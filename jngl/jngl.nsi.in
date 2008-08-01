@@ -1,0 +1,29 @@
+XPStyle On
+SetCompressor lzma
+
+Name "jngl SDK"
+
+OutFile "jngl Library @VERSION@.exe"
+
+InstallDir $PROGRAMFILES\CodeBlocks\MinGW
+
+Page directory
+Page instfiles
+
+LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
+LoadLanguageFile "${NSISDIR}\Contrib\Language files\German.nlf"
+
+Section ""
+
+SetOutPath $INSTDIR\bin
+File zlib1.dll
+File libpng3.dll
+File freetype6.dll
+SetOutPath $INSTDIR\include
+File jngl.hpp
+SetOutPath $INSTDIR\lib
+File libjngl.a
+File libfreetype.dll.a
+File libpng.dll.a
+
+SectionEnd

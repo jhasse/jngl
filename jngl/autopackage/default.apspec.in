@@ -1,0 +1,37 @@
+[Meta]
+RootName: @watteimdocht.de/jngl:$SOFTWAREVERSION
+DisplayName: jngl Library
+ShortName: jngl
+Maintainer: Jan Niklas Hasse <jhasse@gmail.com>
+Packager: Jan Niklas Hasse <jhasse@gmail.com>
+Summary: Easy to use 2D graphic library using OpenGL
+URL: http://www.watteimdocht.de/index_jngl.php
+License: GNU Lesser General Public License, Version 3
+SoftwareVersion: @VERSION@
+AutopackageTarget: 1.3
+
+[BuildPrepare]
+./install.sh $build_root
+
+[BuildUnprepare]
+
+[Globals]
+
+[Imports]
+echo '*' | import
+
+[Prepare]
+require @gtk.org/glib-dev 2.0
+require @opengl.org/opengl 1.2
+require @libpng.org/libpng-dev 1.2
+require @xfree86.org/xxf86vm-dev 1
+
+removeOwningPackage $PREFIX/lib/libjngl.a
+
+[Install]
+installLib lib/libjngl.a
+installPkgConfig lib/pkgconfig/jngl.pc
+copyFile include/jngl.hpp $PREFIX/include/jngl.hpp
+
+[Uninstall]
+uninstallFromLog
