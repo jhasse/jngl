@@ -136,7 +136,9 @@ namespace jngl
 
 	void FontSize(int size);
 	
-	void SetFont(const std::string& name);
+	void SetFont(const std::string& filename);
+	
+	void SetFontByName(const std::string& name);
 
 	void Scale(int width, int height);
 

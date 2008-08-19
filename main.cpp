@@ -205,9 +205,14 @@ namespace jngl
 		pWindow->FontSize(size);
 	}
 
-	void SetFont(const std::string& name)
+	void SetFont(const std::string& filename)
 	{
-		pWindow->SetFont(name);
+		pWindow->SetFont(filename);
+	}
+	
+	void SetFontByName(const std::string& name)
+	{
+		pWindow->SetFontByName(name);
 	}
 
 	bool Window::MouseDown(mouse::Button button)

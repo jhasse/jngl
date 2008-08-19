@@ -31,12 +31,20 @@ namespace jngl
 	{
 		try
 		{
-			boost::assign::ptr_map_insert(fonts_[fontSize_])(filename, filename.c_str(), fontSize_);
+			if(fonts_[fontSize_].find(fontName_) == fonts_[fontSize_].end()) // Only load font if it doesn't exist yet
+			{
+				boost::assign::ptr_map_insert(fonts_[fontSize_])(filename, filename.c_str(), fontSize_);
+			}
 		}
 		catch(std::exception& e)
 		{
 			throw e;
 		}
 		fontName_ = filename;
+	}
+	
+	void Window::SetFontByName(const std::string& name)
+	{
+		Window::SetFont(GetFontFileByName(name));
 	}
 }

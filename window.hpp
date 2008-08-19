@@ -66,6 +66,7 @@ namespace jngl
 		void Print(const std::string& text, const int xposition, const int yposition);
 		void FontSize(const int size);
 		void SetFont(const std::string&);
+		void SetFontByName(const std::string&);
 #ifdef linux
 		boost::shared_ptr<Display> pDisplay_;
 		static void ReleaseXData(void*);
@@ -74,6 +75,8 @@ namespace jngl
 		static void ReleaseRC(HGLRC);
 #endif
 	private:
+		std::string GetFontFileByName(const std::string& fontname);
+		
 		bool fullscreen_, running_;
 		boost::array<bool, 3> mouseDown_;
 		boost::array<bool, 3> mousePressed_;

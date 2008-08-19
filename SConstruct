@@ -1,6 +1,6 @@
 import os
 
-version = "0.7beta3"
+version = "0.7"
 
 #Replace @VERSION@ in certain files
 files = ["jngl.pc.in", "autopackage/default.apspec.in", "jngl.nsi.in"]
@@ -27,7 +27,7 @@ if env['PLATFORM'] == 'win32': # Windows
 	env.Program("test.cpp", CPPPATH=".", LIBPATH=".", LIBS=Split("jngl opengl32 glu32 gdi32 png freetype"), LINKFLAGS="-mwindows")
 
 if env['PLATFORM'] == 'posix': # Linux
-	env.Append(CCFLAGS = '`pkg-config glib-2.0 freetype2 --cflags`', LINKFLAGS = '`pkg-config glib-2.0 freetype2 --libs`')
+	env.Append(CCFLAGS = '`pkg-config glib-2.0 freetype2 fontconfig --cflags`', LINKFLAGS = '`pkg-config glib-2.0 freetype2 fontconfig --libs`')
 	lib = env.Library(target="jngl", source=Split("main.cpp texture.cpp freetype.cpp ConvertUTF.c linux/window.cpp linux/time.cpp window.cpp finally.cpp"))
 	env.Program("test.cpp", CPPPATH=".", LIBPATH=Split("/usr/X11R6/lib ."), LIBS=Split("png jngl GL GLU Xxf86vm"));
 

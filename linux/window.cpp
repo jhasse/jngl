@@ -29,6 +29,7 @@ along with jngl.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 #include <boost/bind.hpp>
 #include <boost/assign/ptr_map_inserter.hpp>
+#include <fontconfig/fontconfig.h>
 
 #include <iostream>
 
@@ -147,6 +148,7 @@ namespace jngl
 
 		glXMakeCurrent(pDisplay_.get(), window_, context_);
 
+		SetFontByName("Arial"); // Default font
 		FontSize(fontSize_); // Load a font the first time
 
 		Init(width, height);
@@ -156,39 +158,47 @@ namespace jngl
 
 	void Window::FontSize(const int size)
 	{
-		if(fonts_.find(size) == fonts_.end()) // Only create the font if it doesn't exist yet
-		{
-			if(fonts_[size].find(fontName_) == fonts_[size].end()) // Is the font already loaded at this size?
-			{
-				const static char* fontnames[] = {
-					"/usr/share/fonts/truetype/ttf-liberation/LiberationSans-Regular.ttf",
-					"/usr/share/fonts/truetype/msttcorefonts/Arial.ttf",
-					"/usr/share/fonts/truetype/freefont/FreeSans.ttf",
-					"/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf"
-				};
-				const int max = sizeof(fontnames) / sizeof(char*);
-				int i;
-				for(i = 0; i <= max; ++i)
-				{
-					if(i == max)
-					{
-						throw std::runtime_error("Couldn't load any font!");
-					}
-					try
-					{
-						boost::assign::ptr_map_insert(fonts_[size])(fontnames[i], fontnames[i], size);
-					}
-					catch(std::exception& e)
-					{
-						Debug(std::string("Skipped: ") + fontnames[i]);
-						continue;
-					}
-					break;
-				}
-				fontName_ = fontnames[i];
-			}
-		}
+		double oldSize = fontSize_;
 		fontSize_ = size;
+		try
+		{
+			SetFont(fontName_); // We changed the size we also need to reload the current font
+		}
+		catch(std::exception& e) // Someting went wrong ...
+		{
+			fontSize_ = oldSize; // ... so let's set fontSize_ back to the previous size
+			throw e;
+		}
+	}
+	
+	std::string Window::GetFontFileByName(const std::string& fontname)
+	{	   
+		const double size = 12;
+		FcFontSet* fontSet = FcFontSetCreate();
+
+		FcPattern* pattern = FcPatternBuild(NULL, FC_FAMILY, FcTypeString, fontname.c_str(), FC_SIZE, FcTypeDouble, size, NULL);
+		FcConfigSubstitute(NULL,pattern, FcMatchPattern);
+		FcDefaultSubstitute(pattern);
+
+		FcResult result;
+		FcPattern* match = FcFontMatch(NULL, pattern, &result);
+		FcPatternDestroy(pattern);
+
+		if(!match)
+		{
+			FcFontSetDestroy(fontSet);
+			throw std::runtime_error(std::string("Couldn't load " + fontname));
+		}
+		FcFontSetAdd(fontSet, match);
+
+		if(fontSet->nfont == 0)
+		{
+			throw std::runtime_error(std::string("Couldn't load " + fontname));
+		}
+	   
+		FcChar8* filename = NULL;
+		FcPatternGetString(fontSet->fonts[0], FC_FILE, 0, &filename);
+		return (const char*)filename;
 	}
 
 	Window::~Window()
