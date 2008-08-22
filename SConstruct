@@ -37,7 +37,7 @@ if env['PLATFORM'] == 'posix': # Linux
 
 if int(autopackage):
 	t = Command('jngl Library ' + version + '.package', [lib, 'autopackage/default.apspec.in'], "makepackage")
-	Clean(t, ['jngl Library ' + version + '.package', 'jngl Library ' + version + '.package.meta', 'jngl.xml'])
+	Clean(t, ['jngl Library ' + version + '.package', 'jngl Library ' + version + '.package.meta', 'jngl.xml', 'jngl.xml.old'])
 
 if int(installer):
 	t = Command('jngl Library ' + version + '.exe', lib, "C:/Programme/NSIS/makensis jngl.nsi")
