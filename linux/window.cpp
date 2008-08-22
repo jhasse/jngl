@@ -156,23 +156,8 @@ namespace jngl
 		running_ = true;
 	}
 
-	void Window::FontSize(const int size)
-	{
-		double oldSize = fontSize_;
-		fontSize_ = size;
-		try
-		{
-			SetFont(fontName_); // We changed the size we also need to reload the current font
-		}
-		catch(std::exception& e) // Someting went wrong ...
-		{
-			fontSize_ = oldSize; // ... so let's set fontSize_ back to the previous size
-			throw e;
-		}
-	}
-	
 	std::string Window::GetFontFileByName(const std::string& fontname)
-	{	   
+	{
 		const double size = 12;
 		FcFontSet* fontSet = FcFontSetCreate();
 
@@ -195,7 +180,7 @@ namespace jngl
 		{
 			throw std::runtime_error(std::string("Couldn't load " + fontname));
 		}
-	   
+
 		FcChar8* filename = NULL;
 		FcPatternGetString(fontSet->fonts[0], FC_FILE, 0, &filename);
 		return (const char*)filename;

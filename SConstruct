@@ -10,6 +10,7 @@ for filename in files:
 	open(newfilename,"w").writelines([line.replace("@VERSION@",version) for line in datei])
 	Clean('.', newfilename) # Make sure scons -c does clean up tidily
 
+
 env = Environment()
 debug = ARGUMENTS.get('debug', 0)
 profile = ARGUMENTS.get('profile', 0)
@@ -24,7 +25,10 @@ if int(profile):
 
 if env['PLATFORM'] == 'win32': # Windows
 	lib = env.Library(target="jngl", source=Split("main.cpp texture.cpp freetype.cpp ConvertUTF.c win32/window.cpp win32/time.cpp window.cpp finally.cpp"))
-	env.Program("test.cpp", CPPPATH=".", LIBPATH=".", LIBS=Split("jngl opengl32 glu32 gdi32 png freetype"), LINKFLAGS="-mwindows")
+	linkflags = "-mwindows"
+	if int(debug):
+		linkflags = ""
+	env.Program("test.cpp", CPPPATH=".", LIBPATH=".", LIBS=Split("jngl opengl32 glu32 gdi32 png freetype"), LINKFLAGS=linkflags)
 
 if env['PLATFORM'] == 'posix': # Linux
 	env.Append(CCFLAGS = '`pkg-config glib-2.0 freetype2 fontconfig --cflags`', LINKFLAGS = '`pkg-config glib-2.0 freetype2 fontconfig --libs`')

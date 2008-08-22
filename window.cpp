@@ -26,7 +26,7 @@ namespace jngl
 	{
 		fonts_[fontSize_][fontName_].Print(xposition, yposition, text);
 	}
-	
+
 	void Window::SetFont(const std::string& filename)
 	{
 		try
@@ -42,9 +42,25 @@ namespace jngl
 		}
 		fontName_ = filename;
 	}
-	
+
 	void Window::SetFontByName(const std::string& name)
 	{
 		Window::SetFont(GetFontFileByName(name));
+	}
+
+
+	void Window::FontSize(const int size)
+	{
+		double oldSize = fontSize_;
+		fontSize_ = size;
+		try
+		{
+			SetFont(fontName_); // We changed the size we also need to reload the current font
+		}
+		catch(std::exception& e) // Someting went wrong ...
+		{
+			fontSize_ = oldSize; // ... so let's set fontSize_ back to the previous size
+			throw e;
+		}
 	}
 }

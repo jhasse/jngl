@@ -19,12 +19,14 @@ along with jngl.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../window.hpp"
 #include "../debug.hpp"
+#include "../finally.hpp"
 #include <gl/gl.h>
 #include <boost/bind.hpp>
 #include <stdexcept>
 #include <iostream>
 #include <windowsx.h> // GET_X_LPARAM
 #include <cassert>
+#include <shlobj.h>
 
 namespace jngl
 {
@@ -139,35 +141,13 @@ namespace jngl
 		if(!wglMakeCurrent(pDeviceContext_.get(), pRenderingContext_.get()))
 			throw std::runtime_error("Can't Activate The GL Rendering Context.");
 
+		SetFontByName("Arial");
 		FontSize(fontSize_);
 
 		if(!Init(width, height))
 			throw std::runtime_error("Initialization Failed.");
 
 		running_ = true;
-	}
-
-	void Window::FontSize(const int size)
-	{
-		if(fonts_.find(size) == fonts_.end()) // Only create the font if it doesn't exist yet
-		{
-			const static char* fontnames[] = {
-				"C:/WINDOWS/Fonts/Arial.ttf",
-				"C:/WINNT/Fonts/Arial.ttf"
-			};
-			const int max = sizeof(fontnames) / sizeof(char*);
-			int i;
-			for(i = 0; !fonts_[size][fontnames[i]].Init(fontnames[i], size) && i <= max; ++i)
-			{
-				Debug(std::string("Skipped: ") + fontnames[i]);
-				if(i == max)
-				{
-					throw std::runtime_error("Couldn't load any font!");
-				}
-			}
-			fontName_ = fontnames[i];
-		}
-		fontSize_ = size;
 	}
 
 	Window::~Window()
@@ -177,6 +157,22 @@ namespace jngl
 			ChangeDisplaySettings(NULL, 0);
 			ShowCursor(true);
 		}
+	}
+
+	std::string Window::GetFontFileByName(const std::string& fontname)
+	{
+		// TODO: This is not a good way to find fonts
+		char temp[MAX_PATH];
+		if(SHGetFolderPath(NULL, CSIDL_FONTS, NULL, 0, temp) != S_OK)
+		{
+			throw std::runtime_error("Couldn't locate font directory.");
+		}
+		std::string path(temp);
+		path += "\\";
+		path += fontname;
+		path += ".ttf";
+		Debug("GetFontFileByName: "); Debug(path); Debug("\n");
+		return path;
 	}
 
 	void Window::ReleaseDC(HWND hwnd, HDC hdc)
