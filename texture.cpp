@@ -263,10 +263,10 @@ namespace jngl
 			}
 			return height;
 		}
-		void Draw(const int xposition, const int yposition)
+		void Draw(const double xposition, const double yposition)
 		{
 			glPushMatrix();
-			glTranslatef(xposition, yposition, 0);
+			glTranslated(xposition, yposition, 0);
 			glEnable(GL_BLEND);
 			glEnable(GL_TEXTURE_2D);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -334,18 +334,23 @@ namespace jngl
 
 	std::map<std::string, Texture> textures_;
 
-	// halfLoad wird benutzt falls nur für die Höhe oder die Breite erstellt wird. Dann wirft load keine Exception.
+	// halfLoad is used, if we only want to find out the width or height of an image. Load won't throw an exception then
 	Texture& GetTexture(const std::string& filename, const bool halfLoad = false)
 	{
 		std::map<std::string, Texture>::iterator i;
-		if((i = textures_.find(filename)) == textures_.end()) // Textur noch nicht geladen?
+		if((i = textures_.find(filename)) == textures_.end()) // texture hasn't been loaded yet?
 			return textures_[filename].load(filename, halfLoad);
 		return i->second;
 	}
 
 	void Draw(const std::string& filename, const int xposition, const int yposition)
 	{
-		GetTexture(filename).Draw(xposition, yposition); // Textur zeichnen
+		GetTexture(filename).Draw(static_cast<double>(xposition), static_cast<double>(yposition));
+	}
+	
+	void Draw(const std::string& filename, const double xposition, const double yposition)
+	{
+		GetTexture(filename).Draw(xposition, yposition);
 	}
 
 	void DrawScaled(const std::string& filename, const double xposition, const double yposition,

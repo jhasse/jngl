@@ -9,6 +9,7 @@ URL: http://www.watteimdocht.de/index_jngl.php
 License: GNU Lesser General Public License, Version 3
 SoftwareVersion: @VERSION@
 AutopackageTarget: 1.2
+RootInstallOnly: Yes
 
 [BuildPrepare]
 ./install.sh $build_root

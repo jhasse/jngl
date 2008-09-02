@@ -42,6 +42,10 @@ namespace jngl
 	void Draw(const std::string& filename,
 	          int xposition,
 	          int yposition);
+
+	void Draw(const std::string& filename,
+	          double xposition,
+	          double yposition);
 	
 	void DrawScaled(const std::string& filename,
 	                double xposition,
