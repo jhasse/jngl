@@ -78,15 +78,12 @@ namespace jngl
 
 	double Time();
 
-	extern "C"
-	{
-		void BeginPolygon();
+	void BeginPolygon();
 
-		void Vertex(int xposition,
-					int yposition);
+	void Vertex(double xposition,
+				double yposition);
 
-		void EndPolygon();
-	}
+	void EndPolygon();
 
 	bool KeyDown(int key);
 

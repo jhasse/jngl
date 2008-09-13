@@ -5,3 +5,4 @@
 * DisplayLists benutzen um Texturen zu zeichnen
 * SetFont implementieren
 * BackgroundColor muss die Hintergrundfarbe vom XWindow setzen
+* Add fontconfig as dependency to the autopackage
