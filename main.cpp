@@ -20,7 +20,6 @@ along with jngl.  If not, see <http://www.gnu.org/licenses/>.
 #include "jngl.hpp"
 #include "window.hpp"
 #include "debug.hpp"
-#include "glu.h"
 
 #include <boost/shared_ptr.hpp>
 #include <GL/gl.h>
@@ -31,6 +30,11 @@ along with jngl.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef NDEBUG
 #include <iostream>
 #endif
+
+extern "C"
+{
+	void InitCallbacks(); // see callbacks.c
+}
 
 namespace jngl
 {
