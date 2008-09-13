@@ -46,7 +46,7 @@ namespace jngl
 	void Draw(const std::string& filename,
 	          double xposition,
 	          double yposition);
-	
+
 	void DrawScaled(const std::string& filename,
 	                double xposition,
 	                double yposition,
@@ -59,11 +59,11 @@ namespace jngl
 	                float factor);
 
 	void DrawQuad(int xposition, int yposition, int width, int height);
-	
+
 	void DrawLine(double xstart, double ystart, double xend, double yend);
 
 	void Rotate(double radian);
-	
+
 	void Translate(int x, int y);
 
 	void Reset();
@@ -78,12 +78,15 @@ namespace jngl
 
 	double Time();
 
-	void BeginPolygon();
+	extern "C"
+	{
+		void BeginPolygon();
 
-	void Vertex(int xposition,
-	            int yposition);
+		void Vertex(int xposition,
+					int yposition);
 
-	void EndPolygon();
+		void EndPolygon();
+	}
 
 	bool KeyDown(int key);
 
@@ -139,9 +142,9 @@ namespace jngl
 	           int yposition);
 
 	void FontSize(int size);
-	
+
 	void SetFont(const std::string& filename);
-	
+
 	void SetFontByName(const std::string& name);
 
 	void Scale(int width, int height);
@@ -149,9 +152,9 @@ namespace jngl
 	void Sleep(int milliseconds);
 
 	double FPS();
-	
+
 	int ScaleWidth();
-	
+
 	int ScaleHeight();
 
 	namespace key

@@ -58,8 +58,12 @@ namespace jngl
 		wc.lpszMenuName		= NULL;									// We Don't Want A Menu
 		wc.lpszClassName	= "OpenGL";								// Set The Class Name
 
-		if (!RegisterClass(&wc))
+		static bool alreadyRegistered = false;
+		if (!alreadyRegistered && !RegisterClass(&wc))
+		{
 			throw std::runtime_error("Failed To Register The Window Class.");
+		}
+		alreadyRegistered = true; // Only register once
 
 		if(fullscreen)
 		{

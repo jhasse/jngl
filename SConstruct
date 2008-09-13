@@ -24,7 +24,7 @@ if int(profile):
 	env.Append(CCFLAGS = '-pg', _LIBFLAGS = ' -pg')
 
 if env['PLATFORM'] == 'win32': # Windows
-	lib = env.Library(target="jngl", source=Split("main.cpp texture.cpp freetype.cpp ConvertUTF.c win32/window.cpp win32/time.cpp window.cpp finally.cpp"))
+	lib = env.Library(target="jngl", source=Split("main.cpp glu.c texture.cpp freetype.cpp ConvertUTF.c win32/window.cpp win32/time.cpp window.cpp finally.cpp"))
 	linkflags = "-mwindows"
 	if int(debug):
 		linkflags = ""
@@ -32,7 +32,7 @@ if env['PLATFORM'] == 'win32': # Windows
 
 if env['PLATFORM'] == 'posix': # Linux
 	env.Append(CCFLAGS = '`pkg-config glib-2.0 freetype2 fontconfig --cflags`', LINKFLAGS = '`pkg-config glib-2.0 freetype2 fontconfig --libs`')
-	lib = env.Library(target="jngl", source=Split("main.cpp texture.cpp freetype.cpp ConvertUTF.c linux/window.cpp linux/time.cpp window.cpp finally.cpp"))
+	lib = env.Library(target="jngl", source=Split("main.cpp glu.c texture.cpp freetype.cpp ConvertUTF.c linux/window.cpp linux/time.cpp window.cpp finally.cpp"))
 	env.Program("test.cpp", CPPPATH=".", LIBPATH=Split("/usr/X11R6/lib ."), LIBS=Split("png jngl GL GLU Xxf86vm"));
 
 if int(autopackage):

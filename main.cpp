@@ -19,9 +19,12 @@ along with jngl.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "jngl.hpp"
 #include "window.hpp"
+#include "debug.hpp"
+#include "glu.h"
 
 #include <boost/shared_ptr.hpp>
 #include <GL/gl.h>
+#include <GL/glu.h>
 #include <stdexcept>
 #include <sstream>
 
@@ -41,6 +44,7 @@ namespace jngl
 		glViewport(0, 0, width, height);
 		Scale(width, height);
 		glFlush();
+		InitCallbacks();
 		return true;
 	}
 
@@ -101,23 +105,6 @@ namespace jngl
 	void Quit()
 	{
 		pWindow->Quit();
-	}
-
-	void BeginPolygon()
-	{
-		glLoadIdentity();
-		glBegin(GL_POLYGON);
-	}
-
-	void Vertex(const int xposition, const int yposition)
-	{
-		glVertex2i(xposition, yposition);
-	}
-
-	void EndPolygon()
-	{
-		glEnd();
-		glColor3ub(255, 255, 255);
 	}
 
 	void BackgroundColor(const unsigned char red, const unsigned char green, const unsigned char blue)
@@ -209,7 +196,7 @@ namespace jngl
 	{
 		pWindow->SetFont(filename);
 	}
-	
+
 	void SetFontByName(const std::string& name)
 	{
 		pWindow->SetFontByName(name);
