@@ -22,12 +22,18 @@ along with jngl.  If not, see <http://www.gnu.org/licenses/>.
 
 GLUtesselator* tobj;
 
-void __stdcall beginCallback(GLenum which)
+#ifndef linux
+#define CALLBACK __stdcall
+#else
+#define CALLBACK
+#endif
+
+void CALLBACK beginCallback(GLenum which)
 {
 	glBegin(which);
 }
 
-void __stdcall combineCallback(GLdouble coords[3],
+void CALLBACK combineCallback(GLdouble coords[3],
 	                 GLdouble *vertex_data[4],
 	                 GLfloat weight[4], GLdouble **dataOut )
 {
