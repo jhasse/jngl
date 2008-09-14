@@ -1,8 +1,6 @@
-* ShowWindow muss wechseln in Vollbild ermöglichen
 * STRG unter windows
-* Kannst du eine Funktion in Jngl implementieren, die die aktuelle Bildschirm-Auflösung zurückgibt, und eine, die sie auf einen gegebenen Wert setzt?
 * Texturen laden vor ShowWindow?
 * DisplayLists benutzen um Texturen zu zeichnen
-* SetFont implementieren
 * BackgroundColor muss die Hintergrundfarbe vom XWindow setzen
 * Add fontconfig as dependency to the autopackage
+* Only enable blending once and not before every drawing instruction

@@ -10,7 +10,7 @@ int main()
 {
 	try
 	{
-		jngl::ShowWindow("Rotate And Zoom", 800, 600);
+		jngl::ShowWindow("JNGL Test Application", 800, 600);
 		jngl::MouseVisible(false);
 //		jngl::SetFont("Arial.ttf");
 		double rotate = 0.0;
@@ -54,7 +54,7 @@ int main()
 			jngl::FontSize(20);
 			jngl::Print("UTF-8:   ä ö ü ß Ĉ Ψ ≈", 5, 105);
 			jngl::FontSize(12);
-			jngl::Color(10,100,10);
+			jngl::Color(0,0,255,128);
 			jngl::BeginPolygon();
 			jngl::Vertex(60, 590);
 			jngl::Vertex(110, 490);
@@ -72,12 +72,12 @@ int main()
 			jngl::Print("B", 110, 490);
 			jngl::Print("C", 160, 390);
 			jngl::Print("D", 210, 390);
-			jngl::Print("A", 260, 490);
-			jngl::Print("B", 310, 490);
-			jngl::Print("C", 360, 390);
-			jngl::Print("D", 410, 490);
-			jngl::Print("D", 460, 490);
-			jngl::Print("D", 510, 590);
+			jngl::Print("E", 260, 490);
+			jngl::Print("F", 310, 490);
+			jngl::Print("G", 360, 390);
+			jngl::Print("H", 410, 490);
+			jngl::Print("I", 460, 490);
+			jngl::Print("J", 510, 590);
 			DrawMouse();
 			jngl::EndDraw();
 		}
