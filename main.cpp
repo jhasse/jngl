@@ -42,6 +42,10 @@ namespace jngl
 	bool Init(const int width, const int height)
 	{
 		glShadeModel(GL_SMOOTH);
+		glEnable(GL_POINT_SMOOTH);
+		glEnable(GL_LINE_SMOOTH);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glClearColor(bgRed, bgGreen, bgBlue, 0.0f);
 		glClearDepth(1.0f);
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
@@ -244,12 +248,9 @@ namespace jngl
 		glTranslatef(x, y, 0);
 	}
 
-	void DrawQuad(const int xposition, const int yposition, const int width, const int height)
+	void DrawRect(const int xposition, const int yposition, const int width, const int height)
 	{
 		glPushMatrix();
-		glPushAttrib(GL_ENABLE_BIT);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glTranslatef(xposition, yposition, 0);
 		glBegin(GL_QUADS);
 			glVertex2i(0, 0);
@@ -258,18 +259,15 @@ namespace jngl
 			glVertex2i(0, height);
 		glEnd();
 		glPopMatrix();
-		glPopAttrib();
 	}
 
 	void DrawLine(const double xstart, const double ystart, const double xend, const double yend)
 	{
 		glPushMatrix();
-		glPushAttrib(GL_ENABLE_BIT);
 		glBegin(GL_LINES);
 			glVertex2f(xstart, ystart);
 			glVertex2f(xend, yend);
 		glEnd();
 		glPopMatrix();
-		glPopAttrib();
 	}
 }

@@ -1,5 +1,5 @@
 Name: jngl
 Description: Easy to use 2D graphic library using OpenGL
 Version: @VERSION@
-Libs: -ljngl -lGL
+Libs: -ljngl -lGL -lGLU
 Requires: libpng glib-2.0 xxf86vm freetype2 fontconfig

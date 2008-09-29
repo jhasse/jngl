@@ -58,7 +58,7 @@ namespace jngl
 	                double yposition,
 	                float factor);
 
-	void DrawQuad(int xposition, int yposition, int width, int height);
+	void DrawRect(int xposition, int yposition, int width, int height);
 
 	void DrawLine(double xstart, double ystart, double xend, double yend);
 
