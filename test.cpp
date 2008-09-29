@@ -35,7 +35,7 @@ int main()
 				             -jngl::Height("jngl.png") * factor,
 				             factor * 2);
 			jngl::Color(0, 0, 0);
-			jngl::DrawQuad(-125, 100, 250, 28);
+			jngl::DrawRect(-125, 100, 250, 28);
 			jngl::FontColor(255, 255, 255);
 			jngl::Print("White text on black background", -115, 105);
 			jngl::FontColor(255, 255, 255);
@@ -46,7 +46,7 @@ int main()
 			std::stringstream sstream;
 			sstream << "FPS: " << jngl::FPS() << "\nFactor: " << factor << "\nSize of double: " << sizeof(double);
 			jngl::Color(0, 0, 0);
-			jngl::DrawQuad(0, 0, 200, 62);
+			jngl::DrawRect(0, 0, 200, 62);
 			jngl::FontColor(255 * (1 - factor), 255 * factor, 255);
 			jngl::Print(sstream.str(), 5, 5);
 			jngl::FontColor(0,0,0);
@@ -93,11 +93,11 @@ void DrawBackground()
 	jngl::Color(255, 255, 255, 100);
 	jngl::Draw("jngl.png", 0, 100);
 	jngl::Color(255, 0, 0, 100);
-	jngl::DrawQuad(600, 30, 100, 100);
+	jngl::DrawRect(600, 30, 100, 100);
 	jngl::Color(0, 255, 0, 100);
-	jngl::DrawQuad(600, 400, 100, 100);
+	jngl::DrawRect(600, 400, 100, 100);
 	jngl::Color(0, 0, 255, 100);
-	jngl::DrawQuad(30, 400, 100, 100);
+	jngl::DrawRect(30, 400, 100, 100);
 }
 
 void DrawMouse()
