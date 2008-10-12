@@ -2,9 +2,11 @@
 #include <cmath>
 #include <sstream>
 #include <iostream>
+#include <boost/lexical_cast.hpp>
 
 void DrawBackground();
 void DrawMouse();
+int performance = 1;
 
 int main()
 {
@@ -17,6 +19,13 @@ int main()
 		while(jngl::Running())
 		{
 			jngl::BeginDraw();
+			for(int i = 0; i < 10; ++i)
+			{
+				if(jngl::KeyDown(boost::lexical_cast<char>(i)))
+				{
+					performance = i == 0 ? 10 : i;
+				}
+			}
 //			jngl::Scale(40, 40);
 			jngl::Print("U", 0, 0);
 			DrawBackground();
@@ -31,9 +40,10 @@ int main()
 			}
 			double factor = sin(rotate / 360 * M_PI);
 			jngl::Color(255, 255, 255, abs(factor * 255));
-			jngl::DrawScaled("jngl.png", -jngl::Width("jngl.png") * factor,
-				             -jngl::Height("jngl.png") * factor,
-				             factor * 2);
+			jngl::DrawScaled("jngl.png",
+							 -jngl::Width("jngl.png")  * factor,
+							 -jngl::Height("jngl.png") * factor,
+							 factor * 2);
 			jngl::Color(0, 0, 0);
 			jngl::DrawRect(-125, 100, 250, 28);
 			jngl::FontColor(255, 255, 255);
@@ -54,6 +64,7 @@ int main()
 			jngl::FontSize(20);
 			jngl::Print("UTF-8:   ä ö ü ß Ĉ Ψ ≈", 5, 105);
 			jngl::FontSize(12);
+			jngl::Print("Press 1-9 to test the performance", 5, 135);
 			jngl::Color(0,0,255,128);
 			jngl::BeginPolygon();
 			jngl::Vertex(60, 590);
@@ -91,7 +102,17 @@ int main()
 void DrawBackground()
 {
 	jngl::Color(255, 255, 255, 100);
-	jngl::Draw("jngl.png", 0, 100);
+	for(int x = 0; x < performance; ++x)
+	{
+		for(int y = 0; y < performance; ++y)
+		{
+			jngl::DrawScaled("jngl.png",
+							 x * jngl::ScaleWidth() / performance,
+							 y * jngl::ScaleHeight() / performance,
+							 (double)jngl::ScaleWidth() / performance / jngl::Width("jngl.png"),
+							 (double)jngl::ScaleHeight() / performance / jngl::Height("jngl.png"));
+		}
+	}
 	jngl::Color(255, 0, 0, 100);
 	jngl::DrawRect(600, 30, 100, 100);
 	jngl::Color(0, 255, 0, 100);
