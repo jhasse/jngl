@@ -42,8 +42,6 @@ namespace jngl
 	bool Init(const int width, const int height)
 	{
 		glShadeModel(GL_SMOOTH);
-		glEnable(GL_POINT_SMOOTH);
-		glEnable(GL_LINE_SMOOTH);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glClearColor(bgRed, bgGreen, bgBlue, 0.0f);
@@ -263,11 +261,13 @@ namespace jngl
 
 	void DrawLine(const double xstart, const double ystart, const double xend, const double yend)
 	{
+		glEnable(GL_LINE_SMOOTH);
 		glPushMatrix();
 		glBegin(GL_LINES);
 			glVertex2f(xstart, ystart);
 			glVertex2f(xend, yend);
 		glEnd();
 		glPopMatrix();
+		glDisable(GL_LINE_SMOOTH);
 	}
 }
