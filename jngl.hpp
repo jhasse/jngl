@@ -40,10 +40,6 @@ namespace jngl
 	void Quit();
 
 	void Draw(const std::string& filename,
-	          int xposition,
-	          int yposition);
-
-	void Draw(const std::string& filename,
 	          double xposition,
 	          double yposition);
 
@@ -58,13 +54,13 @@ namespace jngl
 	                double yposition,
 	                float factor);
 
-	void DrawRect(int xposition, int yposition, int width, int height);
+	void DrawRect(double xposition, double yposition, double width, double height);
 
 	void DrawLine(double xstart, double ystart, double xend, double yend);
 
 	void Rotate(double radian);
 
-	void Translate(int x, int y);
+	void Translate(double x, double y);
 
 	void Reset();
 
@@ -114,8 +110,8 @@ namespace jngl
 	void SetMouse(int xposition, int yposition);
 
 	bool Button(const std::string& texture,
-	            int xposition,
-	            int yposition,
+	            double xposition,
+	            double yposition,
 	            const std::string& mouseover);
 
 	void SetTitle(const std::string& title);
@@ -135,8 +131,8 @@ namespace jngl
 	               unsigned char alpha = 255);
 
 	void Print(const std::string& text,
-	           int xposition,
-	           int yposition);
+	           double xposition,
+	           double yposition);
 
 	void FontSize(int size);
 
@@ -144,7 +140,7 @@ namespace jngl
 
 	void SetFontByName(const std::string& name);
 
-	void Scale(int width, int height);
+	void Scale(double width, double height);
 
 	void Sleep(int milliseconds);
 

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2007-2008  Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2008  Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of jngl.
 
@@ -62,7 +62,7 @@ namespace jngl
 		Font();
 		Font(const char* filename, unsigned int height);
 		~Font();
-		void Print(float x, float y, const std::string& text);
+		void Print(double, double, const std::string& text);
 	private:
 		void MakeDisplayList(unsigned long);
 

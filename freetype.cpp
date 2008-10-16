@@ -172,7 +172,6 @@ namespace jngl
 
 	Font::Font(const char* filename, unsigned int height) : height_(height)
 	{
-		Debug("jngl::Font\n");
 		if(!initialized_)
 		{
 			if(FT_Init_FreeType(&library_))
@@ -181,7 +180,6 @@ namespace jngl
 			}
 			else
 			{
-				Debug("FreeType Library initialized");
 				initialized_ = true;
 			}
 		}
@@ -206,12 +204,10 @@ namespace jngl
 		{
 			MakeDisplayList(i);
 		}
-		Debug("OK");
 	}
 
 	Font::~Font()
 	{
-		Debug("jngl::~Font");
 		glDeleteLists(listBase_, 128);
 		glDeleteTextures(128, textures_);
 		freeFace_.reset((Finally*)0); // free face_ with FT_Done_Face
@@ -222,25 +218,26 @@ namespace jngl
 		}
 	}
 
-	///Much like Nehe's glPrint function, but modified to work
-	///with freetype fonts.
-	void Font::Print(float x, float y, const std::string& text)
+	void Font::Print(double x, double y, const std::string& text)
 	{
 		GLuint font=listBase_;
-		float h=height_/.63f;						//We make the height about 1.5* that of
+		double h = height_ / .63; // We make the height about 1.5* that of
 
 		const char *start_line=text.c_str();
 		std::vector<std::string> lines;
 		const char *c;
-		for(c=text.c_str();*c;c++) {
-			if(*c=='\n') {
+		for(c=text.c_str();*c;c++)
+		{
+			if(*c=='\n')
+			{
 				std::string line;
 				for(const char *n=start_line;n<c;n++) line.append(1,*n);
 				lines.push_back(line);
 				start_line=c+1;
 			}
 		}
-		if(start_line) {
+		if(start_line)
+		{
 			std::string line;
 			for(const char *n=start_line;n<c;n++) line.append(1,*n);
 			lines.push_back(line);
@@ -267,13 +264,13 @@ namespace jngl
 		for(std::size_t j = 0; j < lines.size(); j++)
 		{
 			glPushMatrix();
-			glTranslatef(x,y+h*j,0);
+			glTranslated(x,y+h*j,0);
 //			glMultMatrixf(modelview_matrix);
 
 			// Check if there is an Unicode character
 			for(std::size_t i = 0; i < lines[j].size(); ++i)
 			{
-				const char& ch    = lines[j].c_str()[i]; // Just to have less code
+				const char& ch = lines[j].c_str()[i]; // Just to have less code
 				if(ch & 0x80) // first bit
 				{
 					const UTF8* sourceEnd = (const unsigned char*)&ch + 2; // sourceEnd has to be the next character after the utf-8 sequence
@@ -298,7 +295,7 @@ namespace jngl
 					if(result == conversionOK)
 					{
 						std::map<unsigned long, UnicodeCharacter>::iterator i;
-						if((i = characters_.find(unicode)) == characters_.end()) // Textur noch nicht geladen?
+						if((i = characters_.find(unicode)) == characters_.end()) // Texture isn't loaded yet?
 							characters_[unicode].Init(unicode, height_, face_);
 						characters_[unicode].Draw();
 					}

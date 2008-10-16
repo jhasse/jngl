@@ -22,7 +22,7 @@ along with jngl.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace jngl
 {
-	void Window::Print(const std::string& text, const int xposition, const int yposition)
+	void Window::Print(const std::string& text, const double xposition, const double yposition)
 	{
 		fonts_[fontSize_][fontName_].Print(xposition, yposition, text);
 	}

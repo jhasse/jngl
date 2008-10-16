@@ -342,11 +342,6 @@ namespace jngl
 			return textures_[filename].load(filename, halfLoad);
 		return i->second;
 	}
-
-	void Draw(const std::string& filename, const int xposition, const int yposition)
-	{
-		GetTexture(filename).Draw(static_cast<double>(xposition), static_cast<double>(yposition));
-	}
 	
 	void Draw(const std::string& filename, const double xposition, const double yposition)
 	{
@@ -393,7 +388,7 @@ namespace jngl
 		return height;
 	}
 
-	bool Button(const std::string& texture, const int xposition, const int yposition, const std::string& mouseover)
+	bool Button(const std::string& texture, const double xposition, const double yposition, const std::string& mouseover)
 	{
 		if(xposition <= MouseX() && MouseX() < (xposition + Width(texture)) &&
 		   yposition <= MouseY() && MouseY() < (yposition + Height(texture)))

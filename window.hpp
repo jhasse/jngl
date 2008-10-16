@@ -63,7 +63,7 @@ namespace jngl
 		bool MousePressed(mouse::Button button);
 		void SetMouse(const int xposition, const int yposition);
 		void SetTitle(const std::string& title);
-		void Print(const std::string& text, const int xposition, const int yposition);
+		void Print(const std::string& text, const double xposition, const double yposition);
 		void FontSize(const int size);
 		void SetFont(const std::string&);
 		void SetFontByName(const std::string&);

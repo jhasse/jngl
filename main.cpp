@@ -54,8 +54,8 @@ namespace jngl
 		return true;
 	}
 
-	int scaleWidth = -1, scaleHeight = -1;
-	void Scale(const int width, const int height)
+	double scaleWidth = -1, scaleHeight = -1;
+	void Scale(const double width, const double height)
 	{
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -187,7 +187,7 @@ namespace jngl
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 	}
 
-	void Print(const std::string& text, const int xposition, const int yposition)
+	void Print(const std::string& text, const double xposition, const double yposition)
 	{
 		pWindow->Print(text, xposition, yposition);
 		glColor4ub(colorRed, colorGreen,  colorBlue, colorAlpha);
@@ -241,15 +241,15 @@ namespace jngl
 		glRotated(radian, 0, 0, 1);
 	}
 
-	void Translate(const int x, const int y)
+	void Translate(const double x, const double y)
 	{
-		glTranslatef(x, y, 0);
+		glTranslated(x, y, 0);
 	}
 
-	void DrawRect(const int xposition, const int yposition, const int width, const int height)
+	void DrawRect(const double xposition, const double yposition, const double width, const double height)
 	{
 		glPushMatrix();
-		glTranslatef(xposition, yposition, 0);
+		glTranslated(xposition, yposition, 0);
 		glBegin(GL_QUADS);
 			glVertex2i(0, 0);
 			glVertex2i(width, 0);
