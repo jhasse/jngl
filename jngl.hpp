@@ -58,9 +58,13 @@ namespace jngl
 
 	void DrawLine(double xstart, double ystart, double xend, double yend);
 
-	void Rotate(double radian);
+	void Rotate(double degree);
 
 	void Translate(double x, double y);
+	
+	void PushMatrix();
+	
+	void PopMatrix();
 
 	void Reset();
 

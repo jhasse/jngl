@@ -236,14 +236,24 @@ namespace jngl
 		glLoadIdentity();
 	}
 
-	void Rotate(const double radian)
+	void Rotate(const double degree)
 	{
-		glRotated(radian, 0, 0, 1);
+		glRotated(degree, 0, 0, 1);
 	}
 
 	void Translate(const double x, const double y)
 	{
 		glTranslated(x, y, 0);
+	}
+	
+	void PushMatrix()
+	{
+		glPushMatrix();
+	}
+	
+	void PopMatrix()
+	{
+		glPopMatrix();
 	}
 
 	void DrawRect(const double xposition, const double yposition, const double width, const double height)
