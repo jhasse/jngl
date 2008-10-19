@@ -280,4 +280,14 @@ namespace jngl
 		glPopMatrix();
 		glDisable(GL_LINE_SMOOTH);
 	}
+	
+	void DrawEllipse(const double xmid, const double ymid, const double width, const double height)
+	{
+		glBegin(GL_POLYGON);
+		for(double t = 0; t <= 2*M_PI; t +=0.1)
+		{
+			glVertex2d(width * sin(t), height * cos(t));
+		}
+		glEnd();
+	}
 }
