@@ -8,6 +8,11 @@ void DrawBackground();
 void DrawMouse();
 int performance = 1;
 
+double abs(double v)
+{
+	return v < 0 ? -v : v;
+}
+
 int main()
 {
 	try
@@ -39,7 +44,7 @@ int main()
 				rotate = 0;
 			}
 			double factor = sin(rotate / 360 * M_PI);
-			jngl::Color(255, 255, 255, abs(factor * 255));
+			jngl::Color(255, 255, 255, static_cast<unsigned char>(abs(factor * 255)));
 			jngl::DrawScaled("jngl.png",
 							 -jngl::Width("jngl.png")  * factor,
 							 -jngl::Height("jngl.png") * factor,
@@ -57,7 +62,7 @@ int main()
 			sstream << "FPS: " << jngl::FPS() << "\nFactor: " << factor << "\nSize of double: " << sizeof(double);
 			jngl::Color(0, 0, 0);
 			jngl::DrawRect(0, 0, 200, 62);
-			jngl::FontColor(255 * (1 - factor), 255 * factor, 255);
+			jngl::FontColor(static_cast<unsigned char>(255 * (1 - factor)), static_cast<unsigned char>(255 * factor), 255);
 			jngl::Print(sstream.str(), 5, 5);
 			jngl::FontColor(0,0,0);
 			jngl::Print("Black text on white background", 5, 75);

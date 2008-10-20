@@ -66,12 +66,12 @@ namespace jngl
 		scaleHeight = height;
 	}
 
-	int ScaleWidth()
+	double ScaleWidth()
 	{
 		return scaleWidth;
 	}
 
-	int ScaleHeight()
+	double ScaleHeight()
 	{
 		return scaleHeight;
 	}
@@ -245,12 +245,12 @@ namespace jngl
 	{
 		glTranslated(x, y, 0);
 	}
-	
+
 	void PushMatrix()
 	{
 		glPushMatrix();
 	}
-	
+
 	void PopMatrix()
 	{
 		glPopMatrix();
@@ -261,10 +261,10 @@ namespace jngl
 		glPushMatrix();
 		glTranslated(xposition, yposition, 0);
 		glBegin(GL_QUADS);
-			glVertex2i(0, 0);
-			glVertex2i(width, 0);
-			glVertex2i(width, height);
-			glVertex2i(0, height);
+			glVertex2d(0, 0);
+			glVertex2d(width, 0);
+			glVertex2d(width, height);
+			glVertex2d(0, height);
 		glEnd();
 		glPopMatrix();
 	}
@@ -280,7 +280,7 @@ namespace jngl
 		glPopMatrix();
 		glDisable(GL_LINE_SMOOTH);
 	}
-	
+
 	void DrawEllipse(const double xmid, const double ymid, const double width, const double height)
 	{
 		glBegin(GL_POLYGON);

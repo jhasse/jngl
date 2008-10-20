@@ -51,7 +51,7 @@ namespace jngl
 
 	void Window::FontSize(const int size)
 	{
-		double oldSize = fontSize_;
+		int oldSize = fontSize_;
 		fontSize_ = size;
 		try
 		{

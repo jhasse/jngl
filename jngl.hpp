@@ -57,15 +57,15 @@ namespace jngl
 	void DrawRect(double xposition, double yposition, double width, double height);
 
 	void DrawLine(double xstart, double ystart, double xend, double yend);
-	
-	void DrawEllipse(double xmid, double ymid, double width, double height)
+
+	void DrawEllipse(double xmid, double ymid, double width, double height);
 
 	void Rotate(double degree);
 
 	void Translate(double x, double y);
-	
+
 	void PushMatrix();
-	
+
 	void PopMatrix();
 
 	void Reset();
@@ -152,9 +152,9 @@ namespace jngl
 
 	double FPS();
 
-	int ScaleWidth();
+	double ScaleWidth();
 
-	int ScaleHeight();
+	double ScaleHeight();
 
 	namespace key
 	{
