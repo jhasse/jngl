@@ -26,6 +26,7 @@ along with jngl.  If not, see <http://www.gnu.org/licenses/>.
 #include <GL/glu.h>
 #include <stdexcept>
 #include <sstream>
+#include <cmath>
 
 #ifndef NDEBUG
 #include <iostream>
