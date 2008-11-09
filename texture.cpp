@@ -274,16 +274,11 @@ namespace jngl
 				for(std::vector<RawTexture>::iterator j = i->begin(); j != i->end(); ++j)
 				{
 					glBindTexture(GL_TEXTURE_2D, j->textureid);
-					glBegin(GL_QUADS);
-						glTexCoord2i(0, 0);
-						glVertex2i(0, 0);
-						glTexCoord2i(1, 0);
-						glVertex2i(j->width, 0);
-						glTexCoord2i(1, 1);
-						glVertex2i(j->width, j->height);
-						glTexCoord2i(0, 1);
-						glVertex2i(0, j->height);
-					glEnd();
+					GLint vertexes[] = { 0, 0, j->width, 0, j->width, j->height, 0, j->height };
+					glVertexPointer(2, GL_INT, 0, vertexes);
+					GLint texCoords[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
+					glTexCoordPointer(2, GL_INT, 0, texCoords);
+					glDrawArrays(GL_QUADS, 0, 4);
 					glTranslatef(j->width, 0, 0);
 				}
 				glPopMatrix();
@@ -304,16 +299,14 @@ namespace jngl
 				for(std::vector<RawTexture>::iterator j = i->begin(); j != i->end(); ++j)
 				{
 					glBindTexture(GL_TEXTURE_2D, j->textureid);
-					glBegin(GL_QUADS);
-						glTexCoord2i(0, 0);
-						glVertex2i(0, 0);
-						glTexCoord2i(1, 0);
-						glVertex2f(j->width * xfactor, 0);
-						glTexCoord2i(1, 1);
-						glVertex2f(j->width * xfactor, j->height * yfactor);
-						glTexCoord2i(0, 1);
-						glVertex2f(0, j->height * yfactor);
-					glEnd();
+					GLdouble vertexes[] = { 0,                  0,
+					                        j->width * xfactor, 0,
+					                        j->width * xfactor, j->height * yfactor,
+					                        0,                  j->height * yfactor };
+					glVertexPointer(2, GL_DOUBLE, 0, vertexes);
+					GLdouble texCoords[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
+					glTexCoordPointer(2, GL_DOUBLE, 0, texCoords);
+					glDrawArrays(GL_QUADS, 0, 4);
 					glTranslatef(j->width * xfactor, 0, 0);
 				}
 				glPopMatrix();

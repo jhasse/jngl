@@ -6,6 +6,7 @@
 
 void DrawBackground();
 void DrawMouse();
+void DrawTess();
 int performance = 1;
 
 double abs(double v)
@@ -34,6 +35,7 @@ int main()
 //			jngl::Scale(40, 40);
 			jngl::Print("U", 0, 0);
 			DrawBackground();
+			DrawTess();
 			jngl::Color(0,0,0,255);
 			jngl::PushMatrix();
 			jngl::Translate(650, 450);
@@ -59,7 +61,7 @@ int main()
 			jngl::Print("White text on black background", -115, 105);
 			jngl::FontColor(255, 255, 255);
 			jngl::FontSize(20);
-			jngl::Print("White text on white background", -115, 135);
+			jngl::Print("White text without background", -115, 135);
 			jngl::FontSize(12);
 			jngl::Reset();
 			std::stringstream sstream;
@@ -75,29 +77,6 @@ int main()
 			jngl::FontSize(12);
 			jngl::Print("Press 1-9 to test the performance", 5, 135);
 			jngl::Color(0,0,255,128);
-			jngl::BeginPolygon();
-			jngl::Vertex(60, 590);
-			jngl::Vertex(110, 490);
-			jngl::Vertex(160, 390);
-			jngl::Vertex(210, 390);
-			jngl::Vertex(260, 490);
-			jngl::Vertex(310, 490);
-			jngl::Vertex(360, 390);
-			jngl::Vertex(410, 490);
-			jngl::Vertex(460, 490);
-			jngl::Vertex(510, 590);
-			jngl::EndPolygon();
-			jngl::FontColor(255, 0, 0);
-			jngl::Print("A", 60, 590);
-			jngl::Print("B", 110, 490);
-			jngl::Print("C", 160, 390);
-			jngl::Print("D", 210, 390);
-			jngl::Print("E", 260, 490);
-			jngl::Print("F", 310, 490);
-			jngl::Print("G", 360, 390);
-			jngl::Print("H", 410, 490);
-			jngl::Print("I", 460, 490);
-			jngl::Print("J", 510, 590);
 			DrawMouse();
 			jngl::EndDraw();
 		}
@@ -111,23 +90,32 @@ int main()
 void DrawBackground()
 {
 	jngl::Color(255, 255, 255, 100);
-	for(int x = 0; x < performance; ++x)
+	if(performance > 1)
 	{
-		for(int y = 0; y < performance; ++y)
+		for(int x = 0; x < performance; ++x)
 		{
-			jngl::DrawScaled("jngl.png",
-							 x * jngl::ScaleWidth() / performance,
-							 y * jngl::ScaleHeight() / performance,
-							 (double)jngl::ScaleWidth() / performance / jngl::Width("jngl.png"),
-							 (double)jngl::ScaleHeight() / performance / jngl::Height("jngl.png"));
+			for(int y = 0; y < performance; ++y)
+			{
+				jngl::DrawScaled("jngl.png",
+								 x * jngl::ScaleWidth() / performance,
+								 y * jngl::ScaleHeight() / performance,
+								 (double)jngl::ScaleWidth() / performance / jngl::Width("jngl.png"),
+								 (double)jngl::ScaleHeight() / performance / jngl::Height("jngl.png"));
+			}
 		}
+	}
+	else
+	{
+		jngl::Draw("jngl.png",
+		           jngl::ScaleWidth() / 2- jngl::Width("jngl.png") / 2,
+		           jngl::ScaleHeight() / 2- jngl::Height("jngl.png") / 2);
 	}
 	jngl::Color(255, 0, 0, 100);
 	jngl::DrawRect(600, 30, 100, 100);
 	jngl::Color(0, 255, 0, 100);
 	jngl::DrawRect(600, 400, 100, 100);
 	jngl::Color(0, 0, 255, 100);
-	jngl::DrawRect(30, 400, 100, 100);
+	jngl::DrawEllipse(80, 450, 50, 80);
 }
 
 void DrawMouse()
@@ -138,4 +126,31 @@ void DrawMouse()
 	jngl::FontColor(10, 10, 200);	jngl::Print("↑", -11, -9);
 	jngl::FontSize(12);
 	jngl::Reset();
+}
+void DrawTess()
+{
+	jngl::Color(3, 10, 89, 50);
+	jngl::BeginPolygon();
+	jngl::Vertex(80, 590);
+	jngl::Vertex(130, 490);
+	jngl::Vertex(180, 390);
+	jngl::Vertex(230, 390);
+	jngl::Vertex(280, 490);
+	jngl::Vertex(330, 490);
+	jngl::Vertex(380, 390);
+	jngl::Vertex(430, 490);
+	jngl::Vertex(480, 490);
+	jngl::Vertex(530, 590);
+	jngl::EndPolygon();
+	jngl::FontColor(255, 0, 0);
+	jngl::Print("A", 80, 590);
+	jngl::Print("B", 130, 490);
+	jngl::Print("C", 180, 390);
+	jngl::Print("D", 230, 390);
+	jngl::Print("E", 280, 490);
+	jngl::Print("F", 330, 490);
+	jngl::Print("G", 380, 390);
+	jngl::Print("H", 430, 490);
+	jngl::Print("I", 480, 490);
+	jngl::Print("J", 530, 590);
 }

@@ -44,6 +44,7 @@ namespace jngl
 	{
 		glShadeModel(GL_SMOOTH);
 		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glClearColor(bgRed, bgGreen, bgBlue, 0.0f);
@@ -262,33 +263,35 @@ namespace jngl
 	{
 		glPushMatrix();
 		glTranslated(xposition, yposition, 0);
-		glBegin(GL_QUADS);
-			glVertex2d(0, 0);
-			glVertex2d(width, 0);
-			glVertex2d(width, height);
-			glVertex2d(0, height);
-		glEnd();
+		GLdouble rect[] = { 0, 0, width, 0, width, height, 0, height };
+		glVertexPointer(2, GL_DOUBLE, 0, rect);
+		glDrawArrays(GL_QUADS, 0, 4);
 		glPopMatrix();
 	}
 
 	void DrawLine(const double xstart, const double ystart, const double xend, const double yend)
 	{
-		glEnable(GL_LINE_SMOOTH);
 		glPushMatrix();
-		GLfloat line[] = { xstart, ystart, xend, yend };
-		glVertexPointer(2, GL_FLOAT, 0, line);
+		GLdouble line[] = { xstart, ystart, xend, yend };
+		glVertexPointer(2, GL_DOUBLE, 0, line);
 		glDrawArrays(GL_LINES, 0, 2);
 		glPopMatrix();
-		glDisable(GL_LINE_SMOOTH);
 	}
 
 	void DrawEllipse(const double xmid, const double ymid, const double width, const double height)
 	{
-		glBegin(GL_POLYGON);
+		glPushMatrix();
+		glTranslated(xmid, ymid, 0);
+		std::vector<GLdouble> vertexes;
+		int count = 0;
 		for(double t = 0; t <= 2*M_PI; t +=0.1)
 		{
-			glVertex2d(width * sin(t), height * cos(t));
+			vertexes.push_back(width * sin(t));
+			vertexes.push_back(height * cos(t));
+			++count;
 		}
-		glEnd();
+		glVertexPointer(2, GL_DOUBLE, 0, vertexes.data());
+		glDrawArrays(GL_POLYGON, 0, count);
+		glPopMatrix();
 	}
 }

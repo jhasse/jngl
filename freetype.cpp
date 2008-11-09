@@ -113,7 +113,7 @@ namespace jngl
 		glTranslatef(bitmap_glyph->left,0,0);
 
 		//Now we need to account for the fact that many of
-		//our textures_ are filled with empty padding space.
+		//our textures are filled with empty padding space.
 		//We figure what portion of the texture is used by
 		//the actual character and store that information in
 		//the x and y variables, then when we draw the
