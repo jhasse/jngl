@@ -35,7 +35,11 @@ int main()
 			jngl::Print("U", 0, 0);
 			DrawBackground();
 			jngl::Color(0,0,0,255);
-			jngl::DrawLine(600, 400, 700, 500);
+			jngl::PushMatrix();
+			jngl::Translate(650, 450);
+			jngl::Rotate(rotate);
+			jngl::DrawLine(-50, -50, 50, 50);
+			jngl::PopMatrix();
 			jngl::Translate(jngl::ScaleWidth() / 2, jngl::ScaleHeight() / 2);
 			jngl::Rotate(rotate);
 			rotate += 0.1;

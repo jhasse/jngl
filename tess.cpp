@@ -56,9 +56,6 @@ namespace jngl
 	void EndPolygon()
 	{
 		gluTessEndContour(tobj);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		gluTessEndPolygon(tobj);
-		glDisable(GL_BLEND);
 		positions.clear(); // free all stored positions
 	}}
