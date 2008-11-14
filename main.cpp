@@ -290,7 +290,7 @@ namespace jngl
 			vertexes.push_back(height * cos(t));
 			++count;
 		}
-		glVertexPointer(2, GL_DOUBLE, 0, vertexes.data());
+		glVertexPointer(2, GL_DOUBLE, 0, &vertexes[0]);
 		glDrawArrays(GL_POLYGON, 0, count);
 		glPopMatrix();
 	}
