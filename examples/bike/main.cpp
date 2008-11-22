@@ -32,7 +32,7 @@ int main()
 				jngl::BeginDraw();
 				base.Draw();
 				std::stringstream sstream;
-				sstream << "FPS: " << static_cast<int>(jngl::FPS());				
+				sstream << "FPS: " << static_cast<int>(jngl::FPS());
 				jngl::Print(sstream.str(), 10, 10);
 				jngl::EndDraw();
 			}
