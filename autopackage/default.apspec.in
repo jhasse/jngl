@@ -20,6 +20,7 @@ echo '*' | import
 [Prepare]
 require @gtk.org/glib-dev 2.0
 require @opengl.org/opengl 1.2
+require @opengl.org/glu-dev 1
 require @libpng.org/libpng-dev 1.2
 require @xfree86.org/xxf86vm-dev 1
 require @freetype.org/freetype-dev 9
