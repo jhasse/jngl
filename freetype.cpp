@@ -52,7 +52,7 @@ namespace jngl
 		while(rval<a) rval<<=1;
 		return rval;
 	}
-	
+
 	void LoadCharacter(FT_Face face, unsigned long ch, GLuint displayList, GLuint texture, const float fontHeight)
 	{
 		if(FT_Load_Glyph(face, FT_Get_Char_Index(face, ch) , FT_LOAD_TARGET_LIGHT))
@@ -83,7 +83,7 @@ namespace jngl
 			{
 				data[x*4 + y*4*width] = 255;
 				data[x*4 + y*4*width + 1] = 255;
-				data[x*4 + y*4*width + 2] = 255;				
+				data[x*4 + y*4*width + 2] = 255;
 				if(x >= bitmap.width || y >= bitmap.rows) // Are we in the padding zone? (see next_p2)
 				{
 					data[x*4 + y*4*width + 3] = 0; // Alpha = 0 = not visible
@@ -164,7 +164,7 @@ namespace jngl
 	{
 		LoadCharacter(face_, ch, listBase_ + ch, textures_[ch], height_);
 	}
-	
+
 	Font::Font()
 	{
 		throw std::runtime_error("Attempting to use an unitialized Font object");
@@ -311,7 +311,8 @@ namespace jngl
 			}
 
 			glPopMatrix();
-		}
+		}
+
 		glPopAttrib();
 	}
 

@@ -173,9 +173,25 @@ namespace jngl
 		}
 		std::string path(temp);
 		path += "\\";
-		path += fontname;
+		std::string file;
+		if(fontname == "Times New Roman" || fontname == "serif")
+		{
+			file = "times";
+		}
+		else if(fontname == "Courier" || fontname == "Courier New" || fontname == "mono")
+		{
+			file = "cour";
+		}
+		else if(fontname == "sans" || fontname == "sans-serif")
+		{
+			file = "arial";
+		}
+		else
+		{
+			file = fontname;
+		}
+		path += file;
 		path += ".ttf";
-		Debug("GetFontFileByName: "); Debug(path); Debug("\n");
 		return path;
 	}
 

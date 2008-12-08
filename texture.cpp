@@ -330,7 +330,7 @@ namespace jngl
 			return textures_[filename].load(filename, halfLoad);
 		return i->second;
 	}
-	
+
 	void Draw(const std::string& filename, const double xposition, const double yposition)
 	{
 		GetTexture(filename).Draw(xposition, yposition);

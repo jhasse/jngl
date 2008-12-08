@@ -20,7 +20,6 @@ int main()
 	{
 		jngl::ShowWindow("JNGL Test Application", 800, 600);
 		jngl::MouseVisible(false);
-//		jngl::SetFont("Arial.ttf");
 		double rotate = 0.0;
 		while(jngl::Running())
 		{
@@ -32,8 +31,6 @@ int main()
 					performance = i == 0 ? 10 : i;
 				}
 			}
-//			jngl::Scale(40, 40);
-			jngl::Print("U", 0, 0);
 			DrawBackground();
 			DrawTess();
 			jngl::Color(0,0,0,255);
@@ -69,9 +66,13 @@ int main()
 			jngl::Color(0, 0, 0);
 			jngl::DrawRect(0, 0, 200, 62);
 			jngl::FontColor(static_cast<unsigned char>(255 * (1 - factor)), static_cast<unsigned char>(255 * factor), 255);
+			jngl::SetFontByName("Courier New");
 			jngl::Print(sstream.str(), 5, 5);
+			jngl::SetFontByName("sans-serif");
 			jngl::FontColor(0,0,0);
+			jngl::SetFontByName("Times New Roman");
 			jngl::Print("Black text on white background", 5, 75);
+			jngl::SetFontByName("Arial");
 			jngl::FontSize(20);
 			jngl::Print("UTF-8:   ä ö ü ß Ĉ Ψ ≈", 5, 105);
 			jngl::FontSize(12);
@@ -123,7 +124,8 @@ void DrawMouse()
 	jngl::Translate(jngl::MouseX(), jngl::MouseY());
 	jngl::Rotate(-45);
 	jngl::FontSize(30);
-	jngl::FontColor(10, 10, 200);	jngl::Print("↑", -11, -9);
+	jngl::FontColor(10, 10, 200);
+	jngl::Print("↑", -11, -9);
 	jngl::FontSize(12);
 	jngl::Reset();
 }
