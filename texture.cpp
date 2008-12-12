@@ -268,6 +268,7 @@ namespace jngl
 			glPushMatrix();
 			glTranslated(xposition, yposition, 0);
 			glEnable(GL_TEXTURE_2D);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			for(std::vector<std::vector<RawTexture> >::iterator i = parts_.begin(); i != parts_.end(); ++i)
 			{
 				glPushMatrix();
@@ -284,6 +285,7 @@ namespace jngl
 				glPopMatrix();
 				glTranslatef(0, i->begin()->height, 0);
 			}
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			glDisable(GL_TEXTURE_2D);
 			glPopMatrix();
 		}
@@ -292,7 +294,7 @@ namespace jngl
 			glPushMatrix();
 			glTranslatef(xposition, yposition, 0);
 			glEnable(GL_TEXTURE_2D);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			for(std::vector<std::vector<RawTexture> >::iterator i = parts_.begin(); i != parts_.end(); ++i)
 			{
 				glPushMatrix();
@@ -312,6 +314,7 @@ namespace jngl
 				glPopMatrix();
 				glTranslatef(0, i->begin()->height * yfactor, 0);
 			}
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			glDisable(GL_TEXTURE_2D);
 			glPopMatrix();
 		}

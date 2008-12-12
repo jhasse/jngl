@@ -1,6 +1,6 @@
 import os
 
-version = "0.7.3"
+version = "0.7.4"
 
 #Replace @VERSION@ in certain files
 files = ["jngl.pc.in", "autopackage/default.apspec.in", "jngl.nsi.in"]
