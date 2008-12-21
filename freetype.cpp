@@ -220,26 +220,26 @@ namespace jngl
 
 	void Font::Print(double x, double y, const std::string& text)
 	{
-		GLuint font=listBase_;
+		GLuint font = listBase_;
 		double h = height_ / .63; // We make the height about 1.5* that of
 
 		const char *start_line=text.c_str();
 		std::vector<std::string> lines;
 		const char *c;
-		for(c=text.c_str();*c;c++)
+		for(c = text.c_str(); *c; c++)
 		{
-			if(*c=='\n')
+			if(*c == '\n')
 			{
 				std::string line;
-				for(const char *n=start_line;n<c;n++) line.append(1,*n);
+				for(const char *n = start_line; n < c; ++n) line.append(1, *n);
 				lines.push_back(line);
-				start_line=c+1;
+				start_line = c + 1;
 			}
 		}
 		if(start_line)
 		{
 			std::string line;
-			for(const char *n=start_line;n<c;n++) line.append(1,*n);
+			for(const char *n = start_line; n < c; ++n) line.append(1, *n);
 			lines.push_back(line);
 		}
 
@@ -296,7 +296,9 @@ namespace jngl
 					{
 						std::map<unsigned long, UnicodeCharacter>::iterator i;
 						if((i = characters_.find(unicode)) == characters_.end()) // Texture isn't loaded yet?
+						{
 							characters_[unicode].Init(unicode, height_, face_);
+						}
 						characters_[unicode].Draw();
 					}
 					else
