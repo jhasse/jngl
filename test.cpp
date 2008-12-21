@@ -76,7 +76,11 @@ int main()
 			jngl::FontSize(20);
 			jngl::Print("UTF-8:   ä ö ü ß Ĉ Ψ ≈", 5, 105);
 			jngl::FontSize(12);
-			jngl::Print("Press 1-9 to test the performance", 5, 135);
+			jngl::Print("Press 1-9 to test the performance\nPress E to show a error box.", 5, 135);
+			if(jngl::KeyPressed('e'))
+			{
+				jngl::ErrorMessage("Hello World!");
+			}
 			jngl::Color(0,0,255,128);
 			DrawMouse();
 			jngl::EndDraw();

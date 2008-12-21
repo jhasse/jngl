@@ -1,6 +1,4 @@
 * STRG unter windows
 * Texturen laden vor ShowWindow?
-* DisplayLists benutzen um Texturen zu zeichnen
 * BackgroundColor muss die Hintergrundfarbe vom XWindow setzen
 * Add fontconfig as dependency to the autopackage
-* Only enable blending once and not before every drawing instruction

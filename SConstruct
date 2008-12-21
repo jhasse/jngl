@@ -24,7 +24,7 @@ if int(profile):
 	env.Append(CCFLAGS = '-pg', _LIBFLAGS = ' -pg')
 
 if env['PLATFORM'] == 'win32': # Windows
-	lib = env.Library(target="jngl", source=Split("main.cpp tess.cpp callbacks.c texture.cpp freetype.cpp ConvertUTF.c win32/window.cpp win32/time.cpp window.cpp finally.cpp"))
+	lib = env.Library(target="jngl", source=Split("main.cpp tess.cpp callbacks.c texture.cpp freetype.cpp ConvertUTF.c win32/window.cpp win32/time.cpp win32/message.cpp window.cpp finally.cpp"))
 	linkflags = "-mwindows"
 	if int(debug):
 		linkflags = ""

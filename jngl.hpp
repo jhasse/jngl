@@ -156,6 +156,8 @@ namespace jngl
 
 	double ScaleHeight();
 
+	void ErrorMessage(const std::string& text);
+
 	namespace key
 	{
 #ifdef linux
