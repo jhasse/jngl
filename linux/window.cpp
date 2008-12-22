@@ -50,7 +50,7 @@ namespace jngl
 			XFree(data);
 	}
 
-	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen) : fullscreen_(fullscreen), running_(false), fontSize_(12), fontName_("")
+	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen) : fullscreen_(fullscreen), running_(false), isMouseVisible(true), fontSize_(12), fontName_("")
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
@@ -347,10 +347,13 @@ namespace jngl
 		running_ = false;
 	}
 
-	void Window::MouseVisible(const bool visible)
+	void Window::SetMouseVisible(const bool visible)
 	{
+		isMouseVisible_ = visible;
 		if(visible)
+		{
 			XDefineCursor(pDisplay_.get(), window_, None);
+		}
 		else
 		{
 			// http://www.linuxforums.org/forum/linux-programming-scripting/59012-xlib-hide-mouse-pointer.html

@@ -32,7 +32,7 @@ namespace jngl
 {
 	LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
-	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen) : fullscreen_(fullscreen), running_(false), fontSize_(12)
+	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen) : fullscreen_(fullscreen), running_(false), isMouseVisible_(true), fontSize_(12)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
@@ -277,9 +277,13 @@ namespace jngl
 		running_ = false;
 	}
 
-	void Window::MouseVisible(const bool visible)
+	void Window::SetMouseVisible(const bool visible)
 	{
-		ShowCursor(visible);
+		if(isMouseVisible_ != visible)
+		{
+			ShowCursor(visible); // For some reason Windows wants this twice
+		}
+		isMouseVisible_ = visible;
 	}
 
 	void Window::SetTitle(const std::string& windowTitle)

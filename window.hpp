@@ -52,9 +52,11 @@ namespace jngl
 		void BeginDraw();
 		void EndDraw();
 		void Quit();
-		void MouseVisible(const bool visible);
+		void SetMouseVisible(const bool visible);
+		bool GetMouseVisible() const;
 		int MouseX();
 		int MouseY();
+		bool GetFullscreen() const;
 		bool KeyDown(const int key);
 		bool KeyPressed(const int key);
 		bool KeyDown(const char key);
@@ -76,8 +78,8 @@ namespace jngl
 #endif
 	private:
 		std::string GetFontFileByName(const std::string& fontname);
-		
-		bool fullscreen_, running_;
+
+		bool fullscreen_, running_, isMouseVisible_;
 		boost::array<bool, 3> mouseDown_;
 		boost::array<bool, 3> mousePressed_;
 		std::map<unsigned int, bool> keyDown_;

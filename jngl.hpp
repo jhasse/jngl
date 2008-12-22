@@ -95,7 +95,9 @@ namespace jngl
 
 	bool KeyPressed(char key);
 
-	void MouseVisible(bool visible);
+	void SetMouseVisible(bool visible);
+
+	bool GetMouseVisible();
 
 	int MouseX();
 
@@ -157,6 +159,8 @@ namespace jngl
 	double ScaleHeight();
 
 	void ErrorMessage(const std::string& text);
+
+	bool GetFullscreen();
 
 	namespace key
 	{

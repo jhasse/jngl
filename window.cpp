@@ -63,4 +63,29 @@ namespace jngl
 			throw e;
 		}
 	}
+
+	bool Window::MouseDown(mouse::Button button)
+	{
+		return mouseDown_.at(button);
+	}
+
+	bool Window::MousePressed(mouse::Button button)
+	{
+		if(mousePressed_.at(button))
+		{
+			mousePressed_[button] = false;
+			return true;
+		}
+		return false;
+	}
+
+	bool Window::GetFullscreen() const
+	{
+		return fullscreen_;
+	}
+
+	bool Window::GetMouseVisible() const
+	{
+		return isMouseVisible_;
+	}
 }

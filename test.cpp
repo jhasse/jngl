@@ -19,7 +19,7 @@ int main()
 	try
 	{
 		jngl::ShowWindow("JNGL Test Application", 800, 600);
-		jngl::MouseVisible(false);
+		jngl::SetMouseVisible(false);
 		double rotate = 0.0;
 		while(jngl::Running())
 		{
@@ -80,6 +80,11 @@ int main()
 			if(jngl::KeyPressed('e'))
 			{
 				jngl::ErrorMessage("Hello World!");
+			}
+			jngl::Print("Press F11 to switch fullscreen mode.", 5, 550);
+			if(jngl::KeyPressed(jngl::key::F11))
+			{
+				jngl::ShowWindow("JNGL Test Application", 800, 600, !jngl::GetFullscreen());
 			}
 			jngl::Color(0,0,255,128);
 			DrawMouse();

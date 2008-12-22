@@ -1,25 +1,26 @@
 /*
-Copyright 2007-2008  Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2009  Jan Niklas Hasse <jhasse@gmail.com>
 
-This file is part of jngl.
+This file is part of JNGL.
 
-jngl is free software: you can redistribute it and/or modify
+JNGL is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-jngl is distributed in the hope that it will be useful,
+JNGL is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with jngl.  If not, see <http://www.gnu.org/licenses/>.
+along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "jngl.hpp"
 #include "window.hpp"
 #include "debug.hpp"
+#include "texture.hpp"
 
 #include <boost/shared_ptr.hpp>
 #include <GL/gl.h>
@@ -82,15 +83,23 @@ namespace jngl
 
 	void ShowWindow(const std::string& title, const int width, const int height, bool fullscreen)
 	{
+		bool isMouseVisible = pWindow ? pWindow->GetMouseVisible() : true;
+		HideWindow();
 		if(width == 0)
+		{
 			throw std::runtime_error("Width Is 0");
+		}
 		if(height == 0)
+		{
 			throw std::runtime_error("Height Is 0");
+		}
 		pWindow.reset(new Window(title, width, height, fullscreen));
+		pWindow->SetMouseVisible(isMouseVisible);
 	}
 
 	void HideWindow()
 	{
+		UnloadAll();
 		pWindow.reset((Window*)0);
 	}
 
@@ -168,9 +177,14 @@ namespace jngl
 		pWindow->SetMouse(xposition, yposition);
 	}
 
-	void MouseVisible(const bool visible)
+	void SetMouseVisible(const bool visible)
 	{
-		return pWindow->MouseVisible(visible);
+		return pWindow->SetMouseVisible(visible);
+	}
+
+	bool GetMouseVisible()
+	{
+		return pWindow->GetMouseVisible();
 	}
 
 	void SetTitle(const std::string& title)
@@ -210,19 +224,9 @@ namespace jngl
 		pWindow->SetFontByName(name);
 	}
 
-	bool Window::MouseDown(mouse::Button button)
+	bool GetFullscreen()
 	{
-		return mouseDown_.at(button);
-	}
-
-	bool Window::MousePressed(mouse::Button button)
-	{
-		if(mousePressed_.at(button))
-		{
-			mousePressed_[button] = false;
-			return true;
-		}
-		return false;
+		return pWindow->GetFullscreen();
 	}
 
 	double FPS()
