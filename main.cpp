@@ -278,6 +278,13 @@ namespace jngl
 		glPopMatrix();
 	}
 
+	void DrawPoint(const double x, const double y)
+	{
+		GLdouble point[] = { x, y };
+		glVertexPointer(2, GL_DOUBLE, 0, point);
+		glDrawArrays(GL_POINTS, 0, 1);
+	}
+
 	void ReadPixel(const int x, const int y, unsigned char& red, unsigned char& green, unsigned char& blue)
 	{
 		unsigned char data[3];

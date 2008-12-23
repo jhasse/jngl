@@ -65,6 +65,7 @@ namespace jngl
 		void Print(double, double, const std::string& text);
 	private:
 		void MakeDisplayList(unsigned long);
+		std::vector<std::string> ParseString(const std::string&);
 
 		static bool initialized_;
 		static FT_Library library_;

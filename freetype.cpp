@@ -40,16 +40,16 @@ namespace jngl
 		fontColorAlpha = alpha;
 	}
 
-	///This function gets the first power of 2 >= the
-	///int that we pass it.
-	int next_p2 ( int a )
+	// This function gets the first power of 2 >= the
+	// int that we pass it.
+	int next_p2(int a)
 	{
 		if(a == 1) // A texture with this width does not work for some reason
 		{
 			return 2;
 		}
-		int rval=1;
-		while(rval<a) rval<<=1;
+		int rval = 1;
+		while(rval < a) rval <<= 1;
 		return rval;
 	}
 
@@ -66,14 +66,16 @@ namespace jngl
 			}
 		}
 		FT_Glyph glyph;
-		if(FT_Get_Glyph(face->glyph, &glyph ))
+		if(FT_Get_Glyph(face->glyph, &glyph))
+		{
 			throw std::runtime_error("FT_Get_Glyph failed");
-		FT_Glyph_To_Bitmap( &glyph, ft_render_mode_normal, 0, 1 );
+		}
+		FT_Glyph_To_Bitmap(&glyph, ft_render_mode_normal, 0, 1);
 		FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
-		FT_Bitmap& bitmap=bitmap_glyph->bitmap;
+		FT_Bitmap& bitmap = bitmap_glyph->bitmap;
 
-		int width = next_p2( bitmap.width );
-		int height = next_p2( bitmap.rows );
+		int width = next_p2(bitmap.width);
+		int height = next_p2(bitmap.rows);
 
 		std::vector<GLubyte> data(width * height * 4);
 
@@ -81,9 +83,9 @@ namespace jngl
 		{
 			for(int x = 0; x < width; x++)
 			{
-				data[x*4 + y*4*width] = 255;
-				data[x*4 + y*4*width + 1] = 255;
-				data[x*4 + y*4*width + 2] = 255;
+				data[x * 4 + y * 4 * width    ] = 255;
+				data[x * 4 + y * 4 * width + 1] = 255;
+				data[x * 4 + y * 4 * width + 2] = 255;
 				if(x >= bitmap.width || y >= bitmap.rows) // Are we in the padding zone? (see next_p2)
 				{
 					data[x*4 + y*4*width + 3] = 0; // Alpha = 0 = not visible
@@ -218,20 +220,20 @@ namespace jngl
 		}
 	}
 
-	void Font::Print(double x, double y, const std::string& text)
+	std::vector<std::string> Font::ParseString(const std::string& text)
 	{
-		GLuint font = listBase_;
-		double h = height_ / .63; // We make the height about 1.5* that of
-
-		const char *start_line=text.c_str();
 		std::vector<std::string> lines;
-		const char *c;
+		const char* start_line = text.c_str();
+		const char* c;
 		for(c = text.c_str(); *c; c++)
 		{
 			if(*c == '\n')
 			{
 				std::string line;
-				for(const char *n = start_line; n < c; ++n) line.append(1, *n);
+				for(const char *n = start_line; n < c; ++n)
+				{
+					line.append(1, *n);
+				}
 				lines.push_back(line);
 				start_line = c + 1;
 			}
@@ -239,9 +241,21 @@ namespace jngl
 		if(start_line)
 		{
 			std::string line;
-			for(const char *n = start_line; n < c; ++n) line.append(1, *n);
+			for(const char* n = start_line; n < c; ++n)
+			{
+				line.append(1, *n);
+			}
 			lines.push_back(line);
 		}
+		return lines;
+	}
+
+	void Font::Print(double x, double y, const std::string& text)
+	{
+		GLuint font = listBase_;
+		double h = height_ / .63; // We make the height about 1.5* that of
+
+		std::vector<std::string> lines(ParseString(text));
 
 		glPushAttrib(GL_LIST_BIT | GL_CURRENT_BIT  | GL_ENABLE_BIT | GL_TRANSFORM_BIT);
 		glMatrixMode(GL_MODELVIEW);
@@ -251,27 +265,22 @@ namespace jngl
 		glColor4ub(fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha);
 		glListBase(font);
 
-//		float modelview_matrix[16];
-//		glGetFloatv(GL_MODELVIEW_MATRIX, modelview_matrix);
-
-		//This is where the text display actually happens.
-		//For each line of text we reset the modelview matrix
-		//so that the line's text will start in the correct position.
-		//Notice that we need to reset the matrix, rather than just translating
-		//down by h. This is because when each character is
-		//draw it modifies the current matrix so that the next character
-		//will be drawn immediatly after it.
+		// This is where the text display actually happens.
+		// For each line of text we reset the modelview matrix
+		// so that the line's text will start in the correct position.
+		// Notice that we need to reset the matrix, rather than just translating
+		// down by h. This is because when each character is
+		// draw it modifies the current matrix so that the next character
+		// will be drawn immediatly after it.
 		for(std::size_t j = 0; j < lines.size(); j++)
 		{
 			glPushMatrix();
-			glTranslated(x,y+h*j,0);
-//			glMultMatrixf(modelview_matrix);
+			glTranslated(x, y + h * j, 0);
 
-			// Check if there is an Unicode character
 			for(std::size_t i = 0; i < lines[j].size(); ++i)
 			{
 				const char& ch = lines[j].c_str()[i]; // Just to have less code
-				if(ch & 0x80) // first bit
+				if(ch & 0x80) // first bit (Check if there is an Unicode character)
 				{
 					const UTF8* sourceEnd = (const unsigned char*)&ch + 2; // sourceEnd has to be the next character after the utf-8 sequence
 					++i;

@@ -143,7 +143,7 @@ void DrawMouse()
 	jngl::Rotate(-45);
 	jngl::FontSize(30);
 	jngl::FontColor(10, 10, 200);
-	jngl::Print("↑", -11, -9);
+	jngl::Print("↑", -8, -2);
 	jngl::FontSize(12);
 	jngl::Reset();
 }
