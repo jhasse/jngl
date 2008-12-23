@@ -29,10 +29,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 #include <cmath>
 
-#ifndef NDEBUG
-#include <iostream>
-#endif
-
 extern "C"
 {
 	void InitCallbacks(); // see callbacks.c
@@ -51,32 +47,16 @@ namespace jngl
 		glClearDepth(1.0f);
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 		glViewport(0, 0, width, height);
-		Scale(width, height);
-		glFlush();
-		InitCallbacks();
-		return true;
-	}
 
-	double scaleWidth = -1, scaleHeight = -1;
-	void Scale(const double width, const double height)
-	{
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0.0f, width, height, 0.0f, -100.0f, 100.0f);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		scaleWidth = width;
-		scaleHeight = height;
-	}
 
-	double ScaleWidth()
-	{
-		return scaleWidth;
-	}
-
-	double ScaleHeight()
-	{
-		return scaleHeight;
+		glFlush();
+		InitCallbacks();
+		return true;
 	}
 
 	boost::shared_ptr<Window> pWindow;
@@ -296,5 +276,27 @@ namespace jngl
 		glVertexPointer(2, GL_DOUBLE, 0, &vertexes[0]);
 		glDrawArrays(GL_POLYGON, 0, count);
 		glPopMatrix();
+	}
+
+	void ReadPixel(const int x, const int y, unsigned char& red, unsigned char& green, unsigned char& blue)
+	{
+		unsigned char data[3];
+		data[0] = static_cast<unsigned char>(bgRed * 255.0f);
+		data[1] = static_cast<unsigned char>(bgGreen * 255.0f);
+		data[2] = static_cast<unsigned char>(bgBlue * 255.0f);
+		glReadPixels(x, WindowHeight() - y - 1, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, data);
+		red = data[0];
+		green = data[1];
+		blue = data[2];
+	}
+
+	int WindowWidth()
+	{
+		return pWindow->GetWidth();
+	}
+
+	int WindowHeight()
+	{
+		return pWindow->GetHeight();
 	}
 }

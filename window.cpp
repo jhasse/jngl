@@ -88,4 +88,14 @@ namespace jngl
 	{
 		return isMouseVisible_;
 	}
+
+	int Window::GetWidth() const
+	{
+		return width_;
+	}
+
+	int Window::GetHeight() const
+	{
+		return height_;
+	}
 }

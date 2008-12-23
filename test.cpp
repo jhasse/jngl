@@ -39,7 +39,7 @@ int main()
 			jngl::Rotate(rotate);
 			jngl::DrawLine(-50, -50, 50, 50);
 			jngl::PopMatrix();
-			jngl::Translate(jngl::ScaleWidth() / 2, jngl::ScaleHeight() / 2);
+			jngl::Translate(jngl::WindowWidth() / 2, jngl::WindowHeight() / 2);
 			jngl::Rotate(rotate);
 			rotate += 0.1;
 			if(rotate > 360)
@@ -107,18 +107,18 @@ void DrawBackground()
 			for(int y = 0; y < performance; ++y)
 			{
 				jngl::DrawScaled("jngl.png",
-								 x * jngl::ScaleWidth() / performance,
-								 y * jngl::ScaleHeight() / performance,
-								 (double)jngl::ScaleWidth() / performance / jngl::Width("jngl.png"),
-								 (double)jngl::ScaleHeight() / performance / jngl::Height("jngl.png"));
+								 x * jngl::WindowWidth() / performance,
+								 y * jngl::WindowHeight() / performance,
+								 (double)jngl::WindowWidth() / performance / jngl::Width("jngl.png"),
+								 (double)jngl::WindowHeight() / performance / jngl::Height("jngl.png"));
 			}
 		}
 	}
 	else
 	{
 		jngl::Draw("jngl.png",
-		           jngl::ScaleWidth() / 2- jngl::Width("jngl.png") / 2,
-		           jngl::ScaleHeight() / 2- jngl::Height("jngl.png") / 2);
+		           jngl::WindowWidth() / 2- jngl::Width("jngl.png") / 2,
+		           jngl::WindowHeight() / 2- jngl::Height("jngl.png") / 2);
 	}
 	jngl::Color(255, 0, 0, 100);
 	jngl::DrawRect(600, 30, 100, 100);
@@ -130,6 +130,15 @@ void DrawBackground()
 
 void DrawMouse()
 {
+	unsigned char red, green, blue;
+	jngl::ReadPixel(jngl::MouseX(), jngl::MouseY(), red, green, blue);
+	std::stringstream sstream;
+	sstream << "R: " << static_cast<int>(red)
+	      << "\nG: " << static_cast<int>(green)
+	      << "\nB: " << static_cast<int>(blue);
+	jngl::FontSize(8);
+	jngl::FontColor(0, 255, 0, 200);
+	jngl::Print(sstream.str(), jngl::MouseX() + 30, jngl::MouseY() + 10);
 	jngl::Translate(jngl::MouseX(), jngl::MouseY());
 	jngl::Rotate(-45);
 	jngl::FontSize(30);

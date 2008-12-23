@@ -32,7 +32,8 @@ namespace jngl
 {
 	LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
-	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen) : fullscreen_(fullscreen), running_(false), isMouseVisible_(true), fontSize_(12)
+	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
+		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), fontSize_(12), width_(width), height_(height)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);

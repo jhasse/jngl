@@ -148,19 +148,19 @@ namespace jngl
 
 	void SetFontByName(const std::string& name);
 
-	void Scale(double width, double height);
-
 	void Sleep(int milliseconds);
 
 	double FPS();
 
-	double ScaleWidth();
-
-	double ScaleHeight();
-
 	void ErrorMessage(const std::string& text);
 
 	bool GetFullscreen();
+
+	void ReadPixel(int x, int y, unsigned char& red, unsigned char& green, unsigned char& blue);
+
+	int WindowWidth();
+
+	int WindowHeight();
 
 	namespace key
 	{

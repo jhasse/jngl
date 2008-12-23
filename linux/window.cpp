@@ -50,7 +50,8 @@ namespace jngl
 			XFree(data);
 	}
 
-	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen) : fullscreen_(fullscreen), running_(false), isMouseVisible(true), fontSize_(12), fontName_("")
+	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
+		: fullscreen_(fullscreen), running_(false), isMouseVisible(true), fontSize_(12), fontName_(""), width_(width), height_(height)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);

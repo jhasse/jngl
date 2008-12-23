@@ -56,6 +56,8 @@ namespace jngl
 		bool GetMouseVisible() const;
 		int MouseX();
 		int MouseY();
+		int GetWidth() const;
+		int GetHeight() const;
 		bool GetFullscreen() const;
 		bool KeyDown(const int key);
 		bool KeyPressed(const int key);
@@ -84,7 +86,7 @@ namespace jngl
 		boost::array<bool, 3> mousePressed_;
 		std::map<unsigned int, bool> keyDown_;
 		std::map<unsigned int, bool> keyPressed_;
-		int mousex_, mousey_, fontSize_;
+		int mousex_, mousey_, fontSize_, width_, height_;
 		std::string fontName_;
 
 		// <fontSize, <fontName, Font> >
