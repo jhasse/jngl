@@ -64,7 +64,7 @@ namespace jngl
 	}
 
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
-		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(false), fontSize_(12), width_(width), height_(height), fontName_("")
+		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(true), fontSize_(12), width_(width), height_(height), fontName_("")
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
@@ -82,6 +82,7 @@ namespace jngl
 		boost::shared_ptr<XVisualInfo> pVisual(glXChooseVisual(pDisplay_.get(), screen_, attrListAntiAliasing), ReleaseXData);
 		if(!pVisual)
 		{
+			isMultisampleSupported_ = false;
 			pVisual.reset(glXChooseVisual(pDisplay_.get(), screen_, attrListDbl), ReleaseXData);
 			if(!pVisual)
 			{
