@@ -1,26 +1,30 @@
 /*
-Copyright 2007-2008 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
 
-This file is part of jngl.
+This file is part of JNGL.
 
-jngl is free software: you can redistribute it and/or modify
+JNGL is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-jngl is distributed in the hope that it will be useful,
+JNGL is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with jngl.  If not, see <http://www.gnu.org/licenses/>.
+along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "../window.hpp"
 #include "../debug.hpp"
 #include "../finally.hpp"
+
+#include "wglext.h"
+
 #include <gl/gl.h>
+#include <gl/glext.h>
 #include <boost/bind.hpp>
 #include <stdexcept>
 #include <iostream>
@@ -32,49 +36,108 @@ namespace jngl
 {
 	LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
+	// based on: http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=46
+	bool Window::InitMultisample(HINSTANCE hInstance, PIXELFORMATDESCRIPTOR pfd)
+	{
+		PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
+		if(!wglChoosePixelFormatARB)
+		{
+			return false;
+		}
+
+		HDC hDC = pDeviceContext_.get();
+
+		int pixelFormat;
+		UINT numFormats;
+		float fAttributes[] = {0,0};
+
+		// These Attributes Are The Bits We Want To Test For In Our Sample
+		// Everything Is Pretty Standard, The Only One We Want To
+		// Really Focus On Is The SAMPLE BUFFERS ARB And WGL SAMPLES
+		// These Two Are Going To Do The Main Testing For Whether Or Not
+		// We Support Multisampling On This Hardware
+		int iAttributes[] = { WGL_DRAW_TO_WINDOW_ARB,GL_TRUE,
+			WGL_SUPPORT_OPENGL_ARB,GL_TRUE,
+			WGL_ACCELERATION_ARB,WGL_FULL_ACCELERATION_ARB,
+			WGL_COLOR_BITS_ARB,24,
+			WGL_ALPHA_BITS_ARB,8,
+			WGL_DEPTH_BITS_ARB,16,
+			WGL_STENCIL_BITS_ARB,0,
+			WGL_DOUBLE_BUFFER_ARB,GL_TRUE,
+			WGL_SAMPLE_BUFFERS_ARB,GL_TRUE,
+			WGL_SAMPLES_ARB, 4 ,						// Check For 4x Multisampling
+			0,0};
+
+		// First We Check To See If We Can Get A Pixel Format For 4 Samples
+		bool valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
+
+		// if We Returned True, And Our Format Count Is Greater Than 1
+		if (valid && numFormats >= 1)
+		{
+			arbMultisampleFormat_ = pixelFormat;
+			return true;
+		}
+
+		// Our Pixel Format With 4 Samples Failed, Test For 2 Samples
+		iAttributes[19] = 2;
+		valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
+		if (valid && numFormats >= 1)
+		{
+			arbMultisampleFormat_ = pixelFormat;
+			return true;
+		}
+
+		return false;
+	}
+
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
-		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), fontSize_(12), width_(width), height_(height)
+		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(false), fontSize_(12), width_(width), height_(height)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
-		GLuint		PixelFormat;			// Holds The Results After Searching For A Match
-		WNDCLASS	wc;						// Windows Class Structure
-		DWORD		dwExStyle;				// Window Extended Style
-		DWORD		dwStyle;				// Window Style
-		RECT		WindowRect;				// Grabs Rectangle Upper Left / Lower Right Values
-		WindowRect.left=(long)0;			// Set Left Value To 0
-		WindowRect.right=(long)width;		// Set Right Value To Requested Width
-		WindowRect.top=(long)0;				// Set Top Value To 0
-		WindowRect.bottom=(long)height;		// Set Bottom Value To Requested Height
 
-		HINSTANCE hInstance			= GetModuleHandle(NULL);				// Grab An Instance For Our Window
-		wc.style			= CS_HREDRAW | CS_VREDRAW | CS_OWNDC;	// Redraw On Size, And Own DC For Window.
-		wc.lpfnWndProc		= (WNDPROC) WndProc;					// WndProc Handles Messages
-		wc.cbClsExtra		= 0;									// No Extra Window Data
-		wc.cbWndExtra		= 0;									// No Extra Window Data
-		wc.hInstance		= hInstance;							// Set The Instance
-		wc.hIcon			= LoadIcon(NULL, IDI_WINLOGO);			// Load The Default Icon
-		wc.hCursor			= LoadCursor(NULL, IDC_ARROW);			// Load The Arrow Pointer
-		wc.hbrBackground	= NULL;									// No Background Required For GL
-		wc.lpszMenuName		= NULL;									// We Don't Want A Menu
-		wc.lpszClassName	= "OpenGL";								// Set The Class Name
+		Init(title, false);
+	}
+
+	void Window::Init(const std::string& title, const bool multisample)
+	{
+		WNDCLASS	wc;
+		DWORD		dwExStyle;
+		DWORD		dwStyle;
+		RECT		WindowRect;
+		WindowRect.left   = 0;
+		WindowRect.right  = width_;
+		WindowRect.top    = 0;
+		WindowRect.bottom = height_;
+
+		HINSTANCE hInstance = GetModuleHandle(NULL);
+		wc.style            = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+		wc.lpfnWndProc      = (WNDPROC) WndProc;
+		wc.cbClsExtra       = 0;
+		wc.cbWndExtra       = 0;
+		wc.hInstance        = hInstance;
+		wc.hIcon            = LoadIcon(NULL, IDI_WINLOGO);			// Load The Default Icon
+		wc.hCursor          = LoadCursor(NULL, IDC_ARROW);			// Load The Arrow Pointer
+		wc.hbrBackground    = NULL;									// No Background Required For GL
+		wc.lpszMenuName     = NULL;
+		wc.lpszClassName    = "OpenGL";								// Set The Class Name
 
 		static bool alreadyRegistered = false;
-		if (!alreadyRegistered && !RegisterClass(&wc))
+		if(!alreadyRegistered && !RegisterClass(&wc))
 		{
 			throw std::runtime_error("Failed To Register The Window Class.");
 		}
 		alreadyRegistered = true; // Only register once
 
-		if(fullscreen)
+		if(fullscreen_)
 		{
-			dwExStyle=WS_EX_APPWINDOW;								// Window Extended Style
-			dwStyle=WS_POPUP | WS_VISIBLE;
+			dwExStyle = WS_EX_APPWINDOW;
+			dwStyle = WS_POPUP | WS_VISIBLE;
 		}
 		else
 		{
-			dwExStyle=WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;			// Window Extended Style
-			dwStyle=WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_VISIBLE;							// Windows Style
+			dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;			// Window Extended Style
+			dwStyle = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_VISIBLE;							// Windows Style
 		}
 
 		AdjustWindowRectEx(&WindowRect, dwStyle, FALSE, dwExStyle);		// Adjust Window To True Requested Size
@@ -95,23 +158,27 @@ namespace jngl
 									hInstance,							// Instance
 									NULL), DestroyWindow);
 		if(!pWindowHandle_)
-			throw std::runtime_error("Window Creation Error.");
+		{
+			throw std::runtime_error("Window creation error.");
+		}
 
-		if(fullscreen)
+		if(fullscreen_)
 		{
 			DEVMODE devmode;
 			memset(&devmode, 0, sizeof(devmode));
 			devmode.dmSize = sizeof(devmode);
-			devmode.dmPelsWidth = width;
-			devmode.dmPelsHeight = height;
+			devmode.dmPelsWidth = width_;
+			devmode.dmPelsHeight = height_;
 			devmode.dmBitsPerPel = 32;
 			devmode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
-			if (ChangeDisplaySettings(&devmode, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
-				throw std::runtime_error("The Requested Fullscreen Mode Is Not Supported By Your Video Card.");
+			if(ChangeDisplaySettings(&devmode, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
+			{
+				throw std::runtime_error("The requested fullscreen mode is not supported by your video card.");
+			}
 		}
 
-		static	PIXELFORMATDESCRIPTOR pfd=				// pfd Tells Windows How We Want Things To Be
+		static PIXELFORMATDESCRIPTOR pfd =				// pfd Tells Windows How We Want Things To Be
 		{
 			sizeof(PIXELFORMATDESCRIPTOR),				// Size Of This Pixel Format Descriptor
 			1,											// Version Number
@@ -135,22 +202,59 @@ namespace jngl
 
 		pDeviceContext_.reset(GetDC(pWindowHandle_.get()), boost::bind(ReleaseDC, pWindowHandle_.get(), _1));
 		if (!pDeviceContext_)
-			throw std::runtime_error("Can't Create A GL Device Context.");
-		if (!(PixelFormat=ChoosePixelFormat(pDeviceContext_.get(), &pfd)))
-			throw std::runtime_error("Can't Find A Suitable PixelFormat.");
-		if(!SetPixelFormat(pDeviceContext_.get(), PixelFormat, &pfd))
-			throw std::runtime_error("Can't Set The PixelFormat.");
+		{
+			throw std::runtime_error("Can't create a GL device context.");
+		}
+		GLuint pixelFormat;
+		if(multisample)
+		{
+			pixelFormat = arbMultisampleFormat_;
+		}
+		else
+		{
+			pixelFormat = ChoosePixelFormat(pDeviceContext_.get(), &pfd);
+		}
+		if (!pixelFormat)
+		{
+			throw std::runtime_error("Can't find a suitable PixelFormat.");
+		}
+		if(!SetPixelFormat(pDeviceContext_.get(), pixelFormat, &pfd))
+		{
+			throw std::runtime_error("Can't set the PixelFormat.");
+		}
 		pRenderingContext_.reset(wglCreateContext(pDeviceContext_.get()), ReleaseRC);
 		if(!pRenderingContext_)
-			throw std::runtime_error("Can't Create A GL Rendering Context.");
+		{
+			throw std::runtime_error("Can't create a GL rendering context.");
+		}
 		if(!wglMakeCurrent(pDeviceContext_.get(), pRenderingContext_.get()))
-			throw std::runtime_error("Can't Activate The GL Rendering Context.");
+		{
+			throw std::runtime_error("Can't activate the GL rendering context.");
+		}
+
+		if(!multisample && InitMultisample(hInstance, pfd))
+		{
+			pDeviceContext_.reset((HDC)0); // Destroy window
+			try
+			{
+				Init(title, true); // Recreate with Anti-Aliasing support
+				isMultisampleSupported_ = true;
+			}
+			catch(...)
+			{
+				// If Anti-Aliasing still doesn't work for some reason, let's turn it off again.
+				Init(title, false);
+			}
+			return;
+		}
 
 		SetFontByName("Arial");
 		FontSize(fontSize_);
 
-		if(!Init(width, height))
-			throw std::runtime_error("Initialization Failed.");
+		if(!jngl::Init(width_, height_))
+		{
+			throw std::runtime_error("Initialization failed.");
+		}
 
 		running_ = true;
 	}
@@ -199,7 +303,9 @@ namespace jngl
 	void Window::ReleaseDC(HWND hwnd, HDC hdc)
 	{
 		if(!::ReleaseDC(hwnd, hdc))
-			std::cerr << "Release Device Context Failed." << std::endl;
+		{
+			std::cerr << "Release device context failed." << std::endl;
+		}
 	}
 
 	void Window::ReleaseRC(HGLRC hrc)
@@ -282,7 +388,7 @@ namespace jngl
 	{
 		if(isMouseVisible_ != visible)
 		{
-			ShowCursor(visible); // For some reason Windows wants this twice
+			ShowCursor(visible);
 		}
 		isMouseVisible_ = visible;
 	}

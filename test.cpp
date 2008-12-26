@@ -81,6 +81,11 @@ int main()
 			{
 				jngl::ErrorMessage("Hello World!");
 			}
+			jngl::Print("Press A to toggle Anti-Aliasing.", 5, 530);
+			if(jngl::KeyPressed('a'))
+			{
+				jngl::SetAntiAliasing(!jngl::GetAntiAliasing());
+			}
 			jngl::Print("Press F11 to switch fullscreen mode.", 5, 550);
 			if(jngl::KeyPressed(jngl::key::F11))
 			{

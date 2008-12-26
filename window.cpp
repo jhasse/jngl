@@ -1,20 +1,20 @@
 /*
-Copyright 2007-2008 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
 
-This file is part of jngl.
+This file is part of JNGL.
 
-jngl is free software: you can redistribute it and/or modify
+JNGL is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-jngl is distributed in the hope that it will be useful,
+JNGL is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with jngl.  If not, see <http://www.gnu.org/licenses/>.
+along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "window.hpp"
@@ -47,7 +47,6 @@ namespace jngl
 	{
 		Window::SetFont(GetFontFileByName(name));
 	}
-
 
 	void Window::FontSize(const int size)
 	{
@@ -97,5 +96,10 @@ namespace jngl
 	int Window::GetHeight() const
 	{
 		return height_;
+	}
+
+	bool Window::IsMultisampleSupported() const
+	{
+		return isMultisampleSupported_;
 	}
 }

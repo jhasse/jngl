@@ -1,24 +1,23 @@
 /*
-Copyright 2007-2008 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
 
-This file is part of jngl.
+This file is part of JNGL.
 
-jngl is free software: you can redistribute it and/or modify
+JNGL is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-jngl is distributed in the hope that it will be useful,
+JNGL is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with jngl.  If not, see <http://www.gnu.org/licenses/>.
+along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __WINDOW_HPP__
-#define __WINDOW_HPP__
+#pragma once
 
 #include "jngl.hpp"
 #include "freetype.hpp"
@@ -29,16 +28,15 @@ along with jngl.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/ptr_container/ptr_map.hpp>
 #include <GL/gl.h>
 #include <map>
+
 #ifdef linux
-#include <GL/glx.h>
-#include <GL/glu.h>
-#include <X11/extensions/xf86vmode.h>
-#include <X11/keysym.h>
+	#include <GL/glx.h>
+	#include <GL/glu.h>
+	#include <X11/extensions/xf86vmode.h>
+	#include <X11/keysym.h>
 #else
-#include <windows.h>
+	#include <windows.h>
 #endif
-
-
 
 namespace jngl
 {
@@ -71,6 +69,7 @@ namespace jngl
 		void FontSize(const int size);
 		void SetFont(const std::string&);
 		void SetFontByName(const std::string&);
+		bool IsMultisampleSupported() const;
 #ifdef linux
 		boost::shared_ptr<Display> pDisplay_;
 		static void ReleaseXData(void*);
@@ -80,8 +79,7 @@ namespace jngl
 #endif
 	private:
 		std::string GetFontFileByName(const std::string& fontname);
-
-		bool fullscreen_, running_, isMouseVisible_;
+		bool fullscreen_, running_, isMouseVisible_, isMultisampleSupported_;
 		boost::array<bool, 3> mouseDown_;
 		boost::array<bool, 3> mousePressed_;
 		std::map<unsigned int, bool> keyDown_;
@@ -100,9 +98,12 @@ namespace jngl
 		boost::shared_ptr<boost::remove_pointer<HGLRC>::type> pRenderingContext_;
 		boost::shared_ptr<boost::remove_pointer<HWND>::type> pWindowHandle_;
 		boost::shared_ptr<boost::remove_pointer<HDC>::type> pDeviceContext_;
+		int arbMultisampleFormat_;
+
+		bool InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR);
+		void Init(const std::string& multisample, bool multisample);
 #endif
 	};
 
 	extern boost::shared_ptr<Window> pWindow;
 }
-#endif // __WINDOW_HPP__

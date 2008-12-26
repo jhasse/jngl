@@ -25,6 +25,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/shared_ptr.hpp>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <GL/glext.h>
 #include <stdexcept>
 #include <sstream>
 #include <cmath>
@@ -60,6 +61,7 @@ namespace jngl
 	}
 
 	boost::shared_ptr<Window> pWindow;
+	bool antiAliasingEnabled = false;
 
 	void ShowWindow(const std::string& title, const int width, const int height, bool fullscreen)
 	{
@@ -75,6 +77,7 @@ namespace jngl
 		}
 		pWindow.reset(new Window(title, width, height, fullscreen));
 		pWindow->SetMouseVisible(isMouseVisible);
+		SetAntiAliasing(antiAliasingEnabled);
 	}
 
 	void HideWindow()
@@ -305,5 +308,28 @@ namespace jngl
 	int WindowHeight()
 	{
 		return pWindow->GetHeight();
+	}
+
+	void SetAntiAliasing(bool enabled)
+	{
+		if(!pWindow->IsMultisampleSupported())
+		{
+			antiAliasingEnabled = false;
+			return;
+		}
+		if(enabled)
+		{
+			glEnable(GL_MULTISAMPLE_ARB);
+		}
+		else
+		{
+			glDisable(GL_MULTISAMPLE_ARB);
+		}
+		antiAliasingEnabled = enabled;
+	}
+
+	bool GetAntiAliasing()
+	{
+		return antiAliasingEnabled;
 	}
 }

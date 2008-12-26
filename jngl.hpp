@@ -164,6 +164,10 @@ namespace jngl
 
 	int WindowHeight();
 
+	void SetAntiAliasing(bool enabled);
+
+	bool GetAntiAliasing();
+
 	namespace key
 	{
 #ifdef linux
