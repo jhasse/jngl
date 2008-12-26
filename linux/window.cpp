@@ -1,20 +1,20 @@
 /*
-Copyright 2007-2008  Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
 
-This file is part of jngl.
+This file is part of JNGL.
 
-jngl is free software: you can redistribute it and/or modify
+JNGL is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-jngl is distributed in the hope that it will be useful,
+JNGL is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with jngl.  If not, see <http://www.gnu.org/licenses/>.
+along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "../window.hpp"
@@ -35,13 +35,26 @@ along with jngl.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace jngl
 {
-	/* attributes for a double buffered visual in RGBA format with at least
-	 * 8 bits per color and a 16 bit depth buffer */
+	// attributes for a double buffered visual in RGBA format with at least
+	// 8 bits per color and a 16 bit depth buffer
 	static int attrListDbl[] = { GLX_RGBA, GLX_DOUBLEBUFFER,
 	    GLX_RED_SIZE, 8,
 	    GLX_GREEN_SIZE, 8,
 	    GLX_BLUE_SIZE, 8,
+	    GLX_ALPHA_SIZE, 8,
 	    GLX_DEPTH_SIZE, 16,
+	    None };
+	
+	// attributes are the same as above except that this list also requests
+	// Anti-Aliasing.
+	static int attrListAntiAliasing[] = { GLX_RGBA, GLX_DOUBLEBUFFER,
+	    GLX_RED_SIZE, 8,
+	    GLX_GREEN_SIZE, 8,
+	    GLX_BLUE_SIZE, 8,
+	    GLX_ALPHA_SIZE, 8,
+	    GLX_DEPTH_SIZE, 16,
+	    GLX_SAMPLE_BUFFERS_ARB, 1,
+	    GLX_SAMPLES_ARB, 4,
 	    None };
 
 	void Window::ReleaseXData(void* data)
@@ -51,7 +64,7 @@ namespace jngl
 	}
 
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
-		: fullscreen_(fullscreen), running_(false), isMouseVisible(true), fontSize_(12), fontName_(""), width_(width), height_(height)
+		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(false), fontSize_(12), width_(width), height_(height), fontName_("")
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
@@ -66,9 +79,15 @@ namespace jngl
 			throw std::runtime_error("Could not open display.");
 	    screen_ = DefaultScreen(pDisplay_.get());
 
-		boost::shared_ptr<XVisualInfo> pVisual(glXChooseVisual(pDisplay_.get(), screen_, attrListDbl), ReleaseXData);
+		boost::shared_ptr<XVisualInfo> pVisual(glXChooseVisual(pDisplay_.get(), screen_, attrListAntiAliasing), ReleaseXData);
 		if(!pVisual)
-			throw std::runtime_error("Only singlebuffered visual.");
+		{
+			pVisual.reset(glXChooseVisual(pDisplay_.get(), screen_, attrListDbl), ReleaseXData);
+			if(!pVisual)
+			{
+				throw std::runtime_error("Couldn't create GLX visual.");
+			}
+		}
 
 	    /* create a GLX context */
 	    context_ = glXCreateContext(pDisplay_.get(), pVisual.get(), 0, GL_TRUE);

@@ -1,6 +1,8 @@
+#!/usr/bin/python
+
 import os
 
-version = "0.7.4"
+version = "0.8.0"
 
 #Replace @VERSION@ in certain files
 files = ["jngl.pc.in", "autopackage/default.apspec.in", "jngl.nsi.in"]
@@ -32,7 +34,7 @@ if env['PLATFORM'] == 'win32': # Windows
 
 if env['PLATFORM'] == 'posix': # Linux
 	env.Append(CCFLAGS = '`pkg-config glib-2.0 freetype2 fontconfig --cflags`', LINKFLAGS = '`pkg-config glib-2.0 freetype2 fontconfig --libs`')
-	lib = env.Library(target="jngl", source=Split("main.cpp tess.cpp callbacks.c texture.cpp freetype.cpp ConvertUTF.c linux/window.cpp linux/time.cpp window.cpp finally.cpp"))
+	lib = env.Library(target="jngl", source=Split("main.cpp tess.cpp callbacks.c texture.cpp freetype.cpp ConvertUTF.c linux/window.cpp linux/time.cpp linux/message.cpp window.cpp finally.cpp"))
 	env.Program("test.cpp", CPPPATH=".", LIBPATH=Split("/usr/X11R6/lib ."), LIBS=Split("png jngl GL GLU Xxf86vm"));
 
 if int(autopackage):
