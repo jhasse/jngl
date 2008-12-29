@@ -264,7 +264,6 @@ namespace jngl
 		if(fullscreen_)
 		{
 			ChangeDisplaySettings(NULL, 0);
-			ShowCursor(true);
 		}
 	}
 
