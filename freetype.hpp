@@ -1,24 +1,25 @@
 /*
 Copyright 2007-2009  Jan Niklas Hasse <jhasse@gmail.com>
 
-This file is part of jngl.
+This file is part of JNGL.
 
-jngl is free software: you can redistribute it and/or modify
+JNGL is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-jngl is distributed in the hope that it will be useful,
+JNGL is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with jngl.  If not, see <http://www.gnu.org/licenses/>.
+along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __FREETYPE_HPP__
-#define __FREETYPE_HPP__
+#pragma once
+
+#include "finally.hpp"
 
 #include <ft2build.h>
 #include <freetype/freetype.h>
@@ -37,23 +38,23 @@ along with jngl.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include "finally.hpp"
-
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F
 #endif
 
 namespace jngl
 {
-	class UnicodeCharacter
+	class Character
 	{
 	public:
-		~UnicodeCharacter();
-		void Init(unsigned long ch, float height, FT_Face);
+		Character(unsigned long ch, float height, FT_Face);
+		~Character();
 		void Draw();
+		double GetWidth();
 	private:
 		GLuint displayList_;
 		GLuint texture_;
+		double width_;
 	};
 
 	class Font : boost::noncopyable
@@ -63,7 +64,9 @@ namespace jngl
 		Font(const char* filename, unsigned int height);
 		~Font();
 		void Print(double, double, const std::string& text);
+		double GetTextWidth(const std::string& text);
 	private:
+		Character& GetCharacter(std::string::iterator& it, const std::string::iterator end);
 		void MakeDisplayList(unsigned long);
 		std::vector<std::string> ParseString(const std::string&);
 
@@ -72,10 +75,6 @@ namespace jngl
 		FT_Face face_;
 		boost::shared_ptr<Finally> freeFace_; // Frees face_ if necessary
 		float height_;
-		GLuint textures_[128];
-		GLuint listBase_;
-		std::map<unsigned long, UnicodeCharacter> characters_;
+		std::map<unsigned long, boost::shared_ptr<Character> > characters_;
 	};
 }
-
-#endif // __FREETYPE_HPP__

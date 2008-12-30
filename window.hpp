@@ -21,6 +21,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "jngl.hpp"
 #include "freetype.hpp"
+
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include <boost/type_traits.hpp>
@@ -56,6 +57,7 @@ namespace jngl
 		int MouseY();
 		int GetWidth() const;
 		int GetHeight() const;
+		double GetTextWidth(const std::string&);
 		bool GetFullscreen() const;
 		bool KeyDown(const int key);
 		bool KeyPressed(const int key);
@@ -104,6 +106,4 @@ namespace jngl
 		void Init(const std::string& multisample, bool multisample);
 #endif
 	};
-
-	extern boost::shared_ptr<Window> pWindow;
 }

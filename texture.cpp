@@ -17,6 +17,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "texture.hpp"
+#include "window.hpp"
+#include "jngl.hpp"
+#include "finally.hpp"
+#include "windowptr.hpp"
+
 #include <map>
 #include <iostream>
 #include <string>
@@ -30,11 +36,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include <png.h>
 #include <cmath>
-
-#include "texture.hpp"
-#include "window.hpp"
-#include "jngl.hpp"
-#include "finally.hpp"
 
 #ifndef linux
 #include <gl/glext.h>
@@ -369,7 +370,7 @@ namespace jngl
 		textures_.clear();
 	}
 
-	int Width(const std::string& filename)
+	int GetWidth(const std::string& filename)
 	{
 		const int width = GetTexture(filename, true).Width();
 		if(!pWindow)
@@ -377,7 +378,7 @@ namespace jngl
 		return width;
 	}
 
-	int Height(const std::string& filename)
+	int GetHeight(const std::string& filename)
 	{
 		const int height = GetTexture(filename, true).Height();
 		if(!pWindow)
@@ -385,10 +386,10 @@ namespace jngl
 		return height;
 	}
 
-	bool Button(const std::string& texture, const double xposition, const double yposition, const std::string& mouseover)
+	bool DrawButton(const std::string& texture, const double xposition, const double yposition, const std::string& mouseover)
 	{
-		if(xposition <= MouseX() && MouseX() < (xposition + Width(texture)) &&
-		   yposition <= MouseY() && MouseY() < (yposition + Height(texture)))
+		if(xposition <= GetMouseX() && GetMouseX() < (xposition + GetWidth(texture)) &&
+		   yposition <= GetMouseY() && GetMouseY() < (yposition + GetHeight(texture)))
 		{
 			GetTexture(mouseover).Draw(xposition, yposition);
 			if(MousePressed())

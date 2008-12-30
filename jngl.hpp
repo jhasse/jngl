@@ -76,9 +76,9 @@ namespace jngl
 
 	void Unload(const std::string& filename);
 
-	int Width(const std::string& filename);
+	int GetWidth(const std::string& filename);
 
-	int Height(const std::string& filename);
+	int GetHeight(const std::string& filename);
 
 	double Time();
 
@@ -99,11 +99,11 @@ namespace jngl
 
 	void SetMouseVisible(bool visible);
 
-	bool GetMouseVisible();
+	bool IsMouseVisible();
 
-	int MouseX();
+	int GetMouseX();
 
-	int MouseY();
+	int GetMouseY();
 
 	namespace mouse
 	{
@@ -119,32 +119,32 @@ namespace jngl
 
 	void SetMouse(int xposition, int yposition);
 
-	bool Button(const std::string& texture,
-	            double xposition,
-	            double yposition,
-	            const std::string& mouseover);
+	bool DrawButton(const std::string& texture,
+	                double xposition,
+	                double yposition,
+	                const std::string& mouseover);
 
 	void SetTitle(const std::string& title);
 
-	void BackgroundColor(unsigned char red,
-	                     unsigned char green,
-	                     unsigned char blue);
+	void SetBackgroundColor(unsigned char red,
+	                        unsigned char green,
+	                        unsigned char blue);
 
-	void Color(unsigned char red,
-	           unsigned char green,
-	           unsigned char blue,
-	           unsigned char alpha = 255);
+	void SetColor(unsigned char red,
+	              unsigned char green,
+	              unsigned char blue,
+				  unsigned char alpha = 255);
 
-	void FontColor(unsigned char red,
-	               unsigned char green,
-	               unsigned char blue,
-	               unsigned char alpha = 255);
+	void SetFontColor(unsigned char red,
+	                  unsigned char green,
+	                  unsigned char blue,
+	                  unsigned char alpha = 255);
 
 	void Print(const std::string& text,
 	           double xposition,
 	           double yposition);
 
-	void FontSize(int size);
+	void SetFontSize(int size);
 
 	void SetFont(const std::string& filename);
 
@@ -160,13 +160,15 @@ namespace jngl
 
 	void ReadPixel(int x, int y, unsigned char& red, unsigned char& green, unsigned char& blue);
 
-	int WindowWidth();
+	int GetWindowWidth();
 
-	int WindowHeight();
+	int GetWindowHeight();
 
 	void SetAntiAliasing(bool enabled);
 
 	bool GetAntiAliasing();
+
+	double GetTextWidth(const std::string& text);
 
 	namespace key
 	{

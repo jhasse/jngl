@@ -21,6 +21,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "window.hpp"
 #include "debug.hpp"
 #include "texture.hpp"
+#include "windowptr.hpp"
 
 #include <boost/shared_ptr.hpp>
 #include <GL/gl.h>
@@ -60,7 +61,7 @@ namespace jngl
 		return true;
 	}
 
-	boost::shared_ptr<Window> pWindow;
+	WindowPointer pWindow;
 	bool antiAliasingEnabled = false;
 
 	void ShowWindow(const std::string& title, const int width, const int height, bool fullscreen)
@@ -75,7 +76,7 @@ namespace jngl
 		{
 			throw std::runtime_error("Height Is 0");
 		}
-		pWindow.reset(new Window(title, width, height, fullscreen));
+		pWindow.Set(new Window(title, width, height, fullscreen));
 		pWindow->SetMouseVisible(isMouseVisible);
 		SetAntiAliasing(antiAliasingEnabled);
 	}
@@ -83,7 +84,7 @@ namespace jngl
 	void HideWindow()
 	{
 		UnloadAll();
-		pWindow.reset((Window*)0);
+		pWindow.Delete();
 	}
 
 	void BeginDraw()
@@ -115,12 +116,12 @@ namespace jngl
 		glClearColor(bgRed, bgGreen, bgBlue, 0.0f);
 	}
 
-	int MouseX()
+	int GetMouseX()
 	{
 		return pWindow->MouseX();
 	}
 
-	int MouseY()
+	int GetMouseY()
 	{
 		return pWindow->MouseY();
 	}
@@ -165,7 +166,7 @@ namespace jngl
 		return pWindow->SetMouseVisible(visible);
 	}
 
-	bool GetMouseVisible()
+	bool IsMouseVisible()
 	{
 		return pWindow->GetMouseVisible();
 	}
@@ -177,7 +178,7 @@ namespace jngl
 
 	unsigned char colorRed = 255, colorGreen = 255, colorBlue = 255, colorAlpha = 255;
 
-	void Color(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha)
+	void SetColor(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha)
 	{
 		colorRed = red;
 		colorGreen = green;
@@ -186,13 +187,18 @@ namespace jngl
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 	}
 
+	double GetTextWidth(const std::string& text)
+	{
+		return pWindow->GetTextWidth(text);
+	}
+
 	void Print(const std::string& text, const double xposition, const double yposition)
 	{
 		pWindow->Print(text, xposition, yposition);
 		glColor4ub(colorRed, colorGreen,  colorBlue, colorAlpha);
 	}
 
-	void FontSize(const int size)
+	void SetFontSize(const int size)
 	{
 		pWindow->FontSize(size);
 	}
@@ -294,18 +300,18 @@ namespace jngl
 		data[0] = static_cast<unsigned char>(bgRed * 255.0f);
 		data[1] = static_cast<unsigned char>(bgGreen * 255.0f);
 		data[2] = static_cast<unsigned char>(bgBlue * 255.0f);
-		glReadPixels(x, WindowHeight() - y - 1, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glReadPixels(x, GetWindowHeight() - y - 1, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, data);
 		red = data[0];
 		green = data[1];
 		blue = data[2];
 	}
 
-	int WindowWidth()
+	int GetWindowWidth()
 	{
 		return pWindow->GetWidth();
 	}
 
-	int WindowHeight()
+	int GetWindowHeight()
 	{
 		return pWindow->GetHeight();
 	}

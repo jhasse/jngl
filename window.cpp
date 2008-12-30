@@ -18,10 +18,16 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "window.hpp"
+
 #include <boost/assign/ptr_map_inserter.hpp>
 
 namespace jngl
 {
+	double Window::GetTextWidth(const std::string& text)
+	{
+		return fonts_[fontSize_][fontName_].GetTextWidth(text);
+	}
+
 	void Window::Print(const std::string& text, const double xposition, const double yposition)
 	{
 		fonts_[fontSize_][fontName_].Print(xposition, yposition, text);

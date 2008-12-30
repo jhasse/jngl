@@ -33,13 +33,13 @@ int main()
 			}
 			DrawBackground();
 			DrawTess();
-			jngl::Color(0,0,0,255);
+			jngl::SetColor(0,0,0,255);
 			jngl::PushMatrix();
 			jngl::Translate(650, 450);
 			jngl::Rotate(rotate);
 			jngl::DrawLine(-50, -50, 50, 50);
 			jngl::PopMatrix();
-			jngl::Translate(jngl::WindowWidth() / 2, jngl::WindowHeight() / 2);
+			jngl::Translate(jngl::GetWindowWidth() / 2, jngl::GetWindowHeight() / 2);
 			jngl::Rotate(rotate);
 			rotate += 0.1;
 			if(rotate > 360)
@@ -47,35 +47,36 @@ int main()
 				rotate = 0;
 			}
 			double factor = sin(rotate / 360 * M_PI);
-			jngl::Color(255, 255, 255, static_cast<unsigned char>(abs(factor * 255)));
+			jngl::SetColor(255, 255, 255, static_cast<unsigned char>(abs(factor * 255)));
 			jngl::DrawScaled("jngl.png",
-							 -jngl::Width("jngl.png")  * factor,
-							 -jngl::Height("jngl.png") * factor,
+							 -jngl::GetWidth("jngl.png")  * factor,
+							 -jngl::GetHeight("jngl.png") * factor,
 							 factor * 2);
-			jngl::Color(0, 0, 0);
+			jngl::SetColor(0, 0, 0);
 			jngl::DrawRect(-125, 100, 250, 28);
-			jngl::FontColor(255, 255, 255);
+			jngl::SetFontColor(255, 255, 255);
 			jngl::Print("White text on black background", -115, 105);
-			jngl::FontColor(255, 255, 255);
-			jngl::FontSize(20);
+			jngl::SetFontColor(255, 255, 255);
+			jngl::SetFontSize(20);
 			jngl::Print("White text without background", -115, 135);
-			jngl::FontSize(12);
+			jngl::SetFontSize(12);
 			jngl::Reset();
 			std::stringstream sstream;
 			sstream << "FPS: " << jngl::FPS() << "\nFactor: " << factor << "\nSize of double: " << sizeof(double);
-			jngl::Color(0, 0, 0);
+			jngl::SetColor(0, 0, 0);
 			jngl::DrawRect(0, 0, 200, 62);
-			jngl::FontColor(static_cast<unsigned char>(255 * (1 - factor)), static_cast<unsigned char>(255 * factor), 255);
+			jngl::SetFontColor(static_cast<unsigned char>(255 * (1 - factor)), static_cast<unsigned char>(255 * factor), 255);
 			jngl::SetFontByName("Courier New");
 			jngl::Print(sstream.str(), 5, 5);
 			jngl::SetFontByName("sans-serif");
-			jngl::FontColor(0,0,0);
+			jngl::SetFontColor(0,0,0);
 			jngl::SetFontByName("Times New Roman");
 			jngl::Print("Black text on white background", 5, 75);
 			jngl::SetFontByName("Arial");
-			jngl::FontSize(20);
+			jngl::SetFontSize(20);
 			jngl::Print("UTF-8:   ä ö ü ß Ĉ Ψ ≈", 5, 105);
-			jngl::FontSize(12);
+			jngl::Print(" $", jngl::GetTextWidth("UTF-8:   ä ö ü ß Ĉ Ψ ≈") + 5, 105);
+			jngl::SetFontSize(12);
 			jngl::Print("Press 1-9 to test the performance\nPress E to show a error box.", 5, 135);
 			if(jngl::KeyPressed('e'))
 			{
@@ -91,7 +92,7 @@ int main()
 			{
 				jngl::ShowWindow("JNGL Test Application", 800, 600, !jngl::GetFullscreen());
 			}
-			jngl::Color(0,0,255,128);
+			jngl::SetColor(0,0,255,128);
 			DrawMouse();
 			jngl::EndDraw();
 		}
@@ -104,7 +105,7 @@ int main()
 
 void DrawBackground()
 {
-	jngl::Color(255, 255, 255, 100);
+	jngl::SetColor(255, 255, 255, 100);
 	if(performance > 1)
 	{
 		for(int x = 0; x < performance; ++x)
@@ -112,49 +113,49 @@ void DrawBackground()
 			for(int y = 0; y < performance; ++y)
 			{
 				jngl::DrawScaled("jngl.png",
-								 x * jngl::WindowWidth() / performance,
-								 y * jngl::WindowHeight() / performance,
-								 (double)jngl::WindowWidth() / performance / jngl::Width("jngl.png"),
-								 (double)jngl::WindowHeight() / performance / jngl::Height("jngl.png"));
+								 x * jngl::GetWindowWidth() / performance,
+								 y * jngl::GetWindowHeight() / performance,
+								 (double)jngl::GetWindowWidth() / performance / jngl::GetWidth("jngl.png"),
+								 (double)jngl::GetWindowHeight() / performance / jngl::GetHeight("jngl.png"));
 			}
 		}
 	}
 	else
 	{
 		jngl::Draw("jngl.png",
-		           jngl::WindowWidth() / 2- jngl::Width("jngl.png") / 2,
-		           jngl::WindowHeight() / 2- jngl::Height("jngl.png") / 2);
+		           jngl::GetWindowWidth() / 2- jngl::GetWidth("jngl.png") / 2,
+		           jngl::GetWindowHeight() / 2- jngl::GetHeight("jngl.png") / 2);
 	}
-	jngl::Color(255, 0, 0, 100);
+	jngl::SetColor(255, 0, 0, 100);
 	jngl::DrawRect(600, 30, 100, 100);
-	jngl::Color(0, 255, 0, 100);
+	jngl::SetColor(0, 255, 0, 100);
 	jngl::DrawRect(600, 400, 100, 100);
-	jngl::Color(0, 0, 255, 100);
+	jngl::SetColor(0, 0, 255, 100);
 	jngl::DrawEllipse(80, 450, 50, 80);
 }
 
 void DrawMouse()
 {
 	unsigned char red, green, blue;
-	jngl::ReadPixel(jngl::MouseX(), jngl::MouseY(), red, green, blue);
+	jngl::ReadPixel(jngl::GetMouseX(), jngl::GetMouseY(), red, green, blue);
 	std::stringstream sstream;
 	sstream << "R: " << static_cast<int>(red)
 	      << "\nG: " << static_cast<int>(green)
 	      << "\nB: " << static_cast<int>(blue);
-	jngl::FontSize(8);
-	jngl::FontColor(0, 255, 0, 200);
-	jngl::Print(sstream.str(), jngl::MouseX() + 30, jngl::MouseY() + 10);
-	jngl::Translate(jngl::MouseX(), jngl::MouseY());
+	jngl::SetFontSize(8);
+	jngl::SetFontColor(0, 255, 0, 200);
+	jngl::Print(sstream.str(), jngl::GetMouseX() + 30, jngl::GetMouseY() + 10);
+	jngl::Translate(jngl::GetMouseX(), jngl::GetMouseY());
 	jngl::Rotate(-45);
-	jngl::FontSize(30);
-	jngl::FontColor(10, 10, 200);
+	jngl::SetFontSize(30);
+	jngl::SetFontColor(10, 10, 200);
 	jngl::Print("↑", -8, -2);
-	jngl::FontSize(12);
+	jngl::SetFontSize(12);
 	jngl::Reset();
 }
 void DrawTess()
 {
-	jngl::Color(3, 10, 89, 50);
+	jngl::SetColor(3, 10, 89, 50);
 	jngl::BeginPolygon();
 	jngl::Vertex(80, 590);
 	jngl::Vertex(130, 490);
@@ -167,7 +168,7 @@ void DrawTess()
 	jngl::Vertex(480, 490);
 	jngl::Vertex(530, 590);
 	jngl::EndPolygon();
-	jngl::FontColor(255, 0, 0);
+	jngl::SetFontColor(255, 0, 0);
 	jngl::Print("A", 80, 590);
 	jngl::Print("B", 130, 490);
 	jngl::Print("C", 180, 390);
