@@ -17,6 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <png.h>
+
 #include "texture.hpp"
 #include "window.hpp"
 #include "jngl.hpp"
@@ -34,7 +36,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <GL/glu.h>
 #include <vector>
 #include <stdexcept>
-#include <png.h>
 #include <cmath>
 
 #ifndef linux
