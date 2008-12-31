@@ -51,6 +51,7 @@ namespace jngl
 		void BeginDraw();
 		void EndDraw();
 		void Quit();
+		void Continue();
 		void SetMouseVisible(const bool visible);
 		bool GetMouseVisible() const;
 		int MouseX();

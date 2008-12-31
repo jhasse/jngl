@@ -108,4 +108,19 @@ namespace jngl
 	{
 		return isMultisampleSupported_;
 	}
+
+	bool Window::Running()
+	{
+		return running_;
+	}
+
+	void Window::Quit()
+	{
+		running_ = false;
+	}
+
+	void Window::Continue()
+	{
+		running_ = true;
+	}
 }

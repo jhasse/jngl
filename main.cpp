@@ -108,6 +108,11 @@ namespace jngl
 		pWindow->Quit();
 	}
 
+	void Continue()
+	{
+		pWindow->Continue();
+	}
+
 	void BackgroundColor(const unsigned char red, const unsigned char green, const unsigned char blue)
 	{
 		bgRed = red / 255.0f;

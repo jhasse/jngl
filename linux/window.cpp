@@ -44,7 +44,7 @@ namespace jngl
 	    GLX_ALPHA_SIZE, 8,
 	    GLX_DEPTH_SIZE, 16,
 	    None };
-	
+
 	// attributes are the same as above except that this list also requests
 	// Anti-Aliasing.
 	static int attrListAntiAliasing[] = { GLX_RGBA, GLX_DOUBLEBUFFER,
@@ -356,16 +356,6 @@ namespace jngl
 	void Window::EndDraw()
 	{
 		glXSwapBuffers(pDisplay_.get(), window_);
-	}
-
-	bool Window::Running()
-	{
-		return running_;
-	}
-
-	void Window::Quit()
-	{
-		running_ = false;
 	}
 
 	void Window::SetMouseVisible(const bool visible)

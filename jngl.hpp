@@ -39,6 +39,8 @@ namespace jngl
 
 	void Quit();
 
+	void Continue();
+
 	void Draw(const std::string& filename,
 	          double xposition,
 	          double yposition);

@@ -315,11 +315,6 @@ namespace jngl
 			std::cerr << "Release Rendering Context Failed." << std::endl;
 	}
 
-	bool Window::Running()
-	{
-		return running_;
-	}
-
 	void Window::BeginDraw()
 	{
 		MSG msg;
@@ -376,11 +371,6 @@ namespace jngl
 	void Window::EndDraw()
 	{
 		SwapBuffers(pDeviceContext_.get());
-	}
-
-	void Window::Quit()
-	{
-		running_ = false;
 	}
 
 	void Window::SetMouseVisible(const bool visible)
