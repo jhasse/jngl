@@ -18,6 +18,7 @@ int main()
 {
 	try
 	{
+		jngl::SetBackgroundColor(255, 255, 255);
 		jngl::ShowWindow("JNGL Test Application", 800, 600);
 		jngl::SetMouseVisible(false);
 		double rotate = 0.0;

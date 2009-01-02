@@ -302,16 +302,20 @@ namespace jngl
 	{
 		if(!::ReleaseDC(hwnd, hdc))
 		{
-			std::cerr << "Release device context failed." << std::endl;
+			Debug("Release device context failed.");
 		}
 	}
 
 	void Window::ReleaseRC(HGLRC hrc)
 	{
 		if(!wglMakeCurrent(NULL, NULL))
-			std::cerr << "Release Of DC And RC Failed." << std::endl;
+		{
+			Debug("Release of DC and RC failed.");
+		}
 		if(!wglDeleteContext(hrc))
-			std::cerr << "Release Rendering Context Failed." << std::endl;
+		{
+			Debug("Release rendering context failed.");
+		}
 	}
 
 	void Window::DistinguishLeftRight()

@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2009  Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -113,7 +113,7 @@ namespace jngl
 		pWindow->Continue();
 	}
 
-	void BackgroundColor(const unsigned char red, const unsigned char green, const unsigned char blue)
+	void SetBackgroundColor(const unsigned char red, const unsigned char green, const unsigned char blue)
 	{
 		bgRed = red / 255.0f;
 		bgGreen = green / 255.0f;
