@@ -334,7 +334,10 @@ namespace jngl
 		std::map<std::string, Texture>::iterator i;
 		if((i = textures_.find(filename)) == textures_.end()) // texture hasn't been loaded yet?
 		{
-			pWindow.ThrowIfNull();
+			if(!halfLoad)
+			{
+				pWindow.ThrowIfNull();
+			}
 			return textures_[filename].load(filename, halfLoad);
 		}
 		return i->second;

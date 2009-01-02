@@ -18,6 +18,8 @@ int main()
 {
 	try
 	{
+		std::cout << "Size of jngl.png: " << jngl::GetWidth("jngl.png")
+		          << "x" << jngl::GetHeight("jngl.png") << std::endl;
 		jngl::SetBackgroundColor(255, 255, 255);
 		jngl::ShowWindow("JNGL Test Application", 800, 600);
 		jngl::SetMouseVisible(false);
