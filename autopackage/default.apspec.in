@@ -23,6 +23,7 @@ require @opengl.org/opengl 1.2
 require @opengl.org/glu-dev 1
 require @libpng.org/libpng-dev 1.2
 require @xfree86.org/xxf86vm-dev 1
+require @fontconfig.org/fontconfig-dev 2
 require @freetype.org/freetype-dev 9
 
 removeOwningPackage $PREFIX/lib/libjngl.a
