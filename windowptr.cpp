@@ -11,10 +11,7 @@ namespace jngl
 
 	Window* WindowPointer::operator->() const
 	{
-		if(ptr_ == 0)
-		{
-			throw std::runtime_error("Window hasn't been created yet. Use jngl::ShowWindow.");
-		}
+		ThrowIfNull();
 		return ptr_;
 	}
 
@@ -33,5 +30,13 @@ namespace jngl
 	{
 		delete ptr_;
 		ptr_ = 0;
+	}
+
+	void WindowPointer::ThrowIfNull() const
+	{
+		if(ptr_ == 0)
+		{
+			throw std::runtime_error("Window hasn't been created yet. Use jngl::ShowWindow.");
+		}
 	}
 }

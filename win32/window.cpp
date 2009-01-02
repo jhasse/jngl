@@ -27,7 +27,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <gl/glext.h>
 #include <boost/bind.hpp>
 #include <stdexcept>
-#include <iostream>
 #include <windowsx.h> // GET_X_LPARAM
 #include <cassert>
 #include <shlobj.h>
@@ -315,6 +314,21 @@ namespace jngl
 			std::cerr << "Release Rendering Context Failed." << std::endl;
 	}
 
+	void Window::DistinguishLeftRight()
+	{
+		int codesToCheck[] = {
+			jngl::key::ShiftL, jngl::key::ShiftR,
+			jngl::key::ControlL, jngl::key::ControlR,
+			jngl::key::AltL, jngl::key::AltR
+		};
+		for(unsigned int i = 0; i < sizeof(codesToCheck)/sizeof(codesToCheck[0]); ++i)
+		{
+			bool value = GetKeyState(codesToCheck[i]) & 0xf0;
+			keyDown_[codesToCheck[i]] = value;
+			keyPressed_[codesToCheck[i]] = value;
+		}
+	}
+
 	void Window::BeginDraw()
 	{
 		MSG msg;
@@ -356,10 +370,12 @@ namespace jngl
 				case WM_KEYDOWN:
 					keyDown_[msg.wParam] = true;
 					keyPressed_[msg.wParam] = true;
+					DistinguishLeftRight();
 				break;
 				case WM_KEYUP:
 					keyDown_[msg.wParam] = false;
 					keyPressed_[msg.wParam] = false;
+					DistinguishLeftRight();
 				break;
 			}
 			TranslateMessage(&msg);

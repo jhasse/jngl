@@ -105,6 +105,7 @@ namespace jngl
 
 		bool InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR);
 		void Init(const std::string& multisample, bool multisample);
+		void DistinguishLeftRight();
 #endif
 	};
 }

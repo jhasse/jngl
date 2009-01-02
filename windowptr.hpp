@@ -13,6 +13,7 @@ namespace jngl
 		operator bool() const;
 		void Delete();
 		void Set(Window*);
+		void ThrowIfNull() const;
 	private:
 		Window* ptr_;
 	};
