@@ -28,7 +28,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <freetype/fttrigon.h>
 
 #include <GL/gl.h>
-#include <GL/glu.h>
 
 #include <vector>
 #include <string>

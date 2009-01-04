@@ -12,8 +12,7 @@ for filename in files:
 	open(newfilename,"w").writelines([line.replace("@VERSION@",version) for line in datei])
 	Clean('.', newfilename) # Make sure scons -c does clean up tidily
 
-
-env = Environment()
+env = Environment(tools=['mingw'])
 debug = ARGUMENTS.get('debug', 0)
 profile = ARGUMENTS.get('profile', 0)
 autopackage = ARGUMENTS.get('autopackage', 0)
@@ -26,7 +25,7 @@ if int(profile):
 	env.Append(CCFLAGS = '-pg', _LIBFLAGS = ' -pg')
 
 if env['PLATFORM'] == 'win32': # Windows
-	lib = env.Library(target="jngl", source=Split("main.cpp windowptr.cpp tess.cpp callbacks.c texture.cpp freetype.cpp ConvertUTF.c win32/window.cpp win32/time.cpp win32/message.cpp window.cpp finally.cpp"))
+	lib = env.Library(target="jngl", source=Glob('*.cpp') + Glob('*.c') + Glob('win32/*.cpp'))
 	linkflags = "-mwindows"
 	if int(debug):
 		linkflags = ""

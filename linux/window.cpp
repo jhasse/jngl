@@ -22,7 +22,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <GL/glx.h>
 #include <GL/gl.h>
-#include <GL/glu.h>
 #include <X11/extensions/xf86vmode.h>
 #include <X11/keysym.h>
 #include <stdexcept>

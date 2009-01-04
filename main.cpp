@@ -25,7 +25,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/shared_ptr.hpp>
 #include <GL/gl.h>
-#include <GL/glu.h>
 #include <GL/glext.h>
 #include <stdexcept>
 #include <sstream>

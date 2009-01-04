@@ -33,7 +33,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 #include <GL/gl.h>
-#include <GL/glu.h>
 #include <vector>
 #include <stdexcept>
 #include <cmath>
