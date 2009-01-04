@@ -21,13 +21,13 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "jngl.hpp"
 #include "freetype.hpp"
+#include "opengl.hpp"
 
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/array.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
-#include <GL/gl.h>
 #include <map>
 
 #ifdef linux

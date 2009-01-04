@@ -20,14 +20,13 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "finally.hpp"
+#include "opengl.hpp"
 
 #include <ft2build.h>
 #include <freetype/freetype.h>
 #include <freetype/ftglyph.h>
 #include <freetype/ftoutln.h>
 #include <freetype/fttrigon.h>
-
-#include <GL/gl.h>
 
 #include <vector>
 #include <string>

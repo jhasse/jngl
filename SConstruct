@@ -17,12 +17,15 @@ debug = ARGUMENTS.get('debug', 0)
 profile = ARGUMENTS.get('profile', 0)
 autopackage = ARGUMENTS.get('autopackage', 0)
 installer = ARGUMENTS.get('installer', 0)
+opengles = ARGUMENTS.get('opengles', 0)
 if int(debug):
 	env.Append(CCFLAGS = '-g -Wall')
 else:
 	env.Append(CCFLAGS = '-O2 -DNDEBUG')
 if int(profile):
 	env.Append(CCFLAGS = '-pg', _LIBFLAGS = ' -pg')
+if int(opengles):
+	env.Append(CCFLAGS = '-DOPENGLES')
 
 if env['PLATFORM'] == 'win32': # Windows
 	lib = env.Library(target="jngl", source=Glob('*.cpp') + Glob('*.c') + Glob('win32/*.cpp'))

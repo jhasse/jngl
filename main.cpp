@@ -22,9 +22,9 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "debug.hpp"
 #include "texture.hpp"
 #include "windowptr.hpp"
+#include "draw.hpp"
 
 #include <boost/shared_ptr.hpp>
-#include <GL/gl.h>
 #include <GL/glext.h>
 #include <stdexcept>
 #include <sstream>
@@ -257,45 +257,22 @@ namespace jngl
 
 	void DrawRect(const double xposition, const double yposition, const double width, const double height)
 	{
-		glPushMatrix();
-		glTranslated(xposition, yposition, 0);
-		GLdouble rect[] = { 0, 0, width, 0, width, height, 0, height };
-		glVertexPointer(2, GL_DOUBLE, 0, rect);
-		glDrawArrays(GL_QUADS, 0, 4);
-		glPopMatrix();
+		draw::Rect(xposition, yposition, width, height);
 	}
 
 	void DrawLine(const double xstart, const double ystart, const double xend, const double yend)
 	{
-		glPushMatrix();
-		GLdouble line[] = { xstart, ystart, xend, yend };
-		glVertexPointer(2, GL_DOUBLE, 0, line);
-		glDrawArrays(GL_LINES, 0, 2);
-		glPopMatrix();
+		draw::Line(xstart, ystart, xend, yend);
 	}
 
 	void DrawEllipse(const double xmid, const double ymid, const double width, const double height)
 	{
-		glPushMatrix();
-		glTranslated(xmid, ymid, 0);
-		std::vector<GLdouble> vertexes;
-		int count = 0;
-		for(double t = 0; t <= 2*M_PI; t +=0.1)
-		{
-			vertexes.push_back(width * sin(t));
-			vertexes.push_back(height * cos(t));
-			++count;
-		}
-		glVertexPointer(2, GL_DOUBLE, 0, &vertexes[0]);
-		glDrawArrays(GL_POLYGON, 0, count);
-		glPopMatrix();
+		draw::Ellipse(xmid, ymid, width, height);
 	}
 
 	void DrawPoint(const double x, const double y)
 	{
-		GLdouble point[] = { x, y };
-		glVertexPointer(2, GL_DOUBLE, 0, point);
-		glDrawArrays(GL_POINTS, 0, 1);
+		draw::Point(x, y);
 	}
 
 	void ReadPixel(const int x, const int y, unsigned char& red, unsigned char& green, unsigned char& blue)

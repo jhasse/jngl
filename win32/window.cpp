@@ -20,6 +20,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "../window.hpp"
 #include "../debug.hpp"
 #include "../finally.hpp"
+#include "../opengl.hpp"
 
 #include "wglext.h"
 

@@ -19,9 +19,9 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../window.hpp"
 #include "../debug.hpp"
+#include "../opengl.hpp"
 
 #include <GL/glx.h>
-#include <GL/gl.h>
 #include <X11/extensions/xf86vmode.h>
 #include <X11/keysym.h>
 #include <stdexcept>

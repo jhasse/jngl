@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2009  Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -24,6 +24,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "jngl.hpp"
 #include "finally.hpp"
 #include "windowptr.hpp"
+#include "opengl.hpp"
 
 #include <map>
 #include <iostream>
@@ -32,7 +33,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/shared_array.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
-#include <GL/gl.h>
 #include <vector>
 #include <stdexcept>
 #include <cmath>
@@ -265,10 +265,11 @@ namespace jngl
 			}
 			return height;
 		}
-		void Draw(const double xposition, const double yposition)
+		template<class T>
+		void Draw(const T xposition, const T yposition)
 		{
 			glPushMatrix();
-			glTranslated(xposition, yposition, 0);
+			opengl::Translate(xposition, yposition, 0);
 			glEnable(GL_TEXTURE_2D);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			for(std::vector<std::vector<RawTexture> >::iterator i = parts_.begin(); i != parts_.end(); ++i)
@@ -282,19 +283,20 @@ namespace jngl
 					GLint texCoords[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
 					glTexCoordPointer(2, GL_INT, 0, texCoords);
 					glDrawArrays(GL_QUADS, 0, 4);
-					glTranslatef(j->width, 0, 0);
+					opengl::Translate(j->width, 0, 0);
 				}
 				glPopMatrix();
-				glTranslatef(0, i->begin()->height, 0);
+				opengl::Translate(0, i->begin()->height, 0);
 			}
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			glDisable(GL_TEXTURE_2D);
 			glPopMatrix();
 		}
-		void DrawScaled(const double xposition, const double yposition, const float xfactor, const float yfactor)
+		template<class T>
+		void DrawScaled(const T xposition, const T yposition, const float xfactor, const float yfactor)
 		{
 			glPushMatrix();
-			glTranslatef(xposition, yposition, 0);
+			opengl::Translate(xposition, yposition, 0);
 			glEnable(GL_TEXTURE_2D);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			for(std::vector<std::vector<RawTexture> >::iterator i = parts_.begin(); i != parts_.end(); ++i)
@@ -311,10 +313,10 @@ namespace jngl
 					GLdouble texCoords[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
 					glTexCoordPointer(2, GL_DOUBLE, 0, texCoords);
 					glDrawArrays(GL_QUADS, 0, 4);
-					glTranslatef(j->width * xfactor, 0, 0);
+					opengl::Translate(j->width * xfactor, 0, 0);
 				}
 				glPopMatrix();
-				glTranslatef(0, i->begin()->height * yfactor, 0);
+				opengl::Translate(0, i->begin()->height * yfactor, 0);
 			}
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			glDisable(GL_TEXTURE_2D);
