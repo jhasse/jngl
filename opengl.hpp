@@ -26,14 +26,24 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <gl/gl.h>
 #endif
 
+#include <boost/function.hpp>
+
 namespace opengl
 {
-	inline void Translate(float x, float y, float z) { glTranslatef(x, y, z); }
-#ifndef GL_DOUBLE
-	inline void Translate(double x, double y, double z) { glTranslated(x, y, z); }
+	inline void Translate(float x, float y) { glTranslatef(x, y, 0); }
+#ifdef GL_DOUBLE
+	template<class T, class U>
+	inline void Translate(T x, U y) { glTranslated(static_cast<double>(x), static_cast<double>(y), 0); }
+#else
+	template<class T, class U>
+	inline void Translate(T x, U y) { Translate(static_cast<float>(x), static_cast<float>(y)); }
 #endif
 #ifdef GL_FIXED
-	inline void Translate(int x, int y, int z) { glTranslatex(x, y, z); }
+	inline void Translate(int x, int y) { glTranslatex(x, y, 0); }
+
+	#ifndef GL_INT
+		#define GL_INT GL_FIXED
+	#endif
 #endif
 
 	template<class T> struct Type {};
@@ -57,6 +67,23 @@ namespace opengl
 		const static GLenum constant = GL_DOUBLE;
 #else
 		const static GLenum constant = GL_FLOAT;
+#endif
+	};
+
+	// Display lists don't exist in OpenGL ES so we need a wrapper
+	class DisplayList {
+	public:
+#ifndef OPENGLES
+		DisplayList();
+		~DisplayList();
+#endif
+		void Create(boost::function<void()> function);
+		void Call() const;
+	private:
+#ifdef OPENGLES
+		boost::function<void()> function_;
+#else
+		GLuint displayList_;
 #endif
 	};
 }

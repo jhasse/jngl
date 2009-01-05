@@ -269,7 +269,7 @@ namespace jngl
 		void Draw(const T xposition, const T yposition)
 		{
 			glPushMatrix();
-			opengl::Translate(xposition, yposition, 0);
+			opengl::Translate(xposition, yposition);
 			glEnable(GL_TEXTURE_2D);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			for(std::vector<std::vector<RawTexture> >::iterator i = parts_.begin(); i != parts_.end(); ++i)
@@ -283,10 +283,10 @@ namespace jngl
 					GLint texCoords[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
 					glTexCoordPointer(2, GL_INT, 0, texCoords);
 					glDrawArrays(GL_QUADS, 0, 4);
-					opengl::Translate(j->width, 0, 0);
+					opengl::Translate(j->width, 0);
 				}
 				glPopMatrix();
-				opengl::Translate(0, i->begin()->height, 0);
+				opengl::Translate(0, i->begin()->height);
 			}
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			glDisable(GL_TEXTURE_2D);
@@ -296,7 +296,7 @@ namespace jngl
 		void DrawScaled(const T xposition, const T yposition, const float xfactor, const float yfactor)
 		{
 			glPushMatrix();
-			opengl::Translate(xposition, yposition, 0);
+			opengl::Translate(xposition, yposition);
 			glEnable(GL_TEXTURE_2D);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			for(std::vector<std::vector<RawTexture> >::iterator i = parts_.begin(); i != parts_.end(); ++i)
@@ -313,10 +313,10 @@ namespace jngl
 					GLdouble texCoords[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
 					glTexCoordPointer(2, GL_DOUBLE, 0, texCoords);
 					glDrawArrays(GL_QUADS, 0, 4);
-					opengl::Translate(j->width * xfactor, 0, 0);
+					opengl::Translate(j->width * xfactor, 0);
 				}
 				glPopMatrix();
-				opengl::Translate(0, i->begin()->height * yfactor, 0);
+				opengl::Translate(0, i->begin()->height * yfactor);
 			}
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			glDisable(GL_TEXTURE_2D);

@@ -55,8 +55,6 @@ namespace jngl
 
 	Character::Character(const unsigned long ch, const float fontHeight, FT_Face face)
 	{
-		glGenTextures(1, &texture_);
-		displayList_ = glGenLists(1);
 		if(FT_Load_Glyph(face, FT_Get_Char_Index(face, ch) , FT_LOAD_TARGET_LIGHT))
 		{
 			std::string msg = std::string("FT_Load_Glyph failed. Character: ") + boost::lexical_cast<std::string>(ch);
@@ -94,66 +92,66 @@ namespace jngl
 				}
 				else
 				{
-					data[x*4 + y*4*width + 3] = bitmap.buffer[x + bitmap.width*y];
+					data[x*4 + y*4*width + 3] = bitmap.buffer[x + bitmap.width * y];
 				}
 			}
 		}
 
+		glGenTextures(1, &texture_);
 		glBindTexture(GL_TEXTURE_2D, texture_);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // preventing wrapping artifacts
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &data[0]);
 
-		glNewList(displayList_, GL_COMPILE);
-		glBindTexture(GL_TEXTURE_2D, texture_);
-		glPushMatrix();
+		// Now we need to account for the fact that many of
+		// our textures are filled with empty padding space.
+		// We figure what portion of the texture is used by
+		// the actual character and store that information in
+		// the x and y variables, then when we draw the
+		// quad, we will only reference the parts of the texture
+		// that we contain the character itself.
+		const float x = static_cast<float>(bitmap.width) / static_cast<float>(width);
+		const float y = static_cast<float>(bitmap.rows)  / static_cast<float>(height);
+		GLfloat texCoords[] = { 0, 0, 0, y, x, y, x, 0 };
+		texCoords_.assign(&texCoords[0], &texCoords[8]);
 
-		//first we need to move over a little so that
-		//the character has the right amount of space
-		//between it and the one before it.
-		glTranslatef(bitmap_glyph->left,0,0);
+		GLint vertexes[] = { 0, 0, 0, bitmap.rows, bitmap.width, bitmap.rows, bitmap.width, 0 };
+		vertexes_.assign(&vertexes[0], &vertexes[8]);
 
-		//Now we need to account for the fact that many of
-		//our textures are filled with empty padding space.
-		//We figure what portion of the texture is used by
-		//the actual character and store that information in
-		//the x and y variables, then when we draw the
-		//quad, we will only reference the parts of the texture
-		//that we contain the character itself.
-		float	x=(float)bitmap.width / (float)width,
-				y=(float)bitmap.rows / (float)height;
+		top_ = fontHeight - bitmap_glyph->top;
+		width_ = face->glyph->advance.x >> 6;
+		left_ = bitmap_glyph->left;
 
-		//Move down a little for small characters
-		glTranslatef(0, fontHeight - bitmap_glyph->top,0);
-
-		//Here we draw the texturemaped quads.
-		//The bitmap that we got from FreeType was not
-		//oriented quite like we would like it to be,
-		//so we need to link the texture to the quad
-		//so that the result will be properly aligned.
-		glBegin(GL_QUADS);
-		glTexCoord2d(0,0); glVertex2f(0,0);
-		glTexCoord2d(0,y); glVertex2f(0,bitmap.rows);
-		glTexCoord2d(x,y); glVertex2f(bitmap.width,bitmap.rows);
-		glTexCoord2d(x,0); glVertex2f(bitmap.width,0);
-		glEnd();
-		glPopMatrix();
-		glTranslatef(face->glyph->advance.x >> 6 ,0,0);
-
-		glEndList();
-
-		width_ = bitmap_glyph->left + face->glyph->advance.x >> 6;
+		displayList_.Create(boost::bind(&Character::DrawTexture, this));
 	}
 
-	void Character::Draw()
+	void Character::DrawTexture() const
 	{
-		glCallList(displayList_);
+		glPushMatrix();
+		opengl::Translate(left_, top_);
+		glEnable(GL_TEXTURE_2D);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		glBindTexture(GL_TEXTURE_2D, texture_);
+		glVertexPointer(2, GL_INT, 0, &vertexes_[0]);
+		glTexCoordPointer(2, GL_FLOAT, 0, &texCoords_[0]);
+		glDrawArrays(GL_QUADS, 0, 4);
+
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisable(GL_TEXTURE_2D);
+		glPopMatrix();
+		opengl::Translate(width_, 0);
 	}
 
-	double Character::GetWidth()
+	void Character::Draw() const
+	{
+		displayList_.Call();
+	}
+
+	double Character::GetWidth() const
 	{
 		return width_;
 	}
@@ -161,7 +159,6 @@ namespace jngl
 	Character::~Character()
 	{
 		glDeleteTextures(1, &texture_);
-		glDeleteLists(displayList_, 1);
 	}
 
 	Character& Font::GetCharacter(std::string::iterator& it, const std::string::iterator end)
@@ -316,11 +313,6 @@ namespace jngl
 
 		std::vector<std::string> lines(ParseString(text));
 
-		glPushAttrib(GL_LIST_BIT | GL_CURRENT_BIT  | GL_ENABLE_BIT | GL_TRANSFORM_BIT);
-		glMatrixMode(GL_MODELVIEW);
-		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glColor4ub(fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha);
 
 		std::vector<std::string>::iterator lineEnd = lines.end();
@@ -328,7 +320,7 @@ namespace jngl
 		for(std::vector<std::string>::iterator lineIter = lines.begin(); lineIter != lineEnd; ++lineIter)
 		{
 			glPushMatrix();
-			glTranslated(x, y + h * lineNr, 0);
+			opengl::Translate(x, y + h * lineNr);
 			++lineNr;
 
 			std::string::iterator charEnd = lineIter->end();
@@ -339,8 +331,6 @@ namespace jngl
 
 			glPopMatrix();
 		}
-
-		glPopAttrib();
 	}
 
 	FT_Library Font::library_;

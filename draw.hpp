@@ -25,7 +25,7 @@ namespace draw
 	void Rect(const T xposition, const T yposition, const T width, const T height)
 	{
 		glPushMatrix();
-		opengl::Translate(xposition, yposition, 0);
+		opengl::Translate(xposition, yposition);
 		T rect[] = { 0, 0, width, 0, width, height, 0, height };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, rect);
 		glDrawArrays(GL_QUADS, 0, 4);
@@ -46,7 +46,7 @@ namespace draw
 	void Ellipse(const T xmid, const T ymid, const T width, const T height)
 	{
 		glPushMatrix();
-		opengl::Translate(xmid, ymid, 0);
+		opengl::Translate(xmid, ymid);
 		std::vector<T> vertexes;
 		int count = 0;
 		for(T t = 0; t <= 2 * M_PI; t +=0.1)

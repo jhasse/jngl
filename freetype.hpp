@@ -47,12 +47,18 @@ namespace jngl
 	public:
 		Character(unsigned long ch, float height, FT_Face);
 		~Character();
-		void Draw();
-		double GetWidth();
+		void Draw() const;
+		double GetWidth() const;
 	private:
-		GLuint displayList_;
 		GLuint texture_;
-		double width_;
+		int width_;
+		int left_;
+		float top_;
+		std::vector<GLfloat> texCoords_;
+		std::vector<GLint> vertexes_;
+		opengl::DisplayList displayList_;
+
+		void DrawTexture() const;
 	};
 
 	class Font : boost::noncopyable
@@ -65,7 +71,6 @@ namespace jngl
 		double GetTextWidth(const std::string& text);
 	private:
 		Character& GetCharacter(std::string::iterator& it, const std::string::iterator end);
-		void MakeDisplayList(unsigned long);
 		std::vector<std::string> ParseString(const std::string&);
 
 		static bool initialized_;
