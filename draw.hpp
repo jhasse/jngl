@@ -19,6 +19,8 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "opengl.hpp"
 
+#include <cmath>
+
 namespace draw
 {
 	template<class T>

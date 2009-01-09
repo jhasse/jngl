@@ -20,7 +20,7 @@ Create a source tarball:
 	First you need to create a file list. You can do it like this:
 		find . \( ! -regex '.*/\..*' \) -type f | sed 's/.\///' > filelist
 	Then create the archive:
-		tar cfj jngl_0.7.tar.bz2 $(cat filelist)
+		tar cfj jngl_0.8.0.tar.bz2 $(cat filelist)
 
 
 FreeType for Windows: http://gnuwin32.sourceforge.net/packages/freetype.htm

@@ -24,9 +24,8 @@ namespace jngl
 {
 	void ErrorMessage(const std::string& text)
 	{
-		// FIXME: Do something else if zenity is not available
 		std::stringstream sstream;
-		sstream << "zenity --error --text \"" << text << "\"&" << std::endl;
+		sstream << "xmessage -default okay -nearmouse \"" << text << "\"" << std::endl;
 		system(sstream.str().c_str());
 	}
 }

@@ -23,7 +23,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <GLES/egl.h>
 #include <GLES/gl.h>
 #else
-#include <gl/gl.h>
+#include <GL/gl.h>
 #endif
 
 #include <boost/function.hpp>

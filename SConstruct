@@ -27,8 +27,19 @@ if int(profile):
 if int(opengles):
 	env.Append(CCFLAGS = '-DOPENGLES')
 
+source_files = Split("""
+finally.cpp
+freetype.cpp
+main.cpp
+opengl.cpp
+tess.cpp
+texture.cpp
+window.cpp
+windowptr.cpp
+""") + Glob('*.c')
+
 if env['PLATFORM'] == 'win32': # Windows
-	lib = env.Library(target="jngl", source=Glob('*.cpp') + Glob('*.c') + Glob('win32/*.cpp'))
+	lib = env.Library(target="jngl", source=source_files + Glob('win32/*.cpp'))
 	linkflags = "-mwindows"
 	if int(debug):
 		linkflags = ""
@@ -36,7 +47,7 @@ if env['PLATFORM'] == 'win32': # Windows
 
 if env['PLATFORM'] == 'posix': # Linux
 	env.Append(CCFLAGS = '`pkg-config glib-2.0 freetype2 fontconfig --cflags`', LINKFLAGS = '`pkg-config glib-2.0 freetype2 fontconfig --libs`')
-	lib = env.Library(target="jngl", source=Split("main.cpp windowptr.cpp tess.cpp callbacks.c texture.cpp freetype.cpp ConvertUTF.c linux/window.cpp linux/time.cpp linux/message.cpp window.cpp finally.cpp"))
+	lib = env.Library(target="jngl", source=source_files + Glob('linux/*.cpp'))
 	env.Program("test.cpp", CPPPATH=".", LIBPATH=Split("/usr/X11R6/lib ."), LIBS=Split("png jngl GL GLU Xxf86vm"));
 
 if int(autopackage):

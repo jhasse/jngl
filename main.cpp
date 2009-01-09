@@ -28,7 +28,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <GL/glext.h>
 #include <stdexcept>
 #include <sstream>
-#include <cmath>
 
 extern "C"
 {
