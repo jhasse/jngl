@@ -29,7 +29,7 @@ namespace jngl
 		pid_t pid = fork();
 		if(pid == 0)
 		{
-			execlp("xmessage", "-default okay", "-nearmouse", text.c_str(), NULL);
+			execlp("xmessage", "Error", "-default", "okay", "-nearmouse", text.c_str(), NULL);
 		}
 		else
 		{
