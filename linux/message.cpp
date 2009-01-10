@@ -17,15 +17,23 @@ You should have received a copy of the GNU Lesser General Public License
 along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <sstream>
-#include <cstdlib>
+#include <string>
+#include <unistd.h>    // fork
+#include <sys/types.h> // pid_t
+#include <sys/wait.h>  // waitpid
 
 namespace jngl
 {
 	void ErrorMessage(const std::string& text)
 	{
-		std::stringstream sstream;
-		sstream << "xmessage -default okay -nearmouse \"" << text << "\"" << std::endl;
-		system(sstream.str().c_str());
+		pid_t pid = fork();
+		if(pid == 0)
+		{
+			execlp("xmessage", "-default okay", "-nearmouse", text.c_str(), NULL);
+		}
+		else
+		{
+			waitpid(pid, 0, 0);
+		}
 	}
 }
