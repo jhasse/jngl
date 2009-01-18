@@ -297,14 +297,14 @@ namespace jngl
 		return ksym;
 	}
 
-	bool Window::KeyDown(const char key)
+	bool Window::KeyDown(const std::string& key)
 	{
-		return KeyDown(CharToSym(key));
+		return KeyDown(CharToSym(key[0]));
 	}
 
-	bool Window::KeyPressed(const char key)
+	bool Window::KeyPressed(const std::string& key)
 	{
-		return KeyPressed(CharToSym(key));
+		return KeyPressed(CharToSym(key[0]));
 	}
 
 	void Window::BeginDraw()

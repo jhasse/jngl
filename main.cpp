@@ -113,6 +113,7 @@ namespace jngl
 
 	void SetBackgroundColor(const unsigned char red, const unsigned char green, const unsigned char blue)
 	{
+		pWindow.ThrowIfNull();
 		bgRed = red / 255.0f;
 		bgGreen = green / 255.0f;
 		bgBlue = blue / 255.0f;
