@@ -21,6 +21,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "../debug.hpp"
 #include "../finally.hpp"
 #include "../opengl.hpp"
+#include "../ConvertUTF.h"
 
 #include "wglext.h"
 
@@ -337,8 +338,9 @@ namespace jngl
 	void Window::BeginDraw()
 	{
 		MSG msg;
-		while(PeekMessage(&msg,NULL,0,0,PM_REMOVE))
+		while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
+			static std::map<int, std::string> scanCodeToCharacter;
 			switch(msg.message)
 			{
 				case WM_QUIT:
@@ -381,6 +383,44 @@ namespace jngl
 					keyDown_[msg.wParam] = false;
 					keyPressed_[msg.wParam] = false;
 					DistinguishLeftRight();
+					int scanCode = msg.lParam & 0x7f8000;
+					characterDown_[scanCodeToCharacter[scanCode]] = false;
+					characterPressed_[scanCodeToCharacter[scanCode]] = false;
+				break;
+				case WM_CHAR:
+				{
+					std::vector<char> buf(4);
+					UTF8* temp = reinterpret_cast<UTF8*>(&buf[0]);
+					UTF8** targetStart = &temp;
+					UTF8* targetEnd = *targetStart + buf.size();
+					const UTF16* temp2 = reinterpret_cast<UTF16*>(&msg.wParam);
+					const UTF16** sourceStart = &temp2;
+					const UTF16* sourceEnd = temp2 + sizeof(UTF16);
+					ConversionResult result = ConvertUTF16toUTF8(sourceStart, sourceEnd, targetStart, targetEnd, lenientConversion);
+					if(result != conversionOK)
+					{
+						Debug("WARNING: Couldn't convert UTF16 to UTF8.\n");
+						break;
+					}
+					std::vector<char>::iterator end = ++(buf.begin());
+					if(buf[0] & 0x80)
+					{
+						++end;
+						if(buf[0] & 0x20)
+						{
+							++end;
+							if(buf[0] & 0x10)
+							{
+								++end;
+							}
+						}
+					}
+					std::string character(buf.begin(), end);
+					int scanCode = msg.lParam & 0x7f8000;
+					scanCodeToCharacter[scanCode] = character;
+					characterDown_[character] = true;
+					characterPressed_[character] = true;
+				}
 				break;
 			}
 			TranslateMessage(&msg);
@@ -423,14 +463,19 @@ namespace jngl
 		return false;
 	}
 
-	bool Window::KeyDown(const char key)
+	bool Window::KeyDown(const std::string& key)
 	{
-		return KeyDown((const int)toupper(key));
+		return characterDown_[key];
 	}
 
-	bool Window::KeyPressed(const char key)
+	bool Window::KeyPressed(const std::string& key)
 	{
-		return KeyPressed((const int)toupper(key));
+		if(characterPressed_[key])
+		{
+			characterPressed_[key] = false;
+			return true;
+		}
+		return characterPressed_[key];
 	}
 
 	LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
@@ -472,7 +517,7 @@ namespace jngl
 		}
 
 		// Pass All Unhandled Messages To DefWindowProc
-		return DefWindowProc(hWnd,uMsg,wParam,lParam);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
 
 	int Window::MouseX()

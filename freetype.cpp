@@ -189,9 +189,9 @@ namespace jngl
 					++sourceEnd;
 				}
 			}
-			UTF32 unicode;
 			const UTF8* temp = (const unsigned char*)&ch;
 			const UTF8** sourceStart = &temp;
+			UTF32 unicode;
 			UTF32* temp2 = &unicode;
 			UTF32** targetStart = &temp2;
 			UTF32* targetEnd = &unicode + sizeof(unsigned long);

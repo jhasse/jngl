@@ -95,9 +95,13 @@ namespace jngl
 
 	bool KeyDown(char key);
 
+	bool KeyDown(const std::string& key);
+
 	bool KeyPressed(int key);
 
 	bool KeyPressed(char key);
+
+	bool KeyPressed(const std::string& key);
 
 	void SetMouseVisible(bool visible);
 

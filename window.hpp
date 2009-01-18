@@ -62,8 +62,8 @@ namespace jngl
 		bool GetFullscreen() const;
 		bool KeyDown(const int key);
 		bool KeyPressed(const int key);
-		bool KeyDown(const char key);
-		bool KeyPressed(const char key);
+		bool KeyDown(const std::string& key);
+		bool KeyPressed(const std::string& key);
 		bool MouseDown(mouse::Button button);
 		bool MousePressed(mouse::Button button);
 		void SetMouse(const int xposition, const int yposition);
@@ -87,6 +87,8 @@ namespace jngl
 		boost::array<bool, 3> mousePressed_;
 		std::map<unsigned int, bool> keyDown_;
 		std::map<unsigned int, bool> keyPressed_;
+		std::map<std::string, bool> characterDown_;
+		std::map<std::string, bool> characterPressed_;
 		int mousex_, mousey_, fontSize_, width_, height_;
 		std::string fontName_;
 
