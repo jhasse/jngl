@@ -117,9 +117,9 @@ namespace jngl
 		wc.cbClsExtra       = 0;
 		wc.cbWndExtra       = 0;
 		wc.hInstance        = hInstance;
-		wc.hIcon            = LoadIcon(NULL, IDI_WINLOGO);			// Load The Default Icon
-		wc.hCursor          = LoadCursor(NULL, IDC_ARROW);			// Load The Arrow Pointer
-		wc.hbrBackground    = NULL;									// No Background Required For GL
+		wc.hIcon            = LoadIcon(NULL, IDI_WINLOGO);
+		wc.hCursor          = LoadCursor(NULL, IDC_ARROW);
+		wc.hbrBackground    = NULL;
 		wc.lpszMenuName     = NULL;
 		wc.lpszClassName    = "OpenGL";								// Set The Class Name
 
@@ -133,12 +133,12 @@ namespace jngl
 		if(fullscreen_)
 		{
 			dwExStyle = WS_EX_APPWINDOW;
-			dwStyle = WS_POPUP | WS_VISIBLE;
+			dwStyle = WS_POPUP;
 		}
 		else
 		{
-			dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;			// Window Extended Style
-			dwStyle = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_VISIBLE;							// Windows Style
+			dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
+			dwStyle = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
 		}
 
 		AdjustWindowRectEx(&WindowRect, dwStyle, FALSE, dwExStyle);		// Adjust Window To True Requested Size
@@ -249,6 +249,7 @@ namespace jngl
 			return;
 		}
 
+		::ShowWindow(pWindowHandle_.get(), SW_SHOWNORMAL);
 		SetFontByName("Arial");
 		FontSize(fontSize_);
 
