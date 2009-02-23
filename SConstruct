@@ -18,6 +18,7 @@ profile = ARGUMENTS.get('profile', 0)
 autopackage = ARGUMENTS.get('autopackage', 0)
 installer = ARGUMENTS.get('installer', 0)
 opengles = ARGUMENTS.get('opengles', 0)
+m32 = ARGUMENTS.get('m32', 0)
 if int(debug):
 	env.Append(CCFLAGS = '-g -Wall')
 else:
@@ -26,6 +27,8 @@ if int(profile):
 	env.Append(CCFLAGS = '-pg', _LIBFLAGS = ' -pg')
 if int(opengles):
 	env.Append(CCFLAGS = '-DOPENGLES')
+if int(m32):
+	env.Append(CCFLAGS = '-m32', LINKFLAGS = ' -m32')
 
 source_files = Split("""
 finally.cpp
@@ -46,9 +49,11 @@ if env['PLATFORM'] == 'win32': # Windows
 	env.Program("test.cpp", CPPPATH=".", LIBPATH=".", LIBS=Split("jngl opengl32 glu32 gdi32 png freetype"), LINKFLAGS=linkflags)
 
 if env['PLATFORM'] == 'posix': # Linux
-	env.Append(CCFLAGS = '`pkg-config glib-2.0 freetype2 fontconfig --cflags`', LINKFLAGS = '`pkg-config glib-2.0 freetype2 fontconfig --libs`')
+	env.ParseConfig('pkg-config --cflags --libs freetype2 fontconfig glib-2.0')
 	lib = env.Library(target="jngl", source=source_files + Glob('linux/*.cpp'))
-	env.Program("test.cpp", CPPPATH=".", LIBPATH=Split("/usr/X11R6/lib ."), LIBS=Split("png jngl GL GLU Xxf86vm"));
+	env.Append(LIBPATH=".", CPPPATH='.')
+	env.ParseConfig("pkg-config --cflags --libs jngl.pc")
+	env.Program("test.cpp")
 
 if int(autopackage):
 	t = Command('jngl Library ' + version + '.package', [lib, 'autopackage/default.apspec.in'], "makepackage")
