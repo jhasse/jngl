@@ -7,6 +7,13 @@ Build jngl in profile mode:
 Create an autopackage:
  scons autopackage=1
 
+To create an Autopackage for both 32 bit and 64 bit systems:
+ scons m32=1 autopackage=1
+ mkdir x86
+ mv jngl\ Library*.package x86/
+ scons autopackage=1
+ rm -rf x86/
+
 Create a windows installer:
  scons installer=1
 

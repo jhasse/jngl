@@ -8,11 +8,16 @@ Summary: Easy to use 2D graphic library using OpenGL
 URL: http://www.watteimdocht.de/index_jngl.php
 License: GNU Lesser General Public License, Version 3
 SoftwareVersion: @VERSION@
-AutopackageTarget: 1.2
+AutopackageTarget: 1.4
 RootInstallOnly: Yes
 
 [BuildPrepare]
 ./install.sh $build_root
+
+x86_package="x86/jngl Library @VERSION@.package"
+if [[ -e "$x86_package" ]]; then
+	export HYBRID_PACKAGE="$x86_package"
+fi
 
 [Imports]
 echo '*' | import
