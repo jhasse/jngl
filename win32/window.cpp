@@ -381,12 +381,14 @@ namespace jngl
 					DistinguishLeftRight();
 				break;
 				case WM_KEYUP:
+				{
 					keyDown_[msg.wParam] = false;
 					keyPressed_[msg.wParam] = false;
 					DistinguishLeftRight();
 					int scanCode = msg.lParam & 0x7f8000;
 					characterDown_[scanCodeToCharacter[scanCode]] = false;
 					characterPressed_[scanCodeToCharacter[scanCode]] = false;
+				}
 				break;
 				case WM_CHAR:
 				{

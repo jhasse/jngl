@@ -106,7 +106,7 @@ namespace jngl
 		int arbMultisampleFormat_;
 
 		bool InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR);
-		void Init(const std::string& multisample, bool multisample);
+		void Init(const std::string& title, bool multisample);
 		void DistinguishLeftRight();
 #endif
 	};
