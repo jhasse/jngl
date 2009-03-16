@@ -15,15 +15,12 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\German.nlf"
 
 Section ""
 
-SetOutPath $INSTDIR\bin
-File zlib1.dll
-File libpng3.dll
-File freetype6.dll
 SetOutPath $INSTDIR\include
 File jngl.hpp
 SetOutPath $INSTDIR\lib
 File libjngl.a
-File libfreetype.dll.a
-File libpng.dll.a
+File lib\libfreetype.a
+File lib\libpng.a
+File lib\libz.a
 
 SectionEnd

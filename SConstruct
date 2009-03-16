@@ -47,7 +47,11 @@ if env['PLATFORM'] == 'win32': # Windows
 	linkflags = "-mwindows"
 	if int(debug):
 		linkflags = ""
-	env.Program("test.cpp", CPPPATH=".", LIBPATH=".", LIBS=Split("jngl opengl32 glu32 gdi32 png freetype"), LINKFLAGS=linkflags)
+	env.Program("test.cpp",
+	            CPPPATH=".",
+				LIBPATH=Split(". ./lib"),
+				LIBS=Split("jngl freetype png opengl32 glu32 gdi32 z"),
+				LINKFLAGS=linkflags)
 
 if env['PLATFORM'] == 'posix': # Linux
 	env.ParseConfig('pkg-config --cflags --libs freetype2 fontconfig glib-2.0')
