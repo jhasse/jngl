@@ -22,4 +22,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 namespace jngl
 {
 	void UnloadAll();
+	extern unsigned char spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha,
+						 colorRed,       colorGreen,       colorBlue,       colorAlpha;
 };

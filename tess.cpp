@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2008  Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -18,6 +18,8 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef OPENGLES
+
+#include "texture.hpp"
 
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -57,9 +59,11 @@ namespace jngl
 
 	void EndPolygon()
 	{
+		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		gluTessEndContour(tobj);
 		gluTessEndPolygon(tobj);
 		positions.clear(); // free all stored positions
+		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 }
 

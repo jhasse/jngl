@@ -43,6 +43,17 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace jngl
 {
+	unsigned char spriteColorRed = 255, spriteColorGreen = 255, spriteColorBlue = 255, spriteColorAlpha = 255;
+
+	void SetSpriteColor(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha)
+	{
+		spriteColorRed = red;
+		spriteColorGreen = green;
+		spriteColorBlue = blue;
+		spriteColorAlpha = alpha;
+		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
+	}
+
 	struct RawTexture
 	{
 		GLuint textureid;

@@ -200,7 +200,6 @@ namespace jngl
 		colorGreen = green;
 		colorBlue = blue;
 		colorAlpha = alpha;
-		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 	}
 
 	double GetTextWidth(const std::string& text)
@@ -211,7 +210,7 @@ namespace jngl
 	void Print(const std::string& text, const double xposition, const double yposition)
 	{
 		pWindow->Print(text, xposition, yposition);
-		glColor4ub(colorRed, colorGreen,  colorBlue, colorAlpha);
+		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
 	void SetFontSize(const int size)
@@ -269,22 +268,30 @@ namespace jngl
 
 	void DrawRect(const double xposition, const double yposition, const double width, const double height)
 	{
+		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Rect(xposition, yposition, width, height);
+		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
 	void DrawLine(const double xstart, const double ystart, const double xend, const double yend)
 	{
+		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Line(xstart, ystart, xend, yend);
+		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
 	void DrawEllipse(const double xmid, const double ymid, const double width, const double height)
 	{
+		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Ellipse(xmid, ymid, width, height);
+		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
 	void DrawPoint(const double x, const double y)
 	{
+		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Point(x, y);
+		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
 	void ReadPixel(const int x, const int y, unsigned char& red, unsigned char& green, unsigned char& blue)

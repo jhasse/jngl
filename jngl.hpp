@@ -146,6 +146,11 @@ namespace jngl
 	                  unsigned char blue,
 	                  unsigned char alpha = 255);
 
+	void SetSpriteColor(unsigned char red,
+	                    unsigned char green,
+	                    unsigned char blue,
+				        unsigned char alpha = 255);
+
 	void Print(const std::string& text,
 	           double xposition,
 	           double yposition);

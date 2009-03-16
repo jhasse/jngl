@@ -50,7 +50,7 @@ int main()
 				rotate = 0;
 			}
 			double factor = sin(rotate / 360 * M_PI);
-			jngl::SetColor(255, 255, 255, static_cast<unsigned char>(abs(factor * 255)));
+			jngl::SetSpriteColor(255, 255, 255, static_cast<unsigned char>(abs(factor * 255)));
 			jngl::DrawScaled("jngl.png",
 							 -jngl::GetWidth("jngl.png")  * factor,
 							 -jngl::GetHeight("jngl.png") * factor,
@@ -108,7 +108,7 @@ int main()
 
 void DrawBackground()
 {
-	jngl::SetColor(255, 255, 255, 100);
+	jngl::SetSpriteColor(255, 255, 255, 100);
 	if(performance > 1)
 	{
 		for(int x = 0; x < performance; ++x)
