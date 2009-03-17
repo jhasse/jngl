@@ -27,7 +27,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "opengl.hpp"
 
 #include <map>
-#include <iostream>
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
@@ -145,7 +144,7 @@ namespace jngl
 			}
 		    png_init_io(png_ptr, fp);
 		    png_set_sig_bytes(png_ptr, PNG_BYTES_TO_CHECK);
-			png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND, png_voidp_NULL);
+			png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16, png_voidp_NULL);
 
 			png_ptr->num_rows = png_ptr->height; // Make sure this is set correctly
 
