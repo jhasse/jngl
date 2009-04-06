@@ -307,7 +307,7 @@ namespace jngl
 	}
 
 
-	void Font::Print(double x, double y, const std::string& text)
+	void Font::Print(const int x, const int y, const std::string& text)
 	{
 		double h = height_ / .63; // We make the height about 1.5* that of
 

@@ -207,7 +207,7 @@ namespace jngl
 		return pWindow->GetTextWidth(text);
 	}
 
-	void Print(const std::string& text, const double xposition, const double yposition)
+	void Print(const std::string& text, const int xposition, const int yposition)
 	{
 		pWindow->Print(text, xposition, yposition);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);

@@ -28,7 +28,7 @@ namespace jngl
 		return fonts_[fontSize_][fontName_].GetTextWidth(text);
 	}
 
-	void Window::Print(const std::string& text, const double xposition, const double yposition)
+	void Window::Print(const std::string& text, const int xposition, const int yposition)
 	{
 		fonts_[fontSize_][fontName_].Print(xposition, yposition, text);
 	}

@@ -67,7 +67,7 @@ namespace jngl
 		Font();
 		Font(const char* filename, unsigned int height);
 		~Font();
-		void Print(double, double, const std::string& text);
+		void Print(int x, int y, const std::string& text);
 		double GetTextWidth(const std::string& text);
 	private:
 		Character& GetCharacter(std::string::iterator& it, const std::string::iterator end);

@@ -152,8 +152,8 @@ namespace jngl
 				        unsigned char alpha = 255);
 
 	void Print(const std::string& text,
-	           double xposition,
-	           double yposition);
+	           int xposition,
+	           int yposition);
 
 	void SetFontSize(int size);
 
