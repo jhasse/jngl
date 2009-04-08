@@ -69,7 +69,8 @@ namespace jngl
 		void SetMouse(const int xposition, const int yposition);
 		void SetTitle(const std::string& title);
 		void Print(const std::string& text, const int xposition, const int yposition);
-		void FontSize(const int size);
+		int GetFontSize() const;
+		void SetFontSize(const int size);
 		void SetFont(const std::string&);
 		void SetFontByName(const std::string&);
 		bool IsMultisampleSupported() const;

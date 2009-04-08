@@ -251,7 +251,7 @@ namespace jngl
 
 		::ShowWindow(pWindowHandle_.get(), SW_SHOWNORMAL);
 		SetFontByName("Arial");
-		FontSize(fontSize_);
+		SetFontSize(fontSize_);
 
 		if(!jngl::Init(width_, height_))
 		{

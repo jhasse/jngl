@@ -54,7 +54,12 @@ namespace jngl
 		Window::SetFont(GetFontFileByName(name));
 	}
 
-	void Window::FontSize(const int size)
+	int Window::GetFontSize() const
+	{
+		return fontSize_;
+	}
+
+	void Window::SetFontSize(const int size)
 	{
 		int oldSize = fontSize_;
 		fontSize_ = size;

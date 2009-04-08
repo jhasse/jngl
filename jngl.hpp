@@ -155,6 +155,8 @@ namespace jngl
 	           int xposition,
 	           int yposition);
 
+	int GetFontSize();
+
 	void SetFontSize(int size);
 
 	void SetFont(const std::string& filename);

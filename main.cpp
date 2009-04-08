@@ -213,9 +213,14 @@ namespace jngl
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
+	int GetFontSize()
+	{
+		return pWindow->GetFontSize();
+	}
+
 	void SetFontSize(const int size)
 	{
-		pWindow->FontSize(size);
+		pWindow->SetFontSize(size);
 	}
 
 	void SetFont(const std::string& filename)

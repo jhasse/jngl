@@ -78,7 +78,7 @@ int main()
 			jngl::SetFontByName("Arial");
 			jngl::SetFontSize(20);
 			jngl::Print("UTF-8:   ä ö ü ß Ĉ Ψ ≈", 5, 105);
-			jngl::Print(" $", jngl::GetTextWidth("UTF-8:   ä ö ü ß Ĉ Ψ ≈") + 5, 105);
+			jngl::Print(" $", static_cast<int>(jngl::GetTextWidth("UTF-8:   ä ö ü ß Ĉ Ψ ≈") + 5), 105);
 			jngl::SetFontSize(12);
 			jngl::Print("Press 1-9 to test the performance\nPress E to show a error box.", 5, 135);
 			if(jngl::KeyPressed('e'))
