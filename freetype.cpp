@@ -40,19 +40,6 @@ namespace jngl
 		fontColorAlpha = alpha;
 	}
 
-	// This function gets the first power of 2 >= the
-	// int that we pass it.
-	int next_p2(int a)
-	{
-		if(a == 1) // A texture with this width does not work for some reason
-		{
-			return 2;
-		}
-		int rval = 1;
-		while(rval < a) rval <<= 1;
-		return rval;
-	}
-
 	Character::Character(const unsigned long ch, const float fontHeight, FT_Face face)
 	{
 		if(FT_Load_Glyph(face, FT_Get_Char_Index(face, ch) , FT_LOAD_TARGET_LIGHT))
@@ -74,8 +61,8 @@ namespace jngl
 		FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
 		FT_Bitmap& bitmap = bitmap_glyph->bitmap;
 
-		int width = next_p2(bitmap.width);
-		int height = next_p2(bitmap.rows);
+		int width = opengl::NextPowerOf2(bitmap.width);
+		int height = opengl::NextPowerOf2(bitmap.rows);
 
 		std::vector<GLubyte> data(width * height * 4);
 

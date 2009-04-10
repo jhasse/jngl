@@ -53,14 +53,7 @@ namespace jngl
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
-	struct RawTexture
-	{
-		GLuint textureid;
-		int width;
-		int height;
-	};
-	class Texture
-	{
+	class Texture {
 	public:
 		Texture()
 		{
@@ -69,17 +62,26 @@ namespace jngl
 		{
 			if(pWindow)
 			{
-				for(std::vector<std::vector<RawTexture> >::iterator i = parts_.begin(); i != parts_.end(); ++i)
-				{
-					for(std::vector<RawTexture>::iterator j = i->begin(); j != i->end(); ++j)
-					{
-						glDeleteTextures(1, &j->textureid);
-					}
-				}
+				glDeleteTextures(1, &texture_);
 			}
 		}
+		void DrawTexture()
+		{
+			glPushMatrix();
+			glEnable(GL_TEXTURE_2D);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+			glBindTexture(GL_TEXTURE_2D, texture_);
+			glVertexPointer(2, GL_INT, 0, &vertexes_[0]);
+			glTexCoordPointer(2, GL_DOUBLE, 0, &texCoords_[0]);
+			glDrawArrays(GL_QUADS, 0, 4);
+
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			glDisable(GL_TEXTURE_2D);
+			glPopMatrix();
+		}
 		template<class ArrayType>
-		void loadTexture(const std::string& filename,
+		void LoadTexture(const std::string& filename,
 		                 const int imgWidth,
 		                 const int imgHeight,
 		                 ArrayType& rowPointers,
@@ -87,46 +89,42 @@ namespace jngl
 		                 const bool halfLoad,
 		                 GLenum format)
 		{
-			int yoffset = 0, height = 0, img_height = imgHeight;
-			do
+			int width = opengl::NextPowerOf2(imgWidth);
+			int height = opengl::NextPowerOf2(imgHeight);
+			if(pWindow)
 			{
-				height = static_cast<int>(pow(2, floor(log(img_height) / log(2))));
-				int xoffset = 0, width = 0, img_width = imgWidth;
-				std::vector<RawTexture> temp;
-				do
+				glEnable(GL_TEXTURE_2D);
+				glGenTextures(1, &texture_);
+				glBindTexture(GL_TEXTURE_2D, texture_);
+				glTexImage2D(GL_TEXTURE_2D, 0, channels, width, height, 0, format, GL_UNSIGNED_BYTE, NULL);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // preventing wrapping artifacts
+				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				for(int i = 0; i < imgHeight; ++i)
 				{
-					width = static_cast<int>(pow(2, floor(log(img_width) / log(2))));
-					RawTexture rawTexture;
-					rawTexture.width = width;
-					rawTexture.height = height;
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, imgWidth, 1, format, GL_UNSIGNED_BYTE, rowPointers[i]);
+				}
 
-					if(pWindow)
-					{
-						glEnable(GL_TEXTURE_2D);
-						glGenTextures(1, &rawTexture.textureid);
-						glBindTexture(GL_TEXTURE_2D, rawTexture.textureid);
-						glTexImage2D(GL_TEXTURE_2D, 0, channels, width, height, 0, format, GL_UNSIGNED_BYTE, NULL);
-						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // preventing wrapping artifacts
-						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-						for(int i = 0; i < height; ++i)
-						{
-							glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, width, 1, format, GL_UNSIGNED_BYTE, rowPointers[i + yoffset] + xoffset * channels);
-						}
-						glDisable(GL_TEXTURE_2D);
-					}
-					else if(!halfLoad)
-						throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
+				const GLdouble x = static_cast<GLdouble>(imgWidth) / static_cast<GLdouble>(width);
+				const GLdouble y = static_cast<GLdouble>(imgHeight)  / static_cast<GLdouble>(height);
+				GLfloat texCoords[] = { 0, 0, 0, y, x, y, x, 0 };
+				texCoords_.assign(&texCoords[0], &texCoords[8]);
 
-					temp.push_back(rawTexture);
-					xoffset += width;
-				} while(img_width -= width);
-				yoffset += height;
-				parts_.push_back(temp);
-			} while(img_height -= height);
+				GLint vertexes[] = { 0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0 };
+				vertexes_.assign(&vertexes[0], &vertexes[8]);
+
+				displayList_.Create(boost::bind(&Texture::DrawTexture, this));
+				glDisable(GL_TEXTURE_2D);
+			}
+			else if(!halfLoad)
+			{
+				throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
+			}
+			width_ = imgWidth;
+			height_ = imgHeight;
 		}
-		void loadPNG(const std::string& filename, FILE* const fp, const bool halfLoad)
+		void LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad)
 		{
 			png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, png_voidp_NULL, png_error_ptr_NULL, png_error_ptr_NULL);
 		    if (!png_ptr)
@@ -164,7 +162,7 @@ namespace jngl
 			}
 
 			Finally freePng(boost::bind(png_destroy_read_struct, &png_ptr, &info_ptr, png_infopp_NULL));
-			loadTexture(filename, png_ptr->width, png_ptr->height, info_ptr->row_pointers, png_ptr->channels, halfLoad, format);
+			LoadTexture(filename, png_ptr->width, png_ptr->height, info_ptr->row_pointers, png_ptr->channels, halfLoad, format);
 		}
 		struct BMPHeader
 		{
@@ -177,14 +175,14 @@ namespace jngl
 			unsigned int compression;
 			unsigned int dataSize;
 		};
-		static void cleanUpRowPointers(std::vector<char*>& buf)
+		static void CleanUpRowPointers(std::vector<char*>& buf)
 		{
 			for(std::vector<char*>::iterator i = buf.begin(); i != buf.end(); ++i)
 			{
 				delete[] *i;
 			}
 		}
- 		void loadBMP(const std::string& filename, FILE* const fp, const bool halfLoad)
+ 		void LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad)
 		{
 			fseek(fp, 10, SEEK_SET);
 			BMPHeader header;
@@ -208,7 +206,7 @@ namespace jngl
 			{
 				*i = new char[header.width * 3];
 			}
-			Finally cleanUp(boost::bind(cleanUpRowPointers, boost::ref(buf)));
+			Finally cleanUp(boost::bind(CleanUpRowPointers, boost::ref(buf)));
 
 			if(header.height < 0)
 			{
@@ -231,9 +229,9 @@ namespace jngl
 						throw std::runtime_error(std::string("Error reading data. (" + filename + ")"));
 				}
 			}
-			loadTexture(filename, header.width, header.height, buf, header.bpp / 8, halfLoad, GL_BGR);
+			LoadTexture(filename, header.width, header.height, buf, header.bpp / 8, halfLoad, GL_BGR);
 		}
-		Texture& load(const std::string& filename, const bool halfLoad)
+		Texture& Load(const std::string& filename, const bool halfLoad)
 		{
 			FILE* pFile = fopen(filename.c_str(), "rb");
 			if(!pFile)
@@ -249,9 +247,9 @@ namespace jngl
 				throw std::runtime_error(std::string("Error reading signature bytes. (" + filename + ")"));
 
 			if(png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) == 0)
-				loadPNG(filename, pFile, halfLoad);
+				LoadPNG(filename, pFile, halfLoad);
 			else if(*reinterpret_cast<unsigned short*>(buf) == 19778)
-				loadBMP(filename, pFile, halfLoad);
+				LoadBMP(filename, pFile, halfLoad);
 			else
 				throw std::runtime_error(std::string("Neither a PNG nor a BMP file. (" + filename + ")"));
 
@@ -259,47 +257,18 @@ namespace jngl
 		}
 		int Width()
 		{
-			int width = 0;
-			for(std::vector<RawTexture>::iterator j = parts_.begin()->begin(); j != parts_.begin()->end(); ++j)
-			{
-				width += j->width;
-			}
-			return width;
+			return width_;
 		}
 		int Height()
 		{
-			int height = 0;
-			for(std::vector<std::vector<RawTexture> >::iterator i = parts_.begin(); i != parts_.end(); ++i)
-			{
-				height += i->begin()->height;
-			}
-			return height;
+			return height_;
 		}
 		template<class T>
 		void Draw(const T xposition, const T yposition)
 		{
 			glPushMatrix();
 			opengl::Translate(xposition, yposition);
-			glEnable(GL_TEXTURE_2D);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			for(std::vector<std::vector<RawTexture> >::iterator i = parts_.begin(); i != parts_.end(); ++i)
-			{
-				glPushMatrix();
-				for(std::vector<RawTexture>::iterator j = i->begin(); j != i->end(); ++j)
-				{
-					glBindTexture(GL_TEXTURE_2D, j->textureid);
-					GLint vertexes[] = { 0, 0, j->width, 0, j->width, j->height, 0, j->height };
-					glVertexPointer(2, GL_INT, 0, vertexes);
-					GLint texCoords[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
-					glTexCoordPointer(2, GL_INT, 0, texCoords);
-					glDrawArrays(GL_QUADS, 0, 4);
-					opengl::Translate(j->width, 0);
-				}
-				glPopMatrix();
-				opengl::Translate(0, i->begin()->height);
-			}
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-			glDisable(GL_TEXTURE_2D);
+			displayList_.Call();
 			glPopMatrix();
 		}
 		template<class T>
@@ -307,33 +276,16 @@ namespace jngl
 		{
 			glPushMatrix();
 			opengl::Translate(xposition, yposition);
-			glEnable(GL_TEXTURE_2D);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			for(std::vector<std::vector<RawTexture> >::iterator i = parts_.begin(); i != parts_.end(); ++i)
-			{
-				glPushMatrix();
-				for(std::vector<RawTexture>::iterator j = i->begin(); j != i->end(); ++j)
-				{
-					glBindTexture(GL_TEXTURE_2D, j->textureid);
-					GLdouble vertexes[] = { 0,                  0,
-					                        j->width * xfactor, 0,
-					                        j->width * xfactor, j->height * yfactor,
-					                        0,                  j->height * yfactor };
-					glVertexPointer(2, GL_DOUBLE, 0, vertexes);
-					GLdouble texCoords[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
-					glTexCoordPointer(2, GL_DOUBLE, 0, texCoords);
-					glDrawArrays(GL_QUADS, 0, 4);
-					opengl::Translate(j->width * xfactor, 0);
-				}
-				glPopMatrix();
-				opengl::Translate(0, i->begin()->height * yfactor);
-			}
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-			glDisable(GL_TEXTURE_2D);
+			glScaled(xfactor, yfactor, 0);
+			displayList_.Call();
 			glPopMatrix();
 		}
 	private:
-		std::vector<std::vector<RawTexture> > parts_;
+		opengl::DisplayList displayList_;
+		std::vector<GLdouble> texCoords_;
+		std::vector<GLint> vertexes_;
+		GLuint texture_;
+		int width_, height_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
 	};
 
@@ -349,7 +301,7 @@ namespace jngl
 			{
 				pWindow.ThrowIfNull();
 			}
-			return textures_[filename].load(filename, halfLoad);
+			return textures_[filename].Load(filename, halfLoad);
 		}
 		return i->second;
 	}

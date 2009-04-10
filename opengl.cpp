@@ -51,4 +51,15 @@ namespace opengl
 		glCallList(displayList_);
 #endif
 	}
+
+	int NextPowerOf2(int a)
+	{
+		if(a == 1) // A texture with this width does not work for some reason
+		{
+			return 2;
+		}
+		int rval = 1;
+		while(rval < a) rval <<= 1;
+		return rval;
+	}
 };

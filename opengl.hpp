@@ -86,4 +86,7 @@ namespace opengl
 		GLuint displayList_;
 #endif
 	};
+
+	// This function gets the first power of 2 >= the int that we pass it.
+	int NextPowerOf2(int);
 }
