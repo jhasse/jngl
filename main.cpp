@@ -140,18 +140,6 @@ namespace jngl
 		return pWindow->KeyPressed(key);
 	}
 
-	bool KeyDown(const char key)
-	{
-		std::string temp; temp.append(1, key);
-		return KeyDown(temp);
-	}
-
-	bool KeyPressed(const char key)
-	{
-		std::string temp; temp.append(1, key);
-		return KeyPressed(temp);
-	}
-
 	bool KeyDown(const std::string& key)
 	{
 		return pWindow->KeyDown(key);

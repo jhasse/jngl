@@ -281,26 +281,47 @@ namespace jngl
 		   {'\n',XK_Return},
 		   {0,0}
 		};
+		if('A' <= c && c <= 'Z' && !(KeyDown(key::ShiftL) || KeyDown(key::ShiftR)))
+		{
+			return NoSymbol;
+		}
+		if('a' <= c && c <= 'z' && (KeyDown(key::ShiftL) || KeyDown(key::ShiftR)))
+		{
+			return NoSymbol;
+		}
 		char buf[2];
 		buf[0]=c;
 		buf[1]=0;
 		KeySym ksym = XStringToKeysym(buf);
 		if(ksym == NoSymbol)
 		{
-			Debug("No symbol found for "); Debug(buf); Debug("!");
 			for(int i = 0; CtoKSTable[i].from != 0; ++i)
 			{
 				if(CtoKSTable[i].from == c)
 					return CtoKSTable[i].to;
 			}
-			throw std::runtime_error(std::string("Symbol ") + c + " not found.");
+			return NoSymbol;
 		}
 		return ksym;
+	}
+	
+	bool KeyDown(const char key)
+	{
+		return KeyDown(CharToSym(key));
+	}
+
+	bool KeyPressed(const char key)
+	{
+		return KeyPressed(CharToSym(key));
 	}
 
 	bool Window::KeyDown(const std::string& key)
 	{
-		return KeyDown(CharToSym(key[0]));
+		if(key.size() > 1) // No UTF-8 support yet
+		{
+			return false;
+		}
+		return KeyDown(key[0]);
 	}
 
 	bool Window::KeyPressed(const std::string& key)
@@ -309,7 +330,7 @@ namespace jngl
 		{
 			return false;
 		}
-		return KeyPressed(CharToSym(key[0]));
+		return KeyPressed(key[0]);
 	}
 
 	void Window::BeginDraw()
