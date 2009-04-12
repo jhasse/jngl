@@ -287,6 +287,7 @@ namespace jngl
 		KeySym ksym = XStringToKeysym(buf);
 		if(ksym == NoSymbol)
 		{
+			Debug("No symbol found for "); Debug(buf); Debug("!");
 			for(int i = 0; CtoKSTable[i].from != 0; ++i)
 			{
 				if(CtoKSTable[i].from == c)
@@ -304,7 +305,7 @@ namespace jngl
 
 	bool Window::KeyPressed(const std::string& key)
 	{
-		if(key[0] & 0x40) // No UTF-8 support yet
+		if(key.size() > 1) // No UTF-8 support yet
 		{
 			return false;
 		}
