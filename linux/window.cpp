@@ -304,6 +304,10 @@ namespace jngl
 
 	bool Window::KeyPressed(const std::string& key)
 	{
+		if(key[0] & 0x40) // No UTF-8 support yet
+		{
+			return false;
+		}
 		return KeyPressed(CharToSym(key[0]));
 	}
 
