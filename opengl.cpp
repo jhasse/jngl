@@ -21,37 +21,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace opengl
 {
-#ifndef OPENGLES
-	DisplayList::DisplayList() : displayList_(glGenLists(1))
-	{
-	}
-
-	DisplayList::~DisplayList()
-	{
-		glDeleteLists(displayList_, 1);
-	}
-#endif
-
-	void DisplayList::Create(boost::function<void()> function)
-	{
-#ifdef OPENGLES
-		function_ = function;
-#else
-		glNewList(displayList_, GL_COMPILE);
-		function();
-		glEndList();
-#endif
-	}
-
-	void DisplayList::Call() const
-	{
-#ifdef OPENGLES
-		function_();
-#else
-		glCallList(displayList_);
-#endif
-	}
-
 	int NextPowerOf2(int a)
 	{
 		if(a == 1) // A texture with this width does not work for some reason

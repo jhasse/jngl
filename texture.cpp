@@ -104,6 +104,13 @@ namespace jngl
 				for(int i = 0; i < imgHeight; ++i)
 				{
 					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, imgWidth, 1, format, GL_UNSIGNED_BYTE, rowPointers[i]);
+					std::vector<unsigned char> empty((width - imgWidth) * channels, 0);
+					glTexSubImage2D(GL_TEXTURE_2D, 0, imgWidth, i, width - imgWidth, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
+				}
+				for(int i = imgHeight; i < height; ++i)
+				{
+					std::vector<unsigned char> empty(width * channels, 0);
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, width, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
 				}
 
 				const GLdouble x = static_cast<GLdouble>(imgWidth) / static_cast<GLdouble>(width);
@@ -114,7 +121,6 @@ namespace jngl
 				GLint vertexes[] = { 0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0 };
 				vertexes_.assign(&vertexes[0], &vertexes[8]);
 
-				displayList_.Create(boost::bind(&Texture::DrawTexture, this));
 				glDisable(GL_TEXTURE_2D);
 			}
 			else if(!halfLoad)
@@ -268,7 +274,7 @@ namespace jngl
 		{
 			glPushMatrix();
 			opengl::Translate(xposition, yposition);
-			displayList_.Call();
+			DrawTexture();
 			glPopMatrix();
 		}
 		template<class T>
@@ -277,11 +283,10 @@ namespace jngl
 			glPushMatrix();
 			opengl::Translate(xposition, yposition);
 			glScaled(xfactor, yfactor, 0);
-			displayList_.Call();
+			DrawTexture();
 			glPopMatrix();
 		}
 	private:
-		opengl::DisplayList displayList_;
 		std::vector<GLdouble> texCoords_;
 		std::vector<GLint> vertexes_;
 		GLuint texture_;

@@ -111,11 +111,9 @@ namespace jngl
 		top_ = fontHeight - bitmap_glyph->top;
 		width_ = face->glyph->advance.x >> 6;
 		left_ = bitmap_glyph->left;
-
-		displayList_.Create(boost::bind(&Character::DrawTexture, this));
 	}
 
-	void Character::DrawTexture() const
+	void Character::Draw() const
 	{
 		glPushMatrix();
 		opengl::Translate(left_, top_);
@@ -131,11 +129,6 @@ namespace jngl
 		glDisable(GL_TEXTURE_2D);
 		glPopMatrix();
 		opengl::Translate(width_, 0);
-	}
-
-	void Character::Draw() const
-	{
-		displayList_.Call();
 	}
 
 	double Character::GetWidth() const

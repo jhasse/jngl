@@ -24,6 +24,8 @@ int main()
 		jngl::SetBackgroundColor(255, 255, 255);
 		jngl::SetMouseVisible(false);
 		double rotate = 0.0;
+		int frameNumber = 0;
+		double frameTime = jngl::Time();
 		while(jngl::Running())
 		{
 			jngl::BeginDraw();
@@ -98,6 +100,12 @@ int main()
 			jngl::SetColor(0,0,255,128);
 			DrawMouse();
 			jngl::EndDraw();
+			if(++frameNumber == 500)
+			{
+				std::cout << "It took " << jngl::Time() - frameTime << " seconds to render 500 frames." << std::endl;
+				frameNumber = 0;
+				frameTime = jngl::Time();
+			}
 		}
 	}
 	catch(std::exception& e)

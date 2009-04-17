@@ -56,9 +56,6 @@ namespace jngl
 		float top_;
 		std::vector<GLfloat> texCoords_;
 		std::vector<GLint> vertexes_;
-		opengl::DisplayList displayList_;
-
-		void DrawTexture() const;
 	};
 
 	class Font : boost::noncopyable

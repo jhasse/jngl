@@ -70,23 +70,6 @@ namespace opengl
 #endif
 	};
 
-	// Display lists don't exist in OpenGL ES so we need a wrapper
-	class DisplayList {
-	public:
-#ifndef OPENGLES
-		DisplayList();
-		~DisplayList();
-#endif
-		void Create(boost::function<void()> function);
-		void Call() const;
-	private:
-#ifdef OPENGLES
-		boost::function<void()> function_;
-#else
-		GLuint displayList_;
-#endif
-	};
-
 	// This function gets the first power of 2 >= the int that we pass it.
 	int NextPowerOf2(int);
 }
