@@ -53,10 +53,29 @@ namespace jngl
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
-	class Texture {
+	class Texture : boost::noncopyable {
 	public:
-		Texture()
+		Texture(const std::string& filename, const bool halfLoad)
 		{
+			FILE* pFile = fopen(filename.c_str(), "rb");
+			if(!pFile)
+				throw std::runtime_error(std::string("File not found: " + filename));
+
+			Finally closeFile(boost::bind(fclose, pFile));
+
+			png_byte buf[PNG_BYTES_TO_CHECK];
+			assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short));
+
+			// Read in some of the signature bytes
+			if (fread(buf, 1, PNG_BYTES_TO_CHECK, pFile) != PNG_BYTES_TO_CHECK)
+				throw std::runtime_error(std::string("Error reading signature bytes. (" + filename + ")"));
+
+			if(png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) == 0)
+				LoadPNG(filename, pFile, halfLoad);
+			else if(*reinterpret_cast<unsigned short*>(buf) == 19778)
+				LoadBMP(filename, pFile, halfLoad);
+			else
+				throw std::runtime_error(std::string("Neither a PNG nor a BMP file. (" + filename + ")"));
 		}
 		~Texture()
 		{
@@ -237,30 +256,6 @@ namespace jngl
 			}
 			LoadTexture(filename, header.width, header.height, buf, header.bpp / 8, halfLoad, GL_BGR);
 		}
-		Texture& Load(const std::string& filename, const bool halfLoad)
-		{
-			FILE* pFile = fopen(filename.c_str(), "rb");
-			if(!pFile)
-				throw std::runtime_error(std::string("File not found: " + filename));
-
-			Finally closeFile(boost::bind(fclose, pFile));
-
-			png_byte buf[PNG_BYTES_TO_CHECK];
-			assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short));
-
-			// Read in some of the signature bytes
-			if (fread(buf, 1, PNG_BYTES_TO_CHECK, pFile) != PNG_BYTES_TO_CHECK)
-				throw std::runtime_error(std::string("Error reading signature bytes. (" + filename + ")"));
-
-			if(png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) == 0)
-				LoadPNG(filename, pFile, halfLoad);
-			else if(*reinterpret_cast<unsigned short*>(buf) == 19778)
-				LoadBMP(filename, pFile, halfLoad);
-			else
-				throw std::runtime_error(std::string("Neither a PNG nor a BMP file. (" + filename + ")"));
-
-			return *this;
-		}
 		int Width()
 		{
 			return width_;
@@ -294,21 +289,22 @@ namespace jngl
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
 	};
 
-	std::map<std::string, Texture> textures_;
+	std::map<std::string, boost::shared_ptr<Texture> > textures_;
 
 	// halfLoad is used, if we only want to find out the width or height of an image. Load won't throw an exception then
 	Texture& GetTexture(const std::string& filename, const bool halfLoad = false)
 	{
-		std::map<std::string, Texture>::iterator i;
+		std::map<std::string, boost::shared_ptr<Texture> >::iterator i;
 		if((i = textures_.find(filename)) == textures_.end()) // texture hasn't been loaded yet?
 		{
 			if(!halfLoad)
 			{
 				pWindow.ThrowIfNull();
 			}
-			return textures_[filename].Load(filename, halfLoad);
+			textures_[filename].reset(new Texture(filename, halfLoad));
+			return *(textures_[filename]);
 		}
-		return i->second;
+		return *(i->second);
 	}
 
 	void Draw(const std::string& filename, const double xposition, const double yposition)
@@ -335,7 +331,7 @@ namespace jngl
 
 	void Unload(const std::string& filename)
 	{
-		std::map<std::string, Texture>::iterator i;
+		std::map<std::string, boost::shared_ptr<Texture> >::iterator i;
 		if((i = textures_.find(filename)) != textures_.end())
 			textures_.erase(i);
 	}

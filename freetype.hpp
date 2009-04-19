@@ -42,7 +42,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace jngl
 {
-	class Character
+	class Character : boost::noncopyable
 	{
 	public:
 		Character(unsigned long ch, float height, FT_Face);
