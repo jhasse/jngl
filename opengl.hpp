@@ -20,10 +20,13 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #ifdef OPENGLES
-#include <GLES/egl.h>
-#include <GLES/gl.h>
+	#include <GLES/egl.h>
+	#include <GLES/gl.h>
 #else
-#include <GL/gl.h>
+	#ifndef linux
+		#include <windows.h>
+	#endif
+	#include <GL/gl.h>
 #endif
 
 #include <boost/function.hpp>

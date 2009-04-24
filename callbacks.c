@@ -19,6 +19,9 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef OPENGLES
 
+#ifndef linux
+#include <windows.h>
+#endif
 #include <GL/glu.h>
 #include <stdlib.h>
 

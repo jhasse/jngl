@@ -5,7 +5,7 @@ import os
 version = "0.8.2"
 
 #Replace @VERSION@ in certain files
-files = ["jngl.pc.in", "autopackage/default.apspec.in", "jngl.nsi.in"]
+files = ["jngl.pc.in", "autopackage/default.apspec.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in']
 for filename in files:
 	newfilename = filename.replace(".in", "")
 	datei = open(filename,"r").readlines()
@@ -13,6 +13,12 @@ for filename in files:
 	Clean('.', newfilename) # Make sure scons -c does clean up tidily
 
 env = Environment(tools=['mingw'])
+
+msvc = ARGUMENTS.get('msvc', 0)
+if int(msvc):
+	env = Environment()
+	env.Append(CCFLAGS = '/EHsc')
+
 debug = ARGUMENTS.get('debug', 0)
 profile = ARGUMENTS.get('profile', 0)
 autopackage = ARGUMENTS.get('autopackage', 0)
@@ -50,7 +56,7 @@ if env['PLATFORM'] == 'win32': # Windows
 	env.Program("test.cpp",
 	            CPPPATH=".",
 				LIBPATH=Split(". ./lib"),
-				LIBS=Split("jngl freetype png opengl32 glu32 gdi32 z"),
+				LIBS=Split("jngl freetype png opengl32 glu32 user32 shell32 gdi32 z"),
 				LINKFLAGS=linkflags)
 
 if env['PLATFORM'] == 'posix': # Linux
@@ -65,5 +71,10 @@ if int(autopackage):
 	Clean(t, ['jngl Library ' + version + '.package', 'jngl Library ' + version + '.package.meta', 'jngl.xml', 'jngl.xml.old'])
 
 if int(installer):
-	t = Command('jngl Library ' + version + '.exe', lib, "C:/Programme/NSIS/makensis jngl.nsi")
-	Clean(t, 'jngl Library ' + version + '.exe')
+	nsiFile = 'installer/mingw.nsi'
+	name = 'MinGW'
+	if int(msvc):
+		nsiFile = 'installer/msvc.nsi'
+		name = 'MS Visual C++'
+	t = Command('jngl Library ' + version + '.exe', lib, 'C:/Programme/NSIS/makensis ' + nsiFile)
+	Clean(t, 'installer/JNGL ' + version + ' (' + name + ').exe')

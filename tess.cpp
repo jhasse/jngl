@@ -20,19 +20,17 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef OPENGLES
 
 #include "texture.hpp"
+#include "opengl.hpp"
 
-#include <GL/gl.h>
 #include <GL/glu.h>
-
 #include <stdlib.h>
 #include <stdio.h>
 
 #include <vector>
 
-extern GLUtesselator* tobj;
-
 extern "C"
 {
+	extern GLUtesselator* tobj;
 	void InitCallbacks(); // Defined in callbacks.c
 }
 

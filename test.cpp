@@ -4,12 +4,16 @@
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 
+#ifndef M_PI
+	#define M_PI 3.14159265358979323846
+#endif
+
 void DrawBackground();
 void DrawMouse();
 void DrawTess();
 int performance = 1;
 
-double abs(double v)
+double absolute(double v)
 {
 	return v < 0 ? -v : v;
 }
@@ -52,7 +56,7 @@ int main()
 				rotate = 0;
 			}
 			double factor = sin(rotate / 360 * M_PI);
-			jngl::SetSpriteColor(255, 255, 255, static_cast<unsigned char>(abs(factor * 255)));
+			jngl::SetSpriteColor(255, 255, 255, static_cast<unsigned char>(absolute(factor * 255)));
 			jngl::DrawScaled("jngl.png",
 							 -jngl::GetWidth("jngl.png")  * factor,
 							 -jngl::GetHeight("jngl.png") * factor,
