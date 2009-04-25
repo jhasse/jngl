@@ -1,0 +1,23 @@
+XPStyle On
+SetCompressor lzma
+
+Name "JNGL for Microsoft Visual C++"
+
+OutFile "JNGL @VERSION@ (MS Visual C++).exe"
+
+InstallDir "$PROGRAMFILES\Microsoft Visual Studio 9.0\VC"
+
+Page directory
+Page instfiles
+
+LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
+LoadLanguageFile "${NSISDIR}\Contrib\Language files\German.nlf"
+
+Section ""
+
+SetOutPath $INSTDIR\include
+File ..\jngl.hpp
+SetOutPath $INSTDIR\lib
+File ..\jngl.lib
+
+SectionEnd

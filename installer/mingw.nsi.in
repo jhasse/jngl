@@ -1,11 +1,11 @@
 XPStyle On
 SetCompressor lzma
 
-Name "jngl SDK"
+Name "JNGL for MinGW"
 
-OutFile "jngl Library @VERSION@.exe"
+OutFile "JNGL @VERSION@ (MinGW).exe"
 
-InstallDir $PROGRAMFILES\CodeBlocks\MinGW
+InstallDir "$PROGRAMFILES\CodeBlocks\MinGW"
 
 Page directory
 Page instfiles
@@ -16,11 +16,11 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\German.nlf"
 Section ""
 
 SetOutPath $INSTDIR\include
-File jngl.hpp
+File ..\jngl.hpp
 SetOutPath $INSTDIR\lib
-File libjngl.a
-File lib\libfreetype.a
-File lib\libpng.a
-File lib\libz.a
+File ..\libjngl.a
+File ..\lib\libfreetype.a
+File ..\lib\libpng.a
+File ..\lib\libz.a
 
 SectionEnd
