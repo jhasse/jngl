@@ -19,5 +19,8 @@ SetOutPath $INSTDIR\include
 File ..\jngl.hpp
 SetOutPath $INSTDIR\lib
 File ..\jngl.lib
+File ..\lib\freetype.lib
+File ..\lib\png.lib
+File ..\lib\z.lib
 
 SectionEnd

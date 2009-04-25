@@ -17,7 +17,7 @@ env = Environment(tools=['mingw'])
 msvc = ARGUMENTS.get('msvc', 0)
 if int(msvc):
 	env = Environment()
-	env.Append(CCFLAGS = '/EHsc')
+	env.Append(CCFLAGS = Split('/EHsc /MD'))
 
 debug = ARGUMENTS.get('debug', 0)
 profile = ARGUMENTS.get('profile', 0)
@@ -51,7 +51,7 @@ if env['PLATFORM'] == 'win32': # Windows
 	env.Append(CPPPATH="./include")
 	lib = env.Library(target="jngl", source=source_files + Glob('win32/*.cpp'))
 	linkflags = "-mwindows"
-	if int(debug):
+	if int(debug) or int(msvc):
 		linkflags = ""
 	env.Program("test.cpp",
 	            CPPPATH=".",
@@ -76,5 +76,5 @@ if int(installer):
 	if int(msvc):
 		nsiFile = 'installer/msvc.nsi'
 		name = 'MS Visual C++'
-	t = Command('jngl Library ' + version + '.exe', lib, 'C:/Programme/NSIS/makensis ' + nsiFile)
+	t = Command('jngl Library ' + version + '.exe', lib, '"C:\Program Files\NSIS\makensis.exe" ' + nsiFile)
 	Clean(t, 'installer/JNGL ' + version + ' (' + name + ').exe')
