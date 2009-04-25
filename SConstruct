@@ -48,7 +48,7 @@ windowptr.cpp
 """) + Glob('*.c')
 
 if env['PLATFORM'] == 'win32': # Windows
-	env.Append(CPPPATH="C:/MinGW/include/freetype2")
+	env.Append(CPPPATH="./include")
 	lib = env.Library(target="jngl", source=source_files + Glob('win32/*.cpp'))
 	linkflags = "-mwindows"
 	if int(debug):
