@@ -76,5 +76,6 @@ if int(installer):
 	if int(msvc):
 		nsiFile = 'installer/msvc.nsi'
 		name = 'MS Visual C++'
-	t = Command('jngl Library ' + version + '.exe', lib, '"C:\Program Files\NSIS\makensis.exe" ' + nsiFile)
+	import os
+	t = Command('jngl Library ' + version + '.exe', lib, '"' + os.path.expandvars("%programfiles%") + '\NSIS\makensis.exe " ' + nsiFile)
 	Clean(t, 'installer/JNGL ' + version + ' (' + name + ').exe')
