@@ -17,7 +17,7 @@ env = Environment(tools=['mingw'])
 msvc = ARGUMENTS.get('msvc', 0)
 if int(msvc):
 	env = Environment()
-	env.Append(CCFLAGS = Split('/EHsc /MD'))
+	env.Append(CCFLAGS = '/EHsc /MD')
 
 debug = ARGUMENTS.get('debug', 0)
 profile = ARGUMENTS.get('profile', 0)
@@ -49,7 +49,7 @@ windowptr.cpp
 
 if env['PLATFORM'] == 'win32': # Windows
 	env.Append(CPPPATH="./include")
-	lib = env.Library(target="jngl", source=source_files + Glob('win32/*.cpp'))
+	lib = env.StaticLibrary(target="jngl", source=source_files + Glob('win32/*.cpp'))
 	linkflags = "-mwindows"
 	if int(debug) or int(msvc):
 		linkflags = ""
