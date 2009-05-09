@@ -223,47 +223,47 @@ namespace jngl
 	    }
 	}
 
-	int GetKeySym(key::KeyType key)
+	int GetKeysym(key::KeyType key)
 	{
 		switch(key)
 		{
-			case Left: return 0xff51;
-			case Up: return 0xff52;
-			case Right: return 0xff53;
-			case Down: return 0xff54;
-			case PageUp: return 0xff55;
-			case PageDown: return 0xff56;
-			case Home: return 0xff50;
-			case End: return 0xff57;
-			case BackSpace: return 0xff08;
-			case Tab: return 0xff09;
-			case Clear: return 0xff0b;
-			case Return: return 0xff0d;
-			case Pause: return 0xff13;
-			case Escape: return 0xff1b;
-			case Delete: return 0xffff;
-			case ControlL: return 0xffe3;
-			case ControlR: return 0xffe4;
-			case CapsLock: return 0xffe5;
-			case AltL: return 0xffe9;
-			case AltR: return 0xffea;
-			case SuperL: return 0xffeb;
-			case SuperR: return 0xffec;
-			case Space: return 0x0020;
-			case ShiftL: return 0xffe1;
-			case ShiftR: return 0xffe2;
-			case F1: return 0xffbe;
-			case F2: return 0xffbf;
-			case F3: return 0xffc0;
-			case F4: return 0xffc1;
-			case F5: return 0xffc2;
-			case F6: return 0xffc3;
-			case F7: return 0xffc4;
-			case F8: return 0xffc5;
-			case F9: return 0xffc6;
-			case F10: return 0xffc7;
-			case F11: return 0xffc8;
-			case F12: return 0xffc9;
+			case key::Left: return 0xff51;
+			case key::Up: return 0xff52;
+			case key::Right: return 0xff53;
+			case key::Down: return 0xff54;
+			case key::PageUp: return 0xff55;
+			case key::PageDown: return 0xff56;
+			case key::Home: return 0xff50;
+			case key::End: return 0xff57;
+			case key::BackSpace: return 0xff08;
+			case key::Tab: return 0xff09;
+			case key::Clear: return 0xff0b;
+			case key::Return: return 0xff0d;
+			case key::Pause: return 0xff13;
+			case key::Escape: return 0xff1b;
+			case key::Delete: return 0xffff;
+			case key::ControlL: return 0xffe3;
+			case key::ControlR: return 0xffe4;
+			case key::CapsLock: return 0xffe5;
+			case key::AltL: return 0xffe9;
+			case key::AltR: return 0xffea;
+			case key::SuperL: return 0xffeb;
+			case key::SuperR: return 0xffec;
+			case key::Space: return 0x0020;
+			case key::ShiftL: return 0xffe1;
+			case key::ShiftR: return 0xffe2;
+			case key::F1: return 0xffbe;
+			case key::F2: return 0xffbf;
+			case key::F3: return 0xffc0;
+			case key::F4: return 0xffc1;
+			case key::F5: return 0xffc2;
+			case key::F6: return 0xffc3;
+			case key::F7: return 0xffc4;
+			case key::F8: return 0xffc5;
+			case key::F9: return 0xffc6;
+			case key::F10: return 0xffc7;
+			case key::F11: return 0xffc8;
+			case key::F12: return 0xffc9;
 			default:
 				throw std::runtime_error("Unhandled KeyType!");
 		};
@@ -271,7 +271,7 @@ namespace jngl
 
 	int Window::GetKeyCode(key::KeyType key)
 	{
-		return XKeysymToKeycode(GetKeysym(key));
+		return XKeysymToKeycode(pDisplay_.get(), GetKeysym(key));
 	}
 
 	int CharToSym(char c)
@@ -337,23 +337,13 @@ namespace jngl
 		return ksym;
 	}
 
-	bool KeyDown(const char key)
-	{
-		return KeyDown(CharToSym(key));
-	}
-
-	bool KeyPressed(const char key)
-	{
-		return KeyPressed(CharToSym(key));
-	}
-
 	bool Window::KeyDown(const std::string& key)
 	{
 		if(key.size() > 1) // No UTF-8 support yet
 		{
 			return false;
 		}
-		return KeyDown(key[0]);
+		return keyDown_[XKeysymToKeycode(pDisplay_.get(), CharToSym(key[0]))];
 	}
 
 	bool Window::KeyPressed(const std::string& key)
@@ -362,7 +352,12 @@ namespace jngl
 		{
 			return false;
 		}
-		return KeyPressed(key[0]);
+		if(keyPressed_[XKeysymToKeycode(pDisplay_.get(), CharToSym(key[0]))])
+		{
+			keyPressed_[XKeysymToKeycode(pDisplay_.get(), CharToSym(key[0]))] = false;
+			return true;
+		}
+		return false;
 	}
 
 	void Window::BeginDraw()

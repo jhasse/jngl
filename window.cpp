@@ -182,4 +182,16 @@ namespace jngl
 		}
 		return false;
 	}
+
+	bool KeyDown(const char key)
+	{
+		std::string temp; temp.append(1, key);
+		return KeyDown(temp);
+	}
+
+	bool KeyPressed(const char key)
+	{
+		std::string temp; temp.append(1, key);
+		return KeyPressed(temp);
+	}
 }
