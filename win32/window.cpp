@@ -324,9 +324,9 @@ namespace jngl
 	void Window::DistinguishLeftRight()
 	{
 		int codesToCheck[] = {
-			jngl::key::ShiftL, jngl::key::ShiftR,
-			jngl::key::ControlL, jngl::key::ControlR,
-			jngl::key::AltL, jngl::key::AltR
+			GetKeyCode(jngl::key::ShiftL), GetKeyCode(jngl::key::ShiftR),
+			GetKeyCode(jngl::key::ControlL), GetKeyCode(jngl::key::ControlR),
+			GetKeyCode(jngl::key::AltL), GetKeyCode(jngl::key::AltR)
 		};
 		for(unsigned int i = 0; i < sizeof(codesToCheck)/sizeof(codesToCheck[0]); ++i)
 		{
@@ -451,19 +451,50 @@ namespace jngl
 		SetWindowText(pWindowHandle_.get(), windowTitle.c_str());
 	}
 
-	bool Window::KeyDown(const int key)
+	int Window::GetKeyCode(jngl::key::KeyType key)
 	{
-		return keyDown_[key];
-	}
-
-	bool Window::KeyPressed(const int key)
-	{
-		if(keyPressed_[key])
+		switch(key)
 		{
-			keyPressed_[key] = false;
-			return true;
+			case key::Left: return 0x25;
+			case key::Up: return 0x26;
+			case key::Right: return 0x27;
+			case key::Down: return 0x28;
+			case key::PageUp: return 0x21;
+			case key::PageDown: return 0x22;
+			case key::Home: return 0x24;
+			case key::End: return 0x23;
+			case key::BackSpace: return 0x08;
+			case key::Tab: return 0x09;
+			case key::Clear: return 0x0C;
+			case key::Return: return 0x0D;
+			case key::Pause: return 0x13;
+			case key::Escape: return 0x1b;
+			case key::Delete: return 0x2E;
+			case key::ControlL: return 0xA2;
+			case key::ControlR: return 0xA3;
+			case key::CapsLock: return 0x14;
+			case key::AltL: return 0xA4;
+			case key::AltR: return 0xA5;
+			case key::SuperL: return 0x5B;
+			case key::SuperR: return 0x5C;
+			case key::Space: return 0x20;
+			case key::ShiftL: return 0xA0;
+			case key::ShiftR: return 0xA1;
+			case key::F1: return 0x70;
+			case key::F2: return 0x71;
+			case key::F3: return 0x72;
+			case key::F4: return 0x73;
+			case key::F5: return 0x74;
+			case key::F6: return 0x75;
+			case key::F7: return 0x76;
+			case key::F8: return 0x77;
+			case key::F9: return 0x78;
+			case key::F10: return 0x79;
+			case key::F11: return 0x7a;
+			case key::F12: return 0x7b;
+			default:
+				throw std::runtime_error("Unhandled KeyType!");
 		}
-		return false;
 	}
 
 	bool Window::KeyDown(const std::string& key)

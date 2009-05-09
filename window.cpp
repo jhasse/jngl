@@ -128,4 +128,58 @@ namespace jngl
 	{
 		running_ = true;
 	}
+
+	bool Window::KeyDown(key::KeyType key)
+	{
+		if(key == key::Any)
+		{
+			for(std::map<unsigned int, bool>::iterator it = keyDown_.begin(); it != keyDown_.end(); ++it)
+			{
+				if(it->second)
+				{
+					return true;
+				}
+			}
+			for(std::map<std::string, bool>::iterator it = characterDown_.begin(); it != characterDown_.end(); ++it)
+			{
+				if(it->second)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		return keyDown_[GetKeyCode(key)];
+	}
+
+	bool Window::KeyPressed(key::KeyType key)
+	{
+		if(key == key::Any)
+		{
+			bool anyKeyPressed = false;
+			for(std::map<unsigned int, bool>::iterator it = keyPressed_.begin(); it != keyPressed_.end(); ++it)
+			{
+				if(it->second)
+				{
+					it->second = false;
+					anyKeyPressed = true;
+				}
+			}
+			for(std::map<std::string, bool>::iterator it = characterPressed_.begin(); it != characterPressed_.end(); ++it)
+			{
+				if(it->second)
+				{
+					it->second = false;
+					anyKeyPressed = true;
+				}
+			}
+			return anyKeyPressed;
+		}
+		if(keyPressed_[GetKeyCode(key)])
+		{
+			keyPressed_[GetKeyCode(key)] = false;
+			return true;
+		}
+		return false;
+	}
 }

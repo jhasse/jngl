@@ -130,12 +130,12 @@ namespace jngl
 		return pWindow->MouseY();
 	}
 
-	bool KeyDown(const int key)
+	bool KeyDown(const key::KeyType key)
 	{
 		return pWindow->KeyDown(key);
 	}
 
-	bool KeyPressed(const int key)
+	bool KeyPressed(const key::KeyType key)
 	{
 		return pWindow->KeyPressed(key);
 	}

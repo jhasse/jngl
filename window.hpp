@@ -60,8 +60,8 @@ namespace jngl
 		int GetHeight() const;
 		double GetTextWidth(const std::string&);
 		bool GetFullscreen() const;
-		bool KeyDown(const int key);
-		bool KeyPressed(const int key);
+		bool KeyDown(const key::KeyType key);
+		bool KeyPressed(const key::KeyType key);
 		bool KeyDown(const std::string& key);
 		bool KeyPressed(const std::string& key);
 		bool MouseDown(mouse::Button button);
@@ -82,6 +82,7 @@ namespace jngl
 		static void ReleaseRC(HGLRC);
 #endif
 	private:
+		int GetKeyCode(jngl::key::KeyType key);
 		std::string GetFontFileByName(const std::string& fontname);
 		bool fullscreen_, running_, isMouseVisible_, isMultisampleSupported_;
 		boost::array<bool, 3> mouseDown_;

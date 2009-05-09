@@ -223,23 +223,55 @@ namespace jngl
 	    }
 	}
 
-	bool Window::KeyDown(const int key)
+	int GetKeySym(key::KeyType key)
 	{
-		unsigned int code;
-		code = XKeysymToKeycode(pDisplay_.get(), key);
-		return keyDown_[code];
+		switch(key)
+		{
+			case Left: return 0xff51;
+			case Up: return 0xff52;
+			case Right: return 0xff53;
+			case Down: return 0xff54;
+			case PageUp: return 0xff55;
+			case PageDown: return 0xff56;
+			case Home: return 0xff50;
+			case End: return 0xff57;
+			case BackSpace: return 0xff08;
+			case Tab: return 0xff09;
+			case Clear: return 0xff0b;
+			case Return: return 0xff0d;
+			case Pause: return 0xff13;
+			case Escape: return 0xff1b;
+			case Delete: return 0xffff;
+			case ControlL: return 0xffe3;
+			case ControlR: return 0xffe4;
+			case CapsLock: return 0xffe5;
+			case AltL: return 0xffe9;
+			case AltR: return 0xffea;
+			case SuperL: return 0xffeb;
+			case SuperR: return 0xffec;
+			case Space: return 0x0020;
+			case ShiftL: return 0xffe1;
+			case ShiftR: return 0xffe2;
+			case F1: return 0xffbe;
+			case F2: return 0xffbf;
+			case F3: return 0xffc0;
+			case F4: return 0xffc1;
+			case F5: return 0xffc2;
+			case F6: return 0xffc3;
+			case F7: return 0xffc4;
+			case F8: return 0xffc5;
+			case F9: return 0xffc6;
+			case F10: return 0xffc7;
+			case F11: return 0xffc8;
+			case F12: return 0xffc9;
+			default:
+				throw std::runtime_error("Unhandled KeyType!");
+		};
 	}
 
-	bool Window::KeyPressed(const int key)
+	int Window::GetKeyCode(key::KeyType key)
 	{
-		unsigned int code;
-		code = XKeysymToKeycode(pDisplay_.get(), key);
-		if(keyPressed_[code])
-		{
-			keyPressed_[code] = false;
-			return true;
-		}
-		return false;
+		return XKeysymToKeycode(GetKeysym(key));
 	}
 
 	int CharToSym(char c)
@@ -304,7 +336,7 @@ namespace jngl
 		}
 		return ksym;
 	}
-	
+
 	bool KeyDown(const char key)
 	{
 		return KeyDown(CharToSym(key));
