@@ -30,8 +30,11 @@ int main()
 		double rotate = 0.0;
 		int frameNumber = 0;
 		double frameTime = jngl::Time();
+		double lastTime = jngl::Time();
 		while(jngl::Running())
 		{
+			double timeSinceLastFrame = jngl::Time() - lastTime;
+			lastTime = jngl::Time();
 			jngl::BeginDraw();
 			for(int i = 0; i < 10; ++i)
 			{
@@ -50,7 +53,7 @@ int main()
 			jngl::PopMatrix();
 			jngl::Translate(jngl::GetWindowWidth() / 2, jngl::GetWindowHeight() / 2);
 			jngl::Rotate(rotate);
-			rotate += 0.1;
+			rotate += 90 * timeSinceLastFrame; // 90 degree per second
 			if(rotate > 360)
 			{
 				rotate = 0;

@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <png.h>
+#include <png.h> // We need to include it first, I don't know why
 
 #include "texture.hpp"
 #include "window.hpp"
@@ -35,6 +35,9 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <stdexcept>
 #include <cmath>
+#include <cstdlib>
+#include <cstdio>
+#include <jpeglib.h>
 
 #ifndef linux
 #include <gl/glext.h>
@@ -51,6 +54,16 @@ namespace jngl
 		spriteColorBlue = blue;
 		spriteColorAlpha = alpha;
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
+	}
+
+	struct JpegErrorMgr
+	{
+		struct jpeg_error_mgr pub;
+		jmp_buf setjmp_buffer;	// for return to caller
+	};
+	METHODDEF(void)	JpegErrorExit(j_common_ptr info)
+	{
+		longjmp(reinterpret_cast<JpegErrorMgr*>(info->err)->setjmp_buffer, 1); // Return control to the setjmp point
 	}
 
 	class Texture : boost::noncopyable {
@@ -74,8 +87,10 @@ namespace jngl
 				LoadPNG(filename, pFile, halfLoad);
 			else if(*reinterpret_cast<unsigned short*>(buf) == 19778)
 				LoadBMP(filename, pFile, halfLoad);
+			else if(*reinterpret_cast<unsigned short*>(buf) == 55551)
+				LoadJPG(filename, pFile, halfLoad);
 			else
-				throw std::runtime_error(std::string("Neither a PNG nor a BMP file. (" + filename + ")"));
+				throw std::runtime_error(std::string("Not a PNG, JPEG or BMP file. (" + filename + ")"));
 		}
 		~Texture()
 		{
@@ -255,6 +270,57 @@ namespace jngl
 				}
 			}
 			LoadTexture(filename, header.width, header.height, buf, header.bpp / 8, halfLoad, GL_BGR);
+		}
+		void LoadJPG(const std::string& filename, FILE* file, const bool halfLoad)
+		{
+			fseek(file, 0, SEEK_SET); // Seek to the beginning
+
+			jpeg_decompress_struct info;
+			JpegErrorMgr err;
+			info.err = jpeg_std_error(&err.pub);
+			err.pub.error_exit = JpegErrorExit;
+
+			// Establish the setjmp return context for my_error_exit to use.
+			if(setjmp(err.setjmp_buffer))
+			{
+				// If we get here, the JPEG code has signaled an error.
+				char buf[JMSG_LENGTH_MAX];
+				info.err->format_message(reinterpret_cast<jpeg_common_struct*>(&info), buf);
+				jpeg_destroy_decompress(&info);
+				throw std::runtime_error(buf);
+			}
+
+			jpeg_create_decompress(&info);
+			jpeg_stdio_src(&info, file);
+			jpeg_read_header(&info, TRUE);
+			jpeg_start_decompress(&info);
+
+			int x = info.output_width;
+			int y = info.output_height;
+			int channels = info.num_components;
+
+			GLenum format = GL_RGB;
+			if(channels == 4)
+			{
+				format = GL_RGBA;
+			}
+
+			assert(sizeof(JSAMPLE) == sizeof(char));
+			std::vector<char*> buf(y);
+			for(std::vector<char*>::iterator i = buf.begin(); i != buf.end(); ++i)
+			{
+				*i = new char[x * channels];
+			}
+			Finally cleanUp(boost::bind(CleanUpRowPointers, boost::ref(buf)));
+
+			while(info.output_scanline < info.output_height)
+			{
+				jpeg_read_scanlines(&info, reinterpret_cast<JSAMPLE**>(&buf[info.output_scanline]), 1);
+			}
+
+			jpeg_finish_decompress(&info);
+
+			LoadTexture(filename, x, y, buf, channels, halfLoad, format);
 		}
 		int Width()
 		{
