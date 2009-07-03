@@ -37,11 +37,13 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <cmath>
 #include <cstdlib>
 #include <cstdio>
-#include <jpeglib.h>
-
 #ifndef linux
 #include <gl/glext.h>
+// These defines are needed to prevent conflicting types declarations in jpeglib.h:
+#define XMD_H
+#define HAVE_BOOLEAN
 #endif
+#include <jpeglib.h>
 
 namespace jngl
 {

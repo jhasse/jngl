@@ -56,7 +56,7 @@ if env['PLATFORM'] == 'win32': # Windows
 	env.Program("test.cpp",
 	            CPPPATH=".",
 				LIBPATH=Split(". ./lib"),
-				LIBS=Split("jngl freetype png opengl32 glu32 user32 shell32 gdi32 z"),
+				LIBS=Split("jngl freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg"),
 				LINKFLAGS=linkflags)
 
 if env['PLATFORM'] == 'posix': # Linux

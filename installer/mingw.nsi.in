@@ -22,5 +22,6 @@ File ..\libjngl.a
 File ..\lib\libfreetype.a
 File ..\lib\libpng.a
 File ..\lib\libz.a
+File ..\lib\libjpeg.a
 
 SectionEnd
