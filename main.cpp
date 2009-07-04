@@ -249,6 +249,16 @@ namespace jngl
 		glTranslated(x, y, 0);
 	}
 
+	void Scale(const double factor)
+	{
+		glScaled(factor, factor, 0);
+	}
+
+	void Scale(const double xfactor, const double yfactor)
+	{
+		glScaled(xfactor, yfactor, 0);
+	}
+
 	void PushMatrix()
 	{
 		glPushMatrix();

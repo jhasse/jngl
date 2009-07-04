@@ -68,6 +68,10 @@ namespace jngl
 
 	void Translate(double x, double y);
 
+	void Scale(double factor);
+
+	void Scale(double xfactor, double yfactor);
+
 	void PushMatrix();
 
 	void PopMatrix();
