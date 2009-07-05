@@ -84,7 +84,7 @@ namespace jngl
 	private:
 		int GetKeyCode(jngl::key::KeyType key);
 		std::string GetFontFileByName(const std::string& fontname);
-		bool fullscreen_, running_, isMouseVisible_, isMultisampleSupported_;
+		bool fullscreen_, running_, isMouseVisible_, isMultisampleSupported_, anyKeyPressed_;
 		boost::array<bool, 3> mouseDown_;
 		boost::array<bool, 3> mousePressed_;
 		std::map<unsigned int, bool> keyDown_;

@@ -63,7 +63,8 @@ namespace jngl
 	}
 
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
-		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(true), fontSize_(12), width_(width), height_(height), fontName_("")
+		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(true),
+		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), fontName_("")
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
@@ -375,6 +376,7 @@ namespace jngl
 				case KeyPress:
 					keyDown_[event.xkey.keycode] = true;
 					keyPressed_[event.xkey.keycode] = true;
+					anyKeyPressed_ = true;
 				break;
 				case KeyRelease:
 					keyDown_[event.xkey.keycode] = false;

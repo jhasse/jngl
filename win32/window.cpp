@@ -92,7 +92,8 @@ namespace jngl
 	}
 
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
-		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(false), fontSize_(12), width_(width), height_(height)
+		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(false),
+		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
@@ -378,6 +379,7 @@ namespace jngl
 				case WM_KEYDOWN:
 					keyDown_[msg.wParam] = true;
 					keyPressed_[msg.wParam] = true;
+					anyKeyPressed_ = true;
 					DistinguishLeftRight();
 				break;
 				case WM_KEYUP:

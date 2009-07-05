@@ -3,6 +3,8 @@
 #include <sstream>
 #include <iostream>
 #include <boost/lexical_cast.hpp>
+#include <map>
+#include <vector>
 
 #ifndef M_PI
 	#define M_PI 3.14159265358979323846
@@ -11,6 +13,7 @@
 void DrawBackground();
 void DrawMouse();
 void DrawTess();
+void TestKeys();
 int performance = 1;
 
 double absolute(double v)
@@ -94,16 +97,17 @@ int main()
 			{
 				jngl::ErrorMessage("Hello World!");
 			}
-			jngl::Print("Press A to toggle Anti-Aliasing.", 5, 530);
+			jngl::Print("Press A to toggle Anti-Aliasing.", 5, 510);
 			if(jngl::KeyPressed('a'))
 			{
 				jngl::SetAntiAliasing(!jngl::GetAntiAliasing());
 			}
-			jngl::Print("Press F11 to switch fullscreen mode.", 5, 550);
+			jngl::Print("Press F11 to switch fullscreen mode.", 5, 530);
 			if(jngl::KeyPressed(jngl::key::F11))
 			{
 				jngl::ShowWindow("JNGL Test Application", 800, 600, !jngl::GetFullscreen());
 			}
+			jngl::Print("Press K to test key codes.", 5, 550);
 			jngl::SetColor(0,0,255,128);
 			DrawMouse();
 			jngl::EndDraw();
@@ -112,6 +116,10 @@ int main()
 				std::cout << "It took " << jngl::Time() - frameTime << " seconds to render 500 frames." << std::endl;
 				frameNumber = 0;
 				frameTime = jngl::Time();
+			}
+			if(jngl::KeyDown('k'))
+			{
+				TestKeys();
 			}
 		}
 	}
@@ -149,7 +157,7 @@ void DrawBackground()
 	jngl::SetColor(0, 255, 0, 100);
 	jngl::DrawRect(600, 400, 100, 100);
 	jngl::SetColor(0, 0, 255, 100);
-	jngl::DrawEllipse(80, 450, 50, 80);
+	jngl::DrawEllipse(80, 400, 50, 80);
 }
 
 void DrawMouse()
@@ -171,30 +179,159 @@ void DrawMouse()
 	jngl::SetFontSize(12);
 	jngl::Reset();
 }
+
 void DrawTess()
 {
 	jngl::SetColor(3, 10, 89, 50);
 	jngl::BeginPolygon();
-	jngl::Vertex(80, 590);
-	jngl::Vertex(130, 490);
-	jngl::Vertex(180, 390);
-	jngl::Vertex(230, 390);
-	jngl::Vertex(280, 490);
-	jngl::Vertex(330, 490);
-	jngl::Vertex(380, 390);
-	jngl::Vertex(430, 490);
-	jngl::Vertex(480, 490);
-	jngl::Vertex(530, 590);
+	jngl::Vertex(80, 580);
+	jngl::Vertex(130, 480);
+	jngl::Vertex(180, 380);
+	jngl::Vertex(230, 380);
+	jngl::Vertex(280, 480);
+	jngl::Vertex(330, 480);
+	jngl::Vertex(380, 380);
+	jngl::Vertex(430, 480);
+	jngl::Vertex(480, 480);
+	jngl::Vertex(530, 580);
 	jngl::EndPolygon();
 	jngl::SetFontColor(255, 0, 0);
-	jngl::Print("A", 80, 590);
-	jngl::Print("B", 130, 490);
-	jngl::Print("C", 180, 390);
-	jngl::Print("D", 230, 390);
-	jngl::Print("E", 280, 490);
-	jngl::Print("F", 330, 490);
-	jngl::Print("G", 380, 390);
-	jngl::Print("H", 430, 490);
-	jngl::Print("I", 480, 490);
-	jngl::Print("J", 530, 590);
+	jngl::Print("A", 80, 580);
+	jngl::Print("B", 130, 480);
+	jngl::Print("C", 180, 380);
+	jngl::Print("D", 230, 380);
+	jngl::Print("E", 280, 480);
+	jngl::Print("F", 330, 480);
+	jngl::Print("G", 380, 380);
+	jngl::Print("H", 430, 480);
+	jngl::Print("I", 480, 480);
+	jngl::Print("J", 530, 580);
+}
+
+class RecentlyPressedKey {
+public:
+	RecentlyPressedKey(std::string name, int x, int y) : name_(name), alpha_(255), x_(x), y_(y), lastTime_(jngl::Time()) {}
+	void Draw()
+	{
+		double timeSinceLastFrame = jngl::Time() - lastTime_;
+		lastTime_ = jngl::Time();
+		alpha_ -= timeSinceLastFrame * 60;
+		x_ += timeSinceLastFrame * 40;
+		jngl::SetFontColor(0, 0, 0, static_cast<unsigned char>(alpha_));
+		jngl::Print(name_, int(x_), int(y_));
+		jngl::SetFontColor(0, 0, 0, 255);
+	}
+	int GetAlpha() const
+	{
+		return int(alpha_);
+	}
+private:
+	std::string name_;
+	double alpha_, x_, y_, lastTime_;
+};
+
+void TestKeys()
+{
+	typedef std::map<std::string, jngl::key::KeyType> MapType;
+	MapType keys;
+	keys["Left"] = jngl::key::Left;
+	keys["Up"] = jngl::key::Up;
+	keys["Right"] = jngl::key::Right;
+	keys["Down"] = jngl::key::Down;
+	keys["PageUp"] = jngl::key::PageUp;
+	keys["PageDown"] = jngl::key::PageDown;
+	keys["Home"] = jngl::key::Home;
+	keys["End"] = jngl::key::End;
+	keys["BackSpace"] = jngl::key::BackSpace;
+	keys["Tab"] = jngl::key::Tab;
+	keys["Clear"] = jngl::key::Clear;
+	keys["Return"] = jngl::key::Return;
+	keys["Pause"] = jngl::key::Pause;
+	keys["Escape"] = jngl::key::Escape;
+	keys["Delete"] = jngl::key::Delete;
+	keys["ControlL"] = jngl::key::ControlL;
+	keys["ControlR"] = jngl::key::ControlR;
+	keys["CapsLock"] = jngl::key::CapsLock;
+	keys["AltL"] = jngl::key::AltL;
+	keys["AltR"] = jngl::key::AltR;
+	keys["SuperL"] = jngl::key::SuperL;
+	keys["SuperR"] = jngl::key::SuperR;
+	keys["Space"] = jngl::key::Space;
+	keys["ShiftL"] = jngl::key::ShiftL;
+	keys["ShiftR"] = jngl::key::ShiftR;
+	keys["F1"] = jngl::key::F1;
+	keys["F2"] = jngl::key::F2;
+	keys["F3"] = jngl::key::F3;
+	keys["F4"] = jngl::key::F4;
+	keys["F5"] = jngl::key::F5;
+	keys["F6"] = jngl::key::F6;
+	keys["F7"] = jngl::key::F7;
+	keys["F8"] = jngl::key::F8;
+	keys["F9"] = jngl::key::F9;
+	keys["F10"] = jngl::key::F10;
+	keys["F11"] = jngl::key::F11;
+	keys["F12"] = jngl::key::F12;
+	keys["Any"] = jngl::key::Any;
+	std::vector<RecentlyPressedKey> recentlyPressedKeys;
+	while(jngl::Running())
+	{
+		jngl::BeginDraw();
+		jngl::SetFontSize(10);
+		int y = 10;
+		for(MapType::iterator it = keys.begin(); it != keys.end(); ++it)
+		{
+			if(jngl::KeyDown(it->second))
+			{
+				jngl::SetFontColor(0, 0, 0);
+			}
+			else
+			{
+				jngl::SetFontColor(150, 150, 150);
+			}
+			jngl::Print(it->first, 100, y);
+			if(jngl::KeyPressed(it->second))
+			{
+				recentlyPressedKeys.push_back(RecentlyPressedKey(it->first, 100, y));
+			}
+			y += 15;
+		}
+		y = 10;
+		for(char c = '0'; c <= 'z'; ++c)
+		{
+			char cString[2];
+			cString[0] = c;
+			cString[1] = 0;
+			if(jngl::KeyDown(c))
+			{
+				jngl::SetFontColor(0, 0, 0);
+			}
+			else
+			{
+				jngl::SetFontColor(150, 150, 150);
+			}
+			jngl::Print(cString, 500, y);
+			if(jngl::KeyPressed(c))
+			{
+				recentlyPressedKeys.push_back(RecentlyPressedKey(cString, 500, y));
+			}
+			y += 15;
+			if(c == '9')
+			{
+				c = 'a' - 1;
+			}
+		}
+		std::vector<RecentlyPressedKey>::iterator end = recentlyPressedKeys.end();
+		for(std::vector<RecentlyPressedKey>::iterator it = recentlyPressedKeys.begin(); it != end; ++it)
+		{
+			if(it->GetAlpha() <= 0)
+			{
+				it = recentlyPressedKeys.erase(it);
+			}
+			else
+			{
+				it->Draw();
+			}
+		}
+		jngl::EndDraw();
+	}
 }

@@ -156,26 +156,13 @@ namespace jngl
 	{
 		if(key == key::Any)
 		{
-			bool anyKeyPressed = false;
-			for(std::map<unsigned int, bool>::iterator it = keyPressed_.begin(); it != keyPressed_.end(); ++it)
+			if(anyKeyPressed_)
 			{
-				if(it->second)
-				{
-					it->second = false;
-					anyKeyPressed = true;
-				}
+				anyKeyPressed_ = false;
+				return KeyDown(jngl::key::Any);
 			}
-			for(std::map<std::string, bool>::iterator it = characterPressed_.begin(); it != characterPressed_.end(); ++it)
-			{
-				if(it->second)
-				{
-					it->second = false;
-					anyKeyPressed = true;
-				}
-			}
-			return anyKeyPressed;
 		}
-		if(keyPressed_[GetKeyCode(key)])
+		else if(keyPressed_[GetKeyCode(key)])
 		{
 			keyPressed_[GetKeyCode(key)] = false;
 			return true;
