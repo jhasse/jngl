@@ -1,0 +1,22 @@
+XPStyle On
+SetCompressor lzma
+
+Name "JNGL for Python 2.6"
+
+OutFile "JNGL @VERSION@ (Python 2.6).exe"
+
+InstallDir "C:\Python26\Lib\site-packages"
+
+Page directory
+Page instfiles
+
+LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
+LoadLanguageFile "${NSISDIR}\Contrib\Language files\German.nlf"
+
+Section ""
+
+SetOutPath $INSTDIR
+File /oname=jngl.pyd ..\python\jngl.dll
+File ..\python\boost_python-mgw34-1_39.dll
+
+SectionEnd

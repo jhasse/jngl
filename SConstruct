@@ -5,7 +5,7 @@ import os
 version = "0.8.3"
 
 #Replace @VERSION@ in certain files
-files = ["jngl.pc.in", "autopackage/default.apspec.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in']
+files = ["jngl.pc.in", "autopackage/default.apspec.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
 for filename in files:
 	newfilename = filename.replace(".in", "")
 	datei = open(filename,"r").readlines()
@@ -24,6 +24,7 @@ profile = ARGUMENTS.get('profile', 0)
 autopackage = ARGUMENTS.get('autopackage', 0)
 installer = ARGUMENTS.get('installer', 0)
 opengles = ARGUMENTS.get('opengles', 0)
+python = ARGUMENTS.get('python', 0)
 m32 = ARGUMENTS.get('m32', 0)
 if int(debug):
 	env.Append(CCFLAGS = '-g -Wall')
@@ -53,11 +54,19 @@ if env['PLATFORM'] == 'win32': # Windows
 	linkflags = "-mwindows"
 	if int(debug) or int(msvc):
 		linkflags = ""
+	libs = Split("jngl freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg")
 	env.Program("test.cpp",
 	            CPPPATH=".",
 				LIBPATH=Split(". ./lib"),
-				LIBS=Split("jngl freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg"),
+				LIBS=libs,
 				LINKFLAGS=linkflags)
+	if int(python):
+		env.SharedLibrary(target="python/jngl.dll",
+		                  source="python/main.cpp",
+						  CPPPATH="C:\Python26\include",
+						  LIBPATH=Split(". ./lib ./python C:\Python26\libs"),
+						  LIBS=libs + Split("python26 liblibboost_python-mgw34-1_39"),
+						  LINKFLAGS=linkflags)
 
 if env['PLATFORM'] == 'posix': # Linux
 	env.ParseConfig('pkg-config --cflags --libs freetype2 fontconfig glib-2.0')
@@ -76,6 +85,9 @@ if int(installer):
 	if int(msvc):
 		nsiFile = 'installer/msvc.nsi'
 		name = 'MS Visual C++'
+	if int(python):
+		nsiFile = 'installer/python.nsi'
+		name = 'Python 2.6'
 	import os
 	t = Command('jngl Library ' + version + '.exe', lib, '"' + os.path.expandvars("%programfiles%") + '\NSIS\makensis.exe " ' + nsiFile)
 	Clean(t, 'installer/JNGL ' + version + ' (' + name + ').exe')

@@ -329,7 +329,7 @@ namespace jngl
 			GetKeyCode(jngl::key::ControlL), GetKeyCode(jngl::key::ControlR),
 			GetKeyCode(jngl::key::AltL), GetKeyCode(jngl::key::AltR)
 		};
-		for(unsigned int i = 0; i < sizeof(codesToCheck)/sizeof(codesToCheck[0]); ++i)
+		for(unsigned int i = 0; i < sizeof(codesToCheck) / sizeof(codesToCheck[0]); ++i)
 		{
 			bool value = GetKeyState(codesToCheck[i]) & 0xf0;
 			keyDown_[codesToCheck[i]] = value;
