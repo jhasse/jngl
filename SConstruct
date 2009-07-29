@@ -24,7 +24,7 @@ profile = ARGUMENTS.get('profile', 0)
 autopackage = ARGUMENTS.get('autopackage', 0)
 installer = ARGUMENTS.get('installer', 0)
 opengles = ARGUMENTS.get('opengles', 0)
-python = ARGUMENTS.get('python', 0)
+python = int(ARGUMENTS.get('python', 0))
 m32 = ARGUMENTS.get('m32', 0)
 if int(debug):
 	env.Append(CCFLAGS = '-g -Wall')
@@ -85,9 +85,11 @@ if int(installer):
 	if int(msvc):
 		nsiFile = 'installer/msvc.nsi'
 		name = 'MS Visual C++'
-	if int(python):
+	if python:
 		nsiFile = 'installer/python.nsi'
 		name = 'Python 2.6'
 	import os
 	t = Command('jngl Library ' + version + '.exe', lib, '"' + os.path.expandvars("%programfiles%") + '\NSIS\makensis.exe " ' + nsiFile)
+	if python:
+		Depends(t, 'python/jngl.dll')
 	Clean(t, 'installer/JNGL ' + version + ' (' + name + ').exe')
