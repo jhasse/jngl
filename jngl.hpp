@@ -33,6 +33,8 @@ namespace jngl
 
 	bool Running();
 
+	void SwapBuffers();
+
 	void BeginDraw();
 
 	void EndDraw();

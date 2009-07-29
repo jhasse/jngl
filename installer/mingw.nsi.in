@@ -5,7 +5,13 @@ Name "JNGL for MinGW"
 
 OutFile "JNGL @VERSION@ (MinGW).exe"
 
-InstallDir "$PROGRAMFILES\CodeBlocks\MinGW"
+InstallDir "C:\MinGW"
+
+Function .onInit
+IfFileExists "C:\MinGW" end
+StrCpy $INSTDIR "$PROGRAMFILES\CodeBlocks\MinGW"
+end:
+FunctionEnd
 
 Page directory
 Page instfiles

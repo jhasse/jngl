@@ -85,6 +85,12 @@ namespace jngl
 		pWindow.Delete();
 	}
 
+	void SwapBuffers()
+	{
+	    EndDraw();
+	    BeginDraw();
+	}
+
 	void BeginDraw()
 	{
 		pWindow->BeginDraw();
@@ -180,7 +186,7 @@ namespace jngl
 		return pWindow->SetTitle(title);
 	}
 
-	unsigned char colorRed = 255, colorGreen = 255, colorBlue = 255, colorAlpha = 255;
+	unsigned char colorRed = 0, colorGreen = 0, colorBlue = 0, colorAlpha = 255;
 
 	void SetColor(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha)
 	{

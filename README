@@ -4,6 +4,9 @@ Build jngl in debug mode:
 Build jngl in profile mode:
  scons profile=1
 
+Build python bindings:
+ scons python=1
+
 Create an autopackage:
  scons autopackage=1
 
@@ -15,12 +18,13 @@ To create an Autopackage for both 32 bit and 64 bit systems:
 
 Create a windows installer:
  scons installer=1
+ scons installer=1 python=1
 
 Install jngl to "/usr":
  ./install.sh /usr
 
 Clean up:
- scons installer=1 autopackage=1 -c
+ scons installer=1 autopackage=1 python=1 -c
 
 Create a source tarball:
 	First you need to create a file list. You can do it like this:

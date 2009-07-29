@@ -1,4 +1,4 @@
-#include "jngl.hpp"
+#include "../jngl.hpp"
 
 #include <boost/python.hpp>
 
@@ -91,6 +91,7 @@ BOOST_PYTHON_MODULE(jngl)
 	def("ShowWindow", ShowWindow1);
 	def("ShowWindow", ShowWindow2);
 	def("Running", Running);
+	def("SwapBuffers", SwapBuffers);
 	def("BeginDraw", BeginDraw);
 	def("EndDraw", EndDraw);
 	def("HideWindow", HideWindow);
