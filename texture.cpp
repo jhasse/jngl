@@ -184,6 +184,11 @@ namespace jngl
 			}
 		    png_init_io(png_ptr, fp);
 		    png_set_sig_bytes(png_ptr, PNG_BYTES_TO_CHECK);
+			int colorType = png_get_color_type(png_ptr, info_ptr);
+			if(colorType == PNG_COLOR_TYPE_GRAY || colorType == PNG_COLOR_TYPE_GRAY_ALPHA)
+			{
+				png_set_gray_to_rgb(png_ptr);
+			}
 			png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16, png_voidp_NULL);
 
 			png_ptr->num_rows = png_ptr->height; // Make sure this is set correctly
@@ -191,11 +196,13 @@ namespace jngl
 			GLenum format;
 			switch(png_ptr->channels)
 			{
-				case 1: // palette, we can set channels to 3 because we passed PNG_TRANSFORM_EXPAND to png_read_png
+				case 1: // gray or palette, we can set channels to 3 because we passed PNG_TRANSFORM_EXPAND to png_read_png
 					png_ptr->channels = 3; // we need this value when creating the texture for OpenGL
 				case 3:
 					format = GL_RGB;
 				break;
+				case 2: // gray + alpha
+					png_ptr->channels = 4;
 				case 4:
 					format = GL_RGBA;
 				break;
