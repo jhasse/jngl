@@ -34,7 +34,7 @@ namespace draw
 		opengl::Translate(xposition, yposition);
 		T rect[] = { 0, 0, width, 0, width, height, 0, height };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, rect);
-		glDrawArrays(GL_QUADS, 0, 4);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 		glPopMatrix();
 	}
 
@@ -62,7 +62,7 @@ namespace draw
 			++count;
 		}
 		glVertexPointer(2, opengl::Type<T>::constant, 0, &vertexes[0]);
-		glDrawArrays(GL_POLYGON, 0, count);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, count);
 		glPopMatrix();
 	}
 

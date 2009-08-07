@@ -31,10 +31,14 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <map>
 
 #ifdef linux
-	#include <GL/glx.h>
-	#include <GL/glu.h>
-	#include <X11/extensions/xf86vmode.h>
-	#include <X11/keysym.h>
+	#ifdef WIZ
+	
+	#else
+		#include <GL/glx.h>
+		#include <GL/glu.h>
+		#include <X11/extensions/xf86vmode.h>
+		#include <X11/keysym.h>
+	#endif
 #else
 	#include <windows.h>
 #endif
@@ -74,12 +78,16 @@ namespace jngl
 		void SetFont(const std::string&);
 		void SetFontByName(const std::string&);
 		bool IsMultisampleSupported() const;
-#ifdef linux
+#ifdef WIZ
+
+#else
+	#ifdef linux
 		boost::shared_ptr<Display> pDisplay_;
 		static void ReleaseXData(void*);
-#else
+	#else
 		static void ReleaseDC(HWND, HDC);
 		static void ReleaseRC(HGLRC);
+	#endif
 #endif
 	private:
 		int GetKeyCode(jngl::key::KeyType key);
@@ -96,12 +104,18 @@ namespace jngl
 
 		// <fontSize, <fontName, Font> >
 		boost::ptr_map<int, boost::ptr_map<std::string, Font> > fonts_;
-#ifdef linux
+#ifdef WIZ
+		NativeWindowType nativeWindow_;
+		EGLDisplay display_;
+		EGLContext context_;
+		EGLSurface surface_;
+#else
+	#ifdef linux
 		::Window window_;
 		GLXContext context_;
 		int screen_;
 		XF86VidModeModeInfo oldMode_;
-#else
+	#else
 		boost::shared_ptr<boost::remove_pointer<HGLRC>::type> pRenderingContext_;
 		boost::shared_ptr<boost::remove_pointer<HWND>::type> pWindowHandle_;
 		boost::shared_ptr<boost::remove_pointer<HDC>::type> pDeviceContext_;
@@ -110,6 +124,7 @@ namespace jngl
 		bool InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR);
 		void Init(const std::string& title, bool multisample);
 		void DistinguishLeftRight();
+	#endif
 #endif
 	};
 }

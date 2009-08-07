@@ -43,7 +43,9 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #define XMD_H
 #define HAVE_BOOLEAN
 #endif
+extern "C" {
 #include <jpeglib.h>
+}
 
 namespace jngl
 {
@@ -109,8 +111,8 @@ namespace jngl
 
 			glBindTexture(GL_TEXTURE_2D, texture_);
 			glVertexPointer(2, GL_INT, 0, &vertexes_[0]);
-			glTexCoordPointer(2, GL_DOUBLE, 0, &texCoords_[0]);
-			glDrawArrays(GL_QUADS, 0, 4);
+			glTexCoordPointer(2, opengl::Type<double>::constant, 0, &texCoords_[0]);
+			glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			glDisable(GL_TEXTURE_2D);
@@ -149,8 +151,8 @@ namespace jngl
 					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, width, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
 				}
 
-				const GLdouble x = static_cast<GLdouble>(imgWidth) / static_cast<GLdouble>(width);
-				const GLdouble y = static_cast<GLdouble>(imgHeight)  / static_cast<GLdouble>(height);
+				const opengl::CoordType x = static_cast<opengl::CoordType>(imgWidth) / static_cast<opengl::CoordType>(width);
+				const opengl::CoordType y = static_cast<opengl::CoordType>(imgHeight)  / static_cast<opengl::CoordType>(height);
 				GLfloat texCoords[] = { 0, 0, 0, y, x, y, x, 0 };
 				texCoords_.assign(&texCoords[0], &texCoords[8]);
 
@@ -352,12 +354,12 @@ namespace jngl
 		{
 			glPushMatrix();
 			opengl::Translate(xposition, yposition);
-			glScaled(xfactor, yfactor, 0);
+			opengl::Scale(xfactor, yfactor);
 			DrawTexture();
 			glPopMatrix();
 		}
 	private:
-		std::vector<GLdouble> texCoords_;
+		std::vector<opengl::CoordType> texCoords_;
 		std::vector<GLint> vertexes_;
 		GLuint texture_;
 		int width_, height_;

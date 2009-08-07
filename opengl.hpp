@@ -19,9 +19,10 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#ifdef OPENGLES
-	#include <GLES/egl.h>
-	#include <GLES/gl.h>
+#ifdef WIZ
+	#include <GL/nanogl.h>
+	#include <GL/wizGLES.h>
+	#include <GL/egl.h>
 #else
 	#ifndef linux
 		#include <windows.h>
@@ -31,15 +32,24 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/function.hpp>
 
+#ifndef GL_BGR
+#define GL_BGR 0x80e0
+#endif
+
 namespace opengl
 {
 	inline void Translate(float x, float y) { glTranslatef(x, y, 0); }
+	inline void Scale(float x, float y) { glScalef(x, y, 0); }
 #ifdef GL_DOUBLE
 	template<class T, class U>
 	inline void Translate(T x, U y) { glTranslated(static_cast<double>(x), static_cast<double>(y), 0); }
+	template<class T, class U>
+	inline void Scale(T x, U y) { glScaled(static_cast<double>(x), static_cast<double>(y), 0); }
 #else
 	template<class T, class U>
 	inline void Translate(T x, U y) { Translate(static_cast<float>(x), static_cast<float>(y)); }
+	template<class T, class U>
+	inline void Scale(T x, U y) { Scale(static_cast<float>(x), static_cast<float>(y)); }
 #endif
 #ifdef GL_FIXED
 	inline void Translate(int x, int y) { glTranslatex(x, y, 0); }
@@ -72,6 +82,12 @@ namespace opengl
 		const static GLenum constant = GL_FLOAT;
 #endif
 	};
+
+#ifdef GL_DOUBLE
+	typedef GLdouble CoordType;
+#else
+	typedef GLfloat CoordType;
+#endif
 
 	// This function gets the first power of 2 >= the int that we pass it.
 	int NextPowerOf2(int);

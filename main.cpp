@@ -247,22 +247,26 @@ namespace jngl
 
 	void Rotate(const double degree)
 	{
+#ifdef GL_DOUBLE
 		glRotated(degree, 0, 0, 1);
+#else
+		glRotatef(degree, 0, 0, 1);
+#endif
 	}
 
 	void Translate(const double x, const double y)
 	{
-		glTranslated(x, y, 0);
+		opengl::Translate(x, y);
 	}
 
 	void Scale(const double factor)
 	{
-		glScaled(factor, factor, 0);
+		opengl::Scale(factor, factor);
 	}
 
 	void Scale(const double xfactor, const double yfactor)
 	{
-		glScaled(xfactor, yfactor, 0);
+		opengl::Scale(xfactor, yfactor);
 	}
 
 	void PushMatrix()
@@ -327,6 +331,7 @@ namespace jngl
 
 	void SetAntiAliasing(bool enabled)
 	{
+#ifdef GL_MULTISAMPLE_ARB
 		if(!pWindow->IsMultisampleSupported())
 		{
 			antiAliasingEnabled = false;
@@ -341,6 +346,7 @@ namespace jngl
 			glDisable(GL_MULTISAMPLE_ARB);
 		}
 		antiAliasingEnabled = enabled;
+#endif
 	}
 
 	bool GetAntiAliasing()

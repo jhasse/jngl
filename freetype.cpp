@@ -123,7 +123,7 @@ namespace jngl
 		glBindTexture(GL_TEXTURE_2D, texture_);
 		glVertexPointer(2, GL_INT, 0, &vertexes_[0]);
 		glTexCoordPointer(2, GL_FLOAT, 0, &texCoords_[0]);
-		glDrawArrays(GL_QUADS, 0, 4);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisable(GL_TEXTURE_2D);

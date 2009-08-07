@@ -23,19 +23,21 @@ debug = ARGUMENTS.get('debug', 0)
 profile = ARGUMENTS.get('profile', 0)
 autopackage = ARGUMENTS.get('autopackage', 0)
 installer = ARGUMENTS.get('installer', 0)
-opengles = ARGUMENTS.get('opengles', 0)
 python = int(ARGUMENTS.get('python', 0))
 m32 = ARGUMENTS.get('m32', 0)
+wiz = ARGUMENTS.get('wiz', 0)
 if int(debug):
 	env.Append(CCFLAGS = '-g -Wall')
 else:
 	env.Append(CCFLAGS = '-O2 -DNDEBUG')
 if int(profile):
 	env.Append(CCFLAGS = '-pg', _LIBFLAGS = ' -pg')
-if int(opengles):
-	env.Append(CCFLAGS = '-DOPENGLES')
 if int(m32):
 	env.Append(CCFLAGS = '-m32', LINKFLAGS = ' -m32')
+if int(wiz):
+	env['CXX'] = "/toolchain/bin/arm-openwiz-linux-gnu-g++"
+	env['CC'] = "/toolchain/bin/arm-openwiz-linux-gnu-gcc"
+	env.Append(CPPPATH=["/toolchain/include", "wiz"], LIBPATH=["/toolchain/lib", "wiz"])
 
 source_files = Split("""
 finally.cpp
@@ -69,10 +71,19 @@ if env['PLATFORM'] == 'win32': # Windows
 						  LINKFLAGS=linkflags)
 
 if env['PLATFORM'] == 'posix': # Linux
-	env.ParseConfig('pkg-config --cflags --libs freetype2 fontconfig glib-2.0')
-	lib = env.Library(target="jngl", source=source_files + Glob('linux/*.cpp'))
+	if int(wiz):
+		env.Append(CCFLAGS = '-DWIZ -DOPENGLES')
+		source_files += Glob('wiz/*.cpp')
+	else:
+		source_files += Glob('linux/*.cpp')
+		env.ParseConfig('pkg-config --cflags --libs fontconfig glib-2.0')
+	env.ParseConfig('pkg-config --cflags --libs freetype2')
+	lib = env.Library(target="jngl", source=source_files)
 	env.Append(LIBPATH=".", CPPPATH='.')
-	env.ParseConfig("pkg-config --cflags --libs jngl.pc")
+	if wiz:
+		env.Append(LIBS=Split("jpeg jngl nanoGL wizGLES opengles_lite z png dl"))
+	else:
+		env.ParseConfig("pkg-config --cflags --libs jngl.pc")
 	env.Program("test.cpp")
 
 if int(autopackage):
