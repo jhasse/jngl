@@ -1,4 +1,5 @@
 #include <jngl.hpp>
+#include <jnal.hpp>
 #include <cmath>
 #include <sstream>
 #include <iostream>
@@ -108,6 +109,11 @@ int main()
 				jngl::ShowWindow("JNGL Test Application", 800, 600, !jngl::GetFullscreen());
 			}
 			jngl::Print("Press K to test key codes.", 5, 550);
+			jngl::Print("Press P to play a sound.", 6, 570);
+			if(jngl::KeyPressed('p'))
+			{
+				jnal::Play("test.ogg");
+			}
 			jngl::SetColor(0,0,255,128);
 			DrawMouse();
 			jngl::EndDraw();

@@ -2,7 +2,7 @@
 
 import os
 
-version = "0.8.4"
+version = "0.8.5"
 
 #Replace @VERSION@ in certain files
 files = ["jngl.pc.in", "autopackage/default.apspec.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
@@ -53,22 +53,26 @@ windowptr.cpp
 if env['PLATFORM'] == 'win32': # Windows
 	env.Append(CPPPATH="./include")
 	lib = env.StaticLibrary(target="jngl", source=source_files + Glob('win32/*.cpp'))
+	env.Library(target="jnal", source = "jnal.cpp")
 	linkflags = "-mwindows"
 	if int(debug) or int(msvc):
 		linkflags = ""
-	libs = Split("jngl freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg")
+	libs = Split("jngl jnal alut vorbisfile OpenAL32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg")
 	env.Program("test.cpp",
 	            CPPPATH=".",
 				LIBPATH=Split(". ./lib"),
 				LIBS=libs,
 				LINKFLAGS=linkflags)
 	if int(python):
+		env = env.Clone()
+		env.Append(CPPPATH=Split("C:\Python26\include"),
+		           LIBPATH=Split(". ./lib ./python C:\Python26\libs"),
+		           LIBS=libs + Split("python26 liblibboost_python-mgw34-1_39"),
+		           LINKFLAGS=linkflags)
 		env.SharedLibrary(target="python/jngl.dll",
-		                  source="python/main.cpp",
-						  CPPPATH="C:\Python26\include",
-						  LIBPATH=Split(". ./lib ./python C:\Python26\libs"),
-						  LIBS=libs + Split("python26 liblibboost_python-mgw34-1_39"),
-						  LINKFLAGS=linkflags)
+		                  source="python/main.cpp")
+		env.SharedLibrary(target="python/jnal.dll",
+		                  source="python/jnal.cpp")
 
 if env['PLATFORM'] == 'posix': # Linux
 	if int(wiz):

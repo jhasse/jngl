@@ -289,7 +289,7 @@ namespace jngl
 
 	void Font::Print(const int x, const int y, const std::string& text)
 	{
-		double h = height_ / .63; // We make the height about 1.5* that of
+		int h = int(height_ / .63); // We make the height about 1.5* that of
 
 		std::vector<std::string> lines(ParseString(text));
 
