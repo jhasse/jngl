@@ -77,6 +77,7 @@ namespace jngl
 		pWindow.Set(new Window(title, width, height, fullscreen));
 		pWindow->SetMouseVisible(isMouseVisible);
 		SetAntiAliasing(antiAliasingEnabled);
+		BeginDraw();
 	}
 
 	void HideWindow()
@@ -124,6 +125,7 @@ namespace jngl
 		bgGreen = green / 255.0f;
 		bgBlue = blue / 255.0f;
 		glClearColor(bgRed, bgGreen, bgBlue, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
 	int GetMouseX()
