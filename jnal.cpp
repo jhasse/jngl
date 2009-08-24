@@ -34,7 +34,7 @@ namespace jnal
 {
 	class Sound : boost::noncopyable {
 	public:
-		Sound(ALenum format, std::vector<char>& bufferData, ALsizei freq)
+		Sound(ALenum format, std::vector<char>& bufferData, ALsizei freq) : source_(0)
 		{
 			alGenBuffers(1, &buffer_);
 			alGenSources(1, &source_);
@@ -47,9 +47,10 @@ namespace jnal
 		~Sound()
 		{
 			Debug("freeing sound buffer ... ");
-			alSourcei(source_, AL_BUFFER, 0);
-			alDeleteBuffers(1, &buffer_);
+			alSourceStop(source_);
+			alSourceUnqueueBuffers(source_, 1, &buffer_);
 			alDeleteSources(1, &source_);
+			alDeleteBuffers(1, &buffer_);
 			Debug("OK\n");
 		}
 		bool IsPlaying()
@@ -194,6 +195,7 @@ namespace jnal
 
 	SoundFile& GetSoundFile(const std::string& filename)
 	{
+		GetJNAL();
 		std::map<std::string, boost::shared_ptr<SoundFile> >::iterator i;
 		if((i = sounds.find(filename)) == sounds.end()) // sound hasn't been loaded yet?
 		{
