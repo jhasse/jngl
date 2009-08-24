@@ -25,6 +25,12 @@ along with JNAL.  If not, see <http://www.gnu.org/licenses/>.
 namespace jnal
 {
 	void Play(const std::string& filename);
+
+	void Stop(const std::string& filename);
+
+	bool IsPlaying(const std::string& filename);
+
+	void Load(const std::string& filename);
 }
 
 #endif // __JNAL_HPP__

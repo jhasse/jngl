@@ -18,6 +18,7 @@ along with JNAL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "jnal.hpp"
+#include "debug.hpp"
 
 #include <AL/al.h>
 #include <AL/alut.h>
@@ -27,10 +28,11 @@ along with JNAL.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include <map>
 #include <boost/shared_ptr.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace jnal
 {
-	class Sound {
+	class Sound : boost::noncopyable {
 	public:
 		Sound(ALenum format, std::vector<char>& bufferData, ALsizei freq)
 		{
@@ -44,36 +46,75 @@ namespace jnal
 		}
 		~Sound()
 		{
+			Debug("freeing sound buffer ... ");
+			alSourcei(source_, AL_BUFFER, 0);
 			alDeleteBuffers(1, &buffer_);
 			alDeleteSources(1, &source_);
+			Debug("OK\n");
+		}
+		bool IsPlaying()
+		{
+			ALint state;
+			alGetSourcei(source_, AL_SOURCE_STATE, &state);
+			return state == AL_PLAYING;
+		}
+		bool Stopped()
+		{
+			ALint state;
+			alGetSourcei(source_, AL_SOURCE_STATE, &state);
+			return state == AL_STOPPED;
 		}
 	private:
 		ALuint buffer_;
 		ALuint source_;
 	};
 
-	class JNAL {
+	class JNAL : boost::noncopyable {
 	public:
 		JNAL()
 		{
-			alutInit(0, 0);			// Clean up the OpenAL library
+			alutInit(0, 0);
 		}
 		~JNAL()
 		{
 			alutExit();
 		}
-		void Play(Sound* sound)
+		void Play(boost::shared_ptr<Sound> sound)
 		{
+			std::vector<boost::shared_ptr<Sound> >::iterator end = sounds_.end();
+			for(std::vector<boost::shared_ptr<Sound> >::iterator it = sounds_.begin(); it != end; ++it)
+			{
+				if((*it)->Stopped())
+				{
+					it = sounds_.erase(it);
+				}
+			}
 			sounds_.push_back(boost::shared_ptr<Sound>(sound));
+		}
+		void Stop(boost::shared_ptr<Sound> sound)
+		{
+			std::vector<boost::shared_ptr<Sound> >::iterator i;
+			if((i = std::find(sounds_.begin(), sounds_.end(), sound)) != sounds_.end()) // sound hasn't been loaded yet?
+			{
+				sounds_.erase(i);
+			}
 		}
 	private:
 		std::vector<boost::shared_ptr<Sound> > sounds_;
 	};
 
-	class SoundFile {
+	JNAL& GetJNAL()
+	{
+		static JNAL jnal_;
+		return jnal_;
+	}
+
+	class SoundFile : boost::noncopyable {
 	public:
-		SoundFile(const std::string& filename) // based on http://www.gamedev.net/reference/articles/article2031.asp
+		SoundFile(const std::string& filename) : sound_((Sound*)0)
 		{
+			Debug("Decoding "); Debug(filename); Debug(" ... ");
+			// based on http://www.gamedev.net/reference/articles/article2031.asp
 			FILE* f = fopen(filename.c_str(), "rb");
 			if(!f)
 			{
@@ -118,17 +159,35 @@ namespace jnal
 			while(bytes > 0);
 
 			ov_clear(&oggFile);
+			Debug("OK\n");
 		}
 		void Play()
 		{
-			static JNAL jnal;
-			jnal.Play(new Sound(format, buffer_, freq));
+			sound_.reset(new Sound(format, buffer_, freq));
+			GetJNAL().Play(sound_);
+		}
+		void Stop()
+		{
+			if(sound_)
+			{
+				GetJNAL().Stop(sound_);
+				sound_.reset((Sound*)0);
+			}
+		}
+		bool IsPlaying()
+		{
+			if(sound_)
+			{
+				return sound_->IsPlaying();
+			}
+			return false;
 		}
 	private:
-		ALint state;                            // The state of the sound source
-		ALenum format;                          // The sound data format
-		ALsizei freq;                           // The frequency of the sound data
-		std::vector<char> buffer_;                // The sound buffer data from file
+		boost::shared_ptr<Sound> sound_;
+		ALint state;
+		ALenum format;
+		ALsizei freq;
+		std::vector<char> buffer_;
 	};
 
 	std::map<std::string, boost::shared_ptr<SoundFile> > sounds;
@@ -147,5 +206,20 @@ namespace jnal
 	void Play(const std::string& filename)
 	{
 		GetSoundFile(filename).Play();
+	}
+
+	void Stop(const std::string& filename)
+	{
+		GetSoundFile(filename).Stop();
+	}
+
+	void Load(const std::string& filename)
+	{
+		GetSoundFile(filename);
+	}
+
+	bool IsPlaying(const std::string& filename)
+	{
+		return GetSoundFile(filename).IsPlaying();
 	}
 };

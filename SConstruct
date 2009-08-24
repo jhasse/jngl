@@ -106,5 +106,5 @@ if int(installer):
 	import os
 	t = Command('jngl Library ' + version + '.exe', lib, '"' + os.path.expandvars("%programfiles%") + '\NSIS\makensis.exe " ' + nsiFile)
 	if python:
-		Depends(t, 'python/jngl.dll')
+		Depends(t, ['python/jngl.dll', 'python/jnal.dll'])
 	Clean(t, 'installer/JNGL ' + version + ' (' + name + ').exe')
