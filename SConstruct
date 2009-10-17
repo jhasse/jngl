@@ -77,7 +77,7 @@ if env['PLATFORM'] == 'win32': # Windows
 if env['PLATFORM'] == 'posix': # Linux
 	if int(wiz):
 		env.Append(CCFLAGS = '-DWIZ -DOPENGLES')
-		source_files += Glob('wiz/*.cpp')
+		source_files += Glob('wiz/*.cpp') + Glob('wiz/*.c')
 	else:
 		source_files += Glob('linux/*.cpp')
 		env.ParseConfig('pkg-config --cflags --libs fontconfig glib-2.0')
@@ -86,10 +86,18 @@ if env['PLATFORM'] == 'posix': # Linux
 	env.Library(target="jnal", source = "jnal.cpp")
 	env.Append(LIBPATH=".", CPPPATH='.')
 	if wiz:
-		env.Append(LIBS=Split("jpeg jngl nanoGL wizGLES opengles_lite z png dl"))
+		env.Append(LIBS=Split("jpeg jngl wizGLES opengles_lite z png dl"))
+		env.Program(source = "wiz/test.cpp", target = "wiz/test.gpe")
 	else:
 		env.ParseConfig("pkg-config --cflags --libs jngl.pc jnal.pc")
-	env.Program("test.cpp")
+		env.Program("test.cpp")
+	if int(python):
+		env.SharedLibrary(target="python/jngl.so",
+		                  source="python/main.cpp",
+		                  CCFLAGS="-fPIC",
+						  CPPPATH="/usr/include/python2.6",
+						  LIBPATH=Split(". ./lib ./python"),
+						  LIBS=Split("python2.6 boost_python-py26"))
 
 if int(autopackage):
 	t = Command('jngl Library ' + version + '.package', [lib, 'autopackage/default.apspec.in'], "makepackage")
