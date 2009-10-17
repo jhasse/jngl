@@ -5,7 +5,7 @@ import os
 version = "0.8.5"
 
 #Replace @VERSION@ in certain files
-files = ["jngl.pc.in", "autopackage/default.apspec.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
+files = ["jngl.pc.in", "jnal.pc.in", "autopackage/default.apspec.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
 for filename in files:
 	newfilename = filename.replace(".in", "")
 	datei = open(filename,"r").readlines()
@@ -83,11 +83,12 @@ if env['PLATFORM'] == 'posix': # Linux
 		env.ParseConfig('pkg-config --cflags --libs fontconfig glib-2.0')
 	env.ParseConfig('pkg-config --cflags --libs freetype2')
 	lib = env.Library(target="jngl", source=source_files)
+	env.Library(target="jnal", source = "jnal.cpp")
 	env.Append(LIBPATH=".", CPPPATH='.')
 	if wiz:
 		env.Append(LIBS=Split("jpeg jngl nanoGL wizGLES opengles_lite z png dl"))
 	else:
-		env.ParseConfig("pkg-config --cflags --libs jngl.pc")
+		env.ParseConfig("pkg-config --cflags --libs jngl.pc jnal.pc")
 	env.Program("test.cpp")
 
 if int(autopackage):
