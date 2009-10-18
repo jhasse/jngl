@@ -12,12 +12,14 @@ for filename in files:
 	open(newfilename,"w").writelines([line.replace("@VERSION@",version) for line in datei])
 	Clean('.', newfilename) # Make sure scons -c does clean up tidily
 
-env = Environment(tools=['mingw'])
+env = Environment()
 
-msvc = ARGUMENTS.get('msvc', 0)
-if int(msvc):
-	env = Environment()
-	env.Append(CCFLAGS = '/EHsc /MD')
+if env['PLATFORM'] == 'win32':
+	msvc = ARGUMENTS.get('msvc', 0)
+	if int(msvc):
+		env.Append(CCFLAGS = '/EHsc /MD')	
+	else:
+		env = Environment(tools=['mingw'])
 
 debug = ARGUMENTS.get('debug', 0)
 profile = ARGUMENTS.get('profile', 0)
@@ -82,6 +84,7 @@ if env['PLATFORM'] == 'posix': # Linux
 		source_files += Glob('linux/*.cpp')
 		env.ParseConfig('pkg-config --cflags --libs fontconfig glib-2.0')
 	env.ParseConfig('pkg-config --cflags --libs freetype2')
+	env.Append(CCFLAGS="-fPIC")
 	lib = env.Library(target="jngl", source=source_files)
 	env.Library(target="jnal", source = "jnal.cpp")
 	env.Append(LIBPATH=".", CPPPATH='.')
@@ -94,10 +97,10 @@ if env['PLATFORM'] == 'posix': # Linux
 	if int(python):
 		env.SharedLibrary(target="python/jngl.so",
 		                  source="python/main.cpp",
-		                  CCFLAGS="-fPIC",
+		                  LINKFLAGS='`export CFLAGS="-fPIC" && relaytool --relay jpeg -ljpeg`',
 						  CPPPATH="/usr/include/python2.6",
 						  LIBPATH=Split(". ./lib ./python"),
-						  LIBS=Split("python2.6 boost_python-py26"))
+						  LIBS=Split("python2.6 boost_python-py26 jngl GL GLU png12 glib-2.0 Xxf86vm freetype fontconfig"))
 
 if int(autopackage):
 	t = Command('jngl Library ' + version + '.package', [lib, 'autopackage/default.apspec.in'], "makepackage")
