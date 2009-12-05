@@ -30,9 +30,10 @@ namespace draw
 	template<class T>
 	void Rect(const T xposition, const T yposition, const T width, const T height)
 	{
+		opengl::BindArrayBuffer(0);
 		glPushMatrix();
 		opengl::Translate(xposition, yposition);
-		T rect[] = { 0, 0, width, 0, width, height, 0, height };
+		typename opengl::Type<T>::type rect[] = { 0, 0, width, 0, width, height, 0, height };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, rect);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 		glPopMatrix();
@@ -41,8 +42,9 @@ namespace draw
 	template<class T>
 	void Line(const T xstart, const T ystart, const T xend, const T yend)
 	{
+		opengl::BindArrayBuffer(0);
 		glPushMatrix();
-		T line[] = { xstart, ystart, xend, yend };
+		typename opengl::Type<T>::type line[] = { xstart, ystart, xend, yend };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, line);
 		glDrawArrays(GL_LINES, 0, 2);
 		glPopMatrix();
@@ -51,6 +53,7 @@ namespace draw
 	template<class T>
 	void Ellipse(const T xmid, const T ymid, const T width, const T height)
 	{
+		opengl::BindArrayBuffer(0);
 		glPushMatrix();
 		opengl::Translate(xmid, ymid);
 		std::vector<T> vertexes;
@@ -69,7 +72,8 @@ namespace draw
 	template<class T>
 	void Point(const T x, const T y)
 	{
-		T point[] = { x, y };
+		opengl::BindArrayBuffer(0);
+		typename opengl::Type<T>::type point[] = { x, y };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, point);
 		glDrawArrays(GL_POINTS, 0, 1);
 	}

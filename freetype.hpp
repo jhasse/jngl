@@ -54,8 +54,7 @@ namespace jngl
 		int width_;
 		int left_;
 		float top_;
-		std::vector<GLfloat> texCoords_;
-		std::vector<GLint> vertexes_;
+		GLuint vertexBuffer_;
 	};
 
 	class Font : boost::noncopyable

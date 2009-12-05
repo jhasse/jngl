@@ -108,8 +108,8 @@ typedef int             GLsizeiptr;
 #define GL_COLOR_BUFFER_BIT               0x00004000
 
 /* Boolean */
-//#define GL_FALSE                          0
-//#define GL_TRUE                           1
+#define GL_FALSE                          0
+#define GL_TRUE                           1
 
 /* BeginMode */
 #define GL_POINTS                         0x0000
@@ -131,8 +131,8 @@ typedef int             GLsizeiptr;
 #define GL_ALWAYS                         0x0207
 
 /* BlendingFactorDest */
-//#define GL_ZERO                           0
-//#define GL_ONE                            1
+#define GL_ZERO                           0
+#define GL_ONE                            1
 #define GL_SRC_COLOR                      0x0300
 #define GL_ONE_MINUS_SRC_COLOR            0x0301
 #define GL_SRC_ALPHA                      0x0302
@@ -141,17 +141,15 @@ typedef int             GLsizeiptr;
 #define GL_ONE_MINUS_DST_ALPHA            0x0305
 
 /* BlendingFactorSrc */
-#define GL_ZERO					0x0
-#define GL_ONE					0x1
+/*      GL_ZERO */
+/*      GL_ONE */
 #define GL_DST_COLOR                      0x0306
 #define GL_ONE_MINUS_DST_COLOR            0x0307
 #define GL_SRC_ALPHA_SATURATE             0x0308
-#define GL_SRC_COLOR				0x0300
-#define GL_ONE_MINUS_SRC_COLOR			0x0301
-#define GL_SRC_ALPHA				0x0302
-#define GL_ONE_MINUS_SRC_ALPHA			0x0303
-#define GL_DST_ALPHA				0x0304
-#define GL_ONE_MINUS_DST_ALPHA			0x0305
+/*      GL_SRC_ALPHA */
+/*      GL_ONE_MINUS_SRC_ALPHA */
+/*      GL_DST_ALPHA */
+/*      GL_ONE_MINUS_DST_ALPHA */
 
 /* ClipPlaneName */
 #define GL_CLIP_PLANE0                    0x3000
@@ -701,7 +699,7 @@ GL_API void GL_APIENTRY glMaterialfv (GLenum face, GLenum pname, const GLfloat *
 GL_API void GL_APIENTRY glMultMatrixf (const GLfloat *m);
 GL_API void GL_APIENTRY glMultiTexCoord4f (GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q);
 GL_API void GL_APIENTRY glNormal3f (GLfloat nx, GLfloat ny, GLfloat nz);
-GL_API void GL_APIENTRY glOrtho(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar);
+GL_API void GL_APIENTRY glOrthof (GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar);
 GL_API void GL_APIENTRY glPointParameterf (GLenum pname, GLfloat param);
 GL_API void GL_APIENTRY glPointParameterfv (GLenum pname, const GLfloat *params);
 GL_API void GL_APIENTRY glPointSize (GLfloat size);
@@ -844,15 +842,6 @@ GL_API void GL_APIENTRY glDrawTexxvOES (const GLfixed *coords);
 
 GL_API void GL_APIENTRY glDrawTexfOES (GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height);
 GL_API void GL_APIENTRY glDrawTexfvOES (const GLfloat *coords);
-
-
-GL_API void GL_APIENTRY glBegin(GLenum mode);
-GL_API void GL_APIENTRY glEnd(void);
-GL_API void GL_APIENTRY glVertex2f(GLfloat x, GLfloat y);
-GL_API void GL_APIENTRY glColor3f(	GLfloat red, GLfloat green, GLfloat blue);
-
-GL_API void GL_APIENTRY glClearDepth( GLclampf depth );
-GL_API void GL_APIENTRY glFrustum (GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar);
 
 #ifdef __cplusplus
 }

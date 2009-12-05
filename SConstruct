@@ -50,7 +50,9 @@ tess.cpp
 texture.cpp
 window.cpp
 windowptr.cpp
-""") + Glob('*.c')
+callbacks.c
+ConvertUTF.c
+""")
 
 if env['PLATFORM'] == 'win32': # Windows
 	env.Append(CPPPATH="./include")
@@ -86,14 +88,14 @@ if env['PLATFORM'] == 'posix': # Linux
 	env.ParseConfig('pkg-config --cflags --libs freetype2')
 	env.Append(CCFLAGS="-fPIC")
 	lib = env.Library(target="jngl", source=source_files)
-	env.Library(target="jnal", source = "jnal.cpp")
 	env.Append(LIBPATH=".", CPPPATH='.')
 	if wiz:
-		env.Append(LIBS=Split("jpeg jngl wizGLES opengles_lite z png dl"))
+		env.Append(LIBS=Split("jpeg wizGLES opengles_lite z png dl") + lib)
 		env.Program(source = "wiz/test.cpp", target = "wiz/test.gpe")
 	else:
 		env.ParseConfig("pkg-config --cflags --libs jngl.pc jnal.pc")
 		env.Program("test.cpp")
+		env.Library(target="jnal", source = "jnal.cpp")
 	if int(python):
 		env.SharedLibrary(target="python/jngl.so",
 		                  source="python/main.cpp",

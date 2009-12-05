@@ -25,9 +25,12 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "draw.hpp"
 
 #include <boost/shared_ptr.hpp>
-#include <GL/glext.h>
 #include <stdexcept>
 #include <sstream>
+
+#ifndef OPENGLES
+#include <GL/glext.h>
+#endif
 
 extern "C"
 {
@@ -44,13 +47,19 @@ namespace jngl
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glClearColor(bgRed, bgGreen, bgBlue, 0.0f);
-		glClearDepth(1.0f);
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 		glViewport(0, 0, width, height);
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
+
+	#ifdef OPENGLES
+		#define f2x(x) ((int)((x) * 65536))
+		glOrthox(f2x(0), f2x(320), f2x(240), f2x(0), f2x(-1), f2x(1));
+	#else
 		glOrtho(0.0f, width, height, 0.0f, -100.0f, 100.0f);
+	#endif
+
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 

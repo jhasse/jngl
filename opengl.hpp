@@ -20,13 +20,14 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #ifdef WIZ
-	#include <GL/nanogl.h>
-	#include <GL/wizGLES.h>
-	#include <GL/egl.h>
+	#include <GLES/gl.h>
+	#include <GLES/egl.h>
+	#include <wizGLES.h>
 #else
 	#ifndef linux
 		#include <windows.h>
 	#endif
+	#define GL_GLEXT_PROTOTYPES
 	#include <GL/gl.h>
 #endif
 
@@ -51,21 +52,8 @@ namespace opengl
 	template<class T, class U>
 	inline void Scale(T x, U y) { Scale(static_cast<float>(x), static_cast<float>(y)); }
 #endif
-#ifdef GL_FIXED
-	inline void Translate(int x, int y) { glTranslatex(x, y, 0); }
-
-	#ifndef GL_INT
-		#define GL_INT GL_FIXED
-	#endif
-#endif
 
 	template<class T> struct Type {};
-
-	template<>
-	struct Type<int>
-	{
-		const static GLenum constant = GL_INT;
-	};
 
 	template<>
 	struct Type<float>
@@ -78,8 +66,10 @@ namespace opengl
 	{
 #ifdef GL_DOUBLE
 		const static GLenum constant = GL_DOUBLE;
+		typedef GLdouble type;
 #else
 		const static GLenum constant = GL_FLOAT;
+		typedef GLfloat type;
 #endif
 	};
 
@@ -91,4 +81,6 @@ namespace opengl
 
 	// This function gets the first power of 2 >= the int that we pass it.
 	int NextPowerOf2(int);
+	
+	void BindArrayBuffer(GLuint);
 }

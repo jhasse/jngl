@@ -218,6 +218,20 @@ namespace jngl
 			F10,
 			F11,
 			F12,
+			WizUp,
+			WizDown,
+			WizLeft,
+			WizRight,
+			WizA,
+			WizB,
+			WizX,
+			WizY,
+			WizL,
+			WizR,
+			WizMenu,
+			WizSelect,
+			WizVolUp,
+			WizVolDown,
 			Any
 		};
 	}

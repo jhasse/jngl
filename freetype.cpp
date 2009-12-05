@@ -91,22 +91,18 @@ namespace jngl
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // preventing wrapping artifacts
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &data[0]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &data[0]);
 
-		// Now we need to account for the fact that many of
-		// our textures are filled with empty padding space.
-		// We figure what portion of the texture is used by
-		// the actual character and store that information in
-		// the x and y variables, then when we draw the
-		// quad, we will only reference the parts of the texture
-		// that we contain the character itself.
 		const float x = static_cast<float>(bitmap.width) / static_cast<float>(width);
 		const float y = static_cast<float>(bitmap.rows)  / static_cast<float>(height);
-		GLfloat texCoords[] = { 0, 0, 0, y, x, y, x, 0 };
-		texCoords_.assign(&texCoords[0], &texCoords[8]);
-
-		GLint vertexes[] = { 0, 0, 0, bitmap.rows, bitmap.width, bitmap.rows, bitmap.width, 0 };
-		vertexes_.assign(&vertexes[0], &vertexes[8]);
+		GLfloat vertexes[] = {
+		                        0, 0, 0, y, x, y, x, 0,
+		                        0, 0, 0, bitmap.rows, bitmap.width, bitmap.rows, bitmap.width, 0
+		                      };
+		glGenBuffers(1, &vertexBuffer_);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
+		glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		top_ = fontHeight - bitmap_glyph->top;
 		width_ = face->glyph->advance.x >> 6;
@@ -117,16 +113,11 @@ namespace jngl
 	{
 		glPushMatrix();
 		opengl::Translate(left_, top_);
-		glEnable(GL_TEXTURE_2D);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		glBindTexture(GL_TEXTURE_2D, texture_);
-		glVertexPointer(2, GL_INT, 0, &vertexes_[0]);
-		glTexCoordPointer(2, GL_FLOAT, 0, &texCoords_[0]);
+		opengl::BindArrayBuffer(vertexBuffer_);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisable(GL_TEXTURE_2D);
 		glPopMatrix();
 		opengl::Translate(width_, 0);
 	}
@@ -139,6 +130,7 @@ namespace jngl
 	Character::~Character()
 	{
 		glDeleteTextures(1, &texture_);
+		glDeleteBuffers(1, &vertexBuffer_);
 	}
 
 	Character& Font::GetCharacter(std::string::iterator& it, const std::string::iterator end)
@@ -294,6 +286,8 @@ namespace jngl
 		std::vector<std::string> lines(ParseString(text));
 
 		glColor4ub(fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha);
+		glEnable(GL_TEXTURE_2D);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		std::vector<std::string>::iterator lineEnd = lines.end();
 		int lineNr = 0;
@@ -311,6 +305,8 @@ namespace jngl
 
 			glPopMatrix();
 		}
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisable(GL_TEXTURE_2D);
 	}
 
 	FT_Library Font::library_;

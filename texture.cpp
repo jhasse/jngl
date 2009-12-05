@@ -101,22 +101,20 @@ namespace jngl
 			if(pWindow)
 			{
 				glDeleteTextures(1, &texture_);
+				glDeleteBuffers(1, &vertexBuffer_);
 			}
 		}
 		void DrawTexture()
 		{
-			glPushMatrix();
 			glEnable(GL_TEXTURE_2D);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 			glBindTexture(GL_TEXTURE_2D, texture_);
-			glVertexPointer(2, GL_INT, 0, &vertexes_[0]);
-			glTexCoordPointer(2, opengl::Type<double>::constant, 0, &texCoords_[0]);
+			opengl::BindArrayBuffer(vertexBuffer_);
 			glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			glDisable(GL_TEXTURE_2D);
-			glPopMatrix();
 		}
 		template<class ArrayType>
 		void LoadTexture(const std::string& filename,
@@ -134,7 +132,7 @@ namespace jngl
 				glEnable(GL_TEXTURE_2D);
 				glGenTextures(1, &texture_);
 				glBindTexture(GL_TEXTURE_2D, texture_);
-				glTexImage2D(GL_TEXTURE_2D, 0, channels, width, height, 0, format, GL_UNSIGNED_BYTE, NULL);
+				glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, NULL);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // preventing wrapping artifacts
@@ -151,13 +149,16 @@ namespace jngl
 					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, width, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
 				}
 
-				const opengl::CoordType x = static_cast<opengl::CoordType>(imgWidth) / static_cast<opengl::CoordType>(width);
-				const opengl::CoordType y = static_cast<opengl::CoordType>(imgHeight)  / static_cast<opengl::CoordType>(height);
-				GLfloat texCoords[] = { 0, 0, 0, y, x, y, x, 0 };
-				texCoords_.assign(&texCoords[0], &texCoords[8]);
-
-				GLint vertexes[] = { 0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0 };
-				vertexes_.assign(&vertexes[0], &vertexes[8]);
+				const GLfloat x = static_cast<GLfloat>(imgWidth) / static_cast<GLfloat>(width);
+				const GLfloat y = static_cast<GLfloat>(imgHeight)  / static_cast<GLfloat>(height);
+				GLfloat vertexes[] = {
+				                       0, 0, 0, y, x, y, x, 0, // texture coordinates
+				                       0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0
+				                     };
+				glGenBuffers(1, &vertexBuffer_);
+				glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
+				glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 				glDisable(GL_TEXTURE_2D);
 			}
@@ -359,9 +360,8 @@ namespace jngl
 			glPopMatrix();
 		}
 	private:
-		std::vector<opengl::CoordType> texCoords_;
-		std::vector<GLint> vertexes_;
 		GLuint texture_;
+		GLuint vertexBuffer_;
 		int width_, height_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
 	};
