@@ -73,14 +73,30 @@ namespace jngl
 				data[x * 4 + y * 4 * width    ] = 255;
 				data[x * 4 + y * 4 * width + 1] = 255;
 				data[x * 4 + y * 4 * width + 2] = 255;
-				if(x >= bitmap.width || y >= bitmap.rows) // Are we in the padding zone? (see next_p2)
+				unsigned char alpha = 0;
+				if(x < bitmap.width || y < bitmap.rows) // Are we in the padding zone? (see next_p2)
 				{
-					data[x*4 + y*4*width + 3] = 0; // Alpha = 0 = not visible
+					if(bitmap.pixel_mode == FT_PIXEL_MODE_MONO)
+					{
+						if(bitmap.buffer[y * bitmap.pitch + x / 8] & (0x80 >> (x % 8)))
+						{
+							alpha = 255;
+						}
+						else
+						{
+							alpha = 0;
+						}
+					}
+					else if(bitmap.pixel_mode == FT_PIXEL_MODE_GRAY)
+					{
+						alpha = bitmap.buffer[x + bitmap.width * y];
+					}
+					else
+					{
+						throw std::runtime_error("Unsupported pixel mode\n");
+					}
 				}
-				else
-				{
-					data[x*4 + y*4*width + 3] = bitmap.buffer[x + bitmap.width * y];
-				}
+				data[x*4 + y*4*width + 3] = alpha;
 			}
 		}
 

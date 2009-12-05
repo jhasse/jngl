@@ -65,9 +65,9 @@ int main()
 			double factor = sin(rotate / 360 * M_PI);
 			jngl::SetSpriteColor(255, 255, 255, static_cast<unsigned char>(absolute(factor * 255)));
 			jngl::DrawScaled("jngl.png",
-							 -jngl::GetWidth("jngl.png")  * factor,
-							 -jngl::GetHeight("jngl.png") * factor,
-							 factor * 2);
+			                 -jngl::GetWidth("jngl.png")  * factor,
+			                 -jngl::GetHeight("jngl.png") * factor,
+			                 factor * 2);
 			jngl::SetColor(0, 0, 0);
 			jngl::DrawRect(-125, 100, 250, 28);
 			jngl::SetFontColor(255, 255, 255);

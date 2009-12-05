@@ -78,9 +78,7 @@ namespace jngl
 		memregs16 = (volatile uint16_t*)memregs32;
 
 		nativeWindow_ = OS_CreateWindow();
-		Debug("OS_CreateWindow() finished.\n");
 		display_ = eglGetDisplay((NativeDisplayType)0);
-		Debug("eglGetDisplay() finished.\n");
 
 		EGLint majorVersion;
 		EGLint minorVersion;
@@ -97,28 +95,14 @@ namespace jngl
 		EGLConfig config;
 		EGLint numConfigs;
 		eglChooseConfig(display_, attribList, &config, 1, &numConfigs);
-		Debug("eglChooseConfig finished.\n");
 
 		surface_ = eglCreateWindowSurface(display_, config, nativeWindow_, NULL);
-		Debug("eglCreateWindowSurface finished.\n");
 		context_ = eglCreateContext(display_, config, EGL_NO_CONTEXT, NULL);
-		Debug("eglCreateContext finished.\n");
 		eglMakeCurrent(display_, surface_, surface_, context_);
-		Debug("eglMakeCurrent finished.\n");
 
-//		SetFontByName("Arial"); // Default font
-//		SetFontSize(fontSize_); // Load a font the first time
-//	glMatrixMode(GL_PROJECTION);
-//#define f2x(x) ((int)((x) * 65536))
-//	glOrthox(f2x(0), f2x(320), f2x(240), f2x(0), f2x(-1), f2x(1));
-//	glMatrixMode(GL_MODELVIEW);
-//	glLoadIdentity();
-//	glEnable(GL_BLEND);
-//	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);    
-//	glEnableClientState(GL_VERTEX_ARRAY);	
+		SetFont("/usr/gp2x/HYUni_GPH_B_V1.01.ttf");
+		SetFontSize(fontSize_); // Load a font the first time
 		Init(width, height);
-
-		Debug("OpenGL bullshit finished.\n");
 
 		running_ = true;
 	}
@@ -131,15 +115,15 @@ namespace jngl
 
 	Window::~Window()
 	{
+		Debug("Cleaning up Window ... ");
 		eglMakeCurrent(display_, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-		eglDestroySurface(display_, surface_);
-		eglDestroyContext(display_, context_);
 		eglTerminate(display_);
 		free(nativeWindow_);
 
 		memregs16 = NULL;
 		memregs32 = NULL;
 		close(memfd);
+		Debug("OK\n");
 	}
 	
 	int Window::GetKeyCode(key::KeyType key)

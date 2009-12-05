@@ -28,6 +28,7 @@ namespace jngl
 	class WindowPointer : boost::noncopyable {
 	public:
 		WindowPointer();
+		~WindowPointer();
 		Window* operator->() const;
 		operator bool() const;
 		void Delete();

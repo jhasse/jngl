@@ -27,6 +27,11 @@ namespace jngl
 	WindowPointer::WindowPointer() : ptr_(0)
 	{
 	}
+	
+	WindowPointer::~WindowPointer()
+	{
+		Delete();
+	}
 
 	Window* WindowPointer::operator->() const
 	{

@@ -8,7 +8,6 @@
 int main()
 {
 	jngl::ShowWindow("", 320, 240);
-	jngl::SetFont("Arial.ttf");
 
 	int counter = 0;
 
@@ -19,7 +18,9 @@ int main()
 		jngl::SetColor(255, 255, 255);
 		jngl::DrawLine(10, 10, 400, 400);
 		jngl::SetFontColor(255, 255, 255);
+		jngl::SetFontSize(12);
 		jngl::Print("test", 10, 200);
+		jngl::SetFontSize(10);
 		jngl::Print(boost::lexical_cast<std::string>(jngl::Time()), 100, 200);
 		if(jngl::KeyDown(jngl::key::WizMenu))
 		{
