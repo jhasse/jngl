@@ -74,7 +74,7 @@ namespace jngl
 				data[x * 4 + y * 4 * width + 1] = 255;
 				data[x * 4 + y * 4 * width + 2] = 255;
 				unsigned char alpha = 0;
-				if(x < bitmap.width || y < bitmap.rows) // Are we in the padding zone? (see next_p2)
+				if(x < bitmap.width && y < bitmap.rows) // Are we in the padding zone? (see next_p2)
 				{
 					if(bitmap.pixel_mode == FT_PIXEL_MODE_MONO)
 					{
@@ -118,7 +118,6 @@ namespace jngl
 		glGenBuffers(1, &vertexBuffer_);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
 		glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		top_ = fontHeight - bitmap_glyph->top;
 		width_ = face->glyph->advance.x >> 6;

@@ -165,7 +165,6 @@ namespace jngl
 			glGenBuffers(1, &vertexBuffer_);
 			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
 			glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 			glDisable(GL_TEXTURE_2D);
 		}
