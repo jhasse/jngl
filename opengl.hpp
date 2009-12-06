@@ -25,11 +25,20 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 	#include <wizGLES.h>
 #else
 	#define GL_GLEXT_PROTOTYPES
+	#include <GL/gl.h>
 	#ifndef linux
 		#include <windows.h>
-		#include <GL/glew.h>
+		#define GL_ARRAY_BUFFER 0x8892
+		#define GL_STATIC_DRAW 0x88E4
+		typedef void (APIENTRY * PFNGLBINDBUFFERARBPROC) (GLenum target, GLuint buffer);
+		typedef void (APIENTRY * PFNGLDELETEBUFFERSARBPROC) (GLsizei n, const GLuint *buffers);
+		typedef void (APIENTRY * PFNGLGENBUFFERSARBPROC) (GLsizei n, GLuint *buffers);
+		typedef void (APIENTRY * PFNGLBUFFERDATAARBPROC) (GLenum target, int size, const GLvoid *data, GLenum usage);
+		extern PFNGLGENBUFFERSARBPROC glGenBuffers;
+		extern PFNGLBINDBUFFERARBPROC glBindBuffer;
+		extern PFNGLBUFFERDATAARBPROC glBufferData;
+		extern PFNGLDELETEBUFFERSARBPROC glDeleteBuffers;
 	#endif
-	#include <GL/gl.h>
 #endif
 
 #include <boost/function.hpp>

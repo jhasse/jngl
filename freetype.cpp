@@ -207,15 +207,12 @@ namespace jngl
 
 	Font::Font(const char* filename, unsigned int height) : height_(height)
 	{
-		if(!initialized_)
+		if(++instanceCounter_ == 1)
 		{
 			if(FT_Init_FreeType(&library_))
 			{
+				--instanceCounter_;
 				throw std::runtime_error("FT_Init_FreeType failed");
-			}
-			else
-			{
-				initialized_ = true;
 			}
 		}
 		Debug("Loading font "); Debug(filename); Debug("... ");
@@ -235,10 +232,9 @@ namespace jngl
 	Font::~Font()
 	{
 		freeFace_.reset((Finally*)0); // free face_ with FT_Done_Face
-		if(initialized_)
+		if(--instanceCounter_ == 0)
 		{
 			FT_Done_FreeType(library_);
-			initialized_ = false;
 		}
 	}
 
@@ -326,6 +322,6 @@ namespace jngl
 	}
 
 	FT_Library Font::library_;
-	bool Font::initialized_ = false;
+	int Font::instanceCounter_ = 0;
 }
 

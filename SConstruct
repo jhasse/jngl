@@ -56,7 +56,7 @@ ConvertUTF.c
 
 if env['PLATFORM'] == 'win32': # Windows
 	jnalLibs = Split("alut vorbisfile OpenAL32")
-	jnglLibs = Split("freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg glew32")
+	jnglLibs = Split("freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg")
 	env.Append(CPPPATH="./include")
 	lib = env.Library(target="jngl", source=source_files + Glob('win32/*.cpp'), LIBS=jnglLibs)
 	env.Library(target="jnal", source = "jnal.cpp", LIBS = jnalLibs)

@@ -25,8 +25,11 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "wglext.h"
 
-#include <gl/gl.h>
-#include <gl/glext.h>
+PFNGLGENBUFFERSARBPROC glGenBuffers = NULL;					// VBO Name Generation Procedure
+PFNGLBINDBUFFERARBPROC glBindBuffer = NULL;					// VBO Bind Procedure
+PFNGLBUFFERDATAARBPROC glBufferData = NULL;					// VBO Data Loading Procedure
+PFNGLDELETEBUFFERSARBPROC glDeleteBuffers = NULL;				// VBO Deletion Procedure
+
 #include <boost/bind.hpp>
 #include <stdexcept>
 #include <windowsx.h> // GET_X_LPARAM
@@ -99,6 +102,15 @@ namespace jngl
 		mousePressed_.assign(false);
 
 		Init(title, false);
+
+		glGenBuffers = (PFNGLGENBUFFERSARBPROC) wglGetProcAddress("glGenBuffersARB");
+		glBindBuffer = (PFNGLBINDBUFFERARBPROC) wglGetProcAddress("glBindBufferARB");
+		glBufferData = (PFNGLBUFFERDATAARBPROC) wglGetProcAddress("glBufferDataARB");
+		glDeleteBuffers = (PFNGLDELETEBUFFERSARBPROC) wglGetProcAddress("glDeleteBuffersARB");
+		if(!(glGenBuffers && glBindBuffer && glBufferData && glDeleteBuffers))
+		{
+			throw std::runtime_error("Vertex Buffer Objects not supported by your video card! JNGL won't work, sorry.");
+		}
 	}
 
 	void Window::Init(const std::string& title, const bool multisample)

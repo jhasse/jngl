@@ -69,7 +69,7 @@ namespace jngl
 		Character& GetCharacter(std::string::iterator& it, const std::string::iterator end);
 		std::vector<std::string> ParseString(const std::string&);
 
-		static bool initialized_;
+		static int instanceCounter_;
 		static FT_Library library_;
 		FT_Face face_;
 		boost::shared_ptr<Finally> freeFace_; // Frees face_ if necessary
