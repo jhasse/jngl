@@ -71,7 +71,7 @@ namespace jngl
 
 	class Texture : boost::noncopyable {
 	public:
-		Texture(const std::string& filename, const bool halfLoad)
+		Texture(const std::string& filename, const bool halfLoad) : vertexBuffer_(0)
 		{
 			FILE* pFile = fopen(filename.c_str(), "rb");
 			if(!pFile)
@@ -128,12 +128,12 @@ namespace jngl
 			int height = opengl::NextPowerOf2(imgHeight);
 			width_ = imgWidth;
 			height_ = imgHeight;
-			if(halfLoad)
-			{
-				return;
-			}
 			if(!pWindow)
 			{
+				if(halfLoad)
+				{
+					return;
+				}
 				throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 			}
 			glEnable(GL_TEXTURE_2D);
