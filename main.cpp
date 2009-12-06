@@ -23,14 +23,11 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "texture.hpp"
 #include "windowptr.hpp"
 #include "draw.hpp"
+#include "opengl.hpp"
 
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include <sstream>
-
-#ifndef OPENGLES
-#include <GL/glext.h>
-#endif
 
 extern "C"
 {

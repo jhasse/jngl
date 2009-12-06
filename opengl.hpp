@@ -24,10 +24,11 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 	#include <GLES/egl.h>
 	#include <wizGLES.h>
 #else
+	#define GL_GLEXT_PROTOTYPES
 	#ifndef linux
 		#include <windows.h>
+		#include <GL/glew.h>
 	#endif
-	#define GL_GLEXT_PROTOTYPES
 	#include <GL/gl.h>
 #endif
 
@@ -81,6 +82,6 @@ namespace opengl
 
 	// This function gets the first power of 2 >= the int that we pass it.
 	int NextPowerOf2(int);
-	
+
 	void BindArrayBuffer(GLuint);
 }

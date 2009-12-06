@@ -38,7 +38,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdlib>
 #include <cstdio>
 #ifndef linux
-#include <gl/glext.h>
 // These defines are needed to prevent conflicting types declarations in jpeglib.h:
 #define XMD_H
 #define HAVE_BOOLEAN
@@ -127,47 +126,48 @@ namespace jngl
 		{
 			int width = opengl::NextPowerOf2(imgWidth);
 			int height = opengl::NextPowerOf2(imgHeight);
-			if(pWindow)
+			width_ = imgWidth;
+			height_ = imgHeight;
+			if(halfLoad)
 			{
-				glEnable(GL_TEXTURE_2D);
-				glGenTextures(1, &texture_);
-				glBindTexture(GL_TEXTURE_2D, texture_);
-				glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, NULL);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // preventing wrapping artifacts
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				for(int i = 0; i < imgHeight; ++i)
-				{
-					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, imgWidth, 1, format, GL_UNSIGNED_BYTE, rowPointers[i]);
-					std::vector<unsigned char> empty((width - imgWidth) * channels, 0);
-					glTexSubImage2D(GL_TEXTURE_2D, 0, imgWidth, i, width - imgWidth, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
-				}
-				for(int i = imgHeight; i < height; ++i)
-				{
-					std::vector<unsigned char> empty(width * channels, 0);
-					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, width, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
-				}
-
-				const GLfloat x = static_cast<GLfloat>(imgWidth) / static_cast<GLfloat>(width);
-				const GLfloat y = static_cast<GLfloat>(imgHeight)  / static_cast<GLfloat>(height);
-				GLfloat vertexes[] = {
-				                       0, 0, 0, y, x, y, x, 0, // texture coordinates
-				                       0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0
-				                     };
-				glGenBuffers(1, &vertexBuffer_);
-				glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
-				glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-				glDisable(GL_TEXTURE_2D);
+				return;
 			}
-			else if(!halfLoad)
+			if(!pWindow)
 			{
 				throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 			}
-			width_ = imgWidth;
-			height_ = imgHeight;
+			glEnable(GL_TEXTURE_2D);
+			glGenTextures(1, &texture_);
+			glBindTexture(GL_TEXTURE_2D, texture_);
+			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, NULL);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // preventing wrapping artifacts
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			for(int i = 0; i < imgHeight; ++i)
+			{
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, imgWidth, 1, format, GL_UNSIGNED_BYTE, rowPointers[i]);
+				std::vector<unsigned char> empty((width - imgWidth) * channels, 0);
+				glTexSubImage2D(GL_TEXTURE_2D, 0, imgWidth, i, width - imgWidth, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
+			}
+			for(int i = imgHeight; i < height; ++i)
+			{
+				std::vector<unsigned char> empty(width * channels, 0);
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, width, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
+			}
+
+			const GLfloat x = static_cast<GLfloat>(imgWidth) / static_cast<GLfloat>(width);
+			const GLfloat y = static_cast<GLfloat>(imgHeight)  / static_cast<GLfloat>(height);
+			GLfloat vertexes[] = {
+								   0, 0, 0, y, x, y, x, 0, // texture coordinates
+								   0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0
+								 };
+			glGenBuffers(1, &vertexBuffer_);
+			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
+			glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			glDisable(GL_TEXTURE_2D);
 		}
 		void LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad)
 		{
