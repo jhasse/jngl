@@ -136,7 +136,6 @@ namespace jngl
 				}
 				throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 			}
-			glEnable(GL_TEXTURE_2D);
 			glGenTextures(1, &texture_);
 			glBindTexture(GL_TEXTURE_2D, texture_);
 			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, NULL);
@@ -159,14 +158,12 @@ namespace jngl
 			const GLfloat x = static_cast<GLfloat>(imgWidth) / static_cast<GLfloat>(width);
 			const GLfloat y = static_cast<GLfloat>(imgHeight)  / static_cast<GLfloat>(height);
 			GLfloat vertexes[] = {
-								   0, 0, 0, y, x, y, x, 0, // texture coordinates
-								   0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0
-								 };
+			                       0, 0, 0, y, x, y, x, 0, // texture coordinates
+			                       0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0
+			                     };
 			glGenBuffers(1, &vertexBuffer_);
 			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
 			glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
-
-			glDisable(GL_TEXTURE_2D);
 		}
 		void LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad)
 		{
