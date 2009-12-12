@@ -162,7 +162,7 @@ namespace jngl
 			                       0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0
 			                     };
 			glGenBuffers(1, &vertexBuffer_);
-			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
+			opengl::BindArrayBuffer(vertexBuffer_);
 			glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
 		}
 		void LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad)

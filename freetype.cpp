@@ -116,7 +116,7 @@ namespace jngl
 		                        0, 0, 0, bitmap.rows, bitmap.width, bitmap.rows, bitmap.width, 0
 		                      };
 		glGenBuffers(1, &vertexBuffer_);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
+		opengl::BindArrayBuffer(vertexBuffer_);
 		glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
 
 		top_ = fontHeight - bitmap_glyph->top;
