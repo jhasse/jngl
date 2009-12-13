@@ -507,7 +507,7 @@ namespace jngl
 			case key::F11: return 0x7a;
 			case key::F12: return 0x7b;
 			default:
-				throw std::runtime_error("Unhandled KeyType!");
+				return 0;
 		}
 	}
 
