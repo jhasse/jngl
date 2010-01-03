@@ -15,4 +15,4 @@ if env['PLATFORM'] == 'win32': # Windows
 	linkflags = "-mwindows"
 	if int(debug):
 		linkflags = ""
-	env.Program(files, CPPPATH="../..", LIBPATH="../..", LIBS=Split("jngl opengl32 glu32 gdi32 png freetype"), LINKFLAGS=linkflags)
+	env.Program(files, CPPPATH="../..", LIBPATH="../..", LIBS=Split("jngl freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg"), LINKFLAGS=linkflags)

@@ -63,16 +63,17 @@ if env['PLATFORM'] == 'win32': # Windows
 	linkflags = "-mwindows"
 	if int(debug) or int(msvc):
 		linkflags = ""
+	libs = Split("jngl jnal") + jnglLibs + jnalLibs
 	env.Program("test.cpp",
 	            CPPPATH=".",
 				LIBPATH=Split(". ./lib"),
-				LIBS=Split("jngl jnal") + jnglLibs + jnalLibs,
+				LIBS=libs,
 				LINKFLAGS=linkflags)
 	if int(python):
 		env = env.Clone()
 		env.Append(CPPPATH=Split("C:\Python26\include"),
 		           LIBPATH=Split(". ./lib ./python C:\Python26\libs"),
-		           LIBS=libs + Split("python26 liblibboost_python-mgw34-1_39"),
+		           LIBS=libs + Split("python26 libboost_python-mgw44-1_41"),
 		           LINKFLAGS=linkflags)
 		env.SharedLibrary(target="python/jngl.dll",
 		                  source="python/main.cpp")
