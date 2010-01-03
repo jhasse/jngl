@@ -81,6 +81,8 @@ if env['PLATFORM'] == 'win32': # Windows
 		                  source="python/jnal.cpp")
 
 if env['PLATFORM'] == 'posix': # Linux
+	if int(python):
+		env.Append(CCFLAGS = '-DNOJPEG')
 	if int(wiz):
 		env.Append(CCFLAGS = '-DWIZ -DOPENGLES')
 		source_files += Glob('wiz/*.cpp') + Glob('wiz/*.c')
@@ -95,16 +97,20 @@ if env['PLATFORM'] == 'posix': # Linux
 		env.Append(LIBS=Split("jpeg wizGLES opengles_lite z png dl") + lib)
 		env.Program(source = "wiz/test.cpp", target = "wiz/test.gpe")
 	else:
-		env.ParseConfig("pkg-config --cflags --libs jngl.pc jnal.pc")
-		env.Program("test.cpp")
+		testEnv = env.Clone()
+		testEnv.ParseConfig("pkg-config --cflags --libs jngl.pc jnal.pc")
+		testEnv.Program("test.cpp")
 		env.Library(target="jnal", source = "jnal.cpp")
 	if int(python):
+		env = env.Clone()
+		env.ParseConfig("pkg-config --cflags --libs jngl.pc jnal.pc")
+		env.Append(CPPPATH="/usr/include/python2.6",
+		           LIBPATH=Split(". ./lib ./python"),
+		           LIBS=Split("python2.6 boost_python-py26"))
 		env.SharedLibrary(target="python/jngl.so",
-		                  source="python/main.cpp",
-		                  LINKFLAGS='`export CFLAGS="-fPIC" && relaytool --relay jpeg -ljpeg`',
-						  CPPPATH="/usr/include/python2.6",
-						  LIBPATH=Split(". ./lib ./python"),
-						  LIBS=Split("python2.6 boost_python-py26 jngl GL GLU png12 glib-2.0 Xxf86vm freetype fontconfig"))
+		                  source="python/main.cpp")
+		env.SharedLibrary(target="python/jnal_python.so",
+		                  source="python/jnal.cpp")
 
 if int(autopackage):
 	t = Command('jngl Library ' + version + '.package', [lib, 'autopackage/default.apspec.in'], "makepackage")

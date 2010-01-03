@@ -42,9 +42,11 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #define XMD_H
 #define HAVE_BOOLEAN
 #endif
+#ifndef NOJPEG
 extern "C" {
 #include <jpeglib.h>
 }
+#endif
 
 namespace jngl
 {
@@ -58,7 +60,7 @@ namespace jngl
 		spriteColorAlpha = alpha;
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
-
+#ifndef NOJPEG
 	struct JpegErrorMgr
 	{
 		struct jpeg_error_mgr pub;
@@ -68,6 +70,7 @@ namespace jngl
 	{
 		longjmp(reinterpret_cast<JpegErrorMgr*>(info->err)->setjmp_buffer, 1); // Return control to the setjmp point
 	}
+#endif
 
 	class Texture : boost::noncopyable {
 	public:
@@ -91,7 +94,13 @@ namespace jngl
 			else if(*reinterpret_cast<unsigned short*>(buf) == 19778)
 				LoadBMP(filename, pFile, halfLoad);
 			else if(*reinterpret_cast<unsigned short*>(buf) == 55551)
+			{
+			#ifdef NOJPEG
+				throw std::runtime_error(std::string("Sorry, JPEG files not supported in this build of JNGL. (" + filename + ")"));
+			#else
 				LoadJPG(filename, pFile, halfLoad);
+			#endif
+			}
 			else
 				throw std::runtime_error(std::string("Not a PNG, JPEG or BMP file. (" + filename + ")"));
 		}
@@ -279,6 +288,7 @@ namespace jngl
 			}
 			LoadTexture(filename, header.width, header.height, buf, header.bpp / 8, halfLoad, GL_BGR);
 		}
+#ifndef NOJPEG
 		void LoadJPG(const std::string& filename, FILE* file, const bool halfLoad)
 		{
 			fseek(file, 0, SEEK_SET); // Seek to the beginning
@@ -330,6 +340,7 @@ namespace jngl
 
 			LoadTexture(filename, x, y, buf, channels, halfLoad, format);
 		}
+#endif
 		int Width()
 		{
 			return width_;
