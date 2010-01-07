@@ -80,7 +80,7 @@ namespace jngl
 
 	void Reset();
 
-	void Load(const std::string& filename);
+	unsigned int Load(const std::string& filename);
 
 	void Unload(const std::string& filename);
 

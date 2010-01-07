@@ -177,12 +177,16 @@ namespace jngl
 		void LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad)
 		{
 			png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, png_voidp_NULL, png_error_ptr_NULL, png_error_ptr_NULL);
-		    if (!png_ptr)
-		    	throw std::runtime_error(std::string("libpng error while reading (" + filename + ")"));
+			if(!png_ptr)
+			{
+				throw std::runtime_error(std::string("libpng error while reading (" + filename + ")"));
+			}
 
 			png_infop info_ptr = png_create_info_struct(png_ptr);
 			if(!info_ptr)
+			{
 				throw std::runtime_error(std::string("libpng error while reading (" + filename + ")"));
+			}
 
 			if(setjmp(png_jmpbuf(png_ptr)))
 			{
@@ -190,8 +194,8 @@ namespace jngl
 				png_destroy_read_struct(&png_ptr, &info_ptr, png_infopp_NULL);
 				throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
 			}
-		    png_init_io(png_ptr, fp);
-		    png_set_sig_bytes(png_ptr, PNG_BYTES_TO_CHECK);
+			png_init_io(png_ptr, fp);
+			png_set_sig_bytes(png_ptr, PNG_BYTES_TO_CHECK);
 			int colorType = png_get_color_type(png_ptr, info_ptr);
 			if(colorType == PNG_COLOR_TYPE_GRAY || colorType == PNG_COLOR_TYPE_GRAY_ALPHA)
 			{
@@ -366,6 +370,10 @@ namespace jngl
 			DrawTexture();
 			glPopMatrix();
 		}
+		GLuint GetID()
+		{
+			return texture_;
+		}
 	private:
 		GLuint texture_;
 		GLuint vertexBuffer_;
@@ -408,9 +416,9 @@ namespace jngl
 		GetTexture(filename).DrawScaled(xposition, yposition, factor, factor);
 	}
 
-	void Load(const std::string& filename)
+	GLuint Load(const std::string& filename)
 	{
-		GetTexture(filename);
+		return GetTexture(filename).GetID();
 	}
 
 	void Unload(const std::string& filename)
