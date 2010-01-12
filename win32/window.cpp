@@ -107,10 +107,6 @@ namespace jngl
 		glBindBuffer = (PFNGLBINDBUFFERARBPROC) wglGetProcAddress("glBindBufferARB");
 		glBufferData = (PFNGLBUFFERDATAARBPROC) wglGetProcAddress("glBufferDataARB");
 		glDeleteBuffers = (PFNGLDELETEBUFFERSARBPROC) wglGetProcAddress("glDeleteBuffersARB");
-		if(!(glGenBuffers && glBindBuffer && glBufferData && glDeleteBuffers))
-		{
-			throw std::runtime_error("Vertex Buffer Objects not supported by your video card! JNGL won't work, sorry.");
-		}
 	}
 
 	void Window::Init(const std::string& title, const bool multisample)

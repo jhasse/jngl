@@ -24,7 +24,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "jngl.hpp"
 #include "finally.hpp"
 #include "windowptr.hpp"
-#include "opengl.hpp"
+#include "texture.hpp"
 
 #include <map>
 #include <string>
@@ -74,7 +74,7 @@ namespace jngl
 
 	class Sprite : boost::noncopyable {
 	public:
-		Sprite(const std::string& filename, const bool halfLoad) : vertexBuffer_(0)
+		Sprite(const std::string& filename, const bool halfLoad) : texture_(0)
 		{
 			FILE* pFile = fopen(filename.c_str(), "rb");
 			if(!pFile)
@@ -106,23 +106,7 @@ namespace jngl
 		}
 		~Sprite()
 		{
-			if(pWindow)
-			{
-				glDeleteTextures(1, &texture_);
-				glDeleteBuffers(1, &vertexBuffer_);
-			}
-		}
-		void DrawTexture()
-		{
-			glEnable(GL_TEXTURE_2D);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-			glBindTexture(GL_TEXTURE_2D, texture_);
-			opengl::BindArrayBuffer(vertexBuffer_);
-			glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-			glDisable(GL_TEXTURE_2D);
+			delete texture_;
 		}
 		template<class ArrayType>
 		void LoadTexture(const std::string& filename,
@@ -133,8 +117,6 @@ namespace jngl
 		                 const bool halfLoad,
 		                 GLenum format)
 		{
-			int width = opengl::NextPowerOf2(imgWidth);
-			int height = opengl::NextPowerOf2(imgHeight);
 			width_ = imgWidth;
 			height_ = imgHeight;
 			if(!pWindow)
@@ -145,34 +127,11 @@ namespace jngl
 				}
 				throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 			}
-			glGenTextures(1, &texture_);
-			glBindTexture(GL_TEXTURE_2D, texture_);
-			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, NULL);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // preventing wrapping artifacts
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			texture_ = new Texture(width_, height_, format, channels);
 			for(int i = 0; i < imgHeight; ++i)
 			{
 				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, imgWidth, 1, format, GL_UNSIGNED_BYTE, rowPointers[i]);
-				std::vector<unsigned char> empty((width - imgWidth) * channels, 0);
-				glTexSubImage2D(GL_TEXTURE_2D, 0, imgWidth, i, width - imgWidth, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
 			}
-			for(int i = imgHeight; i < height; ++i)
-			{
-				std::vector<unsigned char> empty(width * channels, 0);
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, width, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
-			}
-
-			const GLfloat x = static_cast<GLfloat>(imgWidth) / static_cast<GLfloat>(width);
-			const GLfloat y = static_cast<GLfloat>(imgHeight)  / static_cast<GLfloat>(height);
-			GLfloat vertexes[] = {
-			                       0, 0, 0, y, x, y, x, 0, // texture coordinates
-			                       0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0
-			                     };
-			glGenBuffers(1, &vertexBuffer_);
-			opengl::BindArrayBuffer(vertexBuffer_);
-			glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
 		}
 		void LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad)
 		{
@@ -358,7 +317,7 @@ namespace jngl
 		{
 			glPushMatrix();
 			opengl::Translate(xposition, yposition);
-			DrawTexture();
+			texture_->Draw();
 			glPopMatrix();
 		}
 		template<class T>
@@ -367,16 +326,15 @@ namespace jngl
 			glPushMatrix();
 			opengl::Translate(xposition, yposition);
 			opengl::Scale(xfactor, yfactor);
-			DrawTexture();
+			texture_->Draw();
 			glPopMatrix();
 		}
 		GLuint GetID()
 		{
-			return texture_;
+			return texture_->GetID();
 		}
 	private:
-		GLuint texture_;
-		GLuint vertexBuffer_;
+		Texture* texture_;
 		int width_, height_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
 	};

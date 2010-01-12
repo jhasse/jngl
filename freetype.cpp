@@ -40,7 +40,7 @@ namespace jngl
 		fontColorAlpha = alpha;
 	}
 
-	Character::Character(const unsigned long ch, const float fontHeight, FT_Face face)
+	Character::Character(const unsigned long ch, const float fontHeight, FT_Face face) : texture_(0)
 	{
 		if(FT_Load_Glyph(face, FT_Get_Char_Index(face, ch) , FT_LOAD_TARGET_LIGHT))
 		{
@@ -100,24 +100,8 @@ namespace jngl
 			}
 		}
 
-		glGenTextures(1, &texture_);
-		glBindTexture(GL_TEXTURE_2D, texture_);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // preventing wrapping artifacts
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
+		texture_ = new Texture(width, height);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &data[0]);
-
-		const float x = static_cast<float>(bitmap.width) / static_cast<float>(width);
-		const float y = static_cast<float>(bitmap.rows)  / static_cast<float>(height);
-		GLfloat vertexes[] = {
-		                        0, 0, 0, y, x, y, x, 0,
-		                        0, 0, 0, bitmap.rows, bitmap.width, bitmap.rows, bitmap.width, 0
-		                      };
-		glGenBuffers(1, &vertexBuffer_);
-		opengl::BindArrayBuffer(vertexBuffer_);
-		glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
 
 		top_ = fontHeight - bitmap_glyph->top;
 		width_ = face->glyph->advance.x >> 6;
@@ -129,9 +113,7 @@ namespace jngl
 		glPushMatrix();
 		opengl::Translate(left_, top_);
 
-		glBindTexture(GL_TEXTURE_2D, texture_);
-		opengl::BindArrayBuffer(vertexBuffer_);
-		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+		texture_->Draw();
 
 		glPopMatrix();
 		opengl::Translate(width_, 0);
@@ -144,8 +126,7 @@ namespace jngl
 
 	Character::~Character()
 	{
-		glDeleteTextures(1, &texture_);
-		glDeleteBuffers(1, &vertexBuffer_);
+		delete texture_;
 	}
 
 	Character& Font::GetCharacter(std::string::iterator& it, const std::string::iterator end)

@@ -20,7 +20,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "finally.hpp"
-#include "opengl.hpp"
+#include "texture.hpp"
 
 #include <ft2build.h>
 #include <freetype/freetype.h>
@@ -36,10 +36,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
-#ifndef GL_CLAMP_TO_EDGE
-#define GL_CLAMP_TO_EDGE 0x812F
-#endif
-
 namespace jngl
 {
 	class Character : boost::noncopyable
@@ -50,11 +46,10 @@ namespace jngl
 		void Draw() const;
 		double GetWidth() const;
 	private:
-		GLuint texture_;
+		Texture* texture_;
 		int width_;
 		int left_;
 		float top_;
-		GLuint vertexBuffer_;
 	};
 
 	class Font : boost::noncopyable
