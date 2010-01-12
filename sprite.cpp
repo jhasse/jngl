@@ -19,7 +19,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <png.h> // We need to include it first, I don't know why
 
-#include "texture.hpp"
+#include "sprite.hpp"
 #include "window.hpp"
 #include "jngl.hpp"
 #include "finally.hpp"
@@ -72,9 +72,9 @@ namespace jngl
 	}
 #endif
 
-	class Texture : boost::noncopyable {
+	class Sprite : boost::noncopyable {
 	public:
-		Texture(const std::string& filename, const bool halfLoad) : vertexBuffer_(0)
+		Sprite(const std::string& filename, const bool halfLoad) : vertexBuffer_(0)
 		{
 			FILE* pFile = fopen(filename.c_str(), "rb");
 			if(!pFile)
@@ -104,7 +104,7 @@ namespace jngl
 			else
 				throw std::runtime_error(std::string("Not a PNG, JPEG or BMP file. (" + filename + ")"));
 		}
-		~Texture()
+		~Sprite()
 		{
 			if(pWindow)
 			{
@@ -381,61 +381,61 @@ namespace jngl
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
 	};
 
-	std::map<std::string, boost::shared_ptr<Texture> > textures_;
+	std::map<std::string, boost::shared_ptr<Sprite> > sprites_;
 
 	// halfLoad is used, if we only want to find out the width or height of an image. Load won't throw an exception then
-	Texture& GetTexture(const std::string& filename, const bool halfLoad = false)
+	Sprite& GetSprite(const std::string& filename, const bool halfLoad = false)
 	{
-		std::map<std::string, boost::shared_ptr<Texture> >::iterator i;
-		if((i = textures_.find(filename)) == textures_.end()) // texture hasn't been loaded yet?
+		std::map<std::string, boost::shared_ptr<Sprite> >::iterator i;
+		if((i = sprites_.find(filename)) == sprites_.end()) // texture hasn't been loaded yet?
 		{
 			if(!halfLoad)
 			{
 				pWindow.ThrowIfNull();
 			}
-			textures_[filename].reset(new Texture(filename, halfLoad));
-			return *(textures_[filename]);
+			sprites_[filename].reset(new Sprite(filename, halfLoad));
+			return *(sprites_[filename]);
 		}
 		return *(i->second);
 	}
 
 	void Draw(const std::string& filename, const double xposition, const double yposition)
 	{
-		GetTexture(filename).Draw(xposition, yposition);
+		GetSprite(filename).Draw(xposition, yposition);
 	}
 
 	void DrawScaled(const std::string& filename, const double xposition, const double yposition,
 	                const float xfactor, const float yfactor)
 	{
-		GetTexture(filename).DrawScaled(xposition, yposition, xfactor, yfactor);
+		GetSprite(filename).DrawScaled(xposition, yposition, xfactor, yfactor);
 	}
 
 	void DrawScaled(const std::string& filename, const double xposition, const double yposition,
 	                const float factor)
 	{
-		GetTexture(filename).DrawScaled(xposition, yposition, factor, factor);
+		GetSprite(filename).DrawScaled(xposition, yposition, factor, factor);
 	}
 
 	GLuint Load(const std::string& filename)
 	{
-		return GetTexture(filename).GetID();
+		return GetSprite(filename).GetID();
 	}
 
 	void Unload(const std::string& filename)
 	{
-		std::map<std::string, boost::shared_ptr<Texture> >::iterator i;
-		if((i = textures_.find(filename)) != textures_.end())
-			textures_.erase(i);
+		std::map<std::string, boost::shared_ptr<Sprite> >::iterator i;
+		if((i = sprites_.find(filename)) != sprites_.end())
+			sprites_.erase(i);
 	}
 
 	void UnloadAll()
 	{
-		textures_.clear();
+		sprites_.clear();
 	}
 
 	int GetWidth(const std::string& filename)
 	{
-		const int width = GetTexture(filename, true).Width();
+		const int width = GetSprite(filename, true).Width();
 		if(!pWindow)
 			Unload(filename);
 		return width;
@@ -443,18 +443,18 @@ namespace jngl
 
 	int GetHeight(const std::string& filename)
 	{
-		const int height = GetTexture(filename, true).Height();
+		const int height = GetSprite(filename, true).Height();
 		if(!pWindow)
 			Unload(filename);
 		return height;
 	}
 
-	bool DrawButton(const std::string& texture, const double xposition, const double yposition, const std::string& mouseover)
+	bool DrawButton(const std::string& sprite, const double xposition, const double yposition, const std::string& mouseover)
 	{
-		if(xposition <= GetMouseX() && GetMouseX() < (xposition + GetWidth(texture)) &&
-		   yposition <= GetMouseY() && GetMouseY() < (yposition + GetHeight(texture)))
+		if(xposition <= GetMouseX() && GetMouseX() < (xposition + GetWidth(sprite)) &&
+		   yposition <= GetMouseY() && GetMouseY() < (yposition + GetHeight(sprite)))
 		{
-			GetTexture(mouseover).Draw(xposition, yposition);
+			GetSprite(mouseover).Draw(xposition, yposition);
 			if(MousePressed())
 			{
 				return true;
@@ -462,7 +462,7 @@ namespace jngl
 		}
 		else
 		{
-			GetTexture(texture).Draw(xposition, yposition);
+			GetSprite(sprite).Draw(xposition, yposition);
 		}
 		return false;
 	}

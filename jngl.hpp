@@ -119,7 +119,7 @@ namespace jngl
 
 	void SetMouse(int xposition, int yposition);
 
-	bool DrawButton(const std::string& texture,
+	bool DrawButton(const std::string& sprite,
 	                double xposition,
 	                double yposition,
 	                const std::string& mouseover);

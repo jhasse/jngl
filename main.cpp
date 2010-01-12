@@ -20,7 +20,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "jngl.hpp"
 #include "window.hpp"
 #include "debug.hpp"
-#include "texture.hpp"
+#include "sprite.hpp"
 #include "windowptr.hpp"
 #include "draw.hpp"
 #include "opengl.hpp"

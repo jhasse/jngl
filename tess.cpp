@@ -19,7 +19,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef OPENGLES
 
-#include "texture.hpp"
+#include "sprite.hpp"
 #include "opengl.hpp"
 
 #include <GL/glu.h>

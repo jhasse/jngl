@@ -46,8 +46,8 @@ finally.cpp
 freetype.cpp
 main.cpp
 opengl.cpp
+sprite.cpp
 tess.cpp
-texture.cpp
 window.cpp
 windowptr.cpp
 callbacks.c
