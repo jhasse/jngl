@@ -77,7 +77,10 @@ Texture::Texture(const int imgWidth, const int imgHeight, GLenum format, int cha
 Texture::~Texture()
 {
 	glDeleteTextures(1, &texture_);
-	glDeleteBuffers(1, &vertexBuffer_);
+	if(useVBO_)
+	{
+		glDeleteBuffers(1, &vertexBuffer_);
+	}
 }
 
 void Texture::Draw() const
