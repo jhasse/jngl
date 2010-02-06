@@ -1,11 +1,11 @@
 [Meta]
 RootName: @watteimdocht.de/jngl:$SOFTWAREVERSION
-DisplayName: jngl Library
+DisplayName: JNGL Library
 ShortName: jngl
 Maintainer: Jan Niklas Hasse <jhasse@gmail.com>
 Packager: Jan Niklas Hasse <jhasse@gmail.com>
-Summary: Easy to use 2D graphic library using OpenGL
-URL: http://www.watteimdocht.de/index_jngl.php
+Summary: Easy to use 2D game library
+URL: http://www.watteimdocht.de/jngl
 License: GNU Lesser General Public License, Version 3
 SoftwareVersion: @VERSION@
 AutopackageTarget: 1.4

@@ -2,7 +2,7 @@
 
 import os
 
-version = "0.8.5"
+version = "0.9.0"
 
 #Replace @VERSION@ in certain files
 files = ["jngl.pc.in", "jnal.pc.in", "autopackage/default.apspec.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
@@ -59,7 +59,7 @@ if env['PLATFORM'] == 'win32': # Windows
 	jnalLibs = Split("alut vorbisfile OpenAL32")
 	jnglLibs = Split("freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg")
 	env.Append(CPPPATH="./include")
-	lib = env.Library(target="jngl", source=source_files + Glob('win32/*.cpp'), LIBS=jnglLibs)
+	lib = env.SharedLibrary(target="jngl", source=source_files + Glob('win32/*.cpp'), LIBS=jnglLibs)
 	env.Library(target="jnal", source = "jnal.cpp", LIBS = jnalLibs)
 	linkflags = "-mwindows"
 	if int(debug) or int(msvc):
@@ -114,8 +114,8 @@ if env['PLATFORM'] == 'posix': # Linux
 		                  source="python/jnal.cpp")
 
 if int(autopackage):
-	t = Command('jngl Library ' + version + '.package', [lib, 'autopackage/default.apspec.in'], "makepackage")
-	Clean(t, ['jngl Library ' + version + '.package', 'jngl Library ' + version + '.package.meta', 'jngl.xml', 'jngl.xml.old'])
+	t = Command('JNGL ' + version + '.package', [lib, 'autopackage/default.apspec.in'], "makepackage")
+	Clean(t, ['JNGL ' + version + '.package', 'JNGL Library ' + version + '.package.meta', 'jngl.xml', 'jngl.xml.old'])
 
 if int(installer):
 	nsiFile = 'installer/mingw.nsi'
@@ -127,7 +127,7 @@ if int(installer):
 		nsiFile = 'installer/python.nsi'
 		name = 'Python 2.6'
 	import os
-	t = Command('jngl Library ' + version + '.exe', lib, '"' + os.path.expandvars("%programfiles%") + '\NSIS\makensis.exe " ' + nsiFile)
+	t = Command('JNGL ' + version + '.exe', lib, '"' + os.path.expandvars("%programfiles%") + '\NSIS\makensis.exe " ' + nsiFile)
 	if python:
 		Depends(t, ['python/jngl.dll', 'python/jnal.dll'])
 	Clean(t, 'installer/JNGL ' + version + ' (' + name + ').exe')
