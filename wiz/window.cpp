@@ -169,14 +169,17 @@ namespace jngl
 				{
 					anyKeyPressed_ = true;
 					keyPressed_[BIT(i)] = true;
-					Debug("key pressed "); Debug(i); Debug("\n");
+					keyTimeout_[BIT(i)] = jngl::Time() + 0.4;
 				}
 				keyDown_[BIT(i)] = true;
-				Debug("key down "); Debug(i); Debug("\n");
+				if(keyTimeout_[BIT(i)] - jngl::Time() < 0)
+				{
+					keyTimeout_[BIT(i)] = jngl::Time() + 0.07;
+					keyPressed_[BIT(i)] = true;
+				}
 			}
 			else if(keyDown_[BIT(i)])
 			{
-				Debug("key up "); Debug(i); Debug("\n");
 				keyDown_[BIT(i)] = false;
 				keyPressed_[BIT(i)] = false;
 			}

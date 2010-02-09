@@ -329,10 +329,6 @@ namespace jngl
 			texture_->Draw();
 			glPopMatrix();
 		}
-		GLuint GetID()
-		{
-			return texture_->GetID();
-		}
 	private:
 		Texture* texture_;
 		int width_, height_;
@@ -374,9 +370,9 @@ namespace jngl
 		GetSprite(filename).DrawScaled(xposition, yposition, factor, factor);
 	}
 
-	GLuint Load(const std::string& filename)
+	void LoadSprite(const std::string& filename)
 	{
-		return GetSprite(filename).GetID();
+		GetSprite(filename);
 	}
 
 	void Unload(const std::string& filename)

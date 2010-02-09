@@ -1,27 +1,27 @@
 /*
-Copyright 2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2009-2010 Jan Niklas Hasse <jhasse@gmail.com>
 
-This file is part of JNAL.
+This file is part of JNGL.
 
-JNAL is free software: you can redistribute it and/or modify
+JNGL is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-JNAL is distributed in the hope that it will be useful,
+JNGL is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with JNAL.  If not, see <http://www.gnu.org/licenses/>.
+along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "jnal.hpp"
+#include "jngl.hpp"
 #include "debug.hpp"
 
 #include <AL/al.h>
-#include <AL/alut.h>
+#include <AL/alc.h>
 #include <vorbis/vorbisfile.h>
 #include <cstdio>
 #include <vector>
@@ -30,7 +30,7 @@ along with JNAL.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace jnal
+namespace jngl
 {
 	class Sound : boost::noncopyable {
 	public:
@@ -70,15 +70,30 @@ namespace jnal
 		ALuint source_;
 	};
 
-	class JNAL : boost::noncopyable {
+	class Audio : boost::noncopyable {
 	public:
-		JNAL()
+		Audio() : device_(0), context_(0)
 		{
-			alutInit(0, 0);
+			device_ = alcOpenDevice(0);
+			if(!device_)
+			{
+				throw std::runtime_error("Could not open audio device.");
+			}
+			context_ = alcCreateContext(device_, 0);
+			if(context_)
+			{
+				alcMakeContextCurrent(context_);
+			}
+			else
+			{
+				throw std::runtime_error("Could not create audio context.");
+			}
 		}
-		~JNAL()
+		~Audio()
 		{
-			alutExit();
+			alcMakeContextCurrent(0);
+			alcDestroyContext(context_);
+			alcCloseDevice(device_);
 		}
 		void Play(boost::shared_ptr<Sound> sound)
 		{
@@ -102,12 +117,14 @@ namespace jnal
 		}
 	private:
 		std::vector<boost::shared_ptr<Sound> > sounds_;
+		ALCdevice* device_;
+		ALCcontext* context_;
 	};
 
-	JNAL& GetJNAL()
+	Audio& GetAudio()
 	{
-		static JNAL jnal_;
-		return jnal_;
+		static Audio audio_;
+		return audio_;
 	}
 
 	class SoundFile : boost::noncopyable {
@@ -165,13 +182,13 @@ namespace jnal
 		void Play()
 		{
 			sound_.reset(new Sound(format, buffer_, freq));
-			GetJNAL().Play(sound_);
+			GetAudio().Play(sound_);
 		}
 		void Stop()
 		{
 			if(sound_)
 			{
-				GetJNAL().Stop(sound_);
+				GetAudio().Stop(sound_);
 				sound_.reset((Sound*)0);
 			}
 		}
@@ -195,7 +212,7 @@ namespace jnal
 
 	SoundFile& GetSoundFile(const std::string& filename)
 	{
-		GetJNAL();
+		GetAudio();
 		std::map<std::string, boost::shared_ptr<SoundFile> >::iterator i;
 		if((i = sounds.find(filename)) == sounds.end()) // sound hasn't been loaded yet?
 		{
@@ -215,7 +232,7 @@ namespace jnal
 		GetSoundFile(filename).Stop();
 	}
 
-	void Load(const std::string& filename)
+	void LoadSound(const std::string& filename)
 	{
 		GetSoundFile(filename);
 	}

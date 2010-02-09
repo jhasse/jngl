@@ -21,6 +21,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "window.hpp"
 #include "debug.hpp"
 #include "sprite.hpp"
+#include "audio.hpp"
 #include "windowptr.hpp"
 #include "draw.hpp"
 #include "opengl.hpp"
@@ -360,5 +361,17 @@ namespace jngl
 	bool GetAntiAliasing()
 	{
 		return antiAliasingEnabled;
+	}
+	
+	void Load(const std::string& filename)
+	{
+		if(filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg")
+		{
+			LoadSound(filename);
+		}
+		else
+		{
+			LoadSprite(filename);
+		}
 	}
 }

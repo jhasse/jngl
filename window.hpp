@@ -109,6 +109,7 @@ namespace jngl
 		EGLDisplay display_;
 		EGLContext context_;
 		EGLSurface surface_;
+		std::map<unsigned int, double> keyTimeout_;
 #else
 	#ifdef linux
 		::Window window_;

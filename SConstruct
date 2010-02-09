@@ -42,6 +42,7 @@ if int(wiz):
 	env.Append(CPPPATH=["/toolchain/include", "wiz"], LIBPATH=["/toolchain/lib", "wiz"])
 
 source_files = Split("""
+audio.cpp
 finally.cpp
 freetype.cpp
 main.cpp
@@ -56,7 +57,7 @@ ConvertUTF.c
 """)
 
 if env['PLATFORM'] == 'win32': # Windows
-	jnalLibs = Split("alut vorbisfile OpenAL32")
+	jnalLibs = Split("vorbisfile OpenAL32")
 	jnglLibs = Split("freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg")
 	env.Append(CPPPATH="./include")
 	lib = env.SharedLibrary(target="jngl", source=source_files + Glob('win32/*.cpp'), LIBS=jnglLibs)
@@ -95,13 +96,12 @@ if env['PLATFORM'] == 'posix': # Linux
 	lib = env.Library(target="jngl", source=source_files)
 	env.Append(LIBPATH=".", CPPPATH='.')
 	if wiz:
-		env.Append(LIBS=Split("jpeg wizGLES opengles_lite z png dl") + lib)
+		env.Append(LIBS=Split("jpeg wizGLES opengles_lite z png dl openal vorbisfile vorbis ogg") + lib)
 		env.Program(source = "wiz/test.cpp", target = "wiz/test.gpe")
 	else:
 		testEnv = env.Clone()
-		testEnv.ParseConfig("pkg-config --cflags --libs jngl.pc jnal.pc")
+		testEnv.ParseConfig("pkg-config --cflags --libs jngl.pc")
 		testEnv.Program("test.cpp")
-		env.Library(target="jnal", source = "jnal.cpp")
 	if int(python):
 		env = env.Clone()
 		env.ParseConfig("pkg-config --cflags --libs jngl.pc jnal.pc")

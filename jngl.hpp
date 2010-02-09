@@ -80,7 +80,7 @@ namespace jngl
 
 	void Reset();
 
-	unsigned int Load(const std::string& filename);
+	void Load(const std::string& filename);
 
 	void Unload(const std::string& filename);
 
@@ -247,6 +247,12 @@ namespace jngl
 	bool KeyPressed(char key);
 
 	bool KeyPressed(const std::string& key);
+
+	void Play(const std::string& filename);
+
+	void Stop(const std::string& filename);
+
+	bool IsPlaying(const std::string& filename);
 }
 
 #endif // __JNGL_HPP__
