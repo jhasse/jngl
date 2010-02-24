@@ -1,5 +1,4 @@
 #include <jngl.hpp>
-#include <jnal.hpp>
 #include <cmath>
 #include <sstream>
 #include <iostream>
@@ -112,8 +111,8 @@ int main()
 			jngl::Print("Press P to play a sound.", 6, 570);
 			if(jngl::KeyPressed('p'))
 			{
-				jnal::Stop("test.ogg");
-				jnal::Play("test.ogg");
+				jngl::Stop("test.ogg");
+				jngl::Play("test.ogg");
 			}
 			jngl::SetColor(0,0,255,128);
 			DrawMouse();
