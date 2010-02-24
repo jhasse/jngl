@@ -5,7 +5,7 @@ import os
 version = "0.9.0"
 
 #Replace @VERSION@ in certain files
-files = ["jngl.pc.in", "jnal.pc.in", "autopackage/default.apspec.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
+files = ["jngl.pc.in", "autopackage/default.apspec.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
 for filename in files:
 	newfilename = filename.replace(".in", "")
 	datei = open(filename,"r").readlines()
@@ -17,7 +17,7 @@ env = Environment()
 if env['PLATFORM'] == 'win32':
 	msvc = ARGUMENTS.get('msvc', 0)
 	if int(msvc):
-		env.Append(CCFLAGS = '/EHsc /MD')	
+		env.Append(CCFLAGS = '/EHsc /MD')
 	else:
 		env = Environment(tools=['mingw'])
 
@@ -42,7 +42,6 @@ if int(wiz):
 	env.Append(CPPPATH=["/toolchain/include", "wiz"], LIBPATH=["/toolchain/lib", "wiz"])
 
 source_files = Split("""
-audio.cpp
 finally.cpp
 freetype.cpp
 main.cpp
@@ -57,15 +56,15 @@ ConvertUTF.c
 """)
 
 if env['PLATFORM'] == 'win32': # Windows
-	jnalLibs = Split("vorbisfile OpenAL32")
-	jnglLibs = Split("freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg")
+	jnglLibs = Split("freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl")
 	env.Append(CPPPATH="./include")
-	lib = env.SharedLibrary(target="jngl", source=source_files + Glob('win32/*.cpp'), LIBS=jnglLibs)
-	env.Library(target="jnal", source = "jnal.cpp", LIBS = jnalLibs)
+	audioFile = env.Object("audio.cpp", CPPFLAGS="-std=c++0x")
+	source_files += audioFile
+	lib = env.Library(target="jngl", source=source_files + Glob('win32/*.cpp'), LIBS=jnglLibs)
 	linkflags = "-mwindows"
 	if int(debug) or int(msvc):
 		linkflags = ""
-	libs = Split("jngl jnal") + jnglLibs + jnalLibs
+	libs = Split("jngl") + jnglLibs
 	env.Program("test.cpp",
 	            CPPPATH=".",
 				LIBPATH=Split(". ./lib"),

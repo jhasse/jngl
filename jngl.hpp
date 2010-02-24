@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2010 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 

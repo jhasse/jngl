@@ -17,12 +17,25 @@ You should have received a copy of the GNU Lesser General Public License
 along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#if (defined(__MINGW32__) || defined(__MINGW64__)) && (__GNUC__ == 4) && (__GNUC_MINOR__ == 4) && (__GNUC_PATCHLEVEL__ == 0)
+// workaround a mingw bug, http://sourceforge.net/tracker/index.php?func=detail&aid=2373234&group_id=2435&atid=102435
+#include <cstdlib>
+#include <cstdarg>
+int swprintf (wchar_t *, size_t, const wchar_t *, ...);
+int vswprintf(wchar_t *, const wchar_t *, va_list);
+#endif
+
 #include "jngl.hpp"
 #include "debug.hpp"
 
-#include <AL/al.h>
-#include <AL/alc.h>
-#include <vorbis/vorbisfile.h>
+#ifdef linux
+	#include <AL/al.h>
+	#include <AL/alc.h>
+	#include <vorbis/vorbisfile.h>
+#else
+	#include "win32/openal.hpp"
+#endif
+
 #include <cstdio>
 #include <vector>
 #include <stdexcept>
@@ -209,6 +222,20 @@ namespace jngl
 	};
 
 	std::map<std::string, boost::shared_ptr<SoundFile> > sounds;
+
+	bool IsOpenALInstalled()
+	{
+		try
+		{
+			GetAudio();
+		}
+		catch(WeakLinkingError& e)
+		{
+			Debug(e.what()); Debug("\n");
+			return false;
+		}
+		return true;
+	}
 
 	SoundFile& GetSoundFile(const std::string& filename)
 	{

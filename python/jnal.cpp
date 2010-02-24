@@ -8,7 +8,7 @@ using namespace jnal;
 BOOST_PYTHON_MODULE(jnal)
 {
 	def("Play", Play);
-	def("IsPlaying", IsPlaying);
 	def("Stop", Stop);
 	def("Load", Load);
+	def("IsPlaying", IsPlaying);
 }
