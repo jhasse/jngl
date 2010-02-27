@@ -253,6 +253,8 @@ namespace jngl
 	void Stop(const std::string& filename);
 
 	bool IsPlaying(const std::string& filename);
+	
+	void SetPlaybackSpeed(float speed);
 }
 
 #endif // __JNGL_HPP__

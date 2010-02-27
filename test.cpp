@@ -97,22 +97,34 @@ int main()
 			{
 				jngl::ErrorMessage("Hello World!");
 			}
-			jngl::Print("Press A to toggle Anti-Aliasing.", 5, 510);
+			jngl::Print("Press A to toggle Anti-Aliasing.", 5, 450);
 			if(jngl::KeyPressed('a'))
 			{
 				jngl::SetAntiAliasing(!jngl::GetAntiAliasing());
 			}
-			jngl::Print("Press F11 to switch fullscreen mode.", 5, 530);
+			jngl::Print("Press F11 to switch fullscreen mode.", 5, 470);
 			if(jngl::KeyPressed(jngl::key::F11))
 			{
 				jngl::ShowWindow("JNGL Test Application", 800, 600, !jngl::GetFullscreen());
 			}
-			jngl::Print("Press K to test key codes.", 5, 550);
-			jngl::Print("Press P to play a sound.", 6, 570);
+			jngl::Print("Press K to test key codes.", 5, 490);
+			jngl::Print("Press P to play a sound.", 6, 510);
 			if(jngl::KeyPressed('p'))
 			{
 				jngl::Stop("test.ogg");
 				jngl::Play("test.ogg");
+			}
+			jngl::Print("Press + and - to change the playback speed.", 6, 530);
+			static int playbackSpeed = 100;
+			jngl::SetPlaybackSpeed(playbackSpeed / 100.0f);
+			jngl::Print(boost::lexical_cast<std::string>(playbackSpeed) + " %", 6, 550);
+			if(jngl::KeyPressed('-'))
+			{
+				--playbackSpeed;
+			}
+			if(jngl::KeyPressed('+'))
+			{
+				++playbackSpeed;
 			}
 			jngl::SetColor(0,0,255,128);
 			DrawMouse();

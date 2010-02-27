@@ -78,6 +78,10 @@ namespace jngl
 			alGetSourcei(source_, AL_SOURCE_STATE, &state);
 			return state == AL_STOPPED;
 		}
+		void SetPitch(float p)
+		{
+			alSourcef(source_, AL_PITCH, p);
+		}
 	private:
 		ALuint buffer_;
 		ALuint source_;
@@ -213,6 +217,13 @@ namespace jngl
 			}
 			return false;
 		}
+		void SetPitch(float p)
+		{
+			if(sound_)
+			{
+				sound_->SetPitch(p);
+			}
+		}
 	private:
 		boost::shared_ptr<Sound> sound_;
 		ALint state;
@@ -267,5 +278,15 @@ namespace jngl
 	bool IsPlaying(const std::string& filename)
 	{
 		return GetSoundFile(filename).IsPlaying();
+	}
+
+	void SetPlaybackSpeed(float speed)
+	{
+		typedef std::map<std::string, boost::shared_ptr<SoundFile> >::iterator iterType;
+		iterType end = sounds.end();
+		for(iterType i = sounds.begin(); i != sounds.end(); ++i)
+		{
+			i->second->SetPitch(speed);
+		}
 	}
 };
