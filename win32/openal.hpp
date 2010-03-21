@@ -41,6 +41,7 @@ typedef void ALvoid;
 #define AL_FORMAT_MONO16                          0x1101
 #define AL_FORMAT_STEREO8                         0x1102
 #define AL_FORMAT_STEREO16                        0x1103
+#define AL_PITCH                                  0x1003
 
 typedef struct ALCdevice_struct ALCdevice;
 typedef struct ALCcontext_struct ALCcontext;
@@ -94,6 +95,7 @@ private:
 WeakFunction<void(ALsizei, ALuint*)> alGenBuffers("alGenBuffers", "OpenAL32.dll");
 WeakFunction<void(ALsizei, ALuint*)> alGenSources("alGenSources", "OpenAL32.dll");
 WeakFunction<void(ALenum, ALfloat, ALfloat, ALfloat)> alListener3f("alListener3f", "OpenAL32.dll");
+WeakFunction<void(ALuint, ALenum, ALfloat)> alSourcef("alSourcef", "OpenAL32.dll");
 WeakFunction<void(ALuint, ALenum, ALfloat, ALfloat, ALfloat)> alSource3f("alSource3f", "OpenAL32.dll");
 WeakFunction<void(ALuint, ALenum, const ALvoid*, ALsizei, ALsizei)> alBufferData("alBufferData", "OpenAL32.dll");
 WeakFunction<void(ALuint, ALenum, ALint)> alSourcei("alSourcei", "OpenAL32.dll");
