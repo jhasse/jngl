@@ -29,5 +29,9 @@ File ..\lib\libfreetype.a
 File ..\lib\libpng.a
 File ..\lib\libz.a
 File ..\lib\libjpeg.a
+SetOutPath $INSTDIR\bin
+File ..\vorbis.dll
+File ..\vorbisfile.dll
+File ..\ogg.dll
 
 SectionEnd
