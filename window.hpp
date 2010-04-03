@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2010 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -32,7 +32,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifdef linux
 	#ifdef WIZ
-	
+
 	#else
 		#include <GL/glx.h>
 		#include <GL/glu.h>
@@ -78,6 +78,7 @@ namespace jngl
 		void SetFont(const std::string&);
 		void SetFontByName(const std::string&);
 		bool IsMultisampleSupported() const;
+		void SetIcon(const std::string&);
 #ifdef WIZ
 
 #else
@@ -101,6 +102,7 @@ namespace jngl
 		std::map<std::string, bool> characterPressed_;
 		int mousex_, mousey_, fontSize_, width_, height_;
 		std::string fontName_;
+		const static unsigned int PNG_BYTES_TO_CHECK = 4;
 
 		// <fontSize, <fontName, Font> >
 		boost::ptr_map<int, boost::ptr_map<std::string, Font> > fonts_;

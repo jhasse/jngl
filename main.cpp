@@ -241,6 +241,11 @@ namespace jngl
 		return pWindow->GetFullscreen();
 	}
 
+	void SetIcon(const std::string& filename)
+	{
+		pWindow->SetIcon(filename);
+	}
+
 	double FPS()
 	{
 		static double lastDraw = 0.0;
@@ -362,7 +367,7 @@ namespace jngl
 	{
 		return antiAliasingEnabled;
 	}
-	
+
 	void Load(const std::string& filename)
 	{
 		if(filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg")

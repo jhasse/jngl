@@ -28,6 +28,7 @@ int main()
 		std::cout << "Size of jngl.png: " << jngl::GetWidth("jngl.png")
 		          << "x" << jngl::GetHeight("jngl.png") << std::endl;
 		jngl::ShowWindow("JNGL Test Application", 800, 600);
+		jngl::SetIcon("jngl.png");
 		jngl::SetBackgroundColor(255, 255, 255);
 		jngl::SetMouseVisible(false);
 		double rotate = 0.0;
