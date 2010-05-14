@@ -1,5 +1,5 @@
 /*
-Copyright 2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2009-2010 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -22,7 +22,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef WIZ
 	#include <GLES/gl.h>
 	#include <GLES/egl.h>
-	#include <wizGLES.h>
+	#include <libogl.h>
 #else
 	#define GL_GLEXT_PROTOTYPES
 	#include <GL/gl.h>

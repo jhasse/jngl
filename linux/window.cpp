@@ -461,4 +461,9 @@ namespace jngl
 	{
 		XWarpPointer(pDisplay_.get(), None, window_, 0, 0, 0, 0, xposition, yposition);
 	}
+	
+	void Window::SetIcon(const std::string&)
+	{
+		return; // TODO: Not implemented yet
+	}
 }

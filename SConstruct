@@ -82,6 +82,7 @@ if env['PLATFORM'] == 'win32': # Windows
 		                  source="python/jnal.cpp")
 
 if env['PLATFORM'] == 'posix': # Linux
+	source_files += ["audio.cpp"]
 	if int(python):
 		env.Append(CCFLAGS = '-DNOJPEG')
 	if int(wiz):
@@ -95,7 +96,7 @@ if env['PLATFORM'] == 'posix': # Linux
 	lib = env.Library(target="jngl", source=source_files)
 	env.Append(LIBPATH=".", CPPPATH='.')
 	if wiz:
-		env.Append(LIBS=Split("jpeg wizGLES opengles_lite z png dl openal vorbisfile vorbis ogg") + lib)
+		env.Append(LIBS=Split("jpeg glport opengles_lite z png dl openal vorbisfile vorbis ogg") + lib)
 		env.Program(source = "wiz/test.cpp", target = "wiz/test.gpe")
 	else:
 		testEnv = env.Clone()
@@ -103,14 +104,12 @@ if env['PLATFORM'] == 'posix': # Linux
 		testEnv.Program("test.cpp")
 	if int(python):
 		env = env.Clone()
-		env.ParseConfig("pkg-config --cflags --libs jngl.pc jnal.pc")
+		env.ParseConfig("pkg-config --cflags --libs jngl.pc")
 		env.Append(CPPPATH="/usr/include/python2.6",
 		           LIBPATH=Split(". ./lib ./python"),
 		           LIBS=Split("python2.6 boost_python-py26"))
 		env.SharedLibrary(target="python/jngl.so",
 		                  source="python/main.cpp")
-		env.SharedLibrary(target="python/jnal_python.so",
-		                  source="python/jnal.cpp")
 
 if int(autopackage):
 	t = Command('JNGL ' + version + '.package', [lib, 'autopackage/default.apspec.in'], "makepackage")

@@ -1,5 +1,0 @@
-Name: jnal
-Description: Easy to use audio library using OpenAL
-Version: @VERSION@
-Libs: -ljnal -lopenal
-Requires: vorbisfile

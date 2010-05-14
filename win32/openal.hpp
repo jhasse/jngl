@@ -48,13 +48,6 @@ typedef struct ALCcontext_struct ALCcontext;
 typedef char ALCboolean;
 typedef int ALCint;
 
-class WeakLinkingError : public std::runtime_error {
-public:
-	WeakLinkingError(const std::string& text) : std::runtime_error(text)
-	{
-	}
-};
-
 template<typename T> class WeakFunction;
 template<typename ReturnType, typename... Args>
 class WeakFunction<ReturnType(Args...)> {

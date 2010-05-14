@@ -14,7 +14,7 @@ RootInstallOnly: Yes
 [BuildPrepare]
 ./install.sh $build_root
 
-x86_package="x86/jngl Library @VERSION@.package"
+x86_package="x86/JNGL Library @VERSION@.package"
 if [[ -e "$x86_package" ]]; then
 	export HYBRID_PACKAGE="$x86_package"
 fi

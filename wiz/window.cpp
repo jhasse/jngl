@@ -214,4 +214,9 @@ namespace jngl
 	{
 		// Not implemented yet
 	}
+	
+	void Window::SetIcon(const std::string&)
+	{
+		// Not supported
+	}
 }
