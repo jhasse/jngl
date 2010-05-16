@@ -258,13 +258,6 @@ namespace jngl
 	void SetPlaybackSpeed(float speed);
 
 	void SetIcon(const std::string& filename);
-
-	class WeakLinkingError : public std::runtime_error {
-	public:
-		WeakLinkingError(const std::string& text) : std::runtime_error(text)
-		{
-		}
-	};
 }
 
 #endif // __JNGL_HPP__

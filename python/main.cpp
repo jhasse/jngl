@@ -203,4 +203,8 @@ BOOST_PYTHON_MODULE(jngl)
 	def("KeyDown", KeyDown2);
 	def("KeyPressed", KeyPressed1);
 	def("KeyPressed", KeyPressed2);
+	def("Play", Play);
+	def("Stop", Stop);
+	def("Load", Load);
+	def("IsPlaying", IsPlaying);
 }

@@ -78,8 +78,6 @@ if env['PLATFORM'] == 'win32': # Windows
 		           LINKFLAGS=linkflags)
 		env.SharedLibrary(target="python/jngl.dll",
 		                  source="python/main.cpp")
-		env.SharedLibrary(target="python/jnal.dll",
-		                  source="python/jnal.cpp")
 
 if env['PLATFORM'] == 'posix': # Linux
 	source_files += ["audio.cpp"]
@@ -127,5 +125,5 @@ if int(installer):
 	import os
 	t = Command('JNGL ' + version + '.exe', lib, '"' + os.path.expandvars("%programfiles%") + '\NSIS\makensis.exe " ' + nsiFile)
 	if python:
-		Depends(t, ['python/jngl.dll', 'python/jnal.dll'])
+		Depends(t, ['python/jngl.dll'])
 	Clean(t, 'installer/JNGL ' + version + ' (' + name + ').exe')

@@ -17,6 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+class WeakLinkingError : public std::runtime_error {
+public:
+	WeakLinkingError(const std::string& text) : std::runtime_error(text)
+	{
+	}
+};
+
 extern "C" {
 #include <dlfcn.h>
 }
