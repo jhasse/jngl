@@ -1,7 +1,7 @@
 XPStyle On
 SetCompressor lzma
 
-Name "JNGL and JNAL for Python 2.6"
+Name "JNGL for Python 2.6"
 
 OutFile "JNGL @VERSION@ (Python 2.6).exe"
 
@@ -11,7 +11,6 @@ Page directory
 Page instfiles
 
 LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
-LoadLanguageFile "${NSISDIR}\Contrib\Language files\German.nlf"
 
 Section ""
 
