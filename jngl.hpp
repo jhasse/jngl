@@ -36,10 +36,6 @@ namespace jngl
 
 	void SwapBuffers();
 
-	void BeginDraw();
-
-	void EndDraw();
-
 	void Quit();
 
 	void Continue();
@@ -258,6 +254,12 @@ namespace jngl
 	void SetPlaybackSpeed(float speed);
 
 	void SetIcon(const std::string& filename);
+	
+	void UpdateKeyStates();
+
+	void BeginDraw();
+
+	void EndDraw();
 }
 
 #endif // __JNGL_HPP__

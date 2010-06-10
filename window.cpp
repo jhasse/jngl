@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2010 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -158,13 +158,13 @@ namespace jngl
 		{
 			if(anyKeyPressed_)
 			{
-				anyKeyPressed_ = false;
+				needToBeSetFalse_.push(&anyKeyPressed_);
 				return KeyDown(jngl::key::Any);
 			}
 		}
 		else if(keyPressed_[GetKeyCode(key)])
 		{
-			keyPressed_[GetKeyCode(key)] = false;
+			needToBeSetFalse_.push(&keyPressed_[GetKeyCode(key)]);
 			return true;
 		}
 		return false;
@@ -180,5 +180,14 @@ namespace jngl
 	{
 		std::string temp; temp.append(1, key);
 		return KeyPressed(temp);
+	}
+
+	void Window::UpdateKeyStates()
+	{
+		while(!needToBeSetFalse_.empty())
+		{
+			*(needToBeSetFalse_.top()) = false;
+			needToBeSetFalse_.pop();
+		}
 	}
 }

@@ -236,6 +236,7 @@ namespace jngl
 
 	bool IsOpenALInstalled()
 	{
+#ifndef linux
 		try
 		{
 			GetAudio();
@@ -245,6 +246,7 @@ namespace jngl
 			Debug(e.what()); Debug("\n");
 			return false;
 		}
+#endif
 		return true;
 	}
 

@@ -29,6 +29,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/array.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <map>
+#include <stack>
 
 #ifdef linux
 	#ifdef WIZ
@@ -79,9 +80,8 @@ namespace jngl
 		void SetFontByName(const std::string&);
 		bool IsMultisampleSupported() const;
 		void SetIcon(const std::string&);
-#ifdef WIZ
-
-#else
+		void UpdateKeyStates();
+#ifndef WIZ
 	#ifdef linux
 		boost::shared_ptr<Display> pDisplay_;
 		static void ReleaseXData(void*);
@@ -100,6 +100,7 @@ namespace jngl
 		std::map<unsigned int, bool> keyPressed_;
 		std::map<std::string, bool> characterDown_;
 		std::map<std::string, bool> characterPressed_;
+		std::stack<bool*> needToBeSetFalse_;
 		int mousex_, mousey_, fontSize_, width_, height_;
 		std::string fontName_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
