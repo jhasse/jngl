@@ -207,4 +207,5 @@ BOOST_PYTHON_MODULE(jngl)
 	def("Stop", Stop);
 	def("Load", Load);
 	def("IsPlaying", IsPlaying);
+	def("IsOpenALInstalled", IsOpenALInstalled);
 }
