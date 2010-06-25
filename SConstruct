@@ -2,7 +2,7 @@
 
 import os
 
-version = "0.9.0"
+version = "0.9.1"
 
 #Replace @VERSION@ in certain files
 files = ["jngl.pc.in", "autopackage/default.apspec.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']

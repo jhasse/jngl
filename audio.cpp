@@ -112,16 +112,13 @@ namespace jngl
 			alcDestroyContext(context_);
 			alcCloseDevice(device_);
 		}
+		static bool IsStopped(boost::shared_ptr<Sound>& s)
+		{
+			return s->Stopped();
+		}
 		void Play(boost::shared_ptr<Sound> sound)
 		{
-			std::vector<boost::shared_ptr<Sound> >::iterator end = sounds_.end();
-			for(std::vector<boost::shared_ptr<Sound> >::iterator it = sounds_.begin(); it != end; ++it)
-			{
-				if((*it)->Stopped())
-				{
-					it = sounds_.erase(it);
-				}
-			}
+			sounds_.erase(remove_if(sounds_.begin(), sounds_.end(), IsStopped), sounds_.end());
 			sounds_.push_back(boost::shared_ptr<Sound>(sound));
 		}
 		void Stop(boost::shared_ptr<Sound> sound)

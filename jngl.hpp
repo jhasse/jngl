@@ -251,10 +251,12 @@ namespace jngl
 
 	bool IsPlaying(const std::string& filename);
 
+	bool IsOpenALInstalled();
+
 	void SetPlaybackSpeed(float speed);
 
 	void SetIcon(const std::string& filename);
-	
+
 	void UpdateKeyStates();
 
 	void BeginDraw();
