@@ -339,6 +339,27 @@ void TestKeys()
 				c = 'a' - 1;
 			}
 		}
+		std::map<std::string, jngl::mouse::Button> buttons;
+		buttons["Left Mouse Button"] = jngl::mouse::Left;
+		buttons["Middle Mouse Button"] = jngl::mouse::Middle;
+		buttons["Right Mouse Button"] = jngl::mouse::Right;
+		for(std::map<std::string, jngl::mouse::Button>::const_iterator it = buttons.begin(); it != buttons.end(); ++it)
+		{
+			if(jngl::MouseDown(it->second))
+			{
+				jngl::SetFontColor(0, 0, 0);
+			}
+			else
+			{
+				jngl::SetFontColor(150, 150, 150);
+			}
+			jngl::Print(it->first, 500, y);
+			if(jngl::MousePressed(it->second))
+			{
+				recentlyPressedKeys.push_back(RecentlyPressedKey(it->first, 500, y));
+			}
+			y += 15;
+		}
 		std::vector<RecentlyPressedKey>::iterator end = recentlyPressedKeys.end();
 		for(std::vector<RecentlyPressedKey>::iterator it = recentlyPressedKeys.begin(); it != end; ++it)
 		{

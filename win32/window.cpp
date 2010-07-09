@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2010 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -372,7 +372,7 @@ namespace jngl
 				break;
 				case WM_RBUTTONDOWN:
 					mouseDown_.at(2) = true;
-					mouseDown_.at(2) = true;
+					mousePressed_.at(2) = true;
 				break;
 				case WM_LBUTTONUP:
 					mouseDown_.at(0) = false;
