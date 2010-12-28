@@ -90,6 +90,7 @@ namespace jngl
 	void HideWindow()
 	{
 		UnloadAll();
+		opengl::BindArrayBuffer(0);
 		pWindow.Delete();
 	}
 
