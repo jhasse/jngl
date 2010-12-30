@@ -26,6 +26,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #else
 	#define GL_GLEXT_PROTOTYPES
 	#include <GL/gl.h>
+	#include <GL/glext.h>
 	#ifndef linux
 		#include <windows.h>
 		#define GL_ARRAY_BUFFER 0x8892
