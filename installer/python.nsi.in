@@ -1,11 +1,11 @@
 XPStyle On
 SetCompressor lzma
 
-Name "JNGL for Python 2.6"
+Name "JNGL for Python 2.7"
 
-OutFile "JNGL @VERSION@ (Python 2.6).exe"
+OutFile "JNGL @VERSION@ (Python 2.7).exe"
 
-InstallDir "C:\Python26\Lib\site-packages"
+InstallDir "C:\Python27\Lib\site-packages"
 
 Page directory
 Page instfiles

@@ -64,6 +64,7 @@ namespace jngl
 		int GetWidth() const;
 		int GetHeight() const;
 		double GetTextWidth(const std::string&);
+		int GetLineHeight();
 		bool GetFullscreen() const;
 		bool KeyDown(const key::KeyType key);
 		bool KeyPressed(const key::KeyType key);

@@ -60,6 +60,7 @@ namespace jngl
 		~Font();
 		void Print(int x, int y, const std::string& text);
 		double GetTextWidth(const std::string& text);
+		int GetLineHeight() const;
 	private:
 		Character& GetCharacter(std::string::iterator& it, const std::string::iterator end);
 		std::vector<std::string> ParseString(const std::string&);

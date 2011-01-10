@@ -269,11 +269,14 @@ namespace jngl
 		}
 		return maxWidth;
 	}
-
+	
+	int Font::GetLineHeight() const {
+		return int(height_ / .63);
+	}
 
 	void Font::Print(const int x, const int y, const std::string& text)
 	{
-		int h = int(height_ / .63); // We make the height about 1.5* that of
+		const int h = GetLineHeight();
 
 		std::vector<std::string> lines(ParseString(text));
 

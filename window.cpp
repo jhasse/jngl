@@ -27,6 +27,10 @@ namespace jngl
 	{
 		return fonts_[fontSize_][fontName_].GetTextWidth(text);
 	}
+	
+	int Window::GetLineHeight() {
+		return fonts_[fontSize_][fontName_].GetLineHeight();
+	}
 
 	void Window::Print(const std::string& text, const int xposition, const int yposition)
 	{

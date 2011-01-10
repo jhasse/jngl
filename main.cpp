@@ -216,6 +216,10 @@ namespace jngl
 	{
 		return pWindow->GetTextWidth(text);
 	}
+	
+	int GetLineHeight() {
+		return pWindow->GetLineHeight();
+	}
 
 	void Print(const std::string& text, const int xposition, const int yposition)
 	{

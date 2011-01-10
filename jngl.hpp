@@ -173,6 +173,8 @@ namespace jngl
 	bool GetAntiAliasing();
 
 	double GetTextWidth(const std::string& text);
+	
+	int GetLineHeight();
 
 	namespace key
 	{

@@ -72,9 +72,9 @@ if env['PLATFORM'] == 'win32': # Windows
 				LINKFLAGS=linkflags)
 	if int(python):
 		env = env.Clone()
-		env.Append(CPPPATH=Split("C:\Python26\include"),
-		           LIBPATH=Split(". ./lib ./python C:\Python26\libs"),
-		           LIBS=libs + Split("python26 libboost_python-mgw44-1_41"),
+		env.Append(CPPPATH=Split("C:\Python27\include"),
+		           LIBPATH=Split(". ./lib ./python C:\Python27\libs"),
+		           LIBS=libs + Split("python27 libboost_python-mgw44-1_41"),
 		           LINKFLAGS=linkflags)
 		env.SharedLibrary(target="python/jngl.dll",
 		                  source="python/main.cpp")
@@ -121,7 +121,7 @@ if int(installer):
 		name = 'MS Visual C++'
 	if python:
 		nsiFile = 'installer/python.nsi'
-		name = 'Python 2.6'
+		name = 'Python 2.7'
 	import os
 	t = Command('JNGL ' + version + '.exe', lib, '"' + os.path.expandvars("%programfiles%") + '\NSIS\makensis.exe " ' + nsiFile)
 	if python:
