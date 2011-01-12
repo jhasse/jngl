@@ -99,7 +99,7 @@ namespace jngl
 	    EndDraw();
 	    BeginDraw();
 	}
-	
+
 	void UpdateKeyStates()
 	{
 		pWindow->UpdateKeyStates();
@@ -371,6 +371,8 @@ namespace jngl
 			glDisable(GL_MULTISAMPLE_ARB);
 		}
 		antiAliasingEnabled = enabled;
+#else
+#warning anti aliasing not available!
 #endif
 	}
 
