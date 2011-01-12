@@ -25,7 +25,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <GL/glu.h>
 #include <stdlib.h>
 
-GLUtesselator* tobj;
+GLUtesselator* tobj = NULL;
 
 #ifndef linux
 #define CALLBACK __stdcall
@@ -60,11 +60,13 @@ void CALLBACK combineCallback(GLdouble coords[3],
 
 void InitCallbacks()
 {
-	tobj = gluNewTess();
-	gluTessCallback(tobj, GLU_TESS_BEGIN, beginCallback);
-	gluTessCallback(tobj, GLU_TESS_VERTEX, glVertex3dv);
-	gluTessCallback(tobj, GLU_TESS_END, glEnd);
-	gluTessCallback(tobj, GLU_TESS_COMBINE, combineCallback);
+	if(tobj == NULL) {
+		tobj = gluNewTess();
+		gluTessCallback(tobj, GLU_TESS_BEGIN, beginCallback);
+		gluTessCallback(tobj, GLU_TESS_VERTEX, glVertex3dv);
+		gluTessCallback(tobj, GLU_TESS_END, glEnd);
+		gluTessCallback(tobj, GLU_TESS_COMBINE, combineCallback);
+	}
 }
 
 #else // OPENGLES

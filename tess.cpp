@@ -36,7 +36,7 @@ extern "C"
 
 namespace jngl
 {
-	std::vector<std::vector<double> > positions;
+	std::vector<std::vector<double>*> positions;
 
 	void BeginPolygon()
 	{
@@ -47,12 +47,12 @@ namespace jngl
 
 	void Vertex(const double xposition, const double yposition)
 	{
-		std::vector<double> position(3);
-		position[0] = xposition;
-		position[1] = yposition;
-		position[2] = 0;
+		std::vector<double>* position = new std::vector<double>(3);
+		(*position)[0] = xposition;
+		(*position)[1] = yposition;
+		(*position)[2] = 0;
 		positions.push_back(position);
-		gluTessVertex(tobj, &positions.back()[0], &positions.back()[0]);
+		gluTessVertex(tobj, &(*positions.back())[0], &(*positions.back())[0]);
 	}
 
 	void EndPolygon()
@@ -60,7 +60,11 @@ namespace jngl
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		gluTessEndContour(tobj);
 		gluTessEndPolygon(tobj);
-		positions.clear(); // free all stored positions
+		std::vector<std::vector<double>*>::iterator end = positions.end();
+		for(std::vector<std::vector<double>*>::iterator it = positions.begin(); it != end; ++it) {
+			delete (*it);
+		}
+		positions.clear();
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 }
