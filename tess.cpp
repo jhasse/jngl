@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -48,11 +48,11 @@ namespace jngl
 	void Vertex(const double xposition, const double yposition)
 	{
 		std::vector<double>* position = new std::vector<double>(3);
-		(*position)[0] = xposition;
-		(*position)[1] = yposition;
-		(*position)[2] = 0;
+		position->at(0) = xposition;
+		position->at(1) = yposition;
+		position->at(2) = 0;
 		positions.push_back(position);
-		gluTessVertex(tobj, &(*positions.back())[0], &(*positions.back())[0]);
+		gluTessVertex(tobj, &position->at(0), &position->at(0));
 	}
 
 	void EndPolygon()
