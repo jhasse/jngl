@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2010 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -173,7 +173,7 @@ namespace jngl
 	bool GetAntiAliasing();
 
 	double GetTextWidth(const std::string& text);
-	
+
 	int GetLineHeight();
 
 	namespace key
@@ -256,6 +256,8 @@ namespace jngl
 	bool IsOpenALInstalled();
 
 	void SetPlaybackSpeed(float speed);
+
+	void SetVolume(float volume);
 
 	void SetIcon(const std::string& filename);
 

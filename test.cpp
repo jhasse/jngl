@@ -115,10 +115,12 @@ int main()
 				jngl::Stop("test.ogg");
 				jngl::Play("test.ogg");
 			}
-			jngl::Print("Press + and - to change the playback speed.", 6, 530);
 			static int playbackSpeed = 100;
 			jngl::SetPlaybackSpeed(playbackSpeed / 100.0f);
-			jngl::Print(boost::lexical_cast<std::string>(playbackSpeed) + " %", 6, 550);
+			jngl::Print("Press + and - to change the audio playback speed: " + boost::lexical_cast<std::string>(playbackSpeed) + " %", 6, 530);
+			static int volume = 100;
+			jngl::SetVolume(volume / 100.0f);
+			jngl::Print("Press W and Q to change the volume: " + boost::lexical_cast<std::string>(volume) + " %", 6, 550);
 			if(jngl::KeyPressed('-'))
 			{
 				--playbackSpeed;
@@ -126,6 +128,12 @@ int main()
 			if(jngl::KeyPressed('+'))
 			{
 				++playbackSpeed;
+			}
+			if(jngl::KeyPressed('q')) {
+				--volume;
+			}
+			if(jngl::KeyPressed('w')) {
+				++volume;
 			}
 			jngl::SetColor(0,0,255,128);
 			DrawMouse();

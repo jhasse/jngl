@@ -1,5 +1,5 @@
 /*
-Copyright 2009-2010 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2009-2011 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -81,6 +81,9 @@ namespace jngl
 		void SetPitch(float p)
 		{
 			alSourcef(source_, AL_PITCH, p);
+		}
+		void SetVolume(float v) {
+			alSourcef(source_, AL_GAIN, v);
 		}
 	private:
 		ALuint buffer_;
@@ -221,6 +224,11 @@ namespace jngl
 				sound_->SetPitch(p);
 			}
 		}
+		void SetVolume(float v) {
+			if(sound_) {
+				sound_->SetVolume(v);
+			}
+		}
 	private:
 		boost::shared_ptr<Sound> sound_;
 		ALint state;
@@ -279,13 +287,17 @@ namespace jngl
 		return GetSoundFile(filename).IsPlaying();
 	}
 
-	void SetPlaybackSpeed(float speed)
-	{
-		typedef std::map<std::string, boost::shared_ptr<SoundFile> >::iterator iterType;
-		iterType end = sounds.end();
-		for(iterType i = sounds.begin(); i != sounds.end(); ++i)
-		{
+	void SetPlaybackSpeed(float speed) {
+		auto end = sounds.end();
+		for(auto i = sounds.begin(); i != end; ++i) {
 			i->second->SetPitch(speed);
+		}
+	}
+
+	void SetVolume(float volume) {
+		auto end = sounds.end();
+		for(auto i = sounds.begin(); i != end; ++i) {
+			i->second->SetVolume(volume);
 		}
 	}
 };

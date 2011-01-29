@@ -208,4 +208,6 @@ BOOST_PYTHON_MODULE(jngl)
 	def("Load", Load);
 	def("IsPlaying", IsPlaying);
 	def("IsOpenALInstalled", IsOpenALInstalled);
+	def("SetPlaybackSpeed", SetPlaybackSpeed);
+	def("SetVolume", SetVolume);
 }

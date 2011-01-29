@@ -1,5 +1,5 @@
 /*
-Copyright 2010 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2010-2011 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -49,6 +49,7 @@ typedef void ALvoid;
 #define AL_FORMAT_STEREO8                         0x1102
 #define AL_FORMAT_STEREO16                        0x1103
 #define AL_PITCH                                  0x1003
+#define AL_GAIN                                   0x100A
 
 typedef struct ALCdevice_struct ALCdevice;
 typedef struct ALCcontext_struct ALCcontext;
