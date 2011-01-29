@@ -391,6 +391,14 @@ namespace jngl
 					keyPressed_[msg.wParam] = true;
 					anyKeyPressed_ = true;
 					DistinguishLeftRight();
+					// A to Z pressed? E.g. when Ctrl is pressed, WM_CHAR doesn't work
+					if(msg.wParam >= 65 && msg.wParam <= 90) {
+						char c[2];
+						c[0] = 'a' + msg.wParam - 65;
+						c[1] = 0;
+						characterDown_[c] = true;
+						characterPressed_[c] = true;
+					}
 				break;
 				case WM_KEYUP:
 				{
@@ -400,6 +408,13 @@ namespace jngl
 					int scanCode = msg.lParam & 0x7f8000;
 					characterDown_[scanCodeToCharacter[scanCode]] = false;
 					characterPressed_[scanCodeToCharacter[scanCode]] = false;
+					if(msg.wParam >= 65 && msg.wParam <= 90) {
+						char c[2];
+						c[0] = 'a' + msg.wParam - 65;
+						c[1] = 0;
+						characterDown_[c] = false;
+						characterPressed_[c] = false;
+					}
 				}
 				break;
 				case WM_CHAR:

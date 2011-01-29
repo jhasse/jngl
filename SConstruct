@@ -74,7 +74,7 @@ if env['PLATFORM'] == 'win32': # Windows
 		env = env.Clone()
 		env.Append(CPPPATH=Split("C:\Python27\include"),
 		           LIBPATH=Split(". ./lib ./python C:\Python27\libs"),
-		           LIBS=libs + Split("python27 libboost_python-mgw44-1_41"),
+		           LIBS=libs + Split("python27 libboost_python-mgw44-1_45"),
 		           LINKFLAGS=linkflags)
 		env.SharedLibrary(target="python/jngl.dll",
 		                  source="python/main.cpp")
