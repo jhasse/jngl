@@ -28,7 +28,7 @@ int vswprintf(wchar_t *, const wchar_t *, va_list);
 #include "jngl.hpp"
 #include "debug.hpp"
 
-#ifdef linux
+#ifdef __linux
 	#include <AL/al.h>
 	#include <AL/alc.h>
 	#include <vorbis/vorbisfile.h>
@@ -90,6 +90,9 @@ namespace jngl
 		ALuint source_;
 	};
 
+	class SoundFile;
+	std::map<std::string, boost::shared_ptr<SoundFile> > sounds;
+
 	class Audio : boost::noncopyable {
 	public:
 		Audio() : device_(0), context_(0)
@@ -111,6 +114,8 @@ namespace jngl
 		}
 		~Audio()
 		{
+			sounds_.clear();
+			sounds.clear();
 			alcMakeContextCurrent(0);
 			alcDestroyContext(context_);
 			alcCloseDevice(device_);
@@ -237,11 +242,9 @@ namespace jngl
 		std::vector<char> buffer_;
 	};
 
-	std::map<std::string, boost::shared_ptr<SoundFile> > sounds;
-
 	bool IsOpenALInstalled()
 	{
-#ifndef linux
+#ifndef __linux
 		try
 		{
 			GetAudio();
