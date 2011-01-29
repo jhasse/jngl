@@ -153,13 +153,13 @@ namespace jngl
 			FILE* f = fopen(filename.c_str(), "rb");
 			if(!f)
 			{
-				throw std::runtime_error("Could not open OGG file.");
+				throw std::runtime_error("File not found (" + filename + ").");
 			}
 
 			OggVorbis_File oggFile;
 			if(ov_open(f, &oggFile, 0, 0) != 0)
 			{
-				throw std::runtime_error("Could not open OGG file.");
+				throw std::runtime_error("Could not open OGG file (" + filename + ").");
 			}
 
 			vorbis_info* pInfo;
