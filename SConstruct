@@ -54,12 +54,11 @@ windowptr.cpp
 callbacks.c
 ConvertUTF.c
 """)
+source_files += env.Object("audio.cpp", CPPFLAGS="-std=c++0x")
 
 if env['PLATFORM'] == 'win32': # Windows
 	jnglLibs = Split("freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl")
 	env.Append(CPPPATH="./include")
-	audioFile = env.Object("audio.cpp", CPPFLAGS="-std=c++0x")
-	source_files += audioFile
 	lib = env.Library(target="jngl", source=source_files + Glob('win32/*.cpp'), LIBS=jnglLibs)
 	linkflags = "-mwindows"
 	if int(debug) or int(msvc):
@@ -80,7 +79,6 @@ if env['PLATFORM'] == 'win32': # Windows
 		                  source="python/main.cpp")
 
 if env['PLATFORM'] == 'posix': # Linux
-	source_files += ["audio.cpp"]
 	if int(python):
 		env.Append(CCFLAGS = '-DNOJPEG')
 	if int(wiz):
