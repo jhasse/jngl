@@ -90,6 +90,9 @@ namespace jngl
 		ALuint source_;
 	};
 
+	class SoundFile;
+	std::map<std::string, boost::shared_ptr<SoundFile> > sounds;
+
 	class Audio : boost::noncopyable {
 	public:
 		Audio() : device_(0), context_(0)
@@ -111,6 +114,8 @@ namespace jngl
 		}
 		~Audio()
 		{
+			sounds_.clear();
+			sounds.clear();
 			alcMakeContextCurrent(0);
 			alcDestroyContext(context_);
 			alcCloseDevice(device_);
@@ -236,8 +241,6 @@ namespace jngl
 		ALsizei freq;
 		std::vector<char> buffer_;
 	};
-
-	std::map<std::string, boost::shared_ptr<SoundFile> > sounds;
 
 	bool IsOpenALInstalled()
 	{
