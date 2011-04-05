@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2010 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -27,7 +27,7 @@ namespace jngl
 	{
 		return fonts_[fontSize_][fontName_].GetTextWidth(text);
 	}
-	
+
 	int Window::GetLineHeight() {
 		return fonts_[fontSize_][fontName_].GetLineHeight();
 	}
@@ -193,5 +193,6 @@ namespace jngl
 			*(needToBeSetFalse_.top()) = false;
 			needToBeSetFalse_.pop();
 		}
+		mouseWheel_ = 0;
 	}
 }

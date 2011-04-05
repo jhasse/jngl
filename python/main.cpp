@@ -210,4 +210,7 @@ BOOST_PYTHON_MODULE(jngl)
 	def("IsOpenALInstalled", IsOpenALInstalled);
 	def("SetPlaybackSpeed", SetPlaybackSpeed);
 	def("SetVolume", SetVolume);
+	def("GetDesktopWidth", GetDesktopWidth);
+	def("GetDesktopHeight", GetDesktopHeight);
+	def("GetMouseWheel", GetMouseWheel);
 }

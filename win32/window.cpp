@@ -98,7 +98,7 @@ namespace jngl
 
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
 		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(false),
-		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height)
+		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
@@ -361,6 +361,9 @@ namespace jngl
 				case WM_MOUSEMOVE:
 					mousex_ = GET_X_LPARAM(msg.lParam);
 					mousey_ = GET_Y_LPARAM(msg.lParam);
+				break;
+				case WM_MOUSEWHEEL:
+					mouseWheel_ += double(GET_WHEEL_DELTA_WPARAM(msg.wParam)) / WHEEL_DELTA;
 				break;
 				case WM_LBUTTONDOWN:
 					mouseDown_.at(0) = true;
@@ -661,5 +664,26 @@ namespace jngl
 
 		HICON hIcon = CreateIconIndirect(&icon);
 		SendMessage(pWindowHandle_.get(), WM_SETICON, WPARAM(ICON_SMALL), LPARAM(hIcon));
+	}
+
+	double Window::GetMouseWheel() const
+	{
+		return mouseWheel_;
+	}
+
+	int GetDesktopWidth()
+	{
+		RECT desktop;
+		const HWND hDesktop = GetDesktopWindow();
+		GetWindowRect(hDesktop, &desktop);
+		return desktop.right;
+	}
+
+	int GetDesktopHeight()
+	{
+		RECT desktop;
+		const HWND hDesktop = GetDesktopWindow();
+		GetWindowRect(hDesktop, &desktop);
+		return desktop.bottom;
 	}
 }

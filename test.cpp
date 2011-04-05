@@ -25,7 +25,9 @@ int main()
 {
 	try
 	{
-		std::cout << "Size of jngl.png: " << jngl::GetWidth("jngl.png")
+		std::cout << "Size of Desktop: " << jngl::GetDesktopWidth()
+		          << "x" << jngl::GetDesktopHeight() << std::endl
+		          << "Size of jngl.png: " << jngl::GetWidth("jngl.png")
 		          << "x" << jngl::GetHeight("jngl.png") << std::endl;
 		jngl::ShowWindow("JNGL Test Application", 800, 600);
 		jngl::SetIcon("jngl.png");
@@ -118,9 +120,6 @@ int main()
 			static int playbackSpeed = 100;
 			jngl::SetPlaybackSpeed(playbackSpeed / 100.0f);
 			jngl::Print("Press + and - to change the audio playback speed: " + boost::lexical_cast<std::string>(playbackSpeed) + " %", 6, 530);
-			static int volume = 100;
-			jngl::SetVolume(volume / 100.0f);
-			jngl::Print("Press W and Q to change the volume: " + boost::lexical_cast<std::string>(volume) + " %", 6, 550);
 			if(jngl::KeyPressed('-'))
 			{
 				--playbackSpeed;
@@ -129,12 +128,10 @@ int main()
 			{
 				++playbackSpeed;
 			}
-			if(jngl::KeyPressed('q')) {
-				--volume;
-			}
-			if(jngl::KeyPressed('w')) {
-				++volume;
-			}
+			static float volume = 1;
+			jngl::SetVolume(volume);
+			jngl::Print("Use your mouse wheel to change the volume: " + boost::lexical_cast<std::string>(int(volume * 100)) + " %", 6, 550);
+			volume += static_cast<float>(jngl::GetMouseWheel()) / 100.0f;
 			jngl::SetColor(0,0,255,128);
 			DrawMouse();
 			jngl::EndDraw();

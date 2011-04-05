@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -216,7 +216,7 @@ namespace jngl
 	{
 		return pWindow->GetTextWidth(text);
 	}
-	
+
 	int GetLineHeight() {
 		return pWindow->GetLineHeight();
 	}
@@ -354,6 +354,11 @@ namespace jngl
 		return pWindow->GetHeight();
 	}
 
+	double GetMouseWheel()
+	{
+		return pWindow->GetMouseWheel();
+	}
+
 	void SetAntiAliasing(bool enabled)
 	{
 #ifdef GL_MULTISAMPLE_ARB
@@ -372,7 +377,7 @@ namespace jngl
 		}
 		antiAliasingEnabled = enabled;
 #else
-#warning anti aliasing not available!
+		Debug("WARNING: anti aliasing not available!\n");
 #endif
 	}
 

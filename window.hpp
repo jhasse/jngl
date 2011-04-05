@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2010 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -82,6 +82,7 @@ namespace jngl
 		bool IsMultisampleSupported() const;
 		void SetIcon(const std::string&);
 		void UpdateKeyStates();
+		double GetMouseWheel() const;
 #ifndef WIZ
 	#ifdef linux
 		boost::shared_ptr<Display> pDisplay_;
@@ -103,6 +104,7 @@ namespace jngl
 		std::map<std::string, bool> characterPressed_;
 		std::stack<bool*> needToBeSetFalse_;
 		int mousex_, mousey_, fontSize_, width_, height_;
+		double mouseWheel_;
 		std::string fontName_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
 

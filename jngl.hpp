@@ -110,6 +110,8 @@ namespace jngl
 		};
 	}
 
+	double GetMouseWheel();
+
 	bool MouseDown(mouse::Button button = mouse::Left);
 
 	bool MousePressed(mouse::Button button = mouse::Left);
@@ -266,6 +268,10 @@ namespace jngl
 	void BeginDraw();
 
 	void EndDraw();
+
+	int GetDesktopWidth();
+
+	int GetDesktopHeight();
 }
 
 #endif // __JNGL_HPP__
