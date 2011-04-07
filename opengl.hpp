@@ -1,5 +1,5 @@
 /*
-Copyright 2009-2010 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2009-2011 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -24,11 +24,13 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 	#include <GLES/egl.h>
 	#include <libogl.h>
 #else
+	#ifndef __linux
+		#include <windows.h>
+	#endif
 	#define GL_GLEXT_PROTOTYPES
 	#include <GL/gl.h>
 	#include <GL/glext.h>
-	#ifndef linux
-		#include <windows.h>
+	#ifndef __linux
 		#define GL_ARRAY_BUFFER 0x8892
 		#define GL_STATIC_DRAW 0x88E4
 		typedef void (APIENTRY * PFNGLBINDBUFFERARBPROC) (GLenum target, GLuint buffer);

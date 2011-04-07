@@ -28,7 +28,7 @@ int vswprintf(wchar_t *, const wchar_t *, va_list);
 #include "jngl.hpp"
 #include "debug.hpp"
 
-#ifdef __linux
+#ifdef NO_WEAK_LINKING_OPENAL
 	#include <AL/al.h>
 	#include <AL/alc.h>
 	#include <vorbis/vorbisfile.h>
@@ -244,7 +244,7 @@ namespace jngl
 
 	bool IsOpenALInstalled()
 	{
-#ifndef __linux
+#ifndef NO_WEAK_LINKING_OPENAL
 		try
 		{
 			GetAudio();

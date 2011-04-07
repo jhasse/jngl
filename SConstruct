@@ -13,6 +13,7 @@ for filename in files:
 	Clean('.', newfilename) # Make sure scons -c does clean up tidily
 
 env = Environment()
+env.SetOption('num_jobs', 3)
 
 if env['PLATFORM'] == 'win32':
 	msvc = ARGUMENTS.get('msvc', 0)
@@ -58,6 +59,9 @@ source_files += env.Object("audio.cpp", CPPFLAGS="-std=c++0x")
 
 if env['PLATFORM'] == 'win32': # Windows
 	jnglLibs = Split("freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl")
+	if int(python) or int(msvc):
+		env.Append(CCFLAGS = '-DNO_WEAK_LINKING_OPENAL')
+		jnglLibs += Split("openal32 ogg vorbisfile")
 	env.Append(CPPPATH="./include")
 	lib = env.Library(target="jngl", source=source_files + Glob('win32/*.cpp'), LIBS=jnglLibs)
 	linkflags = "-mwindows"
@@ -88,7 +92,7 @@ if env['PLATFORM'] == 'posix': # Linux
 		source_files += Glob('linux/*.cpp')
 		env.ParseConfig('pkg-config --cflags --libs fontconfig glib-2.0')
 	env.ParseConfig('pkg-config --cflags --libs freetype2')
-	env.Append(CCFLAGS="-fPIC")
+	env.Append(CCFLAGS="-fPIC -DNO_WEAK_LINKING_OPENAL")
 	lib = env.Library(target="jngl", source=source_files)
 	env.Append(LIBPATH=".", CPPPATH='.')
 	if wiz:

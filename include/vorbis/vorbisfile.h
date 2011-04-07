@@ -53,13 +53,7 @@ typedef struct {
 static int _ov_header_fseek_wrap(FILE *f,ogg_int64_t off,int whence){
   if(f==NULL)return(-1);
 
-#ifdef __MINGW32__
-  return fseeko64(f,off,whence);
-#elif defined (_WIN32)
-  return _fseeki64(f,off,whence);
-#else
   return fseek(f,off,whence);
-#endif
 }
 
 /* These structs below (OV_CALLBACKS_DEFAULT etc) are defined here as
