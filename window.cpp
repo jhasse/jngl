@@ -195,4 +195,9 @@ namespace jngl
 		}
 		mouseWheel_ = 0;
 	}
+
+	double Window::GetMouseWheel() const
+	{
+		return mouseWheel_;
+	}
 }
