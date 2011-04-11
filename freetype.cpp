@@ -40,7 +40,7 @@ namespace jngl
 		fontColorAlpha = alpha;
 	}
 
-	Character::Character(const unsigned long ch, const float fontHeight, FT_Face face) : texture_(0)
+	Character::Character(const unsigned long ch, const unsigned int fontHeight, FT_Face face) : texture_(0)
 	{
 		if(FT_Load_Glyph(face, FT_Get_Char_Index(face, ch) , FT_LOAD_TARGET_LIGHT))
 		{

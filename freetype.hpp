@@ -41,7 +41,7 @@ namespace jngl
 	class Character : boost::noncopyable
 	{
 	public:
-		Character(unsigned long ch, float height, FT_Face);
+		Character(unsigned long ch, unsigned int height, FT_Face);
 		~Character();
 		void Draw() const;
 		double GetWidth() const;
@@ -49,7 +49,7 @@ namespace jngl
 		Texture* texture_;
 		int width_;
 		int left_;
-		float top_;
+		int top_;
 	};
 
 	class Font : boost::noncopyable
@@ -69,7 +69,7 @@ namespace jngl
 		static FT_Library library_;
 		FT_Face face_;
 		boost::shared_ptr<Finally> freeFace_; // Frees face_ if necessary
-		float height_;
+		unsigned int height_;
 		std::map<unsigned long, boost::shared_ptr<Character> > characters_;
 	};
 }

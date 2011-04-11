@@ -69,7 +69,7 @@ int main()
 			jngl::DrawScaled("jngl.png",
 			                 -jngl::GetWidth("jngl.png")  * factor,
 			                 -jngl::GetHeight("jngl.png") * factor,
-			                 factor * 2);
+			                 static_cast<float>(factor * 2));
 			jngl::SetColor(0, 0, 0);
 			jngl::DrawRect(-125, 100, 250, 28);
 			jngl::SetFontColor(255, 255, 255);
@@ -165,8 +165,8 @@ void DrawBackground()
 				jngl::DrawScaled("jngl.png",
 								 x * jngl::GetWindowWidth() / performance,
 								 y * jngl::GetWindowHeight() / performance,
-								 (double)jngl::GetWindowWidth() / performance / jngl::GetWidth("jngl.png"),
-								 (double)jngl::GetWindowHeight() / performance / jngl::GetHeight("jngl.png"));
+								 (float)jngl::GetWindowWidth() / performance / jngl::GetWidth("jngl.png"),
+								 (float)jngl::GetWindowHeight() / performance / jngl::GetHeight("jngl.png"));
 			}
 		}
 	}

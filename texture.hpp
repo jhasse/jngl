@@ -30,7 +30,7 @@ public:
 	~Texture();
 	void Bind() const;
 	void Draw() const;
-	bool GetID() const;
+	GLuint GetID() const;
 private:
 	static bool useVBO_;
 	GLuint texture_;

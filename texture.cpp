@@ -48,7 +48,7 @@ Texture::Texture(const int imgWidth, const int imgHeight, GLenum format, int cha
 	{
 		GLfloat vertexes[] = {
 							   0, 0, 0, y, x, y, x, 0, // texture coordinates
-							   0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0
+							   0, 0, 0, GLfloat(imgHeight), GLfloat(imgWidth), GLfloat(imgHeight), GLfloat(imgWidth), 0
 							 };
 		glGenBuffers(1, &vertexBuffer_);
 		opengl::BindArrayBuffer(vertexBuffer_);
@@ -106,7 +106,7 @@ void Texture::Draw() const
 	glDisable(GL_TEXTURE_2D);
 }
 
-bool Texture::GetID() const
+GLuint Texture::GetID() const
 {
 	return texture_;
 }

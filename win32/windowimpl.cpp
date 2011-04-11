@@ -75,7 +75,7 @@ namespace jngl
 			0,0};
 
 		// First We Check To See If We Can Get A Pixel Format For 4 Samples
-		bool valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
+		BOOL valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
 
 		// if We Returned True, And Our Format Count Is Greater Than 1
 		if (valid && numFormats >= 1)
@@ -341,7 +341,7 @@ namespace jngl
 		};
 		for(unsigned int i = 0; i < sizeof(codesToCheck) / sizeof(codesToCheck[0]); ++i)
 		{
-			bool value = GetKeyState(codesToCheck[i]) & 0xf0;
+			bool value = ((GetKeyState(codesToCheck[i]) & 0xf0) != 0);
 			keyDown_[codesToCheck[i]] = value;
 			keyPressed_[codesToCheck[i]] = value;
 		}
