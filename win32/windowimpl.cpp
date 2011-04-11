@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2010 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -664,11 +664,6 @@ namespace jngl
 
 		HICON hIcon = CreateIconIndirect(&icon);
 		SendMessage(pWindowHandle_.get(), WM_SETICON, WPARAM(ICON_SMALL), LPARAM(hIcon));
-	}
-
-	double Window::GetMouseWheel() const
-	{
-		return mouseWheel_;
 	}
 
 	int GetDesktopWidth()

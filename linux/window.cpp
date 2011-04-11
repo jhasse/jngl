@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -20,6 +20,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "../window.hpp"
 #include "../debug.hpp"
 #include "../opengl.hpp"
+#include "../finally.hpp"
 
 #include <GL/glx.h>
 #include <X11/extensions/xf86vmode.h>
@@ -29,8 +30,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/bind.hpp>
 #include <boost/assign/ptr_map_inserter.hpp>
 #include <fontconfig/fontconfig.h>
-
-#include <iostream>
 
 namespace jngl
 {
@@ -64,7 +63,7 @@ namespace jngl
 
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
 		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(true),
-		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), fontName_("")
+		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0), fontName_("")
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
@@ -383,11 +382,23 @@ namespace jngl
 					keyPressed_[event.xkey.keycode] = false;
 				break;
 				case ButtonPress:
-					if(1 <= event.xbutton.button && event.xbutton.button <= 3)
+					switch(event.xbutton.button)
 					{
-						const unsigned int button = event.xbutton.button - 1;
-						mouseDown_.at(button) = true;
-						mousePressed_.at(button) = true;
+						case 1:
+						case 2:
+						case 3:
+						{
+							const unsigned int button = event.xbutton.button - 1;
+							mouseDown_.at(button) = true;
+							mousePressed_.at(button) = true;
+						}
+						break;
+						case 4:
+							mouseWheel_ += 1;
+						break;
+						case 5:
+							mouseWheel_ -= 1;
+						break;
 					}
 				break;
 				case ButtonRelease:
@@ -465,5 +476,19 @@ namespace jngl
 	void Window::SetIcon(const std::string&)
 	{
 		return; // TODO: Not implemented yet
+	}
+
+	int GetDesktopWidth()
+	{
+		Display* display = XOpenDisplay(NULL);
+		Finally finally(boost::bind(XCloseDisplay, display));
+		return XDisplayWidth(display, XDefaultScreen(display));
+	}
+	
+	int GetDesktopHeight()
+	{
+		Display* display = XOpenDisplay(NULL);
+		Finally finally(boost::bind(XCloseDisplay, display));
+		return XDisplayHeight(display, XDefaultScreen(display));
 	}
 }
