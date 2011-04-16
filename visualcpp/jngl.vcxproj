@@ -89,6 +89,9 @@
       <AdditionalDependencies>libvorbis_static.lib;jpeg.lib;jngl.lib;alut.lib;ogg.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
+    <Lib>
+      <OutputFile>$(OutDir)jngl.lib</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -105,6 +108,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>libvorbis_static.lib;jpeg.lib;jngl.lib;alut.lib;ogg.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <OutputFile>$(OutDir)jngl.lib</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

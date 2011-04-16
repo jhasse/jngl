@@ -1,45 +1,99 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="win32">
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{424cc227-2082-4ac0-b17f-7e7a154f242c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{1f23d4a0-ce02-4ef3-a03f-40dd5ac607bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\win32">
       <UniqueIdentifier>{45301c14-d841-42d9-9ad3-4c114d4a7419}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\win32\message.cpp">
-      <Filter>win32</Filter>
+      <Filter>Source Files\win32</Filter>
     </ClCompile>
     <ClCompile Include="..\win32\time.cpp">
-      <Filter>win32</Filter>
+      <Filter>Source Files\win32</Filter>
     </ClCompile>
     <ClCompile Include="..\win32\windowimpl.cpp">
-      <Filter>win32</Filter>
+      <Filter>Source Files\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\audio.cpp" />
-    <ClCompile Include="..\callbacks.c" />
-    <ClCompile Include="..\ConvertUTF.c" />
-    <ClCompile Include="..\finally.cpp" />
-    <ClCompile Include="..\freetype.cpp" />
-    <ClCompile Include="..\main.cpp" />
-    <ClCompile Include="..\opengl.cpp" />
-    <ClCompile Include="..\sprite.cpp" />
-    <ClCompile Include="..\tess.cpp" />
-    <ClCompile Include="..\texture.cpp" />
-    <ClCompile Include="..\window.cpp" />
-    <ClCompile Include="..\windowptr.cpp" />
+    <ClCompile Include="..\windowptr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\audio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\callbacks.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConvertUTF.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\finally.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\freetype.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\opengl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\audio.hpp" />
-    <ClInclude Include="..\ConvertUTF.h" />
-    <ClInclude Include="..\debug.hpp" />
-    <ClInclude Include="..\draw.hpp" />
-    <ClInclude Include="..\finally.hpp" />
-    <ClInclude Include="..\freetype.hpp" />
-    <ClInclude Include="..\jngl.hpp" />
-    <ClInclude Include="..\opengl.hpp" />
-    <ClInclude Include="..\sprite.hpp" />
-    <ClInclude Include="..\texture.hpp" />
-    <ClInclude Include="..\window.hpp" />
-    <ClInclude Include="..\windowptr.hpp" />
+    <ClInclude Include="..\ConvertUTF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\finally.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\freetype.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\opengl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sprite.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\texture.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\window.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\windowptr.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\jngl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\draw.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\debug.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\audio.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
