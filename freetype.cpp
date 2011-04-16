@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
 
 Most of this code is based on http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=43
 
@@ -27,6 +27,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
+#include <fstream>
 
 namespace jngl
 {
@@ -187,6 +188,10 @@ namespace jngl
 
 	Font::Font(const char* filename, unsigned int height) : height_(height)
 	{
+		if(!std::ifstream(filename))
+		{
+			throw std::runtime_error(std::string("Font file not found: ") + filename);
+		}
 		if(++instanceCounter_ == 1)
 		{
 			if(FT_Init_FreeType(&library_))
@@ -269,7 +274,7 @@ namespace jngl
 		}
 		return maxWidth;
 	}
-	
+
 	int Font::GetLineHeight() const {
 		return int(height_ / .63);
 	}

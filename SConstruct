@@ -43,6 +43,7 @@ if int(wiz):
 	env.Append(CPPPATH=["/toolchain/include", "wiz"], LIBPATH=["/toolchain/lib", "wiz"])
 
 source_files = Split("""
+audio.cpp
 finally.cpp
 freetype.cpp
 main.cpp
@@ -55,7 +56,7 @@ windowptr.cpp
 callbacks.c
 ConvertUTF.c
 """)
-source_files += env.Object("audio.cpp", CPPFLAGS="-std=c++0x")
+env.Append(CPPFLAGS="-std=c++0x")
 
 if env['PLATFORM'] == 'win32': # Windows
 	jnglLibs = Split("freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl")

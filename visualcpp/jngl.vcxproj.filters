@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="win32">
+      <UniqueIdentifier>{45301c14-d841-42d9-9ad3-4c114d4a7419}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\win32\message.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\win32\time.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\win32\windowimpl.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\audio.cpp" />
+    <ClCompile Include="..\callbacks.c" />
+    <ClCompile Include="..\ConvertUTF.c" />
+    <ClCompile Include="..\finally.cpp" />
+    <ClCompile Include="..\freetype.cpp" />
+    <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\opengl.cpp" />
+    <ClCompile Include="..\sprite.cpp" />
+    <ClCompile Include="..\tess.cpp" />
+    <ClCompile Include="..\texture.cpp" />
+    <ClCompile Include="..\window.cpp" />
+    <ClCompile Include="..\windowptr.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\audio.hpp" />
+    <ClInclude Include="..\ConvertUTF.h" />
+    <ClInclude Include="..\debug.hpp" />
+    <ClInclude Include="..\draw.hpp" />
+    <ClInclude Include="..\finally.hpp" />
+    <ClInclude Include="..\freetype.hpp" />
+    <ClInclude Include="..\jngl.hpp" />
+    <ClInclude Include="..\opengl.hpp" />
+    <ClInclude Include="..\sprite.hpp" />
+    <ClInclude Include="..\texture.hpp" />
+    <ClInclude Include="..\window.hpp" />
+    <ClInclude Include="..\windowptr.hpp" />
+  </ItemGroup>
+</Project>

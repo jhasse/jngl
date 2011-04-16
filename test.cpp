@@ -5,6 +5,7 @@
 #include <boost/lexical_cast.hpp>
 #include <map>
 #include <vector>
+#include <algorithm>
 
 #ifndef M_PI
 	#define M_PI 3.14159265358979323846
@@ -365,18 +366,13 @@ void TestKeys()
 			}
 			y += 15;
 		}
-		std::vector<RecentlyPressedKey>::iterator end = recentlyPressedKeys.end();
-		for(std::vector<RecentlyPressedKey>::iterator it = recentlyPressedKeys.begin(); it != end; ++it)
-		{
-			if(it->GetAlpha() <= 0)
-			{
-				it = recentlyPressedKeys.erase(it);
-			}
-			else
-			{
-				it->Draw();
-			}
-		}
+		auto end = recentlyPressedKeys.end();
+		std::for_each(recentlyPressedKeys.begin(), end, [](RecentlyPressedKey& k) {
+			k.Draw();
+		});
+		recentlyPressedKeys.erase(std::remove_if(recentlyPressedKeys.begin(), end, [](const RecentlyPressedKey& k) -> bool {
+			return k.GetAlpha() <= 0;
+		}), end);
 		jngl::EndDraw();
 	}
 }

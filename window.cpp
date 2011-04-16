@@ -39,16 +39,9 @@ namespace jngl
 
 	void Window::SetFont(const std::string& filename)
 	{
-		try
+		if(fonts_[fontSize_].find(filename) == fonts_[fontSize_].end()) // Only load font if it doesn't exist yet
 		{
-			if(fonts_[fontSize_].find(filename) == fonts_[fontSize_].end()) // Only load font if it doesn't exist yet
-			{
-				boost::assign::ptr_map_insert(fonts_[fontSize_])(filename, filename.c_str(), fontSize_);
-			}
-		}
-		catch(std::exception& e)
-		{
-			throw e;
+			boost::assign::ptr_map_insert(fonts_[fontSize_])(filename, filename.c_str(), fontSize_);
 		}
 		fontName_ = filename;
 	}

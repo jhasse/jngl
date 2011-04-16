@@ -62,11 +62,18 @@ Texture::Texture(const int imgWidth, const int imgHeight, GLenum format, int cha
 		GLint vertexes[] = { 0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0 };
 		vertexes_.assign(&vertexes[0], &vertexes[8]);
 	}
-	for(int i = 0; i < imgHeight; ++i)
+
+	// Fill empty space on the right side:
+	if(width - imgWidth > 0)
 	{
-		std::vector<unsigned char> empty((width - imgWidth) * channels, 0);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, imgWidth, i, width - imgWidth, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
+		for(int i = 0; i < imgHeight; ++i)
+		{
+			std::vector<unsigned char> empty((width - imgWidth) * channels, 0);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, imgWidth, i, width - imgWidth, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
+		}
 	}
+
+	// Fill empty space at the bottom:
 	for(int i = imgHeight; i < height; ++i)
 	{
 		std::vector<unsigned char> empty(width * channels, 0);

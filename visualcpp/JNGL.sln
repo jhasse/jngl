@@ -1,7 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jngl", "jngl.vcxproj", "{C8C7E794-05B1-4A00-A060-2A4236C7D1E3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Library", "jngl.vcxproj", "{C8C7E794-05B1-4A00-A060-2A4236C7D1E3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{70970391-A2D5-4B35-88C3-DB340FB8EF05}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C8C7E794-05B1-4A00-A060-2A4236C7D1E3} = {C8C7E794-05B1-4A00-A060-2A4236C7D1E3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +18,10 @@ Global
 		{C8C7E794-05B1-4A00-A060-2A4236C7D1E3}.Debug|Win32.Build.0 = Debug|Win32
 		{C8C7E794-05B1-4A00-A060-2A4236C7D1E3}.Release|Win32.ActiveCfg = Release|Win32
 		{C8C7E794-05B1-4A00-A060-2A4236C7D1E3}.Release|Win32.Build.0 = Release|Win32
+		{70970391-A2D5-4B35-88C3-DB340FB8EF05}.Debug|Win32.ActiveCfg = Debug|Win32
+		{70970391-A2D5-4B35-88C3-DB340FB8EF05}.Debug|Win32.Build.0 = Debug|Win32
+		{70970391-A2D5-4B35-88C3-DB340FB8EF05}.Release|Win32.ActiveCfg = Release|Win32
+		{70970391-A2D5-4B35-88C3-DB340FB8EF05}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

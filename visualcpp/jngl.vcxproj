@@ -10,18 +10,50 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\audio.cpp" />
+    <ClCompile Include="..\callbacks.c" />
+    <ClCompile Include="..\ConvertUTF.c" />
+    <ClCompile Include="..\finally.cpp" />
+    <ClCompile Include="..\freetype.cpp" />
+    <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\opengl.cpp" />
+    <ClCompile Include="..\sprite.cpp" />
+    <ClCompile Include="..\tess.cpp" />
+    <ClCompile Include="..\texture.cpp" />
+    <ClCompile Include="..\win32\message.cpp" />
+    <ClCompile Include="..\win32\time.cpp" />
+    <ClCompile Include="..\win32\windowimpl.cpp" />
+    <ClCompile Include="..\window.cpp" />
+    <ClCompile Include="..\windowptr.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\audio.hpp" />
+    <ClInclude Include="..\ConvertUTF.h" />
+    <ClInclude Include="..\debug.hpp" />
+    <ClInclude Include="..\draw.hpp" />
+    <ClInclude Include="..\finally.hpp" />
+    <ClInclude Include="..\freetype.hpp" />
+    <ClInclude Include="..\jngl.hpp" />
+    <ClInclude Include="..\opengl.hpp" />
+    <ClInclude Include="..\sprite.hpp" />
+    <ClInclude Include="..\texture.hpp" />
+    <ClInclude Include="..\window.hpp" />
+    <ClInclude Include="..\windowptr.hpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C8C7E794-05B1-4A00-A060-2A4236C7D1E3}</ProjectGuid>
     <RootNamespace>jngl</RootNamespace>
+    <ProjectName>Library</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
@@ -37,12 +69,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>.;./include;$(IncludePath)</IncludePath>
-    <LibraryPath>./lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>../include;$(IncludePath)</IncludePath>
+    <LibraryPath>../lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>.;./include;$(IncludePath)</IncludePath>
-    <LibraryPath>./lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>../include;$(IncludePath)</IncludePath>
+    <LibraryPath>../lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -54,7 +86,8 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libvorbis_static.lib;jpeg.lib;jngl.lib;alut.lib;ogg.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libvorbis_static.lib;jpeg.lib;jngl.lib;alut.lib;ogg.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -63,48 +96,16 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NO_WEAK_LINKING_OPENAL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;NO_WEAK_LINKING_OPENAL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>jpeg.lib;jngl.lib;alut.lib;ogg.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib</AdditionalDependencies>
+      <AdditionalDependencies>libvorbis_static.lib;jpeg.lib;jngl.lib;alut.lib;ogg.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="audio.cpp" />
-    <ClCompile Include="callbacks.c" />
-    <ClCompile Include="ConvertUTF.c" />
-    <ClCompile Include="finally.cpp" />
-    <ClCompile Include="freetype.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="opengl.cpp" />
-    <ClCompile Include="sprite.cpp" />
-    <ClCompile Include="tess.cpp" />
-    <ClCompile Include="test.cpp" />
-    <ClCompile Include="texture.cpp" />
-    <ClCompile Include="win32\message.cpp" />
-    <ClCompile Include="win32\time.cpp" />
-    <ClCompile Include="win32\windowimpl.cpp" />
-    <ClCompile Include="window.cpp" />
-    <ClCompile Include="windowptr.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="audio.hpp" />
-    <ClInclude Include="ConvertUTF.h" />
-    <ClInclude Include="debug.hpp" />
-    <ClInclude Include="draw.hpp" />
-    <ClInclude Include="finally.hpp" />
-    <ClInclude Include="freetype.hpp" />
-    <ClInclude Include="jngl.hpp" />
-    <ClInclude Include="opengl.hpp" />
-    <ClInclude Include="sprite.hpp" />
-    <ClInclude Include="texture.hpp" />
-    <ClInclude Include="win32\wglext.h" />
-    <ClInclude Include="window.hpp" />
-    <ClInclude Include="windowptr.hpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
