@@ -31,7 +31,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <map>
 #include <stack>
 
-#ifdef linux
+#ifdef __linux
 	#ifdef WIZ
 
 	#else
@@ -84,7 +84,7 @@ namespace jngl
 		void UpdateKeyStates();
 		double GetMouseWheel() const;
 #ifndef WIZ
-	#ifdef linux
+	#ifdef __linux
 		boost::shared_ptr<Display> pDisplay_;
 		static void ReleaseXData(void*);
 	#else
@@ -117,7 +117,7 @@ namespace jngl
 		EGLSurface surface_;
 		std::map<unsigned int, double> keyTimeout_;
 #else
-	#ifdef linux
+	#ifdef __linux
 		::Window window_;
 		GLXContext context_;
 		int screen_;

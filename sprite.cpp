@@ -37,7 +37,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <cmath>
 #include <cstdlib>
 #include <cstdio>
-#ifndef linux
+#ifndef __linux
 // These defines are needed to prevent conflicting types declarations in jpeglib.h:
 #define XMD_H
 #define HAVE_BOOLEAN
