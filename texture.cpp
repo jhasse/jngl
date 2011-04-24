@@ -28,7 +28,11 @@ bool Texture::useVBO_ = true;
 
 Texture::Texture(const int imgWidth, const int imgHeight, GLenum format, int channels)
 {
+#ifdef __linux
+	if(useVBO_)
+#else
 	if(useVBO_ && !(glGenBuffers && glBindBuffer && glBufferData && glDeleteBuffers))
+#endif
 	{
 		Debug("VBOs not supported, using Vertex Arrays\n");
 		useVBO_ = false;
