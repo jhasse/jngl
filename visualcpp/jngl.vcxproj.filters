@@ -83,9 +83,6 @@
     <ClInclude Include="..\windowptr.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\jngl.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\draw.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

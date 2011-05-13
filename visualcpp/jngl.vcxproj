@@ -34,7 +34,6 @@
     <ClInclude Include="..\draw.hpp" />
     <ClInclude Include="..\finally.hpp" />
     <ClInclude Include="..\freetype.hpp" />
-    <ClInclude Include="..\jngl.hpp" />
     <ClInclude Include="..\opengl.hpp" />
     <ClInclude Include="..\sprite.hpp" />
     <ClInclude Include="..\texture.hpp" />
