@@ -42,7 +42,7 @@ if int(wiz):
 	env['CC'] = "/toolchain/bin/arm-openwiz-linux-gnu-gcc"
 	env.Append(CPPPATH=["/toolchain/include", "wiz"], LIBPATH=["/toolchain/lib", "wiz"])
 
-source_files = Split("""
+source_files = env.Object(Split("""
 audio.cpp
 finally.cpp
 freetype.cpp
@@ -53,10 +53,11 @@ tess.cpp
 texture.cpp
 window.cpp
 windowptr.cpp
+"""), CPPFLAGS="-std=c++0x")
+source_files += Split("""
 callbacks.c
 ConvertUTF.c
 """)
-env.Append(CPPFLAGS="-std=c++0x")
 
 if env['PLATFORM'] == 'win32': # Windows
 	jnglLibs = Split("freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl")
@@ -70,6 +71,7 @@ if env['PLATFORM'] == 'win32': # Windows
 		linkflags = ""
 	libs = Split("jngl") + jnglLibs
 	env.Program("test.cpp",
+	            CPPFLAGS="-std=c++0x",
 	            CPPPATH=".",
 				LIBPATH=Split(". ./lib"),
 				LIBS=libs,
@@ -102,13 +104,13 @@ if env['PLATFORM'] == 'posix': # Linux
 	else:
 		testEnv = env.Clone()
 		testEnv.ParseConfig("pkg-config --cflags --libs jngl.pc")
-		testEnv.Program("test.cpp")
+		testEnv.Program("test.cpp", CPPFLAGS="-std=c++0x")
 	if int(python):
 		env = env.Clone()
 		env.ParseConfig("pkg-config --cflags --libs jngl.pc")
-		env.Append(CPPPATH="/usr/include/python2.6",
+		env.Append(CPPPATH="/usr/include/python2.7",
 		           LIBPATH=Split(". ./lib ./python"),
-		           LIBS=Split("python2.6 boost_python-py26"))
+		           LIBS=Split("python2.7 boost_python-py27"))
 		env.SharedLibrary(target="python/jngl.so",
 		                  source="python/main.cpp")
 
