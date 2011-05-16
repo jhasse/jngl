@@ -135,7 +135,7 @@ namespace jngl
 		}
 		void LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad)
 		{
-			png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, png_voidp_NULL, png_error_ptr_NULL, png_error_ptr_NULL);
+			png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 			if(!png_ptr)
 			{
 				throw std::runtime_error(std::string("libpng error while reading (" + filename + ")"));
@@ -150,7 +150,7 @@ namespace jngl
 			if(setjmp(png_jmpbuf(png_ptr)))
 			{
 				// Free all of the memory associated with the png_ptr and info_ptr
-				png_destroy_read_struct(&png_ptr, &info_ptr, png_infopp_NULL);
+				png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 				throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
 			}
 			png_init_io(png_ptr, fp);
@@ -160,7 +160,7 @@ namespace jngl
 			{
 				png_set_gray_to_rgb(png_ptr);
 			}
-			png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16, png_voidp_NULL);
+			png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16, NULL);
 
 			png_ptr->num_rows = png_ptr->height; // Make sure this is set correctly
 
@@ -181,7 +181,7 @@ namespace jngl
 					throw std::runtime_error(std::string("Unsupported number of channels. (" + filename + ")"));
 			}
 
-			Finally freePng(boost::bind(png_destroy_read_struct, &png_ptr, &info_ptr, png_infopp_NULL));
+			Finally freePng(boost::bind(png_destroy_read_struct, &png_ptr, &info_ptr, (png_infop*)NULL));
 			LoadTexture(filename, png_ptr->width, png_ptr->height, info_ptr->row_pointers, png_ptr->channels, halfLoad, format);
 		}
 		struct BMPHeader
