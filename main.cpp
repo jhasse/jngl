@@ -27,6 +27,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "opengl.hpp"
 
 #include <boost/shared_ptr.hpp>
+#include <boost/lexical_cast.hpp>
 #include <stdexcept>
 #include <sstream>
 
@@ -40,6 +41,12 @@ namespace jngl
     float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
 	bool Init(const int width, const int height)
 	{
+		GLenum err = glewInit();
+		if(err != GLEW_OK) {
+			throw std::runtime_error(boost::lexical_cast<std::string>(glewGetErrorString(err)));
+		}
+		Debug("Using GLEW "); Debug(glewGetString(GLEW_VERSION)); Debug("\n");
+
 		glShadeModel(GL_SMOOTH);
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnable(GL_BLEND);
@@ -132,13 +139,17 @@ namespace jngl
 		pWindow->Continue();
 	}
 
+	void ClearBackgroundColor() {
+		glClearColor(bgRed, bgGreen, bgBlue, 1);
+	}
+
 	void SetBackgroundColor(const unsigned char red, const unsigned char green, const unsigned char blue)
 	{
 		pWindow.ThrowIfNull();
 		bgRed = red / 255.0f;
 		bgGreen = green / 255.0f;
 		bgBlue = blue / 255.0f;
-		glClearColor(bgRed, bgGreen, bgBlue, 0.0f);
+		ClearBackgroundColor();
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 

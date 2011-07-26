@@ -53,6 +53,8 @@ tess.cpp
 texture.cpp
 window.cpp
 windowptr.cpp
+framebuffer.cpp
+framebufferimpl.cpp
 """), CPPFLAGS="-std=c++0x")
 source_files += Split("""
 callbacks.c

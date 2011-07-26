@@ -272,6 +272,20 @@ namespace jngl
 	int GetDesktopWidth();
 
 	int GetDesktopHeight();
+
+	class FrameBufferImpl;
+	class FrameBuffer {
+	public:
+		FrameBuffer(int width, int height);
+		~FrameBuffer();
+		void BeginDraw();
+		void EndDraw();
+		void Draw(int x, int y) const;
+	private:
+		FrameBuffer(const FrameBuffer&);
+		FrameBuffer& operator=(const FrameBuffer&);
+		FrameBufferImpl* pImpl;
+	};
 }
 
 #endif // __JNGL_HPP__

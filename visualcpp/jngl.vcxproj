@@ -15,6 +15,8 @@
     <ClCompile Include="..\callbacks.c" />
     <ClCompile Include="..\ConvertUTF.c" />
     <ClCompile Include="..\finally.cpp" />
+    <ClCompile Include="..\framebuffer.cpp" />
+    <ClCompile Include="..\framebufferimpl.cpp" />
     <ClCompile Include="..\freetype.cpp" />
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\opengl.cpp" />
@@ -33,7 +35,9 @@
     <ClInclude Include="..\debug.hpp" />
     <ClInclude Include="..\draw.hpp" />
     <ClInclude Include="..\finally.hpp" />
+    <ClInclude Include="..\framebufferimpl.hpp" />
     <ClInclude Include="..\freetype.hpp" />
+    <ClInclude Include="..\jngl.hpp" />
     <ClInclude Include="..\opengl.hpp" />
     <ClInclude Include="..\sprite.hpp" />
     <ClInclude Include="..\texture.hpp" />
@@ -79,7 +83,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>NO_WEAK_LINKING_OPENAL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;NO_WEAK_LINKING_OPENAL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
@@ -98,7 +102,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;NO_WEAK_LINKING_OPENAL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;NO_WEAK_LINKING_OPENAL;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>

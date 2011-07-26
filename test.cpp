@@ -32,17 +32,30 @@ int main()
 		          << "x" << jngl::GetHeight("jngl.png") << std::endl;
 		jngl::ShowWindow("JNGL Test Application", 800, 600);
 		jngl::SetIcon("jngl.png");
-		jngl::SetBackgroundColor(255, 255, 255);
 		jngl::SetMouseVisible(false);
+		jngl::FrameBuffer fb(100, 110);
+		fb.BeginDraw();
+		jngl::SetColor(255, 0, 0);
+		jngl::DrawRect(0, 0, 64, 64);
+		jngl::SetColor(0, 255, 0);
+		jngl::DrawRect(0, 64, 64, 64);
+		jngl::SetColor(0, 0, 255);
+		jngl::DrawRect(64, 0, 64, 64);
+		jngl::Print("Frame\nBuffer\nObject", 50, 10);
+		fb.EndDraw();
+		jngl::FrameBuffer fb2(800, 600);
+		bool drawOnFrameBuffer = false;
 		double rotate = 0.0;
 		int frameNumber = 0;
 		double frameTime = jngl::Time();
 		double lastTime = jngl::Time();
 		while(jngl::Running())
 		{
+			if(drawOnFrameBuffer) {
+				fb2.BeginDraw();
+			}
 			double timeSinceLastFrame = jngl::Time() - lastTime;
 			lastTime = jngl::Time();
-			jngl::BeginDraw();
 			for(int i = 0; i < 10; ++i)
 			{
 				if(jngl::KeyDown(boost::lexical_cast<char>(i)))
@@ -58,6 +71,8 @@ int main()
 			jngl::Rotate(rotate);
 			jngl::DrawLine(-50, -50, 50, 50);
 			jngl::PopMatrix();
+			jngl::SetSpriteColor(255, 255, 255, 200);
+			fb.Draw(600, 300);
 			jngl::Translate(jngl::GetWindowWidth() / 2, jngl::GetWindowHeight() / 2);
 			jngl::Rotate(rotate);
 			rotate += 90 * timeSinceLastFrame; // 90 degree per second
@@ -101,6 +116,7 @@ int main()
 			{
 				jngl::ErrorMessage("Hello World!");
 			}
+			jngl::Print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 430);
 			jngl::Print("Press A to toggle Anti-Aliasing.", 5, 450);
 			if(jngl::KeyPressed('a'))
 			{
@@ -134,8 +150,17 @@ int main()
 			jngl::Print("Use your mouse wheel to change the volume: " + boost::lexical_cast<std::string>(int(volume * 100)) + " %", 6, 550);
 			volume += static_cast<float>(jngl::GetMouseWheel()) / 100.0f;
 			jngl::SetColor(0,0,255,128);
+			if(drawOnFrameBuffer) {
+				fb2.EndDraw();
+				jngl::Reset();
+				jngl::SetSpriteColor(255, 255, 255);
+				fb2.Draw(0, 0);
+			}
+			if(jngl::KeyPressed('f')) {
+				drawOnFrameBuffer = !drawOnFrameBuffer;
+			}
 			DrawMouse();
-			jngl::EndDraw();
+			jngl::SwapBuffers();
 			if(++frameNumber == 500)
 			{
 				std::cout << "It took " << jngl::Time() - frameTime << " seconds to render 500 frames." << std::endl;

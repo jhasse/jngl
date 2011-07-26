@@ -27,11 +27,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <png.h>
 
-PFNGLGENBUFFERSARBPROC glGenBuffers = NULL;					// VBO Name Generation Procedure
-PFNGLBINDBUFFERARBPROC glBindBuffer = NULL;					// VBO Bind Procedure
-PFNGLBUFFERDATAARBPROC glBufferData = NULL;					// VBO Data Loading Procedure
-PFNGLDELETEBUFFERSARBPROC glDeleteBuffers = NULL;				// VBO Deletion Procedure
-
 #include <boost/bind.hpp>
 #include <stdexcept>
 #include <windowsx.h> // GET_X_LPARAM
@@ -104,11 +99,6 @@ namespace jngl
 		mousePressed_.assign(false);
 
 		Init(title, false);
-
-		glGenBuffers = (PFNGLGENBUFFERSARBPROC) wglGetProcAddress("glGenBuffersARB");
-		glBindBuffer = (PFNGLBINDBUFFERARBPROC) wglGetProcAddress("glBindBufferARB");
-		glBufferData = (PFNGLBUFFERDATAARBPROC) wglGetProcAddress("glBufferDataARB");
-		glDeleteBuffers = (PFNGLDELETEBUFFERSARBPROC) wglGetProcAddress("glDeleteBuffersARB");
 	}
 
 	void Window::Init(const std::string& title, const bool multisample)
@@ -542,45 +532,22 @@ namespace jngl
 		return characterPressed_[key];
 	}
 
-	LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
-								UINT	uMsg,			// Message For This Window
-								WPARAM	wParam,			// Additional Message Information
-								LPARAM	lParam)			// Additional Message Information
+	LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		switch (uMsg)									// Check For Windows Messages
 		{
-			case WM_ACTIVATE:							// Watch For Window Activate Message
-			{
-				if (!HIWORD(wParam))					// Check Minimization State
-				{
-					//active=TRUE;						// Program Is Active
-				}
-				else
-				{
-					//active=FALSE;						// Program Is No Longer Active
-				}
-
-				return 0;								// Return To The Message Loop
-			}
 			case WM_SYSCOMMAND:							// Intercept System Commands
-			{
-				switch (wParam)							// Check System Calls
+				switch(wParam)							// Check System Calls
 				{
 					case SC_SCREENSAVE:					// Screensaver Trying To Start?
 					case SC_MONITORPOWER:				// Monitor Trying To Enter Powersave?
 					return 0;							// Prevent From Happening
 				}
 				break;									// Exit
-			}
-
 			case WM_CLOSE:								// Did We Receive A Close Message?
-			{
 				PostQuitMessage(0);						// Send A Quit Message
 				return 0;								// Jump Back
-			}
 		}
-
-		// Pass All Unhandled Messages To DefWindowProc
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
 
