@@ -166,6 +166,34 @@ namespace jngl
 			case key::PageUp: return SDLK_PAGEUP;
 			case key::PageDown: return SDLK_PAGEDOWN;
 			case key::Return: return SDLK_RETURN;
+			case key::Space: return SDLK_SPACE;
+			case key::Home: return SDLK_HOME;
+			case key::End: return SDLK_END;
+			case key::Tab: return SDLK_TAB;
+			case key::Clear: return SDLK_CLEAR;
+			case key::Pause: return SDLK_PAUSE;
+			case key::Delete: return SDLK_DELETE;
+			case key::ControlL: return SDLK_LCTRL;
+			case key::ControlR: return SDLK_RCTRL;
+			case key::CapsLock: return SDLK_CAPSLOCK;
+			case key::AltL: return SDLK_LALT;
+			case key::AltR: return SDLK_RALT;
+			case key::SuperL: return SDLK_LSUPER;
+			case key::SuperR: return SDLK_RSUPER;
+			case key::ShiftL: return SDLK_LSHIFT;
+			case key::ShiftR: return SDLK_RSHIFT;
+			case key::F1: return SDLK_F1;
+			case key::F2: return SDLK_F2;
+			case key::F3: return SDLK_F3;
+			case key::F4: return SDLK_F4;
+			case key::F5: return SDLK_F5;
+			case key::F6: return SDLK_F6;
+			case key::F7: return SDLK_F7;
+			case key::F8: return SDLK_F8;
+			case key::F9: return SDLK_F9;
+			case key::F10: return SDLK_F10;
+			case key::F11: return SDLK_F11;
+			case key::F12: return SDLK_F12;
 			default: return 0;
 		}
 	}
