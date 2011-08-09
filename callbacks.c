@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2009  Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -17,9 +17,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OPENGLES
+#include "callbacks.h"
 
-#ifndef linux
+#if defined (OPENGLES) || defined (__APPLE__)
+
+void InitCallbacks() {}
+
+#else
+
+#ifdef WIN32
 #include <windows.h>
 #endif
 #include <GL/glu.h>
@@ -27,7 +33,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 GLUtesselator* tobj = NULL;
 
-#ifndef linux
+#ifdef WIN32
 #define CALLBACK __stdcall
 #else
 #define CALLBACK
@@ -68,9 +74,5 @@ void InitCallbacks()
 		gluTessCallback(tobj, GLU_TESS_COMBINE, combineCallback);
 	}
 }
-
-#else // OPENGLES
-
-void InitCallbacks() {}
 
 #endif

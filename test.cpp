@@ -171,6 +171,9 @@ int main()
 			{
 				TestKeys();
 			}
+			if(jngl::KeyPressed(jngl::key::Escape)) {
+				jngl::Quit();
+			}
 		}
 	}
 	catch(std::exception& e)

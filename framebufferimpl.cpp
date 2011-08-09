@@ -48,7 +48,9 @@ namespace jngl {
 
 	void FrameBufferImpl::BeginDraw() {
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
 		glPushAttrib(GL_VIEWPORT_BIT);
+
 		glViewport(0, -(pWindow->GetHeight() - height), pWindow->GetWidth(), pWindow->GetHeight());
 		glPushMatrix();
 		glClearColor(1, 1, 1, 0);

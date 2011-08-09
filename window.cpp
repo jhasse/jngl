@@ -28,7 +28,8 @@ namespace jngl
 		return fonts_[fontSize_][fontName_].GetTextWidth(text);
 	}
 
-	int Window::GetLineHeight() {
+	int Window::GetLineHeight()
+	{
 		return fonts_[fontSize_][fontName_].GetLineHeight();
 	}
 

@@ -17,10 +17,30 @@ You should have received a copy of the GNU Lesser General Public License
 along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OPENGLES
+#if defined (OPENGLES) || defined (__APPLE__)
+
+#include "jngl.hpp"
+
+namespace jngl
+{
+	void BeginPolygon()
+	{
+	}
+    
+	void Vertex(const double xposition, const double yposition)
+	{
+	}
+    
+	void EndPolygon()
+	{
+	}
+}
+
+#else
 
 #include "sprite.hpp"
 #include "opengl.hpp"
+#include "callbacks.h"
 
 #include <GL/glu.h>
 #include <stdlib.h>
@@ -28,10 +48,8 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 
-extern "C"
-{
-	extern GLUtesselator* tobj;
-	void InitCallbacks(); // Defined in callbacks.c
+extern "C" {
+extern GLUtesselator* tobj;
 }
 
 namespace jngl
@@ -66,23 +84,6 @@ namespace jngl
 		}
 		positions.clear();
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
-	}
-}
-
-#else // OPENGLES
-
-namespace jngl
-{
-	void BeginPolygon()
-	{
-	}
-
-	void Vertex(const double xposition, const double yposition)
-	{
-	}
-
-	void EndPolygon()
-	{
 	}
 }
 

@@ -41,7 +41,11 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 		#include <X11/keysym.h>
 	#endif
 #else
-	#include <windows.h>
+    #ifdef __APPLE__
+        #include <SDL.h>
+    #else
+        #include <windows.h>
+    #endif
 #endif
 
 namespace jngl
@@ -83,7 +87,7 @@ namespace jngl
 		void SetIcon(const std::string&);
 		void UpdateKeyStates();
 		double GetMouseWheel() const;
-#ifndef WIZ
+#ifndef __APPLE__
 	#ifdef __linux
 		boost::shared_ptr<Display> pDisplay_;
 		static void ReleaseXData(void*);
@@ -110,6 +114,7 @@ namespace jngl
 
 		// <fontSize, <fontName, Font> >
 		boost::ptr_map<int, boost::ptr_map<std::string, Font> > fonts_;
+#ifndef __APPLE__
 #ifdef WIZ
 		NativeWindowType nativeWindow_;
 		EGLDisplay display_;
@@ -132,6 +137,10 @@ namespace jngl
 		void Init(const std::string& title, bool multisample);
 		void DistinguishLeftRight();
 	#endif
+#endif
+#else
+		SDL_Window* sdlWindow;
+		SDL_GLContext context;
 #endif
 	};
 }

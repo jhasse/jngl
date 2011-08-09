@@ -13,7 +13,7 @@ for filename in files:
 	Clean('.', newfilename) # Make sure scons -c does clean up tidily
 
 env = Environment()
-env.SetOption('num_jobs', 3)
+env.SetOption('num_jobs', 4)
 
 if env['PLATFORM'] == 'win32':
 	msvc = ARGUMENTS.get('msvc', 0)
@@ -21,6 +21,9 @@ if env['PLATFORM'] == 'win32':
 		env.Append(CCFLAGS = '/EHsc /MD')
 	else:
 		env = Environment(tools=['mingw'])
+
+if env['PLATFORM'] == 'darwin':
+	env = Environment(CXX='/opt/local/bin/g++-mp-4.5', CC='/opt/local/bin/gcc-mp-4.5')
 
 debug = ARGUMENTS.get('debug', 0)
 profile = ARGUMENTS.get('profile', 0)
@@ -64,8 +67,9 @@ ConvertUTF.c
 if env['PLATFORM'] == 'win32': # Windows
 	jnglLibs = Split("freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl")
 	if int(python) or int(msvc):
-		env.Append(CCFLAGS = '-DNO_WEAK_LINKING_OPENAL')
 		jnglLibs += Split("openal32 ogg vorbisfile")
+	else:
+		env.Append(CPPDEFINES='WEAK_LINKING_OPENAL')
 	env.Append(CPPPATH="./include")
 	lib = env.Library(target="jngl", source=source_files + Glob('win32/*.cpp'), LIBS=jnglLibs)
 	linkflags = "-mwindows"
@@ -113,6 +117,26 @@ if env['PLATFORM'] == 'posix': # Linux
 		env.Append(CPPPATH="/usr/include/python2.7",
 		           LIBPATH=Split(". ./lib ./python"),
 		           LIBS=Split("python2.7 boost_python-py27"))
+		env.SharedLibrary(target="python/jngl.so",
+		                  source="python/main.cpp")
+
+if env['PLATFORM'] == 'darwin': # Mac
+	env.Append(LIBS=Split('jngl GLEW jpeg ogg vorbisfile'),
+	           LIBPATH=Split('/opt/local/lib .'),
+	           CPPPATH='/opt/local/include/',
+	           LINKFLAGS='-framework OpenAL -framework OpenGL')
+	env.ParseConfig('/opt/local/bin/pkg-config --cflags --libs freetype2 libpng fontconfig')
+	env.ParseConfig('/opt/local/bin/sdl-config --cflags --libs')
+	env.Library(target="jngl", source=source_files + Glob('sdl/*.cpp'))
+	testEnv = env.Clone()
+	testEnv.Append(CPPPATH='.')
+	testEnv.Program(source='test.cpp', CPPFLAGS='-std=c++0x')
+	if int(python):
+		env = env.Clone()
+		env.Append(CPPPATH='/System/Library/Frameworks/Python.framework/Headers/',
+		           LINKFLAGS='-framework Python',
+		           LIBPATH=Split(". ./lib ./python"),
+		           LIBS=Split("boost_python"))
 		env.SharedLibrary(target="python/jngl.so",
 		                  source="python/main.cpp")
 

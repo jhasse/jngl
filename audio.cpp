@@ -28,12 +28,17 @@ int vswprintf(wchar_t *, const wchar_t *, va_list);
 #include "jngl.hpp"
 #include "debug.hpp"
 
-#ifdef NO_WEAK_LINKING_OPENAL
-	#include <AL/al.h>
-	#include <AL/alc.h>
-	#include <vorbis/vorbisfile.h>
-#else
+#ifdef WEAK_LINKING_OPENAL
 	#include "win32/openal.hpp"
+#else
+    #ifdef __APPLE__
+        #include <OpenAL/al.h>
+        #include <OpenAL/alc.h>
+    #else
+        #include <AL/al.h>
+        #include <AL/alc.h>
+    #endif
+	#include <vorbis/vorbisfile.h>
 #endif
 
 #include <cstdio>
@@ -177,13 +182,13 @@ namespace jngl
 			{
 				format = AL_FORMAT_STEREO16;
 			}
-			freq = pInfo->rate;
+			freq = static_cast<ALsizei>(pInfo->rate);
 
 			const int bufferSize = 32768;
 			char array[bufferSize]; // 32 KB buffers
 			const int endian = 0; // 0 for Little-Endian, 1 for Big-Endian
 			int bitStream;
-			int bytes;
+			long bytes;
 			do
 			{
 				bytes = ov_read(&oggFile, array, bufferSize, endian, 2, 1, &bitStream);
@@ -244,7 +249,7 @@ namespace jngl
 
 	bool IsOpenALInstalled()
 	{
-#ifndef NO_WEAK_LINKING_OPENAL
+#ifdef WEAK_LINKING_OPENAL
 		try
 		{
 			GetAudio();
