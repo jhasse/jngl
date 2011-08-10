@@ -162,18 +162,17 @@ namespace jngl
 			}
 			png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16, NULL);
 
-			png_ptr->num_rows = png_ptr->height; // Make sure this is set correctly
-
 			GLenum format;
-			switch(png_ptr->channels)
+			int channels = png_get_channels(png_ptr, info_ptr);
+			switch(channels)
 			{
 				case 1: // gray or palette, we can set channels to 3 because we passed PNG_TRANSFORM_EXPAND to png_read_png
-					png_ptr->channels = 3; // we need this value when creating the texture for OpenGL
+					channels = 3; // we need this value when creating the texture for OpenGL
 				case 3:
 					format = GL_RGB;
 				break;
 				case 2: // gray + alpha
-					png_ptr->channels = 4;
+					channels = 4;
 				case 4:
 					format = GL_RGBA;
 				break;
@@ -182,7 +181,11 @@ namespace jngl
 			}
 
 			Finally freePng(boost::bind(png_destroy_read_struct, &png_ptr, &info_ptr, (png_infop*)NULL));
-			LoadTexture(filename, png_ptr->width, png_ptr->height, info_ptr->row_pointers, png_ptr->channels, halfLoad, format);
+			LoadTexture(filename,
+			            png_get_image_width(png_ptr, info_ptr),
+			            png_get_image_height(png_ptr, info_ptr),
+			            png_get_rows(png_ptr, info_ptr),
+			            channels, halfLoad, format);
 		}
 		struct BMPHeader
 		{
