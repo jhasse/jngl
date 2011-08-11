@@ -122,8 +122,8 @@ int main()
 			{
 				jngl::SetAntiAliasing(!jngl::GetAntiAliasing());
 			}
-			jngl::Print("Press F11 to switch fullscreen mode.", 5, 470);
-			if(jngl::KeyPressed(jngl::key::F11))
+			jngl::Print("Press F1 to switch fullscreen mode.", 5, 470);
+			if(jngl::KeyPressed(jngl::key::F1))
 			{
 				jngl::ShowWindow("JNGL Test Application", 800, 600, !jngl::GetFullscreen());
 			}

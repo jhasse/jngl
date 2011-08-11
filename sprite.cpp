@@ -181,10 +181,11 @@ namespace jngl
 			}
 
 			Finally freePng(boost::bind(png_destroy_read_struct, &png_ptr, &info_ptr, (png_infop*)NULL));
+			unsigned char** row_pointers = png_get_rows(png_ptr, info_ptr);
 			LoadTexture(filename,
-			            png_get_image_width(png_ptr, info_ptr),
-			            png_get_image_height(png_ptr, info_ptr),
-			            png_get_rows(png_ptr, info_ptr),
+			            static_cast<int>(png_get_image_width(png_ptr, info_ptr)),
+			            static_cast<int>(png_get_image_height(png_ptr, info_ptr)),
+			            row_pointers,
 			            channels, halfLoad, format);
 		}
 		struct BMPHeader
