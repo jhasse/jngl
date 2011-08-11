@@ -125,7 +125,7 @@ if env['PLATFORM'] == 'darwin': # Mac
 	           LIBPATH=Split('/opt/local/lib .'),
 	           CPPPATH='/opt/local/include/',
 	           LINKFLAGS='-framework OpenAL -framework OpenGL')
-	env.ParseConfig('/opt/local/bin/pkg-config --cflags --libs freetype2 libpng fontconfig')
+	env.ParseConfig('/opt/local/bin/pkg-config --cflags --libs freetype2 libpng')
 	env.ParseConfig('/opt/local/bin/sdl-config --cflags --libs')
 	env.Library(target="jngl", source=source_files + Glob('sdl/*.cpp'))
 	testEnv = env.Clone()
