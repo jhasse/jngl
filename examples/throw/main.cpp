@@ -30,7 +30,7 @@ int main()
 		if(jngl::Time() - oldTime > timePerFrame)
 		{
 			oldTime += timePerFrame;
-			ball.CheckMouse(jngl::MouseX(), jngl::MouseY());
+			ball.CheckMouse(jngl::GetMouseX(), jngl::GetMouseY());
 			ball.Move();
 		}
 		else
@@ -43,7 +43,7 @@ int main()
 }
 
 Ball::Ball(const std::string& filename) : x_(100), y_(100), xSpeed_(200), ySpeed_(200),
-    filename_(filename), width_(jngl::Width(filename)), height_(jngl::Height(filename))
+    filename_(filename), width_(jngl::GetWidth(filename)), height_(jngl::GetHeight(filename))
 {
 }
 
