@@ -30,7 +30,7 @@ namespace jngl {
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		glGenRenderbuffers(1, &buffer);
 		glBindRenderbuffer(GL_RENDERBUFFER, buffer);
-		glRenderbufferStorage(buffer, GL_DEPTH_COMPONENT, width, height);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, buffer);
 
 		

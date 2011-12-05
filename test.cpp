@@ -395,12 +395,12 @@ void TestKeys()
 			y += 15;
 		}
 		auto end = recentlyPressedKeys.end();
-		std::for_each(recentlyPressedKeys.begin(), end, [](RecentlyPressedKey& k) {
+/*		std::for_each(recentlyPressedKeys.begin(), end, [](RecentlyPressedKey& k) {
 			k.Draw();
 		});
 		recentlyPressedKeys.erase(std::remove_if(recentlyPressedKeys.begin(), end, [](const RecentlyPressedKey& k) -> bool {
 			return k.GetAlpha() <= 0;
-		}), end);
+		}), end);*/
 		jngl::EndDraw();
 	}
 }

@@ -27,76 +27,54 @@ int vswprintf(wchar_t *, const wchar_t *, va_list);
 
 #include "jngl.hpp"
 #include "debug.hpp"
-
-#ifdef WEAK_LINKING_OPENAL
-	#include "win32/openal.hpp"
-#else
-    #ifdef __APPLE__
-        #include <OpenAL/al.h>
-        #include <OpenAL/alc.h>
-    #else
-        #include <AL/al.h>
-        #include <AL/alc.h>
-    #endif
-	#include <vorbis/vorbisfile.h>
-#endif
+#include "audio.hpp"
 
 #include <cstdio>
-#include <vector>
 #include <stdexcept>
 #include <map>
-#include <boost/shared_ptr.hpp>
-#include <boost/noncopyable.hpp>
 
 namespace jngl
 {
-	class Sound : boost::noncopyable {
-	public:
-		Sound(ALenum format, std::vector<char>& bufferData, ALsizei freq) : source_(0)
-		{
-			alGenBuffers(1, &buffer_);
-			alGenSources(1, &source_);
-			alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
-			alSource3f(source_, AL_POSITION, 0.0f, 0.0f, 0.0f);
-			alBufferData(buffer_, format, &bufferData[0], static_cast<ALsizei>(bufferData.size()), freq);
-			alSourcei(source_, AL_BUFFER, buffer_);
-			alSourcePlay(source_);
-		}
-		~Sound()
-		{
-			Debug("freeing sound buffer ... ");
-			alSourceStop(source_);
-			alSourceUnqueueBuffers(source_, 1, &buffer_);
-			alDeleteSources(1, &source_);
-			alDeleteBuffers(1, &buffer_);
-			Debug("OK\n");
-		}
-		bool IsPlaying()
-		{
-			ALint state;
-			alGetSourcei(source_, AL_SOURCE_STATE, &state);
-			return state == AL_PLAYING;
-		}
-		bool Stopped()
-		{
-			ALint state;
-			alGetSourcei(source_, AL_SOURCE_STATE, &state);
-			return state == AL_STOPPED;
-		}
-		void SetPitch(float p)
-		{
-			alSourcef(source_, AL_PITCH, p);
-		}
-		void SetVolume(float v) {
-			alSourcef(source_, AL_GAIN, v);
-		}
-	private:
-		ALuint buffer_;
-		ALuint source_;
-	};
+	Sound::Sound(ALenum format, std::vector<char>& bufferData, ALsizei freq) : source_(0)
+	{
+		alGenBuffers(1, &buffer_);
+		alGenSources(1, &source_);
+		alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
+		alSource3f(source_, AL_POSITION, 0.0f, 0.0f, 0.0f);
+		alBufferData(buffer_, format, &bufferData[0], static_cast<ALsizei>(bufferData.size()), freq);
+		alSourcei(source_, AL_BUFFER, buffer_);
+		alSourcePlay(source_);
+	}
+	Sound::~Sound()
+	{
+		Debug("freeing sound buffer ... ");
+		alSourceStop(source_);
+		alSourceUnqueueBuffers(source_, 1, &buffer_);
+		alDeleteSources(1, &source_);
+		alDeleteBuffers(1, &buffer_);
+		Debug("OK\n");
+	}
+	bool Sound::IsPlaying()
+	{
+		ALint state;
+		alGetSourcei(source_, AL_SOURCE_STATE, &state);
+		return state == AL_PLAYING;
+	}
+	bool Sound::Stopped()
+	{
+		ALint state;
+		alGetSourcei(source_, AL_SOURCE_STATE, &state);
+		return state == AL_STOPPED;
+	}
+	void Sound::SetPitch(float p)
+	{
+		alSourcef(source_, AL_PITCH, p);
+	}
+	void Sound::SetVolume(float v) {
+		alSourcef(source_, AL_GAIN, v);
+	}
 
-	class SoundFile;
-	std::map<std::string, boost::shared_ptr<SoundFile> > sounds;
+	std::map<std::string, std::shared_ptr<SoundFile> > sounds;
 
 	class Audio : boost::noncopyable {
 	public:
@@ -125,25 +103,25 @@ namespace jngl
 			alcDestroyContext(context_);
 			alcCloseDevice(device_);
 		}
-		static bool IsStopped(boost::shared_ptr<Sound>& s)
+		static bool IsStopped(std::shared_ptr<Sound>& s)
 		{
 			return s->Stopped();
 		}
-		void Play(boost::shared_ptr<Sound> sound)
+		void Play(std::shared_ptr<Sound>& sound)
 		{
 			sounds_.erase(remove_if(sounds_.begin(), sounds_.end(), IsStopped), sounds_.end());
-			sounds_.push_back(boost::shared_ptr<Sound>(sound));
+			sounds_.push_back(sound);
 		}
-		void Stop(boost::shared_ptr<Sound> sound)
+		void Stop(std::shared_ptr<Sound>& sound)
 		{
-			std::vector<boost::shared_ptr<Sound> >::iterator i;
+			std::vector<std::shared_ptr<Sound> >::iterator i;
 			if((i = std::find(sounds_.begin(), sounds_.end(), sound)) != sounds_.end()) // sound hasn't been loaded yet?
 			{
 				sounds_.erase(i);
 			}
 		}
 	private:
-		std::vector<boost::shared_ptr<Sound> > sounds_;
+		std::vector<std::shared_ptr<Sound> > sounds_;
 		ALCdevice* device_;
 		ALCcontext* context_;
 	};
@@ -154,98 +132,89 @@ namespace jngl
 		return audio_;
 	}
 
-	class SoundFile : boost::noncopyable {
-	public:
-		SoundFile(const std::string& filename) : sound_((Sound*)0)
+	SoundFile::SoundFile(const std::string& filename) : sound_((Sound*)0)
+	{
+		Debug("Decoding "); Debug(filename); Debug(" ... ");
+		// based on http://www.gamedev.net/reference/articles/article2031.asp
+		FILE* f = fopen(filename.c_str(), "rb");
+		if(!f)
 		{
-			Debug("Decoding "); Debug(filename); Debug(" ... ");
-			// based on http://www.gamedev.net/reference/articles/article2031.asp
-			FILE* f = fopen(filename.c_str(), "rb");
-			if(!f)
-			{
-				throw std::runtime_error("File not found (" + filename + ").");
-			}
-
-			OggVorbis_File oggFile;
-			if(ov_open(f, &oggFile, 0, 0) != 0)
-			{
-				throw std::runtime_error("Could not open OGG file (" + filename + ").");
-			}
-
-			vorbis_info* pInfo;
-			pInfo = ov_info(&oggFile, -1);
-			if(pInfo->channels == 1)
-			{
-				format = AL_FORMAT_MONO16;
-			}
-			else
-			{
-				format = AL_FORMAT_STEREO16;
-			}
-			freq = static_cast<ALsizei>(pInfo->rate);
-
-			const int bufferSize = 32768;
-			char array[bufferSize]; // 32 KB buffers
-			const int endian = 0; // 0 for Little-Endian, 1 for Big-Endian
-			int bitStream;
-			long bytes;
-			do
-			{
-				bytes = ov_read(&oggFile, array, bufferSize, endian, 2, 1, &bitStream);
-
-				if (bytes < 0)
-				{
-					ov_clear(&oggFile);
-					throw std::runtime_error("Error decoding OGG file.");
-				}
-
-				buffer_.insert(buffer_.end(), array, array + bytes);
-			}
-			while(bytes > 0);
-
-			ov_clear(&oggFile);
-			Debug("OK\n");
+			throw std::runtime_error("File not found (" + filename + ").");
 		}
-		void Play()
+
+		OggVorbis_File oggFile;
+		if(ov_open(f, &oggFile, 0, 0) != 0)
 		{
-			sound_.reset(new Sound(format, buffer_, freq));
-			GetAudio().Play(sound_);
+			throw std::runtime_error("Could not open OGG file (" + filename + ").");
 		}
-		void Stop()
+
+		vorbis_info* pInfo;
+		pInfo = ov_info(&oggFile, -1);
+		if(pInfo->channels == 1)
 		{
-			if(sound_)
-			{
-				GetAudio().Stop(sound_);
-				sound_.reset((Sound*)0);
-			}
+			format = AL_FORMAT_MONO16;
 		}
-		bool IsPlaying()
+		else
 		{
-			if(sound_)
-			{
-				return sound_->IsPlaying();
-			}
-			return false;
+			format = AL_FORMAT_STEREO16;
 		}
-		void SetPitch(float p)
+		freq = static_cast<ALsizei>(pInfo->rate);
+
+		const int bufferSize = 32768;
+		char array[bufferSize]; // 32 KB buffers
+		const int endian = 0; // 0 for Little-Endian, 1 for Big-Endian
+		int bitStream;
+		long bytes;
+		do
 		{
-			if(sound_)
+			bytes = ov_read(&oggFile, array, bufferSize, endian, 2, 1, &bitStream);
+
+			if (bytes < 0)
 			{
-				sound_->SetPitch(p);
+				ov_clear(&oggFile);
+				throw std::runtime_error("Error decoding OGG file.");
 			}
+
+			buffer_.insert(buffer_.end(), array, array + bytes);
 		}
-		void SetVolume(float v) {
-			if(sound_) {
-				sound_->SetVolume(v);
-			}
+		while(bytes > 0);
+
+		ov_clear(&oggFile);
+		Debug("OK\n");
+	}
+	void SoundFile::Play()
+	{
+		sound_.reset(new Sound(format, buffer_, freq));
+		GetAudio().Play(sound_);
+	}
+	void SoundFile::Stop()
+	{
+		if(sound_)
+		{
+			GetAudio().Stop(sound_);
+			sound_.reset((Sound*)0);
 		}
-	private:
-		boost::shared_ptr<Sound> sound_;
-		ALint state;
-		ALenum format;
-		ALsizei freq;
-		std::vector<char> buffer_;
-	};
+	}
+	bool SoundFile::IsPlaying()
+	{
+		if(sound_)
+		{
+			return sound_->IsPlaying();
+		}
+		return false;
+	}
+	void SoundFile::SetPitch(float p)
+	{
+		if(sound_)
+		{
+			sound_->SetPitch(p);
+		}
+	}
+	void SoundFile::SetVolume(float v) {
+		if(sound_) {
+			sound_->SetVolume(v);
+		}
+	}
 
 	bool IsOpenALInstalled()
 	{
@@ -266,8 +235,8 @@ namespace jngl
 	SoundFile& GetSoundFile(const std::string& filename)
 	{
 		GetAudio();
-		std::map<std::string, boost::shared_ptr<SoundFile> >::iterator i;
-		if((i = sounds.find(filename)) == sounds.end()) // sound hasn't been loaded yet?
+		auto i = sounds.find(filename);
+		if(i == sounds.end()) // sound hasn't been loaded yet?
 		{
 			sounds[filename].reset(new SoundFile(filename));
 			return *(sounds[filename]);

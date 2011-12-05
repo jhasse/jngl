@@ -1,5 +1,5 @@
 /*
-Copyright 2010 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2010-2011 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -19,9 +19,54 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#ifdef WEAK_LINKING_OPENAL
+ #include "win32/openal.hpp"
+#else
+ #ifdef __APPLE__
+  #include <OpenAL/al.h>
+  #include <OpenAL/alc.h>
+ #else
+  #include <AL/al.h>
+  #include <AL/alc.h>
+ #endif
+ #include <vorbis/vorbisfile.h>
+#endif
+
 #include <string>
+#include <vector>
+#include <memory>
+#include <boost/noncopyable.hpp>
 
 namespace jngl
 {
 	void LoadSound(const std::string&);
+
+	class Sound : boost::noncopyable {
+	public:
+		Sound(ALenum format, std::vector<char>& bufferData, ALsizei freq);
+		~Sound();
+		bool IsPlaying();
+		bool Stopped();
+		void SetPitch(float p);
+		void SetVolume(float v);
+	private:
+		ALuint buffer_;
+		ALuint source_;
+	};
+	
+	class SoundFile : boost::noncopyable {
+	public:
+		SoundFile(const std::string& filename);
+		void Play();
+		void Stop();
+		bool IsPlaying();
+		void SetPitch(float p);
+		void SetVolume(float v);
+	private:
+		std::shared_ptr<Sound> sound_;
+		ALint state;
+		ALenum format;
+		ALsizei freq;
+		std::vector<char> buffer_;
+	};
 };
