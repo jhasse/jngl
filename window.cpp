@@ -59,7 +59,7 @@ namespace jngl
 
 	void Window::SetFontSize(const int size)
 	{
-		int oldSize = fontSize_;
+		const int oldSize = fontSize_;
 		fontSize_ = size;
 		try
 		{

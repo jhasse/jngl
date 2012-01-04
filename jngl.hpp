@@ -54,6 +54,14 @@ namespace jngl
 	                double xposition,
 	                double yposition,
 	                float factor);
+	
+	void DrawClipped(const std::string& filename,
+					 double xposition,
+					 double yposition,
+					 float xstart,
+					 float xend,
+					 float ystart,
+					 float yend);
 
 	void DrawRect(double xposition, double yposition, double width, double height);
 

@@ -30,6 +30,7 @@ public:
 	~Texture();
 	void Bind() const;
 	void Draw() const;
+	void DrawClipped(float xstart, float xend, float ystart, float yend) const;
 	GLuint GetID() const;
 private:
 	static bool useVBO_;

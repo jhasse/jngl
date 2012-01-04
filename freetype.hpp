@@ -34,7 +34,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <map>
 
 #include <boost/noncopyable.hpp>
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 namespace jngl
 {
@@ -68,8 +68,8 @@ namespace jngl
 		static int instanceCounter_;
 		static FT_Library library_;
 		FT_Face face_;
-		std::shared_ptr<Finally> freeFace_; // Frees face_ if necessary
+		boost::shared_ptr<Finally> freeFace_; // Frees face_ if necessary
 		unsigned int height_;
-		std::map<unsigned long, std::shared_ptr<Character> > characters_;
+		std::map<unsigned long, boost::shared_ptr<Character> > characters_;
 	};
 }

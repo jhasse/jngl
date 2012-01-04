@@ -1,4 +1,4 @@
-#include <jngl.hpp>
+#include "jngl.hpp"
 #include <cmath>
 #include <sstream>
 #include <iostream>
@@ -16,11 +16,9 @@ void DrawMouse();
 void DrawTess();
 void TestKeys();
 int performance = 1;
+double factor = 0;
 
-double absolute(double v)
-{
-	return v < 0 ? -v : v;
-}
+double absolute(double v);
 
 int main()
 {
@@ -80,7 +78,7 @@ int main()
 			{
 				rotate = 0;
 			}
-			double factor = sin(rotate / 360 * M_PI);
+			factor = sin(rotate / 360 * M_PI);
 			jngl::SetSpriteColor(255, 255, 255, static_cast<unsigned char>(absolute(factor * 255)));
 			jngl::DrawScaled("jngl.png",
 			                 -jngl::GetWidth("jngl.png")  * factor,
@@ -201,9 +199,11 @@ void DrawBackground()
 	}
 	else
 	{
-		jngl::Draw("jngl.png",
-		           jngl::GetWindowWidth() / 2- jngl::GetWidth("jngl.png") / 2,
-		           jngl::GetWindowHeight() / 2- jngl::GetHeight("jngl.png") / 2);
+		jngl::DrawClipped("jngl.png",
+		                  jngl::GetWindowWidth() / 2- jngl::GetWidth("jngl.png") / 2,
+		                  jngl::GetWindowHeight() / 2- jngl::GetHeight("jngl.png") / 2,
+						  0.5 - factor / 2, 0.5 + factor / 2,
+						  0.5 - factor / 2, 0.5 + factor / 2);
 	}
 	jngl::SetColor(255, 0, 0, 100);
 	jngl::DrawRect(600, 30, 100, 100);
@@ -403,4 +403,9 @@ void TestKeys()
 		}), end);*/
 		jngl::EndDraw();
 	}
+}
+
+double absolute(double v)
+{
+	return v < 0 ? -v : v;
 }
