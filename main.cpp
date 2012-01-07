@@ -25,6 +25,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "windowptr.hpp"
 #include "draw.hpp"
 #include "opengl.hpp"
+#include "main.hpp"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>

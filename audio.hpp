@@ -34,7 +34,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <vector>
-#include <memory>
+#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
 namespace jngl
@@ -63,7 +63,7 @@ namespace jngl
 		void SetPitch(float p);
 		void SetVolume(float v);
 	private:
-		std::shared_ptr<Sound> sound_;
+		boost::shared_ptr<Sound> sound_;
 		ALint state;
 		ALenum format;
 		ALsizei freq;

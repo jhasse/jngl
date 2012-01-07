@@ -19,6 +19,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "framebufferimpl.hpp"
 #include "windowptr.hpp"
+#include "main.hpp"
 
 namespace jngl {
 
@@ -55,8 +56,6 @@ namespace jngl {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 	}
-
-	void ClearBackgroundColor(); // defined in main.cpp
 
 	void FrameBufferImpl::EndDraw() {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

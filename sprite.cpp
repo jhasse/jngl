@@ -333,6 +333,14 @@ namespace jngl
 			texture_->Draw();
 			glPopMatrix();
 		}
+		template<class T>
+		void DrawClipped(const T x, const T y, const float xstart, const float xend, const float ystart, const float yend)
+		{
+			glPushMatrix();
+			opengl::Translate(x, y);
+			texture_->DrawClipped(xstart, xend, ystart, yend);
+			glPopMatrix();
+		}
 	private:
 		Texture* texture_;
 		int width_, height_;
@@ -372,6 +380,11 @@ namespace jngl
 	                const float factor)
 	{
 		GetSprite(filename).DrawScaled(xposition, yposition, factor, factor);
+	}
+	
+	void DrawClipped(const std::string& filename, double xposition, double yposition, float xstart, float xend, float ystart, float yend)
+	{
+		GetSprite(filename).DrawClipped(xposition, yposition, xstart, xend, ystart, yend);
 	}
 
 	void LoadSprite(const std::string& filename)

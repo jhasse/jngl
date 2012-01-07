@@ -161,13 +161,51 @@ namespace jngl
 					mousex_ = event.motion.x;
 					mousey_ = event.motion.y;
 					break;
+				case SDL_MOUSEBUTTONDOWN: {
+					int button = -1;
+					if (event.button.button == SDL_BUTTON_LEFT) {
+						button = 0;
+					}
+					if (event.button.button == SDL_BUTTON_MIDDLE) {
+						button = 1;
+					}
+					if (event.button.button == SDL_BUTTON_RIGHT) {
+						button = 2;
+					}
+					if (button >= 0) {
+						mouseDown_.at(button) = true;
+						mousePressed_.at(button) = true;
+					}
+					break;
+				}
+				case SDL_MOUSEBUTTONUP: {
+					int button = -1;
+					if (event.button.button == SDL_BUTTON_LEFT) {
+						button = 0;
+					}
+					if (event.button.button == SDL_BUTTON_MIDDLE) {
+						button = 1;
+					}
+					if (event.button.button == SDL_BUTTON_RIGHT) {
+						button = 2;
+					}
+					if (button >= 0) {
+						mouseDown_.at(button) = false;
+						mousePressed_.at(button) = false;
+					}
+					break;
+				}
 				case SDL_KEYDOWN: {
 					keyDown_[event.key.keysym.sym] = true;
 					keyPressed_[event.key.keysym.sym] = true;
 					const char* name = SDL_GetKeyName(event.key.keysym.sym);
 					if(strlen(name) == 1) {
 						std::string tmp;
-						tmp.append(1, tolower(name[0]));
+						if (KeyDown(key::ShiftL) || KeyDown(key::ShiftR)) {
+							tmp.append(1, name[0]);
+						} else {
+							tmp.append(1, tolower(name[0]));
+						}
 						characterDown_[tmp] = true;
 						characterPressed_[tmp] = true;
 					}
@@ -207,7 +245,7 @@ namespace jngl
 
 	void Window::SetTitle(const std::string& windowTitle)
 	{
-		
+		SDL_WM_SetCaption(windowTitle.c_str(), windowTitle.c_str());
 	}
 
 	int Window::MouseX()
