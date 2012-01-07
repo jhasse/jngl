@@ -2,7 +2,7 @@
 
 import os
 
-version = "0.9.5"
+version = "0.9.6"
 
 #Replace @VERSION@ in certain files
 files = ["jngl.pc.in", "autopackage/default.apspec.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
@@ -58,14 +58,14 @@ window.cpp
 windowptr.cpp
 framebuffer.cpp
 framebufferimpl.cpp
-"""), CPPFLAGS="-std=c++0x")
+"""), CPPFLAGS="-std=gnu++0x")
 source_files += Split("""
 callbacks.c
 ConvertUTF.c
 """)
 
 if env['PLATFORM'] == 'win32': # Windows
-	jnglLibs = Split("freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl")
+	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl")
 	if int(python) or int(msvc):
 		jnglLibs += Split("openal32 ogg vorbisfile")
 	else:
@@ -77,7 +77,7 @@ if env['PLATFORM'] == 'win32': # Windows
 		linkflags = ""
 	libs = Split("jngl") + jnglLibs
 	env.Program("test.cpp",
-	            CPPFLAGS="-std=c++0x",
+	            CPPFLAGS="-std=gnu++0x",
 	            CPPPATH=".",
 				LIBPATH=Split(". ./lib"),
 				LIBS=libs,

@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -21,7 +21,6 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "window.hpp"
 #include "debug.hpp"
 #include "sprite.hpp"
-#include "audio.hpp"
 #include "windowptr.hpp"
 #include "draw.hpp"
 #include "opengl.hpp"
@@ -397,6 +396,8 @@ namespace jngl
 	{
 		return antiAliasingEnabled;
 	}
+	
+	void LoadSound(const std::string&); // definied in audio.cpp
 
 	void Load(const std::string& filename)
 	{
