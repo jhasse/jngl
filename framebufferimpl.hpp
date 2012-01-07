@@ -32,6 +32,7 @@ public:
 	void BeginDraw();
 	void EndDraw();
 	void Draw(int x, int y) const;
+	void Clear();
 private:
 	GLuint fbo;
 	GLuint buffer;

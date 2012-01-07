@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2011-2012 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -38,7 +38,8 @@ namespace jngl {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.GetID(), 0);
 
 		assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
-
+		
+		Clear();
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
@@ -52,9 +53,12 @@ namespace jngl {
 		glPushAttrib(GL_VIEWPORT_BIT);
 		glViewport(0, -(pWindow->GetHeight() - height), pWindow->GetWidth(), pWindow->GetHeight());
 		glPushMatrix();
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+	}
+	
+	void FrameBufferImpl::Clear() {
 		glClearColor(1, 1, 1, 0);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 	}
 
 	void FrameBufferImpl::EndDraw() {

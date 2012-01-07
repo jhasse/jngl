@@ -39,4 +39,8 @@ namespace jngl {
 	void FrameBuffer::EndDraw() {
 		return pImpl->EndDraw();
 	}
+	
+	void FrameBuffer::Clear() {
+		return pImpl->Clear();
+	}
 }

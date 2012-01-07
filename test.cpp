@@ -51,6 +51,7 @@ int main()
 		{
 			if(drawOnFrameBuffer) {
 				fb2.BeginDraw();
+				fb2.Clear();
 			}
 			double timeSinceLastFrame = jngl::Time() - lastTime;
 			lastTime = jngl::Time();

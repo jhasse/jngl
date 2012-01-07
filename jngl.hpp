@@ -289,6 +289,7 @@ namespace jngl
 		void BeginDraw();
 		void EndDraw();
 		void Draw(int x, int y) const;
+		void Clear();
 	private:
 		FrameBuffer(const FrameBuffer&);
 		FrameBuffer& operator=(const FrameBuffer&);
