@@ -30,9 +30,11 @@ File ..\lib\libpng.a
 File ..\lib\libz.a
 File ..\lib\libjpeg.a
 File ..\lib\libdl.a
+File ..\lib\libglew32.dll.a
 SetOutPath $INSTDIR\bin
 File ..\vorbis.dll
 File ..\vorbisfile.dll
 File ..\ogg.dll
+File ..\glew32.dll
 
 SectionEnd

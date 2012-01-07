@@ -25,7 +25,7 @@ void InitCallbacks() {}
 
 #else
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 #include <GL/glu.h>
@@ -33,7 +33,7 @@ void InitCallbacks() {}
 
 GLUtesselator* tobj = NULL;
 
-#ifdef WIN32
+#ifdef _WIN32
 #define CALLBACK __stdcall
 #else
 #define CALLBACK

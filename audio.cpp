@@ -32,6 +32,7 @@ int vswprintf(wchar_t *, const wchar_t *, va_list);
 #include <cstdio>
 #include <stdexcept>
 #include <map>
+#include <algorithm>
 
 namespace jngl
 {
