@@ -38,11 +38,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>C:\Python27\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Python27\libs;../../lib;C:\Program Files %28x86%29\boost\boost_1_46_1\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Python27\libs;../../lib;C:\Program Files %28x86%29\boost\boost_1_47\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>C:\Python27\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Python27\libs;../../lib;C:\Program Files %28x86%29\boost\boost_1_46_1\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Python27\libs;../../lib;C:\Program Files %28x86%29\boost\boost_1_47\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

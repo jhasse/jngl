@@ -43,6 +43,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>../..;$(IncludePath)</IncludePath>
     <LibraryPath>../../lib;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>C:\Users\jhasse\git\JNGL</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
