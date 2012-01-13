@@ -348,10 +348,6 @@ namespace jngl
 				case WM_QUIT:
 					running_ = false;
 				break;
-				case WM_MOUSEMOVE:
-					mousex_ = GET_X_LPARAM(msg.lParam);
-					mousey_ = GET_Y_LPARAM(msg.lParam);
-				break;
 				case WM_MOUSEWHEEL:
 					mouseWheel_ += double(GET_WHEEL_DELTA_WPARAM(msg.wParam)) / WHEEL_DELTA;
 				break;
@@ -553,12 +549,18 @@ namespace jngl
 
 	int Window::MouseX()
 	{
-		return mousex_;
+		POINT pnt;
+		GetCursorPos(&pnt);
+		ScreenToClient(pWindowHandle_.get(), &pnt);
+		return pnt.x;
 	}
 
 	int Window::MouseY()
 	{
-		return mousey_;
+		POINT pnt;
+		GetCursorPos(&pnt);
+		ScreenToClient(pWindowHandle_.get(), &pnt);
+		return pnt.y;
 	}
 
 	void Window::SetMouse(const int xposition, const int yposition)
@@ -566,7 +568,7 @@ namespace jngl
 		POINT pnt;
 		pnt.x = xposition;
 		pnt.y = yposition;
-		assert(ClientToScreen(pWindowHandle_.get(), &pnt));
+		ClientToScreen(pWindowHandle_.get(), &pnt);
 		SetCursorPos(pnt.x, pnt.y);
 	}
 
