@@ -89,6 +89,8 @@ namespace jngl
 
 	void Unload(const std::string& filename);
 
+	void UnloadAll();
+
 	int GetWidth(const std::string& filename);
 
 	int GetHeight(const std::string& filename);
@@ -159,6 +161,8 @@ namespace jngl
 	int GetFontSize();
 
 	void SetFontSize(int size);
+
+	std::string GetFont();
 
 	void SetFont(const std::string& filename);
 

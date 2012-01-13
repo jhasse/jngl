@@ -87,6 +87,7 @@ namespace jngl
 		void SetIcon(const std::string&);
 		void UpdateKeyStates();
 		double GetMouseWheel() const;
+		std::string GetFont() const;
 #ifndef __APPLE__
 	#ifdef __linux
 		boost::shared_ptr<Display> pDisplay_;

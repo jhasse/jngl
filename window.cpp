@@ -46,6 +46,11 @@ namespace jngl
 		}
 		fontName_ = filename;
 	}
+	
+	std::string Window::GetFont() const
+	{
+		return fontName_;
+	}
 
 	void Window::SetFontByName(const std::string& name)
 	{

@@ -247,6 +247,11 @@ namespace jngl
 	{
 		pWindow->SetFontSize(size);
 	}
+	
+	std::string GetFont()
+	{
+		return pWindow->GetFont();
+	}
 
 	void SetFont(const std::string& filename)
 	{
