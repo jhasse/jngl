@@ -92,7 +92,7 @@ namespace jngl
 	}
 
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
-		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(false),
+		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false), isMultisampleSupported_(false),
 		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0)
 	{
 		mouseDown_.assign(false);
