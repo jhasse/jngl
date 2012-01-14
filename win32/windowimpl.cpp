@@ -348,6 +348,10 @@ namespace jngl
 				case WM_QUIT:
 					running_ = false;
 				break;
+				case WM_MOUSEMOVE:		
+					mousex_ = GET_X_LPARAM(msg.lParam);
+					mousey_ = GET_Y_LPARAM(msg.lParam);
+				break;
 				case WM_MOUSEWHEEL:
 					mouseWheel_ += double(GET_WHEEL_DELTA_WPARAM(msg.wParam)) / WHEEL_DELTA;
 				break;
@@ -444,6 +448,11 @@ namespace jngl
 			}
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+		}
+		if (relativeMouseMode) {
+			SetMouse(width_ / 2, height_ / 2);
+			mousex_ -= width_ / 2;
+			mousey_ -= height_ / 2;
 		}
 		glLoadIdentity();
 	}
@@ -549,18 +558,12 @@ namespace jngl
 
 	int Window::MouseX()
 	{
-		POINT pnt;
-		GetCursorPos(&pnt);
-		ScreenToClient(pWindowHandle_.get(), &pnt);
-		return pnt.x;
+		return mousex_;
 	}
 
 	int Window::MouseY()
 	{
-		POINT pnt;
-		GetCursorPos(&pnt);
-		ScreenToClient(pWindowHandle_.get(), &pnt);
-		return pnt.y;
+		return mousey_;
 	}
 
 	void Window::SetMouse(const int xposition, const int yposition)
@@ -570,6 +573,15 @@ namespace jngl
 		pnt.y = yposition;
 		ClientToScreen(pWindowHandle_.get(), &pnt);
 		SetCursorPos(pnt.x, pnt.y);
+	}
+	
+	void Window::SetRelativeMouseMode(bool relative) {
+		relativeMouseMode = relative;
+		SetMouseVisible(!relative);
+		if (relative) {
+			SetMouse(width_ / 2, height_ / 2);
+			mousex_ = mousey_ = 0;
+		}
 	}
 
 	void Window::SetIcon(const std::string& filename)

@@ -36,8 +36,8 @@ public:
 private:
 	GLuint fbo;
 	GLuint buffer;
-	Texture texture;
 	const int width;
 	const int height;
+	Texture texture;
 };
 }
