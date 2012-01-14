@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C93B324B14C1B0090053C668 /* sdl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C93B324A14C1B0090053C668 /* sdl.cpp */; };
+		C93B324F14C1B04A0053C668 /* sdl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C93B324E14C1B04A0053C668 /* sdl.hpp */; };
 		C95406CB148D68DA00902BB3 /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9EFACF313F1EA6100E6AE63 /* test.cpp */; };
 		C95406CE148D6DCD00902BB3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3113EAED790086B474 /* OpenGL.framework */; };
 		C95406CF148D6DD500902BB3 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3413EAED8A0086B474 /* OpenAL.framework */; };
@@ -47,6 +49,8 @@
 
 /* Begin PBXFileReference section */
 		C914934E148D620F00A6E3E8 /* Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Test; sourceTree = BUILT_PRODUCTS_DIR; };
+		C93B324A14C1B0090053C668 /* sdl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sdl.cpp; path = sdl/sdl.cpp; sourceTree = "<group>"; };
+		C93B324E14C1B04A0053C668 /* sdl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = sdl.hpp; path = ../sdl/sdl.hpp; sourceTree = "<group>"; };
 		C967FC6814A5FF8B0049D8F2 /* main.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = main.hpp; path = ../main.hpp; sourceTree = "<group>"; };
 		C99A094813EC5079006C46FF /* window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = window.cpp; path = sdl/window.cpp; sourceTree = "<group>"; };
 		C99A094A13EC508C006C46FF /* time.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = time.cpp; path = sdl/time.cpp; sourceTree = "<group>"; };
@@ -139,12 +143,21 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		C93B324D14C1B0340053C668 /* sdl */ = {
+			isa = PBXGroup;
+			children = (
+				C93B324E14C1B04A0053C668 /* sdl.hpp */,
+			);
+			name = sdl;
+			sourceTree = "<group>";
+		};
 		C99A094713EC503A006C46FF /* sdl */ = {
 			isa = PBXGroup;
 			children = (
 				C99A094C13EC509D006C46FF /* message.cpp */,
 				C99A094A13EC508C006C46FF /* time.cpp */,
 				C99A094813EC5079006C46FF /* window.cpp */,
+				C93B324A14C1B0090053C668 /* sdl.cpp */,
 			);
 			name = sdl;
 			sourceTree = "<group>";
@@ -215,6 +228,7 @@
 		C9F1B09F13EAF1D00086B474 /* Header Files */ = {
 			isa = PBXGroup;
 			children = (
+				C93B324D14C1B0340053C668 /* sdl */,
 				C9F1AF5113EAEF420086B474 /* audio.hpp */,
 				C9F1AF5713EAEF420086B474 /* ConvertUTF.h */,
 				C9F1AF5A13EAEF420086B474 /* debug.hpp */,
@@ -242,6 +256,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9E9491514A7DE430048EFCA /* jngl.hpp in Headers */,
+				C93B324F14C1B04A0053C668 /* sdl.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,6 +364,7 @@
 				C9E9490A14A7C40F0048EFCA /* texture.cpp in Sources */,
 				C9E9490B14A7C40F0048EFCA /* window.cpp in Sources */,
 				C9E9490C14A7C40F0048EFCA /* windowptr.cpp in Sources */,
+				C93B324B14C1B0090053C668 /* sdl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

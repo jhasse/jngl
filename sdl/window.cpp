@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2011-2012 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -19,27 +19,12 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../window.hpp"
 #include "../debug.hpp"
+#include "sdl.hpp"
 
 #include <stdexcept>
 
 namespace jngl
-{
-	class SDL {
-	public:
-		static void init() {
-			static SDL sdl;
-		}
-	private:
-		SDL() {
-			if(SDL_Init(SDL_INIT_VIDEO) < 0) {
-				throw std::runtime_error(SDL_GetError());
-			}
-		}
-		~SDL() {
-			SDL_Quit();
-		}
-	};
-		
+{		
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
 		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(true),
 		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0), fontName_("")
@@ -260,6 +245,7 @@ namespace jngl
 
 	void Window::SetMouse(const int xposition, const int yposition)
 	{
+		SDL_WarpMouseInWindow(sdlWindow, xposition, yposition);
 	}
 	
 	void Window::SetIcon(const std::string&)
