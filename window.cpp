@@ -101,6 +101,10 @@ namespace jngl
 	{
 		return isMouseVisible_;
 	}
+	
+	bool Window::GetRelativeMouseMode() const {
+		return relativeMouseMode;
+	}
 
 	int Window::GetWidth() const
 	{

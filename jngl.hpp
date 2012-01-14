@@ -105,6 +105,8 @@ namespace jngl
 	void EndPolygon();
 
 	void SetRelativeMouseMode(bool relative);
+	
+	bool GetRelativeMouseMode();
 
 	void SetMouseVisible(bool visible);
 

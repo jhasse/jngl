@@ -211,6 +211,10 @@ namespace jngl
 	{
 		return pWindow->GetMouseVisible();
 	}
+	
+	bool GetRelativeMouseMode() {
+		return pWindow->GetRelativeMouseMode();
+	}
 
 	void SetTitle(const std::string& title)
 	{

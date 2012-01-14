@@ -62,6 +62,7 @@ namespace jngl
 		void Quit();
 		void Continue();
 		void SetRelativeMouseMode(bool relative);
+		bool GetRelativeMouseMode() const;
 		void SetMouseVisible(bool visible);
 		bool GetMouseVisible() const;
 		int MouseX();

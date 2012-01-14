@@ -408,7 +408,7 @@ void TestKeys()
 		std::stringstream sstream;
 		sstream << "X: " << jngl::GetMouseX() << "\nY: " << jngl::GetMouseY() << std::endl;
 		jngl::Print(sstream.str(), 5, 5);
-		if (!jngl::IsMouseVisible()) {
+		if (jngl::GetRelativeMouseMode()) {
 			xpos += jngl::GetMouseX();
 			ypos += jngl::GetMouseY();
 			DrawMouse(xpos, ypos);
