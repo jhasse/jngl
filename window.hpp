@@ -61,7 +61,8 @@ namespace jngl
 		void EndDraw();
 		void Quit();
 		void Continue();
-		void SetMouseVisible(const bool visible);
+		void SetRelativeMouseMode(bool relative);
+		void SetMouseVisible(bool visible);
 		bool GetMouseVisible() const;
 		int MouseX();
 		int MouseY();
@@ -100,7 +101,7 @@ namespace jngl
 	private:
 		int GetKeyCode(jngl::key::KeyType key);
 		std::string GetFontFileByName(const std::string& fontname);
-		bool fullscreen_, running_, isMouseVisible_, isMultisampleSupported_, anyKeyPressed_;
+		bool fullscreen_, running_, isMouseVisible_, relativeMouseMode, isMultisampleSupported_, anyKeyPressed_;
 		boost::array<bool, 3> mouseDown_;
 		boost::array<bool, 3> mousePressed_;
 		std::map<unsigned int, bool> keyDown_;

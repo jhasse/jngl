@@ -26,7 +26,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 namespace jngl
 {		
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
-		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(true),
+		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false), isMultisampleSupported_(true),
 		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0), fontName_("")
 	{
 		mouseDown_.assign(false);
@@ -136,6 +136,10 @@ namespace jngl
 
 	void Window::BeginDraw()
 	{
+		if (relativeMouseMode) {
+			mousex_ = 0;
+			mousey_ = 0;
+		}
 		SDL_Event event;
 		while(SDL_PollEvent(&event)) {
 			switch(event.type) {
@@ -143,8 +147,13 @@ namespace jngl
 					running_ = false;
 					break;
 				case SDL_MOUSEMOTION:
-					mousex_ = event.motion.x;
-					mousey_ = event.motion.y;
+					if (relativeMouseMode) {
+						mousex_ = event.motion.xrel;
+						mousey_ = event.motion.yrel;
+					} else {
+						mousex_ = event.motion.x;
+						mousey_ = event.motion.y;
+					}
 					break;
 				case SDL_MOUSEBUTTONDOWN: {
 					int button = -1;
@@ -221,6 +230,7 @@ namespace jngl
 
 	void Window::SetMouseVisible(const bool visible)
 	{
+		isMouseVisible_ = visible;
 		if(visible) {
 			SDL_ShowCursor(SDL_ENABLE);
 		} else {
@@ -246,6 +256,18 @@ namespace jngl
 	void Window::SetMouse(const int xposition, const int yposition)
 	{
 		SDL_WarpMouseInWindow(sdlWindow, xposition, yposition);
+	}
+	
+	void Window::SetRelativeMouseMode(const bool relative) {
+		relativeMouseMode = relative;
+		int rtn = SDL_SetRelativeMouseMode(relative ? SDL_TRUE : SDL_FALSE);
+		assert(rtn != -1);
+		if (relative) {
+			mousex_ = 0;
+			mousey_ = 0;
+		} else {
+			SDL_GetMouseState(&mousex_, &mousey_);
+		}
 	}
 	
 	void Window::SetIcon(const std::string&)

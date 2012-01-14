@@ -197,6 +197,10 @@ namespace jngl
 	{
 		pWindow->SetMouse(xposition, yposition);
 	}
+	
+	void SetRelativeMouseMode(const bool relative) {
+		return pWindow->SetRelativeMouseMode(relative);
+	}
 
 	void SetMouseVisible(const bool visible)
 	{

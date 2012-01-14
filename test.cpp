@@ -12,7 +12,7 @@
 #endif
 
 void DrawBackground();
-void DrawMouse();
+void DrawMouse(int, int);
 void DrawTess();
 void TestKeys();
 int performance = 1;
@@ -158,7 +158,7 @@ int main()
 			if(jngl::KeyPressed('f')) {
 				drawOnFrameBuffer = !drawOnFrameBuffer;
 			}
-			DrawMouse();
+			DrawMouse(jngl::GetMouseX(), jngl::GetMouseY());
 			jngl::SwapBuffers();
 			if(++frameNumber == 500)
 			{
@@ -214,7 +214,7 @@ void DrawBackground()
 	jngl::DrawEllipse(80, 400, 50, 80);
 }
 
-void DrawMouse()
+void DrawMouse(int x, int y)
 {
 	unsigned char red, green, blue;
 	jngl::ReadPixel(jngl::GetMouseX(), jngl::GetMouseY(), red, green, blue);
@@ -224,8 +224,8 @@ void DrawMouse()
 	      << "\nB: " << static_cast<int>(blue);
 	jngl::SetFontSize(8);
 	jngl::SetFontColor(0, 255, 0, 200);
-	jngl::Print(sstream.str(), jngl::GetMouseX() + 30, jngl::GetMouseY() + 10);
-	jngl::Translate(jngl::GetMouseX(), jngl::GetMouseY());
+	jngl::Print(sstream.str(), x + 30, y + 10);
+	jngl::Translate(x, y);
 	jngl::Rotate(-45);
 	jngl::SetFontSize(30);
 	jngl::SetFontColor(10, 10, 200);
@@ -284,8 +284,12 @@ private:
 	double alpha_, x_, y_, lastTime_;
 };
 
+
 void TestKeys()
 {
+	jngl::SetRelativeMouseMode(true);
+	int xpos = 400;
+	int ypos = 300;
 	typedef std::map<std::string, jngl::key::KeyType> MapType;
 	MapType keys;
 	keys["Left"] = jngl::key::Left;
@@ -329,7 +333,6 @@ void TestKeys()
 	std::vector<RecentlyPressedKey> recentlyPressedKeys;
 	while(jngl::Running())
 	{
-		jngl::BeginDraw();
 		jngl::SetFontSize(10);
 		int y = 10;
 		for(MapType::iterator it = keys.begin(); it != keys.end(); ++it)
@@ -401,8 +404,21 @@ void TestKeys()
 		});
 		recentlyPressedKeys.erase(std::remove_if(recentlyPressedKeys.begin(), end, [](const RecentlyPressedKey& k) -> bool {
 			return k.GetAlpha() <= 0;
-		}), end);*/
-		jngl::EndDraw();
+ }), end);*/
+		std::stringstream sstream;
+		sstream << "X: " << jngl::GetMouseX() << "\nY: " << jngl::GetMouseY() << std::endl;
+		jngl::Print(sstream.str(), 5, 5);
+		if (!jngl::IsMouseVisible()) {
+			xpos += jngl::GetMouseX();
+			ypos += jngl::GetMouseY();
+			DrawMouse(xpos, ypos);
+		}
+		if (jngl::KeyPressed(jngl::key::Escape)) {
+			jngl::SetRelativeMouseMode(false);
+			jngl::SetMouseVisible(true);
+			jngl::SetMouse(xpos, ypos);
+		}
+		jngl::SwapBuffers();
 	}
 }
 
