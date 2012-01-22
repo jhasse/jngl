@@ -62,7 +62,7 @@ namespace jngl
 	}
 
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
-		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(true),
+		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false), isMultisampleSupported_(true),
 		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0), fontName_("")
 	{
 		mouseDown_.assign(false);
@@ -360,7 +360,7 @@ namespace jngl
 		return false;
 	}
 
-	void Window::BeginDraw()
+	void Window::UpdateInput()
 	{
 		XEvent event;
 		while (XPending(pDisplay_.get()) > 0)
@@ -371,6 +371,11 @@ namespace jngl
 				case MotionNotify:
 					mousex_ = event.xmotion.x;
 					mousey_ = event.xmotion.y;
+					if (relativeMouseMode) {
+						SetMouse(width_ / 2, height_ / 2);
+						mousex_ -= width_ / 2;
+						mousey_ -= height_ / 2;
+					}
 				break;
 				case KeyPress:
 					keyDown_[event.xkey.keycode] = true;
@@ -415,10 +420,18 @@ namespace jngl
 				break;
 			}
 		}
-		glLoadIdentity();
 	}
 
-	void Window::EndDraw()
+	void Window::SetRelativeMouseMode(bool relative) {
+		relativeMouseMode = relative;
+		SetMouseVisible(!relative);
+		if (relative) {
+			SetMouse(width_ / 2, height_ / 2);
+			mousex_ = mousey_ = 0;
+		}
+	}
+
+	void Window::SwapBuffers()
 	{
 		glXSwapBuffers(pDisplay_.get(), window_);
 	}
