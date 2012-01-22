@@ -65,15 +65,16 @@ namespace jngl
 		int width = opengl::NextPowerOf2(bitmap.width);
 		int height = opengl::NextPowerOf2(bitmap.rows);
 
-		std::vector<GLubyte> data(width * height * 4);
+		std::vector<GLubyte*> data(height);
 
 		for(int y = 0; y < height; y++)
 		{
+			data[y] = new GLubyte[width * 4];
 			for(int x = 0; x < width; x++)
 			{
-				data[x * 4 + y * 4 * width    ] = 255;
-				data[x * 4 + y * 4 * width + 1] = 255;
-				data[x * 4 + y * 4 * width + 2] = 255;
+				data[y][x * 4    ] = 255;
+				data[y][x * 4 + 1] = 255;
+				data[y][x * 4 + 2] = 255;
 				unsigned char alpha = 0;
 				if(x < bitmap.width && y < bitmap.rows) // Are we in the padding zone? (see next_p2)
 				{
@@ -97,12 +98,15 @@ namespace jngl
 						throw std::runtime_error("Unsupported pixel mode\n");
 					}
 				}
-				data[x*4 + y*4*width + 3] = alpha;
+				data[y][x*4 + 3] = alpha;
 			}
 		}
 
-		texture_ = new Texture(width, height);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &data[0]);
+		texture_ = new Texture(width, height, &data[0]);
+		auto end = data.end();
+		for(auto it = data.begin(); it != end; ++it) {
+			delete[] *it;
+		}
 
 		top_ = fontHeight - bitmap_glyph->top;
 		width_ = face->glyph->advance.x >> 6;

@@ -23,7 +23,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace jngl {
 
-	FrameBufferImpl::FrameBufferImpl(int width, int height) : width(width), height(height), texture(width, height) {
+	FrameBufferImpl::FrameBufferImpl(int width, int height) : width(width), height(height), texture(width, height, 0) {
 		if(!GLEW_EXT_framebuffer_object) {
 			throw std::runtime_error("OpenGL Frame Buffer Object not supported!");
 		}

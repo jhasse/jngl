@@ -26,7 +26,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 bool Texture::useVBO_ = true;
 
-Texture::Texture(const int imgWidth, const int imgHeight, GLenum format, int channels)
+Texture::Texture(const int imgWidth, const int imgHeight, GLubyte** rowPointers, GLenum format, int channels)
 {
 	if(useVBO_ && !GLEW_ARB_vertex_buffer_object)
 	{
@@ -60,21 +60,22 @@ Texture::Texture(const int imgWidth, const int imgHeight, GLenum format, int cha
 	GLint vertexes[] = { 0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0 };
 	vertexes_.assign(&vertexes[0], &vertexes[8]);
 
-	// Fill empty space on the right side:
-	if(width - imgWidth > 0)
-	{
-		for(int i = 0; i < imgHeight; ++i)
-		{
-			std::vector<unsigned char> empty((width - imgWidth) * channels, 0);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, imgWidth, i, width - imgWidth, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
+	if (rowPointers) {
+		for (int i = 0; i < imgHeight; ++i) {
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, imgWidth, 1, format, GL_UNSIGNED_BYTE, rowPointers[i]);
 		}
-	}
-
-	// Fill empty space at the bottom:
-	for(int i = imgHeight; i < height; ++i)
-	{
-		std::vector<unsigned char> empty(width * channels, 0);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, width, 1, format, GL_UNSIGNED_BYTE, &empty[0]);
+		
+		// Add one addional pixel line to the edges
+		if (imgWidth < width) {
+			for (int i = 0; i < imgHeight; ++i) {
+				glTexSubImage2D(GL_TEXTURE_2D, 0, imgWidth, i, 1, 1, format, GL_UNSIGNED_BYTE, &rowPointers[i][(imgWidth-1)*channels]);
+			}
+		}
+		if (imgHeight < height) {
+			std::vector<char> lastLine(rowPointers[imgHeight-1], rowPointers[imgHeight-1]+imgWidth*channels);
+			lastLine.push_back(lastLine.back());
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, imgHeight, imgWidth+1, 1, format, GL_UNSIGNED_BYTE, &lastLine[0]);
+		}
 	}
 }
 

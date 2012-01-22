@@ -127,11 +127,7 @@ namespace jngl
 				}
 				throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 			}
-			texture_ = new Texture(width_, height_, format, channels);
-			for(int i = 0; i < imgHeight; ++i)
-			{
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, imgWidth, 1, format, GL_UNSIGNED_BYTE, rowPointers[i]);
-			}
+			texture_ = new Texture(width_, height_, reinterpret_cast<GLubyte**>(&rowPointers[0]), format, channels);
 		}
 		void LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad)
 		{

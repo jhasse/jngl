@@ -1,5 +1,5 @@
 /*
-Copyright 2010 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2010-2012 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -26,7 +26,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 class Texture : boost::noncopyable {
 public:
-	Texture(int imgWidth, int imgHeight, GLenum format = GL_RGBA, int channels = 4);
+	Texture(int imgWidth, int imgHeight, GLubyte** rowPointers, GLenum format = GL_RGBA, int channels = 4);
 	~Texture();
 	void Bind() const;
 	void Draw() const;
