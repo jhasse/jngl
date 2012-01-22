@@ -240,7 +240,7 @@ namespace jngl
 
 	void Window::SetTitle(const std::string& windowTitle)
 	{
-		SDL_WM_SetCaption(windowTitle.c_str(), windowTitle.c_str());
+		SDL_SetWindowTitle(sdlWindow, windowTitle.c_str());
 	}
 
 	int Window::MouseX()

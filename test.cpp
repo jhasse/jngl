@@ -28,7 +28,8 @@ int main()
 		          << "x" << jngl::GetDesktopHeight() << std::endl
 		          << "Size of jngl.png: " << jngl::GetWidth("jngl.png")
 		          << "x" << jngl::GetHeight("jngl.png") << std::endl;
-		jngl::ShowWindow("JNGL Test Application", 800, 600);
+		jngl::ShowWindow("SetTitle not working!", 800, 600);
+		jngl::SetTitle("JNGL Test Application");
 		jngl::SetIcon("jngl.png");
 		jngl::SetMouseVisible(false);
 		jngl::FrameBuffer fb(100, 110);
