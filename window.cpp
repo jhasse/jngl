@@ -86,7 +86,7 @@ namespace jngl
 	{
 		if(mousePressed_.at(button))
 		{
-			mousePressed_[button] = false;
+			needToBeSetFalse_.push(&mousePressed_[button]);
 			return true;
 		}
 		return false;

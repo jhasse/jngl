@@ -92,7 +92,7 @@ namespace jngl
 	}
 
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
-		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), isMultisampleSupported_(false),
+		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false), isMultisampleSupported_(false),
 		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0)
 	{
 		mouseDown_.assign(false);
@@ -337,7 +337,7 @@ namespace jngl
 		}
 	}
 
-	void Window::BeginDraw()
+	void Window::UpdateInput()
 	{
 		MSG msg;
 		while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -454,12 +454,11 @@ namespace jngl
 			mousex_ -= width_ / 2;
 			mousey_ -= height_ / 2;
 		}
-		glLoadIdentity();
 	}
 
-	void Window::EndDraw()
+	void Window::SwapBuffers()
 	{
-		SwapBuffers(pDeviceContext_.get());
+		::SwapBuffers(pDeviceContext_.get());
 	}
 
 	void Window::SetMouseVisible(const bool visible)
