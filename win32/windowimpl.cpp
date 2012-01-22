@@ -337,7 +337,7 @@ namespace jngl
 		}
 	}
 
-	void Window::BeginDraw()
+	void Window::UpdateInput()
 	{
 		MSG msg;
 		while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -454,12 +454,11 @@ namespace jngl
 			mousex_ -= width_ / 2;
 			mousey_ -= height_ / 2;
 		}
-		glLoadIdentity();
 	}
 
-	void Window::EndDraw()
+	void Window::SwapBuffers()
 	{
-		SwapBuffers(pDeviceContext_.get());
+		::SwapBuffers(pDeviceContext_.get());
 	}
 
 	void Window::SetMouseVisible(const bool visible)

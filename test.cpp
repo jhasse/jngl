@@ -49,6 +49,7 @@ int main()
 		double lastTime = jngl::Time();
 		while(jngl::Running())
 		{
+			jngl::UpdateInput();
 			if(drawOnFrameBuffer) {
 				fb2.BeginDraw();
 				fb2.Clear();
@@ -333,6 +334,7 @@ void TestKeys()
 	std::vector<RecentlyPressedKey> recentlyPressedKeys;
 	while(jngl::Running())
 	{
+		jngl::UpdateInput();
 		jngl::SetFontSize(10);
 		int y = 10;
 		for(MapType::iterator it = keys.begin(); it != keys.end(); ++it)

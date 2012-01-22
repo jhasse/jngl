@@ -57,10 +57,11 @@ namespace jngl
 		Window(const std::string& title, const int width, const int height, const bool fullscreen);
 		~Window();
 		bool Running();
-		void BeginDraw();
-		void EndDraw();
 		void Quit();
 		void Continue();
+		void UpdateInput();
+		void UpdateKeyStates();
+		void SwapBuffers();
 		void SetRelativeMouseMode(bool relative);
 		bool GetRelativeMouseMode() const;
 		void SetMouseVisible(bool visible);
@@ -87,7 +88,6 @@ namespace jngl
 		void SetFontByName(const std::string&);
 		bool IsMultisampleSupported() const;
 		void SetIcon(const std::string&);
-		void UpdateKeyStates();
 		double GetMouseWheel() const;
 		std::string GetFont() const;
 #ifndef __APPLE__
