@@ -1,3 +1,7 @@
-*.o
-.sconsign.dblite
 *.DS_Store
+.sconsign.dblite
+*.o
+installer/*.nsi
+jngl.pc
+*.so
+*.os
