@@ -91,9 +91,8 @@ BOOST_PYTHON_MODULE(jngl)
 	def("ShowWindow", ShowWindow1);
 	def("ShowWindow", ShowWindow2);
 	def("Running", Running);
+	def("UpdateInput", UpdateInput);
 	def("SwapBuffers", SwapBuffers);
-	def("BeginDraw", BeginDraw);
-	def("EndDraw", EndDraw);
 	def("HideWindow", HideWindow);
 	def("Quit", Quit);
 	def("Continue", Continue);
