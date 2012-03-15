@@ -24,7 +24,11 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 	#include <GLES/egl.h>
 	#include <libogl.h>
 #else
-	#include <GL/glew.h>
+	#ifdef IOS
+		#include <OpenGLES/ES1/gl.h>
+	#else
+		#include <GL/glew.h>
+	#endif
 #endif
 
 #include <boost/function.hpp>

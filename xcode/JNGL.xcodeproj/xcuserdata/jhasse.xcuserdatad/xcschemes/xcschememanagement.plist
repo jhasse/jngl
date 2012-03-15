@@ -4,10 +4,20 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>JNGL iOS.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>JNGL.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>Test iOS.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
 		</dict>
 		<key>Test.xcscheme</key>
 		<dict>
@@ -23,6 +33,16 @@
 			<true/>
 		</dict>
 		<key>C921154213EABBF100770E49</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C96A1CA514FEE5D20065CD6B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C96A1CBF14FEE8410065CD6B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
