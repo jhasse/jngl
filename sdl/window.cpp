@@ -134,7 +134,7 @@ namespace jngl
 		return characterPressed_[key];
 	}
 
-	void Window::BeginDraw()
+	void Window::UpdateInput()
 	{
 		if (relativeMouseMode) {
 			mousex_ = 0;
@@ -220,10 +220,9 @@ namespace jngl
 				}
 			}
 		}
-		glLoadIdentity();
 	}
 
-	void Window::EndDraw()
+	void Window::SwapBuffers()
 	{
 		SDL_GL_SwapWindow(sdlWindow);
 	}
@@ -240,7 +239,7 @@ namespace jngl
 
 	void Window::SetTitle(const std::string& windowTitle)
 	{
-		SDL_WM_SetCaption(windowTitle.c_str(), windowTitle.c_str());
+		SDL_SetWindowTitle(sdlWindow, windowTitle.c_str());
 	}
 
 	int Window::MouseX()

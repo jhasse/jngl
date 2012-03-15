@@ -127,11 +127,7 @@ namespace jngl
 		ALCcontext* context_;
 	};
 
-	Audio& GetAudio()
-	{
-		static Audio audio_;
-		return audio_;
-	}
+	Audio& GetAudio();
 
 	SoundFile::SoundFile(const std::string& filename) : sound_((Sound*)0)
 	{
@@ -277,5 +273,11 @@ namespace jngl
 		for(auto i = sounds.begin(); i != end; ++i) {
 			i->second->SetVolume(volume);
 		}
+	}
+	
+	Audio& GetAudio()
+	{
+		static Audio audio_;
+		return audio_;
 	}
 };

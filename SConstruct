@@ -5,7 +5,7 @@ import os
 version = "1.0.1"
 
 #Replace @VERSION@ in certain files
-files = ["jngl.pc.in", "autopackage/default.apspec.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
+files = ["jngl.pc.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
 for filename in files:
 	newfilename = filename.replace(".in", "")
 	datei = open(filename,"r").readlines()
@@ -27,7 +27,6 @@ if env['PLATFORM'] == 'darwin':
 
 debug = ARGUMENTS.get('debug', 0)
 profile = ARGUMENTS.get('profile', 0)
-autopackage = ARGUMENTS.get('autopackage', 0)
 installer = ARGUMENTS.get('installer', 0)
 python = int(ARGUMENTS.get('python', 0))
 m32 = ARGUMENTS.get('m32', 0)
@@ -139,10 +138,6 @@ if env['PLATFORM'] == 'darwin': # Mac
 		           LIBS=Split("boost_python"))
 		env.SharedLibrary(target="python/jngl.so",
 		                  source="python/main.cpp")
-
-if int(autopackage):
-	t = Command('JNGL ' + version + '.package', [lib, 'autopackage/default.apspec.in'], "makepackage")
-	Clean(t, ['JNGL ' + version + '.package', 'JNGL Library ' + version + '.package.meta', 'jngl.xml', 'jngl.xml.old'])
 
 if int(installer):
 	nsiFile = 'installer/mingw.nsi'

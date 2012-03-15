@@ -60,11 +60,6 @@
 		C9E948EB14A7C3EF0048EFCA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		C9E948EC14A7C3EF0048EFCA /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		C9E948ED14A7C3EF0048EFCA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		C9E948F014A7C3EF0048EFCA /* JNGL2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JNGL2-Info.plist"; sourceTree = "<group>"; };
-		C9E948F214A7C3EF0048EFCA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		C9E948F414A7C3EF0048EFCA /* JNGL2-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JNGL2-Prefix.pch"; sourceTree = "<group>"; };
-		C9E948F514A7C3EF0048EFCA /* JNGL2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNGL2.h; sourceTree = "<group>"; };
-		C9E948F614A7C3EF0048EFCA /* JNGL2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNGL2.m; sourceTree = "<group>"; };
 		C9EFACF313F1EA6100E6AE63 /* test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
 		C9F1894813EB288D005E43B3 /* callbacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = callbacks.h; path = ../callbacks.h; sourceTree = "<group>"; };
 		C9F1AF3113EAED790086B474 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -128,7 +123,6 @@
 				C9F1AF3613EAEF420086B474 /* Source Files */,
 				C9F1AF3413EAED8A0086B474 /* OpenAL.framework */,
 				C9F1AF3113EAED790086B474 /* OpenGL.framework */,
-				C9E948EE14A7C3EF0048EFCA /* JNGL2 */,
 				C9E948E714A7C3EF0048EFCA /* Frameworks */,
 				C921154413EABBF100770E49 /* Products */,
 			);
@@ -179,26 +173,6 @@
 				C9E948ED14A7C3EF0048EFCA /* Foundation.framework */,
 			);
 			name = "Other Frameworks";
-			sourceTree = "<group>";
-		};
-		C9E948EE14A7C3EF0048EFCA /* JNGL2 */ = {
-			isa = PBXGroup;
-			children = (
-				C9E948F514A7C3EF0048EFCA /* JNGL2.h */,
-				C9E948F614A7C3EF0048EFCA /* JNGL2.m */,
-				C9E948EF14A7C3EF0048EFCA /* Supporting Files */,
-			);
-			path = JNGL2;
-			sourceTree = "<group>";
-		};
-		C9E948EF14A7C3EF0048EFCA /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				C9E948F014A7C3EF0048EFCA /* JNGL2-Info.plist */,
-				C9E948F114A7C3EF0048EFCA /* InfoPlist.strings */,
-				C9E948F414A7C3EF0048EFCA /* JNGL2-Prefix.pch */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		C9F1AF3613EAEF420086B474 /* Source Files */ = {
@@ -369,17 +343,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		C9E948F114A7C3EF0048EFCA /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C9E948F214A7C3EF0048EFCA /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		C9149356148D621000A6E3E8 /* Debug */ = {
