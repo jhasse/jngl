@@ -415,15 +415,23 @@ namespace jngl
 		}
 	}
 
-#include <GL/wglew.h>
+#ifdef __WIN32__
+	#include <GL/wglew.h>
+#endif
 	
 	void SetVerticalSync(bool enabled)
 	{
+#ifdef __WIN32__
 		if (WGL_EXT_swap_control) {
 			if (wglSwapIntervalEXT(enabled)) {
 				vsyncEnabled = enabled;
 			}
 		}
+#endif
+#ifdef __APPLE__
+		// OSX always enables V-SYNC
+		vsyncEnabled = true;
+#endif
 	}
 	
 	bool GetVerticalSync()
