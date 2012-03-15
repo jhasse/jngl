@@ -278,7 +278,7 @@
 		C921153A13EABBF100770E49 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = C921153D13EABBF100770E49 /* Build configuration list for PBXProject "JNGL" */;
 			compatibilityVersion = "Xcode 3.2";
