@@ -191,6 +191,10 @@ namespace jngl
 	void SetAntiAliasing(bool enabled);
 
 	bool GetAntiAliasing();
+	
+	void SetVerticalSync(bool enabled);
+	
+	bool GetVerticalSync();
 
 	double GetTextWidth(const std::string& text);
 

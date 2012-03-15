@@ -96,7 +96,7 @@ int main()
 			jngl::SetFontSize(12);
 			jngl::Reset();
 			std::stringstream sstream;
-			sstream << "FPS: " << jngl::FPS() << "\nFactor: " << factor << "\nSize of double: " << sizeof(double);
+			sstream << "FPS" << (jngl::GetVerticalSync() ? " (V-SYNC)" : "") << ": " << int(jngl::FPS()) << "\nFactor: " << factor << "\nSize of double: " << sizeof(double);
 			jngl::SetColor(0, 0, 0);
 			jngl::DrawRect(0, 0, 200, 62);
 			jngl::SetFontColor(static_cast<unsigned char>(255 * (1 - factor)), static_cast<unsigned char>(255 * factor), 255);
@@ -116,7 +116,11 @@ int main()
 			{
 				jngl::ErrorMessage("Hello World!");
 			}
-			jngl::Print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 430);
+			jngl::Print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 410);
+			jngl::Print("Press V to toggle V-SYNC.", 5, 430);
+			if(jngl::KeyPressed('v')) {
+				jngl::SetVerticalSync(!jngl::GetVerticalSync());
+			}
 			jngl::Print("Press A to toggle Anti-Aliasing.", 5, 450);
 			if(jngl::KeyPressed('a'))
 			{

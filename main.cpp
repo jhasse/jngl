@@ -70,11 +70,13 @@ namespace jngl
 
 		glFlush();
 		InitCallbacks();
+		SetVerticalSync(true);
 		return true;
 	}
 
 	WindowPointer pWindow;
 	bool antiAliasingEnabled = false;
+	bool vsyncEnabled = false;
 
 	void ShowWindow(const std::string& title, const int width, const int height, bool fullscreen)
 	{
@@ -411,5 +413,21 @@ namespace jngl
 		{
 			LoadSprite(filename);
 		}
+	}
+
+#include <GL/wglew.h>
+	
+	void SetVerticalSync(bool enabled)
+	{
+		if (WGL_EXT_swap_control) {
+			if (wglSwapIntervalEXT(enabled)) {
+				vsyncEnabled = enabled;
+			}
+		}
+	}
+	
+	bool GetVerticalSync()
+	{
+		return vsyncEnabled;
 	}
 }
