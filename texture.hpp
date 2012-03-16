@@ -37,5 +37,5 @@ private:
 	GLuint texture_;
 	GLuint vertexBuffer_;
 	std::vector<opengl::CoordType> texCoords_;
-	std::vector<GLint> vertexes_;
+	std::vector<GLfloat> vertexes_;
 };

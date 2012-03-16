@@ -16,8 +16,8 @@ env = Environment()
 env.SetOption('num_jobs', 4)
 
 if env['PLATFORM'] == 'win32':
-	msvc = ARGUMENTS.get('msvc', 0)
-	if int(msvc):
+	msvc = bool(ARGUMENTS.get('msvc', 0))
+	if msvc:
 		env.Append(CCFLAGS = '/EHsc /MD')
 	else:
 		env = Environment(tools=['mingw'])
@@ -44,26 +44,27 @@ if int(wiz):
 	env['CC'] = "/toolchain/bin/arm-openwiz-linux-gnu-gcc"
 	env.Append(CPPPATH=["/toolchain/include", "wiz"], LIBPATH=["/toolchain/lib", "wiz"])
 
-source_files = env.Object(Split("""
-audio.cpp
-finally.cpp
-freetype.cpp
-main.cpp
-opengl.cpp
-sprite.cpp
-tess.cpp
-texture.cpp
-window.cpp
-windowptr.cpp
-framebuffer.cpp
-framebufferimpl.cpp
-"""), CPPFLAGS="-std=gnu++0x")
-source_files += Split("""
-callbacks.c
-ConvertUTF.c
-""")
+if not msvc:
+	source_files = env.Object(Split("""
+	audio.cpp
+	finally.cpp
+	freetype.cpp
+	main.cpp
+	opengl.cpp
+	sprite.cpp
+	tess.cpp
+	texture.cpp
+	window.cpp
+	windowptr.cpp
+	framebuffer.cpp
+	framebufferimpl.cpp
+	"""), CPPFLAGS="-std=gnu++0x")
+	source_files += Split("""
+	callbacks.c
+	ConvertUTF.c
+	""")
 
-if env['PLATFORM'] == 'win32': # Windows
+if env['PLATFORM'] == 'win32' and not msvc: # Windows
 	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl")
 	if int(python) or int(msvc):
 		jnglLibs += Split("openal32 ogg vorbisfile")
@@ -149,6 +150,8 @@ if int(installer):
 		nsiFile = 'installer/python.nsi'
 		name = 'Python 2.7'
 	import os
+	if msvc:
+		lib = None
 	t = Command('JNGL ' + version + '.exe', lib, '"' + os.path.expandvars("%programfiles%") + '\NSIS\makensis.exe " ' + nsiFile)
 	if python:
 		Depends(t, ['python/jngl.dll'])

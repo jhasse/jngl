@@ -5,7 +5,7 @@ Name "JNGL for Microsoft Visual C++"
 
 OutFile "JNGL @VERSION@ (MS Visual C++).exe"
 
-InstallDir "$PROGRAMFILES\Microsoft Visual Studio 9.0\VC"
+InstallDir "$PROGRAMFILES\Microsoft Visual Studio 10.0\VC"
 
 Page directory
 Page instfiles
@@ -18,9 +18,9 @@ Section ""
 SetOutPath $INSTDIR\include
 File ..\jngl.hpp
 SetOutPath $INSTDIR\lib
-File ..\jngl.lib
+File ..\visualcpp\Release\jngl.lib
 File ..\lib\freetype.lib
-File ..\lib\png.lib
-File ..\lib\z.lib
+File ..\lib\libpng.lib
+File ..\lib\zlib.lib
 
 SectionEnd

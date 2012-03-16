@@ -57,7 +57,7 @@ Texture::Texture(const int imgWidth, const int imgHeight, GLubyte** rowPointers,
 
 	GLfloat texCoords[] = { 0, 0, 0, y, x, y, x, 0 };
 	texCoords_.assign(&texCoords[0], &texCoords[8]);
-	GLint vertexes[] = { 0, 0, 0, imgHeight, imgWidth, imgHeight, imgWidth, 0 };
+	GLfloat vertexes[] = { 0, 0, 0, float(imgHeight), float(imgWidth), float(imgHeight), float(imgWidth), 0 };
 	vertexes_.assign(&vertexes[0], &vertexes[8]);
 
 	if (rowPointers) {
@@ -101,7 +101,7 @@ void Texture::Draw() const
 #ifndef WIZ
 	else
 	{
-		glVertexPointer(2, GL_INT, 0, &vertexes_[0]);
+		glVertexPointer(2, GL_FLOAT, 0, &vertexes_[0]);
 		glTexCoordPointer(2, opengl::Type<double>::constant, 0, &texCoords_[0]);
 	}
 #endif
@@ -132,7 +132,7 @@ void Texture::DrawClipped(const float xstart, const float xend, const float ysta
 	tmpTexCoords[6] *= xend;
 	tmpTexCoords[3] *= yend;
 	tmpTexCoords[5] *= yend;
-	glVertexPointer(2, GL_INT, 0, &tmpVertexes[0]);
+	glVertexPointer(2, GL_FLOAT, 0, &tmpVertexes[0]);
 	glTexCoordPointer(2, opengl::Type<double>::constant, 0, &tmpTexCoords[0]);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	
