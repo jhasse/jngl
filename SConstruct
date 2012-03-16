@@ -15,8 +15,8 @@ for filename in files:
 env = Environment()
 env.SetOption('num_jobs', 4)
 
+msvc = bool(ARGUMENTS.get('msvc', 0))
 if env['PLATFORM'] == 'win32':
-	msvc = bool(ARGUMENTS.get('msvc', 0))
 	if msvc:
 		env.Append(CCFLAGS = '/EHsc /MD')
 	else:
