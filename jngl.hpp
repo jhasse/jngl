@@ -303,6 +303,18 @@ namespace jngl
 		FrameBuffer& operator=(const FrameBuffer&);
 		FrameBufferImpl* pImpl;
 	};
+	
+	class Work {
+	public:
+		virtual void Step() = 0;
+		virtual void Draw() = 0;
+		virtual void QuitEvent();
+		virtual ~Work();
+	};
+	
+	void SetWork(Work*);
+	
+	void MainLoop();
 }
 
 #endif // __JNGL_HPP__

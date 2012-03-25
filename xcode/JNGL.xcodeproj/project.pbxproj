@@ -22,8 +22,6 @@
 		C967E7CA14FEEDDC004F5985 /* sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9F1AFED13EAEF420086B474 /* sprite.cpp */; };
 		C967E7CB14FEEDDC004F5985 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9F1AFF213EAEF420086B474 /* texture.cpp */; };
 		C96A1CAE14FEE5D20065CD6B /* JNGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = C96A1CAD14FEE5D20065CD6B /* JNGLView.m */; };
-		C96A1CB914FEE7100065CD6B /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CB814FEE7100065CD6B /* OpenGLES.framework */; };
-		C96A1CBB14FEE7160065CD6B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CBA14FEE7160065CD6B /* QuartzCore.framework */; };
 		C96A1CC314FEE8410065CD6B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CC214FEE8410065CD6B /* UIKit.framework */; };
 		C96A1CC414FEE8410065CD6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CA714FEE5D20065CD6B /* Foundation.framework */; };
 		C96A1CC614FEE8410065CD6B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CC514FEE8410065CD6B /* CoreGraphics.framework */; };
@@ -31,9 +29,8 @@
 		C96A1CCE14FEE8410065CD6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C96A1CCD14FEE8410065CD6B /* main.m */; };
 		C96A1CD214FEE8410065CD6B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C96A1CD114FEE8410065CD6B /* AppDelegate.m */; };
 		C96A1CD614FEE8520065CD6B /* libJNGL iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CA614FEE5D20065CD6B /* libJNGL iOS.a */; };
+		C98AE211151F541A0068B398 /* work.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C98AE210151F541A0068B398 /* work.cpp */; };
 		C9AE786314A892FE004359EF /* JNGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E948E614A7C3EF0048EFCA /* JNGL.framework */; };
-		C9DF506814FEEA570036C464 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CB814FEE7100065CD6B /* OpenGLES.framework */; };
-		C9DF506A14FEEA620036C464 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CBA14FEE7160065CD6B /* QuartzCore.framework */; };
 		C9E948FC14A7C40E0048EFCA /* message.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C99A094C13EC509D006C46FF /* message.cpp */; };
 		C9E948FD14A7C40E0048EFCA /* time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C99A094A13EC508C006C46FF /* time.cpp */; };
 		C9E948FE14A7C40E0048EFCA /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C99A094813EC5079006C46FF /* window.cpp */; };
@@ -78,8 +75,6 @@
 		C96A1CAB14FEE5D20065CD6B /* JNGL iOS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JNGL iOS-Prefix.pch"; sourceTree = "<group>"; };
 		C96A1CAC14FEE5D20065CD6B /* JNGLView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNGLView.h; sourceTree = "<group>"; };
 		C96A1CAD14FEE5D20065CD6B /* JNGLView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNGLView.m; sourceTree = "<group>"; };
-		C96A1CB814FEE7100065CD6B /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
-		C96A1CBA14FEE7160065CD6B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		C96A1CC014FEE8410065CD6B /* Test iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Test iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C96A1CC214FEE8410065CD6B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		C96A1CC514FEE8410065CD6B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
@@ -89,6 +84,7 @@
 		C96A1CCF14FEE8410065CD6B /* Test iOS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Test iOS-Prefix.pch"; sourceTree = "<group>"; };
 		C96A1CD014FEE8410065CD6B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C96A1CD114FEE8410065CD6B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C98AE210151F541A0068B398 /* work.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = work.cpp; sourceTree = "<group>"; };
 		C99A094813EC5079006C46FF /* window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = window.cpp; path = sdl/window.cpp; sourceTree = "<group>"; };
 		C99A094A13EC508C006C46FF /* time.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = time.cpp; path = sdl/time.cpp; sourceTree = "<group>"; };
 		C99A094C13EC509D006C46FF /* message.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = message.cpp; path = sdl/message.cpp; sourceTree = "<group>"; };
@@ -145,8 +141,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C96A1CBB14FEE7160065CD6B /* QuartzCore.framework in Frameworks */,
-				C96A1CB914FEE7100065CD6B /* OpenGLES.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,8 +148,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9DF506A14FEEA620036C464 /* QuartzCore.framework in Frameworks */,
-				C9DF506814FEEA570036C464 /* OpenGLES.framework in Frameworks */,
 				C96A1CD614FEE8520065CD6B /* libJNGL iOS.a in Frameworks */,
 				C96A1CC314FEE8410065CD6B /* UIKit.framework in Frameworks */,
 				C96A1CC414FEE8410065CD6B /* Foundation.framework in Frameworks */,
@@ -178,8 +170,6 @@
 		C921153813EABBF100770E49 = {
 			isa = PBXGroup;
 			children = (
-				C96A1CBA14FEE7160065CD6B /* QuartzCore.framework */,
-				C96A1CB814FEE7100065CD6B /* OpenGLES.framework */,
 				C9F1B09F13EAF1D00086B474 /* Header Files */,
 				C9F1AF3613EAEF420086B474 /* Source Files */,
 				C9F1AF3413EAED8A0086B474 /* OpenAL.framework */,
@@ -301,6 +291,7 @@
 				C9F1AFF213EAEF420086B474 /* texture.cpp */,
 				C9F1B00313EAEF420086B474 /* window.cpp */,
 				C9F1B00513EAEF420086B474 /* windowptr.cpp */,
+				C98AE210151F541A0068B398 /* work.cpp */,
 			);
 			name = "Source Files";
 			path = ..;
@@ -523,6 +514,7 @@
 				C9E9490B14A7C40F0048EFCA /* window.cpp in Sources */,
 				C9E9490C14A7C40F0048EFCA /* windowptr.cpp in Sources */,
 				C93B324B14C1B0090053C668 /* sdl.cpp in Sources */,
+				C98AE211151F541A0068B398 /* work.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -582,7 +574,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_CXX_LIBRARY = "libc++";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -617,7 +609,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_CXX_LIBRARY = "libc++";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;

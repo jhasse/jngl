@@ -203,4 +203,50 @@ namespace jngl
 	{
 		return mouseWheel_;
 	}
+	
+	void Window::MainLoop()
+	{
+		while(running_)
+		{
+			if(jngl::Time() - oldTime_ > 0.5) // Is half a second missing?
+			{
+				oldTime_ += 0.5; // Let's slowdown
+			}
+			if(jngl::Time() - oldTime_ > timePerStep_)
+			{
+				// This stuff needs to be done 100 times per second
+				oldTime_ += timePerStep_;
+				jngl::UpdateInput();
+				currentWork_->Step();
+				needDraw_ = true;
+				if(jngl::KeyPressed(jngl::key::Escape) || !jngl::Running())
+				{
+					jngl::Continue(); // Don't let JNGL send the quit event again
+					currentWork_->QuitEvent();
+				}
+			}
+			else if(needDraw_ || showFps_)
+			{
+				needDraw_ = false;
+				currentWork_->Draw();
+				jngl::SwapBuffers();
+			}
+			if(changeWork_)
+			{
+				changeWork_ = false;
+				currentWork_ = newWork_;
+			}
+		}
+	}
+	
+	void Window::SetWork(Work* w) {
+		boost::shared_ptr<Work> work(w);
+		if(!currentWork_) {
+			currentWork_ = work;
+		}
+		else {
+			changeWork_ = true;
+			newWork_ = work;
+		}
+	}
 }

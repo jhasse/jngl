@@ -433,8 +433,15 @@ namespace jngl
 #endif
 	}
 	
-	bool GetVerticalSync()
-	{
+	bool GetVerticalSync() {
 		return vsyncEnabled;
+	}
+	
+	void SetWork(Work* w) {
+		return pWindow->SetWork(w);
+	}
+	
+	void MainLoop() {
+		return pWindow->MainLoop();
 	}
 }

@@ -90,6 +90,8 @@ namespace jngl
 		void SetIcon(const std::string&);
 		double GetMouseWheel() const;
 		std::string GetFont() const;
+		void SetWork(Work*);
+		void MainLoop();
 #ifndef __APPLE__
 	#ifdef __linux
 		boost::shared_ptr<Display> pDisplay_;
@@ -114,6 +116,13 @@ namespace jngl
 		double mouseWheel_;
 		std::string fontName_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
+		double oldTime_;
+		bool needDraw_;
+		constexpr const static double timePerStep_ = 1/60.0;
+		boost::shared_ptr<Work> currentWork_;
+		bool changeWork_;
+		boost::shared_ptr<Work> newWork_;
+		bool showFps_;
 
 		// <fontSize, <fontName, Font> >
 		boost::ptr_map<int, boost::ptr_map<std::string, Font> > fonts_;

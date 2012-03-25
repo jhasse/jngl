@@ -20,19 +20,12 @@ double factor = 0;
 
 double absolute(double v);
 
-int main()
-{
-	try
-	{
-		std::cout << "Size of Desktop: " << jngl::GetDesktopWidth()
-		          << "x" << jngl::GetDesktopHeight() << std::endl
-		          << "Size of jngl.png: " << jngl::GetWidth("jngl.png")
-		          << "x" << jngl::GetHeight("jngl.png") << std::endl;
-		jngl::ShowWindow("SetTitle not working!", 800, 600);
+class Test : public jngl::Work {
+public:
+	Test() : fb(100, 110), fb2(800, 600) {
 		jngl::SetTitle("JNGL Test Application");
 		jngl::SetIcon("jngl.png");
 		jngl::SetMouseVisible(false);
-		jngl::FrameBuffer fb(100, 110);
 		fb.BeginDraw();
 		jngl::SetColor(255, 0, 0);
 		jngl::DrawRect(0, 0, 64, 64);
@@ -42,149 +35,157 @@ int main()
 		jngl::DrawRect(64, 0, 64, 64);
 		jngl::Print("Frame\nBuffer\nObject", 50, 10);
 		fb.EndDraw();
-		jngl::FrameBuffer fb2(800, 600);
-		bool drawOnFrameBuffer = false;
-		double rotate = 0.0;
-		int frameNumber = 0;
-		double frameTime = jngl::Time();
-		double lastTime = jngl::Time();
-		while(jngl::Running())
+		frameTime = jngl::Time();
+		lastTime = jngl::Time();
+	}
+	void Step() {
+	}
+	void Draw() {
+		if(drawOnFrameBuffer) {
+			fb2.BeginDraw();
+			fb2.Clear();
+		}
+		double timeSinceLastFrame = jngl::Time() - lastTime;
+		lastTime = jngl::Time();
+		for(int i = 0; i < 10; ++i)
 		{
-			jngl::UpdateInput();
-			if(drawOnFrameBuffer) {
-				fb2.BeginDraw();
-				fb2.Clear();
-			}
-			double timeSinceLastFrame = jngl::Time() - lastTime;
-			lastTime = jngl::Time();
-			for(int i = 0; i < 10; ++i)
+			if(jngl::KeyDown(boost::lexical_cast<char>(i)))
 			{
-				if(jngl::KeyDown(boost::lexical_cast<char>(i)))
-				{
-					performance = i == 0 ? 10 : i;
-				}
-			}
-			DrawBackground();
-			DrawTess();
-			jngl::SetColor(0,0,0,255);
-			jngl::PushMatrix();
-			jngl::Translate(650, 450);
-			jngl::Rotate(rotate);
-			jngl::DrawLine(-50, -50, 50, 50);
-			jngl::PopMatrix();
-			jngl::SetSpriteColor(255, 255, 255, 200);
-			fb.Draw(600, 300);
-			jngl::Translate(jngl::GetWindowWidth() / 2, jngl::GetWindowHeight() / 2);
-			jngl::Rotate(rotate);
-			rotate += 90 * timeSinceLastFrame; // 90 degree per second
-			if(rotate > 360)
-			{
-				rotate = 0;
-			}
-			factor = sin(rotate / 360 * M_PI);
-			jngl::SetSpriteColor(255, 255, 255, static_cast<unsigned char>(absolute(factor * 255)));
-			jngl::DrawScaled("jngl.png",
-			                 -jngl::GetWidth("jngl.png")  * factor,
-			                 -jngl::GetHeight("jngl.png") * factor,
-			                 static_cast<float>(factor * 2));
-			jngl::SetColor(0, 0, 0);
-			jngl::DrawRect(-125, 100, 250, 28);
-			jngl::SetFontColor(255, 255, 255);
-			jngl::Print("White text on black background", -115, 105);
-			jngl::SetFontColor(255, 255, 255);
-			jngl::SetFontSize(20);
-			jngl::Print("White text without background", -115, 135);
-			jngl::SetFontSize(12);
-			jngl::Reset();
-			std::stringstream sstream;
-			sstream << "FPS" << (jngl::GetVerticalSync() ? " (V-SYNC)" : "") << ": " << int(jngl::FPS()) << "\nFactor: " << factor << "\nSize of double: " << sizeof(double);
-			jngl::SetColor(0, 0, 0);
-			jngl::DrawRect(0, 0, 200, 62);
-			jngl::SetFontColor(static_cast<unsigned char>(255 * (1 - factor)), static_cast<unsigned char>(255 * factor), 255);
-			jngl::SetFontByName("Courier New");
-			jngl::Print(sstream.str(), 5, 5);
-			jngl::SetFontByName("sans-serif");
-			jngl::SetFontColor(0,0,0);
-			jngl::SetFontByName("Times New Roman");
-			jngl::Print("Black text on white background", 5, 75);
-			jngl::SetFontByName("Arial");
-			jngl::SetFontSize(20);
-			jngl::Print("UTF-8:   ä ö ü ß Ĉ Ψ ≈", 5, 105);
-			jngl::Print(" $", static_cast<int>(jngl::GetTextWidth("UTF-8:   ä ö ü ß Ĉ Ψ ≈") + 5), 105);
-			jngl::SetFontSize(12);
-			jngl::Print("Press 1-9 to test the performance\nPress E to show a error box.", 5, 135);
-			if(jngl::KeyPressed('e'))
-			{
-				jngl::ErrorMessage("Hello World!");
-			}
-			jngl::Print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 410);
-			jngl::Print("Press V to toggle V-SYNC.", 5, 430);
-			if(jngl::KeyPressed('v')) {
-				jngl::SetVerticalSync(!jngl::GetVerticalSync());
-			}
-			jngl::Print("Press A to toggle Anti-Aliasing.", 5, 450);
-			if(jngl::KeyPressed('a'))
-			{
-				jngl::SetAntiAliasing(!jngl::GetAntiAliasing());
-			}
-			jngl::Print("Press F1 to switch fullscreen mode.", 5, 470);
-			if(jngl::KeyPressed(jngl::key::F1))
-			{
-				jngl::ShowWindow("JNGL Test Application", 800, 600, !jngl::GetFullscreen());
-			}
-			jngl::Print("Press K to test key codes.", 5, 490);
-			jngl::Print("Press P to play a sound.", 6, 510);
-			if(jngl::KeyPressed('p'))
-			{
-				jngl::Stop("test.ogg");
-				jngl::Play("test.ogg");
-			}
-			static int playbackSpeed = 100;
-			jngl::SetPlaybackSpeed(playbackSpeed / 100.0f);
-			jngl::Print("Press + and - to change the audio playback speed: " + boost::lexical_cast<std::string>(playbackSpeed) + " %", 6, 530);
-			if(jngl::KeyPressed('-'))
-			{
-				--playbackSpeed;
-			}
-			if(jngl::KeyPressed('+'))
-			{
-				++playbackSpeed;
-			}
-			static float volume = 1;
-			jngl::SetVolume(volume);
-			jngl::Print("Use your mouse wheel to change the volume: " + boost::lexical_cast<std::string>(int(volume * 100)) + " %", 6, 550);
-			volume += static_cast<float>(jngl::GetMouseWheel()) / 100.0f;
-			jngl::SetColor(0,0,255,128);
-			if(drawOnFrameBuffer) {
-				fb2.EndDraw();
-				jngl::Reset();
-				jngl::SetSpriteColor(255, 255, 255);
-				fb2.Draw(0, 0);
-			}
-			if(jngl::KeyPressed('f')) {
-				drawOnFrameBuffer = !drawOnFrameBuffer;
-			}
-			DrawMouse(jngl::GetMouseX(), jngl::GetMouseY());
-			jngl::SwapBuffers();
-			if(++frameNumber == 500)
-			{
-				std::cout << "It took " << jngl::Time() - frameTime << " seconds to render 500 frames." << std::endl;
-				frameNumber = 0;
-				frameTime = jngl::Time();
-			}
-			if(jngl::KeyDown('k'))
-			{
-				TestKeys();
-			}
-			if(jngl::KeyPressed(jngl::key::Escape)) {
-				jngl::Quit();
+				performance = i == 0 ? 10 : i;
 			}
 		}
+		DrawBackground();
+		DrawTess();
+		jngl::SetColor(0,0,0,255);
+		jngl::PushMatrix();
+		jngl::Translate(650, 450);
+		jngl::Rotate(rotate);
+		jngl::DrawLine(-50, -50, 50, 50);
+		jngl::PopMatrix();
+		jngl::SetSpriteColor(255, 255, 255, 200);
+		fb.Draw(600, 300);
+		jngl::Translate(jngl::GetWindowWidth() / 2, jngl::GetWindowHeight() / 2);
+		jngl::Rotate(rotate);
+		rotate += 90 * timeSinceLastFrame; // 90 degree per second
+		if(rotate > 360)
+		{
+			rotate = 0;
+		}
+		factor = sin(rotate / 360 * M_PI);
+		jngl::SetSpriteColor(255, 255, 255, static_cast<unsigned char>(absolute(factor * 255)));
+		jngl::DrawScaled("jngl.png",
+						 -jngl::GetWidth("jngl.png")  * factor,
+						 -jngl::GetHeight("jngl.png") * factor,
+						 static_cast<float>(factor * 2));
+		jngl::SetColor(0, 0, 0);
+		jngl::DrawRect(-125, 100, 250, 28);
+		jngl::SetFontColor(255, 255, 255);
+		jngl::Print("White text on black background", -115, 105);
+		jngl::SetFontColor(255, 255, 255);
+		jngl::SetFontSize(20);
+		jngl::Print("White text without background", -115, 135);
+		jngl::SetFontSize(12);
+		jngl::Reset();
+		std::stringstream sstream;
+		sstream << "FPS" << (jngl::GetVerticalSync() ? " (V-SYNC)" : "") << ": " << int(jngl::FPS()) << "\nFactor: " << factor << "\nSize of double: " << sizeof(double);
+		jngl::SetColor(0, 0, 0);
+		jngl::DrawRect(0, 0, 200, 62);
+		jngl::SetFontColor(static_cast<unsigned char>(255 * (1 - factor)), static_cast<unsigned char>(255 * factor), 255);
+		jngl::SetFontByName("Courier New");
+		jngl::Print(sstream.str(), 5, 5);
+		jngl::SetFontByName("sans-serif");
+		jngl::SetFontColor(0,0,0);
+		jngl::SetFontByName("Times New Roman");
+		jngl::Print("Black text on white background", 5, 75);
+		jngl::SetFontByName("Arial");
+		jngl::SetFontSize(20);
+		jngl::Print("UTF-8:   ä ö ü ß Ĉ Ψ ≈", 5, 105);
+		jngl::Print(" $", static_cast<int>(jngl::GetTextWidth("UTF-8:   ä ö ü ß Ĉ Ψ ≈") + 5), 105);
+		jngl::SetFontSize(12);
+		jngl::Print("Press 1-9 to test the performance\nPress E to show a error box.", 5, 135);
+		if(jngl::KeyPressed('e'))
+		{
+			jngl::ErrorMessage("Hello World!");
+		}
+		jngl::Print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 410);
+		jngl::Print("Press V to toggle V-SYNC.", 5, 430);
+		if(jngl::KeyPressed('v')) {
+			jngl::SetVerticalSync(!jngl::GetVerticalSync());
+		}
+		jngl::Print("Press A to toggle Anti-Aliasing.", 5, 450);
+		if(jngl::KeyPressed('a'))
+		{
+			jngl::SetAntiAliasing(!jngl::GetAntiAliasing());
+		}
+		jngl::Print("Press F1 to switch fullscreen mode.", 5, 470);
+		if(jngl::KeyPressed(jngl::key::F1))
+		{
+			jngl::ShowWindow("JNGL Test Application", 800, 600, !jngl::GetFullscreen());
+		}
+		jngl::Print("Press K to test key codes.", 5, 490);
+		jngl::Print("Press P to play a sound.", 6, 510);
+		if(jngl::KeyPressed('p'))
+		{
+			jngl::Stop("test.ogg");
+			jngl::Play("test.ogg");
+		}
+		static int playbackSpeed = 100;
+		jngl::SetPlaybackSpeed(playbackSpeed / 100.0f);
+		jngl::Print("Press + and - to change the audio playback speed: " + boost::lexical_cast<std::string>(playbackSpeed) + " %", 6, 530);
+		if(jngl::KeyPressed('-'))
+		{
+			--playbackSpeed;
+		}
+		if(jngl::KeyPressed('+'))
+		{
+			++playbackSpeed;
+		}
+		static float volume = 1;
+		jngl::SetVolume(volume);
+		jngl::Print("Use your mouse wheel to change the volume: " + boost::lexical_cast<std::string>(int(volume * 100)) + " %", 6, 550);
+		volume += static_cast<float>(jngl::GetMouseWheel()) / 100.0f;
+		jngl::SetColor(0,0,255,128);
+		if(drawOnFrameBuffer) {
+			fb2.EndDraw();
+			jngl::Reset();
+			jngl::SetSpriteColor(255, 255, 255);
+			fb2.Draw(0, 0);
+		}
+		if(jngl::KeyPressed('f')) {
+			drawOnFrameBuffer = !drawOnFrameBuffer;
+		}
+		DrawMouse(jngl::GetMouseX(), jngl::GetMouseY());
+		if(++frameNumber == 500)
+		{
+			std::cout << "It took " << jngl::Time() - frameTime << " seconds to render 500 frames." << std::endl;
+			frameNumber = 0;
+			frameTime = jngl::Time();
+		}
+		if(jngl::KeyDown('k'))
+		{
+			TestKeys();
+		}
+		if(jngl::KeyPressed(jngl::key::Escape)) {
+			jngl::Quit();
+		}
 	}
-	catch(std::exception& e)
-	{
-		std::cout << e.what() << std::endl;
-	}
+private:
+	bool drawOnFrameBuffer = false;
+	double rotate = 0.0;
+	int frameNumber = 0;
+	double frameTime;
+	double lastTime;
+	jngl::FrameBuffer fb, fb2;
+};
+
+int main() {
+	std::cout << "Size of Desktop: " << jngl::GetDesktopWidth()
+	          << "x" << jngl::GetDesktopHeight() << std::endl
+	          << "Size of jngl.png: " << jngl::GetWidth("jngl.png")
+	          << "x" << jngl::GetHeight("jngl.png") << std::endl;
+	jngl::ShowWindow("SetTitle not working!", 800, 600);
+	jngl::SetWork(new Test);
+	jngl::MainLoop();
 }
 
 void DrawBackground()
