@@ -206,16 +206,17 @@ namespace jngl
 	
 	void Window::MainLoop()
 	{
+		const static double timePerStep = 1.0 / 60.0;
 		while(running_)
 		{
 			if(jngl::Time() - oldTime_ > 0.5) // Is half a second missing?
 			{
 				oldTime_ += 0.5; // Let's slowdown
 			}
-			if(jngl::Time() - oldTime_ > timePerStep_)
+			if(jngl::Time() - oldTime_ > timePerStep)
 			{
 				// This stuff needs to be done 100 times per second
-				oldTime_ += timePerStep_;
+				oldTime_ += timePerStep;
 				jngl::UpdateInput();
 				currentWork_->Step();
 				needDraw_ = true;

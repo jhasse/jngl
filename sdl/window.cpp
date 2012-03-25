@@ -20,6 +20,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "../window.hpp"
 #include "../debug.hpp"
 #include "sdl.hpp"
+#include "windowimpl.hpp"
 
 #include <stdexcept>
 
@@ -27,7 +28,8 @@ namespace jngl
 {		
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
 		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false), isMultisampleSupported_(true),
-		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0), fontName_("")
+		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0), fontName_(""),
+		  impl(new WindowImpl)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
@@ -41,14 +43,14 @@ namespace jngl
 		if(fullscreen) {
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
-		sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+		impl->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 						             width, height, flags);
 		
-		if(!sdlWindow) {
+		if(!impl->sdlWindow) {
 			throw std::runtime_error(SDL_GetError());
 		}
 		
-		context = SDL_GL_CreateContext(sdlWindow);
+		impl->context = SDL_GL_CreateContext(impl->sdlWindow);
 		
 		SDL_EnableUNICODE(SDL_ENABLE);
 
@@ -71,8 +73,9 @@ namespace jngl
 
 	Window::~Window()
 	{
-		SDL_GL_DeleteContext(context);
-		SDL_DestroyWindow(sdlWindow);
+		SDL_GL_DeleteContext(impl->context);
+		SDL_DestroyWindow(impl->sdlWindow);
+		delete impl;
 	}
 
 	int Window::GetKeyCode(key::KeyType key)
@@ -224,7 +227,7 @@ namespace jngl
 
 	void Window::SwapBuffers()
 	{
-		SDL_GL_SwapWindow(sdlWindow);
+		SDL_GL_SwapWindow(impl->sdlWindow);
 	}
 
 	void Window::SetMouseVisible(const bool visible)
@@ -239,7 +242,7 @@ namespace jngl
 
 	void Window::SetTitle(const std::string& windowTitle)
 	{
-		SDL_SetWindowTitle(sdlWindow, windowTitle.c_str());
+		SDL_SetWindowTitle(impl->sdlWindow, windowTitle.c_str());
 	}
 
 	int Window::MouseX()
@@ -254,7 +257,7 @@ namespace jngl
 
 	void Window::SetMouse(const int xposition, const int yposition)
 	{
-		SDL_WarpMouseInWindow(sdlWindow, xposition, yposition);
+		SDL_WarpMouseInWindow(impl->sdlWindow, xposition, yposition);
 	}
 	
 	void Window::SetRelativeMouseMode(const bool relative) {

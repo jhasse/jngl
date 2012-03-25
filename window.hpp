@@ -41,15 +41,15 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 		#include <X11/keysym.h>
 	#endif
 #else
-    #ifdef __APPLE__
-        #include <SDL.h>
-    #else
+    #ifdef _WIN32
         #include <windows.h>
     #endif
 #endif
 
 namespace jngl
 {
+	class WindowImpl;
+
 	bool Init(const int width, const int height); // Definied in main.cpp
 	class Window
 	{
@@ -118,7 +118,6 @@ namespace jngl
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
 		double oldTime_;
 		bool needDraw_;
-		constexpr const static double timePerStep_ = 1/60.0;
 		boost::shared_ptr<Work> currentWork_;
 		bool changeWork_;
 		boost::shared_ptr<Work> newWork_;
@@ -151,8 +150,7 @@ namespace jngl
 	#endif
 #endif
 #else
-		SDL_Window* sdlWindow;
-		SDL_GLContext context;
+		WindowImpl* impl;
 #endif
 	};
 }
