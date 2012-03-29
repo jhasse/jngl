@@ -1,11 +1,3 @@
-//
-//  main.m
-//  Test iOS
-//
-//  Created by Jan Niklas Hasse on 01.03.12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 #import "AppDelegate.h"

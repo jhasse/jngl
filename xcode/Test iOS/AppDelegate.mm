@@ -1,8 +1,24 @@
 #import "AppDelegate.h"
 
+#import <JNGL/jngl.hpp>
+
 @implementation AppDelegate
 
 @synthesize window = _window;
+
+class Test : public jngl::Work {
+public:
+	void Step() {
+	}
+	void Draw() {
+		jngl::Draw("/Users/jhasse/git/jngl/jngl.png", 20, 20);
+		jngl::Print("0x0", 0, 0);
+		jngl::Print("100x100", 100, 100);
+		jngl::Print("200x200", 200, 200);
+		jngl::Print("960x480", jngl::GetWindowWidth()-jngl::GetTextWidth("960x480"), jngl::GetWindowHeight()-15);
+	}
+private:
+};
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -11,6 +27,9 @@
 	
 	[self.window addSubview: view];
     [self.window makeKeyAndVisible];
+	
+	jngl::SetWork(new Test);
+	[view drawView];
     return YES;
 }
 

@@ -226,10 +226,10 @@ namespace jngl
 					currentWork_->QuitEvent();
 				}
 			}
-			else if(needDraw_ || showFps_)
+			else if(needDraw_)
 			{
 				needDraw_ = false;
-				currentWork_->Draw();
+				draw();
 				jngl::SwapBuffers();
 			}
 			if(changeWork_)
@@ -240,9 +240,13 @@ namespace jngl
 		}
 	}
 	
+	void Window::draw() const {
+		currentWork_->Draw();
+	}
+	
 	void Window::SetWork(Work* w) {
 		boost::shared_ptr<Work> work(w);
-		if(!currentWork_) {
+		if (!currentWork_) {
 			currentWork_ = work;
 		}
 		else {

@@ -92,6 +92,7 @@ namespace jngl
 		std::string GetFont() const;
 		void SetWork(Work*);
 		void MainLoop();
+		void draw() const;
 #ifndef __APPLE__
 	#ifdef __linux
 		boost::shared_ptr<Display> pDisplay_;
@@ -121,7 +122,6 @@ namespace jngl
 		boost::shared_ptr<Work> currentWork_;
 		bool changeWork_;
 		boost::shared_ptr<Work> newWork_;
-		bool showFps_;
 
 		// <fontSize, <fontName, Font> >
 		boost::ptr_map<int, boost::ptr_map<std::string, Font> > fonts_;

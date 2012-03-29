@@ -355,8 +355,9 @@ namespace jngl
 			{
 				pWindow.ThrowIfNull();
 			}
-			sprites_[filename].reset(new Sprite(filename, halfLoad));
-			return *(sprites_[filename]);
+			auto s = new Sprite(filename, halfLoad);
+			sprites_[filename].reset(s);
+			return *s;
 		}
 		return *(i->second);
 	}

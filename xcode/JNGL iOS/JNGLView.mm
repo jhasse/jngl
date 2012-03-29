@@ -1,5 +1,8 @@
 #import "JNGLView.h"
 
+#include "jngl.hpp"
+#include "windowptr.hpp"
+
 @implementation JNGLView
 
 + (Class) layerClass
@@ -34,17 +37,23 @@
 		glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES,
 									 GL_RENDERBUFFER_OES, renderbuffer);
 		
-		glViewport(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame));
+		int width = CGRectGetWidth(frame);
+		int height = CGRectGetHeight(frame);
+		glViewport(0, 0, width, height);
 		
-		[self drawView];
+		jngl::ShowWindow("", width, height);
     }
     return self;
 }
 
 - (void) drawView
 {
-	glClearColor(0.5f, 0.5f, 0.5f, 1);
+	glClearColor(1.0f, 1.0f, 1.0f, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
+	jngl::Translate(0, 480);
+	jngl::Rotate(-90);
+	
+	jngl::pWindow->draw();
 	
 	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
 }

@@ -33,7 +33,11 @@ namespace draw
 		opengl::BindArrayBuffer(0);
 		glPushMatrix();
 		opengl::Translate(xposition, yposition);
-		typename opengl::Type<T>::type rect[] = { 0, 0, width, 0, width, height, 0, height };
+		typedef typename opengl::Type<T>::type Type;
+		Type rect[] = { 0, 0,
+		                static_cast<Type>(width), 0,
+		                static_cast<Type>(width), static_cast<Type>(height),
+		                0, static_cast<Type>(height) };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, rect);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 		glPopMatrix();
@@ -44,7 +48,9 @@ namespace draw
 	{
 		opengl::BindArrayBuffer(0);
 		glPushMatrix();
-		typename opengl::Type<T>::type line[] = { xstart, ystart, xend, yend };
+		typedef typename opengl::Type<T>::type Type;
+		Type line[] = { static_cast<Type>(xstart), static_cast<Type>(ystart),
+		                static_cast<Type>(xend), static_cast<Type>(yend) };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, line);
 		glDrawArrays(GL_LINES, 0, 2);
 		glPopMatrix();
@@ -73,7 +79,8 @@ namespace draw
 	void Point(const T x, const T y)
 	{
 		opengl::BindArrayBuffer(0);
-		typename opengl::Type<T>::type point[] = { x, y };
+		typedef typename opengl::Type<T>::type Type;
+		Type point[] = { static_cast<Type>(x), static_cast<Type>(y) };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, point);
 		glDrawArrays(GL_POINTS, 0, 1);
 	}

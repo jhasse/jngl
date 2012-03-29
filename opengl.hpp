@@ -26,6 +26,8 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #else
 	#ifdef IOS
 		#include <OpenGLES/ES1/gl.h>
+		#include <OpenGLES/ES1/glext.h>
+		#include "ios/glew.h"
 	#else
 		#include <GL/glew.h>
 	#endif

@@ -41,12 +41,14 @@ namespace jngl
     float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
 	bool Init(const int width, const int height)
 	{
+#ifdef GLEW_OK
 		GLenum err = glewInit();
 		if(err != GLEW_OK) {
 			throw std::runtime_error(boost::lexical_cast<std::string>(glewGetErrorString(err)));
 		}
 		Debug("Using GLEW "); Debug(glewGetString(GLEW_VERSION)); Debug("\n");
-
+#endif
+		
 		glShadeModel(GL_SMOOTH);
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnable(GL_BLEND);
@@ -60,7 +62,7 @@ namespace jngl
 
 	#ifdef OPENGLES
 		#define f2x(x) ((int)((x) * 65536))
-		glOrthox(f2x(0), f2x(320), f2x(240), f2x(0), f2x(-1), f2x(1));
+		glOrthox(f2x(0), f2x(width), f2x(height), f2x(0), f2x(-1), f2x(1));
 	#else
 		glOrtho(0.0f, width, height, 0.0f, -100.0f, 100.0f);
 	#endif

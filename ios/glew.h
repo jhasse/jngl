@@ -1,0 +1,28 @@
+#pragma once
+
+#define OPENGLES 1
+
+#define GLEW_EXT_framebuffer_object 1
+#define GLEW_ARB_vertex_buffer_object 1
+#define glGenFramebuffers glGenFramebuffersOES
+#define glBindFramebuffer glBindFramebufferOES
+#define glGenRenderbuffers glGenRenderbuffersOES
+#define glRenderbufferStorage glRenderbufferStorageOES
+#define GL_RENDERBUFFER GL_RENDERBUFFER_OES
+#define GL_FRAMEBUFFER GL_FRAMEBUFFER_OES
+#define glBindRenderbuffer glBindRenderbufferOES
+#define GL_DEPTH_COMPONENT GL_DEPTH_COMPONENT16_OES
+#define GL_DEPTH_ATTACHMENT GL_DEPTH_ATTACHMENT_OES
+#define GL_COLOR_ATTACHMENT0 GL_COLOR_ATTACHMENT0_OES
+#define GL_FRAMEBUFFER_COMPLETE GL_FRAMEBUFFER_COMPLETE_OES
+#define glFramebufferTexture2D glFramebufferTexture2DOES
+#define glFramebufferRenderbuffer glFramebufferRenderbufferOES
+#define glCheckFramebufferStatus glCheckFramebufferStatusOES
+#define glDeleteFramebuffers glDeleteFramebuffersOES
+#define glDeleteRenderbuffers glDeleteRenderbuffersOES
+#define glBlendFuncSeparateOES
+#define glBlendFuncSeparate glBlendFuncSeparateOES
+
+#define GL_VIEWPORT_BIT 0
+inline void glPushAttrib(int) {}
+inline void glPopAttrib() {}

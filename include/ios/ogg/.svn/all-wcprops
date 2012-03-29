@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/66/trunk/include/ogg
+END
+config_types.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/66/trunk/include/ogg/config_types.h
+END
+ogg.h
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/3/trunk/include/ogg/ogg.h
+END
+os_types.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/3/trunk/include/ogg/os_types.h
+END
