@@ -8,16 +8,22 @@
 
 class Test : public jngl::Work {
 public:
+	Test() {
+		path = [[[NSBundle mainBundle] pathForResource:@"jngl" ofType:@"png" inDirectory:@""] UTF8String];
+		const char* font = [[[NSBundle mainBundle] pathForResource:@"Arial" ofType:@"ttf" inDirectory:@""] UTF8String];
+		jngl::SetFont(font);
+		ogg = [[[NSBundle mainBundle] pathForResource:@"test" ofType:@"ogg" inDirectory:@""] UTF8String];
+	}
 	void Step() {
 	}
 	void Draw() {
-		jngl::Draw("/Users/jhasse/git/jngl/jngl.png", 20, 20);
-		jngl::Print("0x0", 0, 0);
-		jngl::Print("100x100", 100, 100);
-		jngl::Print("200x200", 200, 200);
-		jngl::Print("960x480", jngl::GetWindowWidth()-jngl::GetTextWidth("960x480"), jngl::GetWindowHeight()-15);
+		jngl::Draw(path, -60, 20);
+		jngl::Print("Hallo Welt!", 10, 10);
+		jngl::Play(ogg);
 	}
 private:
+	const char* path;
+	const char* ogg;
 };
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

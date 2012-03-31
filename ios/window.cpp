@@ -31,8 +31,8 @@ namespace jngl
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
 		
-		SetFontByName("Arial"); // Default font
-		SetFontSize(fontSize_); // Load a font the first time
+//		SetFontByName("Arial"); // Default font
+//		SetFontSize(fontSize_); // Load a font the first time
 		
 		Init(width, height);
 		
@@ -45,7 +45,7 @@ namespace jngl
 		if(fontname == "sans-serif") {
 			tmp = "Arial";
 		}
-		return "/Library/Fonts/" + tmp + ".ttf";
+		return tmp + ".ttf";
 	}
 	
 	Window::~Window()

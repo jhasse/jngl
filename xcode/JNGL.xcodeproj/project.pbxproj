@@ -67,6 +67,10 @@
 		C9E9490D14A7C4990048EFCA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3113EAED790086B474 /* OpenGL.framework */; };
 		C9E9490E14A7C49F0048EFCA /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3413EAED8A0086B474 /* OpenAL.framework */; };
 		C9E9491514A7DE430048EFCA /* jngl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9F1AFCA13EAEF420086B474 /* jngl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		C9F3AB8B1525F0A800A77E9F /* Arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8A1525F0A800A77E9F /* Arial.ttf */; };
+		C9F3AB8C1525F0B800A77E9F /* Arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8A1525F0A800A77E9F /* Arial.ttf */; };
+		C9F3AB8E1525F0DC00A77E9F /* jngl.png in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8D1525F0DC00A77E9F /* jngl.png */; };
+		C9F3AB901525F67000A77E9F /* test.ogg in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8F1525F67000A77E9F /* test.ogg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -155,6 +159,9 @@
 		C9F1B00413EAEF420086B474 /* window.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = window.hpp; path = ../window.hpp; sourceTree = "<group>"; };
 		C9F1B00513EAEF420086B474 /* windowptr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = windowptr.cpp; sourceTree = "<group>"; };
 		C9F1B00613EAEF420086B474 /* windowptr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = windowptr.hpp; path = ../windowptr.hpp; sourceTree = "<group>"; };
+		C9F3AB8A1525F0A800A77E9F /* Arial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Arial.ttf; path = ../Arial.ttf; sourceTree = "<group>"; };
+		C9F3AB8D1525F0DC00A77E9F /* jngl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = jngl.png; path = ../jngl.png; sourceTree = "<group>"; };
+		C9F3AB8F1525F67000A77E9F /* test.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.ogg; path = ../test.ogg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +217,9 @@
 		C921153813EABBF100770E49 = {
 			isa = PBXGroup;
 			children = (
+				C9F3AB8F1525F67000A77E9F /* test.ogg */,
+				C9F3AB8D1525F0DC00A77E9F /* jngl.png */,
+				C9F3AB8A1525F0A800A77E9F /* Arial.ttf */,
 				C9BFF83C1524B83E00066D6C /* lib */,
 				C9F1B09F13EAF1D00086B474 /* Header Files */,
 				C9F1AF3613EAEF420086B474 /* Source Files */,
@@ -507,6 +517,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9F3AB901525F67000A77E9F /* test.ogg in Resources */,
+				C9F3AB8E1525F0DC00A77E9F /* jngl.png in Resources */,
+				C9F3AB8C1525F0B800A77E9F /* Arial.ttf in Resources */,
 				C96A1CCC14FEE8410065CD6B /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -515,6 +528,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9F3AB8B1525F0A800A77E9F /* Arial.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,7 +718,10 @@
 		C96A1CAF14FEE5D20065CD6B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					"$(ARCHS_STANDARD_32_BIT)",
+				);
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/JNGL_iOS.dst;
@@ -730,7 +747,10 @@
 		C96A1CB014FEE5D20065CD6B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					"$(ARCHS_STANDARD_32_BIT)",
+				);
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/JNGL_iOS.dst;
@@ -757,10 +777,14 @@
 		C96A1CD414FEE8410065CD6B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					"$(ARCHS_STANDARD_32_BIT)",
+				);
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COMPRESS_PNG_FILES = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
@@ -783,10 +807,14 @@
 		C96A1CD514FEE8410065CD6B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					"$(ARCHS_STANDARD_32_BIT)",
+				);
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COMPRESS_PNG_FILES = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
