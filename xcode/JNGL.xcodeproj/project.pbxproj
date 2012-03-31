@@ -105,6 +105,7 @@
 		C96A1CCF14FEE8410065CD6B /* Test iOS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Test iOS-Prefix.pch"; sourceTree = "<group>"; };
 		C96A1CD014FEE8410065CD6B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C96A1CD114FEE8410065CD6B /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		C97A73101527AADA005AE562 /* time.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = time.hpp; path = ../../ios/time.hpp; sourceTree = "<group>"; };
 		C98AE210151F541A0068B398 /* work.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = work.cpp; sourceTree = "<group>"; };
 		C98E8D2315249AEA0081B15A /* glew.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = glew.h; path = ../../ios/glew.h; sourceTree = "<group>"; };
 		C98E8D291524A4A70081B15A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
@@ -259,6 +260,7 @@
 				C96A1CAA14FEE5D20065CD6B /* Supporting Files */,
 				C98E8D2315249AEA0081B15A /* glew.h */,
 				C9BFF84D1524C3F000066D6C /* time.cpp */,
+				C97A73101527AADA005AE562 /* time.hpp */,
 			);
 			path = "JNGL iOS";
 			sourceTree = "<group>";
@@ -800,6 +802,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -831,6 +834,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

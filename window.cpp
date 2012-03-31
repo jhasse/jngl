@@ -206,28 +206,13 @@ namespace jngl
 	
 	void Window::MainLoop()
 	{
-		const static double timePerStep = 1.0 / 60.0;
 		while(running_)
 		{
 			if(jngl::Time() - oldTime_ > 0.5) // Is half a second missing?
 			{
 				oldTime_ += 0.5; // Let's slowdown
 			}
-			if(jngl::Time() - oldTime_ > timePerStep)
-			{
-				// This stuff needs to be done 100 times per second
-				oldTime_ += timePerStep;
-				jngl::UpdateInput();
-				currentWork_->Step();
-				needDraw_ = true;
-				if(jngl::KeyPressed(jngl::key::Escape) || !jngl::Running())
-				{
-					jngl::Continue(); // Don't let JNGL send the quit event again
-					currentWork_->QuitEvent();
-				}
-			}
-			else if(needDraw_)
-			{
+			if (!stepIfNeeded() && needDraw_) {
 				needDraw_ = false;
 				draw();
 				jngl::SwapBuffers();
@@ -236,6 +221,23 @@ namespace jngl
 			{
 				changeWork_ = false;
 				currentWork_ = newWork_;
+			}
+		}
+	}
+	
+	bool Window::stepIfNeeded() {
+		const static double timePerStep = 1.0 / 60.0;
+		if(jngl::Time() - oldTime_ > timePerStep)
+		{
+			// This stuff needs to be done 100 times per second
+			oldTime_ += timePerStep;
+			jngl::UpdateInput();
+			currentWork_->Step();
+			needDraw_ = true;
+			if(jngl::KeyPressed(jngl::key::Escape) || !jngl::Running())
+			{
+				jngl::Continue(); // Don't let JNGL send the quit event again
+				currentWork_->QuitEvent();
 			}
 		}
 	}

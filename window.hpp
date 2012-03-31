@@ -92,6 +92,7 @@ namespace jngl
 		std::string GetFont() const;
 		void SetWork(Work*);
 		void MainLoop();
+		bool stepIfNeeded();
 		void draw() const;
 #ifndef __APPLE__
 	#ifdef __linux

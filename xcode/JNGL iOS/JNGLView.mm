@@ -2,6 +2,9 @@
 
 #include "jngl.hpp"
 #include "windowptr.hpp"
+#include "time.hpp"
+
+#include <iostream>
 
 @implementation JNGLView
 
@@ -14,6 +17,11 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+		if ([[UIScreen mainScreen] respondsToSelector: NSSelectorFromString(@"scale")]) {
+			if ([self respondsToSelector: NSSelectorFromString(@"contentScaleFactor")]) {
+				self.contentScaleFactor = [[UIScreen mainScreen] scale];
+			}
+		}
 		CAEAGLLayer* eaglLayer = (CAEAGLLayer*) super.layer;
 		eaglLayer.opaque = YES;
 		
@@ -37,25 +45,63 @@
 		glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES,
 									 GL_RENDERBUFFER_OES, renderbuffer);
 		
-		int width = CGRectGetWidth(frame);
-		int height = CGRectGetHeight(frame);
+		width = CGRectGetWidth(frame);
+		height = CGRectGetHeight(frame);
 		glViewport(0, 0, width, height);
 		
 		jngl::ShowWindow("", width, height);
+		std::cout << "Resolution: " << width << "x" << height << std::endl;
+		
+		CADisplayLink* displayLink;
+		displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawView:)];
+		
+		[displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+		
+		[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+		
+		[[NSNotificationCenter defaultCenter]
+		 addObserver:self
+		 selector:@selector(didRotate:)
+		 name:UIDeviceOrientationDidChangeNotification object:nil];
+		
+		startTime = -1;
     }
     return self;
 }
 
-- (void) drawView
+- (void) drawView: (CADisplayLink*) displayLink
 {
+	if (startTime < 0) {
+		startTime = displayLink.timestamp;
+	} else {
+		jngl::elapsedSeconds = displayLink.timestamp - startTime;
+	}
+	
+	jngl::pWindow->stepIfNeeded();
+
+	glLoadIdentity();
 	glClearColor(1.0f, 1.0f, 1.0f, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
-	jngl::Translate(0, 480);
+	jngl::Translate(0, height);
 	jngl::Rotate(-90);
+	jngl::Translate(height / 2, width / 2);
+	jngl::Rotate(angle);
+	angle += (desiredAngle - angle) * 0.1;
+	jngl::Translate(-height / 2, -width / 2);
 	
 	jngl::pWindow->draw();
 	
 	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
+}
+
+- (void) didRotate:(NSNotification*) notification
+{
+	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+	if (orientation == UIDeviceOrientationLandscapeLeft) {
+		desiredAngle = 180;
+	} else {
+		desiredAngle = 0;
+	}
 }
 
 @end

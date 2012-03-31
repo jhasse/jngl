@@ -18,9 +18,12 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "../jngl.hpp"
+#include "time.hpp"
 
 namespace jngl {
+	double elapsedSeconds = 0;
+	
 	double Time() {
-		return 0;
+		return elapsedSeconds;
 	}
 }

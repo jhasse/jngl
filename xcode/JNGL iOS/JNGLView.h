@@ -6,8 +6,15 @@
 
 @interface JNGLView : UIView {
 	EAGLContext* context;
+	float angle;
+	float desiredAngle;
+	int width;
+	int height;
+	CFTimeInterval startTime;
+	
 }
 
-- (void) drawView;
+- (void) drawView: (CADisplayLink*) displayLink;
+- (void) didRotate: (NSNotification*) notification;
 
 @end

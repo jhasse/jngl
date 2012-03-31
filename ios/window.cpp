@@ -31,9 +31,6 @@ namespace jngl
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
 		
-//		SetFontByName("Arial"); // Default font
-//		SetFontSize(fontSize_); // Load a font the first time
-		
 		Init(width, height);
 		
 		running_ = true;
@@ -113,11 +110,11 @@ namespace jngl
 	
 	int GetDesktopWidth()
 	{
-		return 480;
+		return jngl::GetWindowWidth();
 	}
 	
 	int GetDesktopHeight()
 	{
-		return 240;
+		return jngl::GetWindowHeight();
 	}
 }

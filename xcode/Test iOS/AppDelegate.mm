@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 
 #import <JNGL/jngl.hpp>
+#include <sstream>
 
 @implementation AppDelegate
 
@@ -8,21 +9,27 @@
 
 class Test : public jngl::Work {
 public:
-	Test() {
+	Test() : angle(0) {
 		path = [[[NSBundle mainBundle] pathForResource:@"jngl" ofType:@"png" inDirectory:@""] UTF8String];
 		const char* font = [[[NSBundle mainBundle] pathForResource:@"Arial" ofType:@"ttf" inDirectory:@""] UTF8String];
 		jngl::SetFont(font);
 		ogg = [[[NSBundle mainBundle] pathForResource:@"test" ofType:@"ogg" inDirectory:@""] UTF8String];
 	}
 	void Step() {
+		angle += 1;
 	}
 	void Draw() {
 		jngl::Draw(path, -60, 20);
-		jngl::Print("Hallo Welt!", 10, 10);
-		jngl::Play(ogg);
+		std::stringstream sstream;
+		sstream << "FPS: " << int(jngl::FPS()) << " Time: " << jngl::Time();
+		jngl::Print(sstream.str(), 10, 10);
+		jngl::Translate(200, 200);
+		jngl::Rotate(angle);
+		jngl::Print("Hallo Welt!", -50, -10);
 	}
 private:
-	const char* path;
+	int angle;
+	std::string path;
 	const char* ogg;
 };
 
@@ -35,7 +42,6 @@ private:
     [self.window makeKeyAndVisible];
 	
 	jngl::SetWork(new Test);
-	[view drawView];
     return YES;
 }
 
