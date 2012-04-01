@@ -90,10 +90,11 @@ namespace jngl
 		void SetIcon(const std::string&);
 		double GetMouseWheel() const;
 		std::string GetFont() const;
-		void SetWork(Work*);
+		void SetWork(boost::shared_ptr<Work>);
 		void MainLoop();
 		bool stepIfNeeded();
 		void draw() const;
+		boost::shared_ptr<Work> getWork();
 #ifndef __APPLE__
 	#ifdef __linux
 		boost::shared_ptr<Display> pDisplay_;

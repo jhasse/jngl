@@ -22,6 +22,7 @@
 				self.contentScaleFactor = [[UIScreen mainScreen] scale];
 			}
 		}
+
 		CAEAGLLayer* eaglLayer = (CAEAGLLayer*) super.layer;
 		eaglLayer.opaque = YES;
 		
@@ -38,6 +39,7 @@
 		glBindFramebufferOES(GL_FRAMEBUFFER_OES, framebuffer);
 		glBindRenderbufferOES(GL_RENDERBUFFER_OES, renderbuffer);
 
+		
 		[context
 		 renderbufferStorage:GL_RENDERBUFFER_OES
 		 fromDrawable: eaglLayer];
@@ -45,8 +47,8 @@
 		glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES,
 									 GL_RENDERBUFFER_OES, renderbuffer);
 		
-		width = CGRectGetWidth(frame);
-		height = CGRectGetHeight(frame);
+		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &width);
+		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_HEIGHT_OES, &height);
 		glViewport(0, 0, width, height);
 		
 		jngl::ShowWindow("", width, height);
@@ -65,6 +67,7 @@
 		 name:UIDeviceOrientationDidChangeNotification object:nil];
 		
 		startTime = -1;
+		desiredAngle = angle = 0;
     }
     return self;
 }
@@ -97,10 +100,14 @@
 - (void) didRotate:(NSNotification*) notification
 {
 	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-	if (orientation == UIDeviceOrientationLandscapeLeft) {
-		desiredAngle = 180;
-	} else {
-		desiredAngle = 0;
+	switch (orientation) {
+		case UIDeviceOrientationLandscapeLeft:
+			desiredAngle = 180;
+			break;
+		case UIDeviceOrientationLandscapeRight:
+			desiredAngle = 0;
+			break;
+		default: break;
 	}
 }
 

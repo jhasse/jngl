@@ -62,9 +62,9 @@ namespace jngl
 
 	#ifdef OPENGLES
 		#define f2x(x) ((int)((x) * 65536))
-		glOrthox(f2x(0), f2x(width), f2x(height), f2x(0), f2x(-1), f2x(1));
+		glOrthox(f2x(-width/2), f2x(width/2), f2x(-height/2), f2x(height/2), f2x(-1), f2x(1));
 	#else
-		glOrtho(0.0f, width, height, 0.0f, -100.0f, 100.0f);
+		glOrtho(-width/2, width/2, height/2, -height/2, -100.0f, 100.0f);
 	#endif
 
 		glMatrixMode(GL_MODELVIEW);
@@ -439,11 +439,19 @@ namespace jngl
 		return vsyncEnabled;
 	}
 	
-	void SetWork(Work* w) {
+	void SetWork(boost::shared_ptr<Work> w) {
 		return pWindow->SetWork(w);
+	}
+	
+	void SetWork(Work* w) {
+		return pWindow->SetWork(boost::shared_ptr<Work>(w));
 	}
 	
 	void MainLoop() {
 		return pWindow->MainLoop();
+	}
+	
+	boost::shared_ptr<Work> GetWork() {
+		return pWindow->getWork();
 	}
 }

@@ -23,7 +23,8 @@ public:
 		std::stringstream sstream;
 		sstream << "FPS: " << int(jngl::FPS()) << " Time: " << jngl::Time();
 		jngl::Print(sstream.str(), 10, 10);
-		jngl::Translate(200, 200);
+		jngl::Print("Retina Display!", 500, 500);
+		jngl::Translate(200, 300);
 		jngl::Rotate(angle);
 		jngl::Print("Hallo Welt!", -50, -10);
 	}
