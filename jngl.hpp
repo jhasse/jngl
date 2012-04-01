@@ -22,6 +22,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include <stdexcept>
+#include <boost/shared_ptr.hpp>
 
 namespace jngl
 {
@@ -311,6 +312,10 @@ namespace jngl
 		virtual void QuitEvent();
 		virtual ~Work();
 	};
+	
+	boost::shared_ptr<Work> GetWork();
+	
+	void SetWork(boost::shared_ptr<Work> work);
 	
 	void SetWork(Work*);
 	

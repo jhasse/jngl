@@ -239,15 +239,16 @@ namespace jngl
 				jngl::Continue(); // Don't let JNGL send the quit event again
 				currentWork_->QuitEvent();
 			}
+			return true;
 		}
+		return false;
 	}
 	
 	void Window::draw() const {
 		currentWork_->Draw();
 	}
 	
-	void Window::SetWork(Work* w) {
-		boost::shared_ptr<Work> work(w);
+	void Window::SetWork(boost::shared_ptr<Work> work) {
 		if (!currentWork_) {
 			currentWork_ = work;
 		}
@@ -255,5 +256,9 @@ namespace jngl
 			changeWork_ = true;
 			newWork_ = work;
 		}
+	}
+	
+	boost::shared_ptr<Work> Window::getWork() {
+		return currentWork_;
 	}
 }
