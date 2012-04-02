@@ -18,6 +18,8 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "window.hpp"
+#include "main.hpp"
+#include "debug.hpp"
 
 #include <boost/assign/ptr_map_inserter.hpp>
 
@@ -42,7 +44,7 @@ namespace jngl
 	{
 		if(fonts_[fontSize_].find(filename) == fonts_[fontSize_].end()) // Only load font if it doesn't exist yet
 		{
-			boost::assign::ptr_map_insert(fonts_[fontSize_])(filename, filename.c_str(), fontSize_);
+			boost::assign::ptr_map_insert(fonts_[fontSize_])(filename, (pathPrefix + filename).c_str(), fontSize_);
 		}
 		fontName_ = filename;
 	}
@@ -208,31 +210,33 @@ namespace jngl
 	{
 		while(running_)
 		{
-			if(jngl::Time() - oldTime_ > 0.5) // Is half a second missing?
-			{
-				oldTime_ += 0.5; // Let's slowdown
-			}
 			if (!stepIfNeeded() && needDraw_) {
 				needDraw_ = false;
 				draw();
 				jngl::SwapBuffers();
 			}
-			if(changeWork_)
-			{
-				changeWork_ = false;
-				currentWork_ = newWork_;
-			}
 		}
 	}
 	
 	bool Window::stepIfNeeded() {
+		if(changeWork_)
+		{
+			changeWork_ = false;
+			currentWork_ = newWork_;
+		}
+		if(jngl::Time() - oldTime_ > 0.5) // Is half a second missing?
+		{
+			oldTime_ += 0.5; // Let's slowdown
+		}
 		const static double timePerStep = 1.0 / 60.0;
 		if(jngl::Time() - oldTime_ > timePerStep)
 		{
 			// This stuff needs to be done 100 times per second
 			oldTime_ += timePerStep;
 			jngl::UpdateInput();
-			currentWork_->Step();
+			if (currentWork_) {
+				currentWork_->Step();
+			}
 			needDraw_ = true;
 			if(jngl::KeyPressed(jngl::key::Escape) || !jngl::Running())
 			{
@@ -245,14 +249,20 @@ namespace jngl
 	}
 	
 	void Window::draw() const {
-		currentWork_->Draw();
+		if (currentWork_) {
+			currentWork_->Draw();
+		} else {
+			jngl::Print("No work set. Use jngl::SetWork", -50, -5);
+		}
 	}
 	
 	void Window::SetWork(boost::shared_ptr<Work> work) {
 		if (!currentWork_) {
+			Debug("setting current work to "); Debug(work.get()); Debug("\n");
 			currentWork_ = work;
 		}
 		else {
+			Debug("change work to "); Debug(work.get()); Debug("\n");
 			changeWork_ = true;
 			newWork_ = work;
 		}

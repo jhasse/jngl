@@ -31,6 +31,7 @@
 		C98E8D2D1524A5180081B15A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98E8D2C1524A5180081B15A /* QuartzCore.framework */; };
 		C98E8D341524A53F0081B15A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98E8D331524A53F0081B15A /* UIKit.framework */; };
 		C98E8D3A1524A5DE0081B15A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98E8D391524A5DE0081B15A /* CoreGraphics.framework */; };
+		C99DF1271528D85E00779081 /* message.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C99A094C13EC509D006C46FF /* message.cpp */; };
 		C9AE786314A892FE004359EF /* JNGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E948E614A7C3EF0048EFCA /* JNGL.framework */; };
 		C9BFF8021524B24600066D6C /* libJNGL iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CA614FEE5D20065CD6B /* libJNGL iOS.a */; };
 		C9BFF8091524B2F600066D6C /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF8071524B2F600066D6C /* libjpeg.a */; };
@@ -549,6 +550,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C99DF1271528D85E00779081 /* message.cpp in Sources */,
 				C9BFF8421524BE6800066D6C /* audio.cpp in Sources */,
 				C9BFF83B1524B7A900066D6C /* windowptr.cpp in Sources */,
 				C9BFF83A1524B79200066D6C /* callbacks.c in Sources */,
@@ -797,6 +799,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Test iOS/Test iOS-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				HEADER_SEARCH_PATHS = ../include/ios;
 				INFOPLIST_FILE = "Test iOS/Test iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				LIBRARY_SEARCH_PATHS = (
@@ -828,6 +831,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Test iOS/Test iOS-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				HEADER_SEARCH_PATHS = ../include/ios;
 				INFOPLIST_FILE = "Test iOS/Test iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				LIBRARY_SEARCH_PATHS = (

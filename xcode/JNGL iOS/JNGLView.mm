@@ -3,6 +3,7 @@
 #include "jngl.hpp"
 #include "windowptr.hpp"
 #include "time.hpp"
+#include "sprite.hpp"
 
 #include <iostream>
 
@@ -49,10 +50,8 @@
 		
 		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &width);
 		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_HEIGHT_OES, &height);
-		glViewport(0, 0, width, height);
 		
 		jngl::ShowWindow("", width, height);
-		std::cout << "Resolution: " << width << "x" << height << std::endl;
 		
 		CADisplayLink* displayLink;
 		displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawView:)];
@@ -68,6 +67,7 @@
 		
 		startTime = -1;
 		desiredAngle = angle = 0;
+		jngl::setPrefix(std::string([[[NSBundle mainBundle] resourcePath] UTF8String]) + "/");
     }
     return self;
 }
@@ -76,21 +76,22 @@
 {
 	if (startTime < 0) {
 		startTime = displayLink.timestamp;
+		std::cout << "DRAW" << std::endl;
 	} else {
 		jngl::elapsedSeconds = displayLink.timestamp - startTime;
 	}
 	
-	jngl::pWindow->stepIfNeeded();
+	if (jngl::pWindow->stepIfNeeded()) {
+		angle += (desiredAngle - angle) * 0.1;
+	}
 
 	glLoadIdentity();
 	glClearColor(1.0f, 1.0f, 1.0f, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
-	jngl::Translate(0, height);
+	jngl::Translate(-width/2, height/2);
 	jngl::Rotate(-90);
-	jngl::Translate(height / 2, width / 2);
+	jngl::Translate(height/2, width/2);
 	jngl::Rotate(angle);
-	angle += (desiredAngle - angle) * 0.1;
-	jngl::Translate(-height / 2, -width / 2);
 	
 	jngl::pWindow->draw();
 	

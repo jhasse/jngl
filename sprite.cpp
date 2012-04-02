@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -25,6 +25,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "finally.hpp"
 #include "windowptr.hpp"
 #include "texture.hpp"
+#include "main.hpp"
 
 #include <map>
 #include <string>
@@ -346,7 +347,7 @@ namespace jngl
 	std::map<std::string, boost::shared_ptr<Sprite> > sprites_;
 
 	// halfLoad is used, if we only want to find out the width or height of an image. Load won't throw an exception then
-	Sprite& GetSprite(const std::string& filename, const bool halfLoad = false)
+	Sprite& GetSprite(const std::string& filename, const bool halfLoad)
 	{
 		std::map<std::string, boost::shared_ptr<Sprite> >::iterator i;
 		if((i = sprites_.find(filename)) == sprites_.end()) // texture hasn't been loaded yet?
@@ -355,7 +356,7 @@ namespace jngl
 			{
 				pWindow.ThrowIfNull();
 			}
-			auto s = new Sprite(filename, halfLoad);
+			auto s = new Sprite(pathPrefix + filename, halfLoad);
 			sprites_[filename].reset(s);
 			return *s;
 		}
