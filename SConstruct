@@ -56,6 +56,7 @@ if not msvc:
 	texture.cpp
 	window.cpp
 	windowptr.cpp
+	work.cpp
 	framebuffer.cpp
 	framebufferimpl.cpp
 	"""), CPPFLAGS="-std=gnu++0x")

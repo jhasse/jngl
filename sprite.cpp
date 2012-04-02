@@ -378,7 +378,7 @@ namespace jngl
 	{
 		GetSprite(filename).DrawScaled(xposition, yposition, factor, factor);
 	}
-	
+
 	void DrawClipped(const std::string& filename, double xposition, double yposition, float xstart, float xend, float ystart, float yend)
 	{
 		GetSprite(filename).DrawClipped(xposition, yposition, xstart, xend, ystart, yend);

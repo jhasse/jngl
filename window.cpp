@@ -18,6 +18,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "window.hpp"
+#include "debug.hpp"
 
 #include <boost/assign/ptr_map_inserter.hpp>
 
@@ -46,7 +47,7 @@ namespace jngl
 		}
 		fontName_ = filename;
 	}
-	
+
 	std::string Window::GetFont() const
 	{
 		return fontName_;
@@ -101,7 +102,7 @@ namespace jngl
 	{
 		return isMouseVisible_;
 	}
-	
+
 	bool Window::GetRelativeMouseMode() const {
 		return relativeMouseMode;
 	}
@@ -203,7 +204,7 @@ namespace jngl
 	{
 		return mouseWheel_;
 	}
-	
+
 	void Window::MainLoop()
 	{
 		while(running_)
@@ -224,7 +225,7 @@ namespace jngl
 			}
 		}
 	}
-	
+
 	bool Window::stepIfNeeded() {
 		const static double timePerStep = 1.0 / 60.0;
 		if(jngl::Time() - oldTime_ > timePerStep)
@@ -232,7 +233,9 @@ namespace jngl
 			// This stuff needs to be done 100 times per second
 			oldTime_ += timePerStep;
 			jngl::UpdateInput();
-			currentWork_->Step();
+			if (currentWork_) {
+				currentWork_->Step();
+			}
 			needDraw_ = true;
 			if(jngl::KeyPressed(jngl::key::Escape) || !jngl::Running())
 			{
@@ -243,11 +246,13 @@ namespace jngl
 		}
 		return false;
 	}
-	
+
 	void Window::draw() const {
-		currentWork_->Draw();
+		if (currentWork_) {
+			currentWork_->Draw();
+		}
 	}
-	
+
 	void Window::SetWork(boost::shared_ptr<Work> work) {
 		if (!currentWork_) {
 			currentWork_ = work;
@@ -257,7 +262,7 @@ namespace jngl
 			newWork_ = work;
 		}
 	}
-	
+
 	boost::shared_ptr<Work> Window::getWork() {
 		return currentWork_;
 	}
