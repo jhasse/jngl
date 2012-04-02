@@ -205,7 +205,7 @@ namespace jngl
 	{
 		return mouseWheel_;
 	}
-	
+
 	void Window::MainLoop()
 	{
 		while(running_)
@@ -217,7 +217,7 @@ namespace jngl
 			}
 		}
 	}
-	
+
 	bool Window::stepIfNeeded() {
 		if(changeWork_)
 		{
@@ -247,7 +247,7 @@ namespace jngl
 		}
 		return false;
 	}
-	
+
 	void Window::draw() const {
 		if (currentWork_) {
 			currentWork_->Draw();
@@ -255,7 +255,7 @@ namespace jngl
 			jngl::Print("No work set. Use jngl::SetWork", -50, -5);
 		}
 	}
-	
+
 	void Window::SetWork(boost::shared_ptr<Work> work) {
 		if (!currentWork_) {
 			Debug("setting current work to "); Debug(work.get()); Debug("\n");
@@ -267,7 +267,7 @@ namespace jngl
 			newWork_ = work;
 		}
 	}
-	
+
 	boost::shared_ptr<Work> Window::getWork() {
 		return currentWork_;
 	}

@@ -28,6 +28,7 @@
     <ClCompile Include="..\win32\windowimpl.cpp" />
     <ClCompile Include="..\window.cpp" />
     <ClCompile Include="..\windowptr.cpp" />
+    <ClCompile Include="..\work.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\audio.hpp" />
