@@ -4,6 +4,7 @@
 #include "windowptr.hpp"
 #include "time.hpp"
 #include "sprite.hpp"
+#include "windowimpl.hpp"
 
 #include <iostream>
 
@@ -51,7 +52,7 @@
 		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &width);
 		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_HEIGHT_OES, &height);
 		
-		jngl::ShowWindow("", width, height);
+		jngl::ShowWindow("", height, width);
 		
 		CADisplayLink* displayLink;
 		displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawView:)];
@@ -68,21 +69,24 @@
 		startTime = -1;
 		desiredAngle = angle = 0;
 		jngl::setPrefix(std::string([[[NSBundle mainBundle] resourcePath] UTF8String]) + "/");
+		impl = jngl::pWindow->getImpl();
     }
     return self;
 }
 
 - (void) drawView: (CADisplayLink*) displayLink
 {
-	if (startTime < 0) {
-		startTime = displayLink.timestamp;
-		std::cout << "DRAW" << std::endl;
-	} else {
-		jngl::elapsedSeconds = displayLink.timestamp - startTime;
-	}
-	
-	if (jngl::pWindow->stepIfNeeded()) {
-		angle += (desiredAngle - angle) * 0.1;
+	if (displayLink) {
+		if (startTime < 0) {
+			startTime = displayLink.timestamp;
+			std::cout << "DRAW" << std::endl;
+		} else {
+			jngl::elapsedSeconds = displayLink.timestamp - startTime;
+		}
+		
+		if (jngl::pWindow->stepIfNeeded()) {
+			angle += (desiredAngle - angle) * 0.1;
+		}
 	}
 
 	glLoadIdentity();
@@ -96,6 +100,30 @@
 	jngl::pWindow->draw();
 	
 	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
+}
+
+- (void) touchesBegan: (NSSet*) touches withEvent: (UIEvent*) event
+{
+	UITouch* touch = [touches anyObject];
+	CGPoint location = [touch locationInView: self];
+	std::cout << "pWindow: " << jngl::pWindow.get() << "\n";
+	impl->setMouse(location.x, location.y);
+	impl->setMouseDown(true);
+}
+
+- (void) touchesEnded: (NSSet*) touches withEvent: (UIEvent*) event
+{
+	UITouch* touch = [touches anyObject];
+	CGPoint location = [touch locationInView: self];
+	impl->setMouse(location.x, location.y);
+	impl->setMouseDown(false);
+}
+
+- (void) touchesMoved: (NSSet*) touches withEvent: (UIEvent*) event
+{
+	UITouch* touch = [touches anyObject];
+	CGPoint location = [touch locationInView: self];
+	impl->setMouse(location.x, location.y);
 }
 
 - (void) didRotate:(NSNotification*) notification

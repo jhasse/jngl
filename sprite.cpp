@@ -26,6 +26,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include "windowptr.hpp"
 #include "texture.hpp"
 #include "main.hpp"
+#include "debug.hpp"
 
 #include <map>
 #include <string>
@@ -355,6 +356,7 @@ namespace jngl
 			if(!halfLoad)
 			{
 				pWindow.ThrowIfNull();
+				Debug("Loading "); Debug(filename); Debug(" ...\n");
 			}
 			auto s = new Sprite(pathPrefix + filename, halfLoad);
 			sprites_[filename].reset(s);

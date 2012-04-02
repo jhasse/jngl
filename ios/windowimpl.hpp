@@ -1,5 +1,5 @@
 /*
-Copyright 2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -19,25 +19,23 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "window.hpp"
-
 #include <boost/noncopyable.hpp>
 
-namespace jngl
-{
-	class WindowPointer : boost::noncopyable {
+namespace jngl {
+	class Window;
+	
+	class WindowImpl : boost::noncopyable {
 	public:
-		WindowPointer();
-		~WindowPointer();
-		Window* operator->() const;
-		operator bool() const;
-		void Delete();
-		void Set(Window*);
-		void ThrowIfNull() const;
-		Window* get() const;
+		WindowImpl(Window*);
+		void setMouse(int, int);
+		void setMouseDown(bool);
+		void setRelativeMouseMode(bool);
+		int relativeX = 0;
+		int relativeY = 0;
+		void updateInput();
 	private:
-		Window* ptr_;
+		Window* const window;
+		int mouseX = 0;
+		int mouseY = 0;
 	};
-
-	extern WindowPointer pWindow;
 }

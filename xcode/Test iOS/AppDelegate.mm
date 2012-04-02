@@ -9,16 +9,29 @@
 
 class Test : public jngl::Work {
 public:
-	Test() : angle(0) {
+	Test() : angle(0), fbo(0) {
 		jngl::SetFont("Arial.ttf");
 		jngl::Play("test.ogg");
 		std::cout << "Resolution: " << jngl::GetWindowWidth() << "x" << jngl::GetWindowHeight() << std::endl;
 	}
 	void Step() {
 		angle += 1;
+		if (!fbo) {
+			fbo = new jngl::FrameBuffer(100, 100);
+		}
 	}
 	void Draw() {
-		jngl::Draw("jngl.png", -300, -140);
+		if (fbo) {
+			fbo->BeginDraw();
+			jngl::Print("fbo", 0, 0);
+			fbo->EndDraw();
+		}
+		if (jngl::MouseDown()) {
+			jngl::SetSpriteColor(0, 0, 0);
+		} else {
+			jngl::SetSpriteColor(255, 255, 255);
+		}
+		jngl::Draw("jngl.png", -300 + jngl::GetMouseX(), -140 + jngl::GetMouseY());
 		std::stringstream sstream;
 		sstream << "FPS: " << int(jngl::FPS()) << " Time: " << jngl::Time();
 		jngl::Print(sstream.str(), -230, -150);
@@ -26,10 +39,12 @@ public:
 		jngl::Translate(-40, 140);
 		jngl::Rotate(angle);
 		jngl::Print("Hallo Welt!", -50, -10);
+		if (fbo) fbo->Draw(0, 0);
 	}
 private:
 	int angle;
 	const char* ogg;
+	jngl::FrameBuffer* fbo;
 };
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -37,12 +52,15 @@ private:
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	view = [[JNGLView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
-	[self.window addSubview: view];
-    [self.window makeKeyAndVisible];
-	
+	self.window.rootViewController = [[UIViewController alloc] initWithNibName:nil bundle:nil];
+	[self.window.rootViewController setView:view];
+	[self.window addSubview:view];
+
 	jngl::ShowWindow("", jngl::GetWindowWidth(), jngl::GetWindowHeight());
 	jngl::SetWork(new Test);
 	std::cout << "START" << std::endl;
+	[view drawView:nil];
+    [self.window makeKeyAndVisible];
     return YES;
 }
 

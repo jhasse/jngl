@@ -83,6 +83,8 @@ namespace jngl
 
 	void ShowWindow(const std::string& title, const int width, const int height, bool fullscreen)
 	{
+		Debug("jngl::ShowWindow(\""); Debug(title); Debug("\", "); Debug(width); Debug(", "); Debug(height);
+		Debug(", "); Debug(fullscreen); Debug(");\n");
 		if (pWindow &&
 		    width == pWindow->GetWidth() &&
 		    height == pWindow->GetHeight() &&

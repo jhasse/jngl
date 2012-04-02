@@ -39,5 +39,10 @@ private:
 	const int width;
 	const int height;
 	Texture texture;
+	GLuint systemFbo;
+	GLuint systemBuffer;
+#ifndef GL_VIEWPORT_BIT
+	GLint viewport[4];
+#endif
 };
 }

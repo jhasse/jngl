@@ -27,20 +27,28 @@ namespace jngl {
 		if(!GLEW_EXT_framebuffer_object) {
 			throw std::runtime_error("OpenGL Frame Buffer Object not supported!");
 		}
-		glGenFramebuffers(1, &fbo);
-		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		GLint tmp;
+		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &tmp);
+		systemFbo = tmp;
+		glGetIntegerv(GL_RENDERBUFFER_BINDING, &tmp);
+		systemBuffer = tmp;
+
 		glGenRenderbuffers(1, &buffer);
 		glBindRenderbuffer(GL_RENDERBUFFER, buffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, buffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, width, height);
 
-		
+		glGenFramebuffers(1, &fbo);
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, buffer);
+
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.GetID(), 0);
 
 		assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 		
 		Clear();
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, systemFbo);
+		glBindRenderbuffer(GL_RENDERBUFFER, systemBuffer);
 	}
 
 	FrameBufferImpl::~FrameBufferImpl() {
@@ -50,7 +58,12 @@ namespace jngl {
 
 	void FrameBufferImpl::BeginDraw() {
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		glBindRenderbuffer(GL_RENDERBUFFER, buffer);
+#ifdef GL_VIEWPORT_BIT
 		glPushAttrib(GL_VIEWPORT_BIT);
+#else
+		glGetIntegerv(GL_VIEWPORT, viewport);
+#endif
 		glViewport(0, -(pWindow->GetHeight() - height), pWindow->GetWidth(), pWindow->GetHeight());
 		glPushMatrix();
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
@@ -64,8 +77,13 @@ namespace jngl {
 	void FrameBufferImpl::EndDraw() {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glPopMatrix();
+#ifdef GL_VIEWPORT_BIT
 		glPopAttrib();
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#else
+		glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+#endif
+		glBindFramebuffer(GL_FRAMEBUFFER, systemFbo);
+		glBindRenderbuffer(GL_RENDERBUFFER, systemBuffer);
 		ClearBackgroundColor();
 	}
 

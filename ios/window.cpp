@@ -19,23 +19,25 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../window.hpp"
 #include "../debug.hpp"
+#include "windowimpl.hpp"
 
 #include <stdexcept>
 
 namespace jngl
 {		
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
-	: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false), isMultisampleSupported_(true),
-	anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0), fontName_("")
+	: fullscreen_(fullscreen), running_(false), isMouseVisible_(true),
+	  relativeMouseMode(false), isMultisampleSupported_(true),
+	  anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height),
+	  mouseWheel_(0), fontName_(""), impl(new WindowImpl(this)),
+	  changeWork_(false)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
 		
-		Init(width, height);
+		Init(height, width);
 		
 		running_ = true;
-		
-		std::swap(width_, height_); // Swap because we only support Landscape mode
 	}
 	
 	std::string Window::GetFontFileByName(const std::string& fontname)
@@ -49,6 +51,7 @@ namespace jngl
 	
 	Window::~Window()
 	{
+		delete impl;
 	}
 	
 	int Window::GetKeyCode(key::KeyType key)
@@ -73,8 +76,8 @@ namespace jngl
 		return characterPressed_[key];
 	}
 	
-	void Window::UpdateInput()
-	{
+	void Window::UpdateInput() {
+		impl->updateInput();
 	}
 	
 	void Window::SwapBuffers()
@@ -89,13 +92,11 @@ namespace jngl
 	{
 	}
 	
-	int Window::MouseX()
-	{
+	int Window::MouseX() {
 		return mousex_;
 	}
 	
-	int Window::MouseY()
-	{
+	int Window::MouseY() {
 		return mousey_;
 	}
 	
@@ -104,6 +105,8 @@ namespace jngl
 	}
 	
 	void Window::SetRelativeMouseMode(const bool relative) {
+		relativeMouseMode = relative;
+		impl->setRelativeMouseMode(relative);
 	}
 	
 	void Window::SetIcon(const std::string&)
@@ -118,5 +121,9 @@ namespace jngl
 	int GetDesktopHeight()
 	{
 		return jngl::GetWindowHeight();
+	}
+	
+	WindowImpl* Window::getImpl() const {
+		return impl;
 	}
 }

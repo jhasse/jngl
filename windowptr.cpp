@@ -63,4 +63,8 @@ namespace jngl
 			throw std::runtime_error("Window hasn't been created yet. Use jngl::ShowWindow.");
 		}
 	}
+	
+	Window* WindowPointer::get() const {
+		return ptr_;
+	}
 }

@@ -4,6 +4,7 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate> {
 	JNGLView* view;
+	UIViewController* viewController;
 }
 
 @property (strong, nonatomic) UIWindow *window;

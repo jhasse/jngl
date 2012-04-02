@@ -28,6 +28,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/type_traits.hpp>
 #include <boost/array.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <boost/noncopyable.hpp>
 #include <map>
 #include <stack>
 
@@ -51,7 +52,7 @@ namespace jngl
 	class WindowImpl;
 
 	bool Init(const int width, const int height); // Definied in main.cpp
-	class Window
+	class Window : boost::noncopyable
 	{
 	public:
 		Window(const std::string& title, const int width, const int height, const bool fullscreen);
@@ -103,6 +104,8 @@ namespace jngl
 		static void ReleaseDC(HWND, HDC);
 		static void ReleaseRC(HGLRC);
 	#endif
+#else
+		WindowImpl* getImpl() const;
 #endif
 	private:
 		int GetKeyCode(jngl::key::KeyType key);
@@ -152,7 +155,9 @@ namespace jngl
 	#endif
 #endif
 #else
-		WindowImpl* impl;
+		WindowImpl* const impl;
+		
+		friend WindowImpl;
 #endif
 	};
 }
