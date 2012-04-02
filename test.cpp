@@ -22,7 +22,7 @@ double absolute(double v);
 
 class Test : public jngl::Work {
 public:
-	Test() : fb(100, 110), fb2(800, 600) {
+	Test() : fb(100, 110), fb2(800, 600), rotate(0), frameNumber(0) {
 		jngl::SetTitle("JNGL Test Application");
 		jngl::SetIcon("jngl.png");
 		jngl::SetMouseVisible(false);
@@ -171,8 +171,8 @@ public:
 	}
 private:
 	bool drawOnFrameBuffer = false;
-	double rotate = 0.0;
-	int frameNumber = 0;
+	double rotate;
+	int frameNumber;
 	double frameTime;
 	double lastTime;
 	jngl::FrameBuffer fb, fb2;
