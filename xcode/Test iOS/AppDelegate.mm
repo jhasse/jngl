@@ -10,27 +10,25 @@
 class Test : public jngl::Work {
 public:
 	Test() : angle(0) {
-		path = [[[NSBundle mainBundle] pathForResource:@"jngl" ofType:@"png" inDirectory:@""] UTF8String];
-		const char* font = [[[NSBundle mainBundle] pathForResource:@"Arial" ofType:@"ttf" inDirectory:@""] UTF8String];
-		jngl::SetFont(font);
-		ogg = [[[NSBundle mainBundle] pathForResource:@"test" ofType:@"ogg" inDirectory:@""] UTF8String];
+		jngl::SetFont("Arial.ttf");
+		jngl::Play("test.ogg");
+		std::cout << "Resolution: " << jngl::GetWindowWidth() << "x" << jngl::GetWindowHeight() << std::endl;
 	}
 	void Step() {
 		angle += 1;
 	}
 	void Draw() {
-		jngl::Draw(path, -60, 20);
+		jngl::Draw("jngl.png", -300, -140);
 		std::stringstream sstream;
 		sstream << "FPS: " << int(jngl::FPS()) << " Time: " << jngl::Time();
-		jngl::Print(sstream.str(), 10, 10);
-		jngl::Print("Retina Display!", 500, 500);
-		jngl::Translate(200, 300);
+		jngl::Print(sstream.str(), -230, -150);
+		jngl::Print("Retina Display!", 260, 340);
+		jngl::Translate(-40, 140);
 		jngl::Rotate(angle);
 		jngl::Print("Hallo Welt!", -50, -10);
 	}
 private:
 	int angle;
-	std::string path;
 	const char* ogg;
 };
 
@@ -42,7 +40,9 @@ private:
 	[self.window addSubview: view];
     [self.window makeKeyAndVisible];
 	
+	jngl::ShowWindow("", jngl::GetWindowWidth(), jngl::GetWindowHeight());
 	jngl::SetWork(new Test);
+	std::cout << "START" << std::endl;
     return YES;
 }
 

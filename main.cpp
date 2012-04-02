@@ -38,6 +38,7 @@ extern "C"
 
 namespace jngl
 {
+	std::string pathPrefix;
     float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
 	bool Init(const int width, const int height)
 	{
@@ -62,7 +63,7 @@ namespace jngl
 
 	#ifdef OPENGLES
 		#define f2x(x) ((int)((x) * 65536))
-		glOrthox(f2x(-width/2), f2x(width/2), f2x(-height/2), f2x(height/2), f2x(-1), f2x(1));
+		glOrthox(f2x(-width/2), f2x(width/2), f2x(height/2), f2x(-height/2), f2x(-1), f2x(1));
 	#else
 		glOrtho(-width/2, width/2, height/2, -height/2, -100.0f, 100.0f);
 	#endif
@@ -82,6 +83,12 @@ namespace jngl
 
 	void ShowWindow(const std::string& title, const int width, const int height, bool fullscreen)
 	{
+		if (pWindow &&
+		    width == pWindow->GetWidth() &&
+		    height == pWindow->GetHeight() &&
+		    fullscreen == pWindow->GetFullscreen()) {
+			return jngl::SetTitle(title);
+		}
 		bool isMouseVisible = pWindow ? pWindow->GetMouseVisible() : true;
 		HideWindow();
 		if(width == 0)
@@ -453,5 +460,13 @@ namespace jngl
 	
 	boost::shared_ptr<Work> GetWork() {
 		return pWindow->getWork();
+	}
+	
+	void setPrefix(const std::string& path) {
+		pathPrefix = path;
+	}
+	
+	std::string getPrefix() {
+		return pathPrefix;
 	}
 }

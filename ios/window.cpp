@@ -34,6 +34,8 @@ namespace jngl
 		Init(width, height);
 		
 		running_ = true;
+		
+		std::swap(width_, height_); // Swap because we only support Landscape mode
 	}
 	
 	std::string Window::GetFontFileByName(const std::string& fontname)

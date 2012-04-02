@@ -23,7 +23,11 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace jngl
 {
+	class Sprite;
+
 	void LoadSprite(const std::string&);
+	Sprite& GetSprite(const std::string& filename, const bool halfLoad = false);
+
 	extern unsigned char spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha,
 						 colorRed,       colorGreen,       colorBlue,       colorAlpha;
 };

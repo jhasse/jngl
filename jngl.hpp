@@ -320,6 +320,10 @@ namespace jngl
 	void SetWork(Work*);
 	
 	void MainLoop();
+	
+	void setPrefix(const std::string& path);
+	
+	std::string getPrefix();
 }
 
 #endif // __JNGL_HPP__

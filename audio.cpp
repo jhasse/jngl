@@ -28,6 +28,7 @@ int vswprintf(wchar_t *, const wchar_t *, va_list);
 #include "jngl.hpp"
 #include "debug.hpp"
 #include "audio.hpp"
+#include "main.hpp"
 
 #include <cstdio>
 #include <stdexcept>
@@ -235,7 +236,7 @@ namespace jngl
 		auto i = sounds.find(filename);
 		if(i == sounds.end()) // sound hasn't been loaded yet?
 		{
-			sounds[filename].reset(new SoundFile(filename));
+			sounds[filename].reset(new SoundFile(pathPrefix + filename));
 			return *(sounds[filename]);
 		}
 		return *(i->second);
