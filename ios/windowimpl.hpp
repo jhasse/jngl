@@ -30,6 +30,7 @@ namespace jngl {
 		void setMouse(int, int);
 		void setMouseDown(bool);
 		void setRelativeMouseMode(bool);
+		void setFlip(bool);
 		int relativeX = 0;
 		int relativeY = 0;
 		void updateInput();
@@ -37,5 +38,6 @@ namespace jngl {
 		Window* const window;
 		int mouseX = 0;
 		int mouseY = 0;
+		bool flip = false;
 	};
 }

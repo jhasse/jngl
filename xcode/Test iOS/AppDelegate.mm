@@ -17,14 +17,16 @@ public:
 	void Step() {
 		angle += 1;
 		if (!fbo) {
-			fbo = new jngl::FrameBuffer(100, 100);
+			fbo = new jngl::FrameBuffer(jngl::GetWindowWidth(), jngl::GetWindowHeight());
 		}
 	}
 	void Draw() {
 		if (fbo) {
 			fbo->BeginDraw();
-			jngl::Print("fbo", 0, 0);
+			jngl::Print("fbo", -jngl::GetWindowWidth() / 2, -jngl::GetWindowHeight() / 2);
+			jngl::Draw("jngl.png", -300, -140);
 			fbo->EndDraw();
+			fbo->Draw(-jngl::GetWindowWidth() / 2, -jngl::GetWindowHeight() / 2);
 		}
 		if (jngl::MouseDown()) {
 			jngl::SetSpriteColor(0, 0, 0);
@@ -39,7 +41,6 @@ public:
 		jngl::Translate(-40, 140);
 		jngl::Rotate(angle);
 		jngl::Print("Hallo Welt!", -50, -10);
-		if (fbo) fbo->Draw(0, 0);
 	}
 private:
 	int angle;

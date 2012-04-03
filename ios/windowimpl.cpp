@@ -33,8 +33,13 @@ namespace jngl {
 			x *= 2;
 			y *= 2;
 		}
-		mouseX = window->width_ - y;
-		mouseY = x;
+		if (flip) {
+			mouseX = y;
+			mouseY = window->height_ - x;
+		} else {
+			mouseX = window->width_ - y;
+			mouseY = x;
+		}
 	}
 	
 	void WindowImpl::setMouseDown(bool d) {
@@ -60,5 +65,9 @@ namespace jngl {
 			relativeX = mouseX;
 			relativeY = mouseY;
 		}
+	}
+	
+	void WindowImpl::setFlip(bool f) {
+		flip = f;
 	}
 }

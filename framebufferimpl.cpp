@@ -59,13 +59,20 @@ namespace jngl {
 	void FrameBufferImpl::BeginDraw() {
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		glBindRenderbuffer(GL_RENDERBUFFER, buffer);
+		glPushMatrix();
 #ifdef GL_VIEWPORT_BIT
 		glPushAttrib(GL_VIEWPORT_BIT);
 #else
 		glGetIntegerv(GL_VIEWPORT, viewport);
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+#define f2x(x) ((int)((x) * 65536))
+		glOrthox(f2x(-width/2), f2x(width/2), f2x(height/2), f2x(-height/2), f2x(-1), f2x(1));
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 #endif
 		glViewport(0, -(pWindow->GetHeight() - height), pWindow->GetWidth(), pWindow->GetHeight());
-		glPushMatrix();
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 	}
 	
@@ -81,6 +88,10 @@ namespace jngl {
 		glPopAttrib();
 #else
 		glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+		
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
 #endif
 		glBindFramebuffer(GL_FRAMEBUFFER, systemFbo);
 		glBindRenderbuffer(GL_RENDERBUFFER, systemBuffer);

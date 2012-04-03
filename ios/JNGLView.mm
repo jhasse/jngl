@@ -5,6 +5,7 @@
 #include "time.hpp"
 #include "sprite.hpp"
 #include "windowimpl.hpp"
+#include "main.hpp"
 
 #include <iostream>
 
@@ -90,11 +91,8 @@
 	}
 
 	glLoadIdentity();
-	glClearColor(1.0f, 1.0f, 1.0f, 1);
+	jngl::ClearBackgroundColor();
 	glClear(GL_COLOR_BUFFER_BIT);
-	jngl::Translate(-width/2, height/2);
-	jngl::Rotate(-90);
-	jngl::Translate(height/2, width/2);
 	jngl::Rotate(angle);
 	
 	jngl::pWindow->draw();
@@ -132,9 +130,11 @@
 	switch (orientation) {
 		case UIDeviceOrientationLandscapeLeft:
 			desiredAngle = 180;
+			impl->setFlip(true);
 			break;
 		case UIDeviceOrientationLandscapeRight:
 			desiredAngle = 0;
+			impl->setFlip(false);
 			break;
 		default: break;
 	}

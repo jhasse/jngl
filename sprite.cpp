@@ -62,6 +62,11 @@ namespace jngl
 		spriteColorAlpha = alpha;
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
+	
+	void setSpriteAlpha(const unsigned char alpha) {
+		SetSpriteColor(spriteColorRed, spriteColorGreen, spriteColorBlue, alpha);
+	}
+	
 #ifndef NOJPEG
 	struct JpegErrorMgr
 	{
