@@ -25,33 +25,33 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 
 namespace jngl
-{		
+{
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
 		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false), isMultisampleSupported_(true),
 		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0), fontName_(""), needDraw_(true),
-		  impl(new WindowImpl)
+		  impl(new WindowImpl), changeWork_(false)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
-		
+
 		SDL::init();
-		
+
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-		
+
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 		if(fullscreen) {
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 		impl->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 						             width, height, flags);
-		
+
 		if(!impl->sdlWindow) {
 			throw std::runtime_error(SDL_GetError());
 		}
-		
+
 		impl->context = SDL_GL_CreateContext(impl->sdlWindow);
-		
+
 		SDL_EnableUNICODE(SDL_ENABLE);
 
 		SetFontByName("Arial"); // Default font
@@ -126,7 +126,7 @@ namespace jngl
 	{
 		return characterDown_[key];
 	}
-	
+
 	bool Window::KeyPressed(const std::string& key)
 	{
 		if(characterPressed_[key])
@@ -259,7 +259,7 @@ namespace jngl
 	{
 		SDL_WarpMouseInWindow(impl->sdlWindow, xposition, yposition);
 	}
-	
+
 	void Window::SetRelativeMouseMode(const bool relative) {
 		relativeMouseMode = relative;
 		int rtn = SDL_SetRelativeMouseMode(relative ? SDL_TRUE : SDL_FALSE);
@@ -271,7 +271,7 @@ namespace jngl
 			SDL_GetMouseState(&mousex_, &mousey_);
 		}
 	}
-	
+
 	void Window::SetIcon(const std::string&)
 	{
 		return; // TODO: Not implemented yet
@@ -284,7 +284,7 @@ namespace jngl
 		SDL_GetDesktopDisplayMode(0, &mode);
 		return mode.w;
 	}
-	
+
 	int GetDesktopHeight()
 	{
 		SDL::init();

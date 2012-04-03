@@ -63,7 +63,7 @@ namespace jngl
 
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
 		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false), isMultisampleSupported_(true),
-		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0), fontName_("")
+		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0), fontName_(""), changeWork_(false)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
@@ -485,7 +485,7 @@ namespace jngl
 	{
 		XWarpPointer(pDisplay_.get(), None, window_, 0, 0, 0, 0, xposition, yposition);
 	}
-	
+
 	void Window::SetIcon(const std::string&)
 	{
 		return; // TODO: Not implemented yet
@@ -497,7 +497,7 @@ namespace jngl
 		Finally finally(boost::bind(XCloseDisplay, display));
 		return XDisplayWidth(display, XDefaultScreen(display));
 	}
-	
+
 	int GetDesktopHeight()
 	{
 		Display* display = XOpenDisplay(NULL);
