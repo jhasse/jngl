@@ -29,7 +29,7 @@ namespace jngl
 	: fullscreen_(fullscreen), running_(false), isMouseVisible_(true),
 	  relativeMouseMode(false), isMultisampleSupported_(true),
 	  anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height),
-	  mouseWheel_(0), fontName_(""), impl(new WindowImpl(this)),
+	  mouseWheel_(0), fontName_(""), oldTime_(0), needDraw_(true), impl(new WindowImpl(this)),
 	  changeWork_(false)
 	{
 		mouseDown_.assign(false);
