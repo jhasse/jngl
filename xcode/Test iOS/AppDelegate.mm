@@ -17,7 +17,7 @@ public:
 	void Step() {
 		angle += 1;
 		if (!fbo) {
-			fbo = new jngl::FrameBuffer(jngl::GetWindowWidth(), jngl::GetWindowHeight());
+			fbo = new jngl::FrameBuffer(jngl::GetWindowWidth(), jngl::GetWindowHeight() * 0.75);
 		}
 	}
 	void Draw() {
