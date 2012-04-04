@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -92,8 +92,9 @@ namespace jngl
 	}
 
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
-		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false), isMultisampleSupported_(false),
-		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0), changeWork_(false)
+		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false),
+		  isMultisampleSupported_(false), anyKeyPressed_(false), fontSize_(12), width_(width), height_(height),
+		  mouseWheel_(0), oldTime_(0), changeWork_(false)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
