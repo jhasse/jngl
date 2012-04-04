@@ -28,7 +28,7 @@ bool Texture::useVBO_ = true;
 
 Texture::Texture(const int imgWidth, const int imgHeight, GLubyte** rowPointers, GLenum format, int channels)
 {
-	if(useVBO_ && !GLEW_ARB_vertex_buffer_object)
+	if(useVBO_ && (!GLEW_ARB_vertex_buffer_object || !GLEW_VERSION_1_5))
 	{
 		Debug("VBOs not supported, using Vertex Arrays\n");
 		useVBO_ = false;
