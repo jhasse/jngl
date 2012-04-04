@@ -2,6 +2,7 @@
 
 #define OPENGLES 1
 
+#define GLEW_VERSION_1_5 1
 #define GLEW_EXT_framebuffer_object 1
 #define GLEW_ARB_vertex_buffer_object 1
 #define glGenFramebuffers glGenFramebuffersOES

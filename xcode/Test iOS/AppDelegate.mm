@@ -12,7 +12,8 @@ public:
 	Test() : angle(0), fbo(0) {
 		jngl::SetFont("Arial.ttf");
 		jngl::Play("test.ogg");
-		std::cout << "Resolution: " << jngl::GetWindowWidth() << "x" << jngl::GetWindowHeight() << std::endl;
+		std::cout << "Resolution: " << jngl::GetWindowWidth() << "x" << jngl::GetWindowHeight() << std::endl
+		<< "Config path: " << jngl::getConfigPath() << std::endl;
 	}
 	void Step() {
 		angle += 1;

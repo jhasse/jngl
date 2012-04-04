@@ -326,6 +326,10 @@ namespace jngl
 	void setPrefix(const std::string& path);
 	
 	std::string getPrefix();
+	
+	void setConfigPath(const std::string& path);
+	
+	std::string getConfigPath();
 }
 
 #endif // __JNGL_HPP__

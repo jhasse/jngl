@@ -96,6 +96,8 @@ namespace jngl
 		bool stepIfNeeded();
 		void draw() const;
 		boost::shared_ptr<Work> getWork();
+		void setConfigPath(const std::string&);
+		std::string getConfigPath() const;
 #ifndef __APPLE__
 	#ifdef __linux
 		boost::shared_ptr<Display> pDisplay_;
@@ -110,6 +112,7 @@ namespace jngl
 	private:
 		int GetKeyCode(jngl::key::KeyType key);
 		std::string GetFontFileByName(const std::string& fontname);
+
 		bool fullscreen_, running_, isMouseVisible_, relativeMouseMode, isMultisampleSupported_, anyKeyPressed_;
 		boost::array<bool, 3> mouseDown_;
 		boost::array<bool, 3> mousePressed_;
@@ -127,6 +130,7 @@ namespace jngl
 		boost::shared_ptr<Work> currentWork_;
 		bool changeWork_;
 		boost::shared_ptr<Work> newWork_;
+		std::string configPath;
 
 		// <fontSize, <fontName, Font> >
 		boost::ptr_map<int, boost::ptr_map<std::string, Font> > fonts_;

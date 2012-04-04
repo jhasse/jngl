@@ -70,6 +70,9 @@
 		startTime = -1;
 		desiredAngle = angle = 0;
 		jngl::setPrefix(std::string([[[NSBundle mainBundle] resourcePath] UTF8String]) + "/");
+		jngl::setConfigPath(std::string([[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
+		                                  objectAtIndex:0]
+		                                 UTF8String]) + "/");
 		impl = jngl::pWindow->getImpl();
     }
     return self;

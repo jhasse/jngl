@@ -219,11 +219,6 @@ namespace jngl
 	}
 
 	bool Window::stepIfNeeded() {
-		if(changeWork_)
-		{
-			changeWork_ = false;
-			currentWork_ = newWork_;
-		}
 		if(jngl::Time() - oldTime_ > 0.5) // Is half a second missing?
 		{
 			oldTime_ += 0.5; // Let's slowdown
@@ -242,6 +237,10 @@ namespace jngl
 			{
 				jngl::Continue(); // Don't let JNGL send the quit event again
 				currentWork_->QuitEvent();
+			}
+			if(changeWork_) {
+				changeWork_ = false;
+				currentWork_ = newWork_;
 			}
 			return true;
 		}
@@ -270,5 +269,13 @@ namespace jngl
 
 	boost::shared_ptr<Work> Window::getWork() {
 		return currentWork_;
+	}
+	
+	void Window::setConfigPath(const std::string& path) {
+		configPath = path;
+	}
+	
+	std::string Window::getConfigPath() const {
+		return configPath;
 	}
 }

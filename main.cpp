@@ -474,4 +474,12 @@ namespace jngl
 	std::string getPrefix() {
 		return pathPrefix;
 	}
+	
+	void setConfigPath(const std::string& path) {
+		pWindow->setConfigPath(path);
+	}
+	
+	std::string getConfigPath() {
+		return pWindow->getConfigPath();
+	}
 }
