@@ -44,7 +44,10 @@ public:
 		if(drawOnFrameBuffer) {
 			fb2.BeginDraw();
 			fb2.Clear();
+			jngl::Translate(-jngl::GetWindowWidth() / 2, -jngl::GetWindowHeight() / 2);
 		}
+		jngl::Translate(-jngl::GetWindowWidth() / 2, -jngl::GetWindowHeight() / 2);
+		jngl::PushMatrix();
 		double timeSinceLastFrame = jngl::Time() - lastTime;
 		lastTime = jngl::Time();
 		for(int i = 0; i < 10; ++i)
@@ -85,7 +88,7 @@ public:
 		jngl::SetFontSize(20);
 		jngl::Print("White text without background", -115, 135);
 		jngl::SetFontSize(12);
-		jngl::Reset();
+		jngl::PopMatrix();
 		std::stringstream sstream;
 		sstream << "FPS" << (jngl::GetVerticalSync() ? " (V-SYNC)" : "") << ": " << int(jngl::FPS()) << "\nFactor: " << factor << "\nSize of double: " << sizeof(double);
 		jngl::SetColor(0, 0, 0);
