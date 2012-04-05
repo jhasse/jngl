@@ -230,17 +230,18 @@ namespace jngl
 			oldTime_ += timePerStep;
 			jngl::UpdateInput();
 			if (currentWork_) {
-				currentWork_->Step();
+				currentWork_->step();
 			}
 			needDraw_ = true;
 			if(jngl::KeyPressed(jngl::key::Escape) || !jngl::Running())
 			{
 				jngl::Continue(); // Don't let JNGL send the quit event again
-				currentWork_->QuitEvent();
+				currentWork_->onQuitEvent();
 			}
-			if(changeWork_) {
+			while (changeWork_) {
 				changeWork_ = false;
 				currentWork_ = newWork_;
+				currentWork_->onLoad();
 			}
 			return true;
 		}
@@ -249,7 +250,7 @@ namespace jngl
 
 	void Window::draw() const {
 		if (currentWork_) {
-			currentWork_->Draw();
+			currentWork_->draw();
 		} else {
 			jngl::Print("No work set. Use jngl::SetWork", -50, -5);
 		}

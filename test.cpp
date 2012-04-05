@@ -26,7 +26,7 @@ public:
 		jngl::SetTitle("JNGL Test Application");
 		jngl::SetIcon("jngl.png");
 		jngl::SetMouseVisible(false);
-		fb.BeginDraw();
+		fb.beginDraw();
 		jngl::SetColor(255, 0, 0);
 		jngl::DrawRect(0, 0, 64, 64);
 		jngl::SetColor(0, 255, 0);
@@ -34,16 +34,16 @@ public:
 		jngl::SetColor(0, 0, 255);
 		jngl::DrawRect(64, 0, 64, 64);
 		jngl::Print("Frame\nBuffer\nObject", 50, 10);
-		fb.EndDraw();
+		fb.endDraw();
 		frameTime = jngl::Time();
 		lastTime = jngl::Time();
 	}
-	void Step() {
+	void step() {
 	}
-	void Draw() {
+	void draw() const {
 		if(drawOnFrameBuffer) {
-			fb2.BeginDraw();
-			fb2.Clear();
+			fb2.beginDraw();
+			fb2.clear();
 			jngl::Translate(-jngl::GetWindowWidth() / 2, -jngl::GetWindowHeight() / 2);
 		}
 		jngl::Translate(-jngl::GetWindowWidth() / 2, -jngl::GetWindowHeight() / 2);
@@ -66,7 +66,7 @@ public:
 		jngl::DrawLine(-50, -50, 50, 50);
 		jngl::PopMatrix();
 		jngl::SetSpriteColor(255, 255, 255, 200);
-		fb.Draw(600, 300);
+		fb.draw(600, 300);
 		jngl::Translate(jngl::GetWindowWidth() / 2, jngl::GetWindowHeight() / 2);
 		jngl::Rotate(rotate);
 		rotate += 90 * timeSinceLastFrame; // 90 degree per second
@@ -149,10 +149,10 @@ public:
 		volume += static_cast<float>(jngl::GetMouseWheel()) / 100.0f;
 		jngl::SetColor(0,0,255,128);
 		if(drawOnFrameBuffer) {
-			fb2.EndDraw();
+			fb2.endDraw();
 			jngl::Reset();
 			jngl::SetSpriteColor(255, 255, 255);
-			fb2.Draw(0, 0);
+			fb2.draw(0, 0);
 		}
 		if(jngl::KeyPressed('f')) {
 			drawOnFrameBuffer = !drawOnFrameBuffer;
@@ -173,12 +173,12 @@ public:
 		}
 	}
 private:
-	bool drawOnFrameBuffer;
-	double rotate;
-	int frameNumber;
-	double frameTime;
-	double lastTime;
-	jngl::FrameBuffer fb, fb2;
+	mutable bool drawOnFrameBuffer;
+	mutable double rotate;
+	mutable int frameNumber;
+	mutable double frameTime;
+	mutable double lastTime;
+	mutable jngl::FrameBuffer fb, fb2;
 };
 
 int main() {

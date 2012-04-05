@@ -20,8 +20,11 @@
 #include "jngl.hpp"
 
 namespace jngl {
-	void Work::QuitEvent() {
+	void Work::onQuitEvent() {
 		jngl::Quit();
+	}
+	
+	void Work::onLoad() {
 	}
 	
 	Work::~Work() {
