@@ -16,19 +16,19 @@ public:
 		std::cout << "Resolution: " << jngl::GetWindowWidth() << "x" << jngl::GetWindowHeight() << std::endl
 		          << "Config path: " << jngl::getConfigPath() << std::endl;
 	}
-	void Step() {
+	void step() {
 		angle += 1;
 		if (!fbo) {
 			fbo = new jngl::FrameBuffer(jngl::GetWindowWidth(), jngl::GetWindowHeight() * 0.75);
 		}
 	}
-	void Draw() {
+	void draw() const {
 		if (fbo) {
-			fbo->BeginDraw();
+			fbo->beginDraw();
 			jngl::Print("fbo", -jngl::GetWindowWidth() / 2, -jngl::GetWindowHeight() / 2);
 			jngl::Draw("jngl.png", -300, -140);
-			fbo->EndDraw();
-			fbo->Draw(-jngl::GetWindowWidth() / 2, -jngl::GetWindowHeight() / 2);
+			fbo->endDraw();
+			fbo->draw(-jngl::GetWindowWidth() / 2, -jngl::GetWindowHeight() / 2);
 		}
 		if (jngl::MouseDown()) {
 			jngl::SetSpriteColor(0, 0, 0);
@@ -47,7 +47,7 @@ public:
 private:
 	int angle;
 	const char* ogg;
-	jngl::FrameBuffer* fbo;
+	mutable jngl::FrameBuffer* fbo;
 };
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
