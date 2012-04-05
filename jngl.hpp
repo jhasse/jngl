@@ -297,10 +297,10 @@ namespace jngl
 	public:
 		FrameBuffer(int width, int height);
 		~FrameBuffer();
-		void BeginDraw();
-		void EndDraw();
-		void Draw(int x, int y) const;
-		void Clear();
+		void beginDraw();
+		void endDraw();
+		void draw(int x, int y) const;
+		void clear();
 	private:
 		FrameBuffer(const FrameBuffer&);
 		FrameBuffer& operator=(const FrameBuffer&);
@@ -309,9 +309,10 @@ namespace jngl
 	
 	class Work {
 	public:
-		virtual void Step() = 0;
-		virtual void Draw() = 0;
-		virtual void QuitEvent();
+		virtual void step() = 0;
+		virtual void draw() const = 0;
+		virtual void onQuitEvent();
+		virtual void onLoad();
 		virtual ~Work();
 	};
 	

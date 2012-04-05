@@ -13,7 +13,11 @@ for filename in files:
 	Clean('.', newfilename) # Make sure scons -c does clean up tidily
 
 env = Environment()
-env.SetOption('num_jobs', 4)
+try:
+	import multiprocessing
+	env.SetOption('num_jobs', multiprocessing.cpu_count())
+except NotImplementedError:
+	pass
 
 msvc = bool(ARGUMENTS.get('msvc', 0))
 if env['PLATFORM'] == 'win32':

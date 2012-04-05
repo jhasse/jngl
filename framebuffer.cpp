@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2011-2012 Jan Niklas Hasse <jhasse@gmail.com>
 
 This file is part of JNGL.
 
@@ -28,19 +28,19 @@ namespace jngl {
 		delete pImpl;
 	}
 
-	void FrameBuffer::Draw(int x, int y) const {
+	void FrameBuffer::draw(int x, int y) const {
 		return pImpl->Draw(x, y);
 	}
 
-	void FrameBuffer::BeginDraw() {
+	void FrameBuffer::beginDraw() {
 		return pImpl->BeginDraw();
 	}
 
-	void FrameBuffer::EndDraw() {
+	void FrameBuffer::endDraw() {
 		return pImpl->EndDraw();
 	}
 	
-	void FrameBuffer::Clear() {
+	void FrameBuffer::clear() {
 		return pImpl->Clear();
 	}
 }
