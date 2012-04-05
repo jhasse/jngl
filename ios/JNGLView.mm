@@ -88,7 +88,7 @@
 			jngl::elapsedSeconds = displayLink.timestamp - startTime;
 		}
 		
-		if (jngl::pWindow->stepIfNeeded()) {
+		while (jngl::pWindow->stepIfNeeded()) {
 			angle += (desiredAngle - angle) * 0.1;
 		}
 	}
@@ -107,7 +107,6 @@
 {
 	UITouch* touch = [touches anyObject];
 	CGPoint location = [touch locationInView: self];
-	std::cout << "pWindow: " << jngl::pWindow.get() << "\n";
 	impl->setMouse(location.x, location.y);
 	impl->setMouseDown(true);
 }

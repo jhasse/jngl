@@ -2,6 +2,7 @@
 
 #import <JNGL/jngl.hpp>
 #include <sstream>
+#include <iostream>
 
 @implementation AppDelegate
 
@@ -13,7 +14,7 @@ public:
 		jngl::SetFont("Arial.ttf");
 		jngl::Play("test.ogg");
 		std::cout << "Resolution: " << jngl::GetWindowWidth() << "x" << jngl::GetWindowHeight() << std::endl
-		<< "Config path: " << jngl::getConfigPath() << std::endl;
+		          << "Config path: " << jngl::getConfigPath() << std::endl;
 	}
 	void Step() {
 		angle += 1;
