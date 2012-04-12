@@ -15,7 +15,6 @@
 #define glCheckFramebufferStatus glCheckFramebufferStatusOES
 #define glDeleteFramebuffers glDeleteFramebuffersOES
 #define glDeleteRenderbuffers glDeleteRenderbuffersOES
-#define glBlendFuncSeparateOES
 #define glBlendFuncSeparate glBlendFuncSeparateOES
 
 #define GL_RENDERBUFFER GL_RENDERBUFFER_OES
