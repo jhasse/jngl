@@ -247,9 +247,11 @@ namespace jngl
 	}
 
 	void Window::SetRelativeMouseMode(const bool relative) {
-		relativeMouseMode = relative;
 		int rtn = SDL_SetRelativeMouseMode(relative ? SDL_TRUE : SDL_FALSE);
-		assert(rtn != -1);
+		if (rtn == -1) {
+			throw std::runtime_error("Relative mouse mode not supported.");
+		}
+		relativeMouseMode = relative;
 		if (relative) {
 			mousex_ = 0;
 			mousey_ = 0;

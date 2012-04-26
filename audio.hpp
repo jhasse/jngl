@@ -15,6 +15,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
   #include <AL/al.h>
   #include <AL/alc.h>
  #endif
+ #define OV_EXCLUDE_STATIC_CALLBACKS
  #include <vorbis/vorbisfile.h>
 #endif
 
