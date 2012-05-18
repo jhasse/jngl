@@ -15,8 +15,8 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
 Section ""
 
 SetOutPath $INSTDIR
-File /oname=jngl.pyd ..\visualcpp\Release\Python.dll
-File "C:\Program Files (x86)\boost\boost_1_46_1\lib\boost_python-vc100-mt-1_46_1.dll"
+File /oname=jngl.pyd ..\python\jngl.dll
+File ..\python\libboost_python-mgw44-1_45.dll
 File ..\jpeg62.dll
 
 SectionEnd
