@@ -1,20 +1,6 @@
 /*
-Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
-
-This file is part of JNGL.
-
-JNGL is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-JNGL is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
+Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
+For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #include "../window.hpp"
@@ -63,8 +49,8 @@ namespace jngl
 
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
 		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false),
-		  isMultisampleSupported_(true), anyKeyPressed_(false), fontSize_(12), width_(width), height_(height),
-		  mouseWheel_(0), fontName_(""), oldTime_(0), changeWork_(false)
+		  isMultisampleSupported_(true), anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12),
+		  width_(width), height_(height), mouseWheel_(0), fontName_(""), oldTime_(0), changeWork_(false)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
