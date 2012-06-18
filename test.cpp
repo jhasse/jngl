@@ -4,6 +4,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #include "jngl.hpp"
+
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <sstream>
 #include <iostream>
@@ -11,10 +13,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <map>
 #include <vector>
 #include <algorithm>
-
-#ifndef M_PI
-	#define M_PI 3.14159265358979323846
-#endif
 
 void DrawBackground();
 void DrawMouse(int, int);
