@@ -327,7 +327,7 @@ namespace jngl
 		{
 			glPushMatrix();
 			opengl::Translate(x, y);
-			texture_->DrawClipped(xstart, xend, ystart, yend);
+			texture_->drawClipped(xstart, xend, ystart, yend);
 			glPopMatrix();
 		}
 	private:

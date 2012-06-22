@@ -97,7 +97,7 @@ void Texture::Draw() const
 	glDisable(GL_TEXTURE_2D);
 }
 
-void Texture::DrawClipped(const float xstart, const float xend, const float ystart, const float yend) const
+void Texture::drawClipped(const float xstart, const float xend, const float ystart, const float yend) const
 {
 	glEnable(GL_TEXTURE_2D);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
