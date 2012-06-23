@@ -1,0 +1,4 @@
+additionalCommandlineOptions=debug\=1
+ch.hsr.sconsolidator.ui.BuildSettingsPreferencePage_useParentScope=false
+eclipse.preferences.version=1
+numberOfJobs=4
