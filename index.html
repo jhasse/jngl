@@ -1,64 +1,72 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>JNGL by jhasse</title>
+---
+title: JNGL
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>{{ page.title }}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<style>
+	  body {
+		padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+	  }
+	</style>
+	<link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+	<link href="css/prettify.css" type="text/css" rel="stylesheet" />
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>JNGL</h1>
-<p>just a neat game library</p>
-        <p class="view"><a href="https://github.com/jhasse/JNGL">View the Project on GitHub <small>jhasse/JNGL</small></a></p>
-        <ul>
-          <li><a href="https://github.com/jhasse/JNGL/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/jhasse/JNGL/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/jhasse/JNGL">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <p>An easy to use C++ game library for iOS, Android, Windows, Mac and Linux!</p>
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+</head>
 
-<ul>
-<li><a href="https://github.com/jhasse/JNGL/wiki/Tutorialindex">Tutorials</a></li>
-</ul><h2>Example</h2>
+<body onload="prettyPrint()">
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a class="brand" href="#">{{ page.title}}</a>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li class="active"><a href="#">Home</a></li>
+						<li><a href="https://github.com/jhasse/jngl">Code</a></li>
+						<li><a href="https://github.com/jhasse/jngl/wiki">Wiki</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<h1>Just a neat game library</h1>
+		<p>An easy to use C++ game library for iOS, Android, Windows, Mac and Linux!</p>
 
-<div class="highlight">
-<pre><span class="cp">#include &lt;jngl.hpp&gt;</span>
+		<h2>Example</h2>
+		<pre class="prettyprint linenums">
+#include &lt;jngl.hpp&gt;
 
-<span class="k">class</span> <span class="nc">HelloWorld</span> <span class="o">:</span> <span class="k">public</span> <span class="n">jngl</span><span class="o">::</span><span class="n">Work</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="kt">void</span> <span class="n">step</span><span class="p">()</span> <span class="p">{}</span>
-    <span class="kt">void</span> <span class="n">draw</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
-        <span class="n">text</span><span class="p">.</span><span class="n">draw</span><span class="p">();</span>
-    <span class="p">}</span>
-<span class="k">private</span><span class="o">:</span>
-    <span class="n">jngl</span><span class="o">::</span><span class="n">Text</span> <span class="n">text</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">);</span>
-<span class="p">};</span>
+class HelloWorld : public jngl::Work {
+public:
+	void step() {}
+	void draw() const {
+		text.draw();
+	}
+private:
+	jngl::Text text("Hello World!");
+};
 
-<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">jngl</span><span class="o">::</span><span class="n">setWork</span><span class="p">(</span><span class="k">new</span> <span class="n">HelloWorld</span><span class="p">);</span>
-    <span class="n">jngl</span><span class="o">::</span><span class="n">mainLoop</span><span class="p">();</span>
-<span class="p">}</span>
-</pre>
-</div>
-
-      </section>
-    </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/jhasse">jhasse</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
-  </body>
+int main() {
+	jngl::setWork(new HelloWorld);
+	jngl::mainLoop();
+}
+		</pre>
+	</div>
+	<script type="text/javascript" src="js/prettify.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</body>
 </html>
