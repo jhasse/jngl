@@ -1,101 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>JNGL</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	<link href="css/bootstrap.min.css" rel="stylesheet"/>
-	<link href="css/standard.css" rel="stylesheet"/>
-	<link href="css/bootstrap-responsive.min.css" rel="stylesheet"/>
-	<link href="css/prettify.css" rel="stylesheet"/>
-
-	<!--[if lt IE 9]>
-	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-</head>
-
-<body onload="prettyPrint()">
-	<div class="navbar navbar-fixed-top">
-		<div class="navbar-inner">
-			<div class="container">
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</a>
-				<a class="brand" href=".">JNGL</a>
-				<div class="nav-collapse">
-					<ul class="nav">
-						<li class="active"><a href=".">Home</a></li>
-						<li><a href="tutorials">Tutorials</a></li>
-						<li><a href="reference">Reference</a></li>
-						<li><a href="https://github.com/jhasse/jngl">Code</a></li>
-						<li><a href="https://github.com/jhasse/jngl/wiki">Wiki</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
+---
+title: JNGL
+navi: Home
+---
+{% include top.html %}
+<div class="hero-unit">
+	<h1>Just a Neat Game Library</h1>
+	<p>An easy to use C++ game library for iOS, Android, Windows, Mac and Linux!</p>
+	<p>
+		<a href="tutorial" class="btn btn-primary">Get started &raquo;</a>
+		<a href="download" class="btn">Download JNGL <small>(v1.1)</small></a>
+		<a href="https://github.com/jhasse/jngl" class="btn">View project on Github</a>
+	</p>
+</div>
+<div class="row">
+	<div class="span3">
+		<div class="page-header"><h2>Features</h2></div>
+		<ul>
+			<li>Modern C++11 style</li>
+			<li>zlib License, so suitable for commercial use and static linking</li>
+			<li>Full OpenGL accelerated</li>
+			<li>PNG, JPEG, BMP and WebP Image support</li>
+			<li>Ogg Vorbis Audio support</li>
+		</ul>
 	</div>
-	<div class="container">
-		<div class="hero-unit">
-			<h1>Just a Neat Game Library</h1>
-			<p>An easy to use C++ game library for iOS, Android, Windows, Mac and Linux!</p>
-			<p>
-				<a href="tutorial" class="btn btn-primary">Get started &raquo;</a>
-				<a href="download" class="btn">Download JNGL <small>(v1.1)</small></a>
-				<a href="https://github.com/jhasse/jngl" class="btn">View project on Github</a>
-			</p>
-		</div>
-		<div class="row">
-			<div class="span3">
-				<div class="page-header"><h2>Features</h2></div>
-				<ul>
-					<li>Modern C++11 style</li>
-					<li>zlib License, so suitable for commercial use and static linking</li>
-					<li>Full OpenGL accelerated</li>
-					<li>PNG, JPEG, BMP and WebP Image support</li>
-					<li>Ogg Vorbis Audio support</li>
-				</ul>
-			</div>
-			<div class="span3">
-				<div class="page-header"><h2>Projects</h2></div>
-				<p>JNGL is used by the following games:</p>
-				<ul>
-					<li><a href="http://somyeol2d.com"><b>Somyeol2d</b></a><br>Platformer created for the Global Game Jam 2011</li>
-					<li><a href="https://github.com/jhasse/jntetri"><b>JNTETRI</b></a><br>A simple Tetris clone</li>
-					<li><a href="https://github.com/jhasse/tudi"><b>Tudi</b></a><br>Platformer created for a 10 days coding competition</li>
-				</ul>
-			</div>
-			<div class="span6">
-				<div class="page-header"><h2>Example</h2></div>
-				<pre class="prettyprint linenums">
+	<div class="span3">
+		<div class="page-header"><h2>Projects</h2></div>
+		<p>JNGL is used by the following games:</p>
+		<ul>
+			<li><a href="http://somyeol2d.com"><b>Somyeol2d</b></a><br>Platformer created for the Global Game Jam 2011</li>
+			<li><a href="https://github.com/jhasse/jntetri"><b>JNTETRI</b></a><br>A simple Tetris clone</li>
+			<li><a href="https://github.com/jhasse/tudi"><b>Tudi</b></a><br>Platformer created for a 10 days coding competition</li>
+		</ul>
+	</div>
+	<div class="span6">
+		<div class="page-header"><h2>Example</h2></div>
+		<pre class="prettyprint linenums">
 #include &lt;jngl.hpp&gt;
 
-class HelloWorld : public jngl::Work {
-public:
-	void step() {}
-	void draw() const {
-		text.draw();
-	}
-private:
-	jngl::Text text("Hello World!");
-};
-
-int main() {
-	jngl::setWork(new HelloWorld);
-	jngl::mainLoop();
+void jnglMain() {
+    jngl::add&lt;Text&gt;("Hello World!");
 }</pre>
-
-			</div>
-		</div>
-		<hr>
-		<footer>
-			<p>Copyright 2012 <a href="http://bixense.com">bixense.com</a>
-		</footer>
 	</div>
-	<script type="text/javascript" src="js/prettify.js"></script>
-	<script src="js/jquery.js"></script>
-	<script src="js/bootstrap.js"></script>
-</body>
-</html>
+</div>
+{% include bottom.html %}

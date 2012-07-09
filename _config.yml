@@ -1,0 +1,11 @@
+navigation:
+- text: Home
+  url: .
+- text: Tutorials
+  url: tutorials
+- text: Reference
+  url: reference
+- text: Code
+  url: https://github.com/jhasse/jngl
+- text: Wiki
+  url: https://github.com/jhasse/jngl/wiki
