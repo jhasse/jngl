@@ -1,6 +1,6 @@
 #include <boost/python.hpp> // Needs to be included first. See http://bugs.python.org/issue10910
 
-#include "../jngl.hpp"
+#include "../src/jngl.hpp"
 
 using namespace boost::python;
 using namespace jngl;

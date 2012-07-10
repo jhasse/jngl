@@ -29,13 +29,13 @@ if env['PLATFORM'] == 'win32':
 if env['PLATFORM'] == 'darwin':
 	env = Environment(CXX='/opt/local/bin/g++-mp-4.5', CC='/opt/local/bin/gcc-mp-4.5')
 
-debug = ARGUMENTS.get('debug', 0)
+debug = int(ARGUMENTS.get('debug', 0))
 profile = ARGUMENTS.get('profile', 0)
 installer = ARGUMENTS.get('installer', 0)
 python = int(ARGUMENTS.get('python', 0))
 m32 = ARGUMENTS.get('m32', 0)
 wiz = ARGUMENTS.get('wiz', 0)
-if int(debug):
+if debug:
 	env.Append(CCFLAGS = '-g -Wall')
 else:
 	env.Append(CCFLAGS = '-O2 -DNDEBUG')
@@ -50,23 +50,23 @@ if int(wiz):
 
 if not msvc:
 	source_files = env.Object(Split("""
-	audio.cpp
-	finally.cpp
-	freetype.cpp
-	main.cpp
-	opengl.cpp
-	sprite.cpp
-	tess.cpp
-	texture.cpp
-	window.cpp
-	windowptr.cpp
-	work.cpp
-	framebuffer.cpp
-	framebufferimpl.cpp
+	src/audio.cpp
+	src/finally.cpp
+	src/freetype.cpp
+	src/main.cpp
+	src/opengl.cpp
+	src/sprite.cpp
+	src/tess.cpp
+	src/texture.cpp
+	src/window.cpp
+	src/windowptr.cpp
+	src/work.cpp
+	src/framebuffer.cpp
+	src/framebufferimpl.cpp
 	"""), CPPFLAGS="-std=gnu++0x")
 	source_files += Split("""
-	callbacks.c
-	ConvertUTF.c
+	src/callbacks.c
+	src/ConvertUTF.c
 	""")
 
 if env['PLATFORM'] == 'win32' and not msvc: # Windows
@@ -78,13 +78,13 @@ if env['PLATFORM'] == 'win32' and not msvc: # Windows
 	env.Append(CPPPATH="./include")
 	lib = env.Library(target="jngl", source=source_files + Glob('win32/*.cpp'), LIBS=jnglLibs)
 	linkflags = "-mwindows"
-	if int(debug) or int(msvc):
+	if debug or int(msvc):
 		linkflags = ""
 	libs = Split("jngl") + jnglLibs
-	env.Program("test.cpp",
+	env.Program("src/test.cpp",
 	            CPPFLAGS="-std=gnu++0x",
 	            CPPPATH=".",
-				LIBPATH=Split(". ./lib"),
+				LIBPATH=Split("src ./lib"),
 				LIBS=libs,
 				LINKFLAGS=linkflags)
 	if int(python):
