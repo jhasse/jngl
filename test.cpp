@@ -348,6 +348,7 @@ void TestKeys()
 	{
 		jngl::UpdateInput();
 		jngl::SetFontSize(10);
+		jngl::Translate(-400, -300);
 		int y = 10;
 		for(MapType::iterator it = keys.begin(); it != keys.end(); ++it)
 		{
@@ -413,12 +414,12 @@ void TestKeys()
 			y += 15;
 		}
 		auto end = recentlyPressedKeys.end();
-/*		std::for_each(recentlyPressedKeys.begin(), end, [](RecentlyPressedKey& k) {
+		std::for_each(recentlyPressedKeys.begin(), end, [](RecentlyPressedKey& k) {
 			k.Draw();
 		});
 		recentlyPressedKeys.erase(std::remove_if(recentlyPressedKeys.begin(), end, [](const RecentlyPressedKey& k) -> bool {
 			return k.GetAlpha() <= 0;
- }), end);*/
+		}), end);
 		std::stringstream sstream;
 		sstream << "X: " << jngl::GetMouseX() << "\nY: " << jngl::GetMouseY() << std::endl;
 		jngl::Print(sstream.str(), 5, 5);

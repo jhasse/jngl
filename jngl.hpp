@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
@@ -33,6 +33,11 @@ namespace jngl
 	          double xposition,
 	          double yposition);
 
+	template<class Vect>
+	void draw(const std::string& filename, Vect pos) {
+		Draw(filename, pos.x, pos.y);
+	}
+
 	void DrawScaled(const std::string& filename,
 	                double xposition,
 	                double yposition,
@@ -43,7 +48,7 @@ namespace jngl
 	                double xposition,
 	                double yposition,
 	                float factor);
-	
+
 	void DrawClipped(const std::string& filename,
 					 double xposition,
 					 double yposition,
@@ -53,6 +58,11 @@ namespace jngl
 					 float yend);
 
 	void DrawRect(double xposition, double yposition, double width, double height);
+
+	template<class Vect>
+	void drawRect(Vect pos, Vect size) {
+		DrawRect(pos.x, pos.y, size.x, size.y);
+	}
 
 	void DrawLine(double xstart, double ystart, double xend, double yend);
 
@@ -94,7 +104,7 @@ namespace jngl
 	void EndPolygon();
 
 	void SetRelativeMouseMode(bool relative);
-	
+
 	bool GetRelativeMouseMode();
 
 	void SetMouseVisible(bool visible);
@@ -146,7 +156,7 @@ namespace jngl
 	                    unsigned char green,
 	                    unsigned char blue,
 				        unsigned char alpha = 255);
-	
+
 	void setSpriteAlpha(unsigned char alpha);
 
 	void Print(const std::string& text,
@@ -180,9 +190,9 @@ namespace jngl
 	void SetAntiAliasing(bool enabled);
 
 	bool GetAntiAliasing();
-	
+
 	void SetVerticalSync(bool enabled);
-	
+
 	bool GetVerticalSync();
 
 	double GetTextWidth(const std::string& text);
@@ -292,7 +302,7 @@ namespace jngl
 		FrameBuffer& operator=(const FrameBuffer&);
 		FrameBufferImpl* pImpl;
 	};
-	
+
 	class Work {
 	public:
 		virtual void step() = 0;
@@ -301,21 +311,21 @@ namespace jngl
 		virtual void onLoad();
 		virtual ~Work();
 	};
-	
+
 	boost::shared_ptr<Work> GetWork();
-	
+
 	void SetWork(boost::shared_ptr<Work> work);
-	
+
 	void SetWork(Work*);
-	
+
 	void MainLoop();
-	
+
 	void setPrefix(const std::string& path);
-	
+
 	std::string getPrefix();
-	
+
 	void setConfigPath(const std::string& path);
-	
+
 	std::string getConfigPath();
 }
 
