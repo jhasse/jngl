@@ -110,19 +110,15 @@ if env['PLATFORM'] == 'posix': # Linux
 	env.ParseConfig('pkg-config --cflags --libs freetype2')
 	env.Append(CCFLAGS="-fPIC -DNO_WEAK_LINKING_OPENAL")
 	lib = env.Library(target="jngl", source=source_files)
-	env.Append(LIBPATH=".", CPPPATH='.')
-	if wiz:
-		env.Append(LIBS=Split("jpeg glport opengles_lite z png dl openal vorbisfile vorbis ogg") + lib)
-		env.Program(source = "wiz/test.cpp", target = "wiz/test.gpe")
-	else:
-		testEnv = env.Clone()
-		testEnv.ParseConfig("pkg-config --cflags --libs jngl.pc")
-		testEnv.Program(testSrc, CPPFLAGS="-std=c++0x")
+	env.Append(LIBPATH="src", CPPPATH='src')
+	testEnv = env.Clone()
+	testEnv.ParseConfig("pkg-config --cflags --libs jngl.pc")
+	testEnv.Program('test', testSrc, CPPFLAGS="-std=c++0x")
 	if int(python):
 		env = env.Clone()
 		env.ParseConfig("pkg-config --cflags --libs jngl.pc")
 		env.Append(CPPPATH="/usr/include/python2.7",
-		           LIBPATH=Split(". ./lib ./python"),
+		           LIBPATH=Split("src ./python"),
 		           LIBS=Split("python2.7 boost_python-py27"))
 		env.SharedLibrary(target="python/jngl.so",
 		                  source="python/main.cpp")
