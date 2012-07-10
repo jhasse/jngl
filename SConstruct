@@ -27,7 +27,7 @@ if env['PLATFORM'] == 'win32':
 		env = Environment(tools=['mingw'])
 
 if env['PLATFORM'] == 'darwin':
-	env = Environment(CXX='/opt/local/bin/g++-mp-4.5', CC='/opt/local/bin/gcc-mp-4.5')
+	env = Environment(CXX='clang++', CC='clang')
 
 debug = int(ARGUMENTS.get('debug', 0))
 profile = ARGUMENTS.get('profile', 0)
@@ -69,6 +69,8 @@ if not msvc:
 	src/ConvertUTF.c
 	""")
 
+testSrc = "src/test.cpp"
+
 if env['PLATFORM'] == 'win32' and not msvc: # Windows
 	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl")
 	if int(python) or int(msvc):
@@ -81,7 +83,7 @@ if env['PLATFORM'] == 'win32' and not msvc: # Windows
 	if debug or int(msvc):
 		linkflags = ""
 	libs = Split("jngl") + jnglLibs
-	env.Program("src/test.cpp",
+	env.Program(testSrc,
 	            CPPFLAGS="-std=gnu++0x",
 	            CPPPATH=".",
 				LIBPATH=Split("src ./lib"),
@@ -115,7 +117,7 @@ if env['PLATFORM'] == 'posix': # Linux
 	else:
 		testEnv = env.Clone()
 		testEnv.ParseConfig("pkg-config --cflags --libs jngl.pc")
-		testEnv.Program("test.cpp", CPPFLAGS="-std=c++0x")
+		testEnv.Program(testSrc, CPPFLAGS="-std=c++0x")
 	if int(python):
 		env = env.Clone()
 		env.ParseConfig("pkg-config --cflags --libs jngl.pc")
@@ -132,10 +134,10 @@ if env['PLATFORM'] == 'darwin': # Mac
 	           LINKFLAGS='-framework OpenAL -framework OpenGL')
 	env.ParseConfig('/opt/local/bin/pkg-config --cflags --libs freetype2 libpng')
 	env.ParseConfig('/opt/local/bin/sdl-config --cflags --libs')
-	env.Library(target="jngl", source=source_files + Glob('sdl/*.cpp'))
+	env.Library(target="jngl", source=source_files + Glob('src/sdl/*.cpp'))
 	testEnv = env.Clone()
 	testEnv.Append(CPPPATH='.')
-	testEnv.Program(source='test.cpp', CPPFLAGS='-std=c++0x')
+	testEnv.Program(testSrc, CPPFLAGS='-std=c++0x')
 	if int(python):
 		env = env.Clone()
 		env.Append(CPPPATH='/System/Library/Frameworks/Python.framework/Headers/',

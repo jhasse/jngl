@@ -147,7 +147,7 @@ namespace jngl
 #else
 		WindowImpl* const impl;
 		
-		friend WindowImpl;
+		friend class WindowImpl;
 #endif
 	};
 }
