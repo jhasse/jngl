@@ -70,9 +70,9 @@ namespace jngl
 	bool antiAliasingEnabled = false;
 	bool vsyncEnabled = false;
 
-	void ShowWindow(const std::string& title, const int width, const int height, bool fullscreen)
+	void showWindow(const std::string& title, const int width, const int height, bool fullscreen)
 	{
-		Debug("jngl::ShowWindow(\""); Debug(title); Debug("\", "); Debug(width); Debug(", "); Debug(height);
+		Debug("jngl::showWindow(\""); Debug(title); Debug("\", "); Debug(width); Debug(", "); Debug(height);
 		Debug(", "); Debug(fullscreen); Debug(");\n");
 		if (pWindow &&
 		    width == pWindow->GetWidth() &&

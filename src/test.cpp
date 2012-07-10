@@ -126,7 +126,7 @@ public:
 		jngl::Print("Press F1 to switch fullscreen mode.", 5, 470);
 		if(jngl::KeyPressed(jngl::key::F1))
 		{
-			jngl::ShowWindow("JNGL Test Application", 800, 600, !jngl::GetFullscreen());
+			jngl::showWindow("JNGL Test Application", 800, 600, !jngl::GetFullscreen());
 		}
 		jngl::Print("Press K to test key codes.", 5, 490);
 		jngl::Print("Press P to play a sound.", 6, 510);
@@ -189,7 +189,7 @@ int main() {
 	          << "x" << jngl::GetDesktopHeight() << std::endl
 	          << "Size of jngl.png: " << jngl::GetWidth("jngl.png")
 	          << "x" << jngl::GetHeight("jngl.png") << std::endl;
-	jngl::ShowWindow("SetTitle not working!", 800, 600);
+	jngl::showWindow("SetTitle not working!", 800, 600);
 	jngl::SetWork(new Test);
 	jngl::MainLoop();
 }

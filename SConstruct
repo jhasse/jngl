@@ -34,7 +34,6 @@ profile = ARGUMENTS.get('profile', 0)
 installer = ARGUMENTS.get('installer', 0)
 python = int(ARGUMENTS.get('python', 0))
 m32 = ARGUMENTS.get('m32', 0)
-wiz = ARGUMENTS.get('wiz', 0)
 if debug:
 	env.Append(CCFLAGS = '-g -Wall')
 else:
@@ -43,10 +42,10 @@ if int(profile):
 	env.Append(CCFLAGS = '-pg', _LIBFLAGS = ' -pg')
 if int(m32):
 	env.Append(CCFLAGS = '-m32', LINKFLAGS = ' -m32')
-if int(wiz):
-	env['CXX'] = "/toolchain/bin/arm-openwiz-linux-gnu-g++"
-	env['CC'] = "/toolchain/bin/arm-openwiz-linux-gnu-gcc"
-	env.Append(CPPPATH=["/toolchain/include", "wiz"], LIBPATH=["/toolchain/lib", "wiz"])
+if ARGUMENTS.get('VERBOSE') != "1":
+	env['CCCOMSTR'] = env['CXXCOMSTR'] = "compiling: $TARGET"
+	env['LINKCOMSTR'] = "linking: $TARGET"
+	env['ARCOMSTR'] = "archiving: $TARGET"
 
 if not msvc:
 	source_files = env.Object(Split("""
@@ -101,16 +100,12 @@ if env['PLATFORM'] == 'win32' and not msvc: # Windows
 if env['PLATFORM'] == 'posix': # Linux
 	if int(python):
 		env.Append(CCFLAGS = '-DNOJPEG')
-	if int(wiz):
-		env.Append(CCFLAGS = '-DWIZ -DOPENGLES')
-		source_files += Glob('wiz/*.cpp') + Glob('wiz/*.c')
-	else:
-		source_files += Glob('linux/*.cpp')
-		env.ParseConfig('pkg-config --cflags --libs fontconfig glib-2.0')
+	source_files += Glob('src/linux/*.cpp')
+	env.ParseConfig('pkg-config --cflags --libs fontconfig glib-2.0')
 	env.ParseConfig('pkg-config --cflags --libs freetype2')
 	env.Append(CCFLAGS="-fPIC -DNO_WEAK_LINKING_OPENAL")
 	lib = env.Library(target="jngl", source=source_files)
-	env.Append(LIBPATH="src", CPPPATH='src')
+	env.Append(LIBPATH='.', CPPPATH='src')
 	testEnv = env.Clone()
 	testEnv.ParseConfig("pkg-config --cflags --libs jngl.pc")
 	testEnv.Program('test', testSrc, CPPFLAGS="-std=c++0x")

@@ -12,7 +12,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl
 {
-	void ShowWindow(const std::string& title,
+	void showWindow(const std::string& title,
 	                int width,
 	                int heigt,
 	                bool fullscreen = false);
@@ -145,7 +145,7 @@ namespace jngl
 	void SetColor(unsigned char red,
 	              unsigned char green,
 	              unsigned char blue,
-				  unsigned char alpha = 255);
+	              unsigned char alpha = 255);
 
 	void SetFontColor(unsigned char red,
 	                  unsigned char green,
@@ -155,7 +155,7 @@ namespace jngl
 	void SetSpriteColor(unsigned char red,
 	                    unsigned char green,
 	                    unsigned char blue,
-				        unsigned char alpha = 255);
+	                    unsigned char alpha = 255);
 
 	void setSpriteAlpha(unsigned char alpha);
 
