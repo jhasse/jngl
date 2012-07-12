@@ -12,10 +12,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 bool Texture::useVBO_ = true;
 
-Texture::Texture(const int imgWidth, const int imgHeight, GLubyte** rowPointers, GLenum format, int channels)
-{
-	if(useVBO_ && (!GLEW_ARB_vertex_buffer_object || !GLEW_VERSION_1_5))
-	{
+Texture::Texture(const int imgWidth, const int imgHeight, GLubyte** rowPointers, GLenum format, int channels) {
+	if (useVBO_ && (!GLEW_ARB_vertex_buffer_object || !GLEW_VERSION_1_5)) {
 		Debug("VBOs not supported, using Vertex Arrays\n");
 		useVBO_ = false;
 	}
@@ -50,7 +48,7 @@ Texture::Texture(const int imgWidth, const int imgHeight, GLubyte** rowPointers,
 		for (int i = 0; i < imgHeight; ++i) {
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, imgWidth, 1, format, GL_UNSIGNED_BYTE, rowPointers[i]);
 		}
-		
+
 		// Add one addional pixel line to the edges
 		if (imgWidth < width) {
 			for (int i = 0; i < imgHeight; ++i) {
@@ -68,8 +66,7 @@ Texture::Texture(const int imgWidth, const int imgHeight, GLubyte** rowPointers,
 Texture::~Texture()
 {
 	glDeleteTextures(1, &texture_);
-	if(useVBO_)
-	{
+	if (useVBO_) {
 		glDeleteBuffers(1, &vertexBuffer_);
 	}
 }
@@ -80,8 +77,7 @@ void Texture::Draw() const
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
-	if(useVBO_)
-	{
+	if (useVBO_) {
 		opengl::BindArrayBuffer(vertexBuffer_);
 	}
 #ifndef WIZ
@@ -101,7 +97,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 {
 	glEnable(GL_TEXTURE_2D);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	
+
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	opengl::BindArrayBuffer(0);
 	auto tmpVertexes = vertexes_;
@@ -121,7 +117,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	glVertexPointer(2, GL_FLOAT, 0, &tmpVertexes[0]);
 	glTexCoordPointer(2, opengl::Type<double>::constant, 0, &tmpTexCoords[0]);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-	
+
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisable(GL_TEXTURE_2D);
 }

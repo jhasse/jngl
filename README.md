@@ -1,3 +1,5 @@
+# JNGL
+
 Build jngl in debug mode:
  scons debug=1
 
@@ -15,18 +17,13 @@ Install jngl to "/usr":
  ./install.sh /usr
 
 Clean up:
- scons installer=1 autopackage=1 python=1 -c
-
-Create a source tarball:
-	First you need to create a file list. You can do it like this:
-		find . \( ! -regex '.*/\..*' \) -type f | sed 's/.\///' > filelist
-	Then create the archive:
-		tar cfj jngl_0.9.0.tar.bz2 $(cat filelist)
-
+ scons installer=1 python=1 -c
 
 zlib for Windows: http://gnuwin32.sourceforge.net/packages/zlib.htm
 libpng for Windows: http://gnuwin32.sourceforge.net/packages/libpng.htm
 FreeType for Windows: http://gnuwin32.sourceforge.net/packages/freetype.htm
 
 All three of them were built with:
+```
 ./configure --enable-shared=no --prefix=/mingw --exec_prefix=/mingw && make && make install
+```

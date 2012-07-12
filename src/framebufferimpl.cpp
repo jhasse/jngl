@@ -10,7 +10,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 namespace jngl {
 
 	FrameBufferImpl::FrameBufferImpl(int width, int height) : width(width), height(height), texture(width, height, 0) {
-		if(!GLEW_EXT_framebuffer_object) {
+		if (!GLEW_EXT_framebuffer_object) {
 			throw std::runtime_error("OpenGL Frame Buffer Object not supported!");
 		}
 		GLint tmp;
@@ -30,7 +30,7 @@ namespace jngl {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.GetID(), 0);
 
 		assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
-		
+
 		Clear();
 
 		glBindFramebuffer(GL_FRAMEBUFFER, systemFbo);
@@ -61,7 +61,7 @@ namespace jngl {
 		glViewport(0, -(pWindow->GetHeight() - height), pWindow->GetWidth(), pWindow->GetHeight());
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 	}
-	
+
 	void FrameBufferImpl::Clear() {
 		glClearColor(1, 1, 1, 0);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -74,7 +74,7 @@ namespace jngl {
 		glPopAttrib();
 #else
 		glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
-		
+
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);

@@ -17,39 +17,39 @@ namespace jngl
 	                int heigt,
 	                bool fullscreen = false);
 
-	void HideWindow();
+	void hideWindow();
 
-	bool Running();
+	bool running();
 
-	void UpdateInput();
+	void updateInput();
 
-	void SwapBuffers();
+	void swapBuffers();
 
-	void Quit();
+	void quit();
 
-	void Continue();
+	void continue();
 
-	void Draw(const std::string& filename,
+	void draw(const std::string& filename,
 	          double xposition,
 	          double yposition);
 
 	template<class Vect>
 	void draw(const std::string& filename, Vect pos) {
-		Draw(filename, pos.x, pos.y);
+		draw(filename, pos.x, pos.y);
 	}
 
-	void DrawScaled(const std::string& filename,
+	void drawScaled(const std::string& filename,
 	                double xposition,
 	                double yposition,
 	                float xfactor,
 	                float yfactor);
 
-	void DrawScaled(const std::string& filename,
+	void drawScaled(const std::string& filename,
 	                double xposition,
 	                double yposition,
 	                float factor);
 
-	void DrawClipped(const std::string& filename,
+	void drawClipped(const std::string& filename,
 					 double xposition,
 					 double yposition,
 					 float xstart,
@@ -57,63 +57,63 @@ namespace jngl
 					 float ystart,
 					 float yend);
 
-	void DrawRect(double xposition, double yposition, double width, double height);
+	void drawRect(double xposition, double yposition, double width, double height);
 
 	template<class Vect>
 	void drawRect(Vect pos, Vect size) {
 		DrawRect(pos.x, pos.y, size.x, size.y);
 	}
 
-	void DrawLine(double xstart, double ystart, double xend, double yend);
+	void drawLine(double xstart, double ystart, double xend, double yend);
 
-	void DrawEllipse(double xmid, double ymid, double width, double height);
+	void drawEllipse(double xmid, double ymid, double width, double height);
 
-	void DrawPoint(double x, double y);
+	void drawPoint(double x, double y);
 
-	void Rotate(double degree);
+	void rotate(double degree);
 
-	void Translate(double x, double y);
+	void translate(double x, double y);
 
-	void Scale(double factor);
+	void scale(double factor);
 
-	void Scale(double xfactor, double yfactor);
+	void scale(double xfactor, double yfactor);
 
-	void PushMatrix();
+	void pushMatrix();
 
-	void PopMatrix();
+	void popMatrix();
 
-	void Reset();
+	void reset();
 
-	void Load(const std::string& filename);
+	void load(const std::string& filename);
 
-	void Unload(const std::string& filename);
+	void unload(const std::string& filename);
 
-	void UnloadAll();
+	void unloadAll();
 
-	int GetWidth(const std::string& filename);
+	int getWidth(const std::string& filename);
 
-	int GetHeight(const std::string& filename);
+	int getHeight(const std::string& filename);
 
 	double Time();
 
-	void BeginPolygon();
+	void beginPolygon();
 
-	void Vertex(double xposition,
+	void vertex(double xposition,
 				double yposition);
 
-	void EndPolygon();
+	void endPolygon();
 
-	void SetRelativeMouseMode(bool relative);
+	void setRelativeMouseMode(bool relative);
 
-	bool GetRelativeMouseMode();
+	bool getRelativeMouseMode();
 
-	void SetMouseVisible(bool visible);
+	void setMouseVisible(bool visible);
 
-	bool IsMouseVisible();
+	bool isMouseVisible();
 
-	int GetMouseX();
+	int getMouseX();
 
-	int GetMouseY();
+	int getMouseY();
 
 	namespace mouse
 	{
@@ -123,81 +123,81 @@ namespace jngl
 		};
 	}
 
-	double GetMouseWheel();
+	double getMouseWheel();
 
-	bool MouseDown(mouse::Button button = mouse::Left);
+	bool mouseDown(mouse::Button button = mouse::Left);
 
-	bool MousePressed(mouse::Button button = mouse::Left);
+	bool mousePressed(mouse::Button button = mouse::Left);
 
-	void SetMouse(int xposition, int yposition);
+	void setMouse(int xposition, int yposition);
 
-	bool DrawButton(const std::string& sprite,
+	bool drawButton(const std::string& sprite,
 	                double xposition,
 	                double yposition,
 	                const std::string& mouseover);
 
-	void SetTitle(const std::string& title);
+	void setTitle(const std::string& title);
 
-	void SetBackgroundColor(unsigned char red,
+	void setBackgroundColor(unsigned char red,
 	                        unsigned char green,
 	                        unsigned char blue);
 
-	void SetColor(unsigned char red,
+	void setColor(unsigned char red,
 	              unsigned char green,
 	              unsigned char blue,
 	              unsigned char alpha = 255);
 
-	void SetFontColor(unsigned char red,
+	void setFontColor(unsigned char red,
 	                  unsigned char green,
 	                  unsigned char blue,
 	                  unsigned char alpha = 255);
 
-	void SetSpriteColor(unsigned char red,
+	void setSpriteColor(unsigned char red,
 	                    unsigned char green,
 	                    unsigned char blue,
 	                    unsigned char alpha = 255);
 
 	void setSpriteAlpha(unsigned char alpha);
 
-	void Print(const std::string& text,
+	void print(const std::string& text,
 	           int xposition,
 	           int yposition);
 
-	int GetFontSize();
+	int getFontSize();
 
-	void SetFontSize(int size);
+	void setFontSize(int size);
 
-	std::string GetFont();
+	std::string getFont();
 
-	void SetFont(const std::string& filename);
+	void setFont(const std::string& filename);
 
-	void SetFontByName(const std::string& name);
+	void setFontByName(const std::string& name);
 
-	void Sleep(int milliseconds);
+	void sleep(int milliseconds);
 
 	double FPS();
 
-	void ErrorMessage(const std::string& text);
+	void errorMessage(const std::string& text);
 
-	bool GetFullscreen();
+	bool getFullscreen();
 
-	void ReadPixel(int x, int y, unsigned char& red, unsigned char& green, unsigned char& blue);
+	void readPixel(int x, int y, unsigned char& red, unsigned char& green, unsigned char& blue);
 
-	int GetWindowWidth();
+	int getWindowWidth();
 
-	int GetWindowHeight();
+	int getWindowHeight();
 
-	void SetAntiAliasing(bool enabled);
+	void setAntiAliasing(bool enabled);
 
-	bool GetAntiAliasing();
+	bool getAntiAliasing();
 
-	void SetVerticalSync(bool enabled);
+	void setVerticalSync(bool enabled);
 
-	bool GetVerticalSync();
+	bool getVerticalSync();
 
-	double GetTextWidth(const std::string& text);
+	double getTextWidth(const std::string& text);
 
-	int GetLineHeight();
+	int getLineHeight();
 
 	namespace key
 	{

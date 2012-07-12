@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -31,8 +31,8 @@ void CALLBACK beginCallback(GLenum which)
 }
 
 void CALLBACK combineCallback(GLdouble coords[3],
-	                 GLdouble *vertex_data[4],
-	                 GLfloat weight[4], GLdouble **dataOut )
+	                 GLdouble *vertexData[4],
+	                 GLfloat weight[4], GLdouble **dataOut)
 {
    GLdouble *vertex;
    int i;
@@ -43,10 +43,10 @@ void CALLBACK combineCallback(GLdouble coords[3],
    vertex[1] = coords[1];
    vertex[2] = coords[2];
    for (i = 3; i < 7; i++)
-	  vertex[i] = weight[0] * vertex_data[0][i]
-	              + weight[1] * vertex_data[1][i]
-	              + weight[2] * vertex_data[2][i]
-	              + weight[3] * vertex_data[3][i];
+	  vertex[i] = weight[0] * vertexData[0][i]
+	              + weight[1] * vertexData[1][i]
+	              + weight[2] * vertexData[2][i]
+	              + weight[3] * vertexData[3][i];
    *dataOut = vertex;
 }
 

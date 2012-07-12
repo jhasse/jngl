@@ -48,11 +48,11 @@ namespace jngl
 		spriteColorAlpha = alpha;
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
-	
+
 	void setSpriteAlpha(const unsigned char alpha) {
 		SetSpriteColor(spriteColorRed, spriteColorGreen, spriteColorBlue, alpha);
 	}
-	
+
 #ifndef NOJPEG
 	struct JpegErrorMgr
 	{
@@ -70,8 +70,9 @@ namespace jngl
 		Sprite(const std::string& filename, const bool halfLoad) : texture_(0)
 		{
 			FILE* pFile = fopen(filename.c_str(), "rb");
-			if(!pFile)
+			if(!pFile) {
 				throw std::runtime_error(std::string("File not found: " + filename));
+			}
 
 			Finally closeFile(boost::bind(fclose, pFile));
 
@@ -336,7 +337,7 @@ namespace jngl
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
 	};
 
-	std::map<std::string, boost::shared_ptr<Sprite> > sprites_;
+	std::map<std::string, boost::shared_ptr<Sprite>> sprites_;
 
 	// halfLoad is used, if we only want to find out the width or height of an image. Load won't throw an exception then
 	Sprite& GetSprite(const std::string& filename, const bool halfLoad)
