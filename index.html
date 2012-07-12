@@ -5,11 +5,11 @@ navi: Home
 {% include top.html %}
 <div class="hero-unit">
 	<h1>Just a Neat Game Library</h1>
-	<p>An easy to use C++ game library for iOS, Android, Windows, Mac and Linux!</p>
+	<p>An easy to use C++/Python game library for iOS, Android, Windows, Mac and Linux!</p>
 	<p>
 		<a href="tutorial" class="btn btn-primary">Get started &raquo;</a>
-		<a href="download" class="btn">Download JNGL <small>(v1.1)</small></a>
-		<a href="https://github.com/jhasse/jngl" class="btn">View project on Github</a>
+		<a href="download" class="btn">Download JNGL <small>(v1.1.0)</small></a>
+		<a href="https://github.com/jhasse/jngl" class="btn">View project on GitHub</a>
 	</p>
 </div>
 <div class="row">
@@ -17,10 +17,11 @@ navi: Home
 		<div class="page-header"><h2>Features</h2></div>
 		<ul>
 			<li>Modern C++11 style</li>
-			<li>zlib License, so suitable for commercial use and static linking</li>
+			<li><a href="http://en.wikipedia.org/wiki/Zlib_license">zlib License</a>, so suitable for commercial use and static linking</li>
 			<li>Full OpenGL accelerated</li>
-			<li>PNG, JPEG, BMP and WebP Image support</li>
+			<li>PNG, JPEG, BMP and <a href="https://developers.google.com/speed/webp/">WebP</a> Image support</li>
 			<li>Ogg Vorbis Audio support</li>
+			<li>UTF-8 text output using <a href="http://www.freetype.org/">Freetype</a></li>
 		</ul>
 	</div>
 	<div class="span3">
@@ -37,8 +38,17 @@ navi: Home
 		<pre class="prettyprint linenums">
 #include &lt;jngl.hpp&gt;
 
+struct HelloWorld : public jngl::Work {
+public:
+    void draw() const override {
+        text.draw();
+    }
+private:
+    jngl::Text text("Hello World!");
+};
+
 void jnglMain() {
-    jngl::add&lt;Text&gt;("Hello World!");
+    jngl::setWork&lt;HelloWorld&gt;();
 }</pre>
 	</div>
 </div>
