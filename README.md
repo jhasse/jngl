@@ -1,6 +1,10 @@
 # JNGL - Just a Neat Game Library
 
-## Building using scons
+Easy to use game library for C++ and Python
+
+* [Tutorials](http://bixense.com/jngl/tutorials)
+
+## Build using scons
 
 Build jngl in debug mode:
 ```
@@ -35,9 +39,9 @@ scons installer=1 python=1 -c
 
 ## Libraries for Windows
 
-* zlib for Windows: http://gnuwin32.sourceforge.net/packages/zlib.htm
-* libpng for Windows: http://gnuwin32.sourceforge.net/packages/libpng.htm
-* FreeType for Windows: http://gnuwin32.sourceforge.net/packages/freetype.htm
+* (zlib for Windows)[http://gnuwin32.sourceforge.net/packages/zlib.htm]
+* (libpng for Windows)[http://gnuwin32.sourceforge.net/packages/libpng.htm]
+* (FreeType for Windows)[http://gnuwin32.sourceforge.net/packages/freetype.htm]
 
 All three of them were built with:
 ```
