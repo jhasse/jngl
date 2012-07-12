@@ -11,7 +11,7 @@ namespace jngl
 {
 	class Sprite;
 
-	void LoadSprite(const std::string&);
+	void loadSprite(const std::string&);
 	Sprite& GetSprite(const std::string& filename, const bool halfLoad = false);
 
 	extern unsigned char spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha,

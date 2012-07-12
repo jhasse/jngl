@@ -20,7 +20,7 @@ namespace jngl
 {
 	unsigned char fontColorRed = 0, fontColorGreen = 0, fontColorBlue = 0, fontColorAlpha = 255;
 
-	void SetFontColor(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha)
+	void setFontColor(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha)
 	{
 		fontColorRed = red;
 		fontColorGreen = green;
@@ -103,12 +103,12 @@ namespace jngl
 	void Character::Draw() const
 	{
 		glPushMatrix();
-		opengl::Translate(left_, top_);
+		opengl::translate(left_, top_);
 
 		texture_->Draw();
 
 		glPopMatrix();
-		opengl::Translate(width_, 0);
+		opengl::translate(width_, 0);
 	}
 
 	double Character::GetWidth() const
@@ -285,7 +285,7 @@ namespace jngl
 		for(std::vector<std::string>::iterator lineIter = lines.begin(); lineIter != lineEnd; ++lineIter)
 		{
 			glPushMatrix();
-			opengl::Translate(x, y + h * lineNr);
+			opengl::translate(x, y + h * lineNr);
 			++lineNr;
 
 			std::string::iterator charEnd = lineIter->end();

@@ -35,7 +35,7 @@ namespace jngl
 		bool IsPlaying();
 		bool Stopped();
 		void SetPitch(float p);
-		void SetVolume(float v);
+		void setVolume(float v);
 	private:
 		ALuint buffer_;
 		ALuint source_;
@@ -48,7 +48,7 @@ namespace jngl
 		void Stop();
 		bool IsPlaying();
 		void SetPitch(float p);
-		void SetVolume(float v);
+		void setVolume(float v);
 	private:
 		boost::shared_ptr<Sound> sound_;
 		ALint state;

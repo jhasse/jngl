@@ -9,15 +9,15 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl
 {
-	void BeginPolygon()
+	void beginPolygon()
 	{
 	}
     
-	void Vertex(const double xposition, const double yposition)
+	void vertex(const double xposition, const double yposition)
 	{
 	}
     
-	void EndPolygon()
+	void endPolygon()
 	{
 	}
 }
@@ -42,14 +42,14 @@ namespace jngl
 {
 	std::vector<std::vector<double>*> positions;
 
-	void BeginPolygon()
+	void beginPolygon()
 	{
 		InitCallbacks();
 		gluTessBeginPolygon(tobj, NULL);
 		gluTessBeginContour(tobj);
 	}
 
-	void Vertex(const double xposition, const double yposition)
+	void vertex(const double xposition, const double yposition)
 	{
 		std::vector<double>* position = new std::vector<double>(3);
 		position->at(0) = xposition;
@@ -59,7 +59,7 @@ namespace jngl
 		gluTessVertex(tobj, &position->at(0), &position->at(0));
 	}
 
-	void EndPolygon()
+	void endPolygon()
 	{
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		gluTessEndContour(tobj);

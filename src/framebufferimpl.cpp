@@ -81,7 +81,7 @@ namespace jngl {
 #endif
 		glBindFramebuffer(GL_FRAMEBUFFER, systemFbo);
 		glBindRenderbuffer(GL_RENDERBUFFER, systemBuffer);
-		ClearBackgroundColor();
+		clearBackgroundColor();
 	}
 
 	void FrameBufferImpl::Draw(const int x, const int y) const {

@@ -24,7 +24,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace jngl
 {
-	void ErrorMessage(const std::string& text)
+	void errorMessage(const std::string& text)
 	{
 		pid_t pid = fork();
 		if(pid == 0)

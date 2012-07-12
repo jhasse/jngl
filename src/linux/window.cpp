@@ -300,11 +300,11 @@ namespace jngl
 		   {'\n',XK_Return},
 		   {0,0}
 		};
-		if('A' <= c && c <= 'Z' && !(KeyDown(key::ShiftL) || KeyDown(key::ShiftR)))
+		if('A' <= c && c <= 'Z' && !(keyDown(key::ShiftL) || keyDown(key::ShiftR)))
 		{
 			return NoSymbol;
 		}
-		if('a' <= c && c <= 'z' && (KeyDown(key::ShiftL) || KeyDown(key::ShiftR)))
+		if('a' <= c && c <= 'z' && (keyDown(key::ShiftL) || keyDown(key::ShiftR)))
 		{
 			return NoSymbol;
 		}

@@ -31,14 +31,14 @@ namespace jngl
 			QueryPerformanceCounter((LARGE_INTEGER *) &start_);
 		}
 	};
-	double Time()
+	double time()
 	{
 		static Query timer;
 		__int64 time;
 		QueryPerformanceCounter((LARGE_INTEGER *) &time);
 		return static_cast<double>(time - timer.start_) / static_cast<double>(timer.frequency_);
 	}
-	void Sleep(int milliseconds)
+	void sleep(int milliseconds)
 	{
 		HANDLE handle = CreateEvent(NULL, FALSE, FALSE, NULL);
 		if(handle)

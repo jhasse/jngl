@@ -28,12 +28,12 @@ namespace jngl
 		~Timer() { g_timer_destroy(gtimer_); }
 		GTimer* gtimer_;
 	};
-	double Time()
+	double time()
 	{
 		static Timer timer;
 		return g_timer_elapsed(timer.gtimer_, NULL);
 	}
-	void Sleep(int milliseconds)
+	void sleep(int milliseconds)
 	{
 		usleep(milliseconds * 1000);
 	}

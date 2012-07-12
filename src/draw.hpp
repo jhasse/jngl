@@ -18,7 +18,7 @@ namespace draw
 	{
 		opengl::BindArrayBuffer(0);
 		glPushMatrix();
-		opengl::Translate(xposition, yposition);
+		opengl::translate(xposition, yposition);
 		typedef typename opengl::Type<T>::type Type;
 		Type rect[] = { 0, 0,
 		                static_cast<Type>(width), 0,
@@ -47,7 +47,7 @@ namespace draw
 	{
 		opengl::BindArrayBuffer(0);
 		glPushMatrix();
-		opengl::Translate(xmid, ymid);
+		opengl::translate(xmid, ymid);
 		std::vector<T> vertexes;
 		int count = 0;
 		for(T t = 0; t <= 2 * M_PI; t +=0.1)

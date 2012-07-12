@@ -140,7 +140,7 @@ namespace jngl
 		bgRed = red / 255.0f;
 		bgGreen = green / 255.0f;
 		bgBlue = blue / 255.0f;
-		ClearBackgroundColor();
+		clearBackgroundColor();
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
@@ -296,17 +296,17 @@ namespace jngl
 
 	void translate(const double x, const double y)
 	{
-		opengl::Translate(x, y);
+		opengl::translate(x, y);
 	}
 
 	void scale(const double factor)
 	{
-		opengl::Scale(factor, factor);
+		opengl::scale(factor, factor);
 	}
 
 	void scale(const double xfactor, const double yfactor)
 	{
-		opengl::Scale(xfactor, yfactor);
+		opengl::scale(xfactor, yfactor);
 	}
 
 	void pushMatrix()
@@ -411,7 +411,7 @@ namespace jngl
 		}
 		else
 		{
-			LoadSprite(filename);
+			loadSprite(filename);
 		}
 	}
 
@@ -419,7 +419,7 @@ namespace jngl
 	#include <GL/wglew.h>
 #endif
 
-	void SetVerticalSync(bool enabled) {
+	void setVerticalSync(bool enabled) {
 #ifdef _WIN32
 		if (WGL_EXT_swap_control) {
 			if (wglSwapIntervalEXT(enabled)) {

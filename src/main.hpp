@@ -6,7 +6,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
 namespace jngl {
-	void ClearBackgroundColor();
+	void clearBackgroundColor();
 
 	extern std::string pathPrefix;
 }

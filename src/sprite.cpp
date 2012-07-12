@@ -40,7 +40,7 @@ namespace jngl
 {
 	unsigned char spriteColorRed = 255, spriteColorGreen = 255, spriteColorBlue = 255, spriteColorAlpha = 255;
 
-	void SetSpriteColor(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha)
+	void setSpriteColor(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha)
 	{
 		spriteColorRed = red;
 		spriteColorGreen = green;
@@ -50,7 +50,7 @@ namespace jngl
 	}
 
 	void setSpriteAlpha(const unsigned char alpha) {
-		SetSpriteColor(spriteColorRed, spriteColorGreen, spriteColorBlue, alpha);
+		setSpriteColor(spriteColorRed, spriteColorGreen, spriteColorBlue, alpha);
 	}
 
 #ifndef NOJPEG
@@ -310,7 +310,7 @@ namespace jngl
 		void Draw(const T xposition, const T yposition)
 		{
 			glPushMatrix();
-			opengl::Translate(xposition, yposition);
+			opengl::translate(xposition, yposition);
 			texture_->Draw();
 			glPopMatrix();
 		}
@@ -318,8 +318,8 @@ namespace jngl
 		void DrawScaled(const T xposition, const T yposition, const float xfactor, const float yfactor)
 		{
 			glPushMatrix();
-			opengl::Translate(xposition, yposition);
-			opengl::Scale(xfactor, yfactor);
+			opengl::translate(xposition, yposition);
+			opengl::scale(xfactor, yfactor);
 			texture_->Draw();
 			glPopMatrix();
 		}
@@ -327,7 +327,7 @@ namespace jngl
 		void DrawClipped(const T x, const T y, const float xstart, const float xend, const float ystart, const float yend)
 		{
 			glPushMatrix();
-			opengl::Translate(x, y);
+			opengl::translate(x, y);
 			texture_->drawClipped(xstart, xend, ystart, yend);
 			glPopMatrix();
 		}

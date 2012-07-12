@@ -8,13 +8,13 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl
 {
-	double Time()
+	double time()
 	{
 		SDL::init();
 		Uint32 m = SDL_GetTicks();
 		return static_cast<double>(m)/1000.0f;
 	}
-	void Sleep(int milliseconds)
+	void sleep(int milliseconds)
 	{
 		SDL_Delay(milliseconds);
 	}

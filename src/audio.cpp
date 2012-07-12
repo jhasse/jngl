@@ -58,7 +58,7 @@ namespace jngl
 	{
 		alSourcef(source_, AL_PITCH, p);
 	}
-	void Sound::SetVolume(float v) {
+	void Sound::setVolume(float v) {
 		alSourcef(source_, AL_GAIN, v);
 	}
 
@@ -194,9 +194,9 @@ namespace jngl
 			sound_->SetPitch(p);
 		}
 	}
-	void SoundFile::SetVolume(float v) {
+	void SoundFile::setVolume(float v) {
 		if(sound_) {
-			sound_->SetVolume(v);
+			sound_->setVolume(v);
 		}
 	}
 
@@ -228,37 +228,37 @@ namespace jngl
 		return *(i->second);
 	}
 
-	void Play(const std::string& filename)
+	void play(const std::string& filename)
 	{
 		GetSoundFile(filename).Play();
 	}
 
-	void Stop(const std::string& filename)
+	void stop(const std::string& filename)
 	{
 		GetSoundFile(filename).Stop();
 	}
 
-	void LoadSound(const std::string& filename)
+	void loadSound(const std::string& filename)
 	{
 		GetSoundFile(filename);
 	}
 
-	bool IsPlaying(const std::string& filename)
+	bool isPlaying(const std::string& filename)
 	{
 		return GetSoundFile(filename).IsPlaying();
 	}
 
-	void SetPlaybackSpeed(float speed) {
+	void setPlaybackSpeed(float speed) {
 		auto end = sounds.end();
 		for(auto i = sounds.begin(); i != end; ++i) {
 			i->second->SetPitch(speed);
 		}
 	}
 
-	void SetVolume(float volume) {
+	void setVolume(float volume) {
 		auto end = sounds.end();
 		for(auto i = sounds.begin(); i != end; ++i) {
-			i->second->SetVolume(volume);
+			i->second->setVolume(volume);
 		}
 	}
 	

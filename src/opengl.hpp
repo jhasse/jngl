@@ -28,18 +28,18 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace opengl
 {
-	inline void Translate(float x, float y) { glTranslatef(x, y, 0); }
-	inline void Scale(float x, float y) { glScalef(x, y, 0); }
+	inline void translate(float x, float y) { glTranslatef(x, y, 0); }
+	inline void scale(float x, float y) { glScalef(x, y, 0); }
 #ifdef GL_DOUBLE
 	template<class T, class U>
-	inline void Translate(T x, U y) { glTranslated(static_cast<double>(x), static_cast<double>(y), 0); }
+	inline void translate(T x, U y) { glTranslated(static_cast<double>(x), static_cast<double>(y), 0); }
 	template<class T, class U>
-	inline void Scale(T x, U y) { glScaled(static_cast<double>(x), static_cast<double>(y), 0); }
+	inline void scale(T x, U y) { glScaled(static_cast<double>(x), static_cast<double>(y), 0); }
 #else
 	template<class T, class U>
-	inline void Translate(T x, U y) { Translate(static_cast<float>(x), static_cast<float>(y)); }
+	inline void translate(T x, U y) { Translate(static_cast<float>(x), static_cast<float>(y)); }
 	template<class T, class U>
-	inline void Scale(T x, U y) { Scale(static_cast<float>(x), static_cast<float>(y)); }
+	inline void scale(T x, U y) { Scale(static_cast<float>(x), static_cast<float>(y)); }
 #endif
 
 	template<class T> struct Type {};
