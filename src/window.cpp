@@ -34,7 +34,7 @@ namespace jngl
 		}
 		fontName_ = filename;
 	}
-	
+
 	std::string Window::GetFont() const
 	{
 		return fontName_;
@@ -89,7 +89,7 @@ namespace jngl
 	{
 		return isMouseVisible_;
 	}
-	
+
 	bool Window::GetRelativeMouseMode() const {
 		return relativeMouseMode;
 	}
@@ -165,16 +165,16 @@ namespace jngl
 		return false;
 	}
 
-	bool KeyDown(const char key)
+	bool keyDown(const char key)
 	{
 		std::string temp; temp.append(1, key);
-		return KeyDown(temp);
+		return keyDown(temp);
 	}
 
-	bool KeyPressed(const char key)
+	bool keyPressed(const char key)
 	{
 		std::string temp; temp.append(1, key);
-		return KeyPressed(temp);
+		return keyPressed(temp);
 	}
 
 	void Window::UpdateKeyStates()
@@ -199,27 +199,27 @@ namespace jngl
 			if (!stepIfNeeded() && needDraw_) {
 				needDraw_ = false;
 				draw();
-				jngl::SwapBuffers();
+				jngl::swapBuffers();
 			}
 		}
 	}
 
 	bool Window::stepIfNeeded() {
-		if(jngl::Time() - oldTime_ > 0.5) // Is half a second missing?
+		if(jngl::time() - oldTime_ > 0.5) // Is half a second missing?
 		{
 			oldTime_ += 0.5; // Let's slowdown
 		}
 		const static double timePerStep = 1.0 / 60.0;
-		if(jngl::Time() - oldTime_ > timePerStep)
+		if(jngl::time() - oldTime_ > timePerStep)
 		{
 			// This stuff needs to be done 100 times per second
 			oldTime_ += timePerStep;
-			jngl::UpdateInput();
+			jngl::updateInput();
 			if (currentWork_) {
 				currentWork_->step();
 			}
 			needDraw_ = true;
-			if (!jngl::Running()) {
+			if (!jngl::running()) {
 				currentWork_->onQuitEvent();
 			}
 			while (changeWork_) {
@@ -236,7 +236,7 @@ namespace jngl
 		if (currentWork_) {
 			currentWork_->draw();
 		} else {
-			jngl::Print("No work set. Use jngl::SetWork", -50, -5);
+			jngl::print("No work set. Use jngl::SetWork", -50, -5);
 		}
 	}
 
@@ -255,11 +255,11 @@ namespace jngl
 	boost::shared_ptr<Work> Window::getWork() {
 		return currentWork_;
 	}
-	
+
 	void Window::setConfigPath(const std::string& path) {
 		configPath = path;
 	}
-	
+
 	std::string Window::getConfigPath() const {
 		return configPath;
 	}

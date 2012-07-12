@@ -86,9 +86,9 @@ namespace jngl {
 
 	void FrameBufferImpl::Draw(const int x, const int y) const {
 		glPushMatrix();
-		jngl::Translate(x, y);
+		jngl::translate(x, y);
 		glScalef(1.0f, -1.0f, 1.0f);
-		jngl::Translate(0, -height);
+		jngl::translate(0, -height);
 		texture.Draw();
 		glPopMatrix();
 	}

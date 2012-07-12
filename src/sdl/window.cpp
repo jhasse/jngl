@@ -265,7 +265,7 @@ namespace jngl
 		return; // TODO: Not implemented yet
 	}
 
-	int GetDesktopWidth()
+	int getDesktopWidth()
 	{
 		SDL::init();
 		SDL_DisplayMode mode;
@@ -273,7 +273,7 @@ namespace jngl
 		return mode.w;
 	}
 
-	int GetDesktopHeight()
+	int getDesktopHeight()
 	{
 		SDL::init();
 		SDL_DisplayMode mode;

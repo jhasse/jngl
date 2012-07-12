@@ -478,14 +478,14 @@ namespace jngl
 		return; // TODO: Not implemented yet
 	}
 
-	int GetDesktopWidth()
+	int getDesktopWidth()
 	{
 		Display* display = XOpenDisplay(NULL);
 		Finally finally(boost::bind(XCloseDisplay, display));
 		return XDisplayWidth(display, XDefaultScreen(display));
 	}
 
-	int GetDesktopHeight()
+	int getDesktopHeight()
 	{
 		Display* display = XOpenDisplay(NULL);
 		Finally finally(boost::bind(XCloseDisplay, display));

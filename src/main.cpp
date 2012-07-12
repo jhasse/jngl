@@ -35,7 +35,7 @@ namespace jngl
 		}
 		Debug("Using GLEW "); Debug(glewGetString(GLEW_VERSION)); Debug("\n");
 #endif
-		
+
 		glShadeModel(GL_SMOOTH);
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnable(GL_BLEND);
@@ -62,7 +62,7 @@ namespace jngl
 
 		glFlush();
 		InitCallbacks();
-		SetVerticalSync(true);
+		setVerticalSync(true);
 		return true;
 	}
 
@@ -78,10 +78,10 @@ namespace jngl
 		    width == pWindow->GetWidth() &&
 		    height == pWindow->GetHeight() &&
 		    fullscreen == pWindow->GetFullscreen()) {
-			return jngl::SetTitle(title);
+			return jngl::setTitle(title);
 		}
 		bool isMouseVisible = pWindow ? pWindow->GetMouseVisible() : true;
-		HideWindow();
+		hideWindow();
 		if(width == 0)
 		{
 			throw std::runtime_error("Width Is 0");
@@ -92,49 +92,49 @@ namespace jngl
 		}
 		pWindow.Set(new Window(title, width, height, fullscreen));
 		pWindow->SetMouseVisible(isMouseVisible);
-		SetAntiAliasing(antiAliasingEnabled);
+		setAntiAliasing(antiAliasingEnabled);
 	}
 
-	void HideWindow()
+	void hideWindow()
 	{
-		UnloadAll();
+		unloadAll();
 		opengl::BindArrayBuffer(0);
 		pWindow.Delete();
 	}
 
-	void SwapBuffers()
+	void swapBuffers()
 	{
 	    pWindow->SwapBuffers();
 		glLoadIdentity();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void UpdateInput()
+	void updateInput()
 	{
 		pWindow->UpdateKeyStates();
 		pWindow->UpdateInput();
 	}
 
-	bool Running()
+	bool running()
 	{
 		return pWindow->Running();
 	}
 
-	void Quit()
+	void quit()
 	{
 		pWindow->Quit();
 	}
 
-	void Continue()
+	void cancelQuit()
 	{
 		pWindow->Continue();
 	}
 
-	void ClearBackgroundColor() {
+	void clearBackgroundColor() {
 		glClearColor(bgRed, bgGreen, bgBlue, 1);
 	}
 
-	void SetBackgroundColor(const unsigned char red, const unsigned char green, const unsigned char blue)
+	void setBackgroundColor(const unsigned char red, const unsigned char green, const unsigned char blue)
 	{
 		pWindow.ThrowIfNull();
 		bgRed = red / 255.0f;
@@ -144,77 +144,77 @@ namespace jngl
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
-	int GetMouseX()
+	int getMouseX()
 	{
 		return pWindow->MouseX();
 	}
 
-	int GetMouseY()
+	int getMouseY()
 	{
 		return pWindow->MouseY();
 	}
 
-	bool KeyDown(const key::KeyType key)
+	bool keyDown(const key::KeyType key)
 	{
 		return pWindow->KeyDown(key);
 	}
 
-	bool KeyPressed(const key::KeyType key)
+	bool keyPressed(const key::KeyType key)
 	{
 		return pWindow->KeyPressed(key);
 	}
 
-	bool KeyDown(const std::string& key)
+	bool keyDown(const std::string& key)
 	{
 		return pWindow->KeyDown(key);
 	}
 
-	bool KeyPressed(const std::string& key)
+	bool keyPressed(const std::string& key)
 	{
 		return pWindow->KeyPressed(key);
 	}
 
-	bool MouseDown(mouse::Button button)
+	bool mouseDown(mouse::Button button)
 	{
 		return pWindow->MouseDown(button);
 	}
 
-	bool MousePressed(mouse::Button button)
+	bool mousePressed(mouse::Button button)
 	{
 		return pWindow->MousePressed(button);
 	}
 
-	void SetMouse(const int xposition, const int yposition)
+	void setMouse(const int xposition, const int yposition)
 	{
 		pWindow->SetMouse(xposition, yposition);
 	}
-	
-	void SetRelativeMouseMode(const bool relative) {
+
+	void setRelativeMouseMode(const bool relative) {
 		return pWindow->SetRelativeMouseMode(relative);
 	}
 
-	void SetMouseVisible(const bool visible)
+	void setMouseVisible(const bool visible)
 	{
 		return pWindow->SetMouseVisible(visible);
 	}
 
-	bool IsMouseVisible()
+	bool isMouseVisible()
 	{
 		return pWindow->GetMouseVisible();
 	}
-	
-	bool GetRelativeMouseMode() {
+
+	bool getRelativeMouseMode() {
 		return pWindow->GetRelativeMouseMode();
 	}
 
-	void SetTitle(const std::string& title)
+	void setTitle(const std::string& title)
 	{
 		return pWindow->SetTitle(title);
 	}
 
 	unsigned char colorRed = 0, colorGreen = 0, colorBlue = 0, colorAlpha = 255;
 
-	void SetColor(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha)
+	void setColor(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha)
 	{
 		colorRed = red;
 		colorGreen = green;
@@ -222,70 +222,70 @@ namespace jngl
 		colorAlpha = alpha;
 	}
 
-	double GetTextWidth(const std::string& text)
+	double getTextWidth(const std::string& text)
 	{
 		return pWindow->GetTextWidth(text);
 	}
 
-	int GetLineHeight() {
+	int getLineHeight() {
 		return pWindow->GetLineHeight();
 	}
 
-	void Print(const std::string& text, const int xposition, const int yposition)
+	void print(const std::string& text, const int xposition, const int yposition)
 	{
 		pWindow->Print(text, xposition, yposition);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
-	int GetFontSize()
+	int getFontSize()
 	{
 		return pWindow->GetFontSize();
 	}
 
-	void SetFontSize(const int size)
+	void setFontSize(const int size)
 	{
 		pWindow->SetFontSize(size);
 	}
-	
-	std::string GetFont()
+
+	std::string getFont()
 	{
 		return pWindow->GetFont();
 	}
 
-	void SetFont(const std::string& filename)
+	void setFont(const std::string& filename)
 	{
 		pWindow->SetFont(filename);
 	}
 
-	void SetFontByName(const std::string& name)
+	void setFontByName(const std::string& name)
 	{
 		pWindow->SetFontByName(name);
 	}
 
-	bool GetFullscreen()
+	bool getFullscreen()
 	{
 		return pWindow->GetFullscreen();
 	}
 
-	void SetIcon(const std::string& filename)
+	void setIcon(const std::string& filename)
 	{
 		pWindow->SetIcon(filename);
 	}
 
-	double FPS()
+	double getFPS()
 	{
 		static double lastDraw = 0.0;
-		double fps = 1/(jngl::Time() - lastDraw);
-		lastDraw = jngl::Time();
+		double fps = 1/(jngl::time() - lastDraw);
+		lastDraw = jngl::time();
 		return fps;
 	}
 
-	void Reset()
+	void reset()
 	{
 		glLoadIdentity();
 	}
 
-	void Rotate(const double degree)
+	void rotate(const double degree)
 	{
 #ifdef GL_DOUBLE
 		glRotated(degree, 0, 0, 1);
@@ -294,87 +294,87 @@ namespace jngl
 #endif
 	}
 
-	void Translate(const double x, const double y)
+	void translate(const double x, const double y)
 	{
 		opengl::Translate(x, y);
 	}
 
-	void Scale(const double factor)
+	void scale(const double factor)
 	{
 		opengl::Scale(factor, factor);
 	}
 
-	void Scale(const double xfactor, const double yfactor)
+	void scale(const double xfactor, const double yfactor)
 	{
 		opengl::Scale(xfactor, yfactor);
 	}
 
-	void PushMatrix()
+	void pushMatrix()
 	{
 		glPushMatrix();
 	}
 
-	void PopMatrix()
+	void popMatrix()
 	{
 		glPopMatrix();
 	}
 
-	void DrawRect(const double xposition, const double yposition, const double width, const double height)
+	void drawRect(const double xposition, const double yposition, const double width, const double height)
 	{
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Rect(xposition, yposition, width, height);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
-	void DrawLine(const double xstart, const double ystart, const double xend, const double yend)
+	void drawLine(const double xstart, const double ystart, const double xend, const double yend)
 	{
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Line(xstart, ystart, xend, yend);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
-	void DrawEllipse(const double xmid, const double ymid, const double width, const double height)
+	void drawEllipse(const double xmid, const double ymid, const double width, const double height)
 	{
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Ellipse(xmid, ymid, width, height);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
-	void DrawPoint(const double x, const double y)
+	void drawPoint(const double x, const double y)
 	{
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Point(x, y);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
-	void ReadPixel(const int x, const int y, unsigned char& red, unsigned char& green, unsigned char& blue)
+	void readPixel(const int x, const int y, unsigned char& red, unsigned char& green, unsigned char& blue)
 	{
 		unsigned char data[3];
 		data[0] = static_cast<unsigned char>(bgRed * 255.0f);
 		data[1] = static_cast<unsigned char>(bgGreen * 255.0f);
 		data[2] = static_cast<unsigned char>(bgBlue * 255.0f);
-		glReadPixels(x, GetWindowHeight() - y - 1, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glReadPixels(x, getWindowHeight() - y - 1, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, data);
 		red = data[0];
 		green = data[1];
 		blue = data[2];
 	}
 
-	int GetWindowWidth()
+	int getWindowWidth()
 	{
 		return pWindow->GetWidth();
 	}
 
-	int GetWindowHeight()
+	int getWindowHeight()
 	{
 		return pWindow->GetHeight();
 	}
 
-	double GetMouseWheel()
+	double getMouseWheel()
 	{
 		return pWindow->GetMouseWheel();
 	}
 
-	void SetAntiAliasing(bool enabled)
+	void setAntiAliasing(bool enabled)
 	{
 #ifdef GL_MULTISAMPLE_ARB
 		if(!pWindow->IsMultisampleSupported())
@@ -396,18 +396,18 @@ namespace jngl
 #endif
 	}
 
-	bool GetAntiAliasing()
+	bool getAntiAliasing()
 	{
 		return antiAliasingEnabled;
 	}
-	
-	void LoadSound(const std::string&); // definied in audio.cpp
 
-	void Load(const std::string& filename)
+	void loadSound(const std::string&); // definied in audio.cpp
+
+	void load(const std::string& filename)
 	{
 		if(filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg")
 		{
-			LoadSound(filename);
+			loadSound(filename);
 		}
 		else
 		{
@@ -418,7 +418,7 @@ namespace jngl
 #ifdef _WIN32
 	#include <GL/wglew.h>
 #endif
-	
+
 	void SetVerticalSync(bool enabled) {
 #ifdef _WIN32
 		if (WGL_EXT_swap_control) {
@@ -432,39 +432,39 @@ namespace jngl
 		vsyncEnabled = true;
 #endif
 	}
-	
-	bool GetVerticalSync() {
+
+	bool getVerticalSync() {
 		return vsyncEnabled;
 	}
-	
-	void SetWork(boost::shared_ptr<Work> w) {
+
+	void setWork(boost::shared_ptr<Work> w) {
 		return pWindow->SetWork(w);
 	}
-	
-	void SetWork(Work* w) {
+
+	void setWork(Work* w) {
 		return pWindow->SetWork(boost::shared_ptr<Work>(w));
 	}
-	
-	void MainLoop() {
+
+	void mainLoop() {
 		return pWindow->MainLoop();
 	}
-	
-	boost::shared_ptr<Work> GetWork() {
+
+	boost::shared_ptr<Work> getWork() {
 		return pWindow->getWork();
 	}
-	
+
 	void setPrefix(const std::string& path) {
 		pathPrefix = path;
 	}
-	
+
 	std::string getPrefix() {
 		return pathPrefix;
 	}
-	
+
 	void setConfigPath(const std::string& path) {
 		pWindow->setConfigPath(path);
 	}
-	
+
 	std::string getConfigPath() {
 		return pWindow->getConfigPath();
 	}

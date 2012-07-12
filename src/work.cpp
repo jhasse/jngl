@@ -7,12 +7,12 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl {
 	void Work::onQuitEvent() {
-		jngl::Quit();
+		jngl::quit();
 	}
-	
+
 	void Work::onLoad() {
 	}
-	
+
 	Work::~Work() {
 	}
 }

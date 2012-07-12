@@ -357,68 +357,70 @@ namespace jngl
 		return *(i->second);
 	}
 
-	void Draw(const std::string& filename, const double xposition, const double yposition)
+	void draw(const std::string& filename, const double xposition, const double yposition)
 	{
 		GetSprite(filename).Draw(xposition, yposition);
 	}
 
-	void DrawScaled(const std::string& filename, const double xposition, const double yposition,
+	void drawScaled(const std::string& filename, const double xposition, const double yposition,
 	                const float xfactor, const float yfactor)
 	{
 		GetSprite(filename).DrawScaled(xposition, yposition, xfactor, yfactor);
 	}
 
-	void DrawScaled(const std::string& filename, const double xposition, const double yposition,
+	void drawScaled(const std::string& filename, const double xposition, const double yposition,
 	                const float factor)
 	{
 		GetSprite(filename).DrawScaled(xposition, yposition, factor, factor);
 	}
 
-	void DrawClipped(const std::string& filename, double xposition, double yposition, float xstart, float xend, float ystart, float yend)
+	void drawClipped(const std::string& filename, double xposition, double yposition, float xstart, float xend, float ystart, float yend)
 	{
 		GetSprite(filename).DrawClipped(xposition, yposition, xstart, xend, ystart, yend);
 	}
 
-	void LoadSprite(const std::string& filename)
+	void loadSprite(const std::string& filename)
 	{
 		GetSprite(filename);
 	}
 
-	void Unload(const std::string& filename)
+	void unload(const std::string& filename)
 	{
 		std::map<std::string, boost::shared_ptr<Sprite> >::iterator i;
 		if((i = sprites_.find(filename)) != sprites_.end())
 			sprites_.erase(i);
 	}
 
-	void UnloadAll()
+	void unloadAll()
 	{
 		sprites_.clear();
 	}
 
-	int GetWidth(const std::string& filename)
+	int getWidth(const std::string& filename)
 	{
 		const int width = GetSprite(filename, true).Width();
-		if(!pWindow)
-			Unload(filename);
+		if (!pWindow) {
+			unload(filename);
+		}
 		return width;
 	}
 
-	int GetHeight(const std::string& filename)
+	int getHeight(const std::string& filename)
 	{
 		const int height = GetSprite(filename, true).Height();
-		if(!pWindow)
-			Unload(filename);
+		if (!pWindow) {
+			unload(filename);
+		}
 		return height;
 	}
 
-	bool DrawButton(const std::string& sprite, const double xposition, const double yposition, const std::string& mouseover)
+	bool drawButton(const std::string& sprite, const double xposition, const double yposition, const std::string& mouseover)
 	{
-		if(xposition <= GetMouseX() && GetMouseX() < (xposition + GetWidth(sprite)) &&
-		   yposition <= GetMouseY() && GetMouseY() < (yposition + GetHeight(sprite)))
+		if(xposition <= getMouseX() && getMouseX() < (xposition + getWidth(sprite)) &&
+		   yposition <= getMouseY() && getMouseY() < (yposition + getHeight(sprite)))
 		{
 			GetSprite(mouseover).Draw(xposition, yposition);
-			if(MousePressed())
+			if(mousePressed())
 			{
 				return true;
 			}

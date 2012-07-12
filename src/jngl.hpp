@@ -27,7 +27,7 @@ namespace jngl
 
 	void quit();
 
-	void continue();
+	void cancelQuit();
 
 	void draw(const std::string& filename,
 	          double xposition,
@@ -94,7 +94,7 @@ namespace jngl
 
 	int getHeight(const std::string& filename);
 
-	double Time();
+	double time();
 
 	void beginPolygon();
 
@@ -175,7 +175,7 @@ namespace jngl
 
 	void sleep(int milliseconds);
 
-	double FPS();
+	double getFPS();
 
 	void errorMessage(const std::string& text);
 
@@ -258,35 +258,35 @@ namespace jngl
 		};
 	}
 
-	bool KeyDown(key::KeyType key);
+	bool keyDown(key::KeyType key);
 
-	bool KeyDown(char key);
+	bool keyDown(char key);
 
-	bool KeyDown(const std::string& key);
+	bool keyDown(const std::string& key);
 
-	bool KeyPressed(key::KeyType key);
+	bool keyPressed(key::KeyType key);
 
-	bool KeyPressed(char key);
+	bool keyPressed(char key);
 
-	bool KeyPressed(const std::string& key);
+	bool keyPressed(const std::string& key);
 
-	void Play(const std::string& filename);
+	void play(const std::string& filename);
 
-	void Stop(const std::string& filename);
+	void stop(const std::string& filename);
 
-	bool IsPlaying(const std::string& filename);
+	bool isPlaying(const std::string& filename);
 
-	bool IsOpenALInstalled();
+	bool isOpenALInstalled();
 
-	void SetPlaybackSpeed(float speed);
+	void setPlaybackSpeed(float speed);
 
-	void SetVolume(float volume);
+	void setVolume(float volume);
 
-	void SetIcon(const std::string& filename);
+	void setIcon(const std::string& filename);
 
-	int GetDesktopWidth();
+	int getDesktopWidth();
 
-	int GetDesktopHeight();
+	int getDesktopHeight();
 
 	class FrameBufferImpl;
 	class FrameBuffer {
@@ -312,13 +312,13 @@ namespace jngl
 		virtual ~Work();
 	};
 
-	boost::shared_ptr<Work> GetWork();
+	boost::shared_ptr<Work> getWork();
 
-	void SetWork(boost::shared_ptr<Work> work);
+	void setWork(boost::shared_ptr<Work> work);
 
-	void SetWork(Work*);
+	void setWork(Work*);
 
-	void MainLoop();
+	void mainLoop();
 
 	void setPrefix(const std::string& path);
 

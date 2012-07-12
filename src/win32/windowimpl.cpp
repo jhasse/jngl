@@ -647,7 +647,7 @@ namespace jngl
 		SendMessage(pWindowHandle_.get(), WM_SETICON, WPARAM(ICON_SMALL), LPARAM(hIcon));
 	}
 
-	int GetDesktopWidth()
+	int getDesktopWidth()
 	{
 		RECT desktop;
 		const HWND hDesktop = GetDesktopWindow();
@@ -655,7 +655,7 @@ namespace jngl
 		return desktop.right;
 	}
 
-	int GetDesktopHeight()
+	int getDesktopHeight()
 	{
 		RECT desktop;
 		const HWND hDesktop = GetDesktopWindow();

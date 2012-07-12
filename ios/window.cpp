@@ -24,7 +24,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 
 namespace jngl
-{		
+{
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
 	: fullscreen_(fullscreen), running_(false), isMouseVisible_(true),
 	  relativeMouseMode(false), isMultisampleSupported_(true),
@@ -34,12 +34,12 @@ namespace jngl
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
-		
+
 		Init(height, width);
-		
+
 		running_ = true;
 	}
-	
+
 	std::string Window::GetFontFileByName(const std::string& fontname)
 	{
 		std::string tmp = fontname;
@@ -48,24 +48,24 @@ namespace jngl
 		}
 		return tmp + ".ttf";
 	}
-	
+
 	Window::~Window()
 	{
 		delete impl;
 	}
-	
+
 	int Window::GetKeyCode(key::KeyType key)
 	{
 		switch(key) {
 			default: return 0;
 		}
 	}
-	
+
 	bool Window::KeyDown(const std::string& key)
 	{
 		return characterDown_[key];
 	}
-	
+
 	bool Window::KeyPressed(const std::string& key)
 	{
 		if(characterPressed_[key])
@@ -75,54 +75,54 @@ namespace jngl
 		}
 		return characterPressed_[key];
 	}
-	
+
 	void Window::UpdateInput() {
 		impl->updateInput();
 	}
-	
+
 	void Window::SwapBuffers()
 	{
 	}
-	
+
 	void Window::SetMouseVisible(const bool visible)
 	{
 	}
-	
+
 	void Window::SetTitle(const std::string& windowTitle)
 	{
 	}
-	
+
 	int Window::MouseX() {
 		return mousex_;
 	}
-	
+
 	int Window::MouseY() {
 		return mousey_;
 	}
-	
+
 	void Window::SetMouse(const int xposition, const int yposition)
 	{
 	}
-	
+
 	void Window::SetRelativeMouseMode(const bool relative) {
 		relativeMouseMode = relative;
 		impl->setRelativeMouseMode(relative);
 	}
-	
+
 	void Window::SetIcon(const std::string&)
 	{
 	}
-	
-	int GetDesktopWidth()
+
+	int getDesktopWidth()
 	{
-		return jngl::GetWindowWidth();
+		return jngl::getWindowWidth();
 	}
-	
-	int GetDesktopHeight()
+
+	int getDesktopHeight()
 	{
-		return jngl::GetWindowHeight();
+		return jngl::getWindowHeight();
 	}
-	
+
 	WindowImpl* Window::getImpl() const {
 		return impl;
 	}
