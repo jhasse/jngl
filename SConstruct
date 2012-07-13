@@ -48,27 +48,13 @@ if ARGUMENTS.get('VERBOSE') != "1":
 	env['ARCOMSTR'] = "archiving: $TARGET"
 
 if not msvc:
-	source_files = env.Object(Split("""
-	src/audio.cpp
-	src/finally.cpp
-	src/freetype.cpp
-	src/main.cpp
-	src/opengl.cpp
-	src/sprite.cpp
-	src/tess.cpp
-	src/texture.cpp
-	src/window.cpp
-	src/windowptr.cpp
-	src/work.cpp
-	src/framebuffer.cpp
-	src/framebufferimpl.cpp
-	"""), CPPFLAGS="-std=gnu++0x")
+	source_files = env.Object(Glob("src/*.cpp") + Glob("src/jngl/*.cpp"), CPPFLAGS="-std=gnu++0x")
 	source_files += Split("""
 	src/callbacks.c
 	src/ConvertUTF.c
 	""")
 
-testSrc = "src/test.cpp"
+testSrc = "src/test/test.cpp"
 
 if env['PLATFORM'] == 'win32' and not msvc: # Windows
 	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl")

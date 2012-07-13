@@ -6,7 +6,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "jngl.hpp"
 #include "window.hpp"
 #include "debug.hpp"
-#include "sprite.hpp"
+#include "spriteimpl.hpp"
 #include "windowptr.hpp"
 #include "draw.hpp"
 #include "opengl.hpp"

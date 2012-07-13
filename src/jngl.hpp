@@ -6,6 +6,9 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #ifndef __JNGL_HPP__
 #define __JNGL_HPP__
 
+#include "jngl/types.hpp"
+#include "jngl/sprite.hpp"
+
 #include <string>
 #include <stdexcept>
 #include <boost/shared_ptr.hpp>

@@ -24,7 +24,7 @@ namespace jngl
 
 #else
 
-#include "sprite.hpp"
+#include "spriteimpl.hpp"
 #include "opengl.hpp"
 #include "callbacks.h"
 
