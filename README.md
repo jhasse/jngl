@@ -11,17 +11,12 @@ Build jngl in debug mode:
 scons debug=1
 ```
 
-Build jngl in profile mode:
-```
-scons profile=1
-```
-
 Build python bindings:
 ```
 scons python=1
 ```
 
-Create a windows installer:
+Create a Windows installer:
 ```
 scons installer=1
 scons installer=1 python=1
@@ -35,6 +30,11 @@ Install jngl to "/usr":
 Clean up:
 ```
 scons installer=1 python=1 -c
+```
+
+A list of all variables:
+```
+scons -h
 ```
 
 ## Libraries for Windows

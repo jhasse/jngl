@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
-import os
-
-version = "1.0.1"
+version = "1.0.2"
 
 #Replace @VERSION@ in certain files
 files = ["jngl.pc.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
@@ -12,42 +10,44 @@ for filename in files:
 	open(newfilename,"w").writelines([line.replace("@VERSION@",version) for line in datei])
 	Clean('.', newfilename) # Make sure scons -c does clean up tidily
 
-env = Environment()
+vars = Variables()
+vars.Add(BoolVariable('debug', 'Enable debug build', 0))
+vars.Add(BoolVariable('profile', 'Enable profile build', 0))
+vars.Add(BoolVariable('python', 'Build python bindings', 0))
+vars.Add(BoolVariable('installer', 'Create a Windows installer using NSIS', 0))
+vars.Add(BoolVariable('verbose', 'Show verbose compiling output', 0))
+vars.Add(BoolVariable('msvc', "Build installer using Visual C++'s output", 0))
+
+env = Environment(variables = vars)
+Help(vars.GenerateHelpText(env))
 try:
 	import multiprocessing
 	env.SetOption('num_jobs', multiprocessing.cpu_count())
 except NotImplementedError:
 	pass
 
-msvc = bool(ARGUMENTS.get('msvc', 0))
 if env['PLATFORM'] == 'win32':
-	if msvc:
+	if env['msvc']:
 		env.Append(CCFLAGS = '/EHsc /MD')
 	else:
-		env = Environment(tools=['mingw'])
+		env['tools'] = ['mingw']
 
 if env['PLATFORM'] == 'darwin':
-	env = Environment(CXX='clang++', CC='clang')
+	env['CC']  = 'clang'
+	env['CXX'] = 'clang++'
 
-debug = int(ARGUMENTS.get('debug', 0))
-profile = ARGUMENTS.get('profile', 0)
-installer = ARGUMENTS.get('installer', 0)
-python = int(ARGUMENTS.get('python', 0))
-m32 = ARGUMENTS.get('m32', 0)
-if debug:
+if env['debug']:
 	env.Append(CCFLAGS = '-g -Wall')
 else:
 	env.Append(CCFLAGS = '-O2 -DNDEBUG')
-if int(profile):
+if env['profile']:
 	env.Append(CCFLAGS = '-pg', _LIBFLAGS = ' -pg')
-if int(m32):
-	env.Append(CCFLAGS = '-m32', LINKFLAGS = ' -m32')
-if ARGUMENTS.get('VERBOSE') != "1":
+if not env['verbose']:
 	env['CCCOMSTR'] = env['CXXCOMSTR'] = "compiling: $TARGET"
 	env['LINKCOMSTR'] = "linking: $TARGET"
 	env['ARCOMSTR'] = "archiving: $TARGET"
 
-if not msvc:
+if not env['msvc']:
 	source_files = env.Object(Glob("src/*.cpp") + Glob("src/jngl/*.cpp"), CPPFLAGS="-std=gnu++0x")
 	source_files += Split("""
 	src/callbacks.c
@@ -56,16 +56,16 @@ if not msvc:
 
 testSrc = "src/test/test.cpp"
 
-if env['PLATFORM'] == 'win32' and not msvc: # Windows
+if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
 	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl")
-	if int(python) or int(msvc):
+	if env['python'] or env['msvc']:
 		jnglLibs += Split("openal32 ogg vorbisfile")
 	else:
 		env.Append(CPPDEFINES='WEAK_LINKING_OPENAL')
 	env.Append(CPPPATH="./include")
 	lib = env.Library(target="jngl", source=source_files + Glob('win32/*.cpp'), LIBS=jnglLibs)
 	linkflags = "-mwindows"
-	if debug or int(msvc):
+	if env['debug'] or env['msvc']:
 		linkflags = ""
 	libs = Split("jngl") + jnglLibs
 	env.Program(testSrc,
@@ -74,7 +74,7 @@ if env['PLATFORM'] == 'win32' and not msvc: # Windows
 				LIBPATH=Split("src ./lib"),
 				LIBS=libs,
 				LINKFLAGS=linkflags)
-	if int(python):
+	if env['python']:
 		env = env.Clone()
 		env.Append(CPPPATH=Split("C:\Python27\include"),
 		           LIBPATH=Split(". ./lib ./python C:\Python27\libs"),
@@ -84,7 +84,7 @@ if env['PLATFORM'] == 'win32' and not msvc: # Windows
 		                  source="python/main.cpp")
 
 if env['PLATFORM'] == 'posix': # Linux
-	if int(python):
+	if env['python']:
 		env.Append(CCFLAGS = '-DNOJPEG')
 	source_files += Glob('src/linux/*.cpp')
 	env.ParseConfig('pkg-config --cflags --libs fontconfig glib-2.0')
@@ -95,7 +95,7 @@ if env['PLATFORM'] == 'posix': # Linux
 	testEnv = env.Clone()
 	testEnv.ParseConfig("pkg-config --cflags --libs jngl.pc")
 	testEnv.Program('test', testSrc, CPPFLAGS="-std=c++0x")
-	if int(python):
+	if env['python']:
 		env = env.Clone()
 		env.ParseConfig("pkg-config --cflags --libs jngl.pc")
 		env.Append(CPPPATH="/usr/include/python2.7",
@@ -115,7 +115,7 @@ if env['PLATFORM'] == 'darwin': # Mac
 	testEnv = env.Clone()
 	testEnv.Append(CPPPATH='.')
 	testEnv.Program(testSrc, CPPFLAGS='-std=c++0x')
-	if int(python):
+	if env['python']:
 		env = env.Clone()
 		env.Append(CPPPATH='/System/Library/Frameworks/Python.framework/Headers/',
 		           LINKFLAGS='-framework Python',
@@ -124,18 +124,19 @@ if env['PLATFORM'] == 'darwin': # Mac
 		env.SharedLibrary(target="python/jngl.so",
 		                  source="python/main.cpp")
 
-if int(installer):
+if env['installer']:
 	nsiFile = 'installer/mingw.nsi'
 	name = 'MinGW'
-	if int(msvc):
+	if env['msvc']:
 		nsiFile = 'installer/msvc.nsi'
 		name = 'MS Visual C++'
 	if python:
 		nsiFile = 'installer/python.nsi'
 		name = 'Python 2.7'
 	import os
-	if msvc:
+	if env['msvc']:
 		lib = None
+	import os
 	t = Command('JNGL ' + version + '.exe', lib, '"' + os.path.expandvars("%programfiles%") + '\NSIS\makensis.exe " ' + nsiFile)
 	if python:
 		Depends(t, ['python/jngl.dll'])
