@@ -1,7 +1,25 @@
 ---
 title: Tutorials - JNGL
 navi: Tutorials
+sections:
+- title: Creating a Window
+  id: window
+- title: Print Text
+  id: text
+- title: Draw Sprites
+  id: sprites
+- title: Key Input
+  id: input
 ---
 {% include top.html %}
-<p>Coming soon ...</p>
+<header class="jumbotron subhead" id="overview">
+	<h1>Tutorial</h1>
+		<div class="subnav">
+			<ul class="nav nav-pills">
+			{%for section in page.sections %}
+				<li><a href="#{{ section.id }}">{{ forloop.index }}. {{ section.title }}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+</header>
 {% include bottom.html %}
