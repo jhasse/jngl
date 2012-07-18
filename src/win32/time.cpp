@@ -31,7 +31,7 @@ namespace jngl
 			QueryPerformanceCounter((LARGE_INTEGER *) &start_);
 		}
 	};
-	double time()
+	double getTime()
 	{
 		static Query timer;
 		__int64 time;

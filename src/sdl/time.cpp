@@ -8,7 +8,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl
 {
-	double time()
+	double getTime()
 	{
 		SDL::init();
 		Uint32 m = SDL_GetTicks();

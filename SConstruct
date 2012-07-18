@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-version = "1.0.2"
+version = "1.0.3"
 
 #Replace @VERSION@ in certain files
 files = ["jngl.pc.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
@@ -98,10 +98,10 @@ if env['PLATFORM'] == 'posix': # Linux
 	if env['python']:
 		env = env.Clone()
 		env.ParseConfig("pkg-config --cflags --libs jngl.pc")
-		env.Append(CPPPATH="/usr/include/python2.7",
+		env.Append(CPPPATH="/usr/include/python3.2",
 		           LIBPATH=Split("src ./python"),
-		           LIBS=Split("python2.7 boost_python-py27"))
-		env.SharedLibrary(target="python/jngl.so",
+		           LIBS=Split("python3.2mu boost_python-py32"))
+		env.SharedLibrary(target="python/libjngl.so",
 		                  source="python/main.cpp")
 
 if env['PLATFORM'] == 'darwin': # Mac

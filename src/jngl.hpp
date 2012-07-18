@@ -97,7 +97,7 @@ namespace jngl
 
 	int getHeight(const std::string& filename);
 
-	double time();
+	double getTime();
 
 	void beginPolygon();
 

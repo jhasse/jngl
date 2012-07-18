@@ -5,158 +5,164 @@
 using namespace boost::python;
 using namespace jngl;
 
-void ShowWindow1(const std::string& title, int width, int height)
+void showWindow1(const std::string& title, int width, int height)
 {
-	ShowWindow(title, width, height);
+	showWindow(title, width, height);
 }
-void ShowWindow2(const std::string& title, int width, int height, bool fullscreen)
+void showWindow2(const std::string& title, int width, int height, bool fullscreen)
 {
-	ShowWindow(title, width, height, fullscreen);
+	showWindow(title, width, height, fullscreen);
 }
-void DrawScaled1(const std::string& filename, double xposition, double yposition, float xfactor, float yfactor)
+void drawScaled1(const std::string& filename, double xposition, double yposition, float xfactor, float yfactor)
 {
-	DrawScaled(filename, xposition, yposition, xfactor, yfactor);
+	drawScaled(filename, xposition, yposition, xfactor, yfactor);
 }
-void DrawScaled2(const std::string& filename, double xposition, double yposition, float factor)
+void drawScaled2(const std::string& filename, double xposition, double yposition, float factor)
 {
-	DrawScaled(filename, xposition, yposition, factor);
+	drawScaled(filename, xposition, yposition, factor);
 }
-void Scale1(double factor)
+void scale1(double factor)
 {
-	Scale(factor);
+	scale(factor);
 }
-void Scale2(double xfactor, double yfactor)
+void scale2(double xfactor, double yfactor)
 {
-	Scale(xfactor, yfactor);
+	scale(xfactor, yfactor);
 }
-bool MouseDown1()
+bool mouseDown1()
 {
-	return MouseDown();
+	return mouseDown();
 }
-bool MouseDown2(mouse::Button button)
+bool mouseDown2(mouse::Button button)
 {
-	return MouseDown(button);
+	return mouseDown(button);
 }
-bool MousePressed1()
+bool mousePressed1()
 {
-	return MousePressed();
+	return mousePressed();
 }
-bool MousePressed2(mouse::Button button)
+bool mousePressed2(mouse::Button button)
 {
-	return MousePressed(button);
+	return mousePressed(button);
 }
-void SetColor1(unsigned char red, unsigned char green, unsigned char blue)
+void setColor1(unsigned char red, unsigned char green, unsigned char blue)
 {
-	SetColor(red, green, blue);
+	setColor(red, green, blue);
 }
-void SetColor2(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void setColor2(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
-	SetColor(red, green, blue, alpha);
+	setColor(red, green, blue, alpha);
 }
-void SetFontColor1(unsigned char red, unsigned char green, unsigned char blue)
+void setFontColor1(unsigned char red, unsigned char green, unsigned char blue)
 {
-	SetFontColor(red, green, blue);
+	setFontColor(red, green, blue);
 }
-void SetFontColor2(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void setFontColor2(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
-	SetFontColor(red, green, blue, alpha);
+	setFontColor(red, green, blue, alpha);
 }
-void SetSpriteColor1(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void setSpriteColor1(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
-	SetSpriteColor(red, green, blue, alpha);
+	setSpriteColor(red, green, blue, alpha);
 }
-void SetSpriteColor2(unsigned char red, unsigned char green, unsigned char blue)
+void setSpriteColor2(unsigned char red, unsigned char green, unsigned char blue)
 {
-	SetSpriteColor(red, green, blue);
+	setSpriteColor(red, green, blue);
 }
-bool KeyDown1(key::KeyType key)
+bool keyDown1(key::KeyType key)
 {
-	return KeyDown(key);
+	return keyDown(key);
 }
-bool KeyDown2(const std::string& key)
+bool keyDown2(const std::string& key)
 {
-	return KeyDown(key);
+	return keyDown(key);
 }
-bool KeyPressed1(key::KeyType key)
+bool keyPressed1(key::KeyType key)
 {
-	return KeyPressed(key);
+	return keyPressed(key);
 }
-bool KeyPressed2(const std::string& key)
+bool keyPressed2(const std::string& key)
 {
-	return KeyPressed(key);
+	return keyPressed(key);
+}
+void draw1(const std::string& filename, int x, int y) {
+	return draw(filename, x, y);
+}
+void drawRect1(double xposition, double yposition, double width, double height) {
+	return drawRect(xposition, yposition, width, height);
 }
 
 BOOST_PYTHON_MODULE(jngl)
 {
-	def("ShowWindow", ShowWindow1);
-	def("ShowWindow", ShowWindow2);
-	def("Running", Running);
-	def("UpdateInput", UpdateInput);
-	def("SwapBuffers", SwapBuffers);
-	def("HideWindow", HideWindow);
-	def("Quit", Quit);
-	def("Continue", Continue);
-	def("Draw", Draw);
-	def("DrawScaled", DrawScaled1);
-	def("DrawScaled", DrawScaled2);
-	def("DrawRect", DrawRect);
-	def("DrawLine", DrawLine);
-	def("DrawEllipse", DrawEllipse);
-	def("DrawPoint", DrawPoint);
-	def("Rotate", Rotate);
-	def("Translate", Translate);
-	def("Scale", Scale1);
-	def("Scale", Scale2);
-	def("PushMatrix", PushMatrix);
-	def("PopMatrix", PopMatrix);
-	def("Reset", Reset);
-	def("Load", Load);
-	def("Unload", Unload);
-	def("GetWidth", GetWidth);
-	def("GetHeight", GetHeight);
-	def("Time", Time);
-	def("BeginPolygon", BeginPolygon);
-	def("Vertex", Vertex);
-	def("EndPolygon", EndPolygon);
-	def("SetMouseVisible", SetMouseVisible);
-	def("IsMouseVisible", IsMouseVisible);
-	def("GetMouseX", GetMouseX);
-	def("GetMouseY", GetMouseY);
+	def("showWindow", showWindow1);
+	def("showWindow", showWindow2);
+	def("running", running);
+	def("updateInput", updateInput);
+	def("swapBuffers", swapBuffers);
+	def("hideWindow", hideWindow);
+	def("quit", quit);
+	def("cancelQuit", cancelQuit);
+	def("draw", draw1);
+	def("drawScaled", drawScaled1);
+	def("drawScaled", drawScaled2);
+	def("drawRect", drawRect1);
+	def("drawLine", drawLine);
+	def("drawEllipse", drawEllipse);
+	def("drawPoint", drawPoint);
+	def("rotate", rotate);
+	def("translate", translate);
+	def("scale", scale1);
+	def("scale", scale2);
+	def("pushMatrix", pushMatrix);
+	def("popMatrix", popMatrix);
+	def("reset", reset);
+	def("load", load);
+	def("unload", unload);
+	def("getWidth", getWidth);
+	def("getHeight", getHeight);
+	def("getTime", getTime);
+	def("beginPolygon", beginPolygon);
+	def("vertex", vertex);
+	def("endPolygon", endPolygon);
+	def("setMouseVisible", setMouseVisible);
+	def("isMouseVisible", isMouseVisible);
+	def("getMouseX", getMouseX);
+	def("getMouseY", getMouseY);
 
 	enum_<mouse::Button>("mouse")
         .value("Left", mouse::Left)
         .value("Middle", mouse::Middle)
         .value("Right", mouse::Right);
 
-	def("MouseDown", MouseDown1);
-	def("MouseDown", MouseDown2);
-	def("MousePressed", MousePressed1);
-	def("MousePressed", MousePressed2);
-	def("SetMouse", SetMouse);
-	def("DrawButton", DrawButton);
-	def("SetTitle", SetTitle);
-	def("SetBackgroundColor", SetBackgroundColor);
-	def("SetColor", SetColor1);
-	def("SetColor", SetColor2);
-	def("SetFontColor", SetFontColor1);
-	def("SetFontColor", SetFontColor2);
-	def("SetSpriteColor", SetSpriteColor1);
-	def("SetSpriteColor", SetSpriteColor2);
-	def("Print", Print);
-	def("GetFontSize", GetFontSize);
-	def("SetFontSize", SetFontSize);
-	def("SetFont", SetFont);
-	def("SetFontByName", SetFontByName);
-	def("Sleep", Sleep);
-	def("FPS", FPS);
-	def("ErrorMessage", ErrorMessage);
-	def("GetFullscreen", GetFullscreen);
-	def("ReadPixel", ReadPixel);
-	def("GetWindowWidth", GetWindowWidth);
-	def("GetWindowHeight", GetWindowHeight);
-	def("SetAntiAliasing", SetAntiAliasing);
-	def("GetAntiAliasing", GetAntiAliasing);
-	def("GetTextWidth", GetTextWidth);
+	def("mouseDown", mouseDown1);
+	def("mouseDown", mouseDown2);
+	def("mousePressed", mousePressed1);
+	def("mousePressed", mousePressed2);
+	def("setMouse", setMouse);
+	def("drawButton", drawButton);
+	def("setTitle", setTitle);
+	def("setBackgroundColor", setBackgroundColor);
+	def("setColor", setColor1);
+	def("setColor", setColor2);
+	def("setFontColor", setFontColor1);
+	def("setFontColor", setFontColor2);
+	def("setSpriteColor", setSpriteColor1);
+	def("setSpriteColor", setSpriteColor2);
+	def("print", print);
+	def("getFontSize", getFontSize);
+	def("setFontSize", setFontSize);
+	def("setFont", setFont);
+	def("setFontByName", setFontByName);
+	def("sleep", jngl::sleep);
+	def("getFPS", getFPS);
+	def("errorMessage", errorMessage);
+	def("getFullscreen", getFullscreen);
+	def("readPixel", readPixel);
+	def("getWindowWidth", getWindowWidth);
+	def("getWindowHeight", getWindowHeight);
+	def("setAntiAliasing", setAntiAliasing);
+	def("getAntiAliasing", getAntiAliasing);
+	def("getTextWidth", getTextWidth);
 
 	enum_<key::KeyType>("key")
         .value("Left", key::Left)
@@ -198,18 +204,23 @@ BOOST_PYTHON_MODULE(jngl)
 	    .value("F12", key::F12)
 	    .value("Any", key::Any);
 
-	def("KeyDown", KeyDown1);
-	def("KeyDown", KeyDown2);
-	def("KeyPressed", KeyPressed1);
-	def("KeyPressed", KeyPressed2);
-	def("Play", Play);
-	def("Stop", Stop);
-	def("Load", Load);
-	def("IsPlaying", IsPlaying);
-	def("IsOpenALInstalled", IsOpenALInstalled);
+	def("keyDown", keyDown1);
+	def("keyDown", keyDown2);
+	def("keyPressed", keyPressed1);
+	def("keyPressed", keyPressed2);
+	def("play", play);
+	def("stop", stop);
+	def("load", load);
+	def("isPlaying", isPlaying);
+	def("isOpenALInstalled", isOpenALInstalled);
 	def("setPlaybackSpeed", setPlaybackSpeed);
 	def("setVolume", setVolume);
-	def("GetDesktopWidth", GetDesktopWidth);
-	def("GetDesktopHeight", GetDesktopHeight);
-	def("GetMouseWheel", GetMouseWheel);
+	def("getDesktopWidth", getDesktopWidth);
+	def("getDesktopHeight", getDesktopHeight);
+	def("getMouseWheel", getMouseWheel);
+	def("mainLoop", mainLoop);
+	def("setPrefix", setPrefix);
+	def("getPrefix", getPrefix);
+	def("setConfigPath", setConfigPath);
+	def("getConfigPath", getConfigPath);
 }

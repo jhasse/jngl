@@ -200,7 +200,7 @@ namespace jngl
 		}
 	}
 
-	bool IsOpenALInstalled()
+	bool isOpenALInstalled()
 	{
 #ifdef WEAK_LINKING_OPENAL
 		try

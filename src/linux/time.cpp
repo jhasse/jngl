@@ -28,7 +28,7 @@ namespace jngl
 		~Timer() { g_timer_destroy(gtimer_); }
 		GTimer* gtimer_;
 	};
-	double time()
+	double getTime()
 	{
 		static Timer timer;
 		return g_timer_elapsed(timer.gtimer_, NULL);

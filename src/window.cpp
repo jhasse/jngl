@@ -205,12 +205,12 @@ namespace jngl
 	}
 
 	bool Window::stepIfNeeded() {
-		if(jngl::time() - oldTime_ > 0.5) // Is half a second missing?
+		if(jngl::getTime() - oldTime_ > 0.5) // Is half a second missing?
 		{
 			oldTime_ += 0.5; // Let's slowdown
 		}
 		const static double timePerStep = 1.0 / 60.0;
-		if(jngl::time() - oldTime_ > timePerStep)
+		if(jngl::getTime() - oldTime_ > timePerStep)
 		{
 			// This stuff needs to be done 100 times per second
 			oldTime_ += timePerStep;

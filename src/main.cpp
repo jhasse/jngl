@@ -275,8 +275,8 @@ namespace jngl
 	double getFPS()
 	{
 		static double lastDraw = 0.0;
-		double fps = 1/(jngl::time() - lastDraw);
-		lastDraw = jngl::time();
+		double fps = 1/(jngl::getTime() - lastDraw);
+		lastDraw = jngl::getTime();
 		return fps;
 	}
 

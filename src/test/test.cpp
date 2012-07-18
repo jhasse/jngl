@@ -38,8 +38,8 @@ public:
 		jngl::drawRect(64, 0, 64, 64);
 		jngl::print("Frame\nBuffer\nObject", 50, 10);
 		fb.endDraw();
-		frameTime = jngl::time();
-		lastTime = jngl::time();
+		frameTime = jngl::getTime();
+		lastTime = jngl::getTime();
 	}
 	void step() {
 	}
@@ -51,8 +51,8 @@ public:
 		}
 		jngl::translate(-jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
 		jngl::pushMatrix();
-		double timeSinceLastFrame = jngl::time() - lastTime;
-		lastTime = jngl::time();
+		double timeSinceLastFrame = jngl::getTime() - lastTime;
+		lastTime = jngl::getTime();
 		for(int i = 0; i < 10; ++i)
 		{
 			if(jngl::keyDown(boost::lexical_cast<char>(i)))
@@ -163,9 +163,9 @@ public:
 		drawMouse(jngl::getMouseX(), jngl::getMouseY());
 		if(++frameNumber == 500)
 		{
-			std::cout << "It took " << jngl::time() - frameTime << " seconds to render 500 frames." << std::endl;
+			std::cout << "It took " << jngl::getTime() - frameTime << " seconds to render 500 frames." << std::endl;
 			frameNumber = 0;
-			frameTime = jngl::time();
+			frameTime = jngl::getTime();
 		}
 		if(jngl::keyDown('k'))
 		{
@@ -277,11 +277,13 @@ void drawTess()
 
 class RecentlyPressedKey {
 public:
-	RecentlyPressedKey(std::string name, int x, int y) : name_(name), alpha_(255), x_(x), y_(y), lastTime_(jngl::time()) {}
+	RecentlyPressedKey(std::string name, int x, int y)
+		: name_(name), alpha_(255), x_(x), y_(y), lastTime_(jngl::getTime()) {
+	}
 	void Draw()
 	{
-		double timeSinceLastFrame = jngl::time() - lastTime_;
-		lastTime_ = jngl::time();
+		double timeSinceLastFrame = jngl::getTime() - lastTime_;
+		lastTime_ = jngl::getTime();
 		alpha_ -= timeSinceLastFrame * 60;
 		x_ += timeSinceLastFrame * 40;
 		jngl::setFontColor(0, 0, 0, static_cast<unsigned char>(alpha_));
