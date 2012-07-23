@@ -10,102 +10,117 @@
     <Filter Include="Source Files\win32">
       <UniqueIdentifier>{45301c14-d841-42d9-9ad3-4c114d4a7419}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\jngl">
+      <UniqueIdentifier>{30c570aa-2eb3-42b1-abdf-0f15c80d09f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\jngl">
+      <UniqueIdentifier>{36d3ce7e-4178-416e-808b-fde31cda46c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\win32\message.cpp">
+    <ClCompile Include="..\src\win32\message.cpp">
       <Filter>Source Files\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\win32\time.cpp">
+    <ClCompile Include="..\src\win32\time.cpp">
       <Filter>Source Files\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\win32\windowimpl.cpp">
+    <ClCompile Include="..\src\win32\windowimpl.cpp">
       <Filter>Source Files\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\windowptr.cpp">
+    <ClCompile Include="..\src\windowptr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\audio.cpp">
+    <ClCompile Include="..\src\audio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\callbacks.c">
+    <ClCompile Include="..\src\callbacks.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ConvertUTF.c">
+    <ClCompile Include="..\src\ConvertUTF.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\finally.cpp">
+    <ClCompile Include="..\src\finally.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\freetype.cpp">
+    <ClCompile Include="..\src\freetype.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\main.cpp">
+    <ClCompile Include="..\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\opengl.cpp">
+    <ClCompile Include="..\src\opengl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\sprite.cpp">
+    <ClCompile Include="..\src\tess.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\tess.cpp">
+    <ClCompile Include="..\src\texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\texture.cpp">
+    <ClCompile Include="..\src\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\window.cpp">
+    <ClCompile Include="..\src\framebuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\framebuffer.cpp">
+    <ClCompile Include="..\src\framebufferimpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\framebufferimpl.cpp">
+    <ClCompile Include="..\src\work.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\work.cpp">
+    <ClCompile Include="..\src\spriteimpl.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\sprite.cpp">
+      <Filter>Source Files\jngl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\ConvertUTF.h">
+    <ClInclude Include="..\src\ConvertUTF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\finally.hpp">
+    <ClInclude Include="..\src\finally.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\freetype.hpp">
+    <ClInclude Include="..\src\freetype.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\opengl.hpp">
+    <ClInclude Include="..\src\opengl.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\sprite.hpp">
+    <ClInclude Include="..\src\texture.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\texture.hpp">
+    <ClInclude Include="..\src\window.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\window.hpp">
+    <ClInclude Include="..\src\windowptr.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\windowptr.hpp">
+    <ClInclude Include="..\src\draw.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\draw.hpp">
+    <ClInclude Include="..\src\debug.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\debug.hpp">
+    <ClInclude Include="..\src\audio.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\audio.hpp">
+    <ClInclude Include="..\src\jngl.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\jngl.hpp">
+    <ClInclude Include="..\src\framebufferimpl.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\framebufferimpl.hpp">
+    <ClInclude Include="..\src\spriteimpl.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\sprite.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\types.hpp">
+      <Filter>Header Files\jngl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

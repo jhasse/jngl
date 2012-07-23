@@ -54,10 +54,10 @@ void InitCallbacks()
 {
 	if(tobj == NULL) {
 		tobj = gluNewTess();
-		gluTessCallback(tobj, GLU_TESS_BEGIN, (_GLUfuncptr)beginCallback);
-		gluTessCallback(tobj, GLU_TESS_VERTEX, (_GLUfuncptr)glVertex3dv);
-		gluTessCallback(tobj, GLU_TESS_END, (_GLUfuncptr)glEnd);
-		gluTessCallback(tobj, GLU_TESS_COMBINE, (_GLUfuncptr)combineCallback);
+		gluTessCallback(tobj, GLU_TESS_BEGIN, beginCallback);
+		gluTessCallback(tobj, GLU_TESS_VERTEX, glVertex3dv);
+		gluTessCallback(tobj, GLU_TESS_END, glEnd);
+		gluTessCallback(tobj, GLU_TESS_COMBINE, combineCallback);
 	}
 }
 

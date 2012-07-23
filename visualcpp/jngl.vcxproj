@@ -11,39 +11,42 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\audio.cpp" />
-    <ClCompile Include="..\callbacks.c" />
-    <ClCompile Include="..\ConvertUTF.c" />
-    <ClCompile Include="..\finally.cpp" />
-    <ClCompile Include="..\framebuffer.cpp" />
-    <ClCompile Include="..\framebufferimpl.cpp" />
-    <ClCompile Include="..\freetype.cpp" />
-    <ClCompile Include="..\main.cpp" />
-    <ClCompile Include="..\opengl.cpp" />
-    <ClCompile Include="..\sprite.cpp" />
-    <ClCompile Include="..\tess.cpp" />
-    <ClCompile Include="..\texture.cpp" />
-    <ClCompile Include="..\win32\message.cpp" />
-    <ClCompile Include="..\win32\time.cpp" />
-    <ClCompile Include="..\win32\windowimpl.cpp" />
-    <ClCompile Include="..\window.cpp" />
-    <ClCompile Include="..\windowptr.cpp" />
-    <ClCompile Include="..\work.cpp" />
+    <ClCompile Include="..\src\audio.cpp" />
+    <ClCompile Include="..\src\callbacks.c" />
+    <ClCompile Include="..\src\ConvertUTF.c" />
+    <ClCompile Include="..\src\finally.cpp" />
+    <ClCompile Include="..\src\framebuffer.cpp" />
+    <ClCompile Include="..\src\framebufferimpl.cpp" />
+    <ClCompile Include="..\src\freetype.cpp" />
+    <ClCompile Include="..\src\jngl\sprite.cpp" />
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\opengl.cpp" />
+    <ClCompile Include="..\src\spriteimpl.cpp" />
+    <ClCompile Include="..\src\tess.cpp" />
+    <ClCompile Include="..\src\texture.cpp" />
+    <ClCompile Include="..\src\win32\message.cpp" />
+    <ClCompile Include="..\src\win32\time.cpp" />
+    <ClCompile Include="..\src\win32\windowimpl.cpp" />
+    <ClCompile Include="..\src\window.cpp" />
+    <ClCompile Include="..\src\windowptr.cpp" />
+    <ClCompile Include="..\src\work.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\audio.hpp" />
-    <ClInclude Include="..\ConvertUTF.h" />
-    <ClInclude Include="..\debug.hpp" />
-    <ClInclude Include="..\draw.hpp" />
-    <ClInclude Include="..\finally.hpp" />
-    <ClInclude Include="..\framebufferimpl.hpp" />
-    <ClInclude Include="..\freetype.hpp" />
-    <ClInclude Include="..\jngl.hpp" />
-    <ClInclude Include="..\opengl.hpp" />
-    <ClInclude Include="..\sprite.hpp" />
-    <ClInclude Include="..\texture.hpp" />
-    <ClInclude Include="..\window.hpp" />
-    <ClInclude Include="..\windowptr.hpp" />
+    <ClInclude Include="..\src\audio.hpp" />
+    <ClInclude Include="..\src\ConvertUTF.h" />
+    <ClInclude Include="..\src\debug.hpp" />
+    <ClInclude Include="..\src\draw.hpp" />
+    <ClInclude Include="..\src\finally.hpp" />
+    <ClInclude Include="..\src\framebufferimpl.hpp" />
+    <ClInclude Include="..\src\freetype.hpp" />
+    <ClInclude Include="..\src\jngl.hpp" />
+    <ClInclude Include="..\src\jngl\sprite.hpp" />
+    <ClInclude Include="..\src\jngl\types.hpp" />
+    <ClInclude Include="..\src\opengl.hpp" />
+    <ClInclude Include="..\src\spriteimpl.hpp" />
+    <ClInclude Include="..\src\texture.hpp" />
+    <ClInclude Include="..\src\window.hpp" />
+    <ClInclude Include="..\src\windowptr.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C8C7E794-05B1-4A00-A060-2A4236C7D1E3}</ProjectGuid>

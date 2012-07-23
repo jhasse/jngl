@@ -22,7 +22,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace jngl
 {
-	void ErrorMessage(const std::string& text)
+	void errorMessage(const std::string& text)
 	{
 		MessageBox(NULL, text.c_str(), "Error", MB_OK | MB_ICONERROR);
 	}

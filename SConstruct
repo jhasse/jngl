@@ -30,7 +30,7 @@ if env['PLATFORM'] == 'win32':
 	if env['msvc']:
 		env.Append(CCFLAGS = '/EHsc /MD')
 	else:
-		env['tools'] = ['mingw']
+		env = Environment(tools = ['mingw'], variables = vars)
 
 if env['PLATFORM'] == 'darwin':
 	env['CC']  = 'clang'
@@ -63,15 +63,15 @@ if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
 	else:
 		env.Append(CPPDEFINES='WEAK_LINKING_OPENAL')
 	env.Append(CPPPATH="./include")
-	lib = env.Library(target="jngl", source=source_files + Glob('win32/*.cpp'), LIBS=jnglLibs)
+	lib = env.Library(target="jngl", source=source_files + Glob('src/win32/*.cpp'), LIBS=jnglLibs)
 	linkflags = "-mwindows"
 	if env['debug'] or env['msvc']:
 		linkflags = ""
 	libs = Split("jngl") + jnglLibs
-	env.Program(testSrc,
+	env.Program("test", testSrc,
 	            CPPFLAGS="-std=gnu++0x",
 	            CPPPATH=".",
-				LIBPATH=Split("src ./lib"),
+				LIBPATH=Split("src ."),
 				LIBS=libs,
 				LINKFLAGS=linkflags)
 	if env['python']:
