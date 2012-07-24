@@ -44,135 +44,125 @@ public:
 	void step() {
 	}
 	void draw() const {
-		if(drawOnFrameBuffer) {
+		using namespace jngl;
+		if (drawOnFrameBuffer) {
 			fb2.beginDraw();
 			fb2.clear();
-			jngl::translate(-jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
+			translate(-getWindowWidth() / 2, -getWindowHeight() / 2);
 		}
-		jngl::translate(-jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
-		jngl::pushMatrix();
-		double timeSinceLastFrame = jngl::getTime() - lastTime;
-		lastTime = jngl::getTime();
-		for(int i = 0; i < 10; ++i)
-		{
-			if(jngl::keyDown(boost::lexical_cast<char>(i)))
-			{
+		translate(-getWindowWidth() / 2, -getWindowHeight() / 2);
+		pushMatrix();
+		double timeSinceLastFrame = getTime() - lastTime;
+		lastTime = getTime();
+		for (int i = 0; i < 10; ++i) {
+			if (keyDown(boost::lexical_cast<char>(i))) {
 				performance = i == 0 ? 10 : i;
 			}
 		}
 		drawBackground();
 		drawTess();
-		jngl::setColor(0,0,0,255);
-		jngl::pushMatrix();
-		jngl::translate(650, 450);
+		setColor(0,0,0,255);
+		pushMatrix();
+		translate(650, 450);
 		jngl::rotate(rotate);
-		jngl::drawLine(-50, -50, 50, 50);
-		jngl::popMatrix();
-		jngl::setSpriteColor(255, 255, 255, 200);
+		drawLine(-50, -50, 50, 50);
+		popMatrix();
+		setSpriteColor(255, 255, 255, 200);
 		fb.draw(600, 300);
-		jngl::translate(jngl::getWindowWidth() / 2, jngl::getWindowHeight() / 2);
+		translate(getWindowWidth() / 2, getWindowHeight() / 2);
 		jngl::rotate(rotate);
 		rotate += 90 * timeSinceLastFrame; // 90 degree per second
-		if(rotate > 360)
-		{
+		if (rotate > 360) {
 			rotate = 0;
 		}
 		factor = sin(rotate / 360 * M_PI);
-		jngl::setSpriteColor(255, 255, 255, static_cast<unsigned char>(absolute(factor * 255)));
-		jngl::drawScaled("jngl.png",
-						 -jngl::getWidth("jngl.png")  * factor,
-						 -jngl::getHeight("jngl.png") * factor,
-						 static_cast<float>(factor * 2));
-		jngl::setColor(0, 0, 0);
-		jngl::drawRect(-125, 100, 250, 28);
-		jngl::setFontColor(255, 255, 255);
-		jngl::print("White text on black background", -115, 105);
-		jngl::setFontColor(255, 255, 255);
-		jngl::setFontSize(20);
-		jngl::print("White text without background", -115, 135);
-		jngl::setFontSize(12);
-		jngl::popMatrix();
+		setSpriteColor(255, 255, 255, static_cast<unsigned char>(absolute(factor * 255)));
+		drawScaled("jngl.png",
+		           -getWidth("jngl.png")  * factor,
+		           -getHeight("jngl.png") * factor,
+		           static_cast<float>(factor * 2));
+		setColor(0, 0, 0);
+		drawRect(-125, 100, 250, 28);
+		setFontColor(255, 255, 255);
+		print("White text on black background", -115, 105);
+		setFontColor(255, 255, 255);
+		setFontSize(20);
+		print("White text without background", -115, 135);
+		setFontSize(12);
+		popMatrix();
 		std::stringstream sstream;
-		sstream << "FPS" << (jngl::getVerticalSync() ? " (V-SYNC)" : "") << ": " << int(jngl::getFPS()) << "\nFactor: " << factor << "\nSize of double: " << sizeof(double);
-		jngl::setColor(0, 0, 0);
-		jngl::drawRect(0, 0, 200, 62);
-		jngl::setFontColor(static_cast<unsigned char>(255 * (1 - factor)), static_cast<unsigned char>(255 * factor), 255);
-		jngl::setFontByName("Courier New");
-		jngl::print(sstream.str(), 5, 5);
-		jngl::setFontByName("sans-serif");
-		jngl::setFontColor(0,0,0);
-		jngl::setFontByName("Times New Roman");
-		jngl::print("Black text on white background", 5, 75);
-		jngl::setFontByName("Arial");
-		jngl::setFontSize(20);
-		jngl::print("UTF-8:   ä ö ü ß Ĉ Ψ ≈", 5, 105);
-		jngl::print(" $", static_cast<int>(jngl::getTextWidth("UTF-8:   ä ö ü ß Ĉ Ψ ≈") + 5), 105);
-		jngl::setFontSize(12);
-		jngl::print("Press 1-9 to test the performance\nPress E to show a error box.", 5, 135);
-		if(jngl::keyPressed('e'))
-		{
-			jngl::errorMessage("Hello World!");
+		sstream << "FPS" << (getVerticalSync() ? " (V-SYNC)" : "") << ": " << int(getFPS()) << "\nFactor: " << factor << "\nSize of double: " << sizeof(double);
+		setColor(0, 0, 0);
+		drawRect(0, 0, 200, 62);
+		setFontColor(static_cast<unsigned char>(255 * (1 - factor)), static_cast<unsigned char>(255 * factor), 255);
+		setFontByName("Courier New");
+		print(sstream.str(), 5, 5);
+		setFontByName("sans-serif");
+		setFontColor(0,0,0);
+		setFontByName("Times New Roman");
+		print("Black text on white background", 5, 75);
+		setFontByName("Arial");
+		setFontSize(20);
+		print("UTF-8:   ä ö ü ß Ĉ Ψ ≈", 5, 105);
+		print(" $", static_cast<int>(getTextWidth("UTF-8:   ä ö ü ß Ĉ Ψ ≈") + 5), 105);
+		setFontSize(12);
+		print("Press 1-9 to test the performance\nPress E to show a error box.", 5, 135);
+		if (keyPressed('e')) {
+			errorMessage("Hello World!");
 		}
-		jngl::print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 410);
-		jngl::print("Press V to toggle V-SYNC.", 5, 430);
-		if(jngl::keyPressed('v')) {
-			jngl::setVerticalSync(!jngl::getVerticalSync());
+		print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 410);
+		print("Press V to toggle V-SYNC.", 5, 430);
+		if (keyPressed('v')) {
+			setVerticalSync(!getVerticalSync());
 		}
-		jngl::print("Press A to toggle Anti-Aliasing.", 5, 450);
-		if(jngl::keyPressed('a'))
-		{
-			jngl::setAntiAliasing(!jngl::getAntiAliasing());
+		print("Press A to toggle Anti-Aliasing.", 5, 450);
+		if (keyPressed('a')) {
+			setAntiAliasing(!getAntiAliasing());
 		}
-		jngl::print("Press F1 to switch fullscreen mode.", 5, 470);
-		if(jngl::keyPressed(jngl::key::F1))
-		{
-			jngl::showWindow("JNGL Test Application", 800, 600, !jngl::getFullscreen());
+		print("Press F1 to switch fullscreen mode.", 5, 470);
+		if (keyPressed(key::F1)) {
+			showWindow("JNGL Test Application", 800, 600, !getFullscreen());
 		}
-		jngl::print("Press K to test key codes.", 5, 490);
-		jngl::print("Press P to play a sound.", 6, 510);
-		if(jngl::keyPressed('p'))
-		{
-			jngl::stop("test.ogg");
-			jngl::play("test.ogg");
+		print("Press K to test key codes.", 5, 490);
+		print("Press P to play a sound.", 6, 510);
+		if (keyPressed('p')) {
+			stop("test.ogg");
+			play("test.ogg");
 		}
 		static int playbackSpeed = 100;
-		jngl::setPlaybackSpeed(playbackSpeed / 100.0f);
-		jngl::print("Press + and - to change the audio playback speed: " + boost::lexical_cast<std::string>(playbackSpeed) + " %", 6, 530);
-		if(jngl::keyPressed('-'))
-		{
+		setPlaybackSpeed(playbackSpeed / 100.0f);
+		print("Press + and - to change the audio playback speed: " + boost::lexical_cast<std::string>(playbackSpeed) + " %", 6, 530);
+		if (keyPressed('-')) {
 			--playbackSpeed;
 		}
-		if(jngl::keyPressed('+'))
-		{
+		if (keyPressed('+')) {
 			++playbackSpeed;
 		}
 		static float volume = 1;
-		jngl::setVolume(volume);
-		jngl::print("Use your mouse wheel to change the volume: " + boost::lexical_cast<std::string>(int(volume * 100)) + " %", 6, 550);
-		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
-		jngl::setColor(0,0,255,128);
-		if(drawOnFrameBuffer) {
+		setVolume(volume);
+		print("Use your mouse wheel to change the volume: " + boost::lexical_cast<std::string>(int(volume * 100)) + " %", 6, 550);
+		volume += static_cast<float>(getMouseWheel()) / 100.0f;
+		setColor(0,0,255,128);
+		if (drawOnFrameBuffer) {
 			fb2.endDraw();
-			jngl::reset();
-			jngl::setSpriteColor(255, 255, 255);
+			reset();
+			setSpriteColor(255, 255, 255);
 			fb2.draw(0, 0);
 		}
-		if(jngl::keyPressed('f')) {
+		if (keyPressed('f')) {
 			drawOnFrameBuffer = !drawOnFrameBuffer;
 		}
-		drawMouse(jngl::getMouseX(), jngl::getMouseY());
-		if(++frameNumber == 500)
-		{
-			std::cout << "It took " << jngl::getTime() - frameTime << " seconds to render 500 frames." << std::endl;
+		drawMouse(getMouseX(), getMouseY());
+		if (++frameNumber == 500) {
+			std::cout << "It took " << getTime() - frameTime << " seconds to render 500 frames." << std::endl;
 			frameNumber = 0;
-			frameTime = jngl::getTime();
+			frameTime = getTime();
 		}
-		if(jngl::keyDown('k'))
-		{
+		if (keyDown('k')) {
 			testKeys();
 		}
-		if(jngl::keyPressed(jngl::key::Escape)) {
-			jngl::quit();
+		if (keyPressed(key::Escape)) {
+			quit();
 		}
 	}
 private:
@@ -193,15 +183,11 @@ void jngl::main() {
 	jngl::setWork(new Test);
 }
 
-void drawBackground()
-{
+void drawBackground() {
 	jngl::setSpriteColor(255, 255, 255, 100);
-	if(performance > 1)
-	{
-		for(int x = 0; x < performance; ++x)
-		{
-			for(int y = 0; y < performance; ++y)
-			{
+	if (performance > 1) {
+		for (int x = 0; x < performance; ++x) {
+			for (int y = 0; y < performance; ++y) {
 				jngl::drawScaled("jngl.png",
 								 x * jngl::getWindowWidth() / performance,
 								 y * jngl::getWindowHeight() / performance,
@@ -210,8 +196,7 @@ void drawBackground()
 			}
 		}
 	}
-	else
-	{
+	else {
 		jngl::drawClipped("jngl.png",
 		                  jngl::getWindowWidth() / 2- jngl::getWidth("jngl.png") / 2,
 		                  jngl::getWindowHeight() / 2- jngl::getHeight("jngl.png") / 2,
@@ -226,8 +211,7 @@ void drawBackground()
 	jngl::drawEllipse(80, 400, 50, 80);
 }
 
-void drawMouse(int x, int y)
-{
+void drawMouse(int x, int y) {
 	unsigned char red, green, blue;
 	jngl::readPixel(jngl::getMouseX(), jngl::getMouseY(), red, green, blue);
 	std::stringstream sstream;
@@ -246,8 +230,7 @@ void drawMouse(int x, int y)
 	jngl::reset();
 }
 
-void drawTess()
-{
+void drawTess() {
 	jngl::setColor(3, 10, 89, 50);
 	jngl::beginPolygon();
 	jngl::vertex(80, 580);
@@ -279,8 +262,7 @@ public:
 	RecentlyPressedKey(std::string name, int x, int y)
 		: name_(name), alpha_(255), x_(x), y_(y), lastTime_(jngl::getTime()) {
 	}
-	void Draw()
-	{
+	void Draw() {
 		double timeSinceLastFrame = jngl::getTime() - lastTime_;
 		lastTime_ = jngl::getTime();
 		alpha_ -= timeSinceLastFrame * 60;
@@ -289,8 +271,7 @@ public:
 		jngl::print(name_, int(x_), int(y_));
 		jngl::setFontColor(0, 0, 0, 255);
 	}
-	int GetAlpha() const
-	{
+	int GetAlpha() const {
 		return int(alpha_);
 	}
 private:
@@ -299,8 +280,7 @@ private:
 };
 
 
-void testKeys()
-{
+void testKeys() {
 	jngl::setRelativeMouseMode(true);
 	int xpos = 400;
 	int ypos = 300;
@@ -345,51 +325,41 @@ void testKeys()
 	keys["F12"] = jngl::key::F12;
 	keys["Any"] = jngl::key::Any;
 	std::vector<RecentlyPressedKey> recentlyPressedKeys;
-	while(jngl::running())
-	{
+	while (jngl::running()) {
 		jngl::updateInput();
 		jngl::setFontSize(10);
 		jngl::translate(-400, -300);
 		int y = 10;
-		for(MapType::iterator it = keys.begin(); it != keys.end(); ++it)
-		{
-			if(jngl::keyDown(it->second))
-			{
+		for (MapType::iterator it = keys.begin(); it != keys.end(); ++it) {
+			if (jngl::keyDown(it->second)) {
 				jngl::setFontColor(0, 0, 0);
 			}
-			else
-			{
+			else {
 				jngl::setFontColor(150, 150, 150);
 			}
 			jngl::print(it->first, 100, y);
-			if(jngl::keyPressed(it->second))
-			{
+			if (jngl::keyPressed(it->second)){
 				recentlyPressedKeys.push_back(RecentlyPressedKey(it->first, 100, y));
 			}
 			y += 15;
 		}
 		y = 10;
-		for(char c = '0'; c <= 'z'; ++c)
-		{
+		for (char c = '0'; c <= 'z'; ++c) {
 			char cString[2];
 			cString[0] = c;
 			cString[1] = 0;
-			if(jngl::keyDown(c))
-			{
+			if(jngl::keyDown(c)) {
 				jngl::setFontColor(0, 0, 0);
 			}
-			else
-			{
+			else {
 				jngl::setFontColor(150, 150, 150);
 			}
 			jngl::print(cString, 500, y);
-			if(jngl::keyPressed(c))
-			{
+			if (jngl::keyPressed(c)) {
 				recentlyPressedKeys.push_back(RecentlyPressedKey(cString, 500, y));
 			}
 			y += 15;
-			if(c == '9')
-			{
+			if (c == '9') {
 				c = 'a' - 1;
 			}
 		}
@@ -397,19 +367,15 @@ void testKeys()
 		buttons["Left Mouse Button"] = jngl::mouse::Left;
 		buttons["Middle Mouse Button"] = jngl::mouse::Middle;
 		buttons["Right Mouse Button"] = jngl::mouse::Right;
-		for(std::map<std::string, jngl::mouse::Button>::const_iterator it = buttons.begin(); it != buttons.end(); ++it)
-		{
-			if(jngl::mouseDown(it->second))
-			{
+		for (std::map<std::string, jngl::mouse::Button>::const_iterator it = buttons.begin(); it != buttons.end(); ++it) {
+			if (jngl::mouseDown(it->second)) {
 				jngl::setFontColor(0, 0, 0);
 			}
-			else
-			{
+			else {
 				jngl::setFontColor(150, 150, 150);
 			}
 			jngl::print(it->first, 500, y);
-			if(jngl::mousePressed(it->second))
-			{
+			if (jngl::mousePressed(it->second)) {
 				recentlyPressedKeys.push_back(RecentlyPressedKey(it->first, 500, y));
 			}
 			y += 15;
@@ -438,7 +404,6 @@ void testKeys()
 	}
 }
 
-double absolute(double v)
-{
+double absolute(double v) {
 	return v < 0 ? -v : v;
 }
