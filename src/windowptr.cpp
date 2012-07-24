@@ -13,7 +13,7 @@ namespace jngl
 	WindowPointer::WindowPointer() : ptr_(0)
 	{
 	}
-	
+
 	WindowPointer::~WindowPointer()
 	{
 		Delete();
@@ -46,10 +46,10 @@ namespace jngl
 	{
 		if(ptr_ == 0)
 		{
-			throw std::runtime_error("Window hasn't been created yet. Use jngl::ShowWindow.");
+			throw std::runtime_error("Window hasn't been created yet. Use jngl::showWindow.");
 		}
 	}
-	
+
 	Window* WindowPointer::get() const {
 		return ptr_;
 	}

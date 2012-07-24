@@ -189,7 +189,7 @@ void jngl::main() {
 	          << "x" << jngl::getDesktopHeight() << std::endl
 	          << "Size of jngl.png: " << jngl::getWidth("jngl.png")
 	          << "x" << jngl::getHeight("jngl.png") << std::endl;
-	jngl::showWindow("SetTitle not working!", 800, 600);
+	jngl::showWindow("setTitle not working!", 800, 600);
 	jngl::setWork(new Test);
 }
 

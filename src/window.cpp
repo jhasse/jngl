@@ -236,7 +236,7 @@ namespace jngl
 		if (currentWork_) {
 			currentWork_->draw();
 		} else {
-			jngl::print("No work set. Use jngl::SetWork", -50, -5);
+			jngl::print("No work set. Use jngl::setWork", -50, -5);
 		}
 	}
 
