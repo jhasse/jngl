@@ -3,7 +3,7 @@ Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
-#include "jngl.hpp"
+#include "../jngl.hpp"
 
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -184,14 +184,13 @@ private:
 	mutable jngl::FrameBuffer fb, fb2;
 };
 
-int main() {
+void jngl::main() {
 	std::cout << "Size of Desktop: " << jngl::getDesktopWidth()
 	          << "x" << jngl::getDesktopHeight() << std::endl
 	          << "Size of jngl.png: " << jngl::getWidth("jngl.png")
 	          << "x" << jngl::getHeight("jngl.png") << std::endl;
 	jngl::showWindow("SetTitle not working!", 800, 600);
 	jngl::setWork(new Test);
-	jngl::mainLoop();
 }
 
 void drawBackground()

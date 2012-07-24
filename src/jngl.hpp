@@ -15,6 +15,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl
 {
+	void main();
+
 	void showWindow(const std::string& title,
 	                int width,
 	                int heigt,

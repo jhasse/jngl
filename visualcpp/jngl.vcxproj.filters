@@ -75,6 +75,9 @@
     <ClCompile Include="..\src\jngl\sprite.cpp">
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\win32\mainfunction.cpp">
+      <Filter>Source Files\win32</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ConvertUTF.h">
