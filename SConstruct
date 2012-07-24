@@ -71,7 +71,7 @@ if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
 	env.Program("test", testSrc,
 	            CPPFLAGS="-std=gnu++0x",
 	            CPPPATH=".",
-				LIBPATH=Split("src ."),
+				LIBPATH=Split("lib ."),
 				LIBS=libs,
 				LINKFLAGS=linkflags)
 	if env['python']:
