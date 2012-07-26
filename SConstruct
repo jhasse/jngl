@@ -111,10 +111,11 @@ if env['PLATFORM'] == 'darwin': # Mac
 	           LINKFLAGS='-framework OpenAL -framework OpenGL')
 	env.ParseConfig('/opt/local/bin/pkg-config --cflags --libs freetype2 libpng')
 	env.ParseConfig('/opt/local/bin/sdl-config --cflags --libs')
-	env.Library(target="jngl", source=source_files + Glob('src/sdl/*.cpp'))
+	lib = env.Library(target="jngl", source=source_files + Glob('src/sdl/*.cpp'))
 	testEnv = env.Clone()
 	testEnv.Append(CPPPATH='.')
-	testEnv.Program(testSrc, CPPFLAGS='-std=c++0x')
+	env.Append(LIBS=lib)
+	testEnv.Program("test", testSrc, CPPFLAGS='-std=c++0x')
 	if env['python']:
 		env = env.Clone()
 		env.Append(CPPPATH='/System/Library/Frameworks/Python.framework/Headers/',
