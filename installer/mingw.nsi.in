@@ -22,7 +22,10 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\German.nlf"
 Section ""
 
 SetOutPath $INSTDIR\include
-File ..\jngl.hpp
+File ..\src\jngl.hpp
+SetOutPath $INSTDIR\include\jngl
+File ..\src\jngl\sprite.hpp
+File ..\src\jngl\types.hpp
 SetOutPath $INSTDIR\lib
 File ..\libjngl.a
 File ..\lib\libfreetype.a
