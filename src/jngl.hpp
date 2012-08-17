@@ -9,7 +9,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "jngl/types.hpp"
 #include "jngl/sprite.hpp"
 #include "jngl/work.hpp"
-#include "jngl/main.hpp"
 
 #include <string>
 #include <vector>
