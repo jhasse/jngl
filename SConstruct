@@ -48,7 +48,7 @@ if not env['verbose']:
 	env['ARCOMSTR'] = "archiving: $TARGET"
 
 if not env['msvc']:
-	source_files = env.Object(Glob("src/*.cpp") + Glob("src/jngl/*.cpp"), CPPFLAGS="-std=gnu++0x")
+	source_files = env.Object(Glob("src/*.cpp") + Glob("src/jngl/*.cpp"), CPPFLAGS="-std=c++0x")
 	source_files += Split("""
 	src/callbacks.c
 	src/ConvertUTF.c

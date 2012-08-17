@@ -6,6 +6,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #ifndef __JNGL_HPP__
 #define __JNGL_HPP__
 
+#include "jngl/window.hpp"
 #include "jngl/types.hpp"
 #include "jngl/sprite.hpp"
 #include "jngl/work.hpp"
@@ -17,13 +18,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl
 {
-	void showWindow(const std::string& title,
-	                int width,
-	                int heigt,
-	                bool fullscreen = false);
-
-	void hideWindow();
-
 	bool running();
 
 	void updateInput();
@@ -288,10 +282,6 @@ namespace jngl
 	void setVolume(float volume);
 
 	void setIcon(const std::string& filename);
-
-	int getDesktopWidth();
-
-	int getDesktopHeight();
 
 	class FrameBufferImpl;
 	class FrameBuffer {

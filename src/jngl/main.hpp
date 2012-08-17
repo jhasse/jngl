@@ -1,23 +1,27 @@
+/*
+Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+For conditions of distribution and use, see copyright notice in LICENSE.txt
+*/
+
 #pragma once
 
 #include "work.hpp"
+#include "window.hpp"
+
+#include <functional>
 
 namespace jngl {
-	template<class T>
-	class MainCreator {
-	public:
-		MainCreator() {
-			auto t = new T;
-			jngl::setWork(t);
-		}
-	};
+	extern std::function<void()> mainInit;
 
 	template<class T>
-	class Main : public Work {
+	class Main {
 	public:
-		virtual void step() override = 0;
-		virtual void draw() const override = 0;
-	private:
-		static MainCreator<T> _;
+		Main(int width = getDesktopWidth(), int height = getDesktopHeight()) {
+			mainInit = [=]() {
+				jngl::showWindow("", width, height);
+				T* t = new T;
+				jngl::setWork(t);
+			};
+		}
 	};
 }

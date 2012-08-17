@@ -23,7 +23,7 @@ double factor = 0;
 
 double absolute(double v);
 
-class Test : public jngl::Main<Test> {
+class Test : public jngl::Work {
 public:
 	Test() : drawOnFrameBuffer(false), rotate(0), frameNumber(0), fb(100, 110), fb2(800, 600) {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth()
@@ -96,10 +96,12 @@ public:
 		setFontSize(12);
 		popMatrix();
 		std::stringstream sstream;
-		sstream << "FPS" << (getVerticalSync() ? " (V-SYNC)" : "") << ": " << int(getFPS()) << "\nFactor: " << factor << "\nSize of double: " << sizeof(double);
+		sstream << "FPS" << (getVerticalSync() ? " (V-SYNC)" : "") << ": " << int(getFPS())
+		        << "\nFactor: " << factor << "\nSize of double: " << sizeof(double);
 		setColor(0, 0, 0);
 		drawRect(0, 0, 200, 62);
-		setFontColor(static_cast<unsigned char>(255 * (1 - factor)), static_cast<unsigned char>(255 * factor), 255);
+		setFontColor(static_cast<unsigned char>(255 * (1 - factor)),
+		             static_cast<unsigned char>(255 * factor), 255);
 		setFontByName("Courier New");
 		print(sstream.str(), 5, 5);
 		setFontByName("sans-serif");
@@ -136,7 +138,8 @@ public:
 		}
 		static int playbackSpeed = 100;
 		setPlaybackSpeed(playbackSpeed / 100.0f);
-		print("Press + and - to change the audio playback speed: " + boost::lexical_cast<std::string>(playbackSpeed) + " %", 6, 530);
+		print("Press + and - to change the audio playback speed: " +
+		      boost::lexical_cast<std::string>(playbackSpeed) + " %", 6, 530);
 		if (keyPressed('-')) {
 			--playbackSpeed;
 		}
@@ -145,7 +148,9 @@ public:
 		}
 		static float volume = 1;
 		setVolume(volume);
-		print("Use your mouse wheel to change the volume: " + boost::lexical_cast<std::string>(int(volume * 100)) + " %", 6, 550);
+		print("Use your mouse wheel to change the volume: " +
+		      boost::lexical_cast<std::string>(int(volume * 100)) +
+		      " %", 6, 550);
 		volume += static_cast<float>(getMouseWheel()) / 100.0f;
 		setColor(0,0,255,128);
 		if (drawOnFrameBuffer) {
@@ -177,7 +182,10 @@ private:
 	mutable double frameTime;
 	mutable double lastTime;
 	mutable jngl::FrameBuffer fb, fb2;
+	static jngl::Main<Test> main;
 };
+
+jngl::Main<Test> Test::main(800, 600);
 
 void drawBackground() {
 	jngl::setSpriteColor(255, 255, 255, 100);
@@ -363,7 +371,7 @@ void testKeys() {
 		buttons["Left Mouse Button"] = jngl::mouse::Left;
 		buttons["Middle Mouse Button"] = jngl::mouse::Middle;
 		buttons["Right Mouse Button"] = jngl::mouse::Right;
-		for (std::map<std::string, jngl::mouse::Button>::const_iterator it = buttons.begin(); it != buttons.end(); ++it) {
+		for (auto it = buttons.begin(); it != buttons.end(); ++it) {
 			if (jngl::mouseDown(it->second)) {
 				jngl::setFontColor(0, 0, 0);
 			}
@@ -380,7 +388,8 @@ void testKeys() {
 		std::for_each(recentlyPressedKeys.begin(), end, [](RecentlyPressedKey& k) {
 			k.Draw();
 		});
-		recentlyPressedKeys.erase(std::remove_if(recentlyPressedKeys.begin(), end, [](const RecentlyPressedKey& k) -> bool {
+		recentlyPressedKeys.erase(std::remove_if(recentlyPressedKeys.begin(), end,
+		                          [](const RecentlyPressedKey& k) -> bool {
 			return k.GetAlpha() <= 0;
 		}), end);
 		std::stringstream sstream;
