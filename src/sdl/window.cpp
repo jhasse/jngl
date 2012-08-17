@@ -192,6 +192,10 @@ namespace jngl
 						characterDown_[tmp] = true;
 						characterPressed_[tmp] = true;
 					}
+					if (event.key.keysym.sym == SDLK_SPACE) {
+						characterDown_[" "] = true;
+						characterPressed_[" "] = true;
+					}
 					anyKeyPressed_ = true;
 					break;
 				}
@@ -204,6 +208,10 @@ namespace jngl
 						tmp.append(1, tolower(name[0]));
 						characterDown_[tmp] = false;
 						characterPressed_[tmp] = false;
+					}
+					if (event.key.keysym.sym == SDLK_SPACE) {
+						characterDown_[" "] = false;
+						characterPressed_[" "] = false;
 					}
 					break;
 				}
