@@ -17,8 +17,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <stdexcept>
 #include <sstream>
 
-extern "C"
-{
+extern "C" {
 	void InitCallbacks(); // see callbacks.c
 }
 

@@ -75,9 +75,6 @@
     <ClCompile Include="..\src\jngl\sprite.cpp">
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\win32\mainfunction.cpp">
-      <Filter>Source Files\win32</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ConvertUTF.h">
@@ -123,6 +120,12 @@
       <Filter>Header Files\jngl</Filter>
     </ClInclude>
     <ClInclude Include="..\src\jngl\types.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\window.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\work.hpp">
       <Filter>Header Files\jngl</Filter>
     </ClInclude>
   </ItemGroup>

@@ -24,7 +24,6 @@
     <ClCompile Include="..\src\spriteimpl.cpp" />
     <ClCompile Include="..\src\tess.cpp" />
     <ClCompile Include="..\src\texture.cpp" />
-    <ClCompile Include="..\src\win32\mainfunction.cpp" />
     <ClCompile Include="..\src\win32\message.cpp" />
     <ClCompile Include="..\src\win32\time.cpp" />
     <ClCompile Include="..\src\win32\windowimpl.cpp" />
@@ -43,6 +42,8 @@
     <ClInclude Include="..\src\jngl.hpp" />
     <ClInclude Include="..\src\jngl\sprite.hpp" />
     <ClInclude Include="..\src\jngl\types.hpp" />
+    <ClInclude Include="..\src\jngl\window.hpp" />
+    <ClInclude Include="..\src\jngl\work.hpp" />
     <ClInclude Include="..\src\opengl.hpp" />
     <ClInclude Include="..\src\spriteimpl.hpp" />
     <ClInclude Include="..\src\texture.hpp" />

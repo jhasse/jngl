@@ -3,8 +3,7 @@ Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
-#ifndef __JNGL_HPP__
-#define __JNGL_HPP__
+#pragma once
 
 #include "jngl/window.hpp"
 #include "jngl/types.hpp"
@@ -310,5 +309,3 @@ namespace jngl
 
 	std::vector<std::string> getArgs();
 }
-
-#endif // __JNGL_HPP__
