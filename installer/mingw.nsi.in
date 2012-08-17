@@ -1,3 +1,5 @@
+!include jngl.nsh
+
 XPStyle On
 SetCompressor lzma
 
@@ -21,8 +23,7 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\German.nlf"
 
 Section ""
 
-SetOutPath $INSTDIR\include
-File ..\jngl.hpp
+!insertmacro Header
 SetOutPath $INSTDIR\lib
 File ..\libjngl.a
 File ..\lib\libfreetype.a
