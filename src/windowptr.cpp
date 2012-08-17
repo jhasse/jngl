@@ -42,10 +42,8 @@ namespace jngl
 		ptr_ = 0;
 	}
 
-	void WindowPointer::ThrowIfNull() const
-	{
-		if(ptr_ == 0)
-		{
+	void WindowPointer::ThrowIfNull() const {
+		if (ptr_ == 0) {
 			throw std::runtime_error("Window hasn't been created yet. Use jngl::showWindow.");
 		}
 	}

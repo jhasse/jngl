@@ -23,9 +23,14 @@ double factor = 0;
 
 double absolute(double v);
 
-class Test : public jngl::Work {
+class Test : public jngl::Main<Test> {
 public:
 	Test() : drawOnFrameBuffer(false), rotate(0), frameNumber(0), fb(100, 110), fb2(800, 600) {
+		std::cout << "Size of Desktop: " << jngl::getDesktopWidth()
+		          << "x" << jngl::getDesktopHeight() << std::endl
+		          << "Size of jngl.png: " << jngl::getWidth("jngl.png")
+		          << "x" << jngl::getHeight("jngl.png") << std::endl;
+		jngl::showWindow("setTitle not working!", 800, 600);
 		jngl::setTitle("JNGL Test Application");
 		jngl::setIcon("jngl.png");
 		jngl::setMouseVisible(false);
@@ -173,15 +178,6 @@ private:
 	mutable double lastTime;
 	mutable jngl::FrameBuffer fb, fb2;
 };
-
-void jngl::main() {
-	std::cout << "Size of Desktop: " << jngl::getDesktopWidth()
-	          << "x" << jngl::getDesktopHeight() << std::endl
-	          << "Size of jngl.png: " << jngl::getWidth("jngl.png")
-	          << "x" << jngl::getHeight("jngl.png") << std::endl;
-	jngl::showWindow("setTitle not working!", 800, 600);
-	jngl::setWork(new Test);
-}
 
 void drawBackground() {
 	jngl::setSpriteColor(255, 255, 255, 100);

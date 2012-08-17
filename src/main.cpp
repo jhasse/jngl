@@ -25,6 +25,7 @@ extern "C"
 namespace jngl
 {
 	std::string pathPrefix;
+	std::vector<std::string> args;
     float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
 	bool Init(const int width, const int height)
 	{
@@ -467,5 +468,9 @@ namespace jngl
 
 	std::string getConfigPath() {
 		return pWindow->getConfigPath();
+	}
+
+	std::vector<std::string> getArgs() {
+		return args;
 	}
 }

@@ -8,15 +8,15 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "jngl/types.hpp"
 #include "jngl/sprite.hpp"
+#include "jngl/work.hpp"
+#include "jngl/main.hpp"
 
 #include <string>
+#include <vector>
 #include <stdexcept>
-#include <boost/shared_ptr.hpp>
 
 namespace jngl
 {
-	void main();
-
 	void showWindow(const std::string& title,
 	                int width,
 	                int heigt,
@@ -308,21 +308,6 @@ namespace jngl
 		FrameBufferImpl* pImpl;
 	};
 
-	class Work {
-	public:
-		virtual void step() = 0;
-		virtual void draw() const = 0;
-		virtual void onQuitEvent();
-		virtual void onLoad();
-		virtual ~Work();
-	};
-
-	boost::shared_ptr<Work> getWork();
-
-	void setWork(boost::shared_ptr<Work> work);
-
-	void setWork(Work*);
-
 	void mainLoop();
 
 	void setPrefix(const std::string& path);
@@ -332,6 +317,8 @@ namespace jngl
 	void setConfigPath(const std::string& path);
 
 	std::string getConfigPath();
+
+	std::vector<std::string> getArgs();
 }
 
 #endif // __JNGL_HPP__
