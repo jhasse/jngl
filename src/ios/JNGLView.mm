@@ -53,7 +53,7 @@
 		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &width);
 		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_HEIGHT_OES, &height);
 		
-		jngl::ShowWindow("", height, width);
+		jngl::showWindow("", height, width);
 		
 		CADisplayLink* displayLink;
 		displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawView:)];
@@ -96,7 +96,7 @@
 	glLoadIdentity();
 	jngl::clearBackgroundColor();
 	glClear(GL_COLOR_BUFFER_BIT);
-	jngl::Rotate(angle);
+	jngl::rotate(angle);
 	
 	jngl::pWindow->draw();
 	

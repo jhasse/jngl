@@ -37,9 +37,9 @@ namespace opengl
 	inline void scale(T x, U y) { glScaled(static_cast<double>(x), static_cast<double>(y), 0); }
 #else
 	template<class T, class U>
-	inline void translate(T x, U y) { Translate(static_cast<float>(x), static_cast<float>(y)); }
+	inline void translate(T x, U y) { translate(static_cast<float>(x), static_cast<float>(y)); }
 	template<class T, class U>
-	inline void scale(T x, U y) { Scale(static_cast<float>(x), static_cast<float>(y)); }
+	inline void scale(T x, U y) { scale(static_cast<float>(x), static_cast<float>(y)); }
 #endif
 
 	template<class T> struct Type {};

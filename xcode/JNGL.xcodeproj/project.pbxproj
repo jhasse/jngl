@@ -704,7 +704,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
-					"-std=c++0x",
 					"-DNO_WEAK_LINKING_OPENAL",
 					"$(OTHER_CFLAGS)",
 				);
@@ -733,7 +732,6 @@
 				HEADER_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CPLUSPLUSFLAGS = (
-					"-std=c++0x",
 					"-DNO_WEAK_LINKING_OPENAL",
 					"$(OTHER_CFLAGS)",
 				);
@@ -756,15 +754,12 @@
 				GCC_PREFIX_HEADER = "JNGL iOS/JNGL iOS-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				HEADER_SEARCH_PATHS = ../include/ios/;
+				HEADER_SEARCH_PATHS = (
+					../include/ios/,
+					/opt/local/include,
+				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = IOS;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
-				OTHER_CPLUSPLUSFLAGS = (
-					"-std=c++0x",
-					"-DNO_WEAK_LINKING_OPENAL",
-					"$(OTHER_CFLAGS)",
-					"-DIOS",
-				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -787,15 +782,12 @@
 				GCC_PREFIX_HEADER = "JNGL iOS/JNGL iOS-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				HEADER_SEARCH_PATHS = ../include/ios/;
+				HEADER_SEARCH_PATHS = (
+					../include/ios/,
+					/opt/local/include,
+				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = IOS;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
-				OTHER_CPLUSPLUSFLAGS = (
-					"-std=c++0x",
-					"-DNO_WEAK_LINKING_OPENAL",
-					"$(OTHER_CFLAGS)",
-					"-DIOS",
-				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -823,6 +815,10 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Test iOS/Test iOS-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"GLEW_NO_GLU=1",
+				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = ../include/ios;
@@ -856,6 +852,10 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Test iOS/Test iOS-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"GLEW_NO_GLU=1",
+				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = ../include/ios;
