@@ -777,7 +777,7 @@
 			buildSettings = {
 				ARCHS = (
 					armv6,
-					"$(ARCHS_STANDARD_32_BIT)",
+					armv7,
 				);
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -808,8 +808,7 @@
 			buildSettings = {
 				ARCHS = (
 					armv6,
-					"$(ARCHS_STANDARD_32_BIT)",
-					i386,
+					armv7,
 				);
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
