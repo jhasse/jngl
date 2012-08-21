@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C93A963215E3B49B003525E8 /* sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2E515C1D52A006CCBD2 /* sprite.cpp */; };
+		C93A963315E3B49B003525E8 /* audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CA15C1D4BD006CCBD2 /* audio.cpp */; };
+		C93A963415E3B49B003525E8 /* finally.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CB15C1D4BD006CCBD2 /* finally.cpp */; };
+		C93A963515E3B49B003525E8 /* framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CC15C1D4BD006CCBD2 /* framebuffer.cpp */; };
+		C93A963615E3B49B003525E8 /* framebufferimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CD15C1D4BD006CCBD2 /* framebufferimpl.cpp */; };
+		C93A963715E3B49B003525E8 /* freetype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CE15C1D4BD006CCBD2 /* freetype.cpp */; };
+		C93A963815E3B49B003525E8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CF15C1D4BD006CCBD2 /* main.cpp */; };
+		C93A963915E3B49B003525E8 /* opengl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2D015C1D4BD006CCBD2 /* opengl.cpp */; };
+		C93A963A15E3B49B003525E8 /* spriteimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C415C1D47F006CCBD2 /* spriteimpl.cpp */; };
+		C93A963B15E3B49B003525E8 /* tess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2D115C1D4BD006CCBD2 /* tess.cpp */; };
+		C93A963C15E3B49B003525E8 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2D215C1D4BD006CCBD2 /* texture.cpp */; };
+		C93A963D15E3B49B003525E8 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2D315C1D4BD006CCBD2 /* window.cpp */; };
+		C93A963E15E3B49B003525E8 /* windowptr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2D415C1D4BD006CCBD2 /* windowptr.cpp */; };
+		C93A963F15E3B49B003525E8 /* work.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2D515C1D4BD006CCBD2 /* work.cpp */; };
+		C93A964015E3B4BF003525E8 /* ConvertUTF.c in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C915C1D4BD006CCBD2 /* ConvertUTF.c */; };
+		C93A964115E3B4CC003525E8 /* callbacks.c in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C815C1D4BD006CCBD2 /* callbacks.c */; };
 		C93B324B14C1B0090053C668 /* sdl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C93B324A14C1B0090053C668 /* sdl.cpp */; };
 		C93B324F14C1B04A0053C668 /* sdl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C93B324E14C1B04A0053C668 /* sdl.hpp */; };
 		C95406CE148D6DCD00902BB3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3113EAED790086B474 /* OpenGL.framework */; };
@@ -582,6 +598,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C93A964115E3B4CC003525E8 /* callbacks.c in Sources */,
+				C93A964015E3B4BF003525E8 /* ConvertUTF.c in Sources */,
+				C93A963215E3B49B003525E8 /* sprite.cpp in Sources */,
+				C93A963315E3B49B003525E8 /* audio.cpp in Sources */,
+				C93A963415E3B49B003525E8 /* finally.cpp in Sources */,
+				C93A963515E3B49B003525E8 /* framebuffer.cpp in Sources */,
+				C93A963615E3B49B003525E8 /* framebufferimpl.cpp in Sources */,
+				C93A963715E3B49B003525E8 /* freetype.cpp in Sources */,
+				C93A963815E3B49B003525E8 /* main.cpp in Sources */,
+				C93A963915E3B49B003525E8 /* opengl.cpp in Sources */,
+				C93A963A15E3B49B003525E8 /* spriteimpl.cpp in Sources */,
+				C93A963B15E3B49B003525E8 /* tess.cpp in Sources */,
+				C93A963C15E3B49B003525E8 /* texture.cpp in Sources */,
+				C93A963D15E3B49B003525E8 /* window.cpp in Sources */,
+				C93A963E15E3B49B003525E8 /* windowptr.cpp in Sources */,
+				C93A963F15E3B49B003525E8 /* work.cpp in Sources */,
 				C99DF1271528D85E00779081 /* message.cpp in Sources */,
 				C9BFF8401524BD0600066D6C /* window.cpp in Sources */,
 				C9BFF84E1524C3F000066D6C /* time.cpp in Sources */,
@@ -752,6 +784,10 @@
 				DSTROOT = /tmp/JNGL_iOS.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JNGL iOS/JNGL iOS-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"IOS=1",
+					"$(inherited)",
+				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = (
@@ -780,6 +816,10 @@
 				DSTROOT = /tmp/JNGL_iOS.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JNGL iOS/JNGL iOS-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"IOS=1",
+					"$(inherited)",
+				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = (
@@ -815,13 +855,13 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Test iOS/Test iOS-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"GLEW_NO_GLU=1",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				HEADER_SEARCH_PATHS = ../include/ios;
+				HEADER_SEARCH_PATHS = (
+					../include/ios,
+					/opt/local/include,
+				);
 				INFOPLIST_FILE = "Test iOS/Test iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				LIBRARY_SEARCH_PATHS = (
@@ -852,13 +892,13 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Test iOS/Test iOS-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"GLEW_NO_GLU=1",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				HEADER_SEARCH_PATHS = ../include/ios;
+				HEADER_SEARCH_PATHS = (
+					../include/ios,
+					/opt/local/include,
+				);
 				INFOPLIST_FILE = "Test iOS/Test iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				LIBRARY_SEARCH_PATHS = (

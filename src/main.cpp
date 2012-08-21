@@ -50,15 +50,16 @@ namespace jngl
 	#ifdef OPENGLES
 		#define f2x(x) ((int)((x) * 65536))
 		glOrthox(f2x(-width/2), f2x(width/2), f2x(height/2), f2x(-height/2), f2x(-1), f2x(1));
-		jngl::Translate(-width/2, height/2);
-		jngl::Rotate(-90);
-		jngl::Translate(height/2, width/2);
+		jngl::translate(-width/2, height/2);
+		jngl::rotate(-90);
+		jngl::translate(height/2, width/2);
 	#else
 		glOrtho(-width/2, width/2, height/2, -height/2, -100.0f, 100.0f);
 	#endif
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+		glClear(GL_COLOR_BUFFER_BIT);
 
 		glFlush();
 		InitCallbacks();

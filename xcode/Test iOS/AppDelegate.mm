@@ -11,38 +11,38 @@
 class Test : public jngl::Work {
 public:
 	Test() : angle(0), fbo(0) {
-		jngl::SetFont("Arial.ttf");
-		jngl::Play("test.ogg");
-		std::cout << "Resolution: " << jngl::GetWindowWidth() << "x" << jngl::GetWindowHeight() << std::endl
+		jngl::setFont("Arial.ttf");
+		jngl::play("test.ogg");
+		std::cout << "Resolution: " << jngl::getWindowWidth() << "x" << jngl::getWindowHeight() << std::endl
 		          << "Config path: " << jngl::getConfigPath() << std::endl;
 	}
 	void step() {
 		angle += 1;
 		if (!fbo) {
-			fbo = new jngl::FrameBuffer(jngl::GetWindowWidth(), jngl::GetWindowHeight() * 0.75);
+			fbo = new jngl::FrameBuffer(jngl::getWindowWidth(), jngl::getWindowHeight() * 0.75);
 		}
 	}
 	void draw() const {
 		if (fbo) {
 			fbo->beginDraw();
-			jngl::Print("fbo", -jngl::GetWindowWidth() / 2, -jngl::GetWindowHeight() / 2);
-			jngl::Draw("jngl.png", -300, -140);
+			jngl::print("fbo", -jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
+			jngl::draw("jngl.png", -300, -140);
 			fbo->endDraw();
-			fbo->draw(-jngl::GetWindowWidth() / 2, -jngl::GetWindowHeight() / 2);
+			fbo->draw(-jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
 		}
-		if (jngl::MouseDown()) {
-			jngl::SetSpriteColor(0, 0, 0);
+		if (jngl::mouseDown()) {
+			jngl::setSpriteColor(0, 0, 0);
 		} else {
-			jngl::SetSpriteColor(255, 255, 255);
+			jngl::setSpriteColor(255, 255, 255);
 		}
-		jngl::Draw("jngl.png", -300 + jngl::GetMouseX(), -140 + jngl::GetMouseY());
+		jngl::draw("jngl.png", -300 + jngl::getMouseX(), -140 + jngl::getMouseY());
 		std::stringstream sstream;
-		sstream << "FPS: " << int(jngl::FPS()) << " Time: " << jngl::Time();
-		jngl::Print(sstream.str(), -230, -150);
-		jngl::Print("Retina Display!", 260, 340);
-		jngl::Translate(-40, 140);
-		jngl::Rotate(angle);
-		jngl::Print("Hallo Welt!", -50, -10);
+		sstream << "FPS: " << int(jngl::getFPS()) << " Time: " << jngl::getTime();
+		jngl::print(sstream.str(), -230, -150);
+		jngl::print("Retina Display!", 260, 340);
+		jngl::translate(-40, 140);
+		jngl::rotate(angle);
+		jngl::print("Hallo Welt!", -50, -10);
 	}
 private:
 	int angle;
@@ -59,8 +59,8 @@ private:
 	[self.window.rootViewController setView:view];
 	[self.window addSubview:view];
 
-	jngl::ShowWindow("", jngl::GetWindowWidth(), jngl::GetWindowHeight());
-	jngl::SetWork(new Test);
+	jngl::showWindow("", jngl::getWindowWidth(), jngl::getWindowHeight());
+	jngl::setWork(new Test);
 	std::cout << "START" << std::endl;
 	[view drawView:nil];
     [self.window makeKeyAndVisible];
