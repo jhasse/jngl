@@ -224,6 +224,7 @@ namespace jngl
 			while (changeWork_) {
 				changeWork_ = false;
 				currentWork_ = newWork_;
+				newWork_.reset((jngl::Work*)0);
 				currentWork_->onLoad();
 			}
 			return true;
