@@ -192,16 +192,15 @@ namespace jngl
 		return mouseWheel_;
 	}
 
-	void Window::MainLoop()
-	{
-		while(running_)
-		{
+	void Window::MainLoop() {
+		while (running_) {
 			if (!stepIfNeeded() && needDraw_) {
 				needDraw_ = false;
 				draw();
 				jngl::swapBuffers();
 			}
 		}
+		currentWork_.reset((jngl::Work*)0);
 	}
 
 	bool Window::stepIfNeeded() {

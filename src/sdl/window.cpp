@@ -30,7 +30,7 @@ namespace jngl
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 		impl->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-						             width, height, flags);
+		                                   width, height, flags);
 
 		if(!impl->sdlWindow) {
 			throw std::runtime_error(SDL_GetError());
