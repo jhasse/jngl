@@ -6,8 +6,10 @@ if [ "$prefix" == "" ]; then
 	exit 1
 fi
 mkdir -p $prefix/include/
+mkdir -p $prefix/include/jngl/
 mkdir -p $prefix/lib/
 mkdir -p $prefix/lib/pkgconfig/
 cp src/jngl.hpp $prefix/include/
+cp src/jngl/*.hpp $prefix/include/jngl/
 cp libjngl.a $prefix/lib/
 cp jngl.pc $prefix/lib/pkgconfig/
