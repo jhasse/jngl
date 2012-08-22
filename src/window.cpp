@@ -218,7 +218,7 @@ namespace jngl
 				currentWork_->step();
 			}
 			needDraw_ = true;
-			if (!jngl::running()) {
+			if (!jngl::running() && currentWork_) {
 				currentWork_->onQuitEvent();
 			}
 			while (changeWork_) {
