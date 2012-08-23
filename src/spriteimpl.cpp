@@ -20,20 +20,24 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <boost/shared_array.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 #include <vector>
 #include <stdexcept>
 #include <cmath>
 #include <cstdlib>
 #include <cstdio>
 #ifdef _WIN32
-// These defines are needed to prevent conflicting types declarations in jpeglib.h:
-#define XMD_H
-#define HAVE_BOOLEAN
+	// These defines are needed to prevent conflicting types declarations in jpeglib.h:
+	#define XMD_H
+	#define HAVE_BOOLEAN
 #endif
 #ifndef NOJPEG
-extern "C" {
-#include <jpeglib.h>
-}
+	extern "C" {
+		#include <jpeglib.h>
+	}
+#endif
+#ifndef NOWEBP
+	#include <webp/decode.h>
 #endif
 
 namespace jngl
@@ -69,11 +73,20 @@ namespace jngl
 		: texture_(0)
 	{
 		FILE* pFile = fopen(filename.c_str(), "rb");
-		if(!pFile) {
+		if (!pFile) {
 			throw std::runtime_error(std::string("File not found: " + filename));
 		}
 
 		Finally closeFile(boost::bind(fclose, pFile));
+
+		if (boost::algorithm::ends_with(filename, ".webp")) {
+#ifdef NOWEBP
+			throw std::runtime_error(std::string("Sorry, WebP files not supported in this build of JNGL. (" + filename + ")"
+#else
+			LoadWebP(filename, pFile, halfLoad);
+			return;
+#endif
+		}
 
 		png_byte buf[PNG_BYTES_TO_CHECK];
 		assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short));
@@ -95,7 +108,7 @@ namespace jngl
 		#endif
 		}
 		else
-			throw std::runtime_error(std::string("Not a PNG, JPEG or BMP file. (" + filename + ")"));
+			throw std::runtime_error(std::string("Not a PNG, WebP, JPEG or BMP file. (" + filename + ")"));
 	}
 	SpriteImpl::~SpriteImpl()
 	{
@@ -151,16 +164,12 @@ namespace jngl
 
 		Finally freePng(boost::bind(png_destroy_read_struct, &png_ptr, &info_ptr, (png_infop*)NULL));
 		unsigned char** rowPointers = png_get_rows(png_ptr, info_ptr);
-		LoadTexture(filename,
-		            static_cast<int>(png_get_image_width(png_ptr, info_ptr)),
-		            static_cast<int>(png_get_image_height(png_ptr, info_ptr)),
-		            rowPointers,
-		            channels, halfLoad, format);
+		width_ = static_cast<int>(png_get_image_width(png_ptr, info_ptr));
+		height_ = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
+		LoadTexture(filename, channels, halfLoad, format, rowPointers);
 	}
-	void SpriteImpl::CleanUpRowPointers(std::vector<char*>& buf)
-	{
-		for(std::vector<char*>::iterator i = buf.begin(); i != buf.end(); ++i)
-		{
+	void SpriteImpl::CleanUpRowPointers(std::vector<unsigned char*>& buf) {
+		for (auto i = buf.begin(); i != buf.end(); ++i) {
 			delete[] *i;
 		}
 	}
@@ -184,10 +193,9 @@ namespace jngl
 		if(header.dataSize == 0)
 			header.dataSize = header.width * header.height * 3;
 
-		std::vector<char*> buf(header.height);
-		for(std::vector<char*>::iterator i = buf.begin(); i != buf.end(); ++i)
-		{
-			*i = new char[header.width * 3];
+		std::vector<unsigned char*> buf(header.height);
+		for (auto i = buf.begin(); i != buf.end(); ++i) {
+			*i = new unsigned char[header.width * 3];
 		}
 		Finally cleanUp(boost::bind(CleanUpRowPointers, boost::ref(buf)));
 
@@ -212,7 +220,7 @@ namespace jngl
 					throw std::runtime_error(std::string("Error reading data. (" + filename + ")"));
 			}
 		}
-		LoadTexture(filename, header.width, header.height, buf, header.bpp / 8, halfLoad, GL_BGR);
+		LoadTexture(filename, header.bpp / 8, halfLoad, GL_BGR, &buf[0]);
 	}
 #ifndef NOJPEG
 	void SpriteImpl::LoadJPG(const std::string& filename, FILE* file,
@@ -240,8 +248,8 @@ namespace jngl
 		jpeg_read_header(&info, TRUE);
 		jpeg_start_decompress(&info);
 
-		int x = info.output_width;
-		int y = info.output_height;
+		width_ = info.output_width;
+		height_ = info.output_height;
 		int channels = info.num_components;
 
 		GLenum format = GL_RGB;
@@ -251,10 +259,9 @@ namespace jngl
 		}
 
 		assert(sizeof(JSAMPLE) == sizeof(char));
-		std::vector<char*> buf(y);
-		for(std::vector<char*>::iterator i = buf.begin(); i != buf.end(); ++i)
-		{
-			*i = new char[x * channels];
+		std::vector<unsigned char*> buf(height_);
+		for (auto i = buf.begin(); i != buf.end(); ++i) {
+			*i = new unsigned char[width_ * channels];
 		}
 		Finally cleanUp(boost::bind(CleanUpRowPointers, boost::ref(buf)));
 
@@ -265,9 +272,46 @@ namespace jngl
 
 		jpeg_finish_decompress(&info);
 
-		LoadTexture(filename, x, y, buf, channels, halfLoad, format);
+		LoadTexture(filename, channels, halfLoad, format, &buf[0]);
 	}
 #endif
+#ifndef NOWEBP
+	void SpriteImpl::LoadWebP(const std::string& filename, FILE* file,
+	                         const bool halfLoad) {
+		fseek(file, 0, SEEK_END);
+		auto filesize = ftell(file);
+		fseek(file, 0, SEEK_SET);
+
+		std::vector<uint8_t> buf(filesize);
+		if (!fread(&buf[0], filesize, 1, file)) {
+			throw std::runtime_error(std::string("Couldn't open WebP file. (" + filename + ")"));
+		}
+
+		if (!WebPGetInfo(&buf[0], filesize, &width_, &height_)) {
+			throw std::runtime_error(std::string("Invalid WebP file. (" + filename + ")"));
+		}
+
+		auto data = WebPDecodeRGBA(&buf[0], filesize, &width_, &height_);
+		LoadTexture(filename, 4, halfLoad, GL_RGBA, nullptr, data);
+	}
+#endif
+
+	void SpriteImpl::LoadTexture(const std::string& filename,
+								 int channels,
+								 const bool halfLoad,
+								 GLenum format,
+								 GLubyte** rowPointers,
+								 GLubyte* data) {
+		if (!pWindow) {
+			if (halfLoad) {
+				return;
+			}
+			throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
+		}
+		texture_ = new Texture(width_, height_, reinterpret_cast<GLubyte**>(&rowPointers[0]),
+							   format, channels, data);
+	}
+
 	int SpriteImpl::Width()
 	{
 		return width_;

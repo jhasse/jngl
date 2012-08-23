@@ -19,25 +19,8 @@ namespace jngl
 	public:
 		SpriteImpl(const std::string& filename, const bool halfLoad);
 		~SpriteImpl();
-		template<class ArrayType>
-		void LoadTexture(const std::string& filename,
-		                 const int imgWidth,
-		                 const int imgHeight,
-		                 ArrayType& rowPointers,
-		                 int channels,
-		                 const bool halfLoad,
-		                 GLenum format)
-		{
-			width_ = imgWidth;
-			height_ = imgHeight;
-			if (!pWindow) {
-				if (halfLoad) {
-					return;
-				}
-				throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
-			}
-			texture_ = new Texture(width_, height_, reinterpret_cast<GLubyte**>(&rowPointers[0]), format, channels);
-		}
+		void LoadTexture(const std::string& filename, int channels, bool halfLoad, GLenum format,
+						 GLubyte** rowPointers, GLubyte* data = nullptr);
 		void LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad);
 		struct BMPHeader
 		{
@@ -50,10 +33,13 @@ namespace jngl
 			unsigned int compression;
 			unsigned int dataSize;
 		};
-		static void CleanUpRowPointers(std::vector<char*>& buf);
+		static void CleanUpRowPointers(std::vector<unsigned char*>& buf);
  		void LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad);
 #ifndef NOJPEG
 		void LoadJPG(const std::string& filename, FILE* file, const bool halfLoad);
+#endif
+#ifndef NOWEBP
+		void LoadWebP(const std::string& filename, FILE* file, const bool halfLoad);
 #endif
 		int Width();
 		int Height();

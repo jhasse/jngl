@@ -77,9 +77,9 @@ public:
 		}
 		factor = sin(rotate / 360 * M_PI);
 		setSpriteColor(255, 255, 255, static_cast<unsigned char>(absolute(factor * 255)));
-		drawScaled("jngl.png",
-		           -getWidth("jngl.png")  * factor,
-		           -getHeight("jngl.png") * factor,
+		drawScaled("jngl.webp",
+		           -getWidth("jngl.webp")  * factor,
+		           -getHeight("jngl.webp") * factor,
 		           static_cast<float>(factor * 2));
 		setColor(0, 0, 0);
 		drawRect(-125, 100, 250, 28);

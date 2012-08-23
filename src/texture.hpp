@@ -12,7 +12,10 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 class Texture : boost::noncopyable {
 public:
-	Texture(int imgWidth, int imgHeight, GLubyte** rowPointers, GLenum format = GL_RGBA, int channels = 4);
+	Texture(int imgWidth, int imgHeight,
+	        GLubyte** rowPointers, // data as row pointers ...
+	        GLenum format = GL_RGBA, int channels = 4,
+	        GLubyte* data = nullptr /* ... or as one pointer */ );
 	~Texture();
 	void Bind() const;
 	void Draw() const;
