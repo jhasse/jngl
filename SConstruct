@@ -57,13 +57,17 @@ if not env['msvc']:
 testSrc = "src/test/test.cpp"
 
 if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
-	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl")
+	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl webp")
 	if env['python'] or env['msvc']:
 		jnglLibs += Split("openal32 ogg vorbisfile")
 	else:
 		env.Append(CPPDEFINES='WEAK_LINKING_OPENAL')
 	env.Append(CPPPATH="./include")
-	lib = env.Library(target="jngl", source=source_files + Glob('src/win32/*.cpp'), LIBS=jnglLibs)
+	lib = env.Library(target="jngl",
+	                  source=source_files +
+	                         env.Object(Glob('src/win32/*.cpp'),
+	                                         CPPFLAGS="-std=c++11"),
+	                  LIBS=jnglLibs)
 	linkflags = "-mwindows"
 	if env['debug'] or env['msvc']:
 		linkflags = ""
