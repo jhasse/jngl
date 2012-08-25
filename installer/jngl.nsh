@@ -4,4 +4,6 @@
 	SetOutPath $INSTDIR\include\jngl
 	File ..\src\jngl\sprite.hpp
 	File ..\src\jngl\types.hpp
+	File ..\src\jngl\window.hpp
+	File ..\src\jngl\work.hpp
 !macroend

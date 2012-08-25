@@ -32,6 +32,7 @@ File ..\lib\libz.a
 File ..\lib\libjpeg.a
 File ..\lib\libdl.a
 File ..\lib\libglew32.dll.a
+File ..\lib\libwebp.a
 SetOutPath $INSTDIR\bin
 File ..\vorbis.dll
 File ..\vorbisfile.dll
