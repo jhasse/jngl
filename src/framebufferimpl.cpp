@@ -27,7 +27,7 @@ namespace jngl {
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, buffer);
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.GetID(), 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.getID(), 0);
 
 		assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 
@@ -89,7 +89,7 @@ namespace jngl {
 		jngl::translate(x, y);
 		glScalef(1.0f, -1.0f, 1.0f);
 		jngl::translate(0, -height);
-		texture.Draw();
+		texture.draw();
 		glPopMatrix();
 	}
 }

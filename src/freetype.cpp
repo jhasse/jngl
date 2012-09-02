@@ -105,7 +105,7 @@ namespace jngl
 		glPushMatrix();
 		opengl::translate(left_, top_);
 
-		texture_->Draw();
+		texture_->draw();
 
 		glPopMatrix();
 		opengl::translate(width_, 0);

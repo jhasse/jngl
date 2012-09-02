@@ -18,9 +18,9 @@ public:
 	        GLubyte* data = nullptr /* ... or as one pointer */ );
 	~Texture();
 	void Bind() const;
-	void Draw() const;
+	void draw() const;
 	void drawClipped(float xstart, float xend, float ystart, float yend) const;
-	GLuint GetID() const;
+	GLuint getID() const;
 private:
 	static bool useVBO_;
 	GLuint texture_;

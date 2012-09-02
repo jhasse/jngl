@@ -28,8 +28,7 @@ Texture::Texture(const int imgWidth, const int imgHeight, GLubyte** rowPointers,
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	const GLfloat x = static_cast<GLfloat>(imgWidth) / static_cast<GLfloat>(width);
 	const GLfloat y = static_cast<GLfloat>(imgHeight)  / static_cast<GLfloat>(height);
-	if(useVBO_)
-	{
+	if (useVBO_) {
 		GLfloat vertexes[] = {
 							   0, 0, 0, y, x, y, x, 0, // texture coordinates
 							   0, 0, 0, GLfloat(imgHeight), GLfloat(imgWidth), GLfloat(imgHeight), GLfloat(imgWidth), 0
@@ -80,16 +79,14 @@ Texture::Texture(const int imgWidth, const int imgHeight, GLubyte** rowPointers,
 	}
 }
 
-Texture::~Texture()
-{
+Texture::~Texture() {
 	glDeleteTextures(1, &texture_);
 	if (useVBO_) {
 		glDeleteBuffers(1, &vertexBuffer_);
 	}
 }
 
-void Texture::Draw() const
-{
+void Texture::draw() const {
 	glEnable(GL_TEXTURE_2D);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -98,8 +95,7 @@ void Texture::Draw() const
 		opengl::BindArrayBuffer(vertexBuffer_);
 	}
 #ifndef WIZ
-	else
-	{
+	else {
 		glVertexPointer(2, GL_FLOAT, 0, &vertexes_[0]);
 		glTexCoordPointer(2, opengl::Type<double>::constant, 0, &texCoords_[0]);
 	}
@@ -110,8 +106,7 @@ void Texture::Draw() const
 	glDisable(GL_TEXTURE_2D);
 }
 
-void Texture::drawClipped(const float xstart, const float xend, const float ystart, const float yend) const
-{
+void Texture::drawClipped(const float xstart, const float xend, const float ystart, const float yend) const {
 	glEnable(GL_TEXTURE_2D);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -139,7 +134,6 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	glDisable(GL_TEXTURE_2D);
 }
 
-GLuint Texture::GetID() const
-{
+GLuint Texture::getID() const {
 	return texture_;
 }

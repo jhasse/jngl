@@ -47,7 +47,7 @@ namespace jngl
 		void Draw(const T xposition, const T yposition) {
 			glPushMatrix();
 			opengl::translate(xposition, yposition);
-			texture_->Draw();
+			texture_->draw();
 			glPopMatrix();
 		}
 		template<class T>
@@ -55,7 +55,7 @@ namespace jngl
 			glPushMatrix();
 			opengl::translate(xposition, yposition);
 			opengl::scale(xfactor, yfactor);
-			texture_->Draw();
+			texture_->draw();
 			glPopMatrix();
 		}
 		template<class T>
