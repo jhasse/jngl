@@ -6,7 +6,7 @@ Easy to use game library for C++ and Python
 
 ## Build using scons
 
-Build jngl in debug mode:
+Build JNGL in debug mode:
 ```
 scons debug=1
 ```
@@ -22,7 +22,7 @@ scons installer=1
 scons installer=1 python=1
 ```
 
-Install jngl to "/usr":
+Install JNGL to "/usr":
 ```
 ./install.sh /usr
 ```
