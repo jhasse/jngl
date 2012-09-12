@@ -12,7 +12,6 @@ int vswprintf(wchar_t *, const wchar_t *, va_list);
 #endif
 
 #include "jngl.hpp"
-#include "debug.hpp"
 #include "audio.hpp"
 #include "main.hpp"
 
@@ -209,7 +208,7 @@ namespace jngl
 		}
 		catch(WeakLinkingError& e)
 		{
-			Debug(e.what()); Debug("\n");
+			debug(e.what()); debug("\n");
 			return false;
 		}
 #endif

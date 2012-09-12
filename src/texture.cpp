@@ -4,7 +4,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #include "texture.hpp"
-#include "debug.hpp"
+#include "jngl/debug.hpp"
 
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F

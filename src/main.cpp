@@ -5,7 +5,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "jngl.hpp"
 #include "window.hpp"
-#include "debug.hpp"
 #include "spriteimpl.hpp"
 #include "windowptr.hpp"
 #include "draw.hpp"
@@ -33,7 +32,7 @@ namespace jngl
 		if(err != GLEW_OK) {
 			throw std::runtime_error(boost::lexical_cast<std::string>(glewGetErrorString(err)));
 		}
-		Debug("Using GLEW "); Debug(glewGetString(GLEW_VERSION)); Debug("\n");
+		debug("Using GLEW "); debug(glewGetString(GLEW_VERSION)); debug("\n");
 #endif
 
 		glShadeModel(GL_SMOOTH);

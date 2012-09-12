@@ -8,7 +8,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "freetype.hpp"
 #include "jngl.hpp"
-#include "debug.hpp"
 
 #include "ConvertUTF.h"
 

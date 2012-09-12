@@ -5,7 +5,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "window.hpp"
 #include "main.hpp"
-#include "debug.hpp"
+#include "jngl/debug.hpp"
 
 #include <boost/assign/ptr_map_inserter.hpp>
 

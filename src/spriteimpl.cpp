@@ -12,7 +12,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "windowptr.hpp"
 #include "texture.hpp"
 #include "main.hpp"
-#include "debug.hpp"
 
 #include <map>
 #include <string>
