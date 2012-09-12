@@ -35,12 +35,12 @@ namespace jngl
 	}
 	Sound::~Sound()
 	{
-		Debug("freeing sound buffer ... ");
+		debug("freeing sound buffer ... ");
 		alSourceStop(source_);
 		alSourceUnqueueBuffers(source_, 1, &buffer_);
 		alDeleteSources(1, &source_);
 		alDeleteBuffers(1, &buffer_);
-		Debug("OK\n");
+		debug("OK\n");
 	}
 	bool Sound::IsPlaying()
 	{
@@ -118,7 +118,7 @@ namespace jngl
 
 	SoundFile::SoundFile(const std::string& filename) : sound_((Sound*)0)
 	{
-		Debug("Decoding "); Debug(filename); Debug(" ... ");
+		debug("Decoding "); debug(filename); debug(" ... ");
 		// based on http://www.gamedev.net/reference/articles/article2031.asp
 		FILE* f = fopen(filename.c_str(), "rb");
 		if(!f)
@@ -164,7 +164,7 @@ namespace jngl
 		while(bytes > 0);
 
 		ov_clear(&oggFile);
-		Debug("OK\n");
+		debug("OK\n");
 	}
 	void SoundFile::Play()
 	{

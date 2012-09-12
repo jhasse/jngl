@@ -242,11 +242,11 @@ namespace jngl
 
 	void Window::SetWork(boost::shared_ptr<Work> work) {
 		if (!currentWork_) {
-			Debug("setting current work to "); Debug(work.get()); Debug("\n");
+			debug("setting current work to "); debug(work.get()); debug("\n");
 			currentWork_ = work;
 		}
 		else {
-			Debug("change work to "); Debug(work.get()); Debug("\n");
+			debug("change work to "); debug(work.get()); debug("\n");
 			changeWork_ = true;
 			newWork_ = work;
 		}

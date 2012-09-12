@@ -73,8 +73,8 @@ namespace jngl
 
 	void showWindow(const std::string& title, const int width, const int height, bool fullscreen)
 	{
-		Debug("jngl::showWindow(\""); Debug(title); Debug("\", "); Debug(width); Debug(", "); Debug(height);
-		Debug(", "); Debug(fullscreen); Debug(");\n");
+		debug("jngl::showWindow(\""); debug(title); debug("\", "); debug(width); debug(", "); debug(height);
+		debug(", "); debug(fullscreen); debug(");\n");
 		if (pWindow &&
 		    width == pWindow->GetWidth() &&
 		    height == pWindow->GetHeight() &&
@@ -393,7 +393,7 @@ namespace jngl
 		}
 		antiAliasingEnabled = enabled;
 #else
-		Debug("WARNING: anti aliasing not available!\n");
+		debug("WARNING: anti aliasing not available!\n");
 #endif
 	}
 

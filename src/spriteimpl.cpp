@@ -76,7 +76,7 @@ namespace jngl
 
 		if (boost::algorithm::ends_with(filename, ".webp")) {
 #ifdef NOWEBP
-			throw std::runtime_error(std::string("Sorry, WebP files not supported in this build of JNGL. (" + filename + ")"
+			throw std::runtime_error(std::string("Sorry, WebP files not supported in this build of JNGL. (" + filename + ")"));
 #else
 			LoadWebP(filename, pFile, halfLoad);
 			return;
@@ -306,7 +306,7 @@ namespace jngl
 		if ((i = sprites_.find(filename)) == sprites_.end()) { // texture hasn't been loaded yet?
 			if (!halfLoad) {
 				pWindow.ThrowIfNull();
-				Debug("Loading "); Debug(filename); Debug(" ...\n");
+				debug("Loading "); debug(filename); debug(" ...\n");
 			}
 			auto s = new Sprite(pathPrefix + filename, halfLoad);
 			sprites_[filename].reset(s);

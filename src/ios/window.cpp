@@ -18,7 +18,7 @@ along with JNGL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "../window.hpp"
-#include "../debug.hpp"
+#include "../jngl/debug.hpp"
 #include "windowimpl.hpp"
 
 #include <stdexcept>

@@ -33,7 +33,7 @@ namespace jngl
 		if(FT_Load_Glyph(face, FT_Get_Char_Index(face, ch) , FT_LOAD_TARGET_LIGHT))
 		{
 			std::string msg = std::string("FT_Load_Glyph failed. Character: ") + boost::lexical_cast<std::string>(ch);
-			Debug(msg);
+			debug(msg);
 			// Load a question mark instead
 			if(FT_Load_Glyph(face, FT_Get_Char_Index(face, '?') , FT_LOAD_TARGET_LIGHT))
 			{
@@ -162,7 +162,7 @@ namespace jngl
 			}
 			else
 			{
-				Debug(" ERROR - " + boost::lexical_cast<std::string>(result));
+				debug(" ERROR - " + boost::lexical_cast<std::string>(result));
 			}
 		}
 		if(characters_[unicodeCharacter] == 0)
@@ -191,12 +191,12 @@ namespace jngl
 				throw std::runtime_error("FT_Init_FreeType failed");
 			}
 		}
-		Debug("Loading font "); Debug(filename); Debug("... ");
+		debug("Loading font "); debug(filename); debug("... ");
 		if(FT_New_Face(library_, filename, 0, &face_))
 		{
 			throw std::runtime_error("FT_New_Face failed");
 		}
-		Debug("OK\n");
+		debug("OK\n");
 		freeFace_.reset(new Finally(boost::bind(FT_Done_Face, face_))); // Finally will call FT_Done_Face when the Font class is destroyed
 
 		// For some twisted reason, Freetype measures font size

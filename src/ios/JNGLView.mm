@@ -52,7 +52,7 @@
 		
 		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &width);
 		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_HEIGHT_OES, &height);
-		
+
 		jngl::showWindow("", height, width);
 		
 		CADisplayLink* displayLink;
@@ -61,11 +61,7 @@
 		[displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 		
 		[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-		
-		[[NSNotificationCenter defaultCenter]
-		 addObserver:self
-		 selector:@selector(didRotate:)
-		 name:UIDeviceOrientationDidChangeNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
 		
 		startTime = -1;
 		desiredAngle = angle = 0;
@@ -89,7 +85,23 @@
 		}
 		
 		while (jngl::pWindow->stepIfNeeded()) {
-			angle += (desiredAngle - angle) * 0.1;
+			if (angle != desiredAngle) {
+				const float speed = 5.8f;
+				if (angle < desiredAngle) {
+					if (desiredAngle - angle < speed*2) {
+						angle = desiredAngle;
+					} else {
+						angle += speed;
+					}
+				}
+				if (angle > desiredAngle) {
+					if (angle - desiredAngle < speed*2) {
+						angle = desiredAngle;
+					} else {
+						angle -= speed;
+					}
+				}
+			}
 		}
 	}
 

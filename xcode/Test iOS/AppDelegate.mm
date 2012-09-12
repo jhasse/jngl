@@ -40,6 +40,9 @@ public:
 		sstream << "FPS: " << int(jngl::getFPS()) << " Time: " << jngl::getTime();
 		jngl::print(sstream.str(), -230, -150);
 		jngl::print("Retina Display!", 260, 340);
+		jngl::setColor(255, 0, 0);
+		jngl::drawLine(-240, 160, 239, 160);
+		jngl::drawLine(239, -160, 239, 160);
 		jngl::translate(-40, 140);
 		jngl::rotate(angle);
 		jngl::print("Hallo Welt!", -50, -10);
@@ -55,8 +58,10 @@ private:
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	view = [[JNGLView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
-	self.window.rootViewController = [[UIViewController alloc] initWithNibName:nil bundle:nil];
-	[self.window.rootViewController setView:view];
+	JNGLViewController* jvc = [[JNGLViewController alloc] initWithNibName:nil bundle:nil];
+	self.window.rootViewController = jvc;
+	jvc.jnglView = view;
+	
 	[self.window addSubview:view];
 
 	jngl::showWindow("", jngl::getWindowWidth(), jngl::getWindowHeight());
