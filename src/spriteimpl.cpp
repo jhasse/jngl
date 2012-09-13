@@ -43,15 +43,23 @@ namespace jngl
 {
 	unsigned char spriteColorRed = 255, spriteColorGreen = 255, spriteColorBlue = 255, spriteColorAlpha = 255;
 
-	void setSpriteColor(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha) {
+	void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue) {
+		spriteColorRed = red;
+		spriteColorGreen = green;
+		spriteColorBlue = blue;
+		glColor4ub(red, green, blue, spriteColorAlpha);
+	}
+
+	void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) {
 		spriteColorRed = red;
 		spriteColorGreen = green;
 		spriteColorBlue = blue;
 		spriteColorAlpha = alpha;
-		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
+		glColor4ub(red, green, blue, alpha);
 	}
 
-	void setSpriteAlpha(const unsigned char alpha) {
+	void setSpriteAlpha(unsigned char alpha) {
+		spriteColorAlpha = alpha;
 		setSpriteColor(spriteColorRed, spriteColorGreen, spriteColorBlue, alpha);
 	}
 

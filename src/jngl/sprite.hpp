@@ -28,4 +28,15 @@ namespace jngl {
 	private:
 		std::auto_ptr<SpriteImpl> impl;
 	};
+
+	void setSpriteColor(unsigned char red,
+	                    unsigned char green,
+	                    unsigned char blue,
+	                    unsigned char alpha);
+
+	void setSpriteColor(unsigned char red,
+	                    unsigned char green,
+	                    unsigned char alpha);
+
+	void setSpriteAlpha(unsigned char alpha);
 }
