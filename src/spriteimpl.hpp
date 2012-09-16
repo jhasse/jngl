@@ -5,7 +5,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
-#include "jngl/opengl.hpp"
+#include "opengl.hpp"
 #include "windowptr.hpp"
 #include "texture.hpp"
 #include "jngl/sprite.hpp"

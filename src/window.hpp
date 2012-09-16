@@ -7,7 +7,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "jngl.hpp"
 #include "freetype.hpp"
-#include "jngl/opengl.hpp"
+#include "opengl.hpp"
 
 #include <string>
 #include <boost/shared_ptr.hpp>

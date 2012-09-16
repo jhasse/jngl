@@ -7,10 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C923BC4D16066E4400BEFE2D /* font.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4916066E4400BEFE2D /* font.hpp */; };
+		C923BC4E16066E4400BEFE2D /* font.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4916066E4400BEFE2D /* font.hpp */; };
+		C923BC4F16066E4400BEFE2D /* framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C923BC4A16066E4400BEFE2D /* framebuffer.cpp */; };
+		C923BC5016066E4400BEFE2D /* framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C923BC4A16066E4400BEFE2D /* framebuffer.cpp */; };
+		C923BC5116066E4400BEFE2D /* framebuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4B16066E4400BEFE2D /* framebuffer.hpp */; };
+		C923BC5216066E4400BEFE2D /* framebuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4B16066E4400BEFE2D /* framebuffer.hpp */; };
+		C923BC5C16066EC300BEFE2D /* opengl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC5B16066EC300BEFE2D /* opengl.hpp */; };
+		C923BC5D16066EC300BEFE2D /* opengl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC5B16066EC300BEFE2D /* opengl.hpp */; };
 		C93A963215E3B49B003525E8 /* sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2E515C1D52A006CCBD2 /* sprite.cpp */; };
 		C93A963315E3B49B003525E8 /* audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CA15C1D4BD006CCBD2 /* audio.cpp */; };
 		C93A963415E3B49B003525E8 /* finally.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CB15C1D4BD006CCBD2 /* finally.cpp */; };
-		C93A963515E3B49B003525E8 /* framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CC15C1D4BD006CCBD2 /* framebuffer.cpp */; };
 		C93A963615E3B49B003525E8 /* framebufferimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CD15C1D4BD006CCBD2 /* framebufferimpl.cpp */; };
 		C93A963715E3B49B003525E8 /* freetype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CE15C1D4BD006CCBD2 /* freetype.cpp */; };
 		C93A963815E3B49B003525E8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CF15C1D4BD006CCBD2 /* main.cpp */; };
@@ -70,7 +77,6 @@
 		C9E9E2D715C1D4BD006CCBD2 /* ConvertUTF.c in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C915C1D4BD006CCBD2 /* ConvertUTF.c */; };
 		C9E9E2D815C1D4BD006CCBD2 /* audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CA15C1D4BD006CCBD2 /* audio.cpp */; };
 		C9E9E2D915C1D4BD006CCBD2 /* finally.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CB15C1D4BD006CCBD2 /* finally.cpp */; };
-		C9E9E2DA15C1D4BD006CCBD2 /* framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CC15C1D4BD006CCBD2 /* framebuffer.cpp */; };
 		C9E9E2DB15C1D4BD006CCBD2 /* framebufferimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CD15C1D4BD006CCBD2 /* framebufferimpl.cpp */; };
 		C9E9E2DC15C1D4BD006CCBD2 /* freetype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CE15C1D4BD006CCBD2 /* freetype.cpp */; };
 		C9E9E2DD15C1D4BD006CCBD2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CF15C1D4BD006CCBD2 /* main.cpp */; };
@@ -102,6 +108,10 @@
 
 /* Begin PBXFileReference section */
 		C914934E148D620F00A6E3E8 /* Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Test; sourceTree = BUILT_PRODUCTS_DIR; };
+		C923BC4916066E4400BEFE2D /* font.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = font.hpp; path = ../src/jngl/font.hpp; sourceTree = "<group>"; };
+		C923BC4A16066E4400BEFE2D /* framebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = framebuffer.cpp; path = src/jngl/framebuffer.cpp; sourceTree = "<group>"; };
+		C923BC4B16066E4400BEFE2D /* framebuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = framebuffer.hpp; path = ../src/jngl/framebuffer.hpp; sourceTree = "<group>"; };
+		C923BC5B16066EC300BEFE2D /* opengl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = opengl.hpp; path = ../src/opengl.hpp; sourceTree = "<group>"; };
 		C9340335151F86C5007FEF8E /* windowimpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = windowimpl.hpp; path = ../src/sdl/windowimpl.hpp; sourceTree = "<group>"; };
 		C93B324A14C1B0090053C668 /* sdl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sdl.cpp; path = src/sdl/sdl.cpp; sourceTree = "<group>"; };
 		C93B324E14C1B04A0053C668 /* sdl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = sdl.hpp; path = ../src/sdl/sdl.hpp; sourceTree = "<group>"; };
@@ -157,7 +167,6 @@
 		C9E9E2C915C1D4BD006CCBD2 /* ConvertUTF.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ConvertUTF.c; path = src/ConvertUTF.c; sourceTree = "<group>"; };
 		C9E9E2CA15C1D4BD006CCBD2 /* audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = audio.cpp; path = src/audio.cpp; sourceTree = "<group>"; };
 		C9E9E2CB15C1D4BD006CCBD2 /* finally.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = finally.cpp; path = src/finally.cpp; sourceTree = "<group>"; };
-		C9E9E2CC15C1D4BD006CCBD2 /* framebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = framebuffer.cpp; path = src/framebuffer.cpp; sourceTree = "<group>"; };
 		C9E9E2CD15C1D4BD006CCBD2 /* framebufferimpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = framebufferimpl.cpp; path = src/framebufferimpl.cpp; sourceTree = "<group>"; };
 		C9E9E2CE15C1D4BD006CCBD2 /* freetype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = freetype.cpp; path = src/freetype.cpp; sourceTree = "<group>"; };
 		C9E9E2CF15C1D4BD006CCBD2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; };
@@ -179,7 +188,6 @@
 		C9F1AF7513EAEF420086B474 /* framebufferimpl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = framebufferimpl.hpp; path = ../src/framebufferimpl.hpp; sourceTree = "<group>"; };
 		C9F1AF7713EAEF420086B474 /* freetype.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = freetype.hpp; path = ../src/freetype.hpp; sourceTree = "<group>"; };
 		C9F1AFCA13EAEF420086B474 /* jngl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = jngl.hpp; path = ../src/jngl.hpp; sourceTree = "<group>"; };
-		C9F1AFE613EAEF420086B474 /* opengl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = opengl.hpp; path = ../src/opengl.hpp; sourceTree = "<group>"; };
 		C9F1AFF313EAEF420086B474 /* texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = texture.hpp; path = ../src/texture.hpp; sourceTree = "<group>"; };
 		C9F1B00413EAEF420086B474 /* window.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = window.hpp; path = ../src/window.hpp; sourceTree = "<group>"; };
 		C9F1B00613EAEF420086B474 /* windowptr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = windowptr.hpp; path = ../src/windowptr.hpp; sourceTree = "<group>"; };
@@ -376,8 +384,9 @@
 		C9E9E2E415C1D516006CCBD2 /* jngl */ = {
 			isa = PBXGroup;
 			children = (
-				C98A18AB15DEB30D0038B716 /* work.cpp */,
+				C923BC4A16066E4400BEFE2D /* framebuffer.cpp */,
 				C9E9E2E515C1D52A006CCBD2 /* sprite.cpp */,
+				C98A18AB15DEB30D0038B716 /* work.cpp */,
 			);
 			name = jngl;
 			sourceTree = "<group>";
@@ -386,9 +395,11 @@
 			isa = PBXGroup;
 			children = (
 				C94EEDF61600D87D004F9FE0 /* debug.hpp */,
-				C94EEDF71600D87D004F9FE0 /* window.hpp */,
+				C923BC4916066E4400BEFE2D /* font.hpp */,
+				C923BC4B16066E4400BEFE2D /* framebuffer.hpp */,
 				C9E9E2E615C1D52A006CCBD2 /* sprite.hpp */,
 				C9E9E2E715C1D52A006CCBD2 /* types.hpp */,
+				C94EEDF71600D87D004F9FE0 /* window.hpp */,
 				C98A18A915DEADB90038B716 /* work.hpp */,
 			);
 			name = jngl;
@@ -412,7 +423,6 @@
 				C9E9E2C815C1D4BD006CCBD2 /* callbacks.c */,
 				C9E9E2C915C1D4BD006CCBD2 /* ConvertUTF.c */,
 				C9E9E2CB15C1D4BD006CCBD2 /* finally.cpp */,
-				C9E9E2CC15C1D4BD006CCBD2 /* framebuffer.cpp */,
 				C9E9E2CD15C1D4BD006CCBD2 /* framebufferimpl.cpp */,
 				C9E9E2CE15C1D4BD006CCBD2 /* freetype.cpp */,
 				C9E9E2CF15C1D4BD006CCBD2 /* main.cpp */,
@@ -430,8 +440,6 @@
 		C9F1B09F13EAF1D00086B474 /* Header Files */ = {
 			isa = PBXGroup;
 			children = (
-				C9E9E2EB15C1D531006CCBD2 /* jngl */,
-				C93B324D14C1B0340053C668 /* sdl */,
 				C9F1AF5113EAEF420086B474 /* audio.hpp */,
 				C9F1894813EB288D005E43B3 /* callbacks.h */,
 				C9F1AF5713EAEF420086B474 /* ConvertUTF.h */,
@@ -439,9 +447,11 @@
 				C9F1AF7213EAEF420086B474 /* finally.hpp */,
 				C9F1AF7513EAEF420086B474 /* framebufferimpl.hpp */,
 				C9F1AF7713EAEF420086B474 /* freetype.hpp */,
+				C9E9E2EB15C1D531006CCBD2 /* jngl */,
 				C9F1AFCA13EAEF420086B474 /* jngl.hpp */,
 				C967FC6814A5FF8B0049D8F2 /* main.hpp */,
-				C9F1AFE613EAEF420086B474 /* opengl.hpp */,
+				C923BC5B16066EC300BEFE2D /* opengl.hpp */,
+				C93B324D14C1B0340053C668 /* sdl */,
 				C9E9E2C515C1D47F006CCBD2 /* spriteimpl.hpp */,
 				C9F1AFF313EAEF420086B474 /* texture.hpp */,
 				C9F1B00413EAEF420086B474 /* window.hpp */,
@@ -461,6 +471,9 @@
 				C94EEDF91600D87D004F9FE0 /* debug.hpp in Headers */,
 				C94EEDFB1600D87D004F9FE0 /* window.hpp in Headers */,
 				C94EEE321600ED1F004F9FE0 /* JNGLViewController.h in Headers */,
+				C923BC4E16066E4400BEFE2D /* font.hpp in Headers */,
+				C923BC5216066E4400BEFE2D /* framebuffer.hpp in Headers */,
+				C923BC5D16066EC300BEFE2D /* opengl.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,6 +488,9 @@
 				C9E9E2EA15C1D52A006CCBD2 /* types.hpp in Headers */,
 				C94EEDF81600D87D004F9FE0 /* debug.hpp in Headers */,
 				C94EEDFA1600D87D004F9FE0 /* window.hpp in Headers */,
+				C923BC4D16066E4400BEFE2D /* font.hpp in Headers */,
+				C923BC5116066E4400BEFE2D /* framebuffer.hpp in Headers */,
+				C923BC5C16066EC300BEFE2D /* opengl.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -618,7 +634,6 @@
 				C93A963215E3B49B003525E8 /* sprite.cpp in Sources */,
 				C93A963315E3B49B003525E8 /* audio.cpp in Sources */,
 				C93A963415E3B49B003525E8 /* finally.cpp in Sources */,
-				C93A963515E3B49B003525E8 /* framebuffer.cpp in Sources */,
 				C93A963615E3B49B003525E8 /* framebufferimpl.cpp in Sources */,
 				C93A963715E3B49B003525E8 /* freetype.cpp in Sources */,
 				C93A963815E3B49B003525E8 /* main.cpp in Sources */,
@@ -635,6 +650,7 @@
 				C9C95BAA1529D070008EA579 /* JNGLView.mm in Sources */,
 				C98A18AD15DEB30D0038B716 /* work.cpp in Sources */,
 				C94EEE331600ED1F004F9FE0 /* JNGLViewController.mm in Sources */,
+				C923BC5016066E4400BEFE2D /* framebuffer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -660,7 +676,6 @@
 				C9E9E2D715C1D4BD006CCBD2 /* ConvertUTF.c in Sources */,
 				C9E9E2D815C1D4BD006CCBD2 /* audio.cpp in Sources */,
 				C9E9E2D915C1D4BD006CCBD2 /* finally.cpp in Sources */,
-				C9E9E2DA15C1D4BD006CCBD2 /* framebuffer.cpp in Sources */,
 				C9E9E2DB15C1D4BD006CCBD2 /* framebufferimpl.cpp in Sources */,
 				C9E9E2DC15C1D4BD006CCBD2 /* freetype.cpp in Sources */,
 				C9E9E2DD15C1D4BD006CCBD2 /* main.cpp in Sources */,
@@ -671,6 +686,7 @@
 				C9E9E2E215C1D4BD006CCBD2 /* windowptr.cpp in Sources */,
 				C9E9E2E815C1D52A006CCBD2 /* sprite.cpp in Sources */,
 				C98A18AC15DEB30D0038B716 /* work.cpp in Sources */,
+				C923BC4F16066E4400BEFE2D /* framebuffer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

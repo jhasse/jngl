@@ -6,7 +6,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
 #include "types.hpp"
-#include "opengl.hpp"
 
 #include <memory>
 #include <boost/noncopyable.hpp>
@@ -30,8 +29,8 @@ namespace jngl {
 		                 float ystart, float yend) const;
 	private:
 		static void CleanUpRowPointers(std::vector<unsigned char*>& buf);
-		void LoadTexture(const std::string& filename, int channels, bool halfLoad, GLenum format,
-		                 GLubyte** rowPointers, GLubyte* data = nullptr);
+		void LoadTexture(const std::string& filename, int channels, bool halfLoad, unsigned int format,
+		                 unsigned char** rowPointers, unsigned char* data = nullptr);
 		void LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad);
 		struct BMPHeader {
 			unsigned int dataOffset;

@@ -49,7 +49,7 @@ namespace jngl {
 	}
 #endif
 
-	Sprite::Sprite(const std::string& filename, bool halfLoad) {
+	Sprite::Sprite(const std::string& filename, bool halfLoad) : texture(0) {
 		FILE* pFile = fopen(filename.c_str(), "rb");
 		if (!pFile) {
 			throw std::runtime_error(std::string("File not found: " + filename));
@@ -296,18 +296,18 @@ namespace jngl {
 #endif
 
 	void Sprite::LoadTexture(const std::string& filename,
-								 int channels,
-								 const bool halfLoad,
-								 GLenum format,
-								 GLubyte** rowPointers,
-								 GLubyte* data) {
+	                         int channels,
+	                         const bool halfLoad,
+	                         unsigned int format,
+	                         unsigned char** rowPointers,
+	                         unsigned char* data) {
 		if (!pWindow) {
 			if (halfLoad) {
 				return;
 			}
 			throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 		}
-		texture = new Texture(width, height, reinterpret_cast<GLubyte**>(&rowPointers[0]),
+		texture = new Texture(width, height, reinterpret_cast<unsigned char**>(&rowPointers[0]),
 							   format, channels, data);
 	}
 
