@@ -48,7 +48,6 @@ public:
 		if (drawOnFrameBuffer) {
 			fb2.beginDraw();
 			fb2.clear();
-			translate(-getWindowWidth() / 2, -getWindowHeight() / 2);
 		}
 		translate(-getWindowWidth() / 2, -getWindowHeight() / 2);
 		pushMatrix();
@@ -67,7 +66,7 @@ public:
 		jngl::rotate(rotate);
 		drawLine(-50, -50, 50, 50);
 		popMatrix();
-		setSpriteColor(255, 255, 255, 200);
+		setSpriteAlpha(200);
 		fb.draw(600, 300);
 		translate(getWindowWidth() / 2, getWindowHeight() / 2);
 		jngl::rotate(rotate);
@@ -76,7 +75,7 @@ public:
 			rotate = 0;
 		}
 		factor = sin(rotate / 360 * M_PI);
-		setSpriteColor(255, 255, 255, static_cast<unsigned char>(absolute(factor * 255)));
+		setSpriteAlpha(static_cast<unsigned char>(absolute(factor * 255)));
 		drawScaled("jngl.webp",
 		           -getWidth("jngl.webp")  * factor,
 		           -getHeight("jngl.webp") * factor,
@@ -151,8 +150,8 @@ public:
 		if (drawOnFrameBuffer) {
 			fb2.endDraw();
 			reset();
-			setSpriteColor(255, 255, 255);
-			fb2.draw(0, 0);
+			setSpriteAlpha(255);
+			fb2.draw(-getWindowWidth() / 2, -getWindowHeight() / 2);
 		}
 		if (keyPressed('f')) {
 			drawOnFrameBuffer = !drawOnFrameBuffer;
@@ -190,7 +189,7 @@ int main() {
 }
 
 void drawBackground() {
-	jngl::setSpriteColor(255, 255, 255, 100);
+	jngl::setSpriteAlpha(100);
 	if (performance > 1) {
 		for (int x = 0; x < performance; ++x) {
 			for (int y = 0; y < performance; ++y) {

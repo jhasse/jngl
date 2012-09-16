@@ -3,8 +3,8 @@ Copyright 2011-2012 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
-#include "jngl.hpp"
-#include "framebufferimpl.hpp"
+#include "framebuffer.hpp"
+#include "../framebufferimpl.hpp"
 
 namespace jngl {
 	FrameBuffer::FrameBuffer(const int width, const int height) : pImpl(new FrameBufferImpl(width, height)) {
@@ -25,7 +25,7 @@ namespace jngl {
 	void FrameBuffer::endDraw() {
 		return pImpl->EndDraw();
 	}
-	
+
 	void FrameBuffer::clear() {
 		return pImpl->Clear();
 	}

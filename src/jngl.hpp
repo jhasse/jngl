@@ -10,13 +10,14 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "jngl/sprite.hpp"
 #include "jngl/work.hpp"
 #include "jngl/debug.hpp"
+#include "jngl/framebuffer.hpp"
+#include "jngl/font.hpp"
 
 #include <string>
 #include <vector>
 #include <stdexcept>
 
-namespace jngl
-{
+namespace jngl {
 	bool running();
 
 	void updateInput();
@@ -145,11 +146,6 @@ namespace jngl
 	              unsigned char blue,
 	              unsigned char alpha = 255);
 
-	void setFontColor(unsigned char red,
-	                  unsigned char green,
-	                  unsigned char blue,
-	                  unsigned char alpha = 255);
-
 	void print(const std::string& text,
 	           int xposition,
 	           int yposition);
@@ -274,21 +270,6 @@ namespace jngl
 	void setVolume(float volume);
 
 	void setIcon(const std::string& filename);
-
-	class FrameBufferImpl;
-	class FrameBuffer {
-	public:
-		FrameBuffer(int width, int height);
-		~FrameBuffer();
-		void beginDraw();
-		void endDraw();
-		void draw(int x, int y) const;
-		void clear();
-	private:
-		FrameBuffer(const FrameBuffer&);
-		FrameBuffer& operator=(const FrameBuffer&);
-		FrameBufferImpl* pImpl;
-	};
 
 	void mainLoop();
 

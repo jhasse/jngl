@@ -8,7 +8,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "spriteimpl.hpp"
 #include "windowptr.hpp"
 #include "draw.hpp"
-#include "opengl.hpp"
+#include "jngl/opengl.hpp"
 #include "main.hpp"
 
 #include <boost/shared_ptr.hpp>

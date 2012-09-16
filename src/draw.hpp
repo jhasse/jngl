@@ -1,9 +1,9 @@
 /*
-Copyright 2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2009-2012 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
-#include "opengl.hpp"
+#include "jngl/opengl.hpp"
 
 #include <cmath>
 

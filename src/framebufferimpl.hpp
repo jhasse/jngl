@@ -5,7 +5,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
-#include "opengl.hpp"
+#include "jngl/opengl.hpp"
 #include "texture.hpp"
 
 #include <boost/noncopyable.hpp>

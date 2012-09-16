@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2011 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
 
 Most of this code is based on http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=43
 
@@ -7,8 +7,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #include "freetype.hpp"
-#include "jngl.hpp"
-
+#include "jngl/font.hpp"
+#include "jngl/debug.hpp"
 #include "ConvertUTF.h"
 
 #include <boost/bind.hpp>
@@ -29,8 +29,7 @@ namespace jngl
 
 	Character::Character(const unsigned long ch, const unsigned int fontHeight, FT_Face face) : texture_(0)
 	{
-		if(FT_Load_Glyph(face, FT_Get_Char_Index(face, ch) , FT_LOAD_TARGET_LIGHT))
-		{
+		if (FT_Load_Glyph(face, FT_Get_Char_Index(face, ch) , FT_LOAD_TARGET_LIGHT)) {
 			std::string msg = std::string("FT_Load_Glyph failed. Character: ") + boost::lexical_cast<std::string>(ch);
 			debug(msg);
 			// Load a question mark instead
