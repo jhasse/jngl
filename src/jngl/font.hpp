@@ -10,4 +10,8 @@ namespace jngl {
 	                  unsigned char green,
 	                  unsigned char blue,
 	                  unsigned char alpha = 255);
+
+	int getLineHeight();
+
+	void setLineHeight(int);
 }

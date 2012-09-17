@@ -38,8 +38,8 @@ namespace jngl
 	class WindowImpl;
 
 	bool Init(const int width, const int height); // Definied in main.cpp
-	class Window : boost::noncopyable
-	{
+
+	class Window : boost::noncopyable {
 	public:
 		Window(const std::string& title, const int width, const int height, const bool fullscreen);
 		~Window();
@@ -58,7 +58,8 @@ namespace jngl
 		int GetWidth() const;
 		int GetHeight() const;
 		double GetTextWidth(const std::string&);
-		int GetLineHeight();
+		int getLineHeight();
+		void setLineHeight(int);
 		bool GetFullscreen() const;
 		bool KeyDown(const key::KeyType key);
 		bool KeyPressed(const key::KeyType key);

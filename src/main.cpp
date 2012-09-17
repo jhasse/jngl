@@ -228,7 +228,11 @@ namespace jngl
 	}
 
 	int getLineHeight() {
-		return pWindow->GetLineHeight();
+		return pWindow->getLineHeight();
+	}
+
+	void setLineHeight(int h) {
+		pWindow->setLineHeight(h);
 	}
 
 	void print(const std::string& text, const int xposition, const int yposition)

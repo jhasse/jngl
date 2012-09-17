@@ -175,10 +175,8 @@ namespace jngl
 		throw std::runtime_error("Attempting to use an unitialized Font object");
 	}
 
-	Font::Font(const char* filename, unsigned int height) : height_(height)
-	{
-		if(!std::ifstream(filename))
-		{
+	Font::Font(const char* filename, unsigned int height) : height_(height), lineHeight(int(height_ / .63)) {
+		if (!std::ifstream(filename)) {
 			throw std::runtime_error(std::string("Font file not found: ") + filename);
 		}
 		if(++instanceCounter_ == 1)
@@ -264,14 +262,15 @@ namespace jngl
 		return maxWidth;
 	}
 
-	int Font::GetLineHeight() const {
-		return int(height_ / .63);
+	int Font::getLineHeight() const {
+		return lineHeight;
 	}
 
-	void Font::Print(const int x, const int y, const std::string& text)
-	{
-		const int h = GetLineHeight();
+	void Font::setLineHeight(int h) {
+		lineHeight = h;
+	}
 
+	void Font::Print(const int x, const int y, const std::string& text) {
 		std::vector<std::string> lines(ParseString(text));
 
 		glColor4ub(fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha);
@@ -283,7 +282,7 @@ namespace jngl
 		for(std::vector<std::string>::iterator lineIter = lines.begin(); lineIter != lineEnd; ++lineIter)
 		{
 			glPushMatrix();
-			opengl::translate(x, y + h * lineNr);
+			opengl::translate(x, y + lineHeight * lineNr);
 			++lineNr;
 
 			std::string::iterator charEnd = lineIter->end();

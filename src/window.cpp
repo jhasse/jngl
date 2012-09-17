@@ -16,9 +16,12 @@ namespace jngl
 		return fonts_[fontSize_][fontName_].GetTextWidth(text);
 	}
 
-	int Window::GetLineHeight()
-	{
-		return fonts_[fontSize_][fontName_].GetLineHeight();
+	int Window::getLineHeight() {
+		return fonts_[fontSize_][fontName_].getLineHeight();
+	}
+
+	void Window::setLineHeight(int h) {
+		return fonts_[fontSize_][fontName_].setLineHeight(h);
 	}
 
 	void Window::Print(const std::string& text, const int xposition, const int yposition)

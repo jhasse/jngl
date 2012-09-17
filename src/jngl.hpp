@@ -184,8 +184,6 @@ namespace jngl {
 
 	double getTextWidth(const std::string& text);
 
-	int getLineHeight();
-
 	namespace key
 	{
 		enum KeyType

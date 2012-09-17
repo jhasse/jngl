@@ -46,7 +46,8 @@ namespace jngl
 		~Font();
 		void Print(int x, int y, const std::string& text);
 		double GetTextWidth(const std::string& text);
-		int GetLineHeight() const;
+		int getLineHeight() const;
+		void setLineHeight(int);
 	private:
 		Character& GetCharacter(std::string::iterator& it, const std::string::iterator end);
 		std::vector<std::string> ParseString(const std::string&);
@@ -56,6 +57,7 @@ namespace jngl
 		FT_Face face_;
 		boost::shared_ptr<Finally> freeFace_; // Frees face_ if necessary
 		unsigned int height_;
+		int lineHeight;
 		std::map<unsigned long, boost::shared_ptr<Character> > characters_;
 	};
 }
