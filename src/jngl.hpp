@@ -12,6 +12,9 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "jngl/debug.hpp"
 #include "jngl/framebuffer.hpp"
 #include "jngl/font.hpp"
+#include "jngl/drawable.hpp"
+#include "jngl/screen.hpp"
+#include "jngl/text.hpp"
 
 #include <string>
 #include <vector>
