@@ -15,4 +15,8 @@ namespace jngl {
 	void setKeyPressed(const std::string& key, bool p) {
 		pWindow->setKeyPressed(key, p);
 	}
+
+	void setMousePressed(mouse::Button button, bool p) {
+		pWindow->setMousePressed(button, p);
+	}
 }

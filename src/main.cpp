@@ -181,7 +181,7 @@ namespace jngl
 
 	bool mousePressed(mouse::Button button)
 	{
-		return pWindow->MousePressed(button);
+		return pWindow->getMousePressed(button);
 	}
 
 	void setMouse(const int xposition, const int yposition)

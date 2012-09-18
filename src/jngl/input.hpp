@@ -83,4 +83,32 @@ namespace jngl {
 	bool keyPressed(char key);
 
 	bool keyPressed(const std::string& key);
+
+	void setRelativeMouseMode(bool relative);
+
+	bool getRelativeMouseMode();
+
+	void setMouseVisible(bool visible);
+
+	bool isMouseVisible();
+
+	int getMouseX();
+
+	int getMouseY();
+
+	namespace mouse {
+		enum Button {
+			Left, Middle, Right
+		};
+	}
+
+	double getMouseWheel();
+
+	bool mouseDown(mouse::Button button = mouse::Left);
+
+	bool mousePressed(mouse::Button button = mouse::Left);
+
+	void setMousePressed(jngl::mouse::Button, bool);
+
+	void setMouse(int xposition, int yposition);
 }

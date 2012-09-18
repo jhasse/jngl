@@ -73,14 +73,16 @@ namespace jngl
 		return mouseDown_.at(button);
 	}
 
-	bool Window::MousePressed(mouse::Button button)
-	{
-		if(mousePressed_.at(button))
-		{
+	bool Window::getMousePressed(mouse::Button button) {
+		if (mousePressed_.at(button)) {
 			needToBeSetFalse_.push(&mousePressed_[button]);
 			return true;
 		}
 		return false;
+	}
+
+	void Window::setMousePressed(mouse::Button button, bool p) {
+		mousePressed_.at(button) = p;
 	}
 
 	bool Window::GetFullscreen() const

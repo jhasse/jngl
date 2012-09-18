@@ -106,34 +106,6 @@ namespace jngl {
 
 	void endPolygon();
 
-	void setRelativeMouseMode(bool relative);
-
-	bool getRelativeMouseMode();
-
-	void setMouseVisible(bool visible);
-
-	bool isMouseVisible();
-
-	int getMouseX();
-
-	int getMouseY();
-
-	namespace mouse
-	{
-		enum Button
-		{
-			Left, Middle, Right
-		};
-	}
-
-	double getMouseWheel();
-
-	bool mouseDown(mouse::Button button = mouse::Left);
-
-	bool mousePressed(mouse::Button button = mouse::Left);
-
-	void setMouse(int xposition, int yposition);
-
 	bool drawButton(const std::string& sprite,
 	                double xposition,
 	                double yposition,
