@@ -195,6 +195,9 @@ namespace jngl
 	}
 
 	void Window::MainLoop() {
+		Finally _([&]() {
+			currentWork_.reset((jngl::Work*)0);
+		});
 		while (running_) {
 			if (!stepIfNeeded() && needDraw_) {
 				needDraw_ = false;
@@ -202,7 +205,6 @@ namespace jngl
 				jngl::swapBuffers();
 			}
 		}
-		currentWork_.reset((jngl::Work*)0);
 	}
 
 	bool Window::stepIfNeeded() {
