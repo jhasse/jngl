@@ -54,22 +54,16 @@ namespace jngl
 		delete impl;
 	}
 
-	int Window::GetKeyCode(key::KeyType key)
-	{
-		switch(key) {
-			default: return 0;
-		}
+	int Window::GetKeyCode(key::KeyType key) {
+		return key;
 	}
 
-	bool Window::KeyDown(const std::string& key)
-	{
+	bool Window::getKeyDown(const std::string& key)	{
 		return characterDown_[key];
 	}
 
-	bool Window::KeyPressed(const std::string& key)
-	{
-		if(characterPressed_[key])
-		{
+	bool Window::getKeyPressed(const std::string& key) {
+		if (characterPressed_[key]) {
 			characterPressed_[key] = false;
 			return true;
 		}

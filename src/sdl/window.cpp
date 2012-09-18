@@ -108,15 +108,12 @@ namespace jngl
 		}
 	}
 
-	bool Window::KeyDown(const std::string& key)
-	{
+	bool Window::getKeyDown(const std::string& key) {
 		return characterDown_[key];
 	}
 
-	bool Window::KeyPressed(const std::string& key)
-	{
-		if(characterPressed_[key])
-		{
+	bool Window::getKeyPressed(const std::string& key) {
+		if (characterPressed_[key]) {
 			characterPressed_[key] = false;
 			return true;
 		}
@@ -184,7 +181,7 @@ namespace jngl
 					const char* name = SDL_GetKeyName(event.key.keysym.sym);
 					if(strlen(name) == 1) {
 						std::string tmp;
-						if (KeyDown(key::ShiftL) || KeyDown(key::ShiftR)) {
+						if (getKeyDown(key::ShiftL) || getKeyDown(key::ShiftR)) {
 							tmp.append(1, name[0]);
 						} else {
 							tmp.append(1, tolower(name[0]));

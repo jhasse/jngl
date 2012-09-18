@@ -21,6 +21,17 @@ public:
 		if (!fbo) {
 			fbo = new jngl::FrameBuffer(jngl::getWindowWidth(), jngl::getWindowHeight() * 0.75);
 		}
+		for (char c = ' '; c < '~'; ++c) {
+			if (jngl::keyPressed(c)) {
+				std::cout << c << std::flush;
+			}
+		}
+		if (jngl::keyPressed(jngl::key::Return)) {
+			std::cout << std::endl;
+		}
+		if (jngl::keyPressed(jngl::key::BackSpace)) {
+			jngl::setKeyboardVisible(false);
+		}
 	}
 	void draw() const {
 		if (fbo) {
@@ -32,6 +43,7 @@ public:
 		}
 		if (jngl::mouseDown()) {
 			jngl::setSpriteColor(0, 0, 0);
+			jngl::setKeyboardVisible(true);
 		} else {
 			jngl::setSpriteColor(255, 255, 255);
 		}
@@ -60,7 +72,7 @@ private:
 	
 	JNGLViewController* jvc = [[JNGLViewController alloc] initWithNibName:nil bundle:nil];
 	self.window.rootViewController = jvc;
-	jvc.jnglView = view;
+	jnglView = view;
 	
 	[self.window addSubview:view];
 

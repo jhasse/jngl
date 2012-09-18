@@ -61,10 +61,12 @@ namespace jngl
 		int getLineHeight();
 		void setLineHeight(int);
 		bool GetFullscreen() const;
-		bool KeyDown(const key::KeyType key);
-		bool KeyPressed(const key::KeyType key);
-		bool KeyDown(const std::string& key);
-		bool KeyPressed(const std::string& key);
+		bool getKeyDown(const key::KeyType key);
+		bool getKeyPressed(const key::KeyType key);
+		void setKeyPressed(const key::KeyType key, bool);
+		bool getKeyDown(const std::string& key);
+		bool getKeyPressed(const std::string& key);
+		void setKeyPressed(const std::string& key, bool);
 		bool MouseDown(mouse::Button button);
 		bool MousePressed(mouse::Button button);
 		void SetMouse(const int xposition, const int yposition);

@@ -15,6 +15,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "jngl/drawable.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/text.hpp"
+#include "jngl/input.hpp"
 
 #include <string>
 #include <vector>
@@ -186,77 +187,6 @@ namespace jngl {
 	bool getVerticalSync();
 
 	double getTextWidth(const std::string& text);
-
-	namespace key
-	{
-		enum KeyType
-		{
-			Left,
-			Up,
-			Right,
-			Down,
-			PageUp,
-			PageDown,
-			Home,
-			End,
-			BackSpace,
-			Tab,
-			Clear,
-			Return,
-			Pause,
-			Escape,
-			Delete,
-			ControlL,
-			ControlR,
-			CapsLock,
-			AltL,
-			AltR,
-			SuperL,
-			SuperR,
-			Space,
-			ShiftL,
-			ShiftR,
-			F1,
-			F2,
-			F3,
-			F4,
-			F5,
-			F6,
-			F7,
-			F8,
-			F9,
-			F10,
-			F11,
-			F12,
-			WizUp,
-			WizDown,
-			WizLeft,
-			WizRight,
-			WizA,
-			WizB,
-			WizX,
-			WizY,
-			WizL,
-			WizR,
-			WizMenu,
-			WizSelect,
-			WizVolUp,
-			WizVolDown,
-			Any
-		};
-	}
-
-	bool keyDown(key::KeyType key);
-
-	bool keyDown(char key);
-
-	bool keyDown(const std::string& key);
-
-	bool keyPressed(key::KeyType key);
-
-	bool keyPressed(char key);
-
-	bool keyPressed(const std::string& key);
 
 	void play(const std::string& filename);
 

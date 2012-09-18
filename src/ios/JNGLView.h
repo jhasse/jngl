@@ -8,7 +8,7 @@ namespace jngl {
 	class WindowImpl;
 }
 
-@interface JNGLView : UIView {
+@interface JNGLView : UIView <UIKeyInput> {
 	EAGLContext* context;
 	float angle;
 	float desiredAngle;

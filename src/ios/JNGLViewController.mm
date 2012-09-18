@@ -1,5 +1,9 @@
 #import "JNGLViewController.h"
 
+#include "../jngl/input.hpp"
+
+JNGLView* jnglView = nullptr;
+
 @interface JNGLViewController ()
 
 @end
@@ -46,17 +50,27 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	[_jnglView touchesBegan:touches withEvent:event];
+	[jnglView touchesBegan:touches withEvent:event];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	[_jnglView touchesMoved:touches withEvent:event];
+	[jnglView touchesMoved:touches withEvent:event];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	[_jnglView touchesEnded:touches withEvent:event];
+	[jnglView touchesEnded:touches withEvent:event];
 }
 
 @end
+
+namespace jngl {
+	void setKeyboardVisible(bool v) {
+		if (v) {
+			[jnglView becomeFirstResponder];
+		} else {
+			[jnglView resignFirstResponder];
+		}
+	}
+}

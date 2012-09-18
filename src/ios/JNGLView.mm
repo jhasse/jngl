@@ -154,4 +154,21 @@
 	}
 }
 
+-(void) insertText: (NSString*) text {
+	std::string c = [text UTF8String];
+	if (c == "\n") {
+		jngl::setKeyPressed(jngl::key::Return, true);
+	} else {
+		jngl::setKeyPressed(c, true);
+	}
+}
+
+-(void) deleteBackward {
+	jngl::setKeyPressed(jngl::key::BackSpace, true);
+}
+
+-(BOOL) canBecomeFirstResponder {
+	return YES;
+}
+
 @end

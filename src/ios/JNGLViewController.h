@@ -2,8 +2,8 @@
 
 #include "JNGLView.h"
 
-@interface JNGLViewController : UIViewController
+extern JNGLView* jnglView;
 
-@property (readwrite,assign) JNGLView* jnglView;
+@interface JNGLViewController : UIViewController
 
 @end

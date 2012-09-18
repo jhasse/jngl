@@ -156,22 +156,22 @@ namespace jngl
 
 	bool keyDown(const key::KeyType key)
 	{
-		return pWindow->KeyDown(key);
+		return pWindow->getKeyDown(key);
 	}
 
 	bool keyPressed(const key::KeyType key)
 	{
-		return pWindow->KeyPressed(key);
+		return pWindow->getKeyPressed(key);
 	}
 
 	bool keyDown(const std::string& key)
 	{
-		return pWindow->KeyDown(key);
+		return pWindow->getKeyDown(key);
 	}
 
 	bool keyPressed(const std::string& key)
 	{
-		return pWindow->KeyPressed(key);
+		return pWindow->getKeyPressed(key);
 	}
 
 	bool mouseDown(mouse::Button button)

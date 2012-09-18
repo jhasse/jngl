@@ -127,21 +127,15 @@ namespace jngl
 		running_ = true;
 	}
 
-	bool Window::KeyDown(key::KeyType key)
-	{
-		if(key == key::Any)
-		{
-			for(std::map<unsigned int, bool>::iterator it = keyDown_.begin(); it != keyDown_.end(); ++it)
-			{
-				if(it->second)
-				{
+	bool Window::getKeyDown(key::KeyType key) {
+		if (key == key::Any) {
+			for (auto it = keyDown_.begin(); it != keyDown_.end(); ++it) {
+				if (it->second) {
 					return true;
 				}
 			}
-			for(std::map<std::string, bool>::iterator it = characterDown_.begin(); it != characterDown_.end(); ++it)
-			{
-				if(it->second)
-				{
+			for (auto it = characterDown_.begin(); it != characterDown_.end(); ++it) {
+				if (it->second) {
 					return true;
 				}
 			}
@@ -150,22 +144,25 @@ namespace jngl
 		return keyDown_[GetKeyCode(key)];
 	}
 
-	bool Window::KeyPressed(key::KeyType key)
-	{
-		if(key == key::Any)
-		{
-			if(anyKeyPressed_)
-			{
+	bool Window::getKeyPressed(key::KeyType key) {
+		if (key == key::Any) {
+			if (anyKeyPressed_) {
 				needToBeSetFalse_.push(&anyKeyPressed_);
-				return KeyDown(jngl::key::Any);
+				return getKeyDown(jngl::key::Any);
 			}
-		}
-		else if(keyPressed_[GetKeyCode(key)])
-		{
+		} else if(keyPressed_[GetKeyCode(key)]) {
 			needToBeSetFalse_.push(&keyPressed_[GetKeyCode(key)]);
 			return true;
 		}
 		return false;
+	}
+
+	void Window::setKeyPressed(const key::KeyType key, bool p) {
+		keyPressed_[GetKeyCode(key)] = p;
+	}
+
+	void Window::setKeyPressed(const std::string &key, bool p) {
+		characterPressed_[key] = p;
 	}
 
 	bool keyDown(const char key)

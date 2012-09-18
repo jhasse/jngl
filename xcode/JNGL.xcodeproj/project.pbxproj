@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C9196EE21607ACBA00A9E80D /* input.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9196EE11607ACBA00A9E80D /* input.hpp */; };
+		C9196EE51607B59800A9E80D /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9196EE41607B59800A9E80D /* input.cpp */; };
+		C9196EE61607B59800A9E80D /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9196EE41607B59800A9E80D /* input.cpp */; };
+		C9196EF21607C94F00A9E80D /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9196EF11607C94F00A9E80D /* input.cpp */; };
 		C923BC4D16066E4400BEFE2D /* font.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4916066E4400BEFE2D /* font.hpp */; };
 		C923BC4E16066E4400BEFE2D /* font.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4916066E4400BEFE2D /* font.hpp */; };
 		C923BC4F16066E4400BEFE2D /* framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C923BC4A16066E4400BEFE2D /* framebuffer.cpp */; };
@@ -120,6 +124,9 @@
 
 /* Begin PBXFileReference section */
 		C914934E148D620F00A6E3E8 /* Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Test; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9196EE11607ACBA00A9E80D /* input.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = input.hpp; path = ../src/jngl/input.hpp; sourceTree = "<group>"; };
+		C9196EE41607B59800A9E80D /* input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = input.cpp; path = src/jngl/input.cpp; sourceTree = "<group>"; };
+		C9196EF11607C94F00A9E80D /* input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = input.cpp; path = src/sdl/input.cpp; sourceTree = "<group>"; };
 		C923BC4916066E4400BEFE2D /* font.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = font.hpp; path = ../src/jngl/font.hpp; sourceTree = "<group>"; };
 		C923BC4A16066E4400BEFE2D /* framebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = framebuffer.cpp; path = src/jngl/framebuffer.cpp; sourceTree = "<group>"; };
 		C923BC4B16066E4400BEFE2D /* framebuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = framebuffer.hpp; path = ../src/jngl/framebuffer.hpp; sourceTree = "<group>"; };
@@ -351,10 +358,11 @@
 		C99A094713EC503A006C46FF /* sdl */ = {
 			isa = PBXGroup;
 			children = (
-				C9E9E2C215C1D467006CCBD2 /* window.cpp */,
+				C9196EF11607C94F00A9E80D /* input.cpp */,
 				C99A094C13EC509D006C46FF /* message.cpp */,
-				C99A094A13EC508C006C46FF /* time.cpp */,
 				C93B324A14C1B0090053C668 /* sdl.cpp */,
+				C99A094A13EC508C006C46FF /* time.cpp */,
+				C9E9E2C215C1D467006CCBD2 /* window.cpp */,
 			);
 			name = sdl;
 			sourceTree = "<group>";
@@ -402,11 +410,12 @@
 		C9E9E2E415C1D516006CCBD2 /* jngl */ = {
 			isa = PBXGroup;
 			children = (
-				C97409A316076CD1002D1152 /* text.cpp */,
 				C9740993160766FA002D1152 /* drawable.cpp */,
 				C923BC4A16066E4400BEFE2D /* framebuffer.cpp */,
+				C9196EE41607B59800A9E80D /* input.cpp */,
 				C974099D16076AE0002D1152 /* screen.cpp */,
 				C9E9E2E515C1D52A006CCBD2 /* sprite.cpp */,
+				C97409A316076CD1002D1152 /* text.cpp */,
 				C98A18AB15DEB30D0038B716 /* work.cpp */,
 			);
 			name = jngl;
@@ -415,13 +424,14 @@
 		C9E9E2EB15C1D531006CCBD2 /* jngl */ = {
 			isa = PBXGroup;
 			children = (
-				C97409A016076C1C002D1152 /* text.hpp */,
-				C974099A16076969002D1152 /* screen.hpp */,
 				C94EEDF61600D87D004F9FE0 /* debug.hpp */,
 				C9740994160766FA002D1152 /* drawable.hpp */,
 				C923BC4916066E4400BEFE2D /* font.hpp */,
 				C923BC4B16066E4400BEFE2D /* framebuffer.hpp */,
+				C9196EE11607ACBA00A9E80D /* input.hpp */,
+				C974099A16076969002D1152 /* screen.hpp */,
 				C9E9E2E615C1D52A006CCBD2 /* sprite.hpp */,
+				C97409A016076C1C002D1152 /* text.hpp */,
 				C9E9E2E715C1D52A006CCBD2 /* types.hpp */,
 				C94EEDF71600D87D004F9FE0 /* window.hpp */,
 				C98A18A915DEADB90038B716 /* work.hpp */,
@@ -521,6 +531,7 @@
 				C9740997160766FA002D1152 /* drawable.hpp in Headers */,
 				C974099B16076969002D1152 /* screen.hpp in Headers */,
 				C97409A116076C1D002D1152 /* text.hpp in Headers */,
+				C9196EE21607ACBA00A9E80D /* input.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -684,6 +695,7 @@
 				C9740996160766FA002D1152 /* drawable.cpp in Sources */,
 				C974099F16076AE0002D1152 /* screen.cpp in Sources */,
 				C97409A516076CD1002D1152 /* text.cpp in Sources */,
+				C9196EE61607B59800A9E80D /* input.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -723,6 +735,8 @@
 				C9740995160766FA002D1152 /* drawable.cpp in Sources */,
 				C974099E16076AE0002D1152 /* screen.cpp in Sources */,
 				C97409A416076CD1002D1152 /* text.cpp in Sources */,
+				C9196EE51607B59800A9E80D /* input.cpp in Sources */,
+				C9196EF21607C94F00A9E80D /* input.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
