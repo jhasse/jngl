@@ -324,7 +324,7 @@ namespace jngl
 		return ksym;
 	}
 
-	bool Window::KeyDown(const std::string& key)
+	bool Window::getKeyDown(const std::string& key)
 	{
 		if(key.size() > 1) // No UTF-8 support yet
 		{
@@ -333,7 +333,7 @@ namespace jngl
 		return keyDown_[XKeysymToKeycode(pDisplay_.get(), CharToSym(key[0]))];
 	}
 
-	bool Window::KeyPressed(const std::string& key)
+	bool Window::getKeyPressed(const std::string& key)
 	{
 		if(key.size() > 1) // No UTF-8 support yet
 		{
