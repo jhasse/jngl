@@ -12,12 +12,12 @@ namespace jngl {
 
 	Drawable::~Drawable() {
 	}
-	
+
 	void Drawable::setPos(Float x, Float y) {
 		this->x = x;
 		this->y = y;
 	}
-	
+
 	Float Drawable::getLeft() const {
 		return x;
 	}
@@ -25,35 +25,35 @@ namespace jngl {
 	void Drawable::setLeft(Float x) {
 		this->x = x;
 	}
-	
+
 	Float Drawable::getTop() const {
 		return y;
 	}
-	
+
 	void Drawable::setTop(Float y) {
 		this->y = y;
 	}
-	
+
 	Float Drawable::getBottom() const {
 		return getScreenHeight()/2 - y - height;
 	}
-	
+
 	void Drawable::setBottom(Float y) {
 		this->y = getScreenHeight()/2 - y - height;
 	}
-	
+
 	Float Drawable::getRight() const {
 		return getScreenWidth()/2 - x - width;
 	}
-	
+
 	void Drawable::setRight(Float x) {
 		this->x = getScreenWidth()/2 - x - width;
 	}
-	
+
 	int Drawable::getWidth() const {
 		return width;
 	}
-	
+
 	int Drawable::getHeight() const {
 		return height;
 	}

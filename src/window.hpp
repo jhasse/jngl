@@ -36,6 +36,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 namespace jngl
 {
 	class WindowImpl;
+	class Job;
 
 	bool Init(const int width, const int height); // Definied in main.cpp
 
@@ -88,6 +89,7 @@ namespace jngl
 		boost::shared_ptr<Work> getWork();
 		void setConfigPath(const std::string&);
 		std::string getConfigPath() const;
+		void addJob(boost::shared_ptr<Job>);
 #ifndef __APPLE__
 	#ifdef __linux
 		boost::shared_ptr<Display> pDisplay_;
@@ -121,6 +123,7 @@ namespace jngl
 		bool changeWork_;
 		boost::shared_ptr<Work> newWork_;
 		std::string configPath;
+		std::vector<boost::shared_ptr<Job>> jobs;
 
 		// <fontSize, <fontName, Font> >
 		boost::ptr_map<int, boost::ptr_map<std::string, Font> > fonts_;

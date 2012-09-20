@@ -6,6 +6,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "window.hpp"
 #include "main.hpp"
 #include "jngl/debug.hpp"
+#include "jngl/job.hpp"
 
 #include <boost/assign/ptr_map_inserter.hpp>
 
@@ -221,6 +222,9 @@ namespace jngl
 			if (currentWork_) {
 				currentWork_->step();
 			}
+			for (auto& job : jobs) {
+				job->step();
+			}
 			needDraw_ = true;
 			if (!jngl::running() && currentWork_) {
 				currentWork_->onQuitEvent();
@@ -242,6 +246,9 @@ namespace jngl
 		} else {
 			jngl::print("No work set. Use jngl::setWork", -50, -5);
 		}
+		for (auto& job : jobs) {
+			job->draw();
+		}
 	}
 
 	void Window::SetWork(boost::shared_ptr<Work> work) {
@@ -254,6 +261,10 @@ namespace jngl
 			changeWork_ = true;
 			newWork_ = work;
 		}
+	}
+
+	void Window::addJob(boost::shared_ptr<Job> job) {
+		jobs.push_back(job);
 	}
 
 	boost::shared_ptr<Work> Window::getWork() {

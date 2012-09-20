@@ -16,6 +16,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "jngl/screen.hpp"
 #include "jngl/text.hpp"
 #include "jngl/input.hpp"
+#include "jngl/job.hpp"
+#include "jngl/shapes.hpp"
 
 #include <string>
 #include <vector>
@@ -62,17 +64,6 @@ namespace jngl {
 
 	void drawRect(double xposition, double yposition, double width, double height);
 
-	template<class Vect>
-	void drawRect(Vect pos, Vect size) {
-		DrawRect(pos.x, pos.y, size.x, size.y);
-	}
-
-	void drawLine(double xstart, double ystart, double xend, double yend);
-
-	void drawEllipse(double xmid, double ymid, double width, double height);
-
-	void drawPoint(double x, double y);
-
 	void rotate(double degree);
 
 	void translate(double x, double y);
@@ -116,11 +107,6 @@ namespace jngl {
 	void setBackgroundColor(unsigned char red,
 	                        unsigned char green,
 	                        unsigned char blue);
-
-	void setColor(unsigned char red,
-	              unsigned char green,
-	              unsigned char blue,
-	              unsigned char alpha = 255);
 
 	void print(const std::string& text,
 	           int xposition,

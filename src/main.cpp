@@ -212,16 +212,6 @@ namespace jngl
 		return pWindow->SetTitle(title);
 	}
 
-	unsigned char colorRed = 0, colorGreen = 0, colorBlue = 0, colorAlpha = 255;
-
-	void setColor(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha)
-	{
-		colorRed = red;
-		colorGreen = green;
-		colorBlue = blue;
-		colorAlpha = alpha;
-	}
-
 	double getTextWidth(const std::string& text)
 	{
 		return pWindow->GetTextWidth(text);
@@ -334,13 +324,6 @@ namespace jngl
 	{
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Line(xstart, ystart, xend, yend);
-		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
-	}
-
-	void drawEllipse(const double xmid, const double ymid, const double width, const double height)
-	{
-		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
-		draw::Ellipse(xmid, ymid, width, height);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 

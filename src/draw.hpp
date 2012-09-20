@@ -6,6 +6,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "opengl.hpp"
 
 #include <cmath>
+#include <vector>
 
 #ifndef M_PI
 	#define M_PI 3.14159265358979323846
@@ -43,21 +44,21 @@ namespace draw
 	}
 
 	template<class T>
-	void Ellipse(const T xmid, const T ymid, const T width, const T height)
-	{
+	void Ellipse(const T xmid, const T ymid, const T width, const T height, const T startAngle) {
 		opengl::BindArrayBuffer(0);
 		glPushMatrix();
 		opengl::translate(xmid, ymid);
 		std::vector<T> vertexes;
-		int count = 0;
-		for(T t = 0; t <= 2 * M_PI; t +=0.1)
-		{
+		vertexes.push_back(0);
+		vertexes.push_back(0);
+		for (T t = startAngle; t < 2 * M_PI; t += 0.1) {
 			vertexes.push_back(width * sin(t));
-			vertexes.push_back(height * cos(t));
-			++count;
+			vertexes.push_back(-height * cos(t));
 		}
+		vertexes.push_back(0);
+		vertexes.push_back(-height);
 		glVertexPointer(2, opengl::Type<T>::constant, 0, &vertexes[0]);
-		glDrawArrays(GL_TRIANGLE_FAN, 0, count);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, vertexes.size() / 2);
 		glPopMatrix();
 	}
 

@@ -55,6 +55,8 @@ public:
 		jngl::setColor(255, 0, 0);
 		jngl::drawLine(-240, 160, 239, 160);
 		jngl::drawLine(239, -160, 239, 160);
+		jngl::setColor(0, 0, 0, 100);
+		jngl::drawEllipse(0, 0, 100, 100, 2);
 		jngl::translate(-40, 140);
 		jngl::rotate(angle);
 		jngl::print("Hallo Welt!", -50, -10);
