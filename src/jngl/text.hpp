@@ -12,7 +12,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 namespace jngl {
 	class Text : public Drawable {
 	public:
-		Text(const std::string& text);
+		Text(const std::string& text = "");
+		void setText(const std::string&);
 		void step() override;
 		void draw() const override;
 	private:
