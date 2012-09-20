@@ -17,7 +17,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <vector>
 #include <string>
 #include <stdexcept>
-#include <map>
+#include <boost/unordered_map.hpp>
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
@@ -58,6 +58,6 @@ namespace jngl
 		boost::shared_ptr<Finally> freeFace_; // Frees face_ if necessary
 		unsigned int height_;
 		int lineHeight;
-		std::map<unsigned long, boost::shared_ptr<Character> > characters_;
+		boost::unordered_map<unsigned long, boost::shared_ptr<Character> > characters_;
 	};
 }

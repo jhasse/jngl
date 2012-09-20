@@ -11,7 +11,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "../finally.hpp"
 #include "../windowptr.hpp"
 
-#include <map>
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>

@@ -13,7 +13,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "texture.hpp"
 #include "main.hpp"
 
-#include <map>
+#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/function.hpp>
@@ -59,12 +59,12 @@ namespace jngl
 		setSpriteColor(spriteColorRed, spriteColorGreen, spriteColorBlue, alpha);
 	}
 
-	std::map<std::string, boost::shared_ptr<Sprite>> sprites_;
+	boost::unordered_map<std::string, boost::shared_ptr<Sprite>> sprites_;
 
 	// halfLoad is used, if we only want to find out the width or height of an image. Load won't throw an exception then
 	Sprite& GetSprite(const std::string& filename, const bool halfLoad) {
-		std::map<std::string, boost::shared_ptr<Sprite> >::iterator i;
-		if ((i = sprites_.find(filename)) == sprites_.end()) { // texture hasn't been loaded yet?
+		auto it = sprites_.find(filename);
+		if (it == sprites_.end()) { // texture hasn't been loaded yet?
 			if (!halfLoad) {
 				pWindow.ThrowIfNull();
 				debug("Loading "); debug(filename); debug(" ...\n");
@@ -73,7 +73,7 @@ namespace jngl
 			sprites_[filename].reset(s);
 			return *s;
 		}
-		return *(i->second);
+		return *(it->second);
 	}
 
 	void draw(const std::string& filename, const double xposition, const double yposition) {
@@ -99,9 +99,10 @@ namespace jngl
 	}
 
 	void unload(const std::string& filename) {
-		std::map<std::string, boost::shared_ptr<Sprite> >::iterator i;
-		if((i = sprites_.find(filename)) != sprites_.end())
-			sprites_.erase(i);
+		auto it = sprites_.find(filename);
+		if (it != sprites_.end()) {
+			sprites_.erase(it);
+		}
 	}
 
 	void unloadAll() {

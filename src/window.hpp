@@ -13,9 +13,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <boost/shared_ptr.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/array.hpp>
-#include <boost/ptr_container/ptr_map.hpp>
+#include <boost/ptr_container/ptr_unordered_map.hpp>
 #include <boost/noncopyable.hpp>
-#include <map>
 #include <stack>
 
 #ifdef __linux
@@ -126,7 +125,7 @@ namespace jngl
 		std::vector<boost::shared_ptr<Job>> jobs;
 
 		// <fontSize, <fontName, Font> >
-		boost::ptr_map<int, boost::ptr_map<std::string, Font> > fonts_;
+		boost::ptr_unordered_map<int, boost::ptr_unordered_map<std::string, Font> > fonts_;
 #ifndef __APPLE__
 #ifdef WIZ
 		NativeWindowType nativeWindow_;

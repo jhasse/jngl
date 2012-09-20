@@ -17,7 +17,7 @@ int vswprintf(wchar_t *, const wchar_t *, va_list);
 
 #include <cstdio>
 #include <stdexcept>
-#include <map>
+#include <boost/unordered_map.hpp>
 #include <algorithm>
 
 namespace jngl
@@ -61,7 +61,7 @@ namespace jngl
 		alSourcef(source_, AL_GAIN, v);
 	}
 
-	std::map<std::string, boost::shared_ptr<SoundFile> > sounds;
+	boost::unordered_map<std::string, boost::shared_ptr<SoundFile> > sounds;
 
 	class Audio : boost::noncopyable {
 	public:
