@@ -171,4 +171,8 @@
 	return YES;
 }
 
+-(BOOL) hasText {
+	return YES;
+}
+
 @end
