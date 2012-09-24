@@ -5,36 +5,36 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "window.hpp"
 #include "main.hpp"
-#include "jngl/debug.hpp"
-#include "jngl/job.hpp"
+#include "jngl.hpp"
 
 #include <boost/assign/ptr_map_inserter.hpp>
+#include <boost/make_shared.hpp>
 
-namespace jngl
-{
-	double Window::GetTextWidth(const std::string& text)
-	{
-		return fonts_[fontSize_][fontName_].GetTextWidth(text);
+namespace jngl {
+	double Window::GetTextWidth(const std::string& text) {
+		return fonts_[fontSize_][fontName_]->getTextWidth(text);
 	}
 
 	int Window::getLineHeight() {
-		return fonts_[fontSize_][fontName_].getLineHeight();
+		return fonts_[fontSize_][fontName_]->getLineHeight();
 	}
 
 	void Window::setLineHeight(int h) {
-		return fonts_[fontSize_][fontName_].setLineHeight(h);
+		return fonts_[fontSize_][fontName_]->setLineHeight(h);
 	}
 
-	void Window::Print(const std::string& text, const int xposition, const int yposition)
-	{
-		fonts_[fontSize_][fontName_].Print(xposition, yposition, text);
+	boost::shared_ptr<FontImpl> Window::getFontImpl() {
+		return fonts_[fontSize_][fontName_];
 	}
 
-	void Window::SetFont(const std::string& filename)
-	{
-		if(fonts_[fontSize_].find(filename) == fonts_[fontSize_].end()) // Only load font if it doesn't exist yet
-		{
-			boost::assign::ptr_map_insert(fonts_[fontSize_])(filename, (pathPrefix + filename).c_str(), fontSize_);
+	void Window::Print(const std::string& text, const int xposition, const int yposition) {
+		fonts_[fontSize_][fontName_]->print(xposition, yposition, text);
+	}
+
+	void Window::SetFont(const std::string& filename) {
+		if (fonts_[fontSize_].find(filename) == fonts_[fontSize_].end()) {
+			auto font = boost::make_shared<FontImpl>((pathPrefix + filename).c_str(), fontSize_);
+			fonts_[fontSize_][filename] = font;
 		}
 		fontName_ = filename;
 	}

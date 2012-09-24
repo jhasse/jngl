@@ -144,8 +144,6 @@ namespace jngl {
 
 	bool getVerticalSync();
 
-	double getTextWidth(const std::string& text);
-
 	void play(const std::string& filename);
 
 	void stop(const std::string& filename);

@@ -119,7 +119,7 @@ namespace jngl
 		delete texture_;
 	}
 
-	Character& Font::GetCharacter(std::string::iterator& it, const std::string::iterator end)
+	Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::iterator end)
 	{
 		const char& ch = (*it); // Just to have less code
 		unsigned long unicodeCharacter = ch;
@@ -170,12 +170,12 @@ namespace jngl
 		return *(characters_[unicodeCharacter]);
 	}
 
-	Font::Font()
+	FontImpl::FontImpl()
 	{
-		throw std::runtime_error("Attempting to use an unitialized Font object");
+		throw std::runtime_error("Attempting to use an unitialized FontImpl object");
 	}
 
-	Font::Font(const char* filename, unsigned int height) : height_(height), lineHeight(int(height_ / .63)) {
+	FontImpl::FontImpl(const char* filename, unsigned int height) : height_(height), lineHeight(int(height_ / .63)) {
 		if (!std::ifstream(filename)) {
 			throw std::runtime_error(std::string("Font file not found: ") + filename);
 		}
@@ -201,7 +201,7 @@ namespace jngl
 		FT_Set_Char_Size(face_, height * 64, height * 64, 96, 96);
 	}
 
-	Font::~Font()
+	FontImpl::~FontImpl()
 	{
 		freeFace_.reset((Finally*)0); // free face_ with FT_Done_Face
 		if(--instanceCounter_ == 0)
@@ -210,7 +210,7 @@ namespace jngl
 		}
 	}
 
-	std::vector<std::string> Font::ParseString(const std::string& text)
+	std::vector<std::string> FontImpl::ParseString(const std::string& text)
 	{
 		std::vector<std::string> lines;
 		const char* start_line = text.c_str();
@@ -240,8 +240,7 @@ namespace jngl
 		return lines;
 	}
 
-	double Font::GetTextWidth(const std::string& text)
-	{
+	double FontImpl::getTextWidth(const std::string& text) {
 		double maxWidth = 0;
 		std::vector<std::string> lines(ParseString(text));
 
@@ -262,15 +261,15 @@ namespace jngl
 		return maxWidth;
 	}
 
-	int Font::getLineHeight() const {
+	int FontImpl::getLineHeight() const {
 		return lineHeight;
 	}
 
-	void Font::setLineHeight(int h) {
+	void FontImpl::setLineHeight(int h) {
 		lineHeight = h;
 	}
 
-	void Font::Print(const int x, const int y, const std::string& text) {
+	void FontImpl::print(const int x, const int y, const std::string& text) {
 		std::vector<std::string> lines(ParseString(text));
 
 		glColor4ub(fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha);
@@ -297,7 +296,7 @@ namespace jngl
 		glDisable(GL_TEXTURE_2D);
 	}
 
-	FT_Library Font::library_;
-	int Font::instanceCounter_ = 0;
+	FT_Library FontImpl::library_;
+	int FontImpl::instanceCounter_ = 0;
 }
 

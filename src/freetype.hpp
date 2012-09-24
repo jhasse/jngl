@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2009 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -38,14 +38,14 @@ namespace jngl
 		int top_;
 	};
 
-	class Font : boost::noncopyable
+	class FontImpl : boost::noncopyable
 	{
 	public:
-		Font();
-		Font(const char* filename, unsigned int height);
-		~Font();
-		void Print(int x, int y, const std::string& text);
-		double GetTextWidth(const std::string& text);
+		FontImpl();
+		FontImpl(const char* filename, unsigned int height);
+		~FontImpl();
+		void print(int x, int y, const std::string& text);
+		double getTextWidth(const std::string& text);
 		int getLineHeight() const;
 		void setLineHeight(int);
 	private:

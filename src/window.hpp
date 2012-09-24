@@ -5,9 +5,9 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
-#include "jngl.hpp"
 #include "freetype.hpp"
 #include "opengl.hpp"
+#include "jngl/input.hpp"
 
 #include <string>
 #include <boost/shared_ptr.hpp>
@@ -36,6 +36,7 @@ namespace jngl
 {
 	class WindowImpl;
 	class Job;
+	class Work;
 
 	bool Init(const int width, const int height); // Definied in main.cpp
 
@@ -81,6 +82,7 @@ namespace jngl
 		void SetIcon(const std::string&);
 		double GetMouseWheel() const;
 		std::string GetFont() const;
+		boost::shared_ptr<FontImpl> getFontImpl();
 		void SetWork(boost::shared_ptr<Work>);
 		void MainLoop();
 		bool stepIfNeeded();
@@ -124,16 +126,9 @@ namespace jngl
 		std::string configPath;
 		std::vector<boost::shared_ptr<Job>> jobs;
 
-		// <fontSize, <fontName, Font> >
-		boost::ptr_unordered_map<int, boost::ptr_unordered_map<std::string, Font> > fonts_;
+		// <fontSize, <fontName, FontImpl>>
+		boost::ptr_unordered_map<int, boost::unordered_map<std::string, boost::shared_ptr<FontImpl>>> fonts_;
 #ifndef __APPLE__
-#ifdef WIZ
-		NativeWindowType nativeWindow_;
-		EGLDisplay display_;
-		EGLContext context_;
-		EGLSurface surface_;
-		std::map<unsigned int, double> keyTimeout_;
-#else
 	#ifdef __linux
 		::Window window_;
 		GLXContext context_;
@@ -149,10 +144,9 @@ namespace jngl
 		void Init(const std::string& title, bool multisample);
 		void DistinguishLeftRight();
 	#endif
-#endif
 #else
 		WindowImpl* const impl;
-		
+
 		friend class WindowImpl;
 #endif
 	};
