@@ -7,7 +7,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "main.hpp"
 #include "jngl.hpp"
 
-#include <boost/assign/ptr_map_inserter.hpp>
 #include <boost/make_shared.hpp>
 
 namespace jngl {
