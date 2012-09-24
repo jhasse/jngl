@@ -13,7 +13,7 @@ namespace jngl {
 
 	class Font {
 	public:
-		Font();
+		Font(const std::string& filename, unsigned int size);
 		boost::shared_ptr<FontImpl> getImpl();
 		void print(const std::string&, int x, int y);
 	private:

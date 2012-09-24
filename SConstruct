@@ -109,7 +109,7 @@ if env['PLATFORM'] == 'posix': # Linux
 		                  source="python/main.cpp")
 
 if env['PLATFORM'] == 'darwin': # Mac
-	env.Append(LIBS=Split('jngl GLEW jpeg ogg vorbisfile webp'),
+	env.Append(LIBS=Split('GLEW jpeg ogg vorbisfile webp'),
 	           LIBPATH=Split('/opt/local/lib .'),
 	           CPPPATH='/opt/local/include/',
 	           LINKFLAGS='-framework OpenAL -framework OpenGL')
@@ -118,7 +118,7 @@ if env['PLATFORM'] == 'darwin': # Mac
 	lib = env.Library(target="jngl", source=source_files + env.Object(Glob('src/sdl/*.cpp'), CPPFLAGS='-std=c++11'))
 	testEnv = env.Clone()
 	testEnv.Append(CPPPATH='.')
-	env.Append(LIBS=lib)
+	testEnv.Append(LIBS=lib)
 	testEnv.Program("test", testSrc, CPPFLAGS='-std=c++0x')
 	if env['python']:
 		env = env.Clone()

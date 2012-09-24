@@ -76,6 +76,8 @@
 		C98E8D3A1524A5DE0081B15A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98E8D391524A5DE0081B15A /* CoreGraphics.framework */; };
 		C99DF1271528D85E00779081 /* message.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C99A094C13EC509D006C46FF /* message.cpp */; };
 		C9AE786314A892FE004359EF /* JNGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E948E614A7C3EF0048EFCA /* JNGL.framework */; };
+		C9AF94241610F63C002EC853 /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9AF94231610F63C002EC853 /* font.cpp */; };
+		C9AF94251610F63C002EC853 /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9AF94231610F63C002EC853 /* font.cpp */; };
 		C9BFF8021524B24600066D6C /* libJNGL iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CA614FEE5D20065CD6B /* libJNGL iOS.a */; };
 		C9BFF8091524B2F600066D6C /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF8071524B2F600066D6C /* libjpeg.a */; };
 		C9BFF80A1524B2F600066D6C /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF8081524B2F600066D6C /* libpng.a */; };
@@ -179,6 +181,7 @@
 		C98E8D391524A5DE0081B15A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		C99A094A13EC508C006C46FF /* time.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = time.cpp; path = src/sdl/time.cpp; sourceTree = "<group>"; };
 		C99A094C13EC509D006C46FF /* message.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = message.cpp; path = src/sdl/message.cpp; sourceTree = "<group>"; };
+		C9AF94231610F63C002EC853 /* font.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = font.cpp; path = src/jngl/font.cpp; sourceTree = "<group>"; };
 		C9BFF8071524B2F600066D6C /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../lib/ios/libjpeg.a; sourceTree = "<group>"; };
 		C9BFF8081524B2F600066D6C /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../lib/ios/libpng.a; sourceTree = "<group>"; };
 		C9BFF80D1524B59B00066D6C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
@@ -422,6 +425,7 @@
 		C9E9E2E415C1D516006CCBD2 /* jngl */ = {
 			isa = PBXGroup;
 			children = (
+				C9AF94231610F63C002EC853 /* font.cpp */,
 				C9740993160766FA002D1152 /* drawable.cpp */,
 				C923BC4A16066E4400BEFE2D /* framebuffer.cpp */,
 				C9196EE41607B59800A9E80D /* input.cpp */,
@@ -718,6 +722,7 @@
 				C9196EE61607B59800A9E80D /* input.cpp in Sources */,
 				C92916741609BCEC00A69E46 /* job.cpp in Sources */,
 				C93A89FB160B243300BA8D91 /* shapes.cpp in Sources */,
+				C9AF94251610F63C002EC853 /* font.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -761,6 +766,7 @@
 				C9196EF21607C94F00A9E80D /* input.cpp in Sources */,
 				C92916731609BCEC00A69E46 /* job.cpp in Sources */,
 				C93A89FA160B243300BA8D91 /* shapes.cpp in Sources */,
+				C9AF94241610F63C002EC853 /* font.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

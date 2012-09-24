@@ -8,7 +8,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "../freetype.hpp"
 
 namespace jngl {
-	Font::Font() : impl(new FontImpl) {
+	Font::Font(const std::string& filename, unsigned int size) : impl(new FontImpl(filename.c_str(), size)) {
 	}
 
 	void Font::print(const std::string& text, int x, int y) {
