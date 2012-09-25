@@ -68,6 +68,8 @@
 		C97409A216076C1D002D1152 /* text.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C97409A016076C1C002D1152 /* text.hpp */; };
 		C97409A416076CD1002D1152 /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C97409A316076CD1002D1152 /* text.cpp */; };
 		C97409A516076CD1002D1152 /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C97409A316076CD1002D1152 /* text.cpp */; };
+		C9849D701611D5DE000C9A65 /* WebP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9849D6F1611D5DD000C9A65 /* WebP.framework */; };
+		C9849D711611D7A3000C9A65 /* WebP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9849D6F1611D5DD000C9A65 /* WebP.framework */; };
 		C98A18AC15DEB30D0038B716 /* work.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C98A18AB15DEB30D0038B716 /* work.cpp */; };
 		C98A18AD15DEB30D0038B716 /* work.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C98A18AB15DEB30D0038B716 /* work.cpp */; };
 		C98E8D2A1524A4A70081B15A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98E8D291524A4A70081B15A /* OpenGLES.framework */; };
@@ -152,7 +154,6 @@
 		C94EEDF71600D87D004F9FE0 /* window.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = window.hpp; path = ../src/jngl/window.hpp; sourceTree = "<group>"; };
 		C94EEE301600ED1F004F9FE0 /* JNGLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JNGLViewController.h; path = ../../src/ios/JNGLViewController.h; sourceTree = "<group>"; };
 		C94EEE311600ED1F004F9FE0 /* JNGLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = JNGLViewController.mm; path = ../../src/ios/JNGLViewController.mm; sourceTree = "<group>"; };
-		C94EEE3D1601141E004F9FE0 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/GLKit.framework; sourceTree = DEVELOPER_DIR; };
 		C967FC6814A5FF8B0049D8F2 /* main.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = main.hpp; path = ../src/main.hpp; sourceTree = "<group>"; };
 		C96A1CA614FEE5D20065CD6B /* libJNGL iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libJNGL iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C96A1CA714FEE5D20065CD6B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -172,6 +173,7 @@
 		C97409A016076C1C002D1152 /* text.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = text.hpp; path = ../src/jngl/text.hpp; sourceTree = "<group>"; };
 		C97409A316076CD1002D1152 /* text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = text.cpp; path = src/jngl/text.cpp; sourceTree = "<group>"; };
 		C97A73101527AADA005AE562 /* time.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = time.hpp; path = ../../src/ios/time.hpp; sourceTree = "<group>"; };
+		C9849D6F1611D5DD000C9A65 /* WebP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebP.framework; path = ../lib/ios/WebP.framework; sourceTree = "<group>"; };
 		C98A18A915DEADB90038B716 /* work.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = work.hpp; path = ../src/jngl/work.hpp; sourceTree = "<group>"; };
 		C98A18AB15DEB30D0038B716 /* work.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = work.cpp; path = src/jngl/work.cpp; sourceTree = "<group>"; };
 		C98E8D2315249AEA0081B15A /* glew.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = glew.h; path = ../../src/ios/glew.h; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9849D701611D5DE000C9A65 /* WebP.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,6 +261,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9849D711611D7A3000C9A65 /* WebP.framework in Frameworks */,
 				C9BFF84C1524C3CC00066D6C /* libvorbis.a in Frameworks */,
 				C9BFF84A1524C37200066D6C /* libogg.a in Frameworks */,
 				C9BFF8441524C00B00066D6C /* OpenAL.framework in Frameworks */,
@@ -289,7 +293,6 @@
 		C921153813EABBF100770E49 = {
 			isa = PBXGroup;
 			children = (
-				C94EEE3D1601141E004F9FE0 /* GLKit.framework */,
 				C9F3AB8F1525F67000A77E9F /* test.ogg */,
 				C9F3AB8D1525F0DC00A77E9F /* jngl.png */,
 				C9F3AB8A1525F0A800A77E9F /* Arial.ttf */,
@@ -405,6 +408,7 @@
 		C9E948E714A7C3EF0048EFCA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C9849D6F1611D5DD000C9A65 /* WebP.framework */,
 				C9E948E814A7C3EF0048EFCA /* Cocoa.framework */,
 				C96A1CA714FEE5D20065CD6B /* Foundation.framework */,
 				C9E948EA14A7C3EF0048EFCA /* Other Frameworks */,
@@ -885,17 +889,17 @@
 		C96A1CAF14FEE5D20065CD6B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					armv6,
-					armv7,
-				);
+				ARCHS = armv7;
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/JNGL_iOS.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../lib/ios\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JNGL iOS/JNGL iOS-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"NOWEBP=1",
 					"IOS=1",
 					"$(inherited)",
 				);
@@ -906,7 +910,7 @@
 					/opt/local/include,
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = IOS;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -917,17 +921,17 @@
 		C96A1CB014FEE5D20065CD6B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					armv6,
-					armv7,
-				);
+				ARCHS = armv7;
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/JNGL_iOS.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../lib/ios\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JNGL iOS/JNGL iOS-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"NOWEBP=1",
 					"IOS=1",
 					"$(inherited)",
 				);
@@ -938,7 +942,7 @@
 					/opt/local/include,
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = IOS;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -952,10 +956,7 @@
 		C96A1CD414FEE8410065CD6B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					armv6,
-					"$(ARCHS_STANDARD_32_BIT)",
-				);
+				ARCHS = armv7;
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -963,6 +964,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+					"\"$(SRCROOT)/../lib/ios\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Test iOS/Test iOS-Prefix.pch";
@@ -974,7 +976,7 @@
 					/opt/local/include,
 				);
 				INFOPLIST_FILE = "Test iOS/Test iOS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../lib/ios\"",
@@ -989,10 +991,7 @@
 		C96A1CD514FEE8410065CD6B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					armv6,
-					"$(ARCHS_STANDARD_32_BIT)",
-				);
+				ARCHS = armv7;
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1000,6 +999,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+					"\"$(SRCROOT)/../lib/ios\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Test iOS/Test iOS-Prefix.pch";
@@ -1011,7 +1011,7 @@
 					/opt/local/include,
 				);
 				INFOPLIST_FILE = "Test iOS/Test iOS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../lib/ios\"",
