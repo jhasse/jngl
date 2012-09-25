@@ -19,4 +19,8 @@ namespace jngl {
 	void setMousePressed(mouse::Button button, bool p) {
 		pWindow->setMousePressed(button, p);
 	}
+
+	void setMouseDown(mouse::Button button, bool d) {
+		pWindow->setMouseDown(button, d);
+	}
 }

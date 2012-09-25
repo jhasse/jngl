@@ -68,7 +68,8 @@ namespace jngl
 		bool getKeyDown(const std::string& key);
 		bool getKeyPressed(const std::string& key);
 		void setKeyPressed(const std::string& key, bool);
-		bool MouseDown(mouse::Button button);
+		bool getMouseDown(mouse::Button);
+		void setMouseDown(mouse::Button, bool);
 		bool getMousePressed(mouse::Button button);
 		void setMousePressed(mouse::Button button, bool);
 		void SetMouse(const int xposition, const int yposition);

@@ -106,6 +106,8 @@ namespace jngl {
 
 	bool mouseDown(mouse::Button button = mouse::Left);
 
+	void setMouseDown(mouse::Button button, bool);
+
 	bool mousePressed(mouse::Button button = mouse::Left);
 
 	void setMousePressed(jngl::mouse::Button, bool);

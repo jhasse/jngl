@@ -176,7 +176,7 @@ namespace jngl
 
 	bool mouseDown(mouse::Button button)
 	{
-		return pWindow->MouseDown(button);
+		return pWindow->getMouseDown(button);
 	}
 
 	bool mousePressed(mouse::Button button)
