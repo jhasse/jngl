@@ -7,6 +7,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "sprite.hpp"
 
+#include "screen.hpp"
 #include "../texture.hpp"
 #include "../finally.hpp"
 #include "../windowptr.hpp"
@@ -289,8 +290,25 @@ namespace jngl {
 			throw std::runtime_error(std::string("Invalid WebP file. (" + filename + ")"));
 		}
 
-		auto data = WebPDecodeRGBA(&buf[0], filesize, &width, &height);
-		LoadTexture(filename, 4, halfLoad, GL_RGBA, nullptr, data);
+		WebPDecoderConfig config;
+		WebPInitDecoderConfig(&config);
+		if (getScaleFactor() != 1) {
+			config.options.use_scaling = true;
+			width *= getScaleFactor();
+			height *= getScaleFactor();
+			if (width < 1) width = 1;
+			if (height < 1) height = 1;
+			config.options.scaled_width = width;
+			config.options.scaled_height = height;
+		}
+		config.output.colorspace = MODE_RGBA;
+		if (WebPDecode(&buf[0], filesize, &config) != VP8_STATUS_OK) {
+			throw std::runtime_error(std::string("Can't decode WebP file. (" + filename + ")"));
+		}
+		Finally _([&]() {
+			WebPFreeDecBuffer(&config.output);
+		});
+		LoadTexture(filename, 4, halfLoad, GL_RGBA, nullptr, config.output.u.RGBA.rgba);
 	}
 #endif
 
