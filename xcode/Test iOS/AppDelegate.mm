@@ -37,7 +37,7 @@ public:
 		if (fbo) {
 			fbo->beginDraw();
 			jngl::print("fbo", -jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
-			jngl::draw("jngl.png", -300, -140);
+			jngl::draw("jngl.webp", -300, -140);
 			fbo->endDraw();
 			fbo->draw(-jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
 		}
@@ -47,7 +47,7 @@ public:
 		} else {
 			jngl::setSpriteColor(255, 255, 255);
 		}
-		jngl::draw("jngl.png", -300 + jngl::getMouseX(), -140 + jngl::getMouseY());
+		jngl::draw("jngl.webp", -300 + jngl::getMouseX(), -140 + jngl::getMouseY());
 		std::stringstream sstream;
 		sstream << "FPS: " << int(jngl::getFPS()) << " Time: " << jngl::getTime();
 		jngl::print(sstream.str(), -230, -150);

@@ -68,6 +68,8 @@
 		C97409A216076C1D002D1152 /* text.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C97409A016076C1C002D1152 /* text.hpp */; };
 		C97409A416076CD1002D1152 /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C97409A316076CD1002D1152 /* text.cpp */; };
 		C97409A516076CD1002D1152 /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C97409A316076CD1002D1152 /* text.cpp */; };
+		C97F8934161531CE00F683FA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C97F8933161531CE00F683FA /* libz.dylib */; };
+		C97F89371615323200F683FA /* jngl.webp in Resources */ = {isa = PBXBuildFile; fileRef = C97F89361615323200F683FA /* jngl.webp */; };
 		C9849D701611D5DE000C9A65 /* WebP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9849D6F1611D5DD000C9A65 /* WebP.framework */; };
 		C9849D711611D7A3000C9A65 /* WebP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9849D6F1611D5DD000C9A65 /* WebP.framework */; };
 		C98A18AC15DEB30D0038B716 /* work.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C98A18AB15DEB30D0038B716 /* work.cpp */; };
@@ -81,9 +83,6 @@
 		C9AF94241610F63C002EC853 /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9AF94231610F63C002EC853 /* font.cpp */; };
 		C9AF94251610F63C002EC853 /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9AF94231610F63C002EC853 /* font.cpp */; };
 		C9BFF8021524B24600066D6C /* libJNGL iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CA614FEE5D20065CD6B /* libJNGL iOS.a */; };
-		C9BFF8091524B2F600066D6C /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF8071524B2F600066D6C /* libjpeg.a */; };
-		C9BFF80A1524B2F600066D6C /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF8081524B2F600066D6C /* libpng.a */; };
-		C9BFF80E1524B59B00066D6C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF80D1524B59B00066D6C /* libz.dylib */; };
 		C9BFF83E1524BB0A00066D6C /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF83D1524BB0A00066D6C /* libfreetype.a */; };
 		C9BFF8401524BD0600066D6C /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BFF83F1524BD0600066D6C /* window.cpp */; };
 		C9BFF8441524C00B00066D6C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF8431524C00B00066D6C /* OpenAL.framework */; };
@@ -118,7 +117,6 @@
 		C9E9E2EA15C1D52A006CCBD2 /* types.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9E9E2E715C1D52A006CCBD2 /* types.hpp */; };
 		C9F3AB8B1525F0A800A77E9F /* Arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8A1525F0A800A77E9F /* Arial.ttf */; };
 		C9F3AB8C1525F0B800A77E9F /* Arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8A1525F0A800A77E9F /* Arial.ttf */; };
-		C9F3AB8E1525F0DC00A77E9F /* jngl.png in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8D1525F0DC00A77E9F /* jngl.png */; };
 		C9F3AB901525F67000A77E9F /* test.ogg in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8F1525F67000A77E9F /* test.ogg */; };
 /* End PBXBuildFile section */
 
@@ -173,6 +171,8 @@
 		C97409A016076C1C002D1152 /* text.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = text.hpp; path = ../src/jngl/text.hpp; sourceTree = "<group>"; };
 		C97409A316076CD1002D1152 /* text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = text.cpp; path = src/jngl/text.cpp; sourceTree = "<group>"; };
 		C97A73101527AADA005AE562 /* time.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = time.hpp; path = ../../src/ios/time.hpp; sourceTree = "<group>"; };
+		C97F8933161531CE00F683FA /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
+		C97F89361615323200F683FA /* jngl.webp */ = {isa = PBXFileReference; lastKnownFileType = file; name = jngl.webp; path = ../jngl.webp; sourceTree = "<group>"; };
 		C9849D6F1611D5DD000C9A65 /* WebP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebP.framework; path = ../lib/ios/WebP.framework; sourceTree = "<group>"; };
 		C98A18A915DEADB90038B716 /* work.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = work.hpp; path = ../src/jngl/work.hpp; sourceTree = "<group>"; };
 		C98A18AB15DEB30D0038B716 /* work.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = work.cpp; path = src/jngl/work.cpp; sourceTree = "<group>"; };
@@ -261,14 +261,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C97F8934161531CE00F683FA /* libz.dylib in Frameworks */,
 				C9849D711611D7A3000C9A65 /* WebP.framework in Frameworks */,
 				C9BFF84C1524C3CC00066D6C /* libvorbis.a in Frameworks */,
 				C9BFF84A1524C37200066D6C /* libogg.a in Frameworks */,
 				C9BFF8441524C00B00066D6C /* OpenAL.framework in Frameworks */,
 				C9BFF83E1524BB0A00066D6C /* libfreetype.a in Frameworks */,
-				C9BFF80E1524B59B00066D6C /* libz.dylib in Frameworks */,
-				C9BFF8091524B2F600066D6C /* libjpeg.a in Frameworks */,
-				C9BFF80A1524B2F600066D6C /* libpng.a in Frameworks */,
 				C9BFF8021524B24600066D6C /* libJNGL iOS.a in Frameworks */,
 				C98E8D3A1524A5DE0081B15A /* CoreGraphics.framework in Frameworks */,
 				C98E8D341524A53F0081B15A /* UIKit.framework in Frameworks */,
@@ -293,6 +291,8 @@
 		C921153813EABBF100770E49 = {
 			isa = PBXGroup;
 			children = (
+				C97F89361615323200F683FA /* jngl.webp */,
+				C97F8933161531CE00F683FA /* libz.dylib */,
 				C9F3AB8F1525F67000A77E9F /* test.ogg */,
 				C9F3AB8D1525F0DC00A77E9F /* jngl.png */,
 				C9F3AB8A1525F0A800A77E9F /* Arial.ttf */,
@@ -668,8 +668,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C97F89371615323200F683FA /* jngl.webp in Resources */,
 				C9F3AB901525F67000A77E9F /* test.ogg in Resources */,
-				C9F3AB8E1525F0DC00A77E9F /* jngl.png in Resources */,
 				C9F3AB8C1525F0B800A77E9F /* Arial.ttf in Resources */,
 				C96A1CCC14FEE8410065CD6B /* InfoPlist.strings in Resources */,
 			);
@@ -902,12 +902,14 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"IOS=1",
 					"$(inherited)",
+					"NOJPEG=1",
+					"NOPNG=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = (
 					../include/ios/,
-					/opt/local/include,
+					"../../boost-libs/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = IOS;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
@@ -934,12 +936,14 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"IOS=1",
 					"$(inherited)",
+					"NOPNG=1",
+					"NOJPEG=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = (
 					../include/ios/,
-					/opt/local/include,
+					"../../boost-libs/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = IOS;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
@@ -948,8 +952,6 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv6 armv7 i386";
-				"VALID_ARCHS[sdk=*]" = "armv6 armv7 i386";
 			};
 			name = Release;
 		};

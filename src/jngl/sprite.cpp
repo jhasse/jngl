@@ -73,7 +73,11 @@ namespace jngl {
 		if (fread(buf, 1, PNG_BYTES_TO_CHECK, pFile) != PNG_BYTES_TO_CHECK)
 			throw std::runtime_error(std::string("Error reading signature bytes. (" + filename + ")"));
 
+#ifdef NOPNG
+		if (false)
+#else
 		if (png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) == 0)
+#endif
 			LoadPNG(filename, pFile, halfLoad);
 		else if (*reinterpret_cast<unsigned short*>(buf) == 19778)
 			LoadBMP(filename, pFile, halfLoad);
@@ -129,6 +133,7 @@ namespace jngl {
 		glPopMatrix();
 	}
 
+#ifndef NOPNG
 	void Sprite::LoadPNG(const std::string& filename, FILE* const fp,
 	                     const bool halfLoad) {
 		png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -177,6 +182,8 @@ namespace jngl {
 		height = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
 		LoadTexture(filename, channels, halfLoad, format, rowPointers);
 	}
+#endif
+
 	void Sprite::CleanUpRowPointers(std::vector<unsigned char*>& buf) {
 		for (auto i = buf.begin(); i != buf.end(); ++i) {
 			delete[] *i;
