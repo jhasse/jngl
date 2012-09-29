@@ -6,3 +6,4 @@ jngl.pc
 *.so
 *.os
 xcode/JNGL.xcodeproj/project.xcworkspace/xcuserdata/*
+*.sublime-*
