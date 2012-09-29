@@ -18,6 +18,11 @@ namespace jngl {
 		this->y = y;
 	}
 
+	void Drawable::setCenter(Float x, Float y) {
+		this->x = x - width/2;
+		this->y = y - height/2;
+	}
+
 	Float Drawable::getLeft() const {
 		return x;
 	}

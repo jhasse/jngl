@@ -69,29 +69,35 @@ namespace jngl
 				pWindow.ThrowIfNull();
 				debug("Loading "); debug(filename); debug(" ...\n");
 			}
-			auto s = new Sprite(pathPrefix + filename, halfLoad);
+			auto s = new Sprite(filename, halfLoad);
 			sprites_[filename].reset(s);
 			return *s;
 		}
 		return *(it->second);
 	}
 
-	void draw(const std::string& filename, const double xposition, const double yposition) {
-		GetSprite(filename).draw(xposition, yposition);
+	void draw(const std::string& filename, double x, double y) {
+		auto& s = GetSprite(filename);
+		s.setPos(x, y);
+		s.draw();
 	}
 
-	void drawScaled(const std::string& filename, const double xposition, const double yposition,
-	                const float xfactor, const float yfactor) {
-		GetSprite(filename).drawScaled(xposition, yposition, xfactor, yfactor);
+	void drawScaled(const std::string& filename, double x, double y, float xfactor, float yfactor) {
+		auto& s = GetSprite(filename);
+		s.setPos(x, y);
+		s.drawScaled(xfactor, yfactor);
 	}
 
-	void drawScaled(const std::string& filename, const double xposition, const double yposition,
-	                const float factor) {
-		GetSprite(filename).drawScaled(xposition, yposition, factor, factor);
+	void drawScaled(const std::string& filename, double x, double y, float factor) {
+		auto& s = GetSprite(filename);
+		s.setPos(x, y);
+		s.drawScaled(factor);
 	}
 
-	void drawClipped(const std::string& filename, double xposition, double yposition, float xstart, float xend, float ystart, float yend) {
-		GetSprite(filename).drawClipped(xposition, yposition, xstart, xend, ystart, yend);
+	void drawClipped(const std::string& filename, double x, double y, float xstart, float xend, float ystart, float yend) {
+		auto& s = GetSprite(filename);
+		s.setPos(x, y);
+		s.drawClipped(xstart, xend, ystart, yend);
 	}
 
 	void loadSprite(const std::string& filename) {
@@ -123,19 +129,5 @@ namespace jngl
 			unload(filename);
 		}
 		return height;
-	}
-
-	bool drawButton(const std::string& sprite, const double xposition, const double yposition, const std::string& mouseover) {
-		if (xposition <= getMouseX() && getMouseX() < (xposition + getWidth(sprite)) &&
-		    yposition <= getMouseY() && getMouseY() < (yposition + getHeight(sprite))) {
-
-			GetSprite(mouseover).draw(xposition, yposition);
-			if (mousePressed()) {
-				return true;
-			}
-		} else {
-			GetSprite(sprite).draw(xposition, yposition);
-		}
-		return false;
 	}
 }

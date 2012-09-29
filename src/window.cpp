@@ -32,7 +32,7 @@ namespace jngl {
 
 	void Window::SetFont(const std::string& filename) {
 		if (fonts_[fontSize_].find(filename) == fonts_[fontSize_].end()) {
-			auto font = boost::make_shared<FontImpl>((pathPrefix + filename).c_str(), fontSize_);
+			auto font = boost::make_shared<FontImpl>(filename, fontSize_);
 			fonts_[fontSize_][filename] = font;
 		}
 		fontName_ = filename;

@@ -22,11 +22,15 @@ namespace jngl {
 		void draw() const;
 		void drawClipped(float xstart, float xend, float ystart, float yend) const;
 		GLuint getID() const;
+		int getWidth() const;
+		int getHeight() const;
 	private:
 		static bool useVBO_;
 		GLuint texture_;
 		GLuint vertexBuffer_;
 		std::vector<opengl::CoordType> texCoords_;
 		std::vector<GLfloat> vertexes_;
+		int imgWidth;
+		int imgHeight;
 	};
 }

@@ -11,6 +11,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "../texture.hpp"
 #include "../finally.hpp"
 #include "../windowptr.hpp"
+#include "../main.hpp"
 
 #include <string>
 #include <boost/shared_ptr.hpp>
@@ -18,6 +19,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/make_shared.hpp>
 #include <stdexcept>
 #include <cmath>
 #include <cstdlib>
@@ -36,8 +38,20 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 	#include <webp/decode.h>
 #endif
 
+#include <boost/unordered_map.hpp>
+
 namespace jngl {
 	const unsigned int PNG_BYTES_TO_CHECK = 4;
+
+	boost::unordered_map<std::string, boost::shared_ptr<Texture>> textures;
+
+	boost::shared_ptr<Texture> getTexture(const std::string& filename) {
+		auto it = textures.find(filename);
+		if (it == textures.end()) {
+			return boost::shared_ptr<Texture>((Texture*)0);
+		}
+		return it->second;
+	}
 
 #ifndef NOJPEG
 	struct JpegErrorMgr {
@@ -49,7 +63,13 @@ namespace jngl {
 	}
 #endif
 
-	Sprite::Sprite(const std::string& filename, bool halfLoad) : texture(0) {
+	Sprite::Sprite(const std::string& file, bool halfLoad) : texture(getTexture(file)) {
+		if (texture) {
+			width = texture->getWidth();
+			height = texture->getHeight();
+			return;
+		}
+		auto filename = pathPrefix + file;
 		FILE* pFile = fopen(filename.c_str(), "rb");
 		if (!pFile) {
 			throw std::runtime_error(std::string("File not found: " + filename));
@@ -74,7 +94,7 @@ namespace jngl {
 			throw std::runtime_error(std::string("Error reading signature bytes. (" + filename + ")"));
 
 #ifdef NOPNG
-		if (false)
+		if (false) // FIXME: Display warning about PNG files not being supported in this build.
 #else
 		if (png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) == 0)
 #endif
@@ -83,17 +103,14 @@ namespace jngl {
 			LoadBMP(filename, pFile, halfLoad);
 		else if (*reinterpret_cast<unsigned short*>(buf) == 55551) {
 		#ifdef NOJPEG
-			throw std::runtime_error(std::string("Sorry, JPEG files not supported in this build of JNGL. (" + filename + ")"));
+			throw std::runtime_error(std::string("Sorry, JPEG files not supported in this build of JNGL. ("
+			                                     + filename + ")"));
 		#else
 			LoadJPG(filename, pFile, halfLoad);
 		#endif
 		}
 		else
 			throw std::runtime_error(std::string("Not a PNG, WebP, JPEG or BMP file. (" + filename + ")"));
-	}
-
-	Sprite::~Sprite() {
-		delete texture;
 	}
 
 	int Sprite::getWidth() const {
@@ -104,19 +121,21 @@ namespace jngl {
 		return height;
 	}
 
-	void Sprite::draw(Float x, Float y) const {
+	void Sprite::step() {
+	}
+
+	void Sprite::draw() const {
 		glPushMatrix();
 		opengl::translate(x, y);
 		texture->draw();
 		glPopMatrix();
 	}
 
-	void Sprite::drawScaled(Float x, Float y, float factor) const {
-		drawScaled(x, y, factor, factor);
+	void Sprite::drawScaled(float factor) const {
+		drawScaled(factor, factor);
 	}
 
-	void Sprite::drawScaled(Float x, Float y,
-	                        float xfactor, float yfactor) const {
+	void Sprite::drawScaled(float xfactor, float yfactor) const {
 		glPushMatrix();
 		opengl::translate(x, y);
 		opengl::scale(xfactor, yfactor);
@@ -124,9 +143,8 @@ namespace jngl {
 		glPopMatrix();
 	}
 
-	void Sprite::drawClipped(Float x, Float y,
-	                 float xstart, float xend,
-	                 float ystart, float yend) const {
+	void Sprite::drawClipped(float xstart, float xend,
+	                         float ystart, float yend) const {
 		glPushMatrix();
 		opengl::translate(x, y);
 		texture->drawClipped(xstart, xend, ystart, yend);
@@ -331,8 +349,9 @@ namespace jngl {
 			}
 			throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 		}
-		texture = new Texture(width, height, reinterpret_cast<unsigned char**>(&rowPointers[0]),
-							   format, channels, data);
+		texture = boost::make_shared<Texture>(width, height, reinterpret_cast<unsigned char**>(&rowPointers[0]),
+		                                      format, channels, data);
+		textures[filename] = texture;
 	}
 
 }

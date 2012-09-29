@@ -6,27 +6,27 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
 #include "types.hpp"
+#include "drawable.hpp"
 
 #include <memory>
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include <string>
 #include <vector>
 
 namespace jngl {
 	class Texture;
 
-	class Sprite : boost::noncopyable {
+	class Sprite : public Drawable, boost::noncopyable {
 	public:
-		Sprite(const std::string& filename, bool halfLoad);
-		~Sprite();
+		Sprite(const std::string& filename, bool halfLoad = false);
 		int getWidth() const;
 		int getHeight() const;
-		void draw(Float x, Float y) const;
-		void drawScaled(Float x, Float y, float factor) const;
-		void drawScaled(Float x, Float y, float xfactor, float yfactor) const;
-		void drawClipped(Float x, Float y,
-		                 float xstart, float xend,
-		                 float ystart, float yend) const;
+		void step() override;
+		void draw() const override;
+		void drawScaled(float factor) const;
+		void drawScaled(float xfactor, float yfactor) const;
+		void drawClipped(float xstart, float xend, float ystart, float yend) const;
 	private:
 		static void CleanUpRowPointers(std::vector<unsigned char*>& buf);
 		void LoadTexture(const std::string& filename, int channels, bool halfLoad, unsigned int format,
@@ -50,9 +50,7 @@ namespace jngl {
 		void LoadWebP(const std::string& filename, FILE* file, const bool halfLoad);
 #endif
 
-		Texture* texture;
-		int width;
-		int height;
+		boost::shared_ptr<Texture> texture;
 	};
 
 	void setSpriteColor(unsigned char red,

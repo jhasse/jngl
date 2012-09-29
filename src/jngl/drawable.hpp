@@ -15,7 +15,13 @@ namespace jngl {
 		virtual void step() = 0;
 		virtual void draw() const = 0;
 
-		void setPos(Float x, Float y);
+		virtual void setPos(Float x, Float y);
+
+		template<class Vect>
+		Vect getCenter() const {
+			return Vect{x + width/2, y + height/2};
+		}
+		void setCenter(Float x, Float y);
 
 		Float getLeft() const;
 		void setLeft(Float x);
@@ -34,7 +40,7 @@ namespace jngl {
 	protected:
 		Float x;
 		Float y;
-		Float width;
-		Float height;
+		int width;
+		int height;
 	};
 }

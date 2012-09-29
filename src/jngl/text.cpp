@@ -19,11 +19,17 @@ namespace jngl {
 		width = font->getTextWidth(t);
 		height = font->getLineHeight();
 		text = t;
+		updatePos();
 	}
 
 	void Text::setFont(boost::shared_ptr<Font> f) {
 		font = f->getImpl();
 		setText(text);
+	}
+
+	void Text::setAlign(Alignment a) {
+		align = a;
+		updatePos();
 	}
 
 	void Text::step() {
@@ -32,5 +38,18 @@ namespace jngl {
 	void Text::draw() const {
 		font->print(x, y, text);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
+	}
+
+	void Text::updatePos() {
+		if (align == CENTER) {
+			x -= width/2;
+		} else if (align == RIGHT) {
+			x -= width;
+		}
+	}
+
+	void Text::setPos(Float x, Float y) {
+		Drawable::setPos(x, y);
+		updatePos();
 	}
 }

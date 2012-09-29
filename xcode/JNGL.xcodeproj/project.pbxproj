@@ -7,25 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C9196EE21607ACBA00A9E80D /* input.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9196EE11607ACBA00A9E80D /* input.hpp */; };
+		C9196EE21607ACBA00A9E80D /* input.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9196EE11607ACBA00A9E80D /* input.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9196EE51607B59800A9E80D /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9196EE41607B59800A9E80D /* input.cpp */; };
 		C9196EE61607B59800A9E80D /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9196EE41607B59800A9E80D /* input.cpp */; };
 		C9196EF21607C94F00A9E80D /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9196EF11607C94F00A9E80D /* input.cpp */; };
-		C923BC4D16066E4400BEFE2D /* font.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4916066E4400BEFE2D /* font.hpp */; };
+		C923BC4D16066E4400BEFE2D /* font.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4916066E4400BEFE2D /* font.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C923BC4E16066E4400BEFE2D /* font.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4916066E4400BEFE2D /* font.hpp */; };
 		C923BC4F16066E4400BEFE2D /* framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C923BC4A16066E4400BEFE2D /* framebuffer.cpp */; };
 		C923BC5016066E4400BEFE2D /* framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C923BC4A16066E4400BEFE2D /* framebuffer.cpp */; };
-		C923BC5116066E4400BEFE2D /* framebuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4B16066E4400BEFE2D /* framebuffer.hpp */; };
+		C923BC5116066E4400BEFE2D /* framebuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4B16066E4400BEFE2D /* framebuffer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C923BC5216066E4400BEFE2D /* framebuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4B16066E4400BEFE2D /* framebuffer.hpp */; };
-		C923BC5C16066EC300BEFE2D /* opengl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC5B16066EC300BEFE2D /* opengl.hpp */; };
+		C923BC5C16066EC300BEFE2D /* opengl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC5B16066EC300BEFE2D /* opengl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C923BC5D16066EC300BEFE2D /* opengl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC5B16066EC300BEFE2D /* opengl.hpp */; };
 		C92916731609BCEC00A69E46 /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C92916711609BCEC00A69E46 /* job.cpp */; };
 		C92916741609BCEC00A69E46 /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C92916711609BCEC00A69E46 /* job.cpp */; };
-		C92916751609BCEC00A69E46 /* job.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C92916721609BCEC00A69E46 /* job.hpp */; };
+		C92916751609BCEC00A69E46 /* job.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C92916721609BCEC00A69E46 /* job.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C92916761609BCEC00A69E46 /* job.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C92916721609BCEC00A69E46 /* job.hpp */; };
 		C93A89FA160B243300BA8D91 /* shapes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C93A89F8160B243300BA8D91 /* shapes.cpp */; };
 		C93A89FB160B243300BA8D91 /* shapes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C93A89F8160B243300BA8D91 /* shapes.cpp */; };
-		C93A89FC160B243300BA8D91 /* shapes.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C93A89F9160B243300BA8D91 /* shapes.hpp */; };
+		C93A89FC160B243300BA8D91 /* shapes.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C93A89F9160B243300BA8D91 /* shapes.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C93A89FD160B243300BA8D91 /* shapes.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C93A89F9160B243300BA8D91 /* shapes.hpp */; };
 		C93A963215E3B49B003525E8 /* sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2E515C1D52A006CCBD2 /* sprite.cpp */; };
 		C93A963315E3B49B003525E8 /* audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CA15C1D4BD006CCBD2 /* audio.cpp */; };
@@ -42,10 +42,10 @@
 		C93A964015E3B4BF003525E8 /* ConvertUTF.c in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C915C1D4BD006CCBD2 /* ConvertUTF.c */; };
 		C93A964115E3B4CC003525E8 /* callbacks.c in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C815C1D4BD006CCBD2 /* callbacks.c */; };
 		C93B324B14C1B0090053C668 /* sdl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C93B324A14C1B0090053C668 /* sdl.cpp */; };
-		C93B324F14C1B04A0053C668 /* sdl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C93B324E14C1B04A0053C668 /* sdl.hpp */; };
-		C94EEDF81600D87D004F9FE0 /* debug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94EEDF61600D87D004F9FE0 /* debug.hpp */; };
+		C93B324F14C1B04A0053C668 /* sdl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C93B324E14C1B04A0053C668 /* sdl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		C94EEDF81600D87D004F9FE0 /* debug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94EEDF61600D87D004F9FE0 /* debug.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C94EEDF91600D87D004F9FE0 /* debug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94EEDF61600D87D004F9FE0 /* debug.hpp */; };
-		C94EEDFA1600D87D004F9FE0 /* window.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94EEDF71600D87D004F9FE0 /* window.hpp */; };
+		C94EEDFA1600D87D004F9FE0 /* window.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94EEDF71600D87D004F9FE0 /* window.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C94EEDFB1600D87D004F9FE0 /* window.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94EEDF71600D87D004F9FE0 /* window.hpp */; };
 		C94EEE321600ED1F004F9FE0 /* JNGLViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C94EEE301600ED1F004F9FE0 /* JNGLViewController.h */; };
 		C94EEE331600ED1F004F9FE0 /* JNGLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C94EEE311600ED1F004F9FE0 /* JNGLViewController.mm */; };
@@ -58,16 +58,17 @@
 		C96D4D0C15C1D6EB00E36715 /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C96D4D0B15C1D6EB00E36715 /* test.cpp */; };
 		C9740995160766FA002D1152 /* drawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9740993160766FA002D1152 /* drawable.cpp */; };
 		C9740996160766FA002D1152 /* drawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9740993160766FA002D1152 /* drawable.cpp */; };
-		C9740997160766FA002D1152 /* drawable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9740994160766FA002D1152 /* drawable.hpp */; };
+		C9740997160766FA002D1152 /* drawable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9740994160766FA002D1152 /* drawable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9740998160766FA002D1152 /* drawable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9740994160766FA002D1152 /* drawable.hpp */; };
-		C974099B16076969002D1152 /* screen.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C974099A16076969002D1152 /* screen.hpp */; };
+		C974099B16076969002D1152 /* screen.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C974099A16076969002D1152 /* screen.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C974099C16076969002D1152 /* screen.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C974099A16076969002D1152 /* screen.hpp */; };
 		C974099E16076AE0002D1152 /* screen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C974099D16076AE0002D1152 /* screen.cpp */; };
 		C974099F16076AE0002D1152 /* screen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C974099D16076AE0002D1152 /* screen.cpp */; };
-		C97409A116076C1D002D1152 /* text.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C97409A016076C1C002D1152 /* text.hpp */; };
+		C97409A116076C1D002D1152 /* text.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C97409A016076C1C002D1152 /* text.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C97409A216076C1D002D1152 /* text.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C97409A016076C1C002D1152 /* text.hpp */; };
 		C97409A416076CD1002D1152 /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C97409A316076CD1002D1152 /* text.cpp */; };
 		C97409A516076CD1002D1152 /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C97409A316076CD1002D1152 /* text.cpp */; };
+		C9796BB816162BAA0091DF75 /* work.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C98A18A915DEADB90038B716 /* work.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C97F8934161531CE00F683FA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C97F8933161531CE00F683FA /* libz.dylib */; };
 		C97F89371615323200F683FA /* jngl.webp in Resources */ = {isa = PBXBuildFile; fileRef = C97F89361615323200F683FA /* jngl.webp */; };
 		C9849D701611D5DE000C9A65 /* WebP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9849D6F1611D5DD000C9A65 /* WebP.framework */; };
@@ -96,10 +97,9 @@
 		C9E948FD14A7C40E0048EFCA /* time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C99A094A13EC508C006C46FF /* time.cpp */; };
 		C9E9490D14A7C4990048EFCA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3113EAED790086B474 /* OpenGL.framework */; };
 		C9E9490E14A7C49F0048EFCA /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3413EAED8A0086B474 /* OpenAL.framework */; };
-		C9E9491514A7DE430048EFCA /* jngl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9F1AFCA13EAEF420086B474 /* jngl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9E9E2C315C1D467006CCBD2 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C215C1D467006CCBD2 /* window.cpp */; };
 		C9E9E2C615C1D47F006CCBD2 /* spriteimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C415C1D47F006CCBD2 /* spriteimpl.cpp */; };
-		C9E9E2C715C1D47F006CCBD2 /* spriteimpl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9E9E2C515C1D47F006CCBD2 /* spriteimpl.hpp */; };
+		C9E9E2C715C1D47F006CCBD2 /* spriteimpl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9E9E2C515C1D47F006CCBD2 /* spriteimpl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9E9E2D615C1D4BD006CCBD2 /* callbacks.c in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C815C1D4BD006CCBD2 /* callbacks.c */; };
 		C9E9E2D715C1D4BD006CCBD2 /* ConvertUTF.c in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C915C1D4BD006CCBD2 /* ConvertUTF.c */; };
 		C9E9E2D815C1D4BD006CCBD2 /* audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CA15C1D4BD006CCBD2 /* audio.cpp */; };
@@ -113,8 +113,8 @@
 		C9E9E2E115C1D4BD006CCBD2 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2D315C1D4BD006CCBD2 /* window.cpp */; };
 		C9E9E2E215C1D4BD006CCBD2 /* windowptr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2D415C1D4BD006CCBD2 /* windowptr.cpp */; };
 		C9E9E2E815C1D52A006CCBD2 /* sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2E515C1D52A006CCBD2 /* sprite.cpp */; };
-		C9E9E2E915C1D52A006CCBD2 /* sprite.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9E9E2E615C1D52A006CCBD2 /* sprite.hpp */; };
-		C9E9E2EA15C1D52A006CCBD2 /* types.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9E9E2E715C1D52A006CCBD2 /* types.hpp */; };
+		C9E9E2E915C1D52A006CCBD2 /* sprite.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9E9E2E615C1D52A006CCBD2 /* sprite.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		C9E9E2EA15C1D52A006CCBD2 /* types.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9E9E2E715C1D52A006CCBD2 /* types.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9F3AB8B1525F0A800A77E9F /* Arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8A1525F0A800A77E9F /* Arial.ttf */; };
 		C9F3AB8C1525F0B800A77E9F /* Arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8A1525F0A800A77E9F /* Arial.ttf */; };
 		C9F3AB901525F67000A77E9F /* test.ogg in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8F1525F67000A77E9F /* test.ogg */; };
@@ -544,7 +544,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9E9491514A7DE430048EFCA /* jngl.hpp in Headers */,
 				C93B324F14C1B04A0053C668 /* sdl.hpp in Headers */,
 				C9E9E2C715C1D47F006CCBD2 /* spriteimpl.hpp in Headers */,
 				C9E9E2E915C1D52A006CCBD2 /* sprite.hpp in Headers */,
@@ -555,6 +554,7 @@
 				C923BC5116066E4400BEFE2D /* framebuffer.hpp in Headers */,
 				C923BC5C16066EC300BEFE2D /* opengl.hpp in Headers */,
 				C9740997160766FA002D1152 /* drawable.hpp in Headers */,
+				C9796BB816162BAA0091DF75 /* work.hpp in Headers */,
 				C974099B16076969002D1152 /* screen.hpp in Headers */,
 				C97409A116076C1D002D1152 /* text.hpp in Headers */,
 				C9196EE21607ACBA00A9E80D /* input.hpp in Headers */,

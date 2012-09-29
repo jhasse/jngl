@@ -97,11 +97,6 @@ namespace jngl {
 
 	void endPolygon();
 
-	bool drawButton(const std::string& sprite,
-	                double xposition,
-	                double yposition,
-	                const std::string& mouseover);
-
 	void setTitle(const std::string& title);
 
 	void setBackgroundColor(unsigned char red,

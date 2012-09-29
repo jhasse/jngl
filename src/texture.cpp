@@ -13,7 +13,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 namespace jngl {
 	bool Texture::useVBO_ = true;
 
-	Texture::Texture(const int imgWidth, const int imgHeight, GLubyte** rowPointers, GLenum format, int channels, GLubyte* data) {
+	Texture::Texture(const int imgWidth, const int imgHeight, GLubyte** rowPointers,
+	                 GLenum format, int channels, GLubyte* data) : imgWidth(imgWidth), imgHeight(imgHeight) {
 		if (useVBO_ && (!GLEW_ARB_vertex_buffer_object || !GLEW_VERSION_1_5)) {
 			jngl::debug("VBOs not supported, using Vertex Arrays\n");
 			useVBO_ = false;
@@ -137,5 +138,13 @@ namespace jngl {
 
 	GLuint Texture::getID() const {
 		return texture_;
+	}
+
+	int Texture::getWidth() const {
+		return imgWidth;
+	}
+
+	int Texture::getHeight() const {
+		return imgHeight;
 	}
 }

@@ -11,6 +11,12 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <boost/shared_ptr.hpp>
 
 namespace jngl {
+	enum Alignment {
+		LEFT,
+		RIGHT,
+		CENTER
+	};
+
 	class Font;
 	class FontImpl;
 
@@ -19,10 +25,15 @@ namespace jngl {
 		Text(const std::string& text = "");
 		void setText(const std::string&);
 		void setFont(boost::shared_ptr<Font>);
+		void setAlign(Alignment);
+		void setPos(Float x, Float y) override;
 		void step() override;
 		void draw() const override;
 	private:
+		void updatePos();
+
 		std::string text;
 		boost::shared_ptr<FontImpl> font;
+		Alignment align;
 	};
 }

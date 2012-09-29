@@ -38,11 +38,10 @@ namespace jngl
 		int top_;
 	};
 
-	class FontImpl : boost::noncopyable
-	{
+	class FontImpl : boost::noncopyable {
 	public:
 		FontImpl();
-		FontImpl(const char* filename, unsigned int height);
+		FontImpl(const std::string& filename, unsigned int height);
 		~FontImpl();
 		void print(int x, int y, const std::string& text);
 		double getTextWidth(const std::string& text);

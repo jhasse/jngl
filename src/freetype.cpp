@@ -10,6 +10,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "jngl/font.hpp"
 #include "jngl/debug.hpp"
 #include "ConvertUTF.h"
+#include "main.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
@@ -175,8 +176,9 @@ namespace jngl
 		throw std::runtime_error("Attempting to use an unitialized FontImpl object");
 	}
 
-	FontImpl::FontImpl(const char* filename, unsigned int height) : height_(height), lineHeight(int(height_ / .63)) {
-		if (!std::ifstream(filename)) {
+	FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height) : height_(height), lineHeight(int(height_ / .63)) {
+		auto filename = pathPrefix + relativeFilename;
+		if (!std::ifstream(filename.c_str())) {
 			throw std::runtime_error(std::string("Font file not found: ") + filename);
 		}
 		if(++instanceCounter_ == 1)
@@ -188,8 +190,7 @@ namespace jngl
 			}
 		}
 		debug("Loading font "); debug(filename); debug("... ");
-		if(FT_New_Face(library_, filename, 0, &face_))
-		{
+		if (FT_New_Face(library_, filename.c_str(), 0, &face_)) {
 			throw std::runtime_error("FT_New_Face failed");
 		}
 		debug("OK\n");
