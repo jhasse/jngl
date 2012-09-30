@@ -7,6 +7,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "types.hpp"
 
+#pragma GCC visibility push(default)
 namespace jngl {
 	Float getScaleFactor();
 
@@ -16,3 +17,4 @@ namespace jngl {
 
 	int getScreenHeight();
 }
+#pragma GCC visibility pop

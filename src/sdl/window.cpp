@@ -5,6 +5,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
 #include "../jngl/debug.hpp"
+#include "../jngl/window.hpp"
 #include "sdl.hpp"
 #include "windowimpl.hpp"
 

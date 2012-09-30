@@ -14,6 +14,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <string>
 #include <vector>
 
+#pragma GCC visibility push(default)
 namespace jngl {
 	class Texture;
 
@@ -64,3 +65,4 @@ namespace jngl {
 
 	void setSpriteAlpha(unsigned char alpha);
 }
+#pragma GCC visibility pop

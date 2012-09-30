@@ -7,6 +7,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <boost/shared_ptr.hpp>
 
+#pragma GCC visibility push(default)
 namespace jngl {
 	class Job {
 	public:
@@ -17,3 +18,4 @@ namespace jngl {
 
 	void addJob(boost::shared_ptr<Job> job);
 }
+#pragma GCC visibility pop

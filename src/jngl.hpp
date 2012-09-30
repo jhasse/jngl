@@ -23,6 +23,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <vector>
 #include <stdexcept>
 
+#pragma GCC visibility push(default)
 namespace jngl {
 	bool running();
 
@@ -165,3 +166,4 @@ namespace jngl {
 
 	std::vector<std::string> getArgs();
 }
+#pragma GCC visibility pop

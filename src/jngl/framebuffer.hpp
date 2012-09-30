@@ -5,6 +5,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
+#pragma GCC visibility push(default)
 namespace jngl {
 	class FrameBufferImpl;
 
@@ -22,3 +23,4 @@ namespace jngl {
 		FrameBufferImpl* pImpl;
 	};
 }
+#pragma GCC visibility pop

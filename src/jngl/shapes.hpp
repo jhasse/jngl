@@ -5,6 +5,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
+#pragma GCC visibility push(default)
 namespace jngl {
 	void setColor(unsigned char red,
 	              unsigned char green,
@@ -22,3 +23,4 @@ namespace jngl {
 
 	void drawPoint(double x, double y);
 }
+#pragma GCC visibility pop

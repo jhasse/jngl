@@ -7,6 +7,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <boost/shared_ptr.hpp>
 
+#pragma GCC visibility push(default)
 namespace jngl {
 	class Work {
 	public:
@@ -23,3 +24,4 @@ namespace jngl {
 
 	void setWork(Work*);
 }
+#pragma GCC visibility pop

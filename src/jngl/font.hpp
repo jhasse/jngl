@@ -8,6 +8,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <string>
 #include <boost/shared_ptr.hpp>
 
+#pragma GCC visibility push(default)
 namespace jngl {
 	class FontImpl;
 
@@ -31,3 +32,4 @@ namespace jngl {
 
 	double getTextWidth(const std::string& text);
 }
+#pragma GCC visibility pop

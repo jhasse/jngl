@@ -7,6 +7,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "types.hpp"
 
+#pragma GCC visibility push(default)
 namespace jngl {
 	class Drawable {
 	public:
@@ -44,3 +45,4 @@ namespace jngl {
 		int height;
 	};
 }
+#pragma GCC visibility pop
