@@ -47,8 +47,8 @@ private:
     jngl::Text text("Hello World!");
 };
 
-void jnglMain() {
-    jngl::setWork&lt;HelloWorld&gt;();
+JNGL_MAIN {
+    jngl::setWork(new HelloWorld);
 }</pre>
 	</div>
 </div>

@@ -5,6 +5,8 @@ navigation:
   url: tutorials
 - text: Reference
   url: reference
+- text: Forum
+  url: http://groups.google.com/group/jngl
 - text: Code
   url: https://github.com/jhasse/jngl
 - text: Wiki
