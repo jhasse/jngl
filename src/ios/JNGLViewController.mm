@@ -2,6 +2,8 @@
 
 #include "../jngl/input.hpp"
 
+#import <AVFoundation/AVAudioSession.h>
+
 JNGLView* jnglView = nullptr;
 
 @interface JNGLViewController ()
@@ -14,7 +16,7 @@ JNGLView* jnglView = nullptr;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+		[[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryAmbient error: nil];
     }
     return self;
 }

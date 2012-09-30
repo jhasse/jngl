@@ -93,6 +93,8 @@
 		C9C95BA61529CE3A008EA579 /* windowimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9C95BA51529CE3A008EA579 /* windowimpl.cpp */; };
 		C9C95BA91529D070008EA579 /* JNGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = C9C95BA71529D070008EA579 /* JNGLView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9C95BAA1529D070008EA579 /* JNGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9C95BA81529D070008EA579 /* JNGLView.mm */; };
+		C9D1CDCC1618A1520031799E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D1CDCB1618A1520031799E /* AVFoundation.framework */; };
+		C9D1CDCD1618A1B60031799E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D1CDCB1618A1520031799E /* AVFoundation.framework */; };
 		C9E948FC14A7C40E0048EFCA /* message.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C99A094C13EC509D006C46FF /* message.cpp */; };
 		C9E948FD14A7C40E0048EFCA /* time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C99A094A13EC508C006C46FF /* time.cpp */; };
 		C9E9490D14A7C4990048EFCA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3113EAED790086B474 /* OpenGL.framework */; };
@@ -197,6 +199,7 @@
 		C9C95BA51529CE3A008EA579 /* windowimpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = windowimpl.cpp; path = ../../src/ios/windowimpl.cpp; sourceTree = "<group>"; };
 		C9C95BA71529D070008EA579 /* JNGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JNGLView.h; path = ../../src/ios/JNGLView.h; sourceTree = "<group>"; };
 		C9C95BA81529D070008EA579 /* JNGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = JNGLView.mm; path = ../../src/ios/JNGLView.mm; sourceTree = "<group>"; };
+		C9D1CDCB1618A1520031799E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		C9E948E614A7C3EF0048EFCA /* JNGL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JNGL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9E948E814A7C3EF0048EFCA /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		C9E948EB14A7C3EF0048EFCA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -253,6 +256,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9D1CDCC1618A1520031799E /* AVFoundation.framework in Frameworks */,
 				C9849D701611D5DE000C9A65 /* WebP.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -261,6 +265,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9D1CDCD1618A1B60031799E /* AVFoundation.framework in Frameworks */,
 				C97F8934161531CE00F683FA /* libz.dylib in Frameworks */,
 				C9849D711611D7A3000C9A65 /* WebP.framework in Frameworks */,
 				C9BFF84C1524C3CC00066D6C /* libvorbis.a in Frameworks */,
@@ -291,6 +296,7 @@
 		C921153813EABBF100770E49 = {
 			isa = PBXGroup;
 			children = (
+				C9D1CDCB1618A1520031799E /* AVFoundation.framework */,
 				C97F89361615323200F683FA /* jngl.webp */,
 				C97F8933161531CE00F683FA /* libz.dylib */,
 				C9F3AB8F1525F67000A77E9F /* test.ogg */,
@@ -982,7 +988,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = (
 					../include/ios,
-					/opt/local/include,
+					../src,
 				);
 				INFOPLIST_FILE = "Test iOS/Test iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
@@ -1017,7 +1023,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = (
 					../include/ios,
-					/opt/local/include,
+					../src,
 				);
 				INFOPLIST_FILE = "Test iOS/Test iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;

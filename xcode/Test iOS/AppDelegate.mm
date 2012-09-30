@@ -1,6 +1,6 @@
 #import "AppDelegate.h"
 
-#import <JNGL/jngl.hpp>
+#include <jngl.hpp>
 #include <sstream>
 #include <iostream>
 
@@ -12,7 +12,6 @@ class Test : public jngl::Work {
 public:
 	Test() : angle(0), fbo(0) {
 		jngl::setFont("Arial.ttf");
-		jngl::play("test.ogg");
 		std::cout << "Resolution: " << jngl::getWindowWidth() << "x" << jngl::getWindowHeight() << std::endl
 		          << "Config path: " << jngl::getConfigPath() << std::endl;
 	}
@@ -28,6 +27,7 @@ public:
 		}
 		if (jngl::keyPressed(jngl::key::Return)) {
 			std::cout << std::endl;
+			jngl::play("test.ogg");
 		}
 		if (jngl::keyPressed(jngl::key::BackSpace)) {
 			jngl::setKeyboardVisible(false);

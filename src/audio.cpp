@@ -22,6 +22,8 @@ int vswprintf(wchar_t *, const wchar_t *, va_list);
 
 namespace jngl
 {
+	float Sound::masterVolume = 1.0f;
+
 	Sound::Sound(ALenum format, std::vector<char>& bufferData, ALsizei freq) : source_(0)
 	{
 		alGenBuffers(1, &buffer_);
@@ -31,6 +33,7 @@ namespace jngl
 		alBufferData(buffer_, format, &bufferData[0], static_cast<ALsizei>(bufferData.size()), freq);
 		alSourcei(source_, AL_BUFFER, buffer_);
 		alSourcePlay(source_);
+		setVolume(masterVolume);
 	}
 	Sound::~Sound()
 	{
@@ -259,6 +262,7 @@ namespace jngl
 		for(auto i = sounds.begin(); i != end; ++i) {
 			i->second->setVolume(volume);
 		}
+		Sound::masterVolume = volume;
 	}
 	
 	Audio& GetAudio()

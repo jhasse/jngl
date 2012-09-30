@@ -36,6 +36,8 @@ namespace jngl
 		bool Stopped();
 		void SetPitch(float p);
 		void setVolume(float v);
+
+		static float masterVolume;
 	private:
 		ALuint buffer_;
 		ALuint source_;
