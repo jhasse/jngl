@@ -27,12 +27,9 @@ namespace jngl {
 		void setText(const std::string&);
 		void setFont(boost::shared_ptr<Font>);
 		void setAlign(Alignment);
-		void setPos(Float x, Float y) override;
 		void step() override;
 		void draw() const override;
 	private:
-		void updatePos();
-
 		std::string text;
 		boost::shared_ptr<FontImpl> font;
 		Alignment align;

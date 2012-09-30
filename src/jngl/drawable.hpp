@@ -22,7 +22,13 @@ namespace jngl {
 		Vect getCenter() const {
 			return Vect{x + width/2, y + height/2};
 		}
-		void setCenter(Float x, Float y);
+
+		virtual void setCenter(Float x, Float y);
+
+		template<class Vect>
+		void setCenter(Vect c) {
+			setCenter(c.x, c.y);
+		}
 
 		Float getLeft() const;
 		void setLeft(Float x);
@@ -35,6 +41,9 @@ namespace jngl {
 
 		Float getBottom() const;
 		void setBottom(Float y);
+
+		int getX() const;
+		int getY() const;
 
 		int getWidth() const;
 		int getHeight() const;

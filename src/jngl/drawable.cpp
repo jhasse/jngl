@@ -55,6 +55,14 @@ namespace jngl {
 		this->x = getScreenWidth()/2 - x - width;
 	}
 
+	int Drawable::getX() const {
+		return x;
+	}
+
+	int Drawable::getY() const {
+		return y;
+	}
+
 	int Drawable::getWidth() const {
 		return width;
 	}
