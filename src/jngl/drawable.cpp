@@ -24,19 +24,19 @@ namespace jngl {
 	}
 
 	Float Drawable::getLeft() const {
-		return x;
+		return x + getScreenWidth() / 2;
 	}
 
 	void Drawable::setLeft(Float x) {
-		this->x = x;
+		this->x = x - getScreenWidth() / 2;
 	}
 
 	Float Drawable::getTop() const {
-		return y;
+		return y + getScreenHeight() / 2;
 	}
 
 	void Drawable::setTop(Float y) {
-		this->y = y;
+		this->y = y - getScreenHeight() / 2;
 	}
 
 	Float Drawable::getBottom() const {
