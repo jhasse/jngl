@@ -202,9 +202,9 @@ void drawBackground() {
 		}
 	}
 	else {
-		jngl::drawClipped("jngl.png",
-		                  jngl::getWindowWidth() / 2- jngl::getWidth("jngl.png") / 2,
-		                  jngl::getWindowHeight() / 2- jngl::getHeight("jngl.png") / 2,
+		jngl::drawClipped("jngl",
+		                  jngl::getWindowWidth() / 2- jngl::getWidth("jngl") / 2,
+		                  jngl::getWindowHeight() / 2- jngl::getHeight("jngl") / 2,
 						  0.5 - factor / 2, 0.5 + factor / 2,
 						  0.5 - factor / 2, 0.5 + factor / 2);
 	}

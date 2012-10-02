@@ -14,6 +14,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "../main.hpp"
 
 #include <string>
+#include <utility>
+#include <fstream>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/function.hpp>
@@ -67,50 +69,67 @@ namespace jngl {
 		if (texture) {
 			width = texture->getWidth();
 			height = texture->getHeight();
+			setCenter(0, 0);
 			return;
 		}
 		auto filename = pathPrefix + file;
+		const char* extensions[] = {
+#ifndef NOWEBP
+			".webp",
+#endif
+#ifndef NOPNG
+			".png",
+#endif
+#ifndef NOJPEG
+			".jpg", ".jpeg",
+#endif
+			".bmp"
+		};
+		boost::function<void(Sprite*, std::string, FILE*, bool)> functions[] = {
+#ifndef NOWEBP
+			&Sprite::LoadWebP,
+#endif
+#ifndef NOPNG
+			&Sprite::LoadPNG,
+#endif
+#ifndef NOJPEG
+			&Sprite::LoadJPG, &Sprite::LoadJPG,
+#endif
+			&Sprite::LoadBMP
+		};
+		const size_t size = sizeof(extensions)/sizeof(extensions[0]);
+		boost::function<void(Sprite*, std::string, FILE*, bool)> loadFunction;
+		for (int i = 0; i < size; ++i) {
+			if (boost::algorithm::ends_with(filename, extensions[i])) {
+				loadFunction = functions[i];
+				break;
+			}
+			std::string tmp = filename + extensions[i];
+			if (std::ifstream(tmp.c_str())) {
+				filename += extensions[i];
+				loadFunction = functions[i];
+				break;
+			}
+		}
+		if (!loadFunction) {
+			std::stringstream message;
+			message << "No suitable image file found for: " << filename
+			        << "\nSupported file extensions: ";
+			for (int i = 0; i < size; ++i) {
+				if (i) {
+					message << ", ";
+				}
+				message << extensions[i];
+			}
+			throw std::runtime_error(message.str());
+		}
 		FILE* pFile = fopen(filename.c_str(), "rb");
 		if (!pFile) {
 			throw std::runtime_error(std::string("File not found: " + filename));
 		}
-
 		Finally closeFile(boost::bind(fclose, pFile));
-
-		if (boost::algorithm::ends_with(filename, ".webp")) {
-		#ifdef NOWEBP
-			throw std::runtime_error(std::string("Sorry, WebP files not supported in this build of JNGL. (" + filename + ")"));
-		#else
-			LoadWebP(filename, pFile, halfLoad);
-			return;
-		#endif
-		}
-
-		png_byte buf[PNG_BYTES_TO_CHECK];
-		assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short));
-
-		// Read in some of the signature bytes
-		if (fread(buf, 1, PNG_BYTES_TO_CHECK, pFile) != PNG_BYTES_TO_CHECK)
-			throw std::runtime_error(std::string("Error reading signature bytes. (" + filename + ")"));
-
-#ifdef NOPNG
-		if (false) // FIXME: Display warning about PNG files not being supported in this build.
-#else
-		if (png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) == 0)
-#endif
-			LoadPNG(filename, pFile, halfLoad);
-		else if (*reinterpret_cast<unsigned short*>(buf) == 19778)
-			LoadBMP(filename, pFile, halfLoad);
-		else if (*reinterpret_cast<unsigned short*>(buf) == 55551) {
-		#ifdef NOJPEG
-			throw std::runtime_error(std::string("Sorry, JPEG files not supported in this build of JNGL. ("
-			                                     + filename + ")"));
-		#else
-			LoadJPG(filename, pFile, halfLoad);
-		#endif
-		}
-		else
-			throw std::runtime_error(std::string("Not a PNG, WebP, JPEG or BMP file. (" + filename + ")"));
+		loadFunction(this, filename, pFile, halfLoad);
+		setCenter(0, 0);
 	}
 
 	int Sprite::getWidth() const {
@@ -154,6 +173,15 @@ namespace jngl {
 #ifndef NOPNG
 	void Sprite::LoadPNG(const std::string& filename, FILE* const fp,
 	                     const bool halfLoad) {
+		png_byte buf[PNG_BYTES_TO_CHECK];
+		assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short));
+
+		// Read in some of the signature bytes
+		if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK ||
+		    png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) != 0) {
+			throw std::runtime_error(std::string("Error reading signature bytes. (" + filename + ")"));
+		}
+
 		png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 		if (!png_ptr) {
 			throw std::runtime_error(std::string("libpng error while reading (" + filename + ")"));
@@ -252,9 +280,7 @@ namespace jngl {
 	}
 #ifndef NOJPEG
 	void Sprite::LoadJPG(const std::string& filename, FILE* file,
-	                         const bool halfLoad) {
-		fseek(file, 0, SEEK_SET); // Seek to the beginning
-
+	                     const bool halfLoad) {
 		jpeg_decompress_struct info;
 		JpegErrorMgr err;
 		info.err = jpeg_std_error(&err.pub);
