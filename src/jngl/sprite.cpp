@@ -65,14 +65,14 @@ namespace jngl {
 	}
 #endif
 
-	Sprite::Sprite(const std::string& file, bool halfLoad) : texture(getTexture(file)) {
+	Sprite::Sprite(const std::string& shortFilename, bool halfLoad) : texture(getTexture(shortFilename)) {
 		if (texture) {
 			width = texture->getWidth();
 			height = texture->getHeight();
 			setCenter(0, 0);
 			return;
 		}
-		auto filename = pathPrefix + file;
+		auto filename = pathPrefix + shortFilename;
 		const char* extensions[] = {
 #ifndef NOWEBP
 			".webp",
@@ -128,7 +128,7 @@ namespace jngl {
 			throw std::runtime_error(std::string("File not found: " + filename));
 		}
 		Finally closeFile(boost::bind(fclose, pFile));
-		loadFunction(this, filename, pFile, halfLoad);
+		loadFunction(this, shortFilename, pFile, halfLoad);
 		setCenter(0, 0);
 	}
 
