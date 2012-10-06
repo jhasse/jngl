@@ -17,6 +17,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/function.hpp>
+#include <stack>
 #include <stdexcept>
 #include <cmath>
 #include <cstdlib>
@@ -44,6 +45,18 @@ namespace jngl
 		spriteColorGreen = green;
 		spriteColorBlue = blue;
 		glColor4ub(red, green, blue, spriteColorAlpha);
+	}
+
+	std::stack<unsigned char> spriteAlphas;
+
+	void pushSpriteAlpha(unsigned char alpha) {
+		spriteAlphas.push(spriteColorAlpha);
+		setSpriteAlpha(spriteColorAlpha * alpha / 255);
+	}
+
+	void popSpriteAlpha() {
+		setSpriteAlpha(spriteAlphas.top());
+		spriteAlphas.pop();
 	}
 
 	void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) {

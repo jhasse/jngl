@@ -64,5 +64,9 @@ namespace jngl {
 	                    unsigned char alpha);
 
 	void setSpriteAlpha(unsigned char alpha);
+
+	void pushSpriteAlpha(unsigned char alpha = 255);
+
+	void popSpriteAlpha();
 }
 #pragma GCC visibility pop
