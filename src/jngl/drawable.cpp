@@ -55,12 +55,20 @@ namespace jngl {
 		this->x = getScreenWidth()/2 - x - width;
 	}
 
-	int Drawable::getX() const {
+	Float Drawable::getX() const {
 		return x;
 	}
 
-	int Drawable::getY() const {
+	void Drawable::setX(Float x) {
+		this->x = x;
+	}
+
+	Float Drawable::getY() const {
 		return y;
+	}
+
+	void Drawable::setY(Float y) {
+		this->y = y;
 	}
 
 	int Drawable::getWidth() const {

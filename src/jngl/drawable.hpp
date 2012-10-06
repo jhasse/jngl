@@ -42,8 +42,11 @@ namespace jngl {
 		Float getBottom() const;
 		void setBottom(Float y);
 
-		int getX() const;
-		int getY() const;
+		Float getX() const;
+		void setX(Float);
+
+		Float getY() const;
+		void setY(Float);
 
 		int getWidth() const;
 		int getHeight() const;
