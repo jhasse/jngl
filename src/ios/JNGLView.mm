@@ -79,7 +79,6 @@
 	if (displayLink) {
 		if (startTime < 0) {
 			startTime = displayLink.timestamp;
-			std::cout << "DRAW" << std::endl;
 		} else {
 			jngl::elapsedSeconds = displayLink.timestamp - startTime;
 		}

@@ -96,12 +96,10 @@ namespace jngl {
 		if (useVBO_) {
 			opengl::BindArrayBuffer(vertexBuffer_);
 		}
-	#ifndef WIZ
 		else {
 			glVertexPointer(2, GL_FLOAT, 0, &vertexes_[0]);
 			glTexCoordPointer(2, opengl::Type<double>::constant, 0, &texCoords_[0]);
 		}
-	#endif
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
