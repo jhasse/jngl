@@ -11,7 +11,6 @@ namespace jngl {
 @interface JNGLView : UIView <UIKeyInput> {
 	EAGLContext* context;
 	float angle;
-	float desiredAngle;
 	int width;
 	int height;
 	CFTimeInterval startTime;

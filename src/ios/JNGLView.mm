@@ -64,12 +64,13 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
 		
 		startTime = -1;
-		desiredAngle = angle = 0;
+		angle = 0;
 		jngl::setPrefix(std::string([[[NSBundle mainBundle] resourcePath] UTF8String]) + "/");
 		jngl::setConfigPath(std::string([[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
 		                                  objectAtIndex:0]
 		                                 UTF8String]) + "/");
 		impl = jngl::pWindow->getImpl();
+		[UIView setAnimationsEnabled:NO];
     }
     return self;
 }
@@ -83,25 +84,7 @@
 			jngl::elapsedSeconds = displayLink.timestamp - startTime;
 		}
 		
-		while (jngl::pWindow->stepIfNeeded()) {
-			if (angle != desiredAngle) {
-				const float speed = 5.8f;
-				if (angle < desiredAngle) {
-					if (desiredAngle - angle < speed*2) {
-						angle = desiredAngle;
-					} else {
-						angle += speed;
-					}
-				}
-				if (angle > desiredAngle) {
-					if (angle - desiredAngle < speed*2) {
-						angle = desiredAngle;
-					} else {
-						angle -= speed;
-					}
-				}
-			}
-		}
+		while (jngl::pWindow->stepIfNeeded());
 	}
 
 	glLoadIdentity();
@@ -142,11 +125,11 @@
 	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
 	switch (orientation) {
 		case UIDeviceOrientationLandscapeLeft:
-			desiredAngle = 180;
+			angle = 180;
 			impl->setFlip(true);
 			break;
 		case UIDeviceOrientationLandscapeRight:
-			desiredAngle = 0;
+			angle = 0;
 			impl->setFlip(false);
 			break;
 		default: break;
