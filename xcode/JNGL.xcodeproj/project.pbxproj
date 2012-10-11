@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C90170731626DAE7004A38B7 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF8081524B2F600066D6C /* libpng.a */; };
 		C9196EE21607ACBA00A9E80D /* input.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9196EE11607ACBA00A9E80D /* input.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9196EE51607B59800A9E80D /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9196EE41607B59800A9E80D /* input.cpp */; };
 		C9196EE61607B59800A9E80D /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9196EE41607B59800A9E80D /* input.cpp */; };
@@ -83,6 +84,8 @@
 		C9AE786314A892FE004359EF /* JNGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E948E614A7C3EF0048EFCA /* JNGL.framework */; };
 		C9AF94241610F63C002EC853 /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9AF94231610F63C002EC853 /* font.cpp */; };
 		C9AF94251610F63C002EC853 /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9AF94231610F63C002EC853 /* font.cpp */; };
+		C9B8E37B16262AD8000E5FC1 /* matrix.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94717AC16261C7F00B9C5F7 /* matrix.hpp */; };
+		C9B8E38216262BD6000E5FC1 /* matrix.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94717AC16261C7F00B9C5F7 /* matrix.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9BFF8021524B24600066D6C /* libJNGL iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CA614FEE5D20065CD6B /* libJNGL iOS.a */; };
 		C9BFF83E1524BB0A00066D6C /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF83D1524BB0A00066D6C /* libfreetype.a */; };
 		C9BFF8401524BD0600066D6C /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BFF83F1524BD0600066D6C /* window.cpp */; };
@@ -149,6 +152,7 @@
 		C93A89F9160B243300BA8D91 /* shapes.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = shapes.hpp; path = ../src/jngl/shapes.hpp; sourceTree = "<group>"; };
 		C93B324A14C1B0090053C668 /* sdl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sdl.cpp; path = src/sdl/sdl.cpp; sourceTree = "<group>"; };
 		C93B324E14C1B04A0053C668 /* sdl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = sdl.hpp; path = ../src/sdl/sdl.hpp; sourceTree = "<group>"; };
+		C94717AC16261C7F00B9C5F7 /* matrix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = matrix.hpp; path = ../src/jngl/matrix.hpp; sourceTree = "<group>"; };
 		C94EEDF61600D87D004F9FE0 /* debug.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = debug.hpp; path = ../src/jngl/debug.hpp; sourceTree = "<group>"; };
 		C94EEDF71600D87D004F9FE0 /* window.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = window.hpp; path = ../src/jngl/window.hpp; sourceTree = "<group>"; };
 		C94EEE301600ED1F004F9FE0 /* JNGLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JNGLViewController.h; path = ../../src/ios/JNGLViewController.h; sourceTree = "<group>"; };
@@ -265,6 +269,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C90170731626DAE7004A38B7 /* libpng.a in Frameworks */,
 				C9D1CDCD1618A1B60031799E /* AVFoundation.framework in Frameworks */,
 				C97F8934161531CE00F683FA /* libz.dylib in Frameworks */,
 				C9849D711611D7A3000C9A65 /* WebP.framework in Frameworks */,
@@ -458,6 +463,7 @@
 				C923BC4B16066E4400BEFE2D /* framebuffer.hpp */,
 				C9196EE11607ACBA00A9E80D /* input.hpp */,
 				C92916721609BCEC00A69E46 /* job.hpp */,
+				C94717AC16261C7F00B9C5F7 /* matrix.hpp */,
 				C974099A16076969002D1152 /* screen.hpp */,
 				C93A89F9160B243300BA8D91 /* shapes.hpp */,
 				C9E9E2E615C1D52A006CCBD2 /* sprite.hpp */,
@@ -533,6 +539,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9C95BA91529D070008EA579 /* JNGLView.h in Headers */,
+				C9B8E37B16262AD8000E5FC1 /* matrix.hpp in Headers */,
 				C94EEDF91600D87D004F9FE0 /* debug.hpp in Headers */,
 				C94EEDFB1600D87D004F9FE0 /* window.hpp in Headers */,
 				C94EEE321600ED1F004F9FE0 /* JNGLViewController.h in Headers */,
@@ -566,6 +573,7 @@
 				C92916751609BCEC00A69E46 /* job.hpp in Headers */,
 				C93A89FC160B243300BA8D91 /* shapes.hpp in Headers */,
 				C95D98B7161CCA1A00BAC980 /* all.hpp in Headers */,
+				C9B8E38216262BD6000E5FC1 /* matrix.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -916,7 +924,6 @@
 					"IOS=1",
 					"$(inherited)",
 					"NOJPEG=1",
-					"NOPNG=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -949,7 +956,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"IOS=1",
 					"$(inherited)",
-					"NOPNG=1",
 					"NOJPEG=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
