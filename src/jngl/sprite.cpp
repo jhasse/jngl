@@ -40,12 +40,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 	#include <webp/decode.h>
 #endif
 
-#include <boost/unordered_map.hpp>
-
 namespace jngl {
 	const unsigned int PNG_BYTES_TO_CHECK = 4;
-
-	boost::unordered_map<std::string, boost::shared_ptr<Texture>> textures;
 
 	boost::shared_ptr<Texture> getTexture(const std::string& filename) {
 		auto it = textures.find(filename);

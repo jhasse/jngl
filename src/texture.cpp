@@ -11,6 +11,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #endif
 
 namespace jngl {
+	boost::unordered_map<std::string, boost::shared_ptr<Texture>> textures;
+
 	bool Texture::useVBO_ = true;
 
 	Texture::Texture(const int imgWidth, const int imgHeight, GLubyte** rowPointers,

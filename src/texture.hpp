@@ -9,6 +9,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <vector>
 #include <boost/noncopyable.hpp>
+#include <boost/unordered_map.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace jngl {
 	class Texture : boost::noncopyable {
@@ -33,4 +35,6 @@ namespace jngl {
 		int imgWidth;
 		int imgHeight;
 	};
+
+	extern boost::unordered_map<std::string, boost::shared_ptr<Texture>> textures;
 }

@@ -122,10 +122,15 @@ namespace jngl
 		if (it != sprites_.end()) {
 			sprites_.erase(it);
 		}
+		auto it2 = textures.find(filename);
+		if (it2 != textures.end()) {
+			textures.erase(it2);
+		}
 	}
 
 	void unloadAll() {
 		sprites_.clear();
+		textures.clear();
 	}
 
 	int getWidth(const std::string& filename) {
