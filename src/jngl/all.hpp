@@ -18,6 +18,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "input.hpp"
 #include "job.hpp"
 #include "shapes.hpp"
+#include "matrix.hpp"
 
 #include <string>
 #include <vector>
@@ -64,20 +65,6 @@ namespace jngl {
 					 float yend);
 
 	void drawRect(double xposition, double yposition, double width, double height);
-
-	void rotate(double degree);
-
-	void translate(double x, double y);
-
-	void scale(double factor);
-
-	void scale(double xfactor, double yfactor);
-
-	void pushMatrix();
-
-	void popMatrix();
-
-	void reset();
 
 	void load(const std::string& filename);
 
