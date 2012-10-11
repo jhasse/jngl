@@ -75,4 +75,8 @@ namespace jngl {
 			[jnglView resignFirstResponder];
 		}
 	}
+
+	void sleep(int ms) {
+		[NSThread sleepForTimeInterval:double(ms)/1000.0];
+	}
 }
