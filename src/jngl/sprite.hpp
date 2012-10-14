@@ -9,7 +9,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "drawable.hpp"
 
 #include <memory>
-#include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <string>
 #include <vector>
@@ -18,7 +17,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 namespace jngl {
 	class Texture;
 
-	class Sprite : public Drawable, boost::noncopyable {
+	class Sprite : public Drawable {
 	public:
 		Sprite(const std::string& filename, bool halfLoad = false);
 		int getWidth() const;

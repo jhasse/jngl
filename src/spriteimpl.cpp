@@ -80,7 +80,6 @@ namespace jngl
 		if (it == sprites_.end()) { // texture hasn't been loaded yet?
 			if (!halfLoad) {
 				pWindow.ThrowIfNull();
-				debug("Loading "); debug(filename); debug(" ...\n");
 			}
 			auto s = new Sprite(filename, halfLoad);
 			sprites_[filename].reset(s);

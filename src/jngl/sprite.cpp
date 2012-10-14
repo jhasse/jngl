@@ -8,6 +8,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "sprite.hpp"
 
 #include "screen.hpp"
+#include "debug.hpp"
 #include "../texture.hpp"
 #include "../finally.hpp"
 #include "../windowptr.hpp"
@@ -68,6 +69,7 @@ namespace jngl {
 			setCenter(0, 0);
 			return;
 		}
+		jngl::debug("Creating sprite "); jngl::debug(shortFilename); jngl::debug("...");
 		auto filename = pathPrefix + shortFilename;
 		const char* extensions[] = {
 #ifndef NOWEBP
@@ -126,6 +128,7 @@ namespace jngl {
 		Finally closeFile(boost::bind(fclose, pFile));
 		loadFunction(this, shortFilename, pFile, halfLoad);
 		setCenter(0, 0);
+		jngl::debugLn("OK");
 	}
 
 	int Sprite::getWidth() const {
