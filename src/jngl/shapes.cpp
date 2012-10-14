@@ -18,6 +18,22 @@ namespace jngl {
 		colorAlpha = alpha;
 	}
 
+	void setAlpha(unsigned char alpha) {
+		colorAlpha = alpha;
+	}
+
+	std::stack<unsigned char> alphas;
+
+	void pushAlpha(unsigned char alpha) {
+		alphas.push(colorAlpha);
+		setAlpha(colorAlpha * alpha / 255);
+	}
+
+	void popAlpha() {
+		setAlpha(alphas.top());
+		alphas.pop();
+	}
+
 	void drawEllipse(float xmid, float ymid, float width, float height, float startAngle) {
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Ellipse(xmid, ymid, width, height, startAngle);

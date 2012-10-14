@@ -12,6 +12,12 @@ namespace jngl {
 	              unsigned char blue,
 	              unsigned char alpha = 255);
 
+	void setAlpha(unsigned char alpha);
+
+	void pushAlpha(unsigned char alpha);
+
+	void popAlpha();
+
 	template<class Vect>
 	void drawRect(Vect pos, Vect size) {
 		DrawRect(pos.x, pos.y, size.x, size.y);
