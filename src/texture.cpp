@@ -60,8 +60,7 @@ namespace jngl {
 			}
 			if (imgHeight < height) {
 				std::vector<char> lastLine(rowPointers[imgHeight-1], rowPointers[imgHeight-1]+imgWidth*channels);
-				lastLine.push_back(lastLine.back());
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, imgHeight, imgWidth+1, 1, format, GL_UNSIGNED_BYTE, &lastLine[0]);
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, imgHeight, imgWidth, 1, format, GL_UNSIGNED_BYTE, &lastLine[0]);
 			}
 		}
 		if (data) {
@@ -77,8 +76,7 @@ namespace jngl {
 			if (imgHeight < height) {
 				std::vector<char> lastLine(data + (imgHeight-1) * imgWidth * channels,
 				                           data +  imgHeight    * imgWidth * channels);
-				lastLine.push_back(lastLine.back());
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, imgHeight, imgWidth+1, 1, format, GL_UNSIGNED_BYTE, &lastLine[0]);
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, imgHeight, imgWidth, 1, format, GL_UNSIGNED_BYTE, &lastLine[0]);
 			}
 		}
 	}
