@@ -16,17 +16,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <boost/lexical_cast.hpp>
 #include <fstream>
 
-namespace jngl
-{
-	unsigned char fontColorRed = 0, fontColorGreen = 0, fontColorBlue = 0, fontColorAlpha = 255;
-
-	void setFontColor(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha)
-	{
-		fontColorRed = red;
-		fontColorGreen = green;
-		fontColorBlue = blue;
-		fontColorAlpha = alpha;
-	}
+namespace jngl {
 
 	Character::Character(const unsigned long ch, const unsigned int fontHeight, FT_Face face) : texture_(0)
 	{

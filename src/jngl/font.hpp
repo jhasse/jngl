@@ -26,6 +26,10 @@ namespace jngl {
 	                  unsigned char blue,
 	                  unsigned char alpha = 255);
 
+	void pushFontColor(unsigned char red, unsigned char green, unsigned char blue);
+
+	void popFontColor();
+
 	int getLineHeight();
 
 	void setLineHeight(int);
