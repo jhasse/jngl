@@ -19,6 +19,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "job.hpp"
 #include "shapes.hpp"
 #include "matrix.hpp"
+#include "rgb.hpp"
 
 #include <string>
 #include <vector>

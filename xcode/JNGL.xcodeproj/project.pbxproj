@@ -51,6 +51,10 @@
 		C94EEE331600ED1F004F9FE0 /* JNGLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C94EEE311600ED1F004F9FE0 /* JNGLViewController.mm */; };
 		C95406CE148D6DCD00902BB3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3113EAED790086B474 /* OpenGL.framework */; };
 		C95406CF148D6DD500902BB3 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3413EAED8A0086B474 /* OpenAL.framework */; };
+		C9589025162B10190072681D /* rgb.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9589024162B10190072681D /* rgb.hpp */; };
+		C9589026162B10190072681D /* rgb.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9589024162B10190072681D /* rgb.hpp */; };
+		C9589029162B10AB0072681D /* rgb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9589028162B10AB0072681D /* rgb.cpp */; };
+		C958902A162B10AB0072681D /* rgb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9589028162B10AB0072681D /* rgb.cpp */; };
 		C95D98B7161CCA1A00BAC980 /* all.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C95D98B5161CC9B000BAC980 /* all.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C96A1CC414FEE8410065CD6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CA714FEE5D20065CD6B /* Foundation.framework */; };
 		C96A1CCC14FEE8410065CD6B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C96A1CCA14FEE8410065CD6B /* InfoPlist.strings */; };
@@ -157,6 +161,8 @@
 		C94EEDF71600D87D004F9FE0 /* window.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = window.hpp; path = ../src/jngl/window.hpp; sourceTree = "<group>"; };
 		C94EEE301600ED1F004F9FE0 /* JNGLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JNGLViewController.h; path = ../../src/ios/JNGLViewController.h; sourceTree = "<group>"; };
 		C94EEE311600ED1F004F9FE0 /* JNGLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = JNGLViewController.mm; path = ../../src/ios/JNGLViewController.mm; sourceTree = "<group>"; };
+		C9589024162B10190072681D /* rgb.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = rgb.hpp; path = ../src/jngl/rgb.hpp; sourceTree = "<group>"; };
+		C9589028162B10AB0072681D /* rgb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rgb.cpp; path = ../src/jngl/rgb.cpp; sourceTree = "<group>"; };
 		C95D98B5161CC9B000BAC980 /* all.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = all.hpp; path = ../src/jngl/all.hpp; sourceTree = "<group>"; };
 		C967FC6814A5FF8B0049D8F2 /* main.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = main.hpp; path = ../src/main.hpp; sourceTree = "<group>"; };
 		C96A1CA614FEE5D20065CD6B /* libJNGL iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libJNGL iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -464,6 +470,8 @@
 				C9196EE11607ACBA00A9E80D /* input.hpp */,
 				C92916721609BCEC00A69E46 /* job.hpp */,
 				C94717AC16261C7F00B9C5F7 /* matrix.hpp */,
+				C9589024162B10190072681D /* rgb.hpp */,
+				C9589028162B10AB0072681D /* rgb.cpp */,
 				C974099A16076969002D1152 /* screen.hpp */,
 				C93A89F9160B243300BA8D91 /* shapes.hpp */,
 				C9E9E2E615C1D52A006CCBD2 /* sprite.hpp */,
@@ -551,6 +559,7 @@
 				C97409A216076C1D002D1152 /* text.hpp in Headers */,
 				C92916761609BCEC00A69E46 /* job.hpp in Headers */,
 				C93A89FD160B243300BA8D91 /* shapes.hpp in Headers */,
+				C9589026162B10190072681D /* rgb.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -574,6 +583,7 @@
 				C93A89FC160B243300BA8D91 /* shapes.hpp in Headers */,
 				C95D98B7161CCA1A00BAC980 /* all.hpp in Headers */,
 				C9B8E38216262BD6000E5FC1 /* matrix.hpp in Headers */,
+				C9589025162B10190072681D /* rgb.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -741,6 +751,7 @@
 				C92916741609BCEC00A69E46 /* job.cpp in Sources */,
 				C93A89FB160B243300BA8D91 /* shapes.cpp in Sources */,
 				C9AF94251610F63C002EC853 /* font.cpp in Sources */,
+				C958902A162B10AB0072681D /* rgb.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -785,6 +796,7 @@
 				C92916731609BCEC00A69E46 /* job.cpp in Sources */,
 				C93A89FA160B243300BA8D91 /* shapes.cpp in Sources */,
 				C9AF94241610F63C002EC853 /* font.cpp in Sources */,
+				C9589029162B10AB0072681D /* rgb.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
