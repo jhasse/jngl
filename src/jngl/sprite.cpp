@@ -69,7 +69,7 @@ namespace jngl {
 			setCenter(0, 0);
 			return;
 		}
-		jngl::debug("Creating sprite "); jngl::debug(shortFilename); jngl::debug("...");
+		jngl::debug("Creating sprite "); jngl::debug(shortFilename); jngl::debug("... ");
 		auto filename = pathPrefix + shortFilename;
 		const char* extensions[] = {
 #ifndef NOWEBP
