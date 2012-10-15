@@ -7,10 +7,12 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma GCC visibility push(default)
 namespace jngl {
+	void setColor(unsigned char red, unsigned char green, unsigned char blue);
+
 	void setColor(unsigned char red,
 	              unsigned char green,
 	              unsigned char blue,
-	              unsigned char alpha = 255);
+	              unsigned char alpha);
 
 	void setAlpha(unsigned char alpha);
 
