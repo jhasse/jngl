@@ -86,12 +86,13 @@ namespace jngl
 		boost::shared_ptr<FontImpl> getFontImpl();
 		void SetWork(boost::shared_ptr<Work>);
 		void MainLoop();
-		bool stepIfNeeded();
+		void stepIfNeeded();
 		void draw() const;
 		boost::shared_ptr<Work> getWork();
 		void setConfigPath(const std::string&);
 		std::string getConfigPath() const;
 		void addJob(boost::shared_ptr<Job>);
+		void resetFrameLimiter();
 #ifndef __APPLE__
 	#ifdef __linux
 		boost::shared_ptr<Display> pDisplay_;
@@ -119,13 +120,13 @@ namespace jngl
 		double mouseWheel_;
 		std::string fontName_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
-		double oldTime_;
-		bool needDraw_;
+		double oldTime;
 		boost::shared_ptr<Work> currentWork_;
 		bool changeWork_;
 		boost::shared_ptr<Work> newWork_;
 		std::string configPath;
 		std::vector<boost::shared_ptr<Job>> jobs;
+		float stepsPerFrame = 1;
 
 		// <fontSize, <fontName, FontImpl>>
 		boost::ptr_unordered_map<int, boost::unordered_map<std::string, boost::shared_ptr<FontImpl>>> fonts_;

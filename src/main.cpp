@@ -427,6 +427,10 @@ namespace jngl
 		return pWindow->SetWork(w);
 	}
 
+	void resetFrameLimiter() {
+		pWindow->resetFrameLimiter();
+	}
+
 	void setWork(Work* w) {
 		return pWindow->SetWork(boost::shared_ptr<Work>(w));
 	}

@@ -202,24 +202,24 @@ namespace jngl {
 			currentWork_.reset((jngl::Work*)0);
 		});
 		while (running_) {
-			if (!stepIfNeeded() && needDraw_) {
-				needDraw_ = false;
-				draw();
-				jngl::swapBuffers();
-			}
+			stepIfNeeded();
+			draw();
+			jngl::swapBuffers();
 		}
 	}
 
-	bool Window::stepIfNeeded() {
-		if(jngl::getTime() - oldTime_ > 0.5) // Is half a second missing?
-		{
-			oldTime_ += 0.5; // Let's slowdown
-		}
+	void Window::resetFrameLimiter() {
+		oldTime = jngl::getTime();
+		stepsPerFrame = 1;
+	}
+
+	void Window::stepIfNeeded() {
 		const static double timePerStep = 1.0 / 60.0;
-		if(jngl::getTime() - oldTime_ > timePerStep)
-		{
-			// This stuff needs to be done 100 times per second
-			oldTime_ += timePerStep;
+		if (jngl::getTime() - oldTime > timePerStep * stepsPerFrame) {
+			stepsPerFrame += 0.1;
+		}
+		for (int i = 0; i < int(stepsPerFrame + 0.5); ++i) {
+			oldTime += timePerStep;
 			jngl::updateInput();
 			if (currentWork_) {
 				currentWork_->step();
@@ -227,7 +227,6 @@ namespace jngl {
 			for (auto& job : jobs) {
 				job->step();
 			}
-			needDraw_ = true;
 			if (!jngl::running() && currentWork_) {
 				currentWork_->onQuitEvent();
 			}
@@ -237,9 +236,14 @@ namespace jngl {
 				newWork_.reset((jngl::Work*)0);
 				currentWork_->onLoad();
 			}
-			return true;
 		}
-		return false;
+		auto timeToSleep = oldTime - jngl::getTime();
+		if (timeToSleep > 0.005) {
+			jngl::sleep(timeToSleep * 1000);
+		}
+		if (timeToSleep > timePerStep && stepsPerFrame > 0.6) {
+			stepsPerFrame -= timeToSleep - timePerStep;
+		}
 	}
 
 	void Window::draw() const {

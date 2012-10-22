@@ -84,7 +84,7 @@
 			jngl::elapsedSeconds = displayLink.timestamp - startTime;
 		}
 		
-		while (jngl::pWindow->stepIfNeeded());
+		jngl::pWindow->stepIfNeeded();
 	}
 
 	glLoadIdentity();

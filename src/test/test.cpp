@@ -42,6 +42,10 @@ public:
 		lastTime = jngl::getTime();
 	}
 	void step() {
+		rotate += 90.0 / 60.0; // 90 degree per second
+		if (rotate > 360) {
+			rotate = 0;
+		}
 	}
 	void draw() const {
 		using namespace jngl;
@@ -51,7 +55,6 @@ public:
 		}
 		translate(-getWindowWidth() / 2, -getWindowHeight() / 2);
 		pushMatrix();
-		double timeSinceLastFrame = getTime() - lastTime;
 		lastTime = getTime();
 		for (int i = 0; i < 10; ++i) {
 			if (keyDown(boost::lexical_cast<char>(i))) {
@@ -70,10 +73,6 @@ public:
 		fb.draw(600, 300);
 		translate(getWindowWidth() / 2, getWindowHeight() / 2);
 		jngl::rotate(rotate);
-		rotate += 90 * timeSinceLastFrame; // 90 degree per second
-		if (rotate > 360) {
-			rotate = 0;
-		}
 		factor = sin(rotate / 360 * M_PI);
 		setSpriteAlpha(static_cast<unsigned char>(absolute(factor * 255)));
 		drawScaled("jngl.webp",

@@ -49,7 +49,16 @@ public:
 		}
 		jngl::draw("jngl.webp", -300 + jngl::getMouseX(), -140 + jngl::getMouseY());
 		std::stringstream sstream;
-		sstream << "FPS: " << int(jngl::getFPS()) << " Time: " << jngl::getTime();
+		static double fps = 0.0;
+		fps *= 0.9;
+		fps += jngl::getFPS() * 0.1;
+		if (fps > 1000) fps = 0;
+		static int count = 0;
+		static double fpsCache = fps;
+		if (++count % 10 == 0) {
+			fpsCache = fps;
+		}
+		sstream << "FPS: " << int(fpsCache) << " Time: " << jngl::getTime();
 		jngl::print(sstream.str(), -230, -150);
 		jngl::print("Retina Display!", 260, 340);
 		jngl::setColor(255, 0, 0);
@@ -83,6 +92,7 @@ private:
 	std::cout << "START" << std::endl;
 	[view drawView:nil];
     [self.window makeKeyAndVisible];
+	[[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     return YES;
 }
 

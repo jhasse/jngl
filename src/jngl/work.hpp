@@ -23,5 +23,7 @@ namespace jngl {
 	void setWork(boost::shared_ptr<Work> work);
 
 	void setWork(Work*);
+
+	void resetFrameLimiter();
 }
 #pragma GCC visibility pop
