@@ -20,8 +20,6 @@ namespace jngl {
 	class Sprite : public Drawable {
 	public:
 		Sprite(const std::string& filename, bool halfLoad = false);
-		int getWidth() const;
-		int getHeight() const;
 		void step() override;
 		void draw() const override;
 		void drawScaled(float factor) const;

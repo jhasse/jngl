@@ -19,10 +19,10 @@ namespace jngl {
 	}
 
 	int getScreenWidth() {
-		return getWindowWidth();
+		return getWindowWidth() / factor;
 	}
 
 	int getScreenHeight() {
-		return getWindowHeight();
+		return getWindowHeight() / factor;
 	}
 }

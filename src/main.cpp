@@ -288,9 +288,8 @@ namespace jngl
 #endif
 	}
 
-	void translate(const double x, const double y)
-	{
-		opengl::translate(x, y);
+	void translate(const double x, const double y) {
+		opengl::translate(x * getScaleFactor(), y * getScaleFactor());
 	}
 
 	void scale(const double factor)

@@ -14,68 +14,68 @@ namespace jngl {
 	}
 
 	void Drawable::setPos(Float x, Float y) {
-		this->x = x;
-		this->y = y;
+		setX(x);
+		setY(y);
 	}
 
 	void Drawable::setCenter(Float x, Float y) {
-		this->x = x - width/2;
-		this->y = y - height/2;
+		setX(x - getWidth()/2);
+		setY(y - getHeight()/2);
 	}
 
 	Float Drawable::getLeft() const {
-		return x + getScreenWidth() / 2;
+		return getX() + getScreenWidth() / 2;
 	}
 
 	void Drawable::setLeft(Float x) {
-		this->x = x - getScreenWidth() / 2;
+		setX(x - getScreenWidth() / 2);
 	}
 
 	Float Drawable::getTop() const {
-		return y + getScreenHeight() / 2;
+		return getY() + getScreenHeight() / 2;
 	}
 
 	void Drawable::setTop(Float y) {
-		this->y = y - getScreenHeight() / 2;
+		setY(y - getScreenHeight() / 2);
 	}
 
 	Float Drawable::getBottom() const {
-		return getScreenHeight()/2 - y - height;
+		return getScreenHeight()/2 - getY() - getHeight();
 	}
 
 	void Drawable::setBottom(Float y) {
-		this->y = getScreenHeight()/2 - y - height;
+		setY(getScreenHeight()/2 - y - getHeight());
 	}
 
 	Float Drawable::getRight() const {
-		return getScreenWidth()/2 - x - width;
+		return getScreenWidth()/2 - getX() - getWidth();
 	}
 
 	void Drawable::setRight(Float x) {
-		this->x = getScreenWidth()/2 - x - width;
+		setX(getScreenWidth()/2 - x - getWidth());
 	}
 
 	Float Drawable::getX() const {
-		return x;
+		return x / getScaleFactor();
 	}
 
 	void Drawable::setX(Float x) {
-		this->x = x;
+		this->x = x * getScaleFactor();
 	}
 
 	Float Drawable::getY() const {
-		return y;
+		return y / getScaleFactor();
 	}
 
 	void Drawable::setY(Float y) {
-		this->y = y;
+		this->y = y * getScaleFactor();
 	}
 
 	int Drawable::getWidth() const {
-		return width;
+		return width / getScaleFactor();
 	}
 
 	int Drawable::getHeight() const {
-		return height;
+		return height / getScaleFactor();
 	}
 }

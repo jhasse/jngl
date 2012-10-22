@@ -131,14 +131,6 @@ namespace jngl {
 		jngl::debugLn("OK");
 	}
 
-	int Sprite::getWidth() const {
-		return width;
-	}
-
-	int Sprite::getHeight() const {
-		return height;
-	}
-
 	void Sprite::step() {
 	}
 
