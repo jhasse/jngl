@@ -148,7 +148,7 @@ BOOST_PYTHON_MODULE(jngl)
 	def("setFontColor", setFontColor2);
 	def("setSpriteColor", setSpriteColor1);
 	def("setSpriteColor", setSpriteColor2);
-	def("print", print);
+	def("print1", print);
 	def("getFontSize", getFontSize);
 	def("setFontSize", setFontSize);
 	def("setFont", setFont);
