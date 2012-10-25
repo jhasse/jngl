@@ -19,13 +19,14 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "job.hpp"
 #include "shapes.hpp"
 #include "matrix.hpp"
-#include "rgb.hpp"
 
 #include <string>
 #include <vector>
 #include <stdexcept>
 
+#ifndef _MSC_VER
 #pragma GCC visibility push(default)
+#endif
 namespace jngl {
 	bool running();
 
@@ -154,4 +155,6 @@ namespace jngl {
 
 	std::vector<std::string> getArgs();
 }
+#ifndef _MSC_VER
 #pragma GCC visibility pop
+#endif

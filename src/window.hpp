@@ -126,7 +126,11 @@ namespace jngl
 		boost::shared_ptr<Work> newWork_;
 		std::string configPath;
 		std::vector<boost::shared_ptr<Job>> jobs;
+#ifdef _MSC_VER
+		float stepsPerFrame;
+#else
 		float stepsPerFrame = 1;
+#endif
 
 		// <fontSize, <fontName, FontImpl>>
 		boost::ptr_unordered_map<int, boost::unordered_map<std::string, boost::shared_ptr<FontImpl>>> fonts_;

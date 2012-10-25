@@ -100,8 +100,7 @@ namespace jngl {
 		opengl::translate(width_, 0);
 	}
 
-	double Character::GetWidth() const
-	{
+	int Character::getWidth() const {
 		return width_;
 	}
 
@@ -231,21 +230,18 @@ namespace jngl {
 		return lines;
 	}
 
-	double FontImpl::getTextWidth(const std::string& text) {
-		double maxWidth = 0;
+	int FontImpl::getTextWidth(const std::string& text) {
+		int maxWidth = 0;
 		std::vector<std::string> lines(ParseString(text));
 
-		std::vector<std::string>::iterator lineEnd = lines.end();
-		for(std::vector<std::string>::iterator lineIter = lines.begin(); lineIter != lineEnd; ++lineIter)
-		{
-			double lineWidth = 0;
-			std::string::iterator charEnd = lineIter->end();
-			for(std::string::iterator charIter = lineIter->begin(); charIter != charEnd; ++charIter)
-			{
-				lineWidth += GetCharacter(charIter, charEnd).GetWidth();
+		auto lineEnd = lines.end();
+		for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
+			int lineWidth = 0;
+			auto charEnd = lineIter->end();
+			for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
+				lineWidth += GetCharacter(charIter, charEnd).getWidth();
 			}
-			if(lineWidth > maxWidth)
-			{
+			if (lineWidth > maxWidth) {
 				maxWidth = lineWidth;
 			}
 		}

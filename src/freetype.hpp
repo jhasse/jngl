@@ -31,7 +31,7 @@ namespace jngl {
 		Character(unsigned long ch, unsigned int height, FT_Face);
 		~Character();
 		void Draw() const;
-		double GetWidth() const;
+		int getWidth() const;
 	private:
 		Texture* texture_;
 		int width_;
@@ -45,7 +45,7 @@ namespace jngl {
 		FontImpl(const std::string& filename, unsigned int height);
 		~FontImpl();
 		void print(int x, int y, const std::string& text);
-		double getTextWidth(const std::string& text);
+		int getTextWidth(const std::string& text);
 		int getLineHeight() const;
 		void setLineHeight(int);
 	private:

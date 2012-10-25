@@ -60,19 +60,43 @@
     <ClCompile Include="..\src\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\framebuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\framebufferimpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\work.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\spriteimpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\jngl\sprite.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\drawable.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\font.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\framebuffer.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\input.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\job.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\rgb.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\screen.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\shapes.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\text.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\work.cpp">
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
   </ItemGroup>
@@ -126,6 +150,42 @@
       <Filter>Header Files\jngl</Filter>
     </ClInclude>
     <ClInclude Include="..\src\jngl\work.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\all.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\debug.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\drawable.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\font.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\framebuffer.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\input.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\job.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\matrix.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\rgb.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\screen.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\shapes.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\text.hpp">
       <Filter>Header Files\jngl</Filter>
     </ClInclude>
   </ItemGroup>

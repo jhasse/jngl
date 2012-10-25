@@ -10,7 +10,9 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <string>
 #include <boost/shared_ptr.hpp>
 
+#ifndef _MSC_VER
 #pragma GCC visibility push(default)
+#endif
 namespace jngl {
 	enum Alignment {
 		LEFT,
@@ -35,4 +37,6 @@ namespace jngl {
 		Alignment align;
 	};
 }
+#ifndef _MSC_VER
 #pragma GCC visibility pop
+#endif

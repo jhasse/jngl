@@ -7,7 +7,9 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <string>
 
+#ifndef _MSC_VER
 #pragma GCC visibility push(default)
+#endif
 namespace jngl {
 	namespace key {
 		enum KeyType {
@@ -115,4 +117,6 @@ namespace jngl {
 
 	void setMouse(int xposition, int yposition);
 }
+#ifndef _MSC_VER
 #pragma GCC visibility pop
+#endif

@@ -214,9 +214,9 @@ namespace jngl {
 	}
 
 	void Window::stepIfNeeded() {
-		const static double timePerStep = 1.0 / 60.0;
+		const static float timePerStep = 1.0f / 60.0f;
 		if (jngl::getTime() - oldTime > timePerStep * stepsPerFrame) {
-			stepsPerFrame += 0.1;
+			stepsPerFrame += 0.1f;
 		}
 		for (int i = 0; i < int(stepsPerFrame + 0.5); ++i) {
 			oldTime += timePerStep;
@@ -239,10 +239,10 @@ namespace jngl {
 		}
 		auto timeToSleep = oldTime - jngl::getTime();
 		if (timeToSleep > 0.005) {
-			jngl::sleep(timeToSleep * 1000);
+			jngl::sleep(int(timeToSleep * 1000));
 		}
 		if (timeToSleep > timePerStep && stepsPerFrame > 0.6) {
-			stepsPerFrame -= timeToSleep - timePerStep;
+			stepsPerFrame -= float(timeToSleep - timePerStep);
 		}
 	}
 

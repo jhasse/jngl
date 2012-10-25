@@ -4,7 +4,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #include "../window.hpp"
-#include "../debug.hpp"
+#include "../jngl/debug.hpp"
 #include "../finally.hpp"
 #include "../opengl.hpp"
 #include "../ConvertUTF.h"
@@ -80,7 +80,7 @@ namespace jngl
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
 		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false),
 		  isMultisampleSupported_(false), anyKeyPressed_(false), fontSize_(12), width_(width), height_(height),
-		  mouseWheel_(0), oldTime_(0), changeWork_(false)
+		  mouseWheel_(0), oldTime(0), changeWork_(false), stepsPerFrame(1)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
@@ -293,7 +293,7 @@ namespace jngl
 	{
 		if(!::ReleaseDC(hwnd, hdc))
 		{
-			Debug("Release device context failed.");
+			debug("Release device context failed.");
 		}
 	}
 
@@ -301,11 +301,11 @@ namespace jngl
 	{
 		if(!wglMakeCurrent(NULL, NULL))
 		{
-			Debug("Release of DC and RC failed.");
+			debug("Release of DC and RC failed.");
 		}
 		if(!wglDeleteContext(hrc))
 		{
-			Debug("Release rendering context failed.");
+			debug("Release rendering context failed.");
 		}
 	}
 
@@ -409,7 +409,7 @@ namespace jngl
 					ConversionResult result = ConvertUTF16toUTF8(sourceStart, sourceEnd, targetStart, targetEnd, lenientConversion);
 					if(result != conversionOK)
 					{
-						Debug("WARNING: Couldn't convert UTF16 to UTF8.\n");
+						debug("WARNING: Couldn't convert UTF16 to UTF8.\n");
 						break;
 					}
 					std::vector<char>::iterator end = ++(buf.begin());
@@ -508,12 +508,12 @@ namespace jngl
 		}
 	}
 
-	bool Window::KeyDown(const std::string& key)
+	bool Window::getKeyDown(const std::string& key)
 	{
 		return characterDown_[key];
 	}
 
-	bool Window::KeyPressed(const std::string& key)
+	bool Window::getKeyPressed(const std::string& key)
 	{
 		if(characterPressed_[key])
 		{

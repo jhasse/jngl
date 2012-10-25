@@ -7,7 +7,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "spriteimpl.hpp"
 #include "window.hpp"
-#include "jngl.hpp"
 #include "finally.hpp"
 #include "windowptr.hpp"
 #include "texture.hpp"

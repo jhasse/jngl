@@ -7,7 +7,9 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <string>
 
+#ifndef _MSC_VER
 #pragma GCC visibility push(default)
+#endif
 namespace jngl {
 	void showWindow(const std::string& title,
 	                int width,
@@ -20,4 +22,6 @@ namespace jngl {
 
 	int getDesktopHeight();
 }
+#ifndef _MSC_VER
 #pragma GCC visibility pop
+#endif

@@ -15,10 +15,19 @@
     <ClCompile Include="..\src\callbacks.c" />
     <ClCompile Include="..\src\ConvertUTF.c" />
     <ClCompile Include="..\src\finally.cpp" />
-    <ClCompile Include="..\src\framebuffer.cpp" />
     <ClCompile Include="..\src\framebufferimpl.cpp" />
     <ClCompile Include="..\src\freetype.cpp" />
+    <ClCompile Include="..\src\jngl\drawable.cpp" />
+    <ClCompile Include="..\src\jngl\font.cpp" />
+    <ClCompile Include="..\src\jngl\framebuffer.cpp" />
+    <ClCompile Include="..\src\jngl\input.cpp" />
+    <ClCompile Include="..\src\jngl\job.cpp" />
+    <ClCompile Include="..\src\jngl\rgb.cpp" />
+    <ClCompile Include="..\src\jngl\screen.cpp" />
+    <ClCompile Include="..\src\jngl\shapes.cpp" />
     <ClCompile Include="..\src\jngl\sprite.cpp" />
+    <ClCompile Include="..\src\jngl\text.cpp" />
+    <ClCompile Include="..\src\jngl\work.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\opengl.cpp" />
     <ClCompile Include="..\src\spriteimpl.cpp" />
@@ -29,7 +38,6 @@
     <ClCompile Include="..\src\win32\windowimpl.cpp" />
     <ClCompile Include="..\src\window.cpp" />
     <ClCompile Include="..\src\windowptr.cpp" />
-    <ClCompile Include="..\src\work.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\audio.hpp" />
@@ -40,7 +48,19 @@
     <ClInclude Include="..\src\framebufferimpl.hpp" />
     <ClInclude Include="..\src\freetype.hpp" />
     <ClInclude Include="..\src\jngl.hpp" />
+    <ClInclude Include="..\src\jngl\all.hpp" />
+    <ClInclude Include="..\src\jngl\debug.hpp" />
+    <ClInclude Include="..\src\jngl\drawable.hpp" />
+    <ClInclude Include="..\src\jngl\font.hpp" />
+    <ClInclude Include="..\src\jngl\framebuffer.hpp" />
+    <ClInclude Include="..\src\jngl\input.hpp" />
+    <ClInclude Include="..\src\jngl\job.hpp" />
+    <ClInclude Include="..\src\jngl\matrix.hpp" />
+    <ClInclude Include="..\src\jngl\rgb.hpp" />
+    <ClInclude Include="..\src\jngl\screen.hpp" />
+    <ClInclude Include="..\src\jngl\shapes.hpp" />
     <ClInclude Include="..\src\jngl\sprite.hpp" />
+    <ClInclude Include="..\src\jngl\text.hpp" />
     <ClInclude Include="..\src\jngl\types.hpp" />
     <ClInclude Include="..\src\jngl\window.hpp" />
     <ClInclude Include="..\src\jngl\work.hpp" />

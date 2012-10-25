@@ -6,7 +6,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "framebufferimpl.hpp"
 #include "windowptr.hpp"
 #include "main.hpp"
-#include "jngl.hpp"
+#include "jngl/matrix.hpp"
 
 namespace jngl {
 

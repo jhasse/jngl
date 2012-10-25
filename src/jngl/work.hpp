@@ -7,7 +7,9 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <boost/shared_ptr.hpp>
 
+#ifndef _MSC_VER
 #pragma GCC visibility push(default)
+#endif
 namespace jngl {
 	class Work {
 	public:
@@ -26,4 +28,6 @@ namespace jngl {
 
 	void resetFrameLimiter();
 }
+#ifndef _MSC_VER
 #pragma GCC visibility pop
+#endif

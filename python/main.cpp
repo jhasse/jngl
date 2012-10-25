@@ -139,7 +139,6 @@ BOOST_PYTHON_MODULE(jngl)
 	def("mousePressed", mousePressed1);
 	def("mousePressed", mousePressed2);
 	def("setMouse", setMouse);
-	def("drawButton", drawButton);
 	def("setTitle", setTitle);
 	def("setBackgroundColor", setBackgroundColor);
 	def("setColor", setColor1);
@@ -160,6 +159,8 @@ BOOST_PYTHON_MODULE(jngl)
 	def("readPixel", readPixel);
 	def("getWindowWidth", getWindowWidth);
 	def("getWindowHeight", getWindowHeight);
+	def("getScreenWidth", getScreenWidth);
+	def("getScreenHeight", getScreenHeight);
 	def("setAntiAliasing", setAntiAliasing);
 	def("getAntiAliasing", getAntiAliasing);
 	def("getTextWidth", getTextWidth);

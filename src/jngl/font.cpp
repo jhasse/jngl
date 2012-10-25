@@ -23,7 +23,7 @@ namespace jngl {
 	std::stack<RGB> rgbs;
 
 	void pushFontColor(unsigned char red, unsigned char green, unsigned char blue) {
-		rgbs.push({fontColorRed, fontColorGreen, fontColorBlue});
+		rgbs.push(RGB(fontColorRed, fontColorGreen, fontColorBlue));
 		setFontColor(red, green, blue);
 	}
 

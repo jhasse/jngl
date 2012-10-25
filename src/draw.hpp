@@ -51,7 +51,7 @@ namespace draw
 		std::vector<T> vertexes;
 		vertexes.push_back(0);
 		vertexes.push_back(0);
-		for (T t = startAngle; t < 2 * M_PI; t += 0.1) {
+		for (T t = startAngle; t < 2 * M_PI; t += 0.1f) {
 			vertexes.push_back(width * sin(t));
 			vertexes.push_back(-height * cos(t));
 		}

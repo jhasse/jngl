@@ -336,8 +336,8 @@ namespace jngl {
 		WebPInitDecoderConfig(&config);
 		if (getScaleFactor() != 1) {
 			config.options.use_scaling = true;
-			width *= getScaleFactor();
-			height *= getScaleFactor();
+			width  = static_cast<int>(width  * getScaleFactor());
+			height = static_cast<int>(height * getScaleFactor());
 			if (width < 1) width = 1;
 			if (height < 1) height = 1;
 			config.options.scaled_width = width;

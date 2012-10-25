@@ -72,10 +72,10 @@ namespace jngl {
 	}
 
 	int Drawable::getWidth() const {
-		return width / getScaleFactor();
+		return int(width / getScaleFactor());
 	}
 
 	int Drawable::getHeight() const {
-		return height / getScaleFactor();
+		return int(height / getScaleFactor());
 	}
 }
