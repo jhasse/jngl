@@ -53,6 +53,40 @@ namespace jngl {
 		boost::shared_ptr<Texture> texture;
 	};
 
+	void draw(const std::string& filename,
+	          double xposition,
+	          double yposition);
+
+	template<class Vect>
+	void draw(const std::string& filename, Vect pos) {
+		draw(filename, pos.x, pos.y);
+	}
+
+	void load(const std::string& filename);
+
+	void unload(const std::string& filename);
+
+	void unloadAll();
+
+	void drawScaled(const std::string& filename,
+	                double xposition,
+	                double yposition,
+	                float xfactor,
+	                float yfactor);
+
+	void drawScaled(const std::string& filename,
+	                double xposition,
+	                double yposition,
+	                float factor);
+
+	void drawClipped(const std::string& filename,
+					 double xposition,
+					 double yposition,
+					 float xstart,
+					 float xend,
+					 float ystart,
+					 float yend);
+
 	void setSpriteColor(unsigned char red,
 	                    unsigned char green,
 	                    unsigned char blue,
@@ -67,6 +101,10 @@ namespace jngl {
 	void pushSpriteAlpha(unsigned char alpha = 255);
 
 	void popSpriteAlpha();
+
+	int getWidth(const std::string& filename);
+
+	int getHeight(const std::string& filename);
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop

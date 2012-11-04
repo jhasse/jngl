@@ -19,6 +19,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "job.hpp"
 #include "shapes.hpp"
 #include "matrix.hpp"
+#include "sound.hpp"
 
 #include <string>
 #include <vector>
@@ -38,45 +39,7 @@ namespace jngl {
 
 	void cancelQuit();
 
-	void draw(const std::string& filename,
-	          double xposition,
-	          double yposition);
-
-	template<class Vect>
-	void draw(const std::string& filename, Vect pos) {
-		draw(filename, pos.x, pos.y);
-	}
-
-	void drawScaled(const std::string& filename,
-	                double xposition,
-	                double yposition,
-	                float xfactor,
-	                float yfactor);
-
-	void drawScaled(const std::string& filename,
-	                double xposition,
-	                double yposition,
-	                float factor);
-
-	void drawClipped(const std::string& filename,
-					 double xposition,
-					 double yposition,
-					 float xstart,
-					 float xend,
-					 float ystart,
-					 float yend);
-
 	void drawRect(double xposition, double yposition, double width, double height);
-
-	void load(const std::string& filename);
-
-	void unload(const std::string& filename);
-
-	void unloadAll();
-
-	int getWidth(const std::string& filename);
-
-	int getHeight(const std::string& filename);
 
 	double getTime();
 
@@ -128,18 +91,6 @@ namespace jngl {
 	void setVerticalSync(bool enabled);
 
 	bool getVerticalSync();
-
-	void play(const std::string& filename);
-
-	void stop(const std::string& filename);
-
-	bool isPlaying(const std::string& filename);
-
-	bool isOpenALInstalled();
-
-	void setPlaybackSpeed(float speed);
-
-	void setVolume(float volume);
 
 	void setIcon(const std::string& filename);
 

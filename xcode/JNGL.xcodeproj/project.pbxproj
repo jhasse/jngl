@@ -12,6 +12,7 @@
 		C9196EE51607B59800A9E80D /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9196EE41607B59800A9E80D /* input.cpp */; };
 		C9196EE61607B59800A9E80D /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9196EE41607B59800A9E80D /* input.cpp */; };
 		C9196EF21607C94F00A9E80D /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9196EF11607C94F00A9E80D /* input.cpp */; };
+		C92176991647065900785D3E /* sound.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C974F5821646EACF00463550 /* sound.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C923BC4D16066E4400BEFE2D /* font.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4916066E4400BEFE2D /* font.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C923BC4E16066E4400BEFE2D /* font.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C923BC4916066E4400BEFE2D /* font.hpp */; };
 		C923BC4F16066E4400BEFE2D /* framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C923BC4A16066E4400BEFE2D /* framebuffer.cpp */; };
@@ -162,7 +163,7 @@
 		C94EEE301600ED1F004F9FE0 /* JNGLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JNGLViewController.h; path = ../../src/ios/JNGLViewController.h; sourceTree = "<group>"; };
 		C94EEE311600ED1F004F9FE0 /* JNGLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = JNGLViewController.mm; path = ../../src/ios/JNGLViewController.mm; sourceTree = "<group>"; };
 		C9589024162B10190072681D /* rgb.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = rgb.hpp; path = ../src/jngl/rgb.hpp; sourceTree = "<group>"; };
-		C9589028162B10AB0072681D /* rgb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rgb.cpp; path = ../src/jngl/rgb.cpp; sourceTree = "<group>"; };
+		C9589028162B10AB0072681D /* rgb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rgb.cpp; path = src/jngl/rgb.cpp; sourceTree = "<group>"; };
 		C95D98B5161CC9B000BAC980 /* all.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = all.hpp; path = ../src/jngl/all.hpp; sourceTree = "<group>"; };
 		C967FC6814A5FF8B0049D8F2 /* main.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = main.hpp; path = ../src/main.hpp; sourceTree = "<group>"; };
 		C96A1CA614FEE5D20065CD6B /* libJNGL iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libJNGL iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -182,6 +183,7 @@
 		C974099D16076AE0002D1152 /* screen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = screen.cpp; path = src/jngl/screen.cpp; sourceTree = "<group>"; };
 		C97409A016076C1C002D1152 /* text.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = text.hpp; path = ../src/jngl/text.hpp; sourceTree = "<group>"; };
 		C97409A316076CD1002D1152 /* text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = text.cpp; path = src/jngl/text.cpp; sourceTree = "<group>"; };
+		C974F5821646EACF00463550 /* sound.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = sound.hpp; path = ../src/jngl/sound.hpp; sourceTree = "<group>"; };
 		C97A73101527AADA005AE562 /* time.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = time.hpp; path = ../../src/ios/time.hpp; sourceTree = "<group>"; };
 		C97F8933161531CE00F683FA /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		C97F89361615323200F683FA /* jngl.webp */ = {isa = PBXFileReference; lastKnownFileType = file; name = jngl.webp; path = ../jngl.webp; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 				C923BC4A16066E4400BEFE2D /* framebuffer.cpp */,
 				C9196EE41607B59800A9E80D /* input.cpp */,
 				C92916711609BCEC00A69E46 /* job.cpp */,
+				C9589028162B10AB0072681D /* rgb.cpp */,
 				C974099D16076AE0002D1152 /* screen.cpp */,
 				C93A89F8160B243300BA8D91 /* shapes.cpp */,
 				C9E9E2E515C1D52A006CCBD2 /* sprite.cpp */,
@@ -471,7 +474,6 @@
 				C92916721609BCEC00A69E46 /* job.hpp */,
 				C94717AC16261C7F00B9C5F7 /* matrix.hpp */,
 				C9589024162B10190072681D /* rgb.hpp */,
-				C9589028162B10AB0072681D /* rgb.cpp */,
 				C974099A16076969002D1152 /* screen.hpp */,
 				C93A89F9160B243300BA8D91 /* shapes.hpp */,
 				C9E9E2E615C1D52A006CCBD2 /* sprite.hpp */,
@@ -480,6 +482,7 @@
 				C94EEDF71600D87D004F9FE0 /* window.hpp */,
 				C98A18A915DEADB90038B716 /* work.hpp */,
 				C95D98B5161CC9B000BAC980 /* all.hpp */,
+				C974F5821646EACF00463550 /* sound.hpp */,
 			);
 			name = jngl;
 			sourceTree = "<group>";
@@ -580,6 +583,7 @@
 				C97409A116076C1D002D1152 /* text.hpp in Headers */,
 				C9196EE21607ACBA00A9E80D /* input.hpp in Headers */,
 				C92916751609BCEC00A69E46 /* job.hpp in Headers */,
+				C92176991647065900785D3E /* sound.hpp in Headers */,
 				C93A89FC160B243300BA8D91 /* shapes.hpp in Headers */,
 				C95D98B7161CCA1A00BAC980 /* all.hpp in Headers */,
 				C9B8E38216262BD6000E5FC1 /* matrix.hpp in Headers */,

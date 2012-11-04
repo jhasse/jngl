@@ -264,6 +264,10 @@ namespace jngl
 		}
 		Sound::masterVolume = volume;
 	}
+
+	float getVolume() {
+		return Sound::masterVolume;
+	}
 	
 	Audio& GetAudio()
 	{
