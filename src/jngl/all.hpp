@@ -20,6 +20,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "shapes.hpp"
 #include "matrix.hpp"
 #include "sound.hpp"
+#include "color.hpp"
 
 #include <string>
 #include <vector>

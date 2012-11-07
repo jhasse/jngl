@@ -6,9 +6,9 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
 namespace jngl {
-	class RGB {
+	class Color {
 	public:
-		RGB(unsigned char red, unsigned char green, unsigned char blue);
+		Color(unsigned char red, unsigned char green, unsigned char blue);
 
 		unsigned char getRed() const;
 		unsigned char getGreen() const;

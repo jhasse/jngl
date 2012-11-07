@@ -6,7 +6,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "font.hpp"
 
 #include "../freetype.hpp"
-#include "rgb.hpp"
+#include "color.hpp"
 
 #include <stack>
 
@@ -20,10 +20,10 @@ namespace jngl {
 		fontColorAlpha = alpha;
 	}
 
-	std::stack<RGB> rgbs;
+	std::stack<Color> rgbs;
 
 	void pushFontColor(unsigned char red, unsigned char green, unsigned char blue) {
-		rgbs.push(RGB(fontColorRed, fontColorGreen, fontColorBlue));
+		rgbs.push(Color(fontColorRed, fontColorGreen, fontColorBlue));
 		setFontColor(red, green, blue);
 	}
 
