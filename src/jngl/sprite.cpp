@@ -69,7 +69,9 @@ namespace jngl {
 			setCenter(0, 0);
 			return;
 		}
-		jngl::debug("Creating sprite "); jngl::debug(shortFilename); jngl::debug("... ");
+		if (!halfLoad) {
+			jngl::debug("Creating sprite "); jngl::debug(shortFilename); jngl::debug("... ");
+		}
 		auto filename = pathPrefix + shortFilename;
 		const char* extensions[] = {
 #ifndef NOWEBP
@@ -128,7 +130,9 @@ namespace jngl {
 		Finally closeFile(boost::bind(fclose, pFile));
 		loadFunction(this, shortFilename, pFile, halfLoad);
 		setCenter(0, 0);
-		jngl::debugLn("OK");
+		if (!halfLoad) {
+			jngl::debugLn("OK");
+		}
 	}
 
 	void Sprite::step() {
