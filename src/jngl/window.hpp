@@ -18,6 +18,10 @@ namespace jngl {
 
 	void hideWindow();
 
+	int getWindowWidth();
+
+	int getWindowHeight();
+
 	int getDesktopWidth();
 
 	int getDesktopHeight();

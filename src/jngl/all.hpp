@@ -80,10 +80,6 @@ namespace jngl {
 
 	void readPixel(int x, int y, unsigned char& red, unsigned char& green, unsigned char& blue);
 
-	int getWindowWidth();
-
-	int getWindowHeight();
-
 	void setAntiAliasing(bool enabled);
 
 	bool getAntiAliasing();

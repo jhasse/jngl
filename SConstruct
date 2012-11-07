@@ -111,7 +111,7 @@ if env['PLATFORM'] == 'posix': # Linux
 if env['PLATFORM'] == 'darwin': # Mac
 	env.Append(LIBS=Split('GLEW jpeg ogg vorbisfile webp'),
 	           LIBPATH=Split('/opt/local/lib .'),
-	           CPPPATH='/opt/local/include/',
+	           CPPPATH=['/opt/local/include/', '../boost-libs/include'],
 	           LINKFLAGS='-framework OpenAL -framework OpenGL')
 	env.ParseConfig('/opt/local/bin/pkg-config --cflags --libs freetype2 libpng')
 	env.ParseConfig('/opt/local/bin/sdl-config --cflags --libs')
@@ -125,7 +125,8 @@ if env['PLATFORM'] == 'darwin': # Mac
 		env.Append(CPPPATH='/System/Library/Frameworks/Python.framework/Headers/',
 		           LINKFLAGS='-framework Python',
 		           LIBPATH=Split(". ./lib ./python"),
-		           LIBS=Split("boost_python"))
+		           LIBS=Split("boost_python"),
+		           CPPFLAGS='-std=c++11')
 		env.SharedLibrary(target="python/jngl.so",
 		                  source="python/main.cpp")
 

@@ -5,7 +5,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "screen.hpp"
 #include "types.hpp"
-#include "jngl.hpp"
+#include "screen.hpp"
+#include "window.hpp"
 
 namespace jngl {
 	Float factor = 1;
