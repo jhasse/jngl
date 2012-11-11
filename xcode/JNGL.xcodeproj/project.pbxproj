@@ -52,10 +52,6 @@
 		C94EEE331600ED1F004F9FE0 /* JNGLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C94EEE311600ED1F004F9FE0 /* JNGLViewController.mm */; };
 		C95406CE148D6DCD00902BB3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3113EAED790086B474 /* OpenGL.framework */; };
 		C95406CF148D6DD500902BB3 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3413EAED8A0086B474 /* OpenAL.framework */; };
-		C9589025162B10190072681D /* rgb.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9589024162B10190072681D /* rgb.hpp */; };
-		C9589026162B10190072681D /* rgb.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9589024162B10190072681D /* rgb.hpp */; };
-		C9589029162B10AB0072681D /* rgb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9589028162B10AB0072681D /* rgb.cpp */; };
-		C958902A162B10AB0072681D /* rgb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9589028162B10AB0072681D /* rgb.cpp */; };
 		C95D98B7161CCA1A00BAC980 /* all.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C95D98B5161CC9B000BAC980 /* all.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C96A1CC414FEE8410065CD6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CA714FEE5D20065CD6B /* Foundation.framework */; };
 		C96A1CCC14FEE8410065CD6B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C96A1CCA14FEE8410065CD6B /* InfoPlist.strings */; };
@@ -89,6 +85,10 @@
 		C9AE786314A892FE004359EF /* JNGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E948E614A7C3EF0048EFCA /* JNGL.framework */; };
 		C9AF94241610F63C002EC853 /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9AF94231610F63C002EC853 /* font.cpp */; };
 		C9AF94251610F63C002EC853 /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9AF94231610F63C002EC853 /* font.cpp */; };
+		C9B0640F16500CAD00020A5D /* color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9B0640D16500CAD00020A5D /* color.cpp */; };
+		C9B0641016500CAD00020A5D /* color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9B0640D16500CAD00020A5D /* color.cpp */; };
+		C9B0641116500CAD00020A5D /* color.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9B0640E16500CAD00020A5D /* color.hpp */; };
+		C9B0641216500CAD00020A5D /* color.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9B0640E16500CAD00020A5D /* color.hpp */; };
 		C9B8E37B16262AD8000E5FC1 /* matrix.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94717AC16261C7F00B9C5F7 /* matrix.hpp */; };
 		C9B8E38216262BD6000E5FC1 /* matrix.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94717AC16261C7F00B9C5F7 /* matrix.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9BFF8021524B24600066D6C /* libJNGL iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C96A1CA614FEE5D20065CD6B /* libJNGL iOS.a */; };
@@ -162,8 +162,6 @@
 		C94EEDF71600D87D004F9FE0 /* window.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = window.hpp; path = ../src/jngl/window.hpp; sourceTree = "<group>"; };
 		C94EEE301600ED1F004F9FE0 /* JNGLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JNGLViewController.h; path = ../../src/ios/JNGLViewController.h; sourceTree = "<group>"; };
 		C94EEE311600ED1F004F9FE0 /* JNGLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = JNGLViewController.mm; path = ../../src/ios/JNGLViewController.mm; sourceTree = "<group>"; };
-		C9589024162B10190072681D /* rgb.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = rgb.hpp; path = ../src/jngl/rgb.hpp; sourceTree = "<group>"; };
-		C9589028162B10AB0072681D /* rgb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rgb.cpp; path = src/jngl/rgb.cpp; sourceTree = "<group>"; };
 		C95D98B5161CC9B000BAC980 /* all.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = all.hpp; path = ../src/jngl/all.hpp; sourceTree = "<group>"; };
 		C967FC6814A5FF8B0049D8F2 /* main.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = main.hpp; path = ../src/main.hpp; sourceTree = "<group>"; };
 		C96A1CA614FEE5D20065CD6B /* libJNGL iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libJNGL iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -198,6 +196,8 @@
 		C99A094A13EC508C006C46FF /* time.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = time.cpp; path = src/sdl/time.cpp; sourceTree = "<group>"; };
 		C99A094C13EC509D006C46FF /* message.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = message.cpp; path = src/sdl/message.cpp; sourceTree = "<group>"; };
 		C9AF94231610F63C002EC853 /* font.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = font.cpp; path = src/jngl/font.cpp; sourceTree = "<group>"; };
+		C9B0640D16500CAD00020A5D /* color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = color.cpp; path = src/jngl/color.cpp; sourceTree = "<group>"; };
+		C9B0640E16500CAD00020A5D /* color.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = color.hpp; path = ../src/jngl/color.hpp; sourceTree = "<group>"; };
 		C9BFF8071524B2F600066D6C /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../lib/ios/libjpeg.a; sourceTree = "<group>"; };
 		C9BFF8081524B2F600066D6C /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../lib/ios/libpng.a; sourceTree = "<group>"; };
 		C9BFF80D1524B59B00066D6C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
@@ -449,11 +449,11 @@
 			isa = PBXGroup;
 			children = (
 				C9AF94231610F63C002EC853 /* font.cpp */,
+				C9B0640D16500CAD00020A5D /* color.cpp */,
 				C9740993160766FA002D1152 /* drawable.cpp */,
 				C923BC4A16066E4400BEFE2D /* framebuffer.cpp */,
 				C9196EE41607B59800A9E80D /* input.cpp */,
 				C92916711609BCEC00A69E46 /* job.cpp */,
-				C9589028162B10AB0072681D /* rgb.cpp */,
 				C974099D16076AE0002D1152 /* screen.cpp */,
 				C93A89F8160B243300BA8D91 /* shapes.cpp */,
 				C9E9E2E515C1D52A006CCBD2 /* sprite.cpp */,
@@ -466,6 +466,7 @@
 		C9E9E2EB15C1D531006CCBD2 /* jngl */ = {
 			isa = PBXGroup;
 			children = (
+				C9B0640E16500CAD00020A5D /* color.hpp */,
 				C94EEDF61600D87D004F9FE0 /* debug.hpp */,
 				C9740994160766FA002D1152 /* drawable.hpp */,
 				C923BC4916066E4400BEFE2D /* font.hpp */,
@@ -473,7 +474,6 @@
 				C9196EE11607ACBA00A9E80D /* input.hpp */,
 				C92916721609BCEC00A69E46 /* job.hpp */,
 				C94717AC16261C7F00B9C5F7 /* matrix.hpp */,
-				C9589024162B10190072681D /* rgb.hpp */,
 				C974099A16076969002D1152 /* screen.hpp */,
 				C93A89F9160B243300BA8D91 /* shapes.hpp */,
 				C9E9E2E615C1D52A006CCBD2 /* sprite.hpp */,
@@ -562,7 +562,7 @@
 				C97409A216076C1D002D1152 /* text.hpp in Headers */,
 				C92916761609BCEC00A69E46 /* job.hpp in Headers */,
 				C93A89FD160B243300BA8D91 /* shapes.hpp in Headers */,
-				C9589026162B10190072681D /* rgb.hpp in Headers */,
+				C9B0641216500CAD00020A5D /* color.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -587,7 +587,7 @@
 				C93A89FC160B243300BA8D91 /* shapes.hpp in Headers */,
 				C95D98B7161CCA1A00BAC980 /* all.hpp in Headers */,
 				C9B8E38216262BD6000E5FC1 /* matrix.hpp in Headers */,
-				C9589025162B10190072681D /* rgb.hpp in Headers */,
+				C9B0641116500CAD00020A5D /* color.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -755,7 +755,7 @@
 				C92916741609BCEC00A69E46 /* job.cpp in Sources */,
 				C93A89FB160B243300BA8D91 /* shapes.cpp in Sources */,
 				C9AF94251610F63C002EC853 /* font.cpp in Sources */,
-				C958902A162B10AB0072681D /* rgb.cpp in Sources */,
+				C9B0641016500CAD00020A5D /* color.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -800,7 +800,7 @@
 				C92916731609BCEC00A69E46 /* job.cpp in Sources */,
 				C93A89FA160B243300BA8D91 /* shapes.cpp in Sources */,
 				C9AF94241610F63C002EC853 /* font.cpp in Sources */,
-				C9589029162B10AB0072681D /* rgb.cpp in Sources */,
+				C9B0640F16500CAD00020A5D /* color.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
