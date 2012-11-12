@@ -87,7 +87,7 @@
 		C9AF94251610F63C002EC853 /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9AF94231610F63C002EC853 /* font.cpp */; };
 		C9B0640F16500CAD00020A5D /* color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9B0640D16500CAD00020A5D /* color.cpp */; };
 		C9B0641016500CAD00020A5D /* color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9B0640D16500CAD00020A5D /* color.cpp */; };
-		C9B0641116500CAD00020A5D /* color.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9B0640E16500CAD00020A5D /* color.hpp */; };
+		C9B0641116500CAD00020A5D /* color.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9B0640E16500CAD00020A5D /* color.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9B0641216500CAD00020A5D /* color.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9B0640E16500CAD00020A5D /* color.hpp */; };
 		C9B8E37B16262AD8000E5FC1 /* matrix.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94717AC16261C7F00B9C5F7 /* matrix.hpp */; };
 		C9B8E38216262BD6000E5FC1 /* matrix.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94717AC16261C7F00B9C5F7 /* matrix.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -585,9 +585,9 @@
 				C92916751609BCEC00A69E46 /* job.hpp in Headers */,
 				C92176991647065900785D3E /* sound.hpp in Headers */,
 				C93A89FC160B243300BA8D91 /* shapes.hpp in Headers */,
+				C9B0641116500CAD00020A5D /* color.hpp in Headers */,
 				C95D98B7161CCA1A00BAC980 /* all.hpp in Headers */,
 				C9B8E38216262BD6000E5FC1 /* matrix.hpp in Headers */,
-				C9B0641116500CAD00020A5D /* color.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
