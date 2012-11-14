@@ -23,6 +23,20 @@ namespace jngl {
 		boost::shared_ptr<FontImpl> impl;
 	};
 
+	void print(const std::string& text,
+	           int xposition,
+	           int yposition);
+
+	int getFontSize();
+
+	void setFontSize(int size);
+
+	std::string getFont();
+
+	void setFont(const std::string& filename);
+
+	void setFontByName(const std::string& name);
+
 	void setFontColor(unsigned char red,
 	                  unsigned char green,
 	                  unsigned char blue,
