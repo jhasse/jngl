@@ -7,6 +7,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../freetype.hpp"
 #include "color.hpp"
+#include "screen.hpp"
 
 #include <stack>
 
@@ -34,11 +35,12 @@ namespace jngl {
 		rgbs.pop();
 	}
 
-	Font::Font(const std::string& filename, unsigned int size) : impl(new FontImpl(filename.c_str(), size)) {
+	Font::Font(const std::string& filename, unsigned int size)
+	: impl(new FontImpl(filename.c_str(), size)) {
 	}
 
 	void Font::print(const std::string& text, int x, int y) {
-		impl->print(x, y, text);
+		impl->print(x * getScaleFactor(), y * getScaleFactor(), text);
 	}
 
 	boost::shared_ptr<FontImpl> Font::getImpl() {

@@ -9,6 +9,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "freetype.hpp"
 #include "jngl/font.hpp"
 #include "jngl/debug.hpp"
+#include "jngl/screen.hpp"
 #include "ConvertUTF.h"
 #include "main.hpp"
 
@@ -165,7 +166,8 @@ namespace jngl {
 		throw std::runtime_error("Attempting to use an unitialized FontImpl object");
 	}
 
-	FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height) : height_(height), lineHeight(int(height_ / .63)) {
+	FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)
+	: height_(height * getScaleFactor()), lineHeight(int(height_ / .63)) {
 		auto filename = pathPrefix + relativeFilename;
 		if (!std::ifstream(filename.c_str())) {
 			throw std::runtime_error(std::string("Font file not found: ") + filename);
@@ -188,7 +190,7 @@ namespace jngl {
 		// For some twisted reason, Freetype measures font size
 		// in terms of 1/64ths of pixels.  Thus, to make a font
 		// h pixels high, we need to request a size of h*64.
-		FT_Set_Char_Size(face_, height * 64, height * 64, 96, 96);
+		FT_Set_Char_Size(face_, height_ * 64, height_ * 64, 96, 96);
 	}
 
 	FontImpl::~FontImpl()
