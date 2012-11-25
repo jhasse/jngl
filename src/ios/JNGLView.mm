@@ -65,6 +65,8 @@
 		
 		startTime = -1;
 		angle = 0;
+		pause = false;
+		needToResetFrameLimiter = false;
 		jngl::setPrefix(std::string([[[NSBundle mainBundle] resourcePath] UTF8String]) + "/");
 		jngl::setConfigPath(std::string([[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
 		                                  objectAtIndex:0]
@@ -77,24 +79,28 @@
 
 - (void) drawView: (CADisplayLink*) displayLink
 {
-	if (displayLink) {
-		if (startTime < 0) {
-			startTime = displayLink.timestamp;
-		} else {
-			jngl::elapsedSeconds = displayLink.timestamp - startTime;
-		}
-		
-		jngl::pWindow->stepIfNeeded();
-	}
+	if (!pause) {
+		if (displayLink) {
+			if (startTime < 0) {
+				startTime = displayLink.timestamp;
+			} else {
+				jngl::elapsedSeconds = displayLink.timestamp - startTime;
+				if (needToResetFrameLimiter) {
+					jngl::resetFrameLimiter();
+					needToResetFrameLimiter = false;
+				}
+			}
 
-	glLoadIdentity();
-	jngl::clearBackgroundColor();
-	glClear(GL_COLOR_BUFFER_BIT);
-	jngl::rotate(angle);
-	
-	jngl::pWindow->draw();
-	
-	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
+			jngl::pWindow->stepIfNeeded();
+		}
+		glLoadIdentity();
+		jngl::clearBackgroundColor();
+		glClear(GL_COLOR_BUFFER_BIT);
+		jngl::rotate(angle);
+		
+		jngl::pWindow->draw();
+		[context presentRenderbuffer:GL_RENDERBUFFER_OES];
+	}
 }
 
 - (void) touchesBegan: (NSSet*) touches withEvent: (UIEvent*) event
@@ -155,6 +161,13 @@
 
 -(BOOL) hasText {
 	return YES;
+}
+
+-(void) setPause: (bool) p {
+	pause = p;
+	if (!p) {
+		needToResetFrameLimiter = true;
+	}
 }
 
 @end

@@ -15,6 +15,8 @@ namespace jngl {
 	int height;
 	CFTimeInterval startTime;
 	jngl::WindowImpl* impl;
+	bool pause;
+	bool needToResetFrameLimiter;
 }
 
 - (void) drawView: (CADisplayLink*) displayLink;
@@ -22,5 +24,6 @@ namespace jngl {
 - (void) touchesEnded: (NSSet*) touches withEvent: (UIEvent*) event;
 - (void) touchesMoved: (NSSet*) touches withEvent: (UIEvent*) event;
 - (void) didRotate:(NSNotification*) notification;
+- (void) setPause: (bool) p;
 
 @end
