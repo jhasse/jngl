@@ -258,7 +258,9 @@ namespace jngl {
 		lineHeight = h;
 	}
 
-	void FontImpl::print(const int x, const int y, const std::string& text) {
+	void FontImpl::print(int x, int y, const std::string& text) {
+		x *= getScaleFactor();
+		y *= getScaleFactor();
 		std::vector<std::string> lines(ParseString(text));
 
 		glColor4ub(fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha);

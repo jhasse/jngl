@@ -40,7 +40,7 @@ namespace jngl {
 	}
 
 	void Font::print(const std::string& text, int x, int y) {
-		impl->print(x * getScaleFactor(), y * getScaleFactor(), text);
+		impl->print(x, y, text);
 	}
 
 	boost::shared_ptr<FontImpl> Font::getImpl() {
