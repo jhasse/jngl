@@ -6,6 +6,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "text.hpp"
 
 #include "font.hpp"
+#include "screen.hpp"
 #include "../windowptr.hpp"
 #include "../spriteimpl.hpp"
 
@@ -35,7 +36,7 @@ namespace jngl {
 	}
 
 	void Text::draw() const {
-		font->print(int(x), int(y), text);
+		font->print(int(x), int(y / getScaleFactor()), text);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 }

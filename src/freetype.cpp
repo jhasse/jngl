@@ -247,7 +247,7 @@ namespace jngl {
 				maxWidth = lineWidth;
 			}
 		}
-		return maxWidth;
+		return maxWidth / getScaleFactor();
 	}
 
 	int FontImpl::getLineHeight() const {
@@ -267,17 +267,15 @@ namespace jngl {
 		glEnable(GL_TEXTURE_2D);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		std::vector<std::string>::iterator lineEnd = lines.end();
+		auto lineEnd = lines.end();
 		int lineNr = 0;
-		for(std::vector<std::string>::iterator lineIter = lines.begin(); lineIter != lineEnd; ++lineIter)
-		{
+		for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
 			glPushMatrix();
 			opengl::translate(x, y + lineHeight * lineNr);
 			++lineNr;
 
-			std::string::iterator charEnd = lineIter->end();
-			for(std::string::iterator charIter = lineIter->begin(); charIter != charEnd; ++charIter)
-			{
+			auto charEnd = lineIter->end();
+			for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
 				GetCharacter(charIter, charEnd).Draw();
 			}
 

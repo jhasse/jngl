@@ -7,6 +7,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "windowptr.hpp"
 #include "main.hpp"
 #include "jngl/matrix.hpp"
+#include "jngl/screen.hpp"
 
 namespace jngl {
 
@@ -89,7 +90,7 @@ namespace jngl {
 		glPushMatrix();
 		jngl::translate(x, y);
 		glScalef(1.0f, -1.0f, 1.0f);
-		jngl::translate(0, -height);
+		jngl::translate(0, -height / getScaleFactor());
 		texture.draw();
 		glPopMatrix();
 	}
