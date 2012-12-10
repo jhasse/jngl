@@ -239,7 +239,8 @@ namespace jngl {
 		}
 		auto timeToSleep = oldTime - jngl::getTime();
 		if (timeToSleep > 0.005) {
-			jngl::sleep(int(timeToSleep * 1000));
+			jngl::sleep(int(timeToSleep * 900));
+			stepsPerFrame -= 0.1f;
 		}
 		if (timeToSleep > timePerStep && stepsPerFrame > 0.6) {
 			stepsPerFrame -= float(timeToSleep - timePerStep);
