@@ -36,7 +36,7 @@ namespace jngl {
 	}
 
 	void Text::draw() const {
-		font->print(int(x), int(y / getScaleFactor()), text);
+		font->print(int(x / getScaleFactor()), int(y / getScaleFactor()), text);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 }

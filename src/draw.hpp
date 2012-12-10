@@ -5,6 +5,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "opengl.hpp"
 
+#include "jngl/screen.hpp"
+
 #include <cmath>
 #include <vector>
 
@@ -44,7 +46,9 @@ namespace draw
 	}
 
 	template<class T>
-	void Ellipse(const T xmid, const T ymid, const T width, const T height, const T startAngle) {
+	void Ellipse(const T xmid, const T ymid, T width, T height, const T startAngle) {
+		width *= jngl::getScaleFactor();
+		height *= jngl::getScaleFactor();
 		opengl::BindArrayBuffer(0);
 		glPushMatrix();
 		opengl::translate(xmid, ymid);
