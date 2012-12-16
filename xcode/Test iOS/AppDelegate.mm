@@ -41,7 +41,7 @@ public:
 			fbo->endDraw();
 			fbo->draw(-jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
 		}
-		if (jngl::mouseDown()) {
+		if (jngl::isMultitouch()) {
 			jngl::setSpriteColor(0, 0, 0);
 			jngl::setKeyboardVisible(true);
 		} else {

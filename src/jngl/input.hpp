@@ -95,6 +95,8 @@ namespace jngl {
 
 	bool isMouseVisible();
 
+	bool isMultitouch();
+
 	int getMouseX();
 
 	int getMouseY();

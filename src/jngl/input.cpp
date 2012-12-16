@@ -23,4 +23,8 @@ namespace jngl {
 	void setMouseDown(mouse::Button button, bool d) {
 		pWindow->setMouseDown(button, d);
 	}
+
+	bool isMultitouch() {
+		return pWindow->isMultitouch();
+	}
 }

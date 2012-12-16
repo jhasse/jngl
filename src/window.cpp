@@ -285,4 +285,8 @@ namespace jngl {
 	std::string Window::getConfigPath() const {
 		return configPath;
 	}
+
+	bool Window::isMultitouch() const {
+		return multitouch;
+	}
 }

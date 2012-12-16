@@ -54,6 +54,7 @@ namespace jngl
 		bool GetRelativeMouseMode() const;
 		void SetMouseVisible(bool visible);
 		bool GetMouseVisible() const;
+		bool isMultitouch() const;
 		int MouseX();
 		int MouseY();
 		int GetWidth() const;
@@ -123,6 +124,7 @@ namespace jngl
 		double oldTime;
 		boost::shared_ptr<Work> currentWork_;
 		bool changeWork_;
+		bool multitouch = false;
 		boost::shared_ptr<Work> newWork_;
 		std::string configPath;
 		std::vector<boost::shared_ptr<Job>> jobs;

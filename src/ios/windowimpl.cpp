@@ -28,6 +28,9 @@ namespace jngl {
 	}
 	
 	void WindowImpl::setMouseDown(bool d) {
+		if (window->mouseDown_.at(jngl::mouse::Left)) {
+			window->multitouch = d;
+		}
 		window->mousePressed_.at(jngl::mouse::Left) = d;
 		window->mouseDown_.at(jngl::mouse::Left) = d;
 	}

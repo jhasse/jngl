@@ -24,6 +24,7 @@ JNGLView* jnglView = nullptr;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+	self.view.multipleTouchEnabled = YES;
 }
 
 - (void)viewDidUnload
