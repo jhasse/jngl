@@ -271,7 +271,7 @@ namespace jngl {
 		int lineNr = 0;
 		for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
 			glPushMatrix();
-			opengl::translate(x, y + lineHeight * getScaleFactor() * lineNr);
+			opengl::translate(x, y + lineHeight * lineNr);
 			++lineNr;
 
 			auto charEnd = lineIter->end();
