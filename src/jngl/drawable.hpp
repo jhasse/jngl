@@ -22,7 +22,7 @@ namespace jngl {
 
 		template<class Vect>
 		Vect getCenter() const {
-			return Vect{x + width/2, y + height/2};
+			return Vect{getX() + getWidth()/2, getY() + getHeight()/2};
 		}
 
 		virtual void setCenter(Float x, Float y);
