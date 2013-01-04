@@ -110,7 +110,7 @@ BOOST_PYTHON_MODULE(jngl)
 	def("drawEllipse", drawEllipse);
 	def("drawPoint", drawPoint);
 	def("rotate", rotate);
-	def("translate", translate);
+	def("translate", static_cast<void(*)(jngl::Float, jngl::Float)>(translate));
 	def("scale", scale1);
 	def("scale", scale2);
 	def("pushMatrix", pushMatrix);
@@ -143,6 +143,7 @@ BOOST_PYTHON_MODULE(jngl)
 	def("setBackgroundColor", setBackgroundColor);
 	def("setColor", setColor1);
 	def("setColor", setColor2);
+	def("setAlpha", setAlpha);
 	def("setFontColor", setFontColor1);
 	def("setFontColor", setFontColor2);
 	def("setSpriteColor", setSpriteColor1);

@@ -50,7 +50,7 @@ namespace jngl
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
 		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false),
 		  isMultisampleSupported_(true), anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12),
-		  width_(width), height_(height), mouseWheel_(0), fontName_(""), oldTime_(0), changeWork_(false)
+		  width_(width), height_(height), mouseWheel_(0), fontName_(""), oldTime(0), changeWork_(false)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);
