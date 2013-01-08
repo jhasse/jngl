@@ -124,14 +124,15 @@ namespace jngl
 		double oldTime;
 		boost::shared_ptr<Work> currentWork_;
 		bool changeWork_;
-		bool multitouch = false;
 		boost::shared_ptr<Work> newWork_;
 		std::string configPath;
 		std::vector<boost::shared_ptr<Job>> jobs;
 #ifdef _MSC_VER
 		float stepsPerFrame;
+		bool multitouch;
 #else
 		float stepsPerFrame = 1;
+		bool multitouch = false;
 #endif
 
 		// <fontSize, <fontName, FontImpl>>

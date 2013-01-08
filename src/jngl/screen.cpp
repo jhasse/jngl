@@ -20,10 +20,10 @@ namespace jngl {
 	}
 
 	int getScreenWidth() {
-		return getWindowWidth() / factor;
+		return static_cast<int>(getWindowWidth() / factor);
 	}
 
 	int getScreenHeight() {
-		return getWindowHeight() / factor;
+		return static_cast<int>(getWindowHeight() / factor);
 	}
 }

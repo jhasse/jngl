@@ -17,7 +17,7 @@ namespace jngl {
 	}
 
 	void Text::setText(const std::string& t) {
-		width = font->getTextWidth(t) * getScaleFactor();
+		width = static_cast<int>(font->getTextWidth(t) * getScaleFactor());
 		height = font->getLineHeight();
 		text = t;
 	}

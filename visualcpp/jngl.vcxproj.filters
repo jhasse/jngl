@@ -84,9 +84,6 @@
     <ClCompile Include="..\src\jngl\job.cpp">
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\jngl\rgb.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\jngl\screen.cpp">
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
@@ -97,6 +94,9 @@
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
     <ClCompile Include="..\src\jngl\work.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\color.cpp">
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
   </ItemGroup>
@@ -176,9 +176,6 @@
     <ClInclude Include="..\src\jngl\matrix.hpp">
       <Filter>Header Files\jngl</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\jngl\rgb.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\jngl\screen.hpp">
       <Filter>Header Files\jngl</Filter>
     </ClInclude>
@@ -186,6 +183,9 @@
       <Filter>Header Files\jngl</Filter>
     </ClInclude>
     <ClInclude Include="..\src\jngl\text.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\color.hpp">
       <Filter>Header Files\jngl</Filter>
     </ClInclude>
   </ItemGroup>

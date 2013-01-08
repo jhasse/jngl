@@ -17,12 +17,12 @@
     <ClCompile Include="..\src\finally.cpp" />
     <ClCompile Include="..\src\framebufferimpl.cpp" />
     <ClCompile Include="..\src\freetype.cpp" />
+    <ClCompile Include="..\src\jngl\color.cpp" />
     <ClCompile Include="..\src\jngl\drawable.cpp" />
     <ClCompile Include="..\src\jngl\font.cpp" />
     <ClCompile Include="..\src\jngl\framebuffer.cpp" />
     <ClCompile Include="..\src\jngl\input.cpp" />
     <ClCompile Include="..\src\jngl\job.cpp" />
-    <ClCompile Include="..\src\jngl\rgb.cpp" />
     <ClCompile Include="..\src\jngl\screen.cpp" />
     <ClCompile Include="..\src\jngl\shapes.cpp" />
     <ClCompile Include="..\src\jngl\sprite.cpp" />
@@ -49,6 +49,7 @@
     <ClInclude Include="..\src\freetype.hpp" />
     <ClInclude Include="..\src\jngl.hpp" />
     <ClInclude Include="..\src\jngl\all.hpp" />
+    <ClInclude Include="..\src\jngl\color.hpp" />
     <ClInclude Include="..\src\jngl\debug.hpp" />
     <ClInclude Include="..\src\jngl\drawable.hpp" />
     <ClInclude Include="..\src\jngl\font.hpp" />
@@ -56,7 +57,6 @@
     <ClInclude Include="..\src\jngl\input.hpp" />
     <ClInclude Include="..\src\jngl\job.hpp" />
     <ClInclude Include="..\src\jngl\matrix.hpp" />
-    <ClInclude Include="..\src\jngl\rgb.hpp" />
     <ClInclude Include="..\src\jngl\screen.hpp" />
     <ClInclude Include="..\src\jngl\shapes.hpp" />
     <ClInclude Include="..\src\jngl\sprite.hpp" />
@@ -101,12 +101,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>../include;$(IncludePath)</IncludePath>
+    <IncludePath>../include;../../boost-libs/include;$(IncludePath)</IncludePath>
     <LibraryPath>../lib;$(LibraryPath)</LibraryPath>
     <TargetName>jngl</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>../include;$(IncludePath)</IncludePath>
+    <IncludePath>../include;../../boost-libs/include;$(IncludePath)</IncludePath>
     <LibraryPath>../lib;$(LibraryPath)</LibraryPath>
     <TargetName>jngl</TargetName>
   </PropertyGroup>

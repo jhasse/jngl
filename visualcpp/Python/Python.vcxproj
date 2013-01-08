@@ -40,21 +40,22 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Python32\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Python32\libs;../../lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Python32\include;../../../boost-libs/include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Python32\libs;../../../boost-libs/lib/win;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Python32\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Python32\libs;../../lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Python32\include;../../../boost-libs/include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Python32\libs;../../../boost-libs/lib/win;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;zlib.lib;../Debug/jngl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;zlib.lib;../Debug/jngl.lib;libboost_python3-vc110-mt-gd-1_51.lib;python32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -63,12 +64,13 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;zlib.lib;../Release/jngl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;zlib.lib;libwebp.lib;../Release/jngl.lib;libboost_python3-vc110-mt-1_51.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
