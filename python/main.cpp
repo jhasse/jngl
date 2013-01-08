@@ -1,3 +1,4 @@
+#include <cmath> // see http://lists.boost.org/boost-users/2010/12/65159.php
 #include <boost/python.hpp> // Needs to be included first. See http://bugs.python.org/issue10910
 
 #include "../src/jngl.hpp"

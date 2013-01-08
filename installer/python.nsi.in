@@ -1,11 +1,11 @@
 XPStyle On
 SetCompressor lzma
 
-Name "JNGL for Python 2.7"
+Name "JNGL for Python 3.2"
 
-OutFile "JNGL @VERSION@ (Python 2.7).exe"
+OutFile "JNGL @VERSION@ (Python 3.2).exe"
 
-InstallDir "C:\Python27\Lib\site-packages"
+InstallDir "C:\Python32\Lib\site-packages"
 
 Page directory
 Page instfiles
@@ -16,7 +16,11 @@ Section ""
 
 SetOutPath $INSTDIR
 File /oname=jngl.pyd ..\python\jngl.dll
-File ..\python\libboost_python-mgw44-1_45.dll
+File ..\..\boost-libs\lib\win\libboost_python-mgw47-mt-1_51.dll
 File ..\jpeg62.dll
+File ..\glew32.dll
+File ..\ogg.dll
+File ..\vorbis.dll
+File ..\vorbisfile.dll
 
 SectionEnd

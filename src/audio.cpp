@@ -158,7 +158,7 @@ namespace jngl
 			if (bytes < 0)
 			{
 				ov_clear(&oggFile);
-				throw std::runtime_error("Error decoding OGG file.");
+				throw std::runtime_error("Error decoding OGG file (" + filename + ").");
 			}
 
 			buffer_.insert(buffer_.end(), array, array + bytes);

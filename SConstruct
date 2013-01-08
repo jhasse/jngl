@@ -62,7 +62,7 @@ if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
 		jnglLibs += Split("openal32 ogg vorbisfile")
 	else:
 		env.Append(CPPDEFINES='WEAK_LINKING_OPENAL')
-	env.Append(CPPPATH="./include")
+	env.Append(CPPPATH=["./include", "../boost-libs/include"])
 	lib = env.Library(target="jngl",
 	                  source=source_files +
 	                         env.Object(Glob('src/win32/*.cpp'),
@@ -74,16 +74,17 @@ if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
 	libs = Split("jngl") + jnglLibs
 	env.Program("test", testSrc,
 	            CPPFLAGS="-std=gnu++0x",
-	            CPPPATH=".",
+	            CPPPATH=[".", "../boost-libs/include"],
 				LIBPATH=Split("lib ."),
 				LIBS=libs,
 				LINKFLAGS=linkflags)
 	if env['python']:
 		env = env.Clone()
-		env.Append(CPPPATH=Split("C:\Python27\include"),
-		           LIBPATH=Split(". ./lib ./python C:\Python32\libs"),
-		           LIBS=libs + Split("python32 libboost_python-mgw47-mt-1_51"),
-		           LINKFLAGS=linkflags)
+		env.Append(CPPPATH=Split("C:\Python32\include ../boost-libs/include"),
+		             LIBPATH=Split(". lib ../boost-libs/lib/win ./python C:\Python32\libs"),
+		             LIBS=libs + Split("python32 libboost_python-mgw47-mt-1_51.dll"),
+		             LINKFLAGS=linkflags,
+		             CPPFLAGS="-std=c++11")
 		env.SharedLibrary(target="python/jngl.dll",
 		                  source="python/main.cpp")
 
