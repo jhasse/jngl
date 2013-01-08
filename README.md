@@ -2,7 +2,7 @@
 
 Easy to use game library for C++ and Python
 
-* [Tutorials](http://bixense.com/jngl/tutorials)
+* [Tutorials](http://jhasse.github.com/jngl/tutorials)
 
 ## Build using scons
 
