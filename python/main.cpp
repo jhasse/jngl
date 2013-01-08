@@ -91,6 +91,9 @@ void draw1(const std::string& filename, int x, int y) {
 void drawRect1(double xposition, double yposition, double width, double height) {
 	return drawRect(xposition, yposition, width, height);
 }
+void print1(const std::string& text, float x, float y) {
+	return print(text, x, y);
+}
 
 BOOST_PYTHON_MODULE(jngl)
 {
@@ -103,6 +106,7 @@ BOOST_PYTHON_MODULE(jngl)
 	def("quit", quit);
 	def("cancelQuit", cancelQuit);
 	def("draw", draw1);
+	def("draw", static_cast<void(*)(const std::string&, jngl::Float, jngl::Float)>(draw));
 	def("drawScaled", drawScaled1);
 	def("drawScaled", drawScaled2);
 	def("drawRect", drawRect1);
@@ -148,7 +152,8 @@ BOOST_PYTHON_MODULE(jngl)
 	def("setFontColor", setFontColor2);
 	def("setSpriteColor", setSpriteColor1);
 	def("setSpriteColor", setSpriteColor2);
-	def("print1", print);
+	def("print", print);
+	def("print", print1);
 	def("getFontSize", getFontSize);
 	def("setFontSize", setFontSize);
 	def("setFont", setFont);
@@ -225,4 +230,6 @@ BOOST_PYTHON_MODULE(jngl)
 	def("getPrefix", getPrefix);
 	def("setConfigPath", setConfigPath);
 	def("getConfigPath", getConfigPath);
+	def("pushSpriteAlpha", pushSpriteAlpha);
+	def("popSpriteAlpha", popSpriteAlpha);
 }
