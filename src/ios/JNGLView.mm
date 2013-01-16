@@ -64,7 +64,7 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
 		
 		startTime = -1;
-		angle = 0;
+		angle = jngl::getDeviceOrientationSupported(jngl::Portrait) ? 90 : 0;
 		pause = false;
 		needToResetFrameLimiter = false;
 		jngl::setPrefix(std::string([[[NSBundle mainBundle] resourcePath] UTF8String]) + "/");
@@ -126,17 +126,25 @@
 	impl->setMouse(location.x, location.y);
 }
 
-- (void) didRotate:(NSNotification*) notification
-{
+- (void) didRotate:(NSNotification*) notification {
 	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
 	switch (orientation) {
 		case UIDeviceOrientationLandscapeLeft:
-			angle = 180;
-			impl->setFlip(true);
+			if (jngl::getDeviceOrientationSupported(jngl::LandscapeLeft)) {
+				angle = 180;
+				impl->setFlip(true);
+			}
 			break;
 		case UIDeviceOrientationLandscapeRight:
-			angle = 0;
-			impl->setFlip(false);
+			if (jngl::getDeviceOrientationSupported(jngl::LandscapeRight)) {
+				angle = 0;
+				impl->setFlip(false);
+			}
+			break;
+		case UIDeviceOrientationPortrait:
+			if (jngl::getDeviceOrientationSupported(jngl::Portrait)) {
+				angle = 90;
+			}
 			break;
 		default: break;
 	}
@@ -168,6 +176,14 @@
 	if (!p) {
 		needToResetFrameLimiter = true;
 	}
+}
+
+#pragma mark UITextInputTraits methods
+- (UIKeyboardType) keyboardType {
+	if (jngl::getKeyboardType() == jngl::Numpad) {
+		return UIKeyboardTypeNumberPad;
+	}
+	return UIKeyboardTypeDefault;
 }
 
 @end

@@ -26,4 +26,14 @@ namespace jngl {
 	int getScreenHeight() {
 		return static_cast<int>(getWindowHeight() / factor);
 	}
+
+	bool deviceOrientationSupported[] = { false, false, true, true };
+
+	void setDeviceOrientationSupported(DeviceOrientation i, bool enabled) {
+		deviceOrientationSupported[i] = enabled;
+	}
+
+	bool getDeviceOrientationSupported(DeviceOrientation i) {
+		return deviceOrientationSupported[i];
+	}
 }

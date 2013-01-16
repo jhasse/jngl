@@ -27,4 +27,14 @@ namespace jngl {
 	bool isMultitouch() {
 		return pWindow->isMultitouch();
 	}
+
+	KeyboardType keyboardType = Default;
+
+	void setKeyboardType(KeyboardType t) {
+		keyboardType = t;
+	}
+
+	KeyboardType getKeyboardType() {
+		return keyboardType;
+	}
 }

@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2013 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -70,6 +70,16 @@ namespace jngl {
 
 	/// Display onscreen keyboard for touch devices
 	void setKeyboardVisible(bool);
+
+	enum KeyboardType {
+		Default,
+		Numpad
+	};
+
+	/// Type of the onscreen keyboard
+	void setKeyboardType(KeyboardType);
+
+	KeyboardType getKeyboardType();
 
 	void setKeyPressed(const std::string& key, bool);
 

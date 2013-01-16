@@ -18,6 +18,17 @@ namespace jngl {
 	int getScreenWidth();
 
 	int getScreenHeight();
+
+	enum DeviceOrientation {
+		Portrait,
+		PortraitUpsideDown,
+		LandscapeLeft,
+		LandscapeRight
+	};
+
+	void setDeviceOrientationSupported(DeviceOrientation, bool enabled);
+
+	bool getDeviceOrientationSupported(DeviceOrientation);
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop
