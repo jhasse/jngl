@@ -16,7 +16,12 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 		#include <OpenGLES/ES1/glext.h>
 		#include "ios/glew.h"
 	#else
+	#ifdef ANDROID
+		#include <EGL/egl.h>
+		#include <GLES/gl.h>
+	#else
 		#include <GL/glew.h>
+	#endif
 	#endif
 #endif
 

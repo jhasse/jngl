@@ -18,7 +18,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <stack>
 
 #ifdef __linux
-	#ifdef WIZ
+	#ifdef ANDROID
 
 	#else
 		#include <GL/glx.h>
@@ -94,7 +94,7 @@ namespace jngl
 		std::string getConfigPath() const;
 		void addJob(boost::shared_ptr<Job>);
 		void resetFrameLimiter();
-#ifndef __APPLE__
+#if !defined (__APPLE__) && !defined (ANDROID)
 	#ifdef __linux
 		boost::shared_ptr<Display> pDisplay_;
 		static void ReleaseXData(void*);
@@ -127,7 +127,7 @@ namespace jngl
 		boost::shared_ptr<Work> newWork_;
 		std::string configPath;
 		std::vector<boost::shared_ptr<Job>> jobs;
-#ifdef _MSC_VER
+#if defined _MSC_VER || defined ANDROID
 		float stepsPerFrame;
 		bool multitouch;
 #else
@@ -137,7 +137,7 @@ namespace jngl
 
 		// <fontSize, <fontName, FontImpl>>
 		boost::ptr_unordered_map<int, boost::unordered_map<std::string, boost::shared_ptr<FontImpl>>> fonts_;
-#ifndef __APPLE__
+#if !defined (__APPLE__) && !defined (ANDROID)
 	#ifdef __linux
 		::Window window_;
 		GLXContext context_;
