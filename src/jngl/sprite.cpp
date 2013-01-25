@@ -375,4 +375,13 @@ namespace jngl {
 		textures[filename] = texture;
 	}
 
+	void setMasking(bool enabled) {
+		if (enabled) {
+			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_TRUE);
+			glDisable(GL_BLEND);
+		} else {
+			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+			glEnable(GL_BLEND);
+		}
+	}
 }

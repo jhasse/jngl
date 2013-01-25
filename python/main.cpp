@@ -233,4 +233,5 @@ BOOST_PYTHON_MODULE(jngl)
 	def("getConfigPath", getConfigPath);
 	def("pushSpriteAlpha", pushSpriteAlpha);
 	def("popSpriteAlpha", popSpriteAlpha);
+	def("setMasking", setMasking);
 }

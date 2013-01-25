@@ -105,6 +105,8 @@ namespace jngl {
 	int getWidth(const std::string& filename);
 
 	int getHeight(const std::string& filename);
+
+	void setMasking(bool enabled);
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop
