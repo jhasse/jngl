@@ -240,4 +240,29 @@ BOOST_PYTHON_MODULE(jngl)
         .def("beginDraw", &FrameBuffer::beginDraw)
         .def("endDraw", &FrameBuffer::endDraw)
     ;
+
+    enum_<controller::Button>("controller")
+		.value("LeftStickX", controller::LeftStickX)
+		.value("LeftStickY", controller::LeftStickY)
+		.value("RightStickX", controller::RightStickX)
+		.value("RightStickY", controller::RightStickY)
+		.value("A", controller::A)
+		.value("B", controller::B)
+		.value("X", controller::X)
+		.value("Y", controller::Y)
+		.value("LeftButton", controller::LeftButton)
+		.value("RightButton", controller::RightButton)
+		.value("LeftTrigger", controller::LeftTrigger)
+		.value("RightTrigger", controller::RightTrigger)
+		.value("Start", controller::Start)
+		.value("Back", controller::Back)
+		.value("DpadUp", controller::DpadUp)
+		.value("DpadDown", controller::DpadDown)
+		.value("DpadLeft", controller::DpadLeft)
+		.value("DpadRight", controller::DpadRight)
+		.value("LeftStick", controller::LeftStick)
+		.value("RightStic", controller::RightStick);
+
+    def("isControllerConnected", isControllerConnected);
+    def("getControllerState", getControllerState);
 }

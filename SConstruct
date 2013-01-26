@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-version = "1.1.0"
+version = "1.1.1"
 
 #Replace @VERSION@ in certain files
 files = ["jngl.pc.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
