@@ -46,5 +46,8 @@ namespace jngl {
 	float getControllerState(int number, controller::Button) {
 		return 0.0f;
 	}
+
+	void setControllerVibration(int number, unsigned short, unsigned short) {
+	}
 #endif
 }

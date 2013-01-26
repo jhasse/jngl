@@ -45,4 +45,12 @@ namespace jngl {
 			default: return 0.0f;
 		}
 	}
+
+	void setControllerVibration(int number, unsigned short l, unsigned short r) {
+		XINPUT_VIBRATION vibration;
+		ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+		vibration.wLeftMotorSpeed = l;
+		vibration.wRightMotorSpeed = r;
+		XInputSetState(number, &vibration);
+	}
 }

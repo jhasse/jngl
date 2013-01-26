@@ -265,4 +265,5 @@ BOOST_PYTHON_MODULE(jngl)
 
     def("isControllerConnected", isControllerConnected);
     def("getControllerState", getControllerState);
+    def("setControllerVibration", setControllerVibration);
 }

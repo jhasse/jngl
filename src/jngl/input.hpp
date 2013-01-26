@@ -159,6 +159,9 @@ namespace jngl {
 
 	/// Returns a value between 0.0f (not pressed) and 1.0f (pressed).
 	float getControllerState(int number, controller::Button);
+
+	/// Note that the right motor is the high-frequency motor, the left motor is the low-frequency motor.
+	void setControllerVibration(int number, unsigned short leftMotor, unsigned short rightMotor);
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop
