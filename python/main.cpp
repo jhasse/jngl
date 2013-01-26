@@ -234,4 +234,10 @@ BOOST_PYTHON_MODULE(jngl)
 	def("pushSpriteAlpha", pushSpriteAlpha);
 	def("popSpriteAlpha", popSpriteAlpha);
 	def("setMasking", setMasking);
+
+	class_<FrameBuffer, boost::noncopyable>("FrameBuffer", init<int, int>())
+        .def("draw", &FrameBuffer::draw)
+        .def("beginDraw", &FrameBuffer::beginDraw)
+        .def("endDraw", &FrameBuffer::endDraw)
+    ;
 }
