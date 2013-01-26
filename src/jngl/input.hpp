@@ -128,6 +128,37 @@ namespace jngl {
 	void setMousePressed(jngl::mouse::Button, bool);
 
 	void setMouse(int xposition, int yposition);
+
+	namespace controller {
+		enum Button {
+			LeftStickX,
+			LeftStickY,
+			RightStickX,
+			RightStickY,
+			A,
+			B,
+			X,
+			Y,
+			LeftButton,
+			RightButton,
+			LeftTrigger,
+			RightTrigger,
+			Start,
+			Back,
+			DpadUp,
+			DpadDown,
+			DpadLeft,
+			DpadRight,
+			LeftStick,
+			RightStick
+		};
+	}
+
+	/// Check if the Controller is connected. Don't call this function every frame for performance reasons.
+	bool isControllerConnected(int number);
+
+	/// Returns a value between 0.0f (not pressed) and 1.0f (pressed).
+	float getControllerState(int number, controller::Button);
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop

@@ -19,6 +19,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <cassert>
 #include <shlobj.h>
 
+XINPUT_STATE states[XUSER_MAX_COUNT];
+
 namespace jngl
 {
 	LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -324,8 +326,44 @@ namespace jngl
 		}
 	}
 
-	void Window::UpdateInput()
-	{
+	void calculateStick(short& x, short& y, int deadzone) {
+		float magnitude = sqrt(x*x + y*y);
+		float normX = x / magnitude;
+		float normY = y / magnitude;
+
+		const int max = 32767;
+
+		if (magnitude > deadzone) {
+			if (magnitude > max) magnitude = max;
+			magnitude -= deadzone;
+			x = max * normX * magnitude / (max - deadzone);
+			y = max * normY * magnitude / (max - deadzone);
+		} else {
+			x = y = 0;
+		}
+	}
+
+	void calculateTrigger(BYTE& v) {
+		if (v > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) {
+			v -= XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
+			v = BYTE(255 * v / float(255 - XINPUT_GAMEPAD_TRIGGER_THRESHOLD));
+		} else {
+			v = 0;
+		}
+	}
+
+	void Window::UpdateInput() {
+		for (int i = 0; i < XUSER_MAX_COUNT; ++i) {
+			DWORD result = XInputGetState(i, &states[i]);
+			if (result == ERROR_SUCCESS) {
+				calculateStick(states[i].Gamepad.sThumbLX, states[i].Gamepad.sThumbLY,
+				               XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+				calculateStick(states[i].Gamepad.sThumbRX, states[i].Gamepad.sThumbRY,
+				               XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
+				calculateTrigger(states[i].Gamepad.bLeftTrigger);
+				calculateTrigger(states[i].Gamepad.bRightTrigger);
+			}
+		}
 		MSG msg;
 		while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{

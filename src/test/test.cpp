@@ -395,6 +395,13 @@ void testKeys() {
 		std::stringstream sstream;
 		sstream << "X: " << jngl::getMouseX() << "\nY: " << jngl::getMouseY() << std::endl;
 		jngl::print(sstream.str(), 5, 5);
+		for (int i = 0; i < 4; ++i) {
+			std::stringstream sstream;
+			sstream << "Controller " << i << " connected: " << jngl::isControllerConnected(i) << std::endl
+			        << "Trigger: " << jngl::getControllerState(i, jngl::controller::LeftTrigger) << " " << jngl::getControllerState(i, jngl::controller::RightTrigger)
+			        << " A: " << jngl::getControllerState(i, jngl::controller::A);
+			jngl::print(sstream.str(), 500, 100 + i * 50);
+		}
 		if (jngl::getRelativeMouseMode()) {
 			xpos += jngl::getMouseX();
 			ypos += jngl::getMouseY();
