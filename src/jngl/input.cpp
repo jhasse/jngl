@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2013 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -37,4 +37,14 @@ namespace jngl {
 	KeyboardType getKeyboardType() {
 		return keyboardType;
 	}
+
+#ifndef _WIN32
+	bool isControllerConnected(int number) {
+		return false;
+	}
+
+	float getControllerState(int number, controller::Button) {
+		return 0.0f;
+	}
+#endif
 }
