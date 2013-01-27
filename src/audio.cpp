@@ -99,7 +99,7 @@ namespace jngl
 		}
 		void Play(boost::shared_ptr<Sound>& sound)
 		{
-			sounds_.erase(remove_if(sounds_.begin(), sounds_.end(), IsStopped), sounds_.end());
+			sounds_.erase(std::remove_if(sounds_.begin(), sounds_.end(), IsStopped), sounds_.end());
 			sounds_.push_back(sound);
 		}
 		void Stop(boost::shared_ptr<Sound>& sound)
@@ -268,9 +268,8 @@ namespace jngl
 	float getVolume() {
 		return Sound::masterVolume;
 	}
-	
-	Audio& GetAudio()
-	{
+
+	Audio& GetAudio() {
 		static Audio audio_;
 		return audio_;
 	}

@@ -1,10 +1,14 @@
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
-LOCAL_CFLAGS := -std=c++11 -DOPENGLES -D_LITTLE_ENDIAN=1
+LOCAL_CFLAGS := -std=c++11 -DOPENGLES -D_LITTLE_ENDIAN=1 -DNOJPEG -DNOWEBP
 LOCAL_C_INCLUDES := ../../../boost-libs/include
 LOCAL_MODULE := jngl
-LOCAL_SRC_FILES := ../../../src/main.cpp
+SRC_PATH := $(LOCAL_PATH)/../../../src/
+FILE_LIST := $(wildcard $(SRC_PATH)*.cpp $(SRC_PATH)*.c $(SRC_PATH)jngl/*.cpp $(SRC_PATH)android/*.cpp)
+LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
+
+
 LOCAL_CPP_FEATURES += exceptions rtti
 
 include $(BUILD_STATIC_LIBRARY)

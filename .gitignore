@@ -8,5 +8,5 @@ jngl.pc
 xcode/JNGL.xcodeproj/project.xcworkspace/xcuserdata/*
 *.sublime-*
 libjngl.a
-test
+/test
 android/jngl/obj

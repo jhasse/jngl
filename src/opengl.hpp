@@ -1,5 +1,5 @@
 /*
-Copyright 2009-2011 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2009-2013 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -19,6 +19,9 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 	#ifdef ANDROID
 		#include <EGL/egl.h>
 		#include <GLES/gl.h>
+		#define GL_GLEXT_PROTOTYPES 
+		#include <GLES/glext.h>
+		#include "android/glew.h"
 	#else
 		#include <GL/glew.h>
 	#endif
