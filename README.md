@@ -2,8 +2,6 @@
 
 Easy to use game library for C++ and Python
 
-* [Tutorials](http://jhasse.github.com/jngl/tutorials)
-
 ## Build using scons
 
 Build JNGL in debug mode:
