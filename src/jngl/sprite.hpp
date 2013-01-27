@@ -94,7 +94,7 @@ namespace jngl {
 
 	void setSpriteColor(unsigned char red,
 	                    unsigned char green,
-	                    unsigned char alpha);
+	                    unsigned char blue);
 
 	void setSpriteAlpha(unsigned char alpha);
 
