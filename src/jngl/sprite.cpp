@@ -378,10 +378,10 @@ namespace jngl {
 	void setMasking(bool enabled) {
 		if (enabled) {
 			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_TRUE);
-			glDisable(GL_BLEND);
+			glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA);
 		} else {
 			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		}
 	}
 }

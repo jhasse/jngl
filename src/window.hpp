@@ -156,7 +156,7 @@ namespace jngl
 		void Init(const std::string& title, bool multisample);
 		void DistinguishLeftRight();
 	#endif
-#elseif defined (__APPLE__)
+#else
 		WindowImpl* const impl;
 
 		friend class WindowImpl;
