@@ -2,7 +2,7 @@ navigation:
 - text: Home
   url: .
 - text: Tutorials
-  url: tutorials
+  url: https://github.com/jhasse/jngl/wiki/Tutorialindex
 - text: Reference
   url: reference
 - text: Forum
