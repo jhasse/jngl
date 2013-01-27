@@ -22,5 +22,6 @@ File ..\glew32.dll
 File ..\ogg.dll
 File ..\vorbis.dll
 File ..\vorbisfile.dll
+File ..\xinput1_3.dll
 
 SectionEnd

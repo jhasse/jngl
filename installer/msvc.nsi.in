@@ -35,5 +35,6 @@ File ..\lib\libwebp_debug.lib
 File ..\lib\libwebp.lib
 SetOutPath $INSTDIR\bin
 File ..\jpeg62.dll
+File ..\xinput1_3.dll
 
 SectionEnd

@@ -38,5 +38,6 @@ File ..\vorbis.dll
 File ..\vorbisfile.dll
 File ..\ogg.dll
 File ..\glew32.dll
+File ..\xinput1_3.dll
 
 SectionEnd
