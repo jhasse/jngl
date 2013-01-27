@@ -378,7 +378,7 @@ namespace jngl {
 	void setMasking(bool enabled) {
 		if (enabled) {
 			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_TRUE);
-			glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA);
+			glBlendFunc(GL_DST_ALPHA, GL_SRC_ALPHA);
 		} else {
 			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
