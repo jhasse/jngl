@@ -33,6 +33,7 @@
     <ClCompile Include="..\src\spriteimpl.cpp" />
     <ClCompile Include="..\src\tess.cpp" />
     <ClCompile Include="..\src\texture.cpp" />
+    <ClCompile Include="..\src\win32\input.cpp" />
     <ClCompile Include="..\src\win32\message.cpp" />
     <ClCompile Include="..\src\win32\time.cpp" />
     <ClCompile Include="..\src\win32\windowimpl.cpp" />
