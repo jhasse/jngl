@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2013 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -99,7 +99,7 @@ namespace jngl {
 		};
 		const size_t size = sizeof(extensions)/sizeof(extensions[0]);
 		boost::function<void(Sprite*, std::string, FILE*, bool)> loadFunction;
-		for (int i = 0; i < size; ++i) {
+		for (size_t i = 0; i < size; ++i) {
 			if (boost::algorithm::ends_with(filename, extensions[i])) {
 				loadFunction = functions[i];
 				break;
@@ -115,7 +115,7 @@ namespace jngl {
 			std::stringstream message;
 			message << "No suitable image file found for: " << filename
 			        << "\nSupported file extensions: ";
-			for (int i = 0; i < size; ++i) {
+			for (size_t i = 0; i < size; ++i) {
 				if (i) {
 					message << ", ";
 				}

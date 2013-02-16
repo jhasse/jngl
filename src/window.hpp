@@ -27,12 +27,13 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 		#include <X11/keysym.h>
 	#endif
 #else
-    #ifdef _WIN32
-        #include <windows.h>
+	#ifdef _WIN32
+		#include <windows.h>
 		#include <XInput.h>
 
 		extern XINPUT_STATE states[XUSER_MAX_COUNT];
-    #endif
+		extern bool controllerPressed[XUSER_MAX_COUNT][jngl::controller::Last];
+	#endif
 #endif
 
 namespace jngl
@@ -104,6 +105,8 @@ namespace jngl
 	#else
 		static void ReleaseDC(HWND, HDC);
 		static void ReleaseRC(HGLRC);
+
+		void addUpdateInputCallback(std::function<void()>);
 	#endif
 #else
 		WindowImpl* getImpl() const;
@@ -150,6 +153,7 @@ namespace jngl
 		boost::shared_ptr<boost::remove_pointer<HGLRC>::type> pRenderingContext_;
 		boost::shared_ptr<boost::remove_pointer<HWND>::type> pWindowHandle_;
 		boost::shared_ptr<boost::remove_pointer<HDC>::type> pDeviceContext_;
+		std::vector<std::function<void()>> updateInputCallbacks;
 		int arbMultisampleFormat_;
 
 		bool InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR);

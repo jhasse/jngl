@@ -20,9 +20,9 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <shlobj.h>
 
 XINPUT_STATE states[XUSER_MAX_COUNT];
+bool controllerPressed[XUSER_MAX_COUNT][jngl::controller::Last];
 
-namespace jngl
-{
+namespace jngl {
 	LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 	// based on: http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=46
@@ -364,12 +364,16 @@ namespace jngl
 				calculateTrigger(states[i].Gamepad.bRightTrigger);
 			}
 		}
+		if (!updateInputCallbacks.empty()) {
+			for (auto& updateInputCallback : updateInputCallbacks) {
+				updateInputCallback();
+			}
+			updateInputCallbacks.clear();
+		}
 		MSG msg;
-		while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
+		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			static std::map<int, std::string> scanCodeToCharacter;
-			switch(msg.message)
-			{
+			switch (msg.message) {
 				case WM_QUIT:
 					running_ = false;
 				break;
@@ -669,6 +673,10 @@ namespace jngl
 
 		HICON hIcon = CreateIconIndirect(&icon);
 		SendMessage(pWindowHandle_.get(), WM_SETICON, WPARAM(ICON_SMALL), LPARAM(hIcon));
+	}
+
+	void Window::addUpdateInputCallback(std::function<void()> c) {
+		updateInputCallbacks.push_back(c);
 	}
 
 	int getDesktopWidth()

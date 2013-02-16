@@ -47,6 +47,10 @@ namespace jngl {
 		return 0.0f;
 	}
 
+	bool getControllerPressed(int number, controller::Button button) {
+		return false;
+	}
+
 	void setControllerVibration(int number, unsigned short, unsigned short) {
 	}
 #endif

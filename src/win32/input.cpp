@@ -5,6 +5,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/input.hpp"
 #include "../window.hpp"
+#include "../windowptr.hpp"
 
 namespace jngl {
 	void setKeyboardVisible(bool) {
@@ -52,5 +53,17 @@ namespace jngl {
 		vibration.wLeftMotorSpeed = l;
 		vibration.wRightMotorSpeed = r;
 		XInputSetState(number, &vibration);
+	}
+
+	bool getControllerPressed(int number, controller::Button button) {
+		if (controllerPressed[number][button] && getControllerState(number, button) > 0.5f) {
+			pWindow->addUpdateInputCallback([=]() {
+				controllerPressed[number][button] = false;
+			});
+			return true;
+		} else if (getControllerState(number, button) < 0.5f) {
+			controllerPressed[number][button] = true;
+		}
+		return false;
 	}
 }
