@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2013 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -20,13 +20,12 @@ extern "C" {
 	void InitCallbacks(); // see callbacks.c
 }
 
-namespace jngl
-{
+namespace jngl {
 	std::string pathPrefix;
 	std::vector<std::string> args;
-    float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
-	bool Init(const int width, const int height)
-	{
+	float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
+
+	bool Init(const int width, const int height) {
 #ifdef GLEW_OK
 		GLenum err = glewInit();
 		if(err != GLEW_OK) {
@@ -70,8 +69,7 @@ namespace jngl
 	bool antiAliasingEnabled = false;
 	bool vsyncEnabled = false;
 
-	void showWindow(const std::string& title, const int width, const int height, bool fullscreen)
-	{
+	void showWindow(const std::string& title, const int width, const int height, bool fullscreen) {
 		debug("jngl::showWindow(\""); debug(title); debug("\", "); debug(width); debug(", "); debug(height);
 		debug(", "); debug(fullscreen); debug(");\n");
 		if (pWindow &&
@@ -82,12 +80,10 @@ namespace jngl
 		}
 		bool isMouseVisible = pWindow ? pWindow->GetMouseVisible() : true;
 		hideWindow();
-		if(width == 0)
-		{
+		if (width == 0) {
 			throw std::runtime_error("Width Is 0");
 		}
-		if(height == 0)
-		{
+		if (height == 0) {
 			throw std::runtime_error("Height Is 0");
 		}
 		pWindow.Set(new Window(title, width, height, fullscreen));
@@ -95,38 +91,32 @@ namespace jngl
 		setAntiAliasing(antiAliasingEnabled);
 	}
 
-	void hideWindow()
-	{
+	void hideWindow() {
 		unloadAll();
 		opengl::BindArrayBuffer(0);
 		pWindow.Delete();
 	}
 
-	void swapBuffers()
-	{
-	    pWindow->SwapBuffers();
+	void swapBuffers() {
+		pWindow->SwapBuffers();
 		glLoadIdentity();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void updateInput()
-	{
+	void updateInput() {
 		pWindow->UpdateKeyStates();
 		pWindow->UpdateInput();
 	}
 
-	bool running()
-	{
+	bool running() {
 		return pWindow->Running();
 	}
 
-	void quit()
-	{
+	void quit() {
 		pWindow->Quit();
 	}
 
-	void cancelQuit()
-	{
+	void cancelQuit() {
 		pWindow->Continue();
 	}
 
@@ -134,8 +124,7 @@ namespace jngl
 		glClearColor(bgRed, bgGreen, bgBlue, 1);
 	}
 
-	void setBackgroundColor(const unsigned char red, const unsigned char green, const unsigned char blue)
-	{
+	void setBackgroundColor(const unsigned char red, const unsigned char green, const unsigned char blue) {
 		pWindow.ThrowIfNull();
 		bgRed = red / 255.0f;
 		bgGreen = green / 255.0f;
@@ -144,48 +133,39 @@ namespace jngl
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
-	int getMouseX()
-	{
+	int getMouseX() {
 		return pWindow->MouseX();
 	}
 
-	int getMouseY()
-	{
+	int getMouseY() {
 		return pWindow->MouseY();
 	}
 
-	bool keyDown(const key::KeyType key)
-	{
+	bool keyDown(const key::KeyType key) {
 		return pWindow->getKeyDown(key);
 	}
 
-	bool keyPressed(const key::KeyType key)
-	{
+	bool keyPressed(const key::KeyType key) {
 		return pWindow->getKeyPressed(key);
 	}
 
-	bool keyDown(const std::string& key)
-	{
+	bool keyDown(const std::string& key) {
 		return pWindow->getKeyDown(key);
 	}
 
-	bool keyPressed(const std::string& key)
-	{
+	bool keyPressed(const std::string& key) {
 		return pWindow->getKeyPressed(key);
 	}
 
-	bool mouseDown(mouse::Button button)
-	{
+	bool mouseDown(mouse::Button button) {
 		return pWindow->getMouseDown(button);
 	}
 
-	bool mousePressed(mouse::Button button)
-	{
+	bool mousePressed(mouse::Button button) {
 		return pWindow->getMousePressed(button);
 	}
 
-	void setMouse(const int xposition, const int yposition)
-	{
+	void setMouse(const int xposition, const int yposition) {
 		pWindow->SetMouse(xposition, yposition);
 	}
 
@@ -193,13 +173,11 @@ namespace jngl
 		return pWindow->SetRelativeMouseMode(relative);
 	}
 
-	void setMouseVisible(const bool visible)
-	{
+	void setMouseVisible(const bool visible) {
 		return pWindow->SetMouseVisible(visible);
 	}
 
-	bool isMouseVisible()
-	{
+	bool isMouseVisible() {
 		return pWindow->GetMouseVisible();
 	}
 
@@ -207,13 +185,11 @@ namespace jngl
 		return pWindow->GetRelativeMouseMode();
 	}
 
-	void setTitle(const std::string& title)
-	{
+	void setTitle(const std::string& title) {
 		return pWindow->SetTitle(title);
 	}
 
-	double getTextWidth(const std::string& text)
-	{
+	double getTextWidth(const std::string& text) {
 		return pWindow->GetTextWidth(text);
 	}
 
@@ -225,62 +201,51 @@ namespace jngl
 		pWindow->setLineHeight(h);
 	}
 
-	void print(const std::string& text, const int xposition, const int yposition)
-	{
+	void print(const std::string& text, const int xposition, const int yposition) {
 		pWindow->Print(text, xposition, yposition);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
-	int getFontSize()
-	{
+	int getFontSize() {
 		return pWindow->GetFontSize();
 	}
 
-	void setFontSize(const int size)
-	{
+	void setFontSize(const int size) {
 		pWindow->SetFontSize(size);
 	}
 
-	std::string getFont()
-	{
+	std::string getFont() {
 		return pWindow->GetFont();
 	}
 
-	void setFont(const std::string& filename)
-	{
+	void setFont(const std::string& filename) {
 		pWindow->SetFont(filename);
 	}
 
-	void setFontByName(const std::string& name)
-	{
+	void setFontByName(const std::string& name) {
 		pWindow->SetFontByName(name);
 	}
 
-	bool getFullscreen()
-	{
+	bool getFullscreen() {
 		return pWindow->GetFullscreen();
 	}
 
-	void setIcon(const std::string& filename)
-	{
+	void setIcon(const std::string& filename) {
 		pWindow->SetIcon(filename);
 	}
 
-	double getFPS()
-	{
+	double getFPS() {
 		static double lastDraw = 0.0;
 		double fps = 1/(jngl::getTime() - lastDraw);
 		lastDraw = jngl::getTime();
 		return fps;
 	}
 
-	void reset()
-	{
+	void reset() {
 		glLoadIdentity();
 	}
 
-	void rotate(const double degree)
-	{
+	void rotate(const double degree) {
 #ifdef GL_DOUBLE
 		glRotated(degree, 0, 0, 1);
 #else
@@ -292,49 +257,41 @@ namespace jngl
 		opengl::translate(x * getScaleFactor(), y * getScaleFactor());
 	}
 
-	void scale(const double factor)
-	{
+	void scale(const double factor) {
 		opengl::scale(factor, factor);
 	}
 
-	void scale(const double xfactor, const double yfactor)
-	{
+	void scale(const double xfactor, const double yfactor) {
 		opengl::scale(xfactor, yfactor);
 	}
 
-	void pushMatrix()
-	{
+	void pushMatrix() {
 		glPushMatrix();
 	}
 
-	void popMatrix()
-	{
+	void popMatrix() {
 		glPopMatrix();
 	}
 
-	void drawRect(const double xposition, const double yposition, const double width, const double height)
-	{
+	void drawRect(const double xposition, const double yposition, const double width, const double height) {
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Rect(xposition, yposition, width, height);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
-	void drawLine(const double xstart, const double ystart, const double xend, const double yend)
-	{
+	void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Line(xstart, ystart, xend, yend);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
-	void drawPoint(const double x, const double y)
-	{
+	void drawPoint(const double x, const double y) {
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Point(x, y);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
-	void readPixel(const int x, const int y, unsigned char& red, unsigned char& green, unsigned char& blue)
-	{
+	void readPixel(const int x, const int y, unsigned char& red, unsigned char& green, unsigned char& blue) {
 		unsigned char data[3];
 		data[0] = static_cast<unsigned char>(bgRed * 255.0f);
 		data[1] = static_cast<unsigned char>(bgGreen * 255.0f);
@@ -345,23 +302,19 @@ namespace jngl
 		blue = data[2];
 	}
 
-	int getWindowWidth()
-	{
+	int getWindowWidth() {
 		return pWindow->GetWidth();
 	}
 
-	int getWindowHeight()
-	{
+	int getWindowHeight() {
 		return pWindow->GetHeight();
 	}
 
-	double getMouseWheel()
-	{
+	double getMouseWheel() {
 		return pWindow->GetMouseWheel();
 	}
 
-	void setAntiAliasing(bool enabled)
-	{
+	void setAntiAliasing(bool enabled) {
 #ifdef GL_MULTISAMPLE_ARB
 		if(!pWindow->IsMultisampleSupported())
 		{
@@ -382,21 +335,16 @@ namespace jngl
 #endif
 	}
 
-	bool getAntiAliasing()
-	{
+	bool getAntiAliasing() {
 		return antiAliasingEnabled;
 	}
 
 	void loadSound(const std::string&); // definied in audio.cpp
 
-	void load(const std::string& filename)
-	{
-		if(filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg")
-		{
+	void load(const std::string& filename) {
+		if (filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg") {
 			loadSound(filename);
-		}
-		else
-		{
+		} else {
 			loadSprite(filename);
 		}
 	}
