@@ -28,8 +28,9 @@ navi: Home
 		<div class="page-header"><h2>Projects</h2></div>
 		<p>JNGL is used by the following games:</p>
 		<ul>
+			<li><a href="http://sweetsplit.com"><b>Sweet Split</b></a><br>Arcade game for iOS</li>
+			<li><a href="http://watteimdocht.de/jntetri"><b>JNTETRI</b></a><br>A simple Tetris clone</li>
 			<li><a href="http://somyeol2d.com"><b>Somyeol2d</b></a><br>Platformer created for the Global Game Jam 2011</li>
-			<li><a href="https://github.com/jhasse/jntetri"><b>JNTETRI</b></a><br>A simple Tetris clone</li>
 			<li><a href="https://github.com/jhasse/tudi"><b>Tudi</b></a><br>Platformer created for a 10 days coding competition</li>
 		</ul>
 	</div>
@@ -39,7 +40,6 @@ navi: Home
 #include &lt;jngl.hpp&gt;
 
 struct HelloWorld : public jngl::Work {
-public:
     void draw() const override {
         text.draw();
     }
@@ -49,6 +49,7 @@ private:
 
 int main() {
     jngl::setWork(new HelloWorld);
+    jngl::mainLoop();
 }</pre>
 	</div>
 </div>
