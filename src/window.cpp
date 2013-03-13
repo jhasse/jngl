@@ -218,6 +218,9 @@ namespace jngl {
 		if (jngl::getTime() - oldTime > timePerStep * stepsPerFrame) {
 			stepsPerFrame += 0.1f;
 		}
+		if (stepsPerFrame < 0.51f) {
+			stepsPerFrame = 1.0f;
+		}
 		for (int i = 0; i < int(stepsPerFrame + 0.5); ++i) {
 			oldTime += timePerStep;
 			jngl::updateInput();
@@ -238,9 +241,11 @@ namespace jngl {
 			}
 		}
 		auto timeToSleep = oldTime - jngl::getTime();
-		if (timeToSleep > 0.005) {
+		if (timeToSleep > 0.01) {
 			jngl::sleep(int(timeToSleep * 900));
 			stepsPerFrame -= 0.1f;
+		} else if (timeToSleep > 0) {
+			oldTime = jngl::getTime();
 		}
 		if (timeToSleep > timePerStep && stepsPerFrame > 0.6) {
 			stepsPerFrame -= float(timeToSleep - timePerStep);
