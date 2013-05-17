@@ -43,7 +43,7 @@ namespace jngl {
 		impl->print(x, y, text);
 	}
 
-	boost::shared_ptr<FontImpl> Font::getImpl() {
+	std::shared_ptr<FontImpl> Font::getImpl() {
 		return impl;
 	}
 }

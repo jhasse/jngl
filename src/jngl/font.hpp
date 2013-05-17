@@ -6,7 +6,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #ifndef _MSC_VER
 #pragma GCC visibility push(default)
@@ -17,10 +17,10 @@ namespace jngl {
 	class Font {
 	public:
 		Font(const std::string& filename, unsigned int size);
-		boost::shared_ptr<FontImpl> getImpl();
+		std::shared_ptr<FontImpl> getImpl();
 		void print(const std::string&, int x, int y);
 	private:
-		boost::shared_ptr<FontImpl> impl;
+		std::shared_ptr<FontImpl> impl;
 	};
 
 	void print(const std::string& text,

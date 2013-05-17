@@ -21,11 +21,10 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <string>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 
-namespace jngl
-{
+namespace jngl {
 	void LoadSound(const std::string&);
 
 	class Sound : boost::noncopyable {
@@ -52,7 +51,7 @@ namespace jngl
 		void SetPitch(float p);
 		void setVolume(float v);
 	private:
-		boost::shared_ptr<Sound> sound_;
+		std::shared_ptr<Sound> sound_;
 		ALint state;
 		ALenum format;
 		ALsizei freq;

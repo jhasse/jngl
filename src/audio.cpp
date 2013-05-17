@@ -64,7 +64,7 @@ namespace jngl
 		alSourcef(source_, AL_GAIN, v);
 	}
 
-	boost::unordered_map<std::string, boost::shared_ptr<SoundFile> > sounds;
+	boost::unordered_map<std::string, std::shared_ptr<SoundFile>> sounds;
 
 	class Audio : boost::noncopyable {
 	public:
@@ -93,25 +93,22 @@ namespace jngl
 			alcDestroyContext(context_);
 			alcCloseDevice(device_);
 		}
-		static bool IsStopped(boost::shared_ptr<Sound>& s)
+		static bool IsStopped(std::shared_ptr<Sound>& s)
 		{
 			return s->Stopped();
 		}
-		void Play(boost::shared_ptr<Sound>& sound)
-		{
+		void Play(std::shared_ptr<Sound>& sound) {
 			sounds_.erase(std::remove_if(sounds_.begin(), sounds_.end(), IsStopped), sounds_.end());
 			sounds_.push_back(sound);
 		}
-		void Stop(boost::shared_ptr<Sound>& sound)
-		{
-			std::vector<boost::shared_ptr<Sound> >::iterator i;
-			if((i = std::find(sounds_.begin(), sounds_.end(), sound)) != sounds_.end()) // sound hasn't been loaded yet?
-			{
+		void Stop(std::shared_ptr<Sound>& sound) {
+			std::vector<std::shared_ptr<Sound> >::iterator i;
+			if ((i = std::find(sounds_.begin(), sounds_.end(), sound)) != sounds_.end()) {
 				sounds_.erase(i);
 			}
 		}
 	private:
-		std::vector<boost::shared_ptr<Sound> > sounds_;
+		std::vector<std::shared_ptr<Sound> > sounds_;
 		ALCdevice* device_;
 		ALCcontext* context_;
 	};

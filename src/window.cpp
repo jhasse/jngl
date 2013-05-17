@@ -7,8 +7,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "main.hpp"
 #include "jngl.hpp"
 
-#include <boost/make_shared.hpp>
-
 namespace jngl {
 	double Window::GetTextWidth(const std::string& text) {
 		return fonts_[fontSize_][fontName_]->getTextWidth(text);
@@ -22,7 +20,7 @@ namespace jngl {
 		return fonts_[fontSize_][fontName_]->setLineHeight(h);
 	}
 
-	boost::shared_ptr<FontImpl> Window::getFontImpl() {
+	std::shared_ptr<FontImpl> Window::getFontImpl() {
 		return fonts_[fontSize_][fontName_];
 	}
 
@@ -32,7 +30,7 @@ namespace jngl {
 
 	void Window::SetFont(const std::string& filename) {
 		if (fonts_[fontSize_].find(filename) == fonts_[fontSize_].end()) {
-			auto font = boost::make_shared<FontImpl>(filename, fontSize_);
+			auto font = std::make_shared<FontImpl>(filename, fontSize_);
 			fonts_[fontSize_][filename] = font;
 		}
 		fontName_ = filename;
@@ -263,7 +261,7 @@ namespace jngl {
 		}
 	}
 
-	void Window::SetWork(boost::shared_ptr<Work> work) {
+	void Window::SetWork(std::shared_ptr<Work> work) {
 		if (!currentWork_) {
 			debug("setting current work to "); debug(work.get()); debug("\n");
 			currentWork_ = work;
@@ -275,11 +273,11 @@ namespace jngl {
 		}
 	}
 
-	void Window::addJob(boost::shared_ptr<Job> job) {
+	void Window::addJob(std::shared_ptr<Job> job) {
 		jobs.push_back(job);
 	}
 
-	boost::shared_ptr<Work> Window::getWork() {
+	std::shared_ptr<Work> Window::getWork() {
 		return currentWork_;
 	}
 

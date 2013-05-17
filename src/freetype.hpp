@@ -20,7 +20,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <map>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 
 namespace jngl {
 	extern unsigned char fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha;
@@ -55,9 +54,9 @@ namespace jngl {
 		static int instanceCounter_;
 		static FT_Library library_;
 		FT_Face face_;
-		boost::shared_ptr<Finally> freeFace_; // Frees face_ if necessary
+		std::shared_ptr<Finally> freeFace_; // Frees face_ if necessary
 		unsigned int height_;
 		int lineHeight;
-		std::map<unsigned long, boost::shared_ptr<Character>> characters_;
+		std::map<unsigned long, std::shared_ptr<Character>> characters_;
 	};
 }

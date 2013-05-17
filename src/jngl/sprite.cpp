@@ -17,7 +17,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <string>
 #include <utility>
 #include <fstream>
-#include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
@@ -44,10 +43,10 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 namespace jngl {
 	const unsigned int PNG_BYTES_TO_CHECK = 4;
 
-	boost::shared_ptr<Texture> getTexture(const std::string& filename) {
+	std::shared_ptr<Texture> getTexture(const std::string& filename) {
 		auto it = textures.find(filename);
 		if (it == textures.end()) {
-			return boost::shared_ptr<Texture>((Texture*)0);
+			return std::shared_ptr<Texture>((Texture*)0);
 		}
 		return it->second;
 	}
@@ -370,8 +369,8 @@ namespace jngl {
 			}
 			throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 		}
-		texture = boost::make_shared<Texture>(width, height, reinterpret_cast<unsigned char**>(&rowPointers[0]),
-		                                      format, channels, data);
+		texture = std::make_shared<Texture>(width, height, reinterpret_cast<unsigned char**>(&rowPointers[0]),
+		                                    format, channels, data);
 		textures[filename] = texture;
 	}
 

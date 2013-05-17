@@ -22,7 +22,7 @@ namespace jngl {
 		text = t;
 	}
 
-	void Text::setFont(boost::shared_ptr<Font> f) {
+	void Text::setFont(std::shared_ptr<Font> f) {
 		font = f->getImpl();
 		setText(text);
 	}

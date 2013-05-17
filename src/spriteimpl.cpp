@@ -71,7 +71,7 @@ namespace jngl
 		setSpriteColor(spriteColorRed, spriteColorGreen, spriteColorBlue, alpha);
 	}
 
-	boost::unordered_map<std::string, boost::shared_ptr<Sprite>> sprites_;
+	boost::unordered_map<std::string, std::shared_ptr<Sprite>> sprites_;
 
 	// halfLoad is used, if we only want to find out the width or height of an image. Load won't throw an exception then
 	Sprite& GetSprite(const std::string& filename, const bool halfLoad) {

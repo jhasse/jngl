@@ -11,7 +11,7 @@ namespace jngl {
 	Job::~Job() {
 	}
 
-	void addJob(boost::shared_ptr<Job> job) {
+	void addJob(std::shared_ptr<Job> job) {
 		return pWindow->addJob(job);
 	}
 }

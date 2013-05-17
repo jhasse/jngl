@@ -14,7 +14,7 @@ namespace jngl
 	: fullscreen_(fullscreen), running_(false), isMouseVisible_(true),
 	  relativeMouseMode(false), isMultisampleSupported_(true),
 	  anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height),
-	  mouseWheel_(0), fontName_(""), oldTime(0), changeWork_(false)
+	  mouseWheel_(0), fontName_(""), oldTime(0), changeWork_(false), impl(nullptr)
 	{
 		mouseDown_.assign(false);
 		mousePressed_.assign(false);

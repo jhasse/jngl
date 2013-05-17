@@ -5,7 +5,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #ifndef _MSC_VER
 #pragma GCC visibility push(default)
@@ -18,7 +18,7 @@ namespace jngl {
 		virtual void draw() const = 0;
 	};
 
-	void addJob(boost::shared_ptr<Job> job);
+	void addJob(std::shared_ptr<Job> job);
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop

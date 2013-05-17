@@ -8,7 +8,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "drawable.hpp"
 
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #ifndef _MSC_VER
 #pragma GCC visibility push(default)
@@ -27,13 +27,13 @@ namespace jngl {
 	public:
 		Text(const std::string& text = "");
 		void setText(const std::string&);
-		void setFont(boost::shared_ptr<Font>);
+		void setFont(std::shared_ptr<Font>);
 		void setAlign(Alignment);
 		void step();
 		void draw() const;
 	private:
 		std::string text;
-		boost::shared_ptr<FontImpl> font;
+		std::shared_ptr<FontImpl> font;
 		Alignment align;
 	};
 }

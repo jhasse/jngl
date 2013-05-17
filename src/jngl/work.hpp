@@ -5,7 +5,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #ifndef _MSC_VER
 #pragma GCC visibility push(default)
@@ -20,9 +20,9 @@ namespace jngl {
 		virtual ~Work();
 	};
 
-	boost::shared_ptr<Work> getWork();
+	std::shared_ptr<Work> getWork();
 
-	void setWork(boost::shared_ptr<Work> work);
+	void setWork(std::shared_ptr<Work> work);
 
 	void setWork(Work*);
 

@@ -9,7 +9,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "drawable.hpp"
 
 #include <memory>
-#include <boost/shared_ptr.hpp>
 #include <string>
 #include <vector>
 
@@ -50,7 +49,7 @@ namespace jngl {
 		void LoadWebP(const std::string& filename, FILE* file, const bool halfLoad);
 #endif
 
-		boost::shared_ptr<Texture> texture;
+		std::shared_ptr<Texture> texture;
 	};
 
 	void draw(const std::string& filename,

@@ -11,7 +11,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "opengl.hpp"
 #include "main.hpp"
 
-#include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 #include <stdexcept>
 #include <sstream>
@@ -371,7 +370,7 @@ namespace jngl {
 		return vsyncEnabled;
 	}
 
-	void setWork(boost::shared_ptr<Work> w) {
+	void setWork(std::shared_ptr<Work> w) {
 		return pWindow->SetWork(w);
 	}
 
@@ -380,14 +379,14 @@ namespace jngl {
 	}
 
 	void setWork(Work* w) {
-		return pWindow->SetWork(boost::shared_ptr<Work>(w));
+		return pWindow->SetWork(std::shared_ptr<Work>(w));
 	}
 
 	void mainLoop() {
 		return pWindow->MainLoop();
 	}
 
-	boost::shared_ptr<Work> getWork() {
+	std::shared_ptr<Work> getWork() {
 		return pWindow->getWork();
 	}
 

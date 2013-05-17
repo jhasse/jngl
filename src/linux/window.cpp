@@ -65,7 +65,7 @@ namespace jngl
 			throw std::runtime_error("Could not open display.");
 	    screen_ = DefaultScreen(pDisplay_.get());
 
-		boost::shared_ptr<XVisualInfo> pVisual(glXChooseVisual(pDisplay_.get(), screen_, attrListAntiAliasing), ReleaseXData);
+		std::shared_ptr<XVisualInfo> pVisual(glXChooseVisual(pDisplay_.get(), screen_, attrListAntiAliasing), ReleaseXData);
 		if(!pVisual)
 		{
 			isMultisampleSupported_ = false;

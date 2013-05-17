@@ -10,7 +10,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "jngl/input.hpp"
 
 #include <string>
-#include <boost/shared_ptr.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/array.hpp>
 #include <boost/ptr_container/ptr_unordered_map.hpp>
@@ -88,19 +87,19 @@ namespace jngl
 		void SetIcon(const std::string&);
 		double GetMouseWheel() const;
 		std::string GetFont() const;
-		boost::shared_ptr<FontImpl> getFontImpl();
-		void SetWork(boost::shared_ptr<Work>);
+		std::shared_ptr<FontImpl> getFontImpl();
+		void SetWork(std::shared_ptr<Work>);
 		void MainLoop();
 		void stepIfNeeded();
 		void draw() const;
-		boost::shared_ptr<Work> getWork();
+		std::shared_ptr<Work> getWork();
 		void setConfigPath(const std::string&);
 		std::string getConfigPath() const;
-		void addJob(boost::shared_ptr<Job>);
+		void addJob(std::shared_ptr<Job>);
 		void resetFrameLimiter();
 #if !defined (__APPLE__) && !defined (ANDROID)
 	#ifdef __linux
-		boost::shared_ptr<Display> pDisplay_;
+		std::shared_ptr<Display> pDisplay_;
 		static void ReleaseXData(void*);
 	#else
 		static void ReleaseDC(HWND, HDC);
@@ -128,11 +127,11 @@ namespace jngl
 		std::string fontName_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
 		double oldTime;
-		boost::shared_ptr<Work> currentWork_;
+		std::shared_ptr<Work> currentWork_;
 		bool changeWork_;
-		boost::shared_ptr<Work> newWork_;
+		std::shared_ptr<Work> newWork_;
 		std::string configPath;
-		std::vector<boost::shared_ptr<Job>> jobs;
+		std::vector<std::shared_ptr<Job>> jobs;
 #if defined _MSC_VER || defined ANDROID
 		float stepsPerFrame;
 		bool multitouch;
@@ -142,7 +141,7 @@ namespace jngl
 #endif
 
 		// <fontSize, <fontName, FontImpl>>
-		boost::ptr_unordered_map<int, boost::unordered_map<std::string, boost::shared_ptr<FontImpl>>> fonts_;
+		boost::ptr_unordered_map<int, boost::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
 #if !defined (__APPLE__) && !defined (ANDROID)
 	#ifdef __linux
 		::Window window_;
@@ -150,9 +149,9 @@ namespace jngl
 		int screen_;
 		XF86VidModeModeInfo oldMode_;
 	#else
-		boost::shared_ptr<boost::remove_pointer<HGLRC>::type> pRenderingContext_;
-		boost::shared_ptr<boost::remove_pointer<HWND>::type> pWindowHandle_;
-		boost::shared_ptr<boost::remove_pointer<HDC>::type> pDeviceContext_;
+		std::shared_ptr<boost::remove_pointer<HGLRC>::type> pRenderingContext_;
+		std::shared_ptr<boost::remove_pointer<HWND>::type> pWindowHandle_;
+		std::shared_ptr<boost::remove_pointer<HDC>::type> pDeviceContext_;
 		std::vector<std::function<void()>> updateInputCallbacks;
 		int arbMultisampleFormat_;
 
