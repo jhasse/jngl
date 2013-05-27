@@ -1,15 +1,7 @@
 /*
-Copyright 2009-2011 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2009-2013 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
-
-#if (defined(__MINGW32__) || defined(__MINGW64__)) && (__GNUC__ == 4) && (__GNUC_MINOR__ == 4) && (__GNUC_PATCHLEVEL__ == 0)
-// workaround a mingw bug, http://sourceforge.net/tracker/index.php?func=detail&aid=2373234&group_id=2435&atid=102435
-#include <cstdlib>
-#include <cstdarg>
-int swprintf (wchar_t *, size_t, const wchar_t *, ...);
-int vswprintf(wchar_t *, const wchar_t *, va_list);
-#endif
 
 #include "jngl.hpp"
 #include "audio.hpp"
@@ -20,12 +12,10 @@ int vswprintf(wchar_t *, const wchar_t *, va_list);
 #include <boost/unordered_map.hpp>
 #include <algorithm>
 
-namespace jngl
-{
+namespace jngl {
 	float Sound::masterVolume = 1.0f;
 
-	Sound::Sound(ALenum format, std::vector<char>& bufferData, ALsizei freq) : source_(0)
-	{
+	Sound::Sound(ALenum format, std::vector<char>& bufferData, ALsizei freq) : source_(0) {
 		alGenBuffers(1, &buffer_);
 		alGenSources(1, &source_);
 		alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
@@ -35,8 +25,7 @@ namespace jngl
 		alSourcePlay(source_);
 		setVolume(masterVolume);
 	}
-	Sound::~Sound()
-	{
+	Sound::~Sound() {
 		debug("freeing sound buffer ... ");
 		alSourceStop(source_);
 		alSourceUnqueueBuffers(source_, 1, &buffer_);
@@ -44,20 +33,17 @@ namespace jngl
 		alDeleteBuffers(1, &buffer_);
 		debug("OK\n");
 	}
-	bool Sound::IsPlaying()
-	{
+	bool Sound::IsPlaying() {
 		ALint state;
 		alGetSourcei(source_, AL_SOURCE_STATE, &state);
 		return state == AL_PLAYING;
 	}
-	bool Sound::Stopped()
-	{
+	bool Sound::Stopped() {
 		ALint state;
 		alGetSourcei(source_, AL_SOURCE_STATE, &state);
 		return state == AL_STOPPED;
 	}
-	void Sound::SetPitch(float p)
-	{
+	void Sound::SetPitch(float p) {
 		alSourcef(source_, AL_PITCH, p);
 	}
 	void Sound::setVolume(float v) {
@@ -68,33 +54,26 @@ namespace jngl
 
 	class Audio : boost::noncopyable {
 	public:
-		Audio() : device_(0), context_(0)
-		{
+		Audio() : device_(0), context_(0) {
 			device_ = alcOpenDevice(0);
-			if(!device_)
-			{
+			if (!device_) {
 				throw std::runtime_error("Could not open audio device.");
 			}
 			context_ = alcCreateContext(device_, 0);
-			if(context_)
-			{
+			if (context_) {
 				alcMakeContextCurrent(context_);
-			}
-			else
-			{
+			} else {
 				throw std::runtime_error("Could not create audio context.");
 			}
 		}
-		~Audio()
-		{
+		~Audio() {
 			sounds_.clear();
 			sounds.clear();
 			alcMakeContextCurrent(0);
 			alcDestroyContext(context_);
 			alcCloseDevice(device_);
 		}
-		static bool IsStopped(std::shared_ptr<Sound>& s)
-		{
+		static bool IsStopped(std::shared_ptr<Sound>& s) {
 			return s->Stopped();
 		}
 		void Play(std::shared_ptr<Sound>& sound) {
@@ -102,43 +81,37 @@ namespace jngl
 			sounds_.push_back(sound);
 		}
 		void Stop(std::shared_ptr<Sound>& sound) {
-			std::vector<std::shared_ptr<Sound> >::iterator i;
+			std::vector<std::shared_ptr<Sound>>::iterator i;
 			if ((i = std::find(sounds_.begin(), sounds_.end(), sound)) != sounds_.end()) {
 				sounds_.erase(i);
 			}
 		}
 	private:
-		std::vector<std::shared_ptr<Sound> > sounds_;
+		std::vector<std::shared_ptr<Sound>> sounds_;
 		ALCdevice* device_;
 		ALCcontext* context_;
 	};
 
 	Audio& GetAudio();
 
-	SoundFile::SoundFile(const std::string& filename) : sound_((Sound*)0)
-	{
+	SoundFile::SoundFile(const std::string& filename) : sound_(nullptr) {
 		debug("Decoding "); debug(filename); debug(" ... ");
 		// based on http://www.gamedev.net/reference/articles/article2031.asp
 		FILE* f = fopen(filename.c_str(), "rb");
-		if(!f)
-		{
+		if (!f) {
 			throw std::runtime_error("File not found (" + filename + ").");
 		}
 
 		OggVorbis_File oggFile;
-		if(ov_open(f, &oggFile, 0, 0) != 0)
-		{
+		if (ov_open(f, &oggFile, 0, 0) != 0) {
 			throw std::runtime_error("Could not open OGG file (" + filename + ").");
 		}
 
 		vorbis_info* pInfo;
 		pInfo = ov_info(&oggFile, -1);
-		if(pInfo->channels == 1)
-		{
+		if (pInfo->channels == 1) {
 			format = AL_FORMAT_MONO16;
-		}
-		else
-		{
+		} else {
 			format = AL_FORMAT_STEREO16;
 		}
 		freq = static_cast<ALsizei>(pInfo->rate);
@@ -148,66 +121,52 @@ namespace jngl
 		const int endian = 0; // 0 for Little-Endian, 1 for Big-Endian
 		int bitStream;
 		long bytes;
-		do
-		{
+		do {
 			bytes = ov_read(&oggFile, array, bufferSize, endian, 2, 1, &bitStream);
 
-			if (bytes < 0)
-			{
+			if (bytes < 0) {
 				ov_clear(&oggFile);
 				throw std::runtime_error("Error decoding OGG file (" + filename + ").");
 			}
 
 			buffer_.insert(buffer_.end(), array, array + bytes);
-		}
-		while(bytes > 0);
+		} while(bytes > 0);
 
 		ov_clear(&oggFile);
 		debug("OK\n");
 	}
-	void SoundFile::Play()
-	{
+	void SoundFile::Play() {
 		sound_.reset(new Sound(format, buffer_, freq));
 		GetAudio().Play(sound_);
 	}
-	void SoundFile::Stop()
-	{
-		if(sound_)
-		{
+	void SoundFile::Stop() {
+		if (sound_) {
 			GetAudio().Stop(sound_);
 			sound_.reset((Sound*)0);
 		}
 	}
-	bool SoundFile::IsPlaying()
-	{
-		if(sound_)
-		{
+	bool SoundFile::IsPlaying() {
+		if (sound_) {
 			return sound_->IsPlaying();
 		}
 		return false;
 	}
-	void SoundFile::SetPitch(float p)
-	{
-		if(sound_)
-		{
+	void SoundFile::SetPitch(float p) {
+		if (sound_) {
 			sound_->SetPitch(p);
 		}
 	}
 	void SoundFile::setVolume(float v) {
-		if(sound_) {
+		if (sound_) {
 			sound_->setVolume(v);
 		}
 	}
 
-	bool isOpenALInstalled()
-	{
+	bool isOpenALInstalled() {
 #ifdef WEAK_LINKING_OPENAL
-		try
-		{
+		try {
 			GetAudio();
-		}
-		catch(WeakLinkingError& e)
-		{
+		} catch(WeakLinkingError& e) {
 			debug(e.what()); debug("\n");
 			return false;
 		}
@@ -215,48 +174,42 @@ namespace jngl
 		return true;
 	}
 
-	SoundFile& GetSoundFile(const std::string& filename)
-	{
+	SoundFile& GetSoundFile(const std::string& filename) {
 		GetAudio();
 		auto i = sounds.find(filename);
-		if(i == sounds.end()) // sound hasn't been loaded yet?
-		{
+		if (i == sounds.end()) { // sound hasn't been loaded yet?
 			sounds[filename].reset(new SoundFile(pathPrefix + filename));
 			return *(sounds[filename]);
 		}
 		return *(i->second);
 	}
 
-	void play(const std::string& filename)
-	{
+	void play(const std::string& filename) {
 		GetSoundFile(filename).Play();
 	}
 
-	void stop(const std::string& filename)
-	{
+	void stop(const std::string& filename) {
 		GetSoundFile(filename).Stop();
 	}
 
-	void loadSound(const std::string& filename)
-	{
+	void loadSound(const std::string& filename) {
 		GetSoundFile(filename);
 	}
 
-	bool isPlaying(const std::string& filename)
-	{
+	bool isPlaying(const std::string& filename)	{
 		return GetSoundFile(filename).IsPlaying();
 	}
 
 	void setPlaybackSpeed(float speed) {
 		auto end = sounds.end();
-		for(auto i = sounds.begin(); i != end; ++i) {
+		for (auto i = sounds.begin(); i != end; ++i) {
 			i->second->SetPitch(speed);
 		}
 	}
 
 	void setVolume(float volume) {
 		auto end = sounds.end();
-		for(auto i = sounds.begin(); i != end; ++i) {
+		for (auto i = sounds.begin(); i != end; ++i) {
 			i->second->setVolume(volume);
 		}
 		Sound::masterVolume = volume;
