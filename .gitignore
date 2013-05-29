@@ -6,7 +6,7 @@ jngl.pc
 *.so
 *.os
 xcode/JNGL.xcodeproj/project.xcworkspace/xcuserdata/*
-*.sublime-*
+*.sublime-workspace
 libjngl.a
 /test
 android/jngl/obj
