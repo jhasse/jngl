@@ -3,7 +3,6 @@
 *.o
 installer/*.nsi
 jngl.pc
-*.so
 *.os
 xcode/JNGL.xcodeproj/project.xcworkspace/xcuserdata/*
 *.sublime-workspace
