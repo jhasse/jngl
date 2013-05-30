@@ -35,6 +35,14 @@ A list of all variables:
 scons -h
 ```
 
+## Android
+
+Install the Android SDK and NDK. Add the NDK's folder to your PATH and run
+```
+ndk-build
+```
+inside the android/jngl folder.
+
 ## Libraries for Windows
 
 * [zlib for Windows](http://gnuwin32.sourceforge.net/packages/zlib.htm)
