@@ -9,3 +9,6 @@ xcode/JNGL.xcodeproj/project.xcworkspace/xcuserdata/*
 libjngl.a
 /test
 android/jngl/obj
+android/jngl/libs
+android/test/obj
+android/test/libs
