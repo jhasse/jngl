@@ -122,7 +122,7 @@ static void engine_draw_frame(struct engine* engine) {
             ((float)engine->state.y)/engine->height, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-//    jngl::drawRect(0, 0, 10, 10);
+    jngl::drawRect(0, 0, 10, 10);
 
     eglSwapBuffers(engine->display, engine->surface);
 }
