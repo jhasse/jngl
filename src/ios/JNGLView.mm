@@ -11,15 +11,13 @@
 
 @implementation JNGLView
 
-+ (Class) layerClass
-{
++ (Class) layerClass {
 	return [CAEAGLLayer class];
 }
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
+- (id) initWithFrame: (CGRect)frame {
+	self = [super initWithFrame:frame];
+	if (self) {
 		if ([[UIScreen mainScreen] respondsToSelector: NSSelectorFromString(@"scale")]) {
 			if ([self respondsToSelector: NSSelectorFromString(@"contentScaleFactor")]) {
 				self.contentScaleFactor = [[UIScreen mainScreen] scale];
@@ -73,12 +71,11 @@
 		                                 UTF8String]) + "/");
 		impl = jngl::pWindow->getImpl();
 		[UIView setAnimationsEnabled:NO];
-    }
-    return self;
+	}
+	return self;
 }
 
-- (void) drawView: (CADisplayLink*) displayLink
-{
+- (void) drawView: (CADisplayLink*) displayLink {
 	if (!pause) {
 		if (displayLink) {
 			if (startTime < 0) {
@@ -103,24 +100,21 @@
 	}
 }
 
-- (void) touchesBegan: (NSSet*) touches withEvent: (UIEvent*) event
-{
+- (void) touchesBegan: (NSSet*) touches withEvent: (UIEvent*) event {
 	UITouch* touch = [touches anyObject];
 	CGPoint location = [touch locationInView: self];
 	impl->setMouse(location.x, location.y);
 	impl->setMouseDown(true);
 }
 
-- (void) touchesEnded: (NSSet*) touches withEvent: (UIEvent*) event
-{
+- (void) touchesEnded: (NSSet*) touches withEvent: (UIEvent*) event {
 	UITouch* touch = [touches anyObject];
 	CGPoint location = [touch locationInView: self];
 	impl->setMouse(location.x, location.y);
 	impl->setMouseDown(false);
 }
 
-- (void) touchesMoved: (NSSet*) touches withEvent: (UIEvent*) event
-{
+- (void) touchesMoved: (NSSet*) touches withEvent: (UIEvent*) event {
 	UITouch* touch = [touches anyObject];
 	CGPoint location = [touch locationInView: self];
 	impl->setMouse(location.x, location.y);
@@ -178,7 +172,6 @@
 	}
 }
 
-#pragma mark UITextInputTraits methods
 - (UIKeyboardType) keyboardType {
 	if (jngl::getKeyboardType() == jngl::Numpad) {
 		return UIKeyboardTypeNumberPad;
