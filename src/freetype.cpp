@@ -19,20 +19,17 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl {
 
-	Character::Character(const unsigned long ch, const unsigned int fontHeight, FT_Face face) : texture_(0)
-	{
+	Character::Character(const unsigned long ch, const unsigned int fontHeight, FT_Face face) : texture_(0) {
 		if (FT_Load_Glyph(face, FT_Get_Char_Index(face, ch) , FT_LOAD_TARGET_LIGHT)) {
 			std::string msg = std::string("FT_Load_Glyph failed. Character: ") + boost::lexical_cast<std::string>(ch);
 			debug(msg);
 			// Load a question mark instead
-			if(FT_Load_Glyph(face, FT_Get_Char_Index(face, '?') , FT_LOAD_TARGET_LIGHT))
-			{
+			if (FT_Load_Glyph(face, FT_Get_Char_Index(face, '?') , FT_LOAD_TARGET_LIGHT)) {
 				throw std::runtime_error(msg);
 			}
 		}
 		FT_Glyph glyph;
-		if(FT_Get_Glyph(face->glyph, &glyph))
-		{
+		if (FT_Get_Glyph(face->glyph, &glyph)) {
 			throw std::runtime_error("FT_Get_Glyph failed");
 		}
 		FT_Glyph_To_Bitmap(&glyph, ft_render_mode_normal, 0, 1);
@@ -44,34 +41,23 @@ namespace jngl {
 
 		std::vector<GLubyte*> data(height);
 
-		for(int y = 0; y < height; y++)
-		{
+		for (int y = 0; y < height; y++) {
 			data[y] = new GLubyte[width * 4];
-			for(int x = 0; x < width; x++)
-			{
+			for (int x = 0; x < width; x++) {
 				data[y][x * 4    ] = 255;
 				data[y][x * 4 + 1] = 255;
 				data[y][x * 4 + 2] = 255;
 				unsigned char alpha = 0;
-				if(x < bitmap.width && y < bitmap.rows) // Are we in the padding zone? (see next_p2)
-				{
-					if(bitmap.pixel_mode == FT_PIXEL_MODE_MONO)
-					{
-						if(bitmap.buffer[y * bitmap.pitch + x / 8] & (0x80 >> (x % 8)))
-						{
+				if (x < bitmap.width && y < bitmap.rows) { // Are we in the padding zone? (see next_p2)
+					if (bitmap.pixel_mode == FT_PIXEL_MODE_MONO) {
+						if (bitmap.buffer[y * bitmap.pitch + x / 8] & (0x80 >> (x % 8))) {
 							alpha = 255;
-						}
-						else
-						{
+						} else {
 							alpha = 0;
 						}
-					}
-					else if(bitmap.pixel_mode == FT_PIXEL_MODE_GRAY)
-					{
+					} else if(bitmap.pixel_mode == FT_PIXEL_MODE_GRAY) {
 						alpha = bitmap.buffer[x + bitmap.width * y];
-					}
-					else
-					{
+					} else {
 						throw std::runtime_error("Unsupported pixel mode\n");
 					}
 				}
@@ -80,9 +66,8 @@ namespace jngl {
 		}
 
 		texture_ = new Texture(width, height, &data[0]);
-		auto end = data.end();
-		for(auto it = data.begin(); it != end; ++it) {
-			delete[] *it;
+		for (auto d : data) {
+			delete[] d;
 		}
 
 		top_ = fontHeight - bitmap_glyph->top;
@@ -202,29 +187,23 @@ namespace jngl {
 		}
 	}
 
-	std::vector<std::string> FontImpl::ParseString(const std::string& text)
-	{
+	std::vector<std::string> FontImpl::ParseString(const std::string& text) {
 		std::vector<std::string> lines;
 		const char* start_line = text.c_str();
 		const char* c;
-		for(c = text.c_str(); *c; c++)
-		{
-			if(*c == '\n')
-			{
+		for (c = text.c_str(); *c; c++) {
+			if (*c == '\n') {
 				std::string line;
-				for(const char *n = start_line; n < c; ++n)
-				{
+				for (auto *n = start_line; n < c; ++n) {
 					line.append(1, *n);
 				}
 				lines.push_back(line);
 				start_line = c + 1;
 			}
 		}
-		if(start_line)
-		{
+		if (start_line) {
 			std::string line;
-			for(const char* n = start_line; n < c; ++n)
-			{
+			for (auto n = start_line; n < c; ++n) {
 				line.append(1, *n);
 			}
 			lines.push_back(line);

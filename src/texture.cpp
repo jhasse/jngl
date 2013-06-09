@@ -32,20 +32,17 @@ namespace jngl {
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		const GLfloat x = static_cast<GLfloat>(imgWidth) / static_cast<GLfloat>(width);
 		const GLfloat y = static_cast<GLfloat>(imgHeight)  / static_cast<GLfloat>(height);
+		GLfloat vertexes[] = {
+			0, 0, 0, y, x, y, x, 0, // texture coordinates
+			0, 0, 0, GLfloat(imgHeight), GLfloat(imgWidth), GLfloat(imgHeight), GLfloat(imgWidth), 0
+		};
 		if (useVBO_) {
-			GLfloat vertexes[] = {
-								   0, 0, 0, y, x, y, x, 0, // texture coordinates
-								   0, 0, 0, GLfloat(imgHeight), GLfloat(imgWidth), GLfloat(imgHeight), GLfloat(imgWidth), 0
-								 };
 			glGenBuffers(1, &vertexBuffer_);
 			opengl::BindArrayBuffer(vertexBuffer_);
 			glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
 		}
-
-		GLfloat texCoords[] = { 0, 0, 0, y, x, y, x, 0 };
-		texCoords_.assign(&texCoords[0], &texCoords[8]);
-		GLfloat vertexes[] = { 0, 0, 0, float(imgHeight), float(imgWidth), float(imgHeight), float(imgWidth), 0 };
-		vertexes_.assign(&vertexes[0], &vertexes[8]);
+		texCoords_.assign(&vertexes[0], &vertexes[8]);
+		vertexes_.assign(&vertexes[8], &vertexes[16]);
 
 		if (rowPointers) {
 			for (int i = 0; i < imgHeight; ++i) {
