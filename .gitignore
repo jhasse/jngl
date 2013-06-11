@@ -12,3 +12,5 @@ android/jngl/obj
 android/jngl/libs
 android/test/obj
 android/test/libs
+android/test/bin
+android/test/gen

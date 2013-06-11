@@ -20,18 +20,20 @@ LOCAL_SRC_FILES := main.cpp
 LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -ljngl -L../jngl/obj/local/armeabi -L../lib -lfreetype -lpng -lz -logg -lvorbis -lopenal
 LOCAL_STATIC_LIBRARIES := android_native_app_glue
 LOCAL_CPP_FEATURES += exceptions rtti
+APP_STL := gnustl_shared
 
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
 LOCAL_CFLAGS := -std=c++11 -D_LITTLE_ENDIAN=1 -D_STLP_NO_EXCEPTIONS -DOS_ANDROID -D_STLP_USE_SIMPLE_NODE_ALLOC
-LOCAL_MODULE    := bootstrap
+LOCAL_MODULE := bootstrap
 
 LOCAL_SRC_FILES := bootstrap.cpp
 LOCAL_LDLIBS    := -llog -landroid
 LOCAL_STATIC_LIBRARIES := android_native_app_glue
 LOCAL_CPP_FEATURES += exceptions rtti
+APP_STL := gnustl_shared
 
 include $(BUILD_SHARED_LIBRARY)
 
