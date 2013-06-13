@@ -28,8 +28,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 	#endif
 #endif
 
-#include <boost/function.hpp>
-
 #ifndef GL_BGR
 #define GL_BGR 0x80e0
 #endif

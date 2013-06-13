@@ -1,5 +1,5 @@
 /*
-Copyright 2010-2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2010-2013 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -9,7 +9,9 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <vector>
 #include <boost/noncopyable.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
+#include <string>
+#include <memory>
 
 namespace jngl {
 	class Texture : boost::noncopyable {
@@ -35,5 +37,5 @@ namespace jngl {
 		int imgHeight;
 	};
 
-	extern boost::unordered_map<std::string, std::shared_ptr<Texture>> textures;
+	extern std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 }

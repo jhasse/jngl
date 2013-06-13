@@ -9,7 +9,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <cstdio>
 #include <stdexcept>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <algorithm>
 
 namespace jngl {
@@ -50,7 +50,7 @@ namespace jngl {
 		alSourcef(source_, AL_GAIN, v);
 	}
 
-	boost::unordered_map<std::string, std::shared_ptr<SoundFile>> sounds;
+	std::unordered_map<std::string, std::shared_ptr<SoundFile>> sounds;
 
 	class Audio : boost::noncopyable {
 	public:

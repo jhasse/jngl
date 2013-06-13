@@ -11,7 +11,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #endif
 
 namespace jngl {
-	boost::unordered_map<std::string, std::shared_ptr<Texture>> textures;
+	std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
 	bool Texture::useVBO_ = true;
 

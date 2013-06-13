@@ -13,7 +13,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ConvertUTF.h"
 #include "main.hpp"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/lexical_cast.hpp>
 #include <fstream>
 
@@ -170,7 +170,7 @@ namespace jngl {
 			throw std::runtime_error("FT_New_Face failed");
 		}
 		debug("OK\n");
-		freeFace_.reset(new Finally(boost::bind(FT_Done_Face, face_))); // Finally will call FT_Done_Face when the Font class is destroyed
+		freeFace_.reset(new Finally(std::bind(FT_Done_Face, face_))); // Finally will call FT_Done_Face when the Font class is destroyed
 
 		// For some twisted reason, Freetype measures font size
 		// in terms of 1/64ths of pixels.  Thus, to make a font
