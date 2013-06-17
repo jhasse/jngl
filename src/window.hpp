@@ -35,8 +35,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 	#endif
 #endif
 
-namespace jngl
-{
+namespace jngl {
 	class WindowImpl;
 	class Job;
 	class Work;
@@ -47,9 +46,9 @@ namespace jngl
 	public:
 		Window(const std::string& title, const int width, const int height, const bool fullscreen);
 		~Window();
-		bool Running();
-		void Quit();
-		void Continue();
+		bool isRunning();
+		void quit();
+		void cancelQuit();
 		void UpdateInput();
 		void UpdateKeyStates();
 		void SwapBuffers();
@@ -65,7 +64,7 @@ namespace jngl
 		double GetTextWidth(const std::string&);
 		int getLineHeight();
 		void setLineHeight(int);
-		bool GetFullscreen() const;
+		bool getFullscreen() const;
 		bool getKeyDown(const key::KeyType key);
 		bool getKeyPressed(const key::KeyType key);
 		void setKeyPressed(const key::KeyType key, bool);

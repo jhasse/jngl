@@ -74,7 +74,7 @@ namespace jngl {
 		if (pWindow &&
 		    width == pWindow->GetWidth() &&
 		    height == pWindow->GetHeight() &&
-		    fullscreen == pWindow->GetFullscreen()) {
+		    fullscreen == pWindow->getFullscreen()) {
 			return jngl::setTitle(title);
 		}
 		bool isMouseVisible = pWindow ? pWindow->GetMouseVisible() : true;
@@ -108,15 +108,15 @@ namespace jngl {
 	}
 
 	bool running() {
-		return pWindow->Running();
+		return pWindow->isRunning();
 	}
 
 	void quit() {
-		pWindow->Quit();
+		pWindow->quit();
 	}
 
 	void cancelQuit() {
-		pWindow->Continue();
+		pWindow->cancelQuit();
 	}
 
 	void clearBackgroundColor() {
@@ -226,7 +226,7 @@ namespace jngl {
 	}
 
 	bool getFullscreen() {
-		return pWindow->GetFullscreen();
+		return pWindow->getFullscreen();
 	}
 
 	void setIcon(const std::string& filename) {

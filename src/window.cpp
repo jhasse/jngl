@@ -36,31 +36,24 @@ namespace jngl {
 		fontName_ = filename;
 	}
 
-	std::string Window::GetFont() const
-	{
+	std::string Window::GetFont() const {
 		return fontName_;
 	}
 
-	void Window::SetFontByName(const std::string& name)
-	{
+	void Window::SetFontByName(const std::string& name) {
 		Window::SetFont(GetFontFileByName(name));
 	}
 
-	int Window::GetFontSize() const
-	{
+	int Window::GetFontSize() const {
 		return fontSize_;
 	}
 
-	void Window::SetFontSize(const int size)
-	{
+	void Window::SetFontSize(const int size) {
 		const int oldSize = fontSize_;
 		fontSize_ = size;
-		try
-		{
+		try {
 			SetFont(fontName_); // We changed the size we also need to reload the current font
-		}
-		catch(std::exception& e) // Something went wrong ...
-		{
+		} catch(std::exception& e) { // Something went wrong ...
 			fontSize_ = oldSize; // ... so let's set fontSize_ back to the previous size
 			throw e;
 		}
@@ -86,13 +79,11 @@ namespace jngl {
 		mouseDown_.at(button) = d;
 	}
 
-	bool Window::GetFullscreen() const
-	{
+	bool Window::getFullscreen() const {
 		return fullscreen_;
 	}
 
-	bool Window::GetMouseVisible() const
-	{
+	bool Window::GetMouseVisible() const {
 		return isMouseVisible_;
 	}
 
@@ -100,33 +91,27 @@ namespace jngl {
 		return relativeMouseMode;
 	}
 
-	int Window::GetWidth() const
-	{
+	int Window::GetWidth() const {
 		return width_;
 	}
 
-	int Window::GetHeight() const
-	{
+	int Window::GetHeight() const {
 		return height_;
 	}
 
-	bool Window::IsMultisampleSupported() const
-	{
+	bool Window::IsMultisampleSupported() const {
 		return isMultisampleSupported_;
 	}
 
-	bool Window::Running()
-	{
+	bool Window::isRunning() {
 		return running_;
 	}
 
-	void Window::Quit()
-	{
+	void Window::quit() {
 		running_ = false;
 	}
 
-	void Window::Continue()
-	{
+	void Window::cancelQuit() {
 		running_ = true;
 	}
 
@@ -174,24 +159,20 @@ namespace jngl {
 		return keyDown(temp);
 	}
 
-	bool keyPressed(const char key)
-	{
+	bool keyPressed(const char key) {
 		std::string temp; temp.append(1, key);
 		return keyPressed(temp);
 	}
 
-	void Window::UpdateKeyStates()
-	{
-		while(!needToBeSetFalse_.empty())
-		{
+	void Window::UpdateKeyStates() {
+		while (!needToBeSetFalse_.empty()) {
 			*(needToBeSetFalse_.top()) = false;
 			needToBeSetFalse_.pop();
 		}
 		mouseWheel_ = 0;
 	}
 
-	double Window::GetMouseWheel() const
-	{
+	double Window::GetMouseWheel() const {
 		return mouseWheel_;
 	}
 
