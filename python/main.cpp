@@ -93,7 +93,7 @@ void drawRect1(double xposition, double yposition, double width, double height) 
 	return drawRect(xposition, yposition, width, height);
 }
 void print1(const std::string& text, float x, float y) {
-	return print(text, x, y);
+	return print(text, int(x), int(y));
 }
 
 BOOST_PYTHON_MODULE(jngl)

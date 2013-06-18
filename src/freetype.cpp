@@ -152,7 +152,7 @@ namespace jngl {
 	}
 
 	FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)
-	: height_(height * getScaleFactor()), lineHeight(int(height_ / .63)) {
+	: height_(static_cast<unsigned int>(height * getScaleFactor())), lineHeight(int(height_ / .63)) {
 		auto filename = pathPrefix + relativeFilename;
 		if (!std::ifstream(filename.c_str())) {
 			throw std::runtime_error(std::string("Font file not found: ") + filename);
@@ -226,7 +226,7 @@ namespace jngl {
 				maxWidth = lineWidth;
 			}
 		}
-		return maxWidth / getScaleFactor();
+		return int(maxWidth / getScaleFactor());
 	}
 
 	int FontImpl::getLineHeight() const {
@@ -238,8 +238,8 @@ namespace jngl {
 	}
 
 	void FontImpl::print(int x, int y, const std::string& text) {
-		x *= getScaleFactor();
-		y *= getScaleFactor();
+		x = int(x * getScaleFactor());
+		y = int(y * getScaleFactor());
 		std::vector<std::string> lines(ParseString(text));
 
 		glColor4ub(fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha);

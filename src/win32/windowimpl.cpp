@@ -336,8 +336,8 @@ namespace jngl {
 		if (magnitude > deadzone) {
 			if (magnitude > max) magnitude = max;
 			magnitude -= deadzone;
-			x = max * normX * magnitude / (max - deadzone);
-			y = max * normY * magnitude / (max - deadzone);
+			x = short(max * normX * magnitude / (max - deadzone));
+			y = short(max * normY * magnitude / (max - deadzone));
 		} else {
 			x = y = 0;
 		}
