@@ -1,6 +1,10 @@
 *.DS_Store
 .sconsign.dblite
-*.o
+build/
+visualcpp/Debug/
+visualcpp/Release/
+visualcpp/*/Debug/
+visualcpp/*/Release/
 installer/*.nsi
 jngl.pc
 *.os
@@ -14,3 +18,5 @@ android/test/obj
 android/test/libs
 android/test/bin
 android/test/gen
+Thumbs.db
+*.exe

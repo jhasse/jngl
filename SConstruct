@@ -37,9 +37,14 @@ if env['PLATFORM'] == 'darwin':
 	env['CXX'] = 'clang++'
 
 if env['debug']:
+	buildDir = 'build/debug/'
 	env.Append(CCFLAGS = '-g -Wall')
 else:
+	buildDir = 'build/release/'
 	env.Append(CCFLAGS = '-O2 -DNDEBUG')
+
+VariantDir(buildDir, 'src', duplicate=0)
+
 if env['profile']:
 	env.Append(CCFLAGS = '-pg', _LIBFLAGS = ' -pg')
 if not env['verbose']:
@@ -48,13 +53,11 @@ if not env['verbose']:
 	env['ARCOMSTR'] = "archiving: $TARGET"
 
 if not env['msvc']:
-	source_files = env.Object(Glob("src/*.cpp") + Glob("src/jngl/*.cpp"), CPPFLAGS="-std=c++0x")
-	source_files += Split("""
-	src/callbacks.c
-	src/ConvertUTF.c
-	""")
+	source_files = env.Object(Glob(buildDir + "*.cpp") + Glob(buildDir + "jngl/*.cpp"), CPPFLAGS="-std=c++0x")
 
-testSrc = "src/test/test.cpp"
+source_files += [buildDir + 'callbacks.c', buildDir + 'ConvertUTF.c']
+
+testSrc = buildDir + "test/test.cpp"
 
 if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
 	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl webp XInput")
@@ -65,7 +68,7 @@ if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
 	env.Append(CPPPATH=["./include", "../boost-libs/include"])
 	lib = env.Library(target="jngl",
 	                  source=source_files +
-	                         env.Object(Glob('src/win32/*.cpp'),
+	                         env.Object(Glob(buildDir + 'win32/*.cpp'),
 	                                         CPPFLAGS="-std=c++11"),
 	                  LIBS=jnglLibs)
 	linkflags = "-mwindows"
@@ -91,7 +94,7 @@ if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
 if env['PLATFORM'] == 'posix': # Linux
 	if env['python']:
 		env.Append(CCFLAGS = '-DNOJPEG')
-	source_files += env.Object(Glob('src/linux/*.cpp'), CPPFLAGS='-std=c++0x')
+	source_files += env.Object(Glob(buildDir + 'linux/*.cpp'), CPPFLAGS='-std=c++0x')
 	env.ParseConfig('pkg-config --cflags --libs fontconfig')
 	env.ParseConfig('pkg-config --cflags --libs freetype2')
 	env.Append(CCFLAGS="-fPIC -DNO_WEAK_LINKING_OPENAL")
@@ -117,7 +120,7 @@ if env['PLATFORM'] == 'darwin': # Mac
 	           LINKFLAGS='-framework OpenAL -framework OpenGL')
 	env.ParseConfig('/opt/local/bin/pkg-config --cflags --libs freetype2 libpng')
 	env.ParseConfig('/opt/local/bin/sdl-config --cflags --libs')
-	lib = env.Library(target="jngl", source=source_files + env.Object(Glob('src/sdl/*.cpp'), CPPFLAGS='-std=c++11'))
+	lib = env.Library(target="jngl", source=source_files + env.Object(Glob(buildDir + 'sdl/*.cpp'), CPPFLAGS='-std=c++11'))
 	testEnv = env.Clone()
 	testEnv.Append(CPPPATH='.')
 	testEnv.Append(LIBS=lib)
