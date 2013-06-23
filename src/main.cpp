@@ -72,12 +72,12 @@ namespace jngl {
 		debug("jngl::showWindow(\""); debug(title); debug("\", "); debug(width); debug(", "); debug(height);
 		debug(", "); debug(fullscreen); debug(");\n");
 		if (pWindow &&
-		    width == pWindow->GetWidth() &&
-		    height == pWindow->GetHeight() &&
+		    width == pWindow->getWidth() &&
+		    height == pWindow->getHeight() &&
 		    fullscreen == pWindow->getFullscreen()) {
 			return jngl::setTitle(title);
 		}
-		bool isMouseVisible = pWindow ? pWindow->GetMouseVisible() : true;
+		bool isMouseVisible = pWindow ? pWindow->getMouseVisible() : true;
 		hideWindow();
 		if (width == 0) {
 			throw std::runtime_error("Width Is 0");
@@ -103,7 +103,7 @@ namespace jngl {
 	}
 
 	void updateInput() {
-		pWindow->UpdateKeyStates();
+		pWindow->updateKeyStates();
 		pWindow->UpdateInput();
 	}
 
@@ -177,11 +177,11 @@ namespace jngl {
 	}
 
 	bool isMouseVisible() {
-		return pWindow->GetMouseVisible();
+		return pWindow->getMouseVisible();
 	}
 
 	bool getRelativeMouseMode() {
-		return pWindow->GetRelativeMouseMode();
+		return pWindow->getRelativeMouseMode();
 	}
 
 	void setTitle(const std::string& title) {
@@ -201,28 +201,28 @@ namespace jngl {
 	}
 
 	void print(const std::string& text, const int xposition, const int yposition) {
-		pWindow->Print(text, xposition, yposition);
+		pWindow->print(text, xposition, yposition);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
 	int getFontSize() {
-		return pWindow->GetFontSize();
+		return pWindow->getFontSize();
 	}
 
 	void setFontSize(const int size) {
-		pWindow->SetFontSize(size);
+		pWindow->setFontSize(size);
 	}
 
 	std::string getFont() {
-		return pWindow->GetFont();
+		return pWindow->getFont();
 	}
 
 	void setFont(const std::string& filename) {
-		pWindow->SetFont(filename);
+		pWindow->setFont(filename);
 	}
 
 	void setFontByName(const std::string& name) {
-		pWindow->SetFontByName(name);
+		pWindow->setFontByName(name);
 	}
 
 	bool getFullscreen() {
@@ -302,30 +302,26 @@ namespace jngl {
 	}
 
 	int getWindowWidth() {
-		return pWindow->GetWidth();
+		return pWindow->getWidth();
 	}
 
 	int getWindowHeight() {
-		return pWindow->GetHeight();
+		return pWindow->getHeight();
 	}
 
 	double getMouseWheel() {
-		return pWindow->GetMouseWheel();
+		return pWindow->getMouseWheel();
 	}
 
 	void setAntiAliasing(bool enabled) {
 #ifdef GL_MULTISAMPLE_ARB
-		if(!pWindow->IsMultisampleSupported())
-		{
+		if (!pWindow->isMultisampleSupported()) {
 			antiAliasingEnabled = false;
 			return;
 		}
-		if(enabled)
-		{
+		if (enabled) {
 			glEnable(GL_MULTISAMPLE_ARB);
-		}
-		else
-		{
+		} else {
 			glDisable(GL_MULTISAMPLE_ARB);
 		}
 		antiAliasingEnabled = enabled;
@@ -371,7 +367,7 @@ namespace jngl {
 	}
 
 	void setWork(std::shared_ptr<Work> w) {
-		return pWindow->SetWork(w);
+		return pWindow->setWork(w);
 	}
 
 	void resetFrameLimiter() {
@@ -379,11 +375,11 @@ namespace jngl {
 	}
 
 	void setWork(Work* w) {
-		return pWindow->SetWork(std::shared_ptr<Work>(w));
+		return pWindow->setWork(std::shared_ptr<Work>(w));
 	}
 
 	void mainLoop() {
-		return pWindow->MainLoop();
+		return pWindow->mainLoop();
 	}
 
 	std::shared_ptr<Work> getWork() {

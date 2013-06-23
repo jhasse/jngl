@@ -240,8 +240,8 @@ namespace jngl {
 		}
 
 		::ShowWindow(pWindowHandle_.get(), SW_SHOWNORMAL);
-		SetFontByName("Arial");
-		SetFontSize(fontSize_);
+		setFontByName("Arial");
+		setFontSize(fontSize_);
 
 		if(!jngl::Init(width_, height_))
 		{
@@ -327,7 +327,7 @@ namespace jngl {
 	}
 
 	void calculateStick(short& x, short& y, int deadzone) {
-		float magnitude = sqrt(x*x + y*y);
+		float magnitude = float(sqrt(x*x + y*y));
 		float normX = x / magnitude;
 		float normY = y / magnitude;
 

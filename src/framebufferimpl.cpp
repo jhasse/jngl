@@ -60,7 +60,7 @@ namespace jngl {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 #endif
-		glViewport(0, -(pWindow->GetHeight() - height), pWindow->GetWidth(), pWindow->GetHeight());
+		glViewport(0, -(pWindow->getHeight() - height), pWindow->getWidth(), pWindow->getHeight());
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 	}
 

@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2013 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -24,11 +24,11 @@ namespace jngl {
 		return fonts_[fontSize_][fontName_];
 	}
 
-	void Window::Print(const std::string& text, const int xposition, const int yposition) {
+	void Window::print(const std::string& text, const int xposition, const int yposition) {
 		fonts_[fontSize_][fontName_]->print(xposition, yposition, text);
 	}
 
-	void Window::SetFont(const std::string& filename) {
+	void Window::setFont(const std::string& filename) {
 		if (fonts_[fontSize_].find(filename) == fonts_[fontSize_].end()) {
 			auto font = std::make_shared<FontImpl>(filename, fontSize_);
 			fonts_[fontSize_][filename] = font;
@@ -36,23 +36,23 @@ namespace jngl {
 		fontName_ = filename;
 	}
 
-	std::string Window::GetFont() const {
+	std::string Window::getFont() const {
 		return fontName_;
 	}
 
-	void Window::SetFontByName(const std::string& name) {
-		Window::SetFont(GetFontFileByName(name));
+	void Window::setFontByName(const std::string& name) {
+		Window::setFont(GetFontFileByName(name));
 	}
 
-	int Window::GetFontSize() const {
+	int Window::getFontSize() const {
 		return fontSize_;
 	}
 
-	void Window::SetFontSize(const int size) {
+	void Window::setFontSize(const int size) {
 		const int oldSize = fontSize_;
 		fontSize_ = size;
 		try {
-			SetFont(fontName_); // We changed the size we also need to reload the current font
+			setFont(fontName_); // We changed the size we also need to reload the current font
 		} catch(std::exception& e) { // Something went wrong ...
 			fontSize_ = oldSize; // ... so let's set fontSize_ back to the previous size
 			throw e;
@@ -83,23 +83,23 @@ namespace jngl {
 		return fullscreen_;
 	}
 
-	bool Window::GetMouseVisible() const {
+	bool Window::getMouseVisible() const {
 		return isMouseVisible_;
 	}
 
-	bool Window::GetRelativeMouseMode() const {
+	bool Window::getRelativeMouseMode() const {
 		return relativeMouseMode;
 	}
 
-	int Window::GetWidth() const {
+	int Window::getWidth() const {
 		return width_;
 	}
 
-	int Window::GetHeight() const {
+	int Window::getHeight() const {
 		return height_;
 	}
 
-	bool Window::IsMultisampleSupported() const {
+	bool Window::isMultisampleSupported() const {
 		return isMultisampleSupported_;
 	}
 
@@ -153,8 +153,7 @@ namespace jngl {
 		characterPressed_[key] = p;
 	}
 
-	bool keyDown(const char key)
-	{
+	bool keyDown(const char key) {
 		std::string temp; temp.append(1, key);
 		return keyDown(temp);
 	}
@@ -164,7 +163,7 @@ namespace jngl {
 		return keyPressed(temp);
 	}
 
-	void Window::UpdateKeyStates() {
+	void Window::updateKeyStates() {
 		while (!needToBeSetFalse_.empty()) {
 			*(needToBeSetFalse_.top()) = false;
 			needToBeSetFalse_.pop();
@@ -172,11 +171,11 @@ namespace jngl {
 		mouseWheel_ = 0;
 	}
 
-	double Window::GetMouseWheel() const {
+	double Window::getMouseWheel() const {
 		return mouseWheel_;
 	}
 
-	void Window::MainLoop() {
+	void Window::mainLoop() {
 		Finally _([&]() {
 			currentWork_.reset((jngl::Work*)0);
 		});
@@ -242,7 +241,7 @@ namespace jngl {
 		}
 	}
 
-	void Window::SetWork(std::shared_ptr<Work> work) {
+	void Window::setWork(std::shared_ptr<Work> work) {
 		if (!currentWork_) {
 			debug("setting current work to "); debug(work.get()); debug("\n");
 			currentWork_ = work;
