@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2013 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -209,7 +209,7 @@ void drawBackground() {
 		                  jngl::getWindowWidth() / 2- jngl::getWidth("jngl") / 2,
 		                  jngl::getWindowHeight() / 2- jngl::getHeight("jngl") / 2,
 						  0.5 - factor / 2, 0.5 + factor / 2,
-						  0.5 - factor / 2, 0.5 + factor / 2);
+						  float(0.5 - factor / 2), float(0.5 + factor / 2));
 	}
 	jngl::setColor(255, 0, 0, 100);
 	jngl::drawRect(600, 30, 100, 100);
@@ -404,7 +404,7 @@ void testKeys() {
 			sstream << "Controller " << i << " connected: " << jngl::isControllerConnected(i) << std::endl
 			        << "Trigger: " << jngl::getControllerState(i, jngl::controller::LeftTrigger) << " " << jngl::getControllerState(i, jngl::controller::RightTrigger)
 			        << " A: " << jngl::getControllerState(i, jngl::controller::A);
-			jngl::print(sstream.str(), 500, 100 + i * 50);
+			jngl::print(sstream.str(), 560, 100 + i * 50);
 		}
 		if (jngl::getRelativeMouseMode()) {
 			xpos += jngl::getMouseX();
