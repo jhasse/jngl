@@ -11,7 +11,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <string>
 #include <boost/type_traits.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include <boost/ptr_container/ptr_unordered_map.hpp>
 #include <boost/noncopyable.hpp>
 #include <stack>
@@ -114,8 +114,8 @@ namespace jngl {
 		std::string GetFontFileByName(const std::string& fontname);
 
 		bool fullscreen_, running_, isMouseVisible_, relativeMouseMode, isMultisampleSupported_, anyKeyPressed_;
-		boost::array<bool, 3> mouseDown_;
-		boost::array<bool, 3> mousePressed_;
+		std::array<bool, 3> mouseDown_;
+		std::array<bool, 3> mousePressed_;
 		std::map<unsigned int, bool> keyDown_;
 		std::map<unsigned int, bool> keyPressed_;
 		std::map<std::string, bool> characterDown_;
