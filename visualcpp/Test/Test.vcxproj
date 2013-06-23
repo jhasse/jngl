@@ -55,7 +55,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Xinput.lib;glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;zlib.lib;../Debug/jngl.lib;libwebp_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Xinput.lib;glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;zlib.lib;libwebp_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -70,12 +70,17 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Xinput.lib;glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;zlib.lib;../Release/jngl.lib;libwebp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Xinput.lib;glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;zlib.lib;libwebp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\test\test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\jngl.vcxproj">
+      <Project>{c8c7e794-05b1-4a00-a060-2a4236c7d1e3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
