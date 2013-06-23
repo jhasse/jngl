@@ -25,34 +25,34 @@ GLUtesselator* tobj = NULL;
 #define CALLBACK
 #endif
 
-void CALLBACK beginCallback(GLenum which)
-{
+void CALLBACK beginCallback(GLenum which) {
 	glBegin(which);
 }
 
 void CALLBACK combineCallback(GLdouble coords[3],
 	                 GLdouble *vertexData[4],
-	                 GLfloat weight[4], GLdouble **dataOut)
-{
-   GLdouble *vertex;
-   int i;
+	                 GLfloat weight[4], GLdouble **dataOut) {
+	GLdouble *vertex;
+	int i;
 
-   vertex = (GLdouble *) malloc(6 * sizeof(GLdouble));
+	vertex = (GLdouble*)malloc(7 * sizeof(GLdouble));
+	if (!vertex) {
+		return;
+	}
 
-   vertex[0] = coords[0];
-   vertex[1] = coords[1];
-   vertex[2] = coords[2];
-   for (i = 3; i < 7; i++)
-	  vertex[i] = weight[0] * vertexData[0][i]
-	              + weight[1] * vertexData[1][i]
-	              + weight[2] * vertexData[2][i]
-	              + weight[3] * vertexData[3][i];
-   *dataOut = vertex;
+	vertex[0] = coords[0];
+	vertex[1] = coords[1];
+	vertex[2] = coords[2];
+	for (i = 3; i < 7; i++)
+		vertex[i] = weight[0] * vertexData[0][i]
+		          + weight[1] * vertexData[1][i]
+		          + weight[2] * vertexData[2][i]
+		          + weight[3] * vertexData[3][i];
+	*dataOut = vertex;
 }
 
-void InitCallbacks()
-{
-	if(tobj == NULL) {
+void InitCallbacks() {
+	if (tobj == NULL) {
 		tobj = gluNewTess();
 		gluTessCallback(tobj, GLU_TESS_BEGIN, beginCallback);
 		gluTessCallback(tobj, GLU_TESS_VERTEX, glVertex3dv);

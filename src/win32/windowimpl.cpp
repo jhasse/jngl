@@ -439,30 +439,25 @@ namespace jngl {
 					}
 				}
 				break;
-				case WM_CHAR:
-				{
+				case WM_CHAR: {
 					std::vector<char> buf(4);
 					UTF8* temp = reinterpret_cast<UTF8*>(&buf[0]);
 					UTF8** targetStart = &temp;
 					UTF8* targetEnd = *targetStart + buf.size();
 					const UTF16* temp2 = reinterpret_cast<UTF16*>(&msg.wParam);
 					const UTF16** sourceStart = &temp2;
-					const UTF16* sourceEnd = temp2 + sizeof(UTF16);
+					const UTF16* sourceEnd = temp2 + 2;
 					ConversionResult result = ConvertUTF16toUTF8(sourceStart, sourceEnd, targetStart, targetEnd, lenientConversion);
-					if(result != conversionOK)
-					{
+					if (result != conversionOK) {
 						debug("WARNING: Couldn't convert UTF16 to UTF8.\n");
 						break;
 					}
-					std::vector<char>::iterator end = ++(buf.begin());
-					if(buf[0] & 0x80)
-					{
+					auto end = ++(buf.begin());
+					if (buf[0] & 0x80) {
 						++end;
-						if(buf[0] & 0x20)
-						{
+						if (buf[0] & 0x20) {
 							++end;
-							if(buf[0] & 0x10)
-							{
+							if (buf[0] & 0x10) {
 								++end;
 							}
 						}
