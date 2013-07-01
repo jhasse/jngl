@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2013 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -17,8 +17,8 @@ namespace jngl
 	  anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height),
 	  mouseWheel_(0), fontName_(""), oldTime(0), impl(new WindowImpl(this)), changeWork_(false)
 	{
-		mouseDown_.assign(false);
-		mousePressed_.assign(false);
+		mouseDown_.fill(false);
+		mousePressed_.fill(false);
 
 		Init(height, width);
 

@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2013 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -84,8 +84,8 @@ namespace jngl {
 		  isMultisampleSupported_(false), anyKeyPressed_(false), fontSize_(12), width_(width), height_(height),
 		  mouseWheel_(0), oldTime(0), changeWork_(false), stepsPerFrame(1), multitouch(false)
 	{
-		mouseDown_.assign(false);
-		mousePressed_.assign(false);
+		mouseDown_.fill(false);
+		mousePressed_.fill(false);
 
 		Init(title, false);
 	}

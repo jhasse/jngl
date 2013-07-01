@@ -1,5 +1,5 @@
 /*
-Copyright 2011-2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2011-2013 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -18,8 +18,8 @@ namespace jngl
 		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0), fontName_(""), oldTime(0),
 		  changeWork_(false), impl(new WindowImpl)
 	{
-		mouseDown_.assign(false);
-		mousePressed_.assign(false);
+		mouseDown_.fill(false);
+		mousePressed_.fill(false);
 
 		SDL::init();
 
