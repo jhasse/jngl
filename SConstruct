@@ -52,10 +52,10 @@ if not env['verbose']:
 	env['LINKCOMSTR'] = "linking: $TARGET"
 	env['ARCOMSTR'] = "archiving: $TARGET"
 
-if not env['msvc']:
-	source_files = env.Object(Glob(buildDir + "*.cpp") + Glob(buildDir + "jngl/*.cpp"), CPPFLAGS="-std=c++0x")
+source_files = [buildDir + 'callbacks.c', buildDir + 'ConvertUTF.c']
 
-source_files += [buildDir + 'callbacks.c', buildDir + 'ConvertUTF.c']
+if not env['msvc']:
+	source_files += env.Object(Glob(buildDir + "*.cpp") + Glob(buildDir + "jngl/*.cpp"), CPPFLAGS="-std=c++0x")
 
 testSrc = buildDir + "test/test.cpp"
 
