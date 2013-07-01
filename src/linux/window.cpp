@@ -155,8 +155,8 @@ namespace jngl
 
 		glXMakeCurrent(pDisplay_.get(), window_, context_);
 
-		SetFontByName("Arial"); // Default font
-		SetFontSize(fontSize_); // Load a font the first time
+		setFontByName("Arial"); // Default font
+		setFontSize(fontSize_); // Load a font the first time
 
 		Init(width, height);
 
