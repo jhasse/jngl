@@ -416,7 +416,12 @@ namespace jngl {
 					// A to Z pressed? E.g. when Ctrl is pressed, WM_CHAR doesn't work
 					if(msg.wParam >= 65 && msg.wParam <= 90) {
 						char c[2];
-						c[0] = 'a' + msg.wParam - 65;
+						if (keyDown_[GetKeyCode(key::ShiftL)] || keyDown_[GetKeyCode(key::ShiftR)]) {
+							c[0] = 'A';
+						} else {
+							c[0] = 'a';
+						}
+						c[0] += msg.wParam - 65;
 						c[1] = 0;
 						characterDown_[c] = true;
 						characterPressed_[c] = true;
@@ -434,6 +439,9 @@ namespace jngl {
 						char c[2];
 						c[0] = 'a' + msg.wParam - 65;
 						c[1] = 0;
+						characterDown_[c] = false;
+						characterPressed_[c] = false;
+						c[0] = 'A' + msg.wParam - 65;
 						characterDown_[c] = false;
 						characterPressed_[c] = false;
 					}
