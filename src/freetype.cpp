@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2013 Jan Niklas Hasse <jhasse@gmail.com>
 
 Most of this code is based on http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=43
 
@@ -154,13 +154,14 @@ namespace jngl {
 	FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)
 	: height_(static_cast<unsigned int>(height * getScaleFactor())), lineHeight(int(height_ / .63)) {
 		auto filename = pathPrefix + relativeFilename;
-		if (!std::ifstream(filename.c_str())) {
-			throw std::runtime_error(std::string("Font file not found: ") + filename);
+		if (!std::ifstream(filename)) {
+			if (!std::ifstream(relativeFilename)) {
+				throw std::runtime_error(std::string("Font file not found: ") + filename);
+			}
+			filename = relativeFilename;
 		}
-		if(++instanceCounter_ == 1)
-		{
-			if(FT_Init_FreeType(&library_))
-			{
+		if (++instanceCounter_ == 1) {
+			if (FT_Init_FreeType(&library_)) {
 				--instanceCounter_;
 				throw std::runtime_error("FT_Init_FreeType failed");
 			}
