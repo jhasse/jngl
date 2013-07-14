@@ -33,13 +33,14 @@ namespace draw
 	}
 
 	template<class T>
-	void Line(const T xstart, const T ystart, const T xend, const T yend)
-	{
+	void Line(const T xstart, const T ystart, const T xend, const T yend) {
 		opengl::BindArrayBuffer(0);
 		glPushMatrix();
 		typedef typename opengl::Type<T>::type Type;
-		Type line[] = { static_cast<Type>(xstart), static_cast<Type>(ystart),
-		                static_cast<Type>(xend), static_cast<Type>(yend) };
+		Type line[] = { static_cast<Type>(xstart * jngl::getScaleFactor()),
+		                static_cast<Type>(ystart * jngl::getScaleFactor()),
+		                static_cast<Type>(xend * jngl::getScaleFactor()),
+		                static_cast<Type>(yend * jngl::getScaleFactor()) };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, line);
 		glDrawArrays(GL_LINES, 0, 2);
 		glPopMatrix();
