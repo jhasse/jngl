@@ -27,6 +27,7 @@ File ..\lib\libogg_static.lib
 File ..\lib\OpenAL32.lib
 File ..\lib\freetype.lib
 File ..\lib\libvorbis_static.lib
+File ..\lib\vorbisfile.lib
 File ..\lib\libpng.lib
 File ..\lib\zlib.lib
 File ..\lib\jpeg.lib
