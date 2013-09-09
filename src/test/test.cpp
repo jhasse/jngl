@@ -208,7 +208,7 @@ void drawBackground() {
 		jngl::drawClipped("jngl",
 		                  jngl::getWindowWidth() / 2- jngl::getWidth("jngl") / 2,
 		                  jngl::getWindowHeight() / 2- jngl::getHeight("jngl") / 2,
-						  0.5 - factor / 2, 0.5 + factor / 2,
+						  float(0.5 - factor / 2), float(0.5 + factor / 2),
 						  float(0.5 - factor / 2), float(0.5 + factor / 2));
 	}
 	jngl::setColor(255, 0, 0, 100);
