@@ -51,5 +51,5 @@ inside the android/jngl folder.
 
 All three of them were built with:
 ```
-./configure --enable-shared=no --prefix=/mingw --exec_prefix=/mingw && make && make install
+./configure --enable-shared=no --prefix=/mingw --exec_prefix=/mingw && make && make install-strip
 ```
