@@ -26,11 +26,9 @@ namespace jngl {
 	LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 	// based on: http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=46
-	bool Window::InitMultisample(HINSTANCE hInstance, PIXELFORMATDESCRIPTOR pfd)
-	{
+	bool Window::InitMultisample(HINSTANCE hInstance, PIXELFORMATDESCRIPTOR pfd) {
 		PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
-		if(!wglChoosePixelFormatARB)
-		{
+		if (!wglChoosePixelFormatARB) {
 			return false;
 		}
 
@@ -61,8 +59,7 @@ namespace jngl {
 		BOOL valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
 
 		// if We Returned True, And Our Format Count Is Greater Than 1
-		if (valid && numFormats >= 1)
-		{
+		if (valid && numFormats >= 1) {
 			arbMultisampleFormat_ = pixelFormat;
 			return true;
 		}
@@ -70,8 +67,7 @@ namespace jngl {
 		// Our Pixel Format With 4 Samples Failed, Test For 2 Samples
 		iAttributes[19] = 2;
 		valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
-		if (valid && numFormats >= 1)
-		{
+		if (valid && numFormats >= 1) {
 			arbMultisampleFormat_ = pixelFormat;
 			return true;
 		}
@@ -90,8 +86,7 @@ namespace jngl {
 		Init(title, false);
 	}
 
-	void Window::Init(const std::string& title, const bool multisample)
-	{
+	void Window::Init(const std::string& title, const bool multisample) {
 		WNDCLASS	wc;
 		DWORD		dwExStyle;
 		DWORD		dwStyle;
@@ -114,19 +109,15 @@ namespace jngl {
 		wc.lpszClassName    = "OpenGL";								// Set The Class Name
 
 		static bool alreadyRegistered = false;
-		if(!alreadyRegistered && !RegisterClass(&wc))
-		{
+		if (!alreadyRegistered && !RegisterClass(&wc)) {
 			throw std::runtime_error("Failed To Register The Window Class.");
 		}
 		alreadyRegistered = true; // Only register once
 
-		if(fullscreen_)
-		{
+		if (fullscreen_) {
 			dwExStyle = WS_EX_APPWINDOW;
 			dwStyle = WS_POPUP;
-		}
-		else
-		{
+		} else {
 			dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
 			dwStyle = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
 		}
@@ -134,27 +125,20 @@ namespace jngl {
 		AdjustWindowRectEx(&WindowRect, dwStyle, FALSE, dwExStyle);		// Adjust Window To True Requested Size
 
 		// Create The Window
-		pWindowHandle_.reset(CreateWindowEx(	dwExStyle,							// Extended Style For The Window
-									"OpenGL",							// Class Name
-									title.c_str(),								// Window Title
-									dwStyle |							// Defined Window Style
-									WS_CLIPSIBLINGS |					// Required Window Style
-									WS_CLIPCHILDREN,					// Required Window Style
-									CW_USEDEFAULT,
-									CW_USEDEFAULT,
-									WindowRect.right-WindowRect.left,	// Calculate Window Width
-									WindowRect.bottom-WindowRect.top,	// Calculate Window Height
-									NULL,								// No Parent Window
-									NULL,								// No Menu
-									hInstance,							// Instance
-									NULL), DestroyWindow);
-		if(!pWindowHandle_)
-		{
+		pWindowHandle_.reset(CreateWindowEx(dwExStyle,							// Extended Style For The Window
+		                                    "OpenGL",							// Class Name
+		                                    title.c_str(),						// Window Title
+		                                    dwStyle | WS_CLIPSIBLINGS |  WS_CLIPCHILDREN,
+		                                    CW_USEDEFAULT,
+		                                    CW_USEDEFAULT,
+		                                    WindowRect.right-WindowRect.left,	// Calculate Window Width
+		                                    WindowRect.bottom-WindowRect.top,	// Calculate Window Height
+		                                    NULL, NULL, hInstance, NULL), DestroyWindow);
+		if (!pWindowHandle_) {
 			throw std::runtime_error("Window creation error.");
 		}
 
-		if(fullscreen_)
-		{
+		if (fullscreen_) {
 			DEVMODE devmode;
 			memset(&devmode, 0, sizeof(devmode));
 			devmode.dmSize = sizeof(devmode);
@@ -163,8 +147,7 @@ namespace jngl {
 			devmode.dmBitsPerPel = 32;
 			devmode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
-			if(ChangeDisplaySettings(&devmode, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
-			{
+			if (ChangeDisplaySettings(&devmode, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL) {
 				throw std::runtime_error("The requested fullscreen mode is not supported by your video card.");
 			}
 		}
@@ -192,47 +175,35 @@ namespace jngl {
 		};
 
 		pDeviceContext_.reset(GetDC(pWindowHandle_.get()), boost::bind(ReleaseDC, pWindowHandle_.get(), _1));
-		if (!pDeviceContext_)
-		{
+		if (!pDeviceContext_) {
 			throw std::runtime_error("Can't create a GL device context.");
 		}
 		GLuint pixelFormat;
-		if(multisample)
-		{
+		if (multisample) {
 			pixelFormat = arbMultisampleFormat_;
-		}
-		else
-		{
+		} else {
 			pixelFormat = ChoosePixelFormat(pDeviceContext_.get(), &pfd);
 		}
-		if (!pixelFormat)
-		{
+		if (!pixelFormat) {
 			throw std::runtime_error("Can't find a suitable PixelFormat.");
 		}
-		if(!SetPixelFormat(pDeviceContext_.get(), pixelFormat, &pfd))
-		{
+		if (!SetPixelFormat(pDeviceContext_.get(), pixelFormat, &pfd)) {
 			throw std::runtime_error("Can't set the PixelFormat.");
 		}
 		pRenderingContext_.reset(wglCreateContext(pDeviceContext_.get()), ReleaseRC);
-		if(!pRenderingContext_)
-		{
+		if (!pRenderingContext_) {
 			throw std::runtime_error("Can't create a GL rendering context.");
 		}
-		if(!wglMakeCurrent(pDeviceContext_.get(), pRenderingContext_.get()))
-		{
+		if (!wglMakeCurrent(pDeviceContext_.get(), pRenderingContext_.get())) {
 			throw std::runtime_error("Can't activate the GL rendering context.");
 		}
 
-		if(!multisample && InitMultisample(hInstance, pfd))
-		{
+		if (!multisample && InitMultisample(hInstance, pfd)) {
 			pDeviceContext_.reset((HDC)0); // Destroy window
-			try
-			{
+			try {
 				Init(title, true); // Recreate with Anti-Aliasing support
 				isMultisampleSupported_ = true;
-			}
-			catch(...)
-			{
+			} catch(...) {
 				// If Anti-Aliasing still doesn't work for some reason, let's turn it off again.
 				Init(title, false);
 			}
@@ -243,47 +214,35 @@ namespace jngl {
 		setFontByName("Arial");
 		setFontSize(fontSize_);
 
-		if(!jngl::Init(width_, height_))
-		{
+		if (!jngl::Init(width_, height_)) {
 			throw std::runtime_error("Initialization failed.");
 		}
 
 		running_ = true;
 	}
 
-	Window::~Window()
-	{
-		if(fullscreen_)
-		{
+	Window::~Window() {
+		if (fullscreen_) {
 			ChangeDisplaySettings(NULL, 0);
 		}
 	}
 
-	std::string Window::GetFontFileByName(const std::string& fontname)
-	{
+	std::string Window::GetFontFileByName(const std::string& fontname) {
 		// TODO: This is not a good way to find fonts
 		char temp[MAX_PATH];
-		if(SHGetFolderPath(NULL, CSIDL_FONTS, NULL, 0, temp) != S_OK)
-		{
+		if (SHGetFolderPath(NULL, CSIDL_FONTS, NULL, 0, temp) != S_OK) {
 			throw std::runtime_error("Couldn't locate font directory.");
 		}
 		std::string path(temp);
 		path += "\\";
 		std::string file;
-		if(fontname == "Times New Roman" || fontname == "serif")
-		{
+		if (fontname == "Times New Roman" || fontname == "serif") {
 			file = "times";
-		}
-		else if(fontname == "Courier" || fontname == "Courier New" || fontname == "mono")
-		{
+		} else if(fontname == "Courier" || fontname == "Courier New" || fontname == "mono") {
 			file = "cour";
-		}
-		else if(fontname == "sans" || fontname == "sans-serif")
-		{
+		} else if(fontname == "sans" || fontname == "sans-serif") {
 			file = "arial";
-		}
-		else
-		{
+		} else {
 			file = fontname;
 		}
 		path += file;
@@ -291,35 +250,28 @@ namespace jngl {
 		return path;
 	}
 
-	void Window::ReleaseDC(HWND hwnd, HDC hdc)
-	{
-		if(!::ReleaseDC(hwnd, hdc))
-		{
+	void Window::ReleaseDC(HWND hwnd, HDC hdc) {
+		if (!::ReleaseDC(hwnd, hdc)) {
 			debug("Release device context failed.");
 		}
 	}
 
-	void Window::ReleaseRC(HGLRC hrc)
-	{
-		if(!wglMakeCurrent(NULL, NULL))
-		{
+	void Window::ReleaseRC(HGLRC hrc) {
+		if (!wglMakeCurrent(NULL, NULL)) {
 			debug("Release of DC and RC failed.");
 		}
-		if(!wglDeleteContext(hrc))
-		{
+		if (!wglDeleteContext(hrc)) {
 			debug("Release rendering context failed.");
 		}
 	}
 
-	void Window::DistinguishLeftRight()
-	{
+	void Window::DistinguishLeftRight() {
 		int codesToCheck[] = {
 			GetKeyCode(jngl::key::ShiftL), GetKeyCode(jngl::key::ShiftR),
 			GetKeyCode(jngl::key::ControlL), GetKeyCode(jngl::key::ControlR),
 			GetKeyCode(jngl::key::AltL), GetKeyCode(jngl::key::AltR)
 		};
-		for(unsigned int i = 0; i < sizeof(codesToCheck) / sizeof(codesToCheck[0]); ++i)
-		{
+		for (unsigned int i = 0; i < sizeof(codesToCheck) / sizeof(codesToCheck[0]); ++i) {
 			bool value = ((GetKeyState(codesToCheck[i]) & 0xf0) != 0);
 			keyDown_[codesToCheck[i]] = value;
 			keyPressed_[codesToCheck[i]] = value;
@@ -488,29 +440,23 @@ namespace jngl {
 		}
 	}
 
-	void Window::SwapBuffers()
-	{
+	void Window::SwapBuffers() {
 		::SwapBuffers(pDeviceContext_.get());
 	}
 
-	void Window::SetMouseVisible(const bool visible)
-	{
-		if(isMouseVisible_ != visible)
-		{
+	void Window::SetMouseVisible(const bool visible) {
+		if(isMouseVisible_ != visible) {
 			ShowCursor(visible);
 		}
 		isMouseVisible_ = visible;
 	}
 
-	void Window::SetTitle(const std::string& windowTitle)
-	{
+	void Window::SetTitle(const std::string& windowTitle) {
 		SetWindowText(pWindowHandle_.get(), windowTitle.c_str());
 	}
 
-	int Window::GetKeyCode(jngl::key::KeyType key)
-	{
-		switch(key)
-		{
+	int Window::GetKeyCode(jngl::key::KeyType key) {
+		switch(key) {
 			case key::Left: return 0x25;
 			case key::Up: return 0x26;
 			case key::Right: return 0x27;
@@ -553,33 +499,27 @@ namespace jngl {
 		}
 	}
 
-	bool Window::getKeyDown(const std::string& key)
-	{
+	bool Window::getKeyDown(const std::string& key) {
 		return characterDown_[key];
 	}
 
-	bool Window::getKeyPressed(const std::string& key)
-	{
-		if(characterPressed_[key])
-		{
+	bool Window::getKeyPressed(const std::string& key) {
+		if (characterPressed_[key]) {
 			characterPressed_[key] = false;
 			return true;
 		}
 		return characterPressed_[key];
 	}
 
-	LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-	{
-		switch (uMsg)									// Check For Windows Messages
-		{
+	LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+		switch (uMsg) {
 			case WM_SYSCOMMAND:							// Intercept System Commands
-				switch(wParam)							// Check System Calls
-				{
+				switch (wParam) {
 					case SC_SCREENSAVE:					// Screensaver Trying To Start?
 					case SC_MONITORPOWER:				// Monitor Trying To Enter Powersave?
 					return 0;							// Prevent From Happening
 				}
-				break;									// Exit
+				break;
 			case WM_CLOSE:								// Did We Receive A Close Message?
 				PostQuitMessage(0);						// Send A Quit Message
 				return 0;								// Jump Back
@@ -587,18 +527,15 @@ namespace jngl {
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
 
-	int Window::MouseX()
-	{
+	int Window::MouseX() {
 		return mousex_;
 	}
 
-	int Window::MouseY()
-	{
+	int Window::MouseY() {
 		return mousey_;
 	}
 
-	void Window::SetMouse(const int xposition, const int yposition)
-	{
+	void Window::SetMouse(const int xposition, const int yposition) {
 		POINT pnt;
 		pnt.x = xposition;
 		pnt.y = yposition;
@@ -615,10 +552,9 @@ namespace jngl {
 		}
 	}
 
-	void Window::SetIcon(const std::string& filename)
-	{
+	void Window::SetIcon(const std::string& filename) {
 		FILE* fp = fopen(filename.c_str(), "rb");
-		if(!fp)
+		if (!fp)
 			throw std::runtime_error(std::string("File not found: ") + filename);
 		png_byte buf[PNG_BYTES_TO_CHECK];
 		assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short));
@@ -629,19 +565,16 @@ namespace jngl {
 
 		assert(png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) == 0);
 		png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, png_voidp_NULL, png_error_ptr_NULL, png_error_ptr_NULL);
-		if(!png_ptr)
-		{
+		if (!png_ptr) {
 			throw std::runtime_error("libpng error while reading");
 		}
 
 		png_infop info_ptr = png_create_info_struct(png_ptr);
-		if(!info_ptr)
-		{
+		if (!info_ptr) {
 			throw std::runtime_error("libpng error while reading");
 		}
 
-		if(setjmp(png_jmpbuf(png_ptr)))
-		{
+		if (setjmp(png_jmpbuf(png_ptr))) {
 			// Free all of the memory associated with the png_ptr and info_ptr
 			png_destroy_read_struct(&png_ptr, &info_ptr, png_infopp_NULL);
 			throw std::runtime_error("Error reading file.");
@@ -649,8 +582,7 @@ namespace jngl {
 		png_init_io(png_ptr, fp);
 		png_set_sig_bytes(png_ptr, PNG_BYTES_TO_CHECK);
 		int colorType = png_get_color_type(png_ptr, info_ptr);
-		if(colorType == PNG_COLOR_TYPE_GRAY || colorType == PNG_COLOR_TYPE_GRAY_ALPHA)
-		{
+		if (colorType == PNG_COLOR_TYPE_GRAY || colorType == PNG_COLOR_TYPE_GRAY_ALPHA) {
 			png_set_gray_to_rgb(png_ptr);
 		}
 		png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_BGR, png_voidp_NULL);
@@ -661,8 +593,7 @@ namespace jngl {
 		const int y = png_ptr->height;
 
 		std::vector<char> imageData(x * y * png_ptr->channels);
-		for(int i = 0; i < y; ++i)
-		{
+		for (int i = 0; i < y; ++i) {
 			memcpy(&imageData[i*x*png_ptr->channels], info_ptr->row_pointers[i], x * png_ptr->channels);
 		}
 
@@ -682,16 +613,14 @@ namespace jngl {
 		updateInputCallbacks.push_back(c);
 	}
 
-	int getDesktopWidth()
-	{
+	int getDesktopWidth() {
 		RECT desktop;
 		const HWND hDesktop = GetDesktopWindow();
 		GetWindowRect(hDesktop, &desktop);
 		return desktop.right;
 	}
 
-	int getDesktopHeight()
-	{
+	int getDesktopHeight() {
 		RECT desktop;
 		const HWND hDesktop = GetDesktopWindow();
 		GetWindowRect(hDesktop, &desktop);
