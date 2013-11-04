@@ -58,6 +58,9 @@
       <AdditionalDependencies>Xinput.lib;glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;msvc/vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libpng.lib;zlib.lib;libwebp_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

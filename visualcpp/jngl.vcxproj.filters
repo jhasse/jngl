@@ -99,9 +99,7 @@
     <ClCompile Include="..\src\jngl\color.cpp">
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\win32\input.cpp">
-      <Filter>Source Files\win32</Filter>
-    </ClCompile>
+    <ClCompile Include="..\src\win32\inputimpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ConvertUTF.h">
