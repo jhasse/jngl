@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import os
+
 version = "1.1.1"
 
 #Replace @VERSION@ in certain files
@@ -65,7 +67,7 @@ if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
 		jnglLibs += Split("openal32 ogg vorbisfile")
 	else:
 		env.Append(CPPDEFINES='WEAK_LINKING_OPENAL')
-	env.Append(CPPPATH=["./include", "../boost-libs/include"])
+	env.Append(CPPPATH=["./include", "./boost-libs/include"])
 	lib = env.Library(target="jngl",
 	                  source=source_files +
 	                         env.Object(Glob(buildDir + 'win32/*.cpp'),
@@ -77,14 +79,14 @@ if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
 	libs = Split("jngl") + jnglLibs
 	env.Program("test", testSrc,
 	            CPPFLAGS="-std=gnu++0x",
-	            CPPPATH=[".", "../boost-libs/include"],
+	            CPPPATH=[".", "./boost-libs/include"],
 				LIBPATH=Split("lib ."),
 				LIBS=libs,
 				LINKFLAGS=linkflags)
 	if env['python']:
 		env = env.Clone()
-		env.Append(CPPPATH=Split("C:\Python32\include ../boost-libs/include"),
-		             LIBPATH=Split(". lib ../boost-libs/lib/win ./python C:\Python32\libs"),
+		env.Append(CPPPATH=Split("C:\Python32\include ./boost-libs/include"),
+		             LIBPATH=Split(". lib ./boost-libs/lib/win ./python C:\Python32\libs"),
 		             LIBS=libs + Split("python32 libboost_python-mgw47-mt-1_51.dll"),
 		             LINKFLAGS=linkflags,
 		             CPPFLAGS="-std=c++11")
@@ -112,11 +114,14 @@ if env['PLATFORM'] == 'posix': # Linux
 		           CPPFLAGS="-std=c++11")
 		env.SharedLibrary(target="python/libjngl.so",
 		                  source="python/main.cpp")
+elif not os.path.exists('boost-libs/include/boost'):
+	print "Updating boost-libs submodule ..."
+	os.system('git submodule update --init')
 
 if env['PLATFORM'] == 'darwin': # Mac
 	env.Append(LIBS=Split('GLEW jpeg ogg vorbisfile webp'),
 	           LIBPATH=Split('/opt/local/lib .'),
-	           CPPPATH=['/opt/local/include/', '../boost-libs/include'],
+	           CPPPATH=['/opt/local/include/', './boost-libs/include'],
 	           LINKFLAGS='-framework OpenAL -framework OpenGL')
 	env.ParseConfig('/opt/local/bin/pkg-config --cflags --libs freetype2 libpng')
 	env.ParseConfig('/opt/local/bin/sdl-config --cflags --libs')
@@ -147,7 +152,6 @@ if env['installer']:
 	import os
 	if env['msvc']:
 		lib = None
-	import os
 	t = Command('JNGL ' + version + '.exe', lib, '"' + os.path.expandvars("%programfiles%") + '\NSIS\makensis.exe " ' + nsiFile)
 	if env['python']:
 		Depends(t, ['python/jngl.dll'])
