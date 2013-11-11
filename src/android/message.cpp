@@ -9,6 +9,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl {
 	void errorMessage(const std::string& text) {
-		__android_log_print(ANDROID_LOG_ERROR, "JNGL", text.c_str());
+		__android_log_print(ANDROID_LOG_ERROR, "JNGL", "%s", text.c_str());
 	}
 }

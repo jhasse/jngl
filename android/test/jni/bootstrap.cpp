@@ -10,7 +10,7 @@ void* load_lib(const std::string& l) {
 	if (!handle) {
 		throw std::runtime_error(std::string("dlopen(") + l + "): " + dlerror());
 	}
-	__android_log_print(ANDROID_LOG_INFO, "bootstrap", std::string("Loaded " + l).c_str());
+	__android_log_print(ANDROID_LOG_INFO, "bootstrap", "Loaded %s", l.c_str());
 	return handle;
 }
 
@@ -26,7 +26,7 @@ void ANativeActivity_onCreate(ANativeActivity* app, void* ud, size_t udsize) {
 		}
 		main(app, ud, udsize);
 	} catch(std::exception& e) {
-		__android_log_print(ANDROID_LOG_ERROR, "bootstrap", e.what());
+		__android_log_print(ANDROID_LOG_ERROR, "bootstrap", "%s", e.what());
 		ANativeActivity_finish(app);
 	}
 }
