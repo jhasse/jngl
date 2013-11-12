@@ -31,7 +31,6 @@ File ..\lib\msvc\vorbisfile.lib
 File ..\lib\libpng.lib
 File ..\lib\zlib.lib
 File ..\lib\jpeg.lib
-File ..\lib\libwebp_debug.lib
 File ..\lib\libwebp.lib
 SetOutPath $INSTDIR\bin
 File ..\jpeg62.dll
