@@ -85,9 +85,9 @@ if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
 				LINKFLAGS=linkflags)
 	if env['python']:
 		env = env.Clone()
-		env.Append(CPPPATH=Split("C:\Python32\include ./boost-libs/include"),
-		             LIBPATH=Split(". lib ./boost-libs/lib/win ./python C:\Python32\libs"),
-		             LIBS=libs + Split("python32 libboost_python-mgw47-mt-1_51.dll"),
+		env.Append(CPPPATH=Split("C:\Python33\include ./boost-libs/include"),
+		             LIBPATH=Split(". lib ./boost-libs/lib/win ./python C:\Python33\libs"),
+		             LIBS=libs + Split("python33 libboost_python-mgw47-mt-1_51.dll"),
 		             LINKFLAGS=linkflags,
 		             CPPFLAGS="-std=c++11")
 		env.SharedLibrary(target="python/jngl.dll",
