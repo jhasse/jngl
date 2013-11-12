@@ -192,7 +192,7 @@ namespace jngl {
 	}
 
 	void Window::stepIfNeeded() {
-		const static float timePerStep = 1.0f / 60.0f;
+		const static auto timePerStep = 1.0 / 60.0;
 		const auto dif = jngl::getTime() - oldTime - timePerStep * stepsPerFrame;
 		if (dif > 1) { // something is wrong
 			oldTime = jngl::getTime(); // ignore this frame

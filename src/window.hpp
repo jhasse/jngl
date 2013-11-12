@@ -132,7 +132,7 @@ namespace jngl {
 		std::string configPath;
 		std::vector<std::shared_ptr<Job>> jobs;
 #if defined _MSC_VER || defined ANDROID
-		float stepsPerFrame;
+		double stepsPerFrame;
 		bool multitouch;
 #else
 		float stepsPerFrame = 1;
