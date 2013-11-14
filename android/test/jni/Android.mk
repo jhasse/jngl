@@ -1,31 +1,52 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE                        := vorbis
-LOCAL_SRC_FILES                     := ../../lib/libvorbis.so
+LOCAL_MODULE    := vorbis
+LOCAL_SRC_FILES := ../../lib/libvorbis.so
 include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE                        := ogg
-LOCAL_SRC_FILES                     := ../../lib/libogg.so
+LOCAL_MODULE    := ogg
+LOCAL_SRC_FILES := ../../lib/libogg.so
 include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE    := jngl 
+LOCAL_SRC_FILES := ../../jngl/obj/local/armeabi/libjngl.a
+include $(PREBUILT_STATIC_LIBRARY)
 
-LOCAL_CFLAGS := -std=c++11 -D_LITTLE_ENDIAN=1 -DBOOST_EXCEPTION_DISABLE -D_STLP_NO_EXCEPTIONS -DOS_ANDROID -D_STLP_USE_SIMPLE_NODE_ALLOC
-LOCAL_C_INCLUDES := ../../../../boost-libs/include ../../src
+include $(CLEAR_VARS)
+LOCAL_MODULE    := freetype
+LOCAL_SRC_FILES := ../../lib/libfreetype.a
+include $(PREBUILT_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE    := png
+LOCAL_SRC_FILES := ../../lib/libpng.a
+include $(PREBUILT_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE    := openal
+LOCAL_SRC_FILES := ../../lib/libopenal.a
+include $(PREBUILT_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
+
+LOCAL_CFLAGS += -std=c++11
+LOCAL_C_INCLUDES := ../../boost-libs/include ../../src
 LOCAL_MODULE    := jngl-test
 
 LOCAL_SRC_FILES := main.cpp
-LOCAL_LDLIBS    := -llog -landroid -lEGL -lGLESv1_CM -ljngl -L../jngl/obj/local/armeabi -L../lib -lfreetype -lpng -lz -logg -lvorbis -lopenal
-LOCAL_STATIC_LIBRARIES := android_native_app_glue
+LOCAL_LDLIBS    += -llog -landroid -lEGL -lGLESv1_CM -lz
+LOCAL_STATIC_LIBRARIES := android_native_app_glue jngl freetype png openal
+LOCAL_SHARED_LIBRARIES := ogg vorbis
 LOCAL_CPP_FEATURES += exceptions rtti
 
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
-LOCAL_CFLAGS := -std=c++11 -D_LITTLE_ENDIAN=1 -D_STLP_NO_EXCEPTIONS -DOS_ANDROID -D_STLP_USE_SIMPLE_NODE_ALLOC
+LOCAL_CFLAGS := -std=c++11
 LOCAL_MODULE := bootstrap
 
 LOCAL_SRC_FILES := bootstrap.cpp
