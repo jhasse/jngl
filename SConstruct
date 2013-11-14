@@ -2,7 +2,7 @@
 
 import os
 
-version = "1.1.1"
+version = "1.2.0"
 
 #Replace @VERSION@ in certain files
 files = ["jngl.pc.in", "installer/mingw.nsi.in", 'installer/msvc.nsi.in', 'installer/python.nsi.in']
@@ -54,7 +54,7 @@ if not env['verbose']:
 	env['LINKCOMSTR'] = "linking: $TARGET"
 	env['ARCOMSTR'] = "archiving: $TARGET"
 
-source_files = [buildDir + 'callbacks.c', buildDir + 'ConvertUTF.c']
+source_files = [buildDir + 'ConvertUTF.c']
 
 if not env['msvc']:
 	source_files += env.Object(Glob(buildDir + "*.cpp") + Glob(buildDir + "jngl/*.cpp"), CPPFLAGS="-std=c++0x")

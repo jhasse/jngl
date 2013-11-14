@@ -126,9 +126,6 @@ BOOST_PYTHON_MODULE(jngl)
 	def("getWidth", getWidth);
 	def("getHeight", getHeight);
 	def("getTime", getTime);
-	def("beginPolygon", beginPolygon);
-	def("vertex", vertex);
-	def("endPolygon", endPolygon);
 	def("setMouseVisible", setMouseVisible);
 	def("isMouseVisible", isMouseVisible);
 	def("getMouseX", getMouseX);

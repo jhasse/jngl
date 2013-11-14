@@ -44,13 +44,6 @@ namespace jngl {
 
 	double getTime();
 
-	void beginPolygon();
-
-	void vertex(double xposition,
-				double yposition);
-
-	void endPolygon();
-
 	void setTitle(const std::string& title);
 
 	void setBackgroundColor(unsigned char red,

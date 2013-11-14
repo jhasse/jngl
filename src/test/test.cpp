@@ -16,7 +16,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 void drawBackground();
 void drawMouse(int, int);
-void drawTess();
 void testKeys();
 int performance = 1;
 double factor = 0;
@@ -62,7 +61,6 @@ public:
 			}
 		}
 		drawBackground();
-		drawTess();
 		setColor(0,0,0,255);
 		pushMatrix();
 		translate(650, 450);
@@ -236,33 +234,6 @@ void drawMouse(int x, int y) {
 	jngl::print("↑", -8, -2);
 	jngl::setFontSize(12);
 	jngl::reset();
-}
-
-void drawTess() {
-	jngl::setColor(3, 10, 89, 50);
-	jngl::beginPolygon();
-	jngl::vertex(80, 580);
-	jngl::vertex(130, 480);
-	jngl::vertex(180, 380);
-	jngl::vertex(230, 380);
-	jngl::vertex(280, 480);
-	jngl::vertex(330, 480);
-	jngl::vertex(380, 380);
-	jngl::vertex(430, 480);
-	jngl::vertex(480, 480);
-	jngl::vertex(530, 580);
-	jngl::endPolygon();
-	jngl::setFontColor(255, 0, 0);
-	jngl::print("A", 80, 580);
-	jngl::print("B", 130, 480);
-	jngl::print("C", 180, 380);
-	jngl::print("D", 230, 380);
-	jngl::print("E", 280, 480);
-	jngl::print("F", 330, 480);
-	jngl::print("G", 380, 380);
-	jngl::print("H", 430, 480);
-	jngl::print("I", 480, 480);
-	jngl::print("J", 530, 580);
 }
 
 class RecentlyPressedKey {

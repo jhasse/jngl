@@ -15,10 +15,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <stdexcept>
 #include <sstream>
 
-extern "C" {
-	void InitCallbacks(); // see callbacks.c
-}
-
 namespace jngl {
 	std::string pathPrefix;
 	std::vector<std::string> args;
@@ -59,7 +55,6 @@ namespace jngl {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glFlush();
-		InitCallbacks();
 		setVerticalSync(true);
 		return true;
 	}
