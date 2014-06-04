@@ -564,7 +564,7 @@ namespace jngl {
 			throw std::runtime_error(std::string("Error reading signature bytes."));
 
 		assert(png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) == 0);
-		png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, png_voidp_NULL, png_error_ptr_NULL, png_error_ptr_NULL);
+		png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 		if (!png_ptr) {
 			throw std::runtime_error("libpng error while reading");
 		}
@@ -576,7 +576,7 @@ namespace jngl {
 
 		if (setjmp(png_jmpbuf(png_ptr))) {
 			// Free all of the memory associated with the png_ptr and info_ptr
-			png_destroy_read_struct(&png_ptr, &info_ptr, png_infopp_NULL);
+			png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 			throw std::runtime_error("Error reading file.");
 		}
 		png_init_io(png_ptr, fp);
@@ -585,25 +585,25 @@ namespace jngl {
 		if (colorType == PNG_COLOR_TYPE_GRAY || colorType == PNG_COLOR_TYPE_GRAY_ALPHA) {
 			png_set_gray_to_rgb(png_ptr);
 		}
-		png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_BGR, png_voidp_NULL);
+		png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_BGR, NULL);
 
-		png_ptr->num_rows = png_ptr->height; // Make sure this is set correctly
+		const int x = png_get_image_width(png_ptr, info_ptr);
+		const int y = png_get_image_height(png_ptr, info_ptr);
+		const int channels = png_get_channels(png_ptr, info_ptr);
 
-		const int x = png_ptr->width;
-		const int y = png_ptr->height;
-
-		std::vector<char> imageData(x * y * png_ptr->channels);
+		const auto row_pointers = png_get_rows(png_ptr, info_ptr);
+		std::vector<char> imageData(x * y * channels);
 		for (int i = 0; i < y; ++i) {
-			memcpy(&imageData[i*x*png_ptr->channels], info_ptr->row_pointers[i], x * png_ptr->channels);
+			memcpy(&imageData[i*x*channels], row_pointers[i], x * channels);
 		}
 
 		ICONINFO icon;
 		icon.fIcon = true;
 		std::vector<char> blackMask(x * y);
 		icon.hbmMask = CreateBitmap(x, y, 1, 8, &blackMask[0]);
-		icon.hbmColor = CreateBitmap(x, y, 1, png_ptr->channels * 8, &imageData[0]);
+		icon.hbmColor = CreateBitmap(x, y, 1, channels * 8, &imageData[0]);
 
-		png_destroy_read_struct(&png_ptr, &info_ptr, png_infopp_NULL);
+		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 
 		HICON hIcon = CreateIconIndirect(&icon);
 		SendMessage(pWindowHandle_.get(), WM_SETICON, WPARAM(ICON_SMALL), LPARAM(hIcon));

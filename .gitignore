@@ -1,10 +1,14 @@
 *.DS_Store
 .sconsign.dblite
+.sconf_temp/
+config.log
 build/
 visualcpp/Debug/
 visualcpp/Release/
 visualcpp/*/Debug/
 visualcpp/*/Release/
+visualcpp/*.sdf
+visualcpp/*.suo
 installer/*.nsi
 jngl.pc
 *.os

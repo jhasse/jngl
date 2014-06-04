@@ -99,40 +99,4 @@ WeakFunction<void(ALCcontext*)> alcDestroyContext("alcDestroyContext", "OpenAL32
 WeakFunction<ALCboolean(ALCdevice*)> alcCloseDevice("alcCloseDevice", "OpenAL32.dll");
 
 #include <vorbis/codec.h>
-
-typedef struct {
-  size_t (*read_func)  (void *ptr, size_t size, size_t nmemb, void *datasource);
-  int    (*seek_func)  (void *datasource, ogg_int64_t offset, int whence);
-  int    (*close_func) (void *datasource);
-  long   (*tell_func)  (void *datasource);
-} ov_callbacks;
-
-typedef struct OggVorbis_File {
-  void            *datasource; /* Pointer to a FILE *, etc. */
-  int              seekable;
-  ogg_int64_t      offset;
-  ogg_int64_t      end;
-  ogg_sync_state   oy;
-  int              links;
-  ogg_int64_t     *offsets;
-  ogg_int64_t     *dataoffsets;
-  long            *serialnos;
-  ogg_int64_t     *pcmlengths;
-  vorbis_info     *vi;
-  vorbis_comment  *vc;
-  ogg_int64_t      pcm_offset;
-  int              ready_state;
-  long             current_serialno;
-  int              current_link;
-  double           bittrack;
-  double           samptrack;
-  ogg_stream_state os;
-  vorbis_dsp_state vd;
-  vorbis_block     vb;
-  ov_callbacks callbacks;
-} OggVorbis_File;
-
-WeakFunction<int(FILE*, OggVorbis_File*, char*, long)> ov_open("ov_open", "vorbisfile.dll");
-WeakFunction<vorbis_info*(OggVorbis_File*, int)> ov_info("ov_info", "vorbisfile.dll");
-WeakFunction<int(OggVorbis_File*)> ov_clear("ov_clear", "vorbisfile.dll");
-WeakFunction<long(OggVorbis_File*, char*, int, int, int, int, int*)> ov_read("ov_read", "vorbisfile.dll");
+#include <vorbis/vorbisfile.h>

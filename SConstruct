@@ -34,6 +34,8 @@ if env['PLATFORM'] == 'win32':
 	else:
 		env = Environment(tools = ['mingw'], variables = vars)
 
+conf = Configure(env)
+
 if env['PLATFORM'] == 'darwin':
 	env['CC']  = 'clang'
 	env['CXX'] = 'clang++'
@@ -61,10 +63,10 @@ if not env['msvc']:
 
 testSrc = buildDir + "test/test.cpp"
 
-if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
-	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl webp XInput")
+if env['PLATFORM'] in ['win32', 'msys'] and not env['msvc']: # Windows
+	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl webp Xinput vorbisfile")
 	if env['python'] or env['msvc']:
-		jnglLibs += Split("openal32 ogg vorbisfile")
+		jnglLibs += Split("openal32 ogg")
 	else:
 		env.Append(CPPDEFINES='WEAK_LINKING_OPENAL')
 	env.Append(CPPPATH=["./include", "./boost-libs/include"])
@@ -77,10 +79,14 @@ if env['PLATFORM'] == 'win32' and not env['msvc']: # Windows
 	if env['debug'] or env['msvc']:
 		linkflags = ""
 	libs = Split("jngl") + jnglLibs
+	if conf.CheckDeclaration("__i386__"):
+		env.Append(LIBPATH = 'lib/win/x86')
+	else:
+		env.Append(LIBPATH = 'lib/win/x86_64')
 	env.Program("test", testSrc,
 	            CPPFLAGS="-std=gnu++0x",
 	            CPPPATH=[".", "./boost-libs/include"],
-				LIBPATH=Split("lib ."),
+				LIBPATH=Split("."),
 				LIBS=libs,
 				LINKFLAGS=linkflags)
 	if env['python']:

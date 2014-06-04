@@ -2,6 +2,17 @@
 
 Easy to use game library for C++ and Python
 
+## Windows
+
+Set up [MSYS2](http://sourceforge.net/p/msys2/wiki/MSYS2%20installation/) and install the following
+in a mingw64 shell:
+
+```
+pacman -S scons mingw-w64-x86_64-gcc mingw-w64-x86_64-boost
+pacman -S mingw-w64-x86_64-openal mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis
+pacman -S mingw-w64-x86_64-libwebp mingw-w64-x86_64-dlfcn mingw-w64-x86_64-glew
+```
+
 ## Build using scons
 
 Build JNGL in debug mode:
