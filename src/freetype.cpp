@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2013 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2014 Jan Niklas Hasse <jhasse@gmail.com>
 
 Most of this code is based on http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=43
 
@@ -75,8 +75,7 @@ namespace jngl {
 		left_ = bitmap_glyph->left;
 	}
 
-	void Character::Draw() const
-	{
+	void Character::Draw() const {
 		glPushMatrix();
 		opengl::translate(left_, top_);
 
@@ -90,34 +89,28 @@ namespace jngl {
 		return width_;
 	}
 
-	Character::~Character()
-	{
+	Character::~Character() {
 		delete texture_;
 	}
 
-	Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::iterator end)
-	{
+	Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::iterator end) {
 		const char& ch = (*it); // Just to have less code
 		unsigned long unicodeCharacter = ch;
-		if(ch & 0x80) // first bit (Check if this is an Unicode character)
-		{
-			const UTF8* sourceEnd = (const unsigned char*)&ch + 2; // sourceEnd has to be the next character after the utf-8 sequence
+		if (ch & 0x80) { // first bit (Check if this is an Unicode character)
+			const UTF8* sourceEnd = (const unsigned char*)&ch + 2;
+			// sourceEnd has to be the next character after the utf-8 sequence
 			const std::runtime_error unicodeError("Invalid UTF-8 string!");
-			if(++it == end)
-			{
+			if (++it == end) {
 				throw unicodeError;
 			}
-			if(ch & 0x20) // third bit
-			{
-				if(++it == end)
-				{
+			if (ch & 0x20) { // third bit
+				if(++it == end) {
 					throw unicodeError;
 				}
 				++sourceEnd;
 				if(ch & 0x10) // fourth bit
 				{
-					if(++it == end)
-					{
+					if(++it == end) {
 						throw unicodeError;
 					}
 					++sourceEnd;
@@ -129,25 +122,21 @@ namespace jngl {
 			UTF32* temp2 = &unicode;
 			UTF32** targetStart = &temp2;
 			UTF32* targetEnd = &unicode + sizeof(unsigned long);
-			ConversionResult result = ConvertUTF8toUTF32(sourceStart, sourceEnd, targetStart, targetEnd, lenientConversion);
-			if(result == conversionOK)
-			{
+			ConversionResult result = ConvertUTF8toUTF32(sourceStart, sourceEnd, targetStart,
+			                                             targetEnd, lenientConversion);
+			if (result == conversionOK) {
 				unicodeCharacter = unicode;
-			}
-			else
-			{
+			} else {
 				debug(" ERROR - " + boost::lexical_cast<std::string>(result));
 			}
 		}
-		if(characters_[unicodeCharacter] == 0)
-		{
+		if (characters_[unicodeCharacter] == 0) {
 			characters_[unicodeCharacter].reset(new Character(unicodeCharacter, height_, face_));
 		}
 		return *(characters_[unicodeCharacter]);
 	}
 
-	FontImpl::FontImpl()
-	{
+	FontImpl::FontImpl() {
 		throw std::runtime_error("Attempting to use an unitialized FontImpl object");
 	}
 
@@ -160,14 +149,14 @@ namespace jngl {
 			}
 			filename = relativeFilename;
 		}
-		if (++instanceCounter_ == 1) {
-			if (FT_Init_FreeType(&library_)) {
-				--instanceCounter_;
+		if (++instanceCounter == 1) {
+			if (FT_Init_FreeType(&library)) {
+				--instanceCounter;
 				throw std::runtime_error("FT_Init_FreeType failed");
 			}
 		}
 		debug("Loading font "); debug(filename); debug("... ");
-		if (FT_New_Face(library_, filename.c_str(), 0, &face_)) {
+		if (FT_New_Face(library, filename.c_str(), 0, &face_)) {
 			throw std::runtime_error("FT_New_Face failed");
 		}
 		debug("OK\n");
@@ -182,9 +171,9 @@ namespace jngl {
 	FontImpl::~FontImpl()
 	{
 		freeFace_.reset((Finally*)0); // free face_ with FT_Done_Face
-		if(--instanceCounter_ == 0)
+		if(--instanceCounter == 0)
 		{
-			FT_Done_FreeType(library_);
+			FT_Done_FreeType(library);
 		}
 	}
 
@@ -265,7 +254,6 @@ namespace jngl {
 		glDisable(GL_TEXTURE_2D);
 	}
 
-	FT_Library FontImpl::library_;
-	int FontImpl::instanceCounter_ = 0;
+	FT_Library FontImpl::library;
+	int FontImpl::instanceCounter = 0;
 }
-

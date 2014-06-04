@@ -51,8 +51,8 @@ namespace jngl {
 		Character& GetCharacter(std::string::iterator& it, const std::string::iterator end);
 		std::vector<std::string> ParseString(const std::string&);
 
-		static int instanceCounter_;
-		static FT_Library library_;
+		static int instanceCounter;
+		static FT_Library library;
 		FT_Face face_;
 		std::shared_ptr<Finally> freeFace_; // Frees face_ if necessary
 		unsigned int height_;
