@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\audio.cpp" />
-    <ClCompile Include="..\src\callbacks.c" />
     <ClCompile Include="..\src\ConvertUTF.c" />
     <ClCompile Include="..\src\finally.cpp" />
     <ClCompile Include="..\src\framebufferimpl.cpp" />
@@ -31,7 +30,6 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\opengl.cpp" />
     <ClCompile Include="..\src\spriteimpl.cpp" />
-    <ClCompile Include="..\src\tess.cpp" />
     <ClCompile Include="..\src\texture.cpp" />
     <ClCompile Include="..\src\win32\inputimpl.cpp" />
     <ClCompile Include="..\src\win32\message.cpp" />
@@ -71,6 +69,9 @@
     <ClInclude Include="..\src\window.hpp" />
     <ClInclude Include="..\src\windowptr.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C8C7E794-05B1-4A00-A060-2A4236C7D1E3}</ProjectGuid>
     <RootNamespace>jngl</RootNamespace>
@@ -102,12 +103,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>../include;../boost-libs/include;$(IncludePath)</IncludePath>
+    <IncludePath>../include;../include/msvc;$(IncludePath)</IncludePath>
     <LibraryPath>../lib;$(LibraryPath)</LibraryPath>
     <TargetName>jngl</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>../include;../boost-libs/include;$(IncludePath)</IncludePath>
+    <IncludePath>../include;../include/msvc;$(IncludePath)</IncludePath>
     <LibraryPath>../lib;$(LibraryPath)</LibraryPath>
     <TargetName>jngl</TargetName>
   </PropertyGroup>
@@ -147,5 +148,10 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\boost.1.55.0.16\build\native\boost.targets" Condition="Exists('packages\boost.1.55.0.16\build\native\boost.targets')" />
+    <Import Project="packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets" Condition="Exists('packages\zlib.redist.1.2.8.6\build\native\zlib.redist.targets')" />
+    <Import Project="packages\zlib.1.2.8.6\build\native\zlib.targets" Condition="Exists('packages\zlib.1.2.8.6\build\native\zlib.targets')" />
+    <Import Project="packages\libpng.redist.1.5.10.11\build\native\libpng.redist.targets" Condition="Exists('packages\libpng.redist.1.5.10.11\build\native\libpng.redist.targets')" />
+    <Import Project="packages\libpng.1.5.10.11\build\native\libpng.targets" Condition="Exists('packages\libpng.1.5.10.11\build\native\libpng.targets')" />
   </ImportGroup>
 </Project>
