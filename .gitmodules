@@ -1,3 +1,0 @@
-[submodule "boost-libs"]
-	path = boost-libs
-	url = git@github.com:jhasse/boost-libs

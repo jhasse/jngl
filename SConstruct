@@ -120,9 +120,6 @@ if env['PLATFORM'] == 'posix': # Linux
 		           CPPFLAGS="-std=c++11")
 		env.SharedLibrary(target="python/libjngl.so",
 		                  source="python/main.cpp")
-elif not os.path.exists('boost-libs/include/boost'):
-	print "Updating boost-libs submodule ..."
-	os.system('git submodule update --init')
 
 if env['PLATFORM'] == 'darwin': # Mac
 	env.Append(LIBS=Split('GLEW jpeg ogg vorbisfile webp'),
