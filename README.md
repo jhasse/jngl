@@ -2,6 +2,16 @@
 
 Easy to use game library for C++ and Python
 
+## Linux
+
+On a Debian-based distribution:
+
+```
+sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev \
+libjpeg62-dev libpng12-dev libvorbis-dev libopenal-dev scons libglew1.5-dev libboost-dev g++ \
+libwebp-dev git
+```
+
 ## Windows
 
 ### Using MSYS2 / MinGW-w64

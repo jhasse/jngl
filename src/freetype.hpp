@@ -9,10 +9,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "texture.hpp"
 
 #include <ft2build.h>
-#include <freetype/freetype.h>
-#include <freetype/ftglyph.h>
-#include <freetype/ftoutln.h>
-#include <freetype/fttrigon.h>
+#include FT_FREETYPE_H
 
 #include <vector>
 #include <string>

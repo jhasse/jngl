@@ -13,6 +13,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ConvertUTF.h"
 #include "main.hpp"
 
+#include FT_GLYPH_H
 #include <functional>
 #include <boost/lexical_cast.hpp>
 #include <fstream>
