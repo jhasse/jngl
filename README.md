@@ -20,9 +20,9 @@ Set up [MSYS2](http://sourceforge.net/p/msys2/wiki/MSYS2%20installation/) and in
 in a mingw64 shell:
 
 ```
-pacman -S scons mingw-w64-x86_64-gcc mingw-w64-x86_64-boost
-pacman -S mingw-w64-x86_64-openal mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis
-pacman -S mingw-w64-x86_64-libwebp mingw-w64-x86_64-dlfcn mingw-w64-x86_64-glew
+pacman -S scons mingw-w64-x86_64-gcc mingw-w64-x86_64-boost mingw-w64-x86_64-openal \
+mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
+mingw-w64-x86_64-dlfcn mingw-w64-x86_64-glew
 ```
 
 ### Using Visual C++ 2013
@@ -54,9 +54,9 @@ scons installer=1
 scons installer=1 python=1
 ```
 
-Install JNGL to "/usr":
+Install JNGL to "/usr/local":
 ```
-./install.sh /usr
+./install.sh /usr/local
 ```
 
 Clean up:
