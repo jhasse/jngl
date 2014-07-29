@@ -52,8 +52,8 @@ VariantDir(buildDir, 'src', duplicate=0)
 if env['profile']:
 	env.Append(CCFLAGS = '-pg', _LIBFLAGS = ' -pg')
 if not env['verbose']:
-	env['CCCOMSTR'] = env['CXXCOMSTR'] = "compiling: $TARGET"
-	env['LINKCOMSTR'] = "linking: $TARGET"
+	env['CCCOMSTR'] = env['CXXCOMSTR'] = env['SHCXXCOMSTR'] = "compiling: $TARGET"
+	env['LINKCOMSTR'] = env['SHLINKCOMSTR'] = "linking: $TARGET"
 	env['ARCOMSTR'] = "archiving: $TARGET"
 
 source_files = [buildDir + 'ConvertUTF.c']
