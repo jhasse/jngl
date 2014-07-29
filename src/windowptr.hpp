@@ -9,8 +9,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <boost/noncopyable.hpp>
 
-namespace jngl
-{
+namespace jngl {
 	class WindowPointer : boost::noncopyable {
 	public:
 		WindowPointer();

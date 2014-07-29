@@ -114,9 +114,9 @@ if env['PLATFORM'] == 'posix': # Linux
 	if env['python']:
 		env = env.Clone()
 		env.ParseConfig("pkg-config --cflags --libs jngl.pc")
-		env.Append(CPPPATH="/usr/include/python3.3",
+		env.Append(CPPPATH="/usr/include/python3.4",
 		           LIBPATH=Split("src ./python"),
-		           LIBS=Split("python3.3m boost_python-py33"),
+		           LIBS=Split("python3.4m boost_python-py34"),
 		           CPPFLAGS="-std=c++11")
 		env.SharedLibrary(target="python/libjngl.so",
 		                  source="python/main.cpp")
