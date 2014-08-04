@@ -13,6 +13,7 @@ visualcpp/*.suo
 installer/*.nsi
 jngl.pc
 *.os
+*.so
 xcode/JNGL.xcodeproj/project.xcworkspace/xcuserdata/*
 *.sublime-workspace
 libjngl.a
