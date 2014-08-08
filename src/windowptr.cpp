@@ -10,34 +10,28 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl
 {
-	WindowPointer::WindowPointer() : ptr_(0)
-	{
+	WindowPointer::WindowPointer() : ptr_(0) {
 	}
 
-	WindowPointer::~WindowPointer()
-	{
+	WindowPointer::~WindowPointer() {
 		Delete();
 	}
 
-	Window* WindowPointer::operator->() const
-	{
+	Window* WindowPointer::operator->() const {
 		ThrowIfNull();
 		return ptr_;
 	}
 
-	WindowPointer::operator bool() const
-	{
+	WindowPointer::operator bool() const {
 		return ptr_ != 0;
 	}
 
-	void WindowPointer::Set(Window* ptr)
-	{
+	void WindowPointer::Set(Window* ptr) {
 		assert(ptr_ == 0);
 		ptr_ = ptr;
 	}
 
-	void WindowPointer::Delete()
-	{
+	void WindowPointer::Delete() {
 		delete ptr_;
 		ptr_ = 0;
 	}

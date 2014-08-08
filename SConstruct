@@ -52,8 +52,8 @@ VariantDir(buildDir, 'src', duplicate=0)
 if env['profile']:
 	env.Append(CCFLAGS = '-pg', _LIBFLAGS = ' -pg')
 if not env['verbose']:
-	env['CCCOMSTR'] = env['CXXCOMSTR'] = "compiling: $TARGET"
-	env['LINKCOMSTR'] = "linking: $TARGET"
+	env['CCCOMSTR'] = env['CXXCOMSTR'] = env['SHCXXCOMSTR'] = "compiling: $TARGET"
+	env['LINKCOMSTR'] = env['SHLINKCOMSTR'] = "linking: $TARGET"
 	env['ARCOMSTR'] = "archiving: $TARGET"
 
 source_files = [buildDir + 'ConvertUTF.c']
@@ -114,9 +114,9 @@ if env['PLATFORM'] == 'posix': # Linux
 	if env['python']:
 		env = env.Clone()
 		env.ParseConfig("pkg-config --cflags --libs jngl.pc")
-		env.Append(CPPPATH="/usr/include/python3.3",
+		env.Append(CPPPATH="/usr/include/python3.4",
 		           LIBPATH=Split("src ./python"),
-		           LIBS=Split("python3.3m boost_python-py33"),
+		           LIBS=Split("python3.4m boost_python-py34"),
 		           CPPFLAGS="-std=c++11")
 		env.SharedLibrary(target="python/libjngl.so",
 		                  source="python/main.cpp")
