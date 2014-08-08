@@ -38,14 +38,16 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="UserMacros">
+    <NuGetPackageImportStamp>6c35f8d2</NuGetPackageImportStamp>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>../..;../../boost-libs/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../../lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>../../lib;../../lib/msvc;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>../..;../../boost-libs/include;$(IncludePath)</IncludePath>
-    <LibraryPath>../../lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>../../lib;../../lib/msvc;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -55,7 +57,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libpng.lib;Xinput.lib;glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;msvc/vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;zlib.lib;libwebp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlib.lib;libpng15.lib;Xinput.lib;glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;msvc/vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libwebp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <Manifest>
@@ -73,7 +75,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>libpng.lib;Xinput.lib;glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;msvc/vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;zlib.lib;libwebp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlib.lib;libpng15.lib;Xinput.lib;glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;msvc/vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libwebp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>

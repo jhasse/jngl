@@ -32,8 +32,9 @@ Type:
 
 ```
 Install-Package boost -Project Library
-Install-Package boost -Project Python
+Install-Package boost_python -Project Python
 Install-Package libpng -Project Library
+Install-Package libpng -Project Test
 ```
 
 ## Build using scons
