@@ -28,8 +28,8 @@ File ..\lib\OpenAL32.lib
 File ..\lib\freetype.lib
 File ..\lib\libvorbis_static.lib
 File ..\lib\msvc\vorbisfile.lib
-File ..\lib\libpng.lib
-File ..\lib\zlib.lib
+File ..\lib\msvc\libpng15.lib
+File ..\lib\msvc\zlib.lib
 File ..\lib\jpeg.lib
 File ..\lib\libwebp.lib
 SetOutPath $INSTDIR\bin

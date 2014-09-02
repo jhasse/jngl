@@ -7,13 +7,7 @@ Name "JNGL for MinGW"
 
 OutFile "JNGL @VERSION@ (MinGW).exe"
 
-InstallDir "C:\MinGW"
-
-Function .onInit
-IfFileExists "C:\MinGW" end
-StrCpy $INSTDIR "$PROGRAMFILES\CodeBlocks\MinGW"
-end:
-FunctionEnd
+InstallDir "C:\msys64\mingw32"
 
 Page directory
 Page instfiles
@@ -26,19 +20,8 @@ Section ""
 !insertmacro Header
 SetOutPath $INSTDIR\lib
 File ..\libjngl.a
-File ..\lib\libfreetype.a
-File ..\lib\libpng.a
-File ..\lib\libz.a
-File ..\lib\libjpeg.a
-File ..\lib\libdl.a
-File ..\lib\libglew32.dll.a
-File ..\lib\libwebp.a
-File ..\lib\Xinput.lib
+File ..\lib\win\x86\Xinput.lib
 SetOutPath $INSTDIR\bin
-File ..\vorbis.dll
-File ..\vorbisfile.dll
-File ..\ogg.dll
-File ..\glew32.dll
 File ..\xinput1_3.dll
 
 SectionEnd
