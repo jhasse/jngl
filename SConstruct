@@ -155,7 +155,7 @@ if env['installer']:
 	import os
 	if env['msvc']:
 		lib = None
-	t = Command('JNGL ' + version + '.exe', lib, '"' + os.path.expandvars("%programfiles%") + '\NSIS\makensis.exe " ' + nsiFile)
+	t = Command('JNGL ' + version + '.exe', lib, '/c/Program\ Files\ \(x86\)/NSIS/Bin/makensis ' + nsiFile)
 	if env['python']:
 		Depends(t, ['python/jngl.dll'])
 	Clean(t, 'installer/JNGL ' + version + ' (' + name + ').exe')
