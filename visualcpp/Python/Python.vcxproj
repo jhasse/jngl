@@ -14,6 +14,7 @@
     <ProjectGuid>{2A006EE9-E237-4213-B0F3-526C34F4CAB0}</ProjectGuid>
     <RootNamespace>Python</RootNamespace>
     <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and $(VisualStudioVersion) == ''">$(VCTargetsPath11)</VCTargetsPath>
+    <ProjectName>Python</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -39,7 +40,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>660eee4b</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>31081302</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>C:\Python34\include;$(IncludePath)</IncludePath>
@@ -91,11 +92,13 @@
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\boost.1.55.0.16\build\native\boost.targets" Condition="Exists('..\packages\boost.1.55.0.16\build\native\boost.targets')" />
     <Import Project="..\packages\boost_python.1.55.0.16\build\native\boost_python.targets" Condition="Exists('..\packages\boost_python.1.55.0.16\build\native\boost_python.targets')" />
+    <Import Project="..\packages\boost.1.55.0.10\build\native\boost.targets" Condition="Exists('..\packages\boost.1.55.0.10\build\native\boost.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\boost_python.1.55.0.16\build\native\boost_python.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_python.1.55.0.16\build\native\boost_python.targets'))" />
+    <Error Condition="!Exists('..\packages\boost.1.55.0.10\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.55.0.10\build\native\boost.targets'))" />
   </Target>
 </Project>
