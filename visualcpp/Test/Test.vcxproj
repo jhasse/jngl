@@ -58,7 +58,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>zlib.lib;libpng15.lib;Xinput.lib;glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;msvc/vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libwebp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlib.lib;libpng15.lib;Xinput.lib;glew32s.lib;libvorbis_static.lib;alut.lib;libogg_static.lib;OpenAL32.lib;msvc/vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libwebp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <Manifest>
@@ -76,7 +76,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>zlib.lib;libpng15.lib;Xinput.lib;glew32s.lib;libvorbis_static.lib;jpeg.lib;alut.lib;libogg_static.lib;OpenAL32.lib;msvc/vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libwebp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlib.lib;libpng15.lib;Xinput.lib;glew32s.lib;libvorbis_static.lib;alut.lib;libogg_static.lib;OpenAL32.lib;msvc/vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;libwebp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>

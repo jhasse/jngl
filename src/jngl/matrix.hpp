@@ -7,6 +7,10 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "dll.hpp"
 
+#ifndef _MSC_VER
+#pragma GCC visibility push(default)
+#endif
+
 namespace jngl {
 	void JNGLDLL_API rotate(double degree);
 

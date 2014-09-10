@@ -13,5 +13,4 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #endif
 #else
 #define JNGLDLL_API
-#pragma GCC visibility push(default)
 #endif

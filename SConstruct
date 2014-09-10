@@ -69,7 +69,7 @@ if env['PLATFORM'] in ['win32', 'msys'] and not env['msvc']: # Windows
 		jnglLibs += Split("openal32 ogg")
 	else:
 		env.Append(CPPDEFINES='WEAK_LINKING_OPENAL')
-	env.Append(CPPPATH=["./include", "./boost-libs/include"])
+	env.Append(CPPPATH=["./include", "./boost-libs/include", '/mingw64/include/freetype2'])
 	lib = env.Library(target="jngl",
 	                  source=source_files +
 	                         env.Object(Glob(buildDir + 'win32/*.cpp'),
