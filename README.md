@@ -27,15 +27,7 @@ mingw-w64-x86_64-dlfcn mingw-w64-x86_64-glew
 
 ### Using Visual C++ 2013
 
-Open visualcpp/JNGL.sln and choose 'TOOLS' -> NuGet Package Manager -> Package Manager Console.
-Type:
-
-```
-Install-Package boost -Project Library
-Install-Package boost_python -Project Python
-Install-Package libpng -Project Library
-Install-Package libpng -Project Test
-```
+Open visualcpp/JNGL.sln and press Ctrl + F5 to build JNGL and run the example application.
 
 ## Build using scons
 
