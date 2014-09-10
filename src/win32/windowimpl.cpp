@@ -4,6 +4,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #include "../window.hpp"
+#include "../jngl/window.hpp"
 #include "../jngl/debug.hpp"
 #include "../finally.hpp"
 #include "../opengl.hpp"

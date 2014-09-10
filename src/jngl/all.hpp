@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -21,67 +21,5 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "matrix.hpp"
 #include "sound.hpp"
 #include "color.hpp"
-
-#include <string>
-#include <vector>
-#include <stdexcept>
-
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
-namespace jngl {
-	bool running();
-
-	void updateInput();
-
-	void swapBuffers();
-
-	void quit();
-
-	void cancelQuit();
-
-	void drawRect(double xposition, double yposition, double width, double height);
-
-	double getTime();
-
-	void setTitle(const std::string& title);
-
-	void setBackgroundColor(unsigned char red,
-	                        unsigned char green,
-	                        unsigned char blue);
-
-	void sleep(int milliseconds);
-
-	double getFPS();
-
-	void errorMessage(const std::string& text);
-
-	bool getFullscreen();
-
-	void readPixel(int x, int y, unsigned char& red, unsigned char& green, unsigned char& blue);
-
-	void setAntiAliasing(bool enabled);
-
-	bool getAntiAliasing();
-
-	void setVerticalSync(bool enabled);
-
-	bool getVerticalSync();
-
-	void setIcon(const std::string& filename);
-
-	void mainLoop();
-
-	void setPrefix(const std::string& path);
-
-	std::string getPrefix();
-
-	void setConfigPath(const std::string& path);
-
-	std::string getConfigPath();
-
-	std::vector<std::string> getArgs();
-}
-#ifndef _MSC_VER
-#pragma GCC visibility pop
-#endif
+#include "time.hpp"
+#include "other.hpp"

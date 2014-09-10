@@ -1,27 +1,26 @@
 /*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #pragma once
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
+#include "dll.hpp"
+
 namespace jngl {
-	float getVolume();
+	float JNGLDLL_API getVolume();
 
-	void play(const std::string& filename);
+	void JNGLDLL_API play(const std::string& filename);
 
-	void stop(const std::string& filename);
+	void JNGLDLL_API stop(const std::string& filename);
 
-	bool isPlaying(const std::string& filename);
+	bool JNGLDLL_API isPlaying(const std::string& filename);
 
-	bool isOpenALInstalled();
+	bool JNGLDLL_API isOpenALInstalled();
 
-	void setPlaybackSpeed(float speed);
+	void JNGLDLL_API setPlaybackSpeed(float speed);
 
-	void setVolume(float volume);
+	void JNGLDLL_API setVolume(float volume);
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop

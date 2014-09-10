@@ -1,5 +1,5 @@
 /*
-Copyright 2012-2013 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -7,9 +7,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <string>
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
+#include "dll.hpp"
+
 namespace jngl {
 	namespace key {
 		enum KeyType {
@@ -69,7 +68,7 @@ namespace jngl {
 	}
 
 	/// Display onscreen keyboard for touch devices
-	void setKeyboardVisible(bool);
+	void JNGLDLL_API setKeyboardVisible(bool);
 
 	enum KeyboardType {
 		Default,
@@ -77,39 +76,39 @@ namespace jngl {
 	};
 
 	/// Type of the onscreen keyboard
-	void setKeyboardType(KeyboardType);
+	void JNGLDLL_API setKeyboardType(KeyboardType);
 
-	KeyboardType getKeyboardType();
+	KeyboardType JNGLDLL_API getKeyboardType();
 
-	void setKeyPressed(const std::string& key, bool);
+	void JNGLDLL_API setKeyPressed(const std::string& key, bool);
 
-	void setKeyPressed(key::KeyType key, bool);
+	void JNGLDLL_API setKeyPressed(key::KeyType key, bool);
 
-	bool keyDown(key::KeyType key);
+	bool JNGLDLL_API keyDown(key::KeyType key);
 
-	bool keyDown(char key);
+	bool JNGLDLL_API keyDown(char key);
 
-	bool keyDown(const std::string& key);
+	bool JNGLDLL_API keyDown(const std::string& key);
 
-	bool keyPressed(key::KeyType key);
+	bool JNGLDLL_API keyPressed(key::KeyType key);
 
-	bool keyPressed(char key);
+	bool JNGLDLL_API keyPressed(char key);
 
-	bool keyPressed(const std::string& key);
+	bool JNGLDLL_API keyPressed(const std::string& key);
 
-	void setRelativeMouseMode(bool relative);
+	void JNGLDLL_API setRelativeMouseMode(bool relative);
 
-	bool getRelativeMouseMode();
+	bool JNGLDLL_API getRelativeMouseMode();
 
-	void setMouseVisible(bool visible);
+	void JNGLDLL_API setMouseVisible(bool visible);
 
-	bool isMouseVisible();
+	bool JNGLDLL_API isMouseVisible();
 
-	bool isMultitouch();
+	bool JNGLDLL_API isMultitouch();
 
-	int getMouseX();
+	int JNGLDLL_API getMouseX();
 
-	int getMouseY();
+	int JNGLDLL_API getMouseY();
 
 	namespace mouse {
 		enum Button {
@@ -117,17 +116,17 @@ namespace jngl {
 		};
 	}
 
-	double getMouseWheel();
+	double JNGLDLL_API getMouseWheel();
 
-	bool mouseDown(mouse::Button button = mouse::Left);
+	bool JNGLDLL_API mouseDown(mouse::Button button = mouse::Left);
 
-	void setMouseDown(mouse::Button button, bool);
+	void JNGLDLL_API setMouseDown(mouse::Button button, bool);
 
-	bool mousePressed(mouse::Button button = mouse::Left);
+	bool JNGLDLL_API mousePressed(mouse::Button button = mouse::Left);
 
-	void setMousePressed(jngl::mouse::Button, bool);
+	void JNGLDLL_API setMousePressed(jngl::mouse::Button, bool);
 
-	void setMouse(int xposition, int yposition);
+	void JNGLDLL_API setMouse(int xposition, int yposition);
 
 	namespace controller {
 		enum Button {
@@ -156,16 +155,16 @@ namespace jngl {
 	}
 
 	/// Check if the Controller is connected. Don't call this function every frame for performance reasons.
-	bool isControllerConnected(int number);
+	bool JNGLDLL_API isControllerConnected(int number);
 
 	/// Returns a value between 0.0f (not pressed) and 1.0f (pressed).
-	float getControllerState(int number, controller::Button);
+	float JNGLDLL_API getControllerState(int number, controller::Button);
 
 	/// Returns true (one time) when the button is pressed.
-	bool getControllerPressed(int number, controller::Button);
+	bool JNGLDLL_API getControllerPressed(int number, controller::Button);
 
 	/// Note that the right motor is the high-frequency motor, the left motor is the low-frequency motor.
-	void setControllerVibration(int number, unsigned short leftMotor, unsigned short rightMotor);
+	void JNGLDLL_API setControllerVibration(int number, unsigned short leftMotor, unsigned short rightMotor);
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop

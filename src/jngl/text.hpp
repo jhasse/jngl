@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -10,9 +10,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <string>
 #include <memory>
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
+#include "dll.hpp"
+
 namespace jngl {
 	enum Alignment {
 		LEFT,
@@ -25,12 +24,12 @@ namespace jngl {
 
 	class Text : public Drawable {
 	public:
-		Text(const std::string& text = "");
-		void setText(const std::string&);
-		void setFont(std::shared_ptr<Font>);
-		void setAlign(Alignment);
-		void step();
-		void draw() const;
+		JNGLDLL_API Text(const std::string& text = "");
+		void JNGLDLL_API setText(const std::string&);
+		void JNGLDLL_API setFont(std::shared_ptr<Font>);
+		void JNGLDLL_API setAlign(Alignment);
+		void JNGLDLL_API step();
+		void JNGLDLL_API draw() const;
 	private:
 		std::string text;
 		std::shared_ptr<FontImpl> font;

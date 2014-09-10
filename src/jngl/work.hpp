@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -7,11 +7,10 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <memory>
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
+#include "dll.hpp"
+
 namespace jngl {
-	class Work {
+	class JNGLDLL_API Work {
 	public:
 		virtual void step() = 0;
 		virtual void draw() const = 0;
@@ -20,13 +19,13 @@ namespace jngl {
 		virtual ~Work();
 	};
 
-	std::shared_ptr<Work> getWork();
+	std::shared_ptr<Work> JNGLDLL_API getWork();
 
-	void setWork(std::shared_ptr<Work> work);
+	void JNGLDLL_API setWork(std::shared_ptr<Work> work);
 
-	void setWork(Work*);
+	void JNGLDLL_API setWork(Work*);
 
-	void resetFrameLimiter();
+	void JNGLDLL_API resetFrameLimiter();
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop

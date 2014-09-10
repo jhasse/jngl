@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -7,17 +7,16 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "types.hpp"
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
+#include "dll.hpp"
+
 namespace jngl {
-	Float getScaleFactor();
+	Float JNGLDLL_API getScaleFactor();
 
-	void setScaleFactor(Float);
+	void JNGLDLL_API setScaleFactor(Float);
 
-	int getScreenWidth();
+	int JNGLDLL_API getScreenWidth();
 
-	int getScreenHeight();
+	int JNGLDLL_API getScreenHeight();
 
 	enum DeviceOrientation {
 		Portrait,
@@ -26,9 +25,9 @@ namespace jngl {
 		LandscapeRight
 	};
 
-	void setDeviceOrientationSupported(DeviceOrientation, bool enabled);
+	void JNGLDLL_API setDeviceOrientationSupported(DeviceOrientation, bool enabled);
 
-	bool getDeviceOrientationSupported(DeviceOrientation);
+	bool JNGLDLL_API getDeviceOrientationSupported(DeviceOrientation);
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop

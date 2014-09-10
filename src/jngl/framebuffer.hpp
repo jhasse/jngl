@@ -1,17 +1,16 @@
 /*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #pragma once
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
+#include "dll.hpp"
+
 namespace jngl {
 	class FrameBufferImpl;
 
-	class FrameBuffer {
+	class JNGLDLL_API FrameBuffer {
 	public:
 		FrameBuffer(int width, int height);
 		~FrameBuffer();

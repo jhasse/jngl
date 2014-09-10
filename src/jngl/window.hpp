@@ -7,24 +7,23 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <string>
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
+#include "dll.hpp"
+
 namespace jngl {
-	void showWindow(const std::string& title,
+	void JNGLDLL_API showWindow(const std::string& title,
 	                int width,
 	                int heigt,
 	                bool fullscreen = false);
 
-	void hideWindow();
+	void JNGLDLL_API hideWindow();
 
-	int getWindowWidth();
+	int JNGLDLL_API getWindowWidth();
 
-	int getWindowHeight();
+	int JNGLDLL_API getWindowHeight();
 
-	int getDesktopWidth();
+	int JNGLDLL_API getDesktopWidth();
 
-	int getDesktopHeight();
+	int JNGLDLL_API getDesktopHeight();
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop

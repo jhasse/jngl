@@ -7,11 +7,10 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <memory>
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
+#include "dll.hpp"
+
 namespace jngl {
-	class Job {
+	class JNGLDLL_API Job {
 	public:
 		virtual ~Job();
 		virtual void step() = 0;

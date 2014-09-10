@@ -183,6 +183,9 @@
     <ClInclude Include="..\src\jngl\color.hpp">
       <Filter>Header Files\jngl</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\jngl\time.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

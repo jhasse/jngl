@@ -12,20 +12,19 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <string>
 #include <vector>
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
+#include "dll.hpp"
+
 namespace jngl {
 	class Texture;
 
 	class Sprite : public Drawable {
 	public:
-		Sprite(const std::string& filename, bool halfLoad = false);
-		void step();
-		void draw() const;
-		void drawScaled(float factor) const;
-		void drawScaled(float xfactor, float yfactor) const;
-		void drawClipped(float xstart, float xend, float ystart, float yend) const;
+		JNGLDLL_API Sprite(const std::string& filename, bool halfLoad = false);
+		void JNGLDLL_API step();
+		void JNGLDLL_API draw() const;
+		void JNGLDLL_API drawScaled(float factor) const;
+		void JNGLDLL_API drawScaled(float xfactor, float yfactor) const;
+		void JNGLDLL_API drawClipped(float xstart, float xend, float ystart, float yend) const;
 	private:
 		static void CleanUpRowPointers(std::vector<unsigned char*>& buf);
 		void LoadTexture(const std::string& filename, int channels, bool halfLoad, unsigned int format,
@@ -52,7 +51,7 @@ namespace jngl {
 		std::shared_ptr<Texture> texture;
 	};
 
-	void draw(const std::string& filename,
+	void JNGLDLL_API draw(const std::string& filename,
 	          double xposition,
 	          double yposition);
 
@@ -61,51 +60,37 @@ namespace jngl {
 		draw(filename, pos.x, pos.y);
 	}
 
-	void load(const std::string& filename);
+	void JNGLDLL_API load(const std::string& filename);
 
-	void unload(const std::string& filename);
+	void JNGLDLL_API unload(const std::string& filename);
 
-	void unloadAll();
+	void JNGLDLL_API unloadAll();
 
-	void drawScaled(const std::string& filename,
-	                double xposition,
-	                double yposition,
-	                float xfactor,
-	                float yfactor);
+	void JNGLDLL_API drawScaled(const std::string& filename, double xposition, double yposition,
+	                            float xfactor, float yfactor);
 
-	void drawScaled(const std::string& filename,
-	                double xposition,
-	                double yposition,
-	                float factor);
+	void JNGLDLL_API drawScaled(const std::string& filename, double xposition, double yposition,
+	                            float factor);
 
-	void drawClipped(const std::string& filename,
-					 double xposition,
-					 double yposition,
-					 float xstart,
-					 float xend,
-					 float ystart,
-					 float yend);
+	void JNGLDLL_API drawClipped(const std::string& filename, double xposition, double yposition,
+	                             float xstart, float xend, float ystart, float yend);
 
-	void setSpriteColor(unsigned char red,
-	                    unsigned char green,
-	                    unsigned char blue,
-	                    unsigned char alpha);
+	void JNGLDLL_API setSpriteColor(unsigned char red, unsigned char green, unsigned char blue,
+	                                unsigned char alpha);
 
-	void setSpriteColor(unsigned char red,
-	                    unsigned char green,
-	                    unsigned char blue);
+	void JNGLDLL_API setSpriteColor(unsigned char red, unsigned char green, unsigned char blue);
 
-	void setSpriteAlpha(unsigned char alpha);
+	void JNGLDLL_API setSpriteAlpha(unsigned char alpha);
 
-	void pushSpriteAlpha(unsigned char alpha = 255);
+	void JNGLDLL_API pushSpriteAlpha(unsigned char alpha = 255);
 
-	void popSpriteAlpha();
+	void JNGLDLL_API popSpriteAlpha();
 
-	int getWidth(const std::string& filename);
+	int JNGLDLL_API getWidth(const std::string& filename);
 
-	int getHeight(const std::string& filename);
+	int JNGLDLL_API getHeight(const std::string& filename);
 
-	void setMasking(bool enabled);
+	void JNGLDLL_API setMasking(bool enabled);
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop
