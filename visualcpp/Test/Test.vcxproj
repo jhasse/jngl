@@ -14,7 +14,7 @@
     <ProjectGuid>{70970391-A2D5-4B35-88C3-DB340FB8EF05}</ProjectGuid>
     <RootNamespace>Test</RootNamespace>
     <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and $(VisualStudioVersion) == ''">$(VCTargetsPath11)</VCTargetsPath>
-    <ProjectName>_Test</ProjectName>
+    <ProjectName>Test</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

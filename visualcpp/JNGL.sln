@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Library", "jngl.vcxproj", "{C8C7E794-05B1-4A00-A060-2A4236C7D1E3}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{70970391-A2D5-4B35-88C3-DB340FB8EF05}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C8C7E794-05B1-4A00-A060-2A4236C7D1E3} = {C8C7E794-05B1-4A00-A060-2A4236C7D1E3}
-	EndProjectSection
+    ProjectSection(ProjectDependencies) = postProject
+        {C8C7E794-05B1-4A00-A060-2A4236C7D1E3} = {C8C7E794-05B1-4A00-A060-2A4236C7D1E3}
+    EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Library", "jngl.vcxproj", "{C8C7E794-05B1-4A00-A060-2A4236C7D1E3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Python", "Python\Python.vcxproj", "{2A006EE9-E237-4213-B0F3-526C34F4CAB0}"
 EndProject
