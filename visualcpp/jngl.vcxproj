@@ -103,16 +103,16 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>54d0b497</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>988ebf3a</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>../include/msvc;$(IncludePath)</IncludePath>
-    <LibraryPath>../lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>../lib/msvc;$(LibraryPath)</LibraryPath>
     <TargetName>jngl</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>../include/msvc;$(IncludePath)</IncludePath>
-    <LibraryPath>../lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>../lib/msvc;$(LibraryPath)</LibraryPath>
     <TargetName>jngl</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -126,7 +126,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>jpeg.lib;Xinput.lib;libwebp.lib;glew32s.lib;libpng15.lib;libvorbis_static.lib;libogg_static.lib;alut.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libpng15.lib;Xinput.lib;libwebp.lib;glew32s.lib;libvorbis_static.lib;alut.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;zlib.lib;packages\libogg.1.3.0.1\build\native\lib\v110\Win32\Debug\dynamic\libogg.lib;packages\libjpeg.9.0.1.3\build\native\lib\v110\Win32\Debug\dynamic\cdecl\jpeg.lib;packages\freetype.2.4.2.1\build\native\lib\Win32\v110\dynamic\Debug\freetype246_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />
@@ -145,7 +145,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>jpeg.lib;Xinput.lib;libwebp.lib;glew32s.lib;libpng15.lib;libvorbis_static.lib;libogg_static.lib;alut.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;freetype.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libogg.lib;jpeg.lib;libpng15.lib;freetype246_D.lib;Xinput.lib;libwebp.lib;glew32s.lib;libvorbis_static.lib;alut.lib;OpenAL32.lib;vorbisfile.lib;opengl32.lib;glu32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
   </ItemDefinitionGroup>
@@ -160,6 +160,8 @@
     <Import Project="packages\freetype.2.4.2.1\build\native\freetype.targets" Condition="Exists('packages\freetype.2.4.2.1\build\native\freetype.targets')" />
     <Import Project="packages\libjpeg.redist.9.0.1.3\build\native\libjpeg.redist.targets" Condition="Exists('packages\libjpeg.redist.9.0.1.3\build\native\libjpeg.redist.targets')" />
     <Import Project="packages\libjpeg.9.0.1.3\build\native\libjpeg.targets" Condition="Exists('packages\libjpeg.9.0.1.3\build\native\libjpeg.targets')" />
+    <Import Project="packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets" Condition="Exists('packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets')" />
+    <Import Project="packages\libogg.1.3.0.1\build\native\libogg.targets" Condition="Exists('packages\libogg.1.3.0.1\build\native\libogg.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -169,5 +171,7 @@
     <Error Condition="!Exists('packages\freetype.2.4.2.1\build\native\freetype.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\freetype.2.4.2.1\build\native\freetype.targets'))" />
     <Error Condition="!Exists('packages\libjpeg.redist.9.0.1.3\build\native\libjpeg.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\libjpeg.redist.9.0.1.3\build\native\libjpeg.redist.targets'))" />
     <Error Condition="!Exists('packages\libjpeg.9.0.1.3\build\native\libjpeg.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\libjpeg.9.0.1.3\build\native\libjpeg.targets'))" />
+    <Error Condition="!Exists('packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\libogg.redist.1.3.0.1\build\native\libogg.redist.targets'))" />
+    <Error Condition="!Exists('packages\libogg.1.3.0.1\build\native\libogg.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\libogg.1.3.0.1\build\native\libogg.targets'))" />
   </Target>
 </Project>
