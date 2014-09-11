@@ -16,6 +16,9 @@
     <Filter Include="Header Files\jngl">
       <UniqueIdentifier>{36d3ce7e-4178-416e-808b-fde31cda46c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\win32\msvc">
+      <UniqueIdentifier>{d502c015-3f00-4656-89b2-579d5d02313b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\win32\message.cpp">
@@ -94,6 +97,9 @@
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
     <ClCompile Include="..\src\win32\inputimpl.cpp" />
+    <ClCompile Include="..\src\win32\msvc\dlfcn.c">
+      <Filter>Source Files\win32\msvc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ConvertUTF.h">
