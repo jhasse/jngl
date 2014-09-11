@@ -127,7 +127,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libpng15.lib;Xinput.lib;libwebp.lib;glew32s.lib;libvorbis_static.lib;alut.lib;vorbisfile.lib;opengl32.lib;glu32.lib;zlib.lib;packages\libogg.1.3.0.1\build\native\lib\v110\Win32\Debug\dynamic\libogg.lib;packages\libjpeg.9.0.1.3\build\native\lib\v110\Win32\Debug\dynamic\cdecl\jpeg.lib;packages\freetype.2.4.2.1\build\native\lib\Win32\v110\dynamic\Debug\freetype246_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libpng15.lib;Xinput.lib;libwebp.lib;glew32s.lib;libvorbis_static.lib;alut.lib;vorbisfile.lib;opengl32.lib;glu32.lib;zlib.lib;packages\libogg.1.3.0.1\build\native\lib\v110\Win32\Debug\static\libogg.lib;packages\libjpeg.9.0.1.3\build\native\lib\v110\Win32\Debug\static\cdecl\jpeg.lib;packages\freetype.2.4.2.1\build\native\lib\Win32\v110\static\Debug\freetype246_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />

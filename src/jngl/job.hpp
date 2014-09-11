@@ -21,7 +21,7 @@ namespace jngl {
 		virtual void draw() const = 0;
 	};
 
-	void addJob(std::shared_ptr<Job> job);
+	void JNGLDLL_API addJob(std::shared_ptr<Job> job);
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop
