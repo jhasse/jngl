@@ -1,5 +1,5 @@
 /*
-Copyright 2009-2013 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2009-2014 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -19,7 +19,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 	#ifdef ANDROID
 		#include <EGL/egl.h>
 		#include <GLES/gl.h>
-		#define GL_GLEXT_PROTOTYPES 
+		#define GL_GLEXT_PROTOTYPES
 		#include <GLES/glext.h>
 		#include "android/glew.h"
 	#else
@@ -73,9 +73,6 @@ namespace opengl
 #else
 	typedef GLfloat CoordType;
 #endif
-
-	// This function gets the first power of 2 >= the int that we pass it.
-	int NextPowerOf2(int);
 
 	void BindArrayBuffer(GLuint);
 }

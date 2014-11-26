@@ -1,5 +1,5 @@
 /*
-Copyright 2010-2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2010-2014 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -15,14 +15,12 @@ namespace jngl {
 
 	bool Texture::useVBO_ = true;
 
-	Texture::Texture(const int imgWidth, const int imgHeight, GLubyte** rowPointers,
-	                 GLenum format, int channels, GLubyte* data) : imgWidth(imgWidth), imgHeight(imgHeight) {
+	Texture::Texture(const int width, const int height, GLubyte** rowPointers,
+	                 GLenum format, int channels, GLubyte* data) : width(width), height(height) {
 		if (useVBO_ && (!GLEW_ARB_vertex_buffer_object || !GLEW_VERSION_1_5)) {
 			jngl::debug("VBOs not supported, using Vertex Arrays\n");
 			useVBO_ = false;
 		}
-		int width = opengl::NextPowerOf2(imgWidth);
-		int height = opengl::NextPowerOf2(imgHeight);
 		glGenTextures(1, &texture_);
 		glBindTexture(GL_TEXTURE_2D, texture_);
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, NULL);
@@ -30,11 +28,9 @@ namespace jngl {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // preventing wrapping artifacts
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		const GLfloat x = static_cast<GLfloat>(imgWidth) / static_cast<GLfloat>(width);
-		const GLfloat y = static_cast<GLfloat>(imgHeight)  / static_cast<GLfloat>(height);
 		GLfloat vertexes[] = {
-			0, 0, 0, y, x, y, x, 0, // texture coordinates
-			0, 0, 0, GLfloat(imgHeight), GLfloat(imgWidth), GLfloat(imgHeight), GLfloat(imgWidth), 0
+			0, 0, 0, 1, 1, 1, 1, 0, // texture coordinates
+			0, 0, 0, GLfloat(height), GLfloat(width), GLfloat(height), GLfloat(width), 0
 		};
 		if (useVBO_) {
 			glGenBuffers(1, &vertexBuffer_);
@@ -45,35 +41,35 @@ namespace jngl {
 		vertexes_.assign(&vertexes[8], &vertexes[16]);
 
 		if (rowPointers) {
-			for (int i = 0; i < imgHeight; ++i) {
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, imgWidth, 1, format, GL_UNSIGNED_BYTE, rowPointers[i]);
+			for (int i = 0; i < height; ++i) {
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, width, 1, format, GL_UNSIGNED_BYTE, rowPointers[i]);
 			}
 
 			// Add one addional pixel line to the edges
-			if (imgWidth < width) {
-				for (int i = 0; i < imgHeight; ++i) {
-					glTexSubImage2D(GL_TEXTURE_2D, 0, imgWidth, i, 1, 1, format, GL_UNSIGNED_BYTE, &rowPointers[i][(imgWidth-1)*channels]);
+			if (width < width) {
+				for (int i = 0; i < height; ++i) {
+					glTexSubImage2D(GL_TEXTURE_2D, 0, width, i, 1, 1, format, GL_UNSIGNED_BYTE, &rowPointers[i][(width-1)*channels]);
 				}
 			}
-			if (imgHeight < height) {
-				std::vector<char> lastLine(rowPointers[imgHeight-1], rowPointers[imgHeight-1]+imgWidth*channels);
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, imgHeight, imgWidth, 1, format, GL_UNSIGNED_BYTE, &lastLine[0]);
+			if (height < height) {
+				std::vector<char> lastLine(rowPointers[height-1], rowPointers[height-1]+width*channels);
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, height, width, 1, format, GL_UNSIGNED_BYTE, &lastLine[0]);
 			}
 		}
 		if (data) {
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, imgWidth, imgHeight, format, GL_UNSIGNED_BYTE, data);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
 
 			// Add one addional pixel line to the edges
-			if (imgWidth < width) {
-				for (int i = 0; i < imgHeight; ++i) {
-					glTexSubImage2D(GL_TEXTURE_2D, 0, imgWidth, i, 1, 1, format, GL_UNSIGNED_BYTE,
-					                data + ((i + 1) * imgWidth  - 1) * channels);
+			if (width < width) {
+				for (int i = 0; i < height; ++i) {
+					glTexSubImage2D(GL_TEXTURE_2D, 0, width, i, 1, 1, format, GL_UNSIGNED_BYTE,
+									data + ((i + 1) * width  - 1) * channels);
 				}
 			}
-			if (imgHeight < height) {
-				std::vector<char> lastLine(data + (imgHeight-1) * imgWidth * channels,
-				                           data +  imgHeight    * imgWidth * channels);
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, imgHeight, imgWidth, 1, format, GL_UNSIGNED_BYTE, &lastLine[0]);
+			if (height < height) {
+				std::vector<char> lastLine(data + (height-1) * width * channels,
+										   data +  height    * width * channels);
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, height, width, 1, format, GL_UNSIGNED_BYTE, &lastLine[0]);
 			}
 		}
 	}
@@ -136,10 +132,10 @@ namespace jngl {
 	}
 
 	int Texture::getWidth() const {
-		return imgWidth;
+		return width;
 	}
 
 	int Texture::getHeight() const {
-		return imgHeight;
+		return height;
 	}
 }

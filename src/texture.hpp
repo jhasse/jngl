@@ -33,8 +33,8 @@ namespace jngl {
 		GLuint vertexBuffer_;
 		std::vector<opengl::CoordType> texCoords_;
 		std::vector<GLfloat> vertexes_;
-		int imgWidth;
-		int imgHeight;
+		int width;
+		int height;
 	};
 
 	extern std::unordered_map<std::string, std::shared_ptr<Texture>> textures;

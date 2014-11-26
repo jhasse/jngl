@@ -37,8 +37,8 @@ namespace jngl {
 		FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
 		FT_Bitmap& bitmap = bitmap_glyph->bitmap;
 
-		int width = opengl::NextPowerOf2(bitmap.width);
-		int height = opengl::NextPowerOf2(bitmap.rows);
+		int width = bitmap.width;
+		int height = bitmap.rows;
 
 		std::vector<GLubyte*> data(height);
 
@@ -49,18 +49,16 @@ namespace jngl {
 				data[y][x * 4 + 1] = 255;
 				data[y][x * 4 + 2] = 255;
 				unsigned char alpha = 0;
-				if (x < bitmap.width && y < bitmap.rows) { // Are we in the padding zone? (see next_p2)
-					if (bitmap.pixel_mode == FT_PIXEL_MODE_MONO) {
-						if (bitmap.buffer[y * bitmap.pitch + x / 8] & (0x80 >> (x % 8))) {
-							alpha = 255;
-						} else {
-							alpha = 0;
-						}
-					} else if(bitmap.pixel_mode == FT_PIXEL_MODE_GRAY) {
-						alpha = bitmap.buffer[x + bitmap.width * y];
+				if (bitmap.pixel_mode == FT_PIXEL_MODE_MONO) {
+					if (bitmap.buffer[y * bitmap.pitch + x / 8] & (0x80 >> (x % 8))) {
+						alpha = 255;
 					} else {
-						throw std::runtime_error("Unsupported pixel mode\n");
+						alpha = 0;
 					}
+				} else if(bitmap.pixel_mode == FT_PIXEL_MODE_GRAY) {
+					alpha = bitmap.buffer[x + width * y];
+				} else {
+					throw std::runtime_error("Unsupported pixel mode\n");
 				}
 				data[y][x*4 + 3] = alpha;
 			}
