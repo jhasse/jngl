@@ -44,33 +44,9 @@ namespace jngl {
 			for (int i = 0; i < height; ++i) {
 				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, width, 1, format, GL_UNSIGNED_BYTE, rowPointers[i]);
 			}
-
-			// Add one addional pixel line to the edges
-			if (width < width) {
-				for (int i = 0; i < height; ++i) {
-					glTexSubImage2D(GL_TEXTURE_2D, 0, width, i, 1, 1, format, GL_UNSIGNED_BYTE, &rowPointers[i][(width-1)*channels]);
-				}
-			}
-			if (height < height) {
-				std::vector<char> lastLine(rowPointers[height-1], rowPointers[height-1]+width*channels);
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, height, width, 1, format, GL_UNSIGNED_BYTE, &lastLine[0]);
-			}
 		}
 		if (data) {
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
-
-			// Add one addional pixel line to the edges
-			if (width < width) {
-				for (int i = 0; i < height; ++i) {
-					glTexSubImage2D(GL_TEXTURE_2D, 0, width, i, 1, 1, format, GL_UNSIGNED_BYTE,
-									data + ((i + 1) * width  - 1) * channels);
-				}
-			}
-			if (height < height) {
-				std::vector<char> lastLine(data + (height-1) * width * channels,
-										   data +  height    * width * channels);
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, height, width, 1, format, GL_UNSIGNED_BYTE, &lastLine[0]);
-			}
 		}
 	}
 
