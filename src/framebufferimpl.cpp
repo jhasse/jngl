@@ -56,7 +56,8 @@ namespace jngl {
 		glPushMatrix();
 		glLoadIdentity();
 		#define f2x(x) ((int)((x) * 65536))
-		glOrthox(f2x(-pWindow->getWidth()/2), f2x(pWindow->getWidth()/2), f2x(pWindow->getHeight()/2), f2x(-pWindow->getHeight()/2), f2x(-1), f2x(1));
+		glOrthox(f2x(-pWindow->getWidth()/2), f2x(pWindow->getWidth()/2),
+		         f2x(pWindow->getHeight()/2), f2x(-pWindow->getHeight()/2), f2x(-1), f2x(1));
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 #endif

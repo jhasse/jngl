@@ -248,8 +248,7 @@ namespace jngl {
 		if (!currentWork_) {
 			debug("setting current work to "); debug(work.get()); debug("\n");
 			currentWork_ = work;
-		}
-		else {
+		} else {
 			debug("change work to "); debug(work.get()); debug("\n");
 			changeWork_ = true;
 			newWork_ = work;

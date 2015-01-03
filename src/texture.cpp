@@ -64,8 +64,7 @@ namespace jngl {
 		glBindTexture(GL_TEXTURE_2D, texture_);
 		if (useVBO_) {
 			opengl::BindArrayBuffer(vertexBuffer_);
-		}
-		else {
+		} else {
 			glVertexPointer(2, GL_FLOAT, 0, &vertexes_[0]);
 			glTexCoordPointer(2, opengl::Type<double>::constant, 0, &texCoords_[0]);
 		}
