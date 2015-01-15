@@ -29,6 +29,11 @@ namespace jngl {
 			0, 0, 0, 1, 1, 1, 1, 0, // texture coordinates
 			0, 0, 0, GLfloat(height), GLfloat(width), GLfloat(height), GLfloat(width), 0
 		};
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
 		glGenBuffers(1, &vertexBuffer_);
 		opengl::BindArrayBuffer(vertexBuffer_);
 		glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
@@ -43,23 +48,25 @@ namespace jngl {
 		if (data) {
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
 		}
+
+		glBindVertexArray(0);
 	}
 
 	Texture::~Texture() {
 		glDeleteTextures(1, &texture_);
 		glDeleteBuffers(1, &vertexBuffer_);
+		glDeleteVertexArrays(1, &vao);
 	}
 
 	void Texture::draw() const {
+		glBindVertexArray(vao);
 		glEnable(GL_TEXTURE_2D);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		glBindTexture(GL_TEXTURE_2D, texture_);
-		opengl::BindArrayBuffer(vertexBuffer_);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisable(GL_TEXTURE_2D);
+		glBindVertexArray(0);
 	}
 
 	void Texture::drawClipped(const float xstart, const float xend, const float ystart, const float yend) const {
