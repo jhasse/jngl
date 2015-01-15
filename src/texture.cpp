@@ -1,5 +1,5 @@
 /*
-Copyright 2010-2014 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2010-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -13,13 +13,10 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 namespace jngl {
 	std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
-	bool Texture::useVBO_ = true;
-
 	Texture::Texture(const int width, const int height, GLubyte** rowPointers,
 	                 GLenum format, int channels, GLubyte* data) : width(width), height(height) {
-		if (useVBO_ && (!GLEW_ARB_vertex_buffer_object || !GLEW_VERSION_1_5)) {
-			jngl::debug("VBOs not supported, using Vertex Arrays\n");
-			useVBO_ = false;
+		if (!GLEW_ARB_vertex_buffer_object || !GLEW_VERSION_1_5) {
+			throw std::runtime_error("VBOs not supported\n");
 		}
 		glGenTextures(1, &texture_);
 		glBindTexture(GL_TEXTURE_2D, texture_);
@@ -32,11 +29,9 @@ namespace jngl {
 			0, 0, 0, 1, 1, 1, 1, 0, // texture coordinates
 			0, 0, 0, GLfloat(height), GLfloat(width), GLfloat(height), GLfloat(width), 0
 		};
-		if (useVBO_) {
-			glGenBuffers(1, &vertexBuffer_);
-			opengl::BindArrayBuffer(vertexBuffer_);
-			glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
-		}
+		glGenBuffers(1, &vertexBuffer_);
+		opengl::BindArrayBuffer(vertexBuffer_);
+		glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
 		texCoords_.assign(&vertexes[0], &vertexes[8]);
 		vertexes_.assign(&vertexes[8], &vertexes[16]);
 
@@ -52,9 +47,7 @@ namespace jngl {
 
 	Texture::~Texture() {
 		glDeleteTextures(1, &texture_);
-		if (useVBO_) {
-			glDeleteBuffers(1, &vertexBuffer_);
-		}
+		glDeleteBuffers(1, &vertexBuffer_);
 	}
 
 	void Texture::draw() const {
@@ -62,12 +55,7 @@ namespace jngl {
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		glBindTexture(GL_TEXTURE_2D, texture_);
-		if (useVBO_) {
-			opengl::BindArrayBuffer(vertexBuffer_);
-		} else {
-			glVertexPointer(2, GL_FLOAT, 0, &vertexes_[0]);
-			glTexCoordPointer(2, opengl::Type<double>::constant, 0, &texCoords_[0]);
-		}
+		opengl::BindArrayBuffer(vertexBuffer_);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);

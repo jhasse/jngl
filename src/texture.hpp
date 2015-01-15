@@ -1,5 +1,5 @@
 /*
-Copyright 2010-2013 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2010-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -28,7 +28,6 @@ namespace jngl {
 		int getWidth() const;
 		int getHeight() const;
 	private:
-		static bool useVBO_;
 		GLuint texture_;
 		GLuint vertexBuffer_;
 		std::vector<opengl::CoordType> texCoords_;
