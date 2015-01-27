@@ -1,5 +1,5 @@
 /*
-Copyright 2010-2011 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2010-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -41,7 +41,7 @@ namespace jngl {
 		ALuint buffer_;
 		ALuint source_;
 	};
-	
+
 	class SoundFile : boost::noncopyable {
 	public:
 		SoundFile(const std::string& filename);
@@ -52,7 +52,6 @@ namespace jngl {
 		void setVolume(float v);
 	private:
 		std::shared_ptr<Sound> sound_;
-		ALint state;
 		ALenum format;
 		ALsizei freq;
 		std::vector<char> buffer_;

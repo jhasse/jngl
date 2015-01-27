@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2011-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -22,7 +22,6 @@ public:
 private:
 	GLuint fbo;
 	GLuint buffer;
-	const int width;
 	const int height;
 	Texture texture;
 	GLuint systemFbo;
