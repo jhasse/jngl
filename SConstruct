@@ -19,8 +19,10 @@ vars.Add(BoolVariable('python', 'Build python bindings', 0))
 vars.Add(BoolVariable('installer', 'Create a Windows installer using NSIS', 0))
 vars.Add(BoolVariable('verbose', 'Show verbose compiling output', 0))
 vars.Add(BoolVariable('msvc', "Build installer using Visual C++'s output", 0))
+vars.Add(BoolVariable('clang', "Compile with Clang", 0))
 
 env = Environment(variables = vars)
+env['ENV']['TERM'] = os.environ['TERM']
 Help(vars.GenerateHelpText(env))
 try:
 	import multiprocessing
@@ -46,6 +48,10 @@ if env['debug']:
 else:
 	buildDir = 'build/release/'
 	env.Append(CCFLAGS = '-O2 -DNDEBUG')
+
+if env['clang']:
+    env["CC"] = os.getenv("CC") or "clang"
+    env["CXX"] = os.getenv("CXX") or "clang++"
 
 VariantDir(buildDir, 'src', duplicate=0)
 
