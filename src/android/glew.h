@@ -17,6 +17,10 @@
 #define glDeleteRenderbuffers glDeleteRenderbuffersOES
 #define glBlendFuncSeparate glBlendFuncSeparateOES
 
+extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
+extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
+extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
+
 #define GL_RENDERBUFFER GL_RENDERBUFFER_OES
 #define GL_FRAMEBUFFER GL_FRAMEBUFFER_OES
 #define GL_DEPTH_COMPONENT GL_DEPTH_COMPONENT16_OES

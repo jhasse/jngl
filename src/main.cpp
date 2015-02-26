@@ -15,6 +15,10 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <stdexcept>
 #include <sstream>
 
+PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
+PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
+PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
+
 namespace jngl {
 	std::string pathPrefix;
 	std::vector<std::string> args;
@@ -46,6 +50,11 @@ namespace jngl {
 		jngl::translate(-width/2, height/2);
 		jngl::rotate(-90);
 		jngl::translate(height/2, width/2);
+
+		glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
+		glBindVertexArray = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
+		glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");
+
 	#else
 		glOrtho(-width/2, width/2, height/2, -height/2, -100.0f, 100.0f);
 	#endif
