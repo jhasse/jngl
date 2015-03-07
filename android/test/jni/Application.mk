@@ -1,4 +1,4 @@
 APP_OPTIM := release
 
-APP_STL := gnustl_shared
+APP_STL := gnustl_static
 APP_PLATFORM := android-10
