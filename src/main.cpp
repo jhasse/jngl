@@ -15,9 +15,11 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <stdexcept>
 #include <sstream>
 
+#ifdef OPENGLES
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
+#endif
 
 namespace jngl {
 	std::string pathPrefix;
