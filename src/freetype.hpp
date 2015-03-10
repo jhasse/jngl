@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -29,10 +29,10 @@ namespace jngl {
 		void Draw() const;
 		int getWidth() const;
 	private:
-		Texture* texture_;
+		Texture* texture_ = nullptr;
 		int width_;
-		int left_;
-		int top_;
+		int left_ = 0;
+		int top_ = 0;
 	};
 
 	class FontImpl : boost::noncopyable {

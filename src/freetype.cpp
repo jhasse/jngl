@@ -39,6 +39,11 @@ namespace jngl {
 
 		int width = bitmap.width;
 		int height = bitmap.rows;
+		width_ = face->glyph->advance.x >> 6;
+
+		if (height == 0) {
+			return;
+		}
 
 		std::vector<GLubyte*> data(height);
 
@@ -55,12 +60,12 @@ namespace jngl {
 					} else {
 						alpha = 0;
 					}
-				} else if(bitmap.pixel_mode == FT_PIXEL_MODE_GRAY) {
+				} else if (bitmap.pixel_mode == FT_PIXEL_MODE_GRAY) {
 					alpha = bitmap.buffer[x + width * y];
 				} else {
 					throw std::runtime_error("Unsupported pixel mode\n");
 				}
-				data[y][x*4 + 3] = alpha;
+				data[y][x * 4 + 3] = alpha;
 			}
 		}
 
@@ -70,17 +75,16 @@ namespace jngl {
 		}
 
 		top_ = fontHeight - bitmap_glyph->top;
-		width_ = face->glyph->advance.x >> 6;
 		left_ = bitmap_glyph->left;
 	}
 
 	void Character::Draw() const {
-		glPushMatrix();
-		opengl::translate(left_, top_);
-
-		texture_->draw();
-
-		glPopMatrix();
+		if (texture_) {
+			glPushMatrix();
+			opengl::translate(left_, top_);
+			texture_->draw();
+			glPopMatrix();
+		}
 		opengl::translate(width_, 0);
 	}
 
