@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -153,6 +153,9 @@ namespace jngl {
 		std::shared_ptr<boost::remove_pointer<HDC>::type> pDeviceContext_;
 		std::vector<std::function<void()>> updateInputCallbacks;
 		int arbMultisampleFormat_;
+		bool touchscreenActive = false;
+		int relativeX = 0;
+		int relativeY = 0;
 
 		bool InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR);
 		void Init(const std::string& title, bool multisample);

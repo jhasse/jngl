@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2013 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -323,6 +323,10 @@ namespace jngl {
 			}
 			updateInputCallbacks.clear();
 		}
+		if (relativeMouseMode && touchscreenActive) {
+			relativeX = mousex_;
+			relativeY = mousey_;
+		}
 		MSG msg;
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			static std::map<int, std::string> scanCodeToCharacter;
@@ -337,6 +341,13 @@ namespace jngl {
 				case WM_MOUSEWHEEL:
 					mouseWheel_ += double(GET_WHEEL_DELTA_WPARAM(msg.wParam)) / WHEEL_DELTA;
 				break;
+				case WM_POINTERDOWN:
+					touchscreenActive = true;
+				break;
+				case WM_POINTERUP:
+					touchscreenActive = false;
+					SetRelativeMouseMode(relativeMouseMode);
+				break;
 				case WM_LBUTTONDOWN:
 					mouseDown_.at(0) = true;
 					mousePressed_.at(0) = true;
@@ -350,8 +361,16 @@ namespace jngl {
 					mousePressed_.at(2) = true;
 				break;
 				case WM_LBUTTONUP:
-					mouseDown_.at(0) = false;
-					mousePressed_.at(0) = false;
+					if (mousePressed_.at(0)) {
+						// wait one frame
+						addUpdateInputCallback([&]() {
+							mouseDown_.at(0) = false;
+							mousePressed_.at(0) = false;
+						});
+					} else {
+						mouseDown_.at(0) = false;
+						mousePressed_.at(0) = false;
+					}
 				break;
 				case WM_MBUTTONUP:
 					mouseDown_.at(1) = false;
@@ -434,7 +453,7 @@ namespace jngl {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		if (relativeMouseMode) {
+		if (relativeMouseMode && !touchscreenActive) {
 			SetMouse(width_ / 2, height_ / 2);
 			mousex_ -= width_ / 2;
 			mousey_ -= height_ / 2;
@@ -529,11 +548,11 @@ namespace jngl {
 	}
 
 	int Window::MouseX() {
-		return mousex_;
+		return mousex_ - relativeX;
 	}
 
 	int Window::MouseY() {
-		return mousey_;
+		return mousey_ - relativeY;
 	}
 
 	void Window::SetMouse(const int xposition, const int yposition) {
@@ -548,8 +567,17 @@ namespace jngl {
 		relativeMouseMode = relative;
 		SetMouseVisible(!relative);
 		if (relative) {
-			SetMouse(width_ / 2, height_ / 2);
-			mousex_ = mousey_ = 0;
+			if (touchscreenActive) {
+				relativeX = mousex_;
+				relativeY = mousey_;
+			}
+			else {
+				SetMouse(width_ / 2, height_ / 2);
+				relativeX = relativeY = mousex_ = mousey_ = 0;
+			}
+		}
+		else {
+			relativeX = relativeY = 0;
 		}
 	}
 
