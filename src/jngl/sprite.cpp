@@ -1,5 +1,5 @@
 /*
-Copyright 2012-2013 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -220,7 +220,7 @@ namespace jngl {
 		unsigned char** rowPointers = png_get_rows(png_ptr, info_ptr);
 		width = static_cast<int>(png_get_image_width(png_ptr, info_ptr));
 		height = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
-		LoadTexture(filename, channels, halfLoad, format, rowPointers);
+		loadTexture(filename, halfLoad, format, rowPointers);
 	}
 #endif
 
@@ -270,7 +270,7 @@ namespace jngl {
 					throw std::runtime_error(std::string("Error reading data. (" + filename + ")"));
 			}
 		}
-		LoadTexture(filename, header.bpp / 8, halfLoad, GL_BGR, &buf[0]);
+		loadTexture(filename, halfLoad, GL_BGR, &buf[0]);
 	}
 #ifndef NOJPEG
 	void Sprite::LoadJPG(const std::string& filename, FILE* file,
@@ -316,7 +316,7 @@ namespace jngl {
 
 		jpeg_finish_decompress(&info);
 
-		LoadTexture(filename, channels, halfLoad, format, &buf[0]);
+		loadTexture(filename, halfLoad, format, &buf[0]);
 	}
 #endif
 #ifndef NOWEBP
@@ -353,12 +353,11 @@ namespace jngl {
 		Finally _([&]() {
 			WebPFreeDecBuffer(&config.output);
 		});
-		LoadTexture(filename, 4, halfLoad, GL_RGBA, nullptr, config.output.u.RGBA.rgba);
+		loadTexture(filename, halfLoad, GL_RGBA, nullptr, config.output.u.RGBA.rgba);
 	}
 #endif
 
-	void Sprite::LoadTexture(const std::string& filename,
-	                         int channels,
+	void Sprite::loadTexture(const std::string& filename,
 	                         const bool halfLoad,
 	                         unsigned int format,
 	                         unsigned char** rowPointers,
@@ -370,7 +369,7 @@ namespace jngl {
 			throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 		}
 		texture = std::make_shared<Texture>(width, height, reinterpret_cast<unsigned char**>(&rowPointers[0]),
-		                                    format, channels, data);
+		                                    format, data);
 		textures[filename] = texture;
 	}
 

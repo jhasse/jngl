@@ -18,8 +18,7 @@ namespace jngl {
 	public:
 		Texture(int imgWidth, int imgHeight,
 		        GLubyte** rowPointers, // data as row pointers ...
-		        GLenum format = GL_RGBA, int channels = 4,
-		        GLubyte* data = nullptr /* ... or as one pointer */ );
+		        GLenum format = GL_RGBA, GLubyte* data = nullptr /* ... or as one pointer */ );
 		~Texture();
 		void Bind() const;
 		void draw() const;

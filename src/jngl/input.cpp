@@ -1,5 +1,5 @@
 /*
-Copyright 2012-2013 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -39,19 +39,19 @@ namespace jngl {
 	}
 
 #ifndef _WIN32
-	bool isControllerConnected(int number) {
+	bool isControllerConnected(int) {
 		return false;
 	}
 
-	float getControllerState(int number, controller::Button) {
+	float getControllerState(int, controller::Button) {
 		return 0.0f;
 	}
 
-	bool getControllerPressed(int number, controller::Button button) {
+	bool getControllerPressed(int, controller::Button) {
 		return false;
 	}
 
-	void setControllerVibration(int number, unsigned short, unsigned short) {
+	void setControllerVibration(int, unsigned short, unsigned short) {
 	}
 #endif
 }

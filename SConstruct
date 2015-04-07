@@ -44,7 +44,7 @@ if env['PLATFORM'] == 'darwin':
 
 if env['debug']:
 	buildDir = 'build/debug/'
-	env.Append(CCFLAGS = '-g -Wall')
+	env.Append(CCFLAGS = '-g -Wall -Wextra')
 else:
 	buildDir = 'build/release/'
 	env.Append(CCFLAGS = '-O2 -DNDEBUG')

@@ -14,7 +14,7 @@ namespace jngl {
 	std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
 	Texture::Texture(const int width, const int height, GLubyte** rowPointers,
-	                 GLenum format, int channels, GLubyte* data) : width(width), height(height) {
+	                 GLenum format, GLubyte* data) : width(width), height(height) {
 		if (!GLEW_ARB_vertex_buffer_object || !GLEW_VERSION_1_5) {
 			throw std::runtime_error("VBOs not supported\n");
 		}

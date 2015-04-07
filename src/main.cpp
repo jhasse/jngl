@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2013 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -351,15 +351,15 @@ namespace jngl {
 
 #ifdef _WIN32
 	#include <GL/wglew.h>
-#endif
 
 	void setVerticalSync(bool enabled) {
-#ifdef _WIN32
 		if (WGL_EXT_swap_control) {
 			if (wglSwapIntervalEXT(enabled)) {
 				vsyncEnabled = enabled;
 			}
 		}
+#else
+	void setVerticalSync(bool) {
 #endif
 #ifdef __APPLE__
 		// OSX always enables V-SYNC

@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -31,7 +31,7 @@ namespace jngl {
 		void JNGLDLL_API drawClipped(float xstart, float xend, float ystart, float yend) const;
 	private:
 		static void CleanUpRowPointers(std::vector<unsigned char*>& buf);
-		void LoadTexture(const std::string& filename, int channels, bool halfLoad, unsigned int format,
+		void loadTexture(const std::string& filename, bool halfLoad, unsigned int format,
 		                 unsigned char** rowPointers, unsigned char* data = nullptr);
 		void LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad);
 		struct BMPHeader {
