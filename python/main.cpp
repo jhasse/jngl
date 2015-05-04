@@ -1,3 +1,8 @@
+/*
+Copyright 2009-2015 Jan Niklas Hasse <jhasse@gmail.com>
+For conditions of distribution and use, see copyright notice in LICENSE.txt
+*/
+
 #include <cmath> // see http://lists.boost.org/boost-users/2010/12/65159.php
 #include <boost/python.hpp> // Needs to be included first. See http://bugs.python.org/issue10910
 
@@ -6,84 +11,67 @@
 using namespace boost::python;
 using namespace jngl;
 
-void showWindow1(const std::string& title, int width, int height)
-{
+void showWindow1(const std::string& title, int width, int height) {
 	showWindow(title, width, height);
 }
-void showWindow2(const std::string& title, int width, int height, bool fullscreen)
-{
+void showWindow2(const std::string& title, int width, int height, bool fullscreen) {
 	showWindow(title, width, height, fullscreen);
 }
-void drawScaled1(const std::string& filename, double xposition, double yposition, float xfactor, float yfactor)
-{
+void drawScaled1(const std::string& filename, double xposition, double yposition, float xfactor,
+	             float yfactor) {
 	drawScaled(filename, xposition, yposition, xfactor, yfactor);
 }
-void drawScaled2(const std::string& filename, double xposition, double yposition, float factor)
-{
+void drawScaled2(const std::string& filename, double xposition, double yposition, float factor) {
 	drawScaled(filename, xposition, yposition, factor);
 }
-void scale1(double factor)
-{
+void scale1(double factor) {
 	scale(factor);
 }
-void scale2(double xfactor, double yfactor)
-{
+void scale2(double xfactor, double yfactor) {
 	scale(xfactor, yfactor);
 }
-bool mouseDown1()
-{
+bool mouseDown1() {
 	return mouseDown();
 }
-bool mouseDown2(mouse::Button button)
-{
+bool mouseDown2(mouse::Button button) {
 	return mouseDown(button);
 }
-bool mousePressed1()
-{
+bool mousePressed1() {
 	return mousePressed();
 }
-bool mousePressed2(mouse::Button button)
-{
+bool mousePressed2(mouse::Button button) {
 	return mousePressed(button);
 }
-void setColor1(unsigned char red, unsigned char green, unsigned char blue)
-{
+void setColor1(unsigned char red, unsigned char green, unsigned char blue) {
 	setColor(red, green, blue);
 }
-void setColor2(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
-{
+void setColor2(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) {
 	setColor(red, green, blue, alpha);
 }
-void setFontColor1(unsigned char red, unsigned char green, unsigned char blue)
-{
+void setFontColor1(unsigned char red, unsigned char green, unsigned char blue) {
 	setFontColor(red, green, blue);
 }
-void setFontColor2(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
-{
+void setFontColor2(unsigned char red, unsigned char green, unsigned char blue,
+	               unsigned char alpha) {
 	setFontColor(red, green, blue, alpha);
 }
-void setSpriteColor1(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
-{
+void setSpriteColor1(unsigned char red, unsigned char green, unsigned char blue,
+	                 unsigned char alpha) {
 	setSpriteColor(red, green, blue, alpha);
 }
-void setSpriteColor2(unsigned char red, unsigned char green, unsigned char blue)
-{
+void setSpriteColor2(unsigned char red, unsigned char green, unsigned char blue) {
 	setSpriteColor(red, green, blue);
 }
-bool keyDown1(key::KeyType key)
-{
+bool keyDown1(key::KeyType key) {
 	return keyDown(key);
 }
-bool keyDown2(const std::string& key)
-{
+bool keyDown2(const std::string& key) {
 	return keyDown(key);
 }
-bool keyPressed1(key::KeyType key)
-{
+bool keyPressed1(key::KeyType key) {
 	return keyPressed(key);
 }
-bool keyPressed2(const std::string& key)
-{
+bool keyPressed2(const std::string& key) {
 	return keyPressed(key);
 }
 void draw1(const std::string& filename, int x, int y) {
@@ -96,8 +84,33 @@ void print1(const std::string& text, float x, float y) {
 	return print(text, int(x), int(y));
 }
 
-BOOST_PYTHON_MODULE(jngl)
-{
+struct DrawableWrap : Drawable, wrapper<Drawable> {
+	void step() {
+		get_override("step")();
+	}
+	void draw() const {
+		get_override("draw")();
+	}
+	void setPos(Float x, Float y) {
+		if (override setPos = get_override("setPos")) {
+			setPos(x, y);
+			return;
+		}
+		Drawable::setPos(x, y);
+	}
+};
+
+BOOST_PYTHON_MODULE(jngl) {
+	class_<DrawableWrap, boost::noncopyable>("Drawable")
+		.def("step", pure_virtual(&Drawable::step))
+		.def("draw", pure_virtual(&Drawable::draw))
+		.def("setPos", pure_virtual(&Drawable::setPos))
+	;
+
+	class_<Sprite>("Sprite", init<const std::string&>())
+		.def("draw", &Sprite::draw)
+	;
+
 	def("showWindow", showWindow1);
 	def("showWindow", showWindow2);
 	def("running", running);

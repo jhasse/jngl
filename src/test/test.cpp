@@ -24,7 +24,8 @@ double absolute(double v);
 
 class Test : public jngl::Work {
 public:
-	Test() : drawOnFrameBuffer(false), rotate(0), frameNumber(0), fb(100, 110), fb2(800, 600) {
+	Test() : drawOnFrameBuffer(false), rotate(0), frameNumber(0), fb(100, 110), fb2(800, 600),
+	logoWebp("jngl.webp") {
 		jngl::setTitle("JNGL Test Application");
 		jngl::setIcon("jngl.png");
 		jngl::setMouseVisible(false);
@@ -45,6 +46,8 @@ public:
 		if (rotate > 360) {
 			rotate = 0;
 		}
+		factor = sin(rotate / 360 * M_PI);
+		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 	}
 	void draw() const {
 		using namespace jngl;
@@ -71,12 +74,8 @@ public:
 		fb.draw(600, 300);
 		translate(getWindowWidth() / 2, getWindowHeight() / 2);
 		jngl::rotate(rotate);
-		factor = sin(rotate / 360 * M_PI);
 		setSpriteAlpha(static_cast<unsigned char>(absolute(factor * 255)));
-		drawScaled("jngl.webp",
-		           -getWidth("jngl.webp")  * factor,
-		           -getHeight("jngl.webp") * factor,
-		           static_cast<float>(factor * 2));
+		logoWebp.drawScaled(static_cast<float>(factor * 2));
 		setColor(0, 0, 0);
 		drawRect(-125, 100, 250, 28);
 		setFontColor(255, 255, 255);
@@ -173,6 +172,7 @@ private:
 	mutable double frameTime;
 	mutable double lastTime;
 	mutable jngl::FrameBuffer fb, fb2;
+	jngl::Sprite logoWebp;
 };
 
 int main() {

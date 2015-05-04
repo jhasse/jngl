@@ -224,7 +224,7 @@ namespace jngl {
 	}
 #endif
 
-	void Sprite::CleanUpRowPointers(std::vector<unsigned char*>& buf) {
+	void Sprite::cleanUpRowPointers(std::vector<unsigned char*>& buf) {
 		for (auto i = buf.begin(); i != buf.end(); ++i) {
 			delete[] *i;
 		}
@@ -252,7 +252,7 @@ namespace jngl {
 		for (auto i = buf.begin(); i != buf.end(); ++i) {
 			*i = new unsigned char[header.width * 3];
 		}
-		Finally cleanUp(boost::bind(CleanUpRowPointers, boost::ref(buf)));
+		Finally cleanUp(boost::bind(cleanUpRowPointers, boost::ref(buf)));
 
 		if (header.height < 0) {
 			header.height = !header.height;
@@ -308,7 +308,7 @@ namespace jngl {
 		for (auto i = buf.begin(); i != buf.end(); ++i) {
 			*i = new unsigned char[width * channels];
 		}
-		Finally cleanUp(boost::bind(CleanUpRowPointers, boost::ref(buf)));
+		Finally cleanUp(boost::bind(cleanUpRowPointers, boost::ref(buf)));
 
 		while (info.output_scanline < info.output_height) {
 			jpeg_read_scanlines(&info, reinterpret_cast<JSAMPLE**>(&buf[info.output_scanline]), 1);

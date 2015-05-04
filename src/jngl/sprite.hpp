@@ -30,7 +30,7 @@ namespace jngl {
 		void JNGLDLL_API drawScaled(float xfactor, float yfactor) const;
 		void JNGLDLL_API drawClipped(float xstart, float xend, float ystart, float yend) const;
 	private:
-		static void CleanUpRowPointers(std::vector<unsigned char*>& buf);
+		static void cleanUpRowPointers(std::vector<unsigned char*>& buf);
 		void loadTexture(const std::string& filename, bool halfLoad, unsigned int format,
 		                 unsigned char** rowPointers, unsigned char* data = nullptr);
 		void LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad);
