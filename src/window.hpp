@@ -96,16 +96,11 @@ namespace jngl {
 		std::string getConfigPath() const;
 		void addJob(std::shared_ptr<Job>);
 		void resetFrameLimiter();
-#if !defined (__APPLE__) && !defined (ANDROID)
-	#ifdef __linux
-		std::shared_ptr<Display> pDisplay_;
-		static void ReleaseXData(void*);
-	#else
+#ifdef _WIN32
 		static void ReleaseDC(HWND, HDC);
 		static void ReleaseRC(HGLRC);
 
 		void addUpdateInputCallback(std::function<void()>);
-	#endif
 #else
 		WindowImpl* getImpl() const;
 #endif
@@ -122,7 +117,7 @@ namespace jngl {
 		std::map<std::string, bool> characterPressed_;
 		std::stack<bool*> needToBeSetFalse_;
 		int mousex_, mousey_, fontSize_, width_, height_;
-		double mouseWheel_;
+		double mouseWheel_ = 0;
 		std::string fontName_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
 		double oldTime;
@@ -141,13 +136,7 @@ namespace jngl {
 
 		// <fontSize, <fontName, FontImpl>>
 		boost::ptr_unordered_map<int, boost::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
-#if !defined (__APPLE__) && !defined (ANDROID)
-	#ifdef __linux
-		::Window window_;
-		GLXContext context_;
-		int screen_;
-		XF86VidModeModeInfo oldMode_;
-	#else
+#ifdef _WIN32
 		std::shared_ptr<boost::remove_pointer<HGLRC>::type> pRenderingContext_;
 		std::shared_ptr<boost::remove_pointer<HWND>::type> pWindowHandle_;
 		std::shared_ptr<boost::remove_pointer<HDC>::type> pDeviceContext_;
@@ -160,7 +149,6 @@ namespace jngl {
 		bool InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR);
 		void Init(const std::string& title, bool multisample);
 		void DistinguishLeftRight();
-	#endif
 #else
 		WindowImpl* const impl;
 

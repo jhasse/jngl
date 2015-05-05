@@ -107,9 +107,9 @@ if env['PLATFORM'] in ['win32', 'msys'] and not env['msvc']: # Windows
 if env['PLATFORM'] == 'posix': # Linux
 	if env['python']:
 		env.Append(CCFLAGS = '-DNOJPEG')
-	source_files += env.Object(Glob(buildDir + 'linux/*.cpp'), CPPFLAGS='-std=c++0x')
-	env.ParseConfig('pkg-config --cflags --libs fontconfig')
-	env.ParseConfig('pkg-config --cflags --libs freetype2')
+	source_files += env.Object(Glob(buildDir + 'linux/*.cpp') +
+		                       Glob(buildDir + 'sdl/*.cpp'), CPPFLAGS='-std=c++11')
+	env.ParseConfig('pkg-config --cflags --libs fontconfig freetype2 sdl2')
 	env.Append(CCFLAGS="-fPIC -DNO_WEAK_LINKING_OPENAL")
 	lib = env.Library(target="jngl", source=source_files)
 	env.Append(LIBPATH='.', CPPPATH='src')

@@ -1,5 +1,5 @@
 /*
-Copyright 2011-2013 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2011-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -15,9 +15,8 @@ namespace jngl
 {
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
 		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false), isMultisampleSupported_(true),
-		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), mouseWheel_(0), fontName_(""), oldTime(0),
-		  changeWork_(false), impl(new WindowImpl)
-	{
+		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), fontName_(""), oldTime(0),
+		  changeWork_(false), impl(new WindowImpl) {
 		mouseDown_.fill(false);
 		mousePressed_.fill(false);
 
@@ -27,46 +26,43 @@ namespace jngl
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
-		if(fullscreen) {
+		if (fullscreen) {
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 		impl->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		                                   width, height, flags);
 
-		if(!impl->sdlWindow) {
+		if (!impl->sdlWindow) {
 			throw std::runtime_error(SDL_GetError());
 		}
 
 		impl->context = SDL_GL_CreateContext(impl->sdlWindow);
 
-		SDL_EnableUNICODE(SDL_ENABLE);
-
-		SetFontByName("Arial"); // Default font
-		SetFontSize(fontSize_); // Load a font the first time
+		setFontByName("Arial"); // Default font
+		setFontSize(fontSize_); // Load a font the first time
 
 		Init(width, height);
 
 		running_ = true;
 	}
 
-	std::string Window::GetFontFileByName(const std::string& fontname)
-	{
+#ifdef __APPLE__
+	std::string Window::GetFontFileByName(const std::string& fontname) {
 		std::string tmp = fontname;
-		if(fontname == "sans-serif") {
+		if (fontname == "sans-serif") {
 			tmp = "Arial";
 		}
 		return "/Library/Fonts/" + tmp + ".ttf";
 	}
+#endif
 
-	Window::~Window()
-	{
+	Window::~Window() {
 		SDL_GL_DeleteContext(impl->context);
 		SDL_DestroyWindow(impl->sdlWindow);
 		delete impl;
 	}
 
-	int Window::GetKeyCode(key::KeyType key)
-	{
+	int Window::GetKeyCode(key::KeyType key) {
 		switch(key) {
 			case key::Left: return SDLK_LEFT;
 			case key::Right: return SDLK_RIGHT;
@@ -89,8 +85,8 @@ namespace jngl
 			case key::CapsLock: return SDLK_CAPSLOCK;
 			case key::AltL: return SDLK_LALT;
 			case key::AltR: return SDLK_RALT;
-			case key::SuperL: return SDLK_LSUPER;
-			case key::SuperR: return SDLK_RSUPER;
+			case key::SuperL: return SDLK_LGUI;
+			case key::SuperR: return SDLK_RGUI;
 			case key::ShiftL: return SDLK_LSHIFT;
 			case key::ShiftR: return SDLK_RSHIFT;
 			case key::F1: return SDLK_F1;
@@ -121,8 +117,7 @@ namespace jngl
 		return characterPressed_[key];
 	}
 
-	void Window::UpdateInput()
-	{
+	void Window::UpdateInput() {
 		if (relativeMouseMode) {
 			mousex_ = 0;
 			mousey_ = 0;
@@ -159,6 +154,10 @@ namespace jngl
 					}
 					break;
 				}
+				case SDL_MOUSEWHEEL: {
+					mouseWheel_ += event.wheel.y;
+					break;
+				}
 				case SDL_MOUSEBUTTONUP: {
 					int button = -1;
 					if (event.button.button == SDL_BUTTON_LEFT) {
@@ -180,7 +179,7 @@ namespace jngl
 					keyDown_[event.key.keysym.sym] = true;
 					keyPressed_[event.key.keysym.sym] = true;
 					const char* name = SDL_GetKeyName(event.key.keysym.sym);
-					if(strlen(name) == 1) {
+					if (strlen(name) == 1) {
 						std::string tmp;
 						if (getKeyDown(key::ShiftL) || getKeyDown(key::ShiftR)) {
 							tmp.append(1, name[0]);
@@ -201,7 +200,7 @@ namespace jngl
 					keyDown_[event.key.keysym.sym] = false;
 					keyPressed_[event.key.keysym.sym] = false;
 					const char* name = SDL_GetKeyName(event.key.keysym.sym);
-					if(strlen(name) == 1) {
+					if (strlen(name) == 1) {
 						std::string tmp;
 						tmp.append(1, tolower(name[0]));
 						characterDown_[tmp] = false;
@@ -217,38 +216,32 @@ namespace jngl
 		}
 	}
 
-	void Window::SwapBuffers()
-	{
+	void Window::SwapBuffers() {
 		SDL_GL_SwapWindow(impl->sdlWindow);
 	}
 
-	void Window::SetMouseVisible(const bool visible)
-	{
+	void Window::SetMouseVisible(const bool visible) {
 		isMouseVisible_ = visible;
-		if(visible) {
+		if (visible) {
 			SDL_ShowCursor(SDL_ENABLE);
 		} else {
 			SDL_ShowCursor(SDL_DISABLE);
 		}
 	}
 
-	void Window::SetTitle(const std::string& windowTitle)
-	{
+	void Window::SetTitle(const std::string& windowTitle) {
 		SDL_SetWindowTitle(impl->sdlWindow, windowTitle.c_str());
 	}
 
-	int Window::MouseX()
-	{
+	int Window::MouseX() {
 		return mousex_;
 	}
 
-	int Window::MouseY()
-	{
+	int Window::MouseY() {
 		return mousey_;
 	}
 
-	void Window::SetMouse(const int xposition, const int yposition)
-	{
+	void Window::SetMouse(const int xposition, const int yposition) {
 		SDL_WarpMouseInWindow(impl->sdlWindow, xposition, yposition);
 	}
 
@@ -266,21 +259,18 @@ namespace jngl
 		}
 	}
 
-	void Window::SetIcon(const std::string&)
-	{
+	void Window::SetIcon(const std::string&) {
 		return; // TODO: Not implemented yet
 	}
 
-	int getDesktopWidth()
-	{
+	int getDesktopWidth() {
 		SDL::init();
 		SDL_DisplayMode mode;
 		SDL_GetDesktopDisplayMode(0, &mode);
 		return mode.w;
 	}
 
-	int getDesktopHeight()
-	{
+	int getDesktopHeight() {
 		SDL::init();
 		SDL_DisplayMode mode;
 		SDL_GetDesktopDisplayMode(0, &mode);

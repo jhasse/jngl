@@ -48,6 +48,7 @@ public:
 		}
 		factor = sin(rotate / 360 * M_PI);
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
+		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
 	}
 	void draw() const {
 		using namespace jngl;
@@ -136,12 +137,10 @@ public:
 		if (keyPressed('+')) {
 			++playbackSpeed;
 		}
-		static float volume = 1;
 		setVolume(volume);
 		print("Use your mouse wheel to change the volume: " +
 		      boost::lexical_cast<std::string>(int(volume * 100)) +
 		      " %", 6, 550);
-		volume += static_cast<float>(getMouseWheel()) / 100.0f;
 		setColor(0,0,255,128);
 		if (drawOnFrameBuffer) {
 			fb2.endDraw();
@@ -173,6 +172,7 @@ private:
 	mutable double lastTime;
 	mutable jngl::FrameBuffer fb, fb2;
 	jngl::Sprite logoWebp;
+	float volume = 1;
 };
 
 int main() {
