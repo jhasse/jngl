@@ -74,7 +74,7 @@ if env['PLATFORM'] in ['win32', 'msys'] and not env['msvc']: # Windows
 	if env['python'] or env['msvc']:
 		jnglLibs += Split("openal32 ogg")
 	else:
-		env.Append(CPPDEFINES='WEAK_LINKING_OPENAL')
+		env.Append(CPPDEFINES={'WEAK_LINKING_OPENAL': '1', 'WINVER': '0x0602'})
 	env.Append(CPPPATH = ['/mingw64/include/freetype2'])
 	lib = env.Library(target="jngl",
 	                  source=source_files +

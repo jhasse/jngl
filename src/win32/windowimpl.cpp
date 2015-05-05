@@ -27,7 +27,7 @@ namespace jngl {
 	LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 	// based on: http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=46
-	bool Window::InitMultisample(HINSTANCE hInstance, PIXELFORMATDESCRIPTOR pfd) {
+	bool Window::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 		PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
 		if (!wglChoosePixelFormatARB) {
 			return false;

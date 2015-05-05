@@ -1,5 +1,5 @@
 /*
-Copyright 2012-2013 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -49,6 +49,14 @@ public:
 		factor = sin(rotate / 360 * M_PI);
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
+		if (jngl::keyPressed('p')) {
+			if (jngl::isOpenALInstalled()) {
+				jngl::stop("test.ogg");
+				jngl::play("test.ogg");
+			} else {
+				jngl::errorMessage("OpenAL not installed!");
+			}
+		}
 	}
 	void draw() const {
 		using namespace jngl;
@@ -123,10 +131,6 @@ public:
 		}
 		print("Press K to test key codes.", 5, 490);
 		print("Press P to play a sound.", 6, 510);
-		if (keyPressed('p')) {
-			stop("test.ogg");
-			play("test.ogg");
-		}
 		static int playbackSpeed = 100;
 		setPlaybackSpeed(playbackSpeed / 100.0f);
 		print("Press + and - to change the audio playback speed: " +
