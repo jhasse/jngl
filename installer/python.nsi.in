@@ -1,11 +1,11 @@
 XPStyle On
 SetCompressor lzma
 
-Name "JNGL for Python 3.2"
+Name "JNGL for Python 3.4"
 
-OutFile "JNGL @VERSION@ (Python 3.2).exe"
+OutFile "JNGL @VERSION@ (Python 3.4).exe"
 
-InstallDir "C:\Python32\Lib\site-packages"
+InstallDir "C:\Python34\Lib\site-packages"
 
 Page directory
 Page instfiles
@@ -15,13 +15,8 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
 Section ""
 
 SetOutPath $INSTDIR
-File /oname=jngl.pyd ..\python\jngl.dll
-File ..\..\boost-libs\lib\win\libboost_python-mgw47-mt-1_51.dll
-File ..\jpeg62.dll
-File ..\glew32.dll
-File ..\ogg.dll
-File ..\vorbis.dll
-File ..\vorbisfile.dll
-File ..\xinput1_3.dll
+File /oname=jngl.pyd ..\visualcpp\Release\Python.dll
+File ..\visualcpp\Release\jngl.dll
+File ..\visualcpp\packages\libogg.redist.1.3.0.1\build\native\bin\v110\Win32\Release\dynamic\libogg.dll
 
 SectionEnd

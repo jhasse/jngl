@@ -22,7 +22,7 @@ vars.Add(BoolVariable('msvc', "Build installer using Visual C++'s output", 0))
 vars.Add(BoolVariable('clang', "Compile with Clang", 0))
 
 env = Environment(variables = vars)
-env['ENV']['TERM'] = os.environ['TERM']
+env['ENV']['TERM'] = os.getenv('TERM')
 Help(vars.GenerateHelpText(env))
 try:
 	import multiprocessing
@@ -65,7 +65,7 @@ if not env['verbose']:
 source_files = [buildDir + 'ConvertUTF.c']
 
 if not env['msvc']:
-	source_files += env.Object(Glob(buildDir + "*.cpp") + Glob(buildDir + "jngl/*.cpp"), CPPFLAGS="-std=c++0x")
+	source_files += Glob(buildDir + "*.cpp") + Glob(buildDir + "jngl/*.cpp")
 
 testSrc = buildDir + "test/test.cpp"
 
@@ -73,9 +73,9 @@ if env['PLATFORM'] in ['win32', 'msys'] and not env['msvc']: # Windows
 	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl webp Xinput vorbisfile")
 	if env['python'] or env['msvc']:
 		jnglLibs += Split("openal32 ogg")
-	else:
+	if not env['msvc']:
 		env.Append(CPPDEFINES={'WEAK_LINKING_OPENAL': '1', 'WINVER': '0x0602'})
-	env.Append(CPPPATH = ['/mingw64/include/freetype2'])
+	env.Append(CPPPATH = ['/mingw64/include/freetype2'], CXXFLAGS="-std=c++14")
 	lib = env.Library(target="jngl",
 	                  source=source_files +
 	                         env.Object(Glob(buildDir + 'win32/*.cpp'),
@@ -85,24 +85,17 @@ if env['PLATFORM'] in ['win32', 'msys'] and not env['msvc']: # Windows
 	if env['debug'] or env['msvc']:
 		linkflags = ""
 	libs = Split("jngl") + jnglLibs
-	if conf.CheckDeclaration("__i386__"):
-		env.Append(LIBPATH = 'lib/win/x86')
-	else:
-		env.Append(LIBPATH = 'lib/win/x86_64')
 	env.Program("test", testSrc,
 	            LIBPATH = ["."],
-	            CPPFLAGS = "-std=c++11",
 	            LIBS = libs,
 	            LINKFLAGS = linkflags)
 	if env['python']:
 		env = env.Clone()
-		env.Append(CPPPATH=Split("C:\Python33\include ./boost-libs/include"),
-		             LIBPATH=Split(". lib ./boost-libs/lib/win ./python C:\Python33\libs"),
-		             LIBS=libs + Split("python33 libboost_python-mgw47-mt-1_51.dll"),
-		             LINKFLAGS=linkflags,
-		             CPPFLAGS="-std=c++11")
-		env.SharedLibrary(target="python/jngl.dll",
-		                  source="python/main.cpp")
+		env.Append(CPPPATH=["/mingw64/include/python3.4m"],
+		           LIBPATH=Split(". lib ./boost-libs/lib/win ./python"),
+		           LIBS=libs + Split("python3.4 boost_python3-mt"),
+		           LINKFLAGS=linkflags)
+		env.SharedLibrary(source="python/main.cpp")
 
 if env['PLATFORM'] == 'posix': # Linux
 	if env['python']:
@@ -156,11 +149,14 @@ if env['installer']:
 		name = 'MS Visual C++'
 	if env['python']:
 		nsiFile = 'installer/python.nsi'
-		name = 'Python 2.7'
-	import os
+		name = 'Python 3.4'
+	exefile = 'installer/JNGL ' + version + ' (' + name + ').exe'
 	if env['msvc']:
-		lib = None
-	t = Command('JNGL ' + version + '.exe', lib, '/c/Program\ Files\ \(x86\)/NSIS/Bin/makensis ' + nsiFile)
-	if env['python']:
+		t = Command(exefile, None,
+		            '"C:\\Program Files (x86)\\NSIS\\Bin\\makensis" ' + nsiFile)
+	else:
+		t = Command(exefile, None,
+		            '/c/Program\ Files\ \(x86\)/NSIS/Bin/makensis ' + nsiFile)
+	if env['python'] and not env['msvc']:
 		Depends(t, ['python/jngl.dll'])
-	Clean(t, 'installer/JNGL ' + version + ' (' + name + ').exe')
+	Clean(t, exefile)
