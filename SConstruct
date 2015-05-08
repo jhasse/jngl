@@ -19,10 +19,11 @@ vars.Add(BoolVariable('python', 'Build python bindings', 0))
 vars.Add(BoolVariable('installer', 'Create a Windows installer using NSIS', 0))
 vars.Add(BoolVariable('verbose', 'Show verbose compiling output', 0))
 vars.Add(BoolVariable('msvc', "Build installer using Visual C++'s output", 0))
-vars.Add(BoolVariable('clang', "Compile with Clang", 0))
 
 env = Environment(variables = vars)
 env['ENV']['TERM'] = os.getenv('TERM')
+env['CC'] = os.getenv('CC', env['CC'])
+env['CXX'] = os.getenv('CXX', env['CXX'])
 Help(vars.GenerateHelpText(env))
 try:
 	import multiprocessing
@@ -49,10 +50,6 @@ else:
 	buildDir = 'build/release/'
 	env.Append(CCFLAGS = '-O2 -DNDEBUG')
 
-if env['clang']:
-    env["CC"] = os.getenv("CC") or "clang"
-    env["CXX"] = os.getenv("CXX") or "clang++"
-
 VariantDir(buildDir, 'src', duplicate=0)
 
 if env['profile']:
@@ -63,7 +60,7 @@ if not env['verbose']:
 	env['ARCOMSTR'] = "archiving: $TARGET"
 
 source_files = [buildDir + 'ConvertUTF.c']
-env.Append(CXXFLAGS = '-std=c++11')
+env.Append(CXXFLAGS = '-std=c++0x')
 
 if not env['msvc']:
 	source_files += Glob(buildDir + "*.cpp") + Glob(buildDir + "jngl/*.cpp")
