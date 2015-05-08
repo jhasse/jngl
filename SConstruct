@@ -107,10 +107,10 @@ if env['PLATFORM'] == 'posix': # Linux
 	testEnv.Program('test', testSrc)
 	if env['python']:
 		env = env.Clone()
-		env.ParseConfig("pkg-config --cflags --libs jngl.pc")
-		env.Append(CPPPATH="/usr/include/python3.4",
-		           LIBPATH=Split("src ./python"),
-		           LIBS=Split("python3.4m boost_python-py34"))
+		env.ParseConfig("pkg-config --cflags --libs jngl.pc python3")
+		import re
+		pythonVersion = ''.join(re.search('.*(\d)\.(\d).*', env['LIBS'][-1]).groups())
+		env.Append(LIBPATH = ["src", "./python"], LIBS = ["boost_python-py" + pythonVersion])
 		env.SharedLibrary(target="python/libjngl.so",
 		                  source="python/main.cpp")
 
