@@ -7,7 +7,7 @@ notifications:
 install:
   - sudo add-apt-repository ppa:team-xbmc/ppa -y
   - sudo apt-get update -q
-  - sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libsdl2-dev libjpeg62-dev libpng12-dev libvorbis-dev libopenal-dev scons libglew-dev libboost-dev libwebp-dev libboost-python-dev python3-dev -y
+  - sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev libsdl2-dev libjpeg62-dev libpng12-dev libvorbis-dev libopenal-dev scons libglew-dev libboost-dev libwebp-dev libboost-python-dev python3-dev -y
 script:
   - scons verbose=1 debug=1
   - scons verbose=1

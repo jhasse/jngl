@@ -11,7 +11,7 @@ On a Debian-based distribution:
 ```
 sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev \
 libjpeg62-dev libpng12-dev libvorbis-dev libopenal-dev scons libglew-dev libboost-dev g++ \
-libwebp-dev git
+libwebp-dev git libsdl2-dev
 ```
 
 ## Windows
