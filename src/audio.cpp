@@ -1,5 +1,5 @@
 /*
-Copyright 2009-2013 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2009-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -223,4 +223,4 @@ namespace jngl {
 		static Audio audio_;
 		return audio_;
 	}
-};
+}

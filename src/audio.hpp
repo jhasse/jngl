@@ -56,4 +56,4 @@ namespace jngl {
 		ALsizei freq;
 		std::vector<char> buffer_;
 	};
-};
+}
