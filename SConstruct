@@ -63,6 +63,7 @@ if not env['verbose']:
 	env['ARCOMSTR'] = "archiving: $TARGET"
 
 source_files = [buildDir + 'ConvertUTF.c']
+env.Append(CXXFLAGS = '-std=c++11')
 
 if not env['msvc']:
 	source_files += Glob(buildDir + "*.cpp") + Glob(buildDir + "jngl/*.cpp")
@@ -75,11 +76,10 @@ if env['PLATFORM'] in ['win32', 'msys'] and not env['msvc']: # Windows
 		jnglLibs += Split("openal32 ogg")
 	if not env['msvc']:
 		env.Append(CPPDEFINES={'WEAK_LINKING_OPENAL': '1', 'WINVER': '0x0602'})
-	env.Append(CPPPATH = ['/mingw64/include/freetype2'], CXXFLAGS="-std=c++14")
+	env.Append(CPPPATH = ['/mingw64/include/freetype2'])
 	lib = env.Library(target="jngl",
 	                  source=source_files +
-	                         env.Object(Glob(buildDir + 'win32/*.cpp'),
-	                                         CPPFLAGS="-std=c++11"),
+	                         Glob(buildDir + 'win32/*.cpp'),
 	                  LIBS=jnglLibs)
 	linkflags = "-mwindows"
 	if env['debug'] or env['msvc']:
@@ -100,22 +100,20 @@ if env['PLATFORM'] in ['win32', 'msys'] and not env['msvc']: # Windows
 if env['PLATFORM'] == 'posix': # Linux
 	if env['python']:
 		env.Append(CCFLAGS = '-DNOJPEG')
-	source_files += env.Object(Glob(buildDir + 'linux/*.cpp') +
-		                       Glob(buildDir + 'sdl/*.cpp'), CPPFLAGS='-std=c++11')
+	source_files += Glob(buildDir + 'linux/*.cpp') + Glob(buildDir + 'sdl/*.cpp')
 	env.ParseConfig('pkg-config --cflags --libs fontconfig freetype2 sdl2')
 	env.Append(CCFLAGS="-fPIC -DNO_WEAK_LINKING_OPENAL")
 	lib = env.Library(target="jngl", source=source_files)
 	env.Append(LIBPATH='.', CPPPATH='src')
 	testEnv = env.Clone()
 	testEnv.ParseConfig("pkg-config --cflags --libs jngl.pc")
-	testEnv.Program('test', testSrc, CPPFLAGS="-std=c++0x")
+	testEnv.Program('test', testSrc)
 	if env['python']:
 		env = env.Clone()
 		env.ParseConfig("pkg-config --cflags --libs jngl.pc")
 		env.Append(CPPPATH="/usr/include/python3.4",
 		           LIBPATH=Split("src ./python"),
-		           LIBS=Split("python3.4m boost_python-py34"),
-		           CPPFLAGS="-std=c++11")
+		           LIBS=Split("python3.4m boost_python-py34"))
 		env.SharedLibrary(target="python/libjngl.so",
 		                  source="python/main.cpp")
 
@@ -126,18 +124,17 @@ if env['PLATFORM'] == 'darwin': # Mac
 	           LINKFLAGS='-framework OpenAL -framework OpenGL')
 	env.ParseConfig('/opt/local/bin/pkg-config --cflags --libs freetype2 libpng')
 	env.ParseConfig('/opt/local/bin/sdl-config --cflags --libs')
-	lib = env.Library(target="jngl", source=source_files + env.Object(Glob(buildDir + 'sdl/*.cpp'), CPPFLAGS='-std=c++11'))
+	lib = env.Library(target="jngl", source=source_files + Glob(buildDir + 'sdl/*.cpp'))
 	testEnv = env.Clone()
 	testEnv.Append(CPPPATH='.')
 	testEnv.Append(LIBS=lib)
-	testEnv.Program("test", testSrc, CPPFLAGS='-std=c++0x')
+	testEnv.Program("test", testSrc)
 	if env['python']:
 		env = env.Clone()
 		env.Append(CPPPATH='/System/Library/Frameworks/Python.framework/Headers/',
 		           LINKFLAGS='-framework Python',
 		           LIBPATH=Split(". ./lib ./python"),
-		           LIBS=Split("boost_python"),
-		           CPPFLAGS='-std=c++11')
+		           LIBS=Split("boost_python"))
 		env.SharedLibrary(target="python/jngl.so",
 		                  source="python/main.cpp")
 

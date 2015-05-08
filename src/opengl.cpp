@@ -13,4 +13,4 @@ namespace opengl {
 			glVertexPointer(2, GL_FLOAT, 0, (void*)(8 * sizeof(GLfloat)));
 		}
 	}
-};
+}
