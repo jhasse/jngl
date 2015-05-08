@@ -1,0 +1,12 @@
+language: cpp
+compiler:
+  - gcc
+notifications:
+  email: false
+before_install:
+  - sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libsdl2-dev libjpeg62-dev libpng12-dev libvorbis-dev libopenal-dev scons libglew-dev libboost-dev libwebp-dev -y
+script:
+  - scons debug=1
+  - scons
+  - scons python=1 debug=1
+  - scons python=1
