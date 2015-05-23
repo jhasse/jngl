@@ -39,8 +39,6 @@ namespace jngl {
 
     void JNGLDLL_API errorMessage(const std::string& text);
 
-    bool JNGLDLL_API getFullscreen();
-
     void JNGLDLL_API readPixel(int x, int y, unsigned char& red, unsigned char& green, unsigned char& blue);
 
     void JNGLDLL_API setAntiAliasing(bool enabled);
