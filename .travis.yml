@@ -1,8 +1,6 @@
 language: cpp
 compiler:
   - gcc
-notifications:
-  email: false
 install:
   - sudo add-apt-repository ppa:team-xbmc/ppa -y
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
