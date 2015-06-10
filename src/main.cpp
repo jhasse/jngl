@@ -230,10 +230,6 @@ namespace jngl {
 		pWindow->setFontByName(name);
 	}
 
-	bool getFullscreen() {
-		return pWindow->getFullscreen();
-	}
-
 	void setIcon(const std::string& filename) {
 		pWindow->SetIcon(filename);
 	}

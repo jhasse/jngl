@@ -65,6 +65,7 @@ namespace jngl {
 		int getLineHeight();
 		void setLineHeight(int);
 		bool getFullscreen() const;
+		void setFullscreen(bool);
 		bool getKeyDown(const key::KeyType key);
 		bool getKeyPressed(const key::KeyType key);
 		void setKeyPressed(const key::KeyType key, bool);

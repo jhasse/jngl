@@ -127,7 +127,7 @@ public:
 		}
 		print("Press F1 to switch fullscreen mode.", 5, 470);
 		if (keyPressed(key::F1)) {
-			showWindow("JNGL Test Application", 800, 600, !getFullscreen());
+			setFullscreen(!getFullscreen());
 		}
 		print("Press K to test key codes.", 5, 490);
 		print("Press P to play a sound.", 6, 510);
