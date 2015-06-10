@@ -585,6 +585,9 @@ namespace jngl {
 		FILE* fp = fopen(filename.c_str(), "rb");
 		if (!fp)
 			throw std::runtime_error(std::string("File not found: ") + filename);
+		Finally _([&fp]() {
+			fclose(fp);
+		});
 		png_byte buf[PNG_BYTES_TO_CHECK];
 		assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short));
 
