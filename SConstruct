@@ -37,7 +37,7 @@ if env['PLATFORM'] == 'win32':
 	else:
 		env = Environment(tools = ['mingw'], variables = vars)
 
-conf = Configure(env)
+Configure(env)
 
 if env['PLATFORM'] == 'darwin':
 	env['CC']  = 'clang'

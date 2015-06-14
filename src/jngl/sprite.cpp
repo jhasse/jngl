@@ -200,15 +200,12 @@ namespace jngl {
 		png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16, NULL);
 
 		GLenum format;
-		int channels = png_get_channels(png_ptr, info_ptr);
-		switch (channels) {
-			case 1: // gray or palette, we can set channels to 3 because we passed PNG_TRANSFORM_EXPAND to png_read_png
-				channels = 3; // we need this value when creating the texture for OpenGL
+		switch (png_get_channels(png_ptr, info_ptr)) {
+			case 1: // gray or palette, we can set format to RGB because we passed PNG_TRANSFORM_EXPAND to png_read_png
 			case 3:
 				format = GL_RGB;
 			break;
 			case 2: // gray + alpha
-				channels = 4;
 			case 4:
 				format = GL_RGBA;
 			break;
