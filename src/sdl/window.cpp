@@ -129,8 +129,8 @@ namespace jngl {
 					break;
 				case SDL_MOUSEMOTION:
 					if (relativeMouseMode) {
-						mousex_ = event.motion.xrel;
-						mousey_ = event.motion.yrel;
+						mousex_ += event.motion.xrel;
+						mousey_ += event.motion.yrel;
 					} else {
 						mousex_ = event.motion.x;
 						mousey_ = event.motion.y;
