@@ -1,5 +1,5 @@
 /*
-Copyright 2007 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -8,11 +8,10 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>
 
-class Finally : boost::noncopyable
-{
+class Finally : boost::noncopyable {
 public:
 	Finally(boost::function<void()> functionToCall);
 	~Finally();
 private:
-	boost::function<void()> functionToCall_;
+	boost::function<void()> functionToCall;
 };

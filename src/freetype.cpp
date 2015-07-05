@@ -20,10 +20,12 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl {
 
-	Character::Character(const unsigned long ch, const unsigned int fontHeight, FT_Face face) : texture_(0) {
+	Character::Character(const unsigned long ch, const unsigned int fontHeight, FT_Face face)
+	: texture_(0) {
 		const auto flags = FT_LOAD_TARGET_LIGHT | FT_LOAD_RENDER;
 		if (FT_Load_Char(face, ch, flags)) {
-			std::string msg = std::string("FT_Load_Glyph failed. Character: ") + boost::lexical_cast<std::string>(ch);
+			const std::string msg = std::string("FT_Load_Glyph failed. Character: ")
+			                        + boost::lexical_cast<std::string>(ch);
 			debug(msg);
 			// Load a question mark instead
 			if (FT_Load_Glyph(face, FT_Get_Char_Index(face, '?') , flags)) {
@@ -35,7 +37,7 @@ namespace jngl {
 			throw std::runtime_error("FT_Get_Glyph failed");
 		}
 		FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
-		FT_Bitmap& bitmap = bitmap_glyph->bitmap;
+		const FT_Bitmap& bitmap = bitmap_glyph->bitmap;
 
 		int width = bitmap.width;
 		int height = bitmap.rows;
@@ -47,9 +49,9 @@ namespace jngl {
 
 		std::vector<GLubyte*> data(height);
 
-		for (int y = 0; y < height; y++) {
+		for (int y = 0; y < height; ++y) {
 			data[y] = new GLubyte[width * 4];
-			for (int x = 0; x < width; x++) {
+			for (int x = 0; x < width; ++x) {
 				data[y][x * 4    ] = 255;
 				data[y][x * 4 + 1] = 255;
 				data[y][x * 4 + 2] = 255;
