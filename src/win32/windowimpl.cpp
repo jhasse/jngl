@@ -582,6 +582,7 @@ namespace jngl {
 	}
 
 	void Window::SetIcon(const std::string& filename) {
+#ifndef NOPNG
 		FILE* fp = fopen(filename.c_str(), "rb");
 		if (!fp)
 			throw std::runtime_error(std::string("File not found: ") + filename);
@@ -639,6 +640,7 @@ namespace jngl {
 
 		HICON hIcon = CreateIconIndirect(&icon);
 		SendMessage(pWindowHandle_.get(), WM_SETICON, WPARAM(ICON_SMALL), LPARAM(hIcon));
+#endif
 	}
 
 	void Window::addUpdateInputCallback(std::function<void()> c) {

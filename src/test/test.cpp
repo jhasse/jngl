@@ -182,9 +182,7 @@ private:
 int main() {
 	try {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth()
-		          << "x" << jngl::getDesktopHeight() << std::endl
-		          << "Size of jngl.png: " << jngl::getWidth("jngl.png")
-		          << "x" << jngl::getHeight("jngl.png") << std::endl;
+		          << "x" << jngl::getDesktopHeight() << std::endl;
 		jngl::showWindow("setTitle not working!", 800, 600);
 		jngl::setWork(new Test);
 		jngl::mainLoop();
@@ -198,11 +196,11 @@ void drawBackground() {
 	if (performance > 1) {
 		for (int x = 0; x < performance; ++x) {
 			for (int y = 0; y < performance; ++y) {
-				jngl::drawScaled("jngl.png",
+				jngl::drawScaled("jngl",
 								 x * jngl::getWindowWidth() / performance,
 								 y * jngl::getWindowHeight() / performance,
-								 (float)jngl::getWindowWidth() / performance / jngl::getWidth("jngl.png"),
-								 (float)jngl::getWindowHeight() / performance / jngl::getHeight("jngl.png"));
+								 (float)jngl::getWindowWidth() / performance / jngl::getWidth("jngl"),
+								 (float)jngl::getWindowHeight() / performance / jngl::getHeight("jngl"));
 			}
 		}
 	}
