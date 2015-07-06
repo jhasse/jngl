@@ -658,4 +658,8 @@ namespace jngl {
 		GetWindowRect(hDesktop, &desktop);
 		return desktop.bottom;
 	}
+
+	void Window::setFullscreen(bool) {
+		throw std::runtime_error("Not implemented.");
+	}
 }
