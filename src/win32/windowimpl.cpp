@@ -258,12 +258,14 @@ namespace jngl {
 	}
 
 	void Window::ReleaseRC(HGLRC hrc) {
+		/* FIXME: This causes a crash in AMD's graphics driver.
 		if (!wglMakeCurrent(NULL, NULL)) {
 			debug("Release of DC and RC failed.");
 		}
 		if (!wglDeleteContext(hrc)) {
 			debug("Release rendering context failed.");
 		}
+		*/
 	}
 
 	void Window::DistinguishLeftRight() {
