@@ -1,0 +1,5 @@
+{
+  "cmd": "scons debug=1 && gnome-terminal -e \"bash -c './test; read'\"",
+  "sh": true,
+  "errorMatch": "(?<file>[^: \\n]+):(?<line>\\d+):(?<col>\\d+): "
+}

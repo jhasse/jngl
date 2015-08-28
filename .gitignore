@@ -29,3 +29,4 @@ android/test/gen
 Thumbs.db
 *.exe
 python/*.dll*
+.tup/
