@@ -22,4 +22,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "sound.hpp"
 #include "color.hpp"
 #include "time.hpp"
+#include "message.hpp"
+#include "main.hpp"
 #include "other.hpp"

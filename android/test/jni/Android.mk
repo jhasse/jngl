@@ -11,7 +11,7 @@ LOCAL_SRC_FILES := ../../lib/libogg.so
 include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE    := jngl 
+LOCAL_MODULE    := jngl
 LOCAL_SRC_FILES := ../../jngl/obj/local/armeabi/libjngl.a
 include $(PREBUILT_STATIC_LIBRARY)
 
@@ -33,7 +33,7 @@ include $(PREBUILT_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_CFLAGS += -std=c++11
-LOCAL_C_INCLUDES := ../../boost-libs/include ../../src
+LOCAL_C_INCLUDES := src
 LOCAL_MODULE    := jngl-test
 
 LOCAL_SRC_FILES := main.cpp

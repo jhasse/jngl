@@ -37,8 +37,6 @@ namespace jngl {
 
     double JNGLDLL_API getFPS();
 
-    void JNGLDLL_API errorMessage(const std::string& text);
-
     void JNGLDLL_API readPixel(int x, int y, unsigned char& red, unsigned char& green, unsigned char& blue);
 
     void JNGLDLL_API setAntiAliasing(bool enabled);

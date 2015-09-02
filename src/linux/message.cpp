@@ -7,6 +7,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <unistd.h>    // fork
 #include <sys/types.h> // pid_t
 #include <sys/wait.h>  // waitpid
+#include <iostream>
 
 namespace jngl {
 	void errorMessage(const std::string& text) {
@@ -16,5 +17,9 @@ namespace jngl {
 		} else {
 			waitpid(pid, 0, 0);
 		}
+	}
+
+	void printMessage(const std::string& text) {
+		std::cout << text << std::flush;
 	}
 }

@@ -26,6 +26,10 @@ android/test/obj
 android/test/libs
 android/test/bin
 android/test/gen
+android/include/boost
+android/test/build.xml
+android/test/local.properties
+android/test/proguard-project.txt
 Thumbs.db
 *.exe
 python/*.dll*

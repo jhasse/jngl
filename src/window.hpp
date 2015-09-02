@@ -127,7 +127,7 @@ namespace jngl {
 		std::shared_ptr<Work> newWork_;
 		std::string configPath;
 		std::vector<std::shared_ptr<Job>> jobs;
-#if defined _MSC_VER || defined ANDROID
+#ifdef _MSC_VER
 		double stepsPerFrame;
 		bool multitouch;
 #else

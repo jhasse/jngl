@@ -1,10 +1,11 @@
 /*
-Copyright 2013 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2013-2015 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #include "../window.hpp"
 #include "../jngl.hpp"
+#include "windowimpl.hpp"
 
 #include <stdexcept>
 
@@ -13,11 +14,11 @@ namespace jngl {
 	: fullscreen_(fullscreen), running_(false), isMouseVisible_(true),
 	  relativeMouseMode(false), isMultisampleSupported_(true),
 	  anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height),
-	  mouseWheel_(0), fontName_(""), oldTime(0), changeWork_(false), impl(nullptr) {
+	  mouseWheel_(0), fontName_(""), oldTime(0), changeWork_(false), impl(new WindowImpl) {
 		mouseDown_.fill(false);
 		mousePressed_.fill(false);
 
-		Init(height, width);
+		// TODO: Init(height, width);
 
 		running_ = true;
 	}
@@ -31,6 +32,7 @@ namespace jngl {
 	}
 
 	Window::~Window() {
+		delete impl;
 	}
 
 	int Window::GetKeyCode(key::KeyType key) {
@@ -53,16 +55,14 @@ namespace jngl {
 		// TODO
 	}
 
-	void Window::SwapBuffers()
-	{
+	void Window::SwapBuffers() {
+		impl->swapBuffers();
 	}
 
-	void Window::SetMouseVisible(const bool visible)
-	{
+	void Window::SetMouseVisible(const bool visible) {
 	}
 
-	void Window::SetTitle(const std::string& windowTitle)
-	{
+	void Window::SetTitle(const std::string& windowTitle) {
 	}
 
 	int Window::MouseX() {
@@ -73,8 +73,7 @@ namespace jngl {
 		return mousey_;
 	}
 
-	void Window::SetMouse(const int xposition, const int yposition)
-	{
+	void Window::SetMouse(const int xposition, const int yposition) {
 	}
 
 	void Window::SetRelativeMouseMode(const bool relative) {
@@ -82,12 +81,10 @@ namespace jngl {
 		// TODO
 	}
 
-	void Window::SetIcon(const std::string&)
-	{
+	void Window::SetIcon(const std::string&) {
 	}
 
-	int getDesktopWidth()
-	{
+	int getDesktopWidth() {
 		return jngl::getWindowWidth();
 	}
 
