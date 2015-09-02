@@ -16,7 +16,12 @@ namespace jngl {
     public:
         WindowImpl();
 
+        void updateInput();
         void swapBuffers();
+        void init();
+
+        int mouseX;
+        int mouseY;
     private:
         android_app* app;
 
@@ -24,7 +29,7 @@ namespace jngl {
         const ASensor* accelerometerSensor;
         ASensorEventQueue* sensorEventQueue;
 
-        int animating;
+        bool initialized = false;
         EGLDisplay display;
         EGLSurface surface;
         EGLContext context;

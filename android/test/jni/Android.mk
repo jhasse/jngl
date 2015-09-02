@@ -33,7 +33,7 @@ include $(PREBUILT_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_CFLAGS += -std=c++11
-LOCAL_C_INCLUDES := src
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../src
 LOCAL_MODULE    := jngl-test
 
 LOCAL_SRC_FILES := main.cpp

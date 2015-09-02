@@ -40,8 +40,6 @@ namespace jngl {
 	class Job;
 	class Work;
 
-	bool Init(const int width, const int height); // Definied in main.cpp
-
 	class Window : boost::noncopyable {
 	public:
 		Window(const std::string& title, const int width, const int height, const bool fullscreen);

@@ -18,8 +18,6 @@ namespace jngl {
 		mouseDown_.fill(false);
 		mousePressed_.fill(false);
 
-		// TODO: Init(height, width);
-
 		running_ = true;
 	}
 
@@ -52,7 +50,7 @@ namespace jngl {
 	}
 
 	void Window::UpdateInput() {
-		// TODO
+		impl->updateInput();
 	}
 
 	void Window::SwapBuffers() {
