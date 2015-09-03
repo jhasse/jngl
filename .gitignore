@@ -30,6 +30,8 @@ android/include/boost
 android/test/build.xml
 android/test/local.properties
 android/test/proguard-project.txt
+android/test/assets/
+android/test/main.obb
 Thumbs.db
 *.exe
 python/*.dll*

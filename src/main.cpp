@@ -138,11 +138,11 @@ namespace jngl {
 	}
 
 	int getMouseX() {
-		return pWindow->MouseX();
+		return pWindow->getMouseX();
 	}
 
 	int getMouseY() {
-		return pWindow->MouseY();
+		return pWindow->getMouseY();
 	}
 
 	bool keyDown(const key::KeyType key) {

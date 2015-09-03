@@ -233,11 +233,11 @@ namespace jngl {
 		SDL_SetWindowTitle(impl->sdlWindow, windowTitle.c_str());
 	}
 
-	int Window::MouseX() {
+	int Window::getMouseX() {
 		return mousex_;
 	}
 
-	int Window::MouseY() {
+	int Window::getMouseY() {
 		return mousey_;
 	}
 

@@ -55,8 +55,8 @@ namespace jngl {
 		void SetMouseVisible(bool visible);
 		bool getMouseVisible() const;
 		bool isMultitouch() const;
-		int MouseX();
-		int MouseY();
+		int getMouseX();
+		int getMouseY();
 		int getWidth() const;
 		int getHeight() const;
 		double GetTextWidth(const std::string&);

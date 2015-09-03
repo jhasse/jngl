@@ -12,17 +12,24 @@ struct ASensor;
 struct ASensorEventQueue;
 
 namespace jngl {
+    class Window;
+
     class WindowImpl {
     public:
-        WindowImpl();
+        WindowImpl(Window*);
 
         void updateInput();
         void swapBuffers();
         void init();
 
-        int mouseX;
-        int mouseY;
+        int mouseX = 0;
+        int mouseY = 0;
+        int width;
+        int height;
+        int relativeX = 0;
+        int relativeY = 0;
     private:
+        Window* window;
         android_app* app;
 
         ASensorManager* sensorManager;
@@ -33,7 +40,5 @@ namespace jngl {
         EGLDisplay display;
         EGLSurface surface;
         EGLContext context;
-        int32_t width;
-        int32_t height;
     };
 }

@@ -7,11 +7,18 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "../opengl.hpp"
 #include "../jngl/other.hpp"
 #include "../jngl/debug.hpp"
+#include "../window.hpp"
 #include "../main.hpp"
 
 #include <android_native_app_glue.h>
+#include <android/storage_manager.h>
+#include <android/obb.h>
 #include <stdexcept>
 #include <cassert>
+#include <cstdio>
+#include <cerrno>
+#include <cstring>
+#include <fstream>
 
 namespace jngl {
     android_app* androidApp;
@@ -44,18 +51,22 @@ namespace jngl {
     static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
         WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
         if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
-            impl.mouseX = AMotionEvent_getX(event, 0);
-            impl.mouseY = AMotionEvent_getY(event, 0);
+            impl.mouseX = AMotionEvent_getY(event, 0);
+            impl.mouseY = AMotionEvent_getX(event, 0);
             return 1;
         }
         return 0;
     }
 
-    WindowImpl::WindowImpl() : app(androidApp) {
+    WindowImpl::WindowImpl(Window* window) : app(androidApp), window(window) {
         app->userData = this;
         app->onAppCmd = engine_handle_cmd;
         app->onInputEvent = engine_handle_input;
         jngl::debugLn("Handler set.");
+    }
+
+    void callback(const char* filename, const int32_t state, void* data) {
+        debug("ist "); debug(state); debug(" und sollte "); debugLn(AOBB_STATE_MOUNTED);
     }
 
     void WindowImpl::init() {
@@ -113,6 +124,49 @@ namespace jngl {
         // Initialize GL state.
         Init(width, height);
 
+        ANativeActivity* activity = app->activity;
+
+        JNIEnv* env = nullptr;
+        activity->vm->AttachCurrentThread(&env, nullptr);
+        jclass clazz = env->GetObjectClass(activity->clazz);
+
+        jmethodID methodID = env->GetMethodID(clazz, "getPackageName", "()Ljava/lang/String;");
+        jobject result = env->CallObjectMethod(activity->clazz, methodID);
+        std::string packageName = env->GetStringUTFChars((jstring)result, nullptr);
+
+        jmethodID mid = env->GetMethodID(clazz, "getObbDir", "()Ljava/io/File;");
+        jobject obj_File = env->CallObjectMethod(activity->clazz, mid, nullptr);
+        jclass cls_File = env->FindClass("java/io/File");
+        jmethodID mid_getPath = env->GetMethodID(cls_File, "getPath", "()Ljava/lang/String;");
+        jstring obj_Path = (jstring) env->CallObjectMethod(obj_File, mid_getPath);
+
+        std::string obbDir = env->GetStringUTFChars((jstring)obj_Path, nullptr);
+
+        std::stringstream sstream;
+        sstream << obbDir << "/main.1."
+                << packageName << ".obb";
+        std::string obbFile = sstream.str();
+
+        std::fstream test(obbFile);
+        debug("obbFile: "); debugLn(obbFile);
+        if (test) {
+            debugLn("exists");
+            test.close();
+        }
+        auto storageManager = AStorageManager_new();
+        auto info = AObbScanner_getObbInfo(obbFile.c_str());
+        if (!info) {
+            debugLn("info failed");
+        } else {
+            debugLn("info success");
+        }
+        debugLn(AStorageManager_isObbMounted(storageManager, obbFile.c_str()));
+        // FIXME: crashes:
+        // AStorageManager_mountObb(storageManager, obbFile.c_str(), nullptr, callback, nullptr);
+        debugLn(AStorageManager_isObbMounted(storageManager, obbFile.c_str()));
+
+        activity->vm->DetachCurrentThread();
+
         initialized = true;
     }
 
@@ -134,6 +188,13 @@ namespace jngl {
                 // TODO: engine_term_display(&engine);
                 jngl::quit();
             }
+        }
+
+        window->mousex_ = mouseX - relativeX;
+        window->mousey_ = mouseY - relativeY;
+        if (window->relativeMouseMode) {
+            relativeX = mouseX;
+            relativeY = mouseY;
         }
     }
 

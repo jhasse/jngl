@@ -1,4 +1,4 @@
-all: test/bin/JNGLTest-debug.apk
+all: test/bin/JNGLTest-debug.apk test/main.obb
 
 include/boost:
 	ln -s /usr/include/boost include/boost
@@ -9,6 +9,21 @@ libjngl: include/boost test/build.xml ../src/* ../src/android/*
 
 test/build.xml: test/project.properties
 	android update project --path test --name JNGLTest
+
+test/assets:
+	mkdir test/assets
+
+test/assets/jngl.webp: test/assets
+	cp ../jngl.webp "$@"
+
+test/assets/test.ogg: test/assets
+	cp ../test.ogg "$@"
+
+test/obb:
+	mkdir test/obb
+
+test/main.obb: test/assets/jngl.webp test/assets/test.ogg test/obb
+	jobb -d test/assets/ -o test/main.obb -pn com.bixense.jngl_test -pv 11
 
 .PHONY: jngl-test
 jngl-test: test/build.xml libjngl
