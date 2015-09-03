@@ -1,10 +1,11 @@
 {
-  "cmd": "scons debug=1 && gnome-terminal -e \"bash -c './test; read'\"",
+  "cmd": "scons debug=1 && gnome-terminal -e \"bash -c './test; echo \\'exit code $?\\'; read'\"",
   "sh": true,
   "errorMatch": "(?<file>[^: \\n]+):(?<line>\\d+):(?<col>\\d+): ",
   "targets": {
     "Android": {
-      "cmd": "cd android && ./build.sh"
+      "cmd": "cd android && ./build.sh",
+      "errorMatch": "(?<file>[^: \\n]+):(?<line>\\d+):(?<col>\\d+): "
     }
   }
 }
