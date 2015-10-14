@@ -66,6 +66,7 @@
     <ClInclude Include="..\src\jngl\types.hpp" />
     <ClInclude Include="..\src\jngl\window.hpp" />
     <ClInclude Include="..\src\jngl\work.hpp" />
+    <ClInclude Include="..\src\main.hpp" />
     <ClInclude Include="..\src\opengl.hpp" />
     <ClInclude Include="..\src\spriteimpl.hpp" />
     <ClInclude Include="..\src\texture.hpp" />

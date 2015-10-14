@@ -9,6 +9,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "../finally.hpp"
 #include "../opengl.hpp"
 #include "../ConvertUTF.h"
+#include "../main.hpp"
 
 #include "wglext.h"
 
@@ -549,11 +550,11 @@ namespace jngl {
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
 
-	int Window::MouseX() {
+	int Window::getMouseX() {
 		return mousex_ - relativeX;
 	}
 
-	int Window::MouseY() {
+	int Window::getMouseY() {
 		return mousey_ - relativeY;
 	}
 
