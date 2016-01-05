@@ -14,6 +14,8 @@ libjpeg62-dev libpng12-dev libvorbis-dev libopenal-dev scons libglew-dev libboos
 libwebp-dev git libsdl2-dev
 ```
 
+Then [build using SCons](#build-using-scons).
+
 ## Windows
 
 ### Using MSYS2 / MinGW-w64
@@ -27,17 +29,23 @@ mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
 mingw-w64-x86_64-dlfcn mingw-w64-x86_64-glew
 ```
 
-## Mac
-
-```
-brew install sdl2 freetype libvorbis glew jpeg webp
-```
+Then [build using SCons](#build-using-scons).
 
 ### Using Visual C++ 2013
 
 Open visualcpp/JNGL.sln and press Ctrl + F5 to build JNGL and run the example application.
 
-## Build using scons
+## Mac
+
+Use [Homebrew](http://brew.sh/) to install the build dependencies:
+
+```
+brew install sdl2 freetype libvorbis glew jpeg webp
+```
+
+Then [build using SCons](#build-using-scons).
+
+## Build using SCons
 
 Build JNGL in debug mode:
 ```
