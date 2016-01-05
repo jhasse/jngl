@@ -27,6 +27,12 @@ mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
 mingw-w64-x86_64-dlfcn mingw-w64-x86_64-glew
 ```
 
+## Mac
+
+```
+brew install sdl2 freetype libvorbis glew jpeg webp
+```
+
 ### Using Visual C++ 2013
 
 Open visualcpp/JNGL.sln and press Ctrl + F5 to build JNGL and run the example application.

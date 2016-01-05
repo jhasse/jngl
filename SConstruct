@@ -39,10 +39,6 @@ if env['PLATFORM'] == 'win32':
 
 Configure(env)
 
-if env['PLATFORM'] == 'darwin':
-	env['CC']  = 'clang'
-	env['CXX'] = 'clang++'
-
 if env['debug']:
 	buildDir = 'build/debug/'
 	env.Append(CCFLAGS = '-g -Wall -Wextra -pedantic')
@@ -116,12 +112,13 @@ if env['PLATFORM'] == 'posix': # Linux
 
 if env['PLATFORM'] == 'darwin': # Mac
 	env.Append(LIBS=Split('GLEW jpeg ogg vorbisfile webp'),
-	           LIBPATH=Split('/opt/local/lib .'),
-	           CPPPATH=['/opt/local/include/', './boost-libs/include'],
+	           LIBPATH=['.'],
+	           CPPPATH=['/usr/local/include/'],
 	           LINKFLAGS='-framework OpenAL -framework OpenGL')
-	env.ParseConfig('/opt/local/bin/pkg-config --cflags --libs freetype2 libpng')
-	env.ParseConfig('/opt/local/bin/sdl-config --cflags --libs')
-	lib = env.Library(target="jngl", source=source_files + Glob(buildDir + 'sdl/*.cpp'))
+	env.ParseConfig('pkg-config --cflags --libs sdl2 freetype2 libpng')
+	lib = env.Library(target="jngl",
+	                  source=source_files + Glob(buildDir + 'sdl/*.cpp') +
+	                         Glob(buildDir + 'mac/*.cpp'))
 	testEnv = env.Clone()
 	testEnv.Append(CPPPATH='.')
 	testEnv.Append(LIBS=lib)
