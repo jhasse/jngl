@@ -1,6 +1,4 @@
-# JNGL - Just a Neat Game Library
-
-[![Build Status](https://travis-ci.org/jhasse/jngl.svg?branch=master)](https://travis-ci.org/jhasse/jngl)
+# JNGL - Just a Neat Game Library [![Build Status](https://travis-ci.org/jhasse/jngl.svg?branch=master)](https://travis-ci.org/jhasse/jngl) [![Build status](https://ci.appveyor.com/api/projects/status/8gbj2tkxie9uyern?svg=true)](https://ci.appveyor.com/project/jhasse/jngl)
 
 Easy to use game library for C++ and Python
 

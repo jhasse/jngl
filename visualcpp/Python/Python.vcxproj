@@ -41,11 +41,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>C:\Python35\include;%LocalAppData%\Programs\Python\Python35-32\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Python35\lib;%LocalAppData%\Programs\Python\Python35-32\libs;../../lib;../../lib/msvc;../../lib/msvc/debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Python35\Libs;%LocalAppData%\Programs\Python\Python35-32\libs;../../lib;../../lib/msvc;../../lib/msvc/debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>C:\Python35\include;%LocalAppData%\Programs\Python\Python35-32\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Python35\lib;%LocalAppData%\Programs\Python\Python35-32\libs;../../lib;../../lib/msvc;../../lib/msvc/release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Python35\Libs;%LocalAppData%\Programs\Python\Python35-32\libs;../../lib;../../lib/msvc;../../lib/msvc/release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
