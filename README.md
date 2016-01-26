@@ -29,7 +29,7 @@ mingw-w64-x86_64-dlfcn mingw-w64-x86_64-glew
 
 Then [build using SCons](#build-using-scons).
 
-### Using Visual C++ 2013
+### Using Visual C++ 2015
 
 Open visualcpp/JNGL.sln and press Ctrl + F5 to build JNGL and run the example application.
 
