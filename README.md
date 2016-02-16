@@ -12,6 +12,12 @@ libjpeg62-dev libpng12-dev libvorbis-dev libopenal-dev scons libglew-dev libboos
 libwebp-dev git libsdl2-dev
 ```
 
+On Fedora:
+
+```
+sudo dnf install fontconfig-devel freetype-devel libvorbis-devel glew-devel
+```
+
 Then [build using SCons](#build-using-scons).
 
 ## Windows
