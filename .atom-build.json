@@ -6,6 +6,10 @@
     "Android": {
       "cmd": "cd android && ./build.sh",
       "errorMatch": "(?<file>[^: \\n]+):(?<line>\\d+):(?<col>\\d+): "
+    },
+    "Python": {
+      "cmd": "scons python=1",
+      "errorMatch": "(?<file>[^: \\n]+):(?<line>\\d+):(?<col>\\d+): "
     }
   }
 }

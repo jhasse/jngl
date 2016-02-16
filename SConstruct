@@ -37,7 +37,7 @@ if env['PLATFORM'] == 'win32':
 	else:
 		env = Environment(tools = ['mingw'], variables = vars)
 
-Configure(env)
+conf = Configure(env)
 
 if env['debug']:
 	buildDir = 'build/debug/'
@@ -104,9 +104,13 @@ if env['PLATFORM'] == 'posix': # Linux
 	if env['python']:
 		env = env.Clone()
 		env.ParseConfig("pkg-config --cflags --libs jngl.pc python3")
-		import re
-		pythonVersion = ''.join(re.search('.*(\d)\.(\d).*', env['LIBS'][-1]).groups())
-		env.Append(LIBPATH = ["src", "./python"], LIBS = ["boost_python-py" + pythonVersion])
+		env.Append(LIBPATH = ["src", "./python"])
+		if conf.CheckLib(["boost_python3"]):
+			env.Append(LIBS=["boost_python3"])
+		else:
+			import re
+			pythonVersion = ''.join(re.search('.*(\d)\.(\d).*', env['LIBS'][-1]).groups())
+			env.Append(LIBS = ["boost_python-py" + pythonVersion])
 		env.SharedLibrary(target="python/libjngl.so",
 		                  source="python/main.cpp")
 

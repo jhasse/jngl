@@ -15,7 +15,8 @@ libwebp-dev git libsdl2-dev
 On Fedora:
 
 ```
-sudo dnf install fontconfig-devel freetype-devel libvorbis-devel glew-devel
+sudo dnf install fontconfig-devel freetype-devel libvorbis-devel glew-devel libjpeg-turbo-devel \
+libwebp-devel boost-python3-devel python3-devel
 ```
 
 Then [build using SCons](#build-using-scons).
