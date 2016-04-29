@@ -45,7 +45,7 @@ Open visualcpp/JNGL.sln and press Ctrl + F5 to build JNGL and run the example ap
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 
 ```
-brew install sdl2 freetype libvorbis glew jpeg webp
+brew install sdl2 freetype libvorbis glew jpeg webp scons pkg-config boost
 ```
 
 Then [build using SCons](#build-using-scons).
