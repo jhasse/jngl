@@ -16,7 +16,7 @@ On Fedora:
 
 ```
 sudo dnf install fontconfig-devel freetype-devel libvorbis-devel glew-devel libjpeg-turbo-devel \
-libwebp-devel boost-python3-devel python3-devel
+libwebp-devel boost-python3-devel python3-devel scons SDL2-devel openal-soft-devel
 ```
 
 Then [build using SCons](#build-using-scons).
