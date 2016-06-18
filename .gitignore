@@ -12,6 +12,7 @@ visualcpp/*.sdf
 visualcpp/*.suo
 visualcpp/*.opensdf
 visualcpp/.vs/
+visualcpp/JNGL.VC.db
 installer/*.nsi
 jngl.pc
 *.os
