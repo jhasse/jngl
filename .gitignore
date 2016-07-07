@@ -38,3 +38,4 @@ Thumbs.db
 *.exe
 python/*.dll*
 .tup/
+.vscode/.browse*

@@ -31,7 +31,7 @@ in a mingw64 shell:
 ```
 pacman -S scons mingw-w64-x86_64-gcc mingw-w64-x86_64-boost mingw-w64-x86_64-openal \
 mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
-mingw-w64-x86_64-dlfcn mingw-w64-x86_64-glew
+mingw-w64-x86_64-dlfcn mingw-w64-x86_64-glew mingw-w64-x86_64-python3
 ```
 
 Then [build using SCons](#build-using-scons).

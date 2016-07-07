@@ -65,7 +65,9 @@ testSrc = buildDir + "test/test.cpp"
 
 if env['PLATFORM'] in ['win32', 'msys'] and not env['msvc']: # Windows
 	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl webp Xinput vorbisfile")
-	if env['python'] or env['msvc']:
+	if env['python']:
+		jnglLibs += Split("openal ogg")
+	if env['msvc']:
 		jnglLibs += Split("openal32 ogg")
 	if not env['msvc']:
 		env.Append(CPPDEFINES={'WEAK_LINKING_OPENAL': '1', 'WINVER': '0x0602'})
@@ -84,9 +86,9 @@ if env['PLATFORM'] in ['win32', 'msys'] and not env['msvc']: # Windows
 	            LINKFLAGS = linkflags)
 	if env['python']:
 		env = env.Clone()
-		env.Append(CPPPATH=["/mingw64/include/python3.4m"],
+		env.Append(CPPPATH=["/mingw64/include/python3.5m"],
 		           LIBPATH=Split(". lib ./boost-libs/lib/win ./python"),
-		           LIBS=libs + Split("python3.4 boost_python3-mt"),
+		           LIBS=libs + Split("python3.5 boost_python3-mt"),
 		           LINKFLAGS=linkflags)
 		env.SharedLibrary(source="python/main.cpp")
 
