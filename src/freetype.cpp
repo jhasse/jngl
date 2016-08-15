@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2015 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2016 Jan Niklas Hasse <jhasse@gmail.com>
 
 Most of this code is based on http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=43
 
@@ -12,6 +12,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "jngl/screen.hpp"
 #include "ConvertUTF.h"
 #include "main.hpp"
+#include "helper.hpp"
 
 #include FT_GLYPH_H
 #include <functional>
@@ -182,33 +183,9 @@ namespace jngl {
 		}
 	}
 
-	std::vector<std::string> FontImpl::ParseString(const std::string& text) {
-		std::vector<std::string> lines;
-		const char* start_line = text.c_str();
-		const char* c;
-		for (c = text.c_str(); *c; c++) {
-			if (*c == '\n') {
-				std::string line;
-				for (auto *n = start_line; n < c; ++n) {
-					line.append(1, *n);
-				}
-				lines.push_back(line);
-				start_line = c + 1;
-			}
-		}
-		if (start_line) {
-			std::string line;
-			for (auto n = start_line; n < c; ++n) {
-				line.append(1, *n);
-			}
-			lines.push_back(line);
-		}
-		return lines;
-	}
-
 	int FontImpl::getTextWidth(const std::string& text) {
 		int maxWidth = 0;
-		std::vector<std::string> lines(ParseString(text));
+		std::vector<std::string> lines(splitlines(text));
 
 		auto lineEnd = lines.end();
 		for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
@@ -235,7 +212,7 @@ namespace jngl {
 	void FontImpl::print(int x, int y, const std::string& text) {
 		x = int(x * getScaleFactor());
 		y = int(y * getScaleFactor());
-		std::vector<std::string> lines(ParseString(text));
+		std::vector<std::string> lines(splitlines(text));
 
 		glColor4ub(fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha);
 		glEnable(GL_TEXTURE_2D);

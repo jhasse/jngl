@@ -1,5 +1,5 @@
 /*
-Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2016 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -8,6 +8,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "drawable.hpp"
 
 #include <string>
+#include <vector>
 #include <memory>
 
 #include "dll.hpp"
@@ -17,7 +18,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #endif
 
 namespace jngl {
-	enum Alignment {
+	enum class Alignment {
 		LEFT,
 		RIGHT,
 		CENTER
@@ -25,6 +26,7 @@ namespace jngl {
 
 	class Font;
 	class FontImpl;
+	class Line;
 
 	class Text : public Drawable {
 	public:
@@ -35,9 +37,9 @@ namespace jngl {
 		void JNGLDLL_API step();
 		void JNGLDLL_API draw() const;
 	private:
-		std::string text;
+		std::vector<std::shared_ptr<Line>> lines;
 		std::shared_ptr<FontImpl> font;
-		Alignment align;
+		Alignment align = Alignment::LEFT;
 	};
 }
 #ifndef _MSC_VER

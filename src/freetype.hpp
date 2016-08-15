@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2015 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2016 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -46,7 +46,6 @@ namespace jngl {
 		void setLineHeight(int);
 	private:
 		Character& GetCharacter(std::string::iterator& it, const std::string::iterator end);
-		std::vector<std::string> ParseString(const std::string&);
 
 		static int instanceCounter;
 		static FT_Library library;
