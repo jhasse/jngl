@@ -16,6 +16,7 @@
     <ClCompile Include="..\src\finally.cpp" />
     <ClCompile Include="..\src\framebufferimpl.cpp" />
     <ClCompile Include="..\src\freetype.cpp" />
+    <ClCompile Include="..\src\helper.cpp" />
     <ClCompile Include="..\src\jngl\color.cpp" />
     <ClCompile Include="..\src\jngl\drawable.cpp" />
     <ClCompile Include="..\src\jngl\font.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="..\src\finally.hpp" />
     <ClInclude Include="..\src\framebufferimpl.hpp" />
     <ClInclude Include="..\src\freetype.hpp" />
+    <ClInclude Include="..\src\helper.hpp" />
     <ClInclude Include="..\src\jngl.hpp" />
     <ClInclude Include="..\src\jngl\all.hpp" />
     <ClInclude Include="..\src\jngl\color.hpp" />

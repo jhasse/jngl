@@ -103,6 +103,9 @@
     <ClCompile Include="..\src\jngl\window.cpp">
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ConvertUTF.h">
@@ -196,6 +199,9 @@
       <Filter>Header Files\jngl</Filter>
     </ClInclude>
     <ClInclude Include="..\src\main.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\helper.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
