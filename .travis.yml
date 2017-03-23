@@ -1,14 +1,29 @@
 language: cpp
+os:
+- linux
+- osx
 compiler:
   - gcc
+dist: trusty
+sudo: false
+addons:
+  apt:
+    packages:
+      - libfreetype6-dev
+      - libvorbis-dev
+      - libopenal-dev
+      - libsdl2-dev
+      - libglew-dev
+      - libboost-dev
+      - libwebp-dev
+      - libboost-python-dev
 install:
-  - sudo add-apt-repository ppa:team-xbmc/ppa -y
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - sudo apt-get update -q
-  - sudo apt-get install g++-4.8 libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev libsdl2-dev libjpeg-dev libpng12-dev libvorbis-dev libopenal-dev scons libglew-dev libboost-dev libwebp-dev libboost-python-dev python3-dev -y
-  - export CXX="g++-4.8"
+- |
+  [ $TRAVIS_OS_NAME = linux ] || brew install sdl2 freetype libvorbis glew jpeg webp scons
 script:
   - scons verbose=1 debug=1
   - scons verbose=1
-  - scons verbose=1 python=1 debug=1
-  - scons verbose=1 python=1
+  - |
+    [ $TRAVIS_OS_NAME = linux ] && scons verbose=1 python=1 debug=1
+  - |
+    [ $TRAVIS_OS_NAME = linux ] && scons verbose=1 python=1
