@@ -5,6 +5,8 @@ if [ "$prefix" == "" ]; then
 	echo "Usage: ./install.sh <prefix>"
 	exit 1
 fi
+
+set -x
 mkdir -p $prefix/include/
 mkdir -p $prefix/include/jngl/
 mkdir -p $prefix/lib/
