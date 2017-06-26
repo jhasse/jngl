@@ -24,6 +24,6 @@ script:
   - scons verbose=1 debug=1
   - scons verbose=1
   - |
-    [ $TRAVIS_OS_NAME = linux ] && scons verbose=1 python=1 debug=1
+    [ $TRAVIS_OS_NAME = osx ] || scons verbose=1 python=1 debug=1
   - |
-    [ $TRAVIS_OS_NAME = linux ] && scons verbose=1 python=1
+    [ $TRAVIS_OS_NAME = osx ] || scons verbose=1 python=1
