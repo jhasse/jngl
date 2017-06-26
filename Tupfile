@@ -7,10 +7,10 @@ else
     CXXFLAGS += -g -Wall -Wextra
 endif
 
-: foreach src/*.cpp |> $(CXX) $(CXXFLAGS) `pkg-config --cflags freetype2` -fPIC -D_REENTRANT -c %f -o %o |> build/%B.o {objs}
+: foreach src/*.cpp src/*.c src/linux/*.cpp src/jngl/*.cpp src/sdl/*.cpp |> $(CXX) $(CXXFLAGS) `pkg-config --cflags sdl2 freetype2` -fPIC -D_REENTRANT -c %f -o %o |> build/%f.o {objs}
 
 : {objs} |> ar rc %o %f && ranlib %o |> build/libjngl.a
 
 : src/test/test.cpp |> $(CXX) $(CXXFLAGS) -fPIC -D_REENTRANT -c %f -o %o |> build/test/%B.o {objs}
 
-: build/libjngl.a build/test/test.o |> $(CXX) %f $(CXXFLAGS) -L. `pkg-config --cflags --libs jngl.pc` -o %o |> build/bin/test
+: build/libjngl.a build/test/test.o |> $(CXX) %f $(CXXFLAGS) -Lbuild `pkg-config --cflags --libs jngl.pc` -o %o |> build/bin/test
