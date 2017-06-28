@@ -1,3 +1,5 @@
+VERSION = 1.2.0
+
 CC = cc
 CFLAGS = @(CONFIG_CFLAGS) -fdiagnostics-color
 CXX = c++
@@ -10,4 +12,6 @@ CXXFLAGS = @(CONFIG_CXXFLAGS) -std=c++11 -fdiagnostics-color
 
 : src/test/test.cpp |> $(CXX) $(CXXFLAGS) -c %f -o %o |> %f.o {test_obj}
 
-: {libjngl} {test_obj} |> $(CXX) %f $(CXXFLAGS) -L. `pkg-config --cflags --libs jngl.pc` -o %o |> test
+: jngl.pc.in |> sed s/@VERSION@/$(VERSION)/g < %f > %o |> jngl.pc
+
+: {libjngl} {test_obj} | jngl.pc |> $(CXX) %f $(CXXFLAGS) -L. `pkg-config --cflags --libs jngl.pc` -o %o |> test
