@@ -2,7 +2,7 @@
 .sconsign.dblite
 .sconf_temp/
 config.log
-build/
+/build*/
 visualcpp/Debug/
 visualcpp/Release/
 visualcpp/packages/

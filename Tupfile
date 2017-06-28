@@ -1,16 +1,13 @@
+CC = cc
+CFLAGS = @(CONFIG_CFLAGS) -fdiagnostics-color
 CXX = c++
-CXXFLAGS = -std=c++11
+CXXFLAGS = @(CONFIG_CXXFLAGS) -std=c++11 -fdiagnostics-color
 
-ifeq (@(RELEASE), y)
-    CXXFLAGS += -O2
-else
-    CXXFLAGS += -g -Wall -Wextra
-endif
+: foreach src/*.cpp src/linux/*.cpp src/jngl/*.cpp src/sdl/*.cpp |> $(CXX) $(CXXFLAGS) `pkg-config --cflags sdl2 freetype2` -c %f -o %o |> %f.o {objs}
+: src/ConvertUTF.c |> $(CC) $(CFLAGS) -c %f -o %o |> %f.o {objs}
 
-: foreach src/*.cpp src/*.c src/linux/*.cpp src/jngl/*.cpp src/sdl/*.cpp |> $(CXX) $(CXXFLAGS) `pkg-config --cflags sdl2 freetype2` -fPIC -D_REENTRANT -c %f -o %o |> build/%f.o {objs}
+: {objs} |> ar rc %o %f && ranlib %o |> libjngl.a {libjngl}
 
-: {objs} |> ar rc %o %f && ranlib %o |> build/libjngl.a
+: src/test/test.cpp |> $(CXX) $(CXXFLAGS) -c %f -o %o |> %f.o {test_obj}
 
-: src/test/test.cpp |> $(CXX) $(CXXFLAGS) -fPIC -D_REENTRANT -c %f -o %o |> build/test/%B.o {objs}
-
-: build/libjngl.a build/test/test.o |> $(CXX) %f $(CXXFLAGS) -Lbuild `pkg-config --cflags --libs jngl.pc` -o %o |> build/bin/test
+: {libjngl} {test_obj} |> $(CXX) %f $(CXXFLAGS) -L. `pkg-config --cflags --libs jngl.pc` -o %o |> test
