@@ -1,8 +1,16 @@
 VERSION = 1.2.0
 
-CC = cc
+ifdef CC
+	CC = @(CC)
+else
+	CC = cc
+endif
 CFLAGS = @(CFLAGS) -fdiagnostics-color
-CXX = c++
+ifdef CXX
+	CXX = @(CXX)
+else
+	CXX = c++
+endif
 CXXFLAGS = @(CXXFLAGS) -std=c++11 -fdiagnostics-color
 
 : foreach src/*.cpp src/linux/*.cpp src/jngl/*.cpp src/sdl/*.cpp |> $(CXX) $(CXXFLAGS) `pkg-config --cflags sdl2 freetype2` -c %f -o %o |> %f.o {objs}
