@@ -1,9 +1,9 @@
 VERSION = 1.2.0
 
 CC = cc
-CFLAGS = @(CONFIG_CFLAGS) -fdiagnostics-color
+CFLAGS = @(CFLAGS) -fdiagnostics-color
 CXX = c++
-CXXFLAGS = @(CONFIG_CXXFLAGS) -std=c++11 -fdiagnostics-color
+CXXFLAGS = @(CXXFLAGS) -std=c++11 -fdiagnostics-color
 
 : foreach src/*.cpp src/linux/*.cpp src/jngl/*.cpp src/sdl/*.cpp |> $(CXX) $(CXXFLAGS) `pkg-config --cflags sdl2 freetype2` -c %f -o %o |> %f.o {objs}
 : src/ConvertUTF.c |> $(CC) $(CFLAGS) -c %f -o %o |> %f.o {objs}
