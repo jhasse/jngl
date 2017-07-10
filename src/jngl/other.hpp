@@ -37,6 +37,11 @@ namespace jngl {
 
     double JNGLDLL_API getFPS();
 
+    /// How many times Work::step is called per second (default: 60)
+    unsigned int JNGLDLL_API getStepsPerSecond();
+
+    void JNGLDLL_API setStepsPerSecond(unsigned int);
+
     void JNGLDLL_API readPixel(int x, int y, unsigned char& red, unsigned char& green, unsigned char& blue);
 
     void JNGLDLL_API setAntiAliasing(bool enabled);

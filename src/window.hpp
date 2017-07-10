@@ -95,6 +95,8 @@ namespace jngl {
 		std::string getConfigPath() const;
 		void addJob(std::shared_ptr<Job>);
 		void resetFrameLimiter();
+		unsigned int getStepsPerSecond() const;
+		void setStepsPerSecond(unsigned int);
 #ifdef _WIN32
 		static void ReleaseDC(HWND, HDC);
 		static void ReleaseRC(HGLRC);
@@ -107,6 +109,7 @@ namespace jngl {
 		int GetKeyCode(jngl::key::KeyType key);
 		std::string GetFontFileByName(const std::string& fontname);
 
+		double timePerStep = 1.0 / 60.0;
 		bool fullscreen_, running_, isMouseVisible_, relativeMouseMode, isMultisampleSupported_, anyKeyPressed_;
 		std::array<bool, 3> mouseDown_;
 		std::array<bool, 3> mousePressed_;

@@ -241,6 +241,14 @@ namespace jngl {
 		return fps;
 	}
 
+	unsigned int getStepsPerSecond() {
+		return pWindow->getStepsPerSecond();
+	}
+
+	void setStepsPerSecond(const unsigned int stepsPerSecond) {
+		pWindow->setStepsPerSecond(stepsPerSecond);
+	}
+
 	void reset() {
 		glLoadIdentity();
 	}

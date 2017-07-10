@@ -191,8 +191,15 @@ namespace jngl {
 		stepsPerFrame = 1;
 	}
 
+	unsigned int Window::getStepsPerSecond() const {
+		return static_cast<unsigned int>(1.0 / timePerStep);
+	}
+
+	void Window::setStepsPerSecond(const unsigned int stepsPerSecond) {
+		timePerStep = 1.0 / static_cast<double>(stepsPerSecond);
+	}
+
 	void Window::stepIfNeeded() {
-		const static auto timePerStep = 1.0 / 60.0;
 		const auto dif = jngl::getTime() - oldTime - timePerStep * stepsPerFrame;
 		if (dif > 1) { // something is wrong
 			oldTime = jngl::getTime(); // ignore this frame
