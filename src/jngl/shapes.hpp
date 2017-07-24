@@ -30,6 +30,8 @@ namespace jngl {
 		DrawRect(pos.x, pos.y, size.x, size.y);
 	}
 
+	void JNGLDLL_API setLineWidth(float width);
+
 	void JNGLDLL_API drawLine(double xstart, double ystart, double xend, double yend);
 
 	void JNGLDLL_API drawEllipse(float xmid, float ymid, float width, float height, float startAngle = 0);

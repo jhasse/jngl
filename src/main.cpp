@@ -287,6 +287,10 @@ namespace jngl {
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
+	void setLineWidth(const float width) {
+		glLineWidth(width);
+	}
+
 	void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
 		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 		draw::Line(xstart, ystart, xend, yend);
