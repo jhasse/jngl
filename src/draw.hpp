@@ -66,6 +66,7 @@ namespace draw
 		height *= static_cast<T>(jngl::getScaleFactor());
 		opengl::BindArrayBuffer(0);
 		glPushMatrix();
+		glScaled(jngl::getScaleFactor(), jngl::getScaleFactor(), 1.0);
 		opengl::translate(xmid, ymid);
 		std::vector<T> vertexes;
 		vertexes.push_back(0);
