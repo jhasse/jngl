@@ -37,6 +37,9 @@ namespace jngl {
 	void JNGLDLL_API drawEllipse(float xmid, float ymid, float width, float height, float startAngle = 0);
 
 	void JNGLDLL_API drawPoint(double x, double y);
+
+	void JNGLDLL_API drawTriangle(double A_x, double A_y, double B_x, double B_y, double C_x,
+	                              double C_y);
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop

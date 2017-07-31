@@ -287,6 +287,13 @@ namespace jngl {
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
+	void drawTriangle(const double A_x, const double A_y, const double B_x, const double B_y,
+	                  const double C_x, const double C_y) {
+		glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
+		draw::Triangle(A_x, A_y, B_x, B_y, C_x, C_y);
+		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
+	}
+
 	void setLineWidth(const float width) {
 		glLineWidth(width);
 	}
