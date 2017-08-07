@@ -61,9 +61,7 @@ namespace draw
 	}
 
 	template<class T>
-	void Ellipse(const T xmid, const T ymid, T width, T height, const T startAngle) {
-		width  *= static_cast<T>(jngl::getScaleFactor());
-		height *= static_cast<T>(jngl::getScaleFactor());
+	void Ellipse(const T xmid, const T ymid, const T width, const T height, const T startAngle) {
 		opengl::BindArrayBuffer(0);
 		glPushMatrix();
 		glScaled(jngl::getScaleFactor(), jngl::getScaleFactor(), 1.0);
