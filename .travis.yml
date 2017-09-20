@@ -19,6 +19,8 @@ addons:
       - libboost-python-dev
 install:
 - |
+  [ $TRAVIS_OS_NAME = linux ] || brew upgrade jpeg
+- |
   [ $TRAVIS_OS_NAME = linux ] || brew install sdl2 freetype libvorbis glew jpeg webp scons
 script:
   - scons verbose=1 debug=1
