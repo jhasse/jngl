@@ -1,5 +1,5 @@
 /*
-Copyright 2012-2015 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -9,23 +9,12 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "screen.hpp"
 #include "debug.hpp"
-#include "../texture.hpp"
-#include "../finally.hpp"
 #include "../windowptr.hpp"
 #include "../main.hpp"
 
-#include <string>
-#include <utility>
 #include <fstream>
-#include <boost/shared_array.hpp>
-#include <boost/function.hpp>
 #include <boost/bind.hpp>
 #include <boost/algorithm/string/predicate.hpp>
-#include <boost/make_shared.hpp>
-#include <stdexcept>
-#include <cmath>
-#include <cstdlib>
-#include <cstdio>
 #ifdef _WIN32
 	// These defines are needed to prevent conflicting types declarations in jpeglib.h:
 	#define XMD_H
@@ -84,7 +73,7 @@ namespace jngl {
 #endif
 			".bmp"
 		};
-		boost::function<void(Sprite*, std::string, FILE*, bool)> functions[] = {
+		std::function<void(Sprite*, std::string, FILE*, bool)> functions[] = {
 #ifndef NOWEBP
 			&Sprite::LoadWebP,
 #endif
@@ -97,7 +86,7 @@ namespace jngl {
 			&Sprite::LoadBMP
 		};
 		const size_t size = sizeof(extensions)/sizeof(extensions[0]);
-		boost::function<void(Sprite*, std::string, FILE*, bool)> loadFunction;
+		std::function<void(Sprite*, std::string, FILE*, bool)> loadFunction;
 		for (size_t i = 0; i < size; ++i) {
 			if (boost::algorithm::ends_with(filename, extensions[i])) {
 				loadFunction = functions[i];
