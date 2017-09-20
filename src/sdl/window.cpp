@@ -1,16 +1,12 @@
 /*
-Copyright 2011-2015 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2011-2017 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #include "../window.hpp"
 #include "../main.hpp"
-#include "../jngl/debug.hpp"
-#include "../jngl/window.hpp"
 #include "sdl.hpp"
 #include "windowimpl.hpp"
-
-#include <stdexcept>
 
 namespace jngl {
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
