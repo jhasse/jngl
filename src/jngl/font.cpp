@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
@@ -7,7 +7,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../freetype.hpp"
 #include "color.hpp"
-#include "screen.hpp"
 
 #include <stack>
 

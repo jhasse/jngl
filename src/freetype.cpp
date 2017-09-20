@@ -1,5 +1,5 @@
 /*
-Copyright 2007-2016 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
 
 Most of this code is based on http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=43
 
@@ -7,7 +7,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #include "freetype.hpp"
-#include "jngl/font.hpp"
 #include "jngl/debug.hpp"
 #include "jngl/screen.hpp"
 #include "ConvertUTF.h"
@@ -15,7 +14,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "helper.hpp"
 
 #include FT_GLYPH_H
-#include <functional>
 #include <boost/lexical_cast.hpp>
 #include <fstream>
 

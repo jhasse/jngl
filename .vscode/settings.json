@@ -1,3 +1,5 @@
 {
-	"files.associations": {}
+	"files.associations": {
+		"*.ipp": "cpp"
+	}
 }

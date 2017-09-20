@@ -1,10 +1,9 @@
 /*
-Copyright 2007-2013 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #include "window.hpp"
-#include "main.hpp"
 #include "jngl.hpp"
 
 namespace jngl {

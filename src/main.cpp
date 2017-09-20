@@ -1,19 +1,13 @@
 /*
-Copyright 2007-2015 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #include "jngl.hpp"
-#include "window.hpp"
 #include "spriteimpl.hpp"
-#include "windowptr.hpp"
 #include "draw.hpp"
-#include "opengl.hpp"
-#include "main.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <stdexcept>
-#include <sstream>
 
 #ifdef OPENGLES
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;

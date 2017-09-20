@@ -1,10 +1,9 @@
 /*
-Copyright 2010-2015 Jan Niklas Hasse <jhasse@gmail.com>
+Copyright 2010-2017 Jan Niklas Hasse <jhasse@gmail.com>
 For conditions of distribution and use, see copyright notice in LICENSE.txt
 */
 
 #include "texture.hpp"
-#include "jngl/debug.hpp"
 
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F
