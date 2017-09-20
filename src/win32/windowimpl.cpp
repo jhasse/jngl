@@ -344,7 +344,7 @@ namespace jngl {
 				case WM_MOUSEWHEEL:
 					mouseWheel_ += double(GET_WHEEL_DELTA_WPARAM(msg.wParam)) / WHEEL_DELTA;
 				break;
-				case WM_POINTERDOWN:
+				case WM_POINTERDOWN: // WINVER >= 0x0602 (Windows 8)
 					touchscreenActive = true;
 				break;
 				case WM_POINTERUP:

@@ -13,7 +13,22 @@ else
 endif
 CXXFLAGS = @(CXXFLAGS) -std=c++11 -fdiagnostics-color
 
-: foreach src/*.cpp src/linux/*.cpp src/jngl/*.cpp src/sdl/*.cpp |> $(CXX) $(CXXFLAGS) `pkg-config --cflags sdl2 freetype2` -c %f -o %o |> %f.o {objs}
+ifdef PKG_CONFIG
+	PKG_CONFIG = @(PKG_CONFIG)
+else
+	PKG_CONFIG = pkg-config
+endif
+
+SRC=src/*.cpp src/jngl/*.cpp
+ifdef WINDOWS
+	SRC += src/win32/*.cpp
+	LIBS += -lopengl32 -lxinput
+	CXXFLAGS += -DWINVER=0x0602
+else
+	SRC += src/linux/*.cpp src/sdl/*.cpp
+endif
+
+: foreach $(SRC) |> $(CXX) $(CXXFLAGS) `$(PKG_CONFIG) --cflags sdl2 freetype2` -c %f -o %o |> %f.o {objs}
 : src/ConvertUTF.c |> $(CC) $(CFLAGS) -c %f -o %o |> %f.o {objs}
 
 : {objs} |> ar rc %o %f && ranlib %o |> libjngl.a {libjngl}
@@ -22,4 +37,4 @@ CXXFLAGS = @(CXXFLAGS) -std=c++11 -fdiagnostics-color
 
 : jngl.pc.in |> sed s/@VERSION@/$(VERSION)/g < %f > %o |> jngl.pc
 
-: {libjngl} {test_obj} | jngl.pc |> $(CXX) %f $(CXXFLAGS) -L. `pkg-config --cflags --libs jngl.pc` -o %o |> test
+: {libjngl} {test_obj} | jngl.pc |> $(CXX) %f $(CXXFLAGS) -L. `$(PKG_CONFIG) --cflags --libs jngl.pc` $(LIBS) -o %o |> test
