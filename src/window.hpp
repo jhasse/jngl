@@ -28,7 +28,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #else
 	#ifdef _WIN32
 		#include <windows.h>
-		#include <XInput.h>
+		#include <xinput.h>
 
 		extern XINPUT_STATE states[XUSER_MAX_COUNT];
 		extern bool controllerPressed[XUSER_MAX_COUNT][jngl::controller::Last];
