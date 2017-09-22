@@ -1,7 +1,5 @@
-/*
-Copyright 2010-2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2010-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
@@ -22,14 +20,15 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <string>
 #include <vector>
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 namespace jngl {
 	void LoadSound(const std::string&);
 
-	class Sound : boost::noncopyable {
+	class Sound {
 	public:
 		Sound(ALenum format, std::vector<char>& bufferData, ALsizei freq);
+		Sound(const Sound&) = delete;
+		Sound& operator=(const Sound&) = delete;
 		~Sound();
 		bool IsPlaying();
 		bool Stopped();
@@ -42,9 +41,11 @@ namespace jngl {
 		ALuint source_;
 	};
 
-	class SoundFile : boost::noncopyable {
+	class SoundFile {
 	public:
 		SoundFile(const std::string& filename);
+		SoundFile(const SoundFile&) = delete;
+		SoundFile& operator=(const SoundFile&) = delete;
 		void Play();
 		void Stop();
 		bool IsPlaying();

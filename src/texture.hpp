@@ -1,24 +1,23 @@
-/*
-Copyright 2010-2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2010-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
 #include "opengl.hpp"
 
 #include <vector>
-#include <boost/noncopyable.hpp>
 #include <unordered_map>
 #include <string>
 #include <memory>
 
 namespace jngl {
-	class Texture : boost::noncopyable {
+	class Texture {
 	public:
 		Texture(int imgWidth, int imgHeight,
 		        GLubyte** rowPointers, // data as row pointers ...
 		        GLenum format = GL_RGBA, GLubyte* data = nullptr /* ... or as one pointer */ );
+		Texture(const Texture&) = delete;
+		Texture& operator=(const Texture&) = delete;
 		~Texture();
 		void Bind() const;
 		void draw() const;

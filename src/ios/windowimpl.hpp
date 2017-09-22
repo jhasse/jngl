@@ -1,18 +1,16 @@
-/*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
-#include <boost/noncopyable.hpp>
-
 namespace jngl {
 	class Window;
-	
-	class WindowImpl : boost::noncopyable {
+
+	class WindowImpl {
 	public:
 		WindowImpl(Window*);
+		WindowImpl(const WindowImpl&) = delete;
+		WindowImpl& operator=(const WindowImpl&) = delete;
 		void setMouse(int, int);
 		void setMouseDown(bool);
 		void setRelativeMouseMode(bool);

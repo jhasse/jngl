@@ -1,19 +1,17 @@
-/*
-Copyright 2011-2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2011-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
 #include "opengl.hpp"
 #include "texture.hpp"
 
-#include <boost/noncopyable.hpp>
-
 namespace jngl {
-class FrameBufferImpl : boost::noncopyable {
+class FrameBufferImpl {
 public:
 	FrameBufferImpl(int width, int height);
+	FrameBufferImpl(const FrameBufferImpl&) = delete;
+	FrameBufferImpl& operator=(const FrameBufferImpl&) = delete;
 	~FrameBufferImpl();
 	void BeginDraw();
 	void EndDraw();

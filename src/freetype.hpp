@@ -1,7 +1,5 @@
-/*
-Copyright 2007-2016 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
@@ -16,15 +14,14 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <stdexcept>
 #include <map>
 
-#include <boost/noncopyable.hpp>
-
 namespace jngl {
 	extern unsigned char fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha;
 
-	class Character : boost::noncopyable
-	{
+	class Character {
 	public:
 		Character(unsigned long ch, unsigned int height, FT_Face);
+		Character(const Character&) = delete;
+		Character& operator=(const Character&) = delete;
 		~Character();
 		void Draw() const;
 		int getWidth() const;
@@ -35,10 +32,12 @@ namespace jngl {
 		int top_ = 0;
 	};
 
-	class FontImpl : boost::noncopyable {
+	class FontImpl {
 	public:
 		FontImpl();
 		FontImpl(const std::string& filename, unsigned int height);
+		FontImpl(const FontImpl&) = delete;
+		FontImpl& operator=(const FontImpl&) = delete;
 		~FontImpl();
 		void print(int x, int y, const std::string& text);
 		int getTextWidth(const std::string& text);

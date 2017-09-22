@@ -1,7 +1,5 @@
-/*
-Copyright 2009-2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2009-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "jngl.hpp"
 #include "audio.hpp"
@@ -52,7 +50,7 @@ namespace jngl {
 
 	std::unordered_map<std::string, std::shared_ptr<SoundFile>> sounds;
 
-	class Audio : boost::noncopyable {
+	class Audio {
 	public:
 		Audio() : device_(0), context_(0) {
 			device_ = alcOpenDevice(0);
@@ -66,6 +64,8 @@ namespace jngl {
 				throw std::runtime_error("Could not create audio context.");
 			}
 		}
+		Audio(const Audio&) = delete;
+		Audio& operator=(const Audio&) = delete;
 		~Audio() {
 			sounds_.clear();
 			sounds.clear();

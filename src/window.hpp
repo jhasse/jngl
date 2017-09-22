@@ -1,7 +1,5 @@
-/*
-Copyright 2007-2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
@@ -13,7 +11,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <boost/type_traits.hpp>
 #include <array>
 #include <boost/ptr_container/ptr_unordered_map.hpp>
-#include <boost/noncopyable.hpp>
 #include <stack>
 
 #ifdef __linux
@@ -40,9 +37,11 @@ namespace jngl {
 	class Job;
 	class Work;
 
-	class Window : boost::noncopyable {
+	class Window {
 	public:
 		Window(const std::string& title, const int width, const int height, const bool fullscreen);
+		Window(const Window&) = delete;
+		Window& operator=(const Window&) = delete;
 		~Window();
 		bool isRunning();
 		void quit();

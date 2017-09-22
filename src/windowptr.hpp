@@ -1,18 +1,16 @@
-/*
-Copyright 2009 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2009-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
 #include "window.hpp"
 
-#include <boost/noncopyable.hpp>
-
 namespace jngl {
-	class WindowPointer : boost::noncopyable {
+	class WindowPointer {
 	public:
 		WindowPointer();
+		WindowPointer(const WindowPointer&) = delete;
+		WindowPointer& operator=(const WindowPointer&) = delete;
 		~WindowPointer();
 		Window* operator->() const;
 		operator bool() const;
