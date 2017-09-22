@@ -3,13 +3,13 @@
 
 #include "../jngl.hpp"
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include <sstream>
 #include <iostream>
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <boost/math/constants/constants.hpp>
 
 void drawBackground();
 void drawMouse(int, int);
@@ -43,7 +43,7 @@ public:
 		if (rotate > 360) {
 			rotate = 0;
 		}
-		factor = sin(rotate / 360 * M_PI);
+		factor = std::sin(rotate / 360 * boost::math::constants::pi<double>());
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
 		if (jngl::keyPressed('p')) {
