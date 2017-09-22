@@ -1,7 +1,5 @@
-/*
-Copyright 2012-2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl.hpp"
 
@@ -9,7 +7,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <cmath>
 #include <sstream>
 #include <iostream>
-#include <boost/lexical_cast.hpp>
 #include <map>
 #include <vector>
 #include <algorithm>
@@ -68,7 +65,7 @@ public:
 		pushMatrix();
 		lastTime = getTime();
 		for (int i = 0; i < 10; ++i) {
-			if (keyDown(boost::lexical_cast<char>(i))) {
+			if (keyDown('0' + i)) {
 				performance = i == 0 ? 10 : i;
 			}
 		}
@@ -134,7 +131,7 @@ public:
 		static int playbackSpeed = 100;
 		setPlaybackSpeed(playbackSpeed / 100.0f);
 		print("Press + and - to change the audio playback speed: " +
-		      boost::lexical_cast<std::string>(playbackSpeed) + " %", 6, 530);
+		      std::to_string(playbackSpeed) + " %", 6, 530);
 		if (keyPressed('-')) {
 			--playbackSpeed;
 		}
@@ -143,7 +140,7 @@ public:
 		}
 		setVolume(volume);
 		print("Use your mouse wheel to change the volume: " +
-		      boost::lexical_cast<std::string>(int(volume * 100)) +
+		      std::to_string(int(volume * 100)) +
 		      " %", 6, 550);
 		setColor(0,0,255,128);
 		if (drawOnFrameBuffer) {
