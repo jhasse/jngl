@@ -6,7 +6,7 @@
 	"linux": {
 		"command": "/bin/bash"
 	},
-	"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && scons && $@"],
+	"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && scons debug=1 && $@"],
 	"isShellCommand": true,
 	"showOutput": "always",
 	"options": {
