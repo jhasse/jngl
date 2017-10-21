@@ -1,7 +1,5 @@
-/*
-Copyright 2012-2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "input.hpp"
 
@@ -38,7 +36,7 @@ namespace jngl {
 		return keyboardType;
 	}
 
-#ifndef _WIN32
+#if defined(ANDROID) || defined(IOS)
 	bool isControllerConnected(int) {
 		return false;
 	}

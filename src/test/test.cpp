@@ -373,8 +373,27 @@ void testKeys() {
 			std::stringstream sstream;
 			sstream << "Controller " << i << " connected: " << jngl::isControllerConnected(i) << std::endl
 			        << "Trigger: " << jngl::getControllerState(i, jngl::controller::LeftTrigger) << " " << jngl::getControllerState(i, jngl::controller::RightTrigger)
-			        << " A: " << jngl::getControllerState(i, jngl::controller::A);
-			jngl::print(sstream.str(), 560, 100 + i * 50);
+			        << "\nSticks: " << jngl::getControllerState(i, jngl::controller::LeftStickX)
+			        << " " << jngl::getControllerState(i, jngl::controller::LeftStickY)
+			        << " " << jngl::getControllerState(i, jngl::controller::RightStickX)
+			        << " " << jngl::getControllerState(i, jngl::controller::RightStickY)
+			        << "\nA: " << jngl::getControllerPressed(i, jngl::controller::A)
+			        << " B: " << jngl::getControllerPressed(i, jngl::controller::B)
+			        << " X: " << jngl::getControllerPressed(i, jngl::controller::X)
+			        << " Y: " << jngl::getControllerPressed(i, jngl::controller::Y)
+			        << "\nLB: " << jngl::getControllerPressed(i, jngl::controller::LeftButton)
+			        << " RB: " << jngl::getControllerPressed(i, jngl::controller::RightButton)
+			        << " LT: " << jngl::getControllerPressed(i, jngl::controller::LeftTrigger)
+			        << " RT: " << jngl::getControllerPressed(i, jngl::controller::RightTrigger)
+			        << "\nLS: " << jngl::getControllerPressed(i, jngl::controller::LeftStick)
+			        << " RS: " << jngl::getControllerPressed(i, jngl::controller::RightStick)
+			        << " Start: " << jngl::getControllerPressed(i, jngl::controller::Start)
+			        << " Back: " << jngl::getControllerPressed(i, jngl::controller::Back)
+			        << "\n↑: " << jngl::getControllerPressed(i, jngl::controller::DpadUp)
+			        << " ↓: " << jngl::getControllerPressed(i, jngl::controller::DpadDown)
+			        << " ←: " << jngl::getControllerPressed(i, jngl::controller::DpadLeft)
+			        << " →: " << jngl::getControllerPressed(i, jngl::controller::DpadRight);
+			jngl::print(sstream.str(), 558, 50 + i * 110);
 		}
 		if (jngl::getRelativeMouseMode()) {
 			xpos += jngl::getMouseX();
