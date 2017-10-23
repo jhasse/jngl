@@ -58,7 +58,10 @@ namespace jngl {
 		} else {
 			state /= 32767;
 		}
-		return state / 2.0f + 0.5f;
+		if (button == controller::LeftStickY or button == controller::RightStickY) {
+			state *= -1;
+		}
+		return state;
 	}
 
 	bool getControllerPressed(const int number, const controller::Button button) {
