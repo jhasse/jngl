@@ -17,8 +17,6 @@ void testKeys();
 int performance = 1;
 double factor = 0;
 
-double absolute(double v);
-
 class Test : public jngl::Work {
 public:
 	Test() : drawOnFrameBuffer(false), rotate(0), frameNumber(0), fb(100, 110), fb2(800, 600),
@@ -80,7 +78,7 @@ public:
 		fb.draw(600, 300);
 		translate(getWindowWidth() / 2, getWindowHeight() / 2);
 		jngl::rotate(rotate);
-		setSpriteAlpha(static_cast<unsigned char>(absolute(factor * 255)));
+		setSpriteAlpha(static_cast<unsigned char>(std::abs(factor * 255)));
 		logoWebp.drawScaled(static_cast<float>(factor * 2));
 		setColor(0, 0, 0);
 		drawRect(-125, 100, 250, 28);
@@ -407,8 +405,4 @@ void testKeys() {
 		}
 		jngl::swapBuffers();
 	}
-}
-
-double absolute(double v) {
-	return v < 0 ? -v : v;
 }
