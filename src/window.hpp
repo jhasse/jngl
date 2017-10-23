@@ -28,7 +28,6 @@
 		#include <xinput.h>
 
 		extern XINPUT_STATE states[XUSER_MAX_COUNT];
-		extern bool controllerPressed[XUSER_MAX_COUNT][jngl::controller::Last];
 	#endif
 #endif
 

@@ -1,7 +1,5 @@
-/*
-Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
@@ -163,6 +161,9 @@ namespace jngl {
 
 	/// Returns a value between 0.0f (not pressed) and 1.0f (pressed).
 	float JNGLDLL_API getControllerState(int number, controller::Button);
+
+	/// Returns true when the button is down.
+	bool JNGLDLL_API getControllerDown(int number, controller::Button);
 
 	/// Returns true (one time) when the button is pressed.
 	bool JNGLDLL_API getControllerPressed(int number, controller::Button);

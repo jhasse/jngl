@@ -55,15 +55,7 @@ namespace jngl {
 		XInputSetState(number, &vibration);
 	}
 
-	bool getControllerPressed(int number, controller::Button button) {
-		if (controllerPressed[number][button] && getControllerState(number, button) > 0.5f) {
-			pWindow->addUpdateInputCallback([=]() {
-				controllerPressed[number][button] = false;
-			});
-			return true;
-		} else if (getControllerState(number, button) < 0.5f) {
-			controllerPressed[number][button] = true;
-		}
-		return false;
+	bool getControllerDown(int number, controller::Button button) {
+		return getControllerState(number, button) > 0.5f;
 	}
 }

@@ -1,7 +1,5 @@
-/*
-Copyright 2007-2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
 #include "../jngl/window.hpp"
@@ -22,7 +20,6 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <shlobj.h>
 
 XINPUT_STATE states[XUSER_MAX_COUNT];
-bool controllerPressed[XUSER_MAX_COUNT][jngl::controller::Last];
 
 namespace jngl {
 	LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

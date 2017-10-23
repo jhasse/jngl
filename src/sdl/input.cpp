@@ -50,7 +50,7 @@ namespace jngl {
 			case controller::RightStickY: axisIndex = 4; break;
 			case controller::LeftTrigger: axisIndex = 2; break;
 			case controller::RightTrigger: axisIndex = 5; break;
-			default: return getControllerPressed(number, button);
+			default: return getControllerDown(number, button);
 		}
 		float state = SDL_JoystickGetAxis(it->second, axisIndex);
 		if (state < 0) {
@@ -64,7 +64,7 @@ namespace jngl {
 		return state;
 	}
 
-	bool getControllerPressed(const int number, const controller::Button button) {
+	bool getControllerDown(const int number, const controller::Button button) {
 		const auto it = joysticks.find(number);
 		if (it == joysticks.end()) {
 			return false;
