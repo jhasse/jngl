@@ -317,12 +317,6 @@ namespace jngl {
 				calculateTrigger(states[i].Gamepad.bRightTrigger);
 			}
 		}
-		if (!updateInputCallbacks.empty()) {
-			for (auto& updateInputCallback : updateInputCallbacks) {
-				updateInputCallback();
-			}
-			updateInputCallbacks.clear();
-		}
 		if (relativeMouseMode && touchscreenActive) {
 			relativeX = mousex_;
 			relativeY = mousey_;
@@ -641,10 +635,6 @@ namespace jngl {
 		HICON hIcon = CreateIconIndirect(&icon);
 		SendMessage(pWindowHandle_.get(), WM_SETICON, WPARAM(ICON_SMALL), LPARAM(hIcon));
 #endif
-	}
-
-	void Window::addUpdateInputCallback(std::function<void()> c) {
-		updateInputCallbacks.push_back(c);
 	}
 
 	int getDesktopWidth() {

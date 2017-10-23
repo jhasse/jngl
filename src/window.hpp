@@ -95,11 +95,10 @@ namespace jngl {
 		void resetFrameLimiter();
 		unsigned int getStepsPerSecond() const;
 		void setStepsPerSecond(unsigned int);
+		void addUpdateInputCallback(std::function<void()>);
 #ifdef _WIN32
 		static void ReleaseDC(HWND, HDC);
 		static void ReleaseRC(HGLRC);
-
-		void addUpdateInputCallback(std::function<void()>);
 #else
 		WindowImpl* getImpl() const;
 #endif
@@ -136,11 +135,11 @@ namespace jngl {
 
 		// <fontSize, <fontName, FontImpl>>
 		boost::ptr_unordered_map<int, boost::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
+		std::vector<std::function<void()>> updateInputCallbacks;
 #ifdef _WIN32
 		std::shared_ptr<boost::remove_pointer<HGLRC>::type> pRenderingContext_;
 		std::shared_ptr<boost::remove_pointer<HWND>::type> pWindowHandle_;
 		std::shared_ptr<boost::remove_pointer<HDC>::type> pDeviceContext_;
-		std::vector<std::function<void()>> updateInputCallbacks;
 		int arbMultisampleFormat_;
 		bool touchscreenActive = false;
 		int relativeX = 0;

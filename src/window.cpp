@@ -168,6 +168,12 @@ namespace jngl {
 			needToBeSetFalse_.pop();
 		}
 		mouseWheel_ = 0;
+		if (!updateInputCallbacks.empty()) {
+			for (auto& updateInputCallback : updateInputCallbacks) {
+				updateInputCallback();
+			}
+			updateInputCallbacks.clear();
+		}
 	}
 
 	double Window::getMouseWheel() const {
@@ -279,5 +285,9 @@ namespace jngl {
 
 	bool Window::isMultitouch() const {
 		return multitouch;
+	}
+
+	void Window::addUpdateInputCallback(std::function<void()> c) {
+		updateInputCallbacks.emplace_back(std::move(c));
 	}
 }
