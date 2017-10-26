@@ -1,7 +1,5 @@
-/*
-Copyright 2011-2017 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2011-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
 #include "../main.hpp"
@@ -172,6 +170,14 @@ namespace jngl {
 					break;
 				}
 				case SDL_KEYDOWN: {
+					static bool wasFullscreen = fullscreen_;
+					if (event.key.repeat && fullscreen_ != wasFullscreen) {
+						// SDL2 with Xorg has a bug, that it sends a key repeat event when toggling
+						// fullscreen. So let's ignore the second event
+						break;
+					}
+					wasFullscreen = fullscreen_;
+
 					keyDown_[event.key.keysym.sym] = true;
 					keyPressed_[event.key.keysym.sym] = true;
 					const char* name = SDL_GetKeyName(event.key.keysym.sym);
