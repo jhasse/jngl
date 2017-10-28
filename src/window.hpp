@@ -115,7 +115,9 @@ namespace jngl {
 		std::map<std::string, bool> characterDown_;
 		std::map<std::string, bool> characterPressed_;
 		std::stack<bool*> needToBeSetFalse_;
-		int mousex_, mousey_, fontSize_, width_, height_;
+		int mousex_ = 0;
+		int mousey_ = 0;
+		int fontSize_, width_, height_;
 		double mouseWheel_ = 0;
 		std::string fontName_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
