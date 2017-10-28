@@ -42,14 +42,15 @@ namespace jngl {
 		if (it == joysticks.end()) {
 			return 0.0f;
 		}
+		const bool xboxWired = SDL_JoystickNumButtons(it->second) == 11;
 		int axisIndex;
 		switch (button) {
 			case controller::LeftStickX: axisIndex = 0; break;
 			case controller::LeftStickY: axisIndex = 1; break;
-			case controller::RightStickX: axisIndex = 3; break;
-			case controller::RightStickY: axisIndex = 4; break;
-			case controller::LeftTrigger: axisIndex = 2; break;
-			case controller::RightTrigger: axisIndex = 5; break;
+			case controller::RightStickX: axisIndex = xboxWired ? 2 : 3; break;
+			case controller::RightStickY: axisIndex = xboxWired ? 3 : 4; break;
+			case controller::LeftTrigger: axisIndex = xboxWired ? 5 : 2; break;
+			case controller::RightTrigger: axisIndex = xboxWired ? 4 : 5; break;
 			default: return getControllerDown(number, button);
 		}
 		float state = SDL_JoystickGetAxis(it->second, axisIndex);
@@ -69,7 +70,10 @@ namespace jngl {
 		if (it == joysticks.end()) {
 			return false;
 		}
-		const bool xbox = SDL_JoystickNumButtons(it->second) == 15;
+		//           DS4: 16 buttons
+		// Xbox Wireless: 15 buttons
+		//    Xbox Wired: 11 buttons
+		const bool xbox = SDL_JoystickNumButtons(it->second) != 16;
 		if (xbox && (button == controller::LeftTrigger || button == controller::RightTrigger)) {
 			return getControllerState(number, button) > 0;
 		}
