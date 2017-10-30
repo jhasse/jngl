@@ -21,12 +21,13 @@ namespace draw
 	{
 		opengl::BindArrayBuffer(0);
 		glPushMatrix();
-		opengl::translate(xposition, yposition);
+		opengl::translate(xposition * jngl::getScaleFactor(), yposition * jngl::getScaleFactor());
 		typedef typename opengl::Type<T>::type Type;
 		Type rect[] = { 0, 0,
-		                static_cast<Type>(width), 0,
-		                static_cast<Type>(width), static_cast<Type>(height),
-		                0, static_cast<Type>(height) };
+		                static_cast<Type>(width * jngl::getScaleFactor()), 0,
+						static_cast<Type>(width * jngl::getScaleFactor()),
+						static_cast<Type>(height * jngl::getScaleFactor()),
+		                0, static_cast<Type>(height * jngl::getScaleFactor()) };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, rect);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 		glPopMatrix();
