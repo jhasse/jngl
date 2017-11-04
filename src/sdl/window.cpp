@@ -1,15 +1,15 @@
 // Copyright 2011-2017 Jan Niklas Hasse <jhasse@gmail.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
+#ifndef NOPNG
+#include <png.h> // We need to include it first, I don't know why
+#endif
+
 #include "../window.hpp"
 #include "../main.hpp"
 #include "sdl.hpp"
 #include "windowimpl.hpp"
 #include "../jngl/debug.hpp"
-
-#ifndef NOPNG
-#include <png.h>
-#endif
 
 namespace jngl {
 	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
