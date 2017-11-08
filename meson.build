@@ -1,6 +1,6 @@
 project('jngl', ['c', 'cpp'])
 
-if get_option('buildtype') == 'release'
+if get_option('buildtype') == 'release' and not meson.is_subproject()
 	add_global_arguments('-DNDEBUG', language : 'cpp')
 endif
 
@@ -31,22 +31,10 @@ src = [
 	'src/jngl/window.cpp',
 	'src/jngl/work.cpp',
 ]
+cpp_args = []
 
 cxx = meson.get_compiler('cpp')
-if host_machine.system() == 'windows'
-	add_global_arguments('-DWINVER=0x0602', language : 'cpp')
-	opengl_dep = [
-		cxx.find_library('opengl32'),
-		cxx.find_library('glu32'),
-		cxx.find_library('Xinput'),
-	]
-	src += [
-		'src/win32/inputimpl.cpp',
-		'src/win32/message.cpp',
-		'src/win32/time.cpp',
-		'src/win32/windowimpl.cpp',
-	]
-else
+if target_machine.system() == 'linux'
 	opengl_dep = [
 		cxx.find_library('GL'),
 		dependency('SDL2'),
@@ -59,17 +47,37 @@ else
 		'src/linux/message.cpp',
 		'src/linux/window.cpp',
 	]
+else
+	cpp_args += ['-DWINVER=0x0602']
+	opengl_dep = [
+		cxx.find_library('opengl32'),
+		cxx.find_library('glu32'),
+		cxx.find_library('xinput'),
+	]
+	src += [
+		'src/win32/inputimpl.cpp',
+		'src/win32/message.cpp',
+		'src/win32/time.cpp',
+		'src/win32/windowimpl.cpp',
+	]
 endif
 
-jngl = static_library('jngl', sources : src, dependencies : [
+jpeg_dep = dependency('libjpeg', required : false)
+if not jpeg_dep.found()
+	cpp_args += ['-DNOJPEG']
+endif
+
+
+lib = static_library('jngl', sources : src, cpp_args : cpp_args, dependencies : [
 	dependency('freetype2'),
 	dependency('glew'),
 	dependency('libwebp'),
-	dependency('libjpeg'),
 	dependency('libpng'),
 	dependency('openal'),
 	dependency('vorbisfile'),
-	opengl_dep
+	jpeg_dep,
+	opengl_dep,
 ])
+include = include_directories('src')
 
-executable('jngl-test', sources : ['src/test/test.cpp'], link_with : jngl)
+executable('jngl-test', sources : ['src/test/test.cpp'], link_with : lib)
