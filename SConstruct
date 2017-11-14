@@ -24,6 +24,8 @@ env = Environment(variables = vars, ENV = os.environ)
 env['ENV']['TERM'] = os.getenv('TERM')
 env['CC'] = os.getenv('CC', env['CC'])
 env['CXX'] = os.getenv('CXX', env['CXX'])
+if 'clang' in env['CXX']:
+	env.Append(CXXFLAGS = '-stdlib=libc++', LINKFLAGS='-stdlib=libc++')
 Help(vars.GenerateHelpText(env))
 try:
 	import multiprocessing
