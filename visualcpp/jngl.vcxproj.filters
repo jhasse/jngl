@@ -39,7 +39,7 @@
     <ClCompile Include="..\src\ConvertUTF.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\finally.cpp">
+    <ClCompile Include="..\src\jngl\Finally.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\freetype.cpp">
@@ -111,7 +111,7 @@
     <ClInclude Include="..\src\ConvertUTF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\finally.hpp">
+    <ClInclude Include="..\src\jngl\Finally.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\freetype.hpp">

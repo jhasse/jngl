@@ -13,7 +13,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\audio.cpp" />
     <ClCompile Include="..\src\ConvertUTF.c" />
-    <ClCompile Include="..\src\finally.cpp" />
+    <ClCompile Include="..\src\jngl\Finally.cpp" />
     <ClCompile Include="..\src\framebufferimpl.cpp" />
     <ClCompile Include="..\src\freetype.cpp" />
     <ClCompile Include="..\src\helper.cpp" />
@@ -46,7 +46,7 @@
     <ClInclude Include="..\src\ConvertUTF.h" />
     <ClInclude Include="..\src\debug.hpp" />
     <ClInclude Include="..\src\draw.hpp" />
-    <ClInclude Include="..\src\finally.hpp" />
+    <ClInclude Include="..\src\jngl\Finally.hpp" />
     <ClInclude Include="..\src\framebufferimpl.hpp" />
     <ClInclude Include="..\src\freetype.hpp" />
     <ClInclude Include="..\src\helper.hpp" />
