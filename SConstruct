@@ -20,7 +20,7 @@ vars.Add(BoolVariable('installer', 'Create a Windows installer using NSIS', 0))
 vars.Add(BoolVariable('verbose', 'Show verbose compiling output', 0))
 vars.Add(BoolVariable('msvc', "Build installer using Visual C++'s output", 0))
 
-env = Environment(variables = vars)
+env = Environment(variables = vars, ENV = os.environ)
 env['ENV']['TERM'] = os.getenv('TERM')
 env['CC'] = os.getenv('CC', env['CC'])
 env['CXX'] = os.getenv('CXX', env['CXX'])
