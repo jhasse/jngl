@@ -39,3 +39,4 @@ Thumbs.db
 python/*.dll*
 .tup/
 .vscode/.browse*
+/.vscode/tags
