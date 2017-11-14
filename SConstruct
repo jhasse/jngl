@@ -56,7 +56,7 @@ if not env['verbose']:
 	env['ARCOMSTR'] = "archiving: $TARGET"
 
 source_files = [buildDir + 'ConvertUTF.c']
-env.Append(CXXFLAGS = '-std=c++0x')
+env.Append(CXXFLAGS = '-std=c++1y')
 
 if not env['msvc']:
 	source_files += Glob(buildDir + "*.cpp") + Glob(buildDir + "jngl/*.cpp")

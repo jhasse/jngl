@@ -5,6 +5,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
+#include "Finally.hpp"
 #include "types.hpp"
 #include "drawable.hpp"
 
@@ -29,11 +30,14 @@ namespace jngl {
 		void JNGLDLL_API drawScaled(float factor) const;
 		void JNGLDLL_API drawScaled(float xfactor, float yfactor) const;
 		void JNGLDLL_API drawClipped(float xstart, float xend, float ystart, float yend) const;
+
+		std::shared_ptr<Finally> loader;
+
 	private:
 		static void cleanUpRowPointers(std::vector<unsigned char*>& buf);
 		void loadTexture(const std::string& filename, bool halfLoad, unsigned int format,
 		                 unsigned char** rowPointers, unsigned char* data = nullptr);
-		void LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad);
+		Finally LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad);
 		struct BMPHeader {
 			unsigned int dataOffset;
 			unsigned int headerSize;
@@ -44,12 +48,12 @@ namespace jngl {
 			unsigned int compression;
 			unsigned int dataSize;
 		};
- 		void LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad);
+ 		Finally LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad);
 #ifndef NOJPEG
-		void LoadJPG(const std::string& filename, FILE* file, const bool halfLoad);
+		Finally LoadJPG(const std::string& filename, FILE* file, const bool halfLoad);
 #endif
 #ifndef NOWEBP
-		void LoadWebP(const std::string& filename, FILE* file, const bool halfLoad);
+		Finally LoadWebP(const std::string& filename, FILE* file, const bool halfLoad);
 #endif
 
 		std::shared_ptr<Texture> texture;
@@ -64,7 +68,7 @@ namespace jngl {
 		draw(filename, pos.x, pos.y);
 	}
 
-	void JNGLDLL_API load(const std::string& filename);
+	Finally JNGLDLL_API load(const std::string& filename);
 
 	void JNGLDLL_API unload(const std::string& filename);
 

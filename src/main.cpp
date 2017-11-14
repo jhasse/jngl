@@ -1,7 +1,5 @@
-/*
-Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "jngl.hpp"
 #include "spriteimpl.hpp"
@@ -350,11 +348,12 @@ namespace jngl {
 
 	void loadSound(const std::string&); // definied in audio.cpp
 
-	void load(const std::string& filename) {
+	Finally load(const std::string& filename) {
 		if (filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg") {
 			loadSound(filename);
+			return {[](){}};
 		} else {
-			loadSprite(filename);
+			return loadSprite(filename);
 		}
 	}
 

@@ -3,14 +3,19 @@
 
 #pragma once
 
-#include <boost/function.hpp>
+#include <functional>
+
+namespace jngl {
 
 class Finally {
 public:
-	Finally(boost::function<void()> functionToCall);
+	Finally(std::function<void()> functionToCall);
 	Finally(const Finally&) = delete;
 	Finally& operator=(const Finally&) = delete;
+	Finally(Finally&&) = default;
 	~Finally();
 private:
-	boost::function<void()> functionToCall;
+	std::function<void()> functionToCall;
 };
+
+} // namespace jngl

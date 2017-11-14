@@ -1,7 +1,5 @@
-/*
-Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <png.h> // We need to include it first, I don't know why
 
@@ -12,6 +10,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "../windowptr.hpp"
 #include "../main.hpp"
 
+#include <thread>
 #include <fstream>
 #include <boost/bind.hpp>
 #include <boost/algorithm/string/predicate.hpp>
@@ -73,7 +72,7 @@ namespace jngl {
 #endif
 			".bmp"
 		};
-		std::function<void(Sprite*, std::string, FILE*, bool)> functions[] = {
+		std::function<Finally(Sprite*, std::string, FILE*, bool)> functions[] = {
 #ifndef NOWEBP
 			&Sprite::LoadWebP,
 #endif
@@ -86,7 +85,7 @@ namespace jngl {
 			&Sprite::LoadBMP
 		};
 		const size_t size = sizeof(extensions)/sizeof(extensions[0]);
-		std::function<void(Sprite*, std::string, FILE*, bool)> loadFunction;
+		std::function<Finally(Sprite*, std::string, FILE*, bool)> loadFunction;
 		for (size_t i = 0; i < size; ++i) {
 			if (boost::algorithm::ends_with(filename, extensions[i])) {
 				loadFunction = functions[i];
@@ -115,12 +114,15 @@ namespace jngl {
 		if (!pFile) {
 			throw std::runtime_error(std::string("File not found: " + filename));
 		}
-		Finally closeFile(boost::bind(fclose, pFile));
-		loadFunction(this, shortFilename, pFile, halfLoad);
-		setCenter(0, 0);
-		if (!halfLoad) {
-			jngl::debugLn("OK");
-		}
+		auto loadTexture = std::make_shared<Finally>(loadFunction(this, shortFilename, pFile, halfLoad));
+		loader = std::make_shared<Finally>([pFile, loadTexture, halfLoad, this]() mutable {
+			loadTexture.reset(); // call ~Finally
+			fclose(pFile);
+			setCenter(0, 0);
+			if (!halfLoad) {
+				jngl::debugLn("OK");
+			}
+		});
 	}
 
 	void Sprite::step() {
@@ -154,7 +156,7 @@ namespace jngl {
 	}
 
 #ifndef NOPNG
-	void Sprite::LoadPNG(const std::string& filename, FILE* const fp,
+	Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp,
 	                     const bool halfLoad) {
 		png_byte buf[PNG_BYTES_TO_CHECK];
 		assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short));
@@ -207,6 +209,7 @@ namespace jngl {
 		width = static_cast<int>(png_get_image_width(png_ptr, info_ptr));
 		height = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
 		loadTexture(filename, halfLoad, format, rowPointers);
+		return {[](){}};
 	}
 #endif
 
@@ -215,8 +218,8 @@ namespace jngl {
 			delete[] *i;
 		}
 	}
-	void Sprite::LoadBMP(const std::string& filename, FILE* const fp,
-	                         const bool halfLoad) {
+
+	Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad) {
 		fseek(fp, 10, SEEK_SET);
 		BMPHeader header;
 		if (!fread(&header, sizeof(header), 1, fp))
@@ -257,10 +260,10 @@ namespace jngl {
 			}
 		}
 		loadTexture(filename, halfLoad, GL_BGR, &buf[0]);
+		return {[](){}};
 	}
 #ifndef NOJPEG
-	void Sprite::LoadJPG(const std::string& filename, FILE* file,
-	                     const bool halfLoad) {
+	Finally Sprite::LoadJPG(const std::string& filename, FILE* file, const bool halfLoad) {
 		jpeg_decompress_struct info;
 		JpegErrorMgr err;
 		info.err = jpeg_std_error(&err.pub);
@@ -303,11 +306,11 @@ namespace jngl {
 		jpeg_finish_decompress(&info);
 
 		loadTexture(filename, halfLoad, format, &buf[0]);
+		return {[](){}};
 	}
 #endif
 #ifndef NOWEBP
-	void Sprite::LoadWebP(const std::string& filename, FILE* file,
-	                         const bool halfLoad) {
+	Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool halfLoad) {
 		fseek(file, 0, SEEK_END);
 		auto filesize = ftell(file);
 		fseek(file, 0, SEEK_SET);
@@ -321,25 +324,33 @@ namespace jngl {
 			throw std::runtime_error(std::string("Invalid WebP file. (" + filename + ")"));
 		}
 
-		WebPDecoderConfig config;
-		WebPInitDecoderConfig(&config);
+		auto config = std::make_shared<WebPDecoderConfig>();
+		WebPInitDecoderConfig(config.get());
+		config->options.use_threads = true;
 		if (getScaleFactor() != 1) {
-			config.options.use_scaling = true;
+			config->options.use_scaling = true;
 			width  = static_cast<int>(width  * getScaleFactor());
 			height = static_cast<int>(height * getScaleFactor());
 			if (width < 1) width = 1;
 			if (height < 1) height = 1;
-			config.options.scaled_width = width;
-			config.options.scaled_height = height;
+			config->options.scaled_width = width;
+			config->options.scaled_height = height;
 		}
-		config.output.colorspace = MODE_RGBA;
-		if (WebPDecode(&buf[0], filesize, &config) != VP8_STATUS_OK) {
-			throw std::runtime_error(std::string("Can't decode WebP file. (" + filename + ")"));
-		}
-		Finally _([&]() {
-			WebPFreeDecBuffer(&config.output);
-		});
-		loadTexture(filename, halfLoad, GL_RGBA, nullptr, config.output.u.RGBA.rgba);
+		config->output.colorspace = MODE_RGBA;
+		auto result = std::make_shared<VP8StatusCode>();
+		auto thread = std::make_shared<std::thread>(
+			[buf{std::move(buf)}, result, filesize, config]() mutable {
+				*result = WebPDecode(&buf[0], filesize, config.get());
+			}
+		);
+		return {[thread = std::move(thread), result, filename, config, halfLoad, this]() mutable {
+			thread->join();
+			if (*result != VP8_STATUS_OK) {
+				throw std::runtime_error(std::string("Can't decode WebP file. (" + filename + ")"));
+			}
+			loadTexture(filename, halfLoad, GL_RGBA, nullptr, config->output.u.RGBA.rgba);
+			WebPFreeDecBuffer(&config->output);
+		}};
 	}
 #endif
 

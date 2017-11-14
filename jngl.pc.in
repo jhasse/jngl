@@ -1,5 +1,5 @@
 Name: jngl
 Description: Easy to use 2D game library using OpenGL and OpenAL
 Version: @VERSION@
-Libs: -ljngl -ljpeg -lwebp
+Libs: -ljngl -ljpeg -lwebp -lpthread
 Requires: libpng freetype2 fontconfig vorbisfile glew sdl2 openal

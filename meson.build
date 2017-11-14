@@ -7,7 +7,7 @@ endif
 src = [
 	'src/audio.cpp',
 	'src/ConvertUTF.c',
-	'src/finally.cpp',
+	'src/jngl/Finally.cpp',
 	'src/framebufferimpl.cpp',
 	'src/freetype.cpp',
 	'src/helper.cpp',
@@ -80,4 +80,6 @@ lib = static_library('jngl', sources : src, cpp_args : cpp_args, dependencies : 
 ])
 include = include_directories('src')
 
-executable('jngl-test', sources : ['src/test/test.cpp'], link_with : lib)
+executable('jngl-test', sources : ['src/test/test.cpp'], link_with : lib, dependencies : [
+	dependency('threads')
+])

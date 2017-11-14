@@ -1,13 +1,11 @@
-/*
-Copyright 2007-2012 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <png.h> // We need to include it first, I don't know why
 
 #include "spriteimpl.hpp"
 #include "window.hpp"
-#include "finally.hpp"
+#include "jngl/Finally.hpp"
 #include "windowptr.hpp"
 #include "texture.hpp"
 #include "main.hpp"
@@ -111,8 +109,8 @@ namespace jngl
 		s.drawClipped(xstart, xend, ystart, yend);
 	}
 
-	void loadSprite(const std::string& filename) {
-		GetSprite(filename);
+	Finally loadSprite(const std::string& filename) {
+		return std::move(*GetSprite(filename).loader);
 	}
 
 	void unload(const std::string& filename) {

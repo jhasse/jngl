@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "finally.hpp"
+#include "jngl/Finally.hpp"
 #include "texture.hpp"
 
 #include <ft2build.h>
