@@ -4,7 +4,6 @@
 #include "../window.hpp"
 #include "../jngl/window.hpp"
 #include "../jngl/debug.hpp"
-#include "../finally.hpp"
 #include "../opengl.hpp"
 #include "../ConvertUTF.h"
 #include "../main.hpp"
