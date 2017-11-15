@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "dll.hpp"
+
 #include <functional>
 
 namespace jngl {
@@ -13,7 +15,7 @@ public:
 	Finally(const Finally&) = delete;
 	Finally& operator=(const Finally&) = delete;
 	Finally(Finally&&) = default;
-	~Finally();
+	JNGLDLL_API ~Finally();
 private:
 	std::function<void()> functionToCall;
 };
