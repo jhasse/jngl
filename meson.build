@@ -67,6 +67,7 @@ if not jpeg_dep.found()
 	cpp_args += ['-DNOJPEG']
 endif
 
+thread_dep = dependency('threads')
 
 lib = static_library('jngl', sources : src, cpp_args : cpp_args, dependencies : [
 	dependency('freetype2'),
@@ -81,5 +82,16 @@ lib = static_library('jngl', sources : src, cpp_args : cpp_args, dependencies : 
 include = include_directories('src')
 
 executable('jngl-test', sources : ['src/test/test.cpp'], link_with : lib, dependencies : [
-	dependency('threads')
+	thread_dep,
 ])
+
+boost_python_dep = dependency('boost', modules : [ 'python3' ], required : false)
+if boost_python_dep.found()
+	shared_library('jngl', sources : [
+		'python/main.cpp',
+	], dependencies : [
+		boost_python_dep,
+		thread_dep,
+		dependency('python3'),
+	], link_with : lib, name_prefix : '')
+endif
