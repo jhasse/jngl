@@ -24,7 +24,13 @@ namespace jngl {
 
 	class Sprite : public Drawable {
 	public:
-		JNGLDLL_API Sprite(const std::string& filename, bool halfLoad = false);
+		enum class LoadType {
+			NORMAL,
+			HALF,
+			THREADED,
+		};
+
+		JNGLDLL_API Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
 		void JNGLDLL_API step();
 		void JNGLDLL_API draw() const;
 		void JNGLDLL_API drawScaled(float factor) const;

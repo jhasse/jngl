@@ -18,6 +18,7 @@ src = [
 	'src/window.cpp',
 	'src/windowptr.cpp',
 	'src/jngl/color.cpp',
+	'src/jngl/Controller.cpp',
 	'src/jngl/drawable.cpp',
 	'src/jngl/font.cpp',
 	'src/jngl/framebuffer.cpp',
@@ -44,6 +45,7 @@ if target_machine.system() == 'linux'
 		'src/sdl/input.cpp',
 		'src/sdl/sdl.cpp',
 		'src/sdl/window.cpp',
+		'src/sdl/SdlController.cpp',
 		'src/linux/message.cpp',
 		'src/linux/window.cpp',
 	]

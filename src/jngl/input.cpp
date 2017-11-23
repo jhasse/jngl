@@ -52,19 +52,4 @@ namespace jngl {
 	void setControllerVibration(int, unsigned short, unsigned short) {
 	}
 #endif
-
-	// FIXME: Support more than 8 controllers
-	bool controllerPressed[8][jngl::controller::Last];
-
-	bool getControllerPressed(const int number, const controller::Button button) {
-		if (controllerPressed[number][button] && !getControllerDown(number, button)) {
-			pWindow->addUpdateInputCallback([=]() {
-				controllerPressed[number][button] = false;
-			});
-			return true;
-		} else if (!getControllerDown(number, button)) {
-			controllerPressed[number][button] = true;
-		}
-		return false;
-	}
 }

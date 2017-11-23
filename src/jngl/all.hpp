@@ -25,3 +25,4 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "message.hpp"
 #include "main.hpp"
 #include "other.hpp"
+#include "Controller.hpp"

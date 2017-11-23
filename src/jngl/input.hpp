@@ -4,6 +4,8 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <memory>
 
 #include "dll.hpp"
 
@@ -156,20 +158,10 @@ namespace jngl {
 		};
 	}
 
-	/// Check if the Controller is connected. Don't call this function every frame for performance reasons.
-	bool JNGLDLL_API isControllerConnected(int number);
+	class Controller;
 
-	/// Returns a value between 0.0f (not pressed) and 1.0f (pressed).
-	float JNGLDLL_API getControllerState(int number, controller::Button);
-
-	/// Returns true when the button is down.
-	bool JNGLDLL_API getControllerDown(int number, controller::Button);
-
-	/// Returns true (one time) when the button is pressed.
-	bool JNGLDLL_API getControllerPressed(int number, controller::Button);
-
-	/// Note that the right motor is the high-frequency motor, the left motor is the low-frequency motor.
-	void JNGLDLL_API setControllerVibration(int number, unsigned short leftMotor, unsigned short rightMotor);
+	/// Returns all Controllers that are connected. Don't call this function every frame for performance reasons
+	std::vector<std::shared_ptr<Controller>> getConnectedControllers();
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop

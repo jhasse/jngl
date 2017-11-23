@@ -273,7 +273,4 @@ BOOST_PYTHON_MODULE(jngl) {
 		.value("LeftStick", controller::LeftStick)
 		.value("RightStic", controller::RightStick);
 
-    def("isControllerConnected", isControllerConnected);
-    def("getControllerState", getControllerState);
-    def("setControllerVibration", setControllerVibration);
 }

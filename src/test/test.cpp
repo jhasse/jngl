@@ -367,31 +367,33 @@ void testKeys() {
 		std::stringstream sstream;
 		sstream << "X: " << jngl::getMouseX() << "\nY: " << jngl::getMouseY() << std::endl;
 		jngl::print(sstream.str(), 5, 5);
-		for (int i = 0; i < 4; ++i) {
+		size_t controllerNr = 1;
+		for (const auto& controller : jngl::getConnectedControllers()) {
 			std::stringstream sstream;
-			sstream << "Controller " << i << " connected: " << jngl::isControllerConnected(i) << std::endl
-			        << "Trigger: " << jngl::getControllerState(i, jngl::controller::LeftTrigger) << " " << jngl::getControllerState(i, jngl::controller::RightTrigger)
-			        << "\nSticks: " << jngl::getControllerState(i, jngl::controller::LeftStickX)
-			        << " " << jngl::getControllerState(i, jngl::controller::LeftStickY)
-			        << " " << jngl::getControllerState(i, jngl::controller::RightStickX)
-			        << " " << jngl::getControllerState(i, jngl::controller::RightStickY)
-			        << "\nA: " << jngl::getControllerDown(i, jngl::controller::A)
-			        << " B: " << jngl::getControllerDown(i, jngl::controller::B)
-			        << " X: " << jngl::getControllerDown(i, jngl::controller::X)
-			        << " Y: " << jngl::getControllerDown(i, jngl::controller::Y)
-			        << "\nLB: " << jngl::getControllerDown(i, jngl::controller::LeftButton)
-			        << " RB: " << jngl::getControllerDown(i, jngl::controller::RightButton)
-			        << " LT: " << jngl::getControllerDown(i, jngl::controller::LeftTrigger)
-			        << " RT: " << jngl::getControllerDown(i, jngl::controller::RightTrigger)
-			        << "\nLS: " << jngl::getControllerDown(i, jngl::controller::LeftStick)
-			        << " RS: " << jngl::getControllerDown(i, jngl::controller::RightStick)
-			        << " Start: " << jngl::getControllerDown(i, jngl::controller::Start)
-			        << " Back: " << jngl::getControllerDown(i, jngl::controller::Back)
-			        << "\n↑: " << jngl::getControllerDown(i, jngl::controller::DpadUp)
-			        << " ↓: " << jngl::getControllerDown(i, jngl::controller::DpadDown)
-			        << " ←: " << jngl::getControllerDown(i, jngl::controller::DpadLeft)
-			        << " →: " << jngl::getControllerDown(i, jngl::controller::DpadRight);
-			jngl::print(sstream.str(), 558, 50 + i * 110);
+			sstream << "Controller " << controllerNr << " connected." << std::endl
+			        << "Trigger: " << controller->state(jngl::controller::LeftTrigger) << " " << controller->state(jngl::controller::RightTrigger)
+			        << "\nSticks: " << controller->state(jngl::controller::LeftStickX)
+			        << " " << controller->state(jngl::controller::LeftStickY)
+			        << " " << controller->state(jngl::controller::RightStickX)
+			        << " " << controller->state(jngl::controller::RightStickY)
+			        << "\nA: " << controller->down(jngl::controller::A)
+			        << " B: " << controller->down(jngl::controller::B)
+			        << " X: " << controller->down(jngl::controller::X)
+			        << " Y: " << controller->down(jngl::controller::Y)
+			        << "\nLB: " << controller->down(jngl::controller::LeftButton)
+			        << " RB: " << controller->down(jngl::controller::RightButton)
+			        << " LT: " << controller->down(jngl::controller::LeftTrigger)
+			        << " RT: " << controller->down(jngl::controller::RightTrigger)
+			        << "\nLS: " << controller->down(jngl::controller::LeftStick)
+			        << " RS: " << controller->down(jngl::controller::RightStick)
+			        << " Start: " << controller->down(jngl::controller::Start)
+			        << " Back: " << controller->down(jngl::controller::Back)
+			        << "\n↑: " << controller->down(jngl::controller::DpadUp)
+			        << " ↓: " << controller->down(jngl::controller::DpadDown)
+			        << " ←: " << controller->down(jngl::controller::DpadLeft)
+			        << " →: " << controller->down(jngl::controller::DpadRight);
+			jngl::print(sstream.str(), 558, 50 + controllerNr * 110);
+			++controllerNr;
 		}
 		if (jngl::getRelativeMouseMode()) {
 			xpos += jngl::getMouseX();
