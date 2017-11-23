@@ -41,9 +41,9 @@ namespace jngl {
 	void JNGLDLL_API setFontByName(const std::string& name);
 
 	void JNGLDLL_API setFontColor(unsigned char red,
-	                  unsigned char green,
-	                  unsigned char blue,
-	                  unsigned char alpha = 255);
+	                              unsigned char green,
+	                              unsigned char blue,
+	                              unsigned char alpha = 255);
 
 	void JNGLDLL_API pushFontColor(unsigned char red, unsigned char green, unsigned char blue);
 
