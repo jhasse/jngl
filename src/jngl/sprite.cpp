@@ -49,13 +49,14 @@ namespace jngl {
 	}
 #endif
 
-	Sprite::Sprite(const std::string& shortFilename, bool halfLoad) : texture(getTexture(shortFilename)) {
+	Sprite::Sprite(const std::string& shortFilename, LoadType loadType) : texture(getTexture(shortFilename)) {
 		if (texture) {
 			width = texture->getWidth();
 			height = texture->getHeight();
 			setCenter(0, 0);
 			return;
 		}
+		const bool halfLoad = (loadType == LoadType::HALF);
 		if (!halfLoad) {
 			jngl::debug("Creating sprite "); jngl::debug(shortFilename); jngl::debug("... ");
 		}
@@ -123,6 +124,9 @@ namespace jngl {
 				jngl::debugLn("OK");
 			}
 		});
+		if (loadType != LoadType::THREADED) {
+			loader.reset();
+		}
 	}
 
 	void Sprite::step() {

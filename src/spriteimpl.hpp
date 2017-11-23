@@ -8,7 +8,7 @@
 
 namespace jngl {
 	Finally loadSprite(const std::string&);
-	Sprite& GetSprite(const std::string& filename, const bool halfLoad = false);
+	Sprite& GetSprite(const std::string& filename, Sprite::LoadType loadType = Sprite::LoadType::NORMAL);
 
 	extern unsigned char spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha,
 	                     colorRed,       colorGreen,       colorBlue,       colorAlpha;

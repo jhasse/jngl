@@ -72,13 +72,13 @@ namespace jngl
 	boost::unordered_map<std::string, std::shared_ptr<Sprite>> sprites_;
 
 	// halfLoad is used, if we only want to find out the width or height of an image. Load won't throw an exception then
-	Sprite& GetSprite(const std::string& filename, const bool halfLoad) {
+	Sprite& GetSprite(const std::string& filename, const Sprite::LoadType loadType) {
 		auto it = sprites_.find(filename);
 		if (it == sprites_.end()) { // texture hasn't been loaded yet?
-			if (!halfLoad) {
+			if (loadType == Sprite::LoadType::HALF) {
 				pWindow.ThrowIfNull();
 			}
-			auto s = new Sprite(filename, halfLoad);
+			auto s = new Sprite(filename, loadType);
 			sprites_[filename].reset(s);
 			return *s;
 		}
@@ -110,7 +110,7 @@ namespace jngl
 	}
 
 	Finally loadSprite(const std::string& filename) {
-		return std::move(*GetSprite(filename).loader);
+		return std::move(*GetSprite(filename, Sprite::LoadType::THREADED).loader);
 	}
 
 	void unload(const std::string& filename) {
@@ -130,7 +130,7 @@ namespace jngl
 	}
 
 	int getWidth(const std::string& filename) {
-		const int width = GetSprite(filename, true).getWidth();
+		const int width = GetSprite(filename, Sprite::LoadType::HALF).getWidth();
 		if (!pWindow) {
 			unload(filename);
 		}
@@ -138,7 +138,7 @@ namespace jngl
 	}
 
 	int getHeight(const std::string& filename) {
-		const int height = GetSprite(filename, true).getHeight();
+		const int height = GetSprite(filename, Sprite::LoadType::HALF).getHeight();
 		if (!pWindow) {
 			unload(filename);
 		}
