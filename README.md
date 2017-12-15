@@ -21,6 +21,16 @@ libwebp-devel boost-python3-devel python3-devel scons SDL2-devel openal-soft-dev
 
 Then [build using SCons](#build-using-scons).
 
+### Arch Linux
+
+```
+pacman -S --needed meson gcc sdl2 pkg-config fontconfig glew libwebp openal libvorbis boost
+mkdir build
+cd build
+meson ..
+ninja
+```
+
 ## Windows
 
 ### Using MSYS2 / MinGW-w64
