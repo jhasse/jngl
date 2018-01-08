@@ -19,6 +19,9 @@
     <Filter Include="Source Files\win32\msvc">
       <UniqueIdentifier>{d502c015-3f00-4656-89b2-579d5d02313b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\win32">
+      <UniqueIdentifier>{9c3ba812-3e16-47c7-8a71-bbc30f97e86c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\win32\message.cpp">
@@ -37,9 +40,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ConvertUTF.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\Finally.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\freetype.cpp">
@@ -96,7 +96,6 @@
     <ClCompile Include="..\src\jngl\color.cpp">
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\win32\inputimpl.cpp" />
     <ClCompile Include="..\src\win32\msvc\dlfcn.c">
       <Filter>Source Files\win32\msvc</Filter>
     </ClCompile>
@@ -105,6 +104,18 @@
     </ClCompile>
     <ClCompile Include="..\src\helper.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\Finally.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\Controller.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\win32\inputimpl.cpp">
+      <Filter>Source Files\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\win32\XinputController.cpp">
+      <Filter>Source Files\win32</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\audio.cpp" />
     <ClCompile Include="..\src\ConvertUTF.c" />
+    <ClCompile Include="..\src\jngl\Controller.cpp" />
     <ClCompile Include="..\src\jngl\Finally.cpp" />
     <ClCompile Include="..\src\framebufferimpl.cpp" />
     <ClCompile Include="..\src\freetype.cpp" />
@@ -40,6 +41,7 @@
     <ClCompile Include="..\src\win32\windowimpl.cpp" />
     <ClCompile Include="..\src\window.cpp" />
     <ClCompile Include="..\src\windowptr.cpp" />
+    <ClCompile Include="..\src\win32\XinputController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\audio.hpp" />

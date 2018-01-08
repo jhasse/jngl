@@ -161,7 +161,7 @@ namespace jngl {
 	class Controller;
 
 	/// Returns all Controllers that are connected. Don't call this function every frame for performance reasons
-	std::vector<std::shared_ptr<Controller>> getConnectedControllers();
+	std::vector<std::shared_ptr<Controller>> JNGLDLL_API getConnectedControllers();
 }
 #ifndef _MSC_VER
 #pragma GCC visibility pop
