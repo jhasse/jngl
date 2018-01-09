@@ -1,0 +1,11 @@
+image: base/archlinux
+
+build:
+  stage: build
+  script:
+    - pacman -Sy --needed --noconfirm meson gcc sdl2 pkg-config fontconfig glew libwebp openal libvorbis boost
+    - meson build
+    - ninja -C build
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
