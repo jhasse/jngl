@@ -40,3 +40,4 @@ python/*.dll*
 .tup/
 .vscode/.browse*
 /.vscode/tags
+/.vscode/cquery*
