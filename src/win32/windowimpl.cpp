@@ -251,27 +251,70 @@ Window::~Window() {
 	}
 }
 
-std::string Window::GetFontFileByName(const std::string& fontname) {
-	// TODO: This is not a good way to find fonts
-	char temp[MAX_PATH];
-	if (SHGetFolderPath(nullptr, CSIDL_FONTS, nullptr, 0, temp) != S_OK) {
-		throw std::runtime_error("Couldn't locate font directory.");
+std::string Window::GetFontFileByName(const std::string& fontName) {
+	static std::unordered_map<std::string, std::string> cache;
+	const auto it = cache.find(fontName);
+	if (it != cache.end()) { return it->second; }
+	std::string fontNameLower = fontName;
+	std::transform(fontNameLower.begin(), fontNameLower.end(), fontNameLower.begin(), ::tolower);
+	if (fontNameLower == "serif") {
+		fontNameLower = "times";
+	} else if (fontNameLower == "mono" || fontNameLower == "monospace") {
+		fontNameLower = "cour";
+	} else if (fontNameLower == "sans" || fontNameLower == "sans-serif") {
+		fontNameLower = "arial";
 	}
-	std::string path(temp);
-	path += "\\";
-	std::string file;
-	if (fontname == "Times New Roman" || fontname == "serif") {
-		file = "times";
-	} else if (fontname == "Courier" || fontname == "Courier New" || fontname == "mono") {
-		file = "cour";
-	} else if (fontname == "sans" || fontname == "sans-serif") {
-		file = "arial";
-	} else {
-		file = fontname;
+	HKEY hKey;
+	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts",
+	                 0, KEY_READ, &hKey) != ERROR_SUCCESS) {
+		throw std::runtime_error("Couldn't open registry.");
 	}
-	path += file;
-	path += ".ttf";
-	return path;
+
+	DWORD maxValueNameSize, maxValueDataSize;
+	if (RegQueryInfoKey(hKey, 0, 0, 0, 0, 0, 0, 0, &maxValueNameSize, &maxValueDataSize, 0, 0) !=
+	    ERROR_SUCCESS) {
+		throw std::runtime_error("Couldn't query registry.");
+	}
+
+	DWORD valueIndex = 0;
+	const auto valueName = std::make_unique<char[]>(maxValueNameSize);
+	const auto valueData = std::make_unique<BYTE[]>(maxValueDataSize);
+	std::string fontFile;
+	LONG result;
+	do {
+		DWORD valueDataSize = maxValueDataSize;
+		DWORD valueNameSize = maxValueNameSize;
+		DWORD valueType;
+		result = RegEnumValue(hKey, valueIndex, valueName.get(), &valueNameSize, 0, &valueType,
+		                      valueData.get(), &valueDataSize);
+
+		valueIndex++;
+
+		if (result != ERROR_SUCCESS || valueType != REG_SZ) {
+			continue;
+		}
+
+		std::string valueNameLower(valueName.get(), valueNameSize);
+		std::transform(valueNameLower.begin(), valueNameLower.end(), valueNameLower.begin(), ::tolower);
+		if (fontNameLower + " (truetype)" == valueNameLower) {
+			fontFile.assign(reinterpret_cast<const char*>(valueData.get()), valueDataSize);
+			break;
+		}
+	} while (result != ERROR_NO_MORE_ITEMS);
+
+	RegCloseKey(hKey);
+
+	if (fontFile.size() < 2 || fontFile[1] != ':') { // relative path?
+		char fontDir[MAX_PATH];
+		if (SHGetFolderPath(NULL, CSIDL_FONTS, NULL, 0, fontDir) != S_OK) {
+			throw std::runtime_error("Couldn't locate font directory.");
+		}
+		std::ostringstream ss;
+		ss << fontDir << "\\" << fontFile;
+		fontFile = ss.str();
+	}
+	cache.emplace(fontName, fontFile);
+	return fontFile;
 }
 
 void Window::ReleaseDC(HWND hwnd, HDC hdc) {
