@@ -1,11 +1,24 @@
 image: base/archlinux
 
-build:
+before_script:
+  - pacman -Sy --needed --noconfirm meson gcc sdl2 pkg-config fontconfig glew libwebp openal libvorbis boost
+
+gcc:
   stage: build
   script:
-    - pacman -Sy --needed --noconfirm meson gcc sdl2 pkg-config fontconfig glew libwebp openal libvorbis boost
+    - pacman -S --needed --noconfirm gcc
     - meson build
     - ninja -C build
+
+clang:
+  stage: build
+  script:
+    - pacman -S --needed --noconfirm clang-tools-extra python2
+    - CC=clang CXX=clang++ meson build
+    - cd build
+    - ninja
+    - sed -i s/-pipe// compile_commands.json
+    - /usr/share/clang/run-clang-tidy.py -check *,-clang-diagnostic-unused-command-line-argument
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive

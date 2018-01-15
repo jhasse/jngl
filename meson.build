@@ -1,4 +1,4 @@
-project('jngl', ['c', 'cpp'])
+project('jngl', ['c', 'cpp'], default_options : ['cpp_std=c++14'])
 
 if get_option('buildtype') == 'release' and not meson.is_subproject()
 	add_global_arguments('-DNDEBUG', language : 'cpp')
