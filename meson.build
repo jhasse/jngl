@@ -54,13 +54,14 @@ else
 	opengl_dep = [
 		cxx.find_library('opengl32'),
 		cxx.find_library('glu32'),
-		cxx.find_library('xinput'),
+		cxx.find_library('xinput1_4'),
 	]
 	src += [
 		'src/win32/inputimpl.cpp',
 		'src/win32/message.cpp',
 		'src/win32/time.cpp',
 		'src/win32/windowimpl.cpp',
+		'src/win32/XinputController.cpp',
 	]
 endif
 
