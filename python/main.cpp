@@ -1,12 +1,10 @@
-/*
-Copyright 2009-2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
-
-#include <cmath> // see http://lists.boost.org/boost-users/2010/12/65159.php
-#include <boost/python.hpp> // Needs to be included first. See http://bugs.python.org/issue10910
+// Copyright 2009-2018 Jan Niklas Hasse <jhasse@gmail.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../src/jngl.hpp"
+
+#include <boost/python.hpp>
+#include <cmath>
 
 using namespace boost::python;
 using namespace jngl;
@@ -85,13 +83,13 @@ void print1(const std::string& text, float x, float y) {
 }
 
 struct DrawableWrap : Drawable, wrapper<Drawable> {
-	void step() {
+	void step() override {
 		get_override("step")();
 	}
-	void draw() const {
+	void draw() const override {
 		get_override("draw")();
 	}
-	void setPos(Float x, Float y) {
+	void setPos(Float x, Float y) override {
 		if (override setPos = get_override("setPos")) {
 			setPos(x, y);
 			return;
@@ -100,7 +98,7 @@ struct DrawableWrap : Drawable, wrapper<Drawable> {
 	}
 };
 
-BOOST_PYTHON_MODULE(jngl) {
+BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	class_<DrawableWrap, boost::noncopyable>("Drawable")
 		.def("step", pure_virtual(&Drawable::step))
 		.def("draw", pure_virtual(&Drawable::draw))

@@ -1,4 +1,4 @@
-// Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@gmail.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl.hpp"
@@ -19,7 +19,7 @@ double factor = 0;
 
 class Test : public jngl::Work {
 public:
-	Test() : drawOnFrameBuffer(false), rotate(0), frameNumber(0), fb(100, 110), fb2(800, 600),
+	Test() : rotate(0), frameNumber(0), fb(100, 110), fb2(800, 600),
 	logoWebp("jngl.webp") {
 		jngl::setTitle("JNGL Test Application");
 		jngl::setIcon("jngl.png");
@@ -164,7 +164,7 @@ public:
 		}
 	}
 private:
-	mutable bool drawOnFrameBuffer;
+	mutable bool drawOnFrameBuffer = false;
 	mutable double rotate;
 	mutable int frameNumber;
 	mutable double frameTime;
@@ -260,8 +260,7 @@ void testKeys() {
 	jngl::setRelativeMouseMode(true);
 	int xpos = 400;
 	int ypos = 300;
-	typedef std::map<std::string, jngl::key::KeyType> MapType;
-	MapType keys;
+	std::map<std::string, jngl::key::KeyType> keys;
 	keys["Left"] = jngl::key::Left;
 	keys["Up"] = jngl::key::Up;
 	keys["Right"] = jngl::key::Right;
@@ -306,7 +305,7 @@ void testKeys() {
 		jngl::setFontSize(10);
 		jngl::translate(-400, -300);
 		int y = 10;
-		for (MapType::iterator it = keys.begin(); it != keys.end(); ++it) {
+		for (auto it = keys.begin(); it != keys.end(); ++it) {
 			if (jngl::keyDown(it->second)) {
 				jngl::setFontColor(0, 0, 0);
 			}
@@ -315,7 +314,7 @@ void testKeys() {
 			}
 			jngl::print(it->first, 100, y);
 			if (jngl::keyPressed(it->second)){
-				recentlyPressedKeys.push_back(RecentlyPressedKey(it->first, 100, y));
+				recentlyPressedKeys.emplace_back(it->first, 100, y);
 			}
 			y += 15;
 		}
@@ -332,7 +331,7 @@ void testKeys() {
 			}
 			jngl::print(cString, 500, y);
 			if (jngl::keyPressed(c)) {
-				recentlyPressedKeys.push_back(RecentlyPressedKey(cString, 500, y));
+				recentlyPressedKeys.emplace_back(cString, 500, y);
 			}
 			y += 15;
 			if (c == '9') {
@@ -352,7 +351,7 @@ void testKeys() {
 			}
 			jngl::print(it->first, 500, y);
 			if (jngl::mousePressed(it->second)) {
-				recentlyPressedKeys.push_back(RecentlyPressedKey(it->first, 500, y));
+				recentlyPressedKeys.emplace_back(it->first, 500, y);
 			}
 			y += 15;
 		}
