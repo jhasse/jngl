@@ -1,7 +1,7 @@
 image: base/archlinux
 
 before_script:
-  - pacman -Sy --needed --noconfirm meson gcc sdl2 pkg-config fontconfig glew libwebp openal libvorbis boost
+  - pacman -Syu --needed --noconfirm meson gcc sdl2 pkg-config fontconfig glew libwebp openal libvorbis boost
 
 gcc:
   stage: build
@@ -18,7 +18,9 @@ clang:
     - cd build
     - ninja
     - sed -i s/-pipe// compile_commands.json
-    - /usr/share/clang/run-clang-tidy.py -check *,-clang-diagnostic-unused-command-line-argument
+    - TERM=xterm script -qfc "/usr/share/clang/run-clang-tidy.py 2>/dev/null" /dev/null >clang-tidy.log
+    - cat clang-tidy.log | sed s_$PWD/__
+    - '! grep -Fq "error:" clang-tidy.log'
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive

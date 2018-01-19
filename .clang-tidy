@@ -1,0 +1,3 @@
+---
+Checks:          '*,-cert-err58-cpp,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-google-readability-todo,-google-runtime-references,-readability-named-parameter'
+WarningsAsErrors: ''
