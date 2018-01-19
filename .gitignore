@@ -7,3 +7,7 @@ jngl.pc
 *.os
 xcode/JNGL.xcodeproj/project.xcworkspace/xcuserdata/*
 *.sublime-*
+/libjngl.a
+/config.log
+/test
+/build*/
