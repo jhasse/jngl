@@ -41,7 +41,11 @@
 #ifdef _MSC_VER
 #define FALLTHROUGH
 #else
+#ifdef __clang__
+#define FALLTHROUGH [[fallthrough]];
+#else
 #define FALLTHROUGH __attribute__ ((fallthrough));
+#endif
 #endif
 
 #include "ConvertUTF.h"
