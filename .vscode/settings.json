@@ -2,5 +2,8 @@
 	"files.associations": {
 		"*.ipp": "cpp"
 	},
+	"search.exclude": {
+		".vscode/cquery*": true
+	},
 	"cquery.cacheDirectory": "${workspaceFolder}/.vscode/cquery_cached_index/"
 }
