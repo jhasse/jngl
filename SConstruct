@@ -60,7 +60,7 @@ if not env['verbose']:
 env.Append(CXXFLAGS = '-std=c++1y')
 
 if not env['msvc']:
-	source_files += Glob(buildDir + "*.cpp") + Glob(buildDir + "jngl/*.cpp")
+	source_files = Glob(buildDir + "*.cpp") + Glob(buildDir + "jngl/*.cpp")
 
 testSrc = buildDir + "test/test.cpp"
 
