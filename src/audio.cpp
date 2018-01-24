@@ -96,8 +96,7 @@ namespace jngl {
 
 	SoundFile::SoundFile(const std::string& filename) : sound_(nullptr) {
 		debug("Decoding "); debug(filename); debug(" ... ");
-		// based on http://www.gamedev.net/reference/articles/article2031.asp
-		FILE* f = fopen(filename.c_str(), "rb");
+		FILE* const f = fopen(filename.c_str(), "rbe");
 		if (!f) {
 			throw std::runtime_error("File not found (" + filename + ").");
 		}
