@@ -57,7 +57,6 @@ if not env['verbose']:
 	env['LINKCOMSTR'] = env['SHLINKCOMSTR'] = "linking: $TARGET"
 	env['ARCOMSTR'] = "archiving: $TARGET"
 
-source_files = [buildDir + 'ConvertUTF.c']
 env.Append(CXXFLAGS = '-std=c++1y')
 
 if not env['msvc']:

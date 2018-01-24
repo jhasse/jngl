@@ -29,7 +29,6 @@ else
 endif
 
 : foreach $(SRC) |> $(CXX) $(CXXFLAGS) `$(PKG_CONFIG) --cflags sdl2 freetype2` -c %f -o %o |> %f.o {objs}
-: src/ConvertUTF.c |> $(CC) $(CFLAGS) -c %f -o %o |> %f.o {objs}
 
 : {objs} |> ar rc %o %f && ranlib %o |> libjngl.a {libjngl}
 

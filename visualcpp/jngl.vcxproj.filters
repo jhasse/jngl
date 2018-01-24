@@ -39,7 +39,7 @@
     <ClCompile Include="..\src\audio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ConvertUTF.c">
+    <ClCompile Include="..\src\ConvertUTF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\freetype.cpp">

@@ -12,7 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\audio.cpp" />
-    <ClCompile Include="..\src\ConvertUTF.c" />
+    <ClCompile Include="..\src\ConvertUTF.cpp" />
     <ClCompile Include="..\src\jngl\Controller.cpp" />
     <ClCompile Include="..\src\jngl\Finally.cpp" />
     <ClCompile Include="..\src\framebufferimpl.cpp" />
