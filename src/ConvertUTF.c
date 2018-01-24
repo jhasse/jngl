@@ -41,7 +41,7 @@
 #ifdef _MSC_VER
 #define FALLTHROUGH
 #else
-#ifdef __clang__
+#if __clang_major__ >= 5
 #define FALLTHROUGH [[fallthrough]];
 #else
 #define FALLTHROUGH __attribute__ ((fallthrough));
