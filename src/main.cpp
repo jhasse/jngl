@@ -352,9 +352,8 @@ namespace jngl {
 		if (filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg") {
 			loadSound(filename);
 			return {[](){}};
-		} else {
-			return loadSprite(filename);
 		}
+		return loadSprite(filename);
 	}
 
 #ifdef _WIN32

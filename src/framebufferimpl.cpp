@@ -1,7 +1,5 @@
-/*
-Copyright 2011-2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2011-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "framebufferimpl.hpp"
 #include "windowptr.hpp"
@@ -11,7 +9,8 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl {
 
-	FrameBufferImpl::FrameBufferImpl(int width, int height) : height(height), texture(width, height, 0) {
+	FrameBufferImpl::FrameBufferImpl(int width, int height)
+	: height(height), texture(width, height, nullptr) {
 		if (!GLEW_EXT_framebuffer_object) {
 			throw std::runtime_error("OpenGL Frame Buffer Object not supported!");
 		}
@@ -39,9 +38,9 @@ namespace jngl {
 		glBindRenderbuffer(GL_RENDERBUFFER, systemBuffer);
 	}
 
-	FrameBufferImpl::~FrameBufferImpl() {
-		glDeleteFramebuffers(1, &fbo);
-		glDeleteRenderbuffers(1, &buffer);
+FrameBufferImpl::~FrameBufferImpl() {
+	glDeleteFramebuffers(1, &fbo);
+	glDeleteRenderbuffers(1, &buffer);
 	}
 
 	void FrameBufferImpl::BeginDraw() {

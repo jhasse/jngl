@@ -1,10 +1,5 @@
-/*
-Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
-
-Most of this code is based on http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=43
-
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "freetype.hpp"
 #include "jngl/debug.hpp"
@@ -19,8 +14,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl {
 
-	Character::Character(const unsigned long ch, const unsigned int fontHeight, FT_Face face)
-	: texture_(0) {
+	Character::Character(const unsigned long ch, const unsigned int fontHeight, FT_Face face) {
 		const auto flags = FT_LOAD_TARGET_LIGHT | FT_LOAD_RENDER;
 		if (FT_Load_Char(face, ch, flags)) {
 			const std::string msg = std::string("FT_Load_Glyph failed. Character: ")
@@ -134,7 +128,7 @@ namespace jngl {
 				debug(" ERROR - " + boost::lexical_cast<std::string>(result));
 			}
 		}
-		if (characters_[unicodeCharacter] == 0) {
+		if (characters_[unicodeCharacter] == nullptr) {
 			characters_[unicodeCharacter].reset(new Character(unicodeCharacter, height_, face_));
 		}
 		return *(characters_[unicodeCharacter]);
@@ -174,7 +168,7 @@ namespace jngl {
 
 	FontImpl::~FontImpl()
 	{
-		freeFace_.reset((Finally*)0); // free face_ with FT_Done_Face
+		freeFace_.reset(); // free face_ with FT_Done_Face
 		if(--instanceCounter == 0)
 		{
 			FT_Done_FreeType(library);
