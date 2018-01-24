@@ -41,3 +41,4 @@ python/*.dll*
 .vscode/.browse*
 /.vscode/tags
 /.vscode/cquery*
+/compile_commands.json
