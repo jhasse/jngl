@@ -1,3 +1,3 @@
 ---
-Checks:          '*,-cert-err58-cpp,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-google-readability-todo,-google-runtime-references,-readability-named-parameter,-clang-diagnostic-unused-command-line-argument'
+Checks:          '*,-cert-err58-cpp,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-google-readability-todo,-google-runtime-references,-readability-named-parameter,-clang-diagnostic-unused-command-line-argument,-readability-implicit-bool-cast'
 WarningsAsErrors: 'hicpp-use-override'

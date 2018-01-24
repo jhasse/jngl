@@ -1,4 +1,4 @@
-// Copyright 2009-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2009-2018 Jan Niklas Hasse <jhasse@gmail.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "jngl.hpp"
@@ -52,12 +52,12 @@ namespace jngl {
 
 	class Audio {
 	public:
-		Audio() : device_(0), context_(0) {
-			device_ = alcOpenDevice(0);
+		Audio() {
+			device_ = alcOpenDevice(nullptr);
 			if (!device_) {
 				throw std::runtime_error("Could not open audio device.");
 			}
-			context_ = alcCreateContext(device_, 0);
+			context_ = alcCreateContext(device_, nullptr);
 			if (context_) {
 				alcMakeContextCurrent(context_);
 			} else {
@@ -69,7 +69,7 @@ namespace jngl {
 		~Audio() {
 			sounds_.clear();
 			sounds.clear();
-			alcMakeContextCurrent(0);
+			alcMakeContextCurrent(nullptr);
 			alcDestroyContext(context_);
 			alcCloseDevice(device_);
 		}
@@ -88,8 +88,8 @@ namespace jngl {
 		}
 	private:
 		std::vector<std::shared_ptr<Sound>> sounds_;
-		ALCdevice* device_;
-		ALCcontext* context_;
+		ALCdevice* device_ = nullptr;
+		ALCcontext* context_ = nullptr;
 	};
 
 	Audio& GetAudio();
@@ -103,7 +103,7 @@ namespace jngl {
 		}
 
 		OggVorbis_File oggFile;
-		if (ov_open(f, &oggFile, 0, 0) != 0) {
+		if (ov_open(f, &oggFile, nullptr, 0) != 0) {
 			throw std::runtime_error("Could not open OGG file (" + filename + ").");
 		}
 
@@ -142,7 +142,7 @@ namespace jngl {
 	void SoundFile::Stop() {
 		if (sound_) {
 			GetAudio().Stop(sound_);
-			sound_.reset((Sound*)0);
+			sound_.reset();
 		}
 	}
 	bool SoundFile::IsPlaying() {
@@ -223,4 +223,4 @@ namespace jngl {
 		static Audio audio_;
 		return audio_;
 	}
-}
+} // namespace jngl
