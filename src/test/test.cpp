@@ -54,113 +54,114 @@ public:
 		}
 	}
 	void draw() const override {
-		using namespace jngl;
 		if (drawOnFrameBuffer) {
 			fb2.beginDraw();
 			fb2.clear();
 		}
-		translate(-getWindowWidth() / 2, -getWindowHeight() / 2);
-		pushMatrix();
-		lastTime = getTime();
+		jngl::translate(-jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
+		jngl::pushMatrix();
+		lastTime = jngl::getTime();
 		for (int i = 0; i < 10; ++i) {
-			if (keyDown('0' + i)) {
+			if (jngl::keyDown('0' + i)) {
 				performance = i == 0 ? 10 : i;
 			}
 		}
 		drawBackground();
-		setColor(0,0,0,255);
-		pushMatrix();
-		translate(650, 450);
+		jngl::setColor(0,0,0,255);
+		jngl::pushMatrix();
+		jngl::translate(650, 450);
 		jngl::rotate(rotate);
-		drawLine(-50, -50, 50, 50);
-		popMatrix();
-		setSpriteAlpha(200);
+		jngl::drawLine(-50, -50, 50, 50);
+		jngl::popMatrix();
+		jngl::setSpriteAlpha(200);
 		fb.draw(600, 300);
-		translate(getWindowWidth() / 2, getWindowHeight() / 2);
+		jngl::translate(jngl::getWindowWidth() / 2, jngl::getWindowHeight() / 2);
 		jngl::rotate(rotate);
-		setSpriteAlpha(static_cast<unsigned char>(std::abs(factor * 255)));
+		jngl::setSpriteAlpha(static_cast<unsigned char>(std::abs(factor * 255)));
 		logoWebp.drawScaled(static_cast<float>(factor * 2));
-		setColor(0, 0, 0);
-		drawRect(-125, 100, 250, 28);
-		setFontColor(255, 255, 255);
-		print("White text on black background", -115, 105);
-		setFontColor(255, 255, 255);
-		setFontSize(20);
-		print("White text without background", -115, 135);
-		setFontSize(12);
-		popMatrix();
+		jngl::setColor(0, 0, 0);
+		jngl::drawRect(-125, 100, 250, 28);
+		jngl::setFontColor(255, 255, 255);
+		jngl::print("White text on black background", -115, 105);
+		jngl::setFontColor(255, 255, 255);
+		jngl::setFontSize(20);
+		jngl::print("White text without background", -115, 135);
+		jngl::setFontSize(12);
+		jngl::popMatrix();
 		std::stringstream sstream;
-		sstream << "FPS" << (getVerticalSync() ? " (V-SYNC)" : "") << ": " << int(getFPS())
-		        << "\nFactor: " << factor << "\nSize of double: " << sizeof(double);
-		setColor(0, 0, 0);
-		drawRect(0, 0, 200, 62);
-		setFontColor(static_cast<unsigned char>(255 * (1 - factor)),
-		             static_cast<unsigned char>(255 * factor), 255);
-		setFontByName("Courier New");
-		print(sstream.str(), 5, 5);
-		setFontByName("sans-serif");
-		setFontColor(0,0,0);
-		setFontByName("Times New Roman");
-		print("Black text on white background", 5, 75);
-		setFontByName("Arial");
-		setFontSize(20);
-		print("UTF-8:   ä ö ü ß Ĉ Ψ ≈", 5, 105);
-		print(" $", static_cast<int>(getTextWidth("UTF-8:   ä ö ü ß Ĉ Ψ ≈") + 5), 105);
-		setFontSize(12);
-		print("Press 1-9 to test the performance\nPress E to show a error box.", 5, 135);
-		if (keyPressed('e')) {
-			errorMessage("Hello World!");
+		sstream << "FPS" << (jngl::getVerticalSync() ? " (V-SYNC)" : "") << ": "
+		        << int(jngl::getFPS()) << "\nFactor: " << factor
+		        << "\nSize of double: " << sizeof(double);
+		jngl::setColor(0, 0, 0);
+		jngl::drawRect(0, 0, 200, 62);
+		jngl::setFontColor(static_cast<unsigned char>(255 * (1 - factor)),
+		                   static_cast<unsigned char>(255 * factor), 255);
+		jngl::setFontByName("Courier New");
+		jngl::print(sstream.str(), 5, 5);
+		jngl::setFontByName("sans-serif");
+		jngl::setFontColor(0,0,0);
+		jngl::setFontByName("Times New Roman");
+		jngl::print("Black text on white background", 5, 75);
+		jngl::setFontByName("Arial");
+		jngl::setFontSize(20);
+		jngl::print("UTF-8:   ä ö ü ß Ĉ Ψ ≈", 5, 105);
+		jngl::print(" $", static_cast<int>(jngl::getTextWidth("UTF-8:   ä ö ü ß Ĉ Ψ ≈") + 5), 105);
+		jngl::setFontSize(12);
+		jngl::print("Press 1-9 to test the performance\nPress E to show a error box.", 5, 135);
+		if (jngl::keyPressed('e')) {
+			jngl::errorMessage("Hello World!");
 		}
-		print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 410);
-		print("Press V to toggle V-SYNC.", 5, 430);
-		if (keyPressed('v')) {
-			setVerticalSync(!getVerticalSync());
+		jngl::print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 410);
+		jngl::print("Press V to toggle V-SYNC.", 5, 430);
+		if (jngl::keyPressed('v')) {
+			jngl::setVerticalSync(!jngl::getVerticalSync());
 		}
-		print("Press A to toggle Anti-Aliasing.", 5, 450);
-		if (keyPressed('a')) {
-			setAntiAliasing(!getAntiAliasing());
+		jngl::print("Press A to toggle Anti-Aliasing.", 5, 450);
+		if (jngl::keyPressed('a')) {
+			jngl::setAntiAliasing(!jngl::getAntiAliasing());
 		}
-		print("Press F1 to switch fullscreen mode.", 5, 470);
-		if (keyPressed(key::F1)) {
-			setFullscreen(!getFullscreen());
+		jngl::print("Press F1 to switch fullscreen mode.", 5, 470);
+		if (jngl::keyPressed(jngl::key::F1)) {
+			jngl::setFullscreen(!jngl::getFullscreen());
 		}
-		print("Press K to test key codes.", 5, 490);
-		print("Press P to play a sound.", 6, 510);
+		jngl::print("Press K to test key codes.", 5, 490);
+		jngl::print("Press P to play a sound.", 6, 510);
 		static int playbackSpeed = 100;
-		setPlaybackSpeed(playbackSpeed / 100.0f);
-		print("Press + and - to change the audio playback speed: " +
+		jngl::setPlaybackSpeed(playbackSpeed / 100.0f);
+		jngl::print("Press + and - to change the audio playback speed: " +
 		      std::to_string(playbackSpeed) + " %", 6, 530);
-		if (keyPressed('-')) {
+		if (jngl::keyPressed('-')) {
 			--playbackSpeed;
 		}
-		if (keyPressed('+')) {
+		if (jngl::keyPressed('+')) {
 			++playbackSpeed;
 		}
-		setVolume(volume);
-		print("Use your mouse wheel to change the volume: " +
-		      std::to_string(int(volume * 100)) +
-		      " %", 6, 550);
-		setColor(0,0,255,128);
+		jngl::setVolume(volume);
+		jngl::print("Use your mouse wheel to change the volume: " +
+		                std::to_string(int(volume * 100)) + " %",
+		            6, 550);
+		jngl::setColor(0,0,255,128);
 		if (drawOnFrameBuffer) {
 			fb2.endDraw();
-			reset();
-			setSpriteAlpha(255);
-			fb2.draw(-getWindowWidth() / 2, -getWindowHeight() / 2);
+			jngl::reset();
+			jngl::setSpriteAlpha(255);
+			fb2.draw(-jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
 		}
-		if (keyPressed('f')) {
+		if (jngl::keyPressed('f')) {
 			drawOnFrameBuffer = !drawOnFrameBuffer;
 		}
-		drawMouse(getMouseX(), getMouseY());
+		drawMouse(jngl::getMouseX(), jngl::getMouseY());
 		if (++frameNumber == 500) {
-			std::cout << "It took " << getTime() - frameTime << " seconds to render 500 frames." << std::endl;
+			std::cout << "It took " << jngl::getTime() - frameTime
+			          << " seconds to render 500 frames." << std::endl;
 			frameNumber = 0;
-			frameTime = getTime();
+			frameTime = jngl::getTime();
 		}
-		if (keyDown('k')) {
+		if (jngl::keyDown('k')) {
 			testKeys();
 		}
-		if (keyPressed(key::Escape)) {
-			quit();
+		if (jngl::keyPressed(jngl::key::Escape)) {
+			jngl::quit();
 		}
 	}
 private:
