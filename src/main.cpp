@@ -1,9 +1,9 @@
-// Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
+#include "draw.hpp"
 #include "jngl.hpp"
 #include "spriteimpl.hpp"
-#include "draw.hpp"
 
 #include <boost/lexical_cast.hpp>
 
@@ -378,8 +378,8 @@ namespace jngl {
 		return vsyncEnabled;
 	}
 
-	void setWork(std::shared_ptr<Work> w) {
-		return pWindow->setWork(w);
+	void setWork(std::shared_ptr<Work> work) {
+		return pWindow->setWork(std::move(work));
 	}
 
 	void resetFrameLimiter() {
@@ -417,4 +417,4 @@ namespace jngl {
 	std::vector<std::string> getArgs() {
 		return args;
 	}
-}
+} // namespace jngl
