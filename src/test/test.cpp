@@ -36,7 +36,7 @@ public:
 		frameTime = jngl::getTime();
 		lastTime = jngl::getTime();
 	}
-	void step() {
+	void step() override {
 		rotate += 90.0 / 60.0; // 90 degree per second
 		if (rotate > 360) {
 			rotate = 0;
@@ -53,7 +53,7 @@ public:
 			}
 		}
 	}
-	void draw() const {
+	void draw() const override {
 		using namespace jngl;
 		if (drawOnFrameBuffer) {
 			fb2.beginDraw();
