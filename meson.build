@@ -35,9 +35,10 @@ src = [
 cpp_args = []
 
 cxx = meson.get_compiler('cpp')
-if target_machine.system() == 'linux'
+if target_machine.system() != 'windows'
 	opengl_dep = [
-		cxx.find_library('GL'),
+		# cxx.find_library('OpenGL'),
+		dependency('appleframeworks', modules : ['Foundation', 'AppKit', 'IOKIT', 'QuartzCore', 'OpenGL', 'GLUT', 'OpenAL'], required : true),
 		dependency('SDL2'),
 		dependency('fontconfig'),
 	]
@@ -88,14 +89,14 @@ executable('jngl-test', sources : ['src/test/test.cpp'], link_with : lib, depend
 	thread_dep,
 ])
 
-boost_python_dep = dependency('boost', modules : [ 'python3' ], required : false)
-python3_dep = dependency('python3', required : false)
-if boost_python_dep.found() and python3_dep.found()
-	shared_library('jngl', sources : [
-		'python/main.cpp',
-	], dependencies : [
-		boost_python_dep,
-		thread_dep,
-		python3_dep,
-	], link_with : lib, name_prefix : '')
-endif
+# boost_python_dep = dependency('boost', modules : [ 'python3' ], required : false)
+# python3_dep = dependency('python3', required : false)
+# if boost_python_dep.found() and python3_dep.found()
+# 	shared_library('jngl', sources : [
+# 		'python/main.cpp',
+# 	], dependencies : [
+# 		boost_python_dep,
+# 		thread_dep,
+# 		python3_dep,
+# 	], link_with : lib, name_prefix : '')
+# endif
