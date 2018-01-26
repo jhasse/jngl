@@ -1,7 +1,5 @@
-/*
-Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "window.hpp"
 #include "jngl.hpp"
@@ -182,7 +180,7 @@ namespace jngl {
 
 	void Window::mainLoop() {
 		Finally _([&]() {
-			currentWork_.reset((jngl::Work*)0);
+			currentWork_.reset();
 		});
 		while (running_) {
 			stepIfNeeded();
@@ -214,7 +212,7 @@ namespace jngl {
 		if (stepsPerFrame < 0.51f) {
 			stepsPerFrame = 1.0f;
 		}
-		for (int i = 0; i < int(stepsPerFrame + 0.5); ++i) {
+		for (int i = 0; i < lround(stepsPerFrame); ++i) {
 			oldTime += timePerStep;
 			jngl::updateInput();
 			if (currentWork_) {
@@ -229,7 +227,7 @@ namespace jngl {
 			while (changeWork_) {
 				changeWork_ = false;
 				currentWork_ = newWork_;
-				newWork_.reset((jngl::Work*)0);
+				newWork_.reset();
 				currentWork_->onLoad();
 			}
 		}
@@ -259,11 +257,11 @@ namespace jngl {
 	void Window::setWork(std::shared_ptr<Work> work) {
 		if (!currentWork_) {
 			debug("setting current work to "); debug(work.get()); debug("\n");
-			currentWork_ = work;
+			currentWork_ = std::move(work);
 		} else {
 			debug("change work to "); debug(work.get()); debug("\n");
 			changeWork_ = true;
-			newWork_ = work;
+			newWork_ = std::move(work);
 		}
 	}
 
@@ -290,4 +288,4 @@ namespace jngl {
 	void Window::addUpdateInputCallback(std::function<void()> c) {
 		updateInputCallbacks.emplace_back(std::move(c));
 	}
-}
+} // namespace jngl
