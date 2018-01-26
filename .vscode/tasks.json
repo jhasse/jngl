@@ -1,14 +1,12 @@
 {
-	"version": "0.1.0",
+	"version": "2.0.0",
 	"windows": {
 		"command": "C:\\msys64\\usr\\bin\\bash"
 	},
 	"linux": {
 		"command": "/bin/bash"
 	},
-	"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && scons debug=1 && $@"],
-	"isShellCommand": true,
-	"showOutput": "always",
+	"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -d build ] || meson build) && ninja -C build && $@"],
 	"options": {
 		"env": {
 			"LANG": "C.UTF-8",
@@ -18,11 +16,13 @@
 	},
 	"tasks": [
 		{
-			"taskName": "build",
-			"isBuildCommand": true,
+			"label": "build",
 			"problemMatcher": {
 				"owner": "cpp",
-				"fileLocation": ["relative", "${workspaceRoot}/"],
+				"fileLocation": [
+					"relative",
+					"${workspaceRoot}/build"
+				],
 				"pattern": {
 					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error|fatal error):\\s+(.*)$",
 					"file": 1,
@@ -31,6 +31,10 @@
 					"severity": 4,
 					"message": 5
 				}
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
 			}
 		}
 	]
