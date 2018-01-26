@@ -23,7 +23,15 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 		#include <GLES/glext.h>
 		#include "android/glew.h"
 	#else
-		#include <GL/glew.h>
+		#ifdef __APPLE__
+			#include <OpenGL/gl.h>
+			#include <OpenGL/gl3ext.h>
+			#define glBindVertexArray glBindVertexArrayAPPLE
+			#define glDeleteVertexArrays glDeleteVertexArraysAPPLE
+			#define glGenVertexArrays glGenVertexArraysAPPLE
+		#else
+			#include <GL/glew.h>
+		#endif
 	#endif
 	#endif
 #endif
