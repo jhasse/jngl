@@ -1,7 +1,5 @@
-/*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "shapes.hpp"
 #include "../opengl.hpp"
@@ -10,6 +8,10 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl {
 	unsigned char colorRed = 0, colorGreen = 0, colorBlue = 0, colorAlpha = 255;
+
+	void setColor(const jngl::Color color) {
+		setColor(color.getRed(), color.getGreen(), color.getBlue());
+	}
 
 	void setColor(unsigned char red, unsigned char green, unsigned char blue) {
 		colorRed = red;
@@ -45,4 +47,5 @@ namespace jngl {
 		draw::Ellipse(xmid, ymid, width, height, startAngle);
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
-}
+
+} // namespace jngl
