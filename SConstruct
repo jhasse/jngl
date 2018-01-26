@@ -118,7 +118,7 @@ if env['PLATFORM'] == 'posix': # Linux
 		                  source="python/main.cpp")
 
 if env['PLATFORM'] == 'darwin': # Mac
-	env.Append(LIBS=Split('GLEW jpeg ogg vorbisfile webp'),
+	env.Append(LIBS=Split('jpeg ogg vorbisfile webp'),
 	           LIBPATH=['.'],
 	           CPPPATH=['/usr/local/include/'],
 	           LINKFLAGS='-framework OpenAL -framework OpenGL')
