@@ -56,6 +56,7 @@ Use [Homebrew](http://brew.sh/) to install the build dependencies:
 
 ```
 brew install sdl2 freetype libvorbis glew jpeg webp scons pkg-config boost
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 ```
 
 Then [build using SCons](#build-using-scons).
