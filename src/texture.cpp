@@ -12,9 +12,11 @@ namespace jngl {
 
 	Texture::Texture(const int width, const int height, GLubyte** rowPointers,
 	                 GLenum format, GLubyte* data) : width(width), height(height) {
+#ifdef GLEW_OK
 		if (!GLEW_ARB_vertex_buffer_object || !GLEW_VERSION_1_5) {
 			throw std::runtime_error("VBOs not supported\n");
 		}
+#endif
 		glGenTextures(1, &texture_);
 		glBindTexture(GL_TEXTURE_2D, texture_);
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
