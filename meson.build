@@ -96,7 +96,7 @@ executable('jngl-test', sources : ['src/test/test.cpp'], link_with : lib, depend
 	thread_dep,
 ])
 
-if target_machine.system() != 'darwin'
+if target_machine.system() == 'linux'
 	boost_python_dep = dependency('boost', modules : [ 'python3' ], required : false)
 	python3_dep = dependency('python3', required : false)
 	if boost_python_dep.found() and python3_dep.found()
