@@ -1,7 +1,5 @@
-/*
-Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
@@ -17,8 +15,13 @@ namespace jngl {
 		Color(unsigned char red, unsigned char green, unsigned char blue);
 
 		unsigned char getRed() const;
+		void setRed(unsigned char);
+
 		unsigned char getGreen() const;
+		void setGreen(unsigned char);
+
 		unsigned char getBlue() const;
+		void setBlue(unsigned char);
 	private:
 		unsigned char red;
 		unsigned char green;
