@@ -1,13 +1,12 @@
-/*
-Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
 #include <string>
 #include <memory>
 
+#include "color.hpp"
 #include "dll.hpp"
 
 #ifndef _MSC_VER
@@ -39,6 +38,8 @@ namespace jngl {
 	void JNGLDLL_API setFont(const std::string& filename);
 
 	void JNGLDLL_API setFontByName(const std::string& name);
+
+	void JNGLDLL_API setFontColor(jngl::Color);
 
 	void JNGLDLL_API setFontColor(unsigned char red,
 	                              unsigned char green,

@@ -1,7 +1,5 @@
-/*
-Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "font.hpp"
 
@@ -12,6 +10,10 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 namespace jngl {
 	unsigned char fontColorRed = 0, fontColorGreen = 0, fontColorBlue = 0, fontColorAlpha = 255;
+
+	void setFontColor(const jngl::Color color) {
+		setFontColor(color.getRed(), color.getGreen(), color.getBlue());
+	}
 
 	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) {
 		fontColorRed = red;
