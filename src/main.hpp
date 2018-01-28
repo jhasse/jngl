@@ -1,7 +1,5 @@
-/*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
@@ -11,7 +9,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 namespace jngl {
 	void clearBackgroundColor();
 
-	bool Init(const int width, const int height);
+	bool Init(int width, int height, int screenWidth, int screenHeight);
 
 	extern std::string pathPrefix;
 	extern std::vector<std::string> args;

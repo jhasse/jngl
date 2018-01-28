@@ -18,7 +18,7 @@ namespace jngl {
 	std::vector<std::string> args;
 	float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
 
-	bool Init(const int width, const int height) {
+	bool Init(const int width, const int height, const int screenWidth, const int screenHeight) {
 #ifdef GLEW_OK
 		GLenum err = glewInit();
 		if(err != GLEW_OK) {
@@ -34,6 +34,14 @@ namespace jngl {
 		glClearColor(bgRed, bgGreen, bgBlue, 0.0f);
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 		glViewport(0, 0, width, height);
+
+		if (screenWidth != width || screenHeight != height) { // Letterboxing?
+			glEnable(GL_SCISSOR_TEST);
+			assert(screenWidth <= width);
+			assert(screenHeight <= height);
+			glScissor((width - screenWidth) / 2, (height - screenHeight) / 2,
+			          screenWidth, screenHeight);
+		}
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -66,7 +74,9 @@ namespace jngl {
 	bool antiAliasingEnabled = false;
 	bool vsyncEnabled = false;
 
-	void showWindow(const std::string& title, const int width, const int height, bool fullscreen) {
+	void showWindow(const std::string& title, const int width, const int height, bool fullscreen,
+	                const std::pair<int, int> minAspectRatio,
+	                const std::pair<int, int> maxAspectRatio) {
 		debug("jngl::showWindow(\""); debug(title); debug("\", "); debug(width); debug(", "); debug(height);
 		debug(", "); debug(fullscreen); debug(");\n");
 		if (pWindow &&
@@ -83,7 +93,21 @@ namespace jngl {
 		if (height == 0) {
 			throw std::runtime_error("Height Is 0");
 		}
-		pWindow.Set(new Window(title, width, height, fullscreen));
+		int screenWidth = width;
+		int screenHeight = height;
+		if (minAspectRatio.first * height > minAspectRatio.second * width) {
+			// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
+			screenHeight =
+			    std::lround(float(minAspectRatio.second * width) / float(minAspectRatio.first));
+		} else if (maxAspectRatio.first * height < maxAspectRatio.second * width) {
+			// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
+			screenWidth =
+			    std::lround(float(maxAspectRatio.first * height) / float(maxAspectRatio.second));
+		}
+		if (screenWidth != width || screenHeight != height) {
+			debug("Letterboxing to "); debug(screenWidth); debug("x"); debugLn(screenHeight);
+		}
+		pWindow.Set(new Window(title, width, height, fullscreen, screenWidth, screenHeight));
 		pWindow->SetMouseVisible(isMouseVisible);
 		setAntiAliasing(antiAliasingEnabled);
 	}

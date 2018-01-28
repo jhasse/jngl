@@ -89,11 +89,11 @@ namespace jngl {
 	}
 
 	int Window::getWidth() const {
-		return width_;
+		return screenWidth;
 	}
 
 	int Window::getHeight() const {
-		return height_;
+		return screenHeight;
 	}
 
 	bool Window::isMultisampleSupported() const {

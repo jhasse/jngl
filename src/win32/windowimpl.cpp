@@ -1,4 +1,4 @@
-// Copyright 2007-2018 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
@@ -87,10 +87,12 @@ bool Window::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 	return false;
 }
 
-Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
+Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
+               const int screenWidth, const int screenHeight)
 : fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false),
   isMultisampleSupported_(false), anyKeyPressed_(false), fontSize_(12), width_(width),
-  height_(height), oldTime(0), changeWork_(false), stepsPerFrame(1), multitouch(false) {
+  height_(height), screenWidth(screenWidth), screenHeight(screenHeight), oldTime(0),
+  changeWork_(false), stepsPerFrame(1), multitouch(false) {
 	mouseDown_.fill(false);
 	mousePressed_.fill(false);
 
@@ -238,7 +240,7 @@ void Window::Init(const std::string& title, const bool multisample) {
 	setFontByName("Arial");
 	setFontSize(fontSize_);
 
-	if (!jngl::Init(width_, height_)) {
+	if (!jngl::Init(width_, height_, screenWidth, screenHeight)) {
 		throw std::runtime_error("Initialization failed.");
 	}
 

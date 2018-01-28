@@ -14,7 +14,8 @@
 namespace jngl {
 
 void JNGLDLL_API showWindow(const std::string& title, int width, int height,
-                            bool fullscreen = false);
+                            bool fullscreen = false, std::pair<int, int> minAspectRatio = { 4, 3 },
+                            std::pair<int, int> maxAspectRatio = { 16, 9 });
 
 void JNGLDLL_API hideWindow();
 

@@ -12,38 +12,41 @@
 #include "../jngl/debug.hpp"
 
 namespace jngl {
-	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
-		: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false), isMultisampleSupported_(true),
-		  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), fontName_(""), oldTime(0),
-		  changeWork_(false), impl(new WindowImpl) {
-		mouseDown_.fill(false);
-		mousePressed_.fill(false);
 
-		SDL::init();
+Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
+               const int screenWidth, const int screenHeight)
+: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false),
+  isMultisampleSupported_(true), anyKeyPressed_(false), fontSize_(12), width_(width),
+  height_(height), screenWidth(screenWidth), screenHeight(screenHeight), fontName_(""), oldTime(0),
+  changeWork_(false), impl(new WindowImpl) {
+	mouseDown_.fill(false);
+	mousePressed_.fill(false);
 
-		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL::init();
 
-		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
-		if (fullscreen) {
-			flags |= SDL_WINDOW_FULLSCREEN;
-		}
-		impl->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		                                   width, height, flags);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-		if (!impl->sdlWindow) {
-			throw std::runtime_error(SDL_GetError());
-		}
-
-		impl->context = SDL_GL_CreateContext(impl->sdlWindow);
-
-		setFontByName("Arial"); // Default font
-		setFontSize(fontSize_); // Load a font the first time
-
-		Init(width, height);
-
-		running_ = true;
+	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
+	if (fullscreen) {
+		flags |= SDL_WINDOW_FULLSCREEN;
 	}
+	impl->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
+	                                   SDL_WINDOWPOS_CENTERED, width, height, flags);
+
+	if (!impl->sdlWindow) {
+		throw std::runtime_error(SDL_GetError());
+	}
+
+	impl->context = SDL_GL_CreateContext(impl->sdlWindow);
+
+	setFontByName("Arial"); // Default font
+	setFontSize(fontSize_); // Load a font the first time
+
+	Init(width, height, screenWidth, screenHeight);
+
+	running_ = true;
+}
 
 #ifdef __APPLE__
 	std::string Window::GetFontFileByName(const std::string& fontname) {

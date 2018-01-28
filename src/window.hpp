@@ -38,7 +38,8 @@ namespace jngl {
 
 	class Window {
 	public:
-		Window(const std::string& title, const int width, const int height, const bool fullscreen);
+		Window(const std::string& title, int width, int height, bool fullscreen,
+		       int screenWidth, int screenHeight);
 		Window(const Window&) = delete;
 		Window& operator=(const Window&) = delete;
 		~Window();
@@ -118,6 +119,13 @@ namespace jngl {
 		int mousex_ = 0;
 		int mousey_ = 0;
 		int fontSize_, width_, height_;
+
+		/// The usable canvas width, excluding letterboxing
+		const int screenWidth;
+
+		/// The usable canvas height, excluding letterboxing
+		const int screenHeight;
+
 		double mouseWheel_ = 0;
 		std::string fontName_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
