@@ -645,11 +645,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 }
 
 int Window::getMouseX() {
-	return mousex_ - relativeX;
+	return mousex_ - relativeX - (width_ - screenWidth) / 2;
 }
 
 int Window::getMouseY() {
-	return mousey_ - relativeY;
+	return mousey_ - relativeY - (height_ - screenHeight) / 2;
 }
 
 void Window::SetMouse(const int xposition, const int yposition) {

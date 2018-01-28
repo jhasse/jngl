@@ -244,11 +244,11 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	}
 
 	int Window::getMouseX() {
-		return mousex_;
+		return mousex_ - (width_ - screenWidth) / 2;
 	}
 
 	int Window::getMouseY() {
-		return mousey_;
+		return mousey_ - (height_ - screenHeight) / 2;
 	}
 
 	void Window::SetMouse(const int xposition, const int yposition) {
