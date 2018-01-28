@@ -1,12 +1,22 @@
-// Copyright 2017 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2017-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "SdlController.hpp"
 
-
 namespace jngl {
 
 SdlController::SdlController(SDL_Joystick* const handle) : handle(handle) {
+	switch (SDL_JoystickNumButtons(handle)) {
+	case 11:
+		model = Model::XBOX_WIRED;
+		break;
+	case 15:
+		model = Model::XBOX;
+		break;
+	case 16:
+		model = Model::DS4;
+		break;
+	};
 }
 
 SdlController::~SdlController() {
@@ -14,7 +24,7 @@ SdlController::~SdlController() {
 }
 
 float SdlController::state(controller::Button button) const {
-	const bool xboxWired = SDL_JoystickNumButtons(handle) == 11;
+	const bool xboxWired = model == Model::XBOX_WIRED;
 	int axisIndex;
 	switch (button) {
 		case controller::LeftStickX: axisIndex = 0; break;
@@ -38,10 +48,7 @@ float SdlController::state(controller::Button button) const {
 }
 
 bool SdlController::down(const controller::Button button) const {
-	//           DS4: 16 buttons
-	// Xbox Wireless: 15 buttons
-	//    Xbox Wired: 11 buttons
-	const bool xbox = SDL_JoystickNumButtons(handle) != 16;
+	const bool xbox = (model == Model::XBOX || model == Model::XBOX_WIRED);
 	if (xbox && (button == controller::LeftTrigger || button == controller::RightTrigger)) {
 		return state(button) > 0;
 	}

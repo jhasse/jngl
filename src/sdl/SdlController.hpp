@@ -1,4 +1,4 @@
-// Copyright 2017 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2017-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/Controller.hpp"
@@ -18,6 +18,14 @@ public:
 
 private:
 	SDL_Joystick* const handle;
+
+	enum class Model {
+		XBOX,
+		XBOX_WIRED,
+		DS4,
+		UNKNOWN,
+	};
+	Model model = Model::UNKNOWN;
 };
 
 } // namespace jngl
