@@ -23,7 +23,7 @@ SdlController::~SdlController() {
 	SDL_JoystickClose(handle);
 }
 
-float SdlController::state(controller::Button button) const {
+float SdlController::stateWithoutDeadzone(controller::Button button) const {
 	const bool xboxWired = model == Model::XBOX_WIRED;
 	int axisIndex;
 	switch (button) {
@@ -43,6 +43,35 @@ float SdlController::state(controller::Button button) const {
 	}
 	if (button == controller::LeftStickY or button == controller::RightStickY) {
 		state *= -1;
+	}
+	return state;
+}
+
+float SdlController::state(controller::Button button) const {
+	float state = stateWithoutDeadzone(button);
+	if (model != Model::XBOX_WIRED and model != Model::XBOX) {
+		return state; // no deadzone needed
+	}
+	controller::Button otherAxis;
+	switch(button) {
+		case controller::LeftStickY:
+			otherAxis = controller::LeftStickX;
+			break;
+		case controller::LeftStickX:
+			otherAxis = controller::LeftStickY;
+			break;
+		case controller::RightStickY:
+			otherAxis = controller::RightStickX;
+			break;
+		case controller::RightStickX:
+			otherAxis = controller::RightStickY;
+			break;
+		default:
+			return state; // no deadzone needed
+	}
+	const auto otherState = stateWithoutDeadzone(otherAxis);
+	if (state * state + otherState * otherState < 0.1) { // inside deadzone circle?
+		return 0;
 	}
 	return state;
 }

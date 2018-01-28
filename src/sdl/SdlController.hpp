@@ -17,6 +17,8 @@ public:
 	bool is(SDL_Joystick*) const;
 
 private:
+	float stateWithoutDeadzone(controller::Button) const;
+
 	SDL_Joystick* const handle;
 
 	enum class Model {

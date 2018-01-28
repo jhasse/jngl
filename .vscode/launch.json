@@ -2,6 +2,14 @@
 		"version": "0.2.0",
 		"configurations": [
 			{
+				"type": "lldb",
+				"request": "launch",
+				"name": "Launch",
+				"program": "${workspaceRoot}/build/jngl-test",
+				"args": [],
+				"cwd": "${workspaceRoot}"
+			},
+			{
 				"name": "(gdb) Launch",
 				"type": "cppdbg",
 				"request": "launch",
