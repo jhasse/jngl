@@ -1,4 +1,4 @@
-// Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <png.h> // We need to include it first, I don't know why
@@ -171,7 +171,7 @@ namespace jngl {
 			throw std::runtime_error(std::string("Error reading signature bytes. (" + filename + ")"));
 		}
 
-		png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+		png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 		if (!png_ptr) {
 			throw std::runtime_error(std::string("libpng error while reading (" + filename + ")"));
 		}
@@ -183,7 +183,7 @@ namespace jngl {
 
 		if (setjmp(png_jmpbuf(png_ptr))) {
 			// Free all of the memory associated with the png_ptr and info_ptr
-			png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+			png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 			throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
 		}
 		png_init_io(png_ptr, fp);
@@ -192,7 +192,7 @@ namespace jngl {
 		if (colorType == PNG_COLOR_TYPE_GRAY || colorType == PNG_COLOR_TYPE_GRAY_ALPHA) {
 			png_set_gray_to_rgb(png_ptr);
 		}
-		png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16, NULL);
+		png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16, nullptr);
 
 		GLenum format;
 		switch (png_get_channels(png_ptr, info_ptr)) {
@@ -208,7 +208,7 @@ namespace jngl {
 				throw std::runtime_error(std::string("Unsupported number of channels. (" + filename + ")"));
 		}
 
-		Finally freePng(boost::bind(png_destroy_read_struct, &png_ptr, &info_ptr, (png_infop*)NULL));
+		Finally freePng(boost::bind(png_destroy_read_struct, &png_ptr, &info_ptr, (png_infop*)nullptr));
 		unsigned char** rowPointers = png_get_rows(png_ptr, info_ptr);
 		width = static_cast<int>(png_get_image_width(png_ptr, info_ptr));
 		height = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
