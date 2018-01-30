@@ -6,7 +6,6 @@ endif
 
 src = [
 	'src/audio.cpp',
-	'src/ConvertUTF.cpp',
 	'src/jngl/Finally.cpp',
 	'src/framebufferimpl.cpp',
 	'src/freetype.cpp',

@@ -5,7 +5,7 @@
 #include "../jngl/window.hpp"
 #include "../jngl/debug.hpp"
 #include "../opengl.hpp"
-#include "../ConvertUTF.h"
+#include "ConvertUTF.h"
 #include "../main.hpp"
 
 #include "wglext.h"

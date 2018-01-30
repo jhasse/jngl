@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\audio.cpp" />
-    <ClCompile Include="..\src\ConvertUTF.cpp" />
     <ClCompile Include="..\src\jngl\Controller.cpp" />
     <ClCompile Include="..\src\jngl\Finally.cpp" />
     <ClCompile Include="..\src\framebufferimpl.cpp" />
@@ -34,6 +33,7 @@
     <ClCompile Include="..\src\opengl.cpp" />
     <ClCompile Include="..\src\spriteimpl.cpp" />
     <ClCompile Include="..\src\texture.cpp" />
+    <ClCompile Include="..\src\win32\ConvertUTF.cpp" />
     <ClCompile Include="..\src\win32\inputimpl.cpp" />
     <ClCompile Include="..\src\win32\message.cpp" />
     <ClCompile Include="..\src\win32\msvc\dlfcn.c" />
@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\audio.hpp" />
-    <ClInclude Include="..\src\ConvertUTF.h" />
     <ClInclude Include="..\src\debug.hpp" />
     <ClInclude Include="..\src\draw.hpp" />
     <ClInclude Include="..\src\jngl\Finally.hpp" />
@@ -74,6 +73,7 @@
     <ClInclude Include="..\src\opengl.hpp" />
     <ClInclude Include="..\src\spriteimpl.hpp" />
     <ClInclude Include="..\src\texture.hpp" />
+    <ClInclude Include="..\src\win32\ConvertUTF.h" />
     <ClInclude Include="..\src\window.hpp" />
     <ClInclude Include="..\src\windowptr.hpp" />
   </ItemGroup>

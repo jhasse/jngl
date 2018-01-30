@@ -4,12 +4,12 @@
 #include "freetype.hpp"
 #include "jngl/debug.hpp"
 #include "jngl/screen.hpp"
-#include "ConvertUTF.h"
 #include "main.hpp"
 #include "helper.hpp"
 
 #include FT_GLYPH_H
 #include <boost/lexical_cast.hpp>
+#include <codecvt>
 #include <fstream>
 
 namespace jngl {
@@ -92,10 +92,16 @@ namespace jngl {
 	}
 
 	Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::iterator end) {
+#ifdef _MSC_VER
+		// https://stackoverflow.com/questions/32055357/visual-studio-c-2015-stdcodecvt-with-char16-t-or-char32-t
+		static std::wstring_convert<std::codecvt_utf8<int32_t>, int32_t> cvt;
+#else
+		static std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cvt;
+#endif
 		const char& ch = (*it); // Just to have less code
 		unsigned long unicodeCharacter = ch;
 		if (ch & 0x80) { // first bit (Check if this is an Unicode character)
-			const UTF8* sourceEnd = (const unsigned char*)&ch + 2;
+			const char* sourceEnd = &ch + 2;
 			// sourceEnd has to be the next character after the utf-8 sequence
 			const std::runtime_error unicodeError("Invalid UTF-8 string!");
 			if (++it == end) {
@@ -114,19 +120,7 @@ namespace jngl {
 					++sourceEnd;
 				}
 			}
-			const UTF8* temp = (const unsigned char*)&ch;
-			const UTF8** sourceStart = &temp;
-			UTF32 unicode;
-			UTF32* temp2 = &unicode;
-			UTF32** targetStart = &temp2;
-			UTF32* targetEnd = &unicode + sizeof(unsigned long);
-			ConversionResult result = ConvertUTF8toUTF32(sourceStart, sourceEnd, targetStart,
-			                                             targetEnd, lenientConversion);
-			if (result == conversionOK) {
-				unicodeCharacter = unicode;
-			} else {
-				debug(" ERROR - " + boost::lexical_cast<std::string>(result));
-			}
+			unicodeCharacter = cvt.from_bytes(&ch, sourceEnd)[0];
 		}
 		if (characters_[unicodeCharacter] == nullptr) {
 			characters_[unicodeCharacter].reset(new Character(unicodeCharacter, height_, face_));
