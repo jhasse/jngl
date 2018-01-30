@@ -64,6 +64,7 @@ else
 		cxx.find_library('xinput1_4'),
 	]
 	src += [
+		'src/win32/ConvertUTF.cpp',
 		'src/win32/inputimpl.cpp',
 		'src/win32/message.cpp',
 		'src/win32/time.cpp',
