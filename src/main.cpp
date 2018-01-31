@@ -31,11 +31,13 @@ namespace jngl {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glClearColor(bgRed, bgGreen, bgBlue, 0.0f);
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 		glViewport(0, 0, width, height);
 
 		if (screenWidth != width || screenHeight != height) { // Letterboxing?
+			glClearColor(0, 0, 0, 0); // black boxes
+			glClear(GL_COLOR_BUFFER_BIT);
+
 			glEnable(GL_SCISSOR_TEST);
 			assert(screenWidth <= width);
 			assert(screenHeight <= height);
@@ -63,6 +65,8 @@ namespace jngl {
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+
+		glClearColor(bgRed, bgGreen, bgBlue, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glFlush();
