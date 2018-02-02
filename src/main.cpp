@@ -18,6 +18,10 @@ namespace jngl {
 	std::vector<std::string> args;
 	float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
 
+	void clearBackgroundColor() {
+		glClearColor(bgRed, bgGreen, bgBlue, 1);
+	}
+
 	bool Init(const int width, const int height, const int screenWidth, const int screenHeight) {
 #ifdef GLEW_OK
 		GLenum err = glewInit();
@@ -35,7 +39,7 @@ namespace jngl {
 		glViewport(0, 0, width, height);
 
 		if (screenWidth != width || screenHeight != height) { // Letterboxing?
-			glClearColor(0, 0, 0, 0); // black boxes
+			glClearColor(0, 0, 0, 1); // black boxes
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			glEnable(GL_SCISSOR_TEST);
@@ -66,7 +70,7 @@ namespace jngl {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
-		glClearColor(bgRed, bgGreen, bgBlue, 0.0f);
+		clearBackgroundColor();
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glFlush();
@@ -123,6 +127,17 @@ namespace jngl {
 
 	void swapBuffers() {
 		pWindow->SwapBuffers();
+
+		if (glIsEnabled(GL_SCISSOR_TEST)) {
+			// Letterboxing with SDL_VIDEODRIVER=wayland will glitch if we don't draw the black
+			// boxes on every frame
+			glDisable(GL_SCISSOR_TEST);
+			glClearColor(0, 0, 0, 1);
+			glClear(GL_COLOR_BUFFER_BIT);
+			glEnable(GL_SCISSOR_TEST);
+			clearBackgroundColor();
+		}
+
 		glLoadIdentity();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
@@ -142,10 +157,6 @@ namespace jngl {
 
 	void cancelQuit() {
 		pWindow->cancelQuit();
-	}
-
-	void clearBackgroundColor() {
-		glClearColor(bgRed, bgGreen, bgBlue, 1);
 	}
 
 	void setBackgroundColor(const unsigned char red, const unsigned char green, const unsigned char blue) {
