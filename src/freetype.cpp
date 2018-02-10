@@ -152,7 +152,8 @@ namespace jngl {
 			throw std::runtime_error("FT_New_Face failed");
 		}
 		debug("OK\n");
-		freeFace_.reset(new Finally(std::bind(FT_Done_Face, face_))); // Finally will call FT_Done_Face when the Font class is destroyed
+		// Finally will call FT_Done_Face when the Font class is destroyed:
+		freeFace = std::make_unique<Finally>([this]() { return FT_Done_Face(face_); });
 
 		// For some twisted reason, Freetype measures font size
 		// in terms of 1/64ths of pixels.  Thus, to make a font
@@ -162,7 +163,7 @@ namespace jngl {
 
 	FontImpl::~FontImpl()
 	{
-		freeFace_.reset(); // free face_ with FT_Done_Face
+		freeFace.reset(); // free face_ with FT_Done_Face
 		if(--instanceCounter == 0)
 		{
 			FT_Done_FreeType(library);

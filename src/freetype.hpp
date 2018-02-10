@@ -49,7 +49,7 @@ namespace jngl {
 		static int instanceCounter;
 		static FT_Library library;
 		FT_Face face_;
-		std::shared_ptr<Finally> freeFace_; // Frees face_ if necessary
+		std::unique_ptr<Finally> freeFace; // Frees face_ if necessary
 		unsigned int height_;
 		int lineHeight;
 		std::map<unsigned long, std::shared_ptr<Character>> characters_;
