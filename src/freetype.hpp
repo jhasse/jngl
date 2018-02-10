@@ -1,4 +1,4 @@
-// Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -54,4 +54,4 @@ namespace jngl {
 		int lineHeight;
 		std::map<unsigned long, std::shared_ptr<Character>> characters_;
 	};
-}
+} // namespace jngl

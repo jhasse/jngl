@@ -96,4 +96,4 @@ FrameBufferImpl::~FrameBufferImpl() {
 		texture.draw();
 		glPopMatrix();
 	}
-}
+} // namespace jngl

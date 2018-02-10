@@ -225,4 +225,4 @@ namespace jngl {
 
 	FT_Library FontImpl::library;
 	int FontImpl::instanceCounter = 0;
-}
+} // namespace jngl
