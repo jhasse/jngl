@@ -1,9 +1,23 @@
-// Copyright 2009-2018 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2009-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "jngl.hpp"
 #include "audio.hpp"
 #include "main.hpp"
+
+#ifdef WEAK_LINKING_OPENAL
+ #include "win32/openal.hpp"
+#else
+ #ifdef __APPLE__
+  #include <OpenAL/al.h>
+  #include <OpenAL/alc.h>
+ #else
+  #include <AL/al.h>
+  #include <AL/alc.h>
+ #endif
+ #define OV_EXCLUDE_STATIC_CALLBACKS
+ #include <vorbis/vorbisfile.h>
+#endif
 
 #include <cstdio>
 #include <stdexcept>
@@ -11,41 +25,54 @@
 #include <algorithm>
 
 namespace jngl {
+
+	struct Sound::Params {
+		ALenum format;
+		ALsizei freq;
+	};
+
+	struct Sound::Impl {
+		ALuint buffer;
+		ALuint source = 0;
+	};
+
 	float Sound::masterVolume = 1.0f;
 
-	Sound::Sound(ALenum format, std::vector<char>& bufferData, ALsizei freq) : source_(0) {
-		alGenBuffers(1, &buffer_);
-		alGenSources(1, &source_);
+	Sound::Sound(const Params& params, std::vector<char>& bufferData)
+	: impl(std::make_unique<Impl>()) {
+		alGenBuffers(1, &impl->buffer);
+		alGenSources(1, &impl->source);
 		alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
-		alSource3f(source_, AL_POSITION, 0.0f, 0.0f, 0.0f);
-		alBufferData(buffer_, format, &bufferData[0], static_cast<ALsizei>(bufferData.size()), freq);
-		alSourcei(source_, AL_BUFFER, buffer_);
-		alSourcePlay(source_);
+		alSource3f(impl->source, AL_POSITION, 0.0f, 0.0f, 0.0f);
+		alBufferData(impl->buffer, params.format, &bufferData[0],
+		             static_cast<ALsizei>(bufferData.size()), params.freq);
+		alSourcei(impl->source, AL_BUFFER, impl->buffer);
+		alSourcePlay(impl->source);
 		setVolume(masterVolume);
 	}
 	Sound::~Sound() {
 		debug("freeing sound buffer ... ");
-		alSourceStop(source_);
-		alSourceUnqueueBuffers(source_, 1, &buffer_);
-		alDeleteSources(1, &source_);
-		alDeleteBuffers(1, &buffer_);
+		alSourceStop(impl->source);
+		alSourceUnqueueBuffers(impl->source, 1, &impl->buffer);
+		alDeleteSources(1, &impl->source);
+		alDeleteBuffers(1, &impl->buffer);
 		debug("OK\n");
 	}
 	bool Sound::IsPlaying() {
 		ALint state;
-		alGetSourcei(source_, AL_SOURCE_STATE, &state);
+		alGetSourcei(impl->source, AL_SOURCE_STATE, &state);
 		return state == AL_PLAYING;
 	}
 	bool Sound::Stopped() {
 		ALint state;
-		alGetSourcei(source_, AL_SOURCE_STATE, &state);
+		alGetSourcei(impl->source, AL_SOURCE_STATE, &state);
 		return state == AL_STOPPED;
 	}
 	void Sound::SetPitch(float p) {
-		alSourcef(source_, AL_PITCH, p);
+		alSourcef(impl->source, AL_PITCH, p);
 	}
 	void Sound::setVolume(float v) {
-		alSourcef(source_, AL_GAIN, v);
+		alSourcef(impl->source, AL_GAIN, v);
 	}
 
 	std::unordered_map<std::string, std::shared_ptr<SoundFile>> sounds;
@@ -94,7 +121,7 @@ namespace jngl {
 
 	Audio& GetAudio();
 
-	SoundFile::SoundFile(const std::string& filename) : sound_(nullptr) {
+	SoundFile::SoundFile(const std::string& filename) : params(std::make_unique<Sound::Params>()) {
 		debug("Decoding "); debug(filename); debug(" ... ");
 #ifdef _WIN32
 		FILE* const f = fopen(filename.c_str(), "rb");
@@ -113,11 +140,11 @@ namespace jngl {
 		vorbis_info* pInfo;
 		pInfo = ov_info(&oggFile, -1);
 		if (pInfo->channels == 1) {
-			format = AL_FORMAT_MONO16;
+			params->format = AL_FORMAT_MONO16;
 		} else {
-			format = AL_FORMAT_STEREO16;
+			params->format = AL_FORMAT_STEREO16;
 		}
-		freq = static_cast<ALsizei>(pInfo->rate);
+		params->freq = static_cast<ALsizei>(pInfo->rate);
 
 		const int bufferSize = 32768;
 		char array[bufferSize]; // 32 KB buffers
@@ -139,7 +166,7 @@ namespace jngl {
 		debug("OK\n");
 	}
 	void SoundFile::Play() {
-		sound_.reset(new Sound(format, buffer_, freq));
+		sound_.reset(new Sound(*params, buffer_));
 		GetAudio().Play(sound_);
 	}
 	void SoundFile::Stop() {
