@@ -7,6 +7,8 @@
 #include "jngl/matrix.hpp"
 #include "jngl/screen.hpp"
 
+#include <cassert>
+
 namespace jngl {
 
 	FrameBufferImpl::FrameBufferImpl(int width, int height)

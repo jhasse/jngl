@@ -11,6 +11,8 @@
 #include "windowimpl.hpp"
 #include "../jngl/debug.hpp"
 
+#include <cassert>
+
 namespace jngl {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,

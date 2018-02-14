@@ -1,4 +1,4 @@
-// Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -10,7 +10,6 @@
 #include <string>
 #include <boost/type_traits.hpp>
 #include <array>
-#include <boost/ptr_container/ptr_unordered_map.hpp>
 #include <stack>
 
 #ifdef __linux
@@ -144,7 +143,7 @@ namespace jngl {
 #endif
 
 		// <fontSize, <fontName, FontImpl>>
-		boost::ptr_unordered_map<int, boost::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
+		std::map<int, std::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
 		std::vector<std::function<void()>> updateInputCallbacks;
 #ifdef _WIN32
 		std::shared_ptr<boost::remove_pointer<HGLRC>::type> pRenderingContext_;
