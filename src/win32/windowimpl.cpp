@@ -16,6 +16,7 @@
 #include <stdexcept>
 #include <windowsx.h> // GET_X_LPARAM
 #include <cassert>
+#include <cmath>
 #include <shlobj.h>
 
 XINPUT_STATE states[XUSER_MAX_COUNT];
@@ -348,7 +349,7 @@ void Window::DistinguishLeftRight() {
 }
 
 void calculateStick(short& x, short& y, int deadzone) {
-	float magnitude = float(sqrt(x * x + y * y));
+	float magnitude = float(std::sqrt(x * x + y * y));
 	float normX = x / magnitude;
 	float normY = y / magnitude;
 
