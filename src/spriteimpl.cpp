@@ -1,4 +1,4 @@
-// Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <png.h> // We need to include it first, I don't know why
@@ -10,15 +10,14 @@
 #include "texture.hpp"
 #include "main.hpp"
 
-#include <boost/unordered_map.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
-#include <boost/function.hpp>
+#include <boost/shared_ptr.hpp>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 #include <stack>
 #include <stdexcept>
-#include <cmath>
-#include <cstdlib>
-#include <cstdio>
+#include <unordered_map>
 #ifdef _WIN32
 	// These defines are needed to prevent conflicting types declarations in jpeglib.h:
 	#define XMD_H
@@ -69,7 +68,7 @@ namespace jngl
 		setSpriteColor(spriteColorRed, spriteColorGreen, spriteColorBlue, alpha);
 	}
 
-	boost::unordered_map<std::string, std::shared_ptr<Sprite>> sprites_;
+	std::unordered_map<std::string, std::shared_ptr<Sprite>> sprites_;
 
 	// halfLoad is used, if we only want to find out the width or height of an image. Load won't throw an exception then
 	Sprite& GetSprite(const std::string& filename, const Sprite::LoadType loadType) {
