@@ -10,10 +10,11 @@
 #include "../windowptr.hpp"
 #include "../main.hpp"
 
-#include <thread>
-#include <fstream>
-#include <boost/bind.hpp>
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/bind.hpp>
+#include <fstream>
+#include <sstream>
+#include <thread>
 #ifdef _WIN32
 	// These defines are needed to prevent conflicting types declarations in jpeglib.h:
 	#define XMD_H
@@ -100,7 +101,7 @@ namespace jngl {
 			}
 		}
 		if (!loadFunction) {
-			std::stringstream message;
+			std::ostringstream message;
 			message << "No suitable image file found for: " << filename
 			        << "\nSupported file extensions: ";
 			for (size_t i = 0; i < size; ++i) {

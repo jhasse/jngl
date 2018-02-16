@@ -10,7 +10,6 @@
 #include "texture.hpp"
 #include "main.hpp"
 
-#include <boost/shared_array.hpp>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
