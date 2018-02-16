@@ -13,7 +13,6 @@
 #include <png.h>
 
 #include <algorithm>
-#include <boost/bind.hpp>
 #include <stdexcept>
 #include <windowsx.h> // GET_X_LPARAM
 #include <cassert>
@@ -201,7 +200,7 @@ void Window::Init(const std::string& title, const bool multisample) {
 		};
 
 	pDeviceContext_.reset(GetDC(pWindowHandle_.get()),
-	                      boost::bind(ReleaseDC, pWindowHandle_.get(), _1));
+	                      [this](HDC hdc) { ReleaseDC(pWindowHandle_.get(), hdc); });
 	if (!pDeviceContext_) {
 		throw std::runtime_error("Can't create a GL device context.");
 	}
