@@ -8,7 +8,7 @@
 #include "jngl/input.hpp"
 
 #include <string>
-#include <boost/type_traits.hpp>
+#include <type_traits>
 #include <array>
 #include <stack>
 
@@ -146,9 +146,9 @@ namespace jngl {
 		std::map<int, std::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
 		std::vector<std::function<void()>> updateInputCallbacks;
 #ifdef _WIN32
-		std::shared_ptr<boost::remove_pointer<HGLRC>::type> pRenderingContext_;
-		std::shared_ptr<boost::remove_pointer<HWND>::type> pWindowHandle_;
-		std::shared_ptr<boost::remove_pointer<HDC>::type> pDeviceContext_;
+		std::shared_ptr<std::remove_pointer<HGLRC>::type> pRenderingContext_;
+		std::shared_ptr<std::remove_pointer<HWND>::type> pWindowHandle_;
+		std::shared_ptr<std::remove_pointer<HDC>::type> pDeviceContext_;
 		int arbMultisampleFormat_;
 		bool touchscreenActive = false;
 		int relativeX = 0;

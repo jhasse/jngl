@@ -4,6 +4,8 @@
 #include "window.hpp"
 #include "jngl.hpp"
 
+#include <cmath>
+
 namespace jngl {
 	double Window::GetTextWidth(const std::string& text) {
 		return fonts_[fontSize_][fontName_]->getTextWidth(text);
