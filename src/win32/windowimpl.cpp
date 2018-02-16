@@ -12,6 +12,7 @@
 
 #include <png.h>
 
+#include <algorithm>
 #include <boost/bind.hpp>
 #include <stdexcept>
 #include <windowsx.h> // GET_X_LPARAM
