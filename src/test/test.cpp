@@ -3,13 +3,13 @@
 
 #include "../jngl.hpp"
 
-#include <cmath>
-#include <sstream>
-#include <iostream>
-#include <map>
-#include <vector>
 #include <algorithm>
 #include <boost/math/constants/constants.hpp>
+#include <cmath>
+#include <iostream>
+#include <map>
+#include <sstream>
+#include <vector>
 
 void drawBackground();
 void drawMouse(int, int);
@@ -19,8 +19,7 @@ double factor = 0;
 
 class Test : public jngl::Work {
 public:
-	Test() : rotate(0), frameNumber(0), fb(100, 110), fb2(800, 600),
-	logoWebp("jngl.webp") {
+	Test() : fb(100, 110), fb2(800, 600), logoWebp("jngl.webp") {
 		jngl::setTitle("JNGL Test Application");
 		jngl::setIcon("jngl.png");
 		jngl::setMouseVisible(false);
@@ -167,8 +166,8 @@ public:
 private:
 	mutable bool drawOnFrameBuffer = false;
 	mutable double rotate;
-	mutable int frameNumber;
-	mutable double frameTime;
+	mutable int frameNumber = 0;
+	mutable double frameTime = 0;
 	mutable double lastTime;
 	mutable jngl::FrameBuffer fb, fb2;
 	jngl::Sprite logoWebp;
@@ -192,11 +191,11 @@ void drawBackground() {
 	if (performance > 1) {
 		for (int x = 0; x < performance; ++x) {
 			for (int y = 0; y < performance; ++y) {
-				jngl::drawScaled("jngl",
-								 x * jngl::getWindowWidth() / performance,
-								 y * jngl::getWindowHeight() / performance,
-								 (float)jngl::getWindowWidth() / performance / jngl::getWidth("jngl"),
-								 (float)jngl::getWindowHeight() / performance / jngl::getHeight("jngl"));
+				jngl::drawScaled(
+				    "jngl", x * jngl::getWindowWidth() / performance,
+				    y * jngl::getWindowHeight() / performance,
+				    float(jngl::getWindowWidth()) / performance / jngl::getWidth("jngl"),
+				    float(jngl::getWindowHeight()) / performance / jngl::getHeight("jngl"));
 			}
 		}
 	}
@@ -237,7 +236,7 @@ void drawMouse(int x, int y) {
 class RecentlyPressedKey {
 public:
 	RecentlyPressedKey(std::string name, int x, int y)
-		: name_(name), alpha_(255), x_(x), y_(y), lastTime_(jngl::getTime()) {
+	: name_(std::move(name)), alpha_(255), x_(x), y_(y), lastTime_(jngl::getTime()) {
 	}
 	void Draw() {
 		double timeSinceLastFrame = jngl::getTime() - lastTime_;
@@ -306,16 +305,16 @@ void testKeys() {
 		jngl::setFontSize(10);
 		jngl::translate(-400, -300);
 		int y = 10;
-		for (auto it = keys.begin(); it != keys.end(); ++it) {
-			if (jngl::keyDown(it->second)) {
+		for (const auto& it : keys) {
+			if (jngl::keyDown(it.second)) {
 				jngl::setFontColor(0, 0, 0);
 			}
 			else {
 				jngl::setFontColor(150, 150, 150);
 			}
-			jngl::print(it->first, 100, y);
-			if (jngl::keyPressed(it->second)){
-				recentlyPressedKeys.emplace_back(it->first, 100, y);
+			jngl::print(it.first, 100, y);
+			if (jngl::keyPressed(it.second)){
+				recentlyPressedKeys.emplace_back(it.first, 100, y);
 			}
 			y += 15;
 		}
@@ -343,16 +342,16 @@ void testKeys() {
 		buttons["Left Mouse Button"] = jngl::mouse::Left;
 		buttons["Middle Mouse Button"] = jngl::mouse::Middle;
 		buttons["Right Mouse Button"] = jngl::mouse::Right;
-		for (auto it = buttons.begin(); it != buttons.end(); ++it) {
-			if (jngl::mouseDown(it->second)) {
+		for (const auto& it : buttons) {
+			if (jngl::mouseDown(it.second)) {
 				jngl::setFontColor(0, 0, 0);
 			}
 			else {
 				jngl::setFontColor(150, 150, 150);
 			}
-			jngl::print(it->first, 500, y);
-			if (jngl::mousePressed(it->second)) {
-				recentlyPressedKeys.emplace_back(it->first, 500, y);
+			jngl::print(it.first, 500, y);
+			if (jngl::mousePressed(it.second)) {
+				recentlyPressedKeys.emplace_back(it.first, 500, y);
 			}
 			y += 15;
 		}
