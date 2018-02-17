@@ -15,43 +15,47 @@
 #include <map>
 
 namespace jngl {
-	extern unsigned char fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha;
 
-	class Character {
-	public:
-		Character(unsigned long ch, unsigned int height, FT_Face);
-		Character(const Character&) = delete;
-		Character& operator=(const Character&) = delete;
-		~Character();
-		void Draw() const;
-		int getWidth() const;
-	private:
-		Texture* texture_ = nullptr;
-		int width_;
-		int left_ = 0;
-		int top_ = 0;
-	};
+extern unsigned char fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha;
 
-	class FontImpl {
-	public:
-		FontImpl();
-		FontImpl(const std::string& filename, unsigned int height);
-		FontImpl(const FontImpl&) = delete;
-		FontImpl& operator=(const FontImpl&) = delete;
-		~FontImpl();
-		void print(int x, int y, const std::string& text);
-		int getTextWidth(const std::string& text);
-		int getLineHeight() const;
-		void setLineHeight(int);
-	private:
-		Character& GetCharacter(std::string::iterator& it, const std::string::iterator end);
+class Character {
+public:
+	Character(unsigned long ch, unsigned int height, FT_Face);
+	Character(const Character&) = delete;
+	Character& operator=(const Character&) = delete;
+	~Character();
+	void Draw() const;
+	int getWidth() const;
 
-		static int instanceCounter;
-		static FT_Library library;
-		FT_Face face_;
-		std::unique_ptr<Finally> freeFace; // Frees face_ if necessary
-		unsigned int height_;
-		int lineHeight;
-		std::map<unsigned long, std::shared_ptr<Character>> characters_;
-	};
+private:
+	Texture* texture_ = nullptr;
+	int width_;
+	int left_ = 0;
+	int top_ = 0;
+};
+
+class FontImpl {
+public:
+	FontImpl();
+	FontImpl(const std::string& filename, unsigned int height);
+	FontImpl(const FontImpl&) = delete;
+	FontImpl& operator=(const FontImpl&) = delete;
+	~FontImpl();
+	void print(int x, int y, const std::string& text);
+	int getTextWidth(const std::string& text);
+	int getLineHeight() const;
+	void setLineHeight(int);
+
+private:
+	Character& GetCharacter(std::string::iterator& it, const std::string::iterator end);
+
+	static int instanceCounter;
+	static FT_Library library;
+	FT_Face face;
+	std::unique_ptr<Finally> freeFace; // Frees face_ if necessary
+	unsigned int height_;
+	int lineHeight;
+	std::map<unsigned long, std::shared_ptr<Character>> characters_;
+};
+
 } // namespace jngl

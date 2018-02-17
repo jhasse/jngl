@@ -123,7 +123,7 @@ namespace jngl {
 			unicodeCharacter = cvt.from_bytes(&ch, sourceEnd)[0];
 		}
 		if (characters_[unicodeCharacter] == nullptr) {
-			characters_[unicodeCharacter].reset(new Character(unicodeCharacter, height_, face_));
+			characters_[unicodeCharacter].reset(new Character(unicodeCharacter, height_, face));
 		}
 		return *(characters_[unicodeCharacter]);
 	}
@@ -148,17 +148,17 @@ namespace jngl {
 			}
 		}
 		debug("Loading font "); debug(filename); debug("... ");
-		if (FT_New_Face(library, filename.c_str(), 0, &face_)) {
+		if (FT_New_Face(library, filename.c_str(), 0, &face)) {
 			throw std::runtime_error("FT_New_Face failed");
 		}
 		debug("OK\n");
 		// Finally will call FT_Done_Face when the Font class is destroyed:
-		freeFace = std::make_unique<Finally>([this]() { return FT_Done_Face(face_); });
+		freeFace = std::make_unique<Finally>([this]() { return FT_Done_Face(face); });
 
 		// For some twisted reason, Freetype measures font size
 		// in terms of 1/64ths of pixels.  Thus, to make a font
 		// h pixels high, we need to request a size of h*64.
-		FT_Set_Char_Size(face_, height_ * 64, height_ * 64, 96, 96);
+		FT_Set_Char_Size(face, height_ * 64, height_ * 64, 96, 96);
 	}
 
 	FontImpl::~FontImpl()
