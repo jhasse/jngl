@@ -1,7 +1,5 @@
-/*
-Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "text.hpp"
 
@@ -15,12 +13,12 @@ namespace jngl {
 	class Line : public jngl::Drawable {
 	public:
 		Line(const std::string& text, std::shared_ptr<FontImpl> font) : text(text) {
-			setFont(font);
+			setFont(std::move(font));
 		}
-		void setFont(const std::shared_ptr<FontImpl> font) {
-			this->font = font;
+		void setFont(std::shared_ptr<FontImpl> font) {
 			width = static_cast<int>(font->getTextWidth(text) * getScaleFactor());
 			height = font->getLineHeight();
+			this->font = std::move(font);
 		}
 		void step() override {
 		}
