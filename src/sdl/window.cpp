@@ -354,4 +354,4 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		SDL_SetWindowFullscreen(impl->sdlWindow, f ? SDL_WINDOW_FULLSCREEN : 0);
 		fullscreen_ = f;
 	}
-}
+} // namespace jngl
