@@ -31,7 +31,7 @@ void WindowPointer::Set(Window* ptr) {
 
 void WindowPointer::Delete() {
 	delete ptr_;
-	ptr_ = 0;
+	ptr_ = nullptr;
 }
 
 void WindowPointer::ThrowIfNull() const {
