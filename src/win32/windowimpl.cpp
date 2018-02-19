@@ -10,14 +10,17 @@
 
 #include "wglext.h"
 
+#ifndef NOPNG
 #include <png.h>
+#endif
 
 #include <algorithm>
-#include <stdexcept>
-#include <windowsx.h> // GET_X_LPARAM
 #include <cassert>
 #include <cmath>
 #include <shlobj.h>
+#include <sstream>
+#include <stdexcept>
+#include <windowsx.h> // GET_X_LPARAM
 
 XINPUT_STATE states[XUSER_MAX_COUNT];
 
