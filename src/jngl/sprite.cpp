@@ -1,6 +1,10 @@
 // Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
+#ifndef NOPNG
+#include <png.h> // Include first, see https://bugs.launchpad.net/ubuntu/+source/libpng/+bug/218409
+#endif
+
 #include "sprite.hpp"
 
 #include "screen.hpp"
@@ -23,9 +27,6 @@
 		#include <jpeglib.h>
 	}
 #endif
-#ifndef NOPNG
-	#include <png.h>
-#endif
 #ifndef NOWEBP
 	#include <webp/decode.h>
 #endif
@@ -34,7 +35,7 @@ namespace jngl {
 	std::shared_ptr<Texture> getTexture(const std::string& filename) {
 		auto it = textures.find(filename);
 		if (it == textures.end()) {
-			return std::shared_ptr<Texture>((Texture*)0);
+			return nullptr;
 		}
 		return it->second;
 	}
