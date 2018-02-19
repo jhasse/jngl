@@ -1,8 +1,6 @@
 // Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#include <png.h> // We need to include it first, I don't know why
-
 #include "sprite.hpp"
 
 #include "screen.hpp"
@@ -15,23 +13,24 @@
 #include <fstream>
 #include <sstream>
 #include <thread>
+#ifndef NOJPEG
 #ifdef _WIN32
 	// These defines are needed to prevent conflicting types declarations in jpeglib.h:
 	#define XMD_H
 	#define HAVE_BOOLEAN
 #endif
-#ifndef NOJPEG
 	extern "C" {
 		#include <jpeglib.h>
 	}
+#endif
+#ifndef NOPNG
+	#include <png.h>
 #endif
 #ifndef NOWEBP
 	#include <webp/decode.h>
 #endif
 
 namespace jngl {
-	const unsigned int PNG_BYTES_TO_CHECK = 4;
-
 	std::shared_ptr<Texture> getTexture(const std::string& filename) {
 		auto it = textures.find(filename);
 		if (it == textures.end()) {
@@ -163,6 +162,7 @@ namespace jngl {
 #ifndef NOPNG
 	Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp,
 	                     const bool halfLoad) {
+		const unsigned int PNG_BYTES_TO_CHECK = 4;
 		png_byte buf[PNG_BYTES_TO_CHECK];
 		assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short));
 
