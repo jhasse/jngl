@@ -205,16 +205,62 @@ namespace jngl {
 	}
 
 	void Window::stepIfNeeded() {
-		const auto dif = jngl::getTime() - oldTime - timePerStep * stepsPerFrame;
-		if (dif > 1) { // something is wrong
-			oldTime = jngl::getTime(); // ignore this frame
-		} else if (dif > timePerStep) {
-			stepsPerFrame += dif;
+		// TODO: These variables are static, but should rather be members of Window:
+		static auto lastCheckTime = jngl::getTime();
+		static unsigned int stepsSinceLastCheck = 0;
+		static double timeSleptSinceLastCheck = 0;
+
+		const auto currentTime = jngl::getTime();
+		const auto secondsSinceLastCheck = currentTime - lastCheckTime;
+		if (secondsSinceLastCheck > 1) { // Has more than one second passed since our last check?
+			const auto actualStepsPerSecond = stepsSinceLastCheck / secondsSinceLastCheck;
+			const auto doableStepsPerSecond =
+			    stepsSinceLastCheck / (secondsSinceLastCheck - timeSleptSinceLastCheck);
+			const auto targetStepsPerSecond = 1.0 / timePerStep;
+			// TODO: Improve logging. Log level? jngl::trace?
+			jngl::debug("SPS: ");
+			jngl::debug(std::lround(actualStepsPerSecond));
+			jngl::debug(" (doable ");
+			jngl::debug(std::lround(doableStepsPerSecond));
+			jngl::debug(", should be ");
+			jngl::debug(std::lround(targetStepsPerSecond));
+			jngl::debug("); ");
+			// Round up, because if we can do 40 FPS, but need 60 SPS, we need at least 2 SPF:
+			int newStepsPerFrame =
+			    0.99 + stepsPerFrame * targetStepsPerSecond / doableStepsPerSecond;
+			if (newStepsPerFrame < 1) {
+				newStepsPerFrame = 1;
+			}
+			// Divide doableStepsPerSecond by the previous stepsPerFrame and multiply it with
+			// newStepsPerFrame so that we know what can be doable in the future and not what
+			// could have been doable:
+			double shouldSleepPerFrame =
+			    newStepsPerFrame * // we sleep per frame, not per step
+			    (timePerStep - 1.0 / (newStepsPerFrame * doableStepsPerSecond / stepsPerFrame));
+			if (shouldSleepPerFrame < 0) {
+				shouldSleepPerFrame = 0;
+			}
+			// The factor means that we quickly go down when needed, but hesitate to go up:
+			sleepPerFrame += ((shouldSleepPerFrame < sleepPerFrame) ? 0.95 : 0.55) *
+			                 (shouldSleepPerFrame - sleepPerFrame);
+			jngl::debug("stepsPerFrame -> ");
+			jngl::debug(newStepsPerFrame);
+			jngl::debug(", msSleepPerFrame -> ");
+			jngl::debug(sleepPerFrame);
+			jngl::debugLn("");
+			lastCheckTime = currentTime;
+			stepsSinceLastCheck = 0;
+			timeSleptSinceLastCheck = 0;
+			stepsPerFrame = newStepsPerFrame;
 		}
-		if (stepsPerFrame < 0.51f) {
-			stepsPerFrame = 1.0f;
+		const int sleepMs = 1000 * sleepPerFrame;
+		if (sleepMs > 0) {
+			const auto start = jngl::getTime();
+			jngl::sleep(sleepMs);
+			timeSleptSinceLastCheck += jngl::getTime() - start;
 		}
-		for (int i = 0; i < lround(stepsPerFrame); ++i) {
+		for (unsigned int i = 0; i < stepsPerFrame; ++i) {
+			++stepsSinceLastCheck;
 			oldTime += timePerStep;
 			jngl::updateInput();
 			if (currentWork_) {
@@ -232,16 +278,6 @@ namespace jngl {
 				newWork_.reset();
 				currentWork_->onLoad();
 			}
-		}
-		auto timeToSleep = oldTime - jngl::getTime();
-		if (timeToSleep > 0.01) {
-			jngl::sleep(int(timeToSleep * 900));
-			stepsPerFrame -= 0.1f;
-		} else if (timeToSleep > 0) {
-			oldTime = jngl::getTime();
-		}
-		if (timeToSleep > timePerStep && stepsPerFrame > 0.6) {
-			stepsPerFrame -= float(timeToSleep - timePerStep);
 		}
 	}
 

@@ -134,13 +134,9 @@ namespace jngl {
 		std::shared_ptr<Work> newWork_;
 		std::string configPath;
 		std::vector<std::shared_ptr<Job>> jobs;
-#ifdef _MSC_VER
-		double stepsPerFrame;
-		bool multitouch;
-#else
-		float stepsPerFrame = 1;
+		unsigned int stepsPerFrame = 1;
+		double sleepPerFrame = 0; // in seconds
 		bool multitouch = false;
-#endif
 
 		// <fontSize, <fontName, FontImpl>>
 		std::map<int, std::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
