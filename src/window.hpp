@@ -23,7 +23,14 @@
 	#endif
 #else
 	#ifdef _WIN32
+		// TODO: Use pimpl to move this into win32/windowimpl.cpp
 		#include <windows.h>
+		#ifdef min
+			#undef min
+		#endif
+		#ifdef max
+			#undef max
+		#endif
 		#include <xinput.h>
 
 		extern XINPUT_STATE states[XUSER_MAX_COUNT];
