@@ -237,12 +237,11 @@ namespace jngl {
 			// Clamp it in case of some bug:
 			sleepCorrectionFactor = std::max(0.1, std::min(sleepCorrectionFactor, 2.0));
 
-			// Round up, because if we can do 40 FPS, but need 60 SPS, we need at least 2 SPF:
-			int newStepsPerFrame =
-			    0.99 + stepsPerFrame * targetStepsPerSecond / doableStepsPerSecond;
-			if (newStepsPerFrame < 1) {
-				newStepsPerFrame = 1;
-			}
+			// Round up, because if we can do 40 FPS, but need 60 SPS, we need at least 2 SPF. We
+			// don't round up exactly to be a little bit "optimistic" of what we can do.
+			auto newStepsPerFrame = std::min(static_cast<unsigned int>(std::max(1,
+			    int(0.98 + stepsPerFrame * targetStepsPerSecond / doableStepsPerSecond))),
+				stepsPerFrame * 2); // never increase too much
 			// Divide doableStepsPerSecond by the previous stepsPerFrame and multiply it with
 			// newStepsPerFrame so that we know what can be doable in the future and not what
 			// could have been doable:
@@ -266,7 +265,7 @@ namespace jngl {
 			timeSleptSinceLastCheck = 0;
 			stepsPerFrame = newStepsPerFrame;
 		}
-		const int sleepMs = 1000 * sleepPerFrame * sleepCorrectionFactor;
+		const auto sleepMs = int(1000 * sleepPerFrame * sleepCorrectionFactor);
 		if (sleepMs > 0) {
 			const auto start = jngl::getTime();
 			jngl::sleep(sleepMs);
