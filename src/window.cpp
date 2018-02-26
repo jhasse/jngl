@@ -209,14 +209,16 @@ namespace jngl {
 		static auto lastCheckTime = jngl::getTime();
 		static unsigned int stepsSinceLastCheck = 0;
 		static double timeSleptSinceLastCheck = 0;
+		static double sleepCorrectionFactor = 1;
 
 		const auto currentTime = jngl::getTime();
 		const auto secondsSinceLastCheck = currentTime - lastCheckTime;
-		if (secondsSinceLastCheck > 1) { // Has more than one second passed since our last check?
+		const auto targetStepsPerSecond = 1.0 / timePerStep;
+		if (stepsSinceLastCheck > targetStepsPerSecond) { // If SPS == FPS, this would mean that we
+		                                                  // check about every second.
 			const auto actualStepsPerSecond = stepsSinceLastCheck / secondsSinceLastCheck;
 			const auto doableStepsPerSecond =
 			    stepsSinceLastCheck / (secondsSinceLastCheck - timeSleptSinceLastCheck);
-			const auto targetStepsPerSecond = 1.0 / timePerStep;
 			// TODO: Improve logging. Log level? jngl::trace?
 			jngl::debug("SPS: ");
 			jngl::debug(std::lround(actualStepsPerSecond));
@@ -225,6 +227,16 @@ namespace jngl {
 			jngl::debug(", should be ");
 			jngl::debug(std::lround(targetStepsPerSecond));
 			jngl::debug("); ");
+
+			// The sleep function is actually inaccurate (or at least less accurate than getTime),
+			// se we try to find a factor to correct this:
+			sleepCorrectionFactor += 0.1 * // don't change it too fast
+			    (sleepPerFrame * stepsSinceLastCheck / stepsPerFrame - timeSleptSinceLastCheck);
+			//   ↑__________seconds we should have slept___________↑   ↑___actual seconds____↑
+
+			// Clamp it in case of some bug:
+			sleepCorrectionFactor = std::max(0.1, std::min(sleepCorrectionFactor, 2.0));
+
 			// Round up, because if we can do 40 FPS, but need 60 SPS, we need at least 2 SPF:
 			int newStepsPerFrame =
 			    0.99 + stepsPerFrame * targetStepsPerSecond / doableStepsPerSecond;
@@ -247,13 +259,14 @@ namespace jngl {
 			jngl::debug(newStepsPerFrame);
 			jngl::debug(", msSleepPerFrame -> ");
 			jngl::debug(sleepPerFrame);
-			jngl::debugLn("");
+			jngl::debug(" * ");
+			jngl::debugLn(sleepCorrectionFactor);
 			lastCheckTime = currentTime;
 			stepsSinceLastCheck = 0;
 			timeSleptSinceLastCheck = 0;
 			stepsPerFrame = newStepsPerFrame;
 		}
-		const int sleepMs = 1000 * sleepPerFrame;
+		const int sleepMs = 1000 * sleepPerFrame * sleepCorrectionFactor;
 		if (sleepMs > 0) {
 			const auto start = jngl::getTime();
 			jngl::sleep(sleepMs);
