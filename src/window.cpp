@@ -192,7 +192,7 @@ namespace jngl {
 	}
 
 	void Window::resetFrameLimiter() {
-		oldTime = jngl::getTime();
+		numberOfChecks = 0;
 		stepsPerFrame = 1;
 	}
 
@@ -214,8 +214,9 @@ namespace jngl {
 		const auto currentTime = jngl::getTime();
 		const auto secondsSinceLastCheck = currentTime - lastCheckTime;
 		const auto targetStepsPerSecond = 1.0 / timePerStep;
-		if (stepsSinceLastCheck > targetStepsPerSecond) { // If SPS == FPS, this would mean that we
-		                                                  // check about every second.
+		// If SPS == FPS, this would mean that we check about every second, but in the beginning we
+		// want to check more often, e.g. to quickly adjust to high refresh rate monitors:
+		if (stepsSinceLastCheck > targetStepsPerSecond || stepsSinceLastCheck > numberOfChecks) {
 			const auto actualStepsPerSecond = stepsSinceLastCheck / secondsSinceLastCheck;
 			const auto doableStepsPerSecond =
 			    stepsSinceLastCheck / (secondsSinceLastCheck - timeSleptSinceLastCheck);
@@ -264,6 +265,7 @@ namespace jngl {
 			stepsSinceLastCheck = 0;
 			timeSleptSinceLastCheck = 0;
 			stepsPerFrame = newStepsPerFrame;
+			++numberOfChecks;
 		}
 		const auto sleepMs = int(1000 * sleepPerFrame * sleepCorrectionFactor);
 		if (sleepMs > 0) {
@@ -273,7 +275,6 @@ namespace jngl {
 		}
 		for (unsigned int i = 0; i < stepsPerFrame; ++i) {
 			++stepsSinceLastCheck;
-			oldTime += timePerStep;
 			jngl::updateInput();
 			if (currentWork_) {
 				currentWork_->step();

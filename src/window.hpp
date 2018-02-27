@@ -135,7 +135,6 @@ namespace jngl {
 		double mouseWheel_ = 0;
 		std::string fontName_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
-		double oldTime;
 		std::shared_ptr<Work> currentWork_;
 		bool changeWork_;
 		std::shared_ptr<Work> newWork_;
@@ -143,6 +142,10 @@ namespace jngl {
 		std::vector<std::shared_ptr<Job>> jobs;
 		unsigned int stepsPerFrame = 1;
 		double sleepPerFrame = 0; // in seconds
+
+		/// How often the frame limiter has run
+		unsigned int numberOfChecks = 0;
+
 		bool multitouch = false;
 
 		// <fontSize, <fontName, FontImpl>>
