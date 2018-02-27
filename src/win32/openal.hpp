@@ -1,7 +1,5 @@
-/*
-Copyright 2010-2013 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2010-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 class WeakLinkingError : public std::runtime_error {
 public:
@@ -35,6 +33,12 @@ typedef void ALvoid;
 #define AL_FORMAT_STEREO16                        0x1103
 #define AL_PITCH                                  0x1003
 #define AL_GAIN                                   0x100A
+#define AL_NO_ERROR                               0
+#define AL_INVALID_NAME                           0xA001
+#define AL_INVALID_ENUM                           0xA002
+#define AL_INVALID_VALUE                          0xA003
+#define AL_INVALID_OPERATION                      0xA004
+#define AL_OUT_OF_MEMORY                          0xA005
 
 typedef struct ALCdevice_struct ALCdevice;
 typedef struct ALCcontext_struct ALCcontext;
@@ -50,16 +54,14 @@ public:
 	}
 	ReturnType operator()(Args... args)
 	{
-		static bool loaded = false;
-		if(!loaded)
-		{
+		if (!function_) {
 			Load();
 		}
 		return function_(args...);
 	}
 	void Load()
 	{
-		void* handle = dlopen(libName_.c_str(), RTLD_LAZY);
+		static void* handle = dlopen(libName_.c_str(), RTLD_LAZY);
 		if(!handle)
 		{
 			throw WeakLinkingError(std::string("Could not open ") + libName_ + ".");
@@ -91,7 +93,7 @@ WeakFunction<void(ALuint, ALsizei, ALuint*)> alSourceUnqueueBuffers("alSourceUnq
 WeakFunction<void(ALsizei, const ALuint*)> alDeleteSources("alDeleteSources", "OpenAL32.dll");
 WeakFunction<void(ALsizei, const ALuint*)> alDeleteBuffers("alDeleteBuffers", "OpenAL32.dll");
 WeakFunction<void(ALuint,  ALenum, ALint*)> alGetSourcei("alGetSourcei", "OpenAL32.dll");
-
+WeakFunction<ALenum()> alGetError("alGetError", "OpenAL32.dll");
 WeakFunction<ALCdevice*(const char*)> alcOpenDevice("alcOpenDevice", "OpenAL32.dll");
 WeakFunction<ALCcontext*(ALCdevice*, const ALCint*)> alcCreateContext("alcCreateContext", "OpenAL32.dll");
 WeakFunction<ALCboolean(ALCcontext*)> alcMakeContextCurrent("alcMakeContextCurrent", "OpenAL32.dll");
