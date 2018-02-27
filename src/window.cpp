@@ -102,7 +102,7 @@ namespace jngl {
 		return isMultisampleSupported_;
 	}
 
-	bool Window::isRunning() {
+	bool Window::isRunning() const {
 		return running_;
 	}
 

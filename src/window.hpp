@@ -49,7 +49,7 @@ namespace jngl {
 		Window(const Window&) = delete;
 		Window& operator=(const Window&) = delete;
 		~Window();
-		bool isRunning();
+		bool isRunning() const;
 		void quit();
 		void cancelQuit();
 		void UpdateInput();
