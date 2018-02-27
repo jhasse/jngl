@@ -1,7 +1,5 @@
-/*
-Copyright 2013-2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2013-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
 #include "../jngl.hpp"
@@ -14,7 +12,7 @@ namespace jngl {
 	: fullscreen_(fullscreen), running_(false), isMouseVisible_(true),
 	  relativeMouseMode(false), isMultisampleSupported_(true),
 	  anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height),
-	  mouseWheel_(0), fontName_(""), oldTime(0), changeWork_(false), impl(new WindowImpl(this)) {
+	  mouseWheel_(0), fontName_(""), changeWork_(false), impl(new WindowImpl(this)) {
 		mouseDown_.fill(false);
 		mousePressed_.fill(false);
 

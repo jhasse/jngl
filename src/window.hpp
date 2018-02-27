@@ -23,7 +23,14 @@
 	#endif
 #else
 	#ifdef _WIN32
+		// TODO: Use pimpl to move this into win32/windowimpl.cpp
 		#include <windows.h>
+		#ifdef min
+			#undef min
+		#endif
+		#ifdef max
+			#undef max
+		#endif
 		#include <xinput.h>
 
 		extern XINPUT_STATE states[XUSER_MAX_COUNT];
@@ -128,19 +135,18 @@ namespace jngl {
 		double mouseWheel_ = 0;
 		std::string fontName_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
-		double oldTime;
 		std::shared_ptr<Work> currentWork_;
 		bool changeWork_;
 		std::shared_ptr<Work> newWork_;
 		std::string configPath;
 		std::vector<std::shared_ptr<Job>> jobs;
-#ifdef _MSC_VER
-		double stepsPerFrame;
-		bool multitouch;
-#else
-		float stepsPerFrame = 1;
+		unsigned int stepsPerFrame = 1;
+		double sleepPerFrame = 0; // in seconds
+
+		/// How often the frame limiter has run
+		unsigned int numberOfChecks = 0;
+
 		bool multitouch = false;
-#endif
 
 		// <fontSize, <fontName, FontImpl>>
 		std::map<int, std::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;

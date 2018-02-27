@@ -1,48 +1,47 @@
-/*
-Copyright 2009 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2009-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowptr.hpp"
 
-#include <stdexcept>
 #include <cassert>
+#include <stdexcept>
 
-namespace jngl
-{
-	WindowPointer::WindowPointer() : ptr_(0) {
-	}
+namespace jngl {
 
-	WindowPointer::~WindowPointer() {
-		Delete();
-	}
+WindowPointer::WindowPointer() : ptr_(nullptr) {
+}
 
-	Window* WindowPointer::operator->() const {
-		ThrowIfNull();
-		return ptr_;
-	}
+WindowPointer::~WindowPointer() {
+	Delete();
+}
 
-	WindowPointer::operator bool() const {
-		return ptr_ != 0;
-	}
+Window* WindowPointer::operator->() const {
+	ThrowIfNull();
+	return ptr_;
+}
 
-	void WindowPointer::Set(Window* ptr) {
-		assert(ptr_ == 0);
-		ptr_ = ptr;
-	}
+WindowPointer::operator bool() const {
+	return ptr_ != nullptr;
+}
 
-	void WindowPointer::Delete() {
-		delete ptr_;
-		ptr_ = 0;
-	}
+void WindowPointer::Set(Window* ptr) {
+	assert(ptr_ == nullptr);
+	ptr_ = ptr;
+}
 
-	void WindowPointer::ThrowIfNull() const {
-		if (ptr_ == 0) {
-			throw std::runtime_error("Window hasn't been created yet. Use jngl::showWindow.");
-		}
-	}
+void WindowPointer::Delete() {
+	delete ptr_;
+	ptr_ = nullptr;
+}
 
-	Window* WindowPointer::get() const {
-		return ptr_;
+void WindowPointer::ThrowIfNull() const {
+	if (ptr_ == nullptr) {
+		throw std::runtime_error("Window hasn't been created yet. Use jngl::showWindow.");
 	}
 }
+
+Window* WindowPointer::get() const {
+	return ptr_;
+}
+
+} // namespace jngl

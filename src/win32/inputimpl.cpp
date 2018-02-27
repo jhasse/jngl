@@ -1,4 +1,4 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/input.hpp"
@@ -21,10 +21,10 @@ std::vector<std::shared_ptr<Controller>> getConnectedControllers() {
 		ZeroMemory(&state, sizeof(XINPUT_STATE));
 		DWORD dwResult = XInputGetState(i, &state);
 		if (dwResult == ERROR_SUCCESS) {
-			if (!tmp[i]) {
-				tmp[i] = std::make_shared<XinputController>(i);
+			if (!controllers[i]) {
+				controllers[i] = std::make_shared<XinputController>(i);
 			}
-			tmp.push_back(tmp[i]);
+			tmp.push_back(controllers[i]);
 		}
 	}
 	return tmp;

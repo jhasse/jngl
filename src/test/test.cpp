@@ -165,7 +165,7 @@ public:
 	}
 private:
 	mutable bool drawOnFrameBuffer = false;
-	mutable double rotate;
+	mutable double rotate = 0;
 	mutable int frameNumber = 0;
 	mutable double frameTime = 0;
 	mutable double lastTime;
