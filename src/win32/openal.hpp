@@ -49,8 +49,7 @@ template<typename T> class WeakFunction;
 template<typename ReturnType, typename... Args>
 class WeakFunction<ReturnType(Args...)> {
 public:
-	WeakFunction(const char* const name, const char* const libName) : name_(name), libName_(libName)
-	{
+	WeakFunction(const char* const name) : name_(name) {
 	}
 	ReturnType operator()(Args... args)
 	{
@@ -61,44 +60,44 @@ public:
 	}
 	void Load()
 	{
-		static void* handle = dlopen(libName_.c_str(), RTLD_LAZY);
+		constexpr auto LIBNAME = "OpenAL32.dll";
+		static void* handle = dlopen(LIBNAME, RTLD_LAZY);
 		if(!handle)
 		{
-			throw WeakLinkingError(std::string("Could not open ") + libName_ + ".");
+			throw WeakLinkingError(std::string("Could not open ") + LIBNAME + ".");
 		}
 		ReturnType (*symbol)(Args...);
 		*reinterpret_cast<void**>(&symbol) = dlsym(handle, name_.c_str());
 		function_ = symbol;
 		if(!function_)
 		{
-			throw WeakLinkingError(std::string("Could not find ") + name_ + " in " + libName_ + ".");
+			throw WeakLinkingError(std::string("Could not find ") + name_ + " in " + LIBNAME + ".");
 		}
 	}
 private:
 	std::function<ReturnType(Args...)> function_;
 	const std::string name_;
-	const std::string libName_;
 };
 
-WeakFunction<void(ALsizei, ALuint*)> alGenBuffers("alGenBuffers", "OpenAL32.dll");
-WeakFunction<void(ALsizei, ALuint*)> alGenSources("alGenSources", "OpenAL32.dll");
-WeakFunction<void(ALenum, ALfloat, ALfloat, ALfloat)> alListener3f("alListener3f", "OpenAL32.dll");
-WeakFunction<void(ALuint, ALenum, ALfloat)> alSourcef("alSourcef", "OpenAL32.dll");
-WeakFunction<void(ALuint, ALenum, ALfloat, ALfloat, ALfloat)> alSource3f("alSource3f", "OpenAL32.dll");
-WeakFunction<void(ALuint, ALenum, const ALvoid*, ALsizei, ALsizei)> alBufferData("alBufferData", "OpenAL32.dll");
-WeakFunction<void(ALuint, ALenum, ALint)> alSourcei("alSourcei", "OpenAL32.dll");
-WeakFunction<void(ALuint)> alSourcePlay("alSourcePlay", "OpenAL32.dll");
-WeakFunction<void(ALuint)> alSourceStop("alSourceStop", "OpenAL32.dll");
-WeakFunction<void(ALuint, ALsizei, ALuint*)> alSourceUnqueueBuffers("alSourceUnqueueBuffers", "OpenAL32.dll");
-WeakFunction<void(ALsizei, const ALuint*)> alDeleteSources("alDeleteSources", "OpenAL32.dll");
-WeakFunction<void(ALsizei, const ALuint*)> alDeleteBuffers("alDeleteBuffers", "OpenAL32.dll");
-WeakFunction<void(ALuint,  ALenum, ALint*)> alGetSourcei("alGetSourcei", "OpenAL32.dll");
-WeakFunction<ALenum()> alGetError("alGetError", "OpenAL32.dll");
-WeakFunction<ALCdevice*(const char*)> alcOpenDevice("alcOpenDevice", "OpenAL32.dll");
-WeakFunction<ALCcontext*(ALCdevice*, const ALCint*)> alcCreateContext("alcCreateContext", "OpenAL32.dll");
-WeakFunction<ALCboolean(ALCcontext*)> alcMakeContextCurrent("alcMakeContextCurrent", "OpenAL32.dll");
-WeakFunction<void(ALCcontext*)> alcDestroyContext("alcDestroyContext", "OpenAL32.dll");
-WeakFunction<ALCboolean(ALCdevice*)> alcCloseDevice("alcCloseDevice", "OpenAL32.dll");
+WeakFunction<void(ALsizei, ALuint*)> alGenBuffers("alGenBuffers");
+WeakFunction<void(ALsizei, ALuint*)> alGenSources("alGenSources");
+WeakFunction<void(ALenum, ALfloat, ALfloat, ALfloat)> alListener3f("alListener3f");
+WeakFunction<void(ALuint, ALenum, ALfloat)> alSourcef("alSourcef");
+WeakFunction<void(ALuint, ALenum, ALfloat, ALfloat, ALfloat)> alSource3f("alSource3f");
+WeakFunction<void(ALuint, ALenum, const ALvoid*, ALsizei, ALsizei)> alBufferData("alBufferData");
+WeakFunction<void(ALuint, ALenum, ALint)> alSourcei("alSourcei");
+WeakFunction<void(ALuint)> alSourcePlay("alSourcePlay");
+WeakFunction<void(ALuint)> alSourceStop("alSourceStop");
+WeakFunction<void(ALuint, ALsizei, ALuint*)> alSourceUnqueueBuffers("alSourceUnqueueBuffers");
+WeakFunction<void(ALsizei, const ALuint*)> alDeleteSources("alDeleteSources");
+WeakFunction<void(ALsizei, const ALuint*)> alDeleteBuffers("alDeleteBuffers");
+WeakFunction<void(ALuint,  ALenum, ALint*)> alGetSourcei("alGetSourcei");
+WeakFunction<ALenum()> alGetError("alGetError");
+WeakFunction<ALCdevice*(const char*)> alcOpenDevice("alcOpenDevice");
+WeakFunction<ALCcontext*(ALCdevice*, const ALCint*)> alcCreateContext("alcCreateContext");
+WeakFunction<ALCboolean(ALCcontext*)> alcMakeContextCurrent("alcMakeContextCurrent");
+WeakFunction<void(ALCcontext*)> alcDestroyContext("alcDestroyContext");
+WeakFunction<ALCboolean(ALCdevice*)> alcCloseDevice("alcCloseDevice");
 
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
