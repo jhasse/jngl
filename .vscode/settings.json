@@ -1,6 +1,11 @@
 {
 	"files.associations": {
-		"*.ipp": "cpp"
+		"*.ipp": "cpp",
+		"xiosbase": "cpp",
+		"iosfwd": "cpp",
+		"xhash": "cpp",
+		"xstring": "cpp",
+		"xutility": "cpp"
 	},
 	"search.exclude": {
 		".vscode/cquery*": true

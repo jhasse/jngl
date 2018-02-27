@@ -42,3 +42,4 @@ python/*.dll*
 /.vscode/tags
 /.vscode/cquery*
 /compile_commands.json
+/nintendo
