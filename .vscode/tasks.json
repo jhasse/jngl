@@ -1,17 +1,23 @@
 {
 	"version": "2.0.0",
 	"windows": {
-		"command": "C:\\msys64\\usr\\bin\\bash"
+		"command": "C:\\msys64\\usr\\bin\\bash.exe",
+		"args": ["-lc", "([ -f build/build.ninja ] || meson build) && ninja -C build"]
 	},
 	"linux": {
+		"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || meson build) && ninja -C build && $@"],
 		"command": "/bin/bash"
 	},
-	"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -d build ] || meson build) && ninja -C build && $@"],
+	"osx": {
+		"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || meson build) && ninja -C build && $@"],
+		"command": "/bin/bash"
+	},
 	"options": {
 		"env": {
 			"LANG": "C.UTF-8",
 			"PYTHONUNBUFFERD": "1",
-			"MSYSTEM": "MINGW64"
+			"MSYSTEM": "MINGW64",
+			"CHERE_INVOKING": "1"
 		}
 	},
 	"tasks": [
