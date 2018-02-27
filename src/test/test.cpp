@@ -189,17 +189,16 @@ int main() {
 void drawBackground() {
 	jngl::setSpriteAlpha(100);
 	if (performance > 1) {
-		for (int x = 0; x < performance; ++x) {
-			for (int y = 0; y < performance; ++y) {
-				jngl::drawScaled(
-				    "jngl", x * jngl::getWindowWidth() / performance,
-				    y * jngl::getWindowHeight() / performance,
-				    float(jngl::getWindowWidth()) / performance / jngl::getWidth("jngl"),
-				    float(jngl::getWindowHeight()) / performance / jngl::getHeight("jngl"));
+		const int size = performance * performance;
+		for (int x = 0; x < size; ++x) {
+			for (int y = 0; y < size; ++y) {
+				jngl::drawScaled("jngl", x * jngl::getWindowWidth() / size,
+				                 y * jngl::getWindowHeight() / size,
+				                 float(jngl::getWindowWidth()) / size / jngl::getWidth("jngl"),
+				                 float(jngl::getWindowHeight()) / size / jngl::getHeight("jngl"));
 			}
 		}
-	}
-	else {
+	} else {
 		jngl::drawClipped("jngl",
 		                  jngl::getWindowWidth() / 2- jngl::getWidth("jngl") / 2,
 		                  jngl::getWindowHeight() / 2- jngl::getHeight("jngl") / 2,
