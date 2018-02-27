@@ -165,9 +165,8 @@ namespace jngl {
 		void Init(const std::string& title, bool multisample);
 		void DistinguishLeftRight();
 #else
-		WindowImpl* const impl;
-
 		friend class WindowImpl;
 #endif
+		WindowImpl* const impl = nullptr;
 	};
 }
