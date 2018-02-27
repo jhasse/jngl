@@ -38,24 +38,58 @@ namespace jngl {
 
 	float Sound::masterVolume = 1.0f;
 
+	void checkAlError() {
+		switch (alGetError()) {
+		case AL_NO_ERROR: break;
+		case AL_INVALID_NAME:
+			debugLn("Invalid name paramater passed to AL call.");
+			break;
+		case AL_INVALID_ENUM:
+			debugLn("Invalid enum parameter passed to AL call.");
+			break;
+		case AL_INVALID_VALUE:
+			debugLn("Invalid value parameter passed to AL call.");
+			break;
+		case AL_INVALID_OPERATION:
+			debugLn("Illegal AL call.");
+			break;
+		case AL_OUT_OF_MEMORY:
+			debugLn("Not enough memory.");
+			break;
+		default:
+			debugLn("Unknown OpenAL error.");
+		}
+	}
+
 	Sound::Sound(const Params& params, std::vector<char>& bufferData)
 	: impl(std::make_unique<Impl>()) {
 		alGenBuffers(1, &impl->buffer);
+		checkAlError();
 		alGenSources(1, &impl->source);
+		checkAlError();
 		alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
+		checkAlError();
 		alSource3f(impl->source, AL_POSITION, 0.0f, 0.0f, 0.0f);
+		checkAlError();
 		alBufferData(impl->buffer, params.format, &bufferData[0],
 		             static_cast<ALsizei>(bufferData.size()), params.freq);
+		checkAlError();
 		alSourcei(impl->source, AL_BUFFER, impl->buffer);
+		checkAlError();
 		alSourcePlay(impl->source);
+		checkAlError();
 		setVolume(masterVolume);
 	}
 	Sound::~Sound() {
 		debug("freeing sound buffer ... ");
 		alSourceStop(impl->source);
+		checkAlError();
 		alSourceUnqueueBuffers(impl->source, 1, &impl->buffer);
+		checkAlError();
 		alDeleteSources(1, &impl->source);
+		checkAlError();
 		alDeleteBuffers(1, &impl->buffer);
+		checkAlError();
 		debug("OK\n");
 	}
 	bool Sound::IsPlaying() {
@@ -250,7 +284,9 @@ namespace jngl {
 	}
 
 	Audio& GetAudio() {
-		static Audio audio_;
-		return audio_;
+		static Audio* audio = new Audio;
+		// TODO: We'll leak Audio, which isn't nice, but we can't call OpenAL functions during exit
+		// as OpenAL32.dll might already be unloaded.
+		return *audio;
 	}
 } // namespace jngl
