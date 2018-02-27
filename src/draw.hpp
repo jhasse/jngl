@@ -1,7 +1,5 @@
-/*
-Copyright 2009-2012 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2009-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "opengl.hpp"
 
@@ -77,7 +75,7 @@ namespace draw
 		vertexes.push_back(0);
 		vertexes.push_back(-height);
 		glVertexPointer(2, opengl::Type<T>::constant, 0, &vertexes[0]);
-		glDrawArrays(GL_TRIANGLE_FAN, 0, vertexes.size() / 2);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, static_cast<GLsizei>(vertexes.size() / 2));
 		glPopMatrix();
 	}
 
