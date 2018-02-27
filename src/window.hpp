@@ -124,7 +124,8 @@ namespace jngl {
 		std::stack<bool*> needToBeSetFalse_;
 		int mousex_ = 0;
 		int mousey_ = 0;
-		int fontSize_, width_, height_;
+		int fontSize_ = 12;
+		int width_, height_;
 
 		/// The usable canvas width, excluding letterboxing
 		const int screenWidth;
