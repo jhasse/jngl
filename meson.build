@@ -62,6 +62,7 @@ else
 		cxx.find_library('opengl32'),
 		cxx.find_library('glu32'),
 		cxx.find_library('xinput1_4'),
+		cxx.find_library('winmm'),
 	]
 	src += [
 		'src/win32/ConvertUTF.cpp',

@@ -65,7 +65,7 @@ if not env['msvc']:
 testSrc = buildDir + "test/test.cpp"
 
 if env['PLATFORM'] in ['win32', 'msys'] and not env['msvc']: # Windows
-	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl webp Xinput vorbisfile")
+	jnglLibs = Split("glew32 freetype png opengl32 glu32 user32 shell32 gdi32 z jpeg dl webp Xinput vorbisfile winmm")
 	if env['python']:
 		jnglLibs += Split("openal ogg")
 	if env['msvc']:

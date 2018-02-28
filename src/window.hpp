@@ -143,6 +143,7 @@ namespace jngl {
 		std::vector<std::shared_ptr<Job>> jobs;
 		unsigned int stepsPerFrame = 1;
 		double sleepPerFrame = 0; // in seconds
+		double sleepCorrectionFactor = 1;
 
 		/// How often the frame limiter has run
 		unsigned int numberOfChecks = 0;

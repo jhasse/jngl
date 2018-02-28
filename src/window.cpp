@@ -194,6 +194,7 @@ namespace jngl {
 	void Window::resetFrameLimiter() {
 		numberOfChecks = 0;
 		stepsPerFrame = 1;
+		sleepCorrectionFactor = 1;
 	}
 
 	unsigned int Window::getStepsPerSecond() const {
@@ -209,7 +210,6 @@ namespace jngl {
 		static auto lastCheckTime = jngl::getTime();
 		static unsigned int stepsSinceLastCheck = 0;
 		static double timeSleptSinceLastCheck = 0;
-		static double sleepCorrectionFactor = 1;
 
 		const auto currentTime = jngl::getTime();
 		const auto secondsSinceLastCheck = currentTime - lastCheckTime;

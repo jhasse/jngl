@@ -3,6 +3,7 @@
 
 #include "../window.hpp"
 #include "../jngl/window.hpp"
+#include "../jngl/work.hpp"
 #include "../jngl/debug.hpp"
 #include "../opengl.hpp"
 #include "ConvertUTF.h"
@@ -633,6 +634,7 @@ bool Window::getKeyPressed(const std::string& key) {
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	static bool timePeriodActive = false;
 	switch (uMsg) {
 		case WM_SYSCOMMAND: // Intercept System Commands
 			switch (wParam) {
@@ -644,6 +646,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		case WM_CLOSE:          // Did We Receive A Close Message?
 			PostQuitMessage(0); // Send A Quit Message
 			return 0;           // Jump Back
+		case WM_SETFOCUS:
+			debugLn("Window got focus.");
+			if (!timePeriodActive) {
+				timeBeginPeriod(1); // Tells Windows to use more accurate timers
+				timePeriodActive = true;
+				try {
+					resetFrameLimiter(); // sleepCorrectionFactor needs to be resetted since we just
+					                     // changed the behaviour of the sleep function.
+				} catch(std::exception&) {
+					// The window is about to be created, ignore "pWindow == nullptr" exception
+				}
+			}
+			break;
+		case WM_KILLFOCUS:
+			debugLn("Window lost focus.");
+			if (timePeriodActive) {
+				timeEndPeriod(1);
+				timePeriodActive = false;
+			}
+			break;
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
