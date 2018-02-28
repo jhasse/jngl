@@ -1,11 +1,11 @@
 // Copyright 2009-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
+#include <iostream>
 #include <string>
 #include <unistd.h>    // fork
 #include <sys/types.h> // pid_t
 #include <sys/wait.h>  // waitpid
-#include <iostream>
 
 namespace jngl {
 
