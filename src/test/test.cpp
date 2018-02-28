@@ -174,7 +174,7 @@ private:
 	float volume = 1;
 };
 
-int main() {
+JNGL_MAIN_BEGIN
 	try {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth()
 		          << "x" << jngl::getDesktopHeight() << std::endl;
@@ -405,4 +405,4 @@ void testKeys() {
 		}
 		jngl::swapBuffers();
 	}
-}
+JNGL_MAIN_END
