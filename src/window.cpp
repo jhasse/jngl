@@ -5,6 +5,8 @@
 #include "jngl.hpp"
 
 #include <cmath>
+#include <chrono>
+#include <thread>
 
 namespace jngl {
 	double Window::GetTextWidth(const std::string& text) {
@@ -267,10 +269,10 @@ namespace jngl {
 			stepsPerFrame = newStepsPerFrame;
 			++numberOfChecks;
 		}
-		const auto sleepMs = int(1000 * sleepPerFrame * sleepCorrectionFactor);
-		if (sleepMs > 0) {
-			const auto start = jngl::getTime();
-			jngl::sleep(sleepMs);
+		const int micros = std::lround(sleepPerFrame * sleepCorrectionFactor * 1e6);
+		if (micros > 0) {
+			const auto start = getTime();
+			std::this_thread::sleep_for(std::chrono::microseconds(micros));
 			timeSleptSinceLastCheck += jngl::getTime() - start;
 		}
 		for (unsigned int i = 0; i < stepsPerFrame; ++i) {
