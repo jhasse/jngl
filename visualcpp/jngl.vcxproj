@@ -27,6 +27,7 @@
     <ClCompile Include="..\src\jngl\shapes.cpp" />
     <ClCompile Include="..\src\jngl\sprite.cpp" />
     <ClCompile Include="..\src\jngl\text.cpp" />
+    <ClCompile Include="..\src\jngl\time.cpp" />
     <ClCompile Include="..\src\jngl\window.cpp" />
     <ClCompile Include="..\src\jngl\work.cpp" />
     <ClCompile Include="..\src\main.cpp" />
@@ -37,7 +38,6 @@
     <ClCompile Include="..\src\win32\inputimpl.cpp" />
     <ClCompile Include="..\src\win32\message.cpp" />
     <ClCompile Include="..\src\win32\msvc\dlfcn.c" />
-    <ClCompile Include="..\src\win32\time.cpp" />
     <ClCompile Include="..\src\win32\windowimpl.cpp" />
     <ClCompile Include="..\src\window.cpp" />
     <ClCompile Include="..\src\windowptr.cpp" />

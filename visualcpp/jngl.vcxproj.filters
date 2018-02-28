@@ -27,9 +27,6 @@
     <ClCompile Include="..\src\win32\message.cpp">
       <Filter>Source Files\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\win32\time.cpp">
-      <Filter>Source Files\win32</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\win32\windowimpl.cpp">
       <Filter>Source Files\win32</Filter>
     </ClCompile>
@@ -116,6 +113,9 @@
     </ClCompile>
     <ClCompile Include="..\src\win32\ConvertUTF.cpp">
       <Filter>Source Files\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\time.cpp">
+      <Filter>Source Files\jngl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

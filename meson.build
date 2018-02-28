@@ -67,7 +67,6 @@ else
 		'src/win32/ConvertUTF.cpp',
 		'src/win32/inputimpl.cpp',
 		'src/win32/message.cpp',
-		'src/win32/time.cpp',
 		'src/win32/windowimpl.cpp',
 		'src/win32/XinputController.cpp',
 	]
