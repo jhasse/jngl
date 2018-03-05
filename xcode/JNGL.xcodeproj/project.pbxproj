@@ -22,7 +22,6 @@
 		3D150EBD1C3C2FC2008A5DE2 /* other.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3D150EB71C3C2FC2008A5DE2 /* other.hpp */; };
 		3D150EBE1C3C2FC2008A5DE2 /* time.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3D150EB81C3C2FC2008A5DE2 /* time.hpp */; };
 		3D150EBF1C3C2FC2008A5DE2 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D150EB91C3C2FC2008A5DE2 /* window.cpp */; };
-		C90170731626DAE7004A38B7 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF8081524B2F600066D6C /* libpng.a */; };
 		C9196EE21607ACBA00A9E80D /* input.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C9196EE11607ACBA00A9E80D /* input.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9196EE51607B59800A9E80D /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9196EE41607B59800A9E80D /* input.cpp */; };
 		C9196EE61607B59800A9E80D /* input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9196EE41607B59800A9E80D /* input.cpp */; };
@@ -40,6 +39,7 @@
 		C92916741609BCEC00A69E46 /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C92916711609BCEC00A69E46 /* job.cpp */; };
 		C92916751609BCEC00A69E46 /* job.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C92916721609BCEC00A69E46 /* job.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C92916761609BCEC00A69E46 /* job.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C92916721609BCEC00A69E46 /* job.hpp */; };
+		C92D3BB9204DFAFA00012403 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C92D3BB8204DFAFA00012403 /* Ogg.framework */; };
 		C93A89FA160B243300BA8D91 /* shapes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C93A89F8160B243300BA8D91 /* shapes.cpp */; };
 		C93A89FB160B243300BA8D91 /* shapes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C93A89F8160B243300BA8D91 /* shapes.cpp */; };
 		C93A89FC160B243300BA8D91 /* shapes.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C93A89F9160B243300BA8D91 /* shapes.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -105,14 +105,14 @@
 		C9BFF83E1524BB0A00066D6C /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF83D1524BB0A00066D6C /* libfreetype.a */; };
 		C9BFF8401524BD0600066D6C /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BFF83F1524BD0600066D6C /* window.cpp */; };
 		C9BFF8441524C00B00066D6C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF8431524C00B00066D6C /* OpenAL.framework */; };
-		C9BFF84A1524C37200066D6C /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF8491524C37200066D6C /* libogg.a */; };
-		C9BFF84C1524C3CC00066D6C /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF84B1524C3CC00066D6C /* libvorbis.a */; };
 		C9BFF84E1524C3F000066D6C /* time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BFF84D1524C3F000066D6C /* time.cpp */; };
 		C9C95BA61529CE3A008EA579 /* windowimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9C95BA51529CE3A008EA579 /* windowimpl.cpp */; };
 		C9C95BA91529D070008EA579 /* JNGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = C9C95BA71529D070008EA579 /* JNGLView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9C95BAA1529D070008EA579 /* JNGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9C95BA81529D070008EA579 /* JNGLView.mm */; };
 		C9D1CDCC1618A1520031799E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D1CDCB1618A1520031799E /* AVFoundation.framework */; };
 		C9D1CDCD1618A1B60031799E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D1CDCB1618A1520031799E /* AVFoundation.framework */; };
+		C9E6CA85204DFC01004129BE /* Finally.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E6CA84204DFC01004129BE /* Finally.cpp */; };
+		C9E6CA86204DFC26004129BE /* Finally.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E6CA84204DFC01004129BE /* Finally.cpp */; };
 		C9E9490D14A7C4990048EFCA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3113EAED790086B474 /* OpenGL.framework */; };
 		C9E9490E14A7C49F0048EFCA /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3413EAED8A0086B474 /* OpenAL.framework */; };
 		C9E9E2C315C1D467006CCBD2 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C215C1D467006CCBD2 /* window.cpp */; };
@@ -131,6 +131,7 @@
 		C9F3AB8B1525F0A800A77E9F /* Arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8A1525F0A800A77E9F /* Arial.ttf */; };
 		C9F3AB8C1525F0B800A77E9F /* Arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8A1525F0A800A77E9F /* Arial.ttf */; };
 		C9F3AB901525F67000A77E9F /* test.ogg in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8F1525F67000A77E9F /* test.ogg */; };
+		C9F5FF33204DFB83008A21A2 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F5FF32204DFB83008A21A2 /* Vorbis.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -169,6 +170,7 @@
 		C923BC5B16066EC300BEFE2D /* opengl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = opengl.hpp; path = ../src/opengl.hpp; sourceTree = "<group>"; };
 		C92916711609BCEC00A69E46 /* job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = job.cpp; path = src/jngl/job.cpp; sourceTree = "<group>"; };
 		C92916721609BCEC00A69E46 /* job.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = job.hpp; path = ../src/jngl/job.hpp; sourceTree = "<group>"; };
+		C92D3BB8204DFAFA00012403 /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ogg.framework; path = IDZPrecompiledOgg/Ogg.framework; sourceTree = "<group>"; };
 		C9340335151F86C5007FEF8E /* windowimpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = windowimpl.hpp; path = ../src/sdl/windowimpl.hpp; sourceTree = "<group>"; };
 		C93A89F8160B243300BA8D91 /* shapes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = shapes.cpp; path = src/jngl/shapes.cpp; sourceTree = "<group>"; };
 		C93A89F9160B243300BA8D91 /* shapes.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = shapes.hpp; path = ../src/jngl/shapes.hpp; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 		C9C95BA71529D070008EA579 /* JNGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JNGLView.h; path = ../../src/ios/JNGLView.h; sourceTree = "<group>"; };
 		C9C95BA81529D070008EA579 /* JNGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = JNGLView.mm; path = ../../src/ios/JNGLView.mm; sourceTree = "<group>"; };
 		C9D1CDCB1618A1520031799E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		C9E6CA84204DFC01004129BE /* Finally.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Finally.cpp; path = src/jngl/Finally.cpp; sourceTree = "<group>"; };
 		C9E948E614A7C3EF0048EFCA /* JNGL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JNGL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9E948E814A7C3EF0048EFCA /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		C9E948EB14A7C3EF0048EFCA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -262,6 +265,7 @@
 		C9F3AB8A1525F0A800A77E9F /* Arial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Arial.ttf; path = ../Arial.ttf; sourceTree = "<group>"; };
 		C9F3AB8D1525F0DC00A77E9F /* jngl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = jngl.png; path = ../jngl.png; sourceTree = "<group>"; };
 		C9F3AB8F1525F67000A77E9F /* test.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.ogg; path = ../test.ogg; sourceTree = "<group>"; };
+		C9F5FF32204DFB83008A21A2 /* Vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vorbis.framework; path = IDZPrecompiledVorbis/Vorbis.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -288,12 +292,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C90170731626DAE7004A38B7 /* libpng.a in Frameworks */,
+				C9F5FF33204DFB83008A21A2 /* Vorbis.framework in Frameworks */,
+				C92D3BB9204DFAFA00012403 /* Ogg.framework in Frameworks */,
 				C9D1CDCD1618A1B60031799E /* AVFoundation.framework in Frameworks */,
 				C97F8934161531CE00F683FA /* libz.dylib in Frameworks */,
 				C9849D711611D7A3000C9A65 /* WebP.framework in Frameworks */,
-				C9BFF84C1524C3CC00066D6C /* libvorbis.a in Frameworks */,
-				C9BFF84A1524C37200066D6C /* libogg.a in Frameworks */,
 				C9BFF8441524C00B00066D6C /* OpenAL.framework in Frameworks */,
 				C9BFF83E1524BB0A00066D6C /* libfreetype.a in Frameworks */,
 				C9BFF8021524B24600066D6C /* libJNGL iOS.a in Frameworks */,
@@ -446,6 +449,8 @@
 		C9E948E714A7C3EF0048EFCA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C9F5FF32204DFB83008A21A2 /* Vorbis.framework */,
+				C92D3BB8204DFAFA00012403 /* Ogg.framework */,
 				20A68D9C1E6EF6160082FA44 /* libz.1.dylib */,
 				20A68D9A1E6EF59C0082FA44 /* libz.tbd */,
 				20A68D981E6EF5910082FA44 /* AVFoundation.framework */,
@@ -475,6 +480,7 @@
 				C9AF94231610F63C002EC853 /* font.cpp */,
 				C9B0640D16500CAD00020A5D /* color.cpp */,
 				C9740993160766FA002D1152 /* drawable.cpp */,
+				C9E6CA84204DFC01004129BE /* Finally.cpp */,
 				C923BC4A16066E4400BEFE2D /* framebuffer.cpp */,
 				C9196EE41607B59800A9E80D /* input.cpp */,
 				C92916711609BCEC00A69E46 /* job.cpp */,
@@ -777,6 +783,7 @@
 				C93A963D15E3B49B003525E8 /* window.cpp in Sources */,
 				C93A963E15E3B49B003525E8 /* windowptr.cpp in Sources */,
 				C9BFF8401524BD0600066D6C /* window.cpp in Sources */,
+				C9E6CA86204DFC26004129BE /* Finally.cpp in Sources */,
 				C9BFF84E1524C3F000066D6C /* time.cpp in Sources */,
 				C9C95BA61529CE3A008EA579 /* windowimpl.cpp in Sources */,
 				C9C95BAA1529D070008EA579 /* JNGLView.mm in Sources */,
@@ -820,6 +827,7 @@
 				C9E9E2DC15C1D4BD006CCBD2 /* freetype.cpp in Sources */,
 				C9E9E2DD15C1D4BD006CCBD2 /* main.cpp in Sources */,
 				C9E9E2DE15C1D4BD006CCBD2 /* opengl.cpp in Sources */,
+				C9E6CA85204DFC01004129BE /* Finally.cpp in Sources */,
 				C9E9E2E015C1D4BD006CCBD2 /* texture.cpp in Sources */,
 				C9E9E2E115C1D4BD006CCBD2 /* window.cpp in Sources */,
 				C9E9E2E215C1D4BD006CCBD2 /* windowptr.cpp in Sources */,
@@ -1005,13 +1013,11 @@
 					"IOS=1",
 					"$(inherited)",
 					"NOJPEG=1",
+					"NOPNG=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				HEADER_SEARCH_PATHS = (
-					../include/ios/,
-					"../../boost-libs/include",
-				);
+				HEADER_SEARCH_PATHS = ../include/ios/;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = IOS;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = NO;
@@ -1041,13 +1047,11 @@
 					"IOS=1",
 					"$(inherited)",
 					"NOJPEG=1",
+					"NOPNG=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				HEADER_SEARCH_PATHS = (
-					../include/ios/,
-					"../../boost-libs/include",
-				);
+				HEADER_SEARCH_PATHS = ../include/ios/;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = IOS;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
@@ -1072,6 +1076,8 @@
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
 					"\"$(SRCROOT)/../lib/ios\"",
+					"$(PROJECT_DIR)/IDZPrecompiledOgg",
+					"$(PROJECT_DIR)/IDZPrecompiledVorbis",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Test iOS/Test iOS-Prefix.pch";
@@ -1111,6 +1117,8 @@
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
 					"\"$(SRCROOT)/../lib/ios\"",
+					"$(PROJECT_DIR)/IDZPrecompiledOgg",
+					"$(PROJECT_DIR)/IDZPrecompiledVorbis",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Test iOS/Test iOS-Prefix.pch";
