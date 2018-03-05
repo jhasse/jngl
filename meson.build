@@ -37,7 +37,6 @@ cxx = meson.get_compiler('cpp')
 if target_machine.system() != 'windows'
 	opengl_dep = [
 		dependency('SDL2'),
-		dependency('fontconfig'),
 	]
 	if target_machine.system() == 'darwin'
 		opengl_dep += [
@@ -46,7 +45,13 @@ if target_machine.system() != 'windows'
 			], required : true),
 		]
 	else
-		opengl_dep += [cxx.find_library('OpenGL')]
+		opengl_dep += [
+			dependency('fontconfig'),
+			cxx.find_library('OpenGL')
+		]
+		src += [
+			'src/linux/window.cpp',
+		]
 	endif
 	src += [
 		'src/sdl/input.cpp',
@@ -54,7 +59,6 @@ if target_machine.system() != 'windows'
 		'src/sdl/window.cpp',
 		'src/sdl/SdlController.cpp',
 		'src/linux/message.cpp',
-		'src/linux/window.cpp',
 	]
 else
 	cpp_args += ['-DWINVER=0x0602']
