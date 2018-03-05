@@ -5,6 +5,9 @@
 #define GLEW_VERSION_1_5 1
 #define GLEW_EXT_framebuffer_object 1
 #define GLEW_ARB_vertex_buffer_object 1
+#define glGenVertexArrays glGenVertexArraysOES
+#define glBindVertexArray glBindVertexArrayOES
+#define glDeleteVertexArrays glDeleteVertexArraysOES
 #define glGenFramebuffers glGenFramebuffersOES
 #define glBindFramebuffer glBindFramebufferOES
 #define glGenRenderbuffers glGenRenderbuffersOES

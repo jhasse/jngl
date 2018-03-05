@@ -7,7 +7,7 @@
 
 #include <boost/lexical_cast.hpp>
 
-#ifdef OPENGLES
+#ifdef ANDROID
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
@@ -60,11 +60,12 @@ bool Init(const int width, const int height, const int screenWidth, const int sc
 	jngl::rotate(-90);
 	jngl::translate(height / 2, width / 2);
 
+#ifdef ANDROID
 	glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
 	glBindVertexArray = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
 	glDeleteVertexArrays =
 	    (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");
-
+#endif
 #else
 	glOrtho(-width / 2, width / 2, height / 2, -height / 2, -100.0f, 100.0f);
 #endif

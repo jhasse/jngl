@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		209C83B01E74AE2500D3BE2D /* helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 209C83AE1E74AE2500D3BE2D /* helper.cpp */; };
+		209C83B11E74AE2500D3BE2D /* helper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 209C83AF1E74AE2500D3BE2D /* helper.hpp */; };
+		209C83B21E74AE5D00D3BE2D /* helper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 209C83AF1E74AE2500D3BE2D /* helper.hpp */; };
+		209C83B31E74AE5D00D3BE2D /* helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 209C83AE1E74AE2500D3BE2D /* helper.cpp */; };
+		209C83B41E74AE8D00D3BE2D /* message.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D150EB01C3C2F58008A5DE2 /* message.cpp */; };
+		20A68D991E6EF5910082FA44 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A68D981E6EF5910082FA44 /* AVFoundation.framework */; };
+		20A68D9D1E6EF6160082FA44 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A68D9C1E6EF6160082FA44 /* libz.1.dylib */; };
 		3D150EB11C3C2F58008A5DE2 /* message.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D150EB01C3C2F58008A5DE2 /* message.cpp */; };
 		3D150EB31C3C2F9C008A5DE2 /* time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D150EB21C3C2F9C008A5DE2 /* time.cpp */; };
 		3D150EBA1C3C2FC2008A5DE2 /* dll.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3D150EB41C3C2FC2008A5DE2 /* dll.hpp */; };
@@ -39,7 +46,6 @@
 		C93A89FD160B243300BA8D91 /* shapes.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C93A89F9160B243300BA8D91 /* shapes.hpp */; };
 		C93A963215E3B49B003525E8 /* sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2E515C1D52A006CCBD2 /* sprite.cpp */; };
 		C93A963315E3B49B003525E8 /* audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CA15C1D4BD006CCBD2 /* audio.cpp */; };
-		C93A963415E3B49B003525E8 /* finally.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CB15C1D4BD006CCBD2 /* finally.cpp */; };
 		C93A963615E3B49B003525E8 /* framebufferimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CD15C1D4BD006CCBD2 /* framebufferimpl.cpp */; };
 		C93A963715E3B49B003525E8 /* freetype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CE15C1D4BD006CCBD2 /* freetype.cpp */; };
 		C93A963815E3B49B003525E8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CF15C1D4BD006CCBD2 /* main.cpp */; };
@@ -48,7 +54,6 @@
 		C93A963C15E3B49B003525E8 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2D215C1D4BD006CCBD2 /* texture.cpp */; };
 		C93A963D15E3B49B003525E8 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2D315C1D4BD006CCBD2 /* window.cpp */; };
 		C93A963E15E3B49B003525E8 /* windowptr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2D415C1D4BD006CCBD2 /* windowptr.cpp */; };
-		C93A964015E3B4BF003525E8 /* ConvertUTF.c in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C915C1D4BD006CCBD2 /* ConvertUTF.c */; };
 		C93B324B14C1B0090053C668 /* sdl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C93B324A14C1B0090053C668 /* sdl.cpp */; };
 		C94EEDF81600D87D004F9FE0 /* debug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94EEDF61600D87D004F9FE0 /* debug.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C94EEDF91600D87D004F9FE0 /* debug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C94EEDF61600D87D004F9FE0 /* debug.hpp */; };
@@ -112,9 +117,7 @@
 		C9E9490E14A7C49F0048EFCA /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F1AF3413EAED8A0086B474 /* OpenAL.framework */; };
 		C9E9E2C315C1D467006CCBD2 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C215C1D467006CCBD2 /* window.cpp */; };
 		C9E9E2C615C1D47F006CCBD2 /* spriteimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C415C1D47F006CCBD2 /* spriteimpl.cpp */; };
-		C9E9E2D715C1D4BD006CCBD2 /* ConvertUTF.c in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2C915C1D4BD006CCBD2 /* ConvertUTF.c */; };
 		C9E9E2D815C1D4BD006CCBD2 /* audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CA15C1D4BD006CCBD2 /* audio.cpp */; };
-		C9E9E2D915C1D4BD006CCBD2 /* finally.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CB15C1D4BD006CCBD2 /* finally.cpp */; };
 		C9E9E2DB15C1D4BD006CCBD2 /* framebufferimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CD15C1D4BD006CCBD2 /* framebufferimpl.cpp */; };
 		C9E9E2DC15C1D4BD006CCBD2 /* freetype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CE15C1D4BD006CCBD2 /* freetype.cpp */; };
 		C9E9E2DD15C1D4BD006CCBD2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CF15C1D4BD006CCBD2 /* main.cpp */; };
@@ -143,6 +146,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		209C83AE1E74AE2500D3BE2D /* helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helper.cpp; path = src/helper.cpp; sourceTree = "<group>"; };
+		209C83AF1E74AE2500D3BE2D /* helper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = helper.hpp; path = ../src/helper.hpp; sourceTree = "<group>"; };
+		20A68D981E6EF5910082FA44 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		20A68D9A1E6EF59C0082FA44 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		20A68D9C1E6EF6160082FA44 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = ../../../../../usr/lib/libz.1.dylib; sourceTree = "<group>"; };
 		3D150EB01C3C2F58008A5DE2 /* message.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = message.cpp; path = src/mac/message.cpp; sourceTree = "<group>"; };
 		3D150EB21C3C2F9C008A5DE2 /* time.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = time.cpp; path = src/jngl/time.cpp; sourceTree = "<group>"; };
 		3D150EB41C3C2FC2008A5DE2 /* dll.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = dll.hpp; path = ../src/jngl/dll.hpp; sourceTree = "<group>"; };
@@ -227,9 +235,7 @@
 		C9E9E2C215C1D467006CCBD2 /* window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = window.cpp; path = src/sdl/window.cpp; sourceTree = "<group>"; };
 		C9E9E2C415C1D47F006CCBD2 /* spriteimpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = spriteimpl.cpp; path = src/spriteimpl.cpp; sourceTree = "<group>"; };
 		C9E9E2C515C1D47F006CCBD2 /* spriteimpl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = spriteimpl.hpp; path = ../src/spriteimpl.hpp; sourceTree = "<group>"; };
-		C9E9E2C915C1D4BD006CCBD2 /* ConvertUTF.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ConvertUTF.c; path = src/ConvertUTF.c; sourceTree = "<group>"; };
 		C9E9E2CA15C1D4BD006CCBD2 /* audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = audio.cpp; path = src/audio.cpp; sourceTree = "<group>"; };
-		C9E9E2CB15C1D4BD006CCBD2 /* finally.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = finally.cpp; path = src/finally.cpp; sourceTree = "<group>"; };
 		C9E9E2CD15C1D4BD006CCBD2 /* framebufferimpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = framebufferimpl.cpp; path = src/framebufferimpl.cpp; sourceTree = "<group>"; };
 		C9E9E2CE15C1D4BD006CCBD2 /* freetype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = freetype.cpp; path = src/freetype.cpp; sourceTree = "<group>"; };
 		C9E9E2CF15C1D4BD006CCBD2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; };
@@ -303,6 +309,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20A68D9D1E6EF6160082FA44 /* libz.1.dylib in Frameworks */,
+				20A68D991E6EF5910082FA44 /* AVFoundation.framework in Frameworks */,
 				C9E9490E14A7C49F0048EFCA /* OpenAL.framework in Frameworks */,
 				C9E9490D14A7C4990048EFCA /* OpenGL.framework in Frameworks */,
 			);
@@ -438,6 +446,9 @@
 		C9E948E714A7C3EF0048EFCA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				20A68D9C1E6EF6160082FA44 /* libz.1.dylib */,
+				20A68D9A1E6EF59C0082FA44 /* libz.tbd */,
+				20A68D981E6EF5910082FA44 /* AVFoundation.framework */,
 				C9849D6F1611D5DD000C9A65 /* WebP.framework */,
 				C9E948E814A7C3EF0048EFCA /* Cocoa.framework */,
 				C96A1CA714FEE5D20065CD6B /* Foundation.framework */,
@@ -516,13 +527,12 @@
 		C9F1AF3613EAEF420086B474 /* Source Files */ = {
 			isa = PBXGroup;
 			children = (
+				209C83AE1E74AE2500D3BE2D /* helper.cpp */,
 				3D150EAF1C3C2F49008A5DE2 /* mac */,
 				C9E9E2EE15C1D5EC006CCBD2 /* test */,
 				C9E9E2E415C1D516006CCBD2 /* jngl */,
 				C99A094713EC503A006C46FF /* sdl */,
 				C9E9E2CA15C1D4BD006CCBD2 /* audio.cpp */,
-				C9E9E2C915C1D4BD006CCBD2 /* ConvertUTF.c */,
-				C9E9E2CB15C1D4BD006CCBD2 /* finally.cpp */,
 				C9E9E2CD15C1D4BD006CCBD2 /* framebufferimpl.cpp */,
 				C9E9E2CE15C1D4BD006CCBD2 /* freetype.cpp */,
 				C9E9E2CF15C1D4BD006CCBD2 /* main.cpp */,
@@ -539,6 +549,7 @@
 		C9F1B09F13EAF1D00086B474 /* Header Files */ = {
 			isa = PBXGroup;
 			children = (
+				209C83AF1E74AE2500D3BE2D /* helper.hpp */,
 				C9F1AF5113EAEF420086B474 /* audio.hpp */,
 				C9F1894813EB288D005E43B3 /* callbacks.h */,
 				C9F1AF5713EAEF420086B474 /* ConvertUTF.h */,
@@ -578,6 +589,7 @@
 				C974099C16076969002D1152 /* screen.hpp in Headers */,
 				C97409A216076C1D002D1152 /* text.hpp in Headers */,
 				C92916761609BCEC00A69E46 /* job.hpp in Headers */,
+				209C83B21E74AE5D00D3BE2D /* helper.hpp in Headers */,
 				C93A89FD160B243300BA8D91 /* shapes.hpp in Headers */,
 				C9B0641216500CAD00020A5D /* color.hpp in Headers */,
 			);
@@ -587,6 +599,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				209C83B11E74AE2500D3BE2D /* helper.hpp in Headers */,
 				C9E9E2E915C1D52A006CCBD2 /* sprite.hpp in Headers */,
 				C9E9E2EA15C1D52A006CCBD2 /* types.hpp in Headers */,
 				C94EEDF81600D87D004F9FE0 /* debug.hpp in Headers */,
@@ -691,7 +704,12 @@
 		C921153A13EABBF100770E49 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0820;
+				TargetAttributes = {
+					C96A1CBF14FEE8410065CD6B = {
+						DevelopmentTeam = CX2RT643KR;
+					};
+				};
 			};
 			buildConfigurationList = C921153D13EABBF100770E49 /* Build configuration list for PBXProject "JNGL" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -748,10 +766,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C93A964015E3B4BF003525E8 /* ConvertUTF.c in Sources */,
 				C93A963215E3B49B003525E8 /* sprite.cpp in Sources */,
 				C93A963315E3B49B003525E8 /* audio.cpp in Sources */,
-				C93A963415E3B49B003525E8 /* finally.cpp in Sources */,
 				C93A963615E3B49B003525E8 /* framebufferimpl.cpp in Sources */,
 				C93A963715E3B49B003525E8 /* freetype.cpp in Sources */,
 				C93A963815E3B49B003525E8 /* main.cpp in Sources */,
@@ -771,6 +787,8 @@
 				C974099F16076AE0002D1152 /* screen.cpp in Sources */,
 				C97409A516076CD1002D1152 /* text.cpp in Sources */,
 				C9196EE61607B59800A9E80D /* input.cpp in Sources */,
+				209C83B41E74AE8D00D3BE2D /* message.cpp in Sources */,
+				209C83B31E74AE5D00D3BE2D /* helper.cpp in Sources */,
 				C92916741609BCEC00A69E46 /* job.cpp in Sources */,
 				C93A89FB160B243300BA8D91 /* shapes.cpp in Sources */,
 				C9AF94251610F63C002EC853 /* font.cpp in Sources */,
@@ -797,9 +815,7 @@
 				3D150EBF1C3C2FC2008A5DE2 /* window.cpp in Sources */,
 				C9E9E2C315C1D467006CCBD2 /* window.cpp in Sources */,
 				C9E9E2C615C1D47F006CCBD2 /* spriteimpl.cpp in Sources */,
-				C9E9E2D715C1D4BD006CCBD2 /* ConvertUTF.c in Sources */,
 				C9E9E2D815C1D4BD006CCBD2 /* audio.cpp in Sources */,
-				C9E9E2D915C1D4BD006CCBD2 /* finally.cpp in Sources */,
 				C9E9E2DB15C1D4BD006CCBD2 /* framebufferimpl.cpp in Sources */,
 				C9E9E2DC15C1D4BD006CCBD2 /* freetype.cpp in Sources */,
 				C9E9E2DD15C1D4BD006CCBD2 /* main.cpp in Sources */,
@@ -811,6 +827,7 @@
 				C98A18AC15DEB30D0038B716 /* work.cpp in Sources */,
 				C923BC4F16066E4400BEFE2D /* framebuffer.cpp in Sources */,
 				C9740995160766FA002D1152 /* drawable.cpp in Sources */,
+				209C83B01E74AE2500D3BE2D /* helper.cpp in Sources */,
 				C974099E16076AE0002D1152 /* screen.cpp in Sources */,
 				C97409A416076CD1002D1152 /* text.cpp in Sources */,
 				C9196EE51607B59800A9E80D /* input.cpp in Sources */,
@@ -841,6 +858,7 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 9;
 				OTHER_LDFLAGS = (
 					"-lSDL2",
 					"-ljpeg",
@@ -859,6 +877,7 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 9;
 				OTHER_LDFLAGS = (
 					"-lSDL2",
 					"-ljpeg",
@@ -882,7 +901,9 @@
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -930,7 +951,9 @@
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
@@ -967,9 +990,11 @@
 		C96A1CAF14FEE5D20065CD6B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/JNGL_iOS.dst;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../lib/ios\"",
@@ -988,20 +1013,24 @@
 					"../../boost-libs/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = IOS;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
 		C96A1CB014FEE5D20065CD6B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/JNGL_iOS.dst;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../lib/ios\"",
@@ -1020,22 +1049,25 @@
 					"../../boost-libs/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = IOS;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
 		C96A1CD414FEE8410065CD6B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
+				DEVELOPMENT_TEAM = CX2RT643KR;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
@@ -1051,15 +1083,17 @@
 					../src,
 				);
 				INFOPLIST_FILE = "Test iOS/Test iOS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../lib/ios\"",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.watteimdocht.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1067,10 +1101,12 @@
 		C96A1CD514FEE8410065CD6B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
+				DEVELOPMENT_TEAM = CX2RT643KR;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
@@ -1086,7 +1122,7 @@
 					../src,
 				);
 				INFOPLIST_FILE = "Test iOS/Test iOS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../lib/ios\"",
@@ -1097,6 +1133,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1104,6 +1141,7 @@
 		C9E948F814A7C3EF0048EFCA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1123,6 +1161,7 @@
 					"\"$(SRCROOT)/../lib/ios\"",
 				);
 				MACH_O_TYPE = mh_dylib;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = (
 					"-lSDL2",
 					"-ljpeg",
@@ -1142,6 +1181,7 @@
 		C9E948F914A7C3EF0048EFCA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1161,6 +1201,7 @@
 					"\"$(SRCROOT)/../lib/ios\"",
 				);
 				MACH_O_TYPE = mh_dylib;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = (
 					"-lSDL2",
 					"-ljpeg",

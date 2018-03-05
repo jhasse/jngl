@@ -91,7 +91,7 @@
 			jngl::pWindow->stepIfNeeded();
 		}
 		glLoadIdentity();
-		jngl::clearBackgroundColor();
+		// jngl::clearBackgroundColor();
 		glClear(GL_COLOR_BUFFER_BIT);
 		jngl::rotate(angle);
 		
