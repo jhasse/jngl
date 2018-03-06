@@ -23,7 +23,6 @@ namespace jngl {
 - (void) didRotate: (NSNotification*) notification;
 - (void) touchesEnded: (NSSet*) touches withEvent: (UIEvent*) event;
 - (void) touchesMoved: (NSSet*) touches withEvent: (UIEvent*) event;
-- (void) didRotate:(NSNotification*) notification;
 - (void) setPause: (bool) p;
 
 @end
