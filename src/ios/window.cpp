@@ -19,7 +19,7 @@ namespace jngl
 		mouseDown_.fill(false);
 		mousePressed_.fill(false);
 
-		Init(height, width, screenWidth, screenHeight);
+		Init(width, height, screenWidth, screenHeight);
 
 		running_ = true;
 	}

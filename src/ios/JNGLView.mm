@@ -51,7 +51,7 @@
 		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &width);
 		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_HEIGHT_OES, &height);
 
-		jngl::showWindow("", height, width);
+		jngl::showWindow("", width, height);
 		
 		CADisplayLink* displayLink;
 		displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawView:)];
@@ -59,10 +59,8 @@
 		[displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 		
 		[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
 		
 		startTime = -1;
-		angle = jngl::getDeviceOrientationSupported(jngl::Portrait) ? 90 : 0;
 		pause = false;
 		needToResetFrameLimiter = false;
 		jngl::setPrefix(std::string([[[NSBundle mainBundle] resourcePath] UTF8String]) + "/");
@@ -93,7 +91,7 @@
 		glLoadIdentity();
 		// jngl::clearBackgroundColor();
 		glClear(GL_COLOR_BUFFER_BIT);
-		jngl::rotate(angle);
+		jngl::rotate(90);
 		
 		jngl::pWindow->draw();
 		[context presentRenderbuffer:GL_RENDERBUFFER_OES];
@@ -103,45 +101,21 @@
 - (void) touchesBegan: (NSSet*) touches withEvent: (UIEvent*) event {
 	UITouch* touch = [touches anyObject];
 	CGPoint location = [touch locationInView: self];
-	impl->setMouse(location.x, location.y);
+	impl->setMouse(location.x * self.contentScaleFactor, location.y * self.contentScaleFactor);
 	impl->setMouseDown(true);
 }
 
 - (void) touchesEnded: (NSSet*) touches withEvent: (UIEvent*) event {
 	UITouch* touch = [touches anyObject];
 	CGPoint location = [touch locationInView: self];
-	impl->setMouse(location.x, location.y);
+	impl->setMouse(location.x * self.contentScaleFactor, location.y * self.contentScaleFactor);
 	impl->setMouseDown(false);
 }
 
 - (void) touchesMoved: (NSSet*) touches withEvent: (UIEvent*) event {
 	UITouch* touch = [touches anyObject];
 	CGPoint location = [touch locationInView: self];
-	impl->setMouse(location.x, location.y);
-}
-
-- (void) didRotate:(NSNotification*) notification {
-	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-	switch (orientation) {
-		case UIDeviceOrientationLandscapeLeft:
-			if (jngl::getDeviceOrientationSupported(jngl::LandscapeLeft)) {
-				angle = 180;
-				impl->setFlip(true);
-			}
-			break;
-		case UIDeviceOrientationLandscapeRight:
-			if (jngl::getDeviceOrientationSupported(jngl::LandscapeRight)) {
-				angle = 0;
-				impl->setFlip(false);
-			}
-			break;
-		case UIDeviceOrientationPortrait:
-			if (jngl::getDeviceOrientationSupported(jngl::Portrait)) {
-				angle = 90;
-			}
-			break;
-		default: break;
-	}
+	impl->setMouse(location.x * self.contentScaleFactor, location.y * self.contentScaleFactor);
 }
 
 -(void) insertText: (NSString*) text {

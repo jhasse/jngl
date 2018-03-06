@@ -1,4 +1,4 @@
-// Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -14,7 +14,6 @@ namespace jngl {
 		void setMouse(int, int);
 		void setMouseDown(bool);
 		void setRelativeMouseMode(bool);
-		void setFlip(bool);
 		int relativeX = 0;
 		int relativeY = 0;
 		void updateInput();
@@ -22,6 +21,5 @@ namespace jngl {
 		Window* const window;
 		int mouseX = 0;
 		int mouseY = 0;
-		bool flip = false;
 	};
 }
