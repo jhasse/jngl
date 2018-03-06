@@ -84,8 +84,6 @@
 		C9796BB816162BAA0091DF75 /* work.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C98A18A915DEADB90038B716 /* work.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		C97F8934161531CE00F683FA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C97F8933161531CE00F683FA /* libz.dylib */; };
 		C97F89371615323200F683FA /* jngl.webp in Resources */ = {isa = PBXBuildFile; fileRef = C97F89361615323200F683FA /* jngl.webp */; };
-		C9849D701611D5DE000C9A65 /* WebP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9849D6F1611D5DD000C9A65 /* WebP.framework */; };
-		C9849D711611D7A3000C9A65 /* WebP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9849D6F1611D5DD000C9A65 /* WebP.framework */; };
 		C98A18AC15DEB30D0038B716 /* work.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C98A18AB15DEB30D0038B716 /* work.cpp */; };
 		C98A18AD15DEB30D0038B716 /* work.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C98A18AB15DEB30D0038B716 /* work.cpp */; };
 		C98E8D2A1524A4A70081B15A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C98E8D291524A4A70081B15A /* OpenGLES.framework */; };
@@ -109,6 +107,7 @@
 		C9C95BA61529CE3A008EA579 /* windowimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9C95BA51529CE3A008EA579 /* windowimpl.cpp */; };
 		C9C95BA91529D070008EA579 /* JNGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = C9C95BA71529D070008EA579 /* JNGLView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9C95BAA1529D070008EA579 /* JNGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9C95BA81529D070008EA579 /* JNGLView.mm */; };
+		C9CCF0B2204E9381005E371F /* WebPDecoder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9CCF0B1204E9381005E371F /* WebPDecoder.framework */; };
 		C9D1CDCC1618A1520031799E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D1CDCB1618A1520031799E /* AVFoundation.framework */; };
 		C9D1CDCD1618A1B60031799E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9D1CDCB1618A1520031799E /* AVFoundation.framework */; };
 		C9E6CA85204DFC01004129BE /* Finally.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E6CA84204DFC01004129BE /* Finally.cpp */; };
@@ -204,7 +203,6 @@
 		C97A73101527AADA005AE562 /* time.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = time.hpp; path = ../../src/ios/time.hpp; sourceTree = "<group>"; };
 		C97F8933161531CE00F683FA /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		C97F89361615323200F683FA /* jngl.webp */ = {isa = PBXFileReference; lastKnownFileType = file; name = jngl.webp; path = ../jngl.webp; sourceTree = "<group>"; };
-		C9849D6F1611D5DD000C9A65 /* WebP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebP.framework; path = ../lib/ios/WebP.framework; sourceTree = "<group>"; };
 		C98A18A915DEADB90038B716 /* work.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = work.hpp; path = ../src/jngl/work.hpp; sourceTree = "<group>"; };
 		C98A18AB15DEB30D0038B716 /* work.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = work.cpp; path = src/jngl/work.cpp; sourceTree = "<group>"; };
 		C98E8D2315249AEA0081B15A /* glew.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = glew.h; path = ../../src/ios/glew.h; sourceTree = "<group>"; };
@@ -228,6 +226,7 @@
 		C9C95BA51529CE3A008EA579 /* windowimpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = windowimpl.cpp; path = ../../src/ios/windowimpl.cpp; sourceTree = "<group>"; };
 		C9C95BA71529D070008EA579 /* JNGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JNGLView.h; path = ../../src/ios/JNGLView.h; sourceTree = "<group>"; };
 		C9C95BA81529D070008EA579 /* JNGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = JNGLView.mm; path = ../../src/ios/JNGLView.mm; sourceTree = "<group>"; };
+		C9CCF0B1204E9381005E371F /* WebPDecoder.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebPDecoder.framework; path = ../lib/ios/WebPDecoder.framework; sourceTree = "<group>"; };
 		C9D1CDCB1618A1520031799E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		C9E6CA84204DFC01004129BE /* Finally.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Finally.cpp; path = src/jngl/Finally.cpp; sourceTree = "<group>"; };
 		C9E948E614A7C3EF0048EFCA /* JNGL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JNGL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -284,7 +283,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9D1CDCC1618A1520031799E /* AVFoundation.framework in Frameworks */,
-				C9849D701611D5DE000C9A65 /* WebP.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,11 +290,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9CCF0B2204E9381005E371F /* WebPDecoder.framework in Frameworks */,
 				C9F5FF33204DFB83008A21A2 /* Vorbis.framework in Frameworks */,
 				C92D3BB9204DFAFA00012403 /* Ogg.framework in Frameworks */,
 				C9D1CDCD1618A1B60031799E /* AVFoundation.framework in Frameworks */,
 				C97F8934161531CE00F683FA /* libz.dylib in Frameworks */,
-				C9849D711611D7A3000C9A65 /* WebP.framework in Frameworks */,
 				C9BFF8441524C00B00066D6C /* OpenAL.framework in Frameworks */,
 				C9BFF83E1524BB0A00066D6C /* libfreetype.a in Frameworks */,
 				C9BFF8021524B24600066D6C /* libJNGL iOS.a in Frameworks */,
@@ -449,12 +447,12 @@
 		C9E948E714A7C3EF0048EFCA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C9CCF0B1204E9381005E371F /* WebPDecoder.framework */,
 				C9F5FF32204DFB83008A21A2 /* Vorbis.framework */,
 				C92D3BB8204DFAFA00012403 /* Ogg.framework */,
 				20A68D9C1E6EF6160082FA44 /* libz.1.dylib */,
 				20A68D9A1E6EF59C0082FA44 /* libz.tbd */,
 				20A68D981E6EF5910082FA44 /* AVFoundation.framework */,
-				C9849D6F1611D5DD000C9A65 /* WebP.framework */,
 				C9E948E814A7C3EF0048EFCA /* Cocoa.framework */,
 				C96A1CA714FEE5D20065CD6B /* Foundation.framework */,
 				C9E948EA14A7C3EF0048EFCA /* Other Frameworks */,
@@ -1025,7 +1023,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
 		};
@@ -1059,7 +1057,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
 		};
@@ -1099,7 +1097,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1141,7 +1139,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
