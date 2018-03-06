@@ -14,6 +14,8 @@
 		209C83B41E74AE8D00D3BE2D /* message.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D150EB01C3C2F58008A5DE2 /* message.cpp */; };
 		20A68D991E6EF5910082FA44 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A68D981E6EF5910082FA44 /* AVFoundation.framework */; };
 		20A68D9D1E6EF6160082FA44 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A68D9C1E6EF6160082FA44 /* libz.1.dylib */; };
+		20BC2D45204EA1E700FF9F69 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F5FF32204DFB83008A21A2 /* Vorbis.framework */; };
+		20BC2D46204EA20000FF9F69 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C92D3BB8204DFAFA00012403 /* Ogg.framework */; };
 		3D150EB11C3C2F58008A5DE2 /* message.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D150EB01C3C2F58008A5DE2 /* message.cpp */; };
 		3D150EB31C3C2F9C008A5DE2 /* time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D150EB21C3C2F9C008A5DE2 /* time.cpp */; };
 		3D150EBA1C3C2FC2008A5DE2 /* dll.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3D150EB41C3C2FC2008A5DE2 /* dll.hpp */; };
@@ -284,6 +286,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20BC2D46204EA20000FF9F69 /* Ogg.framework in Frameworks */,
+				20BC2D45204EA1E700FF9F69 /* Vorbis.framework in Frameworks */,
 				C9D1CDCC1618A1520031799E /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -716,6 +720,10 @@
 					C96A1CBF14FEE8410065CD6B = {
 						DevelopmentTeam = CX2RT643KR;
 					};
+					C9E948E514A7C3EF0048EFCA = {
+						DevelopmentTeam = CX2RT643KR;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = C921153D13EABBF100770E49 /* Build configuration list for PBXProject "JNGL" */;
@@ -1008,6 +1016,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../lib/ios\"",
+					"$(PROJECT_DIR)/IDZPrecompiledVorbis",
+					"$(PROJECT_DIR)/IDZPrecompiledOgg",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JNGL iOS/JNGL iOS-Prefix.pch";
@@ -1042,6 +1052,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../lib/ios\"",
+					"$(PROJECT_DIR)/IDZPrecompiledVorbis",
+					"$(PROJECT_DIR)/IDZPrecompiledOgg",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JNGL iOS/JNGL iOS-Prefix.pch";
@@ -1152,7 +1164,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = CX2RT643KR;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = "";
@@ -1184,6 +1199,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "de.watteimdocht.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -1192,7 +1208,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = CX2RT643KR;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = "";
@@ -1224,6 +1243,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "de.watteimdocht.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
