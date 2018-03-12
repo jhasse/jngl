@@ -568,8 +568,7 @@ int Window::GetKeyCode(jngl::key::KeyType key) {
 			return 0x0D;
 		case key::Pause:
 			return 0x13;
-		case key::Escape:
-			return 0x1b;
+		case key::Escape: return VK_ESCAPE;
 		case key::Delete:
 			return 0x2E;
 		case key::ControlL:
