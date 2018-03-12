@@ -34,7 +34,7 @@ namespace jngl {
 
 		int width = bitmap.width;
 		int height = bitmap.rows;
-		width_ = face->glyph->advance.x >> 6;
+		width_ = int(face->glyph->advance.x >> 6);
 
 		if (height == 0) {
 			return;

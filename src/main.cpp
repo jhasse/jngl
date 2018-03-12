@@ -106,12 +106,12 @@ void showWindow(const std::string& title, const int width, const int height, boo
 	int screenHeight = height;
 	if (minAspectRatio.first * height > minAspectRatio.second * width) {
 		// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
-		screenHeight =
-		    std::lround(float(minAspectRatio.second * width) / float(minAspectRatio.first));
+		screenHeight = boost::numeric_cast<int>(
+		    std::lround(float(minAspectRatio.second * width) / float(minAspectRatio.first)));
 	} else if (maxAspectRatio.first * height < maxAspectRatio.second * width) {
 		// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
-		screenWidth =
-		    std::lround(float(maxAspectRatio.first * height) / float(maxAspectRatio.second));
+		screenWidth = boost::numeric_cast<int>(
+		    std::lround(float(maxAspectRatio.first * height) / float(maxAspectRatio.second)));
 	}
 	if (screenWidth != width || screenHeight != height) {
 		debug("Letterboxing to "); debug(screenWidth); debug("x"); debugLn(screenHeight);
