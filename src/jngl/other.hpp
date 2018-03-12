@@ -1,7 +1,5 @@
-/*
-Copyright 2014 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2014-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
@@ -26,8 +24,6 @@ namespace jngl {
     void JNGLDLL_API quit();
 
     void JNGLDLL_API cancelQuit();
-
-    void JNGLDLL_API drawRect(double xposition, double yposition, double width, double height);
 
     void JNGLDLL_API setTitle(const std::string& title);
 
