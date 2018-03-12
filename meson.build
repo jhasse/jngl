@@ -84,7 +84,7 @@ endif
 
 thread_dep = dependency('threads')
 
-lib = static_library('jngl', sources : src, cpp_args : cpp_args, dependencies : [
+lib = static_library('jngl', sources : src, cpp_args : cpp_args, install : true, dependencies : [
 	dependency('freetype2'),
 	dependency('glew'),
 	dependency('libwebp'),
@@ -104,12 +104,41 @@ if target_machine.system() == 'linux'
 	boost_python_dep = dependency('boost', modules : [ 'python3' ], required : false)
 	python3_dep = dependency('python3', required : false)
 	if boost_python_dep.found() and python3_dep.found()
-		shared_library('jngl', sources : [
+		shared_library('jngl', link_with : lib, name_prefix : '', sources : [
 			'python/main.cpp',
 		], dependencies : [
 			boost_python_dep,
 			thread_dep,
 			python3_dep,
-		], link_with : lib, name_prefix : '')
+		],
+		install : true, install_dir : import('python3').sysconfig_path('platlib'))
 	endif
 endif
+
+install_headers('src/jngl.hpp')
+install_headers([
+	'src/jngl/all.hpp',
+	'src/jngl/color.hpp',
+	'src/jngl/Controller.hpp',
+	'src/jngl/debug.hpp',
+	'src/jngl/dll.hpp',
+	'src/jngl/drawable.hpp',
+	'src/jngl/Finally.hpp',
+	'src/jngl/font.hpp',
+	'src/jngl/framebuffer.hpp',
+	'src/jngl/input.hpp',
+	'src/jngl/job.hpp',
+	'src/jngl/main.hpp',
+	'src/jngl/matrix.hpp',
+	'src/jngl/message.hpp',
+	'src/jngl/other.hpp',
+	'src/jngl/screen.hpp',
+	'src/jngl/shapes.hpp',
+	'src/jngl/sound.hpp',
+	'src/jngl/sprite.hpp',
+	'src/jngl/text.hpp',
+	'src/jngl/time.hpp',
+	'src/jngl/types.hpp',
+	'src/jngl/window.hpp',
+	'src/jngl/work.hpp',
+], subdir : 'jngl')
