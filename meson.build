@@ -1,5 +1,10 @@
 project('jngl', ['cpp'], default_options : ['cpp_std=c++1z'])
 
+conf_data = configuration_data()
+conf_data.set('VERSION', '1.3.0')
+configure_file(input : 'jngl.pc.in', output : 'jngl.pc', configuration : conf_data,
+               install : true, install_dir : 'lib/pkgconfig')
+
 if get_option('buildtype') == 'release' and not meson.is_subproject()
 	add_global_arguments('-DNDEBUG', language : 'cpp')
 endif
