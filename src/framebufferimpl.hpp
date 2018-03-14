@@ -1,9 +1,8 @@
-// Copyright 2011-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2011-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
-#include "opengl.hpp"
 #include "texture.hpp"
 
 namespace jngl {

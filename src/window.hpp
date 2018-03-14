@@ -4,7 +4,6 @@
 #pragma once
 
 #include "freetype.hpp"
-#include "opengl.hpp"
 #include "jngl/input.hpp"
 
 #include <string>
@@ -17,9 +16,6 @@
 
 	#else
 		#include <GL/glx.h>
-		#include <GL/glu.h>
-		#include <X11/extensions/xf86vmode.h>
-		#include <X11/keysym.h>
 	#endif
 #else
 	#ifdef _WIN32

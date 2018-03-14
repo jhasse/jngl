@@ -3,8 +3,6 @@
 
 #include "Finally.hpp"
 
-#include "debug.hpp"
-
 namespace jngl {
 
 Finally::Finally(std::function<void()> functionToCall) : functionToCall(std::move(functionToCall)) {

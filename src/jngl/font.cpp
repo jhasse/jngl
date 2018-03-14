@@ -4,7 +4,6 @@
 #include "font.hpp"
 
 #include "../freetype.hpp"
-#include "color.hpp"
 
 #include <stack>
 

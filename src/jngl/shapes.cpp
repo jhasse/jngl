@@ -2,7 +2,6 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "shapes.hpp"
-#include "../opengl.hpp"
 #include "../draw.hpp"
 #include "../spriteimpl.hpp"
 

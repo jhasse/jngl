@@ -2,10 +2,8 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
-#include "../jngl/window.hpp"
 #include "../jngl/work.hpp"
 #include "../jngl/debug.hpp"
-#include "../opengl.hpp"
 #include "ConvertUTF.h"
 #include "../main.hpp"
 
@@ -15,12 +13,9 @@
 #include <png.h>
 #endif
 
-#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <shlobj.h>
-#include <sstream>
-#include <stdexcept>
 #include <windowsx.h> // GET_X_LPARAM
 
 XINPUT_STATE states[XUSER_MAX_COUNT];
