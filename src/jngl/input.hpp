@@ -1,8 +1,9 @@
-// Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
+#include <boost/qvm/vec.hpp>
 #include <string>
 #include <vector>
 #include <memory>
@@ -110,8 +111,12 @@ namespace jngl {
 
 	bool JNGLDLL_API isMultitouch();
 
+	boost::qvm::vec<double, 2> JNGLDLL_API getMousePos();
+
+	[[deprecated("Use jngl::getMousePos() instead")]]
 	int JNGLDLL_API getMouseX();
 
+	[[deprecated("Use jngl::getMousePos() instead")]]
 	int JNGLDLL_API getMouseY();
 
 	namespace mouse {
