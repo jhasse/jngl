@@ -22,7 +22,7 @@ endif
 SRC=src/*.cpp src/jngl/*.cpp
 ifdef WINDOWS
 	SRC += src/win32/*.cpp
-	LIBS += -lopengl32 -lxinput
+	LIBS += -lopengl32 -lxinput -lwinmm
 	CXXFLAGS += -DWINVER=0x0602
 else
 	SRC += src/linux/*.cpp src/sdl/*.cpp

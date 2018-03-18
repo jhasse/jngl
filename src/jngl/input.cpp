@@ -1,7 +1,5 @@
-// Copyright 2012-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
-#include "input.hpp"
 
 #include "../windowptr.hpp"
 

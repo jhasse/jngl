@@ -1,12 +1,9 @@
-/*
-Copyright 2012-2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
 #include "Finally.hpp"
-#include "types.hpp"
 #include "drawable.hpp"
 
 #include <memory>

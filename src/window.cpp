@@ -269,7 +269,7 @@ namespace jngl {
 			stepsPerFrame = newStepsPerFrame;
 			++numberOfChecks;
 		}
-		const int micros = std::lround(sleepPerFrame * sleepCorrectionFactor * 1e6);
+		const long micros = std::lround(sleepPerFrame * sleepCorrectionFactor * 1e6);
 		if (micros > 0) {
 			const auto start = getTime();
 			std::this_thread::sleep_for(std::chrono::microseconds(micros));

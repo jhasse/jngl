@@ -1,28 +1,26 @@
-/*
-Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
-#include "window.hpp"
-#include "types.hpp"
-#include "sprite.hpp"
-#include "work.hpp"
+#include "color.hpp"
+#include "Controller.hpp"
 #include "debug.hpp"
-#include "framebuffer.hpp"
-#include "font.hpp"
 #include "drawable.hpp"
-#include "screen.hpp"
-#include "text.hpp"
+#include "font.hpp"
+#include "framebuffer.hpp"
 #include "input.hpp"
 #include "job.hpp"
-#include "shapes.hpp"
-#include "matrix.hpp"
-#include "sound.hpp"
-#include "color.hpp"
-#include "time.hpp"
-#include "message.hpp"
 #include "main.hpp"
+#include "matrix.hpp"
+#include "message.hpp"
 #include "other.hpp"
-#include "Controller.hpp"
+#include "screen.hpp"
+#include "shapes.hpp"
+#include "sound.hpp"
+#include "sprite.hpp"
+#include "text.hpp"
+#include "time.hpp"
+#include "types.hpp"
+#include "window.hpp"
+#include "work.hpp"

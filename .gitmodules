@@ -1,0 +1,6 @@
+[submodule "xcode/IDZPrecompiledVorbis"]
+	path = xcode/IDZPrecompiledVorbis
+	url = https://github.com/iosdevzone/IDZPrecompiledVorbis
+[submodule "xcode/IDZPrecompiledOgg"]
+	path = xcode/IDZPrecompiledOgg
+	url = https://github.com/iosdevzone/IDZPrecompiledOgg

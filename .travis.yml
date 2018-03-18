@@ -1,33 +1,12 @@
 language: cpp
 os:
-- linux
 - osx
 compiler:
   - clang
-dist: trusty
-sudo: false
-addons:
-  apt:
-    packages:
-      - libfreetype6-dev
-      - libvorbis-dev
-      - libopenal-dev
-      - libsdl2-dev
-      - libglew-dev
-      - libboost-dev
-      - libwebp-dev
-      - libboost-python-dev
 install:
-- |
-  [ $TRAVIS_OS_NAME = linux ] || brew update
-- |
-  [ $TRAVIS_OS_NAME = linux ] || brew outdated jpeg || brew upgrade jpeg
-- |
-  [ $TRAVIS_OS_NAME = linux ] || brew install sdl2 freetype libvorbis glew jpeg webp scons
+  - brew update
+  - brew outdated jpeg || brew upgrade jpeg
+  - brew install sdl2 freetype libvorbis glew jpeg webp meson
 script:
-  - scons verbose=1 debug=1
-  - scons verbose=1
-  - |
-    [ $TRAVIS_OS_NAME = osx ] || scons verbose=1 python=1 debug=1
-  - |
-    [ $TRAVIS_OS_NAME = osx ] || scons verbose=1 python=1
+  - meson build
+  - ninja -C build

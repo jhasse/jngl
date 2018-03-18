@@ -4,21 +4,22 @@
 #include "../window.hpp"
 #include "../jngl.hpp"
 #include "windowimpl.hpp"
+#include "../main.hpp"
 
 #include <stdexcept>
 
 namespace jngl
 {
-	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen)
+	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen, const int screenWidth, const int screenHeight)
 	: fullscreen_(fullscreen), running_(false), isMouseVisible_(true),
 	  relativeMouseMode(false), isMultisampleSupported_(true),
-	  anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height),
+	  anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height), screenWidth(screenWidth), screenHeight(screenHeight),
 	  mouseWheel_(0), fontName_(""), impl(new WindowImpl(this)), changeWork_(false)
 	{
 		mouseDown_.fill(false);
 		mousePressed_.fill(false);
 
-		Init(height, width);
+		Init(width, height, screenWidth, screenHeight);
 
 		running_ = true;
 	}
@@ -69,11 +70,11 @@ namespace jngl
 	{
 	}
 
-	int Window::MouseX() {
+	int Window::getMouseX() {
 		return mousex_;
 	}
 
-	int Window::MouseY() {
+	int Window::getMouseY() {
 		return mousey_;
 	}
 

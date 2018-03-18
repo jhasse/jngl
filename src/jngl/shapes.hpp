@@ -25,10 +25,6 @@ void JNGLDLL_API pushAlpha(unsigned char alpha);
 
 void JNGLDLL_API popAlpha();
 
-template <class Vect> void drawRect(Vect pos, Vect size) {
-	DrawRect(pos.x, pos.y, size.x, size.y);
-}
-
 void JNGLDLL_API setLineWidth(float width);
 
 void JNGLDLL_API drawLine(double xstart, double ystart, double xend, double yend);
@@ -40,6 +36,12 @@ void JNGLDLL_API drawPoint(double x, double y);
 
 void JNGLDLL_API drawTriangle(double A_x, double A_y, double B_x, double B_y, double C_x,
                               double C_y);
+
+void JNGLDLL_API drawRect(double xposition, double yposition, double width, double height);
+
+template <class Vect> void drawRect(Vect pos, Vect size) {
+	drawRect(pos.x, pos.y, size.x, size.y);
+}
 
 } // namespace jngl
 

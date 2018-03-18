@@ -18,6 +18,7 @@ jngl.pc
 *.os
 *.so
 xcode/JNGL.xcodeproj/project.xcworkspace/xcuserdata/*
+xcode/JNGL.xcodeproj/project.xcworkspace/xcshareddata/
 xcode/JNGL.xcodeproj/xcuserdata/*.xcuserdatad/
 *.sublime-workspace
 libjngl.a

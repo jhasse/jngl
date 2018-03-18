@@ -5,7 +5,6 @@
 #include "../jngl/window.hpp"
 #include "../jngl/work.hpp"
 #include "../jngl/debug.hpp"
-#include "../opengl.hpp"
 #include "ConvertUTF.h"
 #include "../main.hpp"
 
@@ -15,12 +14,10 @@
 #include <png.h>
 #endif
 
-#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <shlobj.h>
 #include <sstream>
-#include <stdexcept>
 #include <windowsx.h> // GET_X_LPARAM
 
 XINPUT_STATE states[XUSER_MAX_COUNT];
@@ -568,8 +565,7 @@ int Window::GetKeyCode(jngl::key::KeyType key) {
 			return 0x0D;
 		case key::Pause:
 			return 0x13;
-		case key::Escape:
-			return 0x1b;
+		case key::Escape: return VK_ESCAPE;
 		case key::Delete:
 			return 0x2E;
 		case key::ControlL:

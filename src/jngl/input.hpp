@@ -4,7 +4,6 @@
 #pragma once
 
 #include <boost/qvm/vec.hpp>
-#include <string>
 #include <vector>
 #include <memory>
 

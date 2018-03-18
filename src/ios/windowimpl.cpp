@@ -1,7 +1,5 @@
-/*
-Copyright 2012 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowimpl.hpp"
 
@@ -14,17 +12,8 @@ namespace jngl {
 	}
 	
 	void WindowImpl::setMouse(int x, int y) {
-		if (window->height_ == 640) {
-			x *= 2;
-			y *= 2;
-		}
-		if (flip) {
-			mouseX = y;
-			mouseY = window->height_ - x;
-		} else {
-			mouseX = window->width_ - y;
-			mouseY = x;
-		}
+		mouseX = x;
+		mouseY = y;
 	}
 	
 	void WindowImpl::setMouseDown(bool d) {
@@ -53,9 +42,5 @@ namespace jngl {
 			relativeX = mouseX;
 			relativeY = mouseY;
 		}
-	}
-	
-	void WindowImpl::setFlip(bool f) {
-		flip = f;
 	}
 }

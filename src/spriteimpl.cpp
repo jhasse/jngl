@@ -1,36 +1,7 @@
 // Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#ifndef NOPNG
-#include <png.h> // We need to include it first, I don't know why
-#endif
-
 #include "spriteimpl.hpp"
-#include "window.hpp"
-#include "jngl/Finally.hpp"
-#include "windowptr.hpp"
-#include "texture.hpp"
-#include "main.hpp"
-
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <stack>
-#include <stdexcept>
-#include <unordered_map>
-#ifdef _WIN32
-	// These defines are needed to prevent conflicting types declarations in jpeglib.h:
-	#define XMD_H
-	#define HAVE_BOOLEAN
-#endif
-#ifndef NOJPEG
-	extern "C" {
-		#include <jpeglib.h>
-	}
-#endif
-#ifndef NOWEBP
-	#include <webp/decode.h>
-#endif
 
 namespace jngl
 {

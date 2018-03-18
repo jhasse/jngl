@@ -1,4 +1,9 @@
-project('jngl', ['cpp'], default_options : ['cpp_std=c++14'])
+project('jngl', ['cpp'], default_options : ['cpp_std=c++1z'])
+
+conf_data = configuration_data()
+conf_data.set('VERSION', '1.3.0')
+configure_file(input : 'jngl.pc.in', output : 'jngl.pc', configuration : conf_data,
+               install : true, install_dir : 'lib/pkgconfig')
 
 if get_option('buildtype') == 'release' and not meson.is_subproject()
 	add_global_arguments('-DNDEBUG', language : 'cpp')
@@ -37,7 +42,6 @@ cxx = meson.get_compiler('cpp')
 if target_machine.system() != 'windows'
 	opengl_dep = [
 		dependency('SDL2'),
-		dependency('fontconfig'),
 	]
 	if target_machine.system() == 'darwin'
 		opengl_dep += [
@@ -46,7 +50,13 @@ if target_machine.system() != 'windows'
 			], required : true),
 		]
 	else
-		opengl_dep += [cxx.find_library('OpenGL')]
+		opengl_dep += [
+			dependency('fontconfig'),
+			cxx.find_library('OpenGL')
+		]
+		src += [
+			'src/linux/window.cpp',
+		]
 	endif
 	src += [
 		'src/sdl/input.cpp',
@@ -54,7 +64,6 @@ if target_machine.system() != 'windows'
 		'src/sdl/window.cpp',
 		'src/sdl/SdlController.cpp',
 		'src/linux/message.cpp',
-		'src/linux/window.cpp',
 	]
 else
 	cpp_args += ['-DWINVER=0x0602']
@@ -80,7 +89,7 @@ endif
 
 thread_dep = dependency('threads')
 
-lib = static_library('jngl', sources : src, cpp_args : cpp_args, dependencies : [
+lib = static_library('jngl', sources : src, cpp_args : cpp_args, install : true, dependencies : [
 	dependency('freetype2'),
 	dependency('glew'),
 	dependency('libwebp'),
@@ -100,12 +109,41 @@ if target_machine.system() == 'linux'
 	boost_python_dep = dependency('boost', modules : [ 'python3' ], required : false)
 	python3_dep = dependency('python3', required : false)
 	if boost_python_dep.found() and python3_dep.found()
-		shared_library('jngl', sources : [
+		shared_library('jngl', link_with : lib, name_prefix : '', sources : [
 			'python/main.cpp',
 		], dependencies : [
 			boost_python_dep,
 			thread_dep,
 			python3_dep,
-		], link_with : lib, name_prefix : '')
+		],
+		install : true, install_dir : import('python3').sysconfig_path('platlib'))
 	endif
 endif
+
+install_headers('src/jngl.hpp')
+install_headers([
+	'src/jngl/all.hpp',
+	'src/jngl/color.hpp',
+	'src/jngl/Controller.hpp',
+	'src/jngl/debug.hpp',
+	'src/jngl/dll.hpp',
+	'src/jngl/drawable.hpp',
+	'src/jngl/Finally.hpp',
+	'src/jngl/font.hpp',
+	'src/jngl/framebuffer.hpp',
+	'src/jngl/input.hpp',
+	'src/jngl/job.hpp',
+	'src/jngl/main.hpp',
+	'src/jngl/matrix.hpp',
+	'src/jngl/message.hpp',
+	'src/jngl/other.hpp',
+	'src/jngl/screen.hpp',
+	'src/jngl/shapes.hpp',
+	'src/jngl/sound.hpp',
+	'src/jngl/sprite.hpp',
+	'src/jngl/text.hpp',
+	'src/jngl/time.hpp',
+	'src/jngl/types.hpp',
+	'src/jngl/window.hpp',
+	'src/jngl/work.hpp',
+], subdir : 'jngl')

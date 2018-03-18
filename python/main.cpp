@@ -4,7 +4,6 @@
 #include "../src/jngl.hpp"
 
 #include <boost/python.hpp>
-#include <cmath>
 
 using namespace boost::python;
 using namespace jngl;

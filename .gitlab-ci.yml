@@ -25,6 +25,3 @@ mingw:
     - dnf install -y gcc-c++ meson mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-glew mingw64-openal-soft wine-core
     - meson build --cross-file mingw.ini
     - ninja -C build
-
-variables:
-  GIT_SUBMODULE_STRATEGY: recursive
