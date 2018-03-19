@@ -301,17 +301,28 @@ std::string Window::GetFontFileByName(const std::string& fontName) {
 			fontFile.assign(reinterpret_cast<const char*>(valueData.get()), valueDataSize);
 			break;
 		}
+		if ((fontNameLower == "arial" && valueNameLower == "liberation sans (truetype)") ||
+		    (fontNameLower == "courier new" && valueNameLower == "liberation mono (truetype)") ||
+		    (fontNameLower == "times new roman" &&
+		     valueNameLower == "liberation serif (truetype)")) {
+			// Fallbacks for WINE. No break, so that exact matches take priority
+			fontFile.assign(reinterpret_cast<const char*>(valueData.get()), valueDataSize);
+		}
 	} while (result != ERROR_NO_MORE_ITEMS);
 
 	RegCloseKey(hKey);
-
 	if (fontFile.size() < 2 || fontFile[1] != ':') { // relative path?
 		char fontDir[MAX_PATH];
 		if (SHGetFolderPath(NULL, CSIDL_FONTS, NULL, 0, fontDir) != S_OK) {
 			throw std::runtime_error("Couldn't locate font directory.");
 		}
 		std::ostringstream ss;
-		ss << fontDir << "\\" << fontFile;
+		ss << fontDir << "\\";
+		if (fontFile.empty()) {
+			ss << fontName << ".ttf";
+		} else {
+			ss << fontFile;
+		}
 		fontFile = ss.str();
 	}
 	cache.emplace(fontName, fontFile);
