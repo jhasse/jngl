@@ -3,7 +3,10 @@
 
 #pragma once
 
+#include <boost/version.hpp>
+#if BOOST_VERSION >= 106200
 #include <boost/qvm/vec.hpp>
+#endif
 #include <vector>
 #include <memory>
 
@@ -110,7 +113,9 @@ namespace jngl {
 
 	bool JNGLDLL_API isMultitouch();
 
+#if BOOST_VERSION >= 106200
 	boost::qvm::vec<double, 2> JNGLDLL_API getMousePos();
+#endif
 
 	[[deprecated("Use jngl::getMousePos() instead")]]
 	int JNGLDLL_API getMouseX();
