@@ -215,7 +215,7 @@ namespace jngl {
 		width = static_cast<int>(png_get_image_width(png_ptr, info_ptr));
 		height = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
 		loadTexture(filename, halfLoad, format, rowPointers);
-		return {[](){}};
+		return Finally(nullptr);
 	}
 #endif
 
@@ -266,7 +266,7 @@ namespace jngl {
 			}
 		}
 		loadTexture(filename, halfLoad, GL_BGR, &buf[0]);
-		return {[](){}};
+		return Finally(nullptr);
 	}
 #ifndef NOJPEG
 	Finally Sprite::LoadJPG(const std::string& filename, FILE* file, const bool halfLoad) {
@@ -312,7 +312,7 @@ namespace jngl {
 		jpeg_finish_decompress(&info);
 
 		loadTexture(filename, halfLoad, format, &buf[0]);
-		return {[](){}};
+		return Finally(nullptr);
 	}
 #endif
 #ifndef NOWEBP
@@ -349,14 +349,14 @@ namespace jngl {
 				*result = WebPDecode(&buf[0], filesize, config.get());
 			}
 		);
-		return {[thread = std::move(thread), result, filename, config, halfLoad, this]() mutable {
+		return Finally([thread = std::move(thread), result, filename, config, halfLoad, this]() mutable {
 			thread->join();
 			if (*result != VP8_STATUS_OK) {
 				throw std::runtime_error(std::string("Can't decode WebP file. (" + filename + ")"));
 			}
 			loadTexture(filename, halfLoad, GL_RGBA, nullptr, config->output.u.RGBA.rgba);
 			WebPFreeDecBuffer(&config->output);
-		}};
+		});
 	}
 #endif
 

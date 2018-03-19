@@ -8,6 +8,17 @@ namespace jngl {
 Finally::Finally(std::function<void()> functionToCall) : functionToCall(std::move(functionToCall)) {
 }
 
+Finally::Finally(Finally&& other) : functionToCall(std::move(other.functionToCall)) {
+	other.functionToCall = nullptr;
+}
+
+Finally& Finally::operator=(Finally&& other) {
+	if (functionToCall) { functionToCall(); }
+	functionToCall = std::move(other.functionToCall);
+	other.functionToCall = nullptr;
+	return *this;
+}
+
 Finally::~Finally() {
 	if (functionToCall) {
 		functionToCall();

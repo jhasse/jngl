@@ -399,7 +399,7 @@ void loadSound(const std::string&); // definied in audio.cpp
 Finally load(const std::string& filename) {
 	if (filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg") {
 		loadSound(filename);
-		return { []() {} };
+		return Finally(nullptr);
 	}
 	return loadSprite(filename);
 }

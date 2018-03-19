@@ -1,4 +1,4 @@
-// Copyright 2007-2017 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -11,10 +11,11 @@ namespace jngl {
 
 class Finally {
 public:
-	Finally(std::function<void()> functionToCall);
+	explicit Finally(std::function<void()> functionToCall);
+	Finally(Finally&&);
+	Finally& operator=(Finally&&);
 	Finally(const Finally&) = delete;
 	Finally& operator=(const Finally&) = delete;
-	Finally(Finally&&) = default;
 	JNGLDLL_API ~Finally();
 private:
 	std::function<void()> functionToCall;
