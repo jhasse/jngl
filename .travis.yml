@@ -6,7 +6,7 @@ compiler:
 install:
   - brew update
   - brew outdated jpeg || brew upgrade jpeg
-  - brew install sdl2 freetype libvorbis glew jpeg webp meson
+  - brew install sdl2 freetype libvorbis libepoxy jpeg webp meson
 script:
   - meson build
   - ninja -C build
