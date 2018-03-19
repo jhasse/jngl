@@ -110,7 +110,8 @@ namespace jngl {
 		std::string GetFontFileByName(const std::string& fontname);
 
 		double timePerStep = 1.0 / 60.0;
-		bool fullscreen_, running_, isMouseVisible_, relativeMouseMode, isMultisampleSupported_, anyKeyPressed_;
+		bool fullscreen_, running_, isMouseVisible_, relativeMouseMode, anyKeyPressed_;
+		bool isMultisampleSupported_ = true;
 		std::array<bool, 3> mouseDown_;
 		std::array<bool, 3> mousePressed_;
 		std::map<unsigned int, bool> keyDown_;

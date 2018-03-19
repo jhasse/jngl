@@ -89,9 +89,8 @@ bool Window::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const int screenWidth, const int screenHeight)
 : fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false),
-  isMultisampleSupported_(false), anyKeyPressed_(false), fontSize_(12), width_(width),
-  height_(height), screenWidth(screenWidth), screenHeight(screenHeight), changeWork_(false),
-  stepsPerFrame(1), multitouch(false) {
+  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), screenWidth(screenWidth),
+  screenHeight(screenHeight), changeWork_(false), stepsPerFrame(1), multitouch(false) {
 	mouseDown_.fill(false);
 	mousePressed_.fill(false);
 
@@ -223,13 +222,14 @@ void Window::Init(const std::string& title, const bool multisample) {
 		throw std::runtime_error("Can't activate the GL rendering context.");
 	}
 
-	if (!multisample && InitMultisample(hInstance, pfd)) {
+	if (!multisample && isMultisampleSupported_ && InitMultisample(hInstance, pfd)) {
 		pDeviceContext_.reset((HDC)0); // Destroy window
 		try {
-			Init(title, true); // Recreate with Anti-Aliasing support
-			isMultisampleSupported_ = true;
+			jngl::debugLn("Recreating window with Anti-Aliasing support.");
+			Init(title, true);
 		} catch (...) {
 			// If Anti-Aliasing still doesn't work for some reason, let's turn it off again.
+			isMultisampleSupported_ = false;
 			Init(title, false);
 		}
 		return;
