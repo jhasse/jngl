@@ -407,13 +407,11 @@ Finally load(const std::string& filename) {
 }
 
 #ifdef _WIN32
-#include <GL/wglew.h>
+#include <epoxy/wgl.h>
 
 void setVerticalSync(bool enabled) {
-	if (WGL_EXT_swap_control) {
-		if (wglSwapIntervalEXT(enabled)) {
-			vsyncEnabled = enabled;
-		}
+	if (wglSwapIntervalEXT && wglSwapIntervalEXT(enabled)) {
+		vsyncEnabled = enabled;
 	}
 #else
 void setVerticalSync(bool) {

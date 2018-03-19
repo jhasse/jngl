@@ -8,14 +8,13 @@
 #include "ConvertUTF.h"
 #include "../main.hpp"
 
-#include "wglext.h"
-
 #ifndef NOPNG
 #include <png.h>
 #endif
 
 #include <cassert>
 #include <cmath>
+#include <epoxy/wgl.h>
 #include <shlobj.h>
 #include <sstream>
 #include <windowsx.h> // GET_X_LPARAM
@@ -28,8 +27,6 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 // based on: http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=46
 bool Window::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
-	PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB =
-	    (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
 	if (!wglChoosePixelFormatARB) {
 		return false;
 	}
