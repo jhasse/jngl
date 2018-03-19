@@ -15,6 +15,9 @@
 		#include <GLES/glext.h>
 		#include "android/glew.h"
 	#else
+		#ifdef _MSC_VER
+			#include <windows.h> // To avoid warnings about APIENTRY
+		#endif
 		#include <epoxy/gl.h>
 	#endif
 #endif

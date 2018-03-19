@@ -250,6 +250,7 @@ Window::~Window() {
 	if (fullscreen_) {
 		ChangeDisplaySettings(nullptr, 0);
 	}
+	fonts_.clear(); // Delete fonts before destroying the OpenGL context
 }
 
 std::string Window::GetFontFileByName(const std::string& fontName) {
@@ -336,14 +337,12 @@ void Window::ReleaseDC(HWND hwnd, HDC hdc) {
 }
 
 void Window::ReleaseRC(HGLRC hrc) {
-	/* FIXME: This causes a crash in AMD's graphics driver.
 	if (!wglMakeCurrent(nullptr, nullptr)) {
-	    debug("Release of DC and RC failed.");
+		debugLn("Release of DC and RC failed.");
 	}
 	if (!wglDeleteContext(hrc)) {
-	    debug("Release rendering context failed.");
+		debugLn("Release rendering context failed.");
 	}
-	*/
 }
 
 void Window::DistinguishLeftRight() {

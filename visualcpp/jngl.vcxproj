@@ -132,7 +132,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ogg.lib;freetype.lib;Xinput.lib;libwebp.lib;glew32s.lib;vorbis.lib;alut.lib;vorbisfile.lib;opengl32.lib;glu32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ogg.lib;freetype.lib;Xinput.lib;libwebp.lib;epoxy.lib;vorbis.lib;alut.lib;vorbisfile.lib;opengl32.lib;glu32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
     <Lib />
@@ -152,7 +152,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ogg.lib;freetype.lib;Xinput.lib;libwebp.lib;glew32s.lib;vorbis.lib;alut.lib;vorbisfile.lib;opengl32.lib;glu32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ogg.lib;freetype.lib;Xinput.lib;libwebp.lib;epoxy.lib;vorbis.lib;alut.lib;vorbisfile.lib;opengl32.lib;glu32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
   </ItemDefinitionGroup>
