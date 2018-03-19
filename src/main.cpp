@@ -170,10 +170,12 @@ void setBackgroundColor(const unsigned char red, const unsigned char green,
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
+#if BOOST_VERSION >= 106200
 boost::qvm::vec<double, 2> getMousePos() {
 	return { { pWindow->getMouseX() / getScaleFactor() - getScreenWidth() / 2,
 		       pWindow->getMouseY() / getScaleFactor() - getScreenHeight() / 2 } };
 }
+#endif
 
 int getMouseX() {
 	return pWindow->getMouseX();
