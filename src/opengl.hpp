@@ -3,16 +3,11 @@
 
 #pragma once
 
-#ifdef WIZ
-	#include <GLES/gl.h>
-	#include <GLES/egl.h>
-	#include <libogl.h>
+#ifdef IOS
+	#include <OpenGLES/ES1/gl.h>
+	#include <OpenGLES/ES1/glext.h>
+	#include "ios/glew.h"
 #else
-	#ifdef IOS
-		#include <OpenGLES/ES1/gl.h>
-		#include <OpenGLES/ES1/glext.h>
-		#include "ios/glew.h"
-	#else
 	#ifdef ANDROID
 		#include <EGL/egl.h>
 		#include <GLES/gl.h>
@@ -20,17 +15,7 @@
 		#include <GLES/glext.h>
 		#include "android/glew.h"
 	#else
-		#ifdef __APPLE__
-			#include <OpenGL/gl.h>
-			#include <OpenGL/gl3ext.h>
-			#define glBindVertexArray glBindVertexArrayAPPLE
-			#define glDeleteVertexArrays glDeleteVertexArraysAPPLE
-			#define glGenVertexArrays glGenVertexArraysAPPLE
-		#else
-			#include <epoxy/gl.h>
-			#include <epoxy/glx.h>
-		#endif
-	#endif
+		#include <epoxy/gl.h>
 	#endif
 #endif
 
