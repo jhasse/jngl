@@ -13,10 +13,12 @@ namespace jngl {
 
 	FrameBufferImpl::FrameBufferImpl(int width, int height)
 	: height(height), texture(width, height, nullptr) {
-#ifdef GLEW_OK
-		if (!GLEW_EXT_framebuffer_object) {
+#ifdef EPOXY_PUBLIC
+		static bool first = true;
+		if (first && !epoxy_has_gl_extension("GL_EXT_framebuffer_object")) {
 			throw std::runtime_error("OpenGL Frame Buffer Object not supported!");
 		}
+		first = false;
 #endif
 		GLint tmp;
 		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &tmp);

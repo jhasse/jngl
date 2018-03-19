@@ -27,7 +27,8 @@
 			#define glDeleteVertexArrays glDeleteVertexArraysAPPLE
 			#define glGenVertexArrays glGenVertexArraysAPPLE
 		#else
-			#include <GL/glew.h>
+			#include <epoxy/gl.h>
+			#include <epoxy/glx.h>
 		#endif
 	#endif
 	#endif

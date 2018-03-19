@@ -91,7 +91,7 @@ thread_dep = dependency('threads')
 
 lib = static_library('jngl', sources : src, cpp_args : cpp_args, install : true, dependencies : [
 	dependency('freetype2'),
-	dependency('glew'),
+	dependency('epoxy'),
 	dependency('libwebp'),
 	dependency('libpng'),
 	dependency('openal'),

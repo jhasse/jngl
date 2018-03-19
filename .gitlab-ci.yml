@@ -2,7 +2,7 @@ gcc:
   image: base/archlinux
   stage: build
   script:
-    - pacman -Syu --needed --noconfirm meson sdl2 pkg-config fontconfig glew libwebp openal libvorbis boost gcc
+    - pacman -Syu --needed --noconfirm meson sdl2 pkg-config fontconfig libepoxy libwebp openal libvorbis boost gcc
     - meson build
     - ninja -C build
 
@@ -10,7 +10,7 @@ clang:
   image: base/archlinux
   stage: build
   script:
-    - pacman -Syu --needed --noconfirm meson sdl2 pkg-config fontconfig glew libwebp openal libvorbis boost clang-tools-extra python2
+    - pacman -Syu --needed --noconfirm meson sdl2 pkg-config fontconfig libepoxy libwebp openal libvorbis boost clang-tools-extra python2
     - CC=clang CXX=clang++ meson build
     - cd build
     - TERM=xterm script -qfc "ninja" /dev/null
@@ -22,6 +22,6 @@ mingw:
   image: fedora:27
   stage: build
   script:
-    - dnf install -y gcc-c++ meson mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-glew mingw64-openal-soft wine-core
+    - dnf install -y gcc-c++ meson mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft wine-core
     - meson build --cross-file mingw.ini
     - ninja -C build

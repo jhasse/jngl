@@ -12,10 +12,12 @@ namespace jngl {
 
 	Texture::Texture(const int width, const int height, GLubyte** rowPointers,
 	                 GLenum format, GLubyte* data) : width(width), height(height) {
-#ifdef GLEW_OK
-		if (!GLEW_ARB_vertex_buffer_object || !GLEW_VERSION_1_5) {
+#ifdef EPOXY_PUBLIC
+		static bool first = true;
+		if (first && !epoxy_has_gl_extension("GL_ARB_vertex_buffer_object")) {
 			throw std::runtime_error("VBOs not supported\n");
 		}
+		first = false;
 #endif
 		glGenTextures(1, &texture_);
 		glBindTexture(GL_TEXTURE_2D, texture_);
