@@ -11,3 +11,5 @@ xcode/JNGL.xcodeproj/project.xcworkspace/xcuserdata/*
 /config.log
 /test
 /build*/
+/.vscode/
+/compile_commands.json
