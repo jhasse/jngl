@@ -25,3 +25,11 @@ mingw:
     - dnf install -y gcc-c++ meson mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft wine-core
     - meson build --cross-file mingw.ini
     - ninja -C build
+
+android:
+  image: opengisch/docker-qt-crystax
+  stage: build
+  script:
+    - apt install -y file
+    - $ANDROID_NDK_ROOT/ndk-build -j$(nproc) -Candroid/jngl
+    - $ANDROID_NDK_ROOT/ndk-build -j$(nproc) -Candroid/test
