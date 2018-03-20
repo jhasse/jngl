@@ -1,97 +1,64 @@
 # JNGL - Just a Neat Game Library [![Build Status](https://travis-ci.org/jhasse/jngl.svg?branch=master)](https://travis-ci.org/jhasse/jngl) [![Build status](https://ci.appveyor.com/api/projects/status/8gbj2tkxie9uyern?svg=true)](https://ci.appveyor.com/project/jhasse/jngl) [![pipeline status](https://gitlab.com/jhasse/jngl/badges/master/pipeline.svg)](https://gitlab.com/jhasse/jngl/commits/master)
 
-Easy to use game library for C++ and Python
+An easy to use C++/Python game library for Linux, Windows, macOS, Android, iOS and the Nintendo
+Switch.
 
 ## Linux
 
-On a Debian-based distribution:
+### Ubuntu
 
 ```
 sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev \
-libjpeg-dev libpng12-dev libvorbis-dev libopenal-dev scons libglew-dev libboost-dev g++ \
+libjpeg-dev libpng12-dev libvorbis-dev libopenal-dev meson libglew-dev libboost-dev g++ \
 libwebp-dev git libsdl2-dev
 ```
 
-On Fedora:
+### Fedora
 
 ```
 sudo dnf install fontconfig-devel freetype-devel libvorbis-devel glew-devel libjpeg-turbo-devel \
-libwebp-devel boost-python3-devel python3-devel scons SDL2-devel openal-soft-devel
+libwebp-devel boost-python3-devel python3-devel meson SDL2-devel openal-soft-devel
 ```
-
-Then [build using SCons](#build-using-scons).
 
 ### Arch Linux
 
 ```
-pacman -S --needed meson gcc sdl2 pkg-config fontconfig glew libwebp openal libvorbis boost
-mkdir build
-cd build
-meson ..
-ninja
+pacman -Syu --needed meson gcc sdl2 pkg-config fontconfig glew libwebp openal libvorbis boost
 ```
 
 ## Windows
 
-### Using MSYS2 / MinGW-w64
+### MSYS2 / MinGW-w64
 
 Set up [MSYS2](http://sourceforge.net/p/msys2/wiki/MSYS2%20installation/) and install the following
 in a mingw64 shell:
 
 ```
-pacman -S scons mingw-w64-x86_64-gcc mingw-w64-x86_64-boost mingw-w64-x86_64-openal \
-mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
-mingw-w64-x86_64-dlfcn mingw-w64-x86_64-glew mingw-w64-x86_64-python3
+pacman -Syu --needed mingw-w64-x86_64-meson mingw-w64-x86_64-gcc mingw-w64-x86_64-boost \
+mingw-w64-x86_64-openal mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis \
+mingw-w64-x86_64-libwebp mingw-w64-x86_64-dlfcn mingw-w64-x86_64-glew mingw-w64-x86_64-python3
 ```
 
-Then [build using SCons](#build-using-scons).
+### Visual C++ 2015 or newer
 
-### Using Visual C++ 2015
-
-Open visualcpp/JNGL.sln and press Ctrl + F5 to build JNGL and run the example application.
+Open `visualcpp/JNGL.sln` and press <kbd>Ctrl</kbd>+<kbd>F5</kbd> to build JNGL and run the example
+application.
 
 ## Mac
 
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 
 ```
-brew install sdl2 freetype libvorbis glew jpeg webp scons pkg-config boost
+brew install sdl2 freetype libvorbis glew jpeg webp meson pkg-config boost
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 ```
 
-Then [build using SCons](#build-using-scons).
+## Building
 
-## Build using SCons
-
-Build JNGL in debug mode:
 ```
-scons debug=1
-```
-
-Build python bindings:
-```
-scons python=1
-```
-
-Create a Windows installer:
-```
-scons installer=1
-scons installer=1 python=1
-```
-
-Install JNGL to "/usr/local":
-```
-./install.sh /usr/local
-```
-
-Clean up:
-```
-scons installer=1 python=1 -c
-```
-
-A list of all variables:
-```
-scons -h
+meson build
+ninja -C build
+./build/jngl-test
 ```
 
 ## Android
@@ -100,4 +67,8 @@ Install the Android SDK and NDK. Add the NDK's folder to your PATH and run
 ```
 ndk-build
 ```
-inside the android/jngl folder.
+inside the `android/jngl` folder.
+
+## iOS
+
+Open `xcode/JNGL.xcodeproj` and run the "Test iOS" target.
