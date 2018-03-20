@@ -63,7 +63,7 @@ ninja -C build
 
 ## Android
 
-Install the Android SDK and NDK. Add the NDK's folder to your PATH and run
+Install the [CrystaX NDK 10.3](https://www.crystax.net), add the folder to your `PATH` and run
 ```
 ndk-build
 ```

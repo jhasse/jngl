@@ -1,7 +1,6 @@
-/*
-Copyright 2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2015-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
+
 #include "windowimpl.hpp"
 
 #include "../opengl.hpp"
@@ -19,6 +18,7 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <cerrno>
 #include <cstring>
 #include <fstream>
+#include <sstream>
 
 namespace jngl {
     android_app* androidApp;
@@ -122,7 +122,7 @@ namespace jngl {
         debug("Surface size "); debug(width); debug("x"); debugLn(height);
 
         // Initialize GL state.
-        Init(width, height);
+        Init(width, height, width, height);
 
         ANativeActivity* activity = app->activity;
 
