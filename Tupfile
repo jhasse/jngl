@@ -28,7 +28,7 @@ else
 	SRC += src/linux/*.cpp src/sdl/*.cpp
 endif
 
-: foreach $(SRC) |> $(CXX) $(CXXFLAGS) `$(PKG_CONFIG) --cflags sdl2 freetype2` -c %f -o %o |> %f.o {objs}
+: foreach $(SRC) |> $(CXX) $(CXXFLAGS) `$(PKG_CONFIG) --cflags sdl2 freetype2 epoxy` -c %f -o %o |> %f.o {objs}
 
 : {objs} |> ar rc %o %f && ranlib %o |> libjngl.a {libjngl}
 

@@ -12,6 +12,7 @@
 #include <png.h>
 #endif
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <epoxy/wgl.h>
