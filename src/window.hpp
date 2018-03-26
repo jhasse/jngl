@@ -133,6 +133,11 @@ namespace jngl {
 		unsigned int stepsPerFrame = 1;
 		double sleepPerFrame = 0; // in seconds
 		double sleepCorrectionFactor = 1;
+		double timeSleptSinceLastCheck = 0;
+		unsigned int previousStepsPerFrame = 1;
+
+		/// When VSYNC is active we will try to find out to what FPS/Hz the display is limiting us
+		double maxFPS = 300;
 
 		/// How often the frame limiter has run
 		unsigned int numberOfChecks = 0;

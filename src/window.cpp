@@ -211,7 +211,6 @@ namespace jngl {
 		// TODO: These variables are static, but should rather be members of Window:
 		static auto lastCheckTime = jngl::getTime();
 		static unsigned int stepsSinceLastCheck = 0;
-		static double timeSleptSinceLastCheck = 0;
 
 		const auto currentTime = jngl::getTime();
 		const auto secondsSinceLastCheck = currentTime - lastCheckTime;
@@ -219,13 +218,30 @@ namespace jngl {
 		// If SPS == FPS, this would mean that we check about every second, but in the beginning we
 		// want to check more often, e.g. to quickly adjust to high refresh rate monitors:
 		if (stepsSinceLastCheck > targetStepsPerSecond || stepsSinceLastCheck > numberOfChecks) {
+			++numberOfChecks;
 			const auto actualStepsPerSecond = stepsSinceLastCheck / secondsSinceLastCheck;
-			const auto doableStepsPerSecond =
-			    stepsSinceLastCheck / (secondsSinceLastCheck - timeSleptSinceLastCheck);
+			auto doableStepsPerSecond =
+			    stepsSinceLastCheck /
+			    (secondsSinceLastCheck - timeSleptSinceLastCheck);
+			if (previousStepsPerFrame > stepsPerFrame &&
+			    actualStepsPerSecond < targetStepsPerSecond) {
+				maxFPS = 0.5 * maxFPS + 0.5 * actualStepsPerSecond;
+			} else {
+				maxFPS += sleepPerFrame;
+			}
+			previousStepsPerFrame = stepsPerFrame;
+			auto cappedOrDoable = doableStepsPerSecond;
+			if (doableStepsPerSecond > maxFPS) {
+				cappedOrDoable = maxFPS * stepsPerFrame;
+			}
 			// TODO: Improve logging. Log level? jngl::trace?
 			jngl::debug("SPS: ");
 			jngl::debug(std::lround(actualStepsPerSecond));
-			jngl::debug(" (doable ");
+			if (cappedOrDoable < doableStepsPerSecond) {
+				jngl::debug(" (capped ");
+			} else {
+				jngl::debug(" (doable ");
+			}
 			jngl::debug(std::lround(doableStepsPerSecond));
 			jngl::debug(", should be ");
 			jngl::debug(std::lround(targetStepsPerSecond));
@@ -243,7 +259,7 @@ namespace jngl {
 			// Round up, because if we can do 40 FPS, but need 60 SPS, we need at least 2 SPF. We
 			// don't round up exactly to be a little bit "optimistic" of what we can do.
 			auto newStepsPerFrame = std::min(static_cast<unsigned int>(std::max(1,
-			    int(0.98 + stepsPerFrame * targetStepsPerSecond / doableStepsPerSecond))),
+			    int(0.98 + stepsPerFrame * targetStepsPerSecond / cappedOrDoable))),
 				stepsPerFrame * 2); // never increase too much
 			// Divide doableStepsPerSecond by the previous stepsPerFrame and multiply it with
 			// newStepsPerFrame so that we know what can be doable in the future and not what
@@ -262,16 +278,18 @@ namespace jngl {
 			jngl::debug(", msSleepPerFrame -> ");
 			jngl::debug(sleepPerFrame);
 			jngl::debug(" * ");
-			jngl::debugLn(sleepCorrectionFactor);
+			jngl::debug(sleepCorrectionFactor);
+			jngl::debug(", maxFPS: ");
+			jngl::debugLn(maxFPS);
 			lastCheckTime = currentTime;
 			stepsSinceLastCheck = 0;
 			timeSleptSinceLastCheck = 0;
 			stepsPerFrame = newStepsPerFrame;
-			++numberOfChecks;
 		}
-		const long micros = std::lround(sleepPerFrame * sleepCorrectionFactor * 1e6);
+		const auto start = getTime();
+		const auto shouldBe = lastCheckTime + timePerStep * stepsSinceLastCheck;
+		const long micros = std::lround((sleepPerFrame - (start - shouldBe)) * sleepCorrectionFactor * 1e6);
 		if (micros > 0) {
-			const auto start = getTime();
 			std::this_thread::sleep_for(std::chrono::microseconds(micros));
 			timeSleptSinceLastCheck += jngl::getTime() - start;
 		}
