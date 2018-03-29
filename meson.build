@@ -52,7 +52,6 @@ if target_machine.system() != 'windows'
 	else
 		opengl_dep += [
 			dependency('fontconfig'),
-			cxx.find_library('OpenGL')
 		]
 		src += [
 			'src/linux/window.cpp',

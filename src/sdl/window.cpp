@@ -281,7 +281,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 			fclose(fp);
 		});
 		png_byte buf[PNG_BYTES_TO_CHECK];
-		static_assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short));
+		static_assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short), "Invalid PNG signature size.");
 
 		// Read in some of the signature bytes
 		if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK) {
