@@ -9,10 +9,6 @@
 #include "color.hpp"
 #include "dll.hpp"
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
-
 namespace jngl {
 	class FontImpl;
 
@@ -56,6 +52,3 @@ namespace jngl {
 
 	double JNGLDLL_API getTextWidth(const std::string& text);
 }
-#ifndef _MSC_VER
-#pragma GCC visibility pop
-#endif

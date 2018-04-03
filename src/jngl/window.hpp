@@ -7,10 +7,6 @@
 
 #include "dll.hpp"
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
-
 namespace jngl {
 
 void JNGLDLL_API showWindow(const std::string& title, int width, int height,
@@ -32,7 +28,3 @@ bool JNGLDLL_API getFullscreen();
 void JNGLDLL_API setFullscreen(bool);
 
 } // namespace jngl
-
-#ifndef _MSC_VER
-#pragma GCC visibility pop
-#endif

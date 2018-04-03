@@ -1,15 +1,11 @@
-/*
-Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
 #include "dll.hpp"
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
+#include <string>
 
 namespace jngl {
 	float JNGLDLL_API getVolume();
@@ -26,6 +22,3 @@ namespace jngl {
 
 	void JNGLDLL_API setVolume(float volume);
 }
-#ifndef _MSC_VER
-#pragma GCC visibility pop
-#endif

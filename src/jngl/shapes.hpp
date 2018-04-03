@@ -6,10 +6,6 @@
 #include "dll.hpp"
 #include "color.hpp"
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
-
 namespace jngl {
 
 void JNGLDLL_API setColor(jngl::Color);
@@ -44,7 +40,3 @@ template <class Vect> void drawRect(Vect pos, Vect size) {
 }
 
 } // namespace jngl
-
-#ifndef _MSC_VER
-#pragma GCC visibility pop
-#endif

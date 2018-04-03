@@ -1,17 +1,11 @@
-/*
-Copyright 2012-2014 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
 #include "types.hpp"
 
 #include "dll.hpp"
-
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
 
 namespace jngl {
 	Float JNGLDLL_API getScaleFactor();
@@ -33,6 +27,3 @@ namespace jngl {
 
 	bool JNGLDLL_API getDeviceOrientationSupported(DeviceOrientation);
 }
-#ifndef _MSC_VER
-#pragma GCC visibility pop
-#endif

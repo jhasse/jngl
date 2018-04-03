@@ -12,10 +12,6 @@
 
 #include "dll.hpp"
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
-
 namespace jngl {
 	namespace key {
 		enum KeyType {
@@ -172,6 +168,3 @@ namespace jngl {
 	/// Returns all Controllers that are connected. Don't call this function every frame for performance reasons
 	std::vector<std::shared_ptr<Controller>> JNGLDLL_API getConnectedControllers();
 }
-#ifndef _MSC_VER
-#pragma GCC visibility pop
-#endif

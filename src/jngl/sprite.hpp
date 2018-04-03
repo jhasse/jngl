@@ -12,10 +12,6 @@
 
 #include "dll.hpp"
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
-
 namespace jngl {
 	class Texture;
 
@@ -103,6 +99,3 @@ namespace jngl {
 
 	void JNGLDLL_API setMasking(bool enabled);
 }
-#ifndef _MSC_VER
-#pragma GCC visibility pop
-#endif

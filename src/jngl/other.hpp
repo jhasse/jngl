@@ -10,10 +10,6 @@
 
 #include "dll.hpp"
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
-
 namespace jngl {
     bool JNGLDLL_API running();
 
@@ -66,7 +62,3 @@ namespace jngl {
 
     void JNGLDLL_API sleep(int milliseconds);
 }
-
-#ifndef _MSC_VER
-#pragma GCC visibility pop
-#endif

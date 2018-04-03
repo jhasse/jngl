@@ -7,10 +7,6 @@
 
 #include "dll.hpp"
 
-#ifndef _MSC_VER
-#pragma GCC visibility push(default)
-#endif
-
 namespace jngl {
 	class JNGLDLL_API Drawable {
 	public:
@@ -60,6 +56,3 @@ namespace jngl {
 		int height;
 	};
 }
-#ifndef _MSC_VER
-#pragma GCC visibility pop
-#endif
