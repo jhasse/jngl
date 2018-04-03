@@ -8,7 +8,10 @@
 #include <string>
 #include <type_traits>
 #include <array>
+#include <functional>
+#include <map>
 #include <stack>
+#include <unordered_map>
 
 #ifdef _WIN32
 	// TODO: Use pimpl to move this into win32/windowimpl.cpp
