@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "freetype.hpp"
 #include "jngl/input.hpp"
 
 #include <string>
@@ -26,8 +25,9 @@
 #endif
 
 namespace jngl {
-	class WindowImpl;
+	class FontImpl;
 	class Job;
+	class WindowImpl;
 	class Work;
 
 	class Window {

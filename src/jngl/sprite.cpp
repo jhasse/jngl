@@ -7,10 +7,11 @@
 
 #include "sprite.hpp"
 
-#include "screen.hpp"
-#include "debug.hpp"
-#include "../windowptr.hpp"
+#include "../freetype.hpp"
 #include "../main.hpp"
+#include "../windowptr.hpp"
+#include "debug.hpp"
+#include "screen.hpp"
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/bind.hpp>

@@ -3,6 +3,8 @@
 
 #include "spriteimpl.hpp"
 
+#include "texture.hpp"
+
 namespace jngl
 {
 	unsigned char spriteColorRed = 255, spriteColorGreen = 255, spriteColorBlue = 255, spriteColorAlpha = 255;

@@ -5,11 +5,12 @@
 #include <png.h> // We need to include it first, I don't know why
 #endif
 
-#include "../window.hpp"
+#include "../jngl/debug.hpp"
+#include "../jngl/Finally.hpp"
 #include "../main.hpp"
+#include "../window.hpp"
 #include "sdl.hpp"
 #include "windowimpl.hpp"
-#include "../jngl/debug.hpp"
 
 #include <cassert>
 

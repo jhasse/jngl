@@ -3,11 +3,12 @@
 
 #include "text.hpp"
 
-#include "font.hpp"
-#include "screen.hpp"
-#include "../spriteimpl.hpp"
+#include "../freetype.hpp"
 #include "../helper.hpp"
+#include "../spriteimpl.hpp"
+#include "font.hpp"
 #include "matrix.hpp"
+#include "screen.hpp"
 
 namespace jngl {
 	class Line : public jngl::Drawable {
