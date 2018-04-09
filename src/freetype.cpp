@@ -2,10 +2,11 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "freetype.hpp"
+
+#include "helper.hpp"
 #include "jngl/debug.hpp"
 #include "jngl/screen.hpp"
 #include "main.hpp"
-#include "helper.hpp"
 
 #include FT_GLYPH_H
 #include <boost/lexical_cast.hpp>

@@ -3,13 +3,12 @@
 
 #pragma once
 
+#include "dll.hpp"
 #include "drawable.hpp"
 
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
-
-#include "dll.hpp"
 
 namespace jngl {
 	enum class Alignment {

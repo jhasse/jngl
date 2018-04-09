@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <memory>
-
 #include "dll.hpp"
+
+#include <memory>
 
 namespace jngl {
 	class JNGLDLL_API Work {

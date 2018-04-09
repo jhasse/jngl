@@ -9,10 +9,10 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include <vector>
-#include <string>
-#include <stdexcept>
 #include <map>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 namespace jngl {
 

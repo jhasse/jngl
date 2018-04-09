@@ -6,31 +6,33 @@
 #include "window.hpp"
 
 namespace jngl {
-	Float factor = 1;
 
-	Float getScaleFactor() {
-		return factor;
-	}
+Float factor = 1;
 
-	void setScaleFactor(Float f) {
-		factor = f;
-	}
-
-	int getScreenWidth() {
-		return static_cast<int>(getWindowWidth() / factor);
-	}
-
-	int getScreenHeight() {
-		return static_cast<int>(getWindowHeight() / factor);
-	}
-
-	bool deviceOrientationSupported[] = { false, false, true, true };
-
-	void setDeviceOrientationSupported(DeviceOrientation i, bool enabled) {
-		deviceOrientationSupported[i] = enabled;
-	}
-
-	bool getDeviceOrientationSupported(DeviceOrientation i) {
-		return deviceOrientationSupported[i];
-	}
+Float getScaleFactor() {
+	return factor;
 }
+
+void setScaleFactor(Float f) {
+	factor = f;
+}
+
+int getScreenWidth() {
+	return static_cast<int>(getWindowWidth() / factor);
+}
+
+int getScreenHeight() {
+	return static_cast<int>(getWindowHeight() / factor);
+}
+
+bool deviceOrientationSupported[] = { false, false, true, true };
+
+void setDeviceOrientationSupported(DeviceOrientation i, bool enabled) {
+	deviceOrientationSupported[i] = enabled;
+}
+
+bool getDeviceOrientationSupported(DeviceOrientation i) {
+	return deviceOrientationSupported[i];
+}
+
+} // namespace jngl

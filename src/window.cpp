@@ -6,8 +6,8 @@
 #include "freetype.hpp"
 #include "jngl.hpp"
 
-#include <cmath>
 #include <chrono>
+#include <cmath>
 #include <thread>
 
 namespace jngl {

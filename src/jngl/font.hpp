@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include <string>
-#include <memory>
-
 #include "color.hpp"
 #include "dll.hpp"
 #include "Vec2.hpp"
+
+#include <memory>
+#include <string>
 
 namespace jngl {
 	class FontImpl;

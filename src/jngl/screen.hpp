@@ -3,9 +3,8 @@
 
 #pragma once
 
-#include "types.hpp"
-
 #include "dll.hpp"
+#include "types.hpp"
 
 namespace jngl {
 	Float JNGLDLL_API getScaleFactor();
