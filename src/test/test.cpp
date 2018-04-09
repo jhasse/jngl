@@ -12,7 +12,7 @@
 #include <vector>
 
 void drawBackground();
-void drawMouse(int, int);
+void drawMouse(jngl::Vec2);
 void testKeys();
 int performance = 1;
 double factor = 0;
@@ -57,6 +57,7 @@ public:
 			fb2.beginDraw();
 			fb2.clear();
 		}
+		jngl::pushMatrix();
 		jngl::translate(-jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
 		jngl::pushMatrix();
 		lastTime = jngl::getTime();
@@ -149,7 +150,8 @@ public:
 		if (jngl::keyPressed('f')) {
 			drawOnFrameBuffer = !drawOnFrameBuffer;
 		}
-		drawMouse(jngl::getMouseX(), jngl::getMouseY());
+		jngl::popMatrix();
+		drawMouse(jngl::getMousePos());
 		if (++frameNumber == 500) {
 			std::cout << "It took " << jngl::getTime() - frameTime
 			          << " seconds to render 500 frames." << std::endl;
@@ -214,17 +216,17 @@ void drawBackground() {
 	jngl::drawEllipse(80, 400, 50, 80);
 }
 
-void drawMouse(int x, int y) {
+void drawMouse(const jngl::Vec2 mouse) {
 	unsigned char red, green, blue;
-	jngl::readPixel(jngl::getMouseX(), jngl::getMouseY(), red, green, blue);
+	jngl::readPixel(mouse.x, mouse.y, red, green, blue);
 	std::stringstream sstream;
 	sstream << "R: " << static_cast<int>(red)
 	      << "\nG: " << static_cast<int>(green)
 	      << "\nB: " << static_cast<int>(blue);
 	jngl::setFontSize(8);
 	jngl::setFontColor(0, 255, 0, 200);
-	jngl::print(sstream.str(), x + 30, y + 10);
-	jngl::translate(x, y);
+	jngl::print(sstream.str(), mouse.x + 30, mouse.y + 10);
+	jngl::translate(mouse.x, mouse.y);
 	jngl::rotate(-45);
 	jngl::setFontSize(30);
 	jngl::setFontColor(10, 10, 200);
@@ -258,8 +260,8 @@ private:
 
 void testKeys() {
 	jngl::setRelativeMouseMode(true);
-	int xpos = 400;
-	int ypos = 300;
+	double xpos = 0;
+	double ypos = 0;
 	std::map<std::string, jngl::key::KeyType> keys;
 	keys["Left"] = jngl::key::Left;
 	keys["Up"] = jngl::key::Up;
@@ -303,6 +305,7 @@ void testKeys() {
 	while (jngl::running()) {
 		jngl::updateInput();
 		jngl::setFontSize(10);
+		jngl::pushMatrix();
 		jngl::translate(-400, -300);
 		int y = 10;
 		for (const auto& it : keys) {
@@ -364,7 +367,7 @@ void testKeys() {
 			return k.GetAlpha() <= 0;
 		}), end);
 		std::stringstream sstream;
-		sstream << "X: " << jngl::getMouseX() << "\nY: " << jngl::getMouseY() << std::endl;
+		sstream << "X: " << jngl::getMousePos().x << "\nY: " << jngl::getMousePos().y << std::endl;
 		jngl::print(sstream.str(), 5, 5);
 		size_t controllerNr = 1;
 		for (const auto& controller : jngl::getConnectedControllers()) {
@@ -394,10 +397,11 @@ void testKeys() {
 			jngl::print(sstream.str(), 558, 50 + controllerNr * 110);
 			++controllerNr;
 		}
+		jngl::popMatrix();
 		if (jngl::getRelativeMouseMode()) {
-			xpos += jngl::getMouseX();
-			ypos += jngl::getMouseY();
-			drawMouse(xpos, ypos);
+			xpos += jngl::getMousePos().x;
+			ypos += jngl::getMousePos().y;
+			drawMouse({xpos, ypos});
 		}
 		if (jngl::keyPressed(jngl::key::Escape)) {
 			jngl::setRelativeMouseMode(false);

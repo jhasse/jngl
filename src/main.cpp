@@ -171,6 +171,9 @@ void setBackgroundColor(const unsigned char red, const unsigned char green,
 }
 
 Vec2 getMousePos() {
+	if (getRelativeMouseMode()) {
+		return { pWindow->getMouseX() / getScaleFactor(), pWindow->getMouseY() / getScaleFactor() };
+	}
 	return { pWindow->getMouseX() / getScaleFactor() - getScreenWidth() / 2,
 		     pWindow->getMouseY() / getScaleFactor() - getScreenHeight() / 2 };
 }
@@ -208,7 +211,7 @@ bool mousePressed(mouse::Button button) {
 }
 
 void setMouse(const int xposition, const int yposition) {
-	pWindow->SetMouse(xposition, yposition);
+	pWindow->SetMouse(xposition + getScreenWidth() / 2, yposition + getScreenHeight() / 2);
 }
 
 void setRelativeMouseMode(const bool relative) {
