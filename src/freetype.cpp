@@ -201,6 +201,7 @@ namespace jngl {
 		y = int(y * getScaleFactor());
 		std::vector<std::string> lines(splitlines(text));
 
+		glPushAttrib(GL_CURRENT_BIT | GL_ENABLE_BIT);
 		glColor4ub(fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha);
 		glEnable(GL_TEXTURE_2D);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -219,8 +220,7 @@ namespace jngl {
 
 			glPopMatrix();
 		}
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisable(GL_TEXTURE_2D);
+		glPopAttrib();
 	}
 
 	FT_Library FontImpl::library;
