@@ -5,10 +5,8 @@
 
 namespace jngl {
 
+Vec2::Vec2() : x(0), y(0) {}
+
 Vec2::Vec2(const double x, const double y) : x(x), y(y) {}
 
 } // namespace jngl
-
-jngl::Vec2 operator/(const jngl::Vec2& lhs, const double v) {
-	return {lhs.x / v, lhs.y / v};
-}

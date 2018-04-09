@@ -9,6 +9,9 @@ namespace jngl {
 
 class Vec2 {
 public:
+	/// Null vector
+	Vec2();
+
 	Vec2(double x, double y);
 
 	double x;
@@ -16,8 +19,6 @@ public:
 };
 
 } // namespace jngl
-
-jngl::Vec2 operator/(const jngl::Vec2& lhs, const double v);
 
 #if BOOST_VERSION >= 106200
 #include <boost/qvm/vec_traits.hpp>
@@ -44,4 +45,13 @@ template <> struct vec_traits<jngl::Vec2> {
 };
 } // namespace qvm
 } // namespace boost
+
+#include <boost/qvm/vec_operations.hpp>
+
+using boost::qvm::operator+=;
+using boost::qvm::operator*=;
+using boost::qvm::operator/=;
+using boost::qvm::operator-=;
+using boost::qvm::operator==;
+using boost::qvm::operator!=;
 #endif
