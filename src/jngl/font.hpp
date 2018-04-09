@@ -8,6 +8,7 @@
 
 #include "color.hpp"
 #include "dll.hpp"
+#include "Vec2.hpp"
 
 namespace jngl {
 	class FontImpl;
@@ -17,6 +18,8 @@ namespace jngl {
 		JNGLDLL_API Font(const std::string& filename, unsigned int size);
 		std::shared_ptr<FontImpl> JNGLDLL_API getImpl();
 		void JNGLDLL_API print(const std::string&, int x, int y);
+		void JNGLDLL_API print(const std::string&, Vec2 position);
+
 	private:
 		std::shared_ptr<FontImpl> impl;
 	};
