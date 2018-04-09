@@ -16,6 +16,11 @@ public:
 
 	double x;
 	double y;
+
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int) {
+		ar(x, y);
+	}
 };
 
 } // namespace jngl
