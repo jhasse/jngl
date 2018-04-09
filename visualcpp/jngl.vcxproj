@@ -28,6 +28,7 @@
     <ClCompile Include="..\src\jngl\sprite.cpp" />
     <ClCompile Include="..\src\jngl\text.cpp" />
     <ClCompile Include="..\src\jngl\time.cpp" />
+    <ClCompile Include="..\src\jngl\Vec2.cpp" />
     <ClCompile Include="..\src\jngl\window.cpp" />
     <ClCompile Include="..\src\jngl\work.cpp" />
     <ClCompile Include="..\src\main.cpp" />

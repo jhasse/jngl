@@ -117,6 +117,9 @@
     <ClCompile Include="..\src\jngl\time.cpp">
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\jngl\Vec2.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\jngl\Finally.hpp">
