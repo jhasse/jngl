@@ -10,7 +10,7 @@ clang:
   image: base/archlinux
   stage: build
   script:
-    - pacman -Syu --needed --noconfirm meson sdl2 pkg-config fontconfig libepoxy udev libwebp openal libvorbis boost clang-tools-extra python2
+    - pacman -Syu --needed --noconfirm meson sdl2 pkg-config fontconfig libepoxy udev libwebp openal libvorbis boost clang-tools-extra python2-yaml
     - CC=clang CXX=clang++ meson build
     - cd build
     - TERM=xterm script -qfc "ninja" /dev/null
