@@ -3,14 +3,11 @@
 
 #pragma once
 
-#include <boost/version.hpp>
-#if BOOST_VERSION >= 106200
-#include <boost/qvm/vec.hpp>
-#endif
+#include "dll.hpp"
+#include "Vec2.hpp"
+
 #include <vector>
 #include <memory>
-
-#include "dll.hpp"
 
 namespace jngl {
 	namespace key {
@@ -109,9 +106,7 @@ namespace jngl {
 
 	bool JNGLDLL_API isMultitouch();
 
-#if BOOST_VERSION >= 106200
-	boost::qvm::vec<double, 2> JNGLDLL_API getMousePos();
-#endif
+	Vec2 JNGLDLL_API getMousePos();
 
 	[[deprecated("Use jngl::getMousePos() instead")]]
 	int JNGLDLL_API getMouseX();

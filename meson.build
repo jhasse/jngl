@@ -11,19 +11,13 @@ endif
 
 src = [
 	'src/audio.cpp',
-	'src/jngl/Finally.cpp',
 	'src/framebufferimpl.cpp',
 	'src/freetype.cpp',
 	'src/helper.cpp',
-	'src/main.cpp',
-	'src/opengl.cpp',
-	'src/spriteimpl.cpp',
-	'src/texture.cpp',
-	'src/window.cpp',
-	'src/windowptr.cpp',
 	'src/jngl/color.cpp',
 	'src/jngl/Controller.cpp',
 	'src/jngl/drawable.cpp',
+	'src/jngl/Finally.cpp',
 	'src/jngl/font.cpp',
 	'src/jngl/framebuffer.cpp',
 	'src/jngl/input.cpp',
@@ -33,8 +27,15 @@ src = [
 	'src/jngl/sprite.cpp',
 	'src/jngl/text.cpp',
 	'src/jngl/time.cpp',
+	'src/jngl/Vec2.cpp',
 	'src/jngl/window.cpp',
 	'src/jngl/work.cpp',
+	'src/main.cpp',
+	'src/opengl.cpp',
+	'src/spriteimpl.cpp',
+	'src/texture.cpp',
+	'src/window.cpp',
+	'src/windowptr.cpp',
 ]
 cpp_args = []
 
