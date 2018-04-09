@@ -3,11 +3,13 @@
 
 #pragma once
 
+#include "dll.hpp"
+
 #include <boost/version.hpp>
 
 namespace jngl {
 
-class Vec2 {
+class JNGLDLL_API Vec2 {
 public:
 	/// Null vector
 	Vec2();
