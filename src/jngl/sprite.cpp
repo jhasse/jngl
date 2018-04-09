@@ -51,7 +51,7 @@ namespace jngl {
 	}
 #endif
 
-	Sprite::Sprite(const std::string& shortFilename, LoadType loadType) : texture(getTexture(shortFilename)) {
+	Sprite::Sprite(const std::string& filename, LoadType loadType) : texture(getTexture(filename)) {
 		if (texture) {
 			width = texture->getWidth();
 			height = texture->getHeight();
@@ -60,9 +60,9 @@ namespace jngl {
 		}
 		const bool halfLoad = (loadType == LoadType::HALF);
 		if (!halfLoad) {
-			jngl::debug("Creating sprite "); jngl::debug(shortFilename); jngl::debug("... ");
+			jngl::debug("Creating sprite "); jngl::debug(filename); jngl::debug("... ");
 		}
-		auto filename = pathPrefix + shortFilename;
+		auto fullFilename = pathPrefix + filename;
 		const char* extensions[] = {
 #ifndef NOWEBP
 			".webp",
@@ -90,20 +90,20 @@ namespace jngl {
 		const size_t size = sizeof(extensions)/sizeof(extensions[0]);
 		std::function<Finally(Sprite*, std::string, FILE*, bool)> loadFunction;
 		for (size_t i = 0; i < size; ++i) {
-			if (boost::algorithm::ends_with(filename, extensions[i])) {
+			if (boost::algorithm::ends_with(fullFilename, extensions[i])) {
 				loadFunction = functions[i];
 				break;
 			}
-			std::string tmp = filename + extensions[i];
+			std::string tmp = fullFilename + extensions[i];
 			if (std::ifstream(tmp.c_str())) {
-				filename += extensions[i];
+				fullFilename += extensions[i];
 				loadFunction = functions[i];
 				break;
 			}
 		}
 		if (!loadFunction) {
 			std::ostringstream message;
-			message << "No suitable image file found for: " << filename
+			message << "No suitable image file found for: " << fullFilename
 			        << "\nSupported file extensions: ";
 			for (size_t i = 0; i < size; ++i) {
 				if (i) {
@@ -113,11 +113,11 @@ namespace jngl {
 			}
 			throw std::runtime_error(message.str());
 		}
-		FILE* pFile = fopen(filename.c_str(), "rb");
+		FILE* pFile = fopen(fullFilename.c_str(), "rb");
 		if (!pFile) {
-			throw std::runtime_error(std::string("File not found: " + filename));
+			throw std::runtime_error(std::string("File not found: " + fullFilename));
 		}
-		auto loadTexture = std::make_shared<Finally>(loadFunction(this, shortFilename, pFile, halfLoad));
+		auto loadTexture = std::make_shared<Finally>(loadFunction(this, filename, pFile, halfLoad));
 		loader = std::make_shared<Finally>([pFile, loadTexture, halfLoad, this]() mutable {
 			loadTexture.reset(); // call ~Finally
 			fclose(pFile);
