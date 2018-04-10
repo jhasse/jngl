@@ -105,6 +105,7 @@ namespace jngl {
 		std::string GetFontFileByName(const std::string& fontname);
 
 		double timePerStep = 1.0 / 60.0;
+		unsigned int maxStepsPerFrame = 3;
 		bool fullscreen_, running_, isMouseVisible_, relativeMouseMode, anyKeyPressed_;
 		bool isMultisampleSupported_ = true;
 		std::array<bool, 3> mouseDown_;

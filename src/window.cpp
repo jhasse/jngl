@@ -207,6 +207,8 @@ namespace jngl {
 
 	void Window::setStepsPerSecond(const unsigned int stepsPerSecond) {
 		timePerStep = 1.0 / static_cast<double>(stepsPerSecond);
+		maxStepsPerFrame =
+		    std::lround(1.0 / 20.0 / timePerStep); // Never drop below 20 FPS, instead slow down
 	}
 
 	void Window::stepIfNeeded() {
@@ -259,7 +261,7 @@ namespace jngl {
 			// don't round up exactly to be a little bit "optimistic" of what we can do.
 			auto newStepsPerFrame = std::min(static_cast<unsigned int>(std::max(1,
 			    int(0.98 + stepsPerFrame * targetStepsPerSecond / cappedOrDoable))),
-				stepsPerFrame * 2); // never increase too much
+				std::min(stepsPerFrame * 2, maxStepsPerFrame)); // never increase too much
 			// Divide doableStepsPerSecond by the previous stepsPerFrame and multiply it with
 			// newStepsPerFrame so that we know what can be doable in the future and not what
 			// could have been doable:
