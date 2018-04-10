@@ -232,10 +232,7 @@ namespace jngl {
 				maxFPS += sleepPerFrame;
 			}
 			previousStepsPerFrame = stepsPerFrame;
-			auto cappedOrDoable = doableStepsPerSecond;
-			if (doableStepsPerSecond > maxFPS) {
-				cappedOrDoable = maxFPS * stepsPerFrame;
-			}
+			const auto cappedOrDoable = std::min(doableStepsPerSecond, maxFPS * stepsPerFrame);
 			// TODO: Improve logging. Log level? jngl::trace?
 			jngl::debug("SPS: ");
 			jngl::debug(std::lround(actualStepsPerSecond));
