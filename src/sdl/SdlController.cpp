@@ -33,7 +33,7 @@ float SdlController::stateWithoutDeadzone(controller::Button button) const {
 		case controller::RightStickY: axisIndex = xboxWired ? 3 : 4; break;
 		case controller::LeftTrigger: axisIndex = xboxWired ? 5 : 2; break;
 		case controller::RightTrigger: axisIndex = xboxWired ? 4 : 5; break;
-		default: return down(button);
+		default: return down(button) ? 1 : 0;
 	}
 	float state = SDL_JoystickGetAxis(handle, axisIndex);
 	if (state < 0) {

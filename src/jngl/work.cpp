@@ -1,4 +1,4 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "all.hpp"
@@ -12,7 +12,6 @@ void Work::onQuitEvent() {
 void Work::onLoad() {
 }
 
-Work::~Work() {
-}
+Work::~Work() = default;
 
 } // namespace jngl
