@@ -80,6 +80,9 @@ void drawRect1(double xposition, double yposition, double width, double height) 
 void print1(const std::string& text, float x, float y) {
 	return print(text, int(x), int(y));
 }
+void loadWrapper(const std::string& filename) {
+	load(filename);
+}
 
 struct DrawableWrap : Drawable, wrapper<Drawable> {
 	void step() override {
@@ -108,6 +111,11 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 		.def("draw", &Sprite::draw)
 	;
 
+	class_<Vec2>("Vec2", init<Float, Float>())
+		.def_readwrite("x", &Vec2::x)
+		.def_readwrite("y", &Vec2::y)
+	;
+
 	def("showWindow", showWindow1);
 	def("showWindow", showWindow2);
 	def("running", running);
@@ -131,15 +139,14 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("pushMatrix", pushMatrix);
 	def("popMatrix", popMatrix);
 	def("reset", reset);
-	def("load", load);
+	def("load", loadWrapper);
 	def("unload", unload);
 	def("getWidth", getWidth);
 	def("getHeight", getHeight);
 	def("getTime", getTime);
 	def("setMouseVisible", setMouseVisible);
 	def("isMouseVisible", isMouseVisible);
-	def("getMouseX", getMouseX);
-	def("getMouseY", getMouseY);
+	def("getMousePos", getMousePos);
 
 	enum_<mouse::Button>("mouse")
         .value("Left", mouse::Left)
@@ -225,7 +232,6 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("keyPressed", keyPressed2);
 	def("play", play);
 	def("stop", stop);
-	def("load", load);
 	def("isPlaying", isPlaying);
 	def("isOpenALInstalled", isOpenALInstalled);
 	def("setPlaybackSpeed", setPlaybackSpeed);
