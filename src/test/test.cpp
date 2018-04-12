@@ -176,10 +176,12 @@ private:
 	float volume = 1;
 };
 
-JNGL_MAIN_BEGIN
+JNGL_MAIN_BEGIN {
 	try {
-		std::cout << "Size of Desktop: " << jngl::getDesktopWidth()
-		          << "x" << jngl::getDesktopHeight() << std::endl;
+		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
+		          << jngl::getDesktopHeight() << std::endl
+		          << "Size of jngl.png: " << jngl::getWidth("jngl.png") << "x"
+		          << jngl::getHeight("jngl.png") << std::endl;
 		jngl::showWindow("setTitle not working!", 800, 600);
 		jngl::setWork(new Test);
 		jngl::mainLoop();
@@ -187,7 +189,7 @@ JNGL_MAIN_BEGIN
 		jngl::errorMessage(e.what());
 	}
 	jngl::hideWindow();
-}
+} JNGL_MAIN_END
 
 void drawBackground() {
 	jngl::setSpriteAlpha(100);
@@ -410,4 +412,4 @@ void testKeys() {
 		}
 		jngl::swapBuffers();
 	}
-JNGL_MAIN_END
+}
