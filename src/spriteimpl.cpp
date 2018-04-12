@@ -50,7 +50,7 @@ std::unordered_map<std::string, std::shared_ptr<Sprite>> sprites_;
 Sprite& GetSprite(const std::string& filename, const Sprite::LoadType loadType) {
 	auto it = sprites_.find(filename);
 	if (it == sprites_.end()) { // texture hasn't been loaded yet?
-		if (loadType == Sprite::LoadType::HALF) {
+		if (loadType != Sprite::LoadType::HALF) {
 			pWindow.ThrowIfNull();
 		}
 		auto s = new Sprite(filename, loadType);
