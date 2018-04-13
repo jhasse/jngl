@@ -3,14 +3,16 @@
 
 #pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace jngl {
-	void clearBackgroundColor();
 
-	bool Init(int width, int height, int screenWidth, int screenHeight);
+void clearBackgroundColor();
 
-	extern std::string pathPrefix;
-	extern std::vector<std::string> args;
-}
+bool Init(int width, int height, int screenWidth, int screenHeight);
+
+extern std::string pathPrefix;
+extern std::vector<std::string> args;
+
+} // namespace jngl
