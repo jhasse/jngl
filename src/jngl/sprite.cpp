@@ -14,7 +14,6 @@
 #include "screen.hpp"
 
 #include <boost/algorithm/string/predicate.hpp>
-#include <boost/bind.hpp>
 #include <fstream>
 #include <sstream>
 #include <thread>
@@ -211,7 +210,9 @@ namespace jngl {
 				throw std::runtime_error(std::string("Unsupported number of channels. (" + filename + ")"));
 		}
 
-		Finally freePng(boost::bind(png_destroy_read_struct, &png_ptr, &info_ptr, (png_infop*)nullptr));
+		Finally freePng([&png_ptr, &info_ptr]() {
+			png_destroy_read_struct(&png_ptr, &info_ptr, static_cast<png_infop*>(nullptr));
+		});
 		unsigned char** rowPointers = png_get_rows(png_ptr, info_ptr);
 		width = static_cast<int>(png_get_image_width(png_ptr, info_ptr));
 		height = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
@@ -248,7 +249,7 @@ namespace jngl {
 		for (auto i = buf.begin(); i != buf.end(); ++i) {
 			*i = new unsigned char[header.width * 3];
 		}
-		Finally cleanUp(boost::bind(cleanUpRowPointers, boost::ref(buf)));
+		Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
 
 		if (header.height < 0) {
 			header.height = !header.height;
@@ -304,7 +305,7 @@ namespace jngl {
 		for (auto i = buf.begin(); i != buf.end(); ++i) {
 			*i = new unsigned char[width * channels];
 		}
-		Finally cleanUp(boost::bind(cleanUpRowPointers, boost::ref(buf)));
+		Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
 
 		while (info.output_scanline < info.output_height) {
 			jpeg_read_scanlines(&info, reinterpret_cast<JSAMPLE**>(&buf[info.output_scanline]), 1);
