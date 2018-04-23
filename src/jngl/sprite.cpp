@@ -233,18 +233,18 @@ namespace jngl {
 		if (!fread(&header, sizeof(header), 1, fp))
 			throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
 
-		if (header.headerSize != 40)
+		if (header.headerSize != 40) {
 			throw std::runtime_error(std::string("Unsupported header size. (" + filename + ")"));
-
-		if (header.bpp != 24)
+		}
+		if (header.bpp != 24) {
 			throw std::runtime_error(std::string("Bpp not supported. (" + filename + ")"));
-
-		if (header.compression != 0)
+		}
+		if (header.compression != 0) {
 			throw std::runtime_error(std::string("Compression not supported. (" + filename + ")"));
-
-		if (header.dataSize == 0)
+		}
+		if (header.dataSize == 0) {
 			header.dataSize = header.width * header.height * 3;
-
+		}
 		std::vector<unsigned char*> buf(header.height);
 		for (auto i = buf.begin(); i != buf.end(); ++i) {
 			*i = new unsigned char[header.width * 3];
@@ -254,17 +254,21 @@ namespace jngl {
 		if (header.height < 0) {
 			header.height = !header.height;
 			for (int i = 0; i < header.height; ++i) {
-				if(fseek(fp, header.dataOffset + i * header.width * 3, SEEK_SET) != 0)
+				if (fseek(fp, header.dataOffset + i * header.width * 3, SEEK_SET) != 0) {
 					throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
-				if(!fread(buf[i], header.width * 3, 1, fp))
+				}
+				if (!fread(buf[i], header.width * 3, 1, fp)) {
 					throw std::runtime_error(std::string("Error reading data. (" + filename + ")"));
+				}
 			}
 		} else { // "bottom-up"-Bitmap
 			for (int i = header.height - 1; i >= 0; --i) {
-				if (fseek(fp, header.dataOffset + i * header.width * 3, SEEK_SET) != 0)
+				if (fseek(fp, header.dataOffset + i * header.width * 3, SEEK_SET) != 0) {
 					throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
-				if (!fread(buf[(header.height - 1) - i], header.width * 3, 1, fp))
+				}
+				if (!fread(buf[(header.height - 1) - i], header.width * 3, 1, fp)) {
 					throw std::runtime_error(std::string("Error reading data. (" + filename + ")"));
+				}
 			}
 		}
 		loadTexture(filename, halfLoad, GL_BGR, &buf[0]);

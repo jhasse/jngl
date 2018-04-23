@@ -37,7 +37,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	impl->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
 	                                   SDL_WINDOWPOS_CENTERED, width, height, flags);
 
-	if (!impl->sdlWindow) {
+	if (impl->sdlWindow == nullptr) {
 		throw std::runtime_error(SDL_GetError());
 	}
 
@@ -128,7 +128,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 			mousey_ = 0;
 		}
 		SDL_Event event;
-		while(SDL_PollEvent(&event)) {
+		while (SDL_PollEvent(&event) != 0) {
 			switch(event.type) {
 				case SDL_QUIT:
 					running_ = false;
@@ -182,7 +182,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 				}
 				case SDL_KEYDOWN: {
 					static bool wasFullscreen = fullscreen_;
-					if (event.key.repeat && fullscreen_ != wasFullscreen) {
+					if (event.key.repeat != 0u && fullscreen_ != wasFullscreen) {
 						// SDL2 with Xorg has a bug, that it sends a key repeat event when toggling
 						// fullscreen. So let's ignore the second event
 						break;
@@ -275,7 +275,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	void Window::SetIcon(const std::string& filename) {
 #ifndef NOPNG
 		FILE* fp = fopen(filename.c_str(), "rb");
-		if (!fp) {
+		if (fp == nullptr) {
 			throw std::runtime_error(std::string("File not found: ") + filename);
 		}
 		Finally _([&fp]() {
@@ -290,12 +290,12 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		}
 		assert(png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) == 0);
 		png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
-		if (!png_ptr) {
+		if (png_ptr == nullptr) {
 			throw std::runtime_error("libpng error while reading");
 		}
 
 		png_infop info_ptr = png_create_info_struct(png_ptr);
-		if (!info_ptr) {
+		if (info_ptr == nullptr) {
 			throw std::runtime_error("libpng error while reading");
 		}
 
@@ -326,7 +326,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		    SDL_CreateRGBSurfaceFrom(&imageData[0], x, y, channels * 8, channels * x, 0x000000ff,
 		                             0x0000ff00, 0x00ff0000, 0xff000000);
 
-		if (!surface) {
+		if (surface == nullptr) {
 			jngl::debugLn(SDL_GetError());
 			return;
 		}

@@ -13,7 +13,7 @@
 namespace jngl {
 	class Line : public jngl::Drawable {
 	public:
-		Line(const std::string& text, std::shared_ptr<FontImpl> font) : text(text) {
+		Line(std::string text, std::shared_ptr<FontImpl> font) : text(std::move(text)) {
 			setFont(std::move(font));
 		}
 		void setFont(std::shared_ptr<FontImpl> font) {
@@ -91,4 +91,4 @@ namespace jngl {
 		jngl::popMatrix();
 		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
-}
+} // namespace jngl

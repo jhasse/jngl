@@ -3,9 +3,9 @@
 
 #include <iostream>
 #include <string>
-#include <unistd.h>    // fork
 #include <sys/types.h> // pid_t
 #include <sys/wait.h>  // waitpid
+#include <unistd.h>    // fork
 
 namespace jngl {
 
