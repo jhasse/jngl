@@ -229,7 +229,7 @@ namespace jngl {
 			    (secondsSinceLastCheck - timeSleptSinceLastCheck);
 			if (previousStepsPerFrame > stepsPerFrame &&
 			    actualStepsPerSecond < targetStepsPerSecond) {
-				maxFPS = 0.5 * maxFPS + 0.5 * actualStepsPerSecond;
+				maxFPS = 0.5 * maxFPS + 0.5 * actualStepsPerSecond / stepsPerFrame;
 			} else {
 				maxFPS += sleepPerFrame;
 			}
