@@ -12,8 +12,8 @@ namespace jngl {
 class Finally {
 public:
 	explicit Finally(std::function<void()> functionToCall);
-	Finally(Finally&&);
-	Finally& operator=(Finally&&);
+	Finally(Finally&&) noexcept;
+	Finally& operator=(Finally&&) noexcept;
 	Finally(const Finally&) = delete;
 	Finally& operator=(const Finally&) = delete;
 	JNGLDLL_API ~Finally();
