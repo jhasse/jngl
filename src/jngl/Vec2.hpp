@@ -6,6 +6,7 @@
 #include "dll.hpp"
 
 #include <boost/version.hpp>
+#include <iosfwd>
 
 namespace jngl {
 
@@ -19,13 +20,14 @@ public:
 	double x;
 	double y;
 
-	template<class Archive>
-	void serialize(Archive& ar, const unsigned int) {
+	template <class Archive> void serialize(Archive& ar, const unsigned int) {
 		ar(x, y);
 	}
 };
 
 } // namespace jngl
+
+std::ostream& operator<<(std::ostream&, const jngl::Vec2&);
 
 #if BOOST_VERSION >= 106200
 #include <boost/qvm/vec_traits.hpp>
