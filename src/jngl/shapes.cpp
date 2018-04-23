@@ -12,6 +12,10 @@ namespace jngl {
 		setColor(color.getRed(), color.getGreen(), color.getBlue());
 	}
 
+	void setColor(const jngl::Color color, const unsigned char alpha) {
+		setColor(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+	}
+
 	void setColor(unsigned char red, unsigned char green, unsigned char blue) {
 		colorRed = red;
 		colorGreen = green;

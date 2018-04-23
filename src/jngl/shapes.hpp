@@ -10,6 +10,8 @@ namespace jngl {
 
 void JNGLDLL_API setColor(jngl::Color);
 
+void JNGLDLL_API setColor(jngl::Color, unsigned char alpha);
+
 void JNGLDLL_API setColor(unsigned char red, unsigned char green, unsigned char blue);
 
 void JNGLDLL_API setColor(unsigned char red, unsigned char green, unsigned char blue,
