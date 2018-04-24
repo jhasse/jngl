@@ -5,6 +5,7 @@
 
 #include "dll.hpp"
 #include "color.hpp"
+#include "Vec2.hpp"
 
 namespace jngl {
 
@@ -29,6 +30,10 @@ void JNGLDLL_API drawLine(double xstart, double ystart, double xend, double yend
 
 void JNGLDLL_API drawEllipse(float xmid, float ymid, float width, float height,
                              float startAngle = 0);
+
+void JNGLDLL_API drawEllipse(Vec2, float width, float height, float startAngle = 0);
+
+void JNGLDLL_API drawCircle(Vec2, float radius, float startAngle = 0);
 
 void JNGLDLL_API drawPoint(double x, double y);
 

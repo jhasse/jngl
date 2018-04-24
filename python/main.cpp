@@ -130,7 +130,7 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("drawScaled", drawScaled2);
 	def("drawRect", drawRect1);
 	def("drawLine", drawLine);
-	def("drawEllipse", drawEllipse);
+	def("drawEllipse", static_cast<void(*)(float, float, float, float, float)>(drawEllipse));
 	def("drawPoint", drawPoint);
 	def("rotate", rotate);
 	def("translate", static_cast<void(*)(jngl::Float, jngl::Float)>(translate));
