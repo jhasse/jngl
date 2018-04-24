@@ -58,7 +58,7 @@ void drawEllipse(const Vec2 position, const float width, const float height,
 }
 
 void drawCircle(const Vec2 position, const float radius, const float startAngle) {
-	drawEllipse(position.x, position.y, radius, startAngle);
+	drawEllipse(position.x, position.y, radius, radius, startAngle);
 }
 
 } // namespace jngl
