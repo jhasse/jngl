@@ -65,4 +65,6 @@ using boost::qvm::operator==;
 using boost::qvm::operator!=;
 using boost::qvm::operator+;
 using boost::qvm::operator-;
+using boost::qvm::operator/;
+using boost::qvm::operator*;
 #endif
