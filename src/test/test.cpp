@@ -192,7 +192,6 @@ JNGL_MAIN_BEGIN {
 	} catch(std::exception& e) {
 		jngl::errorMessage(e.what());
 	}
-	jngl::hideWindow();
 } JNGL_MAIN_END
 
 void drawBackground() {

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Finally.hpp"
+
 #if !defined(JNGL_MAIN_BEGIN)
 	#if defined(ANDROID)
 		#include <android_native_app_glue.h>
@@ -15,7 +17,7 @@
 			app_dummy();
 		#define JNGL_MAIN_END }
 	#else
-		#define JNGL_MAIN_BEGIN int main() {
+		#define JNGL_MAIN_BEGIN int main() { jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
 		#define JNGL_MAIN_END }
 	#endif
 #endif
