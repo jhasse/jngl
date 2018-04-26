@@ -179,9 +179,13 @@ private:
 JNGL_MAIN_BEGIN {
 	try {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
-		          << jngl::getDesktopHeight() << std::endl
-		          << "Size of jngl.png: " << jngl::getWidth("jngl.png") << "x"
-		          << jngl::getHeight("jngl.png") << std::endl;
+		          << jngl::getDesktopHeight() << std::endl;
+		try {
+			std::cout << "Size of jngl.png: " << jngl::getWidth("jngl.png") << "x"
+			                                  << jngl::getHeight("jngl.png") << std::endl;
+		} catch (std::runtime_error& e) {
+			std::cout << e.what() << std::endl;
+		}
 		jngl::showWindow("setTitle not working!", 800, 600);
 		jngl::setWork(new Test);
 		jngl::mainLoop();
