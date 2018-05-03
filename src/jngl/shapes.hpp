@@ -42,6 +42,8 @@ void JNGLDLL_API drawTriangle(double A_x, double A_y, double B_x, double B_y, do
 
 void JNGLDLL_API drawRect(double xposition, double yposition, double width, double height);
 
+void JNGLDLL_API drawRect(Vec2 position, Vec2 size);
+
 template <class Vect> void drawRect(Vect pos, Vect size) {
 	drawRect(pos.x, pos.y, size.x, size.y);
 }

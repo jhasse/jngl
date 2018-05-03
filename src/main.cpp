@@ -329,6 +329,10 @@ void drawRect(const double xposition, const double yposition, const double width
 	glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 }
 
+void drawRect(const Vec2 position, const Vec2 size) {
+	drawRect(position.x, position.y, size.x, size.y);
+}
+
 void drawTriangle(const double A_x, const double A_y, const double B_x, const double B_y,
                   const double C_x, const double C_y) {
 	glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
