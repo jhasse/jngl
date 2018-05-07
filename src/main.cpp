@@ -350,6 +350,10 @@ void drawLine(const double xstart, const double ystart, const double xend, const
 	glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 }
 
+void drawLine(const Vec2 start, const Vec2 end) {
+	drawLine(start.x, start.y, end.x, end.y);
+}
+
 void drawPoint(const double x, const double y) {
 	glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 	draw::Point(x, y);

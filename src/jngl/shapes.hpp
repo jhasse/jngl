@@ -26,6 +26,8 @@ void JNGLDLL_API popAlpha();
 
 void JNGLDLL_API setLineWidth(float width);
 
+void JNGLDLL_API drawLine(Vec2 start, Vec2 end);
+
 void JNGLDLL_API drawLine(double xstart, double ystart, double xend, double yend);
 
 void JNGLDLL_API drawEllipse(float xmid, float ymid, float width, float height,
