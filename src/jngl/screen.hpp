@@ -11,9 +11,9 @@ namespace jngl {
 
 	void JNGLDLL_API setScaleFactor(Float);
 
-	int JNGLDLL_API getScreenWidth();
+	double JNGLDLL_API getScreenWidth();
 
-	int JNGLDLL_API getScreenHeight();
+	double JNGLDLL_API getScreenHeight();
 
 	enum DeviceOrientation {
 		Portrait,

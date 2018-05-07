@@ -17,12 +17,12 @@ void setScaleFactor(Float f) {
 	factor = f;
 }
 
-int getScreenWidth() {
-	return static_cast<int>(getWindowWidth() / factor);
+double getScreenWidth() {
+	return static_cast<double>(getWindowWidth()) / factor;
 }
 
-int getScreenHeight() {
-	return static_cast<int>(getWindowHeight() / factor);
+double getScreenHeight() {
+	return static_cast<double>(getWindowHeight()) / factor;
 }
 
 bool deviceOrientationSupported[] = { false, false, true, true };
