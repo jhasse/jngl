@@ -92,7 +92,7 @@ FrameBufferImpl::~FrameBufferImpl() {
 		clearBackgroundColor();
 	}
 
-	void FrameBufferImpl::Draw(const int x, const int y) const {
+	void FrameBufferImpl::Draw(const double x, const double y) const {
 		glPushMatrix();
 		jngl::translate(x, y);
 		glScalef(1.0f, -1.0f, 1.0f);

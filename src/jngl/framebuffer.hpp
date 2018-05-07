@@ -14,7 +14,7 @@ namespace jngl {
 		~FrameBuffer();
 		void beginDraw();
 		void endDraw();
-		void draw(int x, int y) const;
+		void draw(double x, double y) const;
 		void clear();
 	private:
 		FrameBuffer(const FrameBuffer&);

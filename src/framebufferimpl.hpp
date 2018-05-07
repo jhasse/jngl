@@ -14,7 +14,7 @@ public:
 	~FrameBufferImpl();
 	void BeginDraw();
 	void EndDraw();
-	void Draw(int x, int y) const;
+	void Draw(double x, double y) const;
 	void Clear();
 private:
 	GLuint fbo;

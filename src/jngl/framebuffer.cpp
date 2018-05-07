@@ -1,7 +1,5 @@
-/*
-Copyright 2011-2012 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2011-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "framebuffer.hpp"
 #include "../framebufferimpl.hpp"
@@ -14,7 +12,7 @@ namespace jngl {
 		delete pImpl;
 	}
 
-	void FrameBuffer::draw(int x, int y) const {
+	void FrameBuffer::draw(const double x, const double y) const {
 		return pImpl->Draw(x, y);
 	}
 
