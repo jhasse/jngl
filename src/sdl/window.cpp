@@ -5,8 +5,8 @@
 #include <png.h> // We need to include it first, I don't know why
 #endif
 
-#include "../jngl/debug.hpp"
 #include "../jngl/Finally.hpp"
+#include "../jngl/debug.hpp"
 #include "../main.hpp"
 #include "../window.hpp"
 #include "sdl.hpp"
@@ -242,8 +242,8 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		}
 	}
 
-	void Window::SetTitle(const std::string& windowTitle) {
-		SDL_SetWindowTitle(impl->sdlWindow, windowTitle.c_str());
+	void Window::SetTitle(const std::string& title) {
+		SDL_SetWindowTitle(impl->sdlWindow, title.c_str());
 	}
 
 	int Window::getMouseX() {

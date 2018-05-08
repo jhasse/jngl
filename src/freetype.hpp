@@ -20,7 +20,7 @@ extern unsigned char fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha
 
 class Character {
 public:
-	Character(unsigned long ch, unsigned int height, FT_Face);
+	Character(unsigned long ch, unsigned int fontHeight, FT_Face);
 	Character(const Character&) = delete;
 	Character& operator=(const Character&) = delete;
 	~Character();
