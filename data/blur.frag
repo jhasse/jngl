@@ -1,4 +1,4 @@
-#version 130
+#version 120
 
 uniform sampler2D tex;
 
@@ -10,13 +10,13 @@ uniform sampler2D tex;
 const int size = 3;
 
 void main() {
-	float stepSizeX = 1.0 / textureSize(tex, 0).x;
-	float stepSizeY = 1.0 / textureSize(tex, 0).y;
+	float stepSizeX = 1. / 600; // This should be 1/width
+	float stepSizeY = 1. / 300; // and 1/height
 	vec4 sum = vec4(0.0);
 	for (int x = -size; x <= size; x++) {
 		for (int y = -size; y <= size; y++) {
-			sum += texture(tex, vec2(gl_TexCoord[0].x + x * stepSizeX,
-			                         gl_TexCoord[0].y + y * stepSizeY)) /
+			sum += texture2D(tex, vec2(gl_TexCoord[0].x + x * stepSizeX,
+			                           gl_TexCoord[0].y + y * stepSizeY)) /
 			       ((2 * size + 1) * (2 * size + 1));
 		}
 	}

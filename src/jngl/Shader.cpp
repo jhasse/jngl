@@ -5,6 +5,8 @@
 
 #include "../Shader_Impl.hpp"
 
+#include <stdexcept>
+
 namespace jngl {
 
 Shader::Shader(const char* const source, const Type type) : impl(std::make_unique<Impl>()) {
