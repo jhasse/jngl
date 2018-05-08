@@ -105,15 +105,13 @@ namespace jngl {
 			message << "No suitable image file found for: " << fullFilename
 			        << "\nSupported file extensions: ";
 			for (size_t i = 0; i < size; ++i) {
-				if (i) {
-					message << ", ";
-				}
+				if (i != 0) { message << ", "; }
 				message << extensions[i];
 			}
 			throw std::runtime_error(message.str());
 		}
 		FILE* pFile = fopen(fullFilename.c_str(), "rb");
-		if (!pFile) {
+		if (pFile == nullptr) {
 			throw std::runtime_error(std::string("File not found: " + fullFilename));
 		}
 		auto loadTexture = std::make_shared<Finally>(loadFunction(this, filename, pFile, halfLoad));
@@ -222,8 +220,8 @@ namespace jngl {
 #endif
 
 	void Sprite::cleanUpRowPointers(std::vector<unsigned char*>& buf) {
-		for (auto i = buf.begin(); i != buf.end(); ++i) {
-			delete[] *i;
+		for (const auto p : buf) {
+			delete[] p;
 		}
 	}
 
