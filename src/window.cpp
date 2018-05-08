@@ -120,13 +120,13 @@ namespace jngl {
 
 	bool Window::getKeyDown(key::KeyType key) {
 		if (key == key::Any) {
-			for (auto it = keyDown_.begin(); it != keyDown_.end(); ++it) {
-				if (it->second) {
+			for (const auto& it : keyDown_) {
+				if (it.second) {
 					return true;
 				}
 			}
-			for (auto it = characterDown_.begin(); it != characterDown_.end(); ++it) {
-				if (it->second) {
+			for (const auto& it : characterDown_) {
+				if (it.second) {
 					return true;
 				}
 			}
@@ -289,7 +289,8 @@ namespace jngl {
 		}
 		const auto start = getTime();
 		const auto shouldBe = lastCheckTime + timePerStep * stepsSinceLastCheck;
-		const long micros = std::lround((sleepPerFrame - (start - shouldBe)) * sleepCorrectionFactor * 1e6);
+		const int64_t micros =
+		    std::lround((sleepPerFrame - (start - shouldBe)) * sleepCorrectionFactor * 1e6);
 		if (micros > 0) {
 			std::this_thread::sleep_for(std::chrono::microseconds(micros));
 			timeSleptSinceLastCheck += jngl::getTime() - start;
@@ -338,7 +339,7 @@ namespace jngl {
 	}
 
 	void Window::addJob(std::shared_ptr<Job> job) {
-		jobs.push_back(job);
+		jobs.emplace_back(std::move(job));
 	}
 
 	std::shared_ptr<Work> Window::getWork() {
