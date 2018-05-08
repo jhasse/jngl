@@ -53,9 +53,8 @@ Sprite& GetSprite(const std::string& filename, const Sprite::LoadType loadType) 
 		if (loadType != Sprite::LoadType::HALF) {
 			pWindow.ThrowIfNull();
 		}
-		auto s = new Sprite(filename, loadType);
-		sprites_[filename].reset(s);
-		return *s;
+		return *sprites_.emplace(filename, std::make_shared<Sprite>(filename, loadType))
+		            .first->second;
 	}
 	return *(it->second);
 }
