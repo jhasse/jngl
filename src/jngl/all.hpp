@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Shader.hpp"
+#include "ShaderProgram.hpp"
 #include "color.hpp"
 #include "Controller.hpp"
 #include "debug.hpp"
