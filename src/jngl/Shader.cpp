@@ -9,7 +9,7 @@
 
 namespace jngl {
 
-Shader::Shader(const char* const source, const Type type) : impl(std::make_unique<Impl>()) {
+Shader::Shader(const char* source, const Type type) : impl(std::make_unique<Impl>()) {
 	impl->id = glCreateShader(type == Type::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER);
 	glShaderSource(impl->id, 1, &source, nullptr);
 	glCompileShader(impl->id);
