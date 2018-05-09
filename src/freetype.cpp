@@ -19,9 +19,9 @@ namespace jngl {
 	Character::Character(const unsigned long ch, const unsigned int fontHeight, FT_Face face) {
 		const auto flags = FT_LOAD_TARGET_LIGHT | FT_LOAD_RENDER;
 		if (FT_Load_Char(face, ch, flags)) {
-			const std::string msg = std::string("FT_Load_Glyph failed. Character: ")
-			                        + boost::lexical_cast<std::string>(ch);
-			debug(msg);
+		    const std::string msg =
+		        std::string("FT_Load_Glyph failed. Character: ") + std::to_string(ch);
+		    debugLn(msg);
 			// Load a question mark instead
 			if (FT_Load_Glyph(face, FT_Get_Char_Index(face, '?') , flags)) {
 				throw std::runtime_error(msg);
