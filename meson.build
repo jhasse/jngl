@@ -125,7 +125,9 @@ if boost_test_dep.found()
 	test('Unit Test', executable('unittest', [
 		'src/unittest/main.cpp',
 		'src/unittest/misc.cpp',
-	], dependencies : [boost_test_dep, thread_dep], link_with : lib))
+		'src/unittest/TextTest.cpp',
+		'src/unittest/Fixture.cpp',
+	], dependencies : [boost_test_dep, thread_dep], link_with : lib, include_directories : include))
 endif
 
 install_headers('src/jngl.hpp')
