@@ -120,6 +120,14 @@ if target_machine.system() == 'linux'
 	endif
 endif
 
+boost_test_dep = dependency('boost', modules : [ 'unit_test_framework' ], required : false)
+if boost_test_dep.found()
+	test('Unit Test', executable('unittest', [
+		'src/unittest/main.cpp',
+		'src/unittest/misc.cpp',
+	], dependencies : [boost_test_dep, thread_dep], link_with : lib))
+endif
+
 install_headers('src/jngl.hpp')
 install_headers([
 	'src/jngl/all.hpp',
