@@ -3,7 +3,7 @@ gcc:
   stage: build
   script:
     - pacman -Syu --needed --noconfirm meson sdl2 pkg-config fontconfig libepoxy udev libwebp openal libvorbis boost gcc
-    - meson build -werror
+    - meson build --werror
     - ninja -C build
 
 clang:
