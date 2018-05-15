@@ -142,6 +142,18 @@ Window::Window(const std::string& title, const int width, const int height, cons
 						mousey_ = event.motion.y;
 					}
 					break;
+				case SDL_FINGERUP:
+					mouseDown_.at(0) = false;
+					mouseDown_.at(0) = false;
+					break;
+				case SDL_FINGERDOWN:
+					mouseDown_.at(0) = true;
+					mousePressed_.at(0) = true;
+					[[fallthrough]];
+				case SDL_FINGERMOTION:
+					mousex_ = event.tfinger.x * width_;
+					mousey_ = event.tfinger.y * height_;
+					break;
 				case SDL_MOUSEBUTTONDOWN: {
 					int button = -1;
 					if (event.button.button == SDL_BUTTON_LEFT) {
