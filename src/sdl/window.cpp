@@ -145,14 +145,25 @@ Window::Window(const std::string& title, const int width, const int height, cons
 				case SDL_FINGERUP:
 					mouseDown_.at(0) = false;
 					mouseDown_.at(0) = false;
+					impl->currentFingerId = std::nullopt;
+					multitouch = false;
 					break;
 				case SDL_FINGERDOWN:
+					if (impl->currentFingerId && *impl->currentFingerId != event.tfinger.fingerId) {
+						multitouch = true;
+					}
+					impl->currentFingerId = event.tfinger.fingerId;
 					mouseDown_.at(0) = true;
 					mousePressed_.at(0) = true;
 					[[fallthrough]];
 				case SDL_FINGERMOTION:
-					mousex_ = event.tfinger.x * width_;
-					mousey_ = event.tfinger.y * height_;
+					if (relativeMouseMode) {
+						mousex_ = event.tfinger.dx * width_;
+						mousey_ = event.tfinger.dy * height_;
+					} else {
+						mousex_ = event.tfinger.x * width_;
+						mousey_ = event.tfinger.y * height_;
+					}
 					break;
 				case SDL_MOUSEBUTTONDOWN: {
 					int button = -1;
