@@ -44,6 +44,7 @@ add_project_arguments(cxx.get_supported_arguments([
 	'-Winit-self',
 	'-Winconsistent-missing-override',
 	'-Wimplicit-fallthrough',
+	'-Wpedantic',
 ]), language : 'cpp')
 
 if target_machine.system() != 'windows'

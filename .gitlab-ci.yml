@@ -7,7 +7,7 @@ gcc:
     - cd build
     - ninja
     - dnf install -y mesa-dri-drivers xorg-x11-drv-dummy liberation-fonts
-    - Xorg -config ../data/xorg.conf &
+    - Xorg -config ../data/xorg.conf &>/dev/null &
     - DISPLAY=:0 ./unittest
 
 clang:
