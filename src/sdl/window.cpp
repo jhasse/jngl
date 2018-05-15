@@ -34,11 +34,17 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	if (fullscreen) {
 		flags |= SDL_WINDOW_FULLSCREEN;
 	}
-	impl->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
-	                                   SDL_WINDOWPOS_CENTERED, width, height, flags);
 
-	if (impl->sdlWindow == nullptr) {
-		throw std::runtime_error(SDL_GetError());
+	const auto create = [&title, width, height, flags]() {
+		return SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+		                        width, height, flags);
+	};
+	if ((impl->sdlWindow = create()) == nullptr) {
+		jngl::debugLn("Recreating window without Anti-Aliasing support.");
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
+		if ((impl->sdlWindow = create()) == nullptr) {
+			throw std::runtime_error(SDL_GetError());
+		}
 	}
 
 	impl->context = SDL_GL_CreateContext(impl->sdlWindow);
