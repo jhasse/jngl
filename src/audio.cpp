@@ -19,10 +19,10 @@
  #include <vorbis/vorbisfile.h>
 #endif
 
+#include <algorithm>
 #include <cstdio>
 #include <stdexcept>
 #include <unordered_map>
-#include <algorithm>
 
 namespace jngl {
 
@@ -115,15 +115,14 @@ namespace jngl {
 	public:
 		Audio() {
 			device_ = alcOpenDevice(nullptr);
-			if (!device_) {
+			if (device_ == nullptr) {
 				throw std::runtime_error("Could not open audio device.");
 			}
 			context_ = alcCreateContext(device_, nullptr);
-			if (context_) {
-				alcMakeContextCurrent(context_);
-			} else {
+			if (context_ == nullptr) {
 				throw std::runtime_error("Could not create audio context.");
 			}
+			alcMakeContextCurrent(context_);
 		}
 		Audio(const Audio&) = delete;
 		Audio& operator=(const Audio&) = delete;
@@ -162,7 +161,7 @@ namespace jngl {
 #else
 		FILE* const f = fopen(filename.c_str(), "rbe");
 #endif
-		if (!f) {
+		if (f == nullptr) {
 			throw std::runtime_error("File not found (" + filename + ").");
 		}
 
@@ -184,7 +183,7 @@ namespace jngl {
 		char array[bufferSize]; // 32 KB buffers
 		const int endian = 0; // 0 for Little-Endian, 1 for Big-Endian
 		int bitStream;
-		long bytes;
+		long bytes; // NOLINT
 		do {
 			bytes = ov_read(&oggFile, array, bufferSize, endian, 2, 1, &bitStream);
 

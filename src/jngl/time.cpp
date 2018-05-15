@@ -7,13 +7,16 @@
 #include <thread>
 
 namespace jngl {
-	using namespace std::chrono;
 
-	double getTime() {
-		static auto start = steady_clock::now();
-		return duration_cast<duration<double>>(steady_clock::now() - start).count();
-	}
-	void sleep(int ms) {
-		std::this_thread::sleep_for(milliseconds(ms));
-	}
+double getTime() {
+	static auto start = std::chrono::steady_clock::now();
+	return std::chrono::duration_cast<std::chrono::duration<double>>(
+	           std::chrono::steady_clock::now() - start)
+	    .count();
 }
+
+void sleep(const int milliseconds) {
+	std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+}
+
+} // namespace jngl
