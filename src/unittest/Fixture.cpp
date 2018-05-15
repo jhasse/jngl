@@ -41,7 +41,6 @@ std::string Fixture::getAsciiArt() const {
 	assert(w % reduceFactor == 0);
 	assert(h % reduceFactor == 0);
 	size_t reducedW = w / reduceFactor;
-	size_t reducedH = h / reduceFactor;
 	std::vector<std::vector<std::vector<float>>> reduced;
 	size_t index = 0;
 	for (int y = 0; y < h; y += reduceFactor) {
@@ -58,7 +57,7 @@ std::string Fixture::getAsciiArt() const {
 			}
 		}
 	}
-	assert(reduced.size() == reducedH);
+	assert(reduced.size() == size_t(h / reduceFactor));
 	std::string out = "\n"; // Start with a newline for prettier output by Boost.Test
 	for (const auto& row : reduced) {
 		assert(row.size() == reducedW);
