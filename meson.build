@@ -40,6 +40,12 @@ src = [
 cpp_args = []
 
 cxx = meson.get_compiler('cpp')
+add_project_arguments(cxx.get_supported_arguments([
+	'-Winit-self',
+	'-Winconsistent-missing-override',
+	'-Wimplicit-fallthrough',
+]), language : 'cpp')
+
 if target_machine.system() != 'windows'
 	opengl_dep = [
 		dependency('SDL2'),
