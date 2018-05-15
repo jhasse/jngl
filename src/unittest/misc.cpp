@@ -10,8 +10,28 @@ BOOST_AUTO_TEST_CASE(FinallyTest) {
 	bool called = false;
 	{
 		jngl::Finally _([&called]() {
+			BOOST_CHECK(!called);
 			called = true;
 		});
+		BOOST_CHECK(!called);
+	}
+	BOOST_CHECK(called);
+	{ // don't crash
+		jngl::Finally _(nullptr);
+	}
+	called = false;
+	{
+		jngl::Finally f1([&called]() {
+			BOOST_CHECK(!called);
+			called = true;
+		});
+		jngl::Finally f2 = std::move(f1);
+		jngl::Finally f3(std::move(f2));
+		{
+			jngl::Finally f4(nullptr);
+			f4 = std::move(f3);
+			f3 = std::move(f4);
+		}
 		BOOST_CHECK(!called);
 	}
 	BOOST_CHECK(called);
