@@ -7,8 +7,9 @@
 
 BOOST_AUTO_TEST_CASE(TextTest) {
 	// Test with two rather big scale factors to avoid rounding errors:
-	for (double scaleFactor : { 4, 6 }) {
+	for (double scaleFactor : { 6, 8 }) {
 		Fixture f(scaleFactor);
+		jngl::setFont("../Arial.ttf");
 		jngl::Text text("test string\nline 2");
 		BOOST_CHECK_EQUAL(text.getWidth(), 69);
 		text.setCenter(-10, -10);
@@ -20,7 +21,7 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 ▒                              ▒
 ▒           ░░                 ▒
 ▒                              ▒
-▒          ░░░░░░░░            ▒
+▒          ░░▒░░░░░            ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )";
 		BOOST_CHECK_EQUAL(f.getAsciiArt(), screenshotCentered);
@@ -33,7 +34,7 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 ▒              ░░ ░            ▒
 ▒              ░  ░            ▒
 ▒              ░░░░░░░         ▒
-▒                              ▒
+▒                  ░           ▒
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
@@ -52,7 +53,7 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 ▒                              ▒
 ▒            ░░░░              ▒
 ▒               ░              ▒
-▒          ░░░░░░░░            ▒
+▒          ░░▒░░░░░            ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
 	}
