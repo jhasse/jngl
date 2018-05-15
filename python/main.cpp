@@ -5,7 +5,6 @@
 
 #include <boost/python.hpp>
 
-using namespace boost::python;
 using namespace jngl;
 
 void showWindow1(const std::string& title, int width, int height) {
@@ -84,7 +83,7 @@ void loadWrapper(const std::string& filename) {
 	load(filename);
 }
 
-struct DrawableWrap : Drawable, wrapper<Drawable> {
+struct DrawableWrap : Drawable, boost::python::wrapper<Drawable> {
 	void step() override {
 		get_override("step")();
 	}
@@ -92,7 +91,7 @@ struct DrawableWrap : Drawable, wrapper<Drawable> {
 		get_override("draw")();
 	}
 	void setPos(Float x, Float y) override {
-		if (override setPos = get_override("setPos")) {
+		if (boost::python::override setPos = get_override("setPos")) {
 			setPos(x, y);
 			return;
 		}
@@ -101,17 +100,22 @@ struct DrawableWrap : Drawable, wrapper<Drawable> {
 };
 
 BOOST_PYTHON_MODULE(jngl) { // NOLINT
+	using boost::python::class_;
+	using boost::python::def;
+	using boost::python::enum_;
+	using boost::python::pure_virtual;
+
 	class_<DrawableWrap, boost::noncopyable>("Drawable")
 		.def("step", pure_virtual(&Drawable::step))
 		.def("draw", pure_virtual(&Drawable::draw))
 		.def("setPos", pure_virtual(&Drawable::setPos))
 	;
 
-	class_<Sprite>("Sprite", init<const std::string&>())
+	class_<Sprite>("Sprite", boost::python::init<const std::string&>())
 		.def("draw", &Sprite::draw)
 	;
 
-	class_<Vec2>("Vec2", init<Float, Float>())
+	class_<Vec2>("Vec2", boost::python::init<Float, Float>())
 		.def_readwrite("x", &Vec2::x)
 		.def_readwrite("y", &Vec2::y)
 	;
@@ -248,7 +252,7 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("popSpriteAlpha", popSpriteAlpha);
 	def("setMasking", setMasking);
 
-	class_<FrameBuffer, boost::noncopyable>("FrameBuffer", init<int, int>())
+	class_<FrameBuffer, boost::noncopyable>("FrameBuffer", boost::python::init<int, int>())
         .def("draw", &FrameBuffer::draw)
         .def("beginDraw", &FrameBuffer::beginDraw)
         .def("endDraw", &FrameBuffer::endDraw)
