@@ -5,26 +5,29 @@
 #include "../framebufferimpl.hpp"
 
 namespace jngl {
-	FrameBuffer::FrameBuffer(const int width, const int height) : pImpl(new FrameBufferImpl(width, height)) {
-	}
 
-	FrameBuffer::~FrameBuffer() {
-		delete pImpl;
-	}
-
-	void FrameBuffer::draw(const double x, const double y) const {
-		return pImpl->Draw(x, y);
-	}
-
-	void FrameBuffer::beginDraw() {
-		return pImpl->BeginDraw();
-	}
-
-	void FrameBuffer::endDraw() {
-		return pImpl->EndDraw();
-	}
-
-	void FrameBuffer::clear() {
-		return pImpl->Clear();
-	}
+FrameBuffer::FrameBuffer(const int width, const int height)
+: pImpl(new FrameBufferImpl(width, height)) {
 }
+
+FrameBuffer::~FrameBuffer() {
+	delete pImpl;
+}
+
+void FrameBuffer::draw(const double x, const double y) const {
+	return pImpl->Draw(x, y);
+}
+
+void FrameBuffer::beginDraw() {
+	return pImpl->BeginDraw();
+}
+
+void FrameBuffer::endDraw() {
+	return pImpl->EndDraw();
+}
+
+void FrameBuffer::clear() {
+	return pImpl->Clear();
+}
+
+} // namespace jngl
