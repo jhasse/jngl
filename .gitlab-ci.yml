@@ -1,10 +1,14 @@
 gcc:
-  image: base/archlinux
+  image: fedora:28
   stage: build
   script:
-    - pacman -Syu --needed --noconfirm meson sdl2 pkg-config fontconfig libepoxy udev libwebp openal libvorbis boost gcc
+    - dnf install -y fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-python3-devel python3-devel meson SDL2-devel openal-soft-devel gcc-c++
     - meson build --werror
-    - ninja -C build
+    - cd build
+    - ninja
+    - dnf install -y mesa-dri-drivers xorg-x11-drv-dummy liberation-fonts
+    - Xorg -config ../data/xorg.conf &
+    - DISPLAY=:0 ./unittest
 
 clang:
   image: base/archlinux
