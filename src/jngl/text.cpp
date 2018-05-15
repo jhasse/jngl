@@ -77,6 +77,8 @@ namespace jngl {
 			line->setY(height);
 			height += line->getHeight();
 		}
+		width *= getScaleFactor();
+		height *= getScaleFactor();
 	}
 
 	void Text::step() {

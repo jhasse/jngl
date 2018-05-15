@@ -7,7 +7,7 @@
 
 class Fixture {
 public:
-	Fixture();
+	Fixture(double scaleFactor);
 	~Fixture();
 
 	std::string getAsciiArt() const;

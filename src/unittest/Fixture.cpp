@@ -6,10 +6,20 @@
 #include <iostream>
 #include <jngl.hpp>
 
-Fixture::Fixture() {
-	jngl::showWindow("unit test", 320, 70, false, {32, 7}, {32, 7});
+Fixture::Fixture(const double scaleFactor) {
+	jngl::setScaleFactor(scaleFactor);
+	jngl::showWindow("unit test", 320 * scaleFactor, 70 * scaleFactor, false, {32, 7}, {32, 7});
 	reset();
 	emptyAsciiArt = getAsciiArt();
+	BOOST_CHECK_EQUAL(emptyAsciiArt, R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒                              ▒
+▒                              ▒
+▒                              ▒
+▒                              ▒
+▒                              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
 }
 
 Fixture::~Fixture() {
@@ -21,7 +31,13 @@ std::string Fixture::getAsciiArt() const {
 	const int h = jngl::getWindowHeight();
 	std::vector<float> buffer(3 * w * h);
 	glReadPixels(0, 0, w, h, GL_RGB, GL_FLOAT, buffer.data());
-	int reduceFactor = 5;
+
+	// ASCII art should always have the same size, therefore let's take the scaleFactor into
+	// account:
+	float reduceFactorAsFloat = 10 * jngl::getScaleFactor();
+	int reduceFactor = std::lround(reduceFactorAsFloat);
+	BOOST_CHECK_CLOSE(reduceFactorAsFloat, reduceFactor, 1e-6);
+
 	assert(w % reduceFactor == 0);
 	assert(h % reduceFactor == 0);
 	size_t reducedW = w / reduceFactor;
