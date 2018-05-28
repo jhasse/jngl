@@ -58,9 +58,7 @@ namespace jngl {
 		std::shared_ptr<Texture> texture;
 	};
 
-	void JNGLDLL_API draw(const std::string& filename,
-	          double xposition,
-	          double yposition);
+	void JNGLDLL_API draw(const std::string& filename, double x, double y);
 
 	template<class Vect>
 	void draw(const std::string& filename, Vect pos) {

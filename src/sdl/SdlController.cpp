@@ -93,10 +93,10 @@ bool SdlController::down(const controller::Button button) const {
 		case controller::RightTrigger: buttonIndex = 7; break;
 		case controller::Start: buttonIndex = xbox ? 7 : 9; break;
 		case controller::Back: buttonIndex = xbox ? 6 : 8; break;
-		case controller::DpadUp: return SDL_JoystickGetHat(handle, 0) & SDL_HAT_UP;
-		case controller::DpadDown: return SDL_JoystickGetHat(handle, 0) & SDL_HAT_DOWN;
-		case controller::DpadLeft: return SDL_JoystickGetHat(handle, 0) & SDL_HAT_LEFT;
-		case controller::DpadRight: return SDL_JoystickGetHat(handle, 0) & SDL_HAT_RIGHT;
+		case controller::DpadUp: return (SDL_JoystickGetHat(handle, 0) & SDL_HAT_UP) != 0;
+		case controller::DpadDown: return (SDL_JoystickGetHat(handle, 0) & SDL_HAT_DOWN) != 0;
+		case controller::DpadLeft: return (SDL_JoystickGetHat(handle, 0) & SDL_HAT_LEFT) != 0;
+		case controller::DpadRight: return (SDL_JoystickGetHat(handle, 0) & SDL_HAT_RIGHT) != 0;
 		case controller::LeftStick: buttonIndex = xbox ? 9 : 11; break;
 		case controller::RightStick: buttonIndex = xbox ? 10 : 12; break;
 		default: return false;
