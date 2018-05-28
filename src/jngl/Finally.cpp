@@ -8,8 +8,11 @@ namespace jngl {
 Finally::Finally(std::function<void()> functionToCall) : functionToCall(std::move(functionToCall)) {
 }
 
-Finally::Finally(Finally&& other) noexcept : functionToCall(std::move(other.functionToCall)) {
-	other.functionToCall = nullptr;
+Finally::Finally(Finally&& other) noexcept {
+	if (other.functionToCall) {
+		functionToCall = std::move(other.functionToCall);
+		other.functionToCall = nullptr;
+	}
 }
 
 Finally& Finally::operator=(Finally&& other) noexcept {
