@@ -3,7 +3,7 @@
 
 #include "../jngl/Controller.hpp"
 
-#include <SDL.h>
+#include "sdl.hpp"
 
 namespace jngl {
 
