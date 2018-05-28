@@ -127,14 +127,17 @@ if target_machine.system() == 'linux'
 	endif
 endif
 
-boost_test_dep = dependency('boost', modules : [ 'unit_test_framework' ], required : false)
-if boost_test_dep.found()
-	test('Unit Test', executable('unittest', [
-		'src/unittest/main.cpp',
-		'src/unittest/misc.cpp',
-		'src/unittest/TextTest.cpp',
-		'src/unittest/Fixture.cpp',
-	], dependencies : [boost_test_dep, thread_dep], link_with : lib, include_directories : include))
+if not meson.is_subproject()
+	boost_test_dep = dependency('boost', modules : [ 'unit_test_framework' ], required : false)
+	if boost_test_dep.found()
+		test('Unit Test', executable('unittest', [
+			'src/unittest/main.cpp',
+			'src/unittest/misc.cpp',
+			'src/unittest/TextTest.cpp',
+			'src/unittest/Fixture.cpp',
+		], dependencies : [boost_test_dep, thread_dep], link_with : lib,
+		include_directories : include))
+	endif
 endif
 
 install_headers('src/jngl.hpp')
