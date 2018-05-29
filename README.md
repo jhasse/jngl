@@ -49,7 +49,7 @@ application.
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 
 ```
-brew install sdl2 freetype libvorbis glew jpeg webp meson pkg-config boost
+brew install sdl2 freetype libvorbis libepoxy jpeg webp meson pkg-config boost
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 ```
 
