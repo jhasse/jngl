@@ -133,6 +133,7 @@ if not meson.is_subproject()
 		test('Unit Test', executable('unittest', [
 			'src/unittest/main.cpp',
 			'src/unittest/misc.cpp',
+			'src/unittest/SpriteTest.cpp',
 			'src/unittest/TextTest.cpp',
 			'src/unittest/Fixture.cpp',
 		], dependencies : [boost_test_dep, thread_dep], link_with : lib,

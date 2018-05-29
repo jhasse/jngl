@@ -87,7 +87,13 @@ void drawClipped(const std::string& filename, const double xposition, const doub
 }
 
 Finally loadSprite(const std::string& filename) {
-	return std::move(*GetSprite(filename, Sprite::LoadType::THREADED).loader);
+	auto& loader = GetSprite(filename, Sprite::LoadType::THREADED).loader;
+	if (loader) {
+		auto rtn = std::move(*loader);
+		loader = nullptr;
+		return rtn;
+	}
+	return Finally(nullptr);
 }
 
 void unload(const std::string& filename) {
