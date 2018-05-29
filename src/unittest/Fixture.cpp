@@ -3,6 +3,7 @@
 #include "../opengl.hpp"
 
 #include <boost/test/unit_test.hpp>
+#include <cmath>
 #include <iostream>
 #include <jngl.hpp>
 
