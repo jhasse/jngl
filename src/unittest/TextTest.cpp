@@ -1,3 +1,6 @@
+// Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
+
 #include "../jngl/text.hpp"
 #include "Fixture.hpp"
 
@@ -17,11 +20,11 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 		text.draw();
 		const std::string screenshotCentered = R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-▒                              ▒
+▒          ░░▒░░░░░            ▒
 ▒                              ▒
 ▒           ░░                 ▒
 ▒                              ▒
-▒          ░░▒░░░░░            ▒
+▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )";
 		BOOST_CHECK_EQUAL(f.getAsciiArt(), screenshotCentered);
@@ -31,11 +34,11 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 		text.draw();
 		BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-▒              ░░ ░            ▒
-▒              ░  ░            ▒
-▒              ░░░░░░░         ▒
-▒                  ░           ▒
 ▒                              ▒
+▒                  ░           ▒
+▒              ░░░░░░░         ▒
+▒              ░  ░            ▒
+▒              ░░ ░            ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
 
@@ -49,11 +52,11 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 		text.draw(); // the second line should now be centered below the first
 		BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-▒                              ▒
-▒                              ▒
-▒            ░░░░              ▒
-▒               ░              ▒
 ▒          ░░▒░░░░░            ▒
+▒               ░              ▒
+▒            ░░░░              ▒
+▒                              ▒
+▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
 	}

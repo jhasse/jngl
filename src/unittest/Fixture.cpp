@@ -2,6 +2,7 @@
 
 #include "../opengl.hpp"
 
+#include <boost/range/adaptor/reversed.hpp>
 #include <boost/test/unit_test.hpp>
 #include <iostream>
 #include <jngl.hpp>
@@ -57,9 +58,10 @@ std::string Fixture::getAsciiArt() const {
 			}
 		}
 	}
+	BOOST_CHECK_EQUAL(index, buffer.size());
 	assert(reduced.size() == size_t(h / reduceFactor));
 	std::string out = "\n"; // Start with a newline for prettier output by Boost.Test
-	for (const auto& row : reduced) {
+	for (const auto& row : boost::adaptors::reverse(reduced)) {
 		assert(row.size() == reducedW);
 		for (const auto& cell : row) {
 			// ASCII:
@@ -88,8 +90,8 @@ void Fixture::reset() const {
 	const double frameSize = 5;
 	const jngl::Vec2 screen(jngl::getScreenWidth(),
 	                        jngl::getScreenHeight());
-	jngl::drawRect(-screen.x / 2, screen.y / 2 - frameSize, screen.x, frameSize); // top
-	jngl::drawRect(-screen.x / 2, -screen.y / 2, screen.x, frameSize);            // left
+	jngl::drawRect(-screen.x / 2, screen.y / 2 - frameSize, screen.x, frameSize); // bottom
+	jngl::drawRect(-screen.x / 2, -screen.y / 2, screen.x, frameSize);            // top
 	jngl::drawRect(screen.x / 2 - frameSize, -screen.y / 2, frameSize, screen.y); // right
-	jngl::drawRect(-screen.x / 2, -screen.y / 2, frameSize, screen.y);            // bottom
+	jngl::drawRect(-screen.x / 2, -screen.y / 2, frameSize, screen.y);            // left
 }
