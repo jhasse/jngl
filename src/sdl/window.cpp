@@ -244,8 +244,10 @@ Window::Window(const std::string& title, const int width, const int height, cons
 					keyPressed_[event.key.keysym.sym] = false;
 					const char* name = SDL_GetKeyName(event.key.keysym.sym);
 					if (strlen(name) == 1) {
-						std::string tmp;
-						tmp.append(1, tolower(name[0]));
+						std::string tmp(1, name[0]);
+						characterDown_[tmp] = false;
+						characterPressed_[tmp] = false;
+						tmp[0] = tolower(name[0]);
 						characterDown_[tmp] = false;
 						characterPressed_[tmp] = false;
 					}
