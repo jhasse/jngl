@@ -327,7 +327,8 @@ void testKeys() {
 			y += 15;
 		}
 		y = 10;
-		for (char c = '0'; c <= 'z'; ++c) {
+		const auto printChar = [&recentlyPressedKeys](const char c, const double x,
+		                                              const double y) {
 			char cString[2];
 			cString[0] = c;
 			cString[1] = 0;
@@ -337,9 +338,15 @@ void testKeys() {
 			else {
 				jngl::setFontColor(150, 150, 150);
 			}
-			jngl::print(cString, 500, y);
+			jngl::print(cString, x, y);
 			if (jngl::keyPressed(c)) {
-				recentlyPressedKeys.emplace_back(cString, 500, y);
+				recentlyPressedKeys.emplace_back(cString, x, y);
+			}
+		};
+		for (char c = '0'; c <= 'z'; ++c) {
+			printChar(c, 380, y);
+			if (c >= 'a' && c <= 'z') {
+				printChar(toupper(c), 610, y);
 			}
 			y += 15;
 			if (c == '9') {
@@ -357,9 +364,9 @@ void testKeys() {
 			else {
 				jngl::setFontColor(150, 150, 150);
 			}
-			jngl::print(it.first, 500, y);
+			jngl::print(it.first, 380, y);
 			if (jngl::mousePressed(it.second)) {
-				recentlyPressedKeys.emplace_back(it.first, 500, y);
+				recentlyPressedKeys.emplace_back(it.first, 380, y);
 			}
 			y += 15;
 		}
