@@ -19,19 +19,10 @@ double factor = 0;
 
 class Test : public jngl::Work {
 public:
-	Test() : fb(100, 110), fb2(800, 600), logoWebp("jngl.webp") {
+	Test() : fb2(jngl::getWindowWidth(), jngl::getWindowHeight()), logoWebp("jngl.webp") {
 		jngl::setTitle("JNGL Test Application");
 		jngl::setIcon("jngl.png");
 		jngl::setMouseVisible(false);
-		fb.beginDraw();
-		jngl::setColor(255, 0, 0);
-		jngl::drawRect(0, 0, 64, 64);
-		jngl::setColor(0, 255, 0);
-		jngl::drawRect(0, 64, 64, 64);
-		jngl::setColor(0, 0, 255);
-		jngl::drawRect(64, 0, 64, 64);
-		jngl::print("Frame\nBuffer\nObject", 50, 10);
-		fb.endDraw();
 		frameTime = jngl::getTime();
 		lastTime = jngl::getTime();
 	}
@@ -58,7 +49,7 @@ public:
 			fb2.clear();
 		}
 		jngl::pushMatrix();
-		jngl::translate(-jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
+		jngl::translate(-jngl::getScreenWidth() / 2, -jngl::getScreenHeight() / 2);
 		jngl::pushMatrix();
 		lastTime = jngl::getTime();
 		for (int i = 0; i < 10; ++i) {
@@ -74,8 +65,7 @@ public:
 		jngl::drawLine(-50, -50, 50, 50);
 		jngl::popMatrix();
 		jngl::setSpriteAlpha(200);
-		fb.draw(600, 300);
-		jngl::translate(jngl::getWindowWidth() / 2, jngl::getWindowHeight() / 2);
+		jngl::translate(jngl::getScreenWidth() / 2, jngl::getScreenHeight() / 2);
 		jngl::rotate(rotate);
 		jngl::setSpriteAlpha(static_cast<unsigned char>(std::abs(factor * 255)));
 		logoWebp.drawScaled(static_cast<float>(factor * 2));
@@ -145,7 +135,7 @@ public:
 			fb2.endDraw();
 			jngl::reset();
 			jngl::setSpriteAlpha(255);
-			fb2.draw(-jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
+			fb2.draw(-jngl::getScreenWidth() / 2, -jngl::getScreenHeight() / 2);
 		}
 		if (jngl::keyPressed('f')) {
 			drawOnFrameBuffer = !drawOnFrameBuffer;
@@ -171,7 +161,7 @@ private:
 	mutable int frameNumber = 0;
 	mutable double frameTime = 0;
 	mutable double lastTime;
-	mutable jngl::FrameBuffer fb, fb2;
+	mutable jngl::FrameBuffer fb2;
 	jngl::Sprite logoWebp;
 	float volume = 1;
 };
@@ -186,7 +176,10 @@ JNGL_MAIN_BEGIN {
 		} catch (std::runtime_error& e) {
 			std::cout << e.what() << std::endl;
 		}
-		jngl::showWindow("setTitle not working!", 800, 600);
+		jngl::setScaleFactor(
+		    std::floor(std::min(jngl::getDesktopWidth() / 800, jngl::getDesktopHeight() / 600)));
+		jngl::showWindow("setTitle not working!", 800 * jngl::getScaleFactor(),
+		                 600 * jngl::getScaleFactor());
 		jngl::setWork(new Test);
 		jngl::mainLoop();
 	} catch(std::exception& e) {
@@ -200,18 +193,17 @@ void drawBackground() {
 		const int size = performance * performance;
 		for (int x = 0; x < size; ++x) {
 			for (int y = 0; y < size; ++y) {
-				jngl::drawScaled("jngl", x * jngl::getWindowWidth() / size,
-				                 y * jngl::getWindowHeight() / size,
-				                 float(jngl::getWindowWidth()) / size / jngl::getWidth("jngl"),
-				                 float(jngl::getWindowHeight()) / size / jngl::getHeight("jngl"));
+				jngl::drawScaled("jngl", x * jngl::getScreenWidth() / size,
+				                 y * jngl::getScreenHeight() / size,
+				                 float(jngl::getScreenWidth()) / size / jngl::getWidth("jngl"),
+				                 float(jngl::getScreenHeight()) / size / jngl::getHeight("jngl"));
 			}
 		}
 	} else {
-		jngl::drawClipped("jngl",
-		                  jngl::getWindowWidth() / 2- jngl::getWidth("jngl") / 2,
-		                  jngl::getWindowHeight() / 2- jngl::getHeight("jngl") / 2,
-						  float(0.5 - factor / 2), float(0.5 + factor / 2),
-						  float(0.5 - factor / 2), float(0.5 + factor / 2));
+		jngl::drawClipped("jngl", jngl::getScreenWidth() / 2 - jngl::getWidth("jngl") / 2,
+		                  jngl::getScreenHeight() / 2 - jngl::getHeight("jngl") / 2,
+		                  float(0.5 - factor / 2), float(0.5 + factor / 2),
+		                  float(0.5 - factor / 2), float(0.5 + factor / 2));
 	}
 	jngl::setColor(255, 0, 0, 100);
 	jngl::drawTriangle(600, 30, 700, 30, 650, 130);
