@@ -8,6 +8,24 @@
 
 #include <boost/test/unit_test.hpp>
 
+BOOST_AUTO_TEST_CASE(CharacterTest) {
+	Fixture f(1);
+	const auto font = std::make_shared<jngl::Font>("../Arial.ttf", 40);
+	jngl::Text t("m ö o ß");
+	t.setFont(font);
+	t.setPos(-110, -20);
+	t.draw();
+	BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒           ░        ░         ▒
+▒     ░ ░  ░░   ░   ▒░░        ▒
+▒    ▒░▒▒  ▒░▒ ░░▒  ▒▒░        ▒
+▒    ▒ ▒░  ▒ ▒ ░░▒  ▒ ▒        ▒
+▒    ░ ░░  ░▒   ▒░  ░░░        ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
+}
+
 BOOST_AUTO_TEST_CASE(TextTest) {
 	// Test with two rather big scale factors to avoid rounding errors:
 	for (double scaleFactor : { 6, 8 }) {
