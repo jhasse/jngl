@@ -168,3 +168,6 @@ install_headers([
 	'src/jngl/window.hpp',
 	'src/jngl/work.hpp',
 ], subdir : 'jngl')
+
+jngl_dep = declare_dependency(include_directories : include, link_with : lib,
+                              dependencies : thread_dep)
