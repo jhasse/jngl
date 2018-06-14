@@ -25,7 +25,7 @@ namespace jngl {
 	public:
 		JNGLDLL_API Text(const std::string& text = "");
 		void JNGLDLL_API setText(const std::string&);
-		void JNGLDLL_API setFont(std::shared_ptr<Font>);
+		void JNGLDLL_API setFont(Font&);
 		void JNGLDLL_API setAlign(Alignment);
 		void JNGLDLL_API step();
 		void JNGLDLL_API draw() const;

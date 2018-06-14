@@ -44,8 +44,8 @@ namespace jngl {
 		setAlign(align);
 	}
 
-	void Text::setFont(std::shared_ptr<Font> f) {
-		font = f->getImpl();
+	void Text::setFont(Font& f) {
+		font = f.getImpl();
 		for (auto& line : lines) {
 			line->setFont(font);
 		}

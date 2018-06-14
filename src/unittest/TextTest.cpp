@@ -10,7 +10,7 @@
 
 BOOST_AUTO_TEST_CASE(CharacterTest) {
 	Fixture f(1);
-	const auto font = std::make_shared<jngl::Font>("../Arial.ttf", 40);
+	jngl::Font font("../Arial.ttf", 40);
 	jngl::Text t("m ö o ß");
 	t.setFont(font);
 	t.setPos(-110, -20);
