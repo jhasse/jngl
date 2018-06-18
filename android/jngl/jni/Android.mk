@@ -15,4 +15,3 @@ LOCAL_CPP_FEATURES += exceptions rtti
 include $(BUILD_STATIC_LIBRARY)
 
 $(call import-module,android/native_app_glue)
-$(call import-module,boost/1.59.0)

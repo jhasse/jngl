@@ -3,6 +3,7 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <stdexcept>
+#include <string>
 
 void* load_lib(const std::string& l) {
 	auto handle = dlopen(std::string("/data/data/com.bixense.jngl_test/lib/" + l).c_str(),
