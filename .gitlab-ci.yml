@@ -31,9 +31,10 @@ mingw:
     - ninja -C build
 
 android:
-  image: opengisch/docker-qt-crystax
+  image: lakoo/android-ndk:26-27.0.3-r17
   stage: build
   script:
-    - apt install -y file
-    - $ANDROID_NDK_ROOT/ndk-build -j$(nproc) -Candroid/jngl
-    - $ANDROID_NDK_ROOT/ndk-build -j$(nproc) -Candroid/test
+    - apt install -y file libboost-dev
+    - ln -s /usr/include/boost android/include/boost
+    - $ANDROID_NDK_HOME/ndk-build -j$(nproc) -C android/jngl
+    - cd android/test && ./gradlew build

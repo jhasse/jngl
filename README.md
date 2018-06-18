@@ -63,11 +63,15 @@ ninja -C build
 
 ## Android
 
-Install the [CrystaX NDK 10.3](https://www.crystax.net), add the folder to your `PATH` and run
+Install the Android SDK and let `ANDROID_HOME` point to it. Also install the NDK and make sure that
+`ndk-build` is on your `PATH`. Then run:
+
 ```
-ndk-build
+ln -s /usr/include/boost android/include/boost
+ndk-build -j$(nproc) -C android/jngl
+cd android/test
+./gradlew build
 ```
-inside the `android/jngl` folder.
 
 ## iOS
 
