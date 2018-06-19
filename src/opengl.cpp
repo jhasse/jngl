@@ -9,7 +9,7 @@ void BindArrayBuffer(const GLuint buffer) {
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
 	if (buffer != 0) {
 		glTexCoordPointer(2, GL_FLOAT, 0, nullptr);
-		glVertexPointer(2, GL_FLOAT, 0, (void*)(8 * sizeof(GLfloat)));
+		glVertexPointer(2, GL_FLOAT, 0, reinterpret_cast<void*>(8 * sizeof(GLfloat))); // NOLINT
 	}
 }
 

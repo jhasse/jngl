@@ -32,7 +32,8 @@ std::string Window::GetFontFileByName(const std::string& fontname) {
 
 	FcChar8* filename = nullptr;
 	FcPatternGetString(fontSet->fonts[0], FC_FILE, 0, &filename);
-	return reinterpret_cast<const char*>(filename);
+	// FcChar8 is unsigned, that's why we need the cast here:
+	return reinterpret_cast<const char*>(filename); // NOLINT
 }
 
 } // namespace jngl

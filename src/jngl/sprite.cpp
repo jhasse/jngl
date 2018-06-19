@@ -336,9 +336,9 @@ namespace jngl {
 
 		auto config = std::make_shared<WebPDecoderConfig>();
 		WebPInitDecoderConfig(config.get());
-		config->options.use_threads = true;
+		config->options.use_threads = 1;
 		if (getScaleFactor() != 1) {
-			config->options.use_scaling = true;
+			config->options.use_scaling = 1;
 			width  = static_cast<int>(width  * getScaleFactor());
 			height = static_cast<int>(height * getScaleFactor());
 			if (width < 1) { width = 1; }
