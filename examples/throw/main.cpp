@@ -1,3 +1,4 @@
+#include <cmath>
 #include <jngl.hpp>
 #include <sstream>
 
@@ -12,7 +13,6 @@ public:
 	void Move();
 	void CheckMouse(int x, int y);
 private:
-	int oldMouseX_, oldMouseY_;
 	double x_, y_, xSpeed_, ySpeed_;
 	const std::string filename_;
 	const int width_, height_;

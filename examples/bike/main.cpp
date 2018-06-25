@@ -1,12 +1,12 @@
-#include <jngl.hpp>
-#include <sstream>
-
 #include "constants.hpp"
 #include "vector2d.hpp"
 #include "bike.hpp"
 #include "base.hpp"
 
+#include <cmath>
 #include <iostream>
+#include <jngl.hpp>
+#include <sstream>
 
 JNGL_MAIN_BEGIN {
 	jngl::setScaleFactor(
