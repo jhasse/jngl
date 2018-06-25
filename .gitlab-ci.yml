@@ -34,5 +34,5 @@ android:
   image: lakoo/android-ndk:26-27.0.3-r17
   stage: build
   script:
-    - apt install -y file libboost-dev make
+    - apt install -y file libboost-dev cmake
     - make -C android
