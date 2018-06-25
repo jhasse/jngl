@@ -12,7 +12,7 @@ void Wheel::CollisionWith(const Vector2d& collisionPoint)
 	double temp2 = -1.5 * (perpendicular * speed_);
 	Vector2d temp = temp2 * perpendicular;
 	speed_ += temp;
-	
+
 	double distance = (collisionPoint - position_).Length();
 	Vector2d correction = perpendicular * (radius_ - distance + 0.1);
 	position_ += correction;
@@ -27,7 +27,8 @@ void Wheel::Move()
 
 void Wheel::Draw()
 {
-	jngl::Draw("wheel.png", static_cast<int>(position_.X() - radius_), static_cast<int>(position_.Y() - radius_));
+	jngl::draw("wheel", static_cast<int>(position_.X() - radius_),
+	           static_cast<int>(position_.Y() - radius_));
 }
 
 Wheel::Wheel(const double x, const double y) : position_(x, y)

@@ -8,16 +8,16 @@
 
 #include <iostream>
 
-int main()
-{
-	jngl::ShowWindow("Bike", screenWidth, screenHeight);
+JNGL_MAIN_BEGIN {
+	jngl::setScaleFactor(
+	    std::floor(std::min(jngl::getDesktopWidth() / 800, jngl::getDesktopHeight() / 600)));
+	jngl::showWindow("Bike", screenWidth * jngl::getScaleFactor(),
+	                 screenHeight * jngl::getScaleFactor());
 	Base base;
-	double oldTime = jngl::Time();
+	double oldTime = jngl::getTime();
 	bool needDraw = true;
-	while(jngl::Running())
-	{
-		if(jngl::Time() - oldTime > timePerFrame)
-		{
+	while (jngl::running()) {
+		if (jngl::getTime() - oldTime > timePerFrame) {
 			// This stuff needs to be done 100 times per second
 			oldTime += timePerFrame;
 			needDraw = true;
@@ -29,18 +29,19 @@ int main()
 			{
 				needDraw = false;
 				// This needs to be done when "needDraw" is true
-				jngl::BeginDraw();
+				jngl::updateInput();
+				jngl::translate(-jngl::getScreenWidth() / 2.0, -jngl::getScreenHeight() / 2.0);
 				base.Draw();
 				std::stringstream sstream;
-				sstream << "FPS: " << static_cast<int>(jngl::FPS());
-				jngl::Print(sstream.str(), 10, 10);
-				jngl::EndDraw();
+				sstream << "FPS: " << static_cast<int>(jngl::getFPS());
+				jngl::print(sstream.str(), 10, 10);
+				jngl::swapBuffers();
 			}
 			else
 			{
 				// Nothing to do? Okay let's Sleep.
-				jngl::Sleep(10);
+				jngl::sleep(10);
 			}
 		}
 	}
-}
+} JNGL_MAIN_END

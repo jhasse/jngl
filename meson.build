@@ -145,6 +145,10 @@ if not meson.is_subproject()
 		], dependencies : [boost_test_dep, thread_dep], link_with : lib,
 		include_directories : include))
 	endif
+	executable('example-bike', ['examples/bike/base.cpp', 'examples/bike/bike.cpp',
+	'examples/bike/line.cpp', 'examples/bike/main.cpp', 'examples/bike/vector2d.cpp',
+	'examples/bike/wheel.cpp'], dependencies : [boost_test_dep, thread_dep], link_with : lib,
+	include_directories : include)
 endif
 
 install_headers('src/jngl.hpp')

@@ -26,7 +26,7 @@ void Base::DoFrame()
 
 void Base::Draw()
 {
-	jngl::Draw("bg.png", 0, 0);
+	jngl::draw("bg", 0, 0);
 	for(std::vector<Line>::iterator it = lines_.begin(); it != lines_.end(); ++it)
 	{
 		it->Draw();

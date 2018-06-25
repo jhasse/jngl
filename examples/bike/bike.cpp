@@ -18,51 +18,43 @@ void DisplayVector2d(Vector2d vec)
 
 void Bike::DoFrame()
 {
-	for(int i = 0; i < wheels_.size(); ++i)
-	{
+	for (size_t i = 0; i < wheels_.size(); ++i) {
 		wheels_[i].Move();
 	}
 	Vector2d connection = wheels_[1].position_ - wheels_[0].position_;
 //  	std::cout << connection.Length() << std::endl;
 	connection.Normalize();
 	connection.Set(connection.Y() * 0.1, connection.X() * 0.1); // Um 90 Grad drehen und 50% Intensität
-	if(jngl::KeyDown(jngl::key::Right))
-	{
-		for(int i = 0; i < wheels_.size(); ++i)
-		{
+	if (jngl::keyDown(jngl::key::Right)) {
+		for (size_t i = 0; i < wheels_.size(); ++i) {
 			wheels_[i].speed_ += Vector2d(0.4, 0);
 		}
 		wheels_[0].speed_ += connection; // Dann hoch damit!
 		wheels_[1].speed_ -= connection; // Dann hoch damit!
 	}
-	if(jngl::KeyDown(jngl::key::Left))
-	{
-		for(int i = 0; i < wheels_.size(); ++i)
-		{
+	if (jngl::keyDown(jngl::key::Left)) {
+		for (size_t i = 0; i < wheels_.size(); ++i) {
 			wheels_[i].speed_ -= Vector2d(0.4, 0);
 		}
 		wheels_[0].speed_ -= connection; // Dann hoch damit!
 		wheels_[1].speed_ += connection; // Dann hoch damit!
 	}
 	std::vector<Vector2d> correction(2);
-	for(int i = 0; i < wheels_.size(); ++i)
-	{
+	for (size_t i = 0; i < wheels_.size(); ++i) {
 		Vector2d connection = wheels_[i].position_ - wheels_[1-i].position_;
 		connection.Normalize();
 		double projection = connection * wheels_[i].speed_;
 		correction[i] = (connection * projection);
 // 		std::cout << wheels_[i].speed_.X() << " " << projection << " " << correction[i].X() << "  "; DisplayVector2d(connection);
 	}
-	for(int i = 0; i < wheels_.size(); ++i)
-	{
+	for (size_t i = 0; i < wheels_.size(); ++i) {
 // 		DisplayVector2d(wheels_[i].speed_);
  		wheels_[i].speed_ -= correction[i];
 		wheels_[i].speed_ += (correction[i] + correction[1-i]) / 2;
 //  		DisplayVector2d(wheels_[i].speed_);
 	}
 // 	std::cout << "\n" << std::endl;
-	for(int i = 0; i < wheels_.size(); ++i)
-	{
+	for (size_t i = 0; i < wheels_.size(); ++i) {
 		wheels_[i].position_ += wheels_[i].speed_; // Bewegen
 	}
 	connection = wheels_[1].position_ - wheels_[0].position_;
@@ -80,8 +72,7 @@ Bike::Bike()
 
 void Bike::Draw()
 {
-	for(int i = 0; i < wheels_.size(); ++i)
-	{
+	for (size_t i = 0; i < wheels_.size(); ++i) {
 		wheels_[i].Draw();
 	}
 }
