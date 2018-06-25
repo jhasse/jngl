@@ -74,7 +74,7 @@ std::string Fixture::getAsciiArt() const {
 
 			float gray = (cell.at(0) + cell.at(1) + cell.at(2)) / 3.0f;
 			const size_t index = std::lround(gray * (chars.size() - 1));
-			assert(0 <= index && index < chars.size());
+			assert(index < chars.size());
 			out += chars[index];
 		}
 		out += "\n";

@@ -41,10 +41,16 @@ cpp_args = []
 
 cxx = meson.get_compiler('cpp')
 add_project_arguments(cxx.get_supported_arguments([
+	'-Wall', '-Wextra',
 	'-Winit-self',
 	'-Winconsistent-missing-override',
 	'-Wimplicit-fallthrough',
 	'-Wpedantic',
+	'-Wfloat-equal',
+	'-Wdelete-non-virtual-dtor',
+	'-Wlogical-op',
+	'-Wduplicated-cond',
+	'-Wduplicated-branches',
 ]), language : 'cpp')
 
 if target_machine.system() != 'windows'

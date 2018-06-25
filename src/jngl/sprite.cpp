@@ -14,6 +14,7 @@
 #include "screen.hpp"
 
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/math/special_functions/relative_difference.hpp>
 #include <fstream>
 #include <sstream>
 #include <thread>
@@ -337,7 +338,7 @@ namespace jngl {
 		auto config = std::make_shared<WebPDecoderConfig>();
 		WebPInitDecoderConfig(config.get());
 		config->options.use_threads = 1;
-		if (getScaleFactor() != 1) {
+		if (boost::math::epsilon_difference(getScaleFactor(), 1) > 10) {
 			config->options.use_scaling = 1;
 			width  = static_cast<int>(width  * getScaleFactor());
 			height = static_cast<int>(height * getScaleFactor());
