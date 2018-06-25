@@ -43,6 +43,9 @@ set_target_properties(ogg PROPERTIES IMPORTED_LOCATION
 add_library(vorbis SHARED IMPORTED)
 set_target_properties(vorbis PROPERTIES IMPORTED_LOCATION
                       ${PROJECT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libvorbis.so)
+add_library(openal SHARED IMPORTED)
+set_target_properties(openal PROPERTIES IMPORTED_LOCATION
+                      ${PROJECT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libopenal.so)
 
 # add lib dependencies
 target_link_libraries(jngl-test
@@ -50,14 +53,15 @@ target_link_libraries(jngl-test
     native_app_glue
     EGL
     GLESv1_CM
+    OpenSLES
     log
     z
     ${PROJECT_SOURCE_DIR}/../../../../../jngl/obj/local/${ANDROID_ABI}/libjngl.a
     ogg
     vorbis
+    openal
     ${PROJECT_SOURCE_DIR}/../../../../../lib/libfreetype.a
     ${PROJECT_SOURCE_DIR}/../../../../../lib/libpng.a
-    ${PROJECT_SOURCE_DIR}/../../../../../lib/libopenal.a
 )
 
 

@@ -63,7 +63,27 @@
 		"cctype": "cpp",
 		"csignal": "cpp",
 		"cstdarg": "cpp",
-		"cwctype": "cpp"
+		"cwctype": "cpp",
+		"array": "cpp",
+		"*.tcc": "cpp",
+		"hash_map": "cpp",
+		"strstream": "cpp",
+		"bitset": "cpp",
+		"clocale": "cpp",
+		"deque": "cpp",
+		"unordered_set": "cpp",
+		"rope": "cpp",
+		"slist": "cpp",
+		"fstream": "cpp",
+		"iomanip": "cpp",
+		"iostream": "cpp",
+		"numeric": "cpp",
+		"optional": "cpp",
+		"sstream": "cpp",
+		"cinttypes": "cpp",
+		"valarray": "cpp",
+		"__config": "cpp",
+		"__nullptr": "cpp"
 	},
 	"search.exclude": {
 		".vscode/cquery*": true

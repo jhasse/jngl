@@ -66,7 +66,14 @@ namespace jngl {
     }
 
     void callback(const char* filename, const int32_t state, void* data) {
-        debug("ist "); debug(state); debug(" und sollte "); debugLn(AOBB_STATE_MOUNTED);
+        if (state == AOBB_STATE_ERROR_INTERNAL) {
+            debugLn("There was an internal system error encountered while trying to mount the OBB.");
+        } else {
+            const auto storageManager = std::shared_ptr<AStorageManager>(AStorageManager_new(), AStorageManager_delete);
+            jngl::setPrefix(AStorageManager_getMountedObbPath(storageManager.get(), filename));
+            jngl::setPrefix(jngl::getPrefix() + "/");
+        }
+        *reinterpret_cast<bool*>(data) = true;
     }
 
     void WindowImpl::init() {
@@ -161,9 +168,12 @@ namespace jngl {
             debugLn("info success");
         }
         debugLn(AStorageManager_isObbMounted(storageManager, obbFile.c_str()));
-        // FIXME: crashes:
-        // AStorageManager_mountObb(storageManager, obbFile.c_str(), nullptr, callback, nullptr);
+        bool finished = false;
+        AStorageManager_mountObb(storageManager, obbFile.c_str(), "secret", callback, &finished);
         debugLn(AStorageManager_isObbMounted(storageManager, obbFile.c_str()));
+
+        while (!finished) {} // wait on this thread
+        debugLn(jngl::getPrefix());
 
         activity->vm->DetachCurrentThread();
 
@@ -183,11 +193,11 @@ namespace jngl {
                 source->process(app, source);
             }
 
-            // Check if we are exiting.
-            if (app->destroyRequested != 0) {
-                // TODO: engine_term_display(&engine);
-                jngl::quit();
-            }
+                // Check if we are exiting.
+                if (app->destroyRequested != 0) {
+                    // TODO: engine_term_display(&engine);
+                    jngl::quit();
+                }
         }
 
         window->mousex_ = mouseX - relativeX;

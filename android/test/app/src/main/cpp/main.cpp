@@ -4,8 +4,14 @@ JNGL_MAIN_BEGIN {
 	try {
 		jngl::showWindow("Android Test", 2560, 1440);
 		float x = 0;
+		bool first = true;
 		while (jngl::running()) {
 			jngl::updateInput();
+			// FIXME: It takes a while for the prefix to be set.
+			if (jngl::getPrefix() != "" && first) {
+				first = false;
+				jngl::play("test.ogg");
+			}
 			jngl::setBackgroundColor(0, 255, 0);
 			jngl::setColor(0, 0, 255);
 			const auto mouse = jngl::getMousePos();

@@ -19,6 +19,14 @@ void ANativeActivity_onCreate(ANativeActivity* app, void* ud, size_t udsize) {
 	try {
 		load_lib("libogg.so");
 		load_lib("libvorbis.so");
+		const auto openal = load_lib("libopenal.so");
+		const auto jni = reinterpret_cast<jint (*)(JavaVM*, void*)>(dlsym(openal, "JNI_OnLoad"));
+		if (jni) {
+			jni(app->vm, nullptr);
+		} else {
+			__android_log_print(ANDROID_LOG_INFO, "bootstrap", "Couldn't find JNI_OnLoad!");
+		}
+
 		auto main = reinterpret_cast<void (*)(ANativeActivity*, void*, size_t)>(
 			dlsym(load_lib("libjngl-test.so"), "ANativeActivity_onCreate")
 		);
