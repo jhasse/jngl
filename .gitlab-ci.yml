@@ -1,3 +1,6 @@
+variables:
+  CLICOLOR_FORCE: "1"
+
 gcc:
   image: fedora:28
   stage: build
@@ -31,8 +34,8 @@ mingw:
     - ninja -C build
 
 android:
-  image: lakoo/android-ndk:26-27.0.3-r17
+  image: jhasse/android-ndk:r17b
   stage: build
   script:
-    - apt install -y file libboost-dev cmake
+    - dnf install -y file boost-devel cmake git gcc-c++ make
     - make -C android

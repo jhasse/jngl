@@ -5,7 +5,7 @@ include/boost:
 
 .PHONY: libjngl
 libjngl: include/boost ../src/* ../src/android/*
-	$$ANDROID_NDK_HOME/ndk-build NDK_DEBUG=1 -j$(nproc) -Cjngl
+	$$ANDROID_NDK_HOME/ndk-build NDK_DEBUG=1 -j$$(nproc) -Cjngl
 
 test/assets:
 	mkdir test/assets
@@ -20,6 +20,8 @@ test/obb:
 	mkdir test/obb
 
 test/main.obb: test/assets/jngl.webp test/assets/test.ogg test/obb
+	# The jobb tool is buggy AF, it needs a certain file size to not crash:
+	for i in $$(seq 70); do cp test/assets/test.ogg test/assets/dummy$$i; done
 	$$ANDROID_HOME/tools/bin/jobb -d test/assets/ -o test/main.obb -pn com.bixense.jngl_test -pv 11 -k secret
 
 test/app/build/outputs/apk/debug/app-debug.apk: libjngl test/app/src/main/jniLibs/armeabi-v7a/libopenal.so
