@@ -84,8 +84,13 @@ namespace jngl {
 		debug("freeing sound buffer ... ");
 		alSourceStop(impl->source);
 		checkAlError();
-		alSourceUnqueueBuffers(impl->source, 1, &impl->buffer);
+		ALint processedBuffers = 0;
+		alGetSourcei(impl->source, AL_BUFFERS_PROCESSED, &processedBuffers);
 		checkAlError();
+		if (processedBuffers == 1) {
+			alSourceUnqueueBuffers(impl->source, processedBuffers, &impl->buffer);
+			checkAlError();
+		}
 		alDeleteSources(1, &impl->source);
 		checkAlError();
 		alDeleteBuffers(1, &impl->buffer);
