@@ -35,6 +35,4 @@ android:
   stage: build
   script:
     - apt install -y file libboost-dev
-    - ln -s /usr/include/boost android/include/boost
-    - $ANDROID_NDK_HOME/ndk-build -j$(nproc) -C android/jngl
-    - cd android/test && ./gradlew build
+    - make -C android
