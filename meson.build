@@ -133,6 +133,9 @@ if target_machine.system() == 'linux'
 	endif
 endif
 
+jngl_dep = declare_dependency(include_directories : include, link_with : lib,
+                              dependencies : thread_dep)
+
 if not meson.is_subproject()
 	boost_test_dep = dependency('boost', modules : [ 'unit_test_framework' ], required : false)
 	if boost_test_dep.found()
@@ -146,9 +149,9 @@ if not meson.is_subproject()
 		include_directories : include))
 	endif
 	executable('example-bike', ['examples/bike/base.cpp', 'examples/bike/bike.cpp',
-	'examples/bike/line.cpp', 'examples/bike/main.cpp', 'examples/bike/vector2d.cpp',
-	'examples/bike/wheel.cpp'], dependencies : [boost_test_dep, thread_dep], link_with : lib,
-	include_directories : include)
+		'examples/bike/line.cpp', 'examples/bike/main.cpp', 'examples/bike/vector2d.cpp',
+		'examples/bike/wheel.cpp'], dependencies : jngl_dep)
+	executable('example-throw', ['examples/throw/main.cpp'], dependencies : jngl_dep)
 endif
 
 install_headers('src/jngl.hpp')
@@ -178,6 +181,3 @@ install_headers([
 	'src/jngl/window.hpp',
 	'src/jngl/work.hpp',
 ], subdir : 'jngl')
-
-jngl_dep = declare_dependency(include_directories : include, link_with : lib,
-                              dependencies : thread_dep)

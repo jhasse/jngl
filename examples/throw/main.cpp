@@ -20,36 +20,38 @@ private:
 
 const double timePerFrame = 0.01; // 100 FPS
 
-int main()
-{
-	jngl::ShowWindow("Throw Example", screenWidth, screenHeight);
-	Ball ball("ball.png");
-	double oldTime = jngl::Time();
-	while(jngl::Running())
-	{
-		if(jngl::Time() - oldTime > timePerFrame)
-		{
+JNGL_MAIN_BEGIN {
+	jngl::setScaleFactor(
+	    std::floor(std::min(jngl::getDesktopWidth() / 800, jngl::getDesktopHeight() / 600)));
+	jngl::showWindow("Throw Example", screenWidth * jngl::getScaleFactor(),
+	                 screenHeight * jngl::getScaleFactor());
+	Ball ball("ball");
+	double oldTime = jngl::getTime();
+	while (jngl::running()) {
+		if (jngl::getTime() - oldTime > timePerFrame) {
 			oldTime += timePerFrame;
-			ball.CheckMouse(jngl::GetMouseX(), jngl::GetMouseY());
+			ball.CheckMouse(jngl::getMousePos().x + screenWidth / 2,
+			                jngl::getMousePos().y + screenHeight / 2);
 			ball.Move();
 		}
 		else
 		{
-			jngl::BeginDraw();
+			jngl::updateInput();
+			jngl::translate(-screenWidth / 2, -screenHeight / 2);
 			ball.Draw();
-			jngl::EndDraw();
+			jngl::swapBuffers();
 		}
 	}
-}
+} JNGL_MAIN_END
 
-Ball::Ball(const std::string& filename) : x_(100), y_(100), xSpeed_(200), ySpeed_(200),
-    filename_(filename), width_(jngl::GetWidth(filename)), height_(jngl::GetHeight(filename))
-{
+Ball::Ball(const std::string& filename)
+: x_(100), y_(100), xSpeed_(200), ySpeed_(200), filename_(filename),
+  width_(jngl::getWidth(filename)), height_(jngl::getHeight(filename)) {
 }
 
 void Ball::Draw()
 {
-	jngl::Draw("ball.png", static_cast<int>(x_), static_cast<int>(y_));
+	jngl::draw("ball", static_cast<int>(x_), static_cast<int>(y_));
 }
 
 void Ball::Move()
@@ -82,8 +84,7 @@ void Ball::Move()
 
 void Ball::CheckMouse(const int x, const int y)
 {
-	if(jngl::MouseDown())
-	{
+	if (jngl::mouseDown()) {
 		xSpeed_ = (x - width_ / 2 - x_) * 10; // Geschwindigkeit vom Ball auf Entfernung von
 		ySpeed_ = (y - height_ / 2 - y_) * 10; // Mausposition und Ballmittelpunkt mal 10 setzen
 	}
