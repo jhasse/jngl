@@ -27,6 +27,7 @@ typedef void ALvoid;
 #define AL_PLAYING                                0x1012
 #define AL_PAUSED                                 0x1013
 #define AL_STOPPED                                0x1014
+#define AL_BUFFERS_PROCESSED                      0x1016
 #define AL_FORMAT_MONO8                           0x1100
 #define AL_FORMAT_MONO16                          0x1101
 #define AL_FORMAT_STEREO8                         0x1102
