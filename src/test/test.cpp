@@ -143,8 +143,9 @@ public:
 		jngl::popMatrix();
 		drawMouse(jngl::getMousePos());
 		if (++frameNumber == 500) {
-			std::cout << "It took " << jngl::getTime() - frameTime
-			          << " seconds to render 500 frames." << std::endl;
+			const auto seconds = jngl::getTime() - frameTime;
+			std::cout << "It took " << seconds << " seconds to render 500 frames (~"
+			          << int(500.0 / seconds) << " FPS)" << std::endl;
 			frameNumber = 0;
 			frameTime = jngl::getTime();
 		}
@@ -398,7 +399,9 @@ void testKeys() {
 			        << " ↓: " << controller->down(jngl::controller::DpadDown)
 			        << " ←: " << controller->down(jngl::controller::DpadLeft)
 			        << " →: " << controller->down(jngl::controller::DpadRight);
-			jngl::print(sstream.str(), 558, 50 + controllerNr * 110);
+			jngl::setColor(255, 255, 255, 150);
+			jngl::drawRect({500, 40 + (controllerNr - 1) * 110}, {300, 120});
+			jngl::print(sstream.str(), 558, 50 + (controllerNr - 1) * 110);
 			++controllerNr;
 		}
 		jngl::popMatrix();
