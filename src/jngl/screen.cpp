@@ -25,6 +25,10 @@ double getScreenHeight() {
 	return static_cast<double>(getWindowHeight()) / factor;
 }
 
+Vec2 getScreenSize() {
+	return {getScreenWidth(), getScreenHeight()};
+}
+
 bool deviceOrientationSupported[] = { false, false, true, true };
 
 void setDeviceOrientationSupported(DeviceOrientation i, bool enabled) {

@@ -5,6 +5,7 @@
 
 #include "dll.hpp"
 #include "types.hpp"
+#include "Vec2.hpp"
 
 namespace jngl {
 	Float JNGLDLL_API getScaleFactor();
@@ -14,6 +15,8 @@ namespace jngl {
 	double JNGLDLL_API getScreenWidth();
 
 	double JNGLDLL_API getScreenHeight();
+
+	Vec2 JNGLDLL_API getScreenSize();
 
 	enum DeviceOrientation {
 		Portrait,
