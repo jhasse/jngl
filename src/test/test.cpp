@@ -400,8 +400,8 @@ void testKeys() {
 			        << " ←: " << controller->down(jngl::controller::DpadLeft)
 			        << " →: " << controller->down(jngl::controller::DpadRight);
 			jngl::setColor(255, 255, 255, 150);
-			jngl::drawRect({500, 40 + (controllerNr - 1) * 110}, {300, 120});
-			jngl::print(sstream.str(), 558, 50 + (controllerNr - 1) * 110);
+			jngl::drawRect({500, 40. + (controllerNr - 1) * 110.}, {300, 120});
+			jngl::print(sstream.str(), 558, 50. + (controllerNr - 1) * 110);
 			++controllerNr;
 		}
 		jngl::popMatrix();
