@@ -10,6 +10,7 @@
 #endif
 
 namespace jngl {
+
 template <class T>
 #ifdef NDEBUG
 void debug(const T&) {
@@ -22,7 +23,7 @@ void debug(const T& t) {
 }
 
 template <class T>
-#ifndef NDEBUG
+#ifdef NDEBUG
 void debugLn(const T&) {
 #else
 void debugLn(const T& t) {
@@ -31,4 +32,5 @@ void debugLn(const T& t) {
 	printMessage(s.str());
 #endif
 }
+
 } // namespace jngl
