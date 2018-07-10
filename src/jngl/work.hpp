@@ -8,20 +8,23 @@
 #include <memory>
 
 namespace jngl {
-	class JNGLDLL_API Work {
-	public:
-		virtual void step() = 0;
-		virtual void draw() const = 0;
-		virtual void onQuitEvent();
-		virtual void onLoad();
-		virtual ~Work();
-	};
 
-	std::shared_ptr<Work> JNGLDLL_API getWork();
+class JNGLDLL_API Work {
+public:
+	virtual void step() = 0;
+	virtual void draw() const = 0;
+	virtual void onQuitEvent();
+	virtual void onLoad();
+	virtual ~Work();
+};
 
-	void JNGLDLL_API setWork(std::shared_ptr<Work> work);
+std::shared_ptr<Work> JNGLDLL_API getWork();
 
-	void JNGLDLL_API setWork(Work*);
+void JNGLDLL_API setWork(std::shared_ptr<Work> work);
 
-	void JNGLDLL_API resetFrameLimiter();
-}
+[[deprecated("Use setWork(std::shared_ptr<Work>) instead")]]
+void JNGLDLL_API setWork(Work*);
+
+void JNGLDLL_API resetFrameLimiter();
+
+} // namespace jngl
