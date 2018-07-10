@@ -8,7 +8,7 @@ const int screenHeight = 600;
 class Ball
 {
 public:
-	Ball(const std::string& filename);
+	explicit Ball(const std::string& filename);
 	void Draw();
 	void Move();
 	void CheckMouse(int x, int y);

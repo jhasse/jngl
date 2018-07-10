@@ -1,11 +1,9 @@
-#ifndef WHEEL_HPP
-#define WHEEL_HPP
+#pragma once
 
 #include "vector2d.hpp"
 #include "line.hpp"
 
-class Wheel
-{
+class Wheel {
 public:
 	Wheel(double x, double y);
 	void Draw();
@@ -14,7 +12,5 @@ public:
 	Vector2d position_;
 	Vector2d speed_;
 	const static int radius_;
-	Wheel* otherWheel_;
+	Wheel* otherWheel_ = nullptr;
 };
-
-#endif
