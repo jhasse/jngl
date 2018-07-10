@@ -7,7 +7,7 @@
 
 namespace jngl {
 
-unsigned char colorRed = 0, colorGreen = 0, colorBlue = 0, colorAlpha = 255;
+uint8_t colorRed = 0, colorGreen = 0, colorBlue = 0, colorAlpha = 255;
 
 void setColor(const jngl::Color color) {
 	setColor(color.getRed(), color.getGreen(), color.getBlue());

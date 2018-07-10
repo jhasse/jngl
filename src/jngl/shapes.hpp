@@ -39,6 +39,8 @@ void JNGLDLL_API drawCircle(Vec2, float radius, float startAngle = 0);
 
 void JNGLDLL_API drawPoint(double x, double y);
 
+void JNGLDLL_API drawTriangle(Vec2 a, Vec2 b, Vec2 c);
+
 void JNGLDLL_API drawTriangle(double A_x, double A_y, double B_x, double B_y, double C_x,
                               double C_y);
 
