@@ -32,7 +32,7 @@ namespace jngl {
 	};
 
 	struct Sound::Impl {
-		ALuint buffer;
+		ALuint buffer = 0;
 		ALuint source = 0;
 	};
 
@@ -131,6 +131,8 @@ namespace jngl {
 		}
 		Audio(const Audio&) = delete;
 		Audio& operator=(const Audio&) = delete;
+		Audio(Audio&&) = delete;
+		Audio& operator=(Audio&&) = delete;
 		~Audio() {
 			sounds_.clear();
 			sounds.clear();
@@ -204,7 +206,7 @@ namespace jngl {
 		debug("OK\n");
 	}
 	void SoundFile::Play() {
-		sound_.reset(new Sound(*params, buffer_));
+		sound_ = std::make_shared<Sound>(*params, buffer_);
 		GetAudio().Play(sound_);
 	}
 	void SoundFile::Stop() {

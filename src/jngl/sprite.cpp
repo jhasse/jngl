@@ -164,7 +164,7 @@ namespace jngl {
 	                     const bool halfLoad) {
 		const unsigned int PNG_BYTES_TO_CHECK = 4;
 		png_byte buf[PNG_BYTES_TO_CHECK];
-		assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short));
+		static_assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short));
 
 		// Read in some of the signature bytes
 		if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK ||

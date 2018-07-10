@@ -31,7 +31,7 @@ namespace jngl {
 		if (FT_Get_Glyph(face->glyph, &glyph)) {
 			throw std::runtime_error("FT_Get_Glyph failed");
 		}
-		FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
+		const auto bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph);
 		const FT_Bitmap& bitmap = bitmap_glyph->bitmap;
 
 		int width = bitmap.width;
@@ -105,19 +105,19 @@ namespace jngl {
 		if (ch & 0x80) { // first bit (Check if this is an Unicode character)
 			const char* sourceEnd = &ch + 2;
 			// sourceEnd has to be the next character after the utf-8 sequence
-			const std::runtime_error unicodeError("Invalid UTF-8 string!");
+			const static auto ERROR_MSG = "Invalid UTF-8 string!";
 			if (++it == end) {
-				throw unicodeError;
+				throw std::runtime_error(ERROR_MSG);
 			}
 			if (ch & 0x20) { // third bit
 				if(++it == end) {
-					throw unicodeError;
+					throw std::runtime_error(ERROR_MSG);
 				}
 				++sourceEnd;
 				if(ch & 0x10) // fourth bit
 				{
 					if(++it == end) {
-						throw unicodeError;
+						throw std::runtime_error(ERROR_MSG);
 					}
 					++sourceEnd;
 				}
