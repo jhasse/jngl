@@ -32,6 +32,9 @@ mingw:
     - dnf install -y gcc-c++ meson mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft wine-core
     - meson build --werror --cross-file mingw.ini
     - ninja -C build
+    - rm -rf build
+    - meson build --werror --cross-file mingw.ini --buildtype release --unity on
+    - ninja -C build
 
 android:
   image: jhasse/android-ndk:r17b
