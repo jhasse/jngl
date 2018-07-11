@@ -11,7 +11,7 @@ ifdef CXX
 else
 	CXX = c++
 endif
-CXXFLAGS = @(CXXFLAGS) -std=c++14 -fdiagnostics-color
+CXXFLAGS = @(CXXFLAGS) -std=c++17 -fdiagnostics-color
 
 ifdef PKG_CONFIG
 	PKG_CONFIG = @(PKG_CONFIG)
