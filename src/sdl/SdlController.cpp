@@ -10,6 +10,9 @@ SdlController::SdlController(SDL_Joystick* const handle) : handle(handle) {
 	case 11:
 		model = Model::XBOX_WIRED;
 		break;
+	case 13:
+		model = Model::DS4;
+		break;
 	case 15:
 		model = Model::XBOX;
 		break;
@@ -49,9 +52,6 @@ float SdlController::stateWithoutDeadzone(controller::Button button) const {
 
 float SdlController::state(controller::Button button) const {
 	float state = stateWithoutDeadzone(button);
-	if (model != Model::XBOX_WIRED and model != Model::XBOX) {
-		return state; // no deadzone needed
-	}
 	controller::Button otherAxis;
 	switch(button) {
 		case controller::LeftStickY:
@@ -69,7 +69,15 @@ float SdlController::state(controller::Button button) const {
 		default:
 			return state; // no deadzone needed
 	}
-	const auto otherState = stateWithoutDeadzone(otherAxis);
+	auto otherState = stateWithoutDeadzone(otherAxis);
+	if (model == Model::DS4) { // DualShock 4 returns sticks as square coordinates
+		const double tmp = state * std::sqrt(1 - 0.5 * otherState * otherState);
+		otherState *= std::sqrt(1 - 0.5 * state * state);
+		state = tmp;
+	}
+	if (model != Model::XBOX_WIRED and model != Model::XBOX) {
+		return state; // no deadzone needed
+	}
 	if (state * state + otherState * otherState < 0.1) { // inside deadzone circle?
 		return 0;
 	}
