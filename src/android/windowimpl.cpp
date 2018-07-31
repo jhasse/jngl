@@ -8,6 +8,7 @@
 #include "../jngl/debug.hpp"
 #include "../window.hpp"
 #include "../main.hpp"
+#include "fopen.hpp"
 
 #include <android_native_app_glue.h>
 #include <android/storage_manager.h>
@@ -63,17 +64,9 @@ namespace jngl {
         app->onAppCmd = engine_handle_cmd;
         app->onInputEvent = engine_handle_input;
         jngl::debugLn("Handler set.");
-    }
 
-    void callback(const char* filename, const int32_t state, void* data) {
-        if (state == AOBB_STATE_ERROR_INTERNAL) {
-            debugLn("There was an internal system error encountered while trying to mount the OBB.");
-        } else {
-            const auto storageManager = std::shared_ptr<AStorageManager>(AStorageManager_new(), AStorageManager_delete);
-            jngl::setPrefix(AStorageManager_getMountedObbPath(storageManager.get(), filename));
-            jngl::setPrefix(jngl::getPrefix() + "/");
-        }
-        *reinterpret_cast<bool*>(data) = true;
+		android_asset_manager = app->activity->assetManager;
+		assert(android_asset_manager);
     }
 
     void WindowImpl::init() {
@@ -131,52 +124,6 @@ namespace jngl {
         // Initialize GL state.
         Init(width, height, width, height);
 
-        ANativeActivity* activity = app->activity;
-
-        JNIEnv* env = nullptr;
-        activity->vm->AttachCurrentThread(&env, nullptr);
-        jclass clazz = env->GetObjectClass(activity->clazz);
-
-        jmethodID methodID = env->GetMethodID(clazz, "getPackageName", "()Ljava/lang/String;");
-        jobject result = env->CallObjectMethod(activity->clazz, methodID);
-        std::string packageName = env->GetStringUTFChars((jstring)result, nullptr);
-
-        jmethodID mid = env->GetMethodID(clazz, "getObbDir", "()Ljava/io/File;");
-        jobject obj_File = env->CallObjectMethod(activity->clazz, mid, nullptr);
-        jclass cls_File = env->FindClass("java/io/File");
-        jmethodID mid_getPath = env->GetMethodID(cls_File, "getPath", "()Ljava/lang/String;");
-        jstring obj_Path = (jstring) env->CallObjectMethod(obj_File, mid_getPath);
-
-        std::string obbDir = env->GetStringUTFChars((jstring)obj_Path, nullptr);
-
-        std::stringstream sstream;
-        sstream << obbDir << "/main.1."
-                << packageName << ".obb";
-        std::string obbFile = sstream.str();
-
-        std::fstream test(obbFile);
-        debug("obbFile: "); debugLn(obbFile);
-        if (test) {
-            debugLn("exists");
-            test.close();
-        }
-        auto storageManager = AStorageManager_new();
-        auto info = AObbScanner_getObbInfo(obbFile.c_str());
-        if (!info) {
-            debugLn("info failed");
-        } else {
-            debugLn("info success");
-        }
-        debugLn(AStorageManager_isObbMounted(storageManager, obbFile.c_str()));
-        bool finished = false;
-        AStorageManager_mountObb(storageManager, obbFile.c_str(), "secret", callback, &finished);
-        debugLn(AStorageManager_isObbMounted(storageManager, obbFile.c_str()));
-
-        while (!finished) {} // wait on this thread
-        debugLn(jngl::getPrefix());
-
-        activity->vm->DetachCurrentThread();
-
         initialized = true;
     }
 
@@ -206,6 +153,9 @@ namespace jngl {
             relativeX = mouseX;
             relativeY = mouseY;
         }
+		if (!initialized) { // wait for WindowImpl::init to get called by engine_handle_cmd
+			return updateInput();
+		}
     }
 
     void WindowImpl::swapBuffers() {

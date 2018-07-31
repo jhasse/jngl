@@ -9,6 +9,10 @@
 #include "main.hpp"
 #include "spriteimpl.hpp"
 
+#ifdef ANDROID
+#include "android/fopen.hpp"
+#endif
+
 #include FT_GLYPH_H
 #include <boost/lexical_cast.hpp>
 #include <codecvt>
@@ -150,8 +154,21 @@ namespace jngl {
 			}
 		}
 		debug("Loading font "); debug(filename); debug("... ");
-		if (FT_New_Face(library, filename.c_str(), 0, &face)) {
-			throw std::runtime_error("FT_New_Face failed");
+
+		FILE* const f = fopen(filename.c_str(), "rb");
+		assert(f);
+		fseek(f, 0, SEEK_END);
+		const size_t fsize = ftell(f);
+		fseek(f, 0, SEEK_SET);
+		bytes = std::make_unique<FT_Byte[]>(fsize);
+		const auto result = fread(bytes.get(), 1, fsize, f);
+		if (result != fsize) {
+			throw std::runtime_error("fread failed");
+		}
+		fclose(f);
+
+		if (FT_New_Memory_Face(library, bytes.get(), fsize, 0, &face) != 0) {
+			throw std::runtime_error("FT_New_Memory_Face failed");
 		}
 		debug("OK\n");
 		// Finally will call FT_Done_Face when the Font class is destroyed:

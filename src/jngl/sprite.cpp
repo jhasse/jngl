@@ -13,6 +13,10 @@
 #include "debug.hpp"
 #include "screen.hpp"
 
+#ifdef ANDROID
+	#include "../android/fopen.hpp"
+#endif
+
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <fstream>

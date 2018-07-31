@@ -19,6 +19,10 @@
  #include <vorbis/vorbisfile.h>
 #endif
 
+#ifdef ANDROID
+#include "android/fopen.hpp"
+#endif
+
 #include <algorithm>
 #include <cstdio>
 #include <stdexcept>

@@ -1,4 +1,4 @@
-all: test/app/build/outputs/apk/debug/app-debug.apk test/main.obb
+all: test/app/build/outputs/apk/debug/app-debug.apk
 
 include/boost:
 	ln -s /usr/include/boost include/boost
@@ -7,30 +7,32 @@ include/boost:
 libjngl: include/boost ../src/* ../src/android/*
 	$$ANDROID_NDK_HOME/ndk-build NDK_DEBUG=1 -j$$(nproc) -Cjngl
 
-test/assets:
-	mkdir test/assets
+test/app/src/main/assets:
+	mkdir "$@"
 
-test/assets/jngl.webp: test/assets
+test/app/src/main/assets/jngl.webp: test/app/src/main/assets ../jngl.webp
 	cp ../jngl.webp "$@"
 
-test/assets/test.ogg: test/assets
+test/app/src/main/assets/jngl.png: test/app/src/main/assets ../jngl.png
+	cp ../jngl.png "$@"
+
+test/app/src/main/assets/test.ogg: test/app/src/main/assets ../test.ogg
 	cp ../test.ogg "$@"
 
-test/obb:
-	mkdir test/obb
+test/app/src/main/assets/Arial.ttf: test/app/src/main/assets ../Arial.ttf
+	cp ../Arial.ttf "$@"
 
-test/main.obb: test/assets/jngl.webp test/assets/test.ogg test/obb
-	# The jobb tool is buggy AF, it needs a certain file size to not crash:
-	for i in $$(seq 70); do cp test/assets/test.ogg test/assets/dummy$$i; done
-	$$ANDROID_HOME/tools/bin/jobb -d test/assets/ -o test/main.obb -pn com.bixense.jngl_test -pv 11 -k secret
-
-test/app/build/outputs/apk/debug/app-debug.apk: libjngl test/app/src/main/jniLibs/armeabi-v7a/libopenal.so
+test/app/build/outputs/apk/debug/app-debug.apk: libjngl \
+                                                test/app/src/main/jniLibs/armeabi-v7a/libopenal.so \
+                                                test/app/src/main/assets/jngl.webp \
+                                                test/app/src/main/assets/jngl.png \
+                                                test/app/src/main/assets/test.ogg \
+                                                test/app/src/main/assets/Arial.ttf
 	cd test && ./gradlew build
 
 .PHONE: run
-run: test/app/build/outputs/apk/debug/app-debug.apk test/main.obb
+run: test/app/build/outputs/apk/debug/app-debug.apk
 	$$ANDROID_HOME/platform-tools/adb install -r test/app/build/outputs/apk/debug/app-debug.apk
-	$$ANDROID_HOME/platform-tools/adb push test/main.obb /mnt/sdcard/Android/obb/com.bixense.jngl_test/main.1.com.bixense.jngl_test.obb
 	$$ANDROID_HOME/platform-tools/adb shell am start -a android.intent.action.MAIN -n com.bixense.jngl_test/android.app.NativeActivity
 
 openal-soft/CMakeLists.txt:
