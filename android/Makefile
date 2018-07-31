@@ -38,9 +38,9 @@ openal-soft/CMakeLists.txt:
 	cd openal-soft && git checkout dc3fa3e51f91096a22ba53faec5bd1146936bee3
 
 openal-soft/build/libopenal.so: openal-soft/CMakeLists.txt
-	cd openal-soft && sed -i 's/aligned_alloc/not_working_on_android/g' CMakeLists.txt && \
-	cd build && cmake -DCMAKE_SYSTEM_NAME=Android -DANDROID_NDK=$$ANDROID_NDK_HOME \
-	-DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DALSOFT_BACKEND_OSS=OFF -DCMAKE_BUILD_TYPE=Release \
+	cd openal-soft && cd build && cmake -DCMAKE_SYSTEM_NAME=Android \
+	-DANDROID_NDK=$$ANDROID_NDK_HOME -DCMAKE_ANDROID_API=23 -DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a \
+	-DALSOFT_BACKEND_OSS=OFF -DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_ANDROID_NDK_TOOLCHAIN_VERSION=clang -DALSOFT_BACKEND_WAVE=OFF .. && $(MAKE)
 
 test/app/src/main/jniLibs/armeabi-v7a/libopenal.so: openal-soft/build/libopenal.so
