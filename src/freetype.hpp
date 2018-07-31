@@ -56,7 +56,9 @@ private:
 	unsigned int height_;
 	int lineHeight;
 	std::map<unsigned long, std::shared_ptr<Character>> characters_;
-	std::unique_ptr<FT_Byte[]> bytes;
+	std::shared_ptr<FT_Byte[]> bytes;
+
+	static std::map<std::string, std::pair<std::weak_ptr<FT_Byte[]>, size_t>> fileCaches;
 };
 
 } // namespace jngl

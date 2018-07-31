@@ -153,21 +153,28 @@ namespace jngl {
 				throw std::runtime_error("FT_Init_FreeType failed");
 			}
 		}
-		debug("Loading font "); debug(filename); debug("... ");
+		auto& fileCache = fileCaches[filename];
+		bytes = fileCache.first.lock();
+		if (bytes) {
+			debug("Reusing font buffer for "); debug(filename); debug("... ");
+		} else {
+			debug("Loading font "); debug(filename); debug("... ");
 
-		FILE* const f = fopen(filename.c_str(), "rb");
-		assert(f);
-		fseek(f, 0, SEEK_END);
-		const size_t fsize = ftell(f);
-		fseek(f, 0, SEEK_SET);
-		bytes = std::make_unique<FT_Byte[]>(fsize);
-		const auto result = fread(bytes.get(), 1, fsize, f);
-		if (result != fsize) {
-			throw std::runtime_error("fread failed");
+			FILE* const f = fopen(filename.c_str(), "rb");
+			assert(f);
+			fseek(f, 0, SEEK_END);
+			const size_t fsize = ftell(f);
+			fseek(f, 0, SEEK_SET);
+			bytes = std::make_unique<FT_Byte[]>(fsize);
+			const auto result = fread(bytes.get(), 1, fsize, f);
+			if (result != fsize) {
+				throw std::runtime_error("fread failed");
+			}
+			fclose(f);
+			fileCache = std::make_pair(bytes, fsize);
 		}
-		fclose(f);
 
-		if (FT_New_Memory_Face(library, bytes.get(), fsize, 0, &face) != 0) {
+		if (FT_New_Memory_Face(library, bytes.get(), fileCache.second, 0, &face) != 0) {
 			throw std::runtime_error("FT_New_Memory_Face failed");
 		}
 		debug("OK\n");
@@ -245,4 +252,5 @@ namespace jngl {
 
 	FT_Library FontImpl::library;
 	int FontImpl::instanceCounter = 0;
+	std::map<std::string, std::pair<std::weak_ptr<FT_Byte[]>, size_t>> FontImpl::fileCaches;
 } // namespace jngl
