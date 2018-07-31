@@ -154,7 +154,7 @@ namespace jngl {
 			}
 		}
 		auto& fileCache = fileCaches[filename];
-		bytes = fileCache.first.lock();
+		bytes = fileCache.lock();
 		if (bytes) {
 			debug("Reusing font buffer for "); debug(filename); debug("... ");
 		} else {
@@ -165,16 +165,16 @@ namespace jngl {
 			fseek(f, 0, SEEK_END);
 			const size_t fsize = ftell(f);
 			fseek(f, 0, SEEK_SET);
-			bytes = std::make_unique<FT_Byte[]>(fsize);
-			const auto result = fread(bytes.get(), 1, fsize, f);
+			bytes = std::make_shared<std::vector<FT_Byte>>(fsize);
+			const auto result = fread(bytes->data(), 1, fsize, f);
 			if (result != fsize) {
 				throw std::runtime_error("fread failed");
 			}
 			fclose(f);
-			fileCache = std::make_pair(bytes, fsize);
+			fileCache = bytes;
 		}
 
-		if (FT_New_Memory_Face(library, bytes.get(), fileCache.second, 0, &face) != 0) {
+		if (FT_New_Memory_Face(library, bytes->data(), bytes->size(), 0, &face) != 0) {
 			throw std::runtime_error("FT_New_Memory_Face failed");
 		}
 		debug("OK\n");
@@ -252,5 +252,5 @@ namespace jngl {
 
 	FT_Library FontImpl::library;
 	int FontImpl::instanceCounter = 0;
-	std::map<std::string, std::pair<std::weak_ptr<FT_Byte[]>, size_t>> FontImpl::fileCaches;
+	decltype(FontImpl::fileCaches) FontImpl::fileCaches;
 } // namespace jngl
