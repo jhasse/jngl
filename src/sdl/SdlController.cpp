@@ -3,6 +3,8 @@
 
 #include "SdlController.hpp"
 
+#include <cmath>
+
 namespace jngl {
 
 SdlController::SdlController(SDL_Joystick* const handle) : handle(handle) {
