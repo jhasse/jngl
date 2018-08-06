@@ -1,6 +1,4 @@
 *.DS_Store
-.sconsign.dblite
-.sconf_temp/
 config.log
 /build*/
 visualcpp/Debug/
