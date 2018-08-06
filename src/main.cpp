@@ -24,14 +24,6 @@ void clearBackgroundColor() {
 }
 
 bool Init(const int width, const int height, const int screenWidth, const int screenHeight) {
-#ifdef GLEW_OK
-	GLenum err = glewInit();
-	if (err != GLEW_OK) {
-		throw std::runtime_error(boost::lexical_cast<std::string>(glewGetErrorString(err)));
-	}
-	debug("Using GLEW "); debugLn(glewGetString(GLEW_VERSION));
-#endif
-
 	glShadeModel(GL_SMOOTH);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnable(GL_BLEND);
