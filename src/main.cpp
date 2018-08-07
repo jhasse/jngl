@@ -48,15 +48,15 @@ bool Init(const int width, const int height, const int screenWidth, const int sc
 #ifdef OPENGLES
 #define f2x(x) ((int)((x)*65536))
 	glOrthox(f2x(-width / 2), f2x(width / 2), f2x(height / 2), f2x(-height / 2), f2x(-1), f2x(1));
-	jngl::translate(-width / 2, height / 2);
-	jngl::rotate(-90);
-	jngl::translate(height / 2, width / 2);
-
 #ifdef ANDROID
 	glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
 	glBindVertexArray = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
 	glDeleteVertexArrays =
 	    (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");
+#else
+	jngl::translate(-width / 2, height / 2);
+	jngl::rotate(-90);
+	jngl::translate(height / 2, width / 2);
 #endif
 #else
 	glOrtho(-width / 2, width / 2, height / 2, -height / 2, -100.0f, 100.0f);
