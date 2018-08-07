@@ -76,14 +76,24 @@ Texture::~Texture() {
 }
 
 void Texture::draw() const {
+#ifdef ANDROID
+	// Android only supports VAOs with OpenGL ES 2.0, which JNGL isn't using yet.
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	opengl::BindArrayBuffer(vertexBuffer_);
+#else
 	glBindVertexArray(vao);
+#endif
 	glEnable(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
 	glDisable(GL_TEXTURE_2D);
+#ifdef ANDROID
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+#else
 	glBindVertexArray(0);
+#endif
 }
 
 void Texture::drawClipped(const float xstart, const float xend, const float ystart,
