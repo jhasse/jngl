@@ -19,17 +19,17 @@ void Line::HandleCollision(Wheel& wheel) const
 		connection.Normalize();
 		Vector2d collisionPoint = start_ + (connection * positionOnLine);
 		double distanceSq = (collisionPoint - wheel.position_).LengthSq();
-		if(distanceSq < wheel.radius_ * wheel.radius_)
+		if(distanceSq < Wheel::radius_ * Wheel::radius_)
 		{
 			wheel.CollisionWith(collisionPoint);
 			return;
 		}
 	}
-	if((start_ - wheel.position_).LengthSq() < wheel.radius_ * wheel.radius_)
+	if((start_ - wheel.position_).LengthSq() < Wheel::radius_ * Wheel::radius_)
 	{
 		wheel.CollisionWith(start_);
 	}
-	if((end_ - wheel.position_).LengthSq() < wheel.radius_ * wheel.radius_)
+	if((end_ - wheel.position_).LengthSq() < Wheel::radius_ * Wheel::radius_)
 	{
 		wheel.CollisionWith(end_);
 	}

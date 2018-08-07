@@ -18,23 +18,23 @@ void DisplayVector2d(Vector2d vec)
 
 void Bike::DoFrame()
 {
-	for (size_t i = 0; i < wheels_.size(); ++i) {
-		wheels_[i].Move();
+	for (auto& wheel : wheels_) {
+		wheel.Move();
 	}
 	Vector2d connection = wheels_[1].position_ - wheels_[0].position_;
 //  	std::cout << connection.Length() << std::endl;
 	connection.Normalize();
 	connection.Set(connection.Y() * 0.1, connection.X() * 0.1); // Um 90 Grad drehen und 50% Intensität
 	if (jngl::keyDown(jngl::key::Right)) {
-		for (size_t i = 0; i < wheels_.size(); ++i) {
-			wheels_[i].speed_ += Vector2d(0.4, 0);
+		for (auto& wheel : wheels_) {
+			wheel.speed_ += Vector2d(0.4, 0);
 		}
 		wheels_[0].speed_ += connection; // Dann hoch damit!
 		wheels_[1].speed_ -= connection; // Dann hoch damit!
 	}
 	if (jngl::keyDown(jngl::key::Left)) {
-		for (size_t i = 0; i < wheels_.size(); ++i) {
-			wheels_[i].speed_ -= Vector2d(0.4, 0);
+		for (auto& wheel : wheels_) {
+			wheel.speed_ -= Vector2d(0.4, 0);
 		}
 		wheels_[0].speed_ -= connection; // Dann hoch damit!
 		wheels_[1].speed_ += connection; // Dann hoch damit!
@@ -72,7 +72,7 @@ Bike::Bike()
 
 void Bike::Draw()
 {
-	for (size_t i = 0; i < wheels_.size(); ++i) {
-		wheels_[i].Draw();
+	for (auto& wheel : wheels_) {
+		wheel.Draw();
 	}
 }
