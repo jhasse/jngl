@@ -51,10 +51,19 @@ namespace jngl {
 
     static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
         WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
-        if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
-            impl.mouseX = AMotionEvent_getY(event, 0);
-            impl.mouseY = AMotionEvent_getX(event, 0);
-            return 1;
+		switch (AInputEvent_getType(event)) {
+			case AINPUT_EVENT_TYPE_MOTION:
+				impl.mouseX = AMotionEvent_getX(event, 0);
+				impl.mouseY = AMotionEvent_getY(event, 0);
+				switch (AMotionEvent_getAction(event)) {
+					case AMOTION_EVENT_ACTION_DOWN:
+						++impl.numberOfTouches;
+						break;
+					case AMOTION_EVENT_ACTION_UP:
+						--impl.numberOfTouches;
+						break;
+				};
+				return 1;
         }
         return 0;
     }
@@ -133,7 +142,8 @@ namespace jngl {
         int events;
         android_poll_source* source;
 
-        while ((ident = ALooper_pollAll(0, NULL, &events, (void**)&source)) >= 0) {
+		while ((ident = ALooper_pollAll(0, NULL, &events, (void**)&source)) >= 0 ||
+		       !initialized /* wait for WindowImpl::init to get called by engine_handle_cmd */) {
 
             // Process this event.
             if (source != NULL) {
@@ -147,15 +157,13 @@ namespace jngl {
                 }
         }
 
+		window->mouseDown_[0] = numberOfTouches > 0;
         window->mousex_ = mouseX - relativeX;
         window->mousey_ = mouseY - relativeY;
         if (window->relativeMouseMode) {
             relativeX = mouseX;
             relativeY = mouseY;
         }
-		if (!initialized) { // wait for WindowImpl::init to get called by engine_handle_cmd
-			return updateInput();
-		}
     }
 
     void WindowImpl::swapBuffers() {

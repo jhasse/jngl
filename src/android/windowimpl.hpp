@@ -1,7 +1,6 @@
-/*
-Copyright 2015 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2015-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
+
 #pragma once
 
 #include <EGL/egl.h>
@@ -24,6 +23,7 @@ namespace jngl {
 
         int mouseX = 0;
         int mouseY = 0;
+		unsigned int numberOfTouches = 0;
         int width;
         int height;
         int relativeX = 0;
