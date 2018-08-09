@@ -1,11 +1,11 @@
 cmake_minimum_required (VERSION 3.9 FATAL_ERROR)
 
-project(jgl LANGUAGES CXX)
+project(jngl LANGUAGES CXX)
 set (CMAKE_CXX_STANDARD 14)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-add_library(libjngl
+add_library(jngl
 	src/audio.cpp
 	src/framebufferimpl.cpp
 	src/freetype.cpp
@@ -34,19 +34,19 @@ add_library(libjngl
 	src/windowptr.cpp
     src/jngl.hpp)
 
-set_target_properties(libjngl PROPERTIES
+set_target_properties(jngl PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src/
 )
 
 if (UNIX)
-    target_sources(libjngl PRIVATE
+	target_sources(jngl PRIVATE
         src/sdl/input.cpp
         src/sdl/sdl.cpp
         src/sdl/window.cpp
         src/sdl/SdlController.cpp
     	src/linux/message.cpp)
     if(NOT APPLE)
-        target_sources(libjngl PRIVATE src/linux/window.cpp)
+		target_sources(jngl PRIVATE src/linux/window.cpp)
     endif()
 endif()
 
@@ -55,49 +55,50 @@ endif()
 if (UNIX)
     if(NOT APPLE)
         find_package(Fontconfig REQUIRED)
-        target_include_directories(libjngl PUBLIC ${FONTCONFIG_INCLUDE_DIR})
-        target_link_libraries(libjngl PRIVATE ${FONTCONFIG_LIBRARIES})
+		target_include_directories(jngl PUBLIC ${FONTCONFIG_INCLUDE_DIR})
+		target_link_libraries(jngl PRIVATE ${FONTCONFIG_LIBRARIES})
     endif()
 endif()
 
 # SDL2
 find_package(SDL2 REQUIRED)
-target_link_libraries(libjngl PUBLIC SDL2::SDL2)
+include_directories(${SDL2_INCLUDE_DIRS})
+target_link_libraries(jngl PUBLIC ${SDL2_LIBRARIES})
 
 # libjpeg
 find_package(JPEG REQUIRED)
-target_include_directories(libjngl PUBLIC ${JPEG_INCLUDE_DIR})
-target_link_libraries(libjngl PRIVATE ${JPEG_LIBRARIES})
+target_include_directories(jngl PUBLIC ${JPEG_INCLUDE_DIR})
+target_link_libraries(jngl PRIVATE ${JPEG_LIBRARIES})
 
 # freetype
 find_package(Freetype REQUIRED)
-target_include_directories(libjngl PUBLIC ${FREETYPE_INCLUDE_DIRS})
-target_link_libraries(libjngl PUBLIC ${FREETYPE_LIBRARIES})
+target_include_directories(jngl PUBLIC ${FREETYPE_INCLUDE_DIRS})
+target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES})
 
 # Threads
 find_package(Threads REQUIRED)
-target_link_libraries(libjngl PUBLIC Threads::Threads)
+target_link_libraries(jngl PUBLIC Threads::Threads)
 
 # PNG
 find_package(PNG REQUIRED)
-target_link_libraries(libjngl PUBLIC ${PNG_LIBRARIES})
+target_link_libraries(jngl PUBLIC ${PNG_LIBRARIES})
 
 # openal
 find_package(OpenAL REQUIRED)
-target_link_libraries(libjngl PUBLIC ${OPENAL_LIBRARY})
+target_link_libraries(jngl PUBLIC ${OPENAL_LIBRARY})
 
 # epoxy
 find_package(LibEpoxy REQUIRED)
-target_include_directories(libjngl PRIVATE ${epoxy_INCLUDE_DIR})
-target_link_libraries(libjngl PUBLIC ${epoxy_LIBRARY})
+target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
+target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
 
 # webp
 find_package(WebP REQUIRED)
-target_include_directories(libjngl PRIVATE ${WEBP_INCLUDE_DIRS})
-target_link_libraries(libjngl PUBLIC ${WEBP_LIBRARIES})
+target_include_directories(jngl PRIVATE ${WEBP_INCLUDE_DIRS})
+target_link_libraries(jngl PUBLIC ${WEBP_LIBRARIES})
 
 # VorbisFile
 find_package(VorbisFile REQUIRED)
-target_include_directories(libjngl PUBLIC ${VorbisFile_INCLUDE_DIRS})
-target_link_libraries(libjngl PUBLIC ${VorbisFile_LIBRARIES})
+target_include_directories(jngl PUBLIC ${VorbisFile_INCLUDE_DIRS})
+target_link_libraries(jngl PUBLIC ${VorbisFile_LIBRARIES})
 
