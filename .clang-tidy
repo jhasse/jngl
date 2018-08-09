@@ -1,6 +1,6 @@
 ---
 Checks:          '*,-cert-err58-cpp,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-google-readability-todo,-google-runtime-references,-readability-named-parameter,-clang-diagnostic-unused-command-line-argument,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-fuchsia-default-arguments,-hicpp-no-array-decay,-cppcoreguidelines-pro-bounds-constant-array-index,-cert-err52-cpp,-cppcoreguidelines-pro-type-vararg,-hicpp-signed-bitwise,-hicpp-vararg,-fuchsia-overloaded-operator'
-WarningsAsErrors: 'hicpp-use-override,modernize-avoid-bind,llvm-namespace-comment,modernize-use-nullptr,modernize-pass-by-value,hicpp-noexcept-move,boost-use-to-string,google-readability-namespace-comments'
+WarningsAsErrors: 'hicpp-use-override,modernize-avoid-bind,llvm-namespace-comment,modernize-use-nullptr,modernize-pass-by-value,hicpp-noexcept-move,boost-use-to-string,google-readability-namespace-comments,modernize-use-default-member-init'
 CheckOptions:
       - key:             readability-implicit-bool-conversion.AllowPointerConditions
         value:           '1'

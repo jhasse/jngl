@@ -108,8 +108,8 @@ namespace jngl {
 		unsigned int maxStepsPerFrame = 3;
 		bool fullscreen_, running_, isMouseVisible_, relativeMouseMode, anyKeyPressed_;
 		bool isMultisampleSupported_ = true;
-		std::array<bool, 3> mouseDown_;
-		std::array<bool, 3> mousePressed_;
+		std::array<bool, 3> mouseDown_ = { false, false, false };
+		std::array<bool, 3> mousePressed_ = { false, false, false };
 		std::map<unsigned int, bool> keyDown_;
 		std::map<unsigned int, bool> keyPressed_;
 		std::map<std::string, bool> characterDown_;

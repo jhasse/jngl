@@ -19,7 +19,7 @@ namespace jngl {
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const int screenWidth, const int screenHeight)
 : fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false),
-  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), screenWidth(screenWidth),
+  anyKeyPressed_(false), width_(width), height_(height), screenWidth(screenWidth),
   screenHeight(screenHeight), fontName_(""), changeWork_(false), impl(new WindowImpl) {
 	mouseDown_.fill(false);
 	mousePressed_.fill(false);
