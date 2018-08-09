@@ -63,14 +63,11 @@ ninja -C build
 
 ## Android
 
-Install the Android SDK and let `ANDROID_HOME` point to it. Also install the NDK and make sure that
-`ndk-build` is on your `PATH`. Then run:
+Install the Android SDK and let `ANDROID_HOME` point to it. Also install the NDK and let
+`ANDROID_NDK_HOME` point to that. Type the following to run the test app via ADB:
 
 ```
-ln -s /usr/include/boost android/include/boost
-ndk-build -j$(nproc) -C android/jngl
-cd android/test
-./gradlew build
+make -C android run
 ```
 
 ## iOS

@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.9 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.6 FATAL_ERROR)
 
 project(jngl LANGUAGES CXX)
 set (CMAKE_CXX_STANDARD 14)
@@ -38,7 +38,11 @@ set_target_properties(jngl PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src/
 )
 
-if (UNIX)
+if (ANDROID)
+	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/android/include)
+	file(GLOB ANDROID_SOURCES src/android/*.cpp)
+	target_sources(jngl PRIVATE ${ANDROID_SOURCES})
+elseif (UNIX)
 	target_sources(jngl PRIVATE
         src/sdl/input.cpp
         src/sdl/sdl.cpp
@@ -53,52 +57,56 @@ endif()
 
 # fontconfig
 if (UNIX)
-    if(NOT APPLE)
+	if(NOT APPLE AND NOT ANDROID)
         find_package(Fontconfig REQUIRED)
 		target_include_directories(jngl PUBLIC ${FONTCONFIG_INCLUDE_DIR})
 		target_link_libraries(jngl PRIVATE ${FONTCONFIG_LIBRARIES})
     endif()
 endif()
 
-# SDL2
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
-target_link_libraries(jngl PUBLIC ${SDL2_LIBRARIES})
+if(ANDROID)
+	target_compile_definitions(jngl PRIVATE NOJPEG NOWEBP OPENGLES)
+	target_include_directories(jngl PRIVATE ${ANDROID_NDK}/sources/android/native_app_glue)
+else()
+	# SDL2
+	find_package(SDL2 REQUIRED)
+	include_directories(${SDL2_INCLUDE_DIRS})
+	target_link_libraries(jngl PUBLIC ${SDL2_LIBRARIES})
 
-# libjpeg
-find_package(JPEG REQUIRED)
-target_include_directories(jngl PUBLIC ${JPEG_INCLUDE_DIR})
-target_link_libraries(jngl PRIVATE ${JPEG_LIBRARIES})
+	# libjpeg
+	find_package(JPEG REQUIRED)
+	target_include_directories(jngl PUBLIC ${JPEG_INCLUDE_DIR})
+	target_link_libraries(jngl PRIVATE ${JPEG_LIBRARIES})
 
-# freetype
-find_package(Freetype REQUIRED)
-target_include_directories(jngl PUBLIC ${FREETYPE_INCLUDE_DIRS})
-target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES})
+	# freetype
+	find_package(Freetype REQUIRED)
+	target_include_directories(jngl PUBLIC ${FREETYPE_INCLUDE_DIRS})
+	target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES})
 
-# Threads
-find_package(Threads REQUIRED)
-target_link_libraries(jngl PUBLIC Threads::Threads)
+	# Threads
+	find_package(Threads REQUIRED)
+	target_link_libraries(jngl PUBLIC Threads::Threads)
 
-# PNG
-find_package(PNG REQUIRED)
-target_link_libraries(jngl PUBLIC ${PNG_LIBRARIES})
+	# PNG
+	find_package(PNG REQUIRED)
+	target_link_libraries(jngl PUBLIC ${PNG_LIBRARIES})
 
-# openal
-find_package(OpenAL REQUIRED)
-target_link_libraries(jngl PUBLIC ${OPENAL_LIBRARY})
+	# openal
+	find_package(OpenAL REQUIRED)
+	target_link_libraries(jngl PUBLIC ${OPENAL_LIBRARY})
 
-# epoxy
-find_package(LibEpoxy REQUIRED)
-target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
-target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
+	# epoxy
+	find_package(LibEpoxy REQUIRED)
+	target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
+	target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
 
-# webp
-find_package(WebP REQUIRED)
-target_include_directories(jngl PRIVATE ${WEBP_INCLUDE_DIRS})
-target_link_libraries(jngl PUBLIC ${WEBP_LIBRARIES})
+	# webp
+	find_package(WebP REQUIRED)
+	target_include_directories(jngl PRIVATE ${WEBP_INCLUDE_DIRS})
+	target_link_libraries(jngl PUBLIC ${WEBP_LIBRARIES})
 
-# VorbisFile
-find_package(VorbisFile REQUIRED)
-target_include_directories(jngl PUBLIC ${VorbisFile_INCLUDE_DIRS})
-target_link_libraries(jngl PUBLIC ${VorbisFile_LIBRARIES})
-
+	# VorbisFile
+	find_package(VorbisFile REQUIRED)
+	target_include_directories(jngl PUBLIC ${VorbisFile_INCLUDE_DIRS})
+	target_link_libraries(jngl PUBLIC ${VorbisFile_LIBRARIES})
+endif()

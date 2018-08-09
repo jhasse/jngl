@@ -47,6 +47,8 @@ add_library(openal SHARED IMPORTED)
 set_target_properties(openal PROPERTIES IMPORTED_LOCATION
                       ${PROJECT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libopenal.so)
 
+add_subdirectory(${PROJECT_SOURCE_DIR}/../../../../../.. ${CMAKE_CURRENT_BINARY_DIR}/jngl)
+
 # add lib dependencies
 target_link_libraries(jngl-test
     android
@@ -56,7 +58,7 @@ target_link_libraries(jngl-test
     OpenSLES
     log
     z
-    ${PROJECT_SOURCE_DIR}/../../../../../jngl/obj/local/${ANDROID_ABI}/libjngl.a
+    jngl
     ogg
     vorbis
     openal

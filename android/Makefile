@@ -1,11 +1,7 @@
 all: test/app/build/outputs/apk/debug/app-debug.apk
 
 include/boost:
-	ln -s /usr/include/boost include/boost
-
-.PHONY: libjngl
-libjngl: include/boost ../src/* ../src/android/*
-	$$ANDROID_NDK_HOME/ndk-build NDK_DEBUG=1 -j$$(nproc) -Cjngl
+	ln -s /usr/include/boost "$@"
 
 test/app/src/main/assets:
 	mkdir "$@"
@@ -22,7 +18,7 @@ test/app/src/main/assets/test.ogg: test/app/src/main/assets ../test.ogg
 test/app/src/main/assets/Arial.ttf: test/app/src/main/assets ../Arial.ttf
 	cp ../Arial.ttf "$@"
 
-test/app/build/outputs/apk/debug/app-debug.apk: libjngl \
+test/app/build/outputs/apk/debug/app-debug.apk: include/boost \
                                                 test/app/src/main/jniLibs/armeabi-v7a/libopenal.so \
                                                 test/app/src/main/assets/jngl.webp \
                                                 test/app/src/main/assets/jngl.png \
