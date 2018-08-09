@@ -86,6 +86,16 @@ if(ANDROID)
 	add_subdirectory(${ALSOFT_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/openal-soft)
 	set(OPENAL_LIBRARY OpenAL)
 
+	set(FREETYPE_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/freetype2)
+	if ((NOT EXISTS ${FREETYPE_SRC_DIR}) OR (NOT EXISTS ${FREETYPE_SRC_DIR}/CMakeLists.txt))
+		execute_process(COMMAND git clone -b VER-2-9-1
+		                https://git.savannah.gnu.org/git/freetype/freetype2.git
+		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
+	endif()
+	add_subdirectory(${FREETYPE_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/freetype2)
+	set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include)
+	set(FREETYPE_LIBRARIES freetype)
+
 	set(OGG_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/ogg)
 	if ((NOT EXISTS ${OGG_SRC_DIR}) OR (NOT EXISTS ${OGG_SRC_DIR}/CMakeLists.txt))
 		execute_process(COMMAND git clone -b v1.3.3
@@ -118,11 +128,6 @@ else()
 	target_include_directories(jngl PUBLIC ${JPEG_INCLUDE_DIR})
 	target_link_libraries(jngl PRIVATE ${JPEG_LIBRARIES})
 
-	# freetype
-	find_package(Freetype REQUIRED)
-	target_include_directories(jngl PUBLIC ${FREETYPE_INCLUDE_DIRS})
-	target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES})
-
 	# Threads
 	find_package(Threads REQUIRED)
 	target_link_libraries(jngl PUBLIC Threads::Threads)
@@ -141,9 +146,10 @@ else()
 	target_include_directories(jngl PUBLIC ${VorbisFile_INCLUDE_DIRS})
 	target_link_libraries(jngl PUBLIC ${VorbisFile_LIBRARIES})
 
+	find_package(Freetype REQUIRED)
 	find_package(OpenAL REQUIRED)
 	find_package(WebP REQUIRED)
 endif()
 
-target_include_directories(jngl PRIVATE ${WEBP_INCLUDE_DIRS})
-target_link_libraries(jngl PUBLIC ${WEBP_LIBRARIES} ${OPENAL_LIBRARY})
+target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS} ${WEBP_INCLUDE_DIRS})
+target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY} ${WEBP_LIBRARIES})
