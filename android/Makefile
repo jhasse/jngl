@@ -1,4 +1,4 @@
-all: test/app/build/outputs/apk/debug/app-debug.apk
+all: gradle
 
 include/boost:
 	ln -s /usr/include/boost "$@"
@@ -18,7 +18,8 @@ test/app/src/main/assets/test.ogg: test/app/src/main/assets ../test.ogg
 test/app/src/main/assets/Arial.ttf: test/app/src/main/assets ../Arial.ttf
 	cp ../Arial.ttf "$@"
 
-test/app/build/outputs/apk/debug/app-debug.apk: include/boost \
+.PHONY: gradle
+gradle: include/boost \
                                                 test/app/src/main/jniLibs/armeabi-v7a/libopenal.so \
                                                 test/app/src/main/assets/jngl.webp \
                                                 test/app/src/main/assets/jngl.png \
@@ -26,8 +27,8 @@ test/app/build/outputs/apk/debug/app-debug.apk: include/boost \
                                                 test/app/src/main/assets/Arial.ttf
 	cd test && ./gradlew build
 
-.PHONE: run
-run: test/app/build/outputs/apk/debug/app-debug.apk
+.PHONY: run
+run: gradle
 	$$ANDROID_HOME/platform-tools/adb install -r test/app/build/outputs/apk/debug/app-debug.apk
 	$$ANDROID_HOME/platform-tools/adb shell am start -a android.intent.action.MAIN -n com.bixense.jngl_test/android.app.NativeActivity
 
