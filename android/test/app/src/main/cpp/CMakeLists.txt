@@ -43,9 +43,6 @@ set_target_properties(ogg PROPERTIES IMPORTED_LOCATION
 add_library(vorbis SHARED IMPORTED)
 set_target_properties(vorbis PROPERTIES IMPORTED_LOCATION
                       ${PROJECT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libvorbis.so)
-add_library(openal SHARED IMPORTED)
-set_target_properties(openal PROPERTIES IMPORTED_LOCATION
-                      ${PROJECT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libopenal.so)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/../../../../../.. ${CMAKE_CURRENT_BINARY_DIR}/jngl)
 
@@ -61,7 +58,6 @@ target_link_libraries(jngl-test
     jngl
     ogg
     vorbis
-    openal
     ${PROJECT_SOURCE_DIR}/../../../../../lib/${ANDROID_ABI}/libfreetype.a
     ${PROJECT_SOURCE_DIR}/../../../../../lib/${ANDROID_ABI}/libpng.a
 )

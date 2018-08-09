@@ -76,6 +76,16 @@ if(ANDROID)
 	add_subdirectory(${WEBP_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/libwebp)
 	set(WEBP_INCLUDE_DIRS ${WEBP_SRC_DIR}/src)
 	set(WEBP_LIBRARIES webp)
+
+	set(ALSOFT_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/openal-soft)
+	if ((NOT EXISTS ${ALSOFT_SRC_DIR}) OR (NOT EXISTS ${ALSOFT_SRC_DIR}/CMakeLists.txt))
+		execute_process(COMMAND git clone -b v1.18
+		                https://github.com/kcat/openal-soft
+		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
+	endif()
+	set(ALSOFT_BACKEND_WAVE OFF CACHE BOOL "Enable Wave Writer backend" FORCE)
+	add_subdirectory(${ALSOFT_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/openal-soft)
+	set(OPENAL_LIBRARY OpenAL)
 else()
 	# SDL2
 	find_package(SDL2 REQUIRED)
@@ -100,10 +110,6 @@ else()
 	find_package(PNG REQUIRED)
 	target_link_libraries(jngl PUBLIC ${PNG_LIBRARIES})
 
-	# openal
-	find_package(OpenAL REQUIRED)
-	target_link_libraries(jngl PUBLIC ${OPENAL_LIBRARY})
-
 	# epoxy
 	find_package(LibEpoxy REQUIRED)
 	target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
@@ -114,8 +120,9 @@ else()
 	target_include_directories(jngl PUBLIC ${VorbisFile_INCLUDE_DIRS})
 	target_link_libraries(jngl PUBLIC ${VorbisFile_LIBRARIES})
 
+	find_package(OpenAL REQUIRED)
 	find_package(WebP REQUIRED)
 endif()
 
 target_include_directories(jngl PRIVATE ${WEBP_INCLUDE_DIRS})
-target_link_libraries(jngl PUBLIC ${WEBP_LIBRARIES})
+target_link_libraries(jngl PUBLIC ${WEBP_LIBRARIES} ${OPENAL_LIBRARY})
