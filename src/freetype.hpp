@@ -20,7 +20,7 @@ extern unsigned char fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha
 
 class Character {
 public:
-	Character(unsigned long ch, unsigned int fontHeight, FT_Face);
+	Character(char32_t ch, unsigned int fontHeight, FT_Face);
 	Character(const Character&) = delete;
 	Character& operator=(const Character&) = delete;
 	~Character();
@@ -37,7 +37,7 @@ private:
 class FontImpl {
 public:
 	FontImpl();
-	FontImpl(const std::string& filename, unsigned int height);
+	FontImpl(const std::string& relativeFilename, unsigned int height);
 	FontImpl(const FontImpl&) = delete;
 	FontImpl& operator=(const FontImpl&) = delete;
 	~FontImpl();
@@ -55,7 +55,7 @@ private:
 	std::unique_ptr<Finally> freeFace; // Frees face_ if necessary
 	unsigned int height_;
 	int lineHeight;
-	std::map<unsigned long, std::shared_ptr<Character>> characters_;
+	std::map<char32_t, std::shared_ptr<Character>> characters_;
 	std::shared_ptr<std::vector<FT_Byte>> bytes;
 
 	static std::map<std::string, std::weak_ptr<std::vector<FT_Byte>>> fileCaches;

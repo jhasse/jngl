@@ -20,7 +20,7 @@
 
 namespace jngl {
 
-	Character::Character(const unsigned long ch, const unsigned int fontHeight, FT_Face face) {
+	Character::Character(const char32_t ch, const unsigned int fontHeight, const FT_Face face) {
 		const auto flags = FT_LOAD_TARGET_LIGHT | FT_LOAD_RENDER;
 		if (FT_Load_Char(face, ch, flags)) {
 		    const std::string msg =
@@ -105,7 +105,7 @@ namespace jngl {
 		static std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cvt;
 #endif
 		const char& ch = (*it); // Just to have less code
-		unsigned long unicodeCharacter = ch;
+		char32_t unicodeCharacter = ch;
 		if (ch & 0x80) { // first bit (Check if this is an Unicode character)
 			const char* sourceEnd = &ch + 2;
 			// sourceEnd has to be the next character after the utf-8 sequence
