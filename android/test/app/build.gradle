@@ -10,11 +10,6 @@ android {
                 arguments '-DANDROID_STL=c++_static'
             }
         }
-        ndk {
-            // Specifies the ABI configurations of your native
-            // libraries Gradle should build and package with your APK.
-            abiFilters 'armeabi-v7a'
-        }
     }
     buildTypes {
         release {
