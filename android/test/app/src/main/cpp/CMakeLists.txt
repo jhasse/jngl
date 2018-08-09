@@ -60,8 +60,8 @@ target_link_libraries(jngl-test
     ogg
     vorbis
     openal
-    ${PROJECT_SOURCE_DIR}/../../../../../lib/libfreetype.a
-    ${PROJECT_SOURCE_DIR}/../../../../../lib/libpng.a
+    ${PROJECT_SOURCE_DIR}/../../../../../lib/${ANDROID_ABI}/libfreetype.a
+    ${PROJECT_SOURCE_DIR}/../../../../../lib/${ANDROID_ABI}/libpng.a
 )
 
 
