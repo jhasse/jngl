@@ -5,7 +5,8 @@
 
 namespace jngl {
 
-Color::Color(unsigned char r, unsigned char g, unsigned char b) : red(r), green(g), blue(b) {
+Color::Color(unsigned char red, unsigned char green, unsigned char blue)
+: red(red), green(green), blue(blue) {
 }
 
 unsigned char Color::getRed() const {

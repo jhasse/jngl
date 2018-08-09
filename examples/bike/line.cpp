@@ -5,11 +5,6 @@ Line::Line(Vector2d start, Vector2d end) : start_(start), end_(end)
 {
 }
 
-void Line::Draw() const
-{
-	// TODO: Implentieren
-}
-
 void Line::HandleCollision(Wheel& wheel) const
 {
 	Vector2d connection = end_ - start_;
