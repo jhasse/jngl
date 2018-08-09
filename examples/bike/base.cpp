@@ -15,8 +15,8 @@ Base::Base() {
 }
 
 void Base::DoFrame() {
-	for (std::vector<Line>::iterator it = lines_.begin(); it != lines_.end(); ++it) {
-		bike_.HandleCollision(*it);
+	for (auto& line : lines_) {
+		bike_.HandleCollision(line);
 	}
 	bike_.DoFrame();
 }

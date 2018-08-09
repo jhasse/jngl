@@ -249,8 +249,8 @@ namespace jngl {
 			header.dataSize = header.width * header.height * 3;
 		}
 		std::vector<unsigned char*> buf(header.height);
-		for (auto i = buf.begin(); i != buf.end(); ++i) {
-			*i = new unsigned char[header.width * 3];
+		for (auto& row : buf) {
+			row = new unsigned char[header.width * 3];
 		}
 		Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
 
@@ -309,8 +309,8 @@ namespace jngl {
 
 		assert(sizeof(JSAMPLE) == sizeof(char));
 		std::vector<unsigned char*> buf(height);
-		for (auto i = buf.begin(); i != buf.end(); ++i) {
-			*i = new unsigned char[width * channels];
+		for (auto& row : buf) {
+			row = new unsigned char[width * channels];
 		}
 		Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
 

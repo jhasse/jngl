@@ -5,9 +5,8 @@
 
 void Bike::HandleCollision(const Line& line)
 {
-	for(std::vector<Wheel>::iterator it = wheels_.begin(); it != wheels_.end(); ++it)
-	{
-		line.HandleCollision(*it);
+	for (auto& wheel : wheels_) {
+		line.HandleCollision(wheel);
 	}
 }
 
@@ -44,8 +43,8 @@ void Bike::DoFrame()
  		wheels_[i].speed_ -= correction[i];
 		wheels_[i].speed_ += (correction[i] + correction[1-i]) / 2;
 	}
-	for (size_t i = 0; i < wheels_.size(); ++i) {
-		wheels_[i].position_ += wheels_[i].speed_; // Bewegen
+	for (auto& wheel : wheels_) {
+		wheel.position_ += wheel.speed_; // Move
 	}
 	connection = wheels_[1].position_ - wheels_[0].position_;
 	connection.Normalize();
