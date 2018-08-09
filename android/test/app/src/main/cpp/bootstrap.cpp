@@ -39,8 +39,6 @@ void ANativeActivity_onCreate(ANativeActivity* app, void* ud, size_t udsize) {
 	const jbyte* const bytes = app->env->GetByteArrayElements(bytesObject, nullptr);
 	const std::string libDir(reinterpret_cast<const char*>(bytes), length);
 	try {
-		load_lib(libDir + "/libogg.so");
-		load_lib(libDir + "/libvorbis.so");
 		const auto openal = load_lib(libDir + "/libopenal.so");
 		const auto jni = reinterpret_cast<jint (*)(JavaVM*, void*)>(dlsym(openal, "JNI_OnLoad"));
 		if (jni) {

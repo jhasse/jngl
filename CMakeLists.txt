@@ -66,7 +66,6 @@ endif()
 
 if(ANDROID)
 	target_compile_definitions(jngl PRIVATE NOJPEG OPENGLES)
-	target_include_directories(jngl PRIVATE ${ANDROID_NDK}/sources/android/native_app_glue)
 
 	set(WEBP_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/libwebp)
 	if ((NOT EXISTS ${WEBP_SRC_DIR}) OR (NOT EXISTS ${WEBP_SRC_DIR}/CMakeLists.txt))
@@ -86,6 +85,28 @@ if(ANDROID)
 	set(ALSOFT_BACKEND_WAVE OFF CACHE BOOL "Enable Wave Writer backend" FORCE)
 	add_subdirectory(${ALSOFT_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/openal-soft)
 	set(OPENAL_LIBRARY OpenAL)
+
+	set(OGG_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/ogg)
+	if ((NOT EXISTS ${OGG_SRC_DIR}) OR (NOT EXISTS ${OGG_SRC_DIR}/CMakeLists.txt))
+		execute_process(COMMAND git clone -b v1.3.3
+		                https://git.xiph.org/ogg.git
+		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
+	endif()
+	add_subdirectory(${OGG_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/ogg)
+	set(OGG_INCLUDE_DIRS ${OGG_SRC_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}/ogg/include)
+	set(OGG_LIBRARIES ogg)
+
+	set(VORBIS_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/vorbis)
+	if ((NOT EXISTS ${VORBIS_SRC_DIR}) OR (NOT EXISTS ${VORBIS_SRC_DIR}/CMakeLists.txt))
+		execute_process(COMMAND git clone -b v1.3.6
+		                https://git.xiph.org/vorbis.git
+		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
+	endif()
+	add_subdirectory(${VORBIS_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/vorbis)
+	target_link_libraries(jngl PUBLIC vorbisfile)
+
+	target_include_directories(jngl PRIVATE ${ANDROID_NDK}/sources/android/native_app_glue
+	                           ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
 else()
 	# SDL2
 	find_package(SDL2 REQUIRED)

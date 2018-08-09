@@ -36,14 +36,6 @@ target_include_directories(jngl-test PRIVATE
     ../../../../../../src
     ../../../../../include)
 
-
-add_library(ogg SHARED IMPORTED)
-set_target_properties(ogg PROPERTIES IMPORTED_LOCATION
-                      ${PROJECT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libogg.so)
-add_library(vorbis SHARED IMPORTED)
-set_target_properties(vorbis PROPERTIES IMPORTED_LOCATION
-                      ${PROJECT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libvorbis.so)
-
 add_subdirectory(${PROJECT_SOURCE_DIR}/../../../../../.. ${CMAKE_CURRENT_BINARY_DIR}/jngl)
 
 # add lib dependencies
@@ -56,8 +48,6 @@ target_link_libraries(jngl-test
     log
     z
     jngl
-    ogg
-    vorbis
     ${PROJECT_SOURCE_DIR}/../../../../../lib/${ANDROID_ABI}/libfreetype.a
     ${PROJECT_SOURCE_DIR}/../../../../../lib/${ANDROID_ABI}/libpng.a
 )
