@@ -1,5 +1,4 @@
 *.DS_Store
-config.log
 /build*/
 visualcpp/Debug/
 visualcpp/Release/
@@ -18,11 +17,6 @@ jngl.pc
 xcode/JNGL.xcodeproj/project.xcworkspace/xcuserdata/*
 xcode/JNGL.xcodeproj/project.xcworkspace/xcshareddata/
 xcode/JNGL.xcodeproj/xcuserdata/*.xcuserdatad/
-*.sublime-workspace
-libjngl.a
-/test
-android/jngl/obj
-android/jngl/libs
 android/test/obj
 android/test/libs
 android/test/bin
@@ -34,8 +28,6 @@ android/test/proguard-project.txt
 android/test/assets/
 android/test/main.obb
 Thumbs.db
-*.exe
-python/*.dll*
 .tup/
 .vscode/.browse*
 /.vscode/tags
