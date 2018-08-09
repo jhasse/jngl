@@ -65,7 +65,7 @@ if (UNIX)
 endif()
 
 if(ANDROID)
-	target_compile_definitions(jngl PRIVATE NOJPEG OPENGLES)
+	target_compile_definitions(jngl PRIVATE NOJPEG NOPNG OPENGLES)
 
 	set(WEBP_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/libwebp)
 	if ((NOT EXISTS ${WEBP_SRC_DIR}) OR (NOT EXISTS ${WEBP_SRC_DIR}/CMakeLists.txt))

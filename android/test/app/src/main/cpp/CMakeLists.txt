@@ -49,7 +49,6 @@ target_link_libraries(jngl-test
     z
     jngl
     ${PROJECT_SOURCE_DIR}/../../../../../lib/${ANDROID_ABI}/libfreetype.a
-    ${PROJECT_SOURCE_DIR}/../../../../../lib/${ANDROID_ABI}/libpng.a
 )
 
 
