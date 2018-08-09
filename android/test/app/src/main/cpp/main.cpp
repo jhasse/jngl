@@ -20,7 +20,7 @@ JNGL_MAIN_BEGIN {
 			jngl::drawRect(mouse.x, mouse.y, 100, 100);
 			x += 0.4;
 			// jngl::setSpriteColor(255, 255, 255, 120);
-			jngl::draw("jngl.png", mouse.x, mouse.y);
+			jngl::draw("jngl.webp", mouse.x, mouse.y);
 			if (jngl::mouseDown(jngl::mouse::Left)) {
 				jngl::print("hello world!", 0, 0);
 			}

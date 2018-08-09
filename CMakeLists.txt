@@ -65,8 +65,17 @@ if (UNIX)
 endif()
 
 if(ANDROID)
-	target_compile_definitions(jngl PRIVATE NOJPEG NOWEBP OPENGLES)
+	target_compile_definitions(jngl PRIVATE NOJPEG OPENGLES)
 	target_include_directories(jngl PRIVATE ${ANDROID_NDK}/sources/android/native_app_glue)
+
+	set(WEBP_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/libwebp)
+	if ((NOT EXISTS ${WEBP_SRC_DIR}) OR (NOT EXISTS ${WEBP_SRC_DIR}/CMakeLists.txt))
+		execute_process(COMMAND git clone -b 1.0.0 https://chromium.googlesource.com/webm/libwebp
+		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
+	endif()
+	add_subdirectory(${WEBP_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/libwebp)
+	set(WEBP_INCLUDE_DIRS ${WEBP_SRC_DIR}/src)
+	set(WEBP_LIBRARIES webp)
 else()
 	# SDL2
 	find_package(SDL2 REQUIRED)
@@ -100,13 +109,13 @@ else()
 	target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
 	target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
 
-	# webp
-	find_package(WebP REQUIRED)
-	target_include_directories(jngl PRIVATE ${WEBP_INCLUDE_DIRS})
-	target_link_libraries(jngl PUBLIC ${WEBP_LIBRARIES})
-
 	# VorbisFile
 	find_package(VorbisFile REQUIRED)
 	target_include_directories(jngl PUBLIC ${VorbisFile_INCLUDE_DIRS})
 	target_link_libraries(jngl PUBLIC ${VorbisFile_LIBRARIES})
+
+	find_package(WebP REQUIRED)
 endif()
+
+target_include_directories(jngl PRIVATE ${WEBP_INCLUDE_DIRS})
+target_link_libraries(jngl PUBLIC ${WEBP_LIBRARIES})
