@@ -40,5 +40,5 @@ android:
   image: jhasse/android-ndk:r17b
   stage: build
   script:
-    - dnf install -y file boost-devel cmake git gcc-c++ make
+    - dnf install -y file boost-devel git make
     - make -C android

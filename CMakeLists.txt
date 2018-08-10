@@ -69,7 +69,8 @@ if(ANDROID)
 
 	set(WEBP_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/libwebp)
 	if ((NOT EXISTS ${WEBP_SRC_DIR}) OR (NOT EXISTS ${WEBP_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone -b 1.0.0 https://chromium.googlesource.com/webm/libwebp
+		execute_process(COMMAND git clone --depth=1 -b 1.0.0
+		                https://chromium.googlesource.com/webm/libwebp
 		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
 	endif()
 	add_subdirectory(${WEBP_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/libwebp)
@@ -78,7 +79,7 @@ if(ANDROID)
 
 	set(ALSOFT_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/openal-soft)
 	if ((NOT EXISTS ${ALSOFT_SRC_DIR}) OR (NOT EXISTS ${ALSOFT_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone -b v1.18
+		execute_process(COMMAND git clone --depth=1 -b v1.18
 		                https://github.com/kcat/openal-soft
 		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
 	endif()
@@ -88,7 +89,7 @@ if(ANDROID)
 
 	set(FREETYPE_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/freetype2)
 	if ((NOT EXISTS ${FREETYPE_SRC_DIR}) OR (NOT EXISTS ${FREETYPE_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone -b VER-2-9-1
+		execute_process(COMMAND git clone --depth=1 -b VER-2-9-1
 		                https://git.savannah.gnu.org/git/freetype/freetype2.git
 		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
 	endif()
