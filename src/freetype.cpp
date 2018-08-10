@@ -14,9 +14,9 @@
 #endif
 
 #include FT_GLYPH_H
-#include <boost/lexical_cast.hpp>
 #include <codecvt>
 #include <fstream>
+#include <locale>
 
 namespace jngl {
 
@@ -64,7 +64,7 @@ namespace jngl {
 				} else if (bitmap.pixel_mode == FT_PIXEL_MODE_GRAY) {
 					alpha = bitmap.buffer[x + width * y];
 				} else {
-					throw std::runtime_error("Unsupported pixel mode\n");
+					throw std::runtime_error("Unsupported pixel mode");
 				}
 				data[y][x * 4 + 3] = alpha;
 			}

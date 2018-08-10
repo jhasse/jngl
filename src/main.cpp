@@ -5,7 +5,7 @@
 #include "jngl.hpp"
 #include "spriteimpl.hpp"
 
-#include <boost/lexical_cast.hpp>
+#include <boost/numeric/conversion/cast.hpp>
 
 #ifdef ANDROID
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
