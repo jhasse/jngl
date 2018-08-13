@@ -16,7 +16,6 @@ installer/*.nsi
 xcode/JNGL.xcodeproj/project.xcworkspace/xcuserdata/*
 xcode/JNGL.xcodeproj/project.xcworkspace/xcshareddata/
 xcode/JNGL.xcodeproj/xcuserdata/*.xcuserdatad/
-android/include/boost
 Thumbs.db
 .tup/
 .vscode/.browse*
