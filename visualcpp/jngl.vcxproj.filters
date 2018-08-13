@@ -120,6 +120,12 @@
     <ClCompile Include="..\src\jngl\Vec2.cpp">
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\jngl\Shader.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\ShaderProgram.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\jngl\Finally.hpp">
@@ -217,6 +223,15 @@
     </ClInclude>
     <ClInclude Include="..\src\win32\ConvertUTF.h">
       <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\Shader.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\ShaderProgram.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\dll.hpp">
+      <Filter>Header Files\jngl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

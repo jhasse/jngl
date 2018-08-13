@@ -24,6 +24,8 @@
     <ClCompile Include="..\src\jngl\input.cpp" />
     <ClCompile Include="..\src\jngl\job.cpp" />
     <ClCompile Include="..\src\jngl\screen.cpp" />
+    <ClCompile Include="..\src\jngl\Shader.cpp" />
+    <ClCompile Include="..\src\jngl\ShaderProgram.cpp" />
     <ClCompile Include="..\src\jngl\shapes.cpp" />
     <ClCompile Include="..\src\jngl\sprite.cpp" />
     <ClCompile Include="..\src\jngl\text.cpp" />
@@ -48,6 +50,7 @@
     <ClInclude Include="..\src\audio.hpp" />
     <ClInclude Include="..\src\debug.hpp" />
     <ClInclude Include="..\src\draw.hpp" />
+    <ClInclude Include="..\src\jngl\dll.hpp" />
     <ClInclude Include="..\src\jngl\Finally.hpp" />
     <ClInclude Include="..\src\framebufferimpl.hpp" />
     <ClInclude Include="..\src\freetype.hpp" />
@@ -63,6 +66,8 @@
     <ClInclude Include="..\src\jngl\job.hpp" />
     <ClInclude Include="..\src\jngl\matrix.hpp" />
     <ClInclude Include="..\src\jngl\screen.hpp" />
+    <ClInclude Include="..\src\jngl\Shader.hpp" />
+    <ClInclude Include="..\src\jngl\ShaderProgram.hpp" />
     <ClInclude Include="..\src\jngl\shapes.hpp" />
     <ClInclude Include="..\src\jngl\sprite.hpp" />
     <ClInclude Include="..\src\jngl\text.hpp" />

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "dll.hpp"
+
 #include <memory>
 
 namespace jngl {
@@ -14,8 +16,8 @@ public:
 		FRAGMENT,
 	};
 
-	Shader(const char* source, Type);
-	~Shader();
+	JNGLDLL_API Shader(const char* source, Type);
+	JNGLDLL_API ~Shader();
 	Shader(const Shader&) = delete;
 	Shader(Shader&&) = delete;
 	Shader& operator=(const Shader&) = delete;

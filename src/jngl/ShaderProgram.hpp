@@ -13,13 +13,13 @@ class Shader;
 
 class ShaderProgram {
 public:
-	ShaderProgram(const Shader& vertex, const Shader& fragment);
-	~ShaderProgram();
+	JNGLDLL_API ShaderProgram(const Shader& vertex, const Shader& fragment);
+	JNGLDLL_API ~ShaderProgram();
 	ShaderProgram(const ShaderProgram&) = delete;
 	ShaderProgram(ShaderProgram&&) = delete;
 	ShaderProgram& operator=(const ShaderProgram&) = delete;
 	ShaderProgram& operator=(ShaderProgram&&) = delete;
-	[[nodiscard]] Finally use() const;
+	JNGLDLL_API [[nodiscard]] Finally use() const;
 
 private:
 	struct Impl;

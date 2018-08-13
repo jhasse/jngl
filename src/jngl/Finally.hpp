@@ -12,7 +12,7 @@ namespace jngl {
 class Finally {
 public:
 	JNGLDLL_API explicit Finally(std::function<void()> functionToCall);
-	Finally(Finally&&) noexcept;
+	JNGLDLL_API Finally(Finally&&) noexcept;
 	Finally& operator=(Finally&&) noexcept;
 	Finally(const Finally&) = delete;
 	Finally& operator=(const Finally&) = delete;
