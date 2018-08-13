@@ -14,6 +14,8 @@
 #endif
 
 #include FT_GLYPH_H
+
+#include <cassert>
 #include <codecvt>
 #include <fstream>
 #include <locale>
