@@ -130,6 +130,7 @@
       <AdditionalOptions>/D_VARIADIC_MAX=6 %(AdditionalOptions)</AdditionalOptions>
       <ObjectFileName>$(IntDir)/$(IntDir)/%(RelativeDir)/</ObjectFileName>
       <MinimalRebuild>false</MinimalRebuild>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -148,6 +149,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/D_VARIADIC_MAX=6 %(AdditionalOptions)</AdditionalOptions>
       <ObjectFileName>$(IntDir)/$(IntDir)/%(RelativeDir)/</ObjectFileName>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -165,7 +167,7 @@
     <Import Project="$(SolutionDir)\packages\libpng.1.5.10.11\build\native\libpng.targets" Condition="Exists('$(SolutionDir)\packages\libpng.1.5.10.11\build\native\libpng.targets')" />
     <Import Project="$(SolutionDir)\packages\libjpeg.redist.9.0.1.3\build\native\libjpeg.redist.targets" Condition="Exists('$(SolutionDir)\packages\libjpeg.redist.9.0.1.3\build\native\libjpeg.redist.targets')" />
     <Import Project="$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\libjpeg.targets" Condition="Exists('$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\libjpeg.targets')" />
-    <Import Project="$(SolutionDir)\packages\boost.1.60.0.0\build\native\boost.targets" Condition="Exists('$(SolutionDir)\packages\boost.1.60.0.0\build\native\boost.targets')" />
+    <Import Project="packages\boost.1.67.0.0\build\boost.targets" Condition="Exists('packages\boost.1.67.0.0\build\boost.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -173,6 +175,6 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\packages\libjpeg.redist.9.0.1.3\build\native\libjpeg.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\libjpeg.redist.9.0.1.3\build\native\libjpeg.redist.targets'))" />
     <Error Condition="!Exists('$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\libjpeg.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\libjpeg.9.0.1.3\build\native\libjpeg.targets'))" />
-    <Error Condition="!Exists('$(SolutionDir)\packages\boost.1.60.0.0\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\boost.1.60.0.0\build\native\boost.targets'))" />
+    <Error Condition="!Exists('packages\boost.1.67.0.0\build\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\boost.1.67.0.0\build\boost.targets'))" />
   </Target>
 </Project>
