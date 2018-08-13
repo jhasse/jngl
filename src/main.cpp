@@ -5,6 +5,7 @@
 #include "jngl.hpp"
 #include "spriteimpl.hpp"
 
+#include <cassert>
 #include <boost/numeric/conversion/cast.hpp>
 
 #ifdef ANDROID
