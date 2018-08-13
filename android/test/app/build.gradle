@@ -3,8 +3,8 @@ apply plugin: 'com.android.application'
 android {
     defaultConfig {
         applicationId = 'com.bixense.jngl_test'
-        minSdkVersion 14
-        targetSdkVersion 25
+        minSdkVersion 21
+        targetSdkVersion 26
         externalNativeBuild {
             cmake {
                 arguments '-DANDROID_STL=c++_static'
@@ -23,11 +23,11 @@ android {
             path 'src/main/cpp/CMakeLists.txt'
         }
     }
-    compileSdkVersion 25
+    compileSdkVersion 26
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:25.4.0'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
 }
