@@ -173,7 +173,7 @@ namespace jngl {
 
 		// Read in some of the signature bytes
 		if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK ||
-		    png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) != 0) {
+		    png_sig_cmp(buf, png_size_t(0), PNG_BYTES_TO_CHECK) != 0) {
 			throw std::runtime_error(std::string("Error reading signature bytes. (" + filename + ")"));
 		}
 
@@ -233,7 +233,7 @@ namespace jngl {
 
 	Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad) {
 		fseek(fp, 10, SEEK_SET);
-		BMPHeader header;
+		BMPHeader header{};
 		if (!fread(&header, sizeof(header), 1, fp))
 			throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
 

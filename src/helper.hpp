@@ -11,6 +11,6 @@ namespace jngl {
 std::vector<std::string> splitlines(const std::string&);
 
 /// Checks whether the file exists on the filesystem or in the APK (on Android)
-bool fileExists(const std::string& filename);
+bool fileExists(const std::string& path);
 
 } // namespace jngl
