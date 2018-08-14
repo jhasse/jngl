@@ -8,6 +8,7 @@
 #include "sprite.hpp"
 
 #include "../freetype.hpp"
+#include "../helper.hpp"
 #include "../main.hpp"
 #include "../windowptr.hpp"
 #include "debug.hpp"
@@ -99,7 +100,7 @@ namespace jngl {
 				break;
 			}
 			std::string tmp = fullFilename + extensions[i];
-			if (std::ifstream(tmp.c_str())) {
+			if (fileExists(tmp)) {
 				fullFilename += extensions[i];
 				loadFunction = functions[i];
 				break;
