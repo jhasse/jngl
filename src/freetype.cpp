@@ -143,8 +143,8 @@ namespace jngl {
 	FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)
 	: height_(static_cast<unsigned int>(height * getScaleFactor())), lineHeight(int(height_ / .63)) {
 		auto filename = pathPrefix + relativeFilename;
-		if (!std::ifstream(filename)) {
-			if (!std::ifstream(relativeFilename)) {
+		if (!fileExists(filename)) {
+			if (!fileExists(relativeFilename)) {
 				throw std::runtime_error(std::string("Font file not found: ") + filename);
 			}
 			filename = relativeFilename;
