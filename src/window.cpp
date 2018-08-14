@@ -346,14 +346,6 @@ namespace jngl {
 		return currentWork_;
 	}
 
-	void Window::setConfigPath(const std::string& path) {
-		configPath = path;
-	}
-
-	std::string Window::getConfigPath() const {
-		return configPath;
-	}
-
 	bool Window::isMultitouch() const {
 		return multitouch;
 	}

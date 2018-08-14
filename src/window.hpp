@@ -87,8 +87,6 @@ namespace jngl {
 		void stepIfNeeded();
 		void draw() const;
 		std::shared_ptr<Work> getWork();
-		void setConfigPath(const std::string&);
-		std::string getConfigPath() const;
 		void addJob(std::shared_ptr<Job>);
 		void resetFrameLimiter();
 		unsigned int getStepsPerSecond() const;
@@ -132,7 +130,6 @@ namespace jngl {
 		std::shared_ptr<Work> currentWork_;
 		bool changeWork_;
 		std::shared_ptr<Work> newWork_;
-		std::string configPath;
 		std::vector<std::shared_ptr<Job>> jobs;
 		unsigned int stepsPerFrame = 1;
 		double sleepPerFrame = 0; // in seconds
