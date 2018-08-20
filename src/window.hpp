@@ -98,6 +98,8 @@ namespace jngl {
 #else
 		WindowImpl* getImpl() const;
 #endif
+		std::string getTextInput() const;
+
 	private:
 		int GetKeyCode(jngl::key::KeyType key);
 		std::string GetFontFileByName(const std::string& fontname);
@@ -117,6 +119,9 @@ namespace jngl {
 		int mousey_ = 0;
 		int fontSize_ = 12;
 		int width_, height_;
+
+		/// UTF-8 string of characters that were pressed since the last frame
+		std::string textInput;
 
 		/// The usable canvas width, excluding letterboxing
 		const int screenWidth;

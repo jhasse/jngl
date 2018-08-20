@@ -130,6 +130,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	}
 
 	void Window::UpdateInput() {
+		textInput.clear();
 		if (relativeMouseMode) {
 			mousex_ = 0;
 			mousey_ = 0;
@@ -210,6 +211,9 @@ Window::Window(const std::string& title, const int width, const int height, cons
 					}
 					break;
 				}
+				case SDL_TEXTINPUT:
+					textInput += event.text.text;
+					break;
 				case SDL_KEYDOWN: {
 					static bool wasFullscreen = fullscreen_;
 					if (event.key.repeat != 0u && fullscreen_ != wasFullscreen) {
@@ -387,5 +391,9 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	void Window::setFullscreen(bool f) {
 		SDL_SetWindowFullscreen(impl->sdlWindow, f ? SDL_WINDOW_FULLSCREEN : 0);
 		fullscreen_ = f;
+	}
+
+	std::string Window::getTextInput() const {
+		return textInput;
 	}
 } // namespace jngl

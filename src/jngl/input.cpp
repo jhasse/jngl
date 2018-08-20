@@ -52,4 +52,8 @@ void setControllerVibration(int, unsigned short, unsigned short) {
 }
 #endif
 
+std::string getTextInput() {
+	return pWindow->getTextInput();
+}
+
 } // namespace jngl
