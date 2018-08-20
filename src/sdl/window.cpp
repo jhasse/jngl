@@ -7,6 +7,7 @@
 
 #include "../jngl/Finally.hpp"
 #include "../jngl/debug.hpp"
+#include "../jngl/window.hpp"
 #include "../main.hpp"
 #include "../window.hpp"
 #include "sdl.hpp"
@@ -32,7 +33,11 @@ Window::Window(const std::string& title, const int width, const int height, cons
 
 	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 	if (fullscreen) {
-		flags |= SDL_WINDOW_FULLSCREEN;
+		if (width == getDesktopWidth() && height == getDesktopHeight()) {
+			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+		} else {
+			flags |= SDL_WINDOW_FULLSCREEN;
+		}
 	}
 
 	const auto create = [&title, width, height, flags]() {
