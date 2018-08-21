@@ -353,4 +353,8 @@ namespace jngl {
 	void Window::addUpdateInputCallback(std::function<void()> c) {
 		updateInputCallbacks.emplace_back(std::move(c));
 	}
+
+	std::string Window::getTextInput() const {
+		return textInput;
+	}
 } // namespace jngl

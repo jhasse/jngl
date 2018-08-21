@@ -386,6 +386,7 @@ void calculateTrigger(BYTE& v) {
 }
 
 void Window::UpdateInput() {
+	textInput.clear();
 	for (int i = 0; i < XUSER_MAX_COUNT; ++i) {
 		DWORD result = XInputGetState(i, &states[i]);
 		if (result == ERROR_SUCCESS) {
@@ -520,6 +521,7 @@ void Window::UpdateInput() {
 				scanCodeToCharacter[scanCode] = character;
 				characterDown_[character] = true;
 				characterPressed_[character] = true;
+				textInput += character;
 			} break;
 		}
 		TranslateMessage(&msg);
