@@ -140,6 +140,7 @@ namespace jngl {
 		double sleepPerFrame = 0; // in seconds
 		double sleepCorrectionFactor = 1;
 		double timeSleptSinceLastCheck = 0;
+		unsigned int numberOfSleeps = 0;
 		unsigned int previousStepsPerFrame = 1;
 
 		/// When VSYNC is active we will try to find out to what FPS/Hz the display is limiting us

@@ -280,9 +280,12 @@ namespace jngl {
 			jngl::debug(sleepPerFrame);
 			jngl::debug(" * ");
 			jngl::debug(sleepCorrectionFactor);
-			jngl::debug(", maxFPS: ");
+			jngl::debug(", slept("); jngl::debug(numberOfSleeps); jngl::debug("): ");
+			jngl::debug(std::lround(1e6 * timeSleptSinceLastCheck));
+			jngl::debug("µs, maxFPS: ");
 			jngl::debugLn(maxFPS);
 			lastCheckTime = currentTime;
+			numberOfSleeps = 0;
 			stepsSinceLastCheck = 0;
 			timeSleptSinceLastCheck = 0;
 			stepsPerFrame = newStepsPerFrame;
@@ -294,6 +297,7 @@ namespace jngl {
 		if (micros > 0) {
 			std::this_thread::sleep_for(std::chrono::microseconds(micros));
 			timeSleptSinceLastCheck += jngl::getTime() - start;
+			++numberOfSleeps;
 		}
 		for (unsigned int i = 0; i < stepsPerFrame; ++i) {
 			++stepsSinceLastCheck;
