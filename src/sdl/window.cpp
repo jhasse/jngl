@@ -158,7 +158,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 				case SDL_FINGERUP:
 					mouseDown_.at(0) = false;
 					mouseDown_.at(0) = false;
-					impl->currentFingerId = boost::none;
+					impl->currentFingerId = std::nullopt;
 					multitouch = false;
 					break;
 				case SDL_FINGERDOWN:

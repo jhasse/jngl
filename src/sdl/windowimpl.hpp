@@ -2,13 +2,15 @@
 
 #include "sdl.hpp"
 
-#include <boost/optional.hpp>
+#include <optional>
 
 namespace jngl {
-	class WindowImpl {
-	public:
-		SDL_Window* sdlWindow;
-		SDL_GLContext context;
-		boost::optional<SDL_FingerID> currentFingerId;
-	};
-}
+
+class WindowImpl {
+public:
+	SDL_Window* sdlWindow;
+	SDL_GLContext context;
+	std::optional<SDL_FingerID> currentFingerId;
+};
+
+} // namespace jngl
