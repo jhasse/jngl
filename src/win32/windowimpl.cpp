@@ -19,6 +19,7 @@
 #include <epoxy/wgl.h>
 #include <shlobj.h>
 #include <sstream>
+#include <mmsystem.h> // timeBeginPeriod
 #include <windowsx.h> // GET_X_LPARAM
 
 XINPUT_STATE states[XUSER_MAX_COUNT];
