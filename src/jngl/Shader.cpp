@@ -17,7 +17,7 @@ Shader::Shader(const char* source, const Type type) : impl(std::make_unique<Impl
 	glGetShaderiv(impl->id, GL_COMPILE_STATUS, &status);
 	if (status != GL_TRUE) {
 		char buffer[2048];
-		glGetShaderInfoLog(impl->id, 512, nullptr, buffer);
+		glGetShaderInfoLog(impl->id, sizeof(buffer), nullptr, buffer);
 		throw std::runtime_error(buffer);
 	}
 }
