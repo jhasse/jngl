@@ -9,6 +9,7 @@
 
 #include "../freetype.hpp"
 #include "../main.hpp"
+#include "../spriteimpl.hpp"
 #include "../windowptr.hpp"
 #include "debug.hpp"
 #include "screen.hpp"
@@ -139,19 +140,23 @@ namespace jngl {
 	void Sprite::draw() const {
 		glPushMatrix();
 		opengl::translate(x, y);
-		texture->draw();
+		texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
+		              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
 		glPopMatrix();
 	}
 
-	void Sprite::drawScaled(float factor) const {
-		drawScaled(factor, factor);
+	void Sprite::drawScaled(float factor, const ShaderProgram* const shaderProgram) const {
+		drawScaled(factor, factor, shaderProgram);
 	}
 
-	void Sprite::drawScaled(float xfactor, float yfactor) const {
+	void Sprite::drawScaled(float xfactor, float yfactor,
+	                        const ShaderProgram* const shaderProgram) const {
 		glPushMatrix();
 		opengl::translate(x, y);
 		opengl::scale(xfactor, yfactor);
-		texture->draw();
+		texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
+		              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f,
+		              shaderProgram);
 		glPopMatrix();
 	}
 

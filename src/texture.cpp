@@ -3,6 +3,11 @@
 
 #include "texture.hpp"
 
+#include "jngl/Shader.hpp"
+
+#include <fstream>
+#include <sstream>
+
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F
 #endif
@@ -10,6 +15,9 @@
 namespace jngl {
 
 std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
+
+ShaderProgram* Texture::textureShaderProgram = nullptr;
+int Texture::shaderSpriteColorUniform = -1;
 
 Texture::Texture(const int width, const int height, GLubyte** rowPointers, GLenum format,
                  GLubyte* data)
@@ -67,6 +75,40 @@ Texture::Texture(const int width, const int height, GLubyte** rowPointers, GLenu
 	}
 
 	glBindVertexArray(0);
+
+	if (!textureShaderProgram) {
+		static Shader* vertexShader;
+		static Shader* fragmentShader;
+		{
+			vertexShader = new Shader(R"(#version 130
+				out vec2 texCoord;
+
+				void main() {
+					gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+					texCoord = gl_MultiTexCoord0.xy;
+				})", Shader::Type::VERTEX
+			);
+		}
+		{
+			std::ifstream fin("data/texture.frag");
+			std::stringstream buffer;
+			buffer << fin.rdbuf();
+			fragmentShader = new Shader(R"(#version 130
+				uniform sampler2D tex;
+				uniform vec4 spriteColor = vec4(1.0, 1.0, 1.0, 1.0);
+
+				in mediump vec2 texCoord;
+
+				out mediump vec4 outColor;
+
+				void main() {
+					outColor = texture2D(tex, texCoord) * spriteColor;
+				})", Shader::Type::FRAGMENT
+			);
+		}
+		textureShaderProgram = new ShaderProgram(*vertexShader, *fragmentShader);
+		shaderSpriteColorUniform = textureShaderProgram->getUniformLocation("spriteColor");
+	}
 }
 
 Texture::~Texture() {
@@ -75,7 +117,12 @@ Texture::~Texture() {
 	glDeleteVertexArrays(1, &vao);
 }
 
-void Texture::draw() const {
+void Texture::draw(const float red, const float green, const float blue, const float alpha,
+                   const ShaderProgram* const shaderProgram) const {
+	auto _ = shaderProgram ? shaderProgram->use() : textureShaderProgram->use();
+	if (!shaderProgram) {
+		glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
+	}
 #ifdef ANDROID
 	// Android only supports VAOs with OpenGL ES 2.0, which JNGL isn't using yet.
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);

@@ -90,8 +90,9 @@ public:
 		jngl::translate(jngl::getScreenWidth() / 2, jngl::getScreenHeight() / 2);
 		jngl::rotate(rotate);
 		jngl::setSpriteAlpha(static_cast<unsigned char>(std::abs(factor * 255)));
-		{
-			auto _(useShader ? shaderProgram->use() : jngl::Finally(nullptr));
+		if (useShader) {
+			logoWebp.drawScaled(static_cast<float>(factor * 2), &*shaderProgram);
+		} else {
 			logoWebp.drawScaled(static_cast<float>(factor * 2));
 		}
 		jngl::setColor(0, 0, 0);

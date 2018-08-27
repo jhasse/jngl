@@ -85,7 +85,8 @@ namespace jngl {
 		if (texture_) {
 			glPushMatrix();
 			opengl::translate(left_, top_);
-			texture_->draw();
+			texture_->draw(float(fontColorRed) / 255.0f, float(fontColorGreen) / 255.0f,
+			               float(fontColorBlue) / 255.0f, float(fontColorAlpha) / 255.0f);
 			glPopMatrix();
 		}
 		opengl::translate(width_, 0);

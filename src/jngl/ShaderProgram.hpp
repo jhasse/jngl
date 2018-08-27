@@ -21,6 +21,8 @@ public:
 	ShaderProgram& operator=(ShaderProgram&&) = delete;
 	JNGLDLL_API [[nodiscard]] Finally use() const;
 
+	int getUniformLocation(const std::string& name) const;
+
 private:
 	struct Impl;
 	std::unique_ptr<Impl> impl;

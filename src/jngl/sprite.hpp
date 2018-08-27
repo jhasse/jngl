@@ -4,9 +4,11 @@
 #pragma once
 
 #include "Finally.hpp"
+#include "ShaderProgram.hpp"
 #include "drawable.hpp"
 
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -26,8 +28,9 @@ namespace jngl {
 		JNGLDLL_API Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
 		void JNGLDLL_API step();
 		void JNGLDLL_API draw() const;
-		void JNGLDLL_API drawScaled(float factor) const;
-		void JNGLDLL_API drawScaled(float xfactor, float yfactor) const;
+		void JNGLDLL_API drawScaled(float factor, const ShaderProgram* = nullptr) const;
+		void JNGLDLL_API drawScaled(float xfactor, float yfactor,
+		                            const ShaderProgram* = nullptr) const;
 		void JNGLDLL_API drawClipped(float xstart, float xend, float ystart, float yend) const;
 
 		std::shared_ptr<Finally> loader;

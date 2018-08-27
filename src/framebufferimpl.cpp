@@ -6,6 +6,7 @@
 #include "jngl/matrix.hpp"
 #include "jngl/screen.hpp"
 #include "main.hpp"
+#include "spriteimpl.hpp"
 #include "windowptr.hpp"
 
 #include <cassert>
@@ -98,7 +99,8 @@ FrameBufferImpl::~FrameBufferImpl() {
 		jngl::translate(x, y);
 		glScalef(1.0f, -1.0f, 1.0f);
 		jngl::translate(0, -height / getScaleFactor());
-		texture.draw();
+		texture.draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
+		             float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
 		glPopMatrix();
 	}
 } // namespace jngl

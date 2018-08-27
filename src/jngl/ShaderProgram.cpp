@@ -5,6 +5,8 @@
 
 #include "../Shader_Impl.hpp"
 
+#include <cassert>
+
 namespace jngl {
 
 struct ShaderProgram::Impl {
@@ -46,6 +48,12 @@ Finally ShaderProgram::use() const {
 		}
 	}
 	return Finally([]() { glUseProgram(0); });
+}
+
+int ShaderProgram::getUniformLocation(const std::string& name) const {
+	int location = glGetUniformLocation(impl->id, name.c_str());
+	assert(location != -1);
+	return location;
 }
 
 ShaderProgram::~ShaderProgram() {
