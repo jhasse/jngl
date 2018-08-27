@@ -110,6 +110,7 @@ void unload(const std::string& filename) {
 void unloadAll() {
 	sprites_.clear();
 	textures.clear();
+	Texture::unloadShader();
 }
 
 int getWidth(const std::string& filename) {

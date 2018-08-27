@@ -184,4 +184,9 @@ int Texture::getHeight() const {
 	return height;
 }
 
+void Texture::unloadShader() {
+	delete textureShaderProgram;
+	textureShaderProgram = nullptr;
+}
+
 } // namespace jngl

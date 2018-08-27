@@ -27,6 +27,7 @@ public:
 	GLuint getID() const;
 	int getWidth() const;
 	int getHeight() const;
+	static void unloadShader();
 
 private:
 	static ShaderProgram* textureShaderProgram;
