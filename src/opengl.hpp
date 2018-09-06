@@ -67,6 +67,4 @@ namespace opengl
 #else
 	typedef GLfloat CoordType;
 #endif
-
-	void BindArrayBuffer(GLuint);
 }

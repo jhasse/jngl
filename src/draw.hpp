@@ -20,7 +20,7 @@ namespace draw
 	template<class T>
 	void Rect(const T xposition, const T yposition, const T width, const T height)
 	{
-		opengl::BindArrayBuffer(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		jngl::pushMatrix();
 		opengl::translate(xposition * jngl::getScaleFactor(), yposition * jngl::getScaleFactor());
 		typedef typename opengl::Type<T>::type Type;
@@ -36,7 +36,7 @@ namespace draw
 
 	template<class T>
 	void Line(const T xstart, const T ystart, const T xend, const T yend) {
-		opengl::BindArrayBuffer(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		jngl::pushMatrix();
 		typedef typename opengl::Type<T>::type Type;
 		Type line[] = { static_cast<Type>(xstart * jngl::getScaleFactor()),
@@ -50,7 +50,7 @@ namespace draw
 
 	template<class T>
 	void Triangle(const T A_x, const T A_y, const T B_x, const T B_y, const T C_x, const T C_y) {
-		opengl::BindArrayBuffer(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		typedef typename opengl::Type<T>::type Type;
 		Type line[] = { static_cast<Type>(A_x * jngl::getScaleFactor()),
 		                static_cast<Type>(A_y * jngl::getScaleFactor()),
@@ -64,7 +64,7 @@ namespace draw
 
 	template<class T>
 	void Ellipse(const T xmid, const T ymid, const T width, const T height, const T startAngle) {
-		opengl::BindArrayBuffer(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		jngl::pushMatrix();
 		glScalef(jngl::getScaleFactor(), jngl::getScaleFactor(), 1);
 		opengl::translate(xmid, ymid);
@@ -85,7 +85,7 @@ namespace draw
 	template<class T>
 	void Point(const T x, const T y)
 	{
-		opengl::BindArrayBuffer(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		typedef typename opengl::Type<T>::type Type;
 		Type point[] = { static_cast<Type>(x), static_cast<Type>(y) };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, point);

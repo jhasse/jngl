@@ -21,6 +21,7 @@ public:
 	ShaderProgram& operator=(ShaderProgram&&) = delete;
 	JNGLDLL_API [[nodiscard]] Finally use() const;
 
+	int getAttribLocation(const std::string& name) const;
 	int getUniformLocation(const std::string& name) const;
 
 private:

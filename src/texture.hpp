@@ -35,8 +35,6 @@ private:
 	GLuint texture_;
 	GLuint vertexBuffer_;
 	GLuint vao;
-	std::vector<opengl::CoordType> texCoords_;
-	std::vector<GLfloat> vertexes_;
 	int width;
 	int height;
 };

@@ -33,7 +33,6 @@ src = [
 	'src/jngl/window.cpp',
 	'src/jngl/work.cpp',
 	'src/main.cpp',
-	'src/opengl.cpp',
 	'src/spriteimpl.cpp',
 	'src/texture.cpp',
 	'src/window.cpp',

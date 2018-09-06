@@ -50,6 +50,12 @@ Finally ShaderProgram::use() const {
 	return Finally([]() { glUseProgram(0); });
 }
 
+int ShaderProgram::getAttribLocation(const std::string& name) const {
+	int location = glGetAttribLocation(impl->id, name.c_str());
+	assert(location != -1);
+	return location;
+}
+
 int ShaderProgram::getUniformLocation(const std::string& name) const {
 	int location = glGetUniformLocation(impl->id, name.c_str());
 	assert(location != -1);
