@@ -171,8 +171,15 @@ namespace jngl {
 	void Sprite::drawClipped(float xstart, float xend,
 	                         float ystart, float yend) const {
 		glPushMatrix();
+		opengl::translate(xstart * width, ystart * height);
+		drawClipped({ xstart, ystart }, { xend, yend });
+		glPopMatrix();
+	}
+
+	void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
+		glPushMatrix();
 		opengl::translate(x, y);
-		texture->drawClipped(xstart, xend, ystart, yend);
+		texture->drawClipped(start.x, end.x, start.y, end.y);
 		glPopMatrix();
 	}
 
