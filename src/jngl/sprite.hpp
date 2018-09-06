@@ -35,7 +35,8 @@ namespace jngl {
 	private:
 		static void cleanUpRowPointers(std::vector<unsigned char*>& buf);
 		void loadTexture(const std::string& filename, bool halfLoad, unsigned int format,
-		                 unsigned char** rowPointers, unsigned char* data = nullptr);
+		                 const unsigned char* const* rowPointers,
+		                 const unsigned char* data = nullptr);
 		Finally LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad);
 		struct BMPHeader {
 			unsigned int dataOffset;

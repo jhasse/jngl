@@ -372,17 +372,16 @@ namespace jngl {
 
 	void Sprite::loadTexture(const std::string& filename,
 	                         const bool halfLoad,
-	                         unsigned int format,
-	                         unsigned char** rowPointers,
-	                         unsigned char* data) {
+	                         const unsigned int format,
+	                         const unsigned char* const* const rowPointers,
+	                         const unsigned char* const data) {
 		if (!pWindow) {
 			if (halfLoad) {
 				return;
 			}
 			throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 		}
-		texture = std::make_shared<Texture>(width, height, reinterpret_cast<unsigned char**>(&rowPointers[0]),
-		                                    format, data);
+		texture = std::make_shared<Texture>(width, height, rowPointers, format, data);
 		textures[filename] = texture;
 	}
 

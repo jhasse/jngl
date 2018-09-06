@@ -11,8 +11,8 @@ namespace jngl {
 
 std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
-Texture::Texture(const int width, const int height, GLubyte** rowPointers, GLenum format,
-                 GLubyte* data)
+Texture::Texture(const int width, const int height, const GLubyte* const* const rowPointers,
+                 GLenum format, const GLubyte* const data)
 : width(width), height(height) {
 #ifdef EPOXY_PUBLIC
 	static bool first = true;
