@@ -5,6 +5,7 @@
 
 #include "helper.hpp"
 #include "jngl/debug.hpp"
+#include "jngl/matrix.hpp"
 #include "jngl/screen.hpp"
 #include "main.hpp"
 #include "spriteimpl.hpp"
@@ -83,10 +84,10 @@ namespace jngl {
 
 	void Character::Draw() const {
 		if (texture_) {
-			glPushMatrix();
+			pushMatrix();
 			opengl::translate(left_, top_);
 			texture_->draw();
-			glPopMatrix();
+			popMatrix();
 		}
 		opengl::translate(width_, 0);
 	}
@@ -236,7 +237,7 @@ namespace jngl {
 		auto lineEnd = lines.end();
 		int lineNr = 0;
 		for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
-			glPushMatrix();
+			pushMatrix();
 			opengl::translate(x, y + lineHeight * lineNr);
 			++lineNr;
 
@@ -245,7 +246,7 @@ namespace jngl {
 				GetCharacter(charIter, charEnd).Draw();
 			}
 
-			glPopMatrix();
+			popMatrix();
 		}
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisable(GL_TEXTURE_2D);

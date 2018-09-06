@@ -5,6 +5,7 @@
 
 #include "opengl.hpp"
 
+#include "jngl/matrix.hpp"
 #include "jngl/screen.hpp"
 
 #include <cmath>
@@ -20,7 +21,7 @@ namespace draw
 	void Rect(const T xposition, const T yposition, const T width, const T height)
 	{
 		opengl::BindArrayBuffer(0);
-		glPushMatrix();
+		jngl::pushMatrix();
 		opengl::translate(xposition * jngl::getScaleFactor(), yposition * jngl::getScaleFactor());
 		typedef typename opengl::Type<T>::type Type;
 		Type rect[] = { 0, 0,
@@ -30,13 +31,13 @@ namespace draw
 		                0, static_cast<Type>(height * jngl::getScaleFactor()) };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, rect);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-		glPopMatrix();
+		jngl::popMatrix();
 	}
 
 	template<class T>
 	void Line(const T xstart, const T ystart, const T xend, const T yend) {
 		opengl::BindArrayBuffer(0);
-		glPushMatrix();
+		jngl::pushMatrix();
 		typedef typename opengl::Type<T>::type Type;
 		Type line[] = { static_cast<Type>(xstart * jngl::getScaleFactor()),
 		                static_cast<Type>(ystart * jngl::getScaleFactor()),
@@ -44,7 +45,7 @@ namespace draw
 		                static_cast<Type>(yend * jngl::getScaleFactor()) };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, line);
 		glDrawArrays(GL_LINES, 0, 2);
-		glPopMatrix();
+		jngl::popMatrix();
 	}
 
 	template<class T>
@@ -64,7 +65,7 @@ namespace draw
 	template<class T>
 	void Ellipse(const T xmid, const T ymid, const T width, const T height, const T startAngle) {
 		opengl::BindArrayBuffer(0);
-		glPushMatrix();
+		jngl::pushMatrix();
 		glScalef(jngl::getScaleFactor(), jngl::getScaleFactor(), 1);
 		opengl::translate(xmid, ymid);
 		std::vector<T> vertexes;
@@ -78,7 +79,7 @@ namespace draw
 		vertexes.push_back(-height);
 		glVertexPointer(2, opengl::Type<T>::constant, 0, &vertexes[0]);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, static_cast<GLsizei>(vertexes.size() / 2));
-		glPopMatrix();
+		jngl::popMatrix();
 	}
 
 	template<class T>

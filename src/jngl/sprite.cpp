@@ -12,6 +12,7 @@
 #include "../main.hpp"
 #include "../windowptr.hpp"
 #include "debug.hpp"
+#include "matrix.hpp"
 #include "screen.hpp"
 
 #ifdef ANDROID
@@ -150,10 +151,10 @@ namespace jngl {
 	}
 
 	void Sprite::draw() const {
-		glPushMatrix();
+		pushMatrix();
 		opengl::translate(x, y);
 		texture->draw();
-		glPopMatrix();
+		popMatrix();
 	}
 
 	void Sprite::drawScaled(float factor) const {
@@ -161,26 +162,26 @@ namespace jngl {
 	}
 
 	void Sprite::drawScaled(float xfactor, float yfactor) const {
-		glPushMatrix();
+		pushMatrix();
 		opengl::translate(x, y);
 		opengl::scale(xfactor, yfactor);
 		texture->draw();
-		glPopMatrix();
+		popMatrix();
 	}
 
 	void Sprite::drawClipped(float xstart, float xend,
 	                         float ystart, float yend) const {
-		glPushMatrix();
+		pushMatrix();
 		opengl::translate(xstart * width, ystart * height);
 		drawClipped({ xstart, ystart }, { xend, yend });
-		glPopMatrix();
+		popMatrix();
 	}
 
 	void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
-		glPushMatrix();
+		pushMatrix();
 		opengl::translate(x, y);
 		texture->drawClipped(start.x, end.x, start.y, end.y);
-		glPopMatrix();
+		popMatrix();
 	}
 
 #ifndef NOPNG
