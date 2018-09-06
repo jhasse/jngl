@@ -56,14 +56,13 @@ namespace jngl {
 	}
 #endif
 
-	Sprite::Sprite(const char* const bytes, const size_t width, const size_t height) {
+	Sprite::Sprite(const unsigned char* const bytes, const size_t width, const size_t height) {
 		// std::vector<const char*> rowPointers(height);
 		// for (size_t i = 0; i < height; ++i) {
 		// 	rowPointers[i] = bytes + (i * width * 4);
 		// }
 		if (!pWindow) { throw std::runtime_error("Window hasn't been created yet."); }
-		texture = std::make_shared<Texture>(width, height, nullptr, GL_RGBA,
-		                                    reinterpret_cast<const GLubyte*>(bytes));
+		texture = std::make_shared<Texture>(width, height, nullptr, GL_RGBA, bytes);
 		Drawable::width = width;
 		Drawable::height = height;
 		setCenter(0, 0);

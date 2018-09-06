@@ -1,7 +1,7 @@
 #include "bike.hpp"
 
-#include <jngl.hpp>
 #include <iostream>
+#include <jngl.hpp>
 
 void Bike::HandleCollision(const Line& line)
 {

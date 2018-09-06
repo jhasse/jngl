@@ -23,7 +23,7 @@ namespace jngl {
 			THREADED,
 		};
 
-		JNGLDLL_API Sprite(const char* bytes, size_t width, size_t height);
+		JNGLDLL_API Sprite(const unsigned char* bytes, size_t width, size_t height);
 		JNGLDLL_API Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
 		void JNGLDLL_API step();
 		void JNGLDLL_API draw() const;
