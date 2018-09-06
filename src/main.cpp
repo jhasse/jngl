@@ -242,7 +242,6 @@ void setLineHeight(int h) {
 
 void print(const std::string& text, const int xposition, const int yposition) {
 	pWindow->print(text, xposition, yposition);
-	glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 }
 
 int getFontSize() {
@@ -320,7 +319,6 @@ void drawRect(const double xposition, const double yposition, const double width
               const double height) {
 	glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 	draw::Rect(xposition, yposition, width, height);
-	glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 }
 
 void drawRect(const Vec2 position, const Vec2 size) {
@@ -335,7 +333,6 @@ void drawTriangle(const double A_x, const double A_y, const double B_x, const do
                   const double C_x, const double C_y) {
 	glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 	draw::Triangle(A_x, A_y, B_x, B_y, C_x, C_y);
-	glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 }
 
 void setLineWidth(const float width) {
@@ -345,7 +342,6 @@ void setLineWidth(const float width) {
 void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
 	glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 	draw::Line(xstart, ystart, xend, yend);
-	glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 }
 
 void drawLine(const Vec2 start, const Vec2 end) {
@@ -355,7 +351,6 @@ void drawLine(const Vec2 start, const Vec2 end) {
 void drawPoint(const double x, const double y) {
 	glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 	draw::Point(x, y);
-	glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 }
 
 void readPixel(const int x, const int y, unsigned char& red, unsigned char& green,

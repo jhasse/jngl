@@ -49,7 +49,6 @@ void popAlpha() {
 void drawEllipse(float xmid, float ymid, float width, float height, float startAngle) {
 	glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
 	draw::Ellipse(xmid, ymid, width, height, startAngle);
-	glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 }
 
 void drawEllipse(const Vec2 position, const float width, const float height,

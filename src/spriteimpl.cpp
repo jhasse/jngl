@@ -14,7 +14,6 @@ void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue) 
 	spriteColorRed = red;
 	spriteColorGreen = green;
 	spriteColorBlue = blue;
-	glColor4ub(red, green, blue, spriteColorAlpha);
 }
 
 std::stack<unsigned char> spriteAlphas;
@@ -35,7 +34,6 @@ void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue,
 	spriteColorGreen = green;
 	spriteColorBlue = blue;
 	spriteColorAlpha = alpha;
-	glColor4ub(red, green, blue, alpha);
 }
 
 void setSpriteAlpha(unsigned char alpha) {

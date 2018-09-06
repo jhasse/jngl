@@ -231,7 +231,6 @@ namespace jngl {
 		y = int(y * getScaleFactor());
 		std::vector<std::string> lines(splitlines(text));
 
-		glColor4ub(fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha);
 		glEnable(GL_TEXTURE_2D);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -251,7 +250,6 @@ namespace jngl {
 		}
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisable(GL_TEXTURE_2D);
-		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
 	FT_Library FontImpl::library;
