@@ -111,7 +111,7 @@ bool SdlController::down(const controller::Button button) const {
 		case controller::RightStick: buttonIndex = xbox ? 10 : 12; break;
 		default: return false;
 	}
-	return SDL_JoystickGetButton(handle, buttonIndex);
+	return SDL_JoystickGetButton(handle, buttonIndex) != 0;
 }
 
 bool SdlController::is(SDL_Joystick* const handle) const {
