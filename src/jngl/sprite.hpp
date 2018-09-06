@@ -5,6 +5,7 @@
 
 #include "Finally.hpp"
 #include "ShaderProgram.hpp"
+#include "Vec2.hpp"
 #include "drawable.hpp"
 
 #include <memory>
@@ -25,20 +26,27 @@ namespace jngl {
 			THREADED,
 		};
 
+		JNGLDLL_API Sprite(const unsigned char* bytes, size_t width, size_t height);
 		JNGLDLL_API Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
 		void JNGLDLL_API step();
 		void JNGLDLL_API draw() const;
 		void JNGLDLL_API drawScaled(float factor, const ShaderProgram* = nullptr) const;
 		void JNGLDLL_API drawScaled(float xfactor, float yfactor,
 		                            const ShaderProgram* = nullptr) const;
+
+		[[deprecated("Use new drawClipped(Vec2, Vec2) method instead")]]
 		void JNGLDLL_API drawClipped(float xstart, float xend, float ystart, float yend) const;
+
+		/// Draw a cutout of the sprite. drawClipped({0, 0}, {1, 1}) would draw it normally.
+		void JNGLDLL_API drawClipped(Vec2 start, Vec2 end) const;
 
 		std::shared_ptr<Finally> loader;
 
 	private:
 		static void cleanUpRowPointers(std::vector<unsigned char*>& buf);
 		void loadTexture(const std::string& filename, bool halfLoad, unsigned int format,
-		                 unsigned char** rowPointers, unsigned char* data = nullptr);
+		                 const unsigned char* const* rowPointers,
+		                 const unsigned char* data = nullptr);
 		Finally LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad);
 		struct BMPHeader {
 			unsigned int dataOffset;

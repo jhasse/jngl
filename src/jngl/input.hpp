@@ -162,4 +162,7 @@ namespace jngl {
 
 	/// Returns all Controllers that are connected. Don't call this function every frame for performance reasons
 	std::vector<std::shared_ptr<Controller>> JNGLDLL_API getConnectedControllers();
+
+	/// Returns a string of characters that have been pressed since the last call to updateInput()
+	std::string JNGLDLL_API getTextInput();
 }

@@ -5,6 +5,7 @@
 
 #include "helper.hpp"
 #include "jngl/debug.hpp"
+#include "jngl/matrix.hpp"
 #include "jngl/screen.hpp"
 #include "main.hpp"
 #include "spriteimpl.hpp"
@@ -83,11 +84,11 @@ namespace jngl {
 
 	void Character::Draw() const {
 		if (texture_) {
-			glPushMatrix();
+			pushMatrix();
 			opengl::translate(left_, top_);
 			texture_->draw(float(fontColorRed) / 255.0f, float(fontColorGreen) / 255.0f,
 			               float(fontColorBlue) / 255.0f, float(fontColorAlpha) / 255.0f);
-			glPopMatrix();
+			popMatrix();
 		}
 		opengl::translate(width_, 0);
 	}
@@ -144,8 +145,8 @@ namespace jngl {
 	FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)
 	: height_(static_cast<unsigned int>(height * getScaleFactor())), lineHeight(int(height_ / .63)) {
 		auto filename = pathPrefix + relativeFilename;
-		if (!std::ifstream(filename)) {
-			if (!std::ifstream(relativeFilename)) {
+		if (!fileExists(filename)) {
+			if (!fileExists(relativeFilename)) {
 				throw std::runtime_error(std::string("Font file not found: ") + filename);
 			}
 			filename = relativeFilename;
@@ -237,7 +238,7 @@ namespace jngl {
 		auto lineEnd = lines.end();
 		int lineNr = 0;
 		for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
-			glPushMatrix();
+			pushMatrix();
 			opengl::translate(x, y + lineHeight * lineNr);
 			++lineNr;
 
@@ -246,7 +247,7 @@ namespace jngl {
 				GetCharacter(charIter, charEnd).Draw();
 			}
 
-			glPopMatrix();
+			popMatrix();
 		}
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisable(GL_TEXTURE_2D);

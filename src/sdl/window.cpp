@@ -7,6 +7,7 @@
 
 #include "../jngl/Finally.hpp"
 #include "../jngl/debug.hpp"
+#include "../jngl/window.hpp"
 #include "../main.hpp"
 #include "../window.hpp"
 #include "sdl.hpp"
@@ -32,7 +33,11 @@ Window::Window(const std::string& title, const int width, const int height, cons
 
 	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 	if (fullscreen) {
-		flags |= SDL_WINDOW_FULLSCREEN;
+		if (width == getDesktopWidth() && height == getDesktopHeight()) {
+			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+		} else {
+			flags |= SDL_WINDOW_FULLSCREEN;
+		}
 	}
 
 	const auto create = [&title, width, height, flags]() {
@@ -130,6 +135,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	}
 
 	void Window::UpdateInput() {
+		textInput.clear();
 		if (relativeMouseMode) {
 			mousex_ = 0;
 			mousey_ = 0;
@@ -152,7 +158,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 				case SDL_FINGERUP:
 					mouseDown_.at(0) = false;
 					mouseDown_.at(0) = false;
-					impl->currentFingerId = boost::none;
+					impl->currentFingerId = nullopt;
 					multitouch = false;
 					break;
 				case SDL_FINGERDOWN:
@@ -210,6 +216,9 @@ Window::Window(const std::string& title, const int width, const int height, cons
 					}
 					break;
 				}
+				case SDL_TEXTINPUT:
+					textInput += event.text.text;
+					break;
 				case SDL_KEYDOWN: {
 					static bool wasFullscreen = fullscreen_;
 					if (event.key.repeat != 0u && fullscreen_ != wasFullscreen) {

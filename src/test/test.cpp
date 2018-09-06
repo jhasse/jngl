@@ -330,6 +330,7 @@ void testKeys() {
 	keys["F12"] = jngl::key::F12;
 	keys["Any"] = jngl::key::Any;
 	std::vector<RecentlyPressedKey> recentlyPressedKeys;
+	std::string textInput;
 	while (jngl::running()) {
 		jngl::updateInput();
 		jngl::setFontSize(10);
@@ -376,6 +377,12 @@ void testKeys() {
 				c = 'a' - 1;
 			}
 		}
+
+		if (textInput.size() > 40) { textInput.clear(); }
+		textInput += jngl::getTextInput();
+		jngl::setFontColor(0, 0, 0);
+		jngl::print(textInput, 100, 583);
+
 		std::map<std::string, jngl::mouse::Button> buttons;
 		buttons["Left Mouse Button"] = jngl::mouse::Left;
 		buttons["Middle Mouse Button"] = jngl::mouse::Middle;

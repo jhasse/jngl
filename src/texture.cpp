@@ -5,8 +5,9 @@
 
 #include "jngl/Shader.hpp"
 
+#include <boost/math/special_functions/relative_difference.hpp>
+#include <cassert>
 #include <fstream>
-#include <sstream>
 
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F
@@ -19,8 +20,8 @@ std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 ShaderProgram* Texture::textureShaderProgram = nullptr;
 int Texture::shaderSpriteColorUniform = -1;
 
-Texture::Texture(const int width, const int height, GLubyte** rowPointers, GLenum format,
-                 GLubyte* data)
+Texture::Texture(const int width, const int height, const GLubyte* const* const rowPointers,
+                 GLenum format, const GLubyte* const data)
 : width(width), height(height) {
 #ifdef EPOXY_PUBLIC
 	static bool first = true;
@@ -151,12 +152,14 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	opengl::BindArrayBuffer(0);
 	auto tmpVertexes = vertexes_;
-	tmpVertexes[0] = tmpVertexes[2] = (tmpVertexes[4] * xstart);
-	tmpVertexes[1] = tmpVertexes[7] = (tmpVertexes[3] * ystart);
-	tmpVertexes[4] *= xend;
-	tmpVertexes[6] *= xend;
-	tmpVertexes[3] *= yend;
-	tmpVertexes[5] *= yend;
+	assert(boost::math::epsilon_difference(tmpVertexes[0], 0) < 9 &&
+	       boost::math::epsilon_difference(tmpVertexes[1], 0) < 9 &&
+	       boost::math::epsilon_difference(tmpVertexes[2], 0) < 9 &&
+	       boost::math::epsilon_difference(tmpVertexes[7], 0) < 9);
+	tmpVertexes[4] *= (xend - xstart);
+	tmpVertexes[6] *= (xend - xstart);
+	tmpVertexes[3] *= (yend - ystart);
+	tmpVertexes[5] *= (yend - ystart);
 	auto tmpTexCoords = texCoords_;
 	tmpTexCoords[0] = tmpTexCoords[2] = (tmpTexCoords[4] * xstart);
 	tmpTexCoords[1] = tmpTexCoords[7] = (tmpTexCoords[3] * ystart);

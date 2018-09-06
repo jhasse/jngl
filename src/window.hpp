@@ -87,8 +87,6 @@ namespace jngl {
 		void stepIfNeeded();
 		void draw() const;
 		std::shared_ptr<Work> getWork();
-		void setConfigPath(const std::string&);
-		std::string getConfigPath() const;
 		void addJob(std::shared_ptr<Job>);
 		void resetFrameLimiter();
 		unsigned int getStepsPerSecond() const;
@@ -97,9 +95,11 @@ namespace jngl {
 #ifdef _WIN32
 		static void ReleaseDC(HWND, HDC);
 		static void ReleaseRC(HGLRC);
-#else
+#elif IOS
 		WindowImpl* getImpl() const;
 #endif
+		std::string getTextInput() const;
+
 	private:
 		int GetKeyCode(jngl::key::KeyType key);
 		std::string GetFontFileByName(const std::string& fontname);
@@ -120,6 +120,9 @@ namespace jngl {
 		int fontSize_ = 12;
 		int width_, height_;
 
+		/// UTF-8 string of characters that were pressed since the last frame
+		std::string textInput;
+
 		/// The usable canvas width, excluding letterboxing
 		const int screenWidth;
 
@@ -132,12 +135,12 @@ namespace jngl {
 		std::shared_ptr<Work> currentWork_;
 		bool changeWork_;
 		std::shared_ptr<Work> newWork_;
-		std::string configPath;
 		std::vector<std::shared_ptr<Job>> jobs;
 		unsigned int stepsPerFrame = 1;
 		double sleepPerFrame = 0; // in seconds
 		double sleepCorrectionFactor = 1;
 		double timeSleptSinceLastCheck = 0;
+		unsigned int numberOfSleeps = 0;
 		unsigned int previousStepsPerFrame = 1;
 
 		/// When VSYNC is active we will try to find out to what FPS/Hz the display is limiting us

@@ -7,13 +7,16 @@
 
 #if !defined(JNGL_MAIN_BEGIN)
 	#if defined(ANDROID)
+		#include "other.hpp"
+
 		#include <android_native_app_glue.h>
 
 		namespace jngl {
 			extern android_app* androidApp;
 		}
 		#define JNGL_MAIN_BEGIN void android_main(android_app* __androidApp) { \
-			jngl::androidApp = __androidApp;
+			jngl::androidApp = __androidApp; \
+			jngl::setConfigPath(__androidApp->activity->internalDataPath);
 		#define JNGL_MAIN_END }
 	#else
 		#define JNGL_MAIN_BEGIN int main() { jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);

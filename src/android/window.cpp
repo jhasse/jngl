@@ -19,6 +19,9 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	mousePressed_.fill(false);
 
 	running_ = true;
+
+	// Calling UpdateInput() for the first time will set-up GLES among other things:
+	UpdateInput();
 }
 
 std::string Window::GetFontFileByName(const std::string& fontname) {
@@ -83,11 +86,11 @@ void Window::SetIcon(const std::string&) {
 }
 
 int getDesktopWidth() {
-	return jngl::getWindowWidth();
+	return 1920; // FIXME jngl::getWindowWidth();
 }
 
 int getDesktopHeight() {
-	return jngl::getWindowHeight();
+	return 1080; // FIXME jngl::getWindowHeight();
 }
 
 } // namespace jngl

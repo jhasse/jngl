@@ -4,3 +4,7 @@
 /openal-soft/
 /vorbis/
 /include/boost
+/.gradle/
+/test/gradlew
+/test/gradlew.bat
+/test/gradle/

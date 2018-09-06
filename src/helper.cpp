@@ -1,7 +1,11 @@
-// Copyright 2016-2018 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2016-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "helper.hpp"
+
+#ifdef ANDROID
+#include "android/fopen.hpp"
+#endif
 
 namespace jngl {
 
@@ -27,6 +31,14 @@ std::vector<std::string> splitlines(const std::string& text) {
 		lines.push_back(line);
 	}
 	return lines;
+}
+
+bool fileExists(const std::string& path) {
+	if (FILE* const f = fopen(path.c_str(), "r")) {
+		fclose(f);
+		return true;
+	}
+	return false;
 }
 
 } // namespace jngl

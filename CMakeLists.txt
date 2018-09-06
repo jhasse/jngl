@@ -1,7 +1,6 @@
 cmake_minimum_required (VERSION 3.6 FATAL_ERROR)
 
 project(jngl LANGUAGES CXX)
-set (CMAKE_CXX_STANDARD 14)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -31,8 +30,13 @@ add_library(jngl
 	src/spriteimpl.cpp
 	src/texture.cpp
 	src/window.cpp
-	src/windowptr.cpp
-    src/jngl.hpp)
+	src/windowptr.cpp)
+
+if (ANDROID)
+	set(CMAKE_CXX_STANDARD 14)
+else()
+	target_compile_features(jngl PUBLIC cxx_std_17)
+endif()
 
 set_target_properties(jngl PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src/

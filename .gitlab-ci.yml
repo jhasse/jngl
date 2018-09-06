@@ -11,6 +11,7 @@ gcc:
     - ninja
     - dnf install -y mesa-dri-drivers xorg-x11-drv-dummy
     - Xorg -config ../data/xorg.conf &>/dev/null &
+    - sleep 1 # wait for Xorg to boot up
     - DISPLAY=:0 ./unittest
 
 clang:

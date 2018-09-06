@@ -1,7 +1,5 @@
-/*
-Copyright 2016 Jan Niklas Hasse <jhasse@gmail.com>
-For conditions of distribution and use, see copyright notice in LICENSE.txt
-*/
+// Copyright 2016-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
@@ -9,5 +7,10 @@ For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <vector>
 
 namespace jngl {
-	std::vector<std::string> splitlines(const std::string&);
-}
+
+std::vector<std::string> splitlines(const std::string&);
+
+/// Checks whether the file exists on the filesystem or in the APK (on Android)
+bool fileExists(const std::string& path);
+
+} // namespace jngl

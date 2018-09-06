@@ -82,8 +82,8 @@ void drawScaled(const std::string& filename, const double xposition, const doubl
 void drawClipped(const std::string& filename, const double xposition, const double yposition,
                  const float xstart, const float xend, const float ystart, const float yend) {
 	auto& s = GetSprite(filename);
-	s.setPos(xposition, yposition);
-	s.drawClipped(xstart, xend, ystart, yend);
+	s.setPos(xposition + xstart * s.getWidth(), yposition + ystart * s.getHeight());
+	s.drawClipped({ xstart, ystart }, { xend, yend });
 }
 
 Finally loadSprite(const std::string& filename) {

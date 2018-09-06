@@ -17,6 +17,7 @@ PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
 namespace jngl {
 
 std::string pathPrefix;
+std::string configPath;
 std::vector<std::string> args;
 float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
 
@@ -461,11 +462,11 @@ std::string getPrefix() {
 }
 
 void setConfigPath(const std::string& path) {
-	pWindow->setConfigPath(path);
+	configPath = path;
 }
 
 std::string getConfigPath() {
-	return pWindow->getConfigPath();
+	return configPath;
 }
 
 std::vector<std::string> getArgs() {

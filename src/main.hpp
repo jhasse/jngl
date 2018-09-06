@@ -13,6 +13,7 @@ void clearBackgroundColor();
 bool Init(int width, int height, int screenWidth, int screenHeight);
 
 extern std::string pathPrefix;
+extern std::string configPath;
 extern std::vector<std::string> args;
 
 } // namespace jngl

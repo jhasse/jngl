@@ -54,13 +54,13 @@ FrameBufferImpl::~FrameBufferImpl() {
 	void FrameBufferImpl::BeginDraw() {
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		glBindRenderbuffer(GL_RENDERBUFFER, buffer);
-		glPushMatrix();
+		pushMatrix();
 #ifdef GL_VIEWPORT_BIT
 		glPushAttrib(GL_VIEWPORT_BIT);
 #else
 		glGetIntegerv(GL_VIEWPORT, viewport);
 		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
+		pushMatrix();
 		glLoadIdentity();
 		#define f2x(x) ((int)((x) * 65536))
 		glOrthox(f2x(-pWindow->getWidth()/2), f2x(pWindow->getWidth()/2),
@@ -79,14 +79,14 @@ FrameBufferImpl::~FrameBufferImpl() {
 
 	void FrameBufferImpl::EndDraw() {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glPopMatrix();
+		popMatrix();
 #ifdef GL_VIEWPORT_BIT
 		glPopAttrib();
 #else
 		glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 
 		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
+		popMatrix();
 		glMatrixMode(GL_MODELVIEW);
 #endif
 		glBindFramebuffer(GL_FRAMEBUFFER, systemFbo);
@@ -95,12 +95,12 @@ FrameBufferImpl::~FrameBufferImpl() {
 	}
 
 	void FrameBufferImpl::Draw(const double x, const double y) const {
-		glPushMatrix();
+		pushMatrix();
 		jngl::translate(x, y);
 		glScalef(1.0f, -1.0f, 1.0f);
 		jngl::translate(0, -height / getScaleFactor());
 		texture.draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 		             float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
-		glPopMatrix();
+		popMatrix();
 	}
 } // namespace jngl

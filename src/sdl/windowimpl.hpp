@@ -2,13 +2,23 @@
 
 #include "sdl.hpp"
 
-#include <boost/optional.hpp>
+#ifdef __APPLE__
+#include <experimental/optional>
+using std::experimental::optional;
+using std::experimental::nullopt;
+#else
+#include <optional>
+using std::optional;
+using std::nullopt;
+#endif
 
 namespace jngl {
-	class WindowImpl {
-	public:
-		SDL_Window* sdlWindow;
-		SDL_GLContext context;
-		boost::optional<SDL_FingerID> currentFingerId;
-	};
-}
+
+class WindowImpl {
+public:
+	SDL_Window* sdlWindow;
+	SDL_GLContext context;
+	optional<SDL_FingerID> currentFingerId;
+};
+
+} // namespace jngl

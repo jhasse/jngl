@@ -8,10 +8,12 @@
 #include "sprite.hpp"
 
 #include "../freetype.hpp"
+#include "../helper.hpp"
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
 #include "../windowptr.hpp"
 #include "debug.hpp"
+#include "matrix.hpp"
 #include "screen.hpp"
 
 #ifdef ANDROID
@@ -55,6 +57,18 @@ namespace jngl {
 		longjmp(reinterpret_cast<JpegErrorMgr*>(info->err)->setjmp_buffer, 1); // Return control to the setjmp point
 	}
 #endif
+
+	Sprite::Sprite(const unsigned char* const bytes, const size_t width, const size_t height) {
+		// std::vector<const char*> rowPointers(height);
+		// for (size_t i = 0; i < height; ++i) {
+		// 	rowPointers[i] = bytes + (i * width * 4);
+		// }
+		if (!pWindow) { throw std::runtime_error("Window hasn't been created yet."); }
+		texture = std::make_shared<Texture>(width, height, nullptr, GL_RGBA, bytes);
+		Drawable::width = width;
+		Drawable::height = height;
+		setCenter(0, 0);
+	}
 
 	Sprite::Sprite(const std::string& filename, LoadType loadType) : texture(getTexture(filename)) {
 		if (texture) {
@@ -100,7 +114,7 @@ namespace jngl {
 				break;
 			}
 			std::string tmp = fullFilename + extensions[i];
-			if (std::ifstream(tmp.c_str())) {
+			if (fileExists(tmp)) {
 				fullFilename += extensions[i];
 				loadFunction = functions[i];
 				break;
@@ -138,11 +152,11 @@ namespace jngl {
 	}
 
 	void Sprite::draw() const {
-		glPushMatrix();
+		pushMatrix();
 		opengl::translate(x, y);
 		texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 		              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
-		glPopMatrix();
+		popMatrix();
 	}
 
 	void Sprite::drawScaled(float factor, const ShaderProgram* const shaderProgram) const {
@@ -151,21 +165,28 @@ namespace jngl {
 
 	void Sprite::drawScaled(float xfactor, float yfactor,
 	                        const ShaderProgram* const shaderProgram) const {
-		glPushMatrix();
+		pushMatrix();
 		opengl::translate(x, y);
 		opengl::scale(xfactor, yfactor);
 		texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 		              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f,
 		              shaderProgram);
-		glPopMatrix();
+		popMatrix();
 	}
 
 	void Sprite::drawClipped(float xstart, float xend,
 	                         float ystart, float yend) const {
-		glPushMatrix();
+		pushMatrix();
+		opengl::translate(xstart * width, ystart * height);
+		drawClipped({ xstart, ystart }, { xend, yend });
+		popMatrix();
+	}
+
+	void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
+		pushMatrix();
 		opengl::translate(x, y);
-		texture->drawClipped(xstart, xend, ystart, yend);
-		glPopMatrix();
+		texture->drawClipped(start.x, end.x, start.y, end.y);
+		popMatrix();
 	}
 
 #ifndef NOPNG
@@ -177,7 +198,7 @@ namespace jngl {
 
 		// Read in some of the signature bytes
 		if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK ||
-		    png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) != 0) {
+		    png_sig_cmp(buf, png_size_t(0), PNG_BYTES_TO_CHECK) != 0) {
 			throw std::runtime_error(std::string("Error reading signature bytes. (" + filename + ")"));
 		}
 
@@ -237,7 +258,7 @@ namespace jngl {
 
 	Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad) {
 		fseek(fp, 10, SEEK_SET);
-		BMPHeader header;
+		BMPHeader header{};
 		if (!fread(&header, sizeof(header), 1, fp))
 			throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
 
@@ -376,17 +397,16 @@ namespace jngl {
 
 	void Sprite::loadTexture(const std::string& filename,
 	                         const bool halfLoad,
-	                         unsigned int format,
-	                         unsigned char** rowPointers,
-	                         unsigned char* data) {
+	                         const unsigned int format,
+	                         const unsigned char* const* const rowPointers,
+	                         const unsigned char* const data) {
 		if (!pWindow) {
 			if (halfLoad) {
 				return;
 			}
 			throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 		}
-		texture = std::make_shared<Texture>(width, height, reinterpret_cast<unsigned char**>(&rowPointers[0]),
-		                                    format, data);
+		texture = std::make_shared<Texture>(width, height, rowPointers, format, data);
 		textures[filename] = texture;
 	}
 
