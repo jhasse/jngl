@@ -323,13 +323,13 @@ Window::Window(const std::string& title, const int width, const int height, cons
 			fclose(fp);
 		});
 		png_byte buf[PNG_BYTES_TO_CHECK];
-		static_assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short), "Invalid PNG signature size.");
+		static_assert(PNG_BYTES_TO_CHECK >= sizeof(uint16_t), "Invalid PNG signature size.");
 
 		// Read in some of the signature bytes
-		if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK) {
+		if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK or
+		    png_sig_cmp(buf, 0, PNG_BYTES_TO_CHECK) != 0) {
 			throw std::runtime_error(std::string("Error reading signature bytes."));
 		}
-		assert(png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) == 0);
 		png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 		if (png_ptr == nullptr) {
 			throw std::runtime_error("libpng error while reading");
