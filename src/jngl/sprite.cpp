@@ -254,9 +254,9 @@ namespace jngl {
 	Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad) {
 		fseek(fp, 10, SEEK_SET);
 		BMPHeader header{};
-		if (!fread(&header, sizeof(header), 1, fp))
+		if (!fread(&header, sizeof(header), 1, fp)) {
 			throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
-
+		}
 		if (header.headerSize != 40) {
 			throw std::runtime_error(std::string("Unsupported header size. (" + filename + ")"));
 		}
