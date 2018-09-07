@@ -328,7 +328,7 @@ namespace jngl {
 			format = GL_RGBA;
 		}
 
-		assert(sizeof(JSAMPLE) == sizeof(char));
+		static_assert(sizeof(JSAMPLE) == sizeof(char));
 		std::vector<unsigned char*> buf(height);
 		for (auto& row : buf) {
 			row = new unsigned char[width * channels];

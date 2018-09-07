@@ -5,8 +5,8 @@
 #include "jngl.hpp"
 #include "spriteimpl.hpp"
 
-#include <cassert>
 #include <boost/numeric/conversion/cast.hpp>
+#include <cassert>
 
 #ifdef ANDROID
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
