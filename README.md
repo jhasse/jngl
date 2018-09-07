@@ -63,12 +63,14 @@ ninja -C build
 
 ## Android
 
-Install the Android SDK and let `ANDROID_HOME` point to it. Also install the NDK and let
-`ANDROID_NDK_HOME` point to that. Type the following to run the test app via ADB:
+Install the Android SDK and let `ANDROID_HOME` point to it. In the Android SDK Manager install the
+NDK build tools. Type the following to run the test app via ADB:
 
 ```
 make -C android run
 ```
+
+You can also open the `android/test` folder in Android Studio and build from there.
 
 ## iOS
 
