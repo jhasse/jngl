@@ -177,8 +177,8 @@ JNGL_MAIN_BEGIN {
 		} catch (std::runtime_error& e) {
 			std::cout << e.what() << std::endl;
 		}
-		jngl::setScaleFactor(
-		    std::floor(std::min(jngl::getDesktopWidth() / 800, jngl::getDesktopHeight() / 600)));
+		jngl::setScaleFactor(std::floor(
+		    std::min((jngl::getDesktopWidth() - 50) / 800, (jngl::getDesktopHeight() - 50) / 600)));
 		jngl::showWindow("setTitle not working!", 800 * jngl::getScaleFactor(),
 		                 600 * jngl::getScaleFactor());
 		jngl::setWork(std::make_shared<Test>());
