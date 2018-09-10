@@ -1,4 +1,4 @@
-project('jngl', ['cpp'], default_options : ['cpp_std=c++1z'])
+project('jngl', ['c', 'cpp'], default_options : ['cpp_std=c++1z'])
 
 conf_data = configuration_data()
 conf_data.set('VERSION', '1.3.0')
@@ -63,6 +63,9 @@ if target_machine.system() != 'windows'
 				'Foundation', 'AppKit', 'IOKIT', 'QuartzCore', 'OpenGL', 'GLUT', 'OpenAL'
 			], required : true),
 		]
+		src += [
+			'src/mac/other.cpp',
+		]
 	else
 		opengl_dep += [
 			dependency('fontconfig'),
@@ -92,6 +95,7 @@ else
 		'src/win32/ConvertUTF.cpp',
 		'src/win32/inputimpl.cpp',
 		'src/win32/message.cpp',
+		'src/win32/other.cpp',
 		'src/win32/windowimpl.cpp',
 		'src/win32/XinputController.cpp',
 	]
