@@ -9,5 +9,5 @@ std::string jngl::getBinaryPath() {
 	char filename[MAX_PATH];
 	GetModuleFileName(nullptr, filename, MAX_PATH);
 	std::string tmp(filename);
-	*binpath = tmp.substr(0, tmp.find_last_of("\\/") + 1);
+	return tmp.substr(0, tmp.find_last_of("\\/") + 1);
 }
