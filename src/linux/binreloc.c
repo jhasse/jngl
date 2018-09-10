@@ -10,8 +10,7 @@
  * more information and how to use this.
  */
 
-#ifndef __BINRELOC_C__
-#define __BINRELOC_C__
+#include "binreloc.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -20,7 +19,6 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
-#include "binreloc.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -184,8 +182,9 @@ static char* _br_find_exe_for_symbol(const void* symbol) {
 		return (char *) NULL;
 
 	f = fopen ("/proc/self/maps", "r");
-	if (f == NULL)
+	if (f == NULL) {
 		return (char *) NULL;
+	}
 
 	address_string_len = 4;
 	address_string = (char *) malloc (address_string_len);
@@ -229,8 +228,9 @@ static char* _br_find_exe_for_symbol(const void* symbol) {
 
 		/* Get rid of "(deleted)" from the filename. */
 		len = strlen (file);
-		if (len > 10 && strcmp (file + len - 10, " (deleted)") == 0)
+		if (len > 10 && strcmp (file + len - 10, " (deleted)") == 0) {
 			file[len - 10] = '\0';
+		}
 
 		/* I don't know whether this can happen but better safe than sorry. */
 		len = strlen (start_addr);
@@ -267,9 +267,8 @@ static char* _br_find_exe_for_symbol(const void* symbol) {
 
 	if (found == NULL) {
 		return (char *) NULL;
-	} else {
-		return strdup (found);
 	}
+	return strdup (found);
 }
 
 static char *exe = (char *) NULL;
@@ -462,9 +461,8 @@ br_find_sbin_dir (const char *default_sbin_dir)
 		/* BinReloc not initialized. */
 		if (default_sbin_dir != (const char *) NULL) {
 			return strdup (default_sbin_dir);
-		} else {
-			return (char *) NULL;
 		}
+		return (char *) NULL;
 	}
 
 	dir = br_build_path (prefix, "sbin");
@@ -599,9 +597,8 @@ br_find_libexec_dir (const char *default_libexec_dir)
 		/* BinReloc not initialized. */
 		if (default_libexec_dir != (const char *) NULL) {
 			return strdup (default_libexec_dir);
-		} else {
-			return (char *) NULL;
 		}
+		return (char *) NULL;
 	}
 
 	dir = br_build_path (prefix, "libexec");
@@ -770,5 +767,3 @@ br_dirname (const char *path)
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
-#endif /* __BINRELOC_C__ */
