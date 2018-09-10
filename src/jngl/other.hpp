@@ -55,6 +55,9 @@ void JNGLDLL_API setConfigPath(const std::string& path);
 
 std::string JNGLDLL_API getConfigPath();
 
+// Returns the directory of the currently running binary
+std::string JNGLDLL_API getBinaryPath();
+
 std::vector<std::string> JNGLDLL_API getArgs();
 
 double JNGLDLL_API getTime();

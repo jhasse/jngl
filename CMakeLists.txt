@@ -52,9 +52,13 @@ elseif (UNIX)
         src/sdl/sdl.cpp
         src/sdl/window.cpp
         src/sdl/SdlController.cpp
-    	src/linux/message.cpp)
-    if(NOT APPLE)
-		target_sources(jngl PRIVATE src/linux/window.cpp)
+	)
+	if(APPLE)
+		file(GLOB SRC src/mac/*.cpp)
+		target_sources(jngl PRIVATE ${SRC})
+	else()
+		file(GLOB SRC src/linux/*.cpp src/linux/*.c)
+		target_sources(jngl PRIVATE ${SRC})
     endif()
 endif()
 

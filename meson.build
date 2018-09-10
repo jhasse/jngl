@@ -77,6 +77,8 @@ if target_machine.system() != 'windows'
 		'src/sdl/window.cpp',
 		'src/sdl/SdlController.cpp',
 		'src/linux/message.cpp',
+		'src/linux/other.cpp',
+		'src/linux/binreloc.c',
 	]
 else
 	cpp_args += ['-DWINVER=0x0602']
