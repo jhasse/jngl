@@ -170,7 +170,8 @@ private:
 JNGL_MAIN_BEGIN {
 	try {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
-		          << jngl::getDesktopHeight() << std::endl;
+		          << jngl::getDesktopHeight() << std::endl
+		          << "Path of binary: " << jngl::getBinaryPath() << std::endl;
 		try {
 			std::cout << "Size of jngl.png: " << jngl::getWidth("jngl.png") << "x"
 			                                  << jngl::getHeight("jngl.png") << std::endl;
