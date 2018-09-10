@@ -23,7 +23,7 @@
 
 namespace jngl {
 
-	Character::Character(const char32_t ch, const unsigned int fontHeight, const FT_Face face) {
+	Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face face) {
 		const auto flags = FT_LOAD_TARGET_LIGHT | FT_LOAD_RENDER;
 		if (FT_Load_Char(face, ch, flags)) {
 		    const std::string msg =
@@ -38,7 +38,7 @@ namespace jngl {
 		if (FT_Get_Glyph(face->glyph, &glyph)) {
 			throw std::runtime_error("FT_Get_Glyph failed");
 		}
-		const auto bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph);
+		const auto bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph); // NOLINT
 		const FT_Bitmap& bitmap = bitmap_glyph->bitmap;
 
 		int width = bitmap.width;
@@ -135,10 +135,6 @@ namespace jngl {
 			characters_[unicodeCharacter].reset(new Character(unicodeCharacter, height_, face));
 		}
 		return *(characters_[unicodeCharacter]);
-	}
-
-	FontImpl::FontImpl() {
-		throw std::runtime_error("Attempting to use an unitialized FontImpl object");
 	}
 
 	FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)

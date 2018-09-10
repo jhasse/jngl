@@ -36,7 +36,6 @@ private:
 
 class FontImpl {
 public:
-	FontImpl();
 	FontImpl(const std::string& relativeFilename, unsigned int height);
 	FontImpl(const FontImpl&) = delete;
 	FontImpl& operator=(const FontImpl&) = delete;

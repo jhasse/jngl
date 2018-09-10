@@ -495,9 +495,8 @@ br_find_data_dir (const char *default_data_dir)
 		/* BinReloc not initialized. */
 		if (default_data_dir != (const char *) NULL) {
 			return strdup (default_data_dir);
-		} else {
-			return (char *) NULL;
 		}
+		return (char *) NULL;
 	}
 
 	dir = br_build_path (prefix, "share");
@@ -630,9 +629,8 @@ br_find_etc_dir (const char *default_etc_dir)
 		/* BinReloc not initialized. */
 		if (default_etc_dir != (const char *) NULL) {
 			return strdup (default_etc_dir);
-		} else {
-			return (char *) NULL;
 		}
+		return (char *) NULL;
 	}
 
 	dir = br_build_path (prefix, "etc");
@@ -752,8 +750,9 @@ br_dirname (const char *path)
 		return strdup (".");
 	}
 
-	while (end > path && *end == '/')
+	while (end > path && *end == '/') {
 		end--;
+	}
 	result = br_strndup (path, end - path + 1);
 	if (result[0] == 0) {
 		free (result);
