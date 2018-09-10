@@ -24,198 +24,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\win32\message.cpp">
+    <ClCompile Include="..\src\win32\*.cpp">
       <Filter>Source Files\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\win32\windowimpl.cpp">
-      <Filter>Source Files\win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\windowptr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\audio.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\freetype.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\opengl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\framebufferimpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\spriteimpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\sprite.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\drawable.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\font.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\framebuffer.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\input.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\job.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\screen.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\shapes.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\text.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\work.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\color.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\win32\msvc\dlfcn.c">
+    <ClCompile Include="..\src\win32\msvc\*.c">
       <Filter>Source Files\win32\msvc</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\jngl\window.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\helper.cpp">
+    <ClCompile Include="..\src\*.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\jngl\Finally.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\Controller.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\win32\inputimpl.cpp">
-      <Filter>Source Files\win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\win32\XinputController.cpp">
-      <Filter>Source Files\win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\win32\ConvertUTF.cpp">
-      <Filter>Source Files\win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\time.cpp">
-      <Filter>Source Files\jngl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\jngl\Vec2.cpp">
+    <ClCompile Include="..\src\jngl\*.cpp">
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\jngl\Finally.hpp">
+    <ClInclude Include="..\src\jngl\*.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\*.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\freetype.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\opengl.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\texture.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\window.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\windowptr.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\draw.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\debug.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\audio.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\framebufferimpl.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\spriteimpl.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\sprite.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\types.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\window.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\work.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\all.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\debug.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\drawable.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\font.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\framebuffer.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\input.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\job.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\matrix.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\screen.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\shapes.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\text.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\color.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\jngl\time.hpp">
-      <Filter>Header Files\jngl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\main.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\helper.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\win32\ConvertUTF.h">
+    <ClInclude Include="..\src\win32\*.hpp">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
   </ItemGroup>

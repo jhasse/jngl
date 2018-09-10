@@ -9,7 +9,7 @@ namespace jngl {
 
 class XinputController : public jngl::Controller {
 public:
-	XinputController(int number);
+	JNGLDLL_API XinputController(int number);
 	float state(controller::Button) const override;
 	bool down(controller::Button) const override;
 

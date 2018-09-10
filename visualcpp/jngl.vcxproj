@@ -11,72 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\audio.cpp" />
-    <ClCompile Include="..\src\jngl\Controller.cpp" />
-    <ClCompile Include="..\src\jngl\Finally.cpp" />
-    <ClCompile Include="..\src\framebufferimpl.cpp" />
-    <ClCompile Include="..\src\freetype.cpp" />
-    <ClCompile Include="..\src\helper.cpp" />
-    <ClCompile Include="..\src\jngl\color.cpp" />
-    <ClCompile Include="..\src\jngl\drawable.cpp" />
-    <ClCompile Include="..\src\jngl\font.cpp" />
-    <ClCompile Include="..\src\jngl\framebuffer.cpp" />
-    <ClCompile Include="..\src\jngl\input.cpp" />
-    <ClCompile Include="..\src\jngl\job.cpp" />
-    <ClCompile Include="..\src\jngl\screen.cpp" />
-    <ClCompile Include="..\src\jngl\shapes.cpp" />
-    <ClCompile Include="..\src\jngl\sprite.cpp" />
-    <ClCompile Include="..\src\jngl\text.cpp" />
-    <ClCompile Include="..\src\jngl\time.cpp" />
-    <ClCompile Include="..\src\jngl\Vec2.cpp" />
-    <ClCompile Include="..\src\jngl\window.cpp" />
-    <ClCompile Include="..\src\jngl\work.cpp" />
-    <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\opengl.cpp" />
-    <ClCompile Include="..\src\spriteimpl.cpp" />
-    <ClCompile Include="..\src\texture.cpp" />
-    <ClCompile Include="..\src\win32\ConvertUTF.cpp" />
-    <ClCompile Include="..\src\win32\inputimpl.cpp" />
-    <ClCompile Include="..\src\win32\message.cpp" />
-    <ClCompile Include="..\src\win32\msvc\dlfcn.c" />
-    <ClCompile Include="..\src\win32\windowimpl.cpp" />
-    <ClCompile Include="..\src\window.cpp" />
-    <ClCompile Include="..\src\windowptr.cpp" />
-    <ClCompile Include="..\src\win32\XinputController.cpp" />
+    <ClCompile Include="..\src\*.cpp" />
+    <ClCompile Include="..\src\jngl\*.cpp" />
+    <ClCompile Include="..\src\win32\*.cpp" />
+    <ClCompile Include="..\src\win32\msvc\*.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\audio.hpp" />
-    <ClInclude Include="..\src\debug.hpp" />
-    <ClInclude Include="..\src\draw.hpp" />
-    <ClInclude Include="..\src\jngl\Finally.hpp" />
-    <ClInclude Include="..\src\framebufferimpl.hpp" />
-    <ClInclude Include="..\src\freetype.hpp" />
-    <ClInclude Include="..\src\helper.hpp" />
-    <ClInclude Include="..\src\jngl.hpp" />
-    <ClInclude Include="..\src\jngl\all.hpp" />
-    <ClInclude Include="..\src\jngl\color.hpp" />
-    <ClInclude Include="..\src\jngl\debug.hpp" />
-    <ClInclude Include="..\src\jngl\drawable.hpp" />
-    <ClInclude Include="..\src\jngl\font.hpp" />
-    <ClInclude Include="..\src\jngl\framebuffer.hpp" />
-    <ClInclude Include="..\src\jngl\input.hpp" />
-    <ClInclude Include="..\src\jngl\job.hpp" />
-    <ClInclude Include="..\src\jngl\matrix.hpp" />
-    <ClInclude Include="..\src\jngl\screen.hpp" />
-    <ClInclude Include="..\src\jngl\shapes.hpp" />
-    <ClInclude Include="..\src\jngl\sprite.hpp" />
-    <ClInclude Include="..\src\jngl\text.hpp" />
-    <ClInclude Include="..\src\jngl\time.hpp" />
-    <ClInclude Include="..\src\jngl\types.hpp" />
-    <ClInclude Include="..\src\jngl\window.hpp" />
-    <ClInclude Include="..\src\jngl\work.hpp" />
-    <ClInclude Include="..\src\main.hpp" />
-    <ClInclude Include="..\src\opengl.hpp" />
-    <ClInclude Include="..\src\spriteimpl.hpp" />
-    <ClInclude Include="..\src\texture.hpp" />
-    <ClInclude Include="..\src\win32\ConvertUTF.h" />
-    <ClInclude Include="..\src\window.hpp" />
-    <ClInclude Include="..\src\windowptr.hpp" />
+    <ClInclude Include="..\src\*.hpp" />
+    <ClInclude Include="..\src\jngl\*.hpp" />
+    <ClInclude Include="..\src\win32\*.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
