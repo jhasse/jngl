@@ -12,13 +12,13 @@
 
 #include "binreloc.h"
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -145,8 +145,9 @@ _br_find_exe (BrInitError *error)
 		}
 		return NULL;
 	}
-	if (line[buf_size - 1] == 10)
+	if (line[buf_size - 1] == 10) {
 		line[buf_size - 1] = 0;
+	}
 
 	/* Extract the filename; it is always an absolute path. */
 	path = strchr (line, '/');
@@ -178,8 +179,9 @@ static char* _br_find_exe_for_symbol(const void* symbol) {
 	size_t address_string_len;
 	char *address_string, line[SIZE], *found;
 
-	if (symbol == NULL)
+	if (symbol == NULL) {
 		return (char *) NULL;
+	}
 
 	f = fopen ("/proc/self/maps", "r");
 	if (f == NULL) {

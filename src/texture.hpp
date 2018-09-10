@@ -28,9 +28,9 @@ public:
 	int getHeight() const;
 
 private:
-	GLuint texture_;
-	GLuint vertexBuffer_;
-	GLuint vao;
+	GLuint texture_ = 0;
+	GLuint vertexBuffer_ = 0;
+	GLuint vao = 0;
 	std::vector<opengl::CoordType> texCoords_;
 	std::vector<GLfloat> vertexes_;
 	int width;
