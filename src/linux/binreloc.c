@@ -43,22 +43,25 @@ _br_find_exe (BrInitError *error)
 	FILE *f;
 
 	/* Read from /proc/self/exe (symlink) */
-	if (sizeof (path) > SSIZE_MAX)
+	if (sizeof (path) > SSIZE_MAX) {
 		buf_size = SSIZE_MAX - 1;
-	else
+	} else {
 		buf_size = PATH_MAX - 1;
+	}
 	path = (char *) malloc (buf_size);
 	if (path == NULL) {
 		/* Cannot allocate memory. */
-		if (error)
+		if (error) {
 			*error = BR_INIT_ERROR_NOMEM;
+		}
 		return NULL;
 	}
 	path2 = (char *) malloc (buf_size);
 	if (path2 == NULL) {
 		/* Cannot allocate memory. */
-		if (error)
+		if (error) {
 			*error = BR_INIT_ERROR_NOMEM;
+		}
 		free (path);
 		return NULL;
 	}
@@ -107,16 +110,18 @@ _br_find_exe (BrInitError *error)
 	if (line == NULL) {
 		/* Cannot allocate memory. */
 		free (path);
-		if (error)
+		if (error) {
 			*error = BR_INIT_ERROR_NOMEM;
+		}
 		return NULL;
 	}
 
 	f = fopen ("/proc/self/maps", "r");
 	if (f == NULL) {
 		free (line);
-		if (error)
+		if (error) {
 			*error = BR_INIT_ERROR_OPEN_MAPS;
+		}
 		return NULL;
 	}
 
@@ -125,8 +130,9 @@ _br_find_exe (BrInitError *error)
 	if (result == NULL) {
 		fclose (f);
 		free (line);
-		if (error)
+		if (error) {
 			*error = BR_INIT_ERROR_READ_MAPS;
+		}
 		return NULL;
 	}
 
@@ -136,8 +142,9 @@ _br_find_exe (BrInitError *error)
 		/* Huh? An empty string? */
 		fclose (f);
 		free (line);
-		if (error)
+		if (error) {
 			*error = BR_INIT_ERROR_INVALID_MAPS;
+		}
 		return NULL;
 	}
 	if (line[buf_size - 1] == 10)
@@ -150,8 +157,9 @@ _br_find_exe (BrInitError *error)
 	if (strstr (line, " r-xp ") == NULL || path == NULL) {
 		fclose (f);
 		free (line);
-		if (error)
+		if (error) {
 			*error = BR_INIT_ERROR_INVALID_MAPS;
+		}
 		return NULL;
 	}
 
@@ -188,34 +196,36 @@ static char* _br_find_exe_for_symbol(const void* symbol) {
 		void *start_addr_p, *end_addr_p;
 		size_t len;
 
-		if (fgets (line, SIZE, f) == NULL)
+		if (fgets (line, SIZE, f) == NULL) {
 			break;
-
+		}
 		/* Sanity check. */
-		if (strstr (line, " r-xp ") == NULL || strchr (line, '/') == NULL)
+		if (strstr (line, " r-xp ") == NULL || strchr (line, '/') == NULL) {
 			continue;
-
+		}
 		/* Parse line. */
 		start_addr = line;
 		end_addr = strchr (line, '-');
 		file = strchr (line, '/');
 
 		/* More sanity check. */
-		if (!(file > end_addr && end_addr != NULL && end_addr[0] == '-'))
+		if (!(file > end_addr && end_addr != NULL && end_addr[0] == '-')) {
 			continue;
-
+		}
 		end_addr[0] = '\0';
 		end_addr++;
 		end_addr_end = strchr (end_addr, ' ');
-		if (end_addr_end == NULL)
+		if (end_addr_end == NULL) {
 			continue;
-
+		}
 		end_addr_end[0] = '\0';
 		len = strlen (file);
-		if (len == 0)
+		if (len == 0) {
 			continue;
-		if (file[len - 1] == '\n')
+		}
+		if (file[len - 1] == '\n') {
 			file[len - 1] = '\0';
+		}
 
 		/* Get rid of "(deleted)" from the filename. */
 		len = strlen (file);
@@ -224,9 +234,9 @@ static char* _br_find_exe_for_symbol(const void* symbol) {
 
 		/* I don't know whether this can happen but better safe than sorry. */
 		len = strlen (start_addr);
-		if (len != strlen (end_addr))
+		if (len != strlen (end_addr)) {
 			continue;
-
+		}
 
 		/* Transform the addresses into a string in the form of 0xdeadbeef,
 		 * then transform that into a pointer. */
@@ -255,10 +265,11 @@ static char* _br_find_exe_for_symbol(const void* symbol) {
 	free (address_string);
 	fclose (f);
 
-	if (found == NULL)
+	if (found == NULL) {
 		return (char *) NULL;
-	else
+	} else {
 		return strdup (found);
+	}
 }
 
 static char *exe = (char *) NULL;
@@ -320,10 +331,11 @@ br_find_exe (const char *default_exe)
 {
 	if (exe == (char *) NULL) {
 		/* BinReloc is not initialized. */
-		if (default_exe != (const char *) NULL)
+		if (default_exe != (const char *) NULL) {
 			return strdup (default_exe);
-		else
+		} else {
 			return (char *) NULL;
+		}
 	}
 	return strdup (exe);
 }
@@ -348,10 +360,11 @@ br_find_exe_dir (const char *default_dir)
 {
 	if (exe == NULL) {
 		/* BinReloc not initialized. */
-		if (default_dir != NULL)
+		if (default_dir != NULL) {
 			return strdup (default_dir);
-		else
+		} else {
 			return NULL;
+		}
 	}
 
 	return br_dirname (exe);
@@ -378,10 +391,11 @@ br_find_prefix (const char *default_prefix)
 
 	if (exe == (char *) NULL) {
 		/* BinReloc not initialized. */
-		if (default_prefix != (const char *) NULL)
+		if (default_prefix != (const char *) NULL) {
 			return strdup (default_prefix);
-		else
+		} else {
 			return (char *) NULL;
+		}
 	}
 
 	dir1 = br_dirname (exe);
@@ -412,10 +426,11 @@ br_find_bin_dir (const char *default_bin_dir)
 	prefix = br_find_prefix ((const char *) NULL);
 	if (prefix == (char *) NULL) {
 		/* BinReloc not initialized. */
-		if (default_bin_dir != (const char *) NULL)
+		if (default_bin_dir != (const char *) NULL) {
 			return strdup (default_bin_dir);
-		else
+		} else {
 			return (char *) NULL;
+		}
 	}
 
 	dir = br_build_path (prefix, "bin");
@@ -445,10 +460,11 @@ br_find_sbin_dir (const char *default_sbin_dir)
 	prefix = br_find_prefix ((const char *) NULL);
 	if (prefix == (char *) NULL) {
 		/* BinReloc not initialized. */
-		if (default_sbin_dir != (const char *) NULL)
+		if (default_sbin_dir != (const char *) NULL) {
 			return strdup (default_sbin_dir);
-		else
+		} else {
 			return (char *) NULL;
+		}
 	}
 
 	dir = br_build_path (prefix, "sbin");
@@ -479,10 +495,11 @@ br_find_data_dir (const char *default_data_dir)
 	prefix = br_find_prefix ((const char *) NULL);
 	if (prefix == (char *) NULL) {
 		/* BinReloc not initialized. */
-		if (default_data_dir != (const char *) NULL)
+		if (default_data_dir != (const char *) NULL) {
 			return strdup (default_data_dir);
-		else
+		} else {
 			return (char *) NULL;
+		}
 	}
 
 	dir = br_build_path (prefix, "share");
@@ -512,10 +529,11 @@ br_find_locale_dir (const char *default_locale_dir)
 	data_dir = br_find_data_dir ((const char *) NULL);
 	if (data_dir == (char *) NULL) {
 		/* BinReloc not initialized. */
-		if (default_locale_dir != (const char *) NULL)
+		if (default_locale_dir != (const char *) NULL) {
 			return strdup (default_locale_dir);
-		else
+		} else {
 			return (char *) NULL;
+		}
 	}
 
 	dir = br_build_path (data_dir, "locale");
@@ -545,10 +563,11 @@ br_find_lib_dir (const char *default_lib_dir)
 	prefix = br_find_prefix ((const char *) NULL);
 	if (prefix == (char *) NULL) {
 		/* BinReloc not initialized. */
-		if (default_lib_dir != (const char *) NULL)
+		if (default_lib_dir != (const char *) NULL) {
 			return strdup (default_lib_dir);
-		else
+		} else {
 			return (char *) NULL;
+		}
 	}
 
 	dir = br_build_path (prefix, "lib");
@@ -578,10 +597,11 @@ br_find_libexec_dir (const char *default_libexec_dir)
 	prefix = br_find_prefix ((const char *) NULL);
 	if (prefix == (char *) NULL) {
 		/* BinReloc not initialized. */
-		if (default_libexec_dir != (const char *) NULL)
+		if (default_libexec_dir != (const char *) NULL) {
 			return strdup (default_libexec_dir);
-		else
+		} else {
 			return (char *) NULL;
+		}
 	}
 
 	dir = br_build_path (prefix, "libexec");
@@ -611,10 +631,11 @@ br_find_etc_dir (const char *default_etc_dir)
 	prefix = br_find_prefix ((const char *) NULL);
 	if (prefix == (char *) NULL) {
 		/* BinReloc not initialized. */
-		if (default_etc_dir != (const char *) NULL)
+		if (default_etc_dir != (const char *) NULL) {
 			return strdup (default_etc_dir);
-		else
+		} else {
 			return (char *) NULL;
+		}
 	}
 
 	dir = br_build_path (prefix, "etc");
@@ -639,10 +660,12 @@ br_strcat (const char *str1, const char *str2)
 	char *result;
 	size_t len1, len2;
 
-	if (str1 == NULL)
+	if (str1 == NULL) {
 		str1 = "";
-	if (str2 == NULL)
+	}
+	if (str2 == NULL) {
 		str2 = "";
+	}
 
 	len1 = strlen (str1);
 	len2 = strlen (str2);
@@ -667,12 +690,14 @@ br_build_path (const char *dir, const char *file)
 	if (len > 0 && dir[len - 1] != '/') {
 		dir2 = br_strcat (dir, "/");
 		must_free = 1;
-	} else
+	} else {
 		dir2 = (char *) dir;
+	}
 
 	result = br_strcat (dir2, file);
-	if (must_free)
+	if (must_free) {
 		free (dir2);
+	}
 	return result;
 }
 
@@ -684,14 +709,17 @@ br_strndup (const char *str, size_t size)
 	char *result = (char *) NULL;
 	size_t len;
 
-	if (str == (const char *) NULL)
+	if (str == (const char *) NULL) {
 		return (char *) NULL;
+	}
 
 	len = strlen (str);
-	if (len == 0)
+	if (len == 0) {
 		return strdup ("");
-	if (size > len)
+	}
+	if (size > len) {
 		size = len;
+	}
 
 	result = (char *) malloc (len + 1);
 	memcpy (result, str, size);
@@ -718,12 +746,14 @@ br_dirname (const char *path)
 	const char *end;
 	char *result;
 
-	if (path == (const char *) NULL)
+	if (path == (const char *) NULL) {
 		return (char *) NULL;
+	}
 
 	end = strrchr (path, '/');
-	if (end == (const char *) NULL)
+	if (end == (const char *) NULL) {
 		return strdup (".");
+	}
 
 	while (end > path && *end == '/')
 		end--;
@@ -731,8 +761,9 @@ br_dirname (const char *path)
 	if (result[0] == 0) {
 		free (result);
 		return strdup ("/");
-	} else
+	} else {
 		return result;
+	}
 }
 
 
