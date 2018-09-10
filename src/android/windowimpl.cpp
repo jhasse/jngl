@@ -157,7 +157,11 @@ namespace jngl {
                 }
         }
 
+		if (!window->mouseDown_[0]) {
+			window->mousePressed_[0] = numberOfTouches > 0;
+		}
 		window->mouseDown_[0] = numberOfTouches > 0;
+		window->multitouch = numberOfTouches > 1;
         window->mousex_ = mouseX - relativeX;
         window->mousey_ = mouseY - relativeY;
         if (window->relativeMouseMode) {
