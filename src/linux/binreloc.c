@@ -334,9 +334,8 @@ br_find_exe (const char *default_exe)
 		/* BinReloc is not initialized. */
 		if (default_exe != (const char *) NULL) {
 			return strdup (default_exe);
-		} else {
-			return (char *) NULL;
 		}
+		return (char *) NULL;
 	}
 	return strdup (exe);
 }
@@ -530,9 +529,8 @@ br_find_locale_dir (const char *default_locale_dir)
 		/* BinReloc not initialized. */
 		if (default_locale_dir != (const char *) NULL) {
 			return strdup (default_locale_dir);
-		} else {
-			return (char *) NULL;
 		}
+		return (char *) NULL;
 	}
 
 	dir = br_build_path (data_dir, "locale");
@@ -759,9 +757,8 @@ br_dirname (const char *path)
 	if (result[0] == 0) {
 		free (result);
 		return strdup ("/");
-	} else {
-		return result;
 	}
+	return result;
 }
 
 

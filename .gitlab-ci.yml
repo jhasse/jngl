@@ -1,5 +1,6 @@
 variables:
   CLICOLOR_FORCE: "1"
+  TERM: xterm
 
 gcc:
   image: fedora:28
@@ -8,7 +9,7 @@ gcc:
     - dnf install -y fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-python3-devel python3-devel meson SDL2-devel openal-soft-devel gcc-c++
     - meson build --werror
     - cd build
-    - ninja
+    - script -qfec "ninja" /dev/null
     - dnf install -y mesa-dri-drivers xorg-x11-drv-dummy
     - Xorg -config ../data/xorg.conf &>/dev/null &
     - sleep 1 # wait for Xorg to boot up
@@ -21,9 +22,9 @@ clang:
     - pacman -Syu --needed --noconfirm meson sdl2 pkg-config fontconfig libepoxy udev libwebp openal libvorbis boost clang-tools-extra python2-yaml
     - CC=clang CXX=clang++ meson build --werror
     - cd build
-    - TERM=xterm script -qfc "ninja" /dev/null
+    - script -qfec "ninja" /dev/null
     - sed -i s/-pipe// compile_commands.json
-    - TERM=xterm script -qfc "/usr/share/clang/run-clang-tidy.py 2>/dev/null" | sed s_$PWD/__
+    - script -qfec "/usr/share/clang/run-clang-tidy.py 2>/dev/null" | sed s_$PWD/__
     - '! grep -Fq "error:" typescript'
 
 mingw:
@@ -32,7 +33,7 @@ mingw:
   script:
     - dnf install -y gcc-c++ meson mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft wine-core
     - meson build --werror --cross-file mingw.ini
-    - ninja -C build
+    - script -qfec "ninja -C build" /dev/null
     - rm -rf build
     - meson build --werror --cross-file mingw.ini --buildtype release --unity on
     - ninja -C build
