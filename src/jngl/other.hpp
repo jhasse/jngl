@@ -3,7 +3,6 @@
 
 #pragma once
 
-
 #include <string>
 #include <vector>
 #include <stdexcept>
@@ -11,54 +10,55 @@
 #include "dll.hpp"
 
 namespace jngl {
-    bool JNGLDLL_API running();
 
-    void JNGLDLL_API updateInput();
+bool JNGLDLL_API running();
 
-    void JNGLDLL_API swapBuffers();
+void JNGLDLL_API updateInput();
 
-    void JNGLDLL_API quit();
+void JNGLDLL_API swapBuffers();
 
-    void JNGLDLL_API cancelQuit();
+void JNGLDLL_API quit();
 
-    void JNGLDLL_API setTitle(const std::string& title);
+void JNGLDLL_API cancelQuit();
 
-    void JNGLDLL_API setBackgroundColor(unsigned char red,
-                                        unsigned char green,
-                                        unsigned char blue);
+void JNGLDLL_API setTitle(const std::string& title);
 
-    double JNGLDLL_API getFPS();
+void JNGLDLL_API setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
 
-    /// How many times Work::step is called per second (default: 60)
-    unsigned int JNGLDLL_API getStepsPerSecond();
+double JNGLDLL_API getFPS();
 
-    void JNGLDLL_API setStepsPerSecond(unsigned int);
+/// How many times Work::step is called per second (default: 60)
+unsigned int JNGLDLL_API getStepsPerSecond();
 
-    void JNGLDLL_API readPixel(int x, int y, unsigned char& red, unsigned char& green, unsigned char& blue);
+void JNGLDLL_API setStepsPerSecond(unsigned int);
 
-    void JNGLDLL_API setAntiAliasing(bool enabled);
+void JNGLDLL_API readPixel(int x, int y, unsigned char& red, unsigned char& green,
+                           unsigned char& blue);
 
-    bool JNGLDLL_API getAntiAliasing();
+void JNGLDLL_API setAntiAliasing(bool enabled);
 
-    void JNGLDLL_API setVerticalSync(bool enabled);
+bool JNGLDLL_API getAntiAliasing();
 
-    bool JNGLDLL_API getVerticalSync();
+void JNGLDLL_API setVerticalSync(bool enabled);
 
-    void JNGLDLL_API setIcon(const std::string& filename);
+bool JNGLDLL_API getVerticalSync();
 
-    void JNGLDLL_API mainLoop();
+void JNGLDLL_API setIcon(const std::string& filename);
 
-    void JNGLDLL_API setPrefix(const std::string& path);
+void JNGLDLL_API mainLoop();
 
-    std::string JNGLDLL_API getPrefix();
+void JNGLDLL_API setPrefix(const std::string& path);
 
-    void JNGLDLL_API setConfigPath(const std::string& path);
+std::string JNGLDLL_API getPrefix();
 
-    std::string JNGLDLL_API getConfigPath();
+void JNGLDLL_API setConfigPath(const std::string& path);
 
-    std::vector<std::string> JNGLDLL_API getArgs();
+std::string JNGLDLL_API getConfigPath();
 
-    double JNGLDLL_API getTime();
+std::vector<std::string> JNGLDLL_API getArgs();
 
-    void JNGLDLL_API sleep(int milliseconds);
-}
+double JNGLDLL_API getTime();
+
+void JNGLDLL_API sleep(int milliseconds);
+
+} // namespace jngl
