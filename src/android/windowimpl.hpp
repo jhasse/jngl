@@ -28,8 +28,8 @@ public:
 	int relativeY = 0;
 
 private:
-	Window* window;
 	android_app* app;
+	Window* window;
 
 	bool initialized = false;
 	EGLDisplay display;

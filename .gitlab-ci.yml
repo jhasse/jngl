@@ -39,8 +39,7 @@ mingw:
     - ninja -C build
 
 android:
-  image: jhasse/android-ndk:r17b
+  image: jhasse/android-ndk:r17c
   stage: build
   script:
-    - dnf install -y file boost-devel git make gradle
     - make -C android
