@@ -120,10 +120,6 @@ lib = static_library('jngl', sources : src, cpp_args : cpp_args, install : true,
 ])
 include = include_directories('src')
 
-executable('jngl-test', sources : ['src/test/test.cpp'], link_with : lib, dependencies : [
-	thread_dep,
-])
-
 if target_machine.system() == 'linux'
 	boost_python_dep = dependency('boost', modules : [ 'python3' ], required : false)
 	python3_dep = dependency('python3', required : false)
@@ -143,6 +139,9 @@ jngl_dep = declare_dependency(include_directories : include, link_with : lib,
                               dependencies : thread_dep)
 
 if not meson.is_subproject()
+	executable('jngl-test', sources : ['src/test/test.cpp'], link_with : lib, dependencies : [
+		thread_dep,
+	])
 	boost_test_dep = dependency('boost', modules : [ 'unit_test_framework' ], required : false)
 	if boost_test_dep.found()
 		test('Unit Test', executable('unittest', [
