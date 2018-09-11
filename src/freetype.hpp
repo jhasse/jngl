@@ -50,7 +50,7 @@ private:
 
 	static int instanceCounter;
 	static FT_Library library;
-	FT_Face face;
+	FT_Face face = nullptr;
 	std::unique_ptr<Finally> freeFace; // Frees face_ if necessary
 	unsigned int height_;
 	int lineHeight;

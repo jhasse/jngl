@@ -19,6 +19,6 @@ std::string jngl::getBinaryPath() {
 	std::vector<char> tmp(size);
 	_NSGetExecutablePath(&tmp[0], &size);
 	binpath->assign(tmp.begin(), tmp.end());
-	*binpath = binpath->substr(0, binpath->find_last_of("\\/") + 1);
+	*binpath = binpath->substr(0, binpath->find_last_of('/') + 1);
 	return *binpath;
 }
