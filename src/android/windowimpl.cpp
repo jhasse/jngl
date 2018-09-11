@@ -91,7 +91,7 @@ namespace jngl {
             EGL_RED_SIZE, 8,
             EGL_NONE
         };
-        EGLint dummy, format;
+		EGLint format;
         EGLint numConfigs;
         EGLConfig config;
 
