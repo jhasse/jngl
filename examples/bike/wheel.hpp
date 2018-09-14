@@ -1,7 +1,6 @@
 #pragma once
 
 #include "vector2d.hpp"
-#include "line.hpp"
 
 class Wheel {
 public:

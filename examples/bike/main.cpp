@@ -1,12 +1,7 @@
 #include "base.hpp"
-#include "bike.hpp"
 #include "constants.hpp"
-#include "vector2d.hpp"
 
-#include <cmath>
-#include <iostream>
 #include <jngl.hpp>
-#include <sstream>
 
 JNGL_MAIN_BEGIN {
 	jngl::setScaleFactor(

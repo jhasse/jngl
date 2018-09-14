@@ -1,9 +1,6 @@
 #include "wheel.hpp"
-#include "constants.hpp"
 
-#include <iostream>
 #include <jngl.hpp>
-#include <vector>
 
 void Wheel::CollisionWith(const Vector2d& collisionPoint)
 {

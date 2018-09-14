@@ -1,6 +1,4 @@
-#include <cmath>
 #include <jngl.hpp>
-#include <sstream>
 
 const int screenWidth = 800;
 const int screenHeight = 600;

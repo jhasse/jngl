@@ -21,7 +21,6 @@
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
-#include <fstream>
 #include <sstream>
 #include <thread>
 #ifndef NOJPEG
