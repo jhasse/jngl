@@ -18,7 +18,6 @@
 
 #include <cassert>
 #include <codecvt>
-#include <fstream>
 #include <locale>
 
 namespace jngl {

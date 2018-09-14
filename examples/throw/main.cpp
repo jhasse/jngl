@@ -1,15 +1,16 @@
+#include <cmath>
 #include <jngl.hpp>
 
 const int screenWidth = 800;
 const int screenHeight = 600;
 
-class Ball
-{
+class Ball {
 public:
 	explicit Ball(const std::string& filename);
 	void Draw();
 	void Move();
 	void CheckMouse(int x, int y);
+
 private:
 	double x_, y_, xSpeed_, ySpeed_;
 	const std::string filename_;
