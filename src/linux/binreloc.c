@@ -362,9 +362,8 @@ br_find_exe_dir (const char *default_dir)
 		/* BinReloc not initialized. */
 		if (default_dir != NULL) {
 			return strdup (default_dir);
-		} else {
-			return NULL;
 		}
+		return NULL;
 	}
 
 	return br_dirname (exe);
@@ -393,9 +392,8 @@ br_find_prefix (const char *default_prefix)
 		/* BinReloc not initialized. */
 		if (default_prefix != (const char *) NULL) {
 			return strdup (default_prefix);
-		} else {
-			return (char *) NULL;
 		}
+		return (char *) NULL;
 	}
 
 	dir1 = br_dirname (exe);
@@ -428,9 +426,8 @@ br_find_bin_dir (const char *default_bin_dir)
 		/* BinReloc not initialized. */
 		if (default_bin_dir != (const char *) NULL) {
 			return strdup (default_bin_dir);
-		} else {
-			return (char *) NULL;
 		}
+		return (char *) NULL;
 	}
 
 	dir = br_build_path (prefix, "bin");
@@ -562,9 +559,8 @@ br_find_lib_dir (const char *default_lib_dir)
 		/* BinReloc not initialized. */
 		if (default_lib_dir != (const char *) NULL) {
 			return strdup (default_lib_dir);
-		} else {
-			return (char *) NULL;
 		}
+		return (char *) NULL;
 	}
 
 	dir = br_build_path (prefix, "lib");

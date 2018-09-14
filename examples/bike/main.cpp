@@ -1,6 +1,7 @@
 #include "base.hpp"
 #include "constants.hpp"
 
+#include <cmath>
 #include <jngl.hpp>
 #include <sstream>
 
