@@ -2,10 +2,8 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <iostream>
-#include <string>
-#include <sys/types.h> // pid_t
-#include <sys/wait.h>  // waitpid
-#include <unistd.h>    // fork
+#include <sys/wait.h> // waitpid
+#include <unistd.h>   // fork
 
 namespace jngl {
 

@@ -10,7 +10,6 @@
 #include FT_FREETYPE_H
 
 #include <map>
-#include <stdexcept>
 #include <string>
 #include <vector>
 

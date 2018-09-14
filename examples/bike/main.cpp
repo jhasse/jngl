@@ -2,6 +2,7 @@
 #include "constants.hpp"
 
 #include <jngl.hpp>
+#include <sstream>
 
 JNGL_MAIN_BEGIN {
 	jngl::setScaleFactor(

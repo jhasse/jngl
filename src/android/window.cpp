@@ -2,10 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
-#include "../jngl.hpp"
 #include "windowimpl.hpp"
-
-#include <stdexcept>
 
 namespace jngl {
 
