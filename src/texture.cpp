@@ -60,12 +60,14 @@ Texture::Texture(const int width, const int height, const GLubyte* const* const 
 	vertexes_.assign(&vertexes[8], &vertexes[16]);
 
 	if (rowPointers) {
+		assert(!data);
 		for (int i = 0; i < height; ++i) {
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, width, 1, format, GL_UNSIGNED_BYTE,
 			                rowPointers[i]);
 		}
 	}
 	if (data) {
+		assert(!rowPointers);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
 	}
 
