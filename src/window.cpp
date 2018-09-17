@@ -311,8 +311,8 @@ namespace jngl {
 			if (!jngl::running() && currentWork_) {
 				currentWork_->onQuitEvent();
 			}
-			while (changeWork_) {
-				changeWork_ = false;
+			while (changeWork) {
+				changeWork = false;
 				currentWork_ = newWork_;
 				newWork_.reset();
 				currentWork_->onLoad();
@@ -337,7 +337,7 @@ namespace jngl {
 			currentWork_ = std::move(work);
 		} else {
 			debug("change work to "); debug(work.get()); debug("\n");
-			changeWork_ = true;
+			changeWork = true;
 			newWork_ = std::move(work);
 		}
 	}

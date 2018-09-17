@@ -18,7 +18,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
                const int screenWidth, const int screenHeight)
 : fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
   width_(width), height_(height), screenWidth(screenWidth), screenHeight(screenHeight),
-  fontName_(""), changeWork_(false), impl(new WindowImpl) {
+  fontName_(""), impl(new WindowImpl) {
 	mouseDown_.fill(false);
 	mousePressed_.fill(false);
 

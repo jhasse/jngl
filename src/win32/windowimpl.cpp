@@ -93,7 +93,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
                const int screenWidth, const int screenHeight)
 : fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
   fontSize_(12), width_(width), height_(height), screenWidth(screenWidth),
-  screenHeight(screenHeight), changeWork_(false), stepsPerFrame(1), multitouch(false) {
+  screenHeight(screenHeight), stepsPerFrame(1), multitouch(false) {
 	mouseDown_.fill(false);
 	mousePressed_.fill(false);
 

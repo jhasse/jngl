@@ -133,7 +133,7 @@ namespace jngl {
 		std::string fontName_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
 		std::shared_ptr<Work> currentWork_;
-		bool changeWork_;
+		bool changeWork = false;
 		std::shared_ptr<Work> newWork_;
 		std::vector<std::shared_ptr<Job>> jobs;
 		unsigned int stepsPerFrame = 1;
