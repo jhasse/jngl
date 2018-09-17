@@ -7,6 +7,7 @@
 
 #include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
+#include <sstream>
 
 #ifdef ANDROID
 #include "android/fopen.hpp"
