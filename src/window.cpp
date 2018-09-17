@@ -107,15 +107,15 @@ namespace jngl {
 	}
 
 	bool Window::isRunning() const {
-		return running_;
+		return running;
 	}
 
 	void Window::quit() {
-		running_ = false;
+		running = false;
 	}
 
 	void Window::cancelQuit() {
-		running_ = true;
+		running = true;
 	}
 
 	bool Window::getKeyDown(key::KeyType key) {
@@ -188,7 +188,7 @@ namespace jngl {
 		Finally _([&]() {
 			currentWork_.reset();
 		});
-		while (running_) {
+		while (isRunning()) {
 			stepIfNeeded();
 			draw();
 			jngl::swapBuffers();

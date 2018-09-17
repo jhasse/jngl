@@ -8,21 +8,19 @@
 
 #include <stdexcept>
 
-namespace jngl
-{
-	Window::Window(const std::string& title, const int width, const int height, const bool fullscreen, const int screenWidth, const int screenHeight)
-	: fullscreen_(fullscreen), running_(false), isMouseVisible_(true),
-	  relativeMouseMode(false),
-	  anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height), screenWidth(screenWidth), screenHeight(screenHeight),
-	  mouseWheel_(0), fontName_(""), impl(new WindowImpl(this)), changeWork_(false)
-	{
-		mouseDown_.fill(false);
-		mousePressed_.fill(false);
+namespace jngl {
 
-		Init(width, height, screenWidth, screenHeight);
+Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
+               const int screenWidth, const int screenHeight)
+: fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
+  mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height), screenWidth(screenWidth),
+  screenHeight(screenHeight), mouseWheel_(0), fontName_(""), impl(new WindowImpl(this)),
+  changeWork_(false) {
+	mouseDown_.fill(false);
+	mousePressed_.fill(false);
 
-		running_ = true;
-	}
+	Init(width, height, screenWidth, screenHeight);
+}
 
 	std::string Window::GetFontFileByName(const std::string& fontname)
 	{

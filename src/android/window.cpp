@@ -8,14 +8,12 @@ namespace jngl {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const int screenWidth, const int screenHeight)
-: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false),
-  anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height),
-  screenWidth(screenWidth), screenHeight(screenHeight), mouseWheel_(0), fontName_(""),
-  changeWork_(false), impl(new WindowImpl(this)) {
+: fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
+  mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height), screenWidth(screenWidth),
+  screenHeight(screenHeight), mouseWheel_(0), fontName_(""), changeWork_(false),
+  impl(new WindowImpl(this)) {
 	mouseDown_.fill(false);
 	mousePressed_.fill(false);
-
-	running_ = true;
 
 	// Calling UpdateInput() for the first time will set-up GLES among other things:
 	UpdateInput();

@@ -91,8 +91,8 @@ bool Window::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const int screenWidth, const int screenHeight)
-: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false),
-  anyKeyPressed_(false), fontSize_(12), width_(width), height_(height), screenWidth(screenWidth),
+: fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
+  fontSize_(12), width_(width), height_(height), screenWidth(screenWidth),
   screenHeight(screenHeight), changeWork_(false), stepsPerFrame(1), multitouch(false) {
 	mouseDown_.fill(false);
 	mousePressed_.fill(false);
@@ -245,8 +245,6 @@ void Window::Init(const std::string& title, const bool multisample) {
 	if (!jngl::Init(width_, height_, screenWidth, screenHeight)) {
 		throw std::runtime_error("Initialization failed.");
 	}
-
-	running_ = true;
 }
 
 Window::~Window() {
@@ -407,7 +405,7 @@ void Window::UpdateInput() {
 		static std::map<int, std::string> scanCodeToCharacter;
 		switch (msg.message) {
 			case WM_QUIT:
-				running_ = false;
+				quit();
 				break;
 			case WM_MOUSEMOVE:
 				mousex_ = GET_X_LPARAM(msg.lParam);

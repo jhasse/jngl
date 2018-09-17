@@ -16,9 +16,9 @@ namespace jngl {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const int screenWidth, const int screenHeight)
-: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false),
-  anyKeyPressed_(false), width_(width), height_(height), screenWidth(screenWidth),
-  screenHeight(screenHeight), fontName_(""), changeWork_(false), impl(new WindowImpl) {
+: fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
+  width_(width), height_(height), screenWidth(screenWidth), screenHeight(screenHeight),
+  fontName_(""), changeWork_(false), impl(new WindowImpl) {
 	mouseDown_.fill(false);
 	mousePressed_.fill(false);
 
@@ -55,8 +55,6 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	setFontSize(fontSize_); // Load a font the first time
 
 	Init(width, height, screenWidth, screenHeight);
-
-	running_ = true;
 }
 
 #ifdef __APPLE__
@@ -141,7 +139,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		while (SDL_PollEvent(&event) != 0) {
 			switch(event.type) {
 				case SDL_QUIT:
-					running_ = false;
+					quit();
 					break;
 				case SDL_MOUSEMOTION:
 					if (relativeMouseMode) {
