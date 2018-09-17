@@ -18,6 +18,7 @@ public:
 	void updateInput();
 	void swapBuffers();
 	void init();
+	void setRelativeMouseMode(bool);
 
 	int mouseX = 0;
 	int mouseY = 0;

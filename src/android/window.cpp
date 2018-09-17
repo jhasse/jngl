@@ -73,7 +73,7 @@ void Window::SetMouse(const int xposition, const int yposition) {
 
 void Window::SetRelativeMouseMode(const bool relative) {
 	relativeMouseMode = relative;
-	// TODO
+	impl->setRelativeMouseMode(relative);
 }
 
 void Window::SetIcon(const std::string&) {

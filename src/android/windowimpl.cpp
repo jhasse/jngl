@@ -137,6 +137,15 @@ void WindowImpl::init() {
 	initialized = true;
 }
 
+void WindowImpl::setRelativeMouseMode(const bool relativeMouseMode) {
+	if (relativeMouseMode) {
+		relativeX = mouseX;
+		relativeY = mouseY;
+	} else {
+		relativeX = relativeY = 0;
+	}
+}
+
 void WindowImpl::updateInput() {
 	// Read all pending events.
 	int ident;
