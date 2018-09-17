@@ -1,4 +1,5 @@
 #include "line.hpp"
+
 #include "wheel.hpp"
 
 Line::Line(Vector2d start, Vector2d end) : start_(start), end_(end)

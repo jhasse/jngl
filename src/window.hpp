@@ -5,8 +5,6 @@
 
 #include "jngl/input.hpp"
 
-#include <string>
-#include <type_traits>
 #include <array>
 #include <functional>
 #include <map>
@@ -14,6 +12,7 @@
 #include <unordered_map>
 
 #ifdef _WIN32
+	#include <type_traits>
 	// TODO: Use pimpl to move this into win32/windowimpl.cpp
 	#include <windows.h>
 	#ifdef min
