@@ -16,7 +16,8 @@
 		}
 		#define JNGL_MAIN_BEGIN void android_main(android_app* __androidApp) { \
 			jngl::androidApp = __androidApp; \
-			jngl::setConfigPath(__androidApp->activity->internalDataPath);
+			jngl::setConfigPath(__androidApp->activity->internalDataPath); \
+			jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
 		#define JNGL_MAIN_END }
 	#else
 		#define JNGL_MAIN_BEGIN int main() { jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
