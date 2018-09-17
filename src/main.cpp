@@ -9,6 +9,8 @@
 #include <cassert>
 
 #ifdef ANDROID
+#include "android/fopen.hpp"
+
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
@@ -471,6 +473,28 @@ std::string getConfigPath() {
 
 std::vector<std::string> getArgs() {
 	return args;
+}
+
+std::stringstream JNGLDLL_API readAsset(const std::string& filename) {
+	std::stringstream sstream;
+	FILE* const f = fopen(filename.c_str(), "rb");
+	if (!f) {
+		return sstream;
+	}
+	Finally closeFile([f]() { fclose(f); });
+	if (fseek(f, 0, SEEK_END) != 0) {
+		return sstream;
+	}
+	const auto size = ftell(f);
+	if (fseek(f, 0, SEEK_SET) != 0) {
+		return sstream;
+	}
+	std::unique_ptr<char[]> content(new char[size]);
+	if (fread(content.get(), size, 1, f) != 1) {
+		return sstream;
+	}
+	sstream.write(content.get(), size);
+	return sstream;
 }
 
 } // namespace jngl

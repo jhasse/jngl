@@ -63,4 +63,7 @@ double JNGLDLL_API getTime();
 
 void JNGLDLL_API sleep(int milliseconds);
 
+/// Returns a stringstream containing the whole file. This will read from the .apk on Android.
+std::stringstream JNGLDLL_API readAsset(const std::string& filename);
+
 } // namespace jngl
