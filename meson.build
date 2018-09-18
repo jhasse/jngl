@@ -154,8 +154,8 @@ if not meson.is_subproject()
 		include_directories : include))
 	endif
 	executable('example-bike', ['examples/bike/base.cpp', 'examples/bike/bike.cpp',
-		'examples/bike/line.cpp', 'examples/bike/main.cpp', 'examples/bike/vector2d.cpp',
-		'examples/bike/wheel.cpp'], dependencies : jngl_dep)
+		'examples/bike/line.cpp', 'examples/bike/main.cpp', 'examples/bike/wheel.cpp'],
+		dependencies : jngl_dep)
 	executable('example-throw', ['examples/throw/main.cpp'], dependencies : jngl_dep)
 endif
 

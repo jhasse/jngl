@@ -1,15 +1,15 @@
 #pragma once
 
-#include "vector2d.hpp"
+#include <jngl/Vec2.hpp>
 
 class Wheel {
 public:
 	Wheel(double x, double y);
 	void Draw();
 	void Move();
-	void CollisionWith(const Vector2d&);
-	Vector2d position_;
-	Vector2d speed_;
+	void CollisionWith(const jngl::Vec2&);
+	jngl::Vec2 position_;
+	jngl::Vec2 speed_;
 	const static int radius_;
 	Wheel* otherWheel_ = nullptr;
 };

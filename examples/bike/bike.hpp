@@ -11,10 +11,10 @@ public:
 	Bike();
 	void Draw();
 	void DoFrame();
-	Vector2d WheelConnection();
+	jngl::Vec2 WheelConnection();
 	void HandleCollision(const Line&);
 
 private:
 	std::vector<Wheel> wheels_;
-	Vector2d position_;
+	jngl::Vec2 position_;
 };

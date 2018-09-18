@@ -2,31 +2,28 @@
 
 #include "wheel.hpp"
 
-Line::Line(Vector2d start, Vector2d end) : start_(start), end_(end)
-{
+Line::Line(jngl::Vec2 start, jngl::Vec2 end) : start_(start), end_(end) {
 }
 
 void Line::HandleCollision(Wheel& wheel) const
 {
-	Vector2d connection = end_ - start_;
-	double positionOnLine = ((wheel.position_ - start_) * connection) / connection.Length();
-	if(0 < positionOnLine && positionOnLine < connection.Length())
-	{
-		connection.Normalize();
-		Vector2d collisionPoint = start_ + (connection * positionOnLine);
-		double distanceSq = (collisionPoint - wheel.position_).LengthSq();
+	jngl::Vec2 connection = end_ - start_;
+	const double positionOnLine =
+	    boost::qvm::dot((wheel.position_ - start_), connection) / boost::qvm::mag(connection);
+	if (0 < positionOnLine && positionOnLine < boost::qvm::mag(connection)) {
+		boost::qvm::normalize(connection);
+		jngl::Vec2 collisionPoint = start_ + (connection * positionOnLine);
+		double distanceSq = boost::qvm::mag_sqr(collisionPoint - wheel.position_);
 		if(distanceSq < Wheel::radius_ * Wheel::radius_)
 		{
 			wheel.CollisionWith(collisionPoint);
 			return;
 		}
 	}
-	if((start_ - wheel.position_).LengthSq() < Wheel::radius_ * Wheel::radius_)
-	{
+	if (boost::qvm::mag_sqr(start_ - wheel.position_) < Wheel::radius_ * Wheel::radius_) {
 		wheel.CollisionWith(start_);
 	}
-	if((end_ - wheel.position_).LengthSq() < Wheel::radius_ * Wheel::radius_)
-	{
+	if (boost::qvm::mag_sqr(end_ - wheel.position_) < Wheel::radius_ * Wheel::radius_) {
 		wheel.CollisionWith(end_);
 	}
 }
