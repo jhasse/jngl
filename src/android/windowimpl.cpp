@@ -79,6 +79,37 @@ WindowImpl::WindowImpl(Window* window, const std::pair<int, int> minAspectRatio,
 
 	android_asset_manager = app->activity->assetManager;
 	assert(android_asset_manager);
+
+	JNIEnv* env = nullptr;
+	app->activity->vm->AttachCurrentThread(&env, nullptr);
+
+	jclass activityClass = env->FindClass("android/app/NativeActivity");
+	jmethodID getWindow = env->GetMethodID(activityClass, "getWindow", "()Landroid/view/Window;");
+
+	jclass windowClass = env->FindClass("android/view/Window");
+	jmethodID getDecorView = env->GetMethodID(windowClass, "getDecorView", "()Landroid/view/View;");
+
+	jclass viewClass = env->FindClass("android/view/View");
+	jmethodID setSystemUiVisibility = env->GetMethodID(viewClass, "setSystemUiVisibility", "(I)V");
+
+	jobject androidWindow = env->CallObjectMethod(app->activity->clazz, getWindow);
+
+	jobject decorView = env->CallObjectMethod(androidWindow, getDecorView);
+
+	jfieldID flagFullscreenID = env->GetStaticFieldID(viewClass, "SYSTEM_UI_FLAG_FULLSCREEN", "I");
+	jfieldID flagHideNavigationID =
+	    env->GetStaticFieldID(viewClass, "SYSTEM_UI_FLAG_HIDE_NAVIGATION", "I");
+	jfieldID flagImmersiveStickyID =
+	    env->GetStaticFieldID(viewClass, "SYSTEM_UI_FLAG_IMMERSIVE_STICKY", "I");
+
+	const int flagFullscreen = env->GetStaticIntField(viewClass, flagFullscreenID);
+	const int flagHideNavigation = env->GetStaticIntField(viewClass, flagHideNavigationID);
+	const int flagImmersiveSticky = env->GetStaticIntField(viewClass, flagImmersiveStickyID);
+	const int flag = flagFullscreen | flagHideNavigation | flagImmersiveSticky;
+
+	env->CallVoidMethod(decorView, setSystemUiVisibility, flag);
+
+	app->activity->vm->DetachCurrentThread();
 }
 
 void WindowImpl::init() {
