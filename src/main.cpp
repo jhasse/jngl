@@ -457,6 +457,10 @@ std::string getConfigPath() {
 	return configPath;
 }
 
+void setArgs(std::vector<std::string> args) {
+	jngl::args = std::move(args);
+}
+
 std::vector<std::string> getArgs() {
 	return args;
 }
