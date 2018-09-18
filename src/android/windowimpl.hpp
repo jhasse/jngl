@@ -4,6 +4,7 @@
 #pragma once
 
 #include <EGL/egl.h>
+#include <utility>
 
 struct android_app;
 
@@ -13,7 +14,7 @@ class Window;
 
 class WindowImpl {
 public:
-	WindowImpl(Window*);
+	WindowImpl(Window*, std::pair<int, int> minAspectRatio, std::pair<int, int> maxAspectRatio);
 
 	void updateInput();
 	void swapBuffers();
@@ -23,12 +24,12 @@ public:
 	int mouseX = 0;
 	int mouseY = 0;
 	unsigned int numberOfTouches = 0;
-	int width;
-	int height;
 	int relativeX = 0;
 	int relativeY = 0;
 
 private:
+	const std::pair<int, int> minAspectRatio;
+	const std::pair<int, int> maxAspectRatio;
 	android_app* app;
 	Window* window;
 

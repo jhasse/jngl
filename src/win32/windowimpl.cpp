@@ -90,13 +90,10 @@ bool Window::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 }
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
-               const int screenWidth, const int screenHeight)
+               const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
-  fontSize_(12), width_(width), height_(height), screenWidth(screenWidth),
-  screenHeight(screenHeight), stepsPerFrame(1), multitouch(false) {
-	mouseDown_.fill(false);
-	mousePressed_.fill(false);
-
+  fontSize_(12), width_(width), height_(height), stepsPerFrame(1), multitouch(false) {
+	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	Init(title, false);
 }
 
@@ -242,7 +239,7 @@ void Window::Init(const std::string& title, const bool multisample) {
 	setFontByName("Arial");
 	setFontSize(fontSize_);
 
-	if (!jngl::Init(width_, height_, screenWidth, screenHeight)) {
+	if (!jngl::Init(width_, height_, canvasWidth, canvasHeight)) {
 		throw std::runtime_error("Initialization failed.");
 	}
 }
@@ -677,11 +674,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 }
 
 int Window::getMouseX() {
-	return mousex_ - relativeX - (width_ - screenWidth) / 2;
+	return mousex_ - relativeX - (width_ - canvasWidth) / 2;
 }
 
 int Window::getMouseY() {
-	return mousey_ - relativeY - (height_ - screenHeight) / 2;
+	return mousey_ - relativeY - (height_ - canvasHeight) / 2;
 }
 
 void Window::SetMouse(const int xposition, const int yposition) {

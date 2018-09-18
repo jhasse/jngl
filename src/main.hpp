@@ -10,7 +10,7 @@ namespace jngl {
 
 void clearBackgroundColor();
 
-bool Init(int width, int height, int screenWidth, int screenHeight);
+bool Init(int width, int height, int canvasWidth, int canvasHeight);
 
 extern std::string pathPrefix;
 extern std::string configPath;

@@ -15,13 +15,9 @@
 namespace jngl {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
-               const int screenWidth, const int screenHeight)
+               const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
-  width_(width), height_(height), screenWidth(screenWidth), screenHeight(screenHeight),
-  fontName_(""), impl(new WindowImpl) {
-	mouseDown_.fill(false);
-	mousePressed_.fill(false);
-
+  width_(width), height_(height), impl(new WindowImpl) {
 	SDL::init();
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -54,7 +50,8 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	setFontByName("Arial"); // Default font
 	setFontSize(fontSize_); // Load a font the first time
 
-	Init(width, height, screenWidth, screenHeight);
+	calculateCanvasSize(minAspectRatio, maxAspectRatio);
+	Init(width, height, canvasWidth, canvasHeight);
 }
 
 #ifdef __APPLE__
@@ -283,11 +280,11 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	}
 
 	int Window::getMouseX() {
-		return mousex_ - (width_ - screenWidth) / 2;
+		return mousex_ - (width_ - canvasWidth) / 2;
 	}
 
 	int Window::getMouseY() {
-		return mousey_ - (height_ - screenHeight) / 2;
+		return mousey_ - (height_ - canvasHeight) / 2;
 	}
 
 	void Window::SetMouse(const int xposition, const int yposition) {

@@ -2,15 +2,16 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
+#include "../windowptr.hpp"
 #include "windowimpl.hpp"
 
 namespace jngl {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
-               const int screenWidth, const int screenHeight)
+               const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
-  mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height), screenWidth(screenWidth),
-  screenHeight(screenHeight), mouseWheel_(0), fontName_(""), impl(new WindowImpl(this)) {
+  mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height), mouseWheel_(0),
+  fontName_(""), impl(new WindowImpl(this, minAspectRatio, maxAspectRatio)) {
 	mouseDown_.fill(false);
 	mousePressed_.fill(false);
 
@@ -61,11 +62,11 @@ void Window::SetTitle(const std::string&) {
 }
 
 int Window::getMouseX() {
-	return mousex_;
+	return mousex_ - (width_ - canvasWidth) / 2;
 }
 
 int Window::getMouseY() {
-	return mousey_;
+	return mousey_ - (height_ - canvasHeight) / 2;
 }
 
 void Window::SetMouse(const int xposition, const int yposition) {
@@ -80,11 +81,11 @@ void Window::SetIcon(const std::string&) {
 }
 
 int getDesktopWidth() {
-	return 1920; // FIXME jngl::getWindowWidth();
+	return pWindow ? pWindow->getWidth() : -1;
 }
 
 int getDesktopHeight() {
-	return 1080; // FIXME jngl::getWindowHeight();
+	return pWindow ? pWindow->getHeight() : -1;
 }
 
 } // namespace jngl

@@ -35,7 +35,7 @@ namespace jngl {
 	class Window {
 	public:
 		Window(const std::string& title, int width, int height, bool fullscreen,
-		       int screenWidth, int screenHeight);
+		       std::pair<int, int> minAspectRatio, std::pair<int, int> maxAspectRatio);
 		Window(const Window&) = delete;
 		Window& operator=(const Window&) = delete;
 		~Window();
@@ -102,6 +102,8 @@ namespace jngl {
 	private:
 		int GetKeyCode(jngl::key::KeyType key);
 		std::string GetFontFileByName(const std::string& fontname);
+		void calculateCanvasSize(const std::pair<int, int> minAspectRatio,
+		                         const std::pair<int, int> maxAspectRatio);
 
 		double timePerStep = 1.0 / 60.0;
 		unsigned int maxStepsPerFrame = 3;
@@ -124,10 +126,10 @@ namespace jngl {
 		std::string textInput;
 
 		/// The usable canvas width, excluding letterboxing
-		const int screenWidth;
+		int canvasWidth = -1;
 
 		/// The usable canvas height, excluding letterboxing
-		const int screenHeight;
+		int canvasHeight = -1;
 
 		double mouseWheel_ = 0;
 		std::string fontName_;

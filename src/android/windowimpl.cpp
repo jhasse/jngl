@@ -69,7 +69,9 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 	return 0;
 }
 
-WindowImpl::WindowImpl(Window* window) : app(androidApp), window(window) {
+WindowImpl::WindowImpl(Window* window, const std::pair<int, int> minAspectRatio,
+                       const std::pair<int, int> maxAspectRatio)
+: minAspectRatio(minAspectRatio), maxAspectRatio(maxAspectRatio), app(androidApp), window(window) {
 	app->userData = this;
 	app->onAppCmd = engine_handle_cmd;
 	app->onInputEvent = engine_handle_input;
@@ -123,16 +125,13 @@ void WindowImpl::init() {
 
 	EGLint w, h;
 	eglQuerySurface(display, surface, EGL_WIDTH, &w);
-	width = w;
 	eglQuerySurface(display, surface, EGL_HEIGHT, &h);
-	height = h;
-	debug("Surface size ");
-	debug(width);
-	debug("x");
-	debugLn(height);
+	window->width_ = w;
+	window->height_ = h;
+	window->calculateCanvasSize(minAspectRatio, maxAspectRatio);
 
 	// Initialize GL state.
-	Init(width, height, width, height);
+	Init(window->width_, window->height_, window->canvasWidth, window->canvasHeight);
 
 	initialized = true;
 }

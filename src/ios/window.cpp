@@ -11,14 +11,12 @@
 namespace jngl {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
-               const int screenWidth, const int screenHeight)
+               const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
-  mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height), screenWidth(screenWidth),
-  screenHeight(screenHeight), mouseWheel_(0), fontName_(""), impl(new WindowImpl(this)) {
-	mouseDown_.fill(false);
-	mousePressed_.fill(false);
-
-	Init(width, height, screenWidth, screenHeight);
+  mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height), mouseWheel_(0),
+  fontName_(""), impl(new WindowImpl(this)) {
+	calculateCanvasSize(minAspectRatio, maxAspectRatio);
+	Init(width, height, canvasWidth, canvasHeight);
 }
 
 std::string Window::GetFontFileByName(const std::string& fontname) {
