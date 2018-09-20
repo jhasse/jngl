@@ -15,6 +15,7 @@
 	#ifdef ANDROID
 		#include <EGL/egl.h>
 		#include <GLES2/gl2.h>
+		#define GL_RGBA8 GL_RGBA8_OES
 	#else
 		#ifdef _MSC_VER
 			#include <windows.h> // To avoid warnings about APIENTRY

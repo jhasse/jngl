@@ -9,7 +9,6 @@
 #include "drawable.hpp"
 
 #include <memory>
-#include <optional>
 #include <string>
 #include <vector>
 
