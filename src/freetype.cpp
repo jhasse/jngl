@@ -227,7 +227,6 @@ namespace jngl {
 		std::vector<std::string> lines(splitlines(text));
 
 		glEnable(GL_TEXTURE_2D);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		auto lineEnd = lines.end();
 		int lineNr = 0;
@@ -243,7 +242,6 @@ namespace jngl {
 
 			popMatrix();
 		}
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisable(GL_TEXTURE_2D);
 	}
 
