@@ -46,9 +46,6 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 			);
 		}
 		{
-			std::ifstream fin("data/texture.frag");
-			std::stringstream buffer;
-			buffer << fin.rdbuf();
 			fragmentShader = new Shader(R"(#version 130
 				uniform sampler2D tex;
 				uniform lowp vec4 spriteColor = vec4(1.0, 1.0, 1.0, 1.0);
