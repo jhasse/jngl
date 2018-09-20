@@ -10,21 +10,14 @@
 #include "../jngl/window.hpp"
 #include "../main.hpp"
 #include "../window.hpp"
-#include "sdl.hpp"
 #include "windowimpl.hpp"
-
-#include <cassert>
 
 namespace jngl {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
-               const int screenWidth, const int screenHeight)
-: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false),
-  anyKeyPressed_(false), width_(width), height_(height), screenWidth(screenWidth),
-  screenHeight(screenHeight), fontName_(""), changeWork_(false), impl(new WindowImpl) {
-	mouseDown_.fill(false);
-	mousePressed_.fill(false);
-
+               const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
+: fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
+  width_(width), height_(height), impl(new WindowImpl) {
 	SDL::init();
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -57,9 +50,8 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	setFontByName("Arial"); // Default font
 	setFontSize(fontSize_); // Load a font the first time
 
-	Init(width, height, screenWidth, screenHeight);
-
-	running_ = true;
+	calculateCanvasSize(minAspectRatio, maxAspectRatio);
+	Init(width, height, canvasWidth, canvasHeight);
 }
 
 #ifdef __APPLE__
@@ -144,7 +136,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		while (SDL_PollEvent(&event) != 0) {
 			switch(event.type) {
 				case SDL_QUIT:
-					running_ = false;
+					quit();
 					break;
 				case SDL_MOUSEMOTION:
 					if (relativeMouseMode) {
@@ -288,11 +280,11 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	}
 
 	int Window::getMouseX() {
-		return mousex_ - (width_ - screenWidth) / 2;
+		return mousex_ - (width_ - canvasWidth) / 2;
 	}
 
 	int Window::getMouseY() {
-		return mousey_ - (height_ - screenHeight) / 2;
+		return mousey_ - (height_ - canvasHeight) / 2;
 	}
 
 	void Window::SetMouse(const int xposition, const int yposition) {
@@ -397,4 +389,5 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		SDL_SetWindowFullscreen(impl->sdlWindow, f ? SDL_WINDOW_FULLSCREEN : 0);
 		fullscreen_ = f;
 	}
+
 } // namespace jngl

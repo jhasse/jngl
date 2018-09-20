@@ -3,62 +3,70 @@
 
 #pragma once
 
-
 #include <string>
 #include <vector>
-#include <stdexcept>
 
 #include "dll.hpp"
 
 namespace jngl {
-    bool JNGLDLL_API running();
 
-    void JNGLDLL_API updateInput();
+bool JNGLDLL_API running();
 
-    void JNGLDLL_API swapBuffers();
+void JNGLDLL_API updateInput();
 
-    void JNGLDLL_API quit();
+void JNGLDLL_API swapBuffers();
 
-    void JNGLDLL_API cancelQuit();
+void JNGLDLL_API quit();
 
-    void JNGLDLL_API setTitle(const std::string& title);
+void JNGLDLL_API cancelQuit();
 
-    void JNGLDLL_API setBackgroundColor(unsigned char red,
-                                        unsigned char green,
-                                        unsigned char blue);
+void JNGLDLL_API setTitle(const std::string& title);
 
-    double JNGLDLL_API getFPS();
+void JNGLDLL_API setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
 
-    /// How many times Work::step is called per second (default: 60)
-    unsigned int JNGLDLL_API getStepsPerSecond();
+double JNGLDLL_API getFPS();
 
-    void JNGLDLL_API setStepsPerSecond(unsigned int);
+/// How many times Work::step is called per second (default: 60)
+unsigned int JNGLDLL_API getStepsPerSecond();
 
-    void JNGLDLL_API readPixel(int x, int y, unsigned char& red, unsigned char& green, unsigned char& blue);
+void JNGLDLL_API setStepsPerSecond(unsigned int);
 
-    void JNGLDLL_API setAntiAliasing(bool enabled);
+void JNGLDLL_API readPixel(int x, int y, unsigned char& red, unsigned char& green,
+                           unsigned char& blue);
 
-    bool JNGLDLL_API getAntiAliasing();
+void JNGLDLL_API setAntiAliasing(bool enabled);
 
-    void JNGLDLL_API setVerticalSync(bool enabled);
+bool JNGLDLL_API getAntiAliasing();
 
-    bool JNGLDLL_API getVerticalSync();
+void JNGLDLL_API setVerticalSync(bool enabled);
 
-    void JNGLDLL_API setIcon(const std::string& filename);
+bool JNGLDLL_API getVerticalSync();
 
-    void JNGLDLL_API mainLoop();
+void JNGLDLL_API setIcon(const std::string& filename);
 
-    void JNGLDLL_API setPrefix(const std::string& path);
+void JNGLDLL_API mainLoop();
 
-    std::string JNGLDLL_API getPrefix();
+void JNGLDLL_API setPrefix(const std::string& path);
 
-    void JNGLDLL_API setConfigPath(const std::string& path);
+std::string JNGLDLL_API getPrefix();
 
-    std::string JNGLDLL_API getConfigPath();
+void JNGLDLL_API setConfigPath(const std::string& path);
 
-    std::vector<std::string> JNGLDLL_API getArgs();
+std::string JNGLDLL_API getConfigPath();
 
-    double JNGLDLL_API getTime();
+// Returns the directory of the currently running binary
+std::string JNGLDLL_API getBinaryPath();
 
-    void JNGLDLL_API sleep(int milliseconds);
-}
+void JNGLDLL_API setArgs(std::vector<std::string>);
+
+/// Returns the command line arguments passed to the executable.
+std::vector<std::string> JNGLDLL_API getArgs();
+
+double JNGLDLL_API getTime();
+
+void JNGLDLL_API sleep(int milliseconds);
+
+/// Returns a stringstream containing the whole file. This will read from the .apk on Android.
+std::stringstream JNGLDLL_API readAsset(const std::string& filename);
+
+} // namespace jngl

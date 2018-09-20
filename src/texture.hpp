@@ -15,7 +15,7 @@ namespace jngl {
 
 class Texture {
 public:
-	Texture(int width, int height,
+	Texture(float preciseWidth, float preciseHeight,
 	        const GLubyte* const* rowPointers, // data as row pointers ...
 	        GLenum format = GL_RGBA, const GLubyte* data = nullptr /* ... or as one pointer */);
 	Texture(const Texture&) = delete;
@@ -32,9 +32,9 @@ public:
 private:
 	static ShaderProgram* textureShaderProgram;
 	static int shaderSpriteColorUniform;
-	GLuint texture_;
-	GLuint vertexBuffer_;
-	GLuint vao;
+	GLuint texture_ = 0;
+	GLuint vertexBuffer_ = 0;
+	GLuint vao = 0;
 	int width;
 	int height;
 };

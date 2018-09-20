@@ -2,23 +2,19 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
-#include "../jngl.hpp"
+#include "../windowptr.hpp"
 #include "windowimpl.hpp"
-
-#include <stdexcept>
 
 namespace jngl {
 
-Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
-               const int screenWidth, const int screenHeight)
-: fullscreen_(fullscreen), running_(false), isMouseVisible_(true), relativeMouseMode(false),
-  anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height),
-  screenWidth(screenWidth), screenHeight(screenHeight), mouseWheel_(0), fontName_(""),
-  changeWork_(false), impl(new WindowImpl(this)) {
+Window::Window(const std::string& /*title*/, const int width, const int height,
+               const bool fullscreen, const std::pair<int, int> minAspectRatio,
+               const std::pair<int, int> maxAspectRatio)
+: fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
+  mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height), mouseWheel_(0),
+  fontName_(""), impl(new WindowImpl(this, minAspectRatio, maxAspectRatio)) {
 	mouseDown_.fill(false);
 	mousePressed_.fill(false);
-
-	running_ = true;
 
 	// Calling UpdateInput() for the first time will set-up GLES among other things:
 	UpdateInput();
@@ -60,37 +56,37 @@ void Window::SwapBuffers() {
 	impl->swapBuffers();
 }
 
-void Window::SetMouseVisible(const bool visible) {
+void Window::SetMouseVisible(const bool) {
 }
 
-void Window::SetTitle(const std::string& windowTitle) {
+void Window::SetTitle(const std::string&) {
 }
 
 int Window::getMouseX() {
-	return mousex_;
+	return mousex_ - (width_ - canvasWidth) / 2;
 }
 
 int Window::getMouseY() {
-	return mousey_;
+	return mousey_ - (height_ - canvasHeight) / 2;
 }
 
-void Window::SetMouse(const int xposition, const int yposition) {
+void Window::SetMouse(const int /*xposition*/, const int /*yposition*/) {
 }
 
 void Window::SetRelativeMouseMode(const bool relative) {
 	relativeMouseMode = relative;
-	// TODO
+	impl->setRelativeMouseMode(relative);
 }
 
 void Window::SetIcon(const std::string&) {
 }
 
 int getDesktopWidth() {
-	return 1920; // FIXME jngl::getWindowWidth();
+	return pWindow ? pWindow->getWidth() : -1;
 }
 
 int getDesktopHeight() {
-	return 1080; // FIXME jngl::getWindowHeight();
+	return pWindow ? pWindow->getHeight() : -1;
 }
 
 } // namespace jngl

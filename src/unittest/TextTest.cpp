@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 		jngl::Text text("test string\nline 2");
 		BOOST_CHECK_EQUAL(text.getWidth(), 69);
 		text.setCenter(-10, -10);
-		BOOST_CHECK_EQUAL(text.getX(), -44);
+		BOOST_CHECK_CLOSE(text.getX(), -44.5, 1e-9);
 		text.draw();
 		const std::string screenshotCentered = R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
@@ -62,11 +62,11 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 
 		text.setCenter(-10, -10); // restore previous state
 		text.draw();
-		BOOST_CHECK_EQUAL(text.getX(), -44);
+		BOOST_CHECK_CLOSE(text.getX(), -44.5, 1e-9);
 		BOOST_CHECK_EQUAL(f.getAsciiArt(), screenshotCentered);
 
 		text.setAlign(jngl::Alignment::CENTER);
-		BOOST_CHECK_EQUAL(text.getX(), -44);
+		BOOST_CHECK_CLOSE(text.getX(), -44.5, 1e-9);
 		text.draw(); // the second line should now be centered below the first
 		BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓

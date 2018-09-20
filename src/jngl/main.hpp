@@ -4,11 +4,10 @@
 #pragma once
 
 #include "Finally.hpp"
+#include "other.hpp"
 
 #if !defined(JNGL_MAIN_BEGIN)
 	#if defined(ANDROID)
-		#include "other.hpp"
-
 		#include <android_native_app_glue.h>
 
 		namespace jngl {
@@ -16,10 +15,19 @@
 		}
 		#define JNGL_MAIN_BEGIN void android_main(android_app* __androidApp) { \
 			jngl::androidApp = __androidApp; \
-			jngl::setConfigPath(__androidApp->activity->internalDataPath);
+			jngl::setConfigPath(__androidApp->activity->internalDataPath); \
+			jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
 		#define JNGL_MAIN_END }
 	#else
-		#define JNGL_MAIN_BEGIN int main() { jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
+		#define JNGL_MAIN_BEGIN int main(int argc, char** argv) { \
+			{ \
+				std::vector<std::string> tmp(argc - 1); \
+				for (int i = 1; i < argc; ++i) { \
+					tmp[i - 1] = argv[i]; \
+				} \
+				jngl::setArgs(tmp); \
+			} \
+			jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
 		#define JNGL_MAIN_END }
 	#endif
 #endif

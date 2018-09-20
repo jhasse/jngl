@@ -6,6 +6,7 @@
 #include "texture.hpp"
 
 namespace jngl {
+
 class FrameBufferImpl {
 public:
 	FrameBufferImpl(int width, int height);
@@ -16,9 +17,10 @@ public:
 	void EndDraw();
 	void Draw(double x, double y) const;
 	void Clear();
+
 private:
-	GLuint fbo;
-	GLuint buffer;
+	GLuint fbo = 0;
+	GLuint buffer = 0;
 	const int height;
 	Texture texture;
 	GLuint systemFbo;
@@ -27,4 +29,5 @@ private:
 	GLint viewport[4];
 #endif
 };
-}
+
+} // namespace jngl

@@ -1,6 +1,7 @@
 #include "bike.hpp"
 
-#include <iostream>
+#include "line.hpp"
+
 #include <jngl.hpp>
 
 void Bike::HandleCollision(const Line& line)
@@ -15,28 +16,30 @@ void Bike::DoFrame()
 	for (auto& wheel : wheels_) {
 		wheel.Move();
 	}
-	Vector2d connection = wheels_[1].position_ - wheels_[0].position_;
-	connection.Normalize();
-	connection.Set(connection.Y() * 0.1, connection.X() * 0.1); // Um 90 Grad drehen und 50% Intensität
+	jngl::Vec2 connection = wheels_[1].position_ - wheels_[0].position_;
+	boost::qvm::normalize(connection);
+
+	connection = { connection.y * 0.1, connection.x * 0.1 }; // Um 90 Grad drehen und 10% Intensität
+
 	if (jngl::keyDown(jngl::key::Right)) {
 		for (auto& wheel : wheels_) {
-			wheel.speed_ += Vector2d(0.4, 0);
+			wheel.speed_ += jngl::Vec2(0.4, 0);
 		}
 		wheels_[0].speed_ += connection; // Dann hoch damit!
 		wheels_[1].speed_ -= connection; // Dann hoch damit!
 	}
 	if (jngl::keyDown(jngl::key::Left)) {
 		for (auto& wheel : wheels_) {
-			wheel.speed_ -= Vector2d(0.4, 0);
+			wheel.speed_ -= jngl::Vec2(0.4, 0);
 		}
 		wheels_[0].speed_ -= connection; // Dann hoch damit!
 		wheels_[1].speed_ += connection; // Dann hoch damit!
 	}
-	std::vector<Vector2d> correction(2);
+	std::vector<jngl::Vec2> correction(2);
 	for (size_t i = 0; i < wheels_.size(); ++i) {
-		Vector2d connection = wheels_[i].position_ - wheels_[1-i].position_;
-		connection.Normalize();
-		double projection = connection * wheels_[i].speed_;
+		jngl::Vec2 connection = wheels_[i].position_ - wheels_[1-i].position_;
+		boost::qvm::normalize(connection);
+		double projection = boost::qvm::dot(connection, wheels_[i].speed_);
 		correction[i] = (connection * projection);
 	}
 	for (size_t i = 0; i < wheels_.size(); ++i) {
@@ -47,7 +50,7 @@ void Bike::DoFrame()
 		wheel.position_ += wheel.speed_; // Move
 	}
 	connection = wheels_[1].position_ - wheels_[0].position_;
-	connection.Normalize();
+	boost::qvm::normalize(connection);
 	wheels_[1].position_ =  wheels_[0].position_ + connection * 128;
 }
 

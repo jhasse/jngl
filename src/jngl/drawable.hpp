@@ -47,12 +47,13 @@ namespace jngl {
 		Float getY() const;
 		void setY(Float);
 
-		int getWidth() const;
-		int getHeight() const;
+		float getWidth() const;
+		float getHeight() const;
+
 	protected:
 		Float x;
 		Float y;
-		int width;
-		int height;
+		float width;
+		float height;
 	};
 }

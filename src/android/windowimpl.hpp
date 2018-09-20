@@ -4,41 +4,39 @@
 #pragma once
 
 #include <EGL/egl.h>
+#include <utility>
 
 struct android_app;
-struct ASensorManager;
-struct ASensor;
-struct ASensorEventQueue;
 
 namespace jngl {
-    class Window;
 
-    class WindowImpl {
-    public:
-        WindowImpl(Window*);
+class Window;
 
-        void updateInput();
-        void swapBuffers();
-        void init();
+class WindowImpl {
+public:
+	WindowImpl(Window*, std::pair<int, int> minAspectRatio, std::pair<int, int> maxAspectRatio);
 
-        int mouseX = 0;
-        int mouseY = 0;
-		unsigned int numberOfTouches = 0;
-        int width;
-        int height;
-        int relativeX = 0;
-        int relativeY = 0;
-    private:
-        Window* window;
-        android_app* app;
+	void updateInput();
+	void swapBuffers();
+	void init();
+	void setRelativeMouseMode(bool);
 
-        ASensorManager* sensorManager;
-        const ASensor* accelerometerSensor;
-        ASensorEventQueue* sensorEventQueue;
+	int mouseX = 0;
+	int mouseY = 0;
+	unsigned int numberOfTouches = 0;
+	int relativeX = 0;
+	int relativeY = 0;
 
-        bool initialized = false;
-        EGLDisplay display;
-        EGLSurface surface;
-        EGLContext context;
-    };
-}
+private:
+	const std::pair<int, int> minAspectRatio;
+	const std::pair<int, int> maxAspectRatio;
+	android_app* app;
+	Window* window;
+
+	bool initialized = false;
+	EGLDisplay display;
+	EGLSurface surface;
+	EGLContext context;
+};
+
+} // namespace jngl

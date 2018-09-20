@@ -22,7 +22,6 @@
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
-#include <fstream>
 #include <sstream>
 #include <thread>
 #ifndef NOJPEG
@@ -194,7 +193,6 @@ namespace jngl {
 	                     const bool halfLoad) {
 		const unsigned int PNG_BYTES_TO_CHECK = 4;
 		png_byte buf[PNG_BYTES_TO_CHECK];
-		static_assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short), "unknown libpng version");
 
 		// Read in some of the signature bytes
 		if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK ||
@@ -259,9 +257,9 @@ namespace jngl {
 	Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad) {
 		fseek(fp, 10, SEEK_SET);
 		BMPHeader header{};
-		if (!fread(&header, sizeof(header), 1, fp))
+		if (!fread(&header, sizeof(header), 1, fp)) {
 			throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
-
+		}
 		if (header.headerSize != 40) {
 			throw std::runtime_error(std::string("Unsupported header size. (" + filename + ")"));
 		}
@@ -333,10 +331,10 @@ namespace jngl {
 			format = GL_RGBA;
 		}
 
-		assert(sizeof(JSAMPLE) == sizeof(char));
+		static_assert(sizeof(JSAMPLE) == sizeof(char));
 		std::vector<unsigned char*> buf(height);
 		for (auto& row : buf) {
-			row = new unsigned char[width * channels];
+			row = new unsigned char[info.output_width * channels];
 		}
 		Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
 
@@ -361,21 +359,21 @@ namespace jngl {
 			throw std::runtime_error(std::string("Couldn't open WebP file. (" + filename + ")"));
 		}
 
-		if (!WebPGetInfo(&buf[0], filesize, &width, &height)) {
+		int imgWidth;
+		int imgHeight;
+		if (!WebPGetInfo(&buf[0], filesize, &imgWidth, &imgHeight)) {
 			throw std::runtime_error(std::string("Invalid WebP file. (" + filename + ")"));
 		}
+		width  = imgWidth  * getScaleFactor();
+		height = imgHeight * getScaleFactor();
 
 		auto config = std::make_shared<WebPDecoderConfig>();
 		WebPInitDecoderConfig(config.get());
 		config->options.use_threads = 1;
 		if (boost::math::epsilon_difference(getScaleFactor(), 1) > 10) {
 			config->options.use_scaling = 1;
-			width  = static_cast<int>(width  * getScaleFactor());
-			height = static_cast<int>(height * getScaleFactor());
-			if (width < 1) { width = 1; }
-			if (height < 1) { height = 1; }
-			config->options.scaled_width = width;
-			config->options.scaled_height = height;
+			config->options.scaled_width  = std::max(1l, std::lround(width));
+			config->options.scaled_height = std::max(1l, std::lround(height));
 		}
 		config->output.colorspace = MODE_RGBA;
 		auto result = std::make_shared<VP8StatusCode>();

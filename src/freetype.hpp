@@ -10,7 +10,6 @@
 #include FT_FREETYPE_H
 
 #include <map>
-#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -36,7 +35,6 @@ private:
 
 class FontImpl {
 public:
-	FontImpl();
 	FontImpl(const std::string& relativeFilename, unsigned int height);
 	FontImpl(const FontImpl&) = delete;
 	FontImpl& operator=(const FontImpl&) = delete;
@@ -51,7 +49,7 @@ private:
 
 	static int instanceCounter;
 	static FT_Library library;
-	FT_Face face;
+	FT_Face face = nullptr;
 	std::unique_ptr<Finally> freeFace; // Frees face_ if necessary
 	unsigned int height_;
 	int lineHeight;

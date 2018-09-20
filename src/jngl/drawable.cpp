@@ -69,12 +69,12 @@ void Drawable::setY(Float y) {
 	this->y = y * getScaleFactor();
 }
 
-int Drawable::getWidth() const {
-	return int(width / getScaleFactor());
+float Drawable::getWidth() const {
+	return width / getScaleFactor();
 }
 
-int Drawable::getHeight() const {
-	return int(height / getScaleFactor());
+float Drawable::getHeight() const {
+	return height / getScaleFactor();
 }
 
 } // namespace jngl

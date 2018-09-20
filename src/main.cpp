@@ -6,9 +6,11 @@
 #include "spriteimpl.hpp"
 
 #include <cassert>
-#include <boost/numeric/conversion/cast.hpp>
+#include <sstream>
 
 #ifdef ANDROID
+#include "android/fopen.hpp"
+
 PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
@@ -25,7 +27,7 @@ void clearBackgroundColor() {
 	glClearColor(bgRed, bgGreen, bgBlue, 1);
 }
 
-bool Init(const int width, const int height, const int screenWidth, const int screenHeight) {
+bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
 	glShadeModel(GL_SMOOTH);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnable(GL_BLEND);
@@ -33,15 +35,15 @@ bool Init(const int width, const int height, const int screenWidth, const int sc
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glViewport(0, 0, width, height);
 
-	if (screenWidth != width || screenHeight != height) { // Letterboxing?
+	if (canvasWidth != width || canvasHeight != height) { // Letterboxing?
 		glClearColor(0, 0, 0, 1); // black boxes
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glEnable(GL_SCISSOR_TEST);
-		assert(screenWidth <= width);
-		assert(screenHeight <= height);
-		glScissor((width - screenWidth) / 2, (height - screenHeight) / 2, screenWidth,
-		          screenHeight);
+		assert(canvasWidth <= width);
+		assert(canvasHeight <= height);
+		glScissor((width - canvasWidth) / 2, (height - canvasHeight) / 2, canvasWidth,
+		          canvasHeight);
 	}
 
 	glMatrixMode(GL_PROJECTION);
@@ -96,21 +98,7 @@ void showWindow(const std::string& title, const int width, const int height, boo
 	if (height == 0) {
 		throw std::runtime_error("Height Is 0");
 	}
-	int screenWidth = width;
-	int screenHeight = height;
-	if (minAspectRatio.first * height > minAspectRatio.second * width) {
-		// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
-		screenHeight = boost::numeric_cast<int>(
-		    std::lround(float(minAspectRatio.second * width) / float(minAspectRatio.first)));
-	} else if (maxAspectRatio.first * height < maxAspectRatio.second * width) {
-		// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
-		screenWidth = boost::numeric_cast<int>(
-		    std::lround(float(maxAspectRatio.first * height) / float(maxAspectRatio.second)));
-	}
-	if (screenWidth != width || screenHeight != height) {
-		debug("Letterboxing to "); debug(screenWidth); debug("x"); debugLn(screenHeight);
-	}
-	pWindow.Set(new Window(title, width, height, fullscreen, screenWidth, screenHeight));
+	pWindow.Set(new Window(title, width, height, fullscreen, minAspectRatio, maxAspectRatio));
 	pWindow->SetMouseVisible(isMouseVisible);
 	setAntiAliasing(antiAliasingEnabled);
 }
@@ -464,8 +452,34 @@ std::string getConfigPath() {
 	return configPath;
 }
 
+void setArgs(std::vector<std::string> args) {
+	jngl::args = std::move(args);
+}
+
 std::vector<std::string> getArgs() {
 	return args;
+}
+
+std::stringstream JNGLDLL_API readAsset(const std::string& filename) {
+	std::stringstream sstream;
+	FILE* const f = fopen(filename.c_str(), "rb");
+	if (!f) {
+		return sstream;
+	}
+	Finally closeFile([f]() { fclose(f); });
+	if (fseek(f, 0, SEEK_END) != 0) {
+		return sstream;
+	}
+	const auto size = ftell(f);
+	if (fseek(f, 0, SEEK_SET) != 0) {
+		return sstream;
+	}
+	std::unique_ptr<char[]> content(new char[size]);
+	if (fread(content.get(), size, 1, f) != 1) {
+		return sstream;
+	}
+	sstream.write(content.get(), size);
+	return sstream;
 }
 
 } // namespace jngl

@@ -1,4 +1,4 @@
-project('jngl', ['cpp'], default_options : ['cpp_std=c++1z'])
+project('jngl', ['c', 'cpp'], default_options : ['cpp_std=c++1z'])
 
 conf_data = configuration_data()
 conf_data.set('VERSION', '1.3.0')
@@ -64,6 +64,9 @@ if target_machine.system() != 'windows'
 				'Foundation', 'AppKit', 'IOKIT', 'QuartzCore', 'OpenGL', 'GLUT', 'OpenAL'
 			], required : true),
 		]
+		src += [
+			'src/mac/other.cpp',
+		]
 	else
 		opengl_dep += [
 			dependency('fontconfig'),
@@ -78,6 +81,8 @@ if target_machine.system() != 'windows'
 		'src/sdl/window.cpp',
 		'src/sdl/SdlController.cpp',
 		'src/linux/message.cpp',
+		'src/linux/other.cpp',
+		'src/linux/binreloc.c',
 	]
 else
 	cpp_args += ['-DWINVER=0x0602']
@@ -91,6 +96,7 @@ else
 		'src/win32/ConvertUTF.cpp',
 		'src/win32/inputimpl.cpp',
 		'src/win32/message.cpp',
+		'src/win32/other.cpp',
 		'src/win32/windowimpl.cpp',
 		'src/win32/XinputController.cpp',
 	]
@@ -115,10 +121,6 @@ lib = static_library('jngl', sources : src, cpp_args : cpp_args, install : true,
 ])
 include = include_directories('src')
 
-executable('jngl-test', sources : ['src/test/test.cpp'], link_with : lib, dependencies : [
-	thread_dep,
-])
-
 if target_machine.system() == 'linux'
 	boost_python_dep = dependency('boost', modules : [ 'python3' ], required : false)
 	python3_dep = dependency('python3', required : false)
@@ -138,6 +140,9 @@ jngl_dep = declare_dependency(include_directories : include, link_with : lib,
                               dependencies : thread_dep)
 
 if not meson.is_subproject()
+	executable('jngl-test', sources : ['src/test/test.cpp'], link_with : lib, dependencies : [
+		thread_dep,
+	])
 	boost_test_dep = dependency('boost', modules : [ 'unit_test_framework' ], required : false)
 	if boost_test_dep.found()
 		test('Unit Test', executable('unittest', [
@@ -150,8 +155,8 @@ if not meson.is_subproject()
 		include_directories : include))
 	endif
 	executable('example-bike', ['examples/bike/base.cpp', 'examples/bike/bike.cpp',
-		'examples/bike/line.cpp', 'examples/bike/main.cpp', 'examples/bike/vector2d.cpp',
-		'examples/bike/wheel.cpp'], dependencies : jngl_dep)
+		'examples/bike/line.cpp', 'examples/bike/main.cpp', 'examples/bike/wheel.cpp'],
+		dependencies : jngl_dep)
 	executable('example-throw', ['examples/throw/main.cpp'], dependencies : jngl_dep)
 endif
 

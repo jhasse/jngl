@@ -4,14 +4,14 @@
 #include <jngl.hpp>
 
 Base::Base() {
-	lines_.emplace_back(Vector2d(0, 0), Vector2d(screenWidth, 0));
-	lines_.emplace_back(Vector2d(0, screenHeight), Vector2d(screenWidth, screenHeight));
-	lines_.emplace_back(Vector2d(screenWidth, 0), Vector2d(screenWidth, screenHeight));
-	lines_.emplace_back(Vector2d(0, 0), Vector2d(0, screenHeight));
-	lines_.emplace_back(Vector2d(118, 444), Vector2d(213, 250));
-	lines_.emplace_back(Vector2d(213, 250), Vector2d(368, 228));
-	lines_.emplace_back(Vector2d(368, 228), Vector2d(452, 295));
-	lines_.emplace_back(Vector2d(452, 295), Vector2d(216, 448));
+	lines_.emplace_back(jngl::Vec2(0, 0), jngl::Vec2(screenWidth, 0));
+	lines_.emplace_back(jngl::Vec2(0, screenHeight), jngl::Vec2(screenWidth, screenHeight));
+	lines_.emplace_back(jngl::Vec2(screenWidth, 0), jngl::Vec2(screenWidth, screenHeight));
+	lines_.emplace_back(jngl::Vec2(0, 0), jngl::Vec2(0, screenHeight));
+	lines_.emplace_back(jngl::Vec2(118, 444), jngl::Vec2(213, 250));
+	lines_.emplace_back(jngl::Vec2(213, 250), jngl::Vec2(368, 228));
+	lines_.emplace_back(jngl::Vec2(368, 228), jngl::Vec2(452, 295));
+	lines_.emplace_back(jngl::Vec2(452, 295), jngl::Vec2(216, 448));
 }
 
 void Base::DoFrame() {

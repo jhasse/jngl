@@ -1,22 +1,20 @@
-#ifndef BIKE_HPP
-#define BIKE_HPP
+#pragma once
 
 #include "wheel.hpp"
-#include "line.hpp"
 
 #include <vector>
 
-class Bike
-{
+class Line;
+
+class Bike {
 public:
 	Bike();
 	void Draw();
 	void DoFrame();
-	Vector2d WheelConnection();
+	jngl::Vec2 WheelConnection();
 	void HandleCollision(const Line&);
+
 private:
 	std::vector<Wheel> wheels_;
-	Vector2d position_;
+	jngl::Vec2 position_;
 };
-
-#endif

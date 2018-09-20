@@ -5,8 +5,6 @@
 
 #include "jngl/input.hpp"
 
-#include <string>
-#include <type_traits>
 #include <array>
 #include <functional>
 #include <map>
@@ -14,6 +12,7 @@
 #include <unordered_map>
 
 #ifdef _WIN32
+	#include <type_traits>
 	// TODO: Use pimpl to move this into win32/windowimpl.cpp
 	#include <windows.h>
 	#ifdef min
@@ -36,7 +35,7 @@ namespace jngl {
 	class Window {
 	public:
 		Window(const std::string& title, int width, int height, bool fullscreen,
-		       int screenWidth, int screenHeight);
+		       std::pair<int, int> minAspectRatio, std::pair<int, int> maxAspectRatio);
 		Window(const Window&) = delete;
 		Window& operator=(const Window&) = delete;
 		~Window();
@@ -103,10 +102,13 @@ namespace jngl {
 	private:
 		int GetKeyCode(jngl::key::KeyType key);
 		std::string GetFontFileByName(const std::string& fontname);
+		void calculateCanvasSize(const std::pair<int, int> minAspectRatio,
+		                         const std::pair<int, int> maxAspectRatio);
 
 		double timePerStep = 1.0 / 60.0;
 		unsigned int maxStepsPerFrame = 3;
-		bool fullscreen_, running_, isMouseVisible_, relativeMouseMode, anyKeyPressed_;
+		bool running = true;
+		bool fullscreen_, isMouseVisible_, relativeMouseMode, anyKeyPressed_;
 		bool isMultisampleSupported_ = true;
 		std::array<bool, 3> mouseDown_{{ false, false, false }};
 		std::array<bool, 3> mousePressed_{{ false, false, false }};
@@ -124,16 +126,16 @@ namespace jngl {
 		std::string textInput;
 
 		/// The usable canvas width, excluding letterboxing
-		const int screenWidth;
+		int canvasWidth = -1;
 
 		/// The usable canvas height, excluding letterboxing
-		const int screenHeight;
+		int canvasHeight = -1;
 
 		double mouseWheel_ = 0;
 		std::string fontName_;
 		const static unsigned int PNG_BYTES_TO_CHECK = 4;
 		std::shared_ptr<Work> currentWork_;
-		bool changeWork_;
+		bool changeWork = false;
 		std::shared_ptr<Work> newWork_;
 		std::vector<std::shared_ptr<Job>> jobs;
 		unsigned int stepsPerFrame = 1;

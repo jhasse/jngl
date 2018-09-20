@@ -6,6 +6,7 @@
 #include "freetype.hpp"
 #include "jngl.hpp"
 
+#include <boost/numeric/conversion/cast.hpp>
 #include <chrono>
 #include <cmath>
 #include <thread>
@@ -95,11 +96,11 @@ namespace jngl {
 	}
 
 	int Window::getWidth() const {
-		return screenWidth;
+		return canvasWidth;
 	}
 
 	int Window::getHeight() const {
-		return screenHeight;
+		return canvasHeight;
 	}
 
 	bool Window::isMultisampleSupported() const {
@@ -107,15 +108,15 @@ namespace jngl {
 	}
 
 	bool Window::isRunning() const {
-		return running_;
+		return running;
 	}
 
 	void Window::quit() {
-		running_ = false;
+		running = false;
 	}
 
 	void Window::cancelQuit() {
-		running_ = true;
+		running = true;
 	}
 
 	bool Window::getKeyDown(key::KeyType key) {
@@ -188,7 +189,7 @@ namespace jngl {
 		Finally _([&]() {
 			currentWork_.reset();
 		});
-		while (running_) {
+		while (isRunning()) {
 			stepIfNeeded();
 			draw();
 			jngl::swapBuffers();
@@ -311,8 +312,8 @@ namespace jngl {
 			if (!jngl::running() && currentWork_) {
 				currentWork_->onQuitEvent();
 			}
-			while (changeWork_) {
-				changeWork_ = false;
+			while (changeWork) {
+				changeWork = false;
 				currentWork_ = newWork_;
 				newWork_.reset();
 				currentWork_->onLoad();
@@ -337,7 +338,7 @@ namespace jngl {
 			currentWork_ = std::move(work);
 		} else {
 			debug("change work to "); debug(work.get()); debug("\n");
-			changeWork_ = true;
+			changeWork = true;
 			newWork_ = std::move(work);
 		}
 	}
@@ -360,5 +361,23 @@ namespace jngl {
 
 	std::string Window::getTextInput() const {
 		return textInput;
+	}
+
+	void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
+	                                 const std::pair<int, int> maxAspectRatio) {
+		canvasWidth = width_;
+		canvasHeight = height_;
+		if (minAspectRatio.first * height_ > minAspectRatio.second * width_) {
+			// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
+			canvasHeight = boost::numeric_cast<int>(
+			    std::lround(float(minAspectRatio.second * width_) / float(minAspectRatio.first)));
+		} else if (maxAspectRatio.first * height_ < maxAspectRatio.second * width_) {
+			// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
+			canvasWidth = boost::numeric_cast<int>(
+			    std::lround(float(maxAspectRatio.first * height_) / float(maxAspectRatio.second)));
+		}
+		if (canvasWidth != width_ || canvasHeight != height_) {
+			debug("Letterboxing to "); debug(canvasWidth); debug("x"); debugLn(canvasHeight);
+		}
 	}
 } // namespace jngl

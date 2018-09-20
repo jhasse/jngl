@@ -20,9 +20,9 @@ std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 ShaderProgram* Texture::textureShaderProgram = nullptr;
 int Texture::shaderSpriteColorUniform = -1;
 
-Texture::Texture(const int width, const int height, const GLubyte* const* const rowPointers,
-                 GLenum format, const GLubyte* const data)
-: width(width), height(height) {
+Texture::Texture(const float preciseWidth, const float preciseHeight,
+                 const GLubyte* const* const rowPointers, GLenum format, const GLubyte* const data)
+: width(std::lround(preciseWidth)), height(std::lround(preciseHeight)) {
 #ifdef EPOXY_PUBLIC
 	static bool first = true;
 	if (first && !epoxy_has_gl_extension("GL_ARB_vertex_buffer_object")) {
@@ -76,11 +76,11 @@ Texture::Texture(const int width, const int height, const GLubyte* const* const 
 	GLfloat vertexes[] = {
 		0, 0,
 		0, 0, // texture coordinates
-		0, GLfloat(height),
+		0, preciseHeight,
 		0, 1, // texture coordinates
-		GLfloat(width), GLfloat(height),
+		preciseWidth, preciseHeight,
 		1, 1, // texture coordinates
-		GLfloat(width), 0,
+		preciseWidth, 0,
 		1, 0 // texture coordinates
 	};
 	glGenVertexArrays(1, &vao);
@@ -100,12 +100,14 @@ Texture::Texture(const int width, const int height, const GLubyte* const* const 
 	glEnableVertexAttribArray(texCoordAttrib);
 
 	if (rowPointers) {
+		assert(!data);
 		for (int i = 0; i < height; ++i) {
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, i, width, 1, format, GL_UNSIGNED_BYTE,
 			                rowPointers[i]);
 		}
 	}
 	if (data) {
+		assert(!rowPointers);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
 	}
 

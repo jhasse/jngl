@@ -1,14 +1,14 @@
 #pragma once
 
-#include "vector2d.hpp"
+#include <jngl/Vec2.hpp>
 
 class Wheel;
 
 class Line
 {
 public:
-	Line(Vector2d start, Vector2d end);
+	Line(jngl::Vec2 start, jngl::Vec2 end);
 	void HandleCollision(Wheel&) const;
-	Vector2d start_;
-	Vector2d end_;
+	jngl::Vec2 start_;
+	jngl::Vec2 end_;
 };
