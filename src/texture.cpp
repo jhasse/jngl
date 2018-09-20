@@ -19,6 +19,7 @@ std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
 ShaderProgram* Texture::textureShaderProgram = nullptr;
 int Texture::shaderSpriteColorUniform = -1;
+int Texture::modelviewUniform = -1;
 
 Texture::Texture(const float preciseWidth, const float preciseHeight,
                  const GLubyte* const* const rowPointers, GLenum format, const GLubyte* const data)
@@ -37,10 +38,12 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 			vertexShader = new Shader(R"(#version 130
 				in mediump vec2 position;
 				in mediump vec2 inTexCoord;
+				uniform mediump mat3 modelview;
 				out mediump vec2 texCoord;
 
 				void main() {
-					gl_Position = gl_ModelViewProjectionMatrix * vec4(position, 0.0, 1.0);
+					vec3 tmp = modelview * vec3(position, 1);
+					gl_Position = gl_ProjectionMatrix * vec4(tmp.x, tmp.y, 0, 1);
 					texCoord = inTexCoord;
 				})", Shader::Type::VERTEX
 			);
@@ -48,7 +51,7 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 		{
 			fragmentShader = new Shader(R"(#version 130
 				uniform sampler2D tex;
-				uniform lowp vec4 spriteColor = vec4(1.0, 1.0, 1.0, 1.0);
+				uniform lowp vec4 spriteColor;
 
 				in mediump vec2 texCoord;
 
@@ -61,6 +64,7 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 		}
 		textureShaderProgram = new ShaderProgram(*vertexShader, *fragmentShader);
 		shaderSpriteColorUniform = textureShaderProgram->getUniformLocation("spriteColor");
+		modelviewUniform = textureShaderProgram->getUniformLocation("modelview");
 	}
 	glGenTextures(1, &texture_);
 	glBindTexture(GL_TEXTURE_2D, texture_);
@@ -122,6 +126,7 @@ void Texture::draw(const float red, const float green, const float blue, const f
 	auto _ = shaderProgram ? shaderProgram->use() : textureShaderProgram->use();
 	if (!shaderProgram) {
 		glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
+		glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
 	}
 	glBindVertexArray(vao);
 	glEnable(GL_TEXTURE_2D);

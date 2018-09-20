@@ -32,6 +32,7 @@ public:
 private:
 	static ShaderProgram* textureShaderProgram;
 	static int shaderSpriteColorUniform;
+	static int modelviewUniform;
 	GLuint texture_ = 0;
 	GLuint vertexBuffer_ = 0;
 	GLuint vao = 0;

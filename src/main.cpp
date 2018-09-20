@@ -5,6 +5,7 @@
 #include "jngl.hpp"
 #include "spriteimpl.hpp"
 
+#include <boost/qvm/mat_operations.hpp>
 #include <cassert>
 #include <sstream>
 
@@ -22,6 +23,7 @@ std::string pathPrefix;
 std::string configPath;
 std::vector<std::string> args;
 float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
+std::stack<boost::qvm::mat<float, 3, 3>> modelviewStack;
 
 void clearBackgroundColor() {
 	glClearColor(bgRed, bgGreen, bgBlue, 1);
@@ -68,6 +70,8 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	reset();
+	modelviewStack = {};
 
 	clearBackgroundColor();
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -121,7 +125,8 @@ void swapBuffers() {
 		clearBackgroundColor();
 	}
 
-	glLoadIdentity();
+	reset();
+	modelviewStack = {};
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -272,15 +277,11 @@ void setStepsPerSecond(const unsigned int stepsPerSecond) {
 }
 
 void reset() {
-	glLoadIdentity();
+	boost::qvm::set_identity(opengl::modelview);
 }
 
 void rotate(const double degree) {
-#ifdef GL_DOUBLE
-	glRotated(degree, 0, 0, 1);
-#else
-	glRotatef(degree, 0, 0, 1);
-#endif
+	boost::qvm::rotate_z(opengl::modelview, degree * M_PI / 180.);
 }
 
 void translate(const double x, const double y) {
@@ -296,11 +297,12 @@ void scale(const double xfactor, const double yfactor) {
 }
 
 void pushMatrix() {
-	glPushMatrix();
+	modelviewStack.push(opengl::modelview);
 }
 
 void popMatrix() {
-	glPopMatrix();
+	opengl::modelview = modelviewStack.top();
+	modelviewStack.pop();
 }
 
 void drawRect(const double xposition, const double yposition, const double width,
