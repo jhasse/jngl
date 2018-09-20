@@ -2,6 +2,7 @@
 
 #include "../opengl.hpp"
 
+#include <boost/numeric/conversion/cast.hpp>
 #include <boost/range/adaptor/reversed.hpp>
 #include <boost/test/unit_test.hpp>
 #include <jngl.hpp>
@@ -35,7 +36,7 @@ std::string Fixture::getAsciiArt() const {
 	// ASCII art should always have the same size, therefore let's take the scaleFactor into
 	// account:
 	float reduceFactorAsFloat = 10 * jngl::getScaleFactor();
-	int reduceFactor = std::lround(reduceFactorAsFloat);
+	int reduceFactor = boost::numeric_cast<int>(std::lround(reduceFactorAsFloat));
 	BOOST_CHECK_CLOSE(reduceFactorAsFloat, reduceFactor, 1e-6);
 
 	assert(w % reduceFactor == 0);
