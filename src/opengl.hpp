@@ -14,10 +14,8 @@
 #else
 	#ifdef ANDROID
 		#include <EGL/egl.h>
-		#include <GLES/gl.h>
-		#define GL_GLEXT_PROTOTYPES
-		#include <GLES/glext.h>
-		#include "android/glew.h"
+		#include <GLES2/gl2.h>
+		#define OPENGLES
 	#else
 		#ifdef _MSC_VER
 			#include <windows.h> // To avoid warnings about APIENTRY

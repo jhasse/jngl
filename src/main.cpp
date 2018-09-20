@@ -11,10 +11,6 @@
 
 #ifdef ANDROID
 #include "android/fopen.hpp"
-
-PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
-PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
-PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
 #endif
 
 namespace jngl {
@@ -78,12 +74,7 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 #ifdef OPENGLES
 #define f2x(x) ((int)((x)*65536))
 	glOrthox(f2x(-width / 2), f2x(width / 2), f2x(height / 2), f2x(-height / 2), f2x(-1), f2x(1));
-#ifdef ANDROID
-	glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
-	glBindVertexArray = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
-	glDeleteVertexArrays =
-	    (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");
-#else
+#ifndef ANDROID
 	jngl::translate(-width / 2, height / 2);
 	jngl::rotate(-90);
 	jngl::translate(height / 2, width / 2);
