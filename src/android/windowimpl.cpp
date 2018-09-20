@@ -192,7 +192,19 @@ void WindowImpl::updateInput() {
 
 		// Check if we are exiting.
 		if (app->destroyRequested != 0) {
-			// TODO: engine_term_display(&engine);
+			if (eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) ==
+			    EGL_FALSE) {
+				debugLn("Couldn't unbind surfaces!");
+			}
+			if (eglDestroyContext(display, context) == EGL_FALSE) {
+				debugLn("Couldn't destroy context!");
+			}
+			if (eglDestroySurface(display, surface) == EGL_FALSE) {
+				debugLn("Couldn't destroy surface!");
+			}
+			if (eglTerminate(display) == EGL_FALSE) {
+				debugLn("Couldn't terminate display!");
+			}
 			jngl::quit();
 		}
 	}
