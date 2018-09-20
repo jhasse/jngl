@@ -32,37 +32,31 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 	first = false;
 #endif
 	if (!textureShaderProgram) {
-		static Shader* vertexShader;
-		static Shader* fragmentShader;
-		{
-			vertexShader = new Shader(R"(#version 130
-				in mediump vec2 position;
-				in mediump vec2 inTexCoord;
-				uniform mediump mat3 modelview;
-				out mediump vec2 texCoord;
+		Shader vertexShader(R"(#version 130
+			in mediump vec2 position;
+			in mediump vec2 inTexCoord;
+			uniform mediump mat3 modelview;
+			out mediump vec2 texCoord;
 
-				void main() {
-					vec3 tmp = modelview * vec3(position, 1);
-					gl_Position = gl_ProjectionMatrix * vec4(tmp.x, tmp.y, 0, 1);
-					texCoord = inTexCoord;
-				})", Shader::Type::VERTEX
-			);
-		}
-		{
-			fragmentShader = new Shader(R"(#version 130
-				uniform sampler2D tex;
-				uniform lowp vec4 spriteColor;
+			void main() {
+				vec3 tmp = modelview * vec3(position, 1);
+				gl_Position = gl_ProjectionMatrix * vec4(tmp.x, tmp.y, 0, 1);
+				texCoord = inTexCoord;
+			})", Shader::Type::VERTEX
+		);
+		Shader fragmentShader(R"(#version 130
+			uniform sampler2D tex;
+			uniform lowp vec4 spriteColor;
 
-				in mediump vec2 texCoord;
+			in mediump vec2 texCoord;
 
-				out lowp vec4 outColor;
+			out lowp vec4 outColor;
 
-				void main() {
-					outColor = texture2D(tex, texCoord) * spriteColor;
-				})", Shader::Type::FRAGMENT
-			);
-		}
-		textureShaderProgram = new ShaderProgram(*vertexShader, *fragmentShader);
+			void main() {
+				outColor = texture2D(tex, texCoord) * spriteColor;
+			})", Shader::Type::FRAGMENT
+		);
+		textureShaderProgram = new ShaderProgram(vertexShader, fragmentShader);
 		shaderSpriteColorUniform = textureShaderProgram->getUniformLocation("spriteColor");
 		modelviewUniform = textureShaderProgram->getUniformLocation("modelview");
 	}
