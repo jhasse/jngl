@@ -24,12 +24,36 @@ std::string configPath;
 std::vector<std::string> args;
 float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
 std::stack<boost::qvm::mat<float, 3, 3>> modelviewStack;
+std::unique_ptr<ShaderProgram> simpleShaderProgram;
+int simpleModelviewUniform;
+int simpleColorUniform;
 
 void clearBackgroundColor() {
 	glClearColor(bgRed, bgGreen, bgBlue, 1);
 }
 
 bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
+	Shader vertexShader(R"(#version 130
+		in mediump vec2 position;
+		uniform mediump mat3 modelview;
+
+		void main() {
+			vec3 tmp = modelview * vec3(position, 1);
+			gl_Position = gl_ProjectionMatrix * vec4(tmp.x, tmp.y, 0, 1);
+		})", Shader::Type::VERTEX
+	);
+	Shader fragmentShader(R"(#version 130
+		uniform lowp vec4 color;
+		out lowp vec4 outColor;
+
+		void main() {
+			outColor = color;
+		})", Shader::Type::FRAGMENT
+	);
+	simpleShaderProgram = std::make_unique<ShaderProgram>(vertexShader, fragmentShader);
+	simpleModelviewUniform = simpleShaderProgram->getUniformLocation("modelview");
+	simpleColorUniform = simpleShaderProgram->getUniformLocation("color");
+
 	glShadeModel(GL_SMOOTH);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnable(GL_BLEND);
@@ -108,6 +132,7 @@ void showWindow(const std::string& title, const int width, const int height, boo
 }
 
 void hideWindow() {
+	simpleShaderProgram.reset();
 	unloadAll();
 	pWindow.Delete();
 }
@@ -482,6 +507,14 @@ std::stringstream JNGLDLL_API readAsset(const std::string& filename) {
 	}
 	sstream.write(content.get(), size);
 	return sstream;
+}
+
+Finally useSimpleShaderProgram() {
+	auto _ = jngl::simpleShaderProgram->use();
+	glUniform4f(simpleColorUniform, float(colorRed) / 255.0f, float(colorGreen) / 255.0f,
+	            float(colorBlue) / 255.0f, float(colorAlpha) / 255.0f);
+	glUniformMatrix3fv(simpleModelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
+	return _;
 }
 
 } // namespace jngl

@@ -7,6 +7,7 @@
 
 #include "jngl/matrix.hpp"
 #include "jngl/screen.hpp"
+#include "main.hpp"
 
 #include <cmath>
 #include <vector>
@@ -23,6 +24,7 @@ namespace draw
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		jngl::pushMatrix();
 		opengl::translate(xposition * jngl::getScaleFactor(), yposition * jngl::getScaleFactor());
+		auto _ = jngl::useSimpleShaderProgram();
 		typedef typename opengl::Type<T>::type Type;
 		Type rect[] = { 0, 0,
 		                static_cast<Type>(width * jngl::getScaleFactor()), 0,
@@ -38,6 +40,7 @@ namespace draw
 	void Line(const T xstart, const T ystart, const T xend, const T yend) {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		jngl::pushMatrix();
+		auto _ = jngl::useSimpleShaderProgram();
 		typedef typename opengl::Type<T>::type Type;
 		Type line[] = { static_cast<Type>(xstart * jngl::getScaleFactor()),
 		                static_cast<Type>(ystart * jngl::getScaleFactor()),
@@ -51,6 +54,7 @@ namespace draw
 	template<class T>
 	void Triangle(const T A_x, const T A_y, const T B_x, const T B_y, const T C_x, const T C_y) {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		auto _ = jngl::useSimpleShaderProgram();
 		typedef typename opengl::Type<T>::type Type;
 		Type line[] = { static_cast<Type>(A_x * jngl::getScaleFactor()),
 		                static_cast<Type>(A_y * jngl::getScaleFactor()),
@@ -68,6 +72,7 @@ namespace draw
 		jngl::pushMatrix();
 		glScalef(jngl::getScaleFactor(), jngl::getScaleFactor(), 1);
 		opengl::translate(xmid, ymid);
+		auto _ = jngl::useSimpleShaderProgram();
 		std::vector<T> vertexes;
 		vertexes.push_back(0);
 		vertexes.push_back(0);
@@ -86,6 +91,7 @@ namespace draw
 	void Point(const T x, const T y)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		auto _ = jngl::useSimpleShaderProgram();
 		typedef typename opengl::Type<T>::type Type;
 		Type point[] = { static_cast<Type>(x), static_cast<Type>(y) };
 		glVertexPointer(2, opengl::Type<T>::constant, 0, point);
