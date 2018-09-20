@@ -86,7 +86,7 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
 
 	const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 	glEnableVertexAttribArray(posAttrib);
 
 	const GLint texCoordAttrib = textureShaderProgram->getAttribLocation("inTexCoord");
