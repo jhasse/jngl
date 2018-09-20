@@ -329,7 +329,7 @@ namespace jngl {
 		static_assert(sizeof(JSAMPLE) == sizeof(char));
 		std::vector<unsigned char*> buf(height);
 		for (auto& row : buf) {
-			row = new unsigned char[width * channels];
+			row = new unsigned char[info.output_width * channels];
 		}
 		Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
 
@@ -354,21 +354,21 @@ namespace jngl {
 			throw std::runtime_error(std::string("Couldn't open WebP file. (" + filename + ")"));
 		}
 
-		if (!WebPGetInfo(&buf[0], filesize, &width, &height)) {
+		int imgWidth;
+		int imgHeight;
+		if (!WebPGetInfo(&buf[0], filesize, &imgWidth, &imgHeight)) {
 			throw std::runtime_error(std::string("Invalid WebP file. (" + filename + ")"));
 		}
+		width  = imgWidth  * getScaleFactor();
+		height = imgHeight * getScaleFactor();
 
 		auto config = std::make_shared<WebPDecoderConfig>();
 		WebPInitDecoderConfig(config.get());
 		config->options.use_threads = 1;
 		if (boost::math::epsilon_difference(getScaleFactor(), 1) > 10) {
 			config->options.use_scaling = 1;
-			width  = static_cast<int>(width  * getScaleFactor());
-			height = static_cast<int>(height * getScaleFactor());
-			if (width < 1) { width = 1; }
-			if (height < 1) { height = 1; }
-			config->options.scaled_width = width;
-			config->options.scaled_height = height;
+			config->options.scaled_width  = std::max(1l, std::lround(width));
+			config->options.scaled_height = std::max(1l, std::lround(height));
 		}
 		config->output.colorspace = MODE_RGBA;
 		auto result = std::make_shared<VP8StatusCode>();

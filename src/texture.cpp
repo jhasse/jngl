@@ -14,9 +14,9 @@ namespace jngl {
 
 std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
-Texture::Texture(const int width, const int height, const GLubyte* const* const rowPointers,
-                 GLenum format, const GLubyte* const data)
-: width(width), height(height) {
+Texture::Texture(const float preciseWidth, const float preciseHeight,
+                 const GLubyte* const* const rowPointers, GLenum format, const GLubyte* const data)
+: width(std::lround(preciseWidth)), height(std::lround(preciseHeight)) {
 #ifdef EPOXY_PUBLIC
 	static bool first = true;
 	if (first && !epoxy_has_gl_extension("GL_ARB_vertex_buffer_object")) {
@@ -43,10 +43,10 @@ Texture::Texture(const int width, const int height, const GLubyte* const* const 
 		                   0,
 		                   0,
 		                   0,
-		                   GLfloat(height),
-		                   GLfloat(width),
-		                   GLfloat(height),
-		                   GLfloat(width),
+		                   preciseHeight,
+		                   preciseWidth,
+		                   preciseHeight,
+		                   preciseWidth,
 		                   0 };
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
