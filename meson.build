@@ -53,6 +53,7 @@ add_project_arguments(cxx.get_supported_arguments([
 	'-Wlogical-op',
 	'-Wduplicated-cond',
 	'-Wduplicated-branches',
+	'-Wnewline-eof',
 ]), language : 'cpp')
 
 if target_machine.system() != 'windows'

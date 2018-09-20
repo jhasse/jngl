@@ -5,11 +5,11 @@
 
 namespace jngl {
 
-bool getFullscreen() {
+bool JNGLDLL_API getFullscreen() {
 	return pWindow->getFullscreen();
 }
 
-void setFullscreen(bool f) {
+void JNGLDLL_API setFullscreen(bool f) {
 	return pWindow->setFullscreen(f);
 }
 
