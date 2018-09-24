@@ -16,15 +16,16 @@ gcc:
     - DISPLAY=:0 ./unittest
 
 clang:
-  image: base/archlinux
+  image: fedora:28
   stage: build
   script:
-    - pacman -Syu --needed --noconfirm meson sdl2 pkg-config fontconfig libepoxy udev libwebp openal libvorbis boost clang-tools-extra python2-yaml
-    - CC=clang CXX=clang++ meson build --werror
+    - dnf install -y fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-python3-devel python3-devel meson SDL2-devel openal-soft-devel clang
+    - CC=clang CXX=clang++ script -qfec "meson build --werror" /dev/null
     - cd build
     - script -qfec "ninja" /dev/null
+    - dnf install -y clang-tools-extra python3-PyYAML
     - sed -i s/-pipe// compile_commands.json
-    - script -qfec "/usr/share/clang/run-clang-tidy.py 2>/dev/null" | sed s_$PWD/__
+    - script -qfec "python3 /usr/share/clang/run-clang-tidy.py 2>/dev/null" | sed s_$PWD/__
     - '! grep -Fq "error:" typescript'
 
 mingw:
