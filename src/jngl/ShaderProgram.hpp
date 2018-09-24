@@ -19,7 +19,13 @@ public:
 	ShaderProgram(ShaderProgram&&) = delete;
 	ShaderProgram& operator=(const ShaderProgram&) = delete;
 	ShaderProgram& operator=(ShaderProgram&&) = delete;
-	JNGLDLL_API [[nodiscard]] Finally use() const;
+
+	JNGLDLL_API
+#if __cplusplus >= 201703L
+	    [[nodiscard]]
+#endif
+	    Finally
+	    use() const;
 
 	int getAttribLocation(const std::string& name) const;
 	int getUniformLocation(const std::string& name) const;
