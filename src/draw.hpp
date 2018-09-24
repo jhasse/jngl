@@ -70,7 +70,7 @@ namespace draw
 	void Ellipse(const T xmid, const T ymid, const T width, const T height, const T startAngle) {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		jngl::pushMatrix();
-		glScalef(jngl::getScaleFactor(), jngl::getScaleFactor(), 1);
+		opengl::scale(jngl::getScaleFactor(), jngl::getScaleFactor());
 		opengl::translate(xmid, ymid);
 		auto _ = jngl::useSimpleShaderProgram();
 		std::vector<T> vertexes;
