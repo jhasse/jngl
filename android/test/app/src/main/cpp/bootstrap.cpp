@@ -4,7 +4,6 @@
 #include <android/native_activity.h>
 #include <android/log.h>
 #include <dlfcn.h>
-#include <errno.h>
 #include <stdexcept>
 #include <string>
 

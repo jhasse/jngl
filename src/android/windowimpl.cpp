@@ -3,7 +3,6 @@
 
 #include "windowimpl.hpp"
 
-#include "../opengl.hpp"
 #include "../jngl/other.hpp"
 #include "../jngl/debug.hpp"
 #include "../window.hpp"
@@ -12,14 +11,6 @@
 
 #include <android_native_app_glue.h>
 #include <android/storage_manager.h>
-#include <android/obb.h>
-#include <stdexcept>
-#include <cassert>
-#include <cstdio>
-#include <cerrno>
-#include <cstring>
-#include <fstream>
-#include <sstream>
 
 namespace jngl {
 
