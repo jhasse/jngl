@@ -5,6 +5,7 @@
 
 #include "freetype.hpp"
 #include "jngl.hpp"
+#include "main.hpp"
 
 #include <boost/numeric/conversion/cast.hpp>
 #include <chrono>
@@ -379,5 +380,30 @@ namespace jngl {
 		if (canvasWidth != width_ || canvasHeight != height_) {
 			debug("Letterboxing to "); debug(canvasWidth); debug("x"); debugLn(canvasHeight);
 		}
+	}
+
+	void Window::initGlObjects() {
+		glGenVertexArrays(1, &vaoTriangle);
+		glBindVertexArray(vaoTriangle);
+		GLuint vbo;
+		glGenBuffers(1, &vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glDeleteBuffers(1, &vbo);
+		glEnableVertexAttribArray(0);
+	}
+
+	void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) const {
+		glBindVertexArray(vaoTriangle);
+		auto tmp = useSimpleShaderProgram();
+		const float vertexes[] = { static_cast<float>(a.x * jngl::getScaleFactor()),
+		                           static_cast<float>(a.y * jngl::getScaleFactor()),
+		                           static_cast<float>(b.x * jngl::getScaleFactor()),
+		                           static_cast<float>(b.y * jngl::getScaleFactor()),
+		                           static_cast<float>(c.x * jngl::getScaleFactor()),
+		                           static_cast<float>(c.y * jngl::getScaleFactor()) };
+		// STREAM because we're using the buffer only once
+		glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertexes, GL_STREAM_DRAW);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 	}
 } // namespace jngl

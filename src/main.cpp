@@ -120,6 +120,7 @@ void showWindow(const std::string& title, const int width, const int height, boo
 	pWindow.Set(new Window(title, width, height, fullscreen, minAspectRatio, maxAspectRatio));
 	pWindow->SetMouseVisible(isMouseVisible);
 	setAntiAliasing(antiAliasingEnabled);
+	pWindow->initGlObjects();
 }
 
 void hideWindow() {
@@ -331,12 +332,12 @@ void drawRect(const Vec2 position, const Vec2 size) {
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
-	drawTriangle(a.x, a.y, b.x, b.y, c.x, c.y);
+	pWindow->drawTriangle(a, b, c);
 }
 
 void drawTriangle(const double A_x, const double A_y, const double B_x, const double B_y,
                   const double C_x, const double C_y) {
-	draw::Triangle(A_x, A_y, B_x, B_y, C_x, C_y);
+	pWindow->drawTriangle({ A_x, A_y}, { B_x, B_y }, { C_x, C_y });
 }
 
 void setLineWidth(const float width) {

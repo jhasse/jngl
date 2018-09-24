@@ -52,21 +52,6 @@ namespace draw
 	}
 
 	template<class T>
-	void Triangle(const T A_x, const T A_y, const T B_x, const T B_y, const T C_x, const T C_y) {
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		auto _ = jngl::useSimpleShaderProgram();
-		typedef typename opengl::Type<T>::type Type;
-		Type line[] = { static_cast<Type>(A_x * jngl::getScaleFactor()),
-		                static_cast<Type>(A_y * jngl::getScaleFactor()),
-		                static_cast<Type>(B_x * jngl::getScaleFactor()),
-		                static_cast<Type>(B_y * jngl::getScaleFactor()),
-		                static_cast<Type>(C_x * jngl::getScaleFactor()),
-		                static_cast<Type>(C_y * jngl::getScaleFactor()) };
-		glVertexPointer(2, opengl::Type<T>::constant, 0, line);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-	}
-
-	template<class T>
 	void Ellipse(const T xmid, const T ymid, const T width, const T height, const T startAngle) {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		jngl::pushMatrix();

@@ -4,6 +4,7 @@
 #pragma once
 
 #include "jngl/input.hpp"
+#include "opengl.hpp"
 
 #include <array>
 #include <functional>
@@ -98,6 +99,8 @@ namespace jngl {
 		WindowImpl* getImpl() const;
 #endif
 		std::string getTextInput() const;
+		void initGlObjects();
+		void drawTriangle(Vec2 a, Vec2 b, Vec2 c) const;
 
 	private:
 		int GetKeyCode(jngl::key::KeyType key);
@@ -105,6 +108,7 @@ namespace jngl {
 		void calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 		                         const std::pair<int, int> maxAspectRatio);
 
+		GLuint vaoTriangle = 0;
 		double timePerStep = 1.0 / 60.0;
 		unsigned int maxStepsPerFrame = 3;
 		bool running = true;
