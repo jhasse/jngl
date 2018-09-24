@@ -32,10 +32,11 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	Shader vertexShader(R"(#version 130
 		in mediump vec2 position;
 		uniform mediump mat3 modelview;
+		uniform mediump mat4 projection;
 
 		void main() {
 			vec3 tmp = modelview * vec3(position, 1);
-			gl_Position = gl_ProjectionMatrix * vec4(tmp.x, tmp.y, 0, 1);
+			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
 		})", Shader::Type::VERTEX
 	);
 	Shader fragmentShader(R"(#version 130
@@ -68,23 +69,22 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		          canvasHeight);
 	}
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	const float l =  -width / 2.f;
+	const float r =   width / 2.f;
+	const float b =  height / 2.f;
+	const float t = -height / 2.f;
+	opengl::projection = {{
+		{ 2.f / (r - l),           0.f,  0.f, -(r + l) / (r - l) },
+		{           0.f, 2.f / (t - b),  0.f, -(t + b) / (t - b) },
+		{           0.f,           0.f, -1.f, 0.f },
+		{           0.f,           0.f,  0.f, 1.f }
+	}};
+	{
+		const auto tmp = simpleShaderProgram->use();
+		const auto projectionUnfirom = simpleShaderProgram->getUniformLocation("projection");
+		glUniformMatrix4fv(projectionUnfirom, 1, GL_TRUE, &opengl::projection.a[0][0]);
+	}
 
-#ifdef OPENGLES
-#define f2x(x) ((int)((x)*65536))
-	glOrthox(f2x(-width / 2), f2x(width / 2), f2x(height / 2), f2x(-height / 2), f2x(-1), f2x(1));
-#ifndef ANDROID
-	jngl::translate(-width / 2, height / 2);
-	jngl::rotate(-90);
-	jngl::translate(height / 2, width / 2);
-#endif
-#else
-	glOrtho(-width / 2, width / 2, height / 2, -height / 2, -100.0f, 100.0f);
-#endif
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 	reset();
 	modelviewStack = {};
 

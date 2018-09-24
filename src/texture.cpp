@@ -36,11 +36,12 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 			in mediump vec2 position;
 			in mediump vec2 inTexCoord;
 			uniform mediump mat3 modelview;
+			uniform mediump mat4 projection;
 			out mediump vec2 texCoord;
 
 			void main() {
 				vec3 tmp = modelview * vec3(position, 1);
-				gl_Position = gl_ProjectionMatrix * vec4(tmp.x, tmp.y, 0, 1);
+				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
 				texCoord = inTexCoord;
 			})", Shader::Type::VERTEX
 		);
@@ -59,6 +60,9 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 		textureShaderProgram = new ShaderProgram(vertexShader, fragmentShader);
 		shaderSpriteColorUniform = textureShaderProgram->getUniformLocation("spriteColor");
 		modelviewUniform = textureShaderProgram->getUniformLocation("modelview");
+		const auto projectionUniform = textureShaderProgram->getUniformLocation("projection");
+		const auto tmp = textureShaderProgram->use();
+		glUniformMatrix4fv(projectionUniform, 1, GL_TRUE, &opengl::projection.a[0][0]);
 	}
 	glGenTextures(1, &texture_);
 	glBindTexture(GL_TEXTURE_2D, texture_);

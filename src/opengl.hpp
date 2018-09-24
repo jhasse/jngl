@@ -15,6 +15,7 @@
 	#ifdef ANDROID
 		#include <EGL/egl.h>
 		#include <GLES2/gl2.h>
+		#include <GLES2/gl2ext.h>
 		#define GL_RGBA8 GL_RGBA8_OES
 	#else
 		#ifdef _MSC_VER
@@ -31,6 +32,7 @@
 namespace opengl
 {
 	extern boost::qvm::mat<float, 3, 3> modelview;
+	extern boost::qvm::mat<float, 4, 4> projection;
 
 	void translate(float x, float y);
 	void scale(float x, float y);
