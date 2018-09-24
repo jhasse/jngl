@@ -23,15 +23,11 @@ namespace draw
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		jngl::pushMatrix();
-		opengl::translate(xposition * jngl::getScaleFactor(), yposition * jngl::getScaleFactor());
 		auto _ = jngl::useSimpleShaderProgram();
-		typedef typename opengl::Type<T>::type Type;
-		Type rect[] = { 0, 0,
-		                static_cast<Type>(width * jngl::getScaleFactor()), 0,
-						static_cast<Type>(width * jngl::getScaleFactor()),
-						static_cast<Type>(height * jngl::getScaleFactor()),
-		                0, static_cast<Type>(height * jngl::getScaleFactor()) };
-		glVertexPointer(2, opengl::Type<T>::constant, 0, rect);
+		jngl::translate(xposition, yposition);
+		opengl::scale(width * jngl::getScaleFactor(), height * jngl::getScaleFactor());
+		float rect[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
+		glVertexPointer(2, GL_FLOAT, 0, rect);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 		jngl::popMatrix();
 	}
@@ -41,12 +37,11 @@ namespace draw
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		jngl::pushMatrix();
 		auto _ = jngl::useSimpleShaderProgram();
-		typedef typename opengl::Type<T>::type Type;
-		Type line[] = { static_cast<Type>(xstart * jngl::getScaleFactor()),
-		                static_cast<Type>(ystart * jngl::getScaleFactor()),
-		                static_cast<Type>(xend * jngl::getScaleFactor()),
-		                static_cast<Type>(yend * jngl::getScaleFactor()) };
-		glVertexPointer(2, opengl::Type<T>::constant, 0, line);
+		jngl::translate(xstart, ystart);
+		opengl::scale((xend - xstart) * jngl::getScaleFactor(),
+		              (yend - ystart) * jngl::getScaleFactor());
+		float line[] = { 0, 0, 1, 1 };
+		glVertexPointer(2, GL_FLOAT, 0, line);
 		glDrawArrays(GL_LINES, 0, 2);
 		jngl::popMatrix();
 	}
