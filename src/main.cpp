@@ -10,6 +10,10 @@
 
 #ifdef ANDROID
 #include "android/fopen.hpp"
+
+PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
+PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
+PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
 #endif
 
 namespace jngl {
@@ -80,6 +84,13 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		const auto projectionUniform = simpleShaderProgram->getUniformLocation("projection");
 		glUniformMatrix4fv(projectionUniform, 1, GL_TRUE, &opengl::projection.a[0][0]);
 	}
+
+#ifdef ANDROID
+	glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
+	glBindVertexArray = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
+	glDeleteVertexArrays =
+	    (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");
+#endif
 
 	reset();
 	modelviewStack = {};

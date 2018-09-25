@@ -17,9 +17,9 @@
 		#include <GLES2/gl2.h>
 		#include <GLES2/gl2ext.h>
 		#define GL_RGBA8 GL_RGBA8_OES
-		#define glGenVertexArrays glGenVertexArraysOES
-		#define glBindVertexArray glBindVertexArrayOES
-		#define glDeleteVertexArrays glDeleteVertexArraysOES
+		extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
+		extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
+		extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
 	#else
 		#ifdef _MSC_VER
 			#include <windows.h> // To avoid warnings about APIENTRY
