@@ -50,11 +50,8 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	simpleModelviewUniform = simpleShaderProgram->getUniformLocation("modelview");
 	simpleColorUniform = simpleShaderProgram->getUniformLocation("color");
 
-	glShadeModel(GL_SMOOTH);
-	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glViewport(0, 0, width, height);
 
 	if (canvasWidth != width || canvasHeight != height) { // Letterboxing?
