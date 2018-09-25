@@ -85,7 +85,7 @@ if target_machine.system() != 'windows'
 		'src/linux/binreloc.c',
 	]
 else
-	cpp_args += ['-DWINVER=0x0602']
+	cpp_args += ['-DWINVER=0x0602', '-D_USE_MATH_DEFINES']
 	opengl_dep = [
 		cxx.find_library('opengl32'),
 		cxx.find_library('glu32'),
