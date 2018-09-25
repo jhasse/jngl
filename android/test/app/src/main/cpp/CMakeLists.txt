@@ -43,7 +43,7 @@ target_link_libraries(jngl-test
     android
     native_app_glue
     EGL
-    GLESv1_CM
+    GLESv2
     OpenSLES
     log
     z
