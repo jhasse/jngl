@@ -208,8 +208,8 @@ namespace jngl {
 
 	void Window::setStepsPerSecond(const unsigned int stepsPerSecond) {
 		timePerStep = 1.0 / static_cast<double>(stepsPerSecond);
-		maxStepsPerFrame =
-		    std::lround(1.0 / 20.0 / timePerStep); // Never drop below 20 FPS, instead slow down
+		maxStepsPerFrame = static_cast<unsigned int>(
+		    std::lround(1.0 / 20.0 / timePerStep)); // Never drop below 20 FPS, instead slow down
 	}
 
 	void Window::stepIfNeeded() {

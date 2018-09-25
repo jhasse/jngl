@@ -11,6 +11,7 @@ namespace jngl {
 	class JNGLDLL_API Drawable {
 	public:
 		Drawable();
+		Drawable(const Drawable&) = default;
 		virtual ~Drawable();
 		virtual void step() = 0;
 		virtual void draw() const = 0;

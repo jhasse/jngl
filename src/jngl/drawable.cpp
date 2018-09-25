@@ -70,11 +70,11 @@ void Drawable::setY(Float y) {
 }
 
 float Drawable::getWidth() const {
-	return width / getScaleFactor();
+	return width / static_cast<float>(getScaleFactor());
 }
 
 float Drawable::getHeight() const {
-	return height / getScaleFactor();
+	return height / static_cast<float>(getScaleFactor());
 }
 
 } // namespace jngl

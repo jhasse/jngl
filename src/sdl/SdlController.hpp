@@ -12,7 +12,7 @@ namespace jngl {
 class SdlController : public Controller {
 public:
 	SdlController(SDL_Joystick*);
-	~SdlController();
+	~SdlController() override;
 	float state(controller::Button) const override;
 	bool down(controller::Button) const override;
 
