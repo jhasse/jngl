@@ -8,8 +8,8 @@
 #include <boost/qvm/mat.hpp>
 
 #ifdef IOS
-	#include <OpenGLES/ES1/gl.h>
-	#include <OpenGLES/ES1/glext.h>
+	#include <OpenGLES/ES3/gl.h>
+	#include <OpenGLES/ES3/glext.h>
 	#include "ios/glew.h"
 #else
 	#ifdef ANDROID

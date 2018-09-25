@@ -20,6 +20,8 @@
 		C92916741609BCEC00A69E46 /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C92916711609BCEC00A69E46 /* job.cpp */; };
 		C92916761609BCEC00A69E46 /* job.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C92916721609BCEC00A69E46 /* job.hpp */; };
 		C92D3BB9204DFAFA00012403 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C92D3BB8204DFAFA00012403 /* Ogg.framework */; };
+		C9367793215A9D7900001AD5 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9367791215A9D7900001AD5 /* Shader.cpp */; };
+		C9367794215A9D7900001AD5 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9367792215A9D7900001AD5 /* ShaderProgram.cpp */; };
 		C93A7E9A2057065800C796AC /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C93A7E992057065800C796AC /* OpenAL.framework */; };
 		C93A7E9C2057067D00C796AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C93A7E9B2057067D00C796AC /* QuartzCore.framework */; };
 		C93A7E9E2057068F00C796AC /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C93A7E9D2057068F00C796AC /* OpenGLES.framework */; };
@@ -100,6 +102,8 @@
 		C92916721609BCEC00A69E46 /* job.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = job.hpp; path = ../src/jngl/job.hpp; sourceTree = "<group>"; };
 		C92D3BB8204DFAFA00012403 /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ogg.framework; path = IDZPrecompiledOgg/Ogg.framework; sourceTree = "<group>"; };
 		C9340335151F86C5007FEF8E /* windowimpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = windowimpl.hpp; path = ../src/sdl/windowimpl.hpp; sourceTree = "<group>"; };
+		C9367791215A9D7900001AD5 /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Shader.cpp; path = src/jngl/Shader.cpp; sourceTree = "<group>"; };
+		C9367792215A9D7900001AD5 /* ShaderProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShaderProgram.cpp; path = src/jngl/ShaderProgram.cpp; sourceTree = "<group>"; };
 		C93A7E992057065800C796AC /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.2.sdk/System/Library/Frameworks/OpenAL.framework; sourceTree = DEVELOPER_DIR; };
 		C93A7E9B2057067D00C796AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.2.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		C93A7E9D2057068F00C796AC /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.2.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
@@ -179,7 +183,6 @@
 		C9F1AF3113EAED790086B474 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		C9F1AF3413EAED8A0086B474 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		C9F1AF5113EAEF420086B474 /* audio.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = audio.hpp; path = ../src/audio.hpp; sourceTree = "<group>"; };
-		C9F1AF5B13EAEF420086B474 /* draw.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = draw.hpp; path = ../src/draw.hpp; sourceTree = "<group>"; };
 		C9F1AF7513EAEF420086B474 /* framebufferimpl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = framebufferimpl.hpp; path = ../src/framebufferimpl.hpp; sourceTree = "<group>"; };
 		C9F1AF7713EAEF420086B474 /* freetype.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = freetype.hpp; path = ../src/freetype.hpp; sourceTree = "<group>"; };
 		C9F1AFCA13EAEF420086B474 /* jngl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = jngl.hpp; path = ../src/jngl.hpp; sourceTree = "<group>"; };
@@ -368,6 +371,8 @@
 		C9E9E2E415C1D516006CCBD2 /* jngl */ = {
 			isa = PBXGroup;
 			children = (
+				C9367791215A9D7900001AD5 /* Shader.cpp */,
+				C9367792215A9D7900001AD5 /* ShaderProgram.cpp */,
 				C94E4A8F20A9ED7D00285CDB /* Vec2.cpp */,
 				3D150EB91C3C2FC2008A5DE2 /* window.cpp */,
 				3D150EB21C3C2F9C008A5DE2 /* time.cpp */,
@@ -455,7 +460,6 @@
 				209C83AF1E74AE2500D3BE2D /* helper.hpp */,
 				C9F1AF5113EAEF420086B474 /* audio.hpp */,
 				C9F1894813EB288D005E43B3 /* callbacks.h */,
-				C9F1AF5B13EAEF420086B474 /* draw.hpp */,
 				C9F1AF7513EAEF420086B474 /* framebufferimpl.hpp */,
 				C9F1AF7713EAEF420086B474 /* freetype.hpp */,
 				C9E9E2EB15C1D531006CCBD2 /* jngl */,
@@ -591,6 +595,7 @@
 				C93A963315E3B49B003525E8 /* audio.cpp in Sources */,
 				C93A963615E3B49B003525E8 /* framebufferimpl.cpp in Sources */,
 				C93A963715E3B49B003525E8 /* freetype.cpp in Sources */,
+				C9367793215A9D7900001AD5 /* Shader.cpp in Sources */,
 				C93A963815E3B49B003525E8 /* main.cpp in Sources */,
 				C93A963915E3B49B003525E8 /* opengl.cpp in Sources */,
 				C93A963A15E3B49B003525E8 /* spriteimpl.cpp in Sources */,
@@ -606,6 +611,7 @@
 				C98A18AD15DEB30D0038B716 /* work.cpp in Sources */,
 				C94EEE331600ED1F004F9FE0 /* JNGLViewController.mm in Sources */,
 				C923BC5016066E4400BEFE2D /* framebuffer.cpp in Sources */,
+				C9367794215A9D7900001AD5 /* ShaderProgram.cpp in Sources */,
 				C9740996160766FA002D1152 /* drawable.cpp in Sources */,
 				C974099F16076AE0002D1152 /* screen.cpp in Sources */,
 				C97409A516076CD1002D1152 /* text.cpp in Sources */,
