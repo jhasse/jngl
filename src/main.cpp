@@ -1,7 +1,6 @@
 // Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#include "draw.hpp"
 #include "jngl.hpp"
 #include "spriteimpl.hpp"
 
@@ -81,8 +80,8 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	}};
 	{
 		const auto tmp = simpleShaderProgram->use();
-		const auto projectionUnfirom = simpleShaderProgram->getUniformLocation("projection");
-		glUniformMatrix4fv(projectionUnfirom, 1, GL_TRUE, &opengl::projection.a[0][0]);
+		const auto projectionUniform = simpleShaderProgram->getUniformLocation("projection");
+		glUniformMatrix4fv(projectionUniform, 1, GL_TRUE, &opengl::projection.a[0][0]);
 	}
 
 	reset();
