@@ -424,6 +424,28 @@ namespace jngl {
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 	}
 
+	void Window::drawEllipse(const Vec2 mid, const Vec2 size, float startAngle) const {
+		glBindVertexArray(vaoTriangle);
+		jngl::pushMatrix();
+		jngl::translate(mid);
+		opengl::scale(jngl::getScaleFactor(), jngl::getScaleFactor());
+		auto tmp = jngl::useSimpleShaderProgram();
+		std::vector<float> vertexes;
+		vertexes.push_back(0.f);
+		vertexes.push_back(0.f);
+		for (float t = startAngle; t < 2.f * M_PI; t += 0.1f) {
+			vertexes.push_back(size.x * std::sin(t));
+			vertexes.push_back(-size.y * std::cos(t));
+		}
+		vertexes.push_back(0.f);
+		vertexes.push_back(-size.y);
+		glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), &vertexes[0],
+		             GL_STREAM_DRAW);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, static_cast<GLsizei>(vertexes.size() / 2));
+		jngl::popMatrix();
+	}
+
 	void Window::drawLine(const Vec2 a, const Vec2 b) const {
 		glBindVertexArray(vaoLine);
 		jngl::pushMatrix();

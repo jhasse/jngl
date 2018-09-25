@@ -353,7 +353,7 @@ void drawLine(const Vec2 start, const Vec2 end) {
 }
 
 void drawPoint(const double x, const double y) {
-	draw::Point(x, y);
+	pWindow->drawEllipse({x, y}, {1, 1}, 0);
 }
 
 void readPixel(const int x, const int y, unsigned char& red, unsigned char& green,

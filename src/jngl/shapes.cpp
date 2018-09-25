@@ -2,7 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "shapes.hpp"
-#include "../draw.hpp"
+
 #include "../spriteimpl.hpp"
 
 namespace jngl {
@@ -47,16 +47,16 @@ void popAlpha() {
 }
 
 void drawEllipse(float xmid, float ymid, float width, float height, float startAngle) {
-	draw::Ellipse(xmid, ymid, width, height, startAngle);
+	pWindow->drawEllipse({xmid, ymid}, {width, height}, startAngle);
 }
 
 void drawEllipse(const Vec2 position, const float width, const float height,
                  const float startAngle) {
-	drawEllipse(position.x, position.y, width, height, startAngle);
+	pWindow->drawEllipse(position, {width, height}, startAngle);
 }
 
 void drawCircle(const Vec2 position, const float radius, const float startAngle) {
-	drawEllipse(position.x, position.y, radius, radius, startAngle);
+	pWindow->drawEllipse(position, {radius, radius}, startAngle);
 }
 
 } // namespace jngl

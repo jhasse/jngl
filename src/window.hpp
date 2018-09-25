@@ -101,6 +101,7 @@ namespace jngl {
 		std::string getTextInput() const;
 		void initGlObjects();
 		void drawTriangle(Vec2 a, Vec2 b, Vec2 c) const;
+		void drawEllipse(Vec2 mid, Vec2 size, float startAngle) const;
 		void drawLine(Vec2 a, Vec2 b) const;
 		void drawRect(Vec2 pos, Vec2 size) const;
 
