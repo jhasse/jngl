@@ -19,34 +19,6 @@
 namespace draw
 {
 	template<class T>
-	void Rect(const T xposition, const T yposition, const T width, const T height)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		jngl::pushMatrix();
-		auto _ = jngl::useSimpleShaderProgram();
-		jngl::translate(xposition, yposition);
-		opengl::scale(width * jngl::getScaleFactor(), height * jngl::getScaleFactor());
-		float rect[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
-		glVertexPointer(2, GL_FLOAT, 0, rect);
-		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-		jngl::popMatrix();
-	}
-
-	template<class T>
-	void Line(const T xstart, const T ystart, const T xend, const T yend) {
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		jngl::pushMatrix();
-		auto _ = jngl::useSimpleShaderProgram();
-		jngl::translate(xstart, ystart);
-		opengl::scale((xend - xstart) * jngl::getScaleFactor(),
-		              (yend - ystart) * jngl::getScaleFactor());
-		float line[] = { 0, 0, 1, 1 };
-		glVertexPointer(2, GL_FLOAT, 0, line);
-		glDrawArrays(GL_LINES, 0, 2);
-		jngl::popMatrix();
-	}
-
-	template<class T>
 	void Ellipse(const T xmid, const T ymid, const T width, const T height, const T startAngle) {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		jngl::pushMatrix();

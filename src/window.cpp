@@ -388,7 +388,24 @@ namespace jngl {
 		GLuint vbo;
 		glGenBuffers(1, &vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glDeleteBuffers(1, &vbo);
+		glEnableVertexAttribArray(0);
+
+		glGenVertexArrays(1, &vaoLine);
+		glBindVertexArray(vaoLine);
+		glGenBuffers(1, &vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		const static float line[] = { 0, 0, 1, 1 };
+		glBufferData(GL_ARRAY_BUFFER, sizeof(line), line, GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+		glEnableVertexAttribArray(0);
+
+		glGenVertexArrays(1, &vaoRect);
+		glBindVertexArray(vaoRect);
+		glGenBuffers(1, &vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		const static float rect[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
+		glBufferData(GL_ARRAY_BUFFER, sizeof(rect), rect, GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 		glEnableVertexAttribArray(0);
 	}
 
@@ -406,4 +423,27 @@ namespace jngl {
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 	}
+
+	void Window::drawLine(const Vec2 a, const Vec2 b) const {
+		glBindVertexArray(vaoLine);
+		jngl::pushMatrix();
+		jngl::translate(a);
+		opengl::scale((b.x - a.x) * jngl::getScaleFactor(),
+		              (b.y - a.y) * jngl::getScaleFactor());
+		auto tmp = useSimpleShaderProgram();
+		glDrawArrays(GL_LINES, 0, 2);
+		jngl::popMatrix();
+	}
+
+	void Window::drawRect(const Vec2 pos, const Vec2 size) const {
+		glBindVertexArray(vaoRect);
+		jngl::pushMatrix();
+		jngl::translate(pos);
+		opengl::scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor());
+		auto tmp = useSimpleShaderProgram();
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+		jngl::popMatrix();
+	}
+
+
 } // namespace jngl

@@ -13,11 +13,11 @@ boost::qvm::mat<float, 3, 3> modelview;
 boost::qvm::mat<float, 4, 4> projection;
 
 void translate(float x, float y) {
-	modelview *= boost::qvm::translation_mat(boost::qvm::vec<float, 2>{x, y});
+	modelview *= boost::qvm::translation_mat(boost::qvm::vec<float, 2>{{ x, y }});
 }
 
 void scale(const float x, const float y) {
-	modelview *= boost::qvm::diag_mat(boost::qvm::vec<float, 3>{x, y, 1});
+	modelview *= boost::qvm::diag_mat(boost::qvm::vec<float, 3>{{ x, y, 1 }});
 }
 
 } // namespace opengl

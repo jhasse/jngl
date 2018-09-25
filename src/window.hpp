@@ -101,6 +101,8 @@ namespace jngl {
 		std::string getTextInput() const;
 		void initGlObjects();
 		void drawTriangle(Vec2 a, Vec2 b, Vec2 c) const;
+		void drawLine(Vec2 a, Vec2 b) const;
+		void drawRect(Vec2 pos, Vec2 size) const;
 
 	private:
 		int GetKeyCode(jngl::key::KeyType key);
@@ -109,6 +111,8 @@ namespace jngl {
 		                         const std::pair<int, int> maxAspectRatio);
 
 		GLuint vaoTriangle = 0;
+		GLuint vaoLine = 0;
+		GLuint vaoRect = 0;
 		double timePerStep = 1.0 / 60.0;
 		unsigned int maxStepsPerFrame = 3;
 		bool running = true;

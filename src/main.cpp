@@ -324,11 +324,11 @@ void popMatrix() {
 
 void drawRect(const double xposition, const double yposition, const double width,
               const double height) {
-	draw::Rect(xposition, yposition, width, height);
+	pWindow->drawRect({ xposition, yposition }, { width, height });
 }
 
 void drawRect(const Vec2 position, const Vec2 size) {
-	drawRect(position.x, position.y, size.x, size.y);
+	pWindow->drawRect(position, size);
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
@@ -345,11 +345,11 @@ void setLineWidth(const float width) {
 }
 
 void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
-	draw::Line(xstart, ystart, xend, yend);
+	pWindow->drawLine({ xstart, ystart }, { xend, yend });
 }
 
 void drawLine(const Vec2 start, const Vec2 end) {
-	drawLine(start.x, start.y, end.x, end.y);
+	pWindow->drawLine(start, end);
 }
 
 void drawPoint(const double x, const double y) {
