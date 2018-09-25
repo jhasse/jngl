@@ -5,12 +5,18 @@
 
 #include "../Shader_Impl.hpp"
 
+#include <boost/algorithm/string.hpp>
 #include <stdexcept>
 
 namespace jngl {
 
 Shader::Shader(const char* source, const Type type) : impl(std::make_unique<Impl>()) {
 	impl->id = glCreateShader(type == Type::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER);
+#ifdef __APPLE__
+	std::string tmp(source);
+	boost::replace_all(tmp, "#version 300 es", "#version 330");
+	source = tmp.c_str();
+#endif
 	glShaderSource(impl->id, 1, &source, nullptr);
 	glCompileShader(impl->id);
 	GLint status;
