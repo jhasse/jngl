@@ -10,7 +10,7 @@
 
 BOOST_AUTO_TEST_CASE(SpriteTest) {
 	Fixture f(1);
-	jngl::drawScaled("../jngl.webp", -60, -30, 0.2);
+	jngl::drawScaled("../jngl.webp", -60, -30, 0.2f);
 	BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒                              ▒

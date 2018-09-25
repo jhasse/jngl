@@ -95,7 +95,7 @@ namespace jngl {
 #ifdef _WIN32
 		static void ReleaseDC(HWND, HDC);
 		static void ReleaseRC(HGLRC);
-#elif IOS
+#elif defined(IOS)
 		WindowImpl* getImpl() const;
 #endif
 		std::string getTextInput() const;

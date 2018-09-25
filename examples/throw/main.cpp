@@ -22,8 +22,8 @@ const double timePerFrame = 0.01; // 100 FPS
 JNGL_MAIN_BEGIN {
 	jngl::setScaleFactor(
 	    std::floor(std::min(jngl::getDesktopWidth() / 800, jngl::getDesktopHeight() / 600)));
-	jngl::showWindow("Throw Example", screenWidth * jngl::getScaleFactor(),
-	                 screenHeight * jngl::getScaleFactor());
+	jngl::showWindow("Throw Example", std::lround(screenWidth * jngl::getScaleFactor()),
+	                 std::lround(screenHeight * jngl::getScaleFactor()));
 	Ball ball("ball");
 	double oldTime = jngl::getTime();
 	while (jngl::running()) {
