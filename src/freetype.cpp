@@ -226,8 +226,6 @@ namespace jngl {
 		y = int(y * getScaleFactor());
 		std::vector<std::string> lines(splitlines(text));
 
-		glEnable(GL_TEXTURE_2D);
-
 		auto lineEnd = lines.end();
 		int lineNr = 0;
 		for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
@@ -242,7 +240,6 @@ namespace jngl {
 
 			popMatrix();
 		}
-		glDisable(GL_TEXTURE_2D);
 	}
 
 	FT_Library FontImpl::library;

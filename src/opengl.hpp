@@ -33,6 +33,10 @@ namespace opengl
 	extern boost::qvm::mat<float, 3, 3> modelview;
 	extern boost::qvm::mat<float, 4, 4> projection;
 
+	/// A global VAO and VBO which are used with GL_STREAM_DRAW
+	extern GLuint vaoStream;
+	extern GLuint vboStream;
+
 	void translate(float x, float y);
 	void scale(float x, float y);
 

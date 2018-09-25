@@ -383,15 +383,16 @@ namespace jngl {
 	}
 
 	void Window::initGlObjects() {
-		glGenVertexArrays(1, &vaoTriangle);
-		glBindVertexArray(vaoTriangle);
-		GLuint vbo;
-		glGenBuffers(1, &vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glGenBuffers(1, &opengl::vboStream);
+
+		glGenVertexArrays(1, &opengl::vaoStream);
+		glBindVertexArray(opengl::vaoStream);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 		glEnableVertexAttribArray(0);
 
 		glGenVertexArrays(1, &vaoLine);
 		glBindVertexArray(vaoLine);
+		GLuint vbo;
 		glGenBuffers(1, &vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		const static float line[] = { 0, 0, 1, 1 };
@@ -410,7 +411,7 @@ namespace jngl {
 	}
 
 	void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) const {
-		glBindVertexArray(vaoTriangle);
+		glBindVertexArray(opengl::vaoStream);
 		auto tmp = useSimpleShaderProgram();
 		const float vertexes[] = { static_cast<float>(a.x * jngl::getScaleFactor()),
 		                           static_cast<float>(a.y * jngl::getScaleFactor()),
@@ -418,6 +419,7 @@ namespace jngl {
 		                           static_cast<float>(b.y * jngl::getScaleFactor()),
 		                           static_cast<float>(c.x * jngl::getScaleFactor()),
 		                           static_cast<float>(c.y * jngl::getScaleFactor()) };
+		glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 		// STREAM because we're using the buffer only once
 		glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertexes, GL_STREAM_DRAW);
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
@@ -425,7 +427,7 @@ namespace jngl {
 	}
 
 	void Window::drawEllipse(const Vec2 mid, const Vec2 size, float startAngle) const {
-		glBindVertexArray(vaoTriangle);
+		glBindVertexArray(opengl::vaoStream);
 		jngl::pushMatrix();
 		jngl::translate(mid);
 		opengl::scale(jngl::getScaleFactor(), jngl::getScaleFactor());
@@ -439,6 +441,7 @@ namespace jngl {
 		}
 		vertexes.push_back(0.f);
 		vertexes.push_back(-size.y);
+		glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 		glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), &vertexes[0],
 		             GL_STREAM_DRAW);
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);

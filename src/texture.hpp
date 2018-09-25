@@ -36,6 +36,7 @@ private:
 	GLuint texture_ = 0;
 	GLuint vertexBuffer_ = 0;
 	GLuint vao = 0;
+	std::vector<GLfloat> vertexes;
 	int width;
 	int height;
 };

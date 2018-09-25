@@ -11,6 +11,8 @@ namespace opengl {
 
 boost::qvm::mat<float, 3, 3> modelview;
 boost::qvm::mat<float, 4, 4> projection;
+GLuint vaoStream;
+GLuint vboStream;
 
 void translate(float x, float y) {
 	modelview *= boost::qvm::translation_mat(boost::qvm::vec<float, 2>{{ x, y }});

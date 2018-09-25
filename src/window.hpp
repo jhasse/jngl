@@ -111,7 +111,6 @@ namespace jngl {
 		void calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 		                         const std::pair<int, int> maxAspectRatio);
 
-		GLuint vaoTriangle = 0;
 		GLuint vaoLine = 0;
 		GLuint vaoRect = 0;
 		double timePerStep = 1.0 / 60.0;

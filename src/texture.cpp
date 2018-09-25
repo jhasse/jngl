@@ -65,7 +65,7 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
 	                GL_CLAMP_TO_EDGE); // preventing wrapping artifacts
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	GLfloat vertexes[] = {
+	vertexes = {
 		0, 0,
 		0, 0, // texture coordinates
 		0, preciseHeight,
@@ -80,7 +80,7 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 
 	glGenBuffers(1, &vertexBuffer_);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
-	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), &vertexes[0], GL_STATIC_DRAW);
 
 	const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
@@ -102,8 +102,6 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 		assert(!rowPointers);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
 	}
-
-	glBindVertexArray(0);
 }
 
 Texture::~Texture() {
@@ -120,18 +118,44 @@ void Texture::draw(const float red, const float green, const float blue, const f
 		glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
 	}
 	glBindVertexArray(vao);
-	glEnable(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-	glDisable(GL_TEXTURE_2D);
-	glBindVertexArray(0);
 }
 
-void Texture::drawClipped(const float /*xstart*/, const float /*xend*/, const float /*ystart*/,
-                          const float /*yend*/) const {
-	// TODO
+void Texture::drawClipped(const float xstart, const float xend, const float ystart,
+                          const float yend) const {
+	std::vector<float> vertexes = this->vertexes;
+
+	vertexes[8] *= (xend - xstart);
+	vertexes[12] *= (xend - xstart);
+	vertexes[5] *= (yend - ystart);
+	vertexes[9] *= (yend - ystart);
+
+	// Texture coordinates:
+	vertexes[2] = vertexes[6] = xstart;
+	vertexes[3] = vertexes[15] = ystart;
+	vertexes[10] = vertexes[14] = xend;
+	vertexes[7] = vertexes[11] = yend;
+
+	glBindVertexArray(opengl::vaoStream);
+	auto tmp = textureShaderProgram->use();
+	glUniform4f(shaderSpriteColorUniform, 1, 1, 1, 1); // TODO
+	glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
+	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
+	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), &vertexes[0], GL_STREAM_DRAW);
+
+	// const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
+	// glEnableVertexAttribArray(posAttrib);
+
+	const GLint texCoordAttrib = textureShaderProgram->getAttribLocation("inTexCoord");
+	glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
+	                      reinterpret_cast<void*>(2 * sizeof(float)));
+	glEnableVertexAttribArray(texCoordAttrib);
+
+	glBindTexture(GL_TEXTURE_2D, texture_);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
 GLuint Texture::getID() const {
