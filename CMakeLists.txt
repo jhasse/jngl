@@ -4,33 +4,8 @@ project(jngl LANGUAGES CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-add_library(jngl
-	src/audio.cpp
-	src/framebufferimpl.cpp
-	src/freetype.cpp
-	src/helper.cpp
-	src/jngl/color.cpp
-	src/jngl/Controller.cpp
-	src/jngl/drawable.cpp
-	src/jngl/Finally.cpp
-	src/jngl/font.cpp
-	src/jngl/framebuffer.cpp
-	src/jngl/input.cpp
-	src/jngl/job.cpp
-	src/jngl/screen.cpp
-	src/jngl/shapes.cpp
-	src/jngl/sprite.cpp
-	src/jngl/text.cpp
-	src/jngl/time.cpp
-	src/jngl/Vec2.cpp
-	src/jngl/window.cpp
-	src/jngl/work.cpp
-	src/main.cpp
-	src/opengl.cpp
-	src/spriteimpl.cpp
-	src/texture.cpp
-	src/window.cpp
-	src/windowptr.cpp)
+file(GLOB SRC src/*.cpp src/jngl/*.cpp)
+add_library(jngl ${SRC})
 
 if (ANDROID)
 	set(CMAKE_CXX_STANDARD 14)
