@@ -143,7 +143,11 @@ void WindowImpl::init() {
 	ANativeWindow_setBuffersGeometry(app->window, 0, 0, format);
 
 	surface = eglCreateWindowSurface(display, config, app->window, NULL);
-	context = eglCreateContext(display, config, NULL, NULL);
+	const EGLint contextAttribList[] = {
+			EGL_CONTEXT_CLIENT_VERSION, 3,
+			EGL_NONE
+	};
+	context = eglCreateContext(display, config, NULL, contextAttribList);
 
 	if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
 		throw std::runtime_error("Unable to eglMakeCurrent");

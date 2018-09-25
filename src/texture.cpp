@@ -24,15 +24,8 @@ int Texture::modelviewUniform = -1;
 Texture::Texture(const float preciseWidth, const float preciseHeight,
                  const GLubyte* const* const rowPointers, GLenum format, const GLubyte* const data)
 : width(std::lround(preciseWidth)), height(std::lround(preciseHeight)) {
-#ifdef EPOXY_PUBLIC
-	static bool first = true;
-	if (first && !epoxy_has_gl_extension("GL_ARB_vertex_buffer_object")) {
-		throw std::runtime_error("VBOs not supported\n");
-	}
-	first = false;
-#endif
 	if (!textureShaderProgram) {
-		Shader vertexShader(R"(#version 130
+		Shader vertexShader(R"(#version 300 es
 			in mediump vec2 position;
 			in mediump vec2 inTexCoord;
 			uniform mediump mat3 modelview;
@@ -45,7 +38,7 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 				texCoord = inTexCoord;
 			})", Shader::Type::VERTEX
 		);
-		Shader fragmentShader(R"(#version 130
+		Shader fragmentShader(R"(#version 300 es
 			uniform sampler2D tex;
 			uniform lowp vec4 spriteColor;
 
@@ -54,7 +47,7 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 			out lowp vec4 outColor;
 
 			void main() {
-				outColor = texture2D(tex, texCoord) * spriteColor;
+				outColor = texture(tex, texCoord) * spriteColor;
 			})", Shader::Type::FRAGMENT
 		);
 		textureShaderProgram = new ShaderProgram(vertexShader, fragmentShader);

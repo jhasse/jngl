@@ -14,12 +14,8 @@
 #else
 	#ifdef ANDROID
 		#include <EGL/egl.h>
-		#include <GLES2/gl2.h>
-		#include <GLES2/gl2ext.h>
-		#define GL_RGBA8 GL_RGBA8_OES
-		extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
-		extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
-		extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
+		#include <GLES3/gl3.h>
+		#include <GLES3/gl3ext.h>
 	#else
 		#ifdef _MSC_VER
 			#include <windows.h> // To avoid warnings about APIENTRY

@@ -10,10 +10,6 @@
 
 #ifdef ANDROID
 #include "android/fopen.hpp"
-
-PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
-PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
-PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
 #endif
 
 namespace jngl {
@@ -31,8 +27,25 @@ void clearBackgroundColor() {
 	glClearColor(bgRed, bgGreen, bgBlue, 1);
 }
 
+#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
+void debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity,
+                   GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
+	if (severity == GL_DEBUG_SEVERITY_HIGH) {
+		jngl::debugLn(std::string("\x1b[1;31m") + message + "\x1b[0m");
+	} else {
+		jngl::debugLn(message);
+	}
+}
+#endif
+
 bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
-	Shader vertexShader(R"(#version 130
+#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
+	glEnable(GL_DEBUG_OUTPUT);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	glDebugMessageCallback(debugCallback, nullptr);
+#endif
+
+	Shader vertexShader(R"(#version 300 es
 		in mediump vec2 position;
 		uniform mediump mat3 modelview;
 		uniform mediump mat4 projection;
@@ -42,7 +55,7 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
 		})", Shader::Type::VERTEX
 	);
-	Shader fragmentShader(R"(#version 130
+	Shader fragmentShader(R"(#version 300 es
 		uniform lowp vec4 color;
 		out lowp vec4 outColor;
 
@@ -84,13 +97,6 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		const auto projectionUniform = simpleShaderProgram->getUniformLocation("projection");
 		glUniformMatrix4fv(projectionUniform, 1, GL_TRUE, &opengl::projection.a[0][0]);
 	}
-
-#ifdef ANDROID
-	glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
-	glBindVertexArray = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
-	glDeleteVertexArrays =
-	    (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");
-#endif
 
 	reset();
 	modelviewStack = {};

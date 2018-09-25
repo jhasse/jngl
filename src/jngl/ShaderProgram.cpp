@@ -31,23 +31,6 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 
 Finally ShaderProgram::use() const {
 	glUseProgram(impl->id);
-	GLenum err;
-	if ((err = glGetError()) != GL_NO_ERROR) {
-		switch (err) {
-			case GL_INVALID_OPERATION:
-				throw std::runtime_error("GL_INVALID_OPERATION");
-			case GL_INVALID_ENUM:
-				throw std::runtime_error("GL_INVALID_ENUM");
-			case GL_INVALID_VALUE:
-				throw std::runtime_error("GL_INVALID_VALUE");
-			case GL_OUT_OF_MEMORY:
-				throw std::runtime_error("GL_OUT_OF_MEMORY");
-			case GL_INVALID_FRAMEBUFFER_OPERATION:
-				throw std::runtime_error("GL_INVALID_FRAMEBUFFER_OPERATION");
-			default:
-				throw std::runtime_error("Unknown OpenGL error");
-		}
-	}
 	return Finally([]() { glUseProgram(0); });
 }
 
