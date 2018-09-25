@@ -43,7 +43,7 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	if (epoxy_gl_version() >= 43) {
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-		glDebugMessageCallback(debugCallback, nullptr);
+		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr);
 	}
 #endif
 
