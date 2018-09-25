@@ -40,9 +40,11 @@ void debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum sev
 
 bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
-	glEnable(GL_DEBUG_OUTPUT);
-	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-	glDebugMessageCallback(debugCallback, nullptr);
+	if (epoxy_gl_version() >= 43) {
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageCallback(debugCallback, nullptr);
+	}
 #endif
 
 	Shader vertexShader(R"(#version 300 es
