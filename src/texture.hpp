@@ -23,7 +23,8 @@ public:
 	~Texture();
 	void Bind() const;
 	void draw(float red, float green, float blue, float alpha, const ShaderProgram* = nullptr) const;
-	void drawClipped(float xstart, float xend, float ystart, float yend) const;
+	void drawClipped(float xstart, float xend, float ystart, float yend, float red, float green,
+	                 float blue, float alpha) const;
 	GLuint getID() const;
 	int getWidth() const;
 	int getHeight() const;

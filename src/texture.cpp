@@ -124,7 +124,8 @@ void Texture::draw(const float red, const float green, const float blue, const f
 }
 
 void Texture::drawClipped(const float xstart, const float xend, const float ystart,
-                          const float yend) const {
+                          const float yend, const float red, const float green, const float blue,
+                          const float alpha) const {
 	std::vector<float> vertexes = this->vertexes;
 
 	vertexes[8] *= (xend - xstart);
@@ -140,7 +141,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 
 	glBindVertexArray(opengl::vaoStream);
 	auto tmp = textureShaderProgram->use();
-	glUniform4f(shaderSpriteColorUniform, 1, 1, 1, 1); // TODO
+	glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
 	glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), &vertexes[0], GL_STREAM_DRAW);

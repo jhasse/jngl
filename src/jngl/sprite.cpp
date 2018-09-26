@@ -184,7 +184,9 @@ namespace jngl {
 	void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
 		pushMatrix();
 		opengl::translate(x, y);
-		texture->drawClipped(start.x, end.x, start.y, end.y);
+		texture->drawClipped(start.x, end.x, start.y, end.y, float(spriteColorRed) / 255.0f,
+		                     float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
+		                     float(spriteColorAlpha) / 255.0f);
 		popMatrix();
 	}
 
