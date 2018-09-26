@@ -106,7 +106,10 @@ public:
 		if (jngl::keyPressed('v')) {
 			jngl::setVerticalSync(!jngl::getVerticalSync());
 		}
-		jngl::print("Press A to toggle Anti-Aliasing.", 5, 450);
+		sstream.str({});
+		sstream << "Press A to turn Anti-Aliasing " << (jngl::getAntiAliasing() ? "off" : "on")
+		        << ".";
+		jngl::print(sstream.str(), 5, 450);
 		if (jngl::keyPressed('a')) {
 			jngl::setAntiAliasing(!jngl::getAntiAliasing());
 		}

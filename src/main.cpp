@@ -78,7 +78,7 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 }
 
 WindowPointer pWindow;
-bool antiAliasingEnabled = false;
+bool antiAliasingEnabled = true;
 bool vsyncEnabled = false;
 
 void showWindow(const std::string& title, const int width, const int height, bool fullscreen,
