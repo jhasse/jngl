@@ -1,19 +1,15 @@
 // Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#include "draw.hpp"
 #include "jngl.hpp"
 #include "spriteimpl.hpp"
 
+#include <boost/qvm/mat_operations.hpp>
 #include <cassert>
 #include <sstream>
 
 #ifdef ANDROID
 #include "android/fopen.hpp"
-
-PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays;
-PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray;
-PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays;
 #endif
 
 namespace jngl {
@@ -22,17 +18,59 @@ std::string pathPrefix;
 std::string configPath;
 std::vector<std::string> args;
 float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
+std::stack<boost::qvm::mat<float, 3, 3>> modelviewStack;
+std::unique_ptr<ShaderProgram> simpleShaderProgram;
+int simpleModelviewUniform;
+int simpleColorUniform;
 
 void clearBackgroundColor() {
 	glClearColor(bgRed, bgGreen, bgBlue, 1);
 }
 
+#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
+void debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity,
+                   GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
+	if (severity == GL_DEBUG_SEVERITY_HIGH) {
+		jngl::debugLn(std::string("\x1b[1;31m") + message + "\x1b[0m");
+	} else {
+		jngl::debugLn(message);
+	}
+}
+#endif
+
 bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
-	glShadeModel(GL_SMOOTH);
-	glEnableClientState(GL_VERTEX_ARRAY);
+#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
+	if (epoxy_gl_version() >= 43) {
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr);
+	}
+#endif
+
+	Shader vertexShader(R"(#version 300 es
+		in mediump vec2 position;
+		uniform mediump mat3 modelview;
+		uniform mediump mat4 projection;
+
+		void main() {
+			vec3 tmp = modelview * vec3(position, 1);
+			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
+		})", Shader::Type::VERTEX
+	);
+	Shader fragmentShader(R"(#version 300 es
+		uniform lowp vec4 color;
+		out lowp vec4 outColor;
+
+		void main() {
+			outColor = color;
+		})", Shader::Type::FRAGMENT
+	);
+	simpleShaderProgram = std::make_unique<ShaderProgram>(vertexShader, fragmentShader);
+	simpleModelviewUniform = simpleShaderProgram->getUniformLocation("modelview");
+	simpleColorUniform = simpleShaderProgram->getUniformLocation("color");
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glViewport(0, 0, width, height);
 
 	if (canvasWidth != width || canvasHeight != height) { // Letterboxing?
@@ -46,28 +84,24 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		          canvasHeight);
 	}
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	const float l =  -width / 2.f;
+	const float r =   width / 2.f;
+	const float b =  height / 2.f;
+	const float t = -height / 2.f;
+	opengl::projection = {{
+		{ 2.f / (r - l),           0.f,  0.f, -(r + l) / (r - l) },
+		{           0.f, 2.f / (t - b),  0.f, -(t + b) / (t - b) },
+		{           0.f,           0.f, -1.f, 0.f },
+		{           0.f,           0.f,  0.f, 1.f }
+	}};
+	{
+		const auto tmp = simpleShaderProgram->use();
+		const auto projectionUniform = simpleShaderProgram->getUniformLocation("projection");
+		glUniformMatrix4fv(projectionUniform, 1, GL_TRUE, &opengl::projection.a[0][0]);
+	}
 
-#ifdef OPENGLES
-#define f2x(x) ((int)((x)*65536))
-	glOrthox(f2x(-width / 2), f2x(width / 2), f2x(height / 2), f2x(-height / 2), f2x(-1), f2x(1));
-#ifdef ANDROID
-	glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
-	glBindVertexArray = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
-	glDeleteVertexArrays =
-	    (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");
-#else
-	jngl::translate(-width / 2, height / 2);
-	jngl::rotate(-90);
-	jngl::translate(height / 2, width / 2);
-#endif
-#else
-	glOrtho(-width / 2, width / 2, height / 2, -height / 2, -100.0f, 100.0f);
-#endif
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	reset();
+	modelviewStack = {};
 
 	clearBackgroundColor();
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -101,9 +135,11 @@ void showWindow(const std::string& title, const int width, const int height, boo
 	pWindow.Set(new Window(title, width, height, fullscreen, minAspectRatio, maxAspectRatio));
 	pWindow->SetMouseVisible(isMouseVisible);
 	setAntiAliasing(antiAliasingEnabled);
+	pWindow->initGlObjects();
 }
 
 void hideWindow() {
+	simpleShaderProgram.reset();
 	unloadAll();
 	pWindow.Delete();
 }
@@ -121,7 +157,8 @@ void swapBuffers() {
 		clearBackgroundColor();
 	}
 
-	glLoadIdentity();
+	reset();
+	modelviewStack = {};
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -230,7 +267,6 @@ void setLineHeight(int h) {
 
 void print(const std::string& text, const int xposition, const int yposition) {
 	pWindow->print(text, xposition, yposition);
-	glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 }
 
 int getFontSize() {
@@ -273,15 +309,11 @@ void setStepsPerSecond(const unsigned int stepsPerSecond) {
 }
 
 void reset() {
-	glLoadIdentity();
+	boost::qvm::set_identity(opengl::modelview);
 }
 
 void rotate(const double degree) {
-#ifdef GL_DOUBLE
-	glRotated(degree, 0, 0, 1);
-#else
-	glRotatef(degree, 0, 0, 1);
-#endif
+	boost::qvm::rotate_z(opengl::modelview, degree * M_PI / 180.);
 }
 
 void translate(const double x, const double y) {
@@ -297,33 +329,30 @@ void scale(const double xfactor, const double yfactor) {
 }
 
 void pushMatrix() {
-	glPushMatrix();
+	modelviewStack.push(opengl::modelview);
 }
 
 void popMatrix() {
-	glPopMatrix();
+	opengl::modelview = modelviewStack.top();
+	modelviewStack.pop();
 }
 
 void drawRect(const double xposition, const double yposition, const double width,
               const double height) {
-	glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
-	draw::Rect(xposition, yposition, width, height);
-	glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
+	pWindow->drawRect({ xposition, yposition }, { width, height });
 }
 
 void drawRect(const Vec2 position, const Vec2 size) {
-	drawRect(position.x, position.y, size.x, size.y);
+	pWindow->drawRect(position, size);
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
-	drawTriangle(a.x, a.y, b.x, b.y, c.x, c.y);
+	pWindow->drawTriangle(a, b, c);
 }
 
 void drawTriangle(const double A_x, const double A_y, const double B_x, const double B_y,
                   const double C_x, const double C_y) {
-	glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
-	draw::Triangle(A_x, A_y, B_x, B_y, C_x, C_y);
-	glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
+	pWindow->drawTriangle({ A_x, A_y}, { B_x, B_y }, { C_x, C_y });
 }
 
 void setLineWidth(const float width) {
@@ -331,19 +360,15 @@ void setLineWidth(const float width) {
 }
 
 void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
-	glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
-	draw::Line(xstart, ystart, xend, yend);
-	glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
+	pWindow->drawLine({ xstart, ystart }, { xend, yend });
 }
 
 void drawLine(const Vec2 start, const Vec2 end) {
-	drawLine(start.x, start.y, end.x, end.y);
+	pWindow->drawLine(start, end);
 }
 
 void drawPoint(const double x, const double y) {
-	glColor4ub(colorRed, colorGreen, colorBlue, colorAlpha);
-	draw::Point(x, y);
-	glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
+	pWindow->drawEllipse({x, y}, {1, 1}, 0);
 }
 
 void readPixel(const int x, const int y, unsigned char& red, unsigned char& green,
@@ -485,6 +510,14 @@ std::stringstream JNGLDLL_API readAsset(const std::string& filename) {
 	}
 	sstream.write(content.get(), size);
 	return sstream;
+}
+
+Finally useSimpleShaderProgram() {
+	auto _ = jngl::simpleShaderProgram->use();
+	glUniform4f(simpleColorUniform, float(colorRed) / 255.0f, float(colorGreen) / 255.0f,
+	            float(colorBlue) / 255.0f, float(colorAlpha) / 255.0f);
+	glUniformMatrix3fv(simpleModelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
+	return _;
 }
 
 } // namespace jngl

@@ -23,6 +23,8 @@ src = [
 	'src/jngl/input.cpp',
 	'src/jngl/job.cpp',
 	'src/jngl/screen.cpp',
+	'src/jngl/Shader.cpp',
+	'src/jngl/ShaderProgram.cpp',
 	'src/jngl/shapes.cpp',
 	'src/jngl/sprite.cpp',
 	'src/jngl/text.cpp',

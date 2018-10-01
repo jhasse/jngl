@@ -85,7 +85,8 @@ namespace jngl {
 		if (texture_) {
 			pushMatrix();
 			opengl::translate(left_, top_);
-			texture_->draw();
+			texture_->draw(float(fontColorRed) / 255.0f, float(fontColorGreen) / 255.0f,
+			               float(fontColorBlue) / 255.0f, float(fontColorAlpha) / 255.0f);
 			popMatrix();
 		}
 		opengl::translate(width_, 0);
@@ -225,10 +226,6 @@ namespace jngl {
 		y = int(y * getScaleFactor());
 		std::vector<std::string> lines(splitlines(text));
 
-		glColor4ub(fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha);
-		glEnable(GL_TEXTURE_2D);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
 		auto lineEnd = lines.end();
 		int lineNr = 0;
 		for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
@@ -243,9 +240,6 @@ namespace jngl {
 
 			popMatrix();
 		}
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisable(GL_TEXTURE_2D);
-		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 
 	FT_Library FontImpl::library;

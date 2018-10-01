@@ -20,6 +20,9 @@ Window::Window(const std::string& title, const int width, const int height, cons
   width_(width), height_(height), impl(new WindowImpl) {
 	SDL::init();
 
+#ifdef __APPLE__ // https://stackoverflow.com/a/26981800/647898
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+#endif
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);

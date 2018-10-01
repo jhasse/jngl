@@ -1,16 +1,25 @@
-// Copyright 2009-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "opengl.hpp"
 
+#include <boost/qvm/mat_operations3.hpp>
+#include <boost/qvm/map_vec_mat.hpp>
+#include <boost/qvm/vec.hpp>
+
 namespace opengl {
 
-void BindArrayBuffer(const GLuint buffer) {
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	if (buffer != 0) {
-		glTexCoordPointer(2, GL_FLOAT, 0, nullptr);
-		glVertexPointer(2, GL_FLOAT, 0, reinterpret_cast<void*>(8 * sizeof(GLfloat))); // NOLINT
-	}
+boost::qvm::mat<float, 3, 3> modelview;
+boost::qvm::mat<float, 4, 4> projection;
+GLuint vaoStream;
+GLuint vboStream;
+
+void translate(float x, float y) {
+	modelview *= boost::qvm::translation_mat(boost::qvm::vec<float, 2>{{ x, y }});
+}
+
+void scale(const float x, const float y) {
+	modelview *= boost::qvm::diag_mat(boost::qvm::vec<float, 3>{{ x, y, 1 }});
 }
 
 } // namespace opengl

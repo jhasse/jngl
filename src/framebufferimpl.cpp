@@ -6,6 +6,7 @@
 #include "jngl/matrix.hpp"
 #include "jngl/screen.hpp"
 #include "main.hpp"
+#include "spriteimpl.hpp"
 #include "windowptr.hpp"
 
 #include <cassert>
@@ -14,13 +15,6 @@ namespace jngl {
 
 	FrameBufferImpl::FrameBufferImpl(int width, int height)
 	: height(height), texture(width, height, nullptr) {
-#ifdef EPOXY_PUBLIC
-		static bool first = true;
-		if (first && !epoxy_has_gl_extension("GL_EXT_framebuffer_object")) {
-			throw std::runtime_error("OpenGL Frame Buffer Object not supported!");
-		}
-		first = false;
-#endif
 		GLint tmp;
 		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &tmp);
 		systemFbo = tmp;
@@ -58,14 +52,6 @@ FrameBufferImpl::~FrameBufferImpl() {
 		glPushAttrib(GL_VIEWPORT_BIT);
 #else
 		glGetIntegerv(GL_VIEWPORT, viewport);
-		glMatrixMode(GL_PROJECTION);
-		pushMatrix();
-		glLoadIdentity();
-		#define f2x(x) ((int)((x) * 65536))
-		glOrthox(f2x(-pWindow->getWidth()/2), f2x(pWindow->getWidth()/2),
-		         f2x(pWindow->getHeight()/2), f2x(-pWindow->getHeight()/2), f2x(-1), f2x(1));
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
 #endif
 		glViewport(0, -(pWindow->getHeight() - height), pWindow->getWidth(), pWindow->getHeight());
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
@@ -83,10 +69,6 @@ FrameBufferImpl::~FrameBufferImpl() {
 		glPopAttrib();
 #else
 		glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
-
-		glMatrixMode(GL_PROJECTION);
-		popMatrix();
-		glMatrixMode(GL_MODELVIEW);
 #endif
 		glBindFramebuffer(GL_FRAMEBUFFER, systemFbo);
 		glBindRenderbuffer(GL_RENDERBUFFER, systemBuffer);
@@ -96,9 +78,10 @@ FrameBufferImpl::~FrameBufferImpl() {
 	void FrameBufferImpl::Draw(const double x, const double y) const {
 		pushMatrix();
 		jngl::translate(x, y);
-		glScalef(1.0f, -1.0f, 1.0f);
+		opengl::scale(1, -1);
 		jngl::translate(0, -height / getScaleFactor());
-		texture.draw();
+		texture.draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
+		             float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
 		popMatrix();
 	}
 } // namespace jngl

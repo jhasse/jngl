@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <boost/math/constants/constants.hpp>
 #include <cmath>
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <sstream>
@@ -42,6 +43,27 @@ public:
 				jngl::errorMessage("OpenAL not installed!");
 			}
 		}
+		if (jngl::keyPressed('s')) {
+			useShader = !useShader;
+			if (!shaderProgram) {
+				{
+					std::ifstream fin("data/texture.vert");
+					std::stringstream buffer;
+					buffer << fin.rdbuf();
+					vertexShader = std::make_unique<jngl::Shader>(buffer.str().c_str(),
+					                                              jngl::Shader::Type::VERTEX);
+				}
+				{
+					std::ifstream fin("data/blur.frag");
+					std::stringstream buffer;
+					buffer << fin.rdbuf();
+					fragmentShader = std::make_unique<jngl::Shader>(buffer.str().c_str(),
+					                                                jngl::Shader::Type::FRAGMENT);
+				}
+				shaderProgram =
+				    std::make_unique<jngl::ShaderProgram>(*vertexShader, *fragmentShader);
+			}
+		}
 	}
 	void draw() const override {
 		if (drawOnFrameBuffer) {
@@ -68,7 +90,11 @@ public:
 		jngl::translate(jngl::getScreenWidth() / 2, jngl::getScreenHeight() / 2);
 		jngl::rotate(rotate);
 		jngl::setSpriteAlpha(static_cast<unsigned char>(std::abs(factor * 255)));
-		logoWebp.drawScaled(static_cast<float>(factor * 2));
+		if (useShader) {
+			logoWebp.drawScaled(static_cast<float>(factor * 2), &*shaderProgram);
+		} else {
+			logoWebp.drawScaled(static_cast<float>(factor * 2));
+		}
 		jngl::setColor(0, 0, 0);
 		jngl::drawRect(-125, 100, 250, 28);
 		jngl::setFontColor(255, 255, 255);
@@ -101,6 +127,7 @@ public:
 		if (jngl::keyPressed('e')) {
 			jngl::errorMessage("Hello World!");
 		}
+		jngl::print("Press S to use the blur shader.", 5, 390);
 		jngl::print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 410);
 		jngl::print("Press V to toggle V-SYNC.", 5, 430);
 		if (jngl::keyPressed('v')) {
@@ -161,6 +188,7 @@ public:
 	}
 private:
 	mutable bool drawOnFrameBuffer = false;
+	bool useShader = false;
 	mutable double rotate = 0;
 	mutable int frameNumber = 0;
 	mutable double frameTime = 0;
@@ -168,6 +196,8 @@ private:
 	mutable jngl::FrameBuffer fb2;
 	jngl::Sprite logoWebp;
 	float volume = 1;
+	std::unique_ptr<jngl::Shader> vertexShader, fragmentShader;
+	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
 };
 
 JNGL_MAIN_BEGIN {

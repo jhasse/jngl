@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "jngl/ShaderProgram.hpp"
 #include "opengl.hpp"
 
 #include <vector>
@@ -21,18 +22,22 @@ public:
 	Texture& operator=(const Texture&) = delete;
 	~Texture();
 	void Bind() const;
-	void draw() const;
-	void drawClipped(float xstart, float xend, float ystart, float yend) const;
+	void draw(float red, float green, float blue, float alpha, const ShaderProgram* = nullptr) const;
+	void drawClipped(float xstart, float xend, float ystart, float yend, float red, float green,
+	                 float blue, float alpha) const;
 	GLuint getID() const;
 	int getWidth() const;
 	int getHeight() const;
+	static void unloadShader();
 
 private:
+	static ShaderProgram* textureShaderProgram;
+	static int shaderSpriteColorUniform;
+	static int modelviewUniform;
 	GLuint texture_ = 0;
 	GLuint vertexBuffer_ = 0;
 	GLuint vao = 0;
-	std::vector<opengl::CoordType> texCoords_;
-	std::vector<GLfloat> vertexes_;
+	std::vector<GLfloat> vertexes;
 	int width;
 	int height;
 };

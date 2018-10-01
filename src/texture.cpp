@@ -3,8 +3,11 @@
 
 #include "texture.hpp"
 
+#include "jngl/Shader.hpp"
+
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <cassert>
+#include <fstream>
 
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F
@@ -14,16 +17,46 @@ namespace jngl {
 
 std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
+ShaderProgram* Texture::textureShaderProgram = nullptr;
+int Texture::shaderSpriteColorUniform = -1;
+int Texture::modelviewUniform = -1;
+
 Texture::Texture(const float preciseWidth, const float preciseHeight,
                  const GLubyte* const* const rowPointers, GLenum format, const GLubyte* const data)
 : width(std::lround(preciseWidth)), height(std::lround(preciseHeight)) {
-#ifdef EPOXY_PUBLIC
-	static bool first = true;
-	if (first && !epoxy_has_gl_extension("GL_ARB_vertex_buffer_object")) {
-		throw std::runtime_error("VBOs not supported\n");
+	if (!textureShaderProgram) {
+		Shader vertexShader(R"(#version 300 es
+			in mediump vec2 position;
+			in mediump vec2 inTexCoord;
+			uniform mediump mat3 modelview;
+			uniform mediump mat4 projection;
+			out mediump vec2 texCoord;
+
+			void main() {
+				vec3 tmp = modelview * vec3(position, 1);
+				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
+				texCoord = inTexCoord;
+			})", Shader::Type::VERTEX
+		);
+		Shader fragmentShader(R"(#version 300 es
+			uniform sampler2D tex;
+			uniform lowp vec4 spriteColor;
+
+			in mediump vec2 texCoord;
+
+			out lowp vec4 outColor;
+
+			void main() {
+				outColor = texture(tex, texCoord) * spriteColor;
+			})", Shader::Type::FRAGMENT
+		);
+		textureShaderProgram = new ShaderProgram(vertexShader, fragmentShader);
+		shaderSpriteColorUniform = textureShaderProgram->getUniformLocation("spriteColor");
+		modelviewUniform = textureShaderProgram->getUniformLocation("modelview");
+		const auto projectionUniform = textureShaderProgram->getUniformLocation("projection");
+		const auto tmp = textureShaderProgram->use();
+		glUniformMatrix4fv(projectionUniform, 1, GL_TRUE, &opengl::projection.a[0][0]);
 	}
-	first = false;
-#endif
 	glGenTextures(1, &texture_);
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
@@ -32,32 +65,31 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
 	                GL_CLAMP_TO_EDGE); // preventing wrapping artifacts
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	GLfloat vertexes[] = { 0,
-		                   0,
-		                   0,
-		                   1,
-		                   1,
-		                   1,
-		                   1,
-		                   0, // texture coordinates
-		                   0,
-		                   0,
-		                   0,
-		                   preciseHeight,
-		                   preciseWidth,
-		                   preciseHeight,
-		                   preciseWidth,
-		                   0 };
+	vertexes = {
+		0, 0,
+		0, 0, // texture coordinates
+		0, preciseHeight,
+		0, 1, // texture coordinates
+		preciseWidth, preciseHeight,
+		1, 1, // texture coordinates
+		preciseWidth, 0,
+		1, 0 // texture coordinates
+	};
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glGenBuffers(1, &vertexBuffer_);
-	opengl::BindArrayBuffer(vertexBuffer_);
-	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
-	texCoords_.assign(&vertexes[0], &vertexes[8]);
-	vertexes_.assign(&vertexes[8], &vertexes[16]);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
+	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), &vertexes[0], GL_STATIC_DRAW);
+
+	const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
+	glEnableVertexAttribArray(posAttrib);
+
+	const GLint texCoordAttrib = textureShaderProgram->getAttribLocation("inTexCoord");
+	glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
+	                      reinterpret_cast<void*>(2 * sizeof(float)));
+	glEnableVertexAttribArray(texCoordAttrib);
 
 	if (rowPointers) {
 		assert(!data);
@@ -70,8 +102,6 @@ Texture::Texture(const float preciseWidth, const float preciseHeight,
 		assert(!rowPointers);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
 	}
-
-	glBindVertexArray(0);
 }
 
 Texture::~Texture() {
@@ -80,56 +110,53 @@ Texture::~Texture() {
 	glDeleteVertexArrays(1, &vao);
 }
 
-void Texture::draw() const {
-#ifdef ANDROID
-	// Android only supports VAOs with OpenGL ES 2.0, which JNGL isn't using yet.
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	opengl::BindArrayBuffer(vertexBuffer_);
-#else
+void Texture::draw(const float red, const float green, const float blue, const float alpha,
+                   const ShaderProgram* const shaderProgram) const {
+	auto _ = shaderProgram ? shaderProgram->use() : textureShaderProgram->use();
+	if (!shaderProgram) {
+		glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
+		glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
+	}
 	glBindVertexArray(vao);
-#endif
-	glEnable(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-	glDisable(GL_TEXTURE_2D);
-#ifdef ANDROID
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-#else
-	glBindVertexArray(0);
-#endif
 }
 
 void Texture::drawClipped(const float xstart, const float xend, const float ystart,
-                          const float yend) const {
-	glEnable(GL_TEXTURE_2D);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+                          const float yend, const float red, const float green, const float blue,
+                          const float alpha) const {
+	std::vector<float> vertexes = this->vertexes;
+
+	vertexes[8] *= (xend - xstart);
+	vertexes[12] *= (xend - xstart);
+	vertexes[5] *= (yend - ystart);
+	vertexes[9] *= (yend - ystart);
+
+	// Texture coordinates:
+	vertexes[2] = vertexes[6] = xstart;
+	vertexes[3] = vertexes[15] = ystart;
+	vertexes[10] = vertexes[14] = xend;
+	vertexes[7] = vertexes[11] = yend;
+
+	glBindVertexArray(opengl::vaoStream);
+	auto tmp = textureShaderProgram->use();
+	glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
+	glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
+	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
+	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), &vertexes[0], GL_STREAM_DRAW);
+
+	// const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
+	// glEnableVertexAttribArray(posAttrib);
+
+	const GLint texCoordAttrib = textureShaderProgram->getAttribLocation("inTexCoord");
+	glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
+	                      reinterpret_cast<void*>(2 * sizeof(float)));
+	glEnableVertexAttribArray(texCoordAttrib);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
-	opengl::BindArrayBuffer(0);
-	auto tmpVertexes = vertexes_;
-	assert(boost::math::epsilon_difference(tmpVertexes[0], 0) < 9 &&
-	       boost::math::epsilon_difference(tmpVertexes[1], 0) < 9 &&
-	       boost::math::epsilon_difference(tmpVertexes[2], 0) < 9 &&
-	       boost::math::epsilon_difference(tmpVertexes[7], 0) < 9);
-	tmpVertexes[4] *= (xend - xstart);
-	tmpVertexes[6] *= (xend - xstart);
-	tmpVertexes[3] *= (yend - ystart);
-	tmpVertexes[5] *= (yend - ystart);
-	auto tmpTexCoords = texCoords_;
-	tmpTexCoords[0] = tmpTexCoords[2] = (tmpTexCoords[4] * xstart);
-	tmpTexCoords[1] = tmpTexCoords[7] = (tmpTexCoords[3] * ystart);
-	tmpTexCoords[4] *= xend;
-	tmpTexCoords[6] *= xend;
-	tmpTexCoords[3] *= yend;
-	tmpTexCoords[5] *= yend;
-	glVertexPointer(2, GL_FLOAT, 0, &tmpVertexes[0]);
-	glTexCoordPointer(2, opengl::Type<double>::constant, 0, &tmpTexCoords[0]);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glDisable(GL_TEXTURE_2D);
 }
 
 GLuint Texture::getID() const {
@@ -142,6 +169,11 @@ int Texture::getWidth() const {
 
 int Texture::getHeight() const {
 	return height;
+}
+
+void Texture::unloadShader() {
+	delete textureShaderProgram;
+	textureShaderProgram = nullptr;
 }
 
 } // namespace jngl

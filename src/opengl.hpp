@@ -3,17 +3,19 @@
 
 #pragma once
 
+#include "jngl/types.hpp"
+
+#include <boost/qvm/mat.hpp>
+
 #ifdef IOS
-	#include <OpenGLES/ES1/gl.h>
-	#include <OpenGLES/ES1/glext.h>
+	#include <OpenGLES/ES3/gl.h>
+	#include <OpenGLES/ES3/glext.h>
 	#include "ios/glew.h"
 #else
 	#ifdef ANDROID
 		#include <EGL/egl.h>
-		#include <GLES/gl.h>
-		#define GL_GLEXT_PROTOTYPES
-		#include <GLES/glext.h>
-		#include "android/glew.h"
+		#include <GLES3/gl3.h>
+		#include <GLES3/gl3ext.h>
 	#else
 		#ifdef _MSC_VER
 			#include <windows.h> // To avoid warnings about APIENTRY
@@ -28,19 +30,15 @@
 
 namespace opengl
 {
-	inline void translate(float x, float y) { glTranslatef(x, y, 0); }
-	inline void scale(float x, float y) { glScalef(x, y, 0); }
-#ifdef GL_DOUBLE
-	template<class T, class U>
-	inline void translate(T x, U y) { glTranslated(static_cast<double>(x), static_cast<double>(y), 0); }
-	template<class T, class U>
-	inline void scale(T x, U y) { glScaled(static_cast<double>(x), static_cast<double>(y), 0); }
-#else
-	template<class T, class U>
-	inline void translate(T x, U y) { translate(static_cast<float>(x), static_cast<float>(y)); }
-	template<class T, class U>
-	inline void scale(T x, U y) { scale(static_cast<float>(x), static_cast<float>(y)); }
-#endif
+	extern boost::qvm::mat<float, 3, 3> modelview;
+	extern boost::qvm::mat<float, 4, 4> projection;
+
+	/// A global VAO and VBO which are used with GL_STREAM_DRAW
+	extern GLuint vaoStream;
+	extern GLuint vboStream;
+
+	void translate(float x, float y);
+	void scale(float x, float y);
 
 	template<class T> struct Type {};
 
@@ -67,6 +65,4 @@ namespace opengl
 #else
 	typedef GLfloat CoordType;
 #endif
-
-	void BindArrayBuffer(GLuint);
 }

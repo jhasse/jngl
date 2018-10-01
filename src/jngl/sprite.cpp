@@ -10,6 +10,7 @@
 #include "../freetype.hpp"
 #include "../helper.hpp"
 #include "../main.hpp"
+#include "../spriteimpl.hpp"
 #include "../windowptr.hpp"
 #include "debug.hpp"
 #include "matrix.hpp"
@@ -152,19 +153,23 @@ namespace jngl {
 	void Sprite::draw() const {
 		pushMatrix();
 		opengl::translate(x, y);
-		texture->draw();
+		texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
+		              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
 		popMatrix();
 	}
 
-	void Sprite::drawScaled(float factor) const {
-		drawScaled(factor, factor);
+	void Sprite::drawScaled(float factor, const ShaderProgram* const shaderProgram) const {
+		drawScaled(factor, factor, shaderProgram);
 	}
 
-	void Sprite::drawScaled(float xfactor, float yfactor) const {
+	void Sprite::drawScaled(float xfactor, float yfactor,
+	                        const ShaderProgram* const shaderProgram) const {
 		pushMatrix();
 		opengl::translate(x, y);
 		opengl::scale(xfactor, yfactor);
-		texture->draw();
+		texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
+		              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f,
+		              shaderProgram);
 		popMatrix();
 	}
 
@@ -179,7 +184,9 @@ namespace jngl {
 	void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
 		pushMatrix();
 		opengl::translate(x, y);
-		texture->drawClipped(start.x, end.x, start.y, end.y);
+		texture->drawClipped(start.x, end.x, start.y, end.y, float(spriteColorRed) / 255.0f,
+		                     float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
+		                     float(spriteColorAlpha) / 255.0f);
 		popMatrix();
 	}
 

@@ -91,6 +91,5 @@ namespace jngl {
 			line->draw();
 		}
 		jngl::popMatrix();
-		glColor4ub(spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha);
 	}
 } // namespace jngl

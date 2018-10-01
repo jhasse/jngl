@@ -27,29 +27,29 @@
 		CAEAGLLayer* eaglLayer = (CAEAGLLayer*) super.layer;
 		eaglLayer.opaque = YES;
 		
-		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
 		
 		if (!context || ![EAGLContext setCurrentContext:context]) {
 			return nil;
 		}
 		
 		GLuint framebuffer, renderbuffer;
-		glGenFramebuffersOES(1, &framebuffer);
-		glGenRenderbuffersOES(1, &renderbuffer);
+		glGenFramebuffers(1, &framebuffer);
+		glGenRenderbuffers(1, &renderbuffer);
 		
-		glBindFramebufferOES(GL_FRAMEBUFFER_OES, framebuffer);
-		glBindRenderbufferOES(GL_RENDERBUFFER_OES, renderbuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
 
 		
 		[context
-		 renderbufferStorage:GL_RENDERBUFFER_OES
+		 renderbufferStorage:GL_RENDERBUFFER
 		 fromDrawable: eaglLayer];
 		
-		glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES,
-									 GL_RENDERBUFFER_OES, renderbuffer);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+									 GL_RENDERBUFFER, renderbuffer);
 		
-		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &width);
-		glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_HEIGHT_OES, &height);
+		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
+		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
 
 		jngl::showWindow("", width, height);
 		
@@ -88,13 +88,12 @@
 
 			jngl::pWindow->stepIfNeeded();
 		}
-		glLoadIdentity();
+		jngl::reset();
 		// jngl::clearBackgroundColor();
 		glClear(GL_COLOR_BUFFER_BIT);
-		jngl::rotate(90);
 		
 		jngl::pWindow->draw();
-		[context presentRenderbuffer:GL_RENDERBUFFER_OES];
+		[context presentRenderbuffer:GL_RENDERBUFFER];
 	}
 }
 

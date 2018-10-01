@@ -5,6 +5,7 @@
 
 #include "freetype.hpp"
 #include "jngl.hpp"
+#include "main.hpp"
 
 #include <boost/numeric/conversion/cast.hpp>
 #include <chrono>
@@ -380,4 +381,94 @@ namespace jngl {
 			debug("Letterboxing to "); debug(canvasWidth); debug("x"); debugLn(canvasHeight);
 		}
 	}
+
+	void Window::initGlObjects() {
+		glGenBuffers(1, &opengl::vboStream);
+
+		glGenVertexArrays(1, &opengl::vaoStream);
+		glBindVertexArray(opengl::vaoStream);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+		glEnableVertexAttribArray(0);
+
+		glGenVertexArrays(1, &vaoLine);
+		glBindVertexArray(vaoLine);
+		GLuint vbo;
+		glGenBuffers(1, &vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		const static float line[] = { 0, 0, 1, 1 };
+		glBufferData(GL_ARRAY_BUFFER, sizeof(line), line, GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+		glEnableVertexAttribArray(0);
+
+		glGenVertexArrays(1, &vaoRect);
+		glBindVertexArray(vaoRect);
+		glGenBuffers(1, &vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		const static float rect[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
+		glBufferData(GL_ARRAY_BUFFER, sizeof(rect), rect, GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+		glEnableVertexAttribArray(0);
+	}
+
+	void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) const {
+		glBindVertexArray(opengl::vaoStream);
+		auto tmp = useSimpleShaderProgram();
+		const float vertexes[] = { static_cast<float>(a.x * jngl::getScaleFactor()),
+		                           static_cast<float>(a.y * jngl::getScaleFactor()),
+		                           static_cast<float>(b.x * jngl::getScaleFactor()),
+		                           static_cast<float>(b.y * jngl::getScaleFactor()),
+		                           static_cast<float>(c.x * jngl::getScaleFactor()),
+		                           static_cast<float>(c.y * jngl::getScaleFactor()) };
+		glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
+		// STREAM because we're using the buffer only once
+		glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertexes, GL_STREAM_DRAW);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
+
+	void Window::drawEllipse(const Vec2 mid, const Vec2 size, float startAngle) const {
+		glBindVertexArray(opengl::vaoStream);
+		jngl::pushMatrix();
+		jngl::translate(mid);
+		opengl::scale(jngl::getScaleFactor(), jngl::getScaleFactor());
+		auto tmp = jngl::useSimpleShaderProgram();
+		std::vector<float> vertexes;
+		vertexes.push_back(0.f);
+		vertexes.push_back(0.f);
+		for (float t = startAngle; t < 2.f * M_PI; t += 0.1f) {
+			vertexes.push_back(size.x * std::sin(t));
+			vertexes.push_back(-size.y * std::cos(t));
+		}
+		vertexes.push_back(0.f);
+		vertexes.push_back(-size.y);
+		glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
+		glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), &vertexes[0],
+		             GL_STREAM_DRAW);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, static_cast<GLsizei>(vertexes.size() / 2));
+		jngl::popMatrix();
+	}
+
+	void Window::drawLine(const Vec2 a, const Vec2 b) const {
+		glBindVertexArray(vaoLine);
+		jngl::pushMatrix();
+		jngl::translate(a);
+		opengl::scale((b.x - a.x) * jngl::getScaleFactor(),
+		              (b.y - a.y) * jngl::getScaleFactor());
+		auto tmp = useSimpleShaderProgram();
+		glDrawArrays(GL_LINES, 0, 2);
+		jngl::popMatrix();
+	}
+
+	void Window::drawRect(const Vec2 pos, const Vec2 size) const {
+		glBindVertexArray(vaoRect);
+		jngl::pushMatrix();
+		jngl::translate(pos);
+		opengl::scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor());
+		auto tmp = useSimpleShaderProgram();
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+		jngl::popMatrix();
+	}
+
+
 } // namespace jngl
