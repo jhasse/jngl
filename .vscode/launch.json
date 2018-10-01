@@ -1,45 +1,54 @@
 {
-		"version": "0.2.0",
-		"configurations": [
-			{
-				"type": "lldb",
-				"request": "launch",
-				"name": "Launch",
-				"program": "${workspaceRoot}/build/jngl-test",
-				"args": [],
-				"cwd": "${workspaceRoot}",
-				"preLaunchTask": "build"
-			},
-			{
-				"type": "lldb",
-				"request": "launch",
-				"name": "Unit Test",
-				"program": "${workspaceRoot}/build/unittest",
-				"args": [],
-				"cwd": "${workspaceRoot}/build",
-				"preLaunchTask": "build"
-			},
-			{
-				"name": "(gdb) Launch",
-				"type": "cppdbg",
-				"request": "launch",
-				"program": "${workspaceRoot}/build/jngl-test",
-				"args": [],
-				"stopAtEntry": false,
-				"cwd": "${workspaceRoot}",
-				"environment": [],
-				"externalConsole": true,
-				"MIMode": "gdb",
-				"setupCommands": [
-					{
-						"description": "Enable pretty-printing for gdb",
-						"text": "-enable-pretty-printing",
-						"ignoreFailures": true
-					}
-				],
-				"windows": {
-					"miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe"
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "gdb",
+			"request": "launch",
+			"name": "jngl-test (GDB)",
+			"target": "./build/jngl-test",
+			"cwd": "${workspaceRoot}",
+			"valuesFormatting": "prettyPrinters",
+			"preLaunchTask": "build"
+		},
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Launch",
+			"program": "${workspaceRoot}/build/jngl-test",
+			"args": [],
+			"cwd": "${workspaceRoot}",
+			"preLaunchTask": "build"
+		},
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Unit Test",
+			"program": "${workspaceRoot}/build/unittest",
+			"args": [],
+			"cwd": "${workspaceRoot}/build",
+			"preLaunchTask": "build"
+		},
+		{
+			"name": "(gdb) Launch",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceRoot}/build/jngl-test",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceRoot}",
+			"environment": [],
+			"externalConsole": true,
+			"MIMode": "gdb",
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
 				}
+			],
+			"windows": {
+				"miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe"
 			}
-		]
-	}
+		}
+	]
+}
