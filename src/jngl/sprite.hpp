@@ -15,95 +15,92 @@
 #include "dll.hpp"
 
 namespace jngl {
-	class Texture;
+class Texture;
 
-	class Sprite : public Drawable {
-	public:
-		enum class LoadType {
-			NORMAL,
-			HALF,
-			THREADED,
-		};
-
-		JNGLDLL_API Sprite(const unsigned char* bytes, size_t width, size_t height);
-		JNGLDLL_API Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
-		void JNGLDLL_API step();
-		void JNGLDLL_API draw() const;
-		void JNGLDLL_API drawScaled(float factor, const ShaderProgram* = nullptr) const;
-		void JNGLDLL_API drawScaled(float xfactor, float yfactor,
-		                            const ShaderProgram* = nullptr) const;
-
-		[[deprecated("Use new drawClipped(Vec2, Vec2) method instead")]]
-		void JNGLDLL_API drawClipped(float xstart, float xend, float ystart, float yend) const;
-
-		/// Draw a cutout of the sprite. drawClipped({0, 0}, {1, 1}) would draw it normally.
-		void JNGLDLL_API drawClipped(Vec2 start, Vec2 end) const;
-
-		std::shared_ptr<Finally> loader;
-
-	private:
-		static void cleanUpRowPointers(std::vector<unsigned char*>& buf);
-		void loadTexture(const std::string& filename, bool halfLoad, unsigned int format,
-		                 const unsigned char* const* rowPointers,
-		                 const unsigned char* data = nullptr);
-		Finally LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad);
-		struct BMPHeader {
-			unsigned int dataOffset;
-			unsigned int headerSize;
-			int width;
-			int height;
-			unsigned short planes;
-			unsigned short bpp;
-			unsigned int compression;
-			unsigned int dataSize;
-		};
- 		Finally LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad);
-#ifndef NOJPEG
-		Finally LoadJPG(const std::string& filename, FILE* file, const bool halfLoad);
-#endif
-#ifndef NOWEBP
-		Finally LoadWebP(const std::string& filename, FILE* file, const bool halfLoad);
-#endif
-
-		std::shared_ptr<Texture> texture;
+class Sprite : public Drawable {
+public:
+	enum class LoadType {
+		NORMAL,
+		HALF,
+		THREADED,
 	};
 
-	void JNGLDLL_API draw(const std::string& filename, double x, double y);
+	JNGLDLL_API Sprite(const unsigned char* bytes, size_t width, size_t height);
+	JNGLDLL_API Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
+	void JNGLDLL_API step();
+	void JNGLDLL_API draw() const;
+	void JNGLDLL_API drawScaled(float factor, const ShaderProgram* = nullptr) const;
+	void JNGLDLL_API drawScaled(float xfactor, float yfactor, const ShaderProgram* = nullptr) const;
 
-	template<class Vect>
-	void draw(const std::string& filename, Vect pos) {
-		draw(filename, pos.x, pos.y);
-	}
+	[[deprecated("Use new drawClipped(Vec2, Vec2) method instead")]] void JNGLDLL_API
+	drawClipped(float xstart, float xend, float ystart, float yend) const;
 
-	Finally JNGLDLL_API load(const std::string& filename);
+	/// Draw a cutout of the sprite. drawClipped({0, 0}, {1, 1}) would draw it normally.
+	void JNGLDLL_API drawClipped(Vec2 start, Vec2 end) const;
 
-	void JNGLDLL_API unload(const std::string& filename);
+	std::shared_ptr<Finally> loader;
 
-	void JNGLDLL_API unloadAll();
+private:
+	static void cleanUpRowPointers(std::vector<unsigned char*>& buf);
+	void loadTexture(const std::string& filename, bool halfLoad, unsigned int format,
+	                 const unsigned char* const* rowPointers, const unsigned char* data = nullptr);
+	Finally LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad);
+	struct BMPHeader {
+		unsigned int dataOffset;
+		unsigned int headerSize;
+		int width;
+		int height;
+		unsigned short planes;
+		unsigned short bpp;
+		unsigned int compression;
+		unsigned int dataSize;
+	};
+	Finally LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad);
+#ifndef NOJPEG
+	Finally LoadJPG(const std::string& filename, FILE* file, const bool halfLoad);
+#endif
+#ifndef NOWEBP
+	Finally LoadWebP(const std::string& filename, FILE* file, const bool halfLoad);
+#endif
 
-	void JNGLDLL_API drawScaled(const std::string& filename, double xposition, double yposition,
-	                            float xfactor, float yfactor);
+	std::shared_ptr<Texture> texture;
+};
 
-	void JNGLDLL_API drawScaled(const std::string& filename, double xposition, double yposition,
-	                            float factor);
+void JNGLDLL_API draw(const std::string& filename, double x, double y);
 
-	void JNGLDLL_API drawClipped(const std::string& filename, double xposition, double yposition,
-	                             float xstart, float xend, float ystart, float yend);
-
-	void JNGLDLL_API setSpriteColor(unsigned char red, unsigned char green, unsigned char blue,
-	                                unsigned char alpha);
-
-	void JNGLDLL_API setSpriteColor(unsigned char red, unsigned char green, unsigned char blue);
-
-	void JNGLDLL_API setSpriteAlpha(unsigned char alpha);
-
-	void JNGLDLL_API pushSpriteAlpha(unsigned char alpha = 255);
-
-	void JNGLDLL_API popSpriteAlpha();
-
-	int JNGLDLL_API getWidth(const std::string& filename);
-
-	int JNGLDLL_API getHeight(const std::string& filename);
-
-	void JNGLDLL_API setMasking(bool enabled);
+template <class Vect> void draw(const std::string& filename, Vect pos) {
+	draw(filename, pos.x, pos.y);
 }
+
+Finally JNGLDLL_API load(const std::string& filename);
+
+void JNGLDLL_API unload(const std::string& filename);
+
+void JNGLDLL_API unloadAll();
+
+void JNGLDLL_API drawScaled(const std::string& filename, double xposition, double yposition,
+                            float xfactor, float yfactor);
+
+void JNGLDLL_API drawScaled(const std::string& filename, double xposition, double yposition,
+                            float factor);
+
+void JNGLDLL_API drawClipped(const std::string& filename, double xposition, double yposition,
+                             float xstart, float xend, float ystart, float yend);
+
+void JNGLDLL_API setSpriteColor(unsigned char red, unsigned char green, unsigned char blue,
+                                unsigned char alpha);
+
+void JNGLDLL_API setSpriteColor(unsigned char red, unsigned char green, unsigned char blue);
+
+void JNGLDLL_API setSpriteAlpha(unsigned char alpha);
+
+void JNGLDLL_API pushSpriteAlpha(unsigned char alpha = 255);
+
+void JNGLDLL_API popSpriteAlpha();
+
+int JNGLDLL_API getWidth(const std::string& filename);
+
+int JNGLDLL_API getHeight(const std::string& filename);
+
+void JNGLDLL_API setMasking(bool enabled);
+} // namespace jngl
