@@ -72,7 +72,7 @@ namespace jngl {
 			}
 		}
 
-		texture_ = new Texture(width, height, &data[0]);
+		texture_ = new Texture(width, height, width, height, &data[0]);
 		for (auto d : data) {
 			delete[] d;
 		}

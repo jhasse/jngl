@@ -67,7 +67,7 @@ Sprite::Sprite(const unsigned char* const bytes, const size_t width, const size_
 	if (!pWindow) {
 		throw std::runtime_error("Window hasn't been created yet.");
 	}
-	texture = std::make_shared<Texture>(width, height, nullptr, GL_RGBA, bytes);
+	texture = std::make_shared<Texture>(width, height, width, height, nullptr, GL_RGBA, bytes);
 	Drawable::width = width;
 	Drawable::height = height;
 	setCenter(0, 0);
@@ -250,9 +250,11 @@ Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool 
 		png_destroy_read_struct(&png_ptr, &info_ptr, static_cast<png_infop*>(nullptr));
 	});
 	unsigned char** rowPointers = png_get_rows(png_ptr, info_ptr);
-	width = static_cast<int>(png_get_image_width(png_ptr, info_ptr));
-	height = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
-	loadTexture(filename, halfLoad, format, rowPointers);
+	const int scaledWidth = static_cast<int>(png_get_image_width(png_ptr, info_ptr));
+	const int scaledHeight = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
+	width = scaledWidth * getScaleFactor();
+	height = scaledHeight * getScaleFactor();
+	loadTexture(scaledWidth, scaledHeight, filename, halfLoad, format, rowPointers);
 	return Finally(nullptr);
 }
 #endif
@@ -307,7 +309,7 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 			}
 		}
 	}
-	loadTexture(filename, halfLoad, GL_BGR, &buf[0]);
+	loadTexture(header.width, header.height, filename, halfLoad, GL_BGR, &buf[0]);
 	return Finally(nullptr);
 }
 #ifndef NOJPEG
@@ -331,8 +333,8 @@ Finally Sprite::LoadJPG(const std::string& filename, FILE* file, const bool half
 	jpeg_read_header(&info, TRUE);
 	jpeg_start_decompress(&info);
 
-	width = info.output_width;
-	height = info.output_height;
+	width = info.output_width * getScaleFactor();
+	height = info.output_height * getScaleFactor();
 	int channels = info.num_components;
 
 	GLenum format = GL_RGB;
@@ -353,7 +355,7 @@ Finally Sprite::LoadJPG(const std::string& filename, FILE* file, const bool half
 
 	jpeg_finish_decompress(&info);
 
-	loadTexture(filename, halfLoad, format, &buf[0]);
+	loadTexture(info.output_width, info.output_height, filename, halfLoad, format, &buf[0]);
 	return Finally(nullptr);
 }
 #endif
@@ -379,10 +381,12 @@ Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool hal
 	auto config = std::make_shared<WebPDecoderConfig>();
 	WebPInitDecoderConfig(config.get());
 	config->options.use_threads = 1;
-	if (boost::math::epsilon_difference(getScaleFactor(), 1) > 10) {
+	int scaledWidth = imgWidth;
+	int scaledHeight = imgHeight;
+	if (getScaleFactor() + 1e-9 < 1) {
 		config->options.use_scaling = 1;
-		config->options.scaled_width = std::max(1l, std::lround(width));
-		config->options.scaled_height = std::max(1l, std::lround(height));
+		config->options.scaled_width = scaledWidth = std::max(1l, std::lround(width));
+		config->options.scaled_height = scaledHeight = std::max(1l, std::lround(height));
 	}
 	config->output.colorspace = MODE_RGBA;
 	auto result = std::make_shared<VP8StatusCode>();
@@ -390,20 +394,22 @@ Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool hal
 	    std::make_shared<std::thread>([buf{ std::move(buf) }, result, filesize, config]() mutable {
 		    *result = WebPDecode(&buf[0], filesize, config.get());
 	    });
-	return Finally(
-	    [thread = std::move(thread), result, filename, config, halfLoad, this]() mutable {
-		    thread->join();
-		    if (*result != VP8_STATUS_OK) {
-			    throw std::runtime_error(std::string("Can't decode WebP file. (" + filename + ")"));
-		    }
-		    loadTexture(filename, halfLoad, GL_RGBA, nullptr, config->output.u.RGBA.rgba);
-		    WebPFreeDecBuffer(&config->output);
-	    });
+	return Finally([thread = std::move(thread), result, filename, config, halfLoad, scaledWidth,
+	                scaledHeight, this]() mutable {
+		thread->join();
+		if (*result != VP8_STATUS_OK) {
+			throw std::runtime_error(std::string("Can't decode WebP file. (" + filename + ")"));
+		}
+		loadTexture(scaledWidth, scaledHeight, filename, halfLoad, GL_RGBA, nullptr,
+		            config->output.u.RGBA.rgba);
+		WebPFreeDecBuffer(&config->output);
+	});
 }
 #endif
 
-void Sprite::loadTexture(const std::string& filename, const bool halfLoad,
-                         const unsigned int format, const unsigned char* const* const rowPointers,
+void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, const std::string& filename,
+                         const bool halfLoad, const unsigned int format,
+                         const unsigned char* const* const rowPointers,
                          const unsigned char* const data) {
 	if (!pWindow) {
 		if (halfLoad) {
@@ -411,7 +417,8 @@ void Sprite::loadTexture(const std::string& filename, const bool halfLoad,
 		}
 		throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 	}
-	texture = std::make_shared<Texture>(width, height, rowPointers, format, data);
+	texture = std::make_shared<Texture>(width, height, scaledWidth, scaledHeight, rowPointers,
+	                                    format, data);
 	textures[filename] = texture;
 }
 

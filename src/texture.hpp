@@ -15,7 +15,7 @@ namespace jngl {
 
 class Texture {
 public:
-	Texture(float preciseWidth, float preciseHeight,
+	Texture(float preciseWidth, float preciseHeight, int width, int height,
 	        const GLubyte* const* rowPointers, // data as row pointers ...
 	        GLenum format = GL_RGBA, const GLubyte* data = nullptr /* ... or as one pointer */);
 	Texture(const Texture&) = delete;

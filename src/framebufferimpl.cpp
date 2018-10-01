@@ -14,7 +14,7 @@
 namespace jngl {
 
 FrameBufferImpl::FrameBufferImpl(int width, int height)
-: height(height), texture(width, height, nullptr) {
+: height(height), texture(width, height, width, height, nullptr) {
 	GLint tmp;
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &tmp);
 	systemFbo = tmp;

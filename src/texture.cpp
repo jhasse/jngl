@@ -21,9 +21,10 @@ ShaderProgram* Texture::textureShaderProgram = nullptr;
 int Texture::shaderSpriteColorUniform = -1;
 int Texture::modelviewUniform = -1;
 
-Texture::Texture(const float preciseWidth, const float preciseHeight,
-                 const GLubyte* const* const rowPointers, GLenum format, const GLubyte* const data)
-: width(std::lround(preciseWidth)), height(std::lround(preciseHeight)) {
+Texture::Texture(const float preciseWidth, const float preciseHeight, const int width,
+                 const int height, const GLubyte* const* const rowPointers, GLenum format,
+                 const GLubyte* const data)
+: width(width), height(height) {
 	if (!textureShaderProgram) {
 		Shader vertexShader(R"(#version 300 es
 			in mediump vec2 position;
