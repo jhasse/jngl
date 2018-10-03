@@ -75,8 +75,8 @@ Sprite::Sprite(const unsigned char* const bytes, const size_t width, const size_
 
 Sprite::Sprite(const std::string& filename, LoadType loadType) : texture(getTexture(filename)) {
 	if (texture) {
-		width = texture->getWidth();
-		height = texture->getHeight();
+		width = texture->getPreciseWidth();
+		height = texture->getPreciseHeight();
 		setCenter(0, 0);
 		return;
 	}

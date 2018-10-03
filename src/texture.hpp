@@ -26,8 +26,8 @@ public:
 	void drawClipped(float xstart, float xend, float ystart, float yend, float red, float green,
 	                 float blue, float alpha) const;
 	GLuint getID() const;
-	int getWidth() const;
-	int getHeight() const;
+	float getPreciseWidth() const;
+	float getPreciseHeight() const;
 	static void unloadShader();
 
 private:
@@ -38,8 +38,6 @@ private:
 	GLuint vertexBuffer_ = 0;
 	GLuint vao = 0;
 	std::vector<GLfloat> vertexes;
-	int width;
-	int height;
 };
 
 extern std::unordered_map<std::string, std::shared_ptr<Texture>> textures;

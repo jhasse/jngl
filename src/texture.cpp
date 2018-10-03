@@ -23,8 +23,7 @@ int Texture::modelviewUniform = -1;
 
 Texture::Texture(const float preciseWidth, const float preciseHeight, const int width,
                  const int height, const GLubyte* const* const rowPointers, GLenum format,
-                 const GLubyte* const data)
-: width(width), height(height) {
+                 const GLubyte* const data) {
 	if (!textureShaderProgram) {
 		Shader vertexShader(R"(#version 300 es
 			in mediump vec2 position;
@@ -164,12 +163,12 @@ GLuint Texture::getID() const {
 	return texture_;
 }
 
-int Texture::getWidth() const {
-	return width;
+float Texture::getPreciseWidth() const {
+	return vertexes[8];
 }
 
-int Texture::getHeight() const {
-	return height;
+float Texture::getPreciseHeight() const {
+	return vertexes[5];
 }
 
 void Texture::unloadShader() {
