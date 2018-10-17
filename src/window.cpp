@@ -384,11 +384,7 @@ namespace jngl {
 
 	void Window::initGlObjects() {
 		glGenBuffers(1, &opengl::vboStream);
-
 		glGenVertexArrays(1, &opengl::vaoStream);
-		glBindVertexArray(opengl::vaoStream);
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-		glEnableVertexAttribArray(0);
 
 		glGenVertexArrays(1, &vaoLine);
 		glBindVertexArray(vaoLine);

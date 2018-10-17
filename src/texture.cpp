@@ -146,9 +146,9 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), &vertexes[0], GL_STREAM_DRAW);
 
-	// const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
-	// glEnableVertexAttribArray(posAttrib);
+	const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
+	glEnableVertexAttribArray(posAttrib);
 
 	const GLint texCoordAttrib = textureShaderProgram->getAttribLocation("inTexCoord");
 	glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
