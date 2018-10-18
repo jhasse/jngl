@@ -23,7 +23,7 @@ SRC=src/*.cpp src/jngl/*.cpp
 ifdef WINDOWS
 	SRC += src/win32/*.cpp
 	LIBS += -lopengl32 -lxinput -lwinmm
-	CXXFLAGS += -DWINVER=0x0602
+	CXXFLAGS += -DWINVER=0x0602 -D_USE_MATH_DEFINES
 else
 	SRC += src/linux/*.cpp src/sdl/*.cpp src/linux/*.c
 endif
