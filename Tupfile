@@ -25,7 +25,7 @@ ifdef WINDOWS
 	LIBS += -lopengl32 -lxinput -lwinmm
 	CXXFLAGS += -DWINVER=0x0602
 else
-	SRC += src/linux/*.cpp src/sdl/*.cpp
+	SRC += src/linux/*.cpp src/sdl/*.cpp src/linux/*.c
 endif
 
 : foreach $(SRC) |> $(CXX) $(CXXFLAGS) `$(PKG_CONFIG) --cflags sdl2 freetype2 epoxy` -c %f -o %o |> %f.o {objs}
