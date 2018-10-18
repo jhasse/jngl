@@ -13,6 +13,14 @@ void showWindow1(const std::string& title, int width, int height) {
 void showWindow2(const std::string& title, int width, int height, bool fullscreen) {
 	showWindow(title, width, height, fullscreen);
 }
+void showWindow3(const std::string& title, int width, int height, bool fullscreen,
+                 boost::python::tuple minAspectRatio, boost::python::tuple maxAspectRatio) {
+	showWindow(title, width, height, fullscreen,
+	           { boost::python::extract<int>(minAspectRatio[0]),
+	             boost::python::extract<int>(minAspectRatio[1]) },
+	           { boost::python::extract<int>(maxAspectRatio[0]),
+	             boost::python::extract<int>(maxAspectRatio[1]) });
+}
 void drawScaled1(const std::string& filename, double xposition, double yposition, float xfactor,
 	             float yfactor) {
 	drawScaled(filename, xposition, yposition, xfactor, yfactor);
@@ -122,6 +130,7 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 
 	def("showWindow", showWindow1);
 	def("showWindow", showWindow2);
+	def("showWindow", showWindow3);
 	def("running", running);
 	def("updateInput", updateInput);
 	def("swapBuffers", swapBuffers);
@@ -151,6 +160,8 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("setMouseVisible", setMouseVisible);
 	def("isMouseVisible", isMouseVisible);
 	def("getMousePos", getMousePos);
+	def("getScaleFactor", getScaleFactor);
+	def("setScaleFactor", setScaleFactor);
 
 	enum_<mouse::Button>("mouse")
         .value("Left", mouse::Left)
