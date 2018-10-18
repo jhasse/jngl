@@ -45,12 +45,18 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 	WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
 	switch (AInputEvent_getType(event)) {
 		case AINPUT_EVENT_TYPE_MOTION:
-			impl.mouseX = AMotionEvent_getX(event, 0);
-			impl.mouseY = AMotionEvent_getY(event, 0);
-			switch (AMotionEvent_getAction(event)) {
-				case AMOTION_EVENT_ACTION_DOWN:
+			switch (AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK) {
+				case AMOTION_EVENT_ACTION_POINTER_DOWN:
 					++impl.numberOfTouches;
 					break;
+				case AMOTION_EVENT_ACTION_DOWN:
+					++impl.numberOfTouches;
+					[[fallthrough]];
+				case AMOTION_EVENT_ACTION_MOVE:
+					impl.mouseX = AMotionEvent_getX(event, 0);
+					impl.mouseY = AMotionEvent_getY(event, 0);
+					break;
+				case AMOTION_EVENT_ACTION_POINTER_UP:
 				case AMOTION_EVENT_ACTION_UP:
 					--impl.numberOfTouches;
 					break;
