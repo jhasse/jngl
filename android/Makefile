@@ -20,7 +20,7 @@ gradle: include/boost \
         test/app/src/main/assets/jngl.webp \
         test/app/src/main/assets/test.ogg \
         test/app/src/main/assets/Arial.ttf
-	cd test && gradle build
+	cd test && ./gradlew build
 
 .PHONY: run
 run: gradle
