@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.6 FATAL_ERROR)
 
-project(jngl LANGUAGES CXX)
+project(jngl LANGUAGES C CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -159,6 +159,9 @@ else()
 				target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.c)
 				target_include_directories(jngl PRIVATE ${THEORA_DEC_INCLUDE_DIRS})
 				target_link_libraries(jngl PRIVATE ${VORBIS_LIBRARIES} ${THEORA_DEC_LIBRARIES})
+
+				add_executable(videoplayer examples/videoplayer.cpp)
+				target_link_libraries(videoplayer PRIVATE jngl)
 			endif()
 		endif()
 	endif()
