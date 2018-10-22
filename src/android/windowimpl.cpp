@@ -44,24 +44,61 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
 	WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
 	switch (AInputEvent_getType(event)) {
+		case AINPUT_EVENT_TYPE_KEY:
+			switch (AKeyEvent_getAction(event)) {
+				case AKEY_EVENT_ACTION_DOWN: {
+					const auto key = AKeyEvent_getKeyCode(event);
+					const auto metaState = AKeyEvent_getMetaState(event);
+
+					JNIEnv* env;
+					app->activity->vm->AttachCurrentThread(&env, nullptr);
+
+					const jclass keyEventClass = env->FindClass("android/view/KeyEvent");
+
+					const jmethodID getUnicodeCharMethod =
+							env->GetMethodID(keyEventClass, "getUnicodeChar", "()I");
+
+					const jmethodID eventConstructor =
+							env->GetMethodID(keyEventClass, "<init>", "(II)V");
+
+					const jobject eventObj = env->NewObject(
+							keyEventClass, eventConstructor, AKEY_EVENT_ACTION_DOWN, key);
+
+					const int unicode = (metaState == 0)
+							? env->CallIntMethod(eventObj, getUnicodeCharMethod)
+							: env->CallIntMethod(eventObj, getUnicodeCharMethod, metaState);
+
+					app->activity->vm->DetachCurrentThread();
+
+					if (unicode == 0) { // For example the back button
+						return 0;
+					}
+
+					char bytes[5];
+					std::memcpy(bytes, &unicode, 4);
+					bytes[4] = '\0';
+					impl.addTextInput(bytes);
+					return 1;
+				}
+			}
+			break;
 		case AINPUT_EVENT_TYPE_MOTION:
 			switch (AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK) {
 				case AMOTION_EVENT_ACTION_POINTER_DOWN:
 					++impl.numberOfTouches;
-					break;
+					return 1;
 				case AMOTION_EVENT_ACTION_DOWN:
 					++impl.numberOfTouches;
 					[[fallthrough]];
 				case AMOTION_EVENT_ACTION_MOVE:
 					impl.mouseX = AMotionEvent_getX(event, 0);
 					impl.mouseY = AMotionEvent_getY(event, 0);
-					break;
+					return 1;
 				case AMOTION_EVENT_ACTION_POINTER_UP:
 				case AMOTION_EVENT_ACTION_UP:
 					--impl.numberOfTouches;
-					break;
+					return 1;
 			};
-			return 1;
 	}
 	return 0;
 }
@@ -181,6 +218,10 @@ void WindowImpl::setRelativeMouseMode(const bool relativeMouseMode) {
 	}
 }
 
+void WindowImpl::addTextInput(const char* const character) {
+	window->textInput += std::string(character);
+}
+
 void WindowImpl::updateInput() {
 	// Read all pending events.
 	int ident;
@@ -229,6 +270,56 @@ void WindowImpl::updateInput() {
 
 void WindowImpl::swapBuffers() {
 	eglSwapBuffers(display, surface);
+}
+
+void setKeyboardVisible(const bool visible) {
+	const auto app = androidApp->activity;
+
+	JNIEnv* env = nullptr;
+	app->vm->AttachCurrentThread(&env, nullptr);
+
+	const jclass nativeActivityClass = env->GetObjectClass(app->clazz);
+
+	const jmethodID getApplicationContextMethod = env->GetMethodID(
+			nativeActivityClass, "getApplicationContext", "()Landroid/content/Context;");
+
+	const jobject contextObject = env->CallObjectMethod(app->clazz, getApplicationContextMethod);
+
+	const jclass contextClass = env->FindClass("android/content/Context");
+
+	const jmethodID getSystemServiceMethod = env->GetMethodID(
+			contextClass, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;");
+
+	const jfieldID INPUT_METHOD_SERVICE_FIELD =
+			env->GetStaticFieldID(contextClass, "INPUT_METHOD_SERVICE", "Ljava/lang/String;");
+
+	const jobject INPUT_METHOD_SERVICE =
+			env->GetStaticObjectField(contextClass, INPUT_METHOD_SERVICE_FIELD);
+
+	const jobject inputMethodManager =
+			env->CallObjectMethod(contextObject, getSystemServiceMethod, INPUT_METHOD_SERVICE);
+
+	const jclass inputMethodManagerClass = env->GetObjectClass(inputMethodManager);
+
+	const jmethodID toggleSoftInputMethod =
+			env->GetMethodID(inputMethodManagerClass, "toggleSoftInput", "(II)V");
+
+	int showFlags;
+	if (visible) {
+		const jfieldID SHOW_FORCED_FIELD =
+				env->GetStaticFieldID(inputMethodManagerClass, "SHOW_FORCED", "I");
+
+		showFlags = env->GetStaticIntField(inputMethodManagerClass, SHOW_FORCED_FIELD);
+	} else {
+		const jfieldID HIDE_IMPLICIT_ONLY_FIELD =
+				env->GetStaticFieldID(inputMethodManagerClass, "HIDE_IMPLICIT_ONLY", "I");
+
+		showFlags = env->GetStaticIntField(inputMethodManagerClass, HIDE_IMPLICIT_ONLY_FIELD);
+	}
+
+	env->CallVoidMethod(inputMethodManager, toggleSoftInputMethod, showFlags, 0);
+
+	app->vm->DetachCurrentThread();
 }
 
 } // namespace jngl

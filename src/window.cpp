@@ -169,6 +169,7 @@ namespace jngl {
 	}
 
 	void Window::updateKeyStates() {
+		textInput.clear();
 		while (!needToBeSetFalse_.empty()) {
 			*(needToBeSetFalse_.top()) = false;
 			needToBeSetFalse_.pop();

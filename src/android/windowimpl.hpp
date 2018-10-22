@@ -20,6 +20,7 @@ public:
 	void swapBuffers();
 	void init();
 	void setRelativeMouseMode(bool);
+	void addTextInput(const char*);
 
 	int mouseX = 0;
 	int mouseY = 0;
