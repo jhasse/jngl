@@ -9,6 +9,11 @@
 
 namespace jngl {
 	void LoadSound(const std::string&);
+	void checkAlError();
+
+	class Audio;
+
+	Audio& GetAudio();
 
 	class Sound {
 	public:

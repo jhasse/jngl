@@ -38,6 +38,8 @@ public:
 	/// Draw a cutout of the sprite. drawClipped({0, 0}, {1, 1}) would draw it normally.
 	void JNGLDLL_API drawClipped(Vec2 start, Vec2 end) const;
 
+	void setBytes(const unsigned char*);
+
 	std::shared_ptr<Finally> loader;
 
 private:

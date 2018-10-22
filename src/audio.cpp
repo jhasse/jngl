@@ -163,8 +163,6 @@ namespace jngl {
 		ALCcontext* context_ = nullptr;
 	};
 
-	Audio& GetAudio();
-
 	SoundFile::SoundFile(const std::string& filename) : params(std::make_unique<Sound::Params>()) {
 		debug("Decoding "); debug(filename); debug(" ... ");
 #ifdef _WIN32

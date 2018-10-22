@@ -29,6 +29,7 @@ public:
 	float getPreciseWidth() const;
 	float getPreciseHeight() const;
 	static void unloadShader();
+	void setBytes(const unsigned char*, int width, int height);
 
 private:
 	static ShaderProgram* textureShaderProgram;

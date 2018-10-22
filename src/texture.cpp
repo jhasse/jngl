@@ -176,4 +176,9 @@ void Texture::unloadShader() {
 	textureShaderProgram = nullptr;
 }
 
+void Texture::setBytes(const unsigned char* const bytes, const int width, const int height) {
+	glBindTexture(GL_TEXTURE_2D, texture_);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+}
+
 } // namespace jngl

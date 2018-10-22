@@ -196,6 +196,10 @@ void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
 	popMatrix();
 }
 
+void Sprite::setBytes(const unsigned char* const bytes) {
+	texture->setBytes(bytes, width, height);
+}
+
 #ifndef NOPNG
 Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad) {
 	const unsigned int PNG_BYTES_TO_CHECK = 4;
