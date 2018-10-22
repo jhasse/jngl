@@ -6,6 +6,7 @@ JNGL_MAIN_BEGIN {
 		jngl::showWindow("Android Test", 1920, 1080);
 		float x = 0;
 		bool first = true;
+		jngl::Sprite sprite("jngl.webp");
 		while (jngl::running()) {
 			jngl::updateInput();
 			jngl::setBackgroundColor(133, 133, 133);
@@ -15,6 +16,7 @@ JNGL_MAIN_BEGIN {
 				first = false;
 				jngl::play("test.ogg");
 			}
+			sprite.drawClipped({0.3, 0.3}, {0.7, 0.7});
 			const auto mouse = jngl::getMousePos();
 			jngl::setColor(200, jngl::mouseDown(jngl::mouse::Left) ? 255 : 54, 45);
 			jngl::drawRect(mouse.x, mouse.y, 100, 100);
