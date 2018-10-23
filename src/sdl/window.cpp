@@ -282,14 +282,6 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		SDL_SetWindowTitle(impl->sdlWindow, title.c_str());
 	}
 
-	int Window::getMouseX() {
-		return mousex_ - (width_ - canvasWidth) / 2;
-	}
-
-	int Window::getMouseY() {
-		return mousey_ - (height_ - canvasHeight) / 2;
-	}
-
 	void Window::SetMouse(const int xposition, const int yposition) {
 		SDL_WarpMouseInWindow(impl->sdlWindow, xposition, yposition);
 	}

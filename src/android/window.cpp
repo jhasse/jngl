@@ -62,16 +62,6 @@ void Window::SetMouseVisible(const bool) {
 void Window::SetTitle(const std::string&) {
 }
 
-int Window::getMouseX() {
-	if (relativeMouseMode) { return mousex_; }
-	return mousex_ - (width_ - canvasWidth) / 2;
-}
-
-int Window::getMouseY() {
-	if (relativeMouseMode) { return mousey_; }
-	return mousey_ - (height_ - canvasHeight) / 2;
-}
-
 void Window::SetMouse(const int /*xposition*/, const int /*yposition*/) {
 }
 

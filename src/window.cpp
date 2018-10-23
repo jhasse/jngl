@@ -92,6 +92,18 @@ namespace jngl {
 		return isMouseVisible_;
 	}
 
+#ifndef _WIN32
+	int Window::getMouseX() {
+		if (relativeMouseMode) { return mousex_; }
+		return mousex_ - (width_ - canvasWidth) / 2;
+	}
+
+	int Window::getMouseY() {
+		if (relativeMouseMode) { return mousey_; }
+		return mousey_ - (height_ - canvasHeight) / 2;
+	}
+#endif
+
 	bool Window::getRelativeMouseMode() const {
 		return relativeMouseMode;
 	}
