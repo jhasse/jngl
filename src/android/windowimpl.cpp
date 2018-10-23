@@ -48,6 +48,10 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 			switch (AKeyEvent_getAction(event)) {
 				case AKEY_EVENT_ACTION_DOWN: {
 					const auto key = AKeyEvent_getKeyCode(event);
+					if (key == AKEYCODE_DEL) {
+						jngl::setKeyPressed(jngl::key::BackSpace, true);
+						return 1;
+					}
 					const auto metaState = AKeyEvent_getMetaState(event);
 
 					JNIEnv* env;
@@ -55,8 +59,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 
 					const jclass keyEventClass = env->FindClass("android/view/KeyEvent");
 
-					const jmethodID getUnicodeCharMethod =
-							env->GetMethodID(keyEventClass, "getUnicodeChar", "()I");
+					const jmethodID getUnicodeCharMethod = env->GetMethodID(
+					    keyEventClass, "getUnicodeChar", (metaState == 0) ? "()I" : "(I)I");
 
 					const jmethodID eventConstructor =
 							env->GetMethodID(keyEventClass, "<init>", "(II)V");
@@ -76,6 +80,10 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 
 					char bytes[5];
 					std::memcpy(bytes, &unicode, 4);
+					if (bytes[0] == '\n') {
+						setKeyPressed(jngl::key::Return, true);
+						return 1;
+					}
 					bytes[4] = '\0';
 					impl.addTextInput(bytes);
 					return 1;
