@@ -176,7 +176,7 @@ void quit() {
 }
 
 void cancelQuit() {
-	pWindow->cancelQuit();
+	if (pWindow) { pWindow->cancelQuit(); }
 }
 
 void setBackgroundColor(const unsigned char red, const unsigned char green,
