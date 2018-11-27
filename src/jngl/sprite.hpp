@@ -16,6 +16,7 @@
 
 namespace jngl {
 class Texture;
+struct Vertex;
 
 class Sprite : public Drawable {
 public:
@@ -37,6 +38,9 @@ public:
 
 	/// Draw a cutout of the sprite. drawClipped({0, 0}, {1, 1}) would draw it normally.
 	void JNGLDLL_API drawClipped(Vec2 start, Vec2 end) const;
+
+	/// Draws a list of triangles with the sprite's texture on it
+	void JNGLDLL_API drawMesh(const std::vector<Vertex>& vertexes) const;
 
 	void setBytes(const unsigned char*);
 

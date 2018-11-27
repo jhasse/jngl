@@ -196,6 +196,14 @@ void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
 	popMatrix();
 }
 
+void Sprite::drawMesh(const std::vector<Vertex>& vertexes) const {
+	pushMatrix();
+	opengl::translate(x, y);
+	texture->drawMesh(vertexes, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
+	                  float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
+	popMatrix();
+}
+
 void Sprite::setBytes(const unsigned char* const bytes) {
 	texture->setBytes(bytes, width, height);
 }

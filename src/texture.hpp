@@ -13,6 +13,8 @@
 
 namespace jngl {
 
+class Vertex;
+
 class Texture {
 public:
 	Texture(float preciseWidth, float preciseHeight, int width, int height,
@@ -25,6 +27,8 @@ public:
 	void draw(float red, float green, float blue, float alpha, const ShaderProgram* = nullptr) const;
 	void drawClipped(float xstart, float xend, float ystart, float yend, float red, float green,
 	                 float blue, float alpha) const;
+	void drawMesh(const std::vector<Vertex>& vertexes, float red, float green, float blue,
+	              float alpha) const;
 	GLuint getID() const;
 	float getPreciseWidth() const;
 	float getPreciseHeight() const;

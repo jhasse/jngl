@@ -4,6 +4,7 @@
 #include "texture.hpp"
 
 #include "jngl/Shader.hpp"
+#include "jngl/Vertex.hpp"
 
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <cassert>
@@ -157,6 +158,29 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+}
+
+void Texture::drawMesh(const std::vector<Vertex>& vertexes, const float red, const float green,
+                       const float blue, const float alpha) const {
+	glBindVertexArray(opengl::vaoStream);
+	auto tmp = textureShaderProgram->use();
+	glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
+	glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
+	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
+	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(vertexes[0]), &vertexes[0],
+	             GL_STREAM_DRAW);
+
+	const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
+	glEnableVertexAttribArray(posAttrib);
+
+	const GLint texCoordAttrib = textureShaderProgram->getAttribLocation("inTexCoord");
+	glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
+	                      reinterpret_cast<void*>(2 * sizeof(float)));
+	glEnableVertexAttribArray(texCoordAttrib);
+
+	glBindTexture(GL_TEXTURE_2D, texture_);
+	glDrawArrays(GL_TRIANGLES, 0, vertexes.size());
 }
 
 GLuint Texture::getID() const {

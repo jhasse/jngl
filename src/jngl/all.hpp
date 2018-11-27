@@ -5,6 +5,7 @@
 
 #include "Shader.hpp"
 #include "ShaderProgram.hpp"
+#include "Vertex.hpp"
 #include "color.hpp"
 #include "Controller.hpp"
 #include "debug.hpp"
