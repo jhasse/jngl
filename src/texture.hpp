@@ -13,7 +13,7 @@
 
 namespace jngl {
 
-class Vertex;
+struct Vertex;
 
 class Texture {
 public:
