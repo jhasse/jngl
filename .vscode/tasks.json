@@ -2,14 +2,14 @@
 	"version": "2.0.0",
 	"windows": {
 		"command": "C:\\msys64\\usr\\bin\\bash.exe",
-		"args": ["-lc", "([ -f build/build.ninja ] || meson build) && ninja -C build | cat"]
+		"args": ["-lc", "([ -f build/build.ninja ] || meson build) && cd build && ninja | cat && $@"]
 	},
 	"linux": {
-		"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || meson build) && ninja -C build && cd build && $@"],
+		"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || meson build) && cd build && ninja && $@"],
 		"command": "/bin/bash"
 	},
 	"osx": {
-		"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || meson build) && ninja -C build && cd build && $@"],
+		"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || meson build) && cd build && ninja && $@"],
 		"command": "/bin/bash"
 	},
 	"options": {
@@ -23,6 +23,7 @@
 	"tasks": [
 		{
 			"label": "build",
+			"args": [],
 			"problemMatcher": {
 				"owner": "cpp",
 				"fileLocation": [
@@ -68,5 +69,9 @@
 				"isDefault": true
 			}
 		}
-	]
+	],
+	"presentation": {
+		"echo": false,
+		"clear": true
+	}
 }
