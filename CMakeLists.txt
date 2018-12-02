@@ -156,7 +156,7 @@ else()
 			pkg_check_modules(VORBIS vorbis)
 			if(VORBIS_FOUND)
 				target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
-				target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.c)
+				target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.cpp)
 				target_include_directories(jngl PRIVATE ${THEORA_DEC_INCLUDE_DIRS})
 				target_link_libraries(jngl PRIVATE ${VORBIS_LIBRARIES} ${THEORA_DEC_LIBRARIES})
 
