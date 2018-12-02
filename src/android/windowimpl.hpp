@@ -21,6 +21,9 @@ public:
 	void init();
 	void setRelativeMouseMode(bool);
 	void addTextInput(const char*);
+	void pause();
+	void makeCurrent();
+	void hideNavigationBar();
 
 	int mouseX = 0;
 	int mouseY = 0;
@@ -29,6 +32,7 @@ public:
 	int relativeY = 0;
 
 private:
+	EGLConfig config;
 	const std::pair<int, int> minAspectRatio;
 	const std::pair<int, int> maxAspectRatio;
 	android_app* app;
@@ -36,7 +40,7 @@ private:
 
 	bool initialized = false;
 	EGLDisplay display;
-	EGLSurface surface;
+	EGLSurface surface = nullptr ;
 	EGLContext context;
 };
 

@@ -33,10 +33,10 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 			// TODO: The window is being hidden or closed, clean it up.
 			break;
 		case APP_CMD_GAINED_FOCUS:
-			// TODO
+			impl.makeCurrent();
 			break;
 		case APP_CMD_LOST_FOCUS:
-			// TODO
+			impl.pause();
 			break;
 	}
 }
@@ -122,39 +122,13 @@ WindowImpl::WindowImpl(Window* window, const std::pair<int, int> minAspectRatio,
 	android_asset_manager = app->activity->assetManager;
 	assert(android_asset_manager);
 
-	JNIEnv* env = nullptr;
-	app->activity->vm->AttachCurrentThread(&env, nullptr);
-
-	jclass activityClass = env->FindClass("android/app/NativeActivity");
-	jmethodID getWindow = env->GetMethodID(activityClass, "getWindow", "()Landroid/view/Window;");
-
-	jclass windowClass = env->FindClass("android/view/Window");
-	jmethodID getDecorView = env->GetMethodID(windowClass, "getDecorView", "()Landroid/view/View;");
-
-	jclass viewClass = env->FindClass("android/view/View");
-	jmethodID setSystemUiVisibility = env->GetMethodID(viewClass, "setSystemUiVisibility", "(I)V");
-
-	jobject androidWindow = env->CallObjectMethod(app->activity->clazz, getWindow);
-
-	jobject decorView = env->CallObjectMethod(androidWindow, getDecorView);
-
-	jfieldID flagFullscreenID = env->GetStaticFieldID(viewClass, "SYSTEM_UI_FLAG_FULLSCREEN", "I");
-	jfieldID flagHideNavigationID =
-	    env->GetStaticFieldID(viewClass, "SYSTEM_UI_FLAG_HIDE_NAVIGATION", "I");
-	jfieldID flagImmersiveStickyID =
-	    env->GetStaticFieldID(viewClass, "SYSTEM_UI_FLAG_IMMERSIVE_STICKY", "I");
-
-	const int flagFullscreen = env->GetStaticIntField(viewClass, flagFullscreenID);
-	const int flagHideNavigation = env->GetStaticIntField(viewClass, flagHideNavigationID);
-	const int flagImmersiveSticky = env->GetStaticIntField(viewClass, flagImmersiveStickyID);
-	const int flag = flagFullscreen | flagHideNavigation | flagImmersiveSticky;
-
-	env->CallVoidMethod(decorView, setSystemUiVisibility, flag);
-
-	app->activity->vm->DetachCurrentThread();
+	hideNavigationBar();
 }
 
 void WindowImpl::init() {
+	if (initialized) {
+		return;
+	}
 	/*
 	 * Here specify the attributes of the desired configuration.
 	 * Below, we select an EGLConfig with at least 8 bits per color
@@ -170,7 +144,6 @@ void WindowImpl::init() {
 	};
 	EGLint format;
 	EGLint numConfigs;
-	EGLConfig config;
 
 	display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 
@@ -193,16 +166,13 @@ void WindowImpl::init() {
 	}
 	ANativeWindow_setBuffersGeometry(app->window, 0, 0, format);
 
-	surface = eglCreateWindowSurface(display, config, app->window, NULL);
 	const EGLint contextAttribList[] = {
 			EGL_CONTEXT_CLIENT_VERSION, 3,
 			EGL_NONE
 	};
 	context = eglCreateContext(display, config, NULL, contextAttribList);
 
-	if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
-		throw std::runtime_error("Unable to eglMakeCurrent");
-	}
+	makeCurrent();
 
 	EGLint w, h;
 	eglQuerySurface(display, surface, EGL_WIDTH, &w);
@@ -230,6 +200,58 @@ void WindowImpl::addTextInput(const char* const character) {
 	window->textInput += std::string(character);
 }
 
+void WindowImpl::pause() {
+	if (eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) ==
+		EGL_FALSE) {
+		debugLn("Couldn't unbind surfaces!");
+	}
+	if (eglDestroySurface(display, surface) == EGL_FALSE) {
+		debugLn("Couldn't destroy surface!");
+	}
+	surface = nullptr;
+}
+
+void WindowImpl::makeCurrent() {
+	if (surface) { return; }
+	surface = eglCreateWindowSurface(display, config, app->window, nullptr);
+	if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
+		throw std::runtime_error("Unable to eglMakeCurrent");
+	}
+}
+
+void WindowImpl::hideNavigationBar() {
+	JNIEnv* env = nullptr;
+	app->activity->vm->AttachCurrentThread(&env, nullptr);
+
+	jclass activityClass = env->FindClass("android/app/NativeActivity");
+	jmethodID getWindow = env->GetMethodID(activityClass, "getWindow", "()Landroid/view/Window;");
+
+	jclass windowClass = env->FindClass("android/view/Window");
+	jmethodID getDecorView = env->GetMethodID(windowClass, "getDecorView", "()Landroid/view/View;");
+
+	jclass viewClass = env->FindClass("android/view/View");
+	jmethodID setSystemUiVisibility = env->GetMethodID(viewClass, "setSystemUiVisibility", "(I)V");
+
+	jobject androidWindow = env->CallObjectMethod(app->activity->clazz, getWindow);
+
+	jobject decorView = env->CallObjectMethod(androidWindow, getDecorView);
+
+	jfieldID flagFullscreenID = env->GetStaticFieldID(viewClass, "SYSTEM_UI_FLAG_FULLSCREEN", "I");
+	jfieldID flagHideNavigationID =
+			env->GetStaticFieldID(viewClass, "SYSTEM_UI_FLAG_HIDE_NAVIGATION", "I");
+	jfieldID flagImmersiveStickyID =
+			env->GetStaticFieldID(viewClass, "SYSTEM_UI_FLAG_IMMERSIVE_STICKY", "I");
+
+	const int flagFullscreen = env->GetStaticIntField(viewClass, flagFullscreenID);
+	const int flagHideNavigation = env->GetStaticIntField(viewClass, flagHideNavigationID);
+	const int flagImmersiveSticky = env->GetStaticIntField(viewClass, flagImmersiveStickyID);
+	const int flag = flagFullscreen | flagHideNavigation | flagImmersiveSticky;
+
+	env->CallVoidMethod(decorView, setSystemUiVisibility, flag);
+
+	app->activity->vm->DetachCurrentThread();
+}
+
 void WindowImpl::updateInput() {
 	// Read all pending events.
 	int ident;
@@ -246,15 +268,8 @@ void WindowImpl::updateInput() {
 
 		// Check if we are exiting.
 		if (app->destroyRequested != 0) {
-			if (eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) ==
-			    EGL_FALSE) {
-				debugLn("Couldn't unbind surfaces!");
-			}
 			if (eglDestroyContext(display, context) == EGL_FALSE) {
 				debugLn("Couldn't destroy context!");
-			}
-			if (eglDestroySurface(display, surface) == EGL_FALSE) {
-				debugLn("Couldn't destroy surface!");
 			}
 			if (eglTerminate(display) == EGL_FALSE) {
 				debugLn("Couldn't terminate display!");
@@ -277,7 +292,9 @@ void WindowImpl::updateInput() {
 }
 
 void WindowImpl::swapBuffers() {
-	eglSwapBuffers(display, surface);
+	if (surface) {
+		eglSwapBuffers(display, surface);
+	}
 }
 
 void setKeyboardVisible(const bool visible) {
