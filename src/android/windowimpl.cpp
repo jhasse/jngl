@@ -280,6 +280,7 @@ void WindowImpl::updateInput() {
 				debugLn("Couldn't terminate display!");
 			}
 			jngl::quit();
+			return; // surface == nullptr, we need to exit this loop
 		}
 	}
 
