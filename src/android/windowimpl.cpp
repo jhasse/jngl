@@ -164,6 +164,7 @@ void WindowImpl::setRelativeMouseMode(const bool relativeMouseMode) {
 	if (relativeMouseMode) {
 		relativeX = mouseX;
 		relativeY = mouseY;
+		window->mousex_ = window->mousey_ = 0;
 	} else {
 		relativeX = relativeY = 0;
 	}
