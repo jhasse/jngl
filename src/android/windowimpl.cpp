@@ -25,6 +25,7 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 			break;
 		case APP_CMD_INIT_WINDOW:
 			// The window is being shown, get it ready.
+			assert(androidApp == app);
 			if (androidApp->window) {
 				impl.init();
 			}
@@ -258,8 +259,12 @@ void WindowImpl::updateInput() {
 	int events;
 	android_poll_source* source;
 
-	while ((ident = ALooper_pollAll(0, NULL, &events, (void**)&source)) >= 0 ||
-	       !initialized /* wait for WindowImpl::init to get called by engine_handle_cmd */) {
+	while ((ident = ALooper_pollAll(
+	            surface ? 0 : 1e9, // This is the timeout. When we're in the background, we don't
+	                               // want to busy-wait for events.
+	            nullptr, &events, (void**)&source)) >= 0 ||
+	       !initialized /* wait for WindowImpl::init to get called by engine_handle_cmd */ ||
+	       !surface /* we're in the background, don't leave this event loop */) {
 
 		// Process this event.
 		if (source != NULL) {
