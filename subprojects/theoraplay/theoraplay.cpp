@@ -94,8 +94,7 @@ static unsigned char *ConvertVideoFrame420ToIYUV(const th_info *tinfo,
 #undef THEORAPLAY_CVT_FNNAME_420
 
 
-typedef struct TheoraDecoder
-{
+struct TheoraDecoder {
     // Thread wrangling...
     int thread_created;
     std::mutex lock;
@@ -121,7 +120,7 @@ typedef struct TheoraDecoder
 
     AudioPacket *audiolist;
     AudioPacket *audiolisttail;
-} TheoraDecoder;
+};
 
 static int FeedMoreOggData(THEORAPLAY_Io *io, ogg_sync_state *sync)
 {
@@ -562,9 +561,7 @@ THEORAPLAY_Decoder *THEORAPLAY_startDecode(THEORAPLAY_Io *io,
         default: goto startdecode_failed;  // invalid/unsupported format.
     } // switch
 
-    ctx = (TheoraDecoder *) malloc(sizeof (TheoraDecoder));
-    if (ctx == NULL)
-        goto startdecode_failed;
+    ctx = new TheoraDecoder;
 
     memset(ctx, '\0', sizeof (TheoraDecoder));
     ctx->maxframes = maxframes;
@@ -581,7 +578,7 @@ THEORAPLAY_Decoder *THEORAPLAY_startDecode(THEORAPLAY_Io *io,
 
 startdecode_failed:
     io->close(io);
-    free(ctx);
+    delete ctx;
     return NULL;
 } // THEORAPLAY_startDecode
 
@@ -616,7 +613,7 @@ void THEORAPLAY_stopDecode(THEORAPLAY_Decoder *decoder)
         audiolist = next;
     } // while
 
-    free(ctx);
+    delete ctx;
 } // THEORAPLAY_stopDecode
 
 
