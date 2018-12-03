@@ -4,7 +4,9 @@
 #pragma once
 
 #include <EGL/egl.h>
+#include <jni.h>
 #include <utility>
+#include <android/input.h>
 
 struct android_app;
 
@@ -15,15 +17,17 @@ class Window;
 class WindowImpl {
 public:
 	WindowImpl(Window*, std::pair<int, int> minAspectRatio, std::pair<int, int> maxAspectRatio);
+	~WindowImpl();
 
 	void updateInput();
 	void swapBuffers();
 	void init();
 	void setRelativeMouseMode(bool);
-	void addTextInput(const char*);
 	void pause();
 	void makeCurrent();
 	void hideNavigationBar();
+	int handleKeyEvent(AInputEvent*);
+	void setKeyboardVisible(bool);
 
 	int mouseX = 0;
 	int mouseY = 0;
@@ -32,6 +36,7 @@ public:
 	int relativeY = 0;
 
 private:
+	JNIEnv* env = nullptr;
 	EGLConfig config;
 	const std::pair<int, int> minAspectRatio;
 	const std::pair<int, int> maxAspectRatio;

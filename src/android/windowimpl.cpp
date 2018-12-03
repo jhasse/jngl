@@ -5,7 +5,7 @@
 
 #include "../jngl/other.hpp"
 #include "../jngl/debug.hpp"
-#include "../window.hpp"
+#include "../windowptr.hpp"
 #include "../main.hpp"
 #include "fopen.hpp"
 
@@ -17,7 +17,7 @@ namespace jngl {
 android_app* androidApp;
 
 static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
-	jngl::debugLn("Received event");
+	jngl::debug("Received event "); jngl::debugLn(cmd);
 	WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
 	switch (cmd) {
 		case APP_CMD_SAVE_STATE:
@@ -25,6 +25,7 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 			break;
 		case APP_CMD_INIT_WINDOW:
 			// The window is being shown, get it ready.
+			assert(androidApp == app);
 			if (androidApp->window) {
 				impl.init();
 			}
@@ -35,8 +36,11 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 		case APP_CMD_GAINED_FOCUS:
 			impl.makeCurrent();
 			break;
-		case APP_CMD_LOST_FOCUS:
+		case APP_CMD_PAUSE:
 			impl.pause();
+			break;
+		case APP_CMD_RESUME:
+			impl.hideNavigationBar();
 			break;
 	}
 }
@@ -45,49 +49,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 	WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
 	switch (AInputEvent_getType(event)) {
 		case AINPUT_EVENT_TYPE_KEY:
-			switch (AKeyEvent_getAction(event)) {
-				case AKEY_EVENT_ACTION_DOWN: {
-					const auto key = AKeyEvent_getKeyCode(event);
-					if (key == AKEYCODE_DEL) {
-						jngl::setKeyPressed(jngl::key::BackSpace, true);
-						return 1;
-					}
-					const auto metaState = AKeyEvent_getMetaState(event);
-
-					JNIEnv* env;
-					app->activity->vm->AttachCurrentThread(&env, nullptr);
-
-					const jclass keyEventClass = env->FindClass("android/view/KeyEvent");
-
-					const jmethodID getUnicodeCharMethod = env->GetMethodID(
-					    keyEventClass, "getUnicodeChar", (metaState == 0) ? "()I" : "(I)I");
-
-					const jmethodID eventConstructor =
-							env->GetMethodID(keyEventClass, "<init>", "(II)V");
-
-					const jobject eventObj = env->NewObject(
-							keyEventClass, eventConstructor, AKEY_EVENT_ACTION_DOWN, key);
-
-					const int unicode = (metaState == 0)
-							? env->CallIntMethod(eventObj, getUnicodeCharMethod)
-							: env->CallIntMethod(eventObj, getUnicodeCharMethod, metaState);
-
-					app->activity->vm->DetachCurrentThread();
-
-					if (unicode == 0) { // For example the back button
-						return 0;
-					}
-
-					char bytes[5];
-					std::memcpy(bytes, &unicode, 4);
-					if (bytes[0] == '\n') {
-						setKeyPressed(jngl::key::Return, true);
-						return 1;
-					}
-					bytes[4] = '\0';
-					impl.addTextInput(bytes);
-					return 1;
-				}
+			if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN) {
+				return impl.handleKeyEvent(event);
 			}
 			break;
 		case AINPUT_EVENT_TYPE_MOTION:
@@ -121,8 +84,18 @@ WindowImpl::WindowImpl(Window* window, const std::pair<int, int> minAspectRatio,
 
 	android_asset_manager = app->activity->assetManager;
 	assert(android_asset_manager);
+	app->activity->vm->AttachCurrentThread(&env, nullptr);
+}
 
-	hideNavigationBar();
+WindowImpl::~WindowImpl() {
+	// We need to destroy the surface before finishing our activity, otherwise the app won't start
+	// again.
+	pause();
+	// jngl::quit() has been called. We need to gracefully quit the activity, too, and handle any
+	// pending events (this will result in destroyRequested != 0):
+	ANativeActivity_finish(app->activity);
+	updateInput();
+	app->activity->vm->DetachCurrentThread();
 }
 
 void WindowImpl::init() {
@@ -191,16 +164,14 @@ void WindowImpl::setRelativeMouseMode(const bool relativeMouseMode) {
 	if (relativeMouseMode) {
 		relativeX = mouseX;
 		relativeY = mouseY;
+		window->mousex_ = window->mousey_ = 0;
 	} else {
 		relativeX = relativeY = 0;
 	}
 }
 
-void WindowImpl::addTextInput(const char* const character) {
-	window->textInput += std::string(character);
-}
-
 void WindowImpl::pause() {
+	if (!surface) { return; }
 	if (eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) ==
 		EGL_FALSE) {
 		debugLn("Couldn't unbind surfaces!");
@@ -220,9 +191,6 @@ void WindowImpl::makeCurrent() {
 }
 
 void WindowImpl::hideNavigationBar() {
-	JNIEnv* env = nullptr;
-	app->activity->vm->AttachCurrentThread(&env, nullptr);
-
 	jclass activityClass = env->FindClass("android/app/NativeActivity");
 	jmethodID getWindow = env->GetMethodID(activityClass, "getWindow", "()Landroid/view/Window;");
 
@@ -248,8 +216,52 @@ void WindowImpl::hideNavigationBar() {
 	const int flag = flagFullscreen | flagHideNavigation | flagImmersiveSticky;
 
 	env->CallVoidMethod(decorView, setSystemUiVisibility, flag);
+	if (env->ExceptionCheck()) {
+		// When resuming the app, setSystemUiVisibility raises an exception "Only the original
+		// thread that created a view hierarchy can touch its views.". The navigation bar still
+		// gets hidden though, so ignore it.
+		env->ExceptionClear();
+	}
+}
 
-	app->activity->vm->DetachCurrentThread();
+int WindowImpl::handleKeyEvent(AInputEvent* const event) {
+	const auto key = AKeyEvent_getKeyCode(event);
+	if (key == AKEYCODE_DEL) {
+		jngl::setKeyPressed(jngl::key::BackSpace, true);
+		return 1;
+	} else if (key == AKEYCODE_BACK) {
+		jngl::quit();
+		return 1;
+	}
+	const auto metaState = AKeyEvent_getMetaState(event);
+
+	const jclass keyEventClass = env->FindClass("android/view/KeyEvent");
+
+	const jmethodID getUnicodeCharMethod =
+	    env->GetMethodID(keyEventClass, "getUnicodeChar", (metaState == 0) ? "()I" : "(I)I");
+
+	const jmethodID eventConstructor = env->GetMethodID(keyEventClass, "<init>", "(II)V");
+
+	const jobject eventObj =
+	    env->NewObject(keyEventClass, eventConstructor, AKEY_EVENT_ACTION_DOWN, key);
+
+	const int unicode = (metaState == 0)
+	                        ? env->CallIntMethod(eventObj, getUnicodeCharMethod)
+	                        : env->CallIntMethod(eventObj, getUnicodeCharMethod, metaState);
+
+	if (unicode == 0) { // For example the back button
+		return 0;
+	}
+
+	char bytes[5];
+	std::memcpy(bytes, &unicode, 4);
+	if (bytes[0] == '\n') {
+		setKeyPressed(jngl::key::Return, true);
+		return 1;
+	}
+	bytes[4] = '\0';
+	window->textInput += std::string(bytes);
+	return 1;
 }
 
 void WindowImpl::updateInput() {
@@ -258,8 +270,12 @@ void WindowImpl::updateInput() {
 	int events;
 	android_poll_source* source;
 
-	while ((ident = ALooper_pollAll(0, NULL, &events, (void**)&source)) >= 0 ||
-	       !initialized /* wait for WindowImpl::init to get called by engine_handle_cmd */) {
+	while ((ident = ALooper_pollAll(
+	            surface ? 0 : 1e9, // This is the timeout. When we're in the background, we don't
+	                               // want to busy-wait for events.
+	            nullptr, &events, (void**)&source)) >= 0 ||
+	       !initialized /* wait for WindowImpl::init to get called by engine_handle_cmd */ ||
+	       !surface /* we're in the background, don't leave this event loop */) {
 
 		// Process this event.
 		if (source != NULL) {
@@ -275,6 +291,7 @@ void WindowImpl::updateInput() {
 				debugLn("Couldn't terminate display!");
 			}
 			jngl::quit();
+			return; // surface == nullptr, we need to exit this loop
 		}
 	}
 
@@ -297,18 +314,20 @@ void WindowImpl::swapBuffers() {
 	}
 }
 
+WindowImpl* Window::getImpl() const { return impl; }
+
 void setKeyboardVisible(const bool visible) {
-	const auto app = androidApp->activity;
+	pWindow->getImpl()->setKeyboardVisible(visible);
+}
 
-	JNIEnv* env = nullptr;
-	app->vm->AttachCurrentThread(&env, nullptr);
-
-	const jclass nativeActivityClass = env->GetObjectClass(app->clazz);
+void WindowImpl::setKeyboardVisible(const bool visible) {
+	const jclass nativeActivityClass = env->GetObjectClass(app->activity->clazz);
 
 	const jmethodID getApplicationContextMethod = env->GetMethodID(
 			nativeActivityClass, "getApplicationContext", "()Landroid/content/Context;");
 
-	const jobject contextObject = env->CallObjectMethod(app->clazz, getApplicationContextMethod);
+	const jobject contextObject =
+	    env->CallObjectMethod(app->activity->clazz, getApplicationContextMethod);
 
 	const jclass contextClass = env->FindClass("android/content/Context");
 
@@ -343,8 +362,6 @@ void setKeyboardVisible(const bool visible) {
 	}
 
 	env->CallVoidMethod(inputMethodManager, toggleSoftInputMethod, showFlags, 0);
-
-	app->vm->DetachCurrentThread();
 }
 
 } // namespace jngl

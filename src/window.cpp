@@ -214,6 +214,7 @@ namespace jngl {
 		numberOfChecks = 0;
 		stepsPerFrame = 1;
 		sleepCorrectionFactor = 1;
+		maxFPS = 300;
 	}
 
 	unsigned int Window::getStepsPerSecond() const {
