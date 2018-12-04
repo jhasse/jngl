@@ -5,8 +5,10 @@
 
 #ifdef JNGL_VIDEO
 
+#include "../opengl.hpp"
 #include "../audio.hpp"
 #include "../../subprojects/theoraplay/theoraplay.h"
+#include "Shader.hpp"
 #include "debug.hpp"
 #include "time.hpp"
 
@@ -25,7 +27,7 @@ namespace jngl {
 class Video::Impl {
 public:
 	Impl(const std::string& filename)
-	: decoder(THEORAPLAY_startDecodeFile(filename.c_str(), 60, THEORAPLAY_VIDFMT_RGBA)),
+	: decoder(THEORAPLAY_startDecodeFile(filename.c_str(), 60, THEORAPLAY_VIDFMT_IYUV)),
 	  startTime(jngl::getTime()) {
 		if (!decoder) {
 			throw std::runtime_error("Failed to start decoding " + filename + "!");
@@ -83,11 +85,108 @@ public:
 					video = last;
 				}
 			}
-			if (!sprite) {
-				sprite = std::make_unique<jngl::Sprite>(video->pixels, video->width, video->height);
-			} else {
-				sprite->setBytes(video->pixels);
+			if (!shaderProgram) {
+				Shader vertexShader(R"(#version 300 es
+					in mediump vec2 position;
+					in mediump vec2 inTexCoord;
+					uniform mediump mat3 modelview;
+					uniform mediump mat4 projection;
+					out mediump vec2 texCoord;
+
+					void main() {
+						vec3 tmp = modelview * vec3(position, 1);
+						gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
+						texCoord = inTexCoord;
+					})", Shader::Type::VERTEX
+				);
+				Shader fragmentShader(R"(#version 300 es
+					uniform sampler2D texY;
+					uniform sampler2D texU;
+					uniform sampler2D texV;
+
+					in mediump vec2 texCoord;
+
+					out lowp vec4 outColor;
+
+					void main() {
+						lowp float y = texture(texY, texCoord).r;
+						lowp float u = texture(texU, texCoord).r - 0.5;
+						lowp float v = texture(texV, texCoord).r - 0.5;
+						y = 1.1643 * (y - 0.0625);
+						outColor = vec4(
+							y + 1.5958 * v,
+							y - 0.39173 * u - 0.81290 * v,
+							y + 2.017 * u,
+							1.0
+						);
+					})", Shader::Type::FRAGMENT
+				);
+				shaderProgram = std::make_unique<ShaderProgram>(vertexShader, fragmentShader);
+				modelviewUniform = shaderProgram->getUniformLocation("modelview");
+				const auto projectionUniform =
+				    shaderProgram->getUniformLocation("projection");
+				const auto tmp = shaderProgram->use();
+				glUniform1i(shaderProgram->getUniformLocation("texU"), 1);
+				glUniform1i(shaderProgram->getUniformLocation("texV"), 2);
+				glUniformMatrix4fv(projectionUniform, 1, GL_TRUE, &opengl::projection.a[0][0]);
+
+				textureY = opengl::genAndBindTexture();
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, video->width, video->height, 0, GL_RED,
+				             GL_UNSIGNED_BYTE, nullptr);
+
+				textureU = opengl::genAndBindTexture();
+				// U and V components are a quarter of the size of the video:
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, video->width / 2, video->height / 2, 0,
+				             GL_RED, GL_UNSIGNED_BYTE, nullptr);
+
+				textureV = opengl::genAndBindTexture();
+				// U and V components are a quarter of the size of the video:
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, video->width / 2, video->height / 2, 0,
+				             GL_RED, GL_UNSIGNED_BYTE, nullptr);
+
+				const float preciseWidth = video->width; // TODO: scaling
+				const float preciseHeight = video->height;
+				const static GLfloat vertexes[] = {
+					-preciseWidth / 2, -preciseHeight / 2,
+					0, 0, // texture coordinates
+					-preciseWidth / 2, preciseHeight / 2,
+					0, 1, // texture coordinates
+					preciseWidth / 2, preciseHeight / 2,
+					1, 1, // texture coordinates
+					preciseWidth / 2, -preciseHeight / 2,
+					1, 0 // texture coordinates
+				};
+				glGenVertexArrays(1, &vao);
+				glBindVertexArray(vao);
+
+				glGenBuffers(1, &vertexBuffer);
+				glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+				glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes, GL_STATIC_DRAW);
+
+				const GLint posAttrib = shaderProgram->getAttribLocation("position");
+				glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
+				glEnableVertexAttribArray(posAttrib);
+
+				const GLint texCoordAttrib = shaderProgram->getAttribLocation("inTexCoord");
+				glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
+				                      reinterpret_cast<void*>(2 * sizeof(float)));
+				glEnableVertexAttribArray(texCoordAttrib);
 			}
+
+			glBindTexture(GL_TEXTURE_2D, textureY);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video->width, video->height, GL_RED,
+			                GL_UNSIGNED_BYTE, video->pixels);
+
+			assert(video->width % 2 == 0 & video->height % 2 == 0);
+			glBindTexture(GL_TEXTURE_2D, textureU);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video->width / 2, video->height / 2, GL_RED,
+			                GL_UNSIGNED_BYTE, video->pixels + video->width * video->height);
+
+			glBindTexture(GL_TEXTURE_2D, textureV);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video->width / 2, video->height / 2, GL_RED,
+			                GL_UNSIGNED_BYTE,
+			                video->pixels + std::lround(1.25 * video->width * video->height));
+
 			THEORAPLAY_freeVideo(video);
 			video = nullptr;
 		}
@@ -140,8 +239,21 @@ public:
 				}
 			}
 		}
-		if (sprite) {
-			sprite->draw();
+		if (shaderProgram) {
+			auto _ = shaderProgram->use();
+			glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
+			glBindVertexArray(vao);
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, textureY);
+
+			glActiveTexture(GL_TEXTURE0 + 1);
+			glBindTexture(GL_TEXTURE_2D, textureU);
+
+			glActiveTexture(GL_TEXTURE0 + 2);
+			glBindTexture(GL_TEXTURE_2D, textureV);
+
+			glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 		}
 	}
 
@@ -178,7 +290,6 @@ private:
 		audio = THEORAPLAY_getAudio(decoder);
 	}
 
-	std::unique_ptr<jngl::Sprite> sprite;
 	std::unique_ptr<jngl::Sound> sound;
 	THEORAPLAY_Decoder* decoder;
 	const THEORAPLAY_VideoFrame* video = nullptr;
@@ -188,6 +299,14 @@ private:
 	std::deque<ALuint> buffers;
 	ALuint source = 0;
 	ALenum format;
+
+	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
+	int modelviewUniform;
+	GLuint textureY; // luminance
+	GLuint textureU; // chrominance
+	GLuint textureV; // chrominance
+	GLuint vao;
+	GLuint vertexBuffer;
 };
 
 Video::Video(const std::string& filename) : impl(std::make_unique<Impl>(filename)) {

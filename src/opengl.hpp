@@ -40,6 +40,9 @@ namespace opengl
 	void translate(float x, float y);
 	void scale(float x, float y);
 
+	/// Generates a textures, binds it to GL_TEXTURE_2D and sets some common parameters
+	GLuint genAndBindTexture();
+
 	template<class T> struct Type {};
 
 	template<>

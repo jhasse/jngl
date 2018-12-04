@@ -58,14 +58,8 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 		const auto tmp = textureShaderProgram->use();
 		glUniformMatrix4fv(projectionUniform, 1, GL_TRUE, &opengl::projection.a[0][0]);
 	}
-	glGenTextures(1, &texture_);
-	glBindTexture(GL_TEXTURE_2D, texture_);
+	texture_ = opengl::genAndBindTexture();
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-	                GL_CLAMP_TO_EDGE); // preventing wrapping artifacts
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	vertexes = {
 		0, 0,
 		0, 0, // texture coordinates
