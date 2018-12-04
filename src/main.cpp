@@ -40,7 +40,7 @@ void debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum sev
 
 bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
-	if (epoxy_gl_version() >= 43) {
+	if (epoxy_gl_version() >= 43 || epoxy_has_gl_extension("GL_KHR_debug")) {
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr);
