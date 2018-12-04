@@ -16,6 +16,8 @@ public:
 	~Video();
 
 	void draw() const;
+	int getWidth() const;
+	int getHeight() const;
 
 private:
 	class Impl;

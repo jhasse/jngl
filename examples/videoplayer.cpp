@@ -3,7 +3,7 @@
 JNGL_MAIN_BEGIN {
 	const auto filename = jngl::getArgs().at(0);
 	jngl::Video video(filename);
-	jngl::showWindow(filename, 1280, 720);
+	jngl::showWindow(filename, video.getWidth(), video.getHeight());
 	while (jngl::running()) {
 		jngl::updateInput();
 		video.draw();

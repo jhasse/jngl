@@ -75,9 +75,11 @@ public:
 				// wait for more.
 				const THEORAPLAY_VideoFrame* last = video;
 				while ((video = THEORAPLAY_getVideo(decoder)) != nullptr) {
+					jngl::debug("\x1b[33mskipped frame at ");
+					jngl::debug(last->playms);
+					jngl::debugLn("ms\x1b[0m");
 					THEORAPLAY_freeVideo(last);
 					last = video;
-					jngl::debugLn("skipped frame!");
 					if (now - double(video->playms) / 1000. < timePerFrame) { break; }
 				}
 
@@ -270,6 +272,9 @@ public:
 		checkAlError();
 	}
 
+	int getWidth() const { return video->width; }
+	int getHeight() const { return video->height; }
+
 private:
 	void queueAudio(ALuint buffer) {
 		auto pcm = std::make_unique<int16_t[]>(audio->frames * audio->channels);
@@ -318,6 +323,14 @@ void Video::draw() const {
 	impl->draw();
 }
 
+int Video::getWidth() const {
+	return impl->getWidth();
+}
+
+int Video::getHeight() const {
+	return impl->getHeight();
+}
+
 } // namespace jngl
 
 #else
@@ -335,6 +348,9 @@ Video::~Video() = default;
 
 void Video::draw() const {
 }
+
+int Video::getWidth() const { return -1; }
+int Video::getHeight() const { return -1; }
 
 } // namespace jngl
 
