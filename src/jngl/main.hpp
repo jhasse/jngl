@@ -5,6 +5,7 @@
 
 #include "Finally.hpp"
 #include "other.hpp"
+#include "window.hpp"
 
 #if !defined(JNGL_MAIN_BEGIN)
 	#if defined(ANDROID)
