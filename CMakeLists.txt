@@ -35,8 +35,12 @@ elseif (UNIX)
 		file(GLOB SRC src/linux/*.cpp src/linux/*.c)
 		target_sources(jngl PRIVATE ${SRC})
     endif()
+else() # Windows
+	target_compile_definitions(jngl PRIVATE WINVER=0x0602 _USE_MATH_DEFINES)
+	file(GLOB SRC src/win32/*.cpp)
+	target_sources(jngl PRIVATE ${SRC})
+	target_link_libraries(jngl PUBLIC xinput1_4 winmm)
 endif()
-
 
 # fontconfig
 if (UNIX)
@@ -108,10 +112,11 @@ if(ANDROID)
 	target_include_directories(jngl PRIVATE ${ANDROID_NDK}/sources/android/native_app_glue
 	                           ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
 else()
-	# SDL2
-	find_package(SDL2 REQUIRED)
-	include_directories(${SDL2_INCLUDE_DIRS})
-	target_link_libraries(jngl PUBLIC ${SDL2_LIBRARIES})
+	if(UNIX)
+		find_package(SDL2 REQUIRED)
+		include_directories(${SDL2_INCLUDE_DIRS})
+		target_link_libraries(jngl PUBLIC ${SDL2_LIBRARIES})
+	endif()
 
 	find_package(JPEG)
 	if(JPEG_FOUND)
@@ -128,11 +133,6 @@ else()
 	# PNG
 	find_package(PNG REQUIRED)
 	target_link_libraries(jngl PUBLIC ${PNG_LIBRARIES})
-
-	# epoxy
-	find_package(LibEpoxy REQUIRED)
-	target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
-	target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
 
 	# VorbisFile
 	find_package(VorbisFile REQUIRED)
@@ -164,6 +164,12 @@ else()
 				target_link_libraries(videoplayer PRIVATE jngl)
 			endif()
 		endif()
+		pkg_check_modules(EPOXY REQUIRED epoxy)
+		target_link_libraries(jngl PUBLIC ${EPOXY_LIBRARIES})
+	else()
+		find_package(LibEpoxy REQUIRED)
+		target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
+		target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
 	endif()
 endif()
 
