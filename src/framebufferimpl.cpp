@@ -60,6 +60,7 @@ void FrameBufferImpl::BeginDraw() {
 void FrameBufferImpl::Clear() {
 	glClearColor(1, 1, 1, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
+	clearBackgroundColor();
 }
 
 void FrameBufferImpl::EndDraw() {
