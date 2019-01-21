@@ -454,7 +454,7 @@ void testKeys() {
 		if (jngl::keyPressed(jngl::key::Escape)) {
 			jngl::setRelativeMouseMode(false);
 			jngl::setMouseVisible(true);
-			jngl::setMouse(xpos, ypos);
+			jngl::setMouse({xpos, ypos});
 		}
 		jngl::swapBuffers();
 	}
