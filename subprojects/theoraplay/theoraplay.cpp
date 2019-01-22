@@ -96,30 +96,30 @@ static unsigned char *ConvertVideoFrame420ToIYUV(const th_info *tinfo,
 
 struct TheoraDecoder {
     // Thread wrangling...
-    int thread_created;
+	int thread_created = 0;
     std::mutex lock;
-    volatile int halt;
-    int thread_done;
+	volatile int halt = 0;
+	int thread_done = 0;
     std::thread worker;
 
     // API state...
-    THEORAPLAY_Io *io;
-    unsigned int maxframes;  // Max video frames to buffer.
-    volatile unsigned int prepped;
-    volatile unsigned int videocount;  // currently buffered frames.
-    volatile unsigned int audioms;  // currently buffered audio samples.
-    volatile int hasvideo;
-    volatile int hasaudio;
-    volatile int decode_error;
+	THEORAPLAY_Io* io = nullptr;
+	unsigned int maxframes = 0; // Max video frames to buffer.
+	volatile unsigned int prepped = 0;
+	volatile unsigned int videocount = 0; // currently buffered frames.
+	volatile unsigned int audioms = 0;    // currently buffered audio samples.
+	volatile int hasvideo = 0;
+	volatile int hasaudio = 0;
+	volatile int decode_error = 0;
 
     THEORAPLAY_VideoFormat vidfmt;
     ConvertVideoFrameFn vidcvt;
 
-    VideoFrame *videolist;
-    VideoFrame *videolisttail;
+	VideoFrame* videolist = nullptr;
+	VideoFrame* videolisttail = nullptr;
 
-    AudioPacket *audiolist;
-    AudioPacket *audiolisttail;
+	AudioPacket* audiolist = nullptr;
+	AudioPacket* audiolisttail = nullptr;
 };
 
 static int FeedMoreOggData(THEORAPLAY_Io *io, ogg_sync_state *sync)
@@ -563,7 +563,6 @@ THEORAPLAY_Decoder *THEORAPLAY_startDecode(THEORAPLAY_Io *io,
 
     ctx = new TheoraDecoder;
 
-    memset(ctx, '\0', sizeof (TheoraDecoder));
     ctx->maxframes = maxframes;
     ctx->vidfmt = vidfmt;
     ctx->vidcvt = vidcvt;
