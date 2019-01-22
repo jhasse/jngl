@@ -12,6 +12,7 @@
 #include "debug.hpp"
 #include "time.hpp"
 
+#include <cmath>
 #include <deque>
 #include <thread>
 #ifdef __APPLE__
