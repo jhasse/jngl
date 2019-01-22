@@ -150,7 +150,7 @@ else()
 	endif()
 
 	find_package(PkgConfig)
-	if(PkgConfig_FOUND)
+	if(PkgConfig_FOUND AND NOT APPLE)
 		pkg_check_modules(THEORA_DEC theoradec)
 		if(THEORA_DEC_FOUND)
 			pkg_check_modules(VORBIS vorbis)

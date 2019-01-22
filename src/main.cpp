@@ -229,8 +229,9 @@ bool mousePressed(mouse::Button button) {
 	return pWindow->getMousePressed(button);
 }
 
-void setMouse(const int xposition, const int yposition) {
-	pWindow->SetMouse(xposition + getScreenWidth() / 2, yposition + getScreenHeight() / 2);
+void setMouse(const jngl::Vec2 pos) {
+	pWindow->SetMouse((pos.x + getScreenWidth() / 2) * getScaleFactor(),
+	                  (pos.y + getScreenHeight() / 2) * getScaleFactor());
 }
 
 void setRelativeMouseMode(const bool relative) {

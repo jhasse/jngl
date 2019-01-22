@@ -319,7 +319,7 @@ static Boolean isLegalUTF8(const UTF8 *source, int length) {
 	    case 0xF4: if (a > 0x8F) return false; break;
 	    default:   if (a < 0x80) return false; break;
 	}
-
+    FALLTHROUGH
     case 1: if (*source >= 0x80 && *source < 0xC2) return false;
     }
     if (*source > 0xF4) return false;

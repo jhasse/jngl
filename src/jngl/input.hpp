@@ -116,7 +116,7 @@ namespace jngl {
 
 	void JNGLDLL_API setMousePressed(jngl::mouse::Button, bool);
 
-	void JNGLDLL_API setMouse(int xposition, int yposition);
+	void JNGLDLL_API setMouse(Vec2 position);
 
 	namespace controller {
 		enum Button {
