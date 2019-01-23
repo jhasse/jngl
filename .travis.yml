@@ -1,12 +1,29 @@
 language: cpp
 os:
 - osx
+- linux
+dist: xenial
 compiler:
   - clang
 install:
-  - brew update
-  - brew outdated jpeg || brew upgrade jpeg
-  - brew install sdl2 freetype libvorbis libepoxy jpeg webp meson
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated jpeg || brew upgrade jpeg; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install sdl2 freetype libvorbis libepoxy jpeg webp meson; fi
 script:
-  - meson build
-  - ninja -C build
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then meson build; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ninja -C build; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd doc && doxygen; fi
+addons:
+  apt:
+    packages:
+    - doxygen
+    - graphviz
+deploy:
+  local-dir: doc/html
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  on:
+    branch: master
+    os: linux
