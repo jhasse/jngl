@@ -1,12 +1,12 @@
 <map id="jngl/Vec2.hpp" name="jngl/Vec2.hpp">
-<area shape="rect" id="node2" href="$Vertex_8hpp_source.html" title="jngl/Vertex.hpp" alt="" coords="5,155,120,181"/>
-<area shape="rect" id="node5" href="$input_8hpp.html" title="jngl/input.hpp" alt="" coords="162,80,267,107"/>
-<area shape="rect" id="node7" href="$font_8hpp_source.html" title="jngl/font.hpp" alt="" coords="353,155,453,181"/>
-<area shape="rect" id="node8" href="$screen_8hpp.html" title="jngl/screen.hpp" alt="" coords="343,80,460,107"/>
-<area shape="rect" id="node9" href="$shapes_8hpp_source.html" title="jngl/shapes.hpp" alt="" coords="485,80,603,107"/>
-<area shape="rect" id="node10" href="$sprite_8hpp_source.html" title="jngl/sprite.hpp" alt="" coords="627,80,738,107"/>
-<area shape="rect" id="node3" href="$all_8hpp.html" title="Includes all JNGL headers. " alt="" coords="403,229,491,256"/>
-<area shape="rect" id="node4" href="$jngl_8hpp_source.html" title="jngl.hpp" alt="" coords="412,304,481,331"/>
-<area shape="rect" id="node6" href="$Controller_8hpp_source.html" title="jngl/Controller.hpp" alt="" coords="195,155,328,181"/>
-<area shape="rect" id="node11" href="$Video_8hpp_source.html" title="jngl/Video.hpp" alt="" coords="630,155,741,181"/>
+<area shape="rect" id="node2" href="$Vertex_8hpp_source.html" title="jngl/Vertex.hpp" alt="" coords="5,157,111,185"/>
+<area shape="rect" id="node5" href="$input_8hpp.html" title="jngl/input.hpp" alt="" coords="167,81,264,109"/>
+<area shape="rect" id="node7" href="$font_8hpp_source.html" title="jngl/font.hpp" alt="" coords="333,157,423,185"/>
+<area shape="rect" id="node8" href="$screen_8hpp.html" title="jngl/screen.hpp" alt="" coords="338,81,442,109"/>
+<area shape="rect" id="node9" href="$shapes_8hpp_source.html" title="jngl/shapes.hpp" alt="" coords="466,81,570,109"/>
+<area shape="rect" id="node10" href="$sprite_8hpp_source.html" title="jngl/sprite.hpp" alt="" coords="594,81,693,109"/>
+<area shape="rect" id="node3" href="$all_8hpp.html" title="Includes all JNGL headers. " alt="" coords="378,233,461,261"/>
+<area shape="rect" id="node4" href="$jngl_8hpp_source.html" title="jngl.hpp" alt="" coords="387,309,452,337"/>
+<area shape="rect" id="node6" href="$Controller_8hpp_source.html" title="jngl/Controller.hpp" alt="" coords="185,157,309,185"/>
+<area shape="rect" id="node11" href="$Video_8hpp_source.html" title="jngl/Video.hpp" alt="" coords="599,157,701,185"/>
 </map>

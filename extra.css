@@ -161,8 +161,10 @@ a.qindexHL {
 	color: #ffffff;
 }
 
-a.el, .memname, td.entry {
-	font-family: monospace;
+a.el, .memname, td.entry, pre.fragment, div.line, .mdescLeft, .mdescRight, .memItemLeft,
+.memItemRight, .memTemplItemLeft, .memTemplItemRight, .memTemplParams, .memtemplate,
+.params .paramname, .retval .paramname, .params .paramdir {
+	font-family: 'Consolas', monospace;
 }
 
 a.code, a.code:visited {
@@ -190,7 +192,6 @@ pre.fragment {
 	word-wrap: break-word;
 	font-size: 9pt;
 	line-height: 125%;
-	font-family: monospace;
 	font-size: 105%;
 }
 
@@ -203,7 +204,6 @@ div.fragment {
 }
 
 div.line {
-	font-family: monospace;
 	font-size: 13px;
 	min-height: 13px;
 	line-height: 1.0;
@@ -476,7 +476,6 @@ table.memberdecls {
 	border: none;
 	margin: 4px;
 	padding: 1px 0 0 8px;
-	font-family: monospace;
 }
 
 .mdescLeft, .mdescRight {
@@ -517,7 +516,6 @@ table.memberdecls {
 /* Styles for detailed member documentation */
 
 .memtemplate {
-	font-family: monospace;
 	font-size: 100%;
 	color: black;
 	font-weight: normal;
@@ -646,7 +644,6 @@ dl.reflist dd {
 }
 
 .params .paramname, .retval .paramname {
-	font-family: monospace;
 	font-style: italic;
 	font-weight: normal;
 	text-shadow: rgba(0, 0, 0, 0.3) 0px 1px 1px;
@@ -658,7 +655,6 @@ dl.reflist dd {
 }
 
 .params .paramdir {
-	font-family: "courier new", courier, monospace;
 	vertical-align: top;
 }
 
