@@ -1,9 +1,0 @@
-#projectname, div, h2, .title, .mdescRight, td {
-	font-family: Roboto, sans-serif;
-}
-table, .memItemLeft, .memItemRight, .memTemplParams, .memTemplItemLeft, .memTemplItemRight {
-	font-family: monospace, fixed;
-}
-#titlearea {
-	display: none;
-}
