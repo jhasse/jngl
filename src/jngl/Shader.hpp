@@ -7,6 +7,7 @@
 
 #include <memory>
 
+/// JNGL's main namespace
 namespace jngl {
 
 class Shader {
