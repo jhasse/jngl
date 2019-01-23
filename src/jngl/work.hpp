@@ -1,28 +1,17 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
 
 #include "dll.hpp"
+#include "job.hpp"
 
 #include <memory>
 
 namespace jngl {
 
-class JNGLDLL_API Work {
+class JNGLDLL_API Work : public Job {
 public:
-	/// Advance the game logic
-	///
-	/// This function gets called 60 times per second or whatever has been set by
-	/// setStepsPerSecond().
-	virtual void step() = 0;
-
-	/// Draw the game state
-	///
-	/// As it isn't garuanteed that this function is called as often as Work::step, you shouldn't
-	/// change any game state in it.
-	virtual void draw() const = 0;
-
 	/// Gets called when the user closes the main window or quit() has been called
 	///
 	/// On Android this will happen when the back button is pressend, on iOS when the app is closed
