@@ -33,6 +33,7 @@ public:
 	void JNGLDLL_API drawScaled(float factor, const ShaderProgram* = nullptr) const;
 	void JNGLDLL_API drawScaled(float xfactor, float yfactor, const ShaderProgram* = nullptr) const;
 
+	/// \deprecated Use new drawClipped(Vec2, Vec2) method instead
 	[[deprecated("Use new drawClipped(Vec2, Vec2) method instead")]] void JNGLDLL_API
 	drawClipped(float xstart, float xend, float ystart, float yend) const;
 

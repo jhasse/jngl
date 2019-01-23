@@ -1,6 +1,6 @@
 // Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// @file
 #pragma once
 
 #include "dll.hpp"
@@ -56,6 +56,7 @@ namespace jngl {
 	/// Display onscreen keyboard for touch devices
 	void JNGLDLL_API setKeyboardVisible(bool);
 
+	/// Whether a normal or a numbers-only keyboard should appear
 	enum KeyboardType {
 		Default,
 		Numpad
@@ -92,11 +93,16 @@ namespace jngl {
 
 	bool JNGLDLL_API isMultitouch();
 
+	/// Mouse position in screen coordinates
 	Vec2 JNGLDLL_API getMousePos();
 
+	/// Retrieve mouse position in pixels
+	/// \deprecated Use jngl::getMousePos() instead
 	[[deprecated("Use jngl::getMousePos() instead")]]
 	int JNGLDLL_API getMouseX();
 
+	/// Retrieve mouse position in pixels
+	/// \deprecated Use jngl::getMousePos() instead
 	[[deprecated("Use jngl::getMousePos() instead")]]
 	int JNGLDLL_API getMouseY();
 
@@ -116,6 +122,7 @@ namespace jngl {
 
 	void JNGLDLL_API setMousePressed(jngl::mouse::Button, bool);
 
+	/// Moves the mouse (does nothing on iOS and Android)
 	void JNGLDLL_API setMouse(Vec2 position);
 
 	namespace controller {

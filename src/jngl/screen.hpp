@@ -1,6 +1,6 @@
 // Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// @file
 #pragma once
 
 #include "dll.hpp"
@@ -8,24 +8,21 @@
 #include "Vec2.hpp"
 
 namespace jngl {
-	Float JNGLDLL_API getScaleFactor();
 
-	void JNGLDLL_API setScaleFactor(Float);
+Float JNGLDLL_API getScaleFactor();
 
-	double JNGLDLL_API getScreenWidth();
+void JNGLDLL_API setScaleFactor(Float);
 
-	double JNGLDLL_API getScreenHeight();
+double JNGLDLL_API getScreenWidth();
 
-	Vec2 JNGLDLL_API getScreenSize();
+double JNGLDLL_API getScreenHeight();
 
-	enum DeviceOrientation {
-		Portrait,
-		PortraitUpsideDown,
-		LandscapeLeft,
-		LandscapeRight
-	};
+Vec2 JNGLDLL_API getScreenSize();
 
-	void JNGLDLL_API setDeviceOrientationSupported(DeviceOrientation, bool enabled);
+enum DeviceOrientation { Portrait, PortraitUpsideDown, LandscapeLeft, LandscapeRight };
 
-	bool JNGLDLL_API getDeviceOrientationSupported(DeviceOrientation);
-}
+void JNGLDLL_API setDeviceOrientationSupported(DeviceOrientation, bool enabled);
+
+bool JNGLDLL_API getDeviceOrientationSupported(DeviceOrientation);
+
+} // namespace jngl

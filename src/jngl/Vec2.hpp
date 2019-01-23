@@ -1,6 +1,6 @@
 // Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// @file
 #pragma once
 
 #include "dll.hpp"
@@ -10,6 +10,7 @@
 
 namespace jngl {
 
+/// Two-dimensional vector
 class JNGLDLL_API Vec2 {
 public:
 	/// Null vector
