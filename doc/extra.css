@@ -12,7 +12,7 @@
 	font-weight: bold;
 }
 
-body, table, div, p, dl, p.definition, table.directory, .tabs2 {
+body, table, div, p, dl, p.definition, table.directory, .tabs, .tabs2 {
 	font-family: "Lato", sans-serif;
 }
 
