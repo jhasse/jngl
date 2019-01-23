@@ -30,8 +30,7 @@ pacman -Syu --needed meson gcc sdl2 pkg-config fontconfig libepoxy libwebp opena
 
 ### MSYS2 / MinGW-w64
 
-Set up [MSYS2](http://sourceforge.net/p/msys2/wiki/MSYS2%20installation/) and install the following
-in a mingw64 shell:
+Set up [MSYS2](https://www.msys2.org/) and install the following in a MinGW-w64 Win64 Shell:
 
 ```
 pacman -Syu --needed mingw-w64-x86_64-meson mingw-w64-x86_64-gcc mingw-w64-x86_64-boost \
