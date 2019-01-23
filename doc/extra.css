@@ -1,3 +1,17 @@
+@font-face {
+	font-family: 'Lato';
+	src: url('LatoLatin-Regular.woff2') format('woff2');
+	font-style: normal;
+	font-weight: normal;
+}
+
+@font-face {
+	font-family: 'Lato';
+	src: url('LatoLatin-Bold.woff2') format('woff2');
+	font-style: normal;
+	font-weight: bold;
+}
+
 body, table, div, p, dl, p.definition, table.directory, .tabs2 {
 	font-family: "Lato", sans-serif;
 }
