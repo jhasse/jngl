@@ -13,3 +13,4 @@ xcode/JNGL.xcodeproj/project.xcworkspace/xcuserdata/*
 /build*/
 /.vscode/
 /compile_commands.json
+/android/
