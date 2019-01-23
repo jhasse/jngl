@@ -1,4 +1,4 @@
 <map id="Drawable" name="Drawable">
-<area shape="rect" id="node2" href="$classjngl_1_1Sprite.html" title="Sprite" alt="" coords="5,81,59,109"/>
-<area shape="rect" id="node3" href="$classjngl_1_1Text.html" title="Text" alt="" coords="82,81,128,109"/>
+<area shape="rect" id="node2" href="$classjngl_1_1Sprite.html" title="Sprite" alt="" coords="5,80,64,107"/>
+<area shape="rect" id="node3" href="$classjngl_1_1Text.html" title="Text" alt="" coords="89,80,135,107"/>
 </map>

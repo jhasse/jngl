@@ -9,8 +9,8 @@ var searchData=
   ['setwork',['setWork',['../namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196',1,'jngl::setWork(std::shared_ptr&lt; Work &gt; work)'],['../namespacejngl.html#af765d65e1817b356ad2bd10c282d3f2d',1,'jngl::setWork(Work *)']]],
   ['shader',['Shader',['../classjngl_1_1Shader.html',1,'jngl']]],
   ['shaderprogram',['ShaderProgram',['../classjngl_1_1ShaderProgram.html',1,'jngl']]],
-  ['showwindow',['showWindow',['../namespacejngl.html#a6258b60ff00bd009838eea0a647279c1',1,'jngl']]],
+  ['showwindow',['showWindow',['../namespacejngl.html#a71a09b7f0cb6c251f5cc718d650f0673',1,'jngl']]],
   ['sprite',['Sprite',['../classjngl_1_1Sprite.html',1,'jngl']]],
   ['state',['state',['../classjngl_1_1Controller.html#a15ab6b1ab1850b74ff7b918a79edd90a',1,'jngl::Controller']]],
-  ['step',['step',['../classjngl_1_1Work.html#aa6f73ac7d5899119d156a0b3a27fba31',1,'jngl::Work']]]
+  ['step',['step',['../classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31',1,'jngl::Job']]]
 ];

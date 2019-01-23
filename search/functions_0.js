@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['cancelquit',['cancelQuit',['../namespacejngl.html#a023daf9767d1e2db5d032856dda0b8fa',1,'jngl']]]
+  ['addjob',['addJob',['../namespacejngl.html#a11ad14d4b65f6bbe5f5c7accaf457077',1,'jngl']]]
 ];

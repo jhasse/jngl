@@ -1,12 +1,7 @@
 var searchData=
 [
-  ['getargs',['getArgs',['../namespacejngl.html#ab3868554a49c6e62d3acc17965fde666',1,'jngl']]],
-  ['getbinarypath',['getBinaryPath',['../namespacejngl.html#a2f8f43d7d33e324796f628fc41640482',1,'jngl']]],
-  ['getconnectedcontrollers',['getConnectedControllers',['../namespacejngl.html#a2ef4903c72008831c91a0c5d39b52655',1,'jngl']]],
-  ['getmousepos',['getMousePos',['../namespacejngl.html#a8225af5eb6dd6d4a1e3c493554b5a01e',1,'jngl']]],
-  ['getmousex',['getMouseX',['../namespacejngl.html#a9ecc5b20cc52ca2658487c248ed649d0',1,'jngl']]],
-  ['getmousey',['getMouseY',['../namespacejngl.html#ab8d8f5aeddfc9b0e415d3d377e68834c',1,'jngl']]],
-  ['getstepspersecond',['getStepsPerSecond',['../namespacejngl.html#a9d8a357dd23189e0724e75d9afb5eddb',1,'jngl']]],
-  ['gettextinput',['getTextInput',['../namespacejngl.html#a61fd6900416c997489df138cb8651ab8',1,'jngl']]],
-  ['gettime',['getTime',['../namespacejngl.html#a4437edd7fd2832790c13ba3179bcc64d',1,'jngl']]]
+  ['down',['down',['../classjngl_1_1Controller.html#a17997332e2f8c247017cb4315b2646bf',1,'jngl::Controller']]],
+  ['draw',['draw',['../classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e',1,'jngl::Job']]],
+  ['drawclipped',['drawClipped',['../classjngl_1_1Sprite.html#a18cf7e38a4361af2aeb8ef8ac45b960f',1,'jngl::Sprite::drawClipped(float xstart, float xend, float ystart, float yend) const '],['../classjngl_1_1Sprite.html#a9b68150c27b9402a4b37486a7ebfad3a',1,'jngl::Sprite::drawClipped(Vec2 start, Vec2 end) const ']]],
+  ['drawmesh',['drawMesh',['../classjngl_1_1Sprite.html#a6a7a9d8f762b59bd7209eefcbb986e65',1,'jngl::Sprite']]]
 ];

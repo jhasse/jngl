@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mainloop',['mainLoop',['../namespacejngl.html#a8526353d8f97c6f91db63b9903e18138',1,'jngl']]]
+  ['hidewindow',['hideWindow',['../namespacejngl.html#a33936343afa186ee6c6095d8789b92f1',1,'jngl']]]
 ];
