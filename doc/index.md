@@ -7,16 +7,19 @@ Nintendo Switch<sup><a href="#fn1">1</a></sup>.
 
 ## Features
 
-* Modern C++14 style
+* C++14 or Python 3 interface
 * [zlib License](http://en.wikipedia.org/wiki/Zlib_license), so suitable for commercial use and
   static linking
-* OpenGL accelerated
+* OpenGL (ES) 3.0 accelerated
 * PNG, JPEG, BMP and [WebP](https://developers.google.com/speed/webp/) image support
-* Ogg Vorbis audio support
+* Ogg Vorbis audio support using OpenAL
+* Theora video playback support
 * UTF-8 text output using [FreeType](http://www.freetype.org/)
 
 ## Games
 
+* [**Snake Line Transmission**](https://gitlab.com/jhasse/ggj2018)<br>
+  Two player game created for the Global Game Jam 2018
 * [**Ghostly Intruders**](https://igjam.eu/jams/igjam-12/490/)<br>
   Local coop game created during the IGJam #12 (2017)
 * [**JNTETRI**](https://github.com/jhasse/jntetri)<br>

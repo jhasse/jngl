@@ -1,4 +1,4 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -19,7 +19,7 @@ public:
 
 	/// Draw the game state
 	///
-	/// As it isn't garuanteed that this function is called as often as Work::step, you shouldn't
+	/// As it isn't garuanteed that this function is called as often as Job::step, you shouldn't
 	/// change any game state in it.
 	virtual void draw() const = 0;
 

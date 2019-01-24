@@ -1,6 +1,6 @@
 // Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// @file
 #pragma once
 
 #include "color.hpp"
@@ -11,47 +11,46 @@
 #include <string>
 
 namespace jngl {
-	class FontImpl;
 
-	class Font {
-	public:
-		JNGLDLL_API Font(const std::string& filename, unsigned int size);
-		std::shared_ptr<FontImpl> JNGLDLL_API getImpl();
-		void JNGLDLL_API print(const std::string&, int x, int y);
-		void JNGLDLL_API print(const std::string&, Vec2 position);
+class FontImpl;
 
-	private:
-		std::shared_ptr<FontImpl> impl;
-	};
+class Font {
+public:
+	JNGLDLL_API Font(const std::string& filename, unsigned int size);
+	std::shared_ptr<FontImpl> JNGLDLL_API getImpl();
+	void JNGLDLL_API print(const std::string&, int x, int y);
+	void JNGLDLL_API print(const std::string&, Vec2 position);
 
-	void JNGLDLL_API print(const std::string& text,
-	           int xposition,
-	           int yposition);
+private:
+	std::shared_ptr<FontImpl> impl;
+};
 
-	int JNGLDLL_API getFontSize();
+void JNGLDLL_API print(const std::string& text, int xposition, int yposition);
 
-	void JNGLDLL_API setFontSize(int size);
+int JNGLDLL_API getFontSize();
 
-	std::string JNGLDLL_API getFont();
+/// Change the font size used by print()
+void JNGLDLL_API setFontSize(int size);
 
-	void JNGLDLL_API setFont(const std::string& filename);
+std::string JNGLDLL_API getFont();
 
-	void JNGLDLL_API setFontByName(const std::string& name);
+void JNGLDLL_API setFont(const std::string& filename);
 
-	void JNGLDLL_API setFontColor(jngl::Color);
+void JNGLDLL_API setFontByName(const std::string& name);
 
-	void JNGLDLL_API setFontColor(unsigned char red,
-	                              unsigned char green,
-	                              unsigned char blue,
-	                              unsigned char alpha = 255);
+void JNGLDLL_API setFontColor(jngl::Color);
 
-	void JNGLDLL_API pushFontColor(unsigned char red, unsigned char green, unsigned char blue);
+void JNGLDLL_API setFontColor(unsigned char red, unsigned char green, unsigned char blue,
+                              unsigned char alpha = 255);
 
-	void JNGLDLL_API popFontColor();
+void JNGLDLL_API pushFontColor(unsigned char red, unsigned char green, unsigned char blue);
 
-	int JNGLDLL_API getLineHeight();
+void JNGLDLL_API popFontColor();
 
-	void JNGLDLL_API setLineHeight(int);
+int JNGLDLL_API getLineHeight();
 
-	double JNGLDLL_API getTextWidth(const std::string& text);
-}
+void JNGLDLL_API setLineHeight(int);
+
+double JNGLDLL_API getTextWidth(const std::string& text);
+
+} // namespace jngl
