@@ -1,7 +1,7 @@
 project('jngl', ['c', 'cpp'], default_options : ['cpp_std=c++1z'])
 
 conf_data = configuration_data()
-conf_data.set('VERSION', '1.3.0')
+conf_data.set('VERSION', '1.4.0')
 configure_file(input : 'jngl.pc.in', output : 'jngl.pc', configuration : conf_data,
                install : true, install_dir : 'lib/pkgconfig')
 
