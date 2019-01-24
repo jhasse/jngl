@@ -26,4 +26,4 @@ deploy:
   keep-history: true
   on:
     branch: master
-    os: linux
+    condition: $TRAVIS_OS_NAME = linux
