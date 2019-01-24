@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['screen_2ehpp',['screen.hpp',['../screen_8hpp.html',1,'']]]
+  ['other_2ehpp',['other.hpp',['../other_8hpp.html',1,'']]]
 ];
