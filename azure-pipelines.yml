@@ -5,12 +5,11 @@ pool:
   vmImage: 'macOS-10.13'
 
 steps:
+- checkout: self
+  submodules: true
 - bash: |
-    set -x
     brew install boost
     ln -s /usr/local/include/boost include/ios/boost
-    ls include/ios
-    ls include/ios/boost
 - task: Xcode@5
   inputs:
     actions: 'build'
