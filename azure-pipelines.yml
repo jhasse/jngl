@@ -8,6 +8,8 @@ steps:
 - script: |
     brew install boost
     mv /usr/local/include/boost include/ios/
+    ls include/ios
+    ls include/ios/boost
 - task: Xcode@5
   inputs:
     actions: 'build'
