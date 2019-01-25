@@ -6,8 +6,9 @@ pool:
 
 steps:
 - bash: |
-    brew install boost
-    mv -r /usr/local/include/boost include/ios/
+    set -x
+    brew install boost tree
+    mv /usr/local/include/boost include/ios/
     ls include/ios
     ls include/ios/boost
     tree include/ios
