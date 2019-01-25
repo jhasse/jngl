@@ -5,6 +5,9 @@ pool:
   vmImage: 'macOS-10.13'
 
 steps:
+- script: |
+  brew install boost
+  mv /usr/local/include/boost include/ios/
 - task: Xcode@5
   inputs:
     actions: 'build'
