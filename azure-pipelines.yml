@@ -8,7 +8,7 @@ steps:
 - bash: |
     set -x
     brew install boost
-    ln -s $(readlink -f /usr/local/include/boost) include/ios/boost
+    ln -s $(readlink /usr/local/include/boost) include/ios/boost
     ls include/ios
     ls include/ios/boost
 - task: Xcode@5
