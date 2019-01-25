@@ -6,8 +6,8 @@ pool:
 
 steps:
 - script: |
-  brew install boost
-  mv /usr/local/include/boost include/ios/
+    brew install boost
+    mv /usr/local/include/boost include/ios/
 - task: Xcode@5
   inputs:
     actions: 'build'
