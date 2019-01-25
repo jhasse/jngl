@@ -7,11 +7,10 @@ pool:
 steps:
 - bash: |
     set -x
-    brew install boost tree
-    mv /usr/local/include/boost include/ios/
+    brew install boost
+    ln -s $(readlink -f /usr/local/include/boost) include/ios/boost
     ls include/ios
     ls include/ios/boost
-    tree include/ios
 - task: Xcode@5
   inputs:
     actions: 'build'
