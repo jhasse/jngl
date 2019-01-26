@@ -30,7 +30,14 @@ public:
 	JNGLDLL_API Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
 	void JNGLDLL_API step();
 	void JNGLDLL_API draw() const;
-	void JNGLDLL_API drawScaled(float factor, const ShaderProgram* = nullptr) const;
+	void JNGLDLL_API drawScaled(float factor, const ShaderProgram* shaderProgram = nullptr) const;
+
+	/// Draws the image scaled around its center by `xfactor` and `yfactor`
+	///
+	/// \param shaderProgram Passing `nullptr` uses the default.
+	///
+	/// `drawScaled(1, 1)` would draw it normally. You can pass negative values to flip the image.
+	/// For example `drawScaled(-1, 1)` would draw the image horizontally flipped.
 	void JNGLDLL_API drawScaled(float xfactor, float yfactor, const ShaderProgram* = nullptr) const;
 
 	/// \deprecated Use new drawClipped(Vec2, Vec2) method instead
