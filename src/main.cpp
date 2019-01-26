@@ -266,6 +266,10 @@ void setLineHeight(int h) {
 	pWindow->setLineHeight(h);
 }
 
+void print(const std::string& text, const jngl::Vec2 position) {
+	pWindow->print(text, position.x, position.y);
+}
+
 void print(const std::string& text, const int xposition, const int yposition) {
 	pWindow->print(text, xposition, yposition);
 }

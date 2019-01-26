@@ -25,6 +25,8 @@ private:
 	std::shared_ptr<FontImpl> impl;
 };
 
+void JNGLDLL_API print(const std::string& text, jngl::Vec2 position);
+
 void JNGLDLL_API print(const std::string& text, int xposition, int yposition);
 
 int JNGLDLL_API getFontSize();
