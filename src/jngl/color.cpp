@@ -34,3 +34,7 @@ void Color::setBlue(const unsigned char blue) {
 }
 
 } // namespace jngl
+
+jngl::Color operator "" _rgb(const unsigned long long hex) {
+	return jngl::Color((hex >> 16) % 256, (hex >> 8) % 256, hex % 256);
+}

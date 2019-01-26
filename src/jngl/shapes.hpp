@@ -1,6 +1,6 @@
 // Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// @file
 #pragma once
 
 #include "dll.hpp"
@@ -9,7 +9,10 @@
 
 namespace jngl {
 
-void JNGLDLL_API setColor(jngl::Color);
+/// Sets the color which should be used to draw primitives
+///
+/// Doesn't change the alpha value currently set by setAlpha()
+void JNGLDLL_API setColor(jngl::Color rgb);
 
 void JNGLDLL_API setColor(jngl::Color, unsigned char alpha);
 
@@ -18,6 +21,8 @@ void JNGLDLL_API setColor(unsigned char red, unsigned char green, unsigned char 
 void JNGLDLL_API setColor(unsigned char red, unsigned char green, unsigned char blue,
                           unsigned char alpha);
 
+/// Sets the alpha value which should be used to draw primitives (0 = fully transparent, 255 = fully
+/// opaque)
 void JNGLDLL_API setAlpha(unsigned char alpha);
 
 void JNGLDLL_API pushAlpha(unsigned char alpha);
