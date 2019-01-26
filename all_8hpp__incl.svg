@@ -55,7 +55,7 @@
 </g>
 <!-- Node12 -->
 <g id="node12" class="node"><title>Node12</title>
-<g id="a_node12"><a xlink:href="color_8hpp_source.html" target="_top" xlink:title="color.hpp">
+<g id="a_node12"><a xlink:href="color_8hpp.html" target="_top" xlink:title="color.hpp">
 <polygon fill="white" stroke="black" points="1360,-112.5 1360,-131.5 1431,-131.5 1431,-112.5 1360,-112.5"/>
 <text text-anchor="middle" x="1395.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">color.hpp</text>
 </a>
@@ -250,7 +250,7 @@
 </g>
 <!-- Node30 -->
 <g id="node30" class="node"><title>Node30</title>
-<g id="a_node30"><a xlink:href="shapes_8hpp_source.html" target="_top" xlink:title="shapes.hpp">
+<g id="a_node30"><a xlink:href="shapes_8hpp.html" target="_top" xlink:title="shapes.hpp">
 <polygon fill="white" stroke="black" points="1408,-168.5 1408,-187.5 1485,-187.5 1485,-168.5 1408,-168.5"/>
 <text text-anchor="middle" x="1446.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">shapes.hpp</text>
 </a>

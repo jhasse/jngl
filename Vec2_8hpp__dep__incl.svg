@@ -68,7 +68,7 @@
 </g>
 <!-- Node9 -->
 <g id="node9" class="node"><title>Node9</title>
-<g id="a_node9"><a xlink:href="shapes_8hpp_source.html" target="_top" xlink:title="jngl/shapes.hpp">
+<g id="a_node9"><a xlink:href="shapes_8hpp.html" target="_top" xlink:title="jngl/shapes.hpp">
 <polygon fill="white" stroke="black" points="420,-168.5 420,-187.5 527,-187.5 527,-168.5 420,-168.5"/>
 <text text-anchor="middle" x="473.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">jngl/shapes.hpp</text>
 </a>

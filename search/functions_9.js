@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['setalpha',['setAlpha',['../namespacejngl.html#a947f00ca9d60697810e58bdb2d706b4a',1,'jngl']]],
+  ['setcolor',['setColor',['../namespacejngl.html#a3258519edc7363582de40cb3ad9a42c4',1,'jngl']]],
   ['setfontsize',['setFontSize',['../namespacejngl.html#a44473e164d313bb3b39b9bebe5e9b8e6',1,'jngl']]],
   ['setkeyboardtype',['setKeyboardType',['../namespacejngl.html#a7dcfe5651847fa7aa74f3768ee9a320c',1,'jngl']]],
   ['setkeyboardvisible',['setKeyboardVisible',['../namespacejngl.html#a5d78cad1b8a18e2c8d200a9c33753591',1,'jngl']]],

@@ -98,6 +98,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Color.html">Color</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Object representing a RGB color.  <a href="classjngl_1_1Color.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Controller.html">Controller</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -436,9 +437,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setDeviceOrientationS
 <tr class="memitem:a13e0c7dcac829260ad21af7b1645551b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a13e0c7dcac829260ad21af7b1645551b"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>getDeviceOrientationSupported</b> (DeviceOrientation)</td></tr>
 <tr class="separator:a13e0c7dcac829260ad21af7b1645551b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a972d7340931d28a748a9dc714535b0ae"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a972d7340931d28a748a9dc714535b0ae"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (<a class="el" href="classjngl_1_1Color.html">jngl::Color</a>)</td></tr>
-<tr class="separator:a972d7340931d28a748a9dc714535b0ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3258519edc7363582de40cb3ad9a42c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a3258519edc7363582de40cb3ad9a42c4">setColor</a> (<a class="el" href="classjngl_1_1Color.html">jngl::Color</a> rgb)</td></tr>
+<tr class="memdesc:a3258519edc7363582de40cb3ad9a42c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the color which should be used to draw primitives.  <a href="#a3258519edc7363582de40cb3ad9a42c4">More...</a><br /></td></tr>
+<tr class="separator:a3258519edc7363582de40cb3ad9a42c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae17d1b846daa39337967b82dc02627e3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae17d1b846daa39337967b82dc02627e3"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (<a class="el" href="classjngl_1_1Color.html">jngl::Color</a>, unsigned char alpha)</td></tr>
 <tr class="separator:ae17d1b846daa39337967b82dc02627e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -449,7 +450,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (unsigne
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)</td></tr>
 <tr class="separator:afcc8e6337e49988c6e55e2e35473d65b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a947f00ca9d60697810e58bdb2d706b4a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a947f00ca9d60697810e58bdb2d706b4a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setAlpha</b> (unsigned char alpha)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a947f00ca9d60697810e58bdb2d706b4a">setAlpha</a> (unsigned char alpha)</td></tr>
+<tr class="memdesc:a947f00ca9d60697810e58bdb2d706b4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha value which should be used to draw primitives (0 = fully transparent, 255 = fully opaque) <br /></td></tr>
 <tr class="separator:a947f00ca9d60697810e58bdb2d706b4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af69331d125cc6c123f0a593a0d8ef497"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af69331d125cc6c123f0a593a0d8ef497"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>pushAlpha</b> (unsigned char alpha)</td></tr>
@@ -643,6 +645,25 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>resetFrameLimiter</b>
 
 <p>Retrieve mouse position in pixels. </p>
 <dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000002">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a8225af5eb6dd6d4a1e3c493554b5a01e" title="Mouse position in screen coordinates. ">jngl::getMousePos()</a> instead </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a3258519edc7363582de40cb3ad9a42c4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void jngl::setColor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Color.html">jngl::Color</a>&#160;</td>
+          <td class="paramname"><em>rgb</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the color which should be used to draw primitives. </p>
+<p>Doesn't change the alpha value currently set by <a class="el" href="namespacejngl.html#a947f00ca9d60697810e58bdb2d706b4a" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent, 255 = fully opaque) ">setAlpha()</a> </p>
 
 </div>
 </div>
