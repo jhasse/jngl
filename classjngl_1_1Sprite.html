@@ -119,11 +119,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>step</b> ()</td></tr>
 <tr class="memitem:a6058e72ae87bdc9ce52d1cb08665575d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6058e72ae87bdc9ce52d1cb08665575d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> () const </td></tr>
 <tr class="separator:a6058e72ae87bdc9ce52d1cb08665575d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82ee03be453d75ca442dd4ba84664d64"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a82ee03be453d75ca442dd4ba84664d64"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawScaled</b> (float factor, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const </td></tr>
-<tr class="separator:a82ee03be453d75ca442dd4ba84664d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbe7836ed4b555d32e10b066897e0c98"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acbe7836ed4b555d32e10b066897e0c98"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawScaled</b> (float xfactor, float yfactor, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const </td></tr>
+<tr class="memitem:af36bf507ff2595f565e358c72d294fe5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af36bf507ff2595f565e358c72d294fe5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>drawScaled</b> (float factor, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *shaderProgram=nullptr) const </td></tr>
+<tr class="separator:af36bf507ff2595f565e358c72d294fe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbe7836ed4b555d32e10b066897e0c98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#acbe7836ed4b555d32e10b066897e0c98">drawScaled</a> (float xfactor, float yfactor, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const </td></tr>
+<tr class="memdesc:acbe7836ed4b555d32e10b066897e0c98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the image scaled around its center by <code>xfactor</code> and <code>yfactor</code>  <a href="#acbe7836ed4b555d32e10b066897e0c98">More...</a><br /></td></tr>
 <tr class="separator:acbe7836ed4b555d32e10b066897e0c98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18cf7e38a4361af2aeb8ef8ac45b960f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#a18cf7e38a4361af2aeb8ef8ac45b960f">drawClipped</a> (float xstart, float xend, float ystart, float yend) const </td></tr>
 <tr class="separator:a18cf7e38a4361af2aeb8ef8ac45b960f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -237,6 +237,47 @@ Collaboration diagram for Sprite:</div>
 </div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="acbe7836ed4b555d32e10b066897e0c98"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawScaled </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>xfactor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>yfactor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *&#160;</td>
+          <td class="paramname"> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws the image scaled around its center by <code>xfactor</code> and <code>yfactor</code> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">shaderProgram</td><td>Passing <code>nullptr</code> uses the default.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><code>drawScaled(1, 1)</code> would draw it normally. You can pass negative values to flip the image. For example <code>drawScaled(-1, 1)</code> would draw the image horizontally flipped. </p>
+
+</div>
+</div>
 <a class="anchor" id="a18cf7e38a4361af2aeb8ef8ac45b960f"></a>
 <div class="memitem">
 <div class="memproto">
