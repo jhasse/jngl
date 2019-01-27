@@ -173,8 +173,8 @@ void Sprite::drawScaled(float factor, const ShaderProgram* const shaderProgram) 
 void Sprite::drawScaled(float xfactor, float yfactor,
                         const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
-	opengl::translate(x, y);
 	opengl::scale(xfactor, yfactor);
+	opengl::translate(x, y);
 	texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f, shaderProgram);
 	popMatrix();
