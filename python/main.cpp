@@ -182,7 +182,7 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("setFontColor", setFontColor2);
 	def("setSpriteColor", setSpriteColor1);
 	def("setSpriteColor", setSpriteColor2);
-	def("print", print);
+	def("print", static_cast<void(*)(const std::string&, Vec2)>(print));
 	def("print", print1);
 	def("getFontSize", getFontSize);
 	def("setFontSize", setFontSize);
