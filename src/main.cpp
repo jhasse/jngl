@@ -32,7 +32,7 @@ void debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum sev
                    GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
 	if (severity == GL_DEBUG_SEVERITY_HIGH) {
 		jngl::debugLn(std::string("\x1b[1;31m") + message + "\x1b[0m");
-	} else {
+	} else if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {
 		jngl::debugLn(message);
 	}
 }
