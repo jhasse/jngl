@@ -434,12 +434,14 @@ void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, const st
 	textures[filename] = texture;
 }
 
-void setMasking(bool enabled) {
-	if (enabled) {
-		glBlendFuncSeparate(GL_ZERO, GL_ONE, GL_DST_COLOR, GL_ZERO);
-	} else {
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+Finally disableBlending() {
+	if (!glIsEnabled(GL_BLEND)) {
+		return Finally(nullptr);
 	}
+	glDisable(GL_BLEND);
+	return Finally([]() {
+		glEnable(GL_BLEND);
+	});
 }
 
 } // namespace jngl

@@ -261,7 +261,6 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("getConfigPath", getConfigPath);
 	def("pushSpriteAlpha", pushSpriteAlpha);
 	def("popSpriteAlpha", popSpriteAlpha);
-	def("setMasking", setMasking);
 
 	class_<FrameBuffer, boost::noncopyable>("FrameBuffer", boost::python::init<int, int>())
         .def("draw", &FrameBuffer::draw)

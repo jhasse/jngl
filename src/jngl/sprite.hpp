@@ -117,5 +117,9 @@ int JNGLDLL_API getWidth(const std::string& filename);
 
 int JNGLDLL_API getHeight(const std::string& filename);
 
-void JNGLDLL_API setMasking(bool enabled);
+#if __cplusplus >= 201703L
+[[nodiscard]]
+#endif
+Finally JNGLDLL_API disableBlending();
+
 } // namespace jngl
