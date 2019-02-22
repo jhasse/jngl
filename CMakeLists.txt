@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.6 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.8)
 
 project(jngl LANGUAGES C CXX)
 
@@ -7,11 +7,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 file(GLOB SRC src/*.cpp src/jngl/*.cpp)
 add_library(jngl ${SRC})
 
-if (ANDROID)
-	set(CMAKE_CXX_STANDARD 14)
-else()
-	target_compile_features(jngl PUBLIC cxx_std_17)
-endif()
+target_compile_features(jngl PUBLIC cxx_std_17)
 
 set_target_properties(jngl PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src/
