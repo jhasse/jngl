@@ -90,6 +90,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classjngl_1_1Sprite-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -113,15 +114,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afc691192408ad699380be20bb1de75cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc691192408ad699380be20bb1de75cc"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Sprite</b> (const std::string &amp;filename, LoadType loadType=LoadType::NORMAL)</td></tr>
 <tr class="separator:afc691192408ad699380be20bb1de75cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6bf1a12c5c98ddec5b65e07fe74cabe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac6bf1a12c5c98ddec5b65e07fe74cabe"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>step</b> ()</td></tr>
-<tr class="separator:ac6bf1a12c5c98ddec5b65e07fe74cabe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6058e72ae87bdc9ce52d1cb08665575d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6058e72ae87bdc9ce52d1cb08665575d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> () const </td></tr>
-<tr class="separator:a6058e72ae87bdc9ce52d1cb08665575d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af36bf507ff2595f565e358c72d294fe5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af36bf507ff2595f565e358c72d294fe5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawScaled</b> (float factor, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *shaderProgram=nullptr) const </td></tr>
-<tr class="separator:af36bf507ff2595f565e358c72d294fe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6c526798a490afe221d1447f508f16a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae6c526798a490afe221d1447f508f16a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>step</b> () override</td></tr>
+<tr class="separator:ae6c526798a490afe221d1447f508f16a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35460413b5c663cd8a28ad3c80caaf71"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a35460413b5c663cd8a28ad3c80caaf71"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> () const override</td></tr>
+<tr class="separator:a35460413b5c663cd8a28ad3c80caaf71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a252f284eb9c6770b370a06d5e310c66f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a252f284eb9c6770b370a06d5e310c66f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> (const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *shaderProgram) const </td></tr>
+<tr class="separator:a252f284eb9c6770b370a06d5e310c66f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af620bac9f3c4abe3dae282e7e4048bfd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af620bac9f3c4abe3dae282e7e4048bfd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>drawScaled</b> (float factor) const </td></tr>
+<tr class="separator:af620bac9f3c4abe3dae282e7e4048bfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbe7836ed4b555d32e10b066897e0c98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#acbe7836ed4b555d32e10b066897e0c98">drawScaled</a> (float xfactor, float yfactor, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const </td></tr>
 <tr class="memdesc:acbe7836ed4b555d32e10b066897e0c98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the image scaled around its center by <code>xfactor</code> and <code>yfactor</code>  <a href="#acbe7836ed4b555d32e10b066897e0c98">More...</a><br /></td></tr>
 <tr class="separator:acbe7836ed4b555d32e10b066897e0c98"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,6 +202,13 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>getWidth</b> () cons
 <tr class="memitem:a3b2cb4054965bddd89e59e7bb2815f77 inherit pub_methods_classjngl_1_1Drawable"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b2cb4054965bddd89e59e7bb2815f77"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getHeight</b> () const </td></tr>
 <tr class="separator:a3b2cb4054965bddd89e59e7bb2815f77 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ab976556b09522328a55549bd94cdeb20"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab976556b09522328a55549bd94cdeb20"></a>
+static const <a class="el" href="classjngl_1_1Shader.html">Shader</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#ab976556b09522328a55549bd94cdeb20">vertexShader</a> ()</td></tr>
+<tr class="memdesc:ab976556b09522328a55549bd94cdeb20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a reference to JNGL's default vertex shader used to draw textures. <br /></td></tr>
+<tr class="separator:ab976556b09522328a55549bd94cdeb20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
