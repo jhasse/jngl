@@ -47,21 +47,14 @@ public:
 			useShader = !useShader;
 			if (!shaderProgram) {
 				{
-					std::ifstream fin("data/texture.vert");
-					std::stringstream buffer;
-					buffer << fin.rdbuf();
-					vertexShader = std::make_unique<jngl::Shader>(buffer.str().c_str(),
-					                                              jngl::Shader::Type::VERTEX);
-				}
-				{
 					std::ifstream fin("data/blur.frag");
 					std::stringstream buffer;
 					buffer << fin.rdbuf();
 					fragmentShader = std::make_unique<jngl::Shader>(buffer.str().c_str(),
 					                                                jngl::Shader::Type::FRAGMENT);
 				}
-				shaderProgram =
-				    std::make_unique<jngl::ShaderProgram>(*vertexShader, *fragmentShader);
+				shaderProgram = std::make_unique<jngl::ShaderProgram>(jngl::Sprite::vertexShader(),
+				                                                      *fragmentShader);
 			}
 		}
 	}
@@ -91,7 +84,8 @@ public:
 		jngl::rotate(rotate);
 		jngl::setSpriteAlpha(static_cast<unsigned char>(std::abs(factor * 255)));
 		if (useShader) {
-			logoWebp.drawScaled(static_cast<float>(factor * 2), &*shaderProgram);
+			logoWebp.drawScaled(static_cast<float>(factor * 2), static_cast<float>(factor * 2),
+			                    &*shaderProgram);
 		} else {
 			logoWebp.drawScaled(static_cast<float>(factor * 2));
 		}
