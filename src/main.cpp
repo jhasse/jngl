@@ -28,8 +28,13 @@ void clearBackgroundColor() {
 }
 
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
-void debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity,
-                   GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
+#ifdef _WIN32
+void __stdcall
+#else
+void
+#endif
+debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity,
+              GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
 	if (severity == GL_DEBUG_SEVERITY_HIGH) {
 		jngl::debugLn(std::string("\x1b[1;31m") + message + "\x1b[0m");
 	} else if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {

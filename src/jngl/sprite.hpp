@@ -55,7 +55,7 @@ public:
 	void setBytes(const unsigned char*);
 
 	/// Returns a reference to JNGL's default vertex shader used to draw textures
-	static const Shader& JNGLDLL_API vertexShader();
+	JNGLDLL_API static const Shader& vertexShader();
 
 	std::shared_ptr<Finally> loader;
 
