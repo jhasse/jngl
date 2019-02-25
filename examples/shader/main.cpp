@@ -1,4 +1,5 @@
 #include <fstream>
+#include <sstream>
 #include <jngl.hpp>
 
 class ShaderExample : public jngl::Work {
