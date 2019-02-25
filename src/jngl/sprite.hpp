@@ -49,7 +49,8 @@ public:
 	void JNGLDLL_API drawClipped(Vec2 start, Vec2 end) const;
 
 	/// Draws a list of triangles with the sprite's texture on it
-	void JNGLDLL_API drawMesh(const std::vector<Vertex>& vertexes) const;
+	void JNGLDLL_API drawMesh(const std::vector<Vertex>& vertexes,
+	                          const ShaderProgram* = nullptr) const;
 
 	void setBytes(const unsigned char*);
 

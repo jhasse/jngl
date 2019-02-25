@@ -28,7 +28,7 @@ public:
 	void drawClipped(float xstart, float xend, float ystart, float yend, float red, float green,
 	                 float blue, float alpha) const;
 	void drawMesh(const std::vector<Vertex>& vertexes, float red, float green, float blue,
-	              float alpha) const;
+	              float alpha, const ShaderProgram*) const;
 	GLuint getID() const;
 	float getPreciseWidth() const;
 	float getPreciseHeight() const;
