@@ -314,7 +314,7 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 	Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
 
 	if (header.height < 0) {
-		header.height = !header.height;
+		header.height = -header.height;
 		for (int i = 0; i < header.height; ++i) {
 			if (fseek(fp, header.dataOffset + i * header.width * 3, SEEK_SET) != 0) {
 				throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
