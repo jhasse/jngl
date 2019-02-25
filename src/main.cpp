@@ -47,6 +47,17 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	}
 #endif
 
+	const float l =  -width / 2.f;
+	const float r =   width / 2.f;
+	const float b =  height / 2.f;
+	const float t = -height / 2.f;
+	opengl::projection = {{
+		{ 2.f / (r - l),           0.f,  0.f, -(r + l) / (r - l) },
+		{           0.f, 2.f / (t - b),  0.f, -(t + b) / (t - b) },
+		{           0.f,           0.f, -1.f, 0.f },
+		{           0.f,           0.f,  0.f, 1.f }
+	}};
+
 	Shader vertexShader(R"(#version 300 es
 		in mediump vec2 position;
 		uniform mediump mat3 modelview;
@@ -82,22 +93,6 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		assert(canvasHeight <= height);
 		glScissor((width - canvasWidth) / 2, (height - canvasHeight) / 2, canvasWidth,
 		          canvasHeight);
-	}
-
-	const float l =  -width / 2.f;
-	const float r =   width / 2.f;
-	const float b =  height / 2.f;
-	const float t = -height / 2.f;
-	opengl::projection = {{
-		{ 2.f / (r - l),           0.f,  0.f, -(r + l) / (r - l) },
-		{           0.f, 2.f / (t - b),  0.f, -(t + b) / (t - b) },
-		{           0.f,           0.f, -1.f, 0.f },
-		{           0.f,           0.f,  0.f, 1.f }
-	}};
-	{
-		const auto tmp = simpleShaderProgram->use();
-		const auto projectionUniform = simpleShaderProgram->getUniformLocation("projection");
-		glUniformMatrix4fv(projectionUniform, 1, GL_TRUE, &opengl::projection.a[0][0]);
 	}
 
 	reset();

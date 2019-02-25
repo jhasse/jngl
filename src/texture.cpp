@@ -19,6 +19,7 @@ namespace jngl {
 std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
 ShaderProgram* Texture::textureShaderProgram = nullptr;
+Shader* Texture::textureVertexShader = nullptr;
 int Texture::shaderSpriteColorUniform = -1;
 int Texture::modelviewUniform = -1;
 
@@ -26,19 +27,6 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
                  const int height, const GLubyte* const* const rowPointers, GLenum format,
                  const GLubyte* const data) {
 	if (!textureShaderProgram) {
-		Shader vertexShader(R"(#version 300 es
-			in mediump vec2 position;
-			in mediump vec2 inTexCoord;
-			uniform mediump mat3 modelview;
-			uniform mediump mat4 projection;
-			out mediump vec2 texCoord;
-
-			void main() {
-				vec3 tmp = modelview * vec3(position, 1);
-				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-				texCoord = inTexCoord;
-			})", Shader::Type::VERTEX
-		);
 		Shader fragmentShader(R"(#version 300 es
 			uniform sampler2D tex;
 			uniform lowp vec4 spriteColor;
@@ -51,12 +39,9 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 				outColor = texture(tex, texCoord) * spriteColor;
 			})", Shader::Type::FRAGMENT
 		);
-		textureShaderProgram = new ShaderProgram(vertexShader, fragmentShader);
+		textureShaderProgram = new ShaderProgram(vertexShader(), fragmentShader);
 		shaderSpriteColorUniform = textureShaderProgram->getUniformLocation("spriteColor");
 		modelviewUniform = textureShaderProgram->getUniformLocation("modelview");
-		const auto projectionUniform = textureShaderProgram->getUniformLocation("projection");
-		const auto tmp = textureShaderProgram->use();
-		glUniformMatrix4fv(projectionUniform, 1, GL_TRUE, &opengl::projection.a[0][0]);
 	}
 	texture_ = opengl::genAndBindTexture();
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
@@ -108,7 +93,10 @@ Texture::~Texture() {
 void Texture::draw(const float red, const float green, const float blue, const float alpha,
                    const ShaderProgram* const shaderProgram) const {
 	auto _ = shaderProgram ? shaderProgram->use() : textureShaderProgram->use();
-	if (!shaderProgram) {
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_TRUE,
+		                   &opengl::modelview.a[0][0]);
+	} else {
 		glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
 		glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
 	}
@@ -190,6 +178,8 @@ float Texture::getPreciseHeight() const {
 }
 
 void Texture::unloadShader() {
+	delete textureVertexShader;
+	textureVertexShader = nullptr;
 	delete textureShaderProgram;
 	textureShaderProgram = nullptr;
 }
@@ -197,6 +187,24 @@ void Texture::unloadShader() {
 void Texture::setBytes(const unsigned char* const bytes, const int width, const int height) {
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+}
+
+const Shader& Texture::vertexShader() {
+	if (!textureVertexShader) {
+		textureVertexShader = new Shader(R"(#version 300 es
+			in mediump vec2 position;
+			in mediump vec2 inTexCoord;
+			uniform mediump mat3 modelview;
+			uniform mediump mat4 projection;
+			out mediump vec2 texCoord;
+
+			void main() {
+				vec3 tmp = modelview * vec3(position, 1);
+				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
+				texCoord = inTexCoord;
+			})", Shader::Type::VERTEX);
+	}
+	return *textureVertexShader;
 }
 
 } // namespace jngl

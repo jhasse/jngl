@@ -166,8 +166,16 @@ void Sprite::draw() const {
 	popMatrix();
 }
 
-void Sprite::drawScaled(float factor, const ShaderProgram* const shaderProgram) const {
-	drawScaled(factor, factor, shaderProgram);
+void Sprite::draw(const ShaderProgram* const shaderProgram) const {
+	pushMatrix();
+	opengl::translate(x, y);
+	texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
+	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f, shaderProgram);
+	popMatrix();
+}
+
+void Sprite::drawScaled(float factor) const {
+	drawScaled(factor, factor);
 }
 
 void Sprite::drawScaled(float xfactor, float yfactor,
@@ -206,6 +214,10 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes) const {
 
 void Sprite::setBytes(const unsigned char* const bytes) {
 	texture->setBytes(bytes, width, height);
+}
+
+const Shader& Sprite::vertexShader() {
+	return Texture::vertexShader();
 }
 
 #ifndef NOPNG

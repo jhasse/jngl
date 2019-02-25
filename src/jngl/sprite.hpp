@@ -28,9 +28,10 @@ public:
 
 	JNGLDLL_API Sprite(const unsigned char* bytes, size_t width, size_t height);
 	JNGLDLL_API Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
-	void JNGLDLL_API step();
-	void JNGLDLL_API draw() const;
-	void JNGLDLL_API drawScaled(float factor, const ShaderProgram* shaderProgram = nullptr) const;
+	void JNGLDLL_API step() override;
+	void JNGLDLL_API draw() const override;
+	void JNGLDLL_API draw(const ShaderProgram* shaderProgram) const;
+	void JNGLDLL_API drawScaled(float factor) const;
 
 	/// Draws the image scaled around its center by `xfactor` and `yfactor`
 	///
@@ -51,6 +52,9 @@ public:
 	void JNGLDLL_API drawMesh(const std::vector<Vertex>& vertexes) const;
 
 	void setBytes(const unsigned char*);
+
+	/// Returns a reference to JNGL's default vertex shader used to draw textures
+	static const Shader& vertexShader();
 
 	std::shared_ptr<Finally> loader;
 

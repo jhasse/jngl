@@ -1,6 +1,10 @@
-#version 120
+#version 300 es
 
 uniform sampler2D tex;
+
+in mediump vec2 texCoord;
+
+out lowp vec4 outColor;
 
 // 0 - no blur
 // 1 - 3x3 blur
@@ -10,15 +14,15 @@ uniform sampler2D tex;
 const int size = 3;
 
 void main() {
-	float stepSizeX = 1. / 600; // This should be 1/width
-	float stepSizeY = 1. / 300; // and 1/height
-	vec4 sum = vec4(0.0);
+	mediump float stepSizeX = 1. / 600.; // This should be 1/width
+	mediump float stepSizeY = 1. / 300.; // and 1/height
+	lowp vec4 sum = vec4(0.0);
 	for (int x = -size; x <= size; x++) {
 		for (int y = -size; y <= size; y++) {
-			sum += texture2D(tex, vec2(gl_TexCoord[0].x + x * stepSizeX,
-			                           gl_TexCoord[0].y + y * stepSizeY)) /
-			       ((2 * size + 1) * (2 * size + 1));
+			sum += texture(tex, vec2(texCoord.x + float(x) * stepSizeX,
+			                         texCoord.y + float(y) * stepSizeY)) /
+			       float((2 * size + 1) * (2 * size + 1));
 		}
 	}
-	gl_FragColor = sum;
+	outColor = sum;
 }

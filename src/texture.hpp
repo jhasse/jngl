@@ -35,8 +35,11 @@ public:
 	static void unloadShader();
 	void setBytes(const unsigned char*, int width, int height);
 
+	static const Shader& vertexShader();
+
 private:
 	static ShaderProgram* textureShaderProgram;
+	static Shader* textureVertexShader;
 	static int shaderSpriteColorUniform;
 	static int modelviewUniform;
 	GLuint texture_ = 0;

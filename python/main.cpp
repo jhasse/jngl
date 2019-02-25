@@ -120,7 +120,7 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	;
 
 	class_<Sprite>("Sprite", boost::python::init<const std::string&>())
-		.def("draw", &Sprite::draw)
+		.def("draw", static_cast<void (Sprite::*)() const>(&Sprite::draw))
 	;
 
 	class_<Vec2>("Vec2", boost::python::init<Float, Float>())
