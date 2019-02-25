@@ -160,6 +160,7 @@ if not meson.is_subproject()
 		'examples/bike/line.cpp', 'examples/bike/main.cpp', 'examples/bike/wheel.cpp'],
 		dependencies : jngl_dep)
 	executable('example-throw', ['examples/throw/main.cpp'], dependencies : jngl_dep)
+	executable('example-shader', ['examples/shader/main.cpp'], dependencies : jngl_dep)
 endif
 
 install_headers('src/jngl.hpp')
