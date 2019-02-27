@@ -44,6 +44,27 @@ cmake make
 Open `visualcpp/JNGL.sln` and press <kbd>Ctrl</kbd>+<kbd>F5</kbd> to build JNGL and run the example
 application.
 
+### Visual Studio Code
+
+Change the terminal to MINGW64 in settings.json.
+
+```
+"terminal.integrated.shell.windows": "C:\\msys64\\usr\\bin\\bash.exe",
+"terminal.integrated.shellArgs.windows": [
+    "--login",
+],
+"terminal.integrated.env.windows": {
+    "CHERE_INVOKING": "1",
+    "MSYSTEM": "MINGW64",
+},
+```
+
+In the terminal run
+
+```
+cmake .. -G"MSYS Makefiles"
+```
+
 ## Mac
 
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
