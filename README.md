@@ -36,7 +36,7 @@ Set up [MSYS2](https://www.msys2.org/) and install the following in a MinGW-w64 
 pacman -Syu --needed mingw-w64-x86_64-meson mingw-w64-x86_64-gcc mingw-w64-x86_64-boost \
 mingw-w64-x86_64-openal mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis \
 mingw-w64-x86_64-libwebp mingw-w64-x86_64-dlfcn mingw-w64-x86_64-libepoxy mingw-w64-x86_64-python3 \
-cmake make
+mingw-w64-x86_64-cmake make
 ```
 
 ### Visual C++ 2015 or newer
@@ -46,7 +46,7 @@ application.
 
 ### Visual Studio Code
 
-Change the terminal to MINGW64 in settings.json.
+Change the terminal to MINGW64 in `settings.json`:
 
 ```
 "terminal.integrated.shell.windows": "C:\\msys64\\usr\\bin\\bash.exe",
@@ -59,10 +59,11 @@ Change the terminal to MINGW64 in settings.json.
 },
 ```
 
-In the terminal run
+In the terminal run:
 
 ```
-cmake .. -G"MSYS Makefiles"
+cmake -H. -Bbuild -G"MSYS Makefiles"
+make -Cbuild
 ```
 
 ## Mac
