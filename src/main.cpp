@@ -517,7 +517,7 @@ std::stringstream JNGLDLL_API readAsset(const std::string& filename) {
 	return sstream;
 }
 
-Finally useSimpleShaderProgram() {
+ShaderProgram::Context useSimpleShaderProgram() {
 	auto context = jngl::simpleShaderProgram->use();
 	glUniform4f(simpleColorUniform, float(colorRed) / 255.0f, float(colorGreen) / 255.0f,
 	            float(colorBlue) / 255.0f, float(colorAlpha) / 255.0f);
@@ -526,7 +526,7 @@ Finally useSimpleShaderProgram() {
 	assert(simpleShaderProgram->getAttribLocation("position") == 0);
 	glEnableVertexAttribArray(0);
 
-	return std::move(context.finally);
+	return context;
 }
 
 } // namespace jngl
