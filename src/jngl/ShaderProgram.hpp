@@ -20,11 +20,18 @@ public:
 	ShaderProgram& operator=(const ShaderProgram&) = delete;
 	ShaderProgram& operator=(ShaderProgram&&) = delete;
 
+	struct Context {
+		Context(Finally);
+		void setUniform(int location, float v0, float v1);
+
+		Finally finally;
+	};
+
 	JNGLDLL_API
 #if __cplusplus >= 201703L
 	    [[nodiscard]]
 #endif
-	    Finally
+	    Context
 	    use() const;
 
 	int getAttribLocation(const std::string& name) const;
@@ -34,5 +41,7 @@ private:
 	struct Impl;
 	std::unique_ptr<Impl> impl;
 };
+
+void setUniform(int location, float v0, float v1);
 
 } // namespace jngl

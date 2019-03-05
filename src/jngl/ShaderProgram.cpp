@@ -31,9 +31,9 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 	glUniformMatrix4fv(getUniformLocation("projection"), 1, GL_TRUE, &opengl::projection.a[0][0]);
 }
 
-Finally ShaderProgram::use() const {
+ShaderProgram::Context ShaderProgram::use() const {
 	glUseProgram(impl->id);
-	return Finally([]() { glUseProgram(0); });
+	return Context(Finally([]() { glUseProgram(0); }));
 }
 
 int ShaderProgram::getAttribLocation(const std::string& name) const {
@@ -50,6 +50,13 @@ int ShaderProgram::getUniformLocation(const std::string& name) const {
 
 ShaderProgram::~ShaderProgram() {
 	glDeleteProgram(impl->id);
+}
+
+ShaderProgram::Context::Context(Finally finally) : finally(std::move(finally)) {
+}
+
+void ShaderProgram::Context::setUniform(const int location, const float v0, const float v1) {
+	glUniform2f(location, v0, v1);
 }
 
 } // namespace jngl
