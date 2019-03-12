@@ -180,7 +180,7 @@ public:
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video->width, video->height, GL_RED,
 			                GL_UNSIGNED_BYTE, video->pixels);
 
-			assert(video->width % 2 == 0 & video->height % 2 == 0);
+			assert(video->width % 2 == 0 && video->height % 2 == 0);
 			glBindTexture(GL_TEXTURE_2D, textureU);
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video->width / 2, video->height / 2, GL_RED,
 			                GL_UNSIGNED_BYTE, video->pixels + video->width * video->height);
@@ -279,7 +279,7 @@ public:
 private:
 	void queueAudio(ALuint buffer) {
 		auto pcm = std::make_unique<int16_t[]>(audio->frames * audio->channels);
-		for (size_t i = 0; i < audio->frames * audio->channels; ++i) {
+		for (int i = 0; i < audio->frames * audio->channels; ++i) {
 			const float sample = std::clamp(audio->samples[i], -1.f, 1.f);
 			pcm[i] = sample * 32767.f;
 		}
