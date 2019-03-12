@@ -26,10 +26,8 @@ public:
 		~Context();
 		Context(const Context&) = delete;
 		Context& operator=(const Context&) = delete;
-
-		// These don't have an implementation as they won't get called due to RVO
 		Context(Context&&);
-		Context& operator=(Context&&);
+		Context& operator=(Context&&) = delete;
 
 		void setUniform(int location, float v0, float v1);
 
