@@ -20,19 +20,38 @@ public:
 	ShaderProgram& operator=(const ShaderProgram&) = delete;
 	ShaderProgram& operator=(ShaderProgram&&) = delete;
 
+	struct Impl;
+	struct Context {
+		Context(const Impl&);
+		~Context();
+		Context(const Context&) = delete;
+		Context& operator=(const Context&) = delete;
+
+		// These don't have an implementation as they won't get called due to RVO
+		Context(Context&&);
+		Context& operator=(Context&&);
+
+		void setUniform(int location, float v0, float v1);
+
+	private:
+		static int referenceCount;
+		static const Impl* activeImpl;
+	};
+
 	JNGLDLL_API
 #if __cplusplus >= 201703L
 	    [[nodiscard]]
 #endif
-	    Finally
+	    Context
 	    use() const;
 
 	int getAttribLocation(const std::string& name) const;
 	int getUniformLocation(const std::string& name) const;
 
 private:
-	struct Impl;
 	std::unique_ptr<Impl> impl;
 };
+
+void setUniform(int location, float v0, float v1);
 
 } // namespace jngl

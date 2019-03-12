@@ -65,7 +65,7 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 
 	Shader vertexShader(R"(#version 300 es
 		in mediump vec2 position;
-		uniform mediump mat3 modelview;
+		uniform highp mat3 modelview;
 		uniform mediump mat4 projection;
 
 		void main() {
@@ -517,8 +517,8 @@ std::stringstream JNGLDLL_API readAsset(const std::string& filename) {
 	return sstream;
 }
 
-Finally useSimpleShaderProgram() {
-	auto _ = jngl::simpleShaderProgram->use();
+ShaderProgram::Context useSimpleShaderProgram() {
+	auto context = jngl::simpleShaderProgram->use();
 	glUniform4f(simpleColorUniform, float(colorRed) / 255.0f, float(colorGreen) / 255.0f,
 	            float(colorBlue) / 255.0f, float(colorAlpha) / 255.0f);
 	glUniformMatrix3fv(simpleModelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
@@ -526,7 +526,7 @@ Finally useSimpleShaderProgram() {
 	assert(simpleShaderProgram->getAttribLocation("position") == 0);
 	glEnableVertexAttribArray(0);
 
-	return _;
+	return context;
 }
 
 } // namespace jngl

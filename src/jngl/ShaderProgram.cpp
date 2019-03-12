@@ -10,6 +10,9 @@
 
 namespace jngl {
 
+int ShaderProgram::Context::referenceCount = 0;
+const ShaderProgram::Impl* ShaderProgram::Context::activeImpl = nullptr;
+
 struct ShaderProgram::Impl {
 	GLuint id;
 };
@@ -31,9 +34,8 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 	glUniformMatrix4fv(getUniformLocation("projection"), 1, GL_TRUE, &opengl::projection.a[0][0]);
 }
 
-Finally ShaderProgram::use() const {
-	glUseProgram(impl->id);
-	return Finally([]() { glUseProgram(0); });
+ShaderProgram::Context ShaderProgram::use() const {
+	return Context(*impl);
 }
 
 int ShaderProgram::getAttribLocation(const std::string& name) const {
@@ -50,6 +52,27 @@ int ShaderProgram::getUniformLocation(const std::string& name) const {
 
 ShaderProgram::~ShaderProgram() {
 	glDeleteProgram(impl->id);
+}
+
+ShaderProgram::Context::Context(const ShaderProgram::Impl& impl) {
+	if (referenceCount > 0) {
+		if (activeImpl != &impl) {
+			throw std::runtime_error("A different ShaderProgram is already in use.");
+		}
+	} else {
+		glUseProgram(impl.id);
+	}
+	++referenceCount;
+	activeImpl = &impl;
+}
+
+ShaderProgram::Context::~Context() {
+	--referenceCount;
+	assert(referenceCount >= 0);
+}
+
+void ShaderProgram::Context::setUniform(const int location, const float v0, const float v1) {
+	glUniform2f(location, v0, v1);
 }
 
 } // namespace jngl

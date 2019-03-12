@@ -4,6 +4,7 @@
 #pragma once
 
 #include "jngl/Finally.hpp"
+#include "jngl/ShaderProgram.hpp"
 
 #include <memory>
 #include <string>
@@ -24,6 +25,6 @@ extern std::unique_ptr<jngl::ShaderProgram> simpleShaderProgram;
 extern int simpleModelviewUniform;
 extern int simpleColorUniform;
 
-Finally useSimpleShaderProgram();
+ShaderProgram::Context useSimpleShaderProgram();
 
 } // namespace jngl

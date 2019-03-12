@@ -200,7 +200,7 @@ const Shader& Texture::vertexShader() {
 		textureVertexShader = new Shader(R"(#version 300 es
 			in mediump vec2 position;
 			in mediump vec2 inTexCoord;
-			uniform mediump mat3 modelview;
+			uniform highp mat3 modelview;
 			uniform mediump mat4 projection;
 			out mediump vec2 texCoord;
 
