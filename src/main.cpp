@@ -65,7 +65,7 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 
 	Shader vertexShader(R"(#version 300 es
 		in mediump vec2 position;
-		uniform mediump mat3 modelview;
+		uniform highp mat3 modelview;
 		uniform mediump mat4 projection;
 
 		void main() {
