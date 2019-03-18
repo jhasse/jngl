@@ -88,14 +88,14 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\boost.1.60.0.0\build\native\boost.targets" Condition="Exists('..\packages\boost.1.60.0.0\build\native\boost.targets')" />
-    <Import Project="..\packages\boost_python.1.60.0.0\build\native\boost_python.targets" Condition="Exists('..\packages\boost_python.1.60.0.0\build\native\boost_python.targets')" />
+    <Import Project="..\packages\boost.1.69.0.0\build\boost.targets" Condition="Exists('..\packages\boost.1.69.0.0\build\boost.targets')" />
+    <Import Project="..\packages\boost_python-src.1.69.0.0\build\boost_python-src.targets" Condition="Exists('..\packages\boost_python-src.1.69.0.0\build\boost_python-src.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+      <ErrorText>Dieses Projekt verweist auf mindestens ein NuGet-Paket, das auf diesem Computer fehlt. Verwenden Sie die Wiederherstellung von NuGet-Paketen, um die fehlenden Dateien herunterzuladen. Weitere Informationen finden Sie unter "http://go.microsoft.com/fwlink/?LinkID=322105". Die fehlende Datei ist "{0}".</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\boost.1.60.0.0\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.60.0.0\build\native\boost.targets'))" />
-    <Error Condition="!Exists('..\packages\boost_python.1.60.0.0\build\native\boost_python.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_python.1.60.0.0\build\native\boost_python.targets'))" />
+    <Error Condition="!Exists('..\packages\boost.1.69.0.0\build\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost.1.69.0.0\build\boost.targets'))" />
+    <Error Condition="!Exists('..\packages\boost_python-src.1.69.0.0\build\boost_python-src.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_python-src.1.69.0.0\build\boost_python-src.targets'))" />
   </Target>
 </Project>

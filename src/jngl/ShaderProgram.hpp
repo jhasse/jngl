@@ -26,7 +26,7 @@ public:
 		~Context();
 		Context(const Context&) = delete;
 		Context& operator=(const Context&) = delete;
-		Context(Context&&);
+		Context(Context&&) noexcept;
 		Context& operator=(Context&&) = delete;
 
 		void setUniform(int location, float v0, float v1);
