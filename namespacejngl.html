@@ -294,7 +294,7 @@ std::vector&lt; std::shared_ptr&lt; <a class="el" href="classjngl_1_1Controller.
 <tr class="separator:a2ef4903c72008831c91a0c5d39b52655"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61fd6900416c997489df138cb8651ab8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a61fd6900416c997489df138cb8651ab8"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a61fd6900416c997489df138cb8651ab8">getTextInput</a> ()</td></tr>
-<tr class="memdesc:a61fd6900416c997489df138cb8651ab8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string of characters that have been pressed since the last call to updateInput() <br /></td></tr>
+<tr class="memdesc:a61fd6900416c997489df138cb8651ab8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string of characters that have been pressed since the last call to <a class="el" href="namespacejngl.html#a41043304f9ce3a6307573263c949d7d6" title="Updates the input state. mainLoop() calls this before Work::step() ">updateInput()</a> <br /></td></tr>
 <tr class="separator:a61fd6900416c997489df138cb8651ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11ad14d4b65f6bbe5f5c7accaf457077"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a11ad14d4b65f6bbe5f5c7accaf457077"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a11ad14d4b65f6bbe5f5c7accaf457077">addJob</a> (std::shared_ptr&lt; <a class="el" href="classjngl_1_1Job.html">Job</a> &gt; job)</td></tr>
@@ -336,10 +336,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 <tr class="memdesc:aa5760c51d7686efb6d653830ee8305d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true until the main window is closed or <a class="el" href="namespacejngl.html#a4d50d8a7e6f86e2fe2b8529c95d6ef02" title="Emit a quit event which will exit mainLoop() and set running() to false. ">quit()</a> has been called. <br /></td></tr>
 <tr class="separator:aa5760c51d7686efb6d653830ee8305d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41043304f9ce3a6307573263c949d7d6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a41043304f9ce3a6307573263c949d7d6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>updateInput</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a41043304f9ce3a6307573263c949d7d6">updateInput</a> ()</td></tr>
+<tr class="memdesc:a41043304f9ce3a6307573263c949d7d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the input state. <a class="el" href="namespacejngl.html#a8526353d8f97c6f91db63b9903e18138" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw. ">mainLoop()</a> calls this before <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic. ">Work::step()</a> <br /></td></tr>
 <tr class="separator:a41043304f9ce3a6307573263c949d7d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2827e4edaa53fecffc9246f8bc2218e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa2827e4edaa53fecffc9246f8bc2218e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>swapBuffers</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#aa2827e4edaa53fecffc9246f8bc2218e">swapBuffers</a> ()</td></tr>
+<tr class="memdesc:aa2827e4edaa53fecffc9246f8bc2218e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swaps back and front buffer. <a class="el" href="namespacejngl.html#a8526353d8f97c6f91db63b9903e18138" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw. ">mainLoop()</a> calls this after <a class="el" href="classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state. ">Work::draw()</a> <br /></td></tr>
 <tr class="separator:aa2827e4edaa53fecffc9246f8bc2218e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d50d8a7e6f86e2fe2b8529c95d6ef02"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d50d8a7e6f86e2fe2b8529c95d6ef02"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a4d50d8a7e6f86e2fe2b8529c95d6ef02">quit</a> ()</td></tr>
