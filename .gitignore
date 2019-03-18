@@ -22,4 +22,5 @@ Thumbs.db
 /.vscode/tags
 /.vscode/cquery*
 /.ccls-cache/
+/compile_commands.json
 /nintendo

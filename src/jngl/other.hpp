@@ -1,4 +1,4 @@
-// Copyright 2014-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2014-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -13,8 +13,10 @@ namespace jngl {
 /// Returns true until the main window is closed or quit() has been called
 bool JNGLDLL_API running();
 
+/// Updates the input state. mainLoop() calls this before Work::step()
 void JNGLDLL_API updateInput();
 
+/// Swaps back and front buffer. mainLoop() calls this after Work::draw()
 void JNGLDLL_API swapBuffers();
 
 /// Emit a quit event which will exit mainLoop() and set running() to false
