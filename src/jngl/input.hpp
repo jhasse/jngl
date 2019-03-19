@@ -1,4 +1,4 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -65,16 +65,22 @@ namespace jngl {
 	/// Type of the onscreen keyboard
 	void JNGLDLL_API setKeyboardType(KeyboardType);
 
+	/// Currently active type of onscreen keyboard
 	KeyboardType JNGLDLL_API getKeyboardType();
 
+	/// Overwrite what keyPressed(const std::string&) should return
 	void JNGLDLL_API setKeyPressed(const std::string& key, bool);
 
+	/// Overwrite what keyPressed(key::KeyType) should return
 	void JNGLDLL_API setKeyPressed(key::KeyType key, bool);
 
+	/// Whether @key is down
 	bool JNGLDLL_API keyDown(key::KeyType key);
 
+	/// Whether @key is down
 	bool JNGLDLL_API keyDown(char key);
 
+	/// Whether @key is down, where key should be exactly one UTF-8 character
 	bool JNGLDLL_API keyDown(const std::string& key);
 
 	bool JNGLDLL_API keyPressed(key::KeyType key);
@@ -91,6 +97,7 @@ namespace jngl {
 
 	bool JNGLDLL_API isMouseVisible();
 
+	/// Returns true when there's more than one finger touching the screen
 	bool JNGLDLL_API isMultitouch();
 
 	/// Mouse position in screen coordinates
@@ -112,6 +119,7 @@ namespace jngl {
 		};
 	}
 
+	/// Returns mouse wheel movement between -100 and 100 (0 if the mousewheel doesn't move)
 	double JNGLDLL_API getMouseWheel();
 
 	bool JNGLDLL_API mouseDown(mouse::Button button = mouse::Left);

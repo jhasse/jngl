@@ -1,4 +1,4 @@
-// Copyright 2017 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2017-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -7,6 +7,7 @@
 
 namespace jngl {
 
+/// Object representing one Gamepad controller
 class Controller {
 public:
 	virtual ~Controller() = default;
@@ -17,6 +18,7 @@ public:
 	/// Returns true when the button is down
 	virtual bool down(controller::Button) const = 0;
 
+	/// Returns true only once for every button press
 	bool pressed(controller::Button);
 
 private:
