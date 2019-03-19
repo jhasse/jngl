@@ -11,6 +11,7 @@
 
 namespace jngl {
 	namespace key {
+		/// Keyboard keys
 		enum KeyType {
 			Left,
 			Up,
@@ -68,10 +69,10 @@ namespace jngl {
 	/// Currently active type of onscreen keyboard
 	KeyboardType JNGLDLL_API getKeyboardType();
 
-	/// Overwrite what keyPressed(const std::string&) should return
+	/// Overwrite what keyPressed() should return
 	void JNGLDLL_API setKeyPressed(const std::string& key, bool);
 
-	/// Overwrite what keyPressed(key::KeyType) should return
+	/// Overwrite what keyPressed() should return
 	void JNGLDLL_API setKeyPressed(key::KeyType key, bool);
 
 	/// Whether @key is down
@@ -114,6 +115,7 @@ namespace jngl {
 	int JNGLDLL_API getMouseY();
 
 	namespace mouse {
+		/// Mouse buttons
 		enum Button {
 			Left, Middle, Right
 		};
@@ -124,16 +126,19 @@ namespace jngl {
 
 	bool JNGLDLL_API mouseDown(mouse::Button button = mouse::Left);
 
+	/// Overwrite what mouseDown() should return
 	void JNGLDLL_API setMouseDown(mouse::Button button, bool);
 
 	bool JNGLDLL_API mousePressed(mouse::Button button = mouse::Left);
 
+	/// Overwrite what mouseDown() should return
 	void JNGLDLL_API setMousePressed(jngl::mouse::Button, bool);
 
 	/// Moves the mouse (does nothing on iOS and Android)
 	void JNGLDLL_API setMouse(Vec2 position);
 
 	namespace controller {
+		/// Gamepad buttons
 		enum Button {
 			LeftStickX,
 			LeftStickY,
