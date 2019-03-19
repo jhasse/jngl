@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['keyboardtype',['KeyboardType',['../namespacejngl.html#ae08f1922e08aba234005793fc4fed5e4',1,'jngl']]]
+  ['button',['Button',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0',1,'jngl::mouse::Button()'],['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0',1,'jngl::controller::Button()']]]
 ];

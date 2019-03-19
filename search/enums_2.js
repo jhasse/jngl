@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['type',['Type',['../classjngl_1_1Shader.html#a1d1cfd8ffb84e947f82999c682b666a7',1,'jngl::Shader']]]
+  ['keyboardtype',['KeyboardType',['../namespacejngl.html#ae08f1922e08aba234005793fc4fed5e4',1,'jngl']]],
+  ['keytype',['KeyType',['../input_8hpp.html#aab0feaba617470cb4aa830dc5935238c',1,'jngl::key']]]
 ];

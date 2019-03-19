@@ -224,14 +224,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 <tr class="separator:a0c107966b4ccbe8ddfb3692348c2bfb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e0ea8949dd075bf85f14a6c41bc232d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e0ea8949dd075bf85f14a6c41bc232d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a7e0ea8949dd075bf85f14a6c41bc232d">setKeyPressed</a> (const std::string &amp;key, bool)</td></tr>
-<tr class="memdesc:a7e0ea8949dd075bf85f14a6c41bc232d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overwrite what keyPressed(const std::string&amp;) should return. <br /></td></tr>
+<tr class="memdesc:a7e0ea8949dd075bf85f14a6c41bc232d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overwrite what keyPressed() should return. <br /></td></tr>
 <tr class="separator:a7e0ea8949dd075bf85f14a6c41bc232d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0c98060b19b5bac9d8d550e3bf57cc8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae0c98060b19b5bac9d8d550e3bf57cc8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ae0c98060b19b5bac9d8d550e3bf57cc8">setKeyPressed</a> (key::KeyType key, bool)</td></tr>
-<tr class="memdesc:ae0c98060b19b5bac9d8d550e3bf57cc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overwrite what keyPressed(key::KeyType) should return. <br /></td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ae0c98060b19b5bac9d8d550e3bf57cc8">setKeyPressed</a> (<a class="el" href="input_8hpp.html#aab0feaba617470cb4aa830dc5935238c">key::KeyType</a> key, bool)</td></tr>
+<tr class="memdesc:ae0c98060b19b5bac9d8d550e3bf57cc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overwrite what keyPressed() should return. <br /></td></tr>
 <tr class="separator:ae0c98060b19b5bac9d8d550e3bf57cc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ca2c281cc5a3c465a46dd70146737ec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ca2c281cc5a3c465a46dd70146737ec"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a7ca2c281cc5a3c465a46dd70146737ec">keyDown</a> (key::KeyType key)</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a7ca2c281cc5a3c465a46dd70146737ec">keyDown</a> (<a class="el" href="input_8hpp.html#aab0feaba617470cb4aa830dc5935238c">key::KeyType</a> key)</td></tr>
 <tr class="memdesc:a7ca2c281cc5a3c465a46dd70146737ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether  is down. <br /></td></tr>
 <tr class="separator:a7ca2c281cc5a3c465a46dd70146737ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f06d69b30abfc3b4c1ff4d4af909269"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f06d69b30abfc3b4c1ff4d4af909269"></a>
@@ -243,7 +243,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 <tr class="memdesc:a069f06b046305527e899e202ca7ebe03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether  is down, where key should be exactly one UTF-8 character. <br /></td></tr>
 <tr class="separator:a069f06b046305527e899e202ca7ebe03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a691c3ce69b7ced02510b270a8f476492"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a691c3ce69b7ced02510b270a8f476492"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>keyPressed</b> (key::KeyType key)</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>keyPressed</b> (<a class="el" href="input_8hpp.html#aab0feaba617470cb4aa830dc5935238c">key::KeyType</a> key)</td></tr>
 <tr class="separator:a691c3ce69b7ced02510b270a8f476492"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2457fe182fdb23b98e78fbba76d538c8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2457fe182fdb23b98e78fbba76d538c8"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>keyPressed</b> (char key)</td></tr>
@@ -282,16 +282,18 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="na
 <tr class="memdesc:a2cbe6b5c63fed23b5ce41b0d442bef77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns mouse wheel movement between -100 and 100 (0 if the mousewheel doesn't move) <br /></td></tr>
 <tr class="separator:a2cbe6b5c63fed23b5ce41b0d442bef77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a467690b2cf5801277fd4f95b5b2d34e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a467690b2cf5801277fd4f95b5b2d34e9"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>mouseDown</b> (mouse::Button button=mouse::Left)</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>mouseDown</b> (<a class="el" href="input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0">mouse::Button</a> button=mouse::Left)</td></tr>
 <tr class="separator:a467690b2cf5801277fd4f95b5b2d34e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5be6491a29de8108c073eec8a0f1901b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5be6491a29de8108c073eec8a0f1901b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setMouseDown</b> (mouse::Button button, bool)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a5be6491a29de8108c073eec8a0f1901b">setMouseDown</a> (<a class="el" href="input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0">mouse::Button</a> button, bool)</td></tr>
+<tr class="memdesc:a5be6491a29de8108c073eec8a0f1901b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overwrite what mouseDown() should return. <br /></td></tr>
 <tr class="separator:a5be6491a29de8108c073eec8a0f1901b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ed7ec985aaea54af9224c46c6cb21cb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ed7ec985aaea54af9224c46c6cb21cb"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>mousePressed</b> (mouse::Button button=mouse::Left)</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>mousePressed</b> (<a class="el" href="input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0">mouse::Button</a> button=mouse::Left)</td></tr>
 <tr class="separator:a0ed7ec985aaea54af9224c46c6cb21cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace09f82f90fcc6c98dcfd5d472e7fd71"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ace09f82f90fcc6c98dcfd5d472e7fd71"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setMousePressed</b> (jngl::mouse::Button, bool)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ace09f82f90fcc6c98dcfd5d472e7fd71">setMousePressed</a> (<a class="el" href="input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0">jngl::mouse::Button</a>, bool)</td></tr>
+<tr class="memdesc:ace09f82f90fcc6c98dcfd5d472e7fd71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overwrite what mouseDown() should return. <br /></td></tr>
 <tr class="separator:ace09f82f90fcc6c98dcfd5d472e7fd71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb2aa65c0631aae5ec613906ab80a74a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abb2aa65c0631aae5ec613906ab80a74a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#abb2aa65c0631aae5ec613906ab80a74a">setMouse</a> (<a class="el" href="classjngl_1_1Vec2.html">Vec2</a> position)</td></tr>
