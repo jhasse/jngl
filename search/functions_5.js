@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mainloop',['mainLoop',['../namespacejngl.html#a8526353d8f97c6f91db63b9903e18138',1,'jngl']]]
+  ['ismultitouch',['isMultitouch',['../namespacejngl.html#a6643be8799336dbf288ba798a197753f',1,'jngl']]]
 ];

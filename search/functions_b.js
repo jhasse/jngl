@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['vec2',['Vec2',['../classjngl_1_1Vec2.html#a1ab54d75ff36ed23a47e9229039c825d',1,'jngl::Vec2']]],
-  ['vertexshader',['vertexShader',['../classjngl_1_1Sprite.html#ab976556b09522328a55549bd94cdeb20',1,'jngl::Sprite']]]
+  ['readasset',['readAsset',['../namespacejngl.html#a97faf475e2690e1ec70b4015d2506f3e',1,'jngl']]],
+  ['running',['running',['../namespacejngl.html#aa5760c51d7686efb6d653830ee8305d5',1,'jngl']]]
 ];
