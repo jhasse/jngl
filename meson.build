@@ -148,6 +148,7 @@ if not meson.is_subproject()
 	boost_test_dep = dependency('boost', modules : [ 'unit_test_framework' ], required : false)
 	if boost_test_dep.found()
 		test('Unit Test', executable('unittest', [
+			'src/unittest/ColorTest.cpp',
 			'src/unittest/main.cpp',
 			'src/unittest/misc.cpp',
 			'src/unittest/SpriteTest.cpp',
