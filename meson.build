@@ -1,4 +1,4 @@
-project('jngl', ['c', 'cpp'], default_options : ['cpp_std=c++1z'])
+project('jngl', ['c', 'cpp'], default_options : ['cpp_std=c++17'])
 
 conf_data = configuration_data()
 conf_data.set('VERSION', '1.4.0')
