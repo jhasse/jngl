@@ -1,6 +1,6 @@
 #include <fstream>
-#include <sstream>
 #include <jngl.hpp>
+#include <sstream>
 
 class ShaderExample : public jngl::Work {
 public:

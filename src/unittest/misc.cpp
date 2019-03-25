@@ -3,6 +3,7 @@
 
 #include "../jngl/Finally.hpp"
 #include "../jngl/sprite.hpp"
+#include "../jngl/other.hpp"
 
 #include <boost/test/unit_test.hpp>
 
@@ -41,4 +42,8 @@ BOOST_AUTO_TEST_CASE(halfLoadTest) {
 	BOOST_CHECK_EQUAL(jngl::getWidth("../jngl"), 600);
 	BOOST_CHECK_EQUAL(jngl::getHeight("../jngl"), 300);
 	BOOST_CHECK_THROW(jngl::load("../jngl"), std::runtime_error);
+}
+
+BOOST_AUTO_TEST_CASE(getBinaryPath) {
+	BOOST_CHECK(!jngl::getBinaryPath().empty());
 }

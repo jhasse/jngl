@@ -20,9 +20,8 @@ std::string jngl::getBinaryPath() {
 		tmp << "BinReloc failed to initialize (error code " << error << ")";
 		throw std::runtime_error(tmp.str());
 	}
-	auto tmp = br_find_exe_dir("");
-	*binpath = tmp;
-	free(tmp);
+	std::shared_ptr<char> tmp(br_find_exe_dir(""), free);
+	*binpath = tmp.get();
 	*binpath += '/';
 	return *binpath;
 }

@@ -276,8 +276,8 @@ Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool 
 		png_destroy_read_struct(&png_ptr, &info_ptr, static_cast<png_infop*>(nullptr));
 	});
 	unsigned char** rowPointers = png_get_rows(png_ptr, info_ptr);
-	const int scaledWidth = static_cast<int>(png_get_image_width(png_ptr, info_ptr));
-	const int scaledHeight = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
+	const auto scaledWidth = static_cast<int>(png_get_image_width(png_ptr, info_ptr));
+	const auto scaledHeight = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
 	width = scaledWidth * getScaleFactor();
 	height = scaledHeight * getScaleFactor();
 	loadTexture(scaledWidth, scaledHeight, filename, halfLoad, format, rowPointers);
@@ -427,7 +427,7 @@ Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool hal
 			throw std::runtime_error(std::string("Can't decode WebP file. (" + filename + ")"));
 		}
 		loadTexture(scaledWidth, scaledHeight, filename, halfLoad, GL_RGBA, nullptr,
-		            config->output.u.RGBA.rgba);
+		            config->output.u.RGBA.rgba); // NOLINT
 		WebPFreeDecBuffer(&config->output);
 	});
 }
