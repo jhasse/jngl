@@ -1,9 +1,9 @@
-// Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/Finally.hpp"
-#include "../jngl/sprite.hpp"
 #include "../jngl/other.hpp"
+#include "../jngl/sprite.hpp"
 
 #include <boost/test/unit_test.hpp>
 

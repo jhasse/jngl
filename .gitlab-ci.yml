@@ -3,7 +3,7 @@ variables:
   TERM: xterm
 
 gcc:
-  image: fedora:28
+  image: fedora:29
   stage: build
   script:
     - dnf install -y fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-python3-devel python3-devel meson SDL2-devel openal-soft-devel gcc-c++
@@ -16,7 +16,7 @@ gcc:
     - DISPLAY=:0 ./unittest
 
 clang:
-  image: fedora:28
+  image: fedora:29
   stage: build
   script:
     - dnf install -y fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-python3-devel python3-devel meson SDL2-devel openal-soft-devel clang
@@ -29,7 +29,7 @@ clang:
     - '! grep -Fq "error:" typescript'
 
 mingw:
-  image: fedora:27
+  image: fedora:29
   stage: build
   script:
     - dnf install -y gcc-c++ meson mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft wine-core
