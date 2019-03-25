@@ -250,8 +250,8 @@ Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool 
 	}
 	png_init_io(png_ptr, fp);
 	png_set_sig_bytes(png_ptr, PNG_BYTES_TO_CHECK);
-	int colorType = png_get_color_type(png_ptr, info_ptr);
-	if (colorType == PNG_COLOR_TYPE_GRAY || colorType == PNG_COLOR_TYPE_GRAY_ALPHA) {
+	if (const int colorType = png_get_color_type(png_ptr, info_ptr);
+	    colorType == PNG_COLOR_TYPE_GRAY || colorType == PNG_COLOR_TYPE_GRAY_ALPHA) {
 		png_set_gray_to_rgb(png_ptr);
 	}
 	png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16, nullptr);
