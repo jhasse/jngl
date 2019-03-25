@@ -79,4 +79,9 @@ void ShaderProgram::Context::setUniform(const int location, const float v0, cons
 	glUniform2f(location, v0, v1);
 }
 
+void ShaderProgram::Context::setUniform(const int location, const float v0, const float v1,
+                                        const float v2, const float v3) {
+	glUniform4f(location, v0, v1, v2, v3);
+}
+
 } // namespace jngl
