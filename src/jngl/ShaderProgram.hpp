@@ -1,4 +1,4 @@
-// Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -26,7 +26,7 @@ public:
 		~Context();
 		Context(const Context&) = delete;
 		Context& operator=(const Context&) = delete;
-		Context(Context&&);
+		Context(Context&&) noexcept;
 		Context& operator=(Context&&) = delete;
 
 		void setUniform(int location, float v0, float v1);

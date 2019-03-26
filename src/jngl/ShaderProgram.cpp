@@ -1,4 +1,4 @@
-// Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "ShaderProgram.hpp"
@@ -66,7 +66,7 @@ ShaderProgram::Context::Context(const ShaderProgram::Impl& impl) {
 	activeImpl = &impl;
 }
 
-ShaderProgram::Context::Context(Context&&) {
+ShaderProgram::Context::Context(Context&&) noexcept {
 	++referenceCount;
 }
 
