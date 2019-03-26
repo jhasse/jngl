@@ -70,6 +70,8 @@ std::vector<std::string> JNGLDLL_API getArgs();
 /// Returns the time that has passed since the program has started in seconds
 double JNGLDLL_API getTime();
 
+/// \deprecated Use std::this_thread::sleep_for instead
+[[deprecated("Use std::this_thread::sleep_for instead")]]
 void JNGLDLL_API sleep(int milliseconds);
 
 /// Returns a stringstream containing the whole file. This will read from the .apk on Android.

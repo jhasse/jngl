@@ -4,6 +4,7 @@
 #include <cmath>
 #include <jngl.hpp>
 #include <sstream>
+#include <thread>
 
 JNGL_MAIN_BEGIN {
 	jngl::setScaleFactor(
@@ -19,11 +20,8 @@ JNGL_MAIN_BEGIN {
 			oldTime += timePerFrame;
 			needDraw = true;
 			base.DoFrame();
-		}
-		else
-		{
-			if(needDraw)
-			{
+		} else {
+			if (needDraw) {
 				needDraw = false;
 				// This needs to be done when "needDraw" is true
 				jngl::updateInput();
@@ -33,11 +31,9 @@ JNGL_MAIN_BEGIN {
 				sstream << "FPS: " << static_cast<int>(jngl::getFPS());
 				jngl::print(sstream.str(), 10, 10);
 				jngl::swapBuffers();
-			}
-			else
-			{
+			} else {
 				// Nothing to do? Okay let's Sleep.
-				jngl::sleep(10);
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			}
 		}
 	}
