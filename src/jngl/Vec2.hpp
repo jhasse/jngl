@@ -37,7 +37,7 @@ namespace boost {
 namespace qvm {
 template <> struct vec_traits<jngl::Vec2> {
 	static int const dim = 2;
-	typedef double scalar_type;
+	using scalar_type = double;
 
 	template <int I> static inline scalar_type& write_element(jngl::Vec2& v) {
 		return (&v.x)[I];
