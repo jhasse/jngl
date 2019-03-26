@@ -4,6 +4,7 @@
 #include "../src/jngl.hpp"
 
 #include <boost/python.hpp>
+#include <thread>
 
 using namespace jngl;
 
@@ -188,7 +189,7 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("setFontSize", setFontSize);
 	def("setFont", setFont);
 	def("setFontByName", setFontByName);
-	def("sleep", jngl::sleep);
+	def("sleep", +[](const int ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); });
 	def("getFPS", getFPS);
 	def("errorMessage", errorMessage);
 	def("getFullscreen", getFullscreen);
