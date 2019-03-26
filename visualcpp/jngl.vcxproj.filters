@@ -36,38 +36,12 @@
     <ClCompile Include="..\src\jngl\*.cpp">
       <Filter>Source Files\jngl</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\*.cpp" />
-    <ClCompile Include="..\src\*.cpp" />
-    <ClCompile Include="..\src\*.cpp" />
-    <ClCompile Include="..\src\*.cpp" />
-    <ClCompile Include="..\src\*.cpp" />
-    <ClCompile Include="..\src\*.cpp" />
-    <ClCompile Include="..\src\*.cpp" />
-    <ClCompile Include="..\src\*.cpp" />
-    <ClCompile Include="..\src\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\jngl\*.cpp" />
-    <ClCompile Include="..\src\win32\*.cpp" />
-    <ClCompile Include="..\src\win32\*.cpp" />
-    <ClCompile Include="..\src\win32\*.cpp" />
-    <ClCompile Include="..\src\win32\*.cpp" />
-    <ClCompile Include="..\src\win32\*.cpp" />
+    <ClCompile Include="..\src\jngl\Shader.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jngl\ShaderProgram.cpp">
+      <Filter>Source Files\jngl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\jngl\*.hpp">
@@ -79,46 +53,15 @@
     <ClInclude Include="..\src\win32\*.hpp">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\*.hpp" />
-    <ClInclude Include="..\src\*.hpp" />
-    <ClInclude Include="..\src\*.hpp" />
-    <ClInclude Include="..\src\*.hpp" />
-    <ClInclude Include="..\src\*.hpp" />
-    <ClInclude Include="..\src\*.hpp" />
-    <ClInclude Include="..\src\*.hpp" />
-    <ClInclude Include="..\src\*.hpp" />
-    <ClInclude Include="..\src\*.hpp" />
-    <ClInclude Include="..\src\*.hpp" />
-    <ClInclude Include="..\src\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\jngl\*.hpp" />
-    <ClInclude Include="..\src\win32\*.hpp" />
+    <ClInclude Include="..\src\jngl\Shader.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\ShaderProgram.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\jngl\dll.hpp">
+      <Filter>Header Files\jngl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

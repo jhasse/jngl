@@ -66,7 +66,7 @@ ShaderProgram::Context::Context(const ShaderProgram::Impl& impl) {
 	activeImpl = &impl;
 }
 
-ShaderProgram::Context::Context(Context&&) noexcept {
+ShaderProgram::Context::Context(Context&&) {
 	++referenceCount;
 }
 

@@ -44,7 +44,7 @@ void Font::print(const std::string& text, int x, int y) {
 }
 
 void Font::print(const std::string& text, const Vec2 position) {
-	impl->print(std::lround(position.x), std::lround(position.y), text);
+	impl->print(position.x, position.y, text);
 }
 
 std::shared_ptr<FontImpl> Font::getImpl() {
