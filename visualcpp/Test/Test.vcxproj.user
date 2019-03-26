@@ -10,7 +10,4 @@
     <LocalDebuggerWorkingDirectory>..\..</LocalDebuggerWorkingDirectory>
     <LocalDebuggerEnvironment>PATH=$(SolutionDir)\packages\libogg.redist.1.3.0.1\build\native\bin\v110\Win32\Release\dynamic;%PATH%</LocalDebuggerEnvironment>
   </PropertyGroup>
-  <PropertyGroup>
-    <NXTargetSerialNumber>Default</NXTargetSerialNumber>
-  </PropertyGroup>
 </Project>
