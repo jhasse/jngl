@@ -1,4 +1,4 @@
-// Copyright 2009-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2009-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../src/jngl.hpp"
@@ -23,7 +23,7 @@ void showWindow3(const std::string& title, int width, int height, bool fullscree
 	             boost::python::extract<int>(maxAspectRatio[1]) });
 }
 void drawScaled1(const std::string& filename, double xposition, double yposition, float xfactor,
-	             float yfactor) {
+                 float yfactor) {
 	drawScaled(filename, xposition, yposition, xfactor, yfactor);
 }
 void drawScaled2(const std::string& filename, double xposition, double yposition, float factor) {
@@ -57,11 +57,11 @@ void setFontColor1(unsigned char red, unsigned char green, unsigned char blue) {
 	setFontColor(red, green, blue);
 }
 void setFontColor2(unsigned char red, unsigned char green, unsigned char blue,
-	               unsigned char alpha) {
+                   unsigned char alpha) {
 	setFontColor(red, green, blue, alpha);
 }
 void setSpriteColor1(unsigned char red, unsigned char green, unsigned char blue,
-	                 unsigned char alpha) {
+                     unsigned char alpha) {
 	setSpriteColor(red, green, blue, alpha);
 }
 void setSpriteColor2(unsigned char red, unsigned char green, unsigned char blue) {
@@ -115,19 +115,16 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	using boost::python::pure_virtual;
 
 	class_<DrawableWrap, boost::noncopyable>("Drawable")
-		.def("step", pure_virtual(&Drawable::step))
-		.def("draw", pure_virtual(&Drawable::draw))
-		.def("setPos", pure_virtual(&Drawable::setPos))
-	;
+	    .def("step", pure_virtual(&Drawable::step))
+	    .def("draw", pure_virtual(&Drawable::draw))
+	    .def("setPos", pure_virtual(&Drawable::setPos));
 
 	class_<Sprite>("Sprite", boost::python::init<const std::string&>())
-		.def("draw", static_cast<void (Sprite::*)() const>(&Sprite::draw))
-	;
+	    .def("draw", static_cast<void (Sprite::*)() const>(&Sprite::draw));
 
 	class_<Vec2>("Vec2", boost::python::init<Float, Float>())
-		.def_readwrite("x", &Vec2::x)
-		.def_readwrite("y", &Vec2::y)
-	;
+	    .def_readwrite("x", &Vec2::x)
+	    .def_readwrite("y", &Vec2::y);
 
 	def("showWindow", showWindow1);
 	def("showWindow", showWindow2);
@@ -139,15 +136,15 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("quit", quit);
 	def("cancelQuit", cancelQuit);
 	def("draw", draw1);
-	def("draw", static_cast<void(*)(const std::string&, jngl::Float, jngl::Float)>(draw));
+	def("draw", static_cast<void (*)(const std::string&, jngl::Float, jngl::Float)>(draw));
 	def("drawScaled", drawScaled1);
 	def("drawScaled", drawScaled2);
 	def("drawRect", drawRect1);
-	def("drawLine", static_cast<void(*)(double, double, double, double)>(drawLine));
-	def("drawEllipse", static_cast<void(*)(float, float, float, float, float)>(drawEllipse));
+	def("drawLine", static_cast<void (*)(double, double, double, double)>(drawLine));
+	def("drawEllipse", static_cast<void (*)(float, float, float, float, float)>(drawEllipse));
 	def("drawPoint", drawPoint);
 	def("rotate", rotate);
-	def("translate", static_cast<void(*)(jngl::Float, jngl::Float)>(translate));
+	def("translate", static_cast<void (*)(jngl::Float, jngl::Float)>(translate));
 	def("scale", scale1);
 	def("scale", scale2);
 	def("pushMatrix", pushMatrix);
@@ -165,9 +162,9 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("setScaleFactor", setScaleFactor);
 
 	enum_<mouse::Button>("mouse")
-        .value("Left", mouse::Left)
-        .value("Middle", mouse::Middle)
-        .value("Right", mouse::Right);
+	    .value("Left", mouse::Left)
+	    .value("Middle", mouse::Middle)
+	    .value("Right", mouse::Right);
 
 	def("mouseDown", mouseDown1);
 	def("mouseDown", mouseDown2);
@@ -183,7 +180,7 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("setFontColor", setFontColor2);
 	def("setSpriteColor", setSpriteColor1);
 	def("setSpriteColor", setSpriteColor2);
-	def("print", static_cast<void(*)(const std::string&, Vec2)>(print));
+	def("print", static_cast<void (*)(const std::string&, Vec2)>(print));
 	def("print", print1);
 	def("getFontSize", getFontSize);
 	def("setFontSize", setFontSize);
@@ -203,7 +200,7 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("getTextWidth", getTextWidth);
 
 	enum_<key::KeyType>("key")
-        .value("Left", key::Left)
+	    .value("Left", key::Left)
 	    .value("Up", key::Up)
 	    .value("Right", key::Right)
 	    .value("Down", key::Down)
@@ -264,31 +261,29 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("popSpriteAlpha", popSpriteAlpha);
 
 	class_<FrameBuffer, boost::noncopyable>("FrameBuffer", boost::python::init<int, int>())
-        .def("draw", &FrameBuffer::draw)
-        .def("beginDraw", &FrameBuffer::beginDraw)
-        .def("endDraw", &FrameBuffer::endDraw)
-    ;
+	    .def("draw", &FrameBuffer::draw)
+	    .def("beginDraw", &FrameBuffer::beginDraw)
+	    .def("endDraw", &FrameBuffer::endDraw);
 
-    enum_<controller::Button>("controller")
-		.value("LeftStickX", controller::LeftStickX)
-		.value("LeftStickY", controller::LeftStickY)
-		.value("RightStickX", controller::RightStickX)
-		.value("RightStickY", controller::RightStickY)
-		.value("A", controller::A)
-		.value("B", controller::B)
-		.value("X", controller::X)
-		.value("Y", controller::Y)
-		.value("LeftButton", controller::LeftButton)
-		.value("RightButton", controller::RightButton)
-		.value("LeftTrigger", controller::LeftTrigger)
-		.value("RightTrigger", controller::RightTrigger)
-		.value("Start", controller::Start)
-		.value("Back", controller::Back)
-		.value("DpadUp", controller::DpadUp)
-		.value("DpadDown", controller::DpadDown)
-		.value("DpadLeft", controller::DpadLeft)
-		.value("DpadRight", controller::DpadRight)
-		.value("LeftStick", controller::LeftStick)
-		.value("RightStic", controller::RightStick);
-
+	enum_<controller::Button>("controller")
+	    .value("LeftStickX", controller::LeftStickX)
+	    .value("LeftStickY", controller::LeftStickY)
+	    .value("RightStickX", controller::RightStickX)
+	    .value("RightStickY", controller::RightStickY)
+	    .value("A", controller::A)
+	    .value("B", controller::B)
+	    .value("X", controller::X)
+	    .value("Y", controller::Y)
+	    .value("LeftButton", controller::LeftButton)
+	    .value("RightButton", controller::RightButton)
+	    .value("LeftTrigger", controller::LeftTrigger)
+	    .value("RightTrigger", controller::RightTrigger)
+	    .value("Start", controller::Start)
+	    .value("Back", controller::Back)
+	    .value("DpadUp", controller::DpadUp)
+	    .value("DpadDown", controller::DpadDown)
+	    .value("DpadLeft", controller::DpadLeft)
+	    .value("DpadRight", controller::DpadRight)
+	    .value("LeftStick", controller::LeftStick)
+	    .value("RightStick", controller::RightStick);
 }
