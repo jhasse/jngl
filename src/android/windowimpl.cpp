@@ -66,7 +66,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				case AMOTION_EVENT_ACTION_UP:
 					--impl.numberOfTouches;
 					return 1;
-			};
+			}
 	}
 	return 0;
 }
@@ -99,11 +99,8 @@ void WindowImpl::init() {
 	if (initialized) {
 		return;
 	}
-	/*
-	 * Here specify the attributes of the desired configuration.
-	 * Below, we select an EGLConfig with at least 8 bits per color
-	 * component compatible with on-screen windows
-	 */
+	// Here specify the attributes of the desired configuration. Below, we select an EGLConfig with
+	// at least 8 bits per color component compatible with on-screen windows
 	const EGLint attribs[] = {
 		EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
 		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
@@ -119,15 +116,13 @@ void WindowImpl::init() {
 
 	eglInitialize(display, 0, 0);
 
-	/* Here, the application chooses the configuration it desires. In this
-	 * sample, we have a very simplified selection process, where we pick
-	 * the first EGLConfig that matches our criteria */
+	// Here, the application chooses the configuration it desires. In this sample, we have a very
+	// simplified selection process, where we pick the first EGLConfig that matches our criteria
 	eglChooseConfig(display, attribs, &config, 1, &numConfigs);
 
-	/* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
-	 * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
-	 * As soon as we picked a EGLConfig, we can safely reconfigure the
-	 * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
+	// EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is guaranteed to be accepted by
+	// ANativeWindow_setBuffersGeometry(). As soon as we picked a EGLConfig, we can safely
+	// reconfigure the ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID.
 	eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
 
 	if (!app) {
