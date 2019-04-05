@@ -1,4 +1,4 @@
-// Copyright 2015-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowimpl.hpp"
@@ -38,9 +38,6 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 			break;
 		case APP_CMD_PAUSE:
 			impl.pause();
-			break;
-		case APP_CMD_RESUME:
-			impl.hideNavigationBar();
 			break;
 	}
 }
@@ -187,40 +184,6 @@ void WindowImpl::makeCurrent() {
 	surface = eglCreateWindowSurface(display, config, app->window, nullptr);
 	if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
 		throw std::runtime_error("Unable to eglMakeCurrent");
-	}
-}
-
-void WindowImpl::hideNavigationBar() {
-	jclass activityClass = env->FindClass("android/app/NativeActivity");
-	jmethodID getWindow = env->GetMethodID(activityClass, "getWindow", "()Landroid/view/Window;");
-
-	jclass windowClass = env->FindClass("android/view/Window");
-	jmethodID getDecorView = env->GetMethodID(windowClass, "getDecorView", "()Landroid/view/View;");
-
-	jclass viewClass = env->FindClass("android/view/View");
-	jmethodID setSystemUiVisibility = env->GetMethodID(viewClass, "setSystemUiVisibility", "(I)V");
-
-	jobject androidWindow = env->CallObjectMethod(app->activity->clazz, getWindow);
-
-	jobject decorView = env->CallObjectMethod(androidWindow, getDecorView);
-
-	jfieldID flagFullscreenID = env->GetStaticFieldID(viewClass, "SYSTEM_UI_FLAG_FULLSCREEN", "I");
-	jfieldID flagHideNavigationID =
-			env->GetStaticFieldID(viewClass, "SYSTEM_UI_FLAG_HIDE_NAVIGATION", "I");
-	jfieldID flagImmersiveStickyID =
-			env->GetStaticFieldID(viewClass, "SYSTEM_UI_FLAG_IMMERSIVE_STICKY", "I");
-
-	const int flagFullscreen = env->GetStaticIntField(viewClass, flagFullscreenID);
-	const int flagHideNavigation = env->GetStaticIntField(viewClass, flagHideNavigationID);
-	const int flagImmersiveSticky = env->GetStaticIntField(viewClass, flagImmersiveStickyID);
-	const int flag = flagFullscreen | flagHideNavigation | flagImmersiveSticky;
-
-	env->CallVoidMethod(decorView, setSystemUiVisibility, flag);
-	if (env->ExceptionCheck()) {
-		// When resuming the app, setSystemUiVisibility raises an exception "Only the original
-		// thread that created a view hierarchy can touch its views.". The navigation bar still
-		// gets hidden though, so ignore it.
-		env->ExceptionClear();
 	}
 }
 

@@ -1,4 +1,4 @@
-// Copyright 2015-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -25,7 +25,6 @@ public:
 	void setRelativeMouseMode(bool);
 	void pause();
 	void makeCurrent();
-	void hideNavigationBar();
 	int handleKeyEvent(AInputEvent*);
 	void setKeyboardVisible(bool);
 
