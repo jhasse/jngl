@@ -4,6 +4,7 @@
 
 #include <errno.h>
 #include <android/asset_manager.h>
+#include <boost/algorithm/string/replace.hpp>
 
 static int android_read(void* cookie, char* buf, int size) {
 	return AAsset_read((AAsset*)cookie, buf, size);
@@ -27,7 +28,14 @@ AAssetManager* android_asset_manager = NULL;
 FILE* android_fopen(const char* fname, const char* mode) {
 	if (mode[0] == 'w') return NULL;
 
-	AAsset* asset = AAssetManager_open(android_asset_manager, fname, 0);
+	if (fname[0] != '\0' && fname[0] == '.' && fname[1] == '/') {
+		fname += 2;
+	}
+
+	std::string tmp(fname);
+	boost::replace_all(tmp, "/./", "/");
+
+	AAsset* asset = AAssetManager_open(android_asset_manager, tmp.c_str(), 0);
 	if (!asset) return NULL;
 
 	return funopen(asset, android_read, android_write, android_seek, android_close);
