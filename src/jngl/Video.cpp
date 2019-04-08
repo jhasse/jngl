@@ -1,13 +1,13 @@
-// Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Video.hpp"
 
 #ifdef JNGL_VIDEO
 
-#include "../opengl.hpp"
-#include "../audio.hpp"
 #include "../../subprojects/theoraplay/theoraplay.h"
+#include "../audio.hpp"
+#include "../opengl.hpp"
 #include "Shader.hpp"
 #include "debug.hpp"
 #include "time.hpp"
@@ -27,7 +27,7 @@ namespace jngl {
 
 class Video::Impl {
 public:
-	Impl(const std::string& filename)
+	explicit Impl(const std::string& filename)
 	: decoder(THEORAPLAY_startDecodeFile(filename.c_str(), 60, THEORAPLAY_VIDFMT_IYUV)),
 	  startTime(jngl::getTime()) {
 		if (!decoder) {
@@ -172,7 +172,7 @@ public:
 
 				const GLint texCoordAttrib = shaderProgram->getAttribLocation("inTexCoord");
 				glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
-				                      reinterpret_cast<void*>(2 * sizeof(float)));
+				                      reinterpret_cast<void*>(2 * sizeof(float))); // NOLINT
 				glEnableVertexAttribArray(texCoordAttrib);
 			}
 
@@ -273,6 +273,11 @@ public:
 		checkAlError();
 	}
 
+	Impl(const Impl&) = delete;
+	Impl& operator=(const Impl&) = delete;
+	Impl(Impl&&) = delete;
+	Impl& operator=(Impl&&) = delete;
+
 	int getWidth() const { return video->width; }
 	int getHeight() const { return video->height; }
 
@@ -281,7 +286,7 @@ private:
 		auto pcm = std::make_unique<int16_t[]>(audio->frames * audio->channels);
 		for (int i = 0; i < audio->frames * audio->channels; ++i) {
 			const float sample = std::clamp(audio->samples[i], -1.f, 1.f);
-			pcm[i] = sample * 32767.f;
+			pcm[i] = static_cast<int16_t>(sample * 32767.f);
 		}
 
 		alBufferData(buffer, format, pcm.get(), audio->frames * audio->channels * sizeof(int16_t),
@@ -307,12 +312,12 @@ private:
 	ALenum format;
 
 	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
-	int modelviewUniform;
-	GLuint textureY; // luminance
-	GLuint textureU; // chrominance
-	GLuint textureV; // chrominance
-	GLuint vao;
-	GLuint vertexBuffer;
+	int modelviewUniform = -1;
+	GLuint textureY = 0; // luminance
+	GLuint textureU = 0; // chrominance
+	GLuint textureV = 0; // chrominance
+	GLuint vao = 0;
+	GLuint vertexBuffer = 0;
 };
 
 Video::Video(const std::string& filename) : impl(std::make_unique<Impl>(filename)) {
