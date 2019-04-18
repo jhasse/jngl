@@ -92,7 +92,8 @@ bool Window::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
-  fontSize_(12), width_(width), height_(height), stepsPerFrame(1), multitouch(false) {
+  fontSize_(12), width_(width), height_(height), stepsPerFrame(1), multitouch(false),
+  impl(nullptr) {
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	Init(title, false);
 }
