@@ -166,11 +166,11 @@ Window::Window(const std::string& title, const int width, const int height, cons
 					[[fallthrough]];
 				case SDL_FINGERMOTION:
 					if (relativeMouseMode) {
-						mousex_ = event.tfinger.dx * width_;
-						mousey_ = event.tfinger.dy * height_;
+						mousex_ = std::lround(event.tfinger.dx * width_);
+						mousey_ = std::lround(event.tfinger.dy * height_);
 					} else {
-						mousex_ = event.tfinger.x * width_;
-						mousey_ = event.tfinger.y * height_;
+						mousex_ = std::lround(event.tfinger.x * width_);
+						mousey_ = std::lround(event.tfinger.y * height_);
 					}
 					break;
 				case SDL_MOUSEBUTTONDOWN: {

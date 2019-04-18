@@ -179,6 +179,6 @@ namespace jngl {
 #else
 		friend class WindowImpl;
 #endif
-		WindowImpl* const impl = nullptr;
+		WindowImpl* const impl;
 	};
 }
