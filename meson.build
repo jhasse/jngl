@@ -150,6 +150,7 @@ if not meson.is_subproject()
 		test('Unit Test', executable('unittest', [
 			'src/unittest/main.cpp', # needs to come first for unity build
 			'src/unittest/ColorTest.cpp',
+			'src/unittest/DrawableTest.cpp',
 			'src/unittest/misc.cpp',
 			'src/unittest/SpriteTest.cpp',
 			'src/unittest/TextTest.cpp',
