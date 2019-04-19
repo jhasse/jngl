@@ -14,6 +14,7 @@ namespace jngl {
 
 class FontImpl;
 
+/// Font loaded from a TTF or OTF file
 class Font {
 public:
 	JNGLDLL_API Font(const std::string& filename, unsigned int size);

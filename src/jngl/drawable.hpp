@@ -8,6 +8,8 @@
 #include "dll.hpp"
 
 namespace jngl {
+
+/// Base class for drawable objects with a position and a rectangle size
 class JNGLDLL_API Drawable {
 public:
 	Drawable();
