@@ -33,6 +33,7 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 		jngl::setFont("../Arial.ttf");
 		jngl::Text text("test string\nline 2");
 		BOOST_CHECK_EQUAL(text.getWidth(), 69);
+		BOOST_CHECK_EQUAL(text.getHeight(), 38);
 		text.setCenter(-10, -10);
 		BOOST_CHECK_CLOSE(text.getX(), -44.5, 1e-9);
 		text.draw();
