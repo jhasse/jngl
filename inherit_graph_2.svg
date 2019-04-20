@@ -11,7 +11,7 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-62 158,-62 158,4 -4,4"/>
 <!-- Node1 -->
 <g id="node1" class="node"><title>Node1</title>
-<g id="a_node1"><a xlink:href="classjngl_1_1Drawable.html" target="_top" xlink:title="Drawable">
+<g id="a_node1"><a xlink:href="classjngl_1_1Drawable.html" target="_top" xlink:title="Base class for drawable objects with a position and a rectangle size. ">
 <polygon fill="white" stroke="black" points="0,-19.5 0,-38.5 65,-38.5 65,-19.5 0,-19.5"/>
 <text text-anchor="middle" x="32.5" y="-26.5" font-family="'Consolas',monospace" font-size="10.00">Drawable</text>
 </a>
@@ -32,7 +32,7 @@
 </g>
 <!-- Node3 -->
 <g id="node3" class="node"><title>Node3</title>
-<g id="a_node3"><a xlink:href="classjngl_1_1Text.html" target="_top" xlink:title="Text">
+<g id="a_node3"><a xlink:href="classjngl_1_1Text.html" target="_top" xlink:title="Rectangle shaped text block. ">
 <polygon fill="white" stroke="black" points="107,-0.5 107,-19.5 148,-19.5 148,-0.5 107,-0.5"/>
 <text text-anchor="middle" x="127.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">Text</text>
 </a>

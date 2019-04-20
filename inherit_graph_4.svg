@@ -11,7 +11,7 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-24 45,-24 45,4 -4,4"/>
 <!-- Node1 -->
 <g id="node1" class="node"><title>Node1</title>
-<g id="a_node1"><a xlink:href="classjngl_1_1Font.html" target="_top" xlink:title="Font">
+<g id="a_node1"><a xlink:href="classjngl_1_1Font.html" target="_top" xlink:title="Font loaded from a TTF or OTF file. ">
 <polygon fill="white" stroke="black" points="0,-0.5 0,-19.5 41,-19.5 41,-0.5 0,-0.5"/>
 <text text-anchor="middle" x="20.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">Font</text>
 </a>

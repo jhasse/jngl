@@ -29,7 +29,7 @@
 </g>
 <!-- Node3 -->
 <g id="node3" class="node"><title>Node3</title>
-<g id="a_node3"><a xlink:href="classjngl_1_1Text.html" target="_top" xlink:title="Text">
+<g id="a_node3"><a xlink:href="classjngl_1_1Text.html" target="_top" xlink:title="Rectangle shaped text block. ">
 <polygon fill="white" stroke="black" points="71,-0.5 71,-19.5 112,-19.5 112,-0.5 71,-0.5"/>
 <text text-anchor="middle" x="91.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">Text</text>
 </a>

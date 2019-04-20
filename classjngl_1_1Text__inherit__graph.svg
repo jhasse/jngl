@@ -16,7 +16,7 @@
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
-<g id="a_node2"><a xlink:href="classjngl_1_1Drawable.html" target="_top" xlink:title="Drawable">
+<g id="a_node2"><a xlink:href="classjngl_1_1Drawable.html" target="_top" xlink:title="Base class for drawable objects with a position and a rectangle size. ">
 <polygon fill="white" stroke="black" points="0,-56.5 0,-75.5 65,-75.5 65,-56.5 0,-56.5"/>
 <text text-anchor="middle" x="32.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00">Drawable</text>
 </a>
