@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['updateinput',['updateInput',['../namespacejngl.html#a41043304f9ce3a6307573263c949d7d6',1,'jngl']]]
+  ['text',['Text',['../classjngl_1_1Text.html',1,'jngl']]],
+  ['text_2ehpp',['text.hpp',['../text_8hpp.html',1,'']]],
+  ['type',['Type',['../classjngl_1_1Shader.html#a1d1cfd8ffb84e947f82999c682b666a7',1,'jngl::Shader']]]
 ];
