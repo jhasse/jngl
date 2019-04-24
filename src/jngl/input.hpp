@@ -10,165 +10,161 @@
 #include <memory>
 
 namespace jngl {
-	namespace key {
-		/// Keyboard keys
-		enum KeyType {
-			Left,
-			Up,
-			Right,
-			Down,
-			PageUp,
-			PageDown,
-			Home,
-			End,
-			BackSpace,
-			Tab,
-			Clear,
-			Return,
-			Pause,
-			Escape,
-			Delete,
-			ControlL,
-			ControlR,
-			CapsLock,
-			AltL,
-			AltR,
-			SuperL,
-			SuperR,
-			Space,
-			ShiftL,
-			ShiftR,
-			F1,
-			F2,
-			F3,
-			F4,
-			F5,
-			F6,
-			F7,
-			F8,
-			F9,
-			F10,
-			F11,
-			F12,
-			Any
-		};
-	}
 
-	/// Display onscreen keyboard for touch devices
-	void JNGLDLL_API setKeyboardVisible(bool);
+namespace key {
+/// Keyboard keys
+enum KeyType {
+	Left,
+	Up,
+	Right,
+	Down,
+	PageUp,
+	PageDown,
+	Home,
+	End,
+	BackSpace,
+	Tab,
+	Clear,
+	Return,
+	Pause,
+	Escape,
+	Delete,
+	ControlL,
+	ControlR,
+	CapsLock,
+	AltL,
+	AltR,
+	SuperL,
+	SuperR,
+	Space,
+	ShiftL,
+	ShiftR,
+	F1,
+	F2,
+	F3,
+	F4,
+	F5,
+	F6,
+	F7,
+	F8,
+	F9,
+	F10,
+	F11,
+	F12,
+	Any
+};
+} // namespace key
 
-	/// Whether a normal or a numbers-only keyboard should appear
-	enum KeyboardType {
-		Default,
-		Numpad
-	};
+/// Display onscreen keyboard for touch devices
+void JNGLDLL_API setKeyboardVisible(bool);
 
-	/// Type of the onscreen keyboard
-	void JNGLDLL_API setKeyboardType(KeyboardType);
+/// Whether a normal or a numbers-only keyboard should appear
+enum KeyboardType { Default, Numpad };
 
-	/// Currently active type of onscreen keyboard
-	KeyboardType JNGLDLL_API getKeyboardType();
+/// Type of the onscreen keyboard
+void JNGLDLL_API setKeyboardType(KeyboardType);
 
-	/// Overwrite what keyPressed() should return
-	void JNGLDLL_API setKeyPressed(const std::string& key, bool);
+/// Currently active type of onscreen keyboard
+KeyboardType JNGLDLL_API getKeyboardType();
 
-	/// Overwrite what keyPressed() should return
-	void JNGLDLL_API setKeyPressed(key::KeyType key, bool);
+/// Overwrite what keyPressed() should return
+void JNGLDLL_API setKeyPressed(const std::string& key, bool);
 
-	/// Whether @key is down
-	bool JNGLDLL_API keyDown(key::KeyType key);
+/// Overwrite what keyPressed() should return
+void JNGLDLL_API setKeyPressed(key::KeyType key, bool);
 
-	/// Whether @key is down
-	bool JNGLDLL_API keyDown(char key);
+/// Whether @key is down
+bool JNGLDLL_API keyDown(key::KeyType key);
 
-	/// Whether @key is down, where key should be exactly one UTF-8 character
-	bool JNGLDLL_API keyDown(const std::string& key);
+/// Whether @key is down
+bool JNGLDLL_API keyDown(char key);
 
-	bool JNGLDLL_API keyPressed(key::KeyType key);
+/// Whether @key is down, where key should be exactly one UTF-8 character
+bool JNGLDLL_API keyDown(const std::string& key);
 
-	bool JNGLDLL_API keyPressed(char key);
+bool JNGLDLL_API keyPressed(key::KeyType key);
 
-	bool JNGLDLL_API keyPressed(const std::string& key);
+bool JNGLDLL_API keyPressed(char key);
 
-	void JNGLDLL_API setRelativeMouseMode(bool relative);
+bool JNGLDLL_API keyPressed(const std::string& key);
 
-	bool JNGLDLL_API getRelativeMouseMode();
+void JNGLDLL_API setRelativeMouseMode(bool relative);
 
-	void JNGLDLL_API setMouseVisible(bool visible);
+bool JNGLDLL_API getRelativeMouseMode();
 
-	bool JNGLDLL_API isMouseVisible();
+void JNGLDLL_API setMouseVisible(bool visible);
 
-	/// Returns true when there's more than one finger touching the screen
-	bool JNGLDLL_API isMultitouch();
+bool JNGLDLL_API isMouseVisible();
 
-	/// Mouse position in screen coordinates
-	Vec2 JNGLDLL_API getMousePos();
+/// Returns true when there's more than one finger touching the screen
+bool JNGLDLL_API isMultitouch();
 
-	/// Retrieve mouse position in pixels
-	/// \deprecated Use jngl::getMousePos() instead
-	[[deprecated("Use jngl::getMousePos() instead")]]
-	int JNGLDLL_API getMouseX();
+/// Mouse position in screen coordinates
+Vec2 JNGLDLL_API getMousePos();
 
-	/// Retrieve mouse position in pixels
-	/// \deprecated Use jngl::getMousePos() instead
-	[[deprecated("Use jngl::getMousePos() instead")]]
-	int JNGLDLL_API getMouseY();
+/// Retrieve mouse position in pixels
+/// \deprecated Use jngl::getMousePos() instead
+[[deprecated("Use jngl::getMousePos() instead")]] int JNGLDLL_API getMouseX();
 
-	namespace mouse {
-		/// Mouse buttons
-		enum Button {
-			Left, Middle, Right
-		};
-	}
+/// Retrieve mouse position in pixels
+/// \deprecated Use jngl::getMousePos() instead
+[[deprecated("Use jngl::getMousePos() instead")]] int JNGLDLL_API getMouseY();
 
-	/// Returns mouse wheel movement between -100 and 100 (0 if the mousewheel doesn't move)
-	double JNGLDLL_API getMouseWheel();
+namespace mouse {
+/// Mouse buttons
+enum Button { Left, Middle, Right };
+} // namespace mouse
 
-	bool JNGLDLL_API mouseDown(mouse::Button button = mouse::Left);
+/// Returns mouse wheel movement between -100 and 100 (0 if the mousewheel doesn't move)
+double JNGLDLL_API getMouseWheel();
 
-	/// Overwrite what mouseDown() should return
-	void JNGLDLL_API setMouseDown(mouse::Button button, bool);
+bool JNGLDLL_API mouseDown(mouse::Button button = mouse::Left);
 
-	bool JNGLDLL_API mousePressed(mouse::Button button = mouse::Left);
+/// Overwrite what mouseDown() should return
+void JNGLDLL_API setMouseDown(mouse::Button button, bool);
 
-	/// Overwrite what mouseDown() should return
-	void JNGLDLL_API setMousePressed(jngl::mouse::Button, bool);
+bool JNGLDLL_API mousePressed(mouse::Button button = mouse::Left);
 
-	/// Moves the mouse (does nothing on iOS and Android)
-	void JNGLDLL_API setMouse(Vec2 position);
+/// Overwrite what mouseDown() should return
+void JNGLDLL_API setMousePressed(jngl::mouse::Button, bool);
 
-	namespace controller {
-		/// Gamepad buttons
-		enum Button {
-			LeftStickX,
-			LeftStickY,
-			RightStickX,
-			RightStickY,
-			A,
-			B,
-			X,
-			Y,
-			LeftButton,
-			RightButton,
-			LeftTrigger,
-			RightTrigger,
-			Start,
-			Back,
-			DpadUp,
-			DpadDown,
-			DpadLeft,
-			DpadRight,
-			LeftStick,
-			RightStick,
-			Last
-		};
-	}
+/// Moves the mouse (does nothing on iOS and Android)
+void JNGLDLL_API setMouse(Vec2 position);
 
-	class Controller;
+namespace controller {
+/// Gamepad buttons
+enum Button {
+	LeftStickX,
+	LeftStickY,
+	RightStickX,
+	RightStickY,
+	A,
+	B,
+	X,
+	Y,
+	LeftButton,
+	RightButton,
+	LeftTrigger,
+	RightTrigger,
+	Start,
+	Back,
+	DpadUp,
+	DpadDown,
+	DpadLeft,
+	DpadRight,
+	LeftStick,
+	RightStick,
+	Last
+};
+} // namespace controller
 
-	/// Returns all Controllers that are connected. Don't call this function every frame for performance reasons
-	std::vector<std::shared_ptr<Controller>> JNGLDLL_API getConnectedControllers();
+class Controller;
 
-	/// Returns a string of characters that have been pressed since the last call to updateInput()
-	std::string JNGLDLL_API getTextInput();
-}
+/// Returns all Controllers that are connected. Don't call this function every frame for performance
+/// reasons
+std::vector<std::shared_ptr<Controller>> JNGLDLL_API getConnectedControllers();
+
+/// Returns a string of characters that have been pressed since the last call to updateInput()
+std::string JNGLDLL_API getTextInput();
+
+} // namespace jngl
