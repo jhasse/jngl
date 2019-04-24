@@ -1,4 +1,4 @@
-// Copyright 2017-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2017-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -13,12 +13,12 @@ class SdlController : public Controller {
 public:
 	SdlController(SDL_Joystick*);
 	~SdlController() override;
-	float state(controller::Button) const override;
 	bool down(controller::Button) const override;
 
 	bool is(SDL_Joystick*) const;
 
 private:
+	float stateImpl(controller::Button) const override;
 	float stateWithoutDeadzone(controller::Button) const;
 
 	SDL_Joystick* const handle;

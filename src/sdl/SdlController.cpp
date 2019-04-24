@@ -1,4 +1,4 @@
-// Copyright 2017-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2017-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "SdlController.hpp"
@@ -52,7 +52,7 @@ float SdlController::stateWithoutDeadzone(controller::Button button) const {
 	return state;
 }
 
-float SdlController::state(controller::Button button) const {
+float SdlController::stateImpl(controller::Button button) const {
 	float state = stateWithoutDeadzone(button);
 	controller::Button otherAxis;
 	switch(button) {
@@ -109,7 +109,7 @@ bool SdlController::down(const controller::Button button) const {
 		case controller::DpadRight: return (SDL_JoystickGetHat(handle, 0) & SDL_HAT_RIGHT) != 0;
 		case controller::LeftStick: buttonIndex = xbox ? 9 : 11; break;
 		case controller::RightStick: buttonIndex = xbox ? 10 : 12; break;
-		default: return false;
+		default: return state(button) > 0.5f; // e.g. LeftStickX
 	}
 	return SDL_JoystickGetButton(handle, buttonIndex) != 0;
 }

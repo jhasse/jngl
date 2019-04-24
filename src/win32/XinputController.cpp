@@ -1,4 +1,4 @@
-// Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "XinputController.hpp"
@@ -10,7 +10,7 @@ namespace jngl {
 XinputController::XinputController(const int number) : i(number) {
 }
 
-float XinputController::state(const controller::Button b) const {
+float XinputController::stateImpl(const controller::Button b) const {
 	const float max = 32767;
 
 	using namespace controller;

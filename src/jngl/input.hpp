@@ -134,10 +134,30 @@ void JNGLDLL_API setMouse(Vec2 position);
 namespace controller {
 /// Gamepad buttons
 enum Button {
+	/// x axis of left stick, -1 to 1
 	LeftStickX,
+
+	/// -LeftStickX
+	LeftStickXInverse,
+
+	/// y axis of left stick, -1 to 1
 	LeftStickY,
+
+	/// -LeftStickY
+	LeftStickYInverse,
+
+	/// x axis of right stick, -1 to 1
 	RightStickX,
+
+	/// -RightStickX
+	RightStickXInverse,
+
+	/// y axis of right stick, -1 to 1
 	RightStickY,
+
+	/// -RightStickY
+	RightStickYInverse,
+
 	A,
 	B,
 	X,

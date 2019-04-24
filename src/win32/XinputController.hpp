@@ -1,4 +1,4 @@
-// Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -10,7 +10,7 @@ namespace jngl {
 class XinputController : public jngl::Controller {
 public:
 	JNGLDLL_API XinputController(int number);
-	float state(controller::Button) const override;
+	float stateImpl(controller::Button) const override;
 	bool down(controller::Button) const override;
 
 private:
