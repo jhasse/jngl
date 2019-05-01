@@ -16,5 +16,6 @@ var searchData=
   ['gettextinput',['getTextInput',['../namespacejngl.html#a61fd6900416c997489df138cb8651ab8',1,'jngl']]],
   ['gettime',['getTime',['../namespacejngl.html#a4437edd7fd2832790c13ba3179bcc64d',1,'jngl']]],
   ['gettop',['getTop',['../classjngl_1_1Drawable.html#a316cc0c624238d3a4ba4645b17e7aa9c',1,'jngl::Drawable']]],
+  ['gettouchpositions',['getTouchPositions',['../namespacejngl.html#aaa978e56af9461cc6a8da01e6a0f28fc',1,'jngl']]],
   ['getwidth',['getWidth',['../classjngl_1_1Drawable.html#a1abb04c6637e0fca05587a36d9ea6b5e',1,'jngl::Drawable']]]
 ];
