@@ -5,6 +5,7 @@
 
 #include "../jngl/other.hpp"
 #include "../jngl/debug.hpp"
+#include "../audio.hpp"
 #include "../windowptr.hpp"
 #include "../main.hpp"
 #include "fopen.hpp"
@@ -172,6 +173,7 @@ void WindowImpl::pause() {
 		debugLn("Couldn't destroy surface!");
 	}
 	surface = nullptr;
+	pauseAudioDevice();
 }
 
 void WindowImpl::makeCurrent() {
@@ -180,6 +182,7 @@ void WindowImpl::makeCurrent() {
 	if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
 		throw std::runtime_error("Unable to eglMakeCurrent");
 	}
+	resumeAudioDevice();
 }
 
 int WindowImpl::handleKeyEvent(AInputEvent* const event) {

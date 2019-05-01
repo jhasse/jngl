@@ -21,6 +21,9 @@
 
 #ifdef ANDROID
 #include "android/fopen.hpp"
+
+#define AL_ALEXT_PROTOTYPES 1
+#include <AL/alext.h>
 #endif
 
 #include <algorithm>
@@ -157,11 +160,30 @@ namespace jngl {
 				sounds_.erase(i);
 			}
 		}
+#ifdef ALC_SOFT_pause_device
+		void pauseDevice() {
+			alcDevicePauseSOFT(device_);
+		}
+		void resumeDevice() {
+			alcDeviceResumeSOFT(device_);
+		}
+#endif
+
 	private:
 		std::vector<std::shared_ptr<Sound>> sounds_;
 		ALCdevice* device_ = nullptr;
 		ALCcontext* context_ = nullptr;
 	};
+
+#ifdef ALC_SOFT_pause_device
+	void pauseAudioDevice() {
+		GetAudio().pauseDevice();
+	}
+
+	void resumeAudioDevice() {
+		GetAudio().resumeDevice();
+	}
+#endif
 
 	SoundFile::SoundFile(const std::string& filename) : params(std::make_unique<Sound::Params>()) {
 		debug("Decoding "); debug(filename); debug(" ... ");
