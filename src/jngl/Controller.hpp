@@ -13,7 +13,7 @@ public:
 	virtual ~Controller() = default;
 
 	/// Returns a value between 0.0f (not pressed) and 1.0f (pressed)
-	virtual float state(controller::Button) const = 0;
+	float state(controller::Button) const;
 
 	/// Returns true when the button is down
 	virtual bool down(controller::Button) const = 0;
@@ -22,6 +22,8 @@ public:
 	bool pressed(controller::Button);
 
 private:
+	virtual float stateImpl(controller::Button) const = 0;
+
 	bool buttonPressed[jngl::controller::Last];
 };
 

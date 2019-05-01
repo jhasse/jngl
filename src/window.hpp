@@ -1,4 +1,4 @@
-// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -51,6 +51,7 @@ namespace jngl {
 		void SetMouseVisible(bool visible);
 		bool getMouseVisible() const;
 		bool isMultitouch() const;
+		std::vector<Vec2> getTouchPositions() const;
 		int getMouseX();
 		int getMouseY();
 		int getWidth() const;

@@ -51,23 +51,33 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				return impl.handleKeyEvent(event);
 			}
 			break;
-		case AINPUT_EVENT_TYPE_MOTION:
-			switch (AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK) {
+		case AINPUT_EVENT_TYPE_MOTION: {
+			const auto action = AMotionEvent_getAction(event);
+			switch (action & AMOTION_EVENT_ACTION_MASK) {
 				case AMOTION_EVENT_ACTION_POINTER_DOWN:
-					++impl.numberOfTouches;
-					return 1;
 				case AMOTION_EVENT_ACTION_DOWN:
-					++impl.numberOfTouches;
-					[[fallthrough]];
-				case AMOTION_EVENT_ACTION_MOVE:
-					impl.mouseX = AMotionEvent_getX(event, 0);
-					impl.mouseY = AMotionEvent_getY(event, 0);
+				case AMOTION_EVENT_ACTION_MOVE: {
+					const int32_t index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >>
+					                      AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+					const auto x = AMotionEvent_getX(event, index);
+					const auto y = AMotionEvent_getY(event, index);
+					auto& touch = impl.touches[AMotionEvent_getPointerId(event, index)];
+					impl.mouseX = touch.x = x;
+					impl.mouseY = touch.y = y;
 					return 1;
+				}
 				case AMOTION_EVENT_ACTION_POINTER_UP:
-				case AMOTION_EVENT_ACTION_UP:
-					--impl.numberOfTouches;
+				case AMOTION_EVENT_ACTION_UP: {
+					const int32_t index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >>
+					                      AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+					const auto it = impl.touches.find(AMotionEvent_getPointerId(event, index));
+					if (it != impl.touches.end()) {
+						impl.touches.erase(it);
+					}
 					return 1;
+				}
 			}
+		}
 	}
 	return 0;
 }
@@ -257,10 +267,10 @@ void WindowImpl::updateInput() {
 	}
 
 	if (!window->mouseDown_[0]) {
-		window->mousePressed_[0] = numberOfTouches > 0;
+		window->mousePressed_[0] = !touches.empty();
 	}
-	window->mouseDown_[0] = numberOfTouches > 0;
-	window->multitouch = numberOfTouches > 1;
+	window->mouseDown_[0] = !touches.empty();
+	window->multitouch = touches.size() > 1;
 	window->mousex_ = mouseX - relativeX;
 	window->mousey_ = mouseY - relativeY;
 	if (window->relativeMouseMode) {
@@ -323,6 +333,15 @@ void WindowImpl::setKeyboardVisible(const bool visible) {
 	}
 
 	env->CallVoidMethod(inputMethodManager, toggleSoftInputMethod, showFlags, 0);
+}
+
+std::vector<Vec2> Window::getTouchPositions() const {
+	std::vector<Vec2> positions;
+	for (auto [id, pos] : impl->touches) {
+		positions.emplace_back(pos.x - (width_ - canvasWidth) / 2,
+		                       pos.y - (height_ - canvasHeight) / 2);
+	}
+	return positions;
 }
 
 } // namespace jngl
