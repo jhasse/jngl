@@ -3,10 +3,13 @@
 
 #pragma once
 
+#include "../jngl/Vec2.hpp"
+
 #include <EGL/egl.h>
 #include <jni.h>
 #include <utility>
 #include <android/input.h>
+#include <map>
 
 struct android_app;
 
@@ -30,7 +33,7 @@ public:
 
 	int mouseX = 0;
 	int mouseY = 0;
-	unsigned int numberOfTouches = 0;
+	std::map<int32_t, Vec2> touches;
 	int relativeX = 0;
 	int relativeY = 0;
 

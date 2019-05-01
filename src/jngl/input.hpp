@@ -99,6 +99,10 @@ bool JNGLDLL_API isMouseVisible();
 /// Returns true when there's more than one finger touching the screen
 bool JNGLDLL_API isMultitouch();
 
+/// Returns all positions where a finger touches the screen. Includes the mouse position if the
+/// primary mouse button is down.
+std::vector<jngl::Vec2> JNGLDLL_API getTouchPositions();
+
 /// Mouse position in screen coordinates
 Vec2 JNGLDLL_API getMousePos();
 

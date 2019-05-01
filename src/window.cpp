@@ -1,4 +1,4 @@
-// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "window.hpp"
@@ -369,6 +369,12 @@ namespace jngl {
 	bool Window::isMultitouch() const {
 		return multitouch;
 	}
+
+#ifndef ANDROID
+	std::vector<Vec2> Window::getTouchPositions() const {
+		return {};
+	}
+#endif
 
 	void Window::addUpdateInputCallback(std::function<void()> c) {
 		updateInputCallbacks.emplace_back(std::move(c));
