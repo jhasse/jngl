@@ -12,6 +12,8 @@ install:
 script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then meson build; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ninja -C build; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cmake -H. -Bbuild-cmake -GNinja; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ninja -C build-cmake; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd doc && doxygen; fi
 addons:
   apt:
