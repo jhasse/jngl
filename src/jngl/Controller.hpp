@@ -8,7 +8,7 @@
 namespace jngl {
 
 /// Object representing one Gamepad controller
-class Controller {
+class JNGLDLL_API Controller {
 public:
 	virtual ~Controller() = default;
 
