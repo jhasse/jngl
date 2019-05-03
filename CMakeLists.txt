@@ -14,7 +14,6 @@ set_target_properties(jngl PROPERTIES
 )
 
 if (ANDROID)
-	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/android/include)
 	file(GLOB ANDROID_SOURCES src/android/*.cpp)
 	target_sources(jngl PRIVATE ${ANDROID_SOURCES})
 elseif (UNIX)

@@ -1,8 +1,5 @@
 all: gradle
 
-include/boost:
-	ln -s /usr/include/boost "$@"
-
 test/app/src/main/assets:
 	mkdir "$@"
 
@@ -16,8 +13,7 @@ test/app/src/main/assets/Arial.ttf: test/app/src/main/assets ../Arial.ttf
 	cp ../Arial.ttf "$@"
 
 .PHONY: gradle
-gradle: include/boost \
-        test/app/src/main/assets/jngl.webp \
+gradle: test/app/src/main/assets/jngl.webp \
         test/app/src/main/assets/test.ogg \
         test/app/src/main/assets/Arial.ttf
 	cd test && ./gradlew build
