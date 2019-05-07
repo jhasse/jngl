@@ -57,6 +57,10 @@ std::string JNGLDLL_API getPrefix();
 
 void JNGLDLL_API setConfigPath(const std::string& path);
 
+/// Returns the directory where to store configuration files and save games.
+/// - Windows: `%%AppData%/Display Name/`
+/// - Linux: `~/.config/Display Name/`
+/// - Android/iOS: Data path provided by the OS
 std::string JNGLDLL_API getConfigPath();
 
 /// Returns the directory of the currently running binary

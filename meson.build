@@ -14,6 +14,7 @@ src = [
 	'src/framebufferimpl.cpp',
 	'src/freetype.cpp',
 	'src/helper.cpp',
+	'src/jngl/App.cpp',
 	'src/jngl/color.cpp',
 	'src/jngl/Controller.cpp',
 	'src/jngl/drawable.cpp',

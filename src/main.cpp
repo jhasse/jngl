@@ -1,6 +1,9 @@
-// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
+#include "main.hpp"
+
+#include "jngl/App.hpp"
 #include "jngl.hpp"
 #include "spriteimpl.hpp"
 
@@ -15,7 +18,7 @@
 namespace jngl {
 
 std::string pathPrefix;
-std::string configPath;
+optional<std::string> configPath;
 std::vector<std::string> args;
 float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
 std::stack<boost::qvm::mat<float, 3, 3>> modelviewStack;
@@ -484,7 +487,14 @@ void setConfigPath(const std::string& path) {
 }
 
 std::string getConfigPath() {
-	return configPath;
+	if (configPath) { return *configPath; }
+#ifndef IOS
+	std::stringstream path;
+	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/";
+	return *(configPath = path.str());
+#endif
+	// TODO: Windows, macOS, Switch
+	throw std::runtime_error("Couldn't get config path. Has the app been started?");
 }
 
 void setArgs(std::vector<std::string> args) {
