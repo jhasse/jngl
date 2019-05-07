@@ -97,6 +97,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1App.html">App</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">There can only be one instance of this class which should be created before the window is shown.  <a href="classjngl_1_1App.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Color.html">Color</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Object representing a RGB color.  <a href="classjngl_1_1Color.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -413,8 +416,8 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getPrefix</b> 
 <tr class="memitem:a1ff1b8cfcc13775b281d3847d7b690ef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ff1b8cfcc13775b281d3847d7b690ef"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setConfigPath</b> (const std::string &amp;path)</td></tr>
 <tr class="separator:a1ff1b8cfcc13775b281d3847d7b690ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2122ebb1c5d1653f8fbbdb373d9b98e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2122ebb1c5d1653f8fbbdb373d9b98e"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getConfigPath</b> ()</td></tr>
+<tr class="memitem:af2122ebb1c5d1653f8fbbdb373d9b98e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#af2122ebb1c5d1653f8fbbdb373d9b98e">getConfigPath</a> ()</td></tr>
+<tr class="memdesc:af2122ebb1c5d1653f8fbbdb373d9b98e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the directory where to store configuration files and save games.  <a href="#af2122ebb1c5d1653f8fbbdb373d9b98e">More...</a><br /></td></tr>
 <tr class="separator:af2122ebb1c5d1653f8fbbdb373d9b98e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f8f43d7d33e324796f628fc41640482"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2f8f43d7d33e324796f628fc41640482"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a2f8f43d7d33e324796f628fc41640482">getBinaryPath</a> ()</td></tr>
@@ -705,6 +708,28 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>resetFrameLimiter</b>
 
 <p>Returns all Controllers that are connected. </p>
 <p>Don't call this function every frame for performance reasons </p>
+
+</div>
+</div>
+<a class="anchor" id="af2122ebb1c5d1653f8fbbdb373d9b98e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string jngl::getConfigPath </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the directory where to store configuration files and save games. </p>
+<ul>
+<li>Windows: <code>%AppData%/Display Name/</code></li>
+<li>Linux: <code>~/.config/Display Name/</code></li>
+<li>Android/iOS: Data path provided by the OS </li>
+</ul>
 
 </div>
 </div>
