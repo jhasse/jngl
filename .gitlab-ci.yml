@@ -29,12 +29,12 @@ clang:
     - '! grep -Fq "error:" typescript'
 
 mingw:
-  image: fedora:29
+  image: fedora:30
   stage: build
   script:
     - dnf install -y gcc-c++ meson mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft wine-core
     - meson build --cross-file mingw.ini
-    - script -qfec "ninja -C build" /dev/null
+    - ninja -C build
     - rm -rf build
     - meson build --cross-file mingw.ini --buildtype release --unity on
     - ninja -C build
