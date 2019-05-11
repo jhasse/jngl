@@ -6,7 +6,7 @@ gcc:
   image: fedora:29
   stage: build
   script:
-    - dnf install -y fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-python3-devel python3-devel meson SDL2-devel openal-soft-devel gcc-c++
+    - dnf install -y fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-python3-devel python3-devel meson SDL2-devel openal-soft-devel gcc-c++ cmake libtheora-devel
     - meson build --werror
     - cd build
     - script -qfec "ninja" /dev/null
@@ -14,6 +14,9 @@ gcc:
     - Xorg -config ../data/xorg.conf &>/dev/null &
     - sleep 1 # wait for Xorg to boot up
     - DISPLAY=:0 ./unittest
+    - cd ..
+    - cmake -Bbuild-cmake -H. -GNinja
+    - ninja -Cbuild-cmake
 
 clang:
   image: fedora:29
