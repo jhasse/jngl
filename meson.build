@@ -35,6 +35,7 @@ src = [
 	'src/jngl/work.cpp',
 	'src/main.cpp',
 	'src/opengl.cpp',
+	'src/SoundFile.cpp',
 	'src/spriteimpl.cpp',
 	'src/texture.cpp',
 	'src/window.cpp',

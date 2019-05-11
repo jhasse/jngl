@@ -1,4 +1,4 @@
-// Copyright 2010-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2010-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "texture.hpp"
@@ -6,9 +6,7 @@
 #include "jngl/Shader.hpp"
 #include "jngl/Vertex.hpp"
 
-#include <boost/math/special_functions/relative_difference.hpp>
 #include <cassert>
-#include <fstream>
 
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F
