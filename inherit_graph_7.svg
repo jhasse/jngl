@@ -11,7 +11,7 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-24 116,-24 116,4 -4,4"/>
 <!-- Node1 -->
 <g id="node1" class="node"><title>Node1</title>
-<g id="a_node1"><a xlink:href="classjngl_1_1Job.html" target="_top" xlink:title="Job">
+<g id="a_node1"><a xlink:href="classjngl_1_1Job.html" target="_top" xlink:title="Background job which stays part of the main loop independent of the active jngl::Work. ">
 <polygon fill="white" stroke="black" points="0,-0.5 0,-19.5 35,-19.5 35,-0.5 0,-0.5"/>
 <text text-anchor="middle" x="17.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">Job</text>
 </a>
@@ -19,7 +19,7 @@
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
-<g id="a_node2"><a xlink:href="classjngl_1_1Work.html" target="_top" xlink:title="Work">
+<g id="a_node2"><a xlink:href="classjngl_1_1Work.html" target="_top" xlink:title="Active state of the game, e.g. a menu or the game itself. ">
 <polygon fill="white" stroke="black" points="71,-0.5 71,-19.5 112,-19.5 112,-0.5 71,-0.5"/>
 <text text-anchor="middle" x="91.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">Work</text>
 </a>

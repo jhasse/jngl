@@ -6,7 +6,7 @@ var searchData=
   ['getconfigpath',['getConfigPath',['../namespacejngl.html#af2122ebb1c5d1653f8fbbdb373d9b98e',1,'jngl']]],
   ['getconnectedcontrollers',['getConnectedControllers',['../namespacejngl.html#a2ef4903c72008831c91a0c5d39b52655',1,'jngl']]],
   ['getdisplayname',['getDisplayName',['../classjngl_1_1App.html#a2c55ba13d6dd898cee6e7b6985cb0c89',1,'jngl::App']]],
-  ['getheight',['getHeight',['../classjngl_1_1Drawable.html#a3b2cb4054965bddd89e59e7bb2815f77',1,'jngl::Drawable']]],
+  ['getheight',['getHeight',['../classjngl_1_1Drawable.html#a3b2cb4054965bddd89e59e7bb2815f77',1,'jngl::Drawable::getHeight()'],['../classjngl_1_1Video.html#a317329daf960a1759801c0f16d43d5a3',1,'jngl::Video::getHeight()']]],
   ['getkeyboardtype',['getKeyboardType',['../namespacejngl.html#a0c107966b4ccbe8ddfb3692348c2bfb8',1,'jngl']]],
   ['getleft',['getLeft',['../classjngl_1_1Drawable.html#a6c4c8ca55a8d103169e19b3341132738',1,'jngl::Drawable']]],
   ['getmousepos',['getMousePos',['../namespacejngl.html#a8225af5eb6dd6d4a1e3c493554b5a01e',1,'jngl']]],
@@ -19,5 +19,5 @@ var searchData=
   ['gettime',['getTime',['../namespacejngl.html#a4437edd7fd2832790c13ba3179bcc64d',1,'jngl']]],
   ['gettop',['getTop',['../classjngl_1_1Drawable.html#a316cc0c624238d3a4ba4645b17e7aa9c',1,'jngl::Drawable']]],
   ['gettouchpositions',['getTouchPositions',['../namespacejngl.html#aaa978e56af9461cc6a8da01e6a0f28fc',1,'jngl']]],
-  ['getwidth',['getWidth',['../classjngl_1_1Drawable.html#a1abb04c6637e0fca05587a36d9ea6b5e',1,'jngl::Drawable']]]
+  ['getwidth',['getWidth',['../classjngl_1_1Drawable.html#a1abb04c6637e0fca05587a36d9ea6b5e',1,'jngl::Drawable::getWidth()'],['../classjngl_1_1Video.html#af149cb053bc8b5fbc1364b5dbb934488',1,'jngl::Video::getWidth()']]]
 ];

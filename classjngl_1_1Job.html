@@ -93,6 +93,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">Job Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Background job which stays part of the main loop independent of the active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself. ">jngl::Work</a>.  
+ <a href="classjngl_1_1Job.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="job_8hpp_source.html">job.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -104,8 +109,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2bf282904f7854c8a4fd515107aa8c4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="job_8hpp_source.html#l00012">12</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
+<div class="textblock"><p>Background job which stays part of the main loop independent of the active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself. ">jngl::Work</a>. </p>
+<p>This can be used for an achievement system for example. Override this class and use <a class="el" href="namespacejngl.html#a11ad14d4b65f6bbe5f5c7accaf457077" title="Add a new Job which will be always be stepped and drawn by mainLoop() ">jngl::addJob</a> to register it. </p>
+
+<p>Definition at line <a class="el" href="job_8hpp_source.html#l00016">16</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
 </div><div class="dynheader">
 Inheritance diagram for Job:</div>
 <div class="dyncontent">

@@ -19,7 +19,7 @@
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
-<g id="a_node2"><a xlink:href="classjngl_1_1Sprite.html" target="_top" xlink:title="Sprite">
+<g id="a_node2"><a xlink:href="classjngl_1_1Sprite.html" target="_top" xlink:title="Higher&#45;level representation of an image. ">
 <polygon fill="white" stroke="black" points="101,-38.5 101,-57.5 154,-57.5 154,-38.5 101,-38.5"/>
 <text text-anchor="middle" x="127.5" y="-45.5" font-family="'Consolas',monospace" font-size="10.00">Sprite</text>
 </a>
