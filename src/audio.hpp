@@ -17,11 +17,11 @@ namespace jngl {
 
 	Audio& GetAudio();
 
+	struct SoundParams;
+
 	class Sound {
 	public:
-		struct Params;
-
-		Sound(const Params&, std::vector<char>& bufferData);
+		Sound(const SoundParams&, std::vector<char>& bufferData);
 		Sound(const Sound&) = delete;
 		Sound& operator=(const Sound&) = delete;
 		~Sound();
@@ -34,21 +34,5 @@ namespace jngl {
 	private:
 		struct Impl;
 		std::unique_ptr<Impl> impl;
-	};
-
-	class SoundFile {
-	public:
-		SoundFile(const std::string& filename);
-		SoundFile(const SoundFile&) = delete;
-		SoundFile& operator=(const SoundFile&) = delete;
-		void Play();
-		void Stop();
-		bool IsPlaying();
-		void SetPitch(float p);
-		void setVolume(float v);
-	private:
-		std::shared_ptr<Sound> sound_;
-		std::unique_ptr<Sound::Params> params;
-		std::vector<char> buffer_;
 	};
 }
