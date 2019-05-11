@@ -3,6 +3,8 @@
 
 #include "App.hpp"
 
+#include <stdexcept>
+
 namespace jngl {
 
 App* App::self = nullptr;

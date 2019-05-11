@@ -6,6 +6,7 @@
 #include "../Shader_Impl.hpp"
 
 #include <cassert>
+#include <stdexcept>
 #include <string>
 
 namespace jngl {

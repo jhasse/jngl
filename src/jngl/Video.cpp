@@ -3,6 +3,8 @@
 
 #include "Video.hpp"
 
+#include <stdexcept>
+
 #ifdef JNGL_VIDEO
 
 #include "../../subprojects/theoraplay/theoraplay.h"
