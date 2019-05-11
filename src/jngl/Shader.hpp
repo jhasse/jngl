@@ -10,6 +10,7 @@
 /// JNGL's main namespace
 namespace jngl {
 
+/// Vertex or fragment GLSL shader
 class Shader {
 public:
 	/// Type of a Shader. To link a ShaderProgram, one shader of each type is needed.

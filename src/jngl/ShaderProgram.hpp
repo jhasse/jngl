@@ -11,6 +11,7 @@ namespace jngl {
 
 class Shader;
 
+/// Linked vertex and fragment shaders
 class ShaderProgram {
 public:
 	JNGLDLL_API ShaderProgram(const Shader& vertex, const Shader& fragment);
@@ -21,6 +22,7 @@ public:
 	ShaderProgram& operator=(ShaderProgram&&) = delete;
 
 	struct Impl;
+	/// Lifetime object when the ShaderProgram is in use
 	struct Context {
 		Context(const Impl&);
 		~Context();

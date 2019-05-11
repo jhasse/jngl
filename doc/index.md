@@ -7,7 +7,7 @@ Nintendo Switch<sup><a href="#fn1">1</a></sup>.
 
 ## Features
 
-* C++14 or Python 3 interface
+* C++17 or Python 3 interface
 * [zlib License](http://en.wikipedia.org/wiki/Zlib_license), so suitable for commercial use and
   static linking
 * OpenGL (ES) 3.0 accelerated
@@ -18,8 +18,10 @@ Nintendo Switch<sup><a href="#fn1">1</a></sup>.
 
 ## Games
 
+* [**Tricky Homes**](https://gitlab.com/jhasse/ggj2019)<br>
+  Two player physics game using Box2D created for the Global Game Jam 2019
 * [**Snake Line Transmission**](https://gitlab.com/jhasse/ggj2018)<br>
-  Two player game created for the Global Game Jam 2018
+  Two player arcade game created for the Global Game Jam 2018
 * [**Ghostly Intruders**](https://igjam.eu/jams/igjam-12/490/)<br>
   Local coop game created during the IGJam #12 (2017)
 * [**JNTETRI**](https://github.com/jhasse/jntetri)<br>

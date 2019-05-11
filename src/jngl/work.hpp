@@ -10,6 +10,7 @@
 
 namespace jngl {
 
+/// Active state of the game, e.g. a menu or the game itself
 class JNGLDLL_API Work : public Job {
 public:
 	/// Gets called when the user closes the main window or quit() has been called

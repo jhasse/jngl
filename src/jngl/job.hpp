@@ -9,6 +9,10 @@
 
 namespace jngl {
 
+/// Background job which stays part of the main loop independent of the active jngl::Work
+///
+/// This can be used for an achievement system for example. Override this class and use
+/// jngl::addJob to register it.
 class JNGLDLL_API Job {
 public:
 	/// Advance the game logic
