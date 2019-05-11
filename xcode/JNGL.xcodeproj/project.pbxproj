@@ -68,6 +68,7 @@
 		C9BFF83E1524BB0A00066D6C /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9BFF83D1524BB0A00066D6C /* libfreetype.a */; };
 		C9BFF8401524BD0600066D6C /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BFF83F1524BD0600066D6C /* window.cpp */; };
 		C9BFF84E1524C3F000066D6C /* time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BFF84D1524C3F000066D6C /* time.cpp */; };
+		C9C1A69822877297009E59C7 /* SoundFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9C1A69722877297009E59C7 /* SoundFile.cpp */; };
 		C9C95BA61529CE3A008EA579 /* windowimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9C95BA51529CE3A008EA579 /* windowimpl.cpp */; };
 		C9C95BA91529D070008EA579 /* JNGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = C9C95BA71529D070008EA579 /* JNGLView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9C95BAA1529D070008EA579 /* JNGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9C95BA81529D070008EA579 /* JNGLView.mm */; };
@@ -155,6 +156,7 @@
 		C9BFF83D1524BB0A00066D6C /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ../lib/ios/libfreetype.a; sourceTree = "<group>"; };
 		C9BFF83F1524BD0600066D6C /* window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = window.cpp; path = ../../src/ios/window.cpp; sourceTree = "<group>"; };
 		C9BFF84D1524C3F000066D6C /* time.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = time.cpp; path = ../../src/ios/time.cpp; sourceTree = "<group>"; };
+		C9C1A69722877297009E59C7 /* SoundFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SoundFile.cpp; path = src/SoundFile.cpp; sourceTree = "<group>"; };
 		C9C95BA31529C978008EA579 /* windowimpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = windowimpl.hpp; path = ../../src/ios/windowimpl.hpp; sourceTree = "<group>"; };
 		C9C95BA51529CE3A008EA579 /* windowimpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = windowimpl.cpp; path = ../../src/ios/windowimpl.cpp; sourceTree = "<group>"; };
 		C9C95BA71529D070008EA579 /* JNGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JNGLView.h; path = ../../src/ios/JNGLView.h; sourceTree = "<group>"; };
@@ -435,6 +437,7 @@
 		C9F1AF3613EAEF420086B474 /* Source Files */ = {
 			isa = PBXGroup;
 			children = (
+				C9C1A69722877297009E59C7 /* SoundFile.cpp */,
 				209C83AE1E74AE2500D3BE2D /* helper.cpp */,
 				3D150EAF1C3C2F49008A5DE2 /* mac */,
 				C9E9E2EE15C1D5EC006CCBD2 /* test */,
@@ -598,6 +601,7 @@
 				C9367793215A9D7900001AD5 /* Shader.cpp in Sources */,
 				C93A963815E3B49B003525E8 /* main.cpp in Sources */,
 				C93A963915E3B49B003525E8 /* opengl.cpp in Sources */,
+				C9C1A69822877297009E59C7 /* SoundFile.cpp in Sources */,
 				C93A963A15E3B49B003525E8 /* spriteimpl.cpp in Sources */,
 				C93A963C15E3B49B003525E8 /* texture.cpp in Sources */,
 				C93A963D15E3B49B003525E8 /* window.cpp in Sources */,
