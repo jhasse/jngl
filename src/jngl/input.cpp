@@ -29,9 +29,8 @@ std::vector<Vec2> getTouchPositions() {
 	if (mouseDown(mouse::Left)) {
 		if (isMultitouch()) {
 			return pWindow->getTouchPositions();
-		} else {
-			return { getMousePos() };
 		}
+		return { getMousePos() };
 	}
 	return {};
 }
