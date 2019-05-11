@@ -5,6 +5,7 @@
 
 #include "audio.hpp"
 #include "jngl/debug.hpp"
+#include "jngl/sound.hpp"
 #include "main.hpp"
 #include "SoundParams.hpp"
 
