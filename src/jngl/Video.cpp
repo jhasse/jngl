@@ -147,8 +147,8 @@ public:
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, video->width / 2, video->height / 2, 0,
 				             GL_RED, GL_UNSIGNED_BYTE, nullptr);
 
-				const float preciseWidth = video->width; // TODO: scaling
-				const float preciseHeight = video->height;
+				const float preciseWidth = video->width * getScaleFactor();
+				const float preciseHeight = video->height * getScaleFactor();
 				const static GLfloat vertexes[] = {
 					-preciseWidth / 2, -preciseHeight / 2,
 					0, 0, // texture coordinates
