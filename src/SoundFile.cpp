@@ -182,6 +182,16 @@ void setVolume(float volume) {
 	Sound::masterVolume = volume;
 }
 
+#ifdef ALC_SOFT_pause_device
+void pauseAudioDevice() {
+	GetAudio().pauseDevice();
+}
+
+void resumeAudioDevice() {
+	GetAudio().resumeDevice();
+}
+#endif
+
 Audio& GetAudio() {
 #ifdef WEAK_LINKING_OPENAL
 	static Audio* audio = new Audio;

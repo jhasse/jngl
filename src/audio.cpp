@@ -97,16 +97,6 @@ namespace jngl {
 		alSourcef(impl->source, AL_GAIN, v);
 	}
 
-#ifdef ALC_SOFT_pause_device
-	void pauseAudioDevice() {
-		GetAudio().pauseDevice();
-	}
-
-	void resumeAudioDevice() {
-		GetAudio().resumeDevice();
-	}
-#endif
-
 	bool isOpenALInstalled() {
 #ifdef WEAK_LINKING_OPENAL
 		try {
