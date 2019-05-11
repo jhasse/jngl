@@ -10,6 +10,7 @@
 #include "../opengl.hpp"
 #include "Shader.hpp"
 #include "debug.hpp"
+#include "screen.hpp"
 #include "time.hpp"
 
 #include <cmath>
