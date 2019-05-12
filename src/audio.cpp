@@ -5,13 +5,6 @@
 #include "audio.hpp"
 #include "SoundParams.hpp"
 
-#ifdef ANDROID
-#include "android/fopen.hpp"
-
-#define AL_ALEXT_PROTOTYPES 1
-#include <AL/alext.h>
-#endif
-
 namespace jngl {
 
 	struct Sound::Impl {

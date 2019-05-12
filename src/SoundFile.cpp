@@ -12,6 +12,13 @@
 #include <algorithm>
 #include <unordered_map>
 
+#ifdef ANDROID
+#include "android/fopen.hpp"
+
+#define AL_ALEXT_PROTOTYPES 1
+#include <AL/alext.h>
+#endif
+
 namespace jngl {
 
 std::unordered_map<std::string, std::shared_ptr<SoundFile>> sounds;
