@@ -21,5 +21,6 @@ var searchData=
   ['sprite',['Sprite',['../classjngl_1_1Sprite.html',1,'jngl']]],
   ['state',['state',['../classjngl_1_1Controller.html#a8e3acb3f4cedb3fcf85fd8c6c104bee6',1,'jngl::Controller']]],
   ['step',['step',['../classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31',1,'jngl::Job']]],
+  ['stop',['stop',['../namespacejngl.html#a6265cb122b1823e5a05633fd528e67bf',1,'jngl']]],
   ['swapbuffers',['swapBuffers',['../namespacejngl.html#aa2827e4edaa53fecffc9246f8bc2218e',1,'jngl']]]
 ];
