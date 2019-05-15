@@ -78,6 +78,11 @@ namespace jngl {
 		alGetSourcei(impl->source, AL_SOURCE_STATE, &state);
 		return state == AL_PLAYING;
 	}
+
+	void Sound::loop() {
+		alSourcei(impl->source, AL_LOOPING, AL_TRUE);
+	}
+
 	bool Sound::Stopped() {
 		ALint state;
 		alGetSourcei(impl->source, AL_SOURCE_STATE, &state);

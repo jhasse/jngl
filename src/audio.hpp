@@ -26,6 +26,7 @@ namespace jngl {
 		Sound& operator=(const Sound&) = delete;
 		~Sound();
 		bool IsPlaying();
+		void loop();
 		bool Stopped();
 		void SetPitch(float p);
 		void setVolume(float v);

@@ -137,6 +137,14 @@ bool SoundFile::IsPlaying() {
 	}
 	return false;
 }
+
+void SoundFile::loop() {
+	if (!IsPlaying()) {
+		Play();
+	}
+	sound_->loop();
+}
+
 void SoundFile::SetPitch(float p) {
 	if (sound_) {
 		sound_->SetPitch(p);
@@ -172,6 +180,10 @@ void loadSound(const std::string& filename) {
 
 bool isPlaying(const std::string& filename) {
 	return GetSoundFile(filename).IsPlaying();
+}
+
+void loop(const std::string& filename) {
+	GetSoundFile(std::string(filename)).loop();
 }
 
 void setPlaybackSpeed(float speed) {

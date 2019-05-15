@@ -20,6 +20,7 @@ public:
 	void Play();
 	void Stop();
 	bool IsPlaying();
+	void loop();
 	void SetPitch(float p);
 	void setVolume(float v);
 
