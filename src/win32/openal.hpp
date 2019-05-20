@@ -22,7 +22,10 @@ typedef int ALenum;
 typedef float ALfloat;
 typedef void ALvoid;
 
-#define AL_POSITION                               0x1004
+constexpr auto AL_FALSE = 0;
+constexpr auto AL_TRUE = 1;
+constexpr auto AL_POSITION = 0x1004;
+constexpr auto AL_LOOPING = 0x1007;
 #define AL_BUFFER                                 0x1009
 #define AL_SOURCE_STATE                           0x1010
 #define AL_INITIAL                                0x1011
