@@ -2,6 +2,15 @@ variables:
   CLICOLOR_FORCE: "1"
   TERM: xterm
 
+image: registry.fedoraproject.org/fedora-minimal:30
+
+cmake:
+  stage: build
+  script:
+  - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel SDL2-devel openal-soft-devel boost-devel libtheora-devel > /dev/null
+  - CXXFLAGS=-fdiagnostics-color cmake -Bbuild -H. -GNinja
+  - ninja -Cbuild
+
 gcc:
   image: fedora:29
   stage: build
@@ -32,10 +41,9 @@ clang:
     - '! grep -Fq "error:" typescript'
 
 mingw:
-  image: fedora:30
   stage: build
   script:
-    - dnf install -y gcc-c++ meson mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft wine-core
+    - microdnf install -y gcc-c++ meson mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft wine-core > /dev/null
     - meson build --cross-file mingw.ini
     - ninja -C build
     - rm -rf build
