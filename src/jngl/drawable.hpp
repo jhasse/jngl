@@ -18,39 +18,39 @@ public:
 	virtual void step() = 0;
 	virtual void draw() const = 0;
 
-	virtual void setPos(Float x, Float y);
+	virtual void setPos(double x, double y);
 
 	template <class Vect> Vect getCenter() const {
 		return Vect(getX() + getWidth() / 2, getY() + getHeight() / 2);
 	}
 
-	virtual void setCenter(Float x, Float y);
+	virtual void setCenter(double x, double y);
 
 	template <class Vect> void setCenter(Vect c) {
 		setCenter(c.x, c.y);
 	}
 
 	/// Returns the distance from the left side of the screen
-	Float getLeft() const;
-	void setLeft(Float x);
+	double getLeft() const;
+	void setLeft(double x);
 
 	/// Returns the distance from the top of the screen
-	Float getTop() const;
-	void setTop(Float y);
+	double getTop() const;
+	void setTop(double y);
 
 	/// Returns the distance from the right side of the screen
-	Float getRight() const;
-	void setRight(Float x);
+	double getRight() const;
+	void setRight(double x);
 
 	/// Returns the distance from the bottom of the screen.
-	Float getBottom() const;
-	void setBottom(Float y);
+	double getBottom() const;
+	void setBottom(double y);
 
-	Float getX() const;
-	void setX(Float);
+	double getX() const;
+	void setX(double);
 
-	Float getY() const;
-	void setY(Float);
+	double getY() const;
+	void setY(double);
 
 	/// Returns the width in screen coordinates
 	float getWidth() const;
@@ -59,8 +59,8 @@ public:
 	float getHeight() const;
 
 protected:
-	Float x;
-	Float y;
+	double x;
+	double y;
 	float width;
 	float height;
 };

@@ -1,4 +1,4 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -9,9 +9,9 @@
 
 namespace jngl {
 
-Float JNGLDLL_API getScaleFactor();
+double JNGLDLL_API getScaleFactor();
 
-void JNGLDLL_API setScaleFactor(Float);
+void JNGLDLL_API setScaleFactor(double);
 
 double JNGLDLL_API getScreenWidth();
 

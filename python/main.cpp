@@ -99,7 +99,7 @@ struct DrawableWrap : Drawable, boost::python::wrapper<Drawable> {
 	void draw() const override {
 		get_override("draw")();
 	}
-	void setPos(Float x, Float y) override {
+	void setPos(double x, double y) override {
 		if (boost::python::override setPos = get_override("setPos")) {
 			setPos(x, y);
 			return;
@@ -122,7 +122,7 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	class_<Sprite>("Sprite", boost::python::init<const std::string&>())
 	    .def("draw", static_cast<void (Sprite::*)() const>(&Sprite::draw));
 
-	class_<Vec2>("Vec2", boost::python::init<Float, Float>())
+	class_<Vec2>("Vec2", boost::python::init<double, double>())
 	    .def_readwrite("x", &Vec2::x)
 	    .def_readwrite("y", &Vec2::y);
 
@@ -136,7 +136,7 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("quit", quit);
 	def("cancelQuit", cancelQuit);
 	def("draw", draw1);
-	def("draw", static_cast<void (*)(const std::string&, jngl::Float, jngl::Float)>(draw));
+	def("draw", static_cast<void (*)(const std::string&, double, double)>(draw));
 	def("drawScaled", drawScaled1);
 	def("drawScaled", drawScaled2);
 	def("drawRect", drawRect1);
@@ -144,7 +144,7 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("drawEllipse", static_cast<void (*)(float, float, float, float, float)>(drawEllipse));
 	def("drawPoint", drawPoint);
 	def("rotate", rotate);
-	def("translate", static_cast<void (*)(jngl::Float, jngl::Float)>(translate));
+	def("translate", static_cast<void (*)(double, double)>(translate));
 	def("scale", scale1);
 	def("scale", scale2);
 	def("pushMatrix", pushMatrix);

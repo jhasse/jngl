@@ -1,4 +1,4 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "drawable.hpp"
@@ -11,61 +11,61 @@ Drawable::Drawable() : x(0), y(0), width(0), height(0) {
 
 Drawable::~Drawable() = default;
 
-void Drawable::setPos(Float x, Float y) {
+void Drawable::setPos(const double x, const double y) {
 	setX(x);
 	setY(y);
 }
 
-void Drawable::setCenter(Float x, Float y) {
+void Drawable::setCenter(const double x, const double y) {
 	setX(x - getWidth() / 2);
 	setY(y - getHeight() / 2);
 }
 
-Float Drawable::getLeft() const {
+double Drawable::getLeft() const {
 	return getX() + getScreenWidth() / 2;
 }
 
-void Drawable::setLeft(Float x) {
+void Drawable::setLeft(const double x) {
 	setX(x - getScreenWidth() / 2);
 }
 
-Float Drawable::getTop() const {
+double Drawable::getTop() const {
 	return getY() + getScreenHeight() / 2;
 }
 
-void Drawable::setTop(Float y) {
+void Drawable::setTop(const double y) {
 	setY(y - getScreenHeight() / 2);
 }
 
-Float Drawable::getBottom() const {
+double Drawable::getBottom() const {
 	return getScreenHeight() / 2 - getY() - getHeight();
 }
 
-void Drawable::setBottom(Float y) {
+void Drawable::setBottom(const double y) {
 	setY(getScreenHeight() / 2 - y - getHeight());
 }
 
-Float Drawable::getRight() const {
+double Drawable::getRight() const {
 	return getScreenWidth() / 2 - getX() - getWidth();
 }
 
-void Drawable::setRight(Float x) {
+void Drawable::setRight(const double x) {
 	setX(getScreenWidth() / 2 - x - getWidth());
 }
 
-Float Drawable::getX() const {
+double Drawable::getX() const {
 	return x / getScaleFactor();
 }
 
-void Drawable::setX(Float x) {
+void Drawable::setX(const double x) {
 	this->x = x * getScaleFactor();
 }
 
-Float Drawable::getY() const {
+double Drawable::getY() const {
 	return y / getScaleFactor();
 }
 
-void Drawable::setY(Float y) {
+void Drawable::setY(const double y) {
 	this->y = y * getScaleFactor();
 }
 

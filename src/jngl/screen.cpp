@@ -1,4 +1,4 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "screen.hpp"
@@ -7,13 +7,13 @@
 
 namespace jngl {
 
-Float factor = 1;
+double factor = 1;
 
-Float getScaleFactor() {
+double getScaleFactor() {
 	return factor;
 }
 
-void setScaleFactor(Float f) {
+void setScaleFactor(double f) {
 	factor = f;
 }
 
