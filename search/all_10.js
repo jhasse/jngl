@@ -7,6 +7,7 @@ var searchData=
   ['setkeyboardtype',['setKeyboardType',['../namespacejngl.html#a7dcfe5651847fa7aa74f3768ee9a320c',1,'jngl']]],
   ['setkeyboardvisible',['setKeyboardVisible',['../namespacejngl.html#a5d78cad1b8a18e2c8d200a9c33753591',1,'jngl']]],
   ['setkeypressed',['setKeyPressed',['../namespacejngl.html#a7e0ea8949dd075bf85f14a6c41bc232d',1,'jngl::setKeyPressed(const std::string &amp;key, bool)'],['../namespacejngl.html#ae0c98060b19b5bac9d8d550e3bf57cc8',1,'jngl::setKeyPressed(key::KeyType key, bool)']]],
+  ['setlineheight',['setLineHeight',['../namespacejngl.html#a9a790ef0a0b6eb1f353dcff57285de5b',1,'jngl']]],
   ['setmouse',['setMouse',['../namespacejngl.html#abb2aa65c0631aae5ec613906ab80a74a',1,'jngl']]],
   ['setmousedown',['setMouseDown',['../namespacejngl.html#a5be6491a29de8108c073eec8a0f1901b',1,'jngl']]],
   ['setmousepressed',['setMousePressed',['../namespacejngl.html#ace09f82f90fcc6c98dcfd5d472e7fd71',1,'jngl']]],
