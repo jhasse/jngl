@@ -22,5 +22,7 @@ var searchData=
   ['state',['state',['../classjngl_1_1Controller.html#a8e3acb3f4cedb3fcf85fd8c6c104bee6',1,'jngl::Controller']]],
   ['step',['step',['../classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31',1,'jngl::Job']]],
   ['stop',['stop',['../namespacejngl.html#a6265cb122b1823e5a05633fd528e67bf',1,'jngl']]],
+  ['superl',['SuperL',['../input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca82dbe895c37ba0fe2eb2154d3f3de628',1,'jngl::key']]],
+  ['superr',['SuperR',['../input_8hpp.html#aab0feaba617470cb4aa830dc5935238cafc33cfef6d341e77b88816dfaf1af9f8',1,'jngl::key']]],
   ['swapbuffers',['swapBuffers',['../namespacejngl.html#aa2827e4edaa53fecffc9246f8bc2218e',1,'jngl']]]
 ];
