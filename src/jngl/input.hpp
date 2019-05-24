@@ -34,8 +34,13 @@ enum KeyType {
 	CapsLock,
 	AltL,
 	AltR,
+
+	/// Left Windows key
 	SuperL,
+
+	/// Right Windows key
 	SuperR,
+
 	Space,
 	ShiftL,
 	ShiftR,
@@ -73,19 +78,23 @@ void JNGLDLL_API setKeyPressed(const std::string& key, bool);
 /// Overwrite what keyPressed() should return
 void JNGLDLL_API setKeyPressed(key::KeyType key, bool);
 
-/// Whether @key is down
+/// Whether \p key is down
 bool JNGLDLL_API keyDown(key::KeyType key);
 
-/// Whether @key is down
+/// Whether \p key is down
 bool JNGLDLL_API keyDown(char key);
 
-/// Whether @key is down, where key should be exactly one UTF-8 character
+/// Whether \p key is down, where \p key should be exactly one UTF-8 character
 bool JNGLDLL_API keyDown(const std::string& key);
 
+/// Whether \p key has been pressed since the next to last call to updateInput()
 bool JNGLDLL_API keyPressed(key::KeyType key);
 
+/// Whether \p key has been pressed since the next to last call to updateInput()
 bool JNGLDLL_API keyPressed(char key);
 
+/// Whether \p key has been pressed since the next to last call to updateInput(), where \p key
+/// should be exactly one UTF-8 character
 bool JNGLDLL_API keyPressed(const std::string& key);
 
 void JNGLDLL_API setRelativeMouseMode(bool relative);
