@@ -1,4 +1,4 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -30,6 +30,7 @@ void JNGLDLL_API print(const std::string& text, jngl::Vec2 position);
 
 void JNGLDLL_API print(const std::string& text, int xposition, int yposition);
 
+/// Get the font size used by print()
 int JNGLDLL_API getFontSize();
 
 /// Change the font size used by print()
@@ -50,8 +51,10 @@ void JNGLDLL_API pushFontColor(unsigned char red, unsigned char green, unsigned 
 
 void JNGLDLL_API popFontColor();
 
+/// Get line height used py print() in pixel
 int JNGLDLL_API getLineHeight();
 
+/// Set line height used by print() in pixel
 void JNGLDLL_API setLineHeight(int);
 
 double JNGLDLL_API getTextWidth(const std::string& text);
