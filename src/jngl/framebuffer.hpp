@@ -5,6 +5,8 @@
 
 #include "dll.hpp"
 
+#include <memory>
+
 namespace jngl {
 
 class FrameBufferImpl;
@@ -20,9 +22,7 @@ public:
 	void clear();
 
 private:
-	FrameBuffer(const FrameBuffer&);
-	FrameBuffer& operator=(const FrameBuffer&);
-	FrameBufferImpl* pImpl;
+	std::unique_ptr<FrameBufferImpl> pImpl;
 };
 
 } // namespace jngl

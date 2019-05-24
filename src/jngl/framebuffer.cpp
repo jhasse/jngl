@@ -7,12 +7,10 @@
 namespace jngl {
 
 FrameBuffer::FrameBuffer(const int width, const int height)
-: pImpl(new FrameBufferImpl(width, height)) {
+: pImpl(std::make_unique<FrameBufferImpl>(width, height)) {
 }
 
-FrameBuffer::~FrameBuffer() {
-	delete pImpl;
-}
+FrameBuffer::~FrameBuffer() = default;
 
 void FrameBuffer::draw(const double x, const double y) const {
 	return pImpl->Draw(x, y);
