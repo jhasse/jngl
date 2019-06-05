@@ -122,10 +122,6 @@ void showWindow(const std::string& title, const int width, const int height, boo
                 const std::pair<int, int> maxAspectRatio) {
 	debug("jngl::showWindow(\""); debug(title); debug("\", "); debug(width); debug(", ");
 	debug(height); debug(", "); debug(fullscreen); debug(");\n");
-	if (pWindow && width == pWindow->getWidth() && height == pWindow->getHeight() &&
-	    fullscreen == pWindow->getFullscreen()) {
-		return jngl::setTitle(title);
-	}
 	bool isMouseVisible = pWindow ? pWindow->getMouseVisible() : true;
 	hideWindow();
 	if (width == 0) {
@@ -391,11 +387,11 @@ void readPixel(const int x, const int y, unsigned char& red, unsigned char& gree
 }
 
 int getWindowWidth() {
-	return pWindow->getWidth();
+	return pWindow->getCanvasWidth();
 }
 
 int getWindowHeight() {
-	return pWindow->getHeight();
+	return pWindow->getCanvasHeight();
 }
 
 double getMouseWheel() {

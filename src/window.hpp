@@ -54,6 +54,8 @@ namespace jngl {
 		std::vector<Vec2> getTouchPositions() const;
 		int getMouseX();
 		int getMouseY();
+		int getCanvasWidth() const;
+		int getCanvasHeight() const;
 		int getWidth() const;
 		int getHeight() const;
 		double GetTextWidth(const std::string&);

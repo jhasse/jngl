@@ -1,4 +1,4 @@
-// Copyright 2011-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -23,6 +23,7 @@ private:
 	GLuint buffer = 0;
 	const int height;
 	Texture texture;
+	bool letterboxing;
 	GLuint systemFbo;
 	GLuint systemBuffer;
 #ifndef GL_VIEWPORT_BIT

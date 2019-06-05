@@ -108,12 +108,20 @@ namespace jngl {
 		return relativeMouseMode;
 	}
 
-	int Window::getWidth() const {
+	int Window::getCanvasWidth() const {
 		return canvasWidth;
 	}
 
-	int Window::getHeight() const {
+	int Window::getCanvasHeight() const {
 		return canvasHeight;
+	}
+
+	int Window::getWidth() const {
+		return width_;
+	}
+
+	int Window::getHeight() const {
+		return height_;
 	}
 
 	bool Window::isMultisampleSupported() const {

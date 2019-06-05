@@ -1,4 +1,4 @@
-// Copyright 2011-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "framebufferimpl.hpp"
@@ -14,7 +14,8 @@
 namespace jngl {
 
 FrameBufferImpl::FrameBufferImpl(int width, int height)
-: height(height), texture(width, height, width, height, nullptr) {
+: height(height), texture(width, height, width, height, nullptr),
+  letterboxing(glIsEnabled(GL_SCISSOR_TEST)) {
 	GLint tmp;
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &tmp);
 	systemFbo = tmp;
@@ -53,8 +54,13 @@ void FrameBufferImpl::BeginDraw() {
 #else
 	glGetIntegerv(GL_VIEWPORT, viewport);
 #endif
-	glViewport(0, -(pWindow->getHeight() - height), pWindow->getWidth(), pWindow->getHeight());
+	glViewport((pWindow->getCanvasWidth() - pWindow->getWidth()) / 2,
+	           -((pWindow->getCanvasHeight() + pWindow->getHeight()) / 2.0 - height),
+	           pWindow->getWidth(), pWindow->getHeight());
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+	if (letterboxing) {
+		glDisable(GL_SCISSOR_TEST);
+	}
 }
 
 void FrameBufferImpl::Clear() {
@@ -64,6 +70,9 @@ void FrameBufferImpl::Clear() {
 }
 
 void FrameBufferImpl::EndDraw() {
+	if (letterboxing) {
+		glEnable(GL_SCISSOR_TEST);
+	}
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	popMatrix();
 #ifdef GL_VIEWPORT_BIT
