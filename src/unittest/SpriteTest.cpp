@@ -6,8 +6,8 @@
 
 #include <jngl.hpp>
 
-#include <boost/test/unit_test.hpp>
 #include <boost/qvm/vec_operations.hpp>
+#include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_CASE(Sprite) {
 	for (float factor : { 1.f, 2.f, 3.4f }) {

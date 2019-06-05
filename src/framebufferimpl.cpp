@@ -55,7 +55,7 @@ void FrameBufferImpl::BeginDraw() {
 	glGetIntegerv(GL_VIEWPORT, viewport);
 #endif
 	glViewport((pWindow->getCanvasWidth() - pWindow->getWidth()) / 2,
-	           -((pWindow->getCanvasHeight() + pWindow->getHeight()) / 2.0 - height),
+	           -((pWindow->getCanvasHeight() + pWindow->getHeight()) / 2 - height),
 	           pWindow->getWidth(), pWindow->getHeight());
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	if (letterboxing) {
