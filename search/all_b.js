@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mainloop',['mainLoop',['../namespacejngl.html#a8526353d8f97c6f91db63b9903e18138',1,'jngl']]]
+  ['mainloop',['mainLoop',['../classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa',1,'jngl::App']]]
 ];
