@@ -461,10 +461,6 @@ void setWork(Work* w) {
 	return pWindow->setWork(std::shared_ptr<Work>(w));
 }
 
-void mainLoop() {
-	return pWindow->mainLoop();
-}
-
 std::shared_ptr<Work> getWork() {
 	return pWindow->getWork();
 }

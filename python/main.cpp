@@ -252,7 +252,6 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("getDesktopWidth", getDesktopWidth);
 	def("getDesktopHeight", getDesktopHeight);
 	def("getMouseWheel", getMouseWheel);
-	def("mainLoop", mainLoop);
 	def("setPrefix", setPrefix);
 	def("getPrefix", getPrefix);
 	def("setConfigPath", setConfigPath);

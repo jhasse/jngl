@@ -54,8 +54,9 @@ private:
 };
 
 JNGL_MAIN_BEGIN {
-	jngl::showWindow("Shader Example", 1280, 720);
+	jngl::App app("Shader Example");
+	jngl::showWindow(app.getDisplayName(), 1280, 720);
 	jngl::setWork(std::make_shared<ShaderExample>());
-	jngl::mainLoop();
+	app.mainLoop();
 }
 JNGL_MAIN_END

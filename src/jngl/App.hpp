@@ -18,6 +18,7 @@ namespace jngl {
 /// JNGL_MAIN_BEGIN {
 /// 	jngl::App app("Awesome Game Name");
 /// 	// ...
+/// 	app.mainLoop();
 /// } JNGL_MAIN_END
 /// \endcode
 class App {
@@ -35,6 +36,9 @@ public:
 	/// Returns the name set by the constructor. This cannot be changed later and is used by
 	/// jngl::getConfigPath() for example.
 	std::string getDisplayName() const;
+
+	/// Starts the main loop, which calls jngl::Work::step and jngl::Work::draw
+	void mainLoop();
 
 private:
 	struct Impl;

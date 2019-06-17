@@ -3,6 +3,8 @@
 
 #include "App.hpp"
 
+#include "../windowptr.hpp"
+
 #include <stdexcept>
 
 namespace jngl {
@@ -34,6 +36,10 @@ const App& App::instance() {
 
 std::string App::getDisplayName() const {
 	return impl->displayName;
+}
+
+void App::mainLoop() {
+	return pWindow->mainLoop();
 }
 
 } // namespace jngl

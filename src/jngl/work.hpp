@@ -21,7 +21,7 @@ public:
 	/// To continue with the main loop, call cancelQuit().
 	virtual void onQuitEvent();
 
-	/// Gets called when the Work is activated by mainLoop()
+	/// Gets called when the Work is activated by App::mainLoop()
 	virtual void onLoad();
 
 	virtual ~Work();
@@ -29,7 +29,7 @@ public:
 
 std::shared_ptr<Work> JNGLDLL_API getWork();
 
-/// Sets the passed Work to be active in mainLoop()
+/// Sets the passed Work to be active in App::mainLoop()
 void JNGLDLL_API setWork(std::shared_ptr<Work> work);
 
 /// \deprecated Use setWork(std::shared_ptr<Work>) instead

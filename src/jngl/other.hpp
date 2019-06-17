@@ -13,13 +13,13 @@ namespace jngl {
 /// Returns true until the main window is closed or quit() has been called
 bool JNGLDLL_API running();
 
-/// Updates the input state. mainLoop() calls this before Work::step()
+/// Updates the input state. App::mainLoop() calls this before Work::step()
 void JNGLDLL_API updateInput();
 
-/// Swaps back and front buffer. mainLoop() calls this after Work::draw()
+/// Swaps back and front buffer. App::mainLoop() calls this after Work::draw()
 void JNGLDLL_API swapBuffers();
 
-/// Emit a quit event which will exit mainLoop() and set running() to false
+/// Emit a quit event which will exit App::mainLoop() and set running() to false
 void JNGLDLL_API quit();
 
 /// Undo quit() or ignore a quit event caused by the user closing the main window
@@ -47,9 +47,6 @@ void JNGLDLL_API setVerticalSync(bool enabled);
 bool JNGLDLL_API getVerticalSync();
 
 void JNGLDLL_API setIcon(const std::string& filename);
-
-/// Starts the main loop, which calls jngl::Work::step and jngl::Work::draw
-void JNGLDLL_API mainLoop();
 
 void JNGLDLL_API setPrefix(const std::string& path);
 

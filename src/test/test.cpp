@@ -1,4 +1,4 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl.hpp"
@@ -21,7 +21,7 @@ double factor = 0;
 class Test : public jngl::Work {
 public:
 	Test() : fb2(jngl::getWindowWidth(), jngl::getWindowHeight()), logoWebp("jngl.webp") {
-		jngl::setTitle("JNGL Test Application");
+		jngl::setTitle(jngl::App::instance().getDisplayName());
 		jngl::setIcon("jngl.png");
 		jngl::setMouseVisible(false);
 		frameTime = jngl::getTime();
@@ -196,6 +196,7 @@ private:
 
 JNGL_MAIN_BEGIN {
 	try {
+		jngl::App app("JNGL Test Application");
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
 		          << jngl::getDesktopHeight() << std::endl
 		          << "Path of binary: " << jngl::getBinaryPath() << std::endl;
@@ -210,7 +211,7 @@ JNGL_MAIN_BEGIN {
 		jngl::showWindow("setTitle not working!", 800 * jngl::getScaleFactor(),
 		                 600 * jngl::getScaleFactor());
 		jngl::setWork(std::make_shared<Test>());
-		jngl::mainLoop();
+		app.mainLoop();
 	} catch(std::exception& e) {
 		jngl::errorMessage(e.what());
 	}
