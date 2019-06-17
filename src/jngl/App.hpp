@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "dll.hpp"
+
 #include <memory>
 #include <string>
 
@@ -21,7 +23,7 @@ namespace jngl {
 /// 	app.mainLoop();
 /// } JNGL_MAIN_END
 /// \endcode
-class App {
+class JNGLDLL_API App {
 public:
 	App(std::string displayName);
 	~App();
