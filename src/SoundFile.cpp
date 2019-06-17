@@ -48,7 +48,7 @@ public:
 		alcCloseDevice(device_);
 	}
 	static bool IsStopped(std::shared_ptr<Sound>& s) {
-		return s->Stopped();
+		return s->isStopped();
 	}
 	void Play(std::shared_ptr<Sound>& sound) {
 		sounds_.erase(std::remove_if(sounds_.begin(), sounds_.end(), IsStopped), sounds_.end());

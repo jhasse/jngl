@@ -27,7 +27,7 @@ namespace jngl {
 		~Sound();
 		bool IsPlaying();
 		void loop();
-		bool Stopped();
+		bool isStopped() const;
 		void SetPitch(float p);
 		void setVolume(float v);
 

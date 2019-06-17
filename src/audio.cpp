@@ -1,9 +1,10 @@
 // Copyright 2009-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#include "jngl.hpp"
 #include "audio.hpp"
+
 #include "SoundParams.hpp"
+#include "jngl.hpp"
 
 namespace jngl {
 
@@ -83,7 +84,7 @@ namespace jngl {
 		alSourcei(impl->source, AL_LOOPING, AL_TRUE);
 	}
 
-	bool Sound::Stopped() {
+	bool Sound::isStopped() const {
 		ALint state;
 		alGetSourcei(impl->source, AL_SOURCE_STATE, &state);
 		return state == AL_STOPPED;
