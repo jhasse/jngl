@@ -9,12 +9,12 @@
 #include <memory>
 #include <string>
 #include <vector>
-#ifdef __APPLE__
+#if defined(__has_include) && __has_include(<optional>)
+#include <optional>
+template <class T> using optional = std::optional<T>;
+#else
 #include <experimental/optional>
 using std::experimental::optional;
-#else
-#include <optional>
-using std::optional;
 #endif
 
 namespace jngl {

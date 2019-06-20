@@ -2,14 +2,14 @@
 
 #include "sdl.hpp"
 
-#ifdef __APPLE__
+#if defined(__has_include) && __has_include(<optional>)
+#include <optional>
+template <class T> using optional = std::optional<T>;
+using std::nullopt;
+#else
 #include <experimental/optional>
 using std::experimental::optional;
 using std::experimental::nullopt;
-#else
-#include <optional>
-using std::optional;
-using std::nullopt;
 #endif
 
 namespace jngl {
