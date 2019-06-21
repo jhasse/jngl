@@ -4,7 +4,7 @@
 
 #if defined(__has_include) && __has_include(<optional>)
 #include <optional>
-template <class T> using optional = std::optional<T>;
+using std::optional;
 using std::nullopt;
 #else
 #include <experimental/optional>
