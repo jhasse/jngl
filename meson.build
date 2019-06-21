@@ -112,6 +112,7 @@ if not jpeg_dep.found()
 endif
 
 thread_dep = dependency('threads')
+boost_dep = dependency('boost')
 
 lib = static_library('jngl', sources : src, cpp_args : cpp_args, install : true, dependencies : [
 	dependency('freetype2'),
@@ -120,6 +121,7 @@ lib = static_library('jngl', sources : src, cpp_args : cpp_args, install : true,
 	dependency('libpng'),
 	dependency('openal'),
 	dependency('vorbisfile'),
+	boost_dep,
 	jpeg_dep,
 	opengl_dep,
 ])
@@ -141,11 +143,11 @@ if target_machine.system() == 'linux'
 endif
 
 jngl_dep = declare_dependency(include_directories : include, link_with : lib,
-                              dependencies : thread_dep)
+                              dependencies : [boost_dep, thread_dep])
 
 if not meson.is_subproject()
 	executable('jngl-test', sources : ['src/test/test.cpp'], link_with : lib, dependencies : [
-		thread_dep,
+		boost_dep, thread_dep,
 	])
 	boost_test_dep = dependency('boost', modules : [ 'unit_test_framework' ], required : false)
 	if boost_test_dep.found()
