@@ -47,7 +47,7 @@ public:
 		} else {
 			jngl::setSpriteColor(255, 255, 255);
 		}
-		jngl::draw("jngl.webp", -300 + jngl::getMouseX(), -140 + jngl::getMouseY());
+		jngl::draw("jngl.webp", jngl::getMousePos() - jngl::Vec2(300, 140));
 		std::stringstream sstream;
 		static double fps = 0.0;
 		fps *= 0.9;
@@ -88,7 +88,7 @@ private:
 	[self.window addSubview:view];
 
 	jngl::showWindow("", jngl::getWindowWidth(), jngl::getWindowHeight());
-	jngl::setWork(new Test);
+	jngl::setWork(std::make_shared<Test>());
 	std::cout << "START" << std::endl;
 	[view drawView:nil];
     [self.window makeKeyAndVisible];

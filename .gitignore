@@ -22,6 +22,7 @@ Thumbs.db
 /.vscode/tags
 /.vscode/cquery*
 /.vscode/ipch/
+/.vscode/c_cpp_properties.json
 /.ccls-cache/
 /compile_commands.json
 /nintendo

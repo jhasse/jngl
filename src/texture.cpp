@@ -166,7 +166,7 @@ void Texture::drawMesh(const std::vector<Vertex>& vertexes, const float red, con
 	glEnableVertexAttribArray(texCoordAttrib);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
-	glDrawArrays(GL_TRIANGLES, 0, vertexes.size());
+	glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertexes.size()));
 }
 
 GLuint Texture::getID() const {
