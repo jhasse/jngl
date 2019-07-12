@@ -9,7 +9,7 @@ Switch.
 
 ```
 sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev \
-libjpeg-dev libpng12-dev libvorbis-dev libopenal-dev meson libepoxy-dev libboost-dev g++ \
+libjpeg-dev libpng-dev libvorbis-dev libopenal-dev meson libepoxy-dev libboost-dev g++ \
 libwebp-dev git libsdl2-dev
 ```
 
