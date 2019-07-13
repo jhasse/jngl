@@ -9,6 +9,7 @@
 
 #include "../../subprojects/theoraplay/theoraplay.h"
 #include "../Sound.hpp"
+#include "../audio.hpp"
 #include "../opengl.hpp"
 #include "Shader.hpp"
 #include "debug.hpp"
