@@ -80,6 +80,9 @@ float SdlController::stateWithoutDeadzone(controller::Button button) const {
 	} else {
 		state /= 32767;
 	}
+	if (button == controller::LeftStickY or button == controller::RightStickY) {
+		state *= -1;
+	}
 	return state;
 }
 
