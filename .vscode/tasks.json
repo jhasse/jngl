@@ -46,9 +46,8 @@
 		},
 		{
 			"label": "test",
-			"args": [
-				"./unittest"
-			],
+			"command": "ninja",
+			"args": [ "-Cbuild", "test" ],
 			"problemMatcher": {
 				"owner": "cpp",
 				"fileLocation": [
