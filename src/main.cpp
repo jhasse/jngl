@@ -497,21 +497,28 @@ std::vector<std::string> getArgs() {
 }
 
 std::stringstream JNGLDLL_API readAsset(const std::string& filename) {
+	if (!filename.empty() && filename[0] == '/') {
+		throw std::runtime_error("Do not pass absolute paths to jngl::readAsset.");
+	}
 	std::stringstream sstream;
 	FILE* const f = fopen(filename.c_str(), "rb");
 	if (!f) {
+		sstream.setstate(std::ios::failbit);
 		return sstream;
 	}
 	Finally closeFile([f]() { fclose(f); });
 	if (fseek(f, 0, SEEK_END) != 0) {
+		sstream.setstate(std::ios::failbit);
 		return sstream;
 	}
 	const auto size = ftell(f);
 	if (fseek(f, 0, SEEK_SET) != 0) {
+		sstream.setstate(std::ios::failbit);
 		return sstream;
 	}
 	std::unique_ptr<char[]> content(new char[size]);
 	if (fread(content.get(), size, 1, f) != 1) {
+		sstream.setstate(std::ios::failbit);
 		return sstream;
 	}
 	sstream.write(content.get(), size);

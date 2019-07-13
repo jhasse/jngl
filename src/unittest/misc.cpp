@@ -47,3 +47,8 @@ BOOST_AUTO_TEST_CASE(halfLoadTest) {
 BOOST_AUTO_TEST_CASE(getBinaryPath) {
 	BOOST_CHECK(!jngl::getBinaryPath().empty());
 }
+
+BOOST_AUTO_TEST_CASE(readAsset) {
+	BOOST_CHECK(!jngl::readAsset("non existing file"));
+	BOOST_CHECK_THROW(jngl::readAsset("/some/absolute/path"), std::runtime_error);
+}
