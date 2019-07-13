@@ -1,4 +1,4 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/debug.hpp"
@@ -25,24 +25,15 @@ std::vector<std::shared_ptr<Controller>> getConnectedControllers() {
 		bool found = false;
 		for (const auto& controller : controllers) {
 			if (controller->is(handle)) {
+				SDL_JoystickClose(handle);
 				rtn.push_back(controller);
 				found = true;
 				break;
 			}
 		}
 		if (!found) {
-			controllers.emplace_back(std::make_shared<SdlController>(handle));
+			controllers.emplace_back(std::make_shared<SdlController>(handle, i));
 			rtn.emplace_back(controllers.back());
-			jngl::debug("Name: ");
-			jngl::debugLn(SDL_JoystickNameForIndex(i));
-			jngl::debug("Number of Axes: ");
-			jngl::debugLn(SDL_JoystickNumAxes(handle));
-			jngl::debug("Number of Buttons: ");
-			jngl::debugLn(SDL_JoystickNumButtons(handle));
-			jngl::debug("Number of Balls: ");
-			jngl::debugLn(SDL_JoystickNumBalls(handle));
-			jngl::debug("Number of Hats: ");
-			jngl::debugLn(SDL_JoystickNumHats(handle));
 		}
 	}
 	return rtn;

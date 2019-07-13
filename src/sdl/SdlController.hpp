@@ -11,7 +11,7 @@ namespace jngl {
 
 class SdlController : public Controller {
 public:
-	SdlController(SDL_Joystick*);
+	SdlController(SDL_Joystick*, int index);
 	~SdlController() override;
 	bool down(controller::Button) const override;
 
@@ -21,7 +21,8 @@ private:
 	float stateImpl(controller::Button) const override;
 	float stateWithoutDeadzone(controller::Button) const;
 
-	SDL_Joystick* const handle;
+	SDL_Joystick* handle;
+	SDL_GameController* gameController = nullptr;
 
 	enum class Model {
 		XBOX,
