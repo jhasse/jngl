@@ -15,7 +15,7 @@ public:
 	Sound(const Sound&) = delete;
 	Sound& operator=(const Sound&) = delete;
 	~Sound();
-	bool IsPlaying();
+	bool isPlaying() const;
 	void loop();
 	bool isStopped() const;
 	void SetPitch(float p);

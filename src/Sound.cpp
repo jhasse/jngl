@@ -77,7 +77,7 @@ Sound::~Sound() {
 	debug("OK\n");
 }
 
-bool Sound::IsPlaying() {
+bool Sound::isPlaying() const {
 	ALint state;
 	alGetSourcei(impl->source, AL_SOURCE_STATE, &state);
 	return state == AL_PLAYING;

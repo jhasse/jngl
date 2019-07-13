@@ -134,7 +134,7 @@ void SoundFile::Stop() {
 }
 bool SoundFile::IsPlaying() {
 	if (sound_) {
-		return sound_->IsPlaying();
+		return sound_->isPlaying();
 	}
 	return false;
 }
