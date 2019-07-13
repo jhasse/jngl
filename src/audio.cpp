@@ -6,6 +6,10 @@
 #include "Sound.hpp"
 #include "jngl.hpp"
 
+#ifdef WEAK_LINKING_OPENAL
+#include "win32/openal.hpp"
+#endif
+
 namespace jngl {
 
 	bool isOpenALInstalled() {
