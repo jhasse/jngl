@@ -5,7 +5,9 @@
 
 #include "dll.hpp"
 
+#if !defined(__has_include) || __has_include("boost/version.hpp")
 #include <boost/version.hpp>
+#endif
 #include <iosfwd>
 
 namespace jngl {
