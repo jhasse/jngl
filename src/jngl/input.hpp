@@ -132,6 +132,7 @@ enum Button { Left, Middle, Right };
 /// Returns mouse wheel movement between -100 and 100 (0 if the mousewheel doesn't move)
 double JNGLDLL_API getMouseWheel();
 
+/// Returns whether \a button is currently held down
 bool JNGLDLL_API mouseDown(mouse::Button button = mouse::Left);
 
 /// Overwrite what mouseDown() should return
@@ -194,13 +195,17 @@ enum Button {
 
 class Controller;
 
-/// Returns all Controllers that are connected. Don't call this function every frame for performance
-/// reasons
+/// Returns all controllers (gamepads) that are connected
+///
+/// Don't call this function every frame for performance reasons, use jngl::onControllerChanged
+/// instead to get notified when controlles are being connected or removed.
 std::vector<std::shared_ptr<Controller>> JNGLDLL_API getConnectedControllers();
 
-/// Specify a function which gets called, whenever a controller gets added or removed (i.e. the
-/// return value of getConnectedControllers would change).
-void JNGLDLL_API onControllerChanged(std::function<void()>);
+/// Specify a function which gets called, whenever a controller gets added or removed
+///
+/// Whenever the return value of jngl::getConnectedControllers would change, \a callback gets
+/// called.
+void JNGLDLL_API onControllerChanged(std::function<void()> callback);
 
 /// Returns a string of characters that have been pressed since the last call to updateInput()
 std::string JNGLDLL_API getTextInput();

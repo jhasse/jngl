@@ -16,8 +16,12 @@ template <class Vect> void translate(Vect v) {
 	translate(v.x, v.y);
 }
 
+/// Multiplies the global ModelView matrix by a scaling matrix
+///
+/// Equivalent to calling `jngl::scale(factor, factor)`.
 void JNGLDLL_API scale(double factor);
 
+/// Multiplies the global ModelView matrix by a scaling matrix
 void JNGLDLL_API scale(double xfactor, double yfactor);
 
 void JNGLDLL_API pushMatrix();

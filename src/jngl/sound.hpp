@@ -17,8 +17,10 @@ void JNGLDLL_API play(const std::string& filename);
 /// Stop an OGG audio file if it's currently playing
 void JNGLDLL_API stop(const std::string& filename);
 
+/// \return whether \a filename is currently playing
 bool JNGLDLL_API isPlaying(const std::string& filename);
 
+/// Play an OGG audio file in a loop
 void JNGLDLL_API loop(const std::string& filename);
 
 bool JNGLDLL_API isOpenALInstalled();

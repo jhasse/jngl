@@ -9,6 +9,7 @@
 
 namespace jngl {
 
+/// Size of one screen pixel in actual pixels
 double JNGLDLL_API getScaleFactor();
 
 void JNGLDLL_API setScaleFactor(double);
