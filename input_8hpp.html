@@ -95,12 +95,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <div class="textblock"><code>#include &quot;dll.hpp&quot;</code><br />
 <code>#include &quot;<a class="el" href="Vec2_8hpp_source.html">Vec2.hpp</a>&quot;</code><br />
+<code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for input.hpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="input_8hpp__incl.svg" width="410" height="187"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="input_8hpp__incl.svg" width="536" height="187"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -320,6 +321,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 <tr class="memitem:a2ef4903c72008831c91a0c5d39b52655"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; Controller &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a2ef4903c72008831c91a0c5d39b52655">getConnectedControllers</a> ()</td></tr>
 <tr class="memdesc:a2ef4903c72008831c91a0c5d39b52655"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all Controllers that are connected.  <a href="namespacejngl.html#a2ef4903c72008831c91a0c5d39b52655">More...</a><br /></td></tr>
 <tr class="separator:a2ef4903c72008831c91a0c5d39b52655"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac08237ef5e2a21a0b755f91aa8866695"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ac08237ef5e2a21a0b755f91aa8866695">onControllerChanged</a> (std::function&lt; void()&gt;)</td></tr>
+<tr class="memdesc:ac08237ef5e2a21a0b755f91aa8866695"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specify a function which gets called, whenever a controller gets added or removed (i.e.  <a href="namespacejngl.html#ac08237ef5e2a21a0b755f91aa8866695">More...</a><br /></td></tr>
+<tr class="separator:ac08237ef5e2a21a0b755f91aa8866695"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61fd6900416c997489df138cb8651ab8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a61fd6900416c997489df138cb8651ab8"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a61fd6900416c997489df138cb8651ab8">getTextInput</a> ()</td></tr>
 <tr class="memdesc:a61fd6900416c997489df138cb8651ab8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string of characters that have been pressed since the last call to <a class="el" href="namespacejngl.html#a41043304f9ce3a6307573263c949d7d6" title="Updates the input state. App::mainLoop() calls this before Work::step() ">updateInput()</a> <br /></td></tr>
@@ -346,7 +350,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="input_8hpp_source.html#l00016">16</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+<p>Definition at line <a class="el" href="input_8hpp_source.html#l00017">17</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
 
 </div>
 </div>
@@ -388,7 +392,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="input_8hpp_source.html#l00149">149</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+<p>Definition at line <a class="el" href="input_8hpp_source.html#l00150">150</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
 
 </div>
 </div>

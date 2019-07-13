@@ -326,6 +326,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 <tr class="memitem:a2ef4903c72008831c91a0c5d39b52655"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="classjngl_1_1Controller.html">Controller</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a2ef4903c72008831c91a0c5d39b52655">getConnectedControllers</a> ()</td></tr>
 <tr class="memdesc:a2ef4903c72008831c91a0c5d39b52655"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all Controllers that are connected.  <a href="#a2ef4903c72008831c91a0c5d39b52655">More...</a><br /></td></tr>
 <tr class="separator:a2ef4903c72008831c91a0c5d39b52655"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac08237ef5e2a21a0b755f91aa8866695"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ac08237ef5e2a21a0b755f91aa8866695">onControllerChanged</a> (std::function&lt; void()&gt;)</td></tr>
+<tr class="memdesc:ac08237ef5e2a21a0b755f91aa8866695"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specify a function which gets called, whenever a controller gets added or removed (i.e.  <a href="#ac08237ef5e2a21a0b755f91aa8866695">More...</a><br /></td></tr>
+<tr class="separator:ac08237ef5e2a21a0b755f91aa8866695"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61fd6900416c997489df138cb8651ab8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a61fd6900416c997489df138cb8651ab8"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a61fd6900416c997489df138cb8651ab8">getTextInput</a> ()</td></tr>
 <tr class="memdesc:a61fd6900416c997489df138cb8651ab8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string of characters that have been pressed since the last call to <a class="el" href="namespacejngl.html#a41043304f9ce3a6307573263c949d7d6" title="Updates the input state. App::mainLoop() calls this before Work::step() ">updateInput()</a> <br /></td></tr>
@@ -725,6 +728,25 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>resetFrameLimiter</b>
 
 <p>Returns all Controllers that are connected. </p>
 <p>Don't call this function every frame for performance reasons </p>
+
+</div>
+</div>
+<a class="anchor" id="ac08237ef5e2a21a0b755f91aa8866695"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void jngl::onControllerChanged </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void()&gt;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Specify a function which gets called, whenever a controller gets added or removed (i.e. </p>
+<p>the return value of getConnectedControllers would change). </p>
 
 </div>
 </div>
