@@ -77,6 +77,7 @@
 		C9F3AB8C1525F0B800A77E9F /* Arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8A1525F0A800A77E9F /* Arial.ttf */; };
 		C9F3AB901525F67000A77E9F /* test.ogg in Resources */ = {isa = PBXBuildFile; fileRef = C9F3AB8F1525F67000A77E9F /* test.ogg */; };
 		C9F5FF33204DFB83008A21A2 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F5FF32204DFB83008A21A2 /* Vorbis.framework */; };
+		C9FC471922D9FEDB00AE575B /* Sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9FC471822D9FEDB00AE575B /* Sound.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -195,6 +196,7 @@
 		C9F3AB8D1525F0DC00A77E9F /* jngl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = jngl.png; path = ../jngl.png; sourceTree = "<group>"; };
 		C9F3AB8F1525F67000A77E9F /* test.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.ogg; path = ../test.ogg; sourceTree = "<group>"; };
 		C9F5FF32204DFB83008A21A2 /* Vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vorbis.framework; path = IDZPrecompiledVorbis/Vorbis.framework; sourceTree = "<group>"; };
+		C9FC471822D9FEDB00AE575B /* Sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sound.cpp; path = src/Sound.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -437,6 +439,7 @@
 		C9F1AF3613EAEF420086B474 /* Source Files */ = {
 			isa = PBXGroup;
 			children = (
+				C9FC471822D9FEDB00AE575B /* Sound.cpp */,
 				C9C1A69722877297009E59C7 /* SoundFile.cpp */,
 				209C83AE1E74AE2500D3BE2D /* helper.cpp */,
 				3D150EAF1C3C2F49008A5DE2 /* mac */,
@@ -612,6 +615,7 @@
 				C9BFF84E1524C3F000066D6C /* time.cpp in Sources */,
 				C9C95BA61529CE3A008EA579 /* windowimpl.cpp in Sources */,
 				C94E4A9020A9ED7D00285CDB /* Vec2.cpp in Sources */,
+				C9FC471922D9FEDB00AE575B /* Sound.cpp in Sources */,
 				C9C95BAA1529D070008EA579 /* JNGLView.mm in Sources */,
 				C98A18AD15DEB30D0038B716 /* work.cpp in Sources */,
 				C94EEE331600ED1F004F9FE0 /* JNGLViewController.mm in Sources */,
