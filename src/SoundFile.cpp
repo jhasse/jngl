@@ -7,6 +7,7 @@
 #include "jngl/debug.hpp"
 #include "jngl/sound.hpp"
 #include "main.hpp"
+#include "Sound.hpp"
 #include "SoundParams.hpp"
 
 #include <algorithm>

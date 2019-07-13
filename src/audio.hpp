@@ -4,8 +4,6 @@
 #pragma once
 
 #include <string>
-#include <vector>
-#include <memory>
 
 namespace jngl {
 	void LoadSound(const std::string&);
@@ -16,24 +14,4 @@ namespace jngl {
 	class Audio;
 
 	Audio& GetAudio();
-
-	struct SoundParams;
-
-	class Sound {
-	public:
-		Sound(const SoundParams&, std::vector<char>& bufferData);
-		Sound(const Sound&) = delete;
-		Sound& operator=(const Sound&) = delete;
-		~Sound();
-		bool IsPlaying();
-		void loop();
-		bool isStopped() const;
-		void SetPitch(float p);
-		void setVolume(float v);
-
-		static float masterVolume;
-	private:
-		struct Impl;
-		std::unique_ptr<Impl> impl;
-	};
 }
