@@ -8,7 +8,7 @@
 #ifdef JNGL_VIDEO
 
 #include "../../subprojects/theoraplay/theoraplay.h"
-#include "../audio.hpp"
+#include "../Sound.hpp"
 #include "../opengl.hpp"
 #include "Shader.hpp"
 #include "debug.hpp"
