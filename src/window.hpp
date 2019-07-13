@@ -107,6 +107,7 @@ namespace jngl {
 		void drawEllipse(Vec2 mid, Vec2 size, float startAngle) const;
 		void drawLine(Vec2 a, Vec2 b) const;
 		void drawRect(Vec2 pos, Vec2 size) const;
+		void onControllerChanged(std::function<void()>);
 
 	private:
 		int GetKeyCode(jngl::key::KeyType key);
@@ -161,6 +162,9 @@ namespace jngl {
 
 		/// How often the frame limiter has run
 		unsigned int numberOfChecks = 0;
+
+		/// Called when a controller is added or removed
+		std::function<void()> controllerChangedCallback;
 
 		bool multitouch = false;
 

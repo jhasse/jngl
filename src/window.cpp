@@ -494,5 +494,8 @@ namespace jngl {
 		jngl::popMatrix();
 	}
 
+	void Window::onControllerChanged(std::function<void()> callback) {
+		controllerChangedCallback = std::move(callback);
+	}
 
 } // namespace jngl

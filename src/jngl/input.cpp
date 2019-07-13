@@ -62,6 +62,10 @@ void setControllerVibration(int, unsigned short, unsigned short) {
 }
 #endif
 
+void onControllerChanged(std::function<void()> callback) {
+	pWindow->onControllerChanged(std::move(callback));
+}
+
 std::string getTextInput() {
 	return pWindow->getTextInput();
 }

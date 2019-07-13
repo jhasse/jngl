@@ -6,6 +6,7 @@
 #include "dll.hpp"
 #include "Vec2.hpp"
 
+#include <functional>
 #include <vector>
 #include <memory>
 
@@ -196,6 +197,10 @@ class Controller;
 /// Returns all Controllers that are connected. Don't call this function every frame for performance
 /// reasons
 std::vector<std::shared_ptr<Controller>> JNGLDLL_API getConnectedControllers();
+
+/// Specify a function which gets called, whenever a controller gets added or removed (i.e. the
+/// return value of getConnectedControllers would change).
+void JNGLDLL_API onControllerChanged(std::function<void()>);
 
 /// Returns a string of characters that have been pressed since the last call to updateInput()
 std::string JNGLDLL_API getTextInput();

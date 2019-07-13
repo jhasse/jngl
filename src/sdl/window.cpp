@@ -261,6 +261,12 @@ Window::Window(const std::string& title, const int width, const int height, cons
 					}
 					break;
 				}
+				case SDL_JOYDEVICEADDED:
+				case SDL_JOYDEVICEREMOVED:
+					if (controllerChangedCallback) {
+						controllerChangedCallback();
+					}
+					break;
 			}
 		}
 	}

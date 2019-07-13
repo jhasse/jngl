@@ -210,6 +210,10 @@ JNGL_MAIN_BEGIN {
 		    std::min((jngl::getDesktopWidth() - 50) / 800, (jngl::getDesktopHeight() - 50) / 600)));
 		jngl::showWindow("setTitle not working!", 800 * jngl::getScaleFactor(),
 		                 600 * jngl::getScaleFactor());
+		jngl::onControllerChanged([]() {
+			std::cout << "Number of connected controllers: "
+			          << jngl::getConnectedControllers().size() << std::endl;
+		});
 		jngl::setWork(std::make_shared<Test>());
 		app.mainLoop();
 	} catch(std::exception& e) {
