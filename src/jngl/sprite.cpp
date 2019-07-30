@@ -22,6 +22,7 @@
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
+#include <boost/math/special_functions/round.hpp>
 #include <sstream>
 #include <thread>
 #ifndef NOJPEG
@@ -411,8 +412,8 @@ Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool hal
 	int scaledHeight = imgHeight;
 	if (getScaleFactor() + 1e-9 < 1) {
 		config->options.use_scaling = 1;
-		config->options.scaled_width = scaledWidth = std::max(1l, std::lround(width));
-		config->options.scaled_height = scaledHeight = std::max(1l, std::lround(height));
+		config->options.scaled_width = scaledWidth = std::max(1, boost::math::iround(width));
+		config->options.scaled_height = scaledHeight = std::max(1, boost::math::iround(height));
 	}
 	config->output.colorspace = MODE_RGBA;
 	auto result = std::make_shared<VP8StatusCode>();
