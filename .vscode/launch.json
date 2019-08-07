@@ -29,7 +29,7 @@
 			"preLaunchTask": "build"
 		},
 		{
-			"name": "(gdb) Launch",
+			"name": "jngl-test (C/C++)",
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceRoot}/build/jngl-test",
@@ -38,7 +38,6 @@
 			"cwd": "${workspaceRoot}",
 			"environment": [],
 			"externalConsole": true,
-			"MIMode": "gdb",
 			"setupCommands": [
 				{
 					"description": "Enable pretty-printing for gdb",
@@ -46,7 +45,11 @@
 					"ignoreFailures": true
 				}
 			],
+			"osx": {
+				"MIMode": "lldb"
+			},
 			"windows": {
+				"MIMode": "gdb",
 				"miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe"
 			}
 		}
