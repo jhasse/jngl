@@ -10,6 +10,7 @@
 #include <functional>
 #include <map>
 #include <stack>
+#include <string>
 #include <unordered_map>
 
 #ifdef _WIN32

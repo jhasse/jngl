@@ -1,9 +1,7 @@
-// Copyright 2009-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2009-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
-
-#include "jngl/types.hpp"
 
 #include <boost/qvm/mat.hpp>
 

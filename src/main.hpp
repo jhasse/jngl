@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "jngl/Finally.hpp"
 #include "jngl/ShaderProgram.hpp"
 
 #include <memory>

@@ -1,17 +1,14 @@
-// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
-#include "jngl/Finally.hpp"
 #include "texture.hpp"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
 #include <map>
-#include <string>
-#include <vector>
 
 namespace jngl {
 

@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "Vec2.hpp"
-
 namespace jngl {
 
 /// Position and texture coordinates

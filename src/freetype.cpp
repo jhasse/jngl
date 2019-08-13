@@ -1,4 +1,4 @@
-// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "freetype.hpp"
@@ -8,7 +8,6 @@
 #include "jngl/matrix.hpp"
 #include "jngl/screen.hpp"
 #include "main.hpp"
-#include "spriteimpl.hpp"
 
 #ifdef ANDROID
 #include "android/fopen.hpp"

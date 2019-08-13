@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "Finally.hpp"
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
 #include "drawable.hpp"

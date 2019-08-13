@@ -7,7 +7,6 @@
 #include "jngl/screen.hpp"
 #include "main.hpp"
 #include "spriteimpl.hpp"
-#include "windowptr.hpp"
 
 #include <cassert>
 

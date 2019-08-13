@@ -1,11 +1,10 @@
-// Copyright 2011-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #ifndef NOPNG
 #include <png.h> // We need to include it first, I don't know why
 #endif
 
-#include "../jngl/Finally.hpp"
 #include "../jngl/debug.hpp"
 #include "../jngl/window.hpp"
 #include "../main.hpp"

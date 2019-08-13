@@ -1,4 +1,4 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #ifndef NOPNG
@@ -11,7 +11,6 @@
 #include "../helper.hpp"
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
-#include "../windowptr.hpp"
 #include "debug.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"

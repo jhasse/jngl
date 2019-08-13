@@ -7,7 +7,6 @@
 #include "spriteimpl.hpp"
 
 #include <boost/qvm/mat_operations.hpp>
-#include <cassert>
 #include <sstream>
 
 #ifdef ANDROID

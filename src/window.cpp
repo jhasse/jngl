@@ -8,8 +8,6 @@
 #include "main.hpp"
 
 #include <boost/numeric/conversion/cast.hpp>
-#include <chrono>
-#include <cmath>
 #include <thread>
 
 namespace jngl {
