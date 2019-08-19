@@ -850,7 +850,6 @@
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
 					"\"$(SRCROOT)/../lib/ios\"",
 					"$(PROJECT_DIR)/IDZPrecompiledOgg",
 					"$(PROJECT_DIR)/IDZPrecompiledVorbis",
@@ -890,7 +889,6 @@
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
 					"\"$(SRCROOT)/../lib/ios\"",
 					"$(PROJECT_DIR)/IDZPrecompiledOgg",
 					"$(PROJECT_DIR)/IDZPrecompiledVorbis",
