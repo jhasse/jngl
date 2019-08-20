@@ -1,3 +1,6 @@
+// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
+
 #import "AppDelegate.h"
 
 #include <jngl.hpp>
@@ -80,14 +83,13 @@ private:
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	view = [[JNGLView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-	
+
 	JNGLViewController* jvc = [[JNGLViewController alloc] initWithNibName:nil bundle:nil];
 	self.window.rootViewController = jvc;
 	jnglView = view;
-	
+
 	[self.window addSubview:view];
 
-	jngl::showWindow("", jngl::getWindowWidth(), jngl::getWindowHeight());
 	jngl::setWork(std::make_shared<Test>());
 	std::cout << "START" << std::endl;
 	[view drawView:nil];
@@ -105,7 +107,7 @@ private:
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-	// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+	// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
 	// If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
