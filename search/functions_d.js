@@ -15,9 +15,9 @@ var searchData=
   ['setstepspersecond',['setStepsPerSecond',['../namespacejngl.html#afed24bb6cc886f01ba23d4ce53125de0',1,'jngl']]],
   ['settitle',['setTitle',['../namespacejngl.html#a86403a082df8f8db91053edaa2a73a5f',1,'jngl']]],
   ['setwork',['setWork',['../namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196',1,'jngl::setWork(std::shared_ptr&lt; Work &gt; work)'],['../namespacejngl.html#af765d65e1817b356ad2bd10c282d3f2d',1,'jngl::setWork(Work *)']]],
-  ['showwindow',['showWindow',['../namespacejngl.html#a71a09b7f0cb6c251f5cc718d650f0673',1,'jngl']]],
+  ['showwindow',['showWindow',['../namespacejngl.html#a6258b60ff00bd009838eea0a647279c1',1,'jngl']]],
   ['sleep',['sleep',['../namespacejngl.html#a6c9a4f10e08890ed285c7062e0f0a81a',1,'jngl']]],
-  ['state',['state',['../classjngl_1_1Controller.html#a8e3acb3f4cedb3fcf85fd8c6c104bee6',1,'jngl::Controller']]],
+  ['state',['state',['../classjngl_1_1Controller.html#aed660735860c00e72d88daf95e520814',1,'jngl::Controller']]],
   ['step',['step',['../classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31',1,'jngl::Job']]],
   ['stop',['stop',['../namespacejngl.html#a6265cb122b1823e5a05633fd528e67bf',1,'jngl']]],
   ['swapbuffers',['swapBuffers',['../namespacejngl.html#aa2827e4edaa53fecffc9246f8bc2218e',1,'jngl']]]
