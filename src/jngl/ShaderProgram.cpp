@@ -27,9 +27,9 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 	GLint status = GL_FALSE;
 	glGetProgramiv(impl->id, GL_LINK_STATUS, &status);
 	if (status != GL_TRUE) {
-		char buffer[2048];
-		glGetProgramInfoLog(impl->id, sizeof(buffer), nullptr, buffer);
-		throw std::runtime_error(buffer);
+		std::array<char, 2048> buffer{};
+		glGetProgramInfoLog(impl->id, std::size(buffer), nullptr, &buffer[0]);
+		throw std::runtime_error(&buffer[0]);
 	}
 	const auto tmp = use();
 	glUniformMatrix4fv(getUniformLocation("projection"), 1, GL_TRUE, &opengl::projection.a[0][0]);
