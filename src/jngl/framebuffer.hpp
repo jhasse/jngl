@@ -4,6 +4,7 @@
 #pragma once
 
 #include "dll.hpp"
+#include "Vec2.hpp"
 
 #include <memory>
 
@@ -18,6 +19,7 @@ public:
 	~FrameBuffer();
 	void beginDraw();
 	void endDraw();
+	void draw(Vec2 position) const;
 	void draw(double x, double y) const;
 	void clear();
 
