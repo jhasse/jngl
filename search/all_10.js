@@ -23,7 +23,7 @@ var searchData=
   ['sleep',['sleep',['../namespacejngl.html#a6c9a4f10e08890ed285c7062e0f0a81a',1,'jngl']]],
   ['sprite',['Sprite',['../classjngl_1_1Sprite.html',1,'jngl']]],
   ['state',['state',['../classjngl_1_1Controller.html#aed660735860c00e72d88daf95e520814',1,'jngl::Controller']]],
-  ['step',['step',['../classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31',1,'jngl::Job']]],
+  ['step',['step',['../classjngl_1_1Drawable.html#aa6f73ac7d5899119d156a0b3a27fba31',1,'jngl::Drawable::step()'],['../classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31',1,'jngl::Job::step()'],['../classjngl_1_1Sprite.html#ae6c526798a490afe221d1447f508f16a',1,'jngl::Sprite::step()'],['../classjngl_1_1Text.html#ac6bf1a12c5c98ddec5b65e07fe74cabe',1,'jngl::Text::step()']]],
   ['stop',['stop',['../namespacejngl.html#a6265cb122b1823e5a05633fd528e67bf',1,'jngl']]],
   ['superl',['SuperL',['../input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca82dbe895c37ba0fe2eb2154d3f3de628',1,'jngl::key']]],
   ['superr',['SuperR',['../input_8hpp.html#aab0feaba617470cb4aa830dc5935238cafc33cfef6d341e77b88816dfaf1af9f8',1,'jngl::key']]],
