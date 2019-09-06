@@ -64,7 +64,7 @@ public:
 			fb2.clear();
 		}
 		jngl::pushMatrix();
-		jngl::translate(-jngl::getScreenWidth() / 2, -jngl::getScreenHeight() / 2);
+		jngl::translate(-jngl::getScreenSize() / 2);
 		jngl::pushMatrix();
 		lastTime = jngl::getTime();
 		for (int i = 0; i < 10; ++i) {
@@ -80,7 +80,7 @@ public:
 		jngl::drawLine(-50, -50, 50, 50);
 		jngl::popMatrix();
 		jngl::setSpriteAlpha(200);
-		jngl::translate(jngl::getScreenWidth() / 2, jngl::getScreenHeight() / 2);
+		jngl::translate(jngl::getScreenSize() / 2);
 		jngl::rotate(rotate);
 		jngl::setSpriteAlpha(static_cast<unsigned char>(std::abs(factor * 255)));
 		if (useShader) {
@@ -159,7 +159,7 @@ public:
 			fb2.endDraw();
 			jngl::reset();
 			jngl::setSpriteAlpha(255);
-			fb2.draw(-jngl::getScreenWidth() / 2, -jngl::getScreenHeight() / 2);
+			fb2.draw(-jngl::getScreenSize() / 2);
 		}
 		if (jngl::keyPressed('f')) {
 			drawOnFrameBuffer = !drawOnFrameBuffer;
