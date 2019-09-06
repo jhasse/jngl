@@ -4,7 +4,6 @@
 #pragma once
 
 #include "dll.hpp"
-#include "types.hpp"
 #include "Vec2.hpp"
 
 namespace jngl {

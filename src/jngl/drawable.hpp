@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "types.hpp"
-
 #include "dll.hpp"
 
 namespace jngl {
@@ -15,7 +13,11 @@ public:
 	Drawable();
 	Drawable(const Drawable&) = default;
 	virtual ~Drawable();
+
+	/// Advance object's state
 	virtual void step() = 0;
+
+	/// Called when drawing a frame
 	virtual void draw() const = 0;
 
 	virtual void setPos(double x, double y);
@@ -64,4 +66,5 @@ protected:
 	float width;
 	float height;
 };
+
 } // namespace jngl
