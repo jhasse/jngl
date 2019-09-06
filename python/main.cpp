@@ -260,7 +260,7 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("popSpriteAlpha", popSpriteAlpha);
 
 	class_<FrameBuffer, boost::noncopyable>("FrameBuffer", boost::python::init<int, int>())
-	    .def("draw", &FrameBuffer::draw)
+	    // .def("draw", &FrameBuffer::draw) FIXME
 	    .def("beginDraw", &FrameBuffer::beginDraw)
 	    .def("endDraw", &FrameBuffer::endDraw);
 
