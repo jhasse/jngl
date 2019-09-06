@@ -193,7 +193,6 @@ install_headers([
 	'src/jngl/sprite.hpp',
 	'src/jngl/text.hpp',
 	'src/jngl/time.hpp',
-	'src/jngl/types.hpp',
 	'src/jngl/window.hpp',
 	'src/jngl/work.hpp',
 ], subdir : 'jngl')
