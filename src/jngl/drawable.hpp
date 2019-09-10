@@ -61,10 +61,10 @@ public:
 	float getHeight() const;
 
 protected:
-	double x;
-	double y;
-	float width;
-	float height;
+	double x = 0;
+	double y = 0;
+	float width = 0;
+	float height = 0;
 };
 
 } // namespace jngl

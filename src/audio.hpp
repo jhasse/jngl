@@ -6,12 +6,14 @@
 #include <string>
 
 namespace jngl {
-	void LoadSound(const std::string&);
-	void checkAlError();
-	void pauseAudioDevice();
-	void resumeAudioDevice();
 
-	class Audio;
+void LoadSound(const std::string&);
+void checkAlError();
+void pauseAudioDevice();
+void resumeAudioDevice();
 
-	Audio& GetAudio();
-}
+class Audio;
+
+Audio& GetAudio();
+
+} // namespace jngl
