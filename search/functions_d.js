@@ -18,7 +18,7 @@ var searchData=
   ['showwindow',['showWindow',['../namespacejngl.html#a6258b60ff00bd009838eea0a647279c1',1,'jngl']]],
   ['sleep',['sleep',['../namespacejngl.html#a6c9a4f10e08890ed285c7062e0f0a81a',1,'jngl']]],
   ['state',['state',['../classjngl_1_1Controller.html#aed660735860c00e72d88daf95e520814',1,'jngl::Controller']]],
-  ['step',['step',['../classjngl_1_1Drawable.html#aa6f73ac7d5899119d156a0b3a27fba31',1,'jngl::Drawable::step()'],['../classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31',1,'jngl::Job::step()'],['../classjngl_1_1Sprite.html#ae6c526798a490afe221d1447f508f16a',1,'jngl::Sprite::step()'],['../classjngl_1_1Text.html#ac6bf1a12c5c98ddec5b65e07fe74cabe',1,'jngl::Text::step()']]],
+  ['step',['step',['../classjngl_1_1Drawable.html#aa6f73ac7d5899119d156a0b3a27fba31',1,'jngl::Drawable::step()'],['../classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31',1,'jngl::Job::step()'],['../classjngl_1_1Sprite.html#ae6c526798a490afe221d1447f508f16a',1,'jngl::Sprite::step()'],['../classjngl_1_1Text.html#ae6c526798a490afe221d1447f508f16a',1,'jngl::Text::step()']]],
   ['stop',['stop',['../namespacejngl.html#a6265cb122b1823e5a05633fd528e67bf',1,'jngl']]],
   ['swapbuffers',['swapBuffers',['../namespacejngl.html#aa2827e4edaa53fecffc9246f8bc2218e',1,'jngl']]]
 ];
