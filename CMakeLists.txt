@@ -174,6 +174,9 @@ else()
 		target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
 		target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
 	endif()
+
+	add_executable(jngl-test src/test/test.cpp)
+	target_link_libraries(jngl-test jngl)
 endif()
 
 target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})
