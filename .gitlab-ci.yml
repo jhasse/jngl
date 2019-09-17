@@ -7,9 +7,14 @@ image: registry.fedoraproject.org/fedora-minimal:30
 cmake:
   stage: build
   script:
-  - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel SDL2-devel openal-soft-devel boost-devel libtheora-devel > /dev/null
+  - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel SDL2-devel openal-soft-devel boost-devel libtheora-devel clang> /dev/null
   - CXXFLAGS=-fdiagnostics-color cmake -Bbuild -H. -GNinja
   - ninja -Cbuild
+  - CC=clang CXX=clang++ CXXFLAGS=-fdiagnostics-color cmake -Bbuild-clang -H. -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+  - cd build-clang
+  - ninja
+  - microdnf install -y clang-tools-extra python3-PyYAML >/dev/null
+  - script -qfec "../data/run-clang-tidy.py"
 
 gcc:
   image: fedora:29
