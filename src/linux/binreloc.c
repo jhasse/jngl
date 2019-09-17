@@ -168,7 +168,7 @@ _br_find_exe (BrInitError *error)
  * Returns a filename which must be freed, or NULL on error.
  */
 static char* _br_find_exe_for_symbol(const void* symbol) {
-#define SIZE PATH_MAX + 100
+#define SIZE (PATH_MAX + 100)
 	FILE *f;
 	size_t address_string_len;
 	char *address_string, line[SIZE], *found;
