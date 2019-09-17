@@ -189,4 +189,4 @@ namespace jngl {
 #endif
 		WindowImpl* const impl;
 	};
-}
+} // namespace jngl

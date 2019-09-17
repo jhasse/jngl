@@ -27,8 +27,8 @@ public:
 	void JNGLDLL_API setText(const std::string&);
 	void JNGLDLL_API setFont(Font&);
 	void JNGLDLL_API setAlign(Alignment);
-	void JNGLDLL_API step();
-	void JNGLDLL_API draw() const;
+	void JNGLDLL_API step() override;
+	void JNGLDLL_API draw() const override;
 
 private:
 	std::vector<std::shared_ptr<Line>> lines;

@@ -26,7 +26,6 @@
 #include "sprite.hpp"
 #include "text.hpp"
 #include "time.hpp"
-#include "types.hpp"
 #include "Video.hpp"
 #include "window.hpp"
 #include "work.hpp"

@@ -4,7 +4,6 @@
 #pragma once
 
 #include "dll.hpp"
-#include "types.hpp"
 #include "Vec2.hpp"
 
 namespace jngl {
@@ -14,10 +13,13 @@ double JNGLDLL_API getScaleFactor();
 
 void JNGLDLL_API setScaleFactor(double);
 
+/// jngl::getScreenSize().x
 double JNGLDLL_API getScreenWidth();
 
+/// jngl::getScreenSize().y
 double JNGLDLL_API getScreenHeight();
 
+/// Returns the size of the useable draw area (excluding letter-boxing) in screen pixels
 Vec2 JNGLDLL_API getScreenSize();
 
 enum DeviceOrientation { Portrait, PortraitUpsideDown, LandscapeLeft, LandscapeRight };

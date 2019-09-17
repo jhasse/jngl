@@ -16,6 +16,10 @@ void FrameBuffer::draw(const double x, const double y) const {
 	return pImpl->Draw(x, y);
 }
 
+void FrameBuffer::draw(const Vec2 position) const {
+	return pImpl->Draw(position.x, position.y);
+}
+
 void FrameBuffer::beginDraw() {
 	return pImpl->BeginDraw();
 }

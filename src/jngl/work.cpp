@@ -12,6 +12,4 @@ void Work::onQuitEvent() {
 void Work::onLoad() {
 }
 
-Work::~Work() = default;
-
 } // namespace jngl

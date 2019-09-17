@@ -1,4 +1,4 @@
-// Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -20,8 +20,8 @@ public:
 
 	Vec2(double x, double y);
 
-	double x;
-	double y;
+	double x = 0;
+	double y = 0;
 
 	template <class Archive> void serialize(Archive& ar, const unsigned int) {
 		ar(x, y);

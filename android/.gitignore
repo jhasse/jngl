@@ -5,3 +5,4 @@
 /vorbis/
 /.gradle/
 /test/gradlew.bat
+/test/app/.cxx/
