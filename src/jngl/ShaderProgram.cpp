@@ -5,6 +5,7 @@
 
 #include "../Shader_Impl.hpp"
 
+#include <array>
 #include <cassert>
 #include <stdexcept>
 #include <string>
