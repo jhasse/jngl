@@ -3,12 +3,12 @@
 
 #include "SoundFile.hpp"
 
+#include "Sound.hpp"
+#include "SoundParams.hpp"
 #include "audio.hpp"
 #include "jngl/debug.hpp"
 #include "jngl/sound.hpp"
 #include "main.hpp"
-#include "Sound.hpp"
-#include "SoundParams.hpp"
 
 #include <algorithm>
 #include <unordered_map>
