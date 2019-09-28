@@ -149,6 +149,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 						mousey_ = event.motion.y;
 					}
 					break;
+#ifndef __APPLE__ // Somehow the trackpad on a Macbook is handled as a touch screen?
 				case SDL_FINGERUP:
 					mouseDown_.at(0) = false;
 					mouseDown_.at(0) = false;
@@ -172,6 +173,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 						mousey_ = std::lround(event.tfinger.y * height_);
 					}
 					break;
+#endif
 				case SDL_MOUSEBUTTONDOWN: {
 					int button = -1;
 					if (event.button.button == SDL_BUTTON_LEFT) {
