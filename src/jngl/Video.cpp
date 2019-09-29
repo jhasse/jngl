@@ -248,14 +248,14 @@ public:
 			glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
 			glBindVertexArray(vao);
 
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, textureY);
-
 			glActiveTexture(GL_TEXTURE0 + 1);
 			glBindTexture(GL_TEXTURE_2D, textureU);
 
 			glActiveTexture(GL_TEXTURE0 + 2);
 			glBindTexture(GL_TEXTURE_2D, textureV);
+
+			glActiveTexture(GL_TEXTURE0); // Set this last so that it stays active after Video::draw
+			glBindTexture(GL_TEXTURE_2D, textureY);
 
 			glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 		}
