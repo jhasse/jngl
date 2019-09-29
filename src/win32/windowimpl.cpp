@@ -145,7 +145,7 @@ void Window::Init(const std::string& title, const bool multisample) {
 	                   dwStyle | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, CW_USEDEFAULT, CW_USEDEFAULT,
 	                   WindowRect.right - WindowRect.left, // Calculate Window Width
 	                   WindowRect.bottom - WindowRect.top, // Calculate Window Height
-	                   nullptr, nullptr, hInstance, nullptr),
+	                   nullptr, nullptr, hInstance, this),
 	    DestroyWindow);
 	if (!pWindowHandle_) {
 		throw std::runtime_error("Window creation error.");
@@ -640,6 +640,13 @@ bool Window::getKeyPressed(const std::string& key) {
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	static bool timePeriodActive = false;
 	switch (uMsg) {
+		case WM_NCCREATE: {
+			// Store Window* pointer passed to CreateWindowEx:
+			SetWindowLongPtr(hWnd, GWLP_USERDATA,
+			                 reinterpret_cast<LONG_PTR>(
+			                     reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams));
+			break;
+		}
 		case WM_SYSCOMMAND: // Intercept System Commands
 			switch (wParam) {
 				case SC_SCREENSAVE:   // Screensaver Trying To Start?
@@ -655,12 +662,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 			if (!timePeriodActive) {
 				timeBeginPeriod(1); // Tells Windows to use more accurate timers
 				timePeriodActive = true;
-				try {
-					resetFrameLimiter(); // sleepCorrectionFactor needs to be resetted since we just
-					                     // changed the behaviour of the sleep function.
-				} catch(std::exception&) {
-					// The window is about to be created, ignore "pWindow == nullptr" exception
-				}
+				const auto self = reinterpret_cast<Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+				self->resetFrameLimiter(); // sleepCorrectionFactor needs to be resetted since we
+				                           // just changed the behaviour of the sleep function.
 			}
 			break;
 		case WM_KILLFOCUS:
