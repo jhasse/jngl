@@ -261,6 +261,10 @@ public:
 		}
 	}
 
+	bool finished() const {
+		return !THEORAPLAY_isDecoding(decoder);
+	}
+
 	~Impl() {
 		alSourceStop(source);
 		checkAlError();
@@ -338,6 +342,10 @@ int Video::getHeight() const {
 	return impl->getHeight();
 }
 
+bool Video::finished() const {
+	return impl->finished();
+}
+
 } // namespace jngl
 
 #else
@@ -358,6 +366,8 @@ void Video::draw() const {
 
 int Video::getWidth() const { return -1; }
 int Video::getHeight() const { return -1; }
+
+bool Video::finished() const { return true; }
 
 } // namespace jngl
 
