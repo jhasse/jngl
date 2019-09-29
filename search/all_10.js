@@ -3,6 +3,7 @@ var searchData=
   ['scale',['scale',['../namespacejngl.html#a9e3fd1d22650ed9ce972f133542858d6',1,'jngl::scale(double factor)'],['../namespacejngl.html#abe6195efb061554e40b5d4e2d9252cff',1,'jngl::scale(double xfactor, double yfactor)']]],
   ['screen_2ehpp',['screen.hpp',['../screen_8hpp.html',1,'']]],
   ['setalpha',['setAlpha',['../namespacejngl.html#a947f00ca9d60697810e58bdb2d706b4a',1,'jngl']]],
+  ['setbackgroundcolor',['setBackgroundColor',['../namespacejngl.html#a2c502e1c3f4d1132a6e31402d355b899',1,'jngl::setBackgroundColor(jngl::Color)'],['../namespacejngl.html#ab3c9357fc82bdc78f9b9aacc84d5e3bc',1,'jngl::setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue)']]],
   ['setcolor',['setColor',['../namespacejngl.html#a3258519edc7363582de40cb3ad9a42c4',1,'jngl']]],
   ['setfontsize',['setFontSize',['../namespacejngl.html#a44473e164d313bb3b39b9bebe5e9b8e6',1,'jngl']]],
   ['setfullscreen',['setFullscreen',['../namespacejngl.html#a4039aa0026f814387a265a55696cc11e',1,'jngl']]],

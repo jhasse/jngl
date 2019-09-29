@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['mainloop',['mainLoop',['../classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa',1,'jngl::App']]],
-  ['mousedown',['mouseDown',['../namespacejngl.html#a467690b2cf5801277fd4f95b5b2d34e9',1,'jngl']]]
+  ['loop',['loop',['../namespacejngl.html#ae8b8f07ae340f7ed20f3e372c3aadfd4',1,'jngl']]]
 ];
