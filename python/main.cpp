@@ -172,7 +172,8 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("mousePressed", mousePressed2);
 	def("setMouse", setMouse);
 	def("setTitle", setTitle);
-	def("setBackgroundColor", setBackgroundColor);
+	def("setBackgroundColor",
+	    static_cast<void (*)(unsigned char, unsigned char, unsigned char)>(setBackgroundColor));
 	def("setColor", setColor1);
 	def("setColor", setColor2);
 	def("setAlpha", setAlpha);
