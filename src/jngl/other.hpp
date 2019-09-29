@@ -25,8 +25,6 @@ void JNGLDLL_API quit();
 /// Undo quit() or ignore a quit event caused by the user closing the main window
 void JNGLDLL_API cancelQuit();
 
-void JNGLDLL_API setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
-
 double JNGLDLL_API getFPS();
 
 /// How many times Work::step is called per second (default: 60)

@@ -176,6 +176,10 @@ void cancelQuit() {
 	if (pWindow) { pWindow->cancelQuit(); }
 }
 
+void setBackgroundColor(const jngl::Color color) {
+	setBackgroundColor(color.getRed(), color.getGreen(), color.getBlue());
+}
+
 void setBackgroundColor(const unsigned char red, const unsigned char green,
                         const unsigned char blue) {
 	pWindow.ThrowIfNull();
