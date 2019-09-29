@@ -31,8 +31,9 @@ namespace jngl {
 class Video::Impl {
 public:
 	explicit Impl(const std::string& filename)
-	: decoder(THEORAPLAY_startDecodeFile((pathPrefix + filename).c_str(), 60, THEORAPLAY_VIDFMT_IYUV)),
-	  startTime(jngl::getTime()) {
+	: decoder(THEORAPLAY_startDecodeFile((pathPrefix + filename).c_str(), BUFFER_SIZE,
+	                                     THEORAPLAY_VIDFMT_IYUV)),
+	  startTime(-jngl::getTime()) {
 		if (!decoder) {
 			throw std::runtime_error("Failed to start decoding " + filename + "!");
 		}
@@ -68,12 +69,23 @@ public:
 	}
 
 	void draw() {
+		if (!started()) {
+			const double timeBuffering = jngl::getTime() + startTime;
+			if (timeBuffering > 2.5 || THEORAPLAY_availableVideo(decoder) >= BUFFER_SIZE) {
+				jngl::debug("Buffering took ");
+				jngl::debug(timeBuffering);
+				jngl::debug(" seconds (");
+				jngl::debug(THEORAPLAY_availableVideo(decoder));
+				jngl::debugLn(" frames).");
+				startTime = jngl::getTime();
+			}
+		}
 		double now = jngl::getTime() - startTime;
-		if (!video) {
+		if (started() && !video) {
 			video = THEORAPLAY_getVideo(decoder);
 		}
-		if (video and double(video->playms) / 1000. <= now) {
-			if (now - double(video->playms) / 1000. >= timePerFrame) {
+		if (!shaderProgram or (video and double(video->playms) / 1000. <= now)) {
+			if (started() and now - double(video->playms) / 1000. >= timePerFrame) {
 				// Skip frames to catch up, but keep track of the last one in case we catch up to a
 				// series of dupe frames, which means we'd have to draw that final frame and then
 				// wait for more.
@@ -196,53 +208,54 @@ public:
 			THEORAPLAY_freeVideo(video);
 			video = nullptr;
 		}
-		if (!audio) {
-			audio = THEORAPLAY_getAudio(decoder);
-		}
-		alSourcef(source, AL_GAIN, getVolume());
-		while (audio) {
-			ALint processed;
-			alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
-			checkAlError();
-
-			assert(processed >= 0);
-
-			if (processed > 0) {
-				// Reuse a processed buffer
-				alSourceUnqueueBuffers(source, 1, &buffers.front());
+		if (started()) {
+			if (!audio) {
+				audio = THEORAPLAY_getAudio(decoder);
+			}
+			alSourcef(source, AL_GAIN, getVolume());
+			while (audio) {
+				ALint processed;
+				alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
 				checkAlError();
 
-				queueAudio(buffers.front());
-				buffers.pop_front();
+				assert(processed >= 0);
 
-				ALint state;
-				alGetSourcei(source, AL_SOURCE_STATE, &state);
-				if (state != AL_PLAYING) {
+				if (processed > 0) {
+					// Reuse a processed buffer
+					alSourceUnqueueBuffers(source, 1, &buffers.front());
+					checkAlError();
 
-					while (true) {
-						alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
-						checkAlError();
-						if (processed == 0) {
-							break;
+					queueAudio(buffers.front());
+					buffers.pop_front();
+
+					ALint state;
+					alGetSourcei(source, AL_SOURCE_STATE, &state);
+					if (state != AL_PLAYING) {
+						while (true) {
+							alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
+							checkAlError();
+							if (processed == 0) {
+								break;
+							}
+							alSourceUnqueueBuffers(source, 1, &buffers.front());
+							checkAlError();
+							alDeleteBuffers(1, &buffers.front());
+							buffers.pop_front();
 						}
-						alSourceUnqueueBuffers(source, 1, &buffers.front());
-						checkAlError();
-						alDeleteBuffers(1, &buffers.front());
-						buffers.pop_front();
-					}
 
-					alSourcePlay(source);
+						alSourcePlay(source);
+						checkAlError();
+						jngl::debugLn("WARNING: Audio buffer underrun!");
+					}
+				} else {
+					ALuint buffer;
+					alGenBuffers(1, &buffer);
 					checkAlError();
-					jngl::debugLn("WARNING: Audio buffer underrun!");
-				}
-			} else {
-				ALuint buffer;
-				alGenBuffers(1, &buffer);
-				checkAlError();
-				queueAudio(buffer);
-				if (buffers.size() == 1) {
-					alSourcePlay(source);
-					checkAlError();
+					queueAudio(buffer);
+					if (buffers.size() == 1) {
+						alSourcePlay(source);
+						checkAlError();
+					}
 				}
 			}
 		}
@@ -286,10 +299,14 @@ public:
 	Impl(Impl&&) = delete;
 	Impl& operator=(Impl&&) = delete;
 
-	int getWidth() const { return video->width; }
-	int getHeight() const { return video->height; }
+	[[nodiscard]] int getWidth() const { return video->width; }
+	[[nodiscard]] int getHeight() const { return video->height; }
 
 private:
+	bool started() const {
+		return startTime > 0;
+	}
+
 	void queueAudio(ALuint buffer) {
 		auto pcm = std::make_unique<int16_t[]>(audio->frames * audio->channels);
 		for (int i = 0; i < audio->frames * audio->channels; ++i) {
@@ -308,6 +325,8 @@ private:
 		THEORAPLAY_freeAudio(audio);
 		audio = THEORAPLAY_getAudio(decoder);
 	}
+
+	constexpr static unsigned int BUFFER_SIZE = 150;
 
 	std::unique_ptr<jngl::Sound> sound;
 	THEORAPLAY_Decoder* decoder;
