@@ -10,6 +10,7 @@
 #include "../../subprojects/theoraplay/theoraplay.h"
 #include "../Sound.hpp"
 #include "../audio.hpp"
+#include "../main.hpp"
 #include "../opengl.hpp"
 #include "Shader.hpp"
 #include "debug.hpp"
@@ -30,7 +31,7 @@ namespace jngl {
 class Video::Impl {
 public:
 	explicit Impl(const std::string& filename)
-	: decoder(THEORAPLAY_startDecodeFile(filename.c_str(), 60, THEORAPLAY_VIDFMT_IYUV)),
+	: decoder(THEORAPLAY_startDecodeFile((pathPrefix + filename).c_str(), 60, THEORAPLAY_VIDFMT_IYUV)),
 	  startTime(jngl::getTime()) {
 		if (!decoder) {
 			throw std::runtime_error("Failed to start decoding " + filename + "!");
