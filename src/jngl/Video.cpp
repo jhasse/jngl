@@ -14,6 +14,7 @@
 #include "Shader.hpp"
 #include "debug.hpp"
 #include "screen.hpp"
+#include "sound.hpp"
 #include "time.hpp"
 
 #include <cmath>
@@ -197,6 +198,7 @@ public:
 		if (!audio) {
 			audio = THEORAPLAY_getAudio(decoder);
 		}
+		alSourcef(source, AL_GAIN, getVolume());
 		while (audio) {
 			ALint processed;
 			alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
