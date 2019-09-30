@@ -4,12 +4,8 @@
 #pragma once
 
 #ifndef JNGLDLL_API
-	#ifdef _MSC_VER
-		#ifdef JNGLDLL_EXPORTS
-			#define JNGLDLL_API __declspec(dllexport)
-		#else
-			#define JNGLDLL_API __declspec(dllimport)
-		#endif
+	#ifdef JNGLDLL_EXPORTS
+		#define JNGLDLL_API __declspec(dllexport)
 	#else
 		#define JNGLDLL_API
 	#endif
