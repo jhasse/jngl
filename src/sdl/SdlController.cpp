@@ -3,6 +3,8 @@
 
 #include "SdlController.hpp"
 
+#include "../jngl/debug.hpp"
+
 #include <cmath>
 
 namespace jngl {
@@ -23,10 +25,13 @@ SdlController::SdlController(SDL_Joystick* const handle, const int index) : hand
 			break;
 		default: {
 			if (SDL_IsGameController(index)) {
-				SDL_JoystickClose(handle);
-				this->handle = nullptr;
 				gameController = SDL_GameControllerOpen(index);
-				assert(gameController);
+				if (gameController) {
+					this->handle = nullptr;
+					SDL_JoystickClose(handle);
+				} else {
+					debugLn("WARNING: SDL_GameControllerOpen failed, falling back to joystick.");
+				}
 			}
 		}
 	};
