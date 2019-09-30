@@ -36,6 +36,7 @@ else() # Windows
 	target_sources(jngl PRIVATE ${SRC})
 	target_link_libraries(jngl PUBLIC winmm)
 	if(MSVC)
+		target_compile_definitions(jngl PRIVATE _CRT_SECURE_NO_WARNINGS)
 		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/win/x86)
 		target_link_libraries(jngl PUBLIC Xinput)
 	else()
@@ -167,6 +168,9 @@ else()
 			URL https://download.savannah.gnu.org/releases/freetype/freetype-2.10.1.tar.xz
 			URL_HASH SHA1=79874ef4eaa52025126b71d836453b8279bdd331)
 		FetchContent_MakeAvailable(freetype)
+		FetchContent_GetProperties(freetype SOURCE_DIR FREETYPE_SRC_DIR)
+		set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include PARENT_SCOPE)
+		set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
 		set(FREETYPE_LIBRARIES freetype)
 
 		FetchContent_Declare(openal
