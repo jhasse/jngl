@@ -34,7 +34,13 @@ else() # Windows
 	target_compile_definitions(jngl PRIVATE WINVER=0x0602 _USE_MATH_DEFINES)
 	file(GLOB SRC src/win32/*.cpp)
 	target_sources(jngl PRIVATE ${SRC})
-	target_link_libraries(jngl PUBLIC xinput1_4 winmm)
+	target_link_libraries(jngl PUBLIC winmm)
+	if(MSVC)
+		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/win/x86)
+		target_link_libraries(jngl PUBLIC Xinput)
+	else()
+		target_link_libraries(jngl PUBLIC xinput1_4)
+	endif()
 endif()
 
 # fontconfig
@@ -134,23 +140,83 @@ else()
 	target_link_libraries(jngl PUBLIC Threads::Threads)
 
 	# PNG
-	find_package(PNG REQUIRED)
-	target_link_libraries(jngl PUBLIC ${PNG_LIBRARIES})
-
-	# VorbisFile
-	find_package(VorbisFile REQUIRED)
-	target_include_directories(jngl PUBLIC ${VorbisFile_INCLUDE_DIRS})
-	target_link_libraries(jngl PUBLIC ${VorbisFile_LIBRARIES})
-
-	find_package(Freetype REQUIRED)
-	find_package(OpenAL REQUIRED)
-
-	find_package(WebP)
-	if(WebP_FOUND)
-		target_link_libraries(jngl PRIVATE ${WEBP_LIBRARIES})
+	find_package(PNG)
+	if(PNG_FOUND)
+		target_link_libraries(jngl PUBLIC ${PNG_LIBRARIES})
 	else()
-		target_compile_definitions(jngl PRIVATE NOWEBP)
+		target_compile_definitions(jngl PRIVATE NOPNG)
 	endif()
+
+	if(MSVC)
+		include(FetchContent)
+		FetchContent_Declare(ogg
+			URL http://downloads.xiph.org/releases/ogg/libogg-1.3.4.tar.xz
+			URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe)
+		FetchContent_MakeAvailable(ogg)
+		FetchContent_GetProperties(ogg SOURCE_DIR OGG_INCLUDE_DIRS)
+		set(OGG_LIBRARIES ogg)
+		FetchContent_Declare(vorbis
+			URL https://github.com/xiph/vorbis/archive/v1.3.6.zip
+			URL_HASH SHA1=694c8b3739f66ef38c08092d0df2ef42197fc480)
+		FetchContent_MakeAvailable(vorbis)
+		FetchContent_GetProperties(vorbis SOURCE_DIR VORBIS_SRC_DIR)
+		target_include_directories(jngl PRIVATE ${VORBIS_SRC_DIR}/include)
+		target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
+
+		FetchContent_Declare(freetype
+			URL https://download.savannah.gnu.org/releases/freetype/freetype-2.10.1.tar.xz
+			URL_HASH SHA1=79874ef4eaa52025126b71d836453b8279bdd331)
+		FetchContent_MakeAvailable(freetype)
+		set(FREETYPE_LIBRARIES freetype)
+
+		FetchContent_Declare(openal
+			URL https://github.com/kcat/openal-soft/archive/openal-soft-1.19.1.zip
+			URL_HASH SHA1=fb7086b973fd4470a5c11e3355b5377899c840c7)
+		FetchContent_MakeAvailable(openal)
+		FetchContent_GetProperties(openal SOURCE_DIR OPENAL_SRC_DIR)
+		target_include_directories(jngl PRIVATE ${OPENAL_SRC_DIR}/include)
+		set(OPENAL_LIBRARY OpenAL)
+
+		FetchContent_Declare(dlfcn
+			URL https://github.com/dlfcn-win32/dlfcn-win32/archive/v1.2.0.zip
+			URL_HASH SHA1=83c37a7d7d152c951e9b8cb673aec47d1776c881)
+		FetchContent_MakeAvailable(dlfcn)
+		FetchContent_GetProperties(dlfcn SOURCE_DIR DLFCN_SRC_DIR)
+		target_include_directories(jngl PRIVATE ${DLFCN_SRC_DIR})
+		target_link_libraries(jngl PRIVATE dl)
+
+		FetchContent_Declare(boost
+			URL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.7z
+			URL_HASH SHA256=1b3949ffddf56129141032542523920034f2e69775fb9332a52ba37c548dbf35)
+		FetchContent_MakeAvailable(boost)
+		FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
+		target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
+
+		target_include_directories(jngl PRIVATE ${PROJECT_SOURCE_DIR}/include/msvc)
+		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc)
+		target_link_libraries(jngl PUBLIC epoxy)
+
+		FetchContent_Declare(webp
+			GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
+			GIT_TAG 3d97bb75144147e47db278ec76e5e70c6b2243db)
+		FetchContent_MakeAvailable(webp)
+		target_link_libraries(jngl PRIVATE webp)
+	else()
+		find_package(VorbisFile REQUIRED)
+		target_include_directories(jngl PUBLIC ${VorbisFile_INCLUDE_DIRS})
+		target_link_libraries(jngl PUBLIC ${VorbisFile_LIBRARIES})
+
+		find_package(Freetype REQUIRED)
+		find_package(OpenAL REQUIRED)
+
+		find_package(WebP)
+		if(WebP_FOUND)
+			target_link_libraries(jngl PRIVATE ${WEBP_LIBRARIES})
+		else()
+			target_compile_definitions(jngl PRIVATE NOWEBP)
+		endif()
+	endif()
+
 
 	find_package(PkgConfig)
 	if(PkgConfig_FOUND)
