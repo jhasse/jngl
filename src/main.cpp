@@ -134,7 +134,7 @@ void showWindow(const std::string& title, const int width, const int height, boo
 	if (height == 0) {
 		throw std::runtime_error("Height Is 0");
 	}
-#ifdef EPOXY_PUBLIC
+#if defined(EPOXY_PUBLIC) && !defined(__APPLE__)
 	if (epoxy_gl_version() < 20) {
 		throw std::runtime_error("Your graphics card is missing OpenGL 2.0 support.");
 	}
