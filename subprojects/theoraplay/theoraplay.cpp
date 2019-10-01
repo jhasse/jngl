@@ -23,6 +23,10 @@
 #include "theora/theoradec.h"
 #include "vorbis/codec.h"
 
+#ifdef ANDROID
+#include "../../src/android/fopen.hpp"
+#endif
+
 #define THEORAPLAY_INTERNAL 1
 
 typedef THEORAPLAY_VideoFrame VideoFrame;

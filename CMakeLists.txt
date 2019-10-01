@@ -115,6 +115,26 @@ if(ANDROID)
 	add_subdirectory(${VORBIS_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/vorbis)
 	target_link_libraries(jngl PUBLIC vorbisfile)
 
+	set(THEORA_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/theora)
+	if ((NOT EXISTS ${THEORA_SRC_DIR}) OR (NOT EXISTS ${THEORA_SRC_DIR}/CMakeLists.txt))
+		execute_process(COMMAND git clone -b v1.1.1
+		                https://git.xiph.org/theora.git
+		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
+	endif()
+	add_library(theoradec OBJECT ${LIBTHEORA_DEC} "${THEORA_SRC_DIR}/lib/apiwrapper.c"
+		"${THEORA_SRC_DIR}/lib/bitpack.c" "${THEORA_SRC_DIR}/lib/dequant.c"
+		"${THEORA_SRC_DIR}/lib/fragment.c" "${THEORA_SRC_DIR}/lib/idct.c"
+		"${THEORA_SRC_DIR}/lib/info.c" "${THEORA_SRC_DIR}/lib/internal.c"
+		"${THEORA_SRC_DIR}/lib/state.c" "${THEORA_SRC_DIR}/lib/quant.c"
+		"${THEORA_SRC_DIR}/lib/decapiwrapper.c" "${THEORA_SRC_DIR}/lib/decinfo.c"
+		"${THEORA_SRC_DIR}/lib/decode.c" "${THEORA_SRC_DIR}/lib/huffdec.c")
+	target_include_directories(theoradec PRIVATE ${OGG_INCLUDE_DIRS} "${THEORA_SRC_DIR}/include")
+	target_compile_options(theoradec PRIVATE -Wno-shift-negative-value -Wno-shift-op-parantheses)
+	target_link_libraries(jngl PRIVATE $<TARGET_OBJECTS:theoradec>)
+	target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
+	target_include_directories(jngl PRIVATE "${THEORA_SRC_DIR}/include")
+	target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.cpp)
+
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)
 	target_include_directories(jngl PRIVATE ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
 else()
