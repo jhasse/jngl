@@ -45,6 +45,7 @@ void JNGLDLL_API setVerticalSync(bool enabled);
 
 bool JNGLDLL_API getVerticalSync();
 
+/// Sets the icon for the window (Desktop-only). Only works with PNG files for now.
 void JNGLDLL_API setIcon(const std::string& filename);
 
 void JNGLDLL_API setPrefix(const std::string& path);
