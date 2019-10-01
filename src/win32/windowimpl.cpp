@@ -223,6 +223,12 @@ void Window::Init(const std::string& title, const bool multisample) {
 		throw std::runtime_error("Can't activate the GL rendering context.");
 	}
 
+	if (epoxy_gl_version() < 20) {
+		throw std::runtime_error("Your graphics card is missing OpenGL 2.0 support (it supports " +
+		                         std::to_string(epoxy_gl_version() / 10) + "." +
+		                         std::to_string(epoxy_gl_version() % 10) + ").");
+	}
+
 	if (!multisample && isMultisampleSupported_ && InitMultisample(hInstance, pfd)) {
 		pDeviceContext_.reset((HDC)0); // Destroy window
 		try {

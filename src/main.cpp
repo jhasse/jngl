@@ -134,13 +134,6 @@ void showWindow(const std::string& title, const int width, const int height, boo
 	if (height == 0) {
 		throw std::runtime_error("Height Is 0");
 	}
-#if defined(EPOXY_PUBLIC) && defined(_MSC_VER)
-	if (epoxy_gl_version() < 20) {
-		throw std::runtime_error("Your graphics card is missing OpenGL 2.0 support (it supports " +
-		                         std::to_string(epoxy_gl_version() / 10) + "." +
-		                         std::to_string(epoxy_gl_version() % 10) + ").");
-	}
-#endif
 	pWindow.Set(new Window(title, width, height, fullscreen, minAspectRatio, maxAspectRatio));
 	pWindow->SetMouseVisible(isMouseVisible);
 	setAntiAliasing(antiAliasingEnabled);
