@@ -191,7 +191,6 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("getFPS", getFPS);
 	def("errorMessage", errorMessage);
 	def("getFullscreen", getFullscreen);
-	def("readPixel", readPixel);
 	def("getWindowWidth", getWindowWidth);
 	def("getWindowHeight", getWindowHeight);
 	def("getScreenWidth", getScreenWidth);

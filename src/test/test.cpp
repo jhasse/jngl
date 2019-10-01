@@ -248,19 +248,10 @@ void drawBackground() {
 }
 
 void drawMouse(const jngl::Vec2 mouse) {
-	unsigned char red, green, blue;
-	jngl::readPixel(mouse.x, mouse.y, red, green, blue);
-	std::stringstream sstream;
-	sstream << "R: " << static_cast<int>(red)
-	      << "\nG: " << static_cast<int>(green)
-	      << "\nB: " << static_cast<int>(blue);
-	jngl::setFontSize(8);
-	jngl::setFontColor(0, 255, 0, 200);
-	jngl::print(sstream.str(), mouse.x + 30, mouse.y + 10);
 	jngl::translate(mouse.x, mouse.y);
 	jngl::rotate(-45);
 	jngl::setFontSize(30);
-	jngl::setFontColor(10, 10, 200);
+	jngl::setFontColor(10, 10, 200, 200);
 	jngl::print("↑", -8, -2);
 	jngl::setFontSize(12);
 	jngl::reset();

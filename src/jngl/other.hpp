@@ -33,6 +33,7 @@ unsigned int JNGLDLL_API getStepsPerSecond();
 /// How many times Work::step should be called per second (default: 60)
 void JNGLDLL_API setStepsPerSecond(unsigned int);
 
+[[deprecated]]
 void JNGLDLL_API readPixel(int x, int y, unsigned char& red, unsigned char& green,
                            unsigned char& blue);
 
