@@ -18,7 +18,8 @@ xcode/JNGL.xcodeproj/project.xcworkspace/xcshareddata/
 xcode/JNGL.xcodeproj/xcuserdata/*.xcuserdatad/
 Thumbs.db
 .tup/
-.vscode/.browse*
+/.vscode/.browse*
+/.vscode/settings.json
 /.vscode/tags
 /.vscode/cquery*
 /.vscode/ipch/
