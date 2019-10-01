@@ -129,7 +129,7 @@ if(ANDROID)
 		"${THEORA_SRC_DIR}/lib/decapiwrapper.c" "${THEORA_SRC_DIR}/lib/decinfo.c"
 		"${THEORA_SRC_DIR}/lib/decode.c" "${THEORA_SRC_DIR}/lib/huffdec.c")
 	target_include_directories(theoradec PRIVATE ${OGG_INCLUDE_DIRS} "${THEORA_SRC_DIR}/include")
-	target_compile_options(theoradec PRIVATE -Wno-shift-negative-value -Wno-shift-op-parantheses)
+	target_compile_options(theoradec PRIVATE -Wno-shift-negative-value -Wno-shift-op-parentheses)
 	target_link_libraries(jngl PRIVATE $<TARGET_OBJECTS:theoradec>)
 	target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
 	target_include_directories(jngl PRIVATE "${THEORA_SRC_DIR}/include")
