@@ -6,6 +6,7 @@ var searchData=
   ['setcolor',['setColor',['../namespacejngl.html#a3258519edc7363582de40cb3ad9a42c4',1,'jngl']]],
   ['setfontsize',['setFontSize',['../namespacejngl.html#a44473e164d313bb3b39b9bebe5e9b8e6',1,'jngl']]],
   ['setfullscreen',['setFullscreen',['../namespacejngl.html#a4039aa0026f814387a265a55696cc11e',1,'jngl']]],
+  ['seticon',['setIcon',['../namespacejngl.html#a9aec403e4e6044f0053a57415edd4a15',1,'jngl']]],
   ['setkeyboardtype',['setKeyboardType',['../namespacejngl.html#a7dcfe5651847fa7aa74f3768ee9a320c',1,'jngl']]],
   ['setkeyboardvisible',['setKeyboardVisible',['../namespacejngl.html#a5d78cad1b8a18e2c8d200a9c33753591',1,'jngl']]],
   ['setkeypressed',['setKeyPressed',['../namespacejngl.html#a7e0ea8949dd075bf85f14a6c41bc232d',1,'jngl::setKeyPressed(const std::string &amp;key, bool)'],['../namespacejngl.html#ae0c98060b19b5bac9d8d550e3bf57cc8',1,'jngl::setKeyPressed(key::KeyType key, bool)']]],
