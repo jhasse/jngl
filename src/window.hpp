@@ -90,10 +90,7 @@ namespace jngl {
 		unsigned int getStepsPerSecond() const;
 		void setStepsPerSecond(unsigned int);
 		void addUpdateInputCallback(std::function<void()>);
-#ifdef _WIN32
-		static void ReleaseDC(HWND, HDC);
-		static void ReleaseRC(HGLRC);
-#elif defined(IOS) || defined(ANDROID)
+#if defined(IOS) || defined(ANDROID)
 		WindowImpl* getImpl() const;
 #endif
 		std::string getTextInput() const;

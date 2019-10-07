@@ -392,4 +392,18 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		fullscreen_ = f;
 	}
 
+#ifdef _WIN32
+	// TODO: Avoid this duplicated code
+
+	int Window::getMouseX() {
+		if (relativeMouseMode) { return mousex_; }
+		return mousex_ - (width_ - canvasWidth) / 2;
+	}
+
+	int Window::getMouseY() {
+		if (relativeMouseMode) { return mousey_; }
+		return mousey_ - (height_ - canvasHeight) / 2;
+	}
+#endif
+
 } // namespace jngl
