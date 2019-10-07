@@ -99,6 +99,7 @@ else
 	]
 	src += [
 		'src/win32/ConvertUTF.cpp',
+		'src/win32/fontfile.cpp',
 		'src/win32/inputimpl.cpp',
 		'src/win32/message.cpp',
 		'src/win32/other.cpp',
