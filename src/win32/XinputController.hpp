@@ -5,7 +5,12 @@
 
 #include "../jngl/Controller.hpp"
 
+#include <windows.h>
+#include <xinput.h>
+
 namespace jngl {
+
+extern XINPUT_STATE states[XUSER_MAX_COUNT];
 
 class XinputController : public jngl::Controller {
 public:

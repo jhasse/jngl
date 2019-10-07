@@ -21,15 +21,31 @@
 #include <sstream>
 #include <mmsystem.h> // timeBeginPeriod
 #include <windowsx.h> // GET_X_LPARAM
-
-XINPUT_STATE states[XUSER_MAX_COUNT];
+#include <xinput.h>
 
 namespace jngl {
+
+class WindowImpl {
+public:
+	std::shared_ptr<std::remove_pointer<HGLRC>::type> pRenderingContext_;
+	std::shared_ptr<std::remove_pointer<HWND>::type> pWindowHandle_;
+	std::shared_ptr<std::remove_pointer<HDC>::type> pDeviceContext_;
+	int arbMultisampleFormat_;
+	bool touchscreenActive = false;
+	int relativeX = 0;
+	int relativeY = 0;
+	std::function<void()> distinguishLeftRight;
+
+	bool InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR);
+	void Init(const std::string& title, bool multisample);
+};
+
+XINPUT_STATE states[XUSER_MAX_COUNT];
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 // based on: http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=46
-bool Window::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
+bool WindowImpl::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 	if (!wglChoosePixelFormatARB) {
 		return false;
 	}
@@ -93,162 +109,171 @@ Window::Window(const std::string& title, const int width, const int height, cons
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
   fontSize_(12), width_(width), height_(height), stepsPerFrame(1), multitouch(false),
-  impl(nullptr) {
+  impl(new WindowImpl) {
+	impl->distinguishLeftRight = [this]() {
+		int codesToCheck[] = { GetKeyCode(jngl::key::ShiftL),   GetKeyCode(jngl::key::ShiftR),
+			                   GetKeyCode(jngl::key::ControlL), GetKeyCode(jngl::key::ControlR),
+			                   GetKeyCode(jngl::key::AltL),     GetKeyCode(jngl::key::AltR) };
+		for (unsigned int i = 0; i < sizeof(codesToCheck) / sizeof(codesToCheck[0]); ++i) {
+			bool value = ((GetKeyState(codesToCheck[i]) & 0xf0) != 0);
+			keyDown_[codesToCheck[i]] = value;
+			keyPressed_[codesToCheck[i]] = value;
+		}
+	};
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
-	Init(title, false);
-}
+	const std::function<void(bool)> init = [this, &title, &init](const bool multisample) {
+		WNDCLASS wc;
+		DWORD dwExStyle;
+		DWORD dwStyle;
+		RECT WindowRect;
+		WindowRect.left = 0;
+		WindowRect.right = width_;
+		WindowRect.top = 0;
+		WindowRect.bottom = height_;
 
-void Window::Init(const std::string& title, const bool multisample) {
-	WNDCLASS wc;
-	DWORD dwExStyle;
-	DWORD dwStyle;
-	RECT WindowRect;
-	WindowRect.left = 0;
-	WindowRect.right = width_;
-	WindowRect.top = 0;
-	WindowRect.bottom = height_;
+		HINSTANCE hInstance = GetModuleHandle(nullptr);
+		wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+		wc.lpfnWndProc = (WNDPROC)WndProc;
+		wc.cbClsExtra = 0;
+		wc.cbWndExtra = 0;
+		wc.hInstance = hInstance;
+		wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);
+		wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+		wc.hbrBackground = nullptr;
+		wc.lpszMenuName = nullptr;
+		wc.lpszClassName = "OpenGL"; // Set The Class Name
 
-	HINSTANCE hInstance = GetModuleHandle(nullptr);
-	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-	wc.lpfnWndProc = (WNDPROC)WndProc;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hInstance = hInstance;
-	wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);
-	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
-	wc.hbrBackground = nullptr;
-	wc.lpszMenuName = nullptr;
-	wc.lpszClassName = "OpenGL"; // Set The Class Name
-
-	static bool alreadyRegistered = false;
-	if (!alreadyRegistered && !RegisterClass(&wc)) {
-		throw std::runtime_error("Failed To Register The Window Class.");
-	}
-	alreadyRegistered = true; // Only register once
-
-	if (fullscreen_) {
-		dwExStyle = WS_EX_APPWINDOW;
-		dwStyle = WS_POPUP;
-	} else {
-		dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
-		dwStyle = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
-	}
-
-	AdjustWindowRectEx(&WindowRect, dwStyle, FALSE,
-	                   dwExStyle); // Adjust Window To True Requested Size
-
-	// Create The Window
-	pWindowHandle_.reset(
-	    CreateWindowEx(dwExStyle,     // Extended Style For The Window
-	                   "OpenGL",      // Class Name
-	                   title.c_str(), // Window Title
-	                   dwStyle | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, CW_USEDEFAULT, CW_USEDEFAULT,
-	                   WindowRect.right - WindowRect.left, // Calculate Window Width
-	                   WindowRect.bottom - WindowRect.top, // Calculate Window Height
-	                   nullptr, nullptr, hInstance, this),
-	    DestroyWindow);
-	if (!pWindowHandle_) {
-		throw std::runtime_error("Window creation error.");
-	}
-
-	if (fullscreen_) {
-		DEVMODE devmode;
-		memset(&devmode, 0, sizeof(devmode));
-		devmode.dmSize = sizeof(devmode);
-		devmode.dmPelsWidth = width_;
-		devmode.dmPelsHeight = height_;
-		devmode.dmBitsPerPel = 32;
-		devmode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-
-		if (ChangeDisplaySettings(&devmode, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL) {
-			throw std::runtime_error(
-			    "The requested fullscreen mode is not supported by your video card.");
+		static bool alreadyRegistered = false;
+		if (!alreadyRegistered && !RegisterClass(&wc)) {
+			throw std::runtime_error("Failed To Register The Window Class.");
 		}
-	}
+		alreadyRegistered = true; // Only register once
 
-	static PIXELFORMATDESCRIPTOR pfd = // pfd Tells Windows How We Want Things To Be
-	    {
-		  sizeof(PIXELFORMATDESCRIPTOR), // Size Of This Pixel Format Descriptor
-		  1,                             // Version Number
-		  PFD_DRAW_TO_WINDOW |           // Format Must Support Window
-		      PFD_SUPPORT_OPENGL |       // Format Must Support OpenGL
-		      PFD_DOUBLEBUFFER,          // Must Support Double Buffering
-		  PFD_TYPE_RGBA,                 // Request An RGBA Format
-		  32,                            // Select Our Color Depth
-		  0,
-		  0,
-		  0,
-		  0,
-		  0,
-		  0, // Color Bits Ignored
-		  0, // No Alpha Buffer
-		  0, // Shift Bit Ignored
-		  0, // No Accumulation Buffer
-		  0,
-		  0,
-		  0,
-		  0,              // Accumulation Bits Ignored
-		  16,             // 16Bit Z-Buffer (Depth Buffer)
-		  0,              // No Stencil Buffer
-		  0,              // No Auxiliary Buffer
-		  PFD_MAIN_PLANE, // Main Drawing Layer
-		  0,              // Reserved
-		  0,
-		  0,
-		  0 // Layer Masks Ignored
-		};
-
-	pDeviceContext_.reset(GetDC(pWindowHandle_.get()),
-	                      [this](HDC hdc) { ReleaseDC(pWindowHandle_.get(), hdc); });
-	if (!pDeviceContext_) {
-		throw std::runtime_error("Can't create a GL device context.");
-	}
-	GLuint pixelFormat;
-	if (multisample) {
-		pixelFormat = arbMultisampleFormat_;
-	} else {
-		pixelFormat = ChoosePixelFormat(pDeviceContext_.get(), &pfd);
-	}
-	if (!pixelFormat) {
-		throw std::runtime_error("Can't find a suitable PixelFormat.");
-	}
-	if (!SetPixelFormat(pDeviceContext_.get(), pixelFormat, &pfd)) {
-		throw std::runtime_error("Can't set the PixelFormat.");
-	}
-	pRenderingContext_.reset(wglCreateContext(pDeviceContext_.get()), ReleaseRC);
-	if (!pRenderingContext_) {
-		throw std::runtime_error("Can't create a GL rendering context.");
-	}
-	if (!wglMakeCurrent(pDeviceContext_.get(), pRenderingContext_.get())) {
-		throw std::runtime_error("Can't activate the GL rendering context.");
-	}
-
-	if (epoxy_gl_version() < 20) {
-		throw std::runtime_error("Your graphics card is missing OpenGL 2.0 support (it supports " +
-		                         std::to_string(epoxy_gl_version() / 10) + "." +
-		                         std::to_string(epoxy_gl_version() % 10) + ").");
-	}
-
-	if (!multisample && isMultisampleSupported_ && InitMultisample(hInstance, pfd)) {
-		pDeviceContext_.reset((HDC)0); // Destroy window
-		try {
-			jngl::debugLn("Recreating window with Anti-Aliasing support.");
-			Init(title, true);
-		} catch (...) {
-			// If Anti-Aliasing still doesn't work for some reason, let's turn it off again.
-			isMultisampleSupported_ = false;
-			Init(title, false);
+		if (fullscreen_) {
+			dwExStyle = WS_EX_APPWINDOW;
+			dwStyle = WS_POPUP;
+		} else {
+			dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
+			dwStyle = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
 		}
-		return;
-	}
 
-	::ShowWindow(pWindowHandle_.get(), SW_SHOWNORMAL);
-	setFontByName("Arial");
-	setFontSize(fontSize_);
+		AdjustWindowRectEx(&WindowRect, dwStyle, FALSE,
+						   dwExStyle); // Adjust Window To True Requested Size
 
-	if (!jngl::Init(width_, height_, canvasWidth, canvasHeight)) {
-		throw std::runtime_error("Initialization failed.");
-	}
+		// Create The Window
+		impl->pWindowHandle_.reset(
+			CreateWindowEx(dwExStyle,     // Extended Style For The Window
+						   "OpenGL",      // Class Name
+						   title.c_str(), // Window Title
+						   dwStyle | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, CW_USEDEFAULT, CW_USEDEFAULT,
+						   WindowRect.right - WindowRect.left, // Calculate Window Width
+						   WindowRect.bottom - WindowRect.top, // Calculate Window Height
+						   nullptr, nullptr, hInstance, this),
+			DestroyWindow);
+		if (!impl->pWindowHandle_) {
+			throw std::runtime_error("Window creation error.");
+		}
+
+		if (fullscreen_) {
+			DEVMODE devmode;
+			memset(&devmode, 0, sizeof(devmode));
+			devmode.dmSize = sizeof(devmode);
+			devmode.dmPelsWidth = width_;
+			devmode.dmPelsHeight = height_;
+			devmode.dmBitsPerPel = 32;
+			devmode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+
+			if (ChangeDisplaySettings(&devmode, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL) {
+				throw std::runtime_error(
+					"The requested fullscreen mode is not supported by your video card.");
+			}
+		}
+
+		static PIXELFORMATDESCRIPTOR pfd = // pfd Tells Windows How We Want Things To Be
+			{
+			  sizeof(PIXELFORMATDESCRIPTOR), // Size Of This Pixel Format Descriptor
+			  1,                             // Version Number
+			  PFD_DRAW_TO_WINDOW |           // Format Must Support Window
+				  PFD_SUPPORT_OPENGL |       // Format Must Support OpenGL
+				  PFD_DOUBLEBUFFER,          // Must Support Double Buffering
+			  PFD_TYPE_RGBA,                 // Request An RGBA Format
+			  32,                            // Select Our Color Depth
+			  0,
+			  0,
+			  0,
+			  0,
+			  0,
+			  0, // Color Bits Ignored
+			  0, // No Alpha Buffer
+			  0, // Shift Bit Ignored
+			  0, // No Accumulation Buffer
+			  0,
+			  0,
+			  0,
+			  0,              // Accumulation Bits Ignored
+			  16,             // 16Bit Z-Buffer (Depth Buffer)
+			  0,              // No Stencil Buffer
+			  0,              // No Auxiliary Buffer
+			  PFD_MAIN_PLANE, // Main Drawing Layer
+			  0,              // Reserved
+			  0,
+			  0,
+			  0 // Layer Masks Ignored
+			};
+
+		impl->pDeviceContext_.reset(GetDC(impl->pWindowHandle_.get()),
+							  [this](HDC hdc) { ReleaseDC(impl->pWindowHandle_.get(), hdc); });
+		if (!impl->pDeviceContext_) {
+			throw std::runtime_error("Can't create a GL device context.");
+		}
+		GLuint pixelFormat;
+		if (multisample) {
+			pixelFormat = impl->arbMultisampleFormat_;
+		} else {
+			pixelFormat = ChoosePixelFormat(impl->pDeviceContext_.get(), &pfd);
+		}
+		if (!pixelFormat) {
+			throw std::runtime_error("Can't find a suitable PixelFormat.");
+		}
+		if (!SetPixelFormat(impl->pDeviceContext_.get(), pixelFormat, &pfd)) {
+			throw std::runtime_error("Can't set the PixelFormat.");
+		}
+		impl->pRenderingContext_.reset(wglCreateContext(impl->pDeviceContext_.get()), ReleaseRC);
+		if (!impl->pRenderingContext_) {
+			throw std::runtime_error("Can't create a GL rendering context.");
+		}
+		if (!wglMakeCurrent(impl->pDeviceContext_.get(), impl->pRenderingContext_.get())) {
+			throw std::runtime_error("Can't activate the GL rendering context.");
+		}
+
+		if (epoxy_gl_version() < 20) {
+			throw std::runtime_error("Your graphics card is missing OpenGL 2.0 support (it supports " +
+									 std::to_string(epoxy_gl_version() / 10) + "." +
+									 std::to_string(epoxy_gl_version() % 10) + ").");
+		}
+
+		if (!multisample && isMultisampleSupported_ && impl->InitMultisample(hInstance, pfd)) {
+			impl->pDeviceContext_.reset((HDC)0); // Destroy window
+			try {
+				jngl::debugLn("Recreating window with Anti-Aliasing support.");
+				init(true);
+			} catch (...) {
+				// If Anti-Aliasing still doesn't work for some reason, let's turn it off again.
+				isMultisampleSupported_ = false;
+				init(false);
+			}
+			return;
+		}
+
+		::ShowWindow(impl->pWindowHandle_.get(), SW_SHOWNORMAL);
+		setFontByName("Arial");
+		setFontSize(fontSize_);
+
+		if (!jngl::Init(width_, height_, canvasWidth, canvasHeight)) {
+			throw std::runtime_error("Initialization failed.");
+		}
+	};
+	init(false);
 }
 
 Window::~Window() {
@@ -256,6 +281,7 @@ Window::~Window() {
 		ChangeDisplaySettings(nullptr, 0);
 	}
 	fonts_.clear(); // Delete fonts before destroying the OpenGL context
+	delete impl;
 }
 
 std::string Window::GetFontFileByName(const std::string& fontName) {
@@ -350,17 +376,6 @@ void Window::ReleaseRC(HGLRC hrc) {
 	}
 }
 
-void Window::DistinguishLeftRight() {
-	int codesToCheck[] = { GetKeyCode(jngl::key::ShiftL),   GetKeyCode(jngl::key::ShiftR),
-		                   GetKeyCode(jngl::key::ControlL), GetKeyCode(jngl::key::ControlR),
-		                   GetKeyCode(jngl::key::AltL),     GetKeyCode(jngl::key::AltR) };
-	for (unsigned int i = 0; i < sizeof(codesToCheck) / sizeof(codesToCheck[0]); ++i) {
-		bool value = ((GetKeyState(codesToCheck[i]) & 0xf0) != 0);
-		keyDown_[codesToCheck[i]] = value;
-		keyPressed_[codesToCheck[i]] = value;
-	}
-}
-
 void calculateStick(short& x, short& y, int deadzone) {
 	float magnitude = float(std::sqrt(x * x + y * y));
 	float normX = x / magnitude;
@@ -400,9 +415,9 @@ void Window::UpdateInput() {
 			calculateTrigger(states[i].Gamepad.bRightTrigger);
 		}
 	}
-	if (relativeMouseMode && touchscreenActive) {
-		relativeX = mousex_;
-		relativeY = mousey_;
+	if (relativeMouseMode && impl->touchscreenActive) {
+		impl->relativeX = mousex_;
+		impl->relativeY = mousey_;
 	}
 	MSG msg;
 	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
@@ -419,10 +434,10 @@ void Window::UpdateInput() {
 				mouseWheel_ += double(GET_WHEEL_DELTA_WPARAM(msg.wParam)) / WHEEL_DELTA;
 				break;
 			case WM_POINTERDOWN: // WINVER >= 0x0602 (Windows 8)
-				touchscreenActive = true;
+				impl->touchscreenActive = true;
 				break;
 			case WM_POINTERUP:
-				touchscreenActive = false;
+				impl->touchscreenActive = false;
 				SetRelativeMouseMode(relativeMouseMode);
 				break;
 			case WM_LBUTTONDOWN:
@@ -461,7 +476,7 @@ void Window::UpdateInput() {
 				keyDown_[msg.wParam] = true;
 				keyPressed_[msg.wParam] = true;
 				anyKeyPressed_ = true;
-				DistinguishLeftRight();
+				impl->distinguishLeftRight();
 				// A to Z pressed? E.g. when Ctrl is pressed, WM_CHAR doesn't work
 				if (msg.wParam >= 65 && msg.wParam <= 90) {
 					char c[2];
@@ -479,7 +494,7 @@ void Window::UpdateInput() {
 			case WM_KEYUP: {
 				keyDown_[msg.wParam] = false;
 				keyPressed_[msg.wParam] = false;
-				DistinguishLeftRight();
+				impl->distinguishLeftRight();
 				int scanCode = msg.lParam & 0x7f8000;
 				characterDown_[scanCodeToCharacter[scanCode]] = false;
 				characterPressed_[scanCodeToCharacter[scanCode]] = false;
@@ -529,7 +544,7 @@ void Window::UpdateInput() {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
-	if (relativeMouseMode && !touchscreenActive) {
+	if (relativeMouseMode && !impl->touchscreenActive) {
 		SetMouse(width_ / 2, height_ / 2);
 		mousex_ -= width_ / 2;
 		mousey_ -= height_ / 2;
@@ -537,7 +552,7 @@ void Window::UpdateInput() {
 }
 
 void Window::SwapBuffers() {
-	::SwapBuffers(pDeviceContext_.get());
+	::SwapBuffers(impl->pDeviceContext_.get());
 }
 
 void Window::SetMouseVisible(const bool visible) {
@@ -548,7 +563,7 @@ void Window::SetMouseVisible(const bool visible) {
 }
 
 void Window::SetTitle(const std::string& windowTitle) {
-	SetWindowText(pWindowHandle_.get(), windowTitle.c_str());
+	SetWindowText(impl->pWindowHandle_.get(), windowTitle.c_str());
 }
 
 int Window::GetKeyCode(jngl::key::KeyType key) {
@@ -685,18 +700,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 }
 
 int Window::getMouseX() {
-	return mousex_ - relativeX - (width_ - canvasWidth) / 2;
+	return mousex_ - impl->relativeX - (width_ - canvasWidth) / 2;
 }
 
 int Window::getMouseY() {
-	return mousey_ - relativeY - (height_ - canvasHeight) / 2;
+	return mousey_ - impl->relativeY - (height_ - canvasHeight) / 2;
 }
 
 void Window::SetMouse(const int xposition, const int yposition) {
 	POINT pnt;
 	pnt.x = xposition;
 	pnt.y = yposition;
-	ClientToScreen(pWindowHandle_.get(), &pnt);
+	ClientToScreen(impl->pWindowHandle_.get(), &pnt);
 	SetCursorPos(pnt.x, pnt.y);
 }
 
@@ -704,15 +719,15 @@ void Window::SetRelativeMouseMode(bool relative) {
 	relativeMouseMode = relative;
 	SetMouseVisible(!relative);
 	if (relative) {
-		if (touchscreenActive) {
-			relativeX = mousex_;
-			relativeY = mousey_;
+		if (impl->touchscreenActive) {
+			impl->relativeX = mousex_;
+			impl->relativeY = mousey_;
 		} else {
 			SetMouse(width_ / 2, height_ / 2);
-			relativeX = relativeY = mousex_ = mousey_ = 0;
+			impl->relativeX = impl->relativeY = mousex_ = mousey_ = 0;
 		}
 	} else {
-		relativeX = relativeY = 0;
+		impl->relativeX = impl->relativeY = 0;
 	}
 }
 
