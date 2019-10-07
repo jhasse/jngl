@@ -26,10 +26,25 @@ XINPUT_STATE states[XUSER_MAX_COUNT];
 
 namespace jngl {
 
+class WindowImpl {
+public:
+	std::shared_ptr<std::remove_pointer<HGLRC>::type> pRenderingContext_;
+	std::shared_ptr<std::remove_pointer<HWND>::type> pWindowHandle_;
+	std::shared_ptr<std::remove_pointer<HDC>::type> pDeviceContext_;
+	int arbMultisampleFormat_;
+	bool touchscreenActive = false;
+	int relativeX = 0;
+	int relativeY = 0;
+
+	bool InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR);
+	void Init(const std::string& title, bool multisample);
+	void DistinguishLeftRight();
+};
+
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 // based on: http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=46
-bool Window::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
+bool WindowImpl::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 	if (!wglChoosePixelFormatARB) {
 		return false;
 	}
@@ -93,12 +108,12 @@ Window::Window(const std::string& title, const int width, const int height, cons
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
   fontSize_(12), width_(width), height_(height), stepsPerFrame(1), multitouch(false),
-  impl(nullptr) {
+  impl(new WindowImpl) {
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
-	Init(title, false);
+	impl->Init(title, false);
 }
 
-void Window::Init(const std::string& title, const bool multisample) {
+void WindowImpl::Init(const std::string& title, const bool multisample) {
 	WNDCLASS wc;
 	DWORD dwExStyle;
 	DWORD dwStyle;
