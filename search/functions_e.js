@@ -16,6 +16,7 @@ var searchData=
   ['setmousepressed',['setMousePressed',['../namespacejngl.html#ace09f82f90fcc6c98dcfd5d472e7fd71',1,'jngl']]],
   ['setstepspersecond',['setStepsPerSecond',['../namespacejngl.html#afed24bb6cc886f01ba23d4ce53125de0',1,'jngl']]],
   ['settitle',['setTitle',['../namespacejngl.html#a86403a082df8f8db91053edaa2a73a5f',1,'jngl']]],
+  ['setvibration',['setVibration',['../classjngl_1_1Controller.html#a3061fb99f8009aa8e00acefc80f078e7',1,'jngl::Controller']]],
   ['setwork',['setWork',['../namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196',1,'jngl::setWork(std::shared_ptr&lt; Work &gt; work)'],['../namespacejngl.html#af765d65e1817b356ad2bd10c282d3f2d',1,'jngl::setWork(Work *)']]],
   ['showwindow',['showWindow',['../namespacejngl.html#a6258b60ff00bd009838eea0a647279c1',1,'jngl']]],
   ['sleep',['sleep',['../namespacejngl.html#a6c9a4f10e08890ed285c7062e0f0a81a',1,'jngl']]],
