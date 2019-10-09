@@ -5,11 +5,16 @@
 
 #include "../jngl/debug.hpp"
 
+#include <boost/math/special_functions/round.hpp>
 #include <cmath>
 
 namespace jngl {
 
-SdlController::SdlController(SDL_Joystick* const handle, const int index) : handle(handle) {
+SdlController::SdlController(SDL_Joystick* const handle, const int index)
+: handle(handle), haptic(SDL_HapticOpenFromJoystick(handle)) {
+	if (!haptic) {
+		debugLn(SDL_GetError());
+	}
 	switch (SDL_JoystickNumButtons(handle)) {
 		case 11:
 			model = Model::XBOX_WIRED;
@@ -184,6 +189,12 @@ bool SdlController::down(const controller::Button button) const {
 			return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_RIGHTSTICK);
 		default:
 			return state(button) > 0.5f;
+	}
+}
+
+void SdlController::setVibration(float vibration) {
+	if (haptic) {
+		SDL_HapticSetGain(haptic, boost::math::iround(vibration * 100));
 	}
 }
 

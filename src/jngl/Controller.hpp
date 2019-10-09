@@ -21,6 +21,9 @@ public:
 	/// Returns true only once for every button press
 	bool pressed(controller::Button);
 
+	/// 0 = no vibration, 1 = maximum
+	virtual void setVibration(float);
+
 private:
 	virtual float stateImpl(controller::Button) const = 0;
 

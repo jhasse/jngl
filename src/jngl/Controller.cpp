@@ -33,4 +33,7 @@ float Controller::state(const controller::Button button) const {
 	return stateImpl(button);
 }
 
+void Controller::setVibration(float) {
+}
+
 } // namespace jngl

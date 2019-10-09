@@ -14,6 +14,7 @@ public:
 	SdlController(SDL_Joystick*, int index);
 	~SdlController() override;
 	bool down(controller::Button) const override;
+	void setVibration(float) override;
 
 	bool is(SDL_Joystick*) const;
 
@@ -23,6 +24,7 @@ private:
 
 	SDL_Joystick* handle;
 	SDL_GameController* gameController = nullptr;
+	SDL_Haptic* haptic = nullptr;
 
 	enum class Model {
 		XBOX,
