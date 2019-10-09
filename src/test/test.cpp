@@ -432,7 +432,8 @@ void testKeys() {
 			        << " ←: " << controller->down(jngl::controller::DpadLeft)
 			        << " →: " << controller->down(jngl::controller::DpadRight);
 			if (controller->pressed(jngl::controller::A)) {
-				controller->setVibration(0.5f);
+				using namespace std::chrono_literals;
+				controller->rumble(0.5f, 200ms);
 			}
 			jngl::setColor(255, 255, 255, 150);
 			jngl::drawRect({500, 40. + (controllerNr - 1) * 110.}, {300, 120});

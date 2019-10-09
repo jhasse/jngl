@@ -14,7 +14,7 @@ public:
 	SdlController(SDL_Joystick*, int index);
 	~SdlController() override;
 	bool down(controller::Button) const override;
-	void setVibration(float) override;
+	void rumble(float, std::chrono::milliseconds) override;
 
 	bool is(SDL_Joystick*) const;
 

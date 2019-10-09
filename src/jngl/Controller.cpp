@@ -33,7 +33,7 @@ float Controller::state(const controller::Button button) const {
 	return stateImpl(button);
 }
 
-void Controller::setVibration(float) {
+void Controller::rumble(float, std::chrono::milliseconds) {
 }
 
 } // namespace jngl

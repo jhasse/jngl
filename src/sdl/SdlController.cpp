@@ -5,14 +5,17 @@
 
 #include "../jngl/debug.hpp"
 
-#include <boost/math/special_functions/round.hpp>
 #include <cmath>
 
 namespace jngl {
 
 SdlController::SdlController(SDL_Joystick* const handle, const int index)
 : handle(handle), haptic(SDL_HapticOpenFromJoystick(handle)) {
-	if (!haptic) {
+	if (haptic) {
+		if (SDL_HapticRumbleInit(haptic) < 0) {
+			debugLn(SDL_GetError());
+		}
+	} else {
 		debugLn(SDL_GetError());
 	}
 	switch (SDL_JoystickNumButtons(handle)) {
@@ -192,9 +195,9 @@ bool SdlController::down(const controller::Button button) const {
 	}
 }
 
-void SdlController::setVibration(float vibration) {
+void SdlController::rumble(const float vibration, const std::chrono::milliseconds ms) {
 	if (haptic) {
-		SDL_HapticSetGain(haptic, boost::math::iround(vibration * 100));
+		SDL_HapticRumblePlay(haptic, vibration, ms.count());
 	}
 }
 
