@@ -43,4 +43,11 @@ bool XinputController::down(const controller::Button b) const {
 	return state(b) > 0.5f;
 }
 
+void XinputController::setVibration(const float amount) {
+	XINPUT_VIBRATION vibration{};
+	vibration.wLeftMotorSpeed = amount * 65535;
+	vibration.wRightMotorSpeed = amount * 65535;
+	XInputSetState(i, &vibration);
+}
+
 } // namespace jngl

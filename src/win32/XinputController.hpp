@@ -17,6 +17,7 @@ public:
 	JNGLDLL_API XinputController(int number);
 	float stateImpl(controller::Button) const override;
 	bool down(controller::Button) const override;
+	void setVibration(float) override;
 
 private:
 	int i;
