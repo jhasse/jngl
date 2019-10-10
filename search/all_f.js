@@ -7,5 +7,6 @@ var searchData=
   ['rightsticky',['RightStickY',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0a0f9106b2bfe37c0a18a1d086ece4e5f9',1,'jngl::controller']]],
   ['rightstickyinverse',['RightStickYInverse',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0a15dc69c00beee5e45b18e3f905f080cc',1,'jngl::controller']]],
   ['rotate',['rotate',['../namespacejngl.html#aa17a08647a651cd111a3319f5589063d',1,'jngl']]],
+  ['rumble',['rumble',['../classjngl_1_1Controller.html#a25b18a163d0c7c014336ba4baf9e1e8f',1,'jngl::Controller']]],
   ['running',['running',['../namespacejngl.html#aa5760c51d7686efb6d653830ee8305d5',1,'jngl']]]
 ];

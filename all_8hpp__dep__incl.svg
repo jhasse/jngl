@@ -9,24 +9,24 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 80)">
 <title>jngl/all.hpp</title>
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-80 93,-80 93,4 -4,4"/>
-<!-- Node36 -->
+<!-- Node37 -->
 <g id="node1" class="node">
-<title>Node36</title>
+<title>Node37</title>
 <polygon fill="#bfbfbf" stroke="#000000" points="0,-56.5 0,-75.5 89,-75.5 89,-56.5 0,-56.5"/>
 <text text-anchor="middle" x="44.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/all.hpp</text>
 </g>
-<!-- Node37 -->
+<!-- Node38 -->
 <g id="node2" class="node">
-<title>Node37</title>
+<title>Node38</title>
 <g id="a_node2"><a xlink:href="jngl_8hpp_source.html" target="_top" xlink:title="jngl.hpp">
 <polygon fill="#ffffff" stroke="#000000" points="12,-.5 12,-19.5 77,-19.5 77,-.5 12,-.5"/>
 <text text-anchor="middle" x="44.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node36&#45;&gt;Node37 -->
+<!-- Node37&#45;&gt;Node38 -->
 <g id="edge1" class="edge">
-<title>Node36&#45;&gt;Node37</title>
+<title>Node37&#45;&gt;Node38</title>
 <path fill="none" stroke="#191970" d="M44.5,-46.1575C44.5,-37.155 44.5,-26.9199 44.5,-19.6427"/>
 <polygon fill="#191970" stroke="#191970" points="41.0001,-46.2455 44.5,-56.2455 48.0001,-46.2456 41.0001,-46.2455"/>
 </g>
