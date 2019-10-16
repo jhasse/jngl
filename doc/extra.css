@@ -57,7 +57,7 @@ h1 {
 	font-size: 28px;
 }
 
-h2 {
+h1, h2 {
 	color: rgb(60, 76, 108);
 	font-size: 24px;
 	font-weight: normal;
