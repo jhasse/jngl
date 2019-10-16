@@ -57,3 +57,18 @@ android:
   stage: build
   script:
     - make -C android
+
+doxygen:
+  stage: deploy
+  script:
+  - microdnf install doxygen cmake make tar xz >/dev/null
+  - cd doc
+  - cmake .
+  - make
+  - doxygen
+  - mv html ../public
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
