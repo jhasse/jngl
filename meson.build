@@ -1,4 +1,4 @@
-project('jngl', ['c', 'cpp'], default_options : ['cpp_std=c++17'])
+project('jngl', ['c', 'cpp'], default_options : ['cpp_std=c++17', 'warning_level=3'])
 
 conf_data = configuration_data()
 conf_data.set('VERSION', '1.4.0')
@@ -46,11 +46,9 @@ cpp_args = []
 
 cxx = meson.get_compiler('cpp')
 add_project_arguments(cxx.get_supported_arguments([
-	'-Wall', '-Wextra',
 	'-Winit-self',
 	'-Winconsistent-missing-override',
 	'-Wimplicit-fallthrough',
-	'-Wpedantic',
 	'-Wfloat-equal',
 	'-Wdelete-non-virtual-dtor',
 	'-Wlogical-op',
