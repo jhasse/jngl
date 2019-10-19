@@ -16,7 +16,7 @@ namespace jngl {
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
-  width_(width), height_(height), impl(new WindowImpl) {
+  width_(width), height_(height), fontName_(GetFontFileByName("Arial")), impl(new WindowImpl) {
 	SDL::init();
 
 #ifdef __APPLE__ // https://stackoverflow.com/a/26981800/647898
@@ -48,9 +48,6 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	}
 
 	impl->context = SDL_GL_CreateContext(impl->sdlWindow);
-
-	setFontByName("Arial"); // Default font
-	setFontSize(fontSize_); // Load a font the first time
 
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	Init(width, height, canvasWidth, canvasHeight);

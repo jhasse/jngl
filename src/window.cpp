@@ -28,7 +28,14 @@ namespace jngl {
 	}
 
 	void Window::print(const std::string& text, const int xposition, const int yposition) {
-		fonts_[fontSize_][fontName_]->print(xposition, yposition, text);
+		const auto itFontsMap = fonts_.find(fontSize_);
+		if (itFontsMap != fonts_.end()) {
+			const auto itFont = itFontsMap->second.find(fontName_);
+			if (itFont != itFontsMap->second.end()) {
+				itFont->second->print(xposition, yposition, text);
+			}
+		}
+		setFont(fontName_);
 	}
 
 	void Window::setFont(const std::string& filename) {
