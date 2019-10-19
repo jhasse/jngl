@@ -33,9 +33,11 @@ namespace jngl {
 			const auto itFont = itFontsMap->second.find(fontName_);
 			if (itFont != itFontsMap->second.end()) {
 				itFont->second->print(xposition, yposition, text);
+				return;
 			}
 		}
 		setFont(fontName_);
+		print(text, xposition, yposition);
 	}
 
 	void Window::setFont(const std::string& filename) {
