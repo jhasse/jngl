@@ -109,8 +109,8 @@ bool WindowImpl::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
-  fontSize_(12), width_(width), height_(height), stepsPerFrame(1), multitouch(false),
-  impl(new WindowImpl) {
+  fontSize_(12), width_(width), height_(height), fontName_(GetFontFileByName("Arial")),
+  stepsPerFrame(1), multitouch(false), impl(new WindowImpl) {
 	impl->distinguishLeftRight = [this]() {
 		int codesToCheck[] = { GetKeyCode(jngl::key::ShiftL),   GetKeyCode(jngl::key::ShiftR),
 			                   GetKeyCode(jngl::key::ControlL), GetKeyCode(jngl::key::ControlR),
@@ -269,8 +269,6 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		}
 
 		::ShowWindow(impl->pWindowHandle_.get(), SW_SHOWNORMAL);
-		setFontByName("Arial");
-		setFontSize(fontSize_);
 
 		if (!jngl::Init(width_, height_, canvasWidth, canvasHeight)) {
 			throw std::runtime_error("Initialization failed.");
