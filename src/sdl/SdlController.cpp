@@ -28,9 +28,6 @@ SdlController::SdlController(SDL_Joystick* const handle, const int index)
 		case 15:
 			model = Model::XBOX;
 			break;
-		case 16:
-			model = Model::DS4;
-			break;
 		default: {
 			if (SDL_IsGameController(index)) {
 				gameController = SDL_GameControllerOpen(index);
