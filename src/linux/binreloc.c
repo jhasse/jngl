@@ -34,19 +34,13 @@ extern "C" {
 static char *
 _br_find_exe (BrInitError *error)
 {
-	char *path, *path2, *line, *result;
-	size_t buf_size;
+	size_t buf_size = PATH_MAX - 1;
 	ssize_t size;
 	struct stat stat_buf;
 	FILE *f;
 
 	/* Read from /proc/self/exe (symlink) */
-	if (sizeof (path) > SSIZE_MAX) {
-		buf_size = SSIZE_MAX - 1;
-	} else {
-		buf_size = PATH_MAX - 1;
-	}
-	path = (char *) malloc (buf_size);
+	char* path = (char*)malloc(buf_size);
 	if (path == NULL) {
 		/* Cannot allocate memory. */
 		if (error) {
@@ -54,7 +48,7 @@ _br_find_exe (BrInitError *error)
 		}
 		return NULL;
 	}
-	path2 = (char *) malloc (buf_size);
+	char* path2 = (char*)malloc(buf_size);
 	if (path2 == NULL) {
 		/* Cannot allocate memory. */
 		if (error) {
@@ -104,7 +98,7 @@ _br_find_exe (BrInitError *error)
 	 * running in Valgrind 2.2. Read from /proc/self/maps as fallback. */
 
 	buf_size = PATH_MAX + 128;
-	line = (char *) realloc (path, buf_size);
+	char* line = (char*)realloc(path, buf_size);
 	if (line == NULL) {
 		/* Cannot allocate memory. */
 		free (path);
@@ -124,7 +118,7 @@ _br_find_exe (BrInitError *error)
 	}
 
 	/* The first entry should be the executable name. */
-	result = fgets (line, (int) buf_size, f);
+	char* result = fgets(line, (int)buf_size, f);
 	if (result == NULL) {
 		fclose (f);
 		free (line);
@@ -174,7 +168,7 @@ _br_find_exe (BrInitError *error)
  * Returns a filename which must be freed, or NULL on error.
  */
 static char* _br_find_exe_for_symbol(const void* symbol) {
-#define SIZE PATH_MAX + 100
+#define SIZE (PATH_MAX + 100)
 	FILE *f;
 	size_t address_string_len;
 	char *address_string, line[SIZE], *found;
@@ -673,7 +667,7 @@ br_strcat (const char *str1, const char *str2)
 char *
 br_build_path (const char *dir, const char *file)
 {
-	char *dir2, *result;
+	char* dir2;
 	size_t len;
 	int must_free = 0;
 
@@ -685,7 +679,7 @@ br_build_path (const char *dir, const char *file)
 		dir2 = (char *) dir;
 	}
 
-	result = br_strcat (dir2, file);
+	char* result = br_strcat(dir2, file);
 	if (must_free) {
 		free (dir2);
 	}

@@ -23,8 +23,6 @@ public:
 
 	/// Gets called when the Work is activated by App::mainLoop()
 	virtual void onLoad();
-
-	virtual ~Work();
 };
 
 std::shared_ptr<Work> JNGLDLL_API getWork();

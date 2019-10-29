@@ -9,6 +9,11 @@
 #include <boost/qvm/mat_operations.hpp>
 #include <sstream>
 
+#ifdef _WIN32
+#include <windows.h>
+#include <shlobj.h>
+#endif
+
 #ifdef ANDROID
 #include "android/fopen.hpp"
 #endif
@@ -174,6 +179,10 @@ void quit() {
 
 void cancelQuit() {
 	if (pWindow) { pWindow->cancelQuit(); }
+}
+
+void setBackgroundColor(const jngl::Color color) {
+	setBackgroundColor(color.getRed(), color.getGreen(), color.getBlue());
 }
 
 void setBackgroundColor(const unsigned char red, const unsigned char green,
@@ -480,10 +489,18 @@ std::string getConfigPath() {
 	if (configPath) { return *configPath; }
 #ifndef IOS
 	std::stringstream path;
+#ifdef _WIN32
+	TCHAR szPath[MAX_PATH];
+	if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, szPath))) {
+		throw std::runtime_error("Couldn't get %AppData% location!");
+	}
+	path << szPath << "/" << App::instance().getDisplayName() << "/";
+#else
 	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/";
+#endif
 	return *(configPath = path.str());
 #endif
-	// TODO: Windows, macOS, Switch
+	// TODO: macOS, Switch
 	throw std::runtime_error("Couldn't get config path. Has the app been started?");
 }
 

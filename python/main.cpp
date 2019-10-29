@@ -172,7 +172,8 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("mousePressed", mousePressed2);
 	def("setMouse", setMouse);
 	def("setTitle", setTitle);
-	def("setBackgroundColor", setBackgroundColor);
+	def("setBackgroundColor",
+	    static_cast<void (*)(unsigned char, unsigned char, unsigned char)>(setBackgroundColor));
 	def("setColor", setColor1);
 	def("setColor", setColor2);
 	def("setAlpha", setAlpha);
@@ -190,7 +191,6 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("getFPS", getFPS);
 	def("errorMessage", errorMessage);
 	def("getFullscreen", getFullscreen);
-	def("readPixel", readPixel);
 	def("getWindowWidth", getWindowWidth);
 	def("getWindowHeight", getWindowHeight);
 	def("getScreenWidth", getScreenWidth);
@@ -260,7 +260,7 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	def("popSpriteAlpha", popSpriteAlpha);
 
 	class_<FrameBuffer, boost::noncopyable>("FrameBuffer", boost::python::init<int, int>())
-	    .def("draw", &FrameBuffer::draw)
+	    // .def("draw", &FrameBuffer::draw) FIXME
 	    .def("beginDraw", &FrameBuffer::beginDraw)
 	    .def("endDraw", &FrameBuffer::endDraw);
 

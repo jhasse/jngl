@@ -41,6 +41,13 @@ private:
 	unsigned char green;
 	unsigned char blue;
 };
+
+/// Sets the screen's background color which is visible when nothing is drawn
+void JNGLDLL_API setBackgroundColor(jngl::Color);
+
+/// Sets the screen's background color which is visible when nothing is drawn
+void JNGLDLL_API setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
+
 } // namespace jngl
 
 jngl::Color operator"" _rgb(unsigned long long);

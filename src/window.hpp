@@ -14,18 +14,12 @@
 #include <unordered_map>
 
 #ifdef _WIN32
-	#include <type_traits>
-	// TODO: Use pimpl to move this into win32/windowimpl.cpp
-	#include <windows.h>
 	#ifdef min
 		#undef min
 	#endif
 	#ifdef max
 		#undef max
 	#endif
-	#include <xinput.h>
-
-	extern XINPUT_STATE states[XUSER_MAX_COUNT];
 #endif
 
 namespace jngl {
@@ -96,10 +90,7 @@ namespace jngl {
 		unsigned int getStepsPerSecond() const;
 		void setStepsPerSecond(unsigned int);
 		void addUpdateInputCallback(std::function<void()>);
-#ifdef _WIN32
-		static void ReleaseDC(HWND, HDC);
-		static void ReleaseRC(HGLRC);
-#elif defined(IOS) || defined(ANDROID)
+#if defined(IOS) || defined(ANDROID)
 		WindowImpl* getImpl() const;
 #endif
 		std::string getTextInput() const;
@@ -172,21 +163,7 @@ namespace jngl {
 		// <fontSize, <fontName, FontImpl>>
 		std::map<int, std::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
 		std::vector<std::function<void()>> updateInputCallbacks;
-#ifdef _WIN32
-		std::shared_ptr<std::remove_pointer<HGLRC>::type> pRenderingContext_;
-		std::shared_ptr<std::remove_pointer<HWND>::type> pWindowHandle_;
-		std::shared_ptr<std::remove_pointer<HDC>::type> pDeviceContext_;
-		int arbMultisampleFormat_;
-		bool touchscreenActive = false;
-		int relativeX = 0;
-		int relativeY = 0;
-
-		bool InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR);
-		void Init(const std::string& title, bool multisample);
-		void DistinguishLeftRight();
-#else
 		friend class WindowImpl;
-#endif
 		WindowImpl* const impl;
 	};
-}
+} // namespace jngl

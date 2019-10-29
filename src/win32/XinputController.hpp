@@ -5,16 +5,26 @@
 
 #include "../jngl/Controller.hpp"
 
+#include <atomic>
+#include <thread>
+#include <windows.h>
+#include <xinput.h>
+
 namespace jngl {
+
+extern XINPUT_STATE states[XUSER_MAX_COUNT];
 
 class XinputController : public jngl::Controller {
 public:
 	JNGLDLL_API XinputController(int number);
+	~XinputController();
 	float stateImpl(controller::Button) const override;
 	bool down(controller::Button) const override;
+	void rumble(float, std::chrono::milliseconds) override;
 
 private:
 	int i;
+	std::vector<std::pair<std::unique_ptr<std::atomic_bool>, std::thread>> threads;
 };
 
 } // namespace jngl

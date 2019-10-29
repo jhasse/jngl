@@ -40,6 +40,9 @@ public:
 	/// Returns the actual pixel height of the video
 	int getHeight() const;
 
+	/// Returns true when the video has reached the end
+	bool finished() const;
+
 private:
 	class Impl;
 

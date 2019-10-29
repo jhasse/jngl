@@ -211,12 +211,13 @@ JNGL_MAIN_BEGIN {
 		jngl::showWindow("setTitle not working!", 800 * jngl::getScaleFactor(),
 		                 600 * jngl::getScaleFactor());
 		jngl::onControllerChanged([]() {
-			std::cout << "Number of connected controllers: "
-			          << jngl::getConnectedControllers().size() << std::endl;
+			const auto controllers = jngl::getConnectedControllers();
+			std::cout << "Number of connected controllers: " << controllers.size() << std::endl;
 		});
 		jngl::setWork(std::make_shared<Test>());
 		app.mainLoop();
 	} catch(std::exception& e) {
+		jngl::hideWindow();
 		jngl::errorMessage(e.what());
 	}
 } JNGL_MAIN_END
@@ -248,19 +249,10 @@ void drawBackground() {
 }
 
 void drawMouse(const jngl::Vec2 mouse) {
-	unsigned char red, green, blue;
-	jngl::readPixel(mouse.x, mouse.y, red, green, blue);
-	std::stringstream sstream;
-	sstream << "R: " << static_cast<int>(red)
-	      << "\nG: " << static_cast<int>(green)
-	      << "\nB: " << static_cast<int>(blue);
-	jngl::setFontSize(8);
-	jngl::setFontColor(0, 255, 0, 200);
-	jngl::print(sstream.str(), mouse.x + 30, mouse.y + 10);
 	jngl::translate(mouse.x, mouse.y);
 	jngl::rotate(-45);
 	jngl::setFontSize(30);
-	jngl::setFontColor(10, 10, 200);
+	jngl::setFontColor(10, 10, 200, 200);
 	jngl::print("↑", -8, -2);
 	jngl::setFontSize(12);
 	jngl::reset();
@@ -439,6 +431,10 @@ void testKeys() {
 			        << " ↓: " << controller->down(jngl::controller::DpadDown)
 			        << " ←: " << controller->down(jngl::controller::DpadLeft)
 			        << " →: " << controller->down(jngl::controller::DpadRight);
+			if (controller->pressed(jngl::controller::A)) {
+				using namespace std::chrono_literals;
+				controller->rumble(0.5f, 200ms);
+			}
 			jngl::setColor(255, 255, 255, 150);
 			jngl::drawRect({500, 40. + (controllerNr - 1) * 110.}, {300, 120});
 			jngl::print(sstream.str(), 558, 50. + (controllerNr - 1) * 110);

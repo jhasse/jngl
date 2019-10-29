@@ -13,7 +13,8 @@
 namespace jngl {
 
 FrameBufferImpl::FrameBufferImpl(int width, int height)
-: height(height), texture(width, height, width, height, nullptr),
+: height(height),
+  texture(static_cast<float>(width), static_cast<float>(height), width, height, nullptr),
   letterboxing(glIsEnabled(GL_SCISSOR_TEST)) {
 	GLint tmp;
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &tmp);
@@ -33,7 +34,7 @@ FrameBufferImpl::FrameBufferImpl(int width, int height)
 
 	assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 
-	Clear();
+	clear();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, systemFbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, systemBuffer);
@@ -62,7 +63,7 @@ void FrameBufferImpl::BeginDraw() {
 	}
 }
 
-void FrameBufferImpl::Clear() {
+void FrameBufferImpl::clear() {
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	clearBackgroundColor();
@@ -95,4 +96,5 @@ void FrameBufferImpl::Draw(const double x, const double y) const {
 	popMatrix();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
+
 } // namespace jngl

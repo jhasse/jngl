@@ -24,11 +24,19 @@ namespace jngl {
 	}
 
 	std::shared_ptr<FontImpl> Window::getFontImpl() {
-		return fonts_[fontSize_][fontName_];
+		const auto itFontsMap = fonts_.find(fontSize_);
+		if (itFontsMap != fonts_.end()) {
+			const auto itFont = itFontsMap->second.find(fontName_);
+			if (itFont != itFontsMap->second.end()) {
+				return itFont->second;
+			}
+		}
+		setFont(fontName_);
+		return getFontImpl();
 	}
 
 	void Window::print(const std::string& text, const int xposition, const int yposition) {
-		fonts_[fontSize_][fontName_]->print(xposition, yposition, text);
+		getFontImpl()->print(xposition, yposition, text);
 	}
 
 	void Window::setFont(const std::string& filename) {

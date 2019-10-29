@@ -1,4 +1,4 @@
-// Copyright 2009-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2009-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowptr.hpp"
@@ -8,8 +8,7 @@
 
 namespace jngl {
 
-WindowPointer::WindowPointer() : ptr_(nullptr) {
-}
+WindowPointer::WindowPointer() = default;
 
 WindowPointer::~WindowPointer() {
 	Delete();

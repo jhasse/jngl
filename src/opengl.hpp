@@ -66,4 +66,4 @@ namespace opengl
 #else
 	typedef GLfloat CoordType;
 #endif
-}
+} // namespace opengl

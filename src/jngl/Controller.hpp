@@ -5,6 +5,8 @@
 
 #include "input.hpp"
 
+#include <chrono>
+
 namespace jngl {
 
 /// Object representing one Gamepad controller
@@ -20,6 +22,9 @@ public:
 
 	/// Returns true only once for every button press
 	bool pressed(controller::Button);
+
+	/// 0 = no vibration, 1 = maximum
+	virtual void rumble(float, std::chrono::milliseconds);
 
 private:
 	virtual float stateImpl(controller::Button) const = 0;

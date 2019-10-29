@@ -3,11 +3,21 @@
 
 #include "SdlController.hpp"
 
+#include "../jngl/debug.hpp"
+
 #include <cmath>
 
 namespace jngl {
 
-SdlController::SdlController(SDL_Joystick* const handle, const int index) : handle(handle) {
+SdlController::SdlController(SDL_Joystick* const handle, const int index)
+: handle(handle), haptic(SDL_HapticOpenFromJoystick(handle)) {
+	if (haptic) {
+		if (SDL_HapticRumbleInit(haptic) < 0) {
+			debugLn(SDL_GetError());
+		}
+	} else {
+		debugLn(SDL_GetError());
+	}
 	switch (SDL_JoystickNumButtons(handle)) {
 		case 11:
 			model = Model::XBOX_WIRED;
@@ -23,10 +33,13 @@ SdlController::SdlController(SDL_Joystick* const handle, const int index) : hand
 			break;
 		default: {
 			if (SDL_IsGameController(index)) {
-				SDL_JoystickClose(handle);
-				this->handle = nullptr;
 				gameController = SDL_GameControllerOpen(index);
-				assert(gameController);
+				if (gameController) {
+					this->handle = nullptr;
+					SDL_JoystickClose(handle);
+				} else {
+					debugLn("WARNING: SDL_GameControllerOpen failed, falling back to joystick.");
+				}
 			}
 		}
 	};
@@ -179,6 +192,12 @@ bool SdlController::down(const controller::Button button) const {
 			return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_RIGHTSTICK);
 		default:
 			return state(button) > 0.5f;
+	}
+}
+
+void SdlController::rumble(const float vibration, const std::chrono::milliseconds ms) {
+	if (haptic) {
+		SDL_HapticRumblePlay(haptic, vibration, ms.count());
 	}
 }
 

@@ -16,7 +16,7 @@ namespace jngl {
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
-  width_(width), height_(height), impl(new WindowImpl) {
+  width_(width), height_(height), fontName_(GetFontFileByName("Arial")), impl(new WindowImpl) {
 	SDL::init();
 
 #ifdef __APPLE__ // https://stackoverflow.com/a/26981800/647898
@@ -48,9 +48,6 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	}
 
 	impl->context = SDL_GL_CreateContext(impl->sdlWindow);
-
-	setFontByName("Arial"); // Default font
-	setFontSize(fontSize_); // Load a font the first time
 
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	Init(width, height, canvasWidth, canvasHeight);
@@ -149,6 +146,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 						mousey_ = event.motion.y;
 					}
 					break;
+#ifndef __APPLE__ // Somehow the trackpad on a Macbook is handled as a touch screen?
 				case SDL_FINGERUP:
 					mouseDown_.at(0) = false;
 					mouseDown_.at(0) = false;
@@ -172,6 +170,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 						mousey_ = std::lround(event.tfinger.y * height_);
 					}
 					break;
+#endif
 				case SDL_MOUSEBUTTONDOWN: {
 					int button = -1;
 					if (event.button.button == SDL_BUTTON_LEFT) {
@@ -389,5 +388,19 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		SDL_SetWindowFullscreen(impl->sdlWindow, f ? SDL_WINDOW_FULLSCREEN : 0);
 		fullscreen_ = f;
 	}
+
+#ifdef _WIN32
+	// TODO: Avoid this duplicated code
+
+	int Window::getMouseX() {
+		if (relativeMouseMode) { return mousex_; }
+		return mousex_ - (width_ - canvasWidth) / 2;
+	}
+
+	int Window::getMouseY() {
+		if (relativeMouseMode) { return mousey_; }
+		return mousey_ - (height_ - canvasHeight) / 2;
+	}
+#endif
 
 } // namespace jngl
