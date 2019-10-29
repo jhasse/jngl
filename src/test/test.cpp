@@ -411,10 +411,6 @@ void testKeys() {
 			std::stringstream sstream;
 			sstream << "Controller " << controllerNr << " connected." << std::endl
 			        << "Trigger: " << controller->state(jngl::controller::LeftTrigger) << " " << controller->state(jngl::controller::RightTrigger)
-			        << "\nSticks: " << controller->state(jngl::controller::LeftStickX)
-			        << " " << controller->state(jngl::controller::LeftStickY)
-			        << " " << controller->state(jngl::controller::RightStickX)
-			        << " " << controller->state(jngl::controller::RightStickY)
 			        << "\nA: " << controller->down(jngl::controller::A)
 			        << " B: " << controller->down(jngl::controller::B)
 			        << " X: " << controller->down(jngl::controller::X)
@@ -435,6 +431,23 @@ void testKeys() {
 				using namespace std::chrono_literals;
 				controller->rumble(0.5f, 200ms);
 			}
+
+			jngl::pushMatrix();
+			for (const jngl::Vec2 stick :
+			     { jngl::Vec2(controller->state(jngl::controller::LeftStickX),
+			                  -controller->state(jngl::controller::LeftStickY)),
+			       jngl::Vec2(controller->state(jngl::controller::RightStickX),
+			                  -controller->state(jngl::controller::RightStickY)) }) {
+				const float circleRadius = 20;
+				const auto circlePos = jngl::Vec2(530, -40 + controllerNr * 110);
+				jngl::setColor(100, 100, 100, 255);
+				jngl::drawEllipse(circlePos, circleRadius, circleRadius);
+				jngl::setColor(255, 255, 255, 255);
+				jngl::drawCircle(circlePos + circleRadius * stick, 4);
+				jngl::translate(0, 2 * circleRadius + 10);
+			}
+			jngl::popMatrix();
+
 			jngl::setColor(255, 255, 255, 150);
 			jngl::drawRect({500, 40. + (controllerNr - 1) * 110.}, {300, 120});
 			jngl::print(sstream.str(), 558, 50. + (controllerNr - 1) * 110);
