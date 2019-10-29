@@ -385,7 +385,7 @@ namespace jngl {
 	}
 
 #ifndef ANDROID
-	std::vector<Vec2> Window::getTouchPositions() const {
+	std::vector<Vec2> Window::getTouchPositions() const { // NOLINT
 		return {};
 	}
 #endif
@@ -460,7 +460,8 @@ namespace jngl {
 		glBindVertexArray(opengl::vaoStream);
 		jngl::pushMatrix();
 		jngl::translate(mid);
-		opengl::scale(jngl::getScaleFactor(), jngl::getScaleFactor());
+		opengl::scale(static_cast<float>(jngl::getScaleFactor()),
+		              static_cast<float>(jngl::getScaleFactor()));
 		auto tmp = jngl::useSimpleShaderProgram();
 		std::vector<float> vertexes;
 		vertexes.push_back(0.f);

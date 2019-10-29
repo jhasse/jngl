@@ -13,4 +13,3 @@ ConstructorInitializerAllOnOneLineOrOnePerLine: false
 SpaceBeforeParens: ControlStatements
 SpacesInContainerLiterals: true
 Cpp11BracedListStyle: false
-IndentCaseLabels: true

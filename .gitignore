@@ -28,3 +28,4 @@ Thumbs.db
 /compile_commands.json
 /nintendo
 /include/ios/boost
+/.clangd/

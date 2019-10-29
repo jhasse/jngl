@@ -102,7 +102,7 @@ namespace jngl {
 		void onControllerChanged(std::function<void()>);
 
 	private:
-		int GetKeyCode(jngl::key::KeyType key);
+		static int GetKeyCode(jngl::key::KeyType key);
 		std::string GetFontFileByName(const std::string& fontname);
 		void calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 		                         const std::pair<int, int> maxAspectRatio);
