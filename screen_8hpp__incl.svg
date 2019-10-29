@@ -66,8 +66,11 @@
 <!-- Node4 -->
 <g id="node5" class="node">
 <title>Node4</title>
-<polygon fill="#ffffff" stroke="#bfbfbf" points="214,-.5 214,-19.5 267,-19.5 267,-.5 214,-.5"/>
+<g id="a_node5"><a doxygen="/home/travis/build/jhasse/jngl/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" xlink:href="http://en.cppreference.com/w/cpp/header/iosfwd.html" target="_top" xlink:title="iosfwd">
+<polygon fill="#ffffff" stroke="#000000" points="214,-.5 214,-19.5 267,-19.5 267,-.5 214,-.5"/>
 <text text-anchor="middle" x="240.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">iosfwd</text>
+</a>
+</g>
 </g>
 <!-- Node2&#45;&gt;Node4 -->
 <g id="edge5" class="edge">

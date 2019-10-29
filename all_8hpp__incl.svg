@@ -408,8 +408,11 @@
 <!-- Node3 -->
 <g id="node4" class="node">
 <title>Node3</title>
-<polygon fill="#ffffff" stroke="#bfbfbf" points="862,-56.5 862,-75.5 915,-75.5 915,-56.5 862,-56.5"/>
+<g id="a_node4"><a doxygen="/home/travis/build/jhasse/jngl/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" xlink:href="http://en.cppreference.com/w/cpp/header/memory.html" target="_top" xlink:title="memory">
+<polygon fill="#ffffff" stroke="#000000" points="862,-56.5 862,-75.5 915,-75.5 915,-56.5 862,-56.5"/>
 <text text-anchor="middle" x="888.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">memory</text>
+</a>
+</g>
 </g>
 <!-- Node1&#45;&gt;Node3 -->
 <g id="edge3" class="edge">
@@ -420,8 +423,11 @@
 <!-- Node4 -->
 <g id="node5" class="node">
 <title>Node4</title>
-<polygon fill="#ffffff" stroke="#bfbfbf" points="621,-112.5 621,-131.5 674,-131.5 674,-112.5 621,-112.5"/>
+<g id="a_node5"><a doxygen="/home/travis/build/jhasse/jngl/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" xlink:href="http://en.cppreference.com/w/cpp/header/string.html" target="_top" xlink:title="string">
+<polygon fill="#ffffff" stroke="#000000" points="621,-112.5 621,-131.5 674,-131.5 674,-112.5 621,-112.5"/>
 <text text-anchor="middle" x="647.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">string</text>
+</a>
+</g>
 </g>
 <!-- Node1&#45;&gt;Node4 -->
 <g id="edge4" class="edge">
@@ -471,8 +477,11 @@
 <!-- Node8 -->
 <g id="node9" class="node">
 <title>Node8</title>
-<polygon fill="#ffffff" stroke="#bfbfbf" points="203,-.5 203,-19.5 280,-19.5 280,-.5 203,-.5"/>
+<g id="a_node9"><a doxygen="/home/travis/build/jhasse/jngl/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" xlink:href="http://en.cppreference.com/w/cpp/header/functional.html" target="_top" xlink:title="functional">
+<polygon fill="#ffffff" stroke="#000000" points="203,-.5 203,-19.5 280,-19.5 280,-.5 203,-.5"/>
 <text text-anchor="middle" x="241.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">functional</text>
+</a>
+</g>
 </g>
 <!-- Node7&#45;&gt;Node8 -->
 <g id="edge11" class="edge">
@@ -495,8 +504,11 @@
 <!-- Node17 -->
 <g id="node18" class="node">
 <title>Node17</title>
-<polygon fill="#ffffff" stroke="#bfbfbf" points="715,-168.5 715,-187.5 768,-187.5 768,-168.5 715,-168.5"/>
+<g id="a_node18"><a doxygen="/home/travis/build/jhasse/jngl/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" xlink:href="http://en.cppreference.com/w/cpp/header/chrono.html" target="_top" xlink:title="chrono">
+<polygon fill="#ffffff" stroke="#000000" points="715,-168.5 715,-187.5 768,-187.5 768,-168.5 715,-168.5"/>
 <text text-anchor="middle" x="741.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">chrono</text>
+</a>
+</g>
 </g>
 <!-- Node11&#45;&gt;Node17 -->
 <g id="edge26" class="edge">
@@ -540,8 +552,11 @@
 <!-- Node16 -->
 <g id="node17" class="node">
 <title>Node16</title>
-<polygon fill="#ffffff" stroke="#bfbfbf" points="769,-112.5 769,-131.5 822,-131.5 822,-112.5 769,-112.5"/>
+<g id="a_node17"><a doxygen="/home/travis/build/jhasse/jngl/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" xlink:href="http://en.cppreference.com/w/cpp/header/vector.html" target="_top" xlink:title="vector">
+<polygon fill="#ffffff" stroke="#000000" points="769,-112.5 769,-131.5 822,-131.5 822,-112.5 769,-112.5"/>
 <text text-anchor="middle" x="795.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">vector</text>
+</a>
+</g>
 </g>
 <!-- Node12&#45;&gt;Node16 -->
 <g id="edge24" class="edge">
@@ -570,8 +585,11 @@
 <!-- Node15 -->
 <g id="node16" class="node">
 <title>Node15</title>
-<polygon fill="#ffffff" stroke="#bfbfbf" points="1399,-56.5 1399,-75.5 1452,-75.5 1452,-56.5 1399,-56.5"/>
+<g id="a_node16"><a doxygen="/home/travis/build/jhasse/jngl/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" xlink:href="http://en.cppreference.com/w/cpp/header/iosfwd.html" target="_top" xlink:title="iosfwd">
+<polygon fill="#ffffff" stroke="#000000" points="1399,-56.5 1399,-75.5 1452,-75.5 1452,-56.5 1399,-56.5"/>
 <text text-anchor="middle" x="1425.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">iosfwd</text>
+</a>
+</g>
 </g>
 <!-- Node13&#45;&gt;Node15 -->
 <g id="edge22" class="edge">
@@ -588,8 +606,11 @@
 <!-- Node20 -->
 <g id="node21" class="node">
 <title>Node20</title>
-<polygon fill="#ffffff" stroke="#bfbfbf" points="154,-168.5 154,-187.5 213,-187.5 213,-168.5 154,-168.5"/>
+<g id="a_node21"><a doxygen="/home/travis/build/jhasse/jngl/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" xlink:href="http://en.cppreference.com/w/cpp/header/sstream.html" target="_top" xlink:title="sstream">
+<polygon fill="#ffffff" stroke="#000000" points="154,-168.5 154,-187.5 213,-187.5 213,-168.5 154,-168.5"/>
 <text text-anchor="middle" x="183.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">sstream</text>
+</a>
+</g>
 </g>
 <!-- Node18&#45;&gt;Node20 -->
 <g id="edge31" class="edge">

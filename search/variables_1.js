@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['v',['v',['../structjngl_1_1Vertex.html#a48d9522e58fa05906c6dba23e5745a72',1,'jngl::Vertex']]]
+  ['capacity',['capacity',['http://en.cppreference.com/w/cpp/experimental/fs/space_info.html',1,'std::experimental::filesystem::space_info::capacity()'],['http://en.cppreference.com/w/cpp/filesystem/space_info.html',1,'std::filesystem::space_info::capacity()']]],
+  ['conjunction_5fv',['conjunction_v',['http://en.cppreference.com/w/cpp/types/conjunction.html',1,'std']]]
 ];

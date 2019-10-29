@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['y',['y',['../structjngl_1_1Vertex.html#aa4f0d3eebc3c443f9be81bf48561a217',1,'jngl::Vertex']]]
+  ['extent_5fv',['extent_v',['http://en.cppreference.com/w/cpp/types/extent.html',1,'std::extent_v()'],['http://en.cppreference.com/w/cpp/experimental/type_trait_variable_templates.html',1,'std::experimental::extent_v()']]]
 ];

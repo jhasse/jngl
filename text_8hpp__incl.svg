@@ -48,8 +48,11 @@
 <!-- Node3 -->
 <g id="node4" class="node">
 <title>Node3</title>
-<polygon fill="#ffffff" stroke="#bfbfbf" points="129,-56.5 129,-75.5 182,-75.5 182,-56.5 129,-56.5"/>
+<g id="a_node4"><a doxygen="/home/travis/build/jhasse/jngl/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" xlink:href="http://en.cppreference.com/w/cpp/header/memory.html" target="_top" xlink:title="memory">
+<polygon fill="#ffffff" stroke="#000000" points="129,-56.5 129,-75.5 182,-75.5 182,-56.5 129,-56.5"/>
 <text text-anchor="middle" x="155.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">memory</text>
+</a>
+</g>
 </g>
 <!-- Node0&#45;&gt;Node3 -->
 <g id="edge4" class="edge">
@@ -60,8 +63,11 @@
 <!-- Node4 -->
 <g id="node5" class="node">
 <title>Node4</title>
-<polygon fill="#ffffff" stroke="#bfbfbf" points="200,-56.5 200,-75.5 253,-75.5 253,-56.5 200,-56.5"/>
+<g id="a_node5"><a doxygen="/home/travis/build/jhasse/jngl/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" xlink:href="http://en.cppreference.com/w/cpp/header/string.html" target="_top" xlink:title="string">
+<polygon fill="#ffffff" stroke="#000000" points="200,-56.5 200,-75.5 253,-75.5 253,-56.5 200,-56.5"/>
 <text text-anchor="middle" x="226.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">string</text>
+</a>
+</g>
 </g>
 <!-- Node0&#45;&gt;Node4 -->
 <g id="edge5" class="edge">
@@ -72,8 +78,11 @@
 <!-- Node5 -->
 <g id="node6" class="node">
 <title>Node5</title>
-<polygon fill="#ffffff" stroke="#bfbfbf" points="271,-56.5 271,-75.5 324,-75.5 324,-56.5 271,-56.5"/>
+<g id="a_node6"><a doxygen="/home/travis/build/jhasse/jngl/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" xlink:href="http://en.cppreference.com/w/cpp/header/vector.html" target="_top" xlink:title="vector">
+<polygon fill="#ffffff" stroke="#000000" points="271,-56.5 271,-75.5 324,-75.5 324,-56.5 271,-56.5"/>
 <text text-anchor="middle" x="297.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">vector</text>
+</a>
+</g>
 </g>
 <!-- Node0&#45;&gt;Node5 -->
 <g id="edge6" class="edge">

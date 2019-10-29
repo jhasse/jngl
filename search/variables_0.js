@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['u',['u',['../structjngl_1_1Vertex.html#a55831f7eab5ed2917a0191e858852f42',1,'jngl::Vertex']]]
+  ['alignment_5fof_5fv',['alignment_of_v',['http://en.cppreference.com/w/cpp/types/alignment_of.html',1,'std::alignment_of_v()'],['http://en.cppreference.com/w/cpp/experimental/type_trait_variable_templates.html',1,'std::experimental::alignment_of_v()']]],
+  ['available',['available',['http://en.cppreference.com/w/cpp/experimental/fs/space_info.html',1,'std::experimental::filesystem::space_info::available()'],['http://en.cppreference.com/w/cpp/filesystem/space_info.html',1,'std::filesystem::space_info::available()']]]
 ];

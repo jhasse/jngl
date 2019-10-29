@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['color_2ehpp',['color.hpp',['../color_8hpp.html',1,'']]]
+  ['bit',['bit',['http://en.cppreference.com/w/cpp/header/bit.html',1,'']]],
+  ['bitset',['bitset',['http://en.cppreference.com/w/cpp/header/bitset.html',1,'']]]
 ];
