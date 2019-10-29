@@ -16,7 +16,7 @@ public:
 	void BeginDraw();
 	void EndDraw();
 	void Draw(double x, double y) const;
-	void Clear();
+	static void clear();
 
 private:
 	GLuint fbo = 0;
