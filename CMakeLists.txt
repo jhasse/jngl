@@ -13,6 +13,8 @@ set_target_properties(jngl PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src/
 )
 
+option(JNGL_VIDEO "Enable Theora video playback" ON)
+
 if (ANDROID)
 	file(GLOB ANDROID_SOURCES src/android/*.cpp)
 	target_sources(jngl PRIVATE ${ANDROID_SOURCES})
@@ -124,25 +126,29 @@ if(ANDROID)
 	add_subdirectory(${VORBIS_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/vorbis)
 	target_link_libraries(jngl PUBLIC vorbisfile)
 
-	set(THEORA_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/theora)
-	if ((NOT EXISTS ${THEORA_SRC_DIR}) OR (NOT EXISTS ${THEORA_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone -b v1.1.1
-		                https://git.xiph.org/theora.git
-		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
+	if(JNGL_VIDEO)
+		set(THEORA_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/theora)
+		if ((NOT EXISTS ${THEORA_SRC_DIR}) OR (NOT EXISTS ${THEORA_SRC_DIR}/CMakeLists.txt))
+			execute_process(COMMAND git clone -b v1.1.1
+			                https://git.xiph.org/theora.git
+			                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
+		endif()
+		add_library(theoradec OBJECT ${LIBTHEORA_DEC} "${THEORA_SRC_DIR}/lib/apiwrapper.c"
+			"${THEORA_SRC_DIR}/lib/bitpack.c" "${THEORA_SRC_DIR}/lib/dequant.c"
+			"${THEORA_SRC_DIR}/lib/fragment.c" "${THEORA_SRC_DIR}/lib/idct.c"
+			"${THEORA_SRC_DIR}/lib/info.c" "${THEORA_SRC_DIR}/lib/internal.c"
+			"${THEORA_SRC_DIR}/lib/state.c" "${THEORA_SRC_DIR}/lib/quant.c"
+			"${THEORA_SRC_DIR}/lib/decapiwrapper.c" "${THEORA_SRC_DIR}/lib/decinfo.c"
+			"${THEORA_SRC_DIR}/lib/decode.c" "${THEORA_SRC_DIR}/lib/huffdec.c")
+		target_include_directories(theoradec PRIVATE ${OGG_INCLUDE_DIRS}
+			"${THEORA_SRC_DIR}/include")
+		target_compile_options(theoradec PRIVATE -Wno-shift-negative-value
+			-Wno-shift-op-parentheses)
+		target_link_libraries(jngl PRIVATE $<TARGET_OBJECTS:theoradec>)
+		target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
+		target_include_directories(jngl PRIVATE "${THEORA_SRC_DIR}/include")
+		target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.cpp)
 	endif()
-	add_library(theoradec OBJECT ${LIBTHEORA_DEC} "${THEORA_SRC_DIR}/lib/apiwrapper.c"
-		"${THEORA_SRC_DIR}/lib/bitpack.c" "${THEORA_SRC_DIR}/lib/dequant.c"
-		"${THEORA_SRC_DIR}/lib/fragment.c" "${THEORA_SRC_DIR}/lib/idct.c"
-		"${THEORA_SRC_DIR}/lib/info.c" "${THEORA_SRC_DIR}/lib/internal.c"
-		"${THEORA_SRC_DIR}/lib/state.c" "${THEORA_SRC_DIR}/lib/quant.c"
-		"${THEORA_SRC_DIR}/lib/decapiwrapper.c" "${THEORA_SRC_DIR}/lib/decinfo.c"
-		"${THEORA_SRC_DIR}/lib/decode.c" "${THEORA_SRC_DIR}/lib/huffdec.c")
-	target_include_directories(theoradec PRIVATE ${OGG_INCLUDE_DIRS} "${THEORA_SRC_DIR}/include")
-	target_compile_options(theoradec PRIVATE -Wno-shift-negative-value -Wno-shift-op-parentheses)
-	target_link_libraries(jngl PRIVATE $<TARGET_OBJECTS:theoradec>)
-	target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
-	target_include_directories(jngl PRIVATE "${THEORA_SRC_DIR}/include")
-	target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.cpp)
 
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)
 	target_include_directories(jngl PRIVATE ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
@@ -258,17 +264,19 @@ else()
 			target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
 			target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
 		endif()
-		pkg_check_modules(THEORA_DEC theoradec)
-		if(THEORA_DEC_FOUND)
-			pkg_check_modules(VORBIS vorbis)
-			if(VORBIS_FOUND)
-				target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
-				target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.cpp)
-				target_include_directories(jngl PRIVATE ${THEORA_DEC_INCLUDE_DIRS})
-				target_link_libraries(jngl PRIVATE ${VORBIS_LINK_LIBRARIES} ${THEORA_DEC_LINK_LIBRARIES})
+		if(JNGL_VIDEO)
+			pkg_check_modules(THEORA_DEC theoradec)
+			if(THEORA_DEC_FOUND)
+				pkg_check_modules(VORBIS vorbis)
+				if(VORBIS_FOUND)
+					target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
+					target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.cpp)
+					target_include_directories(jngl PRIVATE ${THEORA_DEC_INCLUDE_DIRS})
+					target_link_libraries(jngl PRIVATE ${VORBIS_LINK_LIBRARIES} ${THEORA_DEC_LINK_LIBRARIES})
 
-				add_executable(videoplayer examples/videoplayer.cpp)
-				target_link_libraries(videoplayer PRIVATE jngl)
+					add_executable(videoplayer examples/videoplayer.cpp)
+					target_link_libraries(videoplayer PRIVATE jngl)
+				endif()
 			endif()
 		endif()
 		if(NOT APPLE)
