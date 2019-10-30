@@ -11,6 +11,7 @@
 #include "main.hpp"
 
 #include <algorithm>
+#include <array>
 #include <stdexcept>
 #include <unordered_map>
 
