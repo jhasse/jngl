@@ -27,7 +27,7 @@ public:
 	};
 
 	JNGLDLL_API Sprite(const unsigned char* bytes, size_t width, size_t height);
-	JNGLDLL_API Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
+	JNGLDLL_API explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
 	void JNGLDLL_API step() override;
 	void JNGLDLL_API draw() const override;
 	void JNGLDLL_API draw(const ShaderProgram* shaderProgram) const;
@@ -61,10 +61,10 @@ public:
 
 private:
 	static void cleanUpRowPointers(std::vector<unsigned char*>& buf);
-	void loadTexture(const int scaledWidth, const int scaledHeight, const std::string& filename,
-	                 bool halfLoad, unsigned int format, const unsigned char* const* rowPointers,
+	void loadTexture(int scaledWidth, int scaledHeight, const std::string& filename, bool halfLoad,
+	                 unsigned int format, const unsigned char* const* rowPointers,
 	                 const unsigned char* data = nullptr);
-	Finally LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad);
+	Finally LoadPNG(const std::string& filename, FILE* fp, bool halfLoad);
 	struct BMPHeader {
 		unsigned int dataOffset;
 		unsigned int headerSize;
@@ -75,12 +75,12 @@ private:
 		unsigned int compression;
 		unsigned int dataSize;
 	};
-	Finally LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad);
+	Finally LoadBMP(const std::string& filename, FILE* fp, bool halfLoad);
 #ifndef NOJPEG
-	Finally LoadJPG(const std::string& filename, FILE* file, const bool halfLoad);
+	Finally LoadJPG(const std::string& filename, FILE* file, bool halfLoad);
 #endif
 #ifndef NOWEBP
-	Finally LoadWebP(const std::string& filename, FILE* file, const bool halfLoad);
+	Finally LoadWebP(const std::string& filename, FILE* file, bool halfLoad);
 #endif
 
 	std::shared_ptr<Texture> texture;

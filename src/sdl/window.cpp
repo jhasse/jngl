@@ -11,6 +11,8 @@
 #include "../window.hpp"
 #include "windowimpl.hpp"
 
+#include <boost/math/special_functions/detail/round_fwd.hpp>
+
 namespace jngl {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
@@ -163,11 +165,11 @@ Window::Window(const std::string& title, const int width, const int height, cons
 					[[fallthrough]];
 				case SDL_FINGERMOTION:
 					if (relativeMouseMode) {
-						mousex_ = std::lround(event.tfinger.dx * width_);
-						mousey_ = std::lround(event.tfinger.dy * height_);
+						mousex_ = boost::math::iround(event.tfinger.dx * float(width_));
+						mousey_ = boost::math::iround(event.tfinger.dy * float(height_));
 					} else {
-						mousex_ = std::lround(event.tfinger.x * width_);
-						mousey_ = std::lround(event.tfinger.y * height_);
+						mousex_ = boost::math::iround(event.tfinger.x * float(width_));
+						mousey_ = boost::math::iround(event.tfinger.y * float(height_));
 					}
 					break;
 #endif
@@ -313,12 +315,12 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		Finally _([&fp]() {
 			fclose(fp);
 		});
-		png_byte buf[PNG_BYTES_TO_CHECK];
+		std::array<png_byte, PNG_BYTES_TO_CHECK> buf{};
 		static_assert(PNG_BYTES_TO_CHECK >= sizeof(uint16_t), "Invalid PNG signature size.");
 
 		// Read in some of the signature bytes
-		if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK or
-		    png_sig_cmp(buf, 0, PNG_BYTES_TO_CHECK) != 0) {
+		if (fread(&buf[0], 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK or
+		    png_sig_cmp(&buf[0], 0, PNG_BYTES_TO_CHECK) != 0) {
 			throw std::runtime_error(std::string("Error reading signature bytes."));
 		}
 		png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);

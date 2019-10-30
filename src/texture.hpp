@@ -22,6 +22,8 @@ public:
 	        GLenum format = GL_RGBA, const GLubyte* data = nullptr /* ... or as one pointer */);
 	Texture(const Texture&) = delete;
 	Texture& operator=(const Texture&) = delete;
+	Texture(Texture&&) = delete;
+	Texture& operator=(Texture&&) = delete;
 	~Texture();
 	void Bind() const;
 	void draw(float red, float green, float blue, float alpha, const ShaderProgram* = nullptr) const;
@@ -29,9 +31,9 @@ public:
 	                 float blue, float alpha) const;
 	void drawMesh(const std::vector<Vertex>& vertexes, float red, float green, float blue,
 	              float alpha, const ShaderProgram*) const;
-	GLuint getID() const;
-	float getPreciseWidth() const;
-	float getPreciseHeight() const;
+	[[nodiscard]] GLuint getID() const;
+	[[nodiscard]] float getPreciseWidth() const;
+	[[nodiscard]] float getPreciseHeight() const;
 	static void unloadShader();
 	void setBytes(const unsigned char*, int width, int height);
 

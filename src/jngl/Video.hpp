@@ -29,19 +29,23 @@ namespace jngl {
 /// \endcode
 class Video {
 public:
-	Video(const std::string& filename);
+	explicit Video(const std::string& filename);
+	Video(const Video&) = delete;
+	Video& operator=(const Video&) = delete;
+	Video(Video&&) = delete;
+	Video& operator=(Video&&) = delete;
 	~Video();
 
 	void draw() const;
 
 	/// Returns the actual pixel width of the video
-	int getWidth() const;
+	[[nodiscard]] int getWidth() const;
 
 	/// Returns the actual pixel height of the video
-	int getHeight() const;
+	[[nodiscard]] int getHeight() const;
 
 	/// Returns true when the video has reached the end
-	bool finished() const;
+	[[nodiscard]] bool finished() const;
 
 private:
 	class Impl;

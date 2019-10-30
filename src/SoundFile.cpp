@@ -105,19 +105,19 @@ SoundFile::SoundFile(const std::string& filename) : params(std::make_unique<Soun
 	params->freq = static_cast<ALsizei>(pInfo->rate);
 
 	const int bufferSize = 32768;
-	char array[bufferSize]; // 32 KB buffers
-	const int endian = 0;   // 0 for Little-Endian, 1 for Big-Endian
+	std::array<char, bufferSize> array{}; // 32 KB buffers
+	const int endian = 0;                 // 0 for Little-Endian, 1 for Big-Endian
 	int bitStream;
 	long bytes; // NOLINT
 	do {
-		bytes = ov_read(&oggFile, array, bufferSize, endian, 2, 1, &bitStream);
+		bytes = ov_read(&oggFile, &array[0], bufferSize, endian, 2, 1, &bitStream);
 
 		if (bytes < 0) {
 			ov_clear(&oggFile);
 			throw std::runtime_error("Error decoding OGG file (" + filename + ").");
 		}
 
-		buffer_.insert(buffer_.end(), array, array + bytes);
+		buffer_.insert(buffer_.end(), &array[0], &array[0] + bytes);
 	} while (bytes > 0);
 
 	ov_clear(&oggFile);

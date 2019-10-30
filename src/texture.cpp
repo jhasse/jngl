@@ -66,7 +66,7 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 
 	const GLint texCoordAttrib = textureShaderProgram->getAttribLocation("inTexCoord");
 	glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
-	                      reinterpret_cast<void*>(2 * sizeof(float)));
+	                      reinterpret_cast<void*>(2 * sizeof(float))); // NOLINT
 	glEnableVertexAttribArray(texCoordAttrib);
 
 	if (rowPointers) {
@@ -133,7 +133,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 
 	const GLint texCoordAttrib = textureShaderProgram->getAttribLocation("inTexCoord");
 	glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
-	                      reinterpret_cast<void*>(2 * sizeof(float)));
+	                      reinterpret_cast<void*>(2 * sizeof(float))); // NOLINT
 	glEnableVertexAttribArray(texCoordAttrib);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
@@ -162,7 +162,7 @@ void Texture::drawMesh(const std::vector<Vertex>& vertexes, const float red, con
 
 	const GLint texCoordAttrib = textureShaderProgram->getAttribLocation("inTexCoord");
 	glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
-	                      reinterpret_cast<void*>(2 * sizeof(float)));
+	                      reinterpret_cast<void*>(2 * sizeof(float))); // NOLINT
 	glEnableVertexAttribArray(texCoordAttrib);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);

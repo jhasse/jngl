@@ -15,7 +15,8 @@ void showWindow2(const std::string& title, int width, int height, bool fullscree
 	showWindow(title, width, height, fullscreen);
 }
 void showWindow3(const std::string& title, int width, int height, bool fullscreen,
-                 boost::python::tuple minAspectRatio, boost::python::tuple maxAspectRatio) {
+                 const boost::python::tuple& minAspectRatio,
+                 const boost::python::tuple& maxAspectRatio) {
 	showWindow(title, width, height, fullscreen,
 	           { boost::python::extract<int>(minAspectRatio[0]),
 	             boost::python::extract<int>(minAspectRatio[1]) },
