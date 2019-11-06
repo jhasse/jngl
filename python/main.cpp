@@ -3,9 +3,10 @@
 
 #include "../src/jngl.hpp"
 
-#include <boost/python.hpp>
+#include <pybind11/pybind11.h>
 #include <thread>
 
+namespace py = pybind11;
 using namespace jngl;
 
 void showWindow1(const std::string& title, int width, int height) {
@@ -15,13 +16,10 @@ void showWindow2(const std::string& title, int width, int height, bool fullscree
 	showWindow(title, width, height, fullscreen);
 }
 void showWindow3(const std::string& title, int width, int height, bool fullscreen,
-                 const boost::python::tuple& minAspectRatio,
-                 const boost::python::tuple& maxAspectRatio) {
+                 const py::tuple& minAspectRatio, const py::tuple& maxAspectRatio) {
 	showWindow(title, width, height, fullscreen,
-	           { boost::python::extract<int>(minAspectRatio[0]),
-	             boost::python::extract<int>(minAspectRatio[1]) },
-	           { boost::python::extract<int>(maxAspectRatio[0]),
-	             boost::python::extract<int>(maxAspectRatio[1]) });
+	           { minAspectRatio[0].cast<int>(), minAspectRatio[1].cast<int>() },
+	           { maxAspectRatio[0].cast<int>(), maxAspectRatio[1].cast<int>() });
 }
 void drawScaled1(const std::string& filename, double xposition, double yposition, float xfactor,
                  float yfactor) {
@@ -93,114 +91,90 @@ void loadWrapper(const std::string& filename) {
 	load(filename);
 }
 
-struct DrawableWrap : Drawable, boost::python::wrapper<Drawable> {
-	void step() override {
-		get_override("step")();
-	}
-	void draw() const override {
-		get_override("draw")();
-	}
-	void setPos(double x, double y) override {
-		if (boost::python::override setPos = get_override("setPos")) {
-			setPos(x, y);
-			return;
-		}
-		Drawable::setPos(x, y);
-	}
-};
-
-BOOST_PYTHON_MODULE(jngl) { // NOLINT
-	using boost::python::class_;
-	using boost::python::def;
-	using boost::python::enum_;
-	using boost::python::pure_virtual;
-
-	class_<DrawableWrap, boost::noncopyable>("Drawable")
-	    .def("step", pure_virtual(&Drawable::step))
-	    .def("draw", pure_virtual(&Drawable::draw))
-	    .def("setPos", pure_virtual(&Drawable::setPos));
-
-	class_<Sprite>("Sprite", boost::python::init<const std::string&>())
+PYBIND11_MODULE(jngl, m) {
+	py::class_<Sprite>(m, "Sprite")
+	    .def(py::init<const std::string&>())
 	    .def("draw", static_cast<void (Sprite::*)() const>(&Sprite::draw));
 
-	class_<Vec2>("Vec2", boost::python::init<double, double>())
+	py::class_<Vec2>(m, "Vec2")
+	    .def(py::init<double, double>())
 	    .def_readwrite("x", &Vec2::x)
 	    .def_readwrite("y", &Vec2::y);
 
-	def("showWindow", showWindow1);
-	def("showWindow", showWindow2);
-	def("showWindow", showWindow3);
-	def("running", running);
-	def("updateInput", updateInput);
-	def("swapBuffers", swapBuffers);
-	def("hideWindow", hideWindow);
-	def("quit", quit);
-	def("cancelQuit", cancelQuit);
-	def("draw", draw1);
-	def("draw", static_cast<void (*)(const std::string&, double, double)>(draw));
-	def("drawScaled", drawScaled1);
-	def("drawScaled", drawScaled2);
-	def("drawRect", drawRect1);
-	def("drawLine", static_cast<void (*)(double, double, double, double)>(drawLine));
-	def("drawEllipse", static_cast<void (*)(float, float, float, float, float)>(drawEllipse));
-	def("drawPoint", drawPoint);
-	def("rotate", rotate);
-	def("translate", static_cast<void (*)(double, double)>(translate));
-	def("scale", scale1);
-	def("scale", scale2);
-	def("pushMatrix", pushMatrix);
-	def("popMatrix", popMatrix);
-	def("reset", reset);
-	def("load", loadWrapper);
-	def("unload", unload);
-	def("getWidth", getWidth);
-	def("getHeight", getHeight);
-	def("getTime", getTime);
-	def("setMouseVisible", setMouseVisible);
-	def("isMouseVisible", isMouseVisible);
-	def("getMousePos", getMousePos);
-	def("getScaleFactor", getScaleFactor);
-	def("setScaleFactor", setScaleFactor);
+	m.def("showWindow", showWindow1);
+	m.def("showWindow", showWindow2);
+	m.def("showWindow", showWindow3);
+	m.def("running", running);
+	m.def("updateInput", updateInput);
+	m.def("swapBuffers", swapBuffers);
+	m.def("hideWindow", hideWindow);
+	m.def("quit", quit);
+	m.def("cancelQuit", cancelQuit);
+	m.def("draw", draw1);
+	m.def("draw", static_cast<void (*)(const std::string&, double, double)>(draw));
+	m.def("drawScaled", drawScaled1);
+	m.def("drawScaled", drawScaled2);
+	m.def("drawRect", drawRect1);
+	m.def("drawLine", static_cast<void (*)(double, double, double, double)>(drawLine));
+	m.def("drawEllipse", static_cast<void (*)(float, float, float, float, float)>(drawEllipse));
+	m.def("drawPoint", drawPoint);
+	m.def("rotate", rotate);
+	m.def("translate", static_cast<void (*)(double, double)>(translate));
+	m.def("scale", scale1);
+	m.def("scale", scale2);
+	m.def("pushMatrix", pushMatrix);
+	m.def("popMatrix", popMatrix);
+	m.def("reset", reset);
+	m.def("load", loadWrapper);
+	m.def("unload", unload);
+	m.def("getWidth", getWidth);
+	m.def("getHeight", getHeight);
+	m.def("getTime", getTime);
+	m.def("setMouseVisible", setMouseVisible);
+	m.def("isMouseVisible", isMouseVisible);
+	m.def("getMousePos", getMousePos);
+	m.def("getScaleFactor", getScaleFactor);
+	m.def("setScaleFactor", setScaleFactor);
 
-	enum_<mouse::Button>("mouse")
+	py::enum_<mouse::Button>(m, "mouse")
 	    .value("Left", mouse::Left)
 	    .value("Middle", mouse::Middle)
 	    .value("Right", mouse::Right);
 
-	def("mouseDown", mouseDown1);
-	def("mouseDown", mouseDown2);
-	def("mousePressed", mousePressed1);
-	def("mousePressed", mousePressed2);
-	def("setMouse", setMouse);
-	def("setTitle", setTitle);
-	def("setBackgroundColor",
+	m.def("mouseDown", mouseDown1);
+	m.def("mouseDown", mouseDown2);
+	m.def("mousePressed", mousePressed1);
+	m.def("mousePressed", mousePressed2);
+	m.def("setMouse", setMouse);
+	m.def("setTitle", setTitle);
+	m.def("setBackgroundColor",
 	    static_cast<void (*)(unsigned char, unsigned char, unsigned char)>(setBackgroundColor));
-	def("setColor", setColor1);
-	def("setColor", setColor2);
-	def("setAlpha", setAlpha);
-	def("setFontColor", setFontColor1);
-	def("setFontColor", setFontColor2);
-	def("setSpriteColor", setSpriteColor1);
-	def("setSpriteColor", setSpriteColor2);
-	def("print", static_cast<void (*)(const std::string&, Vec2)>(print));
-	def("print", print1);
-	def("getFontSize", getFontSize);
-	def("setFontSize", setFontSize);
-	def("setFont", setFont);
-	def("setFontByName", setFontByName);
-	def("sleep", +[](const int ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); });
-	def("getFPS", getFPS);
-	def("errorMessage", errorMessage);
-	def("getFullscreen", getFullscreen);
-	def("getWindowWidth", getWindowWidth);
-	def("getWindowHeight", getWindowHeight);
-	def("getScreenWidth", getScreenWidth);
-	def("getScreenHeight", getScreenHeight);
-	def("setAntiAliasing", setAntiAliasing);
-	def("getAntiAliasing", getAntiAliasing);
-	def("getTextWidth", getTextWidth);
+	m.def("setColor", setColor1);
+	m.def("setColor", setColor2);
+	m.def("setAlpha", setAlpha);
+	m.def("setFontColor", setFontColor1);
+	m.def("setFontColor", setFontColor2);
+	m.def("setSpriteColor", setSpriteColor1);
+	m.def("setSpriteColor", setSpriteColor2);
+	m.def("print", static_cast<void (*)(const std::string&, Vec2)>(print));
+	m.def("print", print1);
+	m.def("getFontSize", getFontSize);
+	m.def("setFontSize", setFontSize);
+	m.def("setFont", setFont);
+	m.def("setFontByName", setFontByName);
+	m.def("sleep", +[](const int ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); });
+	m.def("getFPS", getFPS);
+	m.def("errorMessage", errorMessage);
+	m.def("getFullscreen", getFullscreen);
+	m.def("getWindowWidth", getWindowWidth);
+	m.def("getWindowHeight", getWindowHeight);
+	m.def("getScreenWidth", getScreenWidth);
+	m.def("getScreenHeight", getScreenHeight);
+	m.def("setAntiAliasing", setAntiAliasing);
+	m.def("getAntiAliasing", getAntiAliasing);
+	m.def("getTextWidth", getTextWidth);
 
-	enum_<key::KeyType>("key")
+	py::enum_<key::KeyType>(m, "key")
 	    .value("Left", key::Left)
 	    .value("Up", key::Up)
 	    .value("Right", key::Right)
@@ -240,32 +214,33 @@ BOOST_PYTHON_MODULE(jngl) { // NOLINT
 	    .value("F12", key::F12)
 	    .value("Any", key::Any);
 
-	def("keyDown", keyDown1);
-	def("keyDown", keyDown2);
-	def("keyPressed", keyPressed1);
-	def("keyPressed", keyPressed2);
-	def("play", play);
-	def("stop", stop);
-	def("isPlaying", isPlaying);
-	def("isOpenALInstalled", isOpenALInstalled);
-	def("setPlaybackSpeed", setPlaybackSpeed);
-	def("setVolume", setVolume);
-	def("getDesktopWidth", getDesktopWidth);
-	def("getDesktopHeight", getDesktopHeight);
-	def("getMouseWheel", getMouseWheel);
-	def("setPrefix", setPrefix);
-	def("getPrefix", getPrefix);
-	def("setConfigPath", setConfigPath);
-	def("getConfigPath", getConfigPath);
-	def("pushSpriteAlpha", pushSpriteAlpha);
-	def("popSpriteAlpha", popSpriteAlpha);
+	m.def("keyDown", keyDown1);
+	m.def("keyDown", keyDown2);
+	m.def("keyPressed", keyPressed1);
+	m.def("keyPressed", keyPressed2);
+	m.def("play", play);
+	m.def("stop", stop);
+	m.def("isPlaying", isPlaying);
+	m.def("isOpenALInstalled", isOpenALInstalled);
+	m.def("setPlaybackSpeed", setPlaybackSpeed);
+	m.def("setVolume", setVolume);
+	m.def("getDesktopWidth", getDesktopWidth);
+	m.def("getDesktopHeight", getDesktopHeight);
+	m.def("getMouseWheel", getMouseWheel);
+	m.def("setPrefix", setPrefix);
+	m.def("getPrefix", getPrefix);
+	m.def("setConfigPath", setConfigPath);
+	m.def("getConfigPath", getConfigPath);
+	m.def("pushSpriteAlpha", pushSpriteAlpha);
+	m.def("popSpriteAlpha", popSpriteAlpha);
 
-	class_<FrameBuffer, boost::noncopyable>("FrameBuffer", boost::python::init<int, int>())
+	py::class_<FrameBuffer>(m, "FrameBuffer")
+	    .def(py::init<int, int>())
 	    // .def("draw", &FrameBuffer::draw) FIXME
 	    .def("beginDraw", &FrameBuffer::beginDraw)
 	    .def("endDraw", &FrameBuffer::endDraw);
 
-	enum_<controller::Button>("controller")
+	py::enum_<controller::Button>(m, "controller")
 	    .value("LeftStickX", controller::LeftStickX)
 	    .value("LeftStickY", controller::LeftStickY)
 	    .value("RightStickX", controller::RightStickX)

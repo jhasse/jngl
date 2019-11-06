@@ -128,13 +128,11 @@ lib = static_library('jngl', sources : src, cpp_args : cpp_args, install : true,
 include = include_directories('src')
 
 if target_machine.system() == 'linux'
-	boost_python_dep = dependency('boost', modules : [ 'python3' ], required : false)
 	python3_dep = dependency('python3', required : false)
-	if boost_python_dep.found() and python3_dep.found()
+	if python3_dep.found() and cxx.has_header('pybind11/pybind11.h')
 		shared_library('jngl', link_with : lib, name_prefix : '', sources : [
 			'python/main.cpp',
 		], dependencies : [
-			boost_python_dep,
 			thread_dep,
 			python3_dep,
 		],
