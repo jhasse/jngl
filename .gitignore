@@ -1,15 +1,5 @@
 *.DS_Store
 /build*/
-visualcpp/Debug/
-visualcpp/Release/
-visualcpp/packages/
-visualcpp/*/Debug/
-visualcpp/*/Release/
-visualcpp/*.sdf
-visualcpp/*.suo
-visualcpp/*.opensdf
-visualcpp/.vs/
-visualcpp/JNGL.VC.db
 installer/*.nsi
 *.os
 *.so

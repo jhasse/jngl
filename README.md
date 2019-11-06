@@ -41,8 +41,11 @@ mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb
 
 ### Visual C++ 2015 or newer
 
-Open `visualcpp/JNGL.sln` and press <kbd>Ctrl</kbd>+<kbd>F5</kbd> to build JNGL and run the example
-application.
+```
+cmake -Bbuild -H. -AWin32
+```
+
+and then open `build/jngl.sln`.
 
 ### Visual Studio Code
 
