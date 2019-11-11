@@ -11,7 +11,7 @@
 #include "../window.hpp"
 #include "windowimpl.hpp"
 
-#include <boost/math/special_functions/detail/round_fwd.hpp>
+#include <boost/math/special_functions/round.hpp>
 
 namespace jngl {
 
