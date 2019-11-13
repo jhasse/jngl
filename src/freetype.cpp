@@ -15,6 +15,7 @@
 
 #include FT_GLYPH_H
 
+#include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
 #include <codecvt>
 #include <locale>
@@ -39,8 +40,8 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 	const auto bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph); // NOLINT
 	const FT_Bitmap& bitmap = bitmap_glyph->bitmap;
 
-	int width = bitmap.width;
-	int height = bitmap.rows;
+	const int width = boost::numeric_cast<int>(bitmap.width);
+	const int height = boost::numeric_cast<int>(bitmap.rows);
 	width_ = int(face->glyph->advance.x >> 6);
 
 	if (height == 0) {
@@ -71,24 +72,24 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 		}
 	}
 
-	texture_ = new Texture(width, height, width, height, &data[0]);
+	texture_ = new Texture(static_cast<float>(width), static_cast<float>(height), width, height, &data[0]);
 	for (auto d : data) {
 		delete[] d;
 	}
 
-	top_ = fontHeight - bitmap_glyph->top;
+	top_ = boost::numeric_cast<int>(fontHeight) - bitmap_glyph->top;
 	left_ = bitmap_glyph->left;
 }
 
 void Character::Draw() const {
 	if (texture_) {
 		pushMatrix();
-		opengl::translate(left_, top_);
+		opengl::translate(static_cast<float>(left_), static_cast<float>(top_));
 		texture_->draw(float(fontColorRed) / 255.0f, float(fontColorGreen) / 255.0f,
 		               float(fontColorBlue) / 255.0f, float(fontColorAlpha) / 255.0f);
 		popMatrix();
 	}
-	opengl::translate(width_, 0);
+	opengl::translate(static_cast<float>(width_), 0);
 }
 
 int Character::getWidth() const {
@@ -226,7 +227,7 @@ void FontImpl::print(int x, int y, const std::string& text) {
 	int lineNr = 0;
 	for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
 		pushMatrix();
-		opengl::translate(x, y + lineHeight * lineNr);
+		opengl::translate(static_cast<float>(x), static_cast<float>(y + lineHeight * lineNr));
 		++lineNr;
 
 		auto charEnd = lineIter->end();
