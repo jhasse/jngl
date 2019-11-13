@@ -2,6 +2,7 @@ language: cpp
 os:
 - osx
 - linux
+- windows
 dist: bionic
 compiler:
   - clang
@@ -15,6 +16,7 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cmake -H. -Bbuild-cmake -GNinja; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ninja -C build-cmake; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd doc && cmake . && make && doxygen; fi
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then cmake -Bbuild -H. -AWin32 && cmake --build build; fi
 addons:
   apt:
     packages:
