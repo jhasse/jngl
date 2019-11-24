@@ -8,5 +8,5 @@ jobs:
     - name: Build with CMake and Visual Studio
       shell: bash
       run: |
-        cmake -Bbuild -H. -GNinja
+        cmake -Bbuild -H.
         cmake --build build
