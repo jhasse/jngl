@@ -427,10 +427,18 @@ void testKeys() {
 			        << " ↓: " << controller->down(jngl::controller::DpadDown)
 			        << " ←: " << controller->down(jngl::controller::DpadLeft)
 			        << " →: " << controller->down(jngl::controller::DpadRight);
+			static uint8_t pressedFade = 150;
 			if (controller->pressed(jngl::controller::A)) {
+				assert(controller->pressed(jngl::controller::A));
 				using namespace std::chrono_literals;
 				controller->rumble(0.5f, 200ms);
+				pressedFade = 0;
+			} else {
+				if (pressedFade < 150) {
+					pressedFade += 10;
+				}
 			}
+			jngl::setFontColor(pressedFade, pressedFade, pressedFade);
 
 			jngl::pushMatrix();
 			for (const jngl::Vec2 stick :
