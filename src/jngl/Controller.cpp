@@ -8,13 +8,19 @@
 namespace jngl {
 
 bool Controller::pressed(const controller::Button button) {
-	if (buttonPressed[button] && !down(button)) {
-		pWindow->addUpdateInputCallback([this, button]() { buttonPressed[button] = false; });
-	} else if (down(button) && !buttonPressed[button]) {
-		buttonPressed[button] = true;
-		return true;
+	if (buttonPressed[button] == ButtonState::UNKNOWN && down(button)) {
+		buttonPressed[button] = ButtonState::PRESSED;
+		pWindow->addUpdateInputCallback([self = shared_from_this(), button]() {
+			self->buttonPressed[button] = ButtonState::WAITING_FOR_UP;
+		});
 	}
-	return false;
+	if (buttonPressed[button] == ButtonState::WAITING_FOR_UP && !down(button)) {
+		// We're using addUpdateInputCallback since we don't want to change the state during a frame
+		pWindow->addUpdateInputCallback([self = shared_from_this(), button]() {
+			self->buttonPressed[button] = ButtonState::UNKNOWN;
+		});
+	}
+	return buttonPressed[button] == ButtonState::PRESSED;
 }
 
 float Controller::state(const controller::Button button) const {
