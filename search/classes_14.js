@@ -5,7 +5,7 @@ var searchData=
   ['u16string_5fview',['u16string_view',['http://en.cppreference.com/w/cpp/experimental/basic_string_view.html',1,'u16string_view'],['http://en.cppreference.com/w/cpp/string/basic_string_view.html',1,'u16string_view']]],
   ['u32streampos',['u32streampos',['http://en.cppreference.com/w/cpp/io/fpos.html',1,'std']]],
   ['u32string',['u32string',['http://en.cppreference.com/w/cpp/string/basic_string.html',1,'u32string'],['http://en.cppreference.com/w/cpp/string/basic_string.html',1,'u32string']]],
-  ['u32string_5fview',['u32string_view',['http://en.cppreference.com/w/cpp/experimental/basic_string_view.html',1,'u32string_view'],['http://en.cppreference.com/w/cpp/string/basic_string_view.html',1,'u32string_view']]],
+  ['u32string_5fview',['u32string_view',['http://en.cppreference.com/w/cpp/string/basic_string_view.html',1,'u32string_view'],['http://en.cppreference.com/w/cpp/experimental/basic_string_view.html',1,'u32string_view']]],
   ['u8string',['u8string',['http://en.cppreference.com/w/cpp/string/basic_string.html',1,'u8string'],['http://en.cppreference.com/w/cpp/string/basic_string.html',1,'u8string']]],
   ['u8string_5fview',['u8string_view',['http://en.cppreference.com/w/cpp/string/basic_string_view.html',1,'std']]],
   ['uint16_5ft',['uint16_t',['http://en.cppreference.com/w/cpp/types/integer.html',1,'std']]],
