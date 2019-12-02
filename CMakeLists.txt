@@ -48,7 +48,12 @@ else() # Windows
 	target_link_libraries(jngl PUBLIC winmm)
 	if(MSVC)
 		target_compile_definitions(jngl PRIVATE _CRT_SECURE_NO_WARNINGS)
-		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/win/x86)
+		if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+			set(JNGL_ARCH "x86_64")
+		else()
+			set(JNGL_ARCH "x86")
+		endif()
+		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/win/${JNGL_ARCH})
 		target_link_libraries(jngl PUBLIC Xinput)
 	else()
 		target_link_libraries(jngl PUBLIC xinput1_4)
@@ -238,7 +243,8 @@ else()
 		target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
 
 		target_include_directories(jngl PRIVATE ${PROJECT_SOURCE_DIR}/include/msvc)
-		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc)
+		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
+		add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
 		target_link_libraries(jngl PUBLIC epoxy)
 
 		FetchContent_Declare(webp
@@ -298,6 +304,7 @@ else()
 
 	add_executable(jngl-test src/test/test.cpp)
 	target_link_libraries(jngl-test jngl)
+	add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/jngl.webp "$<TARGET_FILE_DIR:jngl-test>")
 endif()
 
 target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})

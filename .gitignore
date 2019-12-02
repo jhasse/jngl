@@ -19,3 +19,8 @@ Thumbs.db
 /nintendo
 /include/ios/boost
 /.clangd/
+
+# Visual Studio
+/out/
+/.vs/
+/CMakeSettings.json
