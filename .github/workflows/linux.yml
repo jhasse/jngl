@@ -8,7 +8,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install doxygen graphviz libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev libjpeg-dev libpng-dev libvorbis-dev libopenal-dev meson libepoxy-dev libboost-dev g++ libwebp-dev git libsdl2-dev ninja-build
+        sudo apt install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev libjpeg-dev libpng-dev libvorbis-dev libopenal-dev meson libepoxy-dev libboost-dev g++ libwebp-dev git libsdl2-dev ninja-build
     - name: Build with CMake and GCC
       run: |
         cmake -Bbuild -H. -GNinja
@@ -18,4 +18,5 @@ jobs:
         cd doc
         cmake .
         make
-        doxygen
+        cd ..
+        docker run -v$PWD:/w -it fedora:31 /bin/sh -c "dnf install -y graphviz doxygen && cd /w/doc && doxygen"
