@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.9)
 project(jngl-doxygen NONE)
 
-find_package(Doxygen COMPONENTS dot)
-if(DOXYGEN_FOUND)
+# find_package(Doxygen COMPONENTS dot)
+# if(DOXYGEN_FOUND)
 	include(ExternalProject)
 	ExternalProject_Add (
 		cppreference
@@ -20,4 +20,4 @@ if(DOXYGEN_FOUND)
 	# 	DEPENDS cppreference
 	# 	USES_TERMINAL
 	# )
-endif()
+# endif()
