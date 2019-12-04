@@ -6,7 +6,9 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Install dependencies
-      run: sudo apt install doxygen graphviz libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev libjpeg-dev libpng-dev libvorbis-dev libopenal-dev meson libepoxy-dev libboost-dev g++ libwebp-dev git libsdl2-dev ninja-build
+      run: |
+        sudo apt update
+        sudo apt install doxygen graphviz libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev libjpeg-dev libpng-dev libvorbis-dev libopenal-dev meson libepoxy-dev libboost-dev g++ libwebp-dev git libsdl2-dev ninja-build
     - name: Build with CMake and GCC
       run: |
         cmake -Bbuild -H. -GNinja
