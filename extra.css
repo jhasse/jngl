@@ -163,7 +163,7 @@ a.qindexHL {
 
 a.el, .memname, td.entry, pre.fragment, div.line, .mdescLeft, .mdescRight, .memItemLeft,
 .memItemRight, .memTemplItemLeft, .memTemplItemRight, .memTemplParams, .memtemplate,
-.params .paramname, .retval .paramname, .params .paramdir {
+.params .paramname, .retval .paramname, .params .paramdir, code {
 	font-family: 'Consolas', monospace;
 }
 
