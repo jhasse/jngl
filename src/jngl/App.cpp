@@ -3,6 +3,7 @@
 
 #include "App.hpp"
 
+#include "../jngl/debug.hpp"
 #include "../windowptr.hpp"
 
 #include <stdexcept>
@@ -39,6 +40,9 @@ std::string App::getDisplayName() const {
 }
 
 void App::mainLoop() {
+	debug("Starting main loop for '");
+	debug(impl->displayName);
+	debugLn('\'');
 	return pWindow->mainLoop();
 }
 
