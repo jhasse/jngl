@@ -340,8 +340,8 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 }
 #ifndef NOJPEG
 Finally Sprite::LoadJPG(const std::string& filename, FILE* file, const bool halfLoad) {
-	jpeg_decompress_struct info;
-	JpegErrorMgr err;
+	jpeg_decompress_struct info{};
+	JpegErrorMgr err{};
 	info.err = jpeg_std_error(&err.pub);
 	err.pub.error_exit = JpegErrorExit;
 

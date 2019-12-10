@@ -277,8 +277,8 @@ public:
 		}
 	}
 
-	bool finished() const {
-		return !THEORAPLAY_isDecoding(decoder);
+	[[nodiscard]] bool finished() const {
+		return THEORAPLAY_isDecoding(decoder) == 0;
 	}
 
 	~Impl() {
@@ -303,7 +303,7 @@ public:
 	[[nodiscard]] int getHeight() const { return video->height; }
 
 private:
-	bool started() const {
+	[[nodiscard]] bool started() const {
 		return startTime > 0;
 	}
 

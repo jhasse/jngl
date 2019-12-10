@@ -272,7 +272,7 @@ public:
 		jngl::print(name_, int(x_), int(y_));
 		jngl::setFontColor(0, 0, 0, 255);
 	}
-	int GetAlpha() const {
+	[[nodiscard]] int GetAlpha() const {
 		return int(alpha_);
 	}
 private:

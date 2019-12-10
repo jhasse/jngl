@@ -24,7 +24,7 @@ public:
 	struct Impl;
 	/// Lifetime object when the ShaderProgram is in use
 	struct Context {
-		Context(const Impl&);
+		explicit Context(const Impl&);
 		~Context();
 		Context(const Context&) = delete;
 		Context& operator=(const Context&) = delete;
@@ -46,8 +46,8 @@ public:
 	    Context
 	    use() const;
 
-	int getAttribLocation(const std::string& name) const;
-	int getUniformLocation(const std::string& name) const;
+	[[nodiscard]] int getAttribLocation(const std::string& name) const;
+	[[nodiscard]] int getUniformLocation(const std::string& name) const;
 
 private:
 	std::unique_ptr<Impl> impl;
