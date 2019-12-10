@@ -26,8 +26,10 @@ private:
 	std::shared_ptr<FontImpl> impl;
 };
 
+/// Print \a text at \a position
 void JNGLDLL_API print(const std::string& text, jngl::Vec2 position);
 
+/// Print \a text at { \a xposition, \a yposition }
 void JNGLDLL_API print(const std::string& text, int xposition, int yposition);
 
 /// Get the font size used by print()
