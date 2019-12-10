@@ -42,6 +42,7 @@ var searchData=
   ['pressed',['pressed',['../classjngl_1_1Controller.html#a90c1d7e8f2554e1ca29224a4b24cf020',1,'jngl::Controller']]],
   ['prev',['prev',['http://en.cppreference.com/w/cpp/iterator/prev.html',1,'std']]],
   ['prev_5fpermutation',['prev_permutation',['http://en.cppreference.com/w/cpp/algorithm/prev_permutation.html',1,'std']]],
+  ['print',['print',['../namespacejngl.html#a0c83d60c8e363c7fbb2ec6fd6b75a454',1,'jngl::print(const std::string &amp;text, jngl::Vec2 position)'],['../namespacejngl.html#ac2da1365da999f197b91682016abed76',1,'jngl::print(const std::string &amp;text, int xposition, int yposition)']]],
   ['printf',['printf',['http://en.cppreference.com/w/cpp/io/c/fprintf.html',1,'std']]],
   ['priority_5fqueue',['priority_queue',['http://en.cppreference.com/w/cpp/container/priority_queue/priority_queue.html',1,'std::priority_queue']]],
   ['probabilities',['probabilities',['http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution/probabilities.html',1,'std::discrete_distribution']]],
