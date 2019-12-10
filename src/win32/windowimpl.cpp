@@ -33,6 +33,7 @@ public:
 	int relativeX = 0;
 	int relativeY = 0;
 	std::function<void()> distinguishLeftRight;
+	std::array<bool, XUSER_MAX_COUNT> controllersConnected;
 
 	static void ReleaseDC(HWND, HDC);
 	static void ReleaseRC(HGLRC);
@@ -328,16 +329,23 @@ void calculateTrigger(BYTE& v) {
 
 void Window::UpdateInput() {
 	textInput.clear();
+	const auto lastControllersConnected = impl->controllersConnected;
 	for (int i = 0; i < XUSER_MAX_COUNT; ++i) {
 		DWORD result = XInputGetState(i, &states[i]);
 		if (result == ERROR_SUCCESS) {
+			impl->controllersConnected[i] = true;
 			calculateStick(states[i].Gamepad.sThumbLX, states[i].Gamepad.sThumbLY,
 			               XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
 			calculateStick(states[i].Gamepad.sThumbRX, states[i].Gamepad.sThumbRY,
 			               XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
 			calculateTrigger(states[i].Gamepad.bLeftTrigger);
 			calculateTrigger(states[i].Gamepad.bRightTrigger);
+		} else {
+			impl->controllersConnected[i] = false;
 		}
+	}
+	if (controllerChangedCallback && lastControllersConnected != impl->controllersConnected) {
+		controllerChangedCallback();
 	}
 	if (relativeMouseMode && impl->touchscreenActive) {
 		impl->relativeX = mousex_;
