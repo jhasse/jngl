@@ -440,7 +440,7 @@ namespace jngl {
 		glEnableVertexAttribArray(0);
 	}
 
-	void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) const {
+	void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 		glBindVertexArray(opengl::vaoStream);
 		auto tmp = useSimpleShaderProgram();
 		const float vertexes[] = { static_cast<float>(a.x * jngl::getScaleFactor()),
@@ -456,7 +456,7 @@ namespace jngl {
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 	}
 
-	void Window::drawEllipse(const Vec2 mid, const Vec2 size, float startAngle) const {
+	void Window::drawEllipse(const Vec2 mid, const Vec2 size, float startAngle) {
 		glBindVertexArray(opengl::vaoStream);
 		jngl::pushMatrix();
 		jngl::translate(mid);

@@ -95,15 +95,15 @@ namespace jngl {
 #endif
 		std::string getTextInput() const;
 		void initGlObjects();
-		void drawTriangle(Vec2 a, Vec2 b, Vec2 c) const;
-		void drawEllipse(Vec2 mid, Vec2 size, float startAngle) const;
+		static void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
+		static void drawEllipse(Vec2 mid, Vec2 size, float startAngle);
 		void drawLine(Vec2 a, Vec2 b) const;
 		void drawRect(Vec2 pos, Vec2 size) const;
 		void onControllerChanged(std::function<void()>);
 
 	private:
 		static int GetKeyCode(jngl::key::KeyType key);
-		std::string GetFontFileByName(const std::string& fontname);
+		static std::string GetFontFileByName(const std::string& fontname);
 		void calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 		                         const std::pair<int, int> maxAspectRatio);
 
