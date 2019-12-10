@@ -6,7 +6,6 @@
 #include "../opengl.hpp"
 
 #include <boost/math/special_functions/round.hpp>
-#include <boost/numeric/conversion/cast.hpp>
 #include <boost/range/adaptor/reversed.hpp>
 #include <boost/test/unit_test.hpp>
 #include <jngl.hpp>
@@ -41,7 +40,7 @@ std::string Fixture::getAsciiArt() const {
 	// ASCII art should always have the same size, therefore let's take the scaleFactor into
 	// account:
 	auto reduceFactorAsFloat = static_cast<float>(10 * jngl::getScaleFactor());
-	int reduceFactor = boost::numeric_cast<int>(std::lround(reduceFactorAsFloat));
+	int reduceFactor = boost::math::iround(reduceFactorAsFloat);
 	BOOST_CHECK_CLOSE(reduceFactorAsFloat, reduceFactor, 1e-6);
 
 	assert(w % reduceFactor == 0);
@@ -74,10 +73,10 @@ std::string Fixture::getAsciiArt() const {
 			//                                                 ";", ":", ",", ".", " " };
 
 			// UTF-8:
-			const static std::vector<std::string> chars = {"█", "▓", "▒", "░", " "};
+			const static std::vector<std::string> chars = { "█", "▓", "▒", "░", " " };
 
 			float gray = (cell.at(0) + cell.at(1) + cell.at(2)) / 3.0f;
-			const size_t index = std::lround(gray * float(chars.size() - 1));
+			const size_t index = boost::math::iround(gray * float(chars.size() - 1));
 			assert(index < chars.size());
 			out += chars[index];
 		}
@@ -93,8 +92,7 @@ void Fixture::reset() {
 	jngl::updateInput();
 
 	const double frameSize = 5;
-	const jngl::Vec2 screen(jngl::getScreenWidth(),
-	                        jngl::getScreenHeight());
+	const jngl::Vec2 screen(jngl::getScreenWidth(), jngl::getScreenHeight());
 	jngl::drawRect(-screen.x / 2, screen.y / 2 - frameSize, screen.x, frameSize); // bottom
 	jngl::drawRect(-screen.x / 2, -screen.y / 2, screen.x, frameSize);            // top
 	jngl::drawRect(screen.x / 2 - frameSize, -screen.y / 2, frameSize, screen.y); // right
