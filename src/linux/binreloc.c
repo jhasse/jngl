@@ -171,7 +171,7 @@ static char* _br_find_exe_for_symbol(const void* symbol) {
 #define SIZE (PATH_MAX + 100)
 	FILE *f;
 	size_t address_string_len;
-	char *address_string, line[SIZE], *found;
+	char line[SIZE];
 
 	if (symbol == NULL) {
 		return (char *) NULL;
@@ -183,12 +183,10 @@ static char* _br_find_exe_for_symbol(const void* symbol) {
 	}
 
 	address_string_len = 4;
-	address_string = (char *) malloc (address_string_len);
-	found = (char *) NULL;
+	char* address_string = (char*)malloc(address_string_len);
+	char* found = (char*)NULL;
 
 	while (!feof (f)) {
-		char *start_addr, *end_addr, *end_addr_end, *file;
-		void *start_addr_p, *end_addr_p;
 		size_t len;
 
 		if (fgets (line, SIZE, f) == NULL) {
@@ -199,9 +197,9 @@ static char* _br_find_exe_for_symbol(const void* symbol) {
 			continue;
 		}
 		/* Parse line. */
-		start_addr = line;
-		end_addr = strchr (line, '-');
-		file = strchr (line, '/');
+		char* start_addr = line;
+		char* end_addr = strchr(line, '-');
+		char* file = strchr(line, '/');
 
 		/* More sanity check. */
 		if (!(file > end_addr && end_addr != NULL && end_addr[0] == '-')) {
@@ -209,7 +207,7 @@ static char* _br_find_exe_for_symbol(const void* symbol) {
 		}
 		end_addr[0] = '\0';
 		end_addr++;
-		end_addr_end = strchr (end_addr, ' ');
+		char* end_addr_end = strchr(end_addr, ' ');
 		if (end_addr_end == NULL) {
 			continue;
 		}
@@ -244,11 +242,13 @@ static char* _br_find_exe_for_symbol(const void* symbol) {
 		memcpy (address_string, "0x", 2);
 		memcpy (address_string + 2, start_addr, len);
 		address_string[2 + len] = '\0';
+		void* start_addr_p;
 		sscanf (address_string, "%p", &start_addr_p);
 
 		memcpy (address_string, "0x", 2);
 		memcpy (address_string + 2, end_addr, len);
 		address_string[2 + len] = '\0';
+		void* end_addr_p;
 		sscanf (address_string, "%p", &end_addr_p);
 
 
@@ -380,8 +380,6 @@ br_find_exe_dir (const char *default_dir)
 char *
 br_find_prefix (const char *default_prefix)
 {
-	char *dir1, *dir2;
-
 	if (exe == (char *) NULL) {
 		/* BinReloc not initialized. */
 		if (default_prefix != (const char *) NULL) {
@@ -390,8 +388,8 @@ br_find_prefix (const char *default_prefix)
 		return (char *) NULL;
 	}
 
-	dir1 = br_dirname (exe);
-	dir2 = br_dirname (dir1);
+	char* dir1 = br_dirname(exe);
+	char* dir2 = br_dirname(dir1);
 	free (dir1);
 	return dir2;
 }
@@ -413,9 +411,7 @@ br_find_prefix (const char *default_prefix)
 char *
 br_find_bin_dir (const char *default_bin_dir)
 {
-	char *prefix, *dir;
-
-	prefix = br_find_prefix ((const char *) NULL);
+	char* prefix = br_find_prefix((const char*)NULL);
 	if (prefix == (char *) NULL) {
 		/* BinReloc not initialized. */
 		if (default_bin_dir != (const char *) NULL) {
@@ -424,7 +420,7 @@ br_find_bin_dir (const char *default_bin_dir)
 		return (char *) NULL;
 	}
 
-	dir = br_build_path (prefix, "bin");
+	char* dir = br_build_path(prefix, "bin");
 	free (prefix);
 	return dir;
 }
@@ -446,10 +442,8 @@ br_find_bin_dir (const char *default_bin_dir)
 char *
 br_find_sbin_dir (const char *default_sbin_dir)
 {
-	char *prefix, *dir;
-
-	prefix = br_find_prefix ((const char *) NULL);
-	if (prefix == (char *) NULL) {
+	char* prefix = br_find_prefix((const char*)NULL);
+	if (prefix == (char*)NULL) {
 		/* BinReloc not initialized. */
 		if (default_sbin_dir != (const char *) NULL) {
 			return strdup (default_sbin_dir);
@@ -457,7 +451,7 @@ br_find_sbin_dir (const char *default_sbin_dir)
 		return (char *) NULL;
 	}
 
-	dir = br_build_path (prefix, "sbin");
+	char* dir = br_build_path(prefix, "sbin");
 	free (prefix);
 	return dir;
 }
@@ -480,9 +474,7 @@ br_find_sbin_dir (const char *default_sbin_dir)
 char *
 br_find_data_dir (const char *default_data_dir)
 {
-	char *prefix, *dir;
-
-	prefix = br_find_prefix ((const char *) NULL);
+	char* prefix = br_find_prefix((const char*)NULL);
 	if (prefix == (char *) NULL) {
 		/* BinReloc not initialized. */
 		if (default_data_dir != (const char *) NULL) {
@@ -491,7 +483,7 @@ br_find_data_dir (const char *default_data_dir)
 		return (char *) NULL;
 	}
 
-	dir = br_build_path (prefix, "share");
+	char* dir = br_build_path(prefix, "share");
 	free (prefix);
 	return dir;
 }
@@ -513,9 +505,7 @@ br_find_data_dir (const char *default_data_dir)
 char *
 br_find_locale_dir (const char *default_locale_dir)
 {
-	char *data_dir, *dir;
-
-	data_dir = br_find_data_dir ((const char *) NULL);
+	char* data_dir = br_find_data_dir((const char*)NULL);
 	if (data_dir == (char *) NULL) {
 		/* BinReloc not initialized. */
 		if (default_locale_dir != (const char *) NULL) {
@@ -524,7 +514,7 @@ br_find_locale_dir (const char *default_locale_dir)
 		return (char *) NULL;
 	}
 
-	dir = br_build_path (data_dir, "locale");
+	char* dir = br_build_path(data_dir, "locale");
 	free (data_dir);
 	return dir;
 }
@@ -546,9 +536,7 @@ br_find_locale_dir (const char *default_locale_dir)
 char *
 br_find_lib_dir (const char *default_lib_dir)
 {
-	char *prefix, *dir;
-
-	prefix = br_find_prefix ((const char *) NULL);
+	char* prefix = br_find_prefix((const char*)NULL);
 	if (prefix == (char *) NULL) {
 		/* BinReloc not initialized. */
 		if (default_lib_dir != (const char *) NULL) {
@@ -557,7 +545,7 @@ br_find_lib_dir (const char *default_lib_dir)
 		return (char *) NULL;
 	}
 
-	dir = br_build_path (prefix, "lib");
+	char* dir = br_build_path(prefix, "lib");
 	free (prefix);
 	return dir;
 }
@@ -579,9 +567,7 @@ br_find_lib_dir (const char *default_lib_dir)
 char *
 br_find_libexec_dir (const char *default_libexec_dir)
 {
-	char *prefix, *dir;
-
-	prefix = br_find_prefix ((const char *) NULL);
+	char* prefix = br_find_prefix((const char*)NULL);
 	if (prefix == (char *) NULL) {
 		/* BinReloc not initialized. */
 		if (default_libexec_dir != (const char *) NULL) {
@@ -590,7 +576,7 @@ br_find_libexec_dir (const char *default_libexec_dir)
 		return (char *) NULL;
 	}
 
-	dir = br_build_path (prefix, "libexec");
+	char* dir = br_build_path(prefix, "libexec");
 	free (prefix);
 	return dir;
 }
@@ -612,9 +598,7 @@ br_find_libexec_dir (const char *default_libexec_dir)
 char *
 br_find_etc_dir (const char *default_etc_dir)
 {
-	char *prefix, *dir;
-
-	prefix = br_find_prefix ((const char *) NULL);
+	char* prefix = br_find_prefix((const char*)NULL);
 	if (prefix == (char *) NULL) {
 		/* BinReloc not initialized. */
 		if (default_etc_dir != (const char *) NULL) {
@@ -623,7 +607,7 @@ br_find_etc_dir (const char *default_etc_dir)
 		return (char *) NULL;
 	}
 
-	dir = br_build_path (prefix, "etc");
+	char* dir = br_build_path(prefix, "etc");
 	free (prefix);
 	return dir;
 }
@@ -643,7 +627,6 @@ char *
 br_strcat (const char *str1, const char *str2)
 {
 	char *result;
-	size_t len1, len2;
 
 	if (str1 == NULL) {
 		str1 = "";
@@ -652,8 +635,8 @@ br_strcat (const char *str1, const char *str2)
 		str2 = "";
 	}
 
-	len1 = strlen (str1);
-	len2 = strlen (str2);
+	size_t len1 = strlen(str1);
+	size_t len2 = strlen(str2);
 
 	result = (char *) malloc (len1 + len2 + 1);
 	memcpy (result, str1, len1);
