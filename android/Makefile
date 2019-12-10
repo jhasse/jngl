@@ -1,5 +1,8 @@
 all: gradle
 
+$$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/boost:
+	[ -f "$@/version.hpp" ] || ln -s /usr/include/boost "$@"
+
 test/app/src/main/assets:
 	mkdir "$@"
 
@@ -13,7 +16,8 @@ test/app/src/main/assets/Arial.ttf: test/app/src/main/assets ../Arial.ttf
 	cp ../Arial.ttf "$@"
 
 .PHONY: gradle
-gradle: test/app/src/main/assets/jngl.webp \
+gradle: $$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/boost \
+        test/app/src/main/assets/jngl.webp \
         test/app/src/main/assets/test.ogg \
         test/app/src/main/assets/Arial.ttf
 	cd test && ./gradlew build
