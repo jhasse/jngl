@@ -1,4 +1,4 @@
-// Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -7,13 +7,17 @@
 
 class Fixture {
 public:
-	Fixture(double scaleFactor);
+	explicit Fixture(double scaleFactor);
 	~Fixture();
+	Fixture(const Fixture&) = delete;
+	Fixture& operator=(const Fixture&) = delete;
+	Fixture(Fixture&&) = delete;
+	Fixture& operator=(Fixture&&) = delete;
 
-	std::string getAsciiArt() const;
+	[[nodiscard]] std::string getAsciiArt() const;
 
 private:
-	void reset() const;
+	static void reset() ;
 
 	std::string emptyAsciiArt;
 };

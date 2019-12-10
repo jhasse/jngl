@@ -1,7 +1,11 @@
+// Copyright 2019 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
+
 #include "Fixture.hpp"
 
 #include "../opengl.hpp"
 
+#include <boost/math/special_functions/round.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/range/adaptor/reversed.hpp>
 #include <boost/test/unit_test.hpp>
@@ -9,7 +13,8 @@
 
 Fixture::Fixture(const double scaleFactor) {
 	jngl::setScaleFactor(scaleFactor);
-	jngl::showWindow("unit test", 320 * scaleFactor, 70 * scaleFactor, false, {32, 7}, {32, 7});
+	jngl::showWindow("unit test", boost::math::iround(320 * scaleFactor),
+	                 boost::math::iround(70 * scaleFactor), false, { 32, 7 }, { 32, 7 });
 	reset();
 	emptyAsciiArt = getAsciiArt();
 	BOOST_CHECK_EQUAL(emptyAsciiArt, R"(
@@ -35,7 +40,7 @@ std::string Fixture::getAsciiArt() const {
 
 	// ASCII art should always have the same size, therefore let's take the scaleFactor into
 	// account:
-	float reduceFactorAsFloat = 10 * jngl::getScaleFactor();
+	auto reduceFactorAsFloat = static_cast<float>(10 * jngl::getScaleFactor());
 	int reduceFactor = boost::numeric_cast<int>(std::lround(reduceFactorAsFloat));
 	BOOST_CHECK_CLOSE(reduceFactorAsFloat, reduceFactor, 1e-6);
 
@@ -72,7 +77,7 @@ std::string Fixture::getAsciiArt() const {
 			const static std::vector<std::string> chars = {"█", "▓", "▒", "░", " "};
 
 			float gray = (cell.at(0) + cell.at(1) + cell.at(2)) / 3.0f;
-			const size_t index = std::lround(gray * (chars.size() - 1));
+			const size_t index = std::lround(gray * float(chars.size() - 1));
 			assert(index < chars.size());
 			out += chars[index];
 		}
@@ -83,7 +88,7 @@ std::string Fixture::getAsciiArt() const {
 	return out;
 }
 
-void Fixture::reset() const {
+void Fixture::reset() {
 	jngl::swapBuffers();
 	jngl::updateInput();
 
