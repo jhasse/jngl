@@ -15,13 +15,8 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ninja -C build; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cmake -H. -Bbuild-cmake -GNinja; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ninja -C build-cmake; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd doc && cmake . && make && doxygen; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd doc && cmake . && make && docker run -v$PWD/..:/w -it fedora:31 /bin/sh -c "dnf install -y graphviz doxygen && cd /w/doc && doxygen"; fi
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then cmake -Bbuild -H. -AWin32 && cmake --build build; fi
-addons:
-  apt:
-    packages:
-    - doxygen
-    - graphviz
 deploy:
   local-dir: doc/html
   provider: pages
