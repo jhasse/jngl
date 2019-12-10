@@ -7,7 +7,7 @@ image: registry.fedoraproject.org/fedora-minimal:31
 cmake:
   stage: build
   script:
-  - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel SDL2-devel openal-soft-devel boost-devel libtheora-devel clang> /dev/null
+  - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel SDL2-devel openal-soft-devel boost-devel libtheora-devel clang >/dev/null
   - CXXFLAGS=-fdiagnostics-color cmake -Bbuild -H. -GNinja
   - ninja -Cbuild
   - CC=clang CXX=clang++ CXXFLAGS=-fdiagnostics-color cmake -Bbuild-clang -H. -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=1
@@ -34,11 +34,11 @@ gcc:
 clang:
   stage: build
   script:
-    - microdnf install fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel python3-devel meson SDL2-devel openal-soft-devel clang
+    - microdnf install fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel python3-devel meson SDL2-devel openal-soft-devel clang >/dev/null
     - CC=clang CXX=clang++ script -qfec "meson build --werror" /dev/null
     - cd build
     - script -qfec "ninja" /dev/null
-    - microdnf install clang-tools-extra python3-PyYAML
+    - microdnf install clang-tools-extra python3-PyYAML >/dev/null
     - sed -i s/-pipe// compile_commands.json
     - script -qfec "../data/run-clang-tidy.py"
 
