@@ -32,8 +32,8 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 		Fixture f(scaleFactor);
 		jngl::setFont("../Arial.ttf");
 		jngl::Text text("test string\nline 2");
-		BOOST_CHECK_EQUAL(text.getWidth(), 69);
-		BOOST_CHECK_EQUAL(text.getHeight(), 38);
+		BOOST_CHECK_EQUAL(std::lround(text.getWidth()), 69L);
+		BOOST_CHECK_EQUAL(std::lround(text.getHeight()), 38L);
 		text.setCenter(-10, -10);
 		BOOST_CHECK_CLOSE(text.getX(), -44.5, 1e-9);
 		text.draw();
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 		BOOST_CHECK_EQUAL(f.getAsciiArt(), screenshotCentered);
 
 		text.setPos(-10, -10);
-		BOOST_CHECK_EQUAL(text.getX(), -10);
+		BOOST_CHECK_EQUAL(std::lround(text.getX()), -10L);
 		text.draw();
 		BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
