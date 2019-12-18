@@ -68,7 +68,7 @@ public:
 		jngl::pushMatrix();
 		lastTime = jngl::getTime();
 		for (int i = 0; i < 10; ++i) {
-			if (jngl::keyDown('0' + i)) {
+			if (jngl::keyDown(char('0' + i))) {
 				performance = i == 0 ? 10 : i;
 			}
 		}
@@ -141,7 +141,7 @@ public:
 		jngl::print("Press K to test key codes.", 5, 490);
 		jngl::print("Press P to play a sound.", 6, 510);
 		static int playbackSpeed = 100;
-		jngl::setPlaybackSpeed(playbackSpeed / 100.0f);
+		jngl::setPlaybackSpeed(float(playbackSpeed) / 100.0f);
 		jngl::print("Press + and - to change the audio playback speed: " +
 		      std::to_string(playbackSpeed) + " %", 6, 530);
 		if (jngl::keyPressed('-')) {
@@ -206,10 +206,10 @@ JNGL_MAIN_BEGIN {
 		} catch (std::runtime_error& e) {
 			std::cout << e.what() << std::endl;
 		}
-		jngl::setScaleFactor(std::floor(
-		    std::min((jngl::getDesktopWidth() - 50) / 800, (jngl::getDesktopHeight() - 50) / 600)));
-		jngl::showWindow("setTitle not working!", 800 * jngl::getScaleFactor(),
-		                 600 * jngl::getScaleFactor());
+		const int scaleFactor =
+		    std::min((jngl::getDesktopWidth() - 50) / 800, (jngl::getDesktopHeight() - 50) / 600);
+		jngl::setScaleFactor(scaleFactor);
+		jngl::showWindow("setTitle not working!", 800 * scaleFactor, 600 * scaleFactor);
 		jngl::onControllerChanged([]() {
 			const auto controllers = jngl::getConnectedControllers();
 			std::cout << "Number of connected controllers: " << controllers.size() << std::endl;
@@ -230,13 +230,13 @@ void drawBackground() {
 			for (int y = 0; y < size; ++y) {
 				jngl::drawScaled("jngl", x * jngl::getScreenWidth() / size,
 				                 y * jngl::getScreenHeight() / size,
-				                 float(jngl::getScreenWidth()) / size / jngl::getWidth("jngl"),
-				                 float(jngl::getScreenHeight()) / size / jngl::getHeight("jngl"));
+				                 float(jngl::getScreenWidth() / size / jngl::getWidth("jngl")),
+				                 float(jngl::getScreenHeight() / size / jngl::getHeight("jngl")));
 			}
 		}
 	} else {
-		jngl::drawClipped("jngl", jngl::getScreenWidth() / 2 - jngl::getWidth("jngl") / 2,
-		                  jngl::getScreenHeight() / 2 - jngl::getHeight("jngl") / 2,
+		jngl::drawClipped("jngl", jngl::getScreenWidth() / 2 - jngl::getWidth("jngl") / 2.,
+		                  jngl::getScreenHeight() / 2 - jngl::getHeight("jngl") / 2.,
 		                  float(0.5 - factor / 2), float(0.5 + factor / 2),
 		                  float(0.5 - factor / 2), float(0.5 + factor / 2));
 	}
@@ -346,8 +346,7 @@ void testKeys() {
 			y += 15;
 		}
 		y = 10;
-		const auto printChar = [&recentlyPressedKeys](const char c, const double x,
-		                                              const double y) {
+		const auto printChar = [&recentlyPressedKeys](const char c, const int x, const int y) {
 			char cString[2];
 			cString[0] = c;
 			cString[1] = 0;
@@ -365,7 +364,7 @@ void testKeys() {
 		for (char c = '0'; c <= 'z'; ++c) {
 			printChar(c, 380, y);
 			if (c >= 'a' && c <= 'z') {
-				printChar(toupper(c), 610, y);
+				printChar(char(toupper(c)), 610, y);
 			}
 			y += 15;
 			if (c == '9') {
@@ -406,7 +405,7 @@ void testKeys() {
 		std::stringstream sstream;
 		sstream << "X: " << jngl::getMousePos().x << "\nY: " << jngl::getMousePos().y << std::endl;
 		jngl::print(sstream.str(), 5, 5);
-		size_t controllerNr = 1;
+		int controllerNr = 1;
 		for (const auto& controller : jngl::getConnectedControllers()) {
 			std::stringstream sstream;
 			sstream << "Controller " << controllerNr << " connected." << std::endl
@@ -447,7 +446,7 @@ void testKeys() {
 			       jngl::Vec2(controller->state(jngl::controller::RightStickX),
 			                  -controller->state(jngl::controller::RightStickY)) }) {
 				const float circleRadius = 20;
-				const auto circlePos = jngl::Vec2(530, -40 + controllerNr * 110);
+				const auto circlePos = jngl::Vec2(530, double(-40 + controllerNr * 110));
 				jngl::setColor(100, 100, 100, 255);
 				jngl::drawEllipse(circlePos, circleRadius, circleRadius);
 				jngl::setColor(255, 255, 255, 255);
@@ -457,8 +456,8 @@ void testKeys() {
 			jngl::popMatrix();
 
 			jngl::setColor(255, 255, 255, 150);
-			jngl::drawRect({500, 40. + (controllerNr - 1) * 110.}, {300, 120});
-			jngl::print(sstream.str(), 558, 50. + (controllerNr - 1) * 110);
+			jngl::drawRect({500, 40. + double(controllerNr - 1) * 110.}, {300, 120});
+			jngl::print(sstream.str(), 558, 50 + (controllerNr - 1) * 110);
 			++controllerNr;
 		}
 		jngl::popMatrix();
