@@ -3,7 +3,6 @@
 /// @file
 #pragma once
 
-#include "dll.hpp"
 #include "Vec2.hpp"
 
 #include <functional>
@@ -62,67 +61,67 @@ enum KeyType {
 } // namespace key
 
 /// Display onscreen keyboard for touch devices
-void JNGLDLL_API setKeyboardVisible(bool);
+void setKeyboardVisible(bool);
 
 /// Whether a normal or a numbers-only keyboard should appear
 enum KeyboardType { Default, Numpad };
 
 /// Type of the onscreen keyboard
-void JNGLDLL_API setKeyboardType(KeyboardType);
+void setKeyboardType(KeyboardType);
 
 /// Currently active type of onscreen keyboard
-KeyboardType JNGLDLL_API getKeyboardType();
+KeyboardType getKeyboardType();
 
 /// Overwrite what keyPressed() should return
-void JNGLDLL_API setKeyPressed(const std::string& key, bool);
+void setKeyPressed(const std::string& key, bool);
 
 /// Overwrite what keyPressed() should return
-void JNGLDLL_API setKeyPressed(key::KeyType key, bool);
+void setKeyPressed(key::KeyType key, bool);
 
 /// Whether \p key is down
-bool JNGLDLL_API keyDown(key::KeyType key);
+bool keyDown(key::KeyType key);
 
 /// Whether \p key is down
-bool JNGLDLL_API keyDown(char key);
+bool keyDown(char key);
 
 /// Whether \p key is down, where \p key should be exactly one UTF-8 character
-bool JNGLDLL_API keyDown(const std::string& key);
+bool keyDown(const std::string& key);
 
 /// Whether \p key has been pressed since the next to last call to updateInput()
-bool JNGLDLL_API keyPressed(key::KeyType key);
+bool keyPressed(key::KeyType key);
 
 /// Whether \p key has been pressed since the next to last call to updateInput()
-bool JNGLDLL_API keyPressed(char key);
+bool keyPressed(char key);
 
 /// Whether \p key has been pressed since the next to last call to updateInput(), where \p key
 /// should be exactly one UTF-8 character
-bool JNGLDLL_API keyPressed(const std::string& key);
+bool keyPressed(const std::string& key);
 
-void JNGLDLL_API setRelativeMouseMode(bool relative);
+void setRelativeMouseMode(bool relative);
 
-bool JNGLDLL_API getRelativeMouseMode();
+bool getRelativeMouseMode();
 
-void JNGLDLL_API setMouseVisible(bool visible);
+void setMouseVisible(bool visible);
 
-bool JNGLDLL_API isMouseVisible();
+bool isMouseVisible();
 
 /// Returns true when there's more than one finger touching the screen
-bool JNGLDLL_API isMultitouch();
+bool isMultitouch();
 
 /// Returns all positions where a finger touches the screen. Includes the mouse position if the
 /// primary mouse button is down.
-std::vector<jngl::Vec2> JNGLDLL_API getTouchPositions();
+std::vector<jngl::Vec2> getTouchPositions();
 
 /// Mouse position in screen coordinates
-Vec2 JNGLDLL_API getMousePos();
+Vec2 getMousePos();
 
 /// Retrieve mouse position in pixels
 /// \deprecated Use jngl::getMousePos() instead
-[[deprecated("Use jngl::getMousePos() instead")]] int JNGLDLL_API getMouseX();
+[[deprecated("Use jngl::getMousePos() instead")]] int getMouseX();
 
 /// Retrieve mouse position in pixels
 /// \deprecated Use jngl::getMousePos() instead
-[[deprecated("Use jngl::getMousePos() instead")]] int JNGLDLL_API getMouseY();
+[[deprecated("Use jngl::getMousePos() instead")]] int getMouseY();
 
 namespace mouse {
 /// Mouse buttons
@@ -130,21 +129,21 @@ enum Button { Left, Middle, Right };
 } // namespace mouse
 
 /// Returns mouse wheel movement between -100 and 100 (0 if the mousewheel doesn't move)
-double JNGLDLL_API getMouseWheel();
+double getMouseWheel();
 
 /// Returns whether \a button is currently held down
-bool JNGLDLL_API mouseDown(mouse::Button button = mouse::Left);
+bool mouseDown(mouse::Button button = mouse::Left);
 
 /// Overwrite what mouseDown() should return
-void JNGLDLL_API setMouseDown(mouse::Button button, bool);
+void setMouseDown(mouse::Button button, bool);
 
-bool JNGLDLL_API mousePressed(mouse::Button button = mouse::Left);
+bool mousePressed(mouse::Button button = mouse::Left);
 
 /// Overwrite what mouseDown() should return
-void JNGLDLL_API setMousePressed(jngl::mouse::Button, bool);
+void setMousePressed(jngl::mouse::Button, bool);
 
 /// Moves the mouse (does nothing on iOS and Android)
-void JNGLDLL_API setMouse(Vec2 position);
+void setMouse(Vec2 position);
 
 namespace controller {
 /// Gamepad buttons
@@ -199,15 +198,15 @@ class Controller;
 ///
 /// Don't call this function every frame for performance reasons, use jngl::onControllerChanged
 /// instead to get notified when controlles are being connected or removed.
-std::vector<std::shared_ptr<Controller>> JNGLDLL_API getConnectedControllers();
+std::vector<std::shared_ptr<Controller>> getConnectedControllers();
 
 /// Specify a function which gets called, whenever a controller gets added or removed
 ///
 /// Whenever the return value of jngl::getConnectedControllers would change, \a callback gets
 /// called.
-void JNGLDLL_API onControllerChanged(std::function<void()> callback);
+void onControllerChanged(std::function<void()> callback);
 
 /// Returns a string of characters that have been pressed since the last call to updateInput()
-std::string JNGLDLL_API getTextInput();
+std::string getTextInput();
 
 } // namespace jngl
