@@ -1,9 +1,7 @@
-// Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// @file
 #pragma once
-
-#include "dll.hpp"
 
 #include <memory>
 
@@ -19,8 +17,10 @@ public:
 		FRAGMENT,
 	};
 
-	JNGLDLL_API Shader(const char* source, Type);
-	JNGLDLL_API ~Shader();
+	/// Creates a vertex or fragment shader by compiling it.
+	/// \param source Source code using either GLSL v3.30 or GLSL ES v3.00.
+	Shader(const char* source, Type);
+	~Shader();
 	Shader(const Shader&) = delete;
 	Shader(Shader&&) = delete;
 	Shader& operator=(const Shader&) = delete;
