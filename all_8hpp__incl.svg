@@ -51,7 +51,7 @@
 <!-- Node6 -->
 <g id="node7" class="node">
 <title>Node6</title>
-<g id="a_node7"><a xlink:href="ShaderProgram_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node7"><a xlink:href="ShaderProgram_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="1376.9131,-112.5 1376.9131,-131.5 1495.9131,-131.5 1495.9131,-112.5 1376.9131,-112.5"/>
 <text text-anchor="middle" x="1436.4131" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">ShaderProgram.hpp</text>
 </a>

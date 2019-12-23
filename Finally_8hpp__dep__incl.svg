@@ -21,7 +21,7 @@
 <!-- Node3 -->
 <g id="node2" class="node">
 <title>Node3</title>
-<g id="a_node2"><a xlink:href="ShaderProgram_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node2"><a xlink:href="ShaderProgram_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="0,-224.5 0,-243.5 149,-243.5 149,-224.5 0,-224.5"/>
 <text text-anchor="middle" x="74.5" y="-231.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/ShaderProgram.hpp</text>
 </a>
