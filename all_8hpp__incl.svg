@@ -66,7 +66,7 @@
 <!-- Node8 -->
 <g id="node9" class="node">
 <title>Node8</title>
-<g id="a_node9"><a xlink:href="Vertex_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node9"><a xlink:href="Vertex_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="177.516,-224.5 177.516,-243.5 254.516,-243.5 254.516,-224.5 177.516,-224.5"/>
 <text text-anchor="middle" x="216.016" y="-231.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">Vertex.hpp</text>
 </a>
