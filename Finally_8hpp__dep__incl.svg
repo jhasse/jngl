@@ -102,7 +102,7 @@
 <!-- Node7 -->
 <g id="node6" class="node">
 <title>Node7</title>
-<g id="a_node6"><a xlink:href="Video_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node6"><a xlink:href="Video_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="61,-112.5 61,-131.5 162,-131.5 162,-112.5 61,-112.5"/>
 <text text-anchor="middle" x="111.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/Video.hpp</text>
 </a>
