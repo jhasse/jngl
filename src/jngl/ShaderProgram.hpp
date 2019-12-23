@@ -1,6 +1,6 @@
 // Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// @file
 #pragma once
 
 #include "Finally.hpp"
@@ -14,8 +14,8 @@ class Shader;
 /// Linked vertex and fragment shaders
 class ShaderProgram {
 public:
-	JNGLDLL_API ShaderProgram(const Shader& vertex, const Shader& fragment);
-	JNGLDLL_API ~ShaderProgram();
+	ShaderProgram(const Shader& vertex, const Shader& fragment);
+	~ShaderProgram();
 	ShaderProgram(const ShaderProgram&) = delete;
 	ShaderProgram(ShaderProgram&&) = delete;
 	ShaderProgram& operator=(const ShaderProgram&) = delete;
@@ -39,7 +39,6 @@ public:
 		static const Impl* activeImpl;
 	};
 
-	JNGLDLL_API
 #if __cplusplus >= 201703L
 	    [[nodiscard]]
 #endif
