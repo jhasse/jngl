@@ -111,7 +111,7 @@
 <!-- Node6 -->
 <g id="node3" class="node">
 <title>Node6</title>
-<g id="a_node3"><a xlink:href="Controller_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node3"><a xlink:href="Controller_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="0,-112.5 0,-131.5 131,-131.5 131,-112.5 0,-112.5"/>
 <text text-anchor="middle" x="65.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/Controller.hpp</text>
 </a>
