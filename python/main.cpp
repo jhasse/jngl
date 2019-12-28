@@ -101,6 +101,15 @@ PYBIND11_MODULE(jngl, m) {
 	    .def_readwrite("x", &Vec2::x)
 	    .def_readwrite("y", &Vec2::y);
 
+	py::class_<Color>(m, "Color")
+	    .def(py::init<uint8_t, uint8_t, uint8_t>())
+	    .def("getRed", &Color::getRed)
+	    .def("getGreen", &Color::getGreen)
+	    .def("getBlue", &Color::getBlue)
+	    .def("setRed", &Color::setRed)
+	    .def("setGreen", &Color::setGreen)
+	    .def("setBlue", &Color::setBlue);
+
 	m.def("showWindow", showWindow1);
 	m.def("showWindow", showWindow2);
 	m.def("showWindow", showWindow3);
@@ -147,8 +156,7 @@ PYBIND11_MODULE(jngl, m) {
 	m.def("mousePressed", mousePressed2);
 	m.def("setMouse", setMouse);
 	m.def("setTitle", setTitle);
-	m.def("setBackgroundColor",
-	    static_cast<void (*)(unsigned char, unsigned char, unsigned char)>(setBackgroundColor));
+	m.def("setBackgroundColor", static_cast<void (*)(Color)>(setBackgroundColor));
 	m.def("setColor", setColor1);
 	m.def("setColor", setColor2);
 	m.def("setAlpha", setAlpha);
