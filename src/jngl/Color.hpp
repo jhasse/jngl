@@ -25,15 +25,24 @@ namespace jngl {
 /// \endcode
 class JNGLDLL_API Color {
 public:
+	/// \param red 0...255
+	/// \param green 0...255
+	/// \param blue 0...255
 	Color(unsigned char red, unsigned char green, unsigned char blue);
 
+	/// 0...255
 	unsigned char getRed() const;
+	/// 0...255
 	void setRed(unsigned char);
 
+	/// 0...255
 	unsigned char getGreen() const;
+	/// 0...255
 	void setGreen(unsigned char);
 
+	/// 0...255
 	unsigned char getBlue() const;
+	/// 0...255
 	void setBlue(unsigned char);
 
 private:
@@ -46,8 +55,11 @@ private:
 void JNGLDLL_API setBackgroundColor(jngl::Color);
 
 /// Sets the screen's background color which is visible when nothing is drawn
+/// \deprecated Use setBackgroundColor(jngl::Color) instead.
+[[deprecated("use setBackgroundColor(jngl::Color) instead")]]
 void JNGLDLL_API setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
 
 } // namespace jngl
 
+/// Create a jngl::Color object from a literal. E.g. `0x00ff00_rgb` for green.
 jngl::Color operator"" _rgb(unsigned long long);

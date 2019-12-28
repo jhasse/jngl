@@ -1,10 +1,9 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
 
-#include "dll.hpp"
-#include "color.hpp"
+#include "Color.hpp"
 #include "Vec2.hpp"
 
 namespace jngl {

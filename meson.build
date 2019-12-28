@@ -15,7 +15,7 @@ src = [
 	'src/freetype.cpp',
 	'src/helper.cpp',
 	'src/jngl/App.cpp',
-	'src/jngl/color.cpp',
+	'src/jngl/Color.cpp',
 	'src/jngl/Controller.cpp',
 	'src/jngl/drawable.cpp',
 	'src/jngl/Finally.cpp',
@@ -170,7 +170,7 @@ endif
 install_headers('src/jngl.hpp')
 install_headers([
 	'src/jngl/all.hpp',
-	'src/jngl/color.hpp',
+	'src/jngl/Color.hpp',
 	'src/jngl/Controller.hpp',
 	'src/jngl/debug.hpp',
 	'src/jngl/dll.hpp',

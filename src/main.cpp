@@ -182,17 +182,17 @@ void cancelQuit() {
 }
 
 void setBackgroundColor(const jngl::Color color) {
-	setBackgroundColor(color.getRed(), color.getGreen(), color.getBlue());
+	pWindow.ThrowIfNull();
+	bgRed = color.getRed() / 255.0f;
+	bgGreen = color.getGreen() / 255.0f;
+	bgBlue = color.getBlue() / 255.0f;
+	clearBackgroundColor();
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void setBackgroundColor(const unsigned char red, const unsigned char green,
                         const unsigned char blue) {
-	pWindow.ThrowIfNull();
-	bgRed = red / 255.0f;
-	bgGreen = green / 255.0f;
-	bgBlue = blue / 255.0f;
-	clearBackgroundColor();
-	glClear(GL_COLOR_BUFFER_BIT);
+	setBackgroundColor(Color{ red, green, blue });
 }
 
 Vec2 getMousePos() {

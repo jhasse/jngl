@@ -1,7 +1,7 @@
 // Copyright 2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#include "../jngl/color.hpp"
+#include "../jngl/Color.hpp"
 
 #include <boost/test/unit_test.hpp>
 

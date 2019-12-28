@@ -3,8 +3,7 @@
 /// @file
 #pragma once
 
-#include "color.hpp"
-#include "dll.hpp"
+#include "Color.hpp"
 #include "Vec2.hpp"
 
 #include <memory>

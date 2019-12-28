@@ -8,7 +8,7 @@
 #include "Shader.hpp"
 #include "ShaderProgram.hpp"
 #include "Vertex.hpp"
-#include "color.hpp"
+#include "Color.hpp"
 #include "Controller.hpp"
 #include "debug.hpp"
 #include "drawable.hpp"
