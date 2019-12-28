@@ -1,6 +1,6 @@
 // Copyright 2017-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// @file
 #pragma once
 
 #include "input.hpp"
@@ -10,7 +10,7 @@
 namespace jngl {
 
 /// Object representing one Gamepad controller
-class JNGLDLL_API Controller : public std::enable_shared_from_this<Controller> {
+class Controller : public std::enable_shared_from_this<Controller> {
 public:
 	virtual ~Controller() = default;
 

@@ -1,9 +1,7 @@
 // Copyright 2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// @file
 #pragma once
-
-#include "dll.hpp"
 
 #include <memory>
 #include <string>
@@ -23,7 +21,7 @@ namespace jngl {
 /// 	app.mainLoop();
 /// } JNGL_MAIN_END
 /// \endcode
-class JNGLDLL_API App {
+class App {
 public:
 	explicit App(std::string displayName);
 	~App();
