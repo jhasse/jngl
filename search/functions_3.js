@@ -31,6 +31,7 @@ var searchData=
   ['codecvt_5fbyname',['codecvt_byname',['http://en.cppreference.com/w/cpp/locale/codecvt_byname.html',1,'std::codecvt_byname']]],
   ['collate',['collate',['http://en.cppreference.com/w/cpp/locale/collate/collate.html',1,'std::collate']]],
   ['collate_5fbyname',['collate_byname',['http://en.cppreference.com/w/cpp/locale/collate_byname.html',1,'std::collate_byname']]],
+  ['color',['Color',['../classjngl_1_1Color.html#a0179d2c07d64a0b8f9c5dc9ddf4bc5f7',1,'jngl::Color']]],
   ['combine',['combine',['http://en.cppreference.com/w/cpp/locale/locale/combine.html',1,'std::locale']]],
   ['comp_5fellint_5f1',['comp_ellint_1',['http://en.cppreference.com/w/cpp/numeric/special_math/comp_ellint_1.html',1,'std']]],
   ['comp_5fellint_5f1f',['comp_ellint_1f',['http://en.cppreference.com/w/cpp/numeric/special_math/comp_ellint_1.html',1,'std']]],

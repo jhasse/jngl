@@ -14,7 +14,7 @@ var searchData=
   ['clocale',['clocale',['http://en.cppreference.com/w/cpp/header/clocale.html',1,'']]],
   ['cmath',['cmath',['http://en.cppreference.com/w/cpp/header/cmath.html',1,'']]],
   ['codecvt',['codecvt',['http://en.cppreference.com/w/cpp/header/codecvt.html',1,'']]],
-  ['color_2ehpp',['color.hpp',['../color_8hpp.html',1,'']]],
+  ['color_2ehpp',['Color.hpp',['../Color_8hpp.html',1,'']]],
   ['compare',['compare',['http://en.cppreference.com/w/cpp/header/compare.html',1,'']]],
   ['complex',['complex',['http://en.cppreference.com/w/cpp/header/complex.html',1,'']]],
   ['concepts',['concepts',['http://en.cppreference.com/w/cpp/header/concepts.html',1,'']]],
