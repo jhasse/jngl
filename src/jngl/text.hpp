@@ -23,7 +23,7 @@ class Line;
 class Text : public Drawable {
 public:
 	/// Constructor, \a text may contain `\n` newlines
-	Text(const std::string& text = "");
+	explicit Text(const std::string& text = "");
 
 	/// The text to display (may contain `\n` newlines)
 	void setText(const std::string&);
