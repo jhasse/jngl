@@ -1,9 +1,7 @@
-// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
-
-#include "dll.hpp"
 
 #if !defined(__has_include) || __has_include("boost/version.hpp")
 #include <boost/version.hpp>
@@ -13,7 +11,7 @@
 namespace jngl {
 
 /// Two-dimensional vector
-class JNGLDLL_API Vec2 {
+class Vec2 {
 public:
 	/// Null vector
 	Vec2();
@@ -35,8 +33,7 @@ std::ostream& operator<<(std::ostream&, const jngl::Vec2&);
 #if BOOST_VERSION >= 106200
 #include <boost/qvm/vec_traits.hpp>
 
-namespace boost {
-namespace qvm {
+namespace boost::qvm {
 template <> struct vec_traits<jngl::Vec2> {
 	static int const dim = 2;
 	using scalar_type = double;
@@ -55,8 +52,7 @@ template <> struct vec_traits<jngl::Vec2> {
 		return (&v.x)[i];
 	}
 };
-} // namespace qvm
-} // namespace boost
+} // namespace boost::qvm
 
 #include <boost/qvm/vec_operations.hpp>
 
