@@ -1,14 +1,15 @@
-// Copyright 2014-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2014-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// @file
 #pragma once
-
-#include "dll.hpp"
 
 namespace jngl {
 
-double JNGLDLL_API getTime();
+/// Returns seconds that have passed since program start
+double getTime();
 
-void JNGLDLL_API sleep(int milliseconds);
+/// Sleep current thread for \a milliseconds
+[[deprecated("Use std::this_thread::sleep_for instead")]]
+void sleep(int milliseconds);
 
 } // namespace jngl
