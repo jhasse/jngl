@@ -374,10 +374,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 <tr class="memdesc:ab30302d1de317b3d3307dc4f32571e47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the global ModelView matrix to the identity matrix. <br /></td></tr>
 <tr class="separator:ab30302d1de317b3d3307dc4f32571e47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20a40f52b8d8d366843d25b216a5d1a6"><td class="memItemLeft" align="right" valign="top"><a id="a20a40f52b8d8d366843d25b216a5d1a6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>errorMessage</b> (const <a class="elRef" doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a20a40f52b8d8d366843d25b216a5d1a6">errorMessage</a> (const <a class="elRef" doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text)</td></tr>
+<tr class="memdesc:a20a40f52b8d8d366843d25b216a5d1a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shows a message box with an error <em>text</em>. <br /></td></tr>
 <tr class="separator:a20a40f52b8d8d366843d25b216a5d1a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a008f8bd3145465f530d039dbc8a610e0"><td class="memItemLeft" align="right" valign="top"><a id="a008f8bd3145465f530d039dbc8a610e0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>printMessage</b> (const <a class="elRef" doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text)</td></tr>
+<tr class="memitem:a008f8bd3145465f530d039dbc8a610e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a008f8bd3145465f530d039dbc8a610e0">printMessage</a> (const <a class="elRef" doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text)</td></tr>
+<tr class="memdesc:a008f8bd3145465f530d039dbc8a610e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints <em>text</em> on stdout.  <a href="#a008f8bd3145465f530d039dbc8a610e0">More...</a><br /></td></tr>
 <tr class="separator:a008f8bd3145465f530d039dbc8a610e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5760c51d7686efb6d653830ee8305d5"><td class="memItemLeft" align="right" valign="top"><a id="aa5760c51d7686efb6d653830ee8305d5"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#aa5760c51d7686efb6d653830ee8305d5">running</a> ()</td></tr>
@@ -832,6 +833,27 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>resetFrameLimiter</b>
 
 <p>Multiplies the global ModelView matrix by a scaling matrix. </p>
 <p>Equivalent to calling <code>jngl::scale(factor, factor)</code>. </p>
+
+</div>
+</div>
+<a id="a008f8bd3145465f530d039dbc8a610e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a008f8bd3145465f530d039dbc8a610e0">&#9670;&nbsp;</a></span>printMessage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void jngl::printMessage </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Prints <em>text</em> on stdout. </p>
+<p>Normally this is the same as <code><a class="elRef" doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" href="http://en.cppreference.com/w/cpp/io/cout.html">std::cout</a> &lt;&lt; text &lt;&lt; <a class="elRef" doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" href="http://en.cppreference.com/w/cpp/io/manip/flush.html">std::flush</a>;</code>. On Android this will use <code>__android_log_print</code> for example. </p>
 
 </div>
 </div>

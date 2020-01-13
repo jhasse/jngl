@@ -44,6 +44,7 @@ var searchData=
   ['prev_5fpermutation',['prev_permutation',['http://en.cppreference.com/w/cpp/algorithm/prev_permutation.html',1,'std']]],
   ['print',['print',['../namespacejngl.html#a0c83d60c8e363c7fbb2ec6fd6b75a454',1,'jngl::print(const std::string &amp;text, jngl::Vec2 position)'],['../namespacejngl.html#ac2da1365da999f197b91682016abed76',1,'jngl::print(const std::string &amp;text, int xposition, int yposition)']]],
   ['printf',['printf',['http://en.cppreference.com/w/cpp/io/c/fprintf.html',1,'std']]],
+  ['printmessage',['printMessage',['../namespacejngl.html#a008f8bd3145465f530d039dbc8a610e0',1,'jngl']]],
   ['priority_5fqueue',['priority_queue',['http://en.cppreference.com/w/cpp/container/priority_queue/priority_queue.html',1,'std::priority_queue']]],
   ['probabilities',['probabilities',['http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution/probabilities.html',1,'std::discrete_distribution']]],
   ['promise',['promise',['http://en.cppreference.com/w/cpp/thread/promise/promise.html',1,'std::promise']]],
