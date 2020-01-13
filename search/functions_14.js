@@ -11,6 +11,7 @@ var searchData=
   ['terminate',['terminate',['http://en.cppreference.com/w/cpp/error/terminate.html',1,'std']]],
   ['test',['test',['http://en.cppreference.com/w/cpp/utility/bitset/test.html',1,'std::bitset']]],
   ['test_5fand_5fset',['test_and_set',['http://en.cppreference.com/w/cpp/atomic/atomic_flag/test_and_set.html',1,'std::atomic_flag']]],
+  ['text',['Text',['../classjngl_1_1Text.html#a471a8bae7d453133de20b0719c25e767',1,'jngl::Text']]],
   ['tgamma',['tgamma',['http://en.cppreference.com/w/cpp/numeric/math/tgamma.html',1,'std']]],
   ['thousands_5fsep',['thousands_sep',['http://en.cppreference.com/w/cpp/locale/moneypunct/thousands_sep.html',1,'std::moneypunct::thousands_sep()'],['http://en.cppreference.com/w/cpp/locale/moneypunct/thousands_sep.html',1,'std::moneypunct_byname::thousands_sep()'],['http://en.cppreference.com/w/cpp/locale/numpunct/thousands_sep.html',1,'std::numpunct::thousands_sep()'],['http://en.cppreference.com/w/cpp/locale/numpunct/thousands_sep.html',1,'std::numpunct_byname::thousands_sep()']]],
   ['thread',['thread',['http://en.cppreference.com/w/cpp/thread/thread/thread.html',1,'std::thread']]],
