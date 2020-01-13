@@ -119,7 +119,7 @@ var searchData=
   ['size_5fbytes',['size_bytes',['http://en.cppreference.com/w/cpp/container/span/size_bytes.html',1,'std::span']]],
   ['size_5ft',['size_t',['http://en.cppreference.com/w/cpp/types/size_t.html',1,'std']]],
   ['skipws',['skipws',['http://en.cppreference.com/w/cpp/io/manip/skipws.html',1,'std']]],
-  ['sleep',['sleep',['../namespacejngl.html#a6c9a4f10e08890ed285c7062e0f0a81a',1,'jngl']]],
+  ['sleep',['sleep',['../namespacejngl.html#ac0e992174123c25f1fd4283157469bdf',1,'jngl']]],
   ['sleep_5ffor',['sleep_for',['http://en.cppreference.com/w/cpp/thread/sleep_for.html',1,'std::this_thread']]],
   ['sleep_5funtil',['sleep_until',['http://en.cppreference.com/w/cpp/thread/sleep_until.html',1,'std::this_thread']]],
   ['slice',['slice',['http://en.cppreference.com/w/cpp/numeric/valarray/slice.html',1,'std']]],

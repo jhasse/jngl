@@ -67,7 +67,7 @@ var searchData=
   ['getscreenwidth',['getScreenWidth',['../namespacejngl.html#a285b8708e56768b526cb8ee76f21e5a1',1,'jngl']]],
   ['getstepspersecond',['getStepsPerSecond',['../namespacejngl.html#a9d8a357dd23189e0724e75d9afb5eddb',1,'jngl']]],
   ['gettextinput',['getTextInput',['../namespacejngl.html#a61fd6900416c997489df138cb8651ab8',1,'jngl']]],
-  ['gettime',['getTime',['../namespacejngl.html#a4437edd7fd2832790c13ba3179bcc64d',1,'jngl']]],
+  ['gettime',['getTime',['../namespacejngl.html#acfa255b4d1bf4d4ad83b3d200b99c930',1,'jngl']]],
   ['gettop',['getTop',['../classjngl_1_1Drawable.html#a3670fae9f6c1be822e4b3e271f1f1013',1,'jngl::Drawable']]],
   ['gettouchpositions',['getTouchPositions',['../namespacejngl.html#aaa978e56af9461cc6a8da01e6a0f28fc',1,'jngl']]],
   ['getwchar',['getwchar',['http://en.cppreference.com/w/cpp/io/c/getwchar.html',1,'std']]],
