@@ -9,63 +9,63 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 192)">
 <title>jngl/input.hpp</title>
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-192 167,-192 167,4 -4,4"/>
-<!-- Node8 -->
+<!-- Node7 -->
 <g id="node1" class="node">
-<title>Node8</title>
+<title>Node7</title>
 <g id="a_node1"><a xlink:title=" ">
 <polygon fill="#bfbfbf" stroke="#000000" points="62,-168.5 62,-187.5 163,-187.5 163,-168.5 62,-168.5"/>
 <text text-anchor="middle" x="112.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/input.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node9 -->
+<!-- Node8 -->
 <g id="node2" class="node">
-<title>Node9</title>
+<title>Node8</title>
 <g id="a_node2"><a xlink:href="Controller_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="0,-112.5 0,-131.5 131,-131.5 131,-112.5 0,-112.5"/>
 <text text-anchor="middle" x="65.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/Controller.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node8&#45;&gt;Node9 -->
+<!-- Node7&#45;&gt;Node8 -->
 <g id="edge1" class="edge">
-<title>Node8&#45;&gt;Node9</title>
+<title>Node7&#45;&gt;Node8</title>
 <path fill="none" stroke="#191970" d="M97.8128,-160.5004C89.8204,-150.9775 80.2375,-139.5596 73.593,-131.6427"/>
 <polygon fill="#191970" stroke="#191970" points="95.2036,-162.8358 104.3132,-168.2455 100.5654,-158.3357 95.2036,-162.8358"/>
 </g>
-<!-- Node10 -->
+<!-- Node9 -->
 <g id="node3" class="node">
-<title>Node10</title>
+<title>Node9</title>
 <g id="a_node3"><a xlink:href="all_8hpp.html" target="_top" xlink:title="Includes all JNGL headers.">
 <polygon fill="#ffffff" stroke="#000000" points="68,-56.5 68,-75.5 157,-75.5 157,-56.5 68,-56.5"/>
 <text text-anchor="middle" x="112.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/all.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node8&#45;&gt;Node10 -->
+<!-- Node7&#45;&gt;Node9 -->
 <g id="edge4" class="edge">
-<title>Node8&#45;&gt;Node10</title>
+<title>Node7&#45;&gt;Node9</title>
 <path fill="none" stroke="#191970" d="M127.1712,-160.344C136.2154,-147.3011 145.2511,-128.9432 140.5,-112 136.6631,-98.3169 127.5114,-84.6657 120.7089,-75.8323"/>
 <polygon fill="#191970" stroke="#191970" points="124.2938,-158.3469 121.0779,-168.4418 129.8872,-162.5557 124.2938,-158.3469"/>
 </g>
-<!-- Node9&#45;&gt;Node10 -->
+<!-- Node8&#45;&gt;Node9 -->
 <g id="edge2" class="edge">
-<title>Node9&#45;&gt;Node10</title>
+<title>Node8&#45;&gt;Node9</title>
 <path fill="none" stroke="#191970" d="M80.1872,-104.5004C88.1796,-94.9775 97.7625,-83.5596 104.407,-75.6427"/>
 <polygon fill="#191970" stroke="#191970" points="77.4346,-102.3357 73.6868,-112.2455 82.7964,-106.8358 77.4346,-102.3357"/>
 </g>
-<!-- Node11 -->
+<!-- Node10 -->
 <g id="node4" class="node">
-<title>Node11</title>
+<title>Node10</title>
 <g id="a_node4"><a xlink:href="jngl_8hpp_source.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="80,-.5 80,-19.5 145,-19.5 145,-.5 80,-.5"/>
 <text text-anchor="middle" x="112.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node10&#45;&gt;Node11 -->
+<!-- Node9&#45;&gt;Node10 -->
 <g id="edge3" class="edge">
-<title>Node10&#45;&gt;Node11</title>
+<title>Node9&#45;&gt;Node10</title>
 <path fill="none" stroke="#191970" d="M112.5,-46.1575C112.5,-37.155 112.5,-26.9199 112.5,-19.6427"/>
 <polygon fill="#191970" stroke="#191970" points="109.0001,-46.2455 112.5,-56.2455 116.0001,-46.2456 109.0001,-46.2455"/>
 </g>

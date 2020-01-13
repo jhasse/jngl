@@ -9,204 +9,204 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 248)">
 <title>jngl/Vec2.hpp</title>
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-248 673,-248 673,4 -4,4"/>
-<!-- Node4 -->
+<!-- Node3 -->
 <g id="node1" class="node">
-<title>Node4</title>
+<title>Node3</title>
 <g id="a_node1"><a xlink:title=" ">
 <polygon fill="#bfbfbf" stroke="#000000" points="277,-224.5 277,-243.5 372,-243.5 372,-224.5 277,-224.5"/>
 <text text-anchor="middle" x="324.5" y="-231.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/Vec2.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node5 -->
+<!-- Node4 -->
 <g id="node2" class="node">
-<title>Node5</title>
+<title>Node4</title>
 <g id="a_node2"><a xlink:href="input_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="109,-168.5 109,-187.5 210,-187.5 210,-168.5 109,-168.5"/>
 <text text-anchor="middle" x="159.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/input.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node4&#45;&gt;Node5 -->
+<!-- Node3&#45;&gt;Node4 -->
 <g id="edge1" class="edge">
-<title>Node4&#45;&gt;Node5</title>
+<title>Node3&#45;&gt;Node4</title>
 <path fill="none" stroke="#191970" d="M286.3644,-221.057C256.1675,-210.8084 214.6837,-196.729 187.4944,-187.5011"/>
 <polygon fill="#191970" stroke="#191970" points="285.5411,-224.4736 296.1355,-224.3733 287.7909,-217.845 285.5411,-224.4736"/>
 </g>
-<!-- Node9 -->
+<!-- Node8 -->
 <g id="node6" class="node">
-<title>Node9</title>
+<title>Node8</title>
 <g id="a_node6"><a xlink:href="font_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="188,-112.5 188,-131.5 283,-131.5 283,-112.5 188,-112.5"/>
 <text text-anchor="middle" x="235.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/font.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node4&#45;&gt;Node9 -->
+<!-- Node3&#45;&gt;Node8 -->
 <g id="edge6" class="edge">
-<title>Node4&#45;&gt;Node9</title>
+<title>Node3&#45;&gt;Node8</title>
 <path fill="none" stroke="#191970" d="M310.6155,-216.5274C291.577,-192.5688 258.0285,-150.3505 243.0689,-131.5249"/>
 <polygon fill="#191970" stroke="#191970" points="307.9503,-218.7993 316.9119,-224.4509 313.4307,-214.4443 307.9503,-218.7993"/>
 </g>
-<!-- Node10 -->
+<!-- Node9 -->
 <g id="node7" class="node">
-<title>Node10</title>
+<title>Node9</title>
 <g id="a_node7"><a xlink:href="framebuffer_8hpp_source.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="301,-112.5 301,-131.5 432,-131.5 432,-112.5 301,-112.5"/>
 <text text-anchor="middle" x="366.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/framebuffer.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node4&#45;&gt;Node10 -->
+<!-- Node3&#45;&gt;Node9 -->
 <g id="edge8" class="edge">
-<title>Node4&#45;&gt;Node10</title>
+<title>Node3&#45;&gt;Node9</title>
 <path fill="none" stroke="#191970" d="M310.8184,-215.7578C302.4075,-202.1618 294.6194,-183.3691 302.5,-168 311.1158,-151.1971 329.0403,-139.1427 343.734,-131.6001"/>
 <polygon fill="#191970" stroke="#191970" points="308.052,-217.9148 316.5559,-224.2341 313.8489,-213.9909 308.052,-217.9148"/>
 </g>
-<!-- Node11 -->
+<!-- Node10 -->
 <g id="node8" class="node">
-<title>Node11</title>
+<title>Node10</title>
 <g id="a_node8"><a xlink:href="screen_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="312,-168.5 312,-187.5 419,-187.5 419,-168.5 312,-168.5"/>
 <text text-anchor="middle" x="365.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/screen.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node4&#45;&gt;Node11 -->
+<!-- Node3&#45;&gt;Node10 -->
 <g id="edge10" class="edge">
-<title>Node4&#45;&gt;Node11</title>
+<title>Node3&#45;&gt;Node10</title>
 <path fill="none" stroke="#191970" d="M337.7364,-215.9209C344.6211,-206.5176 352.7609,-195.3997 358.4402,-187.6427"/>
 <polygon fill="#191970" stroke="#191970" points="334.7251,-214.1093 331.6417,-224.2455 340.3731,-218.2445 334.7251,-214.1093"/>
 </g>
-<!-- Node12 -->
+<!-- Node11 -->
 <g id="node9" class="node">
-<title>Node12</title>
+<title>Node11</title>
 <g id="a_node9"><a xlink:href="shapes_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="437,-168.5 437,-187.5 544,-187.5 544,-168.5 437,-168.5"/>
 <text text-anchor="middle" x="490.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/shapes.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node4&#45;&gt;Node12 -->
+<!-- Node3&#45;&gt;Node11 -->
 <g id="edge12" class="edge">
-<title>Node4&#45;&gt;Node12</title>
+<title>Node3&#45;&gt;Node11</title>
 <path fill="none" stroke="#191970" d="M362.8667,-221.057C393.2466,-210.8084 434.9819,-196.729 462.336,-187.5011"/>
 <polygon fill="#191970" stroke="#191970" points="361.393,-217.8603 353.0364,-224.3733 363.6306,-224.4931 361.393,-217.8603"/>
 </g>
-<!-- Node13 -->
+<!-- Node12 -->
 <g id="node10" class="node">
-<title>Node13</title>
+<title>Node12</title>
 <g id="a_node10"><a xlink:href="sprite_8hpp_source.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="562,-168.5 562,-187.5 669,-187.5 669,-168.5 562,-168.5"/>
 <text text-anchor="middle" x="615.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/sprite.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node4&#45;&gt;Node13 -->
+<!-- Node3&#45;&gt;Node12 -->
 <g id="edge14" class="edge">
-<title>Node4&#45;&gt;Node13</title>
+<title>Node3&#45;&gt;Node12</title>
 <path fill="none" stroke="#191970" d="M382.2662,-222.8835C435.8998,-212.5622 514.9153,-197.3565 565.7976,-187.5647"/>
 <polygon fill="#191970" stroke="#191970" points="381.3853,-219.4887 372.2269,-224.8154 382.7081,-226.3626 381.3853,-219.4887"/>
 </g>
-<!-- Node6 -->
+<!-- Node5 -->
 <g id="node3" class="node">
-<title>Node6</title>
+<title>Node5</title>
 <g id="a_node3"><a xlink:href="Controller_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="0,-112.5 0,-131.5 131,-131.5 131,-112.5 0,-112.5"/>
 <text text-anchor="middle" x="65.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/Controller.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node5&#45;&gt;Node6 -->
+<!-- Node4&#45;&gt;Node5 -->
 <g id="edge2" class="edge">
-<title>Node5&#45;&gt;Node6</title>
+<title>Node4&#45;&gt;Node5</title>
 <path fill="none" stroke="#191970" d="M134.3995,-163.0465C117.674,-153.0824 96.1832,-140.2794 81.6859,-131.6427"/>
 <polygon fill="#191970" stroke="#191970" points="132.7441,-166.1343 143.1264,-168.2455 136.3268,-160.1206 132.7441,-166.1343"/>
 </g>
-<!-- Node7 -->
+<!-- Node6 -->
 <g id="node4" class="node">
-<title>Node7</title>
+<title>Node6</title>
 <g id="a_node4"><a xlink:href="all_8hpp.html" target="_top" xlink:title="Includes all JNGL headers.">
 <polygon fill="#ffffff" stroke="#000000" points="369,-56.5 369,-75.5 458,-75.5 458,-56.5 369,-56.5"/>
 <text text-anchor="middle" x="413.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/all.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node5&#45;&gt;Node7 -->
+<!-- Node4&#45;&gt;Node6 -->
 <g id="edge5" class="edge">
-<title>Node5&#45;&gt;Node7</title>
+<title>Node4&#45;&gt;Node6</title>
 <path fill="none" stroke="#191970" d="M159.929,-158.134C161.3499,-143.313 165.7518,-123.6847 178.5,-112 205.7758,-86.9996 308.7342,-74.5262 368.9423,-69.2462"/>
 <polygon fill="#191970" stroke="#191970" points="156.4233,-158.1326 159.3347,-168.3196 163.4114,-158.5404 156.4233,-158.1326"/>
 </g>
-<!-- Node6&#45;&gt;Node7 -->
+<!-- Node5&#45;&gt;Node6 -->
 <g id="edge3" class="edge">
-<title>Node6&#45;&gt;Node7</title>
+<title>Node5&#45;&gt;Node6</title>
 <path fill="none" stroke="#191970" d="M134.9373,-110.8262C204.5919,-99.6174 309.7811,-82.6904 368.9652,-73.1665"/>
 <polygon fill="#191970" stroke="#191970" points="134.2448,-107.3925 124.9279,-112.4369 135.357,-114.3036 134.2448,-107.3925"/>
 </g>
-<!-- Node8 -->
+<!-- Node7 -->
 <g id="node5" class="node">
-<title>Node8</title>
+<title>Node7</title>
 <g id="a_node5"><a xlink:href="jngl_8hpp_source.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="381,-.5 381,-19.5 446,-19.5 446,-.5 381,-.5"/>
 <text text-anchor="middle" x="413.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node7&#45;&gt;Node8 -->
+<!-- Node6&#45;&gt;Node7 -->
 <g id="edge4" class="edge">
-<title>Node7&#45;&gt;Node8</title>
+<title>Node6&#45;&gt;Node7</title>
 <path fill="none" stroke="#191970" d="M413.5,-46.1575C413.5,-37.155 413.5,-26.9199 413.5,-19.6427"/>
 <polygon fill="#191970" stroke="#191970" points="410.0001,-46.2455 413.5,-56.2455 417.0001,-46.2456 410.0001,-46.2455"/>
 </g>
-<!-- Node9&#45;&gt;Node7 -->
+<!-- Node8&#45;&gt;Node6 -->
 <g id="edge7" class="edge">
-<title>Node9&#45;&gt;Node7</title>
+<title>Node8&#45;&gt;Node6</title>
 <path fill="none" stroke="#191970" d="M275.7931,-109.3235C308.4368,-99.0536 353.7134,-84.8093 383.3,-75.5011"/>
 <polygon fill="#191970" stroke="#191970" points="274.588,-106.0335 266.0993,-112.3733 276.6887,-112.7108 274.588,-106.0335"/>
 </g>
-<!-- Node10&#45;&gt;Node7 -->
+<!-- Node9&#45;&gt;Node6 -->
 <g id="edge9" class="edge">
-<title>Node10&#45;&gt;Node7</title>
+<title>Node9&#45;&gt;Node6</title>
 <path fill="none" stroke="#191970" d="M381.1872,-104.5004C389.1796,-94.9775 398.7625,-83.5596 405.407,-75.6427"/>
 <polygon fill="#191970" stroke="#191970" points="378.4346,-102.3357 374.6868,-112.2455 383.7964,-106.8358 378.4346,-102.3357"/>
 </g>
-<!-- Node11&#45;&gt;Node7 -->
+<!-- Node10&#45;&gt;Node6 -->
 <g id="edge11" class="edge">
-<title>Node11&#45;&gt;Node7</title>
+<title>Node10&#45;&gt;Node6</title>
 <path fill="none" stroke="#191970" d="M403.5271,-164.1435C417.7585,-156.8855 432.4211,-146.4324 440.5,-132 451.1428,-112.9872 434.3901,-88.9217 422.8802,-75.7375"/>
 <polygon fill="#191970" stroke="#191970" points="401.8814,-161.0494 394.3108,-168.4613 404.8511,-167.3882 401.8814,-161.0494"/>
 </g>
-<!-- Node12&#45;&gt;Node7 -->
+<!-- Node11&#45;&gt;Node6 -->
 <g id="edge13" class="edge">
-<title>Node12&#45;&gt;Node7</title>
+<title>Node11&#45;&gt;Node6</title>
 <path fill="none" stroke="#191970" d="M482.318,-158.7868C476.1191,-145.1736 466.9107,-126.7787 456.5,-112 446.8046,-98.2368 433.2133,-84.3861 423.9218,-75.5337"/>
 <polygon fill="#191970" stroke="#191970" points="479.2005,-160.3916 486.4417,-168.1257 485.604,-157.564 479.2005,-160.3916"/>
 </g>
-<!-- Node13&#45;&gt;Node7 -->
+<!-- Node12&#45;&gt;Node6 -->
 <g id="edge15" class="edge">
-<title>Node13&#45;&gt;Node7</title>
+<title>Node12&#45;&gt;Node6</title>
 <path fill="none" stroke="#191970" d="M589.4762,-163.5709C547.5363,-140.3171 466.1213,-95.1761 430.6788,-75.5249"/>
 <polygon fill="#191970" stroke="#191970" points="587.8347,-166.6628 598.2776,-168.4509 591.2291,-160.5408 587.8347,-166.6628"/>
 </g>
-<!-- Node14 -->
+<!-- Node13 -->
 <g id="node11" class="node">
-<title>Node14</title>
+<title>Node13</title>
 <g id="a_node11"><a xlink:href="Video_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="565,-112.5 565,-131.5 666,-131.5 666,-112.5 565,-112.5"/>
 <text text-anchor="middle" x="615.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/Video.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node13&#45;&gt;Node14 -->
+<!-- Node12&#45;&gt;Node13 -->
 <g id="edge16" class="edge">
-<title>Node13&#45;&gt;Node14</title>
+<title>Node12&#45;&gt;Node13</title>
 <path fill="none" stroke="#191970" d="M615.5,-158.1575C615.5,-149.155 615.5,-138.9199 615.5,-131.6427"/>
 <polygon fill="#191970" stroke="#191970" points="612.0001,-158.2455 615.5,-168.2455 619.0001,-158.2456 612.0001,-158.2455"/>
 </g>
-<!-- Node14&#45;&gt;Node7 -->
+<!-- Node13&#45;&gt;Node6 -->
 <g id="edge17" class="edge">
-<title>Node14&#45;&gt;Node7</title>
+<title>Node13&#45;&gt;Node6</title>
 <path fill="none" stroke="#191970" d="M570.7289,-109.5882C533.6162,-99.2996 481.6371,-84.8895 447.7719,-75.5011"/>
 <polygon fill="#191970" stroke="#191970" points="570.2034,-113.0745 580.775,-112.3733 572.0735,-106.3289 570.2034,-113.0745"/>
 </g>
