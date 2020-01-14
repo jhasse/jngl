@@ -9,42 +9,42 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 136)">
 <title>jngl/Video.hpp</title>
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-136 105,-136 105,4 -4,4"/>
-<!-- Node13 -->
+<!-- Node11 -->
 <g id="node1" class="node">
-<title>Node13</title>
+<title>Node11</title>
 <g id="a_node1"><a xlink:title=" ">
 <polygon fill="#bfbfbf" stroke="#000000" points="0,-112.5 0,-131.5 101,-131.5 101,-112.5 0,-112.5"/>
 <text text-anchor="middle" x="50.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/Video.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node14 -->
+<!-- Node12 -->
 <g id="node2" class="node">
-<title>Node14</title>
+<title>Node12</title>
 <g id="a_node2"><a xlink:href="all_8hpp.html" target="_top" xlink:title="Includes all JNGL headers.">
 <polygon fill="#ffffff" stroke="#000000" points="6,-56.5 6,-75.5 95,-75.5 95,-56.5 6,-56.5"/>
 <text text-anchor="middle" x="50.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/all.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node13&#45;&gt;Node14 -->
+<!-- Node11&#45;&gt;Node12 -->
 <g id="edge1" class="edge">
-<title>Node13&#45;&gt;Node14</title>
+<title>Node11&#45;&gt;Node12</title>
 <path fill="none" stroke="#191970" d="M50.5,-102.1575C50.5,-93.155 50.5,-82.9199 50.5,-75.6427"/>
 <polygon fill="#191970" stroke="#191970" points="47.0001,-102.2455 50.5,-112.2455 54.0001,-102.2456 47.0001,-102.2455"/>
 </g>
-<!-- Node15 -->
+<!-- Node13 -->
 <g id="node3" class="node">
-<title>Node15</title>
+<title>Node13</title>
 <g id="a_node3"><a xlink:href="jngl_8hpp_source.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="18,-.5 18,-19.5 83,-19.5 83,-.5 18,-.5"/>
 <text text-anchor="middle" x="50.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node14&#45;&gt;Node15 -->
+<!-- Node12&#45;&gt;Node13 -->
 <g id="edge2" class="edge">
-<title>Node14&#45;&gt;Node15</title>
+<title>Node12&#45;&gt;Node13</title>
 <path fill="none" stroke="#191970" d="M50.5,-46.1575C50.5,-37.155 50.5,-26.9199 50.5,-19.6427"/>
 <polygon fill="#191970" stroke="#191970" points="47.0001,-46.2455 50.5,-56.2455 54.0001,-46.2456 47.0001,-46.2455"/>
 </g>
