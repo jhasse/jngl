@@ -444,12 +444,12 @@ namespace jngl {
 		glBindVertexArray(opengl::vaoStream);
 		auto tmp = useSimpleShaderProgram();
 		const float vertexes[] = { static_cast<float>(a.x * jngl::getScaleFactor()),
-		                           static_cast<float>(a.y * jngl::getScaleFactor()),
-		                           static_cast<float>(b.x * jngl::getScaleFactor()),
-		                           static_cast<float>(b.y * jngl::getScaleFactor()),
-		                           static_cast<float>(c.x * jngl::getScaleFactor()),
-		                           static_cast<float>(c.y * jngl::getScaleFactor()) };
-		glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
+		                                  static_cast<float>(a.y * jngl::getScaleFactor()),
+		                                  static_cast<float>(b.x * jngl::getScaleFactor()),
+		                                  static_cast<float>(b.y * jngl::getScaleFactor()),
+		                                  static_cast<float>(c.x * jngl::getScaleFactor()),
+		                                  static_cast<float>(c.y * jngl::getScaleFactor()) };
+	    glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 		// STREAM because we're using the buffer only once
 		glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertexes, GL_STREAM_DRAW);
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
@@ -484,8 +484,8 @@ namespace jngl {
 		glBindVertexArray(vaoLine);
 		jngl::pushMatrix();
 		jngl::translate(a);
-		opengl::scale((b.x - a.x) * jngl::getScaleFactor(),
-		              (b.y - a.y) * jngl::getScaleFactor());
+		opengl::scale(static_cast<float>((b.x - a.x) * jngl::getScaleFactor()),
+		              static_cast<float>((b.y - a.y) * jngl::getScaleFactor()));
 		auto tmp = useSimpleShaderProgram();
 		glDrawArrays(GL_LINES, 0, 2);
 		jngl::popMatrix();
@@ -495,7 +495,8 @@ namespace jngl {
 		glBindVertexArray(vaoRect);
 		jngl::pushMatrix();
 		jngl::translate(pos);
-		opengl::scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor());
+		opengl::scale(static_cast<float>(size.x * jngl::getScaleFactor()),
+		              static_cast<float>(size.y * jngl::getScaleFactor()));
 		auto tmp = useSimpleShaderProgram();
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 		jngl::popMatrix();

@@ -1,4 +1,4 @@
-// Copyright 2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -14,6 +14,8 @@ public:
 	Sound(const SoundParams&, std::vector<char>& bufferData);
 	Sound(const Sound&) = delete;
 	Sound& operator=(const Sound&) = delete;
+	Sound(Sound&&) = default;
+	Sound& operator=(Sound&&) = default;
 	~Sound();
 	bool isPlaying() const;
 	void loop();

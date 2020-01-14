@@ -54,16 +54,16 @@ namespace opengl
 	{
 #ifdef GL_DOUBLE
 		const static GLenum constant = GL_DOUBLE;
-		typedef GLdouble type;
+		using type = GLdouble;
 #else
 		const static GLenum constant = GL_FLOAT;
-		typedef GLfloat type;
+		using type = GLfloat;
 #endif
 	};
 
 #ifdef GL_DOUBLE
-	typedef GLdouble CoordType;
+	using CoordType = GLdouble;
 #else
-	typedef GLfloat CoordType;
+	using CoordType = GLfloat;
 #endif
 } // namespace opengl

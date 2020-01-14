@@ -1,4 +1,4 @@
-// Copyright 2007-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -58,9 +58,9 @@ namespace jngl {
 		void setLineHeight(int);
 		bool getFullscreen() const;
 		void setFullscreen(bool);
-		bool getKeyDown(const key::KeyType key);
-		bool getKeyPressed(const key::KeyType key);
-		void setKeyPressed(const key::KeyType key, bool);
+		bool getKeyDown(key::KeyType key);
+		bool getKeyPressed(key::KeyType key);
+		void setKeyPressed(key::KeyType key, bool);
 		bool getKeyDown(const std::string& key);
 		bool getKeyPressed(const std::string& key);
 		void setKeyPressed(const std::string& key, bool);
@@ -68,11 +68,11 @@ namespace jngl {
 		void setMouseDown(mouse::Button, bool);
 		bool getMousePressed(mouse::Button button);
 		void setMousePressed(mouse::Button button, bool);
-		void SetMouse(const int xposition, const int yposition);
+		void SetMouse(int xposition, int yposition);
 		void SetTitle(const std::string& title);
-		void print(const std::string& text, const int xposition, const int yposition);
+		void print(const std::string& text, int xposition, int yposition);
 		int getFontSize() const;
-		void setFontSize(const int size);
+		void setFontSize(int size);
 		void setFont(const std::string&);
 		void setFontByName(const std::string&);
 		bool isMultisampleSupported() const;

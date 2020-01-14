@@ -1,4 +1,4 @@
-// Copyright 2007-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
@@ -6,6 +6,7 @@
 #include "jngl.hpp"
 #include "spriteimpl.hpp"
 
+#include <boost/math/special_functions/round.hpp>
 #include <boost/qvm/mat_operations.hpp>
 #include <sstream>
 
@@ -54,14 +55,14 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	if (epoxy_gl_version() >= 43 || epoxy_has_gl_extension("GL_KHR_debug")) {
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr);
+		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr); // NOLINT
 	}
 #endif
 
-	const float l =  -width / 2.f;
-	const float r =   width / 2.f;
-	const float b =  height / 2.f;
-	const float t = -height / 2.f;
+	const auto l = static_cast<float>( -width) / 2.f;
+	const auto r = static_cast<float>(  width) / 2.f;
+	const auto b = static_cast<float>( height) / 2.f;
+	const auto t = static_cast<float>(-height) / 2.f;
 	opengl::projection = {{
 		{ 2.f / (r - l),           0.f,  0.f, -(r + l) / (r - l) },
 		{           0.f, 2.f / (t - b),  0.f, -(t + b) / (t - b) },
@@ -236,8 +237,8 @@ bool mousePressed(mouse::Button button) {
 }
 
 void setMouse(const jngl::Vec2 position) {
-	pWindow->SetMouse((position.x + getScreenWidth() / 2) * getScaleFactor(),
-	                  (position.y + getScreenHeight() / 2) * getScaleFactor());
+	pWindow->SetMouse(boost::math::iround((position.x + getScreenWidth() / 2) * getScaleFactor()),
+	                  boost::math::iround((position.y + getScreenHeight() / 2) * getScaleFactor()));
 }
 
 void setRelativeMouseMode(const bool relative) {
@@ -273,7 +274,7 @@ void setLineHeight(int h) {
 }
 
 void print(const std::string& text, const jngl::Vec2 position) {
-	pWindow->print(text, position.x, position.y);
+	pWindow->print(text, boost::math::iround(position.x), boost::math::iround(position.y));
 }
 
 void print(const std::string& text, const int xposition, const int yposition) {
