@@ -1,4 +1,4 @@
-// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Video.hpp"
@@ -18,7 +18,7 @@
 #include "sound.hpp"
 #include "time.hpp"
 
-#include <cmath>
+#include <boost/numeric/conversion/cast.hpp>
 #include <deque>
 #ifdef __APPLE__
 #include <OpenAL/al.h>
@@ -299,8 +299,8 @@ public:
 	Impl(Impl&&) = delete;
 	Impl& operator=(Impl&&) = delete;
 
-	[[nodiscard]] int getWidth() const { return video->width; }
-	[[nodiscard]] int getHeight() const { return video->height; }
+	[[nodiscard]] int getWidth() const { return boost::numeric_cast<int>(video->width); }
+	[[nodiscard]] int getHeight() const { return boost::numeric_cast<int>(video->height); }
 
 private:
 	[[nodiscard]] bool started() const {
@@ -386,10 +386,10 @@ Video::~Video() = default;
 void Video::draw() const {
 }
 
-int Video::getWidth() const { return -1; }
-int Video::getHeight() const { return -1; }
+int Video::getWidth() const { return -1; } // NOLINT
+int Video::getHeight() const { return -1; } // NOLINT
 
-bool Video::finished() const { return true; }
+bool Video::finished() const { return true; } // NOLINT
 
 } // namespace jngl
 
