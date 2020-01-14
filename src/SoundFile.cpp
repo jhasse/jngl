@@ -214,15 +214,8 @@ void resumeAudioDevice() {
 #endif
 
 Audio& GetAudio() {
-#ifdef WEAK_LINKING_OPENAL
-	static Audio* audio = new Audio;
-	// TODO: We'll leak Audio, which isn't nice, but we can't call OpenAL functions during exit
-	// as OpenAL32.dll might already be unloaded.
-	return *audio;
-#else
 	static Audio audio;
 	return audio;
-#endif
 }
 
 } // namespace jngl

@@ -21,6 +21,7 @@ bool isPlaying(const std::string& filename);
 /// Play an OGG audio file in a loop
 void loop(const std::string& filename);
 
+[[deprecated("an OpenAL implementation will always be available")]]
 bool isOpenALInstalled();
 
 void setPlaybackSpeed(float speed);

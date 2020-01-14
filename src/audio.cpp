@@ -5,22 +5,9 @@
 
 #include "Sound.hpp"
 
-#ifdef WEAK_LINKING_OPENAL
-#include "win32/openal.hpp"
-#endif
-
 namespace jngl {
 
 bool isOpenALInstalled() {
-#ifdef WEAK_LINKING_OPENAL
-	try {
-		GetAudio();
-	} catch (WeakLinkingError& e) {
-		debug(e.what());
-		debug("\n");
-		return false;
-	}
-#endif
 	return true;
 }
 
