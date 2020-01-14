@@ -1,10 +1,11 @@
-// Copyright 2015-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowimpl.hpp"
 
 #include "../jngl/other.hpp"
 #include "../jngl/debug.hpp"
+#include "../jngl/screen.hpp"
 #include "../audio.hpp"
 #include "../windowptr.hpp"
 #include "../main.hpp"
@@ -57,13 +58,14 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				case AMOTION_EVENT_ACTION_POINTER_DOWN:
 				case AMOTION_EVENT_ACTION_DOWN:
 				case AMOTION_EVENT_ACTION_MOVE: {
-					const int32_t index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >>
-					                      AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
-					const auto x = AMotionEvent_getX(event, index);
-					const auto y = AMotionEvent_getY(event, index);
-					auto& touch = impl.touches[AMotionEvent_getPointerId(event, index)];
-					impl.mouseX = touch.x = x;
-					impl.mouseY = touch.y = y;
+					for (int32_t index = 0; index < AMotionEvent_getPointerCount(event); ++index) {
+						const auto x = AMotionEvent_getX(event, index);
+						const auto y = AMotionEvent_getY(event, index);
+						const auto id = AMotionEvent_getPointerId(event, index);
+						auto &touch = impl.touches[id];
+						impl.mouseX = touch.x = x;
+						impl.mouseY = touch.y = y;
+					}
 					return 1;
 				}
 				case AMOTION_EVENT_ACTION_POINTER_UP:
@@ -338,8 +340,9 @@ void WindowImpl::setKeyboardVisible(const bool visible) {
 std::vector<Vec2> Window::getTouchPositions() const {
 	std::vector<Vec2> positions;
 	for (auto [id, pos] : impl->touches) {
-		positions.emplace_back(pos.x - (width_ - canvasWidth) / 2,
-		                       pos.y - (height_ - canvasHeight) / 2);
+		positions.emplace_back(
+		    (pos.x - (width_ - canvasWidth) / 2) / getScaleFactor() - getScreenWidth() / 2,
+		    (pos.y - (height_ - canvasHeight) / 2) / getScaleFactor() - getScreenHeight() / 2);
 	}
 	return positions;
 }

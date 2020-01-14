@@ -1,3 +1,4 @@
+#include <boost/math/special_functions/round.hpp>
 #include <cmath>
 #include <jngl.hpp>
 
@@ -22,21 +23,21 @@ const double timePerFrame = 0.01; // 100 FPS
 JNGL_MAIN_BEGIN {
 	jngl::setScaleFactor(
 	    std::floor(std::min(jngl::getDesktopWidth() / 800, jngl::getDesktopHeight() / 600)));
-	jngl::showWindow("Throw Example", std::lround(screenWidth * jngl::getScaleFactor()),
-	                 std::lround(screenHeight * jngl::getScaleFactor()));
+	jngl::showWindow("Throw Example", boost::math::iround(screenWidth * jngl::getScaleFactor()),
+	                 boost::math::iround(screenHeight * jngl::getScaleFactor()));
 	Ball ball("ball");
 	double oldTime = jngl::getTime();
 	while (jngl::running()) {
 		if (jngl::getTime() - oldTime > timePerFrame) {
 			oldTime += timePerFrame;
-			ball.CheckMouse(jngl::getMousePos().x + screenWidth / 2,
-			                jngl::getMousePos().y + screenHeight / 2);
+			ball.CheckMouse(static_cast<int>(jngl::getMousePos().x + screenWidth / 2.),
+			                static_cast<int>(jngl::getMousePos().y + screenHeight / 2.));
 			ball.Move();
 		}
 		else
 		{
 			jngl::updateInput();
-			jngl::translate(-screenWidth / 2, -screenHeight / 2);
+			jngl::translate(-screenWidth / 2., -screenHeight / 2.);
 			ball.Draw();
 			jngl::swapBuffers();
 		}
@@ -84,7 +85,7 @@ void Ball::Move()
 void Ball::CheckMouse(const int x, const int y)
 {
 	if (jngl::mouseDown()) {
-		xSpeed_ = (x - width_ / 2 - x_) * 10; // Geschwindigkeit vom Ball auf Entfernung von
-		ySpeed_ = (y - height_ / 2 - y_) * 10; // Mausposition und Ballmittelpunkt mal 10 setzen
+		xSpeed_ = (x - width_ / 2. - x_) * 10; // Geschwindigkeit vom Ball auf Entfernung von
+		ySpeed_ = (y - height_ / 2. - y_) * 10; // Mausposition und Ballmittelpunkt mal 10 setzen
 	}
 }

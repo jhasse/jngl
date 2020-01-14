@@ -1,4 +1,4 @@
-// Copyright 2017-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2017-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -12,6 +12,10 @@ namespace jngl {
 class SdlController : public Controller {
 public:
 	SdlController(SDL_Joystick*, int index);
+	SdlController(const SdlController&) = delete;
+	SdlController& operator=(const SdlController&) = delete;
+	SdlController(SdlController&&) = delete;
+	SdlController& operator=(SdlController&&) = delete;
 	~SdlController() override;
 	bool down(controller::Button) const override;
 	void rumble(float, std::chrono::milliseconds) override;

@@ -67,6 +67,26 @@
 				"kind": "test",
 				"isDefault": true
 			}
+		},
+		{
+			"label": "clang-tidy",
+			"command": "${workspaceRoot}/data/run-clang-tidy.py",
+			"args": [],
+			"options": {
+				"cwd": "${workspaceRoot}/build"
+			},
+			"problemMatcher": {
+				"owner": "cpp",
+				"fileLocation": ["autoDetect", "${workspaceRoot}/build"],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error|fatal error):\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
 		}
 	],
 	"presentation": {

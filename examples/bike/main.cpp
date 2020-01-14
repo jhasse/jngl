@@ -1,6 +1,7 @@
 #include "base.hpp"
 #include "constants.hpp"
 
+#include <boost/math/special_functions/round.hpp>
 #include <cmath>
 #include <jngl.hpp>
 #include <sstream>
@@ -9,8 +10,8 @@
 JNGL_MAIN_BEGIN {
 	jngl::setScaleFactor(
 	    std::floor(std::min(jngl::getDesktopWidth() / 800, jngl::getDesktopHeight() / 600)));
-	jngl::showWindow("Bike", screenWidth * jngl::getScaleFactor(),
-	                 screenHeight * jngl::getScaleFactor());
+	jngl::showWindow("Bike", boost::math::iround(screenWidth * jngl::getScaleFactor()),
+	                 boost::math::iround(screenHeight * jngl::getScaleFactor()));
 	Base base;
 	double oldTime = jngl::getTime();
 	bool needDraw = true;

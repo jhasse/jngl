@@ -1,11 +1,9 @@
-// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
 
 #include <memory>
-
-#include "dll.hpp"
 
 namespace jngl {
 
@@ -13,7 +11,7 @@ namespace jngl {
 ///
 /// This can be used for an achievement system for example. Override this class and use
 /// jngl::addJob to register it.
-class JNGLDLL_API Job {
+class Job {
 public:
 	/// Advance the game logic
 	///
@@ -27,10 +25,15 @@ public:
 	/// change any game state in it.
 	virtual void draw() const = 0;
 
+	Job() = default;
+	Job(const Job&) = default;
+	Job& operator=(const Job&) = default;
+	Job(Job&&) = default;
+	Job& operator=(Job&&) = default;
 	virtual ~Job();
 };
 
 /// Add a new Job which will be always be stepped and drawn by mainLoop()
-void JNGLDLL_API addJob(std::shared_ptr<Job> job);
+void addJob(std::shared_ptr<Job> job);
 
 } // namespace jngl

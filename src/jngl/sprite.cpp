@@ -1,4 +1,4 @@
-// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #ifndef NOPNG
@@ -54,7 +54,7 @@ struct JpegErrorMgr {
 	jmp_buf setjmp_buffer; // for return to caller
 };
 METHODDEF(void) JpegErrorExit(j_common_ptr info) {
-	longjmp(reinterpret_cast<JpegErrorMgr*>(info->err)->setjmp_buffer,
+	longjmp(reinterpret_cast<JpegErrorMgr*>(info->err)->setjmp_buffer, // NOLINT
 	        1); // Return control to the setjmp point
 }
 #endif
@@ -160,7 +160,7 @@ void Sprite::step() {
 
 void Sprite::draw() const {
 	pushMatrix();
-	opengl::translate(x, y);
+	opengl::translate(static_cast<float>(x), static_cast<float>(y));
 	texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
 	popMatrix();
@@ -168,7 +168,7 @@ void Sprite::draw() const {
 
 void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
-	opengl::translate(x, y);
+	opengl::translate(static_cast<float>(x), static_cast<float>(y));
 	texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f, shaderProgram);
 	popMatrix();
@@ -181,7 +181,7 @@ void Sprite::drawScaled(float factor) const {
 void Sprite::drawScaled(float xfactor, float yfactor,
                         const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
-	opengl::translate(x, y);
+	opengl::translate(static_cast<float>(x), static_cast<float>(y));
 	opengl::scale(xfactor, yfactor);
 	texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f, shaderProgram);
@@ -197,17 +197,17 @@ void Sprite::drawClipped(float xstart, float xend, float ystart, float yend) con
 
 void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
 	pushMatrix();
-	opengl::translate(x, y);
-	texture->drawClipped(start.x, end.x, start.y, end.y, float(spriteColorRed) / 255.0f,
-	                     float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
-	                     float(spriteColorAlpha) / 255.0f);
+	opengl::translate(static_cast<float>(x), static_cast<float>(y));
+	texture->drawClipped(float(start.x), float(end.x), float(start.y), float(end.y),
+	                     float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
+	                     float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
 	popMatrix();
 }
 
 void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
                       const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
-	opengl::translate(x, y);
+	opengl::translate(static_cast<float>(x), static_cast<float>(y));
 	texture->drawMesh(vertexes, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	                  float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f,
 	                  shaderProgram);
@@ -215,7 +215,7 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 }
 
 void Sprite::setBytes(const unsigned char* const bytes) {
-	texture->setBytes(bytes, width, height);
+	texture->setBytes(bytes, boost::math::iround(width), boost::math::iround(height));
 }
 
 const Shader& Sprite::vertexShader() {
@@ -349,7 +349,7 @@ Finally Sprite::LoadJPG(const std::string& filename, FILE* file, const bool half
 	if (setjmp(err.setjmp_buffer)) {
 		// If we get here, the JPEG code has signaled an error.
 		char buf[JMSG_LENGTH_MAX];
-		info.err->format_message(reinterpret_cast<jpeg_common_struct*>(&info), buf);
+		info.err->format_message(reinterpret_cast<jpeg_common_struct*>(&info), buf); // NOLINT
 		jpeg_destroy_decompress(&info);
 		throw std::runtime_error(buf);
 	}
@@ -376,7 +376,8 @@ Finally Sprite::LoadJPG(const std::string& filename, FILE* file, const bool half
 	Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
 
 	while (info.output_scanline < info.output_height) {
-		jpeg_read_scanlines(&info, reinterpret_cast<JSAMPLE**>(&buf[info.output_scanline]), 1);
+		jpeg_read_scanlines(
+		    &info, reinterpret_cast<JSAMPLE**>(&buf[info.output_scanline]) /* NOLINT */, 1);
 	}
 
 	jpeg_finish_decompress(&info);

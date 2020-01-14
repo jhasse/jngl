@@ -1,4 +1,4 @@
-// Copyright 2009-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2009-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -12,9 +12,11 @@ public:
 	WindowPointer();
 	WindowPointer(const WindowPointer&) = delete;
 	WindowPointer& operator=(const WindowPointer&) = delete;
+	WindowPointer(WindowPointer&&) = delete;
+	WindowPointer& operator=(WindowPointer&&) = delete;
 	~WindowPointer();
 	Window* operator->() const;
-	operator bool() const;
+	explicit operator bool() const;
 	void Delete();
 	void Set(Window*);
 	void ThrowIfNull() const;

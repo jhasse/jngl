@@ -1,4 +1,4 @@
-// Copyright 2015-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -20,7 +20,7 @@
 			jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
 		#define JNGL_MAIN_END }
 	#else
-		#define JNGL_MAIN_BEGIN int main(int argc, char** argv) { \
+		#define JNGL_MAIN_BEGIN /* NOLINT */ int main(int argc, char** argv) { \
 			{ \
 				std::vector<std::string> tmp(argc - 1); \
 				for (int i = 1; i < argc; ++i) { \
@@ -29,6 +29,6 @@
 				jngl::setArgs(tmp); \
 			} \
 			jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
-		#define JNGL_MAIN_END }
+		#define JNGL_MAIN_END } // NOLINT
 	#endif
 #endif

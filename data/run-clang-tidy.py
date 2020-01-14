@@ -67,7 +67,7 @@ def get_tidy_invocation(f, clang_tidy_binary, checks, build_path,
         start.append('-header-filter=' + header_filter)
     else:
         # Show warnings in all in-project headers by default.
-        start.append('-header-filter=^' + build_path + '/.*')
+        start.append('-header-filter=src/')
     if checks:
         start.append('-checks=' + checks)
     start.append('-p=' + build_path)

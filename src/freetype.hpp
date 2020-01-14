@@ -1,11 +1,11 @@
-// Copyright 2007-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
 #include "texture.hpp"
 
-#include <ft2build.h>
+#include <ft2build.h> // NOLINT
 #include FT_FREETYPE_H
 
 #include <map>
@@ -19,6 +19,8 @@ public:
 	Character(char32_t ch, unsigned int fontHeight, FT_Face);
 	Character(const Character&) = delete;
 	Character& operator=(const Character&) = delete;
+	Character(Character&&) = delete;
+	Character& operator=(Character&&) = delete;
 	~Character();
 	void Draw() const;
 	int getWidth() const;
@@ -35,6 +37,8 @@ public:
 	FontImpl(const std::string& relativeFilename, unsigned int height);
 	FontImpl(const FontImpl&) = delete;
 	FontImpl& operator=(const FontImpl&) = delete;
+	FontImpl(FontImpl&&) = delete;
+	FontImpl& operator=(FontImpl&&) = delete;
 	~FontImpl();
 	void print(int x, int y, const std::string& text);
 	int getTextWidth(const std::string& text);
@@ -42,7 +46,7 @@ public:
 	void setLineHeight(int);
 
 private:
-	Character& GetCharacter(std::string::iterator& it, const std::string::iterator end);
+	Character& GetCharacter(std::string::iterator& it, std::string::iterator end);
 
 	static int instanceCounter;
 	static FT_Library library;
