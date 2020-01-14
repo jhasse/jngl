@@ -9,63 +9,63 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 192)">
 <title>jngl/job.hpp</title>
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-192 134,-192 134,4 -4,4"/>
-<!-- Node3 -->
+<!-- Node2 -->
 <g id="node1" class="node">
-<title>Node3</title>
+<title>Node2</title>
 <g id="a_node1"><a xlink:title=" ">
 <polygon fill="#bfbfbf" stroke="#000000" points="0,-168.5 0,-187.5 89,-187.5 89,-168.5 0,-168.5"/>
 <text text-anchor="middle" x="44.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/job.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node4 -->
+<!-- Node3 -->
 <g id="node2" class="node">
-<title>Node4</title>
+<title>Node3</title>
 <g id="a_node2"><a xlink:href="all_8hpp.html" target="_top" xlink:title="Includes all JNGL headers.">
 <polygon fill="#ffffff" stroke="#000000" points="0,-56.5 0,-75.5 89,-75.5 89,-56.5 0,-56.5"/>
 <text text-anchor="middle" x="44.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/all.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node3&#45;&gt;Node4 -->
+<!-- Node2&#45;&gt;Node3 -->
 <g id="edge1" class="edge">
-<title>Node3&#45;&gt;Node4</title>
+<title>Node2&#45;&gt;Node3</title>
 <path fill="none" stroke="#191970" d="M34.9054,-159.4785C31.1799,-151.2885 27.3648,-141.3997 25.5,-132 21.4626,-111.6494 31.6911,-88.4726 38.6579,-75.7128"/>
 <polygon fill="#191970" stroke="#191970" points="31.7567,-161.007 39.2682,-168.4788 38.0557,-157.9536 31.7567,-161.007"/>
 </g>
-<!-- Node6 -->
+<!-- Node5 -->
 <g id="node4" class="node">
-<title>Node6</title>
+<title>Node5</title>
 <g id="a_node4"><a xlink:href="work_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="35,-112.5 35,-131.5 130,-131.5 130,-112.5 35,-112.5"/>
 <text text-anchor="middle" x="82.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/work.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node3&#45;&gt;Node6 -->
+<!-- Node2&#45;&gt;Node5 -->
 <g id="edge3" class="edge">
-<title>Node3&#45;&gt;Node6</title>
+<title>Node2&#45;&gt;Node5</title>
 <path fill="none" stroke="#191970" d="M56.7679,-159.9209C63.1488,-150.5176 70.6931,-139.3997 75.9568,-131.6427"/>
 <polygon fill="#191970" stroke="#191970" points="53.838,-158.0055 51.1191,-168.2455 59.6303,-161.936 53.838,-158.0055"/>
 </g>
-<!-- Node5 -->
+<!-- Node4 -->
 <g id="node3" class="node">
-<title>Node5</title>
+<title>Node4</title>
 <g id="a_node3"><a xlink:href="jngl_8hpp_source.html" target="_top" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="12,-.5 12,-19.5 77,-19.5 77,-.5 12,-.5"/>
 <text text-anchor="middle" x="44.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node4&#45;&gt;Node5 -->
+<!-- Node3&#45;&gt;Node4 -->
 <g id="edge2" class="edge">
-<title>Node4&#45;&gt;Node5</title>
+<title>Node3&#45;&gt;Node4</title>
 <path fill="none" stroke="#191970" d="M44.5,-46.1575C44.5,-37.155 44.5,-26.9199 44.5,-19.6427"/>
 <polygon fill="#191970" stroke="#191970" points="41.0001,-46.2455 44.5,-56.2455 48.0001,-46.2456 41.0001,-46.2455"/>
 </g>
-<!-- Node6&#45;&gt;Node4 -->
+<!-- Node5&#45;&gt;Node3 -->
 <g id="edge4" class="edge">
-<title>Node6&#45;&gt;Node4</title>
+<title>Node5&#45;&gt;Node3</title>
 <path fill="none" stroke="#191970" d="M70.2321,-103.9209C63.8512,-94.5176 56.3069,-83.3997 51.0432,-75.6427"/>
 <polygon fill="#191970" stroke="#191970" points="67.3697,-105.936 75.8809,-112.2455 73.162,-102.0055 67.3697,-105.936"/>
 </g>

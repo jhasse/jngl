@@ -13,68 +13,53 @@
 <g id="node1" class="node">
 <title>Node0</title>
 <g id="a_node1"><a xlink:title=" ">
-<polygon fill="#bfbfbf" stroke="#000000" points="18,-112.5 18,-131.5 125,-131.5 125,-112.5 18,-112.5"/>
-<text text-anchor="middle" x="71.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/screen.hpp</text>
+<polygon fill="#bfbfbf" stroke="#000000" points="58,-112.5 58,-131.5 165,-131.5 165,-112.5 58,-112.5"/>
+<text text-anchor="middle" x="111.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/screen.hpp</text>
 </a>
 </g>
 </g>
 <!-- Node1 -->
 <g id="node2" class="node">
 <title>Node1</title>
-<g id="a_node2"><a xlink:href="dll_8hpp_source.html" target="_top" xlink:title=" ">
-<polygon fill="#ffffff" stroke="#000000" points="2,-56.5 2,-75.5 61,-75.5 61,-56.5 2,-56.5"/>
-<text text-anchor="middle" x="31.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">dll.hpp</text>
+<g id="a_node2"><a xlink:href="Vec2_8hpp.html" target="_top" xlink:title=" ">
+<polygon fill="#ffffff" stroke="#000000" points="79,-56.5 79,-75.5 144,-75.5 144,-56.5 79,-56.5"/>
+<text text-anchor="middle" x="111.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">Vec2.hpp</text>
 </a>
 </g>
 </g>
 <!-- Node0&#45;&gt;Node1 -->
 <g id="edge1" class="edge">
 <title>Node0&#45;&gt;Node1</title>
-<path fill="none" stroke="#191970" d="M64.5325,-112.2455C58.9689,-104.4564 51.022,-93.3308 44.3171,-83.9439"/>
-<polygon fill="#191970" stroke="#191970" points="47.0481,-81.7457 38.3876,-75.6427 41.352,-85.8144 47.0481,-81.7457"/>
+<path fill="none" stroke="#191970" d="M111.5,-112.2455C111.5,-104.9382 111.5,-94.6944 111.5,-85.7046"/>
+<polygon fill="#191970" stroke="#191970" points="115.0001,-85.6426 111.5,-75.6427 108.0001,-85.6427 115.0001,-85.6426"/>
 </g>
 <!-- Node2 -->
 <g id="node3" class="node">
 <title>Node2</title>
-<g id="a_node3"><a xlink:href="Vec2_8hpp.html" target="_top" xlink:title=" ">
-<polygon fill="#ffffff" stroke="#000000" points="79,-56.5 79,-75.5 144,-75.5 144,-56.5 79,-56.5"/>
-<text text-anchor="middle" x="111.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">Vec2.hpp</text>
-</a>
-</g>
-</g>
-<!-- Node0&#45;&gt;Node2 -->
-<g id="edge2" class="edge">
-<title>Node0&#45;&gt;Node2</title>
-<path fill="none" stroke="#191970" d="M78.4675,-112.2455C84.0311,-104.4564 91.978,-93.3308 98.6829,-83.9439"/>
-<polygon fill="#191970" stroke="#191970" points="101.648,-85.8144 104.6124,-75.6427 95.9519,-81.7457 101.648,-85.8144"/>
-</g>
-<!-- Node3 -->
-<g id="node4" class="node">
-<title>Node3</title>
-<g id="a_node4"><a xlink:title=" ">
+<g id="a_node3"><a xlink:title=" ">
 <polygon fill="#ffffff" stroke="#bfbfbf" points="0,-.5 0,-19.5 119,-19.5 119,-.5 0,-.5"/>
 <text text-anchor="middle" x="59.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">boost/version.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node2&#45;&gt;Node3 -->
-<g id="edge3" class="edge">
-<title>Node2&#45;&gt;Node3</title>
+<!-- Node1&#45;&gt;Node2 -->
+<g id="edge2" class="edge">
+<title>Node1&#45;&gt;Node2</title>
 <path fill="none" stroke="#191970" d="M102.4423,-56.2455C94.9858,-48.2155 84.2366,-36.6394 75.3583,-27.0781"/>
 <polygon fill="#191970" stroke="#191970" points="77.8232,-24.589 68.4539,-19.6427 72.6937,-29.3522 77.8232,-24.589"/>
 </g>
-<!-- Node4 -->
-<g id="node5" class="node">
-<title>Node4</title>
-<g id="a_node5"><a doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" xlink:href="http://en.cppreference.com/w/cpp/header/iosfwd.html" xlink:title=" ">
+<!-- Node3 -->
+<g id="node4" class="node">
+<title>Node3</title>
+<g id="a_node4"><a doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" xlink:href="http://en.cppreference.com/w/cpp/header/iosfwd.html" xlink:title=" ">
 <polygon fill="#ffffff" stroke="#000000" points="137,-.5 137,-19.5 190,-19.5 190,-.5 137,-.5"/>
 <text text-anchor="middle" x="163.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">iosfwd</text>
 </a>
 </g>
 </g>
-<!-- Node2&#45;&gt;Node4 -->
-<g id="edge4" class="edge">
-<title>Node2&#45;&gt;Node4</title>
+<!-- Node1&#45;&gt;Node3 -->
+<g id="edge3" class="edge">
+<title>Node1&#45;&gt;Node3</title>
 <path fill="none" stroke="#191970" d="M120.5577,-56.2455C128.0142,-48.2155 138.7634,-36.6394 147.6417,-27.0781"/>
 <polygon fill="#191970" stroke="#191970" points="150.3063,-29.3522 154.5461,-19.6427 145.1768,-24.589 150.3063,-29.3522"/>
 </g>
