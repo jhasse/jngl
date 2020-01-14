@@ -34,6 +34,8 @@ namespace jngl {
 		       std::pair<int, int> minAspectRatio, std::pair<int, int> maxAspectRatio);
 		Window(const Window&) = delete;
 		Window& operator=(const Window&) = delete;
+		Window(Window&&) = delete;
+		Window& operator=(Window&&) = delete;
 		~Window();
 		bool isRunning() const;
 		void quit();

@@ -184,9 +184,9 @@ void cancelQuit() {
 
 void setBackgroundColor(const jngl::Color color) {
 	pWindow.ThrowIfNull();
-	bgRed = color.getRed() / 255.0f;
-	bgGreen = color.getGreen() / 255.0f;
-	bgBlue = color.getBlue() / 255.0f;
+	bgRed = float(color.getRed()) / 255.f;
+	bgGreen = float(color.getGreen()) / 255.f;
+	bgBlue = float(color.getBlue()) / 255.f;
 	clearBackgroundColor();
 	glClear(GL_COLOR_BUFFER_BIT);
 }

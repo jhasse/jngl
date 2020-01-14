@@ -1,31 +1,30 @@
-// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
 
-#include "dll.hpp"
 #include "Vec2.hpp"
 
 namespace jngl {
 
 /// Size of one screen pixel in actual pixels
-double JNGLDLL_API getScaleFactor();
+double getScaleFactor();
 
-void JNGLDLL_API setScaleFactor(double);
+void setScaleFactor(double);
 
 /// jngl::getScreenSize().x
-double JNGLDLL_API getScreenWidth();
+double getScreenWidth();
 
 /// jngl::getScreenSize().y
-double JNGLDLL_API getScreenHeight();
+double getScreenHeight();
 
 /// Returns the size of the useable draw area (excluding letter-boxing) in screen pixels
-Vec2 JNGLDLL_API getScreenSize();
+Vec2 getScreenSize();
 
 enum DeviceOrientation { Portrait, PortraitUpsideDown, LandscapeLeft, LandscapeRight };
 
-void JNGLDLL_API setDeviceOrientationSupported(DeviceOrientation, bool enabled);
+void setDeviceOrientationSupported(DeviceOrientation, bool enabled);
 
-bool JNGLDLL_API getDeviceOrientationSupported(DeviceOrientation);
+bool getDeviceOrientationSupported(DeviceOrientation);
 
 } // namespace jngl
