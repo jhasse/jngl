@@ -3,19 +3,16 @@
  *
  * Please see the file LICENSE.txt in the source's root directory.
  *
- *  This file written by Ryan C. Gordon.
+ *  This file was originally written by Ryan C. Gordon.
  */
 
 // I wrote this with a lot of peeking at the Theora example code in
 //  libtheora-1.1.1/examples/player_example.c, but this is all my own
 //  code.
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
+#include <cassert>
+#include <cstring>
 
-#include <chrono>
 #include <mutex>
 #include <thread>
 
