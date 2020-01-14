@@ -69,6 +69,23 @@
 			}
 		},
 		{
+			"label": "build-android",
+			"command": "make",
+			"args": ["-C", "android"],
+			"problemMatcher": {
+				"owner": "cpp",
+				"fileLocation": "autoDetect",
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error|fatal error):\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
+		},
+		{
 			"label": "clang-tidy",
 			"command": "${workspaceRoot}/data/run-clang-tidy.py",
 			"args": [],
