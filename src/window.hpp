@@ -104,10 +104,10 @@ namespace jngl {
 	private:
 		static int GetKeyCode(jngl::key::KeyType key);
 		static std::string GetFontFileByName(const std::string& fontname);
-		void calculateCanvasSize(const std::pair<int, int> minAspectRatio,
-		                         const std::pair<int, int> maxAspectRatio);
+	    void calculateCanvasSize(std::pair<int, int> minAspectRatio,
+	                             std::pair<int, int> maxAspectRatio);
 
-		GLuint vaoLine = 0;
+	    GLuint vaoLine = 0;
 		GLuint vaoRect = 0;
 		double timePerStep = 1.0 / 60.0;
 		unsigned int maxStepsPerFrame = 3;

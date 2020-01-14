@@ -1,4 +1,4 @@
-// Copyright 2010-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2010-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -6,10 +6,10 @@
 #include "jngl/ShaderProgram.hpp"
 #include "opengl.hpp"
 
-#include <vector>
-#include <unordered_map>
-#include <string>
 #include <memory>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 namespace jngl {
 
