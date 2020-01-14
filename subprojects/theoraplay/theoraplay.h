@@ -3,17 +3,11 @@
  *
  * Please see the file LICENSE.txt in the source's root directory.
  *
- *  This file written by Ryan C. Gordon.
+ *  This file was originally written by Ryan C. Gordon.
  */
 
-#ifndef _INCL_THEORAPLAY_H_
-#define _INCL_THEORAPLAY_H_
+#pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-typedef struct THEORAPLAY_Io THEORAPLAY_Io;
 struct THEORAPLAY_Io
 {
     long (*read)(THEORAPLAY_Io *io, void *buf, long buflen);
@@ -21,43 +15,38 @@ struct THEORAPLAY_Io
     void *userdata;
 };
 
-typedef struct THEORAPLAY_Decoder THEORAPLAY_Decoder;
+struct THEORAPLAY_Decoder;
 
 /* YV12 is YCrCb, not YCbCr; that's what SDL uses for YV12 overlays. */
-typedef enum THEORAPLAY_VideoFormat
-{
-    THEORAPLAY_VIDFMT_YV12,  /* NTSC colorspace, planar YCrCb 4:2:0 */
-    THEORAPLAY_VIDFMT_IYUV,  /* NTSC colorspace, planar YCbCr 4:2:0 */
-    THEORAPLAY_VIDFMT_RGB,   /* 24 bits packed pixel RGB */
-    THEORAPLAY_VIDFMT_RGBA   /* 32 bits packed pixel RGBA (full alpha). */
-} THEORAPLAY_VideoFormat;
+enum THEORAPLAY_VideoFormat {
+	THEORAPLAY_VIDFMT_YV12, /* NTSC colorspace, planar YCrCb 4:2:0 */
+	THEORAPLAY_VIDFMT_IYUV, /* NTSC colorspace, planar YCbCr 4:2:0 */
+	THEORAPLAY_VIDFMT_RGB,  /* 24 bits packed pixel RGB */
+	THEORAPLAY_VIDFMT_RGBA  /* 32 bits packed pixel RGBA (full alpha). */
+};
 
-typedef struct THEORAPLAY_VideoFrame
-{
-    unsigned int playms;
-    double fps;
-    unsigned int width;
-    unsigned int height;
-    THEORAPLAY_VideoFormat format;
-    unsigned char *pixels;
-    struct THEORAPLAY_VideoFrame *next;
-} THEORAPLAY_VideoFrame;
+struct THEORAPLAY_VideoFrame {
+	unsigned int playms;
+	double fps;
+	unsigned int width;
+	unsigned int height;
+	THEORAPLAY_VideoFormat format;
+	unsigned char* pixels;
+	struct THEORAPLAY_VideoFrame* next;
+};
 
-typedef struct THEORAPLAY_AudioPacket
-{
-    unsigned int playms;  /* playback start time in milliseconds. */
-    int channels;
-    int freq;
-    int frames;
-    float *samples;  /* frames * channels float32 samples. */
-    struct THEORAPLAY_AudioPacket *next;
-} THEORAPLAY_AudioPacket;
+struct THEORAPLAY_AudioPacket {
+	unsigned int playms; /* playback start time in milliseconds. */
+	int channels;
+	int freq;
+	int frames;
+	float* samples; /* frames * channels float32 samples. */
+	struct THEORAPLAY_AudioPacket* next;
+};
 
-THEORAPLAY_Decoder *THEORAPLAY_startDecodeFile(const char *fname,
-                                               const unsigned int maxframes,
+THEORAPLAY_Decoder* THEORAPLAY_startDecodeFile(const char* fname, unsigned int maxframes,
                                                THEORAPLAY_VideoFormat vidfmt);
-THEORAPLAY_Decoder *THEORAPLAY_startDecode(THEORAPLAY_Io *io,
-                                           const unsigned int maxframes,
+THEORAPLAY_Decoder* THEORAPLAY_startDecode(THEORAPLAY_Io* io, unsigned int maxframes,
                                            THEORAPLAY_VideoFormat vidfmt);
 void THEORAPLAY_stopDecode(THEORAPLAY_Decoder *decoder);
 
@@ -74,12 +63,3 @@ void THEORAPLAY_freeAudio(const THEORAPLAY_AudioPacket *item);
 
 const THEORAPLAY_VideoFrame *THEORAPLAY_getVideo(THEORAPLAY_Decoder *decoder);
 void THEORAPLAY_freeVideo(const THEORAPLAY_VideoFrame *item);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif  /* include-once blocker. */
-
-/* end of theoraplay.h ... */
-
