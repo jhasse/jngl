@@ -60,14 +60,6 @@ void Window::SetMouseVisible(const bool) {
 void Window::SetTitle(const std::string&) {
 }
 
-int Window::getMouseX() {
-	return mousex_;
-}
-
-int Window::getMouseY() {
-	return mousey_;
-}
-
 void Window::SetMouse(const int /*xposition*/, const int /*yposition*/) {
 }
 
@@ -89,6 +81,12 @@ int getDesktopHeight() {
 
 WindowImpl* Window::getImpl() const {
 	return impl;
+}
+
+void Window::setFullscreen(bool fullscreen) {
+	if (!fullscreen) {
+		debugLn("Can't unset fullscreen on iOS!");
+	}
 }
 
 } // namespace jngl
