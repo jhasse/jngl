@@ -1,11 +1,10 @@
 #import "JNGLView.h"
 
-#include "jngl.hpp"
-#include "windowptr.hpp"
+#include "../jngl.hpp"
+#include "../windowptr.hpp"
 #include "time.hpp"
-#include "sprite.hpp"
+#include "../jngl/sprite.hpp"
 #include "windowimpl.hpp"
-#include "main.hpp"
 
 #include <iostream>
 
@@ -26,40 +25,40 @@
 
 		CAEAGLLayer* eaglLayer = (CAEAGLLayer*) super.layer;
 		eaglLayer.opaque = YES;
-		
+
 		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
-		
+
 		if (!context || ![EAGLContext setCurrentContext:context]) {
 			return nil;
 		}
-		
+
 		GLuint framebuffer, renderbuffer;
 		glGenFramebuffers(1, &framebuffer);
 		glGenRenderbuffers(1, &renderbuffer);
-		
+
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 		glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
 
-		
+
 		[context
 		 renderbufferStorage:GL_RENDERBUFFER
 		 fromDrawable: eaglLayer];
-		
+
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 									 GL_RENDERBUFFER, renderbuffer);
-		
+
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
 
 		jngl::showWindow("", width, height);
-		
+
 		CADisplayLink* displayLink;
 		displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawView:)];
-		
+
 		[displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-		
+
 		[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-		
+
 		startTime = -1;
 		pause = false;
 		needToResetFrameLimiter = false;
@@ -91,7 +90,7 @@
 		jngl::reset();
 		// jngl::clearBackgroundColor();
 		glClear(GL_COLOR_BUFFER_BIT);
-		
+
 		jngl::pWindow->draw();
 		[context presentRenderbuffer:GL_RENDERBUFFER];
 	}
