@@ -1,0 +1,2 @@
+set(CMAKE_SYSTEM_NAME iOS)
+set(IOS 1)

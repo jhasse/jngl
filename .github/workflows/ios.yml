@@ -1,0 +1,11 @@
+name: iOS
+on: [push]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build with CMake
+      run: |
+        cmake -Bbuild-ios -H. -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake
+        cmake --build build-ios
