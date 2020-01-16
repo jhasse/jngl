@@ -36,12 +36,8 @@ public:
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
 		if (jngl::keyPressed('p')) {
-			if (jngl::isOpenALInstalled()) {
-				jngl::stop("test.ogg");
-				jngl::play("test.ogg");
-			} else {
-				jngl::errorMessage("OpenAL not installed!");
-			}
+			jngl::stop("test.ogg");
+			jngl::play("test.ogg");
 		}
 		if (jngl::keyPressed('s')) {
 			useShader = !useShader;
