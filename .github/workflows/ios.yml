@@ -5,7 +5,11 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v1
+    - name: Install dependencies
+      run: |
+        brew install boost
+        ln -s /usr/local/include/boost include/ios/boost
     - name: Build with CMake
       run: |
-        cmake -Bbuild-ios -H. -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake
+        cmake -Bbuild-ios -H. -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake -GXcode
         cmake --build build-ios
