@@ -1,4 +1,4 @@
-// Copyright 2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "SoundFile.hpp"
@@ -7,7 +7,6 @@
 #include "SoundParams.hpp"
 #include "audio.hpp"
 #include "jngl/debug.hpp"
-#include "jngl/sound.hpp"
 #include "main.hpp"
 
 #include <algorithm>
@@ -217,15 +216,8 @@ void resumeAudioDevice() {
 #endif
 
 Audio& GetAudio() {
-#ifdef WEAK_LINKING_OPENAL
-	static Audio* audio = new Audio;
-	// TODO: We'll leak Audio, which isn't nice, but we can't call OpenAL functions during exit
-	// as OpenAL32.dll might already be unloaded.
-	return *audio;
-#else
 	static Audio audio;
 	return audio;
-#endif
 }
 
 } // namespace jngl

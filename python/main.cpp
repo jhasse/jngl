@@ -229,7 +229,6 @@ PYBIND11_MODULE(jngl, m) {
 	m.def("play", play);
 	m.def("stop", stop);
 	m.def("isPlaying", isPlaying);
-	m.def("isOpenALInstalled", isOpenALInstalled);
 	m.def("setPlaybackSpeed", setPlaybackSpeed);
 	m.def("setVolume", setVolume);
 	m.def("getDesktopWidth", getDesktopWidth);

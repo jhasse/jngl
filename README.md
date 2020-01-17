@@ -39,10 +39,10 @@ mingw-w64-x86_64-libwebp mingw-w64-x86_64-dlfcn mingw-w64-x86_64-libepoxy mingw-
 mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb
 ```
 
-### Visual C++ 2015 or newer
+### Visual Studio 2017 or newer
 
 ```
-cmake -Bbuild -H. -AWin32
+cmake -Bbuild -H. -DFETCHCONTENT_QUIET=0
 ```
 
 and then open `build/jngl.sln`.

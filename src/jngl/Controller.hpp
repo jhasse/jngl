@@ -1,4 +1,4 @@
-// Copyright 2017-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2017-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -12,7 +12,12 @@ namespace jngl {
 /// Object representing one Gamepad controller
 class Controller : public std::enable_shared_from_this<Controller> {
 public:
+	Controller() = default;
 	virtual ~Controller() = default;
+	Controller(const Controller&) = delete;
+	Controller& operator=(const Controller&) = delete;
+	Controller(Controller&&) = delete;
+	Controller& operator=(Controller&&) = delete;
 
 	/// Returns a value between 0.0f (not pressed) and 1.0f (pressed)
 	float state(controller::Button) const;

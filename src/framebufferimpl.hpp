@@ -1,4 +1,4 @@
-// Copyright 2011-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -12,6 +12,8 @@ public:
 	FrameBufferImpl(int width, int height);
 	FrameBufferImpl(const FrameBufferImpl&) = delete;
 	FrameBufferImpl& operator=(const FrameBufferImpl&) = delete;
+	FrameBufferImpl(FrameBufferImpl&&) = delete;
+	FrameBufferImpl& operator=(FrameBufferImpl&&) = delete;
 	~FrameBufferImpl();
 	void BeginDraw();
 	void EndDraw();

@@ -18,7 +18,7 @@ extern "C" {
 
 
 /// These error codes can be returned by br_init(), gbr_init() or gbr_init_lib().
-typedef enum {
+typedef enum { // NOLINT
 	/** Cannot allocate memory. */
 	BR_INIT_ERROR_NOMEM,
 	/** Unable to open /proc/self/maps; see errno for details. */
@@ -30,26 +30,6 @@ typedef enum {
 } BrInitError;
 
 
-#ifndef BINRELOC_RUNNING_DOXYGEN
-/* Mangle symbol names to avoid symbol collisions with other ELF objects. */
-	#define br_init             IiWh56206072972879_br_init
-	#define br_init_lib         IiWh56206072972879_br_init_lib
-	#define br_find_exe         IiWh56206072972879_br_find_exe
-	#define br_find_exe_dir     IiWh56206072972879_br_find_exe_dir
-	#define br_find_prefix      IiWh56206072972879_br_find_prefix
-	#define br_find_bin_dir     IiWh56206072972879_br_find_bin_dir
-	#define br_find_sbin_dir    IiWh56206072972879_br_find_sbin_dir
-	#define br_find_data_dir    IiWh56206072972879_br_find_data_dir
-	#define br_find_locale_dir  IiWh56206072972879_br_find_locale_dir
-	#define br_find_lib_dir     IiWh56206072972879_br_find_lib_dir
-	#define br_find_libexec_dir IiWh56206072972879_br_find_libexec_dir
-	#define br_find_etc_dir     IiWh56206072972879_br_find_etc_dir
-	#define br_strcat           IiWh56206072972879_br_strcat
-	#define br_build_path       IiWh56206072972879_br_build_path
-	#define br_dirname          IiWh56206072972879_br_dirname
-
-
-#endif
 int   br_init             (BrInitError *error);
 int br_init_lib();
 
