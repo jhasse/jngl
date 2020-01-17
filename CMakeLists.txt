@@ -243,12 +243,17 @@ else()
 		target_include_directories(jngl PRIVATE ${DLFCN_SRC_DIR})
 		target_link_libraries(jngl PRIVATE dl)
 
-		FetchContent_Declare(boost
-			URL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.7z
-			URL_HASH SHA256=1b3949ffddf56129141032542523920034f2e69775fb9332a52ba37c548dbf35)
-		FetchContent_MakeAvailable(boost)
-		FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
-		target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
+		find_package(Boost)
+		if(Boost_FOUND)
+			target_link_libraries(jngl PUBLIC Boost::headers)
+		else()
+			FetchContent_Declare(boost
+				URL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.7z
+				URL_HASH SHA256=1b3949ffddf56129141032542523920034f2e69775fb9332a52ba37c548dbf35)
+			FetchContent_MakeAvailable(boost)
+			FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
+			target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
+		endif()
 
 		target_include_directories(jngl PRIVATE ${PROJECT_SOURCE_DIR}/include/msvc)
 		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
