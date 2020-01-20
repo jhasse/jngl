@@ -513,7 +513,7 @@ std::vector<std::string> getArgs() {
 	return args;
 }
 
-std::stringstream JNGLDLL_API readAsset(const std::string& filename) {
+std::stringstream readAsset(const std::string& filename) {
 	if (!filename.empty() && filename[0] == '/') {
 		throw std::runtime_error("Do not pass absolute paths to jngl::readAsset.");
 	}

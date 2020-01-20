@@ -1,9 +1,7 @@
-// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
-
-#include "dll.hpp"
 
 namespace jngl {
 /// Object representing a RGB color
@@ -23,7 +21,7 @@ namespace jngl {
 /// jngl::setColor(jngl::Color(0x68, 0xda, 0x4f));
 /// jngl::setColor(jngl::Color(104, 218, 79));
 /// \endcode
-class JNGLDLL_API Color {
+class Color {
 public:
 	/// \param red 0...255
 	/// \param green 0...255
@@ -52,12 +50,12 @@ private:
 };
 
 /// Sets the screen's background color which is visible when nothing is drawn
-void JNGLDLL_API setBackgroundColor(jngl::Color);
+void setBackgroundColor(jngl::Color);
 
 /// Sets the screen's background color which is visible when nothing is drawn
 /// \deprecated Use setBackgroundColor(jngl::Color) instead.
 [[deprecated("use setBackgroundColor(jngl::Color) instead")]]
-void JNGLDLL_API setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
+void setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
 
 } // namespace jngl
 
