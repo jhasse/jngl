@@ -1,4 +1,4 @@
-// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -11,7 +11,7 @@
 namespace jngl {
 
 /// Active state of the game, e.g. a menu or the game itself
-class JNGLDLL_API Work : public Job {
+class Work : public Job {
 public:
 	/// Gets called when the user closes the main window or quit() has been called
 	///
@@ -25,15 +25,20 @@ public:
 	virtual void onLoad();
 };
 
-std::shared_ptr<Work> JNGLDLL_API getWork();
+/// Returns the current active Work or nullptr if none has been set
+std::shared_ptr<Work> getWork();
 
 /// Sets the passed Work to be active in App::mainLoop()
-void JNGLDLL_API setWork(std::shared_ptr<Work> work);
+void setWork(std::shared_ptr<Work> work);
 
 /// \deprecated Use setWork(std::shared_ptr<Work>) instead
 [[deprecated("Use setWork(std::shared_ptr<Work>) instead")]]
-void JNGLDLL_API setWork(Work*);
+void setWork(Work*);
 
-void JNGLDLL_API resetFrameLimiter();
+/// Resets the automatic frame limiter of App::mainLoop().
+///
+/// This is useful after you have done a huge amount of work in Work::draw, e.g. after loading
+/// screens.
+void resetFrameLimiter();
 
 } // namespace jngl
