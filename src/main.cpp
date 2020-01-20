@@ -533,7 +533,7 @@ std::stringstream readAsset(const std::string& filename) {
 		sstream.setstate(std::ios::failbit);
 		return sstream;
 	}
-	std::unique_ptr<char[]> content(new char[size]);
+	auto content = std::make_unique<char[]>(size);
 	if (fread(content.get(), size, 1, f) != 1) {
 		sstream.setstate(std::ios::failbit);
 		return sstream;
