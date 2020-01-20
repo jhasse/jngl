@@ -63,7 +63,7 @@ var searchData=
   ['transform_5finclusive_5fscan',['transform_inclusive_scan',['http://en.cppreference.com/w/cpp/algorithm/transform_inclusive_scan.html',1,'std']]],
   ['transform_5fprimary',['transform_primary',['http://en.cppreference.com/w/cpp/regex/regex_traits/transform_primary.html',1,'std::regex_traits']]],
   ['transform_5freduce',['transform_reduce',['http://en.cppreference.com/w/cpp/algorithm/transform_reduce.html',1,'std']]],
-  ['translate',['translate',['http://en.cppreference.com/w/cpp/regex/regex_traits/translate.html',1,'std::regex_traits']]],
+  ['translate',['translate',['http://en.cppreference.com/w/cpp/regex/regex_traits/translate.html',1,'std::regex_traits::translate()'],['../namespacejngl.html#a33055e9490360e20d49880215f041de9',1,'jngl::translate(double x, double y)'],['../namespacejngl.html#aec36677a20c7b4358a83814e8b558974',1,'jngl::translate(Vect v)']]],
   ['translate_5fnocase',['translate_nocase',['http://en.cppreference.com/w/cpp/regex/regex_traits/translate_nocase.html',1,'std::regex_traits']]],
   ['treat_5fas_5ffloating_5fpoint',['treat_as_floating_point',['http://en.cppreference.com/w/cpp/chrono/treat_as_floating_point.html',1,'std::chrono']]],
   ['treat_5fas_5ffloating_5fpoint_5fv',['treat_as_floating_point_v',['http://en.cppreference.com/w/cpp/chrono/treat_as_floating_point.html',1,'std::chrono::treat_as_floating_point_v()'],['http://en.cppreference.com/w/cpp/experimental/type_trait_variable_templates.html',1,'std::experimental::treat_as_floating_point_v()']]],

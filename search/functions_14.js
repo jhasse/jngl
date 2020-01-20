@@ -56,7 +56,7 @@ var searchData=
   ['transform_5finclusive_5fscan',['transform_inclusive_scan',['http://en.cppreference.com/w/cpp/algorithm/transform_inclusive_scan.html',1,'std']]],
   ['transform_5fprimary',['transform_primary',['http://en.cppreference.com/w/cpp/regex/regex_traits/transform_primary.html',1,'std::regex_traits']]],
   ['transform_5freduce',['transform_reduce',['http://en.cppreference.com/w/cpp/algorithm/transform_reduce.html',1,'std']]],
-  ['translate',['translate',['http://en.cppreference.com/w/cpp/regex/regex_traits/translate.html',1,'std::regex_traits']]],
+  ['translate',['translate',['http://en.cppreference.com/w/cpp/regex/regex_traits/translate.html',1,'std::regex_traits::translate()'],['../namespacejngl.html#a33055e9490360e20d49880215f041de9',1,'jngl::translate(double x, double y)'],['../namespacejngl.html#aec36677a20c7b4358a83814e8b558974',1,'jngl::translate(Vect v)']]],
   ['translate_5fnocase',['translate_nocase',['http://en.cppreference.com/w/cpp/regex/regex_traits/translate_nocase.html',1,'std::regex_traits']]],
   ['truename',['truename',['http://en.cppreference.com/w/cpp/locale/numpunct/truefalsename.html',1,'std::numpunct::truename()'],['http://en.cppreference.com/w/cpp/locale/numpunct/truefalsename.html',1,'std::numpunct_byname::truename()']]],
   ['trunc',['trunc',['http://en.cppreference.com/w/cpp/numeric/math/trunc.html',1,'std']]],

@@ -74,6 +74,7 @@ var searchData=
   ['getwidth',['getWidth',['../classjngl_1_1Drawable.html#aaad368cfd9ea3cf64fbc091bd886f729',1,'jngl::Drawable::getWidth()'],['../classjngl_1_1Video.html#adf4256ef8fa281d98229e52f3f07b5cb',1,'jngl::Video::getWidth()']]],
   ['getwindowheight',['getWindowHeight',['../namespacejngl.html#a0bd114aaf7ebebf760dcd2b6d1be16d7',1,'jngl']]],
   ['getwindowwidth',['getWindowWidth',['../namespacejngl.html#adca649a9f4530deb1d23d36c8be0ce51',1,'jngl']]],
+  ['getwork',['getWork',['../namespacejngl.html#a41bdb428b4b122d8a22b79c8d448b306',1,'jngl']]],
   ['giga',['giga',['http://en.cppreference.com/w/cpp/numeric/ratio/ratio.html',1,'std']]],
   ['global',['global',['http://en.cppreference.com/w/cpp/locale/locale/global.html',1,'std::locale']]],
   ['gmtime',['gmtime',['http://en.cppreference.com/w/cpp/chrono/c/gmtime.html',1,'std']]],
