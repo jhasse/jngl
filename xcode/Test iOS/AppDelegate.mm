@@ -17,6 +17,9 @@ public:
 		jngl::setFont("Arial.ttf");
 		std::cout << "Resolution: " << jngl::getWindowWidth() << "x" << jngl::getWindowHeight() << std::endl
 		          << "Config path: " << jngl::getConfigPath() << std::endl;
+		auto sstream = jngl::readAsset("Arial.ttf");
+		sstream.seekp(0, std::ios::end);
+		std::cout << "Size of Arial.ttf in bytes: " << sstream.tellp() << std::endl;
 	}
 	void step() {
 		angle += 1;

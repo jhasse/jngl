@@ -518,7 +518,11 @@ std::stringstream readAsset(const std::string& filename) {
 		throw std::runtime_error("Do not pass absolute paths to jngl::readAsset.");
 	}
 	std::stringstream sstream;
+#ifdef IOS
+	FILE* const f = fopen((pathPrefix + filename).c_str(), "rb");
+#else
 	FILE* const f = fopen(filename.c_str(), "rb");
+#endif
 	if (!f) {
 		sstream.setstate(std::ios::failbit);
 		return sstream;
