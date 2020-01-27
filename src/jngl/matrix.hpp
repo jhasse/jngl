@@ -1,17 +1,19 @@
-// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
-#include "dll.hpp"
-
 namespace jngl {
 
 /// Multiplies the global ModelView matrix with a rotation matrix
-void JNGLDLL_API rotate(double degree);
+void rotate(double degree);
 
-void JNGLDLL_API translate(double x, double y);
+/// Multiplies the global ModelView matrix with a translation matrix
+void translate(double x, double y);
 
+/// Multiplies the global ModelView matrix with a translation matrix
+///
+/// Equivalent to calling `jngl::translate(v.x, v.y);`.
 template <class Vect> void translate(Vect v) {
 	translate(v.x, v.y);
 }
@@ -19,16 +21,18 @@ template <class Vect> void translate(Vect v) {
 /// Multiplies the global ModelView matrix by a scaling matrix
 ///
 /// Equivalent to calling `jngl::scale(factor, factor)`.
-void JNGLDLL_API scale(double factor);
+void scale(double factor);
 
 /// Multiplies the global ModelView matrix by a scaling matrix
-void JNGLDLL_API scale(double xfactor, double yfactor);
+void scale(double xfactor, double yfactor);
 
-void JNGLDLL_API pushMatrix();
+/// Pushes the current ModelView matrix on a global stack
+void pushMatrix();
 
-void JNGLDLL_API popMatrix();
+/// Replaces the current ModelView matrix with the top element of the global stack
+void popMatrix();
 
 /// Resets the global ModelView matrix to the identity matrix
-void JNGLDLL_API reset();
+void reset();
 
 } // namespace jngl

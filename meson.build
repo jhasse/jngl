@@ -173,7 +173,6 @@ install_headers([
 	'src/jngl/Color.hpp',
 	'src/jngl/Controller.hpp',
 	'src/jngl/debug.hpp',
-	'src/jngl/dll.hpp',
 	'src/jngl/drawable.hpp',
 	'src/jngl/Finally.hpp',
 	'src/jngl/font.hpp',

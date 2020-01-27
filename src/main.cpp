@@ -513,7 +513,7 @@ std::vector<std::string> getArgs() {
 	return args;
 }
 
-std::stringstream JNGLDLL_API readAsset(const std::string& filename) {
+std::stringstream readAsset(const std::string& filename) {
 	if (!filename.empty() && filename[0] == '/') {
 		throw std::runtime_error("Do not pass absolute paths to jngl::readAsset.");
 	}
@@ -533,7 +533,7 @@ std::stringstream JNGLDLL_API readAsset(const std::string& filename) {
 		sstream.setstate(std::ios::failbit);
 		return sstream;
 	}
-	std::unique_ptr<char[]> content(new char[size]);
+	auto content = std::make_unique<char[]>(size);
 	if (fread(content.get(), size, 1, f) != 1) {
 		sstream.setstate(std::ios::failbit);
 		return sstream;

@@ -30,7 +30,7 @@ public:
 
 std::ostream& operator<<(std::ostream&, const jngl::Vec2&);
 
-#if BOOST_VERSION >= 106200
+#if BOOST_VERSION >= 106200 || __has_include("boost/qvm/vec_traits.hpp")
 #include <boost/qvm/vec_traits.hpp>
 
 namespace boost::qvm {

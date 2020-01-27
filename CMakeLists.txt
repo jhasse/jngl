@@ -247,12 +247,17 @@ else()
 		target_include_directories(jngl PRIVATE ${DLFCN_SRC_DIR})
 		target_link_libraries(jngl PRIVATE dl)
 
-		FetchContent_Declare(boost
-			URL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.7z
-			URL_HASH SHA256=1b3949ffddf56129141032542523920034f2e69775fb9332a52ba37c548dbf35)
-		FetchContent_MakeAvailable(boost)
-		FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
-		target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
+		find_package(Boost)
+		if(Boost_FOUND)
+			target_link_libraries(jngl PUBLIC Boost::headers)
+		else()
+			FetchContent_Declare(boost
+				URL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.7z
+				URL_HASH SHA256=1b3949ffddf56129141032542523920034f2e69775fb9332a52ba37c548dbf35)
+			FetchContent_MakeAvailable(boost)
+			FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
+			target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
+		endif()
 
 		target_include_directories(jngl PRIVATE ${PROJECT_SOURCE_DIR}/include/msvc)
 		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
@@ -291,6 +296,7 @@ else()
 		set_source_files_properties("Arial.ttf" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 		set_source_files_properties("jngl.webp" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 		add_executable(jngl-test "xcode/Test iOS/AppDelegate.mm" "xcode/Test iOS/main.mm" "Arial.ttf" "jngl.webp")
+		set_target_properties(jngl-test PROPERTIES MACOSX_BUNDLE_INFO_PLIST data/ios/jngl-test.in.plist)
 		target_include_directories(jngl-test PRIVATE include/ios src/ios)
 	else()
 		find_package(VorbisFile REQUIRED)

@@ -52,10 +52,12 @@ public:
 	static bool IsStopped(std::shared_ptr<Sound>& s) {
 		return s->isStopped();
 	}
-	void Play(std::shared_ptr<Sound>& sound) {
+
+	void play(std::shared_ptr<Sound> sound) {
 		sounds_.erase(std::remove_if(sounds_.begin(), sounds_.end(), IsStopped), sounds_.end());
-		sounds_.push_back(sound);
+		sounds_.emplace_back(std::move(sound));
 	}
+
 	void Stop(std::shared_ptr<Sound>& sound) {
 		std::vector<std::shared_ptr<Sound>>::iterator i;
 		if ((i = std::find(sounds_.begin(), sounds_.end(), sound)) != sounds_.end()) {
@@ -125,7 +127,7 @@ SoundFile::SoundFile(const std::string& filename) : params(std::make_unique<Soun
 }
 void SoundFile::Play() {
 	sound_ = std::make_shared<Sound>(*params, buffer_);
-	GetAudio().Play(sound_);
+	GetAudio().play(sound_);
 }
 void SoundFile::Stop() {
 	if (sound_) {
