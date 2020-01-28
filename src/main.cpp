@@ -5,6 +5,7 @@
 
 #include "jngl.hpp"
 #include "spriteimpl.hpp"
+#include "paths.hpp"
 
 #include <boost/math/special_functions/round.hpp>
 #include <boost/qvm/mat_operations.hpp>
@@ -490,18 +491,19 @@ std::string getConfigPath() {
 	if (configPath) { return *configPath; }
 #ifndef IOS
 	std::stringstream path;
-#ifdef _WIN32
+#if defined(_WIN32)
 	TCHAR szPath[MAX_PATH];
 	if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, szPath))) {
 		throw std::runtime_error("Couldn't get %AppData% location!");
 	}
 	path << szPath << "/" << App::instance().getDisplayName() << "/";
+#elif defined(__APPLE__)
+	path << getSystemConfigPath() << "/" << App::instance().getDisplayName() << "/";
 #else
 	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/";
 #endif
 	return *(configPath = path.str());
 #endif
-	// TODO: macOS, Switch
 	throw std::runtime_error("Couldn't get config path. Has the app been started?");
 }
 

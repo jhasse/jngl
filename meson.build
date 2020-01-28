@@ -62,6 +62,8 @@ if target_machine.system() != 'windows'
 		dependency('SDL2'),
 	]
 	if target_machine.system() == 'darwin'
+		add_languages(['objcpp'])
+		add_global_arguments('-std=c++17', language : 'objcpp')
 		opengl_dep += [
 			dependency('appleframeworks', modules : [
 				'Foundation', 'AppKit', 'IOKIT', 'QuartzCore', 'OpenGL', 'GLUT', 'OpenAL'
@@ -69,6 +71,7 @@ if target_machine.system() != 'windows'
 		]
 		src += [
 			'src/mac/other.cpp',
+			'src/mac/paths.mm',
 		]
 	else
 		opengl_dep += [

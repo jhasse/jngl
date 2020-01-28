@@ -54,6 +54,7 @@ void setConfigPath(const std::string& path);
 /// Returns the directory where to store configuration files and save games.
 /// - Windows: `%%AppData%/Display Name/`
 /// - Linux: `~/.config/Display Name/`
+/// - macOS: `~/Library/Application Support/Display Name/`
 /// - Android/iOS: Data path provided by the OS
 std::string getConfigPath();
 
