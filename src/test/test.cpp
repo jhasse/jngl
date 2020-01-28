@@ -195,7 +195,8 @@ JNGL_MAIN_BEGIN {
 		jngl::App app("JNGL Test Application");
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
 		          << jngl::getDesktopHeight() << std::endl
-		          << "Path of binary: " << jngl::getBinaryPath() << std::endl;
+		          << "Path of binary: " << jngl::getBinaryPath() << std::endl
+		          << "Config path: " << jngl::getConfigPath() << std::endl;
 		try {
 			std::cout << "Size of jngl.png: " << jngl::getWidth("jngl.png") << "x"
 			                                  << jngl::getHeight("jngl.png") << std::endl;
