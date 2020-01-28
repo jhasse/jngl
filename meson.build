@@ -63,7 +63,7 @@ if target_machine.system() != 'windows'
 	]
 	if target_machine.system() == 'darwin'
 		add_languages(['objcpp'])
-		add_global_arguments('-std=c++17', language : 'objcpp')
+		add_project_arguments('-std=c++17', language : 'objcpp')
 		opengl_dep += [
 			dependency('appleframeworks', modules : [
 				'Foundation', 'AppKit', 'IOKIT', 'QuartzCore', 'OpenGL', 'GLUT', 'OpenAL'
