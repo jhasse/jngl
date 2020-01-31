@@ -78,6 +78,13 @@ brew install sdl2 freetype libvorbis libepoxy jpeg webp meson pkg-config boost t
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 ```
 
+Hack if image is only 1/4 in size on mac 10.15
+```
+brew unlink sdl2
+brew install mercurial autoconf automake libtool
+brew install --HEAD sdl2
+```
+
 ## Building
 
 ```
