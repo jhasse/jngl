@@ -14,6 +14,7 @@ App* App::self = nullptr;
 
 struct App::Impl {
 	std::string displayName;
+	bool pixelArt = false;
 };
 
 App::App(std::string displayName) : impl(new Impl{ std::move(displayName) }) {
@@ -44,6 +45,14 @@ void App::mainLoop() {
 	debug(impl->displayName);
 	debugLn('\'');
 	return pWindow->mainLoop();
+}
+
+bool App::isPixelArt() const {
+	return impl->pixelArt;
+}
+
+void App::setPixelArt(const bool pixelArt) {
+	impl->pixelArt = pixelArt;
 }
 
 } // namespace jngl

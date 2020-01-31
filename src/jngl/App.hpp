@@ -40,6 +40,14 @@ public:
 	/// Starts the main loop, which calls jngl::Work::step and jngl::Work::draw
 	void mainLoop();
 
+	/// Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)
+	///
+	/// It's important to call this before textures are loaded. Defaults to false.
+	void setPixelArt(bool);
+
+	/// If pixel-perfect magnifying is activated (see setPixelArt)
+	bool isPixelArt() const;
+
 private:
 	struct Impl;
 	std::unique_ptr<Impl> impl;
