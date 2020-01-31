@@ -282,6 +282,7 @@ var searchData=
   ['ismultitouch',['isMultitouch',['../namespacejngl.html#a6643be8799336dbf288ba798a197753f',1,'jngl']]],
   ['isnan',['isnan',['http://en.cppreference.com/w/cpp/numeric/math/isnan.html',1,'std']]],
   ['isnormal',['isnormal',['http://en.cppreference.com/w/cpp/numeric/math/isnormal.html',1,'std']]],
+  ['ispixelart',['isPixelArt',['../classjngl_1_1App.html#affaf53e72da21c307c03b2093951fca7',1,'jngl::App']]],
   ['isplaying',['isPlaying',['../namespacejngl.html#a971aff230e609c611c475f85646cc2db',1,'jngl']]],
   ['isprint_28_3c_20cctype_20_3e_29',['isprint(&lt; cctype &gt;)',['http://en.cppreference.com/w/cpp/string/byte/isprint.html',1,'std']]],
   ['isprint_28_3c_20clocale_20_3e_29',['isprint(&lt; clocale &gt;)',['http://en.cppreference.com/w/cpp/locale/isprint.html',1,'std']]],

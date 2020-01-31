@@ -129,6 +129,13 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa">mainLoop</a> ()</td></tr>
 <tr class="memdesc:a0dcdcf298c511db74358109fc74547fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the main loop, which calls <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">jngl::Work::step</a> and <a class="el" href="classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">jngl::Work::draw</a>. <br /></td></tr>
 <tr class="separator:a0dcdcf298c511db74358109fc74547fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7262c3bd8fcaa2a80de22b296aadbe4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1App.html#ad7262c3bd8fcaa2a80de22b296aadbe4">setPixelArt</a> (bool)</td></tr>
+<tr class="memdesc:ad7262c3bd8fcaa2a80de22b296aadbe4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)  <a href="#ad7262c3bd8fcaa2a80de22b296aadbe4">More...</a><br /></td></tr>
+<tr class="separator:ad7262c3bd8fcaa2a80de22b296aadbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affaf53e72da21c307c03b2093951fca7"><td class="memItemLeft" align="right" valign="top"><a id="affaf53e72da21c307c03b2093951fca7"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1App.html#affaf53e72da21c307c03b2093951fca7">isPixelArt</a> () const</td></tr>
+<tr class="memdesc:affaf53e72da21c307c03b2093951fca7"><td class="mdescLeft">&#160;</td><td class="mdescRight">If pixel-perfect magnifying is activated (see setPixelArt) <br /></td></tr>
+<tr class="separator:affaf53e72da21c307c03b2093951fca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -159,6 +166,27 @@ static const <a class="el" href="classjngl_1_1App.html">App</a> &amp;&#160;</td>
 
 <p>Returns the name set by the constructor. </p>
 <p>This cannot be changed later and is used by <a class="el" href="namespacejngl.html#af2122ebb1c5d1653f8fbbdb373d9b98e" title="Returns the directory where to store configuration files and save games.">jngl::getConfigPath()</a> for example. </p>
+
+</div>
+</div>
+<a id="ad7262c3bd8fcaa2a80de22b296aadbe4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7262c3bd8fcaa2a80de22b296aadbe4">&#9670;&nbsp;</a></span>setPixelArt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setPixelArt </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation) </p>
+<p>It's important to call this before textures are loaded. Defaults to false. </p>
 
 </div>
 </div>
