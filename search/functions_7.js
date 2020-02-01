@@ -65,6 +65,7 @@ var searchData=
   ['getscreenheight',['getScreenHeight',['../namespacejngl.html#a5b3774529f56b2f7792dcb44780c8b24',1,'jngl']]],
   ['getscreensize',['getScreenSize',['../namespacejngl.html#a6b3ce3e4146e6535de9a0353cc28eb07',1,'jngl']]],
   ['getscreenwidth',['getScreenWidth',['../namespacejngl.html#a285b8708e56768b526cb8ee76f21e5a1',1,'jngl']]],
+  ['getsize',['getSize',['../classjngl_1_1FrameBuffer.html#aebe51f6c43d6d673fc3826046d668b38',1,'jngl::FrameBuffer']]],
   ['getstepspersecond',['getStepsPerSecond',['../namespacejngl.html#a9d8a357dd23189e0724e75d9afb5eddb',1,'jngl']]],
   ['gettextinput',['getTextInput',['../namespacejngl.html#a61fd6900416c997489df138cb8651ab8',1,'jngl']]],
   ['gettime',['getTime',['../namespacejngl.html#acfa255b4d1bf4d4ad83b3d200b99c930',1,'jngl']]],

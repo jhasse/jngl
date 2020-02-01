@@ -87,7 +87,7 @@ var searchData=
   ['fputwc',['fputwc',['http://en.cppreference.com/w/cpp/io/c/fputwc.html',1,'std']]],
   ['fputws',['fputws',['http://en.cppreference.com/w/cpp/io/c/fputws.html',1,'std']]],
   ['frac_5fdigits',['frac_digits',['http://en.cppreference.com/w/cpp/locale/moneypunct/frac_digits.html',1,'std::moneypunct::frac_digits()'],['http://en.cppreference.com/w/cpp/locale/moneypunct/frac_digits.html',1,'std::moneypunct_byname::frac_digits()']]],
-  ['framebuffer',['FrameBuffer',['../classjngl_1_1FrameBuffer.html',1,'jngl']]],
+  ['framebuffer',['FrameBuffer',['../classjngl_1_1FrameBuffer.html',1,'FrameBuffer'],['../classjngl_1_1FrameBuffer.html#aac483304855ce99cd6a3d9bbc5534109',1,'jngl::FrameBuffer::FrameBuffer()']]],
   ['fread',['fread',['http://en.cppreference.com/w/cpp/io/c/fread.html',1,'std']]],
   ['free',['free',['http://en.cppreference.com/w/cpp/experimental/fs/space_info.html',1,'std::experimental::filesystem::space_info::free()'],['http://en.cppreference.com/w/cpp/filesystem/space_info.html',1,'std::filesystem::space_info::free()'],['http://en.cppreference.com/w/cpp/memory/c/free.html',1,'std::free()']]],
   ['freeze',['freeze',['http://en.cppreference.com/w/cpp/io/ostrstream/freeze.html',1,'std::ostrstream::freeze()'],['http://en.cppreference.com/w/cpp/io/strstream/freeze.html',1,'std::strstream::freeze()'],['http://en.cppreference.com/w/cpp/io/strstreambuf/freeze.html',1,'std::strstreambuf::freeze()']]],
