@@ -23,6 +23,17 @@
 
 namespace jngl {
 
+void setProcessSettings() {
+	static bool called = false;
+	if (called) {
+		return;
+	}
+	if (!SetProcessDPIAware()) {
+		debugLn("Couldn't set the process-default DPI awareness to system-DPI awareness.");
+	}
+	called = true;
+}
+
 class WindowImpl {
 public:
 	std::shared_ptr<std::remove_pointer<HGLRC>::type> pRenderingContext_;
@@ -724,6 +735,7 @@ void Window::SetIcon(const std::string& filename) {
 }
 
 int getDesktopWidth() {
+	setProcessSettings();
 	RECT desktop;
 	const HWND hDesktop = GetDesktopWindow();
 	GetWindowRect(hDesktop, &desktop);
@@ -731,6 +743,7 @@ int getDesktopWidth() {
 }
 
 int getDesktopHeight() {
+	setProcessSettings();
 	RECT desktop;
 	const HWND hDesktop = GetDesktopWindow();
 	GetWindowRect(hDesktop, &desktop);
