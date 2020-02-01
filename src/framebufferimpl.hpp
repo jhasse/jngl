@@ -30,7 +30,7 @@ private:
 	bool letterboxing;
 	GLuint systemFbo;
 	GLuint systemBuffer;
-#ifndef GL_VIEWPORT_BIT
+#if !defined(GL_VIEWPORT_BIT) || defined(__APPLE__)
 	GLint viewport[4];
 #endif
 };

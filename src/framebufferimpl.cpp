@@ -49,7 +49,7 @@ void FrameBufferImpl::BeginDraw() {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, buffer);
 	pushMatrix();
-#ifdef GL_VIEWPORT_BIT
+#if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 	glPushAttrib(GL_VIEWPORT_BIT);
 #else
 	glGetIntegerv(GL_VIEWPORT, viewport);
@@ -80,7 +80,7 @@ void FrameBufferImpl::EndDraw() {
 	}
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	popMatrix();
-#ifdef GL_VIEWPORT_BIT
+#if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 	glPopAttrib();
 #else
 	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
