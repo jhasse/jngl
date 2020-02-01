@@ -4,6 +4,7 @@
 #pragma once
 
 #include "texture.hpp"
+#include "jngl/Vec2.hpp"
 
 namespace jngl {
 
@@ -19,6 +20,7 @@ public:
 	void EndDraw();
 	void Draw(double x, double y) const;
 	static void clear();
+	Vec2 getSize() const;
 
 private:
 	GLuint fbo = 0;

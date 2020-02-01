@@ -33,4 +33,8 @@ void FrameBuffer::clear() {
 	return pImpl->clear();
 }
 
+Vec2 FrameBuffer::getSize() const {
+	return pImpl->getSize();
+}
+
 } // namespace jngl
