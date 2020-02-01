@@ -14,7 +14,9 @@ class FrameBufferImpl;
 /// Image framebuffer object which can be rendered on
 class FrameBuffer {
 public:
+	/// Creates a framebuffer object with \a width times \a height pixels
 	FrameBuffer(int width, int height);
+
 	FrameBuffer(const FrameBuffer&) = delete;
 	FrameBuffer& operator=(const FrameBuffer&) = delete;
 	FrameBuffer(FrameBuffer&&) = default;
@@ -25,6 +27,9 @@ public:
 	void draw(Vec2 position) const;
 	void draw(double x, double y) const;
 	void clear();
+
+	/// Returns the size in screen pixels
+	Vec2 getSize() const;
 
 private:
 	std::unique_ptr<FrameBufferImpl> pImpl;

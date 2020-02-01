@@ -208,6 +208,7 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
                       const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(x), static_cast<float>(y));
+	scale(getScaleFactor());
 	texture->drawMesh(vertexes, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	                  float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f,
 	                  shaderProgram);

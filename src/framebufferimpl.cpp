@@ -69,6 +69,11 @@ void FrameBufferImpl::clear() {
 	clearBackgroundColor();
 }
 
+Vec2 FrameBufferImpl::getSize() const {
+	return { texture.getPreciseWidth() / getScaleFactor(),
+		     texture.getPreciseHeight() / getScaleFactor() };
+}
+
 void FrameBufferImpl::EndDraw() {
 	if (letterboxing) {
 		glEnable(GL_SCISSOR_TEST);
