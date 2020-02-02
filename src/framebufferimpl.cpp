@@ -57,14 +57,14 @@ void FrameBufferImpl::BeginDraw() {
 	glViewport((pWindow->getCanvasWidth() - pWindow->getWidth()) / 2,
 	           -((pWindow->getCanvasHeight() + pWindow->getHeight()) / 2 - height),
 	           pWindow->getWidth(), pWindow->getHeight());
-	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 	if (letterboxing) {
 		glDisable(GL_SCISSOR_TEST);
 	}
 }
 
 void FrameBufferImpl::clear() {
-	glClearColor(0, 0, 0, 0);
+	glClearColor(1, 1, 1, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	clearBackgroundColor();
 }
@@ -91,7 +91,6 @@ void FrameBufferImpl::EndDraw() {
 }
 
 void FrameBufferImpl::Draw(const double x, const double y) const {
-	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	pushMatrix();
 	jngl::translate(x, y);
 	opengl::scale(1, -1);
@@ -99,7 +98,6 @@ void FrameBufferImpl::Draw(const double x, const double y) const {
 	texture.draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	             float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
 	popMatrix();
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 } // namespace jngl
