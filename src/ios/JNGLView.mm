@@ -2,7 +2,6 @@
 
 #include "../jngl.hpp"
 #include "../windowptr.hpp"
-#include "time.hpp"
 #include "../jngl/sprite.hpp"
 #include "windowimpl.hpp"
 
@@ -78,7 +77,6 @@
 			if (startTime < 0) {
 				startTime = displayLink.timestamp;
 			} else {
-				jngl::elapsedSeconds = displayLink.timestamp - startTime;
 				if (needToResetFrameLimiter) {
 					jngl::resetFrameLimiter();
 					needToResetFrameLimiter = false;

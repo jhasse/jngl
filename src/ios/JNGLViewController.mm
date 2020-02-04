@@ -1,3 +1,6 @@
+// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
+
 #import "JNGLViewController.h"
 
 #include "../jngl/input.hpp"
@@ -60,9 +63,5 @@ namespace jngl {
 		} else {
 			[jnglView resignFirstResponder];
 		}
-	}
-
-	void sleep(int ms) {
-		[NSThread sleepForTimeInterval:double(ms)/1000.0];
 	}
 }
