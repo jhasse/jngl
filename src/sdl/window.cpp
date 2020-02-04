@@ -55,16 +55,6 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	Init(width, height, canvasWidth, canvasHeight);
 }
 
-#ifdef __APPLE__
-	std::string Window::GetFontFileByName(const std::string& fontname) {
-		std::string tmp = fontname;
-		if (fontname == "sans-serif") {
-			tmp = "Arial";
-		}
-		return "/Library/Fonts/" + tmp + ".ttf";
-	}
-#endif
-
 	Window::~Window() {
 		fonts_.clear(); // Clear fonts before deleting GL context
 		SDL_GL_DeleteContext(impl->context);

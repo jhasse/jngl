@@ -72,6 +72,7 @@ if target_machine.system() != 'windows'
 		src += [
 			'src/mac/other.cpp',
 			'src/mac/paths.mm',
+			'src/mac/window.mm',
 		]
 	else
 		opengl_dep += [
