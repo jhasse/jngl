@@ -1,7 +1,7 @@
 // Copyright 2017-2019 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#include "AndroidController.hpp"
+#include "asndroidController.hpp"
 
 #include "../jngl/debug.hpp"
 
