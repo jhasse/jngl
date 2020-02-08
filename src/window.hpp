@@ -66,6 +66,7 @@ namespace jngl {
 		bool getKeyDown(const std::string& key);
 		bool getKeyPressed(const std::string& key);
 		void setKeyPressed(const std::string& key, bool);
+		void setController(const unsigned int &button, bool p);
 		bool getMouseDown(mouse::Button);
 		void setMouseDown(mouse::Button, bool);
 		bool getMousePressed(mouse::Button button);
@@ -122,6 +123,7 @@ namespace jngl {
 		std::map<unsigned int, bool> keyPressed_;
 		std::map<std::string, bool> characterDown_;
 		std::map<std::string, bool> characterPressed_;
+		std::map<unsigned int, bool> androidController_;
 		std::stack<bool*> needToBeSetFalse_;
 		int mousex_ = 0;
 		int mousey_ = 0;

@@ -184,6 +184,10 @@ namespace jngl {
 		characterPressed_[key] = p;
 	}
 
+	void Window::setController(const unsigned int &button, bool p) {
+		androidController_[button] = p;
+	}
+
 	bool keyDown(const char key) {
 		std::string temp; temp.append(1, key);
 		return keyDown(temp);

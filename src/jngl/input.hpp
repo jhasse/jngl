@@ -78,6 +78,9 @@ void setKeyPressed(const std::string& key, bool);
 /// Overwrite what keyPressed() should return
 void setKeyPressed(key::KeyType key, bool);
 
+/// Overwrite what keyPressed() should return
+void setController(int32_t key, bool);
+
 /// Whether \p key is down
 bool keyDown(key::KeyType key);
 

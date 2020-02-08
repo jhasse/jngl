@@ -131,6 +131,16 @@ float SdlController::stateImpl(controller::Button button) const {
 }
 
 bool SdlController::down(const controller::Button button) const {
+
+#if defined(ANDROID)
+	int buttonIndex;
+
+	switch (button) {
+			case controller::A: buttonIndex = 0; break;
+			case controller::B: buttonIndex = 1; break;
+	}
+
+#else
 	if (handle) {
 		const bool xbox = (model == Model::XBOX || model == Model::XBOX_WIRED);
 		if (xbox && (button == controller::LeftTrigger || button == controller::RightTrigger)) {
@@ -192,6 +202,7 @@ bool SdlController::down(const controller::Button button) const {
 	default:
 		return state(button) > 0.5f;
 	}
+#endif
 }
 
 void SdlController::rumble(const float vibration, const std::chrono::milliseconds ms) {

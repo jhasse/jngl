@@ -13,6 +13,10 @@ void setKeyPressed(const std::string& key, bool p) {
 	pWindow->setKeyPressed(key, p);
 }
 
+void setController(int32_t key, bool p) {
+	pWindow->setController(key, p);
+}
+
 void setMousePressed(mouse::Button button, bool p) {
 	pWindow->setMousePressed(button, p);
 }

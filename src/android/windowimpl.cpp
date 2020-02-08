@@ -198,7 +198,7 @@ void WindowImpl::makeCurrent() {
 }
 
 int WindowImpl::handleKeyEvent(AInputEvent* const event) {
-	const auto key = AKeyEvent_getKeyCode(event);
+	const int32_t key = AKeyEvent_getKeyCode(event);
 	if (key == AKEYCODE_DEL) {
 		jngl::setKeyPressed(jngl::key::BackSpace, true);
 		return 1;
@@ -207,6 +207,29 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 		return 1;
 	}
 	const auto metaState = AKeyEvent_getMetaState(event);
+	const auto flags = AKeyEvent_getFlags(event);
+	const auto deviceID = AInputEvent_getDeviceId(event);
+	const auto source = AInputEvent_getSource(event);
+	const auto type = AInputEvent_getType(event);
+	const auto action = AKeyEvent_getAction(event);
+	const auto pointerCount = AMotionEvent_getPointerCount(event);
+
+    if (deviceID != 0) {
+		setController(key, true);
+
+		if(key == AKEYCODE_BUTTON_A)
+		{
+		    setKeyPressed(jngl::key::Space, true);
+		}
+
+
+
+		return 1;
+	}
+
+
+
+
 
 	const jclass keyEventClass = env->FindClass("android/view/KeyEvent");
 
@@ -242,6 +265,9 @@ void WindowImpl::updateInput() {
 	int ident;
 	int events;
 	android_poll_source* source;
+
+	androidController_[AKEYCODE_BUTTON_A] = false;
+	androidController_[AKEYCODE_BUTTON_B] = false;
 
 	while ((ident = ALooper_pollAll(
 	            surface ? 0 : 1e9, // This is the timeout. When we're in the background, we don't

@@ -49,6 +49,7 @@ private:
 	EGLDisplay display;
 	EGLSurface surface = nullptr ;
 	EGLContext context;
+	std::map<unsigned int, bool> androidController_;
 };
 
 } // namespace jngl
