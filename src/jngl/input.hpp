@@ -115,6 +115,10 @@ bool isMultitouch();
 /// primary mouse button is down.
 std::vector<jngl::Vec2> getTouchPositions();
 
+
+Vec2 getControllerMove();
+
+
 /// Mouse position in screen coordinates
 Vec2 getMousePos();
 

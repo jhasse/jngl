@@ -1,7 +1,11 @@
 // Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
+#ifdef ANDROID
+#include "androidController.hpp"
+#else
 #include "SdlController.hpp"
+#endif
 
 namespace jngl {
 

@@ -39,6 +39,12 @@ std::vector<Vec2> getTouchPositions() {
 	return {};
 }
 
+Vec2 getControllerMove()
+{
+    return pWindow->getControllerMove();
+}
+
+
 KeyboardType keyboardType = Default;
 
 void setKeyboardType(KeyboardType t) {

@@ -46,6 +46,19 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
 	WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
+
+    if (AInputEvent_getSource(event) & AINPUT_SOURCE_CLASS_JOYSTICK) {
+        const float lx = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_X, 0);
+        const float ly = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_Y, 0);
+        const float rx = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_RX, 0);
+        const float ry = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_RY, 0);
+		impl.gamepad_x = lx;
+		impl.gamepad_y = ly;
+
+        return true;
+    }
+
+
 	switch (AInputEvent_getType(event)) {
 		case AINPUT_EVENT_TYPE_KEY:
 			if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN) {
@@ -54,6 +67,19 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 			break;
 		case AINPUT_EVENT_TYPE_MOTION: {
 			const auto action = AMotionEvent_getAction(event);
+
+            const auto deviceID = AInputEvent_getDeviceId(event);
+            if (deviceID != 0) {
+                const auto metaState = AKeyEvent_getMetaState(event);
+                const auto flags = AKeyEvent_getFlags(event);
+                const auto deviceID = AInputEvent_getDeviceId(event);
+                const auto source = AInputEvent_getSource(event);
+                const auto type = AInputEvent_getType(event);
+                const auto action = AKeyEvent_getAction(event);
+                const auto pointerCount = AMotionEvent_getPointerCount(event);
+            }
+
+
 			switch (action & AMOTION_EVENT_ACTION_MASK) {
 				case AMOTION_EVENT_ACTION_POINTER_DOWN:
 				case AMOTION_EVENT_ACTION_DOWN:
@@ -80,6 +106,9 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				}
 			}
 		}
+        default:
+            auto a = AInputEvent_getType(event);
+            jngl::debugLn(a);
 	}
 	return 0;
 }
@@ -206,30 +235,28 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 		jngl::quit();
 		return 1;
 	}
-	const auto metaState = AKeyEvent_getMetaState(event);
-	const auto flags = AKeyEvent_getFlags(event);
-	const auto deviceID = AInputEvent_getDeviceId(event);
-	const auto source = AInputEvent_getSource(event);
-	const auto type = AInputEvent_getType(event);
-	const auto action = AKeyEvent_getAction(event);
-	const auto pointerCount = AMotionEvent_getPointerCount(event);
+    const auto metaState = AKeyEvent_getMetaState(event);
+    const auto flags = AKeyEvent_getFlags(event);
+    const auto deviceID = AInputEvent_getDeviceId(event);
+    const auto source = AInputEvent_getSource(event);
+    const auto type = AInputEvent_getType(event);
+    const auto action = AKeyEvent_getAction(event); // Hier kommen nur down events an wegen dem if oben
+    const auto pointerCount = AMotionEvent_getPointerCount(event);
 
     if (deviceID != 0) {
-		setController(key, true);
+        setController(key, true);
 
-		if(key == AKEYCODE_BUTTON_A)
-		{
-		    setKeyPressed(jngl::key::Space, true);
-		}
+        if(key == AKEYCODE_BUTTON_A)
+        {
+            setKeyPressed(jngl::key::Space, true);
+        }
+        if(key == AKEYCODE_BUTTON_B)
+        {
+            setKeyPressed(jngl::key::ShiftL, true);
+        }
 
-
-
-		return 1;
-	}
-
-
-
-
+        return 1;
+    }
 
 	const jclass keyEventClass = env->FindClass("android/view/KeyEvent");
 
@@ -362,6 +389,13 @@ void WindowImpl::setKeyboardVisible(const bool visible) {
 
 	env->CallVoidMethod(inputMethodManager, toggleSoftInputMethod, showFlags, 0);
 }
+
+
+Vec2 Window::getControllerMove() const
+{
+    return Vec2(impl->gamepad_x, impl->gamepad_y);
+}
+
 
 std::vector<Vec2> Window::getTouchPositions() const {
 	std::vector<Vec2> positions;

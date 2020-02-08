@@ -185,7 +185,9 @@ namespace jngl {
 	}
 
 	void Window::setController(const unsigned int &button, bool p) {
-		androidController_[button] = p;
+		// androidController_[button] = p;
+
+
 	}
 
 	bool keyDown(const char key) {

@@ -36,6 +36,8 @@ public:
 	std::map<int32_t, Vec2> touches;
 	int relativeX = 0;
 	int relativeY = 0;
+	float gamepad_x = 0.0;
+	float gamepad_y = 0.0;
 
 private:
 	JNIEnv* env = nullptr;
