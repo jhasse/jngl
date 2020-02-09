@@ -3,9 +3,8 @@
 
 #ifdef ANDROID
 #include "androidController.hpp"
-#else
-#include "SdlController.hpp"
 #endif
+#include "SdlController.hpp"
 
 namespace jngl {
 
