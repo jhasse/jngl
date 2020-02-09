@@ -5,8 +5,6 @@
 
 #include "../jngl/Controller.hpp"
 
-#include "sdl.hpp"
-
 namespace jngl {
 
 class AndroidController : public Controller {
