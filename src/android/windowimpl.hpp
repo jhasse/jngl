@@ -28,7 +28,7 @@ public:
 	void setRelativeMouseMode(bool);
 	void pause();
 	void makeCurrent();
-	int handleKeyEvent(AInputEvent*);
+	[[nodiscard]] int handleKeyEvent(AInputEvent*);
 	void setKeyboardVisible(bool);
 
 	int mouseX = 0;

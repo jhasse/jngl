@@ -23,7 +23,7 @@ JNGL_MAIN_BEGIN {
 			sprite.drawClipped({0.3, 0.3}, {0.7, 0.7});
 			jngl::setColor(200, jngl::mouseDown(jngl::mouse::Left) ? 255 : 54, 45);
 			for (const auto mouse : jngl::getTouchPositions()) {
-				jngl::drawRect(mouse.x, mouse.y, 100, 100);
+				jngl::drawRect(mouse.x, mouse.y, 300, 300);
 			}
 			x += 0.4;
 			// jngl::setSpriteColor(255, 255, 255, 120);

@@ -58,57 +58,70 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
         return true;
     }
 
-
 	switch (AInputEvent_getType(event)) {
-		case AINPUT_EVENT_TYPE_KEY:
-			if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN) {
-				return impl.handleKeyEvent(event);
-			}
-			break;
-		case AINPUT_EVENT_TYPE_MOTION: {
-			const auto action = AMotionEvent_getAction(event);
-
-            const auto deviceID = AInputEvent_getDeviceId(event);
-            if (deviceID != 0) {
-                const auto metaState = AKeyEvent_getMetaState(event);
-                const auto flags = AKeyEvent_getFlags(event);
-                const auto deviceID = AInputEvent_getDeviceId(event);
-                const auto source = AInputEvent_getSource(event);
-                const auto type = AInputEvent_getType(event);
-                const auto action = AKeyEvent_getAction(event);
-                const auto pointerCount = AMotionEvent_getPointerCount(event);
-            }
-
-
-			switch (action & AMOTION_EVENT_ACTION_MASK) {
-				case AMOTION_EVENT_ACTION_POINTER_DOWN:
-				case AMOTION_EVENT_ACTION_DOWN:
-				case AMOTION_EVENT_ACTION_MOVE: {
-					for (int32_t index = 0; index < AMotionEvent_getPointerCount(event); ++index) {
-						const auto x = AMotionEvent_getX(event, index);
-						const auto y = AMotionEvent_getY(event, index);
-						const auto id = AMotionEvent_getPointerId(event, index);
-						auto &touch = impl.touches[id];
-						impl.mouseX = touch.x = x;
-						impl.mouseY = touch.y = y;
-					}
-					return 1;
-				}
-				case AMOTION_EVENT_ACTION_POINTER_UP:
-				case AMOTION_EVENT_ACTION_UP: {
-					const int32_t index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >>
-					                      AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
-					const auto it = impl.touches.find(AMotionEvent_getPointerId(event, index));
-					if (it != impl.touches.end()) {
-						impl.touches.erase(it);
-					}
-					return 1;
-				}
-			}
+	case AINPUT_EVENT_TYPE_KEY:
+		if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN) {
+			return impl.handleKeyEvent(event);
 		}
-        default:
-            auto a = AInputEvent_getType(event);
-            jngl::debugLn(a);
+		break;
+	case AINPUT_EVENT_TYPE_MOTION: {
+		const auto action = AMotionEvent_getAction(event);
+		switch (action & AMOTION_EVENT_ACTION_MASK) {
+		case AMOTION_EVENT_ACTION_DOWN: {
+			const int32_t index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >>
+			                      AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+			const auto id = AMotionEvent_getPointerId(event, index);
+			auto [touch, created] = impl.touches.insert(
+			    { id, { AMotionEvent_getX(event, index), AMotionEvent_getY(event, index) } });
+			assert(created);
+			impl.mouseX = touch->second.x;
+			impl.mouseY = touch->second.y;
+			return 1;
+		}
+		case AMOTION_EVENT_ACTION_POINTER_DOWN: {
+			const int32_t index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >>
+			                      AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+			const auto id = AMotionEvent_getPointerId(event, index);
+			[[maybe_unused]] auto [_, created] = impl.touches.insert(
+			    { id, { AMotionEvent_getX(event, index), AMotionEvent_getY(event, index) } });
+			assert(created);
+			return 1;
+		}
+		case AMOTION_EVENT_ACTION_POINTER_UP: {
+			const int32_t index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >>
+			                      AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+			const auto id = AMotionEvent_getPointerId(event, index);
+			const auto it = impl.touches.find(id);
+			assert(it != impl.touches.end());
+			impl.touches.erase(it);
+			// For the case that the mouse position pointed to this pointer we need to update it so
+			// that it still makes sense. This is very important when going from 2 pointer to 1
+			// since getTouchPositions() will switch to getMousePos() then.
+			impl.mouseX = impl.touches.begin()->second.x;
+			impl.mouseY = impl.touches.begin()->second.y;
+			return 1;
+		}
+		case AMOTION_EVENT_ACTION_MOVE: {
+			for (int32_t index = 0; index < AMotionEvent_getPointerCount(event); ++index) {
+				const auto x = AMotionEvent_getX(event, index);
+				const auto y = AMotionEvent_getY(event, index);
+				const auto id = AMotionEvent_getPointerId(event, index);
+				const auto it = impl.touches.find(id);
+				assert(it != impl.touches.end());
+				it->second.x = x;
+				it->second.y = y;
+				if (index == 0) {
+					impl.mouseX = x;
+					impl.mouseY = y;
+				}
+			}
+			return 1;
+		}
+		case AMOTION_EVENT_ACTION_UP:
+			impl.touches.clear();
+			return 1;
+		}
+	}
 	}
 	return 0;
 }
