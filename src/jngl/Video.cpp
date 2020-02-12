@@ -124,12 +124,12 @@ public:
 
 					in mediump vec2 texCoord;
 
-					out mediump vec4 outColor;
+					out highp vec4 outColor;
 
 					void main() {
-						mediump float y = texture(texY, texCoord).r;
-						mediump float u = texture(texU, texCoord).r - 0.5;
-						mediump float v = texture(texV, texCoord).r - 0.5;
+						highp float y = texture(texY, texCoord).r;
+						highp float u = texture(texU, texCoord).r - 0.5;
+						highp float v = texture(texV, texCoord).r - 0.5;
 						y = 1.1643 * (y - 0.0625);
 						outColor = vec4(
 							y + 1.5958 * v,
