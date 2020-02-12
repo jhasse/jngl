@@ -63,3 +63,6 @@ void THEORAPLAY_freeAudio(const THEORAPLAY_AudioPacket *item);
 
 const THEORAPLAY_VideoFrame *THEORAPLAY_getVideo(THEORAPLAY_Decoder *decoder);
 void THEORAPLAY_freeVideo(const THEORAPLAY_VideoFrame *item);
+
+/// is the background thread done decoding? (returns true before THEORAPLAY_isDecoding)
+bool THEORAPLAY_threadDone(THEORAPLAY_Decoder*);
