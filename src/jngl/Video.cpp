@@ -71,7 +71,8 @@ public:
 	void draw() {
 		if (!started()) {
 			const double timeBuffering = jngl::getTime() + startTime;
-			if (timeBuffering > 2.5 || THEORAPLAY_availableVideo(decoder) >= BUFFER_SIZE) {
+			if (timeBuffering > 2.5 || THEORAPLAY_availableVideo(decoder) >= BUFFER_SIZE ||
+			    THEORAPLAY_threadDone(decoder)) {
 				jngl::debug("Buffering took ");
 				jngl::debug(timeBuffering);
 				jngl::debug(" seconds (");
