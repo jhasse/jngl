@@ -56,6 +56,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 }
 
 	Window::~Window() {
+		currentWork_.reset();
 		fonts_.clear(); // Clear fonts before deleting GL context
 		SDL_GL_DeleteContext(impl->context);
 		SDL_DestroyWindow(impl->sdlWindow);
