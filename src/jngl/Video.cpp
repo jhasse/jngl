@@ -150,17 +150,17 @@ public:
 				glUniformMatrix4fv(projectionUniform, 1, GL_TRUE, &opengl::projection.a[0][0]);
 
 				textureY = opengl::genAndBindTexture();
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, video->width, video->height, 0, GL_RED,
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, video->width, video->height, 0, GL_RED,
 				             GL_UNSIGNED_BYTE, nullptr);
 
 				textureU = opengl::genAndBindTexture();
 				// U and V components are a quarter of the size of the video:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, video->width / 2, video->height / 2, 0,
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, video->width / 2, video->height / 2, 0,
 				             GL_RED, GL_UNSIGNED_BYTE, nullptr);
 
 				textureV = opengl::genAndBindTexture();
 				// U and V components are a quarter of the size of the video:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, video->width / 2, video->height / 2, 0,
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, video->width / 2, video->height / 2, 0,
 				             GL_RED, GL_UNSIGNED_BYTE, nullptr);
 
 				const float preciseWidth = video->width * getScaleFactor();
