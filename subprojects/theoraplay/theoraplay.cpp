@@ -638,9 +638,9 @@ int THEORAPLAY_isDecoding(THEORAPLAY_Decoder* const ctx) {
 #define GET_SYNCED_VALUE(typ, defval, ctx, member)                                                 \
 	typ retval = defval;                                                                           \
 	if (ctx) {                                                                                     \
-		ctx->lock.lock();                                                                          \
-		retval = ctx->member;                                                                      \
-		ctx->lock.unlock();                                                                        \
+		(ctx)->lock.lock();                                                                        \
+		retval = (ctx)->member;                                                                    \
+		(ctx)->lock.unlock();                                                                      \
 	}                                                                                              \
 	return retval;
 
