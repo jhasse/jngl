@@ -15,11 +15,15 @@ test/app/src/main/assets/test.ogg: test/app/src/main/assets ../test.ogg
 test/app/src/main/assets/Arial.ttf: test/app/src/main/assets ../Arial.ttf
 	cp ../Arial.ttf "$@"
 
+test/app/src/main/assets/verysmall.ogv: test/app/src/main/assets ../data/verysmall.ogv
+	cp ../data/verysmall.ogv "$@"
+
 .PHONY: gradle
 gradle: $$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/boost \
         test/app/src/main/assets/jngl.webp \
         test/app/src/main/assets/test.ogg \
-        test/app/src/main/assets/Arial.ttf
+        test/app/src/main/assets/Arial.ttf \
+        test/app/src/main/assets/verysmall.ogv
 	cd test && ./gradlew build
 
 .PHONY: run

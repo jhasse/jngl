@@ -7,6 +7,14 @@
 JNGL_MAIN_BEGIN {
 	try {
 		jngl::showWindow("Android Test", 1920, 1080);
+
+		jngl::Video video("verysmall.ogv");
+		while (jngl::running() && !video.finished()) {
+			jngl::updateInput();
+			video.draw();
+			jngl::swapBuffers();
+		}
+
 		float x = 0;
 		bool first = true;
 		std::string text;
