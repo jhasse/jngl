@@ -19,6 +19,7 @@ set_target_properties(jngl PROPERTIES
 )
 
 option(JNGL_VIDEO "Enable Theora video playback" ON)
+option(JNGL_JPEG "Enable JPEG support if libjpeg is available" ON)
 
 if (ANDROID)
 	file(GLOB ANDROID_SOURCES src/android/*.cpp)
@@ -183,7 +184,9 @@ else()
 		endif()
 	endif()
 
-	find_package(JPEG)
+	if(JNGL_JPEG)
+		find_package(JPEG)
+	endif()
 	if(JPEG_FOUND)
 		target_include_directories(jngl PUBLIC ${JPEG_INCLUDE_DIR})
 		target_link_libraries(jngl PRIVATE ${JPEG_LIBRARIES})
