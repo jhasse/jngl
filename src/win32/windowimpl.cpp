@@ -1,4 +1,4 @@
-// Copyright 2007-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
@@ -122,9 +122,9 @@ bool WindowImpl::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
-: fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
-  fontSize_(12), width_(width), height_(height), fontName_(GetFontFileByName("Arial")),
-  stepsPerFrame(1), multitouch(false), impl(new WindowImpl) {
+: impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), isMouseVisible_(true),
+  relativeMouseMode(false), anyKeyPressed_(false), fontSize_(12), width_(width), height_(height),
+  fontName_(GetFontFileByName("Arial")), stepsPerFrame(1), multitouch(false) {
 	impl->distinguishLeftRight = [this]() {
 		int codesToCheck[] = { GetKeyCode(jngl::key::ShiftL),   GetKeyCode(jngl::key::ShiftR),
 			                   GetKeyCode(jngl::key::ControlL), GetKeyCode(jngl::key::ControlR),
@@ -295,8 +295,6 @@ Window::~Window() {
 	if (fullscreen_) {
 		ChangeDisplaySettings(nullptr, 0);
 	}
-	fonts_.clear(); // Delete fonts before destroying the OpenGL context
-	delete impl;
 }
 
 void WindowImpl::ReleaseDC(HWND hwnd, HDC hdc) {

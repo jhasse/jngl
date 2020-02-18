@@ -19,6 +19,11 @@ namespace jngl {
 
 class WindowImpl {
 public:
+	~WindowImpl() {
+		SDL_GL_DeleteContext(context);
+		SDL_DestroyWindow(sdlWindow);
+	}
+
 	SDL_Window* sdlWindow = nullptr;
 	SDL_GLContext context = nullptr;
 	optional<SDL_FingerID> currentFingerId;

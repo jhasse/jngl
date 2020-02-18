@@ -109,6 +109,9 @@ namespace jngl {
 	    void calculateCanvasSize(std::pair<int, int> minAspectRatio,
 	                             std::pair<int, int> maxAspectRatio);
 
+	friend class WindowImpl;
+	std::unique_ptr<WindowImpl> impl;
+
 	    GLuint vaoLine = 0;
 		GLuint vaoRect = 0;
 		double timePerStep = 1.0 / 60.0;
@@ -165,7 +168,5 @@ namespace jngl {
 		// <fontSize, <fontName, FontImpl>>
 		std::map<int, std::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
 		std::vector<std::function<void()>> updateInputCallbacks;
-		friend class WindowImpl;
-		WindowImpl* const impl;
 	};
 } // namespace jngl

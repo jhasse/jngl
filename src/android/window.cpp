@@ -1,4 +1,4 @@
-// Copyright 2013-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2013-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
@@ -10,9 +10,9 @@ namespace jngl {
 Window::Window(const std::string& /*title*/, const int width, const int height,
                const bool fullscreen, const std::pair<int, int> minAspectRatio,
                const std::pair<int, int> maxAspectRatio)
-: fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
-  mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height), mouseWheel_(0),
-  fontName_(""), impl(new WindowImpl(this, minAspectRatio, maxAspectRatio)) {
+: impl(std::make_unique<WindowImpl>(this, minAspectRatio, maxAspectRatio)), fullscreen_(fullscreen),
+  isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false), mousex_(0), mousey_(0),
+  fontSize_(12), width_(width), height_(height), mouseWheel_(0), fontName_("") {
 	mouseDown_.fill(false);
 	mousePressed_.fill(false);
 
@@ -28,9 +28,7 @@ std::string Window::GetFontFileByName(const std::string& fontname) {
 	return tmp + ".ttf";
 }
 
-Window::~Window() {
-	delete impl;
-}
+Window::~Window() = default;
 
 int Window::GetKeyCode(key::KeyType key) {
 	return key;

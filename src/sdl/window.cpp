@@ -1,4 +1,4 @@
-// Copyright 2011-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #ifndef NOPNG
@@ -17,8 +17,9 @@ namespace jngl {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
-: fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
-  width_(width), height_(height), fontName_(GetFontFileByName("Arial")), impl(new WindowImpl) {
+: impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), isMouseVisible_(true),
+  relativeMouseMode(false), anyKeyPressed_(false), width_(width), height_(height),
+  fontName_(GetFontFileByName("Arial")) {
 	SDL::init();
 
 #ifdef __APPLE__ // https://stackoverflow.com/a/26981800/647898
@@ -55,13 +56,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	Init(width, height, canvasWidth, canvasHeight);
 }
 
-	Window::~Window() {
-		currentWork_.reset();
-		fonts_.clear(); // Clear fonts before deleting GL context
-		SDL_GL_DeleteContext(impl->context);
-		SDL_DestroyWindow(impl->sdlWindow);
-		delete impl;
-	}
+Window::~Window() = default;
 
 	int Window::GetKeyCode(key::KeyType key) {
 		switch(key) {

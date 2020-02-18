@@ -317,7 +317,7 @@ void WindowImpl::swapBuffers() {
 	}
 }
 
-WindowImpl* Window::getImpl() const { return impl; }
+WindowImpl* Window::getImpl() const { return impl.get(); }
 
 void setKeyboardVisible(const bool visible) {
 	pWindow->getImpl()->setKeyboardVisible(visible);
