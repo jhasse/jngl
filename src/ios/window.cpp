@@ -27,7 +27,7 @@ std::string Window::GetFontFileByName(const std::string& fontname) {
 	return tmp + ".ttf";
 }
 
-Window::~Window() = delete;
+Window::~Window() {};
 
 int Window::GetKeyCode(key::KeyType key) {
 	return key;
