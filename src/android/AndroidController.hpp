@@ -22,8 +22,11 @@ public:
 	float leftStickY = 0;
 	float rightStickX = 0;
 	float rightStickY = 0;
+	float dpadX = 0;
+	float dpadY = 0;
 	bool buttonA = false;
 	bool buttonB = false;
+	bool buttonStart = false;
 };
 
 } // namespace jngl

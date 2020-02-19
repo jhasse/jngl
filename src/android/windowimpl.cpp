@@ -404,6 +404,9 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 		case AKEYCODE_BUTTON_B:
 			controller->buttonB = down;
 			break;
+		case AKEYCODE_BUTTON_START:
+			controller->buttonStart = down;
+			break;
 		}
 		break;
 	}
@@ -411,8 +414,10 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 		assert(AMotionEvent_getPointerCount(event) == 1);
 		controller->leftStickX = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_X, 0);
 		controller->leftStickY = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_Y, 0);
-		controller->rightStickX = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_RX, 0);
-		controller->rightStickY = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_RY, 0);
+		controller->rightStickX = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_Z, 0);
+		controller->rightStickY = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_RZ, 0);
+		controller->dpadX = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_HAT_X, 0);
+		controller->dpadY = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_HAT_Y, 0);
 		break;
 	default:
 		debugLn("Unknown joystick event!");
