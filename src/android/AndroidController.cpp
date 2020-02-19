@@ -14,12 +14,8 @@ bool AndroidController::down(const controller::Button button) const {
 	switch (button) {
 		case controller::A: return buttonA;
 		case controller::B: return buttonB;
+		default: return false;
 	}
-	return false;
-}
-
-void AndroidController::rumble(const float /*vibration*/, const std::chrono::milliseconds) {
-	// not implemented!
 }
 
 float AndroidController::stateImpl(const controller::Button button) const {
