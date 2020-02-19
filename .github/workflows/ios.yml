@@ -13,10 +13,9 @@ jobs:
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
     - name: Install dependencies
       run: |
-        gem install xcpretty
         brew install boost
         ln -s /usr/local/include/boost include/ios/boost
     - name: Configure with CMake
       run: cmake -Bbuild-ios -H. -DCMAKE_SYSTEM_NAME=iOS -DIOS=1 -GXcode
     - name: Build with Xcode
-      run: set -o pipefail && xcodebuild -project build-ios/jngl.xcodeproj -sdk iphonesimulator | xcpretty --color
+      run: xcodebuild -quiet -project build-ios/jngl.xcodeproj -sdk iphonesimulator
