@@ -3,6 +3,7 @@
 
 #include "windowimpl.hpp"
 
+#include "AndroidController.hpp"
 #include "../jngl/other.hpp"
 #include "../jngl/debug.hpp"
 #include "../jngl/screen.hpp"
@@ -46,6 +47,11 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
 	WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
+	const auto source = AInputEvent_getSource(event);
+	if ((source & AINPUT_SOURCE_JOYSTICK) == AINPUT_SOURCE_JOYSTICK ||
+	    (source & AINPUT_SOURCE_GAMEPAD) == AINPUT_SOURCE_GAMEPAD) {
+		return impl.handleJoystickEvent(event);
+	}
 	switch (AInputEvent_getType(event)) {
 	case AINPUT_EVENT_TYPE_KEY:
 		if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN) {
@@ -95,7 +101,11 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				const auto y = AMotionEvent_getY(event, index);
 				const auto id = AMotionEvent_getPointerId(event, index);
 				const auto it = impl.touches.find(id);
-				assert(it != impl.touches.end());
+				if (it == impl.touches.end()) {
+					debug("WARNING: Unknown touch id: ");
+					debugLn(id);
+					return 0;
+				}
 				it->second.x = x;
 				it->second.y = y;
 				if (index == 0) {
@@ -365,6 +375,49 @@ void WindowImpl::setKeyboardVisible(const bool visible) {
 	}
 
 	env->CallVoidMethod(inputMethodManager, toggleSoftInputMethod, showFlags, 0);
+}
+
+std::vector<std::shared_ptr<Controller>> WindowImpl::getConnectedControllers() const {
+	std::vector<std::shared_ptr<Controller>> rtn;
+	for (auto [id, controller] : controllers) {
+		rtn.emplace_back(controller);
+	}
+	return rtn;
+}
+
+int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
+	const int32_t deviceId = AInputEvent_getDeviceId(event);
+	auto& controller = controllers[deviceId];
+	if (!controller) {
+		controller = std::make_shared<AndroidController>();
+		if (window->controllerChangedCallback) {
+			window->controllerChangedCallback();
+		}
+	}
+	switch (AInputEvent_getType(event)) {
+	case AINPUT_EVENT_TYPE_KEY: {
+		const bool down = AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN;
+		switch (AKeyEvent_getKeyCode(event)) {
+		case AKEYCODE_BUTTON_A:
+			controller->buttonA = down;
+			break;
+		case AKEYCODE_BUTTON_B:
+			controller->buttonB = down;
+			break;
+		}
+		break;
+	}
+	case AINPUT_EVENT_TYPE_MOTION:
+		assert(AMotionEvent_getPointerCount(event) == 1);
+		controller->leftStickX = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_X, 0);
+		controller->leftStickY = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_Y, 0);
+		controller->rightStickX = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_RX, 0);
+		controller->rightStickY = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_RY, 0);
+		break;
+	default:
+		debugLn("Unknown joystick event!");
+	}
+	return 1;
 }
 
 std::vector<Vec2> Window::getTouchPositions() const {

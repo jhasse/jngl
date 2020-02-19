@@ -1,4 +1,4 @@
-// Copyright 2015-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -10,11 +10,14 @@
 #include <utility>
 #include <android/input.h>
 #include <map>
+#include <vector>
 
 struct android_app;
 
 namespace jngl {
 
+class AndroidController;
+class Controller;
 class Window;
 
 class WindowImpl {
@@ -29,7 +32,9 @@ public:
 	void pause();
 	void makeCurrent();
 	[[nodiscard]] int handleKeyEvent(AInputEvent*);
+	[[nodiscard]] int32_t handleJoystickEvent(const AInputEvent*);
 	void setKeyboardVisible(bool);
+	std::vector<std::shared_ptr<Controller>> getConnectedControllers() const;
 
 	int mouseX = 0;
 	int mouseY = 0;
@@ -49,6 +54,7 @@ private:
 	EGLDisplay display;
 	EGLSurface surface = nullptr ;
 	EGLContext context;
+	std::map<int32_t, std::shared_ptr<AndroidController>> controllers;
 };
 
 } // namespace jngl
