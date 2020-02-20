@@ -4,8 +4,8 @@
 #include "main.hpp"
 
 #include "jngl.hpp"
-#include "spriteimpl.hpp"
 #include "paths.hpp"
+#include "spriteimpl.hpp"
 
 #include <boost/math/special_functions/round.hpp>
 #include <boost/qvm/mat_operations.hpp>

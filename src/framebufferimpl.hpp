@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "texture.hpp"
 #include "jngl/Vec2.hpp"
+#include "texture.hpp"
 
 namespace jngl {
 

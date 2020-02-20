@@ -19,10 +19,15 @@ namespace jngl {
 
 class WindowImpl {
 public:
+	WindowImpl() = default;
 	~WindowImpl() {
 		SDL_GL_DeleteContext(context);
 		SDL_DestroyWindow(sdlWindow);
 	}
+	WindowImpl(const WindowImpl&) = delete;
+	WindowImpl& operator=(const WindowImpl&) = delete;
+	WindowImpl(WindowImpl&&) = delete;
+	WindowImpl& operator=(WindowImpl&&) = delete;
 
 	SDL_Window* sdlWindow = nullptr;
 	SDL_GLContext context = nullptr;
