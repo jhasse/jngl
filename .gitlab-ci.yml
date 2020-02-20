@@ -20,7 +20,7 @@ gcc:
   stage: build
   script:
     - microdnf install fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel pybind11-devel python3-devel meson SDL2-devel openal-soft-devel gcc-c++ libtheora-devel >/dev/null
-    - meson build --werror
+    - script -qfec "meson build --werror -Dpython=true" /dev/null
     - cd build
     - script -qfec "ninja" /dev/null
     - microdnf install mesa-dri-drivers xorg-x11-drv-dummy >/dev/null
