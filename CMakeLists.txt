@@ -88,7 +88,7 @@ if(ANDROID)
 
 	set(WEBP_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/libwebp)
 	if ((NOT EXISTS ${WEBP_SRC_DIR}) OR (NOT EXISTS ${WEBP_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone --depth=1 -b 1.0.0
+		execute_process(COMMAND git clone --depth=1 -b 1.1.0
 		                https://chromium.googlesource.com/webm/libwebp
 		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
 	endif()
