@@ -48,20 +48,20 @@ THEORAPLAY_Decoder* THEORAPLAY_startDecodeFile(const char* fname, unsigned int m
                                                THEORAPLAY_VideoFormat vidfmt);
 THEORAPLAY_Decoder* THEORAPLAY_startDecode(THEORAPLAY_Io* io, unsigned int maxframes,
                                            THEORAPLAY_VideoFormat vidfmt);
-void THEORAPLAY_stopDecode(THEORAPLAY_Decoder *decoder);
+void THEORAPLAY_stopDecode(THEORAPLAY_Decoder*);
 
-int THEORAPLAY_isDecoding(THEORAPLAY_Decoder *decoder);
-int THEORAPLAY_decodingError(THEORAPLAY_Decoder *decoder);
-int THEORAPLAY_isInitialized(THEORAPLAY_Decoder *decoder);
-int THEORAPLAY_hasVideoStream(THEORAPLAY_Decoder *decoder);
-int THEORAPLAY_hasAudioStream(THEORAPLAY_Decoder *decoder);
-unsigned int THEORAPLAY_availableVideo(THEORAPLAY_Decoder *decoder);
-unsigned int THEORAPLAY_availableAudio(THEORAPLAY_Decoder *decoder);
+int THEORAPLAY_isDecoding(THEORAPLAY_Decoder*);
+int THEORAPLAY_decodingError(THEORAPLAY_Decoder*);
+int THEORAPLAY_isInitialized(THEORAPLAY_Decoder*);
+int THEORAPLAY_hasVideoStream(THEORAPLAY_Decoder*);
+int THEORAPLAY_hasAudioStream(THEORAPLAY_Decoder*);
+unsigned int THEORAPLAY_availableVideo(THEORAPLAY_Decoder*);
+unsigned int THEORAPLAY_availableAudio(THEORAPLAY_Decoder*);
 
-const THEORAPLAY_AudioPacket *THEORAPLAY_getAudio(THEORAPLAY_Decoder *decoder);
+const THEORAPLAY_AudioPacket *THEORAPLAY_getAudio(THEORAPLAY_Decoder*);
 void THEORAPLAY_freeAudio(const THEORAPLAY_AudioPacket *item);
 
-const THEORAPLAY_VideoFrame *THEORAPLAY_getVideo(THEORAPLAY_Decoder *decoder);
+const THEORAPLAY_VideoFrame *THEORAPLAY_getVideo(THEORAPLAY_Decoder*);
 void THEORAPLAY_freeVideo(const THEORAPLAY_VideoFrame *item);
 
 /// is the background thread done decoding? (returns true before THEORAPLAY_isDecoding)
