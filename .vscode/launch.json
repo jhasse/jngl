@@ -11,11 +11,30 @@
 			"preLaunchTask": "build"
 		},
 		{
+			"type": "gdb",
+			"request": "launch",
+			"name": "videoplayer (GDB)",
+			"target": "./build/videoplayer",
+			"arguments": "data/verysmall.ogv",
+			"cwd": "${workspaceRoot}",
+			"valuesFormatting": "prettyPrinters",
+			"preLaunchTask": "build"
+		},
+		{
 			"type": "lldb",
 			"request": "launch",
 			"name": "Launch",
 			"program": "${workspaceRoot}/build/jngl-test",
 			"args": [],
+			"cwd": "${workspaceRoot}",
+			"preLaunchTask": "build"
+		},
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "videoplayer",
+			"program": "${workspaceRoot}/build/videoplayer",
+			"args": ["data/verysmall.ogv"],
 			"cwd": "${workspaceRoot}",
 			"preLaunchTask": "build"
 		},
