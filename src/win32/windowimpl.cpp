@@ -1,13 +1,14 @@
 // Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#include "../window.hpp"
+#include "../jngl/debug.hpp"
 #include "../jngl/Finally.hpp"
 #include "../jngl/window.hpp"
 #include "../jngl/work.hpp"
-#include "../jngl/debug.hpp"
-#include "ConvertUTF.h"
 #include "../main.hpp"
+#include "../window.hpp"
+#include "ConvertUTF.h"
+#include "unicode.hpp"
 
 #ifndef NOPNG
 #include <png.h>
@@ -156,7 +157,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
 		wc.hbrBackground = nullptr;
 		wc.lpszMenuName = nullptr;
-		wc.lpszClassName = "OpenGL"; // Set The Class Name
+		wc.lpszClassName = L"OpenGL";
 
 		static bool alreadyRegistered = false;
 		if (!alreadyRegistered && !RegisterClass(&wc)) {
@@ -178,8 +179,8 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		// Create The Window
 		impl->pWindowHandle_.reset(
 			CreateWindowEx(dwExStyle,     // Extended Style For The Window
-						   "OpenGL",      // Class Name
-						   title.c_str(), // Window Title
+			               L"OpenGL",     // Class Name
+			               utf8ToUtf16(title).c_str(), // Window Title
 						   dwStyle | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, CW_USEDEFAULT, CW_USEDEFAULT,
 						   WindowRect.right - WindowRect.left, // Calculate Window Width
 						   WindowRect.bottom - WindowRect.top, // Calculate Window Height
@@ -506,7 +507,7 @@ void Window::SetMouseVisible(const bool visible) {
 }
 
 void Window::SetTitle(const std::string& windowTitle) {
-	SetWindowText(impl->pWindowHandle_.get(), windowTitle.c_str());
+	SetWindowText(impl->pWindowHandle_.get(), utf8ToUtf16(windowTitle).c_str());
 }
 
 int Window::GetKeyCode(jngl::key::KeyType key) {

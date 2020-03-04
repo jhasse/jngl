@@ -48,12 +48,11 @@ elseif (UNIX)
 else() # Windows
 	option(JNGL_SDL2 "Use SDL2 instead of WinAPI" OFF)
 
-	target_compile_definitions(jngl PRIVATE WINVER=0x0602 _USE_MATH_DEFINES)
+	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _USE_MATH_DEFINES UNICODE)
 	if(JNGL_SDL2)
 		file(GLOB SRC src/sdl/*.cpp)
-		target_sources(jngl PRIVATE src/win32/fontfile.cpp)
-		target_sources(jngl PRIVATE src/win32/message.cpp)
-		target_sources(jngl PRIVATE src/win32/other.cpp)
+		target_sources(jngl PRIVATE src/win32/fontfile.cpp src/win32/message.cpp src/win32/other.cpp
+		                            src/win32/unicode.cpp)
 	else()
 		file(GLOB SRC src/win32/*.cpp)
 	endif()

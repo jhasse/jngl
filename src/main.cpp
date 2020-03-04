@@ -13,7 +13,6 @@
 
 #ifdef _WIN32
 #include <windows.h>
-#include <shlobj.h>
 #endif
 
 #ifdef ANDROID
@@ -491,13 +490,7 @@ std::string getConfigPath() {
 	if (configPath) { return *configPath; }
 #ifndef IOS
 	std::stringstream path;
-#if defined(_WIN32)
-	TCHAR szPath[MAX_PATH];
-	if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, szPath))) {
-		throw std::runtime_error("Couldn't get %AppData% location!");
-	}
-	path << szPath << "/" << App::instance().getDisplayName() << "/";
-#elif defined(__APPLE__)
+#if defined(__APPLE__) || defined(_WIN32)
 	path << getSystemConfigPath() << "/" << App::instance().getDisplayName() << "/";
 #else
 	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/";

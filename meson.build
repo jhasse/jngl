@@ -92,7 +92,7 @@ if target_machine.system() != 'windows'
 		'src/linux/binreloc.c',
 	]
 else
-	cpp_args += ['-DWINVER=0x0602', '-D_USE_MATH_DEFINES']
+	cpp_args += ['-D_WIN32_WINNT=0x602', '-D_USE_MATH_DEFINES', '-DUNICODE']
 	opengl_dep = [
 		cxx.find_library('opengl32'),
 		cxx.find_library('glu32'),
@@ -105,6 +105,7 @@ else
 		'src/win32/inputimpl.cpp',
 		'src/win32/message.cpp',
 		'src/win32/other.cpp',
+		'src/win32/unicode.cpp',
 		'src/win32/windowimpl.cpp',
 		'src/win32/XinputController.cpp',
 	]

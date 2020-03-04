@@ -1,7 +1,9 @@
-// Copyright 2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
+
+#include "unicode.hpp"
 
 #include <shlobj.h>
 #include <sstream>
@@ -24,7 +26,7 @@ std::string Window::GetFontFileByName(const std::string& fontName) {
 		fontNameLower = "arial";
 	}
 	HKEY hKey;
-	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts",
+	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts",
 	                 0, KEY_READ, &hKey) != ERROR_SUCCESS) {
 		throw std::runtime_error("Couldn't open registry.");
 	}
@@ -36,7 +38,7 @@ std::string Window::GetFontFileByName(const std::string& fontName) {
 	}
 
 	DWORD valueIndex = 0;
-	const auto valueName = std::make_unique<char[]>(maxValueNameSize);
+	const auto valueName = std::make_unique<wchar_t[]>(maxValueNameSize);
 	const auto valueData = std::make_unique<BYTE[]>(maxValueDataSize);
 	std::string fontFile;
 	LONG result;
@@ -53,11 +55,11 @@ std::string Window::GetFontFileByName(const std::string& fontName) {
 			continue;
 		}
 
-		std::string valueNameLower(valueName.get(), valueNameSize);
+		std::string valueNameLower = utf16ToUtf8({ valueName.get(), valueNameSize });
 		std::transform(valueNameLower.begin(), valueNameLower.end(), valueNameLower.begin(),
 		               ::tolower);
 		if (fontNameLower + " (truetype)" == valueNameLower) {
-			fontFile.assign(reinterpret_cast<const char*>(valueData.get()), valueDataSize);
+			fontFile = utf16ToUtf8({ reinterpret_cast<wchar_t*>(valueData.get()), valueDataSize });
 			break;
 		}
 		if ((fontNameLower == "arial" && valueNameLower == "liberation sans (truetype)") ||
@@ -65,18 +67,18 @@ std::string Window::GetFontFileByName(const std::string& fontName) {
 		    (fontNameLower == "times new roman" &&
 		     valueNameLower == "liberation serif (truetype)")) {
 			// Fallbacks for WINE. No break, so that exact matches take priority
-			fontFile.assign(reinterpret_cast<const char*>(valueData.get()), valueDataSize);
+			fontFile = utf16ToUtf8({ reinterpret_cast<wchar_t*>(valueData.get()), valueDataSize });
 		}
 	} while (result != ERROR_NO_MORE_ITEMS);
 
 	RegCloseKey(hKey);
 	if (fontFile.size() < 2 || fontFile[1] != ':') { // relative path?
-		char fontDir[MAX_PATH];
+		wchar_t fontDir[MAX_PATH];
 		if (SHGetFolderPath(NULL, CSIDL_FONTS, NULL, 0, fontDir) != S_OK) {
 			throw std::runtime_error("Couldn't locate font directory.");
 		}
 		std::ostringstream ss;
-		ss << fontDir << "\\";
+		ss << utf16ToUtf8(fontDir) << "\\";
 		if (fontFile.empty()) {
 			ss << fontName << ".ttf";
 		} else {
