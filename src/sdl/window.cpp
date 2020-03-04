@@ -27,7 +27,6 @@ Window::Window(const std::string& title, const int width, const int height, cons
 #endif
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
 	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 	if (fullscreen) {
@@ -38,19 +37,32 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		}
 	}
 
-	const auto create = [&title, width, height, flags]() {
+	const auto create = [this, &title, width, height, flags]() {
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, isMultisampleSupported_ ? 4 : 0);
 		return SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		                        width, height, flags);
 	};
 	if ((impl->sdlWindow = create()) == nullptr) {
 		jngl::debugLn("Recreating window without Anti-Aliasing support.");
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
+		isMultisampleSupported_ = false;
 		if ((impl->sdlWindow = create()) == nullptr) {
 			throw std::runtime_error(SDL_GetError());
 		}
 	}
 
 	impl->context = SDL_GL_CreateContext(impl->sdlWindow);
+
+	if (isMultisampleSupported_) {
+		int openglMSAA;
+		if (SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &openglMSAA) != 0) {
+			debugLn("Recreating window and OpenGL Context without Anti-Aliasing support.");
+			SDL_GL_DeleteContext(impl->context);
+			SDL_DestroyWindow(impl->sdlWindow);
+			isMultisampleSupported_ = false;
+			impl->sdlWindow = create();
+			impl->context = SDL_GL_CreateContext(impl->sdlWindow);
+		}
+	}
 
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	Init(width, height, canvasWidth, canvasHeight);
