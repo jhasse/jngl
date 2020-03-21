@@ -6,6 +6,11 @@
 #include "SoundParams.hpp"
 #include "jngl/debug.hpp"
 
+#ifdef __APPLE__
+// OpenAL is deprecated in favor of AVAudioEngine
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 namespace jngl {
 
 struct Sound::Impl {
