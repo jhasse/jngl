@@ -148,7 +148,7 @@ if(ANDROID)
 
 	if(JNGL_VIDEO)
 		set(THEORA_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/theora)
-		if ((NOT EXISTS ${THEORA_SRC_DIR}) OR (NOT EXISTS ${THEORA_SRC_DIR}/CMakeLists.txt))
+		if ((NOT EXISTS ${THEORA_SRC_DIR}) OR (NOT EXISTS ${THEORA_SRC_DIR}/lib/info.c))
 			execute_process(COMMAND git clone -b v1.1.1
 			                https://git.xiph.org/theora.git
 			                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
