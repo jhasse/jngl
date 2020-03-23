@@ -7,6 +7,10 @@
 #include "other.hpp"
 #include "window.hpp"
 
+#ifdef __APPLE__
+#include "TargetConditionals.h"
+#endif
+
 #if !defined(JNGL_MAIN_BEGIN)
 	#if defined(ANDROID)
 		#include <android_native_app_glue.h>
@@ -18,6 +22,9 @@
 			jngl::androidApp = __androidApp; \
 			jngl::setConfigPath(__androidApp->activity->internalDataPath); \
 			jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
+		#define JNGL_MAIN_END }
+	#elif defined(__APPLE__) && TARGET_OS_IPHONE // iOS
+		#define JNGL_MAIN_BEGIN void shouldNotBeCalled() {
 		#define JNGL_MAIN_END }
 	#else
 		#define JNGL_MAIN_BEGIN /* NOLINT */ int main(int argc, char** argv) { \
