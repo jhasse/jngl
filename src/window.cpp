@@ -384,7 +384,7 @@ namespace jngl {
 		return multitouch;
 	}
 
-#ifndef ANDROID
+#if !defined(ANDROID) && !defined(IOS)
 	std::vector<Vec2> Window::getTouchPositions() const { // NOLINT
 		return {};
 	}

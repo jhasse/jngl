@@ -94,24 +94,29 @@
 	}
 }
 
+- (void) handleTouch: (NSSet*) touches withType: (jngl::WindowImpl::Touch) type {
+	const auto positions = std::make_unique<std::pair<intptr_t, jngl::Vec2>[]>(touches.count);
+	size_t i = 0;
+	for (UITouch* touch in touches) {
+		CGPoint location = [touch locationInView: self];
+		positions[i].first = intptr_t(touch);
+		positions[i].second.x = location.x * self.contentScaleFactor;
+		positions[i].second.y = location.y * self.contentScaleFactor;
+		++i;
+	}
+	impl->handleTouch(positions.get(), touches.count, type);
+}
+
 - (void) touchesBegan: (NSSet*) touches withEvent: (UIEvent*) event {
-	UITouch* touch = [touches anyObject];
-	CGPoint location = [touch locationInView: self];
-	impl->setMouse(location.x * self.contentScaleFactor, location.y * self.contentScaleFactor);
-	impl->setMouseDown(true);
+	[self handleTouch: touches withType: jngl::WindowImpl::Touch::BEGAN];
 }
 
 - (void) touchesEnded: (NSSet*) touches withEvent: (UIEvent*) event {
-	UITouch* touch = [touches anyObject];
-	CGPoint location = [touch locationInView: self];
-	impl->setMouse(location.x * self.contentScaleFactor, location.y * self.contentScaleFactor);
-	impl->setMouseDown(false);
+	[self handleTouch: touches withType: jngl::WindowImpl::Touch::ENDED];
 }
 
 - (void) touchesMoved: (NSSet*) touches withEvent: (UIEvent*) event {
-	UITouch* touch = [touches anyObject];
-	CGPoint location = [touch locationInView: self];
-	impl->setMouse(location.x * self.contentScaleFactor, location.y * self.contentScaleFactor);
+	[self handleTouch: touches withType: jngl::WindowImpl::Touch::MOVED];
 }
 
 -(void) insertText: (NSString*) text {

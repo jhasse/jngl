@@ -55,6 +55,16 @@ void Window::SwapBuffers() {
 void Window::SetMouseVisible(const bool) {
 }
 
+std::vector<Vec2> Window::getTouchPositions() const {
+	std::vector<Vec2> positions;
+	for (auto [id, pos] : impl->touches) {
+		positions.emplace_back(
+		    (pos.x - (width_ - canvasWidth) / 2) / getScaleFactor() - getScreenWidth() / 2,
+		    (pos.y - (height_ - canvasHeight) / 2) / getScaleFactor() - getScreenHeight() / 2);
+	}
+	return positions;
+}
+
 void Window::SetTitle(const std::string&) {
 }
 
