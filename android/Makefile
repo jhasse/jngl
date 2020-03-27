@@ -1,6 +1,6 @@
 all: gradle
 
-$$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/boost:
+${ANDROID_HOME}/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/boost:
 	[ -f "$@/version.hpp" ] || ln -s /usr/include/boost "$@"
 
 test/app/src/main/assets:
@@ -19,7 +19,7 @@ test/app/src/main/assets/verysmall.ogv: test/app/src/main/assets ../data/verysma
 	cp ../data/verysmall.ogv "$@"
 
 .PHONY: gradle
-gradle: $$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/boost \
+gradle: ${ANDROID_HOME}/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/boost \
         test/app/src/main/assets/jngl.webp \
         test/app/src/main/assets/test.ogg \
         test/app/src/main/assets/Arial.ttf \
@@ -28,5 +28,5 @@ gradle: $$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/
 
 .PHONY: run
 run: gradle
-	$$ANDROID_HOME/platform-tools/adb install -r test/app/build/outputs/apk/debug/app-debug.apk
-	$$ANDROID_HOME/platform-tools/adb shell am start -a android.intent.action.MAIN -n com.bixense.jngl_test/android.app.NativeActivity
+	${ANDROID_HOME}/platform-tools/adb install -r test/app/build/outputs/apk/debug/app-debug.apk
+	${ANDROID_HOME}/platform-tools/adb shell am start -a android.intent.action.MAIN -n com.bixense.jngl_test/android.app.NativeActivity
