@@ -15,12 +15,12 @@ android {
     }
     externalNativeBuild {
         cmake {
-            version '3.10.2'
+            version '3.16.0+'
             path 'src/main/cpp/CMakeLists.txt'
         }
     }
     compileSdkVersion 29
-    ndkVersion "20.1.5948944"
+    ndkVersion "21.0.6113669"
 }
 
 dependencies {

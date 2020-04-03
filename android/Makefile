@@ -1,7 +1,20 @@
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	ANDROID_PLATFORM := linux
+	BOOST_PATH := /usr/include/boost
+endif
+ifeq ($(UNAME_S),Darwin)
+	ANDROID_PLATFORM := darwin
+	BOOST_PATH := /usr/local/include/boost
+endif
+
 all: gradle
 
-${ANDROID_HOME}/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/boost:
-	[ -f "$@/version.hpp" ] || ln -s /usr/include/boost "$@"
+${ANDROID_HOME}/ndk/21.0.6113669/package.xml:
+	yes | ${ANDROID_HOME}/tools/bin/sdkmanager "ndk;21.0.6113669"
+
+${ANDROID_HOME}/ndk/21.0.6113669/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp: | ${ANDROID_HOME}/ndk/21.0.6113669/package.xml
+	ln -s $(BOOST_PATH) `dirname "$@"`
 
 test/app/src/main/assets:
 	mkdir "$@"
@@ -19,7 +32,7 @@ test/app/src/main/assets/verysmall.ogv: test/app/src/main/assets ../data/verysma
 	cp ../data/verysmall.ogv "$@"
 
 .PHONY: gradle
-gradle: ${ANDROID_HOME}/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/boost \
+gradle: ${ANDROID_HOME}/ndk/21.0.6113669/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp \
         test/app/src/main/assets/jngl.webp \
         test/app/src/main/assets/test.ogg \
         test/app/src/main/assets/Arial.ttf \
