@@ -146,30 +146,6 @@ if(ANDROID)
 	add_subdirectory(${VORBIS_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/vorbis)
 	target_link_libraries(jngl PUBLIC vorbisfile)
 
-	if(JNGL_VIDEO)
-		set(THEORA_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/theora)
-		if ((NOT EXISTS ${THEORA_SRC_DIR}) OR (NOT EXISTS ${THEORA_SRC_DIR}/lib/info.c))
-			execute_process(COMMAND git clone -b v1.1.1
-			                https://git.xiph.org/theora.git
-			                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
-		endif()
-		add_library(theoradec OBJECT ${LIBTHEORA_DEC} "${THEORA_SRC_DIR}/lib/apiwrapper.c"
-			"${THEORA_SRC_DIR}/lib/bitpack.c" "${THEORA_SRC_DIR}/lib/dequant.c"
-			"${THEORA_SRC_DIR}/lib/fragment.c" "${THEORA_SRC_DIR}/lib/idct.c"
-			"${THEORA_SRC_DIR}/lib/info.c" "${THEORA_SRC_DIR}/lib/internal.c"
-			"${THEORA_SRC_DIR}/lib/state.c" "${THEORA_SRC_DIR}/lib/quant.c"
-			"${THEORA_SRC_DIR}/lib/decapiwrapper.c" "${THEORA_SRC_DIR}/lib/decinfo.c"
-			"${THEORA_SRC_DIR}/lib/decode.c" "${THEORA_SRC_DIR}/lib/huffdec.c")
-		target_include_directories(theoradec PRIVATE ${OGG_INCLUDE_DIRS}
-			"${THEORA_SRC_DIR}/include")
-		target_compile_options(theoradec PRIVATE -Wno-shift-negative-value
-			-Wno-shift-op-parentheses)
-		target_link_libraries(jngl PRIVATE $<TARGET_OBJECTS:theoradec>)
-		target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
-		target_include_directories(jngl PRIVATE "${THEORA_SRC_DIR}/include")
-		target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.cpp)
-	endif()
-
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)
 	target_include_directories(jngl PRIVATE ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
 else()
@@ -276,6 +252,21 @@ else()
 		FetchContent_MakeAvailable(webp)
 		target_link_libraries(jngl PRIVATE webp)
 	elseif(IOS)
+		include(FetchContent)
+		FetchContent_Declare(ogg
+			URL http://downloads.xiph.org/releases/ogg/libogg-1.3.4.tar.xz
+			URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe)
+		FetchContent_MakeAvailable(ogg)
+		FetchContent_GetProperties(ogg SOURCE_DIR OGG_SOURCE_DIR)
+		set(OGG_INCLUDE_DIRS ${OGG_SOURCE_DIR}/include)
+		set(OGG_LIBRARIES ogg)
+		FetchContent_Declare(vorbis
+			URL https://github.com/xiph/vorbis/archive/v1.3.6.zip
+			URL_HASH SHA1=694c8b3739f66ef38c08092d0df2ef42197fc480)
+		FetchContent_MakeAvailable(vorbis)
+		FetchContent_GetProperties(vorbis SOURCE_DIR VORBIS_SRC_DIR)
+		target_include_directories(jngl PRIVATE ${VORBIS_SRC_DIR}/include)
+		target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
 		target_compile_definitions(jngl PRIVATE IOS)
 		target_compile_definitions(jngl PUBLIC GLES_SILENCE_DEPRECATION)
 		target_include_directories(jngl PUBLIC include/ios)
@@ -286,8 +277,6 @@ else()
 		find_library(IOS_AVFOUNDATION AVFoundation)
 		target_link_libraries(jngl PRIVATE
 			"${PROJECT_SOURCE_DIR}/lib/ios/libfreetype.a"
-			"${PROJECT_SOURCE_DIR}/xcode/IDZPrecompiledVorbis/Vorbis.framework"
-			"${PROJECT_SOURCE_DIR}/xcode/IDZPrecompiledOgg/Ogg.framework"
 			"${PROJECT_SOURCE_DIR}/lib/ios/WebPDecoder.framework"
 			${IOS_OPENGLES} ${IOS_OPENAL} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
 		)
@@ -360,6 +349,32 @@ else()
 	endif()
 	target_link_libraries(jngl-test jngl)
 	add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/jngl.webp "$<TARGET_FILE_DIR:jngl-test>")
+endif()
+
+if(ANDROID OR IOS)
+	if(JNGL_VIDEO)
+		set(THEORA_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/theora)
+		if ((NOT EXISTS ${THEORA_SRC_DIR}) OR (NOT EXISTS ${THEORA_SRC_DIR}/lib/info.c))
+			execute_process(COMMAND git clone -b v1.1.1
+			                https://git.xiph.org/theora.git
+			                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
+		endif()
+		add_library(theoradec OBJECT ${LIBTHEORA_DEC} "${THEORA_SRC_DIR}/lib/apiwrapper.c"
+			"${THEORA_SRC_DIR}/lib/bitpack.c" "${THEORA_SRC_DIR}/lib/dequant.c"
+			"${THEORA_SRC_DIR}/lib/fragment.c" "${THEORA_SRC_DIR}/lib/idct.c"
+			"${THEORA_SRC_DIR}/lib/info.c" "${THEORA_SRC_DIR}/lib/internal.c"
+			"${THEORA_SRC_DIR}/lib/state.c" "${THEORA_SRC_DIR}/lib/quant.c"
+			"${THEORA_SRC_DIR}/lib/decapiwrapper.c" "${THEORA_SRC_DIR}/lib/decinfo.c"
+			"${THEORA_SRC_DIR}/lib/decode.c" "${THEORA_SRC_DIR}/lib/huffdec.c")
+		target_include_directories(theoradec PRIVATE ${OGG_INCLUDE_DIRS}
+			"${THEORA_SRC_DIR}/include")
+		target_compile_options(theoradec PRIVATE -Wno-shift-negative-value
+			-Wno-shift-op-parentheses)
+		target_link_libraries(jngl PRIVATE theoradec)
+		target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
+		target_include_directories(jngl PRIVATE "${THEORA_SRC_DIR}/include")
+		target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.cpp)
+	endif()
 endif()
 
 target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})

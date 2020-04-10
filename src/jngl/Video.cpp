@@ -71,7 +71,7 @@ public:
 	void draw() {
 		if (!started()) {
 			const double timeBuffering = jngl::getTime() + startTime;
-			if (timeBuffering > 2.5 || THEORAPLAY_availableVideo(decoder) >= BUFFER_SIZE ||
+			if (timeBuffering > 5 || THEORAPLAY_availableVideo(decoder) >= BUFFER_SIZE ||
 			    THEORAPLAY_threadDone(decoder)) {
 				jngl::debug("Buffering took ");
 				jngl::debug(timeBuffering);
@@ -327,7 +327,7 @@ private:
 		audio = THEORAPLAY_getAudio(decoder);
 	}
 
-	constexpr static unsigned int BUFFER_SIZE = 150;
+	constexpr static unsigned int BUFFER_SIZE = 300;
 
 	std::unique_ptr<jngl::Sound> sound;
 	THEORAPLAY_Decoder* decoder;
