@@ -254,8 +254,8 @@ else()
 	elseif(IOS)
 		include(FetchContent)
 		FetchContent_Declare(ogg
-			URL http://downloads.xiph.org/releases/ogg/libogg-1.3.4.tar.xz
-			URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe)
+			GIT_REPOSITORY https://github.com/xiph/ogg
+			GIT_TAG c8fca6b4a02d695b1ceea39b330d4406001c03ed)
 		FetchContent_MakeAvailable(ogg)
 		FetchContent_GetProperties(ogg SOURCE_DIR OGG_SOURCE_DIR)
 		set(OGG_INCLUDE_DIRS ${OGG_SOURCE_DIR}/include)
