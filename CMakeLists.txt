@@ -21,6 +21,8 @@ set_target_properties(jngl PROPERTIES
 option(JNGL_VIDEO "Enable Theora video playback" ON)
 option(JNGL_JPEG "Enable JPEG support if libjpeg is available" ON)
 
+set(BUILD_TESTING OFF CACHE INTERNAL "") # for libogg
+
 if (ANDROID)
 	file(GLOB ANDROID_SOURCES src/android/*.cpp)
 	target_sources(jngl PRIVATE ${ANDROID_SOURCES})
