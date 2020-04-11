@@ -31,13 +31,10 @@ typedef THEORAPLAY_AudioPacket AudioPacket;
 
 // !!! FIXME: these all count on the pixel format being TH_PF_420 for now.
 
-typedef unsigned char *(*ConvertVideoFrameFn)(const th_info *tinfo,
-                                              const th_ycbcr_buffer ycbcr);
-
-static unsigned char *ConvertVideoFrame420ToYUVPlanar(
-                            const th_info *tinfo, const th_ycbcr_buffer ycbcr,
-                            const int p0, const int p1, const int p2)
-{
+unsigned char* ConvertVideoFrame420ToIYUV(const th_info* tinfo, const th_ycbcr_buffer ycbcr) {
+	const int p0 = 0;
+	const int p1 = 1;
+	const int p2 = 2;
     int i;
     const int w = tinfo->pic_width;
     const int h = tinfo->pic_height;
@@ -66,22 +63,7 @@ static unsigned char *ConvertVideoFrame420ToYUVPlanar(
 	}
 
     return yuv;
-} // ConvertVideoFrame420ToYUVPlanar
-
-
-static unsigned char *ConvertVideoFrame420ToYV12(const th_info *tinfo,
-                                                 const th_ycbcr_buffer ycbcr)
-{
-    return ConvertVideoFrame420ToYUVPlanar(tinfo, ycbcr, 0, 2, 1);
 }
-
-
-static unsigned char *ConvertVideoFrame420ToIYUV(const th_info *tinfo,
-                                                 const th_ycbcr_buffer ycbcr)
-{
-    return ConvertVideoFrame420ToYUVPlanar(tinfo, ycbcr, 0, 1, 2);
-}
-
 
 struct THEORAPLAY_Decoder {
     // Thread wrangling...
@@ -102,7 +84,6 @@ struct THEORAPLAY_Decoder {
 	volatile int decode_error = 0;
 
     THEORAPLAY_VideoFormat vidfmt;
-    ConvertVideoFrameFn vidcvt;
 
 	VideoFrame* videolist = nullptr;
 	VideoFrame* videolisttail = nullptr;
@@ -405,7 +386,7 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                         item->width = tinfo.pic_width;
                         item->height = tinfo.pic_height;
                         item->format = ctx->vidfmt;
-                        item->pixels = ctx->vidcvt(&tinfo, ycbcr);
+                        item->pixels = ConvertVideoFrame420ToIYUV(&tinfo, ycbcr);
                         item->next = nullptr;
 
                         if (item->pixels == nullptr)
@@ -541,24 +522,10 @@ THEORAPLAY_Decoder *THEORAPLAY_startDecode(THEORAPLAY_Io *io,
                                            const unsigned int maxframes,
                                            THEORAPLAY_VideoFormat vidfmt)
 {
-    ConvertVideoFrameFn vidcvt = nullptr;
-
-    switch (vidfmt)
-    {
-        // !!! FIXME: current expects TH_PF_420.
-        #define VIDCVT(t) case THEORAPLAY_VIDFMT_##t: vidcvt = ConvertVideoFrame420To##t; break;
-        VIDCVT(YV12)
-        VIDCVT(IYUV)
-        #undef VIDCVT
-	default:
-		throw std::runtime_error("invalid/unsupported format.");
-	}
-
 	const auto ctx = new THEORAPLAY_Decoder;
 
 	ctx->maxframes = maxframes;
     ctx->vidfmt = vidfmt;
-    ctx->vidcvt = vidcvt;
     ctx->io = io;
 
     try {
