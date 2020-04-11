@@ -73,34 +73,19 @@ static unsigned char *ConvertVideoFrame420ToYV12(const th_info *tinfo,
                                                  const th_ycbcr_buffer ycbcr)
 {
     return ConvertVideoFrame420ToYUVPlanar(tinfo, ycbcr, 0, 2, 1);
-} // ConvertVideoFrame420ToYV12
+}
 
 
 static unsigned char *ConvertVideoFrame420ToIYUV(const th_info *tinfo,
                                                  const th_ycbcr_buffer ycbcr)
 {
     return ConvertVideoFrame420ToYUVPlanar(tinfo, ycbcr, 0, 1, 2);
-} // ConvertVideoFrame420ToIYUV
-
-
-// RGB
-#define THEORAPLAY_CVT_FNNAME_420 ConvertVideoFrame420ToRGB
-#define THEORAPLAY_CVT_RGB_ALPHA 0
-#include "theoraplay_cvtrgb.h"
-#undef THEORAPLAY_CVT_RGB_ALPHA
-#undef THEORAPLAY_CVT_FNNAME_420
-
-// RGBA
-#define THEORAPLAY_CVT_FNNAME_420 ConvertVideoFrame420ToRGBA
-#define THEORAPLAY_CVT_RGB_ALPHA 1
-#include "theoraplay_cvtrgb.h"
-#undef THEORAPLAY_CVT_RGB_ALPHA
-#undef THEORAPLAY_CVT_FNNAME_420
+}
 
 
 struct THEORAPLAY_Decoder {
     // Thread wrangling...
-	int thread_created = 0;
+	bool thread_created = false;
     std::mutex lock;
 	volatile int halt = 0;
 	int thread_done = 0;
@@ -564,8 +549,6 @@ THEORAPLAY_Decoder *THEORAPLAY_startDecode(THEORAPLAY_Io *io,
         #define VIDCVT(t) case THEORAPLAY_VIDFMT_##t: vidcvt = ConvertVideoFrame420To##t; break;
         VIDCVT(YV12)
         VIDCVT(IYUV)
-        VIDCVT(RGB)
-        VIDCVT(RGBA)
         #undef VIDCVT
 	default:
 		throw std::runtime_error("invalid/unsupported format.");
@@ -596,11 +579,10 @@ void THEORAPLAY_stopDecode(THEORAPLAY_Decoder* const ctx) {
 	if (!ctx) {
 		return;
 	}
-    if (ctx->thread_created)
-    {
+	if (ctx->thread_created) {
         ctx->halt = 1;
         ctx->worker.join();
-    } // if
+	}
 
     VideoFrame *videolist = ctx->videolist;
     while (videolist)
@@ -631,7 +613,7 @@ int THEORAPLAY_isDecoding(THEORAPLAY_Decoder* const ctx) {
         retval = ( ctx && (ctx->audiolist || ctx->videolist ||
                    (ctx->thread_created && !ctx->thread_done)) );
         ctx->lock.unlock();
-    } // if
+    }
     return retval;
 }
 
