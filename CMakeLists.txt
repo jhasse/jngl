@@ -212,8 +212,8 @@ else()
 		set(FREETYPE_LIBRARIES freetype)
 
 		FetchContent_Declare(openal
-			URL https://github.com/kcat/openal-soft/archive/openal-soft-1.19.1.zip
-			URL_HASH SHA1=fb7086b973fd4470a5c11e3355b5377899c840c7)
+			URL https://github.com/kcat/openal-soft/archive/openal-soft-1.20.1.zip
+			URL_HASH SHA1=d86a714e0e7900f4f7197738cb35432772bfe2e0)
 		set(ALSOFT_NO_CONFIG_UTIL ON CACHE BOOL "Disable building the alsoft-config utility" FORCE)
 		set(ALSOFT_UTILS OFF CACHE BOOL "Build and install utility programs" FORCE)
 		set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
