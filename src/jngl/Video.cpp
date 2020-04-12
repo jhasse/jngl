@@ -293,6 +293,7 @@ public:
 		}
 		alDeleteSources(1, &source);
 		checkAlError();
+		THEORAPLAY_stopDecode(decoder);
 	}
 
 	Impl(const Impl&) = delete;

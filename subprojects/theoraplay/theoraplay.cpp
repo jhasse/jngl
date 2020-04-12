@@ -10,6 +10,8 @@
 //  libtheora-1.1.1/examples/player_example.c, but this is all my own
 //  code.
 
+#include "../../src/jngl/debug.hpp"
+
 #include <cassert>
 #include <cstring>
 
@@ -86,6 +88,8 @@ struct THEORAPLAY_Decoder {
 
 	AudioPacket* audiolist = nullptr;
 	AudioPacket* audiolisttail = nullptr;
+
+	std::unique_ptr<uint8_t[]> ringBuffer;
 };
 
 static int FeedMoreOggData(THEORAPLAY_Io *io, ogg_sync_state *sync)
@@ -135,6 +139,8 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
     vorbis_block vblock;
     th_dec_ctx *tdec = nullptr;
     th_setup_info *tsetup = nullptr;
+	size_t ringBufferPos = 0;
+	size_t ringBufferSize;
 
     ogg_sync_init(&sync);
     vorbis_info_init(&vinfo);
@@ -377,7 +383,21 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                         item->width = tinfo.pic_width;
                         item->height = tinfo.pic_height;
                         item->format = ctx->vidfmt;
-						item->pixels = new uint8_t[tinfo.pic_width * tinfo.pic_height * 2];
+
+						if (!ctx->ringBuffer) {
+							ringBufferSize = (ctx->maxframes + 1) * item->width * item->height * 2;
+							jngl::debug("Allocating ");
+							jngl::debug(ringBufferSize / 1024 / 1024);
+							jngl::debugLn(" MB.");
+							ctx->ringBuffer = std::make_unique<uint8_t[]>(ringBufferSize);
+						}
+						item->pixels = &ctx->ringBuffer[ringBufferPos];
+						ringBufferPos += item->width * item->height * 2;
+						assert(ringBufferPos <= ringBufferSize); // width and height mustn't change
+						if (ringBufferPos == ringBufferSize) {
+							ringBufferPos = 0;
+						}
+
 						ConvertVideoFrame420ToIYUV(&tinfo, ycbcr, item->pixels);
 						item->next = nullptr;
 
@@ -545,7 +565,6 @@ void THEORAPLAY_stopDecode(THEORAPLAY_Decoder* const ctx) {
     while (videolist)
     {
         VideoFrame *next = videolist->next;
-        free(videolist->pixels);
         free(videolist);
         videolist = next;
 	}
@@ -665,7 +684,6 @@ void THEORAPLAY_freeVideo(const THEORAPLAY_VideoFrame *_item)
     THEORAPLAY_VideoFrame *item = (THEORAPLAY_VideoFrame *) _item;
 	if (item != nullptr) {
 		assert(item->next == nullptr);
-		free(item->pixels);
         free(item);
 	}
 }
