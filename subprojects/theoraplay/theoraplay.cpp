@@ -33,7 +33,7 @@ typedef THEORAPLAY_AudioPacket AudioPacket;
 
 // !!! FIXME: these all count on the pixel format being TH_PF_420 for now.
 
-unsigned char* ConvertVideoFrame420ToIYUV(const th_info* tinfo, const th_ycbcr_buffer ycbcr) {
+void ConvertVideoFrame420ToIYUV(const th_info* tinfo, const th_ycbcr_buffer ycbcr, uint8_t* dst) {
 	const int p0 = 0;
 	const int p1 = 1;
 	const int p2 = 2;
@@ -50,21 +50,15 @@ unsigned char* ConvertVideoFrame420ToIYUV(const th_info* tinfo, const th_ycbcr_b
     const unsigned char *p2data = ycbcr[p2].data + uvoff;
     const int p2stride = ycbcr[p2].stride;
 
-    if (yuv)
-    {
-        unsigned char *dst = yuv;
-		for (i = 0; i < h; i++, dst += w) {
-			memcpy(dst, p0data + (p0stride * i), w);
-		}
-		for (i = 0; i < (h / 2); i++, dst += w / 2) {
-			memcpy(dst, p1data + (p1stride * i), w / 2);
-		}
-		for (i = 0; i < (h / 2); i++, dst += w / 2) {
-			memcpy(dst, p2data + (p2stride * i), w / 2);
-		}
+	for (i = 0; i < h; i++, dst += w) {
+		memcpy(dst, p0data + (p0stride * i), w);
 	}
-
-    return yuv;
+	for (i = 0; i < (h / 2); i++, dst += w / 2) {
+		memcpy(dst, p1data + (p1stride * i), w / 2);
+	}
+	for (i = 0; i < (h / 2); i++, dst += w / 2) {
+		memcpy(dst, p2data + (p2stride * i), w / 2);
+	}
 }
 
 struct THEORAPLAY_Decoder {
@@ -383,8 +377,9 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                         item->width = tinfo.pic_width;
                         item->height = tinfo.pic_height;
                         item->format = ctx->vidfmt;
-                        item->pixels = ConvertVideoFrame420ToIYUV(&tinfo, ycbcr);
-                        item->next = nullptr;
+						item->pixels = new uint8_t[tinfo.pic_width * tinfo.pic_height * 2];
+						ConvertVideoFrame420ToIYUV(&tinfo, ycbcr, item->pixels);
+						item->next = nullptr;
 
                         if (item->pixels == nullptr)
                         {
