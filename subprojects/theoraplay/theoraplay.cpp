@@ -24,6 +24,8 @@
 #include "../../src/android/fopen.hpp"
 #endif
 
+#include <atomic>
+
 #define THEORAPLAY_INTERNAL 1
 
 typedef THEORAPLAY_VideoFrame VideoFrame;
@@ -69,19 +71,19 @@ struct THEORAPLAY_Decoder {
     // Thread wrangling...
 	bool thread_created = false;
     std::mutex lock;
-	volatile int halt = 0;
+	std::atomic_bool halt = false;
 	int thread_done = 0;
     std::thread worker;
 
     // API state...
 	THEORAPLAY_Io* io = nullptr;
 	unsigned int maxframes = 0; // Max video frames to buffer.
-	volatile unsigned int prepped = 0;
-	volatile unsigned int videocount = 0; // currently buffered frames.
-	volatile unsigned int audioms = 0;    // currently buffered audio samples.
-	volatile int hasvideo = 0;
-	volatile int hasaudio = 0;
-	volatile int decode_error = 0;
+	std::atomic_bool prepped = false;
+	std::atomic_uint videocount = 0; // currently buffered frames.
+	std::atomic_uint audioms = 0;    // currently buffered audio samples.
+	std::atomic_bool hasvideo = false;
+	std::atomic_bool hasaudio = false;
+	std::atomic_bool decode_error = false;
 
     THEORAPLAY_VideoFormat vidfmt;
 
@@ -104,7 +106,7 @@ static int FeedMoreOggData(THEORAPLAY_Io *io, ogg_sync_state *sync)
 		return 0;
 	}
 	return (ogg_sync_wrote(sync, buflen) == 0) ? 1 : -1;
-} // FeedMoreOggData
+}
 
 
 // This massive function is where all the effort happens.
@@ -162,7 +164,7 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                 queue_ogg_page(ctx);
                 bos = 0;
                 break;
-            } // if
+			}
 
             ogg_stream_init(&test, ogg_page_serialno(&page));
             ogg_stream_pagein(&test, &page);
@@ -172,21 +174,19 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
             {
                 memcpy(&tstream, &test, sizeof (test));
                 tpackets = 1;
-            } // if
+            }
             else if (!vpackets && (vorbis_synthesis_headerin(&vinfo, &vcomment, &packet) >= 0))
             {
                 memcpy(&vstream, &test, sizeof (test));
                 vpackets = 1;
-            } // else if
-            else
-            {
-                // whatever it is, we don't care about it
+			} else {
+				// whatever it is, we don't care about it
                 ogg_stream_clear(&test);
-            } // else
-        } // while
-    } // while
+			}
+		}
+	}
 
-    // no audio OR video?
+	// no audio OR video?
 	if (ctx->halt || (!vpackets && !tpackets)) {
 		goto cleanup;
 	}
@@ -278,7 +278,7 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
     // Note that audio and video don't _HAVE_ to start simultaneously.
 
     ctx->lock.lock();
-    ctx->prepped = 1;
+	ctx->prepped = true;
     ctx->hasvideo = (tpackets != 0);
     ctx->hasaudio = (vpackets != 0);
     ctx->lock.unlock();
@@ -312,7 +312,7 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                 {
                     free(item);
                     goto cleanup;
-                } // if
+				}
 
                 // I bet this beats the crap out of the CPU cache...
                 samples = item->samples;
@@ -333,20 +333,17 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                 {
                     assert(ctx->audiolist);
                     ctx->audiolisttail->next = item;
-                } // if
+				}
                 else
                 {
                     assert(!ctx->audiolist);
                     ctx->audiolist = item;
-                } // else
+				}
                 ctx->audiolisttail = item;
                 ctx->lock.unlock();
-            } // if
-
-            else  // no audio available left in current packet?
-            {
-                // try to feed another packet to the Vorbis stream...
-                if (ogg_stream_packetout(&vstream, &packet) <= 0)
+			} else { // no audio available left in current packet?
+				// try to feed another packet to the Vorbis stream...
+				if (ogg_stream_packetout(&vstream, &packet) <= 0)
                 {
 					if (!tpackets) {
 						need_pages = 1; // no video, get more pages now.
@@ -357,7 +354,7 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 					vorbis_synthesis_blockin(&vdsp, &vblock);
 				}
 			}
-        } // while
+		}
 
         if (!ctx->halt && tpackets)
         {
@@ -393,7 +390,7 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                         {
                             free(item);
                             goto cleanup;
-                        } // if
+						}
 
                         //printf("Decoded another video frame.\n");
                         ctx->lock.lock();
@@ -401,19 +398,17 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                         {
                             assert(ctx->videolist);
                             ctx->videolisttail->next = item;
-                        } // if
-                        else
-                        {
+						} else {
                             assert(!ctx->videolist);
                             ctx->videolist = item;
-                        } // else
+                        }
                         ctx->videolisttail = item;
                         ctx->videocount++;
                         ctx->lock.unlock();
 
                         saw_video_frame = 1;
-                    } // if
-                } // if
+					}
+				}
 			}
 		}
 
@@ -447,8 +442,8 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 				}
 			}
             //printf("Awake!\n");
-        } // if
-    } // while
+		}
+	}
 
     was_error = 0;
 
@@ -467,14 +462,14 @@ cleanup:
     ogg_sync_clear(&sync);
     ctx->io->close(ctx->io);
     ctx->thread_done = 1;
-} // WorkerThread
+}
 
 
 static void *WorkerThreadEntry(void *_this)
 {
 	WorkerThread(static_cast<THEORAPLAY_Decoder*>(_this));
     return nullptr;
-} // WorkerThreadEntry
+}
 
 
 static long IoFopenRead(THEORAPLAY_Io *io, void *buf, long buflen)
@@ -485,7 +480,7 @@ static long IoFopenRead(THEORAPLAY_Io *io, void *buf, long buflen)
 		return -1;
 	}
     return (long) br;
-} // IoFopenRead
+}
 
 
 static void IoFopenClose(THEORAPLAY_Io *io)
@@ -493,7 +488,7 @@ static void IoFopenClose(THEORAPLAY_Io *io)
     FILE *f = (FILE *) io->userdata;
     fclose(f);
     free(io);
-} // IoFopenClose
+}
 
 
 THEORAPLAY_Decoder *THEORAPLAY_startDecodeFile(const char *fname,
@@ -509,13 +504,13 @@ THEORAPLAY_Decoder *THEORAPLAY_startDecodeFile(const char *fname,
     {
         free(io);
         return nullptr;
-    } // if
+	}
 
     io->read = IoFopenRead;
     io->close = IoFopenClose;
     io->userdata = f;
     return THEORAPLAY_startDecode(io, maxframes, vidfmt);
-} // THEORAPLAY_startDecodeFile
+}
 
 
 THEORAPLAY_Decoder *THEORAPLAY_startDecode(THEORAPLAY_Io *io,
@@ -540,7 +535,7 @@ startdecode_failed:
     io->close(io);
     delete ctx;
     return nullptr;
-} // THEORAPLAY_startDecode
+}
 
 void THEORAPLAY_stopDecode(THEORAPLAY_Decoder* const ctx) {
 	if (!ctx) {
@@ -558,7 +553,7 @@ void THEORAPLAY_stopDecode(THEORAPLAY_Decoder* const ctx) {
         free(videolist->pixels);
         free(videolist);
         videolist = next;
-    } // while
+	}
 
     AudioPacket *audiolist = ctx->audiolist;
     while (audiolist)
@@ -567,13 +562,13 @@ void THEORAPLAY_stopDecode(THEORAPLAY_Decoder* const ctx) {
         free(audiolist->samples);
         free(audiolist);
         audiolist = next;
-    } // while
+	}
 
     delete ctx;
-} // THEORAPLAY_stopDecode
+}
 
-int THEORAPLAY_isDecoding(THEORAPLAY_Decoder* const ctx) {
-	int retval = 0;
+bool THEORAPLAY_isDecoding(THEORAPLAY_Decoder* const ctx) {
+	bool retval = false;
     if (ctx)
     {
         ctx->lock.lock();
@@ -593,40 +588,32 @@ int THEORAPLAY_isDecoding(THEORAPLAY_Decoder* const ctx) {
 	}                                                                                              \
 	return retval;
 
-int THEORAPLAY_isInitialized(THEORAPLAY_Decoder *decoder)
-{
-    GET_SYNCED_VALUE(int, 0, decoder, prepped);
-} // THEORAPLAY_isInitialized
+bool THEORAPLAY_isInitialized(THEORAPLAY_Decoder* const decoder) {
+	GET_SYNCED_VALUE(bool, 0, decoder, prepped);
+}
 
+bool THEORAPLAY_hasVideoStream(THEORAPLAY_Decoder* const decoder) {
+	GET_SYNCED_VALUE(bool, 0, decoder, hasvideo);
+}
 
-int THEORAPLAY_hasVideoStream(THEORAPLAY_Decoder *decoder)
-{
-    GET_SYNCED_VALUE(int, 0, decoder, hasvideo);
-} // THEORAPLAY_hasVideoStream
-
-
-int THEORAPLAY_hasAudioStream(THEORAPLAY_Decoder *decoder)
-{
-    GET_SYNCED_VALUE(int, 0, decoder, hasaudio);
-} // THEORAPLAY_hasAudioStream
-
+bool THEORAPLAY_hasAudioStream(THEORAPLAY_Decoder* const decoder) {
+	GET_SYNCED_VALUE(bool, 0, decoder, hasaudio);
+}
 
 unsigned int THEORAPLAY_availableVideo(THEORAPLAY_Decoder *decoder)
 {
     GET_SYNCED_VALUE(unsigned int, 0, decoder, videocount);
-} // THEORAPLAY_hasAudioStream
+}
 
 
 unsigned int THEORAPLAY_availableAudio(THEORAPLAY_Decoder *decoder)
 {
     GET_SYNCED_VALUE(unsigned int, 0, decoder, audioms);
-} // THEORAPLAY_hasAudioStream
+}
 
-
-int THEORAPLAY_decodingError(THEORAPLAY_Decoder *decoder)
-{
-    GET_SYNCED_VALUE(int, 0, decoder, decode_error);
-} // THEORAPLAY_decodingError
+bool THEORAPLAY_decodingError(THEORAPLAY_Decoder* const decoder) {
+	GET_SYNCED_VALUE(bool, 0, decoder, decode_error);
+}
 
 const THEORAPLAY_AudioPacket* THEORAPLAY_getAudio(THEORAPLAY_Decoder* const ctx) {
 	AudioPacket *retval;
@@ -645,7 +632,7 @@ const THEORAPLAY_AudioPacket* THEORAPLAY_getAudio(THEORAPLAY_Decoder* const ctx)
     ctx->lock.unlock();
 
     return retval;
-} // THEORAPLAY_getAudio
+}
 
 void THEORAPLAY_freeAudio(const THEORAPLAY_AudioPacket *_item)
 {
@@ -655,8 +642,8 @@ void THEORAPLAY_freeAudio(const THEORAPLAY_AudioPacket *_item)
         assert(item->next == nullptr);
         free(item->samples);
         free(item);
-    } // if
-} // THEORAPLAY_freeAudio
+	}
+}
 
 const THEORAPLAY_VideoFrame* THEORAPLAY_getVideo(THEORAPLAY_Decoder* const ctx) {
 	VideoFrame* retval;
@@ -676,7 +663,7 @@ const THEORAPLAY_VideoFrame* THEORAPLAY_getVideo(THEORAPLAY_Decoder* const ctx) 
     ctx->lock.unlock();
 
     return retval;
-} // THEORAPLAY_getVideo
+}
 
 void THEORAPLAY_freeVideo(const THEORAPLAY_VideoFrame *_item)
 {
@@ -686,7 +673,7 @@ void THEORAPLAY_freeVideo(const THEORAPLAY_VideoFrame *_item)
 		free(item->pixels);
         free(item);
 	}
-} // THEORAPLAY_freeVideo
+}
 
 bool THEORAPLAY_threadDone(THEORAPLAY_Decoder* const ctx) {
 	if (!ctx) {
