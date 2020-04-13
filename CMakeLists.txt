@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required(VERSION 3.14)
 
 project(jngl LANGUAGES C CXX)
 
@@ -17,6 +17,19 @@ target_compile_features(jngl PUBLIC cxx_std_17)
 set_target_properties(jngl PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src/
 )
+
+include(FetchContent)
+find_package(Boost)
+if(Boost_FOUND)
+	target_link_libraries(jngl PUBLIC Boost::headers)
+else()
+	FetchContent_Declare(boost
+		URL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.7z
+		URL_HASH SHA256=1b3949ffddf56129141032542523920034f2e69775fb9332a52ba37c548dbf35)
+	FetchContent_MakeAvailable(boost)
+	FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
+	target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
+endif()
 
 option(JNGL_VIDEO "Enable Theora video playback" ON)
 option(JNGL_JPEG "Enable JPEG support if libjpeg is available" ON)
@@ -185,7 +198,6 @@ else()
 	endif()
 
 	if(MSVC)
-		include(FetchContent)
 		FetchContent_Declare(ogg
 			URL http://downloads.xiph.org/releases/ogg/libogg-1.3.4.tar.xz
 			URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe)
@@ -230,18 +242,6 @@ else()
 		FetchContent_GetProperties(dlfcn SOURCE_DIR DLFCN_SRC_DIR)
 		target_include_directories(jngl PRIVATE ${DLFCN_SRC_DIR})
 		target_link_libraries(jngl PRIVATE dl)
-
-		find_package(Boost)
-		if(Boost_FOUND)
-			target_link_libraries(jngl PUBLIC Boost::headers)
-		else()
-			FetchContent_Declare(boost
-				URL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.7z
-				URL_HASH SHA256=1b3949ffddf56129141032542523920034f2e69775fb9332a52ba37c548dbf35)
-			FetchContent_MakeAvailable(boost)
-			FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
-			target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
-		endif()
 
 		target_include_directories(jngl PRIVATE ${PROJECT_SOURCE_DIR}/include/msvc)
 		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
