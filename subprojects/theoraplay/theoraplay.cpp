@@ -44,7 +44,6 @@ void ConvertVideoFrame420ToIYUV(const th_info* tinfo, const th_ycbcr_buffer ycbc
     const int h = tinfo->pic_height;
     const int yoff = (tinfo->pic_x & ~1) + ycbcr[0].stride * (tinfo->pic_y & ~1);
     const int uvoff = (tinfo->pic_x / 2) + (ycbcr[1].stride) * (tinfo->pic_y / 2);
-    unsigned char *yuv = (unsigned char *) malloc(w * h * 2);
     const unsigned char *p0data = ycbcr[p0].data + yoff;
     const int p0stride = ycbcr[p0].stride;
     const unsigned char *p1data = ycbcr[p1].data + uvoff;
