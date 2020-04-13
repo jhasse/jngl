@@ -58,7 +58,7 @@ android:
   script:
     - make -C android
 
-doxygen:
+pages:
   stage: deploy
   script:
   - microdnf install doxygen cmake make tar xz >/dev/null
