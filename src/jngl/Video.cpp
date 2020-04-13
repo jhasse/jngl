@@ -279,7 +279,7 @@ public:
 	}
 
 	[[nodiscard]] bool finished() const {
-		return THEORAPLAY_isDecoding(decoder) == 0;
+		return !THEORAPLAY_isDecoding(decoder);
 	}
 
 	~Impl() {
