@@ -341,26 +341,24 @@ endif()
 
 if(ANDROID OR IOS)
 	if(JNGL_VIDEO)
-		set(THEORA_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/theora)
-		if ((NOT EXISTS ${THEORA_SRC_DIR}) OR (NOT EXISTS ${THEORA_SRC_DIR}/lib/info.c))
-			execute_process(COMMAND git clone -b v1.1.1
-			                https://git.xiph.org/theora.git
-			                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
-		endif()
-		add_library(theoradec OBJECT ${LIBTHEORA_DEC} "${THEORA_SRC_DIR}/lib/apiwrapper.c"
-			"${THEORA_SRC_DIR}/lib/bitpack.c" "${THEORA_SRC_DIR}/lib/dequant.c"
-			"${THEORA_SRC_DIR}/lib/fragment.c" "${THEORA_SRC_DIR}/lib/idct.c"
-			"${THEORA_SRC_DIR}/lib/info.c" "${THEORA_SRC_DIR}/lib/internal.c"
-			"${THEORA_SRC_DIR}/lib/state.c" "${THEORA_SRC_DIR}/lib/quant.c"
-			"${THEORA_SRC_DIR}/lib/decapiwrapper.c" "${THEORA_SRC_DIR}/lib/decinfo.c"
-			"${THEORA_SRC_DIR}/lib/decode.c" "${THEORA_SRC_DIR}/lib/huffdec.c")
+		FetchContent_Declare(theora
+			URL http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
+			URL_HASH SHA1=8dcaa8e61cd86eb1244467c0b64b9ddac04ae262)
+		FetchContent_Populate(theora)
+		add_library(theoradec OBJECT ${LIBTHEORA_DEC} "${theora_SOURCE_DIR}/lib/apiwrapper.c"
+			"${theora_SOURCE_DIR}/lib/bitpack.c" "${theora_SOURCE_DIR}/lib/dequant.c"
+			"${theora_SOURCE_DIR}/lib/fragment.c" "${theora_SOURCE_DIR}/lib/idct.c"
+			"${theora_SOURCE_DIR}/lib/info.c" "${theora_SOURCE_DIR}/lib/internal.c"
+			"${theora_SOURCE_DIR}/lib/state.c" "${theora_SOURCE_DIR}/lib/quant.c"
+			"${theora_SOURCE_DIR}/lib/decapiwrapper.c" "${theora_SOURCE_DIR}/lib/decinfo.c"
+			"${theora_SOURCE_DIR}/lib/decode.c" "${theora_SOURCE_DIR}/lib/huffdec.c")
 		target_include_directories(theoradec PRIVATE ${OGG_INCLUDE_DIRS}
-			"${THEORA_SRC_DIR}/include")
+			"${theora_SOURCE_DIR}/include")
 		target_compile_options(theoradec PRIVATE -Wno-shift-negative-value
 			-Wno-shift-op-parentheses)
 		target_link_libraries(jngl PRIVATE theoradec)
 		target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
-		target_include_directories(jngl PRIVATE "${THEORA_SRC_DIR}/include")
+		target_include_directories(jngl PRIVATE "${theora_SOURCE_DIR}/include")
 		target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.cpp)
 	endif()
 endif()
