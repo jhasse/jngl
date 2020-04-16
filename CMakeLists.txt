@@ -19,6 +19,9 @@ set_target_properties(jngl PROPERTIES
 )
 
 include(FetchContent)
+if(IOS)
+	set(Boost_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/ios")
+endif()
 find_package(Boost)
 if(Boost_FOUND)
 	target_link_libraries(jngl PUBLIC Boost::headers)
