@@ -99,6 +99,15 @@ if (UNIX)
     endif()
 endif()
 
+if(ANDROID OR MSVC)
+	FetchContent_Declare(ogg
+		URL http://downloads.xiph.org/releases/ogg/libogg-1.3.4.tar.xz
+		URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe)
+	FetchContent_MakeAvailable(ogg)
+	set(OGG_INCLUDE_DIRS "${ogg_SOURCE_DIR}/include" "${ogg_BINARY_DIR}/include")
+	set(OGG_LIBRARIES ogg)
+endif()
+
 get_directory_property(hasParent PARENT_DIRECTORY)
 if(ANDROID)
 	target_compile_definitions(jngl PRIVATE NOJPEG NOPNG OPENGLES)
@@ -144,16 +153,6 @@ if(ANDROID)
 	endif()
 	set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include)
 	set(FREETYPE_LIBRARIES freetype)
-
-	set(OGG_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/ogg)
-	if ((NOT EXISTS ${OGG_SRC_DIR}) OR (NOT EXISTS ${OGG_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone -b v1.3.3
-		                https://git.xiph.org/ogg.git
-		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
-	endif()
-	add_subdirectory(${OGG_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/ogg)
-	set(OGG_INCLUDE_DIRS ${OGG_SRC_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}/ogg/include)
-	set(OGG_LIBRARIES ogg)
 
 	set(VORBIS_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/vorbis)
 	if ((NOT EXISTS ${VORBIS_SRC_DIR}) OR (NOT EXISTS ${VORBIS_SRC_DIR}/CMakeLists.txt))
@@ -201,12 +200,6 @@ else()
 	endif()
 
 	if(MSVC)
-		FetchContent_Declare(ogg
-			URL http://downloads.xiph.org/releases/ogg/libogg-1.3.4.tar.xz
-			URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe)
-		FetchContent_MakeAvailable(ogg)
-		FetchContent_GetProperties(ogg SOURCE_DIR OGG_INCLUDE_DIRS)
-		set(OGG_LIBRARIES ogg)
 		FetchContent_Declare(vorbis
 			URL https://github.com/xiph/vorbis/archive/v1.3.6.zip
 			URL_HASH SHA1=694c8b3739f66ef38c08092d0df2ef42197fc480)
