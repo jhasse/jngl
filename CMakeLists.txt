@@ -106,6 +106,13 @@ if(ANDROID OR MSVC)
 	FetchContent_MakeAvailable(ogg)
 	set(OGG_INCLUDE_DIRS "${ogg_SOURCE_DIR}/include" "${ogg_BINARY_DIR}/include")
 	set(OGG_LIBRARIES ogg)
+
+	FetchContent_Declare(vorbis
+		URL https://github.com/xiph/vorbis/archive/v1.3.6.zip
+		URL_HASH SHA1=694c8b3739f66ef38c08092d0df2ef42197fc480)
+	FetchContent_MakeAvailable(vorbis)
+	target_include_directories(jngl PRIVATE ${vorbis_SOURCE_DIR}/include)
+	target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
 endif()
 
 get_directory_property(hasParent PARENT_DIRECTORY)
@@ -154,15 +161,6 @@ if(ANDROID)
 	set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include)
 	set(FREETYPE_LIBRARIES freetype)
 
-	set(VORBIS_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/vorbis)
-	if ((NOT EXISTS ${VORBIS_SRC_DIR}) OR (NOT EXISTS ${VORBIS_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone -b v1.3.6
-		                https://git.xiph.org/vorbis.git
-		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
-	endif()
-	add_subdirectory(${VORBIS_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/vorbis)
-	target_link_libraries(jngl PUBLIC vorbisfile)
-
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)
 	target_include_directories(jngl PRIVATE ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
 else()
@@ -200,14 +198,6 @@ else()
 	endif()
 
 	if(MSVC)
-		FetchContent_Declare(vorbis
-			URL https://github.com/xiph/vorbis/archive/v1.3.6.zip
-			URL_HASH SHA1=694c8b3739f66ef38c08092d0df2ef42197fc480)
-		FetchContent_MakeAvailable(vorbis)
-		FetchContent_GetProperties(vorbis SOURCE_DIR VORBIS_SRC_DIR)
-		target_include_directories(jngl PRIVATE ${VORBIS_SRC_DIR}/include)
-		target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
-
 		FetchContent_Declare(freetype
 			URL https://download.savannah.gnu.org/releases/freetype/freetype-2.10.1.tar.xz
 			URL_HASH SHA1=79874ef4eaa52025126b71d836453b8279bdd331)
