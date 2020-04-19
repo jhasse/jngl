@@ -29,6 +29,11 @@ void FrameBuffer::endDraw() {
 	return pImpl->EndDraw();
 }
 
+Finally FrameBuffer::use() {
+	pImpl->BeginDraw();
+	return Finally([this]() { pImpl->EndDraw(); });
+}
+
 void FrameBuffer::clear() {
 	return pImpl->clear();
 }

@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Finally.hpp"
 #include "Vec2.hpp"
 
 #include <memory>
@@ -22,8 +23,15 @@ public:
 	FrameBuffer(FrameBuffer&&) = default;
 	FrameBuffer& operator=(FrameBuffer&&) = default;
 	~FrameBuffer();
-	void beginDraw();
-	void endDraw();
+
+	[[deprecated("use FrameBuffer::use() instead")]] void beginDraw();
+	[[deprecated("use FrameBuffer::use() instead")]] void endDraw();
+
+#if __cplusplus >= 201703L
+	[[nodiscard]]
+#endif
+	Finally use();
+
 	void draw(Vec2 position) const;
 	void draw(double x, double y) const;
 	void clear();
