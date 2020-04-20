@@ -244,8 +244,9 @@ PYBIND11_MODULE(jngl, m) {
 	py::class_<FrameBuffer>(m, "FrameBuffer")
 	    .def(py::init<int, int>())
 	    // .def("draw", &FrameBuffer::draw) FIXME
-	    .def("beginDraw", &FrameBuffer::beginDraw)
-	    .def("endDraw", &FrameBuffer::endDraw);
+	    // .def("beginDraw", &FrameBuffer::beginDraw) FIXME
+	    // .def("endDraw", &FrameBuffer::endDraw) FIXME
+	;
 
 	py::enum_<controller::Button>(m, "controller")
 	    .value("LeftStickX", controller::LeftStickX)
