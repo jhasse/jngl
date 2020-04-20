@@ -55,8 +55,9 @@ public:
 		}
 	}
 	void draw() const override {
+		std::optional<jngl::Finally> fb2Context;
 		if (drawOnFrameBuffer) {
-			fb2.beginDraw();
+			fb2Context = fb2.use();
 			fb2.clear();
 		}
 		jngl::pushMatrix();
@@ -152,7 +153,7 @@ public:
 		            6, 550);
 		jngl::setColor(0,0,255,128);
 		if (drawOnFrameBuffer) {
-			fb2.endDraw();
+			fb2Context = {};
 			jngl::reset();
 			jngl::setSpriteAlpha(255);
 			fb2.draw(-jngl::getScreenSize() / 2);
