@@ -23,7 +23,7 @@
 		{
 			"type": "lldb",
 			"request": "launch",
-			"name": "Launch",
+			"name": "jngl-test (LLDB)",
 			"program": "${workspaceRoot}/build/jngl-test",
 			"args": [],
 			"cwd": "${workspaceRoot}",
@@ -70,7 +70,8 @@
 			"windows": {
 				"MIMode": "gdb",
 				"miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe"
-			}
+			},
+			"preLaunchTask": "build"
 		},
 		{
 			"name": "unittest (C/C++)",
