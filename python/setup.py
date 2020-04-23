@@ -15,7 +15,7 @@ class BinaryDistribution(Distribution):
 
 setup(
 	name="jngl",
-	version="1.4.0",
+	version="1.4.1",
 	description="JNGL for Python",
 	author="Jan Niklas Hasse",
 	author_email="jhasse@bixense.com",
