@@ -18,7 +18,7 @@ public:
 	~FrameBufferImpl();
 	void BeginDraw();
 	void EndDraw();
-	void Draw(double x, double y) const;
+	void draw(Vec2 pos, const ShaderProgram* = nullptr) const;
 	static void clear();
 	Vec2 getSize() const;
 

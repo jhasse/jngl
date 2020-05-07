@@ -11,6 +11,7 @@
 namespace jngl {
 
 class FrameBufferImpl;
+class ShaderProgram;
 
 /// Image framebuffer object which can be rendered on
 class FrameBuffer {
@@ -32,7 +33,8 @@ public:
 #endif
 	Finally use();
 
-	void draw(Vec2 position) const;
+	/// Draws the framebuffer image to the screen
+	void draw(Vec2 position, const ShaderProgram* = nullptr) const;
 	void draw(double x, double y) const;
 	void clear();
 

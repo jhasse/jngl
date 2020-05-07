@@ -1,4 +1,4 @@
-// Copyright 2011-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "framebufferimpl.hpp"
@@ -90,13 +90,13 @@ void FrameBufferImpl::EndDraw() {
 	clearBackgroundColor();
 }
 
-void FrameBufferImpl::Draw(const double x, const double y) const {
+void FrameBufferImpl::draw(const Vec2 pos, const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
-	jngl::translate(x, y);
+	jngl::translate(pos);
 	opengl::scale(1, -1);
 	jngl::translate(0, -height / getScaleFactor());
 	texture.draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
-	             float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
+	             float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f, shaderProgram);
 	popMatrix();
 }
 
