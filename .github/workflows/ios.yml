@@ -16,6 +16,6 @@ jobs:
         brew install boost
         ln -s /usr/local/include/boost include/ios/boost
     - name: Configure with CMake
-      run: cmake -Bbuild-ios -H. -DCMAKE_SYSTEM_NAME=iOS -DIOS=1 -GXcode
+      run: cmake -Bbuild-ios -H. -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake
     - name: Build with Xcode
       run: xcodebuild -quiet -project build-ios/jngl.xcodeproj -sdk iphonesimulator

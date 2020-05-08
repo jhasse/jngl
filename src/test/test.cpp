@@ -11,6 +11,8 @@
 #include <map>
 #include <sstream>
 #include <vector>
+#include <filesystem>
+#include <optional>
 
 void drawBackground();
 void drawMouse(jngl::Vec2);
@@ -55,8 +57,9 @@ public:
 		}
 	}
 	void draw() const override {
+		std::optional<jngl::Finally> fb2Context;
 		if (drawOnFrameBuffer) {
-			fb2.beginDraw();
+			fb2Context = fb2.use();
 			fb2.clear();
 		}
 		jngl::pushMatrix();
@@ -152,7 +155,7 @@ public:
 		            6, 550);
 		jngl::setColor(0,0,255,128);
 		if (drawOnFrameBuffer) {
-			fb2.endDraw();
+			fb2Context = {};
 			jngl::reset();
 			jngl::setSpriteAlpha(255);
 			fb2.draw(-jngl::getScreenSize() / 2);
@@ -193,6 +196,7 @@ private:
 JNGL_MAIN_BEGIN {
 	try {
 		jngl::App app("JNGL Test Application");
+		std::filesystem::create_directory(std::filesystem::u8path(jngl::getBinaryPath() + "/blub"));
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
 		          << jngl::getDesktopHeight() << std::endl
 		          << "Path of binary: " << jngl::getBinaryPath() << std::endl

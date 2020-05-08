@@ -10,6 +10,8 @@
 //  libtheora-1.1.1/examples/player_example.c, but this is all my own
 //  code.
 
+#include "../../src/jngl/debug.hpp"
+
 #include <cassert>
 #include <cstring>
 
@@ -24,6 +26,8 @@
 #include "../../src/android/fopen.hpp"
 #endif
 
+#include <atomic>
+
 #define THEORAPLAY_INTERNAL 1
 
 typedef THEORAPLAY_VideoFrame VideoFrame;
@@ -31,19 +35,15 @@ typedef THEORAPLAY_AudioPacket AudioPacket;
 
 // !!! FIXME: these all count on the pixel format being TH_PF_420 for now.
 
-typedef unsigned char *(*ConvertVideoFrameFn)(const th_info *tinfo,
-                                              const th_ycbcr_buffer ycbcr);
-
-static unsigned char *ConvertVideoFrame420ToYUVPlanar(
-                            const th_info *tinfo, const th_ycbcr_buffer ycbcr,
-                            const int p0, const int p1, const int p2)
-{
+void ConvertVideoFrame420ToIYUV(const th_info* tinfo, const th_ycbcr_buffer ycbcr, uint8_t* dst) {
+	const int p0 = 0;
+	const int p1 = 1;
+	const int p2 = 2;
     int i;
     const int w = tinfo->pic_width;
     const int h = tinfo->pic_height;
     const int yoff = (tinfo->pic_x & ~1) + ycbcr[0].stride * (tinfo->pic_y & ~1);
     const int uvoff = (tinfo->pic_x / 2) + (ycbcr[1].stride) * (tinfo->pic_y / 2);
-    unsigned char *yuv = (unsigned char *) malloc(w * h * 2);
     const unsigned char *p0data = ycbcr[p0].data + yoff;
     const int p0stride = ycbcr[p0].stride;
     const unsigned char *p1data = ycbcr[p1].data + uvoff;
@@ -51,79 +51,44 @@ static unsigned char *ConvertVideoFrame420ToYUVPlanar(
     const unsigned char *p2data = ycbcr[p2].data + uvoff;
     const int p2stride = ycbcr[p2].stride;
 
-    if (yuv)
-    {
-        unsigned char *dst = yuv;
-		for (i = 0; i < h; i++, dst += w) {
-			memcpy(dst, p0data + (p0stride * i), w);
-		}
-		for (i = 0; i < (h / 2); i++, dst += w / 2) {
-			memcpy(dst, p1data + (p1stride * i), w / 2);
-		}
-		for (i = 0; i < (h / 2); i++, dst += w / 2) {
-			memcpy(dst, p2data + (p2stride * i), w / 2);
-		}
+	for (i = 0; i < h; i++, dst += w) {
+		memcpy(dst, p0data + (p0stride * i), w);
 	}
-
-    return yuv;
-} // ConvertVideoFrame420ToYUVPlanar
-
-
-static unsigned char *ConvertVideoFrame420ToYV12(const th_info *tinfo,
-                                                 const th_ycbcr_buffer ycbcr)
-{
-    return ConvertVideoFrame420ToYUVPlanar(tinfo, ycbcr, 0, 2, 1);
-} // ConvertVideoFrame420ToYV12
-
-
-static unsigned char *ConvertVideoFrame420ToIYUV(const th_info *tinfo,
-                                                 const th_ycbcr_buffer ycbcr)
-{
-    return ConvertVideoFrame420ToYUVPlanar(tinfo, ycbcr, 0, 1, 2);
-} // ConvertVideoFrame420ToIYUV
-
-
-// RGB
-#define THEORAPLAY_CVT_FNNAME_420 ConvertVideoFrame420ToRGB
-#define THEORAPLAY_CVT_RGB_ALPHA 0
-#include "theoraplay_cvtrgb.h"
-#undef THEORAPLAY_CVT_RGB_ALPHA
-#undef THEORAPLAY_CVT_FNNAME_420
-
-// RGBA
-#define THEORAPLAY_CVT_FNNAME_420 ConvertVideoFrame420ToRGBA
-#define THEORAPLAY_CVT_RGB_ALPHA 1
-#include "theoraplay_cvtrgb.h"
-#undef THEORAPLAY_CVT_RGB_ALPHA
-#undef THEORAPLAY_CVT_FNNAME_420
-
+	for (i = 0; i < (h / 2); i++, dst += w / 2) {
+		memcpy(dst, p1data + (p1stride * i), w / 2);
+	}
+	for (i = 0; i < (h / 2); i++, dst += w / 2) {
+		memcpy(dst, p2data + (p2stride * i), w / 2);
+	}
+}
 
 struct THEORAPLAY_Decoder {
     // Thread wrangling...
-	int thread_created = 0;
+	bool thread_created = false;
     std::mutex lock;
-	volatile int halt = 0;
+	std::atomic_bool halt = false;
 	int thread_done = 0;
     std::thread worker;
 
     // API state...
 	THEORAPLAY_Io* io = nullptr;
 	unsigned int maxframes = 0; // Max video frames to buffer.
-	volatile unsigned int prepped = 0;
-	volatile unsigned int videocount = 0; // currently buffered frames.
-	volatile unsigned int audioms = 0;    // currently buffered audio samples.
-	volatile int hasvideo = 0;
-	volatile int hasaudio = 0;
-	volatile int decode_error = 0;
+	std::atomic_bool prepped = false;
+	std::atomic_uint videocount = 0; // currently buffered frames.
+	std::atomic_uint audioms = 0;    // currently buffered audio samples.
+	std::atomic_bool hasvideo = false;
+	std::atomic_bool hasaudio = false;
+	std::atomic_bool decode_error = false;
 
     THEORAPLAY_VideoFormat vidfmt;
-    ConvertVideoFrameFn vidcvt;
 
 	VideoFrame* videolist = nullptr;
 	VideoFrame* videolisttail = nullptr;
 
 	AudioPacket* audiolist = nullptr;
 	AudioPacket* audiolisttail = nullptr;
+
+	std::unique_ptr<uint8_t[]> ringBuffer;
 };
 
 static int FeedMoreOggData(THEORAPLAY_Io *io, ogg_sync_state *sync)
@@ -138,7 +103,7 @@ static int FeedMoreOggData(THEORAPLAY_Io *io, ogg_sync_state *sync)
 		return 0;
 	}
 	return (ogg_sync_wrote(sync, buflen) == 0) ? 1 : -1;
-} // FeedMoreOggData
+}
 
 
 // This massive function is where all the effort happens.
@@ -173,6 +138,8 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
     vorbis_block vblock;
     th_dec_ctx *tdec = nullptr;
     th_setup_info *tsetup = nullptr;
+	size_t ringBufferPos = 0;
+	size_t ringBufferSize;
 
     ogg_sync_init(&sync);
     vorbis_info_init(&vinfo);
@@ -196,7 +163,7 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                 queue_ogg_page(ctx);
                 bos = 0;
                 break;
-            } // if
+			}
 
             ogg_stream_init(&test, ogg_page_serialno(&page));
             ogg_stream_pagein(&test, &page);
@@ -206,21 +173,19 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
             {
                 memcpy(&tstream, &test, sizeof (test));
                 tpackets = 1;
-            } // if
+            }
             else if (!vpackets && (vorbis_synthesis_headerin(&vinfo, &vcomment, &packet) >= 0))
             {
                 memcpy(&vstream, &test, sizeof (test));
                 vpackets = 1;
-            } // else if
-            else
-            {
-                // whatever it is, we don't care about it
+			} else {
+				// whatever it is, we don't care about it
                 ogg_stream_clear(&test);
-            } // else
-        } // while
-    } // while
+			}
+		}
+	}
 
-    // no audio OR video?
+	// no audio OR video?
 	if (ctx->halt || (!vpackets && !tpackets)) {
 		goto cleanup;
 	}
@@ -312,7 +277,7 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
     // Note that audio and video don't _HAVE_ to start simultaneously.
 
     ctx->lock.lock();
-    ctx->prepped = 1;
+	ctx->prepped = true;
     ctx->hasvideo = (tpackets != 0);
     ctx->hasaudio = (vpackets != 0);
     ctx->lock.unlock();
@@ -346,7 +311,7 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                 {
                     free(item);
                     goto cleanup;
-                } // if
+				}
 
                 // I bet this beats the crap out of the CPU cache...
                 samples = item->samples;
@@ -367,20 +332,17 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                 {
                     assert(ctx->audiolist);
                     ctx->audiolisttail->next = item;
-                } // if
+				}
                 else
                 {
                     assert(!ctx->audiolist);
                     ctx->audiolist = item;
-                } // else
+				}
                 ctx->audiolisttail = item;
                 ctx->lock.unlock();
-            } // if
-
-            else  // no audio available left in current packet?
-            {
-                // try to feed another packet to the Vorbis stream...
-                if (ogg_stream_packetout(&vstream, &packet) <= 0)
+			} else { // no audio available left in current packet?
+				// try to feed another packet to the Vorbis stream...
+				if (ogg_stream_packetout(&vstream, &packet) <= 0)
                 {
 					if (!tpackets) {
 						need_pages = 1; // no video, get more pages now.
@@ -391,7 +353,7 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 					vorbis_synthesis_blockin(&vdsp, &vblock);
 				}
 			}
-        } // while
+		}
 
         if (!ctx->halt && tpackets)
         {
@@ -420,14 +382,29 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                         item->width = tinfo.pic_width;
                         item->height = tinfo.pic_height;
                         item->format = ctx->vidfmt;
-                        item->pixels = ctx->vidcvt(&tinfo, ycbcr);
-                        item->next = nullptr;
+
+						if (!ctx->ringBuffer) {
+							ringBufferSize = (ctx->maxframes + 1) * item->width * item->height * 2;
+							jngl::debug("Allocating ");
+							jngl::debug(ringBufferSize / 1024 / 1024);
+							jngl::debugLn(" MB.");
+							ctx->ringBuffer = std::make_unique<uint8_t[]>(ringBufferSize);
+						}
+						item->pixels = &ctx->ringBuffer[ringBufferPos];
+						ringBufferPos += item->width * item->height * 2;
+						assert(ringBufferPos <= ringBufferSize); // width and height mustn't change
+						if (ringBufferPos == ringBufferSize) {
+							ringBufferPos = 0;
+						}
+
+						ConvertVideoFrame420ToIYUV(&tinfo, ycbcr, item->pixels);
+						item->next = nullptr;
 
                         if (item->pixels == nullptr)
                         {
                             free(item);
                             goto cleanup;
-                        } // if
+						}
 
                         //printf("Decoded another video frame.\n");
                         ctx->lock.lock();
@@ -435,19 +412,17 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                         {
                             assert(ctx->videolist);
                             ctx->videolisttail->next = item;
-                        } // if
-                        else
-                        {
+						} else {
                             assert(!ctx->videolist);
                             ctx->videolist = item;
-                        } // else
+                        }
                         ctx->videolisttail = item;
                         ctx->videocount++;
                         ctx->lock.unlock();
 
                         saw_video_frame = 1;
-                    } // if
-                } // if
+					}
+				}
 			}
 		}
 
@@ -481,8 +456,8 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 				}
 			}
             //printf("Awake!\n");
-        } // if
-    } // while
+		}
+	}
 
     was_error = 0;
 
@@ -501,14 +476,14 @@ cleanup:
     ogg_sync_clear(&sync);
     ctx->io->close(ctx->io);
     ctx->thread_done = 1;
-} // WorkerThread
+}
 
 
 static void *WorkerThreadEntry(void *_this)
 {
 	WorkerThread(static_cast<THEORAPLAY_Decoder*>(_this));
     return nullptr;
-} // WorkerThreadEntry
+}
 
 
 static long IoFopenRead(THEORAPLAY_Io *io, void *buf, long buflen)
@@ -519,7 +494,7 @@ static long IoFopenRead(THEORAPLAY_Io *io, void *buf, long buflen)
 		return -1;
 	}
     return (long) br;
-} // IoFopenRead
+}
 
 
 static void IoFopenClose(THEORAPLAY_Io *io)
@@ -527,7 +502,7 @@ static void IoFopenClose(THEORAPLAY_Io *io)
     FILE *f = (FILE *) io->userdata;
     fclose(f);
     free(io);
-} // IoFopenClose
+}
 
 
 THEORAPLAY_Decoder *THEORAPLAY_startDecodeFile(const char *fname,
@@ -543,39 +518,23 @@ THEORAPLAY_Decoder *THEORAPLAY_startDecodeFile(const char *fname,
     {
         free(io);
         return nullptr;
-    } // if
+	}
 
     io->read = IoFopenRead;
     io->close = IoFopenClose;
     io->userdata = f;
     return THEORAPLAY_startDecode(io, maxframes, vidfmt);
-} // THEORAPLAY_startDecodeFile
+}
 
 
 THEORAPLAY_Decoder *THEORAPLAY_startDecode(THEORAPLAY_Io *io,
                                            const unsigned int maxframes,
                                            THEORAPLAY_VideoFormat vidfmt)
 {
-    ConvertVideoFrameFn vidcvt = nullptr;
-
-    switch (vidfmt)
-    {
-        // !!! FIXME: current expects TH_PF_420.
-        #define VIDCVT(t) case THEORAPLAY_VIDFMT_##t: vidcvt = ConvertVideoFrame420To##t; break;
-        VIDCVT(YV12)
-        VIDCVT(IYUV)
-        VIDCVT(RGB)
-        VIDCVT(RGBA)
-        #undef VIDCVT
-	default:
-		throw std::runtime_error("invalid/unsupported format.");
-	}
-
 	const auto ctx = new THEORAPLAY_Decoder;
 
 	ctx->maxframes = maxframes;
     ctx->vidfmt = vidfmt;
-    ctx->vidcvt = vidcvt;
     ctx->io = io;
 
     try {
@@ -590,26 +549,24 @@ startdecode_failed:
     io->close(io);
     delete ctx;
     return nullptr;
-} // THEORAPLAY_startDecode
+}
 
 void THEORAPLAY_stopDecode(THEORAPLAY_Decoder* const ctx) {
 	if (!ctx) {
 		return;
 	}
-    if (ctx->thread_created)
-    {
+	if (ctx->thread_created) {
         ctx->halt = 1;
         ctx->worker.join();
-    } // if
+	}
 
     VideoFrame *videolist = ctx->videolist;
     while (videolist)
     {
         VideoFrame *next = videolist->next;
-        free(videolist->pixels);
         free(videolist);
         videolist = next;
-    } // while
+	}
 
     AudioPacket *audiolist = ctx->audiolist;
     while (audiolist)
@@ -618,20 +575,20 @@ void THEORAPLAY_stopDecode(THEORAPLAY_Decoder* const ctx) {
         free(audiolist->samples);
         free(audiolist);
         audiolist = next;
-    } // while
+	}
 
     delete ctx;
-} // THEORAPLAY_stopDecode
+}
 
-int THEORAPLAY_isDecoding(THEORAPLAY_Decoder* const ctx) {
-	int retval = 0;
+bool THEORAPLAY_isDecoding(THEORAPLAY_Decoder* const ctx) {
+	bool retval = false;
     if (ctx)
     {
         ctx->lock.lock();
         retval = ( ctx && (ctx->audiolist || ctx->videolist ||
                    (ctx->thread_created && !ctx->thread_done)) );
         ctx->lock.unlock();
-    } // if
+    }
     return retval;
 }
 
@@ -644,40 +601,32 @@ int THEORAPLAY_isDecoding(THEORAPLAY_Decoder* const ctx) {
 	}                                                                                              \
 	return retval;
 
-int THEORAPLAY_isInitialized(THEORAPLAY_Decoder *decoder)
-{
-    GET_SYNCED_VALUE(int, 0, decoder, prepped);
-} // THEORAPLAY_isInitialized
+bool THEORAPLAY_isInitialized(THEORAPLAY_Decoder* const decoder) {
+	GET_SYNCED_VALUE(bool, 0, decoder, prepped);
+}
 
+bool THEORAPLAY_hasVideoStream(THEORAPLAY_Decoder* const decoder) {
+	GET_SYNCED_VALUE(bool, 0, decoder, hasvideo);
+}
 
-int THEORAPLAY_hasVideoStream(THEORAPLAY_Decoder *decoder)
-{
-    GET_SYNCED_VALUE(int, 0, decoder, hasvideo);
-} // THEORAPLAY_hasVideoStream
-
-
-int THEORAPLAY_hasAudioStream(THEORAPLAY_Decoder *decoder)
-{
-    GET_SYNCED_VALUE(int, 0, decoder, hasaudio);
-} // THEORAPLAY_hasAudioStream
-
+bool THEORAPLAY_hasAudioStream(THEORAPLAY_Decoder* const decoder) {
+	GET_SYNCED_VALUE(bool, 0, decoder, hasaudio);
+}
 
 unsigned int THEORAPLAY_availableVideo(THEORAPLAY_Decoder *decoder)
 {
     GET_SYNCED_VALUE(unsigned int, 0, decoder, videocount);
-} // THEORAPLAY_hasAudioStream
+}
 
 
 unsigned int THEORAPLAY_availableAudio(THEORAPLAY_Decoder *decoder)
 {
     GET_SYNCED_VALUE(unsigned int, 0, decoder, audioms);
-} // THEORAPLAY_hasAudioStream
+}
 
-
-int THEORAPLAY_decodingError(THEORAPLAY_Decoder *decoder)
-{
-    GET_SYNCED_VALUE(int, 0, decoder, decode_error);
-} // THEORAPLAY_decodingError
+bool THEORAPLAY_decodingError(THEORAPLAY_Decoder* const decoder) {
+	GET_SYNCED_VALUE(bool, 0, decoder, decode_error);
+}
 
 const THEORAPLAY_AudioPacket* THEORAPLAY_getAudio(THEORAPLAY_Decoder* const ctx) {
 	AudioPacket *retval;
@@ -696,7 +645,7 @@ const THEORAPLAY_AudioPacket* THEORAPLAY_getAudio(THEORAPLAY_Decoder* const ctx)
     ctx->lock.unlock();
 
     return retval;
-} // THEORAPLAY_getAudio
+}
 
 void THEORAPLAY_freeAudio(const THEORAPLAY_AudioPacket *_item)
 {
@@ -706,8 +655,8 @@ void THEORAPLAY_freeAudio(const THEORAPLAY_AudioPacket *_item)
         assert(item->next == nullptr);
         free(item->samples);
         free(item);
-    } // if
-} // THEORAPLAY_freeAudio
+	}
+}
 
 const THEORAPLAY_VideoFrame* THEORAPLAY_getVideo(THEORAPLAY_Decoder* const ctx) {
 	VideoFrame* retval;
@@ -727,17 +676,16 @@ const THEORAPLAY_VideoFrame* THEORAPLAY_getVideo(THEORAPLAY_Decoder* const ctx) 
     ctx->lock.unlock();
 
     return retval;
-} // THEORAPLAY_getVideo
+}
 
 void THEORAPLAY_freeVideo(const THEORAPLAY_VideoFrame *_item)
 {
     THEORAPLAY_VideoFrame *item = (THEORAPLAY_VideoFrame *) _item;
 	if (item != nullptr) {
 		assert(item->next == nullptr);
-		free(item->pixels);
         free(item);
 	}
-} // THEORAPLAY_freeVideo
+}
 
 bool THEORAPLAY_threadDone(THEORAPLAY_Decoder* const ctx) {
 	if (!ctx) {

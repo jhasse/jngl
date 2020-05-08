@@ -46,7 +46,7 @@ public:
 	void setPixelArt(bool);
 
 	/// If pixel-perfect magnifying is activated (see setPixelArt)
-	bool isPixelArt() const;
+	static bool isPixelArt();
 
 private:
 	struct Impl;

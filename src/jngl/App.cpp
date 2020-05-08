@@ -47,8 +47,8 @@ void App::mainLoop() {
 	return pWindow->mainLoop();
 }
 
-bool App::isPixelArt() const {
-	return impl->pixelArt;
+bool App::isPixelArt() {
+	return self ? self->impl->pixelArt : false;
 }
 
 void App::setPixelArt(const bool pixelArt) {

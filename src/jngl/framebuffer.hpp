@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Finally.hpp"
 #include "Vec2.hpp"
 
 #include <memory>
@@ -10,6 +11,7 @@
 namespace jngl {
 
 class FrameBufferImpl;
+class ShaderProgram;
 
 /// Image framebuffer object which can be rendered on
 class FrameBuffer {
@@ -22,9 +24,17 @@ public:
 	FrameBuffer(FrameBuffer&&) = default;
 	FrameBuffer& operator=(FrameBuffer&&) = default;
 	~FrameBuffer();
-	void beginDraw();
-	void endDraw();
-	void draw(Vec2 position) const;
+
+	[[deprecated("use FrameBuffer::use() instead")]] void beginDraw();
+	[[deprecated("use FrameBuffer::use() instead")]] void endDraw();
+
+#if __cplusplus >= 201703L
+	[[nodiscard]]
+#endif
+	Finally use();
+
+	/// Draws the framebuffer image to the screen
+	void draw(Vec2 position, const ShaderProgram* = nullptr) const;
 	void draw(double x, double y) const;
 	void clear();
 

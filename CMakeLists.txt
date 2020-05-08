@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required(VERSION 3.14)
 
 project(jngl LANGUAGES C CXX)
 
@@ -18,8 +18,26 @@ set_target_properties(jngl PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src/
 )
 
+include(FetchContent)
+if(IOS)
+	set(Boost_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/ios")
+endif()
+find_package(Boost)
+if(Boost_FOUND)
+	target_link_libraries(jngl PUBLIC Boost::headers)
+else()
+	FetchContent_Declare(boost
+		URL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.7z
+		URL_HASH SHA256=1b3949ffddf56129141032542523920034f2e69775fb9332a52ba37c548dbf35)
+	FetchContent_MakeAvailable(boost)
+	FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
+	target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
+endif()
+
 option(JNGL_VIDEO "Enable Theora video playback" ON)
 option(JNGL_JPEG "Enable JPEG support if libjpeg is available" ON)
+
+set(BUILD_TESTING OFF CACHE INTERNAL "") # for libogg
 
 if (ANDROID)
 	file(GLOB ANDROID_SOURCES src/android/*.cpp)
@@ -81,6 +99,22 @@ if (UNIX)
     endif()
 endif()
 
+if(ANDROID OR MSVC)
+	FetchContent_Declare(ogg
+		URL http://downloads.xiph.org/releases/ogg/libogg-1.3.4.tar.xz
+		URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe)
+	FetchContent_MakeAvailable(ogg)
+	set(OGG_INCLUDE_DIRS "${ogg_SOURCE_DIR}/include" "${ogg_BINARY_DIR}/include")
+	set(OGG_LIBRARIES ogg)
+
+	FetchContent_Declare(vorbis
+		URL https://github.com/xiph/vorbis/archive/v1.3.6.zip
+		URL_HASH SHA1=694c8b3739f66ef38c08092d0df2ef42197fc480)
+	FetchContent_MakeAvailable(vorbis)
+	target_include_directories(jngl PRIVATE ${vorbis_SOURCE_DIR}/include)
+	target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
+endif()
+
 get_directory_property(hasParent PARENT_DIRECTORY)
 if(ANDROID)
 	target_compile_definitions(jngl PRIVATE NOJPEG NOPNG OPENGLES)
@@ -127,49 +161,6 @@ if(ANDROID)
 	set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include)
 	set(FREETYPE_LIBRARIES freetype)
 
-	set(OGG_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/ogg)
-	if ((NOT EXISTS ${OGG_SRC_DIR}) OR (NOT EXISTS ${OGG_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone -b v1.3.3
-		                https://git.xiph.org/ogg.git
-		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
-	endif()
-	add_subdirectory(${OGG_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/ogg)
-	set(OGG_INCLUDE_DIRS ${OGG_SRC_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}/ogg/include)
-	set(OGG_LIBRARIES ogg)
-
-	set(VORBIS_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/vorbis)
-	if ((NOT EXISTS ${VORBIS_SRC_DIR}) OR (NOT EXISTS ${VORBIS_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone -b v1.3.6
-		                https://git.xiph.org/vorbis.git
-		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
-	endif()
-	add_subdirectory(${VORBIS_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/vorbis)
-	target_link_libraries(jngl PUBLIC vorbisfile)
-
-	if(JNGL_VIDEO)
-		set(THEORA_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/theora)
-		if ((NOT EXISTS ${THEORA_SRC_DIR}) OR (NOT EXISTS ${THEORA_SRC_DIR}/lib/info.c))
-			execute_process(COMMAND git clone -b v1.1.1
-			                https://git.xiph.org/theora.git
-			                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
-		endif()
-		add_library(theoradec OBJECT ${LIBTHEORA_DEC} "${THEORA_SRC_DIR}/lib/apiwrapper.c"
-			"${THEORA_SRC_DIR}/lib/bitpack.c" "${THEORA_SRC_DIR}/lib/dequant.c"
-			"${THEORA_SRC_DIR}/lib/fragment.c" "${THEORA_SRC_DIR}/lib/idct.c"
-			"${THEORA_SRC_DIR}/lib/info.c" "${THEORA_SRC_DIR}/lib/internal.c"
-			"${THEORA_SRC_DIR}/lib/state.c" "${THEORA_SRC_DIR}/lib/quant.c"
-			"${THEORA_SRC_DIR}/lib/decapiwrapper.c" "${THEORA_SRC_DIR}/lib/decinfo.c"
-			"${THEORA_SRC_DIR}/lib/decode.c" "${THEORA_SRC_DIR}/lib/huffdec.c")
-		target_include_directories(theoradec PRIVATE ${OGG_INCLUDE_DIRS}
-			"${THEORA_SRC_DIR}/include")
-		target_compile_options(theoradec PRIVATE -Wno-shift-negative-value
-			-Wno-shift-op-parentheses)
-		target_link_libraries(jngl PRIVATE $<TARGET_OBJECTS:theoradec>)
-		target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
-		target_include_directories(jngl PRIVATE "${THEORA_SRC_DIR}/include")
-		target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.cpp)
-	endif()
-
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)
 	target_include_directories(jngl PRIVATE ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
 else()
@@ -207,21 +198,6 @@ else()
 	endif()
 
 	if(MSVC)
-		include(FetchContent)
-		FetchContent_Declare(ogg
-			URL http://downloads.xiph.org/releases/ogg/libogg-1.3.4.tar.xz
-			URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe)
-		FetchContent_MakeAvailable(ogg)
-		FetchContent_GetProperties(ogg SOURCE_DIR OGG_INCLUDE_DIRS)
-		set(OGG_LIBRARIES ogg)
-		FetchContent_Declare(vorbis
-			URL https://github.com/xiph/vorbis/archive/v1.3.6.zip
-			URL_HASH SHA1=694c8b3739f66ef38c08092d0df2ef42197fc480)
-		FetchContent_MakeAvailable(vorbis)
-		FetchContent_GetProperties(vorbis SOURCE_DIR VORBIS_SRC_DIR)
-		target_include_directories(jngl PRIVATE ${VORBIS_SRC_DIR}/include)
-		target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
-
 		FetchContent_Declare(freetype
 			URL https://download.savannah.gnu.org/releases/freetype/freetype-2.10.1.tar.xz
 			URL_HASH SHA1=79874ef4eaa52025126b71d836453b8279bdd331)
@@ -234,8 +210,8 @@ else()
 		set(FREETYPE_LIBRARIES freetype)
 
 		FetchContent_Declare(openal
-			URL https://github.com/kcat/openal-soft/archive/openal-soft-1.19.1.zip
-			URL_HASH SHA1=fb7086b973fd4470a5c11e3355b5377899c840c7)
+			URL https://github.com/kcat/openal-soft/archive/openal-soft-1.20.1.zip
+			URL_HASH SHA1=d86a714e0e7900f4f7197738cb35432772bfe2e0)
 		set(ALSOFT_NO_CONFIG_UTIL ON CACHE BOOL "Disable building the alsoft-config utility" FORCE)
 		set(ALSOFT_UTILS OFF CACHE BOOL "Build and install utility programs" FORCE)
 		set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
@@ -253,18 +229,6 @@ else()
 		target_include_directories(jngl PRIVATE ${DLFCN_SRC_DIR})
 		target_link_libraries(jngl PRIVATE dl)
 
-		find_package(Boost)
-		if(Boost_FOUND)
-			target_link_libraries(jngl PUBLIC Boost::headers)
-		else()
-			FetchContent_Declare(boost
-				URL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.7z
-				URL_HASH SHA256=1b3949ffddf56129141032542523920034f2e69775fb9332a52ba37c548dbf35)
-			FetchContent_MakeAvailable(boost)
-			FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
-			target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
-		endif()
-
 		target_include_directories(jngl PRIVATE ${PROJECT_SOURCE_DIR}/include/msvc)
 		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
 		add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
@@ -276,6 +240,21 @@ else()
 		FetchContent_MakeAvailable(webp)
 		target_link_libraries(jngl PRIVATE webp)
 	elseif(IOS)
+		include(FetchContent)
+		FetchContent_Declare(ogg
+			GIT_REPOSITORY https://github.com/xiph/ogg
+			GIT_TAG c8fca6b4a02d695b1ceea39b330d4406001c03ed)
+		FetchContent_MakeAvailable(ogg)
+		FetchContent_GetProperties(ogg SOURCE_DIR OGG_SOURCE_DIR)
+		set(OGG_INCLUDE_DIRS ${OGG_SOURCE_DIR}/include)
+		set(OGG_LIBRARIES ogg)
+		FetchContent_Declare(vorbis
+			URL https://github.com/xiph/vorbis/archive/v1.3.6.zip
+			URL_HASH SHA1=694c8b3739f66ef38c08092d0df2ef42197fc480)
+		FetchContent_MakeAvailable(vorbis)
+		FetchContent_GetProperties(vorbis SOURCE_DIR VORBIS_SRC_DIR)
+		target_include_directories(jngl PRIVATE ${VORBIS_SRC_DIR}/include)
+		target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
 		target_compile_definitions(jngl PRIVATE IOS)
 		target_compile_definitions(jngl PUBLIC GLES_SILENCE_DEPRECATION)
 		target_include_directories(jngl PUBLIC include/ios)
@@ -286,8 +265,6 @@ else()
 		find_library(IOS_AVFOUNDATION AVFoundation)
 		target_link_libraries(jngl PRIVATE
 			"${PROJECT_SOURCE_DIR}/lib/ios/libfreetype.a"
-			"${PROJECT_SOURCE_DIR}/xcode/IDZPrecompiledVorbis/Vorbis.framework"
-			"${PROJECT_SOURCE_DIR}/xcode/IDZPrecompiledOgg/Ogg.framework"
 			"${PROJECT_SOURCE_DIR}/lib/ios/WebPDecoder.framework"
 			${IOS_OPENGLES} ${IOS_OPENAL} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
 		)
@@ -360,6 +337,30 @@ else()
 	endif()
 	target_link_libraries(jngl-test jngl)
 	add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/jngl.webp "$<TARGET_FILE_DIR:jngl-test>")
+endif()
+
+if(ANDROID OR IOS)
+	if(JNGL_VIDEO)
+		FetchContent_Declare(theora
+			URL http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
+			URL_HASH SHA1=8dcaa8e61cd86eb1244467c0b64b9ddac04ae262)
+		FetchContent_Populate(theora)
+		add_library(theoradec OBJECT ${LIBTHEORA_DEC} "${theora_SOURCE_DIR}/lib/apiwrapper.c"
+			"${theora_SOURCE_DIR}/lib/bitpack.c" "${theora_SOURCE_DIR}/lib/dequant.c"
+			"${theora_SOURCE_DIR}/lib/fragment.c" "${theora_SOURCE_DIR}/lib/idct.c"
+			"${theora_SOURCE_DIR}/lib/info.c" "${theora_SOURCE_DIR}/lib/internal.c"
+			"${theora_SOURCE_DIR}/lib/state.c" "${theora_SOURCE_DIR}/lib/quant.c"
+			"${theora_SOURCE_DIR}/lib/decapiwrapper.c" "${theora_SOURCE_DIR}/lib/decinfo.c"
+			"${theora_SOURCE_DIR}/lib/decode.c" "${theora_SOURCE_DIR}/lib/huffdec.c")
+		target_include_directories(theoradec PRIVATE ${OGG_INCLUDE_DIRS}
+			"${theora_SOURCE_DIR}/include")
+		target_compile_options(theoradec PRIVATE -Wno-shift-negative-value
+			-Wno-shift-op-parentheses)
+		target_link_libraries(jngl PRIVATE theoradec)
+		target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
+		target_include_directories(jngl PRIVATE "${theora_SOURCE_DIR}/include")
+		target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.cpp)
+	endif()
 endif()
 
 target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})

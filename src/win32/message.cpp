@@ -12,7 +12,7 @@
 namespace jngl {
 
 void errorMessage(const std::string& text) {
-	MessageBox(NULL, utf8ToUtf16(text).c_str(), L"Error", MB_OK | MB_ICONERROR);
+	MessageBox(nullptr, utf8ToUtf16(text).c_str(), L"Error", MB_OK | MB_ICONERROR);
 }
 
 void printMessage(const std::string& text) {
