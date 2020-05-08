@@ -421,19 +421,6 @@ void Window::UpdateInput() {
 				keyPressed_[msg.wParam] = true;
 				anyKeyPressed_ = true;
 				impl->distinguishLeftRight();
-				// A to Z pressed? E.g. when Ctrl is pressed, WM_CHAR doesn't work
-				if (msg.wParam >= 65 && msg.wParam <= 90) {
-					char c[2];
-					if (keyDown_[GetKeyCode(key::ShiftL)] || keyDown_[GetKeyCode(key::ShiftR)]) {
-						c[0] = 'A';
-					} else {
-						c[0] = 'a';
-					}
-					c[0] += msg.wParam - 65;
-					c[1] = 0;
-					characterDown_[c] = true;
-					characterPressed_[c] = true;
-				}
 				break;
 			case WM_KEYUP: {
 				keyDown_[msg.wParam] = false;
@@ -442,16 +429,6 @@ void Window::UpdateInput() {
 				int scanCode = msg.lParam & 0x7f8000;
 				characterDown_[scanCodeToCharacter[scanCode]] = false;
 				characterPressed_[scanCodeToCharacter[scanCode]] = false;
-				if (msg.wParam >= 65 && msg.wParam <= 90) {
-					char c[2];
-					c[0] = 'a' + msg.wParam - 65;
-					c[1] = 0;
-					characterDown_[c] = false;
-					characterPressed_[c] = false;
-					c[0] = 'A' + msg.wParam - 65;
-					characterDown_[c] = false;
-					characterPressed_[c] = false;
-				}
 			} break;
 			case WM_CHAR: {
 				std::vector<char> buf(4);
@@ -478,6 +455,15 @@ void Window::UpdateInput() {
 					}
 				}
 				std::string character(buf.begin(), end);
+				if (character.size() == 1) {
+					assert(character[0] > 0);
+					if (GetKeyState(VK_CONTROL) < 0 &&
+					    character[0] >= 1 /* ctrl-a */ && character[0] <= 26 /* ctrl-z */) {
+						character[0] = 'a' - 1 + character[0];
+					} else if (character[0] < ' ') {
+						break; // non-printable character (e.g. Escape)
+					}
+				}
 				int scanCode = msg.lParam & 0x7f8000;
 				scanCodeToCharacter[scanCode] = character;
 				characterDown_[character] = true;
