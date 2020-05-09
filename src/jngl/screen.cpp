@@ -29,14 +29,4 @@ Vec2 getScreenSize() {
 	return {getScreenWidth(), getScreenHeight()};
 }
 
-bool deviceOrientationSupported[] = { false, false, true, true };
-
-void setDeviceOrientationSupported(DeviceOrientation i, bool enabled) {
-	deviceOrientationSupported[i] = enabled;
-}
-
-bool getDeviceOrientationSupported(DeviceOrientation i) {
-	return deviceOrientationSupported[i];
-}
-
 } // namespace jngl

@@ -21,10 +21,4 @@ double getScreenHeight();
 /// Returns the size of the useable draw area (excluding letter-boxing) in screen pixels
 Vec2 getScreenSize();
 
-enum DeviceOrientation { Portrait, PortraitUpsideDown, LandscapeLeft, LandscapeRight };
-
-void setDeviceOrientationSupported(DeviceOrientation, bool enabled);
-
-bool getDeviceOrientationSupported(DeviceOrientation);
-
 } // namespace jngl
