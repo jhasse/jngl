@@ -1,4 +1,4 @@
-// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl.hpp"
@@ -6,13 +6,13 @@
 #include <algorithm>
 #include <boost/math/constants/constants.hpp>
 #include <cmath>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <optional>
 #include <sstream>
 #include <vector>
-#include <filesystem>
-#include <optional>
 
 void drawBackground();
 void drawMouse(jngl::Vec2);

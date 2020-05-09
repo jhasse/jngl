@@ -18,8 +18,8 @@
 #include <mutex>
 #include <thread>
 
-#include "theoraplay.h"
 #include "theora/theoradec.h"
+#include "theoraplay.h"
 #include "vorbis/codec.h"
 
 #ifdef ANDROID
@@ -28,10 +28,8 @@
 
 #include <atomic>
 
-#define THEORAPLAY_INTERNAL 1
-
-typedef THEORAPLAY_VideoFrame VideoFrame;
-typedef THEORAPLAY_AudioPacket AudioPacket;
+using VideoFrame = THEORAPLAY_VideoFrame;
+using AudioPacket = THEORAPLAY_AudioPacket;
 
 // !!! FIXME: these all count on the pixel format being TH_PF_420 for now.
 
@@ -80,7 +78,7 @@ struct THEORAPLAY_Decoder {
 	std::atomic_bool hasaudio = false;
 	std::atomic_bool decode_error = false;
 
-    THEORAPLAY_VideoFormat vidfmt;
+	THEORAPLAY_VideoFormat vidfmt = THEORAPLAY_VIDFMT_IYUV;
 
 	VideoFrame* videolist = nullptr;
 	VideoFrame* videolisttail = nullptr;
@@ -241,7 +239,7 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
         if (tinfo.pixel_fmt != TH_PF_420) { assert(0); goto cleanup; } // !!! FIXME
 
 		if (tinfo.fps_denominator != 0) {
-			fps = ((double)tinfo.fps_numerator) / ((double)tinfo.fps_denominator);
+			fps = double(tinfo.fps_numerator) / double(tinfo.fps_denominator);
 		}
 		tdec = th_decode_alloc(&tinfo, tsetup);
         if (!tdec) goto cleanup;
