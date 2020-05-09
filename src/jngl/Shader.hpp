@@ -20,6 +20,10 @@ public:
 	/// Creates a vertex or fragment shader by compiling it.
 	/// \param source Source code using either GLSL v3.30 or GLSL ES v3.00.
 	Shader(const char* source, Type);
+
+	/// \overload
+	Shader(const std::istream& source, Type);
+
 	~Shader();
 	Shader(const Shader&) = delete;
 	Shader(Shader&&) = delete;

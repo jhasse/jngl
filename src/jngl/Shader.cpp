@@ -6,6 +6,7 @@
 #include "../Shader_Impl.hpp"
 
 #include <boost/algorithm/string.hpp>
+#include <sstream>
 #include <stdexcept>
 
 namespace jngl {
@@ -26,6 +27,14 @@ Shader::Shader(const char* source, const Type type) : impl(std::make_unique<Impl
 		glGetShaderInfoLog(impl->id, sizeof(buffer), nullptr, buffer);
 		throw std::runtime_error(buffer);
 	}
+}
+
+Shader::Shader(const std::istream& source, const Type type)
+: Shader([&source]() {
+	std::stringstream buffer;
+	buffer << source.rdbuf();
+	return buffer.str();
+}().c_str(), type) {
 }
 
 Shader::~Shader() {
