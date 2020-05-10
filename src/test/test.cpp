@@ -1,4 +1,4 @@
-// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl.hpp"
@@ -6,13 +6,13 @@
 #include <algorithm>
 #include <boost/math/constants/constants.hpp>
 #include <cmath>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <optional>
 #include <sstream>
 #include <vector>
-#include <filesystem>
-#include <optional>
 
 void drawBackground();
 void drawMouse(jngl::Vec2);
@@ -44,13 +44,8 @@ public:
 		if (jngl::keyPressed('s')) {
 			useShader = !useShader;
 			if (!shaderProgram) {
-				{
-					std::ifstream fin("data/blur.frag");
-					std::stringstream buffer;
-					buffer << fin.rdbuf();
-					fragmentShader = std::make_unique<jngl::Shader>(buffer.str().c_str(),
-					                                                jngl::Shader::Type::FRAGMENT);
-				}
+				fragmentShader = std::make_unique<jngl::Shader>(std::ifstream("data/blur.frag"),
+				                                                jngl::Shader::Type::FRAGMENT);
 				shaderProgram = std::make_unique<jngl::ShaderProgram>(jngl::Sprite::vertexShader(),
 				                                                      *fragmentShader);
 			}
