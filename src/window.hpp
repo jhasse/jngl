@@ -49,8 +49,8 @@ namespace jngl {
 		bool getMouseVisible() const;
 		bool isMultitouch() const;
 		std::vector<Vec2> getTouchPositions() const;
-		int getMouseX();
-		int getMouseY();
+		int getMouseX() const;
+		int getMouseY() const;
 		int getCanvasWidth() const;
 		int getCanvasHeight() const;
 		int getWidth() const;

@@ -643,11 +643,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-int Window::getMouseX() {
+int Window::getMouseX() const {
 	return mousex_ - impl->relativeX - (width_ - canvasWidth) / 2;
 }
 
-int Window::getMouseY() {
+int Window::getMouseY() const {
 	return mousey_ - impl->relativeY - (height_ - canvasHeight) / 2;
 }
 
