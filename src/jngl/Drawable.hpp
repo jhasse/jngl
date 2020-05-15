@@ -1,6 +1,7 @@
 // Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// @file
+/// Contains Drawable class
 #pragma once
 
 namespace jngl {

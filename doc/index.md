@@ -18,6 +18,10 @@ Nintendo Switch<sup><a href="#fn1">1</a></sup>.
 
 ## Games
 
+* [**Portal Dogs**](https://portaldogs.com)<br>
+  Puzzle platformer available for the Nintendo Switch, Android and on Steam
+* [**Controller Brawler Repair Force**](https://gitlab.com/jhasse/ggj2020)<br>
+  Four player game created for the Global Game Jam 2020
 * [**Tricky Homes**](https://gitlab.com/jhasse/ggj2019)<br>
   Two player physics game using Box2D created for the Global Game Jam 2019
 * [**Snake Line Transmission**](https://gitlab.com/jhasse/ggj2018)<br>
@@ -36,5 +40,5 @@ Nintendo Switch<sup><a href="#fn1">1</a></sup>.
 
 <hr>
 <sup id="fn1">
-1\. Not open-source due to Nintendo's NDA. [Contact me](https://bixense.com/contact) to get access.
+1\. Not open-source due to Nintendo's NDA. [Contact me](mailto:jhasse@bixense.com) to get access.
 </sup>
