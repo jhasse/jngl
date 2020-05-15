@@ -96,7 +96,7 @@
 <!-- Node9 -->
 <g id="node10" class="node">
 <title>Node9</title>
-<g id="a_node10"><a xlink:href="Drawable_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node10"><a xlink:href="Drawable_8hpp.html" target="_top" xlink:title="Contains Drawable class.">
 <polygon fill="#ffffff" stroke="#000000" points="162,-112.5 162,-131.5 251,-131.5 251,-112.5 162,-112.5"/>
 <text text-anchor="middle" x="206.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">Drawable.hpp</text>
 </a>
