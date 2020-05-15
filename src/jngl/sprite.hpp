@@ -5,7 +5,7 @@
 
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
-#include "drawable.hpp"
+#include "Drawable.hpp"
 
 namespace jngl {
 
