@@ -1,5 +1,6 @@
 <map id="jngl/other.hpp" name="jngl/other.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="20,5,155,32"/>
-<area shape="rect" id="node2" href="/w/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="5,80,76,107"/>
-<area shape="rect" id="node3" href="/w/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="100,80,171,107"/>
+<area shape="rect" id="node1" title=" " alt="" coords="76,5,211,32"/>
+<area shape="rect" id="node2" href="/w/doc/cppreference-doxygen-web.tag.xml$cpp/header/sstream.html" title=" " alt="" coords="5,80,84,107"/>
+<area shape="rect" id="node3" href="/w/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="108,80,179,107"/>
+<area shape="rect" id="node4" href="/w/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="203,80,273,107"/>
 </map>
