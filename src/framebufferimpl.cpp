@@ -100,4 +100,14 @@ void FrameBufferImpl::draw(const Vec2 pos, const ShaderProgram* const shaderProg
 	popMatrix();
 }
 
+void FrameBufferImpl::drawMesh(const std::vector<Vertex>& vertexes,
+                               const ShaderProgram* const shaderProgram) const {
+	pushMatrix();
+	scale(getScaleFactor());
+	texture.drawMesh(vertexes, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
+	                 float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f,
+	                 shaderProgram);
+	popMatrix();
+}
+
 } // namespace jngl

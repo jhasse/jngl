@@ -21,6 +21,11 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 	return pImpl->draw(position, shaderProgram);
 }
 
+void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
+                      const ShaderProgram* const shaderProgram) const {
+	pImpl->drawMesh(vertexes, shaderProgram);
+}
+
 void FrameBuffer::beginDraw() {
 	return pImpl->BeginDraw();
 }

@@ -19,6 +19,8 @@ public:
 	void BeginDraw();
 	void EndDraw();
 	void draw(Vec2 pos, const ShaderProgram* = nullptr) const;
+	void drawMesh(const std::vector<Vertex>& vertexes,
+	              const ShaderProgram* const shaderProgram) const;
 	static void clear();
 	Vec2 getSize() const;
 

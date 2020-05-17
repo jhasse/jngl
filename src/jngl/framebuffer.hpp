@@ -5,6 +5,7 @@
 
 #include "Finally.hpp"
 #include "Vec2.hpp"
+#include "Vertex.hpp"
 
 #include <memory>
 
@@ -36,6 +37,10 @@ public:
 	/// Draws the framebuffer image to the screen
 	void draw(Vec2 position, const ShaderProgram* = nullptr) const;
 	void draw(double x, double y) const;
+
+	/// Draws a list of triangles with the framebuffer's texture on it
+	void drawMesh(const std::vector<Vertex>& vertexes, const ShaderProgram* = nullptr) const;
+
 	void clear();
 
 	/// Returns the size in screen pixels
