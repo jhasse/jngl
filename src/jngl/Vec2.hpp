@@ -16,11 +16,16 @@ public:
 	/// Null vector
 	Vec2();
 
+	/// Creates a vector {x, y}
 	Vec2(double x, double y);
 
+	/// x component
 	double x = 0;
+
+	/// y component
 	double y = 0;
 
+	/// Helper function to use with cereal or Boost.Serialization
 	template <class Archive> void serialize(Archive& ar, const unsigned int) {
 		ar(x, y);
 	}

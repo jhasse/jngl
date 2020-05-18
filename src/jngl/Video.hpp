@@ -36,6 +36,7 @@ public:
 	Video& operator=(Video&&) = delete;
 	~Video();
 
+	/// Starts playback if needed and draws the current video frame centered at {0, 0}
 	void draw() const;
 
 	/// Returns the actual pixel width of the video

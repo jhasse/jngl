@@ -30,11 +30,14 @@ public:
 
 	/// Draws the image scaled around its center by `xfactor` and `yfactor`
 	///
+	/// \param xfactor Scale width by this factor
+	/// \param yfactor Scale height by this factor
 	/// \param shaderProgram Passing `nullptr` uses the default.
 	///
 	/// `drawScaled(1, 1)` would draw it normally. You can pass negative values to flip the image.
 	/// For example `drawScaled(-1, 1)` would draw the image horizontally flipped.
-	void drawScaled(float xfactor, float yfactor, const ShaderProgram* = nullptr) const;
+	void drawScaled(float xfactor, float yfactor,
+	                const ShaderProgram* shaderProgram = nullptr) const;
 
 	/// \deprecated Use new drawClipped(Vec2, Vec2) method instead
 	[[deprecated("Use new drawClipped(Vec2, Vec2) method instead")]] void
