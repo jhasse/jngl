@@ -11,7 +11,6 @@
 
 namespace jngl {
 
-class FrameBufferImpl;
 class ShaderProgram;
 
 /// Image framebuffer object which can be rendered on
@@ -26,9 +25,6 @@ public:
 	FrameBuffer& operator=(FrameBuffer&&) = default;
 	~FrameBuffer();
 
-	[[deprecated("use FrameBuffer::use() instead")]] void beginDraw();
-	[[deprecated("use FrameBuffer::use() instead")]] void endDraw();
-
 #if __cplusplus >= 201703L
 	[[nodiscard]]
 #endif
@@ -41,13 +37,14 @@ public:
 	/// Draws a list of triangles with the framebuffer's texture on it
 	void drawMesh(const std::vector<Vertex>& vertexes, const ShaderProgram* = nullptr) const;
 
-	void clear();
+	static void clear();
 
 	/// Returns the size in screen pixels
 	Vec2 getSize() const;
 
 private:
-	std::unique_ptr<FrameBufferImpl> pImpl;
+	struct Impl;
+	std::unique_ptr<Impl> impl;
 };
 
 } // namespace jngl

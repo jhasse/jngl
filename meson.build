@@ -11,7 +11,6 @@ endif
 
 src = [
 	'src/audio.cpp',
-	'src/framebufferimpl.cpp',
 	'src/freetype.cpp',
 	'src/helper.cpp',
 	'src/jngl/App.cpp',
