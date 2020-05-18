@@ -6,7 +6,7 @@ var searchData=
   ['value_5for',['value_or',['http://en.cppreference.com/w/cpp/experimental/optional/value_or.html',1,'std::experimental::optional::value_or()'],['http://en.cppreference.com/w/cpp/utility/optional/value_or.html',1,'std::optional::value_or()']]],
   ['valueless_5fby_5fexception',['valueless_by_exception',['http://en.cppreference.com/w/cpp/utility/variant/valueless_by_exception.html',1,'std::variant']]],
   ['variant',['variant',['http://en.cppreference.com/w/cpp/utility/variant/variant.html',1,'std::variant']]],
-  ['vec2',['Vec2',['../classjngl_1_1Vec2.html#a1ab54d75ff36ed23a47e9229039c825d',1,'jngl::Vec2']]],
+  ['vec2',['Vec2',['../classjngl_1_1Vec2.html#a1ab54d75ff36ed23a47e9229039c825d',1,'jngl::Vec2::Vec2()'],['../classjngl_1_1Vec2.html#ad15f26b132fc394d0f6366484f5d8716',1,'jngl::Vec2::Vec2(double x, double y)']]],
   ['vector',['vector',['http://en.cppreference.com/w/cpp/container/vector/vector.html',1,'std::pmr::vector::vector()'],['http://en.cppreference.com/w/cpp/container/vector/vector.html',1,'std::vector::vector()']]],
   ['vertexshader',['vertexShader',['../classjngl_1_1Sprite.html#ab976556b09522328a55549bd94cdeb20',1,'jngl::Sprite']]],
   ['vfprintf',['vfprintf',['http://en.cppreference.com/w/cpp/io/c/vfprintf.html',1,'std']]],

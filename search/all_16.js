@@ -14,7 +14,7 @@ var searchData=
   ['variant_5falternative_5ft',['variant_alternative_t',['http://en.cppreference.com/w/cpp/utility/variant/variant_alternative.html',1,'std']]],
   ['variant_5fsize',['variant_size',['http://en.cppreference.com/w/cpp/utility/variant/variant_size.html',1,'std']]],
   ['variant_5fsize_5fv',['variant_size_v',['http://en.cppreference.com/w/cpp/utility/variant/variant_size.html',1,'std']]],
-  ['vec2',['Vec2',['../classjngl_1_1Vec2.html',1,'Vec2'],['../classjngl_1_1Vec2.html#a1ab54d75ff36ed23a47e9229039c825d',1,'jngl::Vec2::Vec2()']]],
+  ['vec2',['Vec2',['../classjngl_1_1Vec2.html',1,'Vec2'],['../classjngl_1_1Vec2.html#a1ab54d75ff36ed23a47e9229039c825d',1,'jngl::Vec2::Vec2()'],['../classjngl_1_1Vec2.html#ad15f26b132fc394d0f6366484f5d8716',1,'jngl::Vec2::Vec2(double x, double y)']]],
   ['vec2_2ehpp',['Vec2.hpp',['../Vec2_8hpp.html',1,'']]],
   ['vector',['vector',['http://en.cppreference.com/w/cpp/container/vector.html',1,'vector'],['http://en.cppreference.com/w/cpp/container/vector.html',1,'vector'],['http://en.cppreference.com/w/cpp/header/vector.html',1,'(Global Namespace)'],['http://en.cppreference.com/w/cpp/container/vector/vector.html',1,'std::pmr::vector::vector()'],['http://en.cppreference.com/w/cpp/container/vector/vector.html',1,'std::vector::vector()']]],
   ['vector_3c_20std_3a_3ashared_5fptr_3c_20line_20_3e_20_3e',['vector&lt; std::shared_ptr&lt; Line &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],

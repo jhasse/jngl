@@ -138,9 +138,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> (const <a cl
 <tr class="memitem:a40a6523d3575531f6b65f4e24cc8f44f"><td class="memItemLeft" align="right" valign="top"><a id="a40a6523d3575531f6b65f4e24cc8f44f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawScaled</b> (float factor) const</td></tr>
 <tr class="separator:a40a6523d3575531f6b65f4e24cc8f44f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73f7e601ef60364ec45e59b86b581d38"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#a73f7e601ef60364ec45e59b86b581d38">drawScaled</a> (float xfactor, float yfactor, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
-<tr class="memdesc:a73f7e601ef60364ec45e59b86b581d38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the image scaled around its center by <code>xfactor</code> and <code>yfactor</code>  <a href="#a73f7e601ef60364ec45e59b86b581d38">More...</a><br /></td></tr>
-<tr class="separator:a73f7e601ef60364ec45e59b86b581d38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41b02a54c89c6d5fe3322b38d4a071f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#a41b02a54c89c6d5fe3322b38d4a071f8">drawScaled</a> (float xfactor, float yfactor, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *shaderProgram=nullptr) const</td></tr>
+<tr class="memdesc:a41b02a54c89c6d5fe3322b38d4a071f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the image scaled around its center by <code>xfactor</code> and <code>yfactor</code>  <a href="#a41b02a54c89c6d5fe3322b38d4a071f8">More...</a><br /></td></tr>
+<tr class="separator:a41b02a54c89c6d5fe3322b38d4a071f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87204f6bbbca14af2ddbc524f499f8f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#a87204f6bbbca14af2ddbc524f499f8f2">drawClipped</a> (float xstart, float xend, float ystart, float yend) const</td></tr>
 <tr class="separator:a87204f6bbbca14af2ddbc524f499f8f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0702d08a03df924e22a53b22228c8ad3"><td class="memItemLeft" align="right" valign="top"><a id="a0702d08a03df924e22a53b22228c8ad3"></a>
@@ -276,8 +276,8 @@ Collaboration diagram for Sprite:</div>
 </div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a73f7e601ef60364ec45e59b86b581d38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a73f7e601ef60364ec45e59b86b581d38">&#9670;&nbsp;</a></span>drawScaled()</h2>
+<a id="a41b02a54c89c6d5fe3322b38d4a071f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41b02a54c89c6d5fe3322b38d4a071f8">&#9670;&nbsp;</a></span>drawScaled()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -298,7 +298,7 @@ Collaboration diagram for Sprite:</div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *&#160;</td>
-          <td class="paramname"> = <code>nullptr</code>&#160;</td>
+          <td class="paramname"><em>shaderProgram</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -311,6 +311,8 @@ Collaboration diagram for Sprite:</div>
 <p>Draws the image scaled around its center by <code>xfactor</code> and <code>yfactor</code> </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">xfactor</td><td>Scale width by this factor </td></tr>
+    <tr><td class="paramname">yfactor</td><td>Scale height by this factor </td></tr>
     <tr><td class="paramname">shaderProgram</td><td>Passing <code>nullptr</code> uses the default.</td></tr>
   </table>
   </dd>
