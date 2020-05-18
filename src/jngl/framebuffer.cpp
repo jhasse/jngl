@@ -100,7 +100,7 @@ Finally FrameBuffer::use() {
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 	glPushAttrib(GL_VIEWPORT_BIT);
 #else
-	glGetIntegerv(GL_VIEWPORT, viewport);
+	glGetIntegerv(GL_VIEWPORT, impl->viewport);
 #endif
 	glViewport((pWindow->getCanvasWidth() - pWindow->getWidth()) / 2,
 	           -((pWindow->getCanvasHeight() + pWindow->getHeight()) / 2 - impl->height),
@@ -118,7 +118,7 @@ Finally FrameBuffer::use() {
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 		glPopAttrib();
 #else
-		glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+		glViewport(impl->viewport[0], impl->viewport[1], impl->viewport[2], impl->viewport[3]);
 #endif
 		glBindFramebuffer(GL_FRAMEBUFFER, impl->systemFbo);
 		glBindRenderbuffer(GL_RENDERBUFFER, impl->systemBuffer);
