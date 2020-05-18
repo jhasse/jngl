@@ -2,7 +2,7 @@ var searchData=
 [
   ['u16streampos',['u16streampos',['http://en.cppreference.com/w/cpp/io/fpos.html',1,'std']]],
   ['u16string',['u16string',['http://en.cppreference.com/w/cpp/string/basic_string.html',1,'u16string'],['http://en.cppreference.com/w/cpp/string/basic_string.html',1,'u16string']]],
-  ['u16string_5fview',['u16string_view',['http://en.cppreference.com/w/cpp/experimental/basic_string_view.html',1,'u16string_view'],['http://en.cppreference.com/w/cpp/string/basic_string_view.html',1,'u16string_view']]],
+  ['u16string_5fview',['u16string_view',['http://en.cppreference.com/w/cpp/string/basic_string_view.html',1,'u16string_view'],['http://en.cppreference.com/w/cpp/experimental/basic_string_view.html',1,'u16string_view']]],
   ['u32streampos',['u32streampos',['http://en.cppreference.com/w/cpp/io/fpos.html',1,'std']]],
   ['u32string',['u32string',['http://en.cppreference.com/w/cpp/string/basic_string.html',1,'u32string'],['http://en.cppreference.com/w/cpp/string/basic_string.html',1,'u32string']]],
   ['u32string_5fview',['u32string_view',['http://en.cppreference.com/w/cpp/string/basic_string_view.html',1,'u32string_view'],['http://en.cppreference.com/w/cpp/experimental/basic_string_view.html',1,'u32string_view']]],
@@ -32,7 +32,6 @@ var searchData=
   ['uniform_5freal_5fdistribution',['uniform_real_distribution',['http://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution.html',1,'std']]],
   ['unique_5flock',['unique_lock',['http://en.cppreference.com/w/cpp/thread/unique_lock.html',1,'std']]],
   ['unique_5fptr',['unique_ptr',['http://en.cppreference.com/w/cpp/memory/unique_ptr.html',1,'std']]],
-  ['unique_5fptr_3c_20framebufferimpl_20_3e',['unique_ptr&lt; FrameBufferImpl &gt;',['http://en.cppreference.com/w/cpp/memory/unique_ptr.html',1,'std']]],
   ['unique_5fptr_3c_20impl_20_3e',['unique_ptr&lt; Impl &gt;',['http://en.cppreference.com/w/cpp/memory/unique_ptr.html',1,'std']]],
   ['unordered_5fmap',['unordered_map',['http://en.cppreference.com/w/cpp/container/unordered_map.html',1,'unordered_map'],['http://en.cppreference.com/w/cpp/container/unordered_map.html',1,'unordered_map']]],
   ['unordered_5fmultimap',['unordered_multimap',['http://en.cppreference.com/w/cpp/container/unordered_multimap.html',1,'unordered_multimap'],['http://en.cppreference.com/w/cpp/container/unordered_multimap.html',1,'unordered_multimap']]],

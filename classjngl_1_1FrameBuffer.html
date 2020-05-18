@@ -93,6 +93,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classjngl_1_1FrameBuffer-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">FrameBuffer Class Reference</div>  </div>
@@ -122,12 +123,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aadfa4a8e69aac0bcebd87356291107d6"><td class="memItemLeft" align="right" valign="top"><a id="aadfa4a8e69aac0bcebd87356291107d6"></a>
 <a class="el" href="classjngl_1_1FrameBuffer.html">FrameBuffer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classjngl_1_1FrameBuffer.html">FrameBuffer</a> &amp;&amp;)=default</td></tr>
 <tr class="separator:aadfa4a8e69aac0bcebd87356291107d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa04ff5477adc7719d09766ac8ec33be1"><td class="memItemLeft" align="right" valign="top"><a id="aa04ff5477adc7719d09766ac8ec33be1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>beginDraw</b> ()</td></tr>
-<tr class="separator:aa04ff5477adc7719d09766ac8ec33be1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca0a43412c6d957fdbd9a63ccefb090c"><td class="memItemLeft" align="right" valign="top"><a id="aca0a43412c6d957fdbd9a63ccefb090c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>endDraw</b> ()</td></tr>
-<tr class="separator:aca0a43412c6d957fdbd9a63ccefb090c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3f36f4e74d8926fe30a98f99f37768d"><td class="memItemLeft" align="right" valign="top"><a id="ad3f36f4e74d8926fe30a98f99f37768d"></a>
 <a class="el" href="classjngl_1_1Finally.html">Finally</a>&#160;</td><td class="memItemRight" valign="bottom"><b>use</b> ()</td></tr>
 <tr class="separator:ad3f36f4e74d8926fe30a98f99f37768d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,18 +137,21 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> (double x, d
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1FrameBuffer.html#a89c331aee86657889c1f1d8233c6051f">drawMesh</a> (const <a class="elRef" doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
 <tr class="memdesc:a89c331aee86657889c1f1d8233c6051f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the framebuffer's texture on it. <br /></td></tr>
 <tr class="separator:a89c331aee86657889c1f1d8233c6051f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8bb3912a3ce86b15842e79d0b421204"><td class="memItemLeft" align="right" valign="top"><a id="ac8bb3912a3ce86b15842e79d0b421204"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
-<tr class="separator:ac8bb3912a3ce86b15842e79d0b421204"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebe51f6c43d6d673fc3826046d668b38"><td class="memItemLeft" align="right" valign="top"><a id="aebe51f6c43d6d673fc3826046d668b38"></a>
 <a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1FrameBuffer.html#aebe51f6c43d6d673fc3826046d668b38">getSize</a> () const</td></tr>
 <tr class="memdesc:aebe51f6c43d6d673fc3826046d668b38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the size in screen pixels. <br /></td></tr>
 <tr class="separator:aebe51f6c43d6d673fc3826046d668b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a14dabca7589b28dc6adca2c5367546e1"><td class="memItemLeft" align="right" valign="top"><a id="a14dabca7589b28dc6adca2c5367546e1"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
+<tr class="separator:a14dabca7589b28dc6adca2c5367546e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Image framebuffer object which can be rendered on. </p>
 
-<p class="definition">Definition at line <a class="el" href="framebuffer_8hpp_source.html#l00018">18</a> of file <a class="el" href="framebuffer_8hpp_source.html">framebuffer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="framebuffer_8hpp_source.html#l00017">17</a> of file <a class="el" href="framebuffer_8hpp_source.html">framebuffer.hpp</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>jngl/<a class="el" href="framebuffer_8hpp_source.html">framebuffer.hpp</a></li>
 </ul>
