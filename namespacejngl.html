@@ -568,8 +568,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> (const <a cl
 template&lt;class Vect &gt; </td></tr>
 <tr class="memitem:ac9ccdc8f0b09d4d1bb26fa30db770281"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>draw</b> (const <a class="elRef" doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename, Vect pos)</td></tr>
 <tr class="separator:ac9ccdc8f0b09d4d1bb26fa30db770281"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acce6a0dfbff6aff683491faa3825ef53"><td class="memItemLeft" align="right" valign="top"><a id="acce6a0dfbff6aff683491faa3825ef53"></a>
-<a class="el" href="classjngl_1_1Finally.html">Finally</a>&#160;</td><td class="memItemRight" valign="bottom"><b>load</b> (const <a class="elRef" doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
+<tr class="memitem:acce6a0dfbff6aff683491faa3825ef53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Finally.html">Finally</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#acce6a0dfbff6aff683491faa3825ef53">load</a> (const <a class="elRef" doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
+<tr class="memdesc:acce6a0dfbff6aff683491faa3825ef53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts a thread to load <em>filename</em> and returns a <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> which will join it.  <a href="#acce6a0dfbff6aff683491faa3825ef53">More...</a><br /></td></tr>
 <tr class="separator:acce6a0dfbff6aff683491faa3825ef53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af33a69f3005ca3f9fb37d15908d290e8"><td class="memItemLeft" align="right" valign="top"><a id="af33a69f3005ca3f9fb37d15908d290e8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>unload</b> (const <a class="elRef" doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
@@ -936,6 +936,32 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
       </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>whether <em>filename</em> is currently playing </dd></dl>
+
+</div>
+</div>
+<a id="acce6a0dfbff6aff683491faa3825ef53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acce6a0dfbff6aff683491faa3825ef53">&#9670;&nbsp;</a></span>load()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Finally.html">Finally</a> jngl::load </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" doxygen="/w/doc/cppreference-doxygen-web.tag.xml:http://en.cppreference.com/w/" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Starts a thread to load <em>filename</em> and returns a <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> which will join it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>Name of an image file (extension is optional) or a .ogg sound file. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
