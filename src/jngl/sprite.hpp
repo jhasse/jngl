@@ -1,11 +1,11 @@
 // Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// \file Contains Sprite class and related functions
 #pragma once
 
+#include "Drawable.hpp"
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
-#include "Drawable.hpp"
 
 namespace jngl {
 
@@ -86,6 +86,9 @@ template <class Vect> void draw(const std::string& filename, Vect pos) {
 	draw(filename, pos.x, pos.y);
 }
 
+/// Starts a thread to load \a filename and returns a Finally which will join it
+///
+/// \param filename Name of an image file (extension is optional) or a .ogg sound file.
 Finally load(const std::string& filename);
 
 void unload(const std::string& filename);
