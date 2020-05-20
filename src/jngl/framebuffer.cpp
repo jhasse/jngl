@@ -93,7 +93,7 @@ void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
 	popMatrix();
 }
 
-Finally FrameBuffer::use() {
+Finally FrameBuffer::use() const {
 	glBindFramebuffer(GL_FRAMEBUFFER, impl->fbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
 	pushMatrix();

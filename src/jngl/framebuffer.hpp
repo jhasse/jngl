@@ -28,7 +28,7 @@ public:
 #if __cplusplus >= 201703L
 	[[nodiscard]]
 #endif
-	Finally use();
+	Finally use() const;
 
 	/// Draws the framebuffer image to the screen
 	void draw(Vec2 position, const ShaderProgram* = nullptr) const;
