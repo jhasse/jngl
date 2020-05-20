@@ -137,4 +137,8 @@ Vec2 FrameBuffer::getSize() const {
 		     impl->texture.getPreciseHeight() / getScaleFactor() };
 }
 
+GLuint FrameBuffer::getTextureID() const {
+	return impl->texture.getID();
+}
+
 } // namespace jngl

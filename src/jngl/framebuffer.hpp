@@ -42,6 +42,13 @@ public:
 	/// Returns the size in screen pixels
 	Vec2 getSize() const;
 
+	/// Returns the OpenGL texture ID of the associated image buffer
+	///
+	/// While this is an implementation detail, it can be useful if you want to draw the
+	/// `GL_TEXTURE_2D` object yourself or need to pass it to another library. The return type is
+	/// equivalent to `GLuint`.
+	uint32_t getTextureID() const;
+
 private:
 	struct Impl;
 	std::unique_ptr<Impl> impl;
