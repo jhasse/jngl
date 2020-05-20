@@ -32,8 +32,8 @@ struct FrameBuffer::Impl {
 	const int height;
 	Texture texture;
 	bool letterboxing;
-	GLuint systemFbo;
-	GLuint systemBuffer;
+	GLuint systemFbo = 0;
+	GLuint systemBuffer = 0;
 #if !defined(GL_VIEWPORT_BIT) || defined(__APPLE__)
 	GLint viewport[4];
 #endif

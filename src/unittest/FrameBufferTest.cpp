@@ -2,8 +2,8 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/framebuffer.hpp"
-#include "../jngl/sprite.hpp"
 #include "../jngl/shapes.hpp"
+#include "../jngl/sprite.hpp"
 #include "Fixture.hpp"
 
 #include <boost/test/unit_test.hpp>
