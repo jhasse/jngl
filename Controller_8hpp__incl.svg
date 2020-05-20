@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="input_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node2"><a xlink:href="input_8hpp.html" target="_top" xlink:title="Input related functions.">
 <polygon fill="white" stroke="black" points="206,-112.5 206,-131.5 277,-131.5 277,-112.5 206,-112.5"/>
 <text text-anchor="middle" x="241.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">input.hpp</text>
 </a>

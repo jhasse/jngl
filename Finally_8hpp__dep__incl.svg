@@ -36,7 +36,7 @@
 <!-- Node7 -->
 <g id="node7" class="node">
 <title>Node7</title>
-<g id="a_node7"><a xlink:href="framebuffer_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node7"><a xlink:href="framebuffer_8hpp.html" target="_top" xlink:title="Contains FrameBuffer class.">
 <polygon fill="white" stroke="black" points="146,-168.5 146,-187.5 277,-187.5 277,-168.5 146,-168.5"/>
 <text text-anchor="middle" x="211.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">jngl/framebuffer.hpp</text>
 </a>

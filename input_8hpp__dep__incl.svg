@@ -12,7 +12,7 @@
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
-<g id="a_node1"><a xlink:title=" ">
+<g id="a_node1"><a xlink:title="Input related functions.">
 <polygon fill="#bfbfbf" stroke="black" points="62,-168.5 62,-187.5 163,-187.5 163,-168.5 62,-168.5"/>
 <text text-anchor="middle" x="112.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">jngl/input.hpp</text>
 </a>

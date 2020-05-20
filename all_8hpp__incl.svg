@@ -66,7 +66,7 @@
 <!-- Node7 -->
 <g id="node7" class="node">
 <title>Node7</title>
-<g id="a_node7"><a xlink:href="input_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node7"><a xlink:href="input_8hpp.html" target="_top" xlink:title="Input related functions.">
 <polygon fill="white" stroke="black" points="907,-168.5 907,-187.5 978,-187.5 978,-168.5 907,-168.5"/>
 <text text-anchor="middle" x="942.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">input.hpp</text>
 </a>
@@ -216,7 +216,7 @@
 <!-- Node25 -->
 <g id="node25" class="node">
 <title>Node25</title>
-<g id="a_node25"><a xlink:href="framebuffer_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node25"><a xlink:href="framebuffer_8hpp.html" target="_top" xlink:title="Contains FrameBuffer class.">
 <polygon fill="white" stroke="black" points="1201,-168.5 1201,-187.5 1302,-187.5 1302,-168.5 1201,-168.5"/>
 <text text-anchor="middle" x="1251.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">framebuffer.hpp</text>
 </a>
@@ -291,7 +291,7 @@
 <!-- Node30 -->
 <g id="node30" class="node">
 <title>Node30</title>
-<g id="a_node30"><a xlink:href="matrix_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node30"><a xlink:href="matrix_8hpp.html" target="_top" xlink:title="Functions related to the global ModelView matrix.">
 <polygon fill="white" stroke="black" points="1601,-224.5 1601,-243.5 1678,-243.5 1678,-224.5 1601,-224.5"/>
 <text text-anchor="middle" x="1639.5" y="-231.5" font-family="'Consolas',monospace" font-size="10.00">matrix.hpp</text>
 </a>

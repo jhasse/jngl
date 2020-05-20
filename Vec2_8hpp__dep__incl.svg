@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="input_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node2"><a xlink:href="input_8hpp.html" target="_top" xlink:title="Input related functions.">
 <polygon fill="white" stroke="black" points="106,-168.5 106,-187.5 207,-187.5 207,-168.5 106,-168.5"/>
 <text text-anchor="middle" x="156.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">jngl/input.hpp</text>
 </a>
@@ -66,7 +66,7 @@
 <!-- Node9 -->
 <g id="node9" class="node">
 <title>Node9</title>
-<g id="a_node9"><a xlink:href="framebuffer_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node9"><a xlink:href="framebuffer_8hpp.html" target="_top" xlink:title="Contains FrameBuffer class.">
 <polygon fill="white" stroke="black" points="458,-112.5 458,-131.5 589,-131.5 589,-112.5 458,-112.5"/>
 <text text-anchor="middle" x="523.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">jngl/framebuffer.hpp</text>
 </a>
