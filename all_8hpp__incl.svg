@@ -321,7 +321,7 @@
 <!-- Node31 -->
 <g id="node32" class="node">
 <title>Node31</title>
-<g id="a_node32"><a xlink:href="shapes_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node32"><a xlink:href="shapes_8hpp.html" target="_top" xlink:title="Functions for drawing shapes.">
 <polygon fill="#ffffff" stroke="#000000" points="1372,-224.5 1372,-243.5 1449,-243.5 1449,-224.5 1372,-224.5"/>
 <text text-anchor="middle" x="1410.5" y="-231.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">shapes.hpp</text>
 </a>

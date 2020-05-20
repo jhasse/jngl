@@ -51,7 +51,7 @@
 <!-- Node5 -->
 <g id="node5" class="node">
 <title>Node5</title>
-<g id="a_node5"><a xlink:href="shapes_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node5"><a xlink:href="shapes_8hpp.html" target="_top" xlink:title="Functions for drawing shapes.">
 <polygon fill="#ffffff" stroke="#000000" points="125.1229,-112.5 125.1229,-131.5 232.1229,-131.5 232.1229,-112.5 125.1229,-112.5"/>
 <text text-anchor="middle" x="178.6229" y="-119.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/shapes.hpp</text>
 </a>

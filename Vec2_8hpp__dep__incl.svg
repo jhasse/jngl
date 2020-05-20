@@ -96,7 +96,7 @@
 <!-- Node13 -->
 <g id="node11" class="node">
 <title>Node13</title>
-<g id="a_node11"><a xlink:href="shapes_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node11"><a xlink:href="shapes_8hpp.html" target="_top" xlink:title="Functions for drawing shapes.">
 <polygon fill="#ffffff" stroke="#000000" points="600,-168.5 600,-187.5 707,-187.5 707,-168.5 600,-168.5"/>
 <text text-anchor="middle" x="653.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00" fill="#000000">jngl/shapes.hpp</text>
 </a>

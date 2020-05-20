@@ -38,7 +38,7 @@ var searchData=
   ['set_5fvalue',['set_value',['http://en.cppreference.com/w/cpp/thread/promise/set_value.html',1,'std::promise']]],
   ['set_5fvalue_5fat_5fthread_5fexit',['set_value_at_thread_exit',['http://en.cppreference.com/w/cpp/thread/promise/set_value_at_thread_exit.html',1,'std::promise']]],
   ['setalign',['setAlign',['../classjngl_1_1Text.html#a560cccd4201edfd95c859e64a777cbcc',1,'jngl::Text']]],
-  ['setalpha',['setAlpha',['../namespacejngl.html#a947f00ca9d60697810e58bdb2d706b4a',1,'jngl']]],
+  ['setalpha',['setAlpha',['../namespacejngl.html#a91353ef118e031d471ef2a9dc7da3ca4',1,'jngl']]],
   ['setbackgroundcolor',['setBackgroundColor',['../namespacejngl.html#a2c502e1c3f4d1132a6e31402d355b899',1,'jngl::setBackgroundColor(jngl::Color)'],['../namespacejngl.html#ab3c9357fc82bdc78f9b9aacc84d5e3bc',1,'jngl::setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue)']]],
   ['setbase',['setbase',['http://en.cppreference.com/w/cpp/io/manip/setbase.html',1,'std']]],
   ['setblue',['setBlue',['../classjngl_1_1Color.html#a62835daefb8468feb54e8d293b2463e0',1,'jngl::Color']]],

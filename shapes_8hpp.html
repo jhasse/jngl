@@ -98,6 +98,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">shapes.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Functions for drawing shapes.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="Color_8hpp_source.html">Color.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Vec2_8hpp_source.html">Vec2.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -135,10 +138,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (unsigne
 <tr class="memitem:afcc8e6337e49988c6e55e2e35473d65b"><td class="memItemLeft" align="right" valign="top"><a id="afcc8e6337e49988c6e55e2e35473d65b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)</td></tr>
 <tr class="separator:afcc8e6337e49988c6e55e2e35473d65b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a947f00ca9d60697810e58bdb2d706b4a"><td class="memItemLeft" align="right" valign="top"><a id="a947f00ca9d60697810e58bdb2d706b4a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a947f00ca9d60697810e58bdb2d706b4a">setAlpha</a> (unsigned char alpha)</td></tr>
-<tr class="memdesc:a947f00ca9d60697810e58bdb2d706b4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha value which should be used to draw primitives (0 = fully transparent, 255 = fully opaque) <br /></td></tr>
-<tr class="separator:a947f00ca9d60697810e58bdb2d706b4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91353ef118e031d471ef2a9dc7da3ca4"><td class="memItemLeft" align="right" valign="top"><a id="a91353ef118e031d471ef2a9dc7da3ca4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a91353ef118e031d471ef2a9dc7da3ca4">setAlpha</a> (uint8_t alpha)</td></tr>
+<tr class="memdesc:a91353ef118e031d471ef2a9dc7da3ca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha value which should be used to draw primitives (0 = fully transparent, 255 = fully opaque) <br /></td></tr>
+<tr class="separator:a91353ef118e031d471ef2a9dc7da3ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af69331d125cc6c123f0a593a0d8ef497"><td class="memItemLeft" align="right" valign="top"><a id="af69331d125cc6c123f0a593a0d8ef497"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>pushAlpha</b> (unsigned char alpha)</td></tr>
 <tr class="separator:af69331d125cc6c123f0a593a0d8ef497"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -175,13 +178,17 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawTriangle</b> (dou
 <tr class="memitem:ab106793618ba713188688722c01664b7"><td class="memItemLeft" align="right" valign="top"><a id="ab106793618ba713188688722c01664b7"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawRect</b> (double xposition, double yposition, double width, double height)</td></tr>
 <tr class="separator:ab106793618ba713188688722c01664b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada05acb285e62f6d7d6ecaaf19755f6c"><td class="memItemLeft" align="right" valign="top"><a id="ada05acb285e62f6d7d6ecaaf19755f6c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawRect</b> (Vec2 position, Vec2 size)</td></tr>
+<tr class="memitem:ada05acb285e62f6d7d6ecaaf19755f6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ada05acb285e62f6d7d6ecaaf19755f6c">drawRect</a> (Vec2 position, Vec2 size)</td></tr>
+<tr class="memdesc:ada05acb285e62f6d7d6ecaaf19755f6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle at <em>position</em>.  <a href="namespacejngl.html#ada05acb285e62f6d7d6ecaaf19755f6c">More...</a><br /></td></tr>
 <tr class="separator:ada05acb285e62f6d7d6ecaaf19755f6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a5ad06d5b333cb2cbf729e84fd557f8"><td class="memTemplParams" colspan="2"><a id="a9a5ad06d5b333cb2cbf729e84fd557f8"></a>
 template&lt;class Vect &gt; </td></tr>
 <tr class="memitem:a9a5ad06d5b333cb2cbf729e84fd557f8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>drawRect</b> (Vect pos, Vect size)</td></tr>
 <tr class="separator:a9a5ad06d5b333cb2cbf729e84fd557f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Functions for drawing shapes. </p>
+
+<p class="definition">Definition in file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
+</div></div><!-- contents -->
 </body></html>
