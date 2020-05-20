@@ -1,6 +1,7 @@
 // Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// Functions related to the global ModelView matrix
+/// @file
 #pragma once
 
 namespace jngl {
