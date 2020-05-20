@@ -13,10 +13,3 @@ jobs:
       run: |
         cmake -Bbuild -H. -GNinja
         ninja -Cbuild
-    - name: Doxygen
-      run: |
-        cd doc
-        cmake .
-        make
-        cd ..
-        docker run -v$PWD:/w -t fedora:31 /bin/sh -c "dnf install -y graphviz doxygen && cd /w/doc && doxygen"
