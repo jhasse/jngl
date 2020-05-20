@@ -156,10 +156,11 @@ if not meson.is_subproject()
 			'src/unittest/main.cpp', # needs to come first for unity build
 			'src/unittest/ColorTest.cpp',
 			'src/unittest/DrawableTest.cpp',
+			'src/unittest/Fixture.cpp',
+			'src/unittest/FrameBufferTest.cpp',
 			'src/unittest/misc.cpp',
 			'src/unittest/SpriteTest.cpp',
 			'src/unittest/TextTest.cpp',
-			'src/unittest/Fixture.cpp',
 		], dependencies : [boost_test_dep, thread_dep], link_with : lib,
 		include_directories : include))
 	endif
