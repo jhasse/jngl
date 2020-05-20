@@ -1,4 +1,4 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "shapes.hpp"
@@ -30,7 +30,7 @@ void setColor(unsigned char red, unsigned char green, unsigned char blue, unsign
 	colorAlpha = alpha;
 }
 
-void setAlpha(unsigned char alpha) {
+void setAlpha(const uint8_t alpha) {
 	colorAlpha = alpha;
 }
 
