@@ -141,6 +141,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1FrameBuffer.html#aebe51f6c43d6d673fc3826046d668b38">getSize</a> () const</td></tr>
 <tr class="memdesc:aebe51f6c43d6d673fc3826046d668b38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the size in screen pixels. <br /></td></tr>
 <tr class="separator:aebe51f6c43d6d673fc3826046d668b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb8d8a09d425d18b5963d8b7a608c629"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1FrameBuffer.html#aeb8d8a09d425d18b5963d8b7a608c629">getTextureID</a> () const</td></tr>
+<tr class="memdesc:aeb8d8a09d425d18b5963d8b7a608c629"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the OpenGL texture ID of the associated image buffer.  <a href="#aeb8d8a09d425d18b5963d8b7a608c629">More...</a><br /></td></tr>
+<tr class="separator:aeb8d8a09d425d18b5963d8b7a608c629"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -152,7 +155,28 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</
 <div class="textblock"><p>Image framebuffer object which can be rendered on. </p>
 
 <p class="definition">Definition at line <a class="el" href="framebuffer_8hpp_source.html#l00017">17</a> of file <a class="el" href="framebuffer_8hpp_source.html">framebuffer.hpp</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="aeb8d8a09d425d18b5963d8b7a608c629"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb8d8a09d425d18b5963d8b7a608c629">&#9670;&nbsp;</a></span>getTextureID()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t getTextureID </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the OpenGL texture ID of the associated image buffer. </p>
+<p>While this is an implementation detail, it can be useful if you want to draw the <code>GL_TEXTURE_2D</code> object yourself or need to pass it to another library. The return type is equivalent to <code>GLuint</code>. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>jngl/<a class="el" href="framebuffer_8hpp_source.html">framebuffer.hpp</a></li>
 </ul>
 </div><!-- contents -->

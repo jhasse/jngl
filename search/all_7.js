@@ -68,6 +68,7 @@ var searchData=
   ['getsize',['getSize',['../classjngl_1_1FrameBuffer.html#aebe51f6c43d6d673fc3826046d668b38',1,'jngl::FrameBuffer']]],
   ['getstepspersecond',['getStepsPerSecond',['../namespacejngl.html#a9d8a357dd23189e0724e75d9afb5eddb',1,'jngl']]],
   ['gettextinput',['getTextInput',['../namespacejngl.html#a61fd6900416c997489df138cb8651ab8',1,'jngl']]],
+  ['gettextureid',['getTextureID',['../classjngl_1_1FrameBuffer.html#aeb8d8a09d425d18b5963d8b7a608c629',1,'jngl::FrameBuffer']]],
   ['gettime',['getTime',['../namespacejngl.html#acfa255b4d1bf4d4ad83b3d200b99c930',1,'jngl']]],
   ['gettop',['getTop',['../classjngl_1_1Drawable.html#a3670fae9f6c1be822e4b3e271f1f1013',1,'jngl::Drawable']]],
   ['gettouchpositions',['getTouchPositions',['../namespacejngl.html#aaa978e56af9461cc6a8da01e6a0f28fc',1,'jngl']]],
