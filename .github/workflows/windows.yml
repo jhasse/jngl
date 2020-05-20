@@ -1,0 +1,12 @@
+name: Windows
+on: [push]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build with CMake and Visual Studio
+      shell: bash
+      run: |
+        cmake -Bbuild -H. -AWin32
+        cmake --build build

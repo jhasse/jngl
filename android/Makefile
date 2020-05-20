@@ -11,7 +11,7 @@ endif
 all: gradle
 
 ${ANDROID_HOME}/ndk/21.0.6113669/package.xml:
-	yes | ${ANDROID_HOME}/tools/bin/sdkmanager "ndk;21.0.6113669"
+	yes | ${ANDROID_HOME}/tools/bin/sdkmanager "ndk;21.0.6113669" >/dev/null
 
 ${ANDROID_HOME}/ndk/21.0.6113669/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp: | ${ANDROID_HOME}/ndk/21.0.6113669/package.xml
 	ln -s $(BOOST_PATH) `dirname "$@"`

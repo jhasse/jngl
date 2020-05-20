@@ -16,3 +16,7 @@ jobs:
       run: |
         cmake -H. -Bbuild-cmake -GNinja
         ninja -Cbuild-cmake
+    - name: Android
+      run: |
+        echo $ANDROID_HOME
+        make -Candroid
