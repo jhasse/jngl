@@ -20,8 +20,8 @@ gcc:
   stage: build
   image: registry.fedoraproject.org/fedora-minimal:31
   script:
-    - microdnf install fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel pybind11-devel python3-devel meson SDL2-devel openal-soft-devel gcc-c++ libtheora-devel >/dev/null
-    - script -qfec "meson build --werror -Dpython=true" /dev/null
+    - microdnf install cmake fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel meson SDL2-devel openal-soft-devel gcc-c++ libtheora-devel >/dev/null
+    - script -qfec "meson build --werror" /dev/null
     - cd build
     - script -qfec "ninja" /dev/null
     - microdnf install mesa-dri-drivers xorg-x11-drv-dummy >/dev/null
