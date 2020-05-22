@@ -1,4 +1,4 @@
-// Copyright 2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Sound.hpp"
@@ -85,6 +85,7 @@ Sound::~Sound() {
 bool Sound::isPlaying() const {
 	ALint state;
 	alGetSourcei(impl->source, AL_SOURCE_STATE, &state);
+	checkAlError();
 	return state == AL_PLAYING;
 }
 
@@ -95,6 +96,7 @@ void Sound::loop() {
 bool Sound::isStopped() const {
 	ALint state;
 	alGetSourcei(impl->source, AL_SOURCE_STATE, &state);
+	checkAlError();
 	return state == AL_STOPPED;
 }
 

@@ -231,6 +231,7 @@ public:
 
 					ALint state;
 					alGetSourcei(source, AL_SOURCE_STATE, &state);
+					checkAlError();
 					if (state != AL_PLAYING) {
 						while (true) {
 							alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
