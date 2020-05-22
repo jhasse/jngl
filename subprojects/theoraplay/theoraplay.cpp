@@ -463,11 +463,19 @@ cleanup:
     ctx->decode_error = (!ctx->halt && was_error);
     if (tdec != nullptr) { th_decode_free(tdec); }
     if (tsetup != nullptr) { th_setup_free(tsetup); }
-    if (vblock_init) vorbis_block_clear(&vblock);
-    if (vdsp_init) vorbis_dsp_clear(&vdsp);
-    if (tpackets) ogg_stream_clear(&tstream);
-    if (vpackets) ogg_stream_clear(&vstream);
-    th_info_clear(&tinfo);
+	if (vblock_init) {
+		vorbis_block_clear(&vblock);
+	}
+	if (vdsp_init) {
+		vorbis_dsp_clear(&vdsp);
+	}
+	if (tpackets) {
+		ogg_stream_clear(&tstream);
+	}
+	if (vpackets) {
+		ogg_stream_clear(&vstream);
+	}
+	th_info_clear(&tinfo);
     th_comment_clear(&tcomment);
     vorbis_comment_clear(&vcomment);
     vorbis_info_clear(&vinfo);

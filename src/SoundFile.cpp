@@ -102,8 +102,7 @@ SoundFile::SoundFile(const std::string& filename) : params(std::make_unique<Soun
 		throw std::runtime_error("Could not open OGG file (" + filename + ").");
 	}
 
-	vorbis_info* pInfo;
-	pInfo = ov_info(&oggFile, -1);
+	const vorbis_info* const pInfo = ov_info(&oggFile, -1);
 	if (pInfo->channels == 1) {
 		params->format = AL_FORMAT_MONO16;
 	} else {

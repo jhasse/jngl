@@ -20,7 +20,7 @@ Shader::Shader(const char* source, const Type type) : impl(std::make_unique<Impl
 #endif
 	glShaderSource(impl->id, 1, &source, nullptr);
 	glCompileShader(impl->id);
-	GLint status;
+	GLint status = GL_FALSE;
 	glGetShaderiv(impl->id, GL_COMPILE_STATUS, &status);
 	if (status != GL_TRUE) {
 		char buffer[2048];

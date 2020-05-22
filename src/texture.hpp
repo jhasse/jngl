@@ -35,7 +35,7 @@ public:
 	[[nodiscard]] float getPreciseWidth() const;
 	[[nodiscard]] float getPreciseHeight() const;
 	static void unloadShader();
-	void setBytes(const unsigned char*, int width, int height);
+	void setBytes(const unsigned char*, int width, int height) const;
 
 	static const Shader& vertexShader();
 

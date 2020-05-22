@@ -1,4 +1,4 @@
-// Copyright 2007-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "freetype.hpp"
@@ -19,6 +19,7 @@
 #include <cassert>
 #include <codecvt>
 #include <locale>
+#include <memory>
 
 namespace jngl {
 
@@ -131,7 +132,7 @@ Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::
 		unicodeCharacter = cvt.from_bytes(&ch, sourceEnd)[0];
 	}
 	if (characters_[unicodeCharacter] == nullptr) {
-		characters_[unicodeCharacter].reset(new Character(unicodeCharacter, height_, face));
+		characters_[unicodeCharacter] = std::make_shared<Character>(unicodeCharacter, height_, face);
 	}
 	return *(characters_[unicodeCharacter]);
 }

@@ -1,4 +1,4 @@
-// Copyright 2016-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2016-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "helper.hpp"
@@ -12,8 +12,8 @@ namespace jngl {
 std::vector<std::string> splitlines(const std::string& text) {
 	std::vector<std::string> lines;
 	const char* start_line = text.c_str();
-	const char* c;
-	for (c = text.c_str(); *c; c++) {
+	const char* c = text.c_str();
+	for (; *c; ++c) {
 		if (*c == '\n') {
 			std::string line;
 			for (auto* n = start_line; n < c; ++n) {
