@@ -29,7 +29,7 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 	glGetProgramiv(impl->id, GL_LINK_STATUS, &status);
 	if (status != GL_TRUE) {
 		std::array<char, 2048> buffer{};
-		glGetProgramInfoLog(impl->id, std::size(buffer), nullptr, &buffer[0]);
+		glGetProgramInfoLog(impl->id, static_cast<GLsizei>(std::size(buffer)), nullptr, &buffer[0]);
 		throw std::runtime_error(&buffer[0]);
 	}
 	const auto tmp = use();
