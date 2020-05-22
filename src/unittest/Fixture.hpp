@@ -1,4 +1,4 @@
-// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -7,6 +7,7 @@
 
 class Fixture {
 public:
+	/// Creates a 320x70 window
 	explicit Fixture(double scaleFactor);
 	~Fixture();
 	Fixture(const Fixture&) = delete;

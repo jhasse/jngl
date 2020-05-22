@@ -1,4 +1,4 @@
-# JNGL - Just a Neat Game Library [![Build Status](https://travis-ci.org/jhasse/jngl.svg?branch=master)](https://travis-ci.org/jhasse/jngl) [![pipeline status](https://gitlab.com/jhasse/jngl/badges/master/pipeline.svg)](https://gitlab.com/jhasse/jngl/commits/master)
+# JNGL - Just a Neat Game Library [![pipeline status](https://gitlab.com/jhasse/jngl/badges/master/pipeline.svg)](https://gitlab.com/jhasse/jngl/commits/master)
 
 An easy to use C++/Python game library for Linux, Windows, macOS, Android, iOS and the Nintendo
 Switch.

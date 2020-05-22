@@ -1,7 +1,7 @@
-// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#include "drawable.hpp"
+#include "Drawable.hpp"
 #include "screen.hpp"
 
 namespace jngl {

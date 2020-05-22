@@ -41,10 +41,11 @@ public:
 	}
 	void draw() const {
 		if (fbo) {
-			fbo->beginDraw();
-			jngl::print("fbo", -jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
-			jngl::draw("jngl.webp", -300, -140);
-			fbo->endDraw();
+			{
+				const auto context = fbo->use();
+				jngl::print("fbo", -jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
+				jngl::draw("jngl.webp", -300, -140);
+			}
 			fbo->draw(-jngl::getWindowWidth() / 2, -jngl::getWindowHeight() / 2);
 		}
 		if (jngl::isMultitouch()) {

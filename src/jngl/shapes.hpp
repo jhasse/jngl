@@ -1,5 +1,6 @@
 // Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
+/// Functions for drawing shapes
 /// @file
 #pragma once
 
@@ -21,7 +22,7 @@ void setColor(unsigned char red, unsigned char green, unsigned char blue, unsign
 
 /// Sets the alpha value which should be used to draw primitives (0 = fully transparent, 255 = fully
 /// opaque)
-void setAlpha(unsigned char alpha);
+void setAlpha(uint8_t alpha);
 
 void pushAlpha(unsigned char alpha);
 
@@ -47,6 +48,9 @@ void drawTriangle(double A_x, double A_y, double B_x, double B_y, double C_x, do
 
 void drawRect(double xposition, double yposition, double width, double height);
 
+/// Draws a rectangle at \a position
+///
+/// Use setColor(Color) to change the color and setAlpha(uint8_t) to change the translucency.
 void drawRect(Vec2 position, Vec2 size);
 
 template <class Vect> void drawRect(Vect pos, Vect size) {

@@ -1,4 +1,4 @@
-// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -8,7 +8,7 @@
 /// JNGL's main namespace
 namespace jngl {
 
-/// Vertex or fragment GLSL shader
+/// Fragment or vertex GLSL shader
 class Shader {
 public:
 	/// Type of a Shader. To link a ShaderProgram, one shader of each type is needed.
@@ -22,6 +22,10 @@ public:
 	Shader(const char* source, Type);
 
 	/// \overload
+	///
+	/// \code
+	/// jngl::Shader foo(jngl::readAsset("foo.frag"), jngl::Shader::Type::FRAGMENT);
+	/// \endcode
 	Shader(const std::istream& source, Type);
 
 	~Shader();

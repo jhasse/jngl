@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <boost/math/constants/constants.hpp>
 #include <cmath>
-#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -191,7 +190,6 @@ private:
 JNGL_MAIN_BEGIN {
 	try {
 		jngl::App app("JNGL Test Application");
-		std::filesystem::create_directory(std::filesystem::u8path(jngl::getBinaryPath() + "/blub"));
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
 		          << jngl::getDesktopHeight() << std::endl
 		          << "Path of binary: " << jngl::getBinaryPath() << std::endl

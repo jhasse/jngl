@@ -1,11 +1,11 @@
 // Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// \file Contains Sprite class and related functions
 #pragma once
 
+#include "Drawable.hpp"
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
-#include "drawable.hpp"
 
 namespace jngl {
 
@@ -30,11 +30,14 @@ public:
 
 	/// Draws the image scaled around its center by `xfactor` and `yfactor`
 	///
+	/// \param xfactor Scale width by this factor
+	/// \param yfactor Scale height by this factor
 	/// \param shaderProgram Passing `nullptr` uses the default.
 	///
 	/// `drawScaled(1, 1)` would draw it normally. You can pass negative values to flip the image.
 	/// For example `drawScaled(-1, 1)` would draw the image horizontally flipped.
-	void drawScaled(float xfactor, float yfactor, const ShaderProgram* = nullptr) const;
+	void drawScaled(float xfactor, float yfactor,
+	                const ShaderProgram* shaderProgram = nullptr) const;
 
 	/// \deprecated Use new drawClipped(Vec2, Vec2) method instead
 	[[deprecated("Use new drawClipped(Vec2, Vec2) method instead")]] void
@@ -86,6 +89,9 @@ template <class Vect> void draw(const std::string& filename, Vect pos) {
 	draw(filename, pos.x, pos.y);
 }
 
+/// Starts a thread to load \a filename and returns a Finally which will join it
+///
+/// \param filename Name of an image file (extension is optional) or a .ogg sound file.
 Finally load(const std::string& filename);
 
 void unload(const std::string& filename);

@@ -11,13 +11,12 @@ endif
 
 src = [
 	'src/audio.cpp',
-	'src/framebufferimpl.cpp',
 	'src/freetype.cpp',
 	'src/helper.cpp',
 	'src/jngl/App.cpp',
 	'src/jngl/Color.cpp',
 	'src/jngl/Controller.cpp',
-	'src/jngl/drawable.cpp',
+	'src/jngl/Drawable.cpp',
 	'src/jngl/Finally.cpp',
 	'src/jngl/font.cpp',
 	'src/jngl/framebuffer.cpp',
@@ -157,10 +156,11 @@ if not meson.is_subproject()
 			'src/unittest/main.cpp', # needs to come first for unity build
 			'src/unittest/ColorTest.cpp',
 			'src/unittest/DrawableTest.cpp',
+			'src/unittest/Fixture.cpp',
+			'src/unittest/FrameBufferTest.cpp',
 			'src/unittest/misc.cpp',
 			'src/unittest/SpriteTest.cpp',
 			'src/unittest/TextTest.cpp',
-			'src/unittest/Fixture.cpp',
 		], dependencies : [boost_test_dep, thread_dep], link_with : lib,
 		include_directories : include))
 	endif
@@ -177,7 +177,7 @@ install_headers([
 	'src/jngl/Color.hpp',
 	'src/jngl/Controller.hpp',
 	'src/jngl/debug.hpp',
-	'src/jngl/drawable.hpp',
+	'src/jngl/Drawable.hpp',
 	'src/jngl/Finally.hpp',
 	'src/jngl/font.hpp',
 	'src/jngl/framebuffer.hpp',

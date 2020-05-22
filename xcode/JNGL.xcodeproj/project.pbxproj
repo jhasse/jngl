@@ -33,7 +33,6 @@
 		C93A89FD160B243300BA8D91 /* shapes.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C93A89F9160B243300BA8D91 /* shapes.hpp */; };
 		C93A963215E3B49B003525E8 /* sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2E515C1D52A006CCBD2 /* sprite.cpp */; };
 		C93A963315E3B49B003525E8 /* audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CA15C1D4BD006CCBD2 /* audio.cpp */; };
-		C93A963615E3B49B003525E8 /* framebufferimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CD15C1D4BD006CCBD2 /* framebufferimpl.cpp */; };
 		C93A963715E3B49B003525E8 /* freetype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CE15C1D4BD006CCBD2 /* freetype.cpp */; };
 		C93A963815E3B49B003525E8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2CF15C1D4BD006CCBD2 /* main.cpp */; };
 		C93A963915E3B49B003525E8 /* opengl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9E9E2D015C1D4BD006CCBD2 /* opengl.cpp */; };
@@ -172,7 +171,6 @@
 		C9E9E2C415C1D47F006CCBD2 /* spriteimpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = spriteimpl.cpp; path = src/spriteimpl.cpp; sourceTree = "<group>"; };
 		C9E9E2C515C1D47F006CCBD2 /* spriteimpl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = spriteimpl.hpp; path = ../src/spriteimpl.hpp; sourceTree = "<group>"; };
 		C9E9E2CA15C1D4BD006CCBD2 /* audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = audio.cpp; path = src/audio.cpp; sourceTree = "<group>"; };
-		C9E9E2CD15C1D4BD006CCBD2 /* framebufferimpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = framebufferimpl.cpp; path = src/framebufferimpl.cpp; sourceTree = "<group>"; };
 		C9E9E2CE15C1D4BD006CCBD2 /* freetype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = freetype.cpp; path = src/freetype.cpp; sourceTree = "<group>"; };
 		C9E9E2CF15C1D4BD006CCBD2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; };
 		C9E9E2D015C1D4BD006CCBD2 /* opengl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = opengl.cpp; path = src/opengl.cpp; sourceTree = "<group>"; };
@@ -185,7 +183,6 @@
 		C9F1AF3113EAED790086B474 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		C9F1AF3413EAED8A0086B474 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		C9F1AF5113EAEF420086B474 /* audio.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = audio.hpp; path = ../src/audio.hpp; sourceTree = "<group>"; };
-		C9F1AF7513EAEF420086B474 /* framebufferimpl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = framebufferimpl.hpp; path = ../src/framebufferimpl.hpp; sourceTree = "<group>"; };
 		C9F1AF7713EAEF420086B474 /* freetype.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = freetype.hpp; path = ../src/freetype.hpp; sourceTree = "<group>"; };
 		C9F1AFCA13EAEF420086B474 /* jngl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = jngl.hpp; path = ../src/jngl.hpp; sourceTree = "<group>"; };
 		C9F1AFF313EAEF420086B474 /* texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = texture.hpp; path = ../src/texture.hpp; sourceTree = "<group>"; };
@@ -443,7 +440,6 @@
 				C9E9E2E415C1D516006CCBD2 /* jngl */,
 				C99A094713EC503A006C46FF /* sdl */,
 				C9E9E2CA15C1D4BD006CCBD2 /* audio.cpp */,
-				C9E9E2CD15C1D4BD006CCBD2 /* framebufferimpl.cpp */,
 				C9E9E2CE15C1D4BD006CCBD2 /* freetype.cpp */,
 				C9E9E2CF15C1D4BD006CCBD2 /* main.cpp */,
 				C9E9E2D015C1D4BD006CCBD2 /* opengl.cpp */,
@@ -462,7 +458,6 @@
 				209C83AF1E74AE2500D3BE2D /* helper.hpp */,
 				C9F1AF5113EAEF420086B474 /* audio.hpp */,
 				C9F1894813EB288D005E43B3 /* callbacks.h */,
-				C9F1AF7513EAEF420086B474 /* framebufferimpl.hpp */,
 				C9F1AF7713EAEF420086B474 /* freetype.hpp */,
 				C9E9E2EB15C1D531006CCBD2 /* jngl */,
 				C9F1AFCA13EAEF420086B474 /* jngl.hpp */,
@@ -597,7 +592,6 @@
 			files = (
 				C93A963215E3B49B003525E8 /* sprite.cpp in Sources */,
 				C93A963315E3B49B003525E8 /* audio.cpp in Sources */,
-				C93A963615E3B49B003525E8 /* framebufferimpl.cpp in Sources */,
 				C93A963715E3B49B003525E8 /* freetype.cpp in Sources */,
 				C9367793215A9D7900001AD5 /* Shader.cpp in Sources */,
 				C93A963815E3B49B003525E8 /* main.cpp in Sources */,

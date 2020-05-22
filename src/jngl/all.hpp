@@ -1,18 +1,18 @@
 // Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-/// @file
 /// Includes all JNGL headers
+/// @file
 #pragma once
 
 #include "App.hpp"
 #include "Color.hpp"
 #include "Controller.hpp"
+#include "Drawable.hpp"
 #include "Shader.hpp"
 #include "ShaderProgram.hpp"
 #include "Vertex.hpp"
 #include "Video.hpp"
 #include "debug.hpp"
-#include "drawable.hpp"
 #include "font.hpp"
 #include "framebuffer.hpp"
 #include "input.hpp"

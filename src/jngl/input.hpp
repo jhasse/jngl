@@ -1,5 +1,6 @@
 // Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
+/// Input related functions
 /// @file
 #pragma once
 
@@ -137,6 +138,7 @@ bool mouseDown(mouse::Button button = mouse::Left);
 /// Overwrite what mouseDown() should return
 void setMouseDown(mouse::Button button, bool);
 
+/// Whether \a button has been pressed since the next to last call to updateInput()
 bool mousePressed(mouse::Button button = mouse::Left);
 
 /// Overwrite what mouseDown() should return
