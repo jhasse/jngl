@@ -56,7 +56,9 @@
 
 		[displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 
+#if !TARGET_OS_TV
 		[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+#endif
 
 		startTime = -1;
 		pause = false;
