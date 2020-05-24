@@ -79,7 +79,6 @@ public:
 	}
 private:
 	int angle;
-	const char* ogg;
 	mutable jngl::FrameBuffer* fbo;
 };
 
