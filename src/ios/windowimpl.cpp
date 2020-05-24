@@ -21,7 +21,14 @@ void WindowImpl::handleTouch(const std::pair<intptr_t, Vec2>* const positions, c
 				touches.find(positions[i].first)->second = positions[i].second;
 				break;
 			case Touch::ENDED:
-				touches.erase(touches.find(positions[i].first));
+				const auto it = touches.find(positions[i].first);
+				assert(it != touches.end());
+				touches.erase(it);
+				// For the case that the mouse position pointed to this pointer we need to update it so
+				// that it still makes sense. This is very important when going from 2 pointer to 1
+				// since getTouchPositions() will switch to getMousePos() then.
+				mouseX = touches.begin()->second.x;
+				mouseY = touches.begin()->second.y;
 				break;
 		}
 	}
