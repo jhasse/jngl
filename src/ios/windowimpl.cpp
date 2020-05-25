@@ -13,23 +13,23 @@ namespace jngl {
 
 void WindowImpl::handleTouch(const std::pair<intptr_t, Vec2>* const positions, const size_t count, const Touch type) {
 	for (size_t i = 0; i < count; ++i) {
-		switch(type) {
-			case Touch::BEGAN:
-				touches.emplace(positions[i]);
-				break;
-			case Touch::MOVED:
-				touches.find(positions[i].first)->second = positions[i].second;
-				break;
-			case Touch::ENDED:
-				const auto it = touches.find(positions[i].first);
-				assert(it != touches.end());
-				touches.erase(it);
-				// For the case that the mouse position pointed to this pointer we need to update it so
-				// that it still makes sense. This is very important when going from 2 pointer to 1
-				// since getTouchPositions() will switch to getMousePos() then.
+		switch (type) {
+		case Touch::BEGAN:
+			touches.emplace(positions[i]);
+			break;
+		case Touch::MOVED:
+			touches.find(positions[i].first)->second = positions[i].second;
+			break;
+		case Touch::ENDED:
+			touches.erase(touches.find(positions[i].first));
+			if (touches.size() == 1) {
+				// For the case that the mouse position pointed to this pointer we need to update it
+				// so that it still makes sense. This is very important when going from 2 pointer to
+				// 1 since getTouchPositions() will switch to getMousePos() then.
 				mouseX = touches.begin()->second.x;
 				mouseY = touches.begin()->second.y;
-				break;
+			}
+			break;
 		}
 	}
 	if (touches.empty()) {
