@@ -88,6 +88,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 			const auto it = impl.touches.find(id);
 			assert(it != impl.touches.end());
 			impl.touches.erase(it);
+			assert(!impl.touches.empty());
 			// For the case that the mouse position pointed to this pointer we need to update it so
 			// that it still makes sense. This is very important when going from 2 pointer to 1
 			// since getTouchPositions() will switch to getMousePos() then.
