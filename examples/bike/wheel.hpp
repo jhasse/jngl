@@ -5,7 +5,7 @@
 class Wheel {
 public:
 	Wheel(double x, double y);
-	void Draw();
+	void draw() const;
 	void Move();
 	void CollisionWith(const jngl::Vec2&);
 	jngl::Vec2 position_;

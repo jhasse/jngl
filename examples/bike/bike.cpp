@@ -65,6 +65,6 @@ Bike::Bike()
 void Bike::Draw()
 {
 	for (auto& wheel : wheels_) {
-		wheel.Draw();
+		wheel.draw();
 	}
 }

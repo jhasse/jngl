@@ -8,7 +8,7 @@ const int screenHeight = 600;
 class Ball {
 public:
 	explicit Ball(const std::string& filename);
-	void Draw();
+	void draw() const;
 	void Move();
 	void CheckMouse(int x, int y);
 
@@ -38,7 +38,7 @@ JNGL_MAIN_BEGIN {
 		{
 			jngl::updateInput();
 			jngl::translate(-screenWidth / 2., -screenHeight / 2.);
-			ball.Draw();
+			ball.draw();
 			jngl::swapBuffers();
 		}
 	}
@@ -49,8 +49,7 @@ Ball::Ball(const std::string& filename)
   width_(jngl::getWidth(filename)), height_(jngl::getHeight(filename)) {
 }
 
-void Ball::Draw()
-{
+void Ball::draw() const {
 	jngl::draw("ball", static_cast<int>(x_), static_cast<int>(y_));
 }
 

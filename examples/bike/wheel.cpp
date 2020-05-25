@@ -21,8 +21,7 @@ void Wheel::Move()
 	speed_ *= 0.99; // Luftreibung
 }
 
-void Wheel::Draw()
-{
+void Wheel::draw() const {
 	jngl::draw("wheel", static_cast<int>(position_.x - radius_),
 	           static_cast<int>(position_.y - radius_));
 }
