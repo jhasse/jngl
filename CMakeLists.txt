@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.14)
 
 project(jngl LANGUAGES C CXX)
 
-if(NOT MSVC)
+if(MSVC)
+	string(APPEND CMAKE_CXX_FLAGS " /permissive-")
+else()
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
 endif()
@@ -198,6 +200,15 @@ else()
 	endif()
 
 	if(MSVC)
+		if(JNGL_SDL2)
+			FetchContent_Declare(sdl2
+				URL https://www.libsdl.org/release/SDL2-2.0.12.zip
+				URL_HASH SHA1=3ed5a7de726f9a2a3c8f7aaa62474901bb3f49ab
+			)
+			FetchContent_MakeAvailable(sdl2)
+			target_link_libraries(jngl PRIVATE SDL2-static)
+		endif()
+
 		FetchContent_Declare(freetype
 			URL https://download.savannah.gnu.org/releases/freetype/freetype-2.10.1.tar.xz
 			URL_HASH SHA1=79874ef4eaa52025126b71d836453b8279bdd331)
