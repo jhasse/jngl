@@ -274,10 +274,12 @@ else()
 		find_library(IOS_QUARTZCORE QuartzCore)
 		find_library(IOS_UIKIT UIKit)
 		find_library(IOS_AVFOUNDATION AVFoundation)
+		find_library(IOS_GAMECONTROLLER GameController)
 		target_link_libraries(jngl PRIVATE
 			"${PROJECT_SOURCE_DIR}/lib/ios/libfreetype.a"
 			"${PROJECT_SOURCE_DIR}/lib/ios/WebPDecoder.framework"
 			${IOS_OPENGLES} ${IOS_OPENAL} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
+			${IOS_GAMECONTROLLER}
 		)
 		if(hasParent)
 			set(FREETYPE_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include/ios PARENT_SCOPE)

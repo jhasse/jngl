@@ -23,5 +23,6 @@ namespace jngl {
 - (void) touchesEnded: (NSSet*) touches withEvent: (UIEvent*) event;
 - (void) touchesMoved: (NSSet*) touches withEvent: (UIEvent*) event;
 - (void) setPause: (bool) p;
+- (void) initControllers;
 
 @end
