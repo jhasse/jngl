@@ -27,6 +27,9 @@ set_target_properties(jngl PROPERTIES
 include(FetchContent)
 if(IOS)
 	set(Boost_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/ios")
+	# find_package is broken on iOS, see https://gitlab.kitware.com/cmake/cmake/issues/19808
+	set(CMAKE_DISABLE_FIND_PACKAGE_ZLIB TRUE)
+	set(CMAKE_DISABLE_FIND_PACKAGE_BZip2 TRUE)
 endif()
 find_package(Boost)
 if(Boost_FOUND)
@@ -203,6 +206,19 @@ else()
 		target_compile_definitions(jngl PRIVATE NOPNG)
 	endif()
 
+	if(MSVC OR IOS)
+		FetchContent_Declare(freetype
+			URL https://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.xz
+			URL_HASH SHA1=b074d5c34dc0e3cc150be6e7aa6b07c9ec4ed875)
+		FetchContent_MakeAvailable(freetype)
+		FetchContent_GetProperties(freetype SOURCE_DIR FREETYPE_SRC_DIR)
+		if(hasParent)
+			set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include PARENT_SCOPE)
+			set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
+		endif()
+		set(FREETYPE_LIBRARIES freetype)
+	endif()
+
 	if(MSVC)
 		if(JNGL_SDL2)
 			FetchContent_Declare(sdl2
@@ -212,17 +228,6 @@ else()
 			FetchContent_MakeAvailable(sdl2)
 			target_link_libraries(jngl PRIVATE SDL2-static)
 		endif()
-
-		FetchContent_Declare(freetype
-			URL https://download.savannah.gnu.org/releases/freetype/freetype-2.10.1.tar.xz
-			URL_HASH SHA1=79874ef4eaa52025126b71d836453b8279bdd331)
-		FetchContent_MakeAvailable(freetype)
-		FetchContent_GetProperties(freetype SOURCE_DIR FREETYPE_SRC_DIR)
-		if(hasParent)
-		set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include PARENT_SCOPE)
-		set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
-		endif()
-		set(FREETYPE_LIBRARIES freetype)
 
 		FetchContent_Declare(openal
 			URL https://github.com/kcat/openal-soft/archive/openal-soft-1.20.1.zip
@@ -280,15 +285,10 @@ else()
 		find_library(IOS_AVFOUNDATION AVFoundation)
 		find_library(IOS_GAMECONTROLLER GameController)
 		target_link_libraries(jngl PRIVATE
-			"${PROJECT_SOURCE_DIR}/lib/ios/libfreetype.a"
 			"${PROJECT_SOURCE_DIR}/lib/ios/WebPDecoder.framework"
 			${IOS_OPENGLES} ${IOS_OPENAL} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
 			${IOS_GAMECONTROLLER}
 		)
-		if(hasParent)
-			set(FREETYPE_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include/ios PARENT_SCOPE)
-			set(FREETYPE_LIBRARY "${PROJECT_SOURCE_DIR}/lib/ios/libfreetype.a" PARENT_SCOPE)
-		endif()
 
 		set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.bixense.jngl-test")
 		set(MACOSX_BUNDLE_BUNDLE_VERSION "1.0")

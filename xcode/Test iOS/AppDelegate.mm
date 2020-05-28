@@ -50,11 +50,13 @@ public:
 		}
 		if (jngl::isMultitouch()) {
 			jngl::setSpriteColor(0, 0, 0);
-			jngl::setKeyboardVisible(true);
+			// jngl::setKeyboardVisible(true);
 		} else {
 			jngl::setSpriteColor(255, 255, 255);
 		}
-		jngl::draw("jngl.webp", jngl::getMousePos() - jngl::Vec2(300, 140));
+		for (const auto pos : jngl::getTouchPositions()) {
+			jngl::draw("jngl.webp", pos - jngl::Vec2(300, 140));
+		}
 		std::stringstream sstream;
 		static double fps = 0.0;
 		fps *= 0.9;
