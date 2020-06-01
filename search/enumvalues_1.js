@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['rightstickx_5003',['RightStickX',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0ab893063c352c832cbeb93fae451bac66',1,'jngl::controller']]],
-  ['rightstickxinverse_5004',['RightStickXInverse',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0a674e5379458e5827dc4363ee0193819f',1,'jngl::controller']]],
-  ['rightsticky_5005',['RightStickY',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0a0f9106b2bfe37c0a18a1d086ece4e5f9',1,'jngl::controller']]],
-  ['rightstickyinverse_5006',['RightStickYInverse',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0a15dc69c00beee5e45b18e3f905f080cc',1,'jngl::controller']]]
+  ['leftbutton_5003',['LeftButton',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0a3955a0a6074e8c316cbe40ce1a53e37f',1,'jngl::controller']]],
+  ['leftstickx_5004',['LeftStickX',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0aaaf5ce813fa16ece88a90e57b2428f1f',1,'jngl::controller']]],
+  ['leftstickxinverse_5005',['LeftStickXInverse',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0a947c569e6b1c8a25a163a0841a569920',1,'jngl::controller']]],
+  ['leftsticky_5006',['LeftStickY',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0ac2784c7a9ece8b060fe51848e86b6463',1,'jngl::controller']]],
+  ['leftstickyinverse_5007',['LeftStickYInverse',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0a8e8dd412dc4d621da94fe2f86224c8cd',1,'jngl::controller']]]
 ];
