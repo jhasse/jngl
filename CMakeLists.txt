@@ -217,6 +217,12 @@ else()
 			set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
 		endif()
 		set(FREETYPE_LIBRARIES freetype)
+
+		FetchContent_Declare(webp
+			GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
+			GIT_TAG 3d97bb75144147e47db278ec76e5e70c6b2243db)
+		FetchContent_MakeAvailable(webp)
+		target_link_libraries(jngl PRIVATE webp)
 	endif()
 
 	if(MSVC)
@@ -253,12 +259,6 @@ else()
 		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
 		add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
 		target_link_libraries(jngl PUBLIC epoxy)
-
-		FetchContent_Declare(webp
-			GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
-			GIT_TAG 3d97bb75144147e47db278ec76e5e70c6b2243db)
-		FetchContent_MakeAvailable(webp)
-		target_link_libraries(jngl PRIVATE webp)
 	elseif(IOS)
 		include(FetchContent)
 		FetchContent_Declare(ogg
@@ -285,7 +285,6 @@ else()
 		find_library(IOS_AVFOUNDATION AVFoundation)
 		find_library(IOS_GAMECONTROLLER GameController)
 		target_link_libraries(jngl PRIVATE
-			"${PROJECT_SOURCE_DIR}/lib/ios/WebPDecoder.framework"
 			${IOS_OPENGLES} ${IOS_OPENAL} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
 			${IOS_GAMECONTROLLER}
 		)
