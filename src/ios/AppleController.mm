@@ -31,8 +31,16 @@ float AppleController::stateImpl(const controller::Button button) const {
 	case controller::RightButton: return gc.extendedGamepad.rightShoulder.value;
 	case controller::LeftStick: return gc.extendedGamepad.leftThumbstickButton.value;
 	case controller::RightStick: return gc.extendedGamepad.rightThumbstickButton.value;
-	case controller::Start: return gc.extendedGamepad.buttonOptions.value;
-	case controller::Back: return gc.extendedGamepad.buttonMenu.value;
+	case controller::Start:
+		if (@available(iOS 13, *)) {
+			return gc.extendedGamepad.buttonOptions.value;
+		}
+		return 0;
+	case controller::Back:
+		if (@available(iOS 13, *)) {
+			return gc.extendedGamepad.buttonMenu.value;
+		}
+		return 0;
 	default:
 		return 0;
 	}
