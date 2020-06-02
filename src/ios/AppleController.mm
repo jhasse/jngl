@@ -32,23 +32,17 @@ float AppleController::stateImpl(const controller::Button button) const {
 	case controller::LeftStick: return gc.extendedGamepad.leftThumbstickButton.value;
 	case controller::RightStick: return gc.extendedGamepad.rightThumbstickButton.value;
 	case controller::Start:
-#if TARGET_OS_TV
-		if (@available(tvOS 13, *)) {
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_13_0
+		return gc.extendedGamepad.buttonOptions.value;
 #else
-		if (@available(iOS 13, *)) {
-#endif
-			return gc.extendedGamepad.buttonOptions.value;
-		}
 		return 0;
+#endif
 	case controller::Back:
-#if TARGET_OS_TV
-		if (@available(tvOS 13, *)) {
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_13_0
+		return gc.extendedGamepad.buttonMenu.value;
 #else
-		if (@available(iOS 13, *)) {
-#endif
-			return gc.extendedGamepad.buttonMenu.value;
-		}
 		return 0;
+#endif
 	default:
 		return 0;
 	}
