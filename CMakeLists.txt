@@ -206,25 +206,6 @@ else()
 		target_compile_definitions(jngl PRIVATE NOPNG)
 	endif()
 
-	if(MSVC OR IOS)
-		FetchContent_Declare(freetype
-			URL https://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.xz
-			URL_HASH SHA1=b074d5c34dc0e3cc150be6e7aa6b07c9ec4ed875)
-		FetchContent_MakeAvailable(freetype)
-		FetchContent_GetProperties(freetype SOURCE_DIR FREETYPE_SRC_DIR)
-		if(hasParent)
-			set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include PARENT_SCOPE)
-			set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
-		endif()
-		set(FREETYPE_LIBRARIES freetype)
-
-		FetchContent_Declare(webp
-			GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
-			GIT_TAG 3d97bb75144147e47db278ec76e5e70c6b2243db)
-		FetchContent_MakeAvailable(webp)
-		target_link_libraries(jngl PRIVATE webp)
-	endif()
-
 	if(MSVC)
 		if(JNGL_SDL2)
 			FetchContent_Declare(sdl2
@@ -346,6 +327,29 @@ else()
 			target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
 			target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
 		endif()
+	endif()
+
+	if(MSVC OR IOS)
+		FetchContent_Declare(freetype
+			URL https://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.xz
+			URL_HASH SHA1=b074d5c34dc0e3cc150be6e7aa6b07c9ec4ed875)
+		FetchContent_MakeAvailable(freetype)
+		FetchContent_GetProperties(freetype SOURCE_DIR FREETYPE_SRC_DIR)
+		if(hasParent)
+			set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include PARENT_SCOPE)
+			set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
+		endif()
+		set(FREETYPE_LIBRARIES freetype)
+
+		FetchContent_Declare(webp
+		GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
+		GIT_TAG 3d97bb75144147e47db278ec76e5e70c6b2243db)
+		FetchContent_MakeAvailable(webp)
+		target_link_libraries(jngl PRIVATE webp)
+		# Note: For some reason it's important to add webp last for MSVC. Otherwise other CMake
+		# projects linking JNGL will get:
+		#   MSVCRTD.lib(exe_winmain.obj) : error LNK2019: unresolved external symbol WinMain
+		#   referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
 	endif()
 
 	if(NOT IOS)
