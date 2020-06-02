@@ -342,10 +342,20 @@ else()
 		set(FREETYPE_LIBRARIES freetype)
 
 		FetchContent_Declare(webp
-		GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
-		GIT_TAG 3d97bb75144147e47db278ec76e5e70c6b2243db)
+			GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
+			GIT_TAG d7844e9762b61c9638c263657bd49e1690184832)
+		# Unfortunately disabling this breaks ARM builds:
+		# set(WEBP_ENABLE_SIMD OFF CACHE BOOL "Enable any SIMD optimization." FORCE)
+		set(WEBP_BUILD_CWEBP OFF CACHE BOOL "Build the cwebp command line tool." FORCE)
+		set(WEBP_BUILD_DWEBP OFF CACHE BOOL "Build the dwebp command line tool." FORCE)
+		set(WEBP_BUILD_IMG2WEBP OFF CACHE BOOL "Build the img2webp animation tool." FORCE)
+		set(WEBP_BUILD_WEBPINFO OFF CACHE BOOL "Build the webpinfo command line tool." FORCE)
+		set(WEBP_BUILD_WEBPMUX OFF CACHE BOOL "Build the webpmux command line tool." FORCE)
+		set(WEBP_BUILD_EXTRAS OFF CACHE BOOL "Build extras." FORCE)
+		string(APPEND CMAKE_C_FLAGS " -DWEBP_REDUCE_SIZE") # No idea how to properly enable this
+		string(APPEND CMAKE_CXX_FLAGS " -DWEBP_REDUCE_SIZE")
 		FetchContent_MakeAvailable(webp)
-		target_link_libraries(jngl PRIVATE webp)
+		target_link_libraries(jngl PRIVATE webpdecode webpdspdecode webputilsdecode)
 		# Note: For some reason it's important to add webp last for MSVC. Otherwise other CMake
 		# projects linking JNGL will get:
 		#   MSVCRTD.lib(exe_winmain.obj) : error LNK2019: unresolved external symbol WinMain
