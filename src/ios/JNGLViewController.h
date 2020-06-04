@@ -1,9 +1,9 @@
-#import <UIKit/UIKit.h>
+#import <GameController/GameController.h>
 
 #include "JNGLView.h"
 
 extern JNGLView* jnglView;
 
-@interface JNGLViewController : UIViewController
+@interface JNGLViewController : GCEventViewController
 
 @end

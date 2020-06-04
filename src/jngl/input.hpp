@@ -178,12 +178,22 @@ enum Button {
 	B,
 	X,
 	Y,
+
+	/// Left shoulder button
 	LeftButton,
+
+	/// Right shoulder button
 	RightButton,
+
 	LeftTrigger,
 	RightTrigger,
+
+	/// Start, or Options button
 	Start,
+
+	/// Back, Menu, or Share button
 	Back,
+
 	DpadUp,
 	DpadDown,
 	DpadLeft,

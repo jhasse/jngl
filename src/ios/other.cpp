@@ -10,8 +10,4 @@ std::string getBinaryPath() {
 	return "";
 }
 
-std::vector<std::shared_ptr<Controller>> getConnectedControllers() {
-	return {};
-}
-
 } // namespace jngl

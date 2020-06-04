@@ -329,7 +329,7 @@ private:
 		audio = THEORAPLAY_getAudio(decoder);
 	}
 
-	constexpr static unsigned int BUFFER_SIZE = 300;
+	constexpr static unsigned int BUFFER_SIZE = 200;
 
 	std::unique_ptr<jngl::Sound> sound;
 	THEORAPLAY_Decoder* decoder;

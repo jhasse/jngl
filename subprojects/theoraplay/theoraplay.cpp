@@ -298,9 +298,9 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                 float *samples;
                 AudioPacket *item = (AudioPacket *) malloc(sizeof (AudioPacket));
                 if (item == nullptr) goto cleanup;
-                item->playms = (unsigned long) ((((double) audioframes) / ((double) vinfo.rate)) * 1000.0);
+                item->playms = static_cast<unsigned int>((((double) audioframes) / ((double) vinfo.rate)) * 1000.0);
                 item->channels = channels;
-                item->freq = vinfo.rate;
+                item->freq = static_cast<int>(vinfo.rate);
                 item->frames = frames;
                 item->samples = (float *) malloc(sizeof (float) * frames * channels);
                 item->next = nullptr;

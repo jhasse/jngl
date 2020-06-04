@@ -7,6 +7,7 @@
 #include <map>
 
 namespace jngl {
+	class AppleController;
 	class Vec2;
 	class Window;
 
@@ -32,6 +33,9 @@ namespace jngl {
 		void updateInput();
 
 		std::map<int64_t, Vec2> touches;
+
+		bool shouldCallControllerChangedCallback = false;
+		std::map<void*, std::shared_ptr<AppleController>> appleControllers;
 
 	private:
 		Window* const window;

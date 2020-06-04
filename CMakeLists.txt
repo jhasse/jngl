@@ -2,9 +2,15 @@ cmake_minimum_required(VERSION 3.14)
 
 project(jngl LANGUAGES C CXX)
 
-if(NOT MSVC)
+if(MSVC)
+	string(APPEND CMAKE_CXX_FLAGS " /permissive-")
+else()
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
+endif()
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+	string(APPEND CMAKE_C_FLAGS " -Wno-shorten-64-to-32") # ogg, vorbis, etc. are full of these
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -21,6 +27,9 @@ set_target_properties(jngl PROPERTIES
 include(FetchContent)
 if(IOS)
 	set(Boost_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/ios")
+	# find_package is broken on iOS, see https://gitlab.kitware.com/cmake/cmake/issues/19808
+	set(CMAKE_DISABLE_FIND_PACKAGE_ZLIB TRUE)
+	set(CMAKE_DISABLE_FIND_PACKAGE_BZip2 TRUE)
 endif()
 find_package(Boost)
 if(Boost_FOUND)
@@ -198,16 +207,14 @@ else()
 	endif()
 
 	if(MSVC)
-		FetchContent_Declare(freetype
-			URL https://download.savannah.gnu.org/releases/freetype/freetype-2.10.1.tar.xz
-			URL_HASH SHA1=79874ef4eaa52025126b71d836453b8279bdd331)
-		FetchContent_MakeAvailable(freetype)
-		FetchContent_GetProperties(freetype SOURCE_DIR FREETYPE_SRC_DIR)
-		if(hasParent)
-		set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include PARENT_SCOPE)
-		set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
+		if(JNGL_SDL2)
+			FetchContent_Declare(sdl2
+				URL https://www.libsdl.org/release/SDL2-2.0.12.zip
+				URL_HASH SHA1=3ed5a7de726f9a2a3c8f7aaa62474901bb3f49ab
+			)
+			FetchContent_MakeAvailable(sdl2)
+			target_link_libraries(jngl PRIVATE SDL2-static)
 		endif()
-		set(FREETYPE_LIBRARIES freetype)
 
 		FetchContent_Declare(openal
 			URL https://github.com/kcat/openal-soft/archive/openal-soft-1.20.1.zip
@@ -233,12 +240,6 @@ else()
 		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
 		add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
 		target_link_libraries(jngl PUBLIC epoxy)
-
-		FetchContent_Declare(webp
-			GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
-			GIT_TAG 3d97bb75144147e47db278ec76e5e70c6b2243db)
-		FetchContent_MakeAvailable(webp)
-		target_link_libraries(jngl PRIVATE webp)
 	elseif(IOS)
 		include(FetchContent)
 		FetchContent_Declare(ogg
@@ -263,15 +264,11 @@ else()
 		find_library(IOS_QUARTZCORE QuartzCore)
 		find_library(IOS_UIKIT UIKit)
 		find_library(IOS_AVFOUNDATION AVFoundation)
+		find_library(IOS_GAMECONTROLLER GameController)
 		target_link_libraries(jngl PRIVATE
-			"${PROJECT_SOURCE_DIR}/lib/ios/libfreetype.a"
-			"${PROJECT_SOURCE_DIR}/lib/ios/WebPDecoder.framework"
 			${IOS_OPENGLES} ${IOS_OPENAL} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
+			${IOS_GAMECONTROLLER}
 		)
-		if(hasParent)
-			set(FREETYPE_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include/ios PARENT_SCOPE)
-			set(FREETYPE_LIBRARY "${PROJECT_SOURCE_DIR}/lib/ios/libfreetype.a" PARENT_SCOPE)
-		endif()
 
 		set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.bixense.jngl-test")
 		set(MACOSX_BUNDLE_BUNDLE_VERSION "1.0")
@@ -330,6 +327,39 @@ else()
 			target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
 			target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
 		endif()
+	endif()
+
+	if(MSVC OR IOS)
+		FetchContent_Declare(freetype
+			URL https://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.xz
+			URL_HASH SHA1=b074d5c34dc0e3cc150be6e7aa6b07c9ec4ed875)
+		FetchContent_MakeAvailable(freetype)
+		FetchContent_GetProperties(freetype SOURCE_DIR FREETYPE_SRC_DIR)
+		if(hasParent)
+			set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include PARENT_SCOPE)
+			set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
+		endif()
+		set(FREETYPE_LIBRARIES freetype)
+
+		FetchContent_Declare(webp
+			GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
+			GIT_TAG d7844e9762b61c9638c263657bd49e1690184832)
+		# Unfortunately disabling this breaks ARM builds:
+		# set(WEBP_ENABLE_SIMD OFF CACHE BOOL "Enable any SIMD optimization." FORCE)
+		set(WEBP_BUILD_CWEBP OFF CACHE BOOL "Build the cwebp command line tool." FORCE)
+		set(WEBP_BUILD_DWEBP OFF CACHE BOOL "Build the dwebp command line tool." FORCE)
+		set(WEBP_BUILD_IMG2WEBP OFF CACHE BOOL "Build the img2webp animation tool." FORCE)
+		set(WEBP_BUILD_WEBPINFO OFF CACHE BOOL "Build the webpinfo command line tool." FORCE)
+		set(WEBP_BUILD_WEBPMUX OFF CACHE BOOL "Build the webpmux command line tool." FORCE)
+		set(WEBP_BUILD_EXTRAS OFF CACHE BOOL "Build extras." FORCE)
+		string(APPEND CMAKE_C_FLAGS " -DWEBP_REDUCE_SIZE") # No idea how to properly enable this
+		string(APPEND CMAKE_CXX_FLAGS " -DWEBP_REDUCE_SIZE")
+		FetchContent_MakeAvailable(webp)
+		target_link_libraries(jngl PRIVATE webpdecode webpdspdecode webputilsdecode)
+		# Note: For some reason it's important to add webp last for MSVC. Otherwise other CMake
+		# projects linking JNGL will get:
+		#   MSVCRTD.lib(exe_winmain.obj) : error LNK2019: unresolved external symbol WinMain
+		#   referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
 	endif()
 
 	if(NOT IOS)

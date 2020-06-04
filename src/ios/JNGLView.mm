@@ -4,8 +4,11 @@
 #include "../windowptr.hpp"
 #include "../jngl/sprite.hpp"
 #include "windowimpl.hpp"
+#include "AppleController.h"
 
 #include <iostream>
+
+#import <GameController/GameController.h>
 
 @implementation JNGLView
 
@@ -156,4 +159,46 @@
 	return UIKeyboardTypeDefault;
 }
 
+-(void) initControllers {
+	assert(impl->appleControllers.empty());
+	if ([[GCController controllers] count] > 0) {
+		impl->shouldCallControllerChangedCallback = true;
+	}
+
+	NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
+	[center addObserverForName:GCControllerDidConnectNotification
+	                    object:nil
+	                     queue:nil
+	                usingBlock:^(NSNotification* note) {
+		              impl->shouldCallControllerChangedCallback = true;
+	                }];
+	[center addObserverForName:GCControllerDidDisconnectNotification
+	                    object:nil
+	                     queue:nil
+	                usingBlock:^(NSNotification* note) {
+		              impl->shouldCallControllerChangedCallback = true;
+	                }];
+}
+
 @end
+
+namespace jngl {
+
+std::vector<std::shared_ptr<Controller>> getConnectedControllers() {
+	const auto controllers = [GCController controllers];
+	std::vector<std::shared_ptr<Controller>> ret;
+	const auto impl = jngl::pWindow->getImpl();
+	for (GCController* controller in controllers) {
+		if ([controller extendedGamepad] == nil) {
+			continue; // Micro Gamepad (Siri Remote)
+		}
+		auto it = impl->appleControllers.find(controller);
+		if (it == impl->appleControllers.end()) {
+			it = impl->appleControllers.emplace(controller, std::make_shared<AppleController>(controller)).first;
+		}
+		ret.push_back(it->second);
+	}
+	return ret;
+}
+
+}

@@ -47,6 +47,12 @@ bool Window::getKeyPressed(const std::string& key) {
 
 void Window::UpdateInput() {
 	impl->updateInput();
+	if (impl->shouldCallControllerChangedCallback) {
+		impl->shouldCallControllerChangedCallback = false;
+		if (controllerChangedCallback) {
+			controllerChangedCallback();
+		}
+	}
 }
 
 void Window::SwapBuffers() {
