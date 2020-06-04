@@ -302,7 +302,7 @@ void setFontByName(const std::string& name) {
 }
 
 void setIcon(const std::string& filename) {
-	pWindow->SetIcon(filename);
+	pWindow->SetIcon(pathPrefix + filename);
 }
 
 double getFPS() {
@@ -476,6 +476,9 @@ std::shared_ptr<Work> getWork() {
 
 void setPrefix(const std::string& path) {
 	pathPrefix = path;
+	if (!pathPrefix.empty() && pathPrefix.back() != '/') {
+		pathPrefix += '/';
+	}
 }
 
 std::string getPrefix() {
