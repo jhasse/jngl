@@ -360,7 +360,7 @@ if(MSVC OR IOS OR ANDROID)
 	FetchContent_MakeAvailable(webp)
 	FetchContent_GetProperties(webp SOURCE_DIR WEBP_SRC_DIR)
 	target_include_directories(jngl PRIVATE ${WEBP_SRC_DIR}/src)
-	target_link_libraries(jngl PRIVATE webpdecoder)
+	target_link_libraries(jngl PRIVATE webpdecode webpdspdecode webputilsdecode)
 	# Note: For some reason it's important to add webp last for MSVC. Otherwise other CMake
 	# projects linking JNGL will get:
 	#   MSVCRTD.lib(exe_winmain.obj) : error LNK2019: unresolved external symbol WinMain
