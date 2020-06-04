@@ -615,9 +615,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>getHeight</b> (const <
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#acfa255b4d1bf4d4ad83b3d200b99c930">getTime</a> ()</td></tr>
 <tr class="memdesc:acfa255b4d1bf4d4ad83b3d200b99c930"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns seconds that have passed since program start. <br /></td></tr>
 <tr class="separator:acfa255b4d1bf4d4ad83b3d200b99c930"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0e992174123c25f1fd4283157469bdf"><td class="memItemLeft" align="right" valign="top"><a id="ac0e992174123c25f1fd4283157469bdf"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ac0e992174123c25f1fd4283157469bdf">sleep</a> (int milliseconds)</td></tr>
-<tr class="memdesc:ac0e992174123c25f1fd4283157469bdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sleep current thread for <em>milliseconds</em>. <br /></td></tr>
+<tr class="memitem:ac0e992174123c25f1fd4283157469bdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ac0e992174123c25f1fd4283157469bdf">sleep</a> (int milliseconds)</td></tr>
+<tr class="memdesc:ac0e992174123c25f1fd4283157469bdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sleep current thread for <em>milliseconds</em>.  <a href="namespacejngl.html#ac0e992174123c25f1fd4283157469bdf">More...</a><br /></td></tr>
 <tr class="separator:ac0e992174123c25f1fd4283157469bdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6258b60ff00bd009838eea0a647279c1"><td class="memItemLeft" align="right" valign="top"><a id="a6258b60ff00bd009838eea0a647279c1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a6258b60ff00bd009838eea0a647279c1">showWindow</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;title, int width, int height, bool fullscreen=false, <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair</a>&lt; int, int &gt; minAspectRatio={ 4, 3 }, <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair</a>&lt; int, int &gt; maxAspectRatio={ 16, 9 })</td></tr>
@@ -997,6 +996,27 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 
 </div>
 </div>
+<a id="ac0e992174123c25f1fd4283157469bdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0e992174123c25f1fd4283157469bdf">&#9670;&nbsp;</a></span>sleep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void jngl::sleep </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>milliseconds</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sleep current thread for <em>milliseconds</em>. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated:</a></b></dt><dd>Use <a class="elRef" href="http://en.cppreference.com/w/cpp/thread/sleep_for.html">std::this_thread::sleep_for</a> instead </dd></dl>
+
+</div>
+</div>
 <a id="af765d65e1817b356ad2bd10c282d3f2d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af765d65e1817b356ad2bd10c282d3f2d">&#9670;&nbsp;</a></span>setWork()</h2>
 
@@ -1012,7 +1032,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
 
 </div>
 </div>
