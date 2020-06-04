@@ -128,16 +128,6 @@ get_directory_property(hasParent PARENT_DIRECTORY)
 if(ANDROID)
 	target_compile_definitions(jngl PRIVATE NOJPEG NOPNG OPENGLES)
 
-	set(WEBP_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/libwebp)
-	if ((NOT EXISTS ${WEBP_SRC_DIR}) OR (NOT EXISTS ${WEBP_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone --depth=1 -b 1.1.0
-		                https://chromium.googlesource.com/webm/libwebp
-		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
-	endif()
-	add_subdirectory(${WEBP_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/libwebp)
-	target_include_directories(jngl PRIVATE ${WEBP_SRC_DIR}/src)
-	target_link_libraries(jngl PUBLIC webp)
-
 	set(ALSOFT_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/openal-soft)
 	if ((NOT EXISTS ${ALSOFT_SRC_DIR}) OR (NOT EXISTS ${ALSOFT_SRC_DIR}/CMakeLists.txt))
 		execute_process(COMMAND git clone --depth=1 -b v1.18
@@ -342,26 +332,6 @@ else()
 			set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
 		endif()
 		set(FREETYPE_LIBRARIES freetype)
-
-		FetchContent_Declare(webp
-			GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
-			GIT_TAG d7844e9762b61c9638c263657bd49e1690184832)
-		# Unfortunately disabling this breaks ARM builds:
-		# set(WEBP_ENABLE_SIMD OFF CACHE BOOL "Enable any SIMD optimization." FORCE)
-		set(WEBP_BUILD_CWEBP OFF CACHE BOOL "Build the cwebp command line tool." FORCE)
-		set(WEBP_BUILD_DWEBP OFF CACHE BOOL "Build the dwebp command line tool." FORCE)
-		set(WEBP_BUILD_IMG2WEBP OFF CACHE BOOL "Build the img2webp animation tool." FORCE)
-		set(WEBP_BUILD_WEBPINFO OFF CACHE BOOL "Build the webpinfo command line tool." FORCE)
-		set(WEBP_BUILD_WEBPMUX OFF CACHE BOOL "Build the webpmux command line tool." FORCE)
-		set(WEBP_BUILD_EXTRAS OFF CACHE BOOL "Build extras." FORCE)
-		string(APPEND CMAKE_C_FLAGS " -DWEBP_REDUCE_SIZE") # No idea how to properly enable this
-		string(APPEND CMAKE_CXX_FLAGS " -DWEBP_REDUCE_SIZE")
-		FetchContent_MakeAvailable(webp)
-		target_link_libraries(jngl PRIVATE webpdecode webpdspdecode webputilsdecode)
-		# Note: For some reason it's important to add webp last for MSVC. Otherwise other CMake
-		# projects linking JNGL will get:
-		#   MSVCRTD.lib(exe_winmain.obj) : error LNK2019: unresolved external symbol WinMain
-		#   referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
 	endif()
 
 	if(NOT hasParent)
@@ -371,6 +341,30 @@ else()
 		target_link_libraries(jngl-test jngl)
 		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/jngl.webp "$<TARGET_FILE_DIR:jngl-test>")
 	endif()
+endif()
+
+if(MSVC OR IOS OR ANDROID)
+	FetchContent_Declare(webp
+		GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
+		GIT_TAG d7844e9762b61c9638c263657bd49e1690184832)
+	# Unfortunately disabling this breaks ARM builds:
+	# set(WEBP_ENABLE_SIMD OFF CACHE BOOL "Enable any SIMD optimization." FORCE)
+	set(WEBP_BUILD_CWEBP OFF CACHE BOOL "Build the cwebp command line tool." FORCE)
+	set(WEBP_BUILD_DWEBP OFF CACHE BOOL "Build the dwebp command line tool." FORCE)
+	set(WEBP_BUILD_IMG2WEBP OFF CACHE BOOL "Build the img2webp animation tool." FORCE)
+	set(WEBP_BUILD_WEBPINFO OFF CACHE BOOL "Build the webpinfo command line tool." FORCE)
+	set(WEBP_BUILD_WEBPMUX OFF CACHE BOOL "Build the webpmux command line tool." FORCE)
+	set(WEBP_BUILD_EXTRAS OFF CACHE BOOL "Build extras." FORCE)
+	string(APPEND CMAKE_C_FLAGS " -DWEBP_REDUCE_SIZE") # No idea how to properly enable this
+	string(APPEND CMAKE_CXX_FLAGS " -DWEBP_REDUCE_SIZE")
+	FetchContent_MakeAvailable(webp)
+	FetchContent_GetProperties(webp SOURCE_DIR WEBP_SRC_DIR)
+	target_include_directories(jngl PRIVATE ${WEBP_SRC_DIR}/src)
+	target_link_libraries(jngl PRIVATE webpdecoder)
+	# Note: For some reason it's important to add webp last for MSVC. Otherwise other CMake
+	# projects linking JNGL will get:
+	#   MSVCRTD.lib(exe_winmain.obj) : error LNK2019: unresolved external symbol WinMain
+	#   referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
 endif()
 
 if(ANDROID OR IOS)
