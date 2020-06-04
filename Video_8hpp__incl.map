@@ -1,13 +1,13 @@
 <map id="jngl/Video.hpp" name="jngl/Video.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="404,5,539,32"/>
-<area shape="rect" id="node2" href="$sprite_8hpp_source.html" title=" " alt="" coords="229,80,332,107"/>
-<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="435,229,505,256"/>
-<area shape="rect" id="node11" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="509,80,580,107"/>
-<area shape="rect" id="node3" href="$Drawable_8hpp.html" title="Contains Drawable class." alt="" coords="21,155,140,181"/>
-<area shape="rect" id="node4" href="$ShaderProgram_8hpp.html" title=" " alt="" coords="275,155,433,181"/>
-<area shape="rect" id="node8" href="$Vec2_8hpp.html" title=" " alt="" coords="164,155,251,181"/>
-<area shape="rect" id="node5" href="$Finally_8hpp.html" title=" " alt="" coords="299,229,409,256"/>
-<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="303,304,405,331"/>
-<area shape="rect" id="node9" title=" " alt="" coords="5,229,164,256"/>
-<area shape="rect" id="node10" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="188,229,259,256"/>
+<area shape="rect" id="node1" title=" " alt="" coords="413,5,548,32"/>
+<area shape="rect" id="node2" href="$sprite_8hpp_source.html" title=" " alt="" coords="253,80,356,107"/>
+<area shape="rect" id="node10" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="444,229,515,256"/>
+<area shape="rect" id="node11" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="519,80,589,107"/>
+<area shape="rect" id="node3" href="$Drawable_8hpp.html" title="Contains Drawable class." alt="" coords="89,155,208,181"/>
+<area shape="rect" id="node4" href="$Vec2_8hpp.html" title=" " alt="" coords="151,229,237,256"/>
+<area shape="rect" id="node7" href="$ShaderProgram_8hpp.html" title=" " alt="" coords="284,155,443,181"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,304,164,331"/>
+<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="188,304,259,331"/>
+<area shape="rect" id="node8" href="$Finally_8hpp.html" title=" " alt="" coords="308,229,419,256"/>
+<area shape="rect" id="node9" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="312,304,415,331"/>
 </map>
