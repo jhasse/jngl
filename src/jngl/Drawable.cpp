@@ -68,6 +68,10 @@ void Drawable::setY(const double y) {
 	this->y = y * getScaleFactor();
 }
 
+Vec2 Drawable::getSize() const {
+	return { double(width) / getScaleFactor(), double(height) / getScaleFactor() };
+}
+
 float Drawable::getWidth() const {
 	return width / static_cast<float>(getScaleFactor());
 }

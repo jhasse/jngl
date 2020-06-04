@@ -29,6 +29,10 @@ BOOST_AUTO_TEST_CASE(Sprite) {
 		jngl::Sprite sprite("../jngl.webp");
 		BOOST_CHECK_CLOSE(sprite.getWidth(), 600, 1e-9);
 		BOOST_CHECK_CLOSE(sprite.getHeight(), 300, 1e-9);
+
+		BOOST_CHECK_CLOSE(sprite.getSize().x, 600, 1e-5); // rounding errors are strong in this one
+		BOOST_CHECK_CLOSE(sprite.getSize().y, 300, 1e-5);
+
 		sprite.setCenter(7.3f, 9.1f);
 		BOOST_CHECK_CLOSE(boost::qvm::mag(sprite.getCenter<jngl::Vec2>() - jngl::Vec2(7.3f, 9.1f)),
 		                  0, 1e-5);

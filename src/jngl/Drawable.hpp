@@ -4,6 +4,8 @@
 /// @file
 #pragma once
 
+#include "Vec2.hpp"
+
 namespace jngl {
 
 /// Base class for drawable objects with a position and a rectangle size
@@ -55,6 +57,9 @@ public:
 
 	double getY() const;
 	void setY(double);
+
+	/// Returns {width, height} in screen coordinates
+	Vec2 getSize() const;
 
 	/// Returns the width in screen coordinates
 	float getWidth() const;

@@ -19,4 +19,6 @@ BOOST_AUTO_TEST_CASE(Drawable) {
 	BOOST_CHECK_CLOSE(d.getY(), 0, 1e-9);
 	BOOST_CHECK_CLOSE(d.getWidth(), 0, 1e-9);
 	BOOST_CHECK_CLOSE(d.getHeight(), 0, 1e-9);
+	BOOST_CHECK_CLOSE(d.getWidth(), d.getSize().x, 1e-9);
+	BOOST_CHECK_CLOSE(d.getHeight(), d.getSize().y, 1e-9);
 }
