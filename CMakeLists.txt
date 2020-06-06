@@ -246,6 +246,7 @@ else()
 		FetchContent_GetProperties(vorbis SOURCE_DIR VORBIS_SRC_DIR)
 		target_include_directories(jngl PRIVATE ${VORBIS_SRC_DIR}/include)
 		target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
+		target_compile_options(jngl PRIVATE -Wno-deprecated-declarations) # OpenAL
 		target_compile_definitions(jngl PRIVATE IOS)
 		target_compile_definitions(jngl PUBLIC GLES_SILENCE_DEPRECATION)
 		target_include_directories(jngl PUBLIC include/ios)
