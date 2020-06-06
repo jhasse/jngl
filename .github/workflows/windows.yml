@@ -1,15 +1,16 @@
 name: Windows
 on: [push]
 jobs:
-  build:
+  msvc:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Build with CMake and Visual Studio
-      shell: bash
-      run: |
-        cmake -Bbuild -H. -AWin32
-        cmake --build build
+    - name: Configure (32 bit)
+      run: cmake -Bbuild -AWin32
+    - name: Build (Debug)
+      run: cmake --build build --config Debug
+    - name: Build (Release)
+      run: cmake --build build --config Release
 
   mingw-sdl:
     runs-on: [ubuntu-latest]
