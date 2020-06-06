@@ -19,6 +19,7 @@
 #include <cmath>
 #include <epoxy/wgl.h>
 #include <mmsystem.h> // timeBeginPeriod
+#include <stdexcept>
 #include <windowsx.h> // GET_X_LPARAM
 #include <xinput.h>
 
