@@ -1,6 +1,7 @@
 set(IOS 1)
 set(CMAKE_SYSTEM_NAME tvOS)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY) # Required for libogg
+set(CMAKE_XCODE_ATTRIBUTE_ENABLE_BITCODE 1)
 
 ### see https://github.com/cristeab/ios-cmake
 
