@@ -296,8 +296,15 @@ else()
 				target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
 			endif()
 			if(JNGL_VIDEO)
-				pkg_check_modules(THEORA_DEC theoradec)
-				if(THEORA_DEC_FOUND)
+				if(APPLE)
+					# On macOS we'll build theora from source, since Homebrew's version crashes due
+					# to a Xcode bug in 10.15: https://forums.developer.apple.com/thread/121887
+					pkg_check_modules(OGG ogg REQUIRED)
+					target_link_libraries(jngl PRIVATE ${OGG_LINK_LIBRARIES})
+				else()
+					pkg_check_modules(THEORA_DEC theoradec)
+				endif()
+				if(APPLE OR THEORA_DEC_FOUND)
 					pkg_check_modules(VORBIS vorbis)
 					if(VORBIS_FOUND)
 						target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
@@ -368,7 +375,7 @@ if(MSVC OR IOS OR ANDROID)
 	#   referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
 endif()
 
-if(ANDROID OR IOS)
+if(ANDROID OR IOS OR APPLE)
 	if(JNGL_VIDEO)
 		FetchContent_Declare(theora
 			URL http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
@@ -384,7 +391,7 @@ if(ANDROID OR IOS)
 		target_include_directories(theoradec PRIVATE ${OGG_INCLUDE_DIRS}
 			"${theora_SOURCE_DIR}/include")
 		target_compile_options(theoradec PRIVATE -Wno-shift-negative-value
-			-Wno-shift-op-parentheses)
+			-Wno-shift-op-parentheses -Wno-logical-op-parentheses -Wno-parentheses)
 		target_link_libraries(jngl PRIVATE theoradec)
 		target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
 		target_include_directories(jngl PRIVATE "${theora_SOURCE_DIR}/include")
