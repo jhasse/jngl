@@ -455,6 +455,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setArgs</b> (<a class
 <a class="elRef" href="http://en.cppreference.com/w/cpp/io/basic_stringstream.html">std::stringstream</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a97faf475e2690e1ec70b4015d2506f3e">readAsset</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
 <tr class="memdesc:a97faf475e2690e1ec70b4015d2506f3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a stringstream containing the whole file. This will read from the .apk on Android. <br /></td></tr>
 <tr class="separator:a97faf475e2690e1ec70b4015d2506f3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdaeddaaadcd2c5e7ee2773483a4a7f6"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#abdaeddaaadcd2c5e7ee2773483a4a7f6">readConfig</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;key)</td></tr>
+<tr class="memdesc:abdaeddaaadcd2c5e7ee2773483a4a7f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read in a configuration value which has been saved under <em>key</em>.  <a href="namespacejngl.html#abdaeddaaadcd2c5e7ee2773483a4a7f6">More...</a><br /></td></tr>
+<tr class="separator:abdaeddaaadcd2c5e7ee2773483a4a7f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad75f06293d49fd5a94549a6da4d1f67b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ad75f06293d49fd5a94549a6da4d1f67b">writeConfig</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;key, const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;value)</td></tr>
+<tr class="memdesc:ad75f06293d49fd5a94549a6da4d1f67b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write <em>value</em> into the persistent storage which can be read in again using <a class="el" href="namespacejngl.html#abdaeddaaadcd2c5e7ee2773483a4a7f6" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a>(<em>key</em>)  <a href="namespacejngl.html#ad75f06293d49fd5a94549a6da4d1f67b">More...</a><br /></td></tr>
+<tr class="separator:ad75f06293d49fd5a94549a6da4d1f67b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f27481362ba716ae55c17f137d09a5d"><td class="memItemLeft" align="right" valign="top"><a id="a1f27481362ba716ae55c17f137d09a5d"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a1f27481362ba716ae55c17f137d09a5d">getScaleFactor</a> ()</td></tr>
 <tr class="memdesc:a1f27481362ba716ae55c17f137d09a5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of one screen pixel in actual pixels. <br /></td></tr>
@@ -896,6 +902,65 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 <li>macOS: <code>~/Library/Application Support/Display Name/</code></li>
 <li>Android/iOS: Data path provided by the OS </li>
 </ul>
+
+</div>
+</div>
+<a id="abdaeddaaadcd2c5e7ee2773483a4a7f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdaeddaaadcd2c5e7ee2773483a4a7f6">&#9670;&nbsp;</a></span>readConfig()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> jngl::readConfig </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read in a configuration value which has been saved under <em>key</em>. </p>
+<p>On most platforms this will read the contents of a file named <em>key</em> in <a class="el" href="namespacejngl.html#af2122ebb1c5d1653f8fbbdb373d9b98e" title="Returns the directory where to store configuration files and save games.">getConfigPath()</a>. On iOS or tvOS it will use the key/value store provided by the OS.</p>
+<dl class="section return"><dt>Returns</dt><dd>Value saved by <a class="el" href="namespacejngl.html#ad75f06293d49fd5a94549a6da4d1f67b" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a>. Empty string if an error occured or <em>key</em> doesn't exist. </dd></dl>
+
+</div>
+</div>
+<a id="ad75f06293d49fd5a94549a6da4d1f67b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad75f06293d49fd5a94549a6da4d1f67b">&#9670;&nbsp;</a></span>writeConfig()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void jngl::writeConfig </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Write <em>value</em> into the persistent storage which can be read in again using <a class="el" href="namespacejngl.html#abdaeddaaadcd2c5e7ee2773483a4a7f6" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a>(<em>key</em>) </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="elRef" href="http://en.cppreference.com/w/cpp/io/ios_base/failure.html">std::ifstream::failure</a></td><td>if the value couldn't be saved (e.g. <a class="el" href="namespacejngl.html#af2122ebb1c5d1653f8fbbdb373d9b98e" title="Returns the directory where to store configuration files and save games.">jngl::getConfigPath()</a> is read-only) </td></tr>
+    <tr><td class="paramname"><a class="elRef" href="http://en.cppreference.com/w/cpp/error/runtime_error.html">std::runtime_error</a></td><td>if <em>key</em> is invalid (it must be a relative file path) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

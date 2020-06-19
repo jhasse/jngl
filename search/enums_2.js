@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['keyboardtype_4999',['KeyboardType',['../namespacejngl.html#ae08f1922e08aba234005793fc4fed5e4',1,'jngl']]],
-  ['keytype_5000',['KeyType',['../input_8hpp.html#aab0feaba617470cb4aa830dc5935238c',1,'jngl::key']]]
+  ['keyboardtype_5003',['KeyboardType',['../namespacejngl.html#ae08f1922e08aba234005793fc4fed5e4',1,'jngl']]],
+  ['keytype_5004',['KeyType',['../input_8hpp.html#aab0feaba617470cb4aa830dc5935238c',1,'jngl::key']]]
 ];
