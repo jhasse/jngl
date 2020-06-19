@@ -70,4 +70,21 @@ std::vector<std::string> getArgs();
 /// Returns a stringstream containing the whole file. This will read from the .apk on Android.
 std::stringstream readAsset(const std::string& filename);
 
+/// Read in a configuration value which has been saved under \a key
+///
+/// On most platforms this will read the contents of a file named \a key in getConfigPath(). On iOS
+/// or tvOS it will use the key/value store provided by the OS.
+///
+/// \return Value saved by jngl::writeConfig. Empty string if an error occured or \a key doesn't
+///         exist.
+std::string readConfig(const std::string& key);
+
+/// Write \a value into the persistent storage which can be read in again using
+/// jngl::readConfig(\a key)
+///
+/// \throws std::ifstream::failure if the value couldn't be saved (e.g. jngl::getConfigPath() is
+///                                read-only)
+/// \throws std::runtime_error if \a key is invalid (it must be a relative file path)
+void writeConfig(const std::string& key, const std::string& value);
+
 } // namespace jngl

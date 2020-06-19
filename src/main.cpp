@@ -9,7 +9,12 @@
 
 #include <boost/math/special_functions/round.hpp>
 #include <boost/qvm/mat_operations.hpp>
+#include <fstream>
 #include <sstream>
+
+#ifdef _WIN32
+#include <filesystem>
+#endif
 
 #ifdef _WIN32
 #include <windows.h>
@@ -542,6 +547,42 @@ std::stringstream readAsset(const std::string& filename) {
 	}
 	sstream.write(content.get(), size);
 	return sstream;
+}
+
+std::string readConfig(const std::string& key) {
+	if (!key.empty() && key[0] == '/') {
+		throw std::runtime_error("Do not pass absolute paths as keys to jngl::readConfig.");
+	}
+
+#ifdef _WIN32
+	std::filesystem::path p = std::filesystem::u8path(jngl::getConfigPath() + key);
+	std::ifstream fin(p, std::ios::binary);
+#else
+	std::ifstream fin(jngl::getConfigPath() + key, std::ios::binary);
+#endif
+
+	std::string out;
+	constexpr size_t READ_SIZE = 4096;
+	std::string buf(READ_SIZE, '\0');
+	while (fin.read(&buf[0], READ_SIZE)) {
+		out.append(buf, 0, fin.gcount());
+	}
+	out.append(buf, 0, fin.gcount());
+	return out;
+}
+
+void writeConfig(const std::string& key, const std::string& value) {
+	if (!key.empty() && key[0] == '/') {
+		throw std::runtime_error("Do not pass absolute paths as keys to jngl::readConfig.");
+	}
+#ifdef _WIN32
+	std::filesystem::path p = std::filesystem::u8path(jngl::getConfigPath() + key);
+	std::ofstream fout(p, std::ios::binary);
+#else
+	std::ofstream fout(jngl::getConfigPath() + key, std::ios::binary);
+#endif
+	fout.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	fout << value;
 }
 
 ShaderProgram::Context useSimpleShaderProgram() {
