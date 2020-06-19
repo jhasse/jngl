@@ -20,6 +20,10 @@
 #include <windows.h>
 #endif
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 #ifdef ANDROID
 #include "android/fopen.hpp"
 #endif
@@ -549,6 +553,7 @@ std::stringstream readAsset(const std::string& filename) {
 	return sstream;
 }
 
+#if !defined(__APPLE__) || !TARGET_OS_IPHONE
 std::string readConfig(const std::string& key) {
 	if (!key.empty() && key[0] == '/') {
 		throw std::runtime_error("Do not pass absolute paths as keys to jngl::readConfig.");
@@ -584,6 +589,7 @@ void writeConfig(const std::string& key, const std::string& value) {
 	fout.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	fout << value;
 }
+#endif
 
 ShaderProgram::Context useSimpleShaderProgram() {
 	auto context = jngl::simpleShaderProgram->use();

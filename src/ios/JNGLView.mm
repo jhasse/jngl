@@ -6,6 +6,7 @@
 #include "windowimpl.hpp"
 #include "AppleController.h"
 
+#include <boost/algorithm/string/replace.hpp>
 #include <iostream>
 
 #import <GameController/GameController.h>
@@ -199,6 +200,45 @@ std::vector<std::shared_ptr<Controller>> getConnectedControllers() {
 		ret.push_back(it->second);
 	}
 	return ret;
+}
+
+std::string canonical(const std::string& key) {
+	// Since the other platforms use key as a filename, we need to make sure
+	//   writeConfig("foo/./bar.txt", "foobar");
+	// and
+	//   readConfig("foo//bar.txt");
+	// will refer to the same value. Of course there's even more to keep in mind, but ultimately
+	// this should be fixed in the game then.
+	std::string tmp = key;
+	boost::replace_all(tmp, "/./", "/");
+	boost::replace_all(tmp, "//", "/");
+	if (tmp != key) {
+		debug("WARNING: Canonicalized `");
+		debug(key);
+		debug("` to `");
+		debug(tmp);
+		debugLn("`.");
+	}
+	return tmp;
+}
+
+std::string readConfig(const std::string& key) {
+	const auto defaults = [NSUserDefaults standardUserDefaults];
+	NSString* const value = [defaults objectForKey:@(canonical(key).c_str())];
+	if (!value) {
+		return {};
+	}
+	return value.UTF8String;
+}
+
+void writeConfig(const std::string& key, const std::string& value) {
+	const auto defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setObject:@(value.c_str()) forKey:@(canonical(key).c_str())];
+	const bool result = [defaults synchronize];
+	if (!result) {
+		jngl::debug("Couldn't write to config key: ");
+		jngl::debugLn(key);
+	}
 }
 
 }
