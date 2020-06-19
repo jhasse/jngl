@@ -27,6 +27,9 @@ public:
 	bool buttonA = false;
 	bool buttonB = false;
 	bool buttonStart = false;
+
+private:
+	float stateWithoutDeadzone(controller::Button) const;
 };
 
 } // namespace jngl
