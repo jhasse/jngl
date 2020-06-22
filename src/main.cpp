@@ -496,6 +496,9 @@ std::string getPrefix() {
 
 void setConfigPath(const std::string& path) {
 	configPath = path;
+	if (configPath->back() != '/') {
+		*configPath += '/';
+	}
 }
 
 std::string getConfigPath() {
