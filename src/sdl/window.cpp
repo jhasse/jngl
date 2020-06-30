@@ -189,7 +189,7 @@ Window::~Window() = default;
 					break;
 				}
 				case SDL_MOUSEWHEEL: {
-					mouseWheel_ += event.wheel.y;
+					mouseWheel += event.wheel.y;
 					break;
 				}
 				case SDL_MOUSEBUTTONUP: {

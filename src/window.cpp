@@ -200,7 +200,7 @@ namespace jngl {
 			*(needToBeSetFalse_.top()) = false;
 			needToBeSetFalse_.pop();
 		}
-		mouseWheel_ = 0;
+		mouseWheel = 0;
 		if (!updateInputCallbacks.empty()) {
 			for (auto& updateInputCallback : updateInputCallbacks) {
 				updateInputCallback();
@@ -210,7 +210,7 @@ namespace jngl {
 	}
 
 	double Window::getMouseWheel() const {
-		return mouseWheel_;
+		return mouseWheel;
 	}
 
 	void Window::mainLoop() {

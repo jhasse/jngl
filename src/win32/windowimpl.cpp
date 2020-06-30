@@ -376,7 +376,7 @@ void Window::UpdateInput() {
 				mousey_ = GET_Y_LPARAM(msg.lParam);
 				break;
 			case WM_MOUSEWHEEL:
-				mouseWheel_ += double(GET_WHEEL_DELTA_WPARAM(msg.wParam)) / WHEEL_DELTA;
+				mouseWheel += double(GET_WHEEL_DELTA_WPARAM(msg.wParam)) / WHEEL_DELTA;
 				break;
 			case WM_POINTERDOWN: // WINVER >= 0x0602 (Windows 8)
 				impl->touchscreenActive = true;

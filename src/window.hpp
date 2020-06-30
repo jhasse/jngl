@@ -109,12 +109,17 @@ private:
 	void calculateCanvasSize(std::pair<int, int> minAspectRatio,
 	                         std::pair<int, int> maxAspectRatio);
 
+
+	/// Called when a controller is added or removed
+	std::function<void()> controllerChangedCallback;
+
 	friend class WindowImpl;
 	std::unique_ptr<WindowImpl> impl;
 
+	double timePerStep = 1.0 / 60.0;
+	double mouseWheel = 0;
 	GLuint vaoLine = 0;
 	GLuint vaoRect = 0;
-	double timePerStep = 1.0 / 60.0;
 	unsigned int maxStepsPerFrame = 3;
 	bool running = true;
 	bool fullscreen_, isMouseVisible_, relativeMouseMode, anyKeyPressed_;
@@ -140,7 +145,6 @@ private:
 	/// The usable canvas height, excluding letterboxing
 	int canvasHeight = -1;
 
-	double mouseWheel_ = 0;
 	std::string fontName_;
 	const static unsigned int PNG_BYTES_TO_CHECK = 4;
 	std::shared_ptr<Work> currentWork_;
@@ -159,9 +163,6 @@ private:
 
 	/// How often the frame limiter has run
 	unsigned int numberOfChecks = 0;
-
-	/// Called when a controller is added or removed
-	std::function<void()> controllerChangedCallback;
 
 	bool multitouch = false;
 

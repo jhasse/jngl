@@ -14,7 +14,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : impl(std::make_unique<WindowImpl>(this)), fullscreen_(fullscreen), isMouseVisible_(true),
   relativeMouseMode(false), anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12),
-  width_(width), height_(height), mouseWheel_(0), fontName_("") {
+  width_(width), height_(height), fontName_("") {
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	Init(width, height, canvasWidth, canvasHeight);
 }
