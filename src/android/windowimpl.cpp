@@ -232,7 +232,35 @@ void WindowImpl::pause() {
 void WindowImpl::makeCurrent() {
 	if (surface) { return; }
 	surface = eglCreateWindowSurface(display, config, app->window, nullptr);
+	assert(eglGetError() == EGL_SUCCESS);
 	if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
+		// Source: https://stackoverflow.com/a/60611870/647898
+		JNIEnv* jni = nullptr;
+		app->activity->vm->AttachCurrentThread(&jni, nullptr);
+
+		jclass clazz = jni->GetObjectClass(app->activity->clazz);
+
+		// Get the ID of the method we want to call
+		// This must match the name and signature from the Java side Signature has to match java
+		// implementation (second string hints a java string parameter)
+		jmethodID methodID = jni->GetMethodID(clazz, "showAlert", "(Ljava/lang/String;Z)I");
+
+		if (methodID) {
+			std::stringstream sstream;
+			sstream << "Your device doesn't support OpenGL ES 3.0!\n\nError code: 0x" << std::hex
+			        << eglGetError();
+
+			// Strings passed to the function need to be converted to a java string object
+			jstring jmessage = jni->NewStringUTF(sstream.str().c_str());
+
+			jint result = jni->CallIntMethod(app->activity->clazz, methodID, jmessage, true);
+
+			// Remember to clean up passed values
+			jni->DeleteLocalRef(jmessage);
+		}
+
+		app->activity->vm->DetachCurrentThread();
+
 		throw std::runtime_error("Unable to eglMakeCurrent");
 	}
 	resumeAudioDevice();
