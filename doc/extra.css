@@ -161,9 +161,9 @@ a.qindexHL {
 	color: #ffffff;
 }
 
-a.el, .memname, td.entry, pre.fragment, div.line, .mdescLeft, .mdescRight, .memItemLeft,
+a.el, a.elRef, .memname, td.entry, pre.fragment, div.line, .mdescLeft, .mdescRight, .memItemLeft,
 .memItemRight, .memTemplItemLeft, .memTemplItemRight, .memTemplParams, .memtemplate,
-.params .paramname, .retval .paramname, .params .paramdir, code {
+.params .paramname, .retval .paramname, .params .paramdir, td.paramname, code {
 	font-family: 'Consolas', monospace;
 }
 
@@ -312,6 +312,10 @@ td.indexvalue {
 	border: 1px solid #C4CFE5;
 	padding: 2px 10px;
 	margin: 2px 0px;
+}
+
+td.paramname {
+	padding-right: 1em;
 }
 
 tr.memlist {
