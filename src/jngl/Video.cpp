@@ -242,6 +242,7 @@ public:
 							alSourceUnqueueBuffers(source, 1, &buffers.front());
 							checkAlError();
 							alDeleteBuffers(1, &buffers.front());
+							checkAlError();
 							buffers.pop_front();
 						}
 
@@ -284,16 +285,12 @@ public:
 	}
 
 	~Impl() {
-		alSourceStop(source);
+		alDeleteSources(1, &source);
 		checkAlError();
 		for (auto buffer : buffers) {
-			alSourceUnqueueBuffers(source, 1, &buffer);
-			checkAlError();
 			alDeleteBuffers(1, &buffer);
 			checkAlError();
 		}
-		alDeleteSources(1, &source);
-		checkAlError();
 		THEORAPLAY_stopDecode(decoder);
 	}
 
