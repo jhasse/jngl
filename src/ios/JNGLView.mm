@@ -17,12 +17,12 @@
 	return [CAEAGLLayer class];
 }
 
-- (id) initWithFrame: (CGRect)frame {
+- (instancetype) initWithFrame: (CGRect)frame {
 	self = [super initWithFrame:frame];
 	if (self) {
 		if ([[UIScreen mainScreen] respondsToSelector: NSSelectorFromString(@"scale")]) {
 			if ([self respondsToSelector: NSSelectorFromString(@"contentScaleFactor")]) {
-				self.contentScaleFactor = [[UIScreen mainScreen] scale];
+				self.contentScaleFactor = [UIScreen mainScreen].scale;
 			}
 		}
 
@@ -67,10 +67,11 @@
 		startTime = -1;
 		pause = false;
 		needToResetFrameLimiter = false;
-		jngl::setPrefix(std::string([[[NSBundle mainBundle] resourcePath] UTF8String]) + "/");
-		jngl::setConfigPath(std::string([[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
-		                                  objectAtIndex:0]
-		                                 UTF8String]) + "/");
+		jngl::setPrefix(std::string([NSBundle mainBundle].resourcePath.UTF8String) + "/");
+		jngl::setConfigPath(std::string(NSSearchPathForDirectoriesInDomains(
+		                                    NSDocumentDirectory, NSUserDomainMask, YES)[0]
+		                                    .UTF8String) +
+		                    "/");
 		impl = jngl::pWindow->getImpl();
 		[UIView setAnimationsEnabled:NO];
 	}
@@ -126,7 +127,7 @@
 }
 
 -(void) insertText: (NSString*) text {
-	std::string c = [text UTF8String];
+	std::string c = text.UTF8String;
 	if (c == "\n") {
 		jngl::setKeyPressed(jngl::key::Return, true);
 	} else {
@@ -162,7 +163,7 @@
 
 -(void) initControllers {
 	assert(impl->appleControllers.empty());
-	if ([[GCController controllers] count] > 0) {
+	if ([GCController controllers].count > 0) {
 		impl->shouldCallControllerChangedCallback = true;
 	}
 
@@ -190,7 +191,7 @@ std::vector<std::shared_ptr<Controller>> getConnectedControllers() {
 	std::vector<std::shared_ptr<Controller>> ret;
 	const auto impl = jngl::pWindow->getImpl();
 	for (GCController* controller in controllers) {
-		if ([controller extendedGamepad] == nil) {
+		if (controller.extendedGamepad == nil) {
 			continue; // Micro Gamepad (Siri Remote)
 		}
 		auto it = impl->appleControllers.find(controller);
