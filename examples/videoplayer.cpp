@@ -1,7 +1,13 @@
 #include <jngl.hpp>
 
 JNGL_MAIN_BEGIN {
-	const auto filename = jngl::getArgs().at(0);
+	const auto args = jngl::getArgs();
+	std::string filename;
+	if (args.empty()) {
+		filename = "verysmall.ogv";
+	} else {
+		filename = args[0];
+	}
 	jngl::Video video(filename);
 	jngl::showWindow(filename, video.getWidth(), video.getHeight());
 	while (jngl::running()) {
