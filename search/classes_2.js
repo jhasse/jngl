@@ -33,7 +33,7 @@ var searchData=
   ['conditional_2473',['conditional',['http://en.cppreference.com/w/cpp/types/conditional.html',1,'std']]],
   ['conditional_5ft_2474',['conditional_t',['http://en.cppreference.com/w/cpp/types/conditional.html',1,'std']]],
   ['conjunction_2475',['conjunction',['http://en.cppreference.com/w/cpp/types/conjunction.html',1,'std']]],
-  ['context_2476',['Context',['../structjngl_1_1ShaderProgram_1_1Context.html',1,'jngl::ShaderProgram']]],
+  ['context_2476',['Context',['../structjngl_1_1FrameBuffer_1_1Context.html',1,'FrameBuffer::Context'],['../structjngl_1_1ShaderProgram_1_1Context.html',1,'ShaderProgram::Context']]],
   ['controller_2477',['Controller',['../classjngl_1_1Controller.html',1,'jngl']]],
   ['copy_5foptions_2478',['copy_options',['http://en.cppreference.com/w/cpp/experimental/fs/copy_options.html',1,'copy_options'],['http://en.cppreference.com/w/cpp/filesystem/copy_options.html',1,'copy_options']]],
   ['cout_2479',['cout',['http://en.cppreference.com/w/cpp/io/cout.html',1,'std']]],

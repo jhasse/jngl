@@ -36,7 +36,7 @@
 <!-- Node10 -->
 <g id="node10" class="node">
 <title>Node10</title>
-<g id="a_node10"><a xlink:href="http://en.cppreference.com/w/cpp/header/memory.html" xlink:title=" ">
+<g id="a_node10"><a target="_parent" xlink:href="http://en.cppreference.com/w/cpp/header/memory.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="329,-56.5 329,-75.5 382,-75.5 382,-56.5 329,-56.5"/>
 <text text-anchor="middle" x="355.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00">memory</text>
 </a>
@@ -51,7 +51,7 @@
 <!-- Node11 -->
 <g id="node11" class="node">
 <title>Node11</title>
-<g id="a_node11"><a xlink:href="http://en.cppreference.com/w/cpp/header/string.html" xlink:title=" ">
+<g id="a_node11"><a target="_parent" xlink:href="http://en.cppreference.com/w/cpp/header/string.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="385,-168.5 385,-187.5 438,-187.5 438,-168.5 385,-168.5"/>
 <text text-anchor="middle" x="411.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">string</text>
 </a>
@@ -132,7 +132,7 @@
 <!-- Node6 -->
 <g id="node6" class="node">
 <title>Node6</title>
-<g id="a_node6"><a xlink:href="http://en.cppreference.com/w/cpp/header/iosfwd.html" xlink:title=" ">
+<g id="a_node6"><a target="_parent" xlink:href="http://en.cppreference.com/w/cpp/header/iosfwd.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="137,-0.5 137,-19.5 190,-19.5 190,-0.5 137,-0.5"/>
 <text text-anchor="middle" x="163.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">iosfwd</text>
 </a>
@@ -168,7 +168,7 @@
 <!-- Node9 -->
 <g id="node9" class="node">
 <title>Node9</title>
-<g id="a_node9"><a xlink:href="http://en.cppreference.com/w/cpp/header/functional.html" xlink:title=" ">
+<g id="a_node9"><a target="_parent" xlink:href="http://en.cppreference.com/w/cpp/header/functional.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="230,-0.5 230,-19.5 307,-19.5 307,-0.5 230,-0.5"/>
 <text text-anchor="middle" x="268.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">functional</text>
 </a>

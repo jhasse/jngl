@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="http://en.cppreference.com/w/cpp/header/memory.html" xlink:title=" ">
+<g id="a_node2"><a target="_parent" xlink:href="http://en.cppreference.com/w/cpp/header/memory.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="27,-0.5 27,-19.5 80,-19.5 80,-0.5 27,-0.5"/>
 <text text-anchor="middle" x="53.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">memory</text>
 </a>

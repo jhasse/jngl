@@ -66,7 +66,7 @@
 <!-- Node5 -->
 <g id="node5" class="node">
 <title>Node5</title>
-<g id="a_node5"><a xlink:href="http://en.cppreference.com/w/cpp/header/iosfwd.html" xlink:title=" ">
+<g id="a_node5"><a target="_parent" xlink:href="http://en.cppreference.com/w/cpp/header/iosfwd.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="147,-0.5 147,-19.5 200,-19.5 200,-0.5 147,-0.5"/>
 <text text-anchor="middle" x="173.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">iosfwd</text>
 </a>

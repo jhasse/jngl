@@ -12,7 +12,7 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="http://en.cppreference.com/w/cpp/memory/enable_shared_from_this.html" xlink:title=" ">
+<g id="a_node1"><a target="_parent" xlink:href="http://en.cppreference.com/w/cpp/memory/enable_shared_from_this.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="0,-0.5 0,-30.5 131,-30.5 131,-0.5 0,-0.5"/>
 <text text-anchor="start" x="8" y="-18.5" font-family="'Consolas',monospace" font-size="10.00">enable_shared_from</text>
 <text text-anchor="middle" x="65.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">_this&lt; Controller &gt;</text>

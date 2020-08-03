@@ -36,7 +36,7 @@
 <!-- Node4 -->
 <g id="node4" class="node">
 <title>Node4</title>
-<g id="a_node4"><a xlink:href="http://en.cppreference.com/w/cpp/header/memory.html" xlink:title=" ">
+<g id="a_node4"><a target="_parent" xlink:href="http://en.cppreference.com/w/cpp/header/memory.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="101,-56.5 101,-75.5 154,-75.5 154,-56.5 101,-56.5"/>
 <text text-anchor="middle" x="127.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00">memory</text>
 </a>
@@ -51,7 +51,7 @@
 <!-- Node3 -->
 <g id="node3" class="node">
 <title>Node3</title>
-<g id="a_node3"><a xlink:href="http://en.cppreference.com/w/cpp/header/functional.html" xlink:title=" ">
+<g id="a_node3"><a target="_parent" xlink:href="http://en.cppreference.com/w/cpp/header/functional.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="3,-0.5 3,-19.5 80,-19.5 80,-0.5 3,-0.5"/>
 <text text-anchor="middle" x="41.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">functional</text>
 </a>

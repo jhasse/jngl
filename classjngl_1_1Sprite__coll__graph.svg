@@ -36,7 +36,7 @@
 <!-- Node3 -->
 <g id="node3" class="node">
 <title>Node3</title>
-<g id="a_node3"><a xlink:href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html" xlink:title=" ">
+<g id="a_node3"><a target="_parent" xlink:href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="83,-67.5 83,-86.5 262,-86.5 262,-67.5 83,-67.5"/>
 <text text-anchor="middle" x="172.5" y="-74.5" font-family="'Consolas',monospace" font-size="10.00">shared_ptr&lt; jngl::Finally &gt;</text>
 </a>
