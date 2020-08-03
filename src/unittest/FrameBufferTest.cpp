@@ -52,4 +52,37 @@ BOOST_AUTO_TEST_CASE(FrameBuffer) {
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
+
+	jngl::FrameBuffer fb2(320, 70);
+	{
+		const auto context1 = fb.use();
+		jngl::drawRect({-40, 0}, {10, 10});
+		{
+			const auto context2 = fb2.use();
+			jngl::drawRect({-10, -20}, {10, 10});
+		}
+		jngl::drawRect({-80, 0}, {10, 10});
+	}
+	fb2.draw(-160, -35);
+	BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒              ▒               ▒
+▒              ▒               ▒
+▒                              ▒
+▒                              ▒
+▒                              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
+
+	// Check if drawing on fb *after* fb2 was in use worked
+	fb.draw(-160, -35);
+	BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒                              ▒
+▒                              ▒
+▒       ▒   ▒    ░░░▒▒▒        ▒
+▒       ▒   ▒    ░░░▒▒▒        ▒
+▒                              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
 }

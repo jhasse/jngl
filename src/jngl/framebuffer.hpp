@@ -4,6 +4,7 @@
 /// @file
 #pragma once
 
+#include "Color.hpp"
 #include "Finally.hpp"
 #include "Vec2.hpp"
 #include "Vertex.hpp"
@@ -26,10 +27,21 @@ public:
 	FrameBuffer& operator=(FrameBuffer&&) = default;
 	~FrameBuffer();
 
+	/// Lifetime object when the FrameBuffer is in use
+	struct Context {
+		explicit Context(std::function<void()> resetCallback);
+		~Context();
+
+		void clear(Color);
+
+	private:
+		std::function<void()> resetCallback;
+	};
+
 #if __cplusplus >= 201703L
 	[[nodiscard]]
 #endif
-	Finally use() const;
+	Context use() const;
 
 	/// Draws the framebuffer image to the screen
 	void draw(Vec2 position, const ShaderProgram* = nullptr) const;

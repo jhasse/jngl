@@ -37,7 +37,13 @@ struct FrameBuffer::Impl {
 #if !defined(GL_VIEWPORT_BIT) || defined(__APPLE__)
 	GLint viewport[4];
 #endif
+
+	/// If this is not empty, there's a FrameBuffer in use and this was the function that activated
+	/// it.
+	static std::stack<std::function<void()>> activate;
 };
+
+std::stack<std::function<void()>> FrameBuffer::Impl::activate;
 
 FrameBuffer::FrameBuffer(const int width, const int height)
 : impl(std::make_unique<Impl>(width, height)) {
@@ -93,23 +99,40 @@ void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
 	popMatrix();
 }
 
-Finally FrameBuffer::use() const {
-	glBindFramebuffer(GL_FRAMEBUFFER, impl->fbo);
-	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
-	pushMatrix();
+FrameBuffer::Context::Context(std::function<void()> resetCallback)
+: resetCallback(std::move(resetCallback)) {
+}
+
+FrameBuffer::Context::~Context() {
+	resetCallback();
+}
+
+FrameBuffer::Context FrameBuffer::use() const {
+	auto activate = [this]() {
+		glBindFramebuffer(GL_FRAMEBUFFER, impl->fbo);
+		glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
+		pushMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
-	glPushAttrib(GL_VIEWPORT_BIT);
+		glPushAttrib(GL_VIEWPORT_BIT);
 #else
-	glGetIntegerv(GL_VIEWPORT, impl->viewport);
+		glGetIntegerv(GL_VIEWPORT, impl->viewport);
 #endif
-	glViewport((pWindow->getCanvasWidth() - pWindow->getWidth()) / 2,
-	           -((pWindow->getCanvasHeight() + pWindow->getHeight()) / 2 - impl->height),
-	           pWindow->getWidth(), pWindow->getHeight());
-	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
-	if (impl->letterboxing) {
-		glDisable(GL_SCISSOR_TEST);
-	}
-	return Finally([this]() {
+		glViewport((pWindow->getCanvasWidth() - pWindow->getWidth()) / 2,
+		           -((pWindow->getCanvasHeight() + pWindow->getHeight()) / 2 - impl->height),
+		           pWindow->getWidth(), pWindow->getHeight());
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+		if (impl->letterboxing) {
+			glDisable(GL_SCISSOR_TEST);
+		}
+	};
+	activate();
+	impl->activate.push(std::move(activate));
+	return Context([this]() {
+		impl->activate.pop();
+		if (!impl->activate.empty()) {
+			impl->activate.top()(); // Restore the FrameBuffer that was previously active
+			return;
+		}
 		if (impl->letterboxing) {
 			glEnable(GL_SCISSOR_TEST);
 		}

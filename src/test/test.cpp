@@ -51,7 +51,7 @@ public:
 		}
 	}
 	void draw() const override {
-		std::optional<jngl::Finally> fb2Context;
+		std::optional<jngl::FrameBuffer::Context> fb2Context;
 		if (drawOnFrameBuffer) {
 			fb2Context = fb2.use();
 			fb2.clear();
