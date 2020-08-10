@@ -13,6 +13,10 @@
 #include <sstream>
 #include <vector>
 
+#ifdef _MSC_VER
+#include <filesystem>
+#endif
+
 void drawBackground();
 void drawMouse(jngl::Vec2);
 void testKeys();
@@ -190,6 +194,9 @@ private:
 JNGL_MAIN_BEGIN {
 	try {
 		jngl::App app("JNGL Test Application");
+#ifdef _MSC_VER
+		std::filesystem::current_path(jngl::getBinaryPath());
+#endif
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
 		          << jngl::getDesktopHeight() << std::endl
 		          << "Path of binary: " << jngl::getBinaryPath() << std::endl
