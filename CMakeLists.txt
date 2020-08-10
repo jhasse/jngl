@@ -92,7 +92,6 @@ else() # Windows
 		else()
 			set(JNGL_ARCH "x86")
 		endif()
-		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/win/${JNGL_ARCH})
 		target_link_libraries(jngl PUBLIC Xinput)
 	else()
 		target_link_libraries(jngl PUBLIC xinput1_4)
