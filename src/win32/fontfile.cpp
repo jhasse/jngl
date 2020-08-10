@@ -5,6 +5,7 @@
 
 #include "unicode.hpp"
 
+#include <algorithm>
 #include <shlobj.h>
 #include <sstream>
 
