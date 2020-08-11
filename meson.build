@@ -92,10 +92,15 @@ if target_machine.system() != 'windows'
 	]
 else
 	cpp_args += ['-D_WIN32_WINNT=0x602', '-D_USE_MATH_DEFINES', '-DUNICODE']
+	if cxx.get_argument_syntax() == 'msvc'
+		xinput_lib = cxx.find_library('xinput')
+	else
+		xinput_lib = cxx.find_library('xinput1_4')
+	endif
 	opengl_dep = [
 		cxx.find_library('opengl32'),
 		cxx.find_library('glu32'),
-		cxx.find_library('xinput1_4'),
+		xinput_lib,
 		cxx.find_library('winmm'),
 	]
 	src += [
