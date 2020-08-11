@@ -139,6 +139,10 @@ WindowImpl::WindowImpl(Window* window, const std::pair<int, int> minAspectRatio,
 }
 
 WindowImpl::~WindowImpl() {
+	if (!initialized) { // Exception thrown during initialization?
+		return; // Skip any clean up code
+		// TODO: The code should probably made exception-safe, but in a cleaner way.
+	}
 	// We need to destroy the surface before finishing our activity, otherwise the app won't start
 	// again.
 	pause();
