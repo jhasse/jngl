@@ -73,7 +73,11 @@ elseif (UNIX)
 		target_sources(jngl PRIVATE ${SRC})
     endif()
 else() # Windows
-	option(JNGL_SDL2 "Use SDL2 instead of WinAPI" OFF)
+	set(JNGL_SDL2_DEFAULT OFF)
+	if(WINDOWS_STORE)
+		set(JNGL_SDL2_DEFAULT ON)
+	endif()
+	option(JNGL_SDL2 "Use SDL2 instead of WinAPI" ${JNGL_SDL2_DEFAULT})
 
 	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _USE_MATH_DEFINES UNICODE)
 	if(JNGL_SDL2)
@@ -197,41 +201,51 @@ else()
 	endif()
 
 	if(MSVC)
-		if(JNGL_SDL2)
-			FetchContent_Declare(sdl2
-				URL https://www.libsdl.org/release/SDL2-2.0.12.zip
-				URL_HASH SHA1=3ed5a7de726f9a2a3c8f7aaa62474901bb3f49ab
-			)
-			FetchContent_MakeAvailable(sdl2)
-			target_link_libraries(jngl PRIVATE SDL2-static)
+		if(WINDOWS_STORE)
+			target_sources(jngl PRIVATE src/uwp/SDL_winrt_main_NonXAML.cpp)
+			# target_compile_options(jngl PRIVATE /ZW /Zc:twoPhase-)
+			target_compile_definitions(jngl PUBLIC JNGL_UWP)
+			target_include_directories(jngl PRIVATE include/uwp)
+			target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH})
+			target_link_libraries(jngl PUBLIC OpenAL SDL2 libGLESv2.dll.lib)
+		else()
+			if(JNGL_SDL2)
+				FetchContent_Declare(sdl2
+					URL https://www.libsdl.org/release/SDL2-2.0.12.zip
+					URL_HASH SHA1=3ed5a7de726f9a2a3c8f7aaa62474901bb3f49ab
+				)
+				FetchContent_MakeAvailable(sdl2)
+				target_link_libraries(jngl PRIVATE SDL2-static)
+			endif()
+
+			FetchContent_Declare(openal
+				URL https://github.com/kcat/openal-soft/archive/openal-soft-1.20.1.zip
+				URL_HASH SHA1=d86a714e0e7900f4f7197738cb35432772bfe2e0)
+			set(ALSOFT_NO_CONFIG_UTIL ON CACHE BOOL "Disable building the alsoft-config utility" FORCE)
+			set(ALSOFT_UTILS OFF CACHE BOOL "Build and install utility programs" FORCE)
+			set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
+			set(ALSOFT_TESTS OFF CACHE BOOL "Build and install test programs" FORCE)
+			set(LIBTYPE "STATIC" CACHE STRING "" FORCE)
+			target_compile_definitions(jngl PRIVATE AL_LIBTYPE_STATIC)
+			FetchContent_MakeAvailable(openal)
+			FetchContent_GetProperties(openal SOURCE_DIR OPENAL_SRC_DIR)
+			target_include_directories(jngl PRIVATE ${OPENAL_SRC_DIR}/include)
+			set(OPENAL_LIBRARY OpenAL)
+
+			FetchContent_Declare(dlfcn
+				URL https://github.com/dlfcn-win32/dlfcn-win32/archive/v1.2.0.zip
+				URL_HASH SHA1=83c37a7d7d152c951e9b8cb673aec47d1776c881)
+			FetchContent_MakeAvailable(dlfcn)
+			FetchContent_GetProperties(dlfcn SOURCE_DIR DLFCN_SRC_DIR)
+			target_include_directories(jngl PRIVATE ${DLFCN_SRC_DIR})
+			target_link_libraries(jngl PRIVATE dl)
+
+			target_include_directories(jngl PRIVATE ${PROJECT_SOURCE_DIR}/include/msvc)
+			target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
+			add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
+			target_link_libraries(jngl PUBLIC epoxy)
 		endif()
 
-		FetchContent_Declare(openal
-			URL https://github.com/kcat/openal-soft/archive/openal-soft-1.20.1.zip
-			URL_HASH SHA1=d86a714e0e7900f4f7197738cb35432772bfe2e0)
-		set(ALSOFT_NO_CONFIG_UTIL ON CACHE BOOL "Disable building the alsoft-config utility" FORCE)
-		set(ALSOFT_UTILS OFF CACHE BOOL "Build and install utility programs" FORCE)
-		set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
-		set(ALSOFT_TESTS OFF CACHE BOOL "Build and install test programs" FORCE)
-		set(LIBTYPE "STATIC" CACHE STRING "" FORCE)
-		target_compile_definitions(jngl PRIVATE AL_LIBTYPE_STATIC)
-		FetchContent_MakeAvailable(openal)
-		FetchContent_GetProperties(openal SOURCE_DIR OPENAL_SRC_DIR)
-		target_include_directories(jngl PRIVATE ${OPENAL_SRC_DIR}/include)
-		set(OPENAL_LIBRARY OpenAL)
-
-		FetchContent_Declare(dlfcn
-			URL https://github.com/dlfcn-win32/dlfcn-win32/archive/v1.2.0.zip
-			URL_HASH SHA1=83c37a7d7d152c951e9b8cb673aec47d1776c881)
-		FetchContent_MakeAvailable(dlfcn)
-		FetchContent_GetProperties(dlfcn SOURCE_DIR DLFCN_SRC_DIR)
-		target_include_directories(jngl PRIVATE ${DLFCN_SRC_DIR})
-		target_link_libraries(jngl PRIVATE dl)
-
-		target_include_directories(jngl PRIVATE ${PROJECT_SOURCE_DIR}/include/msvc)
-		target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
-		add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
-		target_link_libraries(jngl PUBLIC epoxy)
 	elseif(IOS)
 		include(FetchContent)
 		FetchContent_Declare(ogg
@@ -346,8 +360,13 @@ else()
 	endif()
 
 	if(NOT hasParent)
-		if(NOT IOS)
-			add_executable(jngl-test src/test/test.cpp)
+		if(WINDOWS_STORE)
+			# WIN32 is needed to build for the Windows subsystem, not Console
+			add_executable(jngl-test WIN32 src/test/test.cpp)
+		else()
+			if(NOT IOS)
+				add_executable(jngl-test src/test/test.cpp)
+			endif()
 		endif()
 		target_link_libraries(jngl-test jngl)
 		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/jngl.webp "$<TARGET_FILE_DIR:jngl-test>")
