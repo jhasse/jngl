@@ -66,7 +66,9 @@ FrameBuffer::FrameBuffer(const int width, const int height)
 
 	assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 
-	clear();
+	glClearColor(1, 1, 1, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	clearBackgroundColor();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, impl->systemFbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->systemBuffer);
@@ -105,6 +107,12 @@ FrameBuffer::Context::Context(std::function<void()> resetCallback)
 
 FrameBuffer::Context::~Context() {
 	resetCallback();
+}
+
+void FrameBuffer::Context::clear(const Color color) {
+	glClearColor(1, 1, 1, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(color.getRed(), color.getGreen(), color.getBlue(), 1);
 }
 
 FrameBuffer::Context FrameBuffer::use() const {

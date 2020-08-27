@@ -32,7 +32,8 @@ public:
 		explicit Context(std::function<void()> resetCallback);
 		~Context();
 
-		void clear(Color);
+		/// Clear the framebuffer with \a color
+		void clear(Color color);
 
 	private:
 		std::function<void()> resetCallback;
@@ -50,6 +51,9 @@ public:
 	/// Draws a list of triangles with the framebuffer's texture on it
 	void drawMesh(const std::vector<Vertex>& vertexes, const ShaderProgram* = nullptr) const;
 
+	/// Clear the framebuffer with the color set by jngl::setBackgroundColor
+	/// \deprecated use jngl::FrameBuffer::Context::clear(Color) instead
+	[[deprecated("use jngl::FrameBuffer::Context::clear(Color) instead")]]
 	static void clear();
 
 	/// Returns the size in screen pixels

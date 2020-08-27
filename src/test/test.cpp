@@ -58,7 +58,7 @@ public:
 		std::optional<jngl::FrameBuffer::Context> fb2Context;
 		if (drawOnFrameBuffer) {
 			fb2Context = fb2.use();
-			fb2.clear();
+			fb2Context->clear(0xffffff_rgb);
 		}
 		jngl::pushMatrix();
 		jngl::translate(-jngl::getScreenSize() / 2);
