@@ -105,8 +105,20 @@ FrameBuffer::Context::Context(std::function<void()> resetCallback)
 : resetCallback(std::move(resetCallback)) {
 }
 
+FrameBuffer::Context::Context(Context&& other) : resetCallback(other.resetCallback) {
+	other.resetCallback = nullptr;
+}
+
+FrameBuffer::Context& FrameBuffer::Context::operator=(Context&& other) {
+	resetCallback = other.resetCallback;
+	other.resetCallback = nullptr;
+	return *this;
+}
+
 FrameBuffer::Context::~Context() {
-	resetCallback();
+	if (resetCallback) {
+		resetCallback();
+	}
 }
 
 void FrameBuffer::Context::clear(const Color color) {

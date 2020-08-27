@@ -30,6 +30,10 @@ public:
 	/// Lifetime object when the FrameBuffer is in use
 	struct Context {
 		explicit Context(std::function<void()> resetCallback);
+		Context(const Context&) = delete;
+		Context& operator=(const Context&) = delete;
+		Context(Context&&);
+		Context& operator=(Context&&);
 		~Context();
 
 		/// Clear the framebuffer with \a color
