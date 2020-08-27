@@ -32,8 +32,8 @@ public:
 		explicit Context(std::function<void()> resetCallback);
 		Context(const Context&) = delete;
 		Context& operator=(const Context&) = delete;
-		Context(Context&&);
-		Context& operator=(Context&&);
+		Context(Context&&) noexcept;
+		Context& operator=(Context&&) noexcept;
 		~Context();
 
 		/// Clear the framebuffer with \a color

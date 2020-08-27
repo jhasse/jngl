@@ -105,11 +105,12 @@ FrameBuffer::Context::Context(std::function<void()> resetCallback)
 : resetCallback(std::move(resetCallback)) {
 }
 
-FrameBuffer::Context::Context(Context&& other) : resetCallback(other.resetCallback) {
+FrameBuffer::Context::Context(Context&& other) noexcept
+: resetCallback(std::move(other.resetCallback)) {
 	other.resetCallback = nullptr;
 }
 
-FrameBuffer::Context& FrameBuffer::Context::operator=(Context&& other) {
+FrameBuffer::Context& FrameBuffer::Context::operator=(Context&& other) noexcept {
 	resetCallback = other.resetCallback;
 	other.resetCallback = nullptr;
 	return *this;
