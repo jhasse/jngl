@@ -17,6 +17,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 file(GLOB SRC src/*.cpp src/jngl/*.cpp)
 add_library(jngl ${SRC})
+file(GLOB HEADERS src/*.hpp src/jngl/*.hpp)
+target_sources(jngl PRIVATE ${HEADERS})
 
 target_compile_features(jngl PUBLIC cxx_std_17)
 
