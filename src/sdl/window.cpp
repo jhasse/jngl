@@ -385,7 +385,15 @@ Window::~Window() = default;
 	}
 
 	void Window::setFullscreen(bool f) {
-		SDL_SetWindowFullscreen(impl->sdlWindow, f ? SDL_WINDOW_FULLSCREEN : 0);
+		Uint32 flag = 0;
+		if (f) {
+			if (width_ == getDesktopWidth() && height_ == getDesktopHeight()) {
+				flag = SDL_WINDOW_FULLSCREEN_DESKTOP;
+			} else {
+				flag = SDL_WINDOW_FULLSCREEN;
+			}
+		}
+		SDL_SetWindowFullscreen(impl->sdlWindow, flag);
 		fullscreen_ = f;
 	}
 
