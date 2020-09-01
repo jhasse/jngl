@@ -1,4 +1,4 @@
-// Copyright 2009-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2009-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -15,10 +15,14 @@
 		#include <GLES3/gl3.h>
 		#include <GLES3/gl3ext.h>
 	#else
-		#ifdef _MSC_VER
-			#include <windows.h> // To avoid warnings about APIENTRY
+		#ifdef JNGL_UWP
+			#include <GLES3/gl3.h>
+		#else
+			#ifdef _MSC_VER
+				#include <windows.h> // To avoid warnings about APIENTRY
+			#endif
+			#include <epoxy/gl.h>
 		#endif
-		#include <epoxy/gl.h>
 	#endif
 #endif
 
