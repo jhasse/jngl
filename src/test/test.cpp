@@ -441,7 +441,7 @@ void testKeys() {
 			jngl::setFontColor(pressedFade, pressedFade, pressedFade);
 
 			jngl::pushMatrix();
-			for (const jngl::Vec2 stick :
+			for (const jngl::Vec2& stick :
 			     { jngl::Vec2(controller->state(jngl::controller::LeftStickX),
 			                  -controller->state(jngl::controller::LeftStickY)),
 			       jngl::Vec2(controller->state(jngl::controller::RightStickX),
