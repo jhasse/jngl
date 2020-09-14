@@ -447,7 +447,7 @@ Finally load(const std::string& filename) {
 	return loadSprite(filename);
 }
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(JNGL_UWP)
 #include <epoxy/wgl.h>
 
 void setVerticalSync(bool enabled) {
