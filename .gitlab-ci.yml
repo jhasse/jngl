@@ -54,7 +54,7 @@ mingw:
     - ninja -C build
 
 android:
-  image: jhasse/android-ndk:21.0.6113669
+  image: jhasse/android-ndk:21.1.6352462
   stage: build
   script:
     - make -C android
