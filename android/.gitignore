@@ -1,8 +1,5 @@
 /freetype2/
-/ogg/
 /openal-soft/
-/theora/
-/vorbis/
 /.gradle/
 /test/gradlew.bat
 /test/app/.cxx/
