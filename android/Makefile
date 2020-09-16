@@ -10,10 +10,10 @@ endif
 
 all: gradle
 
-${ANDROID_SDK_ROOT}/ndk/21.1.6352462/package.xml:
-	yes | ${ANDROID_SDK_ROOT}/tools/bin/sdkmanager "ndk;21.1.6352462" >/dev/null
+${ANDROID_SDK_ROOT}/ndk/21.3.6528147/package.xml:
+	yes | ${ANDROID_SDK_ROOT}/tools/bin/sdkmanager "ndk;21.3.6528147" >/dev/null
 
-${ANDROID_SDK_ROOT}/ndk/21.1.6352462/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp: | ${ANDROID_SDK_ROOT}/ndk/21.1.6352462/package.xml
+${ANDROID_SDK_ROOT}/ndk/21.3.6528147/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp: | ${ANDROID_SDK_ROOT}/ndk/21.3.6528147/package.xml
 	ln -s $(BOOST_PATH) `dirname "$@"`
 
 test/app/src/main/assets:
@@ -32,7 +32,7 @@ test/app/src/main/assets/verysmall.ogv: test/app/src/main/assets ../data/verysma
 	cp ../data/verysmall.ogv "$@"
 
 .PHONY: gradle
-gradle: ${ANDROID_SDK_ROOT}/ndk/21.1.6352462/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp \
+gradle: ${ANDROID_SDK_ROOT}/ndk/21.3.6528147/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp \
         test/app/src/main/assets/jngl.webp \
         test/app/src/main/assets/test.ogg \
         test/app/src/main/assets/Arial.ttf \
