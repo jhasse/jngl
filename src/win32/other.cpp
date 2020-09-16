@@ -19,6 +19,9 @@ std::string getBinaryPath() {
 }
 
 std::string getSystemConfigPath() {
+#if JNGL_UWP
+	return {}; // TODO
+#else
 	PWSTR pPath;
 	if (SHGetKnownFolderPath(FOLDERID_RoamingAppData, CSIDL_FLAG_CREATE, nullptr, &pPath) != S_OK) {
 		throw std::runtime_error("Couldn't get %AppData% location!");
@@ -26,6 +29,7 @@ std::string getSystemConfigPath() {
 	std::string tmp(utf16ToUtf8(pPath));
 	CoTaskMemFree(pPath);
 	return tmp;
+#endif
 }
 
 } // namespace jngl
