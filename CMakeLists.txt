@@ -367,6 +367,13 @@ else()
 		if(WINDOWS_STORE)
 			# WIN32 is needed to build for the Windows subsystem, not Console
 			add_executable(jngl-test WIN32 src/test/test.cpp)
+
+			# Otherwise linking will fail with
+			#   error LNK2038: mismatch detected for
+			#   'vccorlib_lib_should_be_specified_before_msvcrt_lib_to_linker': value '1' doesn't
+			#   match value '0' in msvcrtd.lib(app_appinit.obj)
+			set_source_files_properties(src/test/test.cpp
+				PROPERTIES COMPILE_FLAGS "/ZW /Zc:twoPhase-")
 		else()
 			if(NOT IOS)
 				add_executable(jngl-test src/test/test.cpp)

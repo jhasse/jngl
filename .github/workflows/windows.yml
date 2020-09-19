@@ -12,6 +12,13 @@ jobs:
       run: cmake --build build --config Debug
     - name: Build (Release)
       run: cmake --build build --config Release
+    - name: Configure (SDL2)
+      shell: cmd
+      run: cmake -Bbuild-sdl -DBOOST_ROOT=%BOOST_ROOT_1_72_0%
+    - name: Build (SDL2, Debug)
+      run: cmake --build build-sdl --config Debug
+    - name: Build (SDL2, Release)
+      run: cmake --build build-sdl --config Release
 
   mingw-sdl:
     runs-on: [ubuntu-latest]
