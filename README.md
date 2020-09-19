@@ -107,4 +107,10 @@ You can also open the `android/test` folder in Android Studio and build from the
 ## iOS
 
 Install Boost using `brew install boost` and run `ln -s /usr/local/include/boost include/ios/boost`.
-Open `xcode/JNGL.xcodeproj` and run the "Test iOS" target.
+Generate a Xcode project using CMake:
+
+```
+cmake -Bbuild-ios -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR
+```
+
+Open and build `build-ios/jngl.xcodeproj` in Xcode.

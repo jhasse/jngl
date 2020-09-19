@@ -3,9 +3,6 @@
 installer/*.nsi
 *.os
 *.so
-xcode/JNGL.xcodeproj/project.xcworkspace/xcuserdata/*
-xcode/JNGL.xcodeproj/project.xcworkspace/xcshareddata/
-xcode/JNGL.xcodeproj/xcuserdata/*.xcuserdatad/
 Thumbs.db
 /.vscode/.browse*
 /.vscode/settings.json
