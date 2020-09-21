@@ -1,8 +1,5 @@
 *.DS_Store
 /build*/
-installer/*.nsi
-*.os
-*.so
 Thumbs.db
 /.vscode/.browse*
 /.vscode/settings.json
@@ -20,3 +17,7 @@ Thumbs.db
 /out/
 /.vs/
 /CMakeSettings.json
+
+# Those files have to be created by hand for now:
+/include/uwp/
+/lib/uwp/x86_64/
