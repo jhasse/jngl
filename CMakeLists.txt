@@ -398,8 +398,6 @@ if(MSVC OR IOS OR ANDROID)
 	set(WEBP_BUILD_WEBPINFO OFF CACHE BOOL "Build the webpinfo command line tool." FORCE)
 	set(WEBP_BUILD_WEBPMUX OFF CACHE BOOL "Build the webpmux command line tool." FORCE)
 	set(WEBP_BUILD_EXTRAS OFF CACHE BOOL "Build extras." FORCE)
-	string(APPEND CMAKE_C_FLAGS " -DWEBP_REDUCE_SIZE") # No idea how to properly enable this
-	string(APPEND CMAKE_CXX_FLAGS " -DWEBP_REDUCE_SIZE")
 	FetchContent_MakeAvailable(webp)
 	FetchContent_GetProperties(webp SOURCE_DIR WEBP_SRC_DIR)
 	target_include_directories(jngl PRIVATE ${WEBP_SRC_DIR}/src)
