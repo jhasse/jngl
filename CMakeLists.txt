@@ -204,11 +204,8 @@ else()
 
 	if(MSVC)
 		if(WINDOWS_STORE)
-			target_sources(jngl PRIVATE src/uwp/SDL_winrt_main_NonXAML.cpp)
-			set_source_files_properties(src/uwp/SDL_winrt_main_NonXAML.cpp
-				PROPERTIES COMPILE_FLAGS "/ZW /Zc:twoPhase-")
 			target_compile_definitions(jngl PUBLIC JNGL_UWP)
-			target_include_directories(jngl PRIVATE include/uwp)
+			target_include_directories(jngl PUBLIC include/uwp) # TODO: This should be PRIVATE
 			target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH})
 			target_link_libraries(jngl PUBLIC OpenAL SDL2 libGLESv2.dll.lib)
 			target_link_options(jngl PUBLIC $<IF:$<CONFIG:Debug>,/defaultlib:vccorlibd.lib /defaultlib:msvcrtd.lib,/defaultlib:vccorlib.lib /defaultlib:msvcrt.lib>)
@@ -365,14 +362,18 @@ else()
 
 	if(NOT hasParent)
 		if(WINDOWS_STORE)
+			set(UWP_DLLS lib/uwp/${JNGL_ARCH}/libEGL.dll lib/uwp/${JNGL_ARCH}/libGLESv2.dll
+				lib/uwp/${JNGL_ARCH}/OpenAL.dll lib/uwp/${JNGL_ARCH}/SDL2.dll)
 			# WIN32 is needed to build for the Windows subsystem, not Console
-			add_executable(jngl-test WIN32 src/test/test.cpp)
+			add_executable(jngl-test WIN32 src/test/test.cpp src/uwp/SDL_winrt_main_NonXAML.cpp
+				${UWP_DLLS})
+			set_source_files_properties(${UWP_DLLS} PROPERTIES VS_DEPLOYMENT_CONTENT 1)
 
 			# Otherwise linking will fail with
 			#   error LNK2038: mismatch detected for
 			#   'vccorlib_lib_should_be_specified_before_msvcrt_lib_to_linker': value '1' doesn't
 			#   match value '0' in msvcrtd.lib(app_appinit.obj)
-			set_source_files_properties(src/test/test.cpp
+			set_source_files_properties(src/uwp/SDL_winrt_main_NonXAML.cpp
 				PROPERTIES COMPILE_FLAGS "/ZW /Zc:twoPhase-")
 		else()
 			if(NOT IOS)
