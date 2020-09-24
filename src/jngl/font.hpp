@@ -36,10 +36,22 @@ int getFontSize();
 /// Change the font size used by print()
 void setFontSize(int size);
 
+/// Returns the currently active font name
+///
+/// This will either return a font name if jngl::setFont was used or a font name if
+/// jngl::setFontByName was used.
 std::string getFont();
 
+/// Sets the currently active font to \a filename
+///
+/// This can either be a TTF or OTF file.
 void setFont(const std::string& filename);
 
+/// Sets the currently active font by a font \a name
+///
+/// \code
+/// jngl::setFontByName("monospace");
+/// \endcode
 void setFontByName(const std::string& name);
 
 void setFontColor(jngl::Color);
