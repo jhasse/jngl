@@ -1,6 +1,6 @@
 <map id="jngl/Video.hpp" name="jngl/Video.hpp">
 <area shape="rect" id="node1" title=" " alt="" coords="413,5,548,32"/>
-<area shape="rect" id="node2" href="$sprite_8hpp_source.html" title=" " alt="" coords="253,80,356,107"/>
+<area shape="rect" id="node2" href="$sprite_8hpp.html" title="Contains Sprite class and related functions." alt="" coords="253,80,356,107"/>
 <area shape="rect" id="node10" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="444,229,515,256"/>
 <area shape="rect" id="node11" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="519,80,589,107"/>
 <area shape="rect" id="node3" href="$Drawable_8hpp.html" title="Contains Drawable class." alt="" coords="89,155,208,181"/>

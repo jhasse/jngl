@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="sprite_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node2"><a xlink:href="sprite_8hpp.html" target="_top" xlink:title="Contains Sprite class and related functions.">
 <polygon fill="white" stroke="black" points="186,-168.5 186,-187.5 263,-187.5 263,-168.5 186,-168.5"/>
 <text text-anchor="middle" x="224.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">sprite.hpp</text>
 </a>

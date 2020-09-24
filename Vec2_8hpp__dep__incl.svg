@@ -36,7 +36,7 @@
 <!-- Node5 -->
 <g id="node5" class="node">
 <title>Node5</title>
-<g id="a_node5"><a xlink:href="sprite_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node5"><a xlink:href="sprite_8hpp.html" target="_top" xlink:title="Contains Sprite class and related functions.">
 <polygon fill="white" stroke="black" points="172,-168.5 172,-187.5 279,-187.5 279,-168.5 172,-168.5"/>
 <text text-anchor="middle" x="225.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">jngl/sprite.hpp</text>
 </a>

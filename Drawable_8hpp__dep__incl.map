@@ -1,7 +1,7 @@
 <map id="jngl/Drawable.hpp" name="jngl/Drawable.hpp">
 <area shape="rect" id="node1" title="Contains Drawable class." alt="" coords="18,5,177,32"/>
 <area shape="rect" id="node2" href="$all_8hpp.html" title="Includes all JNGL headers." alt="" coords="9,229,128,256"/>
-<area shape="rect" id="node4" href="$sprite_8hpp_source.html" title=" " alt="" coords="26,80,169,107"/>
+<area shape="rect" id="node4" href="$sprite_8hpp.html" title="Contains Sprite class and related functions." alt="" coords="26,80,169,107"/>
 <area shape="rect" id="node6" href="$text_8hpp.html" title=" " alt="" coords="213,155,340,181"/>
 <area shape="rect" id="node3" href="$jngl_8hpp_source.html" title=" " alt="" coords="25,304,112,331"/>
 <area shape="rect" id="node5" href="$Video_8hpp.html" title=" " alt="" coords="54,155,189,181"/>
