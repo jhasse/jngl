@@ -25,11 +25,22 @@ public:
 	/// change any game state in it.
 	virtual void draw() const = 0;
 
+	/// Does nothing
 	Job() = default;
+
+	/// Copy constructor
 	Job(const Job&) = default;
+
+	/// Copy assignment
 	Job& operator=(const Job&) = default;
+
+	/// Move constructor
 	Job(Job&&) = default;
+
+	/// Move assignment
 	Job& operator=(Job&&) = default;
+
+	/// Does nothing
 	virtual ~Job();
 };
 

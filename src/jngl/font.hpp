@@ -1,5 +1,6 @@
 // Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
+/// Contains jngl::Font class and related functions
 /// @file
 #pragma once
 
@@ -7,6 +8,7 @@
 #include "Vec2.hpp"
 
 #include <memory>
+#include <string>
 
 namespace jngl {
 
@@ -54,13 +56,19 @@ void setFont(const std::string& filename);
 /// \endcode
 void setFontByName(const std::string& name);
 
+/// Sets the color of the currently active font
 void setFontColor(jngl::Color);
 
+/// Sets the color of the currently active font
+///
+/// If the \a alpha value isn't specified, it will be set to 255 (opaque).
 void setFontColor(unsigned char red, unsigned char green, unsigned char blue,
                   unsigned char alpha = 255);
 
+/// Pushes the currently active font color on a stack and sets a new one
 void pushFontColor(unsigned char red, unsigned char green, unsigned char blue);
 
+/// Resets the font color on the top of stack which is used by jngl::pushFontColor
 void popFontColor();
 
 /// Get line height used py print() in pixel
@@ -69,6 +77,7 @@ int getLineHeight();
 /// Set line height used by print() in pixel
 void setLineHeight(int);
 
+/// Calculates the width of \a text in pixels if it would be drawn with the currently active font
 double getTextWidth(const std::string& text);
 
 } // namespace jngl

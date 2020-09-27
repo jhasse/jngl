@@ -1,12 +1,14 @@
 // Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-/// Contains Sprite class and related functions
+/// Contains jngl::Sprite class and related functions
 /// \file
 #pragma once
 
 #include "Drawable.hpp"
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
+
+#include <vector>
 
 namespace jngl {
 
@@ -55,6 +57,7 @@ public:
 	/// Returns a reference to JNGL's default vertex shader used to draw textures
 	static const Shader& vertexShader();
 
+	/// Function which actually loads the sprite
 	std::shared_ptr<Finally> loader;
 
 private:

@@ -29,6 +29,7 @@ namespace jngl {
 /// \endcode
 class Video {
 public:
+	/// Opens OGG Theora video specified by \a filename
 	explicit Video(const std::string& filename);
 	Video(const Video&) = delete;
 	Video& operator=(const Video&) = delete;
