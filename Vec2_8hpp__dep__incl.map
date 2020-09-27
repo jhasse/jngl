@@ -1,9 +1,9 @@
 <map id="jngl/Vec2.hpp" name="jngl/Vec2.hpp">
 <area shape="rect" id="node1" title=" " alt="" coords="517,5,644,32"/>
-<area shape="rect" id="node2" href="$Drawable_8hpp.html" title="Contains Drawable class." alt="" coords="121,80,280,107"/>
-<area shape="rect" id="node5" href="$sprite_8hpp.html" title="Contains Sprite class and related functions." alt="" coords="235,155,377,181"/>
-<area shape="rect" id="node8" href="$font_8hpp.html" title=" " alt="" coords="417,229,544,256"/>
-<area shape="rect" id="node9" href="$framebuffer_8hpp.html" title="Contains FrameBuffer class." alt="" coords="493,155,668,181"/>
+<area shape="rect" id="node2" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="121,80,280,107"/>
+<area shape="rect" id="node5" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="235,155,377,181"/>
+<area shape="rect" id="node8" href="$font_8hpp.html" title="Contains jngl::Font class and related functions." alt="" coords="417,229,544,256"/>
+<area shape="rect" id="node9" href="$framebuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="493,155,668,181"/>
 <area shape="rect" id="node10" href="$input_8hpp.html" title="Input related functions." alt="" coords="692,155,827,181"/>
 <area shape="rect" id="node12" href="$screen_8hpp.html" title=" " alt="" coords="689,80,832,107"/>
 <area shape="rect" id="node13" href="$shapes_8hpp.html" title="Functions for drawing shapes." alt="" coords="860,80,1003,107"/>

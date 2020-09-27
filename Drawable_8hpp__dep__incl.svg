@@ -12,7 +12,7 @@
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
-<g id="a_node1"><a xlink:title="Contains Drawable class.">
+<g id="a_node1"><a xlink:title="Contains jngl::Drawable class.">
 <polygon fill="#bfbfbf" stroke="black" points="9.69,-224.5 9.69,-243.5 128.69,-243.5 128.69,-224.5 9.69,-224.5"/>
 <text text-anchor="middle" x="69.19" y="-231.5" font-family="'Consolas',monospace" font-size="10.00">jngl/Drawable.hpp</text>
 </a>
@@ -36,7 +36,7 @@
 <!-- Node4 -->
 <g id="node4" class="node">
 <title>Node4</title>
-<g id="a_node4"><a xlink:href="sprite_8hpp.html" target="_top" xlink:title="Contains Sprite class and related functions.">
+<g id="a_node4"><a xlink:href="sprite_8hpp.html" target="_top" xlink:title="Contains jngl::Sprite class and related functions.">
 <polygon fill="white" stroke="black" points="15.69,-168.5 15.69,-187.5 122.69,-187.5 122.69,-168.5 15.69,-168.5"/>
 <text text-anchor="middle" x="69.19" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">jngl/sprite.hpp</text>
 </a>

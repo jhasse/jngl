@@ -12,7 +12,7 @@
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
-<g id="a_node1"><a xlink:title="Contains Drawable class.">
+<g id="a_node1"><a xlink:title="Contains jngl::Drawable class.">
 <polygon fill="#bfbfbf" stroke="black" points="52,-112.5 52,-131.5 171,-131.5 171,-112.5 52,-112.5"/>
 <text text-anchor="middle" x="111.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">jngl/Drawable.hpp</text>
 </a>
