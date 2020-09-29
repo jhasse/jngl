@@ -28,6 +28,7 @@ struct AppParameters {
 /// Implement this function and return a factory function which creates the first jngl::Work
 std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters&);
 
+#if !defined(__APPLE__) || !TARGET_OS_IPHONE // iOS
 JNGL_MAIN_BEGIN {
 	jngl::AppParameters params;
 	auto workFactory = jnglInit(params);
@@ -38,3 +39,4 @@ JNGL_MAIN_BEGIN {
 	app.mainLoop();
 }
 JNGL_MAIN_END
+#endif
