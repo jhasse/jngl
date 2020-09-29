@@ -10,17 +10,22 @@
 #include "screen.hpp"
 #include "work.hpp"
 
+#include <cmath>
+
 namespace jngl {
 class Work;
 
 struct AppParameters {
+	/// Display name of the application which will be used in the window title for example
 	std::string displayName;
+
+	/// Size of the canvas in screen pixels, see jngl::getScreenSize()
 	jngl::Vec2 screenSize;
 };
 
 } // namespace jngl
 
-/// Imlement this function and return a factory function which creates the first jngl::Work
+/// Implement this function and return a factory function which creates the first jngl::Work
 std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters&);
 
 JNGL_MAIN_BEGIN {
