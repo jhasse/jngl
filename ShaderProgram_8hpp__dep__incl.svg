@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="all_8hpp.html" target="_top" xlink:title="Includes all JNGL headers.">
+<g id="a_node2"><a xlink:href="all_8hpp.html" target="_top" xlink:title="Includes all JNGL headers except for init.hpp.">
 <polygon fill="white" stroke="black" points="27,-56.5 27,-75.5 116,-75.5 116,-56.5 27,-56.5"/>
 <text text-anchor="middle" x="71.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00">jngl/all.hpp</text>
 </a>
