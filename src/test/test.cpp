@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl.hpp"
+#include "../jngl/init.hpp"
 
 #include <algorithm>
 #include <boost/math/constants/constants.hpp>
@@ -191,37 +192,33 @@ private:
 	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
 };
 
-JNGL_MAIN_BEGIN {
-	try {
-		jngl::App app("JNGL Test Application");
+std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& params) {
+	params.displayName = "JNGL Test Application";
 #ifdef _MSC_VER
-		std::filesystem::current_path(jngl::getBinaryPath());
+	std::filesystem::current_path(jngl::getBinaryPath());
 #endif
+	try {
+		std::cout << "Size of jngl.png: " << jngl::getWidth("jngl.png") << "x"
+		          << jngl::getHeight("jngl.png") << std::endl;
+	} catch (std::runtime_error& e) {
+		std::cout << e.what() << std::endl;
+	}
+	const int scaleFactor =
+	    std::min((jngl::getDesktopWidth() - 50) / 800, (jngl::getDesktopHeight() - 50) / 600);
+	jngl::setScaleFactor(scaleFactor);
+	params.screenSize = { 800, 600 };
+	return []() {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
 		          << jngl::getDesktopHeight() << std::endl
 		          << "Path of binary: " << jngl::getBinaryPath() << std::endl
 		          << "Config path: " << jngl::getConfigPath() << std::endl;
-		try {
-			std::cout << "Size of jngl.png: " << jngl::getWidth("jngl.png") << "x"
-			                                  << jngl::getHeight("jngl.png") << std::endl;
-		} catch (std::runtime_error& e) {
-			std::cout << e.what() << std::endl;
-		}
-		const int scaleFactor =
-		    std::min((jngl::getDesktopWidth() - 50) / 800, (jngl::getDesktopHeight() - 50) / 600);
-		jngl::setScaleFactor(scaleFactor);
-		jngl::showWindow("setTitle not working!", 800 * scaleFactor, 600 * scaleFactor);
 		jngl::onControllerChanged([]() {
 			const auto controllers = jngl::getConnectedControllers();
 			std::cout << "Number of connected controllers: " << controllers.size() << std::endl;
 		});
-		jngl::setWork(std::make_shared<Test>());
-		app.mainLoop();
-	} catch(std::exception& e) {
-		jngl::hideWindow();
-		jngl::errorMessage(e.what());
-	}
-} JNGL_MAIN_END
+		return std::make_shared<Test>();
+	};
+}
 
 void drawBackground() {
 	jngl::setSpriteAlpha(100);

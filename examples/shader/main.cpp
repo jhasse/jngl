@@ -1,5 +1,6 @@
 #include <fstream>
 #include <jngl.hpp>
+#include <jngl/init.hpp>
 #include <sstream>
 
 class ShaderExample : public jngl::Work {
@@ -53,10 +54,8 @@ private:
 	std::unique_ptr<jngl::ShaderProgram> blurProgram;
 };
 
-JNGL_MAIN_BEGIN {
-	jngl::App app("Shader Example");
-	jngl::showWindow(app.getDisplayName(), 1280, 720);
-	jngl::setWork(std::make_shared<ShaderExample>());
-	app.mainLoop();
+std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& params) {
+	params.displayName = "Shader Example";
+	params.screenSize = { 1280, 720 };
+	return []() { return std::make_shared<ShaderExample>(); };
 }
-JNGL_MAIN_END
