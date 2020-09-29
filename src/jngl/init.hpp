@@ -32,8 +32,8 @@ JNGL_MAIN_BEGIN {
 	jngl::AppParameters params;
 	auto workFactory = jnglInit(params);
 	jngl::App app(params.displayName);
-	jngl::showWindow(params.displayName, std::lround(800 * jngl::getScaleFactor()),
-	                 std::lround(600 * jngl::getScaleFactor()));
+	jngl::showWindow(params.displayName, std::lround(params.screenSize.x * jngl::getScaleFactor()),
+	                 std::lround(params.screenSize.y * jngl::getScaleFactor()));
 	jngl::setWork(workFactory());
 	app.mainLoop();
 }
