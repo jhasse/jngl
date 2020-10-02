@@ -7,7 +7,6 @@
 #include "../jngl/init.hpp"
 
 #include <sstream>
-#include <iostream>
 
 @implementation AppDelegate
 
@@ -28,7 +27,7 @@
 	auto workFactory = jnglInit(params);
 	jngl::App app(params.displayName);
 	jngl::setWork(workFactory());
-	std::cout << "START" << std::endl;
+
 	[view drawView:nil];
     [self.window makeKeyAndVisible];
 	[[UIApplication sharedApplication] setIdleTimerDisabled:YES];
