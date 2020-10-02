@@ -107,21 +107,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
 <div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classjngl_1_1Work.html">   13</a></span>&#160;<span class="keyword">class </span><a class="code" href="classjngl_1_1Work.html">Work</a> : <span class="keyword">public</span> <a class="code" href="classjngl_1_1Job.html">Job</a> {</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classjngl_1_1Work.html#a73f9f5ca4d5c6d4dc49b176af928cd90">   21</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Work.html#a73f9f5ca4d5c6d4dc49b176af928cd90">onQuitEvent</a>();</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classjngl_1_1Work.html#a8342b70aa2109f3a2cf6ee028258098c">   24</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Work.html#a8342b70aa2109f3a2cf6ee028258098c">onLoad</a>();</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;};</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="namespacejngl.html#a41bdb428b4b122d8a22b79c8d448b306">   28</a></span>&#160;<a class="codeRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr&lt;Work&gt;</a> <a class="code" href="namespacejngl.html#a41bdb428b4b122d8a22b79c8d448b306">getWork</a>();</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196">   31</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196">setWork</a>(<a class="codeRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr&lt;Work&gt;</a> work);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;[[deprecated(<span class="stringliteral">&quot;Use setWork(std::shared_ptr&lt;Work&gt;) instead&quot;</span>)]]</div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="namespacejngl.html#af765d65e1817b356ad2bd10c282d3f2d">   35</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196">setWork</a>(<a class="code" href="classjngl_1_1Work.html">Work</a>*);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="namespacejngl.html#a2b8ca3b921f4c5aaa72bde58f85489b0">   41</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a2b8ca3b921f4c5aaa72bde58f85489b0">resetFrameLimiter</a>();</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;} <span class="comment">// namespace jngl</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classjngl_1_1Work.html#a73f9f5ca4d5c6d4dc49b176af928cd90">   20</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Work.html#a73f9f5ca4d5c6d4dc49b176af928cd90">onQuitEvent</a>();</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classjngl_1_1Work.html#a0b83084052507320942da9ae00eaf2bb">   26</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Work.html#a0b83084052507320942da9ae00eaf2bb">onPauseEvent</a>();</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classjngl_1_1Work.html#a8342b70aa2109f3a2cf6ee028258098c">   29</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Work.html#a8342b70aa2109f3a2cf6ee028258098c">onLoad</a>();</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;};</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="namespacejngl.html#a41bdb428b4b122d8a22b79c8d448b306">   33</a></span>&#160;<a class="codeRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr&lt;Work&gt;</a> <a class="code" href="namespacejngl.html#a41bdb428b4b122d8a22b79c8d448b306">getWork</a>();</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196">   36</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196">setWork</a>(<a class="codeRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr&lt;Work&gt;</a> work);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;[[deprecated(<span class="stringliteral">&quot;Use setWork(std::shared_ptr&lt;Work&gt;) instead&quot;</span>)]]</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="namespacejngl.html#af765d65e1817b356ad2bd10c282d3f2d">   40</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196">setWork</a>(<a class="code" href="classjngl_1_1Work.html">Work</a>*);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="namespacejngl.html#a2b8ca3b921f4c5aaa72bde58f85489b0">   46</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a2b8ca3b921f4c5aaa72bde58f85489b0">resetFrameLimiter</a>();</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;} <span class="comment">// namespace jngl</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassjngl_1_1Work_html_a73f9f5ca4d5c6d4dc49b176af928cd90"><div class="ttname"><a href="classjngl_1_1Work.html#a73f9f5ca4d5c6d4dc49b176af928cd90">jngl::Work::onQuitEvent</a></div><div class="ttdeci">virtual void onQuitEvent()</div><div class="ttdoc">Gets called when the user closes the main window or quit() has been called.</div></div>
 <div class="ttc" id="ashared_ptr_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a></div></div>
@@ -133,5 +135,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="ajob_8hpp_html"><div class="ttname"><a href="job_8hpp.html">job.hpp</a></div></div>
 <div class="ttc" id="amemory_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/memory.html">memory</a></div></div>
 <div class="ttc" id="anamespacejngl_html_a2b8ca3b921f4c5aaa72bde58f85489b0"><div class="ttname"><a href="namespacejngl.html#a2b8ca3b921f4c5aaa72bde58f85489b0">jngl::resetFrameLimiter</a></div><div class="ttdeci">void resetFrameLimiter()</div><div class="ttdoc">Resets the automatic frame limiter of App::mainLoop().</div></div>
+<div class="ttc" id="aclassjngl_1_1Work_html_a0b83084052507320942da9ae00eaf2bb"><div class="ttname"><a href="classjngl_1_1Work.html#a0b83084052507320942da9ae00eaf2bb">jngl::Work::onPauseEvent</a></div><div class="ttdeci">virtual void onPauseEvent()</div><div class="ttdoc">Gets called when the main window loses focus or the app is put in the background.</div></div>
 <div class="ttc" id="anamespacejngl_html_a7631ce749b3b2d409e3f84f2cb32b196"><div class="ttname"><a href="namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196">jngl::setWork</a></div><div class="ttdeci">void setWork(std::shared_ptr&lt; Work &gt; work)</div><div class="ttdoc">Sets the passed Work to be active in App::mainLoop()</div></div>
 </body></html>

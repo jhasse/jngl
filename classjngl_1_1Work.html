@@ -109,6 +109,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a73f9f5ca4d5c6d4dc49b176af928cd90"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Work.html#a73f9f5ca4d5c6d4dc49b176af928cd90">onQuitEvent</a> ()</td></tr>
 <tr class="memdesc:a73f9f5ca4d5c6d4dc49b176af928cd90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called when the user closes the main window or <a class="el" href="namespacejngl.html#a4d50d8a7e6f86e2fe2b8529c95d6ef02" title="Emit a quit event which will exit App::mainLoop() and set running() to false.">quit()</a> has been called.  <a href="classjngl_1_1Work.html#a73f9f5ca4d5c6d4dc49b176af928cd90">More...</a><br /></td></tr>
 <tr class="separator:a73f9f5ca4d5c6d4dc49b176af928cd90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b83084052507320942da9ae00eaf2bb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Work.html#a0b83084052507320942da9ae00eaf2bb">onPauseEvent</a> ()</td></tr>
+<tr class="memdesc:a0b83084052507320942da9ae00eaf2bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called when the main window loses focus or the app is put in the background.  <a href="classjngl_1_1Work.html#a0b83084052507320942da9ae00eaf2bb">More...</a><br /></td></tr>
+<tr class="separator:a0b83084052507320942da9ae00eaf2bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8342b70aa2109f3a2cf6ee028258098c"><td class="memItemLeft" align="right" valign="top"><a id="a8342b70aa2109f3a2cf6ee028258098c"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Work.html#a8342b70aa2109f3a2cf6ee028258098c">onLoad</a> ()</td></tr>
 <tr class="memdesc:a8342b70aa2109f3a2cf6ee028258098c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called when the <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> is activated by <a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> <br /></td></tr>
@@ -186,8 +189,36 @@ Collaboration diagram for Work:</div>
 </div><div class="memdoc">
 
 <p>Gets called when the user closes the main window or <a class="el" href="namespacejngl.html#a4d50d8a7e6f86e2fe2b8529c95d6ef02" title="Emit a quit event which will exit App::mainLoop() and set running() to false.">quit()</a> has been called. </p>
-<p>On Android this will happen when the back button is pressend, on iOS when the app is closed or put in the background.</p>
+<p>On Android this will happen when the back button is pressed.</p>
 <p>To continue with the main loop, call <a class="el" href="namespacejngl.html#a023daf9767d1e2db5d032856dda0b8fa" title="Undo quit() or ignore a quit event caused by the user closing the main window.">cancelQuit()</a>. </p>
+
+</div>
+</div>
+<a id="a0b83084052507320942da9ae00eaf2bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b83084052507320942da9ae00eaf2bb">&#9670;&nbsp;</a></span>onPauseEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void onPauseEvent </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets called when the main window loses focus or the app is put in the background. </p>
+<p>On iOS and Android this will happen when the user switches to another app. As the main loop continues to run you might want to pause the game if necessary. </p>
 
 </div>
 </div>
