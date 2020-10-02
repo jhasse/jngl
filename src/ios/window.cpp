@@ -14,17 +14,13 @@ Window::Window(const std::string& title, const int width, const int height, cons
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : impl(std::make_unique<WindowImpl>(this)), fullscreen_(fullscreen), isMouseVisible_(true),
   relativeMouseMode(false), anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12),
-  width_(width), height_(height), fontName_("") {
+  width_(width), height_(height), fontName_("Arial.ttf") {
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	Init(width, height, canvasWidth, canvasHeight);
 }
 
 std::string Window::GetFontFileByName(const std::string& fontname) {
-	std::string tmp = fontname;
-	if (fontname == "sans-serif") {
-		tmp = "Arial";
-	}
-	return tmp + ".ttf";
+	return "Arial.ttf"; // Not implemented on iOS. Always use Arial.ttf as that's what jngl-test uses.
 }
 
 Window::~Window() {};

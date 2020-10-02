@@ -7,7 +7,7 @@
 namespace jngl {
 
 std::string getBinaryPath() {
-	return "";
+	return getPrefix(); // better than nothing
 }
 
 } // namespace jngl
