@@ -14,11 +14,16 @@ class Work : public Job {
 public:
 	/// Gets called when the user closes the main window or quit() has been called
 	///
-	/// On Android this will happen when the back button is pressend, on iOS when the app is closed
-	/// or put in the background.
+	/// On Android this will happen when the back button is pressed.
 	///
 	/// To continue with the main loop, call cancelQuit().
 	virtual void onQuitEvent();
+
+	/// Gets called when the main window loses focus or the app is put in the background
+	///
+	/// On iOS and Android this will happen when the user switches to another app. As the main loop
+	/// continues to run you might want to pause the game if necessary.
+	virtual void onPauseEvent();
 
 	/// Gets called when the Work is activated by App::mainLoop()
 	virtual void onLoad();

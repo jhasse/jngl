@@ -148,10 +148,15 @@
 }
 
 -(void) setPause: (bool) p {
-	pause = p;
+	if (p && !pause && jngl::pWindow) {
+		if (const auto work = jngl::pWindow->getWork()) {
+			work->onPauseEvent();
+		}
+	}
 	if (!p) {
 		needToResetFrameLimiter = true;
 	}
+	pause = p;
 }
 
 - (UIKeyboardType) keyboardType {
