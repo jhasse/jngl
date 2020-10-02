@@ -1,4 +1,4 @@
-// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/sprite.hpp"
@@ -12,7 +12,7 @@
 BOOST_AUTO_TEST_CASE(Sprite) {
 	for (float factor : { 1.f, 2.f, 3.4f }) {
 		Fixture f(factor);
-		jngl::drawScaled("../jngl.webp", -60, -30, 0.2f);
+		jngl::drawScaled("../android/test/app/src/main/assets/jngl.webp", -60, -30, 0.2f);
 		BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒                              ▒
@@ -22,11 +22,11 @@ BOOST_AUTO_TEST_CASE(Sprite) {
 ▒              ░░              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
-		jngl::load("../jngl.webp"); // This shouldn't crash
+		jngl::load("../android/test/app/src/main/assets/jngl.webp"); // This shouldn't crash
 	}
 	{
 		Fixture f(3.4f);
-		jngl::Sprite sprite("../jngl.webp");
+		jngl::Sprite sprite("../android/test/app/src/main/assets/jngl.webp");
 		BOOST_CHECK_CLOSE(sprite.getWidth(), 600, 1e-9);
 		BOOST_CHECK_CLOSE(sprite.getHeight(), 300, 1e-9);
 

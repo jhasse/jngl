@@ -19,9 +19,6 @@ ${ANDROID_SDK_ROOT}/ndk/21.3.6528147/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM
 test/app/src/main/assets:
 	mkdir "$@"
 
-test/app/src/main/assets/jngl.webp: test/app/src/main/assets ../jngl.webp
-	cp ../jngl.webp "$@"
-
 test/app/src/main/assets/test.ogg: test/app/src/main/assets ../test.ogg
 	cp ../test.ogg "$@"
 
@@ -33,7 +30,6 @@ test/app/src/main/assets/verysmall.ogv: test/app/src/main/assets ../data/verysma
 
 .PHONY: gradle
 gradle: ${ANDROID_SDK_ROOT}/ndk/21.3.6528147/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp \
-        test/app/src/main/assets/jngl.webp \
         test/app/src/main/assets/test.ogg \
         test/app/src/main/assets/Arial.ttf \
         test/app/src/main/assets/verysmall.ogv

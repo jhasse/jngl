@@ -14,10 +14,6 @@
 #include <sstream>
 #include <vector>
 
-#ifdef _MSC_VER
-#include <filesystem>
-#endif
-
 void drawBackground();
 void drawMouse(jngl::Vec2);
 void testKeys();
@@ -194,9 +190,7 @@ private:
 
 std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& params) {
 	params.displayName = "JNGL Test Application";
-#ifdef _MSC_VER
-	std::filesystem::current_path(jngl::getBinaryPath());
-#endif
+	jngl::setPrefix(jngl::getBinaryPath());
 	try {
 		std::cout << "Size of jngl.png: " << jngl::getWidth("jngl.png") << "x"
 		          << jngl::getHeight("jngl.png") << std::endl;

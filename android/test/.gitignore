@@ -7,4 +7,6 @@
 /captures
 .externalNativeBuild
 /app/build/
-/app/src/main/assets/
+/app/src/main/assets/Arial.ttf
+/app/src/main/assets/test.ogg
+/app/src/main/assets/verysmall.ogv
