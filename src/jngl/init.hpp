@@ -20,7 +20,9 @@ struct AppParameters {
 	std::string displayName;
 
 	/// Size of the canvas in screen pixels, see jngl::getScreenSize()
-	jngl::Vec2 screenSize;
+	///
+	/// If not specified JNGL will create a fullscreen Window with the maximum of space available.
+	std::optional<jngl::Vec2> screenSize;
 };
 
 } // namespace jngl
@@ -33,8 +35,12 @@ JNGL_MAIN_BEGIN {
 	jngl::AppParameters params;
 	auto workFactory = jnglInit(params);
 	jngl::App app(params.displayName);
-	jngl::showWindow(params.displayName, std::lround(params.screenSize.x * jngl::getScaleFactor()),
-	                 std::lround(params.screenSize.y * jngl::getScaleFactor()));
+	if (!params.screenSize) {
+		params.screenSize = { double(jngl::getDesktopWidth()), double(jngl::getDesktopHeight()) };
+	}
+	jngl::showWindow(params.displayName, std::lround(params.screenSize->x * jngl::getScaleFactor()),
+	                 std::lround(params.screenSize->y * jngl::getScaleFactor()), true, { 1, 3 },
+	                 { 3, 1 });
 	jngl::setWork(workFactory());
 	app.mainLoop();
 }
