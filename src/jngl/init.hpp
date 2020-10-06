@@ -11,6 +11,7 @@
 #include "work.hpp"
 
 #include <cmath>
+#include <optional>
 
 namespace jngl {
 class Work;
