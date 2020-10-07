@@ -7,6 +7,15 @@
 #include "other.hpp"
 #include "window.hpp"
 
+#ifdef JNGL_UWP
+#include <SDL.h>
+
+#define JNGL_MAIN_BEGIN /* NOLINT */ int main(int argc, char** argv) { \
+	jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
+#define JNGL_MAIN_END return 0; } // NOLINT
+
+#else
+
 #ifdef __APPLE__
 #include "TargetConditionals.h"
 #endif
@@ -38,4 +47,6 @@
 			jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
 		#define JNGL_MAIN_END } // NOLINT
 	#endif
+#endif
+
 #endif
