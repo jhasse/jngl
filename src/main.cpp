@@ -14,10 +14,11 @@
 
 #ifdef _WIN32
 #include <filesystem>
+#include <windows.h>
 #endif
 
-#ifdef _WIN32
-#include <windows.h>
+#ifdef JNGL_UWP
+#include <boost/algorithm/string.hpp>
 #endif
 
 #ifdef __APPLE__

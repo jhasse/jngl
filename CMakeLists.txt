@@ -359,10 +359,17 @@ else()
 		set(FREETYPE_LIBRARIES freetype)
 	endif()
 
+	if(WINDOWS_STORE)
+		set(UWP_DLLS
+			${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH}/libEGL.dll
+			${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH}/libGLESv2.dll
+			${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH}/OpenAL.dll
+			${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH}/SDL2.dll
+		)
+		set(JNGL_UWP_DLLS ${UWP_DLLS} PARENT_SCOPE)
+	endif()
 	if(NOT hasParent)
 		if(WINDOWS_STORE)
-			set(UWP_DLLS lib/uwp/${JNGL_ARCH}/libEGL.dll lib/uwp/${JNGL_ARCH}/libGLESv2.dll
-				lib/uwp/${JNGL_ARCH}/OpenAL.dll lib/uwp/${JNGL_ARCH}/SDL2.dll)
 			# WIN32 is needed to build for the Windows subsystem, not Console
 			add_executable(jngl-test WIN32 src/test/test.cpp src/uwp/SDL_winrt_main_NonXAML.cpp
 				${UWP_DLLS})
