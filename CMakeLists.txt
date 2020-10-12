@@ -78,6 +78,20 @@ else() # Windows
 	set(JNGL_SDL2_DEFAULT OFF)
 	if(WINDOWS_STORE)
 		set(JNGL_SDL2_DEFAULT ON)
+
+		FetchContent_Declare(
+			angle
+			GIT_REPOSITORY https://github.com/jhasse/angle.git
+			GIT_TAG        cmake
+		)
+		if(NOT angle_POPULATED)
+			FetchContent_Populate(angle)
+
+			set(BUILD_SHARED_LIBS_OLD ${BUILD_SHARED_LIBS})
+			set(BUILD_SHARED_LIBS ON CACHE INTERNAL "")
+			add_subdirectory(${angle_SOURCE_DIR} ${angle_BINARY_DIR})
+			set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_OLD} CACHE BOOL "" FORCE)
+		endif()
 	endif()
 	option(JNGL_SDL2 "Use SDL2 instead of WinAPI" ${JNGL_SDL2_DEFAULT})
 
@@ -90,7 +104,7 @@ else() # Windows
 		file(GLOB SRC src/win32/*.cpp)
 	endif()
 	target_sources(jngl PRIVATE ${SRC})
-	target_link_libraries(jngl PUBLIC winmm)
+	target_link_libraries(jngl PUBLIC winmm libEGL libGLESv2)
 	if(MSVC)
 		string(APPEND CMAKE_C_FLAGS " /D_CRT_SECURE_NO_WARNINGS")
 		string(APPEND CMAKE_CXX_FLAGS " /D_CRT_SECURE_NO_WARNINGS /D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING")
@@ -361,8 +375,6 @@ else()
 
 	if(WINDOWS_STORE)
 		set(UWP_DLLS
-			${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH}/libEGL.dll
-			${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH}/libGLESv2.dll
 			${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH}/OpenAL.dll
 			${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH}/SDL2.dll
 		)
