@@ -18,6 +18,7 @@
 #include "sound.hpp"
 #include "time.hpp"
 
+#include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
 #include <deque>
 #ifdef __APPLE__

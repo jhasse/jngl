@@ -417,7 +417,7 @@ if(MSVC OR IOS OR ANDROID)
 	#   referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
 endif()
 
-if(ANDROID OR IOS OR APPLE)
+if(ANDROID OR IOS OR APPLE OR WINDOWS_STORE)
 	if(JNGL_VIDEO)
 		FetchContent_Declare(theora
 			URL http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
@@ -432,8 +432,10 @@ if(ANDROID OR IOS OR APPLE)
 			"${theora_SOURCE_DIR}/lib/decode.c" "${theora_SOURCE_DIR}/lib/huffdec.c")
 		target_include_directories(theoradec PRIVATE ${OGG_INCLUDE_DIRS}
 			"${theora_SOURCE_DIR}/include")
-		target_compile_options(theoradec PRIVATE -Wno-shift-negative-value
-			-Wno-shift-op-parentheses -Wno-logical-op-parentheses -Wno-parentheses)
+		if(NOT MSVC)
+			target_compile_options(theoradec PRIVATE -Wno-shift-negative-value
+				-Wno-shift-op-parentheses -Wno-logical-op-parentheses -Wno-parentheses)
+		endif()
 		target_link_libraries(jngl PRIVATE theoradec)
 		target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
 		target_include_directories(jngl PRIVATE "${theora_SOURCE_DIR}/include")
