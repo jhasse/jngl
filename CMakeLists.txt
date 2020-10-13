@@ -224,7 +224,7 @@ else()
 			target_compile_definitions(jngl PUBLIC JNGL_UWP)
 			target_include_directories(jngl PUBLIC include/uwp) # TODO: This should be PRIVATE
 			target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH})
-			target_link_libraries(jngl PUBLIC OpenAL SDL2 libGLESv2.dll.lib)
+			target_link_libraries(jngl PUBLIC OpenAL SDL2)
 			target_link_options(jngl PUBLIC $<IF:$<CONFIG:Debug>,/defaultlib:vccorlibd.lib /defaultlib:msvcrtd.lib,/defaultlib:vccorlib.lib /defaultlib:msvcrt.lib>)
 		else()
 			if(JNGL_SDL2)
@@ -387,8 +387,9 @@ else()
 		if(WINDOWS_STORE)
 			# WIN32 is needed to build for the Windows subsystem, not Console
 			add_executable(jngl-test WIN32 src/test/test.cpp src/uwp/SDL_winrt_main_NonXAML.cpp
-				${UWP_DLLS})
-			set_source_files_properties(${UWP_DLLS} PROPERTIES VS_DEPLOYMENT_CONTENT 1)
+				Arial.ttf android/test/app/src/main/assets/jngl.webp ${UWP_DLLS})
+			set_source_files_properties(${UWP_DLLS} Arial.ttf
+				android/test/app/src/main/assets/jngl.webp PROPERTIES VS_DEPLOYMENT_CONTENT 1)
 
 			# Otherwise linking will fail with
 			#   error LNK2038: mismatch detected for
