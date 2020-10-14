@@ -129,17 +129,17 @@ SoundFile::SoundFile(const std::string& filename) : params(std::make_unique<Soun
 	ov_clear(&oggFile);
 	debug("OK\n");
 }
-void SoundFile::Play() {
+void SoundFile::play() {
 	sound_ = std::make_shared<Sound>(*params, buffer_);
 	GetAudio().play(sound_);
 }
-void SoundFile::Stop() {
+void SoundFile::stop() {
 	if (sound_) {
 		GetAudio().Stop(sound_);
 		sound_.reset();
 	}
 }
-bool SoundFile::IsPlaying() {
+bool SoundFile::isPlaying() {
 	if (sound_) {
 		return sound_->isPlaying();
 	}
@@ -147,13 +147,13 @@ bool SoundFile::IsPlaying() {
 }
 
 void SoundFile::loop() {
-	if (!IsPlaying()) {
-		Play();
+	if (!isPlaying()) {
+		play();
 	}
 	sound_->loop();
 }
 
-void SoundFile::SetPitch(float p) {
+void SoundFile::setPitch(float p) {
 	if (sound_) {
 		sound_->SetPitch(p);
 	}
@@ -164,40 +164,40 @@ void SoundFile::setVolume(float v) {
 	}
 }
 
-SoundFile& GetSoundFile(const std::string& filename) {
+std::shared_ptr<SoundFile> getSoundFile(const std::string& filename) {
 	GetAudio();
 	auto i = sounds.find(filename);
 	if (i == sounds.end()) { // sound hasn't been loaded yet?
 		sounds[filename] = std::make_shared<SoundFile>(pathPrefix + filename);
-		return *(sounds[filename]);
+		return sounds[filename];
 	}
-	return *(i->second);
+	return i->second;
 }
 
 void play(const std::string& filename) {
-	GetSoundFile(filename).Play();
+	getSoundFile(filename)->play();
 }
 
 void stop(const std::string& filename) {
-	GetSoundFile(filename).Stop();
+	getSoundFile(filename)->stop();
 }
 
 void loadSound(const std::string& filename) {
-	GetSoundFile(filename);
+	getSoundFile(filename);
 }
 
 bool isPlaying(const std::string& filename) {
-	return GetSoundFile(filename).IsPlaying();
+	return getSoundFile(filename)->isPlaying();
 }
 
 void loop(const std::string& filename) {
-	GetSoundFile(std::string(filename)).loop();
+	getSoundFile(filename)->loop();
 }
 
 void setPlaybackSpeed(float speed) {
 	auto end = sounds.end();
 	for (auto i = sounds.begin(); i != end; ++i) {
-		i->second->SetPitch(speed);
+		i->second->setPitch(speed);
 	}
 }
 

@@ -20,11 +20,11 @@ public:
 	SoundFile& operator=(const SoundFile&) = delete;
 	SoundFile(SoundFile&&) = default;
 	SoundFile& operator=(SoundFile&&) = default;
-	void Play();
-	void Stop();
-	bool IsPlaying();
+	void play();
+	void stop();
+	bool isPlaying();
 	void loop();
-	void SetPitch(float p);
+	void setPitch(float p);
 	void setVolume(float v);
 
 private:
