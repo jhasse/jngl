@@ -1,11 +1,15 @@
 // Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// Sound related functions
+/// @file
 #pragma once
 
+#include <memory>
 #include <string>
 
 namespace jngl {
+
+class SoundFile;
 
 float getVolume();
 
@@ -19,7 +23,10 @@ void stop(const std::string& filename);
 bool isPlaying(const std::string& filename);
 
 /// Play an OGG audio file in a loop
-void loop(const std::string& filename);
+///
+/// If it's already playing, this function won't play it twice, but simply set it to loop and return
+/// a pointer to the same SoundFile.
+std::shared_ptr<SoundFile> loop(const std::string& filename);
 
 [[deprecated("an OpenAL implementation will always be available")]]
 bool isOpenALInstalled();

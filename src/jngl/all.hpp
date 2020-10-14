@@ -10,6 +10,7 @@
 #include "Drawable.hpp"
 #include "Shader.hpp"
 #include "ShaderProgram.hpp"
+#include "SoundFile.hpp"
 #include "Vertex.hpp"
 #include "Video.hpp"
 #include "debug.hpp"

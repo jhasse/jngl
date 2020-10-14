@@ -3,11 +3,11 @@
 
 #include "SoundFile.hpp"
 
-#include "Sound.hpp"
-#include "SoundParams.hpp"
-#include "audio.hpp"
-#include "jngl/debug.hpp"
-#include "main.hpp"
+#include "../audio.hpp"
+#include "../main.hpp"
+#include "../Sound.hpp"
+#include "../SoundParams.hpp"
+#include "debug.hpp"
 
 #include <algorithm>
 #include <array>
@@ -190,8 +190,10 @@ bool isPlaying(const std::string& filename) {
 	return getSoundFile(filename)->isPlaying();
 }
 
-void loop(const std::string& filename) {
-	getSoundFile(filename)->loop();
+std::shared_ptr<SoundFile> loop(const std::string& filename) {
+	auto tmp = getSoundFile(filename);
+	tmp->loop();
+	return tmp;
 }
 
 void setPlaybackSpeed(float speed) {
