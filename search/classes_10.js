@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['queue_2842',['queue',['http://en.cppreference.com/w/cpp/container/queue.html',1,'std']]]
+  ['queue_2848',['queue',['http://en.cppreference.com/w/cpp/container/queue.html',1,'std']]]
 ];
