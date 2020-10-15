@@ -2,6 +2,6 @@
 <area shape="rect" id="node1" title=" " alt="" coords="48,5,183,32"/>
 <area shape="rect" id="node2" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="5,155,124,181"/>
 <area shape="rect" id="node4" href="$main_8hpp_source.html" title=" " alt="" coords="103,80,229,107"/>
-<area shape="rect" id="node3" href="$jngl_8hpp_source.html" title=" " alt="" coords="21,229,108,256"/>
+<area shape="rect" id="node3" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="21,229,108,256"/>
 <area shape="rect" id="node5" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="148,155,275,181"/>
 </map>

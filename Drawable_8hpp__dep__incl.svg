@@ -66,7 +66,7 @@
 <!-- Node3 -->
 <g id="node3" class="node">
 <title>Node3</title>
-<g id="a_node3"><a xlink:href="jngl_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node3"><a xlink:href="jngl_8hpp.html" target="_top" xlink:title="Includes jngl/all.hpp.">
 <polygon fill="white" stroke="black" points="14.69,-0.5 14.69,-19.5 79.69,-19.5 79.69,-0.5 14.69,-0.5"/>
 <text text-anchor="middle" x="47.19" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">jngl.hpp</text>
 </a>

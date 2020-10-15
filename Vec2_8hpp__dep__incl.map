@@ -9,7 +9,7 @@
 <area shape="rect" id="node14" href="$shapes_8hpp.html" title="Functions for drawing shapes." alt="" coords="901,80,1044,107"/>
 <area shape="rect" id="node3" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="398,304,517,331"/>
 <area shape="rect" id="node7" href="$text_8hpp.html" title=" " alt="" coords="22,155,149,181"/>
-<area shape="rect" id="node4" href="$jngl_8hpp_source.html" title=" " alt="" coords="414,379,501,405"/>
+<area shape="rect" id="node4" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="414,379,501,405"/>
 <area shape="rect" id="node6" href="$Video_8hpp.html" title=" " alt="" coords="149,229,284,256"/>
 <area shape="rect" id="node11" href="$Controller_8hpp.html" title=" " alt="" coords="709,229,884,256"/>
 <area shape="rect" id="node13" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="750,155,877,181"/>

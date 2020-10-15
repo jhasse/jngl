@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['screensize_5037',['screenSize',['../structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b',1,'jngl::AppParameters']]],
-  ['second_5038',['second',['http://en.cppreference.com/w/cpp/utility/pair.html',1,'std::pair']]]
+  ['screensize_5039',['screenSize',['../structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b',1,'jngl::AppParameters']]],
+  ['second_5040',['second',['http://en.cppreference.com/w/cpp/utility/pair.html',1,'std::pair']]]
 ];

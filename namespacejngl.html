@@ -105,6 +105,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">There can only be one instance of this class which should be created before the window is shown.  <a href="classjngl_1_1App.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1AppParameters.html">AppParameters</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters used to initialize the main window.  <a href="structjngl_1_1AppParameters.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Color.html">Color</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Object representing a RGB color.  <a href="classjngl_1_1Color.html#details">More...</a><br /></td></tr>
@@ -134,6 +135,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Linked vertex and fragment shaders.  <a href="classjngl_1_1ShaderProgram.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sound loaded from an OGG file.  <a href="classjngl_1_1SoundFile.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html">Sprite</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Higher-level representation of an image.  <a href="classjngl_1_1Sprite.html#details">More...</a><br /></td></tr>
@@ -346,7 +348,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 <tr class="separator:a61fd6900416c997489df138cb8651ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11ad14d4b65f6bbe5f5c7accaf457077"><td class="memItemLeft" align="right" valign="top"><a id="a11ad14d4b65f6bbe5f5c7accaf457077"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a11ad14d4b65f6bbe5f5c7accaf457077">addJob</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Job.html">Job</a> &gt; job)</td></tr>
-<tr class="memdesc:a11ad14d4b65f6bbe5f5c7accaf457077"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> which will be always be stepped and drawn by mainLoop() <br /></td></tr>
+<tr class="memdesc:a11ad14d4b65f6bbe5f5c7accaf457077"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> which will be always be stepped and drawn by <a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> <br /></td></tr>
 <tr class="separator:a11ad14d4b65f6bbe5f5c7accaf457077"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa17a08647a651cd111a3319f5589063d"><td class="memItemLeft" align="right" valign="top"><a id="aa17a08647a651cd111a3319f5589063d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#aa17a08647a651cd111a3319f5589063d">rotate</a> (double degree)</td></tr>
@@ -1164,7 +1166,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 </div><div class="memdoc">
 
 <p>Play an OGG audio file in a loop. </p>
-<p>If it's already playing, this function won't play it twice, but simply set it to loop and return a pointer to the same <a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a>. </p>
+<p>If it's already playing, this function won't play it twice, but simply set it to loop and return a pointer to the same <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a>. </p>
 
 </div>
 </div>
