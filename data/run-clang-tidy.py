@@ -60,14 +60,11 @@ def make_absolute(f, directory):
 
 
 def get_tidy_invocation(f, clang_tidy_binary, checks, build_path,
-                        header_filter, quiet, config):
+                        quiet, config):
     """Gets a command line for clang-tidy."""
     start = [clang_tidy_binary]
-    if header_filter is not None:
-        start.append('-header-filter=' + header_filter)
-    else:
-        # Show warnings in all in-project headers by default.
-        start.append('-header-filter=src/')
+    # Show warnings in all in-project headers by default.
+    start.append('-header-filter=src/')
     if checks:
         start.append('-checks=' + checks)
     start.append('-p=' + build_path)
@@ -84,8 +81,7 @@ def run_tidy(args, build_path, queue, failed_files):
     while True:
         name = queue.get()
         invocation = get_tidy_invocation(name, 'clang-tidy', None,
-                                         build_path, None,
-                                         None, None)
+                                         build_path, None, None)
         return_code = subprocess.call(invocation, stderr=subprocess.PIPE)
         if return_code != 0:
             failed_files.append(name)
