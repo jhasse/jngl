@@ -13,6 +13,7 @@ namespace jngl {
 class Sound;
 struct SoundParams;
 
+/// Sound loaded from an OGG file
 class SoundFile {
 public:
 	explicit SoundFile(const std::string& filename);

@@ -44,7 +44,7 @@ public:
 	virtual ~Job();
 };
 
-/// Add a new Job which will be always be stepped and drawn by mainLoop()
+/// Add a new Job which will be always be stepped and drawn by App::mainLoop()
 void addJob(std::shared_ptr<Job> job);
 
 } // namespace jngl

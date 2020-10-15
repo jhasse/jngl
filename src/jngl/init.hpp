@@ -16,6 +16,7 @@
 namespace jngl {
 class Work;
 
+/// Parameters used to initialize the main window
 struct AppParameters {
 	/// Display name of the application which will be used in the window title for example
 	std::string displayName;
