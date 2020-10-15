@@ -122,10 +122,17 @@ FrameBuffer::Context::~Context() {
 	}
 }
 
-void FrameBuffer::Context::clear(const Color color) {
+void FrameBuffer::Context::clear() {
+	assert(resetCallback);
 	glClearColor(1, 1, 1, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(color.getRed(), color.getGreen(), color.getBlue(), 1);
+}
+
+void FrameBuffer::Context::clear(const Color color) {
+	assert(resetCallback);
+	glClearColor(float(color.getRed()) / 255.f, float(color.getGreen()) / 255.f,
+	             float(color.getBlue()) / 255.f, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 FrameBuffer::Context FrameBuffer::use() const {

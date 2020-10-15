@@ -37,6 +37,9 @@ public:
 		Context& operator=(Context&&) noexcept;
 		~Context();
 
+		/// Clear the framebuffer with a transparent background
+		void clear();
+
 		/// Clear the framebuffer with \a color
 		void clear(Color color);
 
