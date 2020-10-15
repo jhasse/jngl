@@ -3,10 +3,10 @@
 
 #include "SoundFile.hpp"
 
-#include "../audio.hpp"
-#include "../main.hpp"
 #include "../Sound.hpp"
 #include "../SoundParams.hpp"
+#include "../audio.hpp"
+#include "../main.hpp"
 #include "debug.hpp"
 
 #include <algorithm>
