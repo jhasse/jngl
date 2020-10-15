@@ -16,23 +16,8 @@ ${ANDROID_SDK_ROOT}/ndk/21.3.6528147/package.xml:
 ${ANDROID_SDK_ROOT}/ndk/21.3.6528147/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp: | ${ANDROID_SDK_ROOT}/ndk/21.3.6528147/package.xml
 	ln -s $(BOOST_PATH) `dirname "$@"`
 
-test/app/src/main/assets:
-	mkdir "$@"
-
-test/app/src/main/assets/test.ogg: test/app/src/main/assets ../test.ogg
-	cp ../test.ogg "$@"
-
-test/app/src/main/assets/Arial.ttf: test/app/src/main/assets ../Arial.ttf
-	cp ../Arial.ttf "$@"
-
-test/app/src/main/assets/verysmall.ogv: test/app/src/main/assets ../data/verysmall.ogv
-	cp ../data/verysmall.ogv "$@"
-
 .PHONY: gradle
-gradle: ${ANDROID_SDK_ROOT}/ndk/21.3.6528147/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp \
-        test/app/src/main/assets/test.ogg \
-        test/app/src/main/assets/Arial.ttf \
-        test/app/src/main/assets/verysmall.ogv
+gradle: ${ANDROID_SDK_ROOT}/ndk/21.3.6528147/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp
 	cd test && ./gradlew build
 
 .PHONY: run

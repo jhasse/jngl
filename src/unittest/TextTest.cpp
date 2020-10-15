@@ -1,4 +1,4 @@
-// Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/text.hpp"
@@ -10,7 +10,7 @@
 
 BOOST_AUTO_TEST_CASE(CharacterTest) {
 	Fixture f(1);
-	jngl::Font font("../Arial.ttf", 40);
+	jngl::Font font("../data/Arial.ttf", 40);
 	jngl::Text t("m ö o ß");
 	t.setFont(font);
 	t.setPos(-110, -20);
@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 	// Test with two rather big scale factors to avoid rounding errors:
 	for (double scaleFactor : { 6, 8 }) {
 		Fixture f(scaleFactor);
-		jngl::setFont("../Arial.ttf");
+		jngl::setFont("../data/Arial.ttf");
 		jngl::Text text("test string\nline 2");
 		BOOST_CHECK_EQUAL(std::lround(text.getWidth()), 69L);
 		BOOST_CHECK_EQUAL(std::lround(text.getHeight()), 38L);

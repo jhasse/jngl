@@ -1,6 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
+    sourceSets {
+        main {
+            assets.srcDirs = ["../../../data"]
+        }
+    }
     defaultConfig {
         applicationId = 'com.bixense.jngl_test'
         minSdkVersion 21

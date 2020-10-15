@@ -300,10 +300,11 @@ else()
 			set(MACOSX_BUNDLE_BUNDLE_VERSION "1.0")
 			set(MACOSX_BUNDLE_LONG_VERSION_STRING "1.0")
 			set(MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0")
-			set_source_files_properties(Arial.ttf PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-			set_source_files_properties(android/test/app/src/main/assets/jngl.webp PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-			set_source_files_properties(test.ogg PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-			add_executable(jngl-test src/test/test.cpp src/ios/test/main.mm Arial.ttf android/test/app/src/main/assets/jngl.webp test.ogg)
+			set_source_files_properties(data/Arial.ttf PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+			set_source_files_properties(data/jngl.webp PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+			set_source_files_properties(data/test.ogg PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+			add_executable(jngl-test src/test/test.cpp src/ios/test/main.mm data/Arial.ttf
+				data/jngl.webp data/test.ogg)
 			set_target_properties(jngl-test PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${PROJECT_SOURCE_DIR}/data/ios/jngl-test.in.plist")
 		endif()
 	else()
@@ -387,9 +388,9 @@ else()
 		if(WINDOWS_STORE)
 			# WIN32 is needed to build for the Windows subsystem, not Console
 			add_executable(jngl-test WIN32 src/test/test.cpp src/uwp/SDL_winrt_main_NonXAML.cpp
-				Arial.ttf android/test/app/src/main/assets/jngl.webp ${UWP_DLLS})
-			set_source_files_properties(${UWP_DLLS} Arial.ttf
-				android/test/app/src/main/assets/jngl.webp PROPERTIES VS_DEPLOYMENT_CONTENT 1)
+				data/Arial.ttf data/jngl.webp ${UWP_DLLS})
+			set_source_files_properties(${UWP_DLLS} data/Arial.ttf data/jngl.webp
+				PROPERTIES VS_DEPLOYMENT_CONTENT 1)
 
 			# Otherwise linking will fail with
 			#   error LNK2038: mismatch detected for
@@ -403,7 +404,7 @@ else()
 			endif()
 		endif()
 		target_link_libraries(jngl-test jngl)
-		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/android/test/app/src/main/assets/jngl.webp "$<TARGET_FILE_DIR:jngl-test>")
+		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/jngl.webp "$<TARGET_FILE_DIR:jngl-test>")
 		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/jngl.png "$<TARGET_FILE_DIR:jngl-test>")
 	endif()
 endif()
