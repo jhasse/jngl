@@ -37,12 +37,17 @@ JNGL_MAIN_BEGIN {
 	jngl::AppParameters params;
 	auto workFactory = jnglInit(params);
 	jngl::App app(params.displayName);
+	bool fullscreen = false;
+#ifdef NDEBUG
+	fullscreen = true;
+#endif
 	if (!params.screenSize) {
 		params.screenSize = { double(jngl::getDesktopWidth()), double(jngl::getDesktopHeight()) };
+		fullscreen = true;
 	}
 	jngl::showWindow(params.displayName, std::lround(params.screenSize->x * jngl::getScaleFactor()),
-	                 std::lround(params.screenSize->y * jngl::getScaleFactor()), true, { 1, 3 },
-	                 { 3, 1 });
+	                 std::lround(params.screenSize->y * jngl::getScaleFactor()), fullscreen,
+	                 { 1, 3 }, { 3, 1 });
 	jngl::setWork(workFactory());
 	app.mainLoop();
 }
