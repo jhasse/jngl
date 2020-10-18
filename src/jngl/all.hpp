@@ -13,6 +13,7 @@
 #include "SoundFile.hpp"
 #include "Vertex.hpp"
 #include "Video.hpp"
+#include "Widget.hpp"
 #include "debug.hpp"
 #include "font.hpp"
 #include "framebuffer.hpp"
