@@ -23,7 +23,8 @@ std::string Window::GetFontFileByName(const std::string& fontname) {
 	return "Arial.ttf"; // Not implemented on iOS. Always use Arial.ttf as that's what jngl-test uses.
 }
 
-Window::~Window() {};
+Window::~Window() {
+}
 
 int Window::GetKeyCode(key::KeyType key) {
 	return key;
