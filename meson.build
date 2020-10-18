@@ -31,6 +31,7 @@ src = [
 	'src/jngl/text.cpp',
 	'src/jngl/time.cpp',
 	'src/jngl/Vec2.cpp',
+	'src/jngl/Widget.cpp',
 	'src/jngl/window.cpp',
 	'src/jngl/work.cpp',
 	'src/main.cpp',
