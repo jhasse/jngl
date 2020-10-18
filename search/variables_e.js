@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['u_5043',['u',['../structjngl_1_1Vertex.html#a55831f7eab5ed2917a0191e858852f42',1,'jngl::Vertex']]],
-  ['uses_5fallocator_5fv_5044',['uses_allocator_v',['http://en.cppreference.com/w/cpp/memory/uses_allocator.html',1,'std::uses_allocator_v()'],['http://en.cppreference.com/w/cpp/experimental/type_trait_variable_templates.html',1,'std::experimental::uses_allocator_v()']]]
+  ['treat_5fas_5ffloating_5fpoint_5fv_5045',['treat_as_floating_point_v',['http://en.cppreference.com/w/cpp/chrono/treat_as_floating_point.html',1,'std::chrono::treat_as_floating_point_v()'],['http://en.cppreference.com/w/cpp/experimental/type_trait_variable_templates.html',1,'std::experimental::treat_as_floating_point_v()']]],
+  ['tuple_5fsize_5fv_5046',['tuple_size_v',['http://en.cppreference.com/w/cpp/utility/tuple/tuple_size.html',1,'std::tuple_size_v()'],['http://en.cppreference.com/w/cpp/experimental/type_trait_variable_templates.html',1,'std::experimental::tuple_size_v()']]]
 ];

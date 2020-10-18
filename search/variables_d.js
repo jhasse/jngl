@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['treat_5fas_5ffloating_5fpoint_5fv_5041',['treat_as_floating_point_v',['http://en.cppreference.com/w/cpp/chrono/treat_as_floating_point.html',1,'std::chrono::treat_as_floating_point_v()'],['http://en.cppreference.com/w/cpp/experimental/type_trait_variable_templates.html',1,'std::experimental::treat_as_floating_point_v()']]],
-  ['tuple_5fsize_5fv_5042',['tuple_size_v',['http://en.cppreference.com/w/cpp/utility/tuple/tuple_size.html',1,'std::tuple_size_v()'],['http://en.cppreference.com/w/cpp/experimental/type_trait_variable_templates.html',1,'std::experimental::tuple_size_v()']]]
+  ['screensize_5043',['screenSize',['../structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b',1,'jngl::AppParameters']]],
+  ['second_5044',['second',['http://en.cppreference.com/w/cpp/utility/pair.html',1,'std::pair']]]
 ];
