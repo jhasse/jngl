@@ -17,6 +17,7 @@ src = [
 	'src/jngl/Color.cpp',
 	'src/jngl/Controller.cpp',
 	'src/jngl/Drawable.cpp',
+	'src/jngl/effects.cpp',
 	'src/jngl/Finally.cpp',
 	'src/jngl/font.cpp',
 	'src/jngl/framebuffer.cpp',

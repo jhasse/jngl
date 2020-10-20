@@ -15,6 +15,7 @@
 #include "Video.hpp"
 #include "Widget.hpp"
 #include "debug.hpp"
+#include "effects.hpp"
 #include "font.hpp"
 #include "framebuffer.hpp"
 #include "input.hpp"
