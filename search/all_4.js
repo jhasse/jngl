@@ -86,15 +86,16 @@ var searchData=
   ['do_5fwiden_458',['do_widen',['http://en.cppreference.com/w/cpp/locale/ctype/widen.html',1,'std::ctype::do_widen()'],['http://en.cppreference.com/w/cpp/locale/ctype/widen.html',1,'std::ctype_byname::do_widen()']]],
   ['domain_5ferror_459',['domain_error',['http://en.cppreference.com/w/cpp/error/domain_error.html',1,'domain_error'],['http://en.cppreference.com/w/cpp/error/domain_error.html',1,'std::domain_error::domain_error()']]],
   ['down_460',['down',['../classjngl_1_1Controller.html#a17997332e2f8c247017cb4315b2646bf',1,'jngl::Controller']]],
-  ['draw_461',['draw',['../classjngl_1_1Drawable.html#a2bf282904f7854c8a4fd515107aa8c4e',1,'jngl::Drawable::draw()'],['../classjngl_1_1FrameBuffer.html#a0a9e0c8f009704fd88297bcfe198aef2',1,'jngl::FrameBuffer::draw()'],['../classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e',1,'jngl::Job::draw()'],['../classjngl_1_1Sprite.html#a35460413b5c663cd8a28ad3c80caaf71',1,'jngl::Sprite::draw()'],['../classjngl_1_1Text.html#a35460413b5c663cd8a28ad3c80caaf71',1,'jngl::Text::draw()'],['../classjngl_1_1Video.html#a257b753011ed7e831390acf9b70614f0',1,'jngl::Video::draw()']]],
+  ['draw_461',['draw',['../classjngl_1_1Drawable.html#a2bf282904f7854c8a4fd515107aa8c4e',1,'jngl::Drawable::draw()'],['../classjngl_1_1FrameBuffer.html#a0a9e0c8f009704fd88297bcfe198aef2',1,'jngl::FrameBuffer::draw()'],['../classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e',1,'jngl::Job::draw()'],['../classjngl_1_1Sprite.html#a35460413b5c663cd8a28ad3c80caaf71',1,'jngl::Sprite::draw()'],['../classjngl_1_1Text.html#a35460413b5c663cd8a28ad3c80caaf71',1,'jngl::Text::draw()'],['../classjngl_1_1Video.html#a257b753011ed7e831390acf9b70614f0',1,'jngl::Video::draw()'],['../classjngl_1_1Widget.html#a96bb482f1b66dc98abe16b25d5580a08',1,'jngl::Widget::draw()']]],
   ['drawable_462',['Drawable',['../classjngl_1_1Drawable.html',1,'jngl']]],
   ['drawable_2ehpp_463',['Drawable.hpp',['../Drawable_8hpp.html',1,'']]],
   ['drawclipped_464',['drawClipped',['../classjngl_1_1Sprite.html#a87204f6bbbca14af2ddbc524f499f8f2',1,'jngl::Sprite::drawClipped(float xstart, float xend, float ystart, float yend) const'],['../classjngl_1_1Sprite.html#a0702d08a03df924e22a53b22228c8ad3',1,'jngl::Sprite::drawClipped(Vec2 start, Vec2 end) const']]],
   ['drawmesh_465',['drawMesh',['../classjngl_1_1FrameBuffer.html#a89c331aee86657889c1f1d8233c6051f',1,'jngl::FrameBuffer::drawMesh()'],['../classjngl_1_1Sprite.html#a89c331aee86657889c1f1d8233c6051f',1,'jngl::Sprite::drawMesh()']]],
   ['drawrect_466',['drawRect',['../namespacejngl.html#ada05acb285e62f6d7d6ecaaf19755f6c',1,'jngl']]],
   ['drawscaled_467',['drawScaled',['../classjngl_1_1Sprite.html#a41b02a54c89c6d5fe3322b38d4a071f8',1,'jngl::Sprite']]],
-  ['duration_468',['duration',['http://en.cppreference.com/w/cpp/chrono/duration.html',1,'duration'],['http://en.cppreference.com/w/cpp/chrono/duration/duration.html',1,'std::chrono::duration::duration()']]],
-  ['duration_5fcast_469',['duration_cast',['http://en.cppreference.com/w/cpp/chrono/duration/duration_cast.html',1,'std::chrono']]],
-  ['duration_5fvalues_470',['duration_values',['http://en.cppreference.com/w/cpp/chrono/duration_values.html',1,'std::chrono']]],
-  ['dynamic_5fpointer_5fcast_471',['dynamic_pointer_cast',['http://en.cppreference.com/w/cpp/memory/shared_ptr/pointer_cast.html',1,'std']]]
+  ['drawself_468',['drawSelf',['../classjngl_1_1Widget.html#af532c2e778f0b7ed2013943d0ee3eda3',1,'jngl::Widget']]],
+  ['duration_469',['duration',['http://en.cppreference.com/w/cpp/chrono/duration.html',1,'duration'],['http://en.cppreference.com/w/cpp/chrono/duration/duration.html',1,'std::chrono::duration::duration()']]],
+  ['duration_5fcast_470',['duration_cast',['http://en.cppreference.com/w/cpp/chrono/duration/duration_cast.html',1,'std::chrono']]],
+  ['duration_5fvalues_471',['duration_values',['http://en.cppreference.com/w/cpp/chrono/duration_values.html',1,'std::chrono']]],
+  ['dynamic_5fpointer_5fcast_472',['dynamic_pointer_cast',['http://en.cppreference.com/w/cpp/memory/shared_ptr/pointer_cast.html',1,'std']]]
 ];
