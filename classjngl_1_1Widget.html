@@ -92,6 +92,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classjngl_1_1Widget-members.html">List of all members</a>  </div>
@@ -100,15 +101,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a8bb1ef53467e4f61410d12822d922498"><td class="memItemLeft" align="right" valign="top"><a id="a8bb1ef53467e4f61410d12822d922498"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>Action</b> { <b>NONE</b>, 
+<b>REMOVE</b>
+ }</td></tr>
+<tr class="separator:a8bb1ef53467e4f61410d12822d922498"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af19665a1cf75b35fefb168806b280be1"><td class="memItemLeft" align="right" valign="top"><a id="af19665a1cf75b35fefb168806b280be1"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Widget.html#af19665a1cf75b35fefb168806b280be1">Widget</a> (<a class="el" href="classjngl_1_1Vec2.html">jngl::Vec2</a> <a class="el" href="classjngl_1_1Widget.html#a6e37ad5a87462ee0c98d5e165b90fc40">position</a>)</td></tr>
 <tr class="memdesc:af19665a1cf75b35fefb168806b280be1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classjngl_1_1Widget.html">Widget</a> centered at <em>position</em>. <br /></td></tr>
 <tr class="separator:af19665a1cf75b35fefb168806b280be1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef869b86ca98514f9bc5a56ed5953e01"><td class="memItemLeft" align="right" valign="top"><a id="aef869b86ca98514f9bc5a56ed5953e01"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>step</b> ()</td></tr>
-<tr class="separator:aef869b86ca98514f9bc5a56ed5953e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28efed2bd10e2f0a3cde84987a3cff60"><td class="memItemLeft" align="right" valign="top">virtual Action&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Widget.html#a28efed2bd10e2f0a3cde84987a3cff60">step</a> ()</td></tr>
+<tr class="memdesc:a28efed2bd10e2f0a3cde84987a3cff60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Steps all Effects.  <a href="classjngl_1_1Widget.html#a28efed2bd10e2f0a3cde84987a3cff60">More...</a><br /></td></tr>
+<tr class="separator:a28efed2bd10e2f0a3cde84987a3cff60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96bb482f1b66dc98abe16b25d5580a08"><td class="memItemLeft" align="right" valign="top"><a id="a96bb482f1b66dc98abe16b25d5580a08"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Widget.html#a96bb482f1b66dc98abe16b25d5580a08">draw</a> () const</td></tr>
 <tr class="memdesc:a96bb482f1b66dc98abe16b25d5580a08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the widget with all effects applied. <br /></td></tr>
@@ -127,10 +135,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>removeEffect</b> (<a 
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Widget.html#a349c9b996c0f9f7d51a7147b15e3d071">removeEffects</a> ()</td></tr>
 <tr class="memdesc:a349c9b996c0f9f7d51a7147b15e3d071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all effects. <br /></td></tr>
 <tr class="separator:a349c9b996c0f9f7d51a7147b15e3d071"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaad485946008a4c0a6dbbd18b573d1ae"><td class="memItemLeft" align="right" valign="top"><a id="aaad485946008a4c0a6dbbd18b573d1ae"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Widget.html#aaad485946008a4c0a6dbbd18b573d1ae">remove</a> ()=0</td></tr>
-<tr class="memdesc:aaad485946008a4c0a6dbbd18b573d1ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the <a class="el" href="classjngl_1_1Widget.html">Widget</a> itself from its container. <br /></td></tr>
-<tr class="separator:aaad485946008a4c0a6dbbd18b573d1ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -148,6 +152,35 @@ Collaboration diagram for Widget:</div>
 <div class="center"><iframe scrolling="no" frameborder="0" src="classjngl_1_1Widget__coll__graph.svg" width="120" height="127"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a28efed2bd10e2f0a3cde84987a3cff60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28efed2bd10e2f0a3cde84987a3cff60">&#9670;&nbsp;</a></span>step()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Action step </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Steps all Effects. </p>
+<p>When Action::REMOVE is returned, the <a class="el" href="classjngl_1_1Widget.html">Widget</a> wants to be removed from its container. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>jngl/<a class="el" href="Widget_8hpp_source.html">Widget.hpp</a></li>
 </ul>
