@@ -15,6 +15,7 @@ src = [
 	'src/helper.cpp',
 	'src/jngl/App.cpp',
 	'src/jngl/Color.cpp',
+	'src/jngl/Container.cpp',
 	'src/jngl/Controller.cpp',
 	'src/jngl/Drawable.cpp',
 	'src/jngl/effects.cpp',
