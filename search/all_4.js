@@ -93,7 +93,7 @@ var searchData=
   ['drawmesh_466',['drawMesh',['../classjngl_1_1FrameBuffer.html#a89c331aee86657889c1f1d8233c6051f',1,'jngl::FrameBuffer::drawMesh()'],['../classjngl_1_1Sprite.html#a89c331aee86657889c1f1d8233c6051f',1,'jngl::Sprite::drawMesh()']]],
   ['drawrect_467',['drawRect',['../namespacejngl.html#ada05acb285e62f6d7d6ecaaf19755f6c',1,'jngl']]],
   ['drawscaled_468',['drawScaled',['../classjngl_1_1Sprite.html#a41b02a54c89c6d5fe3322b38d4a071f8',1,'jngl::Sprite']]],
-  ['drawself_469',['drawSelf',['../classjngl_1_1Widget.html#af532c2e778f0b7ed2013943d0ee3eda3',1,'jngl::Widget']]],
+  ['drawself_469',['drawSelf',['../classjngl_1_1Label.html#ac0cb7b3373ae7883d29c49011c3580ac',1,'jngl::Label::drawSelf()'],['../classjngl_1_1Widget.html#af532c2e778f0b7ed2013943d0ee3eda3',1,'jngl::Widget::drawSelf()']]],
   ['duration_470',['duration',['http://en.cppreference.com/w/cpp/chrono/duration.html',1,'duration'],['http://en.cppreference.com/w/cpp/chrono/duration/duration.html',1,'std::chrono::duration::duration()']]],
   ['duration_5fcast_471',['duration_cast',['http://en.cppreference.com/w/cpp/chrono/duration/duration_cast.html',1,'std::chrono']]],
   ['duration_5fvalues_472',['duration_values',['http://en.cppreference.com/w/cpp/chrono/duration_values.html',1,'std::chrono']]],
