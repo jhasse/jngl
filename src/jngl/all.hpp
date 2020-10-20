@@ -20,6 +20,7 @@
 #include "framebuffer.hpp"
 #include "input.hpp"
 #include "job.hpp"
+#include "Label.hpp"
 #include "main.hpp"
 #include "matrix.hpp"
 #include "message.hpp"
