@@ -24,6 +24,7 @@ src = [
 	'src/jngl/framebuffer.cpp',
 	'src/jngl/input.cpp',
 	'src/jngl/job.cpp',
+	'src/jngl/Label.cpp',
 	'src/jngl/screen.cpp',
 	'src/jngl/Shader.cpp',
 	'src/jngl/ShaderProgram.cpp',
