@@ -20,7 +20,15 @@ public:
 
 	virtual ~Widget();
 
-	virtual void step();
+	enum class Action {
+		NONE,
+		REMOVE,
+	};
+
+	/// Steps all Effects
+	///
+	/// When Action::REMOVE is returned, the Widget wants to be removed from its container.
+	[[nodiscard]] virtual Action step();
 
 	/// Draws the widget with all effects applied
 	virtual void draw() const;
@@ -33,9 +41,6 @@ public:
 
 	/// Removes all effects
 	virtual void removeEffects();
-
-	/// Removes the Widget itself from its container
-	virtual void remove() = 0;
 
 protected:
 	/// Center

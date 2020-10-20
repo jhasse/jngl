@@ -10,7 +10,7 @@ public:
 	enum class Action {
 		NONE,
 		REMOVE_EFFECT,
-		REMOVE_SPRITE,
+		REMOVE_WIDGET,
 	};
 
 	virtual ~Effect();

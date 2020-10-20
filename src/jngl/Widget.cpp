@@ -15,7 +15,7 @@ Widget::Widget(const jngl::Vec2 position) : position(position) {
 
 Widget::~Widget() = default;
 
-void Widget::step() {
+Widget::Action Widget::step() {
 	for (const auto& effect : effects) {
 		switch (effect->step()) {
 			case jngl::Effect::Action::NONE:
@@ -23,9 +23,8 @@ void Widget::step() {
 			case jngl::Effect::Action::REMOVE_EFFECT:
 				removeEffect(effect.get());
 				break;
-			case jngl::Effect::Action::REMOVE_SPRITE:
-				remove();
-				break;
+			case jngl::Effect::Action::REMOVE_WIDGET:
+				return Action::REMOVE;
 		}
 	}
 	if (!needToRemove.empty()) {
@@ -38,6 +37,7 @@ void Widget::step() {
 		}
 		needToRemove.clear();
 	}
+	return Action::NONE;
 }
 
 void Widget::draw() const {
