@@ -8,7 +8,7 @@ var searchData=
   ['accumulate_3236',['accumulate',['http://en.cppreference.com/w/cpp/algorithm/accumulate.html',1,'std']]],
   ['acos_3237',['acos',['http://en.cppreference.com/w/cpp/numeric/math/acos.html',1,'std']]],
   ['acosh_3238',['acosh',['http://en.cppreference.com/w/cpp/numeric/math/acosh.html',1,'std']]],
-  ['addjob_3239',['addJob',['../namespacejngl.html#a11ad14d4b65f6bbe5f5c7accaf457077',1,'jngl']]],
+  ['addjob_3239',['addJob',['../namespacejngl.html#a11ad14d4b65f6bbe5f5c7accaf457077',1,'jngl::addJob(std::shared_ptr&lt; Job &gt; job)'],['../namespacejngl.html#ab2438a10e12cec0f9253d8666f09e084',1,'jngl::addJob(Args &amp;&amp;... args)']]],
   ['address_3240',['address',['http://en.cppreference.com/w/cpp/memory/allocator/address.html',1,'std::allocator']]],
   ['addressof_3241',['addressof',['http://en.cppreference.com/w/cpp/memory/addressof.html',1,'std']]],
   ['adjacent_5fdifference_3242',['adjacent_difference',['http://en.cppreference.com/w/cpp/algorithm/adjacent_difference.html',1,'std']]],

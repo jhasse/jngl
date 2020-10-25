@@ -20,7 +20,7 @@ var searchData=
   ['add_5frvalue_5freference_5ft_18',['add_rvalue_reference_t',['http://en.cppreference.com/w/cpp/types/add_reference.html',1,'std']]],
   ['add_5fvolatile_19',['add_volatile',['http://en.cppreference.com/w/cpp/types/add_cv.html',1,'std']]],
   ['add_5fvolatile_5ft_20',['add_volatile_t',['http://en.cppreference.com/w/cpp/types/add_cv.html',1,'std']]],
-  ['addjob_21',['addJob',['../namespacejngl.html#a11ad14d4b65f6bbe5f5c7accaf457077',1,'jngl']]],
+  ['addjob_21',['addJob',['../namespacejngl.html#a11ad14d4b65f6bbe5f5c7accaf457077',1,'jngl::addJob(std::shared_ptr&lt; Job &gt; job)'],['../namespacejngl.html#ab2438a10e12cec0f9253d8666f09e084',1,'jngl::addJob(Args &amp;&amp;... args)']]],
   ['address_22',['address',['http://en.cppreference.com/w/cpp/memory/allocator/address.html',1,'std::allocator']]],
   ['addressof_23',['addressof',['http://en.cppreference.com/w/cpp/memory/addressof.html',1,'std']]],
   ['adjacent_5fdifference_24',['adjacent_difference',['http://en.cppreference.com/w/cpp/algorithm/adjacent_difference.html',1,'std']]],

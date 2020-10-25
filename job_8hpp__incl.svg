@@ -12,7 +12,7 @@
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
-<g id="a_node1"><a xlink:title=" ">
+<g id="a_node1"><a xlink:title="Contains jngl::Job class and related functions.">
 <polygon fill="#bfbfbf" stroke="black" points="0,-56.5 0,-75.5 89,-75.5 89,-56.5 0,-56.5"/>
 <text text-anchor="middle" x="44.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00">jngl/job.hpp</text>
 </a>

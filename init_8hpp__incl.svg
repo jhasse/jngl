@@ -294,7 +294,7 @@
 <!-- Node17 -->
 <g id="node17" class="node">
 <title>Node17</title>
-<g id="a_node17"><a xlink:href="job_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node17"><a xlink:href="job_8hpp.html" target="_top" xlink:title="Contains jngl::Job class and related functions.">
 <polygon fill="white" stroke="black" points="392,-56.5 392,-75.5 451,-75.5 451,-56.5 392,-56.5"/>
 <text text-anchor="middle" x="421.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00">job.hpp</text>
 </a>
