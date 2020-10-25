@@ -35,6 +35,12 @@ std::shared_ptr<Work> getWork();
 /// Sets the passed Work to be active in App::mainLoop()
 void setWork(std::shared_ptr<Work> work);
 
+/// The same as setWork(std::shared_ptr<Work>) but creates the Work for you
+template <class T, class... Args>
+void setWork(Args&&... args) {
+	setWork(std::make_shared<T>(std::forward<Args>(args)...));
+}
+
 /// \deprecated Use setWork(std::shared_ptr<Work>) instead
 [[deprecated("Use setWork(std::shared_ptr<Work>) instead")]]
 void setWork(Work*);
