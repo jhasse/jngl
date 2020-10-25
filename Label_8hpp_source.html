@@ -95,26 +95,28 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">Label.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Color_8hpp.html">Color.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;Widget.hpp&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="text_8hpp.html">text.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacejngl.html">jngl</a> {</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright 2020 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// For conditions of distribution and use, see copyright notice in LICENSE.txt</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Color_8hpp.html">Color.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;Widget.hpp&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="text_8hpp.html">text.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classjngl_1_1Label.html">    9</a></span>&#160;<span class="keyword">class </span><a class="code" href="classjngl_1_1Label.html">Label</a> : <span class="keyword">public</span> <a class="code" href="classjngl_1_1Widget.html">Widget</a> {</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classjngl_1_1Label.html">Label</a>(<span class="keyword">const</span> <a class="codeRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; str, <a class="code" href="classjngl_1_1Font.html">Font</a>&amp;, <a class="code" href="classjngl_1_1Color.html">Color</a>, <a class="code" href="classjngl_1_1Vec2.html">Vec2</a> <a class="code" href="classjngl_1_1Widget.html#a6e37ad5a87462ee0c98d5e165b90fc40">position</a>);</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classjngl_1_1Label.html#ac0cb7b3373ae7883d29c49011c3580ac">   13</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Label.html#ac0cb7b3373ae7883d29c49011c3580ac">drawSelf</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacejngl.html">jngl</a> {</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classjngl_1_1Label.html">   11</a></span>&#160;<span class="keyword">class </span><a class="code" href="classjngl_1_1Label.html">Label</a> : <span class="keyword">public</span> <a class="code" href="classjngl_1_1Widget.html">Widget</a> {</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classjngl_1_1Label.html">Label</a>(<span class="keyword">const</span> <a class="codeRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; str, <a class="code" href="classjngl_1_1Font.html">Font</a>&amp;, <a class="code" href="classjngl_1_1Color.html">Color</a>, <a class="code" href="classjngl_1_1Vec2.html">Vec2</a> <a class="code" href="classjngl_1_1Widget.html#a6e37ad5a87462ee0c98d5e165b90fc40">position</a>);</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <a class="code" href="classjngl_1_1Text.html">jngl::Text</a> text;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <a class="code" href="classjngl_1_1Color.html">jngl::Color</a> color;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;};</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;} <span class="comment">// namespace jngl</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classjngl_1_1Label.html#ac0cb7b3373ae7883d29c49011c3580ac">   15</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Label.html#ac0cb7b3373ae7883d29c49011c3580ac">drawSelf</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <a class="code" href="classjngl_1_1Text.html">jngl::Text</a> text;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <a class="code" href="classjngl_1_1Color.html">jngl::Color</a> color;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;};</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;} <span class="comment">// namespace jngl</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="abasic_string_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Label_html_ac0cb7b3373ae7883d29c49011c3580ac"><div class="ttname"><a href="classjngl_1_1Label.html#ac0cb7b3373ae7883d29c49011c3580ac">jngl::Label::drawSelf</a></div><div class="ttdeci">void drawSelf() const override</div><div class="ttdoc">Override this function to draw the widget.</div></div>
@@ -122,7 +124,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="aclassjngl_1_1Widget_html_a6e37ad5a87462ee0c98d5e165b90fc40"><div class="ttname"><a href="classjngl_1_1Widget.html#a6e37ad5a87462ee0c98d5e165b90fc40">jngl::Widget::position</a></div><div class="ttdeci">jngl::Vec2 position</div><div class="ttdoc">Center.</div><div class="ttdef"><b>Definition:</b> <a href="Widget_8hpp_source.html#l00047">Widget.hpp:47</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Color_html"><div class="ttname"><a href="classjngl_1_1Color.html">jngl::Color</a></div><div class="ttdoc">Object representing a RGB color.</div><div class="ttdef"><b>Definition:</b> <a href="Color_8hpp_source.html#l00024">Color.hpp:24</a></div></div>
 <div class="ttc" id="atext_8hpp_html"><div class="ttname"><a href="text_8hpp.html">text.hpp</a></div></div>
-<div class="ttc" id="aclassjngl_1_1Label_html"><div class="ttname"><a href="classjngl_1_1Label.html">jngl::Label</a></div><div class="ttdef"><b>Definition:</b> <a href="Label_8hpp_source.html#l00009">Label.hpp:9</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Label_html"><div class="ttname"><a href="classjngl_1_1Label.html">jngl::Label</a></div><div class="ttdef"><b>Definition:</b> <a href="Label_8hpp_source.html#l00011">Label.hpp:11</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Font_html"><div class="ttname"><a href="classjngl_1_1Font.html">jngl::Font</a></div><div class="ttdoc">Font loaded from a TTF or OTF file.</div><div class="ttdef"><b>Definition:</b> <a href="font_8hpp_source.html#l00018">font.hpp:18</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Text_html"><div class="ttname"><a href="classjngl_1_1Text.html">jngl::Text</a></div><div class="ttdoc">Rectangle shaped text block.</div><div class="ttdef"><b>Definition:</b> <a href="text_8hpp_source.html#l00023">text.hpp:23</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Widget_html"><div class="ttname"><a href="classjngl_1_1Widget.html">jngl::Widget</a></div><div class="ttdef"><b>Definition:</b> <a href="Widget_8hpp_source.html#l00016">Widget.hpp:16</a></div></div>
