@@ -18,5 +18,4 @@ jobs:
         ninja -Cbuild-cmake
     - name: Android
       run: |
-        export ANDROID_SDK_ROOT=$ANDROID_HOME
         make -Candroid
