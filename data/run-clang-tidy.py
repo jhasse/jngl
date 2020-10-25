@@ -91,7 +91,6 @@ def run_tidy(args, build_path, queue, failed_files):
 def main():
     # files to be processed (regex on path)
     args_files = sys.argv[1:] if len(sys.argv) > 1 else ['.*']
-    print(args_files)
 
     # Build up a big regexy filter from all command line arguments.
     file_name_re = re.compile('|'.join(args_files))
