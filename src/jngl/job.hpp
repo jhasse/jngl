@@ -1,5 +1,6 @@
 // Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
+/// Contains jngl::Job class and related functions
 /// @file
 #pragma once
 
@@ -46,5 +47,11 @@ public:
 
 /// Add a new Job which will be always be stepped and drawn by App::mainLoop()
 void addJob(std::shared_ptr<Job> job);
+
+/// The same as addJob(std::shared_ptr<Job>) but creates the Job for you
+template <class T, class... Args>
+void addJob(Args&&... args) {
+	addJob(std::make_shared<T>(std::forward<Args>(args)...));
+}
 
 } // namespace jngl
