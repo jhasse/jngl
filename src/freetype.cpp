@@ -173,7 +173,8 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)
 		fileCache = bytes;
 	}
 
-	if (FT_New_Memory_Face(library, bytes->data(), bytes->size(), 0, &face) != 0) {
+	if (FT_New_Memory_Face(library, bytes->data(), static_cast<FT_Long>(bytes->size()), 0, &face) !=
+	    0) {
 		throw std::runtime_error("FT_New_Memory_Face failed");
 	}
 	debug("OK\n");
