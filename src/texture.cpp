@@ -83,9 +83,15 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 }
 
 Texture::~Texture() {
-	glDeleteTextures(1, &texture_);
-	glDeleteBuffers(1, &vertexBuffer_);
-	glDeleteVertexArrays(1, &vao);
+	if (textureShaderProgram) {
+		// if the textureShaderProgram is nullptr, this means unloadShader() has been called by
+		// hideWindow() and the OpenGL context doesn't exist anymore. It's unnecessary to delete
+		// OpenGL resources in that case. It might even lead to crashes when the OpenGL function
+		// pointers have been unloaded (Windows).
+		glDeleteTextures(1, &texture_);
+		glDeleteBuffers(1, &vertexBuffer_);
+		glDeleteVertexArrays(1, &vao);
+	}
 }
 
 void Texture::draw(const float red, const float green, const float blue, const float alpha,
