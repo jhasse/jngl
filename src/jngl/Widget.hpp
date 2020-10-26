@@ -37,6 +37,12 @@ public:
 	virtual void drawSelf() const = 0;
 
 	void addEffect(std::unique_ptr<Effect>);
+
+	template<class T, class... Args>
+	void addEffect(Args&&... args) {
+		return addEffect(std::make_unique<T>(std::forward<Args>(args)...));
+	}
+
 	void removeEffect(Effect*);
 
 	/// Removes all effects
