@@ -12,6 +12,7 @@ Thumbs.db
 /nintendo
 /include/ios/boost
 /.clangd/
+/.cache/
 
 # Visual Studio
 /out/
