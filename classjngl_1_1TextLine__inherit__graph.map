@@ -1,0 +1,4 @@
+<map id="TextLine" name="TextLine">
+<area shape="rect" id="node1" title="Rectangle shaped text (in contrast to jngl::Text this only represents one line)" alt="" coords="5,80,92,107"/>
+<area shape="rect" id="node2" href="$classjngl_1_1Drawable.html" title="Base class for drawable objects with a position and a rectangle size." alt="" coords="5,5,92,32"/>
+</map>
