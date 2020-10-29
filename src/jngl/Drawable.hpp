@@ -67,6 +67,9 @@ public:
 	/// Returns the height in screen coordinates
 	float getHeight() const;
 
+	/// Returns whether \a point is inside the bounding box
+	bool contains(jngl::Vec2 point) const;
+
 protected:
 	double x = 0;
 	double y = 0;
