@@ -34,8 +34,7 @@ BOOST_AUTO_TEST_CASE(Sprite) {
 		BOOST_CHECK_CLOSE(sprite.getSize().y, 300, 1e-5);
 
 		sprite.setCenter(7.3f, 9.1f);
-		BOOST_CHECK_CLOSE(boost::qvm::mag(sprite.getCenter<jngl::Vec2>() - jngl::Vec2(7.3f, 9.1f)),
-		                  0, 1e-5);
+		BOOST_CHECK_CLOSE(boost::qvm::mag(sprite.getCenter() - jngl::Vec2(7.3f, 9.1f)), 0, 1e-5);
 		BOOST_CHECK_CLOSE(sprite.getX(), -292.7f, 1e-5);
 		BOOST_CHECK_CLOSE(sprite.getY(), -140.9f, 1e-5);
 		BOOST_CHECK_CLOSE(sprite.getLeft(), -132.7f, 1e-5);
