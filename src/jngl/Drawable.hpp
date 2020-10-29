@@ -26,9 +26,7 @@ public:
 
 	virtual void setPos(double x, double y);
 
-	template <class Vect> Vect getCenter() const {
-		return Vect(getX() + getWidth() / 2, getY() + getHeight() / 2);
-	}
+	jngl::Vec2 getCenter() const;
 
 	virtual void setCenter(double x, double y);
 

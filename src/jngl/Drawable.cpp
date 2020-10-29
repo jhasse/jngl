@@ -18,6 +18,10 @@ void Drawable::setPos(const double x, const double y) {
 	setY(y);
 }
 
+jngl::Vec2 Drawable::getCenter() const {
+	return { getX() + getWidth() / 2, getY() + getHeight() / 2 };
+}
+
 void Drawable::setCenter(const double x, const double y) {
 	setX(x - getWidth() / 2);
 	setY(y - getHeight() / 2);
