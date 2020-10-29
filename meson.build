@@ -32,6 +32,7 @@ src = [
 	'src/jngl/SoundFile.cpp',
 	'src/jngl/sprite.cpp',
 	'src/jngl/text.cpp',
+	'src/jngl/TextLine.cpp',
 	'src/jngl/time.cpp',
 	'src/jngl/Vec2.cpp',
 	'src/jngl/Widget.cpp',
