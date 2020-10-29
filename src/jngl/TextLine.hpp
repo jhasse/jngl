@@ -22,7 +22,7 @@ public:
 
 private:
 	std::string text;
-	std::shared_ptr<FontImpl> font;
+	std::shared_ptr<FontImpl> fontImpl;
 };
 
 } // namespace jngl

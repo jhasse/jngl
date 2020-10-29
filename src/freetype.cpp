@@ -139,7 +139,8 @@ Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::
 }
 
 FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)
-: height_(static_cast<unsigned int>(height * getScaleFactor())), lineHeight(int(height_ / .63)) {
+: height_(static_cast<unsigned int>(height * getScaleFactor())),
+  lineHeight(int(height_ * LINE_HEIGHT_FACOTR)) {
 	auto filename = pathPrefix + relativeFilename;
 	if (!fileExists(filename)) {
 		if (!fileExists(relativeFilename)) {

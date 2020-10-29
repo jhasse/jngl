@@ -11,6 +11,7 @@
 #include "Shader.hpp"
 #include "ShaderProgram.hpp"
 #include "SoundFile.hpp"
+#include "TextLine.hpp"
 #include "Vertex.hpp"
 #include "Video.hpp"
 #include "Widget.hpp"

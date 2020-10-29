@@ -12,6 +12,7 @@
 
 namespace jngl {
 
+constexpr double LINE_HEIGHT_FACOTR = 1. / .63;
 extern unsigned char fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha;
 
 class Character {
