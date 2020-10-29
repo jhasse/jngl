@@ -67,6 +67,8 @@ public:
 	/// Returns the height in screen coordinates
 	float getHeight() const;
 
+	void drawBoundingBox() const;
+
 protected:
 	double x = 0;
 	double y = 0;

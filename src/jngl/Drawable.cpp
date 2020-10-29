@@ -2,7 +2,10 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Drawable.hpp"
+
+#include "Color.hpp"
 #include "screen.hpp"
+#include "shapes.hpp"
 
 namespace jngl {
 
@@ -78,6 +81,18 @@ float Drawable::getWidth() const {
 
 float Drawable::getHeight() const {
 	return height / static_cast<float>(getScaleFactor());
+}
+
+void Drawable::drawBoundingBox() const {
+	setColor(Color(255, 0, 0));
+	const double LINE_WIDTH = 2;
+	drawRect(getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2, LINE_WIDTH + getWidth(), LINE_WIDTH);
+	drawRect(getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2, LINE_WIDTH,
+	         LINE_WIDTH + getHeight());
+	drawRect(getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 + getHeight(),
+	         LINE_WIDTH + getWidth(), LINE_WIDTH);
+	drawRect(getX() - LINE_WIDTH / 2 + getWidth(), getY() - LINE_WIDTH / 2, LINE_WIDTH,
+	         LINE_WIDTH + getHeight());
 }
 
 } // namespace jngl
