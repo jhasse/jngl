@@ -15,6 +15,13 @@ public:
 	void step();
 	void draw() const;
 	void addWidget(std::unique_ptr<Widget>);
+
+	/// The same as addWidget(std::shared_ptr<Widget>) but creates the Widget for you
+	template <class T, class... Args>
+	void addWidget(Args&&... args) {
+		addWidget(std::make_unique<T>(std::forward<Args>(args)...));
+	}
+
 	void removeWidget(Widget*);
 
 private:
