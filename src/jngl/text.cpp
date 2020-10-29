@@ -11,7 +11,7 @@
 #include "screen.hpp"
 
 namespace jngl {
-class Line : public jngl::Drawable {
+class Line : public Drawable {
 public:
 	Line(std::string text, std::shared_ptr<FontImpl> font) : text(std::move(text)) {
 		setFont(std::move(font));
@@ -24,7 +24,7 @@ public:
 	void step() override {
 	}
 	void draw() const override {
-		font->print(int(x / getScaleFactor()), int(y / getScaleFactor()), text);
+		font->print(x / getScaleFactor(), y / getScaleFactor(), text);
 	}
 
 private:

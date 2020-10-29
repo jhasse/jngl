@@ -15,6 +15,7 @@
 
 #include FT_GLYPH_H
 
+#include <boost/math/special_functions/round.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
 #include <codecvt>
@@ -220,16 +221,17 @@ void FontImpl::setLineHeight(int h) {
 	lineHeight = h;
 }
 
-void FontImpl::print(int x, int y, const std::string& text) {
-	x = int(x * getScaleFactor());
-	y = int(y * getScaleFactor());
+void FontImpl::print(const double x, const double y, const std::string& text) {
+	const int xRounded = boost::math::iround(x * getScaleFactor());
+	const int yRounded = boost::math::iround(y * getScaleFactor());
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();
 	int lineNr = 0;
 	for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
 		pushMatrix();
-		opengl::translate(static_cast<float>(x), static_cast<float>(y + lineHeight * lineNr));
+		opengl::translate(static_cast<float>(xRounded),
+		                  static_cast<float>(yRounded + lineHeight * lineNr));
 		++lineNr;
 
 		auto charEnd = lineIter->end();

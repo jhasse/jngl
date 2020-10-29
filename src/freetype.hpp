@@ -40,7 +40,7 @@ public:
 	FontImpl(FontImpl&&) = delete;
 	FontImpl& operator=(FontImpl&&) = delete;
 	~FontImpl();
-	void print(int x, int y, const std::string& text);
+	void print(double x, double y, const std::string& text);
 	int getTextWidth(const std::string& text);
 	int getLineHeight() const;
 	void setLineHeight(int);
