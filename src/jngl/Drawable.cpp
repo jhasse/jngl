@@ -100,8 +100,9 @@ void Drawable::drawBoundingBox() const {
 }
 
 bool Drawable::contains(const jngl::Vec2 point) const {
-	return (x - getWidth() / 2 <= point.x && point.x < (x + getWidth() / 2) &&
-	        y - getHeight() / 2 <= point.y && point.y < (y + getHeight() / 2));
+	return (getX() <= point.x && point.x < getX() + getWidth() &&
+	        getY() <= point.y && point.y < getY() + getHeight());
+
 }
 
 } // namespace jngl
