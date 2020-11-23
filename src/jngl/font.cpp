@@ -1,11 +1,10 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "font.hpp"
 
 #include "../freetype.hpp"
 
-#include <boost/math/special_functions/round.hpp>
 #include <stack>
 
 namespace jngl {
