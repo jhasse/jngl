@@ -1,11 +1,10 @@
 <map id="jngl/Finally.hpp" name="jngl/Finally.hpp">
 <area shape="rect" id="node1" title=" " alt="" coords="151,5,301,32"/>
-<area shape="rect" id="node2" href="$framebuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="5,229,180,256"/>
+<area shape="rect" id="node2" href="$framebuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="5,155,180,181"/>
 <area shape="rect" id="node5" href="$main_8hpp_source.html" title=" " alt="" coords="163,80,289,107"/>
 <area shape="rect" id="node7" href="$ShaderProgram_8hpp.html" title="Contains jngl::ShaderProgram class." alt="" coords="321,80,520,107"/>
-<area shape="rect" id="node3" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="361,304,480,331"/>
-<area shape="rect" id="node4" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="377,379,464,405"/>
+<area shape="rect" id="node3" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="260,229,379,256"/>
+<area shape="rect" id="node4" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="276,304,363,331"/>
 <area shape="rect" id="node6" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="256,155,383,181"/>
 <area shape="rect" id="node8" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="459,155,601,181"/>
-<area shape="rect" id="node9" href="$Video_8hpp.html" title=" " alt="" coords="509,229,644,256"/>
 </map>
