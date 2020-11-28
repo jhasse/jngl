@@ -65,7 +65,7 @@ struct THEORAPLAY_Decoder {
 	bool thread_created = false;
     std::mutex lock;
 	std::atomic_bool halt = false;
-	int thread_done = 0;
+	bool thread_done = false;
     std::thread worker;
 
     // API state...
@@ -481,7 +481,7 @@ cleanup:
     vorbis_info_clear(&vinfo);
     ogg_sync_clear(&sync);
     ctx->io->close(ctx->io);
-    ctx->thread_done = 1;
+	ctx->thread_done = true;
 }
 
 

@@ -339,15 +339,16 @@ void rotate(const double degree) {
 }
 
 void translate(const double x, const double y) {
-	opengl::translate(x * getScaleFactor(), y * getScaleFactor());
+	opengl::translate(static_cast<float>(x * getScaleFactor()),
+	                  static_cast<float>(y * getScaleFactor()));
 }
 
 void scale(const double factor) {
-	opengl::scale(factor, factor);
+	opengl::scale(static_cast<float>(factor), static_cast<float>(factor));
 }
 
 void scale(const double xfactor, const double yfactor) {
-	opengl::scale(xfactor, yfactor);
+	opengl::scale(static_cast<float>(xfactor), static_cast<float>(yfactor));
 }
 
 void pushMatrix() {

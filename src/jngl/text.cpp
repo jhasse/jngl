@@ -17,7 +17,7 @@ public:
 		setFont(std::move(font));
 	}
 	void setFont(std::shared_ptr<FontImpl> font) {
-		width = font->getTextWidth(text) * getScaleFactor();
+		width = static_cast<float>(font->getTextWidth(text) * getScaleFactor());
 		height = static_cast<float>(font->getLineHeight());
 		this->font = std::move(font);
 	}
@@ -78,8 +78,8 @@ void Text::setAlign(Alignment a) {
 		line->setY(height);
 		height += line->getHeight();
 	}
-	width *= getScaleFactor();
-	height *= getScaleFactor();
+	width *= static_cast<float>(getScaleFactor());
+	height *= static_cast<float>(getScaleFactor());
 }
 
 void Text::step() {

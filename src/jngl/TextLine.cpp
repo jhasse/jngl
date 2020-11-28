@@ -10,7 +10,7 @@
 namespace jngl {
 
 TextLine::TextLine(Font& font, std::string text) : text(std::move(text)), fontImpl(font.getImpl()) {
-	width = fontImpl->getTextWidth(this->text) * getScaleFactor();
+	width = static_cast<float>(fontImpl->getTextWidth(this->text) * getScaleFactor());
 	height = static_cast<float>(fontImpl->getLineHeight());
 }
 

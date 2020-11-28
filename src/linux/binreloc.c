@@ -32,7 +32,7 @@ extern "C" {
  * not NULL, the error code will be stored there, if an error occured.
  */
 static char *
-_br_find_exe (BrInitError *error)
+br_find_exe_internal (BrInitError *error)
 {
 	size_t buf_size = PATH_MAX - 1;
 	ssize_t size;
@@ -167,7 +167,7 @@ _br_find_exe (BrInitError *error)
  * Find the canonical filename of the executable which owns symbol.
  * Returns a filename which must be freed, or NULL on error.
  */
-static char* _br_find_exe_for_symbol(const void* symbol) {
+static char* br_find_exe_for_symbol_internal(const void* symbol) {
 #define SIZE (PATH_MAX + 100)
 	FILE *f;
 	size_t address_string_len;
@@ -287,7 +287,7 @@ static char *exe = (char *) NULL;
 int
 br_init (BrInitError *error)
 {
-	exe = _br_find_exe (error);
+	exe = br_find_exe_internal (error);
 	return exe != NULL;
 }
 
@@ -307,7 +307,7 @@ br_init (BrInitError *error)
  * @returns 1 on success, 0 if a filename cannot be found.
  */
 int br_init_lib() {
-	exe = _br_find_exe_for_symbol((const void*)"");
+	exe = br_find_exe_for_symbol_internal((const void*)"");
 	return exe != NULL;
 }
 
