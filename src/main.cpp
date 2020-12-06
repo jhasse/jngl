@@ -13,8 +13,12 @@
 #include <sstream>
 
 #ifdef _WIN32
-#include <filesystem>
 #include <windows.h>
+#endif
+
+#if defined(_WIN32) || defined(__linux__)
+#include <filesystem>
+#define HAVE_FILESYSTEM
 #endif
 
 #ifdef JNGL_UWP
@@ -581,6 +585,11 @@ void writeConfig(const std::string& key, const std::string& value) {
 	if (!key.empty() && key[0] == '/') {
 		throw std::runtime_error("Do not pass absolute paths as keys to jngl::readConfig.");
 	}
+#ifdef HAVE_FILESYSTEM
+	if (!std::filesystem::exists(jngl::getConfigPath())) {
+		std::filesystem::create_directories(jngl::getConfigPath());
+	}
+#endif
 #ifdef _WIN32
 	std::filesystem::path p = std::filesystem::u8path(jngl::getConfigPath() + key);
 	std::ofstream fout(p, std::ios::binary);
