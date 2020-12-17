@@ -21,7 +21,7 @@ public:
 	virtual void endDraw() const = 0;
 };
 
-class Zoom : public jngl::Effect {
+class Zoom : public Effect {
 public:
 	explicit Zoom(std::function<float(float)>);
 	Action step() override;
@@ -33,7 +33,7 @@ private:
 	float time = 0;
 };
 
-class Executor : public jngl::Effect {
+class Executor : public Effect {
 public:
 	explicit Executor(std::function<Action(float)>);
 	Action step() override;
