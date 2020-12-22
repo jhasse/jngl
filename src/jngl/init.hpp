@@ -10,6 +10,7 @@
 #include "screen.hpp"
 #include "work.hpp"
 
+#include <boost/math/special_functions/round.hpp>
 #include <cmath>
 #include <optional>
 
@@ -33,7 +34,7 @@ struct AppParameters {
 std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters&);
 
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE // iOS
-JNGL_MAIN_BEGIN {
+JNGL_MAIN_BEGIN { // NOLINT
 	jngl::AppParameters params;
 	auto workFactory = jnglInit(params);
 	jngl::App app(params.displayName);
@@ -45,8 +46,9 @@ JNGL_MAIN_BEGIN {
 		params.screenSize = { double(jngl::getDesktopWidth()), double(jngl::getDesktopHeight()) };
 		fullscreen = true;
 	}
-	jngl::showWindow(params.displayName, std::lround(params.screenSize->x * jngl::getScaleFactor()),
-	                 std::lround(params.screenSize->y * jngl::getScaleFactor()), fullscreen,
+	jngl::showWindow(params.displayName,
+	                 boost::math::iround(params.screenSize->x * jngl::getScaleFactor()),
+	                 boost::math::iround(params.screenSize->y * jngl::getScaleFactor()), fullscreen,
 	                 { 1, 3 }, { 3, 1 });
 	jngl::setWork(workFactory());
 	app.mainLoop();

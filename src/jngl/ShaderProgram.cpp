@@ -1,4 +1,4 @@
-// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "ShaderProgram.hpp"
@@ -8,7 +8,6 @@
 #include <array>
 #include <cassert>
 #include <stdexcept>
-#include <string>
 
 namespace jngl {
 

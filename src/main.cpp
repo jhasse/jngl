@@ -13,8 +13,12 @@
 #include <sstream>
 
 #ifdef _WIN32
-#include <filesystem>
 #include <windows.h>
+#endif
+
+#if defined(_WIN32) || (defined(__linux__) && !defined(ANDROID) && __has_include(<filesystem>))
+#include <filesystem>
+#define HAVE_FILESYSTEM
 #endif
 
 #ifdef JNGL_UWP
@@ -339,15 +343,16 @@ void rotate(const double degree) {
 }
 
 void translate(const double x, const double y) {
-	opengl::translate(x * getScaleFactor(), y * getScaleFactor());
+	opengl::translate(static_cast<float>(x * getScaleFactor()),
+	                  static_cast<float>(y * getScaleFactor()));
 }
 
 void scale(const double factor) {
-	opengl::scale(factor, factor);
+	opengl::scale(static_cast<float>(factor), static_cast<float>(factor));
 }
 
 void scale(const double xfactor, const double yfactor) {
-	opengl::scale(xfactor, yfactor);
+	opengl::scale(static_cast<float>(xfactor), static_cast<float>(yfactor));
 }
 
 void pushMatrix() {
@@ -580,6 +585,11 @@ void writeConfig(const std::string& key, const std::string& value) {
 	if (!key.empty() && key[0] == '/') {
 		throw std::runtime_error("Do not pass absolute paths as keys to jngl::readConfig.");
 	}
+#ifdef HAVE_FILESYSTEM
+	if (!std::filesystem::exists(jngl::getConfigPath())) {
+		std::filesystem::create_directories(jngl::getConfigPath());
+	}
+#endif
 #ifdef _WIN32
 	std::filesystem::path p = std::filesystem::u8path(jngl::getConfigPath() + key);
 	std::ofstream fout(p, std::ios::binary);

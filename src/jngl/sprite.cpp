@@ -20,7 +20,6 @@
 #endif
 
 #include <boost/algorithm/string/predicate.hpp>
-#include <boost/math/special_functions/relative_difference.hpp>
 #include <boost/math/special_functions/round.hpp>
 #include <sstream>
 #include <thread>
@@ -279,8 +278,8 @@ Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool 
 	unsigned char** rowPointers = png_get_rows(png_ptr, info_ptr);
 	const auto scaledWidth = static_cast<int>(png_get_image_width(png_ptr, info_ptr));
 	const auto scaledHeight = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
-	width = scaledWidth * getScaleFactor();
-	height = scaledHeight * getScaleFactor();
+	width = static_cast<float>(scaledWidth * getScaleFactor());
+	height = static_cast<float>(scaledHeight * getScaleFactor());
 	loadTexture(scaledWidth, scaledHeight, filename, halfLoad, format, rowPointers);
 	return Finally(nullptr);
 }
@@ -360,8 +359,8 @@ Finally Sprite::LoadJPG(const std::string& filename, FILE* file, const bool half
 	jpeg_read_header(&info, TRUE);
 	jpeg_start_decompress(&info);
 
-	width = info.output_width * getScaleFactor();
-	height = info.output_height * getScaleFactor();
+	width = static_cast<float>(info.output_width * getScaleFactor());
+	height = static_cast<float>(info.output_height * getScaleFactor());
 	int channels = info.num_components;
 
 	GLenum format = GL_RGB;
@@ -403,8 +402,8 @@ Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool hal
 	if (!WebPGetInfo(&buf[0], filesize, &imgWidth, &imgHeight)) {
 		throw std::runtime_error(std::string("Invalid WebP file. (" + filename + ")"));
 	}
-	width = imgWidth * getScaleFactor();
-	height = imgHeight * getScaleFactor();
+	width = static_cast<float>(imgWidth * getScaleFactor());
+	height = static_cast<float>(imgHeight * getScaleFactor());
 
 	auto config = std::make_shared<WebPDecoderConfig>();
 	WebPInitDecoderConfig(config.get());
