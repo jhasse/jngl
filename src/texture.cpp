@@ -29,12 +29,10 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 			uniform sampler2D tex;
 			uniform lowp vec4 spriteColor;
 
-			in mediump vec2 texCoord;
-
-			out lowp vec4 outColor;
+			varying mediump vec2 texCoord;
 
 			void main() {
-				outColor = texture(tex, texCoord) * spriteColor;
+				gl_FragColor = texture2D(tex, texCoord) * spriteColor;
 			})", Shader::Type::FRAGMENT
 		);
 		textureShaderProgram = new ShaderProgram(vertexShader(), fragmentShader);
@@ -202,11 +200,11 @@ void Texture::setBytes(const unsigned char* const bytes, const int width, const 
 const Shader& Texture::vertexShader() {
 	if (!textureVertexShader) {
 		textureVertexShader = new Shader(R"(#version 300 es
-			in mediump vec2 position;
-			in mediump vec2 inTexCoord;
+			attribute mediump vec2 position;
+			attribute mediump vec2 inTexCoord;
 			uniform highp mat3 modelview;
 			uniform mediump mat4 projection;
-			out mediump vec2 texCoord;
+			varying mediump vec2 texCoord;
 
 			void main() {
 				vec3 tmp = modelview * vec3(position, 1);

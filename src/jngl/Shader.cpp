@@ -17,6 +17,10 @@ Shader::Shader(const char* source, const Type type) : impl(std::make_unique<Impl
 	std::string tmp(source);
 	boost::replace_all(tmp, "#version 300 es", "#version 330");
 	source = tmp.c_str();
+//#elif defined(JNGL_UWP)
+//	std::string tmp(source);
+//	boost::replace_all(tmp, "#version 300 es", "");
+//	source = tmp.c_str();
 #endif
 	glShaderSource(impl->id, 1, &source, nullptr);
 	glCompileShader(impl->id);

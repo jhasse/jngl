@@ -107,11 +107,11 @@ public:
 			}
 			if (!shaderProgram) {
 				Shader vertexShader(R"(#version 300 es
-					in mediump vec2 position;
-					in mediump vec2 inTexCoord;
+					attribute mediump vec2 position;
+					attribute mediump vec2 inTexCoord;
 					uniform mediump mat3 modelview;
 					uniform mediump mat4 projection;
-					out mediump vec2 texCoord;
+					varying mediump vec2 texCoord;
 
 					void main() {
 						vec3 tmp = modelview * vec3(position, 1);
@@ -124,16 +124,14 @@ public:
 					uniform sampler2D texU;
 					uniform sampler2D texV;
 
-					in mediump vec2 texCoord;
-
-					out lowp vec4 outColor;
+					varying mediump vec2 texCoord;
 
 					void main() {
-						lowp float y = texture(texY, texCoord).r;
-						lowp float u = texture(texU, texCoord).r - 0.5;
-						lowp float v = texture(texV, texCoord).r - 0.5;
+						lowp float y = texture2D(texY, texCoord).r;
+						lowp float u = texture2D(texU, texCoord).r - 0.5;
+						lowp float v = texture2D(texV, texCoord).r - 0.5;
 						y = 1.1643 * (y - 0.0625);
-						outColor = vec4(
+						gl_FragColor = vec4(
 							y + 1.5958 * v,
 							y - 0.39173 * u - 0.81290 * v,
 							y + 2.017 * u,

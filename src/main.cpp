@@ -85,7 +85,7 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	}};
 
 	Shader vertexShader(R"(#version 300 es
-		in mediump vec2 position;
+		attribute mediump vec2 position;
 		uniform highp mat3 modelview;
 		uniform mediump mat4 projection;
 
@@ -96,10 +96,9 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	);
 	Shader fragmentShader(R"(#version 300 es
 		uniform lowp vec4 color;
-		out lowp vec4 outColor;
 
 		void main() {
-			outColor = color;
+			gl_FragColor = color;
 		})", Shader::Type::FRAGMENT
 	);
 	simpleShaderProgram = std::make_unique<ShaderProgram>(vertexShader, fragmentShader);
