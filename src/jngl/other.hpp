@@ -32,9 +32,6 @@ unsigned int getStepsPerSecond();
 /// How many times Work::step should be called per second (default: 60)
 void setStepsPerSecond(unsigned int);
 
-[[deprecated]] void readPixel(int x, int y, unsigned char& red, unsigned char& green,
-                              unsigned char& blue);
-
 void setAntiAliasing(bool enabled);
 
 bool getAntiAliasing();

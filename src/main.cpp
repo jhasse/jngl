@@ -398,18 +398,6 @@ void drawPoint(const double x, const double y) {
 	pWindow->drawEllipse({x, y}, {1, 1}, 0);
 }
 
-void readPixel(const int x, const int y, unsigned char& red, unsigned char& green,
-               unsigned char& blue) {
-	unsigned char data[3];
-	data[0] = static_cast<unsigned char>(bgRed * 255.0f);
-	data[1] = static_cast<unsigned char>(bgGreen * 255.0f);
-	data[2] = static_cast<unsigned char>(bgBlue * 255.0f);
-	glReadPixels(x, getWindowHeight() - y - 1, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, data);
-	red = data[0];
-	green = data[1];
-	blue = data[2];
-}
-
 int getWindowWidth() {
 	return pWindow->getCanvasWidth();
 }
