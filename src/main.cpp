@@ -495,7 +495,7 @@ void setConfigPath(const std::string& path) {
 	}
 }
 
-std::string getConfigPath() {
+std::string _getConfigPath() {
 	if (configPath) { return *configPath; }
 #ifndef IOS
 	std::stringstream path;
@@ -515,6 +515,10 @@ void setArgs(std::vector<std::string> args) {
 
 std::vector<std::string> getArgs() {
 	return args;
+}
+
+std::string getConfigPath() {
+	return _getConfigPath();
 }
 
 std::stringstream readAsset(const std::string& filename) {
@@ -553,10 +557,10 @@ std::string readConfig(const std::string& key) {
 	}
 
 #ifdef _WIN32
-	std::filesystem::path p = std::filesystem::u8path(jngl::getConfigPath() + key);
+	std::filesystem::path p = std::filesystem::u8path(_getConfigPath() + key);
 	std::ifstream fin(p, std::ios::binary);
 #else
-	std::ifstream fin(jngl::getConfigPath() + key, std::ios::binary);
+	std::ifstream fin(_getConfigPath() + key, std::ios::binary);
 #endif
 
 	std::string out;
@@ -574,15 +578,15 @@ void writeConfig(const std::string& key, const std::string& value) {
 		throw std::runtime_error("Do not pass absolute paths as keys to jngl::readConfig.");
 	}
 #ifdef HAVE_FILESYSTEM
-	if (!std::filesystem::exists(jngl::getConfigPath())) {
-		std::filesystem::create_directories(jngl::getConfigPath());
+	if (!std::filesystem::exists(_getConfigPath())) {
+		std::filesystem::create_directories(_getConfigPath());
 	}
 #endif
 #ifdef _WIN32
-	std::filesystem::path p = std::filesystem::u8path(jngl::getConfigPath() + key);
+	std::filesystem::path p = std::filesystem::u8path(_getConfigPath() + key);
 	std::ofstream fout(p, std::ios::binary);
 #else
-	std::ofstream fout(jngl::getConfigPath() + key, std::ios::binary);
+	std::ofstream fout(_getConfigPath() + key, std::ios::binary);
 #endif
 	fout.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	fout << value;

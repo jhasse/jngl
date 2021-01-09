@@ -49,12 +49,14 @@ std::string getPrefix();
 
 void setConfigPath(const std::string& path);
 
+/// \deprecated Use jngl::writeConfig and jngl::readConfig instead.
+///
 /// Returns the directory where to store configuration files and save games.
 /// - Windows: `%%AppData%/Display Name/`
 /// - Linux: `~/.config/Display Name/`
 /// - macOS: `~/Library/Application Support/Display Name/`
 /// - Android/iOS: Data path provided by the OS
-std::string getConfigPath();
+[[deprecated("use jngl::writeConfig and jngl::readConfig instead")]] std::string getConfigPath();
 
 /// Returns the directory of the currently running binary
 std::string getBinaryPath();

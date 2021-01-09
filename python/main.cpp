@@ -236,8 +236,6 @@ PYBIND11_MODULE(jngl, m) {
 	m.def("getMouseWheel", getMouseWheel);
 	m.def("setPrefix", setPrefix);
 	m.def("getPrefix", getPrefix);
-	m.def("setConfigPath", setConfigPath);
-	m.def("getConfigPath", getConfigPath);
 	m.def("pushSpriteAlpha", pushSpriteAlpha);
 	m.def("popSpriteAlpha", popSpriteAlpha);
 

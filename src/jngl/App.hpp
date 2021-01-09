@@ -34,7 +34,7 @@ public:
 	static const App& instance();
 
 	/// Returns the name set by the constructor. This cannot be changed later and is used by
-	/// jngl::getConfigPath() for example.
+	/// jngl::writeConfig() for example.
 	[[nodiscard]] std::string getDisplayName() const;
 
 	/// Starts the main loop, which calls jngl::Work::step and jngl::Work::draw
