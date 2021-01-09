@@ -1,4 +1,4 @@
-// Copyright 2015-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowimpl.hpp"
@@ -14,6 +14,7 @@
 
 #include <android_native_app_glue.h>
 #include <android/storage_manager.h>
+#include <android/window.h>
 
 namespace jngl {
 
@@ -157,6 +158,8 @@ void WindowImpl::init() {
 	if (initialized) {
 		return;
 	}
+	ANativeActivity_setWindowFlags(app->activity, AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
+
 	// Here specify the attributes of the desired configuration. Below, we select an EGLConfig with
 	// at least 8 bits per color component compatible with on-screen windows
 	const EGLint attribs[] = {
