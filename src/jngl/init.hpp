@@ -1,4 +1,4 @@
-// Copyright 2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Include this file only once, as it defines the main function
 /// \file
@@ -42,14 +42,32 @@ JNGL_MAIN_BEGIN { // NOLINT
 #ifdef NDEBUG
 	fullscreen = true;
 #endif
+	std::pair<int, int> minAspectRatio{ 1, 3 };
+	std::pair<int, int> maxAspectRatio{ 3, 1 };
 	if (!params.screenSize) {
 		params.screenSize = { double(jngl::getDesktopWidth()), double(jngl::getDesktopHeight()) };
 		fullscreen = true;
 	}
-	jngl::showWindow(params.displayName,
-	                 boost::math::iround(params.screenSize->x * jngl::getScaleFactor()),
-	                 boost::math::iround(params.screenSize->y * jngl::getScaleFactor()), fullscreen,
-	                 { 1, 3 }, { 3, 1 });
+	if (fullscreen) {
+		const jngl::Vec2 desktopSize{ double(jngl::getDesktopWidth()),
+			                          double(jngl::getDesktopHeight()) };
+		jngl::setScaleFactor(
+		    std::min(desktopSize.x / params.screenSize->x, desktopSize.y / params.screenSize->y));
+		maxAspectRatio = minAspectRatio =
+		    std::pair<int, int>(params.screenSize->x, params.screenSize->y);
+	} else {
+		// Make window as big as possible
+		const int scaleFactor = std::min((jngl::getDesktopWidth() - 50) / params.screenSize->x,
+		                                 (jngl::getDesktopHeight() - 50) / params.screenSize->y);
+		jngl::setScaleFactor(std::max(1, scaleFactor));
+	}
+	jngl::showWindow(
+	    params.displayName,
+	    fullscreen ? jngl::getDesktopWidth()
+	               : boost::math::iround(params.screenSize->x * jngl::getScaleFactor()),
+	    fullscreen ? jngl::getDesktopHeight()
+	               : boost::math::iround(params.screenSize->y * jngl::getScaleFactor()),
+	    fullscreen, minAspectRatio, maxAspectRatio);
 	jngl::setWork(workFactory());
 	app.mainLoop();
 }
