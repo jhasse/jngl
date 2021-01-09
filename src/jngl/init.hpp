@@ -26,6 +26,9 @@ struct AppParameters {
 	///
 	/// If not specified JNGL will create a fullscreen Window with the maximum of space available.
 	std::optional<jngl::Vec2> screenSize;
+
+	/// Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)
+	bool pixelArt = false;
 };
 
 } // namespace jngl
@@ -38,6 +41,7 @@ JNGL_MAIN_BEGIN { // NOLINT
 	jngl::AppParameters params;
 	auto workFactory = jnglInit(params);
 	jngl::App app(params.displayName);
+	app.setPixelArt(params.pixelArt);
 	bool fullscreen = false;
 #ifdef NDEBUG
 	fullscreen = true;
