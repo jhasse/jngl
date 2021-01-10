@@ -229,8 +229,8 @@ else()
 		else()
 			if(JNGL_SDL2)
 				FetchContent_Declare(sdl2
-					URL https://www.libsdl.org/release/SDL2-2.0.12.zip
-					URL_HASH SHA1=3ed5a7de726f9a2a3c8f7aaa62474901bb3f49ab
+					URL https://www.libsdl.org/release/SDL2-2.0.14.zip
+					URL_HASH SHA1=94c60f9c34fe5aaad443df0051e0202bfd4d583b
 				)
 				FetchContent_MakeAvailable(sdl2)
 				target_link_libraries(jngl PRIVATE SDL2-static)
