@@ -578,8 +578,10 @@ void writeConfig(const std::string& key, const std::string& value) {
 		throw std::runtime_error("Do not pass absolute paths as keys to jngl::readConfig.");
 	}
 #ifdef HAVE_FILESYSTEM
-	if (!std::filesystem::exists(_getConfigPath())) {
-		std::filesystem::create_directories(_getConfigPath());
+	const auto configPath = std::filesystem::u8path(_getConfigPath());
+	const auto directory = (configPath / std::filesystem::u8path(key)).parent_path();
+	if (!std::filesystem::exists(directory)) {
+		std::filesystem::create_directories(directory);
 	}
 #endif
 #ifdef _WIN32
