@@ -2,9 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 
 project(jngl LANGUAGES C CXX)
 
-if(MSVC)
-	string(APPEND CMAKE_CXX_FLAGS " /permissive-")
-else()
+if(NOT MSVC)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
 endif()

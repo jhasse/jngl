@@ -86,8 +86,8 @@ public:
 		if (started() && !video) {
 			video = THEORAPLAY_getVideo(decoder);
 		}
-		if (!shaderProgram or (video and double(video->playms) / 1000. <= now)) {
-			if (started() and now - double(video->playms) / 1000. >= timePerFrame) {
+		if (!shaderProgram || (video && double(video->playms) / 1000. <= now)) {
+			if (started() && now - double(video->playms) / 1000. >= timePerFrame) {
 				// Skip frames to catch up, but keep track of the last one in case we catch up to a
 				// series of dupe frames, which means we'd have to draw that final frame and then
 				// wait for more.

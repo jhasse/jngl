@@ -69,7 +69,7 @@ float SdlController::stateWithoutDeadzone(controller::Button button) const {
 		} else {
 			state /= 32767;
 		}
-		if (button == controller::LeftStickY or button == controller::RightStickY) {
+		if (button == controller::LeftStickY || button == controller::RightStickY) {
 			state *= -1;
 		}
 		return state;
@@ -90,7 +90,7 @@ float SdlController::stateWithoutDeadzone(controller::Button button) const {
 	} else {
 		state /= 32767;
 	}
-	if (button == controller::LeftStickY or button == controller::RightStickY) {
+	if (button == controller::LeftStickY || button == controller::RightStickY) {
 		state *= -1;
 	}
 	return state;
@@ -121,7 +121,7 @@ float SdlController::stateImpl(controller::Button button) const {
 		otherState *= std::sqrt(1 - 0.5 * state * state);
 		state = static_cast<float>(tmp);
 	}
-	if (model != Model::XBOX_WIRED and model != Model::XBOX) {
+	if (model != Model::XBOX_WIRED && model != Model::XBOX) {
 		return state; // no deadzone needed
 	}
 	if (state * state + otherState * otherState < 0.1) { // inside deadzone circle?
