@@ -1,4 +1,4 @@
-// Copyright 2010-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2010-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "texture.hpp"
@@ -98,11 +98,11 @@ void Texture::draw(const float red, const float green, const float blue, const f
                    const ShaderProgram* const shaderProgram) const {
 	auto _ = shaderProgram ? shaderProgram->use() : textureShaderProgram->use();
 	if (shaderProgram) {
-		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_TRUE,
-		                   &opengl::modelview.a[0][0]);
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   opengl::modelview.data);
 	} else {
 		glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
-		glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
+		glUniformMatrix3fv(modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	}
 	glBindVertexArray(vao);
 
@@ -129,7 +129,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	glBindVertexArray(opengl::vaoStream);
 	auto tmp = textureShaderProgram->use();
 	glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
-	glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
+	glUniformMatrix3fv(modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), &vertexes[0], GL_STREAM_DRAW);
 
@@ -152,11 +152,11 @@ void Texture::drawMesh(const std::vector<Vertex>& vertexes, const float red, con
 	glBindVertexArray(opengl::vaoStream);
 	auto _ = shaderProgram ? shaderProgram->use() : textureShaderProgram->use();
 	if (shaderProgram) {
-		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_TRUE,
-		                   &opengl::modelview.a[0][0]);
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   opengl::modelview.data);
 	} else {
 		glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
-		glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
+		glUniformMatrix3fv(modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(vertexes[0]), &vertexes[0],

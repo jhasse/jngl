@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "opengl.hpp"
@@ -12,8 +12,8 @@
 
 namespace opengl {
 
-boost::qvm::mat<float, 3, 3> modelview;
-boost::qvm::mat<float, 4, 4> projection;
+jngl::Mat3 modelview;
+jngl::Mat4 projection;
 GLuint vaoStream;
 GLuint vboStream;
 

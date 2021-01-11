@@ -1,4 +1,4 @@
-// Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
@@ -39,7 +39,7 @@ std::string pathPrefix;
 optional<std::string> configPath;
 std::vector<std::string> args;
 float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
-std::stack<boost::qvm::mat<float, 3, 3>> modelviewStack;
+std::stack<jngl::Mat3> modelviewStack;
 std::unique_ptr<ShaderProgram> simpleShaderProgram;
 int simpleModelviewUniform;
 int simpleColorUniform;
@@ -77,12 +77,10 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	const auto r = static_cast<float>(  width) / 2.f;
 	const auto b = static_cast<float>( height) / 2.f;
 	const auto t = static_cast<float>(-height) / 2.f;
-	opengl::projection = {{
-		{ 2.f / (r - l),           0.f,  0.f, -(r + l) / (r - l) },
-		{           0.f, 2.f / (t - b),  0.f, -(t + b) / (t - b) },
-		{           0.f,           0.f, -1.f, 0.f },
-		{           0.f,           0.f,  0.f, 1.f }
-	}};
+	opengl::projection = { 2.f / (r - l), 0.f,           0.f,  -(r + l) / (r - l),
+		                   0.f,           2.f / (t - b), 0.f,  -(t + b) / (t - b),
+		                   0.f,           0.f,           -1.f, 0.f,
+		                   0.f,           0.f,           0.f,  1.f };
 
 	Shader vertexShader(R"(#version 300 es
 		in mediump vec2 position;
@@ -599,7 +597,7 @@ ShaderProgram::Context useSimpleShaderProgram() {
 	auto context = jngl::simpleShaderProgram->use();
 	glUniform4f(simpleColorUniform, float(colorRed) / 255.0f, float(colorGreen) / 255.0f,
 	            float(colorBlue) / 255.0f, float(colorAlpha) / 255.0f);
-	glUniformMatrix3fv(simpleModelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
+	glUniformMatrix3fv(simpleModelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 
 	assert(simpleShaderProgram->getAttribLocation("position") == 0);
 	glEnableVertexAttribArray(0);

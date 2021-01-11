@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "ShaderProgram.hpp"
@@ -32,7 +32,7 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 		throw std::runtime_error(&buffer[0]);
 	}
 	const auto tmp = use();
-	glUniformMatrix4fv(getUniformLocation("projection"), 1, GL_TRUE, &opengl::projection.a[0][0]);
+	glUniformMatrix4fv(getUniformLocation("projection"), 1, GL_FALSE, opengl::projection.data);
 }
 
 ShaderProgram::Context ShaderProgram::use() const {

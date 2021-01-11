@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include "jngl/Mat3.hpp"
+#include "jngl/Mat4.hpp"
+
 #include <boost/qvm/mat.hpp>
 
 #ifdef IOS
@@ -32,8 +35,8 @@
 
 namespace opengl
 {
-	extern boost::qvm::mat<float, 3, 3> modelview;
-	extern boost::qvm::mat<float, 4, 4> projection;
+	extern jngl::Mat3 modelview;
+	extern jngl::Mat4 projection;
 
 	/// A global VAO and VBO which are used with GL_STREAM_DRAW
 	extern GLuint vaoStream;

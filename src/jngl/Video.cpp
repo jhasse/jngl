@@ -148,7 +148,7 @@ public:
 				const auto tmp = shaderProgram->use();
 				glUniform1i(shaderProgram->getUniformLocation("texU"), 1);
 				glUniform1i(shaderProgram->getUniformLocation("texV"), 2);
-				glUniformMatrix4fv(projectionUniform, 1, GL_TRUE, &opengl::projection.a[0][0]);
+				glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, opengl::projection.data);
 
 				textureY = opengl::genAndBindTexture();
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, video->width, video->height, 0, GL_RED,
@@ -265,7 +265,7 @@ public:
 		}
 		if (shaderProgram) {
 			auto _ = shaderProgram->use();
-			glUniformMatrix3fv(modelviewUniform, 1, GL_TRUE, &opengl::modelview.a[0][0]);
+			glUniformMatrix3fv(modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 			glBindVertexArray(vao);
 
 			glActiveTexture(GL_TEXTURE0 + 1);
