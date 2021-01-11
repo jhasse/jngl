@@ -1,3 +1,5 @@
+// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Mat4.hpp"
 
 namespace jngl {
@@ -12,8 +14,5 @@ Mat4::Mat4(std::initializer_list<float> elements) {
 			column = 0;
 		}
 	}
-}
-
-Mat4::Mat4() : data{ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 } {
 }
 } // namespace jngl

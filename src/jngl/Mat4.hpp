@@ -3,25 +3,25 @@
 /// @file Contains jngl::Mat4 class 
 #pragma once
 
-#include <boost/qvm/mat_traits.hpp>
 #include <boost/qvm/mat.hpp>
+#include <boost/qvm/mat_traits.hpp>
 #include <initializer_list>
 
 namespace jngl {
 
 /// 4x4 matrix
 ///
-/// identical to boost::qvm::mat<float, 4, 4>, but stores the elements column-major in memory
+/// Identical to `boost::qvm::mat<float, 4, 4>`, but stores the elements column-major in memory
 class Mat4 {
 public:
 	/// creates identity matrix
-	Mat4();
+	Mat4() = default;
 
 	/// construct matrix from row-major array with 16 elements
 	Mat4(std::initializer_list<float>);
 
 	/// column-major
-	float data[16];
+	float data[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 };
 
 } // namespace jngl

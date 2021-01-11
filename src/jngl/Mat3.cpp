@@ -1,3 +1,5 @@
+// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Mat3.hpp"
 
 namespace jngl {
@@ -12,8 +14,5 @@ Mat3::Mat3(std::initializer_list<float> elements) {
 			column = 0;
 		}
 	}
-}
-
-Mat3::Mat3() : data{ 1, 0, 0, 0, 1, 0, 0, 0, 1 } {
 }
 } // namespace jngl

@@ -3,8 +3,8 @@
 /// @file Contains jngl::Mat3 class 
 #pragma once
 
-#include <boost/qvm/mat_traits.hpp>
 #include <boost/qvm/mat.hpp>
+#include <boost/qvm/mat_traits.hpp>
 #include <initializer_list>
 
 namespace jngl {
@@ -15,13 +15,13 @@ namespace jngl {
 class Mat3 {
 public:
 	/// creates identity matrix
-	Mat3();
+	Mat3() = default;
 
 	/// construct matrix from row-major array with 9 elements
 	Mat3(std::initializer_list<float>);
 
 	/// column-major
-	float data[9];
+	float data[9] = { 1, 0, 0, 0, 1, 0, 0, 0, 1 };
 };
 
 } // namespace jngl
