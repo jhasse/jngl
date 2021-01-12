@@ -259,7 +259,7 @@
 <!-- Node13 -->
 <g id="node13" class="node">
 <title>Node13</title>
-<g id="a_node13"><a xlink:href="Vec2_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node13"><a xlink:href="Vec2_8hpp.html" target="_top" xlink:title="Contains jngl::Vec2 class.">
 <polygon fill="white" stroke="black" points="508,-56.5 508,-75.5 573,-75.5 573,-56.5 508,-56.5"/>
 <text text-anchor="middle" x="540.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00">Vec2.hpp</text>
 </a>

@@ -2,7 +2,7 @@
 <area shape="rect" id="node1" title="Contains jngl::FrameBuffer class." alt="" coords="273,5,448,32"/>
 <area shape="rect" id="node2" href="$Color_8hpp.html" title=" " alt="" coords="5,80,100,107"/>
 <area shape="rect" id="node3" href="$Finally_8hpp.html" title=" " alt="" coords="124,80,235,107"/>
-<area shape="rect" id="node5" href="$Vec2_8hpp.html" title=" " alt="" coords="259,80,345,107"/>
+<area shape="rect" id="node5" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="259,80,345,107"/>
 <area shape="rect" id="node8" href="$Vertex_8hpp.html" title=" " alt="" coords="369,80,472,107"/>
 <area shape="rect" id="node9" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="496,80,567,107"/>
 <area shape="rect" id="node10" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="591,80,661,107"/>
