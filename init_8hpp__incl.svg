@@ -36,7 +36,7 @@
 <!-- Node5 -->
 <g id="node5" class="node">
 <title>Node5</title>
-<g id="a_node5"><a xlink:href="main_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node5"><a xlink:href="main_8hpp.html" target="_top" xlink:title="Defines macros for the main entry point.">
 <polygon fill="white" stroke="black" points="180,-118 180,-137 245,-137 245,-118 180,-118"/>
 <text text-anchor="middle" x="212.5" y="-125" font-family="'Consolas',monospace" font-size="10.00">main.hpp</text>
 </a>

@@ -126,7 +126,7 @@
 <!-- Node16 -->
 <g id="node16" class="node">
 <title>Node16</title>
-<g id="a_node16"><a xlink:href="Widget_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node16"><a xlink:href="Widget_8hpp.html" target="_top" xlink:title="Contains jngl::Container class.">
 <polygon fill="white" stroke="black" points="316,-168.5 316,-187.5 423,-187.5 423,-168.5 316,-168.5"/>
 <text text-anchor="middle" x="369.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">jngl/Widget.hpp</text>
 </a>
@@ -219,7 +219,7 @@
 <!-- Node7 -->
 <g id="node7" class="node">
 <title>Node7</title>
-<g id="a_node7"><a xlink:href="Label_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node7"><a xlink:href="Label_8hpp.html" target="_top" xlink:title="Contains jngl::Label class.">
 <polygon fill="white" stroke="black" points="240,-112.5 240,-131.5 341,-131.5 341,-112.5 240,-112.5"/>
 <text text-anchor="middle" x="290.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">jngl/Label.hpp</text>
 </a>

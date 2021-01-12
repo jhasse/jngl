@@ -95,45 +95,45 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">Mat3.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright 2021 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
+<a href="Mat3_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright 2021 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// For conditions of distribution and use, see copyright notice in LICENSE.txt</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"></span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;boost/qvm/mat.hpp&gt;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;boost/qvm/mat_traits.hpp&gt;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/initializer_list.html">initializer_list</a>&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacejngl.html">jngl</a> {</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classjngl_1_1Mat3.html">   15</a></span>&#160;<span class="keyword">class </span><a class="code" href="classjngl_1_1Mat3.html">Mat3</a> {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classjngl_1_1Mat3.html#a26af65b41f1b153fdb4b1605f35ab29e">   18</a></span>&#160;    <a class="code" href="classjngl_1_1Mat3.html#a26af65b41f1b153fdb4b1605f35ab29e">Mat3</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classjngl_1_1Mat3.html#a02a789c870dc2dc316a96820513a1e6f">   21</a></span>&#160;    <a class="code" href="classjngl_1_1Mat3.html#a02a789c870dc2dc316a96820513a1e6f">Mat3</a>(<a class="codeRef" href="http://en.cppreference.com/w/cpp/utility/initializer_list.html">std::initializer_list&lt;float&gt;</a>);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classjngl_1_1Mat3.html#afb030f49947f8fb0713f9e162b9bbc26">   24</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classjngl_1_1Mat3.html#afb030f49947f8fb0713f9e162b9bbc26">data</a>[9] = { 1, 0, 0, 0, 1, 0, 0, 0, 1 };</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;};</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;} <span class="comment">// namespace jngl</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span>boost::qvm {</div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="structboost_1_1qvm_1_1mat__traits_3_01jngl_1_1Mat3_01_4.html">   30</a></span>&#160;<span class="keyword">template</span> &lt;&gt; <span class="keyword">struct </span>mat_traits&lt;<a class="code" href="namespacejngl.html">jngl</a>::Mat3&gt; {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <span class="keyword">const</span> rows = 3;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <span class="keyword">const</span> cols = 3;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">typedef</span> <span class="keywordtype">float</span> scalar_type;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">template</span> &lt;<span class="keywordtype">int</span> R, <span class="keywordtype">int</span> C&gt; <span class="keyword">static</span> scalar_type read_element(<span class="keyword">const</span> <a class="code" href="classjngl_1_1Mat3.html">jngl::Mat3</a>&amp; m) {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordflow">return</span> m.<a class="code" href="classjngl_1_1Mat3.html#afb030f49947f8fb0713f9e162b9bbc26">data</a>[C * 3 + R];</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    }</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">template</span> &lt;<span class="keywordtype">int</span> R, <span class="keywordtype">int</span> C&gt; <span class="keyword">static</span> scalar_type&amp; write_element(<a class="code" href="classjngl_1_1Mat3.html">jngl::Mat3</a>&amp; m) {</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">return</span> m.<a class="code" href="classjngl_1_1Mat3.html#afb030f49947f8fb0713f9e162b9bbc26">data</a>[C * 3 + R];</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    }</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;};</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;} <span class="comment">// namespace boost::qvm</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"></span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;boost/qvm/mat.hpp&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;boost/qvm/mat_traits.hpp&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/initializer_list.html">initializer_list</a>&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacejngl.html">jngl</a> {</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classjngl_1_1Mat3.html">   16</a></span>&#160;<span class="keyword">class </span><a class="code" href="classjngl_1_1Mat3.html">Mat3</a> {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classjngl_1_1Mat3.html#a26af65b41f1b153fdb4b1605f35ab29e">   19</a></span>&#160;    <a class="code" href="classjngl_1_1Mat3.html#a26af65b41f1b153fdb4b1605f35ab29e">Mat3</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classjngl_1_1Mat3.html#a02a789c870dc2dc316a96820513a1e6f">   22</a></span>&#160;    <a class="code" href="classjngl_1_1Mat3.html#a02a789c870dc2dc316a96820513a1e6f">Mat3</a>(<a class="codeRef" href="http://en.cppreference.com/w/cpp/utility/initializer_list.html">std::initializer_list&lt;float&gt;</a>);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classjngl_1_1Mat3.html#afb030f49947f8fb0713f9e162b9bbc26">   25</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classjngl_1_1Mat3.html#afb030f49947f8fb0713f9e162b9bbc26">data</a>[9] = { 1, 0, 0, 0, 1, 0, 0, 0, 1 };</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;};</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;} <span class="comment">// namespace jngl</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>boost::qvm {</div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="structboost_1_1qvm_1_1mat__traits_3_01jngl_1_1Mat3_01_4.html">   31</a></span>&#160;<span class="keyword">template</span> &lt;&gt; <span class="keyword">struct </span>mat_traits&lt;<a class="code" href="namespacejngl.html">jngl</a>::Mat3&gt; {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <span class="keyword">const</span> rows = 3;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <span class="keyword">const</span> cols = 3;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">typedef</span> <span class="keywordtype">float</span> scalar_type;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">template</span> &lt;<span class="keywordtype">int</span> R, <span class="keywordtype">int</span> C&gt; <span class="keyword">static</span> scalar_type read_element(<span class="keyword">const</span> <a class="code" href="classjngl_1_1Mat3.html">jngl::Mat3</a>&amp; m) {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">return</span> m.<a class="code" href="classjngl_1_1Mat3.html#afb030f49947f8fb0713f9e162b9bbc26">data</a>[C * 3 + R];</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    }</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">template</span> &lt;<span class="keywordtype">int</span> R, <span class="keywordtype">int</span> C&gt; <span class="keyword">static</span> scalar_type&amp; write_element(<a class="code" href="classjngl_1_1Mat3.html">jngl::Mat3</a>&amp; m) {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">return</span> m.<a class="code" href="classjngl_1_1Mat3.html#afb030f49947f8fb0713f9e162b9bbc26">data</a>[C * 3 + R];</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;};</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;} <span class="comment">// namespace boost::qvm</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassjngl_1_1Mat3_html_a02a789c870dc2dc316a96820513a1e6f"><div class="ttname"><a href="classjngl_1_1Mat3.html#a02a789c870dc2dc316a96820513a1e6f">jngl::Mat3::Mat3</a></div><div class="ttdeci">Mat3(std::initializer_list&lt; float &gt;)</div><div class="ttdoc">construct matrix from row-major array with 9 elements</div></div>
-<div class="ttc" id="aclassjngl_1_1Mat3_html"><div class="ttname"><a href="classjngl_1_1Mat3.html">jngl::Mat3</a></div><div class="ttdoc">3x3 matrix</div><div class="ttdef"><b>Definition:</b> <a href="Mat3_8hpp_source.html#l00015">Mat3.hpp:15</a></div></div>
-<div class="ttc" id="aclassjngl_1_1Mat3_html_afb030f49947f8fb0713f9e162b9bbc26"><div class="ttname"><a href="classjngl_1_1Mat3.html#afb030f49947f8fb0713f9e162b9bbc26">jngl::Mat3::data</a></div><div class="ttdeci">float data[9]</div><div class="ttdoc">column-major</div><div class="ttdef"><b>Definition:</b> <a href="Mat3_8hpp_source.html#l00024">Mat3.hpp:24</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Mat3_html"><div class="ttname"><a href="classjngl_1_1Mat3.html">jngl::Mat3</a></div><div class="ttdoc">3x3 matrix</div><div class="ttdef"><b>Definition:</b> <a href="Mat3_8hpp_source.html#l00016">Mat3.hpp:16</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Mat3_html_afb030f49947f8fb0713f9e162b9bbc26"><div class="ttname"><a href="classjngl_1_1Mat3.html#afb030f49947f8fb0713f9e162b9bbc26">jngl::Mat3::data</a></div><div class="ttdeci">float data[9]</div><div class="ttdoc">column-major</div><div class="ttdef"><b>Definition:</b> <a href="Mat3_8hpp_source.html#l00025">Mat3.hpp:25</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition:</b> <a href="App_8hpp_source.html#l00009">App.hpp:9</a></div></div>
 <div class="ttc" id="ainitializer_list_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/initializer_list.html">initializer_list</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Mat3_html_a26af65b41f1b153fdb4b1605f35ab29e"><div class="ttname"><a href="classjngl_1_1Mat3.html#a26af65b41f1b153fdb4b1605f35ab29e">jngl::Mat3::Mat3</a></div><div class="ttdeci">Mat3()=default</div><div class="ttdoc">creates identity matrix</div></div>

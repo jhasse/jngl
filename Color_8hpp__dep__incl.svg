@@ -66,7 +66,7 @@
 <!-- Node6 -->
 <g id="node6" class="node">
 <title>Node6</title>
-<g id="a_node6"><a xlink:href="Label_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node6"><a xlink:href="Label_8hpp.html" target="_top" xlink:title="Contains jngl::Label class.">
 <polygon fill="white" stroke="black" points="279.95,-112.5 279.95,-131.5 380.95,-131.5 380.95,-112.5 279.95,-112.5"/>
 <text text-anchor="middle" x="330.45" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">jngl/Label.hpp</text>
 </a>

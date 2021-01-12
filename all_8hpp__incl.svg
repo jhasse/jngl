@@ -96,7 +96,7 @@
 <!-- Node15 -->
 <g id="node15" class="node">
 <title>Node15</title>
-<g id="a_node15"><a xlink:href="Label_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node15"><a xlink:href="Label_8hpp.html" target="_top" xlink:title="Contains jngl::Label class.">
 <polygon fill="white" stroke="black" points="582,-224.5 582,-243.5 653,-243.5 653,-224.5 582,-224.5"/>
 <text text-anchor="middle" x="617.5" y="-231.5" font-family="'Consolas',monospace" font-size="10.00">Label.hpp</text>
 </a>
@@ -111,7 +111,7 @@
 <!-- Node16 -->
 <g id="node16" class="node">
 <title>Node16</title>
-<g id="a_node16"><a xlink:href="Widget_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node16"><a xlink:href="Widget_8hpp.html" target="_top" xlink:title="Contains jngl::Container class.">
 <polygon fill="white" stroke="black" points="421,-168.5 421,-187.5 498,-187.5 498,-168.5 421,-168.5"/>
 <text text-anchor="middle" x="459.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">Widget.hpp</text>
 </a>
@@ -231,7 +231,7 @@
 <!-- Node26 -->
 <g id="node26" class="node">
 <title>Node26</title>
-<g id="a_node26"><a xlink:href="debug_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node26"><a xlink:href="debug_8hpp.html" target="_top" xlink:title="Logging functions for debug purposes.">
 <polygon fill="white" stroke="black" points="1752,-224.5 1752,-243.5 1823,-243.5 1823,-224.5 1752,-224.5"/>
 <text text-anchor="middle" x="1787.5" y="-231.5" font-family="'Consolas',monospace" font-size="10.00">debug.hpp</text>
 </a>
@@ -261,7 +261,7 @@
 <!-- Node29 -->
 <g id="node29" class="node">
 <title>Node29</title>
-<g id="a_node29"><a xlink:href="effects_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node29"><a xlink:href="effects_8hpp.html" target="_top" xlink:title="Effects that can be applied to jngl::Widget.">
 <polygon fill="white" stroke="black" points="0,-112.5 0,-131.5 77,-131.5 77,-112.5 0,-112.5"/>
 <text text-anchor="middle" x="38.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">effects.hpp</text>
 </a>
@@ -321,7 +321,7 @@
 <!-- Node33 -->
 <g id="node33" class="node">
 <title>Node33</title>
-<g id="a_node33"><a xlink:href="main_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node33"><a xlink:href="main_8hpp.html" target="_top" xlink:title="Defines macros for the main entry point.">
 <polygon fill="white" stroke="black" points="1458,-224.5 1458,-243.5 1523,-243.5 1523,-224.5 1458,-224.5"/>
 <text text-anchor="middle" x="1490.5" y="-231.5" font-family="'Consolas',monospace" font-size="10.00">main.hpp</text>
 </a>

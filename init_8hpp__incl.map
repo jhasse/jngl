@@ -1,7 +1,7 @@
 <map id="jngl/init.hpp" name="jngl/init.hpp">
 <area shape="rect" id="node1" title="Include this file only once, as it defines the main function." alt="" coords="623,5,749,32"/>
 <area shape="rect" id="node2" href="$App_8hpp.html" title=" " alt="" coords="425,169,504,196"/>
-<area shape="rect" id="node5" href="$main_8hpp_source.html" title=" " alt="" coords="245,87,332,114"/>
+<area shape="rect" id="node5" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="245,87,332,114"/>
 <area shape="rect" id="node12" href="$screen_8hpp.html" title=" " alt="" coords="635,87,737,114"/>
 <area shape="rect" id="node16" href="$work_8hpp.html" title=" " alt="" coords="524,87,611,114"/>
 <area shape="rect" id="node18" title=" " alt="" coords="761,80,944,121"/>

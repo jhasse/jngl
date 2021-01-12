@@ -36,7 +36,7 @@
 <!-- Node4 -->
 <g id="node4" class="node">
 <title>Node4</title>
-<g id="a_node4"><a xlink:href="debug_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node4"><a xlink:href="debug_8hpp.html" target="_top" xlink:title="Logging functions for debug purposes.">
 <polygon fill="white" stroke="black" points="46,-112.5 46,-131.5 147,-131.5 147,-112.5 46,-112.5"/>
 <text text-anchor="middle" x="96.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">jngl/debug.hpp</text>
 </a>

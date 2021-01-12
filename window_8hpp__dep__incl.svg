@@ -36,7 +36,7 @@
 <!-- Node4 -->
 <g id="node4" class="node">
 <title>Node4</title>
-<g id="a_node4"><a xlink:href="main_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node4"><a xlink:href="main_8hpp.html" target="_top" xlink:title="Defines macros for the main entry point.">
 <polygon fill="white" stroke="black" points="73,-112.5 73,-131.5 168,-131.5 168,-112.5 73,-112.5"/>
 <text text-anchor="middle" x="120.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">jngl/main.hpp</text>
 </a>
