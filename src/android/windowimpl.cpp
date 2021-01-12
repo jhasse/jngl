@@ -471,4 +471,8 @@ std::vector<Vec2> Window::getTouchPositions() const {
 	return positions;
 }
 
+std::string getSystemConfigPath() {
+	return jngl::androidApp->activity->internalDataPath;
+}
+
 } // namespace jngl

@@ -499,6 +499,8 @@ std::string _getConfigPath() {
 	std::stringstream path;
 #if defined(__APPLE__) || defined(_WIN32)
 	path << getSystemConfigPath() << "/" << App::instance().getDisplayName() << "/";
+#elif defined(ANDROID)
+	path << getSystemConfigPath() << "/";
 #else
 	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/";
 #endif

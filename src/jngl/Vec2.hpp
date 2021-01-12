@@ -1,5 +1,6 @@
-// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
+/// Contains jngl::Vec2 class
 /// @file
 #pragma once
 
@@ -33,6 +34,7 @@ public:
 
 } // namespace jngl
 
+/// Prints the vector like this: [x=…, y=…]
 std::ostream& operator<<(std::ostream&, const jngl::Vec2&);
 
 #if BOOST_VERSION >= 106200 || __has_include("boost/qvm/vec_traits.hpp")
