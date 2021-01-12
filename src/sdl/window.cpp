@@ -304,9 +304,8 @@ Window::~Window() = default;
 		}
 	}
 
-	void Window::SetIcon(const std::string& filename) {
+	void Window::SetIcon(const std::string& filepath) {
 #ifndef NOPNG
-		const auto filepath = pathPrefix + filename;
 		FILE* fp = fopen(filepath.c_str(), "rb");
 		if (fp == nullptr) {
 			throw std::runtime_error(std::string("File not found: ") + filepath);
