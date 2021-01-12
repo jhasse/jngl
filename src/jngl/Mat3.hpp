@@ -1,6 +1,7 @@
 // Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-/// @file Contains jngl::Mat3 class 
+/// Contains jngl::Mat3 class
+/// @file
 #pragma once
 
 #include <boost/qvm/mat.hpp>

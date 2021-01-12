@@ -1,6 +1,7 @@
-// Copyright 2012-2018 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2012-2021 Jan Niklas Hasse <jhasse@gmail.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// Logging functions for debug purposes
+/// @file
 #pragma once
 
 #ifndef NDEBUG

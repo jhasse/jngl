@@ -1,6 +1,7 @@
-// Copyright 2015-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
+/// Defines macros for the main entry point
+/// @file
 #pragma once
 
 #include "Finally.hpp"
