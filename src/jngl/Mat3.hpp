@@ -4,8 +4,9 @@
 /// @file
 #pragma once
 
-#include <boost/qvm/mat.hpp>
-#include <boost/qvm/mat_traits.hpp>
+#if !defined(__has_include) || __has_include("boost/version.hpp")
+#include <boost/version.hpp>
+#endif
 #include <initializer_list>
 
 namespace jngl {
@@ -27,11 +28,14 @@ public:
 
 } // namespace jngl
 
+#if BOOST_VERSION >= 106200 || __has_include("boost/qvm/mat_traits.hpp")
+#include <boost/qvm/mat_traits.hpp>
+
 namespace boost::qvm {
 template <> struct mat_traits<jngl::Mat3> {
 	static int const rows = 3;
 	static int const cols = 3;
-	typedef float scalar_type;
+	using scalar_type = float;
 
 	template <int R, int C> static scalar_type read_element(const jngl::Mat3& m) {
 		return m.data[C * 3 + R];
@@ -41,3 +45,4 @@ template <> struct mat_traits<jngl::Mat3> {
 	}
 };
 } // namespace boost::qvm
+#endif
