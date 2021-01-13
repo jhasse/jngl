@@ -117,8 +117,18 @@ public:
 						vec3 tmp = modelview * vec3(position, 1);
 						gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
 						texCoord = inTexCoord;
-					})", Shader::Type::VERTEX
-				);
+					})", Shader::Type::VERTEX, R"(
+					attribute mediump vec2 position;
+					attribute mediump vec2 inTexCoord;
+					uniform mediump mat3 modelview;
+					uniform mediump mat4 projection;
+					varying mediump vec2 texCoord;
+
+					void main() {
+						vec3 tmp = modelview * vec3(position, 1);
+						gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
+						texCoord = inTexCoord;
+					})");
 				Shader fragmentShader(R"(#version 300 es
 					uniform sampler2D texY;
 					uniform sampler2D texU;
@@ -139,7 +149,25 @@ public:
 							y + 2.017 * u,
 							1.0
 						);
-					})", Shader::Type::FRAGMENT
+					})", Shader::Type::FRAGMENT, R"(
+					uniform sampler2D texY;
+					uniform sampler2D texU;
+					uniform sampler2D texV;
+
+					varying mediump vec2 texCoord;
+
+					void main() {
+						lowp float y = texture2D(texY, texCoord).r;
+						lowp float u = texture2D(texU, texCoord).r - 0.5;
+						lowp float v = texture2D(texV, texCoord).r - 0.5;
+						y = 1.1643 * (y - 0.0625);
+						gl_FragColor = vec4(
+							y + 1.5958 * v,
+							y - 0.39173 * u - 0.81290 * v,
+							y + 2.017 * u,
+							1.0
+						);
+					})"
 				);
 				shaderProgram = std::make_unique<ShaderProgram>(vertexShader, fragmentShader);
 				modelviewUniform = shaderProgram->getUniformLocation("modelview");

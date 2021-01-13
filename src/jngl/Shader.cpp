@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Shader.hpp"
@@ -11,12 +11,20 @@
 
 namespace jngl {
 
-Shader::Shader(const char* source, const Type type) : impl(std::make_unique<Impl>()) {
+Shader::Shader(const char* source, const Type type, const char* const gles20Source [[maybe_unused]])
+: impl(std::make_unique<Impl>()) {
 	impl->id = glCreateShader(type == Type::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER);
 #if defined(__APPLE__) && !defined(OPENGLES)
 	std::string tmp(source);
 	boost::replace_all(tmp, "#version 300 es", "#version 330");
 	source = tmp.c_str();
+#endif
+#ifdef JNGL_UWP
+	if (gles20Source) {
+		source = gles20Source;
+	} else {
+		jngl::debugLn("WARNING: OpenGL ES 3.0 not supported on Xbox!");
+	}
 #endif
 	glShaderSource(impl->id, 1, &source, nullptr);
 	glCompileShader(impl->id);

@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -19,7 +19,8 @@ public:
 
 	/// Creates a vertex or fragment shader by compiling it.
 	/// \param source Source code using either GLSL v3.30 or GLSL ES v3.00.
-	Shader(const char* source, Type);
+	/// \param gles20Source Source code using GLSL v1.00 for OpenGL ES 2.0
+	Shader(const char* source, Type, const char* gles20Source = nullptr);
 
 	/// \overload
 	///

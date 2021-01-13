@@ -35,7 +35,15 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 
 			void main() {
 				outColor = texture(tex, texCoord) * spriteColor;
-			})", Shader::Type::FRAGMENT
+			})", Shader::Type::FRAGMENT, R"(
+			uniform sampler2D tex;
+			uniform lowp vec4 spriteColor;
+
+			varying mediump vec2 texCoord;
+
+			void main() {
+				gl_FragColor = texture2D(tex, texCoord) * spriteColor;
+			})"
 		);
 		textureShaderProgram = new ShaderProgram(vertexShader(), fragmentShader);
 		shaderSpriteColorUniform = textureShaderProgram->getUniformLocation("spriteColor");
@@ -212,7 +220,18 @@ const Shader& Texture::vertexShader() {
 				vec3 tmp = modelview * vec3(position, 1);
 				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
 				texCoord = inTexCoord;
-			})", Shader::Type::VERTEX);
+			})", Shader::Type::VERTEX, R"(
+			attribute mediump vec2 position;
+			attribute mediump vec2 inTexCoord;
+			uniform highp mat3 modelview;
+			uniform mediump mat4 projection;
+			varying mediump vec2 texCoord;
+
+			void main() {
+				vec3 tmp = modelview * vec3(position, 1);
+				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
+				texCoord = inTexCoord;
+			})");
 	}
 	return *textureVertexShader;
 }
