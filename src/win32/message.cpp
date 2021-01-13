@@ -9,6 +9,10 @@
 #include <iostream>
 #include <windows.h>
 
+#ifdef JNGL_UWP
+#include <SDL.h>
+#endif
+
 namespace jngl {
 
 void errorMessage(const std::string& text) {
@@ -21,7 +25,11 @@ void errorMessage(const std::string& text) {
 }
 
 void printMessage(const std::string& text) {
+#ifdef JNGL_UWP
+	SDL_Log("%s", text.c_str());
+#else
 	std::cout << text << std::flush;
+#endif
 }
 
 } // namespace jngl
