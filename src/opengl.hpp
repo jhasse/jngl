@@ -19,7 +19,11 @@
 		#include <GLES3/gl3ext.h>
 	#else
 		#ifdef JNGL_UWP
-			#include <GLES3/gl3.h>
+			#include <GLES2/gl2.h>
+			#include <GLES2/gl2ext.h>
+
+			#define glGenVertexArrays glGenVertexArraysOES
+			#define glBindVertexArray glBindVertexArrayOES
 		#else
 			#ifdef _MSC_VER
 				#include <windows.h> // To avoid warnings about APIENTRY
