@@ -116,9 +116,9 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5bef8cf2df68a86d8855efb3a86a49dc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Shader.html#a5bef8cf2df68a86d8855efb3a86a49dc">Shader</a> (const char *source, <a class="el" href="classjngl_1_1Shader.html#a1d1cfd8ffb84e947f82999c682b666a7">Type</a>)</td></tr>
-<tr class="memdesc:a5bef8cf2df68a86d8855efb3a86a49dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a vertex or fragment shader by compiling it.  <a href="classjngl_1_1Shader.html#a5bef8cf2df68a86d8855efb3a86a49dc">More...</a><br /></td></tr>
-<tr class="separator:a5bef8cf2df68a86d8855efb3a86a49dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a4c1bba70b26e5283b8c045b990a3c3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Shader.html#a3a4c1bba70b26e5283b8c045b990a3c3">Shader</a> (const char *source, <a class="el" href="classjngl_1_1Shader.html#a1d1cfd8ffb84e947f82999c682b666a7">Type</a>, const char *gles20Source=nullptr)</td></tr>
+<tr class="memdesc:a3a4c1bba70b26e5283b8c045b990a3c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a vertex or fragment shader by compiling it.  <a href="classjngl_1_1Shader.html#a3a4c1bba70b26e5283b8c045b990a3c3">More...</a><br /></td></tr>
+<tr class="separator:a3a4c1bba70b26e5283b8c045b990a3c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab722bab8175cb2e077785473a17a4bef"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Shader.html#ab722bab8175cb2e077785473a17a4bef">Shader</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/io/basic_istream.html">std::istream</a> &amp;source, <a class="el" href="classjngl_1_1Shader.html#a1d1cfd8ffb84e947f82999c682b666a7">Type</a>)</td></tr>
 <tr class="memdesc:ab722bab8175cb2e077785473a17a4bef"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.  <a href="classjngl_1_1Shader.html#ab722bab8175cb2e077785473a17a4bef">More...</a><br /></td></tr>
 <tr class="separator:ab722bab8175cb2e077785473a17a4bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,8 +146,8 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ShaderProgram</b></t
 
 <p class="definition">Definition at line <a class="el" href="Shader_8hpp_source.html#l00012">12</a> of file <a class="el" href="Shader_8hpp_source.html">Shader.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a5bef8cf2df68a86d8855efb3a86a49dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5bef8cf2df68a86d8855efb3a86a49dc">&#9670;&nbsp;</a></span>Shader() <span class="overload">[1/2]</span></h2>
+<a id="a3a4c1bba70b26e5283b8c045b990a3c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a4c1bba70b26e5283b8c045b990a3c3">&#9670;&nbsp;</a></span>Shader() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,7 +162,13 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ShaderProgram</b></t
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classjngl_1_1Shader.html#a1d1cfd8ffb84e947f82999c682b666a7">Type</a>&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>gles20Source</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -176,6 +182,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ShaderProgram</b></t
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">source</td><td>Source code using either GLSL v3.30 or GLSL ES v3.00. </td></tr>
+    <tr><td class="paramname">gles20Source</td><td>Source code using GLSL v1.00 for OpenGL ES 2.0 </td></tr>
   </table>
   </dd>
 </dl>
