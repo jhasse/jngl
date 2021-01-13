@@ -218,22 +218,23 @@ else()
 	endif()
 
 	if(MSVC)
+		if(JNGL_SDL2)
+			set(SDL_SENSOR OFF CACHE BOOL "" FORCE) # doesn't work with UWP
+			FetchContent_Declare(sdl2
+				URL https://www.libsdl.org/release/SDL2-2.0.14.zip
+				URL_HASH SHA1=94c60f9c34fe5aaad443df0051e0202bfd4d583b
+			)
+			FetchContent_MakeAvailable(sdl2)
+			target_link_libraries(jngl PRIVATE SDL2-static)
+		endif()
 		if(WINDOWS_STORE)
 			target_compile_definitions(jngl PUBLIC JNGL_UWP)
-			target_include_directories(jngl PUBLIC include/uwp) # TODO: This should be PRIVATE
+			target_include_directories(jngl PRIVATE include/uwp)
+			target_include_directories(jngl PUBLIC ${sdl2_SOURCE_DIR}/include ${sdl2_BINARY_DIR}/include) # TODO: This should be PRIVATE
 			target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH})
-			target_link_libraries(jngl PUBLIC OpenAL SDL2)
+			target_link_libraries(jngl PUBLIC OpenAL)
 			target_link_options(jngl PUBLIC $<IF:$<CONFIG:Debug>,/defaultlib:vccorlibd.lib /defaultlib:msvcrtd.lib,/defaultlib:vccorlib.lib /defaultlib:msvcrt.lib>)
 		else()
-			if(JNGL_SDL2)
-				FetchContent_Declare(sdl2
-					URL https://www.libsdl.org/release/SDL2-2.0.14.zip
-					URL_HASH SHA1=94c60f9c34fe5aaad443df0051e0202bfd4d583b
-				)
-				FetchContent_MakeAvailable(sdl2)
-				target_link_libraries(jngl PRIVATE SDL2-static)
-			endif()
-
 			FetchContent_Declare(openal
 				URL https://github.com/kcat/openal-soft/archive/openal-soft-1.20.1.zip
 				URL_HASH SHA1=d86a714e0e7900f4f7197738cb35432772bfe2e0)
@@ -378,7 +379,6 @@ else()
 	if(WINDOWS_STORE)
 		set(UWP_DLLS
 			${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH}/OpenAL.dll
-			${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH}/SDL2.dll
 		)
 		set(JNGL_UWP_DLLS ${UWP_DLLS} PARENT_SCOPE)
 	endif()
