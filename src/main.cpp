@@ -83,6 +83,14 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		                   0.f,           0.f,           0.f,  1.f };
 
 	Shader vertexShader(R"(#version 300 es
+		in mediump vec2 position;
+		uniform highp mat3 modelview;
+		uniform mediump mat4 projection;
+
+		void main() {
+			vec3 tmp = modelview * vec3(position, 1);
+			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
+		})", Shader::Type::VERTEX, R"(
 		attribute mediump vec2 position;
 		uniform highp mat3 modelview;
 		uniform mediump mat4 projection;
@@ -90,14 +98,20 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		void main() {
 			vec3 tmp = modelview * vec3(position, 1);
 			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-		})", Shader::Type::VERTEX
+		})"
 	);
 	Shader fragmentShader(R"(#version 300 es
+		uniform lowp vec4 color;
+		out lowp vec4 outColor;
+
+		void main() {
+			outColor = color;
+		})", Shader::Type::FRAGMENT, R"(
 		uniform lowp vec4 color;
 
 		void main() {
 			gl_FragColor = color;
-		})", Shader::Type::FRAGMENT
+		})"
 	);
 	simpleShaderProgram = std::make_unique<ShaderProgram>(vertexShader, fragmentShader);
 	simpleModelviewUniform = simpleShaderProgram->getUniformLocation("modelview");
