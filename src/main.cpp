@@ -345,6 +345,10 @@ void setStepsPerSecond(const unsigned int stepsPerSecond) {
 	pWindow->setStepsPerSecond(stepsPerSecond);
 }
 
+Mat3 modelview() {
+	return opengl::modelview;
+}
+
 void reset() {
 	boost::qvm::set_identity(opengl::modelview);
 }

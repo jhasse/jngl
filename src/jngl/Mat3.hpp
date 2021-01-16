@@ -11,6 +11,8 @@
 
 namespace jngl {
 
+class Vec2;
+
 /// 3x3 matrix
 ///
 /// identical to boost::qvm::mat<float, 3, 3>, but stores the elements column-major in memory
@@ -21,6 +23,11 @@ public:
 
 	/// construct matrix from row-major array with 9 elements
 	Mat3(std::initializer_list<float>);
+
+	/// Multiplies the matrix with a translation matrix generated from v
+	///
+	/// \return *this
+	Mat3& translate(const Vec2&);
 
 	/// column-major
 	float data[9] = { 1, 0, 0, 0, 1, 0, 0, 0, 1 };
