@@ -5,6 +5,10 @@
 
 #include "../Shader_Impl.hpp"
 
+#ifdef JNGL_UWP
+#include "debug.hpp"
+#endif
+
 #include <boost/algorithm/string.hpp>
 #include <sstream>
 #include <stdexcept>
