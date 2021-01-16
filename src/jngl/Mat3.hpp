@@ -27,12 +27,23 @@ public:
 	/// Multiplies the matrix with a translation matrix generated from v
 	///
 	/// \return *this
-	Mat3& translate(const Vec2&);
+	Mat3& translate(const Vec2& v);
+
+	/// Multiplies the matrix by a scaling matrix
+	///
+	/// Equivalent to calling `Mat3::scale(factor, factor)`.
+	/// \return *this
+	Mat3& scale(float factor);
 
 	/// Multiplies the matrix by a scaling matrix
 	///
 	/// \return *this
-	Mat3& scale(float factor);
+	///
+	/// If you want to draw a sprite with double the width, but the correct height:
+	/// \code
+	/// yourSprite.draw(jngl::modelview().scale(2, 1));
+	/// \endcode
+	Mat3& scale(float xfactor, float yfactor);
 
 	/// Multiplies the matrix with a rotation matrix
 	///

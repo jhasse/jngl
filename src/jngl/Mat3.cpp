@@ -30,7 +30,11 @@ Mat3& Mat3::translate(const jngl::Vec2& v) {
 }
 
 Mat3& Mat3::scale(const float factor) {
-	return *this *= boost::qvm::diag_mat(boost::qvm::vec<float, 3>{ { factor, factor, 1 } });
+	return scale(factor, factor);
+}
+
+Mat3& Mat3::scale(const float xfactor, const float yfactor) {
+	return *this *= boost::qvm::diag_mat(boost::qvm::vec<float, 3>{ { xfactor, yfactor, 1 } });
 }
 
 Mat3& Mat3::rotate(const float radian) {
