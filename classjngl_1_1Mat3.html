@@ -115,6 +115,15 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Mat3.html#a02a789c870dc2dc316a96820513a1e6f">Mat3</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/utility/initializer_list.html">std::initializer_list</a>&lt; float &gt;)</td></tr>
 <tr class="memdesc:a02a789c870dc2dc316a96820513a1e6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">construct matrix from row-major array with 9 elements <br /></td></tr>
 <tr class="separator:a02a789c870dc2dc316a96820513a1e6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a636c4aba441b96aa78e0e8a3878ecd84"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Mat3.html#a636c4aba441b96aa78e0e8a3878ecd84">translate</a> (const <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> &amp;)</td></tr>
+<tr class="memdesc:a636c4aba441b96aa78e0e8a3878ecd84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies the matrix with a translation matrix generated from v.  <a href="classjngl_1_1Mat3.html#a636c4aba441b96aa78e0e8a3878ecd84">More...</a><br /></td></tr>
+<tr class="separator:a636c4aba441b96aa78e0e8a3878ecd84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afecf2ee866d5f13bbc8203cac39c4d5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Mat3.html#afecf2ee866d5f13bbc8203cac39c4d5c">scale</a> (float factor)</td></tr>
+<tr class="memdesc:afecf2ee866d5f13bbc8203cac39c4d5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies the matrix by a scaling matrix.  <a href="classjngl_1_1Mat3.html#afecf2ee866d5f13bbc8203cac39c4d5c">More...</a><br /></td></tr>
+<tr class="separator:afecf2ee866d5f13bbc8203cac39c4d5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea77ad61e6ea0327f22c9a55262489e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Mat3.html#aea77ad61e6ea0327f22c9a55262489e9">rotate</a> (float radian)</td></tr>
+<tr class="memdesc:aea77ad61e6ea0327f22c9a55262489e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies the matrix with a rotation matrix.  <a href="classjngl_1_1Mat3.html#aea77ad61e6ea0327f22c9a55262489e9">More...</a><br /></td></tr>
+<tr class="separator:aea77ad61e6ea0327f22c9a55262489e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -127,8 +136,72 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 <div class="textblock"><p>3x3 matrix </p>
 <p>identical to boost::qvm::mat&lt;float, 3, 3&gt;, but stores the elements column-major in memory </p>
 
-<p class="definition">Definition at line <a class="el" href="Mat3_8hpp_source.html#l00017">17</a> of file <a class="el" href="Mat3_8hpp_source.html">Mat3.hpp</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="Mat3_8hpp_source.html#l00019">19</a> of file <a class="el" href="Mat3_8hpp_source.html">Mat3.hpp</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a636c4aba441b96aa78e0e8a3878ecd84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a636c4aba441b96aa78e0e8a3878ecd84">&#9670;&nbsp;</a></span>translate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a>&amp; translate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Multiplies the matrix with a translation matrix generated from v. </p>
+<dl class="section return"><dt>Returns</dt><dd>*this </dd></dl>
+
+</div>
+</div>
+<a id="afecf2ee866d5f13bbc8203cac39c4d5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afecf2ee866d5f13bbc8203cac39c4d5c">&#9670;&nbsp;</a></span>scale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a>&amp; scale </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>factor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Multiplies the matrix by a scaling matrix. </p>
+<dl class="section return"><dt>Returns</dt><dd>*this </dd></dl>
+
+</div>
+</div>
+<a id="aea77ad61e6ea0327f22c9a55262489e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea77ad61e6ea0327f22c9a55262489e9">&#9670;&nbsp;</a></span>rotate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a>&amp; rotate </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>radian</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Multiplies the matrix with a rotation matrix. </p>
+<dl class="section return"><dt>Returns</dt><dd>*this </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>jngl/<a class="el" href="Mat3_8hpp_source.html">Mat3.hpp</a></li>
 </ul>
 </div><!-- contents -->

@@ -132,6 +132,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#a35460413b5c663cd8a28ad3c80caaf71">draw</a> () const override</td></tr>
 <tr class="memdesc:a35460413b5c663cd8a28ad3c80caaf71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when drawing a frame. <br /></td></tr>
 <tr class="separator:a35460413b5c663cd8a28ad3c80caaf71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84099a083d3701e8b5aa85643186a26e"><td class="memItemLeft" align="right" valign="top"><a id="a84099a083d3701e8b5aa85643186a26e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#a84099a083d3701e8b5aa85643186a26e">draw</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#a5fbfb4b36561052e1c34bcfbe777a9a6">modelview</a>) const</td></tr>
+<tr class="memdesc:a84099a083d3701e8b5aa85643186a26e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the image centered using <em>modelview</em>. <br /></td></tr>
+<tr class="separator:a84099a083d3701e8b5aa85643186a26e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad569156f9424782e97035deb46b0777b"><td class="memItemLeft" align="right" valign="top"><a id="ad569156f9424782e97035deb46b0777b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> (const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *shaderProgram) const</td></tr>
 <tr class="separator:ad569156f9424782e97035deb46b0777b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,7 +143,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> (const <a cl
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawScaled</b> (float factor) const</td></tr>
 <tr class="separator:a40a6523d3575531f6b65f4e24cc8f44f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41b02a54c89c6d5fe3322b38d4a071f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#a41b02a54c89c6d5fe3322b38d4a071f8">drawScaled</a> (float xfactor, float yfactor, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *shaderProgram=nullptr) const</td></tr>
-<tr class="memdesc:a41b02a54c89c6d5fe3322b38d4a071f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the image scaled around its center by <code>xfactor</code> and <code>yfactor</code>  <a href="classjngl_1_1Sprite.html#a41b02a54c89c6d5fe3322b38d4a071f8">More...</a><br /></td></tr>
+<tr class="memdesc:a41b02a54c89c6d5fe3322b38d4a071f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the image scaled by <code>xfactor</code> and <code>yfactor</code>  <a href="classjngl_1_1Sprite.html#a41b02a54c89c6d5fe3322b38d4a071f8">More...</a><br /></td></tr>
 <tr class="separator:a41b02a54c89c6d5fe3322b38d4a071f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87204f6bbbca14af2ddbc524f499f8f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#a87204f6bbbca14af2ddbc524f499f8f2">drawClipped</a> (float xstart, float xend, float ystart, float yend) const</td></tr>
 <tr class="separator:a87204f6bbbca14af2ddbc524f499f8f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -273,7 +277,7 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>height</b> = 0</td><
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Higher-level representation of an image. </p>
 
-<p class="definition">Definition at line <a class="el" href="sprite_8hpp_source.html#l00019">19</a> of file <a class="el" href="sprite_8hpp_source.html">sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sprite_8hpp_source.html#l00020">20</a> of file <a class="el" href="sprite_8hpp_source.html">sprite.hpp</a>.</p>
 </div><div class="dynheader">
 Inheritance diagram for Sprite:</div>
 <div class="dyncontent">
@@ -319,7 +323,7 @@ Collaboration diagram for Sprite:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Draws the image scaled around its center by <code>xfactor</code> and <code>yfactor</code> </p>
+<p>Draws the image scaled by <code>xfactor</code> and <code>yfactor</code> </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">xfactor</td><td>Scale width by this factor </td></tr>

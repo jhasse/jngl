@@ -95,37 +95,44 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">matrix.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="matrix_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright 2012-2020 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
+<a href="matrix_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright 2012-2021 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// For conditions of distribution and use, see copyright notice in LICENSE.txt</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"></span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacejngl.html">jngl</a> {</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Mat3_8hpp.html">Mat3.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="namespacejngl.html#aa17a08647a651cd111a3319f5589063d">   10</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#aa17a08647a651cd111a3319f5589063d">rotate</a>(<span class="keywordtype">double</span> degree);</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="namespacejngl.html#a33055e9490360e20d49880215f041de9">   13</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a33055e9490360e20d49880215f041de9">translate</a>(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="namespacejngl.html#aec36677a20c7b4358a83814e8b558974">   18</a></span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> Vect&gt; <span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a33055e9490360e20d49880215f041de9">translate</a>(Vect v) {</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <a class="code" href="namespacejngl.html#a33055e9490360e20d49880215f041de9">translate</a>(v.x, v.y);</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;}</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="namespacejngl.html#a9e3fd1d22650ed9ce972f133542858d6">   25</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a9e3fd1d22650ed9ce972f133542858d6">scale</a>(<span class="keywordtype">double</span> factor);</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacejngl.html">jngl</a> {</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="namespacejngl.html#a5fbfb4b36561052e1c34bcfbe777a9a6">   12</a></span>&#160;<a class="code" href="classjngl_1_1Mat3.html">jngl::Mat3</a> <a class="code" href="namespacejngl.html#a5fbfb4b36561052e1c34bcfbe777a9a6">modelview</a>();</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="namespacejngl.html#aa17a08647a651cd111a3319f5589063d">   15</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#aa17a08647a651cd111a3319f5589063d">rotate</a>(<span class="keywordtype">double</span> degree);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="namespacejngl.html#a33055e9490360e20d49880215f041de9">   18</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a33055e9490360e20d49880215f041de9">translate</a>(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y);</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="namespacejngl.html#aec36677a20c7b4358a83814e8b558974">   23</a></span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> Vect&gt; <span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a33055e9490360e20d49880215f041de9">translate</a>(Vect v) {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <a class="code" href="namespacejngl.html#a33055e9490360e20d49880215f041de9">translate</a>(v.x, v.y);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;}</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="namespacejngl.html#abe6195efb061554e40b5d4e2d9252cff">   28</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a9e3fd1d22650ed9ce972f133542858d6">scale</a>(<span class="keywordtype">double</span> xfactor, <span class="keywordtype">double</span> yfactor);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="namespacejngl.html#afc63ae7a67efef954aa3d63e98fbdb24">   31</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#afc63ae7a67efef954aa3d63e98fbdb24">pushMatrix</a>();</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="namespacejngl.html#a63c22e977fb6bbcaa2a815ccea83e9b4">   34</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a63c22e977fb6bbcaa2a815ccea83e9b4">popMatrix</a>();</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="namespacejngl.html#ab30302d1de317b3d3307dc4f32571e47">   37</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#ab30302d1de317b3d3307dc4f32571e47">reset</a>();</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;} <span class="comment">// namespace jngl</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="namespacejngl.html#a9e3fd1d22650ed9ce972f133542858d6">   30</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a9e3fd1d22650ed9ce972f133542858d6">scale</a>(<span class="keywordtype">double</span> factor);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="namespacejngl.html#abe6195efb061554e40b5d4e2d9252cff">   33</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a9e3fd1d22650ed9ce972f133542858d6">scale</a>(<span class="keywordtype">double</span> xfactor, <span class="keywordtype">double</span> yfactor);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="namespacejngl.html#afc63ae7a67efef954aa3d63e98fbdb24">   36</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#afc63ae7a67efef954aa3d63e98fbdb24">pushMatrix</a>();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="namespacejngl.html#a63c22e977fb6bbcaa2a815ccea83e9b4">   39</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a63c22e977fb6bbcaa2a815ccea83e9b4">popMatrix</a>();</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="namespacejngl.html#ab30302d1de317b3d3307dc4f32571e47">   42</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#ab30302d1de317b3d3307dc4f32571e47">reset</a>();</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;} <span class="comment">// namespace jngl</span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="anamespacejngl_html_a5fbfb4b36561052e1c34bcfbe777a9a6"><div class="ttname"><a href="namespacejngl.html#a5fbfb4b36561052e1c34bcfbe777a9a6">jngl::modelview</a></div><div class="ttdeci">jngl::Mat3 modelview()</div><div class="ttdoc">Returns a copy of the global ModelView matrix.</div></div>
 <div class="ttc" id="anamespacejngl_html_ab30302d1de317b3d3307dc4f32571e47"><div class="ttname"><a href="namespacejngl.html#ab30302d1de317b3d3307dc4f32571e47">jngl::reset</a></div><div class="ttdeci">void reset()</div><div class="ttdoc">Resets the global ModelView matrix to the identity matrix.</div></div>
+<div class="ttc" id="aclassjngl_1_1Mat3_html"><div class="ttname"><a href="classjngl_1_1Mat3.html">jngl::Mat3</a></div><div class="ttdoc">3x3 matrix</div><div class="ttdef"><b>Definition:</b> <a href="Mat3_8hpp_source.html#l00019">Mat3.hpp:19</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition:</b> <a href="App_8hpp_source.html#l00009">App.hpp:9</a></div></div>
 <div class="ttc" id="anamespacejngl_html_afc63ae7a67efef954aa3d63e98fbdb24"><div class="ttname"><a href="namespacejngl.html#afc63ae7a67efef954aa3d63e98fbdb24">jngl::pushMatrix</a></div><div class="ttdeci">void pushMatrix()</div><div class="ttdoc">Pushes the current ModelView matrix on a global stack.</div></div>
 <div class="ttc" id="anamespacejngl_html_a9e3fd1d22650ed9ce972f133542858d6"><div class="ttname"><a href="namespacejngl.html#a9e3fd1d22650ed9ce972f133542858d6">jngl::scale</a></div><div class="ttdeci">void scale(double factor)</div><div class="ttdoc">Multiplies the global ModelView matrix by a scaling matrix.</div></div>
 <div class="ttc" id="anamespacejngl_html_aa17a08647a651cd111a3319f5589063d"><div class="ttname"><a href="namespacejngl.html#aa17a08647a651cd111a3319f5589063d">jngl::rotate</a></div><div class="ttdeci">void rotate(double degree)</div><div class="ttdoc">Multiplies the global ModelView matrix with a rotation matrix.</div></div>
+<div class="ttc" id="aMat3_8hpp_html"><div class="ttname"><a href="Mat3_8hpp.html">Mat3.hpp</a></div><div class="ttdoc">Contains jngl::Mat3 class.</div></div>
 <div class="ttc" id="anamespacejngl_html_a33055e9490360e20d49880215f041de9"><div class="ttname"><a href="namespacejngl.html#a33055e9490360e20d49880215f041de9">jngl::translate</a></div><div class="ttdeci">void translate(double x, double y)</div><div class="ttdoc">Multiplies the global ModelView matrix with a translation matrix.</div></div>
 <div class="ttc" id="anamespacejngl_html_a63c22e977fb6bbcaa2a815ccea83e9b4"><div class="ttname"><a href="namespacejngl.html#a63c22e977fb6bbcaa2a815ccea83e9b4">jngl::popMatrix</a></div><div class="ttdeci">void popMatrix()</div><div class="ttdoc">Replaces the current ModelView matrix with the top element of the global stack.</div></div>
 </body></html>
