@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Sprite class and related functions
 /// \file
@@ -12,6 +12,7 @@
 
 namespace jngl {
 
+class Mat3;
 class Texture;
 struct Vertex;
 
@@ -28,10 +29,14 @@ public:
 	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
 	void step() override;
 	void draw() const override;
+
+	/// Draws the image centered using \a modelview
+	void draw(Mat3 modelview) const;
+
 	void draw(const ShaderProgram* shaderProgram) const;
 	void drawScaled(float factor) const;
 
-	/// Draws the image scaled around its center by `xfactor` and `yfactor`
+	/// Draws the image scaled by `xfactor` and `yfactor`
 	///
 	/// \param xfactor Scale width by this factor
 	/// \param yfactor Scale height by this factor

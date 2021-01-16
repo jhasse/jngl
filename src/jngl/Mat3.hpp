@@ -29,6 +29,16 @@ public:
 	/// \return *this
 	Mat3& translate(const Vec2&);
 
+	/// Multiplies the matrix by a scaling matrix
+	///
+	/// \return *this
+	Mat3& scale(float factor);
+
+	/// Multiplies the matrix with a rotation matrix
+	///
+	/// \return *this
+	Mat3& rotate(float radian);
+
 	/// column-major
 	float data[9] = { 1, 0, 0, 0, 1, 0, 0, 0, 1 };
 };

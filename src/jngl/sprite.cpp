@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #ifndef NOPNG
@@ -21,6 +21,9 @@
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/math/special_functions/round.hpp>
+#include <boost/qvm/map_vec_mat.hpp>
+#include <boost/qvm/mat_operations3.hpp>
+#include <boost/qvm/vec.hpp>
 #include <sstream>
 #include <thread>
 #ifndef NOJPEG
@@ -163,6 +166,13 @@ void Sprite::draw() const {
 	texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
 	popMatrix();
+}
+
+void Sprite::draw(Mat3 modelview) const {
+	modelview *= boost::qvm::translation_mat(
+	    boost::qvm::vec<double, 2>({ x - width / 2., y - height / 2. }));
+	texture->draw(modelview, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
+	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
 }
 
 void Sprite::draw(const ShaderProgram* const shaderProgram) const {

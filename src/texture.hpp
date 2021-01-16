@@ -27,6 +27,8 @@ public:
 	~Texture();
 	void Bind() const;
 	void draw(float red, float green, float blue, float alpha, const ShaderProgram* = nullptr) const;
+	void draw(const Mat3& modelview, float red, float green, float blue, float alpha,
+	          const ShaderProgram* = nullptr) const;
 	void drawClipped(float xstart, float xend, float ystart, float yend, float red, float green,
 	                 float blue, float alpha) const;
 	void drawMesh(const std::vector<Vertex>& vertexes, float red, float green, float blue,
