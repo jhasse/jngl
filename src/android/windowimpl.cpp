@@ -394,23 +394,41 @@ void WindowImpl::setKeyboardVisible(const bool visible) {
 
 	const jclass inputMethodManagerClass = env->GetObjectClass(inputMethodManager);
 
-	const jmethodID toggleSoftInputMethod =
-			env->GetMethodID(inputMethodManagerClass, "toggleSoftInput", "(II)V");
+	const jmethodID getWindowMethod =
+	    env->GetMethodID(nativeActivityClass, "getWindow", "()Landroid/view/Window;");
 
-	int showFlags;
+	const jobject window = env->CallObjectMethod(app->activity->clazz, getWindowMethod);
+
+	const jclass windowClass = env->FindClass("android/view/Window");
+
+	const jmethodID getDecorViewMethod =
+	    env->GetMethodID(windowClass, "getDecorView", "()Landroid/view/View;");
+
+	const jobject decorView = env->CallObjectMethod(window, getDecorViewMethod);
+
 	if (visible) {
+		const jmethodID showSoftInputMethod =
+		    env->GetMethodID(inputMethodManagerClass, "showSoftInput", "(Landroid/view/View;I)Z");
+
 		const jfieldID SHOW_FORCED_FIELD =
-				env->GetStaticFieldID(inputMethodManagerClass, "SHOW_FORCED", "I");
+		    env->GetStaticFieldID(inputMethodManagerClass, "SHOW_FORCED", "I");
 
-		showFlags = env->GetStaticIntField(inputMethodManagerClass, SHOW_FORCED_FIELD);
+		const int showFlags = env->GetStaticIntField(inputMethodManagerClass, SHOW_FORCED_FIELD);
+
+		env->CallBooleanMethod(inputMethodManager, showSoftInputMethod, decorView, showFlags);
 	} else {
-		const jfieldID HIDE_IMPLICIT_ONLY_FIELD =
-				env->GetStaticFieldID(inputMethodManagerClass, "HIDE_IMPLICIT_ONLY", "I");
+		const jclass viewClass = env->FindClass("android/view/View");
 
-		showFlags = env->GetStaticIntField(inputMethodManagerClass, HIDE_IMPLICIT_ONLY_FIELD);
+		const jmethodID getWindowTokenMethod =
+		    env->GetMethodID(viewClass, "getWindowToken", "()Landroid/os/IBinder;");
+
+		const jobject windowToken = env->CallObjectMethod(decorView, getWindowTokenMethod);
+
+		const jmethodID hideSoftInputFromWindowMethod = env->GetMethodID(
+		    inputMethodManagerClass, "hideSoftInputFromWindow", "(Landroid/os/IBinder;I)Z");
+
+		env->CallBooleanMethod(inputMethodManager, hideSoftInputFromWindowMethod, windowToken, 0);
 	}
-
-	env->CallVoidMethod(inputMethodManager, toggleSoftInputMethod, showFlags, 0);
 }
 
 std::vector<std::shared_ptr<Controller>> WindowImpl::getConnectedControllers() const {
