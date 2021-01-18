@@ -76,7 +76,7 @@ void drawScaled(const std::string& filename, const double xposition, const doubl
                 const float factor) {
 	auto& s = GetSprite(filename);
 	s.setPos(xposition, yposition);
-	s.drawScaled(factor);
+	s.drawScaled(factor, factor);
 }
 
 void drawClipped(const std::string& filename, const double xposition, const double yposition,
