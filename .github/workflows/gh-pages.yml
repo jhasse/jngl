@@ -1,13 +1,11 @@
 name: GitHub Pages
 on:
   push:
-    branches:
-      - master
 jobs:
   doxygen:
     runs-on: ubuntu-latest
     container:
-      image: registry.fedoraproject.org/fedora-minimal:32
+      image: registry.fedoraproject.org/fedora-minimal:34
     steps:
       - name: Install dependencies
         run: microdnf install git graphviz doxygen cmake make tar xz rsync
@@ -22,6 +20,7 @@ jobs:
         working-directory: doc
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v3
+        if: github.ref == 'refs/heads/master'
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages

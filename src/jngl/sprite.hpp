@@ -44,6 +44,9 @@ public:
 	///
 	/// `drawScaled(1, 1)` would draw it normally. You can pass negative values to flip the image.
 	/// For example `drawScaled(-1, 1)` would draw the image horizontally flipped.
+	///
+	/// \deprecated Scale the modelview matrix instead using jngl::Mat3::scale
+	[[deprecated("Scale the modelview matrix instead using jngl::Mat3::scale")]]
 	void drawScaled(float xfactor, float yfactor,
 	                const ShaderProgram* shaderProgram = nullptr) const;
 
