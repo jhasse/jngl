@@ -183,10 +183,6 @@ void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 	popMatrix();
 }
 
-void Sprite::drawScaled(float factor) const {
-	drawScaled(factor, factor);
-}
-
 void Sprite::drawScaled(float xfactor, float yfactor,
                         const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
