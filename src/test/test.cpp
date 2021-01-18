@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl.hpp"
@@ -14,7 +14,6 @@
 #include <sstream>
 #include <vector>
 
-void drawBackground();
 void drawMouse(jngl::Vec2);
 void testKeys();
 int performance = 1;
@@ -51,6 +50,7 @@ public:
 			}
 		}
 	}
+	void drawBackground() const;
 	void draw() const override {
 		std::optional<jngl::FrameBuffer::Context> fb2Context;
 		if (drawOnFrameBuffer) {
@@ -78,10 +78,9 @@ public:
 		jngl::rotate(rotate);
 		jngl::setSpriteAlpha(static_cast<unsigned char>(std::abs(factor * 255)));
 		if (useShader) {
-			logoWebp.drawScaled(static_cast<float>(factor * 2), static_cast<float>(factor * 2),
-			                    &*shaderProgram);
+			logoWebp.draw(jngl::modelview().scale(static_cast<float>(factor * 2)), &*shaderProgram);
 		} else {
-			logoWebp.drawScaled(static_cast<float>(factor * 2));
+			logoWebp.draw(jngl::modelview().scale(static_cast<float>(factor * 2)));
 		}
 		jngl::setColor(0, 0, 0);
 		jngl::drawRect(-125, 100, 250, 28);
@@ -213,16 +212,18 @@ std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& param
 	};
 }
 
-void drawBackground() {
+void Test::drawBackground() const {
 	jngl::setSpriteAlpha(100);
 	if (performance > 1) {
 		const int size = performance * performance;
 		for (int x = 0; x < size; ++x) {
 			for (int y = 0; y < size; ++y) {
-				jngl::drawScaled("jngl", x * jngl::getScreenWidth() / size,
-				                 y * jngl::getScreenHeight() / size,
-				                 float(jngl::getScreenWidth() / size / jngl::getWidth("jngl")),
-				                 float(jngl::getScreenHeight() / size / jngl::getHeight("jngl")));
+				logoWebp.draw(
+				    jngl::modelview()
+				        .translate(jngl::Vec2((x + .5) * jngl::getScreenWidth() / size,
+				                              (y + .5) * jngl::getScreenHeight() / size))
+				        .scale(float(jngl::getScreenWidth() / size / jngl::getWidth("jngl")),
+				               float(jngl::getScreenHeight() / size / jngl::getHeight("jngl"))));
 			}
 		}
 	} else {
