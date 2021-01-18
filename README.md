@@ -1,7 +1,7 @@
 # JNGL - Just a Neat Game Library [![pipeline status](https://gitlab.com/jhasse/jngl/badges/master/pipeline.svg)](https://gitlab.com/jhasse/jngl/commits/master)
 
-An easy to use C++/Python game library for Linux, Windows, macOS, Android, iOS and the Nintendo
-Switch.
+An easy to use C++/Python game library for Linux, Windows, macOS, Android, iOS, Xbox and the
+Nintendo Switch.
 
 ## Linux
 
@@ -114,3 +114,9 @@ cmake -Bbuild-ios -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake -DIOS
 ```
 
 Open and build `build-ios/jngl.xcodeproj` in Xcode.
+
+## Xbox
+
+```
+cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0"
+```
