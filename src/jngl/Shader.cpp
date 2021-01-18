@@ -44,6 +44,7 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 Shader::Shader(const std::istream& source, const Type type)
 : Shader([&source]() {
 	std::stringstream buffer;
+	buffer.exceptions(std::ios_base::failbit);
 	buffer << source.rdbuf();
 	return buffer.str();
 }().c_str(), type) {
