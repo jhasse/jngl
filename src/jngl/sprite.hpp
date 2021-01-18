@@ -31,10 +31,11 @@ public:
 	void draw() const override;
 
 	/// Draws the image centered using \a modelview
-	void draw(Mat3 modelview) const;
+	///
+	/// \param shaderProgram Passing `nullptr` uses the default.
+	void draw(Mat3 modelview, const ShaderProgram* = nullptr) const;
 
 	void draw(const ShaderProgram* shaderProgram) const;
-	void drawScaled(float factor) const;
 
 	/// Draws the image scaled by `xfactor` and `yfactor`
 	///

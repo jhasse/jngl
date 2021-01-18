@@ -168,11 +168,11 @@ void Sprite::draw() const {
 	popMatrix();
 }
 
-void Sprite::draw(Mat3 modelview) const {
+void Sprite::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) const {
 	modelview *=
 	    boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. }));
 	texture->draw(modelview, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
-	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
+	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f, shaderProgram);
 }
 
 void Sprite::draw(const ShaderProgram* const shaderProgram) const {
