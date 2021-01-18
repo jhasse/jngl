@@ -243,6 +243,7 @@ else()
 			set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
 			set(ALSOFT_TESTS OFF CACHE BOOL "Build and install test programs" FORCE)
 			set(LIBTYPE "STATIC" CACHE STRING "" FORCE)
+			target_compile_definitions(jngl PRIVATE AL_LIBTYPE_STATIC)
 
 			FetchContent_Declare(dlfcn
 				URL https://github.com/dlfcn-win32/dlfcn-win32/archive/v1.2.0.zip
