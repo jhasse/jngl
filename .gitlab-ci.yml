@@ -20,7 +20,7 @@ gcc:
   stage: build
   script:
     - microdnf install cmake fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel meson SDL2-devel openal-soft-devel gcc-c++ libtheora-devel >/dev/null
-    - script -qfec "meson build --werror" /dev/null
+    - script -qfec "meson build" /dev/null
     - cd build
     - script -qfec "ninja" /dev/null
     - microdnf install mesa-dri-drivers xorg-x11-drv-dummy >/dev/null
@@ -35,7 +35,7 @@ clang:
   stage: build
   script:
     - microdnf install fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel meson SDL2-devel openal-soft-devel clang >/dev/null
-    - CC=clang CXX=clang++ script -qfec "meson build --werror" /dev/null
+    - CC=clang CXX=clang++ script -qfec "meson build" /dev/null
     - cd build
     - script -qfec "ninja" /dev/null
     - microdnf install clang-tools-extra python3-PyYAML >/dev/null
