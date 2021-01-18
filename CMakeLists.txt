@@ -229,10 +229,10 @@ else()
 		endif()
 		if(WINDOWS_STORE)
 			target_compile_definitions(jngl PUBLIC JNGL_UWP)
-			target_include_directories(jngl PRIVATE include/uwp)
 			target_include_directories(jngl PUBLIC ${sdl2_SOURCE_DIR}/include ${sdl2_BINARY_DIR}/include) # TODO: This should be PRIVATE
-			target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH})
-			target_link_libraries(jngl PUBLIC OpenAL)
+			FetchContent_Declare(openal
+				GIT_REPOSITORY https://github.com/jhasse/openal-soft-winphone
+				GIT_TAG e4f3681316b1e8d8d68dfc31b1fc952d9bba085d)
 			target_link_options(jngl PUBLIC $<IF:$<CONFIG:Debug>,/defaultlib:vccorlibd.lib /defaultlib:msvcrtd.lib,/defaultlib:vccorlib.lib /defaultlib:msvcrt.lib>)
 		else()
 			FetchContent_Declare(openal
@@ -243,11 +243,6 @@ else()
 			set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
 			set(ALSOFT_TESTS OFF CACHE BOOL "Build and install test programs" FORCE)
 			set(LIBTYPE "STATIC" CACHE STRING "" FORCE)
-			target_compile_definitions(jngl PRIVATE AL_LIBTYPE_STATIC)
-			FetchContent_MakeAvailable(openal)
-			FetchContent_GetProperties(openal SOURCE_DIR OPENAL_SRC_DIR)
-			target_include_directories(jngl PRIVATE ${OPENAL_SRC_DIR}/include)
-			set(OPENAL_LIBRARY OpenAL)
 
 			FetchContent_Declare(dlfcn
 				URL https://github.com/dlfcn-win32/dlfcn-win32/archive/v1.2.0.zip
@@ -262,6 +257,8 @@ else()
 			add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
 			target_link_libraries(jngl PUBLIC epoxy)
 		endif()
+		FetchContent_MakeAvailable(openal)
+		set(OPENAL_LIBRARY OpenAL)
 
 	elseif(IOS)
 		include(FetchContent)
@@ -376,18 +373,12 @@ else()
 		set(FREETYPE_LIBRARIES freetype)
 	endif()
 
-	if(WINDOWS_STORE)
-		set(UWP_DLLS
-			${PROJECT_SOURCE_DIR}/lib/uwp/${JNGL_ARCH}/OpenAL.dll
-		)
-		set(JNGL_UWP_DLLS ${UWP_DLLS} PARENT_SCOPE)
-	endif()
 	if(NOT hasParent)
 		if(WINDOWS_STORE)
 			# WIN32 is needed to build for the Windows subsystem, not Console
 			add_executable(jngl-test WIN32 src/test/test.cpp src/uwp/SDL_winrt_main_NonXAML.cpp
-				data/Arial.ttf data/jngl.webp ${UWP_DLLS})
-			set_source_files_properties(${UWP_DLLS} data/Arial.ttf data/jngl.webp
+				data/Arial.ttf data/jngl.webp data/test.ogg)
+			set_source_files_properties(data/Arial.ttf data/jngl.webp data/test.ogg
 				PROPERTIES VS_DEPLOYMENT_CONTENT 1)
 
 			# Otherwise linking will fail with
