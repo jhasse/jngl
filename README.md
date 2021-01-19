@@ -63,7 +63,6 @@ Use [Homebrew](http://brew.sh/) to install the build dependencies:
 
 ```
 brew install sdl2 freetype libvorbis libepoxy jpeg webp pkg-config boost cmake
-export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 ```
 
 ## Android
