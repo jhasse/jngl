@@ -245,14 +245,6 @@ else()
 			set(LIBTYPE "STATIC" CACHE STRING "" FORCE)
 			target_compile_definitions(jngl PRIVATE AL_LIBTYPE_STATIC)
 
-			FetchContent_Declare(dlfcn
-				URL https://github.com/dlfcn-win32/dlfcn-win32/archive/v1.2.0.zip
-				URL_HASH SHA1=83c37a7d7d152c951e9b8cb673aec47d1776c881)
-			FetchContent_MakeAvailable(dlfcn)
-			FetchContent_GetProperties(dlfcn SOURCE_DIR DLFCN_SRC_DIR)
-			target_include_directories(jngl PRIVATE ${DLFCN_SRC_DIR})
-			target_link_libraries(jngl PRIVATE dl)
-
 			target_include_directories(jngl PRIVATE ${PROJECT_SOURCE_DIR}/include/msvc)
 			target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
 			add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
