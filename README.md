@@ -3,13 +3,23 @@
 An easy to use C++/Python game library for Linux, Windows, macOS, Android, iOS, Xbox and the
 Nintendo Switch.
 
+ * [Documentation](https://bixense.com/jngl/)
+
+## Building
+
+```
+cmake -Bbuild
+cmake --build build
+./build/jngl-test
+```
+
 ## Linux
 
 ### Ubuntu
 
 ```
 sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev \
-libjpeg-dev libpng-dev libvorbis-dev libopenal-dev meson libepoxy-dev libboost-dev g++ \
+libjpeg-dev libpng-dev libvorbis-dev libopenal-dev cmake libepoxy-dev libboost-dev g++ \
 libwebp-dev git libsdl2-dev
 ```
 
@@ -17,13 +27,13 @@ libwebp-dev git libsdl2-dev
 
 ```
 sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel \
-libjpeg-turbo-devel boost-python3-devel python3-devel meson SDL2-devel openal-soft-devel gcc-c++
+libjpeg-turbo-devel boost-python3-devel python3-devel cmake SDL2-devel openal-soft-devel gcc-c++
 ```
 
 ### Arch Linux
 
 ```
-pacman -Syu --needed meson gcc sdl2 pkg-config fontconfig libepoxy libwebp openal libvorbis boost
+pacman -Syu --needed cmake gcc sdl2 pkg-config fontconfig libepoxy libwebp openal libvorbis boost
 ```
 
 ## Windows
@@ -33,64 +43,27 @@ pacman -Syu --needed meson gcc sdl2 pkg-config fontconfig libepoxy libwebp opena
 Set up [MSYS2](https://www.msys2.org/) and install the following in a MinGW-w64 Win64 Shell:
 
 ```
-pacman -Syu --needed mingw-w64-x86_64-meson mingw-w64-x86_64-gcc mingw-w64-x86_64-boost \
-mingw-w64-x86_64-openal mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis \
-mingw-w64-x86_64-libwebp mingw-w64-x86_64-dlfcn mingw-w64-x86_64-libepoxy mingw-w64-x86_64-python3 \
-mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb
+pacman -Syu --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-boost mingw-w64-x86_64-openal \
+mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
+mingw-w64-x86_64-dlfcn mingw-w64-x86_64-libepoxy mingw-w64-x86_64-python3 mingw-w64-x86_64-cmake \
+make mingw-w64-x86_64-gdb
 ```
 
 ### Visual Studio 2017 or newer
 
 ```
-cmake -Bbuild -H. -DFETCHCONTENT_QUIET=0
+cmake -Bbuild -DFETCHCONTENT_QUIET=0
 ```
 
 and then open `build/jngl.sln`.
-
-### Visual Studio Code
-
-Change the terminal to MINGW64 in `settings.json`:
-
-```
-"terminal.integrated.shell.windows": "C:\\msys64\\usr\\bin\\bash.exe",
-"terminal.integrated.shellArgs.windows": [
-    "--login",
-],
-"terminal.integrated.env.windows": {
-    "CHERE_INVOKING": "1",
-    "MSYSTEM": "MINGW64",
-},
-```
-
-In the terminal run:
-
-```
-cmake -H. -Bbuild -G"MSYS Makefiles"
-make -Cbuild
-```
 
 ## Mac
 
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 
 ```
-brew install sdl2 freetype libvorbis libepoxy jpeg webp meson pkg-config boost cmake
+brew install sdl2 freetype libvorbis libepoxy jpeg webp pkg-config boost cmake
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-```
-
-Hack if image is only 1/4 in size on mac 10.15
-```
-brew unlink sdl2
-brew install mercurial autoconf automake libtool
-brew install --HEAD sdl2
-```
-
-## Building
-
-```
-meson build
-ninja -C build
-./build/jngl-test
 ```
 
 ## Android
@@ -120,3 +93,5 @@ Open and build `build-ios/jngl.xcodeproj` in Xcode.
 ```
 cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0"
 ```
+
+and then open `build-uwp/jngl.sln`.

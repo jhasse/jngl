@@ -1,6 +1,6 @@
 # Just a Neat Game Library {#mainpage}
 
-JNGL is an easy to use C++/Python game library for Linux, Windows, macOS, Android, iOS and the
+JNGL is an easy to use C++/Python game library for Linux, Windows, macOS, Android, iOS, Xbox and the
 Nintendo Switch<sup><a href="#fn1">1</a></sup>.
 
 * [GitHub](https://github.com/jhasse/jngl)
