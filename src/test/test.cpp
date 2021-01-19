@@ -190,12 +190,6 @@ private:
 std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& params) {
 	params.displayName = "JNGL Test Application";
 	jngl::setPrefix(jngl::getBinaryPath());
-	try {
-		std::cout << "Size of jngl.png: " << jngl::getWidth("jngl.png") << "x"
-		          << jngl::getHeight("jngl.png") << std::endl;
-	} catch (std::runtime_error& e) {
-		std::cout << e.what() << std::endl;
-	}
 	const int scaleFactor =
 	    std::min((jngl::getDesktopWidth() - 50) / 800, (jngl::getDesktopHeight() - 50) / 600);
 	jngl::setScaleFactor(std::max(1, scaleFactor));
