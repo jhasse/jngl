@@ -1,0 +1,15 @@
+name: Python Bindings
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev libjpeg-dev libpng-dev libvorbis-dev libopenal-dev meson libepoxy-dev libboost-dev g++ libwebp-dev git libsdl2-dev ninja-build pybind11-dev python3-dev
+    - name: Build with Meson
+      run: |
+        meson build-python -Dpython=true
+        sudo ninja -Cbuild-python install
