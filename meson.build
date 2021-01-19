@@ -143,18 +143,6 @@ lib = static_library('jngl', sources : src, cpp_args : cpp_args, install : true,
 ])
 include = include_directories('src')
 
-if get_option('python')
-	python3_dep = import('python').find_installation('python3').dependency(embed : true)
-	cxx.has_header('pybind11/pybind11.h', required : true)
-	shared_library('jngl', link_with : lib, name_prefix : '', sources : [
-		'python/main.cpp',
-	], dependencies : [
-		thread_dep,
-		python3_dep,
-	],
-	install : true, install_dir : import('python3').sysconfig_path('platlib'))
-endif
-
 jngl_dep = declare_dependency(include_directories : include, link_with : lib,
                               dependencies : [boost_dep, thread_dep])
 

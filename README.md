@@ -5,8 +5,8 @@
 [🎓 Tutorial](https://github.com/jhasse/jngl/wiki/Tutorialindex)
 [📚 Documentation](https://bixense.com/jngl/annotated.html)
 
-An easy to use C++/Python game library for Linux, Windows, macOS, Android, iOS, Xbox and the
-Nintendo Switch.
+An easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox and the Nintendo
+Switch.
 
 [![Portal Dogs running on the Switch](https://user-images.githubusercontent.com/80071/105062511-f651d480-5a7a-11eb-8cd3-260c7929353a.gif)](https://portaldogs.com/)
 
@@ -32,7 +32,7 @@ libwebp-dev git libsdl2-dev
 
 ```
 sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel \
-libjpeg-turbo-devel boost-python3-devel python3-devel cmake SDL2-devel openal-soft-devel gcc-c++
+libjpeg-turbo-devel cmake SDL2-devel openal-soft-devel gcc-c++
 ```
 
 ### Arch Linux
@@ -50,8 +50,7 @@ Set up [MSYS2](https://www.msys2.org/) and install the following in a MinGW-w64 
 ```
 pacman -Syu --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-boost mingw-w64-x86_64-openal \
 mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
-mingw-w64-x86_64-dlfcn mingw-w64-x86_64-libepoxy mingw-w64-x86_64-python3 mingw-w64-x86_64-cmake \
-make mingw-w64-x86_64-gdb
+mingw-w64-x86_64-dlfcn mingw-w64-x86_64-libepoxy mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb
 ```
 
 ### Visual Studio 2017 or newer
