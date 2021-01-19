@@ -23,6 +23,12 @@ libjpeg-dev libpng-dev libvorbis-dev libopenal-dev cmake libepoxy-dev libboost-d
 libwebp-dev git libsdl2-dev
 ```
 
+If you get this error:
+E: Unable to locate package libopenal-dev
+E: Unable to locate package libsdl2-dev
+
+You need to activate the universe software sources.
+
 ### Fedora
 
 ```
