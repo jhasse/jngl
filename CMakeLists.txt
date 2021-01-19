@@ -134,12 +134,15 @@ if(ANDROID OR MSVC)
 		URL http://downloads.xiph.org/releases/ogg/libogg-1.3.4.tar.xz
 		URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe)
 	FetchContent_MakeAvailable(ogg)
-	set(OGG_INCLUDE_DIRS "${ogg_SOURCE_DIR}/include" "${ogg_BINARY_DIR}/include")
-	set(OGG_LIBRARIES ogg)
+	set(OGG_INCLUDE_DIR ${ogg_SOURCE_DIR}/include)
+	set(OGG_INCLUDE_DIRS ${OGG_INCLUDE_DIR} ${ogg_BINARY_DIR}/include)
+	set(OGG_LIBRARY $<TARGET_FILE:ogg>)
+	add_library(Ogg::ogg INTERFACE IMPORTED)
+	set_target_properties(Ogg::ogg PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${OGG_INCLUDE_DIRS}")
 
 	FetchContent_Declare(vorbis
-		URL https://github.com/xiph/vorbis/archive/v1.3.6.zip
-		URL_HASH SHA1=694c8b3739f66ef38c08092d0df2ef42197fc480)
+		URL https://github.com/xiph/vorbis/archive/v1.3.7.zip
+		URL_HASH SHA1=fb943e21c34a1a2035009c06cfbfd9235af406d0)
 	FetchContent_MakeAvailable(vorbis)
 	target_include_directories(jngl PRIVATE ${vorbis_SOURCE_DIR}/include)
 	target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
