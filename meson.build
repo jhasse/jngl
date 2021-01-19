@@ -144,7 +144,7 @@ lib = static_library('jngl', sources : src, cpp_args : cpp_args, install : true,
 include = include_directories('src')
 
 if get_option('python')
-	python3_dep = dependency('python3')
+	python3_dep = import('python').find_installation('python3').dependency(embed : true)
 	cxx.has_header('pybind11/pybind11.h', required : true)
 	shared_library('jngl', link_with : lib, name_prefix : '', sources : [
 		'python/main.cpp',
