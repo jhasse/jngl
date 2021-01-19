@@ -1,9 +1,14 @@
 # JNGL - Just a Neat Game Library [![pipeline status](https://gitlab.com/jhasse/jngl/badges/master/pipeline.svg)](https://gitlab.com/jhasse/jngl/commits/master)
 
+[🌐 Website](https://bixense.com/jngl/)
+[🏃 Quickstart](https://github.com/jhasse/jngl/wiki/JNGL-Quickstart)
+[🎓 Tutorial](https://github.com/jhasse/jngl/wiki/Tutorialindex)
+[📚 Documentation](https://bixense.com/jngl/annotated.html)
+
 An easy to use C++/Python game library for Linux, Windows, macOS, Android, iOS, Xbox and the
 Nintendo Switch.
 
- * [Documentation](https://bixense.com/jngl/)
+[![Portal Dogs running on the Switch](https://user-images.githubusercontent.com/80071/105062511-f651d480-5a7a-11eb-8cd3-260c7929353a.gif)](https://portaldogs.com/)
 
 ## Building
 
