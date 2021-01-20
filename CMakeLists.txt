@@ -46,7 +46,6 @@ endif()
 option(JNGL_VIDEO "Enable Theora video playback" ON)
 option(JNGL_JPEG "Enable JPEG support if libjpeg is available" ON)
 
-set(BUILD_TESTING OFF CACHE INTERNAL "") # for libogg
 set(ALSOFT_TESTS OFF CACHE BOOL "Build and install test programs" FORCE)
 set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
 set(ALSOFT_UTILS OFF CACHE BOOL "Build and install utility programs" FORCE)
@@ -132,11 +131,12 @@ if (UNIX)
     endif()
 endif()
 
-if(ANDROID OR MSVC)
-	FetchContent_Declare(ogg
+if(ANDROID OR MSVC OR IOS)
+	include(cmake/CPM.cmake)
+	CPMAddPackage(NAME ogg
 		URL http://downloads.xiph.org/releases/ogg/libogg-1.3.4.tar.xz
-		URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe)
-	FetchContent_MakeAvailable(ogg)
+		URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe
+		OPTIONS "BUILD_TESTING OFF")
 	set(OGG_INCLUDE_DIR ${ogg_SOURCE_DIR}/include)
 	set(OGG_INCLUDE_DIRS ${OGG_INCLUDE_DIR} ${ogg_BINARY_DIR}/include)
 	set(OGG_LIBRARY $<TARGET_FILE:ogg>)
@@ -254,21 +254,6 @@ else()
 		set(OPENAL_LIBRARY OpenAL)
 
 	elseif(IOS)
-		include(FetchContent)
-		FetchContent_Declare(ogg
-			GIT_REPOSITORY https://github.com/xiph/ogg
-			GIT_TAG c8fca6b4a02d695b1ceea39b330d4406001c03ed)
-		FetchContent_MakeAvailable(ogg)
-		FetchContent_GetProperties(ogg SOURCE_DIR OGG_SOURCE_DIR)
-		set(OGG_INCLUDE_DIRS ${OGG_SOURCE_DIR}/include)
-		set(OGG_LIBRARIES ogg)
-		FetchContent_Declare(vorbis
-			URL https://github.com/xiph/vorbis/archive/v1.3.6.zip
-			URL_HASH SHA1=694c8b3739f66ef38c08092d0df2ef42197fc480)
-		FetchContent_MakeAvailable(vorbis)
-		FetchContent_GetProperties(vorbis SOURCE_DIR VORBIS_SRC_DIR)
-		target_include_directories(jngl PRIVATE ${VORBIS_SRC_DIR}/include)
-		target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
 		target_compile_options(jngl PRIVATE -Wno-deprecated-declarations) # OpenAL
 		target_compile_definitions(jngl PRIVATE IOS)
 		target_compile_definitions(jngl PUBLIC GLES_SILENCE_DEPRECATION)
