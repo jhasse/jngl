@@ -47,6 +47,9 @@ option(JNGL_VIDEO "Enable Theora video playback" ON)
 option(JNGL_JPEG "Enable JPEG support if libjpeg is available" ON)
 
 set(BUILD_TESTING OFF CACHE INTERNAL "") # for libogg
+set(ALSOFT_TESTS OFF CACHE BOOL "Build and install test programs" FORCE)
+set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
+set(ALSOFT_UTILS OFF CACHE BOOL "Build and install utility programs" FORCE)
 
 if (ANDROID)
 	file(GLOB ANDROID_SOURCES src/android/*.cpp)
@@ -158,9 +161,6 @@ if(ANDROID)
 		                https://github.com/kcat/openal-soft
 		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
 	endif()
-	set(ALSOFT_UTILS OFF CACHE BOOL "Build and install utility programs" FORCE)
-	set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
-	set(ALSOFT_TESTS OFF CACHE BOOL "Build and install test programs" FORCE)
 	set(ALSOFT_CONFIG OFF CACHE BOOL "Install alsoft.conf sample configuration file" FORCE)
 	set(ALSOFT_HRTF_DEFS OFF CACHE BOOL "Install HRTF definition files" FORCE)
 	set(ALSOFT_AMBDEC_PRESETS OFF CACHE BOOL "Install AmbDec preset files" FORCE)
@@ -242,9 +242,6 @@ else()
 				URL https://github.com/kcat/openal-soft/archive/openal-soft-1.20.1.zip
 				URL_HASH SHA1=d86a714e0e7900f4f7197738cb35432772bfe2e0)
 			set(ALSOFT_NO_CONFIG_UTIL ON CACHE BOOL "Disable building the alsoft-config utility" FORCE)
-			set(ALSOFT_UTILS OFF CACHE BOOL "Build and install utility programs" FORCE)
-			set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
-			set(ALSOFT_TESTS OFF CACHE BOOL "Build and install test programs" FORCE)
 			set(LIBTYPE "STATIC" CACHE STRING "" FORCE)
 			target_compile_definitions(jngl PRIVATE AL_LIBTYPE_STATIC)
 
