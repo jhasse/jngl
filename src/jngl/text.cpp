@@ -24,7 +24,7 @@ public:
 	void step() override {
 	}
 	void draw() const override {
-		font->print(x / getScaleFactor(), y / getScaleFactor(), text);
+		font->print(getX(), getY(), text);
 	}
 
 private:
@@ -87,7 +87,7 @@ void Text::step() {
 
 void Text::draw() const {
 	jngl::pushMatrix();
-	jngl::translate(int(x / getScaleFactor()), int(y / getScaleFactor()));
+	jngl::translate(int(getX()), int(getY()));
 	for (auto& line : lines) {
 		line->draw();
 	}

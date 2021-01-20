@@ -36,7 +36,7 @@ void TextLine::draw() const {
 	// vertical center being off. We have to adjust by "undoing" the added space for the line.
 	const double lineSpacing = fontImpl->getLineHeight() * (1 - 1 / LINE_HEIGHT_FACOTR);
 
-	fontImpl->print(x / getScaleFactor(), (y + lineSpacing / 2.) / getScaleFactor(), text);
+	fontImpl->print(getX(), getY() + lineSpacing / 2. / getScaleFactor(), text);
 }
 
 } // namespace jngl

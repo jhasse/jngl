@@ -60,19 +60,19 @@ void Drawable::setRight(const double x) {
 }
 
 double Drawable::getX() const {
-	return x / getScaleFactor();
+	return position.x / getScaleFactor();
 }
 
 void Drawable::setX(const double x) {
-	this->x = x * getScaleFactor();
+	position.x = x * getScaleFactor();
 }
 
 double Drawable::getY() const {
-	return y / getScaleFactor();
+	return position.y / getScaleFactor();
 }
 
 void Drawable::setY(const double y) {
-	this->y = y * getScaleFactor();
+	position.y = y * getScaleFactor();
 }
 
 Vec2 Drawable::getSize() const {

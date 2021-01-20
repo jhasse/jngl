@@ -162,7 +162,7 @@ void Sprite::step() {
 
 void Sprite::draw() const {
 	pushMatrix();
-	opengl::translate(static_cast<float>(x), static_cast<float>(y));
+	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
 	popMatrix();
@@ -177,7 +177,7 @@ void Sprite::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) cons
 
 void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
-	opengl::translate(static_cast<float>(x), static_cast<float>(y));
+	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f, shaderProgram);
 	popMatrix();
@@ -186,7 +186,7 @@ void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 void Sprite::drawScaled(float xfactor, float yfactor,
                         const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
-	opengl::translate(static_cast<float>(x), static_cast<float>(y));
+	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	opengl::scale(xfactor, yfactor);
 	texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f, shaderProgram);
@@ -202,7 +202,7 @@ void Sprite::drawClipped(float xstart, float xend, float ystart, float yend) con
 
 void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
 	pushMatrix();
-	opengl::translate(static_cast<float>(x), static_cast<float>(y));
+	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	texture->drawClipped(float(start.x), float(end.x), float(start.y), float(end.y),
 	                     float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	                     float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
@@ -212,7 +212,7 @@ void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
 void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
                       const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
-	opengl::translate(static_cast<float>(x), static_cast<float>(y));
+	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	scale(getScaleFactor());
 	texture->drawMesh(vertexes, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	                  float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f,

@@ -71,8 +71,7 @@ public:
 	bool contains(jngl::Vec2 point) const;
 
 protected:
-	double x = 0;
-	double y = 0;
+	Vec2 position;
 	float width = 0;
 	float height = 0;
 };
