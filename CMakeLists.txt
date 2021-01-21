@@ -137,8 +137,8 @@ if(ANDROID OR MSVC OR IOS)
 		URL http://downloads.xiph.org/releases/ogg/libogg-1.3.4.tar.xz
 		URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe
 		OPTIONS "BUILD_TESTING OFF")
-	set(OGG_INCLUDE_DIR ${ogg_SOURCE_DIR}/include)
-	set(OGG_INCLUDE_DIRS ${OGG_INCLUDE_DIR} ${ogg_BINARY_DIR}/include)
+	set(OGG_INCLUDE_DIR ${libogg_SOURCE_DIR}/include)
+	set(OGG_INCLUDE_DIRS ${OGG_INCLUDE_DIR} ${libogg_BINARY_DIR}/include)
 	set(OGG_LIBRARY $<TARGET_FILE:ogg>)
 	add_library(Ogg::ogg INTERFACE IMPORTED)
 	set_target_properties(Ogg::ogg PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${OGG_INCLUDE_DIRS}")
