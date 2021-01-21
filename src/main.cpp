@@ -16,7 +16,7 @@
 #include <windows.h>
 #endif
 
-#if defined(_WIN32) || (defined(__linux__) && !defined(ANDROID) && __has_include(<filesystem>))
+#if defined(_WIN32) || (!defined(ANDROID) && __has_include(<filesystem>))
 #include <filesystem>
 #define HAVE_FILESYSTEM
 #endif
