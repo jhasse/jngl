@@ -65,20 +65,6 @@ void draw(const std::string& filename, double x, double y) {
 	s.draw();
 }
 
-void drawScaled(const std::string& filename, const double xposition, const double yposition,
-                const float xfactor, const float yfactor) {
-	auto& s = GetSprite(filename);
-	s.setPos(xposition, yposition);
-	s.drawScaled(xfactor, yfactor);
-}
-
-void drawScaled(const std::string& filename, const double xposition, const double yposition,
-                const float factor) {
-	auto& s = GetSprite(filename);
-	s.setPos(xposition, yposition);
-	s.drawScaled(factor, factor);
-}
-
 void drawClipped(const std::string& filename, const double xposition, const double yposition,
                  const float xstart, const float xend, const float ystart, const float yend) {
 	auto& s = GetSprite(filename);

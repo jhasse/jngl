@@ -111,11 +111,6 @@ void unload(const std::string& filename);
 
 void unloadAll();
 
-void drawScaled(const std::string& filename, double xposition, double yposition, float xfactor,
-                float yfactor);
-
-void drawScaled(const std::string& filename, double xposition, double yposition, float factor);
-
 void drawClipped(const std::string& filename, double xposition, double yposition, float xstart,
                  float xend, float ystart, float yend);
 
