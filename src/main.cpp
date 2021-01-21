@@ -66,11 +66,15 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 
 bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
+#ifndef JNGL_UWP
 	if (epoxy_gl_version() >= 43 || epoxy_has_gl_extension("GL_KHR_debug")) {
+#endif
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr); // NOLINT
+#ifndef JNGL_UWP
 	}
+#endif
 #endif
 
 	const auto l = static_cast<float>( -width) / 2.f;
