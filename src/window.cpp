@@ -269,17 +269,17 @@ void Window::stepIfNeeded() {
 		previousStepsPerFrame = stepsPerFrame;
 		const auto cappedOrDoable = std::min(doableStepsPerSecond, maxFPS * stepsPerFrame);
 		// TODO: Improve logging. Log level? jngl::trace?
-		jngl::debug("SPS: ");
-		jngl::debug(std::lround(actualStepsPerSecond));
-		if (cappedOrDoable < doableStepsPerSecond) {
-			jngl::debug(" (capped ");
-		} else {
-			jngl::debug(" (doable ");
-		}
-		jngl::debug(std::lround(doableStepsPerSecond));
-		jngl::debug(", should be ");
-		jngl::debug(std::lround(targetStepsPerSecond));
-		jngl::debug("); ");
+		// jngl::debug("SPS: ");
+		// jngl::debug(std::lround(actualStepsPerSecond));
+		// if (cappedOrDoable < doableStepsPerSecond) {
+		// 	jngl::debug(" (capped ");
+		// } else {
+		// 	jngl::debug(" (doable ");
+		// }
+		// jngl::debug(std::lround(doableStepsPerSecond));
+		// jngl::debug(", should be ");
+		// jngl::debug(std::lround(targetStepsPerSecond));
+		// jngl::debug("); ");
 
 		// The sleep function is actually inaccurate (or at least less accurate than getTime),
 		// se we try to find a factor to correct this:
@@ -309,18 +309,18 @@ void Window::stepIfNeeded() {
 		// The factor means that we quickly go down when needed, but hesitate to go up:
 		sleepPerFrame += ((shouldSleepPerFrame < sleepPerFrame) ? 0.95 : 0.55) *
 		                 (shouldSleepPerFrame - sleepPerFrame);
-		jngl::debug("stepsPerFrame -> ");
-		jngl::debug(newStepsPerFrame);
-		jngl::debug(", msSleepPerFrame -> ");
-		jngl::debug(sleepPerFrame);
-		jngl::debug(" * ");
-		jngl::debug(sleepCorrectionFactor);
-		jngl::debug(", slept(");
-		jngl::debug(numberOfSleeps);
-		jngl::debug("): ");
-		jngl::debug(std::lround(1e6 * timeSleptSinceLastCheck));
-		jngl::debug("µs, maxFPS: ");
-		jngl::debugLn(maxFPS);
+		// jngl::debug("stepsPerFrame -> ");
+		// jngl::debug(newStepsPerFrame);
+		// jngl::debug(", msSleepPerFrame -> ");
+		// jngl::debug(sleepPerFrame);
+		// jngl::debug(" * ");
+		// jngl::debug(sleepCorrectionFactor);
+		// jngl::debug(", slept(");
+		// jngl::debug(numberOfSleeps);
+		// jngl::debug("): ");
+		// jngl::debug(std::lround(1e6 * timeSleptSinceLastCheck));
+		// jngl::debug("µs, maxFPS: ");
+		// jngl::debugLn(maxFPS);
 		lastCheckTime = currentTime;
 		numberOfSleeps = 0;
 		stepsSinceLastCheck = 0;
