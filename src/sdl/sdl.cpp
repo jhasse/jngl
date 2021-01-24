@@ -14,6 +14,7 @@ SDL::SDL() {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0) {
 		throw std::runtime_error(SDL_GetError());
 	}
+	SDL_SetHint(SDL_HINT_WINRT_HANDLE_BACK_BUTTON, "1");
 }
 SDL::~SDL() {
 	SDL_Quit();

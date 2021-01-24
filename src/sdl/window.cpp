@@ -37,6 +37,12 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		}
 	}
 
+#ifdef JNGL_UWP
+	isMultisampleSupported_ = false; // crashes on Xbox since ANGLE uses a PixelShader 4.1 for multi-sampling and Xbox only supports 4.0 in UWP mode.
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+#endif
 	const auto create = [this, &title, width, height, flags]() {
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, isMultisampleSupported_ ? 4 : 0);
 		return SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
