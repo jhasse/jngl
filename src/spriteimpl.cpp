@@ -18,6 +18,12 @@ void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue) 
 	spriteColorBlue = blue;
 }
 
+void setSpriteColor(Color color) {
+	spriteColorRed = color.getRed();
+	spriteColorGreen = color.getGreen();
+	spriteColorBlue = color.getBlue();
+}
+
 std::stack<unsigned char> spriteAlphas;
 
 void pushSpriteAlpha(unsigned char alpha) {
