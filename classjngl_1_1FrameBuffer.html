@@ -130,8 +130,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aadfa4a8e69aac0bcebd87356291107d6"><td class="memItemLeft" align="right" valign="top"><a id="aadfa4a8e69aac0bcebd87356291107d6"></a>
 <a class="el" href="classjngl_1_1FrameBuffer.html">FrameBuffer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classjngl_1_1FrameBuffer.html">FrameBuffer</a> &amp;&amp;)=default</td></tr>
 <tr class="separator:aadfa4a8e69aac0bcebd87356291107d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae358651e3b120275590b7163a63090f5"><td class="memItemLeft" align="right" valign="top"><a id="ae358651e3b120275590b7163a63090f5"></a>
-<a class="el" href="structjngl_1_1FrameBuffer_1_1Context.html">Context</a>&#160;</td><td class="memItemRight" valign="bottom"><b>use</b> () const</td></tr>
+<tr class="memitem:ae358651e3b120275590b7163a63090f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structjngl_1_1FrameBuffer_1_1Context.html">Context</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1FrameBuffer.html#ae358651e3b120275590b7163a63090f5">use</a> () const</td></tr>
+<tr class="memdesc:ae358651e3b120275590b7163a63090f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts drawing on the <a class="el" href="classjngl_1_1FrameBuffer.html" title="Image framebuffer object which can be rendered on.">FrameBuffer</a> as long as <a class="el" href="structjngl_1_1FrameBuffer_1_1Context.html" title="Lifetime object when the FrameBuffer is in use.">Context</a> is alive.  <a href="classjngl_1_1FrameBuffer.html#ae358651e3b120275590b7163a63090f5">More...</a><br /></td></tr>
 <tr class="separator:ae358651e3b120275590b7163a63090f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a9e0c8f009704fd88297bcfe198aef2"><td class="memItemLeft" align="right" valign="top"><a id="a0a9e0c8f009704fd88297bcfe198aef2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1FrameBuffer.html#a0a9e0c8f009704fd88297bcfe198aef2">draw</a> (<a class="el" href="classjngl_1_1Vec2.html">Vec2</a> position, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
@@ -140,6 +140,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:ab0ef46287ad69bbc3bce39e270340519"><td class="memItemLeft" align="right" valign="top"><a id="ab0ef46287ad69bbc3bce39e270340519"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> (double x, double y) const</td></tr>
 <tr class="separator:ab0ef46287ad69bbc3bce39e270340519"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae852e8df456379a31406ac8076215b4d"><td class="memItemLeft" align="right" valign="top"><a id="ae852e8df456379a31406ac8076215b4d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#a5fbfb4b36561052e1c34bcfbe777a9a6">modelview</a>, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
+<tr class="separator:ae852e8df456379a31406ac8076215b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89c331aee86657889c1f1d8233c6051f"><td class="memItemLeft" align="right" valign="top"><a id="a89c331aee86657889c1f1d8233c6051f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1FrameBuffer.html#a89c331aee86657889c1f1d8233c6051f">drawMesh</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
 <tr class="memdesc:a89c331aee86657889c1f1d8233c6051f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the framebuffer's texture on it. <br /></td></tr>
@@ -161,8 +164,28 @@ Static Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Image framebuffer object which can be rendered on. </p>
 
-<p class="definition">Definition at line <a class="el" href="framebuffer_8hpp_source.html#l00020">20</a> of file <a class="el" href="framebuffer_8hpp_source.html">framebuffer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="framebuffer_8hpp_source.html#l00021">21</a> of file <a class="el" href="framebuffer_8hpp_source.html">framebuffer.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae358651e3b120275590b7163a63090f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae358651e3b120275590b7163a63090f5">&#9670;&nbsp;</a></span>use()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structjngl_1_1FrameBuffer_1_1Context.html">Context</a> use </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Starts drawing on the <a class="el" href="classjngl_1_1FrameBuffer.html" title="Image framebuffer object which can be rendered on.">FrameBuffer</a> as long as <a class="el" href="structjngl_1_1FrameBuffer_1_1Context.html" title="Lifetime object when the FrameBuffer is in use.">Context</a> is alive. </p>
+<p>The modelview matrix gets adjusted so that (0, 0) is in the center of the <a class="el" href="classjngl_1_1FrameBuffer.html" title="Image framebuffer object which can be rendered on.">FrameBuffer</a>. </p>
+
+</div>
+</div>
 <a id="a14dabca7589b28dc6adca2c5367546e1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a14dabca7589b28dc6adca2c5367546e1">&#9670;&nbsp;</a></span>clear()</h2>
 
