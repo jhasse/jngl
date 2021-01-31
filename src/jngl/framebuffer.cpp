@@ -8,12 +8,13 @@
 #include "../texture.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
+#include "window.hpp"
 
 namespace jngl {
 
 struct FrameBuffer::Impl {
 	Impl(int width, int height)
-	: height(height),
+	: width(width), height(height),
 	  texture(static_cast<float>(width), static_cast<float>(height), width, height, nullptr),
 	  letterboxing(glIsEnabled(GL_SCISSOR_TEST)) {
 	}
@@ -29,6 +30,7 @@ struct FrameBuffer::Impl {
 
 	GLuint fbo = 0;
 	GLuint buffer = 0;
+	const int width;
 	const int height;
 	Texture texture;
 	bool letterboxing;
@@ -152,6 +154,9 @@ FrameBuffer::Context FrameBuffer::use() const {
 		if (impl->letterboxing) {
 			glDisable(GL_SCISSOR_TEST);
 		}
+		// Move the center to the center of our fbo:
+		opengl::translate(-0.5 * (getWindowWidth() - impl->width),
+		                  -0.5 * (getWindowHeight() - impl->height));
 	};
 	activate();
 	impl->activate.push(std::move(activate));

@@ -47,6 +47,9 @@ public:
 		std::function<void()> resetCallback;
 	};
 
+	/// Starts drawing on the FrameBuffer as long as Context is alive
+	///
+	/// The modelview matrix gets adjusted so that (0, 0) is in the center of the FrameBuffer.
 #if __cplusplus >= 201703L
 	[[nodiscard]]
 #endif
