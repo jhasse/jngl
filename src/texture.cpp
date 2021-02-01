@@ -61,8 +61,8 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 		preciseWidth, 0,
 		1, 0 // texture coordinates
 	};
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	// glGenVertexArrays(1, &vao);
+	// glBindVertexArray(vao);
 
 	glGenBuffers(1, &vertexBuffer_);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
@@ -98,7 +98,7 @@ Texture::~Texture() {
 		// pointers have been unloaded (Windows).
 		glDeleteTextures(1, &texture_);
 		glDeleteBuffers(1, &vertexBuffer_);
-		glDeleteVertexArrays(1, &vao);
+		// glDeleteVertexArrays(1, &vao);
 	}
 }
 
@@ -117,7 +117,7 @@ void Texture::draw(const Mat3& modelview, const float red, const float green, co
 		glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
 		glUniformMatrix3fv(modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
-	glBindVertexArray(vao);
+	// glBindVertexArray(vao);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
@@ -139,7 +139,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	vertexes[10] = vertexes[14] = xend;
 	vertexes[7] = vertexes[11] = yend;
 
-	glBindVertexArray(opengl::vaoStream);
+	// glBindVertexArray(opengl::vaoStream);
 	auto tmp = textureShaderProgram->use();
 	glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
 	glUniformMatrix3fv(modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
@@ -162,7 +162,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 void Texture::drawMesh(const std::vector<Vertex>& vertexes, const float red, const float green,
                        const float blue, const float alpha,
                        const ShaderProgram* const shaderProgram) const {
-	glBindVertexArray(opengl::vaoStream);
+	// glBindVertexArray(opengl::vaoStream);
 	auto _ = shaderProgram ? shaderProgram->use() : textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,

@@ -16,10 +16,10 @@
 #include <windows.h>
 #endif
 
-#if defined(_WIN32) || (!defined(ANDROID) && __has_include(<filesystem>))
-#include <filesystem>
-#define HAVE_FILESYSTEM
-#endif
+// #if defined(_WIN32) || (!defined(ANDROID) && __has_include(<filesystem>))
+// #include <filesystem>
+// #define HAVE_FILESYSTEM
+// #endif
 
 #ifdef JNGL_UWP
 #include <boost/algorithm/string.hpp>
@@ -577,20 +577,20 @@ std::string readConfig(const std::string& key) {
 		throw std::runtime_error("Do not pass absolute paths as keys to jngl::readConfig.");
 	}
 
-#ifdef _WIN32
-	std::filesystem::path p = std::filesystem::u8path(_getConfigPath() + key);
-	std::ifstream fin(p, std::ios::binary);
-#else
-	std::ifstream fin(_getConfigPath() + key, std::ios::binary);
-#endif
+// #ifdef _WIN32
+// 	std::filesystem::path p = std::filesystem::u8path(_getConfigPath() + key);
+// 	std::ifstream fin(p, std::ios::binary);
+// #else
+// 	std::ifstream fin(_getConfigPath() + key, std::ios::binary);
+// #endif
 
 	std::string out;
-	constexpr size_t READ_SIZE = 4096;
-	std::string buf(READ_SIZE, '\0');
-	while (fin.read(&buf[0], READ_SIZE)) {
-		out.append(buf, 0, fin.gcount());
-	}
-	out.append(buf, 0, fin.gcount());
+	// constexpr size_t READ_SIZE = 4096;
+	// std::string buf(READ_SIZE, '\0');
+	// while (fin.read(&buf[0], READ_SIZE)) {
+	// 	out.append(buf, 0, fin.gcount());
+	// }
+	// out.append(buf, 0, fin.gcount());
 	return out;
 }
 
@@ -598,21 +598,21 @@ void writeConfig(const std::string& key, const std::string& value) {
 	if (!key.empty() && key[0] == '/') {
 		throw std::runtime_error("Do not pass absolute paths as keys to jngl::readConfig.");
 	}
-#ifdef HAVE_FILESYSTEM
-	const auto configPath = std::filesystem::u8path(_getConfigPath());
-	const auto directory = (configPath / std::filesystem::u8path(key)).parent_path();
-	if (!std::filesystem::exists(directory)) {
-		std::filesystem::create_directories(directory);
-	}
-#endif
-#ifdef _WIN32
-	std::filesystem::path p = std::filesystem::u8path(_getConfigPath() + key);
-	std::ofstream fout(p, std::ios::binary);
-#else
-	std::ofstream fout(_getConfigPath() + key, std::ios::binary);
-#endif
-	fout.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-	fout << value;
+// #ifdef HAVE_FILESYSTEM
+// 	const auto configPath = std::filesystem::u8path(_getConfigPath());
+// 	const auto directory = (configPath / std::filesystem::u8path(key)).parent_path();
+// 	if (!std::filesystem::exists(directory)) {
+// 		std::filesystem::create_directories(directory);
+// 	}
+// #endif
+// #ifdef _WIN32
+// 	std::filesystem::path p = std::filesystem::u8path(_getConfigPath() + key);
+// 	std::ofstream fout(p, std::ios::binary);
+// #else
+// 	std::ofstream fout(_getConfigPath() + key, std::ios::binary);
+// #endif
+// 	fout.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+// 	fout << value;
 }
 #endif
 

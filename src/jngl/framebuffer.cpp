@@ -55,7 +55,7 @@ FrameBuffer::FrameBuffer(const int width, const int height)
 
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, width, height);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, width, height);
 
 	glGenFramebuffers(1, &impl->fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, impl->fbo);

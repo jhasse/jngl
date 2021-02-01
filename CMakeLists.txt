@@ -7,12 +7,23 @@ if(NOT MSVC)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -USE_SDL=2 -USE_FREETYPE=1 -USE_VORBIS=1")
-include_directories(${CMAKE_SOURCE_DIR}/include ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${VORBIS_INCLUDE_DIRS})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
 	string(APPEND CMAKE_C_FLAGS " -Wno-shorten-64-to-32") # ogg, vorbis, etc. are full of these
 endif()
+
+# -s FORCE_FILESYSTEM=1
+if( ${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
+	set(USE_FLAGS "-s USE_SDL=2 -s USE_FREETYPE=1 -s FORCE_FILESYSTEM=0 -s USE_VORBIS=1 -s DISABLE_EXCEPTION_CATCHING=2 -s ASSERTIONS=1 -g4") # -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS}")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_FLAGS}")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_FLAGS}")
+	SET(CMAKE_EXECUTABLE_SUFFIX ".html")
+endif()
+include_directories(${CMAKE_SOURCE_DIR}/include ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${VORBIS_INCLUDE_DIRS})
+
+
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -251,8 +262,8 @@ else()
 
 			target_include_directories(jngl PRIVATE ${PROJECT_SOURCE_DIR}/include/msvc)
 			target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
-			add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
-			target_link_libraries(jngl PUBLIC epoxy)
+			# add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
+			# target_link_libraries(jngl PUBLIC epoxy)
 		endif()
 		FetchContent_MakeAvailable(openal)
 		set(OPENAL_LIBRARY OpenAL)
@@ -346,10 +357,10 @@ else()
 			# endif()
 			# pkg_check_modules(VorbisFile REQUIRED vorbisfile)
 			# pkg_check_modules(FREETYPE REQUIRED freetype2)
-			FetchContent_Declare(epoxy
-				GIT_REPOSITORY https://github.com/garbageslam/empoxy.git)
+			# FetchContent_Declare(epoxy
+			# 	GIT_REPOSITORY https://github.com/garbageslam/empoxy.git)
 				# URL_HASH SHA256=1b3949ffddf56129141032542523920034f2e69775fb9332a52ba37c548dbf35)
-			FetchContent_MakeAvailable(epoxy)
+			# FetchContent_MakeAvailable(epoxy)
 		else()
 			find_package(VorbisFile REQUIRED)
 			find_package(Freetype REQUIRED)
@@ -357,11 +368,11 @@ else()
 		target_include_directories(jngl PUBLIC ${VorbisFile_INCLUDE_DIRS})
 		target_link_libraries(jngl PUBLIC ${VorbisFile_LIBRARIES})
 		target_link_directories(jngl PUBLIC ${VorbisFile_LIBRARY_DIRS})
-		if(NOT PkgConfig_FOUND OR APPLE)
-			find_package(epoxy REQUIRED)
-			target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
-			target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
-		endif()
+		# if(NOT PkgConfig_FOUND OR APPLE)
+		# 	find_package(epoxy REQUIRED)
+		# 	target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
+		# 	target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
+		# endif()
 	endif()
 
 	if(MSVC OR IOS)
@@ -455,4 +466,4 @@ endif()
 
 target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})
 target_link_directories(jngl PUBLIC ${FREETYPE_LIBRARY_DIRS})
-target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY})
+target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY} SDL2 freetype ogg vorbis)
