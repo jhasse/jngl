@@ -86,15 +86,6 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		                   0.f,           0.f,           -1.f, 0.f,
 		                   0.f,           0.f,           0.f,  1.f };
 
-	const auto l = static_cast<float>( -width) / 2.f;
-	const auto r = static_cast<float>(  width) / 2.f;
-	const auto b = static_cast<float>( height) / 2.f;
-	const auto t = static_cast<float>(-height) / 2.f;
-	opengl::projection = { 2.f / (r - l), 0.f,           0.f,  -(r + l) / (r - l),
-		                   0.f,           2.f / (t - b), 0.f,  -(t + b) / (t - b),
-		                   0.f,           0.f,           -1.f, 0.f,
-		                   0.f,           0.f,           0.f,  1.f };
-
 	Shader vertexShader(R"(#version 300 es
 		in mediump vec2 position;
 		uniform highp mat3 modelview;
