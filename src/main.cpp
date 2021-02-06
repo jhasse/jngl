@@ -65,7 +65,7 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 #endif
 
 bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
-#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
+#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG) && !defined(__EMSCRIPTEN__)
 #ifndef JNGL_UWP
 	if (epoxy_gl_version() >= 43 || epoxy_has_gl_extension("GL_KHR_debug")) {
 #endif
@@ -86,11 +86,19 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		                   0.f,           0.f,           -1.f, 0.f,
 		                   0.f,           0.f,           0.f,  1.f };
 
+	const auto l = static_cast<float>( -width) / 2.f;
+	const auto r = static_cast<float>(  width) / 2.f;
+	const auto b = static_cast<float>( height) / 2.f;
+	const auto t = static_cast<float>(-height) / 2.f;
+	opengl::projection = { 2.f / (r - l), 0.f,           0.f,  -(r + l) / (r - l),
+		                   0.f,           2.f / (t - b), 0.f,  -(t + b) / (t - b),
+		                   0.f,           0.f,           -1.f, 0.f,
+		                   0.f,           0.f,           0.f,  1.f };
+
 	Shader vertexShader(R"(#version 300 es
 		in mediump vec2 position;
 		uniform highp mat3 modelview;
 		uniform mediump mat4 projection;
-
 		void main() {
 			vec3 tmp = modelview * vec3(position, 1);
 			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
@@ -98,7 +106,6 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		attribute mediump vec2 position;
 		uniform highp mat3 modelview;
 		uniform mediump mat4 projection;
-
 		void main() {
 			vec3 tmp = modelview * vec3(position, 1);
 			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
@@ -107,12 +114,10 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	Shader fragmentShader(R"(#version 300 es
 		uniform lowp vec4 color;
 		out lowp vec4 outColor;
-
 		void main() {
 			outColor = color;
 		})", Shader::Type::FRAGMENT, R"(
 		uniform lowp vec4 color;
-
 		void main() {
 			gl_FragColor = color;
 		})"
@@ -156,8 +161,11 @@ void showWindow(const std::string& title, const int width, const int height, boo
                 const std::pair<int, int> maxAspectRatio) {
 	debug("jngl::showWindow(\""); debug(title); debug("\", "); debug(width); debug(", ");
 	debug(height); debug(", "); debug(fullscreen); debug(");\n");
+	jngl::debugLn("x1");
 	bool isMouseVisible = pWindow ? pWindow->getMouseVisible() : true;
+	jngl::debugLn("x2");
 	hideWindow();
+	jngl::debugLn("x3");
 	if (width == 0) {
 		throw std::runtime_error("Width Is 0");
 	}
