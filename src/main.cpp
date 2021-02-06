@@ -65,14 +65,14 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 #endif
 
 bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
-#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG) && !defined(__EMSCRIPTEN__)
-#ifndef JNGL_UWP
+#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
+#ifdef EPOXY_PUBLIC
 	if (epoxy_gl_version() >= 43 || epoxy_has_gl_extension("GL_KHR_debug")) {
 #endif
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr); // NOLINT
-#ifndef JNGL_UWP
+#ifdef EPOXY_PUBLIC
 	}
 #endif
 #endif
@@ -90,13 +90,15 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		in mediump vec2 position;
 		uniform highp mat3 modelview;
 		uniform mediump mat4 projection;
+
 		void main() {
 			vec3 tmp = modelview * vec3(position, 1);
 			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-		})", Shader::Type::VERTEX, R"(
+		})", Shader::Type::VERTEX, R"(#version 100
 		attribute mediump vec2 position;
 		uniform highp mat3 modelview;
 		uniform mediump mat4 projection;
+
 		void main() {
 			vec3 tmp = modelview * vec3(position, 1);
 			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
@@ -105,10 +107,12 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	Shader fragmentShader(R"(#version 300 es
 		uniform lowp vec4 color;
 		out lowp vec4 outColor;
+
 		void main() {
 			outColor = color;
-		})", Shader::Type::FRAGMENT, R"(
+		})", Shader::Type::FRAGMENT, R"(#version 100
 		uniform lowp vec4 color;
+
 		void main() {
 			gl_FragColor = color;
 		})"
@@ -174,7 +178,13 @@ void hideWindow() {
 
 void swapBuffers() {
 	pWindow->SwapBuffers();
+}
 
+void updateInput() {
+	pWindow->updateKeyStates();
+	pWindow->UpdateInput();
+
+	// FIXME: updateInput should not do this or the documentation should be updated accordingly
 	if (glIsEnabled(GL_SCISSOR_TEST)) {
 		// Letterboxing with SDL_VIDEODRIVER=wayland will glitch if we don't draw the black boxes on
 		// every frame
@@ -188,11 +198,6 @@ void swapBuffers() {
 	reset();
 	modelviewStack = {};
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void updateInput() {
-	pWindow->updateKeyStates();
-	pWindow->UpdateInput();
 }
 
 bool running() {
