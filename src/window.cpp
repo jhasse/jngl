@@ -432,10 +432,10 @@ void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 
 void Window::initGlObjects() {
 	glGenBuffers(1, &opengl::vboStream);
-	// glGenVertexArrays(1, &opengl::vaoStream);
+	glGenVertexArrays(1, &opengl::vaoStream);
 
-	// glGenVertexArrays(1, &vaoLine);
-	// glBindVertexArray(vaoLine);
+	glGenVertexArrays(1, &vaoLine);
+	glBindVertexArray(vaoLine);
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -444,8 +444,8 @@ void Window::initGlObjects() {
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(0);
 
-	// glGenVertexArrays(1, &vaoRect);
-	// glBindVertexArray(vaoRect);
+	glGenVertexArrays(1, &vaoRect);
+	glBindVertexArray(vaoRect);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	const static float rect[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
@@ -455,7 +455,7 @@ void Window::initGlObjects() {
 }
 
 void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
-	// glBindVertexArray(opengl::vaoStream);
+	glBindVertexArray(opengl::vaoStream);
 	auto tmp = useSimpleShaderProgram();
 	const float vertexes[] = { static_cast<float>(a.x * jngl::getScaleFactor()),
 		                       static_cast<float>(a.y * jngl::getScaleFactor()),
@@ -471,7 +471,7 @@ void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 }
 
 void Window::drawEllipse(const Vec2 mid, const Vec2 size, float startAngle) {
-	// glBindVertexArray(opengl::vaoStream);
+	glBindVertexArray(opengl::vaoStream);
 	jngl::pushMatrix();
 	jngl::translate(mid);
 	opengl::scale(static_cast<float>(jngl::getScaleFactor()),
@@ -494,7 +494,7 @@ void Window::drawEllipse(const Vec2 mid, const Vec2 size, float startAngle) {
 }
 
 void Window::drawLine(const Vec2 a, const Vec2 b) const {
-	// glBindVertexArray(vaoLine);
+	glBindVertexArray(vaoLine);
 	jngl::pushMatrix();
 	jngl::translate(a);
 	opengl::scale(static_cast<float>((b.x - a.x) * jngl::getScaleFactor()),
@@ -505,7 +505,7 @@ void Window::drawLine(const Vec2 a, const Vec2 b) const {
 }
 
 void Window::drawRect(const Vec2 pos, const Vec2 size) const {
-	// glBindVertexArray(vaoRect);
+	glBindVertexArray(vaoRect);
 	jngl::pushMatrix();
 	jngl::translate(pos);
 	opengl::scale(static_cast<float>(size.x * jngl::getScaleFactor()),

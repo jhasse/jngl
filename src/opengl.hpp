@@ -30,9 +30,7 @@
 			#ifdef _MSC_VER
 				#include <windows.h> // To avoid warnings about APIENTRY
 			#endif
-			// #include <epoxy/gl.h>
-			#include <GLES2/gl2.h>
-			#include <GLES2/gl2ext.h>
+			#include <epoxy/gl.h>
 		#endif
 	#endif
 #endif
