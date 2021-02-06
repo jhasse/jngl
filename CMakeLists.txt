@@ -21,7 +21,6 @@ endif()
 # 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
 # 	SET(CMAKE_EXECUTABLE_SUFFIX ".html")
 # endif()
-include_directories(${CMAKE_SOURCE_DIR}/include ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${VORBIS_INCLUDE_DIRS})
 
 
 
@@ -466,3 +465,5 @@ endif()
 target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})
 target_link_directories(jngl PUBLIC ${FREETYPE_LIBRARY_DIRS})
 target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY} SDL2 freetype ogg vorbis)
+
+target_include_directories(jngl PUBLIC ${SDL2_INCLUDE_DIRS} ${VORBIS_INCLUDE_DIRS})
