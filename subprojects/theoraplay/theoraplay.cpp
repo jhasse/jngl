@@ -453,7 +453,6 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 					std::this_thread::sleep_for(std::chrono::milliseconds(10));
 				}
 			}
-            //printf("Awake!\n");
 		}
 	}
 
