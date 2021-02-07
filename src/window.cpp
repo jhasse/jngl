@@ -7,6 +7,10 @@
 #include "jngl.hpp"
 #include "main.hpp"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 #include <boost/numeric/conversion/cast.hpp>
 #include <thread>
 
@@ -220,13 +224,28 @@ double Window::getMouseWheel() const {
 	return mouseWheel;
 }
 
+#ifdef __EMSCRIPTEN__
+std::function<void()> g_jnglMainLoop;
+void jnglMainLoop() {
+	g_jnglMainLoop();
+}
+#endif
+
 void Window::mainLoop() {
+#ifdef __EMSCRIPTEN__
+	g_jnglMainLoop = [this]() {
+#else
 	Finally _([&]() { currentWork_.reset(); });
 	while (isRunning()) {
+#endif
 		stepIfNeeded();
 		draw();
 		jngl::swapBuffers();
 	}
+#ifdef __EMSCRIPTEN__
+	;
+	emscripten_set_main_loop(jnglMainLoop, 0, true);
+#endif
 }
 
 void Window::resetFrameLimiter() {
