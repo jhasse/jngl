@@ -209,7 +209,6 @@ else()
 			target_link_libraries(jngl PUBLIC SDL2::SDL2)
 		endif()
 	endif()
-	target_link_libraries(jngl PRIVATE ${SDL2_LIBRARIES} ${FREETYPE_LIBRARIES} ${VORBIS_LIBRARIES})
 
 	if(JNGL_JPEG)
 		find_package(JPEG)
@@ -464,6 +463,4 @@ endif()
 
 target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})
 target_link_directories(jngl PUBLIC ${FREETYPE_LIBRARY_DIRS})
-target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY} SDL2 freetype ogg vorbis)
-
-target_include_directories(jngl PUBLIC ${SDL2_INCLUDE_DIRS} ${VORBIS_INCLUDE_DIRS})
+target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY})
