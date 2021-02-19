@@ -4,6 +4,7 @@
 /// \file
 #pragma once
 
+#include "Color.hpp"
 #include "Drawable.hpp"
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
@@ -118,6 +119,8 @@ void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue,
                     unsigned char alpha);
 
 void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue);
+
+void setSpriteColor(Color);
 
 void setSpriteAlpha(unsigned char alpha);
 

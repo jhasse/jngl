@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::FrameBuffer class
 /// @file
@@ -6,6 +6,7 @@
 
 #include "Color.hpp"
 #include "Finally.hpp"
+#include "Mat3.hpp"
 #include "Vec2.hpp"
 #include "Vertex.hpp"
 
@@ -47,6 +48,9 @@ public:
 		std::function<void()> resetCallback;
 	};
 
+	/// Starts drawing on the FrameBuffer as long as Context is alive
+	///
+	/// The modelview matrix gets adjusted so that (0, 0) is in the center of the FrameBuffer.
 #if __cplusplus >= 201703L
 	[[nodiscard]]
 #endif
@@ -55,6 +59,8 @@ public:
 	/// Draws the framebuffer image to the screen
 	void draw(Vec2 position, const ShaderProgram* = nullptr) const;
 	void draw(double x, double y) const;
+
+	void draw(Mat3 modelview, const ShaderProgram* = nullptr) const;
 
 	/// Draws a list of triangles with the framebuffer's texture on it
 	void drawMesh(const std::vector<Vertex>& vertexes, const ShaderProgram* = nullptr) const;
