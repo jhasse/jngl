@@ -397,7 +397,7 @@ endif()
 if(MSVC OR IOS OR ANDROID)
 	FetchContent_Declare(webp
 		GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
-		GIT_TAG d7844e9762b61c9638c263657bd49e1690184832)
+		GIT_TAG 25ae67b3de2ba941ff19ee0e90655b591faf048e)
 	# Unfortunately disabling this breaks ARM builds:
 	# set(WEBP_ENABLE_SIMD OFF CACHE BOOL "Enable any SIMD optimization." FORCE)
 	set(WEBP_BUILD_ANIM_UTILS OFF CACHE BOOL "Build animation utilities." FORCE)
