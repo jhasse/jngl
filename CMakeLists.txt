@@ -7,22 +7,9 @@ if(NOT MSVC)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-
 if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
 	string(APPEND CMAKE_C_FLAGS " -Wno-shorten-64-to-32") # ogg, vorbis, etc. are full of these
 endif()
-
-# -s FORCE_FILESYSTEM=1
-# if( ${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
-# 	set(USE_FLAGS "-s USE_SDL=2 -s USE_FREETYPE=1 -s FORCE_FILESYSTEM=0 -s USE_VORBIS=1 -s DISABLE_EXCEPTION_CATCHING=2 -s ASSERTIONS=1 -g4 ") # -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1
-# 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS}")
-# 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_FLAGS}")
-# 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
-# 	SET(CMAKE_EXECUTABLE_SUFFIX ".html")
-# endif()
-
-
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -84,6 +71,9 @@ elseif (UNIX)
 		find_library(MAC_FOUNDATION Foundation)
 		find_library(MAC_CORETEXT CoreText)
 		target_link_libraries(jngl PRIVATE ${MAC_FOUNDATION} ${MAC_CORETEXT})
+	elseif(EMSCRIPTEN)
+		file(GLOB SRC src/emscripten/*.cpp)
+		target_sources(jngl PRIVATE src/mac/message.cpp ${SRC})
 	else()
 		file(GLOB SRC src/linux/*.cpp src/linux/*.c)
 		target_sources(jngl PRIVATE ${SRC})
@@ -137,13 +127,13 @@ else() # Windows
 endif()
 
 # fontconfig
-# if (UNIX)
-# 	if(NOT APPLE AND NOT ANDROID)
-#         find_package(Fontconfig REQUIRED)
-# 		target_include_directories(jngl PUBLIC ${FONTCONFIG_INCLUDE_DIR})
-# 		target_link_libraries(jngl PRIVATE ${FONTCONFIG_LIBRARIES})
-#     endif()
-# endif()
+if (UNIX AND NOT EMSCRIPTEN)
+	if(NOT APPLE AND NOT ANDROID)
+        find_package(Fontconfig REQUIRED)
+		target_include_directories(jngl PUBLIC ${FONTCONFIG_INCLUDE_DIR})
+		target_link_libraries(jngl PRIVATE ${FONTCONFIG_LIBRARIES})
+    endif()
+endif()
 
 if(ANDROID OR MSVC)
 	FetchContent_Declare(ogg
@@ -261,8 +251,8 @@ else()
 
 			target_include_directories(jngl PRIVATE ${PROJECT_SOURCE_DIR}/include/msvc)
 			target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
-			# add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
-			# target_link_libraries(jngl PUBLIC epoxy)
+			add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
+			target_link_libraries(jngl PUBLIC epoxy)
 		endif()
 		FetchContent_MakeAvailable(openal)
 		set(OPENAL_LIBRARY OpenAL)
@@ -369,11 +359,11 @@ else()
 			target_link_libraries(jngl PUBLIC ${VorbisFile_LIBRARIES})
 		endif()
 		target_link_directories(jngl PUBLIC ${VorbisFile_LIBRARY_DIRS})
-		# if(NOT PkgConfig_FOUND OR APPLE)
-		# 	find_package(epoxy REQUIRED)
-		# 	target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
-		# 	target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
-		# endif()
+		if(NOT PkgConfig_FOUND OR APPLE)
+			find_package(epoxy REQUIRED)
+			target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
+			target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
+		endif()
 	endif()
 
 	if(MSVC OR IOS)

@@ -49,12 +49,12 @@ JNGL_MAIN_BEGIN { // NOLINT
 	std::pair<int, int> minAspectRatio{ 1, 3 };
 	std::pair<int, int> maxAspectRatio{ 3, 1 };
 	if (!params.screenSize) {
-		params.screenSize = { double(800), double(600) };
+		params.screenSize = { double(jngl::getDesktopWidth()), double(jngl::getDesktopHeight()) };
 		fullscreen = true;
 	}
 	if (fullscreen) {
-		const jngl::Vec2 desktopSize{ double(800),
-			                          double(600) };
+		const jngl::Vec2 desktopSize{ double(jngl::getDesktopWidth()),
+			                          double(jngl::getDesktopHeight()) };
 		jngl::setScaleFactor(
 		    std::min(desktopSize.x / params.screenSize->x, desktopSize.y / params.screenSize->y));
 		maxAspectRatio = minAspectRatio =
@@ -71,9 +71,9 @@ JNGL_MAIN_BEGIN { // NOLINT
 	}
 	jngl::showWindow(
 	    params.displayName,
-	    fullscreen ? 800
+	    fullscreen ? jngl::getDesktopWidth()
 	               : boost::math::iround(params.screenSize->x * jngl::getScaleFactor()),
-	    fullscreen ? 600
+	    fullscreen ? jngl::getDesktopHeight()
 	               : boost::math::iround(params.screenSize->y * jngl::getScaleFactor()),
 	    fullscreen, minAspectRatio, maxAspectRatio);
 	jngl::setWork(workFactory());
