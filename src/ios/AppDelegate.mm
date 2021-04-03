@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #import "AppDelegate.h"
@@ -17,7 +17,7 @@
 	self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 	jngl::AppParameters params;
 	auto workFactory = jnglInit(params);
-	jngl::App app(params.displayName);
+	jngl::App::instance().setDisplayName(params.displayName);
 	view = [[JNGLView alloc] initWithFrame:[UIScreen mainScreen].bounds];
 
 	JNGLViewController* jvc = [[JNGLViewController alloc] initWithNibName:nil bundle:nil];

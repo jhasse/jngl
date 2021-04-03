@@ -40,7 +40,8 @@ std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters&);
 JNGL_MAIN_BEGIN { // NOLINT
 	jngl::AppParameters params;
 	auto workFactory = jnglInit(params);
-	jngl::App app(params.displayName);
+	auto& app = jngl::App::instance();
+	app.setDisplayName(params.displayName);
 	app.setPixelArt(params.pixelArt);
 	bool fullscreen = false;
 #ifdef NDEBUG
