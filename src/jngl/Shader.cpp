@@ -27,7 +27,7 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 	if (gles20Source) {
 		source = gles20Source;
 	} else {
-		jngl::debugLn("WARNING: OpenGL ES 3.0 not supported on Xbox!");
+		jngl::debugLn("WARNING: OpenGL ES 3.0 not supported on this platform!");
 	}
 #endif
 	glShaderSource(impl->id, 1, &source, nullptr);
