@@ -1,4 +1,4 @@
-// Copyright 2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -8,7 +8,7 @@
 
 namespace jngl {
 
-/// There can only be one instance of this class which should be created before the window is shown.
+/// There can only be one instance of this class which will be created before the window is shown.
 ///
 /// Example:
 /// \code
@@ -16,26 +16,28 @@ namespace jngl {
 /// #include <jngl/main.hpp>
 ///
 /// JNGL_MAIN_BEGIN {
-/// 	jngl::App app("Awesome Game Name");
+/// 	jngl::App::instance().setDisplayName("Awesome Game Name");
 /// 	// ...
-/// 	app.mainLoop();
+/// 	jngl::App::instance().mainLoop();
 /// } JNGL_MAIN_END
 /// \endcode
 class App {
 public:
-	explicit App(std::string displayName);
+	[[deprecated("Use jngl::App::instance().setDisplayName instead")]] explicit App(
+	    std::string displayName);
 	~App();
 	App(const App&) = delete;
 	App& operator=(const App&) = delete;
 	App(App&&) = delete;
 	App& operator=(App&&) = delete;
 
-	/// Access the instance, throws std::runtime_error if it doesn't exist.
-	static const App& instance();
+	/// Access the instance, creates it if it doesn't exist
+	static App& instance();
 
-	/// Returns the name set by the constructor. This cannot be changed later and is used by
-	/// jngl::writeConfig() for example.
+	/// The display name of the app is used by jngl::writeConfig() for example.
 	[[nodiscard]] std::string getDisplayName() const;
+
+	void setDisplayName(const std::string&);
 
 	/// Starts the main loop, which calls jngl::Work::step and jngl::Work::draw
 	void mainLoop();
@@ -49,6 +51,8 @@ public:
 	static bool isPixelArt();
 
 private:
+	App();
+
 	struct Impl;
 	std::unique_ptr<Impl> impl;
 

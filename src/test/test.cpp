@@ -190,9 +190,6 @@ private:
 std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& params) {
 	params.displayName = "JNGL Test Application";
 	jngl::setPrefix(jngl::getBinaryPath());
-	const int scaleFactor =
-	    std::min((jngl::getDesktopWidth() - 50) / 800, (jngl::getDesktopHeight() - 50) / 600);
-	jngl::setScaleFactor(std::max(1, scaleFactor));
 	params.screenSize = { 800, 600 };
 	return []() {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
