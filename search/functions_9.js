@@ -25,7 +25,7 @@ var searchData=
   ['insert_5fiterator_3913',['insert_iterator',['http://en.cppreference.com/w/cpp/iterator/insert_iterator/insert_iterator.html',1,'std::insert_iterator']]],
   ['insert_5for_5fassign_3914',['insert_or_assign',['http://en.cppreference.com/w/cpp/container/map/insert_or_assign.html',1,'std::pmr::map::insert_or_assign()'],['http://en.cppreference.com/w/cpp/container/unordered_map/insert_or_assign.html',1,'std::unordered_map::insert_or_assign()'],['http://en.cppreference.com/w/cpp/container/unordered_map/insert_or_assign.html',1,'std::pmr::unordered_map::insert_or_assign()'],['http://en.cppreference.com/w/cpp/container/map/insert_or_assign.html',1,'std::map::insert_or_assign()']]],
   ['inserter_3915',['inserter',['http://en.cppreference.com/w/cpp/iterator/inserter.html',1,'std']]],
-  ['instance_3916',['instance',['../classjngl_1_1App.html#aa71580226861d82f168a81f9cafbcc07',1,'jngl::App']]],
+  ['instance_3916',['instance',['../classjngl_1_1App.html#acea9c83e16f1dfad71a912e7633bd025',1,'jngl::App']]],
   ['internal_3917',['internal',['http://en.cppreference.com/w/cpp/io/manip/left.html',1,'std']]],
   ['intervals_3918',['intervals',['http://en.cppreference.com/w/cpp/numeric/random/piecewise_linear_distribution/params.html',1,'std::piecewise_linear_distribution::intervals()'],['http://en.cppreference.com/w/cpp/numeric/random/piecewise_constant_distribution/params.html',1,'std::piecewise_constant_distribution::intervals()']]],
   ['invalid_5fargument_3919',['invalid_argument',['http://en.cppreference.com/w/cpp/error/invalid_argument.html',1,'std::invalid_argument']]],

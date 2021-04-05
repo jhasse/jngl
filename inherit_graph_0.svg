@@ -12,7 +12,7 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="classjngl_1_1App.html" target="_top" xlink:title="There can only be one instance of this class which should be created before the window is shown.">
+<g id="a_node1"><a xlink:href="classjngl_1_1App.html" target="_top" xlink:title="There can only be one instance of this class which will be created before the window is shown.">
 <polygon fill="white" stroke="black" points="0,-0.5 0,-19.5 35,-19.5 35,-0.5 0,-0.5"/>
 <text text-anchor="middle" x="17.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">App</text>
 </a>

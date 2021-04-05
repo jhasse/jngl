@@ -41,7 +41,7 @@ var searchData=
   ['insert_5fiterator_830',['insert_iterator',['http://en.cppreference.com/w/cpp/iterator/insert_iterator/insert_iterator.html',1,'std::insert_iterator::insert_iterator()'],['http://en.cppreference.com/w/cpp/iterator/insert_iterator.html',1,'insert_iterator']]],
   ['insert_5for_5fassign_831',['insert_or_assign',['http://en.cppreference.com/w/cpp/container/map/insert_or_assign.html',1,'std::map::insert_or_assign()'],['http://en.cppreference.com/w/cpp/container/map/insert_or_assign.html',1,'std::pmr::map::insert_or_assign()'],['http://en.cppreference.com/w/cpp/container/unordered_map/insert_or_assign.html',1,'std::pmr::unordered_map::insert_or_assign()'],['http://en.cppreference.com/w/cpp/container/unordered_map/insert_or_assign.html',1,'std::unordered_map::insert_or_assign()']]],
   ['inserter_832',['inserter',['http://en.cppreference.com/w/cpp/iterator/inserter.html',1,'std']]],
-  ['instance_833',['instance',['../classjngl_1_1App.html#aa71580226861d82f168a81f9cafbcc07',1,'jngl::App']]],
+  ['instance_833',['instance',['../classjngl_1_1App.html#acea9c83e16f1dfad71a912e7633bd025',1,'jngl::App']]],
   ['int16_5ft_834',['int16_t',['http://en.cppreference.com/w/cpp/types/integer.html',1,'std']]],
   ['int32_5ft_835',['int32_t',['http://en.cppreference.com/w/cpp/types/integer.html',1,'std']]],
   ['int64_5ft_836',['int64_t',['http://en.cppreference.com/w/cpp/types/integer.html',1,'std']]],
