@@ -1,8 +1,9 @@
-// Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
+#include "jngl/Pixels.hpp"
 #include "texture.hpp"
 
 #include <ft2build.h> // NOLINT
@@ -29,8 +30,8 @@ public:
 private:
 	Texture* texture_ = nullptr;
 	int width_;
-	int left_ = 0;
-	int top_ = 0;
+	Pixels left_{0};
+	Pixels top_{0};
 };
 
 class FontImpl {

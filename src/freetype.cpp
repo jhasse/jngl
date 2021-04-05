@@ -1,4 +1,4 @@
-// Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "freetype.hpp"
@@ -79,8 +79,8 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 		delete[] d;
 	}
 
-	top_ = boost::numeric_cast<int>(fontHeight) - bitmap_glyph->top;
-	left_ = bitmap_glyph->left;
+	top_ = Pixels(boost::numeric_cast<int>(fontHeight) - bitmap_glyph->top);
+	left_ = Pixels(bitmap_glyph->left);
 }
 
 void Character::Draw() const {
