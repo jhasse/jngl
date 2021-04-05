@@ -178,7 +178,10 @@ void hideWindow() {
 
 void swapBuffers() {
 	pWindow->SwapBuffers();
+	clearBackBuffer();
+}
 
+void clearBackBuffer() {
 	if (glIsEnabled(GL_SCISSOR_TEST)) {
 		// Letterboxing with SDL_VIDEODRIVER=wayland will glitch if we don't draw the black boxes on
 		// every frame
