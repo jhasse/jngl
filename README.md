@@ -5,8 +5,8 @@
 [🎓 Tutorial](https://github.com/jhasse/jngl/wiki/Tutorial1)
 [📚 Documentation](https://bixense.com/jngl/annotated.html)
 
-An easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox and the Nintendo
-Switch.
+An easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox, the Nintendo Switch,
+and the Web.
 
 [![Portal Dogs running on the Switch](https://user-images.githubusercontent.com/80071/105062511-f651d480-5a7a-11eb-8cd3-260c7929353a.gif)](https://portaldogs.com/)
 
