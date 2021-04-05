@@ -178,13 +178,10 @@ void hideWindow() {
 
 void swapBuffers() {
 	pWindow->SwapBuffers();
+	clearBackBuffer();
 }
 
-void updateInput() {
-	pWindow->updateKeyStates();
-	pWindow->UpdateInput();
-
-	// FIXME: updateInput should not do this or the documentation should be updated accordingly
+void clearBackBuffer() {
 	if (glIsEnabled(GL_SCISSOR_TEST)) {
 		// Letterboxing with SDL_VIDEODRIVER=wayland will glitch if we don't draw the black boxes on
 		// every frame
@@ -198,6 +195,11 @@ void updateInput() {
 	reset();
 	modelviewStack = {};
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void updateInput() {
+	pWindow->updateKeyStates();
+	pWindow->UpdateInput();
 }
 
 bool running() {

@@ -40,7 +40,8 @@ std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters&);
 JNGL_MAIN_BEGIN { // NOLINT
 	jngl::AppParameters params;
 	auto workFactory = jnglInit(params);
-	jngl::App app(params.displayName);
+	auto& app = jngl::App::instance();
+	app.setDisplayName(params.displayName);
 	app.setPixelArt(params.pixelArt);
 	bool fullscreen = false;
 #ifdef NDEBUG
@@ -55,10 +56,13 @@ JNGL_MAIN_BEGIN { // NOLINT
 	if (fullscreen) {
 		const jngl::Vec2 desktopSize{ double(jngl::getDesktopWidth()),
 			                          double(jngl::getDesktopHeight()) };
-		jngl::setScaleFactor(
-		    std::min(desktopSize.x / params.screenSize->x, desktopSize.y / params.screenSize->y));
-		maxAspectRatio = minAspectRatio =
-		    std::pair<int, int>(params.screenSize->x, params.screenSize->y);
+		if (desktopSize.x > 0 &&
+		    desktopSize.y > 0) { // desktop size isn't available on some platforms (e.g. Android)
+			jngl::setScaleFactor(std::min(desktopSize.x / params.screenSize->x,
+			                              desktopSize.y / params.screenSize->y));
+			maxAspectRatio = minAspectRatio =
+			    std::pair<int, int>(params.screenSize->x, params.screenSize->y);
+		}
 	} else {
 		// Make window as big as possible
 		const float scaleFactor = std::min((jngl::getDesktopWidth() - 50) / params.screenSize->x,

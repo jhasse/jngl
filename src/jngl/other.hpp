@@ -1,5 +1,6 @@
-// Copyright 2014-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2014-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
+/// Miscellaneous functions
 /// @file
 #pragma once
 
@@ -16,7 +17,14 @@ bool running();
 void updateInput();
 
 /// Swaps back and front buffer. App::mainLoop() calls this after Work::draw()
+///
+/// Also clears the back buffer using jngl::clearBackBuffer().
 void swapBuffers();
+
+/// Clears the back buffer and resets the ModelView matrix, see jngl::reset()
+///
+/// jngl::swapBuffers() calls this so there isn't any reason to call this manually most of the time.
+void clearBackBuffer();
 
 /// Emit a quit event which will exit App::mainLoop() and set running() to false
 void quit();

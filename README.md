@@ -2,7 +2,7 @@
 
 [🌐 Website](https://bixense.com/jngl/)
 [🏃 Quickstart](https://github.com/jhasse/jngl/wiki/JNGL-Quickstart)
-[🎓 Tutorial](https://github.com/jhasse/jngl/wiki/Tutorialindex)
+[🎓 Tutorial](https://github.com/jhasse/jngl/wiki/Tutorial1)
 [📚 Documentation](https://bixense.com/jngl/annotated.html)
 
 An easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox and the Nintendo
@@ -50,7 +50,8 @@ Set up [MSYS2](https://www.msys2.org/) and install the following in a MinGW-w64 
 ```
 pacman -Syu --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-boost mingw-w64-x86_64-openal \
 mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
-mingw-w64-x86_64-dlfcn mingw-w64-x86_64-libepoxy mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb
+mingw-w64-x86_64-dlfcn mingw-w64-x86_64-libepoxy mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb \
+mingw-w64-x86_64-libtheora
 ```
 
 ### Visual Studio 2017 or newer

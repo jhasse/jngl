@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #import "AppDelegate.h"
@@ -15,6 +15,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	jngl::AppParameters params;
+	auto workFactory = jnglInit(params);
+	jngl::App::instance().setDisplayName(params.displayName);
 	view = [[JNGLView alloc] initWithFrame:[UIScreen mainScreen].bounds];
 
 	JNGLViewController* jvc = [[JNGLViewController alloc] initWithNibName:nil bundle:nil];
@@ -23,9 +26,6 @@
 
 	[self.window addSubview:view];
 
-	jngl::AppParameters params;
-	auto workFactory = jnglInit(params);
-	jngl::App app(params.displayName);
 	jngl::setWork(workFactory());
 
 	[view drawView:nil];
