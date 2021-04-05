@@ -211,7 +211,7 @@ int FontImpl::getTextWidth(const std::string& text) {
 			maxWidth = lineWidth;
 		}
 	}
-	return int(maxWidth / getScaleFactor());
+	return maxWidth;
 }
 
 int FontImpl::getLineHeight() const {

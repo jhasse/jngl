@@ -18,7 +18,7 @@
 namespace jngl {
 
 double Window::GetTextWidth(const std::string& text) {
-	return fonts_[fontSize_][fontName_]->getTextWidth(text);
+	return fonts_[fontSize_][fontName_]->getTextWidth(text) / getScaleFactor();
 }
 
 int Window::getLineHeight() {
