@@ -32,7 +32,10 @@ void quit();
 /// Undo quit() or ignore a quit event caused by the user closing the main window
 void cancelQuit();
 
-double getFPS();
+/// Calculates FPS if called once per frame
+///
+/// \deprecated Not really intuitive or robust, use your own calculations instead
+[[deprecated("Not really intuitive or robust, use your own calculations instead")]] double getFPS();
 
 /// How many times Work::step is called per second (default: 60)
 unsigned int getStepsPerSecond();
