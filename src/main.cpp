@@ -294,7 +294,7 @@ void setTitle(const std::string& title) {
 }
 
 double getTextWidth(const std::string& text) {
-	return pWindow->GetTextWidth(text);
+	return static_cast<double>(pWindow->getTextWidth(text));
 }
 
 int getLineHeight() {

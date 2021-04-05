@@ -2,9 +2,20 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ScaleablePixels.hpp"
 
+#include "Pixels.hpp"
+#include "screen.hpp"
+
 namespace jngl {
 
 ScaleablePixels::ScaleablePixels(const double value) : value(value) {
+}
+
+ScaleablePixels::operator double() const {
+	return value;
+}
+
+ScaleablePixels::operator Pixels() const {
+	return Pixels(value / getScaleFactor());
 }
 
 } // namespace jngl

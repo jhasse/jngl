@@ -8,6 +8,7 @@
 #include "../spriteimpl.hpp"
 #include "font.hpp"
 #include "matrix.hpp"
+#include "ScaleablePixels.hpp"
 #include "screen.hpp"
 
 namespace jngl {

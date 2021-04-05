@@ -5,6 +5,7 @@
 
 #include "freetype.hpp"
 #include "jngl.hpp"
+#include "jngl/ScaleablePixels.hpp"
 #include "main.hpp"
 #include "windowptr.hpp"
 
@@ -17,8 +18,8 @@
 
 namespace jngl {
 
-double Window::GetTextWidth(const std::string& text) {
-	return fonts_[fontSize_][fontName_]->getTextWidth(text) / getScaleFactor();
+ScaleablePixels Window::getTextWidth(const std::string& text) {
+	return static_cast<ScaleablePixels>(fonts_[fontSize_][fontName_]->getTextWidth(text));
 }
 
 int Window::getLineHeight() {

@@ -6,6 +6,7 @@
 #include "helper.hpp"
 #include "jngl/debug.hpp"
 #include "jngl/matrix.hpp"
+#include "jngl/ScaleablePixels.hpp"
 #include "jngl/screen.hpp"
 #include "main.hpp"
 
@@ -44,7 +45,7 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 
 	const int width = boost::numeric_cast<int>(bitmap.width);
 	const int height = boost::numeric_cast<int>(bitmap.rows);
-	width_ = int(face->glyph->advance.x >> 6);
+	width_ = Pixels(static_cast<int32_t>(face->glyph->advance.x >> 6));
 
 	if (height == 0) {
 		return;
@@ -94,7 +95,7 @@ void Character::Draw() const {
 	opengl::translate(static_cast<float>(width_), 0);
 }
 
-int Character::getWidth() const {
+Pixels Character::getWidth() const {
 	return width_;
 }
 
@@ -196,13 +197,13 @@ FontImpl::~FontImpl() {
 	}
 }
 
-int FontImpl::getTextWidth(const std::string& text) {
-	int maxWidth = 0;
+Pixels FontImpl::getTextWidth(const std::string& text) {
+	auto maxWidth = 0_px;
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();
 	for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
-		int lineWidth = 0;
+		auto lineWidth = 0_px;
 		auto charEnd = lineIter->end();
 		for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
 			lineWidth += GetCharacter(charIter, charEnd).getWidth();

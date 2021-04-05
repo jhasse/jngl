@@ -4,10 +4,16 @@
 
 namespace jngl {
 
+class Pixels;
+
 /// Scale-independent pixels, see jngl::getScaleFactor()
 class ScaleablePixels {
 public:
 	explicit ScaleablePixels(double);
+
+	explicit operator double() const;
+
+	explicit operator Pixels() const;
 
 private:
 	double value;

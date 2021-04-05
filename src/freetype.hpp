@@ -25,11 +25,11 @@ public:
 	Character& operator=(Character&&) = delete;
 	~Character();
 	void Draw() const;
-	int getWidth() const;
+	Pixels getWidth() const;
 
 private:
 	Texture* texture_ = nullptr;
-	int width_;
+	Pixels width_{0};
 	Pixels left_{0};
 	Pixels top_{0};
 };
@@ -43,7 +43,7 @@ public:
 	FontImpl& operator=(FontImpl&&) = delete;
 	~FontImpl();
 	void print(double x, double y, const std::string& text);
-	int getTextWidth(const std::string& text);
+	Pixels getTextWidth(const std::string& text);
 	int getLineHeight() const;
 	void setLineHeight(int);
 

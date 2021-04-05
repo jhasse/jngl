@@ -10,6 +10,8 @@
 #include "Controller.hpp"
 #include "Drawable.hpp"
 #include "Label.hpp"
+#include "Pixels.hpp"
+#include "ScaleablePixels.hpp"
 #include "Shader.hpp"
 #include "ShaderProgram.hpp"
 #include "SoundFile.hpp"

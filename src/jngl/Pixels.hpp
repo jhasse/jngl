@@ -6,17 +6,28 @@
 
 namespace jngl {
 
+class ScaleablePixels;
+
 /// Scale-dependent pixels, corresponds to actual pixels on the screen
 class Pixels {
 public:
 	explicit Pixels(int32_t);
+	explicit Pixels(double);
 
 	explicit operator float() const;
 
+	explicit operator ScaleablePixels() const;
+
+	Pixels& operator+=(Pixels);
+
 private:
+	friend bool operator>(jngl::Pixels, jngl::Pixels);
+
 	double value;
 };
 
+bool operator>(jngl::Pixels, jngl::Pixels);
+
 } // namespace jngl
 
-jngl::Pixels operator"" _px(long double);
+jngl::Pixels operator"" _px(unsigned long long);

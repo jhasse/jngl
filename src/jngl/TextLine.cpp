@@ -5,6 +5,7 @@
 
 #include "../freetype.hpp"
 #include "font.hpp"
+#include "ScaleablePixels.hpp"
 #include "screen.hpp"
 
 namespace jngl {
