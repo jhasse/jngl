@@ -144,6 +144,12 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Mat4.html">Mat4</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">4x4 matrix  <a href="classjngl_1_1Mat4.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Pixels.html">Pixels</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale-dependent pixels, corresponds to actual pixels on the screen.  <a href="classjngl_1_1Pixels.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1ScaleablePixels.html">ScaleablePixels</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale-independent pixels, see <a class="el" href="namespacejngl.html#a1f27481362ba716ae55c17f137d09a5d" title="Size of one screen pixel in actual pixels.">jngl::getScaleFactor()</a>  <a href="classjngl_1_1ScaleablePixels.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Shader.html">Shader</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fragment or vertex GLSL shader.  <a href="classjngl_1_1Shader.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -440,8 +446,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a023daf9767d1e2db5d032856dda0b8fa">cancelQuit</a> ()</td></tr>
 <tr class="memdesc:a023daf9767d1e2db5d032856dda0b8fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Undo <a class="el" href="namespacejngl.html#a4d50d8a7e6f86e2fe2b8529c95d6ef02" title="Emit a quit event which will exit App::mainLoop() and set running() to false.">quit()</a> or ignore a quit event caused by the user closing the main window. <br /></td></tr>
 <tr class="separator:a023daf9767d1e2db5d032856dda0b8fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11aa4d274386025357fa1a6578bb74ee"><td class="memItemLeft" align="right" valign="top"><a id="a11aa4d274386025357fa1a6578bb74ee"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>getFPS</b> ()</td></tr>
+<tr class="memitem:a11aa4d274386025357fa1a6578bb74ee"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a11aa4d274386025357fa1a6578bb74ee">getFPS</a> ()</td></tr>
+<tr class="memdesc:a11aa4d274386025357fa1a6578bb74ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates FPS if called once per frame.  <a href="namespacejngl.html#a11aa4d274386025357fa1a6578bb74ee">More...</a><br /></td></tr>
 <tr class="separator:a11aa4d274386025357fa1a6578bb74ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d8a357dd23189e0724e75d9afb5eddb"><td class="memItemLeft" align="right" valign="top"><a id="a9d8a357dd23189e0724e75d9afb5eddb"></a>
 unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a9d8a357dd23189e0724e75d9afb5eddb">getStepsPerSecond</a> ()</td></tr>
@@ -499,6 +505,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setArgs</b> (<a class
 <tr class="memitem:ad75f06293d49fd5a94549a6da4d1f67b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ad75f06293d49fd5a94549a6da4d1f67b">writeConfig</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;key, const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;value)</td></tr>
 <tr class="memdesc:ad75f06293d49fd5a94549a6da4d1f67b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write <em>value</em> into the persistent storage which can be read in again using <a class="el" href="namespacejngl.html#abdaeddaaadcd2c5e7ee2773483a4a7f6" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a>(<em>key</em>)  <a href="namespacejngl.html#ad75f06293d49fd5a94549a6da4d1f67b">More...</a><br /></td></tr>
 <tr class="separator:ad75f06293d49fd5a94549a6da4d1f67b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4ce12aef5901304e900d09af046394d"><td class="memItemLeft" align="right" valign="top"><a id="ac4ce12aef5901304e900d09af046394d"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (<a class="el" href="classjngl_1_1Pixels.html">jngl::Pixels</a>, <a class="el" href="classjngl_1_1Pixels.html">jngl::Pixels</a>)</td></tr>
+<tr class="separator:ac4ce12aef5901304e900d09af046394d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f27481362ba716ae55c17f137d09a5d"><td class="memItemLeft" align="right" valign="top"><a id="a1f27481362ba716ae55c17f137d09a5d"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a1f27481362ba716ae55c17f137d09a5d">getScaleFactor</a> ()</td></tr>
 <tr class="memdesc:a1f27481362ba716ae55c17f137d09a5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of one screen pixel in actual pixels. <br /></td></tr>
@@ -1066,6 +1075,26 @@ template&lt;class T , class... Args&gt; </td></tr>
 
 </div>
 </div>
+<a id="a11aa4d274386025357fa1a6578bb74ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11aa4d274386025357fa1a6578bb74ee">&#9670;&nbsp;</a></span>getFPS()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double jngl::getFPS </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates FPS if called once per frame. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated:</a></b></dt><dd>Not really intuitive or robust, use your own calculations instead </dd></dl>
+
+</div>
+</div>
 <a id="af2122ebb1c5d1653f8fbbdb373d9b98e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af2122ebb1c5d1653f8fbbdb373d9b98e">&#9670;&nbsp;</a></span>getConfigPath()</h2>
 
@@ -1080,7 +1109,7 @@ template&lt;class T , class... Args&gt; </td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#ad75f06293d49fd5a94549a6da4d1f67b" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="namespacejngl.html#abdaeddaaadcd2c5e7ee2773483a4a7f6" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#ad75f06293d49fd5a94549a6da4d1f67b" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="namespacejngl.html#abdaeddaaadcd2c5e7ee2773483a4a7f6" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
 <p>Returns the directory where to store configuration files and save games.</p><ul>
 <li>Windows: <code>%AppData%/Display Name/</code></li>
 <li>Linux: <code>~/.config/Display Name/</code></li>
@@ -1284,7 +1313,7 @@ template&lt;class T , class... Args&gt; </td></tr>
 </div><div class="memdoc">
 
 <p>Sleep current thread for <em>milliseconds</em>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated:</a></b></dt><dd>Use <a class="elRef" href="http://en.cppreference.com/w/cpp/thread/sleep_for.html">std::this_thread::sleep_for</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated:</a></b></dt><dd>Use <a class="elRef" href="http://en.cppreference.com/w/cpp/thread/sleep_for.html">std::this_thread::sleep_for</a> instead </dd></dl>
 
 </div>
 </div>
@@ -1303,7 +1332,7 @@ template&lt;class T , class... Args&gt; </td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a7631ce749b3b2d409e3f84f2cb32b196" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
 
 </div>
 </div>
