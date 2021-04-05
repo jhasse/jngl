@@ -6,6 +6,7 @@
 #include "freetype.hpp"
 #include "jngl.hpp"
 #include "main.hpp"
+#include "windowptr.hpp"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -239,8 +240,9 @@ void Window::mainLoop() {
 	while (isRunning()) {
 #endif
 		stepIfNeeded();
+		clearBackBuffer();
 		draw();
-		jngl::swapBuffers();
+		pWindow->SwapBuffers();
 	}
 #ifdef __EMSCRIPTEN__
 	;
