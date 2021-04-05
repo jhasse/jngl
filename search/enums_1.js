@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['button_5121',['Button',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0',1,'jngl::mouse::Button()'],['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0',1,'jngl::controller::Button()']]]
+  ['button_5123',['Button',['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0',1,'jngl::mouse::Button()'],['../input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0',1,'jngl::controller::Button()']]]
 ];

@@ -426,10 +426,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a41043304f9ce3a6307573263c949d7d6">updateInput</a> ()</td></tr>
 <tr class="memdesc:a41043304f9ce3a6307573263c949d7d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the input state. <a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> calls this before <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Work::step()</a> <br /></td></tr>
 <tr class="separator:a41043304f9ce3a6307573263c949d7d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2827e4edaa53fecffc9246f8bc2218e"><td class="memItemLeft" align="right" valign="top"><a id="aa2827e4edaa53fecffc9246f8bc2218e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#aa2827e4edaa53fecffc9246f8bc2218e">swapBuffers</a> ()</td></tr>
-<tr class="memdesc:aa2827e4edaa53fecffc9246f8bc2218e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swaps back and front buffer. <a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> calls this after <a class="el" href="classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">Work::draw()</a> <br /></td></tr>
+<tr class="memitem:aa2827e4edaa53fecffc9246f8bc2218e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#aa2827e4edaa53fecffc9246f8bc2218e">swapBuffers</a> ()</td></tr>
+<tr class="memdesc:aa2827e4edaa53fecffc9246f8bc2218e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swaps back and front buffer.  <a href="namespacejngl.html#aa2827e4edaa53fecffc9246f8bc2218e">More...</a><br /></td></tr>
 <tr class="separator:aa2827e4edaa53fecffc9246f8bc2218e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39d14eff72d22b1fbde7684a0a2ed12c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a39d14eff72d22b1fbde7684a0a2ed12c">clearBackBuffer</a> ()</td></tr>
+<tr class="memdesc:a39d14eff72d22b1fbde7684a0a2ed12c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the back buffer and resets the ModelView matrix, see <a class="el" href="namespacejngl.html#ab30302d1de317b3d3307dc4f32571e47" title="Resets the global ModelView matrix to the identity matrix.">jngl::reset()</a>  <a href="namespacejngl.html#a39d14eff72d22b1fbde7684a0a2ed12c">More...</a><br /></td></tr>
+<tr class="separator:a39d14eff72d22b1fbde7684a0a2ed12c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d50d8a7e6f86e2fe2b8529c95d6ef02"><td class="memItemLeft" align="right" valign="top"><a id="a4d50d8a7e6f86e2fe2b8529c95d6ef02"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a4d50d8a7e6f86e2fe2b8529c95d6ef02">quit</a> ()</td></tr>
 <tr class="memdesc:a4d50d8a7e6f86e2fe2b8529c95d6ef02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emit a quit event which will exit <a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> and set <a class="el" href="namespacejngl.html#aa5760c51d7686efb6d653830ee8305d5" title="Returns true until the main window is closed or quit() has been called.">running()</a> to false. <br /></td></tr>
@@ -1020,6 +1022,47 @@ template&lt;class T , class... Args&gt; </td></tr>
 
 <p>Prints <em>text</em> on stdout. </p>
 <p>Normally this is the same as <code><a class="elRef" href="http://en.cppreference.com/w/cpp/io/cout.html">std::cout</a> &lt;&lt; text &lt;&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/io/manip/flush.html">std::flush</a>;</code>. On Android this will use <code>__android_log_print</code> for example. </p>
+
+</div>
+</div>
+<a id="aa2827e4edaa53fecffc9246f8bc2218e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2827e4edaa53fecffc9246f8bc2218e">&#9670;&nbsp;</a></span>swapBuffers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void jngl::swapBuffers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Swaps back and front buffer. </p>
+<p><a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> calls this after <a class="el" href="classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">Work::draw()</a></p>
+<p>Also clears the back buffer using <a class="el" href="namespacejngl.html#a39d14eff72d22b1fbde7684a0a2ed12c" title="Clears the back buffer and resets the ModelView matrix, see jngl::reset()">jngl::clearBackBuffer()</a>. </p>
+
+</div>
+</div>
+<a id="a39d14eff72d22b1fbde7684a0a2ed12c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39d14eff72d22b1fbde7684a0a2ed12c">&#9670;&nbsp;</a></span>clearBackBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void jngl::clearBackBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clears the back buffer and resets the ModelView matrix, see <a class="el" href="namespacejngl.html#ab30302d1de317b3d3307dc4f32571e47" title="Resets the global ModelView matrix to the identity matrix.">jngl::reset()</a> </p>
+<p><a class="el" href="namespacejngl.html#aa2827e4edaa53fecffc9246f8bc2218e" title="Swaps back and front buffer.">jngl::swapBuffers()</a> calls this so there isn't any reason to call this manually most of the time. </p>
 
 </div>
 </div>

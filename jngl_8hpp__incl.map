@@ -23,7 +23,7 @@
 <area shape="rect" id="node33" href="$framebuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="2509,229,2643,256"/>
 <area shape="rect" id="node36" href="$job_8hpp.html" title="Contains jngl::Job class and related functions." alt="" coords="305,229,383,256"/>
 <area shape="rect" id="node37" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="1987,155,2074,181"/>
-<area shape="rect" id="node38" href="$other_8hpp.html" title=" " alt="" coords="2102,229,2197,256"/>
+<area shape="rect" id="node38" href="$other_8hpp.html" title="Miscellaneous functions." alt="" coords="2102,229,2197,256"/>
 <area shape="rect" id="node39" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="1975,229,2078,256"/>
 <area shape="rect" id="node40" href="$matrix_8hpp.html" title="Functions related to the global ModelView matrix." alt="" coords="2974,155,3077,181"/>
 <area shape="rect" id="node41" href="$screen_8hpp.html" title=" " alt="" coords="2414,155,2517,181"/>
