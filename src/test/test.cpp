@@ -92,8 +92,8 @@ public:
 		jngl::setFontSize(12);
 		jngl::popMatrix();
 		std::stringstream sstream;
-		sstream << "FPS" << (jngl::getVerticalSync() ? " (V-SYNC)" : "") << ": "
-		        << int(jngl::getFPS()) << "\nFactor: " << factor
+		sstream << "SPS" << (jngl::getVerticalSync() ? " (V-SYNC)" : "") << ": "
+		        << jngl::getStepsPerSecond() << "\nFactor: " << factor
 		        << "\nSize of double: " << sizeof(double);
 		jngl::setColor(0, 0, 0);
 		jngl::drawRect(0, 0, 200, 62);
