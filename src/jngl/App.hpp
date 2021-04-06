@@ -7,6 +7,7 @@
 #include <string>
 
 namespace jngl {
+class ShaderProgram;
 
 /// There can only be one instance of this class which will be created before the window is shown.
 ///
@@ -50,8 +51,15 @@ public:
 	/// If pixel-perfect magnifying is activated (see setPixelArt)
 	static bool isPixelArt();
 
+	void updateProjectionMatrix() const;
+
 private:
 	App();
+
+	void registerShaderProgram(ShaderProgram*);
+	void unregisterShaderProgram(ShaderProgram*);
+
+	friend ShaderProgram;
 
 	struct Impl;
 	std::unique_ptr<Impl> impl;

@@ -9,6 +9,9 @@
 
 #include <boost/math/special_functions/round.hpp>
 #include <boost/qvm/mat_operations.hpp>
+#include <boost/qvm/map_vec_mat.hpp>
+#include <boost/qvm/mat_operations3.hpp>
+#include <boost/qvm/vec.hpp>
 #include <fstream>
 #include <sstream>
 
@@ -77,14 +80,7 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 #endif
 #endif
 
-	const auto l = static_cast<float>( -width) / 2.f;
-	const auto r = static_cast<float>(  width) / 2.f;
-	const auto b = static_cast<float>( height) / 2.f;
-	const auto t = static_cast<float>(-height) / 2.f;
-	opengl::projection = { 2.f / (r - l), 0.f,           0.f,  -(r + l) / (r - l),
-		                   0.f,           2.f / (t - b), 0.f,  -(t + b) / (t - b),
-		                   0.f,           0.f,           -1.f, 0.f,
-		                   0.f,           0.f,           0.f,  1.f };
+	updateProjection(width, height, width, height);
 
 	Shader vertexShader(R"(#version 300 es
 		in mediump vec2 position;
@@ -145,6 +141,34 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	glFlush();
 	setVerticalSync(true);
 	return true;
+}
+
+void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth,
+                      int originalWindowHeight) {
+	debug("Updating projection matrix to ");
+	debug(windowWidth);
+	debug("x");
+	debugLn(windowHeight);
+	const auto l = static_cast<float>(-windowWidth) / 2.f;
+	const auto r = static_cast<float>(windowWidth) / 2.f;
+	const auto b = static_cast<float>(windowHeight) / 2.f;
+	const auto t = static_cast<float>(-windowHeight) / 2.f;
+	opengl::projection = { float(windowWidth) / float(originalWindowWidth) * 2.f / (r - l),
+		                   0.f,
+		                   0.f,
+		                   -(r + l) / (r - l),
+		                   0.f,
+		                   float(windowHeight) / float(originalWindowHeight) * 2.f / (t - b),
+		                   0.f,
+		                   -(t + b) / (t - b),
+		                   0.f,
+		                   0.f,
+		                   -1.f,
+		                   0.f,
+		                   0.f,
+		                   0.f,
+		                   0.f,
+		                   1.f };
 }
 
 WindowPointer pWindow;

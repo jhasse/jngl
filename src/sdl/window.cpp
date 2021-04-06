@@ -1,10 +1,11 @@
-// Copyright 2011-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #ifndef NOPNG
 #include <png.h> // We need to include it first, I don't know why
 #endif
 
+#include "../jngl/App.hpp"
 #include "../jngl/debug.hpp"
 #include "../jngl/window.hpp"
 #include "../main.hpp"
@@ -36,6 +37,9 @@ Window::Window(const std::string& title, const int width, const int height, cons
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 	}
+#ifdef __EMSCRIPTEN__
+	flags |= SDL_WINDOW_RESIZABLE;
+#endif
 
 #ifdef JNGL_UWP
 	isMultisampleSupported_ = false; // crashes on Xbox since ANGLE uses a PixelShader 4.1 for
@@ -310,6 +314,12 @@ void Window::UpdateInput() {
 				controllerChangedCallback();
 			}
 			break;
+		case SDL_WINDOWEVENT:
+			if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+				updateProjection(event.window.data1, event.window.data2, width_, height_);
+				App::instance().updateProjectionMatrix();
+				glViewport(0, 0, event.window.data1, event.window.data2);
+			}
 		}
 	}
 }

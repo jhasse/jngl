@@ -3,9 +3,11 @@
 
 #include "App.hpp"
 
-#include "../jngl/debug.hpp"
 #include "../windowptr.hpp"
+#include "debug.hpp"
+#include "ShaderProgram.hpp"
 
+#include <set>
 #include <stdexcept>
 
 namespace jngl {
@@ -15,6 +17,7 @@ App* App::self = nullptr;
 struct App::Impl {
 	std::string displayName;
 	bool pixelArt = false;
+	std::set<ShaderProgram*> shaderPrograms;
 };
 
 App::App(std::string displayName) : impl(new Impl{ std::move(displayName) }) {
@@ -62,6 +65,22 @@ bool App::isPixelArt() {
 
 void App::setPixelArt(const bool pixelArt) {
 	impl->pixelArt = pixelArt;
+}
+
+void App::registerShaderProgram(ShaderProgram* shaderProgram) {
+	impl->shaderPrograms.insert(shaderProgram);
+}
+
+void App::unregisterShaderProgram(ShaderProgram* shaderProgram) {
+	impl->shaderPrograms.erase(shaderProgram);
+}
+
+void App::updateProjectionMatrix() const {
+	for (const auto shaderProgram : impl->shaderPrograms) {
+		const auto context = shaderProgram->use();
+		glUniformMatrix4fv(shaderProgram->getUniformLocation("projection"), 1, GL_FALSE,
+		                   opengl::projection.data);
+	}
 }
 
 } // namespace jngl

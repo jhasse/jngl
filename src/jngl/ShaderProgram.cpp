@@ -4,6 +4,8 @@
 #include "ShaderProgram.hpp"
 
 #include "../Shader_Impl.hpp"
+#include "../windowptr.hpp"
+#include "App.hpp"
 
 #include <array>
 #include <cassert>
@@ -33,6 +35,7 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 	}
 	const auto tmp = use();
 	glUniformMatrix4fv(getUniformLocation("projection"), 1, GL_FALSE, opengl::projection.data);
+	App::instance().registerShaderProgram(this);
 }
 
 ShaderProgram::Context ShaderProgram::use() const {
@@ -53,6 +56,7 @@ int ShaderProgram::getUniformLocation(const std::string& name) const {
 
 ShaderProgram::~ShaderProgram() {
 	glDeleteProgram(impl->id);
+	App::self->unregisterShaderProgram(this);
 }
 
 ShaderProgram::Context::Context(const ShaderProgram::Impl& impl) {
