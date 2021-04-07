@@ -61,6 +61,11 @@ void setFontByName(const std::string& name);
 /// Sets the color of the currently active font
 void setFontColor(jngl::Color);
 
+/// Sets the color of the currently active font and the alpha value
+///
+/// \a alpha goes from 0.0f to 1.0f (opaque). It's automatically clamped to these values.
+void setFontColor(Color, float alpha);
+
 /// Sets the color of the currently active font
 ///
 /// If the \a alpha value isn't specified, it will be set to 255 (opaque).
