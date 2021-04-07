@@ -43,7 +43,7 @@ void Font::print(const std::string& text, int x, int y) {
 	impl->print(x, y, text);
 }
 
-void Font::print(const std::string& text, const Vec2 position) {
+void Font::print(const std::string& text, const Vec2 position) const {
 	impl->print(position.x, position.y, text);
 }
 

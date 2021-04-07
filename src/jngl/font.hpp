@@ -20,7 +20,9 @@ public:
 	Font(const std::string& filename, unsigned int size);
 	std::shared_ptr<FontImpl> getImpl();
 	void print(const std::string&, int x, int y);
-	void print(const std::string&, Vec2 position);
+
+	/// Draw \a text at \a position
+	void print(const std::string& text, Vec2 position) const;
 
 private:
 	std::shared_ptr<FontImpl> impl;
