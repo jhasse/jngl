@@ -20,7 +20,9 @@ public:
 	Font(const std::string& filename, unsigned int size);
 	std::shared_ptr<FontImpl> getImpl();
 	void print(const std::string&, int x, int y);
-	void print(const std::string&, Vec2 position);
+
+	/// Draw \a text at \a position
+	void print(const std::string& text, Vec2 position) const;
 
 private:
 	std::shared_ptr<FontImpl> impl;
@@ -58,6 +60,11 @@ void setFontByName(const std::string& name);
 
 /// Sets the color of the currently active font
 void setFontColor(jngl::Color);
+
+/// Sets the color of the currently active font and the alpha value
+///
+/// \a alpha goes from 0.0f to 1.0f (opaque). It's automatically clamped to these values.
+void setFontColor(Color, float alpha);
 
 /// Sets the color of the currently active font
 ///

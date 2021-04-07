@@ -15,6 +15,11 @@ void setFontColor(const jngl::Color color) {
 	setFontColor(color.getRed(), color.getGreen(), color.getBlue());
 }
 
+void setFontColor(const Color color, float alpha) {
+	setFontColor(color.getRed(), color.getGreen(), color.getBlue(),
+	             std::clamp(std::lround(alpha * 255), 0L, 255L));
+}
+
 void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) {
 	fontColorRed = red;
 	fontColorGreen = green;
@@ -43,7 +48,7 @@ void Font::print(const std::string& text, int x, int y) {
 	impl->print(x, y, text);
 }
 
-void Font::print(const std::string& text, const Vec2 position) {
+void Font::print(const std::string& text, const Vec2 position) const {
 	impl->print(position.x, position.y, text);
 }
 

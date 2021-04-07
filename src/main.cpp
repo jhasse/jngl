@@ -148,7 +148,12 @@ void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth
 	debug("Updating projection matrix to ");
 	debug(windowWidth);
 	debug("x");
-	debugLn(windowHeight);
+	debug(windowHeight);
+	debug(" (original size: ");
+	debug(originalWindowWidth);
+	debug("x");
+	debug(originalWindowHeight);
+	debugLn(")");
 	const auto l = static_cast<float>(-windowWidth) / 2.f;
 	const auto r = static_cast<float>(windowWidth) / 2.f;
 	const auto b = static_cast<float>(windowHeight) / 2.f;
