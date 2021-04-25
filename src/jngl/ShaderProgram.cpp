@@ -56,7 +56,9 @@ int ShaderProgram::getUniformLocation(const std::string& name) const {
 
 ShaderProgram::~ShaderProgram() {
 	glDeleteProgram(impl->id);
-	App::self->unregisterShaderProgram(this);
+	if (App::self) {
+		App::self->unregisterShaderProgram(this);
+	}
 }
 
 ShaderProgram::Context::Context(const ShaderProgram::Impl& impl) {
