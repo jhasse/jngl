@@ -28,9 +28,6 @@ JNGL_MAIN_BEGIN {
 				jngl::updateInput();
 				jngl::translate(-jngl::getScreenWidth() / 2.0, -jngl::getScreenHeight() / 2.0);
 				base.Draw();
-				std::stringstream sstream;
-				sstream << "FPS: " << static_cast<int>(jngl::getFPS());
-				jngl::print(sstream.str(), 10, 10);
 				jngl::swapBuffers();
 			} else {
 				// Nothing to do? Okay let's Sleep.
