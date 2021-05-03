@@ -36,7 +36,7 @@ if(Boost_FOUND)
 	target_link_libraries(jngl PUBLIC Boost::headers)
 else()
 	FetchContent_Declare(boost
-		URL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.7z
+		URL https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.7z
 		URL_HASH SHA256=1b3949ffddf56129141032542523920034f2e69775fb9332a52ba37c548dbf35)
 	FetchContent_MakeAvailable(boost)
 	FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
