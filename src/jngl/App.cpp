@@ -17,7 +17,7 @@ App* App::self = nullptr;
 struct App::Impl {
 	std::string displayName;
 	bool pixelArt = false;
-	std::set<ShaderProgram*> shaderPrograms;
+	std::set<ShaderProgram*> shaderPrograms{};
 };
 
 App::App(std::string displayName) : impl(new Impl{ std::move(displayName) }) {
