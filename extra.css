@@ -28,11 +28,12 @@ h1.groupheader {
 	font-size: 24px;
 	font-weight: normal;
 	margin: 10px 2px;
+	display: none; /* actually hide the headline as there's jngl.svg instead */
 }
 
 h2.groupheader {
 	border-bottom: none;
-	color: rgb(60, 76, 108);
+	color: #cc3a8eff;
 	font-size: 24px;
 	font-weight: normal;
 	margin: 42px 0px 20px 0px;
@@ -58,7 +59,7 @@ h1 {
 }
 
 h1, h2 {
-	color: rgb(60, 76, 108);
+	color: #cc3a8eff;
 	font-size: 24px;
 	font-weight: normal;
 	margin: 42px 0px 20px 0px;
@@ -133,13 +134,13 @@ div.navtab {
 /* @group Link Styling */
 
 a {
-	color: rgb(51, 102, 204);
+	color: #2d77c9ff;
 	font-weight: normal;
 	text-decoration: none;
 }
 
 .contents a:visited {
-	color: rgb(51, 102, 204);
+	color: #2d77c9ff;
 }
 
 a:hover {
@@ -168,11 +169,11 @@ a.el, a.elRef, .memname, td.entry, pre.fragment, div.line, .mdescLeft, .mdescRig
 }
 
 a.code, a.code:visited {
-	color: rgb(51, 102, 204);
+	color: #2d77c9ff;
 }
 
 a.codeRef, a.codeRef:visited {
-	color: rgb(51, 102, 204);
+	color: #2d77c9ff;
 }
 
 
@@ -1197,12 +1198,12 @@ tr.heading h2 {
 
 .tabs, .tabs2, .tabs3, .sm {
 	background-image: none;
-	background-color: #2f3a48;
+	background-color: #2d77c9;
 	color: white;
 }
 
 .tabs2, .tabs li.current, .sm .highlighted {
-	background-color: #51637b;
+	background-color: #cc3a8e;
 }
 
 .tablist li {
