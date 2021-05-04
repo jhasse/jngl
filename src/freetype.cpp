@@ -145,6 +145,9 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)
 	auto filename = pathPrefix + relativeFilename;
 	if (!fileExists(filename)) {
 		if (!fileExists(relativeFilename)) {
+			if (relativeFilename.empty()) {
+				throw std::runtime_error("No font file set. Use jngl::setFont.");
+			}
 			throw std::runtime_error(std::string("Font file not found: ") + filename);
 		}
 		filename = relativeFilename;
