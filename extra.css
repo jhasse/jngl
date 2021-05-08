@@ -31,6 +31,10 @@ h1.groupheader {
 	display: none; /* actually hide the headline as there's jngl.svg instead */
 }
 
+img {
+	max-width: 100%;
+}
+
 h2.groupheader {
 	border-bottom: none;
 	color: #cc3a8eff;
