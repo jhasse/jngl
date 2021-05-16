@@ -28,7 +28,10 @@ h1.groupheader {
 	font-size: 24px;
 	font-weight: normal;
 	margin: 10px 2px;
-	display: none; /* actually hide the headline as there's jngl.svg instead */
+}
+
+img {
+	max-width: 100%;
 }
 
 h2.groupheader {

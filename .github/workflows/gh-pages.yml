@@ -17,6 +17,7 @@ jobs:
           cmake .
           make
           doxygen
+          sed -i 'sx<div class="title">Documentation </div>xxg' html/index.html # Remove header from index.html only
         working-directory: doc
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v3
