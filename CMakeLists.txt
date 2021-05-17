@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.13)
 
 project(jngl LANGUAGES C CXX)
 
@@ -33,7 +33,7 @@ if(IOS)
 endif()
 find_package(Boost)
 if(Boost_FOUND)
-	target_link_libraries(jngl PUBLIC Boost::headers)
+	target_include_directories(jngl PUBLIC ${Boost_INCLUDE_DIRS})
 else()
 	FetchContent_Declare(boost
 		URL https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.7z
@@ -78,6 +78,8 @@ elseif (UNIX)
 		file(GLOB SRC src/linux/*.cpp src/linux/*.c)
 		target_sources(jngl PRIVATE ${SRC})
     endif()
+
+	target_link_libraries(jngl PRIVATE $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>)
 else() # Windows
 	set(JNGL_SDL2_DEFAULT OFF)
 	if(WINDOWS_STORE)
