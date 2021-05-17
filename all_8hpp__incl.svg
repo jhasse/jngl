@@ -36,7 +36,7 @@
 <!-- Node5 -->
 <g id="node5" class="node">
 <title>Node5</title>
-<g id="a_node5"><a xlink:href="Color_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node5"><a xlink:href="Color_8hpp.html" target="_top" xlink:title="Contains jngl::Color class.">
 <polygon fill="white" stroke="black" points="1974,-112.5 1974,-131.5 2045,-131.5 2045,-112.5 1974,-112.5"/>
 <text text-anchor="middle" x="2009.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">Color.hpp</text>
 </a>
@@ -780,7 +780,7 @@
 <!-- Node25 -->
 <g id="node25" class="node">
 <title>Node25</title>
-<g id="a_node25"><a xlink:href="Finally_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node25"><a xlink:href="Finally_8hpp.html" target="_top" xlink:title="Contains jngl::Finally class.">
 <polygon fill="white" stroke="black" points="1358,-112.5 1358,-131.5 1441,-131.5 1441,-112.5 1358,-112.5"/>
 <text text-anchor="middle" x="1399.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">Finally.hpp</text>
 </a>

@@ -1,6 +1,6 @@
 <map id="jngl/main.hpp" name="jngl/main.hpp">
 <area shape="rect" id="node1" title="Defines macros for the main entry point." alt="" coords="179,5,305,32"/>
-<area shape="rect" id="node2" href="$Finally_8hpp.html" title=" " alt="" coords="31,80,141,107"/>
+<area shape="rect" id="node2" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="31,80,141,107"/>
 <area shape="rect" id="node4" href="$other_8hpp.html" title="Miscellaneous functions." alt="" coords="195,80,289,107"/>
 <area shape="rect" id="node8" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="313,80,416,107"/>
 <area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="5,155,108,181"/>

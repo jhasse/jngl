@@ -1,5 +1,5 @@
 <map id="jngl/Finally.hpp" name="jngl/Finally.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="151,5,301,32"/>
+<area shape="rect" id="node1" title="Contains jngl::Finally class." alt="" coords="151,5,301,32"/>
 <area shape="rect" id="node2" href="$framebuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="5,155,180,181"/>
 <area shape="rect" id="node5" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="163,80,289,107"/>
 <area shape="rect" id="node7" href="$ShaderProgram_8hpp.html" title="Contains jngl::ShaderProgram class." alt="" coords="321,80,520,107"/>

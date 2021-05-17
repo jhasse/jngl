@@ -2,7 +2,7 @@
 <area shape="rect" id="node1" title="Includes jngl/all.hpp." alt="" coords="1544,5,1631,32"/>
 <area shape="rect" id="node2" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="1528,80,1647,107"/>
 <area shape="rect" id="node3" href="$App_8hpp.html" title=" " alt="" coords="1388,229,1467,256"/>
-<area shape="rect" id="node6" href="$Color_8hpp.html" title=" " alt="" coords="2637,304,2732,331"/>
+<area shape="rect" id="node6" href="$Color_8hpp.html" title="Contains jngl::Color class." alt="" coords="2637,304,2732,331"/>
 <area shape="rect" id="node7" href="$Container_8hpp.html" title="Contains jngl::Container class." alt="" coords="643,229,769,256"/>
 <area shape="rect" id="node10" href="$Controller_8hpp.html" title=" " alt="" coords="321,155,456,181"/>
 <area shape="rect" id="node11" href="$input_8hpp.html" title="Input related functions." alt="" coords="235,229,329,256"/>
@@ -44,7 +44,7 @@
 <area shape="rect" id="node13" title=" " alt="" coords="2663,453,2821,480"/>
 <area shape="rect" id="node14" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="2455,453,2525,480"/>
 <area shape="rect" id="node22" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="17,229,96,256"/>
-<area shape="rect" id="node26" href="$Finally_8hpp.html" title=" " alt="" coords="1816,304,1927,331"/>
+<area shape="rect" id="node26" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="1816,304,1927,331"/>
 <area shape="rect" id="node33" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/sstream.html" title=" " alt="" coords="2532,304,2611,331"/>
 <area shape="rect" id="node37" href="$Mat3_8hpp.html" title="Contains jngl::Mat3 class." alt="" coords="3151,304,3237,331"/>
 <area shape="rect" id="node38" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/initializer_list.html" title=" " alt="" coords="3119,379,3269,405"/>

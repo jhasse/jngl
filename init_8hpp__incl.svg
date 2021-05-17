@@ -157,7 +157,7 @@
 <!-- Node6 -->
 <g id="node6" class="node">
 <title>Node6</title>
-<g id="a_node6"><a xlink:href="Finally_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node6"><a xlink:href="Finally_8hpp.html" target="_top" xlink:title="Contains jngl::Finally class.">
 <polygon fill="white" stroke="black" points="19,-56.5 19,-75.5 102,-75.5 102,-56.5 19,-56.5"/>
 <text text-anchor="middle" x="60.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00">Finally.hpp</text>
 </a>

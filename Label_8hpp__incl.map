@@ -1,6 +1,6 @@
 <map id="jngl/Label.hpp" name="jngl/Label.hpp">
 <area shape="rect" id="node1" title="Contains jngl::Label class." alt="" coords="108,5,243,32"/>
-<area shape="rect" id="node2" href="$Color_8hpp.html" title=" " alt="" coords="5,80,100,107"/>
+<area shape="rect" id="node2" href="$Color_8hpp.html" title="Contains jngl::Color class." alt="" coords="5,80,100,107"/>
 <area shape="rect" id="node3" href="$Widget_8hpp.html" title="Contains jngl::Container class." alt="" coords="124,80,227,107"/>
 <area shape="rect" id="node10" href="$text_8hpp.html" title=" " alt="" coords="251,80,337,107"/>
 <area shape="rect" id="node4" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="179,229,265,256"/>

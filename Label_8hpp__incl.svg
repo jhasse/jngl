@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="Color_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node2"><a xlink:href="Color_8hpp.html" target="_top" xlink:title="Contains jngl::Color class.">
 <polygon fill="white" stroke="black" points="0,-168.5 0,-187.5 71,-187.5 71,-168.5 0,-168.5"/>
 <text text-anchor="middle" x="35.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">Color.hpp</text>
 </a>

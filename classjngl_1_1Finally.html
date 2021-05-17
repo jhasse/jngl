@@ -107,13 +107,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac5afeee6d00b1ee4e71c074641600dc3"><td class="memItemLeft" align="right" valign="top"><a id="ac5afeee6d00b1ee4e71c074641600dc3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Finally</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::function</a>&lt; void()&gt; functionToCall)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Finally.html#ac5afeee6d00b1ee4e71c074641600dc3">Finally</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::function</a>&lt; void()&gt; functionToCall)</td></tr>
+<tr class="memdesc:ac5afeee6d00b1ee4e71c074641600dc3"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>functionToCall</em> will be moved into the member with the same name <br /></td></tr>
 <tr class="separator:ac5afeee6d00b1ee4e71c074641600dc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a5c9e505a302f10126e25e09fa88c12"><td class="memItemLeft" align="right" valign="top"><a id="a1a5c9e505a302f10126e25e09fa88c12"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Finally</b> (<a class="el" href="classjngl_1_1Finally.html">Finally</a> &amp;&amp;) noexcept</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Finally.html#a1a5c9e505a302f10126e25e09fa88c12">Finally</a> (<a class="el" href="classjngl_1_1Finally.html">Finally</a> &amp;&amp;) noexcept</td></tr>
+<tr class="memdesc:a1a5c9e505a302f10126e25e09fa88c12"><td class="mdescLeft">&#160;</td><td class="mdescRight">The moved-from <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> object will no longer call the function. <br /></td></tr>
 <tr class="separator:a1a5c9e505a302f10126e25e09fa88c12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8375d932305331795bba4dd8eedcbe86"><td class="memItemLeft" align="right" valign="top"><a id="a8375d932305331795bba4dd8eedcbe86"></a>
-<a class="el" href="classjngl_1_1Finally.html">Finally</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classjngl_1_1Finally.html">Finally</a> &amp;&amp;) noexcept</td></tr>
+<a class="el" href="classjngl_1_1Finally.html">Finally</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Finally.html#a8375d932305331795bba4dd8eedcbe86">operator=</a> (<a class="el" href="classjngl_1_1Finally.html">Finally</a> &amp;&amp;) noexcept</td></tr>
+<tr class="memdesc:a8375d932305331795bba4dd8eedcbe86"><td class="mdescLeft">&#160;</td><td class="mdescRight">The moved-from <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> object will no longer call the function. <br /></td></tr>
 <tr class="separator:a8375d932305331795bba4dd8eedcbe86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c4a9858620d1dbc803e0e01ae7b9b7d"><td class="memItemLeft" align="right" valign="top"><a id="a8c4a9858620d1dbc803e0e01ae7b9b7d"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Finally</b> (const <a class="el" href="classjngl_1_1Finally.html">Finally</a> &amp;)=delete</td></tr>
@@ -121,11 +124,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a49fe1128f8472fc008887da33c08a58b"><td class="memItemLeft" align="right" valign="top"><a id="a49fe1128f8472fc008887da33c08a58b"></a>
 <a class="el" href="classjngl_1_1Finally.html">Finally</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classjngl_1_1Finally.html">Finally</a> &amp;)=delete</td></tr>
 <tr class="separator:a49fe1128f8472fc008887da33c08a58b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bd21b732b9bcb80bec80dec89815d9d"><td class="memItemLeft" align="right" valign="top"><a id="a4bd21b732b9bcb80bec80dec89815d9d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Finally.html#a4bd21b732b9bcb80bec80dec89815d9d">~Finally</a> ()</td></tr>
+<tr class="memdesc:a4bd21b732b9bcb80bec80dec89815d9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls the function which has been passed into the constructor. <br /></td></tr>
+<tr class="separator:a4bd21b732b9bcb80bec80dec89815d9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Helper class which calls a function when being destroyed. </p>
-
-<p class="definition">Definition at line <a class="el" href="Finally_8hpp_source.html#l00011">11</a> of file <a class="el" href="Finally_8hpp_source.html">Finally.hpp</a>.</p>
+<p>Useful when using C interfaces without the need to write a wrapper class. For example:</p>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> foo() {</div>
+<div class="line">    FILE* f = <a class="codeRef" href="http://en.cppreference.com/w/cpp/io/c/fopen.html">fopen</a>(<span class="stringliteral">&quot;foo.txt&quot;</span>, <span class="stringliteral">&quot;r&quot;</span>);</div>
+<div class="line">    <a class="code" href="classjngl_1_1Finally.html#ac5afeee6d00b1ee4e71c074641600dc3">Finally</a> _([f]() { <a class="codeRef" href="http://en.cppreference.com/w/cpp/io/c/fclose.html">fclose</a>(f); };</div>
+<div class="line">    <span class="comment">// ...</span></div>
+<div class="line">}</div>
+<div class="ttc" id="aclassjngl_1_1Finally_html_ac5afeee6d00b1ee4e71c074641600dc3"><div class="ttname"><a href="classjngl_1_1Finally.html#ac5afeee6d00b1ee4e71c074641600dc3">jngl::Finally::Finally</a></div><div class="ttdeci">Finally(std::function&lt; void()&gt; functionToCall)</div><div class="ttdoc">functionToCall will be moved into the member with the same name</div></div>
+<div class="ttc" id="afclose_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/io/c/fclose.html">std::fclose</a></div><div class="ttdeci">T fclose(T... args)</div></div>
+<div class="ttc" id="afopen_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/io/c/fopen.html">std::fopen</a></div><div class="ttdeci">T fopen(T... args)</div></div>
+</div><!-- fragment --> 
+<p class="definition">Definition at line <a class="el" href="Finally_8hpp_source.html#l00022">22</a> of file <a class="el" href="Finally_8hpp_source.html">Finally.hpp</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>jngl/<a class="el" href="Finally_8hpp_source.html">Finally.hpp</a></li>
 </ul>
