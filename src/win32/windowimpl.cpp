@@ -30,11 +30,9 @@ void setProcessSettings() {
 	if (called) {
 		return;
 	}
-#ifdef _MSC_VER // MinGW doesn't seem to have SetProcessDPIAware yet
 	if (!SetProcessDPIAware()) {
 		debugLn("Couldn't set the process-default DPI awareness to system-DPI awareness.");
 	}
-#endif
 	called = true;
 }
 
