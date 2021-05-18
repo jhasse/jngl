@@ -12,6 +12,26 @@
 namespace jngl {
 
 /// Two-dimensional vector
+///
+/// JNGL doesn't provide any linear algebra functions but relies on the excelent
+/// [Boost.QVM](https://www.boost.org/doc/libs/release/libs/qvm/index.html):
+///
+/// \code
+/// #include <boost/qvm/vec_operations.hpp>
+///
+/// jngl::Vec2 v(3, 4);
+/// double length = boost::qvm::mag(v);
+/// assert(length == 5);
+/// \endcode
+///
+/// If the header `boost/qvm/vec_traits.hpp` is available, common math operators will also be
+/// brought into the global namespace:
+///
+/// \code
+/// jngl::Vec2 v(3, 4);
+/// v *= 2.0;
+/// assert(std::lround(v.x) == 6);
+/// \endcode
 class Vec2 {
 public:
 	/// Null vector
