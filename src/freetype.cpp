@@ -4,9 +4,9 @@
 #include "freetype.hpp"
 
 #include "helper.hpp"
+#include "jngl/ScaleablePixels.hpp"
 #include "jngl/debug.hpp"
 #include "jngl/matrix.hpp"
-#include "jngl/ScaleablePixels.hpp"
 #include "jngl/screen.hpp"
 #include "main.hpp"
 
@@ -75,7 +75,8 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 		}
 	}
 
-	texture_ = new Texture(static_cast<float>(width), static_cast<float>(height), width, height, &data[0]);
+	texture_ =
+	    new Texture(static_cast<float>(width), static_cast<float>(height), width, height, &data[0]);
 	for (auto d : data) {
 		delete[] d;
 	}
@@ -134,7 +135,8 @@ Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::
 		unicodeCharacter = cvt.from_bytes(&ch, sourceEnd)[0];
 	}
 	if (characters_[unicodeCharacter] == nullptr) {
-		characters_[unicodeCharacter] = std::make_shared<Character>(unicodeCharacter, height_, face);
+		characters_[unicodeCharacter] =
+		    std::make_shared<Character>(unicodeCharacter, height_, face);
 	}
 	return *(characters_[unicodeCharacter]);
 }

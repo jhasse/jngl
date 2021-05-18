@@ -8,8 +8,8 @@
 #include "spriteimpl.hpp"
 
 #include <boost/math/special_functions/round.hpp>
-#include <boost/qvm/mat_operations.hpp>
 #include <boost/qvm/map_vec_mat.hpp>
+#include <boost/qvm/mat_operations.hpp>
 #include <boost/qvm/mat_operations3.hpp>
 #include <boost/qvm/vec.hpp>
 #include <fstream>
@@ -240,7 +240,9 @@ void quit() {
 }
 
 void cancelQuit() {
-	if (pWindow) { pWindow->cancelQuit(); }
+	if (pWindow) {
+		pWindow->cancelQuit();
+	}
 }
 
 void setBackgroundColor(const jngl::Color color) {
@@ -430,7 +432,7 @@ void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 
 void drawTriangle(const double A_x, const double A_y, const double B_x, const double B_y,
                   const double C_x, const double C_y) {
-	pWindow->drawTriangle({ A_x, A_y}, { B_x, B_y }, { C_x, C_y });
+	pWindow->drawTriangle({ A_x, A_y }, { B_x, B_y }, { C_x, C_y });
 }
 
 void setLineWidth(const float width) {
@@ -446,7 +448,7 @@ void drawLine(const Vec2 start, const Vec2 end) {
 }
 
 void drawPoint(const double x, const double y) {
-	pWindow->drawEllipse({x, y}, {1, 1}, 0);
+	pWindow->drawEllipse({ x, y }, { 1, 1 }, 0);
 }
 
 int getWindowWidth() {
@@ -547,7 +549,9 @@ void setConfigPath(const std::string& path) {
 }
 
 std::string _getConfigPath() {
-	if (configPath) { return *configPath; }
+	if (configPath) {
+		return *configPath;
+	}
 #ifndef IOS
 	std::stringstream path;
 #if defined(__APPLE__)

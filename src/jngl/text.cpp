@@ -6,9 +6,9 @@
 #include "../freetype.hpp"
 #include "../helper.hpp"
 #include "../spriteimpl.hpp"
+#include "ScaleablePixels.hpp"
 #include "font.hpp"
 #include "matrix.hpp"
-#include "ScaleablePixels.hpp"
 #include "screen.hpp"
 
 namespace jngl {

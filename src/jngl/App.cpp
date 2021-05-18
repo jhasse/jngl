@@ -4,8 +4,8 @@
 #include "App.hpp"
 
 #include "../windowptr.hpp"
-#include "debug.hpp"
 #include "ShaderProgram.hpp"
+#include "debug.hpp"
 
 #include <set>
 #include <stdexcept>

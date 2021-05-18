@@ -4,8 +4,8 @@
 #include "TextLine.hpp"
 
 #include "../freetype.hpp"
-#include "font.hpp"
 #include "ScaleablePixels.hpp"
+#include "font.hpp"
 #include "screen.hpp"
 
 namespace jngl {
