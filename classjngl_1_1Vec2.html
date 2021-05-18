@@ -134,8 +134,20 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Two-dimensional vector. </p>
-
-<p class="definition">Definition at line <a class="el" href="Vec2_8hpp_source.html#l00015">15</a> of file <a class="el" href="Vec2_8hpp_source.html">Vec2.hpp</a>.</p>
+<p>JNGL doesn't provide any linear algebra functions but relies on the excelent <a href="https://www.boost.org/doc/libs/release/libs/qvm/index.html">Boost.QVM</a>:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;boost/qvm/vec_operations.hpp&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a> v(3, 4);</div>
+<div class="line"><span class="keywordtype">double</span> length = boost::qvm::mag(v);</div>
+<div class="line">assert(length == 5);</div>
+<div class="ttc" id="aclassjngl_1_1Vec2_html"><div class="ttname"><a href="classjngl_1_1Vec2.html">jngl::Vec2</a></div><div class="ttdoc">Two-dimensional vector.</div><div class="ttdef"><b>Definition:</b> <a href="Vec2_8hpp_source.html#l00035">Vec2.hpp:35</a></div></div>
+</div><!-- fragment --><p>If the header <code>boost/qvm/vec_traits.hpp</code> is available, common math operators will also be brought into the global namespace:</p>
+<div class="fragment"><div class="line"><a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a> v(3, 4);</div>
+<div class="line">v *= 2.0;</div>
+<div class="line">assert(<a class="codeRef" href="http://en.cppreference.com/w/cpp/numeric/math/round.html">std::lround</a>(v.x) == 6);</div>
+<div class="ttc" id="around_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/numeric/math/round.html">std::lround</a></div><div class="ttdeci">T lround(T... args)</div></div>
+</div><!-- fragment --> 
+<p class="definition">Definition at line <a class="el" href="Vec2_8hpp_source.html#l00035">35</a> of file <a class="el" href="Vec2_8hpp_source.html">Vec2.hpp</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>jngl/<a class="el" href="Vec2_8hpp_source.html">Vec2.hpp</a></li>
 </ul>
