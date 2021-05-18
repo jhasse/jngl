@@ -373,7 +373,7 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                     if (th_decode_ycbcr_out(tdec, ycbcr) == 0)
                     {
                         const double videotime = th_granule_time(tdec, granulepos);
-                        VideoFrame *item = (VideoFrame *) malloc(sizeof (VideoFrame));
+						const auto item = new VideoFrame;
                         if (item == nullptr) { goto cleanup; }
                         item->playms = (unsigned int) (videotime * 1000.0);
                         item->fps = fps;
@@ -400,7 +400,7 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 
                         if (item->pixels == nullptr)
                         {
-                            free(item);
+							delete item;
                             goto cleanup;
 						}
 
@@ -683,12 +683,10 @@ const THEORAPLAY_VideoFrame* THEORAPLAY_getVideo(THEORAPLAY_Decoder* const ctx) 
     return retval;
 }
 
-void THEORAPLAY_freeVideo(const THEORAPLAY_VideoFrame *_item)
-{
-    THEORAPLAY_VideoFrame *item = (THEORAPLAY_VideoFrame *) _item;
+void THEORAPLAY_freeVideo(const THEORAPLAY_VideoFrame* item) {
 	if (item != nullptr) {
 		assert(item->next == nullptr);
-        free(item);
+		delete item;
 	}
 }
 
