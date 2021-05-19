@@ -1,4 +1,4 @@
-// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../windowptr.hpp"
@@ -44,23 +44,6 @@ void setKeyboardType(KeyboardType t) {
 KeyboardType getKeyboardType() {
 	return keyboardType;
 }
-
-#if defined(ANDROID) || defined(IOS)
-bool isControllerConnected(int) {
-	return false;
-}
-
-float getControllerState(int, controller::Button) {
-	return 0.0f;
-}
-
-bool getControllerDown(int, controller::Button) {
-	return false;
-}
-
-void setControllerVibration(int, unsigned short, unsigned short) {
-}
-#endif
 
 void onControllerChanged(std::function<void()> callback) {
 	pWindow->onControllerChanged(std::move(callback));
