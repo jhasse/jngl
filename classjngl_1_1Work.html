@@ -106,6 +106,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ad9283b336e6952919ef4d3f435105451"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Work.html#ad9283b336e6952919ef4d3f435105451">onBackEvent</a> ()</td></tr>
+<tr class="memdesc:ad9283b336e6952919ef4d3f435105451"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called when the "back" button is pressed (important on Android)  <a href="classjngl_1_1Work.html#ad9283b336e6952919ef4d3f435105451">More...</a><br /></td></tr>
+<tr class="separator:ad9283b336e6952919ef4d3f435105451"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73f9f5ca4d5c6d4dc49b176af928cd90"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Work.html#a73f9f5ca4d5c6d4dc49b176af928cd90">onQuitEvent</a> ()</td></tr>
 <tr class="memdesc:a73f9f5ca4d5c6d4dc49b176af928cd90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called when the user closes the main window or <a class="el" href="namespacejngl.html#a4d50d8a7e6f86e2fe2b8529c95d6ef02" title="Emit a quit event which will exit App::mainLoop() and set running() to false.">quit()</a> has been called.  <a href="classjngl_1_1Work.html#a73f9f5ca4d5c6d4dc49b176af928cd90">More...</a><br /></td></tr>
 <tr class="separator:a73f9f5ca4d5c6d4dc49b176af928cd90"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,6 +168,34 @@ Collaboration diagram for Work:</div>
 </div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad9283b336e6952919ef4d3f435105451"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9283b336e6952919ef4d3f435105451">&#9670;&nbsp;</a></span>onBackEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void onBackEvent </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets called when the "back" button is pressed (important on Android) </p>
+<p>Calls onQuitEvent by default. </p>
+
+</div>
+</div>
 <a id="a73f9f5ca4d5c6d4dc49b176af928cd90"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a73f9f5ca4d5c6d4dc49b176af928cd90">&#9670;&nbsp;</a></span>onQuitEvent()</h2>
 
@@ -189,7 +220,6 @@ Collaboration diagram for Work:</div>
 </div><div class="memdoc">
 
 <p>Gets called when the user closes the main window or <a class="el" href="namespacejngl.html#a4d50d8a7e6f86e2fe2b8529c95d6ef02" title="Emit a quit event which will exit App::mainLoop() and set running() to false.">quit()</a> has been called. </p>
-<p>On Android this will happen when the back button is pressed.</p>
 <p>To continue with the main loop, call <a class="el" href="namespacejngl.html#a023daf9767d1e2db5d032856dda0b8fa" title="Undo quit() or ignore a quit event caused by the user closing the main window.">cancelQuit()</a>. </p>
 
 </div>
