@@ -4,7 +4,7 @@
 <area shape="rect" id="node3" href="$App_8hpp.html" title=" " alt="" coords="1388,229,1467,256"/>
 <area shape="rect" id="node6" href="$Color_8hpp.html" title="Contains jngl::Color class." alt="" coords="2637,304,2732,331"/>
 <area shape="rect" id="node7" href="$Container_8hpp.html" title="Contains jngl::Container class." alt="" coords="643,229,769,256"/>
-<area shape="rect" id="node10" href="$Controller_8hpp.html" title=" " alt="" coords="321,155,456,181"/>
+<area shape="rect" id="node10" href="$Controller_8hpp.html" title="Contains jngl::Controller class." alt="" coords="321,155,456,181"/>
 <area shape="rect" id="node11" href="$input_8hpp.html" title="Input related functions." alt="" coords="235,229,329,256"/>
 <area shape="rect" id="node17" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="545,304,664,331"/>
 <area shape="rect" id="node18" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="1303,155,1397,181"/>

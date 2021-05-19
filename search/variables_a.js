@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['pixelart_5110',['pixelArt',['../structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805',1,'jngl::AppParameters']]],
-  ['position_5111',['position',['../classjngl_1_1Widget.html#a6e37ad5a87462ee0c98d5e165b90fc40',1,'jngl::Widget']]]
+  ['pixelart_5113',['pixelArt',['../structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805',1,'jngl::AppParameters']]],
+  ['position_5114',['position',['../classjngl_1_1Widget.html#a6e37ad5a87462ee0c98d5e165b90fc40',1,'jngl::Widget']]]
 ];

@@ -66,7 +66,7 @@
 <!-- Node9 -->
 <g id="node9" class="node">
 <title>Node9</title>
-<g id="a_node9"><a xlink:href="Controller_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node9"><a xlink:href="Controller_8hpp.html" target="_top" xlink:title="Contains jngl::Controller class.">
 <polygon fill="white" stroke="black" points="237,-224.5 237,-243.5 338,-243.5 338,-224.5 237,-224.5"/>
 <text text-anchor="middle" x="287.5" y="-231.5" font-family="'Consolas',monospace" font-size="10.00">Controller.hpp</text>
 </a>

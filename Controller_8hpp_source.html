@@ -95,52 +95,53 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <div class="title">Controller.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="Controller_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright 2017-2020 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
+<a href="Controller_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright 2017-2021 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// For conditions of distribution and use, see copyright notice in LICENSE.txt</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"></span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="input_8hpp.html">input.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/chrono.html">chrono</a>&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacejngl.html">jngl</a> {</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classjngl_1_1Controller.html">   13</a></span>&#160;<span class="keyword">class </span><a class="code" href="classjngl_1_1Controller.html">Controller</a> : <span class="keyword">public</span> <a class="codeRef" href="http://en.cppreference.com/w/cpp/memory/enable_shared_from_this.html">std::enable_shared_from_this</a>&lt;Controller&gt; {</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <a class="code" href="classjngl_1_1Controller.html">Controller</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classjngl_1_1Controller.html">Controller</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <a class="code" href="classjngl_1_1Controller.html">Controller</a>(<span class="keyword">const</span> <a class="code" href="classjngl_1_1Controller.html">Controller</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <a class="code" href="classjngl_1_1Controller.html">Controller</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classjngl_1_1Controller.html">Controller</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <a class="code" href="classjngl_1_1Controller.html">Controller</a>(<a class="code" href="classjngl_1_1Controller.html">Controller</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <a class="code" href="classjngl_1_1Controller.html">Controller</a>&amp; operator=(<a class="code" href="classjngl_1_1Controller.html">Controller</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classjngl_1_1Controller.html#aed660735860c00e72d88daf95e520814">   23</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classjngl_1_1Controller.html#aed660735860c00e72d88daf95e520814">state</a>(<a class="code" href="input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0">controller::Button</a>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classjngl_1_1Controller.html#a17997332e2f8c247017cb4315b2646bf">   26</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classjngl_1_1Controller.html#a17997332e2f8c247017cb4315b2646bf">down</a>(<a class="code" href="input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0">controller::Button</a>) <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classjngl_1_1Controller.html#a90c1d7e8f2554e1ca29224a4b24cf020">   29</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classjngl_1_1Controller.html#a90c1d7e8f2554e1ca29224a4b24cf020">pressed</a>(<a class="code" href="input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0">controller::Button</a>);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classjngl_1_1Controller.html#a25b18a163d0c7c014336ba4baf9e1e8f">   32</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Controller.html#a25b18a163d0c7c014336ba4baf9e1e8f">rumble</a>(<span class="keywordtype">float</span>, <a class="codeRef" href="http://en.cppreference.com/w/cpp/chrono/duration.html">std::chrono::milliseconds</a>);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">float</span> stateImpl(<a class="code" href="input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0">controller::Button</a>) <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">enum class</span> ButtonState {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        UNKNOWN,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        PRESSED,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        NOT_PRESSED,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        WAITING_FOR_UP,</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    };</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    ButtonState buttonPressed[jngl::controller::Last] = { ButtonState::UNKNOWN };</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;};</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;} <span class="comment">// namespace jngl</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"></span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="input_8hpp.html">input.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/chrono.html">chrono</a>&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacejngl.html">jngl</a> {</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classjngl_1_1Controller.html">   14</a></span>&#160;<span class="keyword">class </span><a class="code" href="classjngl_1_1Controller.html">Controller</a> : <span class="keyword">public</span> <a class="codeRef" href="http://en.cppreference.com/w/cpp/memory/enable_shared_from_this.html">std::enable_shared_from_this</a>&lt;Controller&gt; {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="classjngl_1_1Controller.html#afdaa75db717cef8cc9bb6ab0776d3106">   17</a></span>&#160;    <a class="code" href="classjngl_1_1Controller.html#afdaa75db717cef8cc9bb6ab0776d3106">Controller</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classjngl_1_1Controller.html">Controller</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <a class="code" href="classjngl_1_1Controller.html#afdaa75db717cef8cc9bb6ab0776d3106">Controller</a>(<span class="keyword">const</span> <a class="code" href="classjngl_1_1Controller.html">Controller</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <a class="code" href="classjngl_1_1Controller.html">Controller</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classjngl_1_1Controller.html">Controller</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <a class="code" href="classjngl_1_1Controller.html#afdaa75db717cef8cc9bb6ab0776d3106">Controller</a>(<a class="code" href="classjngl_1_1Controller.html">Controller</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <a class="code" href="classjngl_1_1Controller.html">Controller</a>&amp; operator=(<a class="code" href="classjngl_1_1Controller.html">Controller</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classjngl_1_1Controller.html#aed660735860c00e72d88daf95e520814">   25</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classjngl_1_1Controller.html#aed660735860c00e72d88daf95e520814">state</a>(<a class="code" href="input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0">controller::Button</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classjngl_1_1Controller.html#a17997332e2f8c247017cb4315b2646bf">   28</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classjngl_1_1Controller.html#a17997332e2f8c247017cb4315b2646bf">down</a>(<a class="code" href="input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0">controller::Button</a>) <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classjngl_1_1Controller.html#a90c1d7e8f2554e1ca29224a4b24cf020">   31</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classjngl_1_1Controller.html#a90c1d7e8f2554e1ca29224a4b24cf020">pressed</a>(<a class="code" href="input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0">controller::Button</a>);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classjngl_1_1Controller.html#a25b18a163d0c7c014336ba4baf9e1e8f">   34</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Controller.html#a25b18a163d0c7c014336ba4baf9e1e8f">rumble</a>(<span class="keywordtype">float</span>, <a class="codeRef" href="http://en.cppreference.com/w/cpp/chrono/duration.html">std::chrono::milliseconds</a>);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">float</span> stateImpl(<a class="code" href="input_8hpp.html#a03bfec859eac87be20f8952c1eb89de0">controller::Button</a>) <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">enum class</span> ButtonState {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        UNKNOWN,</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        PRESSED,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        NOT_PRESSED,</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        WAITING_FOR_UP,</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    };</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    ButtonState buttonPressed[jngl::controller::Last] = { ButtonState::UNKNOWN };</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;};</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;} <span class="comment">// namespace jngl</span></div>
 <div class="ttc" id="achrono_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/chrono.html">chrono</a></div></div>
-<div class="ttc" id="aclassjngl_1_1Controller_html"><div class="ttname"><a href="classjngl_1_1Controller.html">jngl::Controller</a></div><div class="ttdoc">Object representing one Gamepad controller.</div><div class="ttdef"><b>Definition:</b> <a href="Controller_8hpp_source.html#l00013">Controller.hpp:13</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Controller_html"><div class="ttname"><a href="classjngl_1_1Controller.html">jngl::Controller</a></div><div class="ttdoc">Object representing one Gamepad controller.</div><div class="ttdef"><b>Definition:</b> <a href="Controller_8hpp_source.html#l00014">Controller.hpp:14</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Controller_html_a17997332e2f8c247017cb4315b2646bf"><div class="ttname"><a href="classjngl_1_1Controller.html#a17997332e2f8c247017cb4315b2646bf">jngl::Controller::down</a></div><div class="ttdeci">virtual bool down(controller::Button) const =0</div><div class="ttdoc">Returns true when the button is down.</div></div>
 <div class="ttc" id="aclassjngl_1_1Controller_html_a25b18a163d0c7c014336ba4baf9e1e8f"><div class="ttname"><a href="classjngl_1_1Controller.html#a25b18a163d0c7c014336ba4baf9e1e8f">jngl::Controller::rumble</a></div><div class="ttdeci">virtual void rumble(float, std::chrono::milliseconds)</div><div class="ttdoc">0 = no vibration, 1 = maximum</div></div>
 <div class="ttc" id="aclassjngl_1_1Controller_html_a90c1d7e8f2554e1ca29224a4b24cf020"><div class="ttname"><a href="classjngl_1_1Controller.html#a90c1d7e8f2554e1ca29224a4b24cf020">jngl::Controller::pressed</a></div><div class="ttdeci">bool pressed(controller::Button)</div><div class="ttdoc">Returns true only once per frame (until jngl::updateInput is called) for every button press.</div></div>
 <div class="ttc" id="aclassjngl_1_1Controller_html_aed660735860c00e72d88daf95e520814"><div class="ttname"><a href="classjngl_1_1Controller.html#aed660735860c00e72d88daf95e520814">jngl::Controller::state</a></div><div class="ttdeci">float state(controller::Button) const</div><div class="ttdoc">Returns a value between 0.0f (not pressed) and 1.0f (pressed)</div></div>
+<div class="ttc" id="aclassjngl_1_1Controller_html_afdaa75db717cef8cc9bb6ab0776d3106"><div class="ttname"><a href="classjngl_1_1Controller.html#afdaa75db717cef8cc9bb6ab0776d3106">jngl::Controller::Controller</a></div><div class="ttdeci">Controller()=default</div><div class="ttdoc">Use jngl::getConnectedControllers() to query available controllers.</div></div>
 <div class="ttc" id="aduration_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/chrono/duration.html">std::chrono::milliseconds</a></div></div>
 <div class="ttc" id="aenable_shared_from_this_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/memory/enable_shared_from_this.html">std::enable_shared_from_this</a></div></div>
 <div class="ttc" id="ainput_8hpp_html"><div class="ttname"><a href="input_8hpp.html">input.hpp</a></div><div class="ttdoc">Input related functions.</div></div>

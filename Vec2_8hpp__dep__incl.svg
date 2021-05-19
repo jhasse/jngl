@@ -264,7 +264,7 @@
 <!-- Node12 -->
 <g id="node12" class="node">
 <title>Node12</title>
-<g id="a_node12"><a xlink:href="Controller_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node12"><a xlink:href="Controller_8hpp.html" target="_top" xlink:title="Contains jngl::Controller class.">
 <polygon fill="white" stroke="black" points="699,-112.5 699,-131.5 830,-131.5 830,-112.5 699,-112.5"/>
 <text text-anchor="middle" x="764.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">jngl/Controller.hpp</text>
 </a>
