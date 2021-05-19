@@ -7,6 +7,7 @@
 #include "../jngl/other.hpp"
 #include "../jngl/debug.hpp"
 #include "../jngl/screen.hpp"
+#include "../jngl/work.hpp"
 #include "../audio.hpp"
 #include "../windowptr.hpp"
 #include "../main.hpp"
@@ -279,7 +280,7 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 		jngl::setKeyPressed(jngl::key::BackSpace, true);
 		return 1;
 	} else if (key == AKEYCODE_BACK) {
-		jngl::getWork()->onBackEvent();
+		window->getWork()->onBackEvent();
 		return 1;
 	}
 	const auto metaState = AKeyEvent_getMetaState(event);
