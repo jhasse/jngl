@@ -1,5 +1,6 @@
-// Copyright 2017-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2017-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
+/// Contains jngl::Controller class
 /// @file
 #pragma once
 
@@ -12,6 +13,7 @@ namespace jngl {
 /// Object representing one Gamepad controller
 class Controller : public std::enable_shared_from_this<Controller> {
 public:
+	/// Use jngl::getConnectedControllers() to query available controllers
 	Controller() = default;
 	virtual ~Controller() = default;
 	Controller(const Controller&) = delete;
