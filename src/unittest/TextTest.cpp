@@ -78,5 +78,8 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
+
+		BOOST_CHECK_EQUAL(std::lround(jngl::getTextWidth("foo")), 22);
+		BOOST_CHECK_EQUAL(std::lround(jngl::getTextWidth("foo\nfoobar\nbar")), 45);
 	}
 }

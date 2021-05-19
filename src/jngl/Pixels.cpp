@@ -20,7 +20,7 @@ Pixels::operator float() const {
 }
 
 Pixels::operator ScaleablePixels() const {
-	return ScaleablePixels(value * getScaleFactor());
+	return ScaleablePixels(value / getScaleFactor());
 }
 
 Pixels& Pixels::operator+=(const Pixels b) {
