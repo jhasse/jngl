@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -12,9 +12,12 @@ namespace jngl {
 /// Active state of the game, e.g. a menu or the game itself
 class Work : public Job {
 public:
-	/// Gets called when the user closes the main window or quit() has been called
+	/// Gets called when the "back" button is pressed (important on Android)
 	///
-	/// On Android this will happen when the back button is pressed.
+	/// Calls onQuitEvent by default.
+	virtual void onBackEvent();
+
+	/// Gets called when the user closes the main window or quit() has been called
 	///
 	/// To continue with the main loop, call cancelQuit().
 	virtual void onQuitEvent();
