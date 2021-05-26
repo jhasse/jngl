@@ -194,6 +194,7 @@ std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& param
 	return []() {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
 		          << jngl::getDesktopHeight() << std::endl
+		          << "Preferred language: " << jngl::getPreferredLanguage() << std::endl
 		          << "Path of binary: " << jngl::getBinaryPath() << std::endl;
 		jngl::onControllerChanged([]() {
 			const auto controllers = jngl::getConnectedControllers();

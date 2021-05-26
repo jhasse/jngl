@@ -92,6 +92,7 @@ if target_machine.system() != 'windows'
 	endif
 	src += [
 		'src/sdl/input.cpp',
+		'src/sdl/other.cpp',
 		'src/sdl/sdl.cpp',
 		'src/sdl/window.cpp',
 		'src/sdl/SdlController.cpp',

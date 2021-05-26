@@ -740,4 +740,22 @@ void Window::setFullscreen(bool) {
 	throw std::runtime_error("Not implemented.");
 }
 
+std::string getPreferredLanguage() {
+	ULONG numLanguages;
+	DWORD bufferLength = 0;
+	std::string lang = "en";
+	if (GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numLanguages, nullptr, &bufferLength) ==
+	    FALSE) {
+		return lang;
+	}
+	auto languagesBuffer = std::make_unique<wchar_t[]>(bufferLength);
+	if (GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numLanguages, languagesBuffer.get(),
+	                                &bufferLength) == FALSE ||
+	    bufferLength < 3) {
+	}
+	lang[0] = languagesBuffer[0];
+	lang[1] = languagesBuffer[1];
+	return lang;
+}
+
 } // namespace jngl

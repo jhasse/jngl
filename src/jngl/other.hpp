@@ -97,4 +97,7 @@ std::string readConfig(const std::string& key);
 /// \throws std::runtime_error if \a key is invalid (it must be a relative file path)
 void writeConfig(const std::string& key, const std::string& value);
 
+/// Returns user preferred language, i.e. "en" for English, "de" for German
+std::string getPreferredLanguage();
+
 } // namespace jngl
