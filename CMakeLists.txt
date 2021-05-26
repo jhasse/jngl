@@ -58,12 +58,8 @@ elseif(IOS)
 	file(GLOB SRC src/ios/*.cpp src/ios/*.mm src/ios/*.h)
 	target_sources(jngl PRIVATE ${SRC} src/mac/message.cpp)
 elseif (UNIX)
-	target_sources(jngl PRIVATE
-        src/sdl/input.cpp
-        src/sdl/sdl.cpp
-        src/sdl/window.cpp
-        src/sdl/SdlController.cpp
-	)
+	file(GLOB SRC src/sdl/*.cpp)
+	target_sources(jngl PRIVATE ${SRC})
 	if(APPLE)
 		file(GLOB SRC src/mac/*.cpp src/mac/*.mm)
 		enable_language(OBJCXX)
