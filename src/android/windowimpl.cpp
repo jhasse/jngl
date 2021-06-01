@@ -51,7 +51,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 	WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
 	const auto source = AInputEvent_getSource(event);
 	if ((source & AINPUT_SOURCE_JOYSTICK) == AINPUT_SOURCE_JOYSTICK ||
-	    (source & AINPUT_SOURCE_GAMEPAD) == AINPUT_SOURCE_GAMEPAD) {
+	    (source & AINPUT_SOURCE_GAMEPAD) == AINPUT_SOURCE_GAMEPAD ||
+	    (source & AINPUT_SOURCE_DPAD) == AINPUT_SOURCE_DPAD) {
 		return impl.handleJoystickEvent(event);
 	}
 	switch (AInputEvent_getType(event)) {
@@ -454,6 +455,7 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 		const bool down = AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN;
 		switch (AKeyEvent_getKeyCode(event)) {
 		case AKEYCODE_BUTTON_A:
+		case AKEYCODE_DPAD_CENTER:
 			controller->buttonA = down;
 			break;
 		case AKEYCODE_BUTTON_B:
@@ -461,6 +463,18 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 			break;
 		case AKEYCODE_BUTTON_START:
 			controller->buttonStart = down;
+			break;
+		case AKEYCODE_DPAD_LEFT:
+			controller->dpadX = down ? -1 : 0;
+			break;
+		case AKEYCODE_DPAD_RIGHT:
+			controller->dpadX = down ? 1 : 0;
+			break;
+		case AKEYCODE_DPAD_UP:
+			controller->dpadY = down ? -1 : 0;
+			break;
+		case AKEYCODE_DPAD_DOWN:
+			controller->dpadY = down ? 1 : 0;
 			break;
 		}
 		break;
