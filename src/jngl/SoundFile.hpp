@@ -17,7 +17,7 @@ struct SoundParams;
 class SoundFile {
 public:
 	explicit SoundFile(const std::string& filename);
-	~SoundFile() = default;
+	~SoundFile();
 	SoundFile(const SoundFile&) = delete;
 	SoundFile& operator=(const SoundFile&) = delete;
 	SoundFile(SoundFile&&) noexcept;

@@ -130,6 +130,7 @@ SoundFile::SoundFile(const std::string& filename) : params(std::make_unique<Soun
 	debug("OK\n");
 }
 
+SoundFile::~SoundFile() = default;
 SoundFile::SoundFile(SoundFile&&) noexcept = default;
 SoundFile& SoundFile::operator=(SoundFile&&) noexcept = default;
 
