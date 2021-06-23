@@ -1,4 +1,4 @@
-// Copyright 2019-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "SoundFile.hpp"
@@ -129,6 +129,10 @@ SoundFile::SoundFile(const std::string& filename) : params(std::make_unique<Soun
 	ov_clear(&oggFile);
 	debug("OK\n");
 }
+
+SoundFile::SoundFile(SoundFile&&) noexcept = default;
+SoundFile& SoundFile::operator=(SoundFile&&) noexcept = default;
+
 void SoundFile::play() {
 	sound_ = std::make_shared<Sound>(*params, buffer_);
 	GetAudio().play(sound_);
