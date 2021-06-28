@@ -508,4 +508,29 @@ std::string getSystemConfigPath() {
 	return jngl::androidApp->activity->internalDataPath;
 }
 
+std::string getPreferredLanguage() {
+	JNIEnv* jni = nullptr;
+	androidApp->activity->vm->AttachCurrentThread(&jni, nullptr);
+	Finally _([]() { androidApp->activity->vm->DetachCurrentThread(); });
+
+	const jclass localeClass = jni->FindClass("java/util/Locale");
+	const jobject defaultLocale = jni->CallStaticObjectMethod(
+	    localeClass, jni->GetStaticMethodID(localeClass, "getDefault", "()Ljava/util/Locale;"));
+
+	const jobject language = jni->CallObjectMethod(
+	    defaultLocale, jni->GetMethodID(localeClass, "getLanguage", "()Ljava/lang/String;"));
+
+	const jmethodID getBytesMethod =
+	    jni->GetMethodID(jni->GetObjectClass(language), "getBytes", "(Ljava/lang/String;)[B");
+	const auto bytesObject = static_cast<jbyteArray>(
+	    jni->CallObjectMethod(language, getBytesMethod, jni->NewStringUTF("UTF-8")));
+	const size_t length = jni->GetArrayLength(bytesObject);
+	if (length != 2) {
+		debugLn("ERROR: Couldn't get preferred language. Falling back to \"en\".");
+		return "en";
+	}
+	return std::string(
+	    reinterpret_cast<const char*>(jni->GetByteArrayElements(bytesObject, nullptr)), length);
+}
+
 } // namespace jngl

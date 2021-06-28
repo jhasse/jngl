@@ -1,4 +1,4 @@
-// Copyright 2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <jngl.hpp>
@@ -38,7 +38,10 @@ JNGL_MAIN_BEGIN {
 			const auto mouse = jngl::getMousePos();
 			jngl::draw("jngl.webp", mouse.x, mouse.y);
 			if (jngl::mouseDown(jngl::mouse::Left)) {
-				jngl::print("touches: " + std::to_string(jngl::getTouchPositions().size()), 0, 0);
+				jngl::setFontColor(0x000000_rgb);
+				jngl::print(jngl::getPreferredLanguage() +
+				                ", touches: " + std::to_string(jngl::getTouchPositions().size()),
+				            -100, 0);
 			}
 			if (jngl::mousePressed(jngl::mouse::Left) and jngl::isMultitouch()) {
 				jngl::setKeyboardVisible(true);
