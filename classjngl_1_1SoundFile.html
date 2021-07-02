@@ -107,7 +107,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a56f897f766a008f69a20badd6991b6b3"><td class="memItemLeft" align="right" valign="top"><a id="a56f897f766a008f69a20badd6991b6b3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SoundFile</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1SoundFile.html#a56f897f766a008f69a20badd6991b6b3">SoundFile</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
+<tr class="memdesc:a56f897f766a008f69a20badd6991b6b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load an OGG file called <em>filename</em>. <br /></td></tr>
 <tr class="separator:a56f897f766a008f69a20badd6991b6b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46aa023758c7e1252894707b50fd51fc"><td class="memItemLeft" align="right" valign="top"><a id="a46aa023758c7e1252894707b50fd51fc"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SoundFile</b> (const <a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a> &amp;)=delete</td></tr>
@@ -122,22 +123,28 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a> &amp;&amp;) noexcept</td></tr>
 <tr class="separator:ab91bad8c693bfd1ffb8b15370a4a9019"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d58098c6cf63c241ed03bc797256bb1"><td class="memItemLeft" align="right" valign="top"><a id="a6d58098c6cf63c241ed03bc797256bb1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>play</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1SoundFile.html#a6d58098c6cf63c241ed03bc797256bb1">play</a> ()</td></tr>
+<tr class="memdesc:a6d58098c6cf63c241ed03bc797256bb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play the sound once. If called twice the sound would also play twice. <br /></td></tr>
 <tr class="separator:a6d58098c6cf63c241ed03bc797256bb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c528baf37154d347366083f0f816846"><td class="memItemLeft" align="right" valign="top"><a id="a8c528baf37154d347366083f0f816846"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1SoundFile.html#a8c528baf37154d347366083f0f816846">stop</a> ()</td></tr>
+<tr class="memdesc:a8c528baf37154d347366083f0f816846"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop the last started sound. <br /></td></tr>
 <tr class="separator:a8c528baf37154d347366083f0f816846"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8438e3403946accc1986a05b89ee7b03"><td class="memItemLeft" align="right" valign="top"><a id="a8438e3403946accc1986a05b89ee7b03"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isPlaying</b> ()</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1SoundFile.html#a8438e3403946accc1986a05b89ee7b03">isPlaying</a> ()</td></tr>
+<tr class="memdesc:a8438e3403946accc1986a05b89ee7b03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the sound is still playing at least once. <br /></td></tr>
 <tr class="separator:a8438e3403946accc1986a05b89ee7b03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe461d27b9c48d5921c00d521181f12f"><td class="memItemLeft" align="right" valign="top"><a id="afe461d27b9c48d5921c00d521181f12f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>loop</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1SoundFile.html#afe461d27b9c48d5921c00d521181f12f">loop</a> ()</td></tr>
+<tr class="memdesc:afe461d27b9c48d5921c00d521181f12f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play the sound in a loop. Can also be stopped using <a class="el" href="classjngl_1_1SoundFile.html#a8c528baf37154d347366083f0f816846" title="Stop the last started sound.">stop()</a> <br /></td></tr>
 <tr class="separator:afe461d27b9c48d5921c00d521181f12f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a575447d1eb582576aa54990beca2ce2a"><td class="memItemLeft" align="right" valign="top"><a id="a575447d1eb582576aa54990beca2ce2a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setPitch</b> (float p)</td></tr>
-<tr class="separator:a575447d1eb582576aa54990beca2ce2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb368884d19eb0587316d708cc41fdde"><td class="memItemLeft" align="right" valign="top"><a id="acb368884d19eb0587316d708cc41fdde"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1SoundFile.html#acb368884d19eb0587316d708cc41fdde">setPitch</a> (float)</td></tr>
+<tr class="memdesc:acb368884d19eb0587316d708cc41fdde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set pitch in (0.0f, ∞]. Default is 1.0f. <br /></td></tr>
+<tr class="separator:acb368884d19eb0587316d708cc41fdde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adba16af13c4a8c53151baa2d5123ec96"><td class="memItemLeft" align="right" valign="top"><a id="adba16af13c4a8c53151baa2d5123ec96"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setVolume</b> (float v)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1SoundFile.html#adba16af13c4a8c53151baa2d5123ec96">setVolume</a> (float v)</td></tr>
+<tr class="memdesc:adba16af13c4a8c53151baa2d5123ec96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set volume in [0, ∞]. Default is 1.0f. <br /></td></tr>
 <tr class="separator:adba16af13c4a8c53151baa2d5123ec96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
