@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classjngl_1_1Mat3.html" title="3x3 matrix" alt="" coords="5,5,60,32"/>
+<area shape="rect" id="node1" href="$classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work." alt="" coords="5,5,52,32"/>
+<area shape="rect" id="node2" href="$classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself." alt="" coords="100,5,155,32"/>
 </map>

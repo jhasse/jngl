@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['capacity_5023',['capacity',['http://en.cppreference.com/w/cpp/experimental/fs/space_info.html',1,'std::experimental::filesystem::space_info::capacity()'],['http://en.cppreference.com/w/cpp/filesystem/space_info.html',1,'std::filesystem::space_info::capacity()']]],
-  ['conjunction_5fv_5024',['conjunction_v',['http://en.cppreference.com/w/cpp/types/conjunction.html',1,'std']]]
+  ['capacity_5027',['capacity',['http://en.cppreference.com/w/cpp/experimental/fs/space_info.html',1,'std::experimental::filesystem::space_info::capacity()'],['http://en.cppreference.com/w/cpp/filesystem/space_info.html',1,'std::filesystem::space_info::capacity()']]],
+  ['conjunction_5fv_5028',['conjunction_v',['http://en.cppreference.com/w/cpp/types/conjunction.html',1,'std']]]
 ];
