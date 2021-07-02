@@ -394,7 +394,7 @@ Finally Sprite::LoadJPG(const std::string& filename, FILE* file, const bool half
 #endif
 #ifndef NOWEBP
 Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool halfLoad) {
-	auto imageData = std::make_shared<ImageDataWebP>(filename, file);
+	auto imageData = std::make_shared<ImageDataWebP>(filename, file, getScaleFactor());
 	width = static_cast<float>(imageData->getImageWidth() * getScaleFactor());
 	height = static_cast<float>(imageData->getImageHeight() * getScaleFactor());
 	return Finally([imageData = std::move(imageData), filename, halfLoad, this]() mutable {

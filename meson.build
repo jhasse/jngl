@@ -23,6 +23,7 @@ src = [
 	'src/jngl/Finally.cpp',
 	'src/jngl/font.cpp',
 	'src/jngl/framebuffer.cpp',
+	'src/jngl/ImageData.cpp',
 	'src/jngl/input.cpp',
 	'src/jngl/job.cpp',
 	'src/jngl/Label.cpp',

@@ -11,11 +11,17 @@ namespace jngl {
 
 class ImageData {
 public:
+	/// Passing a filename will load the specified \a filename
+	///
+	/// Currently only WebP files are supported (WIP).
+	static std::unique_ptr<ImageData> load(const std::string& filename);
+
 	virtual ~ImageData() = default;
 
 	virtual int getWidth() const = 0;
 	virtual int getHeight() const = 0;
 
+	/// RGBA values ordered row-major
 	virtual const uint8_t* pixels() const = 0;
 };
 

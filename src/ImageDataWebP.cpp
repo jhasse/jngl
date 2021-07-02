@@ -1,7 +1,5 @@
 #include "ImageDataWebP.hpp"
 
-#include "jngl/screen.hpp"
-
 #include <boost/math/special_functions/round.hpp>
 #include <future>
 #include <thread>
@@ -9,7 +7,8 @@
 
 namespace jngl {
 
-ImageDataWebP::ImageDataWebP(std::string filename, FILE* file) : filename(std::move(filename)) {
+ImageDataWebP::ImageDataWebP(std::string filename, FILE* file, double scaleFactor)
+: filename(std::move(filename)) {
 	fseek(file, 0, SEEK_END);
 	auto filesize = ftell(file);
 	fseek(file, 0, SEEK_SET);
@@ -22,17 +21,17 @@ ImageDataWebP::ImageDataWebP(std::string filename, FILE* file) : filename(std::m
 	if (!WebPGetInfo(&buf[0], filesize, &imgWidth, &imgHeight)) {
 		throw std::runtime_error(std::string("Invalid WebP file. (" + this->filename + ")"));
 	}
-	auto width = static_cast<float>(imgWidth * getScaleFactor());
-	auto height = static_cast<float>(imgHeight * getScaleFactor());
 
 	WebPInitDecoderConfig(&config);
 	config.options.use_threads = 1;
 	scaledWidth = imgWidth;
 	scaledHeight = imgHeight;
-	if (getScaleFactor() + 1e-9 < 1) {
+	if (scaleFactor + 1e-9 < 1) {
 		config.options.use_scaling = 1;
-		config.options.scaled_width = scaledWidth = std::max(1, boost::math::iround(width));
-		config.options.scaled_height = scaledHeight = std::max(1, boost::math::iround(height));
+		config.options.scaled_width = scaledWidth =
+		    std::max(1, boost::math::iround(imgWidth * scaleFactor));
+		config.options.scaled_height = scaledHeight =
+		    std::max(1, boost::math::iround(imgHeight * scaleFactor));
 	}
 	config.output.colorspace = MODE_RGBA;
 	thread = std::make_unique<std::thread>([this, buf{ std::move(buf) }, filesize]() mutable {
