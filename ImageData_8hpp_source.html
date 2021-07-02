@@ -106,18 +106,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
 <div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classjngl_1_1ImageData.html">   12</a></span>&#160;<span class="keyword">class </span><a class="code" href="classjngl_1_1ImageData.html">ImageData</a> {</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classjngl_1_1ImageData.html">ImageData</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> getWidth() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> getHeight() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="classjngl_1_1ImageData.html#ac7620cdb320d8acebeb89760f2d26537">   17</a></span>&#160;    <span class="keyword">static</span> <a class="codeRef" href="http://en.cppreference.com/w/cpp/memory/unique_ptr.html">std::unique_ptr&lt;ImageData&gt;</a> <a class="code" href="classjngl_1_1ImageData.html#ac7620cdb320d8acebeb89760f2d26537">load</a>(<span class="keyword">const</span> <a class="codeRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; filename);</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> uint8_t* pixels() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;};</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;} <span class="comment">// namespace jngl</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classjngl_1_1ImageData.html">ImageData</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> getWidth() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> getHeight() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classjngl_1_1ImageData.html#a38c41992cdf9d72e91db68ca4dee1f05">   25</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> uint8_t* <a class="code" href="classjngl_1_1ImageData.html#a38c41992cdf9d72e91db68ca4dee1f05">pixels</a>() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;};</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;} <span class="comment">// namespace jngl</span></div>
+<div class="ttc" id="abasic_string_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a></div></div>
 <div class="ttc" id="aclassjngl_1_1ImageData_html"><div class="ttname"><a href="classjngl_1_1ImageData.html">jngl::ImageData</a></div><div class="ttdef"><b>Definition:</b> <a href="ImageData_8hpp_source.html#l00012">ImageData.hpp:12</a></div></div>
+<div class="ttc" id="aclassjngl_1_1ImageData_html_a38c41992cdf9d72e91db68ca4dee1f05"><div class="ttname"><a href="classjngl_1_1ImageData.html#a38c41992cdf9d72e91db68ca4dee1f05">jngl::ImageData::pixels</a></div><div class="ttdeci">virtual const uint8_t * pixels() const =0</div><div class="ttdoc">RGBA values ordered row-major.</div></div>
+<div class="ttc" id="aclassjngl_1_1ImageData_html_ac7620cdb320d8acebeb89760f2d26537"><div class="ttname"><a href="classjngl_1_1ImageData.html#ac7620cdb320d8acebeb89760f2d26537">jngl::ImageData::load</a></div><div class="ttdeci">static std::unique_ptr&lt; ImageData &gt; load(const std::string &amp;filename)</div><div class="ttdoc">Passing a filename will load the specified filename.</div></div>
 <div class="ttc" id="acstddef_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/cstddef.html">cstddef</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition:</b> <a href="App_8hpp_source.html#l00009">App.hpp:9</a></div></div>
 <div class="ttc" id="astring_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/string.html">string</a></div></div>
+<div class="ttc" id="aunique_ptr_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/memory/unique_ptr.html">std::unique_ptr</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </body></html>
