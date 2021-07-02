@@ -4,6 +4,7 @@
 
 #include "jngl/ImageData.hpp"
 
+#include <thread>
 #include <webp/decode.h>
 
 namespace jngl {
