@@ -211,6 +211,9 @@ void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
 
 void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
                       const ShaderProgram* const shaderProgram) const {
+	if (vertexes.empty()) {
+		return;
+	}
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	scale(getScaleFactor());
