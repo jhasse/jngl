@@ -1,3 +1,6 @@
+// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
+#ifndef NOWEBP
 #include "ImageDataWebP.hpp"
 
 #include <boost/math/special_functions/round.hpp>
@@ -73,3 +76,4 @@ int ImageDataWebP::getHeight() const {
 }
 
 } // namespace jngl
+#endif
