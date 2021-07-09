@@ -65,7 +65,6 @@ Sound::Sound(const SoundParams& params, std::vector<char>& bufferData)
 }
 
 Sound::~Sound() {
-	debug("freeing sound buffer ... ");
 	alSourceStop(impl->source);
 	checkAlError();
 	ALint processedBuffers = 0;
@@ -79,7 +78,6 @@ Sound::~Sound() {
 	checkAlError();
 	alDeleteBuffers(1, &impl->buffer);
 	checkAlError();
-	debug("OK\n");
 }
 
 bool Sound::isPlaying() const {

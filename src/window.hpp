@@ -1,4 +1,4 @@
-// Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -25,6 +25,7 @@
 namespace jngl {
 class FontImpl;
 class Job;
+class ScaleablePixels;
 class WindowImpl;
 class Work;
 
@@ -55,7 +56,7 @@ public:
 	int getCanvasHeight() const;
 	int getWidth() const;
 	int getHeight() const;
-	double GetTextWidth(const std::string&);
+	ScaleablePixels getTextWidth(const std::string&);
 	int getLineHeight();
 	void setLineHeight(int);
 	bool getFullscreen() const;

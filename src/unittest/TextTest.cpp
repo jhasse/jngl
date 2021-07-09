@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/text.hpp"
@@ -32,10 +32,10 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 		Fixture f(scaleFactor);
 		jngl::setFont("../data/Arial.ttf");
 		jngl::Text text("test string\nline 2");
-		BOOST_CHECK_EQUAL(std::lround(text.getWidth()), 69L);
+		BOOST_CHECK_CLOSE(text.getWidth(), 69.4, 0.2);
 		BOOST_CHECK_EQUAL(std::lround(text.getHeight()), 38L);
 		text.setCenter(-10, -10);
-		BOOST_CHECK_CLOSE(text.getX(), -44.5, 1e-9);
+		BOOST_CHECK_CLOSE(text.getX(), -44.7, 0.2);
 		text.draw();
 		const std::string screenshotCentered = R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
@@ -63,11 +63,11 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 
 		text.setCenter(-10, -10); // restore previous state
 		text.draw();
-		BOOST_CHECK_CLOSE(text.getX(), -44.5, 1e-9);
+		BOOST_CHECK_CLOSE(text.getX(), -44.7, 0.2);
 		BOOST_CHECK_EQUAL(f.getAsciiArt(), screenshotCentered);
 
 		text.setAlign(jngl::Alignment::CENTER);
-		BOOST_CHECK_CLOSE(text.getX(), -44.5, 1e-9);
+		BOOST_CHECK_CLOSE(text.getX(), -44.7, 0.2);
 		text.draw(); // the second line should now be centered below the first
 		BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
@@ -78,5 +78,8 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
+
+		BOOST_CHECK_EQUAL(std::lround(jngl::getTextWidth("foo")), 22);
+		BOOST_CHECK_EQUAL(std::lround(jngl::getTextWidth("foo\nfoobar\nbar")), 45);
 	}
 }

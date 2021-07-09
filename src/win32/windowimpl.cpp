@@ -30,11 +30,9 @@ void setProcessSettings() {
 	if (called) {
 		return;
 	}
-#ifdef _MSC_VER // MinGW doesn't seem to have SetProcessDPIAware yet
 	if (!SetProcessDPIAware()) {
 		debugLn("Couldn't set the process-default DPI awareness to system-DPI awareness.");
 	}
-#endif
 	called = true;
 }
 
@@ -740,6 +738,24 @@ int getDesktopHeight() {
 
 void Window::setFullscreen(bool) {
 	throw std::runtime_error("Not implemented.");
+}
+
+std::string getPreferredLanguage() {
+	ULONG numLanguages;
+	DWORD bufferLength = 0;
+	std::string lang = "en";
+	if (GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numLanguages, nullptr, &bufferLength) ==
+	    FALSE) {
+		return lang;
+	}
+	auto languagesBuffer = std::make_unique<wchar_t[]>(bufferLength);
+	if (GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numLanguages, languagesBuffer.get(),
+	                                &bufferLength) == FALSE ||
+	    bufferLength < 3) {
+	}
+	lang[0] = languagesBuffer[0];
+	lang[1] = languagesBuffer[1];
+	return lang;
 }
 
 } // namespace jngl

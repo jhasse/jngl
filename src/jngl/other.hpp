@@ -1,5 +1,6 @@
-// Copyright 2014-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2014-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
+/// Miscellaneous functions
 /// @file
 #pragma once
 
@@ -16,7 +17,14 @@ bool running();
 void updateInput();
 
 /// Swaps back and front buffer. App::mainLoop() calls this after Work::draw()
+///
+/// Also clears the back buffer using jngl::clearBackBuffer().
 void swapBuffers();
+
+/// Clears the back buffer and resets the ModelView matrix, see jngl::reset()
+///
+/// jngl::swapBuffers() calls this so there isn't any reason to call this manually most of the time.
+void clearBackBuffer();
 
 /// Emit a quit event which will exit App::mainLoop() and set running() to false
 void quit();
@@ -24,7 +32,10 @@ void quit();
 /// Undo quit() or ignore a quit event caused by the user closing the main window
 void cancelQuit();
 
-double getFPS();
+/// Calculates FPS if called once per frame
+///
+/// \deprecated Not really intuitive or robust, use your own calculations instead
+[[deprecated("Not really intuitive or robust, use your own calculations instead")]] double getFPS();
 
 /// How many times Work::step is called per second (default: 60)
 unsigned int getStepsPerSecond();
@@ -85,5 +96,8 @@ std::string readConfig(const std::string& key);
 ///                                read-only)
 /// \throws std::runtime_error if \a key is invalid (it must be a relative file path)
 void writeConfig(const std::string& key, const std::string& value);
+
+/// Returns user preferred language, i.e. "en" for English, "de" for German
+std::string getPreferredLanguage();
 
 } // namespace jngl

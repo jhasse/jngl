@@ -8,7 +8,7 @@ jobs:
       image: registry.fedoraproject.org/fedora-minimal:34
     steps:
       - name: Install dependencies
-        run: microdnf install git graphviz doxygen cmake make tar xz rsync
+        run: microdnf install -y git graphviz doxygen cmake make tar xz rsync
       - uses: actions/checkout@v2
         with:
           persist-credentials: false
@@ -17,6 +17,7 @@ jobs:
           cmake .
           make
           doxygen
+          sed -i 'sx<div class="title">Documentation </div>xxg' html/index.html # Remove header from index.html only
         working-directory: doc
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v3

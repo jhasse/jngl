@@ -7,6 +7,7 @@
 #include "../jngl/other.hpp"
 #include "../jngl/debug.hpp"
 #include "../jngl/screen.hpp"
+#include "../jngl/work.hpp"
 #include "../audio.hpp"
 #include "../windowptr.hpp"
 #include "../main.hpp"
@@ -50,7 +51,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 	WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
 	const auto source = AInputEvent_getSource(event);
 	if ((source & AINPUT_SOURCE_JOYSTICK) == AINPUT_SOURCE_JOYSTICK ||
-	    (source & AINPUT_SOURCE_GAMEPAD) == AINPUT_SOURCE_GAMEPAD) {
+	    (source & AINPUT_SOURCE_GAMEPAD) == AINPUT_SOURCE_GAMEPAD ||
+	    (source & AINPUT_SOURCE_DPAD) == AINPUT_SOURCE_DPAD) {
 		return impl.handleJoystickEvent(event);
 	}
 	switch (AInputEvent_getType(event)) {
@@ -279,7 +281,7 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 		jngl::setKeyPressed(jngl::key::BackSpace, true);
 		return 1;
 	} else if (key == AKEYCODE_BACK) {
-		jngl::quit();
+		window->getWork()->onBackEvent();
 		return 1;
 	}
 	const auto metaState = AKeyEvent_getMetaState(event);
@@ -453,6 +455,7 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 		const bool down = AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN;
 		switch (AKeyEvent_getKeyCode(event)) {
 		case AKEYCODE_BUTTON_A:
+		case AKEYCODE_DPAD_CENTER:
 			controller->buttonA = down;
 			break;
 		case AKEYCODE_BUTTON_B:
@@ -460,6 +463,18 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 			break;
 		case AKEYCODE_BUTTON_START:
 			controller->buttonStart = down;
+			break;
+		case AKEYCODE_DPAD_LEFT:
+			controller->dpadX = down ? -1 : 0;
+			break;
+		case AKEYCODE_DPAD_RIGHT:
+			controller->dpadX = down ? 1 : 0;
+			break;
+		case AKEYCODE_DPAD_UP:
+			controller->dpadY = down ? -1 : 0;
+			break;
+		case AKEYCODE_DPAD_DOWN:
+			controller->dpadY = down ? 1 : 0;
 			break;
 		}
 		break;
@@ -491,6 +506,31 @@ std::vector<Vec2> Window::getTouchPositions() const {
 
 std::string getSystemConfigPath() {
 	return jngl::androidApp->activity->internalDataPath;
+}
+
+std::string getPreferredLanguage() {
+	JNIEnv* jni = nullptr;
+	androidApp->activity->vm->AttachCurrentThread(&jni, nullptr);
+	Finally _([]() { androidApp->activity->vm->DetachCurrentThread(); });
+
+	const jclass localeClass = jni->FindClass("java/util/Locale");
+	const jobject defaultLocale = jni->CallStaticObjectMethod(
+	    localeClass, jni->GetStaticMethodID(localeClass, "getDefault", "()Ljava/util/Locale;"));
+
+	const jobject language = jni->CallObjectMethod(
+	    defaultLocale, jni->GetMethodID(localeClass, "getLanguage", "()Ljava/lang/String;"));
+
+	const jmethodID getBytesMethod =
+	    jni->GetMethodID(jni->GetObjectClass(language), "getBytes", "(Ljava/lang/String;)[B");
+	const auto bytesObject = static_cast<jbyteArray>(
+	    jni->CallObjectMethod(language, getBytesMethod, jni->NewStringUTF("UTF-8")));
+	const size_t length = jni->GetArrayLength(bytesObject);
+	if (length != 2) {
+		debugLn("ERROR: Couldn't get preferred language. Falling back to \"en\".");
+		return "en";
+	}
+	return std::string(
+	    reinterpret_cast<const char*>(jni->GetByteArrayElements(bytesObject, nullptr)), length);
 }
 
 } // namespace jngl

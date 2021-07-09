@@ -4,6 +4,7 @@
 /// \file
 #pragma once
 
+#include "Color.hpp"
 #include "Drawable.hpp"
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
@@ -111,11 +112,6 @@ void unload(const std::string& filename);
 
 void unloadAll();
 
-void drawScaled(const std::string& filename, double xposition, double yposition, float xfactor,
-                float yfactor);
-
-void drawScaled(const std::string& filename, double xposition, double yposition, float factor);
-
 void drawClipped(const std::string& filename, double xposition, double yposition, float xstart,
                  float xend, float ystart, float yend);
 
@@ -123,6 +119,8 @@ void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue,
                     unsigned char alpha);
 
 void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue);
+
+void setSpriteColor(Color);
 
 void setSpriteAlpha(unsigned char alpha);
 

@@ -1,8 +1,9 @@
-// Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
+#include "jngl/Pixels.hpp"
 #include "texture.hpp"
 
 #include <ft2build.h> // NOLINT
@@ -24,13 +25,13 @@ public:
 	Character& operator=(Character&&) = delete;
 	~Character();
 	void Draw() const;
-	int getWidth() const;
+	Pixels getWidth() const;
 
 private:
 	Texture* texture_ = nullptr;
-	int width_;
-	int left_ = 0;
-	int top_ = 0;
+	Pixels width_{0};
+	Pixels left_{0};
+	Pixels top_{0};
 };
 
 class FontImpl {
@@ -42,7 +43,7 @@ public:
 	FontImpl& operator=(FontImpl&&) = delete;
 	~FontImpl();
 	void print(double x, double y, const std::string& text);
-	int getTextWidth(const std::string& text);
+	Pixels getTextWidth(const std::string& text);
 	int getLineHeight() const;
 	void setLineHeight(int);
 

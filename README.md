@@ -2,11 +2,11 @@
 
 [🌐 Website](https://bixense.com/jngl/)
 [🏃 Quickstart](https://github.com/jhasse/jngl/wiki/JNGL-Quickstart)
-[🎓 Tutorial](https://github.com/jhasse/jngl/wiki/Tutorialindex)
+[🎓 Tutorial](https://github.com/jhasse/jngl/wiki/Tutorial1)
 [📚 Documentation](https://bixense.com/jngl/annotated.html)
 
-An easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox and the Nintendo
-Switch.
+An easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox, the Nintendo Switch,
+and the Web.
 
 [![Portal Dogs running on the Switch](https://user-images.githubusercontent.com/80071/105062511-f651d480-5a7a-11eb-8cd3-260c7929353a.gif)](https://portaldogs.com/)
 
@@ -50,7 +50,8 @@ Set up [MSYS2](https://www.msys2.org/) and install the following in a MinGW-w64 
 ```
 pacman -Syu --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-boost mingw-w64-x86_64-openal \
 mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
-mingw-w64-x86_64-dlfcn mingw-w64-x86_64-libepoxy mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb
+mingw-w64-x86_64-dlfcn mingw-w64-x86_64-libepoxy mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb \
+mingw-w64-x86_64-libtheora
 ```
 
 ### Visual Studio 2017 or newer
@@ -82,10 +83,12 @@ You can also open the `android/test` folder in Android Studio and build from the
 
 ## iOS
 
-Install Boost using `brew install boost` and run `ln -s /usr/local/include/boost include/ios/boost`.
 Generate a Xcode project using CMake:
 
 ```
+brew install boost
+mkdir include/ios
+ln -s $(brew --prefix)/include/boost include/ios/boost
 cmake -Bbuild-ios -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR
 ```
 

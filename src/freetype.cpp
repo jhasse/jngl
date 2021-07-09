@@ -1,9 +1,10 @@
-// Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "freetype.hpp"
 
 #include "helper.hpp"
+#include "jngl/ScaleablePixels.hpp"
 #include "jngl/debug.hpp"
 #include "jngl/matrix.hpp"
 #include "jngl/screen.hpp"
@@ -44,7 +45,7 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 
 	const int width = boost::numeric_cast<int>(bitmap.width);
 	const int height = boost::numeric_cast<int>(bitmap.rows);
-	width_ = int(face->glyph->advance.x >> 6);
+	width_ = Pixels(static_cast<int32_t>(face->glyph->advance.x >> 6));
 
 	if (height == 0) {
 		return;
@@ -74,13 +75,14 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 		}
 	}
 
-	texture_ = new Texture(static_cast<float>(width), static_cast<float>(height), width, height, &data[0]);
+	texture_ =
+	    new Texture(static_cast<float>(width), static_cast<float>(height), width, height, &data[0]);
 	for (auto d : data) {
 		delete[] d;
 	}
 
-	top_ = boost::numeric_cast<int>(fontHeight) - bitmap_glyph->top;
-	left_ = bitmap_glyph->left;
+	top_ = Pixels(boost::numeric_cast<int>(fontHeight) - bitmap_glyph->top);
+	left_ = Pixels(bitmap_glyph->left);
 }
 
 void Character::Draw() const {
@@ -94,7 +96,7 @@ void Character::Draw() const {
 	opengl::translate(static_cast<float>(width_), 0);
 }
 
-int Character::getWidth() const {
+Pixels Character::getWidth() const {
 	return width_;
 }
 
@@ -133,7 +135,8 @@ Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::
 		unicodeCharacter = cvt.from_bytes(&ch, sourceEnd)[0];
 	}
 	if (characters_[unicodeCharacter] == nullptr) {
-		characters_[unicodeCharacter] = std::make_shared<Character>(unicodeCharacter, height_, face);
+		characters_[unicodeCharacter] =
+		    std::make_shared<Character>(unicodeCharacter, height_, face);
 	}
 	return *(characters_[unicodeCharacter]);
 }
@@ -144,6 +147,9 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)
 	auto filename = pathPrefix + relativeFilename;
 	if (!fileExists(filename)) {
 		if (!fileExists(relativeFilename)) {
+			if (relativeFilename.empty()) {
+				throw std::runtime_error("No font file set. Use jngl::setFont.");
+			}
 			throw std::runtime_error(std::string("Font file not found: ") + filename);
 		}
 		filename = relativeFilename;
@@ -196,13 +202,13 @@ FontImpl::~FontImpl() {
 	}
 }
 
-int FontImpl::getTextWidth(const std::string& text) {
-	int maxWidth = 0;
+Pixels FontImpl::getTextWidth(const std::string& text) {
+	auto maxWidth = 0_px;
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();
 	for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
-		int lineWidth = 0;
+		auto lineWidth = 0_px;
 		auto charEnd = lineIter->end();
 		for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
 			lineWidth += GetCharacter(charIter, charEnd).getWidth();
@@ -211,7 +217,7 @@ int FontImpl::getTextWidth(const std::string& text) {
 			maxWidth = lineWidth;
 		}
 	}
-	return int(maxWidth / getScaleFactor());
+	return maxWidth;
 }
 
 int FontImpl::getLineHeight() const {

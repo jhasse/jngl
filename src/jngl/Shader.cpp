@@ -5,7 +5,7 @@
 
 #include "../Shader_Impl.hpp"
 
-#ifdef JNGL_UWP
+#if defined (JNGL_UWP) || defined (__EMSCRIPTEN__)
 #include "debug.hpp"
 #endif
 
@@ -23,11 +23,11 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 	boost::replace_all(tmp, "#version 300 es", "#version 330");
 	source = tmp.c_str();
 #endif
-#ifdef JNGL_UWP
+#if defined (JNGL_UWP) || defined (__EMSCRIPTEN__)
 	if (gles20Source) {
 		source = gles20Source;
 	} else {
-		jngl::debugLn("WARNING: OpenGL ES 3.0 not supported on Xbox!");
+		jngl::debugLn("WARNING: OpenGL ES 3.0 not supported on this platform!");
 	}
 #endif
 	glShaderSource(impl->id, 1, &source, nullptr);

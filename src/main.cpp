@@ -8,7 +8,10 @@
 #include "spriteimpl.hpp"
 
 #include <boost/math/special_functions/round.hpp>
+#include <boost/qvm/map_vec_mat.hpp>
 #include <boost/qvm/mat_operations.hpp>
+#include <boost/qvm/mat_operations3.hpp>
+#include <boost/qvm/vec.hpp>
 #include <fstream>
 #include <sstream>
 
@@ -16,7 +19,7 @@
 #include <windows.h>
 #endif
 
-#if defined(_WIN32) || (defined(__linux__) && !defined(ANDROID) && __has_include(<filesystem>))
+#if defined(_WIN32) || (!defined(ANDROID) && __has_include(<filesystem>))
 #include <filesystem>
 #define HAVE_FILESYSTEM
 #endif
@@ -66,21 +69,18 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 
 bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
+#ifdef EPOXY_PUBLIC
 	if (epoxy_gl_version() >= 43 || epoxy_has_gl_extension("GL_KHR_debug")) {
+#endif
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr); // NOLINT
+#ifdef EPOXY_PUBLIC
 	}
 #endif
+#endif
 
-	const auto l = static_cast<float>( -width) / 2.f;
-	const auto r = static_cast<float>(  width) / 2.f;
-	const auto b = static_cast<float>( height) / 2.f;
-	const auto t = static_cast<float>(-height) / 2.f;
-	opengl::projection = { 2.f / (r - l), 0.f,           0.f,  -(r + l) / (r - l),
-		                   0.f,           2.f / (t - b), 0.f,  -(t + b) / (t - b),
-		                   0.f,           0.f,           -1.f, 0.f,
-		                   0.f,           0.f,           0.f,  1.f };
+	updateProjection(width, height, width, height);
 
 	Shader vertexShader(R"(#version 300 es
 		in mediump vec2 position;
@@ -90,7 +90,7 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		void main() {
 			vec3 tmp = modelview * vec3(position, 1);
 			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-		})", Shader::Type::VERTEX, R"(
+		})", Shader::Type::VERTEX, R"(#version 100
 		attribute mediump vec2 position;
 		uniform highp mat3 modelview;
 		uniform mediump mat4 projection;
@@ -106,7 +106,7 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 
 		void main() {
 			outColor = color;
-		})", Shader::Type::FRAGMENT, R"(
+		})", Shader::Type::FRAGMENT, R"(#version 100
 		uniform lowp vec4 color;
 
 		void main() {
@@ -143,6 +143,39 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	return true;
 }
 
+void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth,
+                      int originalWindowHeight) {
+	debug("Updating projection matrix to ");
+	debug(windowWidth);
+	debug("x");
+	debug(windowHeight);
+	debug(" (original size: ");
+	debug(originalWindowWidth);
+	debug("x");
+	debug(originalWindowHeight);
+	debugLn(")");
+	const auto l = static_cast<float>(-windowWidth) / 2.f;
+	const auto r = static_cast<float>(windowWidth) / 2.f;
+	const auto b = static_cast<float>(windowHeight) / 2.f;
+	const auto t = static_cast<float>(-windowHeight) / 2.f;
+	opengl::projection = { float(windowWidth) / float(originalWindowWidth) * 2.f / (r - l),
+		                   0.f,
+		                   0.f,
+		                   -(r + l) / (r - l),
+		                   0.f,
+		                   float(windowHeight) / float(originalWindowHeight) * 2.f / (t - b),
+		                   0.f,
+		                   -(t + b) / (t - b),
+		                   0.f,
+		                   0.f,
+		                   -1.f,
+		                   0.f,
+		                   0.f,
+		                   0.f,
+		                   0.f,
+		                   1.f };
+}
+
 WindowPointer pWindow;
 bool antiAliasingEnabled = true;
 bool vsyncEnabled = false;
@@ -174,7 +207,10 @@ void hideWindow() {
 
 void swapBuffers() {
 	pWindow->SwapBuffers();
+	clearBackBuffer();
+}
 
+void clearBackBuffer() {
 	if (glIsEnabled(GL_SCISSOR_TEST)) {
 		// Letterboxing with SDL_VIDEODRIVER=wayland will glitch if we don't draw the black boxes on
 		// every frame
@@ -204,7 +240,9 @@ void quit() {
 }
 
 void cancelQuit() {
-	if (pWindow) { pWindow->cancelQuit(); }
+	if (pWindow) {
+		pWindow->cancelQuit();
+	}
 }
 
 void setBackgroundColor(const jngl::Color color) {
@@ -287,7 +325,7 @@ void setTitle(const std::string& title) {
 }
 
 double getTextWidth(const std::string& text) {
-	return pWindow->GetTextWidth(text);
+	return static_cast<double>(pWindow->getTextWidth(text));
 }
 
 int getLineHeight() {
@@ -394,7 +432,7 @@ void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 
 void drawTriangle(const double A_x, const double A_y, const double B_x, const double B_y,
                   const double C_x, const double C_y) {
-	pWindow->drawTriangle({ A_x, A_y}, { B_x, B_y }, { C_x, C_y });
+	pWindow->drawTriangle({ A_x, A_y }, { B_x, B_y }, { C_x, C_y });
 }
 
 void setLineWidth(const float width) {
@@ -410,7 +448,7 @@ void drawLine(const Vec2 start, const Vec2 end) {
 }
 
 void drawPoint(const double x, const double y) {
-	pWindow->drawEllipse({x, y}, {1, 1}, 0);
+	pWindow->drawEllipse({ x, y }, { 1, 1 }, 0);
 }
 
 int getWindowWidth() {
@@ -511,13 +549,17 @@ void setConfigPath(const std::string& path) {
 }
 
 std::string _getConfigPath() {
-	if (configPath) { return *configPath; }
+	if (configPath) {
+		return *configPath;
+	}
 #ifndef IOS
 	std::stringstream path;
-#if defined(__APPLE__) || defined(_WIN32)
+#if defined(__APPLE__)
 	path << getSystemConfigPath() << "/" << App::instance().getDisplayName() << "/";
 #elif defined(ANDROID)
 	path << getSystemConfigPath() << "/";
+#elif defined(_WIN32)
+	path << getSystemConfigPath() << "\\" << App::instance().getDisplayName() << "\\";
 #else
 	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/";
 #endif

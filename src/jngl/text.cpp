@@ -1,4 +1,4 @@
-// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "text.hpp"
@@ -6,6 +6,7 @@
 #include "../freetype.hpp"
 #include "../helper.hpp"
 #include "../spriteimpl.hpp"
+#include "ScaleablePixels.hpp"
 #include "font.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
@@ -17,7 +18,7 @@ public:
 		setFont(std::move(font));
 	}
 	void setFont(std::shared_ptr<FontImpl> font) {
-		width = static_cast<float>(font->getTextWidth(text) * getScaleFactor());
+		width = static_cast<float>(font->getTextWidth(text));
 		height = static_cast<float>(font->getLineHeight());
 		this->font = std::move(font);
 	}

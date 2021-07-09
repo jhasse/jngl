@@ -1,10 +1,11 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "font.hpp"
 
 #include "../freetype.hpp"
 
+#include <algorithm>
 #include <stack>
 
 namespace jngl {
@@ -13,6 +14,11 @@ unsigned char fontColorRed = 0, fontColorGreen = 0, fontColorBlue = 0, fontColor
 
 void setFontColor(const jngl::Color color) {
 	setFontColor(color.getRed(), color.getGreen(), color.getBlue());
+}
+
+void setFontColor(const Color color, float alpha) {
+	setFontColor(color.getRed(), color.getGreen(), color.getBlue(),
+	             std::clamp(std::lround(alpha * 255), 0L, 255L));
 }
 
 void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) {
@@ -43,7 +49,7 @@ void Font::print(const std::string& text, int x, int y) {
 	impl->print(x, y, text);
 }
 
-void Font::print(const std::string& text, const Vec2 position) {
+void Font::print(const std::string& text, const Vec2 position) const {
 	impl->print(position.x, position.y, text);
 }
 

@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/sprite.hpp"
@@ -12,7 +12,9 @@
 BOOST_AUTO_TEST_CASE(Sprite) {
 	for (float factor : { 1.f, 2.f, 3.4f }) {
 		Fixture f(factor);
-		jngl::drawScaled("../data/jngl.webp", -60, -30, 0.2f);
+		jngl::Sprite sprite("../data/jngl.webp");
+		sprite.setPos(-60, -30);
+		sprite.drawScaled(0.2f, 0.2f);
 		BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒                              ▒

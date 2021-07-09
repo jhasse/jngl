@@ -18,6 +18,12 @@ void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue) 
 	spriteColorBlue = blue;
 }
 
+void setSpriteColor(Color color) {
+	spriteColorRed = color.getRed();
+	spriteColorGreen = color.getGreen();
+	spriteColorBlue = color.getBlue();
+}
+
 std::stack<unsigned char> spriteAlphas;
 
 void pushSpriteAlpha(unsigned char alpha) {
@@ -63,20 +69,6 @@ void draw(const std::string& filename, double x, double y) {
 	auto& s = GetSprite(filename);
 	s.setPos(x, y);
 	s.draw();
-}
-
-void drawScaled(const std::string& filename, const double xposition, const double yposition,
-                const float xfactor, const float yfactor) {
-	auto& s = GetSprite(filename);
-	s.setPos(xposition, yposition);
-	s.drawScaled(xfactor, yfactor);
-}
-
-void drawScaled(const std::string& filename, const double xposition, const double yposition,
-                const float factor) {
-	auto& s = GetSprite(filename);
-	s.setPos(xposition, yposition);
-	s.drawScaled(factor, factor);
 }
 
 void drawClipped(const std::string& filename, const double xposition, const double yposition,

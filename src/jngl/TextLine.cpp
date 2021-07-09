@@ -1,16 +1,17 @@
-// Copyright 2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "TextLine.hpp"
 
 #include "../freetype.hpp"
+#include "ScaleablePixels.hpp"
 #include "font.hpp"
 #include "screen.hpp"
 
 namespace jngl {
 
 TextLine::TextLine(Font& font, std::string text) : text(std::move(text)), fontImpl(font.getImpl()) {
-	width = static_cast<float>(fontImpl->getTextWidth(this->text) * getScaleFactor());
+	width = static_cast<float>(fontImpl->getTextWidth(this->text));
 	height = static_cast<float>(fontImpl->getLineHeight());
 	setCenter(0, 0);
 }

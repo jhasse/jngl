@@ -37,7 +37,7 @@ extern "C" {
 }
 #endif
 #ifndef NOWEBP
-#include <webp/decode.h>
+#include "../ImageDataWebP.hpp"
 #endif
 
 namespace jngl {
@@ -211,6 +211,9 @@ void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
 
 void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
                       const ShaderProgram* const shaderProgram) const {
+	if (vertexes.empty()) {
+		return;
+	}
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	scale(getScaleFactor());
@@ -394,48 +397,12 @@ Finally Sprite::LoadJPG(const std::string& filename, FILE* file, const bool half
 #endif
 #ifndef NOWEBP
 Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool halfLoad) {
-	fseek(file, 0, SEEK_END);
-	auto filesize = ftell(file);
-	fseek(file, 0, SEEK_SET);
-
-	std::vector<uint8_t> buf(filesize);
-	if (!fread(&buf[0], filesize, 1, file)) {
-		throw std::runtime_error(std::string("Couldn't open WebP file. (" + filename + ")"));
-	}
-
-	int imgWidth;
-	int imgHeight;
-	if (!WebPGetInfo(&buf[0], filesize, &imgWidth, &imgHeight)) {
-		throw std::runtime_error(std::string("Invalid WebP file. (" + filename + ")"));
-	}
-	width = static_cast<float>(imgWidth * getScaleFactor());
-	height = static_cast<float>(imgHeight * getScaleFactor());
-
-	auto config = std::make_shared<WebPDecoderConfig>();
-	WebPInitDecoderConfig(config.get());
-	config->options.use_threads = 1;
-	int scaledWidth = imgWidth;
-	int scaledHeight = imgHeight;
-	if (getScaleFactor() + 1e-9 < 1) {
-		config->options.use_scaling = 1;
-		config->options.scaled_width = scaledWidth = std::max(1, boost::math::iround(width));
-		config->options.scaled_height = scaledHeight = std::max(1, boost::math::iround(height));
-	}
-	config->output.colorspace = MODE_RGBA;
-	auto result = std::make_shared<VP8StatusCode>();
-	auto thread =
-	    std::make_shared<std::thread>([buf{ std::move(buf) }, result, filesize, config]() mutable {
-		    *result = WebPDecode(&buf[0], filesize, config.get());
-	    });
-	return Finally([thread = std::move(thread), result, filename, config, halfLoad, scaledWidth,
-	                scaledHeight, this]() mutable {
-		thread->join();
-		if (*result != VP8_STATUS_OK) {
-			throw std::runtime_error(std::string("Can't decode WebP file. (" + filename + ")"));
-		}
-		loadTexture(scaledWidth, scaledHeight, filename, halfLoad, GL_RGBA, nullptr,
-		            config->output.u.RGBA.rgba); // NOLINT
-		WebPFreeDecBuffer(&config->output);
+	auto imageData = std::make_shared<ImageDataWebP>(filename, file, getScaleFactor());
+	width = static_cast<float>(imageData->getImageWidth() * getScaleFactor());
+	height = static_cast<float>(imageData->getImageHeight() * getScaleFactor());
+	return Finally([imageData = std::move(imageData), filename, halfLoad, this]() mutable {
+		loadTexture(imageData->getWidth(), imageData->getHeight(), filename, halfLoad, GL_RGBA,
+		            nullptr, imageData->pixels());
 	});
 }
 #endif

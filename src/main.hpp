@@ -1,4 +1,4 @@
-// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -23,6 +23,7 @@ class ShaderProgram;
 void clearBackgroundColor();
 
 bool Init(int width, int height, int canvasWidth, int canvasHeight);
+void updateProjection(int windowWidth, int windowHeight, int, int);
 
 extern std::string pathPrefix;
 extern optional<std::string> configPath;
