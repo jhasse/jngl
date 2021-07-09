@@ -140,8 +140,6 @@ if(ANDROID OR MSVC OR IOS)
 	set(OGG_INCLUDE_DIR ${libogg_SOURCE_DIR}/include)
 	set(OGG_INCLUDE_DIRS ${OGG_INCLUDE_DIR} ${libogg_BINARY_DIR}/include)
 	set(OGG_LIBRARY $<TARGET_FILE:ogg>)
-	add_library(Ogg::ogg INTERFACE IMPORTED)
-	set_target_properties(Ogg::ogg PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${OGG_INCLUDE_DIRS}")
 
 	FetchContent_Declare(vorbis
 		URL https://github.com/xiph/vorbis/archive/v1.3.7.zip
