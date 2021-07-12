@@ -10,14 +10,14 @@ endif
 
 all: gradle
 
-${ANDROID_SDK_ROOT}/ndk/21.3.6528147/package.xml:
-	yes | ${ANDROID_SDK_ROOT}/tools/bin/sdkmanager "ndk;21.3.6528147" >/dev/null
+${ANDROID_SDK_ROOT}/ndk/21.4.7075529/package.xml:
+	yes | ${ANDROID_SDK_ROOT}/tools/bin/sdkmanager "ndk;21.4.7075529" >/dev/null
 
-${ANDROID_SDK_ROOT}/ndk/21.3.6528147/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp: | ${ANDROID_SDK_ROOT}/ndk/21.3.6528147/package.xml
+${ANDROID_SDK_ROOT}/ndk/21.4.7075529/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp: | ${ANDROID_SDK_ROOT}/ndk/21.4.7075529/package.xml
 	ln -s $(BOOST_PATH) `dirname "$@"`
 
 .PHONY: gradle
-gradle: ${ANDROID_SDK_ROOT}/ndk/21.3.6528147/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp
+gradle: ${ANDROID_SDK_ROOT}/ndk/21.4.7075529/toolchains/llvm/prebuilt/$(ANDROID_PLATFORM)-x86_64/sysroot/usr/include/boost/version.hpp
 	cd test && ./gradlew build
 
 .PHONY: run
