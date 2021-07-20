@@ -414,9 +414,7 @@ endif()
 if(MSVC OR IOS OR ANDROID)
 	FetchContent_Declare(webp
 		GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
-		GIT_TAG 25ae67b3de2ba941ff19ee0e90655b591faf048e)
-	# Unfortunately disabling this breaks ARM builds:
-	# set(WEBP_ENABLE_SIMD OFF CACHE BOOL "Enable any SIMD optimization." FORCE)
+		GIT_TAG e0241154901620a3dc6c3929463608b9bf2c36aa)
 	set(WEBP_BUILD_ANIM_UTILS OFF CACHE BOOL "Build animation utilities." FORCE)
 	set(WEBP_BUILD_CWEBP OFF CACHE BOOL "Build the cwebp command line tool." FORCE)
 	set(WEBP_BUILD_DWEBP OFF CACHE BOOL "Build the dwebp command line tool." FORCE)
@@ -426,9 +424,6 @@ if(MSVC OR IOS OR ANDROID)
 	set(WEBP_BUILD_WEBPINFO OFF CACHE BOOL "Build the webpinfo command line tool." FORCE)
 	set(WEBP_BUILD_WEBPMUX OFF CACHE BOOL "Build the webpmux command line tool." FORCE)
 	set(WEBP_BUILD_EXTRAS OFF CACHE BOOL "Build extras." FORCE)
-	if(NOT ANDROID) # error: undefined reference to 'WebPInitSharpYUVNEON'
-		set(WEBP_ENABLE_SIMD OFF CACHE BOOL "Enable any SIMD optimization." FORCE)
-	endif()
 	FetchContent_MakeAvailable(webp)
 	FetchContent_GetProperties(webp SOURCE_DIR WEBP_SRC_DIR)
 	target_include_directories(jngl PRIVATE ${WEBP_SRC_DIR}/src)
