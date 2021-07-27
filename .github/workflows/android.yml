@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: [ubuntu-latest]
     container:
-      image: jhasse/android-ndk:21.3.6528147
+      image: jhasse/android-ndk:21.4.7075529
     steps:
     - uses: actions/checkout@v2
     - name: Build
