@@ -1,4 +1,7 @@
 <map id="jngl/window.hpp" name="jngl/window.hpp">
-<area shape="rect" id="node1" title="Functions related to the main window." alt="" coords="5,5,148,32"/>
-<area shape="rect" id="node2" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="41,80,112,107"/>
+<area shape="rect" id="node1" title="Functions related to the main window." alt="" coords="92,5,235,32"/>
+<area shape="rect" id="node2" href="$Pixels_8hpp_source.html" title=" " alt="" coords="5,80,108,107"/>
+<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/array.html" title=" " alt="" coords="132,80,195,107"/>
+<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="219,80,289,107"/>
+<area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="17,155,96,181"/>
 </map>
