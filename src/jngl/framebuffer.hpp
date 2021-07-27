@@ -21,8 +21,11 @@ class ShaderProgram;
 /// Image framebuffer object which can be rendered on
 class FrameBuffer {
 public:
-	/// Creates a framebuffer object with \a width times \a height pixels
+	/// Creates a framebuffer object with \a width times \a height actual pixels
 	FrameBuffer(Pixels width, Pixels height);
+
+	/// Creates a framebuffer object with \a width times \a height scalable pixels
+	FrameBuffer(ScaleablePixels width, ScaleablePixels height);
 
 	/// Creates a framebuffer object with \a size[0] times \a size[1] pixels
 	explicit FrameBuffer(std::array<Pixels, 2> size);

@@ -3,6 +3,7 @@
 
 #include "framebuffer.hpp"
 
+#include "ScaleablePixels.hpp"
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
 #include "../texture.hpp"
@@ -75,6 +76,10 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
 
 	glBindFramebuffer(GL_FRAMEBUFFER, impl->systemFbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->systemBuffer);
+}
+
+FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height)
+: FrameBuffer(static_cast<Pixels>(width), static_cast<Pixels>(height)) {
 }
 
 FrameBuffer::FrameBuffer(std::array<Pixels, 2> size) : FrameBuffer(size[0], size[1]) {
