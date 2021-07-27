@@ -1,4 +1,4 @@
-// Copyright 2019-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
@@ -63,7 +63,8 @@ std::string Window::GetFontFileByName(const std::string& fontName) {
 		std::transform(valueNameLower.begin(), valueNameLower.end(), valueNameLower.begin(),
 		               ::tolower);
 		if (fontNameLower + " (truetype)" == valueNameLower) {
-			fontFile = utf16ToUtf8({ reinterpret_cast<wchar_t*>(valueData.get()), valueDataSize });
+			fontFile =
+			    utf16ToUtf8({ reinterpret_cast<wchar_t*>(valueData.get()), valueDataSize / 2 });
 			break;
 		}
 		if ((fontNameLower == "arial" && valueNameLower == "liberation sans (truetype)") ||
@@ -71,7 +72,8 @@ std::string Window::GetFontFileByName(const std::string& fontName) {
 		    (fontNameLower == "times new roman" &&
 		     valueNameLower == "liberation serif (truetype)")) {
 			// Fallbacks for WINE. No break, so that exact matches take priority
-			fontFile = utf16ToUtf8({ reinterpret_cast<wchar_t*>(valueData.get()), valueDataSize });
+			fontFile =
+			    utf16ToUtf8({ reinterpret_cast<wchar_t*>(valueData.get()), valueDataSize / 2 });
 		}
 	} while (result != ERROR_NO_MORE_ITEMS);
 
