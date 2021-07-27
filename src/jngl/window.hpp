@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 /// Functions related to the main window.
@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include "Pixels.hpp"
+
+#include <array>
 #include <string>
 
 namespace jngl {
@@ -23,6 +26,9 @@ int getWindowWidth();
 
 /// Returns the height of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)
 int getWindowHeight();
+
+/// Returns {width, height} of the window in actual pixels
+std::array<Pixels, 2> getWindowSize();
 
 /// Returns the width of the main display in actual pixels
 int getDesktopWidth();

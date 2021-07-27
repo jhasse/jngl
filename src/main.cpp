@@ -459,6 +459,10 @@ int getWindowHeight() {
 	return pWindow->getCanvasHeight();
 }
 
+std::array<Pixels, 2> getWindowSize() {
+	return { Pixels(getWindowWidth()), Pixels(getWindowHeight()) };
+}
+
 double getMouseWheel() {
 	return pWindow->getMouseWheel();
 }
