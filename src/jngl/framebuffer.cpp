@@ -47,8 +47,8 @@ struct FrameBuffer::Impl {
 
 std::stack<std::function<void()>> FrameBuffer::Impl::activate;
 
-FrameBuffer::FrameBuffer(const int width, const int height)
-: impl(std::make_unique<Impl>(width, height)) {
+FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
+: impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height))) {
 	GLint tmp;
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &tmp);
 	impl->systemFbo = tmp;
@@ -57,7 +57,8 @@ FrameBuffer::FrameBuffer(const int width, const int height)
 
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, width, height);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, static_cast<int>(width),
+	                      static_cast<int>(height));
 
 	glGenFramebuffers(1, &impl->fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, impl->fbo);
@@ -74,6 +75,9 @@ FrameBuffer::FrameBuffer(const int width, const int height)
 
 	glBindFramebuffer(GL_FRAMEBUFFER, impl->systemFbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->systemBuffer);
+}
+
+FrameBuffer::FrameBuffer(std::array<Pixels, 2> size) : FrameBuffer(size[0], size[1]) {
 }
 
 FrameBuffer::~FrameBuffer() = default;

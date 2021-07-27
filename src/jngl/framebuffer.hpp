@@ -7,6 +7,7 @@
 #include "Color.hpp"
 #include "Finally.hpp"
 #include "Mat3.hpp"
+#include "Pixels.hpp"
 #include "Vec2.hpp"
 #include "Vertex.hpp"
 
@@ -21,7 +22,10 @@ class ShaderProgram;
 class FrameBuffer {
 public:
 	/// Creates a framebuffer object with \a width times \a height pixels
-	FrameBuffer(int width, int height);
+	FrameBuffer(Pixels width, Pixels height);
+
+	/// Creates a framebuffer object with \a size[0] times \a size[1] pixels
+	explicit FrameBuffer(std::array<Pixels, 2> size);
 
 	FrameBuffer(const FrameBuffer&) = delete;
 	FrameBuffer& operator=(const FrameBuffer&) = delete;

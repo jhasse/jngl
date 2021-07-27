@@ -16,6 +16,8 @@ public:
 
 	explicit operator float() const;
 
+	explicit operator int() const;
+
 	explicit operator ScaleablePixels() const;
 
 	Pixels& operator+=(Pixels);

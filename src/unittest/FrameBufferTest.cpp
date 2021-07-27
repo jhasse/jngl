@@ -1,4 +1,4 @@
-// Copyright 2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/framebuffer.hpp"
@@ -10,7 +10,7 @@
 
 BOOST_AUTO_TEST_CASE(FrameBuffer) {
 	Fixture f(1.f);
-	jngl::FrameBuffer fb(320, 70);
+	jngl::FrameBuffer fb(320_px, 70_px);
 	jngl::drawRect({-10, 0}, {10, 10});
 	{
 		const auto context = fb.use();
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(FrameBuffer) {
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
 
-	jngl::FrameBuffer fb2(320, 70);
+	jngl::FrameBuffer fb2(320_px, 70_px);
 	{
 		const auto context1 = fb.use();
 		jngl::drawRect({-40, 0}, {10, 10});

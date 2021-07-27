@@ -21,7 +21,7 @@ double factor = 0;
 
 class Test : public jngl::Work {
 public:
-	Test() : fb2(jngl::getWindowWidth(), jngl::getWindowHeight()), logoWebp("jngl.webp") {
+	Test() : fb2(jngl::getWindowSize()), logoWebp("jngl.webp") {
 		jngl::setTitle(jngl::App::instance().getDisplayName() + " | UTF-8: äöüß");
 		jngl::setIcon("jngl.png");
 		jngl::setMouseVisible(false);
