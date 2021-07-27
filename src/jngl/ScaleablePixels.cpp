@@ -15,7 +15,7 @@ ScaleablePixels::operator double() const {
 }
 
 ScaleablePixels::operator Pixels() const {
-	return Pixels(value / getScaleFactor());
+	return Pixels(value * getScaleFactor());
 }
 
 } // namespace jngl
