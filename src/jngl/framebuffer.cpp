@@ -164,21 +164,19 @@ FrameBuffer::Context FrameBuffer::use() const {
 		glBindFramebuffer(GL_FRAMEBUFFER, impl->fbo);
 		glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
 		pushMatrix();
+		reset();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 		glPushAttrib(GL_VIEWPORT_BIT);
 #else
 		glGetIntegerv(GL_VIEWPORT, impl->viewport);
 #endif
-		glViewport((pWindow->getCanvasWidth() - pWindow->getWidth()) / 2,
-		           -((pWindow->getCanvasHeight() + pWindow->getHeight()) / 2 - impl->height),
-		           pWindow->getWidth(), pWindow->getHeight());
+		glViewport(0, 0, impl->width, impl->height);
+		opengl::scale(float(pWindow->getWidth()) / float(impl->width),
+		              float(pWindow->getHeight()) / float(impl->height));
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 		if (impl->letterboxing) {
 			glDisable(GL_SCISSOR_TEST);
 		}
-		// Move the center to the center of our fbo:
-		opengl::translate(-0.5 * (getWindowWidth() - impl->width),
-		                  -0.5 * (getWindowHeight() - impl->height));
 	};
 	activate();
 	impl->activate.push(std::move(activate));
