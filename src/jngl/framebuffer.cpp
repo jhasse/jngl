@@ -25,8 +25,11 @@ struct FrameBuffer::Impl {
 	Impl& operator=(Impl&&) = delete;
 
 	~Impl() {
-		glDeleteFramebuffers(1, &fbo);
-		glDeleteRenderbuffers(1, &buffer);
+		if (pWindow) { // Don't bother deleting OpenGL objects when the OpenGL context has already
+			           // been destroyed
+			glDeleteFramebuffers(1, &fbo);
+			glDeleteRenderbuffers(1, &buffer);
+		}
 	}
 
 	GLuint fbo = 0;
