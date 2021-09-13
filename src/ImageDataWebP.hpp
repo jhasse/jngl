@@ -28,7 +28,9 @@ public:
 	int getImageHeight() const;
 
 private:
+#ifndef __EMSCRIPTEN__
 	std::unique_ptr<std::thread> thread;
+#endif
 	VP8StatusCode result;
 	WebPDecoderConfig config{};
 	std::string filename;

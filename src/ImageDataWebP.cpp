@@ -37,22 +37,30 @@ ImageDataWebP::ImageDataWebP(std::string filename, FILE* file, double scaleFacto
 		    std::max(1, boost::math::iround(imgHeight * scaleFactor));
 	}
 	config.output.colorspace = MODE_RGBA;
+#ifndef __EMSCRIPTEN__
 	thread = std::make_unique<std::thread>([this, buf{ std::move(buf) }, filesize]() mutable {
+#endif
 		result = WebPDecode(&buf[0], filesize, &config);
+#ifndef __EMSCRIPTEN__
 	});
+#endif
 }
 
 ImageDataWebP::~ImageDataWebP() {
+#ifndef __EMSCRIPTEN__
 	if (thread && thread->joinable()) {
 		thread->join();
 	}
+#endif
 	WebPFreeDecBuffer(&config.output);
 }
 
 const uint8_t* ImageDataWebP::pixels() const {
+#ifndef __EMSCRIPTEN__
 	if (thread->joinable()) {
 		thread->join();
 	}
+#endif
 	if (result != VP8_STATUS_OK) {
 		throw std::runtime_error(std::string("Can't decode WebP file. (" + filename + ")"));
 	}
