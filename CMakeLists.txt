@@ -301,11 +301,13 @@ else()
 	else()
 		find_package(OpenAL REQUIRED)
 
-		find_package(WebP)
-		if(WebP_FOUND)
-			target_link_libraries(jngl PRIVATE ${WEBP_LIBRARIES})
-		else()
-			target_compile_definitions(jngl PRIVATE NOWEBP)
+		if(NOT EMSCRIPTEN)
+			find_package(WebP)
+			if(WebP_FOUND)
+				target_link_libraries(jngl PRIVATE ${WEBP_LIBRARIES})
+			else()
+				target_compile_definitions(jngl PRIVATE NOWEBP)
+			endif()
 		endif()
 
 		find_package(PkgConfig)
@@ -411,7 +413,7 @@ else()
 	endif()
 endif()
 
-if(MSVC OR IOS OR ANDROID)
+if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
 	FetchContent_Declare(webp
 		GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
 		GIT_TAG e0241154901620a3dc6c3929463608b9bf2c36aa)
