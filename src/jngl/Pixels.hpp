@@ -1,5 +1,7 @@
 // Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
+/// Contains jngl::Pixels class
+/// @file
 #pragma once
 
 #include <cstdint>
