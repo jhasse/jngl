@@ -1,6 +1,6 @@
 <map id="jngl/init.hpp" name="jngl/init.hpp">
 <area shape="rect" id="node1" title="Include this file only once, as it defines the main function." alt="" coords="441,5,568,32"/>
-<area shape="rect" id="node2" href="$App_8hpp.html" title=" " alt="" coords="171,169,249,196"/>
+<area shape="rect" id="node2" href="$App_8hpp.html" title="Contains jngl::App class." alt="" coords="171,169,249,196"/>
 <area shape="rect" id="node5" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="343,87,429,114"/>
 <area shape="rect" id="node15" href="$screen_8hpp.html" title=" " alt="" coords="453,87,556,114"/>
 <area shape="rect" id="node19" href="$work_8hpp.html" title=" " alt="" coords="79,87,165,114"/>
@@ -15,7 +15,7 @@
 <area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="609,244,712,271"/>
 <area shape="rect" id="node9" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/sstream.html" title=" " alt="" coords="507,244,585,271"/>
 <area shape="rect" id="node10" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="412,244,483,271"/>
-<area shape="rect" id="node12" href="$Pixels_8hpp_source.html" title=" " alt="" coords="104,244,207,271"/>
+<area shape="rect" id="node12" href="$Pixels_8hpp.html" title="Contains jngl::Pixels class." alt="" coords="104,244,207,271"/>
 <area shape="rect" id="node14" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/array.html" title=" " alt="" coords="325,244,388,271"/>
 <area shape="rect" id="node13" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="116,319,195,345"/>
 <area shape="rect" id="node16" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="772,169,859,196"/>

@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="App_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_node2"><a xlink:href="App_8hpp.html" target="_top" xlink:title="Contains jngl::App class.">
 <polygon fill="white" stroke="black" points="960,-168.5 960,-187.5 1019,-187.5 1019,-168.5 960,-168.5"/>
 <text text-anchor="middle" x="989.5" y="-175.5" font-family="'Consolas',monospace" font-size="10.00">App.hpp</text>
 </a>
@@ -156,7 +156,7 @@
 <!-- Node20 -->
 <g id="node20" class="node">
 <title>Node20</title>
-<g id="a_node20"><a xlink:href="Pixels_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node20"><a xlink:href="Pixels_8hpp.html" target="_top" xlink:title="Contains jngl::Pixels class.">
 <polygon fill="white" stroke="black" points="2328,-112.5 2328,-131.5 2405,-131.5 2405,-112.5 2328,-112.5"/>
 <text text-anchor="middle" x="2366.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">Pixels.hpp</text>
 </a>
@@ -171,7 +171,7 @@
 <!-- Node22 -->
 <g id="node22" class="node">
 <title>Node22</title>
-<g id="a_node22"><a xlink:href="ScaleablePixels_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node22"><a xlink:href="ScaleablePixels_8hpp.html" target="_top" xlink:title="Contains jngl::ScaleablePixels class.">
 <polygon fill="white" stroke="black" points="2395,-224.5 2395,-243.5 2526,-243.5 2526,-224.5 2395,-224.5"/>
 <text text-anchor="middle" x="2460.5" y="-231.5" font-family="'Consolas',monospace" font-size="10.00">ScaleablePixels.hpp</text>
 </a>

@@ -12,7 +12,7 @@
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
-<g id="a_node1"><a xlink:title=" ">
+<g id="a_node1"><a xlink:title="Contains jngl::App class.">
 <polygon fill="#bfbfbf" stroke="black" points="55,-112.5 55,-131.5 144,-131.5 144,-112.5 55,-112.5"/>
 <text text-anchor="middle" x="99.5" y="-119.5" font-family="'Consolas',monospace" font-size="10.00">jngl/App.hpp</text>
 </a>

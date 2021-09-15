@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="Pixels_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node2"><a xlink:href="Pixels_8hpp.html" target="_top" xlink:title="Contains jngl::Pixels class.">
 <polygon fill="white" stroke="black" points="0,-56.5 0,-75.5 77,-75.5 77,-56.5 0,-56.5"/>
 <text text-anchor="middle" x="38.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00">Pixels.hpp</text>
 </a>

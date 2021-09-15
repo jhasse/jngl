@@ -1,11 +1,24 @@
 var searchData=
 [
-  ['text_2ehpp_3268',['text.hpp',['../text_8hpp.html',1,'']]],
-  ['textline_2ehpp_3269',['TextLine.hpp',['../TextLine_8hpp.html',1,'']]],
-  ['thread_3270',['thread',['http://en.cppreference.com/w/cpp/header/thread.html',1,'']]],
-  ['time_2ehpp_3271',['time.hpp',['../time_8hpp.html',1,'']]],
-  ['tuple_3272',['tuple',['http://en.cppreference.com/w/cpp/header/tuple.html',1,'']]],
-  ['type_5ftraits_3273',['type_traits',['http://en.cppreference.com/w/cpp/header/type_traits.html',1,'']]],
-  ['typeindex_3274',['typeindex',['http://en.cppreference.com/w/cpp/header/typeindex.html',1,'']]],
-  ['typeinfo_3275',['typeinfo',['http://en.cppreference.com/w/cpp/header/typeinfo.html',1,'']]]
+  ['scaleablepixels_2ehpp_3251',['ScaleablePixels.hpp',['../ScaleablePixels_8hpp.html',1,'']]],
+  ['scoped_5fallocator_3252',['scoped_allocator',['http://en.cppreference.com/w/cpp/header/scoped_allocator.html',1,'']]],
+  ['screen_2ehpp_3253',['screen.hpp',['../screen_8hpp.html',1,'']]],
+  ['set_3254',['set',['http://en.cppreference.com/w/cpp/header/set.html',1,'']]],
+  ['shader_2ehpp_3255',['Shader.hpp',['../Shader_8hpp.html',1,'']]],
+  ['shaderprogram_2ehpp_3256',['ShaderProgram.hpp',['../ShaderProgram_8hpp.html',1,'']]],
+  ['shapes_2ehpp_3257',['shapes.hpp',['../shapes_8hpp.html',1,'']]],
+  ['shared_5fmutex_3258',['shared_mutex',['http://en.cppreference.com/w/cpp/header/shared_mutex.html',1,'']]],
+  ['sound_2ehpp_3259',['sound.hpp',['../sound_8hpp.html',1,'']]],
+  ['soundfile_2ehpp_3260',['SoundFile.hpp',['../SoundFile_8hpp.html',1,'']]],
+  ['span_3261',['span',['http://en.cppreference.com/w/cpp/header/span.html',1,'']]],
+  ['sprite_2ehpp_3262',['sprite.hpp',['../sprite_8hpp.html',1,'']]],
+  ['sstream_3263',['sstream',['http://en.cppreference.com/w/cpp/header/sstream.html',1,'']]],
+  ['stack_3264',['stack',['http://en.cppreference.com/w/cpp/header/stack.html',1,'']]],
+  ['stdexcept_3265',['stdexcept',['http://en.cppreference.com/w/cpp/header/stdexcept.html',1,'']]],
+  ['streambuf_3266',['streambuf',['http://en.cppreference.com/w/cpp/header/streambuf.html',1,'']]],
+  ['string_3267',['string',['http://en.cppreference.com/w/cpp/header/string.html',1,'']]],
+  ['string_5fview_3268',['string_view',['http://en.cppreference.com/w/cpp/header/string_view.html',1,'']]],
+  ['strstream_3269',['strstream',['http://en.cppreference.com/w/cpp/header/strstream.html',1,'']]],
+  ['syncstream_3270',['syncstream',['http://en.cppreference.com/w/cpp/header/syncstream.html',1,'']]],
+  ['system_5ferror_3271',['system_error',['http://en.cppreference.com/w/cpp/header/system_error.html',1,'']]]
 ];

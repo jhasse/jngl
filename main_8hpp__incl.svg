@@ -132,7 +132,7 @@
 <!-- Node9 -->
 <g id="node9" class="node">
 <title>Node9</title>
-<g id="a_node9"><a xlink:href="Pixels_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_node9"><a xlink:href="Pixels_8hpp.html" target="_top" xlink:title="Contains jngl::Pixels class.">
 <polygon fill="white" stroke="black" points="314,-56.5 314,-75.5 391,-75.5 391,-56.5 314,-56.5"/>
 <text text-anchor="middle" x="352.5" y="-63.5" font-family="'Consolas',monospace" font-size="10.00">Pixels.hpp</text>
 </a>
