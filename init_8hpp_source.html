@@ -132,7 +132,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    app.setDisplayName(params.<a class="code" href="structjngl_1_1AppParameters.html#abd54db44deb77f599f600479aea631a3">displayName</a>);</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    app.setPixelArt(params.<a class="code" href="structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805">pixelArt</a>);</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordtype">bool</span> fullscreen = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#ifdef NDEBUG</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#if defined(NDEBUG) || defined(__ANDROID__)</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    fullscreen = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="codeRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair&lt;int, int&gt;</a> minAspectRatio{ 1, 3 };</div>
