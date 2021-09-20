@@ -14,6 +14,9 @@ double getScaleFactor() {
 }
 
 void setScaleFactor(double f) {
+	if (f < 0) {
+		throw std::runtime_error("Invalid scale factor: " + std::to_string(f));
+	}
 	factor = f;
 }
 
