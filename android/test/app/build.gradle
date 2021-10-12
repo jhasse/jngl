@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId = 'com.bixense.jngl_test'
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
     }
     buildTypes {
         release {
@@ -24,7 +24,7 @@ android {
             path 'src/main/cpp/CMakeLists.txt'
         }
     }
-    compileSdkVersion 29
+    compileSdkVersion 30
     ndkVersion '21.4.7075529'
 }
 
