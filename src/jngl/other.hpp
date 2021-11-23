@@ -51,7 +51,7 @@ void setVerticalSync(bool enabled);
 
 bool getVerticalSync();
 
-/// Sets the icon for the window (Desktop-only). Only works with PNG files for now.
+/// Sets the icon for the window (Desktop-only)
 void setIcon(const std::string& filename);
 
 void setPrefix(const std::string& path);

@@ -365,7 +365,7 @@ void setFontByName(const std::string& name) {
 }
 
 void setIcon(const std::string& filename) {
-	pWindow->SetIcon(pathPrefix + filename);
+	pWindow->SetIcon(filename);
 }
 
 double getFPS() {

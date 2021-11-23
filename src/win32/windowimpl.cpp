@@ -1,18 +1,15 @@
-// Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/debug.hpp"
 #include "../jngl/Finally.hpp"
+#include "../jngl/ImageData.hpp"
 #include "../jngl/window.hpp"
 #include "../jngl/work.hpp"
 #include "../main.hpp"
 #include "../window.hpp"
 #include "ConvertUTF.h"
 #include "unicode.hpp"
-
-#ifndef NOPNG
-#include <png.h>
-#endif
 
 #include <algorithm>
 #include <cassert>
@@ -661,63 +658,34 @@ void Window::SetRelativeMouseMode(bool relative) {
 }
 
 void Window::SetIcon(const std::string& filename) {
-#ifndef NOPNG
-	FILE* fp = fopen(filename.c_str(), "rb");
-	if (!fp) throw std::runtime_error(std::string("File not found: ") + filename);
-	Finally _([&fp]() { fclose(fp); });
-	png_byte buf[PNG_BYTES_TO_CHECK];
-	assert(PNG_BYTES_TO_CHECK >= sizeof(unsigned short));
+	auto imageData = ImageData::load(filename);
 
-	// Read in some of the signature bytes
-	if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK)
-		throw std::runtime_error(std::string("Error reading signature bytes."));
+	const int CHANNELS = 4;
 
-	assert(png_sig_cmp(buf, (png_size_t)0, PNG_BYTES_TO_CHECK) == 0);
-	png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
-	if (!png_ptr) {
-		throw std::runtime_error("libpng error while reading");
-	}
-
-	png_infop info_ptr = png_create_info_struct(png_ptr);
-	if (!info_ptr) {
-		throw std::runtime_error("libpng error while reading");
-	}
-
-	if (setjmp(png_jmpbuf(png_ptr))) {
-		// Free all of the memory associated with the png_ptr and info_ptr
-		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
-		throw std::runtime_error("Error reading file.");
-	}
-	png_init_io(png_ptr, fp);
-	png_set_sig_bytes(png_ptr, PNG_BYTES_TO_CHECK);
-	int colorType = png_get_color_type(png_ptr, info_ptr);
-	if (colorType == PNG_COLOR_TYPE_GRAY || colorType == PNG_COLOR_TYPE_GRAY_ALPHA) {
-		png_set_gray_to_rgb(png_ptr);
-	}
-	png_read_png(png_ptr, info_ptr,
-	             PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_BGR, nullptr);
-
-	const int x = png_get_image_width(png_ptr, info_ptr);
-	const int y = png_get_image_height(png_ptr, info_ptr);
-	const int channels = png_get_channels(png_ptr, info_ptr);
-
-	const auto row_pointers = png_get_rows(png_ptr, info_ptr);
-	std::vector<char> imageData(x * y * channels);
-	for (int i = 0; i < y; ++i) {
-		memcpy(&imageData[i * x * channels], row_pointers[i], x * channels);
+	auto bgra = std::make_unique<char[]>(imageData->getWidth() * imageData->getHeight() * CHANNELS);
+	for (size_t x = 0; x < imageData->getWidth(); ++x) {
+		for (size_t y = 0; y < imageData->getHeight(); ++y) {
+			// transform RGBA to BGRA:
+			bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS] =
+			    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 2];
+			bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 1] =
+			    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 1];
+			bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 2] =
+			    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS];
+			bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 3] =
+			    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 3];
+		}
 	}
 
 	ICONINFO icon;
 	icon.fIcon = true;
-	std::vector<char> blackMask(x * y);
-	icon.hbmMask = CreateBitmap(x, y, 1, 8, &blackMask[0]);
-	icon.hbmColor = CreateBitmap(x, y, 1, channels * 8, &imageData[0]);
-
-	png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
+	std::vector<char> blackMask(imageData->getWidth() * imageData->getHeight());
+	icon.hbmMask = CreateBitmap(imageData->getWidth(), imageData->getHeight(), 1, 8, &blackMask[0]);
+	icon.hbmColor =
+	    CreateBitmap(imageData->getWidth(), imageData->getHeight(), 1, CHANNELS * 8, bgra.get());
 
 	HICON hIcon = CreateIconIndirect(&icon);
 	SendMessage(impl->pWindowHandle_.get(), WM_SETICON, WPARAM(ICON_SMALL), LPARAM(hIcon));
-#endif
 }
 
 int getDesktopWidth() {

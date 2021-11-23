@@ -14,7 +14,7 @@ class ImageData {
 public:
 	/// Passing a filename will load the specified \a filename
 	///
-	/// Currently only WebP files are supported (WIP).
+	/// PNG and WebP files are supported.
 	static std::unique_ptr<ImageData> load(const std::string& filename);
 
 	virtual ~ImageData() = default;

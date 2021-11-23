@@ -8,6 +8,9 @@
 #ifdef ANDROID
 #include "../android/fopen.hpp"
 #endif
+#ifndef NOPNG
+#include "../ImageDataPNG.hpp"
+#endif
 #ifndef NOWEBP
 #include "../ImageDataWebP.hpp"
 #endif
@@ -21,11 +24,19 @@ namespace jngl {
 std::unique_ptr<ImageData> ImageData::load(const std::string& filename) {
 	auto fullFilename = pathPrefix + filename;
 	const char* extensions[] = {
+#ifndef NOPNG
+		".png",
+#endif
 #ifndef NOWEBP
 		".webp",
 #endif
 	};
 	std::function<std::unique_ptr<ImageData>(std::string, FILE*)> functions[] = {
+#ifndef NOPNG
+		[](std::string filename, FILE* file) {
+		    return std::make_unique<ImageDataPNG>(std::move(filename), file);
+		},
+#endif
 #ifndef NOWEBP
 		[](std::string filename, FILE* file) {
 		    return std::make_unique<ImageDataWebP>(std::move(filename), file, 1);
