@@ -5,6 +5,7 @@
 #include "jngl/Finally.hpp"
 
 #include <cassert>
+#include <cstring>
 #include <png.h>
 #include <stdexcept>
 
