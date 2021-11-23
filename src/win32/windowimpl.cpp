@@ -38,7 +38,7 @@ public:
 	std::shared_ptr<std::remove_pointer<HGLRC>::type> pRenderingContext_;
 	std::shared_ptr<std::remove_pointer<HWND>::type> pWindowHandle_;
 	std::shared_ptr<std::remove_pointer<HDC>::type> pDeviceContext_;
-	int arbMultisampleFormat_;
+	int arbMultisampleFormat_ = 0;
 	bool touchscreenActive = false;
 	int relativeX = 0;
 	int relativeY = 0;
