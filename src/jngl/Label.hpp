@@ -6,7 +6,7 @@
 
 #include "Color.hpp"
 #include "Widget.hpp"
-#include "text.hpp"
+#include "TextLine.hpp"
 
 namespace jngl {
 
@@ -17,7 +17,7 @@ public:
 	void drawSelf() const override;
 
 private:
-	jngl::Text text;
+	jngl::TextLine text;
 	jngl::Color color;
 };
 
