@@ -2,7 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
-#include "jngl/ImageData.hpp"
+#include "../jngl/ImageData.hpp"
 
 #include <cstdint>
 #include <vector>

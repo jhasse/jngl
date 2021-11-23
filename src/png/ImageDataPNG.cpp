@@ -2,7 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ImageDataPNG.hpp"
 
-#include "jngl/Finally.hpp"
+#include "../jngl/Finally.hpp"
 
 #include <cassert>
 #include <cstring>

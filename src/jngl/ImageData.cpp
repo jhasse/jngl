@@ -9,7 +9,7 @@
 #include "../android/fopen.hpp"
 #endif
 #ifndef NOPNG
-#include "../ImageDataPNG.hpp"
+#include "../png/ImageDataPNG.hpp"
 #endif
 #ifndef NOWEBP
 #include "../ImageDataWebP.hpp"

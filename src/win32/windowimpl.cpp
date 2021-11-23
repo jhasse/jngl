@@ -170,18 +170,19 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		}
 
 		AdjustWindowRectEx(&WindowRect, dwStyle, FALSE,
-						   dwExStyle); // Adjust Window To True Requested Size
+		                   dwExStyle); // Adjust Window To True Requested Size
 
 		// Create The Window
 		impl->pWindowHandle_.reset(
-			CreateWindowEx(dwExStyle,     // Extended Style For The Window
-			               L"OpenGL",     // Class Name
-			               utf8ToUtf16(title).c_str(), // Window Title
-						   dwStyle | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, CW_USEDEFAULT, CW_USEDEFAULT,
-						   WindowRect.right - WindowRect.left, // Calculate Window Width
-						   WindowRect.bottom - WindowRect.top, // Calculate Window Height
-						   nullptr, nullptr, hInstance, this),
-			DestroyWindow);
+		    CreateWindowEx(dwExStyle,                  // Extended Style For The Window
+		                   L"OpenGL",                  // Class Name
+		                   utf8ToUtf16(title).c_str(), // Window Title
+		                   dwStyle | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, CW_USEDEFAULT,
+		                   CW_USEDEFAULT,
+		                   WindowRect.right - WindowRect.left, // Calculate Window Width
+		                   WindowRect.bottom - WindowRect.top, // Calculate Window Height
+		                   nullptr, nullptr, hInstance, this),
+		    DestroyWindow);
 		if (!impl->pWindowHandle_) {
 			throw std::runtime_error("Window creation error.");
 		}
@@ -197,41 +198,41 @@ Window::Window(const std::string& title, const int width, const int height, cons
 
 			if (ChangeDisplaySettings(&devmode, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL) {
 				throw std::runtime_error(
-					"The requested fullscreen mode is not supported by your video card.");
+				    "The requested fullscreen mode is not supported by your video card.");
 			}
 		}
 
 		static PIXELFORMATDESCRIPTOR pfd = // pfd Tells Windows How We Want Things To Be
-			{
-			  sizeof(PIXELFORMATDESCRIPTOR), // Size Of This Pixel Format Descriptor
-			  1,                             // Version Number
-			  PFD_DRAW_TO_WINDOW |           // Format Must Support Window
-				  PFD_SUPPORT_OPENGL |       // Format Must Support OpenGL
-				  PFD_DOUBLEBUFFER,          // Must Support Double Buffering
-			  PFD_TYPE_RGBA,                 // Request An RGBA Format
-			  32,                            // Select Our Color Depth
-			  0,
-			  0,
-			  0,
-			  0,
-			  0,
-			  0, // Color Bits Ignored
-			  0, // No Alpha Buffer
-			  0, // Shift Bit Ignored
-			  0, // No Accumulation Buffer
-			  0,
-			  0,
-			  0,
-			  0,              // Accumulation Bits Ignored
-			  16,             // 16Bit Z-Buffer (Depth Buffer)
-			  0,              // No Stencil Buffer
-			  0,              // No Auxiliary Buffer
-			  PFD_MAIN_PLANE, // Main Drawing Layer
-			  0,              // Reserved
-			  0,
-			  0,
-			  0 // Layer Masks Ignored
-			};
+		    {
+			    sizeof(PIXELFORMATDESCRIPTOR), // Size Of This Pixel Format Descriptor
+			    1,                             // Version Number
+			    PFD_DRAW_TO_WINDOW |           // Format Must Support Window
+			        PFD_SUPPORT_OPENGL |       // Format Must Support OpenGL
+			        PFD_DOUBLEBUFFER,          // Must Support Double Buffering
+			    PFD_TYPE_RGBA,                 // Request An RGBA Format
+			    32,                            // Select Our Color Depth
+			    0,
+			    0,
+			    0,
+			    0,
+			    0,
+			    0, // Color Bits Ignored
+			    0, // No Alpha Buffer
+			    0, // Shift Bit Ignored
+			    0, // No Accumulation Buffer
+			    0,
+			    0,
+			    0,
+			    0,              // Accumulation Bits Ignored
+			    16,             // 16Bit Z-Buffer (Depth Buffer)
+			    0,              // No Stencil Buffer
+			    0,              // No Auxiliary Buffer
+			    PFD_MAIN_PLANE, // Main Drawing Layer
+			    0,              // Reserved
+			    0,
+			    0,
+			    0 // Layer Masks Ignored
+		    };
 
 		impl->pDeviceContext_.reset(GetDC(impl->pWindowHandle_.get()), [this](HDC hdc) {
 			WindowImpl::ReleaseDC(impl->pWindowHandle_.get(), hdc);
@@ -261,9 +262,10 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		}
 
 		if (epoxy_gl_version() < 20) {
-			throw std::runtime_error("Your graphics card is missing OpenGL 2.0 support (it supports " +
-									 std::to_string(epoxy_gl_version() / 10) + "." +
-									 std::to_string(epoxy_gl_version() % 10) + ").");
+			throw std::runtime_error(
+			    "Your graphics card is missing OpenGL 2.0 support (it supports " +
+			    std::to_string(epoxy_gl_version() / 10) + "." +
+			    std::to_string(epoxy_gl_version() % 10) + ").");
 		}
 
 		if (!multisample && isMultisampleSupported_ && impl->InitMultisample(hInstance, pfd)) {
@@ -363,109 +365,109 @@ void Window::UpdateInput() {
 	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 		static std::map<int, std::string> scanCodeToCharacter;
 		switch (msg.message) {
-			case WM_QUIT:
-				quit();
-				break;
-			case WM_MOUSEMOVE:
-				mousex_ = GET_X_LPARAM(msg.lParam);
-				mousey_ = GET_Y_LPARAM(msg.lParam);
-				break;
-			case WM_MOUSEWHEEL:
-				mouseWheel += double(GET_WHEEL_DELTA_WPARAM(msg.wParam)) / WHEEL_DELTA;
-				break;
-			case WM_POINTERDOWN: // WINVER >= 0x0602 (Windows 8)
-				impl->touchscreenActive = true;
-				break;
-			case WM_POINTERUP:
-				impl->touchscreenActive = false;
-				SetRelativeMouseMode(relativeMouseMode);
-				break;
-			case WM_LBUTTONDOWN:
-				mouseDown_.at(0) = true;
-				mousePressed_.at(0) = true;
-				break;
-			case WM_MBUTTONDOWN:
-				mouseDown_.at(1) = true;
-				mousePressed_.at(1) = true;
-				break;
-			case WM_RBUTTONDOWN:
-				mouseDown_.at(2) = true;
-				mousePressed_.at(2) = true;
-				break;
-			case WM_LBUTTONUP:
-				if (mousePressed_.at(0)) {
-					// wait one frame
-					addUpdateInputCallback([&]() {
-						mouseDown_.at(0) = false;
-						mousePressed_.at(0) = false;
-					});
-				} else {
+		case WM_QUIT:
+			quit();
+			break;
+		case WM_MOUSEMOVE:
+			mousex_ = GET_X_LPARAM(msg.lParam);
+			mousey_ = GET_Y_LPARAM(msg.lParam);
+			break;
+		case WM_MOUSEWHEEL:
+			mouseWheel += double(GET_WHEEL_DELTA_WPARAM(msg.wParam)) / WHEEL_DELTA;
+			break;
+		case WM_POINTERDOWN: // WINVER >= 0x0602 (Windows 8)
+			impl->touchscreenActive = true;
+			break;
+		case WM_POINTERUP:
+			impl->touchscreenActive = false;
+			SetRelativeMouseMode(relativeMouseMode);
+			break;
+		case WM_LBUTTONDOWN:
+			mouseDown_.at(0) = true;
+			mousePressed_.at(0) = true;
+			break;
+		case WM_MBUTTONDOWN:
+			mouseDown_.at(1) = true;
+			mousePressed_.at(1) = true;
+			break;
+		case WM_RBUTTONDOWN:
+			mouseDown_.at(2) = true;
+			mousePressed_.at(2) = true;
+			break;
+		case WM_LBUTTONUP:
+			if (mousePressed_.at(0)) {
+				// wait one frame
+				addUpdateInputCallback([&]() {
 					mouseDown_.at(0) = false;
 					mousePressed_.at(0) = false;
-				}
+				});
+			} else {
+				mouseDown_.at(0) = false;
+				mousePressed_.at(0) = false;
+			}
+			break;
+		case WM_MBUTTONUP:
+			mouseDown_.at(1) = false;
+			mousePressed_.at(1) = false;
+			break;
+		case WM_RBUTTONUP:
+			mouseDown_.at(2) = false;
+			mousePressed_.at(2) = false;
+			break;
+		case WM_KEYDOWN:
+			keyDown_[msg.wParam] = true;
+			keyPressed_[msg.wParam] = true;
+			anyKeyPressed_ = true;
+			impl->distinguishLeftRight();
+			break;
+		case WM_KEYUP: {
+			keyDown_[msg.wParam] = false;
+			keyPressed_[msg.wParam] = false;
+			impl->distinguishLeftRight();
+			int scanCode = msg.lParam & 0x7f8000;
+			characterDown_[scanCodeToCharacter[scanCode]] = false;
+			characterPressed_[scanCodeToCharacter[scanCode]] = false;
+		} break;
+		case WM_CHAR: {
+			std::vector<char> buf(4);
+			UTF8* temp = reinterpret_cast<UTF8*>(&buf[0]);
+			UTF8** targetStart = &temp;
+			UTF8* targetEnd = *targetStart + buf.size();
+			const UTF16* temp2 = reinterpret_cast<UTF16*>(&msg.wParam);
+			const UTF16** sourceStart = &temp2;
+			const UTF16* sourceEnd = temp2 + 2;
+			ConversionResult result = ConvertUTF16toUTF8(sourceStart, sourceEnd, targetStart,
+			                                             targetEnd, lenientConversion);
+			if (result != conversionOK) {
+				debug("WARNING: Couldn't convert UTF16 to UTF8.\n");
 				break;
-			case WM_MBUTTONUP:
-				mouseDown_.at(1) = false;
-				mousePressed_.at(1) = false;
-				break;
-			case WM_RBUTTONUP:
-				mouseDown_.at(2) = false;
-				mousePressed_.at(2) = false;
-				break;
-			case WM_KEYDOWN:
-				keyDown_[msg.wParam] = true;
-				keyPressed_[msg.wParam] = true;
-				anyKeyPressed_ = true;
-				impl->distinguishLeftRight();
-				break;
-			case WM_KEYUP: {
-				keyDown_[msg.wParam] = false;
-				keyPressed_[msg.wParam] = false;
-				impl->distinguishLeftRight();
-				int scanCode = msg.lParam & 0x7f8000;
-				characterDown_[scanCodeToCharacter[scanCode]] = false;
-				characterPressed_[scanCodeToCharacter[scanCode]] = false;
-			} break;
-			case WM_CHAR: {
-				std::vector<char> buf(4);
-				UTF8* temp = reinterpret_cast<UTF8*>(&buf[0]);
-				UTF8** targetStart = &temp;
-				UTF8* targetEnd = *targetStart + buf.size();
-				const UTF16* temp2 = reinterpret_cast<UTF16*>(&msg.wParam);
-				const UTF16** sourceStart = &temp2;
-				const UTF16* sourceEnd = temp2 + 2;
-				ConversionResult result = ConvertUTF16toUTF8(sourceStart, sourceEnd, targetStart,
-				                                             targetEnd, lenientConversion);
-				if (result != conversionOK) {
-					debug("WARNING: Couldn't convert UTF16 to UTF8.\n");
-					break;
-				}
-				auto end = ++(buf.begin());
-				if (buf[0] & 0x80) {
+			}
+			auto end = ++(buf.begin());
+			if (buf[0] & 0x80) {
+				++end;
+				if (buf[0] & 0x20) {
 					++end;
-					if (buf[0] & 0x20) {
+					if (buf[0] & 0x10) {
 						++end;
-						if (buf[0] & 0x10) {
-							++end;
-						}
 					}
 				}
-				std::string character(buf.begin(), end);
-				if (character.size() == 1) {
-					assert(character[0] > 0);
-					if (GetKeyState(VK_CONTROL) < 0 &&
-					    character[0] >= 1 /* ctrl-a */ && character[0] <= 26 /* ctrl-z */) {
-						character[0] = 'a' - 1 + character[0];
-					} else if (character[0] < ' ') {
-						break; // non-printable character (e.g. Escape)
-					}
+			}
+			std::string character(buf.begin(), end);
+			if (character.size() == 1) {
+				assert(character[0] > 0);
+				if (GetKeyState(VK_CONTROL) < 0 && character[0] >= 1 /* ctrl-a */ &&
+				    character[0] <= 26 /* ctrl-z */) {
+					character[0] = 'a' - 1 + character[0];
+				} else if (character[0] < ' ') {
+					break; // non-printable character (e.g. Escape)
 				}
-				int scanCode = msg.lParam & 0x7f8000;
-				scanCodeToCharacter[scanCode] = character;
-				characterDown_[character] = true;
-				characterPressed_[character] = true;
-				textInput += character;
-			} break;
+			}
+			int scanCode = msg.lParam & 0x7f8000;
+			scanCodeToCharacter[scanCode] = character;
+			characterDown_[character] = true;
+			characterPressed_[character] = true;
+			textInput += character;
+		} break;
 		}
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
@@ -494,81 +496,82 @@ void Window::SetTitle(const std::string& windowTitle) {
 
 int Window::GetKeyCode(jngl::key::KeyType key) {
 	switch (key) {
-		case key::Left:
-			return 0x25;
-		case key::Up:
-			return 0x26;
-		case key::Right:
-			return 0x27;
-		case key::Down:
-			return 0x28;
-		case key::PageUp:
-			return 0x21;
-		case key::PageDown:
-			return 0x22;
-		case key::Home:
-			return 0x24;
-		case key::End:
-			return 0x23;
-		case key::BackSpace:
-			return 0x08;
-		case key::Tab:
-			return 0x09;
-		case key::Clear:
-			return 0x0C;
-		case key::Return:
-			return 0x0D;
-		case key::Pause:
-			return 0x13;
-		case key::Escape: return VK_ESCAPE;
-		case key::Delete:
-			return 0x2E;
-		case key::ControlL:
-			return 0xA2;
-		case key::ControlR:
-			return 0xA3;
-		case key::CapsLock:
-			return 0x14;
-		case key::AltL:
-			return 0xA4;
-		case key::AltR:
-			return 0xA5;
-		case key::SuperL:
-			return 0x5B;
-		case key::SuperR:
-			return 0x5C;
-		case key::Space:
-			return 0x20;
-		case key::ShiftL:
-			return 0xA0;
-		case key::ShiftR:
-			return 0xA1;
-		case key::F1:
-			return 0x70;
-		case key::F2:
-			return 0x71;
-		case key::F3:
-			return 0x72;
-		case key::F4:
-			return 0x73;
-		case key::F5:
-			return 0x74;
-		case key::F6:
-			return 0x75;
-		case key::F7:
-			return 0x76;
-		case key::F8:
-			return 0x77;
-		case key::F9:
-			return 0x78;
-		case key::F10:
-			return 0x79;
-		case key::F11:
-			return 0x7a;
-		case key::F12:
-			return 0x7b;
-		default:
-			return 0;
+	case key::Left:
+		return 0x25;
+	case key::Up:
+		return 0x26;
+	case key::Right:
+		return 0x27;
+	case key::Down:
+		return 0x28;
+	case key::PageUp:
+		return 0x21;
+	case key::PageDown:
+		return 0x22;
+	case key::Home:
+		return 0x24;
+	case key::End:
+		return 0x23;
+	case key::BackSpace:
+		return 0x08;
+	case key::Tab:
+		return 0x09;
+	case key::Clear:
+		return 0x0C;
+	case key::Return:
+		return 0x0D;
+	case key::Pause:
+		return 0x13;
+	case key::Escape:
+		return VK_ESCAPE;
+	case key::Delete:
+		return 0x2E;
+	case key::ControlL:
+		return 0xA2;
+	case key::ControlR:
+		return 0xA3;
+	case key::CapsLock:
+		return 0x14;
+	case key::AltL:
+		return 0xA4;
+	case key::AltR:
+		return 0xA5;
+	case key::SuperL:
+		return 0x5B;
+	case key::SuperR:
+		return 0x5C;
+	case key::Space:
+		return 0x20;
+	case key::ShiftL:
+		return 0xA0;
+	case key::ShiftR:
+		return 0xA1;
+	case key::F1:
+		return 0x70;
+	case key::F2:
+		return 0x71;
+	case key::F3:
+		return 0x72;
+	case key::F4:
+		return 0x73;
+	case key::F5:
+		return 0x74;
+	case key::F6:
+		return 0x75;
+	case key::F7:
+		return 0x76;
+	case key::F8:
+		return 0x77;
+	case key::F9:
+		return 0x78;
+	case key::F10:
+		return 0x79;
+	case key::F11:
+		return 0x7a;
+	case key::F12:
+		return 0x7b;
+	default:
+		return 0;
 	}
 }
 
@@ -587,40 +590,40 @@ bool Window::getKeyPressed(const std::string& key) {
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	static bool timePeriodActive = false;
 	switch (uMsg) {
-		case WM_NCCREATE: {
-			// Store Window* pointer passed to CreateWindowEx:
-			SetWindowLongPtr(hWnd, GWLP_USERDATA,
-			                 reinterpret_cast<LONG_PTR>(
-			                     reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams));
-			break;
+	case WM_NCCREATE: {
+		// Store Window* pointer passed to CreateWindowEx:
+		SetWindowLongPtr(
+		    hWnd, GWLP_USERDATA,
+		    reinterpret_cast<LONG_PTR>(reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams));
+		break;
+	}
+	case WM_SYSCOMMAND: // Intercept System Commands
+		switch (wParam) {
+		case SC_SCREENSAVE:   // Screensaver Trying To Start?
+		case SC_MONITORPOWER: // Monitor Trying To Enter Powersave?
+			return 0;         // Prevent From Happening
 		}
-		case WM_SYSCOMMAND: // Intercept System Commands
-			switch (wParam) {
-				case SC_SCREENSAVE:   // Screensaver Trying To Start?
-				case SC_MONITORPOWER: // Monitor Trying To Enter Powersave?
-					return 0;         // Prevent From Happening
-			}
-			break;
-		case WM_CLOSE:          // Did We Receive A Close Message?
-			PostQuitMessage(0); // Send A Quit Message
-			return 0;           // Jump Back
-		case WM_SETFOCUS:
-			debugLn("Window got focus.");
-			if (!timePeriodActive) {
-				timeBeginPeriod(1); // Tells Windows to use more accurate timers
-				timePeriodActive = true;
-				const auto self = reinterpret_cast<Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-				self->resetFrameLimiter(); // sleepCorrectionFactor needs to be resetted since we
-				                           // just changed the behaviour of the sleep function.
-			}
-			break;
-		case WM_KILLFOCUS:
-			debugLn("Window lost focus.");
-			if (timePeriodActive) {
-				timeEndPeriod(1);
-				timePeriodActive = false;
-			}
-			break;
+		break;
+	case WM_CLOSE:          // Did We Receive A Close Message?
+		PostQuitMessage(0); // Send A Quit Message
+		return 0;           // Jump Back
+	case WM_SETFOCUS:
+		debugLn("Window got focus.");
+		if (!timePeriodActive) {
+			timeBeginPeriod(1); // Tells Windows to use more accurate timers
+			timePeriodActive = true;
+			const auto self = reinterpret_cast<Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+			self->resetFrameLimiter(); // sleepCorrectionFactor needs to be resetted since we
+			                           // just changed the behaviour of the sleep function.
+		}
+		break;
+	case WM_KILLFOCUS:
+		debugLn("Window lost focus.");
+		if (timePeriodActive) {
+			timeEndPeriod(1);
+			timePeriodActive = false;
+		}
+		break;
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
@@ -658,34 +661,41 @@ void Window::SetRelativeMouseMode(bool relative) {
 }
 
 void Window::SetIcon(const std::string& filename) {
-	auto imageData = ImageData::load(filename);
+	try {
+		auto imageData = ImageData::load(filename);
 
-	const int CHANNELS = 4;
+		const int CHANNELS = 4;
 
-	auto bgra = std::make_unique<char[]>(imageData->getWidth() * imageData->getHeight() * CHANNELS);
-	for (size_t x = 0; x < imageData->getWidth(); ++x) {
-		for (size_t y = 0; y < imageData->getHeight(); ++y) {
-			// transform RGBA to BGRA:
-			bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS] =
-			    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 2];
-			bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 1] =
-			    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 1];
-			bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 2] =
-			    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS];
-			bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 3] =
-			    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 3];
+		auto bgra =
+		    std::make_unique<char[]>(imageData->getWidth() * imageData->getHeight() * CHANNELS);
+		for (size_t x = 0; x < imageData->getWidth(); ++x) {
+			for (size_t y = 0; y < imageData->getHeight(); ++y) {
+				// transform RGBA to BGRA:
+				bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS] =
+				    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 2];
+				bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 1] =
+				    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 1];
+				bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 2] =
+				    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS];
+				bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 3] =
+				    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 3];
+			}
 		}
+
+		ICONINFO icon;
+		icon.fIcon = true;
+		std::vector<char> blackMask(imageData->getWidth() * imageData->getHeight());
+		icon.hbmMask =
+		    CreateBitmap(imageData->getWidth(), imageData->getHeight(), 1, 8, &blackMask[0]);
+		icon.hbmColor = CreateBitmap(imageData->getWidth(), imageData->getHeight(), 1, CHANNELS * 8,
+		                             bgra.get());
+
+		HICON hIcon = CreateIconIndirect(&icon);
+		SendMessage(impl->pWindowHandle_.get(), WM_SETICON, WPARAM(ICON_SMALL), LPARAM(hIcon));
+	} catch (std::runtime_error& e) {
+		debug("jngl::setIcon: ");
+		debugLn(e.what());
 	}
-
-	ICONINFO icon;
-	icon.fIcon = true;
-	std::vector<char> blackMask(imageData->getWidth() * imageData->getHeight());
-	icon.hbmMask = CreateBitmap(imageData->getWidth(), imageData->getHeight(), 1, 8, &blackMask[0]);
-	icon.hbmColor =
-	    CreateBitmap(imageData->getWidth(), imageData->getHeight(), 1, CHANNELS * 8, bgra.get());
-
-	HICON hIcon = CreateIconIndirect(&icon);
-	SendMessage(impl->pWindowHandle_.get(), WM_SETICON, WPARAM(ICON_SMALL), LPARAM(hIcon));
 }
 
 int getDesktopWidth() {
