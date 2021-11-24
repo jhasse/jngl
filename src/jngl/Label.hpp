@@ -5,8 +5,8 @@
 #pragma once
 
 #include "Color.hpp"
-#include "Widget.hpp"
 #include "TextLine.hpp"
+#include "Widget.hpp"
 
 namespace jngl {
 

@@ -3,10 +3,10 @@
 
 #include "framebuffer.hpp"
 
-#include "ScaleablePixels.hpp"
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
 #include "../texture.hpp"
+#include "ScaleablePixels.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
 #include "window.hpp"

@@ -33,8 +33,8 @@ std::unique_ptr<ImageData> ImageData::load(const std::string& filename) {
 	};
 	std::function<std::unique_ptr<ImageData>(std::string, FILE*)> functions[] = {
 #ifndef NOPNG
-		[](std::string filename, FILE* file) {
-		    return std::make_unique<ImageDataPNG>(std::move(filename), file);
+		[](const std::string& filename, FILE* file) {
+		    return std::make_unique<ImageDataPNG>(filename, file);
 		},
 #endif
 #ifndef NOWEBP
