@@ -2,8 +2,8 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/App.hpp"
-#include "../jngl/debug.hpp"
 #include "../jngl/ImageData.hpp"
+#include "../jngl/debug.hpp"
 #include "../jngl/window.hpp"
 #include "../main.hpp"
 #include "../window.hpp"
@@ -360,9 +360,9 @@ void Window::SetIcon(const std::string& filepath) {
 	auto imageData = ImageData::load(filepath);
 	const int CHANNELS = 4;
 	SDL_Surface* const surface = SDL_CreateRGBSurfaceFrom(
-	    const_cast<uint8_t*>(imageData->pixels()), imageData->getWidth(), imageData->getHeight(),
-	    CHANNELS * 8, CHANNELS * imageData->getWidth(), 0x000000ff, 0x0000ff00, 0x00ff0000,
-	    0xff000000);
+	    const_cast<uint8_t*>(imageData->pixels()) /* NOLINT */, imageData->getWidth(),
+	    imageData->getHeight(), CHANNELS * 8, CHANNELS * imageData->getWidth(), 0x000000ff,
+	    0x0000ff00, 0x00ff0000, 0xff000000);
 
 	if (surface == nullptr) {
 		jngl::debugLn(SDL_GetError());
