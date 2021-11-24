@@ -21,7 +21,7 @@
 <!-- Node1 -->
 <g id="node2" class="node">
 <title>Node1</title>
-<g id="a_node2"><a xlink:href="classjngl_1_1Label.html" target="_top" xlink:title=" ">
+<g id="a_node2"><a xlink:href="classjngl_1_1Label.html" target="_top" xlink:title="Simple Widget displaying a line of text.">
 <polygon fill="white" stroke="black" points="89,-0.5 89,-19.5 136,-19.5 136,-0.5 89,-0.5"/>
 <text text-anchor="middle" x="112.5" y="-7.5" font-family="'Consolas',monospace" font-size="10.00">Label</text>
 </a>
