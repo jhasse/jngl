@@ -1,18 +1,18 @@
 <map id="jngl.hpp" name="jngl.hpp">
 <area shape="rect" id="node1" title="Includes jngl/all.hpp." alt="" coords="1563,5,1650,32"/>
 <area shape="rect" id="node2" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="1547,80,1666,107"/>
-<area shape="rect" id="node3" href="$App_8hpp.html" title="Contains jngl::App class." alt="" coords="1175,229,1254,256"/>
+<area shape="rect" id="node3" href="$App_8hpp.html" title="Contains jngl::App class." alt="" coords="1294,229,1373,256"/>
 <area shape="rect" id="node6" href="$Color_8hpp.html" title="Contains jngl::Color class." alt="" coords="2214,304,2309,331"/>
 <area shape="rect" id="node7" href="$Container_8hpp.html" title="Contains jngl::Container class." alt="" coords="293,229,419,256"/>
 <area shape="rect" id="node10" href="$Controller_8hpp.html" title="Contains jngl::Controller class." alt="" coords="775,155,910,181"/>
 <area shape="rect" id="node11" href="$input_8hpp.html" title="Input related functions." alt="" coords="795,229,890,256"/>
 <area shape="rect" id="node17" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="691,304,810,331"/>
-<area shape="rect" id="node18" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="165,155,259,181"/>
-<area shape="rect" id="node19" href="$Widget_8hpp.html" title="Contains jngl::Container class." alt="" coords="23,229,126,256"/>
-<area shape="rect" id="node20" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="150,229,269,256"/>
+<area shape="rect" id="node18" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="163,155,258,181"/>
+<area shape="rect" id="node19" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="150,229,269,256"/>
+<area shape="rect" id="node20" href="$Widget_8hpp.html" title="Contains jngl::Container class." alt="" coords="23,229,126,256"/>
 <area shape="rect" id="node21" href="$Pixels_8hpp.html" title="Contains jngl::Pixels class." alt="" coords="3058,304,3161,331"/>
 <area shape="rect" id="node23" href="$ScaleablePixels_8hpp.html" title="Contains jngl::ScaleablePixels class." alt="" coords="1141,155,1315,181"/>
-<area shape="rect" id="node24" href="$Shader_8hpp.html" title=" " alt="" coords="410,155,513,181"/>
+<area shape="rect" id="node24" href="$Shader_8hpp.html" title=" " alt="" coords="411,155,514,181"/>
 <area shape="rect" id="node25" href="$ShaderProgram_8hpp.html" title="Contains jngl::ShaderProgram class." alt="" coords="1781,229,1939,256"/>
 <area shape="rect" id="node27" href="$SoundFile_8hpp.html" title="Contains jngl::SoundFile class." alt="" coords="1025,229,1151,256"/>
 <area shape="rect" id="node28" href="$Vertex_8hpp.html" title=" " alt="" coords="2333,304,2435,331"/>
@@ -29,13 +29,13 @@
 <area shape="rect" id="node43" href="$matrix_8hpp.html" title="Functions related to the global ModelView matrix." alt="" coords="2898,155,3001,181"/>
 <area shape="rect" id="node44" href="$screen_8hpp.html" title=" " alt="" coords="2593,155,2695,181"/>
 <area shape="rect" id="node45" href="$shapes_8hpp.html" title="Functions for drawing shapes." alt="" coords="2422,229,2525,256"/>
-<area shape="rect" id="node46" href="$sound_8hpp.html" title="Sound related functions." alt="" coords="1278,229,1373,256"/>
+<area shape="rect" id="node46" href="$sound_8hpp.html" title="Sound related functions." alt="" coords="1175,229,1270,256"/>
 <area shape="rect" id="node47" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="1645,155,1747,181"/>
 <area shape="rect" id="node48" href="$text_8hpp.html" title=" " alt="" coords="914,229,1001,256"/>
 <area shape="rect" id="node49" href="$time_8hpp.html" title="Timing functions." alt="" coords="3025,155,3111,181"/>
 <area shape="rect" id="node50" href="$work_8hpp.html" title=" " alt="" coords="542,155,629,181"/>
 <area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="937,304,1007,331"/>
-<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="1470,304,1541,331"/>
+<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="1457,304,1527,331"/>
 <area shape="rect" id="node8" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/set.html" title=" " alt="" coords="278,304,325,331"/>
 <area shape="rect" id="node9" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="1045,304,1115,331"/>
 <area shape="rect" id="node16" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/chrono.html" title=" " alt="" coords="649,229,719,256"/>
