@@ -10,6 +10,7 @@
 
 namespace jngl {
 
+/// Containing the pixel data of an image file
 class ImageData {
 public:
 	/// Passing a filename will load the specified \a filename
@@ -19,7 +20,10 @@ public:
 
 	virtual ~ImageData() = default;
 
+	/// Returns the width of the image in pixels
 	virtual int getWidth() const = 0;
+
+	/// Returns the height of the image in pixels
 	virtual int getHeight() const = 0;
 
 	/// RGBA values ordered row-major

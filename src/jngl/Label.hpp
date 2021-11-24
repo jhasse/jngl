@@ -10,6 +10,7 @@
 
 namespace jngl {
 
+/// Simple Widget displaying a line of text
 class Label : public Widget {
 public:
 	explicit Label(const std::string& str, Font&, Color, Vec2 position);
