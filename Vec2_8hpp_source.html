@@ -116,59 +116,62 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
 <div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classjngl_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">   47</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classjngl_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> = 0;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classjngl_1_1Vec2.html#af0dd9205158ccf7bcfcd8ff81f79c927">   50</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Archive&gt; <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Vec2.html#af0dd9205158ccf7bcfcd8ff81f79c927">serialize</a>(Archive&amp; ar, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>) {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        ar(<a class="code" href="classjngl_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>, <a class="code" href="classjngl_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a>);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    }</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;};</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;} <span class="comment">// namespace jngl</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="Vec2_8hpp.html#aa31006f9056a44f1e4bb383df0486854">   58</a></span>&#160;<a class="codeRef" href="http://en.cppreference.com/w/cpp/io/basic_ostream.html">std::ostream</a>&amp; <a class="code" href="Vec2_8hpp.html#aa31006f9056a44f1e4bb383df0486854">operator&lt;&lt;</a>(<a class="codeRef" href="http://en.cppreference.com/w/cpp/io/basic_ostream.html">std::ostream</a>&amp;, <span class="keyword">const</span> <a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a>&amp;);</div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classjngl_1_1Vec2.html#abada6dfb33f4cbafe1e443a5cf8dc8d0">   50</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classjngl_1_1Vec2.html#abada6dfb33f4cbafe1e443a5cf8dc8d0">isNull</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classjngl_1_1Vec2.html#af0dd9205158ccf7bcfcd8ff81f79c927">   53</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Archive&gt; <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Vec2.html#af0dd9205158ccf7bcfcd8ff81f79c927">serialize</a>(Archive&amp; ar, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>) {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        ar(<a class="code" href="classjngl_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>, <a class="code" href="classjngl_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a>);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    }</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;};</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;} <span class="comment">// namespace jngl</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#if BOOST_VERSION &gt;= 106200 || __has_include(&quot;boost/qvm/vec_traits.hpp&quot;</span>)</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#include &lt;boost/qvm/vec_traits.hpp&gt;</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="Vec2_8hpp.html#aa31006f9056a44f1e4bb383df0486854">   61</a></span>&#160;<a class="codeRef" href="http://en.cppreference.com/w/cpp/io/basic_ostream.html">std::ostream</a>&amp; <a class="code" href="Vec2_8hpp.html#aa31006f9056a44f1e4bb383df0486854">operator&lt;&lt;</a>(<a class="codeRef" href="http://en.cppreference.com/w/cpp/io/basic_ostream.html">std::ostream</a>&amp;, <span class="keyword">const</span> <a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a>&amp;);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keyword">namespace </span>boost::qvm {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keyword">template</span> &lt;&gt; <span class="keyword">struct </span>vec_traits&lt;<a class="code" href="namespacejngl.html">jngl</a>::Vec2&gt; {</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <span class="keyword">const</span> dim = 2;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">using</span> scalar_type = double;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">template</span> &lt;<span class="keywordtype">int</span> I&gt; <span class="keyword">static</span> <span class="keyword">inline</span> scalar_type&amp; write_element(<a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a>&amp; v) {</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">return</span> (&amp;v.<a class="code" href="classjngl_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>)[I];</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    }</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">template</span> &lt;<span class="keywordtype">int</span> I&gt; <span class="keyword">static</span> <span class="keyword">inline</span> scalar_type read_element(<span class="keyword">const</span> <a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a>&amp; v) {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#if BOOST_VERSION &gt;= 106200 || __has_include(&quot;boost/qvm/vec_traits.hpp&quot;</span>)</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#include &lt;boost/qvm/vec_traits.hpp&gt;</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keyword">namespace </span>boost::qvm {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">template</span> &lt;&gt; <span class="keyword">struct </span>vec_traits&lt;<a class="code" href="namespacejngl.html">jngl</a>::Vec2&gt; {</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <span class="keyword">const</span> dim = 2;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">using</span> scalar_type = double;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">template</span> &lt;<span class="keywordtype">int</span> I&gt; <span class="keyword">static</span> <span class="keyword">inline</span> scalar_type&amp; write_element(<a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a>&amp; v) {</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordflow">return</span> (&amp;v.<a class="code" href="classjngl_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>)[I];</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    }</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> scalar_type&amp; write_element_idx(<span class="keywordtype">int</span> i, <a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a>&amp; v) {</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordflow">return</span> (&amp;v.<a class="code" href="classjngl_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>)[i];</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    }</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> scalar_type read_element_idx(<span class="keywordtype">int</span> i, <a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a> <span class="keyword">const</span>&amp; v) {</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">template</span> &lt;<span class="keywordtype">int</span> I&gt; <span class="keyword">static</span> <span class="keyword">inline</span> scalar_type read_element(<span class="keyword">const</span> <a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a>&amp; v) {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordflow">return</span> (&amp;v.<a class="code" href="classjngl_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>)[I];</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> scalar_type&amp; write_element_idx(<span class="keywordtype">int</span> i, <a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a>&amp; v) {</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">return</span> (&amp;v.<a class="code" href="classjngl_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>)[i];</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    }</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;};</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;} <span class="comment">// namespace boost::qvm</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#include &lt;boost/qvm/vec_operations.hpp&gt;</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">using</span> boost::qvm::operator+=;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keyword">using</span> boost::qvm::operator*=;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="keyword">using</span> boost::qvm::operator/=;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="keyword">using</span> boost::qvm::operator-=;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="keyword">using</span> boost::qvm::operator==;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keyword">using</span> boost::qvm::operator!=;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keyword">using</span> boost::qvm::operator+;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">using</span> boost::qvm::operator-;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keyword">using</span> boost::qvm::operator/;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="keyword">using</span> boost::qvm::operator*;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> scalar_type read_element_idx(<span class="keywordtype">int</span> i, <a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a> <span class="keyword">const</span>&amp; v) {</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">return</span> (&amp;v.<a class="code" href="classjngl_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>)[i];</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    }</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;};</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;} <span class="comment">// namespace boost::qvm</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">#include &lt;boost/qvm/vec_operations.hpp&gt;</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="keyword">using</span> boost::qvm::operator+=;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="keyword">using</span> boost::qvm::operator*=;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keyword">using</span> boost::qvm::operator/=;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keyword">using</span> boost::qvm::operator-=;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">using</span> boost::qvm::operator==;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keyword">using</span> boost::qvm::operator!=;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="keyword">using</span> boost::qvm::operator+;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="keyword">using</span> boost::qvm::operator-;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="keyword">using</span> boost::qvm::operator/;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keyword">using</span> boost::qvm::operator*;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aVec2_8hpp_html_aa31006f9056a44f1e4bb383df0486854"><div class="ttname"><a href="Vec2_8hpp.html#aa31006f9056a44f1e4bb383df0486854">operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;, const jngl::Vec2 &amp;)</div><div class="ttdoc">Prints the vector like this: [x=…, y=…].</div></div>
 <div class="ttc" id="abasic_ostream_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/io/basic_ostream.html">std::ostream</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Vec2_html"><div class="ttname"><a href="classjngl_1_1Vec2.html">jngl::Vec2</a></div><div class="ttdoc">Two-dimensional vector.</div><div class="ttdef"><b>Definition:</b> <a href="Vec2_8hpp_source.html#l00035">Vec2.hpp:35</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Vec2_html_a1ab54d75ff36ed23a47e9229039c825d"><div class="ttname"><a href="classjngl_1_1Vec2.html#a1ab54d75ff36ed23a47e9229039c825d">jngl::Vec2::Vec2</a></div><div class="ttdeci">Vec2()</div><div class="ttdoc">Null vector.</div></div>
 <div class="ttc" id="aclassjngl_1_1Vec2_html_ab927965981178aa1fba979a37168db2a"><div class="ttname"><a href="classjngl_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">jngl::Vec2::y</a></div><div class="ttdeci">double y</div><div class="ttdoc">y component</div><div class="ttdef"><b>Definition:</b> <a href="Vec2_8hpp_source.html#l00047">Vec2.hpp:47</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Vec2_html_abada6dfb33f4cbafe1e443a5cf8dc8d0"><div class="ttname"><a href="classjngl_1_1Vec2.html#abada6dfb33f4cbafe1e443a5cf8dc8d0">jngl::Vec2::isNull</a></div><div class="ttdeci">bool isNull() const</div><div class="ttdoc">returns true if both x and y are exactly 0</div></div>
 <div class="ttc" id="aclassjngl_1_1Vec2_html_ad15f26b132fc394d0f6366484f5d8716"><div class="ttname"><a href="classjngl_1_1Vec2.html#ad15f26b132fc394d0f6366484f5d8716">jngl::Vec2::Vec2</a></div><div class="ttdeci">Vec2(double x, double y)</div><div class="ttdoc">Creates a vector {x, y}.</div></div>
-<div class="ttc" id="aclassjngl_1_1Vec2_html_af0dd9205158ccf7bcfcd8ff81f79c927"><div class="ttname"><a href="classjngl_1_1Vec2.html#af0dd9205158ccf7bcfcd8ff81f79c927">jngl::Vec2::serialize</a></div><div class="ttdeci">void serialize(Archive &amp;ar, const unsigned int)</div><div class="ttdoc">Helper function to use with cereal or Boost.Serialization.</div><div class="ttdef"><b>Definition:</b> <a href="Vec2_8hpp_source.html#l00050">Vec2.hpp:50</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Vec2_html_af0dd9205158ccf7bcfcd8ff81f79c927"><div class="ttname"><a href="classjngl_1_1Vec2.html#af0dd9205158ccf7bcfcd8ff81f79c927">jngl::Vec2::serialize</a></div><div class="ttdeci">void serialize(Archive &amp;ar, const unsigned int)</div><div class="ttdoc">Helper function to use with cereal or Boost.Serialization.</div><div class="ttdef"><b>Definition:</b> <a href="Vec2_8hpp_source.html#l00053">Vec2.hpp:53</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Vec2_html_af88b946fb90d5f08b5fb740c70e98c10"><div class="ttname"><a href="classjngl_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">jngl::Vec2::x</a></div><div class="ttdeci">double x</div><div class="ttdoc">x component</div><div class="ttdef"><b>Definition:</b> <a href="Vec2_8hpp_source.html#l00044">Vec2.hpp:44</a></div></div>
 <div class="ttc" id="aiosfwd_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/iosfwd.html">iosfwd</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition:</b> <a href="App_8hpp_source.html#l00010">App.hpp:10</a></div></div>
