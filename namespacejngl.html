@@ -446,6 +446,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 <tr class="memitem:a39d14eff72d22b1fbde7684a0a2ed12c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a39d14eff72d22b1fbde7684a0a2ed12c">clearBackBuffer</a> ()</td></tr>
 <tr class="memdesc:a39d14eff72d22b1fbde7684a0a2ed12c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the back buffer and resets the ModelView matrix, see <a class="el" href="namespacejngl.html#ab30302d1de317b3d3307dc4f32571e47" title="Resets the global ModelView matrix to the identity matrix.">jngl::reset()</a>  <a href="namespacejngl.html#a39d14eff72d22b1fbde7684a0a2ed12c">More...</a><br /></td></tr>
 <tr class="separator:a39d14eff72d22b1fbde7684a0a2ed12c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31e0348eb0e158e2e1cc72a4c804ae86"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a31e0348eb0e158e2e1cc72a4c804ae86">canQuit</a> ()</td></tr>
+<tr class="memdesc:a31e0348eb0e158e2e1cc72a4c804ae86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some platforms (e.g.  <a href="namespacejngl.html#a31e0348eb0e158e2e1cc72a4c804ae86">More...</a><br /></td></tr>
+<tr class="separator:a31e0348eb0e158e2e1cc72a4c804ae86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d50d8a7e6f86e2fe2b8529c95d6ef02"><td class="memItemLeft" align="right" valign="top"><a id="a4d50d8a7e6f86e2fe2b8529c95d6ef02"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a4d50d8a7e6f86e2fe2b8529c95d6ef02">quit</a> ()</td></tr>
 <tr class="memdesc:a4d50d8a7e6f86e2fe2b8529c95d6ef02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emit a quit event which will exit <a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> and set <a class="el" href="namespacejngl.html#aa5760c51d7686efb6d653830ee8305d5" title="Returns true until the main window is closed or quit() has been called.">running()</a> to false. <br /></td></tr>
@@ -1119,6 +1122,27 @@ template&lt;class T , class... Args&gt; </td></tr>
 
 <p>Clears the back buffer and resets the ModelView matrix, see <a class="el" href="namespacejngl.html#ab30302d1de317b3d3307dc4f32571e47" title="Resets the global ModelView matrix to the identity matrix.">jngl::reset()</a> </p>
 <p><a class="el" href="namespacejngl.html#aa2827e4edaa53fecffc9246f8bc2218e" title="Swaps back and front buffer.">jngl::swapBuffers()</a> calls this so there isn't any reason to call this manually most of the time. </p>
+
+</div>
+</div>
+<a id="a31e0348eb0e158e2e1cc72a4c804ae86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31e0348eb0e158e2e1cc72a4c804ae86">&#9670;&nbsp;</a></span>canQuit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool jngl::canQuit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Some platforms (e.g. </p>
+<p>iOS) don't allow apps to quit themselves</p>
+<p>If this returns false you should hide any "Quit Game" menu buttons. </p>
 
 </div>
 </div>
