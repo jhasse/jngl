@@ -235,6 +235,14 @@ bool running() {
 	return pWindow->isRunning();
 }
 
+bool canQuit() {
+#ifdef IOS
+	return false;
+#else
+	return true;
+#endif
+}
+
 void quit() {
 	pWindow->quit();
 }
