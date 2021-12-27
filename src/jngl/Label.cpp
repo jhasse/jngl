@@ -12,8 +12,12 @@ Label::Label(const std::string& str, Font& font, const Color color, const jngl::
 }
 
 void Label::drawSelf() const {
-	jngl::setFontColor(color);
+	jngl::setFontColor(color, alpha);
 	text.draw();
+}
+
+void Label::setAlpha(float alpha) {
+	this->alpha = alpha;
 }
 
 } // namespace jngl
