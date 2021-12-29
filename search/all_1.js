@@ -23,7 +23,7 @@ var searchData=
   ['addjob_21',['addJob',['../namespacejngl.html#a11ad14d4b65f6bbe5f5c7accaf457077',1,'jngl::addJob(std::shared_ptr&lt; Job &gt; job)'],['../namespacejngl.html#ab2438a10e12cec0f9253d8666f09e084',1,'jngl::addJob(Args &amp;&amp;... args)']]],
   ['address_22',['address',['http://en.cppreference.com/w/cpp/memory/allocator/address.html',1,'std::allocator']]],
   ['addressof_23',['addressof',['http://en.cppreference.com/w/cpp/memory/addressof.html',1,'std']]],
-  ['addwidget_24',['addWidget',['../classjngl_1_1Container.html#a1b89177cc00c9644fd18eaa876746efa',1,'jngl::Container::addWidget(std::unique_ptr&lt; Widget &gt;)'],['../classjngl_1_1Container.html#a4976556c2c3691333cbe7996e542c478',1,'jngl::Container::addWidget(Args &amp;&amp;... args)']]],
+  ['addwidget_24',['addWidget',['../classjngl_1_1Container.html#aad44e3101bb63de55ec7a16eeadc2c9e',1,'jngl::Container::addWidget(std::unique_ptr&lt; Widget &gt;)'],['../classjngl_1_1Container.html#a86997bb9c6a8d7e9d8c6401ae2eb1294',1,'jngl::Container::addWidget(Args &amp;&amp;... args)']]],
   ['adjacent_5fdifference_25',['adjacent_difference',['http://en.cppreference.com/w/cpp/algorithm/adjacent_difference.html',1,'std']]],
   ['adjacent_5ffind_26',['adjacent_find',['http://en.cppreference.com/w/cpp/algorithm/adjacent_find.html',1,'std']]],
   ['adopt_5flock_5ft_27',['adopt_lock_t',['http://en.cppreference.com/w/cpp/thread/lock_tag_t.html',1,'std']]],
