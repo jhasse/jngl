@@ -8,6 +8,7 @@
 #include <boost/version.hpp>
 #endif
 #include <iosfwd>
+#include <tuple>
 
 namespace jngl {
 
@@ -53,6 +54,12 @@ public:
 	template <class Archive> void serialize(Archive& ar, const unsigned int) {
 		ar(x, y);
 	}
+
+	bool operator<(const Vec2& rhs) const
+	{
+        return std::tie(x, y) < std::tie(rhs.x, rhs.y);
+    }
+
 };
 
 } // namespace jngl
