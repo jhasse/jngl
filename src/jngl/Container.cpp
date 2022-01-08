@@ -33,8 +33,9 @@ void Container::draw() const {
 	}
 }
 
-void Container::addWidget(std::unique_ptr<Widget> w) {
+Widget* Container::addWidget(std::unique_ptr<Widget> w) {
 	widgets.emplace_back(std::move(w));
+	return widgets.back().get();
 }
 
 void Container::removeWidget(Widget* const widget) {

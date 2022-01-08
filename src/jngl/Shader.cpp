@@ -23,6 +23,11 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 	boost::replace_all(tmp, "#version 300 es", "#version 330");
 	source = tmp.c_str();
 #endif
+#ifdef EPOXY_PUBLIC
+    if (epoxy_glsl_version() <= 120 && gles20Source) {
+        source = gles20Source;
+    }
+#endif
 #if defined (JNGL_UWP) || defined (__EMSCRIPTEN__)
 	if (gles20Source) {
 		source = gles20Source;

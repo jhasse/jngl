@@ -17,9 +17,13 @@ public:
 
 	void drawSelf() const override;
 
+	/// Set font color alpha from 0...1
+	void setAlpha(float alpha);
+
 private:
 	jngl::TextLine text;
 	jngl::Color color;
+	float alpha = 1.f;
 };
 
 } // namespace jngl

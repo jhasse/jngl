@@ -26,6 +26,11 @@ void swapBuffers();
 /// jngl::swapBuffers() calls this so there isn't any reason to call this manually most of the time.
 void clearBackBuffer();
 
+/// Some platforms (e.g. iOS) don't allow apps to quit themselves
+///
+/// If this returns false you should hide any "Quit Game" menu buttons.
+bool canQuit();
+
 /// Emit a quit event which will exit App::mainLoop() and set running() to false
 void quit();
 

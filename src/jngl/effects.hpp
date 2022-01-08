@@ -48,4 +48,10 @@ private:
 	float time = 0;
 };
 
+namespace easing {
+
+float elastic(float);
+
+} // namespace easing
+
 } // namespace jngl

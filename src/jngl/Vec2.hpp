@@ -46,6 +46,9 @@ public:
 	/// y component
 	double y = 0;
 
+	/// returns true if both x and y are exactly 0
+	bool isNull() const;
+
 	/// Helper function to use with cereal or Boost.Serialization
 	template <class Archive> void serialize(Archive& ar, const unsigned int) {
 		ar(x, y);
