@@ -10,16 +10,20 @@
 
 namespace jngl {
 
+/// Containing the pixel data of an image file
 class ImageData {
 public:
 	/// Passing a filename will load the specified \a filename
 	///
-	/// Currently only WebP files are supported (WIP).
+	/// PNG and WebP files are supported.
 	static std::unique_ptr<ImageData> load(const std::string& filename);
 
 	virtual ~ImageData() = default;
 
+	/// Returns the width of the image in pixels
 	virtual int getWidth() const = 0;
+
+	/// Returns the height of the image in pixels
 	virtual int getHeight() const = 0;
 
 	/// RGBA values ordered row-major

@@ -652,14 +652,12 @@ const THEORAPLAY_AudioPacket* THEORAPLAY_getAudio(THEORAPLAY_Decoder* const ctx)
     return retval;
 }
 
-void THEORAPLAY_freeAudio(const THEORAPLAY_AudioPacket *_item)
-{
-    THEORAPLAY_AudioPacket *item = (THEORAPLAY_AudioPacket *) _item;
+void THEORAPLAY_freeAudio(const THEORAPLAY_AudioPacket* item) {
     if (item != nullptr)
     {
         assert(item->next == nullptr);
         free(item->samples);
-        free(item);
+		free(const_cast<THEORAPLAY_AudioPacket*>(item));
 	}
 }
 

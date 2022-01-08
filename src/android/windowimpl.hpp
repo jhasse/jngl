@@ -41,9 +41,9 @@ public:
 	std::map<int32_t, Vec2> touches;
 	int relativeX = 0;
 	int relativeY = 0;
+	JNIEnv* env = nullptr;
 
 private:
-	JNIEnv* env = nullptr;
 	EGLConfig config;
 	const std::pair<int, int> minAspectRatio;
 	const std::pair<int, int> maxAspectRatio;

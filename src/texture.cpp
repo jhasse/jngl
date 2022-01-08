@@ -35,7 +35,7 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 
 			void main() {
 				outColor = texture(tex, texCoord) * spriteColor;
-			})", Shader::Type::FRAGMENT, R"(
+			})", Shader::Type::FRAGMENT, R"(#version 100
 			uniform sampler2D tex;
 			uniform lowp vec4 spriteColor;
 
@@ -225,7 +225,7 @@ const Shader& Texture::vertexShader() {
 				vec3 tmp = modelview * vec3(position, 1);
 				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
 				texCoord = inTexCoord;
-			})", Shader::Type::VERTEX, R"(
+			})", Shader::Type::VERTEX, R"(#version 100
 			attribute mediump vec2 position;
 			attribute mediump vec2 inTexCoord;
 			uniform highp mat3 modelview;

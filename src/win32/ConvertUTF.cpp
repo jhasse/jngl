@@ -38,14 +38,10 @@
 
 ------------------------------------------------------------------------ */
 
-#ifdef _MSC_VER
-#define FALLTHROUGH
-#else
 #if __has_cpp_attribute(fallthrough)
 #define FALLTHROUGH [[fallthrough]];
 #else
 #define FALLTHROUGH __attribute__ ((fallthrough));
-#endif
 #endif
 
 #include "ConvertUTF.h"

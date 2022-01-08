@@ -22,12 +22,11 @@ public:
 	void draw() const;
 
 	/// Immediately adds a Widget to the container
-	void addWidget(std::unique_ptr<Widget>);
+	Widget* addWidget(std::unique_ptr<Widget>);
 
 	/// The same as addWidget(std::unique_ptr<Widget>) but creates the Widget for you
-	template <class T, class... Args>
-	void addWidget(Args&&... args) {
-		addWidget(std::make_unique<T>(std::forward<Args>(args)...));
+	template <class T, class... Args> T* addWidget(Args&&... args) {
+		return dynamic_cast<T*>(addWidget(std::make_unique<T>(std::forward<Args>(args)...)));
 	}
 
 	/// Marks a Widget to be removed by Container::step

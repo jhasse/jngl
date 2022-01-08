@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -6,6 +6,8 @@
 #include "../jngl/Controller.hpp"
 
 #include <atomic>
+#include <condition_variable>
+#include <optional>
 #include <thread>
 #include <windows.h>
 #include <xinput.h>
@@ -24,7 +26,11 @@ public:
 
 private:
 	int i;
-	std::vector<std::pair<std::unique_ptr<std::atomic_bool>, std::thread>> threads;
+	std::thread thread;
+	std::condition_variable cv;
+	std::mutex mutex;
+	std::optional<std::chrono::milliseconds> rumbleDuration;
+	bool stopRequested = false;
 };
 
 } // namespace jngl

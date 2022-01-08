@@ -509,28 +509,25 @@ std::string getSystemConfigPath() {
 }
 
 std::string getPreferredLanguage() {
-	JNIEnv* jni = nullptr;
-	androidApp->activity->vm->AttachCurrentThread(&jni, nullptr);
-	Finally _([]() { androidApp->activity->vm->DetachCurrentThread(); });
+	const auto env = reinterpret_cast<WindowImpl*>(androidApp->userData)->env;
+	const jclass localeClass = env->FindClass("java/util/Locale");
+	const jobject defaultLocale = env->CallStaticObjectMethod(
+	    localeClass, env->GetStaticMethodID(localeClass, "getDefault", "()Ljava/util/Locale;"));
 
-	const jclass localeClass = jni->FindClass("java/util/Locale");
-	const jobject defaultLocale = jni->CallStaticObjectMethod(
-	    localeClass, jni->GetStaticMethodID(localeClass, "getDefault", "()Ljava/util/Locale;"));
-
-	const jobject language = jni->CallObjectMethod(
-	    defaultLocale, jni->GetMethodID(localeClass, "getLanguage", "()Ljava/lang/String;"));
+	const jobject language = env->CallObjectMethod(
+	    defaultLocale, env->GetMethodID(localeClass, "getLanguage", "()Ljava/lang/String;"));
 
 	const jmethodID getBytesMethod =
-	    jni->GetMethodID(jni->GetObjectClass(language), "getBytes", "(Ljava/lang/String;)[B");
+	    env->GetMethodID(env->GetObjectClass(language), "getBytes", "(Ljava/lang/String;)[B");
 	const auto bytesObject = static_cast<jbyteArray>(
-	    jni->CallObjectMethod(language, getBytesMethod, jni->NewStringUTF("UTF-8")));
-	const size_t length = jni->GetArrayLength(bytesObject);
+	    env->CallObjectMethod(language, getBytesMethod, env->NewStringUTF("UTF-8")));
+	const size_t length = env->GetArrayLength(bytesObject);
 	if (length != 2) {
 		debugLn("ERROR: Couldn't get preferred language. Falling back to \"en\".");
 		return "en";
 	}
 	return std::string(
-	    reinterpret_cast<const char*>(jni->GetByteArrayElements(bytesObject, nullptr)), length);
+	    reinterpret_cast<const char*>(env->GetByteArrayElements(bytesObject, nullptr)), length);
 }
 
 } // namespace jngl

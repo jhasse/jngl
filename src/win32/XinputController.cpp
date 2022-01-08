@@ -7,15 +7,29 @@
 
 namespace jngl {
 
-XinputController::XinputController(const int number) : i(number) {
+XinputController::XinputController(const int number) : i(number), thread([this]() {
+	std::unique_lock<std::mutex> lock(mutex); // to access rumbleDuration
+	while (!stopRequested) {
+		if (rumbleDuration) {
+			auto duration = *rumbleDuration;
+			rumbleDuration = std::nullopt;
+			cv.wait_for(lock, duration); // unlocks the mutex while waiting
+			if (stopRequested || rumbleDuration) continue;
+			XINPUT_VIBRATION vibration{};
+			vibration.wLeftMotorSpeed = 0;
+			vibration.wRightMotorSpeed = 0;
+			XInputSetState(i, &vibration);
+		} else {
+			cv.wait(lock);
+		}
+	}
+}) {
 }
 
 XinputController::~XinputController() {
-	for (auto& thread : threads) {
-		if (thread.second.joinable()) {
-			thread.second.join();
-		}
-	}
+	stopRequested = true;
+	cv.notify_one();
+	thread.join();
 }
 
 float XinputController::stateImpl(const controller::Button b) const {
@@ -52,29 +66,13 @@ bool XinputController::down(const controller::Button b) const {
 }
 
 void XinputController::rumble(const float amount, std::chrono::milliseconds time) {
-	// Clean up old threads
-	for (auto it = threads.begin(); it != threads.end();) {
-		if (*it->first) {
-			it->second.join();
-			it = threads.erase(it);
-		} else {
-			++it;
-		}
-	}
-
-	auto finished = std::make_unique<std::atomic_bool>(false);
-	const auto finishedPtr = finished.get();
-	threads.emplace_back(std::move(finished), [this, finishedPtr, time, amount]() {
-		XINPUT_VIBRATION vibration{};
-		vibration.wLeftMotorSpeed = amount * 65535;
-		vibration.wRightMotorSpeed = amount * 65535;
-		XInputSetState(i, &vibration);
-		std::this_thread::sleep_for(time);
-		vibration.wLeftMotorSpeed = 0;
-		vibration.wRightMotorSpeed = 0;
-		XInputSetState(i, &vibration);
-		*finishedPtr = true;
-	});
+	std::unique_lock<std::mutex> lock(mutex);
+	XINPUT_VIBRATION vibration{};
+	vibration.wLeftMotorSpeed = amount * 65535;
+	vibration.wRightMotorSpeed = amount * 65535;
+	XInputSetState(i, &vibration);
+	rumbleDuration = time;
+	cv.notify_one();
 }
 
 } // namespace jngl

@@ -36,8 +36,8 @@ if(Boost_FOUND)
 	target_include_directories(jngl PUBLIC ${Boost_INCLUDE_DIRS})
 else()
 	FetchContent_Declare(boost
-		URL https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.7z
-		URL_HASH SHA256=1b3949ffddf56129141032542523920034f2e69775fb9332a52ba37c548dbf35)
+		URL https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.bz2
+		URL_HASH SHA256=d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee)
 	FetchContent_MakeAvailable(boost)
 	FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
 	target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
@@ -46,7 +46,6 @@ endif()
 option(JNGL_VIDEO "Enable Theora video playback" ON)
 option(JNGL_JPEG "Enable JPEG support if libjpeg is available" ON)
 
-set(BUILD_TESTING OFF CACHE INTERNAL "") # for libogg
 set(ALSOFT_TESTS OFF CACHE BOOL "Build and install test programs" FORCE)
 set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
 set(ALSOFT_UTILS OFF CACHE BOOL "Build and install utility programs" FORCE)
@@ -133,16 +132,15 @@ if (UNIX AND NOT EMSCRIPTEN)
     endif()
 endif()
 
-if(ANDROID OR MSVC)
-	FetchContent_Declare(ogg
-		URL http://downloads.xiph.org/releases/ogg/libogg-1.3.4.tar.xz
-		URL_HASH SHA256=c163bc12bc300c401b6aa35907ac682671ea376f13ae0969a220f7ddf71893fe)
-	FetchContent_MakeAvailable(ogg)
-	set(OGG_INCLUDE_DIR ${ogg_SOURCE_DIR}/include)
-	set(OGG_INCLUDE_DIRS ${OGG_INCLUDE_DIR} ${ogg_BINARY_DIR}/include)
+if(ANDROID OR MSVC OR IOS)
+	include(cmake/CPM.cmake)
+	CPMAddPackage(NAME libogg
+		URL http://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.xz
+		URL_HASH SHA256=c4d91be36fc8e54deae7575241e03f4211eb102afb3fc0775fbbc1b740016705
+		OPTIONS "BUILD_TESTING OFF")
+	set(OGG_INCLUDE_DIR ${libogg_SOURCE_DIR}/include)
+	set(OGG_INCLUDE_DIRS ${OGG_INCLUDE_DIR} ${libogg_BINARY_DIR}/include)
 	set(OGG_LIBRARY $<TARGET_FILE:ogg>)
-	add_library(Ogg::ogg INTERFACE IMPORTED)
-	set_target_properties(Ogg::ogg PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${OGG_INCLUDE_DIRS}")
 
 	FetchContent_Declare(vorbis
 		URL https://github.com/xiph/vorbis/archive/v1.3.7.zip
@@ -189,13 +187,10 @@ if(ANDROID)
 	target_include_directories(jngl PRIVATE ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
 else()
 	if(UNIX AND NOT IOS AND NOT EMSCRIPTEN)
-		find_package(SDL2 REQUIRED)
-		if(SDL2_INCLUDE_DIRS)
-			include_directories(${SDL2_INCLUDE_DIRS})
-			target_link_libraries(jngl PUBLIC ${SDL2_LIBRARIES})
-		else()
-			target_link_libraries(jngl PUBLIC SDL2::SDL2)
-		endif()
+		find_package(PkgConfig REQUIRED)
+		pkg_check_modules(SDL2 REQUIRED sdl2)
+		target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
+		target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
 	endif()
 
 	if(JNGL_JPEG)
@@ -216,6 +211,7 @@ else()
 	if(NOT EMSCRIPTEN)
 		find_package(PNG)
 		if(PNG_FOUND)
+			target_sources(jngl PRIVATE src/png/ImageDataPNG.cpp)
 			target_link_libraries(jngl PUBLIC ${PNG_LIBRARIES})
 		else()
 			target_compile_definitions(jngl PRIVATE NOPNG)
@@ -256,21 +252,6 @@ else()
 		set(OPENAL_LIBRARY OpenAL)
 
 	elseif(IOS)
-		include(FetchContent)
-		FetchContent_Declare(ogg
-			GIT_REPOSITORY https://github.com/xiph/ogg
-			GIT_TAG c8fca6b4a02d695b1ceea39b330d4406001c03ed)
-		FetchContent_MakeAvailable(ogg)
-		FetchContent_GetProperties(ogg SOURCE_DIR OGG_SOURCE_DIR)
-		set(OGG_INCLUDE_DIRS ${OGG_SOURCE_DIR}/include)
-		set(OGG_LIBRARIES ogg)
-		FetchContent_Declare(vorbis
-			URL https://github.com/xiph/vorbis/archive/v1.3.6.zip
-			URL_HASH SHA1=694c8b3739f66ef38c08092d0df2ef42197fc480)
-		FetchContent_MakeAvailable(vorbis)
-		FetchContent_GetProperties(vorbis SOURCE_DIR VORBIS_SRC_DIR)
-		target_include_directories(jngl PRIVATE ${VORBIS_SRC_DIR}/include)
-		target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
 		target_compile_options(jngl PRIVATE -Wno-deprecated-declarations) # OpenAL
 		target_compile_definitions(jngl PRIVATE IOS)
 		target_compile_definitions(jngl PUBLIC GLES_SILENCE_DEPRECATION)

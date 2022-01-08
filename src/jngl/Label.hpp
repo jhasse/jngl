@@ -5,20 +5,25 @@
 #pragma once
 
 #include "Color.hpp"
+#include "TextLine.hpp"
 #include "Widget.hpp"
-#include "text.hpp"
 
 namespace jngl {
 
+/// Simple Widget displaying a line of text
 class Label : public Widget {
 public:
 	explicit Label(const std::string& str, Font&, Color, Vec2 position);
 
 	void drawSelf() const override;
 
+	/// Set font color alpha from 0...1
+	void setAlpha(float alpha);
+
 private:
-	jngl::Text text;
+	jngl::TextLine text;
 	jngl::Color color;
+	float alpha = 1.f;
 };
 
 } // namespace jngl

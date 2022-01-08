@@ -13,6 +13,7 @@ src = [
 	'src/audio.cpp',
 	'src/freetype.cpp',
 	'src/helper.cpp',
+	'src/png/ImageDataPNG.cpp',
 	'src/ImageDataWebP.cpp',
 	'src/jngl/App.cpp',
 	'src/jngl/Color.cpp',
