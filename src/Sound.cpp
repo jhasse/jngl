@@ -89,6 +89,7 @@ bool Sound::isPlaying() const {
 
 void Sound::loop() {
 	alSourcei(impl->source, AL_LOOPING, AL_TRUE);
+	checkAlError();
 }
 
 bool Sound::isStopped() const {
@@ -100,10 +101,12 @@ bool Sound::isStopped() const {
 
 void Sound::SetPitch(float p) {
 	alSourcef(impl->source, AL_PITCH, p);
+	checkAlError();
 }
 
 void Sound::setVolume(float v) {
 	alSourcef(impl->source, AL_GAIN, v);
+	checkAlError();
 }
 
 } // namespace jngl
