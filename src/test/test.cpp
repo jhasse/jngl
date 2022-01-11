@@ -36,7 +36,7 @@ public:
 		factor = std::sin(rotate / 360 * boost::math::constants::pi<double>());
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
-		if (jngl::keyPressed('p')) {
+		if (jngl::keyPressed('p') || jngl::mousePressed()) {
 			jngl::stop("test.ogg");
 			jngl::play("test.ogg");
 		}
@@ -132,7 +132,7 @@ public:
 			jngl::setFullscreen(!jngl::getFullscreen());
 		}
 		jngl::print("Press K to test key codes.", 5, 490);
-		jngl::print("Press P to play a sound.", 6, 510);
+		jngl::print("Press P or touch to play a sound.", 6, 510);
 		static int playbackSpeed = 100;
 		jngl::setPlaybackSpeed(float(playbackSpeed) / 100.0f);
 		jngl::print("Press + and - to change the audio playback speed: " +

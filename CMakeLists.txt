@@ -252,18 +252,25 @@ else()
 		set(OPENAL_LIBRARY OpenAL)
 
 	elseif(IOS)
-		target_compile_options(jngl PRIVATE -Wno-deprecated-declarations) # OpenAL
+		# target_compile_options(jngl PRIVATE -Wno-deprecated-declarations) # OpenAL
 		target_compile_definitions(jngl PRIVATE IOS)
 		target_compile_definitions(jngl PUBLIC GLES_SILENCE_DEPRECATION)
 		target_include_directories(jngl PUBLIC include/ios)
 		find_library(IOS_OPENGLES OpenGLES)
-		find_library(IOS_OPENAL OpenAL)
+
+		include(cmake/CPM.cmake)
+		CPMAddPackage(NAME openal
+			URL https://github.com/kcat/openal-soft/archive/refs/tags/1.21.1.zip
+			URL_HASH SHA1=1442363faf47a5a7cd6287513068ecd6c70e747e
+			OPTIONS "LIBTYPE STATIC" "HAVE_LIBLOG 0")
+		# set(IOS_OPENAL OpenAL)
+
 		find_library(IOS_QUARTZCORE QuartzCore)
 		find_library(IOS_UIKIT UIKit)
 		find_library(IOS_AVFOUNDATION AVFoundation)
 		find_library(IOS_GAMECONTROLLER GameController)
 		target_link_libraries(jngl PRIVATE
-			${IOS_OPENGLES} ${IOS_OPENAL} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
+			${IOS_OPENGLES} OpenAL ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
 			${IOS_GAMECONTROLLER}
 		)
 

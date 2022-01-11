@@ -18,14 +18,10 @@
 #include "sound.hpp"
 #include "time.hpp"
 
+#include <AL/al.h>
 #include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
 #include <deque>
-#ifdef __APPLE__
-#include <OpenAL/al.h>
-#else
-#include <AL/al.h>
-#endif
 
 namespace jngl {
 
