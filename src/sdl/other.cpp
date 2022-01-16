@@ -10,7 +10,7 @@
 namespace jngl {
 
 std::string getPreferredLanguage() {
-#if defined(__has_include) && __has_include(<SDL_locale.h>)
+#if defined(__has_include) && __has_include(<SDL_locale.h>) && defined(HAVE_SDL_LOCALE)
 	SDL_Locale* locale = SDL_GetPreferredLocales();
 	if (locale && locale->language && locale->language[0] != '\0' && locale->language[1] != '\0' &&
 	    locale->language[2] == '\0') {
