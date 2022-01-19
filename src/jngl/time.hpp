@@ -1,4 +1,4 @@
-// Copyright 2014-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2014-2021 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Timing functions
 /// @file
@@ -10,8 +10,8 @@ namespace jngl {
 double getTime();
 
 /// Sleep current thread for \a milliseconds
-/// \deprecated Use std::this_thread::sleep_for instead
-[[deprecated("Use std::this_thread::sleep_for instead")]]
+/// \deprecated Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead
+[[deprecated("Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead")]]
 void sleep(int milliseconds);
 
 } // namespace jngl
