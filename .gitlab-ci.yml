@@ -54,7 +54,7 @@ mingw:
     - ninja -C build
 
 android:
-  image: registry.gitlab.com/jhasse/android-ndk-docker:22-1-7171670
+  image: registry.gitlab.com/jhasse/android-ndk-docker:23-0-7599858
   stage: build
   script:
     - make -C android
