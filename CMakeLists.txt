@@ -36,8 +36,8 @@ if(Boost_FOUND)
 	target_include_directories(jngl PUBLIC ${Boost_INCLUDE_DIRS})
 else()
 	FetchContent_Declare(boost
-		URL https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.bz2
-		URL_HASH SHA256=d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee)
+		URL https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_1_78_0.tar.gz
+		URL_HASH SHA256=94ced8b72956591c4775ae2207a9763d3600b30d9d7446562c552f0a14a63be7)
 	FetchContent_MakeAvailable(boost)
 	FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
 	target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
