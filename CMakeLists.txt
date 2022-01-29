@@ -216,6 +216,8 @@ else()
 		else()
 			target_compile_definitions(jngl PRIVATE NOPNG)
 		endif()
+	else()
+		target_compile_definitions(jngl PRIVATE NOPNG)
 	endif()
 
 	if(MSVC)
