@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Include this file only once, as it defines the main function
 /// \file
@@ -10,7 +10,6 @@
 #include "screen.hpp"
 #include "work.hpp"
 
-#include <boost/math/special_functions/round.hpp>
 #include <cmath>
 #include <optional>
 
@@ -73,13 +72,12 @@ JNGL_MAIN_BEGIN { // NOLINT
 			jngl::setScaleFactor(scaleFactor);
 		}
 	}
-	jngl::showWindow(
-	    params.displayName,
-	    fullscreen ? jngl::getDesktopWidth()
-	               : boost::math::iround(params.screenSize->x * jngl::getScaleFactor()),
-	    fullscreen ? jngl::getDesktopHeight()
-	               : boost::math::iround(params.screenSize->y * jngl::getScaleFactor()),
-	    fullscreen, minAspectRatio, maxAspectRatio);
+	jngl::showWindow(params.displayName,
+	                 fullscreen ? jngl::getDesktopWidth()
+	                            : int(std::lround(params.screenSize->x * jngl::getScaleFactor())),
+	                 fullscreen ? jngl::getDesktopHeight()
+	                            : int(std::lround(params.screenSize->y * jngl::getScaleFactor())),
+	                 fullscreen, minAspectRatio, maxAspectRatio);
 	jngl::setWork(workFactory());
 	app.mainLoop();
 }

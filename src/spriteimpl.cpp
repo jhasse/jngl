@@ -1,11 +1,9 @@
-// Copyright 2007-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "spriteimpl.hpp"
 
 #include "texture.hpp"
-
-#include <boost/math/special_functions/round.hpp>
 
 namespace jngl {
 
@@ -106,7 +104,7 @@ void unloadAll() {
 }
 
 int getWidth(const std::string& filename) {
-	const int width = boost::math::iround(GetSprite(filename, Sprite::LoadType::HALF).getWidth());
+	const int width = int(std::lround(GetSprite(filename, Sprite::LoadType::HALF).getWidth()));
 	if (!pWindow) {
 		unload(filename);
 	}
@@ -114,7 +112,7 @@ int getWidth(const std::string& filename) {
 }
 
 int getHeight(const std::string& filename) {
-	const int height = boost::math::iround(GetSprite(filename, Sprite::LoadType::HALF).getHeight());
+	const int height = int(std::lround(GetSprite(filename, Sprite::LoadType::HALF).getHeight()));
 	if (!pWindow) {
 		unload(filename);
 	}

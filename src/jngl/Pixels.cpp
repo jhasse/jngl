@@ -5,7 +5,6 @@
 #include "ScaleablePixels.hpp"
 #include "screen.hpp"
 
-#include <boost/math/special_functions/round.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 
 namespace jngl {
@@ -21,7 +20,7 @@ Pixels::operator float() const {
 }
 
 Pixels::operator int() const {
-	return boost::math::iround(value);
+	return int(std::lround(value));
 }
 
 Pixels::operator ScaleablePixels() const {
