@@ -154,33 +154,23 @@ get_directory_property(hasParent PARENT_DIRECTORY)
 if(ANDROID)
 	target_compile_definitions(jngl PRIVATE NOJPEG NOPNG OPENGLES)
 
-	set(ALSOFT_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/openal-soft)
-	if ((NOT EXISTS ${ALSOFT_SRC_DIR}) OR (NOT EXISTS ${ALSOFT_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone --depth=1 -b v1.18
-		                https://github.com/kcat/openal-soft
-		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
-	endif()
-	set(ALSOFT_CONFIG OFF CACHE BOOL "Install alsoft.conf sample configuration file" FORCE)
-	set(ALSOFT_HRTF_DEFS OFF CACHE BOOL "Install HRTF definition files" FORCE)
-	set(ALSOFT_AMBDEC_PRESETS OFF CACHE BOOL "Install AmbDec preset files" FORCE)
-	set(ALSOFT_BACKEND_WAVE OFF CACHE BOOL "Enable Wave Writer backend" FORCE)
-	set(LIBTYPE "STATIC" CACHE STRING "" FORCE)
-	add_subdirectory(${ALSOFT_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/openal-soft)
+	CPMAddPackage(NAME openal
+		URL https://github.com/kcat/openal-soft/archive/refs/tags/1.21.1.zip
+		URL_HASH SHA1=1442363faf47a5a7cd6287513068ecd6c70e747e
+		OPTIONS
+			"LIBTYPE STATIC"
+			"ALSOFT_INSTALL_CONFIG OFF"
+			"ALSOFT_INSTALL_HRTF_DATA OFF"
+			"ALSOFT_INSTALL_AMBDEC_PRESETS OFF"
+			"ALSOFT_BACKEND_WAVE OFF"
+	)
 	set(OPENAL_LIBRARY OpenAL)
-	target_include_directories(jngl PRIVATE ${ALSOFT_SRC_DIR}/include)
 
-	set(FREETYPE_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/freetype2)
-	if ((NOT EXISTS ${FREETYPE_SRC_DIR}) OR (NOT EXISTS ${FREETYPE_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone --depth=1 -b VER-2-9-1
-		                https://git.savannah.gnu.org/git/freetype/freetype2.git
-		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
-	endif()
-	add_subdirectory(${FREETYPE_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/freetype2)
-	if(hasParent)
-		set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include PARENT_SCOPE)
-		set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
-	endif()
-	set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include)
+	CPMAddPackage(NAME freetype
+		URL https://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.xz
+		URL_HASH SHA256=3333ae7cfda88429c97a7ae63b7d01ab398076c3b67182e960e5684050f2c5c8
+		OPTIONS "FT_DISABLE_HARFBUZZ 1"
+	)
 	set(FREETYPE_LIBRARIES freetype)
 
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)

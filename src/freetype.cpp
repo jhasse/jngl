@@ -1,4 +1,4 @@
-// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "freetype.hpp"
@@ -16,7 +16,6 @@
 
 #include FT_GLYPH_H
 
-#include <boost/math/special_functions/round.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
 #include <codecvt>
@@ -229,8 +228,8 @@ void FontImpl::setLineHeight(int h) {
 }
 
 void FontImpl::print(const double x, const double y, const std::string& text) {
-	const int xRounded = boost::math::iround(x * getScaleFactor());
-	const int yRounded = boost::math::iround(y * getScaleFactor());
+	const int xRounded = int(std::lround(x * getScaleFactor()));
+	const int yRounded = int(std::lround(y * getScaleFactor()));
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();

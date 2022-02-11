@@ -1,4 +1,4 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #ifndef NOPNG
@@ -20,7 +20,6 @@
 #endif
 
 #include <boost/algorithm/string/predicate.hpp>
-#include <boost/math/special_functions/round.hpp>
 #include <boost/qvm/map_vec_mat.hpp>
 #include <boost/qvm/mat_operations3.hpp>
 #include <boost/qvm/vec.hpp>
@@ -224,7 +223,7 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 }
 
 void Sprite::setBytes(const unsigned char* const bytes) {
-	texture->setBytes(bytes, boost::math::iround(width), boost::math::iround(height));
+	texture->setBytes(bytes, int(std::lround(width)), int(std::lround(height)));
 }
 
 const Shader& Sprite::vertexShader() {

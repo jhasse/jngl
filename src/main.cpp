@@ -7,7 +7,6 @@
 #include "paths.hpp"
 #include "spriteimpl.hpp"
 
-#include <boost/math/special_functions/round.hpp>
 #include <boost/qvm/map_vec_mat.hpp>
 #include <boost/qvm/mat_operations.hpp>
 #include <boost/qvm/mat_operations3.hpp>
@@ -311,8 +310,8 @@ bool mousePressed(mouse::Button button) {
 }
 
 void setMouse(const jngl::Vec2 position) {
-	pWindow->SetMouse(boost::math::iround((position.x + getScreenWidth() / 2) * getScaleFactor()),
-	                  boost::math::iround((position.y + getScreenHeight() / 2) * getScaleFactor()));
+	pWindow->SetMouse(int(std::lround((position.x + getScreenWidth() / 2) * getScaleFactor())),
+	                  int(std::lround((position.y + getScreenHeight() / 2) * getScaleFactor())));
 }
 
 void setRelativeMouseMode(const bool relative) {
@@ -348,7 +347,7 @@ void setLineHeight(int h) {
 }
 
 void print(const std::string& text, const jngl::Vec2 position) {
-	pWindow->print(text, boost::math::iround(position.x), boost::math::iround(position.y));
+	pWindow->print(text, int(std::lround(position.x)), int(std::lround(position.y)));
 }
 
 void print(const std::string& text, const int xposition, const int yposition) {
