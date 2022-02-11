@@ -95,7 +95,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <div class="title">Drawable.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="Drawable_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright 2012-2021 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
+<a href="Drawable_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright 2012-2022 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// For conditions of distribution and use, see copyright notice in LICENSE.txt</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"></span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
@@ -116,56 +116,61 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#a2bf282904f7854c8a4fd515107aa8c4e">   25</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Drawable.html#a2bf282904f7854c8a4fd515107aa8c4e">draw</a>() <span class="keyword">const</span> = 0;</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> setPos(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#ad6a6880d5d1d6a1fe65f7e80c099e4e9">   30</a></span>&#160;    <a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a> <a class="code" href="classjngl_1_1Drawable.html#ad6a6880d5d1d6a1fe65f7e80c099e4e9">getCenter</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> setCenter(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Vect&gt; <span class="keywordtype">void</span> setCenter(Vect c) {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        setCenter(c.x, c.y);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    }</div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#a597e686cf6c81aadeab82e6607e234fe">   28</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Drawable.html#a597e686cf6c81aadeab82e6607e234fe">setPos</a>(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#af7974389245efd199961c4b65da4adee">   31</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Vect&gt; <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Drawable.html#af7974389245efd199961c4b65da4adee">setPos</a>(Vect p) {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <a class="code" href="classjngl_1_1Drawable.html#a597e686cf6c81aadeab82e6607e234fe">setPos</a>(p.x, p.y);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    }</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#ad6a6880d5d1d6a1fe65f7e80c099e4e9">   36</a></span>&#160;    <a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a> <a class="code" href="classjngl_1_1Drawable.html#ad6a6880d5d1d6a1fe65f7e80c099e4e9">getCenter</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#afb92889e10e7fe3b53fff9548842e1aa">   39</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classjngl_1_1Drawable.html#afb92889e10e7fe3b53fff9548842e1aa">getLeft</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordtype">void</span> setLeft(<span class="keywordtype">double</span> x);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#a3670fae9f6c1be822e4b3e271f1f1013">   43</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classjngl_1_1Drawable.html#a3670fae9f6c1be822e4b3e271f1f1013">getTop</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordtype">void</span> setTop(<span class="keywordtype">double</span> y);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#ac56fd76cfe6e30a7ef0b36ab06d7580a">   47</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classjngl_1_1Drawable.html#ac56fd76cfe6e30a7ef0b36ab06d7580a">getRight</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordtype">void</span> setRight(<span class="keywordtype">double</span> x);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#a02049096cfb707d50451ff5d84118a5a">   51</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classjngl_1_1Drawable.html#a02049096cfb707d50451ff5d84118a5a">getBottom</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordtype">void</span> setBottom(<span class="keywordtype">double</span> y);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">double</span> getX() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">void</span> setX(<span class="keywordtype">double</span>);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordtype">double</span> getY() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">void</span> setY(<span class="keywordtype">double</span>);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> setCenter(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Vect&gt; <span class="keywordtype">void</span> setCenter(Vect c) {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        setCenter(c.x, c.y);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    }</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#afb92889e10e7fe3b53fff9548842e1aa">   45</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classjngl_1_1Drawable.html#afb92889e10e7fe3b53fff9548842e1aa">getLeft</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordtype">void</span> setLeft(<span class="keywordtype">double</span> x);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#a3670fae9f6c1be822e4b3e271f1f1013">   49</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classjngl_1_1Drawable.html#a3670fae9f6c1be822e4b3e271f1f1013">getTop</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordtype">void</span> setTop(<span class="keywordtype">double</span> y);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#ac56fd76cfe6e30a7ef0b36ab06d7580a">   53</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classjngl_1_1Drawable.html#ac56fd76cfe6e30a7ef0b36ab06d7580a">getRight</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">void</span> setRight(<span class="keywordtype">double</span> x);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#a02049096cfb707d50451ff5d84118a5a">   57</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classjngl_1_1Drawable.html#a02049096cfb707d50451ff5d84118a5a">getBottom</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">void</span> setBottom(<span class="keywordtype">double</span> y);</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#aebe51f6c43d6d673fc3826046d668b38">   61</a></span>&#160;    <a class="code" href="classjngl_1_1Vec2.html">Vec2</a> <a class="code" href="classjngl_1_1Drawable.html#aebe51f6c43d6d673fc3826046d668b38">getSize</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">double</span> getX() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> setX(<span class="keywordtype">double</span>);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#aaad368cfd9ea3cf64fbc091bd886f729">   64</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classjngl_1_1Drawable.html#aaad368cfd9ea3cf64fbc091bd886f729">getWidth</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">double</span> getY() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">void</span> setY(<span class="keywordtype">double</span>);</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#ae07ffc83c6e2586b09157cacd623819b">   67</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classjngl_1_1Drawable.html#ae07ffc83c6e2586b09157cacd623819b">getHeight</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#aebe51f6c43d6d673fc3826046d668b38">   67</a></span>&#160;    <a class="code" href="classjngl_1_1Vec2.html">Vec2</a> <a class="code" href="classjngl_1_1Drawable.html#aebe51f6c43d6d673fc3826046d668b38">getSize</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">void</span> drawBoundingBox() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#a6d6e0d6afba009c29a780f255ebbc962">   72</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classjngl_1_1Drawable.html#a6d6e0d6afba009c29a780f255ebbc962">contains</a>(<a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a> point) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="classjngl_1_1Vec2.html">Vec2</a> position;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">float</span> width = 0;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">float</span> height = 0;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;};</div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#aaad368cfd9ea3cf64fbc091bd886f729">   70</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classjngl_1_1Drawable.html#aaad368cfd9ea3cf64fbc091bd886f729">getWidth</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#ae07ffc83c6e2586b09157cacd623819b">   73</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classjngl_1_1Drawable.html#ae07ffc83c6e2586b09157cacd623819b">getHeight</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span> drawBoundingBox() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="classjngl_1_1Drawable.html#a6d6e0d6afba009c29a780f255ebbc962">   78</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classjngl_1_1Drawable.html#a6d6e0d6afba009c29a780f255ebbc962">contains</a>(<a class="code" href="classjngl_1_1Vec2.html">jngl::Vec2</a> point) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// namespace jngl</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <a class="code" href="classjngl_1_1Vec2.html">Vec2</a> position;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordtype">float</span> width = 0;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">float</span> height = 0;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;};</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;} <span class="comment">// namespace jngl</span></div>
 <div class="ttc" id="aVec2_8hpp_html"><div class="ttname"><a href="Vec2_8hpp.html">Vec2.hpp</a></div><div class="ttdoc">Contains jngl::Vec2 class.</div></div>
 <div class="ttc" id="aclassjngl_1_1Drawable_html"><div class="ttname"><a href="classjngl_1_1Drawable.html">jngl::Drawable</a></div><div class="ttdoc">Base class for drawable objects with a position and a rectangle size.</div><div class="ttdef"><b>Definition:</b> <a href="Drawable_8hpp_source.html#l00012">Drawable.hpp:12</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Drawable_html_a02049096cfb707d50451ff5d84118a5a"><div class="ttname"><a href="classjngl_1_1Drawable.html#a02049096cfb707d50451ff5d84118a5a">jngl::Drawable::getBottom</a></div><div class="ttdeci">double getBottom() const</div><div class="ttdoc">Returns the distance from the bottom of the screen.</div></div>
 <div class="ttc" id="aclassjngl_1_1Drawable_html_a2bf282904f7854c8a4fd515107aa8c4e"><div class="ttname"><a href="classjngl_1_1Drawable.html#a2bf282904f7854c8a4fd515107aa8c4e">jngl::Drawable::draw</a></div><div class="ttdeci">virtual void draw() const =0</div><div class="ttdoc">Called when drawing a frame.</div></div>
 <div class="ttc" id="aclassjngl_1_1Drawable_html_a3670fae9f6c1be822e4b3e271f1f1013"><div class="ttname"><a href="classjngl_1_1Drawable.html#a3670fae9f6c1be822e4b3e271f1f1013">jngl::Drawable::getTop</a></div><div class="ttdeci">double getTop() const</div><div class="ttdoc">Returns the distance from the top of the screen.</div></div>
+<div class="ttc" id="aclassjngl_1_1Drawable_html_a597e686cf6c81aadeab82e6607e234fe"><div class="ttname"><a href="classjngl_1_1Drawable.html#a597e686cf6c81aadeab82e6607e234fe">jngl::Drawable::setPos</a></div><div class="ttdeci">virtual void setPos(double x, double y)</div><div class="ttdoc">Sets the position of the top-left of the Drawable.</div></div>
 <div class="ttc" id="aclassjngl_1_1Drawable_html_a6d6e0d6afba009c29a780f255ebbc962"><div class="ttname"><a href="classjngl_1_1Drawable.html#a6d6e0d6afba009c29a780f255ebbc962">jngl::Drawable::contains</a></div><div class="ttdeci">bool contains(jngl::Vec2 point) const</div><div class="ttdoc">Returns whether point is inside the bounding box.</div></div>
 <div class="ttc" id="aclassjngl_1_1Drawable_html_aa6f73ac7d5899119d156a0b3a27fba31"><div class="ttname"><a href="classjngl_1_1Drawable.html#aa6f73ac7d5899119d156a0b3a27fba31">jngl::Drawable::step</a></div><div class="ttdeci">virtual void step()=0</div><div class="ttdoc">Advance object's state.</div></div>
 <div class="ttc" id="aclassjngl_1_1Drawable_html_aaad368cfd9ea3cf64fbc091bd886f729"><div class="ttname"><a href="classjngl_1_1Drawable.html#aaad368cfd9ea3cf64fbc091bd886f729">jngl::Drawable::getWidth</a></div><div class="ttdeci">float getWidth() const</div><div class="ttdoc">Returns the width in screen coordinates.</div></div>
@@ -173,6 +178,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <div class="ttc" id="aclassjngl_1_1Drawable_html_ad6a6880d5d1d6a1fe65f7e80c099e4e9"><div class="ttname"><a href="classjngl_1_1Drawable.html#ad6a6880d5d1d6a1fe65f7e80c099e4e9">jngl::Drawable::getCenter</a></div><div class="ttdeci">jngl::Vec2 getCenter() const</div><div class="ttdoc">Returns the position of the center of the Drawable.</div></div>
 <div class="ttc" id="aclassjngl_1_1Drawable_html_ae07ffc83c6e2586b09157cacd623819b"><div class="ttname"><a href="classjngl_1_1Drawable.html#ae07ffc83c6e2586b09157cacd623819b">jngl::Drawable::getHeight</a></div><div class="ttdeci">float getHeight() const</div><div class="ttdoc">Returns the height in screen coordinates.</div></div>
 <div class="ttc" id="aclassjngl_1_1Drawable_html_aebe51f6c43d6d673fc3826046d668b38"><div class="ttname"><a href="classjngl_1_1Drawable.html#aebe51f6c43d6d673fc3826046d668b38">jngl::Drawable::getSize</a></div><div class="ttdeci">Vec2 getSize() const</div><div class="ttdoc">Returns {width, height} in screen coordinates.</div></div>
+<div class="ttc" id="aclassjngl_1_1Drawable_html_af7974389245efd199961c4b65da4adee"><div class="ttname"><a href="classjngl_1_1Drawable.html#af7974389245efd199961c4b65da4adee">jngl::Drawable::setPos</a></div><div class="ttdeci">void setPos(Vect p)</div><div class="ttdoc">Sets the position of the top-left of the Drawable.</div><div class="ttdef"><b>Definition:</b> <a href="Drawable_8hpp_source.html#l00031">Drawable.hpp:31</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Drawable_html_afb92889e10e7fe3b53fff9548842e1aa"><div class="ttname"><a href="classjngl_1_1Drawable.html#afb92889e10e7fe3b53fff9548842e1aa">jngl::Drawable::getLeft</a></div><div class="ttdeci">double getLeft() const</div><div class="ttdoc">Returns the distance from the left side of the screen.</div></div>
 <div class="ttc" id="aclassjngl_1_1Vec2_html"><div class="ttname"><a href="classjngl_1_1Vec2.html">jngl::Vec2</a></div><div class="ttdoc">Two-dimensional vector.</div><div class="ttdef"><b>Definition:</b> <a href="Vec2_8hpp_source.html#l00035">Vec2.hpp:35</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition:</b> <a href="App_8hpp_source.html#l00010">App.hpp:10</a></div></div>
