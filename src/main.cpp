@@ -222,6 +222,9 @@ void clearBackBuffer() {
 	}
 
 	reset();
+	if (!modelviewStack.empty()) {
+		jngl::debugLn("uneven calls to push/popMatrix at the beginning of the frame!");
+	}
 	modelviewStack = {};
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
