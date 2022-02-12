@@ -1,4 +1,4 @@
-// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ScaleablePixels.hpp"
 
@@ -22,4 +22,8 @@ ScaleablePixels::operator Pixels() const {
 
 jngl::ScaleablePixels operator "" _sp(const long double value) {
 	return jngl::ScaleablePixels(value);
+}
+
+jngl::ScaleablePixels operator "" _sp(const unsigned long long value) {
+	return jngl::ScaleablePixels(static_cast<double>(value));
 }

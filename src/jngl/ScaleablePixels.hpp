@@ -1,4 +1,4 @@
-// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::ScaleablePixels class
 /// @file
@@ -24,3 +24,4 @@ private:
 } // namespace jngl
 
 jngl::ScaleablePixels operator"" _sp(long double);
+jngl::ScaleablePixels operator"" _sp(unsigned long long);
