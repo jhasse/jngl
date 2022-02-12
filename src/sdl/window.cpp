@@ -9,6 +9,8 @@
 #include "../window.hpp"
 #include "windowimpl.hpp"
 
+#include <stdexcept>
+
 namespace jngl {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
