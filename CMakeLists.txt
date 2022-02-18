@@ -214,8 +214,8 @@ else()
 		if(JNGL_SDL2)
 			set(SDL_SENSOR OFF CACHE BOOL "" FORCE) # doesn't work with UWP
 			FetchContent_Declare(sdl2
-				URL https://www.libsdl.org/release/SDL2-2.0.14.zip
-				URL_HASH SHA1=94c60f9c34fe5aaad443df0051e0202bfd4d583b
+				URL https://www.libsdl.org/release/SDL2-2.0.16.zip
+				URL_HASH SHA1=4d09aad9b76b5d51366bebeded8bec46dcf67ef6
 			)
 			FetchContent_MakeAvailable(sdl2)
 			target_link_libraries(jngl PRIVATE SDL2-static)
@@ -438,3 +438,17 @@ endif()
 target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})
 target_link_directories(jngl PUBLIC ${FREETYPE_LIBRARY_DIRS})
 target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY})
+
+if(NOT hasParent)
+	include(CTest)
+	if(BUILD_TESTING)
+		find_package(Boost COMPONENTS unit_test_framework)
+		if(Boost_FOUND)
+			file(GLOB UNITTEST_SRC src/unittest/*.cpp)
+			add_executable(jngl-unittest ${UNITTEST_SRC})
+			target_link_libraries(jngl-unittest PRIVATE jngl ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+			target_compile_definitions(jngl-unittest PRIVATE BOOST_TEST_DYN_LINK)
+			add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
+		endif()
+	endif()
+endif()
