@@ -5,16 +5,14 @@ jobs:
     runs-on: windows-2019
     steps:
     - uses: actions/checkout@v1
-    - name: asdf
-      run: echo ${Env:BOOST_ROOT_1_72_0}
     - name: Configure
-      run: cmake -Bbuild -DBOOST_ROOT="${Env:BOOST_ROOT_1_72_0}"
+      run: cmake -Bbuild
     - name: Build (Debug)
       run: cmake --build build --config Debug
     - name: Build (Release)
       run: cmake --build build --config Release
     - name: Configure (UWP)
-      run: cmake -Bbuild-uwp -DBOOST_ROOT=%BOOST_ROOT_1_72_0% -DBoost_INCLUDE_DIR=${Env:BOOST_ROOT_1_72_0} -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION=10.0
+      run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION=10.0
     - name: Build (UWP, Debug)
       run: cmake --build build-uwp --config Debug
     - name: Build (UWP, Release)
