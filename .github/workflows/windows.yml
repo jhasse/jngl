@@ -6,9 +6,9 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: asdf
-      run: echo ${Env:BOOST_ROOT_1_69_0}
+      run: echo ${Env:BOOST_ROOT_1_72_0}
     - name: Configure
-      run: echo ${Env:BOOST_ROOT_1_72_0} && cmake -Bbuild -DBOOST_ROOT=${Env:BOOST_ROOT_1_72_0}
+      run: cmake -Bbuild -DBOOST_ROOT="${Env:BOOST_ROOT_1_72_0}"
     - name: Build (Debug)
       run: cmake --build build --config Debug
     - name: Build (Release)
