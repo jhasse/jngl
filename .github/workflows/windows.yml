@@ -12,7 +12,7 @@ jobs:
     - name: Build (Release)
       run: cmake --build build --config Release
     - name: Configure (UWP)
-      run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION=10.0
+      run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore '-DCMAKE_SYSTEM_VERSION=10.0'
     - name: Build (UWP, Debug)
       run: cmake --build build-uwp --config Debug
     - name: Build (UWP, Release)
