@@ -3,7 +3,8 @@
 
 #include "SdlController.hpp"
 
-#include "../jngl/debug.hpp"
+#include "../../jngl/debug.hpp"
+#include "../../window.hpp"
 
 #include <cmath>
 
@@ -235,6 +236,9 @@ std::vector<std::shared_ptr<Controller>> getConnectedControllers() {
 		}
 	}
 	return rtn;
+}
+
+void Window::updateControllerStates() {
 }
 
 } // namespace jngl
