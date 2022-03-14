@@ -124,7 +124,7 @@ else
 		'src/win32/other.cpp',
 		'src/win32/unicode.cpp',
 		'src/win32/windowimpl.cpp',
-		'src/win32/XinputController.cpp',
+		'src/xinput/XinputController.cpp',
 	]
 endif
 
