@@ -7,6 +7,8 @@
 
 namespace jngl {
 
+XINPUT_STATE states[XUSER_MAX_COUNT];
+
 XinputController::XinputController(const int number) : i(number), thread([this]() {
 	std::unique_lock<std::mutex> lock(mutex); // to access rumbleDuration
 	while (!stopRequested) {
@@ -73,6 +75,71 @@ void XinputController::rumble(const float amount, std::chrono::milliseconds time
 	XInputSetState(i, &vibration);
 	rumbleDuration = time;
 	cv.notify_one();
+}
+
+std::vector<std::shared_ptr<Controller>> getConnectedControllers() {
+	static std::shared_ptr<XinputController> controllers[XUSER_MAX_COUNT];
+	std::vector<std::shared_ptr<Controller>> tmp;
+	for (int i = 0; i < XUSER_MAX_COUNT; ++i) {
+		XINPUT_STATE state;
+		ZeroMemory(&state, sizeof(XINPUT_STATE));
+		DWORD dwResult = XInputGetState(i, &state);
+		if (dwResult == ERROR_SUCCESS) {
+			if (!controllers[i]) {
+				controllers[i] = std::make_shared<XinputController>(i);
+			}
+			tmp.push_back(controllers[i]);
+		}
+	}
+	return tmp;
+}
+
+void calculateStick(short& x, short& y, int deadzone) {
+	float magnitude = float(std::sqrt(x * x + y * y));
+	float normX = x / magnitude;
+	float normY = y / magnitude;
+
+	const int max = 32767;
+
+	if (magnitude > deadzone) {
+		if (magnitude > max) magnitude = max;
+		magnitude -= deadzone;
+		x = short(max * normX * magnitude / (max - deadzone));
+		y = short(max * normY * magnitude / (max - deadzone));
+	} else {
+		x = y = 0;
+	}
+}
+
+void calculateTrigger(BYTE& v) {
+	if (v > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) {
+		v -= XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
+		v = BYTE(255 * v / float(255 - XINPUT_GAMEPAD_TRIGGER_THRESHOLD));
+	} else {
+		v = 0;
+	}
+}
+
+void Window::updateControllerStates() {
+	static std::array<bool, XUSER_MAX_COUNT> controllersConnected;
+	const auto lastControllersConnected = controllersConnected;
+	for (int i = 0; i < XUSER_MAX_COUNT; ++i) {
+		DWORD result = XInputGetState(i, &states[i]);
+		if (result == ERROR_SUCCESS) {
+			controllersConnected[i] = true;
+			calculateStick(states[i].Gamepad.sThumbLX, states[i].Gamepad.sThumbLY,
+			               XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+			calculateStick(states[i].Gamepad.sThumbRX, states[i].Gamepad.sThumbRY,
+			               XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
+			calculateTrigger(states[i].Gamepad.bLeftTrigger);
+			calculateTrigger(states[i].Gamepad.bRightTrigger);
+		} else {
+			controllersConnected[i] = false;
+		}
+	}
+	if (controllerChangedCallback && lastControllersConnected != controllersConnected) {
+		controllerChangedCallback();
+	}
 }
 
 } // namespace jngl

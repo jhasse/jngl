@@ -57,7 +57,7 @@ elseif(IOS)
 	file(GLOB SRC src/ios/*.cpp src/ios/*.mm src/ios/*.h)
 	target_sources(jngl PRIVATE ${SRC} src/mac/message.cpp)
 elseif (UNIX)
-	file(GLOB SRC src/sdl/*.cpp)
+	file(GLOB SRC src/sdl/*.cpp src/sdl/controller/SdlController.cpp)
 	target_sources(jngl PRIVATE ${SRC})
 	if(APPLE)
 		file(GLOB SRC src/mac/*.cpp src/mac/*.mm)
@@ -99,10 +99,15 @@ else() # Windows
 	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _USE_MATH_DEFINES UNICODE)
 	if(JNGL_SDL2)
 		file(GLOB SRC src/sdl/*.cpp)
+		if(WINDOWS_STORE)
+			target_sources(jngl PRIVATE src/xinput/XinputController.cpp)
+		else()
+			target_sources(jngl PRIVATE src/sdl/controller/SdlController.cpp)
+		endif()
 		target_sources(jngl PRIVATE src/win32/fontfile.cpp src/win32/message.cpp src/win32/other.cpp
 		                            src/win32/unicode.cpp)
 	else()
-		file(GLOB SRC src/win32/*.cpp)
+		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp)
 	endif()
 	target_sources(jngl PRIVATE ${SRC})
 	target_link_libraries(jngl PUBLIC winmm)
@@ -163,6 +168,7 @@ if(ANDROID)
 			"ALSOFT_INSTALL_HRTF_DATA OFF"
 			"ALSOFT_INSTALL_AMBDEC_PRESETS OFF"
 			"ALSOFT_BACKEND_WAVE OFF"
+			"ALSOFT_CPUEXT_NEON OFF"
 	)
 	set(OPENAL_LIBRARY OpenAL)
 
@@ -214,8 +220,8 @@ else()
 		if(JNGL_SDL2)
 			set(SDL_SENSOR OFF CACHE BOOL "" FORCE) # doesn't work with UWP
 			FetchContent_Declare(sdl2
-				URL https://www.libsdl.org/release/SDL2-2.0.14.zip
-				URL_HASH SHA1=94c60f9c34fe5aaad443df0051e0202bfd4d583b
+				URL https://www.libsdl.org/release/SDL2-2.0.16.zip
+				URL_HASH SHA1=4d09aad9b76b5d51366bebeded8bec46dcf67ef6
 			)
 			FetchContent_MakeAvailable(sdl2)
 			target_link_libraries(jngl PRIVATE SDL2-static)
@@ -438,3 +444,17 @@ endif()
 target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})
 target_link_directories(jngl PUBLIC ${FREETYPE_LIBRARY_DIRS})
 target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY})
+
+if(NOT hasParent)
+	include(CTest)
+	if(BUILD_TESTING)
+		find_package(Boost COMPONENTS unit_test_framework)
+		if(Boost_FOUND)
+			file(GLOB UNITTEST_SRC src/unittest/*.cpp)
+			add_executable(jngl-unittest ${UNITTEST_SRC})
+			target_link_libraries(jngl-unittest PRIVATE jngl ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+			target_compile_definitions(jngl-unittest PRIVATE BOOST_TEST_DYN_LINK)
+			add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
+		endif()
+	endif()
+endif()

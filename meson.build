@@ -98,7 +98,7 @@ if target_machine.system() != 'windows'
 		'src/sdl/other.cpp',
 		'src/sdl/sdl.cpp',
 		'src/sdl/window.cpp',
-		'src/sdl/SdlController.cpp',
+		'src/sdl/controller/SdlController.cpp',
 		'src/linux/message.cpp',
 		'src/linux/other.cpp',
 		'src/linux/binreloc.c',
@@ -124,7 +124,7 @@ else
 		'src/win32/other.cpp',
 		'src/win32/unicode.cpp',
 		'src/win32/windowimpl.cpp',
-		'src/win32/XinputController.cpp',
+		'src/xinput/XinputController.cpp',
 	]
 endif
 

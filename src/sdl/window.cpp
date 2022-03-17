@@ -173,6 +173,7 @@ bool Window::getKeyPressed(const std::string& key) {
 
 void Window::UpdateInput() {
 	textInput.clear();
+	updateControllerStates();
 	if (relativeMouseMode) {
 		mousex_ = 0;
 		mousey_ = 0;
