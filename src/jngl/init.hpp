@@ -36,7 +36,7 @@ struct AppParameters {
 std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters&);
 
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE // iOS
-JNGL_MAIN_BEGIN { // NOLINT
+JNGL_MAIN_BEGIN {                            // NOLINT
 	jngl::AppParameters params;
 	auto workFactory = jnglInit(params);
 	auto& app = jngl::App::instance();
@@ -59,13 +59,13 @@ JNGL_MAIN_BEGIN { // NOLINT
 		    desktopSize.y > 0) { // desktop size isn't available on some platforms (e.g. Android)
 			jngl::setScaleFactor(std::min(desktopSize.x / params.screenSize->x,
 			                              desktopSize.y / params.screenSize->y));
-			maxAspectRatio = minAspectRatio =
-			    std::pair<int, int>(params.screenSize->x, params.screenSize->y);
+			maxAspectRatio = minAspectRatio = std::pair<int, int>(
+			    std::lround(params.screenSize->x), std::lround(params.screenSize->y));
 		}
 	} else {
 		// Make window as big as possible
-		const float scaleFactor = std::min((jngl::getDesktopWidth() - 50) / params.screenSize->x,
-		                                   (jngl::getDesktopHeight() - 50) / params.screenSize->y);
+		const double scaleFactor = std::min((jngl::getDesktopWidth() - 50) / params.screenSize->x,
+		                                    (jngl::getDesktopHeight() - 50) / params.screenSize->y);
 		if (scaleFactor > 1) {
 			jngl::setScaleFactor(std::floor(scaleFactor));
 		} else {

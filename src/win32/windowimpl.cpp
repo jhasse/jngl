@@ -1,4 +1,4 @@
-// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/debug.hpp"
@@ -43,7 +43,6 @@ public:
 	int relativeX = 0;
 	int relativeY = 0;
 	std::function<void()> distinguishLeftRight;
-	std::array<bool, XUSER_MAX_COUNT> controllersConnected;
 
 	static void ReleaseDC(HWND, HDC);
 	static void ReleaseRC(HGLRC);
