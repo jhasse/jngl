@@ -15,8 +15,9 @@ bool running();
 
 /// Updates the input state. App::mainLoop() calls this before Work::step()
 ///
-/// \deprecated Do not call this yourself, use jngl::Work instead
-[[deprecated("Do not call this yourself, use jngl::Work instead")]] void updateInput();
+/// Normally you shouldn't call this yourself at all unleass you want to implement your own game
+/// loop.
+void updateInput();
 
 /// Swaps back and front buffer. App::mainLoop() calls this after Work::draw()
 ///

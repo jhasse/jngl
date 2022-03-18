@@ -360,7 +360,8 @@ void Window::stepIfNeeded() {
 	}
 	for (unsigned int i = 0; i < stepsPerFrame; ++i) {
 		++stepsSinceLastCheck;
-		jngl::updateInput();
+		updateKeyStates();
+		UpdateInput();
 		if (currentWork_) {
 			currentWork_->step();
 		}
