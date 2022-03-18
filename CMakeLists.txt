@@ -177,6 +177,10 @@ if(ANDROID)
 		URL_HASH SHA256=3333ae7cfda88429c97a7ae63b7d01ab398076c3b67182e960e5684050f2c5c8
 		OPTIONS "FT_DISABLE_HARFBUZZ 1"
 	)
+	if(hasParent)
+		set(FREETYPE_INCLUDE_DIRS ${freetype_SOURCE_DIR}/include PARENT_SCOPE)
+		set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
+	endif()
 	set(FREETYPE_LIBRARIES freetype)
 
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)
