@@ -33,6 +33,8 @@
 
 #ifdef ANDROID
 #include "android/fopen.hpp"
+
+#include <sys/stat.h>
 #endif
 
 namespace jngl {
@@ -650,6 +652,16 @@ void writeConfig(const std::string& key, const std::string& value) {
 	if (!key.empty() && key[0] == '/') {
 		throw std::runtime_error("Do not pass absolute paths as keys to jngl::readConfig.");
 	}
+#ifdef ANDROID
+	auto it = std::find(key.begin(), key.end(), '/');
+	while (it != key.end()) {
+		std::string directory(key.begin(), it);
+		if (mkdir((_getConfigPath() + directory).c_str(), 755) != 0 && errno != EEXIST) {
+			throw std::runtime_error("Couldn't create " + directory);
+		}
+		it = std::find(it + 1, key.end(), '/');
+	}
+#endif
 #ifdef HAVE_FILESYSTEM
 	const auto configPath = std::filesystem::u8path(_getConfigPath());
 	const auto directory = (configPath / std::filesystem::u8path(key)).parent_path();
