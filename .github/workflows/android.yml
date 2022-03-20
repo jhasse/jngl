@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: [ubuntu-latest]
     container:
-      image: registry.gitlab.com/jhasse/android-ndk-docker:22-1-7171670
+      image: registry.gitlab.com/jhasse/android-ndk-docker:23-0-7599858
     steps:
     - uses: actions/checkout@v2
     - name: Build

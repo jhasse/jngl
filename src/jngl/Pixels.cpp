@@ -1,4 +1,4 @@
-// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Pixels.hpp"
 
@@ -35,6 +35,10 @@ Pixels& Pixels::operator+=(const Pixels b) {
 
 bool operator>(const jngl::Pixels a, const jngl::Pixels b) {
 	return a.value > b.value;
+}
+
+Pixels operator/(const jngl::Pixels a, const float b) {
+	return Pixels(float(a) / b);
 }
 
 } // namespace jngl
