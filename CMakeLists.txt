@@ -239,8 +239,8 @@ else()
 			target_link_options(jngl PUBLIC $<IF:$<CONFIG:Debug>,/defaultlib:vccorlibd.lib /defaultlib:msvcrtd.lib,/defaultlib:vccorlib.lib /defaultlib:msvcrt.lib>)
 		else()
 			FetchContent_Declare(openal
-				URL https://github.com/kcat/openal-soft/archive/openal-soft-1.20.1.zip
-				URL_HASH SHA1=d86a714e0e7900f4f7197738cb35432772bfe2e0)
+				URL https://github.com/kcat/openal-soft/archive/refs/tags/1.21.1.zip
+				URL_HASH SHA1=1442363faf47a5a7cd6287513068ecd6c70e747e)
 			set(ALSOFT_NO_CONFIG_UTIL ON CACHE BOOL "Disable building the alsoft-config utility" FORCE)
 			set(LIBTYPE "STATIC" CACHE STRING "" FORCE)
 			target_compile_definitions(jngl PRIVATE AL_LIBTYPE_STATIC)
