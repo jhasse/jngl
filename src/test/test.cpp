@@ -23,7 +23,7 @@ class Test : public jngl::Work {
 public:
 	Test() : fb2(jngl::getWindowSize()), logoWebp("jngl.webp") {
 		jngl::setTitle(jngl::App::instance().getDisplayName() + " | UTF-8: äöüß");
-		jngl::setIcon("jngl.png");
+		jngl::setIcon("jngl");
 		jngl::setMouseVisible(false);
 		frameTime = jngl::getTime();
 		lastTime = jngl::getTime();
