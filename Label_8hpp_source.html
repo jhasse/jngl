@@ -95,44 +95,53 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <div class="title">Label.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="Label_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright 2020-2021 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
+<a href="Label_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright 2020-2022 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// For conditions of distribution and use, see copyright notice in LICENSE.txt</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"></span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Color_8hpp.html">Color.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="TextLine_8hpp.html">TextLine.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Widget_8hpp.html">Widget.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacejngl.html">jngl</a> {</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classjngl_1_1Label.html">   14</a></span>&#160;<span class="keyword">class </span><a class="code" href="classjngl_1_1Label.html">Label</a> : <span class="keyword">public</span> <a class="code" href="classjngl_1_1Widget.html">Widget</a> {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classjngl_1_1Label.html">Label</a>(<span class="keyword">const</span> <a class="codeRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; str, <a class="code" href="classjngl_1_1Font.html">Font</a>&amp;, <a class="code" href="classjngl_1_1Color.html">Color</a>, <a class="code" href="classjngl_1_1Vec2.html">Vec2</a> <a class="code" href="classjngl_1_1Widget.html#a6e37ad5a87462ee0c98d5e165b90fc40">position</a>);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classjngl_1_1Label.html#ac0cb7b3373ae7883d29c49011c3580ac">   18</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Label.html#ac0cb7b3373ae7883d29c49011c3580ac">drawSelf</a>() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classjngl_1_1Label.html#a391413f3039a43801820f09b7c484248">   21</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Label.html#a391413f3039a43801820f09b7c484248">setAlpha</a>(<span class="keywordtype">float</span> alpha);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <a class="code" href="classjngl_1_1TextLine.html">jngl::TextLine</a> text;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <a class="code" href="classjngl_1_1Color.html">jngl::Color</a> color;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordtype">float</span> alpha = 1.f;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;};</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;} <span class="comment">// namespace jngl</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="text_8hpp.html">text.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacejngl.html">jngl</a> {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classjngl_1_1Label.html">   15</a></span>&#160;<span class="keyword">class </span><a class="code" href="classjngl_1_1Label.html">Label</a> : <span class="keyword">public</span> <a class="code" href="classjngl_1_1Widget.html">Widget</a> {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classjngl_1_1Label.html">Label</a>(<span class="keyword">const</span> <a class="codeRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; str, <a class="code" href="classjngl_1_1Font.html">Font</a>&amp;, <a class="code" href="classjngl_1_1Color.html">Color</a>, <a class="code" href="classjngl_1_1Vec2.html">Vec2</a> <a class="code" href="classjngl_1_1Widget.html#a6e37ad5a87462ee0c98d5e165b90fc40">position</a>);</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classjngl_1_1Label.html#ac0cb7b3373ae7883d29c49011c3580ac">   19</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Label.html#ac0cb7b3373ae7883d29c49011c3580ac">drawSelf</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classjngl_1_1Label.html#a391413f3039a43801820f09b7c484248">   22</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Label.html#a391413f3039a43801820f09b7c484248">setAlpha</a>(<span class="keywordtype">float</span> alpha);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classjngl_1_1Label.html#a560cccd4201edfd95c859e64a777cbcc">   25</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classjngl_1_1Label.html#a560cccd4201edfd95c859e64a777cbcc">setAlign</a>(<a class="code" href="namespacejngl.html#acdfaca60ec19c0265bac2692d7982726">Alignment</a>);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classjngl_1_1Label.html#aaad368cfd9ea3cf64fbc091bd886f729">   28</a></span>&#160;    <span class="keywordtype">float</span> <a class="code" href="classjngl_1_1Label.html#aaad368cfd9ea3cf64fbc091bd886f729">getWidth</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="classjngl_1_1TextLine.html">jngl::TextLine</a> text;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="classjngl_1_1Color.html">jngl::Color</a> color;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordtype">float</span> alpha = 1.f;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;};</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;} <span class="comment">// namespace jngl</span></div>
 <div class="ttc" id="aColor_8hpp_html"><div class="ttname"><a href="Color_8hpp.html">Color.hpp</a></div><div class="ttdoc">Contains jngl::Color class.</div></div>
 <div class="ttc" id="aTextLine_8hpp_html"><div class="ttname"><a href="TextLine_8hpp.html">TextLine.hpp</a></div><div class="ttdoc">Contains jngl::TextLine class.</div></div>
 <div class="ttc" id="aWidget_8hpp_html"><div class="ttname"><a href="Widget_8hpp.html">Widget.hpp</a></div><div class="ttdoc">Contains jngl::Container class.</div></div>
 <div class="ttc" id="abasic_string_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Color_html"><div class="ttname"><a href="classjngl_1_1Color.html">jngl::Color</a></div><div class="ttdoc">Object representing a RGB color.</div><div class="ttdef"><b>Definition:</b> <a href="Color_8hpp_source.html#l00025">Color.hpp:25</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Font_html"><div class="ttname"><a href="classjngl_1_1Font.html">jngl::Font</a></div><div class="ttdoc">Font loaded from a TTF or OTF file.</div><div class="ttdef"><b>Definition:</b> <a href="font_8hpp_source.html#l00018">font.hpp:18</a></div></div>
-<div class="ttc" id="aclassjngl_1_1Label_html"><div class="ttname"><a href="classjngl_1_1Label.html">jngl::Label</a></div><div class="ttdoc">Simple Widget displaying a line of text.</div><div class="ttdef"><b>Definition:</b> <a href="Label_8hpp_source.html#l00014">Label.hpp:14</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Label_html"><div class="ttname"><a href="classjngl_1_1Label.html">jngl::Label</a></div><div class="ttdoc">Simple Widget displaying a line of text.</div><div class="ttdef"><b>Definition:</b> <a href="Label_8hpp_source.html#l00015">Label.hpp:15</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Label_html_a391413f3039a43801820f09b7c484248"><div class="ttname"><a href="classjngl_1_1Label.html#a391413f3039a43801820f09b7c484248">jngl::Label::setAlpha</a></div><div class="ttdeci">void setAlpha(float alpha)</div><div class="ttdoc">Set font color alpha from 0...1.</div></div>
+<div class="ttc" id="aclassjngl_1_1Label_html_a560cccd4201edfd95c859e64a777cbcc"><div class="ttname"><a href="classjngl_1_1Label.html#a560cccd4201edfd95c859e64a777cbcc">jngl::Label::setAlign</a></div><div class="ttdeci">void setAlign(Alignment)</div><div class="ttdoc">How to align the label's text, default is CENTER.</div></div>
+<div class="ttc" id="aclassjngl_1_1Label_html_aaad368cfd9ea3cf64fbc091bd886f729"><div class="ttname"><a href="classjngl_1_1Label.html#aaad368cfd9ea3cf64fbc091bd886f729">jngl::Label::getWidth</a></div><div class="ttdeci">float getWidth() const</div><div class="ttdoc">Returns the width of the underlying jngl::TextLine.</div></div>
 <div class="ttc" id="aclassjngl_1_1Label_html_ac0cb7b3373ae7883d29c49011c3580ac"><div class="ttname"><a href="classjngl_1_1Label.html#ac0cb7b3373ae7883d29c49011c3580ac">jngl::Label::drawSelf</a></div><div class="ttdeci">void drawSelf() const override</div><div class="ttdoc">Override this function to draw the widget.</div></div>
 <div class="ttc" id="aclassjngl_1_1TextLine_html"><div class="ttname"><a href="classjngl_1_1TextLine.html">jngl::TextLine</a></div><div class="ttdoc">Rectangle shaped text (in contrast to jngl::Text this only represents one line)</div><div class="ttdef"><b>Definition:</b> <a href="TextLine_8hpp_source.html#l00017">TextLine.hpp:17</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Vec2_html"><div class="ttname"><a href="classjngl_1_1Vec2.html">jngl::Vec2</a></div><div class="ttdoc">Two-dimensional vector.</div><div class="ttdef"><b>Definition:</b> <a href="Vec2_8hpp_source.html#l00035">Vec2.hpp:35</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Widget_html"><div class="ttname"><a href="classjngl_1_1Widget.html">jngl::Widget</a></div><div class="ttdef"><b>Definition:</b> <a href="Widget_8hpp_source.html#l00017">Widget.hpp:17</a></div></div>
-<div class="ttc" id="aclassjngl_1_1Widget_html_a6e37ad5a87462ee0c98d5e165b90fc40"><div class="ttname"><a href="classjngl_1_1Widget.html#a6e37ad5a87462ee0c98d5e165b90fc40">jngl::Widget::position</a></div><div class="ttdeci">jngl::Vec2 position</div><div class="ttdoc">Center.</div><div class="ttdef"><b>Definition:</b> <a href="Widget_8hpp_source.html#l00054">Widget.hpp:54</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Widget_html_a6e37ad5a87462ee0c98d5e165b90fc40"><div class="ttname"><a href="classjngl_1_1Widget.html#a6e37ad5a87462ee0c98d5e165b90fc40">jngl::Widget::position</a></div><div class="ttdeci">jngl::Vec2 position</div><div class="ttdoc">Center.</div><div class="ttdef"><b>Definition:</b> <a href="Widget_8hpp_source.html#l00057">Widget.hpp:57</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition:</b> <a href="App_8hpp_source.html#l00010">App.hpp:10</a></div></div>
+<div class="ttc" id="anamespacejngl_html_acdfaca60ec19c0265bac2692d7982726"><div class="ttname"><a href="namespacejngl.html#acdfaca60ec19c0265bac2692d7982726">jngl::Alignment</a></div><div class="ttdeci">Alignment</div><div class="ttdoc">How multiple lines should be aligned in a text block.</div><div class="ttdef"><b>Definition:</b> <a href="text_8hpp_source.html#l00016">text.hpp:16</a></div></div>
+<div class="ttc" id="atext_8hpp_html"><div class="ttname"><a href="text_8hpp.html">text.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </body></html>
