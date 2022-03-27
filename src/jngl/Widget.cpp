@@ -65,4 +65,8 @@ void Widget::removeEffects() {
 	effects.clear();
 }
 
+jngl::Vec2 Widget::getPosition() const {
+	return position;
+}
+
 } // namespace jngl
