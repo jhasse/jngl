@@ -43,7 +43,7 @@ public:
 		if (jngl::keyPressed('s')) {
 			useShader = !useShader;
 			if (!shaderProgram) {
-				fragmentShader = std::make_unique<jngl::Shader>(std::ifstream("data/blur.frag"),
+				fragmentShader = std::make_unique<jngl::Shader>(std::ifstream("blur.frag"),
 				                                                jngl::Shader::Type::FRAGMENT);
 				shaderProgram = std::make_unique<jngl::ShaderProgram>(jngl::Sprite::vertexShader(),
 				                                                      *fragmentShader);

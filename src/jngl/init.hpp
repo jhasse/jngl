@@ -13,6 +13,10 @@
 #include <cmath>
 #include <optional>
 
+#if defined(__has_include) && __has_include("filesystem")
+#include <filesystem>
+#endif
+
 namespace jngl {
 class Work;
 
@@ -37,6 +41,17 @@ std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters&);
 
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE // iOS
 JNGL_MAIN_BEGIN {                            // NOLINT
+#if !defined(ANDROID) && defined(__has_include) && __has_include(<filesystem>) && \
+    (!defined(TARGET_OS_IOS) || TARGET_OS_IOS == 0)
+	std::error_code err;
+	std::filesystem::current_path("data", err);
+	if (err) {
+		std::filesystem::current_path("../data", err); // move out of build/bin folder
+		if (err) {
+			std::filesystem::current_path("../../data", err); // move out of build/Debug folder
+		}
+	}
+#endif
 	jngl::AppParameters params;
 	auto workFactory = jnglInit(params);
 	auto& app = jngl::App::instance();
