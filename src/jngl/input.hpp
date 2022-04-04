@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Input related functions
 /// @file
@@ -9,6 +9,13 @@
 #include <functional>
 #include <memory>
 #include <vector>
+#if defined(__has_include) && __has_include(<optional>)
+#include <optional>
+using std::optional;
+#else
+#include <experimental/optional>
+using std::experimental::optional;
+#endif
 
 namespace jngl {
 
@@ -114,7 +121,13 @@ bool isMultitouch();
 std::vector<jngl::Vec2> getTouchPositions();
 
 /// Mouse position in screen coordinates
+///
+/// If no mouse is connected will return the last touch position. See jngl::getCursorPos() if you
+/// really want the position of the mouse only.
 Vec2 getMousePos();
+
+/// Returns the position of the mouse pointer if a mouse is connected/available
+optional<Vec2> getCursorPos();
 
 /// Retrieve mouse position in pixels
 /// \deprecated Use jngl::getMousePos() instead

@@ -1,4 +1,4 @@
-// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
@@ -277,6 +277,17 @@ Vec2 getMousePos() {
 	}
 	return { pWindow->getMouseX() / getScaleFactor() - getScreenWidth() / 2,
 		     pWindow->getMouseY() / getScaleFactor() - getScreenHeight() / 2 };
+}
+
+optional<Vec2> getCursorPos() {
+	// TODO: This is a very naive approach and ignores Windows devices with touch screens or Android
+	// devices with mice.
+#if defined(IOS) || defined(ANDROID)
+	return {};
+#else
+	return Vec2(pWindow->getMouseX() / getScaleFactor() - getScreenWidth() / 2,
+	            pWindow->getMouseY() / getScaleFactor() - getScreenHeight() / 2);
+#endif
 }
 
 int getMouseX() {
