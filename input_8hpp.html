@@ -106,10 +106,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/functional.html">functional</a>&gt;</code><br />
 <code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/memory.html">memory</a>&gt;</code><br />
 <code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/vector.html">vector</a>&gt;</code><br />
+<code>#include &lt;experimental/optional&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for input.hpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="input_8hpp__incl.svg" width="519" height="187"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="input_8hpp__incl.svg" width="734" height="187"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -294,10 +295,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 <tr class="memitem:aaa978e56af9461cc6a8da01e6a0f28fc"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="classjngl_1_1Vec2.html">jngl::Vec2</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#aaa978e56af9461cc6a8da01e6a0f28fc">getTouchPositions</a> ()</td></tr>
 <tr class="memdesc:aaa978e56af9461cc6a8da01e6a0f28fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all positions where a finger touches the screen.  <a href="namespacejngl.html#aaa978e56af9461cc6a8da01e6a0f28fc">More...</a><br /></td></tr>
 <tr class="separator:aaa978e56af9461cc6a8da01e6a0f28fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8225af5eb6dd6d4a1e3c493554b5a01e"><td class="memItemLeft" align="right" valign="top"><a id="a8225af5eb6dd6d4a1e3c493554b5a01e"></a>
-Vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a8225af5eb6dd6d4a1e3c493554b5a01e">getMousePos</a> ()</td></tr>
-<tr class="memdesc:a8225af5eb6dd6d4a1e3c493554b5a01e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mouse position in screen coordinates. <br /></td></tr>
+<tr class="memitem:a8225af5eb6dd6d4a1e3c493554b5a01e"><td class="memItemLeft" align="right" valign="top">Vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a8225af5eb6dd6d4a1e3c493554b5a01e">getMousePos</a> ()</td></tr>
+<tr class="memdesc:a8225af5eb6dd6d4a1e3c493554b5a01e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mouse position in screen coordinates.  <a href="namespacejngl.html#a8225af5eb6dd6d4a1e3c493554b5a01e">More...</a><br /></td></tr>
 <tr class="separator:a8225af5eb6dd6d4a1e3c493554b5a01e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c5d29a54e96f3f736307cb70cb5324b"><td class="memItemLeft" align="right" valign="top"><a id="a8c5d29a54e96f3f736307cb70cb5324b"></a>
+<a class="elRef" href="http://en.cppreference.com/w/cpp/experimental/optional.html">optional</a>&lt; Vec2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a8c5d29a54e96f3f736307cb70cb5324b">getCursorPos</a> ()</td></tr>
+<tr class="memdesc:a8c5d29a54e96f3f736307cb70cb5324b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the position of the mouse pointer if a mouse is connected/available. <br /></td></tr>
+<tr class="separator:a8c5d29a54e96f3f736307cb70cb5324b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ecc5b20cc52ca2658487c248ed649d0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a9ecc5b20cc52ca2658487c248ed649d0">getMouseX</a> ()</td></tr>
 <tr class="memdesc:a9ecc5b20cc52ca2658487c248ed649d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve mouse position in pixels.  <a href="namespacejngl.html#a9ecc5b20cc52ca2658487c248ed649d0">More...</a><br /></td></tr>
 <tr class="separator:a9ecc5b20cc52ca2658487c248ed649d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -364,7 +368,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00017">17</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00024">24</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
 
 </div>
 </div>
@@ -408,7 +412,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00152">152</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00165">165</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
 
 </div>
 </div>

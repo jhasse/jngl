@@ -1,11 +1,12 @@
 <map id="jngl/Controller.hpp" name="jngl/Controller.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Controller class." alt="" coords="293,5,468,32"/>
-<area shape="rect" id="node2" href="$input_8hpp.html" title="Input related functions." alt="" coords="280,80,375,107"/>
-<area shape="rect" id="node9" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/chrono.html" title=" " alt="" coords="399,80,469,107"/>
+<area shape="rect" id="node1" title="Contains jngl::Controller class." alt="" coords="349,5,524,32"/>
+<area shape="rect" id="node2" href="$input_8hpp.html" title="Input related functions." alt="" coords="336,80,431,107"/>
+<area shape="rect" id="node10" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/chrono.html" title=" " alt="" coords="455,80,525,107"/>
 <area shape="rect" id="node3" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="111,155,197,181"/>
 <area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="221,155,324,181"/>
 <area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="348,155,419,181"/>
 <area shape="rect" id="node8" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="443,155,513,181"/>
+<area shape="rect" id="node9" title=" " alt="" coords="537,155,728,181"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,229,164,256"/>
 <area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="188,229,259,256"/>
 </map>

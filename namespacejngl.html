@@ -337,10 +337,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 <tr class="memitem:aaa978e56af9461cc6a8da01e6a0f28fc"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="classjngl_1_1Vec2.html">jngl::Vec2</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#aaa978e56af9461cc6a8da01e6a0f28fc">getTouchPositions</a> ()</td></tr>
 <tr class="memdesc:aaa978e56af9461cc6a8da01e6a0f28fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all positions where a finger touches the screen.  <a href="namespacejngl.html#aaa978e56af9461cc6a8da01e6a0f28fc">More...</a><br /></td></tr>
 <tr class="separator:aaa978e56af9461cc6a8da01e6a0f28fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8225af5eb6dd6d4a1e3c493554b5a01e"><td class="memItemLeft" align="right" valign="top"><a id="a8225af5eb6dd6d4a1e3c493554b5a01e"></a>
-<a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a8225af5eb6dd6d4a1e3c493554b5a01e">getMousePos</a> ()</td></tr>
-<tr class="memdesc:a8225af5eb6dd6d4a1e3c493554b5a01e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mouse position in screen coordinates. <br /></td></tr>
+<tr class="memitem:a8225af5eb6dd6d4a1e3c493554b5a01e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a8225af5eb6dd6d4a1e3c493554b5a01e">getMousePos</a> ()</td></tr>
+<tr class="memdesc:a8225af5eb6dd6d4a1e3c493554b5a01e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mouse position in screen coordinates.  <a href="namespacejngl.html#a8225af5eb6dd6d4a1e3c493554b5a01e">More...</a><br /></td></tr>
 <tr class="separator:a8225af5eb6dd6d4a1e3c493554b5a01e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c5d29a54e96f3f736307cb70cb5324b"><td class="memItemLeft" align="right" valign="top"><a id="a8c5d29a54e96f3f736307cb70cb5324b"></a>
+<a class="elRef" href="http://en.cppreference.com/w/cpp/experimental/optional.html">optional</a>&lt; <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a8c5d29a54e96f3f736307cb70cb5324b">getCursorPos</a> ()</td></tr>
+<tr class="memdesc:a8c5d29a54e96f3f736307cb70cb5324b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the position of the mouse pointer if a mouse is connected/available. <br /></td></tr>
+<tr class="separator:a8c5d29a54e96f3f736307cb70cb5324b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ecc5b20cc52ca2658487c248ed649d0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a9ecc5b20cc52ca2658487c248ed649d0">getMouseX</a> ()</td></tr>
 <tr class="memdesc:a9ecc5b20cc52ca2658487c248ed649d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve mouse position in pixels.  <a href="namespacejngl.html#a9ecc5b20cc52ca2658487c248ed649d0">More...</a><br /></td></tr>
 <tr class="separator:a9ecc5b20cc52ca2658487c248ed649d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -937,6 +940,26 @@ template&lt;class T , class... Args&gt; </td></tr>
 
 <p>Returns all positions where a finger touches the screen. </p>
 <p>Includes the mouse position if the primary mouse button is down. </p>
+
+</div>
+</div>
+<a id="a8225af5eb6dd6d4a1e3c493554b5a01e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8225af5eb6dd6d4a1e3c493554b5a01e">&#9670;&nbsp;</a></span>getMousePos()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a> jngl::getMousePos </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Mouse position in screen coordinates. </p>
+<p>If no mouse is connected will return the last touch position. See <a class="el" href="namespacejngl.html#a8c5d29a54e96f3f736307cb70cb5324b" title="Returns the position of the mouse pointer if a mouse is connected/available.">jngl::getCursorPos()</a> if you really want the position of the mouse only. </p>
 
 </div>
 </div>
