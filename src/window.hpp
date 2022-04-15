@@ -1,4 +1,4 @@
-// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -109,7 +109,7 @@ private:
 	static std::string GetFontFileByName(const std::string& fontname);
 	void calculateCanvasSize(std::pair<int, int> minAspectRatio,
 	                         std::pair<int, int> maxAspectRatio);
-
+	void updateControllerStates();
 
 	/// Called when a controller is added or removed
 	std::function<void()> controllerChangedCallback;

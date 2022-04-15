@@ -1,4 +1,4 @@
-// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/debug.hpp"
@@ -43,7 +43,6 @@ public:
 	int relativeX = 0;
 	int relativeY = 0;
 	std::function<void()> distinguishLeftRight;
-	std::array<bool, XUSER_MAX_COUNT> controllersConnected;
 
 	static void ReleaseDC(HWND, HDC);
 	static void ReleaseRC(HGLRC);
@@ -51,8 +50,6 @@ public:
 	bool InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR);
 	void Init(const std::string& title, bool multisample);
 };
-
-XINPUT_STATE states[XUSER_MAX_COUNT];
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -120,16 +117,16 @@ bool WindowImpl::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), isMouseVisible_(true),
-  relativeMouseMode(false), anyKeyPressed_(false), fontSize_(12), width_(width), height_(height),
-  fontName_(GetFontFileByName("Arial")), stepsPerFrame(1), multitouch(false) {
+  relativeMouseMode(false), anyKeyPressed_(false), width_(width), height_(height),
+  fontName_(GetFontFileByName("Arial")) {
 	impl->distinguishLeftRight = [this]() {
 		int codesToCheck[] = { GetKeyCode(jngl::key::ShiftL),   GetKeyCode(jngl::key::ShiftR),
 			                   GetKeyCode(jngl::key::ControlL), GetKeyCode(jngl::key::ControlR),
 			                   GetKeyCode(jngl::key::AltL),     GetKeyCode(jngl::key::AltR) };
-		for (unsigned int i = 0; i < sizeof(codesToCheck) / sizeof(codesToCheck[0]); ++i) {
-			bool value = ((GetKeyState(codesToCheck[i]) & 0xf0) != 0);
-			keyDown_[codesToCheck[i]] = value;
-			keyPressed_[codesToCheck[i]] = value;
+		for (int code : codesToCheck) {
+			bool value = ((GetKeyState(code) & 0xf0) != 0);
+			keyDown_[code] = value;
+			keyPressed_[code] = value;
 		}
 	};
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
@@ -269,7 +266,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		}
 
 		if (!multisample && isMultisampleSupported_ && impl->InitMultisample(hInstance, pfd)) {
-			impl->pDeviceContext_.reset((HDC)0); // Destroy window
+			impl->pDeviceContext_.reset((HDC)nullptr); // Destroy window
 			try {
 				jngl::debugLn("Recreating window with Anti-Aliasing support.");
 				init(true);
@@ -311,52 +308,9 @@ void WindowImpl::ReleaseRC(HGLRC hrc) {
 	}
 }
 
-void calculateStick(short& x, short& y, int deadzone) {
-	float magnitude = float(std::sqrt(x * x + y * y));
-	float normX = x / magnitude;
-	float normY = y / magnitude;
-
-	const int max = 32767;
-
-	if (magnitude > deadzone) {
-		if (magnitude > max) magnitude = max;
-		magnitude -= deadzone;
-		x = short(max * normX * magnitude / (max - deadzone));
-		y = short(max * normY * magnitude / (max - deadzone));
-	} else {
-		x = y = 0;
-	}
-}
-
-void calculateTrigger(BYTE& v) {
-	if (v > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) {
-		v -= XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
-		v = BYTE(255 * v / float(255 - XINPUT_GAMEPAD_TRIGGER_THRESHOLD));
-	} else {
-		v = 0;
-	}
-}
-
 void Window::UpdateInput() {
 	textInput.clear();
-	const auto lastControllersConnected = impl->controllersConnected;
-	for (int i = 0; i < XUSER_MAX_COUNT; ++i) {
-		DWORD result = XInputGetState(i, &states[i]);
-		if (result == ERROR_SUCCESS) {
-			impl->controllersConnected[i] = true;
-			calculateStick(states[i].Gamepad.sThumbLX, states[i].Gamepad.sThumbLY,
-			               XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
-			calculateStick(states[i].Gamepad.sThumbRX, states[i].Gamepad.sThumbRY,
-			               XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
-			calculateTrigger(states[i].Gamepad.bLeftTrigger);
-			calculateTrigger(states[i].Gamepad.bRightTrigger);
-		} else {
-			impl->controllersConnected[i] = false;
-		}
-	}
-	if (controllerChangedCallback && lastControllersConnected != impl->controllersConnected) {
-		controllerChangedCallback();
-	}
+	updateControllerStates();
 	if (relativeMouseMode && impl->touchscreenActive) {
 		impl->relativeX = mousex_;
 		impl->relativeY = mousey_;

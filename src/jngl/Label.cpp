@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Label.hpp"
 
@@ -18,6 +18,24 @@ void Label::drawSelf() const {
 
 void Label::setAlpha(float alpha) {
 	this->alpha = alpha;
+}
+
+void Label::setAlign(Alignment align) {
+	switch (align) {
+	case Alignment::LEFT:
+		text.setX(0);
+		break;
+	case Alignment::RIGHT:
+		text.setX(-text.getWidth());
+		break;
+	case Alignment::CENTER:
+		text.setCenter(Vec2(0, 0));
+		break;
+	}
+}
+
+float Label::getWidth() const {
+	return text.getWidth();
 }
 
 } // namespace jngl

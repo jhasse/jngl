@@ -1,5 +1,3 @@
-/freetype2/
-/openal-soft/
 /.gradle/
 /test/gradlew.bat
 /test/app/.cxx/

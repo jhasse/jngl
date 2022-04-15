@@ -1,6 +1,7 @@
-// Copyright 2020-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
+#include "../jngl/ScaleablePixels.hpp"
 #include "../jngl/framebuffer.hpp"
 #include "../jngl/shapes.hpp"
 #include "../jngl/sprite.hpp"
@@ -116,4 +117,32 @@ BOOST_AUTO_TEST_CASE(FrameBuffer) {
 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 )");
+}
+
+BOOST_AUTO_TEST_CASE(FrameBufferScale)
+{
+	for (float scaleFactor : { 1.f, 5.f })
+	{
+		Fixture f(scaleFactor);
+		// check if scaling is correct when using a small FrameBuffer
+		jngl::FrameBuffer smallFb(100_sp, 30_sp);
+		jngl::drawRect({-10, 0}, {10, 10});
+		{
+			const auto context = smallFb.use();
+			jngl::setAlpha(150);
+			jngl::drawRect({10, 0}, {30, 10});
+			jngl::setAlpha(255);
+			jngl::drawRect({40, 0}, {30, 10});
+		}
+		smallFb.draw(-160, 0);
+		BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒                              ▒
+▒                              ▒
+▒              ▒               ▒
+▒              ▒               ▒
+▒     ░░░█                     ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
+	}
 }

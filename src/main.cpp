@@ -1,4 +1,4 @@
-// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
@@ -7,7 +7,6 @@
 #include "paths.hpp"
 #include "spriteimpl.hpp"
 
-#include <boost/math/special_functions/round.hpp>
 #include <boost/qvm/map_vec_mat.hpp>
 #include <boost/qvm/mat_operations.hpp>
 #include <boost/qvm/mat_operations3.hpp>
@@ -34,6 +33,8 @@
 
 #ifdef ANDROID
 #include "android/fopen.hpp"
+
+#include <sys/stat.h>
 #endif
 
 namespace jngl {
@@ -222,6 +223,9 @@ void clearBackBuffer() {
 	}
 
 	reset();
+	if (!modelviewStack.empty()) {
+		jngl::debugLn("uneven calls to push/popMatrix at the beginning of the frame!");
+	}
 	modelviewStack = {};
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -275,6 +279,17 @@ Vec2 getMousePos() {
 		     pWindow->getMouseY() / getScaleFactor() - getScreenHeight() / 2 };
 }
 
+optional<Vec2> getCursorPos() {
+	// TODO: This is a very naive approach and ignores Windows devices with touch screens or Android
+	// devices with mice.
+#if defined(IOS) || defined(ANDROID)
+	return {};
+#else
+	return Vec2(pWindow->getMouseX() / getScaleFactor() - getScreenWidth() / 2,
+	            pWindow->getMouseY() / getScaleFactor() - getScreenHeight() / 2);
+#endif
+}
+
 int getMouseX() {
 	return pWindow->getMouseX();
 }
@@ -308,8 +323,8 @@ bool mousePressed(mouse::Button button) {
 }
 
 void setMouse(const jngl::Vec2 position) {
-	pWindow->SetMouse(boost::math::iround((position.x + getScreenWidth() / 2) * getScaleFactor()),
-	                  boost::math::iround((position.y + getScreenHeight() / 2) * getScaleFactor()));
+	pWindow->SetMouse(int(std::lround((position.x + getScreenWidth() / 2) * getScaleFactor())),
+	                  int(std::lround((position.y + getScreenHeight() / 2) * getScaleFactor())));
 }
 
 void setRelativeMouseMode(const bool relative) {
@@ -345,7 +360,7 @@ void setLineHeight(int h) {
 }
 
 void print(const std::string& text, const jngl::Vec2 position) {
-	pWindow->print(text, boost::math::iround(position.x), boost::math::iround(position.y));
+	pWindow->print(text, int(std::lround(position.x)), int(std::lround(position.y)));
 }
 
 void print(const std::string& text, const int xposition, const int yposition) {
@@ -648,6 +663,16 @@ void writeConfig(const std::string& key, const std::string& value) {
 	if (!key.empty() && key[0] == '/') {
 		throw std::runtime_error("Do not pass absolute paths as keys to jngl::readConfig.");
 	}
+#ifdef ANDROID
+	auto it = std::find(key.begin(), key.end(), '/');
+	while (it != key.end()) {
+		std::string directory(key.begin(), it);
+		if (mkdir((_getConfigPath() + directory).c_str(), 755) != 0 && errno != EEXIST) {
+			throw std::runtime_error("Couldn't create " + directory);
+		}
+		it = std::find(it + 1, key.end(), '/');
+	}
+#endif
 #ifdef HAVE_FILESYSTEM
 	const auto configPath = std::filesystem::u8path(_getConfigPath());
 	const auto directory = (configPath / std::filesystem::u8path(key)).parent_path();

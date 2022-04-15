@@ -57,7 +57,7 @@ elseif(IOS)
 	file(GLOB SRC src/ios/*.cpp src/ios/*.mm src/ios/*.h)
 	target_sources(jngl PRIVATE ${SRC} src/mac/message.cpp)
 elseif (UNIX)
-	file(GLOB SRC src/sdl/*.cpp)
+	file(GLOB SRC src/sdl/*.cpp src/sdl/controller/SdlController.cpp)
 	target_sources(jngl PRIVATE ${SRC})
 	if(APPLE)
 		file(GLOB SRC src/mac/*.cpp src/mac/*.mm)
@@ -99,10 +99,15 @@ else() # Windows
 	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _USE_MATH_DEFINES UNICODE)
 	if(JNGL_SDL2)
 		file(GLOB SRC src/sdl/*.cpp)
+		if(WINDOWS_STORE)
+			target_sources(jngl PRIVATE src/xinput/XinputController.cpp)
+		else()
+			target_sources(jngl PRIVATE src/sdl/controller/SdlController.cpp)
+		endif()
 		target_sources(jngl PRIVATE src/win32/fontfile.cpp src/win32/message.cpp src/win32/other.cpp
 		                            src/win32/unicode.cpp)
 	else()
-		file(GLOB SRC src/win32/*.cpp)
+		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp)
 	endif()
 	target_sources(jngl PRIVATE ${SRC})
 	target_link_libraries(jngl PUBLIC winmm)
@@ -154,33 +159,28 @@ get_directory_property(hasParent PARENT_DIRECTORY)
 if(ANDROID)
 	target_compile_definitions(jngl PRIVATE NOJPEG NOPNG OPENGLES)
 
-	set(ALSOFT_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/openal-soft)
-	if ((NOT EXISTS ${ALSOFT_SRC_DIR}) OR (NOT EXISTS ${ALSOFT_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone --depth=1 -b v1.18
-		                https://github.com/kcat/openal-soft
-		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
-	endif()
-	set(ALSOFT_CONFIG OFF CACHE BOOL "Install alsoft.conf sample configuration file" FORCE)
-	set(ALSOFT_HRTF_DEFS OFF CACHE BOOL "Install HRTF definition files" FORCE)
-	set(ALSOFT_AMBDEC_PRESETS OFF CACHE BOOL "Install AmbDec preset files" FORCE)
-	set(ALSOFT_BACKEND_WAVE OFF CACHE BOOL "Enable Wave Writer backend" FORCE)
-	set(LIBTYPE "STATIC" CACHE STRING "" FORCE)
-	add_subdirectory(${ALSOFT_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/openal-soft)
+	CPMAddPackage(NAME openal
+		URL https://github.com/kcat/openal-soft/archive/refs/tags/1.21.1.zip
+		URL_HASH SHA1=1442363faf47a5a7cd6287513068ecd6c70e747e
+		OPTIONS
+			"LIBTYPE STATIC"
+			"ALSOFT_INSTALL_CONFIG OFF"
+			"ALSOFT_INSTALL_HRTF_DATA OFF"
+			"ALSOFT_INSTALL_AMBDEC_PRESETS OFF"
+			"ALSOFT_BACKEND_WAVE OFF"
+			"ALSOFT_CPUEXT_NEON OFF"
+	)
 	set(OPENAL_LIBRARY OpenAL)
-	target_include_directories(jngl PRIVATE ${ALSOFT_SRC_DIR}/include)
 
-	set(FREETYPE_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/freetype2)
-	if ((NOT EXISTS ${FREETYPE_SRC_DIR}) OR (NOT EXISTS ${FREETYPE_SRC_DIR}/CMakeLists.txt))
-		execute_process(COMMAND git clone --depth=1 -b VER-2-9-1
-		                https://git.savannah.gnu.org/git/freetype/freetype2.git
-		                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/android/)
-	endif()
-	add_subdirectory(${FREETYPE_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/freetype2)
+	CPMAddPackage(NAME freetype
+		URL https://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.xz
+		URL_HASH SHA256=3333ae7cfda88429c97a7ae63b7d01ab398076c3b67182e960e5684050f2c5c8
+		OPTIONS "FT_DISABLE_HARFBUZZ 1"
+	)
 	if(hasParent)
-		set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include PARENT_SCOPE)
+		set(FREETYPE_INCLUDE_DIRS ${freetype_SOURCE_DIR}/include PARENT_SCOPE)
 		set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
 	endif()
-	set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include)
 	set(FREETYPE_LIBRARIES freetype)
 
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)
@@ -216,14 +216,16 @@ else()
 		else()
 			target_compile_definitions(jngl PRIVATE NOPNG)
 		endif()
+	else()
+		target_compile_definitions(jngl PRIVATE NOPNG)
 	endif()
 
 	if(MSVC)
 		if(JNGL_SDL2)
 			set(SDL_SENSOR OFF CACHE BOOL "" FORCE) # doesn't work with UWP
 			FetchContent_Declare(sdl2
-				URL https://www.libsdl.org/release/SDL2-2.0.14.zip
-				URL_HASH SHA1=94c60f9c34fe5aaad443df0051e0202bfd4d583b
+				URL https://www.libsdl.org/release/SDL2-2.0.16.zip
+				URL_HASH SHA1=4d09aad9b76b5d51366bebeded8bec46dcf67ef6
 			)
 			FetchContent_MakeAvailable(sdl2)
 			target_link_libraries(jngl PRIVATE SDL2-static)
@@ -237,8 +239,8 @@ else()
 			target_link_options(jngl PUBLIC $<IF:$<CONFIG:Debug>,/defaultlib:vccorlibd.lib /defaultlib:msvcrtd.lib,/defaultlib:vccorlib.lib /defaultlib:msvcrt.lib>)
 		else()
 			FetchContent_Declare(openal
-				URL https://github.com/kcat/openal-soft/archive/openal-soft-1.20.1.zip
-				URL_HASH SHA1=d86a714e0e7900f4f7197738cb35432772bfe2e0)
+				URL https://github.com/kcat/openal-soft/archive/refs/tags/1.21.1.zip
+				URL_HASH SHA1=1442363faf47a5a7cd6287513068ecd6c70e747e)
 			set(ALSOFT_NO_CONFIG_UTIL ON CACHE BOOL "Disable building the alsoft-config utility" FORCE)
 			set(LIBTYPE "STATIC" CACHE STRING "" FORCE)
 			target_compile_definitions(jngl PRIVATE AL_LIBTYPE_STATIC)
@@ -446,3 +448,17 @@ endif()
 target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})
 target_link_directories(jngl PUBLIC ${FREETYPE_LIBRARY_DIRS})
 target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY})
+
+if(NOT hasParent)
+	include(CTest)
+	if(BUILD_TESTING)
+		find_package(Boost COMPONENTS unit_test_framework)
+		if(Boost_FOUND)
+			file(GLOB UNITTEST_SRC src/unittest/*.cpp)
+			add_executable(jngl-unittest ${UNITTEST_SRC})
+			target_link_libraries(jngl-unittest PRIVATE jngl ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+			target_compile_definitions(jngl-unittest PRIVATE BOOST_TEST_DYN_LINK)
+			add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
+		endif()
+	endif()
+endif()

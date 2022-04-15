@@ -49,6 +49,9 @@ public:
 	/// Removes all effects
 	virtual void removeEffects();
 
+	/// Returns the center
+	jngl::Vec2 getPosition() const;
+
 protected:
 	/// Center
 	jngl::Vec2 position;

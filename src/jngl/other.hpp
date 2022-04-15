@@ -1,4 +1,4 @@
-// Copyright 2014-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2014-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Miscellaneous functions
 /// @file
@@ -14,6 +14,9 @@ namespace jngl {
 bool running();
 
 /// Updates the input state. App::mainLoop() calls this before Work::step()
+///
+/// Normally you shouldn't call this yourself at all unleass you want to implement your own game
+/// loop.
 void updateInput();
 
 /// Swaps back and front buffer. App::mainLoop() calls this after Work::draw()

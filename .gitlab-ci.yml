@@ -2,15 +2,15 @@ variables:
   CLICOLOR_FORCE: "1"
   TERM: xterm
 
-image: registry.fedoraproject.org/fedora-minimal:32
+image: registry.fedoraproject.org/fedora-minimal:35
 
 cmake:
   stage: build
   script:
   - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel SDL2-devel openal-soft-devel boost-devel libtheora-devel clang >/dev/null
-  - CXXFLAGS=-fdiagnostics-color cmake -Bbuild -H. -GNinja
+  - CXXFLAGS=-fdiagnostics-color cmake -Bbuild -GNinja
   - ninja -Cbuild
-  - CC=clang CXX=clang++ CXXFLAGS=-fdiagnostics-color cmake -Bbuild-clang -H. -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+  - CC=clang CXX=clang++ CXXFLAGS=-fdiagnostics-color cmake -Bbuild-clang -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=1
   - cd build-clang
   - ninja
   - microdnf install -y clang-tools-extra python3-PyYAML >/dev/null
@@ -19,39 +19,37 @@ cmake:
 gcc:
   stage: build
   script:
-    - microdnf install cmake fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel meson SDL2-devel openal-soft-devel gcc-c++ libtheora-devel >/dev/null
+    - microdnf install -y cmake fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel meson SDL2-devel openal-soft-devel gcc-c++ libtheora-devel >/dev/null
     - script -qfec "meson build" /dev/null
     - cd build
     - script -qfec "ninja" /dev/null
-    - microdnf install mesa-dri-drivers xorg-x11-drv-dummy >/dev/null
+    - microdnf install -y mesa-dri-drivers xorg-x11-drivers >/dev/null
     - Xorg -config ../data/xorg.conf &>/dev/null &
     - sleep 1 # wait for Xorg to boot up
     - DISPLAY=:0 ./unittest
     - cd ..
-    - cmake -Bbuild-cmake -H. -GNinja
+    - cmake -Bbuild-cmake -GNinja
     - ninja -Cbuild-cmake
 
 clang:
   stage: build
   script:
-    - microdnf install fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel meson SDL2-devel openal-soft-devel clang >/dev/null
+    - microdnf install -y fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel meson SDL2-devel openal-soft-devel clang >/dev/null
     - CC=clang CXX=clang++ script -qfec "meson build" /dev/null
     - cd build
     - script -qfec "ninja" /dev/null
-    - microdnf install clang-tools-extra python3-PyYAML >/dev/null
+    - microdnf install -y clang-tools-extra python3-PyYAML >/dev/null
     - sed -i s/-pipe// compile_commands.json
     - script -qfec "../data/run-clang-tidy.py"
 
 mingw:
   stage: build
-  image: registry.fedoraproject.org/fedora-minimal:31
   script:
-    - microdnf install gcc-c++ meson mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft wine-core > /dev/null
-    - meson build --cross-file mingw.ini
-    - ninja -C build
-    - rm -rf build
-    - meson build --cross-file mingw.ini --buildtype release --unity on
-    - ninja -C build
+    - microdnf install -y gcc-c++ cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft > /dev/null
+    - mingw64-cmake -GNinja -Bbuild-debug -DCMAKE_BUILD_TYPE=Debug
+    - ninja -C build-debug
+    - mingw64-cmake -GNinja -Bbuild-release -DCMAKE_BUILD_TYPE=Release
+    - ninja -C build-release
 
 android:
   image: registry.gitlab.com/jhasse/android-ndk-docker:23-0-7599858
@@ -62,7 +60,7 @@ android:
 pages:
   stage: deploy
   script:
-  - microdnf install doxygen cmake make tar xz >/dev/null
+  - microdnf install -y doxygen cmake make tar xz >/dev/null
   - cd doc
   - cmake .
   - make

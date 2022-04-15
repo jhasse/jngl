@@ -163,25 +163,31 @@ FrameBuffer::Context FrameBuffer::use() const {
 	auto activate = [this]() {
 		glBindFramebuffer(GL_FRAMEBUFFER, impl->fbo);
 		glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
-		pushMatrix();
-		reset();
-#if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
-		glPushAttrib(GL_VIEWPORT_BIT);
-#else
-		glGetIntegerv(GL_VIEWPORT, impl->viewport);
-#endif
 		glViewport(0, 0, impl->width, impl->height);
-		opengl::scale(float(pWindow->getWidth()) / float(impl->width),
-		              float(pWindow->getHeight()) / float(impl->height));
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 		if (impl->letterboxing) {
 			glDisable(GL_SCISSOR_TEST);
 		}
 	};
+	pushMatrix();
+	reset();
+	opengl::scale(float(pWindow->getWidth()) / float(impl->width),
+	              float(pWindow->getHeight()) / float(impl->height));
+#if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
+	glPushAttrib(GL_VIEWPORT_BIT);
+#else
+	glGetIntegerv(GL_VIEWPORT, impl->viewport);
+#endif
 	activate();
 	impl->activate.push(std::move(activate));
 	return Context([this]() {
 		impl->activate.pop();
+		popMatrix();
+#if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
+		glPopAttrib();
+#else
+		glViewport(impl->viewport[0], impl->viewport[1], impl->viewport[2], impl->viewport[3]);
+#endif
 		if (!impl->activate.empty()) {
 			impl->activate.top()(); // Restore the FrameBuffer that was previously active
 			return;
@@ -190,12 +196,6 @@ FrameBuffer::Context FrameBuffer::use() const {
 			glEnable(GL_SCISSOR_TEST);
 		}
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		popMatrix();
-#if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
-		glPopAttrib();
-#else
-		glViewport(impl->viewport[0], impl->viewport[1], impl->viewport[2], impl->viewport[3]);
-#endif
 		glBindFramebuffer(GL_FRAMEBUFFER, impl->systemFbo);
 		glBindRenderbuffer(GL_RENDERBUFFER, impl->systemBuffer);
 		clearBackgroundColor();

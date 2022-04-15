@@ -262,7 +262,7 @@ void WindowImpl::makeCurrent() {
 			// Strings passed to the function need to be converted to a java string object
 			jstring jmessage = jni->NewStringUTF(sstream.str().c_str());
 
-			jint result = jni->CallIntMethod(app->activity->clazz, methodID, jmessage, true);
+			jni->CallIntMethod(app->activity->clazz, methodID, jmessage, true);
 
 			// Remember to clean up passed values
 			jni->DeleteLocalRef(jmessage);

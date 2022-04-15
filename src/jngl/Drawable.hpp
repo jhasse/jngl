@@ -1,4 +1,4 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Drawable class
 /// @file
@@ -24,7 +24,13 @@ public:
 	/// Called when drawing a frame
 	virtual void draw() const = 0;
 
+	/// Sets the position of the top-left of the Drawable
 	virtual void setPos(double x, double y);
+
+	/// Sets the position of the top-left of the Drawable
+	template <class Vect> void setPos(Vect p) {
+		setPos(p.x, p.y);
+	}
 
 	/// Returns the position of the center of the Drawable
 	jngl::Vec2 getCenter() const;

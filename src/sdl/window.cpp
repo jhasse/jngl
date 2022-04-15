@@ -1,4 +1,4 @@
-// Copyright 2011-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/App.hpp"
@@ -9,7 +9,7 @@
 #include "../window.hpp"
 #include "windowimpl.hpp"
 
-#include <boost/math/special_functions/round.hpp>
+#include <stdexcept>
 
 namespace jngl {
 
@@ -173,6 +173,7 @@ bool Window::getKeyPressed(const std::string& key) {
 
 void Window::UpdateInput() {
 	textInput.clear();
+	updateControllerStates();
 	if (relativeMouseMode) {
 		mousex_ = 0;
 		mousey_ = 0;
@@ -209,11 +210,11 @@ void Window::UpdateInput() {
 			[[fallthrough]];
 		case SDL_FINGERMOTION:
 			if (relativeMouseMode) {
-				mousex_ = boost::math::iround(event.tfinger.dx * float(width_));
-				mousey_ = boost::math::iround(event.tfinger.dy * float(height_));
+				mousex_ = int(std::lround(event.tfinger.dx * float(width_)));
+				mousey_ = int(std::lround(event.tfinger.dy * float(height_)));
 			} else {
-				mousex_ = boost::math::iround(event.tfinger.x * float(width_));
-				mousey_ = boost::math::iround(event.tfinger.y * float(height_));
+				mousex_ = int(std::lround(event.tfinger.x * float(width_)));
+				mousey_ = int(std::lround(event.tfinger.y * float(height_)));
 			}
 			break;
 #endif

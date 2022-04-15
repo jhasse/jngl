@@ -2,19 +2,17 @@ name: Windows
 on: [push]
 jobs:
   msvc:
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
     - uses: actions/checkout@v1
     - name: Configure
-      shell: cmd
-      run: cmake -Bbuild -DBOOST_ROOT=%BOOST_ROOT_1_72_0%
+      run: cmake -Bbuild
     - name: Build (Debug)
       run: cmake --build build --config Debug
     - name: Build (Release)
       run: cmake --build build --config Release
     - name: Configure (UWP)
-      shell: cmd
-      run: cmake -Bbuild-uwp -DBOOST_ROOT=%BOOST_ROOT_1_72_0% -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION=10.0
+      run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore '-DCMAKE_SYSTEM_VERSION=10.0'
     - name: Build (UWP, Debug)
       run: cmake --build build-uwp --config Debug
     - name: Build (UWP, Release)
