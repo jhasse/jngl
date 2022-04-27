@@ -244,6 +244,7 @@ void Window::mainLoop() {
 		clearBackBuffer();
 		draw();
 		pWindow->SwapBuffers();
+		sleepIfNeeded();
 	}
 #ifdef __EMSCRIPTEN__
 	;
@@ -256,6 +257,8 @@ void Window::resetFrameLimiter() {
 	stepsPerFrame = 1;
 	sleepCorrectionFactor = 1;
 	maxFPS = 300;
+	lastCheckTime = getTime();
+	stepsSinceLastCheck = 0;
 }
 
 unsigned int Window::getStepsPerSecond() const {
@@ -269,10 +272,6 @@ void Window::setStepsPerSecond(const unsigned int stepsPerSecond) {
 }
 
 void Window::stepIfNeeded() {
-	// TODO: These variables are static, but should rather be members of Window:
-	static auto lastCheckTime = jngl::getTime();
-	static unsigned int stepsSinceLastCheck = 0;
-
 	const auto currentTime = jngl::getTime();
 	const auto secondsSinceLastCheck = currentTime - lastCheckTime;
 	const auto targetStepsPerSecond = 1.0 / timePerStep;
@@ -349,15 +348,6 @@ void Window::stepIfNeeded() {
 		timeSleptSinceLastCheck = 0;
 		stepsPerFrame = newStepsPerFrame;
 	}
-	const auto start = getTime();
-	const auto shouldBe = lastCheckTime + timePerStep * stepsSinceLastCheck;
-	const int64_t micros =
-	    std::lround((sleepPerFrame - (start - shouldBe)) * sleepCorrectionFactor * 1e6);
-	if (micros > 0) {
-		std::this_thread::sleep_for(std::chrono::microseconds(micros));
-		timeSleptSinceLastCheck += jngl::getTime() - start;
-		++numberOfSleeps;
-	}
 	for (unsigned int i = 0; i < stepsPerFrame; ++i) {
 		++stepsSinceLastCheck;
 		updateKeyStates();
@@ -377,6 +367,18 @@ void Window::stepIfNeeded() {
 			newWork_.reset();
 			currentWork_->onLoad();
 		}
+	}
+}
+
+void Window::sleepIfNeeded() {
+	const auto start = getTime();
+	const auto shouldBe = lastCheckTime + timePerStep * stepsSinceLastCheck;
+	const int64_t micros =
+	    std::lround((sleepPerFrame - (start - shouldBe)) * sleepCorrectionFactor * 1e6);
+	if (micros > 0) {
+		std::this_thread::sleep_for(std::chrono::microseconds(micros));
+		timeSleptSinceLastCheck += jngl::getTime() - start;
+		++numberOfSleeps;
 	}
 }
 

@@ -86,6 +86,7 @@ public:
 	void setWork(std::shared_ptr<Work>);
 	void mainLoop();
 	void stepIfNeeded();
+	void sleepIfNeeded();
 	void draw() const;
 	std::shared_ptr<Work> getWork();
 	void addJob(std::shared_ptr<Job>);
@@ -152,18 +153,20 @@ private:
 	bool changeWork = false;
 	std::shared_ptr<Work> newWork_;
 	std::vector<std::shared_ptr<Job>> jobs;
-	unsigned int stepsPerFrame = 1;
+	unsigned int stepsPerFrame;
 	double sleepPerFrame = 0; // in seconds
-	double sleepCorrectionFactor = 1;
+	double sleepCorrectionFactor;
 	double timeSleptSinceLastCheck = 0;
 	unsigned int numberOfSleeps = 0;
 	unsigned int previousStepsPerFrame = 1;
+	double lastCheckTime;
+	unsigned int stepsSinceLastCheck;
 
 	/// When VSYNC is active we will try to find out to what FPS/Hz the display is limiting us
-	double maxFPS = 300;
+	double maxFPS;
 
 	/// How often the frame limiter has run
-	unsigned int numberOfChecks = 0;
+	unsigned int numberOfChecks;
 
 	bool multitouch = false;
 

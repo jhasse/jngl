@@ -98,6 +98,7 @@
 
 		jngl::pWindow->draw();
 		[context presentRenderbuffer:GL_RENDERBUFFER];
+		jngl::pWindow->sleepIfNeeded();
 	}
 }
 
