@@ -47,7 +47,9 @@ void WindowImpl::handleTouch(const std::pair<intptr_t, Vec2>* const positions, c
 }
 
 	void WindowImpl::setMouseDown(bool d) {
-		window->mousePressed_.at(jngl::mouse::Left) = d;
+        if (!d || !window->mouseDown_.at(jngl::mouse::Left)) {
+            window->mousePressed_.at(jngl::mouse::Left) = d;
+        }
 		window->mouseDown_.at(jngl::mouse::Left) = d;
 	}
 
