@@ -690,4 +690,8 @@ std::string getPreferredLanguage() {
 	return lang;
 }
 
+void openURL(const std::string& url) {
+	ShellExecute(0, 0, utf8ToUtf16(url).c_str(), 0, 0, SW_SHOW);
+}
+
 } // namespace jngl
