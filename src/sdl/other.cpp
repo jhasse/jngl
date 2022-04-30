@@ -23,7 +23,9 @@ std::string getPreferredLanguage() {
 }
 
 void openURL(const std::string& url) {
+#if SDL_VERSION_ATLEAST(2, 0, 14)
 	SDL_OpenURL(url.c_str());
+#endif
 }
 
 } // namespace jngl
