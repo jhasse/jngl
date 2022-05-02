@@ -207,6 +207,7 @@ void Window::UpdateInput() {
 			impl->currentFingerId = event.tfinger.fingerId;
 			mouseDown_.at(0) = true;
 			mousePressed_.at(0) = true;
+			needToBeSetFalse_.push(&mousePressed_[0]);
 			[[fallthrough]];
 		case SDL_FINGERMOTION:
 			if (relativeMouseMode) {
@@ -232,6 +233,7 @@ void Window::UpdateInput() {
 			if (button >= 0) {
 				mouseDown_.at(button) = true;
 				mousePressed_.at(button) = true;
+				needToBeSetFalse_.push(&mousePressed_[button]);
 			}
 			break;
 		}

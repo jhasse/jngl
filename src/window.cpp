@@ -81,12 +81,8 @@ bool Window::getMouseDown(mouse::Button button) {
 	return mouseDown_.at(button);
 }
 
-bool Window::getMousePressed(mouse::Button button) {
-	if (mousePressed_.at(button)) {
-		needToBeSetFalse_.push(&mousePressed_[button]);
-		return true;
-	}
-	return false;
+bool Window::getMousePressed(mouse::Button button) const {
+	return mousePressed_[button];
 }
 
 void Window::setMousePressed(mouse::Button button, bool p) {

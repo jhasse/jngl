@@ -69,7 +69,7 @@ public:
 	void setKeyPressed(const std::string& key, bool);
 	bool getMouseDown(mouse::Button);
 	void setMouseDown(mouse::Button, bool);
-	bool getMousePressed(mouse::Button button);
+	bool getMousePressed(mouse::Button button) const;
 	void setMousePressed(mouse::Button button, bool);
 	void SetMouse(int xposition, int yposition);
 	void SetTitle(const std::string& title);
