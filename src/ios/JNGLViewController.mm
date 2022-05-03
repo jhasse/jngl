@@ -71,6 +71,11 @@ JNGLView* jnglView = nullptr;
 	[jnglView touchesEnded:touches withEvent:event];
 }
 
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	[jnglView touchesCancelled:touches withEvent:event];
+}
+
 @end
 
 namespace jngl {

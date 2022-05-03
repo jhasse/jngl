@@ -123,6 +123,10 @@
 	[self handleTouch: touches withType: jngl::WindowImpl::Touch::ENDED];
 }
 
+- (void) touchesCancelled: (NSSet*) touches withEvent: (UIEvent*) event {
+	[self handleTouch: touches withType: jngl::WindowImpl::Touch::ENDED];
+}
+
 - (void) touchesMoved: (NSSet*) touches withEvent: (UIEvent*) event {
 	[self handleTouch: touches withType: jngl::WindowImpl::Touch::MOVED];
 }
