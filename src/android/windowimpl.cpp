@@ -347,7 +347,9 @@ void WindowImpl::updateInput() {
 	}
 
 	if (!window->mouseDown_[0]) {
-		window->mousePressed_[0] = !touches.empty();
+		if ((window->mousePressed_[0] = !touches.empty())) {
+			window->needToBeSetFalse_.push(&window->mousePressed_[0]);
+		}
 	}
 	window->mouseDown_[0] = !touches.empty();
 	window->multitouch = touches.size() > 1;
