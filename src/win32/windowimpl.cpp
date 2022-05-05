@@ -687,6 +687,7 @@ std::string getPreferredLanguage() {
 	if (GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numLanguages, languagesBuffer.get(),
 	                                &bufferLength) == FALSE ||
 	    bufferLength < 3) {
+		return lang;
 	}
 	lang[0] = languagesBuffer[0];
 	lang[1] = languagesBuffer[1];
