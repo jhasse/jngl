@@ -421,4 +421,22 @@ int Window::getMouseY() const {
 }
 #endif
 
+void setCursor(Cursor type) {
+	SDL_SystemCursor sdlType = SDL_SYSTEM_CURSOR_ARROW;
+	switch (type) {
+	case Cursor::ARROW:
+		sdlType = SDL_SYSTEM_CURSOR_ARROW;
+		break;
+	case Cursor::I:
+		sdlType = SDL_SYSTEM_CURSOR_IBEAM;
+		break;
+	};
+	static SDL_Cursor* cursor = nullptr;
+	if (cursor) {
+		SDL_FreeCursor(cursor);
+	}
+	cursor = SDL_CreateSystemCursor(sdlType);
+	SDL_SetCursor(cursor);
+}
+
 } // namespace jngl

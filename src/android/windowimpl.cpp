@@ -552,4 +552,6 @@ void openURL(const std::string& url) {
 	env->CallVoidMethod(androidApp->activity->clazz, start_activity, intent);
 }
 
+void setCursor(Cursor) {}
+
 } // namespace jngl

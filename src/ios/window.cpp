@@ -100,4 +100,6 @@ void Window::setFullscreen(bool fullscreen) {
 	}
 }
 
+void setCursor(Cursor) {}
+
 } // namespace jngl
