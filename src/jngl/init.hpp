@@ -64,8 +64,8 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 #if defined(NDEBUG) || defined(__ANDROID__)
 	fullscreen = true;
 #endif
-	std::pair<int, int> minAspectRatio{ 1, std::numeric_limits<int>::max() };
-	std::pair<int, int> maxAspectRatio{ std::numeric_limits<int>::max(), 1 };
+	std::pair<int, int> minAspectRatio{ 1, 3 };
+	std::pair<int, int> maxAspectRatio{ 3, 1 };
 	if (!params.screenSize) {
 		params.screenSize = { double(jngl::getDesktopWidth()), double(jngl::getDesktopHeight()) };
 		fullscreen = true;
