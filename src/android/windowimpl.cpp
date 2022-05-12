@@ -7,6 +7,7 @@
 #include "../jngl/other.hpp"
 #include "../jngl/debug.hpp"
 #include "../jngl/screen.hpp"
+#include "../jngl/window.hpp"
 #include "../jngl/work.hpp"
 #include "../audio.hpp"
 #include "../windowptr.hpp"
@@ -552,6 +553,6 @@ void openURL(const std::string& url) {
 	env->CallVoidMethod(androidApp->activity->clazz, start_activity, intent);
 }
 
-void setCursor(Cursor) {}
+void setCursor(jngl::Cursor) {}
 
 } // namespace jngl
