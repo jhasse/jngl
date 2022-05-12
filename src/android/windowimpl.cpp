@@ -282,7 +282,9 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 		jngl::setKeyPressed(jngl::key::BackSpace, true);
 		return 1;
 	} else if (key == AKEYCODE_BACK) {
-		window->getWork()->onBackEvent();
+		if (const auto& work = window->getWork()) {
+			work->onBackEvent();
+		}
 		return 1;
 	}
 	const auto metaState = AKeyEvent_getMetaState(event);
