@@ -45,4 +45,10 @@ void setFullscreen(bool);
 /// Sets the main window title
 void setTitle(const std::string& title);
 
+enum class Cursor {
+    ARROW,
+    I,
+};
+void setCursor(Cursor);
+
 } // namespace jngl

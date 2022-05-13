@@ -30,6 +30,9 @@ struct AppParameters {
 	/// If not specified JNGL will create a fullscreen Window with the maximum of space available.
 	std::optional<jngl::Vec2> screenSize;
 
+	std::optional<std::pair<int, int>> minAspectRatio;
+	std::optional<std::pair<int, int>> maxAspectRatio;
+
 	/// Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)
 	bool pixelArt = false;
 };
@@ -92,7 +95,8 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 	                            : int(std::lround(params.screenSize->x * jngl::getScaleFactor())),
 	                 fullscreen ? jngl::getDesktopHeight()
 	                            : int(std::lround(params.screenSize->y * jngl::getScaleFactor())),
-	                 fullscreen, minAspectRatio, maxAspectRatio);
+	                 fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
+	                 params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
 	jngl::setWork(workFactory());
 	app.mainLoop();
 }

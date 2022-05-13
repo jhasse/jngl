@@ -27,10 +27,12 @@ public:
 	/// Returns the width of the underlying jngl::TextLine
 	float getWidth() const;
 
+protected:
+	float alpha = 1.f;
+
 private:
 	jngl::TextLine text;
 	jngl::Color color;
-	float alpha = 1.f;
 };
 
 } // namespace jngl

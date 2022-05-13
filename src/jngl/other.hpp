@@ -108,4 +108,7 @@ void writeConfig(const std::string& key, const std::string& value);
 /// Returns user preferred language, i.e. "en" for English, "de" for German
 std::string getPreferredLanguage();
 
+/// Opens a link (e.g. https://bixense.com) in the browser
+void openURL(const std::string&);
+
 } // namespace jngl

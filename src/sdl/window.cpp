@@ -207,6 +207,7 @@ void Window::UpdateInput() {
 			impl->currentFingerId = event.tfinger.fingerId;
 			mouseDown_.at(0) = true;
 			mousePressed_.at(0) = true;
+			needToBeSetFalse_.push(&mousePressed_[0]);
 			[[fallthrough]];
 		case SDL_FINGERMOTION:
 			if (relativeMouseMode) {
@@ -232,6 +233,7 @@ void Window::UpdateInput() {
 			if (button >= 0) {
 				mouseDown_.at(button) = true;
 				mousePressed_.at(button) = true;
+				needToBeSetFalse_.push(&mousePressed_[button]);
 			}
 			break;
 		}
@@ -418,5 +420,23 @@ int Window::getMouseY() const {
 	return mousey_ - (height_ - canvasHeight) / 2;
 }
 #endif
+
+void setCursor(Cursor type) {
+	SDL_SystemCursor sdlType = SDL_SYSTEM_CURSOR_ARROW;
+	switch (type) {
+	case Cursor::ARROW:
+		sdlType = SDL_SYSTEM_CURSOR_ARROW;
+		break;
+	case Cursor::I:
+		sdlType = SDL_SYSTEM_CURSOR_IBEAM;
+		break;
+	};
+	static SDL_Cursor* cursor = nullptr;
+	if (cursor) {
+		SDL_FreeCursor(cursor);
+	}
+	cursor = SDL_CreateSystemCursor(sdlType);
+	SDL_SetCursor(cursor);
+}
 
 } // namespace jngl

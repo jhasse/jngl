@@ -1,4 +1,4 @@
-// Copyright 2015-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowimpl.hpp"
@@ -7,6 +7,7 @@
 #include "../jngl/other.hpp"
 #include "../jngl/debug.hpp"
 #include "../jngl/screen.hpp"
+#include "../jngl/window.hpp"
 #include "../jngl/work.hpp"
 #include "../audio.hpp"
 #include "../windowptr.hpp"
@@ -281,7 +282,9 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 		jngl::setKeyPressed(jngl::key::BackSpace, true);
 		return 1;
 	} else if (key == AKEYCODE_BACK) {
-		window->getWork()->onBackEvent();
+		if (const auto& work = window->getWork()) {
+			work->onBackEvent();
+		}
 		return 1;
 	}
 	const auto metaState = AKeyEvent_getMetaState(event);
@@ -347,7 +350,9 @@ void WindowImpl::updateInput() {
 	}
 
 	if (!window->mouseDown_[0]) {
-		window->mousePressed_[0] = !touches.empty();
+		if ((window->mousePressed_[0] = !touches.empty())) {
+			window->needToBeSetFalse_.push(&window->mousePressed_[0]);
+		}
 	}
 	window->mouseDown_[0] = !touches.empty();
 	window->multitouch = touches.size() > 1;
@@ -529,5 +534,27 @@ std::string getPreferredLanguage() {
 	return std::string(
 	    reinterpret_cast<const char*>(env->GetByteArrayElements(bytesObject, nullptr)), length);
 }
+
+void openURL(const std::string& url) {
+	const auto env = reinterpret_cast<WindowImpl*>(androidApp->userData)->env;
+	jstring urlString = env->NewStringUTF(url.c_str());
+	jclass uriClass = env->FindClass("android/net/Uri");
+	jmethodID uriParse =
+	    env->GetStaticMethodID(uriClass, "parse", "(Ljava/lang/String;)Landroid/net/Uri;");
+	jobject uri = env->CallStaticObjectMethod(uriClass, uriParse, urlString);
+	jclass intentClass = env->FindClass("android/content/Intent");
+	jobject actionView = env->GetStaticObjectField(
+	    intentClass, env->GetStaticFieldID(intentClass, "ACTION_VIEW", "Ljava/lang/String;"));
+	jmethodID newIntent =
+	    env->GetMethodID(intentClass, "<init>", "(Ljava/lang/String;Landroid/net/Uri;)V");
+	jobject intent = env->AllocObject(intentClass);
+	env->CallVoidMethod(intent, newIntent, actionView, uri);
+	jclass activity_class = env->FindClass("android/app/Activity");
+	jmethodID start_activity =
+	    env->GetMethodID(activity_class, "startActivity", "(Landroid/content/Intent;)V");
+	env->CallVoidMethod(androidApp->activity->clazz, start_activity, intent);
+}
+
+void setCursor(jngl::Cursor) {}
 
 } // namespace jngl

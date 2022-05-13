@@ -339,14 +339,17 @@ void Window::UpdateInput() {
 		case WM_LBUTTONDOWN:
 			mouseDown_.at(0) = true;
 			mousePressed_.at(0) = true;
+			needToBeSetFalse_.push(&mousePressed_[0]);
 			break;
 		case WM_MBUTTONDOWN:
 			mouseDown_.at(1) = true;
 			mousePressed_.at(1) = true;
+			needToBeSetFalse_.push(&mousePressed_[1]);
 			break;
 		case WM_RBUTTONDOWN:
 			mouseDown_.at(2) = true;
 			mousePressed_.at(2) = true;
+			needToBeSetFalse_.push(&mousePressed_[2]);
 			break;
 		case WM_LBUTTONUP:
 			if (mousePressed_.at(0)) {
@@ -684,10 +687,17 @@ std::string getPreferredLanguage() {
 	if (GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numLanguages, languagesBuffer.get(),
 	                                &bufferLength) == FALSE ||
 	    bufferLength < 3) {
+		return lang;
 	}
 	lang[0] = languagesBuffer[0];
 	lang[1] = languagesBuffer[1];
 	return lang;
 }
+
+void openURL(const std::string& url) {
+	ShellExecute(0, 0, utf8ToUtf16(url).c_str(), 0, 0, SW_SHOW);
+}
+
+void setCursor(Cursor) {}
 
 } // namespace jngl
