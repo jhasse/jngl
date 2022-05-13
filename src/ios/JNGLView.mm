@@ -2,6 +2,7 @@
 
 #include "../jngl.hpp"
 #include "../windowptr.hpp"
+#include "../jngl/AppParameters.hpp"
 #include "../jngl/sprite.hpp"
 #include "windowimpl.hpp"
 #include "AppleController.h"
@@ -17,7 +18,7 @@
 	return [CAEAGLLayer class];
 }
 
-- (instancetype) initWithFrame: (CGRect)frame {
+- (instancetype) initWithFrame: (CGRect)frame withAppParameters: (const jngl::AppParameters&)params {
 	self = [super initWithFrame:frame];
 	if (self) {
 		if ([[UIScreen mainScreen] respondsToSelector: NSSelectorFromString(@"scale")]) {
@@ -53,7 +54,9 @@
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
 
-		jngl::showWindow("", width, height);
+		jngl::showWindow("", width, height, true,
+		                 params.minAspectRatio ? *params.minAspectRatio : std::make_pair(1, 3),
+		                 params.maxAspectRatio ? *params.maxAspectRatio : std::make_pair(3, 1));
 
 		CADisplayLink* displayLink;
 		displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawView:)];

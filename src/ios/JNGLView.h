@@ -5,6 +5,7 @@
 #import <OpenGLES/ES3/glext.h>
 
 namespace jngl {
+	struct AppParameters;
 	class WindowImpl;
 }
 
@@ -19,6 +20,7 @@ namespace jngl {
 	bool needToResetFrameLimiter;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame withAppParameters:(const jngl::AppParameters&)params;
 - (void) drawView: (CADisplayLink*) displayLink;
 - (void) touchesEnded: (NSSet*) touches withEvent: (UIEvent*) event;
 - (void) touchesMoved: (NSSet*) touches withEvent: (UIEvent*) event;

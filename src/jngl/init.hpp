@@ -6,12 +6,12 @@
 #pragma once
 
 #include "App.hpp"
+#include "AppParameters.hpp"
 #include "main.hpp"
 #include "screen.hpp"
 #include "work.hpp"
 
 #include <cmath>
-#include <optional>
 
 #if defined(__has_include) && __has_include("filesystem")
 #include <filesystem>
@@ -19,24 +19,6 @@
 
 namespace jngl {
 class Work;
-
-/// Parameters used to initialize the main window
-struct AppParameters {
-	/// Display name of the application which will be used in the window title for example
-	std::string displayName;
-
-	/// Size of the canvas in screen pixels, see jngl::getScreenSize()
-	///
-	/// If not specified JNGL will create a fullscreen Window with the maximum of space available.
-	std::optional<jngl::Vec2> screenSize;
-
-	std::optional<std::pair<int, int>> minAspectRatio;
-	std::optional<std::pair<int, int>> maxAspectRatio;
-
-	/// Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)
-	bool pixelArt = false;
-};
-
 } // namespace jngl
 
 /// Implement this function and return a factory function which creates the first jngl::Work
