@@ -104,6 +104,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1App.html">App</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">There can only be one instance of this class which will be created before the window is shown.  <a href="classjngl_1_1App.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1AppParameters.html">AppParameters</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters used to initialize the main window.  <a href="structjngl_1_1AppParameters.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Color.html">Color</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Object representing a RGB color.  <a href="classjngl_1_1Color.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,9 +136,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1ImageData.html">ImageData</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Containing the pixel data of an image file.  <a href="classjngl_1_1ImageData.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1AppParameters.html">AppParameters</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters used to initialize the main window.  <a href="structjngl_1_1AppParameters.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Job.html">Job</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Background job which stays part of the main loop independent of the active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">jngl::Work</a>.  <a href="classjngl_1_1Job.html#details">More...</a><br /></td></tr>
@@ -201,6 +201,10 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:acdfaca60ec19c0265bac2692d7982726"><td class="mdescLeft">&#160;</td><td class="mdescRight">How multiple lines should be aligned in a text block. <br /></td></tr>
 <tr class="separator:acdfaca60ec19c0265bac2692d7982726"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9c915d433bdce7b6b47c0956c850f43"><td class="memItemLeft" align="right" valign="top"><a id="ac9c915d433bdce7b6b47c0956c850f43"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>Cursor</b> { <b>ARROW</b>
+, <b>I</b>
+ }</td></tr>
+<tr class="separator:ac9c915d433bdce7b6b47c0956c850f43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -592,7 +596,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawEllipse</b> (floa
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawEllipse</b> (<a class="el" href="classjngl_1_1Vec2.html">Vec2</a>, float width, float height, float startAngle=0)</td></tr>
 <tr class="separator:a92ac4fa0a7f55e6f560da252b389d22d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5de7d66b2300b652e8a934d62803d12"><td class="memItemLeft" align="right" valign="top"><a id="ae5de7d66b2300b652e8a934d62803d12"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawCircle</b> (<a class="el" href="classjngl_1_1Vec2.html">Vec2</a>, float radius, float startAngle=0)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ae5de7d66b2300b652e8a934d62803d12">drawCircle</a> (<a class="el" href="classjngl_1_1Vec2.html">Vec2</a>, float radius, float startAngle=0)</td></tr>
+<tr class="memdesc:ae5de7d66b2300b652e8a934d62803d12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Angles in radian. <br /></td></tr>
 <tr class="separator:ae5de7d66b2300b652e8a934d62803d12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13ddf452c1a48a23319c0594764d14a8"><td class="memItemLeft" align="right" valign="top"><a id="a13ddf452c1a48a23319c0594764d14a8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawPoint</b> (double x, double y)</td></tr>
@@ -731,6 +736,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a86403a082df8f8db91053edaa2a73a5f">setTitle</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;title)</td></tr>
 <tr class="memdesc:a86403a082df8f8db91053edaa2a73a5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the main window title. <br /></td></tr>
 <tr class="separator:a86403a082df8f8db91053edaa2a73a5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab73ef3410f71e4beeef751a89fa231ee"><td class="memItemLeft" align="right" valign="top"><a id="ab73ef3410f71e4beeef751a89fa231ee"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setCursor</b> (Cursor)</td></tr>
+<tr class="separator:ab73ef3410f71e4beeef751a89fa231ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41bdb428b4b122d8a22b79c8d448b306"><td class="memItemLeft" align="right" valign="top"><a id="a41bdb428b4b122d8a22b79c8d448b306"></a>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Work.html">Work</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a41bdb428b4b122d8a22b79c8d448b306">getWork</a> ()</td></tr>
 <tr class="memdesc:a41bdb428b4b122d8a22b79c8d448b306"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> or nullptr if none has been set. <br /></td></tr>
