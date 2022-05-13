@@ -20,7 +20,7 @@ jobs:
           sed -i 'sx<div class="title">Documentation </div>xxg' html/index.html # Remove header from index.html only
         working-directory: doc
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+        uses: JamesIves/github-pages-deploy-action@releases/v4
         if: github.ref == 'refs/heads/master'
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -38,6 +38,7 @@ void drawEllipse(float xmid, float ymid, float width, float height, float startA
 
 void drawEllipse(Vec2, float width, float height, float startAngle = 0);
 
+/// Angles in radian
 void drawCircle(Vec2, float radius, float startAngle = 0);
 
 void drawPoint(double x, double y);
