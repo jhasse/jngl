@@ -1,4 +1,4 @@
-// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "window.hpp"
@@ -514,15 +514,12 @@ void Window::drawEllipse(const Vec2 mid, const Vec2 size, float startAngle) {
 	jngl::popMatrix();
 }
 
-void Window::drawLine(const Vec2 a, const Vec2 b) const {
+void Window::drawLine(Mat3 modelview, const Vec2 b) const {
 	glBindVertexArray(vaoLine);
-	jngl::pushMatrix();
-	jngl::translate(a);
-	opengl::scale(static_cast<float>((b.x - a.x) * jngl::getScaleFactor()),
-	              static_cast<float>((b.y - a.y) * jngl::getScaleFactor()));
-	auto tmp = useSimpleShaderProgram();
+	auto tmp =
+	    useSimpleShaderProgram(modelview.scale(static_cast<float>(b.x * jngl::getScaleFactor()),
+	                                           static_cast<float>(b.y * jngl::getScaleFactor())));
 	glDrawArrays(GL_LINES, 0, 2);
-	jngl::popMatrix();
 }
 
 void Window::drawRect(const Vec2 pos, const Vec2 size) const {

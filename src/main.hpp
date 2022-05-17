@@ -1,4 +1,4 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -18,6 +18,7 @@ using std::experimental::optional;
 
 namespace jngl {
 
+class Mat3;
 class ShaderProgram;
 
 void clearBackgroundColor();
@@ -33,5 +34,6 @@ extern int simpleModelviewUniform;
 extern int simpleColorUniform;
 
 ShaderProgram::Context useSimpleShaderProgram();
+ShaderProgram::Context useSimpleShaderProgram(const Mat3& modelview);
 
 } // namespace jngl

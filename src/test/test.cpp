@@ -1,4 +1,4 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl.hpp"
@@ -68,11 +68,11 @@ public:
 		}
 		drawBackground();
 		jngl::setColor(0,0,0,255);
-		jngl::pushMatrix();
-		jngl::translate(650, 450);
-		jngl::rotate(rotate);
-		jngl::drawLine(-50, -50, 50, 50);
-		jngl::popMatrix();
+		jngl::drawLine(jngl::modelview()
+		                   .translate({ 650, 450 })
+		                   .rotate(rotate / 360 * boost::math::constants::pi<double>())
+		                   .translate({ -50, -50 }),
+		               { 100, 100 });
 		jngl::setSpriteAlpha(200);
 		jngl::translate(jngl::getScreenSize() / 2);
 		jngl::rotate(rotate);

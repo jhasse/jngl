@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Functions for drawing shapes
 /// @file
@@ -8,6 +8,8 @@
 #include "Vec2.hpp"
 
 namespace jngl {
+
+class Mat3;
 
 /// Sets the color which should be used to draw primitives
 ///
@@ -33,6 +35,9 @@ void setLineWidth(float width);
 void drawLine(Vec2 start, Vec2 end);
 
 void drawLine(double xstart, double ystart, double xend, double yend);
+
+/// Draws a line from (0, 0) to \a end
+void drawLine(const Mat3& modelview, Vec2 end);
 
 void drawEllipse(float xmid, float ymid, float width, float height, float startAngle = 0);
 

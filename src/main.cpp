@@ -472,11 +472,15 @@ void setLineWidth(const float width) {
 }
 
 void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
-	pWindow->drawLine({ xstart, ystart }, { xend, yend });
+	drawLine(jngl::Vec2(xstart, ystart), jngl::Vec2(xend, yend));
 }
 
 void drawLine(const Vec2 start, const Vec2 end) {
-	pWindow->drawLine(start, end);
+	pWindow->drawLine(jngl::modelview().translate(start), end - start);
+}
+
+void drawLine(const Mat3& modelview, const Vec2 end) {
+	pWindow->drawLine(modelview, end);
 }
 
 void drawPoint(const double x, const double y) {
@@ -701,10 +705,14 @@ void writeConfig(const std::string& key, const std::string& value) {
 #endif
 
 ShaderProgram::Context useSimpleShaderProgram() {
+	return useSimpleShaderProgram(opengl::modelview);
+}
+
+ShaderProgram::Context useSimpleShaderProgram(const Mat3& modelview) {
 	auto context = jngl::simpleShaderProgram->use();
 	glUniform4f(simpleColorUniform, float(colorRed) / 255.0f, float(colorGreen) / 255.0f,
 	            float(colorBlue) / 255.0f, float(colorAlpha) / 255.0f);
-	glUniformMatrix3fv(simpleModelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+	glUniformMatrix3fv(simpleModelviewUniform, 1, GL_FALSE, modelview.data);
 
 	assert(simpleShaderProgram->getAttribLocation("position") == 0);
 	glEnableVertexAttribArray(0);

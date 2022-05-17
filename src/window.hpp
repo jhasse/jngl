@@ -101,7 +101,7 @@ public:
 	void initGlObjects();
 	static void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
 	static void drawEllipse(Vec2 mid, Vec2 size, float startAngle);
-	void drawLine(Vec2 a, Vec2 b) const;
+	void drawLine(jngl::Mat3 modelview, Vec2 b) const;
 	void drawRect(Vec2 pos, Vec2 size) const;
 	void onControllerChanged(std::function<void()>);
 
