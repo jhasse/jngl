@@ -1,10 +1,5 @@
 project('jngl', ['c', 'cpp'], default_options : ['cpp_std=c++17', 'warning_level=3'])
 
-conf_data = configuration_data()
-conf_data.set('VERSION', '1.4.1')
-configure_file(input : 'jngl.pc.in', output : 'jngl.pc', configuration : conf_data,
-               install : true, install_dir : 'lib/pkgconfig')
-
 if get_option('buildtype') == 'release'
 	add_project_arguments('-DNDEBUG', language : 'cpp')
 endif
