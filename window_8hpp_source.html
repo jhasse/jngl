@@ -95,7 +95,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <div class="title">window.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="window_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright 2012-2021 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
+<a href="window_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright 2012-2022 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// For conditions of distribution and use, see copyright notice in LICENSE.txt</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
@@ -105,44 +105,48 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/array.html">array</a>&gt;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/string.html">string</a>&gt;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacejngl.html">jngl</a> {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="namespacejngl.html#a6258b60ff00bd009838eea0a647279c1">   17</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a6258b60ff00bd009838eea0a647279c1">showWindow</a>(<span class="keyword">const</span> <a class="codeRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; title, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">bool</span> fullscreen = <span class="keyword">false</span>,</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                <a class="codeRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair&lt;int, int&gt;</a> minAspectRatio = { 4, 3 },</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                <a class="codeRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair&lt;int, int&gt;</a> maxAspectRatio = { 16, 9 });</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="namespacejngl.html#a33936343afa186ee6c6095d8789b92f1">   22</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a33936343afa186ee6c6095d8789b92f1">hideWindow</a>();</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="namespacejngl.html#adca649a9f4530deb1d23d36c8be0ce51">   25</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespacejngl.html#adca649a9f4530deb1d23d36c8be0ce51">getWindowWidth</a>();</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="namespacejngl.html#a0bd114aaf7ebebf760dcd2b6d1be16d7">   28</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespacejngl.html#a0bd114aaf7ebebf760dcd2b6d1be16d7">getWindowHeight</a>();</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="namespacejngl.html#a9489a9ba96b46c077ace9c97d3cc595f">   31</a></span>&#160;<a class="codeRef" href="http://en.cppreference.com/w/cpp/container/array.html">std::array&lt;Pixels, 2&gt;</a> <a class="code" href="namespacejngl.html#a9489a9ba96b46c077ace9c97d3cc595f">getWindowSize</a>();</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="namespacejngl.html#a9ab26c6330ce71755baf47b12d9932bd">   34</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespacejngl.html#a9ab26c6330ce71755baf47b12d9932bd">getDesktopWidth</a>();</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="namespacejngl.html#a74e79be6b090572ffeecee63cd24de1c">   37</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespacejngl.html#a74e79be6b090572ffeecee63cd24de1c">getDesktopHeight</a>();</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="namespacejngl.html#a2d0dc7cd161f4076060c9332751d3755">   40</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespacejngl.html#a2d0dc7cd161f4076060c9332751d3755">getFullscreen</a>();</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="namespacejngl.html#a4039aa0026f814387a265a55696cc11e">   43</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a4039aa0026f814387a265a55696cc11e">setFullscreen</a>(<span class="keywordtype">bool</span>);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="namespacejngl.html#a86403a082df8f8db91053edaa2a73a5f">   46</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a86403a082df8f8db91053edaa2a73a5f">setTitle</a>(<span class="keyword">const</span> <a class="codeRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; title);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keyword">enum class</span> Cursor {</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    ARROW,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    I,</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;};</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keywordtype">void</span> setCursor(Cursor);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;} <span class="comment">// namespace jngl</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/vector.html">vector</a>&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacejngl.html">jngl</a> {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="namespacejngl.html#a6258b60ff00bd009838eea0a647279c1">   18</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a6258b60ff00bd009838eea0a647279c1">showWindow</a>(<span class="keyword">const</span> <a class="codeRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; title, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">bool</span> fullscreen = <span class="keyword">false</span>,</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                <a class="codeRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair&lt;int, int&gt;</a> minAspectRatio = { 4, 3 },</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                <a class="codeRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair&lt;int, int&gt;</a> maxAspectRatio = { 16, 9 });</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="namespacejngl.html#a33936343afa186ee6c6095d8789b92f1">   23</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a33936343afa186ee6c6095d8789b92f1">hideWindow</a>();</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="namespacejngl.html#adca649a9f4530deb1d23d36c8be0ce51">   26</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespacejngl.html#adca649a9f4530deb1d23d36c8be0ce51">getWindowWidth</a>();</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="namespacejngl.html#a0bd114aaf7ebebf760dcd2b6d1be16d7">   29</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespacejngl.html#a0bd114aaf7ebebf760dcd2b6d1be16d7">getWindowHeight</a>();</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="namespacejngl.html#a9489a9ba96b46c077ace9c97d3cc595f">   32</a></span>&#160;<a class="codeRef" href="http://en.cppreference.com/w/cpp/container/array.html">std::array&lt;Pixels, 2&gt;</a> <a class="code" href="namespacejngl.html#a9489a9ba96b46c077ace9c97d3cc595f">getWindowSize</a>();</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="namespacejngl.html#a9ab26c6330ce71755baf47b12d9932bd">   35</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespacejngl.html#a9ab26c6330ce71755baf47b12d9932bd">getDesktopWidth</a>();</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="namespacejngl.html#a74e79be6b090572ffeecee63cd24de1c">   38</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespacejngl.html#a74e79be6b090572ffeecee63cd24de1c">getDesktopHeight</a>();</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="namespacejngl.html#a2d0dc7cd161f4076060c9332751d3755">   41</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespacejngl.html#a2d0dc7cd161f4076060c9332751d3755">getFullscreen</a>();</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="namespacejngl.html#a4039aa0026f814387a265a55696cc11e">   44</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a4039aa0026f814387a265a55696cc11e">setFullscreen</a>(<span class="keywordtype">bool</span>);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="namespacejngl.html#a86403a082df8f8db91053edaa2a73a5f">   47</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacejngl.html#a86403a082df8f8db91053edaa2a73a5f">setTitle</a>(<span class="keyword">const</span> <a class="codeRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; title);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">enum class</span> Cursor {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    ARROW,</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    I,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;};</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keywordtype">void</span> setCursor(Cursor);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="namespacejngl.html#a2d66db6f31c29834ccfa16e80eaea06b">   56</a></span>&#160;<a class="codeRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector&lt;float&gt;</a> <a class="code" href="namespacejngl.html#a2d66db6f31c29834ccfa16e80eaea06b">readPixels</a>();</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;} <span class="comment">// namespace jngl</span></div>
 <div class="ttc" id="aPixels_8hpp_html"><div class="ttname"><a href="Pixels_8hpp.html">Pixels.hpp</a></div><div class="ttdoc">Contains jngl::Pixels class.</div></div>
 <div class="ttc" id="aarray_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/array.html">array</a></div></div>
 <div class="ttc" id="abasic_string_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition:</b> <a href="App_8hpp_source.html#l00010">App.hpp:10</a></div></div>
 <div class="ttc" id="anamespacejngl_html_a0bd114aaf7ebebf760dcd2b6d1be16d7"><div class="ttname"><a href="namespacejngl.html#a0bd114aaf7ebebf760dcd2b6d1be16d7">jngl::getWindowHeight</a></div><div class="ttdeci">int getWindowHeight()</div><div class="ttdoc">Returns the height of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)</div></div>
 <div class="ttc" id="anamespacejngl_html_a2d0dc7cd161f4076060c9332751d3755"><div class="ttname"><a href="namespacejngl.html#a2d0dc7cd161f4076060c9332751d3755">jngl::getFullscreen</a></div><div class="ttdeci">bool getFullscreen()</div><div class="ttdoc">If the window is displayed fullscreen (always true on mobile devices)</div></div>
+<div class="ttc" id="anamespacejngl_html_a2d66db6f31c29834ccfa16e80eaea06b"><div class="ttname"><a href="namespacejngl.html#a2d66db6f31c29834ccfa16e80eaea06b">jngl::readPixels</a></div><div class="ttdeci">std::vector&lt; float &gt; readPixels()</div><div class="ttdoc">Read red, green and blue values of the whole window frame buffer.</div></div>
 <div class="ttc" id="anamespacejngl_html_a33936343afa186ee6c6095d8789b92f1"><div class="ttname"><a href="namespacejngl.html#a33936343afa186ee6c6095d8789b92f1">jngl::hideWindow</a></div><div class="ttdeci">void hideWindow()</div><div class="ttdoc">Cleans up the window and unloads everything.</div></div>
 <div class="ttc" id="anamespacejngl_html_a4039aa0026f814387a265a55696cc11e"><div class="ttname"><a href="namespacejngl.html#a4039aa0026f814387a265a55696cc11e">jngl::setFullscreen</a></div><div class="ttdeci">void setFullscreen(bool)</div><div class="ttdoc">Toggle fullscreen window mode.</div></div>
 <div class="ttc" id="anamespacejngl_html_a6258b60ff00bd009838eea0a647279c1"><div class="ttname"><a href="namespacejngl.html#a6258b60ff00bd009838eea0a647279c1">jngl::showWindow</a></div><div class="ttdeci">void showWindow(const std::string &amp;title, int width, int height, bool fullscreen=false, std::pair&lt; int, int &gt; minAspectRatio={ 4, 3 }, std::pair&lt; int, int &gt; maxAspectRatio={ 16, 9 })</div><div class="ttdoc">Creates the main window.</div></div>
@@ -153,5 +157,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
 <div class="ttc" id="anamespacejngl_html_adca649a9f4530deb1d23d36c8be0ce51"><div class="ttname"><a href="namespacejngl.html#adca649a9f4530deb1d23d36c8be0ce51">jngl::getWindowWidth</a></div><div class="ttdeci">int getWindowWidth()</div><div class="ttdoc">Returns the width of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)</div></div>
 <div class="ttc" id="apair_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair</a></div></div>
 <div class="ttc" id="astring_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/string.html">string</a></div></div>
+<div class="ttc" id="avector_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/vector.html">vector</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </body></html>

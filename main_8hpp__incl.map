@@ -1,12 +1,12 @@
 <map id="jngl/main.hpp" name="jngl/main.hpp">
-<area shape="rect" id="node1" title="Defines macros for the main entry point." alt="" coords="207,5,333,32"/>
-<area shape="rect" id="node2" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="45,80,156,107"/>
-<area shape="rect" id="node4" href="$other_8hpp.html" title="Miscellaneous functions." alt="" coords="223,80,317,107"/>
-<area shape="rect" id="node8" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="383,80,485,107"/>
+<area shape="rect" id="node1" title="Defines macros for the main entry point." alt="" coords="192,5,319,32"/>
+<area shape="rect" id="node2" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="44,80,155,107"/>
+<area shape="rect" id="node4" href="$other_8hpp.html" title="Miscellaneous functions." alt="" coords="208,80,303,107"/>
+<area shape="rect" id="node8" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="327,80,429,107"/>
 <area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="5,155,108,181"/>
 <area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/sstream.html" title=" " alt="" coords="132,155,211,181"/>
-<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="329,155,400,181"/>
-<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="235,155,305,181"/>
+<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="235,155,305,181"/>
+<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="329,155,400,181"/>
 <area shape="rect" id="node9" href="$Pixels_8hpp.html" title="Contains jngl::Pixels class." alt="" coords="424,155,527,181"/>
 <area shape="rect" id="node11" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/array.html" title=" " alt="" coords="551,155,613,181"/>
 <area shape="rect" id="node10" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="436,229,515,256"/>
