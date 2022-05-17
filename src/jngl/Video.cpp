@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Video.hpp"
@@ -7,7 +7,7 @@
 
 #ifdef JNGL_VIDEO
 
-#include "../../subprojects/theoraplay/theoraplay.h"
+#include "../theoraplay/theoraplay.h"
 #include "../Sound.hpp"
 #include "../audio.hpp"
 #include "../main.hpp"
