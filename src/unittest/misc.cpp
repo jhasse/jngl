@@ -1,4 +1,4 @@
-// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/Finally.hpp"
@@ -6,6 +6,7 @@
 #include "../jngl/sprite.hpp"
 
 #include <boost/test/unit_test.hpp>
+#include <filesystem>
 
 BOOST_AUTO_TEST_CASE(FinallyTest) {
 	bool called = false;
@@ -39,9 +40,21 @@ BOOST_AUTO_TEST_CASE(FinallyTest) {
 }
 
 BOOST_AUTO_TEST_CASE(halfLoadTest) {
-	BOOST_CHECK_EQUAL(jngl::getWidth("../jngl"), 600);
-	BOOST_CHECK_EQUAL(jngl::getHeight("../jngl"), 300);
-	BOOST_CHECK_THROW(jngl::load("../jngl"), std::runtime_error);
+	std::error_code err;
+	std::filesystem::current_path("data", err);
+	if (err) {
+		std::filesystem::current_path("../data", err); // move out of build/bin folder
+		if (err) {
+			std::filesystem::current_path("../../data", err); // move out of build/Debug folder
+			if (err) {
+				std::filesystem::current_path("../../../data",
+				                              err); // move out of out\build\x64-Debug
+			}
+		}
+	}
+	BOOST_CHECK_EQUAL(jngl::getWidth("jngl"), 600);
+	BOOST_CHECK_EQUAL(jngl::getHeight("jngl"), 300);
+	BOOST_CHECK_THROW(jngl::load("jngl"), std::runtime_error);
 }
 
 BOOST_AUTO_TEST_CASE(getBinaryPath) {
