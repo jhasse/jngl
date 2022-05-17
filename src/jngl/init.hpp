@@ -34,6 +34,9 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 		std::filesystem::current_path("../data", err); // move out of build/bin folder
 		if (err) {
 			std::filesystem::current_path("../../data", err); // move out of build/Debug folder
+			if (err) {
+				std::filesystem::current_path("../../../data", err); // move out of out\build\x64-Debug
+			}
 		}
 	}
 #endif
