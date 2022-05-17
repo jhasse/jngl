@@ -4,6 +4,7 @@
 #include "ImageDataWebP.hpp"
 
 #include <cmath>
+#include <format>
 #include <future>
 #include <thread>
 #include <vector>

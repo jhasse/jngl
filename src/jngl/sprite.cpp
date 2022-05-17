@@ -23,6 +23,7 @@
 #include <boost/qvm/map_vec_mat.hpp>
 #include <boost/qvm/mat_operations3.hpp>
 #include <boost/qvm/vec.hpp>
+#include <format>
 #include <sstream>
 #include <thread>
 #ifndef NOJPEG
