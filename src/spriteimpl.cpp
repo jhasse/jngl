@@ -47,11 +47,11 @@ void setSpriteAlpha(unsigned char alpha) {
 	setSpriteColor(spriteColorRed, spriteColorGreen, spriteColorBlue, alpha);
 }
 
-std::unordered_map<std::string, std::shared_ptr<Sprite>> sprites_;
+std::unordered_map<std::string_view, std::shared_ptr<Sprite>> sprites_;
 
 // halfLoad is used, if we only want to find out the width or height of an image. Load won't throw
 // an exception then
-Sprite& GetSprite(const std::string& filename, const Sprite::LoadType loadType) {
+Sprite& GetSprite(std::string_view filename, const Sprite::LoadType loadType) {
 	auto it = sprites_.find(filename);
 	if (it == sprites_.end()) { // texture hasn't been loaded yet?
 		if (loadType != Sprite::LoadType::HALF) {
@@ -63,7 +63,7 @@ Sprite& GetSprite(const std::string& filename, const Sprite::LoadType loadType) 
 	return *(it->second);
 }
 
-void draw(const std::string& filename, double x, double y) {
+void draw(std::string_view filename, double x, double y) {
 	auto& s = GetSprite(filename);
 	s.setPos(x, y);
 	s.draw();

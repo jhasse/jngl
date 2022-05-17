@@ -10,19 +10,19 @@
 
 namespace jngl {
 
-ImageDataWebP::ImageDataWebP(std::string filename, FILE* file, double scaleFactor)
-: filename(std::move(filename)) {
+ImageDataWebP::ImageDataWebP(std::string_view filename, FILE* file, double scaleFactor)
+: filename(filename) {
 	fseek(file, 0, SEEK_END);
 	auto filesize = ftell(file);
 	fseek(file, 0, SEEK_SET);
 
 	std::vector<uint8_t> buf(filesize);
 	if (!fread(&buf[0], filesize, 1, file)) {
-		throw std::runtime_error(std::string("Couldn't open WebP file. (" + this->filename + ")"));
+		throw std::runtime_error(std::format("Couldn't open WebP file. ({})", filename));
 	}
 
 	if (!WebPGetInfo(&buf[0], filesize, &imgWidth, &imgHeight)) {
-		throw std::runtime_error(std::string("Invalid WebP file. (" + this->filename + ")"));
+		throw std::runtime_error(std::format("Invalid WebP file. ({})", filename));
 	}
 
 	WebPInitDecoderConfig(&config);
