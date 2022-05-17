@@ -1,19 +1,16 @@
-// Copyright 2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Fixture.hpp"
 
-#include "../opengl.hpp"
-
-#include <boost/math/special_functions/round.hpp>
 #include <boost/range/adaptor/reversed.hpp>
 #include <boost/test/unit_test.hpp>
 #include <jngl.hpp>
 
 Fixture::Fixture(const double scaleFactor) {
 	jngl::setScaleFactor(scaleFactor);
-	jngl::showWindow("unit test", boost::math::iround(320 * scaleFactor),
-	                 boost::math::iround(70 * scaleFactor), false, { 32, 7 }, { 32, 7 });
+	jngl::showWindow("unit test", static_cast<int>(std::lround(320 * scaleFactor)),
+	                 static_cast<int>(std::lround(70 * scaleFactor)), false, { 32, 7 }, { 32, 7 });
 	reset();
 	emptyAsciiArt = getAsciiArt();
 	BOOST_CHECK_EQUAL(emptyAsciiArt, R"(
@@ -34,13 +31,12 @@ Fixture::~Fixture() {
 std::string Fixture::getAsciiArt() const {
 	const int w = jngl::getWindowWidth();
 	const int h = jngl::getWindowHeight();
-	std::vector<float> buffer(3 * w * h);
-	glReadPixels(0, 0, w, h, GL_RGB, GL_FLOAT, buffer.data());
+	auto buffer = jngl::readPixels();
 
 	// ASCII art should always have the same size, therefore let's take the scaleFactor into
 	// account:
 	auto reduceFactorAsFloat = static_cast<float>(10 * jngl::getScaleFactor());
-	int reduceFactor = boost::math::iround(reduceFactorAsFloat);
+	int reduceFactor = static_cast<int>(std::lround(reduceFactorAsFloat));
 	BOOST_CHECK_CLOSE(reduceFactorAsFloat, reduceFactor, 1e-6);
 
 	assert(w % reduceFactor == 0);
@@ -76,7 +72,7 @@ std::string Fixture::getAsciiArt() const {
 			const static std::vector<std::string> chars = { "█", "▓", "▒", "░", " " };
 
 			float gray = (cell.at(0) + cell.at(1) + cell.at(2)) / 3.0f;
-			const size_t index = boost::math::iround(gray * float(chars.size() - 1));
+			const size_t index = std::lround(gray * float(chars.size() - 1));
 			assert(index < chars.size());
 			out += chars[index];
 		}

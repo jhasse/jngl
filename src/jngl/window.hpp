@@ -1,4 +1,4 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 /// Functions related to the main window.
@@ -10,6 +10,7 @@
 
 #include <array>
 #include <string>
+#include <vector>
 
 namespace jngl {
 
@@ -50,5 +51,8 @@ enum class Cursor {
     I,
 };
 void setCursor(Cursor);
+
+/// Read red, green and blue values of the whole window frame buffer
+std::vector<float> readPixels();
 
 } // namespace jngl

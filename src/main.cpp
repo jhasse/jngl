@@ -348,6 +348,14 @@ void setTitle(const std::string& title) {
 	return pWindow->SetTitle(title);
 }
 
+std::vector<float> readPixels() {
+	const int w = jngl::getWindowWidth();
+	const int h = jngl::getWindowHeight();
+	std::vector<float> buffer(3 * w * h);
+	glReadPixels(0, 0, w, h, GL_RGB, GL_FLOAT, buffer.data());
+	return buffer;
+}
+
 double getTextWidth(const std::string& text) {
 	return static_cast<double>(pWindow->getTextWidth(text));
 }
