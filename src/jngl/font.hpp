@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Font class and related functions
 /// @file
@@ -17,12 +17,17 @@ class FontImpl;
 /// Font loaded from a TTF or OTF file
 class Font {
 public:
+	/// Creates a font from \a filename in \a size px
 	Font(const std::string& filename, unsigned int size);
-	std::shared_ptr<FontImpl> getImpl();
+
+	/// Uses the font to print something at \a x \a y. The color can be specified using setFontColor.
 	void print(const std::string&, int x, int y);
 
 	/// Draw \a text at \a position
 	void print(const std::string& text, Vec2 position) const;
+
+	/// Internal function
+	std::shared_ptr<FontImpl> getImpl();
 
 private:
 	std::shared_ptr<FontImpl> impl;
