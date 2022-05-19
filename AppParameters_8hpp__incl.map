@@ -1,7 +1,8 @@
 <map id="jngl/AppParameters.hpp" name="jngl/AppParameters.hpp">
-<area shape="rect" id="node1" title="Contains jngl::AppParameters struct." alt="" coords="109,5,308,32"/>
+<area shape="rect" id="node1" title="Contains jngl::AppParameters struct." alt="" coords="173,5,372,32"/>
 <area shape="rect" id="node2" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="111,80,197,107"/>
-<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/optional.html" title=" " alt="" coords="221,80,308,107"/>
+<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="221,80,324,107"/>
+<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/optional.html" title=" " alt="" coords="348,80,435,107"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,155,164,181"/>
 <area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="188,155,259,181"/>
 </map>
