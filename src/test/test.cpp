@@ -425,21 +425,20 @@ void testKeys() {
 			}
 			jngl::setFontColor(pressedFade, pressedFade, pressedFade);
 
-			jngl::pushMatrix();
 			for (const jngl::Vec2& stick :
 			     { jngl::Vec2(controller->state(jngl::controller::LeftStickX),
 			                  -controller->state(jngl::controller::LeftStickY)),
 			       jngl::Vec2(controller->state(jngl::controller::RightStickX),
 			                  -controller->state(jngl::controller::RightStickY)) }) {
 				const float circleRadius = 20;
-				const auto circlePos = jngl::Vec2(530, double(-40 + controllerNr * 110));
 				jngl::setColor(100, 100, 100, 255);
-				jngl::drawEllipse(circlePos, circleRadius, circleRadius);
+				auto circleModelview =
+				    jngl::modelview().translate({ 530, double(-40 + controllerNr * 110) });
+				jngl::drawEllipse(circleModelview, circleRadius, circleRadius);
 				jngl::setColor(255, 255, 255, 255);
-				jngl::drawCircle(circlePos + circleRadius * stick, 4);
+				jngl::drawCircle(circleModelview.translate(circleRadius * stick), 4);
 				jngl::translate(0, 2 * circleRadius + 10);
 			}
-			jngl::popMatrix();
 
 			jngl::setColor(255, 255, 255, 150);
 			jngl::drawRect({500, 40. + double(controllerNr - 1) * 110.}, {300, 120});

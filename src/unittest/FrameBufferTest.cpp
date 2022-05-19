@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE(FrameBuffer) {
 	{
 		auto context = fb.use();
 		context.clear();
-		jngl::drawCircle({0, 0}, 15);
+		jngl::drawCircle(jngl::Vec2{0, 0}, 15);
 	}
 	fb.draw(-160, -35);
 	BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_CASE(FrameBuffer) {
 	{
 		auto context = fb.use();
 		context.clear(0xdd2222_rgb);
-		jngl::drawCircle({40, 0}, 15);
+		jngl::drawCircle(jngl::Vec2{40, 0}, 15);
 	}
 	fb.draw(-160, -35);
 	BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(

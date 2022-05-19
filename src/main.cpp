@@ -484,7 +484,7 @@ void drawLine(const Mat3& modelview, const Vec2 end) {
 }
 
 void drawPoint(const double x, const double y) {
-	pWindow->drawEllipse({ x, y }, { 1, 1 }, 0);
+	drawEllipse(modelview().translate({ x, y }), 1, 1, 0);
 }
 
 int getWindowWidth() {
