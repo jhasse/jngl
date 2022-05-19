@@ -6,12 +6,18 @@
 
 #include "Vec2.hpp"
 
+#include <functional>
 #include <optional>
 
 namespace jngl {
 
+class Work;
+
 /// Parameters used to initialize the main window
 struct AppParameters {
+	/// A factory function which creates the first jngl::Work
+	std::function<std::shared_ptr<jngl::Work>()> start;
+
 	/// Display name of the application which will be used in the window title for example
 	std::string displayName;
 

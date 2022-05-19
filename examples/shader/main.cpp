@@ -54,8 +54,10 @@ private:
 	std::unique_ptr<jngl::ShaderProgram> blurProgram;
 };
 
-std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& params) {
+jngl::AppParameters jnglInit() {
+	jngl::AppParameters params;
 	params.displayName = "Shader Example";
 	params.screenSize = { 1280, 720 };
-	return []() { return std::make_shared<ShaderExample>(); };
+	params.start = []() { return std::make_shared<ShaderExample>(); };
+	return params;
 }

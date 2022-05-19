@@ -187,11 +187,12 @@ private:
 	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
 };
 
-std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& params) {
+jngl::AppParameters jnglInit() {
+	jngl::AppParameters params;
 	params.displayName = "JNGL Test Application";
 	jngl::setPrefix(jngl::getBinaryPath());
 	params.screenSize = { 800, 600 };
-	return []() {
+	params.start = []() {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
 		          << jngl::getDesktopHeight() << std::endl
 		          << "Preferred language: " << jngl::getPreferredLanguage() << std::endl
@@ -202,6 +203,7 @@ std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& param
 		});
 		return std::make_shared<Test>();
 	};
+	return params;
 }
 
 void Test::drawBackground() const {

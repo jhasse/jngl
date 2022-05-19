@@ -21,8 +21,8 @@ namespace jngl {
 class Work;
 } // namespace jngl
 
-/// Implement this function and return a factory function which creates the first jngl::Work
-std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters&);
+/// Implement this function and set AppParameters::start
+jngl::AppParameters jnglInit();
 
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE // iOS
 JNGL_MAIN_BEGIN {                            // NOLINT
@@ -40,8 +40,7 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 		}
 	}
 #endif
-	jngl::AppParameters params;
-	auto workFactory = jnglInit(params);
+	jngl::AppParameters params = jnglInit();
 	auto& app = jngl::App::instance();
 	app.setDisplayName(params.displayName);
 	app.setPixelArt(params.pixelArt);
@@ -82,7 +81,7 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 	                            : int(std::lround(params.screenSize->y * jngl::getScaleFactor())),
 	                 fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
 	                 params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
-	jngl::setWork(workFactory());
+	jngl::setWork(params.start());
 	app.mainLoop();
 }
 JNGL_MAIN_END
