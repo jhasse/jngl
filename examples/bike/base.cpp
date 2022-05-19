@@ -14,14 +14,15 @@ Base::Base() {
 	lines_.emplace_back(jngl::Vec2(452, 295), jngl::Vec2(216, 448));
 }
 
-void Base::DoFrame() {
+void Base::step() {
 	for (auto& line : lines_) {
 		bike_.HandleCollision(line);
 	}
 	bike_.DoFrame();
 }
 
-void Base::Draw() {
+void Base::draw() const {
+	jngl::translate(-jngl::getScreenWidth() / 2.0, -jngl::getScreenHeight() / 2.0);
 	jngl::draw("bg", 0, 0);
-	bike_.Draw();
+	bike_.draw();
 }
