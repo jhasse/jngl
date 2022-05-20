@@ -3,12 +3,12 @@ on:
   push:
 jobs:
   doxygen:
-    runs-on: ubuntu-latest
-    container:
-      image: registry.fedoraproject.org/fedora-minimal:34
+    runs-on: ubuntu-22.04
     steps:
       - name: Install dependencies
-        run: microdnf install -y git graphviz doxygen cmake make tar xz rsync
+        run: |
+         sudo apt update
+         sudo apt install graphviz doxygen cmake
       - uses: actions/checkout@v2
         with:
           persist-credentials: false
