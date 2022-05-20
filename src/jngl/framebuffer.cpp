@@ -106,13 +106,11 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 }
 
 void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) const {
-	pushMatrix();
 	impl->texture.draw(modelview.scale(1, -1).translate({ -impl->width / getScaleFactor() / 2,
 	                                                      -impl->height / getScaleFactor() / 2 }),
 	                   float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
 	                   float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f,
 	                   shaderProgram);
-	popMatrix();
 }
 
 void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
