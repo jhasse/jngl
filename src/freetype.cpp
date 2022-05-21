@@ -84,15 +84,15 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 	left_ = Pixels(bitmap_glyph->left);
 }
 
-void Character::Draw() const {
+void Character::draw(Mat3& modelview) const {
 	if (texture_) {
-		pushMatrix();
-		opengl::translate(static_cast<float>(left_), static_cast<float>(top_));
-		texture_->draw(float(fontColorRed) / 255.0f, float(fontColorGreen) / 255.0f,
-		               float(fontColorBlue) / 255.0f, float(fontColorAlpha) / 255.0f);
-		popMatrix();
+		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE,
+		                   Mat3(modelview)
+		                       .translate({ static_cast<float>(left_), static_cast<float>(top_) })
+		                       .data);
+		texture_->draw();
 	}
-	opengl::translate(static_cast<float>(width_), 0);
+	modelview.translate({ static_cast<float>(width_), 0 });
 }
 
 Pixels Character::getWidth() const {
@@ -228,6 +228,10 @@ void FontImpl::setLineHeight(int h) {
 }
 
 void FontImpl::print(const double x, const double y, const std::string& text) {
+	auto context = Texture::textureShaderProgram->use();
+	glUniform4f(Texture::shaderSpriteColorUniform, float(fontColorRed) / 255.0f,
+	            float(fontColorGreen) / 255.0f, float(fontColorBlue) / 255.0f,
+	            float(fontColorAlpha) / 255.0f);
 	const int xRounded = int(std::lround(x * getScaleFactor()));
 	const int yRounded = int(std::lround(y * getScaleFactor()));
 	std::vector<std::string> lines(splitlines(text));
@@ -235,17 +239,14 @@ void FontImpl::print(const double x, const double y, const std::string& text) {
 	auto lineEnd = lines.end();
 	int lineNr = 0;
 	for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
-		pushMatrix();
-		opengl::translate(static_cast<float>(xRounded),
-		                  static_cast<float>(yRounded + lineHeight * lineNr));
+		auto modelview = jngl::modelview().translate({ static_cast<float>(xRounded),
+						  static_cast<float>(yRounded + lineHeight * lineNr) });
 		++lineNr;
 
 		auto charEnd = lineIter->end();
 		for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
-			GetCharacter(charIter, charEnd).Draw();
+			GetCharacter(charIter, charEnd).draw(modelview);
 		}
-
-		popMatrix();
 	}
 }
 
