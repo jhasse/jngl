@@ -9,7 +9,7 @@ class Line;
 class Bike {
 public:
 	Bike();
-	void Draw();
+	void draw() const;
 	void DoFrame();
 	jngl::Vec2 WheelConnection();
 	void HandleCollision(const Line&);

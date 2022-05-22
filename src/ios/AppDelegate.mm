@@ -15,8 +15,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	jngl::AppParameters params;
-	auto workFactory = jnglInit(params);
+	jngl::AppParameters params = jnglInit();
 	jngl::App::instance().setDisplayName(params.displayName);
 	view = [[JNGLView alloc] initWithFrame:[UIScreen mainScreen].bounds withAppParameters:params];
 
@@ -26,7 +25,7 @@
 
 	[self.window addSubview:view];
 
-	jngl::setWork(workFactory());
+	jngl::setWork(params.start());
 
 	[view drawView:nil];
     [self.window makeKeyAndVisible];

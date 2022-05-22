@@ -1,15 +1,15 @@
-#include <boost/math/special_functions/round.hpp>
 #include <cmath>
 #include <jngl.hpp>
+#include <jngl/init.hpp>
 
 const int screenWidth = 800;
 const int screenHeight = 600;
 
-class Ball {
+class Ball : public jngl::Work {
 public:
 	explicit Ball(const std::string& filename);
-	void draw() const;
-	void Move();
+	void draw() const override;
+	void step() override;
 	void CheckMouse(int x, int y);
 
 private:
@@ -20,29 +20,17 @@ private:
 
 const double timePerFrame = 0.01; // 100 FPS
 
-JNGL_MAIN_BEGIN {
-	jngl::setScaleFactor(
-	    std::floor(std::min(jngl::getDesktopWidth() / 800, jngl::getDesktopHeight() / 600)));
-	jngl::showWindow("Throw Example", boost::math::iround(screenWidth * jngl::getScaleFactor()),
-	                 boost::math::iround(screenHeight * jngl::getScaleFactor()));
-	Ball ball("ball");
-	double oldTime = jngl::getTime();
-	while (jngl::running()) {
-		if (jngl::getTime() - oldTime > timePerFrame) {
-			oldTime += timePerFrame;
-			ball.CheckMouse(static_cast<int>(jngl::getMousePos().x + screenWidth / 2.),
-			                static_cast<int>(jngl::getMousePos().y + screenHeight / 2.));
-			ball.Move();
-		}
-		else
-		{
-			jngl::updateInput();
-			jngl::translate(-screenWidth / 2., -screenHeight / 2.);
-			ball.draw();
-			jngl::swapBuffers();
-		}
-	}
-} JNGL_MAIN_END
+jngl::AppParameters jnglInit() {
+	return {
+		[]() {
+			jngl::setStepsPerSecond(1. / timePerFrame);
+			jngl::setPrefix("../examples/throw");
+			return std::make_shared<Ball>("ball");
+		},
+		"Throw Example",
+		jngl::Vec2(screenWidth, screenHeight),
+	};
+}
 
 Ball::Ball(const std::string& filename)
 : x_(100), y_(100), xSpeed_(200), ySpeed_(200), filename_(filename),
@@ -50,11 +38,13 @@ Ball::Ball(const std::string& filename)
 }
 
 void Ball::draw() const {
+	jngl::translate(-screenWidth / 2., -screenHeight / 2.);
 	jngl::draw("ball", static_cast<int>(x_), static_cast<int>(y_));
 }
 
-void Ball::Move()
-{
+void Ball::step() {
+	CheckMouse(static_cast<int>(jngl::getMousePos().x + screenWidth / 2.),
+	           static_cast<int>(jngl::getMousePos().y + screenHeight / 2.));
 	x_ += xSpeed_ * timePerFrame; // 100 FPS also jedes mal ein hunderstel der Bewegung
 	y_ += ySpeed_ * timePerFrame;
 	xSpeed_ *= 0.99; // Die Geschwindigkeit wird 100 mal pro Sekunde um 1 % langsamer

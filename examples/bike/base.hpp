@@ -3,11 +3,13 @@
 #include "bike.hpp"
 #include "line.hpp"
 
-class Base {
+#include <jngl/work.hpp>
+
+class Base : public jngl::Work {
 public:
 	Base();
-	void DoFrame();
-	void Draw();
+	void step() override;
+	void draw() const override;
 
 private:
 	std::vector<Line> lines_;
