@@ -118,6 +118,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae0f33aa58541161550a5386af801f362"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Mat3.html#ae0f33aa58541161550a5386af801f362">translate</a> (const <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> &amp;v)</td></tr>
 <tr class="memdesc:ae0f33aa58541161550a5386af801f362"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies the matrix with a translation matrix generated from v.  <a href="classjngl_1_1Mat3.html#ae0f33aa58541161550a5386af801f362">More...</a><br /></td></tr>
 <tr class="separator:ae0f33aa58541161550a5386af801f362"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22a91ba99bd918431886c73e5d5a3a51"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Mat3.html#a22a91ba99bd918431886c73e5d5a3a51">translate</a> (<a class="el" href="classjngl_1_1Pixels.html">Pixels</a> x, <a class="el" href="classjngl_1_1Pixels.html">Pixels</a> y)</td></tr>
+<tr class="memdesc:a22a91ba99bd918431886c73e5d5a3a51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies the matrix with a translation matrix generated from (x,y)  <a href="classjngl_1_1Mat3.html#a22a91ba99bd918431886c73e5d5a3a51">More...</a><br /></td></tr>
+<tr class="separator:a22a91ba99bd918431886c73e5d5a3a51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afecf2ee866d5f13bbc8203cac39c4d5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Mat3.html#afecf2ee866d5f13bbc8203cac39c4d5c">scale</a> (float factor)</td></tr>
 <tr class="memdesc:afecf2ee866d5f13bbc8203cac39c4d5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies the matrix by a scaling matrix.  <a href="classjngl_1_1Mat3.html#afecf2ee866d5f13bbc8203cac39c4d5c">More...</a><br /></td></tr>
 <tr class="separator:afecf2ee866d5f13bbc8203cac39c4d5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,10 +142,10 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 <div class="textblock"><p>3x3 matrix </p>
 <p>identical to boost::qvm::mat&lt;float, 3, 3&gt;, but stores the elements column-major in memory </p>
 
-<p class="definition">Definition at line <a class="el" href="Mat3_8hpp_source.html#l00019">19</a> of file <a class="el" href="Mat3_8hpp_source.html">Mat3.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Mat3_8hpp_source.html#l00020">20</a> of file <a class="el" href="Mat3_8hpp_source.html">Mat3.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ae0f33aa58541161550a5386af801f362"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0f33aa58541161550a5386af801f362">&#9670;&nbsp;</a></span>translate()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0f33aa58541161550a5386af801f362">&#9670;&nbsp;</a></span>translate() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -158,6 +161,37 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 </div><div class="memdoc">
 
 <p>Multiplies the matrix with a translation matrix generated from v. </p>
+<dl class="section return"><dt>Returns</dt><dd>*this </dd></dl>
+
+</div>
+</div>
+<a id="a22a91ba99bd918431886c73e5d5a3a51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22a91ba99bd918431886c73e5d5a3a51">&#9670;&nbsp;</a></span>translate() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a>&amp; translate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Pixels.html">Pixels</a>&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Pixels.html">Pixels</a>&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Multiplies the matrix with a translation matrix generated from (x,y) </p>
 <dl class="section return"><dt>Returns</dt><dd>*this </dd></dl>
 
 </div>
