@@ -87,12 +87,10 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 void Character::draw(Mat3& modelview) const {
 	if (texture_) {
 		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE,
-		                   Mat3(modelview)
-		                       .translate({ static_cast<float>(left_), static_cast<float>(top_) })
-		                       .data);
+		                   Mat3(modelview).translate(left_, top_).data);
 		texture_->draw();
 	}
-	modelview.translate({ static_cast<float>(width_), 0 });
+	modelview.translate(width_, 0_px);
 }
 
 Pixels Character::getWidth() const {
@@ -239,8 +237,8 @@ void FontImpl::print(const double x, const double y, const std::string& text) {
 	auto lineEnd = lines.end();
 	int lineNr = 0;
 	for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
-		auto modelview = jngl::modelview().translate({ static_cast<float>(xRounded),
-						  static_cast<float>(yRounded + lineHeight * lineNr) });
+		auto modelview =
+		    jngl::modelview().translate(Pixels(xRounded), Pixels(yRounded + lineHeight * lineNr));
 		++lineNr;
 
 		auto charEnd = lineIter->end();
