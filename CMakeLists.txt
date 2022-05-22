@@ -147,10 +147,9 @@ if(ANDROID OR MSVC OR IOS)
 	set(OGG_INCLUDE_DIRS ${OGG_INCLUDE_DIR} ${libogg_BINARY_DIR}/include)
 	set(OGG_LIBRARY $<TARGET_FILE:ogg>)
 
-	FetchContent_Declare(vorbis
+	CPMAddPackage(NAME vorbis
 		URL https://github.com/xiph/vorbis/archive/v1.3.7.zip
 		URL_HASH SHA1=fb943e21c34a1a2035009c06cfbfd9235af406d0)
-	FetchContent_MakeAvailable(vorbis)
 	target_include_directories(jngl PRIVATE ${vorbis_SOURCE_DIR}/include)
 	target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
 endif()
