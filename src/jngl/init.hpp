@@ -66,8 +66,8 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 		}
 	} else {
 		// Make window as big as possible
-		const double scaleFactor = std::min((jngl::getDesktopWidth() - 50) / params.screenSize->x,
-		                                    (jngl::getDesktopHeight() - 50) / params.screenSize->y);
+		const double scaleFactor = std::min((jngl::getDesktopWidth() - 99) / params.screenSize->x,
+		                                    (jngl::getDesktopHeight() - 99) / params.screenSize->y);
 		if (scaleFactor > 1) {
 			jngl::setScaleFactor(std::floor(scaleFactor));
 		} else {
