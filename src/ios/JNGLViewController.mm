@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #import "JNGLViewController.h"
@@ -74,6 +74,10 @@ JNGLView* jnglView = nullptr;
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	[jnglView touchesCancelled:touches withEvent:event];
+}
+
+- (BOOL)prefersHomeIndicatorAutoHidden {
+	return YES;
 }
 
 @end
