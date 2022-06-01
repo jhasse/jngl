@@ -1,4 +1,4 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl.hpp"
@@ -68,11 +68,11 @@ public:
 		}
 		drawBackground();
 		jngl::setColor(0,0,0,255);
-		jngl::pushMatrix();
-		jngl::translate(650, 450);
-		jngl::rotate(rotate);
-		jngl::drawLine(-50, -50, 50, 50);
-		jngl::popMatrix();
+		jngl::drawLine(jngl::modelview()
+		                   .translate({ 650, 450 })
+		                   .rotate(rotate / 360 * boost::math::constants::pi<double>())
+		                   .translate({ -50, -50 }),
+		               { 100, 100 });
 		jngl::setSpriteAlpha(200);
 		jngl::translate(jngl::getScreenSize() / 2);
 		jngl::rotate(rotate);
@@ -187,11 +187,12 @@ private:
 	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
 };
 
-std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& params) {
+jngl::AppParameters jnglInit() {
+	jngl::AppParameters params;
 	params.displayName = "JNGL Test Application";
 	jngl::setPrefix(jngl::getBinaryPath());
 	params.screenSize = { 800, 600 };
-	return []() {
+	params.start = []() {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
 		          << jngl::getDesktopHeight() << std::endl
 		          << "Preferred language: " << jngl::getPreferredLanguage() << std::endl
@@ -202,6 +203,7 @@ std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& param
 		});
 		return std::make_shared<Test>();
 	};
+	return params;
 }
 
 void Test::drawBackground() const {
@@ -423,21 +425,20 @@ void testKeys() {
 			}
 			jngl::setFontColor(pressedFade, pressedFade, pressedFade);
 
-			jngl::pushMatrix();
 			for (const jngl::Vec2& stick :
 			     { jngl::Vec2(controller->state(jngl::controller::LeftStickX),
 			                  -controller->state(jngl::controller::LeftStickY)),
 			       jngl::Vec2(controller->state(jngl::controller::RightStickX),
 			                  -controller->state(jngl::controller::RightStickY)) }) {
 				const float circleRadius = 20;
-				const auto circlePos = jngl::Vec2(530, double(-40 + controllerNr * 110));
 				jngl::setColor(100, 100, 100, 255);
-				jngl::drawEllipse(circlePos, circleRadius, circleRadius);
+				auto circleModelview =
+				    jngl::modelview().translate({ 530, double(-40 + controllerNr * 110) });
+				jngl::drawEllipse(circleModelview, circleRadius, circleRadius);
 				jngl::setColor(255, 255, 255, 255);
-				jngl::drawCircle(circlePos + circleRadius * stick, 4);
+				jngl::drawCircle(circleModelview.translate(circleRadius * stick), 4);
 				jngl::translate(0, 2 * circleRadius + 10);
 			}
-			jngl::popMatrix();
 
 			jngl::setColor(255, 255, 255, 150);
 			jngl::drawRect({500, 40. + double(controllerNr - 1) * 110.}, {300, 120});

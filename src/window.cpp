@@ -1,4 +1,4 @@
-// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "window.hpp"
@@ -491,38 +491,12 @@ void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-void Window::drawEllipse(const Vec2 mid, const Vec2 size, float startAngle) {
-	glBindVertexArray(opengl::vaoStream);
-	jngl::pushMatrix();
-	jngl::translate(mid);
-	opengl::scale(static_cast<float>(jngl::getScaleFactor()),
-	              static_cast<float>(jngl::getScaleFactor()));
-	auto tmp = jngl::useSimpleShaderProgram();
-	std::vector<float> vertexes;
-	vertexes.push_back(0.f);
-	vertexes.push_back(0.f);
-	for (float t = startAngle; t < 2.f * M_PI; t += 0.1f) {
-		vertexes.push_back(size.x * std::sin(t));
-		vertexes.push_back(-size.y * std::cos(t));
-	}
-	vertexes.push_back(0.f);
-	vertexes.push_back(-size.y);
-	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
-	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), &vertexes[0], GL_STREAM_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, static_cast<GLsizei>(vertexes.size() / 2));
-	jngl::popMatrix();
-}
-
-void Window::drawLine(const Vec2 a, const Vec2 b) const {
+void Window::drawLine(Mat3 modelview, const Vec2 b) const {
 	glBindVertexArray(vaoLine);
-	jngl::pushMatrix();
-	jngl::translate(a);
-	opengl::scale(static_cast<float>((b.x - a.x) * jngl::getScaleFactor()),
-	              static_cast<float>((b.y - a.y) * jngl::getScaleFactor()));
-	auto tmp = useSimpleShaderProgram();
+	auto tmp =
+	    useSimpleShaderProgram(modelview.scale(static_cast<float>(b.x * jngl::getScaleFactor()),
+	                                           static_cast<float>(b.y * jngl::getScaleFactor())));
 	glDrawArrays(GL_LINES, 0, 2);
-	jngl::popMatrix();
 }
 
 void Window::drawRect(const Vec2 pos, const Vec2 size) const {

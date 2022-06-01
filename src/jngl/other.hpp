@@ -51,19 +51,25 @@ unsigned int getStepsPerSecond();
 /// How many times Work::step should be called per second (default: 60)
 void setStepsPerSecond(unsigned int);
 
+/// Toggles MSAA
 void setAntiAliasing(bool enabled);
 
+/// Returns whether MSAA is enabled. If the device doesn't support it, it will always return false.
 bool getAntiAliasing();
 
+/// Toggles V-SYNC
 void setVerticalSync(bool enabled);
 
+/// Returns whether V-SYNC is enabled. Many devices always enable V-SYNC with no way to turn it off.
 bool getVerticalSync();
 
 /// Sets the icon for the window (Desktop-only)
 void setIcon(const std::string& filename);
 
+/// Sets a global prefix which will be prepended whenever images or sounds are loaded
 void setPrefix(const std::string& path);
 
+/// Returns the global prefix set by jngl::setPrefix
 std::string getPrefix();
 
 void setConfigPath(const std::string& path);

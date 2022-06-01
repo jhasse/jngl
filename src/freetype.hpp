@@ -24,7 +24,7 @@ public:
 	Character(Character&&) = delete;
 	Character& operator=(Character&&) = delete;
 	~Character();
-	void Draw() const;
+	void draw(Mat3& modelview) const;
 	Pixels getWidth() const;
 
 private:

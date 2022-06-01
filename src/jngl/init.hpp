@@ -6,12 +6,12 @@
 #pragma once
 
 #include "App.hpp"
+#include "AppParameters.hpp"
 #include "main.hpp"
 #include "screen.hpp"
 #include "work.hpp"
 
 #include <cmath>
-#include <optional>
 
 #if defined(__has_include) && __has_include("filesystem")
 #include <filesystem>
@@ -19,28 +19,10 @@
 
 namespace jngl {
 class Work;
-
-/// Parameters used to initialize the main window
-struct AppParameters {
-	/// Display name of the application which will be used in the window title for example
-	std::string displayName;
-
-	/// Size of the canvas in screen pixels, see jngl::getScreenSize()
-	///
-	/// If not specified JNGL will create a fullscreen Window with the maximum of space available.
-	std::optional<jngl::Vec2> screenSize;
-
-	std::optional<std::pair<int, int>> minAspectRatio;
-	std::optional<std::pair<int, int>> maxAspectRatio;
-
-	/// Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)
-	bool pixelArt = false;
-};
-
 } // namespace jngl
 
-/// Implement this function and return a factory function which creates the first jngl::Work
-std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters&);
+/// Implement this function and set AppParameters::start
+jngl::AppParameters jnglInit();
 
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE // iOS
 JNGL_MAIN_BEGIN {                            // NOLINT
@@ -52,11 +34,13 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 		std::filesystem::current_path("../data", err); // move out of build/bin folder
 		if (err) {
 			std::filesystem::current_path("../../data", err); // move out of build/Debug folder
+			if (err) {
+				std::filesystem::current_path("../../../data", err); // move out of out\build\x64-Debug
+			}
 		}
 	}
 #endif
-	jngl::AppParameters params;
-	auto workFactory = jnglInit(params);
+	jngl::AppParameters params = jnglInit();
 	auto& app = jngl::App::instance();
 	app.setDisplayName(params.displayName);
 	app.setPixelArt(params.pixelArt);
@@ -82,8 +66,8 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 		}
 	} else {
 		// Make window as big as possible
-		const double scaleFactor = std::min((jngl::getDesktopWidth() - 50) / params.screenSize->x,
-		                                    (jngl::getDesktopHeight() - 50) / params.screenSize->y);
+		const double scaleFactor = std::min((jngl::getDesktopWidth() - 99) / params.screenSize->x,
+		                                    (jngl::getDesktopHeight() - 99) / params.screenSize->y);
 		if (scaleFactor > 1) {
 			jngl::setScaleFactor(std::floor(scaleFactor));
 		} else {
@@ -97,7 +81,7 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 	                            : int(std::lround(params.screenSize->y * jngl::getScaleFactor())),
 	                 fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
 	                 params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
-	jngl::setWork(workFactory());
+	jngl::setWork(params.start());
 	app.mainLoop();
 }
 JNGL_MAIN_END

@@ -50,16 +50,16 @@ JNGL_MAIN_BEGIN {
 			jngl::print(text, -100, -200);
 
 			jngl::setColor(255, 0, 0);
-			jngl::drawCircle({-800, -400}, 30); // top left
+			jngl::drawCircle(jngl::Vec2(-800, -400), 30); // top left
 
 			jngl::setColor(255, 255, 0);
-			jngl::drawCircle({800, -400}, 30); // top right
+			jngl::drawCircle(jngl::Vec2(800, -400), 30); // top right
 
 			jngl::setColor(120, 255, 120);
-			jngl::drawCircle({-800, 400}, 30); // bottom left
+			jngl::drawCircle(jngl::Vec2(-800, 400), 30); // bottom left
 
 			jngl::setColor(0, 0, 255);
-			jngl::drawCircle({800, 400}, 30); // bottom right
+			jngl::drawCircle(jngl::Vec2(800, 400), 30); // bottom right
 
 			jngl::pushMatrix();
 			jngl::translate(-300, -200);

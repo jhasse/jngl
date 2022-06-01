@@ -36,8 +36,8 @@ if(Boost_FOUND)
 	target_include_directories(jngl PUBLIC ${Boost_INCLUDE_DIRS})
 else()
 	FetchContent_Declare(boost
-		URL https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_1_78_0.tar.gz
-		URL_HASH SHA256=94ced8b72956591c4775ae2207a9763d3600b30d9d7446562c552f0a14a63be7)
+		URL https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.bz2
+		URL_HASH SHA256=475d589d51a7f8b3ba2ba4eda022b170e562ca3b760ee922c146b6c65856ef39)
 	FetchContent_MakeAvailable(boost)
 	FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
 	target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
@@ -147,10 +147,9 @@ if(ANDROID OR MSVC OR IOS)
 	set(OGG_INCLUDE_DIRS ${OGG_INCLUDE_DIR} ${libogg_BINARY_DIR}/include)
 	set(OGG_LIBRARY $<TARGET_FILE:ogg>)
 
-	FetchContent_Declare(vorbis
+	CPMAddPackage(NAME vorbis
 		URL https://github.com/xiph/vorbis/archive/v1.3.7.zip
 		URL_HASH SHA1=fb943e21c34a1a2035009c06cfbfd9235af406d0)
-	FetchContent_MakeAvailable(vorbis)
 	target_include_directories(jngl PRIVATE ${vorbis_SOURCE_DIR}/include)
 	target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
 endif()
@@ -313,7 +312,7 @@ else()
 					pkg_check_modules(VORBIS vorbis)
 					if(VORBIS_FOUND)
 						target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
-						target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.cpp)
+						target_sources(jngl PRIVATE src/theoraplay/theoraplay.cpp)
 						target_include_directories(jngl PRIVATE ${THEORA_DEC_INCLUDE_DIRS})
 						target_link_libraries(jngl PRIVATE ${VORBIS_LINK_LIBRARIES} ${THEORA_DEC_LINK_LIBRARIES})
 
@@ -392,7 +391,7 @@ else()
 		target_link_libraries(jngl-test jngl)
 		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/jngl.webp "$<TARGET_FILE_DIR:jngl-test>")
 		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/test.ogg "$<TARGET_FILE_DIR:jngl-test>")
-		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/jngl.png "$<TARGET_FILE_DIR:jngl-test>")
+		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/jngl.png "$<TARGET_FILE_DIR:jngl-test>")
 	endif()
 endif()
 
@@ -441,7 +440,7 @@ if(ANDROID OR IOS OR APPLE OR WINDOWS_STORE)
 		target_link_libraries(jngl PRIVATE theoradec)
 		target_compile_definitions(jngl PRIVATE JNGL_VIDEO)
 		target_include_directories(jngl PRIVATE "${theora_SOURCE_DIR}/include")
-		target_sources(jngl PRIVATE subprojects/theoraplay/theoraplay.cpp)
+		target_sources(jngl PRIVATE src/theoraplay/theoraplay.cpp)
 	endif()
 endif()
 

@@ -99,20 +99,39 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 	jngl::translate(position);
 	opengl::scale(1, -1);
 	jngl::translate(0, -impl->height / getScaleFactor());
-	impl->texture.draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
-	                   float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f,
-	                   shaderProgram);
+	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   opengl::modelview.data);
+	} else {
+		glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f,
+		            float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
+		            float(spriteColorAlpha) / 255.0f);
+		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+	}
+	impl->texture.draw();
 	popMatrix();
 }
 
 void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) const {
-	pushMatrix();
-	impl->texture.draw(modelview.scale(1, -1).translate({ -impl->width / getScaleFactor() / 2,
-	                                                      -impl->height / getScaleFactor() / 2 }),
-	                   float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
-	                   float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f,
-	                   shaderProgram);
-	popMatrix();
+	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   modelview.scale(1, -1)
+		                       .translate({ -impl->width / getScaleFactor() / 2,
+		                                    -impl->height / getScaleFactor() / 2 })
+		                       .data);
+	} else {
+		glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f,
+		            float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
+		            float(spriteColorAlpha) / 255.0f);
+		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE,
+		                   modelview.scale(1, -1)
+		                       .translate({ -impl->width / getScaleFactor() / 2,
+		                                    -impl->height / getScaleFactor() / 2 })
+		                       .data);
+	}
+	impl->texture.draw();
 }
 
 void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,

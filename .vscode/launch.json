@@ -41,8 +41,8 @@
 		{
 			"type": "lldb",
 			"request": "launch",
-			"name": "Unit Test",
-			"program": "${workspaceRoot}/build/unittest",
+			"name": "jngl-unittest (LLDB)",
+			"program": "${workspaceRoot}/build/jngl-unittest",
 			"args": [],
 			"cwd": "${workspaceRoot}/build",
 			"preLaunchTask": "build"

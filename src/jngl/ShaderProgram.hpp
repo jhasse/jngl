@@ -33,6 +33,7 @@ public:
 		Context(Context&&) noexcept;
 		Context& operator=(Context&&) = delete;
 
+		static void setUniform(int location, int v0);
 		static void setUniform(int location, float v0, float v1);
 		static void setUniform(int location, float v0, float v1, float v2, float v3);
 

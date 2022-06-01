@@ -1,8 +1,7 @@
 {
 	"version": "2.0.0",
 	"windows": {
-		"command": "C:\\msys64\\usr\\bin\\bash.exe",
-		"args": ["-lc", "([ -f build/build.ninja ] || meson build) && cd build && ninja && $@"]
+		"command": ".vscode/build.bat"
 	},
 	"linux": {
 		"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || meson build) && cd build && ninja && $@"],
