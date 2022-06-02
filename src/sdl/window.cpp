@@ -15,7 +15,7 @@ namespace jngl {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
-: impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), isMouseVisible_(true),
+: impl(std::make_unique<WindowImpl>(width, height)), fullscreen_(fullscreen), isMouseVisible_(true),
   relativeMouseMode(false), anyKeyPressed_(false), width_(width), height_(height),
   fontName_(GetFontFileByName("Arial")) {
 	SDL::init();
@@ -316,6 +316,8 @@ void Window::UpdateInput() {
 			break;
 		case SDL_WINDOWEVENT:
 			if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+				impl->actualWidth = event.window.data1;
+				impl->actualHeight = event.window.data2;
 				updateProjection(event.window.data1, event.window.data2, width_, height_);
 				App::instance().updateProjectionMatrix();
 				glViewport(0, 0, event.window.data1, event.window.data2);
@@ -404,20 +406,20 @@ void Window::setFullscreen(bool f) {
 }
 
 #ifdef _WIN32
-// TODO: Avoid this duplicated code
-
 int Window::getMouseX() const {
 	if (relativeMouseMode) {
 		return mousex_;
 	}
-	return mousex_ - (width_ - canvasWidth) / 2;
+	return std::lround((mousex_ - (width_ - canvasWidth) / 2) *
+	                   (float(width_) / impl->actualWidth));
 }
 
 int Window::getMouseY() const {
 	if (relativeMouseMode) {
 		return mousey_;
 	}
-	return mousey_ - (height_ - canvasHeight) / 2;
+	return std::lround((mousey_ - (height_ - canvasHeight) / 2) *
+	                   (float(height_) / impl->actualHeight));
 }
 #endif
 
