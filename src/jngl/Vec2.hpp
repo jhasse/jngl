@@ -62,10 +62,10 @@ public:
 
 };
 
-} // namespace jngl
-
 /// Prints the vector like this: [x=…, y=…]
-std::ostream& operator<<(std::ostream&, const jngl::Vec2&);
+std::ostream& operator<<(std::ostream&, const Vec2&);
+
+} // namespace jngl
 
 #if BOOST_VERSION >= 106200 || __has_include("boost/qvm/vec_traits.hpp")
 #include <boost/qvm/vec_traits.hpp>

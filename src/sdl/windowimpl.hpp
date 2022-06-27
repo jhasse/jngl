@@ -1,4 +1,4 @@
-// Copyright 2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -19,7 +19,7 @@ namespace jngl {
 
 class WindowImpl {
 public:
-	WindowImpl() = default;
+	WindowImpl(float width, float height) : actualWidth(width), actualHeight(height) {}
 	~WindowImpl() {
 		SDL_GL_DeleteContext(context);
 		SDL_DestroyWindow(sdlWindow);
@@ -32,6 +32,11 @@ public:
 	SDL_Window* sdlWindow = nullptr;
 	SDL_GLContext context = nullptr;
 	optional<SDL_FingerID> currentFingerId;
+
+	/// UWP windows can be resized, no way around. So we save the actual window size here for mouse
+	/// input to work:
+	float actualWidth;
+	float actualHeight;
 };
 
 } // namespace jngl
