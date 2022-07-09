@@ -40,4 +40,8 @@ void TextLine::draw() const {
 	fontImpl->print(getX(), getY() + lineSpacing / 2. / getScaleFactor(), text);
 }
 
+void TextLine::setText(std::string text) {
+	this->text = std::move(text);
+}
+
 } // namespace jngl

@@ -19,6 +19,7 @@ public:
 	TextLine(Font&, std::string text);
 	void step() override;
 	void draw() const override;
+	void setText(std::string);
 
 private:
 	std::string text;
