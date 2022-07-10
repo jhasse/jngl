@@ -1,4 +1,4 @@
-// Copyright 2019-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "SoundFile.hpp"
@@ -35,11 +35,13 @@ public:
 	Audio() {
 		device_ = alcOpenDevice(nullptr);
 		if (device_ == nullptr) {
-			throw std::runtime_error("Could not open audio device.");
+			jngl::debugLn("Could not open audio device.");
+			return;
 		}
 		context_ = alcCreateContext(device_, nullptr);
 		if (context_ == nullptr) {
-			throw std::runtime_error("Could not create audio context.");
+			jngl::debugLn("Could not create audio context.");
+			return;
 		}
 		alcMakeContextCurrent(context_);
 	}
@@ -53,6 +55,32 @@ public:
 		alcMakeContextCurrent(nullptr);
 		alcDestroyContext(context_);
 		alcCloseDevice(device_);
+	}
+	void checkAlError() {
+		if (context_ == nullptr) {
+			return;
+		}
+		switch (alGetError()) {
+		case AL_NO_ERROR:
+			break;
+		case AL_INVALID_NAME:
+			debugLn("Invalid name paramater passed to AL call.");
+			break;
+		case AL_INVALID_ENUM:
+			debugLn("Invalid enum parameter passed to AL call.");
+			break;
+		case AL_INVALID_VALUE:
+			debugLn("Invalid value parameter passed to AL call.");
+			break;
+		case AL_INVALID_OPERATION:
+			debugLn("Illegal AL call.");
+			break;
+		case AL_OUT_OF_MEMORY:
+			debugLn("Not enough memory.");
+			break;
+		default:
+			debugLn("Unknown OpenAL error.");
+		}
 	}
 	static bool IsStopped(std::shared_ptr<Sound>& s) {
 		return s->isStopped();
@@ -83,6 +111,10 @@ private:
 	ALCdevice* device_ = nullptr;
 	ALCcontext* context_ = nullptr;
 };
+
+void checkAlError() {
+	GetAudio().checkAlError();
+}
 
 SoundFile::SoundFile(const std::string& filename) : params(std::make_unique<SoundParams>()) {
 	debug("Decoding ");
