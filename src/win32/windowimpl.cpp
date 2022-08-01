@@ -12,6 +12,7 @@
 #include "unicode.hpp"
 
 #include <algorithm>
+#include <atomic>
 #include <cassert>
 #include <cmath>
 #include <epoxy/wgl.h>
