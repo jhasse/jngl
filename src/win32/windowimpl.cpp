@@ -371,12 +371,16 @@ void Window::UpdateInput() {
 			mouseDown_.at(2) = false;
 			mousePressed_.at(2) = false;
 			break;
+		case WM_SYSKEYDOWN:
+			debugLn("WM_SYSKEYDOWN");
 		case WM_KEYDOWN:
 			keyDown_[msg.wParam] = true;
 			keyPressed_[msg.wParam] = true;
 			anyKeyPressed_ = true;
 			impl->distinguishLeftRight();
 			break;
+		case WM_SYSKEYUP:
+			debugLn("WM_SYSKEYUP");
 		case WM_KEYUP: {
 			keyDown_[msg.wParam] = false;
 			keyPressed_[msg.wParam] = false;
