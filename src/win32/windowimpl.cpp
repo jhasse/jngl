@@ -556,6 +556,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	}
 	case WM_SYSCOMMAND: // Intercept System Commands
 		switch (wParam) {
+		case SC_KEYMENU:
+			debugLn("Ignoring SC_KEYMENU (AltL / F10 menu).");
+			return 0;
 		case SC_SCREENSAVE:   // Screensaver Trying To Start?
 		case SC_MONITORPOWER: // Monitor Trying To Enter Powersave?
 			return 0;         // Prevent From Happening
