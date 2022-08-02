@@ -57,6 +57,14 @@ android:
   script:
     - make -C android
 
+SteamOS:
+  image: registry.gitlab.steamos.cloud/steamrt/soldier/sdk
+  stage: build
+  script:
+    - apt-get install -y libboost-dev
+    - cmake -Bbuild-steamos -GNinja -DCMAKE_BUILD_TYPE=Debug
+    - cmake --build build-steamos
+
 pages:
   stage: deploy
   script:
