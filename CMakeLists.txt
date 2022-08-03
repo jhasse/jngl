@@ -396,21 +396,21 @@ else()
 endif()
 
 if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
-	FetchContent_Declare(webp
+	CPMAddPackage(NAME webp
 		GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
-		GIT_TAG e0241154901620a3dc6c3929463608b9bf2c36aa)
-	set(WEBP_BUILD_ANIM_UTILS OFF CACHE BOOL "Build animation utilities." FORCE)
-	set(WEBP_BUILD_CWEBP OFF CACHE BOOL "Build the cwebp command line tool." FORCE)
-	set(WEBP_BUILD_DWEBP OFF CACHE BOOL "Build the dwebp command line tool." FORCE)
-	set(WEBP_BUILD_GIF2WEBP OFF CACHE BOOL "Build the gif2webp conversion tool." FORCE)
-	set(WEBP_BUILD_IMG2WEBP OFF CACHE BOOL "Build the img2webp animation tool." FORCE)
-	set(WEBP_BUILD_VWEBP OFF CACHE BOOL "Build the vwebp viewer tool." FORCE)
-	set(WEBP_BUILD_WEBPINFO OFF CACHE BOOL "Build the webpinfo command line tool." FORCE)
-	set(WEBP_BUILD_WEBPMUX OFF CACHE BOOL "Build the webpmux command line tool." FORCE)
-	set(WEBP_BUILD_EXTRAS OFF CACHE BOOL "Build extras." FORCE)
-	FetchContent_MakeAvailable(webp)
-	FetchContent_GetProperties(webp SOURCE_DIR WEBP_SRC_DIR)
-	target_include_directories(jngl PRIVATE ${WEBP_SRC_DIR}/src)
+		GIT_TAG e0241154901620a3dc6c3929463608b9bf2c36aa
+		OPTIONS
+			"WEBP_BUILD_ANIM_UTILS OFF"
+			"WEBP_BUILD_CWEBP OFF"
+			"WEBP_BUILD_DWEBP OFF"
+			"WEBP_BUILD_GIF2WEBP OFF"
+			"WEBP_BUILD_IMG2WEBP OFF"
+			"WEBP_BUILD_VWEBP OFF"
+			"WEBP_BUILD_WEBPINFO OFF"
+			"WEBP_BUILD_WEBPMUX OFF"
+			"WEBP_BUILD_EXTRAS OFF"
+	)
+	target_include_directories(jngl PRIVATE ${webp_SOURCE_DIR}/src)
 	target_link_libraries(jngl PRIVATE webpdecode webpdspdecode webputilsdecode)
 	# Note: For some reason it's important to add webp last for MSVC. Otherwise other CMake
 	# projects linking JNGL will get:
