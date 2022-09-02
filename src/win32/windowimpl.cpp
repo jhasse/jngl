@@ -12,6 +12,7 @@
 #include "unicode.hpp"
 
 #include <algorithm>
+#include <atomic>
 #include <cassert>
 #include <cmath>
 #include <epoxy/wgl.h>
@@ -43,12 +44,34 @@ public:
 	int relativeX = 0;
 	int relativeY = 0;
 	std::function<void()> distinguishLeftRight;
+	Window* window;
+	std::atomic_bool clearInputAfterFocusLoss{false};
 
 	static void ReleaseDC(HWND, HDC);
 	static void ReleaseRC(HGLRC);
 
 	bool InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR);
 	void Init(const std::string& title, bool multisample);
+
+	/// Attention: Will be called on a different thread as WM_SETFOCUS and WM_KILLFOCUS are unqueued
+	/// messages.
+	void onFocusChange(bool focus) {
+		static bool timePeriodActive = false;
+		if (focus) {
+			if (!timePeriodActive) {
+				timeBeginPeriod(1); // Tells Windows to use more accurate timers
+				timePeriodActive = true;
+				window->resetFrameLimiter(); // sleepCorrectionFactor needs to be resetted since we
+				                             // just changed the behaviour of the sleep function.
+			}
+		} else {
+			if (timePeriodActive) {
+				timeEndPeriod(1);
+				timePeriodActive = false;
+			}
+			clearInputAfterFocusLoss = true;
+		}
+	}
 };
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -119,6 +142,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 : impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), isMouseVisible_(true),
   relativeMouseMode(false), anyKeyPressed_(false), width_(width), height_(height),
   fontName_(GetFontFileByName("Arial")) {
+	impl->window = this;
 	impl->distinguishLeftRight = [this]() {
 		int codesToCheck[] = { GetKeyCode(jngl::key::ShiftL),   GetKeyCode(jngl::key::ShiftR),
 			                   GetKeyCode(jngl::key::ControlL), GetKeyCode(jngl::key::ControlR),
@@ -178,7 +202,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		                   CW_USEDEFAULT,
 		                   WindowRect.right - WindowRect.left, // Calculate Window Width
 		                   WindowRect.bottom - WindowRect.top, // Calculate Window Height
-		                   nullptr, nullptr, hInstance, this),
+		                   nullptr, nullptr, hInstance, impl.get()),
 		    DestroyWindow);
 		if (!impl->pWindowHandle_) {
 			throw std::runtime_error("Window creation error.");
@@ -371,12 +395,16 @@ void Window::UpdateInput() {
 			mouseDown_.at(2) = false;
 			mousePressed_.at(2) = false;
 			break;
+		case WM_SYSKEYDOWN:
+			debugLn("WM_SYSKEYDOWN");
 		case WM_KEYDOWN:
 			keyDown_[msg.wParam] = true;
 			keyPressed_[msg.wParam] = true;
 			anyKeyPressed_ = true;
 			impl->distinguishLeftRight();
 			break;
+		case WM_SYSKEYUP:
+			debugLn("WM_SYSKEYUP");
 		case WM_KEYUP: {
 			keyDown_[msg.wParam] = false;
 			keyPressed_[msg.wParam] = false;
@@ -433,6 +461,27 @@ void Window::UpdateInput() {
 		SetMouse(width_ / 2, height_ / 2);
 		mousex_ -= width_ / 2;
 		mousey_ -= height_ / 2;
+	}
+	if (impl->clearInputAfterFocusLoss) {
+		impl->clearInputAfterFocusLoss = false;
+		for (auto& it : keyDown_) {
+			it.second = false;
+		}
+		for (auto& it : keyPressed_) {
+			it.second = false;
+		}
+		for (auto& it : characterDown_) {
+			it.second = false;
+		}
+		for (auto& it : characterPressed_) {
+			it.second = false;
+		}
+		for (auto& b : mouseDown_) {
+			b = false;
+		}
+		for (auto& b : mousePressed_) {
+			b = false;
+		}
 	}
 }
 
@@ -545,10 +594,9 @@ bool Window::getKeyPressed(const std::string& key) {
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	static bool timePeriodActive = false;
 	switch (uMsg) {
 	case WM_NCCREATE: {
-		// Store Window* pointer passed to CreateWindowEx:
+		// Store WindowImpl* pointer passed to CreateWindowEx:
 		SetWindowLongPtr(
 		    hWnd, GWLP_USERDATA,
 		    reinterpret_cast<LONG_PTR>(reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams));
@@ -556,6 +604,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	}
 	case WM_SYSCOMMAND: // Intercept System Commands
 		switch (wParam) {
+		case SC_KEYMENU:
+			debugLn("Ignoring SC_KEYMENU (AltL / F10 menu).");
+			return 0;
 		case SC_SCREENSAVE:   // Screensaver Trying To Start?
 		case SC_MONITORPOWER: // Monitor Trying To Enter Powersave?
 			return 0;         // Prevent From Happening
@@ -566,20 +617,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		return 0;           // Jump Back
 	case WM_SETFOCUS:
 		debugLn("Window got focus.");
-		if (!timePeriodActive) {
-			timeBeginPeriod(1); // Tells Windows to use more accurate timers
-			timePeriodActive = true;
-			const auto self = reinterpret_cast<Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-			self->resetFrameLimiter(); // sleepCorrectionFactor needs to be resetted since we
-			                           // just changed the behaviour of the sleep function.
-		}
+		reinterpret_cast<WindowImpl*>(GetWindowLongPtr(hWnd, GWLP_USERDATA))->onFocusChange(true);
 		break;
 	case WM_KILLFOCUS:
 		debugLn("Window lost focus.");
-		if (timePeriodActive) {
-			timeEndPeriod(1);
-			timePeriodActive = false;
-		}
+		reinterpret_cast<WindowImpl*>(GetWindowLongPtr(hWnd, GWLP_USERDATA))->onFocusChange(false);
 		break;
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);

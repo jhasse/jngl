@@ -137,8 +137,8 @@ if (UNIX AND NOT EMSCRIPTEN)
     endif()
 endif()
 
+include(cmake/CPM.cmake)
 if(ANDROID OR MSVC OR IOS)
-	include(cmake/CPM.cmake)
 	CPMAddPackage(NAME libogg
 		URL http://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.xz
 		URL_HASH SHA256=c4d91be36fc8e54deae7575241e03f4211eb102afb3fc0775fbbc1b740016705
@@ -147,10 +147,9 @@ if(ANDROID OR MSVC OR IOS)
 	set(OGG_INCLUDE_DIRS ${OGG_INCLUDE_DIR} ${libogg_BINARY_DIR}/include)
 	set(OGG_LIBRARY $<TARGET_FILE:ogg>)
 
-	FetchContent_Declare(vorbis
+	CPMAddPackage(NAME vorbis
 		URL https://github.com/xiph/vorbis/archive/v1.3.7.zip
 		URL_HASH SHA1=fb943e21c34a1a2035009c06cfbfd9235af406d0)
-	FetchContent_MakeAvailable(vorbis)
 	target_include_directories(jngl PRIVATE ${vorbis_SOURCE_DIR}/include)
 	target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
 endif()
@@ -397,21 +396,21 @@ else()
 endif()
 
 if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
-	FetchContent_Declare(webp
+	CPMAddPackage(NAME webp
 		GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
-		GIT_TAG e0241154901620a3dc6c3929463608b9bf2c36aa)
-	set(WEBP_BUILD_ANIM_UTILS OFF CACHE BOOL "Build animation utilities." FORCE)
-	set(WEBP_BUILD_CWEBP OFF CACHE BOOL "Build the cwebp command line tool." FORCE)
-	set(WEBP_BUILD_DWEBP OFF CACHE BOOL "Build the dwebp command line tool." FORCE)
-	set(WEBP_BUILD_GIF2WEBP OFF CACHE BOOL "Build the gif2webp conversion tool." FORCE)
-	set(WEBP_BUILD_IMG2WEBP OFF CACHE BOOL "Build the img2webp animation tool." FORCE)
-	set(WEBP_BUILD_VWEBP OFF CACHE BOOL "Build the vwebp viewer tool." FORCE)
-	set(WEBP_BUILD_WEBPINFO OFF CACHE BOOL "Build the webpinfo command line tool." FORCE)
-	set(WEBP_BUILD_WEBPMUX OFF CACHE BOOL "Build the webpmux command line tool." FORCE)
-	set(WEBP_BUILD_EXTRAS OFF CACHE BOOL "Build extras." FORCE)
-	FetchContent_MakeAvailable(webp)
-	FetchContent_GetProperties(webp SOURCE_DIR WEBP_SRC_DIR)
-	target_include_directories(jngl PRIVATE ${WEBP_SRC_DIR}/src)
+		GIT_TAG e0241154901620a3dc6c3929463608b9bf2c36aa
+		OPTIONS
+			"WEBP_BUILD_ANIM_UTILS OFF"
+			"WEBP_BUILD_CWEBP OFF"
+			"WEBP_BUILD_DWEBP OFF"
+			"WEBP_BUILD_GIF2WEBP OFF"
+			"WEBP_BUILD_IMG2WEBP OFF"
+			"WEBP_BUILD_VWEBP OFF"
+			"WEBP_BUILD_WEBPINFO OFF"
+			"WEBP_BUILD_WEBPMUX OFF"
+			"WEBP_BUILD_EXTRAS OFF"
+	)
+	target_include_directories(jngl PRIVATE ${webp_SOURCE_DIR}/src)
 	target_link_libraries(jngl PRIVATE webpdecode webpdspdecode webputilsdecode)
 	# Note: For some reason it's important to add webp last for MSVC. Otherwise other CMake
 	# projects linking JNGL will get:

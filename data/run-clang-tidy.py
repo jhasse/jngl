@@ -102,6 +102,7 @@ def main():
     # Load the database and extract all files.
     database = json.load(open(os.path.join(build_path, db_path)))
     files = [entry['file'] for entry in database]
+    files = [x for x in files if os.path.abspath('../src') in x]
 
     max_task = multiprocessing.cpu_count()
 

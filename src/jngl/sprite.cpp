@@ -162,23 +162,45 @@ void Sprite::step() {
 void Sprite::draw() const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
-	texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
-	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
+	auto context = Texture::textureShaderProgram->use();
+	glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f,
+	            float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
+	            float(spriteColorAlpha) / 255.0f);
+	glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+	texture->draw();
 	popMatrix();
 }
 
 void Sprite::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) const {
 	modelview *=
 	    boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. }));
-	texture->draw(modelview, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
-	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f, shaderProgram);
+	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   modelview.data);
+	} else {
+		glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f,
+		            float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
+		            float(spriteColorAlpha) / 255.0f);
+		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, modelview.data);
+	}
+	texture->draw();
 }
 
 void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
-	texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
-	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f, shaderProgram);
+	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+			opengl::modelview.data);
+	}
+	else {
+		glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
+			float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
+		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+	}
+	texture->draw();
 	popMatrix();
 }
 
@@ -187,8 +209,17 @@ void Sprite::drawScaled(float xfactor, float yfactor,
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	opengl::scale(xfactor, yfactor);
-	texture->draw(float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
-	              float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f, shaderProgram);
+		auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+			opengl::modelview.data);
+	}
+	else {
+		glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
+			float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
+		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+	}
+	texture->draw();
 	popMatrix();
 }
 

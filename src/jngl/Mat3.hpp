@@ -1,4 +1,4 @@
-// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Mat3 class
 /// @file
@@ -11,6 +11,7 @@
 
 namespace jngl {
 
+class Pixels;
 class Vec2;
 
 /// 3x3 matrix
@@ -28,6 +29,11 @@ public:
 	///
 	/// \return *this
 	Mat3& translate(const Vec2& v);
+
+	/// Multiplies the matrix with a translation matrix generated from (x,y)
+	///
+	/// \return *this
+	Mat3& translate(Pixels x, Pixels y);
 
 	/// Multiplies the matrix by a scaling matrix
 	///

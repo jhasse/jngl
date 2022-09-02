@@ -20,6 +20,8 @@ Switch<sup><a href="#fn1">1</a></sup> and the Web.
 
 ## Games
 
+* [**Boomshine Plus**](https://bixense.com/boomshineplus/)<br>
+  Simple and chilly, but addictive puzzle game for Android, iOS and PC
 * [**Portal Dogs**](https://portaldogs.com)<br>
   Puzzle platformer available for the Nintendo Switch, Android and on Steam
 * [**Controller Brawler Repair Force**](https://gitlab.com/jhasse/ggj2020)<br>
