@@ -47,7 +47,15 @@ namespace easing {
 float elastic(float t) {
 	const float c4 = (2 * M_PI) / 3;
 
-	return t == 0 ? 0 : t == 1 ? 1 : pow(2, -10 * t) * sin((t * 10 - 0.75) * c4) + 1;
+	return t <= 0 ? 0 : t >= 1 ? 1 : pow(2, -10 * t) * sin((t * 10 - 0.75) * c4) + 1;
+}
+
+float cubic(float t) {
+	return t < 0 ? 0 : t > 1 ? 1 : 1.f - std::pow(1.f - t, 3.f);
+}
+
+float expo(float t) {
+	return t < 0 ? 0 : t >= 1 ? 1 : 1 - std::pow(2, -10 * t);
 }
 
 } // namespace easing

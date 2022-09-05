@@ -51,6 +51,8 @@ private:
 namespace easing {
 
 float elastic(float);
+float cubic(float);
+float expo(float);
 
 } // namespace easing
 
