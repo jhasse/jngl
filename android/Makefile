@@ -5,7 +5,7 @@ ifeq ($(UNAME_S),Linux)
 endif
 ifeq ($(UNAME_S),Darwin)
 	ANDROID_PLATFORM := darwin
-	BOOST_PATH := /usr/local/include/boost
+	BOOST_PATH := /opt/homebrew/include/boost
 endif
 
 all: gradle
