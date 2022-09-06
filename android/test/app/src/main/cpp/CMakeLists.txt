@@ -33,15 +33,3 @@ target_link_libraries(jngl-test
     z
     jngl
 )
-
-
-add_library(bootstrap SHARED bootstrap.cpp)
-
-target_include_directories(bootstrap PRIVATE
-    ${ANDROID_NDK}/sources/android/native_app_glue)
-
-# add lib dependencies
-target_link_libraries(bootstrap
-    android
-    native_app_glue
-    log)
