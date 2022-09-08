@@ -64,6 +64,8 @@ SteamOS:
     - apt-get install -y libboost-dev
     - cmake -Bbuild-steamos -GNinja -DCMAKE_BUILD_TYPE=Debug
     - cmake --build build-steamos
+    - cmake -Bbuild-steamos-release -GNinja -DCMAKE_BUILD_TYPE=Release -DJNGL_VIDEO=0 -DJNGL_JPEG=0 -DJNGL_BUILD_WEBP_FROM_SOURCE=1 -DBUILD_SHARED_LIBS=0
+    - cmake --build build-steamos-release
 
 pages:
   stage: deploy

@@ -46,6 +46,12 @@ endif()
 option(JNGL_VIDEO "Enable Theora video playback" ON)
 option(JNGL_JPEG "Enable JPEG support if libjpeg is available" ON)
 
+set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
+if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
+	set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT ON)
+endif()
+option(JNGL_BUILD_WEBP_FROM_SOURCE "Build libwebp from source instead of using the system version" ${JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT})
+
 set(ALSOFT_TESTS OFF CACHE BOOL "Build and install test programs" FORCE)
 set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
 set(ALSOFT_UTILS OFF CACHE BOOL "Build and install utility programs" FORCE)
@@ -283,7 +289,7 @@ else()
 	else()
 		find_package(OpenAL REQUIRED)
 
-		if(NOT EMSCRIPTEN)
+		if(NOT JNGL_BUILD_WEBP_FROM_SOURCE)
 			find_package(WebP)
 			if(WebP_FOUND)
 				target_link_libraries(jngl PRIVATE ${WEBP_LIBRARIES})
@@ -395,7 +401,7 @@ else()
 	endif()
 endif()
 
-if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
+if(JNGL_BUILD_WEBP_FROM_SOURCE)
 	CPMAddPackage(NAME webp
 		GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
 		GIT_TAG e0241154901620a3dc6c3929463608b9bf2c36aa
