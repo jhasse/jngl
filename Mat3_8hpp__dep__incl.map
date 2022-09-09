@@ -1,7 +1,9 @@
 <map id="jngl/Mat3.hpp" name="jngl/Mat3.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Mat3 class." alt="" coords="127,5,253,32"/>
-<area shape="rect" id="node2" href="$framebuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="5,80,188,107"/>
-<area shape="rect" id="node5" href="$matrix_8hpp.html" title="Functions related to the global ModelView matrix." alt="" coords="212,80,355,107"/>
-<area shape="rect" id="node3" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="131,155,249,181"/>
-<area shape="rect" id="node4" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="147,229,233,256"/>
+<area shape="rect" id="node1" title="Contains jngl::Mat3 class." alt="" coords="143,5,269,32"/>
+<area shape="rect" id="node2" href="$framebuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="5,155,188,181"/>
+<area shape="rect" id="node5" href="$matrix_8hpp.html" title="Functions related to the global ModelView matrix." alt="" coords="135,80,277,107"/>
+<area shape="rect" id="node6" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="301,80,460,107"/>
+<area shape="rect" id="node3" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="192,229,311,256"/>
+<area shape="rect" id="node4" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="208,304,295,331"/>
+<area shape="rect" id="node7" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="315,155,449,181"/>
 </map>
