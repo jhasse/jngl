@@ -225,6 +225,28 @@ void FontImpl::setLineHeight(int h) {
 	lineHeight = h;
 }
 
+void FontImpl::print(Mat3 modelview, const std::string& text) {
+	auto context = Texture::textureShaderProgram->use();
+	glUniform4f(Texture::shaderSpriteColorUniform, float(fontColorRed) / 255.0f,
+	            float(fontColorGreen) / 255.0f, float(fontColorBlue) / 255.0f,
+	            float(fontColorAlpha) / 255.0f);
+	std::vector<std::string> lines(splitlines(text));
+
+	auto lineEnd = lines.end();
+	auto lineIter = lines.begin();
+	while (true) {
+		auto charEnd = lineIter->end();
+		Mat3 modelviewCopy = modelview;
+		for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
+			GetCharacter(charIter, charEnd).draw(modelviewCopy);
+		}
+		if (++lineIter == lineEnd) {
+			break;
+		}
+		modelview.translate(Pixels(0), Pixels(lineHeight));
+	}
+}
+
 void FontImpl::print(const double x, const double y, const std::string& text) {
 	auto context = Texture::textureShaderProgram->use();
 	glUniform4f(Texture::shaderSpriteColorUniform, float(fontColorRed) / 255.0f,
