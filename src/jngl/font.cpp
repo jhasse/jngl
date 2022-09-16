@@ -53,6 +53,10 @@ void Font::print(const std::string& text, const Vec2 position) const {
 	impl->print(position.x, position.y, text);
 }
 
+void Font::print(const Mat3& modelview, const std::string& text) const {
+	impl->print(modelview, text);
+}
+
 std::shared_ptr<FontImpl> Font::getImpl() {
 	return impl;
 }

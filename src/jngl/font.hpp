@@ -13,6 +13,7 @@
 namespace jngl {
 
 class FontImpl;
+class Mat3;
 
 /// Font loaded from a TTF or OTF file
 class Font {
@@ -25,6 +26,9 @@ public:
 
 	/// Draw \a text at \a position
 	void print(const std::string& text, Vec2 position) const;
+
+	/// Draw \a text using \a modelview
+	void print(const Mat3& modelview, const std::string& text) const;
 
 	/// Internal function
 	std::shared_ptr<FontImpl> getImpl();
