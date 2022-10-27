@@ -137,8 +137,6 @@ WindowImpl::WindowImpl(Window* window, const std::pair<int, int> minAspectRatio,
 	app->onInputEvent = engine_handle_input;
 	jngl::debugLn("Handler set.");
 
-	android_asset_manager = app->activity->assetManager;
-	assert(android_asset_manager);
 	app->activity->vm->AttachCurrentThread(&env, nullptr);
 }
 

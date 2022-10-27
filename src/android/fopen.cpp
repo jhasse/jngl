@@ -2,6 +2,8 @@
 
 #include "fopen.hpp"
 
+#include "../jngl/main.hpp"
+
 #include <errno.h>
 #include <android/asset_manager.h>
 #include <boost/algorithm/string/replace.hpp>
@@ -23,8 +25,6 @@ static int android_close(void* cookie) {
 	return 0;
 }
 
-AAssetManager* android_asset_manager = NULL;
-
 FILE* android_fopen(const char* fname, const char* mode) {
 	if (mode[0] == 'w') return NULL;
 
@@ -35,7 +35,7 @@ FILE* android_fopen(const char* fname, const char* mode) {
 	std::string tmp(fname);
 	boost::replace_all(tmp, "/./", "/");
 
-	AAsset* asset = AAssetManager_open(android_asset_manager, tmp.c_str(), 0);
+	AAsset* asset = AAssetManager_open(jngl::androidApp->activity->assetManager, tmp.c_str(), 0);
 	if (!asset) return NULL;
 
 	return funopen(asset, android_read, android_write, android_seek, android_close);
