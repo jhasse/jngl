@@ -83,4 +83,9 @@ protected:
 	float height = 0;
 };
 
+template <class Box> bool contains(const Box& box, const Vec2 point) {
+	return (box.getX() <= point.x && point.x < box.getX() + box.getWidth() &&
+	        box.getY() <= point.y && point.y < box.getY() + box.getHeight());
+}
+
 } // namespace jngl
