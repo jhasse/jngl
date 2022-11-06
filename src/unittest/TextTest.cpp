@@ -9,21 +9,26 @@
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_CASE(CharacterTest) {
-	Fixture f(1);
+	Fixture f(2);
 	jngl::Font font("../data/Arial.ttf", 40);
 	jngl::Text t("m ö o ß");
 	t.setFont(font);
 	t.setPos(-110, -20);
 	t.draw();
-	BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
+	const auto output = R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-▒           ░        ░         ▒
-▒     ░ ░  ░░   ░   ▒░░        ▒
-▒    ▒░▒▒  ▒░▒ ░░▒  ▒▒░        ▒
+▒           ░       ░▒         ▒
+▒    ░░░░  ░▒   ░░  ▒░░        ▒
+▒    ▒░▒▒  ▒ ▒ ░░▒  ▒▒         ▒
 ▒    ▒ ▒░  ▒ ▒ ░░▒  ▒ ▒        ▒
-▒    ░ ░░  ░▒   ▒░  ░░░        ▒
+▒    ░ ░░  ░▒░  ▒░  ░░░        ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-)");
+)";
+	BOOST_CHECK_EQUAL(f.getAsciiArt(), output);
+	font.print("m ö o ß", -110, -20);
+	BOOST_CHECK_EQUAL(f.getAsciiArt(), output);
+	font.print("m ö o ß", jngl::Vec2(-110, -20));
+	BOOST_CHECK_EQUAL(f.getAsciiArt(), output);
 }
 
 BOOST_AUTO_TEST_CASE(TextTest) {
