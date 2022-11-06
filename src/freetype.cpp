@@ -17,6 +17,11 @@
 #include FT_GLYPH_H
 
 #include <boost/numeric/conversion/cast.hpp>
+#include <boost/qvm/map_vec_mat.hpp>
+#include <boost/qvm/mat_operations.hpp>
+#include <boost/qvm/mat_operations3.hpp>
+#include <boost/qvm/mat_access.hpp>
+#include <boost/qvm/vec.hpp>
 #include <cassert>
 #include <codecvt>
 #include <locale>
@@ -230,6 +235,8 @@ void FontImpl::print(Mat3 modelview, const std::string& text) {
 	glUniform4f(Texture::shaderSpriteColorUniform, float(fontColorRed) / 255.0f,
 	            float(fontColorGreen) / 255.0f, float(fontColorBlue) / 255.0f,
 	            float(fontColorAlpha) / 255.0f);
+	boost::qvm::A02(modelview) = std::round(boost::qvm::A02(modelview));
+	boost::qvm::A12(modelview) = std::round(boost::qvm::A12(modelview));
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();
