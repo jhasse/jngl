@@ -217,12 +217,12 @@ Pixels FontImpl::getTextWidth(const std::string& text) {
 	return maxWidth;
 }
 
-int FontImpl::getLineHeight() const {
-	return lineHeight;
+Pixels FontImpl::getLineHeight() const {
+	return Pixels(lineHeight);
 }
 
-void FontImpl::setLineHeight(int h) {
-	lineHeight = h;
+void FontImpl::setLineHeight(Pixels h) {
+	lineHeight = int(h);
 }
 
 void FontImpl::print(Mat3 modelview, const std::string& text) {

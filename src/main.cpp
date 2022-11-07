@@ -360,12 +360,12 @@ double getTextWidth(const std::string& text) {
 	return static_cast<double>(pWindow->getTextWidth(text));
 }
 
-int getLineHeight() {
-	return pWindow->getLineHeight();
+double getLineHeight() {
+	return double(ScaleablePixels(pWindow->getLineHeight()));
 }
 
-void setLineHeight(int h) {
-	pWindow->setLineHeight(h);
+void setLineHeight(double h) {
+	pWindow->setLineHeight(Pixels(ScaleablePixels(h)));
 }
 
 void print(const std::string& text, const jngl::Vec2 position) {

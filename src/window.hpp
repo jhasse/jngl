@@ -57,8 +57,8 @@ public:
 	int getWidth() const;
 	int getHeight() const;
 	ScaleablePixels getTextWidth(const std::string&);
-	int getLineHeight();
-	void setLineHeight(int);
+	Pixels getLineHeight();
+	void setLineHeight(Pixels);
 	bool getFullscreen() const;
 	void setFullscreen(bool);
 	bool getKeyDown(key::KeyType key);

@@ -36,14 +36,14 @@ void TextLine::draw() const {
 
 	// There's a spacing after each line using the normal setCenter would result in the
 	// vertical center being off. We have to adjust by "undoing" the added space for the line.
-	const double lineSpacing = fontImpl->getLineHeight() * (1 - 1 / LINE_HEIGHT_FACOTR);
+	const double lineSpacing = double(fontImpl->getLineHeight()) * (1 - 1 / LINE_HEIGHT_FACOTR);
 
 	fontImpl->print(getX(), getY() + lineSpacing / 2. / getScaleFactor(), text);
 }
 
 void TextLine::draw(Mat3 modelview) const {
 	// see above
-	const double lineSpacing = fontImpl->getLineHeight() * (1 - 1 / LINE_HEIGHT_FACOTR);
+	const double lineSpacing = double(fontImpl->getLineHeight()) * (1 - 1 / LINE_HEIGHT_FACOTR);
 
 	fontImpl->print(modelview.translate(Vec2(getX(), getY() + lineSpacing / 2. / getScaleFactor())),
 	                text);

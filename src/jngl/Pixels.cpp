@@ -19,6 +19,10 @@ Pixels::operator float() const {
 	return value;
 }
 
+Pixels::operator double() const {
+	return value;
+}
+
 Pixels::operator int() const {
 	return int(std::lround(value));
 }

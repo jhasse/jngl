@@ -45,8 +45,8 @@ public:
 	void print(Mat3 modelview, const std::string& text);
 	void print(double x, double y, const std::string& text);
 	Pixels getTextWidth(const std::string& text);
-	int getLineHeight() const;
-	void setLineHeight(int);
+	Pixels getLineHeight() const;
+	void setLineHeight(Pixels);
 
 private:
 	Character& GetCharacter(std::string::iterator& it, std::string::iterator end);

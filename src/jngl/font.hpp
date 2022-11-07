@@ -87,11 +87,11 @@ void pushFontColor(unsigned char red, unsigned char green, unsigned char blue);
 /// Resets the font color on the top of stack which is used by jngl::pushFontColor
 void popFontColor();
 
-/// Get line height used py print() in pixel
-int getLineHeight();
+/// Get line height used py print() in scale-independent pixel
+double getLineHeight();
 
-/// Set line height used by print() in pixel
-void setLineHeight(int);
+/// Set line height used by print() in scale-independent pixel
+void setLineHeight(double);
 
 /// Calculates the width of \a text in pixels if it would be drawn with the currently active font
 double getTextWidth(const std::string& text);

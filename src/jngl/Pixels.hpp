@@ -18,6 +18,8 @@ public:
 
 	explicit operator float() const;
 
+	explicit operator double() const;
+
 	explicit operator int() const;
 
 	explicit operator ScaleablePixels() const;
