@@ -223,6 +223,10 @@ template&lt;class T &gt; </td></tr>
 template&lt;class T &gt; </td></tr>
 <tr class="memitem:a0da3fe394552d2634c795c4722c41f08"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>debugLn</b> (const T &amp;t)</td></tr>
 <tr class="separator:a0da3fe394552d2634c795c4722c41f08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50ed73183c9fc293f1d28db84f0eae1a"><td class="memTemplParams" colspan="2"><a id="a50ed73183c9fc293f1d28db84f0eae1a"></a>
+template&lt;class Box &gt; </td></tr>
+<tr class="memitem:a50ed73183c9fc293f1d28db84f0eae1a"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>contains</b> (const Box &amp;box, const <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> point)</td></tr>
+<tr class="separator:a50ed73183c9fc293f1d28db84f0eae1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c83d60c8e363c7fbb2ec6fd6b75a454"><td class="memItemLeft" align="right" valign="top"><a id="a0c83d60c8e363c7fbb2ec6fd6b75a454"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a0c83d60c8e363c7fbb2ec6fd6b75a454">print</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text, <a class="el" href="classjngl_1_1Vec2.html">jngl::Vec2</a> position)</td></tr>
 <tr class="memdesc:a0c83d60c8e363c7fbb2ec6fd6b75a454"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print <em>text</em> at <em>position</em>. <br /></td></tr>
@@ -266,14 +270,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="name
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#aae3e4538f3983ccdbf52a1b7dec3778d">popFontColor</a> ()</td></tr>
 <tr class="memdesc:aae3e4538f3983ccdbf52a1b7dec3778d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the font color on the top of stack which is used by <a class="el" href="namespacejngl.html#a9730e6c233882da4bb3d78d1079f7c72" title="Pushes the currently active font color on a stack and sets a new one.">jngl::pushFontColor</a>. <br /></td></tr>
 <tr class="separator:aae3e4538f3983ccdbf52a1b7dec3778d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b182105ad29bd1e13f5890cc3f709df"><td class="memItemLeft" align="right" valign="top"><a id="a3b182105ad29bd1e13f5890cc3f709df"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a3b182105ad29bd1e13f5890cc3f709df">getLineHeight</a> ()</td></tr>
-<tr class="memdesc:a3b182105ad29bd1e13f5890cc3f709df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get line height used py <a class="el" href="namespacejngl.html#a0c83d60c8e363c7fbb2ec6fd6b75a454" title="Print text at position.">print()</a> in pixel. <br /></td></tr>
-<tr class="separator:a3b182105ad29bd1e13f5890cc3f709df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a790ef0a0b6eb1f353dcff57285de5b"><td class="memItemLeft" align="right" valign="top"><a id="a9a790ef0a0b6eb1f353dcff57285de5b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a9a790ef0a0b6eb1f353dcff57285de5b">setLineHeight</a> (int)</td></tr>
-<tr class="memdesc:a9a790ef0a0b6eb1f353dcff57285de5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set line height used by <a class="el" href="namespacejngl.html#a0c83d60c8e363c7fbb2ec6fd6b75a454" title="Print text at position.">print()</a> in pixel. <br /></td></tr>
-<tr class="separator:a9a790ef0a0b6eb1f353dcff57285de5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ad38794d810e6f6d8afb844a7d915ed"><td class="memItemLeft" align="right" valign="top"><a id="a2ad38794d810e6f6d8afb844a7d915ed"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a2ad38794d810e6f6d8afb844a7d915ed">getLineHeight</a> ()</td></tr>
+<tr class="memdesc:a2ad38794d810e6f6d8afb844a7d915ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get line height used py <a class="el" href="namespacejngl.html#a0c83d60c8e363c7fbb2ec6fd6b75a454" title="Print text at position.">print()</a> in scale-independent pixel. <br /></td></tr>
+<tr class="separator:a2ad38794d810e6f6d8afb844a7d915ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2231b43566739089dd3c1d8df06db54"><td class="memItemLeft" align="right" valign="top"><a id="ab2231b43566739089dd3c1d8df06db54"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ab2231b43566739089dd3c1d8df06db54">setLineHeight</a> (double)</td></tr>
+<tr class="memdesc:ab2231b43566739089dd3c1d8df06db54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set line height used by <a class="el" href="namespacejngl.html#a0c83d60c8e363c7fbb2ec6fd6b75a454" title="Print text at position.">print()</a> in scale-independent pixel. <br /></td></tr>
+<tr class="separator:ab2231b43566739089dd3c1d8df06db54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af58539e80c1913aac9359edfa7a51f44"><td class="memItemLeft" align="right" valign="top"><a id="af58539e80c1913aac9359edfa7a51f44"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#af58539e80c1913aac9359edfa7a51f44">getTextWidth</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text)</td></tr>
 <tr class="memdesc:af58539e80c1913aac9359edfa7a51f44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the width of <em>text</em> in pixels if it would be drawn with the currently active font. <br /></td></tr>
