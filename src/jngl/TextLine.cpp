@@ -38,7 +38,9 @@ void TextLine::draw() const {
 	// vertical center being off. We have to adjust by "undoing" the added space for the line.
 	const double lineSpacing = double(fontImpl->getLineHeight()) * (1 - 1 / LINE_HEIGHT_FACOTR);
 
-	fontImpl->print(getX(), getY() + lineSpacing / 2. / getScaleFactor(), text);
+	fontImpl->print(ScaleablePixels(getX()),
+	                ScaleablePixels(getY() + double(ScaleablePixels(Pixels(lineSpacing / 2.)))),
+	                text);
 }
 
 void TextLine::draw(Mat3 modelview) const {

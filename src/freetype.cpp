@@ -247,13 +247,13 @@ void FontImpl::print(Mat3 modelview, const std::string& text) {
 	}
 }
 
-void FontImpl::print(const double x, const double y, const std::string& text) {
+void FontImpl::print(const ScaleablePixels x, const ScaleablePixels y, const std::string& text) {
 	auto context = Texture::textureShaderProgram->use();
 	glUniform4f(Texture::shaderSpriteColorUniform, float(fontColorRed) / 255.0f,
 	            float(fontColorGreen) / 255.0f, float(fontColorBlue) / 255.0f,
 	            float(fontColorAlpha) / 255.0f);
-	const int xRounded = int(std::lround(x * getScaleFactor()));
-	const int yRounded = int(std::lround(y * getScaleFactor()));
+	const int xRounded = int(std::lround(static_cast<double>(Pixels(x))));
+	const int yRounded = int(std::lround(static_cast<double>(Pixels(y))));
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();

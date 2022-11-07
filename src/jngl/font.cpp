@@ -1,9 +1,10 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "font.hpp"
 
 #include "../freetype.hpp"
+#include "ScaleablePixels.hpp"
 
 #include <algorithm>
 #include <stack>
@@ -46,11 +47,11 @@ Font::Font(const std::string& filename, unsigned int size) : impl(new FontImpl(f
 }
 
 void Font::print(const std::string& text, int x, int y) {
-	impl->print(x, y, text);
+	impl->print(ScaleablePixels(x), ScaleablePixels(y), text);
 }
 
 void Font::print(const std::string& text, const Vec2 position) const {
-	impl->print(position.x, position.y, text);
+	impl->print(ScaleablePixels(position.x), ScaleablePixels(position.y), text);
 }
 
 void Font::print(const Mat3& modelview, const std::string& text) const {

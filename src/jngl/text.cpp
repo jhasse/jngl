@@ -1,4 +1,4 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "text.hpp"
@@ -25,7 +25,7 @@ public:
 	void step() override {
 	}
 	void draw() const override {
-		font->print(getX(), getY(), text);
+		font->print(ScaleablePixels(getX()), ScaleablePixels(getY()), text);
 	}
 
 private:

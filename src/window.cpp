@@ -43,7 +43,7 @@ std::shared_ptr<FontImpl> Window::getFontImpl() {
 }
 
 void Window::print(const std::string& text, const int xposition, const int yposition) {
-	getFontImpl()->print(xposition, yposition, text);
+	getFontImpl()->print(ScaleablePixels(xposition), ScaleablePixels(yposition), text);
 }
 
 void Window::setFont(const std::string& filename) {

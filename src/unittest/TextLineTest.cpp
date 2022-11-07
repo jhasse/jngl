@@ -29,5 +29,7 @@ BOOST_AUTO_TEST_CASE(TextLineTest) {
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )";
 		BOOST_CHECK_EQUAL(f.getAsciiArt(), screenshotCentered);
+		text.draw(jngl::modelview());
+		BOOST_CHECK_EQUAL(f.getAsciiArt(), screenshotCentered);
 	}
 }

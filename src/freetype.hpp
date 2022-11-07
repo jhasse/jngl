@@ -43,7 +43,7 @@ public:
 	FontImpl& operator=(FontImpl&&) = delete;
 	~FontImpl();
 	void print(Mat3 modelview, const std::string& text);
-	void print(double x, double y, const std::string& text);
+	void print(ScaleablePixels x, ScaleablePixels y, const std::string& text);
 	Pixels getTextWidth(const std::string& text);
 	Pixels getLineHeight() const;
 	void setLineHeight(Pixels);
