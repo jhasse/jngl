@@ -13,6 +13,13 @@ project(jngl-doxygen NONE)
 		BUILD_COMMAND rm "<DOWNLOAD_DIR>/html-book-20190602.tar.xz"
 		INSTALL_COMMAND mv cppreference-doxygen-web.tag.xml "${CMAKE_CURRENT_SOURCE_DIR}"
 	)
+	ExternalProject_Add(doxygen-awesome-css
+		GIT_REPOSITORY https://github.com/jothepro/doxygen-awesome-css.git
+		GIT_TAG v2.1.0
+		CONFIGURE_COMMAND ""
+		BUILD_COMMAND ""
+		INSTALL_COMMAND cd <SOURCE_DIR> && cp doxygen-awesome.css doxygen-awesome-sidebar-only.css "${CMAKE_CURRENT_SOURCE_DIR}"
+	)
 	# TODO: I have to figure this out:
 	# add_custom_command(doxygen
 	# 	COMMAND ${DOXYGEN_EXECUTABLE}

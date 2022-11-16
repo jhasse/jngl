@@ -1,6 +1,4 @@
-# Documentation {#mainpage}
-
-<img alt="Just a Neat Game Library" src="jngl.svg"/>
+<img height="175px" alt="Just a Neat Game Library" src="jngl.svg"/>
 
 JNGL is an easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox, the Nintendo
 Switch<sup><a href="#fn1">1</a></sup> and the Web.
