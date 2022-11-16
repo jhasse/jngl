@@ -1,9 +1,0 @@
-<map id="jngl/Drawable.hpp" name="jngl/Drawable.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Drawable class." alt="" coords="73,5,231,32"/>
-<area shape="rect" id="node2" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="150,229,269,256"/>
-<area shape="rect" id="node4" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="29,155,171,181"/>
-<area shape="rect" id="node5" href="$text_8hpp.html" title=" " alt="" coords="143,80,270,107"/>
-<area shape="rect" id="node7" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="294,80,453,107"/>
-<area shape="rect" id="node3" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="166,304,253,331"/>
-<area shape="rect" id="node6" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="247,155,382,181"/>
-</map>

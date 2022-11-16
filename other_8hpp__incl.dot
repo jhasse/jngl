@@ -1,0 +1,14 @@
+digraph "jngl/other.hpp"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname='Consolas',monospace,fontsize=10,labelfontname='Consolas',monospace,labelfontsize=10];
+  node [fontname='Consolas',monospace,fontsize=10,shape=box,height=0.2,width=0.4];
+  Node1 [label="jngl/other.hpp",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Miscellaneous functions."];
+  Node1 -> Node2 [color="steelblue1",style="solid"];
+  Node2 [label="sstream",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/sstream.html",tooltip=" "];
+  Node1 -> Node3 [color="steelblue1",style="solid"];
+  Node3 [label="string",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html",tooltip=" "];
+  Node1 -> Node4 [color="steelblue1",style="solid"];
+  Node4 [label="vector",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html",tooltip=" "];
+}

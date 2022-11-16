@@ -1,0 +1,15 @@
+digraph "jngl/Vertex.hpp"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname='Consolas',monospace,fontsize=10,labelfontname='Consolas',monospace,labelfontsize=10];
+  node [fontname='Consolas',monospace,fontsize=10,shape=box,height=0.2,width=0.4];
+  Node1 [label="jngl/Vertex.hpp",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [dir="back",color="steelblue1",style="solid"];
+  Node2 [label="jngl/all.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$all_8hpp.html",tooltip="Includes all JNGL headers except for init.hpp."];
+  Node2 -> Node3 [dir="back",color="steelblue1",style="solid"];
+  Node3 [label="jngl.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$jngl_8hpp.html",tooltip="Includes jngl/all.hpp."];
+  Node1 -> Node4 [dir="back",color="steelblue1",style="solid"];
+  Node4 [label="jngl/framebuffer.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$framebuffer_8hpp.html",tooltip="Contains jngl::FrameBuffer class."];
+  Node4 -> Node2 [dir="back",color="steelblue1",style="solid"];
+}

@@ -1,0 +1,55 @@
+digraph "jngl/Vec2.hpp"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname='Consolas',monospace,fontsize=10,labelfontname='Consolas',monospace,labelfontsize=10];
+  node [fontname='Consolas',monospace,fontsize=10,shape=box,height=0.2,width=0.4];
+  Node1 [label="jngl/Vec2.hpp",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Contains jngl::Vec2 class."];
+  Node1 -> Node2 [dir="back",color="steelblue1",style="solid"];
+  Node2 [label="jngl/AppParameters.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$AppParameters_8hpp.html",tooltip="Contains jngl::AppParameters struct."];
+  Node2 -> Node3 [dir="back",color="steelblue1",style="solid"];
+  Node3 [label="jngl/init.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$init_8hpp.html",tooltip="Include this file only once, as it defines the main function."];
+  Node1 -> Node4 [dir="back",color="steelblue1",style="solid"];
+  Node4 [label="jngl/Drawable.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$Drawable_8hpp.html",tooltip="Contains jngl::Drawable class."];
+  Node4 -> Node5 [dir="back",color="steelblue1",style="solid"];
+  Node5 [label="jngl/TextLine.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$TextLine_8hpp.html",tooltip="Contains jngl::TextLine class."];
+  Node5 -> Node6 [dir="back",color="steelblue1",style="solid"];
+  Node6 [label="jngl/Label.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$Label_8hpp.html",tooltip="Contains jngl::Label class."];
+  Node6 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node7 [label="jngl/all.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$all_8hpp.html",tooltip="Includes all JNGL headers except for init.hpp."];
+  Node7 -> Node8 [dir="back",color="steelblue1",style="solid"];
+  Node8 [label="jngl.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$jngl_8hpp.html",tooltip="Includes jngl/all.hpp."];
+  Node5 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node4 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node4 -> Node9 [dir="back",color="steelblue1",style="solid"];
+  Node9 [label="jngl/sprite.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$sprite_8hpp.html",tooltip="Contains jngl::Sprite class and related functions."];
+  Node9 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node4 -> Node10 [dir="back",color="steelblue1",style="solid"];
+  Node10 [label="jngl/text.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$text_8hpp.html",tooltip=" "];
+  Node10 -> Node6 [dir="back",color="steelblue1",style="solid"];
+  Node10 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node1 -> Node11 [dir="back",color="steelblue1",style="solid"];
+  Node11 [label="jngl/Widget.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$Widget_8hpp.html",tooltip="Contains jngl::Container class."];
+  Node11 -> Node6 [dir="back",color="steelblue1",style="solid"];
+  Node11 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node1 -> Node12 [dir="back",color="steelblue1",style="solid"];
+  Node12 [label="jngl/font.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$font_8hpp.html",tooltip="Contains jngl::Font class and related functions."];
+  Node12 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node1 -> Node13 [dir="back",color="steelblue1",style="solid"];
+  Node13 [label="jngl/framebuffer.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$framebuffer_8hpp.html",tooltip="Contains jngl::FrameBuffer class."];
+  Node13 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node1 -> Node14 [dir="back",color="steelblue1",style="solid"];
+  Node14 [label="jngl/input.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$input_8hpp.html",tooltip="Input related functions."];
+  Node14 -> Node15 [dir="back",color="steelblue1",style="solid"];
+  Node15 [label="jngl/Controller.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$Controller_8hpp.html",tooltip="Contains jngl::Controller class."];
+  Node15 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node14 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node1 -> Node16 [dir="back",color="steelblue1",style="solid"];
+  Node16 [label="jngl/screen.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$screen_8hpp.html",tooltip=" "];
+  Node16 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node16 -> Node3 [dir="back",color="steelblue1",style="solid"];
+  Node1 -> Node17 [dir="back",color="steelblue1",style="solid"];
+  Node17 [label="jngl/shapes.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$shapes_8hpp.html",tooltip="Functions for drawing shapes."];
+  Node17 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node1 -> Node9 [dir="back",color="steelblue1",style="solid"];
+}

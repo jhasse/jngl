@@ -1,6 +1,0 @@
-<map id="jngl/work.hpp" name="jngl/work.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="75,5,201,32"/>
-<area shape="rect" id="node2" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="5,80,124,107"/>
-<area shape="rect" id="node4" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="148,80,275,107"/>
-<area shape="rect" id="node3" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="21,155,108,181"/>
-</map>

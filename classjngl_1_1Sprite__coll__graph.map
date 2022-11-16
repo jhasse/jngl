@@ -1,6 +1,0 @@
-<map id="Sprite" name="Sprite">
-<area shape="rect" id="node1" title="Higher&#45;level representation of an image." alt="" coords="153,184,224,211"/>
-<area shape="rect" id="node2" href="$classjngl_1_1Drawable.html" title="Base class for drawable objects with a position and a rectangle size." alt="" coords="5,95,92,121"/>
-<area shape="rect" id="node3" href="$classjngl_1_1Vec2.html" title="Two&#45;dimensional vector." alt="" coords="21,5,76,32"/>
-<area shape="rect" id="node4" href="/home/runner/work/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/memory/shared_ptr.html" title=" " alt="" coords="116,95,355,121"/>
-</map>

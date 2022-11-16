@@ -1,5 +1,5 @@
 var time_8hpp =
 [
-    [ "getTime", "time_8hpp.html#acfa255b4d1bf4d4ad83b3d200b99c930", null ],
-    [ "sleep", "time_8hpp.html#ac0e992174123c25f1fd4283157469bdf", null ]
+    [ "getTime", "time_8hpp.html#a4437edd7fd2832790c13ba3179bcc64d", null ],
+    [ "sleep", "time_8hpp.html#a6c9a4f10e08890ed285c7062e0f0a81a", null ]
 ];

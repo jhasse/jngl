@@ -7,8 +7,7 @@ var annotated_dup =
       [ "Container", "classjngl_1_1Container.html", "classjngl_1_1Container" ],
       [ "Controller", "classjngl_1_1Controller.html", "classjngl_1_1Controller" ],
       [ "Drawable", "classjngl_1_1Drawable.html", "classjngl_1_1Drawable" ],
-      [ "Effect", "classjngl_1_1Effect.html", "classjngl_1_1Effect" ],
-      [ "Zoom", "classjngl_1_1Zoom.html", "classjngl_1_1Zoom" ],
+      [ "Effect", "classjngl_1_1Effect.html", null ],
       [ "Executor", "classjngl_1_1Executor.html", "classjngl_1_1Executor" ],
       [ "Finally", "classjngl_1_1Finally.html", "classjngl_1_1Finally" ],
       [ "Font", "classjngl_1_1Font.html", "classjngl_1_1Font" ],
@@ -18,18 +17,19 @@ var annotated_dup =
       [ "Label", "classjngl_1_1Label.html", "classjngl_1_1Label" ],
       [ "Mat3", "classjngl_1_1Mat3.html", "classjngl_1_1Mat3" ],
       [ "Mat4", "classjngl_1_1Mat4.html", "classjngl_1_1Mat4" ],
-      [ "Pixels", "classjngl_1_1Pixels.html", "classjngl_1_1Pixels" ],
-      [ "ScaleablePixels", "classjngl_1_1ScaleablePixels.html", "classjngl_1_1ScaleablePixels" ],
+      [ "Pixels", "classjngl_1_1Pixels.html", null ],
+      [ "ScaleablePixels", "classjngl_1_1ScaleablePixels.html", null ],
       [ "Shader", "classjngl_1_1Shader.html", "classjngl_1_1Shader" ],
       [ "ShaderProgram", "classjngl_1_1ShaderProgram.html", "classjngl_1_1ShaderProgram" ],
       [ "SoundFile", "classjngl_1_1SoundFile.html", "classjngl_1_1SoundFile" ],
       [ "Sprite", "classjngl_1_1Sprite.html", "classjngl_1_1Sprite" ],
       [ "Text", "classjngl_1_1Text.html", "classjngl_1_1Text" ],
-      [ "TextLine", "classjngl_1_1TextLine.html", "classjngl_1_1TextLine" ],
+      [ "TextLine", "classjngl_1_1TextLine.html", null ],
       [ "Vec2", "classjngl_1_1Vec2.html", "classjngl_1_1Vec2" ],
       [ "Vertex", "structjngl_1_1Vertex.html", "structjngl_1_1Vertex" ],
       [ "Video", "classjngl_1_1Video.html", "classjngl_1_1Video" ],
       [ "Widget", "classjngl_1_1Widget.html", "classjngl_1_1Widget" ],
-      [ "Work", "classjngl_1_1Work.html", "classjngl_1_1Work" ]
+      [ "Work", "classjngl_1_1Work.html", "classjngl_1_1Work" ],
+      [ "Zoom", "classjngl_1_1Zoom.html", null ]
     ] ]
 ];

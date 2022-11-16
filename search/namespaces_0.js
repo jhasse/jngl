@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['jngl_3165',['jngl',['../namespacejngl.html',1,'']]]
+  ['jngl_0',['jngl',['../namespacejngl.html',1,'']]]
 ];

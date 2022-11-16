@@ -1,0 +1,23 @@
+digraph "jngl/Mat3.hpp"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname='Consolas',monospace,fontsize=10,labelfontname='Consolas',monospace,labelfontsize=10];
+  node [fontname='Consolas',monospace,fontsize=10,shape=box,height=0.2,width=0.4];
+  Node1 [label="jngl/Mat3.hpp",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Contains jngl::Mat3 class."];
+  Node1 -> Node2 [dir="back",color="steelblue1",style="solid"];
+  Node2 [label="jngl/TextLine.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$TextLine_8hpp.html",tooltip="Contains jngl::TextLine class."];
+  Node2 -> Node3 [dir="back",color="steelblue1",style="solid"];
+  Node3 [label="jngl/Label.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$Label_8hpp.html",tooltip="Contains jngl::Label class."];
+  Node3 -> Node4 [dir="back",color="steelblue1",style="solid"];
+  Node4 [label="jngl/all.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$all_8hpp.html",tooltip="Includes all JNGL headers except for init.hpp."];
+  Node4 -> Node5 [dir="back",color="steelblue1",style="solid"];
+  Node5 [label="jngl.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$jngl_8hpp.html",tooltip="Includes jngl/all.hpp."];
+  Node2 -> Node4 [dir="back",color="steelblue1",style="solid"];
+  Node1 -> Node6 [dir="back",color="steelblue1",style="solid"];
+  Node6 [label="jngl/framebuffer.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$framebuffer_8hpp.html",tooltip="Contains jngl::FrameBuffer class."];
+  Node6 -> Node4 [dir="back",color="steelblue1",style="solid"];
+  Node1 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node7 [label="jngl/matrix.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$matrix_8hpp.html",tooltip="Functions related to the global ModelView matrix."];
+  Node7 -> Node4 [dir="back",color="steelblue1",style="solid"];
+}

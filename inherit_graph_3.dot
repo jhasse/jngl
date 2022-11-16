@@ -1,0 +1,9 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname='Consolas',monospace,fontsize=10,labelfontname='Consolas',monospace,labelfontsize=10];
+  node [fontname='Consolas',monospace,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node0 [label="Container",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classjngl_1_1Container.html",tooltip="Helper class to handle multiple instances of Widget."];
+}

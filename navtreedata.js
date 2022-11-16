@@ -49,14 +49,9 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"",
-"classjngl_1_1ShaderProgram.html#a90db324f11798beca54c539ddc698bc6",
-"cpp/error/make_exception_ptr.html",
-"cpp/io/c/vfwscanf.html",
-"cpp/numeric/special_math/cyl_neumann.html",
-"cpp/types/is_trivial.html",
-"input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca9e9c76d7349af6fa36f24efbb7e001d7",
-"other_8hpp.html#a40ab47c63ca42329697533850078f38f"
+"AppParameters_8hpp.html",
+"classjngl_1_1ShaderProgram.html",
+"matrix_8hpp.html#acfcb9cdf97108d05cf2b0da911c93a4c"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

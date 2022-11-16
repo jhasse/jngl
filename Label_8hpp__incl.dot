@@ -1,0 +1,42 @@
+digraph "jngl/Label.hpp"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname='Consolas',monospace,fontsize=10,labelfontname='Consolas',monospace,labelfontsize=10];
+  node [fontname='Consolas',monospace,fontsize=10,shape=box,height=0.2,width=0.4];
+  Node1 [label="jngl/Label.hpp",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Contains jngl::Label class."];
+  Node1 -> Node2 [color="steelblue1",style="solid"];
+  Node2 [label="Color.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$Color_8hpp.html",tooltip="Contains jngl::Color class."];
+  Node1 -> Node3 [color="steelblue1",style="solid"];
+  Node3 [label="TextLine.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$TextLine_8hpp.html",tooltip="Contains jngl::TextLine class."];
+  Node3 -> Node4 [color="steelblue1",style="solid"];
+  Node4 [label="Drawable.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$Drawable_8hpp.html",tooltip="Contains jngl::Drawable class."];
+  Node4 -> Node5 [color="steelblue1",style="solid"];
+  Node5 [label="Vec2.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$Vec2_8hpp.html",tooltip="Contains jngl::Vec2 class."];
+  Node5 -> Node6 [color="steelblue1",style="solid"];
+  Node6 [label="boost/version.hpp",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+  Node5 -> Node7 [color="steelblue1",style="solid"];
+  Node7 [label="iosfwd",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html",tooltip=" "];
+  Node3 -> Node8 [color="steelblue1",style="solid"];
+  Node8 [label="Mat3.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$Mat3_8hpp.html",tooltip="Contains jngl::Mat3 class."];
+  Node8 -> Node6 [color="steelblue1",style="solid"];
+  Node8 -> Node9 [color="steelblue1",style="solid"];
+  Node9 [label="initializer_list",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/initializer_list.html",tooltip=" "];
+  Node3 -> Node10 [color="steelblue1",style="solid"];
+  Node10 [label="memory",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html",tooltip=" "];
+  Node1 -> Node11 [color="steelblue1",style="solid"];
+  Node11 [label="Widget.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$Widget_8hpp.html",tooltip="Contains jngl::Container class."];
+  Node11 -> Node5 [color="steelblue1",style="solid"];
+  Node11 -> Node10 [color="steelblue1",style="solid"];
+  Node11 -> Node12 [color="steelblue1",style="solid"];
+  Node12 [label="set",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/set.html",tooltip=" "];
+  Node11 -> Node13 [color="steelblue1",style="solid"];
+  Node13 [label="vector",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html",tooltip=" "];
+  Node1 -> Node14 [color="steelblue1",style="solid"];
+  Node14 [label="text.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$text_8hpp.html",tooltip=" "];
+  Node14 -> Node4 [color="steelblue1",style="solid"];
+  Node14 -> Node10 [color="steelblue1",style="solid"];
+  Node14 -> Node15 [color="steelblue1",style="solid"];
+  Node15 [label="string",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html",tooltip=" "];
+  Node14 -> Node13 [color="steelblue1",style="solid"];
+}

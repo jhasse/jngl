@@ -1,0 +1,17 @@
+digraph "AppParameters"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname='Consolas',monospace,fontsize=10,labelfontname='Consolas',monospace,labelfontsize=10];
+  node [fontname='Consolas',monospace,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [label="AppParameters",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Parameters used to initialize the main window."];
+  Node2 -> Node1 [dir="back",color="darkorchid3",style="dashed",label=" start" ];
+  Node2 [label="function\< std::shared\l_ptr\< jngl::Work \>()\>",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",URL="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/utility/functional/function.html",tooltip=" "];
+  Node3 -> Node1 [dir="back",color="darkorchid3",style="dashed",label=" displayName" ];
+  Node3 [label="string",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",URL="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/string/basic_string.html",tooltip=" "];
+  Node4 -> Node1 [dir="back",color="darkorchid3",style="dashed",label=" screenSize" ];
+  Node4 [label="optional\< jngl::Vec2 \>",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",URL="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/utility/optional.html",tooltip=" "];
+  Node5 -> Node1 [dir="back",color="darkorchid3",style="dashed",label=" maxAspectRatio\nminAspectRatio" ];
+  Node5 [label="optional\< std::pair\l\< int, int \> \>",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",URL="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/utility/optional.html",tooltip=" "];
+}
