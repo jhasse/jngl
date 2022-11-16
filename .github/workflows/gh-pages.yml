@@ -5,12 +5,10 @@ jobs:
   doxygen:
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:22.10
+      image: registry.fedoraproject.org/fedora-minimal:37
     steps:
       - name: Install dependencies
-        run: |
-         apt update
-         apt install -y graphviz doxygen cmake git
+        run: microdnf install -y git graphviz doxygen cmake make tar xz rsync
       - uses: actions/checkout@v2
         with:
           persist-credentials: false
