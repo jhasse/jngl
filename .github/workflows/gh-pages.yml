@@ -3,12 +3,14 @@ on:
   push:
 jobs:
   doxygen:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:22.10
     steps:
       - name: Install dependencies
         run: |
-         sudo apt update
-         sudo apt install graphviz doxygen cmake
+         apt update
+         apt install -y graphviz doxygen cmake git
       - uses: actions/checkout@v2
         with:
           persist-credentials: false

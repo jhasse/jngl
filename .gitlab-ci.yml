@@ -70,7 +70,7 @@ SteamOS:
 pages:
   stage: deploy
   script:
-  - microdnf install -y doxygen cmake make tar xz >/dev/null
+  - microdnf install -y doxygen cmake make tar xz git >/dev/null
   - cd doc
   - cmake .
   - make
