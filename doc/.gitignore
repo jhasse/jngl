@@ -1,3 +1,6 @@
 /html/
 /doxygen_sqlite3.db
 /cppreference-doxygen-web.tag.xml
+/build*/
+/doxygen-awesome-sidebar-only.css
+/doxygen-awesome.css
