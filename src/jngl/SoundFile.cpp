@@ -116,50 +116,56 @@ void checkAlError() {
 	GetAudio().checkAlError();
 }
 
-SoundFile::SoundFile(const std::string& filename) : params(std::make_unique<SoundParams>()) {
-	debug("Decoding ");
-	debug(filename);
-	debug(" ... ");
+SoundFile::SoundFile(std::string filename, std::launch policy)
+: params(std::make_unique<SoundParams>()) {
+	loader = std::async(policy, [this, filename = std::move(filename)]() {
+		debug("Decoding ");
+		debug(filename);
+		debug(" ... ");
 #ifdef _WIN32
-	FILE* const f = fopen(filename.c_str(), "rb");
+		FILE* const f = fopen(filename.c_str(), "rb");
 #else
-	FILE* const f = fopen(filename.c_str(), "rbe");
+		FILE* const f = fopen(filename.c_str(), "rbe");
 #endif
-	if (f == nullptr) {
-		throw std::runtime_error("File not found (" + filename + ").");
-	}
+		if (f == nullptr) {
+			throw std::runtime_error("File not found (" + filename + ").");
+		}
+		Finally closeFile([f]() { fclose(f); });
 
-	OggVorbis_File oggFile;
-	if (ov_open(f, &oggFile, nullptr, 0) != 0) {
-		throw std::runtime_error("Could not open OGG file (" + filename + ").");
-	}
-
-	const vorbis_info* const pInfo = ov_info(&oggFile, -1);
-	if (pInfo->channels == 1) {
-		params->format = AL_FORMAT_MONO16;
-	} else {
-		params->format = AL_FORMAT_STEREO16;
-	}
-	params->freq = static_cast<ALsizei>(pInfo->rate);
-
-	const int bufferSize = 32768;
-	std::array<char, bufferSize> array{}; // 32 KB buffers
-	const int endian = 0;                 // 0 for Little-Endian, 1 for Big-Endian
-	int bitStream;
-	long bytes; // NOLINT
-	do {
-		bytes = ov_read(&oggFile, &array[0], bufferSize, endian, 2, 1, &bitStream);
-
-		if (bytes < 0) {
-			ov_clear(&oggFile);
-			throw std::runtime_error("Error decoding OGG file (" + filename + ").");
+		OggVorbis_File oggFile;
+		if (ov_open(f, &oggFile, nullptr, 0) != 0) {
+			throw std::runtime_error("Could not open OGG file (" + filename + ").");
 		}
 
-		buffer_.insert(buffer_.end(), &array[0], &array[0] + bytes);
-	} while (bytes > 0);
+		const vorbis_info* const pInfo = ov_info(&oggFile, -1);
+		if (pInfo->channels == 1) {
+			params->format = AL_FORMAT_MONO16;
+		} else {
+			params->format = AL_FORMAT_STEREO16;
+		}
+		params->freq = static_cast<ALsizei>(pInfo->rate);
 
-	ov_clear(&oggFile);
-	debug("OK\n");
+		const int bufferSize = 32768;
+		std::array<char, bufferSize> array{}; // 32 KB buffers
+		const int endian = 0;                 // 0 for Little-Endian, 1 for Big-Endian
+		int bitStream;
+		long bytes; // NOLINT
+		do {
+			bytes = ov_read(&oggFile, &array[0], bufferSize, endian, 2, 1, &bitStream);
+
+			if (bytes < 0) {
+				ov_clear(&oggFile);
+				throw std::runtime_error("Error decoding OGG file (" + filename + ").");
+			}
+
+			buffer_.insert(buffer_.end(), &array[0], &array[0] + bytes);
+		} while (bytes > 0);
+
+		ov_clear(&oggFile);
+		debug("OK (");
+		debug(buffer_.size() / 1024. / 1024.);
+		debugLn(" MB)");
+	});
 }
 
 SoundFile::~SoundFile() = default;
@@ -167,6 +173,7 @@ SoundFile::SoundFile(SoundFile&&) noexcept = default;
 SoundFile& SoundFile::operator=(SoundFile&&) noexcept = default;
 
 void SoundFile::play() {
+	load();
 	sound_ = std::make_shared<Sound>(*params, buffer_);
 	GetAudio().play(sound_);
 }
@@ -201,34 +208,44 @@ void SoundFile::setVolume(float v) {
 	}
 }
 
-std::shared_ptr<SoundFile> getSoundFile(const std::string& filename) {
+void SoundFile::load() {
+	if (loader) {
+		loader->get();
+		loader = std::nullopt;
+	}
+}
+
+std::shared_ptr<SoundFile> getSoundFile(const std::string& filename, std::launch policy) {
 	GetAudio();
 	auto i = sounds.find(filename);
 	if (i == sounds.end()) { // sound hasn't been loaded yet?
-		sounds[filename] = std::make_shared<SoundFile>(pathPrefix + filename);
+		sounds[filename] = std::make_shared<SoundFile>(pathPrefix + filename, policy);
 		return sounds[filename];
 	}
 	return i->second;
 }
 
 void play(const std::string& filename) {
-	getSoundFile(filename)->play();
+	getSoundFile(filename, std::launch::deferred)->play();
 }
 
 void stop(const std::string& filename) {
-	getSoundFile(filename)->stop();
+	getSoundFile(filename, std::launch::async)->stop();
 }
 
-void loadSound(const std::string& filename) {
-	getSoundFile(filename);
+Finally loadSound(const std::string& filename) {
+	auto soundFile = getSoundFile(filename, std::launch::async);
+	return Finally([soundFile = std::move(soundFile)]() {
+		soundFile->load();
+	});
 }
 
 bool isPlaying(const std::string& filename) {
-	return getSoundFile(filename)->isPlaying();
+	return getSoundFile(filename, std::launch::async)->isPlaying();
 }
 
 std::shared_ptr<SoundFile> loop(const std::string& filename) {
-	auto tmp = getSoundFile(filename);
+	auto tmp = getSoundFile(filename, std::launch::deferred);
 	tmp->loop();
 	return tmp;
 }

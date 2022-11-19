@@ -21,7 +21,8 @@ double factor = 0;
 
 class Test : public jngl::Work {
 public:
-	Test() : fb2(jngl::getWindowSize()), logoWebp("jngl.webp") {
+	Test()
+	: fb2(jngl::getWindowSize()), logoWebp("jngl.webp"), soundLoader(jngl::load("test.ogg")) {
 		jngl::setTitle(jngl::App::instance().getDisplayName() + " | UTF-8: äöüß");
 		jngl::setIcon("jngl");
 		jngl::setMouseVisible(false);
@@ -37,8 +38,18 @@ public:
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
 		if (jngl::keyPressed('p')) {
+			auto start = clock.now();
 			jngl::stop("test.ogg");
+			std::cout << "stop took "
+			          << std::chrono::duration_cast<std::chrono::milliseconds>(clock.now() - start)
+			                 .count()
+			          << " ms.\n";
+			start = clock.now();
 			jngl::play("test.ogg");
+			std::cout << "play took "
+			          << std::chrono::duration_cast<std::chrono::milliseconds>(clock.now() - start)
+			                 .count()
+			          << " ms.\n";
 		}
 		if (jngl::keyPressed('s')) {
 			useShader = !useShader;
@@ -185,6 +196,8 @@ private:
 	float volume = 1;
 	std::unique_ptr<jngl::Shader> vertexShader, fragmentShader;
 	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
+	std::chrono::steady_clock clock;
+	jngl::Finally soundLoader;
 };
 
 jngl::AppParameters jnglInit() {
