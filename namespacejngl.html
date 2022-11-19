@@ -642,9 +642,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawRect</b> (double 
 <tr class="memitem:abc34138b4a6abf14269a6a34e901a5c8"><td class="memItemLeft" align="right" valign="top"><a id="abc34138b4a6abf14269a6a34e901a5c8" name="abc34138b4a6abf14269a6a34e901a5c8"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getVolume</b> ()</td></tr>
 <tr class="separator:abc34138b4a6abf14269a6a34e901a5c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a2d4a760f9febf9ab966d0ed41183b2"><td class="memItemLeft" align="right" valign="top"><a id="a9a2d4a760f9febf9ab966d0ed41183b2" name="a9a2d4a760f9febf9ab966d0ed41183b2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>play</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
-<tr class="memdesc:a9a2d4a760f9febf9ab966d0ed41183b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play an OGG audio file once. <br /></td></tr>
+<tr class="memitem:a9a2d4a760f9febf9ab966d0ed41183b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a9a2d4a760f9febf9ab966d0ed41183b2">play</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
+<tr class="memdesc:a9a2d4a760f9febf9ab966d0ed41183b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play an OGG audio file once.  <a href="namespacejngl.html#a9a2d4a760f9febf9ab966d0ed41183b2">More...</a><br /></td></tr>
 <tr class="separator:a9a2d4a760f9febf9ab966d0ed41183b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe3523bc342eb0bfc08a004bc2bce9ee"><td class="memItemLeft" align="right" valign="top"><a id="abe3523bc342eb0bfc08a004bc2bce9ee" name="abe3523bc342eb0bfc08a004bc2bce9ee"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
@@ -1574,6 +1573,27 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00066">66</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9a2d4a760f9febf9ab966d0ed41183b2" name="a9a2d4a760f9febf9ab966d0ed41183b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a2d4a760f9febf9ab966d0ed41183b2">&#9670;&#160;</a></span>play()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void play </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Play an OGG audio file once. </p>
+<p >Might block if the file hasn't been played before. To avoid that use <a class="el" href="namespacejngl.html#a59bf57d562a77318d562ab15d017de5d" title="Starts a thread to load filename and returns a Finally which will join it.">jngl::load</a> before. </p>
 
 </div>
 </div>

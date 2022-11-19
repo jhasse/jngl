@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"matrix_8hpp.html#a74e4ac455bf89378a4f47726b5014f44":[2,0,0,20,5],
+"matrix_8hpp.html#a89162c73545bb184c781c825dd72f082":[2,0,0,20,7],
 "matrix_8hpp.html#acfcb9cdf97108d05cf2b0da911c93a4c":[2,0,0,20,0],
 "matrix_8hpp.html#ad20897c5c8bd47f5d4005989bead0e55":[2,0,0,20,8],
 "matrix_8hpp.html#adc3f4af0da695be4afd366843ebba0e6":[2,0,0,20,3],
@@ -188,8 +190,8 @@ var NAVTREEINDEX2 =
 "sprite_8hpp_source.html":[2,0,0,31],
 "structjngl_1_1AppParameters.html":[0,0,0,1],
 "structjngl_1_1AppParameters.html":[1,0,0,1],
-"structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805":[1,0,0,1,3],
 "structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805":[0,0,0,1,3],
+"structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805":[1,0,0,1,3],
 "structjngl_1_1AppParameters.html#ab8f3127de4b6ccfc51833c48f37c7e1c":[1,0,0,1,0],
 "structjngl_1_1AppParameters.html#ab8f3127de4b6ccfc51833c48f37c7e1c":[0,0,0,1,0],
 "structjngl_1_1AppParameters.html#abd54db44deb77f599f600479aea631a3":[0,0,0,1,1],

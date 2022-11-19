@@ -108,10 +108,9 @@ $(document).ready(function(){initNavTree('classjngl_1_1SoundFile.html',''); init
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a56f897f766a008f69a20badd6991b6b3"><td class="memItemLeft" align="right" valign="top"><a id="a56f897f766a008f69a20badd6991b6b3" name="a56f897f766a008f69a20badd6991b6b3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SoundFile</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
-<tr class="memdesc:a56f897f766a008f69a20badd6991b6b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load an OGG file called <em>filename</em>. <br /></td></tr>
-<tr class="separator:a56f897f766a008f69a20badd6991b6b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a545c659b1fbfed195fee3ed9dd29db75"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1SoundFile.html#a545c659b1fbfed195fee3ed9dd29db75">SoundFile</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> filename, std::launch policy)</td></tr>
+<tr class="memdesc:a545c659b1fbfed195fee3ed9dd29db75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load an OGG file called <em>filename</em>.  <a href="classjngl_1_1SoundFile.html#a545c659b1fbfed195fee3ed9dd29db75">More...</a><br /></td></tr>
+<tr class="separator:a545c659b1fbfed195fee3ed9dd29db75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46aa023758c7e1252894707b50fd51fc"><td class="memItemLeft" align="right" valign="top"><a id="a46aa023758c7e1252894707b50fd51fc" name="a46aa023758c7e1252894707b50fd51fc"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SoundFile</b> (const <a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a> &amp;)=delete</td></tr>
 <tr class="separator:a46aa023758c7e1252894707b50fd51fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,12 +147,75 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setPitch</b> (float)<
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setVolume</b> (float v)</td></tr>
 <tr class="memdesc:adba16af13c4a8c53151baa2d5123ec96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set volume in [0, ∞]. Default is 1.0f. <br /></td></tr>
 <tr class="separator:adba16af13c4a8c53151baa2d5123ec96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78f61ac2dd03bcba8e09ca20cd7d68e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1SoundFile.html#a78f61ac2dd03bcba8e09ca20cd7d68e3">load</a> ()</td></tr>
+<tr class="memdesc:a78f61ac2dd03bcba8e09ca20cd7d68e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Block until the sound file has been fully decompressed and loaded.  <a href="classjngl_1_1SoundFile.html#a78f61ac2dd03bcba8e09ca20cd7d68e3">More...</a><br /></td></tr>
+<tr class="separator:a78f61ac2dd03bcba8e09ca20cd7d68e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Sound loaded from an OGG file. </p>
+<p >JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly - you can just use <a class="el" href="namespacejngl.html#a9a2d4a760f9febf9ab966d0ed41183b2" title="Play an OGG audio file once.">jngl::play</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="SoundFile_8hpp_source.html#l00017">17</a> of file <a class="el" href="SoundFile_8hpp_source.html">SoundFile.hpp</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="SoundFile_8hpp_source.html#l00028">28</a> of file <a class="el" href="SoundFile_8hpp_source.html">SoundFile.hpp</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a545c659b1fbfed195fee3ed9dd29db75" name="a545c659b1fbfed195fee3ed9dd29db75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a545c659b1fbfed195fee3ed9dd29db75">&#9670;&#160;</a></span>SoundFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::launch&#160;</td>
+          <td class="paramname"><em>policy</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Load an OGG file called <em>filename</em>. </p>
+<p >Loading can either happen on its own thread (std::launch::async) or the first time you try to play the file (std::launch::deferred).</p>
+<dl class="section note"><dt>Note</dt><dd>If the file doesn't exist this will not throw, but calling <a class="el" href="classjngl_1_1SoundFile.html#a6d58098c6cf63c241ed03bc797256bb1" title="Play the sound once. If called twice the sound would also play twice.">SoundFile::play</a>, <a class="el" href="classjngl_1_1SoundFile.html#afe461d27b9c48d5921c00d521181f12f" title="Play the sound in a loop. Can also be stopped using stop()">SoundFile::loop</a> or <a class="el" href="classjngl_1_1SoundFile.html#a78f61ac2dd03bcba8e09ca20cd7d68e3" title="Block until the sound file has been fully decompressed and loaded.">SoundFile::load</a> will. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a78f61ac2dd03bcba8e09ca20cd7d68e3" name="a78f61ac2dd03bcba8e09ca20cd7d68e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78f61ac2dd03bcba8e09ca20cd7d68e3">&#9670;&#160;</a></span>load()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void load </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Block until the sound file has been fully decompressed and loaded. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="elRef" href="http://en.cppreference.com/w/cpp/error/runtime_error.html">std::runtime_error</a></td><td>File not found or decoding errors </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>jngl/<a class="el" href="SoundFile_8hpp_source.html">SoundFile.hpp</a></li>
 </ul>
 </div><!-- contents -->

@@ -146,7 +146,7 @@ var searchData=
   ['sort_143',['sort',['http://en.cppreference.com/w/cpp/container/forward_list/sort.html',1,'std::forward_list::sort()'],['http://en.cppreference.com/w/cpp/container/list/sort.html',1,'std::list::sort()'],['http://en.cppreference.com/w/cpp/container/forward_list/sort.html',1,'std::pmr::forward_list::sort()'],['http://en.cppreference.com/w/cpp/algorithm/sort.html',1,'std::sort()'],['http://en.cppreference.com/w/cpp/container/list/sort.html',1,'std::pmr::list::sort()']]],
   ['sort_5fheap_144',['sort_heap',['http://en.cppreference.com/w/cpp/algorithm/sort_heap.html',1,'std']]],
   ['sound_2ehpp_145',['sound.hpp',['../sound_8hpp.html',1,'']]],
-  ['soundfile_146',['SoundFile',['../classjngl_1_1SoundFile.html',1,'SoundFile'],['../classjngl_1_1SoundFile.html#a56f897f766a008f69a20badd6991b6b3',1,'jngl::SoundFile::SoundFile()']]],
+  ['soundfile_146',['SoundFile',['../classjngl_1_1SoundFile.html',1,'SoundFile'],['../classjngl_1_1SoundFile.html#a545c659b1fbfed195fee3ed9dd29db75',1,'jngl::SoundFile::SoundFile()']]],
   ['soundfile_2ehpp_147',['SoundFile.hpp',['../SoundFile_8hpp.html',1,'']]],
   ['source_5flocation_148',['source_location',['http://en.cppreference.com/w/cpp/experimental/source_location.html',1,'std::experimental']]],
   ['space_149',['space',['http://en.cppreference.com/w/cpp/experimental/fs/space.html',1,'std::experimental::filesystem::space()'],['http://en.cppreference.com/w/cpp/filesystem/space.html',1,'std::filesystem::space()']]],
