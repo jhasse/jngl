@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Sound related functions
 /// @file
@@ -14,6 +14,8 @@ class SoundFile;
 float getVolume();
 
 /// Play an OGG audio file once
+///
+/// Might block if the file hasn't been played before. To avoid that use jngl::load before.
 void play(const std::string& filename);
 
 /// Stop an OGG audio file if it's currently playing

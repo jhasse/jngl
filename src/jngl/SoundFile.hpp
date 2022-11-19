@@ -22,6 +22,9 @@ class Sound;
 struct SoundParams;
 
 /// Sound loaded from an OGG file
+///
+/// JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly -
+/// you can just use jngl::play.
 class SoundFile {
 public:
 	/// Load an OGG file called \a filename
