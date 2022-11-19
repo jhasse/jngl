@@ -12,17 +12,15 @@
 	font-weight: bold;
 }
 
-body, table, div, p, dl, p.definition, table.directory, .tabs, .tabs2, a {
-	font-family: "Lato", sans-serif;
-}
-
 :root {
 	/* --primary-color: #2d77c9; */
 	/* --page-foreground-color: #000; */
+	--font-family: "Lato", system-ui, sans-serif;
+	--side-nav-arrow-opacity: 0.4;
 }
 
 a.el, a.elRef, .memname, td.entry, pre.fragment, div.line, .mdescLeft, .memItemLeft,
 .memItemRight, .memTemplItemLeft, .memTemplItemRight, .memTemplParams, .memtemplate,
 .params .paramname, .retval .paramname, .params .paramdir, td.paramname, code {
-	font-family: 'Consolas', monospace;
+	font-family: var(--font-family-monospace);
 }
