@@ -1,0 +1,5 @@
+<map id="Drawable" name="Drawable">
+<area shape="rect" id="node1" title="Base class for drawable objects with a position and a rectangle size." alt="" coords="40,5,127,31"/>
+<area shape="rect" id="node2" href="$classjngl_1_1Sprite.html" title="Higher&#45;level representation of an image." alt="" coords="5,79,76,104"/>
+<area shape="rect" id="node3" href="$classjngl_1_1Text.html" title="Rectangle shaped text block." alt="" coords="100,79,155,104"/>
+</map>

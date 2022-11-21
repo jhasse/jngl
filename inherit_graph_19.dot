@@ -1,9 +1,0 @@
-digraph "Graphical Class Hierarchy"
-{
- // LATEX_PDF_SIZE
-  bgcolor="transparent";
-  edge [fontname='Consolas',monospace,fontsize=10,labelfontname='Consolas',monospace,labelfontsize=10];
-  node [fontname='Consolas',monospace,fontsize=10,shape=box,height=0.2,width=0.4];
-  rankdir="LR";
-  Node0 [label="ShaderProgram::Context",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$structjngl_1_1ShaderProgram_1_1Context.html",tooltip="Lifetime object when the ShaderProgram is in use."];
-}

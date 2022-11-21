@@ -1,0 +1,4 @@
+<map id="Job" name="Job">
+<area shape="rect" id="node1" title="Background job which stays part of the main loop independent of the active jngl::Work." alt="" coords="9,5,56,31"/>
+<area shape="rect" id="node2" href="$classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself." alt="" coords="5,79,60,104"/>
+</map>
