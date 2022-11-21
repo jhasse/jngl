@@ -1,4 +1,4 @@
-// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Vec2 class
 /// @file
@@ -13,7 +13,7 @@ namespace jngl {
 
 /// Two-dimensional vector
 ///
-/// JNGL doesn't provide any linear algebra functions but relies on the excelent
+/// JNGL doesn't provide any linear algebra functions itself but relies on the excellent
 /// [Boost.QVM](https://www.boost.org/doc/libs/release/libs/qvm/index.html):
 ///
 /// \code
