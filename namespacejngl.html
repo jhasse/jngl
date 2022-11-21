@@ -509,8 +509,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setPrefix</b> (const 
 <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPrefix</b> ()</td></tr>
 <tr class="memdesc:abf5b2d5c1e7afb827b0151d194503854"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the global prefix set by <a class="el" href="namespacejngl.html#a331699c6d357204373f8ad42fc174d07" title="Sets a global prefix which will be prepended whenever images or sounds are loaded.">jngl::setPrefix</a>. <br /></td></tr>
 <tr class="separator:abf5b2d5c1e7afb827b0151d194503854"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace0bccdd95107deb172bfae920eb4769"><td class="memItemLeft" align="right" valign="top"><a id="ace0bccdd95107deb172bfae920eb4769" name="ace0bccdd95107deb172bfae920eb4769"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setConfigPath</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;path)</td></tr>
+<tr class="memitem:ace0bccdd95107deb172bfae920eb4769"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ace0bccdd95107deb172bfae920eb4769">setConfigPath</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;path)</td></tr>
 <tr class="separator:ace0bccdd95107deb172bfae920eb4769"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67f578ae7b31a18af696c75231554372"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a67f578ae7b31a18af696c75231554372">getConfigPath</a> ()</td></tr>
 <tr class="separator:a67f578ae7b31a18af696c75231554372"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -520,6 +519,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setConfigPath</b> (co
 <tr class="separator:ac133cf5185d3b52971d219380da1517a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c4816c324038640de13593ee1c5844d"><td class="memItemLeft" align="right" valign="top"><a id="a5c4816c324038640de13593ee1c5844d" name="a5c4816c324038640de13593ee1c5844d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setArgs</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &gt;)</td></tr>
+<tr class="memdesc:a5c4816c324038640de13593ee1c5844d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by JNGL_MAIN_BEGIN to set command line arguments. <br /></td></tr>
 <tr class="separator:a5c4816c324038640de13593ee1c5844d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac84a94c9280462d8c9157cbe1d3e936a"><td class="memItemLeft" align="right" valign="top"><a id="ac84a94c9280462d8c9157cbe1d3e936a" name="ac84a94c9280462d8c9157cbe1d3e936a"></a>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getArgs</b> ()</td></tr>
@@ -1326,7 +1326,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 
 <p>Updates the input state. </p>
 <p ><a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> calls this before <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Work::step()</a></p>
-<p >Normally you shouldn't call this yourself at all unleass you want to implement your own game loop. </p>
+<p >Normally you shouldn't call this yourself at all, unless you want to implement your own game loop. </p>
 
 </div>
 </div>
@@ -1412,6 +1412,25 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 
 </div>
 </div>
+<a id="ace0bccdd95107deb172bfae920eb4769" name="ace0bccdd95107deb172bfae920eb4769"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace0bccdd95107deb172bfae920eb4769">&#9670;&#160;</a></span>setConfigPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setConfigPath </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="namespacejngl.html#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead. </dd></dl>
+
+</div>
+</div>
 <a id="a67f578ae7b31a18af696c75231554372" name="a67f578ae7b31a18af696c75231554372"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a67f578ae7b31a18af696c75231554372">&#9670;&#160;</a></span>getConfigPath()</h2>
 
@@ -1426,7 +1445,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="namespacejngl.html#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="namespacejngl.html#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
 <p >Returns the directory where to store configuration files and save games.</p><ul>
 <li>Windows: <code>%AppData%/Display Name/</code></li>
 <li>Linux: <code>~/.config/Display Name/</code></li>
@@ -1711,7 +1730,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div><div class="memdoc">
 
 <p>Sleep current thread for <em>milliseconds</em>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated:</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated:</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
 
 </div>
 </div>
@@ -1752,7 +1771,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
 
 </div>
 </div>
