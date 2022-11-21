@@ -1,6 +1,6 @@
 var classjngl_1_1SoundFile =
 [
-    [ "SoundFile", "classjngl_1_1SoundFile.html#a545c659b1fbfed195fee3ed9dd29db75", null ],
+    [ "SoundFile", "classjngl_1_1SoundFile.html#a23cee4b1b6eadd42debe5625c27f5fa1", null ],
     [ "play", "classjngl_1_1SoundFile.html#a6d58098c6cf63c241ed03bc797256bb1", null ],
     [ "stop", "classjngl_1_1SoundFile.html#a8c528baf37154d347366083f0f816846", null ],
     [ "isPlaying", "classjngl_1_1SoundFile.html#a8438e3403946accc1986a05b89ee7b03", null ],

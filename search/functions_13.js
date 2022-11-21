@@ -116,7 +116,7 @@ var searchData=
   ['snprintf_113',['snprintf',['http://en.cppreference.com/w/cpp/io/c/fprintf.html',1,'std']]],
   ['sort_114',['sort',['http://en.cppreference.com/w/cpp/container/forward_list/sort.html',1,'std::pmr::forward_list::sort()'],['http://en.cppreference.com/w/cpp/algorithm/sort.html',1,'std::sort()'],['http://en.cppreference.com/w/cpp/container/list/sort.html',1,'std::list::sort()'],['http://en.cppreference.com/w/cpp/container/forward_list/sort.html',1,'std::forward_list::sort()'],['http://en.cppreference.com/w/cpp/container/list/sort.html',1,'std::pmr::list::sort()']]],
   ['sort_5fheap_115',['sort_heap',['http://en.cppreference.com/w/cpp/algorithm/sort_heap.html',1,'std']]],
-  ['soundfile_116',['SoundFile',['../classjngl_1_1SoundFile.html#a545c659b1fbfed195fee3ed9dd29db75',1,'jngl::SoundFile']]],
+  ['soundfile_116',['SoundFile',['../classjngl_1_1SoundFile.html#a23cee4b1b6eadd42debe5625c27f5fa1',1,'jngl::SoundFile']]],
   ['space_117',['space',['http://en.cppreference.com/w/cpp/filesystem/space.html',1,'std::filesystem::space()'],['http://en.cppreference.com/w/cpp/experimental/fs/space.html',1,'std::experimental::filesystem::space()']]],
   ['span_118',['span',['http://en.cppreference.com/w/cpp/container/span/span.html',1,'std::span']]],
   ['sph_5fbessel_119',['sph_bessel',['http://en.cppreference.com/w/cpp/numeric/special_math/sph_bessel.html',1,'std']]],
