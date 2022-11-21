@@ -22,6 +22,24 @@ class Work;
 } // namespace jngl
 
 /// Implement this function and set AppParameters::start
+///
+/// Usually you'd want to do this in a file called e.g. `main.cpp`:
+/// \code
+/// #include "MyGame.hpp" // class that derives from jngl::Work
+///
+/// #include <jngl/init.hpp>
+///
+/// jngl::AppParameters jnglInit() {
+///     jngl::AppParameters params;
+///     params.displayName = "My Game";
+///     params.screenSize = { 1920, 1080 };
+/// 
+///     params.start = []() {
+///         return std::make_shared<MyGame>();
+///     };
+///     return params;
+/// }
+/// \endcode
 jngl::AppParameters jnglInit();
 
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE // iOS

@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Effects that can be applied to jngl::Widget
 /// @file
@@ -8,6 +8,7 @@
 
 namespace jngl {
 
+/// Base class for effects that can be applied to jngl::Widget
 class Effect {
 public:
 	enum class Action {

@@ -8,13 +8,18 @@ namespace jngl {
 
 class Pixels;
 
-/// Scale-independent pixels, see jngl::getScaleFactor()
+/// Scale-independent pixels, also called "screen pixels"
+///
+/// jngl::getScreenSize() will return the number of scale-independent pixels in your canvas. This is
+/// also the size you can specify in jngl::AppParameters::screenSize.
 class ScaleablePixels {
 public:
 	explicit ScaleablePixels(double);
 
+	/// Returns the value
 	explicit operator double() const;
 
+	/// Returns the value multiplied by jngl::getScaleFactor()
 	explicit operator Pixels() const;
 
 private:
