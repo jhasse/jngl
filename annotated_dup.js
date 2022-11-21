@@ -18,7 +18,7 @@ var annotated_dup =
       [ "Mat3", "classjngl_1_1Mat3.html", "classjngl_1_1Mat3" ],
       [ "Mat4", "classjngl_1_1Mat4.html", "classjngl_1_1Mat4" ],
       [ "Pixels", "classjngl_1_1Pixels.html", null ],
-      [ "ScaleablePixels", "classjngl_1_1ScaleablePixels.html", null ],
+      [ "ScaleablePixels", "classjngl_1_1ScaleablePixels.html", "classjngl_1_1ScaleablePixels" ],
       [ "Shader", "classjngl_1_1Shader.html", "classjngl_1_1Shader" ],
       [ "ShaderProgram", "classjngl_1_1ShaderProgram.html", "classjngl_1_1ShaderProgram" ],
       [ "SoundFile", "classjngl_1_1SoundFile.html", "classjngl_1_1SoundFile" ],

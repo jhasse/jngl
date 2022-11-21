@@ -50,8 +50,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AppParameters_8hpp.html",
-"classjngl_1_1ShaderProgram.html",
-"matrix_8hpp.html#a74e4ac455bf89378a4f47726b5014f44"
+"classjngl_1_1Shader.html#a3a4c1bba70b26e5283b8c045b990a3c3",
+"main_8hpp_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

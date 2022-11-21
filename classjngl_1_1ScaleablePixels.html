@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('classjngl_1_1ScaleablePixels.html','')
 </div><!--header-->
 <div class="contents">
 
-<p>Scale-independent pixels, see <a class="el" href="namespacejngl.html#a7d23d95fbe7f69b235a6984b67f5fa7c" title="Size of one screen pixel in actual pixels.">jngl::getScaleFactor()</a>  
+<p>Scale-independent pixels, also called "screen pixels".  
  <a href="classjngl_1_1ScaleablePixels.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="ScaleablePixels_8hpp_source.html">jngl/ScaleablePixels.hpp</a>&gt;</code></p>
@@ -113,15 +113,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acccf80808b9880b845b100470accdca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c5a46ebe31a3699f441668931f2978e"><td class="memItemLeft" align="right" valign="top"><a id="a3c5a46ebe31a3699f441668931f2978e" name="a3c5a46ebe31a3699f441668931f2978e"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>operator double</b> () const</td></tr>
+<tr class="memdesc:a3c5a46ebe31a3699f441668931f2978e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value. <br /></td></tr>
 <tr class="separator:a3c5a46ebe31a3699f441668931f2978e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a700ce0a3b5dc58a20341baa8a40e396e"><td class="memItemLeft" align="right" valign="top"><a id="a700ce0a3b5dc58a20341baa8a40e396e" name="a700ce0a3b5dc58a20341baa8a40e396e"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>operator Pixels</b> () const</td></tr>
+<tr class="memdesc:a700ce0a3b5dc58a20341baa8a40e396e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value multiplied by <a class="el" href="namespacejngl.html#a7d23d95fbe7f69b235a6984b67f5fa7c" title="Size of one screen pixel in actual pixels.">jngl::getScaleFactor()</a> <br /></td></tr>
 <tr class="separator:a700ce0a3b5dc58a20341baa8a40e396e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Scale-independent pixels, see <a class="el" href="namespacejngl.html#a7d23d95fbe7f69b235a6984b67f5fa7c" title="Size of one screen pixel in actual pixels.">jngl::getScaleFactor()</a> </p>
+<div class="textblock"><p >Scale-independent pixels, also called "screen pixels". </p>
+<p ><a class="el" href="namespacejngl.html#af73b72c0f9314a0e65382f95e326bd39" title="Returns the size of the useable draw area (excluding letter-boxing) in screen pixels.">jngl::getScreenSize()</a> will return the number of scale-independent pixels in your canvas. This is also the size you can specify in <a class="el" href="structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b" title="Size of the canvas in screen pixels, see jngl::getScreenSize()">jngl::AppParameters::screenSize</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ScaleablePixels_8hpp_source.html#l00012">12</a> of file <a class="el" href="ScaleablePixels_8hpp_source.html">ScaleablePixels.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ScaleablePixels_8hpp_source.html#l00015">15</a> of file <a class="el" href="ScaleablePixels_8hpp_source.html">ScaleablePixels.hpp</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>jngl/<a class="el" href="ScaleablePixels_8hpp_source.html">ScaleablePixels.hpp</a></li>
 </ul>

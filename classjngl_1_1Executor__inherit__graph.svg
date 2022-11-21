@@ -20,8 +20,8 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="classjngl_1_1Effect.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#bfbfbf" points="56,-74 9,-74 9,-55 56,-55 56,-74"/>
+<g id="a_node2"><a xlink:href="classjngl_1_1Effect.html" target="_top" xlink:title="Base class for effects that can be applied to jngl::Widget.">
+<polygon fill="white" stroke="#666666" points="56,-74 9,-74 9,-55 56,-55 56,-74"/>
 <text text-anchor="middle" x="32.5" y="-62" font-family="ui-monospace,monospace" font-size="10.00">Effect</text>
 </a>
 </g>

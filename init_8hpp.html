@@ -126,9 +126,8 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a2471fe7de5ef776522a016331b6bf6e5"><td class="memItemLeft" align="right" valign="top"><a id="a2471fe7de5ef776522a016331b6bf6e5" name="a2471fe7de5ef776522a016331b6bf6e5"></a>
-<a class="el" href="structjngl_1_1AppParameters.html">jngl::AppParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><b>jnglInit</b> ()</td></tr>
-<tr class="memdesc:a2471fe7de5ef776522a016331b6bf6e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implement this function and set AppParameters::start. <br /></td></tr>
+<tr class="memitem:a2471fe7de5ef776522a016331b6bf6e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structjngl_1_1AppParameters.html">jngl::AppParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="init_8hpp.html#a2471fe7de5ef776522a016331b6bf6e5">jnglInit</a> ()</td></tr>
+<tr class="memdesc:a2471fe7de5ef776522a016331b6bf6e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implement this function and set AppParameters::start.  <a href="init_8hpp.html#a2471fe7de5ef776522a016331b6bf6e5">More...</a><br /></td></tr>
 <tr class="separator:a2471fe7de5ef776522a016331b6bf6e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="init_8hpp.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
 <tr class="separator:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,6 +137,45 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition in file <a class="el" href="init_8hpp_source.html">init.hpp</a>.</p>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="a2471fe7de5ef776522a016331b6bf6e5" name="a2471fe7de5ef776522a016331b6bf6e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2471fe7de5ef776522a016331b6bf6e5">&#9670;&#160;</a></span>jnglInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structjngl_1_1AppParameters.html">jngl::AppParameters</a> jnglInit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Implement this function and set AppParameters::start. </p>
+<p >Usually you'd want to do this in a file called e.g. <code>main.cpp</code>: </p><div class="fragment"><div class="line"><span class="preprocessor">#include &quot;MyGame.hpp&quot;</span> <span class="comment">// class that derives from jngl::Work</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="init_8hpp.html">jngl/init.hpp</a>&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_struct" href="structjngl_1_1AppParameters.html">jngl::AppParameters</a> <a class="code hl_function" href="init_8hpp.html#a2471fe7de5ef776522a016331b6bf6e5">jnglInit</a>() {</div>
+<div class="line">    <a class="code hl_struct" href="structjngl_1_1AppParameters.html">jngl::AppParameters</a> params;</div>
+<div class="line">    params.<a class="code hl_variable" href="structjngl_1_1AppParameters.html#abd54db44deb77f599f600479aea631a3">displayName</a> = <span class="stringliteral">&quot;My Game&quot;</span>;</div>
+<div class="line">    params.<a class="code hl_variable" href="structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b">screenSize</a> = { 1920, 1080 };</div>
+<div class="line"> </div>
+<div class="line">    params.<a class="code hl_variable" href="structjngl_1_1AppParameters.html#ab8f3127de4b6ccfc51833c48f37c7e1c">start</a> = []() {</div>
+<div class="line">        <span class="keywordflow">return</span> std::make_shared&lt;MyGame&gt;();</div>
+<div class="line">    };</div>
+<div class="line">    <span class="keywordflow">return</span> params;</div>
+<div class="line">}</div>
+<div class="ttc" id="ainit_8hpp_html"><div class="ttname"><a href="init_8hpp.html">init.hpp</a></div><div class="ttdoc">Include this file only once, as it defines the main function.</div></div>
+<div class="ttc" id="ainit_8hpp_html_a2471fe7de5ef776522a016331b6bf6e5"><div class="ttname"><a href="init_8hpp.html#a2471fe7de5ef776522a016331b6bf6e5">jnglInit</a></div><div class="ttdeci">jngl::AppParameters jnglInit()</div><div class="ttdoc">Implement this function and set AppParameters::start.</div></div>
+<div class="ttc" id="astructjngl_1_1AppParameters_html"><div class="ttname"><a href="structjngl_1_1AppParameters.html">jngl::AppParameters</a></div><div class="ttdoc">Parameters used to initialize the main window.</div><div class="ttdef"><b>Definition:</b> <a href="AppParameters_8hpp_source.html#l00017">AppParameters.hpp:17</a></div></div>
+<div class="ttc" id="astructjngl_1_1AppParameters_html_ab8f3127de4b6ccfc51833c48f37c7e1c"><div class="ttname"><a href="structjngl_1_1AppParameters.html#ab8f3127de4b6ccfc51833c48f37c7e1c">jngl::AppParameters::start</a></div><div class="ttdeci">std::function&lt; std::shared_ptr&lt; jngl::Work &gt;()&gt; start</div><div class="ttdoc">A factory function which creates the first jngl::Work.</div><div class="ttdef"><b>Definition:</b> <a href="AppParameters_8hpp_source.html#l00019">AppParameters.hpp:19</a></div></div>
+<div class="ttc" id="astructjngl_1_1AppParameters_html_abd54db44deb77f599f600479aea631a3"><div class="ttname"><a href="structjngl_1_1AppParameters.html#abd54db44deb77f599f600479aea631a3">jngl::AppParameters::displayName</a></div><div class="ttdeci">std::string displayName</div><div class="ttdoc">Display name of the application which will be used in the window title for example.</div><div class="ttdef"><b>Definition:</b> <a href="AppParameters_8hpp_source.html#l00022">AppParameters.hpp:22</a></div></div>
+<div class="ttc" id="astructjngl_1_1AppParameters_html_aefc3b35ef4d7e9bba2cc4481cad0398b"><div class="ttname"><a href="structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b">jngl::AppParameters::screenSize</a></div><div class="ttdeci">std::optional&lt; jngl::Vec2 &gt; screenSize</div><div class="ttdoc">Size of the canvas in screen pixels, see jngl::getScreenSize()</div><div class="ttdef"><b>Definition:</b> <a href="AppParameters_8hpp_source.html#l00027">AppParameters.hpp:27</a></div></div>
+</div><!-- fragment --> 
+</div>
+</div>
 <a id="a3c04138a5bfe5d72780bb7e82a18e627" name="a3c04138a5bfe5d72780bb7e82a18e627"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3c04138a5bfe5d72780bb7e82a18e627">&#9670;&#160;</a></span>main()</h2>
 
@@ -164,7 +202,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="init_8hpp_source.html#l00028">28</a> of file <a class="el" href="init_8hpp_source.html">init.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="init_8hpp_source.html#l00046">46</a> of file <a class="el" href="init_8hpp_source.html">init.hpp</a>.</p>
 
 </div>
 </div>

@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
-<g id="a_node1"><a xlink:title=" ">
+<g id="a_node1"><a xlink:title="Base class for effects that can be applied to jngl::Widget.">
 <polygon fill="#999999" stroke="#666666" points="91,-74 44,-74 44,-55 91,-55 91,-74"/>
 <text text-anchor="middle" x="67.5" y="-62" font-family="ui-monospace,monospace" font-size="10.00">Effect</text>
 </a>
