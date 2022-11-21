@@ -15,7 +15,7 @@ bool running();
 
 /// Updates the input state. App::mainLoop() calls this before Work::step()
 ///
-/// Normally you shouldn't call this yourself at all unleass you want to implement your own game
+/// Normally you shouldn't call this yourself at all, unless you want to implement your own game
 /// loop.
 void updateInput();
 
@@ -72,6 +72,7 @@ void setPrefix(const std::string& path);
 /// Returns the global prefix set by jngl::setPrefix
 std::string getPrefix();
 
+/// \deprecated Use jngl::writeConfig and jngl::readConfig instead.
 void setConfigPath(const std::string& path);
 
 /// \deprecated Use jngl::writeConfig and jngl::readConfig instead.
@@ -86,12 +87,13 @@ void setConfigPath(const std::string& path);
 /// Returns the directory of the currently running binary
 std::string getBinaryPath();
 
+/// Called by JNGL_MAIN_BEGIN to set command line arguments
 void setArgs(std::vector<std::string>);
 
-/// Returns the command line arguments passed to the executable.
+/// Returns the command line arguments passed to the executable
 std::vector<std::string> getArgs();
 
-/// Returns a stringstream containing the whole file. This will read from the .apk on Android.
+/// Returns a stringstream containing the whole file. This will read from the .apk on Android
 std::stringstream readAsset(const std::string& filename);
 
 /// Read in a configuration value which has been saved under \a key
