@@ -35,7 +35,7 @@ public:
 	/// \note
 	/// If the file doesn't exist this will not throw, but calling SoundFile::play, SoundFile::loop
 	/// or SoundFile::load will.
-	SoundFile(std::string filename, std::launch policy);
+	SoundFile(std::string filename, std::launch policy = std::launch::async);
 	~SoundFile();
 	SoundFile(const SoundFile&) = delete;
 	SoundFile& operator=(const SoundFile&) = delete;
