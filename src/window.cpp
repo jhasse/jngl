@@ -510,6 +510,12 @@ void Window::drawRect(const Vec2 pos, const Vec2 size) const {
 	jngl::popMatrix();
 }
 
+void Window::drawRect(Mat3 modelview, const Vec2 size) const {
+	glBindVertexArray(vaoRect);
+	auto tmp = useSimpleShaderProgram(modelview.scale(size.x, size.y));
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+}
+
 void Window::onControllerChanged(std::function<void()> callback) {
 	controllerChangedCallback = std::move(callback);
 }

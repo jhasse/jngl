@@ -63,6 +63,11 @@ void drawRect(double xposition, double yposition, double width, double height);
 /// Use setColor(Color) to change the color and setAlpha(uint8_t) to change the translucency.
 void drawRect(Vec2 position, Vec2 size);
 
+/// Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color
+///
+/// Use setAlpha to set the opacity.
+void drawRect(const Mat3& modelview, Vec2 size, Color);
+
 template <class Vect> void drawRect(Vect pos, Vect size) {
 	drawRect(pos.x, pos.y, size.x, size.y);
 }

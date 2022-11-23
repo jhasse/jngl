@@ -451,11 +451,20 @@ void popMatrix() {
 
 void drawRect(const double xposition, const double yposition, const double width,
               const double height) {
-	pWindow->drawRect({ xposition, yposition }, { width, height });
+	pWindow->drawRect(Vec2{ xposition, yposition }, { width, height });
 }
 
 void drawRect(const Vec2 position, const Vec2 size) {
 	pWindow->drawRect(position, size);
+}
+
+void drawRect(const Mat3& modelview, const Vec2 size, const Color color) {
+	auto red = colorRed;
+	auto green = colorGreen;
+	auto blue = colorBlue;
+	jngl::setColor(color);
+	pWindow->drawRect(modelview, size);
+	jngl::setColor(red, green, blue);
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {

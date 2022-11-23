@@ -102,6 +102,7 @@ public:
 	static void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
 	void drawLine(Mat3 modelview, Vec2 b) const;
 	void drawRect(Vec2 pos, Vec2 size) const;
+	void drawRect(Mat3 modelview, Vec2 size) const;
 	void onControllerChanged(std::function<void()>);
 
 private:
