@@ -1,4 +1,4 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Sprite class and related functions
 /// \file
@@ -9,6 +9,7 @@
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
 
+#include <future>
 #include <vector>
 
 namespace jngl {
@@ -30,6 +31,31 @@ public:
 	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
 	void step() override;
 	void draw() const override;
+
+	/// Loads a sprite on a thread (if not loaded already)
+	///
+	/// You'll need to capture the returned std::future as it would otherwise block in its
+	/// destructor.
+	/// Example:
+	/// \code
+	/// class MyGame : public jngl::Work {
+	///     void step() override {}
+	///     void draw() const override {
+	///         if (myFuture.wait_for(std::chrono::milliseconds(2)) == std::future_status::ready) {
+	///             mySprite = myFuture.get();
+	///         }
+	///         if (mySprite) {
+	///             mySprite->draw();
+	///         } else {
+	///             jngl::print("loading...", jngl::Vec2(0, 0));
+	///         }
+	///     }
+	///
+	///     std::future<std::shared_ptr<jngl::Sprite>> myFuture = jngl::Sprite::load("foo.webp");
+	///     std::shared_ptr<jngl::Sprite> mySprite;
+	/// };
+	/// \endcode
+	std::future<std::shared_ptr<Sprite>> load(const std::string& filename);
 
 	/// Draws the image centered using \a modelview
 	///

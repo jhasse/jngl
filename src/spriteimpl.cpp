@@ -86,6 +86,14 @@ Finally loadSprite(const std::string& filename) {
 	return Finally(nullptr);
 }
 
+std::future<std::shared_ptr<Sprite>> Sprite::load(const std::string& filename) {
+	auto finally = jngl::load(filename);
+	return std::async(std::launch::deferred, [filename, finally = std::move(finally)]() mutable {
+		{ auto tmp = std::move(finally); }
+		return sprites_[filename];
+	});
+}
+
 void unload(const std::string& filename) {
 	auto it = sprites_.find(filename);
 	if (it != sprites_.end()) {
