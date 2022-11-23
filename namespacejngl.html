@@ -637,6 +637,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawRect</b> (double 
 <tr class="memitem:a613e032e5ada91ff002f75a46bd217b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a613e032e5ada91ff002f75a46bd217b9">drawRect</a> (<a class="el" href="classjngl_1_1Vec2.html">Vec2</a> position, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> size)</td></tr>
 <tr class="memdesc:a613e032e5ada91ff002f75a46bd217b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle at <em>position</em>.  <a href="namespacejngl.html#a613e032e5ada91ff002f75a46bd217b9">More...</a><br /></td></tr>
 <tr class="separator:a613e032e5ada91ff002f75a46bd217b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a205c2adf01c829c4ebc78d9ef94ab793"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a205c2adf01c829c4ebc78d9ef94ab793">drawRect</a> (const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;<a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> size, <a class="el" href="classjngl_1_1Color.html">Color</a>)</td></tr>
+<tr class="memdesc:a205c2adf01c829c4ebc78d9ef94ab793"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color.  <a href="namespacejngl.html#a205c2adf01c829c4ebc78d9ef94ab793">More...</a><br /></td></tr>
+<tr class="separator:a205c2adf01c829c4ebc78d9ef94ab793"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5d7a4704b83794f3c27871f022e2aa2"><td class="memTemplParams" colspan="2">template&lt;class Vect &gt; </td></tr>
 <tr class="memitem:af5d7a4704b83794f3c27871f022e2aa2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejngl.html#af5d7a4704b83794f3c27871f022e2aa2">drawRect</a> (Vect pos, Vect size)</td></tr>
 <tr class="separator:af5d7a4704b83794f3c27871f022e2aa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1536,7 +1539,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div>
 </div>
 <a id="a613e032e5ada91ff002f75a46bd217b9" name="a613e032e5ada91ff002f75a46bd217b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a613e032e5ada91ff002f75a46bd217b9">&#9670;&#160;</a></span>drawRect() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a613e032e5ada91ff002f75a46bd217b9">&#9670;&#160;</a></span>drawRect() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1566,8 +1569,45 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 
 </div>
 </div>
+<a id="a205c2adf01c829c4ebc78d9ef94ab793" name="a205c2adf01c829c4ebc78d9ef94ab793"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a205c2adf01c829c4ebc78d9ef94ab793">&#9670;&#160;</a></span>drawRect() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawRect </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;&#160;</td>
+          <td class="paramname"><em>modelview</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Color.html">Color</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color. </p>
+<p >Use setAlpha to set the opacity. </p>
+
+</div>
+</div>
 <a id="af5d7a4704b83794f3c27871f022e2aa2" name="af5d7a4704b83794f3c27871f022e2aa2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5d7a4704b83794f3c27871f022e2aa2">&#9670;&#160;</a></span>drawRect() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af5d7a4704b83794f3c27871f022e2aa2">&#9670;&#160;</a></span>drawRect() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1592,7 +1632,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00066">66</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00071">71</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
 
 </div>
 </div>

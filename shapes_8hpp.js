@@ -4,5 +4,6 @@ var shapes_8hpp =
     [ "setAlpha", "shapes_8hpp.html#a2e0420f68fa01ef7219a0bc2aa792169", null ],
     [ "drawLine", "shapes_8hpp.html#ae891e0c19cfaeb0ec2875aa2735b20a8", null ],
     [ "drawCircle", "shapes_8hpp.html#acffb85162aeb7457024b3fdb2b4df9b9", null ],
-    [ "drawRect", "shapes_8hpp.html#a613e032e5ada91ff002f75a46bd217b9", null ]
+    [ "drawRect", "shapes_8hpp.html#a613e032e5ada91ff002f75a46bd217b9", null ],
+    [ "drawRect", "shapes_8hpp.html#a205c2adf01c829c4ebc78d9ef94ab793", null ]
 ];

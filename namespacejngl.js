@@ -131,6 +131,7 @@ var namespacejngl =
     [ "drawLine", "namespacejngl.html#ae891e0c19cfaeb0ec2875aa2735b20a8", null ],
     [ "drawCircle", "namespacejngl.html#acffb85162aeb7457024b3fdb2b4df9b9", null ],
     [ "drawRect", "namespacejngl.html#a613e032e5ada91ff002f75a46bd217b9", null ],
+    [ "drawRect", "namespacejngl.html#a205c2adf01c829c4ebc78d9ef94ab793", null ],
     [ "play", "namespacejngl.html#a9a2d4a760f9febf9ab966d0ed41183b2", null ],
     [ "stop", "namespacejngl.html#abe3523bc342eb0bfc08a004bc2bce9ee", null ],
     [ "isPlaying", "namespacejngl.html#a41df6b862953562a4795ef71dc79fc9c", null ],
