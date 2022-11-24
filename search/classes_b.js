@@ -9,11 +9,12 @@ var searchData=
   ['linear_5fcongruential_5fengine_6',['linear_congruential_engine',['http://en.cppreference.com/w/cpp/numeric/random/linear_congruential_engine.html',1,'std']]],
   ['list_7',['list',['http://en.cppreference.com/w/cpp/container/list.html',1,'list'],['http://en.cppreference.com/w/cpp/container/list.html',1,'list']]],
   ['lldiv_5ft_8',['lldiv_t',['http://en.cppreference.com/w/cpp/numeric/math/div.html',1,'std']]],
-  ['locale_9',['locale',['http://en.cppreference.com/w/cpp/locale/locale.html',1,'std']]],
-  ['lock_5fguard_10',['lock_guard',['http://en.cppreference.com/w/cpp/thread/lock_guard.html',1,'std']]],
-  ['logic_5ferror_11',['logic_error',['http://en.cppreference.com/w/cpp/error/logic_error.html',1,'std']]],
-  ['logical_5fand_12',['logical_and',['http://en.cppreference.com/w/cpp/utility/functional/logical_and.html',1,'std']]],
-  ['logical_5fnot_13',['logical_not',['http://en.cppreference.com/w/cpp/utility/functional/logical_not.html',1,'std']]],
-  ['logical_5for_14',['logical_or',['http://en.cppreference.com/w/cpp/utility/functional/logical_or.html',1,'std']]],
-  ['lognormal_5fdistribution_15',['lognormal_distribution',['http://en.cppreference.com/w/cpp/numeric/random/lognormal_distribution.html',1,'std']]]
+  ['loader_9',['Loader',['../classjngl_1_1Sprite_1_1Loader.html',1,'jngl::Sprite']]],
+  ['locale_10',['locale',['http://en.cppreference.com/w/cpp/locale/locale.html',1,'std']]],
+  ['lock_5fguard_11',['lock_guard',['http://en.cppreference.com/w/cpp/thread/lock_guard.html',1,'std']]],
+  ['logic_5ferror_12',['logic_error',['http://en.cppreference.com/w/cpp/error/logic_error.html',1,'std']]],
+  ['logical_5fand_13',['logical_and',['http://en.cppreference.com/w/cpp/utility/functional/logical_and.html',1,'std']]],
+  ['logical_5fnot_14',['logical_not',['http://en.cppreference.com/w/cpp/utility/functional/logical_not.html',1,'std']]],
+  ['logical_5for_15',['logical_or',['http://en.cppreference.com/w/cpp/utility/functional/logical_or.html',1,'std']]],
+  ['lognormal_5fdistribution_16',['lognormal_distribution',['http://en.cppreference.com/w/cpp/numeric/random/lognormal_distribution.html',1,'std']]]
 ];

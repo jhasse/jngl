@@ -26,6 +26,7 @@ var searchData=
   ['function_3c_20std_3a_3ashared_5fptr_3c_20jngl_3a_3awork_20_3e_28_29_3e_23',['function&lt; std::shared_ptr&lt; jngl::Work &gt;()&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
   ['function_3c_20void_28_29_3e_24',['function&lt; void()&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
   ['future_25',['future',['http://en.cppreference.com/w/cpp/thread/future.html',1,'std']]],
-  ['future_5ferrc_26',['future_errc',['http://en.cppreference.com/w/cpp/thread/future_errc.html',1,'std']]],
-  ['future_5ferror_27',['future_error',['http://en.cppreference.com/w/cpp/thread/future_error.html',1,'std']]]
+  ['future_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3aimagedata_20_3e_20_3e_26',['future&lt; std::unique_ptr&lt; jngl::ImageData &gt; &gt;',['http://en.cppreference.com/w/cpp/thread/future.html',1,'std']]],
+  ['future_5ferrc_27',['future_errc',['http://en.cppreference.com/w/cpp/thread/future_errc.html',1,'std']]],
+  ['future_5ferror_28',['future_error',['http://en.cppreference.com/w/cpp/thread/future_error.html',1,'std']]]
 ];

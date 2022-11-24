@@ -24,6 +24,7 @@ var hierarchy =
     [ "Job", "classjngl_1_1Job.html", [
       [ "Work", "classjngl_1_1Work.html", null ]
     ] ],
+    [ "Sprite::Loader", "classjngl_1_1Sprite_1_1Loader.html", null ],
     [ "Mat3", "classjngl_1_1Mat3.html", null ],
     [ "Mat4", "classjngl_1_1Mat4.html", null ],
     [ "Pixels", "classjngl_1_1Pixels.html", null ],
