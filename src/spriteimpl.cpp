@@ -3,6 +3,8 @@
 
 #include "spriteimpl.hpp"
 
+#include "jngl/ImageData.hpp"
+#include "jngl/message.hpp"
 #include "texture.hpp"
 
 namespace jngl {
@@ -86,12 +88,44 @@ Finally loadSprite(const std::string& filename) {
 	return Finally(nullptr);
 }
 
-std::future<std::shared_ptr<Sprite>> Sprite::load(const std::string& filename) {
-	auto finally = jngl::load(filename);
-	return std::async(std::launch::deferred, [filename, finally = std::move(finally)]() mutable {
-		{ auto tmp = std::move(finally); }
-		return sprites_[filename];
-	});
+Sprite::Loader::Loader(std::string filename) noexcept : filename(std::move(filename)) {
+	if (sprites_.count(this->filename) == 0) {
+		imageDataFuture = std::async(std::launch::async, [this]() {
+			auto tmp = ImageData::load(this->filename);
+			tmp->pixels(); // TODO: Not needed when Sprite loading and jngl::load will be reworked
+			return tmp;
+		});
+	}
+}
+
+Sprite::Loader::~Loader() noexcept {
+	try {
+		shared();
+	} catch(std::exception& e) {
+		errorMessage(e.what());
+	}
+}
+
+std::shared_ptr<Sprite> Sprite::Loader::shared() const {
+	if (auto it = sprites_.find(filename); it != sprites_.end()) {
+		return it->second;
+	}
+	auto imageData = imageDataFuture.get();
+	return sprites_
+	    .try_emplace(filename, std::make_shared<Sprite>(imageData->pixels(), imageData->getWidth(),
+	                                                    imageData->getHeight()))
+	    .first->second;
+}
+
+Sprite::Loader::operator bool() const {
+	if (sprites_.count(filename) > 0) {
+		return true;
+	}
+	return imageDataFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
+}
+
+Sprite* Sprite::Loader::operator->() const {
+	return shared().get();
 }
 
 void unload(const std::string& filename) {

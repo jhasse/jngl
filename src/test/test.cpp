@@ -19,6 +19,24 @@ void testKeys();
 int performance = 1;
 double factor = 0;
 
+class AsyncLoad : public jngl::Work {
+public:
+	AsyncLoad() {
+		jngl::setSpriteAlpha(255);
+	}
+	void step() override {}
+	void draw() const override {
+		if (spriteAsync) {
+			spriteAsync->draw();
+		} else {
+			jngl::print("loading...", jngl::Vec2(0, 0));
+		}
+	}
+
+private:
+	jngl::Sprite::Loader spriteAsync{ "../examples/bike/bg" };
+};
+
 class Test : public jngl::Work {
 public:
 	Test()
@@ -59,6 +77,9 @@ public:
 				shaderProgram = std::make_unique<jngl::ShaderProgram>(jngl::Sprite::vertexShader(),
 				                                                      *fragmentShader);
 			}
+		}
+		if (jngl::keyPressed('g')) {
+			jngl::setWork<AsyncLoad>();
 		}
 	}
 	void drawBackground() const;
@@ -144,10 +165,11 @@ public:
 		}
 		jngl::print("Press K to test key codes.", 5, 490);
 		jngl::print("Press P to play a sound.", 6, 510);
+		jngl::print("Press G to load a Sprite asynchronously.", 6, 530);
 		static int playbackSpeed = 100;
 		jngl::setPlaybackSpeed(float(playbackSpeed) / 100.0f);
 		jngl::print("Press + and - to change the audio playback speed: " +
-		      std::to_string(playbackSpeed) + " %", 6, 530);
+		      std::to_string(playbackSpeed) + " %", 6, 550);
 		if (jngl::keyPressed('-')) {
 			--playbackSpeed;
 		}
@@ -157,7 +179,7 @@ public:
 		jngl::setVolume(volume);
 		jngl::print("Use your mouse wheel to change the volume: " +
 		                std::to_string(int(volume * 100)) + " %",
-		            6, 550);
+		            6, 570);
 		jngl::setColor(0,0,255,128);
 		if (drawOnFrameBuffer) {
 			fb2Context = {};
