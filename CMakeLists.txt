@@ -161,6 +161,18 @@ if(ANDROID OR MSVC OR IOS)
 endif()
 
 get_directory_property(hasParent PARENT_DIRECTORY)
+if(ANDROID OR MSVC OR IOS)
+	CPMAddPackage(NAME freetype
+		URL https://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.xz
+		URL_HASH SHA256=3333ae7cfda88429c97a7ae63b7d01ab398076c3b67182e960e5684050f2c5c8
+		OPTIONS "FT_DISABLE_HARFBUZZ 1"
+	)
+	if(hasParent)
+		set(FREETYPE_INCLUDE_DIRS ${freetype_SOURCE_DIR}/include PARENT_SCOPE)
+		set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
+	endif()
+	set(FREETYPE_LIBRARIES freetype)
+endif()
 if(ANDROID)
 	target_compile_definitions(jngl PRIVATE NOJPEG NOPNG OPENGLES)
 
@@ -176,17 +188,6 @@ if(ANDROID)
 			"ALSOFT_CPUEXT_NEON OFF"
 	)
 	set(OPENAL_LIBRARY OpenAL)
-
-	CPMAddPackage(NAME freetype
-		URL https://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.xz
-		URL_HASH SHA256=3333ae7cfda88429c97a7ae63b7d01ab398076c3b67182e960e5684050f2c5c8
-		OPTIONS "FT_DISABLE_HARFBUZZ 1"
-	)
-	if(hasParent)
-		set(FREETYPE_INCLUDE_DIRS ${freetype_SOURCE_DIR}/include PARENT_SCOPE)
-		set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
-	endif()
-	set(FREETYPE_LIBRARIES freetype)
 
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)
 	target_include_directories(jngl PRIVATE ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
@@ -352,19 +353,6 @@ else()
 			target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
 			target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
 		endif()
-	endif()
-
-	if(MSVC OR IOS)
-		FetchContent_Declare(freetype
-			URL https://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.xz
-			URL_HASH SHA1=b074d5c34dc0e3cc150be6e7aa6b07c9ec4ed875)
-		FetchContent_MakeAvailable(freetype)
-		FetchContent_GetProperties(freetype SOURCE_DIR FREETYPE_SRC_DIR)
-		if(hasParent)
-			set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include PARENT_SCOPE)
-			set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
-		endif()
-		set(FREETYPE_LIBRARIES freetype)
 	endif()
 
 	if(NOT hasParent)
