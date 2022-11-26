@@ -4,6 +4,7 @@ Easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox, the 
 Switch<sup><a href="#fn1">1</a></sup> and the Web.
 
 * [GitHub](https://github.com/jhasse/jngl)
+* [Try JNGL in your browser](https://jhasse.gitlab.io/ggj2021)
 
 ## Features
 
