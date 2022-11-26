@@ -2,6 +2,7 @@ var window_8hpp =
 [
     [ "showWindow", "window_8hpp.html#a067878c05abd87f38c0aa7de7bb9b3a5", null ],
     [ "hideWindow", "window_8hpp.html#a6d20c55145d6024abf036cc86e2e0380", null ],
+    [ "atExit", "window_8hpp.html#a92cae2836367e6879d02c48fc0cd1793", null ],
     [ "getWindowWidth", "window_8hpp.html#a8fc4938d1caca0f3230c1aa7acb9661b", null ],
     [ "getWindowHeight", "window_8hpp.html#a943b811007cc700d5758b550e843518a", null ],
     [ "getWindowSize", "window_8hpp.html#ad84f3e61595dd50afb8c51067ee57bb9", null ],

@@ -29,6 +29,7 @@ var dir_8e4ce6a79c50906a55e08e24621d0bf4 =
     [ "Shader.hpp", "Shader_8hpp.html", "Shader_8hpp" ],
     [ "ShaderProgram.hpp", "ShaderProgram_8hpp.html", "ShaderProgram_8hpp" ],
     [ "shapes.hpp", "shapes_8hpp.html", "shapes_8hpp" ],
+    [ "Singleton.hpp", "Singleton_8hpp.html", "Singleton_8hpp" ],
     [ "sound.hpp", "sound_8hpp.html", "sound_8hpp" ],
     [ "SoundFile.hpp", "SoundFile_8hpp.html", "SoundFile_8hpp" ],
     [ "sprite.hpp", "sprite_8hpp.html", "sprite_8hpp" ],

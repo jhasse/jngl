@@ -21,6 +21,7 @@ var annotated_dup =
       [ "ScaleablePixels", "classjngl_1_1ScaleablePixels.html", "classjngl_1_1ScaleablePixels" ],
       [ "Shader", "classjngl_1_1Shader.html", "classjngl_1_1Shader" ],
       [ "ShaderProgram", "classjngl_1_1ShaderProgram.html", "classjngl_1_1ShaderProgram" ],
+      [ "Singleton", "classjngl_1_1Singleton.html", null ],
       [ "SoundFile", "classjngl_1_1SoundFile.html", "classjngl_1_1SoundFile" ],
       [ "Sprite", "classjngl_1_1Sprite.html", "classjngl_1_1Sprite" ],
       [ "Text", "classjngl_1_1Text.html", "classjngl_1_1Text" ],

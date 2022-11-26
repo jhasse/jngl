@@ -31,6 +31,7 @@ var hierarchy =
     [ "ScaleablePixels", "classjngl_1_1ScaleablePixels.html", null ],
     [ "Shader", "classjngl_1_1Shader.html", null ],
     [ "ShaderProgram", "classjngl_1_1ShaderProgram.html", null ],
+    [ "Singleton< T >", "classjngl_1_1Singleton.html", null ],
     [ "SoundFile", "classjngl_1_1SoundFile.html", null ],
     [ "TextLine", "classjngl_1_1TextLine.html", null ],
     [ "Vec2", "classjngl_1_1Vec2.html", null ],
