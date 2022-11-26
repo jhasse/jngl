@@ -9,6 +9,7 @@
 #include "Pixels.hpp"
 
 #include <array>
+#include <functional>
 #include <string>
 #include <vector>
 
