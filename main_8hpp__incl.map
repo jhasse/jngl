@@ -1,8 +1,8 @@
 <map id="jngl/main.hpp" name="jngl/main.hpp">
-<area shape="rect" id="node1" title="Defines macros for the main entry point." alt="" coords="192,5,319,31"/>
-<area shape="rect" id="node2" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="44,79,155,104"/>
-<area shape="rect" id="node4" href="$other_8hpp.html" title="Miscellaneous functions." alt="" coords="208,79,303,104"/>
-<area shape="rect" id="node8" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="327,79,429,104"/>
+<area shape="rect" id="node1" title="Defines macros for the main entry point." alt="" coords="179,5,305,31"/>
+<area shape="rect" id="node2" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="31,79,141,104"/>
+<area shape="rect" id="node4" href="$other_8hpp.html" title="Miscellaneous functions." alt="" coords="195,79,289,104"/>
+<area shape="rect" id="node8" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="313,79,416,104"/>
 <area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="5,152,108,177"/>
 <area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/sstream.html" title=" " alt="" coords="132,152,211,177"/>
 <area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="235,152,305,177"/>

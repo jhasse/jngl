@@ -5,15 +5,15 @@
  -->
 <!-- Title: jngl/Pixels.hpp Pages: 1 -->
 <svg width="390pt" height="247pt"
- viewBox="0.00 0.00 390.37 247.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ viewBox="0.00 0.00 389.96 247.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 243)">
 <title>jngl/Pixels.hpp</title>
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
 <g id="a_node1"><a xlink:title="Contains jngl::Pixels class.">
-<polygon fill="#999999" stroke="#666666" points="131.37,-239 24.37,-239 24.37,-220 131.37,-220 131.37,-239"/>
-<text text-anchor="middle" x="77.87" y="-227" font-family="ui-monospace,monospace" font-size="10.00">jngl/Pixels.hpp</text>
+<polygon fill="#999999" stroke="#666666" points="130.96,-239 23.96,-239 23.96,-220 130.96,-220 130.96,-239"/>
+<text text-anchor="middle" x="77.46" y="-227" font-family="ui-monospace,monospace" font-size="10.00">jngl/Pixels.hpp</text>
 </a>
 </g>
 </g>
@@ -21,124 +21,130 @@
 <g id="node2" class="node">
 <title>Node2</title>
 <g id="a_node2"><a xlink:href="all_8hpp.html" target="_top" xlink:title="Includes all JNGL headers except for init.hpp.">
-<polygon fill="white" stroke="#666666" points="141.37,-74 52.37,-74 52.37,-55 141.37,-55 141.37,-74"/>
-<text text-anchor="middle" x="96.87" y="-62" font-family="ui-monospace,monospace" font-size="10.00">jngl/all.hpp</text>
+<polygon fill="white" stroke="#666666" points="159.96,-74 70.96,-74 70.96,-55 159.96,-55 159.96,-74"/>
+<text text-anchor="middle" x="115.46" y="-62" font-family="ui-monospace,monospace" font-size="10.00">jngl/all.hpp</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node2 -->
 <g id="edge1" class="edge">
 <title>Node1&#45;&gt;Node2</title>
-<path fill="none" stroke="#63b8ff" d="M40.84,-215.85C26.32,-208.86 11.17,-198.57 2.87,-184 -1.31,-176.66 -0.25,-172.85 2.87,-165 19.38,-123.49 62.33,-89.28 83.99,-74.04"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="39.66,-219.15 50.22,-219.98 42.48,-212.75 39.66,-219.15"/>
+<path fill="none" stroke="#63b8ff" d="M41.97,-215.9C17.92,-205.08 -7.78,-187.65 2.46,-165 22.37,-120.93 72.51,-88.59 98.8,-74.05"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="40.79,-219.21 51.37,-219.86 43.51,-212.75 40.79,-219.21"/>
 </g>
 <!-- Node4 -->
 <g id="node4" class="node">
 <title>Node4</title>
 <g id="a_node4"><a xlink:href="framebuffer_8hpp.html" target="_top" xlink:title="Contains jngl::FrameBuffer class.">
-<polygon fill="white" stroke="#666666" points="143.37,-184 12.37,-184 12.37,-165 143.37,-165 143.37,-184"/>
-<text text-anchor="middle" x="77.87" y="-172" font-family="ui-monospace,monospace" font-size="10.00">jngl/framebuffer.hpp</text>
+<polygon fill="white" stroke="#666666" points="142.96,-184 11.96,-184 11.96,-165 142.96,-165 142.96,-184"/>
+<text text-anchor="middle" x="77.46" y="-172" font-family="ui-monospace,monospace" font-size="10.00">jngl/framebuffer.hpp</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node4 -->
 <g id="edge3" class="edge">
 <title>Node1&#45;&gt;Node4</title>
-<path fill="none" stroke="#63b8ff" d="M77.87,-209.66C77.87,-200.93 77.87,-190.99 77.87,-184.09"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="74.37,-209.75 77.87,-219.75 81.37,-209.75 74.37,-209.75"/>
+<path fill="none" stroke="#63b8ff" d="M77.46,-209.66C77.46,-200.93 77.46,-190.99 77.46,-184.09"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="73.96,-209.75 77.46,-219.75 80.96,-209.75 73.96,-209.75"/>
 </g>
 <!-- Node5 -->
 <g id="node5" class="node">
 <title>Node5</title>
 <g id="a_node5"><a xlink:href="window_8hpp.html" target="_top" xlink:title="Functions related to the main window.">
-<polygon fill="white" stroke="#666666" points="268.37,-184 161.37,-184 161.37,-165 268.37,-165 268.37,-184"/>
-<text text-anchor="middle" x="214.87" y="-172" font-family="ui-monospace,monospace" font-size="10.00">jngl/window.hpp</text>
+<polygon fill="white" stroke="#666666" points="267.96,-184 160.96,-184 160.96,-165 267.96,-165 267.96,-184"/>
+<text text-anchor="middle" x="214.46" y="-172" font-family="ui-monospace,monospace" font-size="10.00">jngl/window.hpp</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node5 -->
 <g id="edge5" class="edge">
 <title>Node1&#45;&gt;Node5</title>
-<path fill="none" stroke="#63b8ff" d="M109.43,-216.29C134.82,-206.47 169.87,-192.91 192.46,-184.17"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="107.94,-213.11 99.88,-219.98 110.47,-219.64 107.94,-213.11"/>
+<path fill="none" stroke="#63b8ff" d="M109.02,-216.29C134.41,-206.47 169.46,-192.91 192.04,-184.17"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="107.53,-213.11 99.47,-219.98 110.06,-219.64 107.53,-213.11"/>
 </g>
 <!-- Node3 -->
 <g id="node3" class="node">
 <title>Node3</title>
 <g id="a_node3"><a xlink:href="jngl_8hpp.html" target="_top" xlink:title="Includes jngl/all.hpp.">
-<polygon fill="white" stroke="#666666" points="129.37,-19 64.37,-19 64.37,0 129.37,0 129.37,-19"/>
-<text text-anchor="middle" x="96.87" y="-7" font-family="ui-monospace,monospace" font-size="10.00">jngl.hpp</text>
+<polygon fill="white" stroke="#666666" points="147.96,-19 82.96,-19 82.96,0 147.96,0 147.96,-19"/>
+<text text-anchor="middle" x="115.46" y="-7" font-family="ui-monospace,monospace" font-size="10.00">jngl.hpp</text>
 </a>
 </g>
 </g>
 <!-- Node2&#45;&gt;Node3 -->
 <g id="edge2" class="edge">
 <title>Node2&#45;&gt;Node3</title>
-<path fill="none" stroke="#63b8ff" d="M96.87,-44.66C96.87,-35.93 96.87,-25.99 96.87,-19.09"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="93.37,-44.75 96.87,-54.75 100.37,-44.75 93.37,-44.75"/>
+<path fill="none" stroke="#63b8ff" d="M115.46,-44.66C115.46,-35.93 115.46,-25.99 115.46,-19.09"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="111.96,-44.75 115.46,-54.75 118.96,-44.75 111.96,-44.75"/>
 </g>
 <!-- Node4&#45;&gt;Node2 -->
 <g id="edge4" class="edge">
 <title>Node4&#45;&gt;Node2</title>
-<path fill="none" stroke="#63b8ff" d="M81.16,-154.8C85.31,-131.2 92.28,-91.58 95.35,-74.16"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="77.71,-154.21 79.42,-164.66 84.6,-155.42 77.71,-154.21"/>
+<path fill="none" stroke="#63b8ff" d="M83.92,-155.12C92.21,-131.56 106.25,-91.66 112.41,-74.16"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="80.58,-154.07 80.57,-164.66 87.19,-156.39 80.58,-154.07"/>
 </g>
 <!-- Node5&#45;&gt;Node2 -->
-<g id="edge7" class="edge">
+<g id="edge8" class="edge">
 <title>Node5&#45;&gt;Node2</title>
-<path fill="none" stroke="#63b8ff" d="M183.08,-160.57C167.28,-153.04 148.67,-142.37 134.87,-129 118.08,-112.73 105.95,-87.5 100.35,-74.27"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="181.93,-163.9 192.48,-164.86 184.83,-157.53 181.93,-163.9"/>
+<path fill="none" stroke="#63b8ff" d="M178.85,-160.86C163.25,-153.69 145.92,-143.26 134.46,-129 121.34,-112.68 117.27,-87.47 116.01,-74.26"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="177.7,-164.17 188.27,-164.9 180.46,-157.74 177.7,-164.17"/>
 </g>
 <!-- Node6 -->
 <g id="node6" class="node">
 <title>Node6</title>
 <g id="a_node6"><a xlink:href="Singleton_8hpp.html" target="_top" xlink:title="Contains jngl::Singleton base class.">
-<polygon fill="white" stroke="#666666" points="269.37,-129 144.37,-129 144.37,-110 269.37,-110 269.37,-129"/>
-<text text-anchor="middle" x="206.87" y="-117" font-family="ui-monospace,monospace" font-size="10.00">jngl/Singleton.hpp</text>
+<polygon fill="white" stroke="#666666" points="268.96,-129 143.96,-129 143.96,-110 268.96,-110 268.96,-129"/>
+<text text-anchor="middle" x="206.46" y="-117" font-family="ui-monospace,monospace" font-size="10.00">jngl/Singleton.hpp</text>
 </a>
 </g>
 </g>
 <!-- Node5&#45;&gt;Node6 -->
 <g id="edge6" class="edge">
 <title>Node5&#45;&gt;Node6</title>
-<path fill="none" stroke="#63b8ff" d="M212.03,-154.66C210.71,-145.93 209.21,-135.99 208.17,-129.09"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="208.59,-155.38 213.55,-164.75 215.52,-154.34 208.59,-155.38"/>
+<path fill="none" stroke="#63b8ff" d="M211.61,-154.66C210.3,-145.93 208.79,-135.99 207.75,-129.09"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="208.18,-155.38 213.14,-164.75 215.1,-154.34 208.18,-155.38"/>
 </g>
 <!-- Node7 -->
 <g id="node7" class="node">
 <title>Node7</title>
 <g id="a_node7"><a xlink:href="main_8hpp.html" target="_top" xlink:title="Defines macros for the main entry point.">
-<polygon fill="white" stroke="#666666" points="382.37,-129 287.37,-129 287.37,-110 382.37,-110 382.37,-129"/>
-<text text-anchor="middle" x="334.87" y="-117" font-family="ui-monospace,monospace" font-size="10.00">jngl/main.hpp</text>
+<polygon fill="white" stroke="#666666" points="381.96,-129 286.96,-129 286.96,-110 381.96,-110 381.96,-129"/>
+<text text-anchor="middle" x="334.46" y="-117" font-family="ui-monospace,monospace" font-size="10.00">jngl/main.hpp</text>
 </a>
 </g>
 </g>
 <!-- Node5&#45;&gt;Node7 -->
-<g id="edge8" class="edge">
+<g id="edge9" class="edge">
 <title>Node5&#45;&gt;Node7</title>
-<path fill="none" stroke="#63b8ff" d="M243.4,-160.9C265.57,-151.11 295.72,-137.79 315.24,-129.17"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="241.88,-157.74 234.15,-164.98 244.71,-164.15 241.88,-157.74"/>
+<path fill="none" stroke="#63b8ff" d="M242.99,-160.9C265.15,-151.11 295.31,-137.79 314.83,-129.17"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="241.47,-157.74 233.74,-164.98 244.3,-164.15 241.47,-157.74"/>
+</g>
+<!-- Node6&#45;&gt;Node2 -->
+<g id="edge7" class="edge">
+<title>Node6&#45;&gt;Node2</title>
+<path fill="none" stroke="#63b8ff" d="M182.75,-104.7C166.18,-95.04 144.55,-82.44 130.34,-74.17"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="181.43,-107.98 191.84,-109.98 184.96,-101.93 181.43,-107.98"/>
 </g>
 <!-- Node7&#45;&gt;Node2 -->
-<g id="edge9" class="edge">
+<g id="edge10" class="edge">
 <title>Node7&#45;&gt;Node2</title>
-<path fill="none" stroke="#63b8ff" d="M286.61,-107.75C242.01,-97.82 176.61,-83.26 135.41,-74.08"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="286.11,-111.23 296.63,-109.98 287.63,-104.39 286.11,-111.23"/>
+<path fill="none" stroke="#63b8ff" d="M289.53,-107.63C248.51,-97.7 188.67,-83.22 150.92,-74.08"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="288.73,-111.03 299.27,-109.98 290.37,-104.23 288.73,-111.03"/>
 </g>
 <!-- Node8 -->
 <g id="node8" class="node">
 <title>Node8</title>
 <g id="a_node8"><a xlink:href="init_8hpp.html" target="_top" xlink:title="Include this file only once, as it defines the main function.">
-<polygon fill="white" stroke="#666666" points="382.37,-74 287.37,-74 287.37,-55 382.37,-55 382.37,-74"/>
-<text text-anchor="middle" x="334.87" y="-62" font-family="ui-monospace,monospace" font-size="10.00">jngl/init.hpp</text>
+<polygon fill="white" stroke="#666666" points="381.96,-74 286.96,-74 286.96,-55 381.96,-55 381.96,-74"/>
+<text text-anchor="middle" x="334.46" y="-62" font-family="ui-monospace,monospace" font-size="10.00">jngl/init.hpp</text>
 </a>
 </g>
 </g>
 <!-- Node7&#45;&gt;Node8 -->
-<g id="edge10" class="edge">
+<g id="edge11" class="edge">
 <title>Node7&#45;&gt;Node8</title>
-<path fill="none" stroke="#63b8ff" d="M334.87,-99.66C334.87,-90.93 334.87,-80.99 334.87,-74.09"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="331.37,-99.75 334.87,-109.75 338.37,-99.75 331.37,-99.75"/>
+<path fill="none" stroke="#63b8ff" d="M334.46,-99.66C334.46,-90.93 334.46,-80.99 334.46,-74.09"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="330.96,-99.75 334.46,-109.75 337.96,-99.75 330.96,-99.75"/>
 </g>
 </g>
 </svg>
