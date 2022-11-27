@@ -52,6 +52,10 @@ void TextLine::setText(std::string text) {
 	this->text = std::move(text);
 }
 
+Vec2 TextLine::getSize() const {
+	return { getWidth(), getHeight() };
+}
+
 double TextLine::getWidth() const {
 	return static_cast<double>(ScaleablePixels(fontImpl->getTextWidth(this->text)));
 }
