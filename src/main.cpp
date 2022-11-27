@@ -23,10 +23,6 @@
 #define HAVE_FILESYSTEM
 #endif
 
-#ifdef JNGL_UWP
-#include <boost/algorithm/string.hpp>
-#endif
-
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 #endif
