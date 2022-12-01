@@ -130,12 +130,14 @@ SoundFile::SoundFile(std::string filename, std::launch policy)
 		if (f == nullptr) {
 			throw std::runtime_error("File not found (" + filename + ").");
 		}
-		Finally closeFile([f]() { fclose(f); });
 
 		OggVorbis_File oggFile;
 		if (ov_open(f, &oggFile, nullptr, 0) != 0) {
+			fclose(f); // If [and only if] an ov_open() call fails, the application must explicitly
+			           // fclose() the FILE * pointer itself.
 			throw std::runtime_error("Could not open OGG file (" + filename + ").");
 		}
+		Finally cleanup([&oggFile]() { ov_clear(&oggFile); /* calls fclose */ });
 
 		const vorbis_info* const pInfo = ov_info(&oggFile, -1);
 		if (pInfo->channels == 1) {
@@ -154,14 +156,12 @@ SoundFile::SoundFile(std::string filename, std::launch policy)
 			bytes = ov_read(&oggFile, &array[0], bufferSize, endian, 2, 1, &bitStream);
 
 			if (bytes < 0) {
-				ov_clear(&oggFile);
 				throw std::runtime_error("Error decoding OGG file (" + filename + ").");
 			}
 
 			buffer_.insert(buffer_.end(), &array[0], &array[0] + bytes);
 		} while (bytes > 0);
 
-		ov_clear(&oggFile);
 		debug("OK (");
 		debug(buffer_.size() / 1024. / 1024.);
 		debugLn(" MB)");
