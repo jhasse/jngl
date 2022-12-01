@@ -41,8 +41,7 @@ public:
 	[[nodiscard]] std::string getDisplayName() const;
 
 	/// \deprecated Set jngl::AppParameters.displayName instead
-	[[deprecated("Set jngl::AppParameters.displayName instead")]] void
-	setDisplayName(const std::string&);
+	void setDisplayName(const std::string&);
 
 	/// Starts the main loop, which calls jngl::Work::step and jngl::Work::draw
 	void mainLoop();
