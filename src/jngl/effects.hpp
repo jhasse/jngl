@@ -23,8 +23,10 @@ public:
 	virtual void endDraw() const = 0;
 };
 
+/// Scales the ModelView matrix
 class Zoom : public Effect {
 public:
+	/// f(t)
 	explicit Zoom(std::function<float(float)>);
 	Action step() override;
 	void beginDraw() const override;
@@ -35,6 +37,7 @@ private:
 	float time = 0;
 };
 
+/// Executes a specific action, e.g. removes the Widget
 class Executor : public Effect {
 public:
 	explicit Executor(std::function<Action(float)>);

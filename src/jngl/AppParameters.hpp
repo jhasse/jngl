@@ -7,7 +7,9 @@
 #include "Vec2.hpp"
 
 #include <functional>
+#include <memory>
 #include <optional>
+#include <string>
 
 namespace jngl {
 

@@ -55,6 +55,7 @@ public:
 	/// If pixel-perfect magnifying is activated (see setPixelArt)
 	static bool isPixelArt();
 
+	/// Internal function used by JNGL when the Window is resized
 	void updateProjectionMatrix() const;
 
 private:

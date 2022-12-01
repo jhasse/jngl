@@ -7,6 +7,8 @@
 #include "Color.hpp"
 #include "Vec2.hpp"
 
+#include <cstdint>
+
 namespace jngl {
 
 class Mat3;
@@ -16,6 +18,8 @@ class Mat3;
 /// Doesn't change the alpha value currently set by setAlpha()
 void setColor(jngl::Color rgb);
 
+/// Sets the color and alpha which should be used to draw primitives
+/// @param alpha [0...255]
 void setColor(jngl::Color, unsigned char alpha);
 
 void setColor(unsigned char red, unsigned char green, unsigned char blue);
