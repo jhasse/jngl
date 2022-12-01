@@ -1,5 +1,5 @@
 <map id="Effect" name="Effect">
 <area shape="rect" id="node1" title="Base class for effects that can be applied to jngl::Widget." alt="" coords="64,5,127,31"/>
-<area shape="rect" id="node2" href="$classjngl_1_1Executor.html" title=" " alt="" coords="5,79,92,104"/>
-<area shape="rect" id="node3" href="$classjngl_1_1Zoom.html" title=" " alt="" coords="116,79,171,104"/>
+<area shape="rect" id="node2" href="$classjngl_1_1Executor.html" title="Executes a specific action, e.g. removes the Widget." alt="" coords="5,79,92,104"/>
+<area shape="rect" id="node3" href="$classjngl_1_1Zoom.html" title="Scales the ModelView matrix." alt="" coords="116,79,171,104"/>
 </map>

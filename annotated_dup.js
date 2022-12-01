@@ -31,6 +31,6 @@ var annotated_dup =
       [ "Video", "classjngl_1_1Video.html", "classjngl_1_1Video" ],
       [ "Widget", "classjngl_1_1Widget.html", "classjngl_1_1Widget" ],
       [ "Work", "classjngl_1_1Work.html", "classjngl_1_1Work" ],
-      [ "Zoom", "classjngl_1_1Zoom.html", null ]
+      [ "Zoom", "classjngl_1_1Zoom.html", "classjngl_1_1Zoom" ]
     ] ]
 ];

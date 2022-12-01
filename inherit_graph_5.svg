@@ -20,7 +20,7 @@
 <!-- Node1 -->
 <g id="node2" class="node">
 <title>Node1</title>
-<g id="a_node2"><a xlink:href="classjngl_1_1Executor.html" target="_top" xlink:title=" ">
+<g id="a_node2"><a xlink:href="classjngl_1_1Executor.html" target="_top" xlink:title="Executes a specific action, e.g. removes the Widget.">
 <polygon fill="white" stroke="#666666" points="148,-56 83,-56 83,-37 148,-37 148,-56"/>
 <text text-anchor="middle" x="115.5" y="-44" font-family="ui-monospace,monospace" font-size="10.00">Executor</text>
 </a>
@@ -35,7 +35,7 @@
 <!-- Node2 -->
 <g id="node3" class="node">
 <title>Node2</title>
-<g id="a_node3"><a xlink:href="classjngl_1_1Zoom.html" target="_top" xlink:title=" ">
+<g id="a_node3"><a xlink:href="classjngl_1_1Zoom.html" target="_top" xlink:title="Scales the ModelView matrix.">
 <polygon fill="white" stroke="#666666" points="136,-19 95,-19 95,0 136,0 136,-19"/>
 <text text-anchor="middle" x="115.5" y="-7" font-family="ui-monospace,monospace" font-size="10.00">Zoom</text>
 </a>

@@ -30,7 +30,7 @@ var namespacejngl =
     [ "Video", "classjngl_1_1Video.html", "classjngl_1_1Video" ],
     [ "Widget", "classjngl_1_1Widget.html", "classjngl_1_1Widget" ],
     [ "Work", "classjngl_1_1Work.html", "classjngl_1_1Work" ],
-    [ "Zoom", "classjngl_1_1Zoom.html", null ],
+    [ "Zoom", "classjngl_1_1Zoom.html", "classjngl_1_1Zoom" ],
     [ "KeyboardType", "namespacejngl.html#ae08f1922e08aba234005793fc4fed5e4", [
       [ "Default", "namespacejngl.html#ae08f1922e08aba234005793fc4fed5e4a79935518a3889663d8688b6b01fff051", null ],
       [ "Numpad", "namespacejngl.html#ae08f1922e08aba234005793fc4fed5e4a04f314ae42d0ff23c9f29b42a0f0eabb", null ]
@@ -42,6 +42,7 @@ var namespacejngl =
     ] ],
     [ "setBackgroundColor", "namespacejngl.html#ae90a1346aab83848e060a8c5b3581029", null ],
     [ "setBackgroundColor", "namespacejngl.html#a5a1481d931704b4d0dd6342b2bf5152c", null ],
+    [ "contains", "namespacejngl.html#a659fec77fac8709c62729fa1210fa6b1", null ],
     [ "print", "namespacejngl.html#a70ccf12f2af460f800c43bb827040230", null ],
     [ "print", "namespacejngl.html#a2b70617b0dcd3fbf280ea1d8d2a8f2eb", null ],
     [ "getFontSize", "namespacejngl.html#a0ff53ac1131b4178f1f7a5f8df2332d2", null ],
@@ -128,6 +129,7 @@ var namespacejngl =
     [ "getScreenHeight", "namespacejngl.html#a9942379fdf4fb4445c35eaf3390b7ccb", null ],
     [ "getScreenSize", "namespacejngl.html#af73b72c0f9314a0e65382f95e326bd39", null ],
     [ "setColor", "namespacejngl.html#ae3c7e5e5522cf08149ced61283849ab0", null ],
+    [ "setColor", "namespacejngl.html#a19841c7dc1b1c9d6f6e94fcfa67eb28d", null ],
     [ "setAlpha", "namespacejngl.html#a2e0420f68fa01ef7219a0bc2aa792169", null ],
     [ "drawLine", "namespacejngl.html#ae891e0c19cfaeb0ec2875aa2735b20a8", null ],
     [ "drawCircle", "namespacejngl.html#acffb85162aeb7457024b3fdb2b4df9b9", null ],

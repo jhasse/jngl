@@ -1,6 +1,7 @@
 var shapes_8hpp =
 [
     [ "setColor", "shapes_8hpp.html#ae3c7e5e5522cf08149ced61283849ab0", null ],
+    [ "setColor", "shapes_8hpp.html#a19841c7dc1b1c9d6f6e94fcfa67eb28d", null ],
     [ "setAlpha", "shapes_8hpp.html#a2e0420f68fa01ef7219a0bc2aa792169", null ],
     [ "drawLine", "shapes_8hpp.html#ae891e0c19cfaeb0ec2875aa2735b20a8", null ],
     [ "drawCircle", "shapes_8hpp.html#acffb85162aeb7457024b3fdb2b4df9b9", null ],

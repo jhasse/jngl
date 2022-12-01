@@ -1,4 +1,4 @@
 <map id="Zoom" name="Zoom">
-<area shape="rect" id="node1" title=" " alt="" coords="9,79,64,104"/>
+<area shape="rect" id="node1" title="Scales the ModelView matrix." alt="" coords="9,79,64,104"/>
 <area shape="rect" id="node2" href="$classjngl_1_1Effect.html" title="Base class for effects that can be applied to jngl::Widget." alt="" coords="5,5,68,31"/>
 </map>

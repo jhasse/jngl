@@ -50,9 +50,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AppParameters_8hpp.html",
-"classjngl_1_1Shader.html#a1d1cfd8ffb84e947f82999c682b666a7a7345a249ed5c2f850d85dc1727c24716",
-"input_8hpp.html#ad178a38cc5f90ca8047e07693d39ac6a",
-"time_8hpp.html#a4437edd7fd2832790c13ba3179bcc64d"
+"classjngl_1_1ScaleablePixels.html",
+"input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca9fa8a5a1e10fdeafbb823a1c31fbd491",
+"structjngl_1_1FrameBuffer_1_1Context.html#ac8bb3912a3ce86b15842e79d0b421204"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
