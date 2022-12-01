@@ -25,7 +25,8 @@ class ShaderProgram;
 /// \endcode
 class App {
 public:
-	[[deprecated("Use jngl::App::instance().setDisplayName instead")]] explicit App(
+	/// \deprecated Set jngl::AppParameters.displayName instead
+	[[deprecated("Set jngl::AppParameters.displayName instead")]] explicit App(
 	    std::string displayName);
 	~App();
 	App(const App&) = delete;
@@ -39,7 +40,9 @@ public:
 	/// The display name of the app is used by jngl::writeConfig() for example.
 	[[nodiscard]] std::string getDisplayName() const;
 
-	void setDisplayName(const std::string&);
+	/// \deprecated Set jngl::AppParameters.displayName instead
+	[[deprecated("Set jngl::AppParameters.displayName instead")]] void
+	setDisplayName(const std::string&);
 
 	/// Starts the main loop, which calls jngl::Work::step and jngl::Work::draw
 	void mainLoop();
