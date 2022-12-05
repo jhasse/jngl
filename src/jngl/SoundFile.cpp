@@ -223,7 +223,10 @@ void SoundFile::setVolume(float v) {
 
 void SoundFile::load() {
 	if (loader) {
-		loader->get();
+		if (!loader->valid()) {
+			throw std::runtime_error("Invalid SoundFile.");
+		}
+		loader->get(); // might throw
 		loader = std::nullopt;
 	}
 }
