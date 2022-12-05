@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <stdexcept>
 #include <unordered_map>
 
@@ -169,8 +170,20 @@ SoundFile::SoundFile(std::string filename, std::launch policy)
 }
 
 SoundFile::~SoundFile() = default;
-SoundFile::SoundFile(SoundFile&&) noexcept = default;
-SoundFile& SoundFile::operator=(SoundFile&&) noexcept = default;
+SoundFile::SoundFile(SoundFile&& other) noexcept {
+	other.load();
+	*this = std::move(other);
+}
+SoundFile& SoundFile::operator=(SoundFile&& other) noexcept {
+	other.load();
+	assert(!other.loader);
+	load();
+	assert(!loader);
+	sound_ = std::move(other.sound_);
+	params = std::move(other.params);
+	buffer_ = std::move(other.buffer_);
+	return *this;
+}
 
 void SoundFile::play() {
 	load();
