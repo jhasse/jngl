@@ -2,7 +2,7 @@ variables:
   CLICOLOR_FORCE: "1"
   TERM: xterm
 
-image: registry.fedoraproject.org/fedora-minimal:35
+image: registry.fedoraproject.org/fedora-minimal:36
 
 cmake:
   stage: build
