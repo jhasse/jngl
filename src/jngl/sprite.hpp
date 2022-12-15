@@ -34,6 +34,7 @@ public:
 	void draw() const override;
 
 	/// Use this class to load a Sprite asynchronously
+	///
 	/// Example:
 	/// \code
 	/// class MyGame : public jngl::Work {

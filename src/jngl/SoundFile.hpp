@@ -69,7 +69,9 @@ private:
 	std::shared_ptr<Sound> sound_;
 	std::unique_ptr<SoundParams> params;
 	std::vector<char> buffer_;
+#ifndef EMSCRIPTEN
 	optional<std::future<void>> loader;
+#endif
 };
 
 } // namespace jngl

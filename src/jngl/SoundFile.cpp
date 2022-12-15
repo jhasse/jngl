@@ -119,7 +119,9 @@ void checkAlError() {
 
 SoundFile::SoundFile(std::string filename, std::launch policy)
 : params(std::make_unique<SoundParams>()) {
+#ifndef EMSCRIPTEN
 	loader = std::async(policy, [this, filename = std::move(filename)]() {
+#endif
 		debug("Decoding ");
 		debug(filename);
 		debug(" ... ");
@@ -166,7 +168,9 @@ SoundFile::SoundFile(std::string filename, std::launch policy)
 		debug("OK (");
 		debug(buffer_.size() / 1024. / 1024.);
 		debugLn(" MB)");
+#ifndef EMSCRIPTEN
 	});
+#endif
 }
 
 SoundFile::~SoundFile() = default;
@@ -175,10 +179,12 @@ SoundFile::SoundFile(SoundFile&& other) noexcept {
 	*this = std::move(other);
 }
 SoundFile& SoundFile::operator=(SoundFile&& other) noexcept {
+#ifndef EMSCRIPTEN
 	other.load();
 	assert(!other.loader);
 	load();
 	assert(!loader);
+#endif
 	sound_ = std::move(other.sound_);
 	params = std::move(other.params);
 	buffer_ = std::move(other.buffer_);
@@ -222,6 +228,7 @@ void SoundFile::setVolume(float v) {
 }
 
 void SoundFile::load() {
+#ifndef EMSCRIPTEN
 	if (loader) {
 		if (!loader->valid()) {
 			throw std::runtime_error("Invalid SoundFile.");
@@ -229,6 +236,7 @@ void SoundFile::load() {
 		loader->get(); // might throw
 		loader = std::nullopt;
 	}
+#endif
 }
 
 std::shared_ptr<SoundFile> getSoundFile(const std::string& filename, std::launch policy) {
