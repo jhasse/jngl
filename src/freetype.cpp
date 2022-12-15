@@ -16,7 +16,6 @@
 
 #include FT_GLYPH_H
 
-#include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
 #include <codecvt>
 #include <locale>
@@ -42,8 +41,8 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 	const auto bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph); // NOLINT
 	const FT_Bitmap& bitmap = bitmap_glyph->bitmap;
 
-	const int width = boost::numeric_cast<int>(bitmap.width);
-	const int height = boost::numeric_cast<int>(bitmap.rows);
+	const int width = static_cast<int>(bitmap.width);
+	const int height = static_cast<int>(bitmap.rows);
 	width_ = Pixels(static_cast<int32_t>(face->glyph->advance.x >> 6));
 
 	if (height == 0) {
@@ -80,7 +79,7 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 		delete[] d;
 	}
 
-	top_ = Pixels(boost::numeric_cast<int>(fontHeight) - bitmap_glyph->top);
+	top_ = Pixels(static_cast<int>(fontHeight) - bitmap_glyph->top);
 	left_ = Pixels(bitmap_glyph->left);
 }
 
