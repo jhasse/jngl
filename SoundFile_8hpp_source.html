@@ -145,10 +145,12 @@ $(document).ready(function(){initNavTree('SoundFile_8hpp_source.html',''); initR
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <a class="code hl_namespaceRef" href="http://en.cppreference.com/w/namespacestd.html">std</a>::shared_ptr&lt;Sound&gt; sound_;</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <a class="code hl_namespaceRef" href="http://en.cppreference.com/w/namespacestd.html">std</a>::unique_ptr&lt;SoundParams&gt; params;</div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <a class="code hl_namespaceRef" href="http://en.cppreference.com/w/namespacestd.html">std</a>::vector&lt;<span class="keywordtype">char</span>&gt; buffer_;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/experimental/optional.html">optional</a>&lt;<a class="code hl_namespaceRef" href="http://en.cppreference.com/w/namespacestd.html">std</a>::future&lt;<span class="keywordtype">void</span>&gt;&gt; loader;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>};</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>} <span class="comment">// namespace jngl</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="preprocessor">#ifndef EMSCRIPTEN</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/experimental/optional.html">optional&lt;std::future&lt;void&gt;</a>&gt; loader;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>};</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>} <span class="comment">// namespace jngl</span></div>
 <div class="ttc" id="abasic_string_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a></div></div>
 <div class="ttc" id="aclassjngl_1_1SoundFile_html"><div class="ttname"><a href="classjngl_1_1SoundFile.html">jngl::SoundFile</a></div><div class="ttdoc">Sound loaded from an OGG file.</div><div class="ttdef"><b>Definition:</b> <a href="SoundFile_8hpp_source.html#l00028">SoundFile.hpp:28</a></div></div>
 <div class="ttc" id="aclassjngl_1_1SoundFile_html_a23cee4b1b6eadd42debe5625c27f5fa1"><div class="ttname"><a href="classjngl_1_1SoundFile.html#a23cee4b1b6eadd42debe5625c27f5fa1">jngl::SoundFile::SoundFile</a></div><div class="ttdeci">SoundFile(std::string filename, std::launch policy=std::launch::async)</div><div class="ttdoc">Load an OGG file called filename.</div></div>
