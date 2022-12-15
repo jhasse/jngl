@@ -86,6 +86,7 @@ template <> struct vec_traits<jngl::Vec2> {
 
 #include <boost/qvm/vec_operations.hpp>
 
+namespace jngl {
 using boost::qvm::operator+=;
 using boost::qvm::operator*=;
 using boost::qvm::operator/=;
@@ -96,4 +97,5 @@ using boost::qvm::operator+;
 using boost::qvm::operator-;
 using boost::qvm::operator/;
 using boost::qvm::operator*;
+} // namespace jngl
 #endif

@@ -29,8 +29,14 @@ public:
 	};
 
 	Sprite(const unsigned char* bytes, size_t width, size_t height);
+
+	/// \deprecated Use Loader instead
 	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
+
+	/// Does nothing
 	void step() override;
+
+	/// Draws the Sprite, centered by default
 	void draw() const override;
 
 	/// Use this class to load a Sprite asynchronously
