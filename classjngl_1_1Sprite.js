@@ -1,6 +1,7 @@
 var classjngl_1_1Sprite =
 [
     [ "Loader", "classjngl_1_1Sprite_1_1Loader.html", "classjngl_1_1Sprite_1_1Loader" ],
+    [ "Sprite", "classjngl_1_1Sprite.html#afc691192408ad699380be20bb1de75cc", null ],
     [ "step", "classjngl_1_1Sprite.html#ae6c526798a490afe221d1447f508f16a", null ],
     [ "draw", "classjngl_1_1Sprite.html#a35460413b5c663cd8a28ad3c80caaf71", null ],
     [ "draw", "classjngl_1_1Sprite.html#ae852e8df456379a31406ac8076215b4d", null ],

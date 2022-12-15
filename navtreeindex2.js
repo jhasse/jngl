@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca9e27ab13e156f0125c6d8417dbe70946":[2,0,0,14,0,33],
+"input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca9e9c76d7349af6fa36f24efbb7e001d7":[2,0,0,14,0,37],
 "input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca9fa8a5a1e10fdeafbb823a1c31fbd491":[2,0,0,14,0,11],
 "input_8hpp.html#aab0feaba617470cb4aa830dc5935238caa1e9d714a0238434a819235d4832f7d2":[2,0,0,14,0,30],
 "input_8hpp.html#aab0feaba617470cb4aa830dc5935238caa3c13a70de6599f4470373ec46d4f6bf":[2,0,0,14,0,26],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b":[0,0,0,1,2],
 "structjngl_1_1FrameBuffer_1_1Context.html":[1,0,0,10,0],
 "structjngl_1_1FrameBuffer_1_1Context.html":[0,0,0,10,0],
-"structjngl_1_1FrameBuffer_1_1Context.html#ab156ef3a1b8a1095c1a086c7056ad263":[1,0,0,10,0,1],
-"structjngl_1_1FrameBuffer_1_1Context.html#ab156ef3a1b8a1095c1a086c7056ad263":[0,0,0,10,0,1],
-"structjngl_1_1FrameBuffer_1_1Context.html#ac8bb3912a3ce86b15842e79d0b421204":[1,0,0,10,0,0]
+"structjngl_1_1FrameBuffer_1_1Context.html#ab156ef3a1b8a1095c1a086c7056ad263":[1,0,0,10,0,1]
 };

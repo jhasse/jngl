@@ -129,14 +129,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aba598d427dad290cafb71fefd2168555"><td class="memItemLeft" align="right" valign="top"><a id="aba598d427dad290cafb71fefd2168555" name="aba598d427dad290cafb71fefd2168555"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Sprite</b> (const unsigned char *bytes, size_t width, size_t height)</td></tr>
 <tr class="separator:aba598d427dad290cafb71fefd2168555"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc691192408ad699380be20bb1de75cc"><td class="memItemLeft" align="right" valign="top"><a id="afc691192408ad699380be20bb1de75cc" name="afc691192408ad699380be20bb1de75cc"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Sprite</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename, LoadType loadType=LoadType::NORMAL)</td></tr>
+<tr class="memitem:afc691192408ad699380be20bb1de75cc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#afc691192408ad699380be20bb1de75cc">Sprite</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename, LoadType loadType=LoadType::NORMAL)</td></tr>
 <tr class="separator:afc691192408ad699380be20bb1de75cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6c526798a490afe221d1447f508f16a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#ae6c526798a490afe221d1447f508f16a">step</a> () override</td></tr>
-<tr class="memdesc:ae6c526798a490afe221d1447f508f16a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Advance object's state.  <a href="classjngl_1_1Sprite.html#ae6c526798a490afe221d1447f508f16a">More...</a><br /></td></tr>
+<tr class="memdesc:ae6c526798a490afe221d1447f508f16a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does nothing.  <a href="classjngl_1_1Sprite.html#ae6c526798a490afe221d1447f508f16a">More...</a><br /></td></tr>
 <tr class="separator:ae6c526798a490afe221d1447f508f16a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35460413b5c663cd8a28ad3c80caaf71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#a35460413b5c663cd8a28ad3c80caaf71">draw</a> () const override</td></tr>
-<tr class="memdesc:a35460413b5c663cd8a28ad3c80caaf71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when drawing a frame.  <a href="classjngl_1_1Sprite.html#a35460413b5c663cd8a28ad3c80caaf71">More...</a><br /></td></tr>
+<tr class="memdesc:a35460413b5c663cd8a28ad3c80caaf71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a>, centered by default.  <a href="classjngl_1_1Sprite.html#a35460413b5c663cd8a28ad3c80caaf71">More...</a><br /></td></tr>
 <tr class="separator:a35460413b5c663cd8a28ad3c80caaf71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae852e8df456379a31406ac8076215b4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#ae852e8df456379a31406ac8076215b4d">draw</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
 <tr class="memdesc:ae852e8df456379a31406ac8076215b4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the image centered using <em>modelview</em>.  <a href="classjngl_1_1Sprite.html#ae852e8df456379a31406ac8076215b4d">More...</a><br /></td></tr>
@@ -324,6 +323,44 @@ Collaboration diagram for Sprite:</div>
 
 </div>
 </div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="afc691192408ad699380be20bb1de75cc" name="afc691192408ad699380be20bb1de75cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc691192408ad699380be20bb1de75cc">&#9670;&#160;</a></span>Sprite()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Sprite.html">Sprite</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">LoadType&#160;</td>
+          <td class="paramname"><em>loadType</em> = <code>LoadType::NORMAL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated:</a></b></dt><dd>Use <a class="el" href="classjngl_1_1Sprite_1_1Loader.html" title="Use this class to load a Sprite asynchronously.">Loader</a> instead </dd></dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="ae6c526798a490afe221d1447f508f16a" name="ae6c526798a490afe221d1447f508f16a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae6c526798a490afe221d1447f508f16a">&#9670;&#160;</a></span>step()</h2>
@@ -348,7 +385,7 @@ Collaboration diagram for Sprite:</div>
 </table>
 </div><div class="memdoc">
 
-<p>Advance object's state. </p>
+<p>Does nothing. </p>
 
 <p>Implements <a class="el" href="classjngl_1_1Drawable.html#aa6f73ac7d5899119d156a0b3a27fba31">Drawable</a>.</p>
 
@@ -377,7 +414,7 @@ Collaboration diagram for Sprite:</div>
 </table>
 </div><div class="memdoc">
 
-<p>Called when drawing a frame. </p>
+<p>Draws the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a>, centered by default. </p>
 
 <p>Implements <a class="el" href="classjngl_1_1Drawable.html#a2bf282904f7854c8a4fd515107aa8c4e">Drawable</a>.</p>
 
@@ -461,7 +498,7 @@ Collaboration diagram for Sprite:</div>
   </dd>
 </dl>
 <p><code>drawScaled(1, 1)</code> would draw it normally. You can pass negative values to flip the image. For example <code>drawScaled(-1, 1)</code> would draw the image horizontally flipped.</p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated:</a></b></dt><dd>Scale the modelview matrix instead using <a class="el" href="classjngl_1_1Mat3.html#ab617f121c1617e7156a72b12a06cb17f" title="Multiplies the matrix by a scaling matrix.">jngl::Mat3::scale</a> </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated:</a></b></dt><dd>Scale the modelview matrix instead using <a class="el" href="classjngl_1_1Mat3.html#ab617f121c1617e7156a72b12a06cb17f" title="Multiplies the matrix by a scaling matrix.">jngl::Mat3::scale</a> </dd></dl>
 
 </div>
 </div>
@@ -502,7 +539,7 @@ Collaboration diagram for Sprite:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated:</a></b></dt><dd>Use new drawClipped(Vec2, Vec2) method instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated:</a></b></dt><dd>Use new drawClipped(Vec2, Vec2) method instead </dd></dl>
 
 </div>
 </div>
@@ -521,7 +558,7 @@ Collaboration diagram for Sprite:</div>
 
 <p>Function which actually loads the sprite. </p>
 
-<p class="definition">Definition at line <a class="el" href="sprite_8hpp_source.html#l00128">128</a> of file <a class="el" href="sprite_8hpp_source.html">sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sprite_8hpp_source.html#l00134">134</a> of file <a class="el" href="sprite_8hpp_source.html">sprite.hpp</a>.</p>
 
 </div>
 </div>
