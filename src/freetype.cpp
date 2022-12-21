@@ -1,7 +1,7 @@
 // Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+#define _LIBCPP_DISABLE_DEPRECATION_WARNINGS
 #include "freetype.hpp"
 
 #include "helper.hpp"
