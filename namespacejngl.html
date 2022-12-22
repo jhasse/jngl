@@ -409,9 +409,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addJob</b> (<a class=
 <tr class="memitem:ae15308fbb3125f278ed8d05b971eb9ee"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ae15308fbb3125f278ed8d05b971eb9ee">addJob</a> (Args &amp;&amp;... args)</td></tr>
 <tr class="memdesc:ae15308fbb3125f278ed8d05b971eb9ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">The same as <a class="el" href="namespacejngl.html#af4511ceb38d56c476938458af6bd98e6" title="Add a new Job which will be always be stepped and drawn by App::mainLoop()">addJob(std::shared_ptr&lt;Job&gt;)</a> but creates the <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> for you.  <a href="namespacejngl.html#ae15308fbb3125f278ed8d05b971eb9ee">More...</a><br /></td></tr>
 <tr class="separator:ae15308fbb3125f278ed8d05b971eb9ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="memItemLeft" align="right" valign="top"><a id="acfcb9cdf97108d05cf2b0da911c93a4c" name="acfcb9cdf97108d05cf2b0da911c93a4c"></a>
-<a class="el" href="classjngl_1_1Mat3.html">jngl::Mat3</a>&#160;</td><td class="memItemRight" valign="bottom"><b>modelview</b> ()</td></tr>
-<tr class="memdesc:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the global ModelView matrix. <br /></td></tr>
+<tr class="memitem:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">jngl::Mat3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a> ()</td></tr>
+<tr class="memdesc:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the global ModelView matrix.  <a href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">More...</a><br /></td></tr>
 <tr class="separator:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c5875d20c1cdbec6c8a3b84cee6ccee"><td class="memItemLeft" align="right" valign="top"><a id="a3c5875d20c1cdbec6c8a3b84cee6ccee" name="a3c5875d20c1cdbec6c8a3b84cee6ccee"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>rotate</b> (double degree)</td></tr>
@@ -1256,6 +1255,39 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 
 </div>
 </div>
+<a id="acfcb9cdf97108d05cf2b0da911c93a4c" name="acfcb9cdf97108d05cf2b0da911c93a4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfcb9cdf97108d05cf2b0da911c93a4c">&#9670;&#160;</a></span>modelview()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Mat3.html">jngl::Mat3</a> modelview </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a copy of the global ModelView matrix. </p>
+<p >This is the matrix which is used in all of JNGL's shaders to position objects. Using this function you can get a local copy of it. This allows you to more precisely position an object without affecting any global state.</p>
+<p >A common use-case where you actually want to modify the ModelView matrix for all objects is the camera. So in your drawing loop you would do: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> MyGame::draw()<span class="keyword"> const </span>{</div>
+<div class="line">    <a class="code hl_function" href="namespacejngl.html#ae34bb82fbe517542fed56f90cf125d36">jngl::translate</a>(cameraPosition);</div>
+<div class="line">    {</div>
+<div class="line">        <span class="keyword">auto</span> mv = <a class="code hl_function" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">jngl::modelview</a>();</div>
+<div class="line">        sprite.draw(mv.translate(position1);</div>
+<div class="line">    } <span class="comment">// mv which is translated by position1 gets discarded</span></div>
+<div class="line">    {</div>
+<div class="line">        <span class="keyword">auto</span> mv = <a class="code hl_function" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">jngl::modelview</a>();</div>
+<div class="line">        sprite.draw(mv.translate(position2);</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+<div class="ttc" id="anamespacejngl_html_acfcb9cdf97108d05cf2b0da911c93a4c"><div class="ttname"><a href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">jngl::modelview</a></div><div class="ttdeci">jngl::Mat3 modelview()</div><div class="ttdoc">Returns a copy of the global ModelView matrix.</div></div>
+<div class="ttc" id="anamespacejngl_html_ae34bb82fbe517542fed56f90cf125d36"><div class="ttname"><a href="namespacejngl.html#ae34bb82fbe517542fed56f90cf125d36">jngl::translate</a></div><div class="ttdeci">void translate(double x, double y)</div><div class="ttdoc">Multiplies the global ModelView matrix with a translation matrix.</div></div>
+</div><!-- fragment --> 
+</div>
+</div>
 <a id="adc3f4af0da695be4afd366843ebba0e6" name="adc3f4af0da695be4afd366843ebba0e6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adc3f4af0da695be4afd366843ebba0e6">&#9670;&#160;</a></span>translate()</h2>
 
@@ -1275,7 +1307,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 <p>Multiplies the global ModelView matrix with a translation matrix. </p>
 <p >Equivalent to calling <code><a class="el" href="namespacejngl.html#ae34bb82fbe517542fed56f90cf125d36" title="Multiplies the global ModelView matrix with a translation matrix.">jngl::translate</a>(v.x, v.y);</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="matrix_8hpp_source.html#l00023">23</a> of file <a class="el" href="matrix_8hpp_source.html">matrix.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="matrix_8hpp_source.html#l00043">43</a> of file <a class="el" href="matrix_8hpp_source.html">matrix.hpp</a>.</p>
 
 </div>
 </div>
