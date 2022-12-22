@@ -1,4 +1,4 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::FrameBuffer class
 /// @file
@@ -19,6 +19,19 @@ namespace jngl {
 class ShaderProgram;
 
 /// Image framebuffer object which can be rendered on
+///
+/// Example:
+/// \code
+/// FrameBuffer foo(300_px, 200_px);
+/// // ...
+/// {
+///     auto context = foo.use();
+///     context.clear(0xff0000_rgb);
+///     jngl::print("Hello World!", jngl::Vec2(-100, -20));
+/// } // jngl::FrameBuffer::Context is destroyed, now drawing on the main buffer again
+/// // ...
+/// foo.draw(jngl::modelview()); // draws a red rectangle with Hello World! on it
+/// \endcode
 class FrameBuffer {
 public:
 	/// Creates a framebuffer object with \a width times \a height actual pixels
