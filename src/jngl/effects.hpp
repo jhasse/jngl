@@ -4,6 +4,7 @@
 /// @file
 #pragma once
 
+#include "Vec2.hpp"
 #include <functional>
 
 namespace jngl {
@@ -52,8 +53,23 @@ private:
 	float time = 0;
 };
 
+class Move : public Effect {
+public:
+	explicit Move(Vec2 offset, std::function<float(float)>);
+	Action step() override;
+	void beginDraw() const override;
+	void endDraw() const override;
+
+private:
+	Vec2 offset;
+	float progress;
+	std::function<float(float)> function;
+	float time = 0;
+};
+
 namespace easing {
 
+float linear(float);
 float elastic(float);
 float cubic(float);
 float expo(float);

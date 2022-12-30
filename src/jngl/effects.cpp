@@ -42,7 +42,28 @@ Executor::Action Executor::step() {
 	return function(time);
 }
 
+Move::Move(Vec2 offset, std::function<float(float)> function)
+: offset(offset), function(std::move(function)) {
+}
+
+Move::Action Move::step() {
+	time += 1.f / float(getStepsPerSecond());
+	progress = function(time);
+	return progress >= 1 ? Action::REMOVE_EFFECT : Action::NONE;
+}
+
+void Move::beginDraw() const {
+	jngl::translate(offset * (1 - progress));
+}
+
+void Move::endDraw() const {
+}
+
 namespace easing {
+
+float linear(float t) {
+	return t <= 0 ? 0 : t >= 1 ? 1 : t;
+}
 
 float elastic(float t) {
 	const float c4 = (2 * M_PI) / 3;
