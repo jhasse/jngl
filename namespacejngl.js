@@ -16,6 +16,7 @@ var namespacejngl =
     [ "Label", "classjngl_1_1Label.html", "classjngl_1_1Label" ],
     [ "Mat3", "classjngl_1_1Mat3.html", "classjngl_1_1Mat3" ],
     [ "Mat4", "classjngl_1_1Mat4.html", "classjngl_1_1Mat4" ],
+    [ "Move", "classjngl_1_1Move.html", null ],
     [ "Pixels", "classjngl_1_1Pixels.html", null ],
     [ "ScaleablePixels", "classjngl_1_1ScaleablePixels.html", "classjngl_1_1ScaleablePixels" ],
     [ "Shader", "classjngl_1_1Shader.html", "classjngl_1_1Shader" ],

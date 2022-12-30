@@ -1,19 +1,20 @@
 <map id="jngl/Vec2.hpp" name="jngl/Vec2.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Vec2 class." alt="" coords="803,5,929,31"/>
+<area shape="rect" id="node1" title="Contains jngl::Vec2 class." alt="" coords="884,5,1011,31"/>
 <area shape="rect" id="node2" href="$AppParameters_8hpp.html" title="Contains jngl::AppParameters struct." alt="" coords="5,79,204,104"/>
-<area shape="rect" id="node4" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="445,79,604,104"/>
+<area shape="rect" id="node4" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="461,79,620,104"/>
 <area shape="rect" id="node9" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="795,152,937,177"/>
 <area shape="rect" id="node11" href="$Widget_8hpp.html" title="Contains jngl::Container class." alt="" coords="628,152,771,177"/>
-<area shape="rect" id="node12" href="$font_8hpp.html" title="Contains jngl::Font class and related functions." alt="" coords="743,225,869,251"/>
-<area shape="rect" id="node13" href="$framebuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="893,225,1068,251"/>
-<area shape="rect" id="node14" href="$input_8hpp.html" title="Input related functions." alt="" coords="1064,152,1199,177"/>
-<area shape="rect" id="node16" href="$screen_8hpp.html" title=" " alt="" coords="228,79,371,104"/>
-<area shape="rect" id="node17" href="$shapes_8hpp.html" title="Functions for drawing shapes." alt="" coords="1201,79,1344,104"/>
+<area shape="rect" id="node12" href="$effects_8hpp.html" title="Effects that can be applied to jngl::Widget." alt="" coords="732,225,875,251"/>
+<area shape="rect" id="node13" href="$font_8hpp.html" title="Contains jngl::Font class and related functions." alt="" coords="899,225,1025,251"/>
+<area shape="rect" id="node14" href="$framebuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="1049,225,1224,251"/>
+<area shape="rect" id="node15" href="$input_8hpp.html" title="Input related functions." alt="" coords="1268,152,1403,177"/>
+<area shape="rect" id="node17" href="$screen_8hpp.html" title=" " alt="" coords="228,79,371,104"/>
+<area shape="rect" id="node18" href="$shapes_8hpp.html" title="Functions for drawing shapes." alt="" coords="1340,79,1483,104"/>
 <area shape="rect" id="node3" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="41,152,168,177"/>
-<area shape="rect" id="node5" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="445,152,604,177"/>
-<area shape="rect" id="node7" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="620,299,739,324"/>
-<area shape="rect" id="node10" href="$text_8hpp.html" title=" " alt="" coords="295,152,421,177"/>
-<area shape="rect" id="node6" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="481,225,616,251"/>
-<area shape="rect" id="node8" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="636,372,723,397"/>
-<area shape="rect" id="node15" href="$Controller_8hpp.html" title="Contains jngl::Controller class." alt="" coords="1144,225,1319,251"/>
+<area shape="rect" id="node5" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="295,152,453,177"/>
+<area shape="rect" id="node7" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="635,299,753,324"/>
+<area shape="rect" id="node10" href="$text_8hpp.html" title=" " alt="" coords="477,152,604,177"/>
+<area shape="rect" id="node6" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="471,225,605,251"/>
+<area shape="rect" id="node8" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="651,372,737,397"/>
+<area shape="rect" id="node16" href="$Controller_8hpp.html" title="Contains jngl::Controller class." alt="" coords="1248,225,1423,251"/>
 </map>

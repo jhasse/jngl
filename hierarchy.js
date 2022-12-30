@@ -12,6 +12,7 @@ var hierarchy =
     ] ],
     [ "Effect", "classjngl_1_1Effect.html", [
       [ "Executor", "classjngl_1_1Executor.html", null ],
+      [ "Move", "classjngl_1_1Move.html", null ],
       [ "Zoom", "classjngl_1_1Zoom.html", null ]
     ] ],
     [ "enable_shared_from_this< Controller >", "http://en.cppreference.com/w/cpp/memory/enable_shared_from_this.html", [
