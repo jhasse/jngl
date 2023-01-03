@@ -14,7 +14,7 @@ jobs:
     - name: Install dependencies
       run: |
         brew install boost
-        mkdir include/ios
+        mkdir -p include/ios
         ln -s /usr/local/include/boost include/ios/boost
     - name: Configure with CMake
       run: cmake -Bbuild-ios -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR
