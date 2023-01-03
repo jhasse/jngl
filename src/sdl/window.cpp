@@ -59,6 +59,9 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	}
 
 	impl->context = SDL_GL_CreateContext(impl->sdlWindow);
+#ifdef GLAD_GL
+	gladLoadGL(reinterpret_cast<GLADloadfunc>(SDL_GL_GetProcAddress));
+#endif
 
 	if (isMultisampleSupported_) {
 		int openglMSAA;
@@ -308,12 +311,14 @@ void Window::UpdateInput() {
 			}
 			break;
 		}
+#ifndef __EMSCRIPTEN__
 		case SDL_JOYDEVICEADDED:
 		case SDL_JOYDEVICEREMOVED:
 			if (controllerChangedCallback) {
 				controllerChangedCallback();
 			}
 			break;
+#endif
 		case SDL_WINDOWEVENT:
 			if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
 				impl->actualWidth = event.window.data1;
