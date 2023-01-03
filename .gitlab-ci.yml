@@ -4,43 +4,23 @@ variables:
 
 image: registry.fedoraproject.org/fedora-minimal:36
 
-cmake:
+linux:
   stage: build
   script:
   - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel SDL2-devel openal-soft-devel boost-devel libtheora-devel clang util-linux >/dev/null
   - CXXFLAGS=-fdiagnostics-color cmake -Bbuild -GNinja
-  - ninja -Cbuild
+  - cd build
+  - ninja
+  - microdnf install -y mesa-dri-drivers xorg-x11-drivers >/dev/null
+  - Xorg -config ../data/xorg.conf &>/dev/null &
+  - sleep 1 # wait for Xorg to boot up
+  - DISPLAY=:0 ./jngl-unittest
+  - cd ..
   - CC=clang CXX=clang++ CXXFLAGS=-fdiagnostics-color cmake -Bbuild-clang -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=1
   - cd build-clang
   - ninja
   - microdnf install -y clang-tools-extra python3-PyYAML >/dev/null
   - script -qfec "../data/run-clang-tidy.py"
-
-gcc:
-  stage: build
-  script:
-    - microdnf install -y cmake fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel meson SDL2-devel openal-soft-devel gcc-c++ libtheora-devel util-linux >/dev/null
-    - script -qfec "meson build" /dev/null
-    - cd build
-    - script -qfec "ninja" /dev/null
-    - microdnf install -y mesa-dri-drivers xorg-x11-drivers >/dev/null
-    - Xorg -config ../data/xorg.conf &>/dev/null &
-    - sleep 1 # wait for Xorg to boot up
-    - DISPLAY=:0 ./unittest
-    - cd ..
-    - cmake -Bbuild-cmake -GNinja
-    - ninja -Cbuild-cmake
-
-clang:
-  stage: build
-  script:
-    - microdnf install -y fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel meson SDL2-devel openal-soft-devel clang util-linux >/dev/null
-    - CC=clang CXX=clang++ script -qfec "meson build" /dev/null
-    - cd build
-    - script -qfec "ninja" /dev/null
-    - microdnf install -y clang-tools-extra python3-PyYAML >/dev/null
-    - sed -i s/-pipe// compile_commands.json
-    - script -qfec "../data/run-clang-tidy.py"
 
 mingw:
   stage: build

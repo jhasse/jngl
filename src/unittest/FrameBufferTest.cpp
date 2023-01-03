@@ -98,7 +98,7 @@ boost::ut::suite _ = [] {
 			jngl::drawCircle(jngl::Vec2{ 0, 0 }, 15);
 		}
 		jngl::drawCircle(jngl::modelview().translate({ 100, 0 }),
-		                 5); // check that the background of the framebuffer is transparent
+		                 6); // check that the background of the framebuffer is transparent
 		fb.draw(-160, -35);
 		expect(eq(f.getAsciiArt(), std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓

@@ -6,11 +6,11 @@ project(jngl-doxygen NONE)
 	include(ExternalProject)
 	ExternalProject_Add (
 		cppreference
-		URL "https://github.com/PeterFeicht/cppreference-doc/releases/download/v20190602/html-book-20190602.tar.xz"
-		URL_HASH SHA256=cb06cb61206cf38c6b6d978d286f6dfa05052152397af2f0759fff33be2f6efc
+		URL "https://github.com/PeterFeicht/cppreference-doc/releases/download/v20220730/html-book-20220730.tar.xz"
+		URL_HASH SHA256=71f15003c168b8dc5a00cbaf19b6480a9b3e87ab7e462aa39edb63d7511c028b
 		DOWNLOAD_NO_EXTRACT YES
-		CONFIGURE_COMMAND xzcat "<DOWNLOAD_DIR>/html-book-20190602.tar.xz" | tar -xf - cppreference-doxygen-web.tag.xml
-		BUILD_COMMAND rm "<DOWNLOAD_DIR>/html-book-20190602.tar.xz"
+		CONFIGURE_COMMAND xzcat "<DOWNLOAD_DIR>/html-book-20220730.tar.xz" | tar -xf - cppreference-doxygen-web.tag.xml
+		BUILD_COMMAND rm "<DOWNLOAD_DIR>/html-book-20220730.tar.xz"
 		INSTALL_COMMAND mv cppreference-doxygen-web.tag.xml "${CMAKE_CURRENT_SOURCE_DIR}"
 	)
 	ExternalProject_Add(doxygen-awesome-css

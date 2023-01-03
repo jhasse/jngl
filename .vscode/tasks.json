@@ -4,11 +4,11 @@
 		"command": ".vscode/build.bat"
 	},
 	"linux": {
-		"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || meson build) && cd build && ninja && $@"],
+		"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Debug) && cd build && ninja && $@"],
 		"command": "/bin/bash"
 	},
 	"osx": {
-		"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || meson build) && cd build && ninja && $@"],
+		"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Debug) && cd build && ninja && $@"],
 		"command": "/bin/bash"
 	},
 	"options": {
