@@ -549,7 +549,7 @@ Finally load(const std::string& filename) {
 }
 
 #if defined(_WIN32) && !defined(JNGL_UWP)
-#include <epoxy/wgl.h>
+#include <glad/wgl.h>
 
 void setVerticalSync(bool enabled) {
 	if (wglSwapIntervalEXT && wglSwapIntervalEXT(enabled)) {

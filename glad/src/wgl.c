@@ -25,13 +25,18 @@ extern "C" {
 
 int GLAD_WGL_VERSION_1_0 = 0;
 int GLAD_WGL_ARB_extensions_string = 0;
+int GLAD_WGL_ARB_multisample = 0;
+int GLAD_WGL_ARB_pixel_format = 0;
 int GLAD_WGL_EXT_extensions_string = 0;
 int GLAD_WGL_EXT_swap_control = 0;
 
 
 
+PFNWGLCHOOSEPIXELFORMATARBPROC glad_wglChoosePixelFormatARB = NULL;
 PFNWGLGETEXTENSIONSSTRINGARBPROC glad_wglGetExtensionsStringARB = NULL;
 PFNWGLGETEXTENSIONSSTRINGEXTPROC glad_wglGetExtensionsStringEXT = NULL;
+PFNWGLGETPIXELFORMATATTRIBFVARBPROC glad_wglGetPixelFormatAttribfvARB = NULL;
+PFNWGLGETPIXELFORMATATTRIBIVARBPROC glad_wglGetPixelFormatAttribivARB = NULL;
 PFNWGLGETSWAPINTERVALEXTPROC glad_wglGetSwapIntervalEXT = NULL;
 PFNWGLSWAPINTERVALEXTPROC glad_wglSwapIntervalEXT = NULL;
 
@@ -39,6 +44,12 @@ PFNWGLSWAPINTERVALEXTPROC glad_wglSwapIntervalEXT = NULL;
 static void glad_wgl_load_WGL_ARB_extensions_string(GLADuserptrloadfunc load, void *userptr) {
     if(!GLAD_WGL_ARB_extensions_string) return;
     glad_wglGetExtensionsStringARB = (PFNWGLGETEXTENSIONSSTRINGARBPROC) load(userptr, "wglGetExtensionsStringARB");
+}
+static void glad_wgl_load_WGL_ARB_pixel_format(GLADuserptrloadfunc load, void *userptr) {
+    if(!GLAD_WGL_ARB_pixel_format) return;
+    glad_wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC) load(userptr, "wglChoosePixelFormatARB");
+    glad_wglGetPixelFormatAttribfvARB = (PFNWGLGETPIXELFORMATATTRIBFVARBPROC) load(userptr, "wglGetPixelFormatAttribfvARB");
+    glad_wglGetPixelFormatAttribivARB = (PFNWGLGETPIXELFORMATATTRIBIVARBPROC) load(userptr, "wglGetPixelFormatAttribivARB");
 }
 static void glad_wgl_load_WGL_EXT_extensions_string(GLADuserptrloadfunc load, void *userptr) {
     if(!GLAD_WGL_EXT_extensions_string) return;
@@ -91,6 +102,8 @@ static GLADapiproc glad_wgl_get_proc_from_userptr(void *userptr, const char* nam
 
 static int glad_wgl_find_extensions_wgl(HDC hdc) {
     GLAD_WGL_ARB_extensions_string = glad_wgl_has_extension(hdc, "WGL_ARB_extensions_string");
+    GLAD_WGL_ARB_multisample = glad_wgl_has_extension(hdc, "WGL_ARB_multisample");
+    GLAD_WGL_ARB_pixel_format = glad_wgl_has_extension(hdc, "WGL_ARB_pixel_format");
     GLAD_WGL_EXT_extensions_string = glad_wgl_has_extension(hdc, "WGL_EXT_extensions_string");
     GLAD_WGL_EXT_swap_control = glad_wgl_has_extension(hdc, "WGL_EXT_swap_control");
     return 1;
@@ -112,6 +125,7 @@ int gladLoadWGLUserPtr(HDC hdc, GLADuserptrloadfunc load, void *userptr) {
 
     if (!glad_wgl_find_extensions_wgl(hdc)) return 0;
     glad_wgl_load_WGL_ARB_extensions_string(load, userptr);
+    glad_wgl_load_WGL_ARB_pixel_format(load, userptr);
     glad_wgl_load_WGL_EXT_extensions_string(load, userptr);
     glad_wgl_load_WGL_EXT_swap_control(load, userptr);
 
@@ -124,6 +138,19 @@ int gladLoadWGL(HDC hdc, GLADloadfunc load) {
 }
  
 
+#ifdef GLAD_WGL
+
+static GLADapiproc glad_wgl_get_proc(void *vuserptr, const char* name) {
+    GLAD_UNUSED(vuserptr);
+    return GLAD_GNUC_EXTENSION (GLADapiproc) wglGetProcAddress(name);
+}
+
+int gladLoaderLoadWGL(HDC hdc) {
+    return gladLoadWGLUserPtr(hdc, glad_wgl_get_proc, NULL);
+}
+
+
+#endif /* GLAD_WGL */
 
 #ifdef __cplusplus
 }

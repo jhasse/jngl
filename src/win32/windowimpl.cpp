@@ -1,4 +1,4 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/debug.hpp"
@@ -15,7 +15,7 @@
 #include <atomic>
 #include <cassert>
 #include <cmath>
-#include <epoxy/wgl.h>
+#include <glad/wgl.h>
 #include <mmsystem.h> // timeBeginPeriod
 #include <stdexcept>
 #include <windowsx.h> // GET_X_LPARAM
@@ -78,7 +78,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 // based on: http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=46
 bool WindowImpl::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
-	if (!wglChoosePixelFormatARB) {
+	if (!GLAD_WGL_ARB_pixel_format) {
 		return false;
 	}
 
@@ -282,12 +282,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 			throw std::runtime_error("Can't activate the GL rendering context.");
 		}
 
-		if (epoxy_gl_version() < 20) {
-			throw std::runtime_error(
-			    "Your graphics card is missing OpenGL 2.0 support (it supports " +
-			    std::to_string(epoxy_gl_version() / 10) + "." +
-			    std::to_string(epoxy_gl_version() % 10) + ").");
-		}
+		gladLoaderLoadWGL(impl->pDeviceContext_.get());
 
 		if (!multisample && isMultisampleSupported_ && impl->InitMultisample(hInstance, pfd)) {
 			impl->pDeviceContext_.reset((HDC)nullptr); // Destroy window
@@ -300,6 +295,14 @@ Window::Window(const std::string& title, const int width, const int height, cons
 				init(false);
 			}
 			return;
+		}
+
+		const int glVersion = gladLoaderLoadGL();
+		if (glVersion < GLAD_MAKE_VERSION(2, 0)) {
+			throw std::runtime_error(
+			    "Your graphics card is missing OpenGL 2.0 support (it supports " +
+			    std::to_string(GLAD_VERSION_MAJOR(glVersion)) + "." +
+			    std::to_string(GLAD_VERSION_MINOR(glVersion)) + ").");
 		}
 
 		::ShowWindow(impl->pWindowHandle_.get(), SW_SHOWNORMAL);
