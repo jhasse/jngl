@@ -1,11 +1,10 @@
-// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ImageDataPNG.hpp"
 
-#include "../jngl/Finally.hpp"
-
 #include <cassert>
 #include <cstring>
+#include <gsl/util>
 #include <png.h>
 #include <stdexcept>
 
@@ -45,7 +44,7 @@ ImageDataPNG::ImageDataPNG(const std::string& filename, FILE* fp) {
 		png_set_gray_to_rgb(png_ptr);
 	}
 	png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_16, nullptr);
-	Finally destroyRead(
+	gsl::final_action destroyRead(
 	    [&png_ptr, &info_ptr]() { png_destroy_read_struct(&png_ptr, &info_ptr, nullptr); });
 
 	x = png_get_image_width(png_ptr, info_ptr);

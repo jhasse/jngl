@@ -1,4 +1,4 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -9,6 +9,7 @@
 #include <ft2build.h> // NOLINT
 #include FT_FREETYPE_H
 
+#include <gsl/util>
 #include <map>
 
 namespace jngl {
@@ -54,7 +55,7 @@ private:
 	static int instanceCounter;
 	static FT_Library library;
 	FT_Face face = nullptr;
-	std::unique_ptr<Finally> freeFace; // Frees face_ if necessary
+	std::unique_ptr<gsl::final_action<std::function<void()>>> freeFace; // Frees face_ if necessary
 	unsigned int height_;
 	int lineHeight;
 	std::map<char32_t, std::shared_ptr<Character>> characters_;

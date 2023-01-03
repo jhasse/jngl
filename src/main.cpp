@@ -1,4 +1,4 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
@@ -12,6 +12,7 @@
 #include <boost/qvm/mat_operations3.hpp>
 #include <boost/qvm/vec.hpp>
 #include <fstream>
+#include <gsl/util>
 #include <sstream>
 
 #ifdef _WIN32
@@ -644,7 +645,7 @@ std::stringstream readAsset(const std::string& filename) {
 		sstream.setstate(std::ios::failbit);
 		return sstream;
 	}
-	Finally closeFile([f]() { fclose(f); });
+	gsl::final_action closeFile([f]() { fclose(f); });
 	if (fseek(f, 0, SEEK_END) != 0) {
 		sstream.setstate(std::ios::failbit);
 		return sstream;

@@ -1,4 +1,4 @@
-// Copyright 2019-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "SoundFile.hpp"
@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <gsl/util>
 #include <stdexcept>
 #include <unordered_map>
 
@@ -140,7 +141,7 @@ SoundFile::SoundFile(std::string filename, std::launch policy)
 			           // fclose() the FILE * pointer itself.
 			throw std::runtime_error("Could not open OGG file (" + filename + ").");
 		}
-		Finally cleanup([&oggFile]() { ov_clear(&oggFile); /* calls fclose */ });
+		gsl::final_action cleanup([&oggFile]() { ov_clear(&oggFile); /* calls fclose */ });
 
 		const vorbis_info* const pInfo = ov_info(&oggFile, -1);
 		if (pInfo->channels == 1) {
@@ -257,9 +258,9 @@ void stop(const std::string& filename) {
 	getSoundFile(filename, std::launch::async)->stop();
 }
 
-Finally loadSound(const std::string& filename) {
+gsl::final_action<std::function<void()>> loadSound(const std::string& filename) {
 	auto soundFile = getSoundFile(filename, std::launch::async);
-	return Finally([soundFile = std::move(soundFile)]() {
+	return gsl::final_action<std::function<void()>>([soundFile = std::move(soundFile)]() {
 		soundFile->load();
 	});
 }

@@ -1,10 +1,8 @@
-// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::ShaderProgram class
 /// @file
 #pragma once
-
-#include "Finally.hpp"
 
 #include <memory>
 #include <string>

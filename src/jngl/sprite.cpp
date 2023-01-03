@@ -1,4 +1,4 @@
-// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #ifndef NOPNG
@@ -317,7 +317,7 @@ Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool 
 			    std::string("Unsupported number of channels. (" + filename + ")"));
 	}
 
-	Finally freePng([&png_ptr, &info_ptr]() {
+	gsl::final_action freePng([&png_ptr, &info_ptr]() {
 		png_destroy_read_struct(&png_ptr, &info_ptr, static_cast<png_infop*>(nullptr));
 	});
 	unsigned char** rowPointers = png_get_rows(png_ptr, info_ptr);
@@ -358,7 +358,7 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 	for (auto& row : buf) {
 		row = new unsigned char[header.width * 3];
 	}
-	Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
+	gsl::final_action cleanUp([&buf]() { cleanUpRowPointers(buf); });
 
 	if (header.height < 0) {
 		header.height = -header.height;
@@ -418,7 +418,7 @@ Finally Sprite::LoadJPG(const std::string& filename, FILE* file, const bool half
 	for (auto& row : buf) {
 		row = new unsigned char[info.output_width * channels];
 	}
-	Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
+	gsl::final_action cleanUp([&buf]() { cleanUpRowPointers(buf); });
 
 	while (info.output_scanline < info.output_height) {
 		jpeg_read_scanlines(

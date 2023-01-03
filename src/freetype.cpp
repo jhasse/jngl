@@ -1,4 +1,4 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #define _LIBCPP_DISABLE_DEPRECATION_WARNINGS
@@ -183,8 +183,9 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)
 		throw std::runtime_error("FT_New_Memory_Face failed");
 	}
 	debug("OK\n");
-	// Finally will call FT_Done_Face when the Font class is destroyed:
-	freeFace = std::make_unique<Finally>([this]() { return FT_Done_Face(face); });
+	// gsl::final_action will call FT_Done_Face when the Font class is destroyed:
+	freeFace = std::make_unique<gsl::final_action<std::function<void()>>>(
+	    [this]() { return FT_Done_Face(face); });
 
 	// For some twisted reason, Freetype measures font size
 	// in terms of 1/64ths of pixels.  Thus, to make a font

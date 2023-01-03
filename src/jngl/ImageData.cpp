@@ -19,6 +19,7 @@
 #include <boost/algorithm/string/predicate.hpp>
 #endif
 #include <functional>
+#include <gsl/util>
 #include <sstream>
 
 namespace jngl {
@@ -79,7 +80,7 @@ std::unique_ptr<ImageData> ImageData::load(const std::string& filename) {
 	if (pFile == nullptr) {
 		throw std::runtime_error(std::string("File not found: " + fullFilename));
 	}
-	Finally _([pFile]() { fclose(pFile); });
+	gsl::final_action _([pFile]() { fclose(pFile); });
 	return loadFunction(filename, pFile);
 }
 

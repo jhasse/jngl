@@ -233,7 +233,7 @@ void Window::mainLoop() {
 #ifdef __EMSCRIPTEN__
 	g_jnglMainLoop = [this]() {
 #else
-	Finally _([&]() { currentWork_.reset(); });
+	gsl::final_action _([&]() { currentWork_.reset(); });
 	while (isRunning()) {
 #endif
 		stepIfNeeded();
