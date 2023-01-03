@@ -443,7 +443,7 @@ target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})
 target_link_directories(jngl PUBLIC ${FREETYPE_LIBRARY_DIRS})
 target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY})
 
-if(NOT hasParent)
+if(NOT hasParent AND NOT WINDOWS_STORE)
 	include(CTest)
 	if(BUILD_TESTING)
 		file(GLOB UNITTEST_SRC src/unittest/*.cpp)
