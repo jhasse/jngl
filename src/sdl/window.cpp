@@ -311,14 +311,12 @@ void Window::UpdateInput() {
 			}
 			break;
 		}
-#ifndef __EMSCRIPTEN__
 		case SDL_JOYDEVICEADDED:
 		case SDL_JOYDEVICEREMOVED:
 			if (controllerChangedCallback) {
 				controllerChangedCallback();
 			}
 			break;
-#endif
 		case SDL_WINDOWEVENT:
 			if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
 				impl->actualWidth = event.window.data1;
