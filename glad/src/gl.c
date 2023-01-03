@@ -39,6 +39,7 @@ int GLAD_GL_VERSION_4_0 = 0;
 int GLAD_GL_VERSION_4_1 = 0;
 int GLAD_GL_VERSION_4_2 = 0;
 int GLAD_GL_VERSION_4_3 = 0;
+int GLAD_GL_ARB_multisample = 0;
 int GLAD_GL_KHR_debug = 0;
 
 
@@ -391,6 +392,7 @@ PFNGLRENDERBUFFERSTORAGEPROC glad_glRenderbufferStorage = NULL;
 PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC glad_glRenderbufferStorageMultisample = NULL;
 PFNGLRESUMETRANSFORMFEEDBACKPROC glad_glResumeTransformFeedback = NULL;
 PFNGLSAMPLECOVERAGEPROC glad_glSampleCoverage = NULL;
+PFNGLSAMPLECOVERAGEARBPROC glad_glSampleCoverageARB = NULL;
 PFNGLSAMPLEMASKIPROC glad_glSampleMaski = NULL;
 PFNGLSAMPLERPARAMETERIIVPROC glad_glSamplerParameterIiv = NULL;
 PFNGLSAMPLERPARAMETERIUIVPROC glad_glSamplerParameterIuiv = NULL;
@@ -1165,6 +1167,10 @@ static void glad_gl_load_GL_VERSION_4_3( GLADuserptrloadfunc load, void* userptr
     glad_glVertexAttribLFormat = (PFNGLVERTEXATTRIBLFORMATPROC) load(userptr, "glVertexAttribLFormat");
     glad_glVertexBindingDivisor = (PFNGLVERTEXBINDINGDIVISORPROC) load(userptr, "glVertexBindingDivisor");
 }
+static void glad_gl_load_GL_ARB_multisample( GLADuserptrloadfunc load, void* userptr) {
+    if(!GLAD_GL_ARB_multisample) return;
+    glad_glSampleCoverageARB = (PFNGLSAMPLECOVERAGEARBPROC) load(userptr, "glSampleCoverageARB");
+}
 static void glad_gl_load_GL_KHR_debug( GLADuserptrloadfunc load, void* userptr) {
     if(!GLAD_GL_KHR_debug) return;
     glad_glDebugMessageCallback = (PFNGLDEBUGMESSAGECALLBACKPROC) load(userptr, "glDebugMessageCallback");
@@ -1286,6 +1292,7 @@ static int glad_gl_find_extensions_gl( int version) {
     char **exts_i = NULL;
     if (!glad_gl_get_extensions(version, &exts, &num_exts_i, &exts_i)) return 0;
 
+    GLAD_GL_ARB_multisample = glad_gl_has_extension(version, exts, num_exts_i, exts_i, "GL_ARB_multisample");
     GLAD_GL_KHR_debug = glad_gl_has_extension(version, exts, num_exts_i, exts_i, "GL_KHR_debug");
 
     glad_gl_free_extensions(exts_i, num_exts_i);
@@ -1363,6 +1370,7 @@ int gladLoadGLUserPtr( GLADuserptrloadfunc load, void *userptr) {
     glad_gl_load_GL_VERSION_4_3(load, userptr);
 
     if (!glad_gl_find_extensions_gl(version)) return 0;
+    glad_gl_load_GL_ARB_multisample(load, userptr);
     glad_gl_load_GL_KHR_debug(load, userptr);
 
 
