@@ -19,7 +19,9 @@
 #include "../android/fopen.hpp"
 #endif
 
+#if __cplusplus < 202002L
 #include <boost/algorithm/string/predicate.hpp>
+#endif
 #include <boost/qvm/map_vec_mat.hpp>
 #include <boost/qvm/mat_operations3.hpp>
 #include <boost/qvm/vec.hpp>
@@ -115,7 +117,11 @@ Sprite::Sprite(const std::string& filename, LoadType loadType) : texture(getText
 	const size_t size = sizeof(extensions) / sizeof(extensions[0]);
 	std::function<Finally(Sprite*, std::string, FILE*, bool)> loadFunction;
 	for (size_t i = 0; i < size; ++i) {
+#if __cplusplus < 202002L
 		if (boost::algorithm::ends_with(fullFilename, extensions[i])) {
+#else
+		if (fullFilename.ends_with(extensions[i])) {
+#endif
 			loadFunction = functions[i];
 			break;
 		}
