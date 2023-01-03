@@ -7,6 +7,7 @@
 #include <jngl.hpp>
 
 #include <boost/ut.hpp>
+#include <cmath>
 #include <string_view>
 
 namespace {

@@ -8,6 +8,7 @@
 
 #include <boost/qvm/vec_operations.hpp>
 #include <boost/ut.hpp>
+#include <cmath>
 
 namespace {
 boost::ut::suite _ = [] {

@@ -5,6 +5,7 @@
 
 #include <boost/range/adaptor/reversed.hpp>
 #include <boost/ut.hpp>
+#include <cmath>
 #include <jngl.hpp>
 
 Fixture::Fixture(const double scaleFactor) {

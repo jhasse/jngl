@@ -7,6 +7,7 @@
 #include <jngl.hpp>
 
 #include <boost/ut.hpp>
+#include <cmath>
 
 namespace {
 boost::ut::suite _ = [] {
