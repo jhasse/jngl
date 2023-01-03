@@ -15,7 +15,9 @@
 #include "../ImageDataWebP.hpp"
 #endif
 
+#if __cplusplus < 202002L
 #include <boost/algorithm/string/predicate.hpp>
+#endif
 #include <functional>
 #include <sstream>
 
@@ -46,7 +48,11 @@ std::unique_ptr<ImageData> ImageData::load(const std::string& filename) {
 	const size_t size = sizeof(extensions) / sizeof(extensions[0]);
 	std::function<std::unique_ptr<ImageData>(std::string, FILE*)> loadFunction;
 	for (size_t i = 0; i < size; ++i) {
+#if __cplusplus < 202002L
 		if (boost::algorithm::ends_with(fullFilename, extensions[i])) {
+#else
+		if (fullFilename.ends_with(extensions[i])) {
+#endif
 			loadFunction = functions[i];
 			break;
 		}
