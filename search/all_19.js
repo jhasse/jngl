@@ -1,7 +1,14 @@
 var searchData=
 [
-  ['y_0',['y',['../classjngl_1_1Vec2.html#ab927965981178aa1fba979a37168db2a',1,'jngl::Vec2::y()'],['../structjngl_1_1Vertex.html#aa4f0d3eebc3c443f9be81bf48561a217',1,'jngl::Vertex::y()']]],
-  ['yield_1',['yield',['http://en.cppreference.com/w/cpp/thread/yield.html',1,'std::this_thread']]],
-  ['yocto_2',['yocto',['http://en.cppreference.com/w/cpp/numeric/ratio/ratio.html',1,'std']]],
-  ['yotta_3',['yotta',['http://en.cppreference.com/w/cpp/numeric/ratio/ratio.html',1,'std']]]
+  ['y_0',['y',['../structjngl_1_1Vertex.html#aa4f0d3eebc3c443f9be81bf48561a217',1,'jngl::Vertex::y()'],['../classjngl_1_1Vec2.html#ab927965981178aa1fba979a37168db2a',1,'jngl::Vec2::y()']]],
+  ['year_1',['year',['http://en.cppreference.com/w/cpp/chrono/year.html',1,'year'],['http://en.cppreference.com/w/cpp/chrono/year_month_weekday_last/accessors.html',1,'std::chrono::year_month_weekday_last::year()'],['http://en.cppreference.com/w/cpp/chrono/year_month_weekday/accessors.html',1,'std::chrono::year_month_weekday::year()'],['http://en.cppreference.com/w/cpp/chrono/year_month_day_last/accessors.html',1,'std::chrono::year_month_day_last::year()'],['http://en.cppreference.com/w/cpp/chrono/year_month_day/accessors.html',1,'std::chrono::year_month_day::year()'],['http://en.cppreference.com/w/cpp/chrono/year_month/accessors.html',1,'std::chrono::year_month::year()'],['http://en.cppreference.com/w/cpp/chrono/year/year.html',1,'std::chrono::year::year()']]],
+  ['year_5fmonth_2',['year_month',['http://en.cppreference.com/w/cpp/chrono/year_month.html',1,'year_month'],['http://en.cppreference.com/w/cpp/chrono/year_month/year_month.html',1,'std::chrono::year_month::year_month()']]],
+  ['year_5fmonth_5fday_3',['year_month_day',['http://en.cppreference.com/w/cpp/chrono/year_month_day.html',1,'year_month_day'],['http://en.cppreference.com/w/cpp/chrono/year_month_day/year_month_day.html',1,'std::chrono::year_month_day::year_month_day()']]],
+  ['year_5fmonth_5fday_5flast_4',['year_month_day_last',['http://en.cppreference.com/w/cpp/chrono/year_month_day_last.html',1,'year_month_day_last'],['http://en.cppreference.com/w/cpp/chrono/year_month_day_last/year_month_day_last.html',1,'std::chrono::year_month_day_last::year_month_day_last()']]],
+  ['year_5fmonth_5fweekday_5',['year_month_weekday',['http://en.cppreference.com/w/cpp/chrono/year_month_weekday.html',1,'year_month_weekday'],['http://en.cppreference.com/w/cpp/chrono/year_month_weekday/year_month_weekday.html',1,'std::chrono::year_month_weekday::year_month_weekday()']]],
+  ['year_5fmonth_5fweekday_5flast_6',['year_month_weekday_last',['http://en.cppreference.com/w/cpp/chrono/year_month_weekday_last.html',1,'year_month_weekday_last'],['http://en.cppreference.com/w/cpp/chrono/year_month_weekday_last/year_month_weekday_last.html',1,'std::chrono::year_month_weekday_last::year_month_weekday_last()']]],
+  ['years_7',['years',['http://en.cppreference.com/w/cpp/chrono/duration.html',1,'years'],['http://en.cppreference.com/w/cpp/chrono/duration/duration.html',1,'std::chrono::years::years()']]],
+  ['yield_8',['yield',['http://en.cppreference.com/w/cpp/thread/yield.html',1,'std::this_thread']]],
+  ['yocto_9',['yocto',['http://en.cppreference.com/w/cpp/numeric/ratio/ratio.html',1,'std']]],
+  ['yotta_10',['yotta',['http://en.cppreference.com/w/cpp/numeric/ratio/ratio.html',1,'std']]]
 ];
