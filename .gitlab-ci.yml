@@ -7,7 +7,7 @@ image: registry.fedoraproject.org/fedora-minimal:36
 linux:
   stage: build
   script:
-  - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel SDL2-devel openal-soft-devel boost-devel libtheora-devel clang util-linux >/dev/null
+  - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libwebp-devel SDL2-devel openal-soft-devel boost-devel libtheora-devel clang util-linux >/dev/null
   - CXXFLAGS=-fdiagnostics-color cmake -Bbuild -GNinja
   - cd build
   - ninja
@@ -25,7 +25,7 @@ linux:
 mingw:
   stage: build
   script:
-    - microdnf install -y gcc-c++ cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft > /dev/null
+    - microdnf install -y gcc-c++ cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-openal-soft > /dev/null
     - mingw64-cmake -GNinja -Bbuild-debug -DCMAKE_BUILD_TYPE=Debug
     - ninja -C build-debug
     - mingw64-cmake -GNinja -Bbuild-release -DCMAKE_BUILD_TYPE=Release
