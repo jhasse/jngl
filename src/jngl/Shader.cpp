@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Shader.hpp"
@@ -25,10 +25,18 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 	}
 	source = tmp.c_str();
 #endif
-#ifdef EPOXY_PUBLIC
-    if (epoxy_glsl_version() <= 120 && gles20Source) {
-        source = gles20Source;
-    }
+#ifdef GLAD_GL
+	if (const auto version = glGetString(GL_SHADING_LANGUAGE_VERSION)) {
+		std::istringstream tmp(reinterpret_cast<const char*>(version)); // e.g. "4.60 NVIDIA"
+		uint32_t major;
+		uint32_t minor;
+		tmp >> major;
+		tmp.ignore(1); // ignore "."
+		tmp >> minor;
+		if (tmp && major <= 1 && minor <= 20 && gles20Source) {
+			source = gles20Source;
+		}
+	}
 #endif
 #if defined (JNGL_UWP) || defined (__EMSCRIPTEN__)
 	if (gles20Source) {
