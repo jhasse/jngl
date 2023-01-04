@@ -6,7 +6,6 @@
 #include "../audio/engine.hpp"
 #include "../audio/mixer.hpp"
 #include "../Sound.hpp"
-#include "../SoundParams.hpp"
 #include "../audio.hpp"
 #include "../main.hpp"
 #include "debug.hpp"
