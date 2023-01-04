@@ -13,12 +13,16 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-file(GLOB SRC src/*.cpp src/jngl/*.cpp)
+file(GLOB SRC src/*.cpp src/jngl/*.cpp
+	src/audio/*.cpp
+	src/audio/effect/*.cpp
+	src/audio/minimp3/minimp3.c
+)
 add_library(jngl ${SRC})
 file(GLOB HEADERS src/*.hpp src/jngl/*.hpp)
 target_sources(jngl PRIVATE ${HEADERS})
 
-target_compile_features(jngl PUBLIC cxx_std_17)
+target_compile_features(jngl PUBLIC cxx_std_20)
 
 set_target_properties(jngl PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src/
