@@ -1,17 +1,20 @@
-// Copyright 2019-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
+#include "audio/stream.hpp"
 #include <memory>
 #include <vector>
+
+using namespace psemek; // FIXME
 
 namespace jngl {
 struct SoundParams;
 
 class Sound {
 public:
-	Sound(const SoundParams&, std::vector<char>& bufferData);
+	Sound(std::vector<char>& bufferData);
 	Sound(const Sound&) = delete;
 	Sound& operator=(const Sound&) = delete;
 	Sound(Sound&&) = default;
@@ -22,6 +25,7 @@ public:
 	bool isStopped() const;
 	void SetPitch(float p);
 	void setVolume(float v);
+	std::shared_ptr<audio::stream> getStream();
 
 	static float masterVolume;
 

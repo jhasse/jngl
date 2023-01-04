@@ -42,7 +42,7 @@ private:
 class Test : public jngl::Work {
 public:
 	Test()
-	: fb2(jngl::getWindowSize()), logoWebp("jngl.webp"), soundLoader(jngl::load("test.ogg")), mixer(psemek::audio::make_mixer()) {
+	: fb2(jngl::getWindowSize()), logoWebp("jngl.webp"), soundLoader(jngl::load("test.ogg")) {
 		jngl::setTitle(jngl::App::instance().getDisplayName() + " | UTF-8: äöüß");
 		jngl::setIcon("jngl");
 		jngl::setMouseVisible(false);
@@ -59,9 +59,6 @@ public:
 			file.seekg(0, std::ios_base::beg);
 			file.read(&vec[0], fileSize);
 		}
-		mp3 = psemek::audio::load_ogg(vec);
-		mixer->add(mp3->stream());
-		engine.output()->stream(mixer);
 	}
 	void step() override {
 		rotate += 90.0 / 60.0; // 90 degree per second
@@ -236,10 +233,6 @@ private:
 	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
 	std::chrono::steady_clock clock;
 	jngl::Finally soundLoader;
-
-	std::shared_ptr<psemek::audio::track> mp3;
-	psemek::audio::engine engine;
-	std::shared_ptr<psemek::audio::mixer> mixer;
 };
 
 jngl::AppParameters jnglInit() {

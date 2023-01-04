@@ -1,4 +1,4 @@
-// Copyright 2019-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::SoundFile class
 /// @file
@@ -67,11 +67,7 @@ public:
 
 private:
 	std::shared_ptr<Sound> sound_;
-	std::unique_ptr<SoundParams> params;
 	std::vector<char> buffer_;
-#ifndef EMSCRIPTEN
-	optional<std::future<void>> loader;
-#endif
 };
 
 } // namespace jngl
