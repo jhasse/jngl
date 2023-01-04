@@ -5,7 +5,6 @@
 #include "../jngl/init.hpp"
 
 #include <algorithm>
-#include <boost/math/constants/constants.hpp>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -52,7 +51,7 @@ public:
 		if (rotate > 360) {
 			rotate = 0;
 		}
-		factor = std::sin(rotate / 360 * boost::math::constants::pi<double>());
+		factor = std::sin(rotate / 360 * M_PI);
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
 		if (jngl::keyPressed('p')) {
@@ -102,7 +101,7 @@ public:
 		jngl::setColor(0,0,0,255);
 		jngl::drawLine(jngl::modelview()
 		                   .translate({ 650, 450 })
-		                   .rotate(rotate / 360 * boost::math::constants::pi<double>())
+		                   .rotate(rotate / 360 * M_PI)
 		                   .translate({ -50, -50 }),
 		               { 100, 100 });
 		jngl::setSpriteAlpha(200);
