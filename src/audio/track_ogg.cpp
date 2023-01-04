@@ -13,7 +13,7 @@ namespace {
 struct ogg_data_holder {
 	std::vector<char> storage;
 	std::span<char const> data;
-	int32_t pos;
+	int32_t pos = 0;
 
 	ogg_data_holder(std::vector<char> storage) : storage(std::move(storage)), data(this->storage) {
 	}

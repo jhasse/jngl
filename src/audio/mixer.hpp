@@ -12,6 +12,7 @@ namespace psemek::audio
 		: stream
 	{
 		virtual channel_ptr add(stream_ptr stream) = 0;
+		virtual void remove(stream*) = 0;
 	};
 
 	using mixer_ptr = std::shared_ptr<mixer>;

@@ -13,6 +13,7 @@ namespace jngl {
 
 struct Sound::Impl {
 	std::shared_ptr<audio::track> track;
+	std::shared_ptr<audio::stream> stream;
 };
 
 float Sound::masterVolume = 1.0f;
@@ -44,7 +45,10 @@ void Sound::setVolume(float v) {
 }
 
 std::shared_ptr<audio::stream> Sound::getStream() {
-	return impl->track->stream();
+	if (impl->stream) {
+		return impl->stream;
+	}
+	return impl->stream = impl->track->stream();
 }
 
 } // namespace jngl

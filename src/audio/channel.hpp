@@ -36,6 +36,10 @@ namespace psemek::audio
 			return stream() != nullptr;
 		}
 
+		bool hasStream(struct stream* other) const {
+			return stream_.get() == other;
+		}
+
 	private:
 		stream_ptr stream_;
 	};

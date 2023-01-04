@@ -56,7 +56,7 @@ public:
 	}
 
 	void Stop(std::shared_ptr<Sound>& sound) {
-		// TODO: Actually stop playing
+		mixer->remove(sound->getStream().get());
 		std::vector<std::shared_ptr<Sound>>::iterator i;
 		if ((i = std::find(sounds_.begin(), sounds_.end(), sound)) != sounds_.end()) {
 			sounds_.erase(i);

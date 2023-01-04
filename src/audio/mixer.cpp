@@ -17,6 +17,11 @@ namespace psemek::audio
 		{
 			channel_ptr add(stream_ptr stream) override;
 
+			void remove(stream* stream) override {
+				std::lock_guard lock(streamsToStopMutex);
+				streamsToStop.push_back(stream);
+			}
+
 			std::size_t read(float * data, std::size_t sample_count) override;
 
 			std::optional<std::size_t> length() const override
@@ -37,6 +42,9 @@ namespace psemek::audio
 
 			std::mutex new_channels_mutex_;
 			std::vector<channel_ptr> new_channels_;
+
+			std::mutex streamsToStopMutex;
+			std::vector<stream*> streamsToStop;
 
 			std::atomic<std::size_t> played_{0};
 		};
@@ -63,6 +71,21 @@ namespace psemek::audio
 				}
 				for (auto & ch : new_channels)
 					channels_.push_back(std::move(ch));
+
+				std::vector<stream*> streamsToStop;
+				{
+					std::lock_guard lock{streamsToStopMutex};
+					streamsToStop = std::move(this->streamsToStop);
+				}
+				for (stream* const stream : streamsToStop) {
+					const auto it = std::find_if(channels_.begin(), channels_.end(),
+					[stream](const auto& channel) {
+						return channel->hasStream(stream);
+					});
+					if (it != channels_.end()) {
+						(*it)->stop();
+					}
+				}
 			}
 
 			std::fill(data, data + sample_count, 0.f);
