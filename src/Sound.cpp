@@ -9,6 +9,8 @@
 #include "audio/effect/loop.hpp"
 #include "audio/effect/volume.hpp"
 
+#include <cassert>
+
 using namespace psemek; // FIXME
 
 namespace jngl {

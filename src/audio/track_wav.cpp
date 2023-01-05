@@ -3,8 +3,10 @@
 #include "constants.hpp"
 #include "../jngl/Finally.hpp"
 
-#include <SDL2/SDL_audio.h>
+#include <SDL.h>
+#include <stdexcept>
 #include <string>
+#include <cassert>
 
 namespace psemek::audio
 {

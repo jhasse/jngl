@@ -1,8 +1,9 @@
 #include "engine.hpp"
 #include "constants.hpp"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
+#include <cassert>
 #include <mutex>
 #include <atomic>
 #include <vector>

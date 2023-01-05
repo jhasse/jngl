@@ -5,6 +5,8 @@
 #include <vorbis/vorbisfile.h>
 
 #include <atomic>
+#include <cassert>
+#include <stdexcept>
 
 namespace psemek::audio {
 

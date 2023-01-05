@@ -1,5 +1,6 @@
 #include "recorder.hpp"
 
+#include <stdexcept>
 #include <vector>
 
 namespace psemek::audio
