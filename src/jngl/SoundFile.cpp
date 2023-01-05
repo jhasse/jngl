@@ -147,10 +147,12 @@ bool SoundFile::isPlaying() {
 }
 
 void SoundFile::loop() {
-	if (!isPlaying()) {
-		play();
+	if (sound_ && sound_->isLooping()) {
+		return;
 	}
+	sound_ = std::make_shared<Sound>(buffer_);
 	sound_->loop();
+	GetAudio().play(sound_);
 }
 
 void SoundFile::setPitch(float p) {

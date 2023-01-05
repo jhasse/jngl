@@ -84,7 +84,7 @@ struct ogg_stream_impl : stream {
 	}
 
 	std::optional<std::size_t> length() const override {
-		return std::nullopt;
+		return played_.load();
 	}
 
 	std::size_t read(float* data, std::size_t sample_count) override {

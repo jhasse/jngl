@@ -21,6 +21,7 @@ public:
 	Sound& operator=(Sound&&) = default;
 	~Sound();
 	bool isPlaying() const;
+	bool isLooping() const;
 	void loop();
 	bool isStopped() const;
 	void SetPitch(float p);
