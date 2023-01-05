@@ -42,6 +42,7 @@ else()
 	FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
 	target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
 endif()
+target_include_directories(jngl PUBLIC include/public)
 
 option(JNGL_VIDEO "Enable Theora video playback" ON)
 option(JNGL_JPEG "Enable JPEG support if libjpeg is available" ON)

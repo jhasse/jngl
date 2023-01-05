@@ -1,11 +1,12 @@
-// Copyright 2021-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Pixels.hpp"
 
 #include "ScaleablePixels.hpp"
 #include "screen.hpp"
 
-#include <boost/numeric/conversion/cast.hpp>
+#include <cmath>
+#include <gsl/narrow>
 
 namespace jngl {
 
@@ -47,5 +48,5 @@ Pixels operator/(const jngl::Pixels a, const float b) {
 } // namespace jngl
 
 jngl::Pixels operator "" _px(const unsigned long long value) {
-	return jngl::Pixels(boost::numeric_cast<int32_t>(value));
+	return jngl::Pixels(gsl::narrow<int32_t>(value));
 }
