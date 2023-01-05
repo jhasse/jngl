@@ -392,8 +392,8 @@ endif()
 
 if(JNGL_BUILD_WEBP_FROM_SOURCE)
 	CPMAddPackage(NAME webp
-		GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
-		GIT_TAG e0241154901620a3dc6c3929463608b9bf2c36aa
+		URL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.2.4.tar.gz
+		URL_HASH SHA1=24586e2a8e01a9cced102d68852661b964502429
 		OPTIONS
 			"WEBP_BUILD_ANIM_UTILS OFF"
 			"WEBP_BUILD_CWEBP OFF"
