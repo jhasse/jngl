@@ -6,6 +6,7 @@
 
 #include <atomic>
 #include <cassert>
+#include <cstring>
 #include <stdexcept>
 
 namespace psemek::audio {
