@@ -16,8 +16,6 @@ struct Sound::Impl {
 	std::shared_ptr<audio::stream> stream;
 };
 
-float Sound::masterVolume = 1.0f;
-
 Sound::Sound(std::vector<char>& bufferData) : impl(new Impl{ audio::load_ogg(bufferData) }) {
 }
 

@@ -4,6 +4,7 @@
 #include "SoundFile.hpp"
 
 #include "../audio/effect/pitch.hpp"
+#include "../audio/effect/volume.hpp"
 #include "../audio/engine.hpp"
 #include "../audio/mixer.hpp"
 #include "../Sound.hpp"
@@ -37,8 +38,10 @@ std::unordered_map<std::string, std::shared_ptr<SoundFile>> sounds;
 
 class Audio {
 public:
-	Audio() : mixer(psemek::audio::make_mixer()), pitchControl(audio::pitch(mixer)) {
-		engine.output()->stream(pitchControl);
+	Audio()
+	: mixer(psemek::audio::make_mixer()), pitchControl(audio::pitch(mixer)),
+	  volumeControl(volume(pitchControl)) {
+		engine.output()->stream(volumeControl);
 	}
 	Audio(const Audio&) = delete;
 	Audio& operator=(const Audio&) = delete;
@@ -74,12 +77,19 @@ public:
 	void setPitch(float pitch) {
 		pitchControl->pitch(pitch);
 	}
+	float getVolume() const {
+		return volumeControl->gain();
+	}
+	void setVolume(float volume) {
+		volumeControl->gain(volume);
+	}
 
 private:
 	std::vector<std::shared_ptr<Sound>> sounds_;
 	audio::engine engine;
 	std::shared_ptr<audio::mixer> mixer;
 	std::shared_ptr<audio::pitch_control> pitchControl;
+	std::shared_ptr<audio::volume_control> volumeControl;
 };
 
 SoundFile::SoundFile(std::string filename, std::launch) {
@@ -194,12 +204,12 @@ void setPlaybackSpeed(float speed) {
 	GetAudio().setPitch(speed);
 }
 
+float getVolume() {
+	return GetAudio().getVolume();
+}
+
 void setVolume(float volume) {
-	auto end = sounds.end();
-	for (auto i = sounds.begin(); i != end; ++i) {
-		i->second->setVolume(volume);
-	}
-	Sound::masterVolume = volume;
+	GetAudio().setVolume(volume);
 }
 
 #ifdef ALC_SOFT_pause_device

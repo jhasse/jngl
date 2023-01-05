@@ -11,8 +11,4 @@ bool isOpenALInstalled() {
 	return true;
 }
 
-float getVolume() {
-	return Sound::masterVolume;
-}
-
 } // namespace jngl

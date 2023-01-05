@@ -27,8 +27,6 @@ public:
 	void setVolume(float v);
 	std::shared_ptr<audio::stream> getStream();
 
-	static float masterVolume;
-
 private:
 	struct Impl;
 	std::unique_ptr<Impl> impl;
