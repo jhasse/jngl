@@ -6,6 +6,7 @@
 #include "audio.hpp"
 #include "jngl/debug.hpp"
 #include "audio/track.hpp"
+#include "audio/effect/volume.hpp"
 
 using namespace psemek; // FIXME
 
@@ -13,10 +14,11 @@ namespace jngl {
 
 struct Sound::Impl {
 	std::shared_ptr<audio::track> track;
-	std::shared_ptr<audio::stream> stream;
+	std::shared_ptr<audio::volume_control> stream;
 };
 
 Sound::Sound(std::vector<char>& bufferData) : impl(new Impl{ audio::load_ogg(bufferData) }) {
+	impl->stream = audio::volume(impl->track->stream());
 }
 
 Sound::~Sound() {
@@ -39,14 +41,11 @@ void Sound::SetPitch(float p) {
 }
 
 void Sound::setVolume(float v) {
-	// TODO
+	impl->stream->gain(v);
 }
 
 std::shared_ptr<audio::stream> Sound::getStream() {
-	if (impl->stream) {
-		return impl->stream;
-	}
-	return impl->stream = impl->track->stream();
+	return impl->stream;
 }
 
 } // namespace jngl
