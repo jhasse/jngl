@@ -69,6 +69,9 @@ public:
 			                 .count()
 			          << " ms.\n";
 		}
+		if (jngl::keyPressed('l')) {
+			jngl::loop("test.ogg");
+		}
 		if (jngl::keyPressed('s')) {
 			useShader = !useShader;
 			if (!shaderProgram) {
@@ -164,17 +167,17 @@ public:
 			jngl::setFullscreen(!jngl::getFullscreen());
 		}
 		jngl::print("Press K to test key codes.", 5, 490);
-		jngl::print("Press P to play a sound.", 6, 510);
+		jngl::print("Press P to play a sound, L to loop it.", 6, 510);
 		jngl::print("Press G to load a Sprite asynchronously.", 6, 530);
 		static int playbackSpeed = 100;
 		jngl::setPlaybackSpeed(float(playbackSpeed) / 100.0f);
 		jngl::print("Press + and - to change the audio playback speed: " +
 		      std::to_string(playbackSpeed) + " %", 6, 550);
 		if (jngl::keyPressed('-')) {
-			--playbackSpeed;
+			playbackSpeed -= jngl::keyDown(jngl::key::AltL) ? 50 : 1;
 		}
 		if (jngl::keyPressed('+')) {
-			++playbackSpeed;
+			playbackSpeed += jngl::keyDown(jngl::key::AltL) ? 50 : 1;
 		}
 		jngl::setVolume(volume);
 		jngl::print("Use your mouse wheel to change the volume: " +
