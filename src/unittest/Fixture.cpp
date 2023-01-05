@@ -1,9 +1,8 @@
-// Copyright 2019-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Fixture.hpp"
 
-#include <boost/range/adaptor/reversed.hpp>
 #include <boost/test/unit_test.hpp>
 #include <jngl.hpp>
 
@@ -61,9 +60,9 @@ std::string Fixture::getAsciiArt() const {
 	BOOST_CHECK_EQUAL(index, buffer.size());
 	assert(reduced.size() == size_t(h / reduceFactor));
 	std::string out = "\n"; // Start with a newline for prettier output by Boost.Test
-	for (const auto& row : boost::adaptors::reverse(reduced)) {
-		assert(row.size() == reducedW);
-		for (const auto& cell : row) {
+	for (auto itRow = reduced.rbegin(); itRow != reduced.rend(); ++itRow) {
+		assert(itRow->size() == reducedW);
+		for (const auto& cell : *itRow) {
 			// ASCII:
 			// const static std::vector<std::string> chars = { "@", "#", "%", "x", "o",
 			//                                                 ";", ":", ",", ".", " " };

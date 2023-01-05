@@ -1,4 +1,4 @@
-// Copyright 2016-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2016-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "helper.hpp"
@@ -39,6 +39,27 @@ bool fileExists(const std::string& path) {
 		return true;
 	}
 	return false;
+}
+
+std::string sanitizePath(std::string path) {
+	while (true) { // /./ => /
+		size_t pos = path.find("/./");
+		if (pos == std::string::npos) {
+			break;
+		}
+		path.erase(pos, 2);
+	}
+	while (true) { // // => /
+		size_t pos = path.find("//");
+		if (pos == std::string::npos) {
+			break;
+		}
+		path.erase(pos, 1);
+	}
+	if (path.size() > 1 && path[0] == '.' && path[1] == '/') {
+		path.erase(0, 2);
+	}
+	return path;
 }
 
 } // namespace jngl

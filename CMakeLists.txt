@@ -231,6 +231,7 @@ else()
 	endif()
 
 	if(MSVC)
+		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
 		if(JNGL_SDL2)
 			set(SDL_SENSOR OFF CACHE BOOL "" FORCE) # doesn't work with UWP
 			FetchContent_Declare(sdl2

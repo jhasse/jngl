@@ -7,7 +7,6 @@
 #include "audio/mixer.hpp"
 
 #include <algorithm>
-#include <boost/math/constants/constants.hpp>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -65,7 +64,7 @@ public:
 		if (rotate > 360) {
 			rotate = 0;
 		}
-		factor = std::sin(rotate / 360 * boost::math::constants::pi<double>());
+		factor = std::sin(rotate / 360 * M_PI);
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
 		if (jngl::keyPressed('p')) {
@@ -81,6 +80,9 @@ public:
 			          << std::chrono::duration_cast<std::chrono::milliseconds>(clock.now() - start)
 			                 .count()
 			          << " ms.\n";
+		}
+		if (jngl::keyPressed('l')) {
+			jngl::loop("test.ogg");
 		}
 		if (jngl::keyPressed('s')) {
 			useShader = !useShader;
@@ -115,7 +117,7 @@ public:
 		jngl::setColor(0,0,0,255);
 		jngl::drawLine(jngl::modelview()
 		                   .translate({ 650, 450 })
-		                   .rotate(rotate / 360 * boost::math::constants::pi<double>())
+		                   .rotate(rotate / 360 * M_PI)
 		                   .translate({ -50, -50 }),
 		               { 100, 100 });
 		jngl::setSpriteAlpha(200);
@@ -177,17 +179,17 @@ public:
 			jngl::setFullscreen(!jngl::getFullscreen());
 		}
 		jngl::print("Press K to test key codes.", 5, 490);
-		jngl::print("Press P to play a sound.", 6, 510);
+		jngl::print("Press P to play a sound, L to loop it.", 6, 510);
 		jngl::print("Press G to load a Sprite asynchronously.", 6, 530);
 		static int playbackSpeed = 100;
 		jngl::setPlaybackSpeed(float(playbackSpeed) / 100.0f);
 		jngl::print("Press + and - to change the audio playback speed: " +
 		      std::to_string(playbackSpeed) + " %", 6, 550);
 		if (jngl::keyPressed('-')) {
-			--playbackSpeed;
+			playbackSpeed -= jngl::keyDown(jngl::key::AltL) ? 50 : 1;
 		}
 		if (jngl::keyPressed('+')) {
-			++playbackSpeed;
+			playbackSpeed += jngl::keyDown(jngl::key::AltL) ? 50 : 1;
 		}
 		jngl::setVolume(volume);
 		jngl::print("Use your mouse wheel to change the volume: " +

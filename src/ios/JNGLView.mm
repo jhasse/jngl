@@ -1,5 +1,9 @@
+// Copyright 2023 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
+
 #import "JNGLView.h"
 
+#include "../helper.hpp"
 #include "../jngl.hpp"
 #include "../windowptr.hpp"
 #include "../jngl/AppParameters.hpp"
@@ -7,7 +11,6 @@
 #include "windowimpl.hpp"
 #include "AppleController.h"
 
-#include <boost/algorithm/string/replace.hpp>
 #include <iostream>
 
 #import <GameController/GameController.h>
@@ -223,9 +226,7 @@ std::string canonical(const std::string& key) {
 	//   readConfig("foo//bar.txt");
 	// will refer to the same value. Of course there's even more to keep in mind, but ultimately
 	// this should be fixed in the game then.
-	std::string tmp = key;
-	boost::replace_all(tmp, "/./", "/");
-	boost::replace_all(tmp, "//", "/");
+	std::string tmp = sanitizePath(key);
 	if (tmp != key) {
 		debug("WARNING: Canonicalized `");
 		debug(key);
