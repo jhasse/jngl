@@ -1,15 +1,10 @@
-// Copyright 2021-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Mat3.hpp"
 
 #include "Pixels.hpp"
 #include "Vec2.hpp"
 #include "screen.hpp"
-
-#include <boost/qvm/map_vec_mat.hpp>
-#include <boost/qvm/mat_operations.hpp>
-#include <boost/qvm/mat_operations3.hpp>
-#include <boost/qvm/vec.hpp>
 
 namespace jngl {
 Mat3::Mat3(std::initializer_list<float> elements) {

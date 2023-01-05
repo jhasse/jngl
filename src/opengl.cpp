@@ -1,13 +1,11 @@
-// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "opengl.hpp"
 
 #include "jngl/App.hpp"
 
-#include <boost/qvm/map_vec_mat.hpp>
-#include <boost/qvm/mat_operations3.hpp>
-#include <boost/qvm/vec.hpp>
+#include <boost/qvm_lite.hpp>
 #include <stdexcept>
 
 namespace opengl {

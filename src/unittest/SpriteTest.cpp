@@ -1,4 +1,4 @@
-// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/sprite.hpp"
@@ -6,7 +6,6 @@
 
 #include <jngl.hpp>
 
-#include <boost/qvm/vec_operations.hpp>
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_CASE(Sprite) {
