@@ -3,7 +3,6 @@
 
 #include "Fixture.hpp"
 
-#include <boost/range/adaptor/reversed.hpp>
 #include <boost/ut.hpp>
 #include <cmath>
 #include <jngl.hpp>
@@ -62,9 +61,9 @@ std::string Fixture::getAsciiArt() const {
 	boost::ut::expect(index == buffer.size());
 	assert(reduced.size() == size_t(h / reduceFactor));
 	std::string out = "\n"; // Start with a newline for prettier output by Boost.Test
-	for (const auto& row : boost::adaptors::reverse(reduced)) {
-		assert(row.size() == reducedW);
-		for (const auto& cell : row) {
+	for (auto itRow = reduced.rbegin(); itRow != reduced.rend(); ++itRow) {
+		assert(itRow->size() == reducedW);
+		for (const auto& cell : *itRow) {
 			// ASCII:
 			// const static std::vector<std::string> chars = { "@", "#", "%", "x", "o",
 			//                                                 ";", ":", ",", ".", " " };

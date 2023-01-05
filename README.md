@@ -2,7 +2,7 @@
 
 [🌐 Website](https://bixense.com/jngl/)
 [🏃 Quickstart](https://github.com/jhasse/jngl/wiki/JNGL-Quickstart)
-[🎓 Tutorial](https://github.com/jhasse/jngl/wiki/Tutorial1)
+[🎓 Tutorial](https://github.com/pinguin999/my-jngl-starter)
 [📚 Documentation](https://bixense.com/jngl/annotated.html)
 
 An easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox, the Nintendo Switch,

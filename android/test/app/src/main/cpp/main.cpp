@@ -18,7 +18,7 @@ JNGL_MAIN_BEGIN {
 		float x = 0;
 		bool first = true;
 		std::string text;
-		jngl::Sprite sprite("jngl.webp");
+		jngl::Sprite sprite("././/././jngl.webp");
 		while (jngl::running()) {
 			jngl::updateInput();
 			jngl::setBackgroundColor(jngl::Color(133, 133, 133));
