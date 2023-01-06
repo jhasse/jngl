@@ -113,10 +113,10 @@ else() # Windows
 		target_sources(jngl PRIVATE src/win32/fontfile.cpp src/win32/message.cpp src/win32/other.cpp
 		                            src/win32/unicode.cpp)
 	else()
-		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp glad/src/wgl.c)
+		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp)
 		target_link_libraries(jngl PRIVATE opengl32)
 	endif()
-	target_sources(jngl PRIVATE ${SRC})
+	target_sources(jngl PRIVATE ${SRC} glad/src/wgl.c)
 	target_link_libraries(jngl PUBLIC winmm)
 	if(WINDOWS_STORE)
 		target_link_libraries(jngl PUBLIC libEGL libGLESv2)
