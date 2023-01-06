@@ -105,6 +105,9 @@ public:
 	void drawRect(Mat3 modelview, Vec2 size) const;
 	void onControllerChanged(std::function<void()>);
 
+	friend class WindowImpl;
+	std::unique_ptr<WindowImpl> impl;
+
 private:
 	static int GetKeyCode(jngl::key::KeyType key);
 	static std::string GetFontFileByName(const std::string& fontname);
@@ -114,15 +117,6 @@ private:
 
 	/// Called when a controller is added or removed
 	std::function<void()> controllerChangedCallback;
-
-	friend class WindowImpl;
-#ifdef _WIN32
-public:
-#endif
-	std::unique_ptr<WindowImpl> impl;
-#ifdef _WIN32
-private:
-#endif
 
 	double timePerStep = 1.0 / 60.0;
 	double mouseWheel = 0;

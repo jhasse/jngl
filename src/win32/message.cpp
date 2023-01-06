@@ -15,13 +15,6 @@
 
 namespace jngl {
 
-#ifdef JNGL_UWP
-void errorMessage(const std::string& text) {
-	printMessage(text + "\n");
-	// TODO
-}
-#endif
-
 void printMessage(const std::string& text) {
 #ifdef JNGL_UWP
 	SDL_Log("%s", text.c_str());
