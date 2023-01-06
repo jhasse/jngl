@@ -374,6 +374,9 @@ else()
 		else()
 			if(NOT IOS)
 				add_executable(jngl-test src/test/test.cpp)
+				if(WIN32)
+					target_sources(jngl-test PRIVATE src/win32/jngl.manifest)
+				endif()
 
 				add_executable(example-bike examples/bike/base.cpp examples/bike/bike.cpp
 					examples/bike/line.cpp examples/bike/main.cpp examples/bike/wheel.cpp)
