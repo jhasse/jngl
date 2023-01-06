@@ -122,6 +122,8 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a30cfc64f3282933e0da476e358a5937d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8hpp.html#a30cfc64f3282933e0da476e358a5937d">JNGL_CATCH_EXCEPTION_TO_ERROR_MESSAGE</a></td></tr>
+<tr class="separator:a30cfc64f3282933e0da476e358a5937d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a199058880de8f3bc123fd166948307a0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8hpp.html#a199058880de8f3bc123fd166948307a0">JNGL_MAIN_BEGIN</a></td></tr>
 <tr class="separator:a199058880de8f3bc123fd166948307a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c18346a9a7f4f179dfc40cc88e16433"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8hpp.html#a3c18346a9a7f4f179dfc40cc88e16433">JNGL_MAIN_END</a>&#160;&#160;&#160;}</td></tr>
@@ -132,6 +134,22 @@ Macros</h2></td></tr>
 
 <p class="definition">Definition in file <a class="el" href="main_8hpp_source.html">main.hpp</a>.</p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a30cfc64f3282933e0da476e358a5937d" name="a30cfc64f3282933e0da476e358a5937d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30cfc64f3282933e0da476e358a5937d">&#9670;&#160;</a></span>JNGL_CATCH_EXCEPTION_TO_ERROR_MESSAGE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define JNGL_CATCH_EXCEPTION_TO_ERROR_MESSAGE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="main_8hpp_source.html#l00042">42</a> of file <a class="el" href="main_8hpp_source.html">main.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a199058880de8f3bc123fd166948307a0" name="a199058880de8f3bc123fd166948307a0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a199058880de8f3bc123fd166948307a0">&#9670;&#160;</a></span>JNGL_MAIN_BEGIN</h2>
 
@@ -144,19 +162,20 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">            <span class="comment">/* NOLINT */</span> <span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv) { \</div>
-<div class="line">            { \</div>
-<div class="line">                <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector&lt;std::string&gt;</a> tmp(argc - 1); \</div>
-<div class="line">                for (<span class="keywordtype">int</span> i = 1; i &lt; argc; ++i) { \</div>
-<div class="line">                    tmp[i - 1] = argv[i]; \</div>
+<div class="line">            JNGL_CATCH_EXCEPTION_TO_ERROR_MESSAGE \</div>
+<div class="line">                { \</div>
+<div class="line">                    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector&lt;std::string&gt;</a> tmp(argc - 1); \</div>
+<div class="line">                    for (<span class="keywordtype">int</span> i = 1; i &lt; argc; ++i) { \</div>
+<div class="line">                        tmp[i - 1] = argv[i]; \</div>
+<div class="line">                    } \</div>
+<div class="line">                    jngl::setArgs(tmp); \</div>
 <div class="line">                } \</div>
-<div class="line">                jngl::setArgs(tmp); \</div>
-<div class="line">            } \</div>
-<div class="line">            <a class="code hl_class" href="classjngl_1_1Finally.html">jngl::Finally</a> _ZtzNg47T5XSjogv(<a class="code hl_function" href="namespacejngl.html#a6d20c55145d6024abf036cc86e2e0380">jngl::hideWindow</a>);</div>
+<div class="line">                <a class="code hl_class" href="classjngl_1_1Finally.html">jngl::Finally</a> _ZtzNg47T5XSjogv(<a class="code hl_function" href="namespacejngl.html#a6d20c55145d6024abf036cc86e2e0380">jngl::hideWindow</a>);</div>
 <div class="ttc" id="aclassjngl_1_1Finally_html"><div class="ttname"><a href="classjngl_1_1Finally.html">jngl::Finally</a></div><div class="ttdoc">Helper class which calls a function when being destroyed.</div><div class="ttdef"><b>Definition:</b> <a href="Finally_8hpp_source.html#l00022">Finally.hpp:22</a></div></div>
 <div class="ttc" id="anamespacejngl_html_a6d20c55145d6024abf036cc86e2e0380"><div class="ttname"><a href="namespacejngl.html#a6d20c55145d6024abf036cc86e2e0380">jngl::hideWindow</a></div><div class="ttdeci">void hideWindow()</div><div class="ttdoc">Cleans up the window and unloads everything.</div></div>
 <div class="ttc" id="avector_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a></div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="main_8hpp_source.html#l00039">39</a> of file <a class="el" href="main_8hpp_source.html">main.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="main_8hpp_source.html#l00044">44</a> of file <a class="el" href="main_8hpp_source.html">main.hpp</a>.</p>
 
 </div>
 </div>
@@ -172,7 +191,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="main_8hpp_source.html#l00048">48</a> of file <a class="el" href="main_8hpp_source.html">main.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="main_8hpp_source.html#l00061">61</a> of file <a class="el" href="main_8hpp_source.html">main.hpp</a>.</p>
 
 </div>
 </div>
