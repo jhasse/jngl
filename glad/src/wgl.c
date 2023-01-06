@@ -138,19 +138,6 @@ int gladLoadWGL(HDC hdc, GLADloadfunc load) {
 }
  
 
-#ifdef GLAD_WGL
-
-static GLADapiproc glad_wgl_get_proc(void *vuserptr, const char* name) {
-    GLAD_UNUSED(vuserptr);
-    return GLAD_GNUC_EXTENSION (GLADapiproc) wglGetProcAddress(name);
-}
-
-int gladLoaderLoadWGL(HDC hdc) {
-    return gladLoadWGLUserPtr(hdc, glad_wgl_get_proc, NULL);
-}
-
-
-#endif /* GLAD_WGL */
 
 #ifdef __cplusplus
 }

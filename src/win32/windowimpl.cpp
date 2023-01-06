@@ -137,6 +137,13 @@ bool WindowImpl::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 	return false;
 }
 
+static GLADapiproc gladGlGetProc(void* user, const char* name) {
+	if (auto result = reinterpret_cast<GLADapiproc>(wglGetProcAddress(name))) {
+		return result;
+	}
+	return reinterpret_cast<GLADapiproc>(GetProcAddress(reinterpret_cast<HMODULE>(user), name));
+}
+
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), isMouseVisible_(true),
@@ -282,7 +289,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 			throw std::runtime_error("Can't activate the GL rendering context.");
 		}
 
-		gladLoaderLoadWGL(impl->pDeviceContext_.get());
+		gladLoadWGL(impl->pDeviceContext_.get(), reinterpret_cast<GLADloadfunc>(wglGetProcAddress));
 
 		if (!multisample && isMultisampleSupported_ && impl->InitMultisample(hInstance, pfd)) {
 			impl->pDeviceContext_.reset((HDC)nullptr); // Destroy window
@@ -297,7 +304,11 @@ Window::Window(const std::string& title, const int width, const int height, cons
 			return;
 		}
 
-		const int glVersion = gladLoaderLoadGL();
+		HMODULE openglDll = LoadLibrary(L"opengl32.dll");
+		if (!openglDll) {
+			throw std::runtime_error("Can't load opengl32.dll.");
+		}
+		int glVersion = gladLoadGLUserPtr(gladGlGetProc, openglDll);
 		if (glVersion < GLAD_MAKE_VERSION(2, 0)) {
 			throw std::runtime_error(
 			    "Your graphics card is missing OpenGL 2.0 support (it supports " +
