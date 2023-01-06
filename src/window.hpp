@@ -116,7 +116,13 @@ private:
 	std::function<void()> controllerChangedCallback;
 
 	friend class WindowImpl;
+#ifdef _WIN32
+public:
+#endif
 	std::unique_ptr<WindowImpl> impl;
+#ifdef _WIN32
+private:
+#endif
 
 	double timePerStep = 1.0 / 60.0;
 	double mouseWheel = 0;
