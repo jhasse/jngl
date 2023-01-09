@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.13)
 
 project(jngl LANGUAGES C CXX)
 
-if(NOT MSVC)
+if(MSVC)
+	string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus")
+else()
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
 endif()
