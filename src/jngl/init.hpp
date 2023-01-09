@@ -1,4 +1,4 @@
-// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Include this file only once, as it defines the main function
 /// \file
@@ -8,6 +8,7 @@
 #include "App.hpp"
 #include "AppParameters.hpp"
 #include "main.hpp"
+#include "message.hpp"
 #include "screen.hpp"
 #include "work.hpp"
 

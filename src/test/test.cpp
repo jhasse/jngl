@@ -227,7 +227,6 @@ private:
 jngl::AppParameters jnglInit() {
 	jngl::AppParameters params;
 	params.displayName = "JNGL Test Application";
-	jngl::setPrefix(jngl::getBinaryPath());
 	params.screenSize = { 800, 600 };
 	params.start = []() {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"

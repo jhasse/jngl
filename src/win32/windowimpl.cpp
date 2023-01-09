@@ -1,4 +1,4 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/debug.hpp"
@@ -7,7 +7,7 @@
 #include "../jngl/window.hpp"
 #include "../jngl/work.hpp"
 #include "../main.hpp"
-#include "../window.hpp"
+#include "../windowptr.hpp"
 #include "ConvertUTF.h"
 #include "unicode.hpp"
 
@@ -741,5 +741,20 @@ void openURL(const std::string& url) {
 }
 
 void setCursor(Cursor) {}
+
+void errorMessage(const std::string& text) {
+	HWND hWnd = nullptr;
+	bool old;
+	Window* window = pWindow.get();
+	if (window) {
+		old = window->getMouseVisible();
+		window->SetMouseVisible(true);
+		hWnd = window->impl->pWindowHandle_.get();
+	}
+	MessageBox(hWnd, utf8ToUtf16(text).c_str(), L"Error", MB_OK | MB_ICONERROR);
+	if (window) {
+		window->SetMouseVisible(old);
+	}
+}
 
 } // namespace jngl
