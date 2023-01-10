@@ -93,4 +93,7 @@ namespace psemek::audio
 		return impl().output;
 	}
 
+	void engine::setPause(bool pause) {
+		SDL_PauseAudioDevice(impl().device, pause ? 1 : 0);
+	}
 }

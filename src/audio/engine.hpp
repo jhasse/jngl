@@ -19,6 +19,7 @@ namespace psemek::audio
 		~engine();
 
 		channel_ptr output();
+		void setPause(bool);
 
 	private:
 		struct impl;

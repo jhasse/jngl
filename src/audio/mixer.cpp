@@ -1,5 +1,6 @@
 #include "mixer.hpp"
 
+#include <algorithm>
 #include <memory>
 #include <vector>
 #include <atomic>

@@ -66,14 +66,12 @@ public:
 			sounds_.erase(i);
 		}
 	}
-#ifdef ALC_SOFT_pause_device
 	void pauseDevice() {
-		alcDevicePauseSOFT(device_);
+		engine.setPause(true);
 	}
 	void resumeDevice() {
-		alcDeviceResumeSOFT(device_);
+		engine.setPause(false);
 	}
-#endif
 	void setPitch(float pitch) {
 		pitchControl->pitch(pitch);
 	}
@@ -214,7 +212,6 @@ void setVolume(float volume) {
 	GetAudio().setVolume(volume);
 }
 
-#ifdef ALC_SOFT_pause_device
 void pauseAudioDevice() {
 	GetAudio().pauseDevice();
 }
@@ -222,7 +219,6 @@ void pauseAudioDevice() {
 void resumeAudioDevice() {
 	GetAudio().resumeDevice();
 }
-#endif
 
 Audio& GetAudio() {
 	static Audio audio;
