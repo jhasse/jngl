@@ -367,7 +367,7 @@ else()
 			#   'vccorlib_lib_should_be_specified_before_msvcrt_lib_to_linker': value '1' doesn't
 			#   match value '0' in msvcrtd.lib(app_appinit.obj)
 			set_source_files_properties(src/uwp/SDL_winrt_main_NonXAML.cpp
-				PROPERTIES COMPILE_FLAGS "/ZW /Zc:twoPhase-")
+				PROPERTIES COMPILE_FLAGS "/ZW /Zc:twoPhase- /std:c++17")
 		else()
 			if(NOT IOS)
 				add_executable(jngl-test src/test/test.cpp)
