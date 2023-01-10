@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -50,7 +50,7 @@ public:
 private:
 	class Impl;
 
-	std::unique_ptr<Impl> impl;
+	std::shared_ptr<Impl> impl;
 };
 
 } // namespace jngl

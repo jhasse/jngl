@@ -81,6 +81,9 @@ public:
 	void setVolume(float volume) {
 		volumeControl->gain(volume);
 	}
+	std::shared_ptr<audio::mixer> getMixer() {
+		return mixer;
+	}
 
 private:
 	std::vector<std::shared_ptr<Sound>> sounds_;
@@ -223,6 +226,10 @@ void resumeAudioDevice() {
 Audio& GetAudio() {
 	static Audio audio;
 	return audio;
+}
+
+std::shared_ptr<audio::mixer> getMixer() {
+	return GetAudio().getMixer();
 }
 
 } // namespace jngl

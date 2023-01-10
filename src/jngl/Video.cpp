@@ -1,12 +1,16 @@
-// Copyright 2018-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Video.hpp"
 
+#include <cstring>
+#include <mutex>
 #include <stdexcept>
 
 #ifdef JNGL_VIDEO
 
+#include "../audio/constants.hpp"
+#include "../audio/effect/pitch.hpp"
 #include "../theoraplay/theoraplay.h"
 #include "../Sound.hpp"
 #include "../audio.hpp"
@@ -21,15 +25,12 @@
 #include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
 #include <deque>
-#ifdef __APPLE__
-#include <OpenAL/al.h>
-#else
-#include <AL/al.h>
-#endif
 
 namespace jngl {
 
-class Video::Impl {
+using namespace psemek; // TODO
+
+class Video::Impl : public audio::stream {
 public:
 	explicit Impl(const std::string& filename)
 	: decoder(THEORAPLAY_startDecodeFile((pathPrefix + filename).c_str(), BUFFER_SIZE,
@@ -45,28 +46,13 @@ public:
 		timePerFrame = 1. / double(video->fps);
 		assert(timePerFrame > 0);
 
-		GetAudio();
-		alGenSources(1, &source);
-		checkAlError();
-		alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
-		checkAlError();
-		alSource3f(source, AL_POSITION, 0.0f, 0.0f, 0.0f);
-		checkAlError();
-
 		while (!audio) {
 			audio = THEORAPLAY_getAudio(decoder);
 		}
+	}
 
-		switch (audio->channels) {
-			case 1:
-				format = AL_FORMAT_MONO16;
-				break;
-			case 2:
-				format = AL_FORMAT_STEREO16;
-				break;
-			default:
-				throw std::runtime_error("Unsupported number of channels.");
-		}
+	int getFrequency() const {
+		return audio->freq;
 	}
 
 	void draw() {
@@ -242,53 +228,8 @@ public:
 			if (!audio) {
 				audio = THEORAPLAY_getAudio(decoder);
 			}
-			alSourcef(source, AL_GAIN, getVolume());
 			while (audio) {
-				ALint processed;
-				alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
-				checkAlError();
-
-				assert(processed >= 0);
-
-				if (processed > 0) {
-					// Reuse a processed buffer
-					alSourceUnqueueBuffers(source, 1, &buffers.front());
-					checkAlError();
-
-					queueAudio(buffers.front());
-					buffers.pop_front();
-
-					ALint state;
-					alGetSourcei(source, AL_SOURCE_STATE, &state);
-					checkAlError();
-					if (state != AL_PLAYING) {
-						while (true) {
-							alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
-							checkAlError();
-							if (processed == 0) {
-								break;
-							}
-							alSourceUnqueueBuffers(source, 1, &buffers.front());
-							checkAlError();
-							alDeleteBuffers(1, &buffers.front());
-							checkAlError();
-							buffers.pop_front();
-						}
-
-						alSourcePlay(source);
-						checkAlError();
-						jngl::debugLn("WARNING: Audio buffer underrun!");
-					}
-				} else {
-					ALuint buffer;
-					alGenBuffers(1, &buffer);
-					checkAlError();
-					queueAudio(buffer);
-					if (buffers.size() == 1) {
-						alSourcePlay(source);
-						checkAlError();
-					}
-				}
+				queueAudio();
 			}
 		}
 		if (shaderProgram) {
@@ -314,12 +255,6 @@ public:
 	}
 
 	~Impl() {
-		alDeleteSources(1, &source);
-		checkAlError();
-		for (auto buffer : buffers) {
-			alDeleteBuffers(1, &buffer);
-			checkAlError();
-		}
 		THEORAPLAY_stopDecode(decoder);
 	}
 
@@ -336,24 +271,48 @@ private:
 		return startTime > 0;
 	}
 
-	void queueAudio(ALuint buffer) {
-		auto pcm = std::make_unique<int16_t[]>(audio->frames * audio->channels);
-		for (int i = 0; i < audio->frames * audio->channels; ++i) {
-			const float sample = std::clamp(audio->samples[i], -1.f, 1.f);
-			pcm[i] = static_cast<int16_t>(sample * 32767.f);
+	size_t played() const override { assert(false); }
+	std::optional<size_t> length() const override { assert(false); }
+
+	void queueAudio() {
+		{
+			std::scoped_lock lock(audioBufferMutex);
+			if (audio->channels == 1) {
+				for (size_t i = 0; i < audio->frames; ++i) {
+					audioBuffer.push_back(audio->samples[i]);
+					audioBuffer.push_back(audio->samples[i]);
+				}
+			} else {
+				assert(audio->channels == 2);
+				audioBuffer.insert(audioBuffer.end(), audio->samples,
+				                   audio->samples + audio->frames * 2);
+			}
 		}
-
-		alBufferData(buffer, format, pcm.get(), audio->frames * audio->channels * sizeof(int16_t),
-		             audio->freq);
-		checkAlError();
-		alSourceQueueBuffers(source, 1, &buffer);
-		checkAlError();
-
-		buffers.push_back(buffer);
-
 		THEORAPLAY_freeAudio(audio);
 		audio = THEORAPLAY_getAudio(decoder);
 	}
+
+	std::size_t read(float * data, std::size_t sample_count) override {
+		std::scoped_lock lock(audioBufferMutex);
+		if (audioBuffer.size() < sample_count) {
+			if (finished()) {
+				return 0;
+			}
+			if (started()) {
+				jngl::debugLn("WARNING: Audio buffer underrun!");
+			}
+			std::memset(data, 0, sample_count);
+			return sample_count;
+		}
+		const auto begin = audioBuffer.begin();
+		const auto end = begin + sample_count;
+		std::copy(begin, end, data);
+		audioBuffer.erase(begin, end);
+		return sample_count;
+	}
+
+	std::mutex audioBufferMutex;
+	std::vector<float> audioBuffer;
 
 	constexpr static unsigned int BUFFER_SIZE = 200;
 
@@ -363,9 +322,6 @@ private:
 	const THEORAPLAY_AudioPacket* audio = nullptr;
 	double startTime;
 	double timePerFrame;
-	std::deque<ALuint> buffers;
-	ALuint source = 0;
-	ALenum format;
 
 	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
 	int modelviewUniform = -1;
@@ -376,7 +332,12 @@ private:
 	GLuint vertexBuffer = 0;
 };
 
-Video::Video(const std::string& filename) : impl(std::make_unique<Impl>(filename)) {
+Video::Video(const std::string& filename) : impl(std::make_shared<Impl>(filename)) {
+	if (impl->getFrequency() != audio::frequency) {
+		getMixer()->add(audio::pitch(impl, float(impl->getFrequency()) / audio::frequency));
+	} else {
+		getMixer()->add(impl);
+	}
 }
 
 Video::~Video() = default;
