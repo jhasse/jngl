@@ -62,6 +62,12 @@ set(ALSOFT_UTILS OFF CACHE BOOL "Build and install utility programs" FORCE)
 
 if (ANDROID)
 	file(GLOB ANDROID_SOURCES src/android/*.cpp)
+	FetchContent_Declare(sdl2
+		URL https://github.com/libsdl-org/SDL/releases/download/release-2.26.2/SDL2-2.26.2.tar.gz
+		URL_HASH SHA1=2a1415a201ac07c353c6d8e4daaa11c8910fb879
+	)
+	FetchContent_MakeAvailable(sdl2)
+	target_link_libraries(jngl PRIVATE SDL2-static)
 	target_sources(jngl PRIVATE ${ANDROID_SOURCES})
 elseif(IOS)
 	file(GLOB SRC src/ios/*.cpp src/ios/*.mm src/ios/*.h)
