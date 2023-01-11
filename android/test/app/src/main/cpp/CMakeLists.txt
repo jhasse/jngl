@@ -26,6 +26,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/../../../../../.. ${CMAKE_CURRENT_BINARY_
 # add lib dependencies
 target_link_libraries(jngl-test
     android
+    log
     native_app_glue
     EGL
     GLESv3

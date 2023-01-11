@@ -1,5 +1,6 @@
-#include "engine.hpp"
-#include "constants.hpp"
+#include "../engine.hpp"
+#include "../constants.hpp"
+#include "../../sdl/sdl.hpp"
 
 #include <SDL.h>
 
@@ -30,9 +31,8 @@ namespace psemek::audio
 		static void callback(void * userdata, std::uint8_t * stream, int len);
 	};
 
-	engine::impl::impl()
-		// : sdl_init(sdl2::init(SDL_INIT_AUDIO)) FIXME
-	{
+	engine::impl::impl() {
+		jngl::SDL::init();
 		SDL_AudioSpec desired, obtained;
 		desired.freq = frequency;
 		desired.channels = 2;
