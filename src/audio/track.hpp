@@ -22,9 +22,6 @@ namespace psemek::audio
 	track_ptr load_raw(std::span<float const> data);
 	track_ptr load_raw(std::vector<float> data);
 
-	track_ptr load_wav(std::span<char const> data);
-	track_ptr load_wav(std::vector<char> const & data);
-
 	track_ptr load_mp3(std::span<char const> data);
 	track_ptr load_mp3(std::vector<char> data);
 
