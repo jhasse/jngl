@@ -219,15 +219,13 @@ else()
 
 	if(MSVC)
 		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
-		if(JNGL_SDL2)
-			set(SDL_SENSOR OFF CACHE BOOL "" FORCE) # doesn't work with UWP
-			FetchContent_Declare(sdl2
-				URL https://www.libsdl.org/release/SDL2-2.0.16.zip
-				URL_HASH SHA1=4d09aad9b76b5d51366bebeded8bec46dcf67ef6
-			)
-			FetchContent_MakeAvailable(sdl2)
-			target_link_libraries(jngl PRIVATE SDL2-static)
-		endif()
+		set(SDL_SENSOR OFF CACHE BOOL "" FORCE) # doesn't work with UWP
+		FetchContent_Declare(sdl2
+			URL https://www.libsdl.org/release/SDL2-2.0.16.zip
+			URL_HASH SHA1=4d09aad9b76b5d51366bebeded8bec46dcf67ef6
+		)
+		FetchContent_MakeAvailable(sdl2)
+		target_link_libraries(jngl PRIVATE SDL2-static)
 		if(WINDOWS_STORE)
 			target_compile_definitions(jngl PUBLIC JNGL_UWP)
 			target_include_directories(jngl PUBLIC ${sdl2_SOURCE_DIR}/include ${sdl2_BINARY_DIR}/include) # TODO: This should be PRIVATE
