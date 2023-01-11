@@ -219,12 +219,34 @@ else()
 
 	if(MSVC)
 		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
-		set(SDL_SENSOR OFF CACHE BOOL "" FORCE) # doesn't work with UWP
-		FetchContent_Declare(sdl2
-			URL https://www.libsdl.org/release/SDL2-2.0.16.zip
-			URL_HASH SHA1=4d09aad9b76b5d51366bebeded8bec46dcf67ef6
-		)
-		FetchContent_MakeAvailable(sdl2)
+		if(JNGL_SDL2)
+			CPMAddPackage(NAME sdl2
+				URL https://www.libsdl.org/release/SDL2-2.0.16.zip
+				URL_HASH SHA1=4d09aad9b76b5d51366bebeded8bec46dcf67ef6
+				OPTIONS
+					"SDL_SENSOR OFF" # doesn't work with UWP
+			)
+		else()
+			CPMAddPackage(NAME sdl2
+				URL https://www.libsdl.org/release/SDL2-2.0.16.zip
+				URL_HASH SHA1=4d09aad9b76b5d51366bebeded8bec46dcf67ef6
+				OPTIONS
+					"SDL_ATOMIC OFF"
+					"SDL_CPUINFO OFF"
+					"SDL_DLOPEN OFF"
+					"SDL_EVENTS OFF"
+					"SDL_FILE OFF"
+					"SDL_FILESYSTEM OFF"
+					"SDL_HAPTIC OFF"
+					"SDL_LOADSO ON"
+					"SDL_LOCALE OFF"
+					"SDL_POWER OFF"
+					"SDL_RENDER OFF"
+					"SDL_SENSOR OFF"
+					"SDL_SHARED OFF"
+					"SDL_TIMERS OFF"
+			)
+		endif()
 		target_link_libraries(jngl PRIVATE SDL2-static)
 		if(WINDOWS_STORE)
 			target_compile_definitions(jngl PUBLIC JNGL_UWP)
