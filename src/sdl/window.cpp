@@ -1,4 +1,4 @@
-// Copyright 2011-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/App.hpp"
@@ -6,7 +6,7 @@
 #include "../jngl/debug.hpp"
 #include "../jngl/window.hpp"
 #include "../main.hpp"
-#include "../window.hpp"
+#include "../windowptr.hpp"
 #include "windowimpl.hpp"
 
 #include <stdexcept>
@@ -439,6 +439,21 @@ void setCursor(Cursor type) {
 	}
 	cursor = SDL_CreateSystemCursor(sdlType);
 	SDL_SetCursor(cursor);
+}
+
+void errorMessage(const std::string &text) {
+	SDL_Window* sdlWindow = nullptr;
+	bool old;
+	Window* window = pWindow.get();
+	if (window) {
+		old = window->getMouseVisible();
+		window->SetMouseVisible(true);
+		sdlWindow = window->impl->sdlWindow;
+	}
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", text.c_str(), sdlWindow);
+	if (window) {
+		window->SetMouseVisible(old);
+	}
 }
 
 } // namespace jngl

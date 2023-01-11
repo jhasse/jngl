@@ -23,8 +23,9 @@
 #include "time.hpp"
 
 #include <algorithm>
-#include <boost/numeric/conversion/cast.hpp>
+#include <cmath>
 #include <deque>
+#include <gsl/narrow>
 
 namespace jngl {
 
@@ -263,8 +264,8 @@ public:
 	Impl(Impl&&) = delete;
 	Impl& operator=(Impl&&) = delete;
 
-	[[nodiscard]] int getWidth() const { return boost::numeric_cast<int>(video->width); }
-	[[nodiscard]] int getHeight() const { return boost::numeric_cast<int>(video->height); }
+	[[nodiscard]] int getWidth() const { return gsl::narrow<int>(video->width); }
+	[[nodiscard]] int getHeight() const { return gsl::narrow<int>(video->height); }
 
 private:
 	[[nodiscard]] bool started() const {

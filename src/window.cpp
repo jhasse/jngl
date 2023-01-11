@@ -1,4 +1,4 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "window.hpp"
@@ -13,7 +13,7 @@
 #include <emscripten.h>
 #endif
 
-#include <boost/numeric/conversion/cast.hpp>
+#include <gsl/narrow>
 #include <thread>
 
 namespace jngl {
@@ -436,11 +436,11 @@ void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 	canvasHeight = height_;
 	if (minAspectRatio.first * height_ > minAspectRatio.second * width_) {
 		// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
-		canvasHeight = boost::numeric_cast<int>(
+		canvasHeight = gsl::narrow<int>(
 		    std::lround(float(minAspectRatio.second * width_) / float(minAspectRatio.first)));
 	} else if (maxAspectRatio.first * height_ < maxAspectRatio.second * width_) {
 		// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
-		canvasWidth = boost::numeric_cast<int>(
+		canvasWidth = gsl::narrow<int>(
 		    std::lround(float(maxAspectRatio.first * height_) / float(maxAspectRatio.second)));
 	}
 	if (canvasWidth != width_ || canvasHeight != height_) {

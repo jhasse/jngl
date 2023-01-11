@@ -36,16 +36,30 @@
 		#define JNGL_MAIN_BEGIN void shouldNotBeCalled() {
 		#define JNGL_MAIN_END }
 	#else
+		#ifdef NDEBUG
+			#define JNGL_CATCH_EXCEPTION_TO_ERROR_MESSAGE try {
+		#else
+			#define JNGL_CATCH_EXCEPTION_TO_ERROR_MESSAGE
+		#endif
 		#define JNGL_MAIN_BEGIN /* NOLINT */ int main(int argc, char** argv) { \
-			{ \
-				std::vector<std::string> tmp(argc - 1); \
-				for (int i = 1; i < argc; ++i) { \
-					tmp[i - 1] = argv[i]; \
+			JNGL_CATCH_EXCEPTION_TO_ERROR_MESSAGE \
+				{ \
+					std::vector<std::string> tmp(argc - 1); \
+					for (int i = 1; i < argc; ++i) { \
+						tmp[i - 1] = argv[i]; \
+					} \
+					jngl::setArgs(tmp); \
 				} \
-				jngl::setArgs(tmp); \
-			} \
-			jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
-		#define JNGL_MAIN_END } // NOLINT
+				jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
+		#ifdef NDEBUG
+			#define JNGL_MAIN_END /* NOLINT */ } catch (std::exception& e) { \
+					jngl::errorMessage(e.what()); \
+					return EXIT_FAILURE; \
+				} \
+			}
+		#else
+			#define JNGL_MAIN_END }
+		#endif
 	#endif
 #endif
 
