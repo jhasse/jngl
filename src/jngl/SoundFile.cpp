@@ -22,9 +22,6 @@ using namespace psemek; // FIXME
 
 #ifdef ANDROID
 #include "../android/fopen.hpp"
-
-#define AL_ALEXT_PROTOTYPES 1
-#include <AL/alext.h>
 #endif
 
 #ifdef __APPLE__

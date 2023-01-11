@@ -56,10 +56,6 @@ if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
 endif()
 option(JNGL_BUILD_WEBP_FROM_SOURCE "Build libwebp from source instead of using the system version" ${JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT})
 
-set(ALSOFT_TESTS OFF CACHE BOOL "Build and install test programs" FORCE)
-set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
-set(ALSOFT_UTILS OFF CACHE BOOL "Build and install utility programs" FORCE)
-
 if (ANDROID)
 	file(GLOB ANDROID_SOURCES src/android/*.cpp)
 	FetchContent_Declare(sdl2
@@ -186,19 +182,6 @@ endif()
 if(ANDROID)
 	target_compile_definitions(jngl PRIVATE NOJPEG NOPNG OPENGLES)
 
-	CPMAddPackage(NAME openal
-		URL https://github.com/kcat/openal-soft/archive/refs/tags/1.21.1.zip
-		URL_HASH SHA1=1442363faf47a5a7cd6287513068ecd6c70e747e
-		OPTIONS
-			"LIBTYPE STATIC"
-			"ALSOFT_INSTALL_CONFIG OFF"
-			"ALSOFT_INSTALL_HRTF_DATA OFF"
-			"ALSOFT_INSTALL_AMBDEC_PRESETS OFF"
-			"ALSOFT_BACKEND_WAVE OFF"
-			"ALSOFT_CPUEXT_NEON OFF"
-	)
-	set(OPENAL_LIBRARY OpenAL)
-
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)
 	target_include_directories(jngl PRIVATE ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
 else()
@@ -250,39 +233,24 @@ else()
 		if(WINDOWS_STORE)
 			target_compile_definitions(jngl PUBLIC JNGL_UWP)
 			target_include_directories(jngl PUBLIC ${sdl2_SOURCE_DIR}/include ${sdl2_BINARY_DIR}/include) # TODO: This should be PRIVATE
-			FetchContent_Declare(openal
-				GIT_REPOSITORY https://github.com/jhasse/openal-soft-winphone
-				GIT_TAG e4f3681316b1e8d8d68dfc31b1fc952d9bba085d)
 			target_link_options(jngl PUBLIC $<IF:$<CONFIG:Debug>,/defaultlib:vccorlibd.lib /defaultlib:msvcrtd.lib,/defaultlib:vccorlib.lib /defaultlib:msvcrt.lib>)
 		else()
-			FetchContent_Declare(openal
-				URL https://github.com/kcat/openal-soft/archive/refs/tags/1.21.1.zip
-				URL_HASH SHA1=1442363faf47a5a7cd6287513068ecd6c70e747e)
-			set(ALSOFT_NO_CONFIG_UTIL ON CACHE BOOL "Disable building the alsoft-config utility" FORCE)
-			set(LIBTYPE "STATIC" CACHE STRING "" FORCE)
-			target_compile_definitions(jngl PRIVATE AL_LIBTYPE_STATIC)
-
 			target_include_directories(jngl PRIVATE ${PROJECT_SOURCE_DIR}/include/msvc)
 			target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
 			add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
 			target_link_libraries(jngl PUBLIC epoxy)
 		endif()
-		FetchContent_MakeAvailable(openal)
-		set(OPENAL_LIBRARY OpenAL)
-
 	elseif(IOS)
-		target_compile_options(jngl PRIVATE -Wno-deprecated-declarations) # OpenAL
 		target_compile_definitions(jngl PRIVATE IOS)
 		target_compile_definitions(jngl PUBLIC GLES_SILENCE_DEPRECATION)
 		target_include_directories(jngl PUBLIC include/ios)
 		find_library(IOS_OPENGLES OpenGLES)
-		find_library(IOS_OPENAL OpenAL)
 		find_library(IOS_QUARTZCORE QuartzCore)
 		find_library(IOS_UIKIT UIKit)
 		find_library(IOS_AVFOUNDATION AVFoundation)
 		find_library(IOS_GAMECONTROLLER GameController)
 		target_link_libraries(jngl PRIVATE
-			${IOS_OPENGLES} ${IOS_OPENAL} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
+			${IOS_OPENGLES} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
 			${IOS_GAMECONTROLLER}
 		)
 
@@ -299,8 +267,6 @@ else()
 			set_target_properties(jngl-test PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${PROJECT_SOURCE_DIR}/data/ios/jngl-test.in.plist")
 		endif()
 	else()
-		find_package(OpenAL REQUIRED)
-
 		if(NOT JNGL_BUILD_WEBP_FROM_SOURCE)
 			find_package(WebP)
 			if(WebP_FOUND)
@@ -451,7 +417,7 @@ endif()
 
 target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})
 target_link_directories(jngl PUBLIC ${FREETYPE_LIBRARY_DIRS})
-target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY})
+target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES})
 
 if(NOT hasParent)
 	include(CTest)
