@@ -16,7 +16,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 file(GLOB SRC src/*.cpp src/jngl/*.cpp
 	src/audio/*.cpp
 	src/audio/effect/*.cpp
-	src/audio/minimp3/minimp3.c
 )
 add_library(jngl ${SRC})
 file(GLOB HEADERS src/*.hpp src/jngl/*.hpp)
