@@ -30,9 +30,6 @@ bool isPlaying(const std::string& filename);
 /// a pointer to the same SoundFile.
 std::shared_ptr<SoundFile> loop(const std::string& filename);
 
-[[deprecated("an OpenAL implementation will always be available")]]
-bool isOpenALInstalled();
-
 void setPlaybackSpeed(float speed);
 
 void setVolume(float volume);

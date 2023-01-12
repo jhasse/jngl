@@ -24,11 +24,6 @@ using namespace psemek; // FIXME
 #include "../android/fopen.hpp"
 #endif
 
-#ifdef __APPLE__
-// OpenAL is deprecated in favor of AVAudioEngine
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-#endif
-
 namespace jngl {
 
 std::unordered_map<std::string, std::shared_ptr<SoundFile>> sounds;

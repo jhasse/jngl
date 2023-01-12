@@ -24,7 +24,7 @@ cmake --build build
 
 ```
 sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev \
-libjpeg-dev libpng-dev libvorbis-dev libopenal-dev cmake libepoxy-dev g++ \
+libjpeg-dev libpng-dev libvorbis-dev cmake libepoxy-dev g++ \
 libwebp-dev git libsdl2-dev
 ```
 
@@ -32,13 +32,13 @@ libwebp-dev git libsdl2-dev
 
 ```
 sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel \
-libjpeg-turbo-devel cmake SDL2-devel openal-soft-devel gcc-c++
+libjpeg-turbo-devel cmake SDL2-devel gcc-c++
 ```
 
 ### Arch Linux
 
 ```
-pacman -Syu --needed cmake gcc sdl2 pkg-config fontconfig libepoxy libwebp openal libvorbis
+pacman -Syu --needed cmake gcc sdl2 pkg-config fontconfig libepoxy libwebp libvorbis
 ```
 
 ## Windows
@@ -48,7 +48,7 @@ pacman -Syu --needed cmake gcc sdl2 pkg-config fontconfig libepoxy libwebp opena
 Set up [MSYS2](https://www.msys2.org/) and install the following in a MinGW-w64 Win64 Shell:
 
 ```
-pacman -Syu --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-openal \
+pacman -Syu --needed mingw-w64-x86_64-gcc \
 mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
 mingw-w64-x86_64-dlfcn mingw-w64-x86_64-libepoxy mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb \
 mingw-w64-x86_64-libtheora

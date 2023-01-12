@@ -13,7 +13,7 @@ Switch<sup><a href="#fn1">1</a></sup> and the Web.
   static linking
 * OpenGL (ES) 3.0 accelerated
 * PNG, JPEG, BMP and [WebP](https://developers.google.com/speed/webp/) image support
-* Ogg Vorbis audio support using OpenAL
+* Ogg Vorbis audio support with support for effects like pitch shifting
 * Theora video playback support
 * UTF-8 text output using [FreeType](http://www.freetype.org/)
 
