@@ -15,13 +15,13 @@ namespace {
 
 struct ogg_data_holder {
 	std::vector<char> storage;
-	std::span<char const> data;
+	gsl::span<char const> data;
 	int32_t pos = 0;
 
 	ogg_data_holder(std::vector<char> storage) : storage(std::move(storage)), data(this->storage) {
 	}
 
-	ogg_data_holder(std::span<char const> data) : data(data) {
+	ogg_data_holder(gsl::span<char const> data) : data(data) {
 	}
 };
 
@@ -169,7 +169,7 @@ private:
 
 } // namespace
 
-track_ptr load_ogg(std::span<char const> data) {
+track_ptr load_ogg(gsl::span<char const> data) {
 	return std::make_shared<ogg_track_impl>(std::make_shared<ogg_data_holder>(data));
 }
 

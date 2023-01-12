@@ -21,7 +21,7 @@ namespace psemek::audio
 				, samples_(storage_)
 			{}
 
-			recorder_impl(std::span<float const> samples)
+			recorder_impl(gsl::span<float const> samples)
 				: samples_(samples)
 			{}
 
@@ -46,7 +46,7 @@ namespace psemek::audio
 				return result;
 			}
 
-			std::span<float const> buffer() const override
+			gsl::span<float const> buffer() const override
 			{
 				return samples_;
 			}
@@ -54,7 +54,7 @@ namespace psemek::audio
 		private:
 			stream_ptr stream_;
 			std::vector<float> storage_;
-			std::span<float const> samples_;
+			gsl::span<float const> samples_;
 		};
 
 	}
@@ -71,7 +71,7 @@ namespace psemek::audio
 		return std::make_shared<recorder_impl>(std::move(samples));
 	}
 
-	std::shared_ptr<recorder> make_recorder(std::span<float const> samples)
+	std::shared_ptr<recorder> make_recorder(gsl::span<float const> samples)
 	{
 		if ((samples.size() % 2) != 0)
 			throw std::runtime_error("bad sample count");

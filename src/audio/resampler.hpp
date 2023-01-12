@@ -1,7 +1,6 @@
 #pragma once
 
-#include <span>
-
+#include <gsl/span>
 #include <vector>
 #include <atomic>
 
@@ -19,9 +18,9 @@ namespace psemek::audio
 		float smoothness(float value);
 
 		// ratio is target frequency / source frequency
-		void feed(std::span<float const> samples);
+		void feed(gsl::span<float const> samples);
 
-		std::span<float const> result() const
+		gsl::span<float const> result() const
 		{
 			return result_;
 		}

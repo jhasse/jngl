@@ -1,8 +1,8 @@
 #pragma once
 
 #include "stream.hpp"
-#include <span>
 
+#include <gsl/span>
 #include <optional>
 #include <vector>
 
@@ -19,7 +19,7 @@ namespace psemek::audio
 
 	using track_ptr = std::shared_ptr<track>;
 
-	track_ptr load_ogg(std::span<char const> data);
+	track_ptr load_ogg(gsl::span<char const> data);
 	track_ptr load_ogg(std::vector<char> data);
 
 }

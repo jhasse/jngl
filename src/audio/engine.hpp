@@ -4,8 +4,6 @@
 #include "track.hpp"
 #include "channel.hpp"
 
-#include <span>
-
 #include <memory>
 #include <string_view>
 #include <vector>

@@ -32,7 +32,7 @@ namespace psemek::audio
 		return multiplier_to_smoothness(smoothness_multiplier_.exchange(smoothness_to_multiplier(value)));
 	}
 
-	void resampler::feed(std::span<float const> samples)
+	void resampler::feed(gsl::span<float const> samples)
 	{
 		result_.clear();
 
