@@ -1,4 +1,4 @@
-// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/text.hpp"
@@ -6,16 +6,22 @@
 
 #include <jngl.hpp>
 
-#include <boost/test/unit_test.hpp>
+#include <boost/ut.hpp>
+#include <cmath>
+#include <string_view>
 
-BOOST_AUTO_TEST_CASE(CharacterTest) {
-	Fixture f(2);
-	jngl::Font font("../data/Arial.ttf", 40);
-	jngl::Text t("m ö o ß");
-	t.setFont(font);
-	t.setPos(-110, -20);
-	t.draw();
-	const auto output = R"(
+namespace {
+boost::ut::suite _ = [] {
+	using namespace boost::ut;
+
+	"CharacterTest"_test = [] {
+		Fixture f(2);
+		jngl::Font font("../data/Arial.ttf", 40);
+		jngl::Text t("m ö o ß");
+		t.setFont(font);
+		t.setPos(-110, -20);
+		t.draw();
+		const auto output = R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒           ░       ░▒         ▒
 ▒    ░░░░  ░▒   ░░  ▒░░        ▒
@@ -24,25 +30,25 @@ BOOST_AUTO_TEST_CASE(CharacterTest) {
 ▒    ░ ░░  ░▒░  ▒░  ░░░        ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )";
-	BOOST_CHECK_EQUAL(f.getAsciiArt(), output);
-	font.print("m ö o ß", -110, -20);
-	BOOST_CHECK_EQUAL(f.getAsciiArt(), output);
-	font.print("m ö o ß", jngl::Vec2(-110, -20));
-	BOOST_CHECK_EQUAL(f.getAsciiArt(), output);
-}
+		expect(eq(f.getAsciiArt(), output));
+		font.print("m ö o ß", -110, -20);
+		expect(eq(f.getAsciiArt(), output));
+		font.print("m ö o ß", jngl::Vec2(-110, -20));
+		expect(eq(f.getAsciiArt(), output));
+	};
 
-BOOST_AUTO_TEST_CASE(TextTest) {
-	// Test with two rather big scale factors to avoid rounding errors:
-	for (double scaleFactor : { 6, 8 }) {
-		Fixture f(scaleFactor);
-		jngl::setFont("../data/Arial.ttf");
-		jngl::Text text("test string\nline 2");
-		BOOST_CHECK_CLOSE(text.getWidth(), 69.4, 0.2);
-		BOOST_CHECK_EQUAL(std::lround(text.getHeight()), 38L);
-		text.setCenter(-10, -10);
-		BOOST_CHECK_CLOSE(text.getX(), -44.7, 0.2);
-		text.draw();
-		const std::string screenshotCentered = R"(
+	"TextTest"_test = [] {
+		// Test with two rather big scale factors to avoid rounding errors:
+		for (double scaleFactor : { 6, 8 }) {
+			Fixture f(scaleFactor);
+			jngl::setFont("../data/Arial.ttf");
+			jngl::Text text("test string\nline 2");
+			expect(approx(text.getWidth(), 69.4, 0.1));
+			expect(std::lround(text.getHeight()) == 38_i);
+			text.setCenter(-10, -10);
+			expect(approx(text.getX(), -44.7, 0.1));
+			text.draw();
+			const std::string screenshotCentered = R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒          ░░▒░░░░░            ▒
 ▒                              ▒
@@ -51,12 +57,12 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )";
-		BOOST_CHECK_EQUAL(f.getAsciiArt(), screenshotCentered);
+			expect(eq(f.getAsciiArt(), screenshotCentered));
 
-		text.setPos(-10, -10);
-		BOOST_CHECK_EQUAL(std::lround(text.getX()), -10L);
-		text.draw();
-		BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
+			text.setPos(-10, -10);
+			expect(std::lround(text.getX()) == -10_i);
+			text.draw();
+			expect(eq(f.getAsciiArt(), std::string_view(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒                              ▒
 ▒                  ░           ▒
@@ -64,17 +70,17 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 ▒              ░  ░            ▒
 ▒              ░░ ░            ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-)");
+)")));
 
-		text.setCenter(-10, -10); // restore previous state
-		text.draw();
-		BOOST_CHECK_CLOSE(text.getX(), -44.7, 0.2);
-		BOOST_CHECK_EQUAL(f.getAsciiArt(), screenshotCentered);
+			text.setCenter(-10, -10); // restore previous state
+			text.draw();
+			expect(approx(text.getX(), -44.7, 0.1));
+			expect(eq(f.getAsciiArt(), screenshotCentered));
 
-		text.setAlign(jngl::Alignment::CENTER);
-		BOOST_CHECK_CLOSE(text.getX(), -44.7, 0.2);
-		text.draw(); // the second line should now be centered below the first
-		BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
+			text.setAlign(jngl::Alignment::CENTER);
+			expect(approx(text.getX(), -44.7, 0.1));
+			text.draw(); // the second line should now be centered below the first
+			expect(eq(f.getAsciiArt(), std::string_view(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒          ░░▒░░░░░            ▒
 ▒               ░              ▒
@@ -82,9 +88,11 @@ BOOST_AUTO_TEST_CASE(TextTest) {
 ▒                              ▒
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-)");
+)")));
 
-		BOOST_CHECK_EQUAL(std::lround(jngl::getTextWidth("foo")), 22);
-		BOOST_CHECK_EQUAL(std::lround(jngl::getTextWidth("foo\nfoobar\nbar")), 45);
-	}
+			expect(std::lround(jngl::getTextWidth("foo")) == 22_i);
+			expect(std::lround(jngl::getTextWidth("foo\nfoobar\nbar")) == 45_i);
+		}
+	};
+};
 }

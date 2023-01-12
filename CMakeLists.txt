@@ -42,6 +42,7 @@ else()
 	FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
 	target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
 endif()
+target_include_directories(jngl PUBLIC include/public)
 
 option(JNGL_VIDEO "Enable Theora video playback" ON)
 option(JNGL_JPEG "Enable JPEG support if libjpeg is available" ON)
@@ -223,6 +224,7 @@ else()
 	endif()
 
 	if(MSVC)
+		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
 		if(JNGL_SDL2)
 			set(SDL_SENSOR OFF CACHE BOOL "" FORCE) # doesn't work with UWP
 			FetchContent_Declare(sdl2
@@ -358,6 +360,9 @@ else()
 		else()
 			if(NOT IOS)
 				add_executable(jngl-test src/test/test.cpp)
+				if(WIN32)
+					target_sources(jngl-test PRIVATE src/win32/jngl.manifest)
+				endif()
 
 				add_executable(example-bike examples/bike/base.cpp examples/bike/bike.cpp
 					examples/bike/line.cpp examples/bike/main.cpp examples/bike/wheel.cpp)
@@ -369,16 +374,13 @@ else()
 			endif()
 		endif()
 		target_link_libraries(jngl-test jngl)
-		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/jngl.webp "$<TARGET_FILE_DIR:jngl-test>")
-		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/test.ogg "$<TARGET_FILE_DIR:jngl-test>")
-		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/jngl.png "$<TARGET_FILE_DIR:jngl-test>")
 	endif()
 endif()
 
 if(JNGL_BUILD_WEBP_FROM_SOURCE)
 	CPMAddPackage(NAME webp
-		GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
-		GIT_TAG e0241154901620a3dc6c3929463608b9bf2c36aa
+		URL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.2.4.tar.gz
+		URL_HASH SHA1=24586e2a8e01a9cced102d68852661b964502429
 		OPTIONS
 			"WEBP_BUILD_ANIM_UTILS OFF"
 			"WEBP_BUILD_CWEBP OFF"
@@ -428,16 +430,14 @@ target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})
 target_link_directories(jngl PUBLIC ${FREETYPE_LIBRARY_DIRS})
 target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY})
 
-if(NOT hasParent)
+if(NOT hasParent AND NOT WINDOWS_STORE)
 	include(CTest)
 	if(BUILD_TESTING)
-		find_package(Boost COMPONENTS unit_test_framework)
-		if(Boost_FOUND)
-			file(GLOB UNITTEST_SRC src/unittest/*.cpp)
-			add_executable(jngl-unittest ${UNITTEST_SRC})
-			target_link_libraries(jngl-unittest PRIVATE jngl ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
-			target_compile_definitions(jngl-unittest PRIVATE BOOST_TEST_DYN_LINK)
-			add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
-		endif()
+		file(GLOB UNITTEST_SRC src/unittest/*.cpp)
+		add_executable(jngl-unittest ${UNITTEST_SRC})
+		target_compile_features(jngl-unittest PRIVATE cxx_std_20)
+		target_link_libraries(jngl-unittest PRIVATE jngl ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+		target_compile_definitions(jngl-unittest PRIVATE BOOST_UT_DISABLE_MODULE)
+		add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
 	endif()
 endif()

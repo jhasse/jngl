@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <jngl.hpp>
@@ -15,10 +15,9 @@ JNGL_MAIN_BEGIN {
 			jngl::swapBuffers();
 		}
 
-		float x = 0;
 		bool first = true;
 		std::string text;
-		jngl::Sprite sprite("jngl.webp");
+		jngl::Sprite sprite("././/././jngl.webp");
 		while (jngl::running()) {
 			jngl::updateInput();
 			jngl::setBackgroundColor(jngl::Color(133, 133, 133));
@@ -33,7 +32,6 @@ JNGL_MAIN_BEGIN {
 			for (const auto mouse : jngl::getTouchPositions()) {
 				jngl::drawRect(mouse.x, mouse.y, 300, 300);
 			}
-			x += 0.4;
 			// jngl::setSpriteColor(255, 255, 255, 120);
 			const auto mouse = jngl::getMousePos();
 			jngl::draw("jngl.webp", mouse.x, mouse.y);

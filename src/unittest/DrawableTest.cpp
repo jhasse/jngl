@@ -1,9 +1,9 @@
-// Copyright 2019-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/Drawable.hpp"
 
-#include <boost/test/unit_test.hpp>
+#include <boost/ut.hpp>
 
 class Dummy : public jngl::Drawable {
 public:
@@ -13,12 +13,17 @@ public:
 	}
 };
 
-BOOST_AUTO_TEST_CASE(Drawable) {
-	Dummy d;
-	BOOST_CHECK_CLOSE(d.getX(), 0, 1e-9);
-	BOOST_CHECK_CLOSE(d.getY(), 0, 1e-9);
-	BOOST_CHECK_CLOSE(d.getWidth(), 0, 1e-9);
-	BOOST_CHECK_CLOSE(d.getHeight(), 0, 1e-9);
-	BOOST_CHECK_CLOSE(d.getWidth(), d.getSize().x, 1e-9);
-	BOOST_CHECK_CLOSE(d.getHeight(), d.getSize().y, 1e-9);
+namespace {
+boost::ut::suite _ = [] {
+	using namespace boost::ut;
+	"Drawable"_test = [] {
+		Dummy d;
+		expect(approx(d.getX(), 0, 1e-9));
+		expect(approx(d.getY(), 0, 1e-9));
+		expect(approx(d.getWidth(), 0, 1e-9));
+		expect(approx(d.getHeight(), 0, 1e-9));
+		expect(approx(d.getWidth(), d.getSize().x, 1e-9));
+		expect(approx(d.getHeight(), d.getSize().y, 1e-9));
+	};
+};
 }
