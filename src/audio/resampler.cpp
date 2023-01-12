@@ -3,6 +3,14 @@
 
 #include <vector>
 
+#if __cplusplus < 202002L
+float lerp(float a, float b, float t) {
+	return a + t * (b - a);
+}
+#else
+using std::lerp;
+#endif
+
 namespace psemek::audio
 {
 
@@ -44,16 +52,16 @@ namespace psemek::audio
 
 		while (position_ < 0)
 		{
-			result_.push_back(std::lerp(last_sample_[0], samples[0], position_frac_));
-			result_.push_back(std::lerp(last_sample_[1], samples[1], position_frac_));
+			result_.push_back(lerp(last_sample_[0], samples[0], position_frac_));
+			result_.push_back(lerp(last_sample_[1], samples[1], position_frac_));
 			real_ratio_ += (ratio - real_ratio_) * smoothness_multiplier;
 			advance(1.f / real_ratio_);
 		}
 
 		while (2 * position_ + 3 < samples.size())
 		{
-			result_.push_back(std::lerp(samples[2 * position_ + 0], samples[2 * position_ + 2], position_frac_));
-			result_.push_back(std::lerp(samples[2 * position_ + 1], samples[2 * position_ + 3], position_frac_));
+			result_.push_back(lerp(samples[2 * position_ + 0], samples[2 * position_ + 2], position_frac_));
+			result_.push_back(lerp(samples[2 * position_ + 1], samples[2 * position_ + 3], position_frac_));
 			real_ratio_ += (ratio - real_ratio_) * smoothness_multiplier;
 			advance(1.f / real_ratio_);
 		}
