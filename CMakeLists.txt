@@ -35,15 +35,8 @@ endif()
 find_package(Boost 1.76.0) # first version with boost/qvm_lite.hpp
 if(Boost_FOUND)
 	target_include_directories(jngl PUBLIC ${Boost_INCLUDE_DIRS})
-elseif("${CMAKE_CXX_COMPILE_FEATURES}" MATCHES "cxx_std_20")
-	target_include_directories(jngl PUBLIC include/boost-qvm)
 else()
-	FetchContent_Declare(boost
-		URL https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.bz2
-		URL_HASH SHA256=1e19565d82e43bc59209a168f5ac899d3ba471d55c7610c677d4ccf2c9c500c0)
-	FetchContent_MakeAvailable(boost)
-	FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
-	target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
+	target_include_directories(jngl PUBLIC include/boost-qvm)
 endif()
 target_include_directories(jngl PUBLIC include/public)
 

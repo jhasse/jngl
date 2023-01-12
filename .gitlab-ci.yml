@@ -41,6 +41,10 @@ steamos:
   image: registry.gitlab.steamos.cloud/steamrt/soldier/sdk
   stage: build
   script:
+    - cd /usr/local/include
+    - curl --silent -O -L https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.bz2
+    - tar -xf *.tar.bz2 --strip-components=1 boost_1_80_0/boost
+    - cd -
     - cmake -Bbuild-steamos -GNinja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=0
     - cmake --build build-steamos
     - cmake -Bbuild-steamos-release -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=0 -DJNGL_VIDEO=0 -DJNGL_JPEG=0 -DJNGL_BUILD_WEBP_FROM_SOURCE=1 -DBUILD_SHARED_LIBS=0
