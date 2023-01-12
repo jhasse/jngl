@@ -32,8 +32,7 @@ class Audio {
 public:
 	Audio()
 	: mixer(psemek::audio::make_mixer()), pitchControl(audio::pitch(mixer)),
-	  volumeControl(volume(pitchControl)) {
-		engine.setStream(volumeControl);
+	  volumeControl(volume(pitchControl)), engine(volumeControl) {
 	}
 	Audio(const Audio&) = delete;
 	Audio& operator=(const Audio&) = delete;
@@ -79,10 +78,10 @@ public:
 
 private:
 	std::vector<std::shared_ptr<Sound>> sounds_;
-	audio::engine engine;
 	std::shared_ptr<audio::mixer> mixer;
 	std::shared_ptr<audio::pitch_control> pitchControl;
 	std::shared_ptr<audio::volume_control> volumeControl;
+	audio::engine engine;
 };
 
 SoundFile::SoundFile(std::string filename, std::launch) {

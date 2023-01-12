@@ -12,18 +12,14 @@ namespace psemek::audio
 
 	struct engine
 	{
-		engine();
+		engine(std::shared_ptr<stream> output);
 		~engine();
 
-		void setStream(std::shared_ptr<stream>);
 		void setPause(bool);
 
 	private:
-		struct impl;
-		std::unique_ptr<struct impl> pimpl_;
-		struct impl & impl() { return *pimpl_; }
-		struct impl const & impl() const { return *pimpl_; }
-		template <typename ... Args> static auto make_impl(Args && ... args) { return std::make_unique<struct impl>(std::forward<Args>(args)...); }
+		struct Impl;
+		std::unique_ptr<Impl> impl;
 	};
 
 }

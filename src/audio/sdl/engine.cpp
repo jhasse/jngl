@@ -13,7 +13,7 @@
 namespace psemek::audio
 {
 
-	struct engine::impl
+	struct engine::Impl
 	{
 		std::shared_ptr<void> sdl_init;
 
@@ -23,15 +23,14 @@ namespace psemek::audio
 		bool thread_registered = false;
 
 		std::shared_ptr<stream> output;
-		std::atomic_bool outputSet{false};
 
-		impl();
-		~impl();
+		Impl(std::shared_ptr<stream>);
+		~Impl();
 
 		static void callback(void * userdata, std::uint8_t * stream, int len);
 	};
 
-	engine::impl::impl() {
+	engine::Impl::Impl(std::shared_ptr<stream> output) : output(std::move(output)) {
 		if (SDL_Init(SDL_INIT_AUDIO) < 0) {
 			throw std::runtime_error(SDL_GetError());
 		}
@@ -53,18 +52,18 @@ namespace psemek::audio
 		SDL_PauseAudioDevice(device, 0);
 	}
 
-	engine::impl::~impl()
+	engine::Impl::~Impl()
 	{
 		SDL_CloseAudioDevice(device);
 	}
 
-	void engine::impl::callback(void * userdata, std::uint8_t * dst_u8, int len)
+	void engine::Impl::callback(void * userdata, std::uint8_t * dst_u8, int len)
 	{
 		static std::string const profiler_str = "audio";
 		// prof::profiler prof(profiler_str);
 
-		auto self = static_cast<impl *>(userdata);
-		std::int16_t * dst = reinterpret_cast<std::int16_t *>(dst_u8);
+	    auto self = static_cast<Impl*>(userdata);
+	    std::int16_t * dst = reinterpret_cast<std::int16_t *>(dst_u8);
 
 		if (!self->thread_registered)
 		{
@@ -74,28 +73,20 @@ namespace psemek::audio
 
 		std::size_t const size = len / 2;
 		std::size_t read = 0;
-		if (self->outputSet)
-			read = self->output->read(self->buffer.data(), size);
+		read = self->output->read(self->buffer.data(), size);
 		std::fill(self->buffer.data() + read, self->buffer.data() + size, 0.f);
 
 		for (auto s : self->buffer)
 			*dst++ = static_cast<std::int16_t>(std::max(std::min((65535.f * s - 1.f) / 2.f, 32767.f), -32768.f));
 	}
 
-	engine::engine()
-		: pimpl_(make_impl())
+	engine::engine(std::shared_ptr<stream> output)
+		: impl(std::make_unique<Impl>(std::move(output)))
 	{}
 
 	engine::~engine() = default;
 
-	void engine::setStream(std::shared_ptr<audio::stream> stream)
-	{
-		assert(!impl().outputSet); // with C++20 it would be possible to use std::atomic<std::shared_ptr<stream>>
-		impl().output = std::move(stream);
-		impl().outputSet = true;
-	}
-
 	void engine::setPause(bool pause) {
-		SDL_PauseAudioDevice(impl().device, pause ? 1 : 0);
+		SDL_PauseAudioDevice(impl->device, pause ? 1 : 0);
 	}
 }

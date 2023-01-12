@@ -12,29 +12,25 @@
 
 namespace psemek::audio {
 
-struct engine::impl {
-	channel_ptr output;
+struct engine::Impl {
+	std::shared_ptr<stream> output;
 
-	impl();
-	~impl();
+	Impl(std::shared_ptr<stream> output);
 
 	class Callback : public oboe::AudioStreamCallback {
 	public:
-		Callback(impl& self) : self(self) {
+		Callback(Impl& self) : self(self) {
 		}
 
 	private:
 		oboe::DataCallbackResult onAudioReady(oboe::AudioStream*, void* data,
 		                                      int32_t len) override {
-			stream_ptr output = self.output->stream();
 			float* dst = reinterpret_cast<float*>(data);
-			if (output) {
-				output->read(dst, len * 2);
-			}
+            self.output->read(dst, len * 2);
 			return oboe::DataCallbackResult::Continue;
 		}
 
-		impl& self;
+		Impl& self;
 	};
 
 	Callback callback;
@@ -42,8 +38,8 @@ struct engine::impl {
 	std::shared_ptr<oboe::AudioStream> oboeStream;
 };
 
-engine::impl::impl()
-: callback(*this)
+engine::Impl::Impl(std::shared_ptr<stream> output)
+: output(std::move(output)), callback(*this)
 {
 	builder.setDirection(oboe::Direction::Output);
 	builder.setPerformanceMode(oboe::PerformanceMode::LowLatency);
@@ -58,33 +54,25 @@ engine::impl::impl()
 		throw std::runtime_error(oboe::convertToText(result));
 	}
 
-	output = std::make_shared<channel>();
 	oboeStream->requestStart();
 }
 
-engine::impl::~impl() {
-}
-
-engine::engine() : pimpl_(make_impl()) {
+engine::engine(std::shared_ptr<stream> output) : impl(std::make_unique<Impl>(std::move(output))) {
 }
 
 engine::~engine() = default;
 
-channel_ptr engine::output() {
-	return impl().output;
-}
-
 void engine::setPause(bool pause) {
 	if (pause) {
-		if (impl().oboeStream) {
-			impl().oboeStream->close();
-			impl().oboeStream.reset();
+		if (impl->oboeStream) {
+			impl->oboeStream->close();
+			impl->oboeStream.reset();
 		}
 	} else {
-		if (!impl().oboeStream) {
-			const auto result = impl().builder.openStream(impl().oboeStream);
+		if (!impl->oboeStream) {
+			const auto result = impl->builder.openStream(impl->oboeStream);
 			if (result == oboe::Result::OK) {
-				impl().oboeStream->requestStart();
+				impl->oboeStream->requestStart();
 			} else {
 				jngl::debugLn(std::string("WARNING: ") + oboe::convertToText(result));
 			}
