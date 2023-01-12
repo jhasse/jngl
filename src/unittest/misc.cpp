@@ -1,67 +1,69 @@
-// Copyright 2018-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/Finally.hpp"
 #include "../jngl/other.hpp"
 #include "../jngl/sprite.hpp"
 
-#include <boost/test/unit_test.hpp>
+#include <boost/ut.hpp>
 #include <filesystem>
 
-BOOST_AUTO_TEST_CASE(FinallyTest) {
-	bool called = false;
-	{
-		jngl::Finally _([&called]() {
-			BOOST_CHECK(!called);
-			called = true;
-		});
-		BOOST_CHECK(!called);
-	}
-	BOOST_CHECK(called);
-	{ // don't crash
-		jngl::Finally _(nullptr);
-	}
-	called = false;
-	{
-		jngl::Finally f1([&called]() {
-			BOOST_CHECK(!called);
-			called = true;
-		});
-		jngl::Finally f2 = std::move(f1);
-		jngl::Finally f3(std::move(f2));
-		{
-			jngl::Finally f4(nullptr);
-			f4 = std::move(f3);
-			f3 = std::move(f4);
-		}
-		BOOST_CHECK(!called);
-	}
-	BOOST_CHECK(called);
-}
+boost::ut::suite _ = [] {
+	using namespace boost::ut;
 
-BOOST_AUTO_TEST_CASE(halfLoadTest) {
-	std::error_code err;
-	std::filesystem::current_path("data", err);
-	if (err) {
-		std::filesystem::current_path("../data", err); // move out of build/bin folder
+	"FinallyTest"_test = [] {
+		bool called = false;
+		{
+			jngl::Finally _([&called]() {
+				expect(!called);
+				called = true;
+			});
+			expect(!called);
+		}
+		expect(called);
+		{ // don't crash
+			jngl::Finally _(nullptr);
+		}
+		called = false;
+		{
+			jngl::Finally f1([&called]() {
+				expect(!called);
+				called = true;
+			});
+			jngl::Finally f2 = std::move(f1);
+			jngl::Finally f3(std::move(f2));
+			{
+				jngl::Finally f4(nullptr);
+				f4 = std::move(f3);
+				f3 = std::move(f4);
+			}
+			expect(!called);
+		}
+		expect(called);
+	};
+
+	"halfLoadTest"_test = [] {
+		std::error_code err;
+		std::filesystem::current_path("data", err);
 		if (err) {
-			std::filesystem::current_path("../../data", err); // move out of build/Debug folder
+			std::filesystem::current_path("../data", err); // move out of build/bin folder
 			if (err) {
-				std::filesystem::current_path("../../../data",
-				                              err); // move out of out\build\x64-Debug
+				std::filesystem::current_path("../../data", err); // move out of build/Debug folder
+				if (err) {
+					std::filesystem::current_path("../../../data",
+					                              err); // move out of out\build\x64-Debug
+				}
 			}
 		}
-	}
-	BOOST_CHECK_EQUAL(jngl::getWidth("jngl"), 600);
-	BOOST_CHECK_EQUAL(jngl::getHeight("jngl"), 300);
-	BOOST_CHECK_THROW(jngl::load("jngl"), std::runtime_error);
-}
+		expect(jngl::getWidth("jngl") == 600_i);
+		expect(jngl::getHeight("jngl") == 300_i);
+		expect(throws<std::runtime_error>([] { jngl::load("jngl"); }));
+	};
 
-BOOST_AUTO_TEST_CASE(getBinaryPath) {
-	BOOST_CHECK(!jngl::getBinaryPath().empty());
-}
+	"getBinaryPath"_test = [] { expect(!jngl::getBinaryPath().empty()); };
 
-BOOST_AUTO_TEST_CASE(readAsset) {
-	BOOST_CHECK(!jngl::readAsset("non existing file"));
-	BOOST_CHECK_THROW(jngl::readAsset("/some/absolute/path"), std::runtime_error);
-}
+	"readAsset"_test = [] {
+		expect(!jngl::readAsset("non existing file"));
+		expect(throws<std::runtime_error>([] { jngl::readAsset("/some/absolute/path"); }));
+	};
+};

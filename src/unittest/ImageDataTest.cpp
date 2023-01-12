@@ -4,20 +4,27 @@
 #include "../jngl/ImageData.hpp"
 #include "Fixture.hpp"
 
-#include <boost/test/unit_test.hpp>
+#include <boost/ut.hpp>
 
-BOOST_AUTO_TEST_CASE(ImageData) {
-	try {
-		jngl::ImageData::load("foo.tga");
-		BOOST_ASSERT(false);
-	} catch (std::runtime_error& e) {
-		BOOST_CHECK_EQUAL(std::string(e.what()).substr(0, 68),
-		                  "No suitable image file found for: foo.tga\nSupported file extensions:");
-	}
-	try {
-		jngl::ImageData::load("foo.webp");
-		BOOST_ASSERT(false);
-	} catch (std::runtime_error& e) {
-		BOOST_CHECK_EQUAL(e.what(), "File not found: foo.webp");
-	}
+namespace {
+boost::ut::suite _ = [] {
+	using namespace boost::ut;
+	"ImageData"_test = [] {
+		try {
+			jngl::ImageData::load("foo.tga");
+			expect(false);
+		} catch (std::runtime_error& e) {
+			expect(
+			    eq(std::string(e.what()).substr(0, 68),
+			       std::string(
+			           "No suitable image file found for: foo.tga\nSupported file extensions:")));
+		}
+		try {
+			jngl::ImageData::load("foo.webp");
+			expect(false);
+		} catch (std::runtime_error& e) {
+			expect(eq(e.what(), std::string("File not found: foo.webp")));
+		}
+	};
+};
 }

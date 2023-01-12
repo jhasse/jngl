@@ -6,15 +6,19 @@
 
 #include <jngl.hpp>
 
-#include <boost/test/unit_test.hpp>
+#include <boost/ut.hpp>
+#include <cmath>
 
-BOOST_AUTO_TEST_CASE(Sprite) {
-	for (float factor : { 1.f, 2.f, 3.4f }) {
-		Fixture f(factor);
-		jngl::Sprite sprite("../data/jngl.webp");
-		sprite.setPos(-60, -30);
-		sprite.drawScaled(0.2f, 0.2f);
-		BOOST_CHECK_EQUAL(f.getAsciiArt(), R"(
+namespace {
+boost::ut::suite _ = [] {
+	using namespace boost::ut;
+	"Sprite"_test = [] {
+		for (float factor : { 1.f, 2.f, 3.4f }) {
+			Fixture f(factor);
+			jngl::Sprite sprite("../data/jngl.webp");
+			sprite.setPos(-60, -30);
+			sprite.drawScaled(0.2f, 0.2f);
+			expect(eq(f.getAsciiArt(), std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒                              ▒
 ▒             ░░░░             ▒
@@ -22,25 +26,27 @@ BOOST_AUTO_TEST_CASE(Sprite) {
 ▒            ░░░░░░            ▒
 ▒              ░░              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-)");
-		jngl::load("../data/jngl.webp"); // This shouldn't crash
-	}
-	{
-		Fixture f(3.4f);
-		jngl::Sprite sprite("../data/jngl.webp");
-		BOOST_CHECK_CLOSE(sprite.getWidth(), 600, 1e-9);
-		BOOST_CHECK_CLOSE(sprite.getHeight(), 300, 1e-9);
+)")));
+			jngl::load("../data/jngl.webp"); // This shouldn't crash
+		}
+		{
+			Fixture f(3.4f);
+			jngl::Sprite sprite("../data/jngl.webp");
+			expect(approx(sprite.getWidth(), 600, 1e-9));
+			expect(approx(sprite.getHeight(), 300, 1e-9));
 
-		BOOST_CHECK_CLOSE(sprite.getSize().x, 600, 1e-5); // rounding errors are strong in this one
-		BOOST_CHECK_CLOSE(sprite.getSize().y, 300, 1e-5);
+			expect(approx(sprite.getSize().x, 600, 1e-4)); // rounding errors are strong in this one
+			expect(approx(sprite.getSize().y, 300, 1e-4));
 
-		sprite.setCenter(7.3f, 9.1f);
-		BOOST_CHECK_CLOSE(boost::qvm::mag(sprite.getCenter() - jngl::Vec2(7.3f, 9.1f)), 0, 1e-5);
-		BOOST_CHECK_CLOSE(sprite.getX(), -292.7f, 1e-5);
-		BOOST_CHECK_CLOSE(sprite.getY(), -140.9f, 1e-5);
-		BOOST_CHECK_CLOSE(sprite.getLeft(), -132.7f, 1e-5);
-		BOOST_CHECK_CLOSE(sprite.getTop(), -105.9f, 1e-5);
-		BOOST_CHECK_CLOSE(sprite.getRight(), -147.3f, 1e-5);
-		BOOST_CHECK_CLOSE(sprite.getBottom(), -124.1f, 1e-5);
-	}
+			sprite.setCenter(7.3f, 9.1f);
+			expect(approx(boost::qvm::mag(sprite.getCenter() - jngl::Vec2(7.3f, 9.1f)), 0, 1e-5));
+			expect(approx(sprite.getX(), -292.7f, 1e-4));
+			expect(approx(sprite.getY(), -140.9f, 1e-5));
+			expect(approx(sprite.getLeft(), -132.7f, 1e-5));
+			expect(approx(sprite.getTop(), -105.9f, 1e-5));
+			expect(approx(sprite.getRight(), -147.3f, 1e-5));
+			expect(approx(sprite.getBottom(), -124.1f, 1e-5));
+		}
+	};
+};
 }

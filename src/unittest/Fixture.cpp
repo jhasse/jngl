@@ -3,7 +3,8 @@
 
 #include "Fixture.hpp"
 
-#include <boost/test/unit_test.hpp>
+#include <boost/ut.hpp>
+#include <cmath>
 #include <jngl.hpp>
 
 Fixture::Fixture(const double scaleFactor) {
@@ -12,7 +13,8 @@ Fixture::Fixture(const double scaleFactor) {
 	                 static_cast<int>(std::lround(70 * scaleFactor)), false, { 32, 7 }, { 32, 7 });
 	reset();
 	emptyAsciiArt = getAsciiArt();
-	BOOST_CHECK_EQUAL(emptyAsciiArt, R"(
+	using namespace boost::ut;
+	expect(eq(emptyAsciiArt, std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒                              ▒
 ▒                              ▒
@@ -20,7 +22,7 @@ Fixture::Fixture(const double scaleFactor) {
 ▒                              ▒
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-)");
+)")));
 }
 
 Fixture::~Fixture() {
@@ -36,7 +38,8 @@ std::string Fixture::getAsciiArt() const {
 	// account:
 	auto reduceFactorAsFloat = static_cast<float>(10 * jngl::getScaleFactor());
 	int reduceFactor = static_cast<int>(std::lround(reduceFactorAsFloat));
-	BOOST_CHECK_CLOSE(reduceFactorAsFloat, reduceFactor, 1e-6);
+	using namespace boost::ut;
+	expect(approx(reduceFactorAsFloat, reduceFactor, 1e-6));
 
 	assert(w % reduceFactor == 0);
 	assert(h % reduceFactor == 0);
@@ -57,7 +60,7 @@ std::string Fixture::getAsciiArt() const {
 			}
 		}
 	}
-	BOOST_CHECK_EQUAL(index, buffer.size());
+	expect(eq(index, buffer.size()));
 	assert(reduced.size() == size_t(h / reduceFactor));
 	std::string out = "\n"; // Start with a newline for prettier output by Boost.Test
 	for (auto itRow = reduced.rbegin(); itRow != reduced.rend(); ++itRow) {
