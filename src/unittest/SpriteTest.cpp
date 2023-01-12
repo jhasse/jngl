@@ -17,7 +17,7 @@ boost::ut::suite _ = [] {
 			Fixture f(factor);
 			jngl::Sprite sprite("../data/jngl.webp");
 			sprite.setPos(-60, -30);
-			sprite.drawScaled(0.2f, 0.2f);
+			sprite.draw(jngl::modelview().scale(0.2f, 0.2f));
 			expect(eq(f.getAsciiArt(), std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒                              ▒
