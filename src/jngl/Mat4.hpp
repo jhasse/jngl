@@ -1,12 +1,10 @@
-// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Mat4 class
 /// @file
 #pragma once
 
-#if !defined(__has_include) || __has_include("boost/version.hpp")
-#include <boost/version.hpp>
-#endif
+#include <boost/qvm_lite.hpp>
 #include <initializer_list>
 
 namespace jngl {
@@ -28,9 +26,6 @@ public:
 
 } // namespace jngl
 
-#if BOOST_VERSION >= 106200 || __has_include("boost/qvm/mat_traits.hpp")
-#include <boost/qvm/mat_traits.hpp>
-
 namespace boost::qvm {
 template <> struct mat_traits<jngl::Mat4> {
 	static int const rows = 4;
@@ -45,4 +40,3 @@ template <> struct mat_traits<jngl::Mat4> {
 	}
 };
 } // namespace boost::qvm
-#endif

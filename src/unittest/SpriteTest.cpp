@@ -6,7 +6,6 @@
 
 #include <jngl.hpp>
 
-#include <boost/qvm/vec_operations.hpp>
 #include <boost/ut.hpp>
 #include <cmath>
 

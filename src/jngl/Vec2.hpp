@@ -1,12 +1,10 @@
-// Copyright 2018-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Vec2 class
 /// @file
 #pragma once
 
-#if !defined(__has_include) || __has_include("boost/version.hpp")
-#include <boost/version.hpp>
-#endif
+#include <boost/qvm_lite.hpp>
 #include <iosfwd>
 
 namespace jngl {
@@ -17,15 +15,14 @@ namespace jngl {
 /// [Boost.QVM](https://www.boost.org/doc/libs/release/libs/qvm/index.html):
 ///
 /// \code
-/// #include <boost/qvm/vec_operations.hpp>
+/// #include <jngl/Vec2.hpp>
 ///
 /// jngl::Vec2 v(3, 4);
 /// double length = boost::qvm::mag(v);
 /// assert(length == 5);
 /// \endcode
 ///
-/// If the header `boost/qvm/vec_traits.hpp` is available, common math operators will also be
-/// brought into the global namespace:
+/// Common math operators are overloaded:
 ///
 /// \code
 /// jngl::Vec2 v(3, 4);
@@ -60,9 +57,6 @@ std::ostream& operator<<(std::ostream&, const Vec2&);
 
 } // namespace jngl
 
-#if BOOST_VERSION >= 106200 || __has_include("boost/qvm/vec_traits.hpp")
-#include <boost/qvm/vec_traits.hpp>
-
 namespace boost::qvm {
 template <> struct vec_traits<jngl::Vec2> {
 	static int const dim = 2;
@@ -84,8 +78,6 @@ template <> struct vec_traits<jngl::Vec2> {
 };
 } // namespace boost::qvm
 
-#include <boost/qvm/vec_operations.hpp>
-
 namespace jngl {
 using boost::qvm::operator+=;
 using boost::qvm::operator*=;
@@ -98,4 +90,3 @@ using boost::qvm::operator-;
 using boost::qvm::operator/;
 using boost::qvm::operator*;
 } // namespace jngl
-#endif
