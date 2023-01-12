@@ -10,14 +10,14 @@
 #include "windowimpl.hpp"
 
 #include <stdexcept>
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(JNGL_UWP)
 #include <windows.h>
 #endif
 
 namespace jngl {
 
 void setProcessSettings() {
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(JNGL_UWP)
 	static bool called = false;
 	if (called) {
 		return;
