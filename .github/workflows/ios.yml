@@ -11,11 +11,6 @@ jobs:
         auth_header="$(git config --local --get http.https://github.com/.extraheader)"
         git submodule sync --recursive
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-    - name: Install dependencies
-      run: |
-        brew install boost
-        mkdir include/ios
-        ln -s /usr/local/include/boost include/ios/boost
     - name: Configure with CMake
       run: cmake -Bbuild-ios -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR
     - name: Build with Xcode

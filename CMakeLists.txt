@@ -28,7 +28,6 @@ set_target_properties(jngl PROPERTIES
 
 include(FetchContent)
 if(IOS)
-	set(Boost_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/ios")
 	# find_package is broken on iOS, see https://gitlab.kitware.com/cmake/cmake/issues/19808
 	set(CMAKE_DISABLE_FIND_PACKAGE_ZLIB TRUE)
 	set(CMAKE_DISABLE_FIND_PACKAGE_BZip2 TRUE)
@@ -447,7 +446,7 @@ if(NOT hasParent AND NOT WINDOWS_STORE)
 		file(GLOB UNITTEST_SRC src/unittest/*.cpp)
 		add_executable(jngl-unittest ${UNITTEST_SRC})
 		target_compile_features(jngl-unittest PRIVATE cxx_std_20)
-		target_link_libraries(jngl-unittest PRIVATE jngl ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+		target_link_libraries(jngl-unittest PRIVATE jngl)
 		target_compile_definitions(jngl-unittest PRIVATE BOOST_UT_DISABLE_MODULE)
 		add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
 	endif()
