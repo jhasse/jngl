@@ -1,5 +1,12 @@
 var annotated_dup =
 [
+    [ "boost", null, [
+      [ "qvm", null, [
+        [ "mat_traits< jngl::Mat3 >", "structboost_1_1qvm_1_1mat__traits_3_01jngl_1_1Mat3_01_4.html", null ],
+        [ "mat_traits< jngl::Mat4 >", "structboost_1_1qvm_1_1mat__traits_3_01jngl_1_1Mat4_01_4.html", null ],
+        [ "vec_traits< jngl::Vec2 >", "structboost_1_1qvm_1_1vec__traits_3_01jngl_1_1Vec2_01_4.html", null ]
+      ] ]
+    ] ],
     [ "jngl", "namespacejngl.html", [
       [ "App", "classjngl_1_1App.html", "classjngl_1_1App" ],
       [ "AppParameters", "structjngl_1_1AppParameters.html", "structjngl_1_1AppParameters" ],

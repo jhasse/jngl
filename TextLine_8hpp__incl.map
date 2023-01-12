@@ -1,10 +1,10 @@
 <map id="jngl/TextLine.hpp" name="jngl/TextLine.hpp">
-<area shape="rect" id="node1" title="Contains jngl::TextLine class." alt="" coords="123,5,281,31"/>
-<area shape="rect" id="node2" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="16,79,135,104"/>
-<area shape="rect" id="node6" href="$Mat3_8hpp.html" title="Contains jngl::Mat3 class." alt="" coords="159,79,245,104"/>
-<area shape="rect" id="node8" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="269,79,340,104"/>
-<area shape="rect" id="node3" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="32,152,119,177"/>
-<area shape="rect" id="node4" title=" " alt="" coords="100,225,259,251"/>
+<area shape="rect" id="node1" title="Contains jngl::TextLine class." alt="" coords="127,5,285,31"/>
+<area shape="rect" id="node2" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="20,79,139,104"/>
+<area shape="rect" id="node6" href="$Mat3_8hpp.html" title="Contains jngl::Mat3 class." alt="" coords="163,79,249,104"/>
+<area shape="rect" id="node8" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="273,79,344,104"/>
+<area shape="rect" id="node3" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="36,152,123,177"/>
+<area shape="rect" id="node4" title=" " alt="" coords="100,225,267,251"/>
 <area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="5,225,76,251"/>
-<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/initializer_list.html" title=" " alt="" coords="217,152,368,177"/>
+<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/initializer_list.html" title=" " alt="" coords="221,152,372,177"/>
 </map>

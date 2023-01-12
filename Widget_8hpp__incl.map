@@ -1,9 +1,9 @@
 <map id="jngl/Widget.hpp" name="jngl/Widget.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Container class." alt="" coords="227,5,369,31"/>
-<area shape="rect" id="node2" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="111,79,197,104"/>
-<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="221,79,292,104"/>
-<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/set.html" title=" " alt="" coords="316,79,363,104"/>
-<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="387,79,457,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,152,164,177"/>
-<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="188,152,259,177"/>
+<area shape="rect" id="node1" title="Contains jngl::Container class." alt="" coords="232,5,375,31"/>
+<area shape="rect" id="node2" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="116,79,203,104"/>
+<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="227,79,297,104"/>
+<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/set.html" title=" " alt="" coords="321,79,368,104"/>
+<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="392,79,463,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,152,172,177"/>
+<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="196,152,267,177"/>
 </map>

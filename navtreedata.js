@@ -52,7 +52,7 @@ var NAVTREEINDEX =
 "AppParameters_8hpp.html",
 "classjngl_1_1Pixels.html",
 "input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca8feb334f9ed9ddb8dbc69cfa4fd6b614",
-"structjngl_1_1FrameBuffer_1_1Context.html"
+"structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

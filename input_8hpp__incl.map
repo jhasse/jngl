@@ -1,10 +1,10 @@
 <map id="jngl/input.hpp" name="jngl/input.hpp">
-<area shape="rect" id="node1" title="Input related functions." alt="" coords="316,5,451,31"/>
-<area shape="rect" id="node2" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="111,79,197,104"/>
-<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="221,79,324,104"/>
-<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="348,79,419,104"/>
-<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="443,79,513,104"/>
-<area shape="rect" id="node8" title=" " alt="" coords="537,79,728,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,152,164,177"/>
-<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="188,152,259,177"/>
+<area shape="rect" id="node1" title="Input related functions." alt="" coords="321,5,456,31"/>
+<area shape="rect" id="node2" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="116,79,203,104"/>
+<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="227,79,329,104"/>
+<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="353,79,424,104"/>
+<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="448,79,519,104"/>
+<area shape="rect" id="node8" title=" " alt="" coords="543,79,733,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,152,172,177"/>
+<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="196,152,267,177"/>
 </map>

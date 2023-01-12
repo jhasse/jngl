@@ -28,6 +28,8 @@ var hierarchy =
     [ "Sprite::Loader", "classjngl_1_1Sprite_1_1Loader.html", null ],
     [ "Mat3", "classjngl_1_1Mat3.html", null ],
     [ "Mat4", "classjngl_1_1Mat4.html", null ],
+    [ "mat_traits< jngl::Mat3 >", "structboost_1_1qvm_1_1mat__traits_3_01jngl_1_1Mat3_01_4.html", null ],
+    [ "mat_traits< jngl::Mat4 >", "structboost_1_1qvm_1_1mat__traits_3_01jngl_1_1Mat4_01_4.html", null ],
     [ "Pixels", "classjngl_1_1Pixels.html", null ],
     [ "ScaleablePixels", "classjngl_1_1ScaleablePixels.html", null ],
     [ "Shader", "classjngl_1_1Shader.html", null ],
@@ -36,6 +38,7 @@ var hierarchy =
     [ "SoundFile", "classjngl_1_1SoundFile.html", null ],
     [ "TextLine", "classjngl_1_1TextLine.html", null ],
     [ "Vec2", "classjngl_1_1Vec2.html", null ],
+    [ "vec_traits< jngl::Vec2 >", "structboost_1_1qvm_1_1vec__traits_3_01jngl_1_1Vec2_01_4.html", null ],
     [ "Vertex", "structjngl_1_1Vertex.html", null ],
     [ "Video", "classjngl_1_1Video.html", null ],
     [ "Widget", "classjngl_1_1Widget.html", [
