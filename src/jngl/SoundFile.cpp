@@ -33,7 +33,7 @@ public:
 	Audio()
 	: mixer(psemek::audio::make_mixer()), pitchControl(audio::pitch(mixer)),
 	  volumeControl(volume(pitchControl)) {
-		engine.output()->stream(volumeControl);
+		engine.setStream(volumeControl);
 	}
 	Audio(const Audio&) = delete;
 	Audio& operator=(const Audio&) = delete;

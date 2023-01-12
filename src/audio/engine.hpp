@@ -2,7 +2,6 @@
 
 #include "stream.hpp"
 #include "track.hpp"
-#include "channel.hpp"
 
 #include <memory>
 #include <string_view>
@@ -16,7 +15,7 @@ namespace psemek::audio
 		engine();
 		~engine();
 
-		channel_ptr output();
+		void setStream(std::shared_ptr<stream>);
 		void setPause(bool);
 
 	private:

@@ -16,7 +16,7 @@ namespace psemek::audio
 			: mixer
 			, std::enable_shared_from_this<mixer_impl>
 		{
-			channel_ptr add(stream_ptr stream) override;
+			void add(stream_ptr stream) override;
 
 			void remove(stream* stream) override {
 				std::lock_guard lock(streamsToStopMutex);
@@ -36,13 +36,13 @@ namespace psemek::audio
 			}
 
 		private:
-			std::vector<channel_ptr> channels_;
-			std::vector<channel_ptr> alive_channels_;
+			std::vector<std::shared_ptr<stream>> channels_;
+			std::vector<std::shared_ptr<stream>> alive_channels_;
 
 			std::vector<float> buffer_;
 
 			std::mutex new_channels_mutex_;
-			std::vector<channel_ptr> new_channels_;
+			std::vector<std::shared_ptr<stream>> new_channels_;
 
 			std::mutex streamsToStopMutex;
 			std::vector<stream*> streamsToStop;
@@ -50,22 +50,16 @@ namespace psemek::audio
 			std::atomic<std::size_t> played_{0};
 		};
 
-		channel_ptr mixer_impl::add(stream_ptr stream)
+		void mixer_impl::add(stream_ptr stream)
 		{
-			auto result = std::make_shared<channel>(std::move(stream));
-
-			{
-				std::lock_guard lock{new_channels_mutex_};
-				new_channels_.push_back(result);
-			}
-
-			return result;
+			std::lock_guard lock{new_channels_mutex_};
+			new_channels_.push_back(std::move(stream));
 		}
 
 		std::size_t mixer_impl::read(float * data, std::size_t sample_count)
 		{
 			{
-				std::vector<channel_ptr> new_channels;
+				std::vector<std::shared_ptr<stream>> new_channels;
 				{
 					std::lock_guard lock{new_channels_mutex_};
 					new_channels = std::move(new_channels_);
@@ -81,10 +75,10 @@ namespace psemek::audio
 				for (stream* const stream : streamsToStop) {
 					const auto it = std::find_if(channels_.begin(), channels_.end(),
 					[stream](const auto& channel) {
-						return channel->hasStream(stream);
+						return channel.get() == stream;
 					});
 					if (it != channels_.end()) {
-						(*it)->stop();
+						(*it).reset();
 					}
 				}
 			}
@@ -95,7 +89,7 @@ namespace psemek::audio
 
 			for (auto & ch : channels_)
 			{
-				auto stream = ch->stream();
+				auto& stream = ch;
 				if (!stream)
 					continue;
 
@@ -111,7 +105,7 @@ namespace psemek::audio
 
 				if (read < sample_count)
 				{
-					ch->stop();
+					ch.reset();
 					continue;
 				}
 

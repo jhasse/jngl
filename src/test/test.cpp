@@ -47,17 +47,6 @@ public:
 		jngl::setMouseVisible(false);
 		frameTime = jngl::getTime();
 		lastTime = jngl::getTime();
-		std::ifstream file("test.ogg", std::ios::binary);
-		assert(file);
-		std::vector<char> vec;
-		if (!file.eof() && !file.fail()) {
-			file.seekg(0, std::ios_base::end);
-			std::streampos fileSize = file.tellg();
-			vec.resize(fileSize);
-
-			file.seekg(0, std::ios_base::beg);
-			file.read(&vec[0], fileSize);
-		}
 	}
 	void step() override {
 		rotate += 90.0 / 60.0; // 90 degree per second

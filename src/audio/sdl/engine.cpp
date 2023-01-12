@@ -22,7 +22,8 @@ namespace psemek::audio
 		std::vector<float> buffer;
 		bool thread_registered = false;
 
-		channel_ptr output;
+		std::shared_ptr<stream> output;
+		std::atomic_bool outputSet{false};
 
 		impl();
 		~impl();
@@ -49,7 +50,6 @@ namespace psemek::audio
 		// log::info() << "Initialized audio: " << static_cast<int>(obtained.channels) << " channels, " << obtained.freq << " Hz, " << obtained.samples << " samples";
 
 		buffer.resize(obtained.samples * obtained.channels);
-		output = std::make_shared<channel>();
 		SDL_PauseAudioDevice(device, 0);
 	}
 
@@ -64,7 +64,6 @@ namespace psemek::audio
 		// prof::profiler prof(profiler_str);
 
 		auto self = static_cast<impl *>(userdata);
-		stream_ptr output = self->output->stream();
 		std::int16_t * dst = reinterpret_cast<std::int16_t *>(dst_u8);
 
 		if (!self->thread_registered)
@@ -75,8 +74,8 @@ namespace psemek::audio
 
 		std::size_t const size = len / 2;
 		std::size_t read = 0;
-		if (output)
-			read = output->read(self->buffer.data(), size);
+		if (self->outputSet)
+			read = self->output->read(self->buffer.data(), size);
 		std::fill(self->buffer.data() + read, self->buffer.data() + size, 0.f);
 
 		for (auto s : self->buffer)
@@ -89,9 +88,11 @@ namespace psemek::audio
 
 	engine::~engine() = default;
 
-	channel_ptr engine::output()
+	void engine::setStream(std::shared_ptr<audio::stream> stream)
 	{
-		return impl().output;
+		assert(!impl().outputSet); // with C++20 it would be possible to use std::atomic<std::shared_ptr<stream>>
+		impl().output = std::move(stream);
+		impl().outputSet = true;
 	}
 
 	void engine::setPause(bool pause) {

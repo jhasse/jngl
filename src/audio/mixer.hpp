@@ -1,7 +1,6 @@
 #pragma once
 
 #include "stream.hpp"
-#include "channel.hpp"
 
 #include <memory>
 
@@ -11,7 +10,7 @@ namespace psemek::audio
 	struct mixer
 		: stream
 	{
-		virtual channel_ptr add(stream_ptr stream) = 0;
+		virtual void add(stream_ptr stream) = 0;
 		virtual void remove(stream*) = 0;
 	};
 
