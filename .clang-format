@@ -14,3 +14,6 @@ SpaceBeforeParens: ControlStatements
 SpacesInContainerLiterals: true
 Cpp11BracedListStyle: false
 LambdaBodyIndentation: OuterScope
+BreakBeforeBraces: Custom
+BraceWrapping:
+  BeforeLambdaBody: true
