@@ -24,7 +24,7 @@ cmake --build build
 
 ```
 sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev \
-libjpeg-dev libpng-dev libvorbis-dev libopenal-dev cmake libboost-dev g++ \
+libjpeg-dev libpng-dev libvorbis-dev libopenal-dev cmake g++ \
 libwebp-dev git libsdl2-dev
 ```
 
@@ -38,7 +38,7 @@ libjpeg-turbo-devel cmake SDL2-devel openal-soft-devel gcc-c++
 ### Arch Linux
 
 ```
-pacman -Syu --needed cmake gcc sdl2 pkg-config fontconfig libwebp openal libvorbis boost
+pacman -Syu --needed cmake gcc sdl2 pkg-config fontconfig libwebp openal libvorbis
 ```
 
 ## Windows
@@ -48,7 +48,7 @@ pacman -Syu --needed cmake gcc sdl2 pkg-config fontconfig libwebp openal libvorb
 Set up [MSYS2](https://www.msys2.org/) and install the following in a MinGW-w64 Win64 Shell:
 
 ```
-pacman -Syu --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-boost mingw-w64-x86_64-openal \
+pacman -Syu --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-openal \
 mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
 mingw-w64-x86_64-dlfcn mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb \
 mingw-w64-x86_64-libtheora
@@ -67,7 +67,7 @@ and then open `build/jngl.sln`.
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 
 ```
-brew install sdl2 freetype libvorbis jpeg webp pkg-config boost cmake
+brew install sdl2 freetype libvorbis jpeg webp pkg-config cmake
 ```
 
 ## Android
@@ -86,9 +86,6 @@ You can also open the `android/test` folder in Android Studio and build from the
 Generate a Xcode project using CMake:
 
 ```
-brew install boost
-mkdir include/ios
-ln -s $(brew --prefix)/include/boost include/ios/boost
 cmake -Bbuild-ios -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR
 ```
 

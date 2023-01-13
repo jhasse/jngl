@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.13)
 
 project(jngl LANGUAGES C CXX)
 
-if(NOT MSVC)
+if(MSVC)
+	string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus")
+else()
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
 endif()
@@ -18,7 +20,7 @@ add_library(jngl ${SRC})
 file(GLOB HEADERS src/*.hpp src/jngl/*.hpp)
 target_sources(jngl PRIVATE ${HEADERS})
 
-target_compile_features(jngl PUBLIC cxx_std_17)
+target_compile_features(jngl PUBLIC cxx_std_20)
 
 set_target_properties(jngl PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src/
@@ -26,21 +28,15 @@ set_target_properties(jngl PROPERTIES
 
 include(FetchContent)
 if(IOS)
-	set(Boost_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/ios")
 	# find_package is broken on iOS, see https://gitlab.kitware.com/cmake/cmake/issues/19808
 	set(CMAKE_DISABLE_FIND_PACKAGE_ZLIB TRUE)
 	set(CMAKE_DISABLE_FIND_PACKAGE_BZip2 TRUE)
 endif()
-find_package(Boost)
+find_package(Boost 1.76.0) # first version with boost/qvm_lite.hpp
 if(Boost_FOUND)
 	target_include_directories(jngl PUBLIC ${Boost_INCLUDE_DIRS})
 else()
-	FetchContent_Declare(boost
-		URL https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.bz2
-		URL_HASH SHA256=1e19565d82e43bc59209a168f5ac899d3ba471d55c7610c677d4ccf2c9c500c0)
-	FetchContent_MakeAvailable(boost)
-	FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
-	target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
+	target_include_directories(jngl PUBLIC include/boost-qvm)
 endif()
 target_include_directories(jngl PUBLIC include/public)
 
@@ -103,7 +99,7 @@ else() # Windows
 	endif()
 	option(JNGL_SDL2 "Use SDL2 instead of WinAPI" ${JNGL_SDL2_DEFAULT})
 
-	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _USE_MATH_DEFINES UNICODE)
+	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _USE_MATH_DEFINES _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
 	if(JNGL_SDL2)
 		file(GLOB SRC src/sdl/*.cpp)
 		if(WINDOWS_STORE)
@@ -358,7 +354,7 @@ else()
 			#   'vccorlib_lib_should_be_specified_before_msvcrt_lib_to_linker': value '1' doesn't
 			#   match value '0' in msvcrtd.lib(app_appinit.obj)
 			set_source_files_properties(src/uwp/SDL_winrt_main_NonXAML.cpp
-				PROPERTIES COMPILE_FLAGS "/ZW /Zc:twoPhase-")
+				PROPERTIES COMPILE_FLAGS "/ZW /Zc:twoPhase- /std:c++17")
 		else()
 			if(NOT IOS)
 				add_executable(jngl-test src/test/test.cpp)
@@ -438,7 +434,7 @@ if(NOT hasParent AND NOT WINDOWS_STORE)
 		file(GLOB UNITTEST_SRC src/unittest/*.cpp)
 		add_executable(jngl-unittest ${UNITTEST_SRC})
 		target_compile_features(jngl-unittest PRIVATE cxx_std_20)
-		target_link_libraries(jngl-unittest PRIVATE jngl ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+		target_link_libraries(jngl-unittest PRIVATE jngl)
 		target_compile_definitions(jngl-unittest PRIVATE BOOST_UT_DISABLE_MODULE)
 		add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
 	endif()

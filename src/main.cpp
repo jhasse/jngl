@@ -1,4 +1,4 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
@@ -7,10 +7,7 @@
 #include "paths.hpp"
 #include "spriteimpl.hpp"
 
-#include <boost/qvm/map_vec_mat.hpp>
-#include <boost/qvm/mat_operations.hpp>
-#include <boost/qvm/mat_operations3.hpp>
-#include <boost/qvm/vec.hpp>
+#include <boost/qvm_lite.hpp>
 #include <fstream>
 #include <sstream>
 

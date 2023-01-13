@@ -22,9 +22,6 @@
 #if __cplusplus < 202002L
 #include <boost/algorithm/string/predicate.hpp>
 #endif
-#include <boost/qvm/map_vec_mat.hpp>
-#include <boost/qvm/mat_operations3.hpp>
-#include <boost/qvm/vec.hpp>
 #include <sstream>
 #include <thread>
 #ifndef NOJPEG
