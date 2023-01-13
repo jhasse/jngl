@@ -1,4 +1,4 @@
-// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Shader.hpp"
@@ -9,7 +9,6 @@
 #include "debug.hpp"
 #endif
 
-#include <boost/algorithm/string.hpp>
 #include <sstream>
 #include <stdexcept>
 
@@ -20,7 +19,10 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 	impl->id = glCreateShader(type == Type::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER);
 #if defined(__APPLE__) && !defined(OPENGLES)
 	std::string tmp(source);
-	boost::replace_all(tmp, "#version 300 es", "#version 330");
+	const std::string search = "#version 300 es";
+	if (size_t pos = tmp.find(search); pos != std::string::npos) {
+		 tmp.replace(pos, search.length(), "#version 330");
+	}
 	source = tmp.c_str();
 #endif
 #ifdef EPOXY_PUBLIC

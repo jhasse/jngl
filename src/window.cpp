@@ -1,4 +1,4 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "window.hpp"
@@ -13,7 +13,7 @@
 #include <emscripten.h>
 #endif
 
-#include <boost/numeric/conversion/cast.hpp>
+#include <gsl/narrow>
 #include <thread>
 
 namespace jngl {
@@ -22,11 +22,11 @@ ScaleablePixels Window::getTextWidth(const std::string& text) {
 	return static_cast<ScaleablePixels>(fonts_[fontSize_][fontName_]->getTextWidth(text));
 }
 
-int Window::getLineHeight() {
+Pixels Window::getLineHeight() {
 	return fonts_[fontSize_][fontName_]->getLineHeight();
 }
 
-void Window::setLineHeight(int h) {
+void Window::setLineHeight(Pixels h) {
 	return fonts_[fontSize_][fontName_]->setLineHeight(h);
 }
 
@@ -43,7 +43,7 @@ std::shared_ptr<FontImpl> Window::getFontImpl() {
 }
 
 void Window::print(const std::string& text, const int xposition, const int yposition) {
-	getFontImpl()->print(xposition, yposition, text);
+	getFontImpl()->print(ScaleablePixels(xposition), ScaleablePixels(yposition), text);
 }
 
 void Window::setFont(const std::string& filename) {
@@ -436,11 +436,11 @@ void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 	canvasHeight = height_;
 	if (minAspectRatio.first * height_ > minAspectRatio.second * width_) {
 		// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
-		canvasHeight = boost::numeric_cast<int>(
+		canvasHeight = gsl::narrow<int>(
 		    std::lround(float(minAspectRatio.second * width_) / float(minAspectRatio.first)));
 	} else if (maxAspectRatio.first * height_ < maxAspectRatio.second * width_) {
 		// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
-		canvasWidth = boost::numeric_cast<int>(
+		canvasWidth = gsl::narrow<int>(
 		    std::lround(float(maxAspectRatio.first * height_) / float(maxAspectRatio.second)));
 	}
 	if (canvasWidth != width_ || canvasHeight != height_) {
@@ -491,29 +491,6 @@ void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-void Window::drawEllipse(const Vec2 mid, const Vec2 size, float startAngle) {
-	glBindVertexArray(opengl::vaoStream);
-	jngl::pushMatrix();
-	jngl::translate(mid);
-	opengl::scale(static_cast<float>(jngl::getScaleFactor()),
-	              static_cast<float>(jngl::getScaleFactor()));
-	auto tmp = jngl::useSimpleShaderProgram();
-	std::vector<float> vertexes;
-	vertexes.push_back(0.f);
-	vertexes.push_back(0.f);
-	for (float t = startAngle; t < 2.f * M_PI; t += 0.1f) {
-		vertexes.push_back(size.x * std::sin(t));
-		vertexes.push_back(-size.y * std::cos(t));
-	}
-	vertexes.push_back(0.f);
-	vertexes.push_back(-size.y);
-	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
-	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), &vertexes[0], GL_STREAM_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, static_cast<GLsizei>(vertexes.size() / 2));
-	jngl::popMatrix();
-}
-
 void Window::drawLine(Mat3 modelview, const Vec2 b) const {
 	glBindVertexArray(vaoLine);
 	auto tmp =
@@ -531,6 +508,12 @@ void Window::drawRect(const Vec2 pos, const Vec2 size) const {
 	auto tmp = useSimpleShaderProgram();
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	jngl::popMatrix();
+}
+
+void Window::drawRect(Mat3 modelview, const Vec2 size) const {
+	glBindVertexArray(vaoRect);
+	auto tmp = useSimpleShaderProgram(modelview.scale(size.x, size.y));
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
 void Window::onControllerChanged(std::function<void()> callback) {

@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Video.hpp"
@@ -19,8 +19,9 @@
 #include "time.hpp"
 
 #include <algorithm>
-#include <boost/numeric/conversion/cast.hpp>
+#include <cmath>
 #include <deque>
+#include <gsl/narrow>
 #ifdef __APPLE__
 #include <OpenAL/al.h>
 #else
@@ -328,8 +329,8 @@ public:
 	Impl(Impl&&) = delete;
 	Impl& operator=(Impl&&) = delete;
 
-	[[nodiscard]] int getWidth() const { return boost::numeric_cast<int>(video->width); }
-	[[nodiscard]] int getHeight() const { return boost::numeric_cast<int>(video->height); }
+	[[nodiscard]] int getWidth() const { return gsl::narrow<int>(video->width); }
+	[[nodiscard]] int getHeight() const { return gsl::narrow<int>(video->height); }
 
 private:
 	[[nodiscard]] bool started() const {

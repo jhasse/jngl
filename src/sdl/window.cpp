@@ -1,4 +1,4 @@
-// Copyright 2011-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/App.hpp"
@@ -6,16 +6,32 @@
 #include "../jngl/debug.hpp"
 #include "../jngl/window.hpp"
 #include "../main.hpp"
-#include "../window.hpp"
+#include "../windowptr.hpp"
 #include "windowimpl.hpp"
 
 #include <stdexcept>
+#if defined(_WIN32) && !defined(JNGL_UWP)
+#include <windows.h>
+#endif
 
 namespace jngl {
 
+void setProcessSettings() {
+#if defined(_WIN32) && !defined(JNGL_UWP)
+	static bool called = false;
+	if (called) {
+		return;
+	}
+	if (!SetProcessDPIAware()) {
+		debugLn("Couldn't set the process-default DPI awareness to system-DPI awareness.");
+	}
+	called = true;
+#endif
+}
+
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
-: impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), isMouseVisible_(true),
+: impl(std::make_unique<WindowImpl>(width, height)), fullscreen_(fullscreen), isMouseVisible_(true),
   relativeMouseMode(false), anyKeyPressed_(false), width_(width), height_(height),
   fontName_(GetFontFileByName("Arial")) {
 	SDL::init();
@@ -316,6 +332,8 @@ void Window::UpdateInput() {
 			break;
 		case SDL_WINDOWEVENT:
 			if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+				impl->actualWidth = event.window.data1;
+				impl->actualHeight = event.window.data2;
 				updateProjection(event.window.data1, event.window.data2, width_, height_);
 				App::instance().updateProjectionMatrix();
 				glViewport(0, 0, event.window.data1, event.window.data2);
@@ -377,6 +395,7 @@ void Window::SetIcon(const std::string& filepath) {
 }
 
 int getDesktopWidth() {
+	setProcessSettings();
 	SDL::init();
 	SDL_DisplayMode mode;
 	SDL_GetDesktopDisplayMode(0, &mode);
@@ -384,6 +403,7 @@ int getDesktopWidth() {
 }
 
 int getDesktopHeight() {
+	setProcessSettings();
 	SDL::init();
 	SDL_DisplayMode mode;
 	SDL_GetDesktopDisplayMode(0, &mode);
@@ -404,20 +424,20 @@ void Window::setFullscreen(bool f) {
 }
 
 #ifdef _WIN32
-// TODO: Avoid this duplicated code
-
 int Window::getMouseX() const {
 	if (relativeMouseMode) {
 		return mousex_;
 	}
-	return mousex_ - (width_ - canvasWidth) / 2;
+	return std::lround((mousex_ - (width_ - canvasWidth) / 2) *
+	                   (float(width_) / impl->actualWidth));
 }
 
 int Window::getMouseY() const {
 	if (relativeMouseMode) {
 		return mousey_;
 	}
-	return mousey_ - (height_ - canvasHeight) / 2;
+	return std::lround((mousey_ - (height_ - canvasHeight) / 2) *
+	                   (float(height_) / impl->actualHeight));
 }
 #endif
 
@@ -437,6 +457,21 @@ void setCursor(Cursor type) {
 	}
 	cursor = SDL_CreateSystemCursor(sdlType);
 	SDL_SetCursor(cursor);
+}
+
+void errorMessage(const std::string &text) {
+	SDL_Window* sdlWindow = nullptr;
+	bool old;
+	Window* window = pWindow.get();
+	if (window) {
+		old = window->getMouseVisible();
+		window->SetMouseVisible(true);
+		sdlWindow = window->impl->sdlWindow;
+	}
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", text.c_str(), sdlWindow);
+	if (window) {
+		window->SetMouseVisible(old);
+	}
 }
 
 } // namespace jngl

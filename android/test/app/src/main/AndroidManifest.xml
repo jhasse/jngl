@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- BEGIN_INCLUDE(manifest) -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.bixense.jngl_test"
           android:versionCode="1"
           android:versionName="1.0">
 
@@ -15,10 +14,11 @@
 		          android:screenOrientation="sensorLandscape"
 		          android:label="@string/app_name"
 		          android:configChanges="orientation|keyboardHidden"
+		          android:exported="true"
 		          android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 			<!-- Tell NativeActivity the name of our .so -->
 			<meta-data android:name="android.app.lib_name"
-			           android:value="bootstrap" />
+			           android:value="jngl-test" />
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />

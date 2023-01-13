@@ -1,12 +1,20 @@
-// Copyright 2019-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::SoundFile class
 /// @file
 #pragma once
 
+#include <future>
 #include <memory>
 #include <string>
 #include <vector>
+#if defined(__has_include) && __has_include(<optional>)
+#include <optional>
+using std::optional;
+#else
+#include <experimental/optional>
+using std::experimental::optional;
+#endif
 
 namespace jngl {
 
@@ -14,10 +22,20 @@ class Sound;
 struct SoundParams;
 
 /// Sound loaded from an OGG file
+///
+/// JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly -
+/// you can just use jngl::play.
 class SoundFile {
 public:
 	/// Load an OGG file called \a filename
-	explicit SoundFile(const std::string& filename);
+	///
+	/// Loading can either happen on its own thread (std::launch::async) or the first time you
+	/// try to play the file (std::launch::deferred).
+	///
+	/// \note
+	/// If the file doesn't exist this will not throw, but calling SoundFile::play, SoundFile::loop
+	/// or SoundFile::load will.
+	SoundFile(std::string filename, std::launch policy = std::launch::async);
 	~SoundFile();
 	SoundFile(const SoundFile&) = delete;
 	SoundFile& operator=(const SoundFile&) = delete;
@@ -42,10 +60,18 @@ public:
 	/// Set volume in [0, ∞]. Default is 1.0f
 	void setVolume(float v);
 
+	/// Block until the sound file has been fully decompressed and loaded
+	///
+	/// \throws std::runtime_error File not found or decoding errors
+	void load();
+
 private:
 	std::shared_ptr<Sound> sound_;
 	std::unique_ptr<SoundParams> params;
 	std::vector<char> buffer_;
+#ifndef EMSCRIPTEN
+	optional<std::future<void>> loader;
+#endif
 };
 
 } // namespace jngl

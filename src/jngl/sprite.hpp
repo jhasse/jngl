@@ -1,4 +1,4 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Sprite class and related functions
 /// \file
@@ -9,11 +9,13 @@
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
 
+#include <future>
 #include <string_view>
 #include <vector>
 
 namespace jngl {
 
+class ImageData;
 class Mat3;
 class Texture;
 struct Vertex;
@@ -28,9 +30,70 @@ public:
 	};
 
 	Sprite(const unsigned char* bytes, size_t width, size_t height);
+
+	/// \deprecated Use Loader instead
 	explicit Sprite(std::string_view filename, LoadType loadType = LoadType::NORMAL);
+
+	/// Does nothing
 	void step() override;
+
+	/// Draws the Sprite, centered by default
 	void draw() const override;
+
+	/// Use this class to load a Sprite asynchronously
+	///
+	/// Example:
+	/// \code
+	/// class MyGame : public jngl::Work {
+	///     void step() override {}
+	///     void draw() const override {
+	///         if (mySprite) {
+	///             mySprite->draw();
+	///         } else {
+	///             jngl::print("loading...", jngl::Vec2(0, 0));
+	///         }
+	///     }
+	///
+	///     jngl::Sprite::Loader mySprite{ "foo.webp" };
+	/// };
+	/// \endcode
+	class Loader {
+	public:
+		/// Starts a thread to load \a filename and returns instantly
+		///
+		/// Note that if the file couldn't be found this will not throw. Instead the exception will
+		/// be thrown on first use by shared() or operator->().
+		explicit Loader(std::string filename) noexcept;
+
+		/// Blocks until the Sprite has been loaded
+		///
+		/// While you won't have access to std::shared_ptr returned by shared(), the Sprite will
+		/// still be loaded into JNGL's cache and the next time you create a Sprite from this
+		/// filename, you'll get the same std::shared_ptr.
+		///
+		/// If shared() or operator->() haven't been called yet and the file wasn't found the
+		/// destructor won't throw but use errorMessage(const std::string&).
+		~Loader() noexcept;
+
+		/// Blocks until the Sprite has been loaded and returns a non-nullptr std::shared_ptr
+		///
+		/// \throws std::runtime_error on decoding errors or file not found
+		std::shared_ptr<Sprite> shared() const;
+
+		/// Returns whether the sprite has been loaded, does NOT block
+		///
+		/// After this returned true all other methods won't block any more.
+		operator bool() const;
+
+		/// Blocks until the Sprite has been loaded
+		///
+		/// \throws std::runtime_error on decoding errors or file not found
+		Sprite* operator->() const;
+
+	private:
+		mutable std::future<std::unique_ptr<ImageData>> imageDataFuture;
+		std::string filename;
+	};
 
 	/// Draws the image centered using \a modelview
 	///

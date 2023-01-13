@@ -1,31 +1,28 @@
-// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Vec2 class
 /// @file
 #pragma once
 
-#if !defined(__has_include) || __has_include("boost/version.hpp")
-#include <boost/version.hpp>
-#endif
+#include <boost/qvm_lite.hpp>
 #include <iosfwd>
 
 namespace jngl {
 
 /// Two-dimensional vector
 ///
-/// JNGL doesn't provide any linear algebra functions but relies on the excelent
+/// JNGL doesn't provide any linear algebra functions itself but relies on the excellent
 /// [Boost.QVM](https://www.boost.org/doc/libs/release/libs/qvm/index.html):
 ///
 /// \code
-/// #include <boost/qvm/vec_operations.hpp>
+/// #include <jngl/Vec2.hpp>
 ///
 /// jngl::Vec2 v(3, 4);
 /// double length = boost::qvm::mag(v);
 /// assert(length == 5);
 /// \endcode
 ///
-/// If the header `boost/qvm/vec_traits.hpp` is available, common math operators will also be
-/// brought into the global namespace:
+/// Common math operators are overloaded:
 ///
 /// \code
 /// jngl::Vec2 v(3, 4);
@@ -55,13 +52,10 @@ public:
 	}
 };
 
-} // namespace jngl
-
 /// Prints the vector like this: [x=…, y=…]
-std::ostream& operator<<(std::ostream&, const jngl::Vec2&);
+std::ostream& operator<<(std::ostream&, const Vec2&);
 
-#if BOOST_VERSION >= 106200 || __has_include("boost/qvm/vec_traits.hpp")
-#include <boost/qvm/vec_traits.hpp>
+} // namespace jngl
 
 namespace boost::qvm {
 template <> struct vec_traits<jngl::Vec2> {
@@ -84,8 +78,7 @@ template <> struct vec_traits<jngl::Vec2> {
 };
 } // namespace boost::qvm
 
-#include <boost/qvm/vec_operations.hpp>
-
+namespace jngl {
 using boost::qvm::operator+=;
 using boost::qvm::operator*=;
 using boost::qvm::operator/=;
@@ -96,4 +89,4 @@ using boost::qvm::operator+;
 using boost::qvm::operator-;
 using boost::qvm::operator/;
 using boost::qvm::operator*;
-#endif
+} // namespace jngl

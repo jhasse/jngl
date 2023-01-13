@@ -1,9 +1,12 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "shapes.hpp"
 
+#include "../main.hpp"
 #include "../spriteimpl.hpp"
+#include "matrix.hpp"
+#include "screen.hpp"
 
 namespace jngl {
 
@@ -47,16 +50,39 @@ void popAlpha() {
 }
 
 void drawEllipse(float xmid, float ymid, float width, float height, float startAngle) {
-	pWindow->drawEllipse({xmid, ymid}, {width, height}, startAngle);
+	drawEllipse(modelview().translate({xmid, ymid}), width, height, startAngle);
 }
 
 void drawEllipse(const Vec2 position, const float width, const float height,
                  const float startAngle) {
-	pWindow->drawEllipse(position, {width, height}, startAngle);
+	drawEllipse(modelview().translate(position), width, height, startAngle);
+}
+
+void drawEllipse(Mat3 modelview, float width, float height, float startAngle) {
+	glBindVertexArray(opengl::vaoStream);
+	auto tmp = useSimpleShaderProgram(modelview.scale(
+	    static_cast<float>(getScaleFactor()), static_cast<float>(getScaleFactor())));
+	std::vector<float> vertexes;
+	vertexes.push_back(0.f);
+	vertexes.push_back(0.f);
+	for (float t = startAngle; t < 2.f * M_PI; t += 0.1f) {
+		vertexes.push_back(width * std::sin(t));
+		vertexes.push_back(-height * std::cos(t));
+	}
+	vertexes.push_back(0.f);
+	vertexes.push_back(-height);
+	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
+	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), &vertexes[0], GL_STREAM_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, static_cast<GLsizei>(vertexes.size() / 2));
 }
 
 void drawCircle(const Vec2 position, const float radius, const float startAngle) {
-	pWindow->drawEllipse(position, {radius, radius}, startAngle);
+	drawEllipse(modelview().translate(position), radius, radius, startAngle);
+}
+
+void drawCircle(Mat3 modelview, const float radius, const float startAngle) {
+	drawEllipse(modelview, radius, radius, startAngle);
 }
 
 } // namespace jngl

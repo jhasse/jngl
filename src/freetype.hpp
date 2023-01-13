@@ -1,4 +1,4 @@
-// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -24,7 +24,7 @@ public:
 	Character(Character&&) = delete;
 	Character& operator=(Character&&) = delete;
 	~Character();
-	void Draw() const;
+	void draw(Mat3& modelview) const;
 	Pixels getWidth() const;
 
 private:
@@ -42,10 +42,11 @@ public:
 	FontImpl(FontImpl&&) = delete;
 	FontImpl& operator=(FontImpl&&) = delete;
 	~FontImpl();
-	void print(double x, double y, const std::string& text);
+	void print(Mat3 modelview, const std::string& text);
+	void print(ScaleablePixels x, ScaleablePixels y, const std::string& text);
 	Pixels getTextWidth(const std::string& text);
-	int getLineHeight() const;
-	void setLineHeight(int);
+	Pixels getLineHeight() const;
+	void setLineHeight(Pixels);
 
 private:
 	Character& GetCharacter(std::string::iterator& it, std::string::iterator end);

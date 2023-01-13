@@ -2,65 +2,58 @@ variables:
   CLICOLOR_FORCE: "1"
   TERM: xterm
 
-image: registry.fedoraproject.org/fedora-minimal:35
+image: registry.fedoraproject.org/fedora-minimal:36
 
-cmake:
+linux:
   stage: build
   script:
-  - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel SDL2-devel openal-soft-devel boost-devel libtheora-devel clang >/dev/null
+  - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel SDL2-devel openal-soft-devel libtheora-devel clang util-linux >/dev/null
   - CXXFLAGS=-fdiagnostics-color cmake -Bbuild -GNinja
-  - ninja -Cbuild
+  - cd build
+  - ninja
+  - microdnf install -y mesa-dri-drivers xorg-x11-drivers >/dev/null
+  - Xorg -config ../data/xorg.conf &>/dev/null &
+  - sleep 1 # wait for Xorg to boot up
+  - DISPLAY=:0 ./jngl-unittest
+  - cd ..
   - CC=clang CXX=clang++ CXXFLAGS=-fdiagnostics-color cmake -Bbuild-clang -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=1
   - cd build-clang
   - ninja
   - microdnf install -y clang-tools-extra python3-PyYAML >/dev/null
   - script -qfec "../data/run-clang-tidy.py"
 
-gcc:
-  stage: build
-  script:
-    - microdnf install -y cmake fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel meson SDL2-devel openal-soft-devel gcc-c++ libtheora-devel >/dev/null
-    - script -qfec "meson build" /dev/null
-    - cd build
-    - script -qfec "ninja" /dev/null
-    - microdnf install -y mesa-dri-drivers xorg-x11-drivers >/dev/null
-    - Xorg -config ../data/xorg.conf &>/dev/null &
-    - sleep 1 # wait for Xorg to boot up
-    - DISPLAY=:0 ./unittest
-    - cd ..
-    - cmake -Bbuild-cmake -GNinja
-    - ninja -Cbuild-cmake
-
-clang:
-  stage: build
-  script:
-    - microdnf install -y fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel libjpeg-turbo-devel boost-devel meson SDL2-devel openal-soft-devel clang >/dev/null
-    - CC=clang CXX=clang++ script -qfec "meson build" /dev/null
-    - cd build
-    - script -qfec "ninja" /dev/null
-    - microdnf install -y clang-tools-extra python3-PyYAML >/dev/null
-    - sed -i s/-pipe// compile_commands.json
-    - script -qfec "../data/run-clang-tidy.py"
-
 mingw:
   stage: build
   script:
-    - microdnf install -y gcc-c++ cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft > /dev/null
+    - microdnf install -y gcc-c++ cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft > /dev/null
     - mingw64-cmake -GNinja -Bbuild-debug -DCMAKE_BUILD_TYPE=Debug
     - ninja -C build-debug
     - mingw64-cmake -GNinja -Bbuild-release -DCMAKE_BUILD_TYPE=Release
     - ninja -C build-release
 
 android:
-  image: registry.gitlab.com/jhasse/android-ndk-docker:23-1-7779620
+  image: registry.gitlab.com/jhasse/android-ndk-docker:r25
   stage: build
   script:
     - make -C android
 
+steamos:
+  image: registry.gitlab.steamos.cloud/steamrt/soldier/sdk
+  stage: build
+  script:
+    - cd /usr/local/include
+    - curl --silent -O -L https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.bz2
+    - tar -xf *.tar.bz2 --strip-components=1 boost_1_80_0/boost
+    - cd -
+    - cmake -Bbuild-steamos -GNinja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=0
+    - cmake --build build-steamos
+    - cmake -Bbuild-steamos-release -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=0 -DJNGL_VIDEO=0 -DJNGL_JPEG=0 -DJNGL_BUILD_WEBP_FROM_SOURCE=1 -DBUILD_SHARED_LIBS=0
+    - cmake --build build-steamos-release
+
 pages:
   stage: deploy
   script:
-  - microdnf install -y doxygen cmake make tar xz >/dev/null
+  - microdnf install -y doxygen cmake make tar xz git >/dev/null
   - cd doc
   - cmake .
   - make

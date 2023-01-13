@@ -7,6 +7,8 @@
 #include "Color.hpp"
 #include "Vec2.hpp"
 
+#include <cstdint>
+
 namespace jngl {
 
 class Mat3;
@@ -16,6 +18,8 @@ class Mat3;
 /// Doesn't change the alpha value currently set by setAlpha()
 void setColor(jngl::Color rgb);
 
+/// Sets the color and alpha which should be used to draw primitives
+/// @param alpha [0...255]
 void setColor(jngl::Color, unsigned char alpha);
 
 void setColor(unsigned char red, unsigned char green, unsigned char blue);
@@ -43,8 +47,12 @@ void drawEllipse(float xmid, float ymid, float width, float height, float startA
 
 void drawEllipse(Vec2, float width, float height, float startAngle = 0);
 
+void drawEllipse(Mat3 modelview, float width, float height, float startAngle = 0);
+
 /// Angles in radian
 void drawCircle(Vec2, float radius, float startAngle = 0);
+
+void drawCircle(Mat3 modelview, float radius, float startAngle = 0);
 
 void drawPoint(double x, double y);
 
@@ -58,6 +66,11 @@ void drawRect(double xposition, double yposition, double width, double height);
 ///
 /// Use setColor(Color) to change the color and setAlpha(uint8_t) to change the translucency.
 void drawRect(Vec2 position, Vec2 size);
+
+/// Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color
+///
+/// Use setAlpha to set the opacity.
+void drawRect(const Mat3& modelview, Vec2 size, Color);
 
 template <class Vect> void drawRect(Vect pos, Vect size) {
 	drawRect(pos.x, pos.y, size.x, size.y);

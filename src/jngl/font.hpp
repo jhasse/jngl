@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Font class and related functions
 /// @file
@@ -13,16 +13,25 @@
 namespace jngl {
 
 class FontImpl;
+class Mat3;
 
 /// Font loaded from a TTF or OTF file
 class Font {
 public:
+	/// Creates a font from \a filename in \a size px
 	Font(const std::string& filename, unsigned int size);
-	std::shared_ptr<FontImpl> getImpl();
+
+	/// Uses the font to print something at \a x \a y. The color can be specified using setFontColor.
 	void print(const std::string&, int x, int y);
 
 	/// Draw \a text at \a position
 	void print(const std::string& text, Vec2 position) const;
+
+	/// Draw \a text using \a modelview
+	void print(const Mat3& modelview, const std::string& text) const;
+
+	/// Internal function
+	std::shared_ptr<FontImpl> getImpl();
 
 private:
 	std::shared_ptr<FontImpl> impl;
@@ -78,11 +87,11 @@ void pushFontColor(unsigned char red, unsigned char green, unsigned char blue);
 /// Resets the font color on the top of stack which is used by jngl::pushFontColor
 void popFontColor();
 
-/// Get line height used py print() in pixel
-int getLineHeight();
+/// Get line height used py print() in scale-independent pixel
+double getLineHeight();
 
-/// Set line height used by print() in pixel
-void setLineHeight(int);
+/// Set line height used by print() in scale-independent pixel
+void setLineHeight(double);
 
 /// Calculates the width of \a text in pixels if it would be drawn with the currently active font
 double getTextWidth(const std::string& text);

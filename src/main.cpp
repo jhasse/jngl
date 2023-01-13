@@ -1,4 +1,4 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
@@ -7,10 +7,7 @@
 #include "paths.hpp"
 #include "spriteimpl.hpp"
 
-#include <boost/qvm/map_vec_mat.hpp>
-#include <boost/qvm/mat_operations.hpp>
-#include <boost/qvm/mat_operations3.hpp>
-#include <boost/qvm/vec.hpp>
+#include <boost/qvm_lite.hpp>
 #include <fstream>
 #include <sstream>
 
@@ -21,10 +18,6 @@
 #if defined(_WIN32) || (!defined(ANDROID) && __has_include(<filesystem>))
 #include <filesystem>
 #define HAVE_FILESYSTEM
-#endif
-
-#ifdef JNGL_UWP
-#include <boost/algorithm/string.hpp>
 #endif
 
 #ifdef __APPLE__
@@ -47,6 +40,8 @@ std::stack<jngl::Mat3> modelviewStack;
 std::unique_ptr<ShaderProgram> simpleShaderProgram;
 int simpleModelviewUniform;
 int simpleColorUniform;
+
+static std::vector<std::function<void()>> callAtExit;
 
 void clearBackgroundColor() {
 	glClearColor(bgRed, bgGreen, bgBlue, 1);
@@ -202,9 +197,17 @@ void showWindow(const std::string& title, const int width, const int height, boo
 }
 
 void hideWindow() {
+	for (const auto& f : callAtExit) {
+		f();
+	}
+	callAtExit.clear();
 	simpleShaderProgram.reset();
 	unloadAll();
 	pWindow.Delete();
+}
+
+void atExit(std::function<void()> f) {
+	callAtExit.emplace_back(std::move(f));
 }
 
 void swapBuffers() {
@@ -360,12 +363,12 @@ double getTextWidth(const std::string& text) {
 	return static_cast<double>(pWindow->getTextWidth(text));
 }
 
-int getLineHeight() {
-	return pWindow->getLineHeight();
+double getLineHeight() {
+	return double(ScaleablePixels(pWindow->getLineHeight()));
 }
 
-void setLineHeight(int h) {
-	pWindow->setLineHeight(h);
+void setLineHeight(double h) {
+	pWindow->setLineHeight(Pixels(ScaleablePixels(h)));
 }
 
 void print(const std::string& text, const jngl::Vec2 position) {
@@ -451,11 +454,20 @@ void popMatrix() {
 
 void drawRect(const double xposition, const double yposition, const double width,
               const double height) {
-	pWindow->drawRect({ xposition, yposition }, { width, height });
+	pWindow->drawRect(Vec2{ xposition, yposition }, { width, height });
 }
 
 void drawRect(const Vec2 position, const Vec2 size) {
 	pWindow->drawRect(position, size);
+}
+
+void drawRect(const Mat3& modelview, const Vec2 size, const Color color) {
+	auto red = colorRed;
+	auto green = colorGreen;
+	auto blue = colorBlue;
+	jngl::setColor(color);
+	pWindow->drawRect(modelview, size);
+	jngl::setColor(red, green, blue);
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
@@ -484,7 +496,7 @@ void drawLine(const Mat3& modelview, const Vec2 end) {
 }
 
 void drawPoint(const double x, const double y) {
-	pWindow->drawEllipse({ x, y }, { 1, 1 }, 0);
+	drawEllipse(modelview().translate({ x, y }), 1, 1, 0);
 }
 
 int getWindowWidth() {
@@ -524,12 +536,11 @@ bool getAntiAliasing() {
 	return antiAliasingEnabled;
 }
 
-void loadSound(const std::string&); // definied in audio.cpp
+Finally loadSound(const std::string&); // definied in audio.cpp
 
 Finally load(const std::string& filename) {
 	if (filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg") {
-		loadSound(filename);
-		return Finally(nullptr);
+		return loadSound(filename);
 	}
 	return loadSprite(filename);
 }

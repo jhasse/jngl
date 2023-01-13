@@ -5,7 +5,6 @@
 #include "../jngl/init.hpp"
 
 #include <algorithm>
-#include <boost/math/constants/constants.hpp>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -19,9 +18,28 @@ void testKeys();
 int performance = 1;
 double factor = 0;
 
+class AsyncLoad : public jngl::Work {
+public:
+	AsyncLoad() {
+		jngl::setSpriteAlpha(255);
+	}
+	void step() override {}
+	void draw() const override {
+		if (spriteAsync) {
+			spriteAsync->draw();
+		} else {
+			jngl::print("loading...", jngl::Vec2(0, 0));
+		}
+	}
+
+private:
+	jngl::Sprite::Loader spriteAsync{ "../examples/bike/bg" };
+};
+
 class Test : public jngl::Work {
 public:
-	Test() : fb2(jngl::getWindowSize()), logoWebp("jngl.webp") {
+	Test()
+	: fb2(jngl::getWindowSize()), logoWebp("jngl.webp"), soundLoader(jngl::load("test.ogg")) {
 		jngl::setTitle(jngl::App::instance().getDisplayName() + " | UTF-8: äöüß");
 		jngl::setIcon("jngl");
 		jngl::setMouseVisible(false);
@@ -33,12 +51,25 @@ public:
 		if (rotate > 360) {
 			rotate = 0;
 		}
-		factor = std::sin(rotate / 360 * boost::math::constants::pi<double>());
+		factor = std::sin(rotate / 360 * M_PI);
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
 		if (jngl::keyPressed('p')) {
+			auto start = clock.now();
 			jngl::stop("test.ogg");
+			std::cout << "stop took "
+			          << std::chrono::duration_cast<std::chrono::milliseconds>(clock.now() - start)
+			                 .count()
+			          << " ms.\n";
+			start = clock.now();
 			jngl::play("test.ogg");
+			std::cout << "play took "
+			          << std::chrono::duration_cast<std::chrono::milliseconds>(clock.now() - start)
+			                 .count()
+			          << " ms.\n";
+		}
+		if (jngl::keyPressed('l')) {
+			jngl::loop("test.ogg");
 		}
 		if (jngl::keyPressed('s')) {
 			useShader = !useShader;
@@ -48,6 +79,9 @@ public:
 				shaderProgram = std::make_unique<jngl::ShaderProgram>(jngl::Sprite::vertexShader(),
 				                                                      *fragmentShader);
 			}
+		}
+		if (jngl::keyPressed('g')) {
+			jngl::setWork<AsyncLoad>();
 		}
 	}
 	void drawBackground() const;
@@ -70,7 +104,7 @@ public:
 		jngl::setColor(0,0,0,255);
 		jngl::drawLine(jngl::modelview()
 		                   .translate({ 650, 450 })
-		                   .rotate(rotate / 360 * boost::math::constants::pi<double>())
+		                   .rotate(rotate / 360 * M_PI)
 		                   .translate({ -50, -50 }),
 		               { 100, 100 });
 		jngl::setSpriteAlpha(200);
@@ -132,21 +166,22 @@ public:
 			jngl::setFullscreen(!jngl::getFullscreen());
 		}
 		jngl::print("Press K to test key codes.", 5, 490);
-		jngl::print("Press P to play a sound.", 6, 510);
+		jngl::print("Press P to play a sound, L to loop it.", 6, 510);
+		jngl::print("Press G to load a Sprite asynchronously.", 6, 530);
 		static int playbackSpeed = 100;
 		jngl::setPlaybackSpeed(float(playbackSpeed) / 100.0f);
 		jngl::print("Press + and - to change the audio playback speed: " +
-		      std::to_string(playbackSpeed) + " %", 6, 530);
+		      std::to_string(playbackSpeed) + " %", 6, 550);
 		if (jngl::keyPressed('-')) {
-			--playbackSpeed;
+			playbackSpeed -= jngl::keyDown(jngl::key::AltL) ? 50 : 1;
 		}
 		if (jngl::keyPressed('+')) {
-			++playbackSpeed;
+			playbackSpeed += jngl::keyDown(jngl::key::AltL) ? 50 : 1;
 		}
 		jngl::setVolume(volume);
 		jngl::print("Use your mouse wheel to change the volume: " +
 		                std::to_string(int(volume * 100)) + " %",
-		            6, 550);
+		            6, 570);
 		jngl::setColor(0,0,255,128);
 		if (drawOnFrameBuffer) {
 			fb2Context = {};
@@ -185,13 +220,15 @@ private:
 	float volume = 1;
 	std::unique_ptr<jngl::Shader> vertexShader, fragmentShader;
 	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
+	std::chrono::steady_clock clock;
+	jngl::Finally soundLoader;
 };
 
-std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& params) {
+jngl::AppParameters jnglInit() {
+	jngl::AppParameters params;
 	params.displayName = "JNGL Test Application";
-	jngl::setPrefix(jngl::getBinaryPath());
 	params.screenSize = { 800, 600 };
-	return []() {
+	params.start = []() {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
 		          << jngl::getDesktopHeight() << std::endl
 		          << "Preferred language: " << jngl::getPreferredLanguage() << std::endl
@@ -202,6 +239,7 @@ std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& param
 		});
 		return std::make_shared<Test>();
 	};
+	return params;
 }
 
 void Test::drawBackground() const {
@@ -423,21 +461,20 @@ void testKeys() {
 			}
 			jngl::setFontColor(pressedFade, pressedFade, pressedFade);
 
-			jngl::pushMatrix();
 			for (const jngl::Vec2& stick :
 			     { jngl::Vec2(controller->state(jngl::controller::LeftStickX),
 			                  -controller->state(jngl::controller::LeftStickY)),
 			       jngl::Vec2(controller->state(jngl::controller::RightStickX),
 			                  -controller->state(jngl::controller::RightStickY)) }) {
 				const float circleRadius = 20;
-				const auto circlePos = jngl::Vec2(530, double(-40 + controllerNr * 110));
 				jngl::setColor(100, 100, 100, 255);
-				jngl::drawEllipse(circlePos, circleRadius, circleRadius);
+				auto circleModelview =
+				    jngl::modelview().translate({ 530, double(-40 + controllerNr * 110) });
+				jngl::drawEllipse(circleModelview, circleRadius, circleRadius);
 				jngl::setColor(255, 255, 255, 255);
-				jngl::drawCircle(circlePos + circleRadius * stick, 4);
+				jngl::drawCircle(circleModelview.translate(circleRadius * stick), 4);
 				jngl::translate(0, 2 * circleRadius + 10);
 			}
-			jngl::popMatrix();
 
 			jngl::setColor(255, 255, 255, 150);
 			jngl::drawRect({500, 40. + double(controllerNr - 1) * 110.}, {300, 120});

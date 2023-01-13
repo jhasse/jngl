@@ -4,7 +4,7 @@ jobs:
   msvc:
     runs-on: windows-2022
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Configure
       run: cmake -Bbuild
     - name: Build (Debug)
@@ -21,11 +21,11 @@ jobs:
   mingw-sdl:
     runs-on: [ubuntu-latest]
     container:
-      image: registry.fedoraproject.org/fedora-minimal:32
+      image: registry.fedoraproject.org/fedora-minimal:37
     steps:
     - name: Install dependencies
-      run: microdnf install cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-boost mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft mingw32-nsis tar
-    - uses: actions/checkout@v2
+      run: microdnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft mingw32-nsis tar gzip
+    - uses: actions/checkout@v3
     - name: Build with CMake and GCC
       run: |
         mingw64-cmake -Bbuild-windows -GNinja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=0 -DJNGL_SDL2=1

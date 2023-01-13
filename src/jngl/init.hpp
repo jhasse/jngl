@@ -1,4 +1,4 @@
-// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Include this file only once, as it defines the main function
 /// \file
@@ -8,6 +8,7 @@
 #include "App.hpp"
 #include "AppParameters.hpp"
 #include "main.hpp"
+#include "message.hpp"
 #include "screen.hpp"
 #include "work.hpp"
 
@@ -21,8 +22,26 @@ namespace jngl {
 class Work;
 } // namespace jngl
 
-/// Implement this function and return a factory function which creates the first jngl::Work
-std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters&);
+/// Implement this function and set AppParameters::start
+///
+/// Usually you'd want to do this in a file called e.g. `main.cpp`:
+/// \code
+/// #include "MyGame.hpp" // class that derives from jngl::Work
+///
+/// #include <jngl/init.hpp>
+///
+/// jngl::AppParameters jnglInit() {
+///     jngl::AppParameters params;
+///     params.displayName = "My Game";
+///     params.screenSize = { 1920, 1080 };
+/// 
+///     params.start = []() {
+///         return std::make_shared<MyGame>();
+///     };
+///     return params;
+/// }
+/// \endcode
+jngl::AppParameters jnglInit();
 
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE // iOS
 JNGL_MAIN_BEGIN {                            // NOLINT
@@ -40,8 +59,7 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 		}
 	}
 #endif
-	jngl::AppParameters params;
-	auto workFactory = jnglInit(params);
+	jngl::AppParameters params = jnglInit();
 	auto& app = jngl::App::instance();
 	app.setDisplayName(params.displayName);
 	app.setPixelArt(params.pixelArt);
@@ -67,8 +85,8 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 		}
 	} else {
 		// Make window as big as possible
-		const double scaleFactor = std::min((jngl::getDesktopWidth() - 50) / params.screenSize->x,
-		                                    (jngl::getDesktopHeight() - 50) / params.screenSize->y);
+		const double scaleFactor = std::min((jngl::getDesktopWidth() - 99) / params.screenSize->x,
+		                                    (jngl::getDesktopHeight() - 99) / params.screenSize->y);
 		if (scaleFactor > 1) {
 			jngl::setScaleFactor(std::floor(scaleFactor));
 		} else {
@@ -82,7 +100,7 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 	                            : int(std::lround(params.screenSize->y * jngl::getScaleFactor())),
 	                 fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
 	                 params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
-	jngl::setWork(workFactory());
+	jngl::setWork(params.start());
 	app.mainLoop();
 }
 JNGL_MAIN_END

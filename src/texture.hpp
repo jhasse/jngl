@@ -25,10 +25,7 @@ public:
 	Texture(Texture&&) = delete;
 	Texture& operator=(Texture&&) = delete;
 	~Texture();
-	void Bind() const;
-	void draw(float red, float green, float blue, float alpha, const ShaderProgram* = nullptr) const;
-	void draw(const Mat3& modelview, float red, float green, float blue, float alpha,
-	          const ShaderProgram* = nullptr) const;
+	void draw() const;
 	void drawClipped(float xstart, float xend, float ystart, float yend, float red, float green,
 	                 float blue, float alpha) const;
 	void drawMesh(const std::vector<Vertex>& vertexes, float red, float green, float blue,
@@ -41,11 +38,11 @@ public:
 
 	static const Shader& vertexShader();
 
-private:
 	static ShaderProgram* textureShaderProgram;
 	static Shader* textureVertexShader;
 	static int shaderSpriteColorUniform;
 	static int modelviewUniform;
+private:
 	GLuint texture_ = 0;
 	GLuint vertexBuffer_ = 0;
 	GLuint vao = 0;

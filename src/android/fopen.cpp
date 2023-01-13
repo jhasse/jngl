@@ -1,10 +1,15 @@
+// Copyright 2023 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
+
 // See https://github.com/googlesamples/android-ndk/blob/master/native-media/app/src/main/cpp/android_fopen.c
 
 #include "fopen.hpp"
 
+#include "../jngl/main.hpp"
+#include "../helper.hpp"
+
 #include <errno.h>
 #include <android/asset_manager.h>
-#include <boost/algorithm/string/replace.hpp>
 
 static int android_read(void* cookie, char* buf, int size) {
 	return AAsset_read((AAsset*)cookie, buf, size);
@@ -23,20 +28,14 @@ static int android_close(void* cookie) {
 	return 0;
 }
 
-AAssetManager* android_asset_manager = NULL;
-
 FILE* android_fopen(const char* fname, const char* mode) {
 	if (mode[0] == 'w') return NULL;
 
-	if (fname[0] != '\0' && fname[0] == '.' && fname[1] == '/') {
-		fname += 2;
+	std::string tmp = jngl::sanitizePath(fname);
+
+	AAsset* asset = AAssetManager_open(jngl::androidApp->activity->assetManager, tmp.c_str(), 0);
+	if (!asset) {
+		return nullptr;
 	}
-
-	std::string tmp(fname);
-	boost::replace_all(tmp, "/./", "/");
-
-	AAsset* asset = AAssetManager_open(android_asset_manager, tmp.c_str(), 0);
-	if (!asset) return NULL;
-
 	return funopen(asset, android_read, android_write, android_seek, android_close);
 }

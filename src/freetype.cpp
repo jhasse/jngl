@@ -1,6 +1,7 @@
 // Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
+#define _LIBCPP_DISABLE_DEPRECATION_WARNINGS
 #include "freetype.hpp"
 
 #include "helper.hpp"
@@ -16,7 +17,6 @@
 
 #include FT_GLYPH_H
 
-#include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
 #include <codecvt>
 #include <locale>
@@ -42,8 +42,8 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 	const auto bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph); // NOLINT
 	const FT_Bitmap& bitmap = bitmap_glyph->bitmap;
 
-	const int width = boost::numeric_cast<int>(bitmap.width);
-	const int height = boost::numeric_cast<int>(bitmap.rows);
+	const int width = static_cast<int>(bitmap.width);
+	const int height = static_cast<int>(bitmap.rows);
 	width_ = Pixels(static_cast<int32_t>(face->glyph->advance.x >> 6));
 
 	if (height == 0) {
@@ -80,19 +80,17 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 		delete[] d;
 	}
 
-	top_ = Pixels(boost::numeric_cast<int>(fontHeight) - bitmap_glyph->top);
+	top_ = Pixels(static_cast<int>(fontHeight) - bitmap_glyph->top);
 	left_ = Pixels(bitmap_glyph->left);
 }
 
-void Character::Draw() const {
+void Character::draw(Mat3& modelview) const {
 	if (texture_) {
-		pushMatrix();
-		opengl::translate(static_cast<float>(left_), static_cast<float>(top_));
-		texture_->draw(float(fontColorRed) / 255.0f, float(fontColorGreen) / 255.0f,
-		               float(fontColorBlue) / 255.0f, float(fontColorAlpha) / 255.0f);
-		popMatrix();
+		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE,
+		                   Mat3(modelview).translate(left_, top_).data);
+		texture_->draw();
 	}
-	opengl::translate(static_cast<float>(width_), 0);
+	modelview.translate(width_, 0_px);
 }
 
 Pixels Character::getWidth() const {
@@ -219,33 +217,56 @@ Pixels FontImpl::getTextWidth(const std::string& text) {
 	return maxWidth;
 }
 
-int FontImpl::getLineHeight() const {
-	return lineHeight;
+Pixels FontImpl::getLineHeight() const {
+	return Pixels(lineHeight);
 }
 
-void FontImpl::setLineHeight(int h) {
-	lineHeight = h;
+void FontImpl::setLineHeight(Pixels h) {
+	lineHeight = int(h);
 }
 
-void FontImpl::print(const double x, const double y, const std::string& text) {
-	const int xRounded = int(std::lround(x * getScaleFactor()));
-	const int yRounded = int(std::lround(y * getScaleFactor()));
+void FontImpl::print(Mat3 modelview, const std::string& text) {
+	auto context = Texture::textureShaderProgram->use();
+	glUniform4f(Texture::shaderSpriteColorUniform, float(fontColorRed) / 255.0f,
+	            float(fontColorGreen) / 255.0f, float(fontColorBlue) / 255.0f,
+	            float(fontColorAlpha) / 255.0f);
+	std::vector<std::string> lines(splitlines(text));
+
+	auto lineEnd = lines.end();
+	auto lineIter = lines.begin();
+	while (true) {
+		auto charEnd = lineIter->end();
+		Mat3 modelviewCopy = modelview;
+		for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
+			GetCharacter(charIter, charEnd).draw(modelviewCopy);
+		}
+		if (++lineIter == lineEnd) {
+			break;
+		}
+		modelview.translate(Pixels(0), Pixels(lineHeight));
+	}
+}
+
+void FontImpl::print(const ScaleablePixels x, const ScaleablePixels y, const std::string& text) {
+	auto context = Texture::textureShaderProgram->use();
+	glUniform4f(Texture::shaderSpriteColorUniform, float(fontColorRed) / 255.0f,
+	            float(fontColorGreen) / 255.0f, float(fontColorBlue) / 255.0f,
+	            float(fontColorAlpha) / 255.0f);
+	const int xRounded = int(std::lround(static_cast<double>(Pixels(x))));
+	const int yRounded = int(std::lround(static_cast<double>(Pixels(y))));
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();
 	int lineNr = 0;
 	for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
-		pushMatrix();
-		opengl::translate(static_cast<float>(xRounded),
-		                  static_cast<float>(yRounded + lineHeight * lineNr));
+		auto modelview =
+		    jngl::modelview().translate(Pixels(xRounded), Pixels(yRounded + lineHeight * lineNr));
 		++lineNr;
 
 		auto charEnd = lineIter->end();
 		for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
-			GetCharacter(charIter, charEnd).Draw();
+			GetCharacter(charIter, charEnd).draw(modelview);
 		}
-
-		popMatrix();
 	}
 }
 

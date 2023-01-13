@@ -1,4 +1,4 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Includes all JNGL headers except for init.hpp
 /// @file
@@ -14,6 +14,7 @@
 #include "ScaleablePixels.hpp"
 #include "Shader.hpp"
 #include "ShaderProgram.hpp"
+#include "Singleton.hpp"
 #include "SoundFile.hpp"
 #include "TextLine.hpp"
 #include "Vertex.hpp"

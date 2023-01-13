@@ -6,22 +6,12 @@
 class ShaderExample : public jngl::Work {
 public:
 	ShaderExample() {
-		{
-			std::ifstream fin("data/blur.frag");
-			std::stringstream buffer;
-			buffer << fin.rdbuf();
-			blurFragment =
-			    std::make_unique<jngl::Shader>(buffer.str().c_str(), jngl::Shader::Type::FRAGMENT);
-		}
+		blurFragment = std::make_unique<jngl::Shader>(jngl::readAsset("blur.frag"),
+		                                              jngl::Shader::Type::FRAGMENT);
 		blurProgram =
 		    std::make_unique<jngl::ShaderProgram>(jngl::Sprite::vertexShader(), *blurFragment);
-		{
-			std::ifstream fin("data/textured.frag");
-			std::stringstream buffer;
-			buffer << fin.rdbuf();
-			texturedFragment =
-			    std::make_unique<jngl::Shader>(buffer.str().c_str(), jngl::Shader::Type::FRAGMENT);
-		}
+		texturedFragment = std::make_unique<jngl::Shader>(jngl::readAsset("textured.frag"),
+		                                                  jngl::Shader::Type::FRAGMENT);
 		texturedProgram =
 		    std::make_unique<jngl::ShaderProgram>(jngl::Sprite::vertexShader(), *texturedFragment);
 	}
@@ -32,7 +22,7 @@ public:
 	void draw() const override {
 		jngl::pushMatrix();
 		jngl::translate(100, 0);
-		sprite.drawClipped({0.43, 0.1}, {0.61, 0.9});
+		sprite.drawClipped({ 0.43, 0.1 }, { 0.61, 0.9 });
 		jngl::translate(300, 30);
 		sprite.draw(blurProgram.get());
 		jngl::translate(-700, 0);
@@ -54,8 +44,10 @@ private:
 	std::unique_ptr<jngl::ShaderProgram> blurProgram;
 };
 
-std::function<std::shared_ptr<jngl::Work>()> jnglInit(jngl::AppParameters& params) {
-	params.displayName = "Shader Example";
-	params.screenSize = { 1280, 720 };
-	return []() { return std::make_shared<ShaderExample>(); };
+jngl::AppParameters jnglInit() {
+	return {
+		[]() { return std::make_shared<ShaderExample>(); },
+		"Shader Example",
+		jngl::Vec2(1280, 720),
+	};
 }

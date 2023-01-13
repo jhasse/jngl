@@ -1,8 +1,9 @@
-// Copyright 2019-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Sound.hpp"
 
+#include "audio.hpp"
 #include "SoundParams.hpp"
 #include "jngl/debug.hpp"
 
@@ -19,30 +20,6 @@ struct Sound::Impl {
 };
 
 float Sound::masterVolume = 1.0f;
-
-void checkAlError() {
-	switch (alGetError()) {
-		case AL_NO_ERROR:
-			break;
-		case AL_INVALID_NAME:
-			debugLn("Invalid name paramater passed to AL call.");
-			break;
-		case AL_INVALID_ENUM:
-			debugLn("Invalid enum parameter passed to AL call.");
-			break;
-		case AL_INVALID_VALUE:
-			debugLn("Invalid value parameter passed to AL call.");
-			break;
-		case AL_INVALID_OPERATION:
-			debugLn("Illegal AL call.");
-			break;
-		case AL_OUT_OF_MEMORY:
-			debugLn("Not enough memory.");
-			break;
-		default:
-			debugLn("Unknown OpenAL error.");
-	}
-}
 
 Sound::Sound(const SoundParams& params, std::vector<char>& bufferData)
 : impl(std::make_unique<Impl>()) {

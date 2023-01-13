@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "TextLine.hpp"
@@ -6,13 +6,12 @@
 #include "../freetype.hpp"
 #include "ScaleablePixels.hpp"
 #include "font.hpp"
+#include "matrix.hpp"
 #include "screen.hpp"
 
 namespace jngl {
 
 TextLine::TextLine(Font& font, std::string text) : text(std::move(text)), fontImpl(font.getImpl()) {
-	width = static_cast<float>(fontImpl->getTextWidth(this->text));
-	height = static_cast<float>(fontImpl->getLineHeight());
 	setCenter(0, 0);
 }
 
@@ -35,9 +34,65 @@ void TextLine::draw() const {
 
 	// There's a spacing after each line using the normal setCenter would result in the
 	// vertical center being off. We have to adjust by "undoing" the added space for the line.
-	const double lineSpacing = fontImpl->getLineHeight() * (1 - 1 / LINE_HEIGHT_FACOTR);
+	const double lineSpacing =
+	    double(ScaleablePixels(fontImpl->getLineHeight())) * (1 - 1 / LINE_HEIGHT_FACOTR);
 
-	fontImpl->print(getX(), getY() + lineSpacing / 2. / getScaleFactor(), text);
+	fontImpl->print(ScaleablePixels(getX()), ScaleablePixels(getY() + lineSpacing / 2.), text);
+}
+
+void TextLine::draw(Mat3 modelview) const {
+	// see above
+	const double lineSpacing =
+	    double(ScaleablePixels(fontImpl->getLineHeight())) * (1 - 1 / LINE_HEIGHT_FACOTR);
+
+	fontImpl->print(modelview.translate(position + Vec2(0, lineSpacing / 2.)), text);
+}
+
+void TextLine::setText(std::string text) {
+	this->text = std::move(text);
+}
+
+Vec2 TextLine::getSize() const {
+	return { getWidth(), getHeight() };
+}
+
+double TextLine::getWidth() const {
+	return static_cast<double>(ScaleablePixels(fontImpl->getTextWidth(this->text)));
+}
+
+double TextLine::getHeight() const {
+	return static_cast<double>(ScaleablePixels(fontImpl->getLineHeight()));
+}
+
+void TextLine::setCenter(double x, double y) {
+	setX(x - getWidth() / 2);
+	setY(y - getHeight() / 2);
+}
+
+void TextLine::setCenter(Vec2 center) {
+	setX(center.x - getWidth() / 2);
+	setY(center.y - getHeight() / 2);
+}
+
+double TextLine::getX() const {
+	return position.x;
+}
+
+void TextLine::setX(double x) {
+	position.x = x;
+}
+
+double TextLine::getY() const {
+	return position.y;
+}
+
+void TextLine::setY(double y) {
+	position.y = y;
+}
+
+void TextLine::setPos(double x, double y) {
+	position.x = x;
+	position.y = y;
 }
 
 } // namespace jngl

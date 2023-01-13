@@ -15,7 +15,7 @@ bool running();
 
 /// Updates the input state. App::mainLoop() calls this before Work::step()
 ///
-/// Normally you shouldn't call this yourself at all unleass you want to implement your own game
+/// Normally you shouldn't call this yourself at all, unless you want to implement your own game
 /// loop.
 void updateInput();
 
@@ -51,21 +51,28 @@ unsigned int getStepsPerSecond();
 /// How many times Work::step should be called per second (default: 60)
 void setStepsPerSecond(unsigned int);
 
+/// Toggles MSAA
 void setAntiAliasing(bool enabled);
 
+/// Returns whether MSAA is enabled. If the device doesn't support it, it will always return false.
 bool getAntiAliasing();
 
+/// Toggles V-SYNC
 void setVerticalSync(bool enabled);
 
+/// Returns whether V-SYNC is enabled. Many devices always enable V-SYNC with no way to turn it off.
 bool getVerticalSync();
 
 /// Sets the icon for the window (Desktop-only)
 void setIcon(const std::string& filename);
 
+/// Sets a global prefix which will be prepended whenever images or sounds are loaded
 void setPrefix(const std::string& path);
 
+/// Returns the global prefix set by jngl::setPrefix
 std::string getPrefix();
 
+/// \deprecated Use jngl::writeConfig and jngl::readConfig instead.
 void setConfigPath(const std::string& path);
 
 /// \deprecated Use jngl::writeConfig and jngl::readConfig instead.
@@ -80,12 +87,13 @@ void setConfigPath(const std::string& path);
 /// Returns the directory of the currently running binary
 std::string getBinaryPath();
 
+/// Called by JNGL_MAIN_BEGIN to set command line arguments
 void setArgs(std::vector<std::string>);
 
-/// Returns the command line arguments passed to the executable.
+/// Returns the command line arguments passed to the executable
 std::vector<std::string> getArgs();
 
-/// Returns a stringstream containing the whole file. This will read from the .apk on Android.
+/// Returns a stringstream containing the whole file. This will read from the .apk on Android
 std::stringstream readAsset(const std::string& filename);
 
 /// Read in a configuration value which has been saved under \a key

@@ -102,21 +102,7 @@ Texture::~Texture() {
 	}
 }
 
-void Texture::draw(const float red, const float green, const float blue, const float alpha,
-                   const ShaderProgram* const shaderProgram) const {
-	draw(opengl::modelview, red, green, blue, alpha, shaderProgram);
-}
-
-void Texture::draw(const Mat3& modelview, const float red, const float green, const float blue,
-                   const float alpha, const ShaderProgram* const shaderProgram) const {
-	auto _ = shaderProgram ? shaderProgram->use() : textureShaderProgram->use();
-	if (shaderProgram) {
-		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
-		                   modelview.data);
-	} else {
-		glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
-		glUniformMatrix3fv(modelviewUniform, 1, GL_FALSE, modelview.data);
-	}
+void Texture::draw() const {
 	glBindVertexArray(vao);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);

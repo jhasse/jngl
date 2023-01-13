@@ -57,8 +57,8 @@ public:
 	int getWidth() const;
 	int getHeight() const;
 	ScaleablePixels getTextWidth(const std::string&);
-	int getLineHeight();
-	void setLineHeight(int);
+	Pixels getLineHeight();
+	void setLineHeight(Pixels);
 	bool getFullscreen() const;
 	void setFullscreen(bool);
 	bool getKeyDown(key::KeyType key);
@@ -100,10 +100,13 @@ public:
 	std::string getTextInput() const;
 	void initGlObjects();
 	static void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
-	static void drawEllipse(Vec2 mid, Vec2 size, float startAngle);
-	void drawLine(jngl::Mat3 modelview, Vec2 b) const;
+	void drawLine(Mat3 modelview, Vec2 b) const;
 	void drawRect(Vec2 pos, Vec2 size) const;
+	void drawRect(Mat3 modelview, Vec2 size) const;
 	void onControllerChanged(std::function<void()>);
+
+	friend class WindowImpl;
+	std::unique_ptr<WindowImpl> impl;
 
 private:
 	static int GetKeyCode(jngl::key::KeyType key);
@@ -114,9 +117,6 @@ private:
 
 	/// Called when a controller is added or removed
 	std::function<void()> controllerChangedCallback;
-
-	friend class WindowImpl;
-	std::unique_ptr<WindowImpl> impl;
 
 	double timePerStep = 1.0 / 60.0;
 	double mouseWheel = 0;

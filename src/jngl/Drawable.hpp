@@ -35,8 +35,10 @@ public:
 	/// Returns the position of the center of the Drawable
 	jngl::Vec2 getCenter() const;
 
+	/// Centers the Sprite at (x, y)
 	virtual void setCenter(double x, double y);
 
+	/// Centers the Sprite at \a c (e.g. jngl::Vec2)
 	template <class Vect> void setCenter(Vect c) {
 		setCenter(c.x, c.y);
 	}
@@ -72,6 +74,7 @@ public:
 	/// Returns the height in screen coordinates
 	float getHeight() const;
 
+	/// Draws a red box around the Drawable
 	void drawBoundingBox() const;
 
 	/// Returns whether \a point is inside the bounding box
@@ -82,5 +85,11 @@ protected:
 	float width = 0;
 	float height = 0;
 };
+
+/// Pass any class that implements getX(), getY(), getWidth() and getHeight()
+template <class Box> bool contains(const Box& box, const Vec2 point) {
+	return (box.getX() <= point.x && point.x < box.getX() + box.getWidth() &&
+	        box.getY() <= point.y && point.y < box.getY() + box.getHeight());
+}
 
 } // namespace jngl

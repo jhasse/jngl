@@ -62,8 +62,7 @@ Bike::Bike()
 	wheels_[1].otherWheel_ = &wheels_[0];
 }
 
-void Bike::Draw()
-{
+void Bike::draw() const {
 	for (auto& wheel : wheels_) {
 		wheel.draw();
 	}

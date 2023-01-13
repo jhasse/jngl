@@ -1,4 +1,4 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Functions related to the global ModelView matrix
 /// @file
@@ -9,6 +9,26 @@
 namespace jngl {
 
 /// Returns a copy of the global ModelView matrix
+///
+/// This is the matrix which is used in all of JNGL's shaders to position objects. Using this
+/// function you can get a local copy of it. This allows you to more precisely position an object
+/// without affecting any global state.
+///
+/// A common use-case where you actually want to modify the ModelView matrix for all objects is the
+/// camera. So in your drawing loop you would do:
+/// \code
+/// void MyGame::draw() const {
+///     jngl::translate(cameraPosition);
+///     {
+///         auto mv = jngl::modelview();
+///         sprite.draw(mv.translate(position1);
+///     } // mv which is translated by position1 gets discarded
+///     {
+///         auto mv = jngl::modelview();
+///         sprite.draw(mv.translate(position2);
+///     }
+/// }
+/// \endcode
 jngl::Mat3 modelview();
 
 /// Multiplies the global ModelView matrix with a rotation matrix

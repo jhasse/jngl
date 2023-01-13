@@ -9,6 +9,7 @@
 #include "Pixels.hpp"
 
 #include <array>
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -20,7 +21,14 @@ void showWindow(const std::string& title, int width, int height, bool fullscreen
                 std::pair<int, int> maxAspectRatio = { 16, 9 });
 
 /// Cleans up the window and unloads everything
+///
+/// Will delete all instances of Singleton before starting to unload everything.
 void hideWindow();
+
+/// Call this function once when the window is hidden
+///
+/// The function shouldn't throw and will be called at the next hideWindow() call.
+void atExit(std::function<void()>);
 
 /// Returns the width of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)
 int getWindowWidth();

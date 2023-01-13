@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.13)
 
 project(jngl LANGUAGES C CXX)
 
-if(NOT MSVC)
+if(MSVC)
+	string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus")
+else()
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
 endif()
@@ -26,25 +28,26 @@ set_target_properties(jngl PROPERTIES
 
 include(FetchContent)
 if(IOS)
-	set(Boost_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/ios")
 	# find_package is broken on iOS, see https://gitlab.kitware.com/cmake/cmake/issues/19808
 	set(CMAKE_DISABLE_FIND_PACKAGE_ZLIB TRUE)
 	set(CMAKE_DISABLE_FIND_PACKAGE_BZip2 TRUE)
 endif()
-find_package(Boost)
+find_package(Boost 1.76.0) # first version with boost/qvm_lite.hpp
 if(Boost_FOUND)
 	target_include_directories(jngl PUBLIC ${Boost_INCLUDE_DIRS})
 else()
-	FetchContent_Declare(boost
-		URL https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.bz2
-		URL_HASH SHA256=d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee)
-	FetchContent_MakeAvailable(boost)
-	FetchContent_GetProperties(boost SOURCE_DIR BOOST_SRC_DIR)
-	target_include_directories(jngl PUBLIC ${BOOST_SRC_DIR})
+	target_include_directories(jngl PUBLIC include/boost-qvm)
 endif()
+target_include_directories(jngl PUBLIC include/public)
 
 option(JNGL_VIDEO "Enable Theora video playback" ON)
 option(JNGL_JPEG "Enable JPEG support if libjpeg is available" ON)
+
+set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
+if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
+	set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT ON)
+endif()
+option(JNGL_BUILD_WEBP_FROM_SOURCE "Build libwebp from source instead of using the system version" ${JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT})
 
 set(ALSOFT_TESTS OFF CACHE BOOL "Build and install test programs" FORCE)
 set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
@@ -96,7 +99,7 @@ else() # Windows
 	endif()
 	option(JNGL_SDL2 "Use SDL2 instead of WinAPI" ${JNGL_SDL2_DEFAULT})
 
-	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _USE_MATH_DEFINES UNICODE)
+	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _USE_MATH_DEFINES _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
 	if(JNGL_SDL2)
 		file(GLOB SRC src/sdl/*.cpp)
 		if(WINDOWS_STORE)
@@ -137,8 +140,8 @@ if (UNIX AND NOT EMSCRIPTEN)
     endif()
 endif()
 
+include(cmake/CPM.cmake)
 if(ANDROID OR MSVC OR IOS)
-	include(cmake/CPM.cmake)
 	CPMAddPackage(NAME libogg
 		URL http://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.xz
 		URL_HASH SHA256=c4d91be36fc8e54deae7575241e03f4211eb102afb3fc0775fbbc1b740016705
@@ -147,15 +150,26 @@ if(ANDROID OR MSVC OR IOS)
 	set(OGG_INCLUDE_DIRS ${OGG_INCLUDE_DIR} ${libogg_BINARY_DIR}/include)
 	set(OGG_LIBRARY $<TARGET_FILE:ogg>)
 
-	FetchContent_Declare(vorbis
+	CPMAddPackage(NAME vorbis
 		URL https://github.com/xiph/vorbis/archive/v1.3.7.zip
 		URL_HASH SHA1=fb943e21c34a1a2035009c06cfbfd9235af406d0)
-	FetchContent_MakeAvailable(vorbis)
 	target_include_directories(jngl PRIVATE ${vorbis_SOURCE_DIR}/include)
 	target_link_libraries(jngl PUBLIC vorbis vorbisfile ogg)
 endif()
 
 get_directory_property(hasParent PARENT_DIRECTORY)
+if(ANDROID OR MSVC OR IOS)
+	CPMAddPackage(NAME freetype
+		URL https://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.xz
+		URL_HASH SHA256=3333ae7cfda88429c97a7ae63b7d01ab398076c3b67182e960e5684050f2c5c8
+		OPTIONS "FT_DISABLE_HARFBUZZ 1"
+	)
+	if(hasParent)
+		set(FREETYPE_INCLUDE_DIRS ${freetype_SOURCE_DIR}/include PARENT_SCOPE)
+		set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
+	endif()
+	set(FREETYPE_LIBRARIES freetype)
+endif()
 if(ANDROID)
 	target_compile_definitions(jngl PRIVATE NOJPEG NOPNG OPENGLES)
 
@@ -171,17 +185,6 @@ if(ANDROID)
 			"ALSOFT_CPUEXT_NEON OFF"
 	)
 	set(OPENAL_LIBRARY OpenAL)
-
-	CPMAddPackage(NAME freetype
-		URL https://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.xz
-		URL_HASH SHA256=3333ae7cfda88429c97a7ae63b7d01ab398076c3b67182e960e5684050f2c5c8
-		OPTIONS "FT_DISABLE_HARFBUZZ 1"
-	)
-	if(hasParent)
-		set(FREETYPE_INCLUDE_DIRS ${freetype_SOURCE_DIR}/include PARENT_SCOPE)
-		set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
-	endif()
-	set(FREETYPE_LIBRARIES freetype)
 
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)
 	target_include_directories(jngl PRIVATE ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
@@ -221,6 +224,7 @@ else()
 	endif()
 
 	if(MSVC)
+		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
 		if(JNGL_SDL2)
 			set(SDL_SENSOR OFF CACHE BOOL "" FORCE) # doesn't work with UWP
 			FetchContent_Declare(sdl2
@@ -284,7 +288,7 @@ else()
 	else()
 		find_package(OpenAL REQUIRED)
 
-		if(NOT EMSCRIPTEN)
+		if(NOT JNGL_BUILD_WEBP_FROM_SOURCE)
 			find_package(WebP)
 			if(WebP_FOUND)
 				target_link_libraries(jngl PRIVATE ${WEBP_LIBRARIES})
@@ -349,19 +353,6 @@ else()
 		endif()
 	endif()
 
-	if(MSVC OR IOS)
-		FetchContent_Declare(freetype
-			URL https://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.xz
-			URL_HASH SHA1=b074d5c34dc0e3cc150be6e7aa6b07c9ec4ed875)
-		FetchContent_MakeAvailable(freetype)
-		FetchContent_GetProperties(freetype SOURCE_DIR FREETYPE_SRC_DIR)
-		if(hasParent)
-			set(FREETYPE_INCLUDE_DIRS ${FREETYPE_SRC_DIR}/include PARENT_SCOPE)
-			set(FREETYPE_LIBRARY freetype PARENT_SCOPE)
-		endif()
-		set(FREETYPE_LIBRARIES freetype)
-	endif()
-
 	if(NOT hasParent)
 		if(WINDOWS_STORE)
 			# WIN32 is needed to build for the Windows subsystem, not Console
@@ -375,10 +366,13 @@ else()
 			#   'vccorlib_lib_should_be_specified_before_msvcrt_lib_to_linker': value '1' doesn't
 			#   match value '0' in msvcrtd.lib(app_appinit.obj)
 			set_source_files_properties(src/uwp/SDL_winrt_main_NonXAML.cpp
-				PROPERTIES COMPILE_FLAGS "/ZW /Zc:twoPhase-")
+				PROPERTIES COMPILE_FLAGS "/ZW /Zc:twoPhase- /std:c++17")
 		else()
 			if(NOT IOS)
 				add_executable(jngl-test src/test/test.cpp)
+				if(WIN32)
+					target_sources(jngl-test PRIVATE src/win32/jngl.manifest)
+				endif()
 
 				add_executable(example-bike examples/bike/base.cpp examples/bike/bike.cpp
 					examples/bike/line.cpp examples/bike/main.cpp examples/bike/wheel.cpp)
@@ -390,28 +384,25 @@ else()
 			endif()
 		endif()
 		target_link_libraries(jngl-test jngl)
-		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/jngl.webp "$<TARGET_FILE_DIR:jngl-test>")
-		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/test.ogg "$<TARGET_FILE_DIR:jngl-test>")
-		add_custom_command(TARGET jngl-test COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/jngl.png "$<TARGET_FILE_DIR:jngl-test>")
 	endif()
 endif()
 
-if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
-	FetchContent_Declare(webp
-		GIT_REPOSITORY https://chromium.googlesource.com/webm/libwebp
-		GIT_TAG e0241154901620a3dc6c3929463608b9bf2c36aa)
-	set(WEBP_BUILD_ANIM_UTILS OFF CACHE BOOL "Build animation utilities." FORCE)
-	set(WEBP_BUILD_CWEBP OFF CACHE BOOL "Build the cwebp command line tool." FORCE)
-	set(WEBP_BUILD_DWEBP OFF CACHE BOOL "Build the dwebp command line tool." FORCE)
-	set(WEBP_BUILD_GIF2WEBP OFF CACHE BOOL "Build the gif2webp conversion tool." FORCE)
-	set(WEBP_BUILD_IMG2WEBP OFF CACHE BOOL "Build the img2webp animation tool." FORCE)
-	set(WEBP_BUILD_VWEBP OFF CACHE BOOL "Build the vwebp viewer tool." FORCE)
-	set(WEBP_BUILD_WEBPINFO OFF CACHE BOOL "Build the webpinfo command line tool." FORCE)
-	set(WEBP_BUILD_WEBPMUX OFF CACHE BOOL "Build the webpmux command line tool." FORCE)
-	set(WEBP_BUILD_EXTRAS OFF CACHE BOOL "Build extras." FORCE)
-	FetchContent_MakeAvailable(webp)
-	FetchContent_GetProperties(webp SOURCE_DIR WEBP_SRC_DIR)
-	target_include_directories(jngl PRIVATE ${WEBP_SRC_DIR}/src)
+if(JNGL_BUILD_WEBP_FROM_SOURCE)
+	CPMAddPackage(NAME webp
+		URL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.2.4.tar.gz
+		URL_HASH SHA1=24586e2a8e01a9cced102d68852661b964502429
+		OPTIONS
+			"WEBP_BUILD_ANIM_UTILS OFF"
+			"WEBP_BUILD_CWEBP OFF"
+			"WEBP_BUILD_DWEBP OFF"
+			"WEBP_BUILD_GIF2WEBP OFF"
+			"WEBP_BUILD_IMG2WEBP OFF"
+			"WEBP_BUILD_VWEBP OFF"
+			"WEBP_BUILD_WEBPINFO OFF"
+			"WEBP_BUILD_WEBPMUX OFF"
+			"WEBP_BUILD_EXTRAS OFF"
+	)
+	target_include_directories(jngl PRIVATE ${webp_SOURCE_DIR}/src)
 	target_link_libraries(jngl PRIVATE webpdecode webpdspdecode webputilsdecode)
 	# Note: For some reason it's important to add webp last for MSVC. Otherwise other CMake
 	# projects linking JNGL will get:
@@ -449,16 +440,14 @@ target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})
 target_link_directories(jngl PUBLIC ${FREETYPE_LIBRARY_DIRS})
 target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY})
 
-if(NOT hasParent)
+if(NOT hasParent AND NOT WINDOWS_STORE)
 	include(CTest)
 	if(BUILD_TESTING)
-		find_package(Boost COMPONENTS unit_test_framework)
-		if(Boost_FOUND)
-			file(GLOB UNITTEST_SRC src/unittest/*.cpp)
-			add_executable(jngl-unittest ${UNITTEST_SRC})
-			target_link_libraries(jngl-unittest PRIVATE jngl ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
-			target_compile_definitions(jngl-unittest PRIVATE BOOST_TEST_DYN_LINK)
-			add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
-		endif()
+		file(GLOB UNITTEST_SRC src/unittest/*.cpp)
+		add_executable(jngl-unittest ${UNITTEST_SRC})
+		target_compile_features(jngl-unittest PRIVATE cxx_std_20)
+		target_link_libraries(jngl-unittest PRIVATE jngl)
+		target_compile_definitions(jngl-unittest PRIVATE BOOST_UT_DISABLE_MODULE)
+		add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
 	endif()
 endif()
