@@ -1,7 +1,7 @@
 all: gradle
 
-${ANDROID_SDK_ROOT}/ndk/25.0.8775105/package.xml:
-	yes | ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager "ndk;25.0.8775105" >/dev/null
+${ANDROID_SDK_ROOT}/ndk/25.1.8937393/package.xml:
+	yes | ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager "ndk;25.1.8937393" >/dev/null
 
 .PHONY: gradle
 gradle:
