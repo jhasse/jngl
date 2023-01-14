@@ -177,7 +177,9 @@ if(ANDROID)
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)
 	target_include_directories(jngl PRIVATE ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
 else()
-	target_sources(jngl PRIVATE src/audio/sdl/engine.cpp)
+	if(NOT IOS)
+		target_sources(jngl PRIVATE src/audio/sdl/engine.cpp)
+	endif()
 	if(UNIX AND NOT IOS AND NOT EMSCRIPTEN)
 		find_package(PkgConfig REQUIRED)
 		pkg_check_modules(SDL2 REQUIRED sdl2)
@@ -262,9 +264,10 @@ else()
 		find_library(IOS_UIKIT UIKit)
 		find_library(IOS_AVFOUNDATION AVFoundation)
 		find_library(IOS_GAMECONTROLLER GameController)
+		find_library(IOS_AudioToolbox AudioToolbox)
 		target_link_libraries(jngl PRIVATE
 			${IOS_OPENGLES} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
-			${IOS_GAMECONTROLLER}
+			${IOS_GAMECONTROLLER} ${IOS_AudioToolbox}
 		)
 
 		if(NOT hasParent)
@@ -276,7 +279,7 @@ else()
 			set_source_files_properties(data/jngl.webp PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 			set_source_files_properties(data/test.ogg PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 			add_executable(jngl-test src/test/test.cpp src/ios/test/main.mm data/Arial.ttf
-				data/jngl.webp data/test.ogg)
+				data/jngl.webp data/test.ogg src/audio/ios/Engine.mm)
 			set_target_properties(jngl-test PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${PROJECT_SOURCE_DIR}/data/ios/jngl-test.in.plist")
 		endif()
 	else()
