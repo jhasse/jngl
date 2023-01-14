@@ -10,8 +10,24 @@
 #include "windowimpl.hpp"
 
 #include <stdexcept>
+#if defined(_WIN32) && !defined(JNGL_UWP)
+#include <windows.h>
+#endif
 
 namespace jngl {
+
+void setProcessSettings() {
+#if defined(_WIN32) && !defined(JNGL_UWP)
+	static bool called = false;
+	if (called) {
+		return;
+	}
+	if (!SetProcessDPIAware()) {
+		debugLn("Couldn't set the process-default DPI awareness to system-DPI awareness.");
+	}
+	called = true;
+#endif
+}
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
@@ -59,6 +75,9 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	}
 
 	impl->context = SDL_GL_CreateContext(impl->sdlWindow);
+#ifdef GLAD_GL
+	gladLoadGL(reinterpret_cast<GLADloadfunc>(SDL_GL_GetProcAddress));
+#endif
 
 	if (isMultisampleSupported_) {
 		int openglMSAA;
@@ -379,6 +398,7 @@ void Window::SetIcon(const std::string& filepath) {
 }
 
 int getDesktopWidth() {
+	setProcessSettings();
 	SDL::init();
 	SDL_DisplayMode mode;
 	SDL_GetDesktopDisplayMode(0, &mode);
@@ -386,6 +406,7 @@ int getDesktopWidth() {
 }
 
 int getDesktopHeight() {
+	setProcessSettings();
 	SDL::init();
 	SDL_DisplayMode mode;
 	SDL_GetDesktopDisplayMode(0, &mode);

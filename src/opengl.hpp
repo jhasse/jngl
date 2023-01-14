@@ -25,10 +25,7 @@
 			#define glBindVertexArray glBindVertexArrayOES
 			#define glDeleteVertexArrays glDeleteVertexArraysOES
 		#else
-			#ifdef _MSC_VER
-				#include <windows.h> // To avoid warnings about APIENTRY
-			#endif
-			#include <epoxy/gl.h>
+			#include <glad/gl.h>
 		#endif
 	#endif
 #endif
