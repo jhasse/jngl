@@ -75,6 +75,9 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	}
 
 	impl->context = SDL_GL_CreateContext(impl->sdlWindow);
+#ifdef GLAD_GL
+	gladLoadGL(reinterpret_cast<GLADloadfunc>(SDL_GL_GetProcAddress));
+#endif
 
 	if (isMultisampleSupported_) {
 		int openglMSAA;

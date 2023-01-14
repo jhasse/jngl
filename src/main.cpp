@@ -65,13 +65,13 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 
 bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
-#ifdef EPOXY_PUBLIC
-	if (epoxy_gl_version() >= 43 || epoxy_has_gl_extension("GL_KHR_debug")) {
+#ifdef GLAD_GL
+	if (GLAD_GL_VERSION_4_3 || GLAD_GL_KHR_debug) {
 #endif
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr); // NOLINT
-#ifdef EPOXY_PUBLIC
+#ifdef GLAD_GL
 	}
 #endif
 #endif
@@ -546,7 +546,7 @@ Finally load(const std::string& filename) {
 }
 
 #if defined(_WIN32) && !defined(JNGL_UWP)
-#include <epoxy/wgl.h>
+#include <glad/wgl.h>
 
 void setVerticalSync(bool enabled) {
 	if (wglSwapIntervalEXT && wglSwapIntervalEXT(enabled)) {
