@@ -365,9 +365,9 @@
 <!-- Node42 -->
 <g id="node40" class="node">
 <title>Node42</title>
-<g id="a_node40"><a xlink:href="framebuffer_8hpp.html" target="_top" xlink:title="Contains jngl::FrameBuffer class.">
+<g id="a_node40"><a xlink:href="FrameBuffer_8hpp.html" target="_top" xlink:title="Contains jngl::FrameBuffer class.">
 <polygon fill="white" stroke="#666666" points="2121.1,-184 2020.1,-184 2020.1,-165 2121.1,-165 2121.1,-184"/>
-<text text-anchor="middle" x="2070.6" y="-172" font-family="ui-monospace,monospace" font-size="10.00">framebuffer.hpp</text>
+<text text-anchor="middle" x="2070.6" y="-172" font-family="ui-monospace,monospace" font-size="10.00">FrameBuffer.hpp</text>
 </a>
 </g>
 </g>

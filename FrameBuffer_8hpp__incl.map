@@ -1,4 +1,4 @@
-<map id="jngl/framebuffer.hpp" name="jngl/framebuffer.hpp">
+<map id="jngl/FrameBuffer.hpp" name="jngl/FrameBuffer.hpp">
 <area shape="rect" id="node1" title="Contains jngl::FrameBuffer class." alt="" coords="396,5,571,31"/>
 <area shape="rect" id="node2" href="$Color_8hpp.html" title="Contains jngl::Color class." alt="" coords="5,79,100,104"/>
 <area shape="rect" id="node3" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="124,79,235,104"/>

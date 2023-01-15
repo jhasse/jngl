@@ -24,7 +24,7 @@
 <area shape="rect" id="node36" href="$message_8hpp.html" title=" " alt="" coords="1784,225,1895,251"/>
 <area shape="rect" id="node38" href="$effects_8hpp.html" title="Effects that can be applied to jngl::Widget." alt="" coords="1932,299,2035,324"/>
 <area shape="rect" id="node39" href="$font_8hpp.html" title="Contains jngl::Font class and related functions." alt="" coords="2072,225,2159,251"/>
-<area shape="rect" id="node40" href="$framebuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="2529,225,2664,251"/>
+<area shape="rect" id="node40" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="2529,225,2664,251"/>
 <area shape="rect" id="node41" href="$job_8hpp.html" title="Contains jngl::Job class and related functions." alt="" coords="421,225,500,251"/>
 <area shape="rect" id="node42" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="1395,152,1481,177"/>
 <area shape="rect" id="node43" href="$other_8hpp.html" title="Miscellaneous functions." alt="" coords="1304,225,1399,251"/>

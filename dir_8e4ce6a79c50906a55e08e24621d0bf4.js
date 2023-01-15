@@ -11,7 +11,7 @@ var dir_8e4ce6a79c50906a55e08e24621d0bf4 =
     [ "effects.hpp", "effects_8hpp.html", "effects_8hpp" ],
     [ "Finally.hpp", "Finally_8hpp.html", "Finally_8hpp" ],
     [ "font.hpp", "font_8hpp.html", "font_8hpp" ],
-    [ "framebuffer.hpp", "framebuffer_8hpp.html", "framebuffer_8hpp" ],
+    [ "FrameBuffer.hpp", "FrameBuffer_8hpp.html", "FrameBuffer_8hpp" ],
     [ "ImageData.hpp", "ImageData_8hpp.html", "ImageData_8hpp" ],
     [ "init.hpp", "init_8hpp.html", "init_8hpp" ],
     [ "input.hpp", "input_8hpp.html", "input_8hpp" ],
