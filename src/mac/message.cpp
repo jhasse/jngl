@@ -6,7 +6,7 @@
 #include <iostream>
 
 namespace jngl {
-	void printMessage(const std::string& text) {
-		std::cout << text << std::flush;
-	}
+void printMessage(const std::string& text) {
+	std::cout << text << std::flush;
 }
+} // namespace jngl

@@ -1,4 +1,4 @@
-// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Sprite class and related functions
 /// \file
@@ -82,7 +82,7 @@ public:
 		/// Returns whether the sprite has been loaded, does NOT block
 		///
 		/// After this returned true all other methods won't block any more.
-		operator bool() const;
+		operator bool() const; // NOLINT
 
 		/// Blocks until the Sprite has been loaded
 		///

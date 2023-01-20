@@ -27,4 +27,4 @@ boost::ut::suite _ = [] {
 		}
 	};
 };
-}
+} // namespace

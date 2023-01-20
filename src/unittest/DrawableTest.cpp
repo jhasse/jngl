@@ -26,4 +26,4 @@ boost::ut::suite _ = [] {
 		expect(approx(d.getHeight(), d.getSize().y, 1e-9));
 	};
 };
-}
+} // namespace
