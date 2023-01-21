@@ -101,7 +101,7 @@ bool Window::getMouseVisible() const {
 	return isMouseVisible_;
 }
 
-#if defined(ANDROID) || (defined(TARGET_OS_IOS) && TARGET_OS_IOS != 0)
+#if defined(ANDROID) || defined(IOS)
 int Window::getMouseX() const {
 	if (relativeMouseMode) {
 		return mousex_;
