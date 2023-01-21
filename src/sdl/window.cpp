@@ -4,11 +4,13 @@
 #include "../jngl/App.hpp"
 #include "../jngl/ImageData.hpp"
 #include "../jngl/debug.hpp"
+#include "../jngl/screen.hpp"
 #include "../jngl/window.hpp"
 #include "../main.hpp"
 #include "../windowptr.hpp"
 #include "windowimpl.hpp"
 
+#include <cassert>
 #include <stdexcept>
 #if defined(_WIN32) && !defined(JNGL_UWP)
 #include <windows.h>
@@ -31,8 +33,8 @@ void setProcessSettings() {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
-: impl(std::make_unique<WindowImpl>(width, height)), fullscreen_(fullscreen), width_(width),
-  height_(height), fontName_(GetFontFileByName("Arial")) {
+: impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), width_(width), height_(height),
+  fontName_(GetFontFileByName("Arial")) {
 	SDL::init();
 
 #ifdef __APPLE__ // https://stackoverflow.com/a/26981800/647898
@@ -41,7 +43,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
+	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI;
 	if (fullscreen) {
 		if (width == getDesktopWidth() && height == getDesktopHeight()) {
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -90,8 +92,13 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		}
 	}
 
+	SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
+	impl->actualWidth = width_;
+	impl->actualHeight = height_;
+	impl->hidpiScaleFactor = static_cast<float>(width_) / width;
+	setScaleFactor(getScaleFactor() * impl->hidpiScaleFactor);
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
-	Init(width, height, canvasWidth, canvasHeight);
+	Init(width_, height_, canvasWidth, canvasHeight);
 }
 
 Window::~Window() = default;
@@ -334,11 +341,14 @@ void Window::UpdateInput() {
 			break;
 		case SDL_WINDOWEVENT:
 			if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-				impl->actualWidth = event.window.data1;
-				impl->actualHeight = event.window.data2;
-				updateProjection(event.window.data1, event.window.data2, width_, height_);
+				int width;
+				int height;
+				SDL_GL_GetDrawableSize(impl->sdlWindow, &width, &height);
+				impl->actualWidth = width;
+				impl->actualHeight = height;
+				updateProjection(width, height, width_, height_);
 				App::instance().updateProjectionMatrix();
-				glViewport(0, 0, event.window.data1, event.window.data2);
+				glViewport(0, 0, width, height);
 			}
 		}
 	}
@@ -425,23 +435,21 @@ void Window::setFullscreen(bool f) {
 	fullscreen_ = f;
 }
 
-#ifdef _WIN32
 int Window::getMouseX() const {
 	if (relativeMouseMode) {
-		return mousex_;
+		return mousex_ * impl->hidpiScaleFactor;
 	}
-	return std::lround((mousex_ - (width_ - canvasWidth) / 2) *
+	return std::lround((mousex_ * impl->hidpiScaleFactor - (width_ - canvasWidth) / 2) *
 	                   (float(width_) / impl->actualWidth));
 }
 
 int Window::getMouseY() const {
 	if (relativeMouseMode) {
-		return mousey_;
+		return mousey_ * impl->hidpiScaleFactor;
 	}
-	return std::lround((mousey_ - (height_ - canvasHeight) / 2) *
+	return std::lround((mousey_ * impl->hidpiScaleFactor - (height_ - canvasHeight) / 2) *
 	                   (float(height_) / impl->actualHeight));
 }
-#endif
 
 void setCursor(Cursor type) {
 	SDL_SystemCursor sdlType = SDL_SYSTEM_CURSOR_ARROW;
