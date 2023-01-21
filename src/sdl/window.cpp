@@ -31,9 +31,8 @@ void setProcessSettings() {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
-: impl(std::make_unique<WindowImpl>(width, height)), fullscreen_(fullscreen), isMouseVisible_(true),
-  relativeMouseMode(false), anyKeyPressed_(false), width_(width), height_(height),
-  fontName_(GetFontFileByName("Arial")) {
+: impl(std::make_unique<WindowImpl>(width, height)), fullscreen_(fullscreen), width_(width),
+  height_(height), fontName_(GetFontFileByName("Arial")) {
 	SDL::init();
 
 #ifdef __APPLE__ // https://stackoverflow.com/a/26981800/647898
