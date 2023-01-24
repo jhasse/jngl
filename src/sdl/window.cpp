@@ -101,7 +101,11 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	Init(width_, height_, canvasWidth, canvasHeight);
 }
 
-Window::~Window() = default;
+Window::~Window() {
+	// This is rather dirty, but needed for the rare case that one wants to create a window after
+	// hiding a previous one and doesn't reset the scale factor:
+	setScaleFactor(getScaleFactor() / impl->hidpiScaleFactor);
+}
 
 int Window::GetKeyCode(key::KeyType key) {
 	switch (key) {
