@@ -37,6 +37,7 @@ struct engine::Impl {
 			throw std::runtime_error("AudioUnitGetProperty failed");
 		}
 
+		streamFormat.mSampleRate = frequency;
 		streamFormat.mChannelsPerFrame = 2; // stereo
 		streamFormat.mFramesPerPacket = 1;
 		streamFormat.mFormatFlags = kAudioFormatFlagsNativeEndian | kLinearPCMFormatFlagIsPacked |
