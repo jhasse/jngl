@@ -25,14 +25,14 @@ linux:
 mingw:
   stage: build
   script:
-    - microdnf install -y cmake ninja-build mingw64-gcc-c++ mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libjpeg-turbo mingw64-libwebp mingw64-dlfcn > /dev/null
+    - microdnf install -y cmake ninja-build mingw64-gcc-c++ mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn > /dev/null
     - mingw64-cmake -GNinja -Bbuild-debug -DCMAKE_BUILD_TYPE=Debug
     - ninja -C build-debug
     - mingw64-cmake -GNinja -Bbuild-release -DCMAKE_BUILD_TYPE=Release
     - ninja -C build-release
 
 android:
-  image: registry.gitlab.com/jhasse/android-ndk-docker:r25
+  image: registry.gitlab.com/jhasse/android-ndk-docker:r25b
   stage: build
   script:
     - make -C android
@@ -47,7 +47,7 @@ steamos:
     - cd -
     - cmake -Bbuild-steamos -GNinja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=0
     - cmake --build build-steamos
-    - cmake -Bbuild-steamos-release -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=0 -DJNGL_VIDEO=0 -DJNGL_JPEG=0 -DJNGL_BUILD_WEBP_FROM_SOURCE=1 -DBUILD_SHARED_LIBS=0
+    - cmake -Bbuild-steamos-release -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=0 -DJNGL_VIDEO=0 -DJNGL_BUILD_WEBP_FROM_SOURCE=1 -DBUILD_SHARED_LIBS=0
     - cmake --build build-steamos-release
 
 pages:

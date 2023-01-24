@@ -161,7 +161,12 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		}
 	};
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
-	const std::function<void(bool)> init = [this, &title, &init](const bool multisample) {
+	HMODULE openglDll = LoadLibrary(L"opengl32.dll");
+	if (!openglDll) {
+		throw std::runtime_error("Can't load opengl32.dll.");
+	}
+	const std::function<void(bool)> init =
+	    [this, &title, &init, openglDll](const bool multisample) {
 		WNDCLASS wc;
 		DWORD dwExStyle;
 		DWORD dwStyle;
@@ -289,7 +294,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 			throw std::runtime_error("Can't activate the GL rendering context.");
 		}
 
-		gladLoadWGL(impl->pDeviceContext_.get(), reinterpret_cast<GLADloadfunc>(wglGetProcAddress));
+		gladLoadWGLUserPtr(impl->pDeviceContext_.get(), gladGlGetProc, openglDll);
 
 		if (!multisample && isMultisampleSupported_ && impl->InitMultisample(hInstance, pfd)) {
 			impl->pDeviceContext_.reset((HDC)nullptr); // Destroy window
@@ -304,10 +309,6 @@ Window::Window(const std::string& title, const int width, const int height, cons
 			return;
 		}
 
-		HMODULE openglDll = LoadLibrary(L"opengl32.dll");
-		if (!openglDll) {
-			throw std::runtime_error("Can't load opengl32.dll.");
-		}
 		int glVersion = gladLoadGLUserPtr(gladGlGetProc, openglDll);
 		if (glVersion < GLAD_MAKE_VERSION(2, 0)) {
 			throw std::runtime_error(

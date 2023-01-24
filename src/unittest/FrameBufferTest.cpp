@@ -1,8 +1,8 @@
-// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/ScaleablePixels.hpp"
-#include "../jngl/framebuffer.hpp"
+#include "../jngl/FrameBuffer.hpp"
 #include "../jngl/matrix.hpp"
 #include "../jngl/shapes.hpp"
 #include "../jngl/sprite.hpp"
@@ -152,4 +152,4 @@ boost::ut::suite _ = [] {
 		}
 	};
 };
-}
+} // namespace

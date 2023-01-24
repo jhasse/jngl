@@ -1,4 +1,4 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -124,7 +124,10 @@ private:
 	GLuint vaoRect = 0;
 	unsigned int maxStepsPerFrame = 3;
 	bool running = true;
-	bool fullscreen_, isMouseVisible_, relativeMouseMode, anyKeyPressed_;
+	bool fullscreen_;
+	bool isMouseVisible_ = true;
+	bool relativeMouseMode = false;
+	bool anyKeyPressed_ = false;
 	bool isMultisampleSupported_ = true;
 	std::array<bool, 3> mouseDown_{ { false, false, false } };
 	std::array<bool, 3> mousePressed_{ { false, false, false } };

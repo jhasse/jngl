@@ -23,7 +23,7 @@
 #include "debug.hpp"
 #include "effects.hpp"
 #include "font.hpp"
-#include "framebuffer.hpp"
+#include "FrameBuffer.hpp"
 #include "input.hpp"
 #include "job.hpp"
 #include "main.hpp"

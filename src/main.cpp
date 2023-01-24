@@ -174,7 +174,6 @@ void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth
 
 WindowPointer pWindow;
 bool antiAliasingEnabled = true;
-bool vsyncEnabled = false;
 
 void showWindow(const std::string& title, const int width, const int height, bool fullscreen,
                 const std::pair<int, int> minAspectRatio,
@@ -543,26 +542,6 @@ Finally load(const std::string& filename) {
 		return loadSound(filename);
 	}
 	return loadSprite(filename);
-}
-
-#if defined(_WIN32) && !defined(JNGL_UWP)
-#include <glad/wgl.h>
-
-void setVerticalSync(bool enabled) {
-	if (wglSwapIntervalEXT && wglSwapIntervalEXT(enabled)) {
-		vsyncEnabled = enabled;
-	}
-#else
-void setVerticalSync(bool) {
-#endif
-#ifdef __APPLE__
-	// OSX always enables V-SYNC
-	vsyncEnabled = true;
-#endif
-}
-
-bool getVerticalSync() {
-	return vsyncEnabled;
 }
 
 void setWork(std::shared_ptr<Work> work) {

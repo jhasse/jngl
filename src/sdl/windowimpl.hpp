@@ -1,4 +1,4 @@
-// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -19,7 +19,7 @@ namespace jngl {
 
 class WindowImpl {
 public:
-	WindowImpl(float width, float height) : actualWidth(width), actualHeight(height) {}
+	WindowImpl() = default;
 	~WindowImpl() {
 		SDL_GL_DeleteContext(context);
 		SDL_DestroyWindow(sdlWindow);
@@ -37,6 +37,9 @@ public:
 	/// input to work:
 	float actualWidth;
 	float actualHeight;
+
+	/// For Retina screens on macOS SDL does its own scaling of mouse coordinates, etc. :(
+	float hidpiScaleFactor;
 };
 
 } // namespace jngl

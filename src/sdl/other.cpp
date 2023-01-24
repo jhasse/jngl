@@ -1,4 +1,4 @@
-// Copyright 2021-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/other.hpp"
@@ -26,6 +26,14 @@ void openURL(const std::string& url) {
 #if SDL_VERSION_ATLEAST(2, 0, 14)
 	SDL_OpenURL(url.c_str());
 #endif
+}
+
+void setVerticalSync(bool enabled) {
+	SDL_GL_SetSwapInterval(enabled ? 1 : 0);
+}
+
+bool getVerticalSync() {
+	return SDL_GL_GetSwapInterval() == 1;
 }
 
 } // namespace jngl

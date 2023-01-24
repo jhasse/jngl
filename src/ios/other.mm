@@ -41,4 +41,11 @@ void errorMessage(const std::string& text) {
 	               completion:nil];
 }
 
+void setVerticalSync(bool) {
+}
+
+bool getVerticalSync() {
+	return true;
+}
+
 } // namespace jngl

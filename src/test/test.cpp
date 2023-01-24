@@ -285,7 +285,7 @@ void drawMouse(const jngl::Vec2 mouse) {
 class RecentlyPressedKey {
 public:
 	RecentlyPressedKey(std::string name, int x, int y)
-	: name_(std::move(name)), alpha_(255), x_(x), y_(y), lastTime_(jngl::getTime()) {
+	: name_(std::move(name)), x_(x), y_(y), lastTime_(jngl::getTime()) {
 	}
 	void Draw() {
 		double timeSinceLastFrame = jngl::getTime() - lastTime_;
@@ -301,7 +301,8 @@ public:
 	}
 private:
 	std::string name_;
-	double alpha_, x_, y_, lastTime_;
+	double alpha_ = 255;
+	double x_, y_, lastTime_;
 };
 
 

@@ -1,4 +1,4 @@
-// Copyright 2012-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Color.hpp"
@@ -35,6 +35,7 @@ void Color::setBlue(const unsigned char blue) {
 
 } // namespace jngl
 
-jngl::Color operator "" _rgb(const unsigned long long hex) {
-	return jngl::Color((hex >> 16) % 256, (hex >> 8) % 256, hex % 256);
+jngl::Color operator"" _rgb(const unsigned long long hex) {
+	return { static_cast<unsigned char>((hex >> 16) % 256),
+		     static_cast<unsigned char>((hex >> 8) % 256), static_cast<unsigned char>(hex % 256) };
 }
