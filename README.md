@@ -24,7 +24,7 @@ cmake --build build
 
 ```
 sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev \
-libjpeg-dev libpng-dev libvorbis-dev libopenal-dev cmake g++ \
+libpng-dev libvorbis-dev libopenal-dev cmake g++ \
 libwebp-dev git libsdl2-dev
 ```
 
@@ -32,7 +32,7 @@ libwebp-dev git libsdl2-dev
 
 ```
 sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libwebp-devel \
-libjpeg-turbo-devel cmake SDL2-devel openal-soft-devel gcc-c++
+cmake SDL2-devel openal-soft-devel gcc-c++
 ```
 
 ### Arch Linux
@@ -67,7 +67,7 @@ and then open `build/jngl.sln`.
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 
 ```
-brew install sdl2 freetype libvorbis jpeg webp pkg-config cmake
+brew install sdl2 freetype libvorbis webp pkg-config cmake
 ```
 
 ## Android

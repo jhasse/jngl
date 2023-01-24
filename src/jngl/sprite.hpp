@@ -150,9 +150,6 @@ private:
 		unsigned int dataSize;
 	};
 	Finally LoadBMP(const std::string& filename, FILE* fp, bool halfLoad);
-#ifndef NOJPEG
-	Finally LoadJPG(const std::string& filename, FILE* file, bool halfLoad);
-#endif
 #ifndef NOWEBP
 	Finally LoadWebP(const std::string& filename, FILE* file, bool halfLoad);
 #endif

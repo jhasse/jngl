@@ -41,7 +41,6 @@ endif()
 target_include_directories(jngl PUBLIC include/public)
 
 option(JNGL_VIDEO "Enable Theora video playback" ON)
-option(JNGL_JPEG "Enable JPEG support if libjpeg is available" ON)
 
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
 if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
@@ -169,7 +168,7 @@ if(ANDROID OR MSVC OR IOS)
 	set(FREETYPE_LIBRARIES freetype)
 endif()
 if(ANDROID)
-	target_compile_definitions(jngl PRIVATE NOJPEG NOPNG OPENGLES)
+	target_compile_definitions(jngl PRIVATE NOPNG OPENGLES)
 
 	CPMAddPackage(NAME openal
 		URL https://github.com/kcat/openal-soft/archive/refs/tags/1.21.1.zip
@@ -192,16 +191,6 @@ else()
 		pkg_check_modules(SDL2 REQUIRED sdl2)
 		target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
 		target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
-	endif()
-
-	if(JNGL_JPEG)
-		find_package(JPEG)
-	endif()
-	if(JPEG_FOUND)
-		target_include_directories(jngl PUBLIC ${JPEG_INCLUDE_DIR})
-		target_link_libraries(jngl PRIVATE ${JPEG_LIBRARIES})
-	else()
-		target_compile_definitions(jngl PRIVATE NOJPEG)
 	endif()
 
 	if(NOT IOS AND NOT EMSCRIPTEN)

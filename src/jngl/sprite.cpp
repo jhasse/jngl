@@ -24,16 +24,6 @@
 #endif
 #include <sstream>
 #include <thread>
-#ifndef NOJPEG
-#ifdef _WIN32
-// These defines are needed to prevent conflicting types declarations in jpeglib.h:
-#define XMD_H
-#define HAVE_BOOLEAN
-#endif
-extern "C" {
-#include <jpeglib.h>
-}
-#endif
 #ifndef NOWEBP
 #include "../ImageDataWebP.hpp"
 #endif
@@ -47,17 +37,6 @@ std::shared_ptr<Texture> getTexture(const std::string& filename) {
 	}
 	return it->second;
 }
-
-#ifndef NOJPEG
-struct JpegErrorMgr {
-	struct jpeg_error_mgr pub;
-	jmp_buf setjmp_buffer; // for return to caller
-};
-METHODDEF(void) JpegErrorExit(j_common_ptr info) {
-	longjmp(reinterpret_cast<JpegErrorMgr*>(info->err)->setjmp_buffer, // NOLINT
-	        1); // Return control to the setjmp point
-}
-#endif
 
 Sprite::Sprite(const unsigned char* const bytes, const size_t width, const size_t height) {
 	// std::vector<const char*> rowPointers(height);
@@ -94,9 +73,6 @@ Sprite::Sprite(const std::string& filename, LoadType loadType) : texture(getText
 #ifndef NOPNG
 		".png",
 #endif
-#ifndef NOJPEG
-		".jpg", ".jpeg",
-#endif
 		".bmp"
 	};
 	std::function<Finally(Sprite*, std::string, FILE*, bool)> functions[] = {
@@ -105,9 +81,6 @@ Sprite::Sprite(const std::string& filename, LoadType loadType) : texture(getText
 #endif
 #ifndef NOPNG
 		&Sprite::LoadPNG,
-#endif
-#ifndef NOJPEG
-		&Sprite::LoadJPG, &Sprite::LoadJPG,
 #endif
 		&Sprite::LoadBMP
 	};
@@ -380,54 +353,6 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 	loadTexture(header.width, header.height, filename, halfLoad, GL_BGR, &buf[0]);
 	return Finally(nullptr);
 }
-#ifndef NOJPEG
-Finally Sprite::LoadJPG(const std::string& filename, FILE* file, const bool halfLoad) {
-	jpeg_decompress_struct info{};
-	JpegErrorMgr err{};
-	info.err = jpeg_std_error(&err.pub);
-	err.pub.error_exit = JpegErrorExit;
-
-	// Establish the setjmp return context for my_error_exit to use.
-	if (setjmp(err.setjmp_buffer)) {
-		// If we get here, the JPEG code has signaled an error.
-		char buf[JMSG_LENGTH_MAX];
-		info.err->format_message(reinterpret_cast<jpeg_common_struct*>(&info), buf); // NOLINT
-		jpeg_destroy_decompress(&info);
-		throw std::runtime_error(buf);
-	}
-
-	jpeg_create_decompress(&info);
-	jpeg_stdio_src(&info, file);
-	jpeg_read_header(&info, TRUE);
-	jpeg_start_decompress(&info);
-
-	width = static_cast<float>(info.output_width * getScaleFactor());
-	height = static_cast<float>(info.output_height * getScaleFactor());
-	int channels = info.num_components;
-
-	GLenum format = GL_RGB;
-	if (channels == 4) {
-		format = GL_RGBA;
-	}
-
-	static_assert(sizeof(JSAMPLE) == sizeof(char));
-	std::vector<unsigned char*> buf(height);
-	for (auto& row : buf) {
-		row = new unsigned char[info.output_width * channels];
-	}
-	Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
-
-	while (info.output_scanline < info.output_height) {
-		jpeg_read_scanlines(
-		    &info, reinterpret_cast<JSAMPLE**>(&buf[info.output_scanline]) /* NOLINT */, 1);
-	}
-
-	jpeg_finish_decompress(&info);
-
-	loadTexture(info.output_width, info.output_height, filename, halfLoad, format, &buf[0]);
-	return Finally(nullptr);
-}
-#endif
 #ifndef NOWEBP
 Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool halfLoad) {
 	auto imageData = std::make_shared<ImageDataWebP>(filename, file, getScaleFactor());
