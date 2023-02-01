@@ -14,7 +14,7 @@ struct SoundParams;
 
 class Sound {
 public:
-	Sound(std::vector<char>& bufferData);
+	explicit Sound(std::vector<char>& bufferData);
 	Sound(const Sound&) = delete;
 	Sound& operator=(const Sound&) = delete;
 	Sound(Sound&&) = default;

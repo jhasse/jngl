@@ -29,4 +29,4 @@ namespace psemek::audio
 		return std::pow(10.f, db / 10.f);
 	}
 
-}
+} // namespace psemek::audio

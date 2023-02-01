@@ -7,19 +7,17 @@
 #include <string_view>
 #include <vector>
 
-namespace psemek::audio
-{
+namespace psemek::audio {
 
-	struct engine
-	{
-		engine(std::shared_ptr<stream> output);
-		~engine();
+struct engine {
+	explicit engine(std::shared_ptr<stream> output);
+	~engine();
 
-		void setPause(bool);
+	void setPause(bool);
 
-	private:
-		struct Impl;
-		std::unique_ptr<Impl> impl;
-	};
+private:
+	struct Impl;
+	std::unique_ptr<Impl> impl;
+};
 
-}
+} // namespace psemek::audio

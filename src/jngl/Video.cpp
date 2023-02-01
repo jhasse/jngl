@@ -255,7 +255,7 @@ public:
 		return !THEORAPLAY_isDecoding(decoder);
 	}
 
-	~Impl() {
+	~Impl() override {
 		THEORAPLAY_stopDecode(decoder);
 	}
 

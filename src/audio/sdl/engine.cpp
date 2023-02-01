@@ -5,19 +5,18 @@
 
 #include <SDL.h>
 
-#include <cassert>
-#include <mutex>
 #include <atomic>
-#include <vector>
-#include <optional>
+#include <cassert>
 #include <cmath>
+#include <mutex>
+#include <optional>
 #include <thread>
+#include <vector>
 
-namespace psemek::audio
-{
+namespace psemek::audio {
 
 struct engine::Impl {
-	Impl(std::shared_ptr<stream> output) {
+	explicit Impl(std::shared_ptr<stream> output) {
 		try {
 			backend = std::make_unique<SdlImpl>(output);
 		} catch (std::exception& e) {
@@ -32,7 +31,7 @@ struct engine::Impl {
 	std::unique_ptr<Backend> backend;
 
 	struct DummyImpl : public Backend {
-		DummyImpl(std::shared_ptr<stream> output)
+		explicit DummyImpl(std::shared_ptr<stream> output)
 		: output(std::move(output)), thread(
 		                                 [this]()
 		                                 {
@@ -71,7 +70,7 @@ struct engine::Impl {
 			}
 		  }) {
 		}
-		~DummyImpl() {
+		~DummyImpl() override {
 			quit = true;
 			thread.join();
 		}
@@ -94,7 +93,7 @@ struct engine::Impl {
 
 		std::shared_ptr<stream> output;
 
-		SdlImpl(std::shared_ptr<stream> output) : output(std::move(output)) {
+		explicit SdlImpl(std::shared_ptr<stream> output) : output(std::move(output)) {
 			if (SDL_Init(SDL_INIT_AUDIO) < 0) {
 				throw std::runtime_error(SDL_GetError());
 			}
@@ -109,12 +108,13 @@ struct engine::Impl {
 				throw std::runtime_error(SDL_GetError());
 			}
 
-		// log::info() << "Initialized audio: " << static_cast<int>(obtained.channels) << " channels, " << obtained.freq << " Hz, " << obtained.samples << " samples";
+			// log::info() << "Initialized audio: " << static_cast<int>(obtained.channels) << "
+			// channels, " << obtained.freq << " Hz, " << obtained.samples << " samples";
 
 			buffer.resize(obtained.samples * obtained.channels);
 			SDL_PauseAudioDevice(device, 0);
 		}
-		~SdlImpl() {
+		~SdlImpl() override {
 			SDL_CloseAudioDevice(device);
 		}
 
@@ -123,15 +123,17 @@ struct engine::Impl {
 			// prof::profiler prof(profiler_str);
 
 			auto self = static_cast<SdlImpl*>(userdata);
-			std::int16_t * dst = reinterpret_cast<std::int16_t *>(dst_u8);
+			std::int16_t* dst = reinterpret_cast<std::int16_t*>(dst_u8);
 
 			std::size_t const size = len / 2;
 			std::size_t read = 0;
 			read = self->output->read(self->buffer.data(), size);
 			std::fill(self->buffer.data() + read, self->buffer.data() + size, 0.f);
 
-			for (auto s : self->buffer)
-				*dst++ = static_cast<std::int16_t>(std::max(std::min((65535.f * s - 1.f) / 2.f, 32767.f), -32768.f));
+			for (auto s : self->buffer) {
+				*dst++ = static_cast<std::int16_t>(
+				    std::max(std::min((65535.f * s - 1.f) / 2.f, 32767.f), -32768.f));
+			}
 		}
 
 		void setPause(bool pause) override {
@@ -148,4 +150,4 @@ engine::~engine() = default;
 void engine::setPause(bool pause) {
 	impl->backend->setPause(pause);
 }
-}
+} // namespace psemek::audio

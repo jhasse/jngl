@@ -18,10 +18,10 @@ struct ogg_data_holder {
 	gsl::span<char const> data;
 	int32_t pos = 0;
 
-	ogg_data_holder(std::vector<char> storage) : storage(std::move(storage)), data(this->storage) {
+	explicit ogg_data_holder(std::vector<char> storage) : storage(std::move(storage)), data(this->storage) {
 	}
 
-	ogg_data_holder(gsl::span<char const> data) : data(data) {
+	explicit ogg_data_holder(gsl::span<char const> data) : data(data) {
 	}
 };
 
@@ -71,7 +71,7 @@ static long bytesTell(void* datasource) {
 }
 
 struct ogg_stream_impl : stream {
-	ogg_stream_impl(std::shared_ptr<ogg_data_holder> data)
+	explicit ogg_stream_impl(std::shared_ptr<ogg_data_holder> data)
 	: data_(std::move(data)), source_buffer_(1152 * 200) // TODO: how big has this to be for ogg?
 	{
 		if (ov_open_callbacks(this->data_.get(), &oggFile, nullptr, 0,
@@ -152,7 +152,7 @@ private:
 };
 
 struct ogg_track_impl : track {
-	ogg_track_impl(std::shared_ptr<ogg_data_holder> data) : data_(std::move(data)) {
+	explicit ogg_track_impl(std::shared_ptr<ogg_data_holder> data) : data_(std::move(data)) {
 	}
 
 	stream_ptr stream() const override {
