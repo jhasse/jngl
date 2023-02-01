@@ -1,6 +1,10 @@
 variables:
   CLICOLOR_FORCE: "1"
   TERM: xterm
+  CPM_SOURCE_CACHE: ${CI_PROJECT_DIR}/.cache/cpm
+cache:
+  key: cpm
+  paths: [.cache/cpm]
 
 image: registry.fedoraproject.org/fedora-minimal:36
 
