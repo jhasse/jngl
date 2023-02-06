@@ -1,4 +1,4 @@
-// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -28,6 +28,7 @@ public:
 	/// jngl::Shader foo(jngl::readAsset("foo.frag"), jngl::Shader::Type::FRAGMENT);
 	/// \endcode
 	Shader(const std::istream& source, Type);
+	Shader(const std::istream& source, Type, const std::istream& gles20Source); //< \overload
 
 	~Shader();
 	Shader(const Shader&) = delete;

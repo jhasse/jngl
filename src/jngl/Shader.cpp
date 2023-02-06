@@ -65,6 +65,20 @@ Shader::Shader(const std::istream& source, const Type type)
 }().c_str(), type) {
 }
 
+Shader::Shader(const std::istream& source, const Type type, const std::istream& gles20Source)
+: Shader([&source]() {
+	std::stringstream buffer;
+	buffer.exceptions(std::ios_base::failbit);
+	buffer << source.rdbuf();
+	return buffer.str();
+}().c_str(), type, [&gles20Source]() {
+	std::stringstream buffer;
+	buffer.exceptions(std::ios_base::failbit);
+	buffer << gles20Source.rdbuf();
+	return buffer.str();
+}().c_str()) {
+}
+
 Shader::~Shader() {
 	glDeleteShader(impl->id);
 }
