@@ -243,7 +243,7 @@ bool running() {
 }
 
 bool canQuit() {
-#ifdef IOS
+#if defined(IOS) || defined(EMSCRIPTEN)
 	return false;
 #else
 	return true;
