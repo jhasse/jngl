@@ -365,6 +365,17 @@ void WindowImpl::updateInput() {
 void WindowImpl::swapBuffers() {
 	if (surface) {
 		eglSwapBuffers(display, surface);
+		if (firstFrame) {
+			firstFrame = false;
+			JNIEnv* jni = nullptr;
+			app->activity->vm->AttachCurrentThread(&jni, nullptr);
+			jclass clazz = jni->GetObjectClass(app->activity->clazz);
+			jmethodID methodID = jni->GetMethodID(clazz, "markNativeCodeReady", "()V");
+			if (methodID) {
+				jni->CallVoidMethod(app->activity->clazz, methodID);
+			}
+			app->activity->vm->DetachCurrentThread();
+		}
 	}
 }
 

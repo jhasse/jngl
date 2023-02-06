@@ -51,8 +51,9 @@ private:
 	Window* window;
 
 	bool initialized = false;
+	bool firstFrame = true;
 	EGLDisplay display;
-	EGLSurface surface = nullptr ;
+	EGLSurface surface = nullptr;
 	EGLContext context;
 	std::map<int32_t, std::shared_ptr<AndroidController>> controllers;
 };
