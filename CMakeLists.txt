@@ -389,10 +389,10 @@ endif()
 
 if(ANDROID OR IOS OR APPLE OR WINDOWS_STORE)
 	if(JNGL_VIDEO)
-		FetchContent_Declare(theora
+		CPMAddPackage(NAME theora
 			URL http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
-			URL_HASH SHA1=8dcaa8e61cd86eb1244467c0b64b9ddac04ae262)
-		FetchContent_Populate(theora)
+			URL_HASH SHA1=8dcaa8e61cd86eb1244467c0b64b9ddac04ae262
+			DOWNLOAD_ONLY)
 		add_library(theoradec OBJECT ${LIBTHEORA_DEC} "${theora_SOURCE_DIR}/lib/apiwrapper.c"
 			"${theora_SOURCE_DIR}/lib/bitpack.c" "${theora_SOURCE_DIR}/lib/dequant.c"
 			"${theora_SOURCE_DIR}/lib/fragment.c" "${theora_SOURCE_DIR}/lib/idct.c"
