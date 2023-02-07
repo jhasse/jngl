@@ -1,5 +1,6 @@
 var namespacejngl =
 [
+    [ "Achievement", "structjngl_1_1Achievement.html", "structjngl_1_1Achievement" ],
     [ "App", "classjngl_1_1App.html", "classjngl_1_1App" ],
     [ "AppParameters", "structjngl_1_1AppParameters.html", "structjngl_1_1AppParameters" ],
     [ "Color", "classjngl_1_1Color.html", "classjngl_1_1Color" ],

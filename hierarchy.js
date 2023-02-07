@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "Achievement", "structjngl_1_1Achievement.html", null ],
     [ "App", "classjngl_1_1App.html", null ],
     [ "AppParameters", "structjngl_1_1AppParameters.html", null ],
     [ "Color", "classjngl_1_1Color.html", null ],
