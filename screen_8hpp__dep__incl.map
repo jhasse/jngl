@@ -1,6 +1,5 @@
 <map id="jngl/screen.hpp" name="jngl/screen.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="67,5,209,31"/>
-<area shape="rect" id="node2" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="5,79,124,104"/>
-<area shape="rect" id="node4" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="148,79,275,104"/>
-<area shape="rect" id="node3" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="21,152,108,177"/>
+<area shape="rect" id="node1" title=" " alt="" coords="43,5,185,31"/>
+<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="5,79,92,104"/>
+<area shape="rect" id="node3" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="116,79,243,104"/>
 </map>

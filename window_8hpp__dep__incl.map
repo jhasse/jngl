@@ -1,8 +1,7 @@
 <map id="jngl/window.hpp" name="jngl/window.hpp">
-<area shape="rect" id="node1" title="Functions related to the main window." alt="" coords="139,5,281,31"/>
+<area shape="rect" id="node1" title="Functions related to the main window." alt="" coords="103,5,245,31"/>
 <area shape="rect" id="node2" href="$Singleton_8hpp.html" title="Contains jngl::Singleton base class." alt="" coords="5,79,172,104"/>
-<area shape="rect" id="node3" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="128,152,247,177"/>
-<area shape="rect" id="node5" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="248,79,375,104"/>
-<area shape="rect" id="node4" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="144,225,231,251"/>
-<area shape="rect" id="node6" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="271,152,397,177"/>
+<area shape="rect" id="node4" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="196,79,323,104"/>
+<area shape="rect" id="node3" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="45,152,132,177"/>
+<area shape="rect" id="node5" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="196,152,323,177"/>
 </map>

@@ -1,6 +1,5 @@
 <map id="jngl/TextLine.hpp" name="jngl/TextLine.hpp">
-<area shape="rect" id="node1" title="Contains jngl::TextLine class." alt="" coords="45,5,204,31"/>
-<area shape="rect" id="node2" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="5,79,140,104"/>
-<area shape="rect" id="node3" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="65,152,184,177"/>
-<area shape="rect" id="node4" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="81,225,168,251"/>
+<area shape="rect" id="node1" title="Contains jngl::TextLine class." alt="" coords="5,5,164,31"/>
+<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="41,152,128,177"/>
+<area shape="rect" id="node3" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="71,79,205,104"/>
 </map>

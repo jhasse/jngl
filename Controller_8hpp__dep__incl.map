@@ -1,5 +1,4 @@
 <map id="jngl/Controller.hpp" name="jngl/Controller.hpp">
 <area shape="rect" id="node1" title="Contains jngl::Controller class." alt="" coords="5,5,180,31"/>
-<area shape="rect" id="node2" href="$all_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="33,79,152,104"/>
-<area shape="rect" id="node3" href="$jngl_8hpp.html" title="Includes jngl/all.hpp." alt="" coords="49,152,136,177"/>
+<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="49,79,136,104"/>
 </map>
