@@ -8,8 +8,8 @@ namespace jngl {
 
 Achievement::Achievement(std::string id, std::string name, std::string description,
                          std::string icon, int minValue, int maxValue)
-: id(std::move(id)), name(std::move(name)), description(std::move(description)), icon(std::move(icon)),
-  minValue(minValue), maxValue(maxValue), value(minValue) {
+: id(std::move(id)), name(std::move(name)), description(std::move(description)),
+  icon(std::move(icon)), minValue(minValue), maxValue(maxValue), value(minValue) {
 }
 
 void Achievement::setValue(int value) {
@@ -19,4 +19,4 @@ void Achievement::setValue(int value) {
 	this->value = value;
 }
 
-}
+} // namespace jngl
