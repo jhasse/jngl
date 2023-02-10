@@ -1,4 +1,5 @@
 <map id="jngl/main.hpp" name="jngl/main.hpp">
-<area shape="rect" id="node1" title="Defines macros for the main entry point." alt="" coords="5,5,132,31"/>
-<area shape="rect" id="node2" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="5,79,132,104"/>
+<area shape="rect" id="node1" title="Defines macros for the main entry point." alt="" coords="51,5,177,31"/>
+<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="5,79,92,104"/>
+<area shape="rect" id="node3" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="116,79,243,104"/>
 </map>

@@ -1,9 +1,9 @@
 <map id="jngl/Pixels.hpp" name="jngl/Pixels.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Pixels class." alt="" coords="43,5,185,31"/>
-<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="33,225,120,251"/>
-<area shape="rect" id="node3" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="27,79,201,104"/>
-<area shape="rect" id="node4" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="225,79,368,104"/>
-<area shape="rect" id="node5" href="$Singleton_8hpp.html" title="Contains jngl::Singleton base class." alt="" coords="115,152,281,177"/>
-<area shape="rect" id="node6" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="305,152,432,177"/>
-<area shape="rect" id="node7" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="305,225,432,251"/>
+<area shape="rect" id="node1" title="Contains jngl::Pixels class." alt="" coords="37,5,180,31"/>
+<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="116,225,203,251"/>
+<area shape="rect" id="node3" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="21,79,196,104"/>
+<area shape="rect" id="node4" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="220,79,363,104"/>
+<area shape="rect" id="node5" href="$Singleton_8hpp.html" title="Contains jngl::Singleton base class." alt="" coords="197,152,364,177"/>
+<area shape="rect" id="node6" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="388,152,515,177"/>
+<area shape="rect" id="node7" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="388,225,515,251"/>
 </map>
