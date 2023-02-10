@@ -2,6 +2,8 @@
 #include "resampler.hpp"
 #include "constants.hpp"
 
+#include "../jngl/debug.hpp"
+
 #include <vorbis/vorbisfile.h>
 
 #include <atomic>
@@ -10,6 +12,8 @@
 #include <stdexcept>
 
 namespace psemek::audio {
+
+extern std::atomic_int8_t* gBuffersEmpty;
 
 namespace {
 
@@ -91,8 +95,7 @@ struct ogg_stream_impl : stream {
 	}
 
 	std::size_t read(float* data, std::size_t sample_count) override {
-		auto input = reinterpret_cast<std::uint8_t const*>(data_->data.data());
-
+        int before = *gBuffersEmpty;
 		std::size_t result = 0;
 		while (result < sample_count) {
 			if (resampler_pos_ < resampler_.result().size()) {
@@ -103,10 +106,8 @@ struct ogg_stream_impl : stream {
 				resampler_pos_ += size;
 				result += size;
 			} else {
-
-				const int endian = 0;                 // 0 for Little-Endian, 1 for Big-Endian
 				float** buffer = nullptr;
-				auto samples_read = ov_read_float(&oggFile, &buffer, 1024, &bitStream);
+				auto samples_read = ov_read_float(&oggFile, &buffer, sample_count, &bitStream);
 				assert(samples_read >= 0);
 				if (samples_read == 0) {
 					break;
@@ -127,7 +128,11 @@ struct ogg_stream_impl : stream {
 		}
 
 		played_.fetch_add(result);
-
+        int duration = *gBuffersEmpty - before;
+        if (duration > 0) {
+            jngl::debug("read took ");
+            jngl::debugLn(duration);
+        }
 		return result;
 	}
 
