@@ -1,5 +1,7 @@
 #include "mixer.hpp"
 
+#include "readerwriterqueue/readerwriterqueue.h"
+
 #include <algorithm>
 #include <memory>
 #include <vector>
@@ -14,8 +16,8 @@ struct mixer_impl final : mixer, std::enable_shared_from_this<mixer_impl> {
 	void add(stream_ptr stream) override;
 
 	void remove(stream* stream) override {
-		std::lock_guard lock(streamsToStopMutex);
-		streamsToStop.push_back(stream);
+		gc();
+		streamsToStop.enqueue(stream);
 	}
 
 	std::size_t read(float* data, std::size_t sample_count) override;
@@ -29,56 +31,54 @@ struct mixer_impl final : mixer, std::enable_shared_from_this<mixer_impl> {
 	}
 
 private:
-	std::vector<std::shared_ptr<stream>> channels_;
-	std::vector<std::shared_ptr<stream>> alive_channels_;
+	void gc() {
+		stream* tmp;
+		while (streamsToRemoveOnMainThread.try_dequeue(tmp)) {
+			auto it = std::find_if(streamsOnMainThread.begin(), streamsOnMainThread.end(),
+			                       [tmp](const auto& stream) { return stream.get() == tmp; });
+			assert(it != streamsOnMainThread.end());
+			streamsOnMainThread.erase(it);
+		}
+	}
+	std::vector<std::shared_ptr<stream>> streamsOnMainThread;
+
+	moodycamel::ReaderWriterQueue<stream*> streamsToRemoveOnMainThread;
+
+	std::vector<stream*> activeStreams; //< only used on mixer thread
 
 	std::vector<float> buffer_;
 
-	std::mutex new_channels_mutex_;
-	std::vector<std::shared_ptr<stream>> new_channels_;
+	moodycamel::ReaderWriterQueue<stream*> newStreams;
 
-	std::mutex streamsToStopMutex;
-	std::vector<stream*> streamsToStop;
+	moodycamel::ReaderWriterQueue<stream*> streamsToStop;
 
 	std::atomic<std::size_t> played_{ 0 };
 };
 
 void mixer_impl::add(stream_ptr stream) {
-	std::lock_guard lock{ new_channels_mutex_ };
-	new_channels_.push_back(std::move(stream));
+	gc();
+	newStreams.enqueue(stream.get());
+	streamsOnMainThread.emplace_back(std::move(stream));
 }
 
 std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
-	{
-		std::vector<std::shared_ptr<stream>> new_channels;
-		{
-			std::lock_guard lock{ new_channels_mutex_ };
-			new_channels = std::move(new_channels_);
-		}
-		for (auto& ch : new_channels) {
-			channels_.push_back(std::move(ch));
-		}
-		std::vector<stream*> streamsToStop;
-		{
-			std::lock_guard lock{ streamsToStopMutex };
-			streamsToStop = std::move(this->streamsToStop);
-		}
-		for (stream* const stream : streamsToStop) {
-			const auto it =
-			    std::find_if(channels_.begin(), channels_.end(),
-			                 [stream](const auto& channel) { return channel.get() == stream; });
-			if (it != channels_.end()) {
-				(*it).reset();
-			}
-		}
+	stream* tmp;
+	while (newStreams.try_dequeue(tmp)) {
+		activeStreams.emplace_back(tmp);
+	}
+	while (streamsToStop.try_dequeue(tmp)) {
+		auto it = std::find(activeStreams.begin(), activeStreams.end(), tmp);
+		assert(it != activeStreams.end());
+		activeStreams.erase(it);
+		streamsToRemoveOnMainThread.enqueue(tmp);
 	}
 
 	std::fill(data, data + sample_count, 0.f);
 
 	buffer_.resize(sample_count);
 
-	for (auto& ch : channels_) {
-		auto& stream = ch;
+	for (auto it = activeStreams.begin(); it != activeStreams.end();) {
+		auto& stream = *it;
 		if (!stream) continue;
 
 		auto read = stream->read(buffer_.data(), sample_count);
@@ -87,21 +87,17 @@ std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
 			auto begin = buffer_.data();
 			auto end = begin + read;
 			auto dst = data;
-			for (; begin < end;) {
+			for (; begin < end;)
 				*dst++ += *begin++;
-			}
 		}
 
 		if (read < sample_count) {
-			ch.reset();
-			continue;
+			streamsToRemoveOnMainThread.enqueue(*it);
+			it = activeStreams.erase(it);
+		} else {
+			++it;
 		}
-
-		alive_channels_.push_back(std::move(ch));
 	}
-
-	std::swap(channels_, alive_channels_);
-	alive_channels_.clear();
 
 	played_.fetch_add(sample_count);
 
