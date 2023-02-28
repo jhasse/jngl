@@ -43,7 +43,8 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI;
+	Uint32 flags =
+	    SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE;
 	if (fullscreen) {
 		if (width == getDesktopWidth() && height == getDesktopHeight()) {
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -51,9 +52,6 @@ Window::Window(const std::string& title, const int width, const int height, cons
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 	}
-#ifdef __EMSCRIPTEN__
-	flags |= SDL_WINDOW_RESIZABLE;
-#endif
 
 #ifdef JNGL_UWP
 	isMultisampleSupported_ = false; // crashes on Xbox since ANGLE uses a PixelShader 4.1 for
@@ -97,7 +95,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	impl->actualHeight = height_;
 	impl->hidpiScaleFactor = static_cast<float>(width_) / width;
 	setScaleFactor(getScaleFactor() * impl->hidpiScaleFactor);
-	calculateCanvasSize(minAspectRatio, maxAspectRatio);
+	calculateCanvasSize(minAspectRatio, maxAspectRatio, width_, height_);
 	Init(width_, height_, canvasWidth, canvasHeight);
 }
 
@@ -350,9 +348,24 @@ void Window::UpdateInput() {
 				SDL_GL_GetDrawableSize(impl->sdlWindow, &width, &height);
 				impl->actualWidth = width;
 				impl->actualHeight = height;
-				updateProjection(width, height, width_, height_);
-				App::instance().updateProjectionMatrix();
+				//calculateCanvasSize({ canvasWidth, canvasHeight }, { canvasWidth, canvasHeight }, width, height);
+				//updateProjection(canvasWidth, canvasHeight, width_, height_);
+				//App::instance().updateProjectionMatrix();
 				glViewport(0, 0, width, height);
+
+				/*if (canvasWidth != width || canvasHeight != height) { // Letterboxing?
+					glClearColor(0, 0, 0, 1); // black boxes
+					glClear(GL_COLOR_BUFFER_BIT);
+
+					glEnable(GL_SCISSOR_TEST);
+					assert(canvasWidth <= width);
+					assert(canvasHeight <= height);
+					glScissor((width - canvasWidth) / 2, (height - canvasHeight) / 2, canvasWidth,
+						canvasHeight);
+				}
+				else {
+					glDisable(GL_SCISSOR_TEST);
+				}*/
 			}
 		}
 	}
