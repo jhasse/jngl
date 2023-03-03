@@ -1,4 +1,4 @@
-// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::ImageData class
 /// \file
@@ -25,6 +25,11 @@ public:
 
 	/// Returns the height of the image in pixels
 	virtual int getHeight() const = 0;
+
+	/// If the image has been scaled by getScaleFactor() this will return the original image width
+	virtual int getImageWidth() const = 0;
+	/// If the image has been scaled by getScaleFactor() this will return the original image height
+	virtual int getImageHeight() const = 0;
 
 	/// RGBA values ordered row-major
 	virtual const uint8_t* pixels() const = 0;

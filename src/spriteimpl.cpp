@@ -111,9 +111,7 @@ std::shared_ptr<Sprite> Sprite::Loader::shared() const {
 		return it->second;
 	}
 	auto imageData = imageDataFuture.get();
-	return sprites_
-	    .try_emplace(filename, std::make_shared<Sprite>(imageData->pixels(), imageData->getWidth(),
-	                                                    imageData->getHeight()))
+	return sprites_.try_emplace(filename, std::make_shared<Sprite>(filename, *imageData))
 	    .first->second;
 }
 

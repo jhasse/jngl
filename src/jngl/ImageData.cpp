@@ -1,9 +1,10 @@
-// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ImageData.hpp"
 
 #include "../helper.hpp"
 #include "../main.hpp"
+#include "screen.hpp"
 
 #ifdef ANDROID
 #include "../android/fopen.hpp"
@@ -41,7 +42,7 @@ std::unique_ptr<ImageData> ImageData::load(const std::string& filename) {
 #endif
 #ifndef NOWEBP
 		[](std::string filename, FILE* file) {
-		    return std::make_unique<ImageDataWebP>(std::move(filename), file, 1);
+		    return std::make_unique<ImageDataWebP>(std::move(filename), file, jngl::getScaleFactor());
 		},
 #endif
 	};

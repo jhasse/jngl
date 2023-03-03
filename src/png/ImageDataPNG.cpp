@@ -1,4 +1,4 @@
-// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ImageDataPNG.hpp"
 
@@ -74,6 +74,14 @@ int ImageDataPNG::getWidth() const {
 }
 
 int ImageDataPNG::getHeight() const {
+	return static_cast<int>(y);
+}
+
+int ImageDataPNG::getImageWidth() const {
+	return static_cast<int>(x);
+}
+
+int ImageDataPNG::getImageHeight() const {
 	return static_cast<int>(y);
 }
 

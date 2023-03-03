@@ -42,17 +42,20 @@ std::shared_ptr<Texture> getTexture(const std::string& filename) {
 	return it->second;
 }
 
-Sprite::Sprite(const unsigned char* const bytes, const size_t width, const size_t height) {
-	// std::vector<const char*> rowPointers(height);
-	// for (size_t i = 0; i < height; ++i) {
-	// 	rowPointers[i] = bytes + (i * width * 4);
-	// }
+Sprite::Sprite(const std::string& filename, const ImageData& imageData) {
 	if (!pWindow) {
 		throw std::runtime_error("Window hasn't been created yet.");
 	}
-	texture = std::make_shared<Texture>(width, height, width, height, nullptr, GL_RGBA, bytes);
-	Drawable::width = width;
-	Drawable::height = height;
+	width = imageData.getImageWidth();
+	height = imageData.getImageHeight();
+	auto it = textures.find(filename);
+	if (it == textures.end()) {
+		textures[filename] = texture =
+		    std::make_shared<Texture>(imageData.getImageWidth(), imageData.getImageHeight(), width,
+		                              height, nullptr, GL_RGBA, imageData.pixels());
+	} else {
+		texture = it->second;
+	}
 	setCenter(0, 0);
 }
 
