@@ -111,8 +111,8 @@ public:
 private:
 	static int GetKeyCode(jngl::key::KeyType key);
 	static std::string GetFontFileByName(const std::string& fontname);
-	void calculateCanvasSize(std::pair<int, int> minAspectRatio, std::pair<int, int> maxAspectRatio,
-	                         int width, int height);
+	void calculateCanvasSize(std::pair<int, int> minAspectRatio,
+	                         std::pair<int, int> maxAspectRatio);
 	void updateControllerStates();
 
 	/// Called when a controller is added or removed

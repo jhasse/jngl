@@ -431,19 +431,19 @@ std::string Window::getTextInput() const {
 }
 
 void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
-                                 const std::pair<int, int> maxAspectRatio, const int width, const int height) {
-	canvasWidth = width;
-	canvasHeight = height;
-	if (minAspectRatio.first * height > minAspectRatio.second * width) {
+                                 const std::pair<int, int> maxAspectRatio) {
+	canvasWidth = width_;
+	canvasHeight = height_;
+	if (minAspectRatio.first * height_ > minAspectRatio.second * width_) {
 		// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
 		canvasHeight = gsl::narrow<int>(
-		    std::lround(float(minAspectRatio.second * width) / float(minAspectRatio.first)));
-	} else if (maxAspectRatio.first * height < maxAspectRatio.second * width) {
+		    std::lround(float(minAspectRatio.second * width_) / float(minAspectRatio.first)));
+	} else if (maxAspectRatio.first * height_ < maxAspectRatio.second * width_) {
 		// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
 		canvasWidth = gsl::narrow<int>(
-		    std::lround(float(maxAspectRatio.first * height) / float(maxAspectRatio.second)));
+		    std::lround(float(maxAspectRatio.first * height_) / float(maxAspectRatio.second)));
 	}
-	if (canvasWidth != width_ || canvasHeight != height) {
+	if (canvasWidth != width_ || canvasHeight != height_) {
 		debug("Letterboxing to ");
 		debug(canvasWidth);
 		debug("x");

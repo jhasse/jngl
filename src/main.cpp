@@ -115,6 +115,22 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	updateViewportAndLetterboxing(width, height, canvasWidth, canvasHeight);
+
+	reset();
+	modelviewStack = {};
+
+	clearBackgroundColor();
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glFlush();
+	setVerticalSync(true);
+	return true;
+}
+
+void updateViewportAndLetterboxing(const int width, const int height, const int canvasWidth,
+                                   const int canvasHeight) {
 	glViewport(0, 0, width, height);
 
 	if (canvasWidth != width || canvasHeight != height) { // Letterboxing?
@@ -127,16 +143,6 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		glScissor((width - canvasWidth) / 2, (height - canvasHeight) / 2, canvasWidth,
 		          canvasHeight);
 	}
-
-	reset();
-	modelviewStack = {};
-
-	clearBackgroundColor();
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glFlush();
-	setVerticalSync(true);
-	return true;
 }
 
 void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth,

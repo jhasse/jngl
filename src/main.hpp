@@ -24,6 +24,7 @@ class ShaderProgram;
 void clearBackgroundColor();
 
 bool Init(int width, int height, int canvasWidth, int canvasHeight);
+void updateViewportAndLetterboxing(int width, int height, int canvasWidth, int canvasHeight);
 void updateProjection(int windowWidth, int windowHeight, int, int);
 
 extern std::string pathPrefix;

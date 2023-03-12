@@ -95,7 +95,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	impl->actualHeight = height_;
 	impl->hidpiScaleFactor = static_cast<float>(width_) / width;
 	setScaleFactor(getScaleFactor() * impl->hidpiScaleFactor);
-	calculateCanvasSize(minAspectRatio, maxAspectRatio, width_, height_);
+	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	impl->actualCanvasWidth = canvasWidth;
 	impl->actualCanvasHeight = canvasHeight;
 	Init(width_, height_, canvasWidth, canvasHeight);
@@ -345,17 +345,16 @@ void Window::UpdateInput() {
 			break;
 		case SDL_WINDOWEVENT:
 			if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-				int width;
-				int height;
-				SDL_GL_GetDrawableSize(impl->sdlWindow, &width, &height);
-				impl->actualWidth = width;
-				impl->actualHeight = height;
+				const int originalWidth = width_;
+				const int originalHeight = height_;
+				SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
+				impl->actualWidth = width_;
+				impl->actualHeight = height_;
 				impl->actualCanvasWidth = canvasWidth;
 				impl->actualCanvasHeight = canvasHeight;
-				calculateCanvasSize({ canvasWidth, canvasHeight }, { canvasWidth, canvasHeight },
-				                    width, height);
-				const float tmpWidth = (float(width) / canvasWidth) * width_;
-				const float tmpHeight = (float(height) / canvasHeight) * height_;
+				calculateCanvasSize({ canvasWidth, canvasHeight }, { canvasWidth, canvasHeight });
+				const float tmpWidth = (float(width_) / canvasWidth) * originalWidth;
+				const float tmpHeight = (float(height_) / canvasHeight) * originalHeight;
 				const auto l = -1.f / 2.f;
 				const auto r = 1.f / 2.f;
 				const auto b = 1.f / 2.f;
@@ -377,24 +376,13 @@ void Window::UpdateInput() {
 					                   0.f,
 					                   1.f };
 				App::instance().updateProjectionMatrix();
-				glViewport(0, 0, width, height);
-
-				if (canvasWidth != width || canvasHeight != height) { // Letterboxing?
-					glClearColor(0, 0, 0, 1);                         // black boxes
-					glClear(GL_COLOR_BUFFER_BIT);
-
-					glEnable(GL_SCISSOR_TEST);
-					assert(canvasWidth <= width);
-					assert(canvasHeight <= height);
-					glScissor((width - canvasWidth) / 2, (height - canvasHeight) / 2, canvasWidth,
-					          canvasHeight);
-				} else {
-					glDisable(GL_SCISSOR_TEST);
-				}
+				updateViewportAndLetterboxing(width_, height_, canvasWidth, canvasHeight);
 				// restore the values in canvasWidth and canvasHeight because our scaleFactor didn't
 				// change:
 				std::swap(canvasWidth, impl->actualCanvasWidth);
 				std::swap(canvasHeight, impl->actualCanvasHeight);
+				width_ = originalWidth;
+				height_ = originalHeight;
 			}
 		}
 	}
