@@ -31,7 +31,7 @@ void setProcessSettings() {
 #endif
 }
 
-Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
+Window::Window(const std::string& title, int width, int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), width_(width), height_(height),
   fontName_(GetFontFileByName("Arial")) {
@@ -87,6 +87,28 @@ Window::Window(const std::string& title, const int width, const int height, cons
 			isMultisampleSupported_ = false;
 			impl->sdlWindow = create();
 			impl->context = SDL_GL_CreateContext(impl->sdlWindow);
+		}
+	}
+
+	{
+		assert(width_ == width);
+		assert(height_ == height);
+		// one some platforms (e.g. UWP or Emscripten) the size we specify for the window might be
+		// ignored. Check if we actually got what we asked for and correct if not:
+		SDL_GetWindowSize(impl->sdlWindow, &width, &height);
+		if (width_ != width || height_ != height) {
+			debug("Wanted window dimensions ");
+			debug(width_);
+			debug("x");
+			debug(height_);
+			debug(", but got ");
+			debug(width);
+			debug("x");
+			debug(height);
+			debug(" instead.");
+			setScaleFactor(getScaleFactor() * width / width_);
+			width_ = width;
+			height_ = height;
 		}
 	}
 
@@ -353,8 +375,8 @@ void Window::UpdateInput() {
 				impl->actualCanvasWidth = canvasWidth;
 				impl->actualCanvasHeight = canvasHeight;
 				calculateCanvasSize({ canvasWidth, canvasHeight }, { canvasWidth, canvasHeight });
-				const float tmpWidth = (float(width_) / canvasWidth) * originalWidth;
-				const float tmpHeight = (float(height_) / canvasHeight) * originalHeight;
+				const float tmpWidth = (float(width_) / canvasWidth) * impl->actualCanvasWidth;
+				const float tmpHeight = (float(height_) / canvasHeight) * impl->actualCanvasHeight;
 				const auto l = -1.f / 2.f;
 				const auto r = 1.f / 2.f;
 				const auto b = 1.f / 2.f;
