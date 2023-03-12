@@ -96,6 +96,8 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	impl->hidpiScaleFactor = static_cast<float>(width_) / width;
 	setScaleFactor(getScaleFactor() * impl->hidpiScaleFactor);
 	calculateCanvasSize(minAspectRatio, maxAspectRatio, width_, height_);
+	impl->actualCanvasWidth = canvasWidth;
+	impl->actualCanvasHeight = canvasHeight;
 	Init(width_, height_, canvasWidth, canvasHeight);
 }
 
@@ -348,24 +350,51 @@ void Window::UpdateInput() {
 				SDL_GL_GetDrawableSize(impl->sdlWindow, &width, &height);
 				impl->actualWidth = width;
 				impl->actualHeight = height;
-				//calculateCanvasSize({ canvasWidth, canvasHeight }, { canvasWidth, canvasHeight }, width, height);
-				//updateProjection(canvasWidth, canvasHeight, width_, height_);
-				//App::instance().updateProjectionMatrix();
+				impl->actualCanvasWidth = canvasWidth;
+				impl->actualCanvasHeight = canvasHeight;
+				calculateCanvasSize({ canvasWidth, canvasHeight }, { canvasWidth, canvasHeight },
+				                    width, height);
+				const float tmpWidth = (float(width) / canvasWidth) * width_;
+				const float tmpHeight = (float(height) / canvasHeight) * height_;
+				const auto l = -1.f / 2.f;
+				const auto r = 1.f / 2.f;
+				const auto b = 1.f / 2.f;
+				const auto t = -1.f / 2.f;
+				opengl::projection = { 1.f / float(tmpWidth) * 2.f / (r - l),
+					                   0.f,
+					                   0.f,
+					                   -(r + l) / (r - l),
+					                   0.f,
+					                   1.f / float(tmpHeight) * 2.f / (t - b),
+					                   0.f,
+					                   -(t + b) / (t - b),
+					                   0.f,
+					                   0.f,
+					                   -1.f,
+					                   0.f,
+					                   0.f,
+					                   0.f,
+					                   0.f,
+					                   1.f };
+				App::instance().updateProjectionMatrix();
 				glViewport(0, 0, width, height);
 
-				/*if (canvasWidth != width || canvasHeight != height) { // Letterboxing?
-					glClearColor(0, 0, 0, 1); // black boxes
+				if (canvasWidth != width || canvasHeight != height) { // Letterboxing?
+					glClearColor(0, 0, 0, 1);                         // black boxes
 					glClear(GL_COLOR_BUFFER_BIT);
 
 					glEnable(GL_SCISSOR_TEST);
 					assert(canvasWidth <= width);
 					assert(canvasHeight <= height);
 					glScissor((width - canvasWidth) / 2, (height - canvasHeight) / 2, canvasWidth,
-						canvasHeight);
-				}
-				else {
+					          canvasHeight);
+				} else {
 					glDisable(GL_SCISSOR_TEST);
-				}*/
+				}
+				// restore the values in canvasWidth and canvasHeight because our scaleFactor didn't
+				// change:
+				std::swap(canvasWidth, impl->actualCanvasWidth);
+				std::swap(canvasHeight, impl->actualCanvasHeight);
 			}
 		}
 	}
@@ -456,16 +485,18 @@ int Window::getMouseX() const {
 	if (relativeMouseMode) {
 		return mousex_ * impl->hidpiScaleFactor;
 	}
-	return std::lround((mousex_ * impl->hidpiScaleFactor - (width_ - canvasWidth) / 2) *
-	                   (float(width_) / impl->actualWidth));
+	return std::lround(
+	    (mousex_ * impl->hidpiScaleFactor - (impl->actualWidth - impl->actualCanvasWidth) / 2) *
+	    (float(canvasWidth) / impl->actualCanvasWidth));
 }
 
 int Window::getMouseY() const {
 	if (relativeMouseMode) {
 		return mousey_ * impl->hidpiScaleFactor;
 	}
-	return std::lround((mousey_ * impl->hidpiScaleFactor - (height_ - canvasHeight) / 2) *
-	                   (float(height_) / impl->actualHeight));
+	return std::lround(
+	    (mousey_ * impl->hidpiScaleFactor - (impl->actualHeight - impl->actualCanvasHeight) / 2) *
+	    (float(canvasHeight) / impl->actualCanvasHeight));
 }
 
 void setCursor(Cursor type) {
