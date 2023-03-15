@@ -13,6 +13,7 @@
 #include <cassert>
 #include <stdexcept>
 #if defined(_WIN32) && !defined(JNGL_UWP)
+#define NOMINMAX
 #include <windows.h>
 #endif
 
@@ -93,7 +94,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	{
 		assert(width_ == width);
 		assert(height_ == height);
-		// one some platforms (e.g. UWP or Emscripten) the size we specify for the window might be
+		// on some platforms (e.g. UWP or Emscripten) the size we specify for the window might be
 		// ignored. Check if we actually got what we asked for and correct if not:
 		SDL_GetWindowSize(impl->sdlWindow, &width, &height);
 		if (width_ != width || height_ != height) {
@@ -106,7 +107,8 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 			debug("x");
 			debug(height);
 			debug(" instead.");
-			setScaleFactor(getScaleFactor() * width / width_);
+			setScaleFactor(getScaleFactor() * std::min(static_cast<double>(width) / width_,
+			                                           static_cast<double>(height) / height_));
 			width_ = width;
 			height_ = height;
 		}
