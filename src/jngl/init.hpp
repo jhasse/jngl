@@ -64,7 +64,7 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 	app.setDisplayName(params.displayName);
 	app.setPixelArt(params.pixelArt);
 	bool fullscreen = false;
-#if defined(NDEBUG) || defined(__ANDROID__)
+#if (!defined(__EMSCRIPTEN__) && defined(NDEBUG)) || defined(__ANDROID__)
 	fullscreen = true;
 #endif
 	std::pair<int, int> minAspectRatio{ 1, 3 };
