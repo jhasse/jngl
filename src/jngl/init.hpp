@@ -64,12 +64,15 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 	app.setDisplayName(params.displayName);
 	app.setPixelArt(params.pixelArt);
 	bool fullscreen = false;
-#if defined(NDEBUG) || defined(__ANDROID__)
+#if (!defined(__EMSCRIPTEN__) && defined(NDEBUG)) || defined(__ANDROID__)
 	fullscreen = true;
 #endif
 	std::pair<int, int> minAspectRatio{ 1, 3 };
 	std::pair<int, int> maxAspectRatio{ 3, 1 };
-	if (!params.screenSize) {
+	if (params.screenSize) {
+		maxAspectRatio = minAspectRatio = std::pair<int, int>(std::lround(params.screenSize->x),
+		                                                      std::lround(params.screenSize->y));
+	} else {
 		params.screenSize = { double(jngl::getDesktopWidth()), double(jngl::getDesktopHeight()) };
 		fullscreen = true;
 	}
@@ -80,8 +83,6 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 		    desktopSize.y > 0) { // desktop size isn't available on some platforms (e.g. Android)
 			jngl::setScaleFactor(std::min(desktopSize.x / params.screenSize->x,
 			                              desktopSize.y / params.screenSize->y));
-			maxAspectRatio = minAspectRatio = std::pair<int, int>(
-			    std::lround(params.screenSize->x), std::lround(params.screenSize->y));
 		}
 	} else {
 		// Make window as big as possible
