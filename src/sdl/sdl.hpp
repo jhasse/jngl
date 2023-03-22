@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -26,6 +26,7 @@ public:
 private:
 	SDL();
 	~SDL();
+	void setHint(const char* name, bool);
 };
 
 } // namespace jngl
