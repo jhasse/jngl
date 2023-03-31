@@ -41,7 +41,7 @@ public:
 	Test()
 	: fb2(jngl::getWindowSize()), logoWebp("jngl.webp"), soundLoader(jngl::load("test.ogg")) {
 		jngl::setTitle(jngl::App::instance().getDisplayName() + " | UTF-8: äöüß");
-		jngl::setIcon("jngl");
+		jngl::setIcon("jngl-icon");
 		jngl::setMouseVisible(false);
 		frameTime = jngl::getTime();
 		lastTime = jngl::getTime();
