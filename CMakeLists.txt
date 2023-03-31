@@ -22,6 +22,15 @@ target_sources(jngl PRIVATE ${HEADERS})
 
 target_compile_features(jngl PUBLIC cxx_std_20)
 
+if(JNGL_STEAMWORKS)
+	target_include_directories(jngl PRIVATE include/steam)
+	target_link_directories(jngl PUBLIC include/steam/lib/osx)
+	target_link_libraries(jngl PRIVATE sdkencryptedappticket)
+	target_sources(jngl PRIVATE src/steam/SteamAchievements.cpp)
+else()
+	target_sources(jngl PRIVATE src/steam/disabled/initSteam.cpp)
+endif()
+
 set_target_properties(jngl PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src/
 )
@@ -41,6 +50,7 @@ endif()
 target_include_directories(jngl PUBLIC include/public)
 
 option(JNGL_VIDEO "Enable Theora video playback" ON)
+option(JNGL_STEAMWORKS "Enable Steamsworks SDK support for achievements" OFF)
 
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
 if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
