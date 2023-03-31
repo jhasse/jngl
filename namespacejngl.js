@@ -126,6 +126,7 @@ var namespacejngl =
     [ "writeConfig", "namespacejngl.html#a75eb68f8ea7e1d976fef38e1c27c721f", null ],
     [ "getPreferredLanguage", "namespacejngl.html#ac4430bf0f8aa94d8e97d926767536f88", null ],
     [ "openURL", "namespacejngl.html#a50c77a70c66599a4befa331993345eec", null ],
+    [ "initSteam", "namespacejngl.html#ad428ca08a63b77301c7b4873189bbdf6", null ],
     [ "getScaleFactor", "namespacejngl.html#a7d23d95fbe7f69b235a6984b67f5fa7c", null ],
     [ "getScreenWidth", "namespacejngl.html#adc82933bd579ab83d7cd4e3bc5f79a12", null ],
     [ "getScreenHeight", "namespacejngl.html#a9942379fdf4fb4445c35eaf3390b7ccb", null ],
