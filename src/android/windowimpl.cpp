@@ -243,8 +243,7 @@ void WindowImpl::makeCurrent() {
 	assert(eglGetError() == EGL_SUCCESS);
 	if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
 		// Source: https://stackoverflow.com/a/60611870/647898
-		JNIEnv* jni = nullptr;
-		app->activity->vm->AttachCurrentThread(&jni, nullptr);
+		JNIEnv* const jni = env;
 
 		jclass clazz = jni->GetObjectClass(app->activity->clazz);
 
@@ -265,9 +264,9 @@ void WindowImpl::makeCurrent() {
 
 			// Remember to clean up passed values
 			jni->DeleteLocalRef(jmessage);
+		} else {
+			jni->ExceptionClear();
 		}
-
-		app->activity->vm->DetachCurrentThread();
 
 		throw std::runtime_error("Unable to eglMakeCurrent");
 	}
@@ -367,14 +366,14 @@ void WindowImpl::swapBuffers() {
 		eglSwapBuffers(display, surface);
 		if (firstFrame) {
 			firstFrame = false;
-			JNIEnv* jni = nullptr;
-			app->activity->vm->AttachCurrentThread(&jni, nullptr);
+			JNIEnv* const jni = env;
 			jclass clazz = jni->GetObjectClass(app->activity->clazz);
 			jmethodID methodID = jni->GetMethodID(clazz, "markNativeCodeReady", "()V");
 			if (methodID) {
 				jni->CallVoidMethod(app->activity->clazz, methodID);
+			} else {
+				jni->ExceptionClear();
 			}
-			app->activity->vm->DetachCurrentThread();
 		}
 	}
 }
