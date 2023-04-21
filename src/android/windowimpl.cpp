@@ -1,4 +1,4 @@
-// Copyright 2015-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowimpl.hpp"
@@ -476,6 +476,9 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 			break;
 		case AKEYCODE_BUTTON_START:
 			controller->buttonStart = down;
+			break;
+		case AKEYCODE_BACK:
+			controller->buttonBack = down;
 			break;
 		case AKEYCODE_DPAD_LEFT:
 			controller->dpadX = down ? -1 : 0;
