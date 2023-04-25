@@ -512,7 +512,8 @@ void Window::drawRect(const Vec2 pos, const Vec2 size) const {
 
 void Window::drawRect(Mat3 modelview, const Vec2 size) const {
 	glBindVertexArray(vaoRect);
-	auto tmp = useSimpleShaderProgram(modelview.scale(size.x, size.y));
+	auto tmp = useSimpleShaderProgram(
+	    modelview.scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor()));
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
