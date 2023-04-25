@@ -13,8 +13,8 @@ Achievement::Achievement(std::string id, std::string name, std::string descripti
 }
 
 void Achievement::setValue(int value) {
-	if (this->value < maxValue && value >= maxValue) {
-		AchievementLayer::handle().notify(*this);
+	if (this->value < maxValue && value > this->value) {
+		AchievementLayer::handle().notify(*this, this->value, value);
 	}
 	this->value = value;
 }

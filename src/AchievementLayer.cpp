@@ -7,9 +7,12 @@
 #include "jngl/Vec2.hpp"
 #include "jngl/font.hpp"
 #include "jngl/matrix.hpp"
+#include "jngl/other.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/shapes.hpp"
 #include "windowptr.hpp"
+
+#include <sstream>
 
 namespace jngl {
 
@@ -25,19 +28,65 @@ AchievementLayer& AchievementLayer::handle() {
 }
 
 void AchievementLayer::step() {
+	if (++stepsPassed > getStepsPerSecond() * 3) {
+		fadeIn += 0.05f;
+	} else {
+		fadeIn *= 0.85f;
+	}
+	if (fadeIn < 0.015f) {
+		value += (static_cast<float>(targetValue) - value) * 0.1f;
+		if (fadeIn < 0.001f && targetValue >= maxValue) {
+			colorFade += (1 - colorFade) * 0.05f;
+		}
+	}
+	if (fadeIn > 1.f && !queue.empty()) {
+		queue.front()();
+		queue.pop_front();
+	}
 }
 
 void AchievementLayer::draw() const {
-	const jngl::Vec2 BOX(300, 60);
-	auto mv = jngl::modelview();
-	mv.translate(jngl::getScreenSize() / 2. - BOX);
-	jngl::drawRect(mv, BOX, Color(150, 150, 150));
-	mv.translate({ 20, 20 }); // padding
+	const Vec2 BOX(650, 140);
+	auto mv = modelview();
+	mv.translate({0., fadeIn * 140});
+	mv.translate(getScreenSize() / 2. - BOX);
+	pushAlpha(180);
+	drawRect(mv, BOX, Color(50, 50, 50));
+	popAlpha();
+	const Vec2 padding{ 20, 20 };
+	mv.translate(padding);
+
+	setFontColor(0xffffff_rgb, 1.f);
+	setFontSize(37);
 	pWindow->getFontImpl()->print(mv, achievement);
+
+	mv.translate({0, 50});
+	setFontSize(28);
+	std::ostringstream tmp;
+	tmp << std::lround(value) << " of " << maxValue;
+	pWindow->getFontImpl()->print(mv, tmp.str());
+
+	Vec2 bar(BOX.x - padding.x * 2, 10);
+	mv.translate({0, 40}); // below text
+	const float percentage = std::min(1.f, value / static_cast<float>(maxValue));
+	bar.x *= percentage;
+	drawRect(mv, bar, interpolate(Color(255, 255, 255), 0xe2b007_rgb /* gold */, colorFade));
+	mv.translate({ bar.x, 0 });
+	drawRect(mv, Vec2((1.f - percentage) * (BOX.x - padding.x * 2), bar.y), Color(90, 90, 90));
 }
 
-void AchievementLayer::notify(const Achievement& achievement) {
-	this->achievement = achievement.description;
+void AchievementLayer::notify(const Achievement& achievement, int oldValue, int newValue) {
+	auto start = [this, &achievement, oldValue, newValue]() {
+		this->achievement = achievement.name;
+		fadeIn = 1.f;
+		value = static_cast<float>(oldValue);
+		targetValue = newValue;
+		maxValue = achievement.maxValue;
+		assert(achievement.minValue == 0); // TODO: Support for != 0
+		stepsPassed = 0;
+		colorFade = 0;
+	};
+	queue.emplace_back(start);
 }
 
 } // namespace jngl
