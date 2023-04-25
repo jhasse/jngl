@@ -5,6 +5,7 @@
 #include "jngl/job.hpp"
 
 #include <deque>
+#include <functional>
 #include <string>
 
 namespace jngl {
