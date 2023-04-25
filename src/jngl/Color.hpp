@@ -50,6 +50,9 @@ private:
 	unsigned char blue;
 };
 
+// Returns a color mix between a (t == 0) and b (t == 1)
+Color interpolate(Color a, Color b, float t);
+
 /// Sets the screen's background color which is visible when nothing is drawn
 void setBackgroundColor(jngl::Color);
 
