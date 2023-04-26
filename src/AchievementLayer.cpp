@@ -34,18 +34,27 @@ void AchievementLayer::step() {
 		fadeIn *= 0.85f;
 	}
 	if (fadeIn < 0.015f) {
-		value += (static_cast<float>(targetValue) - value) * 0.1f;
+		value += (static_cast<float>(targetValue) - value) * 0.05f;
 		if (fadeIn < 0.001f && targetValue >= maxValue) {
 			colorFade += (1 - colorFade) * 0.05f;
 		}
 	}
-	if (fadeIn > 1.f && !queue.empty()) {
-		queue.front()();
-		queue.pop_front();
+	if (fadeIn > 1.f) {
+		achievement = nullptr;
+		if (!queue.empty()) {
+			do {
+				queue.front().second();
+				assert(achievement != nullptr);
+				queue.pop_front();
+			} while (!queue.empty() && achievement == queue.front().first);
+		}
 	}
 }
 
 void AchievementLayer::draw() const {
+	if (!achievement) {
+		return;
+	}
 	const Vec2 BOX(650, 140);
 	auto mv = modelview();
 	mv.translate({0., fadeIn * 140});
@@ -57,7 +66,7 @@ void AchievementLayer::draw() const {
 
 	setFontColor(0xffffff_rgb, 1.f);
 	setFontSize(37);
-	pWindow->getFontImpl()->print(mv, achievement);
+	pWindow->getFontImpl()->print(mv, achievement->name);
 
 	mv.translate({0, 50});
 	setFontSize(28);
@@ -76,22 +85,25 @@ void AchievementLayer::draw() const {
 }
 
 void AchievementLayer::notify(const Achievement& achievement, int oldValue, int newValue) {
-	if (fadeIn < 1.f && this->achievement == achievement.name) {
-		// re-use existing popup
-		targetValue = newValue;
-		stepsPassed = 0;
-		return;
-	}
 	auto start = [this, &achievement, oldValue, newValue]() {
-		this->achievement = achievement.name;
-		fadeIn = 1.f;
-		value = static_cast<float>(oldValue);
 		targetValue = newValue;
-		maxValue = achievement.maxValue;
 		stepsPassed = 0;
-		colorFade = 0;
+		if (this->achievement == nullptr) {
+			// only start animations, if we aren't re-use an existing popup
+			fadeIn = 1.f;
+			value = static_cast<float>(oldValue);
+			maxValue = achievement.maxValue;
+			colorFade = 0;
+		} else {
+			assert(&achievement == this->achievement);
+		}
+		this->achievement = &achievement;
 	};
-	queue.emplace_back(start);
+	if (this->achievement == nullptr || this->achievement == &achievement /* re-use existing popup */) {
+		start();
+	} else {
+		queue.emplace_back(&achievement, start);
+	}
 }
 
 } // namespace jngl

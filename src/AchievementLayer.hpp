@@ -22,7 +22,7 @@ public:
 	void notify(const Achievement&, int oldValue, int newValue);
 
 private:
-	std::string achievement;
+	const Achievement* achievement = nullptr;
 	float fadeIn = 2.f;
 
 	float value = 0;
@@ -31,7 +31,7 @@ private:
 	int stepsPassed = 0;
 	float colorFade = 0;
 
-	std::deque<std::function<void()>> queue;
+	std::deque<std::pair<const Achievement*, std::function<void()>>> queue;
 };
 
 } // namespace jngl
