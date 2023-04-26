@@ -7,16 +7,21 @@
 namespace jngl {
 
 Achievement::Achievement(std::string id, std::string name, std::string description,
-                         std::string icon, int minValue, int maxValue)
+                         std::string icon, int initialvalue, int maxValue)
 : id(std::move(id)), name(std::move(name)), description(std::move(description)),
-  icon(std::move(icon)), minValue(minValue), maxValue(maxValue), value(minValue) {
+  icon(std::move(icon)), maxValue(maxValue), value(initialvalue) {
 }
 
-void Achievement::setValue(int value) {
-	if (this->value < maxValue && value > this->value) {
-		AchievementLayer::handle().notify(*this, this->value, value);
+int Achievement::getValue() const {
+	return value;
+}
+
+void Achievement::increaseValue(int by) {
+	assert(by >= 0);
+	if (value < maxValue && by > 0) {
+		AchievementLayer::handle().notify(*this, value, value + by);
 	}
-	this->value = value;
+	value += by;
 }
 
 } // namespace jngl

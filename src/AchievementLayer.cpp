@@ -50,9 +50,8 @@ void AchievementLayer::draw() const {
 	auto mv = modelview();
 	mv.translate({0., fadeIn * 140});
 	mv.translate(getScreenSize() / 2. - BOX);
-	pushAlpha(180);
+	jngl::setAlpha(180);
 	drawRect(mv, BOX, Color(50, 50, 50));
-	popAlpha();
 	const Vec2 padding{ 20, 20 };
 	mv.translate(padding);
 
@@ -73,16 +72,22 @@ void AchievementLayer::draw() const {
 	drawRect(mv, bar, interpolate(Color(255, 255, 255), 0xe2b007_rgb /* gold */, colorFade));
 	mv.translate({ bar.x, 0 });
 	drawRect(mv, Vec2((1.f - percentage) * (BOX.x - padding.x * 2), bar.y), Color(90, 90, 90));
+	jngl::setAlpha(255);
 }
 
 void AchievementLayer::notify(const Achievement& achievement, int oldValue, int newValue) {
+	if (fadeIn < 1.f && this->achievement == achievement.name) {
+		// re-use existing popup
+		targetValue = newValue;
+		stepsPassed = 0;
+		return;
+	}
 	auto start = [this, &achievement, oldValue, newValue]() {
 		this->achievement = achievement.name;
 		fadeIn = 1.f;
 		value = static_cast<float>(oldValue);
 		targetValue = newValue;
 		maxValue = achievement.maxValue;
-		assert(achievement.minValue == 0); // TODO: Support for != 0
 		stepsPassed = 0;
 		colorFade = 0;
 	};
