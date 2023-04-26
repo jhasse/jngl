@@ -4,6 +4,8 @@
 
 #include "../AchievementLayer.hpp"
 
+#include <cassert>
+
 namespace jngl {
 
 Achievement::Achievement(std::string id, std::string name, std::string description,
