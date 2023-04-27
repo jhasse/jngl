@@ -29,6 +29,9 @@ struct Achievement {
 	int getValue() const;
 	void increaseValue(int by);
 
+	// if set "customDisplayValue(<value>) of customDisplayValue(<maxValue>)" will be displayed
+	std::function<int(int)> customDisplayValue;
+
 private:
 	int value;
 };

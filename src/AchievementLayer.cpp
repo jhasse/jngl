@@ -71,7 +71,17 @@ void AchievementLayer::draw() const {
 	mv.translate({0, 50});
 	setFontSize(28);
 	std::ostringstream tmp;
-	tmp << std::lround(value) << " of " << maxValue;
+	if (achievement->customDisplayValue) {
+		tmp << achievement->customDisplayValue(static_cast<int>(std::lround(value)));
+	} else {
+		tmp << std::lround(value);
+	}
+	tmp << " of ";
+	if (achievement->customDisplayValue) {
+		tmp << achievement->customDisplayValue(maxValue);
+	} else {
+		tmp << maxValue;
+	}
 	pWindow->getFontImpl()->print(mv, tmp.str());
 
 	Vec2 bar(BOX.x - padding.x * 2, 10);
