@@ -42,6 +42,7 @@ var namespacejngl =
       [ "RIGHT", "namespacejngl.html#acdfaca60ec19c0265bac2692d7982726a21507b40c80068eda19865706fdc2403", null ],
       [ "CENTER", "namespacejngl.html#acdfaca60ec19c0265bac2692d7982726ac397289ee45877be0cd49811fe245b4e", null ]
     ] ],
+    [ "interpolate", "namespacejngl.html#a3510ea81518e91fdd25d400de62124be", null ],
     [ "setBackgroundColor", "namespacejngl.html#ae90a1346aab83848e060a8c5b3581029", null ],
     [ "setBackgroundColor", "namespacejngl.html#a5a1481d931704b4d0dd6342b2bf5152c", null ],
     [ "contains", "namespacejngl.html#a659fec77fac8709c62729fa1210fa6b1", null ],
