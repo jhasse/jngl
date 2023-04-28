@@ -55,14 +55,14 @@ void AchievementLayer::draw() const {
 	if (!achievement) {
 		return;
 	}
-	const Vec2 BOX(650, 140);
+	const Vec2 BOX(600, 140);
+	const Vec2 PADDING{ 20, 20 };
 	auto mv = modelview();
-	mv.translate({0., fadeIn * 140});
-	mv.translate(getScreenSize() / 2. - BOX);
+	mv.translate({0., fadeIn * (BOX.y + PADDING.y)});
+	mv.translate(getScreenSize() / 2. - BOX - PADDING);
 	jngl::setAlpha(180);
 	drawRect(mv, BOX, Color(50, 50, 50));
-	const Vec2 padding{ 20, 20 };
-	mv.translate(padding);
+	mv.translate(PADDING);
 
 	setFontColor(0xffffff_rgb, 1.f);
 	setFontSize(37);
@@ -84,13 +84,13 @@ void AchievementLayer::draw() const {
 	}
 	pWindow->getFontImpl()->print(mv, tmp.str());
 
-	Vec2 bar(BOX.x - padding.x * 2, 10);
+	Vec2 bar(BOX.x - PADDING.x * 2, 10);
 	mv.translate({0, 40}); // below text
 	const float percentage = std::min(1.f, value / static_cast<float>(maxValue));
 	bar.x *= percentage;
 	drawRect(mv, bar, interpolate(Color(255, 255, 255), 0xe2b007_rgb /* gold */, colorFade));
 	mv.translate({ bar.x, 0 });
-	drawRect(mv, Vec2((1.f - percentage) * (BOX.x - padding.x * 2), bar.y), Color(90, 90, 90));
+	drawRect(mv, Vec2((1.f - percentage) * (BOX.x - PADDING.x * 2), bar.y), Color(90, 90, 90));
 	jngl::setAlpha(255);
 }
 
