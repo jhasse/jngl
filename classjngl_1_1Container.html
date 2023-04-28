@@ -118,15 +118,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> () const</td
 <tr class="separator:a257b753011ed7e831390acf9b70614f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09001f63a3f6f6133749f5bda24a992f"><td class="memItemLeft" align="right" valign="top"><a id="a09001f63a3f6f6133749f5bda24a992f" name="a09001f63a3f6f6133749f5bda24a992f"></a>
 <a class="el" href="classjngl_1_1Widget.html">Widget</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>addWidget</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/unique_ptr.html">std::unique_ptr</a>&lt; <a class="el" href="classjngl_1_1Widget.html">Widget</a> &gt;)</td></tr>
-<tr class="memdesc:a09001f63a3f6f6133749f5bda24a992f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Immediately adds a <a class="el" href="classjngl_1_1Widget.html">Widget</a> to the container. <br /></td></tr>
+<tr class="memdesc:a09001f63a3f6f6133749f5bda24a992f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a <a class="el" href="classjngl_1_1Widget.html">Widget</a> to the container (safe to call during <a class="el" href="classjngl_1_1Container.html#ac6bf1a12c5c98ddec5b65e07fe74cabe" title="Calls Widget::step of every widget and removes the once which request it.">Container::step</a>) <br /></td></tr>
 <tr class="separator:a09001f63a3f6f6133749f5bda24a992f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad11dde3f83816c47bd515e054011ee5b"><td class="memTemplParams" colspan="2">template&lt;class T , class... Args&gt; </td></tr>
 <tr class="memitem:ad11dde3f83816c47bd515e054011ee5b"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjngl_1_1Container.html#ad11dde3f83816c47bd515e054011ee5b">addWidget</a> (Args &amp;&amp;... args)</td></tr>
-<tr class="memdesc:ad11dde3f83816c47bd515e054011ee5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The same as <a class="el" href="classjngl_1_1Container.html#a09001f63a3f6f6133749f5bda24a992f" title="Immediately adds a Widget to the container.">addWidget(std::unique_ptr&lt;Widget&gt;)</a> but creates the <a class="el" href="classjngl_1_1Widget.html">Widget</a> for you.  <a href="classjngl_1_1Container.html#ad11dde3f83816c47bd515e054011ee5b">More...</a><br /></td></tr>
+<tr class="memdesc:ad11dde3f83816c47bd515e054011ee5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The same as <a class="el" href="classjngl_1_1Container.html#a09001f63a3f6f6133749f5bda24a992f" title="Adds a Widget to the container (safe to call during Container::step)">addWidget(std::unique_ptr&lt;Widget&gt;)</a> but creates the <a class="el" href="classjngl_1_1Widget.html">Widget</a> for you.  <a href="classjngl_1_1Container.html#ad11dde3f83816c47bd515e054011ee5b">More...</a><br /></td></tr>
 <tr class="separator:ad11dde3f83816c47bd515e054011ee5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d1ae719c05bdc42765dfcef46c09fa9"><td class="memItemLeft" align="right" valign="top"><a id="a9d1ae719c05bdc42765dfcef46c09fa9" name="a9d1ae719c05bdc42765dfcef46c09fa9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>removeWidget</b> (<a class="el" href="classjngl_1_1Widget.html">Widget</a> *)</td></tr>
-<tr class="memdesc:a9d1ae719c05bdc42765dfcef46c09fa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks a <a class="el" href="classjngl_1_1Widget.html">Widget</a> to be removed by <a class="el" href="classjngl_1_1Container.html#ac6bf1a12c5c98ddec5b65e07fe74cabe" title="Calls Widget::step of every widget and removes the once which request it.">Container::step</a>. <br /></td></tr>
+<tr class="memdesc:a9d1ae719c05bdc42765dfcef46c09fa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a <a class="el" href="classjngl_1_1Widget.html">Widget</a> from the <a class="el" href="classjngl_1_1Container.html" title="Helper class to handle multiple instances of Widget.">Container</a> (safe to call during <a class="el" href="classjngl_1_1Container.html#ac6bf1a12c5c98ddec5b65e07fe74cabe" title="Calls Widget::step of every widget and removes the once which request it.">Container::step</a>) <br /></td></tr>
 <tr class="separator:a9d1ae719c05bdc42765dfcef46c09fa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -158,7 +158,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>removeWidget</b> (<a 
 </table>
 </div><div class="memdoc">
 
-<p>The same as <a class="el" href="classjngl_1_1Container.html#a09001f63a3f6f6133749f5bda24a992f" title="Immediately adds a Widget to the container.">addWidget(std::unique_ptr&lt;Widget&gt;)</a> but creates the <a class="el" href="classjngl_1_1Widget.html">Widget</a> for you. </p>
+<p>The same as <a class="el" href="classjngl_1_1Container.html#a09001f63a3f6f6133749f5bda24a992f" title="Adds a Widget to the container (safe to call during Container::step)">addWidget(std::unique_ptr&lt;Widget&gt;)</a> but creates the <a class="el" href="classjngl_1_1Widget.html">Widget</a> for you. </p>
 
 <p class="definition">Definition at line <a class="el" href="Container_8hpp_source.html#l00028">28</a> of file <a class="el" href="Container_8hpp_source.html">Container.hpp</a>.</p>
 
