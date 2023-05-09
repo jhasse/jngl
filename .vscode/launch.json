@@ -73,10 +73,10 @@
 			"preLaunchTask": "build"
 		},
 		{
-			"name": "unittest (C/C++)",
+			"name": "jngl-unittest (C/C++)",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceRoot}/build/unittest",
+			"program": "${workspaceRoot}/build/jngl-unittest",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceRoot}/build",
