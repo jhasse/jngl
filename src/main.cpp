@@ -30,6 +30,10 @@
 #include <sys/stat.h>
 #endif
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 namespace jngl {
 
 std::string pathPrefix;
@@ -596,6 +600,8 @@ std::string _getConfigPath() {
 	path << getSystemConfigPath() << "/";
 #elif defined(_WIN32)
 	path << getSystemConfigPath() << "\\" << App::instance().getDisplayName() << "\\";
+#elif defined(__EMSCRIPTEN__)
+	path << "/working1/";
 #else
 	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/";
 #endif
@@ -697,6 +703,16 @@ void writeConfig(const std::string& key, const std::string& value) {
 #endif
 	fout.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	fout << value;
+
+#ifdef __EMSCRIPTEN__
+	EM_ASM(
+		FS.syncfs(false, function(err) {
+			if (err) {
+				console.warn("Error saving:", err);
+			}
+		})
+	);
+#endif
 }
 #endif
 
