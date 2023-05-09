@@ -198,6 +198,14 @@ void WindowImpl::init() {
 			EGL_NONE
 	};
 	context = eglCreateContext(display, config, NULL, contextAttribList);
+	if (!context) {
+		jngl::debugLn("Couldn't get OpenGL ES 3.0 context, falling back to OpenGL ES 2.0.");
+		const EGLint contextAttribList[] = {
+				EGL_CONTEXT_MAJOR_VERSION, 2,
+				EGL_NONE
+		};
+		context = eglCreateContext(display, config, NULL, contextAttribList);
+	}
 
 	makeCurrent();
 
