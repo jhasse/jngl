@@ -41,12 +41,14 @@ void AchievementLayer::step() {
 	}
 	if (fadeIn > 1.f) {
 		achievement = nullptr;
-		if (!queue.empty()) {
-			do {
-				queue.front().second();
+		for (auto it = queue.begin(); it != queue.end();) {
+			if (achievement == nullptr || it->first == achievement) {
+				it->second();
 				assert(achievement != nullptr);
-				queue.pop_front();
-			} while (!queue.empty() && achievement == queue.front().first);
+				it = queue.erase(it);
+			} else {
+				++it;
+			}
 		}
 	}
 }

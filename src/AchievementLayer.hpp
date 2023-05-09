@@ -4,9 +4,9 @@
 
 #include "jngl/job.hpp"
 
-#include <deque>
 #include <functional>
 #include <string>
+#include <vector>
 
 namespace jngl {
 
@@ -31,7 +31,7 @@ private:
 	int stepsPassed = 0;
 	float colorFade = 0;
 
-	std::deque<std::pair<const Achievement*, std::function<void()>>> queue;
+	std::vector<std::pair<const Achievement*, std::function<void()>>> queue;
 };
 
 } // namespace jngl
