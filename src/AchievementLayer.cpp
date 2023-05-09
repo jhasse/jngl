@@ -57,11 +57,15 @@ void AchievementLayer::draw() const {
 	if (!achievement) {
 		return;
 	}
-	const Vec2 BOX(600, 140);
+	const Vec2 BOX(570, 140);
 	const Vec2 PADDING{ 20, 20 };
 	auto mv = modelview();
 	mv.translate({0., fadeIn * (BOX.y + PADDING.y)});
-	mv.translate(getScreenSize() / 2. - BOX - PADDING);
+	mv.translate(getScreenSize() / 2. - BOX - PADDING -
+	             Vec2(PADDING.x /* more horizontal padding to move away from rounded edge of some
+	                               phone screens */
+	                  ,
+	                  0));
 	jngl::setAlpha(180);
 	drawRect(mv, BOX, Color(50, 50, 50));
 	mv.translate(PADDING);
