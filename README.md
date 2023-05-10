@@ -1,9 +1,11 @@
-# JNGL - Just a Neat Game Library [![pipeline status](https://gitlab.com/jhasse/jngl/badges/master/pipeline.svg)](https://gitlab.com/jhasse/jngl/commits/master)
+# JNGL - Just a Neat Game Library
 
 [🌐 Website](https://bixense.com/jngl/)
 [🏃 Quickstart](https://github.com/jhasse/jngl/wiki/JNGL-Quickstart)
 [🎓 Tutorial](https://github.com/pinguin999/my-jngl-starter)
 [📚 Documentation](https://bixense.com/jngl/annotated.html)
+
+[![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/zWdnq6UJ79)
 
 An easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox, the Nintendo Switch,
 and the Web.
