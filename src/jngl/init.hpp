@@ -76,12 +76,13 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 		maxAspectRatio = minAspectRatio = std::pair<int, int>(std::lround(params.screenSize->x),
 		                                                      std::lround(params.screenSize->y));
 	} else {
-		params.screenSize = { double(jngl::getDesktopWidth()), double(jngl::getDesktopHeight()) };
+		params.screenSize = { static_cast<double>(jngl::getDesktopWidth()),
+			                  static_cast<double>(jngl::getDesktopHeight()) };
 		fullscreen = true;
 	}
 	if (fullscreen) {
-		const jngl::Vec2 desktopSize{ double(jngl::getDesktopWidth()),
-			                          double(jngl::getDesktopHeight()) };
+		const jngl::Vec2 desktopSize{ static_cast<double>(jngl::getDesktopWidth()),
+			                          static_cast<double>(jngl::getDesktopHeight()) };
 		if (desktopSize.x > 0 &&
 		    desktopSize.y > 0) { // desktop size isn't available on some platforms (e.g. Android)
 			jngl::setScaleFactor(std::min(desktopSize.x / params.screenSize->x,
