@@ -386,7 +386,7 @@ void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, const st
 		}
 		throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 	}
-	texture = std::make_shared<Texture>(width, height, scaledWidth, scaledHeight, rowPointers,
+	texture = std::make_shared<Texture>(scaledWidth, scaledHeight, width, height, rowPointers,
 	                                    format, data);
 	textures[filename] = texture;
 }
