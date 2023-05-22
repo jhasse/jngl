@@ -1,4 +1,4 @@
-// Copyright 2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "AndroidController.hpp"
 
@@ -15,6 +15,7 @@ bool AndroidController::down(const controller::Button button) const {
 		case controller::A: return buttonA;
 		case controller::B: return buttonB;
 		case controller::Start: return buttonStart;
+		case controller::Back: return buttonBack;
 		default: return state(button) > 0.5f;
 	}
 }

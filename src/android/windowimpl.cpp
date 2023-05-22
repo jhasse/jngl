@@ -1,4 +1,4 @@
-// Copyright 2015-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowimpl.hpp"
@@ -37,7 +37,7 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 			}
 			break;
 		case APP_CMD_TERM_WINDOW:
-			// TODO: The window is being hidden or closed, clean it up.
+			impl.terminate();
 			break;
 		case APP_CMD_GAINED_FOCUS:
 			impl.makeCurrent();
@@ -138,13 +138,11 @@ WindowImpl::WindowImpl(Window* window, const std::pair<int, int> minAspectRatio,
 	jngl::debugLn("Handler set.");
 
 	app->activity->vm->AttachCurrentThread(&env, nullptr);
+
+	ANativeActivity_setWindowFlags(app->activity, AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
 }
 
 WindowImpl::~WindowImpl() {
-	if (!initialized) { // Exception thrown during initialization?
-		return; // Skip any clean up code
-		// TODO: The code should probably made exception-safe, but in a cleaner way.
-	}
 	// We need to destroy the surface before finishing our activity, otherwise the app won't start
 	// again.
 	pause();
@@ -155,17 +153,21 @@ WindowImpl::~WindowImpl() {
 	app->activity->vm->DetachCurrentThread();
 }
 
-void WindowImpl::init() {
-	if (initialized) {
-		return;
+static void handleEglError() {
+	EGLenum error = eglGetError();
+	const char* errorString = eglQueryString(EGL_NO_DISPLAY, error);
+	if (errorString != nullptr) {
+		throw std::runtime_error(errorString);
 	}
-	ANativeActivity_setWindowFlags(app->activity, AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
+	throw std::runtime_error("EGL error: " + std::to_string(error));
+}
 
+WindowImpl::DisplayWrapper::DisplayWrapper() {
 	// Here specify the attributes of the desired configuration. Below, we select an EGLConfig with
 	// at least 8 bits per color component compatible with on-screen windows
-	const EGLint attribs[] = {
+	EGLint attribs[] = {
 		EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
 		EGL_BLUE_SIZE, 8,
 		EGL_GREEN_SIZE, 8,
 		EGL_RED_SIZE, 8,
@@ -175,43 +177,98 @@ void WindowImpl::init() {
 	EGLint numConfigs;
 
 	display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-
-	eglInitialize(display, 0, 0);
-
+	if (display == EGL_NO_DISPLAY) {
+		handleEglError();
+	}
+	if (eglInitialize(display, nullptr, nullptr) == EGL_FALSE) {
+		handleEglError();
+	}
 	// Here, the application chooses the configuration it desires. In this sample, we have a very
 	// simplified selection process, where we pick the first EGLConfig that matches our criteria
-	eglChooseConfig(display, attribs, &config, 1, &numConfigs);
+	if (eglChooseConfig(display, attribs, &config, 1, &numConfigs) == EGL_FALSE) {
+		assert(attribs[3] == EGL_OPENGL_ES3_BIT);
+		attribs[3] = EGL_OPENGL_ES2_BIT;
+		if (eglChooseConfig(display, attribs, &config, 1, &numConfigs) == EGL_FALSE) {
+			handleEglError();
+		}
+	}
 
 	// EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is guaranteed to be accepted by
 	// ANativeWindow_setBuffersGeometry(). As soon as we picked a EGLConfig, we can safely
 	// reconfigure the ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID.
-	eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
+	if (eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format) == EGL_FALSE) {
+		handleEglError();
+	}
 
-	if (!app) {
+	if (!androidApp) {
 		throw std::runtime_error("android_app struct not set. "
 		                         "Use JNGL_MAIN_BEGIN and JNGL_MAIN_END.");
 	}
-	ANativeWindow_setBuffersGeometry(app->window, 0, 0, format);
+	ANativeWindow_setBuffersGeometry(androidApp->window, 0, 0, format);
 
 	const EGLint contextAttribList[] = {
-			EGL_CONTEXT_CLIENT_VERSION, 3,
+			EGL_CONTEXT_CLIENT_VERSION, (attribs[3] & EGL_OPENGL_ES3_BIT) ? 3 : 2,
 			EGL_NONE
 	};
 	context = eglCreateContext(display, config, NULL, contextAttribList);
+	if (context == EGL_NO_CONTEXT) {
+		handleEglError();
+	}
+}
 
+WindowImpl::DisplayWrapper::~DisplayWrapper() {
+	surface = std::nullopt;
+	assert(context != EGL_NO_CONTEXT);
+	if (eglDestroyContext(display, context) == EGL_FALSE) {
+		handleEglError();
+	}
+	if (eglTerminate(display) == EGL_FALSE) {
+		handleEglError();
+	}
+}
+
+WindowImpl::DisplayWrapper::SurfaceWrapper::SurfaceWrapper(const DisplayWrapper& parent)
+: parent(parent) {
+	surface = eglCreateWindowSurface(parent.display, parent.config, androidApp->window, nullptr);
+	if (surface == EGL_NO_SURFACE) {
+		handleEglError();
+	}
+	if (eglMakeCurrent(parent.display, surface, surface, parent.context) == EGL_FALSE) {
+		handleEglError();
+	}
+}
+
+WindowImpl::DisplayWrapper::SurfaceWrapper::~SurfaceWrapper() {
+	assert(parent.display != EGL_NO_DISPLAY);
+	if (eglMakeCurrent(parent.display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) ==
+	    EGL_FALSE) {
+		handleEglError();
+	}
+	assert(surface != EGL_NO_SURFACE);
+	if (eglDestroySurface(parent.display, surface) == EGL_FALSE) {
+		handleEglError();
+	}
+}
+
+void WindowImpl::init() {
 	makeCurrent();
 
 	EGLint w, h;
-	eglQuerySurface(display, surface, EGL_WIDTH, &w);
-	eglQuerySurface(display, surface, EGL_HEIGHT, &h);
+	if (eglQuerySurface(display->display, display->surface->surface, EGL_WIDTH, &w) == EGL_FALSE) {
+		handleEglError();
+	}
+	if (eglQuerySurface(display->display, display->surface->surface, EGL_HEIGHT, &h) == EGL_FALSE) {
+		handleEglError();
+	}
 	window->width_ = w;
 	window->height_ = h;
 	window->calculateCanvasSize(minAspectRatio, maxAspectRatio);
+}
 
-	// Initialize GL state.
-	Init(window->width_, window->height_, window->canvasWidth, window->canvasHeight);
-
-	initialized = true;
+void WindowImpl::terminate() {
+	if (display) {
+		display->surface = std::nullopt;
+	}
 }
 
 void WindowImpl::setRelativeMouseMode(const bool relativeMouseMode) {
@@ -225,51 +282,18 @@ void WindowImpl::setRelativeMouseMode(const bool relativeMouseMode) {
 }
 
 void WindowImpl::pause() {
-	if (!surface) { return; }
-	if (eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) ==
-		EGL_FALSE) {
-		debugLn("Couldn't unbind surfaces!");
+	if (display) {
+		display->surface = std::nullopt;
 	}
-	if (eglDestroySurface(display, surface) == EGL_FALSE) {
-		debugLn("Couldn't destroy surface!");
-	}
-	surface = nullptr;
 	pauseAudioDevice();
 }
 
 void WindowImpl::makeCurrent() {
-	if (surface) { return; }
-	surface = eglCreateWindowSurface(display, config, app->window, nullptr);
-	assert(eglGetError() == EGL_SUCCESS);
-	if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
-		// Source: https://stackoverflow.com/a/60611870/647898
-		JNIEnv* jni = nullptr;
-		app->activity->vm->AttachCurrentThread(&jni, nullptr);
-
-		jclass clazz = jni->GetObjectClass(app->activity->clazz);
-
-		// Get the ID of the method we want to call
-		// This must match the name and signature from the Java side Signature has to match java
-		// implementation (second string hints a java string parameter)
-		jmethodID methodID = jni->GetMethodID(clazz, "showAlert", "(Ljava/lang/String;Z)I");
-
-		if (methodID) {
-			std::stringstream sstream;
-			sstream << "Your device doesn't support OpenGL ES 3.0!\n\nError code: 0x" << std::hex
-			        << eglGetError();
-
-			// Strings passed to the function need to be converted to a java string object
-			jstring jmessage = jni->NewStringUTF(sstream.str().c_str());
-
-			jni->CallIntMethod(app->activity->clazz, methodID, jmessage, true);
-
-			// Remember to clean up passed values
-			jni->DeleteLocalRef(jmessage);
-		}
-
-		app->activity->vm->DetachCurrentThread();
-
-		throw std::runtime_error("Unable to eglMakeCurrent");
+	if (!display) {
+		display.emplace();
+	}
+	if (!display->surface) {
+		display->surface.emplace(*display);
 	}
 	resumeAudioDevice();
 }
@@ -317,17 +341,22 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 }
 
 void WindowImpl::updateInput() {
+	if (firstFrame && display && display->context) {
+		// TODO: I think this should be moved to Window::initGlObjects(). We can't do it in
+		// WindowImpl::init() as that might be called multiple times even at startup.
+		Init(window->width_, window->height_, window->canvasWidth, window->canvasHeight);
+	}
 	// Read all pending events.
 	int ident;
 	int events;
 	android_poll_source* source;
 
 	while ((ident = ALooper_pollAll(
-	            surface ? 0 : 1e9, // This is the timeout. When we're in the background, we don't
+	            display->surface ? 0 : 1e9, // This is the timeout. When we're in the background, we don't
 	                               // want to busy-wait for events.
 	            nullptr, &events, (void**)&source)) >= 0 ||
-	       !initialized /* wait for WindowImpl::init to get called by engine_handle_cmd */ ||
-	       !surface /* we're in the background, don't leave this event loop */) {
+	       !display /* wait for WindowImpl::init to get called by engine_handle_cmd */ ||
+	       !display->surface /* we're in the background, don't leave this event loop */) {
 
 		// Process this event.
 		if (source != NULL) {
@@ -336,12 +365,7 @@ void WindowImpl::updateInput() {
 
 		// Check if we are exiting.
 		if (app->destroyRequested != 0) {
-			if (eglDestroyContext(display, context) == EGL_FALSE) {
-				debugLn("Couldn't destroy context!");
-			}
-			if (eglTerminate(display) == EGL_FALSE) {
-				debugLn("Couldn't terminate display!");
-			}
+			display = std::nullopt;
 			jngl::quit();
 			return; // surface == nullptr, we need to exit this loop
 		}
@@ -363,18 +387,20 @@ void WindowImpl::updateInput() {
 }
 
 void WindowImpl::swapBuffers() {
-	if (surface) {
-		eglSwapBuffers(display, surface);
+	if (display->surface) {
+		if (eglSwapBuffers(display->display, display->surface->surface) == EGL_FALSE) {
+			handleEglError();
+		}
 		if (firstFrame) {
 			firstFrame = false;
-			JNIEnv* jni = nullptr;
-			app->activity->vm->AttachCurrentThread(&jni, nullptr);
+			JNIEnv* const jni = env;
 			jclass clazz = jni->GetObjectClass(app->activity->clazz);
 			jmethodID methodID = jni->GetMethodID(clazz, "markNativeCodeReady", "()V");
 			if (methodID) {
 				jni->CallVoidMethod(app->activity->clazz, methodID);
+			} else {
+				jni->ExceptionClear();
 			}
-			app->activity->vm->DetachCurrentThread();
 		}
 	}
 }
@@ -477,6 +503,9 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 			break;
 		case AKEYCODE_BUTTON_START:
 			controller->buttonStart = down;
+			break;
+		case AKEYCODE_BACK:
+			controller->buttonBack = down;
 			break;
 		case AKEYCODE_DPAD_LEFT:
 			controller->dpadX = down ? -1 : 0;

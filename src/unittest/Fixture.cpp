@@ -41,8 +41,8 @@ std::string Fixture::getAsciiArt() const {
 	using namespace boost::ut;
 	expect(approx(reduceFactorAsFloat, reduceFactor, 1e-6));
 
-	assert(w % reduceFactor == 0);
-	assert(h % reduceFactor == 0);
+	expect(eq(w % reduceFactor, 0));
+	expect(eq(h % reduceFactor, 0));
 	size_t reducedW = w / reduceFactor;
 	std::vector<std::vector<std::vector<float>>> reduced;
 	size_t index = 0;
@@ -91,6 +91,7 @@ void Fixture::reset() {
 
 	const double frameSize = 5;
 	const jngl::Vec2 screen(jngl::getScreenWidth(), jngl::getScreenHeight());
+	jngl::setColor(0x000000_rgb);
 	jngl::drawRect(-screen.x / 2, screen.y / 2 - frameSize, screen.x, frameSize); // bottom
 	jngl::drawRect(-screen.x / 2, -screen.y / 2, screen.x, frameSize);            // top
 	jngl::drawRect(screen.x / 2 - frameSize, -screen.y / 2, frameSize, screen.y); // right

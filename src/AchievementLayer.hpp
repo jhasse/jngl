@@ -4,7 +4,9 @@
 
 #include "jngl/job.hpp"
 
+#include <functional>
 #include <string>
+#include <vector>
 
 namespace jngl {
 
@@ -17,10 +19,19 @@ public:
 	void step() override;
 	void draw() const override;
 
-	void notify(const Achievement&);
+	void notify(const Achievement&, int oldValue, int newValue);
 
 private:
-	std::string achievement;
+	const Achievement* achievement = nullptr;
+	float fadeIn = 2.f;
+
+	float value = 0;
+	int targetValue = 0;
+	int maxValue = 0;
+	int stepsPassed = 0;
+	float colorFade = 0;
+
+	std::vector<std::pair<const Achievement*, std::function<void()>>> queue;
 };
 
 } // namespace jngl

@@ -13,7 +13,7 @@ class Sprite;
 
 struct Achievement {
 	Achievement(std::string id, std::string name, std::string description, std::string icon,
-	            int minValue = 0, int maxValue = 1);
+	            int initialValue = 0, int maxValue = 1);
 
 	/// API Name
 	std::string id;
@@ -24,10 +24,13 @@ struct Achievement {
 	/// filename for achievement icon, will be loaded when the achievement is displayed
 	std::string icon;
 
-	int minValue;
 	int maxValue;
 
-	void setValue(int);
+	int getValue() const;
+	void increaseValue(int by);
+
+	// if set "customDisplayValue(<value>) of customDisplayValue(<maxValue>)" will be displayed
+	std::function<int(int)> customDisplayValue;
 
 private:
 	int value;

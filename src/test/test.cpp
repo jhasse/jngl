@@ -41,7 +41,7 @@ public:
 	Test()
 	: fb2(jngl::getWindowSize()), logoWebp("jngl.webp"), soundLoader(jngl::load("test.ogg")) {
 		jngl::setTitle(jngl::App::instance().getDisplayName() + " | UTF-8: äöüß");
-		jngl::setIcon("jngl");
+		jngl::setIcon("jngl-icon");
 		jngl::setMouseVisible(false);
 		frameTime = jngl::getTime();
 		lastTime = jngl::getTime();
@@ -55,16 +55,18 @@ public:
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
 		if (jngl::keyPressed('p')) {
-			auto start = clock.now();
+			auto start = std::chrono::steady_clock::now();
 			jngl::stop("test.ogg");
 			std::cout << "stop took "
-			          << std::chrono::duration_cast<std::chrono::milliseconds>(clock.now() - start)
+			          << std::chrono::duration_cast<std::chrono::milliseconds>(
+			                 std::chrono::steady_clock::now() - start)
 			                 .count()
 			          << " ms.\n";
-			start = clock.now();
+			start = std::chrono::steady_clock::now();
 			jngl::play("test.ogg");
 			std::cout << "play took "
-			          << std::chrono::duration_cast<std::chrono::milliseconds>(clock.now() - start)
+			          << std::chrono::duration_cast<std::chrono::milliseconds>(
+			                 std::chrono::steady_clock::now() - start)
 			                 .count()
 			          << " ms.\n";
 		}

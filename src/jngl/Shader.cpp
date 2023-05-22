@@ -50,6 +50,15 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 	GLint status = GL_FALSE;
 	glGetShaderiv(impl->id, GL_COMPILE_STATUS, &status);
 	if (status != GL_TRUE) {
+		if (gles20Source && source != gles20Source) {
+			glShaderSource(impl->id, 1, &gles20Source, nullptr);
+			glCompileShader(impl->id);
+			GLint status = GL_FALSE;
+			glGetShaderiv(impl->id, GL_COMPILE_STATUS, &status);
+			if (status == GL_TRUE) {
+				return;
+			}
+		}
 		char buffer[2048];
 		glGetShaderInfoLog(impl->id, sizeof(buffer), nullptr, buffer);
 		throw std::runtime_error(buffer);
