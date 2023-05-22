@@ -15,6 +15,10 @@
 #include "matrix.hpp"
 #include "screen.hpp"
 
+#ifdef _WIN32
+#include "../win32/unicode.hpp"
+#endif
+
 #ifdef ANDROID
 #include "../android/fopen.hpp"
 #endif
@@ -114,7 +118,11 @@ Sprite::Sprite(const std::string& filename, LoadType loadType) : texture(getText
 		}
 		throw std::runtime_error(message.str());
 	}
+#ifdef _WIN32
+	FILE* pFile = _wfopen(utf8ToUtf16(fullFilename).c_str(), L"rb");
+#else
 	FILE* pFile = fopen(fullFilename.c_str(), "rb");
+#endif
 	if (pFile == nullptr) {
 		throw std::runtime_error(std::string("File not found: " + fullFilename));
 	}

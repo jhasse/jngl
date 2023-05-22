@@ -30,6 +30,10 @@
 #include <sys/stat.h>
 #endif
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 namespace jngl {
 
 std::string pathPrefix;
@@ -115,6 +119,22 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	updateViewportAndLetterboxing(width, height, canvasWidth, canvasHeight);
+
+	reset();
+	modelviewStack = {};
+
+	clearBackgroundColor();
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glFlush();
+	setVerticalSync(true);
+	return true;
+}
+
+void updateViewportAndLetterboxing(const int width, const int height, const int canvasWidth,
+                                   const int canvasHeight) {
 	glViewport(0, 0, width, height);
 
 	if (canvasWidth != width || canvasHeight != height) { // Letterboxing?
@@ -127,16 +147,6 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 		glScissor((width - canvasWidth) / 2, (height - canvasHeight) / 2, canvasWidth,
 		          canvasHeight);
 	}
-
-	reset();
-	modelviewStack = {};
-
-	clearBackgroundColor();
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glFlush();
-	setVerticalSync(true);
-	return true;
 }
 
 void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth,
@@ -243,7 +253,7 @@ bool running() {
 }
 
 bool canQuit() {
-#ifdef IOS
+#if defined(IOS) || defined(EMSCRIPTEN)
 	return false;
 #else
 	return true;
@@ -590,6 +600,8 @@ std::string _getConfigPath() {
 	path << getSystemConfigPath() << "/";
 #elif defined(_WIN32)
 	path << getSystemConfigPath() << "\\" << App::instance().getDisplayName() << "\\";
+#elif defined(__EMSCRIPTEN__)
+	path << "/working1/";
 #else
 	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/";
 #endif
@@ -691,6 +703,16 @@ void writeConfig(const std::string& key, const std::string& value) {
 #endif
 	fout.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	fout << value;
+
+#ifdef __EMSCRIPTEN__
+	EM_ASM(
+		FS.syncfs(false, function(err) {
+			if (err) {
+				console.warn("Error saving:", err);
+			}
+		})
+	);
+#endif
 }
 #endif
 

@@ -4,11 +4,17 @@
 		"command": ".vscode/build.bat"
 	},
 	"linux": {
-		"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Debug) && cd build && ninja && $@"],
+		"args": [
+			"-lc",
+			"cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Debug) && cd build && ninja && $@"
+		],
 		"command": "/bin/bash"
 	},
 	"osx": {
-		"args": ["-lc", "cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Debug) && cd build && ninja && $@"],
+		"args": [
+			"-lc",
+			"cd \"\"${workspaceRoot}\"\" && ([ -f build/build.ninja ] || cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Debug) && cd build && ninja && $@"
+		],
 		"command": "/bin/bash"
 	},
 	"options": {
@@ -46,7 +52,10 @@
 		{
 			"label": "test",
 			"command": "ninja",
-			"args": [ "-Cbuild", "test" ],
+			"args": [
+				"-Cbuild",
+				"test"
+			],
 			"problemMatcher": {
 				"owner": "cpp",
 				"fileLocation": [
@@ -70,7 +79,10 @@
 		{
 			"label": "build-android",
 			"command": "make",
-			"args": ["-C", "android"],
+			"args": [
+				"-C",
+				"android"
+			],
 			"problemMatcher": {
 				"owner": "cpp",
 				"fileLocation": "autoDetect",
@@ -93,7 +105,10 @@
 			},
 			"problemMatcher": {
 				"owner": "cpp",
-				"fileLocation": ["autoDetect", "${workspaceRoot}/build"],
+				"fileLocation": [
+					"autoDetect",
+					"${workspaceRoot}/build"
+				],
 				"pattern": {
 					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error|fatal error):\\s+(.*)$",
 					"file": 1,
@@ -103,6 +118,17 @@
 					"message": 5
 				}
 			}
+		},
+		{
+			"label": "rebuild_cache",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"build",
+				"--target",
+				"rebuild_cache"
+			],
+			"problemMatcher": []
 		}
 	],
 	"presentation": {

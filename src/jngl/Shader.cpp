@@ -50,6 +50,15 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 	GLint status = GL_FALSE;
 	glGetShaderiv(impl->id, GL_COMPILE_STATUS, &status);
 	if (status != GL_TRUE) {
+		if (gles20Source && source != gles20Source) {
+			glShaderSource(impl->id, 1, &gles20Source, nullptr);
+			glCompileShader(impl->id);
+			GLint status = GL_FALSE;
+			glGetShaderiv(impl->id, GL_COMPILE_STATUS, &status);
+			if (status == GL_TRUE) {
+				return;
+			}
+		}
 		char buffer[2048];
 		glGetShaderInfoLog(impl->id, sizeof(buffer), nullptr, buffer);
 		throw std::runtime_error(buffer);
@@ -63,6 +72,20 @@ Shader::Shader(const std::istream& source, const Type type)
 	buffer << source.rdbuf();
 	return buffer.str();
 }().c_str(), type) {
+}
+
+Shader::Shader(const std::istream& source, const Type type, const std::istream& gles20Source)
+: Shader([&source]() {
+	std::stringstream buffer;
+	buffer.exceptions(std::ios_base::failbit);
+	buffer << source.rdbuf();
+	return buffer.str();
+}().c_str(), type, [&gles20Source]() {
+	std::stringstream buffer;
+	buffer.exceptions(std::ios_base::failbit);
+	buffer << gles20Source.rdbuf();
+	return buffer.str();
+}().c_str()) {
 }
 
 Shader::~Shader() {

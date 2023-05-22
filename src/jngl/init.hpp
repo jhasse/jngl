@@ -55,6 +55,9 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 			std::filesystem::current_path("../../data", err); // move out of build/Debug folder
 			if (err) {
 				std::filesystem::current_path("../../../data", err); // move out of out\build\x64-Debug
+				if (err) {
+					std::filesystem::current_path(jngl::getBinaryPath() + "data", err);
+				}
 			}
 		}
 	}
@@ -64,24 +67,26 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 	app.setDisplayName(params.displayName);
 	app.setPixelArt(params.pixelArt);
 	bool fullscreen = false;
-#if defined(NDEBUG) || defined(__ANDROID__)
+#if (!defined(__EMSCRIPTEN__) && defined(NDEBUG)) || defined(__ANDROID__)
 	fullscreen = true;
 #endif
 	std::pair<int, int> minAspectRatio{ 1, 3 };
 	std::pair<int, int> maxAspectRatio{ 3, 1 };
-	if (!params.screenSize) {
-		params.screenSize = { double(jngl::getDesktopWidth()), double(jngl::getDesktopHeight()) };
+	if (params.screenSize) {
+		maxAspectRatio = minAspectRatio = std::pair<int, int>(std::lround(params.screenSize->x),
+		                                                      std::lround(params.screenSize->y));
+	} else {
+		params.screenSize = { static_cast<double>(jngl::getDesktopWidth()),
+			                  static_cast<double>(jngl::getDesktopHeight()) };
 		fullscreen = true;
 	}
 	if (fullscreen) {
-		const jngl::Vec2 desktopSize{ double(jngl::getDesktopWidth()),
-			                          double(jngl::getDesktopHeight()) };
+		const jngl::Vec2 desktopSize{ static_cast<double>(jngl::getDesktopWidth()),
+			                          static_cast<double>(jngl::getDesktopHeight()) };
 		if (desktopSize.x > 0 &&
 		    desktopSize.y > 0) { // desktop size isn't available on some platforms (e.g. Android)
 			jngl::setScaleFactor(std::min(desktopSize.x / params.screenSize->x,
 			                              desktopSize.y / params.screenSize->y));
-			maxAspectRatio = minAspectRatio = std::pair<int, int>(
-			    std::lround(params.screenSize->x), std::lround(params.screenSize->y));
 		}
 	} else {
 		// Make window as big as possible

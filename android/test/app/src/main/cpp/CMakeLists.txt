@@ -1,5 +1,5 @@
-project(jngl-test)
 cmake_minimum_required(VERSION 3.16)
+project(jngl-test)
 
 # build native_app_glue as a static lib
 set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")

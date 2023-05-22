@@ -25,6 +25,15 @@ target_sources(jngl PRIVATE ${HEADERS})
 
 target_compile_features(jngl PUBLIC cxx_std_20)
 
+if(JNGL_STEAMWORKS)
+	target_include_directories(jngl PRIVATE include/steam)
+	target_link_directories(jngl PUBLIC include/steam/lib/osx)
+	target_link_libraries(jngl PRIVATE sdkencryptedappticket)
+	target_sources(jngl PRIVATE src/steam/SteamAchievements.cpp)
+else()
+	target_sources(jngl PRIVATE src/steam/disabled/initSteam.cpp)
+endif()
+
 set_target_properties(jngl PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src/
 )
@@ -44,6 +53,7 @@ endif()
 target_include_directories(jngl PUBLIC include/public)
 
 option(JNGL_VIDEO "Enable Theora video playback" ON)
+option(JNGL_STEAMWORKS "Enable Steamsworks SDK support for achievements" OFF)
 
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
 if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
@@ -382,10 +392,10 @@ endif()
 
 if(ANDROID OR IOS OR APPLE OR WINDOWS_STORE)
 	if(JNGL_VIDEO)
-		FetchContent_Declare(theora
+		CPMAddPackage(NAME theora
 			URL http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
-			URL_HASH SHA1=8dcaa8e61cd86eb1244467c0b64b9ddac04ae262)
-		FetchContent_Populate(theora)
+			URL_HASH SHA1=8dcaa8e61cd86eb1244467c0b64b9ddac04ae262
+			DOWNLOAD_ONLY)
 		add_library(theoradec OBJECT ${LIBTHEORA_DEC} "${theora_SOURCE_DIR}/lib/apiwrapper.c"
 			"${theora_SOURCE_DIR}/lib/bitpack.c" "${theora_SOURCE_DIR}/lib/dequant.c"
 			"${theora_SOURCE_DIR}/lib/fragment.c" "${theora_SOURCE_DIR}/lib/idct.c"

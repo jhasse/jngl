@@ -35,7 +35,7 @@ void Label::setAlign(Alignment align) {
 }
 
 float Label::getWidth() const {
-	return text.getWidth();
+	return static_cast<float>(text.getWidth());
 }
 
 } // namespace jngl

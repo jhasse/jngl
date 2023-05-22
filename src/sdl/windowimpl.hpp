@@ -37,6 +37,8 @@ public:
 	/// input to work:
 	float actualWidth;
 	float actualHeight;
+	int actualCanvasWidth;
+	int actualCanvasHeight;
 
 	/// For Retina screens on macOS SDL does its own scaling of mouse coordinates, etc. :(
 	float hidpiScaleFactor;

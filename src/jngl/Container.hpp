@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Container class
 /// @file
@@ -21,7 +21,7 @@ public:
 	/// Calls Widget::draw of every widget
 	void draw() const;
 
-	/// Immediately adds a Widget to the container
+	/// Adds a Widget to the container (safe to call during Container::step)
 	Widget* addWidget(std::unique_ptr<Widget>);
 
 	/// The same as addWidget(std::unique_ptr<Widget>) but creates the Widget for you
@@ -29,12 +29,14 @@ public:
 		return dynamic_cast<T*>(addWidget(std::make_unique<T>(std::forward<Args>(args)...)));
 	}
 
-	/// Marks a Widget to be removed by Container::step
+	/// Removes a Widget from the Container (safe to call during Container::step)
 	void removeWidget(Widget*);
 
 private:
 	std::vector<std::unique_ptr<Widget>> widgets;
+	std::vector<std::unique_ptr<Widget>> needToAdd;
 	std::set<Widget*> needToRemove;
+	uint8_t iterating = 0;
 };
 
 } // namespace jngl

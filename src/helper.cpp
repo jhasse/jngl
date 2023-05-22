@@ -3,6 +3,10 @@
 
 #include "helper.hpp"
 
+#ifdef _WIN32
+#include "win32/unicode.hpp"
+#endif
+
 #ifdef ANDROID
 #include "android/fopen.hpp"
 #endif
@@ -34,7 +38,11 @@ std::vector<std::string> splitlines(const std::string& text) {
 }
 
 bool fileExists(const std::string& path) {
+#ifdef _WIN32
+	if (FILE* const f = _wfopen(utf8ToUtf16(path).c_str(), L"r")) {
+#else
 	if (FILE* const f = fopen(path.c_str(), "r")) {
+#endif
 		fclose(f);
 		return true;
 	}

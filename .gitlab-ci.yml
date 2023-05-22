@@ -1,6 +1,10 @@
 variables:
   CLICOLOR_FORCE: "1"
   TERM: xterm
+  CPM_SOURCE_CACHE: ${CI_PROJECT_DIR}/.cache/cpm
+cache:
+  key: cpm
+  paths: [.cache/cpm]
 
 image: registry.fedoraproject.org/fedora-minimal:37
 
@@ -32,7 +36,7 @@ mingw:
     - ninja -C build-release
 
 android:
-  image: registry.gitlab.com/jhasse/android-ndk-docker:r25b
+  image: registry.gitlab.com/jhasse/android-ndk-docker:r25c
   stage: build
   script:
     - make -C android
