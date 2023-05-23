@@ -12,7 +12,14 @@
 namespace jngl {
 
 std::string getPreferredLanguage() {
-#if defined(__has_include) && __has_include(<SDL_locale.h>)
+#if defined(__EMSCRIPTEN__)
+	if (const auto lang_cstr = std::getenv("LANG")) {
+		const std::string lang = lang_cstr;
+		if (lang.size() >= 2) {
+			return lang.substr(0, 2);
+		}
+	}
+#elif defined(__has_include) && __has_include(<SDL_locale.h>)
 	SDL_Locale* locale = SDL_GetPreferredLocales();
 	if (locale && locale->language && locale->language[0] != '\0' && locale->language[1] != '\0' &&
 	    locale->language[2] == '\0') {

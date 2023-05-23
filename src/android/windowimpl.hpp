@@ -28,6 +28,7 @@ public:
 	void updateInput();
 	void swapBuffers();
 	void init();
+	void terminate();
 	void setRelativeMouseMode(bool);
 	void pause();
 	void makeCurrent();
@@ -44,16 +45,30 @@ public:
 	JNIEnv* env = nullptr;
 
 private:
-	EGLConfig config;
 	const std::pair<int, int> minAspectRatio;
 	const std::pair<int, int> maxAspectRatio;
 	android_app* app;
 	Window* window;
 
-	bool initialized = false;
-	EGLDisplay display;
-	EGLSurface surface = nullptr ;
-	EGLContext context;
+	bool firstFrame = true;
+
+	struct DisplayWrapper {
+		DisplayWrapper();
+		~DisplayWrapper();
+		EGLDisplay display;
+		EGLConfig config;
+		EGLContext context;
+
+		struct SurfaceWrapper {
+			SurfaceWrapper(const DisplayWrapper& parent);
+			~SurfaceWrapper();
+			const DisplayWrapper& parent;
+			EGLSurface surface;
+		};
+		std::optional<SurfaceWrapper> surface;
+	};
+	std::optional<DisplayWrapper> display;
+
 	std::map<int32_t, std::shared_ptr<AndroidController>> controllers;
 };
 

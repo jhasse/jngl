@@ -1,4 +1,4 @@
-// Copyright 2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
@@ -27,6 +27,7 @@ public:
 	bool buttonA = false;
 	bool buttonB = false;
 	bool buttonStart = false;
+	bool buttonBack = false;
 
 private:
 	float stateWithoutDeadzone(controller::Button) const;
