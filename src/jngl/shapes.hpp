@@ -1,4 +1,4 @@
-// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Functions for drawing shapes
 /// @file
@@ -30,8 +30,12 @@ void setColor(unsigned char red, unsigned char green, unsigned char blue, unsign
 /// opaque)
 void setAlpha(uint8_t alpha);
 
+[[deprecated("Use setAlpha instead")]]
+/// \deprecated Use setAlpha instead
 void pushAlpha(unsigned char alpha);
 
+[[deprecated("Use setAlpha instead")]]
+/// \deprecated Use setAlpha instead
 void popAlpha();
 
 void setLineWidth(float width);
