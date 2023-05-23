@@ -603,11 +603,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (unsigne
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setAlpha</b> (uint8_t alpha)</td></tr>
 <tr class="memdesc:a2e0420f68fa01ef7219a0bc2aa792169"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha value which should be used to draw primitives (0 = fully transparent, 255 = fully opaque) <br /></td></tr>
 <tr class="separator:a2e0420f68fa01ef7219a0bc2aa792169"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a300cff90be946129dc06dc94fe3ee05a"><td class="memItemLeft" align="right" valign="top"><a id="a300cff90be946129dc06dc94fe3ee05a" name="a300cff90be946129dc06dc94fe3ee05a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>pushAlpha</b> (unsigned char alpha)</td></tr>
+<tr class="memitem:a300cff90be946129dc06dc94fe3ee05a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a300cff90be946129dc06dc94fe3ee05a">pushAlpha</a> (unsigned char alpha)</td></tr>
 <tr class="separator:a300cff90be946129dc06dc94fe3ee05a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae381bef37f6a0cc1e32993ab659e8688"><td class="memItemLeft" align="right" valign="top"><a id="ae381bef37f6a0cc1e32993ab659e8688" name="ae381bef37f6a0cc1e32993ab659e8688"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>popAlpha</b> ()</td></tr>
+<tr class="memitem:ae381bef37f6a0cc1e32993ab659e8688"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ae381bef37f6a0cc1e32993ab659e8688">popAlpha</a> ()</td></tr>
 <tr class="separator:ae381bef37f6a0cc1e32993ab659e8688"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc5e234e75b961a87cbce0b3fc9d1c5a"><td class="memItemLeft" align="right" valign="top"><a id="abc5e234e75b961a87cbce0b3fc9d1c5a" name="abc5e234e75b961a87cbce0b3fc9d1c5a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setLineWidth</b> (float width)</td></tr>
@@ -1627,6 +1625,43 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 
 </div>
 </div>
+<a id="a300cff90be946129dc06dc94fe3ee05a" name="a300cff90be946129dc06dc94fe3ee05a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a300cff90be946129dc06dc94fe3ee05a">&#9670;&#160;</a></span>pushAlpha()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void pushAlpha </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>alpha</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated:</a></b></dt><dd>Use setAlpha instead </dd></dl>
+
+</div>
+</div>
+<a id="ae381bef37f6a0cc1e32993ab659e8688" name="ae381bef37f6a0cc1e32993ab659e8688"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae381bef37f6a0cc1e32993ab659e8688">&#9670;&#160;</a></span>popAlpha()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void popAlpha </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated:</a></b></dt><dd>Use setAlpha instead </dd></dl>
+
+</div>
+</div>
 <a id="a613e032e5ada91ff002f75a46bd217b9" name="a613e032e5ada91ff002f75a46bd217b9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a613e032e5ada91ff002f75a46bd217b9">&#9670;&#160;</a></span>drawRect() <span class="overload">[1/3]</span></h2>
 
@@ -1721,7 +1756,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00075">75</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00079">79</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
 
 </div>
 </div>
@@ -1859,7 +1894,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div><div class="memdoc">
 
 <p>Sleep current thread for <em>milliseconds</em>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated:</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated:</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
 
 </div>
 </div>
@@ -1941,7 +1976,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
 
 </div>
 </div>

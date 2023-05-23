@@ -1,5 +1,9 @@
 var NAVTREEINDEX3 =
 {
+"structjngl_1_1Achievement.html":[0,0,0,0],
+"structjngl_1_1Achievement.html":[1,0,1,0],
+"structjngl_1_1Achievement.html#aa101b5036fe941887517343150f4a9c0":[0,0,0,0,1],
+"structjngl_1_1Achievement.html#aa101b5036fe941887517343150f4a9c0":[1,0,1,0,1],
 "structjngl_1_1Achievement.html#afd0d68c6d31ff249f3ae8662162663c3":[0,0,0,0,0],
 "structjngl_1_1Achievement.html#afd0d68c6d31ff249f3ae8662162663c3":[1,0,1,0,0],
 "structjngl_1_1AppParameters.html":[0,0,0,2],
