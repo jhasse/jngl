@@ -67,7 +67,8 @@ public:
 
 private:
 	std::shared_ptr<Sound> sound_;
-	std::vector<char> buffer_;
+	std::vector<float> buffer_;
+	long frequency;
 };
 
 } // namespace jngl

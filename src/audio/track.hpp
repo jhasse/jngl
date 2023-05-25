@@ -18,6 +18,9 @@ struct track {
 
 using track_ptr = std::shared_ptr<track>;
 
+track_ptr load_raw(gsl::span<float const> data);
+track_ptr load_raw(std::vector<float> data);
+
 track_ptr load_ogg(gsl::span<char const> data);
 track_ptr load_ogg(std::vector<char> data);
 

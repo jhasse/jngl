@@ -18,6 +18,9 @@
 #include <stdexcept>
 #include <unordered_map>
 
+#define OV_EXCLUDE_STATIC_CALLBACKS
+#include <vorbis/vorbisfile.h>
+
 using namespace psemek; // FIXME
 
 #ifdef ANDROID
@@ -85,7 +88,7 @@ private:
 };
 
 SoundFile::SoundFile(std::string filename, std::launch) {
-	debug("Reading ");
+	debug("Decoding ");
 	debug(filename);
 	debug(" ... ");
 #ifdef _WIN32
@@ -96,17 +99,46 @@ SoundFile::SoundFile(std::string filename, std::launch) {
 	if (f == nullptr) {
 		throw std::runtime_error("File not found (" + filename + ").");
 	}
-	fseek(f, 0, SEEK_END);
-	long fsize = ftell(f);
-	fseek(f, 0, SEEK_SET);
 
-	buffer_.resize(fsize);
-	int itemsRead = fread(buffer_.data(), fsize, 1, f);
-	assert(itemsRead == 1);
-	fclose(f);
+	OggVorbis_File oggFile;
+	if (ov_open(f, &oggFile, nullptr, 0) != 0) {
+		fclose(f); // If [and only if] an ov_open() call fails, the application must explicitly
+		           // fclose() the FILE * pointer itself.
+		throw std::runtime_error("Could not open OGG file (" + filename + ").");
+	}
+	Finally cleanup(
+	    [&oggFile]()
+	    {
+		ov_clear(&oggFile); /* calls fclose */
+	});
+
+	const vorbis_info* const pInfo = ov_info(&oggFile, -1);
+	frequency = pInfo->rate;
+
+	const int endian = 0; // 0 for Little-Endian, 1 for Big-Endian
+	int bitStream;
+	while (true) {
+		float** buffer = nullptr;
+		auto samples_read = ov_read_float(&oggFile, &buffer, 1024, &bitStream);
+		if (samples_read == 0) {
+			break;
+		}
+		if (samples_read < 0) {
+			throw std::runtime_error("Error decoding OGG file (" + filename + ").");
+		}
+
+		size_t start = buffer_.size();
+		buffer_.resize(start + samples_read * 2);
+		for (std::size_t i = samples_read; i > 0;) {
+			i -= 1;
+			auto tmp = buffer[0][i];
+			buffer_[start + i * 2 + 0] = tmp;
+			buffer_[start + i * 2 + 1] = buffer[pInfo->channels == 1 ? 0 : 1][i];
+		}
+	}
 
 	debug("OK (");
-	debug(buffer_.size() / 1024. / 1024.);
+	debug(buffer_.size() * sizeof(float) / 1024. / 1024.);
 	debugLn(" MB)");
 }
 
@@ -122,7 +154,7 @@ SoundFile& SoundFile::operator=(SoundFile&& other) noexcept {
 }
 
 void SoundFile::play() {
-	sound_ = std::make_shared<Sound>(buffer_);
+	sound_ = std::make_shared<Sound>(buffer_, frequency);
 	GetAudio().play(sound_);
 }
 void SoundFile::stop() {
@@ -142,7 +174,7 @@ void SoundFile::loop() {
 	if (sound_ && sound_->isLooping()) {
 		return;
 	}
-	sound_ = std::make_shared<Sound>(buffer_);
+	sound_ = std::make_shared<Sound>(buffer_, frequency);
 	sound_->loop();
 	GetAudio().play(sound_);
 }

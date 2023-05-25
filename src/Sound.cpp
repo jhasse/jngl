@@ -4,10 +4,12 @@
 #include "Sound.hpp"
 
 #include "audio.hpp"
-#include "jngl/debug.hpp"
-#include "audio/track.hpp"
+#include "audio/constants.hpp"
 #include "audio/effect/loop.hpp"
+#include "audio/effect/pitch.hpp"
 #include "audio/effect/volume.hpp"
+#include "audio/track.hpp"
+#include "jngl/debug.hpp"
 
 #include <cassert>
 
@@ -21,8 +23,14 @@ struct Sound::Impl {
 	std::shared_ptr<audio::volume_control> volumeControl;
 };
 
-Sound::Sound(std::vector<char>& bufferData) : impl(new Impl{ audio::load_ogg(bufferData) }) {
-	impl->stream = impl->volumeControl = audio::volume(impl->track->stream());
+Sound::Sound(std::vector<float>& bufferData, long frequency)
+: impl(new Impl{ audio::load_raw(bufferData) }) {
+	auto stream = impl->track->stream();
+	if (frequency != psemek::audio::frequency) {
+		stream = audio::pitch(std::move(stream),
+		                      static_cast<float>(frequency) / psemek::audio::frequency);
+	}
+	impl->stream = impl->volumeControl = audio::volume(std::move(stream));
 }
 
 Sound::~Sound() {
