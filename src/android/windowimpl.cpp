@@ -140,6 +140,44 @@ WindowImpl::WindowImpl(Window* window, const std::pair<int, int> minAspectRatio,
 	app->activity->vm->AttachCurrentThread(&env, nullptr);
 
 	ANativeActivity_setWindowFlags(app->activity, AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
+
+
+	jclass inputDeviceClass = env->FindClass("android/view/InputDevice");
+	if (!inputDeviceClass) { return; }
+	Finally cleanInputDeviceClass([&]() { env->DeleteLocalRef(inputDeviceClass); });
+
+	jmethodID getInputDeviceMethod =
+	    env->GetStaticMethodID(inputDeviceClass, "getDevice", "(I)Landroid/view/InputDevice;");
+	if (!getInputDeviceMethod) { return; }
+	jmethodID getSourcesMethod = env->GetMethodID(inputDeviceClass, "getSources", "()I");
+	if (!getSourcesMethod) { return; }
+
+	jmethodID getDeviceIdsMethod = env->GetStaticMethodID(inputDeviceClass, "getDeviceIds", "()[I");
+	if (!getDeviceIdsMethod) { return; }
+	auto deviceIds =
+	    static_cast<jintArray>(env->CallStaticObjectMethod(inputDeviceClass, getDeviceIdsMethod));
+	if (!deviceIds) { return; }
+	Finally cleanDeviceIds([&]() { env->DeleteLocalRef(deviceIds); });
+
+	jint* elements = env->GetIntArrayElements(deviceIds, nullptr);
+	if (!elements) { return; }
+	Finally cleanElements([&]() { env->ReleaseIntArrayElements(deviceIds, elements, 0); });
+
+	jsize length = env->GetArrayLength(deviceIds);
+	for (jsize i = 0; i < length; ++i) {
+		jobject inputDeviceObj =
+		    env->CallStaticObjectMethod(inputDeviceClass, getInputDeviceMethod, elements[i]);
+		if (!inputDeviceObj) { continue; }
+		Finally cleanInputDeviceObj([&]() { env->DeleteLocalRef(inputDeviceObj); });
+
+		jint sources = env->CallIntMethod(inputDeviceObj, getSourcesMethod);
+		if ((sources & AINPUT_SOURCE_JOYSTICK) == AINPUT_SOURCE_JOYSTICK ||
+		    (sources & AINPUT_SOURCE_GAMEPAD) == AINPUT_SOURCE_GAMEPAD) {
+            if (auto& controller = controllers[elements[i]]; !controller) {
+                controller = std::make_shared<AndroidController>();
+            }
+		}
+	}
 }
 
 WindowImpl::~WindowImpl() {
