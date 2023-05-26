@@ -105,7 +105,7 @@ var namespacejngl =
     [ "swapBuffers", "namespacejngl.html#a31a9db7752f187501af260615027c5bd", null ],
     [ "clearBackBuffer", "namespacejngl.html#a1452effd5409822ed0a65e58f5ee3e9c", null ],
     [ "canQuit", "namespacejngl.html#a4b2ac4983f758c08f92701b491f5c877", null ],
-    [ "quit", "namespacejngl.html#a2463a3acef2df4c951ce942a3229e44e", null ],
+    [ "quit", "namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca", null ],
     [ "cancelQuit", "namespacejngl.html#a435e2f7919544ec87ae83ffdb226a50d", null ],
     [ "getFPS", "namespacejngl.html#a36aabb71cb6dcef1e96154963745c790", null ],
     [ "getStepsPerSecond", "namespacejngl.html#a06943dd8adf8a3d0ef639620df5dcad2", null ],
