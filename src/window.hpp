@@ -39,7 +39,7 @@ public:
 	Window& operator=(Window&&) = delete;
 	~Window();
 	bool isRunning() const;
-	void quit();
+	void quit() noexcept;
 	void cancelQuit();
 	void UpdateInput();
 	void updateKeyStates();

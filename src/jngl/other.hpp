@@ -35,7 +35,10 @@ void clearBackBuffer();
 bool canQuit();
 
 /// Emit a quit event which will exit App::mainLoop() and set running() to false
-void quit();
+///
+/// If the window hasn't been created yet or the loop is already about to quit, this function does
+/// nothing
+void quit() noexcept;
 
 /// Undo quit() or ignore a quit event caused by the user closing the main window
 void cancelQuit();
