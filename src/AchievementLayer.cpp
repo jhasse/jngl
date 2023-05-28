@@ -28,7 +28,7 @@ AchievementLayer& AchievementLayer::handle() {
 }
 
 void AchievementLayer::step() {
-	if (++stepsPassed > getStepsPerSecond() * 3) {
+	if (++stepsPassed > static_cast<int>(getStepsPerSecond() * 3)) {
 		fadeIn += 0.05f;
 	} else {
 		fadeIn *= 0.85f;
