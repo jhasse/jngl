@@ -51,8 +51,8 @@ var NAVTREEINDEX =
 [
 "Achievement_8hpp.html",
 "classjngl_1_1Mat4.html#a6a88a3e476a1a7c18ef547913ab5827b",
-"input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca8d311dd8454951b86e27873c49ff1ec5",
-"structjngl_1_1Achievement.html"
+"input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca82dbe895c37ba0fe2eb2154d3f3de628",
+"structboost_1_1qvm_1_1mat__traits_3_01jngl_1_1Mat4_01_4.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

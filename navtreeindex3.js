@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"structboost_1_1qvm_1_1mat__traits_3_01jngl_1_1Mat4_01_4.html":[1,0,0,0,1],
+"structboost_1_1qvm_1_1vec__traits_3_01jngl_1_1Vec2_01_4.html":[1,0,0,0,2],
 "structjngl_1_1Achievement.html":[0,0,0,0],
 "structjngl_1_1Achievement.html":[1,0,1,0],
 "structjngl_1_1Achievement.html#aa101b5036fe941887517343150f4a9c0":[0,0,0,0,1],

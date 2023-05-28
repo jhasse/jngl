@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca82dbe895c37ba0fe2eb2154d3f3de628":[2,0,0,14,0,20],
+"input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca897dc84a58812cda1dbc2de4e74e4729":[2,0,0,14,0,36],
 "input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca8d311dd8454951b86e27873c49ff1ec5":[2,0,0,14,0,28],
 "input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca8feb334f9ed9ddb8dbc69cfa4fd6b614":[2,0,0,14,0,6],
 "input_8hpp.html#aab0feaba617470cb4aa830dc5935238ca9d4d8b0b72fc2659da772d761a3c5ecb":[2,0,0,14,0,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "sprite_8hpp.html":[2,0,0,32],
 "sprite_8hpp.html#a59bf57d562a77318d562ab15d017de5d":[2,0,0,32,2],
 "sprite_8hpp_source.html":[2,0,0,32],
-"structboost_1_1qvm_1_1mat__traits_3_01jngl_1_1Mat3_01_4.html":[1,0,0,0,0],
-"structboost_1_1qvm_1_1mat__traits_3_01jngl_1_1Mat4_01_4.html":[1,0,0,0,1],
-"structboost_1_1qvm_1_1vec__traits_3_01jngl_1_1Vec2_01_4.html":[1,0,0,0,2]
+"structboost_1_1qvm_1_1mat__traits_3_01jngl_1_1Mat3_01_4.html":[1,0,0,0,0]
 };
