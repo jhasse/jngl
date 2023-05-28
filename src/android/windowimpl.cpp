@@ -544,6 +544,11 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 			break;
 		case AKEYCODE_BACK:
 			controller->buttonBack = down;
+			if (down && pWindow) {
+				if (const auto work = pWindow->getWork()) {
+					work->onControllerBack();
+				}
+			}
 			break;
 		case AKEYCODE_DPAD_LEFT:
 			controller->dpadX = down ? -1 : 0;
