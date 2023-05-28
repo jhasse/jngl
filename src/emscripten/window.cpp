@@ -5,7 +5,7 @@
 
 namespace jngl {
 
-std::string Window::GetFontFileByName(const std::string& fontname) {
+std::string Window::GetFontFileByName(const std::string&) {
 	return "";
 }
 
