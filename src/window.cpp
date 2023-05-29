@@ -408,6 +408,15 @@ void Window::addJob(std::shared_ptr<Job> job) {
 	jobs.emplace_back(std::move(job));
 }
 
+std::shared_ptr<Job> Window::getJob(const std::function<bool(Job&)>& predicate) const {
+	for (const auto& job : jobs) {
+		if (predicate(*job)) {
+			return job;
+		}
+	}
+	return nullptr;
+}
+
 std::shared_ptr<Work> Window::getWork() {
 	return currentWork_;
 }

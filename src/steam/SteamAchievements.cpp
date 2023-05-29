@@ -2,6 +2,9 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "SteamAchievements.hpp"
 
+#include "../jngl/Achievement.hpp"
+#include "../jngl/debug.hpp"
+
 namespace jngl {
 
 SteamAchievements::SteamAchievements()
@@ -32,9 +35,39 @@ SteamAchievements::~SteamAchievements() {
 
 void SteamAchievements::step() {
 	SteamAPI_RunCallbacks();
+	AchievementLayer::step();
 }
 
-void initSteam() {
+void SteamAchievements::notify(const Achievement& achievement, int oldValue, int newValue) {
+	if (initialized && oldValue < achievement.maxValue && newValue >= achievement.maxValue) {
+		SteamUserStats()->SetAchievement(achievement.id.c_str());
+		if (!SteamUserStats()->StoreStats()) {
+			debugLn("Error setting Steam achievement.");
+		}
+	}
+	AchievementLayer::notify(achievement, oldValue, newValue);
+}
+
+void SteamAchievements::onUserStatsReceived(UserStatsReceived_t* callback) {
+	if (callback->m_nGameID != appID) {
+		return;
+	}
+	if (callback->m_eResult != k_EResultOK) {
+		return;
+	}
+	initialized = true;
+}
+
+void SteamAchievements::onUserStatsStored(UserStatsStored_t*) {
+}
+
+void SteamAchievements::onAchievementStored(UserAchievementStored_t*) {
+}
+
+void initSteam(uint32_t appId) {
+	if (SteamAPI_RestartAppIfNecessary(appId)) {
+		std::exit(1);
+	}
 	addJob<SteamAchievements>();
 }
 

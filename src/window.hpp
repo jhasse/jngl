@@ -90,6 +90,7 @@ public:
 	void draw() const;
 	std::shared_ptr<Work> getWork();
 	void addJob(std::shared_ptr<Job>);
+	std::shared_ptr<Job> getJob(const std::function<bool(Job&)>& predicate) const;
 	void resetFrameLimiter();
 	unsigned int getStepsPerSecond() const;
 	void setStepsPerSecond(unsigned int);

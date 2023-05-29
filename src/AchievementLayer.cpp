@@ -17,12 +17,10 @@
 namespace jngl {
 
 AchievementLayer& AchievementLayer::handle() {
-	static std::weak_ptr<AchievementLayer> instance;
-	if (auto shared = instance.lock()) {
-		return *shared;
+	if (auto job = getJob<AchievementLayer>()) {
+		return *job;
 	}
 	auto shared = std::make_shared<AchievementLayer>();
-	instance = shared;
 	addJob(shared);
 	return *shared;
 }

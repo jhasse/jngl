@@ -119,7 +119,4 @@ std::string getPreferredLanguage();
 /// Opens a link (e.g. https://bixense.com) in the browser
 void openURL(const std::string&);
 
-/// Initializes the Steamworks SDK (if JNGL_STEAMWORKS has been set via CMake)
-void initSteam();
-
 } // namespace jngl
