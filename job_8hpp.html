@@ -104,11 +104,12 @@ $(document).ready(function(){initNavTree('job_8hpp.html',''); initResizable(); }
 
 <p>Contains <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">jngl::Job</a> class and related functions.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/memory.html">memory</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/functional.html">functional</a>&gt;</code><br />
+<code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/memory.html">memory</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for job.hpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="job_8hpp__incl.svg" width="130" height="110"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="job_8hpp__incl.svg" width="208" height="110"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -142,6 +143,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addJob</b> (<a class=
 <tr class="memitem:ae15308fbb3125f278ed8d05b971eb9ee"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ae15308fbb3125f278ed8d05b971eb9ee">addJob</a> (Args &amp;&amp;... args)</td></tr>
 <tr class="memdesc:ae15308fbb3125f278ed8d05b971eb9ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">The same as <a class="el" href="namespacejngl.html#af4511ceb38d56c476938458af6bd98e6" title="Add a new Job which will be always be stepped and drawn by App::mainLoop()">addJob(std::shared_ptr&lt;Job&gt;)</a> but creates the <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> for you.  <a href="namespacejngl.html#ae15308fbb3125f278ed8d05b971eb9ee">More...</a><br /></td></tr>
 <tr class="separator:ae15308fbb3125f278ed8d05b971eb9ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74afbcfe46a4632076d67390db3becf0"><td class="memItemLeft" align="right" valign="top"><a id="a74afbcfe46a4632076d67390db3becf0" name="a74afbcfe46a4632076d67390db3becf0"></a>
+<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; Job &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getJob</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::function</a>&lt; bool(Job &amp;)&gt; &amp;predicate)</td></tr>
+<tr class="memdesc:a74afbcfe46a4632076d67390db3becf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> for which <em>predicate</em> returned true. <br /></td></tr>
+<tr class="separator:a74afbcfe46a4632076d67390db3becf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fa19061aa43809790dd0ba3f5de6a67"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a4fa19061aa43809790dd0ba3f5de6a67"><td class="memTemplItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a4fa19061aa43809790dd0ba3f5de6a67">getJob</a> ()</td></tr>
+<tr class="memdesc:a4fa19061aa43809790dd0ba3f5de6a67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> that is a T.  <a href="namespacejngl.html#a4fa19061aa43809790dd0ba3f5de6a67">More...</a><br /></td></tr>
+<tr class="separator:a4fa19061aa43809790dd0ba3f5de6a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Contains <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">jngl::Job</a> class and related functions. </p>

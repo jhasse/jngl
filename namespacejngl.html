@@ -299,6 +299,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setLineHeight</b> (do
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getTextWidth</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text)</td></tr>
 <tr class="memdesc:af60c08a50c17934ee771bc0cf068d49a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the width of <em>text</em> in pixels if it would be drawn with the currently active font. <br /></td></tr>
 <tr class="separator:af60c08a50c17934ee771bc0cf068d49a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bf0e823f9e8cb24bc9516a6d4b65baf"><td class="memItemLeft" align="right" valign="top"><a id="a3bf0e823f9e8cb24bc9516a6d4b65baf" name="a3bf0e823f9e8cb24bc9516a6d4b65baf"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>initSteam</b> (uint32_t appId)</td></tr>
+<tr class="memdesc:a3bf0e823f9e8cb24bc9516a6d4b65baf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the Steamworks SDK (if JNGL_STEAMWORKS has been set via CMake) <br /></td></tr>
+<tr class="separator:a3bf0e823f9e8cb24bc9516a6d4b65baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d6aa0eceebd892770053c46a98cde2d"><td class="memItemLeft" align="right" valign="top"><a id="a9d6aa0eceebd892770053c46a98cde2d" name="a9d6aa0eceebd892770053c46a98cde2d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setKeyboardVisible</b> (bool)</td></tr>
 <tr class="memdesc:a9d6aa0eceebd892770053c46a98cde2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Display onscreen keyboard for touch devices. <br /></td></tr>
@@ -417,6 +421,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addJob</b> (<a class=
 <tr class="memitem:ae15308fbb3125f278ed8d05b971eb9ee"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ae15308fbb3125f278ed8d05b971eb9ee">addJob</a> (Args &amp;&amp;... args)</td></tr>
 <tr class="memdesc:ae15308fbb3125f278ed8d05b971eb9ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">The same as <a class="el" href="namespacejngl.html#af4511ceb38d56c476938458af6bd98e6" title="Add a new Job which will be always be stepped and drawn by App::mainLoop()">addJob(std::shared_ptr&lt;Job&gt;)</a> but creates the <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> for you.  <a href="namespacejngl.html#ae15308fbb3125f278ed8d05b971eb9ee">More...</a><br /></td></tr>
 <tr class="separator:ae15308fbb3125f278ed8d05b971eb9ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74afbcfe46a4632076d67390db3becf0"><td class="memItemLeft" align="right" valign="top"><a id="a74afbcfe46a4632076d67390db3becf0" name="a74afbcfe46a4632076d67390db3becf0"></a>
+<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Job.html">Job</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getJob</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::function</a>&lt; bool(<a class="el" href="classjngl_1_1Job.html">Job</a> &amp;)&gt; &amp;predicate)</td></tr>
+<tr class="memdesc:a74afbcfe46a4632076d67390db3becf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> for which <em>predicate</em> returned true. <br /></td></tr>
+<tr class="separator:a74afbcfe46a4632076d67390db3becf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fa19061aa43809790dd0ba3f5de6a67"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a4fa19061aa43809790dd0ba3f5de6a67"><td class="memTemplItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a4fa19061aa43809790dd0ba3f5de6a67">getJob</a> ()</td></tr>
+<tr class="memdesc:a4fa19061aa43809790dd0ba3f5de6a67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> that is a T.  <a href="namespacejngl.html#a4fa19061aa43809790dd0ba3f5de6a67">More...</a><br /></td></tr>
+<tr class="separator:a4fa19061aa43809790dd0ba3f5de6a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">jngl::Mat3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a> ()</td></tr>
 <tr class="memdesc:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the global ModelView matrix.  <a href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">More...</a><br /></td></tr>
 <tr class="separator:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -554,10 +566,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setArgs</b> (<a class
 void&#160;</td><td class="memItemRight" valign="bottom"><b>openURL</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;)</td></tr>
 <tr class="memdesc:a50c77a70c66599a4befa331993345eec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens a link (e.g. <a href="https://bixense.com">https://bixense.com</a>) in the browser. <br /></td></tr>
 <tr class="separator:a50c77a70c66599a4befa331993345eec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad428ca08a63b77301c7b4873189bbdf6"><td class="memItemLeft" align="right" valign="top"><a id="ad428ca08a63b77301c7b4873189bbdf6" name="ad428ca08a63b77301c7b4873189bbdf6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>initSteam</b> ()</td></tr>
-<tr class="memdesc:ad428ca08a63b77301c7b4873189bbdf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the Steamworks SDK (if JNGL_STEAMWORKS has been set via CMake) <br /></td></tr>
-<tr class="separator:ad428ca08a63b77301c7b4873189bbdf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9351d153307428b5a8841832ef441150"><td class="memItemLeft" align="right" valign="top"><a id="a9351d153307428b5a8841832ef441150" name="a9351d153307428b5a8841832ef441150"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (<a class="el" href="classjngl_1_1Pixels.html">jngl::Pixels</a>, <a class="el" href="classjngl_1_1Pixels.html">jngl::Pixels</a>)</td></tr>
 <tr class="separator:a9351d153307428b5a8841832ef441150"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1260,7 +1268,28 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 
 <p>The same as <a class="el" href="namespacejngl.html#af4511ceb38d56c476938458af6bd98e6" title="Add a new Job which will be always be stepped and drawn by App::mainLoop()">addJob(std::shared_ptr&lt;Job&gt;)</a> but creates the <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> for you. </p>
 
-<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00053">53</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00054">54</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4fa19061aa43809790dd0ba3f5de6a67" name="a4fa19061aa43809790dd0ba3f5de6a67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fa19061aa43809790dd0ba3f5de6a67">&#9670;&#160;</a></span>getJob()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; T &gt; getJob </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> that is a T. </p>
+
+<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00062">62</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
 
 </div>
 </div>

@@ -1,7 +1,8 @@
 <map id="AppParameters" name="AppParameters">
-<area shape="rect" id="node1" title="Parameters used to initialize the main window." alt="" coords="373,94,500,119"/>
+<area shape="rect" id="node1" title="Parameters used to initialize the main window." alt="" coords="373,118,500,143"/>
 <area shape="rect" id="node2" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/utility/functional/function.html" title=" " alt="" coords="9,5,200,45"/>
 <area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/string/basic_string.html" title=" " alt="" coords="69,70,140,95"/>
 <area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/utility/optional.html" title=" " alt="" coords="5,119,204,145"/>
 <area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/utility/optional.html" title=" " alt="" coords="17,171,192,211"/>
+<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/utility/optional.html" title=" " alt="" coords="13,235,196,261"/>
 </map>

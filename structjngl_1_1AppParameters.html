@@ -121,6 +121,9 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ab5325fa61e6536248b117c00f9e0c33d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc62cb9766a4f9b018a0c8f28e6b0034"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair</a>&lt; int, int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1AppParameters.html#abc62cb9766a4f9b018a0c8f28e6b0034">maxAspectRatio</a></td></tr>
 <tr class="separator:abc62cb9766a4f9b018a0c8f28e6b0034"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02feeb271b223f9a32d2455353cd2cf3"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1AppParameters.html#a02feeb271b223f9a32d2455353cd2cf3">steamAppId</a></td></tr>
+<tr class="memdesc:a02feeb271b223f9a32d2455353cd2cf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">If set and JNGL_STEAMWORKS has been passed to CMake, JNGL will ensure the app runs through Steam and initialize the SteamAPI.  <a href="structjngl_1_1AppParameters.html#a02feeb271b223f9a32d2455353cd2cf3">More...</a><br /></td></tr>
+<tr class="separator:a02feeb271b223f9a32d2455353cd2cf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a452c2865e2e1517b22f137b628971805"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805">pixelArt</a> = false</td></tr>
 <tr class="memdesc:a452c2865e2e1517b22f137b628971805"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)  <a href="structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805">More...</a><br /></td></tr>
 <tr class="separator:a452c2865e2e1517b22f137b628971805"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,7 +135,7 @@ Public Attributes</h2></td></tr>
 </div><div class="dynheader">
 Collaboration diagram for AppParameters:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="structjngl_1_1AppParameters__coll__graph.svg" width="506" height="216"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="structjngl_1_1AppParameters__coll__graph.svg" width="506" height="267"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -223,6 +226,24 @@ Collaboration diagram for AppParameters:</div>
 
 </div>
 </div>
+<a id="a02feeb271b223f9a32d2455353cd2cf3" name="a02feeb271b223f9a32d2455353cd2cf3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02feeb271b223f9a32d2455353cd2cf3">&#9670;&#160;</a></span>steamAppId</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt;uint32_t&gt; steamAppId</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>If set and JNGL_STEAMWORKS has been passed to CMake, JNGL will ensure the app runs through Steam and initialize the SteamAPI. </p>
+
+<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00036">36</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a452c2865e2e1517b22f137b628971805" name="a452c2865e2e1517b22f137b628971805"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a452c2865e2e1517b22f137b628971805">&#9670;&#160;</a></span>pixelArt</h2>
 
@@ -237,7 +258,7 @@ Collaboration diagram for AppParameters:</div>
 
 <p>Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation) </p>
 
-<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00035">35</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00039">39</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
 
 </div>
 </div>

@@ -26,6 +26,5 @@ var other_8hpp =
     [ "readConfig", "other_8hpp.html#a060f8cb034b351009016d3a37ae6c1f8", null ],
     [ "writeConfig", "other_8hpp.html#a75eb68f8ea7e1d976fef38e1c27c721f", null ],
     [ "getPreferredLanguage", "other_8hpp.html#ac4430bf0f8aa94d8e97d926767536f88", null ],
-    [ "openURL", "other_8hpp.html#a50c77a70c66599a4befa331993345eec", null ],
-    [ "initSteam", "other_8hpp.html#ad428ca08a63b77301c7b4873189bbdf6", null ]
+    [ "openURL", "other_8hpp.html#a50c77a70c66599a4befa331993345eec", null ]
 ];
