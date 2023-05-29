@@ -145,7 +145,7 @@ bool Window::isRunning() const {
 	return running;
 }
 
-void Window::quit() {
+void Window::quit() noexcept {
 	running = false;
 }
 

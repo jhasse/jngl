@@ -19,7 +19,7 @@ Window* WindowPointer::operator->() const {
 	return ptr_;
 }
 
-WindowPointer::operator bool() const {
+WindowPointer::operator bool() const noexcept {
 	return ptr_ != nullptr;
 }
 
@@ -39,7 +39,7 @@ void WindowPointer::ThrowIfNull() const {
 	}
 }
 
-Window* WindowPointer::get() const {
+Window* WindowPointer::get() const noexcept {
 	return ptr_;
 }
 

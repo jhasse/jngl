@@ -260,8 +260,10 @@ bool canQuit() {
 #endif
 }
 
-void quit() {
-	pWindow->quit();
+void quit() noexcept {
+	if (const auto w = pWindow.get()) {
+		w->quit();
+	}
 }
 
 void cancelQuit() {
