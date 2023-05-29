@@ -4,7 +4,7 @@
 
 namespace jngl {
 
-void initSteam(int32_t) {
+void initSteam(uint32_t) {
 }
 
 } // namespace jngl
