@@ -23,6 +23,7 @@ target_sources(jngl PRIVATE ${HEADERS})
 target_compile_features(jngl PUBLIC cxx_std_20)
 
 if(JNGL_STEAMWORKS)
+	message(STATUS "Using Steam SDK: ${JNGL_STEAMWORKS}")
 	target_include_directories(jngl PRIVATE ${JNGL_STEAMWORKS}/public/steam)
 	if(APPLE)
 		target_link_directories(jngl PUBLIC ${JNGL_STEAMWORKS}/redistributable_bin/osx)
