@@ -99,6 +99,10 @@ void AchievementLayer::draw() const {
 }
 
 void AchievementLayer::notify(const Achievement& achievement, int oldValue, int newValue) {
+	assert(newValue >= oldValue);
+	if (newValue == oldValue) {
+		return;
+	}
 	auto start = [this, &achievement, oldValue, newValue]() {
 		targetValue = newValue;
 		stepsPassed = 0;

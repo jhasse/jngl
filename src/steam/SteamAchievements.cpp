@@ -39,7 +39,7 @@ void SteamAchievements::step() {
 }
 
 void SteamAchievements::notify(const Achievement& achievement, int oldValue, int newValue) {
-	if (initialized && oldValue < achievement.maxValue && newValue >= achievement.maxValue) {
+	if (initialized && newValue >= achievement.maxValue) {
 		SteamUserStats()->SetAchievement(achievement.id.c_str());
 		if (!SteamUserStats()->StoreStats()) {
 			debugLn("Error setting Steam achievement.");
