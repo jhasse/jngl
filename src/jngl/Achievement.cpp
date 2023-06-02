@@ -20,7 +20,7 @@ int Achievement::getValue() const {
 
 void Achievement::increaseValue(int by) {
 	assert(by >= 0);
-	if ((value < maxValue && by > 0) || (value >= maxValue && by == 0)) {
+	if ((value < maxValue && by > 0) || (value >= maxValue && by >= 0)) {
 		AchievementLayer::handle().notify(*this, value, value + by);
 	}
 	value += by;

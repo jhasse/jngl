@@ -100,7 +100,7 @@ void AchievementLayer::draw() const {
 
 void AchievementLayer::notify(const Achievement& achievement, int oldValue, int newValue) {
 	assert(newValue >= oldValue);
-	if (newValue == oldValue) {
+	if (newValue == oldValue || oldValue >= achievement.maxValue) {
 		return;
 	}
 	auto start = [this, &achievement, oldValue, newValue]() {
