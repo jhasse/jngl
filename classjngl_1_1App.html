@@ -109,8 +109,10 @@ $(document).ready(function(){initNavTree('classjngl_1_1App.html',''); initResiza
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7782b818736f96c2fd5e544dba6477ea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1App.html#a7782b818736f96c2fd5e544dba6477ea">App</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> displayName)</td></tr>
-<tr class="separator:a7782b818736f96c2fd5e544dba6477ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a370f7ccaa1c0979d904f59357a049fbd"><td class="memItemLeft" align="right" valign="top"><a id="a370f7ccaa1c0979d904f59357a049fbd" name="a370f7ccaa1c0979d904f59357a049fbd"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>App</b> (<a class="el" href="structjngl_1_1AppParameters.html">AppParameters</a>)</td></tr>
+<tr class="memdesc:a370f7ccaa1c0979d904f59357a049fbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do not call this constructor yourself, it gets called by JNGL_MAIN_BEGIN. <br /></td></tr>
+<tr class="separator:a370f7ccaa1c0979d904f59357a049fbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9655ed150557afb8cbffa8f26a473345"><td class="memItemLeft" align="right" valign="top"><a id="a9655ed150557afb8cbffa8f26a473345" name="a9655ed150557afb8cbffa8f26a473345"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>App</b> (const <a class="el" href="classjngl_1_1App.html">App</a> &amp;)=delete</td></tr>
 <tr class="separator:a9655ed150557afb8cbffa8f26a473345"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,7 +147,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>updateProjectionMatri
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a60812497ebee5d4e6c6980191ae5de0e"><td class="memItemLeft" align="right" valign="top"><a id="a60812497ebee5d4e6c6980191ae5de0e" name="a60812497ebee5d4e6c6980191ae5de0e"></a>
 static <a class="el" href="classjngl_1_1App.html">App</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>instance</b> ()</td></tr>
-<tr class="memdesc:a60812497ebee5d4e6c6980191ae5de0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access the instance, creates it if it doesn't exist. <br /></td></tr>
+<tr class="memdesc:a60812497ebee5d4e6c6980191ae5de0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access the instance. <br /></td></tr>
 <tr class="separator:a60812497ebee5d4e6c6980191ae5de0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afce9a31f006a6de2b090019f819b9bb7"><td class="memItemLeft" align="right" valign="top"><a id="afce9a31f006a6de2b090019f819b9bb7" name="afce9a31f006a6de2b090019f819b9bb7"></a>
 static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isPixelArt</b> ()</td></tr>
@@ -164,40 +166,12 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isPixelArt</b>
 <div class="line">} JNGL_MAIN_END</div>
 <div class="ttc" id="aApp_8hpp_html"><div class="ttname"><a href="App_8hpp.html">App.hpp</a></div><div class="ttdoc">Contains jngl::App class.</div></div>
 <div class="ttc" id="aclassjngl_1_1App_html_a0dcdcf298c511db74358109fc74547fa"><div class="ttname"><a href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa">jngl::App::mainLoop</a></div><div class="ttdeci">void mainLoop()</div><div class="ttdoc">Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.</div></div>
-<div class="ttc" id="aclassjngl_1_1App_html_a60812497ebee5d4e6c6980191ae5de0e"><div class="ttname"><a href="classjngl_1_1App.html#a60812497ebee5d4e6c6980191ae5de0e">jngl::App::instance</a></div><div class="ttdeci">static App &amp; instance()</div><div class="ttdoc">Access the instance, creates it if it doesn't exist.</div></div>
+<div class="ttc" id="aclassjngl_1_1App_html_a60812497ebee5d4e6c6980191ae5de0e"><div class="ttname"><a href="classjngl_1_1App.html#a60812497ebee5d4e6c6980191ae5de0e">jngl::App::instance</a></div><div class="ttdeci">static App &amp; instance()</div><div class="ttdoc">Access the instance.</div></div>
 <div class="ttc" id="aclassjngl_1_1App_html_a765b9ae9280acdb193b3f32460dfc165"><div class="ttname"><a href="classjngl_1_1App.html#a765b9ae9280acdb193b3f32460dfc165">jngl::App::setDisplayName</a></div><div class="ttdeci">void setDisplayName(const std::string &amp;)</div></div>
 <div class="ttc" id="amain_8hpp_html"><div class="ttname"><a href="main_8hpp.html">main.hpp</a></div><div class="ttdoc">Defines macros for the main entry point.</div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="App_8hpp_source.html#l00026">26</a> of file <a class="el" href="App_8hpp_source.html">App.hpp</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a7782b818736f96c2fd5e544dba6477ea" name="a7782b818736f96c2fd5e544dba6477ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7782b818736f96c2fd5e544dba6477ea">&#9670;&#160;</a></span>App()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classjngl_1_1App.html">App</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td>
-          <td class="paramname"><em>displayName</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>Set <a class="el" href="structjngl_1_1AppParameters.html#abd54db44deb77f599f600479aea631a3" title="Display name of the application which will be used in the window title for example.">jngl::AppParameters.displayName</a> instead </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
+<p class="definition">Definition at line <a class="el" href="App_8hpp_source.html#l00027">27</a> of file <a class="el" href="App_8hpp_source.html">App.hpp</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a765b9ae9280acdb193b3f32460dfc165" name="a765b9ae9280acdb193b3f32460dfc165"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a765b9ae9280acdb193b3f32460dfc165">&#9670;&#160;</a></span>setDisplayName()</h2>
 
@@ -213,7 +187,7 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isPixelArt</b>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000002">Deprecated:</a></b></dt><dd>Set <a class="el" href="structjngl_1_1AppParameters.html#abd54db44deb77f599f600479aea631a3" title="Display name of the application which will be used in the window title for example.">jngl::AppParameters.displayName</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>Set <a class="el" href="structjngl_1_1AppParameters.html#abd54db44deb77f599f600479aea631a3" title="Display name of the application which will be used in the window title for example.">jngl::AppParameters.displayName</a> instead </dd></dl>
 
 </div>
 </div>

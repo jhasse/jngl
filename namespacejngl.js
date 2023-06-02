@@ -61,7 +61,6 @@ var namespacejngl =
     [ "getLineHeight", "namespacejngl.html#a0f314ec8c7bb7ff9ed7fbc24e531d6d3", null ],
     [ "setLineHeight", "namespacejngl.html#a96e77f6bac9a45498307713a9a3ac114", null ],
     [ "getTextWidth", "namespacejngl.html#af60c08a50c17934ee771bc0cf068d49a", null ],
-    [ "initSteam", "namespacejngl.html#a3bf0e823f9e8cb24bc9516a6d4b65baf", null ],
     [ "setKeyboardVisible", "namespacejngl.html#a9d6aa0eceebd892770053c46a98cde2d", null ],
     [ "setKeyboardType", "namespacejngl.html#aa0d4bfbd081f4c71d8235c4883e95d5f", null ],
     [ "getKeyboardType", "namespacejngl.html#a297b45e6036776eaa1f9e0ac7573b90c", null ],
