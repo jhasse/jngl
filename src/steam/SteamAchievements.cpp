@@ -20,7 +20,8 @@ SteamAchievements::SteamAchievements()
 		throw std::runtime_error("SteamUser() returned nullptr");
 	}
 	if (!user->BLoggedOn()) {
-		throw std::runtime_error("Steam user not logged on");
+		debugLn("Steam user not logged on");
+		return;
 	}
 	const auto userStats = SteamUserStats();
 	if (!userStats) {
