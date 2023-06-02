@@ -7,4 +7,7 @@ namespace jngl {
 void initSteam(uint32_t) {
 }
 
+void initSteamAchievements() {
+}
+
 } // namespace jngl

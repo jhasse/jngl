@@ -22,9 +22,6 @@ namespace jngl {
 
 class Work;
 
-/// Initializes the Steamworks SDK (if JNGL_STEAMWORKS has been set via CMake)
-void initSteam(uint32_t appId);
-
 } // namespace jngl
 
 /// Implement this function and set AppParameters::start
@@ -68,9 +65,7 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 	}
 #endif
 	jngl::AppParameters params = jnglInit();
-	auto& app = jngl::App::instance();
-	app.setDisplayName(params.displayName);
-	app.setPixelArt(params.pixelArt);
+	jngl::App app(params);
 	bool fullscreen = false;
 #if (!defined(__EMSCRIPTEN__) && defined(NDEBUG)) || defined(__ANDROID__)
 	fullscreen = true;
@@ -110,9 +105,6 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 	                            : int(std::lround(params.screenSize->y * jngl::getScaleFactor())),
 	                 fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
 	                 params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
-	if (params.steamAppId) {
-		jngl::initSteam(*params.steamAppId);
-	}
 	jngl::setWork(params.start());
 	app.mainLoop();
 }
