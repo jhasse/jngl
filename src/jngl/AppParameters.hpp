@@ -31,6 +31,10 @@ struct AppParameters {
 	std::optional<std::pair<int, int>> minAspectRatio;
 	std::optional<std::pair<int, int>> maxAspectRatio;
 
+	/// If set and JNGL_STEAMWORKS has been passed to CMake, JNGL will ensure the app runs through
+	/// Steam and initialize the SteamAPI
+	std::optional<uint32_t> steamAppId;
+
 	/// Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)
 	bool pixelArt = false;
 };

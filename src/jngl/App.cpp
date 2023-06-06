@@ -1,9 +1,10 @@
-// Copyright 2019-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "App.hpp"
 
 #include "../windowptr.hpp"
+#include "AppParameters.hpp"
 #include "ShaderProgram.hpp"
 #include "debug.hpp"
 
@@ -12,24 +13,28 @@
 
 namespace jngl {
 
+/// Restarts the program via Steam if needed
+void initSteamAchievements();
+
+/// Initializes the Steamworks SDK (if JNGL_STEAMWORKS has been set via CMake)
+void initSteam(uint32_t steamAppId);
+
 App* App::self = nullptr;
 
 struct App::Impl {
 	std::string displayName;
 	bool pixelArt = false;
+	std::optional<uint32_t> steamAppId;
 	std::set<ShaderProgram*> shaderPrograms{};
 };
 
-App::App(std::string displayName) : impl(new Impl{ std::move(displayName) }) {
+App::App(AppParameters params) : impl(new Impl{ params.displayName, params.pixelArt, params.steamAppId }) {
 	if (self) {
 		throw std::runtime_error("You may only create one instance of jngl::App.");
 	}
 	self = this;
-}
-
-App::App() : impl(new Impl) {
-	if (self) {
-		throw std::runtime_error("You may only create one instance of jngl::App.");
+	if (impl->steamAppId) {
+		jngl::initSteam(*impl->steamAppId);
 	}
 }
 
@@ -39,7 +44,7 @@ App::~App() {
 
 App& App::instance() {
 	if (!self) {
-		self = new App; // TODO: Don't leak, but turn this into a "real" singleton
+		throw std::runtime_error("App hasn't been created yet.");
 	}
 	return *self;
 }
@@ -53,6 +58,9 @@ void App::setDisplayName(const std::string& displayName) {
 }
 
 void App::mainLoop() {
+	if (impl->steamAppId) {
+		initSteamAchievements();
+	}
 	debug("Starting main loop for '");
 	debug(impl->displayName);
 	debugLn('\'');

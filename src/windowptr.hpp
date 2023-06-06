@@ -16,11 +16,11 @@ public:
 	WindowPointer& operator=(WindowPointer&&) = delete;
 	~WindowPointer();
 	Window* operator->() const;
-	explicit operator bool() const;
+	explicit operator bool() const noexcept;
 	void Delete();
 	void Set(Window*);
 	void ThrowIfNull() const;
-	Window* get() const;
+	Window* get() const noexcept;
 
 private:
 	Window* ptr_ = nullptr;
