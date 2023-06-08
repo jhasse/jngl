@@ -1,6 +1,6 @@
 #include "mixer.hpp"
 
-#include "readerwriterqueue/readerwriterqueue.h"
+#include <atomic_queue/atomic_queue.h>
 
 #include <algorithm>
 #include <memory>
@@ -17,7 +17,7 @@ struct mixer_impl final : mixer, std::enable_shared_from_this<mixer_impl> {
 
 	void remove(stream* stream) override {
 		gc();
-		streamsToStop.enqueue(stream);
+		streamsToStop.push(stream);
 	}
 
 	std::size_t read(float* data, std::size_t sample_count) override;
@@ -33,7 +33,7 @@ struct mixer_impl final : mixer, std::enable_shared_from_this<mixer_impl> {
 private:
 	void gc() {
 		stream* tmp;
-		while (streamsToRemoveOnMainThread.try_dequeue(tmp)) {
+		while (streamsToRemoveOnMainThread.try_pop(tmp)) {
 			auto it = std::find_if(streamsOnMainThread.begin(), streamsOnMainThread.end(),
 			                       [tmp](const auto& stream) { return stream.get() == tmp; });
 			assert(it != streamsOnMainThread.end());
@@ -42,35 +42,36 @@ private:
 	}
 	std::vector<std::shared_ptr<stream>> streamsOnMainThread;
 
-	moodycamel::ReaderWriterQueue<stream*> streamsToRemoveOnMainThread;
+	atomic_queue::AtomicQueue<stream*, 10> streamsToRemoveOnMainThread;
 
 	std::vector<stream*> activeStreams; //< only used on mixer thread
 
 	std::vector<float> buffer_;
 
-	moodycamel::ReaderWriterQueue<stream*> newStreams;
+	atomic_queue::AtomicQueue<stream*, 10> newStreams;
 
-	moodycamel::ReaderWriterQueue<stream*> streamsToStop;
+	atomic_queue::AtomicQueue<stream*, 10> streamsToStop;
 
 	std::atomic<std::size_t> played_{ 0 };
 };
 
 void mixer_impl::add(stream_ptr stream) {
 	gc();
-	newStreams.enqueue(stream.get());
+	newStreams.push(stream.get());
 	streamsOnMainThread.emplace_back(std::move(stream));
 }
 
 std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
 	stream* tmp;
-	while (newStreams.try_dequeue(tmp)) {
+	while (newStreams.try_pop(tmp)) {
 		activeStreams.emplace_back(tmp);
 	}
-	while (streamsToStop.try_dequeue(tmp)) {
+	while (streamsToStop.try_pop(tmp)) {
 		auto it = std::find(activeStreams.begin(), activeStreams.end(), tmp);
-		assert(it != activeStreams.end());
-		activeStreams.erase(it);
-		streamsToRemoveOnMainThread.enqueue(tmp);
+		if (it != activeStreams.end()) {
+			activeStreams.erase(it);
+			streamsToRemoveOnMainThread.push(tmp);
+		}
 	}
 
 	std::fill(data, data + sample_count, 0.f);
@@ -92,7 +93,7 @@ std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
 		}
 
 		if (read < sample_count) {
-			streamsToRemoveOnMainThread.enqueue(*it);
+			streamsToRemoveOnMainThread.push(*it);
 			it = activeStreams.erase(it);
 		} else {
 			++it;
