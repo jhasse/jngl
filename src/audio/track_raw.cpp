@@ -1,6 +1,7 @@
 #include "track.hpp"
 
 #include <atomic>
+#include <stdexcept>
 
 namespace psemek::audio {
 
