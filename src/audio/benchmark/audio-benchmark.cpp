@@ -3,6 +3,7 @@
 
 #include "audio/track.hpp"
 
+#include <cassert>
 #include <iostream>
 #include <vector>
 
