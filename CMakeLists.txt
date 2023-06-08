@@ -85,6 +85,7 @@ elseif (UNIX)
 	else()
 		file(GLOB SRC src/linux/*.cpp src/linux/*.c)
 		target_sources(jngl PRIVATE ${SRC})
+		target_link_libraries(jngl PRIVATE atomic)
     endif()
 
 	target_link_libraries(jngl PRIVATE $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>)
