@@ -88,8 +88,9 @@ std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
 			auto begin = buffer_.data();
 			auto end = begin + read;
 			auto dst = data;
-			for (; begin < end;)
+			for (; begin < end;) {
 				*dst++ += *begin++;
+			}
 		}
 
 		if (read < sample_count) {
