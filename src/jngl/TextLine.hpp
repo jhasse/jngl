@@ -22,6 +22,7 @@ public:
 	void draw() const;
 	void draw(Mat3 modelview) const;
 	void setText(std::string);
+	std::string getText() const;
 
 	Vec2 getSize() const;
 	double getWidth() const;

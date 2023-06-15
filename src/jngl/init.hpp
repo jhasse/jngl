@@ -19,7 +19,9 @@
 #endif
 
 namespace jngl {
+
 class Work;
+
 } // namespace jngl
 
 /// Implement this function and set AppParameters::start
@@ -63,9 +65,7 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 	}
 #endif
 	jngl::AppParameters params = jnglInit();
-	auto& app = jngl::App::instance();
-	app.setDisplayName(params.displayName);
-	app.setPixelArt(params.pixelArt);
+	jngl::App app(params);
 	bool fullscreen = false;
 #if (!defined(__EMSCRIPTEN__) && defined(NDEBUG)) || defined(__ANDROID__)
 	fullscreen = true;

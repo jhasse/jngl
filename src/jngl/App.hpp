@@ -1,4 +1,4 @@
-// Copyright 2019-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::App class
 /// @file
@@ -8,6 +8,7 @@
 #include <string>
 
 namespace jngl {
+struct AppParameters;
 class ShaderProgram;
 
 /// There can only be one instance of this class which will be created before the window is shown.
@@ -25,16 +26,16 @@ class ShaderProgram;
 /// \endcode
 class App {
 public:
-	/// \deprecated Set jngl::AppParameters.displayName instead
-	[[deprecated("Set jngl::AppParameters.displayName instead")]] explicit App(
-	    std::string displayName);
+	/// Do not call this constructor yourself, it gets called by JNGL_MAIN_BEGIN
+	explicit App(AppParameters);
+
 	~App();
 	App(const App&) = delete;
 	App& operator=(const App&) = delete;
 	App(App&&) = delete;
 	App& operator=(App&&) = delete;
 
-	/// Access the instance, creates it if it doesn't exist
+	/// Access the instance
 	static App& instance();
 
 	/// The display name of the app is used by jngl::writeConfig() for example.
@@ -58,8 +59,6 @@ public:
 	void updateProjectionMatrix() const;
 
 private:
-	App();
-
 	void registerShaderProgram(ShaderProgram*);
 	void unregisterShaderProgram(ShaderProgram*);
 

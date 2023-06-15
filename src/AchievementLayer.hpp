@@ -19,7 +19,7 @@ public:
 	void step() override;
 	void draw() const override;
 
-	void notify(const Achievement&, int oldValue, int newValue);
+	virtual void notify(const Achievement&, int oldValue, int newValue);
 
 private:
 	const Achievement* achievement = nullptr;

@@ -17,18 +17,16 @@
 namespace jngl {
 
 AchievementLayer& AchievementLayer::handle() {
-	static std::weak_ptr<AchievementLayer> instance;
-	if (auto shared = instance.lock()) {
-		return *shared;
+	if (auto job = getJob<AchievementLayer>()) {
+		return *job;
 	}
 	auto shared = std::make_shared<AchievementLayer>();
-	instance = shared;
 	addJob(shared);
 	return *shared;
 }
 
 void AchievementLayer::step() {
-	if (++stepsPassed > getStepsPerSecond() * 3) {
+	if (++stepsPassed > static_cast<int>(getStepsPerSecond() * 3)) {
 		fadeIn += 0.05f;
 	} else {
 		fadeIn *= 0.85f;
@@ -101,6 +99,10 @@ void AchievementLayer::draw() const {
 }
 
 void AchievementLayer::notify(const Achievement& achievement, int oldValue, int newValue) {
+	assert(newValue >= oldValue);
+	if (newValue == oldValue || oldValue >= achievement.maxValue) {
+		return;
+	}
 	auto start = [this, &achievement, oldValue, newValue]() {
 		targetValue = newValue;
 		stepsPassed = 0;
