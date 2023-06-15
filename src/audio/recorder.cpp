@@ -26,7 +26,7 @@ struct recorder_impl : recorder {
 		if (!stream_) return 0;
 
 		if (storage_.size() < samples_.size() + samples) {
-			storage_.resize(std::max<std::size_t>(samples, storage_.size() * 2));
+			storage_.resize(std::max<std::size_t>(samples_.size() + samples, storage_.size() * 2));
 			samples_ = { storage_.data(), storage_.data() + samples_.size() };
 		}
 
