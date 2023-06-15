@@ -248,6 +248,9 @@ void FontImpl::print(Mat3 modelview, const std::string& text) {
 }
 
 void FontImpl::print(const ScaleablePixels x, const ScaleablePixels y, const std::string& text) {
+#ifdef JNGL_PERFORMANCE_OVERLAY
+	if (!Texture::textureShaderProgram) { return; }
+#endif
 	auto context = Texture::textureShaderProgram->use();
 	glUniform4f(Texture::shaderSpriteColorUniform, float(fontColorRed) / 255.0f,
 	            float(fontColorGreen) / 255.0f, float(fontColorBlue) / 255.0f,
