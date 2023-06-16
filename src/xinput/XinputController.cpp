@@ -70,8 +70,8 @@ bool XinputController::down(const controller::Button b) const {
 void XinputController::rumble(const float amount, std::chrono::milliseconds time) {
 	std::unique_lock<std::mutex> lock(mutex);
 	XINPUT_VIBRATION vibration{};
-	vibration.wLeftMotorSpeed = amount * 65535;
-	vibration.wRightMotorSpeed = amount * 65535;
+	vibration.wLeftMotorSpeed = static_cast<WORD>(amount * 65535);
+	vibration.wRightMotorSpeed = static_cast<WORD>(amount * 65535);
 	XInputSetState(i, &vibration);
 	rumbleDuration = time;
 	cv.notify_one();

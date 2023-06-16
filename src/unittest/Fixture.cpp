@@ -6,9 +6,11 @@
 #include <boost/ut.hpp>
 #include <cmath>
 #include <jngl.hpp>
+#include <jngl/AppParameters.hpp>
 
 Fixture::Fixture(const double scaleFactor) {
 	jngl::setScaleFactor(scaleFactor);
+	static jngl::App app(jngl::AppParameters{});
 	jngl::showWindow("unit test", static_cast<int>(std::lround(320 * scaleFactor)),
 	                 static_cast<int>(std::lround(70 * scaleFactor)), false, { 32, 7 }, { 32, 7 });
 	reset();

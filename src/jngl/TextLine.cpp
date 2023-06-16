@@ -52,6 +52,10 @@ void TextLine::setText(std::string text) {
 	this->text = std::move(text);
 }
 
+std::string TextLine::getText() const {
+	return text;
+}
+
 Vec2 TextLine::getSize() const {
 	return { getWidth(), getHeight() };
 }
