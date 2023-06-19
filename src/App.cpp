@@ -7,7 +7,11 @@
 #include "jngl/AppParameters.hpp"
 #include "jngl/ShaderProgram.hpp"
 #include "jngl/debug.hpp"
+#include "jngl/screen.hpp"
+#include "jngl/window.hpp"
+#include "jngl/work.hpp"
 
+#include <cmath>
 #include <set>
 #include <stdexcept>
 
@@ -90,5 +94,55 @@ void App::updateProjectionMatrix() const {
 		                   opengl::projection.data);
 	}
 }
+
+#if !defined(__APPLE__) || !TARGET_OS_IPHONE // iOS
+namespace internal {
+
+void mainLoop(AppParameters params) {
+	App app(params);
+	bool fullscreen = false;
+#if (!defined(__EMSCRIPTEN__) && defined(NDEBUG)) || defined(__ANDROID__)
+	fullscreen = true;
+#endif
+	std::pair<int, int> minAspectRatio{ 1, 3 };
+	std::pair<int, int> maxAspectRatio{ 3, 1 };
+	if (params.screenSize) {
+		maxAspectRatio = minAspectRatio = std::pair<int, int>(std::lround(params.screenSize->x),
+		                                                      std::lround(params.screenSize->y));
+	} else {
+		params.screenSize = { static_cast<double>(getDesktopWidth()),
+			                  static_cast<double>(getDesktopHeight()) };
+		fullscreen = true;
+	}
+	if (fullscreen) {
+		const Vec2 desktopSize{ static_cast<double>(getDesktopWidth()),
+			                    static_cast<double>(getDesktopHeight()) };
+		if (desktopSize.x > 0 &&
+		    desktopSize.y > 0) { // desktop size isn't available on some platforms (e.g. Android)
+			setScaleFactor(std::min(desktopSize.x / params.screenSize->x,
+			                        desktopSize.y / params.screenSize->y));
+		}
+	} else {
+		// Make window as big as possible
+		const double scaleFactor = std::min((getDesktopWidth() - 99) / params.screenSize->x,
+		                                    (getDesktopHeight() - 99) / params.screenSize->y);
+		if (scaleFactor > 1) {
+			setScaleFactor(std::floor(scaleFactor));
+		} else {
+			setScaleFactor(scaleFactor);
+		}
+	}
+	showWindow(
+	    params.displayName,
+	    fullscreen ? getDesktopWidth() : int(std::lround(params.screenSize->x * getScaleFactor())),
+	    fullscreen ? getDesktopHeight() : int(std::lround(params.screenSize->y * getScaleFactor())),
+	    fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
+	    params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
+	setWork(params.start());
+	app.mainLoop();
+}
+
+} // namespace internal
+#endif
 
 } // namespace jngl
