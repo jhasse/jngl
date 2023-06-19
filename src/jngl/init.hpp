@@ -7,6 +7,7 @@
 
 #include "AppParameters.hpp"
 #include "main.hpp"
+#include "message.hpp"
 
 #include <cmath>
 
