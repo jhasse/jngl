@@ -3,6 +3,8 @@
 
 #include "Fixture.hpp"
 
+#include "../App.hpp"
+
 #include <boost/ut.hpp>
 #include <cmath>
 #include <jngl.hpp>

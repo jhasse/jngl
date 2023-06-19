@@ -3,10 +3,10 @@
 
 #include "App.hpp"
 
-#include "../windowptr.hpp"
-#include "AppParameters.hpp"
-#include "ShaderProgram.hpp"
-#include "debug.hpp"
+#include "windowptr.hpp"
+#include "jngl/AppParameters.hpp"
+#include "jngl/ShaderProgram.hpp"
+#include "jngl/debug.hpp"
 
 #include <set>
 #include <stdexcept>

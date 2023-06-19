@@ -1,11 +1,11 @@
-// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "ShaderProgram.hpp"
 
 #include "../Shader_Impl.hpp"
 #include "../windowptr.hpp"
-#include "App.hpp"
+#include "../App.hpp"
 
 #include <array>
 #include <cassert>

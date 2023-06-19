@@ -1,7 +1,7 @@
 // Copyright 2011-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#include "../jngl/App.hpp"
+#include "../App.hpp"
 #include "../jngl/ImageData.hpp"
 #include "../jngl/debug.hpp"
 #include "../jngl/screen.hpp"

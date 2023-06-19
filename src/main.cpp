@@ -3,6 +3,7 @@
 
 #include "main.hpp"
 
+#include "App.hpp"
 #include "jngl.hpp"
 #include "paths.hpp"
 #include "spriteimpl.hpp"
