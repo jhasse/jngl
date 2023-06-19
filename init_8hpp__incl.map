@@ -1,26 +1,21 @@
 <map id="jngl/init.hpp" name="jngl/init.hpp">
-<area shape="rect" id="node1" title="Include this file only once, as it defines the main function." alt="" coords="300,5,427,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="39,79,117,104"/>
-<area shape="rect" id="node3" href="$AppParameters_8hpp.html" title="Contains jngl::AppParameters struct." alt="" coords="149,152,308,177"/>
-<area shape="rect" id="node11" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="565,79,652,104"/>
-<area shape="rect" id="node20" href="$message_8hpp.html" title=" " alt="" coords="431,79,541,104"/>
-<area shape="rect" id="node21" href="$screen_8hpp.html" title=" " alt="" coords="141,79,244,104"/>
-<area shape="rect" id="node22" href="$work_8hpp.html" title=" " alt="" coords="320,79,407,104"/>
-<area shape="rect" id="node24" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cmath.html" title=" " alt="" coords="676,79,739,104"/>
-<area shape="rect" id="node4" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="68,225,155,251"/>
-<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="384,225,487,251"/>
-<area shape="rect" id="node8" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="289,225,360,251"/>
-<area shape="rect" id="node9" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/optional.html" title=" " alt="" coords="179,225,265,251"/>
-<area shape="rect" id="node10" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="511,225,581,251"/>
-<area shape="rect" id="node5" title=" " alt="" coords="100,299,267,324"/>
-<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="5,299,76,324"/>
-<area shape="rect" id="node12" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="539,152,649,177"/>
-<area shape="rect" id="node13" href="$other_8hpp.html" title="Miscellaneous functions." alt="" coords="803,152,897,177"/>
-<area shape="rect" id="node16" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="673,152,776,177"/>
-<area shape="rect" id="node14" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/sstream.html" title=" " alt="" coords="913,225,992,251"/>
-<area shape="rect" id="node15" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="819,225,889,251"/>
-<area shape="rect" id="node17" href="$Pixels_8hpp.html" title="Contains jngl::Pixels class." alt="" coords="692,225,795,251"/>
-<area shape="rect" id="node19" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/array.html" title=" " alt="" coords="605,225,668,251"/>
-<area shape="rect" id="node18" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="704,299,783,324"/>
-<area shape="rect" id="node23" href="$job_8hpp.html" title="Contains jngl::Job class and related functions." alt="" coords="384,152,463,177"/>
+<area shape="rect" id="node1" title="Include this file only once, as it defines the main function." alt="" coords="469,5,596,31"/>
+<area shape="rect" id="node2" href="$AppParameters_8hpp.html" title="Contains jngl::AppParameters struct." alt="" coords="212,152,371,177"/>
+<area shape="rect" id="node10" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="489,79,576,104"/>
+<area shape="rect" id="node19" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cmath.html" title=" " alt="" coords="600,79,663,104"/>
+<area shape="rect" id="node3" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="116,225,203,251"/>
+<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="321,225,424,251"/>
+<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="227,225,297,251"/>
+<area shape="rect" id="node8" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/optional.html" title=" " alt="" coords="5,225,92,251"/>
+<area shape="rect" id="node9" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="575,225,645,251"/>
+<area shape="rect" id="node4" title=" " alt="" coords="148,299,315,324"/>
+<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="53,299,124,324"/>
+<area shape="rect" id="node11" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="409,152,520,177"/>
+<area shape="rect" id="node12" href="$other_8hpp.html" title="Miscellaneous functions." alt="" coords="711,152,805,177"/>
+<area shape="rect" id="node15" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="551,152,653,177"/>
+<area shape="rect" id="node13" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/sstream.html" title=" " alt="" coords="851,225,929,251"/>
+<area shape="rect" id="node14" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="756,225,827,251"/>
+<area shape="rect" id="node16" href="$Pixels_8hpp.html" title="Contains jngl::Pixels class." alt="" coords="448,225,551,251"/>
+<area shape="rect" id="node18" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/array.html" title=" " alt="" coords="669,225,732,251"/>
+<area shape="rect" id="node17" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="460,299,539,324"/>
 </map>

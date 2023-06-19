@@ -1,6 +1,5 @@
 <map id="jngl/job.hpp" name="jngl/job.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Job class and related functions." alt="" coords="40,5,159,31"/>
-<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="5,152,92,177"/>
-<area shape="rect" id="node3" href="$work_8hpp.html" title=" " alt="" coords="87,79,213,104"/>
-<area shape="rect" id="node4" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="116,152,243,177"/>
+<area shape="rect" id="node1" title="Contains jngl::Job class and related functions." alt="" coords="5,5,124,31"/>
+<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="21,152,108,177"/>
+<area shape="rect" id="node3" href="$work_8hpp.html" title=" " alt="" coords="52,79,179,104"/>
 </map>
