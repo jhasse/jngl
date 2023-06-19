@@ -15,13 +15,11 @@
 #include <filesystem>
 #endif
 
-namespace jngl {
-namespace internal {
+namespace jngl::internal {
 
 void mainLoop(AppParameters);
 
-} // namespace internal
-} // namespace jngl
+} // namespace jngl::internal
 
 /// Implement this function and set AppParameters::start
 ///

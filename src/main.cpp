@@ -9,6 +9,7 @@
 #include "spriteimpl.hpp"
 
 #include <boost/qvm_lite.hpp>
+#include <cstddef>
 #include <fstream>
 #include <sstream>
 
@@ -369,7 +370,7 @@ void setTitle(const std::string& title) {
 std::vector<float> readPixels() {
 	const int w = jngl::getWindowWidth();
 	const int h = jngl::getWindowHeight();
-	std::vector<float> buffer(3 * w * h);
+	std::vector<float> buffer(static_cast<size_t>(3 * w * h));
 	glReadPixels(0, 0, w, h, GL_RGB, GL_FLOAT, buffer.data());
 	return buffer;
 }
@@ -387,7 +388,8 @@ void setLineHeight(double h) {
 }
 
 void print(const std::string& text, const jngl::Vec2 position) {
-	pWindow->print(text, int(std::lround(position.x)), int(std::lround(position.y)));
+	pWindow->print(text, static_cast<int>(std::lround(position.x)),
+	               static_cast<int>(std::lround(position.y)));
 }
 
 void print(const std::string& text, const int xposition, const int yposition) {
@@ -676,7 +678,7 @@ std::string readConfig(const std::string& key) {
 	std::string out;
 	constexpr size_t READ_SIZE = 4096;
 	std::string buf(READ_SIZE, '\0');
-	while (fin.read(&buf[0], READ_SIZE)) {
+	while (fin.read(buf.data(), READ_SIZE)) {
 		out.append(buf, 0, fin.gcount());
 	}
 	out.append(buf, 0, fin.gcount());
@@ -731,8 +733,9 @@ ShaderProgram::Context useSimpleShaderProgram() {
 
 ShaderProgram::Context useSimpleShaderProgram(const Mat3& modelview) {
 	auto context = jngl::simpleShaderProgram->use();
-	glUniform4f(simpleColorUniform, float(colorRed) / 255.0f, float(colorGreen) / 255.0f,
-	            float(colorBlue) / 255.0f, float(colorAlpha) / 255.0f);
+	glUniform4f(simpleColorUniform, static_cast<float>(colorRed) / 255.0f,
+	            static_cast<float>(colorGreen) / 255.0f, static_cast<float>(colorBlue) / 255.0f,
+	            static_cast<float>(colorAlpha) / 255.0f);
 	glUniformMatrix3fv(simpleModelviewUniform, 1, GL_FALSE, modelview.data);
 
 	assert(simpleShaderProgram->getAttribLocation("position") == 0);

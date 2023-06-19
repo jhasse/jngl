@@ -3,13 +3,13 @@
 
 #include "App.hpp"
 
-#include "windowptr.hpp"
 #include "jngl/AppParameters.hpp"
 #include "jngl/ShaderProgram.hpp"
 #include "jngl/debug.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/window.hpp"
 #include "jngl/work.hpp"
+#include "windowptr.hpp"
 
 #include <cmath>
 #include <set>
@@ -32,7 +32,8 @@ struct App::Impl {
 	std::set<ShaderProgram*> shaderPrograms{};
 };
 
-App::App(AppParameters params) : impl(new Impl{ params.displayName, params.pixelArt, params.steamAppId }) {
+App::App(AppParameters params)
+: impl(new Impl{ std::move(params.displayName), params.pixelArt, params.steamAppId }) {
 	if (self) {
 		throw std::runtime_error("You may only create one instance of jngl::App.");
 	}
@@ -132,12 +133,13 @@ void mainLoop(AppParameters params) {
 			setScaleFactor(scaleFactor);
 		}
 	}
-	showWindow(
-	    params.displayName,
-	    fullscreen ? getDesktopWidth() : int(std::lround(params.screenSize->x * getScaleFactor())),
-	    fullscreen ? getDesktopHeight() : int(std::lround(params.screenSize->y * getScaleFactor())),
-	    fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
-	    params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
+	showWindow(params.displayName,
+	           fullscreen ? getDesktopWidth()
+	                      : static_cast<int>(std::lround(params.screenSize->x * getScaleFactor())),
+	           fullscreen ? getDesktopHeight()
+	                      : static_cast<int>(std::lround(params.screenSize->y * getScaleFactor())),
+	           fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
+	           params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
 	setWork(params.start());
 	app.mainLoop();
 }
