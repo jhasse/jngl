@@ -40,9 +40,9 @@ private:
 
 class Test : public jngl::Work {
 public:
-	Test()
+	Test(const std::string& displayName)
 	: fb2(jngl::getWindowSize()), logoWebp("jngl.webp"), soundLoader(jngl::load("test.ogg")) {
-		jngl::setTitle(jngl::App::instance().getDisplayName() + " | UTF-8: äöüß");
+		jngl::setTitle(displayName + " | UTF-8: äöüß");
 		jngl::setIcon("jngl-icon");
 		jngl::setMouseVisible(false);
 		frameTime = jngl::getTime();
@@ -232,7 +232,7 @@ jngl::AppParameters jnglInit() {
 	jngl::AppParameters params;
 	params.displayName = "JNGL Test Application";
 	params.screenSize = { 800, 600 };
-	params.start = []() {
+	params.start = [displayName = params.displayName]() {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
 		          << jngl::getDesktopHeight() << std::endl
 		          << "Preferred language: " << jngl::getPreferredLanguage() << std::endl
@@ -241,7 +241,7 @@ jngl::AppParameters jnglInit() {
 			const auto controllers = jngl::getConnectedControllers();
 			std::cout << "Number of connected controllers: " << controllers.size() << std::endl;
 		});
-		return std::make_shared<Test>();
+		return std::make_shared<Test>(displayName);
 	};
 	return params;
 }

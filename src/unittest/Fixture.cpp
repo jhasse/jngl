@@ -3,6 +3,8 @@
 
 #include "Fixture.hpp"
 
+#include "../App.hpp"
+
 #include <boost/ut.hpp>
 #include <cmath>
 #include <jngl.hpp>
@@ -15,7 +17,7 @@ Fixture::Fixture(const double scaleFactor) {
 	                 static_cast<int>(std::lround(70 * scaleFactor)), false, { 32, 7 }, { 32, 7 });
 	reset();
 	emptyAsciiArt = getAsciiArt();
-	using namespace boost::ut;
+	using namespace boost::ut; // NOLINT
 	expect(eq(emptyAsciiArt, std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒                              ▒
@@ -40,7 +42,7 @@ std::string Fixture::getAsciiArt() const {
 	// account:
 	auto reduceFactorAsFloat = static_cast<float>(10 * jngl::getScaleFactor());
 	int reduceFactor = static_cast<int>(std::lround(reduceFactorAsFloat));
-	using namespace boost::ut;
+	using namespace boost::ut; // NOLINT
 	expect(approx(reduceFactorAsFloat, reduceFactor, 1e-6));
 
 	expect(eq(w % reduceFactor, 0));

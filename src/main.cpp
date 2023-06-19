@@ -3,6 +3,7 @@
 
 #include "main.hpp"
 
+#include "App.hpp"
 #include "jngl.hpp"
 #include "paths.hpp"
 #include "spriteimpl.hpp"
@@ -164,22 +165,24 @@ void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth
 	const auto r = static_cast<float>(windowWidth) / 2.f;
 	const auto b = static_cast<float>(windowHeight) / 2.f;
 	const auto t = static_cast<float>(-windowHeight) / 2.f;
-	opengl::projection = { float(windowWidth) / float(originalWindowWidth) * 2.f / (r - l),
-		                   0.f,
-		                   0.f,
-		                   -(r + l) / (r - l),
-		                   0.f,
-		                   float(windowHeight) / float(originalWindowHeight) * 2.f / (t - b),
-		                   0.f,
-		                   -(t + b) / (t - b),
-		                   0.f,
-		                   0.f,
-		                   -1.f,
-		                   0.f,
-		                   0.f,
-		                   0.f,
-		                   0.f,
-		                   1.f };
+	opengl::projection = {
+		static_cast<float>(windowWidth) / static_cast<float>(originalWindowWidth) * 2.f / (r - l),
+		0.f,
+		0.f,
+		-(r + l) / (r - l),
+		0.f,
+		static_cast<float>(windowHeight) / static_cast<float>(originalWindowHeight) * 2.f / (t - b),
+		0.f,
+		-(t + b) / (t - b),
+		0.f,
+		0.f,
+		-1.f,
+		0.f,
+		0.f,
+		0.f,
+		0.f,
+		1.f
+	};
 }
 
 WindowPointer pWindow;
@@ -274,9 +277,9 @@ void cancelQuit() {
 
 void setBackgroundColor(const jngl::Color color) {
 	pWindow.ThrowIfNull();
-	bgRed = float(color.getRed()) / 255.f;
-	bgGreen = float(color.getGreen()) / 255.f;
-	bgBlue = float(color.getBlue()) / 255.f;
+	bgRed = static_cast<float>(color.getRed()) / 255.f;
+	bgGreen = static_cast<float>(color.getGreen()) / 255.f;
+	bgBlue = static_cast<float>(color.getBlue()) / 255.f;
 	clearBackgroundColor();
 	glClear(GL_COLOR_BUFFER_BIT);
 }
@@ -338,8 +341,9 @@ bool mousePressed(mouse::Button button) {
 }
 
 void setMouse(const jngl::Vec2 position) {
-	pWindow->SetMouse(int(std::lround((position.x + getScreenWidth() / 2) * getScaleFactor())),
-	                  int(std::lround((position.y + getScreenHeight() / 2) * getScaleFactor())));
+	pWindow->SetMouse(
+	    static_cast<int>(std::lround((position.x + getScreenWidth() / 2) * getScaleFactor())),
+	    static_cast<int>(std::lround((position.y + getScreenHeight() / 2) * getScaleFactor())));
 }
 
 void setRelativeMouseMode(const bool relative) {
@@ -375,7 +379,7 @@ double getTextWidth(const std::string& text) {
 }
 
 double getLineHeight() {
-	return double(ScaleablePixels(pWindow->getLineHeight()));
+	return static_cast<double>(ScaleablePixels{ pWindow->getLineHeight() });
 }
 
 void setLineHeight(double h) {
@@ -605,7 +609,7 @@ std::string _getConfigPath() {
 #elif defined(__EMSCRIPTEN__)
 	path << "/working1/";
 #else
-	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/";
+	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/"; // NOLINT
 #endif
 	return *(configPath = path.str());
 #endif
@@ -634,7 +638,10 @@ std::stringstream readAsset(const std::string& filename) {
 		sstream.setstate(std::ios::failbit);
 		return sstream;
 	}
-	Finally closeFile([f]() { fclose(f); });
+	Finally closeFile([f]() {
+		int result [[maybe_unused]] = fclose(f);
+		assert(result == 0);
+	});
 	if (fseek(f, 0, SEEK_END) != 0) {
 		sstream.setstate(std::ios::failbit);
 		return sstream;
