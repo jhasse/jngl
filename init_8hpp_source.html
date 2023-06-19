@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('init_8hpp_source.html',''); initResiza
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"></span> </div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="App_8hpp.html">App.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;App.hpp&quot;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="AppParameters_8hpp.html">AppParameters.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="main_8hpp.html">main.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="message_8hpp.html">message.hpp</a>&quot;</span></div>
@@ -143,7 +143,7 @@ $(document).ready(function(){initNavTree('init_8hpp_source.html',''); initResiza
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    }</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <a class="code hl_struct" href="structjngl_1_1AppParameters.html">jngl::AppParameters</a> params = <a class="code hl_function" href="init_8hpp.html#a2471fe7de5ef776522a016331b6bf6e5">jnglInit</a>();</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <a class="code hl_class" href="classjngl_1_1App.html">jngl::App</a> app(params);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    jngl::App app(params);</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordtype">bool</span> fullscreen = <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="preprocessor">#if (!defined(__EMSCRIPTEN__) &amp;&amp; defined(NDEBUG)) || defined(__ANDROID__)</span></div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    fullscreen = <span class="keyword">true</span>;</div>
@@ -189,8 +189,6 @@ $(document).ready(function(){initNavTree('init_8hpp_source.html',''); initResiza
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>JNGL_MAIN_END</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aAppParameters_8hpp_html"><div class="ttname"><a href="AppParameters_8hpp.html">AppParameters.hpp</a></div><div class="ttdoc">Contains jngl::AppParameters struct.</div></div>
-<div class="ttc" id="aApp_8hpp_html"><div class="ttname"><a href="App_8hpp.html">App.hpp</a></div><div class="ttdoc">Contains jngl::App class.</div></div>
-<div class="ttc" id="aclassjngl_1_1App_html"><div class="ttname"><a href="classjngl_1_1App.html">jngl::App</a></div><div class="ttdoc">There can only be one instance of this class which will be created before the window is shown.</div><div class="ttdef"><b>Definition:</b> <a href="App_8hpp_source.html#l00027">App.hpp:27</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Vec2_html"><div class="ttname"><a href="classjngl_1_1Vec2.html">jngl::Vec2</a></div><div class="ttdoc">Two-dimensional vector.</div><div class="ttdef"><b>Definition:</b> <a href="Vec2_8hpp_source.html#l00032">Vec2.hpp:32</a></div></div>
 <div class="ttc" id="acmath_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/cmath.html">cmath</a></div></div>
 <div class="ttc" id="acurrent_path_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/filesystem/current_path.html">std::filesystem::current_path</a></div><div class="ttdeci">T current_path(T... args)</div></div>

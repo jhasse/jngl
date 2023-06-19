@@ -1,5 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classjngl_1_1Drawable.html" title="Base class for drawable objects with a position and a rectangle size." alt="" coords="5,31,92,56"/>
-<area shape="rect" id="node2" href="$classjngl_1_1Sprite.html" title="Higher&#45;level representation of an image." alt="" coords="140,5,211,31"/>
-<area shape="rect" id="node3" href="$classjngl_1_1Text.html" title="Rectangle shaped text block." alt="" coords="148,55,203,80"/>
+<area shape="rect" id="node1" href="$classjngl_1_1Effect.html" title="Base class for effects that can be applied to jngl::Widget." alt="" coords="5,55,68,80"/>
+<area shape="rect" id="node2" href="$classjngl_1_1Executor.html" title="Executes a specific action, e.g. removes the Widget." alt="" coords="116,5,203,31"/>
+<area shape="rect" id="node3" href="$classjngl_1_1Move.html" title=" " alt="" coords="132,55,187,80"/>
+<area shape="rect" id="node4" href="$classjngl_1_1Zoom.html" title="Scales the ModelView matrix." alt="" coords="132,104,187,129"/>
 </map>

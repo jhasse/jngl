@@ -9,7 +9,6 @@ var annotated_dup =
     ] ],
     [ "jngl", "namespacejngl.html", [
       [ "Achievement", "structjngl_1_1Achievement.html", "structjngl_1_1Achievement" ],
-      [ "App", "classjngl_1_1App.html", "classjngl_1_1App" ],
       [ "AppParameters", "structjngl_1_1AppParameters.html", "structjngl_1_1AppParameters" ],
       [ "Color", "classjngl_1_1Color.html", "classjngl_1_1Color" ],
       [ "Container", "classjngl_1_1Container.html", "classjngl_1_1Container" ],

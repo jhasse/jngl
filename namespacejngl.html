@@ -109,9 +109,6 @@ $(document).ready(function(){initNavTree('namespacejngl.html',''); initResizable
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1Achievement.html">Achievement</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1App.html">App</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">There can only be one instance of this class which will be created before the window is shown.  <a href="classjngl_1_1App.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1AppParameters.html">AppParameters</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters used to initialize the main window.  <a href="structjngl_1_1AppParameters.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -411,7 +408,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setMouse</b> (<a clas
 <tr class="separator:a63680f5c003fed81f723fd1a3a7b3693"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4511ceb38d56c476938458af6bd98e6"><td class="memItemLeft" align="right" valign="top"><a id="af4511ceb38d56c476938458af6bd98e6" name="af4511ceb38d56c476938458af6bd98e6"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addJob</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Job.html">Job</a> &gt; job)</td></tr>
-<tr class="memdesc:af4511ceb38d56c476938458af6bd98e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> which will be always be stepped and drawn by <a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> <br /></td></tr>
+<tr class="memdesc:af4511ceb38d56c476938458af6bd98e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> which will be always be stepped and drawn by App::mainLoop() <br /></td></tr>
 <tr class="separator:af4511ceb38d56c476938458af6bd98e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae15308fbb3125f278ed8d05b971eb9ee"><td class="memTemplParams" colspan="2">template&lt;class T , class... Args&gt; </td></tr>
 <tr class="memitem:ae15308fbb3125f278ed8d05b971eb9ee"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ae15308fbb3125f278ed8d05b971eb9ee">addJob</a> (Args &amp;&amp;... args)</td></tr>
@@ -483,7 +480,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>running</b> ()</td></
 <tr class="memdesc:a4b2ac4983f758c08f92701b491f5c877"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some platforms (e.g.  <a href="namespacejngl.html#a4b2ac4983f758c08f92701b491f5c877">More...</a><br /></td></tr>
 <tr class="separator:a4b2ac4983f758c08f92701b491f5c877"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0eb736262d05c5af0143a5eadae67ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca">quit</a> () noexcept</td></tr>
-<tr class="memdesc:ad0eb736262d05c5af0143a5eadae67ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emit a quit event which will exit <a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> and set <a class="el" href="namespacejngl.html#aaa6432a11cc8aa43cdcac30e43bf038f" title="Returns true until the main window is closed or quit() has been called.">running()</a> to false.  <a href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca">More...</a><br /></td></tr>
+<tr class="memdesc:ad0eb736262d05c5af0143a5eadae67ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emit a quit event which will exit App::mainLoop() and set <a class="el" href="namespacejngl.html#aaa6432a11cc8aa43cdcac30e43bf038f" title="Returns true until the main window is closed or quit() has been called.">running()</a> to false.  <a href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca">More...</a><br /></td></tr>
 <tr class="separator:ad0eb736262d05c5af0143a5eadae67ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a435e2f7919544ec87ae83ffdb226a50d"><td class="memItemLeft" align="right" valign="top"><a id="a435e2f7919544ec87ae83ffdb226a50d" name="a435e2f7919544ec87ae83ffdb226a50d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>cancelQuit</b> ()</td></tr>
@@ -795,7 +792,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setCursor</b> (Cursor
 <tr class="separator:a57d53df4f6801a026e40bc1ccf8bd390"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9937073cb10d7c761085e47010390297"><td class="memItemLeft" align="right" valign="top"><a id="a9937073cb10d7c761085e47010390297" name="a9937073cb10d7c761085e47010390297"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Work.html">Work</a> &gt; work)</td></tr>
-<tr class="memdesc:a9937073cb10d7c761085e47010390297"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the passed <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> to be active in <a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> <br /></td></tr>
+<tr class="memdesc:a9937073cb10d7c761085e47010390297"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the passed <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> to be active in App::mainLoop() <br /></td></tr>
 <tr class="separator:a9937073cb10d7c761085e47010390297"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5bc0c906f29976cf36850c5aa0c84ba"><td class="memTemplParams" colspan="2">template&lt;class T , class... Args&gt; </td></tr>
 <tr class="memitem:af5bc0c906f29976cf36850c5aa0c84ba"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejngl.html#af5bc0c906f29976cf36850c5aa0c84ba">setWork</a> (Args &amp;&amp;... args)</td></tr>
@@ -804,7 +801,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 <tr class="memitem:a9b9d453bc1307852b482b9926abeeca9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a9b9d453bc1307852b482b9926abeeca9">setWork</a> (<a class="el" href="classjngl_1_1Work.html">Work</a> *)</td></tr>
 <tr class="separator:a9b9d453bc1307852b482b9926abeeca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5654b5fb3dec5ca7aa0d860163ab8a09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a5654b5fb3dec5ca7aa0d860163ab8a09">resetFrameLimiter</a> ()</td></tr>
-<tr class="memdesc:a5654b5fb3dec5ca7aa0d860163ab8a09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the automatic frame limiter of <a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a>.  <a href="namespacejngl.html#a5654b5fb3dec5ca7aa0d860163ab8a09">More...</a><br /></td></tr>
+<tr class="memdesc:a5654b5fb3dec5ca7aa0d860163ab8a09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the automatic frame limiter of App::mainLoop().  <a href="namespacejngl.html#a5654b5fb3dec5ca7aa0d860163ab8a09">More...</a><br /></td></tr>
 <tr class="separator:a5654b5fb3dec5ca7aa0d860163ab8a09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -912,7 +909,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div><div class="memdoc">
 
 <p>Sets the screen's background color which is visible when nothing is drawn. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000002">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#ae90a1346aab83848e060a8c5b3581029" title="Sets the screen&#39;s background color which is visible when nothing is drawn.">setBackgroundColor(jngl::Color)</a> instead. </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#ae90a1346aab83848e060a8c5b3581029" title="Sets the screen&#39;s background color which is visible when nothing is drawn.">setBackgroundColor(jngl::Color)</a> instead. </dd></dl>
 
 </div>
 </div>
@@ -1181,7 +1178,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div><div class="memdoc">
 
 <p>Retrieve mouse position in pixels. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000004">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">jngl::getMousePos()</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000003">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">jngl::getMousePos()</a> instead </dd></dl>
 
 </div>
 </div>
@@ -1201,7 +1198,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div><div class="memdoc">
 
 <p>Retrieve mouse position in pixels. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">jngl::getMousePos()</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000004">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">jngl::getMousePos()</a> instead </dd></dl>
 
 </div>
 </div>
@@ -1403,7 +1400,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div><div class="memdoc">
 
 <p>Updates the input state. </p>
-<p ><a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> calls this before <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Work::step()</a></p>
+<p >App::mainLoop() calls this before <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Work::step()</a></p>
 <p >Normally you shouldn't call this yourself at all, unless you want to implement your own game loop. </p>
 
 </div>
@@ -1424,7 +1421,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div><div class="memdoc">
 
 <p>Swaps back and front buffer. </p>
-<p ><a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> calls this after <a class="el" href="classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">Work::draw()</a></p>
+<p >App::mainLoop() calls this after <a class="el" href="classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">Work::draw()</a></p>
 <p >Also clears the back buffer using <a class="el" href="namespacejngl.html#a1452effd5409822ed0a65e58f5ee3e9c" title="Clears the back buffer and resets the ModelView matrix, see jngl::reset()">jngl::clearBackBuffer()</a>. </p>
 
 </div>
@@ -1493,7 +1490,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </table>
 </div><div class="memdoc">
 
-<p>Emit a quit event which will exit <a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a> and set <a class="el" href="namespacejngl.html#aaa6432a11cc8aa43cdcac30e43bf038f" title="Returns true until the main window is closed or quit() has been called.">running()</a> to false. </p>
+<p>Emit a quit event which will exit App::mainLoop() and set <a class="el" href="namespacejngl.html#aaa6432a11cc8aa43cdcac30e43bf038f" title="Returns true until the main window is closed or quit() has been called.">running()</a> to false. </p>
 <p >If the window hasn't been created yet or the loop is already about to quit, this function does nothing </p>
 
 </div>
@@ -1514,7 +1511,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div><div class="memdoc">
 
 <p>Calculates FPS if called once per frame. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated:</a></b></dt><dd>Not really intuitive or robust, use your own calculations instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated:</a></b></dt><dd>Not really intuitive or robust, use your own calculations instead </dd></dl>
 
 </div>
 </div>
@@ -1533,7 +1530,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="namespacejngl.html#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead. </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="namespacejngl.html#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead. </dd></dl>
 
 </div>
 </div>
@@ -1551,7 +1548,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="namespacejngl.html#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="namespacejngl.html#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
 <p >Returns the directory where to store configuration files and save games.</p><ul>
 <li>Windows: <code>%AppData%/Display Name/</code></li>
 <li>Linux: <code>~/.config/Display Name/</code></li>
@@ -1692,7 +1689,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated:</a></b></dt><dd>Use setAlpha instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated:</a></b></dt><dd>Use setAlpha instead </dd></dl>
 
 </div>
 </div>
@@ -1710,7 +1707,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated:</a></b></dt><dd>Use setAlpha instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated:</a></b></dt><dd>Use setAlpha instead </dd></dl>
 
 </div>
 </div>
@@ -1946,7 +1943,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div><div class="memdoc">
 
 <p>Sleep current thread for <em>milliseconds</em>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated:</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated:</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
 
 </div>
 </div>
@@ -2028,7 +2025,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated:</a></b></dt><dd>Use <a class="el" href="namespacejngl.html#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -2047,7 +2044,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
       </table>
 </div><div class="memdoc">
 
-<p>Resets the automatic frame limiter of <a class="el" href="classjngl_1_1App.html#a0dcdcf298c511db74358109fc74547fa" title="Starts the main loop, which calls jngl::Work::step and jngl::Work::draw.">App::mainLoop()</a>. </p>
+<p>Resets the automatic frame limiter of App::mainLoop(). </p>
 <p >This is useful after you have done a huge amount of work in <a class="el" href="classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">Work::draw</a>, e.g. after loading screens. </p>
 
 </div>
