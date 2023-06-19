@@ -44,14 +44,16 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	Uint32 flags =
-	    SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE;
+	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI;
 	if (fullscreen) {
 		if (width == getDesktopWidth() && height == getDesktopHeight()) {
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		} else {
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
+	} else {
+		flags |= SDL_WINDOW_RESIZABLE; // if we make fullscreen window resizeable on GNOME, it will
+		                               // be reduced in its height (SDL bug?).
 	}
 
 #ifdef JNGL_UWP
