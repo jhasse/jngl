@@ -49,7 +49,7 @@ App::~App() {
 
 App& App::instance() {
 	if (!self) {
-		throw std::runtime_error("App hasn't been created yet.");
+		self = new App({});
 	}
 	return *self;
 }

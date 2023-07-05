@@ -39,6 +39,7 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 	if (FT_Get_Glyph(face->glyph, &glyph)) {
 		throw std::runtime_error("FT_Get_Glyph failed");
 	}
+	Finally freeGlyph([&]() { FT_Done_Glyph(glyph); });
 	const auto bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph); // NOLINT
 	const FT_Bitmap& bitmap = bitmap_glyph->bitmap;
 
