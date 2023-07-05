@@ -46,7 +46,8 @@ private:
 
 	std::vector<stream*> activeStreams; //< only used on mixer thread
 
-	std::vector<float> buffer_;
+	constexpr static size_t BUFFER_SIZE = 996;
+	float buffer[BUFFER_SIZE];
 
 	atomic_queue::AtomicQueue<stream*, 10> newStreams;
 
@@ -62,6 +63,11 @@ void mixer_impl::add(stream_ptr stream) {
 }
 
 std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
+	if (sample_count > BUFFER_SIZE) {
+		size_t first = read(data, BUFFER_SIZE);
+		return first + read(data + BUFFER_SIZE, sample_count - BUFFER_SIZE);
+	}
+
 	stream* tmp;
 	while (newStreams.try_pop(tmp)) {
 		activeStreams.emplace_back(tmp);
@@ -76,16 +82,14 @@ std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
 
 	std::fill(data, data + sample_count, 0.f);
 
-	buffer_.resize(sample_count);
-
 	for (auto it = activeStreams.begin(); it != activeStreams.end();) {
 		auto& stream = *it;
 		if (!stream) continue;
 
-		auto read = stream->read(buffer_.data(), sample_count);
+		auto read = stream->read(buffer, sample_count);
 
 		{
-			auto begin = buffer_.data();
+			auto begin = buffer;
 			auto end = begin + read;
 			auto dst = data;
 			for (; begin < end;) {
