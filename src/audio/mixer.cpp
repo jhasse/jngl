@@ -44,7 +44,9 @@ private:
 
 	atomic_queue::AtomicQueue<stream*, 10> streamsToRemoveOnMainThread;
 
-	std::vector<stream*> activeStreams; //< only used on mixer thread
+	constexpr static size_t MAX_ACTIVE_STREAMS = 256;
+	size_t numberOfActiveStreams = 0;
+	stream* activeStreams[MAX_ACTIVE_STREAMS]; //< only used on mixer thread
 
 	constexpr static size_t BUFFER_SIZE = 996;
 	float buffer[BUFFER_SIZE];
@@ -69,20 +71,20 @@ std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
 	}
 
 	stream* tmp;
-	while (newStreams.try_pop(tmp)) {
-		activeStreams.emplace_back(tmp);
+	while (numberOfActiveStreams < MAX_ACTIVE_STREAMS && newStreams.try_pop(tmp)) {
+		activeStreams[numberOfActiveStreams++] = tmp;
 	}
 	while (streamsToStop.try_pop(tmp)) {
-		auto it = std::find(activeStreams.begin(), activeStreams.end(), tmp);
-		if (it != activeStreams.end()) {
-			activeStreams.erase(it);
+		auto it = std::find(activeStreams, activeStreams + numberOfActiveStreams, tmp);
+		if (it != activeStreams + numberOfActiveStreams) {
+			*it = activeStreams[--numberOfActiveStreams]; // move the last element to the one to be erased
 			streamsToRemoveOnMainThread.push(tmp);
 		}
 	}
 
 	std::fill(data, data + sample_count, 0.f);
 
-	for (auto it = activeStreams.begin(); it != activeStreams.end();) {
+	for (auto it = activeStreams; it != activeStreams + numberOfActiveStreams;) {
 		auto& stream = *it;
 		if (!stream) continue;
 
@@ -98,8 +100,8 @@ std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
 		}
 
 		if (read < sample_count) {
+			*it = activeStreams[--numberOfActiveStreams]; // move the last element to the one to be erased
 			streamsToRemoveOnMainThread.push(*it);
-			it = activeStreams.erase(it);
 		} else {
 			++it;
 		}
