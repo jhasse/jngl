@@ -24,10 +24,6 @@ struct raw_stream_impl : stream {
 	: data_holder_(std::move(data_holder)) {
 	}
 
-	std::optional<std::size_t> length() const override {
-		return data_holder_->samples.size();
-	}
-
 	std::size_t read(float* data, std::size_t sample_count) override {
 		auto played = played_.load();
 
@@ -38,8 +34,8 @@ struct raw_stream_impl : stream {
 		return count;
 	}
 
-	std::size_t played() const override {
-		return played_;
+	void rewind() override {
+		played_ = 0;
 	}
 
 private:

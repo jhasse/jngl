@@ -272,13 +272,8 @@ private:
 		return startTime > 0;
 	}
 
-	size_t played() const override {
+	void rewind() override {
 		assert(false);
-		return 0;
-	}
-	std::optional<size_t> length() const override {
-		assert(false);
-		return 0;
 	}
 
 	void queueAudio() {

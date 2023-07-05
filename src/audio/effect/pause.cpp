@@ -22,10 +22,6 @@ struct pause_control_impl : pause_control {
 		return paused_.exchange(value);
 	}
 
-	std::optional<std::size_t> length() const override {
-		return stream_->length();
-	}
-
 	std::size_t read(float* data, std::size_t sample_count) override {
 		bool const paused = paused_.load();
 
@@ -59,8 +55,8 @@ struct pause_control_impl : pause_control {
 		return result;
 	}
 
-	std::size_t played() const override {
-		return stream_->played();
+	void rewind() override {
+		return stream_->rewind();
 	}
 
 private:

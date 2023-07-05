@@ -25,12 +25,8 @@ struct volume_control_impl : volume_control {
 		return base_.smoothness(value);
 	}
 
-	std::optional<std::size_t> length() const override {
-		return stream_->length();
-	}
-
-	std::size_t played() const override {
-		return stream_->played();
+	void rewind() override {
+		return stream_->rewind();
 	}
 
 	std::size_t read(float* data, std::size_t sample_count) override {
@@ -70,12 +66,8 @@ struct volume_control_stereo_impl : volume_control_stereo {
 		return base_.smoothness(value);
 	}
 
-	std::optional<std::size_t> length() const override {
-		return stream_->length();
-	}
-
-	std::size_t played() const override {
-		return stream_->played();
+	void rewind() override {
+		return stream_->rewind();
 	}
 
 	std::size_t read(float* data, std::size_t sample_count) override {

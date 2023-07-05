@@ -33,10 +33,6 @@ struct pitch_control_impl : pitch_control {
 		return this->ratio = 1.f / ratio;
 	}
 
-	std::optional<std::size_t> length() const override {
-		return std::nullopt;
-	}
-
 	std::size_t read(float* data, std::size_t sample_count) override {
 		assert(sample_count % 2 == 0);
 		std::size_t result = 0;
@@ -50,22 +46,15 @@ struct pitch_control_impl : pitch_control {
 		while (result < sample_count) {
 			// assert(2 * (position + 1) <= sourceBufferSize);
 			if (2 * (position + 1) >= sourceBufferSize) {
-				if (!stream_) {
-					break;
-				}
 				static_assert(MAX_SOURCE_BUFFER_SIZE % 2 == 0);
 				sourceBuffer[0] = sourceBuffer[sourceBufferSize - 2];
 				sourceBuffer[1] = sourceBuffer[sourceBufferSize - 1];
+				position = 0;
 				sourceBufferSize = stream_->read(sourceBuffer + 2, MAX_SOURCE_BUFFER_SIZE - 2) + 2;
 				if (sourceBufferSize == 2) {
-					// interpolate to 0
-					sourceBuffer[2] = 0.f;
-					sourceBuffer[3] = 0.f;
-					sourceBufferSize = 4;
-					stream_.reset();
+					break;
 				}
 				assert(sourceBufferSize % 2 == 0);
-				position = 0;
 			}
 			data[result] =
 			    lerp(sourceBuffer[2 * position], sourceBuffer[2 * (position + 1)], positionFrac);
@@ -84,8 +73,10 @@ struct pitch_control_impl : pitch_control {
 		return result;
 	}
 
-	std::size_t played() const override {
-		return played_.load();
+	void rewind() override {
+		stream_->rewind();
+		position = 0;
+		sourceBufferSize = 0;
 	}
 
 private:
@@ -96,7 +87,6 @@ private:
 	size_t sourceBufferSize = 0;
 	float sourceBuffer[MAX_SOURCE_BUFFER_SIZE] = { 0 };
 
-	float lastSample[2]{ 0, 0 };
 	float positionFrac = 0; //< 0 = left sample, 1 = right sample
 
 	float ratio; // 1. / ratio

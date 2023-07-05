@@ -22,12 +22,8 @@ struct mixer_impl final : mixer, std::enable_shared_from_this<mixer_impl> {
 
 	std::size_t read(float* data, std::size_t sample_count) override;
 
-	std::optional<std::size_t> length() const override {
-		return std::nullopt;
-	}
-
-	std::size_t played() const override {
-		return played_.load();
+	void rewind() override {
+		assert(false);
 	}
 
 private:
