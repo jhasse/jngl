@@ -96,8 +96,8 @@ std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
 		}
 
 		if (read < sample_count) {
-			*it = activeStreams[--numberOfActiveStreams]; // move the last element to the one to be erased
 			streamsToRemoveOnMainThread.push(*it);
+			*it = activeStreams[--numberOfActiveStreams]; // move the last element to the one to be erased
 		} else {
 			++it;
 		}
