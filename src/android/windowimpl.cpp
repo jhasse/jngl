@@ -50,7 +50,7 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
 	if (!app || !app->userData) {
-		return; // shouldn't happen but I seen a crash in this function in the Play Console
+		return 0; // shouldn't happen but I seen a crash in this function in the Play Console
 	}
 	WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
 	const auto source = AInputEvent_getSource(event);
