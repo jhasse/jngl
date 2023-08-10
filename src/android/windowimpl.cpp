@@ -382,11 +382,6 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 }
 
 void WindowImpl::updateInput() {
-	if (firstFrame && display && display->context) {
-		// TODO: I think this should be moved to Window::initGlObjects(). We can't do it in
-		// WindowImpl::init() as that might be called multiple times even at startup.
-		Init(window->width_, window->height_, window->canvasWidth, window->canvasHeight);
-	}
 	// Read all pending events.
 	int ident;
 	int events;
