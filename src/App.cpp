@@ -96,7 +96,7 @@ void App::updateProjectionMatrix() const {
 	}
 }
 
-#if !defined(__APPLE__) || !TARGET_OS_IPHONE // iOS
+#if !defined(__APPLE__) || !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE // iOS
 namespace internal {
 
 void mainLoop(AppParameters params) {

@@ -461,6 +461,9 @@ void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 }
 
 void Window::initGlObjects() {
+#ifdef ANDROID
+	Init(width_, height_, canvasWidth, canvasHeight);
+#endif
 	glGenBuffers(1, &opengl::vboStream);
 	glGenVertexArrays(1, &opengl::vaoStream);
 

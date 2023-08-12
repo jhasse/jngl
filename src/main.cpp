@@ -265,6 +265,10 @@ bool canQuit() {
 }
 
 void quit() noexcept {
+	if (!canQuit()) {
+		debugLn("Quitting the main loop is not supported on this patform!");
+		return;
+	}
 	if (const auto w = pWindow.get()) {
 		w->quit();
 	}
