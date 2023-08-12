@@ -5,7 +5,7 @@
 #include <vector>
 
 namespace jngl {
-class Stream;
+struct Stream;
 }
 
 namespace psemek::audio {

@@ -8,7 +8,7 @@
 
 namespace jngl {
 
-class Stream;
+struct Stream;
 struct SoundParams;
 
 class Sound {
