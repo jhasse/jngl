@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../stream.hpp"
+#include "../Stream.hpp"
 
 #include <atomic>
 
