@@ -2,6 +2,7 @@
 
 #include "../../jngl/debug.hpp"
 #include "../constants.hpp"
+#include "../Stream.hpp"
 
 #include <SDL.h>
 
@@ -16,7 +17,7 @@
 namespace psemek::audio {
 
 struct engine::Impl {
-	explicit Impl(std::shared_ptr<stream> output) {
+	explicit Impl(std::shared_ptr<Stream> output) {
 		try {
 			backend = std::make_unique<SdlImpl>(output);
 		} catch (std::exception& e) {
@@ -31,7 +32,7 @@ struct engine::Impl {
 	std::unique_ptr<Backend> backend;
 
 	struct DummyImpl : public Backend {
-		explicit DummyImpl(std::shared_ptr<stream> output)
+		explicit DummyImpl(std::shared_ptr<Stream> output)
 		: output(std::move(output)), thread(
 		                                 [this]()
 		                                 {
@@ -78,7 +79,7 @@ struct engine::Impl {
 			this->pause = pause;
 		}
 
-		std::shared_ptr<stream> output;
+		std::shared_ptr<Stream> output;
 		std::atomic_bool pause{ false };
 		std::atomic_bool quit{ false };
 		std::thread thread;
@@ -91,9 +92,9 @@ struct engine::Impl {
 
 		std::vector<float> buffer;
 
-		std::shared_ptr<stream> output;
+		std::shared_ptr<Stream> output;
 
-		explicit SdlImpl(std::shared_ptr<stream> output) : output(std::move(output)) {
+		explicit SdlImpl(std::shared_ptr<Stream> output) : output(std::move(output)) {
 			if (SDL_Init(SDL_INIT_AUDIO) < 0) {
 				throw std::runtime_error(SDL_GetError());
 			}
@@ -142,7 +143,7 @@ struct engine::Impl {
 	};
 };
 
-engine::engine(std::shared_ptr<stream> output) : impl(std::make_unique<Impl>(std::move(output))) {
+engine::engine(std::shared_ptr<Stream> output) : impl(std::make_unique<Impl>(std::move(output))) {
 }
 
 engine::~engine() = default;

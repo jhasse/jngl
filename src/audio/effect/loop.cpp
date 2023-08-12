@@ -1,11 +1,13 @@
 #include "loop.hpp"
 
+#include "../Stream.hpp"
+
 namespace psemek::audio {
 
 namespace {
 
-struct loop_impl : stream {
-	loop_impl(stream_ptr stream, std::optional<std::size_t> count)
+struct loop_impl : Stream {
+	loop_impl(std::shared_ptr<Stream> stream, std::optional<std::size_t> count)
 	: stream_(std::move(stream)), count_(count) {
 	}
 
@@ -28,14 +30,14 @@ struct loop_impl : stream {
 	}
 
 private:
-	stream_ptr stream_;
+	std::shared_ptr<Stream> stream_;
 	std::optional<std::size_t> count_;
 	std::size_t repeated_ = 0;
 };
 
 } // namespace
 
-stream_ptr loop(stream_ptr stream, std::optional<std::size_t> count) {
+std::shared_ptr<Stream> loop(std::shared_ptr<Stream> stream, std::optional<std::size_t> count) {
 	return std::make_shared<loop_impl>(std::move(stream), count);
 }
 

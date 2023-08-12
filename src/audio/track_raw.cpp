@@ -1,5 +1,7 @@
 #include "track.hpp"
 
+#include "Stream.hpp"
+
 #include <atomic>
 #include <stdexcept>
 
@@ -19,7 +21,7 @@ struct data_holder {
 	}
 };
 
-struct raw_stream_impl : stream {
+struct raw_stream_impl : Stream {
 	explicit raw_stream_impl(std::shared_ptr<data_holder> data_holder)
 	: data_holder_(std::move(data_holder)) {
 	}
@@ -48,7 +50,7 @@ struct raw_track_impl : track {
 	: data_holder_(std::move(data_holder)) {
 	}
 
-	stream_ptr stream() const override {
+	std::shared_ptr<Stream> stream() const override {
 		return std::make_shared<raw_stream_impl>(data_holder_);
 	}
 

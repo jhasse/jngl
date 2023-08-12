@@ -31,7 +31,7 @@ namespace jngl {
 
 using namespace psemek; // TODO
 
-class Video::Impl : public audio::stream {
+class Video::Impl : public Stream {
 public:
 	explicit Impl(const std::string& filename)
 	: decoder(THEORAPLAY_startDecodeFile((pathPrefix + filename).c_str(), BUFFER_SIZE,

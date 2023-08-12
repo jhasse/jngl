@@ -1,6 +1,7 @@
 #include "../engine.hpp"
 
 #include "../constants.hpp"
+#include "../Stream.hpp"
 
 #include <AudioUnit/AudioUnit.h>
 #include <cassert>
@@ -11,7 +12,7 @@ namespace psemek::audio {
 constexpr AudioUnitElement OUTPUT_ELEMENT = 0;
 
 struct engine::Impl {
-	Impl(std::shared_ptr<stream> output) : output(std::move(output)) {
+	Impl(std::shared_ptr<Stream> output) : output(std::move(output)) {
 		AudioComponentDescription desc{};
 		desc.componentType = kAudioUnitType_Output;
 		desc.componentSubType = kAudioUnitSubType_RemoteIO;
@@ -83,11 +84,11 @@ struct engine::Impl {
 		return noErr;
 	}
 
-	std::shared_ptr<stream> output;
+	std::shared_ptr<Stream> output;
 	AudioUnit audioUnit;
 };
 
-engine::engine(std::shared_ptr<stream> output) : impl(std::make_unique<Impl>(std::move(output))) {
+engine::engine(std::shared_ptr<Stream> output) : impl(std::make_unique<Impl>(std::move(output))) {
 	setPause(false);
 }
 

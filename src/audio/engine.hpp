@@ -1,16 +1,21 @@
 #pragma once
 
-#include "stream.hpp"
 #include "track.hpp"
 
 #include <memory>
 #include <string_view>
 #include <vector>
 
+namespace jngl {
+class Stream;
+}
+
 namespace psemek::audio {
 
+using jngl::Stream; // FIXME
+
 struct engine {
-	explicit engine(std::shared_ptr<stream> output);
+	explicit engine(std::shared_ptr<Stream> output);
 	~engine();
 
 	void setPause(bool);

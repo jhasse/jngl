@@ -6,7 +6,7 @@ namespace psemek::audio {
 namespace {
 
 struct volume_control_impl : volume_control {
-	volume_control_impl(stream_ptr stream, float gain, float smoothness)
+	volume_control_impl(std::shared_ptr<Stream> stream, float gain, float smoothness)
 	: base_(gain, gain, smoothness), stream_(std::move(stream)) {
 	}
 
@@ -37,11 +37,11 @@ struct volume_control_impl : volume_control {
 
 private:
 	volume_base base_;
-	stream_ptr stream_;
+	std::shared_ptr<Stream> stream_;
 };
 
 struct volume_control_stereo_impl : volume_control_stereo {
-	volume_control_stereo_impl(stream_ptr stream, float gain_left, float gain_right,
+	volume_control_stereo_impl(std::shared_ptr<Stream> stream, float gain_left, float gain_right,
 	                           float smoothness)
 	: base_(gain_left, gain_right, smoothness), stream_(std::move(stream)) {
 	}
@@ -78,16 +78,16 @@ struct volume_control_stereo_impl : volume_control_stereo {
 
 private:
 	volume_base base_;
-	stream_ptr stream_;
+	std::shared_ptr<Stream> stream_;
 };
 
 } // namespace
 
-std::shared_ptr<volume_control> volume(stream_ptr stream, float gain, float smoothness) {
+std::shared_ptr<volume_control> volume(std::shared_ptr<Stream> stream, float gain, float smoothness) {
 	return std::make_shared<volume_control_impl>(std::move(stream), gain, smoothness);
 }
 
-std::shared_ptr<volume_control_stereo> volume_stereo(stream_ptr stream, float gain_left,
+std::shared_ptr<volume_control_stereo> volume_stereo(std::shared_ptr<Stream> stream, float gain_left,
                                                      float gain_right, float smoothness) {
 	return std::make_shared<volume_control_stereo_impl>(std::move(stream), gain_left, gain_right,
 	                                                    smoothness);

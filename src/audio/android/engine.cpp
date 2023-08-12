@@ -1,5 +1,6 @@
 #include "../engine.hpp"
 #include "../constants.hpp"
+#include "../Stream.hpp"
 #include "../../jngl/debug.hpp"
 
 #include <oboe/Oboe.h>
@@ -13,9 +14,9 @@
 namespace psemek::audio {
 
 struct engine::Impl {
-	std::shared_ptr<stream> output;
+	std::shared_ptr<Stream> output;
 
-	Impl(std::shared_ptr<stream> output);
+	Impl(std::shared_ptr<Stream> output);
 
 	class Callback : public oboe::AudioStreamCallback {
 	public:
@@ -38,7 +39,7 @@ struct engine::Impl {
 	std::shared_ptr<oboe::AudioStream> oboeStream;
 };
 
-engine::Impl::Impl(std::shared_ptr<stream> output)
+engine::Impl::Impl(std::shared_ptr<Stream> output)
 : output(std::move(output)), callback(*this)
 {
 	builder.setDirection(oboe::Direction::Output);
@@ -57,7 +58,7 @@ engine::Impl::Impl(std::shared_ptr<stream> output)
 	oboeStream->requestStart();
 }
 
-engine::engine(std::shared_ptr<stream> output) : impl(std::make_unique<Impl>(std::move(output))) {
+engine::engine(std::shared_ptr<Stream> output) : impl(std::make_unique<Impl>(std::move(output))) {
 }
 
 engine::~engine() = default;

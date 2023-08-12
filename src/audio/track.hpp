@@ -1,15 +1,19 @@
 #pragma once
 
-#include "stream.hpp"
-
 #include <gsl/span>
 #include <optional>
 #include <vector>
 
+namespace jngl {
+class Stream;
+}
+
 namespace psemek::audio {
 
+using jngl::Stream; // FIXME
+
 struct track {
-	virtual stream_ptr stream() const = 0;
+	virtual std::shared_ptr<Stream> stream() const = 0;
 	virtual std::optional<std::size_t> length() const = 0;
 
 	virtual ~track() {

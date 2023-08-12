@@ -1,14 +1,16 @@
 #pragma once
 
-#include "stream.hpp"
+#include "Stream.hpp"
 
 #include <memory>
 
 namespace psemek::audio {
 
-struct mixer : stream {
-	virtual void add(stream_ptr stream) = 0;
-	virtual void remove(stream*) = 0;
+using jngl::Stream; // FIXME
+
+struct mixer : Stream {
+	virtual void add(std::shared_ptr<Stream> stream) = 0;
+	virtual void remove(Stream*) = 0;
 };
 
 using mixer_ptr = std::shared_ptr<mixer>;

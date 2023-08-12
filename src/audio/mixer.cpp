@@ -13,9 +13,9 @@ namespace psemek::audio {
 namespace {
 
 struct mixer_impl final : mixer, std::enable_shared_from_this<mixer_impl> {
-	void add(stream_ptr stream) override;
+	void add(std::shared_ptr<Stream> stream) override;
 
-	void remove(stream* stream) override {
+	void remove(Stream* stream) override {
 		gc();
 		streamsToStop.push(stream);
 	}
@@ -28,7 +28,7 @@ struct mixer_impl final : mixer, std::enable_shared_from_this<mixer_impl> {
 
 private:
 	void gc() {
-		stream* tmp;
+		Stream* tmp;
 		while (streamsToRemoveOnMainThread.try_pop(tmp)) {
 			auto it = std::find_if(streamsOnMainThread.begin(), streamsOnMainThread.end(),
 			                       [tmp](const auto& stream) { return stream.get() == tmp; });
@@ -36,25 +36,25 @@ private:
 			streamsOnMainThread.erase(it);
 		}
 	}
-	std::vector<std::shared_ptr<stream>> streamsOnMainThread;
+	std::vector<std::shared_ptr<Stream>> streamsOnMainThread;
 
-	atomic_queue::AtomicQueue<stream*, 10> streamsToRemoveOnMainThread;
+	atomic_queue::AtomicQueue<Stream*, 10> streamsToRemoveOnMainThread;
 
 	constexpr static size_t MAX_ACTIVE_STREAMS = 256;
 	size_t numberOfActiveStreams = 0;
-	stream* activeStreams[MAX_ACTIVE_STREAMS]; //< only used on mixer thread
+	Stream* activeStreams[MAX_ACTIVE_STREAMS]; //< only used on mixer thread
 
 	constexpr static size_t BUFFER_SIZE = 996;
 	float buffer[BUFFER_SIZE];
 
-	atomic_queue::AtomicQueue<stream*, 10> newStreams;
+	atomic_queue::AtomicQueue<Stream*, 10> newStreams;
 
-	atomic_queue::AtomicQueue<stream*, 10> streamsToStop;
+	atomic_queue::AtomicQueue<Stream*, 10> streamsToStop;
 
 	std::atomic<std::size_t> played_{ 0 };
 };
 
-void mixer_impl::add(stream_ptr stream) {
+void mixer_impl::add(std::shared_ptr<Stream> stream) {
 	gc();
 	newStreams.push(stream.get());
 	streamsOnMainThread.emplace_back(std::move(stream));
@@ -66,7 +66,7 @@ std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
 		return first + read(data + BUFFER_SIZE, sample_count - BUFFER_SIZE);
 	}
 
-	stream* tmp;
+	Stream* tmp;
 	while (numberOfActiveStreams < MAX_ACTIVE_STREAMS && newStreams.try_pop(tmp)) {
 		activeStreams[numberOfActiveStreams++] = tmp;
 	}

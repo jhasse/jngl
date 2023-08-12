@@ -9,7 +9,7 @@ namespace psemek::audio {
 namespace {
 
 struct pause_control_impl : pause_control {
-	pause_control_impl(stream_ptr stream, bool paused, duration length)
+	pause_control_impl(std::shared_ptr<Stream> stream, bool paused, duration length)
 	: stream_(std::move(stream)), paused_{ paused }, length_(length),
 	  level_(paused ? 0 : length_.samples()) {
 	}
@@ -60,7 +60,7 @@ struct pause_control_impl : pause_control {
 	}
 
 private:
-	stream_ptr stream_;
+	std::shared_ptr<Stream> stream_;
 	std::atomic<bool> paused_;
 	duration length_;
 	std::size_t level_;
@@ -68,7 +68,7 @@ private:
 
 } // namespace
 
-std::shared_ptr<pause_control> pause(stream_ptr stream, bool paused, duration length) {
+std::shared_ptr<pause_control> pause(std::shared_ptr<Stream> stream, bool paused, duration length) {
 	return std::make_shared<pause_control_impl>(std::move(stream), paused, length);
 }
 

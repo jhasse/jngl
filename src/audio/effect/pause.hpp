@@ -1,11 +1,13 @@
 #pragma once
 
-#include "../stream.hpp"
+#include "../Stream.hpp"
 #include "../duration.hpp"
 
 namespace psemek::audio {
 
-struct pause_control : stream {
+using jngl::Stream; // FIXME
+
+struct pause_control : Stream {
 	virtual bool paused() const = 0;
 	virtual bool paused(bool value) = 0;
 
@@ -17,7 +19,7 @@ struct pause_control : stream {
 	}
 };
 
-std::shared_ptr<pause_control> pause(stream_ptr stream, bool paused = false,
+std::shared_ptr<pause_control> pause(std::shared_ptr<Stream> stream, bool paused = false,
                                      duration length = 0.01f);
 
 } // namespace psemek::audio

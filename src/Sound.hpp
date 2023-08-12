@@ -3,13 +3,12 @@
 
 #pragma once
 
-#include "audio/stream.hpp"
 #include <memory>
 #include <vector>
 
-using namespace psemek; // FIXME
-
 namespace jngl {
+
+class Stream;
 struct SoundParams;
 
 class Sound {
@@ -26,7 +25,7 @@ public:
 	bool isStopped() const;
 	void SetPitch(float p);
 	void setVolume(float v);
-	std::shared_ptr<audio::stream> getStream();
+	std::shared_ptr<Stream> getStream();
 
 private:
 	struct Impl;

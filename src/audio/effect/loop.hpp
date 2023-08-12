@@ -1,9 +1,16 @@
 #pragma once
 
-#include "../stream.hpp"
+#include <memory>
+#include <optional>
+
+namespace jngl {
+class Stream;
+}
 
 namespace psemek::audio {
 
-stream_ptr loop(stream_ptr stream, std::optional<std::size_t> count = {});
+using jngl::Stream; // FIXME
+
+std::shared_ptr<Stream> loop(std::shared_ptr<Stream> stream, std::optional<std::size_t> count = {});
 
 } // namespace psemek::audio

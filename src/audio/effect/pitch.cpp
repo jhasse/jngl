@@ -17,7 +17,7 @@ namespace psemek::audio {
 namespace {
 
 struct pitch_control_impl : pitch_control {
-	pitch_control_impl(stream_ptr stream, float ratio)
+	pitch_control_impl(std::shared_ptr<Stream> stream, float ratio)
 	: stream_(std::move(stream)), ratio(1.f / ratio) {
 	}
 
@@ -80,7 +80,7 @@ struct pitch_control_impl : pitch_control {
 	}
 
 private:
-	stream_ptr stream_;
+	std::shared_ptr<Stream> stream_;
 
 	constexpr static size_t MAX_SOURCE_BUFFER_SIZE = 996;
 	size_t position = 0;
@@ -96,7 +96,7 @@ private:
 
 } // namespace
 
-std::shared_ptr<pitch_control> pitch(stream_ptr stream, float ratio) {
+std::shared_ptr<pitch_control> pitch(std::shared_ptr<Stream> stream, float ratio) {
 	return std::make_shared<pitch_control_impl>(std::move(stream), ratio);
 }
 
