@@ -115,7 +115,6 @@ SoundFile::SoundFile(std::string filename, std::launch) {
 	const vorbis_info* const pInfo = ov_info(&oggFile, -1);
 	frequency = pInfo->rate;
 
-	const int endian = 0; // 0 for Little-Endian, 1 for Big-Endian
 	int bitStream;
 	while (true) {
 		float** buffer = nullptr;
