@@ -6,6 +6,7 @@
 
 #include <SDL.h>
 
+#include <array>
 #include <atomic>
 #include <cassert>
 #include <cmath>
