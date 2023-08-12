@@ -310,10 +310,10 @@ void Window::stepIfNeeded() {
 
 		// Round up, because if we can do 40 FPS, but need 60 SPS, we need at least 2 SPF. We
 		// don't round up exactly to be a little bit "optimistic" of what we can do.
-		auto newStepsPerFrame =
-		    std::min(static_cast<unsigned int>(std::max(
-		                 1, int(0.98 + stepsPerFrame * targetStepsPerSecond / cappedOrDoable))),
-		             std::min(stepsPerFrame * 2, maxStepsPerFrame)); // never increase too much
+		auto newStepsPerFrame = std::min(
+		    static_cast<unsigned int>(std::max(
+		        1, static_cast<int>(0.98 + stepsPerFrame * targetStepsPerSecond / cappedOrDoable))),
+		    std::min(stepsPerFrame * 2, maxStepsPerFrame)); // never increase too much
 		// Divide doableStepsPerSecond by the previous stepsPerFrame and multiply it with
 		// newStepsPerFrame so that we know what can be doable in the future and not what
 		// could have been doable:
@@ -445,12 +445,14 @@ void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 	canvasHeight = height_;
 	if (minAspectRatio.first * height_ > minAspectRatio.second * width_) {
 		// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
-		canvasHeight = gsl::narrow<int>(
-		    std::lround(float(minAspectRatio.second * width_) / float(minAspectRatio.first)));
+		canvasHeight =
+		    gsl::narrow<int>(std::lround(static_cast<float>(minAspectRatio.second * width_) /
+		                                 static_cast<float>(minAspectRatio.first)));
 	} else if (maxAspectRatio.first * height_ < maxAspectRatio.second * width_) {
 		// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
-		canvasWidth = gsl::narrow<int>(
-		    std::lround(float(maxAspectRatio.first * height_) / float(maxAspectRatio.second)));
+		canvasWidth =
+		    gsl::narrow<int>(std::lround(static_cast<float>(maxAspectRatio.first * height_) /
+		                                 static_cast<float>(maxAspectRatio.second)));
 	}
 	if (canvasWidth != width_ || canvasHeight != height_) {
 		debug("Letterboxing to ");

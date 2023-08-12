@@ -38,8 +38,8 @@ App::App(AppParameters params)
 		throw std::runtime_error("You may only create one instance of jngl::App.");
 	}
 	self = this;
-	if (impl->steamAppId) {
-		jngl::initSteam(*impl->steamAppId);
+	if (auto id = impl->steamAppId) {
+		jngl::initSteam(*id);
 	}
 }
 
