@@ -1,11 +1,11 @@
-#include "track.hpp"
+#include "Track.hpp"
 
 #include "Stream.hpp"
 
 #include <atomic>
 #include <stdexcept>
 
-namespace psemek::audio {
+namespace jngl {
 
 namespace {
 
@@ -45,7 +45,7 @@ private:
 	std::atomic<std::size_t> played_{ 0 };
 };
 
-struct raw_track_impl : track {
+struct raw_track_impl : Track {
 	explicit raw_track_impl(std::shared_ptr<data_holder> data_holder)
 	: data_holder_(std::move(data_holder)) {
 	}
@@ -64,14 +64,18 @@ private:
 
 } // namespace
 
-track_ptr load_raw(gsl::span<float const> samples) {
-	if ((samples.size() % 2) != 0) throw std::runtime_error("bad sample count");
+std::shared_ptr<Track> load_raw(gsl::span<float const> samples) {
+	if ((samples.size() % 2) != 0) {
+		throw std::runtime_error("bad sample count");
+	}
 	return std::make_shared<raw_track_impl>(std::make_shared<data_holder>(samples));
 }
 
-track_ptr load_raw(std::vector<float> samples) {
-	if ((samples.size() % 2) != 0) throw std::runtime_error("bad sample count");
+std::shared_ptr<Track> load_raw(std::vector<float> samples) {
+	if ((samples.size() % 2) != 0) {
+		throw std::runtime_error("bad sample count");
+	}
 	return std::make_shared<raw_track_impl>(std::make_shared<data_holder>(std::move(samples)));
 }
 
-} // namespace psemek::audio
+} // namespace jngl

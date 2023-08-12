@@ -1,14 +1,12 @@
 #pragma once
 
-#include "track.hpp"
-
 #include <memory>
 #include <string_view>
 #include <vector>
 
 namespace jngl {
 struct Stream;
-}
+} // namespace jngl
 
 namespace psemek::audio {
 

@@ -5,7 +5,7 @@
 
 namespace jngl {
 struct Stream;
-}
+} // namespace jngl
 
 namespace psemek::audio {
 

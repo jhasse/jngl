@@ -8,7 +8,7 @@
 #include "audio/effect/loop.hpp"
 #include "audio/effect/pitch.hpp"
 #include "audio/effect/volume.hpp"
-#include "audio/track.hpp"
+#include "audio/Track.hpp"
 #include "jngl/debug.hpp"
 
 #include <cassert>
@@ -18,13 +18,13 @@ using namespace psemek; // FIXME
 namespace jngl {
 
 struct Sound::Impl {
-	std::shared_ptr<audio::track> track;
+	std::shared_ptr<Track> track;
 	std::shared_ptr<Stream> stream;
 	std::shared_ptr<audio::volume_control> volumeControl;
 };
 
 Sound::Sound(std::vector<float>& bufferData, long frequency)
-: impl(new Impl{ audio::load_raw(bufferData) }) {
+: impl(new Impl{ load_raw(bufferData) }) {
 	auto stream = impl->track->stream();
 	if (frequency != psemek::audio::frequency) {
 		stream = audio::pitch(std::move(stream),
