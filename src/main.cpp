@@ -704,8 +704,15 @@ void writeConfig(const std::string& key, const std::string& value) {
 	}
 #endif
 #ifdef HAVE_FILESYSTEM
+#if __cplusplus >= 202002L
+	const auto tmp = _getConfigPath();
+	const auto configPath = std::filesystem::path(std::u8string{ tmp.begin(), tmp.end() });
+	const auto directory =
+	    (configPath / std::filesystem::path(std::u8string{ key.begin(), key.end() })).parent_path();
+#else
 	const auto configPath = std::filesystem::u8path(_getConfigPath());
 	const auto directory = (configPath / std::filesystem::u8path(key)).parent_path();
+#endif
 	if (!std::filesystem::exists(directory)) {
 		std::filesystem::create_directories(directory);
 	}
