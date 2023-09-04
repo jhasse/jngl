@@ -11,7 +11,7 @@
 #include <vector>
 #include <cmath>
 
-namespace psemek::audio {
+namespace jngl::audio {
 
 struct engine::Impl {
 	std::shared_ptr<Stream> output;
@@ -75,9 +75,9 @@ void engine::setPause(bool pause) {
 			if (result == oboe::Result::OK) {
 				impl->oboeStream->requestStart();
 			} else {
-				jngl::debugLn(std::string("WARNING: ") + oboe::convertToText(result));
+				debugLn(std::string("WARNING: ") + oboe::convertToText(result));
 			}
 		}
 	}
 }
-} // namespace psemek::audio
+} // namespace jngl::audio

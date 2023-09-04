@@ -2,9 +2,7 @@
 
 #include "../Stream.hpp"
 
-namespace psemek::audio {
-
-using jngl::Stream; // FIXME
+namespace jngl::audio {
 
 struct pitch_control : Stream {
 	virtual float pitch() const = 0;
@@ -13,4 +11,4 @@ struct pitch_control : Stream {
 
 std::shared_ptr<pitch_control> pitch(std::shared_ptr<Stream> stream, float ratio = 1.f);
 
-} // namespace psemek::audio
+} // namespace jngl::audio

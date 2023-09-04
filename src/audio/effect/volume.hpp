@@ -2,9 +2,7 @@
 
 #include "../Stream.hpp"
 
-namespace psemek::audio {
-
-using jngl::Stream; // FIXME
+namespace jngl::audio {
 
 struct volume_control : Stream {
 	virtual float gain() const = 0;
@@ -29,4 +27,4 @@ std::shared_ptr<volume_control_stereo> volume_stereo(std::shared_ptr<Stream> str
                                                      float gain_right = 1.f,
                                                      float smoothness = 0.f);
 
-} // namespace psemek::audio
+} // namespace jngl::audio

@@ -21,8 +21,6 @@
 #define OV_EXCLUDE_STATIC_CALLBACKS
 #include <vorbis/vorbisfile.h>
 
-using namespace psemek; // FIXME
-
 #ifdef ANDROID
 #include "../android/fopen.hpp"
 #endif
@@ -34,7 +32,7 @@ std::unordered_map<std::string, std::shared_ptr<SoundFile>> sounds;
 class Audio {
 public:
 	Audio()
-	: mixer(psemek::audio::make_mixer()), pitchControl(audio::pitch(mixer)),
+	: mixer(jngl::audio::make_mixer()), pitchControl(audio::pitch(mixer)),
 	  volumeControl(volume(pitchControl)), engine(volumeControl) {
 	}
 	Audio(const Audio&) = delete;

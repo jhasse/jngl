@@ -3,9 +3,7 @@
 #include "../Stream.hpp"
 #include "../duration.hpp"
 
-namespace psemek::audio {
-
-using jngl::Stream; // FIXME
+namespace jngl::audio {
 
 struct pause_control : Stream {
 	virtual bool paused() const = 0;
@@ -22,4 +20,4 @@ struct pause_control : Stream {
 std::shared_ptr<pause_control> pause(std::shared_ptr<Stream> stream, bool paused = false,
                                      duration length = 0.01f);
 
-} // namespace psemek::audio
+} // namespace jngl::audio

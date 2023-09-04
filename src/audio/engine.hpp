@@ -6,11 +6,8 @@
 
 namespace jngl {
 struct Stream;
-} // namespace jngl
 
-namespace psemek::audio {
-
-using jngl::Stream; // FIXME
+namespace audio {
 
 struct engine {
 	explicit engine(std::shared_ptr<Stream> output);
@@ -23,4 +20,5 @@ private:
 	std::unique_ptr<Impl> impl;
 };
 
-} // namespace psemek::audio
+} // namespace audio
+} // namespace jngl

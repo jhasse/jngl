@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <cmath>
 
-namespace psemek::audio {
+namespace jngl::audio {
 
 struct duration {
 	duration() : samples_{ 0 } {
@@ -52,4 +52,4 @@ private:
 	std::int64_t samples_;
 };
 
-} // namespace psemek::audio
+} // namespace jngl::audio

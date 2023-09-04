@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-namespace psemek::audio {
+namespace jngl::audio {
 
 volume_base::volume_base(float gain_left, float gain_right, float smoothness)
 : gain_{ gain_left, gain_right }, smoothness_multiplier_{ smoothness_to_multiplier(smoothness) },
@@ -34,4 +34,4 @@ void volume_base::apply(float* data, std::size_t sample_count) {
 	}
 }
 
-} // namespace psemek::audio
+} // namespace jngl::audio

@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-namespace psemek::audio {
+namespace jngl::audio {
 
 inline float smoothness_to_multiplier(float smoothness) {
 	if (smoothness == 0.f) return 1.f;
@@ -21,4 +21,4 @@ inline void smooth_update(float& value, float target_value, float smoothness_mul
 	value += (target_value - value) * smoothness_multiplier;
 }
 
-} // namespace psemek::audio
+} // namespace jngl::audio

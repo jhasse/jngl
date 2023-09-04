@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <atomic>
 
-namespace psemek::audio {
+namespace jngl::audio {
 
 namespace {
 
@@ -72,4 +72,4 @@ std::shared_ptr<pause_control> pause(std::shared_ptr<Stream> stream, bool paused
 	return std::make_shared<pause_control_impl>(std::move(stream), paused, length);
 }
 
-} // namespace psemek::audio
+} // namespace jngl::audio

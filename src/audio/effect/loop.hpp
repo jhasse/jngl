@@ -5,12 +5,10 @@
 
 namespace jngl {
 struct Stream;
-} // namespace jngl
 
-namespace psemek::audio {
-
-using jngl::Stream; // FIXME
+namespace audio {
 
 std::shared_ptr<Stream> loop(std::shared_ptr<Stream> stream, std::optional<std::size_t> count = {});
 
-} // namespace psemek::audio
+} // namespace audio
+} // namespace jngl

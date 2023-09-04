@@ -29,8 +29,6 @@
 
 namespace jngl {
 
-using namespace psemek; // TODO
-
 class Video::Impl : public Stream {
 public:
 	explicit Impl(const std::string& filename)

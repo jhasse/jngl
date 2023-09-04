@@ -1,7 +1,7 @@
 #include "volume.hpp"
 #include "volume_base.hpp"
 
-namespace psemek::audio {
+namespace jngl::audio {
 
 namespace {
 
@@ -93,4 +93,4 @@ std::shared_ptr<volume_control_stereo> volume_stereo(std::shared_ptr<Stream> str
 	                                                    smoothness);
 }
 
-} // namespace psemek::audio
+} // namespace jngl::audio

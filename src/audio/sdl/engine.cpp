@@ -15,14 +15,14 @@
 #include <thread>
 #include <vector>
 
-namespace psemek::audio {
+namespace jngl::audio {
 
 struct engine::Impl {
 	explicit Impl(std::shared_ptr<Stream> output) {
 		try {
 			backend = std::make_unique<SdlImpl>(output);
 		} catch (std::exception& e) {
-			jngl::debugLn(e.what());
+			debugLn(e.what());
 			backend = std::make_unique<DummyImpl>(std::move(output));
 		}
 	}
@@ -51,23 +51,23 @@ struct engine::Impl {
 				// 	average += std::fabs(f / buffer.size());
 				// }
 				// if (average < 0.1f) {
-				// 	jngl::debug(' ');
+				// 	debug(' ');
 				// } else if (average < 0.2f) {
-				// 	jngl::debug("▁");
+				// 	debug("▁");
 				// } else if (average < 0.3f) {
-				// 	jngl::debug("▂");
+				// 	debug("▂");
 				// } else if (average < 0.4f) {
-				// 	jngl::debug("▃");
+				// 	debug("▃");
 				// } else if (average < 0.5f) {
-				// 	jngl::debug("▄");
+				// 	debug("▄");
 				// } else if (average < 0.6f) {
-				// 	jngl::debug("▅");
+				// 	debug("▅");
 				// } else if (average < 0.7f) {
-				// 	jngl::debug("▆");
+				// 	debug("▆");
 				// } else if (average < 0.8f) {
-				// 	jngl::debug("▇");
+				// 	debug("▇");
 				// } else {
-				// 	jngl::debug("█");
+				// 	debug("█");
 				// }
 			}
 		  }) {
@@ -152,4 +152,4 @@ engine::~engine() = default;
 void engine::setPause(bool pause) {
 	impl->backend->setPause(pause);
 }
-} // namespace psemek::audio
+} // namespace jngl::audio

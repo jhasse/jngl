@@ -8,9 +8,7 @@
 #include <atomic>
 #include <mutex>
 
-namespace psemek::audio {
-
-namespace {
+namespace jngl::audio {
 
 struct mixer_impl final : mixer, std::enable_shared_from_this<mixer_impl> {
 	void add(std::shared_ptr<Stream> stream) override;
@@ -108,10 +106,8 @@ std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
 	return sample_count;
 }
 
-} // namespace
-
 mixer_ptr make_mixer() {
 	return std::make_shared<mixer_impl>();
 }
 
-} // namespace psemek::audio
+} // namespace jngl::audio

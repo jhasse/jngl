@@ -13,8 +13,6 @@
 
 #include <cassert>
 
-using namespace psemek; // FIXME
-
 namespace jngl {
 
 struct Sound::Impl {
@@ -26,9 +24,9 @@ struct Sound::Impl {
 Sound::Sound(std::vector<float>& bufferData, long frequency)
 : impl(new Impl{ load_raw(bufferData) }) {
 	auto stream = impl->track->stream();
-	if (frequency != psemek::audio::frequency) {
-		stream = audio::pitch(std::move(stream),
-		                      static_cast<float>(frequency) / psemek::audio::frequency);
+	if (frequency != jngl::audio::frequency) {
+		stream =
+		    audio::pitch(std::move(stream), static_cast<float>(frequency) / jngl::audio::frequency);
 	}
 	impl->stream = impl->volumeControl = audio::volume(std::move(stream));
 }

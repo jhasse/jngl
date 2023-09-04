@@ -7,7 +7,7 @@
 #include <cassert>
 #include <string>
 
-namespace psemek::audio {
+namespace jngl::audio {
 
 constexpr AudioUnitElement OUTPUT_ELEMENT = 0;
 
@@ -100,4 +100,4 @@ void engine::setPause(bool pause) {
 	assert(err == noErr);
 }
 
-} // namespace psemek::audio
+} // namespace jngl::audio

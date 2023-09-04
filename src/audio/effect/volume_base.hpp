@@ -4,7 +4,7 @@
 
 #include <atomic>
 
-namespace psemek::audio {
+namespace jngl::audio {
 
 struct volume_base {
 	volume_base(float gain_left, float gain_right, float smoothness);
@@ -34,4 +34,4 @@ private:
 	float real_gain_[2];
 };
 
-} // namespace psemek::audio
+} // namespace jngl::audio

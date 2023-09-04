@@ -12,7 +12,7 @@ float lerp(float a, float b, float t) {
 using std::lerp;
 #endif
 
-namespace psemek::audio {
+namespace jngl::audio {
 
 namespace {
 
@@ -100,4 +100,4 @@ std::shared_ptr<pitch_control> pitch(std::shared_ptr<Stream> stream, float ratio
 	return std::make_shared<pitch_control_impl>(std::move(stream), ratio);
 }
 
-} // namespace psemek::audio
+} // namespace jngl::audio

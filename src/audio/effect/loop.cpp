@@ -2,7 +2,7 @@
 
 #include "../Stream.hpp"
 
-namespace psemek::audio {
+namespace jngl::audio {
 
 namespace {
 
@@ -41,4 +41,4 @@ std::shared_ptr<Stream> loop(std::shared_ptr<Stream> stream, std::optional<std::
 	return std::make_shared<loop_impl>(std::move(stream), count);
 }
 
-} // namespace psemek::audio
+} // namespace jngl::audio
