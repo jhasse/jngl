@@ -1,5 +1,4 @@
 #include "pause.hpp"
-#include "../smooth.hpp"
 
 #include <algorithm>
 #include <atomic>
