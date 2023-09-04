@@ -44,6 +44,7 @@ Checks: '
        ,-llvmlibc-callee-namespace,
        ,-llvmlibc-implementation-in-namespace,
        ,-llvmlibc-restrict-system-libc-headers,
+       ,-misc-no-recursion,
        ,-misc-non-private-member-variables-in-classes,
        ,-modernize-avoid-c-arrays,
        ,-modernize-use-nodiscard,
@@ -54,6 +55,7 @@ Checks: '
        ,-readability-named-parameter,
        ,-readability-qualified-auto,
        ,-readability-uppercase-literal-suffix,
+       ,-readability-use-anyofallof,
 '
 WarningsAsErrors: 'hicpp-use-override,modernize-avoid-bind,llvm-namespace-comment,modernize-use-nullptr,modernize-pass-by-value,hicpp-noexcept-move,boost-use-to-string,google-readability-namespace-comments,modernize-use-default-member-init,modernize-loop-convert,hicpp-use-nullptr,google-readability-braces-around-statements,cert-dcl03-c,readability-else-after-return,bugprone-macro-parentheses,readability-redundant-declaration,google-explicit-constructor,readability-avoid-const-params-in-decls'
 CheckOptions:

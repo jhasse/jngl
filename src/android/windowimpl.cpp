@@ -126,6 +126,12 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 		case AMOTION_EVENT_ACTION_UP:
 			impl.touches.clear();
 			return 1;
+		case AMOTION_EVENT_ACTION_HOVER_MOVE:
+			if (AMotionEvent_getPointerCount(event) >= 1) {
+				impl.mouseX = AMotionEvent_getX(event, 0 /* JNGL supports only one mouse */);
+				impl.mouseY = AMotionEvent_getY(event, 0);
+			}
+			return 1;
 		}
 	}
 	}

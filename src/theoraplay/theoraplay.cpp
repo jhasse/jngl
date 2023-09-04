@@ -295,15 +295,15 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
             {
                 const int channels = vinfo.channels;
                 int chanidx, frameidx;
-                float *samples;
-                AudioPacket *item = (AudioPacket *) malloc(sizeof (AudioPacket));
-                if (item == nullptr) goto cleanup;
+				float* samples;
+				AudioPacket* item = static_cast<AudioPacket*>(malloc(sizeof(AudioPacket)));
+				if (item == nullptr) goto cleanup;
                 item->playms = static_cast<unsigned int>((((double) audioframes) / ((double) vinfo.rate)) * 1000.0);
                 item->channels = channels;
                 item->freq = static_cast<int>(vinfo.rate);
-                item->frames = frames;
-                item->samples = (float *) malloc(sizeof (float) * frames * channels);
-                item->next = nullptr;
+				item->frames = frames;
+				item->samples = static_cast<float*>(malloc(sizeof(float) * frames * channels));
+				item->next = nullptr;
 
                 if (item->samples == nullptr)
                 {
@@ -375,8 +375,8 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                         const double videotime = th_granule_time(tdec, granulepos);
 						const auto item = new VideoFrame;
                         if (item == nullptr) { goto cleanup; }
-                        item->playms = (unsigned int) (videotime * 1000.0);
-                        item->fps = fps;
+						item->playms = static_cast<unsigned int>(videotime * 1000.0);
+						item->fps = fps;
                         item->width = tinfo.pic_width;
                         item->height = tinfo.pic_height;
                         item->format = ctx->vidfmt;

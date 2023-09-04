@@ -41,7 +41,7 @@ struct FrameBuffer::Impl {
 	GLuint systemFbo = 0;
 	GLuint systemBuffer = 0;
 #if !defined(GL_VIEWPORT_BIT) || defined(__APPLE__)
-	GLint viewport[4];
+	GLint viewport[4]{};
 #endif
 
 	/// If this is not empty, there's a FrameBuffer in use and this was the function that activated
@@ -104,9 +104,10 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f,
-		            float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
-		            float(spriteColorAlpha) / 255.0f);
+		glUniform4f(Texture::shaderSpriteColorUniform, static_cast<float>(spriteColorRed) / 255.0f,
+		            static_cast<float>(spriteColorGreen) / 255.0f,
+		            static_cast<float>(spriteColorBlue) / 255.0f,
+		            static_cast<float>(spriteColorAlpha) / 255.0f);
 		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	}
 	impl->texture.draw();
@@ -122,9 +123,10 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 		                                    -impl->height / getScaleFactor() / 2 })
 		                       .data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f,
-		            float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
-		            float(spriteColorAlpha) / 255.0f);
+		glUniform4f(Texture::shaderSpriteColorUniform, static_cast<float>(spriteColorRed) / 255.0f,
+		            static_cast<float>(spriteColorGreen) / 255.0f,
+		            static_cast<float>(spriteColorBlue) / 255.0f,
+		            static_cast<float>(spriteColorAlpha) / 255.0f);
 		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE,
 		                   modelview.scale(1, -1)
 		                       .translate({ -impl->width / getScaleFactor() / 2,
@@ -138,9 +140,10 @@ void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
                            const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
 	scale(getScaleFactor());
-	impl->texture.drawMesh(vertexes, float(spriteColorRed) / 255.0f,
-	                       float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
-	                       float(spriteColorAlpha) / 255.0f, shaderProgram);
+	impl->texture.drawMesh(vertexes, static_cast<float>(spriteColorRed) / 255.0f,
+	                       static_cast<float>(spriteColorGreen) / 255.0f,
+	                       static_cast<float>(spriteColorBlue) / 255.0f,
+	                       static_cast<float>(spriteColorAlpha) / 255.0f, shaderProgram);
 	popMatrix();
 }
 
@@ -173,8 +176,9 @@ void FrameBuffer::Context::clear() {
 
 void FrameBuffer::Context::clear(const Color color) {
 	assert(resetCallback);
-	glClearColor(float(color.getRed()) / 255.f, float(color.getGreen()) / 255.f,
-	             float(color.getBlue()) / 255.f, 1);
+	glClearColor(static_cast<float>(color.getRed()) / 255.f,
+	             static_cast<float>(color.getGreen()) / 255.f,
+	             static_cast<float>(color.getBlue()) / 255.f, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -190,15 +194,15 @@ FrameBuffer::Context FrameBuffer::use() const {
 	};
 	pushMatrix();
 	reset();
-	opengl::scale(float(pWindow->getWidth()) / float(impl->width),
-	              float(pWindow->getHeight()) / float(impl->height));
+	opengl::scale(static_cast<float>(pWindow->getWidth()) / static_cast<float>(impl->width),
+	              static_cast<float>(pWindow->getHeight()) / static_cast<float>(impl->height));
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 	glPushAttrib(GL_VIEWPORT_BIT);
 #else
 	glGetIntegerv(GL_VIEWPORT, impl->viewport);
 #endif
 	activate();
-	impl->activate.push(std::move(activate));
+	impl->activate.emplace(std::move(activate));
 	return Context([this]() {
 		impl->activate.pop();
 		popMatrix();
