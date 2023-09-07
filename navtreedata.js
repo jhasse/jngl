@@ -52,7 +52,7 @@ var NAVTREEINDEX =
 "Achievement_8hpp.html",
 "classjngl_1_1Shader.html#a1d1cfd8ffb84e947f82999c682b666a7a0c3e47aef93a7f244f41ab309a33634b",
 "input_8hpp.html#aab0feaba617470cb4aa830dc5935238cadf84767d83f4a35ab9dfa119cdbc7b3b",
-"structjngl_1_1AppParameters.html#ab8f3127de4b6ccfc51833c48f37c7e1c"
+"sprite_8hpp_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

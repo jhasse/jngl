@@ -87,6 +87,8 @@ var input_8hpp =
     [ "keyPressed", "input_8hpp.html#ab4f02dd8f5a8430d8e2c43e9ff619cdc", null ],
     [ "keyPressed", "input_8hpp.html#ac70b281629c8cf8075609ed36a79f152", null ],
     [ "keyPressed", "input_8hpp.html#a6a36a281b47f1990c3b9969f2823ff5c", null ],
+    [ "setMouseVisible", "input_8hpp.html#ac8805026a7c7e55a01a77f8046fb2c0d", null ],
+    [ "isMouseVisible", "input_8hpp.html#ae2ab00ca7f02e707017fb5dd331a8369", null ],
     [ "isMultitouch", "input_8hpp.html#a82df15c66b88bd4b5e053a7e67f85004", null ],
     [ "getTouchPositions", "input_8hpp.html#a31de3c586d8061891c962b80f91055a7", null ],
     [ "getMousePos", "input_8hpp.html#ade03c1f38a9e52f5a27deb7d8beb5dcf", null ],
