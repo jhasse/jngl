@@ -42,8 +42,7 @@ void popAlpha();
 /// \deprecated Use drawRectangle instead
 void setLineWidth(float width);
 
-[[deprecated("Use drawRectangle instead")]]
-/// \deprecated Use drawRectangle instead
+/// Draws a line from start to end, the width can be set using setLineWidth
 void drawLine(Vec2 start, Vec2 end);
 
 [[deprecated("Use drawRectangle instead")]]
