@@ -2,6 +2,7 @@
 
 #include "Stream.hpp"
 
+#include <atomic>
 #include <memory>
 #include <vector>
 
