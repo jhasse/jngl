@@ -3,76 +3,64 @@
 #include <atomic_queue/atomic_queue.h>
 
 #include <algorithm>
-#include <memory>
-#include <vector>
 #include <atomic>
+#include <memory>
 #include <mutex>
+#include <vector>
 
-namespace jngl::audio {
+namespace jngl {
 
-struct mixer_impl final : mixer, std::enable_shared_from_this<mixer_impl> {
-	void add(std::shared_ptr<Stream> stream) override;
-
-	void remove(Stream* stream) override {
-		gc();
-		streamsToStop.push(stream);
-	}
-
-	std::size_t read(float* data, std::size_t sample_count) override;
-
-	void rewind() override {
-		assert(false);
-	}
-
-private:
-	void gc() {
-		Stream* tmp;
-		while (streamsToRemoveOnMainThread.try_pop(tmp)) {
-			auto it = std::find_if(streamsOnMainThread.begin(), streamsOnMainThread.end(),
-			                       [tmp](const auto& stream) { return stream.get() == tmp; });
-			assert(it != streamsOnMainThread.end());
-			streamsOnMainThread.erase(it);
-		}
-	}
-	std::vector<std::shared_ptr<Stream>> streamsOnMainThread;
-
+struct Mixer::Impl {
 	atomic_queue::AtomicQueue<Stream*, 10> streamsToRemoveOnMainThread;
-
-	constexpr static size_t MAX_ACTIVE_STREAMS = 256;
-	size_t numberOfActiveStreams = 0;
-	Stream* activeStreams[MAX_ACTIVE_STREAMS]; //< only used on mixer thread
-
-	constexpr static size_t BUFFER_SIZE = 996;
-	float buffer[BUFFER_SIZE];
-
 	atomic_queue::AtomicQueue<Stream*, 10> newStreams;
-
 	atomic_queue::AtomicQueue<Stream*, 10> streamsToStop;
-
-	std::atomic<std::size_t> played_{ 0 };
 };
 
-void mixer_impl::add(std::shared_ptr<Stream> stream) {
+Mixer::Mixer() : impl(std::make_unique<Impl>()) {
+}
+Mixer::~Mixer() = default;
+
+void Mixer::gc() {
+	Stream* tmp;
+	while (impl->streamsToRemoveOnMainThread.try_pop(tmp)) {
+		auto it = std::find_if(streamsOnMainThread.begin(), streamsOnMainThread.end(),
+		                       [tmp](const auto& stream) { return stream.get() == tmp; });
+		assert(it != streamsOnMainThread.end());
+		streamsOnMainThread.erase(it);
+	}
+}
+
+void Mixer::remove(Stream* stream) {
 	gc();
-	newStreams.push(stream.get());
+	impl->streamsToStop.push(stream);
+}
+
+void Mixer::rewind() {
+	assert(false);
+}
+
+void Mixer::add(std::shared_ptr<Stream> stream) {
+	gc();
+	impl->newStreams.push(stream.get());
 	streamsOnMainThread.emplace_back(std::move(stream));
 }
 
-std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
+size_t Mixer::read(float* data, size_t sample_count) {
 	if (sample_count > BUFFER_SIZE) {
 		size_t first = read(data, BUFFER_SIZE);
 		return first + read(data + BUFFER_SIZE, sample_count - BUFFER_SIZE);
 	}
 
 	Stream* tmp;
-	while (numberOfActiveStreams < MAX_ACTIVE_STREAMS && newStreams.try_pop(tmp)) {
+	while (numberOfActiveStreams < MAX_ACTIVE_STREAMS && impl->newStreams.try_pop(tmp)) {
 		activeStreams[numberOfActiveStreams++] = tmp;
 	}
-	while (streamsToStop.try_pop(tmp)) {
+	while (impl->streamsToStop.try_pop(tmp)) {
 		auto it = std::find(activeStreams, activeStreams + numberOfActiveStreams, tmp);
 		if (it != activeStreams + numberOfActiveStreams) {
-			*it = activeStreams[--numberOfActiveStreams]; // move the last element to the one to be erased
-			streamsToRemoveOnMainThread.push(tmp);
+			*it = activeStreams[--numberOfActiveStreams]; // move the last element to the one to be
+			                                              // erased
+			impl->streamsToRemoveOnMainThread.push(tmp);
 		}
 	}
 
@@ -80,7 +68,9 @@ std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
 
 	for (auto it = activeStreams; it != activeStreams + numberOfActiveStreams;) {
 		auto& stream = *it;
-		if (!stream) continue;
+		if (!stream) {
+			continue;
+		}
 
 		auto read = stream->read(buffer, sample_count);
 
@@ -94,8 +84,9 @@ std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
 		}
 
 		if (read < sample_count) {
-			streamsToRemoveOnMainThread.push(*it);
-			*it = activeStreams[--numberOfActiveStreams]; // move the last element to the one to be erased
+			impl->streamsToRemoveOnMainThread.push(*it);
+			*it = activeStreams[--numberOfActiveStreams]; // move the last element to the one to be
+			                                              // erased
 		} else {
 			++it;
 		}
@@ -106,8 +97,4 @@ std::size_t mixer_impl::read(float* data, std::size_t sample_count) {
 	return sample_count;
 }
 
-mixer_ptr make_mixer() {
-	return std::make_shared<mixer_impl>();
-}
-
-} // namespace jngl::audio
+} // namespace jngl

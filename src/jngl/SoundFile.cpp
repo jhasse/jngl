@@ -32,7 +32,7 @@ std::unordered_map<std::string, std::shared_ptr<SoundFile>> sounds;
 class Audio {
 public:
 	Audio()
-	: mixer(jngl::audio::make_mixer()), pitchControl(audio::pitch(mixer)),
+	: mixer(std::make_shared<Mixer>()), pitchControl(audio::pitch(mixer)),
 	  volumeControl(volume(pitchControl)), engine(volumeControl) {
 	}
 	Audio(const Audio&) = delete;
@@ -73,13 +73,13 @@ public:
 	void setVolume(float volume) {
 		volumeControl->gain(volume);
 	}
-	std::shared_ptr<audio::mixer> getMixer() {
+	std::shared_ptr<Mixer> getMixer() {
 		return mixer;
 	}
 
 private:
 	std::vector<std::shared_ptr<Sound>> sounds_;
-	std::shared_ptr<audio::mixer> mixer;
+	std::shared_ptr<Mixer> mixer;
 	std::shared_ptr<audio::pitch_control> pitchControl;
 	std::shared_ptr<audio::volume_control> volumeControl;
 	audio::engine engine;
@@ -248,7 +248,7 @@ Audio& GetAudio() {
 	return audio;
 }
 
-std::shared_ptr<audio::mixer> getMixer() {
+std::shared_ptr<Mixer> getMixer() {
 	return GetAudio().getMixer();
 }
 

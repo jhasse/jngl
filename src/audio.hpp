@@ -16,6 +16,6 @@ void resumeAudioDevice();
 class Audio;
 
 Audio& GetAudio();
-std::shared_ptr<audio::mixer> getMixer();
+std::shared_ptr<Mixer> getMixer();
 
 } // namespace jngl
