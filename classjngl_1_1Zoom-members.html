@@ -9,16 +9,11 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
-<link href="navtree.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="resize.js"></script>
-<script type="text/javascript" src="navtreedata.js"></script>
-<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
-<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
 <link href="extra.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
@@ -29,7 +24,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="jngl-logo.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">JNGL<span id="projectnumber">&#160;v1.6.0</span>
+   <div id="projectname">JNGL
    </div>
    <div id="projectbrief">Easy to use cross-platform 2D game library</div>
   </td>
@@ -55,23 +50,6 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
-</div><!-- top -->
-<div id="side-nav" class="ui-resizable side-nav-resizable">
-  <div id="nav-tree">
-    <div id="nav-tree-contents">
-      <div id="nav-sync" class="sync"></div>
-    </div>
-  </div>
-  <div id="splitbar" style="-moz-user-select:none;" 
-       class="ui-resizable-handle">
-  </div>
-</div>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('classjngl_1_1Zoom.html',''); initResizable(); });
-/* @license-end */
-</script>
-<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -93,6 +71,11 @@ $(document).ready(function(){initNavTree('classjngl_1_1Zoom.html',''); initResiz
 </div>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacejngl.html">jngl</a></li><li class="navelem"><a class="el" href="classjngl_1_1Zoom.html">Zoom</a></li>  </ul>
+</div>
+</div><!-- top -->
 <div class="header">
   <div class="headertitle"><div class="title">Zoom Member List</div></div>
 </div><!--header-->
@@ -107,12 +90,7 @@ $(document).ready(function(){initNavTree('classjngl_1_1Zoom.html',''); initResiz
   <tr class="even"><td class="entry"><a class="el" href="classjngl_1_1Zoom.html#a7e5722eb9d5e368f4c4cb1e2bcc9695f">Zoom</a>(std::function&lt; float(float)&gt;)</td><td class="entry"><a class="el" href="classjngl_1_1Zoom.html">Zoom</a></td><td class="entry"><span class="mlabel">explicit</span></td></tr>
   <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>~Effect</b>() (defined in <a class="el" href="classjngl_1_1Effect.html">Effect</a>)</td><td class="entry"><a class="el" href="classjngl_1_1Effect.html">Effect</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
 </table></div><!-- contents -->
-</div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.9.1-->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-  </ul>
-</div>
 </body>
 </html>
