@@ -682,8 +682,8 @@ void Window::SetIcon(const std::string& filename) {
 
 		auto bgra =
 		    std::make_unique<char[]>(imageData->getWidth() * imageData->getHeight() * CHANNELS);
-		for (size_t x = 0; x < imageData->getWidth(); ++x) {
-			for (size_t y = 0; y < imageData->getHeight(); ++y) {
+		for (size_t x = 0; x < static_cast<size_t>(imageData->getWidth()); ++x) {
+			for (size_t y = 0; y < static_cast<size_t>(imageData->getHeight()); ++y) {
 				// transform RGBA to BGRA:
 				bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS] =
 				    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 2];

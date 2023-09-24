@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -10,6 +10,9 @@ namespace jngl {
 /// Size of one screen pixel in actual pixels
 double getScaleFactor();
 
+/// Overwrite the size of one screen pixel
+///
+/// Normally you wouldn't use this, but set AppParameters::screenSize to a lower value instead.
 void setScaleFactor(double);
 
 /// jngl::getScreenSize().x

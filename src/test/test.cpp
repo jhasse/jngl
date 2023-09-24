@@ -267,7 +267,7 @@ void Test::drawBackground() const {
 		    static_cast<float>(0.5 - factor / 2), static_cast<float>(0.5 + factor / 2));
 	}
 	jngl::setColor(255, 0, 0, 100);
-	jngl::drawTriangle(600, 30, 700, 30, 650, 130);
+	jngl::drawTriangle({ 600, 30 }, { 700, 30 }, { 650, 130 });
 	jngl::setColor(0, 255, 0, 100);
 	jngl::drawRect(600, 400, 100, 100);
 	jngl::setColor(0, 0, 255, 100);

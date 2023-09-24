@@ -1,4 +1,4 @@
-<img height="175px" alt="Just a Neat Game Library" src="jngl.svg"/>
+# Just a Neat Game Library
 
 Easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox, the Nintendo
 Switch<sup><a href="#fn1">1</a></sup> and the Web.
@@ -6,7 +6,7 @@ Switch<sup><a href="#fn1">1</a></sup> and the Web.
 * [GitHub](https://github.com/jhasse/jngl)
 * [Try JNGL in your browser](https://jhasse.gitlab.io/ggj2021)
 
-## Features
+### Features
 
 * C++17
 * [zlib License](http://en.wikipedia.org/wiki/Zlib_license), so suitable for commercial use and
@@ -17,7 +17,7 @@ Switch<sup><a href="#fn1">1</a></sup> and the Web.
 * Theora video playback support
 * UTF-8 text output using [FreeType](http://www.freetype.org/)
 
-## Games
+### Games
 
 * [**Boomshine Plus**](https://bixense.com/boomshineplus/)<br>
   Simple and chilly, but addictive puzzle game for Android, iOS and PC

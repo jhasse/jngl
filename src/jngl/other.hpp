@@ -54,7 +54,9 @@ unsigned int getStepsPerSecond();
 /// How many times Work::step should be called per second (default: 60)
 void setStepsPerSecond(unsigned int);
 
-/// Toggles MSAA
+/// Toggles Multisample anti-aliasing (MSAA)
+///
+/// Many devices don't support this, so this function will do nothing.
 void setAntiAliasing(bool enabled);
 
 /// Returns whether MSAA is enabled. If the device doesn't support it, it will always return false.
