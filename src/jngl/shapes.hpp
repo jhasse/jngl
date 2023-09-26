@@ -38,10 +38,15 @@ void pushAlpha(unsigned char alpha);
 /// \deprecated Use setAlpha instead
 void popAlpha();
 
+[[deprecated("Use drawRectangle instead")]]
+/// \deprecated Use drawRectangle instead
 void setLineWidth(float width);
 
+/// Draws a line from start to end, the width can be set using setLineWidth
 void drawLine(Vec2 start, Vec2 end);
 
+[[deprecated("Use drawRectangle instead")]]
+/// \deprecated Use drawRectangle instead
 void drawLine(double xstart, double ystart, double xend, double yend);
 
 /// Draws a line from (0, 0) to \a end
@@ -60,8 +65,11 @@ void drawCircle(Mat3 modelview, float radius, float startAngle = 0);
 
 void drawPoint(double x, double y);
 
+/// Draws the triangle a -> b -> c
 void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
 
+[[deprecated("Use drawTriangle(Vec2, Vec2, Vec2) instead")]]
+/// \deprecated Use drawTriangle(Vec2, Vec2, Vec2) instead
 void drawTriangle(double A_x, double A_y, double B_x, double B_y, double C_x, double C_y);
 
 void drawRect(double xposition, double yposition, double width, double height);

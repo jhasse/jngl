@@ -3,6 +3,7 @@
 
 #import "JNGLView.h"
 
+#include "../App.hpp"
 #include "../helper.hpp"
 #include "../jngl.hpp"
 #include "../windowptr.hpp"

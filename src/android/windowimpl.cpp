@@ -49,6 +49,9 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 }
 
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
+	if (!app || !app->userData) {
+		return 0; // shouldn't happen but I seen a crash in this function in the Play Console
+	}
 	WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
 	const auto source = AInputEvent_getSource(event);
 	if ((source & AINPUT_SOURCE_JOYSTICK) == AINPUT_SOURCE_JOYSTICK ||
@@ -122,6 +125,12 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 		}
 		case AMOTION_EVENT_ACTION_UP:
 			impl.touches.clear();
+			return 1;
+		case AMOTION_EVENT_ACTION_HOVER_MOVE:
+			if (AMotionEvent_getPointerCount(event) >= 1) {
+				impl.mouseX = AMotionEvent_getX(event, 0 /* JNGL supports only one mouse */);
+				impl.mouseY = AMotionEvent_getY(event, 0);
+			}
 			return 1;
 		}
 	}
@@ -379,11 +388,6 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 }
 
 void WindowImpl::updateInput() {
-	if (firstFrame && display && display->context) {
-		// TODO: I think this should be moved to Window::initGlObjects(). We can't do it in
-		// WindowImpl::init() as that might be called multiple times even at startup.
-		Init(window->width_, window->height_, window->canvasWidth, window->canvasHeight);
-	}
 	// Read all pending events.
 	int ident;
 	int events;

@@ -3,8 +3,8 @@
 #include "Fixture.hpp"
 
 #include <boost/ut.hpp>
-#include <jngl/shapes.hpp>
 #include <jngl/matrix.hpp>
+#include <jngl/shapes.hpp>
 
 namespace {
 boost::ut::suite _ = [] {

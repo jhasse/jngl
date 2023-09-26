@@ -7,11 +7,11 @@
 
 #ifdef JNGL_VIDEO
 
-#include "../theoraplay/theoraplay.h"
 #include "../Sound.hpp"
 #include "../audio.hpp"
 #include "../main.hpp"
 #include "../opengl.hpp"
+#include "../theoraplay/theoraplay.h"
 #include "Shader.hpp"
 #include "debug.hpp"
 #include "screen.hpp"
@@ -43,7 +43,7 @@ public:
 		while (!video) {
 			video = THEORAPLAY_getVideo(decoder);
 		}
-		timePerFrame = 1. / double(video->fps);
+		timePerFrame = 1. / video->fps;
 		assert(timePerFrame > 0);
 
 		GetAudio();
@@ -87,8 +87,8 @@ public:
 		if (started() && !video) {
 			video = THEORAPLAY_getVideo(decoder);
 		}
-		if (!shaderProgram || (video && double(video->playms) / 1000. <= now)) {
-			if (started() && now - double(video->playms) / 1000. >= timePerFrame) {
+		if (!shaderProgram || (video && static_cast<double>(video->playms) / 1000. <= now)) {
+			if (started() && now - static_cast<double>(video->playms) / 1000. >= timePerFrame) {
 				// Skip frames to catch up, but keep track of the last one in case we catch up to a
 				// series of dupe frames, which means we'd have to draw that final frame and then
 				// wait for more.
@@ -99,7 +99,9 @@ public:
 					jngl::debugLn("ms\x1b[0m");
 					THEORAPLAY_freeVideo(last);
 					last = video;
-					if (now - double(video->playms) / 1000. < timePerFrame) { break; }
+					if (now - static_cast<double>(video->playms) / 1000. < timePerFrame) {
+						break;
+					}
 				}
 
 				if (!video) {
@@ -180,18 +182,21 @@ public:
 				glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, opengl::projection.data);
 
 				textureY = opengl::genAndBindTexture();
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, video->width, video->height, 0, GL_RED,
-				             GL_UNSIGNED_BYTE, nullptr);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, static_cast<GLsizei>(video->width),
+				             static_cast<GLsizei>(video->height), 0, GL_RED, GL_UNSIGNED_BYTE,
+				             nullptr);
 
 				textureU = opengl::genAndBindTexture();
 				// U and V components are a quarter of the size of the video:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, video->width / 2, video->height / 2, 0,
-				             GL_RED, GL_UNSIGNED_BYTE, nullptr);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, static_cast<GLsizei>(video->width / 2),
+				             static_cast<GLsizei>(video->height / 2), 0, GL_RED, GL_UNSIGNED_BYTE,
+				             nullptr);
 
 				textureV = opengl::genAndBindTexture();
 				// U and V components are a quarter of the size of the video:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, video->width / 2, video->height / 2, 0,
-				             GL_RED, GL_UNSIGNED_BYTE, nullptr);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, static_cast<GLsizei>(video->width / 2),
+				             static_cast<GLsizei>(video->height / 2), 0, GL_RED, GL_UNSIGNED_BYTE,
+				             nullptr);
 
 				const auto preciseWidth = static_cast<float>(video->width * getScaleFactor());
 				const auto preciseHeight = static_cast<float>(video->height * getScaleFactor());
@@ -223,17 +228,19 @@ public:
 			}
 
 			glBindTexture(GL_TEXTURE_2D, textureY);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video->width, video->height, GL_RED,
-			                GL_UNSIGNED_BYTE, video->pixels);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, static_cast<GLsizei>(video->width),
+			                static_cast<GLsizei>(video->height), GL_RED, GL_UNSIGNED_BYTE,
+			                video->pixels);
 
 			assert(video->width % 2 == 0 && video->height % 2 == 0);
 			glBindTexture(GL_TEXTURE_2D, textureU);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video->width / 2, video->height / 2, GL_RED,
-			                GL_UNSIGNED_BYTE, video->pixels + video->width * video->height);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, static_cast<GLsizei>(video->width / 2),
+			                static_cast<GLsizei>(video->height / 2), GL_RED, GL_UNSIGNED_BYTE,
+			                video->pixels + static_cast<size_t>(video->width) * video->height);
 
 			glBindTexture(GL_TEXTURE_2D, textureV);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video->width / 2, video->height / 2, GL_RED,
-			                GL_UNSIGNED_BYTE,
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, static_cast<GLsizei>(video->width / 2),
+			                static_cast<GLsizei>(video->height / 2), GL_RED, GL_UNSIGNED_BYTE,
 			                video->pixels + std::lround(1.25 * video->width * video->height));
 
 			THEORAPLAY_freeVideo(video);
@@ -338,13 +345,14 @@ private:
 	}
 
 	void queueAudio(ALuint buffer) {
-		auto pcm = std::make_unique<int16_t[]>(audio->frames * audio->channels);
+		auto pcm = std::make_unique<int16_t[]>(static_cast<long>(audio->frames) * audio->channels);
 		for (int i = 0; i < audio->frames * audio->channels; ++i) {
 			const float sample = std::clamp(audio->samples[i], -1.f, 1.f);
 			pcm[i] = static_cast<int16_t>(sample * 32767.f);
 		}
 
-		alBufferData(buffer, format, pcm.get(), audio->frames * audio->channels * sizeof(int16_t),
+		alBufferData(buffer, format, pcm.get(),
+		             audio->frames * audio->channels * static_cast<ALsizei>(sizeof(int16_t)),
 		             audio->freq);
 		checkAlError();
 		alSourceQueueBuffers(source, 1, &buffer);

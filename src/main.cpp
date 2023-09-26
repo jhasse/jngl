@@ -3,11 +3,13 @@
 
 #include "main.hpp"
 
+#include "App.hpp"
 #include "jngl.hpp"
 #include "paths.hpp"
 #include "spriteimpl.hpp"
 
 #include <boost/qvm_lite.hpp>
+#include <cstddef>
 #include <fstream>
 #include <sstream>
 
@@ -164,22 +166,24 @@ void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth
 	const auto r = static_cast<float>(windowWidth) / 2.f;
 	const auto b = static_cast<float>(windowHeight) / 2.f;
 	const auto t = static_cast<float>(-windowHeight) / 2.f;
-	opengl::projection = { float(windowWidth) / float(originalWindowWidth) * 2.f / (r - l),
-		                   0.f,
-		                   0.f,
-		                   -(r + l) / (r - l),
-		                   0.f,
-		                   float(windowHeight) / float(originalWindowHeight) * 2.f / (t - b),
-		                   0.f,
-		                   -(t + b) / (t - b),
-		                   0.f,
-		                   0.f,
-		                   -1.f,
-		                   0.f,
-		                   0.f,
-		                   0.f,
-		                   0.f,
-		                   1.f };
+	opengl::projection = {
+		static_cast<float>(windowWidth) / static_cast<float>(originalWindowWidth) * 2.f / (r - l),
+		0.f,
+		0.f,
+		-(r + l) / (r - l),
+		0.f,
+		static_cast<float>(windowHeight) / static_cast<float>(originalWindowHeight) * 2.f / (t - b),
+		0.f,
+		-(t + b) / (t - b),
+		0.f,
+		0.f,
+		-1.f,
+		0.f,
+		0.f,
+		0.f,
+		0.f,
+		1.f
+	};
 }
 
 WindowPointer pWindow;
@@ -261,6 +265,10 @@ bool canQuit() {
 }
 
 void quit() noexcept {
+	if (!canQuit()) {
+		debugLn("Quitting the main loop is not supported on this patform!");
+		return;
+	}
 	if (const auto w = pWindow.get()) {
 		w->quit();
 	}
@@ -274,9 +282,9 @@ void cancelQuit() {
 
 void setBackgroundColor(const jngl::Color color) {
 	pWindow.ThrowIfNull();
-	bgRed = float(color.getRed()) / 255.f;
-	bgGreen = float(color.getGreen()) / 255.f;
-	bgBlue = float(color.getBlue()) / 255.f;
+	bgRed = static_cast<float>(color.getRed()) / 255.f;
+	bgGreen = static_cast<float>(color.getGreen()) / 255.f;
+	bgBlue = static_cast<float>(color.getBlue()) / 255.f;
 	clearBackgroundColor();
 	glClear(GL_COLOR_BUFFER_BIT);
 }
@@ -338,8 +346,9 @@ bool mousePressed(mouse::Button button) {
 }
 
 void setMouse(const jngl::Vec2 position) {
-	pWindow->SetMouse(int(std::lround((position.x + getScreenWidth() / 2) * getScaleFactor())),
-	                  int(std::lround((position.y + getScreenHeight() / 2) * getScaleFactor())));
+	pWindow->SetMouse(
+	    static_cast<int>(std::lround((position.x + getScreenWidth() / 2) * getScaleFactor())),
+	    static_cast<int>(std::lround((position.y + getScreenHeight() / 2) * getScaleFactor())));
 }
 
 void setRelativeMouseMode(const bool relative) {
@@ -365,7 +374,7 @@ void setTitle(const std::string& title) {
 std::vector<float> readPixels() {
 	const int w = jngl::getWindowWidth();
 	const int h = jngl::getWindowHeight();
-	std::vector<float> buffer(3 * w * h);
+	std::vector<float> buffer(static_cast<size_t>(3 * w * h));
 	glReadPixels(0, 0, w, h, GL_RGB, GL_FLOAT, buffer.data());
 	return buffer;
 }
@@ -375,7 +384,7 @@ double getTextWidth(const std::string& text) {
 }
 
 double getLineHeight() {
-	return double(ScaleablePixels(pWindow->getLineHeight()));
+	return static_cast<double>(ScaleablePixels{ pWindow->getLineHeight() });
 }
 
 void setLineHeight(double h) {
@@ -383,7 +392,8 @@ void setLineHeight(double h) {
 }
 
 void print(const std::string& text, const jngl::Vec2 position) {
-	pWindow->print(text, int(std::lround(position.x)), int(std::lround(position.y)));
+	pWindow->print(text, static_cast<int>(std::lround(position.x)),
+	               static_cast<int>(std::lround(position.y)));
 }
 
 void print(const std::string& text, const int xposition, const int yposition) {
@@ -605,7 +615,7 @@ std::string _getConfigPath() {
 #elif defined(__EMSCRIPTEN__)
 	path << "/working1/";
 #else
-	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/";
+	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/"; // NOLINT
 #endif
 	return *(configPath = path.str());
 #endif
@@ -634,7 +644,10 @@ std::stringstream readAsset(const std::string& filename) {
 		sstream.setstate(std::ios::failbit);
 		return sstream;
 	}
-	Finally closeFile([f]() { fclose(f); });
+	Finally closeFile([f]() {
+		int result [[maybe_unused]] = fclose(f);
+		assert(result == 0);
+	});
 	if (fseek(f, 0, SEEK_END) != 0) {
 		sstream.setstate(std::ios::failbit);
 		return sstream;
@@ -669,7 +682,7 @@ std::string readConfig(const std::string& key) {
 	std::string out;
 	constexpr size_t READ_SIZE = 4096;
 	std::string buf(READ_SIZE, '\0');
-	while (fin.read(&buf[0], READ_SIZE)) {
+	while (fin.read(buf.data(), READ_SIZE)) {
 		out.append(buf, 0, fin.gcount());
 	}
 	out.append(buf, 0, fin.gcount());
@@ -691,8 +704,15 @@ void writeConfig(const std::string& key, const std::string& value) {
 	}
 #endif
 #ifdef HAVE_FILESYSTEM
+#if __cplusplus >= 202002L
+	const auto tmp = _getConfigPath();
+	const auto configPath = std::filesystem::path(std::u8string{ tmp.begin(), tmp.end() });
+	const auto directory =
+	    (configPath / std::filesystem::path(std::u8string{ key.begin(), key.end() })).parent_path();
+#else
 	const auto configPath = std::filesystem::u8path(_getConfigPath());
 	const auto directory = (configPath / std::filesystem::u8path(key)).parent_path();
+#endif
 	if (!std::filesystem::exists(directory)) {
 		std::filesystem::create_directories(directory);
 	}
@@ -724,8 +744,9 @@ ShaderProgram::Context useSimpleShaderProgram() {
 
 ShaderProgram::Context useSimpleShaderProgram(const Mat3& modelview) {
 	auto context = jngl::simpleShaderProgram->use();
-	glUniform4f(simpleColorUniform, float(colorRed) / 255.0f, float(colorGreen) / 255.0f,
-	            float(colorBlue) / 255.0f, float(colorAlpha) / 255.0f);
+	glUniform4f(simpleColorUniform, static_cast<float>(colorRed) / 255.0f,
+	            static_cast<float>(colorGreen) / 255.0f, static_cast<float>(colorBlue) / 255.0f,
+	            static_cast<float>(colorAlpha) / 255.0f);
 	glUniformMatrix3fv(simpleModelviewUniform, 1, GL_FALSE, modelview.data);
 
 	assert(simpleShaderProgram->getAttribLocation("position") == 0);

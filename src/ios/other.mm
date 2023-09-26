@@ -21,7 +21,8 @@ std::string getPreferredLanguage() {
 
 void openURL(const std::string& url) {
 	[[UIApplication sharedApplication]
-	    openURL:[NSURL URLWithString:[NSString stringWithUTF8String:url.c_str()]]];
+	    openURL:[NSURL URLWithString:[NSString stringWithUTF8String:url.c_str()]]
+     options:@{} completionHandler:nil ];
 }
 
 void errorMessage(const std::string& text) {
