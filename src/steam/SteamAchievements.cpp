@@ -60,7 +60,10 @@ void SteamAchievements::onUserStatsReceived(UserStatsReceived_t* callback) {
 	initialized = true;
 }
 
-void SteamAchievements::onUserStatsStored(UserStatsStored_t*) {
+void SteamAchievements::onUserStatsStored(UserStatsStored_t* callback) {
+	if (callback->m_eResult != k_EResultOK) {
+		debugLn("StoreStats() failed.");
+	}
 }
 
 void SteamAchievements::onAchievementStored(UserAchievementStored_t*) {
