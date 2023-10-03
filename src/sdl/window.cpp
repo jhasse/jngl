@@ -370,7 +370,7 @@ void Window::UpdateInput() {
 			}
 			break;
 		case SDL_WINDOWEVENT:
-			if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+			if (!impl->firstFrame && event.window.event == SDL_WINDOWEVENT_RESIZED) {
 				const int originalWidth = width_;
 				const int originalHeight = height_;
 				SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
@@ -416,6 +416,7 @@ void Window::UpdateInput() {
 
 void Window::SwapBuffers() {
 	SDL_GL_SwapWindow(impl->sdlWindow);
+	impl->firstFrame = false;
 }
 
 void Window::SetMouseVisible(const bool visible) {
