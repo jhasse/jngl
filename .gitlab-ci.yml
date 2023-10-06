@@ -29,7 +29,7 @@ linux:
 mingw:
   stage: build
   script:
-    - microdnf install -y cmake ninja-build mingw64-gcc-c++ mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw64-gcc-c++ > /dev/null
+    - microdnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw64-gcc-c++ > /dev/null
     - mingw64-cmake -GNinja -Bbuild-debug -DCMAKE_BUILD_TYPE=Debug
     - ninja -C build-debug
     - mingw64-cmake -GNinja -Bbuild-release -DCMAKE_BUILD_TYPE=Release
