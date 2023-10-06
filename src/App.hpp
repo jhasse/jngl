@@ -26,9 +26,6 @@ class ShaderProgram;
 /// \endcode
 class App {
 public:
-	/// Do not call this constructor yourself, it gets called by JNGL_MAIN_BEGIN
-	explicit App(AppParameters);
-
 	~App();
 	App(const App&) = delete;
 	App& operator=(const App&) = delete;
@@ -58,7 +55,12 @@ public:
 	/// Internal function used by JNGL when the Window is resized
 	void updateProjectionMatrix() const;
 
+	/// Do not call this function yourself, it gets called by JNGL_MAIN_BEGIN
+	void init(AppParameters);
+
 private:
+	App();
+
 	void registerShaderProgram(ShaderProgram*);
 	void unregisterShaderProgram(ShaderProgram*);
 

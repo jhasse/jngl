@@ -60,7 +60,7 @@ std::unique_ptr<jngl::App> jnglApp;
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
 
-		jnglApp.reset(new jngl::App(params));
+        jngl::App::instance().init(params);
 		jngl::showWindow("", width, height, true,
 		                 params.minAspectRatio ? *params.minAspectRatio : std::make_pair(1, 3),
 		                 params.maxAspectRatio ? *params.maxAspectRatio : std::make_pair(3, 1));

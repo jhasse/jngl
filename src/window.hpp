@@ -177,5 +177,9 @@ private:
 	// <fontSize, <fontName, FontImpl>>
 	std::map<int, std::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
 	std::vector<std::function<void()>> updateInputCallbacks;
+
+#ifdef JNGL_PERFORMANCE_OVERLAY
+	double lastStepDuration = 0;
+#endif
 };
 } // namespace jngl

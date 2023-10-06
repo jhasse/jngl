@@ -348,12 +348,22 @@ void Window::stepIfNeeded() {
 		++stepsSinceLastCheck;
 		updateKeyStates();
 		UpdateInput();
+#ifdef JNGL_PERFORMANCE_OVERLAY
+		auto start = std::chrono::steady_clock::now();
+#endif
 		if (currentWork_) {
 			currentWork_->step();
 		}
 		for (auto& job : jobs) {
 			job->step();
 		}
+#ifdef JNGL_PERFORMANCE_OVERLAY
+		lastStepDuration = static_cast<double>(
+			std::chrono::duration_cast<std::chrono::microseconds>(
+				std::chrono::steady_clock::now() - start
+			).count()
+		) / 1000.;
+#endif
 		if (!jngl::running() && currentWork_) {
 			currentWork_->onQuitEvent();
 		}
@@ -379,6 +389,9 @@ void Window::sleepIfNeeded() {
 }
 
 void Window::draw() const {
+#ifdef JNGL_PERFORMANCE_OVERLAY
+	auto start = std::chrono::steady_clock::now();
+#endif
 	if (currentWork_) {
 		currentWork_->draw();
 	} else {
@@ -387,6 +400,26 @@ void Window::draw() const {
 	for (auto& job : jobs) {
 		job->draw();
 	}
+#ifdef JNGL_PERFORMANCE_OVERLAY
+	auto us = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - start);
+
+	if (currentWork_) {
+		jngl::reset();
+		jngl::setColor(0xffffff_rgb, 255);
+		jngl::drawRect(-getScreenSize() / 2., jngl::Vec2(400, 100));
+		jngl::setFontColor(0x000000_rgb, 1.f);
+		{
+			std::ostringstream tmp;
+			tmp << "step: " << lastStepDuration << " ms";
+			jngl::print(tmp.str(), -getScreenSize() / 2. + jngl::Vec2(50, 10));
+		}
+		{
+			std::ostringstream tmp;
+			tmp << "draw: " << static_cast<double>(us.count()) / 1000. << " ms";
+			jngl::print(tmp.str(), -getScreenSize() / 2. + jngl::Vec2(50, 60));
+		}
+	}
+#endif
 }
 
 void Window::setWork(std::shared_ptr<Work> work) {

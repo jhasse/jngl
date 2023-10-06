@@ -42,6 +42,10 @@ public:
 
 	/// For Retina screens on macOS SDL does its own scaling of mouse coordinates, etc. :(
 	float hidpiScaleFactor;
+
+	/// On UWP there's a bug that sometimes there are "wrong" resize events at startup (maybe due to
+	/// fullscreen mode?). Just skipping them until the first frame is drawn is a workaround.
+	bool firstFrame = true;
 };
 
 } // namespace jngl

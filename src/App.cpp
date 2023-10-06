@@ -12,6 +12,7 @@
 #include "windowptr.hpp"
 
 #include <cmath>
+#include <memory>
 #include <set>
 #include <stdexcept>
 
@@ -32,15 +33,11 @@ struct App::Impl {
 	std::set<ShaderProgram*> shaderPrograms{};
 };
 
-App::App(AppParameters params)
-: impl(new Impl{ std::move(params.displayName), params.pixelArt, params.steamAppId }) {
+App::App() {
 	if (self) {
 		throw std::runtime_error("You may only create one instance of jngl::App.");
 	}
 	self = this;
-	if (auto id = impl->steamAppId) {
-		jngl::initSteam(*id);
-	}
 }
 
 App::~App() {
@@ -49,9 +46,15 @@ App::~App() {
 
 App& App::instance() {
 	if (!self) {
-		self = new App({});
+		self = new App;
 	}
 	return *self;
+}
+
+void App::init(AppParameters params) {
+	assert(impl == nullptr);
+	impl = std::make_unique<App::Impl>(
+	    App::Impl{ std::move(params.displayName), params.pixelArt, params.steamAppId });
 }
 
 std::string App::getDisplayName() const {
@@ -81,6 +84,9 @@ void App::setPixelArt(const bool pixelArt) {
 }
 
 void App::registerShaderProgram(ShaderProgram* shaderProgram) {
+	if (!impl) { // unit tests
+		init({});
+	}
 	impl->shaderPrograms.insert(shaderProgram);
 }
 
@@ -100,7 +106,11 @@ void App::updateProjectionMatrix() const {
 namespace internal {
 
 void mainLoop(AppParameters params) {
-	App app(params);
+	App::instance().init(params);
+	if (auto id = params.steamAppId) {
+		jngl::initSteam(*id);
+	}
+
 	bool fullscreen = false;
 #if (!defined(__EMSCRIPTEN__) && defined(NDEBUG)) || defined(__ANDROID__)
 	fullscreen = true;
@@ -141,7 +151,7 @@ void mainLoop(AppParameters params) {
 	           fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
 	           params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
 	setWork(params.start());
-	app.mainLoop();
+	App::instance().mainLoop();
 }
 
 } // namespace internal
