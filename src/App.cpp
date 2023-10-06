@@ -52,6 +52,7 @@ App& App::instance() {
 }
 
 void App::init(AppParameters params) {
+	assert(impl == nullptr);
 	impl = std::make_unique<App::Impl>(
 	    App::Impl{ std::move(params.displayName), params.pixelArt, params.steamAppId });
 }
@@ -83,6 +84,9 @@ void App::setPixelArt(const bool pixelArt) {
 }
 
 void App::registerShaderProgram(ShaderProgram* shaderProgram) {
+	if (!impl) { // unit tests
+		init({});
+	}
 	impl->shaderPrograms.insert(shaderProgram);
 }
 
