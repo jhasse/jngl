@@ -45,8 +45,8 @@ void setLineWidth(float width);
 /// Draws a line from start to end, the width can be set using setLineWidth
 void drawLine(Vec2 start, Vec2 end);
 
-[[deprecated("Use drawRectangle instead")]]
-/// \deprecated Use drawRectangle instead
+[[deprecated("Use drawLine(Vec2, Vec2) instead")]]
+/// \deprecated Use drawLine(Vec2, Vec2) instead
 void drawLine(double xstart, double ystart, double xend, double yend);
 
 /// Draws a line from (0, 0) to \a end
