@@ -43,6 +43,7 @@ Checks: '
        ,-llvm-qualified-auto,
        ,-llvmlibc-callee-namespace,
        ,-llvmlibc-implementation-in-namespace,
+       ,-llvmlibc-inline-function-decl,
        ,-llvmlibc-restrict-system-libc-headers,
        ,-misc-no-recursion,
        ,-misc-non-private-member-variables-in-classes,
