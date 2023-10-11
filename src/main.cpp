@@ -347,8 +347,8 @@ bool mousePressed(mouse::Button button) {
 
 void setMouse(const jngl::Vec2 position) {
 	pWindow->SetMouse(
-	    static_cast<int>(std::lround((position.x + getScreenWidth() / 2) * getScaleFactor())),
-	    static_cast<int>(std::lround((position.y + getScreenHeight() / 2) * getScaleFactor())));
+	    static_cast<int>(std::lround(position.x * getScaleFactor() + pWindow->getWidth() / 2.)),
+	    static_cast<int>(std::lround(position.y * getScaleFactor() + pWindow->getHeight() / 2.)));
 }
 
 void setRelativeMouseMode(const bool relative) {
