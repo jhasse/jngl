@@ -643,11 +643,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 }
 
 int Window::getMouseX() const {
-	return mousex_ - impl->relativeX - (width_ - canvasWidth) / 2;
+	if (relativeMouseMode) {
+		return mousex_ - impl->relativeX;
+	}
+	assert(impl->relativeX == 0);
+	return mousex_ - (width_ - canvasWidth) / 2;
 }
 
 int Window::getMouseY() const {
-	return mousey_ - impl->relativeY - (height_ - canvasHeight) / 2;
+	if (relativeMouseMode) {
+		return mousey_ - impl->relativeY;
+	}
+	assert(impl->relativeY == 0);
+	return mousey_ - (height_ - canvasHeight) / 2;
 }
 
 void Window::SetMouse(const int xposition, const int yposition) {
