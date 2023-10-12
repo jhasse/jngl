@@ -433,7 +433,10 @@ void Window::SetTitle(const std::string& title) {
 }
 
 void Window::SetMouse(const int xposition, const int yposition) {
-	SDL_WarpMouseInWindow(impl->sdlWindow, xposition, yposition);
+	SDL_WarpMouseInWindow(
+	    impl->sdlWindow,
+	    static_cast<int>(std::lround(static_cast<float>(xposition) / impl->hidpiScaleFactor)),
+	    static_cast<int>(std::lround(static_cast<float>(yposition) / impl->hidpiScaleFactor)));
 }
 
 void Window::SetRelativeMouseMode(const bool relative) {
