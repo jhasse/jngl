@@ -23,7 +23,7 @@ SDL::~SDL() {
 	SDL_Quit();
 }
 void SDL::setHint(const char* name, bool value) {
-	const auto result = SDL_SetHint(name, value ? "1" : "0");
+	[[maybe_unused]] const auto result = SDL_SetHint(name, value ? "1" : "0");
 	assert(result == SDL_TRUE);
 }
 

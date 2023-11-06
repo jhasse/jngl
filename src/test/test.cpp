@@ -223,7 +223,6 @@ private:
 	float volume = 1;
 	std::unique_ptr<jngl::Shader> vertexShader, fragmentShader;
 	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
-	std::chrono::steady_clock clock;
 	jngl::Finally soundLoader;
 };
 
