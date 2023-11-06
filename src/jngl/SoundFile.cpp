@@ -41,13 +41,12 @@ public:
 	Audio& operator=(Audio&&) = delete;
 	~Audio() {
 	}
-	static bool IsStopped(std::shared_ptr<Sound>& s) {
-		return s->isStopped();
-	}
 
 	void play(std::shared_ptr<Sound> sound) {
 		mixer->add(sound->getStream());
-		sounds_.erase(std::remove_if(sounds_.begin(), sounds_.end(), IsStopped), sounds_.end());
+		sounds_.erase(std::remove_if(sounds_.begin(), sounds_.end(),
+		                             [](const auto& s) { return !s->isPlaying(); }),
+		              sounds_.end());
 		sounds_.emplace_back(std::move(sound));
 	}
 
@@ -176,11 +175,6 @@ void SoundFile::loop() {
 	GetAudio().play(sound_);
 }
 
-void SoundFile::setPitch(float p) {
-	if (sound_) {
-		sound_->SetPitch(p);
-	}
-}
 void SoundFile::setVolume(float v) {
 	if (sound_) {
 		sound_->setVolume(v);

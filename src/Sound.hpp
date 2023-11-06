@@ -22,8 +22,6 @@ public:
 	bool isPlaying() const;
 	bool isLooping() const;
 	void loop();
-	bool isStopped() const;
-	void SetPitch(float p);
 	void setVolume(float v);
 	std::shared_ptr<Stream> getStream();
 

@@ -47,14 +47,6 @@ void Sound::loop() {
 	impl->stream = audio::loop(impl->volumeControl);
 }
 
-bool Sound::isStopped() const {
-	return false; // TODO
-}
-
-void Sound::SetPitch(float p) {
-	// TODO
-}
-
 void Sound::setVolume(float v) {
 	impl->volumeControl->gain(v);
 }

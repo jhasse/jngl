@@ -54,9 +54,6 @@ public:
 	/// Play the sound in a loop. Can also be stopped using stop()
 	void loop();
 
-	/// Set pitch in (0.0f, ∞]. Default is 1.0f
-	void setPitch(float);
-
 	/// Set volume in [0, ∞]. Default is 1.0f
 	void setVolume(float v);
 
