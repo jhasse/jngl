@@ -256,8 +256,8 @@ public:
 		}
 	}
 
-	[[nodiscard]] bool finished() const {
-		return !THEORAPLAY_isDecoding(decoder);
+	[[nodiscard]] bool isPlaying() const override {
+		return THEORAPLAY_isDecoding(decoder);
 	}
 
 	~Impl() override {
@@ -302,7 +302,7 @@ private:
 	std::size_t read(float * data, std::size_t sample_count) override {
 		std::scoped_lock lock(audioBufferMutex);
 		if (audioBuffer.size() < sample_count) {
-			if (finished()) {
+			if (!isPlaying()) {
 				return 0;
 			}
 			if (started()) {
@@ -362,7 +362,7 @@ int Video::getHeight() const {
 }
 
 bool Video::finished() const {
-	return impl->finished();
+	return !impl->isPlaying();
 }
 
 } // namespace jngl

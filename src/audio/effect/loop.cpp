@@ -29,6 +29,10 @@ struct loop_impl : Stream {
 		repeated_ = 0;
 	}
 
+	bool isPlaying() const override {
+		return true;
+	}
+
 private:
 	std::shared_ptr<Stream> stream_;
 	std::optional<std::size_t> count_;

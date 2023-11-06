@@ -35,7 +35,7 @@ Sound::~Sound() {
 }
 
 bool Sound::isPlaying() const {
-	return true; // TODO
+	return impl->stream->isPlaying();
 }
 
 bool Sound::isLooping() const {

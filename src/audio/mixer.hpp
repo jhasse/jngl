@@ -17,6 +17,7 @@ public:
 	void remove(Stream*);
 
 	void rewind() override;
+	bool isPlaying() const override;
 	size_t read(float*, size_t) override;
 
 private:

@@ -40,6 +40,10 @@ struct raw_stream_impl : Stream {
 		played_ = 0;
 	}
 
+	bool isPlaying() const override {
+		return data_holder_->samples.size() - played_ > 0;
+	}
+
 private:
 	std::shared_ptr<data_holder> data_holder_;
 	std::atomic<std::size_t> played_{ 0 };

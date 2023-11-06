@@ -58,6 +58,10 @@ struct pause_control_impl : pause_control {
 		return stream_->rewind();
 	}
 
+	bool isPlaying() const override {
+		return paused_ ? false : stream_->isPlaying();
+	}
+
 private:
 	std::shared_ptr<Stream> stream_;
 	std::atomic<bool> paused_;

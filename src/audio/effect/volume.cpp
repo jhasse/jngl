@@ -29,6 +29,10 @@ struct volume_control_impl : volume_control {
 		return stream_->rewind();
 	}
 
+	bool isPlaying() const override {
+		return stream_->isPlaying();
+	}
+
 	std::size_t read(float* data, std::size_t sample_count) override {
 		auto result = stream_->read(data, sample_count);
 		base_.apply(data, result);
@@ -68,6 +72,10 @@ struct volume_control_stereo_impl : volume_control_stereo {
 
 	void rewind() override {
 		return stream_->rewind();
+	}
+
+	bool isPlaying() const override {
+		return stream_->isPlaying();
 	}
 
 	std::size_t read(float* data, std::size_t sample_count) override {

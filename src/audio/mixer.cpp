@@ -39,6 +39,15 @@ void Mixer::rewind() {
 	assert(false);
 }
 
+bool Mixer::isPlaying() const {
+	for (const auto& stream : streamsOnMainThread) {
+		if (stream->isPlaying()) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void Mixer::add(std::shared_ptr<Stream> stream) {
 	gc();
 	impl->newStreams.push(stream.get());

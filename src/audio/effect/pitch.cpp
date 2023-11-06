@@ -79,6 +79,10 @@ struct pitch_control_impl : pitch_control {
 		sourceBufferSize = 0;
 	}
 
+	bool isPlaying() const override {
+		return stream_->isPlaying();
+	}
+
 private:
 	std::shared_ptr<Stream> stream_;
 
