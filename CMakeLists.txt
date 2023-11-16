@@ -238,7 +238,6 @@ else()
 					"SDL_ATOMIC OFF"
 					"SDL_CPUINFO OFF"
 					"SDL_DLOPEN OFF"
-					"SDL_EVENTS OFF"
 					"SDL_FILE OFF"
 					"SDL_FILESYSTEM OFF"
 					"SDL_HAPTIC OFF"
