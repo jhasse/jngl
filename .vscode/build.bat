@@ -2,6 +2,6 @@ call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build
 if exist build\build.ninja (
     rem file exists
 ) else (
-    cmake -Bbuild -GNinja -DJNGL_VIDEO=0 -DCMAKE_BUILD_TYPE=Debug
+    cmake -Bbuild -G"Ninja Multi-Config" -DJNGL_VIDEO=0
 )
 cmake --build build
