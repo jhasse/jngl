@@ -426,7 +426,6 @@ void Window::UpdateInput() {
 			impl->distinguishLeftRight();
 			int scanCode = msg.lParam & 0x7f8000;
 			characterDown_[scanCodeToCharacter[scanCode]] = false;
-			characterPressed_[scanCodeToCharacter[scanCode]] = false;
 		} break;
 		case WM_CHAR: {
 			std::vector<char> buf(4);
@@ -466,6 +465,7 @@ void Window::UpdateInput() {
 			scanCodeToCharacter[scanCode] = character;
 			characterDown_[character] = true;
 			characterPressed_[character] = true;
+			needToBeSetFalse_.push(&characterPressed_[character]);
 			textInput += character;
 		} break;
 		}
@@ -486,9 +486,6 @@ void Window::UpdateInput() {
 			it.second = false;
 		}
 		for (auto& it : characterDown_) {
-			it.second = false;
-		}
-		for (auto& it : characterPressed_) {
 			it.second = false;
 		}
 		for (auto& b : mouseDown_) {
@@ -601,10 +598,6 @@ bool Window::getKeyDown(const std::string& key) {
 }
 
 bool Window::getKeyPressed(const std::string& key) {
-	if (characterPressed_[key]) {
-		characterPressed_[key] = false;
-		return true;
-	}
 	return characterPressed_[key];
 }
 

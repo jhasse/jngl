@@ -219,10 +219,6 @@ bool Window::getKeyDown(const std::string& key) {
 }
 
 bool Window::getKeyPressed(const std::string& key) {
-	if (characterPressed_[key]) {
-		characterPressed_[key] = false;
-		return true;
-	}
 	return characterPressed_[key];
 }
 
@@ -337,10 +333,12 @@ void Window::UpdateInput() {
 				}
 				characterDown_[tmp] = true;
 				characterPressed_[tmp] = true;
+				needToBeSetFalse_.push(&characterPressed_[tmp]);
 			}
 			if (event.key.keysym.sym == SDLK_SPACE) {
 				characterDown_[" "] = true;
 				characterPressed_[" "] = true;
+				needToBeSetFalse_.push(&characterPressed_[" "]);
 			}
 			anyKeyPressed_ = true;
 			break;
@@ -352,14 +350,11 @@ void Window::UpdateInput() {
 			if (strlen(name) == 1) {
 				std::string tmp(1, name[0]);
 				characterDown_[tmp] = false;
-				characterPressed_[tmp] = false;
 				tmp[0] = tolower(name[0]);
 				characterDown_[tmp] = false;
-				characterPressed_[tmp] = false;
 			}
 			if (event.key.keysym.sym == SDLK_SPACE) {
 				characterDown_[" "] = false;
-				characterPressed_[" "] = false;
 			}
 			break;
 		}

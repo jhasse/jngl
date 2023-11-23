@@ -189,6 +189,9 @@ void Window::setKeyPressed(const key::KeyType key, bool p) {
 
 void Window::setKeyPressed(const std::string& key, bool p) {
 	characterPressed_[key] = p;
+	if (p) {
+		needToBeSetFalse_.push(&characterPressed_[key]);
+	}
 }
 
 bool keyDown(const char key) {
