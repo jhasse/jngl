@@ -73,9 +73,15 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
 
 	assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 
+	if (impl->letterboxing) {
+		glDisable(GL_SCISSOR_TEST);
+	}
 	glClearColor(1, 1, 1, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	clearBackgroundColor();
+	if (impl->letterboxing) {
+		glEnable(GL_SCISSOR_TEST);
+	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, impl->systemFbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->systemBuffer);

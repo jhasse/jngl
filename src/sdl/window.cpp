@@ -78,7 +78,12 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 
 	impl->context = SDL_GL_CreateContext(impl->sdlWindow);
 #ifdef GLAD_GL
-	gladLoadGL(reinterpret_cast<GLADloadfunc>(SDL_GL_GetProcAddress));
+	const auto glVersion = gladLoadGL(reinterpret_cast<GLADloadfunc>(SDL_GL_GetProcAddress));
+	if (glVersion < GLAD_MAKE_VERSION(2, 0)) {
+		throw std::runtime_error("Your graphics card is missing OpenGL 2.0 support (it supports " +
+		                         std::to_string(GLAD_VERSION_MAJOR(glVersion)) + "." +
+		                         std::to_string(GLAD_VERSION_MINOR(glVersion)) + ").");
+	}
 #endif
 
 	if (isMultisampleSupported_) {
@@ -219,10 +224,6 @@ bool Window::getKeyDown(const std::string& key) {
 }
 
 bool Window::getKeyPressed(const std::string& key) {
-	if (characterPressed_[key]) {
-		characterPressed_[key] = false;
-		return true;
-	}
 	return characterPressed_[key];
 }
 
@@ -337,10 +338,12 @@ void Window::UpdateInput() {
 				}
 				characterDown_[tmp] = true;
 				characterPressed_[tmp] = true;
+				needToBeSetFalse_.push(&characterPressed_[tmp]);
 			}
 			if (event.key.keysym.sym == SDLK_SPACE) {
 				characterDown_[" "] = true;
 				characterPressed_[" "] = true;
+				needToBeSetFalse_.push(&characterPressed_[" "]);
 			}
 			anyKeyPressed_ = true;
 			break;
@@ -352,14 +355,11 @@ void Window::UpdateInput() {
 			if (strlen(name) == 1) {
 				std::string tmp(1, name[0]);
 				characterDown_[tmp] = false;
-				characterPressed_[tmp] = false;
 				tmp[0] = tolower(name[0]);
 				characterDown_[tmp] = false;
-				characterPressed_[tmp] = false;
 			}
 			if (event.key.keysym.sym == SDLK_SPACE) {
 				characterDown_[" "] = false;
-				characterPressed_[" "] = false;
 			}
 			break;
 		}
