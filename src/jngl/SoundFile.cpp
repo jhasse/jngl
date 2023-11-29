@@ -13,8 +13,6 @@
 #include "debug.hpp"
 
 #include <algorithm>
-#include <array>
-#include <cassert>
 #include <stdexcept>
 #include <unordered_map>
 
@@ -39,8 +37,7 @@ public:
 	Audio& operator=(const Audio&) = delete;
 	Audio(Audio&&) = delete;
 	Audio& operator=(Audio&&) = delete;
-	~Audio() {
-	}
+	~Audio() = default;
 
 	void play(std::shared_ptr<Sound> sound) {
 		mixer->add(sound->getStream());
@@ -52,8 +49,7 @@ public:
 
 	void Stop(std::shared_ptr<Sound>& sound) {
 		mixer->remove(sound->getStream().get());
-		std::vector<std::shared_ptr<Sound>>::iterator i;
-		if ((i = std::find(sounds_.begin(), sounds_.end(), sound)) != sounds_.end()) {
+		if (auto i = std::find(sounds_.begin(), sounds_.end(), sound); i != sounds_.end()) {
 			sounds_.erase(i);
 		}
 	}
@@ -139,13 +135,14 @@ SoundFile::SoundFile(std::string filename, std::launch) {
 }
 
 SoundFile::~SoundFile() = default;
-SoundFile::SoundFile(SoundFile&& other) noexcept {
+SoundFile::SoundFile(SoundFile&& other) noexcept : frequency(-1) {
 	other.load();
 	*this = std::move(other);
 }
 SoundFile& SoundFile::operator=(SoundFile&& other) noexcept {
 	sound_ = std::move(other.sound_);
 	buffer_ = std::move(other.buffer_);
+	frequency = other.frequency;
 	return *this;
 }
 
