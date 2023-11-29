@@ -35,7 +35,7 @@ public:
 	/// \note
 	/// If the file doesn't exist this will not throw, but calling SoundFile::play, SoundFile::loop
 	/// or SoundFile::load will.
-	explicit SoundFile(std::string filename, std::launch policy = std::launch::async);
+	explicit SoundFile(const std::string& filename, std::launch policy = std::launch::async);
 	~SoundFile();
 	SoundFile(const SoundFile&) = delete;
 	SoundFile& operator=(const SoundFile&) = delete;
@@ -65,7 +65,7 @@ public:
 private:
 	std::shared_ptr<Sound> sound_;
 	std::vector<float> buffer_;
-	long frequency;
+	long frequency = -1;
 };
 
 } // namespace jngl

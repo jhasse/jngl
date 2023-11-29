@@ -3,12 +3,12 @@
 
 #include "SoundFile.hpp"
 
+#include "../Sound.hpp"
+#include "../audio.hpp"
 #include "../audio/effect/pitch.hpp"
 #include "../audio/effect/volume.hpp"
 #include "../audio/engine.hpp"
 #include "../audio/mixer.hpp"
-#include "../Sound.hpp"
-#include "../audio.hpp"
 #include "../main.hpp"
 #include "debug.hpp"
 
@@ -80,7 +80,7 @@ private:
 	audio::engine engine;
 };
 
-SoundFile::SoundFile(std::string filename, std::launch) {
+SoundFile::SoundFile(const std::string& filename, std::launch) {
 	debug("Decoding ");
 	debug(filename);
 	debug(" ... ");
@@ -135,7 +135,7 @@ SoundFile::SoundFile(std::string filename, std::launch) {
 }
 
 SoundFile::~SoundFile() = default;
-SoundFile::SoundFile(SoundFile&& other) noexcept : frequency(-1) {
+SoundFile::SoundFile(SoundFile&& other) noexcept {
 	other.load();
 	*this = std::move(other);
 }
