@@ -550,4 +550,12 @@ void errorMessage(const std::string &text) {
 	}
 }
 
+float Window::getResizedWindowScalingX() const {
+	return impl->actualWidth / static_cast<float>(impl->actualCanvasWidth);
+}
+
+float Window::getResizedWindowScalingY() const {
+	return impl->actualHeight / static_cast<float>(impl->actualCanvasHeight);
+}
+
 } // namespace jngl

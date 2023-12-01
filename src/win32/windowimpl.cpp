@@ -733,6 +733,14 @@ void Window::setFullscreen(bool) {
 	throw std::runtime_error("Not implemented.");
 }
 
+float Window::getResizedWindowScalingX() const {
+	return 1.f;
+}
+
+float Window::getResizedWindowScalingY() const {
+	return 1.f;
+}
+
 std::string getPreferredLanguage() {
 	ULONG numLanguages;
 	DWORD bufferLength = 0;
