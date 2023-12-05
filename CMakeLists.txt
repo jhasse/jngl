@@ -353,8 +353,9 @@ else()
 		if(WINDOWS_STORE)
 			# WIN32 is needed to build for the Windows subsystem, not Console
 			add_executable(jngl-test WIN32 src/test/test.cpp src/uwp/SDL_winrt_main_NonXAML.cpp
-				data/Arial.ttf data/jngl.webp data/test.ogg)
-			set_source_files_properties(data/Arial.ttf data/jngl.webp data/test.ogg
+				data/Arial.ttf data/jngl.webp data/jngl-icon.webp data/test.ogg)
+			set_source_files_properties(data/Arial.ttf data/jngl.webp data/jngl-icon.webp
+				data/test.ogg
 				PROPERTIES VS_DEPLOYMENT_CONTENT 1)
 
 			# Otherwise linking will fail with
