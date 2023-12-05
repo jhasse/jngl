@@ -187,7 +187,7 @@ if(ANDROID OR MSVC OR IOS)
 	set(FREETYPE_LIBRARIES freetype)
 endif()
 if(ANDROID)
-	target_compile_definitions(jngl PRIVATE NOPNG OPENGLES)
+	target_compile_definitions(jngl PRIVATE NOPNG)
 
 	CPMAddPackage(NAME openal
 		URL https://github.com/kcat/openal-soft/archive/refs/tags/1.21.1.zip

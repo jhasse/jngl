@@ -9,7 +9,6 @@
 #ifdef IOS
 	#include <OpenGLES/ES3/gl.h>
 	#include <OpenGLES/ES3/glext.h>
-	#include "ios/glew.h"
 #else
 	#ifdef ANDROID
 		#include <EGL/egl.h>
