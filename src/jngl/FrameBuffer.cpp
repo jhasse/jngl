@@ -61,7 +61,7 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
 
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, static_cast<int>(width),
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, static_cast<int>(width),
 	                      static_cast<int>(height));
 
 	glGenFramebuffers(1, &impl->fbo);
