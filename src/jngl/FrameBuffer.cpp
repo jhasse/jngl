@@ -9,7 +9,6 @@
 #include "ScaleablePixels.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
-#include "window.hpp"
 
 namespace jngl {
 
