@@ -16,7 +16,7 @@ jobs:
     - name: Build Release
       run: cd build && ninja -f build-Release.ninja
     - name: Install unittest dependencies
-      run: apt install xserver-xorg-core xserver-xorg-video-dummy
+      run: sudo apt install xserver-xorg-core xserver-xorg-video-dummy
     - name: Unittest
       run: |
         cd build
