@@ -20,7 +20,7 @@ jobs:
     - name: Unittest
       run: |
         cd build
-        Xorg -config ../data/xorg.config &>/dev/null &
+        Xorg -config ../data/xorg.conf &>/dev/null &
         sleep 1 # wait for Xorg to boot up
         DISPLAY=:0 ./Debug/jngl-unittest
         DISPLAY=:0 ./Release/jngl-unittest
