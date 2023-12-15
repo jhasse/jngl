@@ -18,9 +18,9 @@ jobs:
     - name: Install unittest dependencies
       run: apt install xserver-xorg-core xserver-xorg-video-dummy
     - name: Unittest
-      run:
-        - cd build
-        - Xorg -config ../data/xorg.config &>/dev/null &
-        - sleep 1 # wait for Xorg to boot up
-        - DISPLAY=:0 ./Debug/jngl-unittest
-        - DISPLAY=:0 ./Release/jngl-unittest
+      run: |
+        cd build
+        Xorg -config ../data/xorg.config &>/dev/null &
+        sleep 1 # wait for Xorg to boot up
+        DISPLAY=:0 ./Debug/jngl-unittest
+        DISPLAY=:0 ./Release/jngl-unittest
