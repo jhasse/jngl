@@ -98,6 +98,9 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		}
 	}
 
+#ifndef __linux__ // This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by
+                  // SDL2). On Linux (GNOME) it results in the top of the window being cut off (by
+                  // the header bar height?).
 	{
 		assert(width_ == width);
 		assert(height_ == height);
@@ -122,6 +125,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	}
 
 	SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
+#endif
 	impl->actualWidth = width_;
 	impl->actualHeight = height_;
 	impl->hidpiScaleFactor = static_cast<float>(width_) / width;
@@ -548,6 +552,14 @@ void errorMessage(const std::string &text) {
 	if (window) {
 		window->SetMouseVisible(old);
 	}
+}
+
+float Window::getResizedWindowScalingX() const {
+	return impl->actualWidth / static_cast<float>(impl->actualCanvasWidth);
+}
+
+float Window::getResizedWindowScalingY() const {
+	return impl->actualHeight / static_cast<float>(impl->actualCanvasHeight);
 }
 
 } // namespace jngl

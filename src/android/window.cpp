@@ -67,6 +67,14 @@ void Window::SetRelativeMouseMode(const bool relative) {
 void Window::SetIcon(const std::string&) {
 }
 
+float Window::getResizedWindowScalingX() const {
+	return 1.f;
+}
+
+float Window::getResizedWindowScalingY() const {
+	return 1.f;
+}
+
 int getDesktopWidth() {
 	return pWindow ? pWindow->getWidth() : -1;
 }

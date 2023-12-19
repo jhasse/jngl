@@ -56,6 +56,13 @@ public:
 	int getCanvasHeight() const;
 	int getWidth() const;
 	int getHeight() const;
+
+	/// When the Window gets resized this returns the scaling for each direction (since letterboxing
+	/// might result in different values) which has to be taken into account for FrameBuffers (SDL
+	/// backend only)
+	float getResizedWindowScalingX() const;
+	float getResizedWindowScalingY() const;
+
 	ScaleablePixels getTextWidth(const std::string&);
 	Pixels getLineHeight();
 	void setLineHeight(Pixels);

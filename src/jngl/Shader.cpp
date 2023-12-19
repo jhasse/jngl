@@ -17,7 +17,7 @@ namespace jngl {
 Shader::Shader(const char* source, const Type type, const char* const gles20Source [[maybe_unused]])
 : impl(std::make_unique<Impl>()) {
 	impl->id = glCreateShader(type == Type::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER);
-#if defined(__APPLE__) && !defined(OPENGLES)
+#if defined(__APPLE__) && !defined(IOS)
 	std::string tmp(source);
 	const std::string search = "#version 300 es";
 	if (size_t pos = tmp.find(search); pos != std::string::npos) {

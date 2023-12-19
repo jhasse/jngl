@@ -9,7 +9,6 @@
 #include "ScaleablePixels.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
-#include "window.hpp"
 
 namespace jngl {
 
@@ -61,7 +60,7 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
 
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, static_cast<int>(width),
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, static_cast<int>(width),
 	                      static_cast<int>(height));
 
 	glGenFramebuffers(1, &impl->fbo);
@@ -194,14 +193,21 @@ FrameBuffer::Context FrameBuffer::use() const {
 		glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
 		glViewport(0, 0, impl->width, impl->height);
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+
+		// each time we active we have to check again, because the window might have been resized
+		if (!impl->letterboxing) {
+			impl->letterboxing = glIsEnabled(GL_SCISSOR_TEST);
+		}
 		if (impl->letterboxing) {
 			glDisable(GL_SCISSOR_TEST);
 		}
 	};
 	pushMatrix();
 	reset();
-	opengl::scale(static_cast<float>(pWindow->getWidth()) / static_cast<float>(impl->width),
-	              static_cast<float>(pWindow->getHeight()) / static_cast<float>(impl->height));
+	opengl::scale(static_cast<float>(pWindow->getCanvasWidth()) / static_cast<float>(impl->width) *
+	                  pWindow->getResizedWindowScalingX(),
+	              static_cast<float>(pWindow->getCanvasHeight()) /
+	                  static_cast<float>(impl->height) * pWindow->getResizedWindowScalingY());
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 	glPushAttrib(GL_VIEWPORT_BIT);
 #else

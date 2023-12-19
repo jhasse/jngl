@@ -189,7 +189,7 @@ if(ANDROID OR MSVC OR IOS)
 	set(FREETYPE_LIBRARIES freetype)
 endif()
 if(ANDROID)
-	target_compile_definitions(jngl PRIVATE NOPNG OPENGLES)
+	target_compile_definitions(jngl PRIVATE NOPNG)
 
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)
 	target_include_directories(jngl PRIVATE ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
@@ -346,8 +346,9 @@ else()
 		if(WINDOWS_STORE)
 			# WIN32 is needed to build for the Windows subsystem, not Console
 			add_executable(jngl-test WIN32 src/test/test.cpp src/uwp/SDL_winrt_main_NonXAML.cpp
-				data/Arial.ttf data/jngl.webp data/test.ogg)
-			set_source_files_properties(data/Arial.ttf data/jngl.webp data/test.ogg
+				data/Arial.ttf data/jngl.webp data/jngl-icon.webp data/test.ogg)
+			set_source_files_properties(data/Arial.ttf data/jngl.webp data/jngl-icon.webp
+				data/test.ogg
 				PROPERTIES VS_DEPLOYMENT_CONTENT 1)
 
 			# Otherwise linking will fail with
