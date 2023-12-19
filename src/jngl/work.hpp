@@ -1,4 +1,4 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -21,6 +21,14 @@ public:
 	///
 	/// To continue with the main loop, call cancelQuit().
 	virtual void onQuitEvent();
+
+	/// Gets called when the "Back" button is pressed on any connected controller (Android only)
+	///
+	/// As the TV remote is registered as a controller this is important to handle Back on the TV
+	/// remote. Most likely you won't need to overwrite this though, as it calls onBackEvent() by
+	/// default and having Android's "Back" button to the same as "Back" on the TV remote is a good
+	/// idea.
+	virtual void onControllerBack();
 
 	/// Gets called when the main window loses focus or the app is put in the background
 	///

@@ -39,7 +39,7 @@ public:
 	Window& operator=(Window&&) = delete;
 	~Window();
 	bool isRunning() const;
-	void quit();
+	void quit() noexcept;
 	void cancelQuit();
 	void UpdateInput();
 	void updateKeyStates();
@@ -56,6 +56,13 @@ public:
 	int getCanvasHeight() const;
 	int getWidth() const;
 	int getHeight() const;
+
+	/// When the Window gets resized this returns the scaling for each direction (since letterboxing
+	/// might result in different values) which has to be taken into account for FrameBuffers (SDL
+	/// backend only)
+	float getResizedWindowScalingX() const;
+	float getResizedWindowScalingY() const;
+
 	ScaleablePixels getTextWidth(const std::string&);
 	Pixels getLineHeight();
 	void setLineHeight(Pixels);
@@ -90,6 +97,7 @@ public:
 	void draw() const;
 	std::shared_ptr<Work> getWork();
 	void addJob(std::shared_ptr<Job>);
+	std::shared_ptr<Job> getJob(const std::function<bool(Job&)>& predicate) const;
 	void resetFrameLimiter();
 	unsigned int getStepsPerSecond() const;
 	void setStepsPerSecond(unsigned int);
@@ -176,5 +184,9 @@ private:
 	// <fontSize, <fontName, FontImpl>>
 	std::map<int, std::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
 	std::vector<std::function<void()>> updateInputCallbacks;
+
+#ifdef JNGL_PERFORMANCE_OVERLAY
+	double lastStepDuration = 0;
+#endif
 };
 } // namespace jngl

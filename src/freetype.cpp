@@ -39,10 +39,11 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 	if (FT_Get_Glyph(face->glyph, &glyph)) {
 		throw std::runtime_error("FT_Get_Glyph failed");
 	}
+	Finally freeGlyph([&]() { FT_Done_Glyph(glyph); });
 	const auto bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph); // NOLINT
 	const FT_Bitmap& bitmap = bitmap_glyph->bitmap;
 
-	const int width = static_cast<int>(bitmap.width);
+	const auto width = static_cast<ptrdiff_t>(bitmap.width);
 	const int height = static_cast<int>(bitmap.rows);
 	width_ = Pixels(static_cast<int32_t>(face->glyph->advance.x >> 6));
 
@@ -54,7 +55,7 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 
 	for (int y = 0; y < height; ++y) {
 		data[y] = new GLubyte[width * 4];
-		for (int x = 0; x < width; ++x) {
+		for (ptrdiff_t x = 0; x < width; ++x) {
 			data[y][x * 4    ] = 255;
 			data[y][x * 4 + 1] = 255;
 			data[y][x * 4 + 2] = 255;
@@ -140,7 +141,7 @@ Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::
 
 FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)
 : height_(static_cast<unsigned int>(height * getScaleFactor())),
-  lineHeight(int(height_ * LINE_HEIGHT_FACOTR)) {
+  lineHeight(static_cast<int>(height_ * LINE_HEIGHT_FACOTR)) {
 	auto filename = pathPrefix + relativeFilename;
 	if (!fileExists(filename)) {
 		if (!fileExists(relativeFilename)) {
@@ -222,14 +223,15 @@ Pixels FontImpl::getLineHeight() const {
 }
 
 void FontImpl::setLineHeight(Pixels h) {
-	lineHeight = int(h);
+	lineHeight = static_cast<int>(h);
 }
 
 void FontImpl::print(Mat3 modelview, const std::string& text) {
 	auto context = Texture::textureShaderProgram->use();
-	glUniform4f(Texture::shaderSpriteColorUniform, float(fontColorRed) / 255.0f,
-	            float(fontColorGreen) / 255.0f, float(fontColorBlue) / 255.0f,
-	            float(fontColorAlpha) / 255.0f);
+	glUniform4f(Texture::shaderSpriteColorUniform, static_cast<float>(fontColorRed) / 255.0f,
+	            static_cast<float>(fontColorGreen) / 255.0f,
+	            static_cast<float>(fontColorBlue) / 255.0f,
+	            static_cast<float>(fontColorAlpha) / 255.0f);
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();
@@ -248,12 +250,15 @@ void FontImpl::print(Mat3 modelview, const std::string& text) {
 }
 
 void FontImpl::print(const ScaleablePixels x, const ScaleablePixels y, const std::string& text) {
+#ifdef JNGL_PERFORMANCE_OVERLAY
+	if (!Texture::textureShaderProgram) { return; }
+#endif
 	auto context = Texture::textureShaderProgram->use();
-	glUniform4f(Texture::shaderSpriteColorUniform, float(fontColorRed) / 255.0f,
-	            float(fontColorGreen) / 255.0f, float(fontColorBlue) / 255.0f,
-	            float(fontColorAlpha) / 255.0f);
-	const int xRounded = int(std::lround(static_cast<double>(Pixels(x))));
-	const int yRounded = int(std::lround(static_cast<double>(Pixels(y))));
+	glUniform4f(Texture::shaderSpriteColorUniform, static_cast<float>(fontColorRed) / 255.0f,
+	            static_cast<float>(fontColorGreen) / 255.0f, static_cast<float>(fontColorBlue) / 255.0f,
+	            static_cast<float>(fontColorAlpha) / 255.0f);
+	const int xRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ x })));
+	const int yRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ y })));
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();

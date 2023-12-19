@@ -5,12 +5,9 @@
 
 #pragma once
 
-#include "App.hpp"
 #include "AppParameters.hpp"
 #include "main.hpp"
 #include "message.hpp"
-#include "screen.hpp"
-#include "work.hpp"
 
 #include <cmath>
 
@@ -18,9 +15,11 @@
 #include <filesystem>
 #endif
 
-namespace jngl {
-class Work;
-} // namespace jngl
+namespace jngl::internal {
+
+void mainLoop(AppParameters);
+
+} // namespace jngl::internal
 
 /// Implement this function and set AppParameters::start
 ///
@@ -62,51 +61,7 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 		}
 	}
 #endif
-	jngl::AppParameters params = jnglInit();
-	auto& app = jngl::App::instance();
-	app.setDisplayName(params.displayName);
-	app.setPixelArt(params.pixelArt);
-	bool fullscreen = false;
-#if (!defined(__EMSCRIPTEN__) && defined(NDEBUG)) || defined(__ANDROID__)
-	fullscreen = true;
-#endif
-	std::pair<int, int> minAspectRatio{ 1, 3 };
-	std::pair<int, int> maxAspectRatio{ 3, 1 };
-	if (params.screenSize) {
-		maxAspectRatio = minAspectRatio = std::pair<int, int>(std::lround(params.screenSize->x),
-		                                                      std::lround(params.screenSize->y));
-	} else {
-		params.screenSize = { static_cast<double>(jngl::getDesktopWidth()),
-			                  static_cast<double>(jngl::getDesktopHeight()) };
-		fullscreen = true;
-	}
-	if (fullscreen) {
-		const jngl::Vec2 desktopSize{ static_cast<double>(jngl::getDesktopWidth()),
-			                          static_cast<double>(jngl::getDesktopHeight()) };
-		if (desktopSize.x > 0 &&
-		    desktopSize.y > 0) { // desktop size isn't available on some platforms (e.g. Android)
-			jngl::setScaleFactor(std::min(desktopSize.x / params.screenSize->x,
-			                              desktopSize.y / params.screenSize->y));
-		}
-	} else {
-		// Make window as big as possible
-		const double scaleFactor = std::min((jngl::getDesktopWidth() - 99) / params.screenSize->x,
-		                                    (jngl::getDesktopHeight() - 99) / params.screenSize->y);
-		if (scaleFactor > 1) {
-			jngl::setScaleFactor(std::floor(scaleFactor));
-		} else {
-			jngl::setScaleFactor(scaleFactor);
-		}
-	}
-	jngl::showWindow(params.displayName,
-	                 fullscreen ? jngl::getDesktopWidth()
-	                            : int(std::lround(params.screenSize->x * jngl::getScaleFactor())),
-	                 fullscreen ? jngl::getDesktopHeight()
-	                            : int(std::lround(params.screenSize->y * jngl::getScaleFactor())),
-	                 fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
-	                 params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
-	jngl::setWork(params.start());
-	app.mainLoop();
+	jngl::internal::mainLoop(jnglInit());
 }
 JNGL_MAIN_END
 #endif

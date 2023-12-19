@@ -3,6 +3,7 @@
 #include "ImageData.hpp"
 
 #include "../helper.hpp"
+#include "../jngl/debug.hpp"
 #include "../main.hpp"
 #include "screen.hpp"
 
@@ -78,9 +79,13 @@ std::unique_ptr<ImageData> ImageData::load(const std::string& filename) {
 	}
 	FILE* pFile = fopen(fullFilename.c_str(), "rb");
 	if (pFile == nullptr) {
-		throw std::runtime_error(std::string("File not found: " + fullFilename));
+		throw std::runtime_error("File not found: " + fullFilename);
 	}
-	Finally _([pFile]() { fclose(pFile); });
+	Finally _([pFile]() {
+		if (fclose(pFile) != 0) {
+			debugLn("error closing file");
+		}
+	});
 	return loadFunction(filename, pFile);
 }
 

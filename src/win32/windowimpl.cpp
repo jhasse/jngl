@@ -426,7 +426,6 @@ void Window::UpdateInput() {
 			impl->distinguishLeftRight();
 			int scanCode = msg.lParam & 0x7f8000;
 			characterDown_[scanCodeToCharacter[scanCode]] = false;
-			characterPressed_[scanCodeToCharacter[scanCode]] = false;
 		} break;
 		case WM_CHAR: {
 			std::vector<char> buf(4);
@@ -466,6 +465,7 @@ void Window::UpdateInput() {
 			scanCodeToCharacter[scanCode] = character;
 			characterDown_[character] = true;
 			characterPressed_[character] = true;
+			needToBeSetFalse_.push(&characterPressed_[character]);
 			textInput += character;
 		} break;
 		}
@@ -486,9 +486,6 @@ void Window::UpdateInput() {
 			it.second = false;
 		}
 		for (auto& it : characterDown_) {
-			it.second = false;
-		}
-		for (auto& it : characterPressed_) {
 			it.second = false;
 		}
 		for (auto& b : mouseDown_) {
@@ -601,10 +598,6 @@ bool Window::getKeyDown(const std::string& key) {
 }
 
 bool Window::getKeyPressed(const std::string& key) {
-	if (characterPressed_[key]) {
-		characterPressed_[key] = false;
-		return true;
-	}
 	return characterPressed_[key];
 }
 
@@ -643,11 +636,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 }
 
 int Window::getMouseX() const {
-	return mousex_ - impl->relativeX - (width_ - canvasWidth) / 2;
+	if (relativeMouseMode) {
+		return mousex_ - impl->relativeX;
+	}
+	assert(impl->relativeX == 0);
+	return mousex_ - (width_ - canvasWidth) / 2;
 }
 
 int Window::getMouseY() const {
-	return mousey_ - impl->relativeY - (height_ - canvasHeight) / 2;
+	if (relativeMouseMode) {
+		return mousey_ - impl->relativeY;
+	}
+	assert(impl->relativeY == 0);
+	return mousey_ - (height_ - canvasHeight) / 2;
 }
 
 void Window::SetMouse(const int xposition, const int yposition) {
@@ -682,8 +683,8 @@ void Window::SetIcon(const std::string& filename) {
 
 		auto bgra =
 		    std::make_unique<char[]>(imageData->getWidth() * imageData->getHeight() * CHANNELS);
-		for (size_t x = 0; x < imageData->getWidth(); ++x) {
-			for (size_t y = 0; y < imageData->getHeight(); ++y) {
+		for (size_t x = 0; x < static_cast<size_t>(imageData->getWidth()); ++x) {
+			for (size_t y = 0; y < static_cast<size_t>(imageData->getHeight()); ++y) {
 				// transform RGBA to BGRA:
 				bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS] =
 				    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 2];
@@ -730,6 +731,14 @@ int getDesktopHeight() {
 
 void Window::setFullscreen(bool) {
 	throw std::runtime_error("Not implemented.");
+}
+
+float Window::getResizedWindowScalingX() const {
+	return 1.f;
+}
+
+float Window::getResizedWindowScalingY() const {
+	return 1.f;
 }
 
 std::string getPreferredLanguage() {

@@ -9,7 +9,6 @@
 #ifdef IOS
 	#include <OpenGLES/ES3/gl.h>
 	#include <OpenGLES/ES3/glext.h>
-	#include "ios/glew.h"
 #else
 	#ifdef ANDROID
 		#include <EGL/egl.h>
@@ -24,6 +23,9 @@
 			#define glGenVertexArrays glGenVertexArraysOES
 			#define glBindVertexArray glBindVertexArrayOES
 			#define glDeleteVertexArrays glDeleteVertexArraysOES
+			#if defined(__EMSCRIPTEN__)
+				#define GL_RGBA8 GL_RGBA8_OES
+			#endif
 		#else
 			#include <glad/gl.h>
 		#endif

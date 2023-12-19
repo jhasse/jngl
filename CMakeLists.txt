@@ -6,7 +6,7 @@ if(MSVC)
 	string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus")
 else()
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fdiagnostics-color")
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
@@ -23,9 +23,18 @@ target_sources(jngl PRIVATE ${HEADERS})
 target_compile_features(jngl PUBLIC cxx_std_20)
 
 if(JNGL_STEAMWORKS)
-	target_include_directories(jngl PRIVATE include/steam)
-	target_link_directories(jngl PUBLIC include/steam/lib/osx)
-	target_link_libraries(jngl PRIVATE sdkencryptedappticket)
+	message(STATUS "Using Steam SDK: ${JNGL_STEAMWORKS}")
+	target_include_directories(jngl PRIVATE ${JNGL_STEAMWORKS}/public/steam)
+	if(APPLE)
+		target_link_directories(jngl PUBLIC ${JNGL_STEAMWORKS}/redistributable_bin/osx)
+		target_link_libraries(jngl PRIVATE steam_api)
+	elseif(WIN32)
+		target_link_directories(jngl PUBLIC ${JNGL_STEAMWORKS}/redistributable_bin/win64)
+		target_link_libraries(jngl PRIVATE steam_api64)
+	else()
+		target_link_directories(jngl PUBLIC ${JNGL_STEAMWORKS}/redistributable_bin/linux64)
+		target_link_libraries(jngl PRIVATE steam_api)
+	endif()
 	target_sources(jngl PRIVATE src/steam/SteamAchievements.cpp)
 else()
 	target_sources(jngl PRIVATE src/steam/disabled/initSteam.cpp)
@@ -178,7 +187,7 @@ if(ANDROID OR MSVC OR IOS)
 	set(FREETYPE_LIBRARIES freetype)
 endif()
 if(ANDROID)
-	target_compile_definitions(jngl PRIVATE NOPNG OPENGLES)
+	target_compile_definitions(jngl PRIVATE NOPNG)
 
 	CPMAddPackage(NAME openal
 		URL https://github.com/kcat/openal-soft/archive/refs/tags/1.21.1.zip
@@ -225,8 +234,8 @@ else()
 		if(JNGL_SDL2)
 			set(SDL_SENSOR OFF CACHE BOOL "" FORCE) # doesn't work with UWP
 			FetchContent_Declare(sdl2
-				URL https://www.libsdl.org/release/SDL2-2.0.16.zip
-				URL_HASH SHA1=4d09aad9b76b5d51366bebeded8bec46dcf67ef6
+				URL https://www.libsdl.org/release/SDL2-2.28.4.zip
+				URL_HASH SHA1=0d9e0da0e935c4f0524cfd16d47d38b6045b9573
 			)
 			FetchContent_MakeAvailable(sdl2)
 			target_link_libraries(jngl PRIVATE SDL2-static)
@@ -344,8 +353,9 @@ else()
 		if(WINDOWS_STORE)
 			# WIN32 is needed to build for the Windows subsystem, not Console
 			add_executable(jngl-test WIN32 src/test/test.cpp src/uwp/SDL_winrt_main_NonXAML.cpp
-				data/Arial.ttf data/jngl.webp data/test.ogg)
-			set_source_files_properties(data/Arial.ttf data/jngl.webp data/test.ogg
+				data/Arial.ttf data/jngl.webp data/jngl-icon.webp data/test.ogg)
+			set_source_files_properties(data/Arial.ttf data/jngl.webp data/jngl-icon.webp
+				data/test.ogg
 				PROPERTIES VS_DEPLOYMENT_CONTENT 1)
 
 			# Otherwise linking will fail with

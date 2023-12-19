@@ -17,7 +17,7 @@ Pixels::Pixels(const double value) : value(value) {
 }
 
 Pixels::operator float() const {
-	return value;
+	return static_cast<float>(value);
 }
 
 Pixels::operator double() const {

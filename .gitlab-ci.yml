@@ -6,7 +6,7 @@ cache:
   key: cpm
   paths: [.cache/cpm]
 
-image: registry.fedoraproject.org/fedora-minimal:36
+image: registry.fedoraproject.org/fedora-minimal:38
 
 linux:
   stage: build
@@ -29,14 +29,14 @@ linux:
 mingw:
   stage: build
   script:
-    - microdnf install -y gcc-c++ cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw64-openal-soft > /dev/null
+    - microdnf install -y gcc-c++ cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw64-openal-soft mingw64-gcc-c++ > /dev/null
     - mingw64-cmake -GNinja -Bbuild-debug -DCMAKE_BUILD_TYPE=Debug
     - ninja -C build-debug
     - mingw64-cmake -GNinja -Bbuild-release -DCMAKE_BUILD_TYPE=Release
     - ninja -C build-release
 
 android:
-  image: registry.gitlab.com/jhasse/android-ndk-docker:r25c
+  image: registry.gitlab.com/jhasse/android-ndk-docker:r26
   stage: build
   script:
     - make -C android

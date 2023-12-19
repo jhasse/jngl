@@ -5,11 +5,11 @@
 #pragma once
 
 #include "jngl/Achievement.hpp"
-#include "jngl/App.hpp"
 #include "jngl/Color.hpp"
 #include "jngl/Container.hpp"
 #include "jngl/Controller.hpp"
 #include "jngl/Drawable.hpp"
+#include "jngl/FrameBuffer.hpp"
 #include "jngl/Label.hpp"
 #include "jngl/Pixels.hpp"
 #include "jngl/ScaleablePixels.hpp"
@@ -24,7 +24,6 @@
 #include "jngl/debug.hpp"
 #include "jngl/effects.hpp"
 #include "jngl/font.hpp"
-#include "jngl/FrameBuffer.hpp"
 #include "jngl/input.hpp"
 #include "jngl/job.hpp"
 #include "jngl/main.hpp"

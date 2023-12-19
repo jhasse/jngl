@@ -3,6 +3,7 @@
 
 #import "JNGLView.h"
 
+#include "../App.hpp"
 #include "../helper.hpp"
 #include "../jngl.hpp"
 #include "../windowptr.hpp"
@@ -14,6 +15,8 @@
 #include <iostream>
 
 #import <GameController/GameController.h>
+
+std::unique_ptr<jngl::App> jnglApp;
 
 @implementation JNGLView
 
@@ -57,6 +60,7 @@
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
 
+        jngl::App::instance().init(params);
 		jngl::showWindow("", width, height, true,
 		                 params.minAspectRatio ? *params.minAspectRatio : std::make_pair(1, 3),
 		                 params.maxAspectRatio ? *params.maxAspectRatio : std::make_pair(3, 1));
