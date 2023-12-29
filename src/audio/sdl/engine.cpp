@@ -47,7 +47,7 @@ struct engine::Impl {
 				do {
 					std::this_thread::sleep_for(std::chrono::milliseconds(1000 / slowdown));
 				} while (pause && !quit);
-				const auto read = this->output->read(buffer.data(), buffer.size());
+				[[maybe_unused]] const auto read = this->output->read(buffer.data(), buffer.size());
 				assert(read == buffer.size());
 				// to debug sound on the terminal:
 				// float average = 0;
