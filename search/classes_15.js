@@ -10,7 +10,7 @@ var searchData=
   ['vec2_7',['Vec2',['../classjngl_1_1Vec2.html',1,'jngl']]],
   ['vec_5ftraits_3c_20jngl_3a_3avec2_20_3e_8',['vec_traits&lt; jngl::Vec2 &gt;',['../structboost_1_1qvm_1_1vec__traits_3_01jngl_1_1Vec2_01_4.html',1,'boost::qvm']]],
   ['vector_9',['vector',['http://en.cppreference.com/w/cpp/container/vector.html',1,'vector'],['http://en.cppreference.com/w/cpp/container/vector.html',1,'vector']]],
-  ['vector_3c_20char_20_3e_10',['vector&lt; char &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
+  ['vector_3c_20float_20_3e_10',['vector&lt; float &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
   ['vector_3c_20std_3a_3ashared_5fptr_3c_20line_20_3e_20_3e_11',['vector&lt; std::shared_ptr&lt; Line &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
   ['vector_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3aeffect_20_3e_20_3e_12',['vector&lt; std::unique_ptr&lt; jngl::Effect &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
   ['vector_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3awidget_20_3e_20_3e_13',['vector&lt; std::unique_ptr&lt; jngl::Widget &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],

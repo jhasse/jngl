@@ -19,7 +19,7 @@ var searchData=
   ['vec_5ftraits_3c_20jngl_3a_3avec2_20_3e_16',['vec_traits&lt; jngl::Vec2 &gt;',['../structboost_1_1qvm_1_1vec__traits_3_01jngl_1_1Vec2_01_4.html',1,'boost::qvm']]],
   ['vector_17',['vector',['http://en.cppreference.com/w/cpp/container/vector.html',1,'vector'],['http://en.cppreference.com/w/cpp/container/vector.html',1,'vector'],['http://en.cppreference.com/w/cpp/container/vector/vector.html',1,'std::vector::vector()'],['http://en.cppreference.com/w/cpp/container/vector/vector.html',1,'std::pmr::vector::vector()'],['http://en.cppreference.com/w/cpp/header/vector.html',1,'(Global Namespace)']]],
   ['vector_29_18',['vector)',['http://en.cppreference.com/w/cpp/experimental/vector/erase.html',1,'std::experimental::erase(std::vector)()'],['http://en.cppreference.com/w/cpp/experimental/vector/erase_if.html',1,'std::experimental::erase_if(std::vector)()']]],
-  ['vector_3c_20char_20_3e_19',['vector&lt; char &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
+  ['vector_3c_20float_20_3e_19',['vector&lt; float &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
   ['vector_3c_20std_3a_3ashared_5fptr_3c_20line_20_3e_20_3e_20',['vector&lt; std::shared_ptr&lt; Line &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
   ['vector_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3aeffect_20_3e_20_3e_21',['vector&lt; std::unique_ptr&lt; jngl::Effect &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
   ['vector_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3awidget_20_3e_20_3e_22',['vector&lt; std::unique_ptr&lt; jngl::Widget &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
