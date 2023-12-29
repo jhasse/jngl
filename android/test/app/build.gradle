@@ -10,6 +10,14 @@ android {
         applicationId = 'com.bixense.jngl_test'
         minSdkVersion 21
         targetSdkVersion 31
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
+    }
+    buildFeatures {
+        prefab true
     }
     buildTypes {
         release {
@@ -31,4 +39,5 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.google.oboe:oboe:1.7.0'
 }

@@ -557,7 +557,7 @@ bool getAntiAliasing() {
 	return antiAliasingEnabled;
 }
 
-Finally loadSound(const std::string&); // definied in audio.cpp
+Finally loadSound(const std::string&); // definied in SoundFile.cpp
 
 Finally load(const std::string& filename) {
 	if (filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg") {

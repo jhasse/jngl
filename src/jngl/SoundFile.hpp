@@ -1,4 +1,4 @@
-// Copyright 2019-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::SoundFile class
 /// @file
@@ -35,7 +35,7 @@ public:
 	/// \note
 	/// If the file doesn't exist this will not throw, but calling SoundFile::play, SoundFile::loop
 	/// or SoundFile::load will.
-	explicit SoundFile(std::string filename, std::launch policy = std::launch::async);
+	explicit SoundFile(const std::string& filename, std::launch policy = std::launch::async);
 	~SoundFile();
 	SoundFile(const SoundFile&) = delete;
 	SoundFile& operator=(const SoundFile&) = delete;
@@ -54,9 +54,6 @@ public:
 	/// Play the sound in a loop. Can also be stopped using stop()
 	void loop();
 
-	/// Set pitch in (0.0f, ∞]. Default is 1.0f
-	void setPitch(float);
-
 	/// Set volume in [0, ∞]. Default is 1.0f
 	void setVolume(float v);
 
@@ -67,11 +64,8 @@ public:
 
 private:
 	std::shared_ptr<Sound> sound_;
-	std::unique_ptr<SoundParams> params;
-	std::vector<char> buffer_;
-#ifndef EMSCRIPTEN
-	optional<std::future<void>> loader;
-#endif
+	std::vector<float> buffer_;
+	long frequency = -1;
 };
 
 } // namespace jngl

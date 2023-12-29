@@ -3,6 +3,8 @@
 
 #include "../jngl.hpp"
 #include "../jngl/init.hpp"
+#include "audio/engine.hpp"
+#include "audio/mixer.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -167,7 +169,8 @@ public:
 			jngl::setFullscreen(!jngl::getFullscreen());
 		}
 		jngl::print("Press K to test key codes.", 5, 490);
-		jngl::print("Press P to play a sound, L to loop it.", 6, 510);
+		jngl::print("Press P to play a sound, L to loop it.", jngl::isPlaying("test.ogg") ? 20 : 6,
+		            510);
 		jngl::print("Press G to load a Sprite asynchronously.", 6, 530);
 		static int playbackSpeed = 100;
 		jngl::setPlaybackSpeed(static_cast<float>(playbackSpeed) / 100.0f);

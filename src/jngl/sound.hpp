@@ -30,11 +30,10 @@ bool isPlaying(const std::string& filename);
 /// a pointer to the same SoundFile.
 std::shared_ptr<SoundFile> loop(const std::string& filename);
 
-[[deprecated("an OpenAL implementation will always be available")]]
-bool isOpenALInstalled();
-
+/// Set global pitch in (0.0f, ∞]. Default is 1.0f
 void setPlaybackSpeed(float speed);
 
+/// Set global volume in [0, ∞]. Default is 1.0f
 void setVolume(float volume);
 
 } // namespace jngl
