@@ -1,0 +1,5 @@
+<map id="WorkFactory" name="WorkFactory">
+<area shape="rect" id="node1" title=" " alt="" coords="5,152,116,177"/>
+<area shape="rect" id="node2" href="$classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself." alt="" coords="33,79,88,104"/>
+<area shape="rect" id="node3" href="$classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work." alt="" coords="37,5,84,31"/>
+</map>
