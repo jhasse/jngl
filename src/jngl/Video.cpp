@@ -1,4 +1,4 @@
-// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Video.hpp"
@@ -11,7 +11,6 @@
 
 #include "../audio/constants.hpp"
 #include "../audio/effect/pitch.hpp"
-#include "../Sound.hpp"
 #include "../audio.hpp"
 #include "../main.hpp"
 #include "../opengl.hpp"
@@ -19,7 +18,6 @@
 #include "Shader.hpp"
 #include "debug.hpp"
 #include "screen.hpp"
-#include "sound.hpp"
 #include "time.hpp"
 
 #include <algorithm>
@@ -272,6 +270,8 @@ public:
 	[[nodiscard]] int getWidth() const { return gsl::narrow<int>(video->width); }
 	[[nodiscard]] int getHeight() const { return gsl::narrow<int>(video->height); }
 
+	std::atomic_bool removeFromMixer{ false };
+
 private:
 	[[nodiscard]] bool started() const {
 		return startTime > 0;
@@ -300,6 +300,9 @@ private:
 	}
 
 	std::size_t read(float * data, std::size_t sample_count) override {
+		if (removeFromMixer) {
+			return 0;
+		}
 		std::scoped_lock lock(audioBufferMutex);
 		if (audioBuffer.size() < sample_count) {
 			if (!isPlaying()) {
@@ -323,7 +326,6 @@ private:
 
 	constexpr static unsigned int BUFFER_SIZE = 200;
 
-	std::unique_ptr<jngl::Sound> sound;
 	THEORAPLAY_Decoder* decoder;
 	const THEORAPLAY_VideoFrame* video = nullptr;
 	const THEORAPLAY_AudioPacket* audio = nullptr;
@@ -347,7 +349,9 @@ Video::Video(const std::string& filename) : impl(std::make_shared<Impl>(filename
 	}
 }
 
-Video::~Video() = default;
+Video::~Video() {
+	impl->removeFromMixer = true;
+}
 
 void Video::draw() const {
 	impl->draw();
