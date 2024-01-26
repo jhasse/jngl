@@ -9,6 +9,7 @@
 #include "../audio/effect/volume.hpp"
 #include "../audio/engine.hpp"
 #include "../audio/mixer.hpp"
+#include "../jngl/Singleton.hpp"
 #include "../main.hpp"
 #include "debug.hpp"
 
@@ -27,7 +28,7 @@ namespace jngl {
 
 std::unordered_map<std::string, std::shared_ptr<SoundFile>> sounds;
 
-class Audio {
+class Audio : public jngl::Singleton<Audio> {
 public:
 	Audio()
 	: mixer(std::make_shared<Mixer>()), pitchControl(audio::pitch(mixer)),
@@ -235,8 +236,7 @@ void resumeAudioDevice() {
 }
 
 Audio& GetAudio() {
-	static Audio audio;
-	return audio;
+	return Audio::handle();
 }
 
 std::shared_ptr<Mixer> getMixer() {
