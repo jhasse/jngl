@@ -367,6 +367,9 @@ void Window::stepIfNeeded() {
 			).count()
 		) / 1000.;
 #endif
+		if (keyPressed(key::Escape)) {
+			currentWork_->onBackEvent();
+		}
 		if (!jngl::running() && currentWork_) {
 			currentWork_->onQuitEvent();
 		}
