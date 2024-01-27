@@ -806,4 +806,9 @@ ShaderProgram::Context useSimpleShaderProgram(const Mat3& modelview) {
 	return context;
 }
 
+int round(double v) {
+	assert(!std::isnan(v));
+	return static_cast<int>(std::lround(v));
+}
+
 } // namespace jngl

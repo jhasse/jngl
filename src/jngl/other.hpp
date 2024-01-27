@@ -124,4 +124,7 @@ std::string getPreferredLanguage();
 /// Opens a link (e.g. https://bixense.com) in the browser
 void openURL(const std::string&);
 
+/// Rounds a double to an integer, just like std::lround
+int round(double v);
+
 } // namespace jngl
