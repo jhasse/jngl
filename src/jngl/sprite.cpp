@@ -271,7 +271,7 @@ void Sprite::setBytes(const unsigned char* const bytes) {
 }
 
 const Shader& Sprite::vertexShader() {
-	return Texture::vertexShader();
+	return *Texture::textureVertexShader;
 }
 
 #ifndef NOPNG

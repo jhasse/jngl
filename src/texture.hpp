@@ -35,8 +35,6 @@ public:
 	static void unloadShader();
 	void setBytes(const unsigned char*, int width, int height) const;
 
-	static const Shader& vertexShader();
-
 	static ShaderProgram* textureShaderProgram;
 	static Shader* textureVertexShader;
 	static int shaderSpriteColorUniform;
