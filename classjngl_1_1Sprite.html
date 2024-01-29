@@ -137,8 +137,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawClipped</b> (<a c
 <tr class="separator:a0702d08a03df924e22a53b22228c8ad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89c331aee86657889c1f1d8233c6051f"><td class="memItemLeft" align="right" valign="top"><a id="a89c331aee86657889c1f1d8233c6051f" name="a89c331aee86657889c1f1d8233c6051f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawMesh</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
-<tr class="memdesc:a89c331aee86657889c1f1d8233c6051f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the sprite's texture on it. <br /></td></tr>
+<tr class="memdesc:a89c331aee86657889c1f1d8233c6051f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the sprite's texture on it using the global modelview from <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c" title="Returns a copy of the global ModelView matrix.">jngl::modelview()</a> <br /></td></tr>
 <tr class="separator:a89c331aee86657889c1f1d8233c6051f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16eec847da023ffb64358c9ad0a9fce2"><td class="memItemLeft" align="right" valign="top"><a id="a16eec847da023ffb64358c9ad0a9fce2" name="a16eec847da023ffb64358c9ad0a9fce2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>drawMesh</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
+<tr class="memdesc:a16eec847da023ffb64358c9ad0a9fce2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the sprite's texture on it, ignores the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a>'s position. <br /></td></tr>
+<tr class="separator:a16eec847da023ffb64358c9ad0a9fce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac417e162aaacd2e4f918c12966052cd0"><td class="memItemLeft" align="right" valign="top"><a id="ac417e162aaacd2e4f918c12966052cd0" name="ac417e162aaacd2e4f918c12966052cd0"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setBytes</b> (const unsigned char *)</td></tr>
 <tr class="separator:ac417e162aaacd2e4f918c12966052cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -541,7 +545,7 @@ Collaboration diagram for Sprite:</div>
 
 <p>Function which actually loads the sprite. </p>
 
-<p class="definition">Definition at line <a class="el" href="sprite_8hpp_source.html#l00134">134</a> of file <a class="el" href="sprite_8hpp_source.html">sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sprite_8hpp_source.html#l00139">139</a> of file <a class="el" href="sprite_8hpp_source.html">sprite.hpp</a>.</p>
 
 </div>
 </div>
