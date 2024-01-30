@@ -142,7 +142,7 @@ void mainLoop(AppParameters params) {
 	                      : static_cast<int>(std::lround(params.screenSize->y * getScaleFactor())),
 	           fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
 	           params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
-	if (fullscreen) {
+	if (fullscreen && params.screenSize->x > 0 && params.screenSize->y > 0) {
 		const auto windowSize = jngl::getWindowSize();
 		setScaleFactor(std::min(static_cast<double>(windowSize[0]) / params.screenSize->x,
 		                        static_cast<double>(windowSize[1]) / params.screenSize->y));
