@@ -125,15 +125,7 @@ void mainLoop(AppParameters params) {
 			                  static_cast<double>(getDesktopHeight()) };
 		fullscreen = true;
 	}
-	if (fullscreen) {
-		const Vec2 desktopSize{ static_cast<double>(getDesktopWidth()),
-			                    static_cast<double>(getDesktopHeight()) };
-		if (desktopSize.x > 0 &&
-		    desktopSize.y > 0) { // desktop size isn't available on some platforms (e.g. Android)
-			setScaleFactor(std::min(desktopSize.x / params.screenSize->x,
-			                        desktopSize.y / params.screenSize->y));
-		}
-	} else {
+	if (!fullscreen) {
 		// Make window as big as possible
 		const double scaleFactor = std::min((getDesktopWidth() * 0.925) / params.screenSize->x,
 		                                    (getDesktopHeight() * 0.925) / params.screenSize->y);
@@ -150,6 +142,11 @@ void mainLoop(AppParameters params) {
 	                      : static_cast<int>(std::lround(params.screenSize->y * getScaleFactor())),
 	           fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
 	           params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
+	if (fullscreen) {
+		const auto windowSize = jngl::getWindowSize();
+		setScaleFactor(std::min(static_cast<double>(windowSize[0]) / params.screenSize->x,
+		                        static_cast<double>(windowSize[1]) / params.screenSize->y));
+	}
 	setWork(params.start());
 	App::instance().mainLoop();
 }
