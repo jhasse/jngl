@@ -33,7 +33,7 @@ android {
         }
     }
     compileSdkVersion 31
-    ndkVersion '26.0.10792818'
+    ndkVersion '26.1.10909125'
     namespace 'com.bixense.jngl_test'
 }
 
