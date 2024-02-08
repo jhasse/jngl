@@ -97,6 +97,7 @@ public:
 	void draw() const;
 	std::shared_ptr<Work> getWork();
 	void addJob(std::shared_ptr<Job>);
+	void removeJob(Job*);
 	std::shared_ptr<Job> getJob(const std::function<bool(Job&)>& predicate) const;
 	void resetFrameLimiter();
 	unsigned int getStepsPerSecond() const;
@@ -164,6 +165,7 @@ private:
 	bool changeWork = false;
 	std::shared_ptr<Work> newWork_;
 	std::vector<std::shared_ptr<Job>> jobs;
+	std::vector<Job*> jobsToRemove;
 	unsigned int stepsPerFrame;
 	double sleepPerFrame = 0; // in seconds
 	double sleepCorrectionFactor;

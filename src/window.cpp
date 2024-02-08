@@ -354,11 +354,19 @@ void Window::stepIfNeeded() {
 #ifdef JNGL_PERFORMANCE_OVERLAY
 		auto start = std::chrono::steady_clock::now();
 #endif
-		if (currentWork_) {
-			currentWork_->step();
-		}
 		for (auto& job : jobs) {
 			job->step();
+		}
+		for (auto job : jobsToRemove) {
+			const auto it = std::find_if(jobs.begin(), jobs.end(),
+			                             [job](const auto& p) { return p.get() == job; });
+			if (it != jobs.end()) {
+				jobs.erase(it);
+			}
+		}
+		jobsToRemove.clear();
+		if (currentWork_) {
+			currentWork_->step();
 		}
 #ifdef JNGL_PERFORMANCE_OVERLAY
 		lastStepDuration = static_cast<double>(
@@ -445,6 +453,10 @@ void Window::setWork(std::shared_ptr<Work> work) {
 
 void Window::addJob(std::shared_ptr<Job> job) {
 	jobs.emplace_back(std::move(job));
+}
+
+void Window::removeJob(Job* job) {
+	jobsToRemove.emplace_back(job);
 }
 
 std::shared_ptr<Job> Window::getJob(const std::function<bool(Job&)>& predicate) const {
