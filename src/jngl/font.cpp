@@ -1,4 +1,4 @@
-// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "font.hpp"
@@ -56,6 +56,10 @@ void Font::print(const std::string& text, const Vec2 position) const {
 
 void Font::print(const Mat3& modelview, const std::string& text) const {
 	impl->print(modelview, text);
+}
+
+double Font::getTextWidth(std::string_view text) {
+	return static_cast<double>(static_cast<ScaleablePixels>(impl->getTextWidth(std::string(text))));
 }
 
 std::shared_ptr<FontImpl> Font::getImpl() {

@@ -1,4 +1,4 @@
-// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Font class and related functions
 /// @file
@@ -29,6 +29,10 @@ public:
 
 	/// Draw \a text using \a modelview
 	void print(const Mat3& modelview, const std::string& text) const;
+
+	/// Calculates the width of \a text in scale-independent pixels if it would be drawn with this
+	/// font
+	double getTextWidth(std::string_view);
 
 	/// Internal function
 	std::shared_ptr<FontImpl> getImpl();
@@ -93,7 +97,8 @@ double getLineHeight();
 /// Set line height used by print() in scale-independent pixel
 void setLineHeight(double);
 
-/// Calculates the width of \a text in pixels if it would be drawn with the currently active font
+/// Calculates the width of \a text in scale-independent pixels if it would be drawn with the
+/// currently active font
 double getTextWidth(const std::string& text);
 
 } // namespace jngl
