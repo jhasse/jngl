@@ -108,7 +108,11 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:aa59fdcedf6c847f97502dc5df4ad0498"><td class="memItemLeft" align="right" valign="top">static T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Singleton.html#aa59fdcedf6c847f97502dc5df4ad0498">handle</a> ()</td></tr>
+<tr class="memdesc:aa59fdcedf6c847f97502dc5df4ad0498"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the <a class="el" href="classjngl_1_1Singleton.html" title="Inherit from this class to create a singleton that will be destroyed when your games exits.">Singleton</a> if needed.  <a href="classjngl_1_1Singleton.html#aa59fdcedf6c847f97502dc5df4ad0498">More...</a><br /></td></tr>
 <tr class="separator:aa59fdcedf6c847f97502dc5df4ad0498"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ad7e1fdecf77e218aea71a19d225f97"><td class="memItemLeft" align="right" valign="top">static T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Singleton.html#a5ad7e1fdecf77e218aea71a19d225f97">handleIfAlive</a> () noexcept</td></tr>
+<tr class="memdesc:a5ad7e1fdecf77e218aea71a19d225f97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Doesn't create the <a class="el" href="classjngl_1_1Singleton.html" title="Inherit from this class to create a singleton that will be destroyed when your games exits.">Singleton</a>, may return nullptr.  <a href="classjngl_1_1Singleton.html#a5ad7e1fdecf77e218aea71a19d225f97">More...</a><br /></td></tr>
+<tr class="separator:a5ad7e1fdecf77e218aea71a19d225f97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;class T&gt;<br />
@@ -147,7 +151,38 @@ class jngl::Singleton&lt; T &gt;</div><p >Inherit from this class to create a si
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Singleton_8hpp_source.html#l00031">31</a> of file <a class="el" href="Singleton_8hpp_source.html">Singleton.hpp</a>.</p>
+<p>Creates the <a class="el" href="classjngl_1_1Singleton.html" title="Inherit from this class to create a singleton that will be destroyed when your games exits.">Singleton</a> if needed. </p>
+
+<p class="definition">Definition at line <a class="el" href="Singleton_8hpp_source.html#l00032">32</a> of file <a class="el" href="Singleton_8hpp_source.html">Singleton.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a5ad7e1fdecf77e218aea71a19d225f97" name="a5ad7e1fdecf77e218aea71a19d225f97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ad7e1fdecf77e218aea71a19d225f97">&#9670;&#160;</a></span>handleIfAlive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static T * handleIfAlive </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Doesn't create the <a class="el" href="classjngl_1_1Singleton.html" title="Inherit from this class to create a singleton that will be destroyed when your games exits.">Singleton</a>, may return nullptr. </p>
+
+<p class="definition">Definition at line <a class="el" href="Singleton_8hpp_source.html#l00044">44</a> of file <a class="el" href="Singleton_8hpp_source.html">Singleton.hpp</a>.</p>
 
 </div>
 </div>
