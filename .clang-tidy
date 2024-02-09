@@ -28,6 +28,7 @@ Checks: '
        ,-fuchsia-multiple-inheritance,
        ,-fuchsia-overloaded-operator,
        ,-fuchsia-statically-constructed-objects,
+       ,-fuchsia-trailing-return,
        ,-google-global-names-in-headers,
        ,-google-readability-todo,
        ,-google-runtime-int,
