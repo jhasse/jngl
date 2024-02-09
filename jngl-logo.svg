@@ -83,6 +83,12 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(-17.545431,-86.501562)">
+    <circle
+       style="fill:#ffffff;fill-opacity:0.7;stroke-width:0.264583"
+       id="path1"
+       cx="40.66"
+       cy="109.6"
+       r="22.04" />
     <path
        inkscape:connector-curvature="0"
        style="vector-effect:none;fill:url(#linearGradient1070);fill-opacity:1;stroke:none;stroke-width:0.481;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
