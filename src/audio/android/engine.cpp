@@ -63,7 +63,9 @@ engine::Impl::Impl(std::shared_ptr<Stream> output)
 engine::engine(std::shared_ptr<Stream> output) : impl(std::make_unique<Impl>(std::move(output))) {
 }
 
-engine::~engine() = default;
+engine::~engine() {
+	impl->oboeStream->close();
+}
 
 void engine::setPause(bool pause) {
 	if (pause) {

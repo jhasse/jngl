@@ -228,7 +228,9 @@ void setVolume(float volume) {
 }
 
 void pauseAudioDevice() {
-	GetAudio().pauseDevice();
+	if (auto audio = Audio::handleIfAlive()) {
+		audio->pauseDevice();
+	}
 }
 
 void resumeAudioDevice() {
