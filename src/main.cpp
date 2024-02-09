@@ -48,8 +48,6 @@ std::unique_ptr<ShaderProgram> simpleShaderProgram;
 int simpleModelviewUniform;
 int simpleColorUniform;
 
-static std::vector<std::function<void()>> callAtExit;
-
 void clearBackgroundColor() {
 	glClearColor(bgRed, bgGreen, bgBlue, 1);
 }
@@ -261,17 +259,16 @@ void showWindow(const std::string& title, const int width, const int height, boo
 }
 
 void hideWindow() {
-	for (const auto& f : callAtExit) {
-		f();
+	if (pWindow) {
+		App::instance().callAtExitFunctions();
 	}
-	callAtExit.clear();
 	simpleShaderProgram.reset();
 	unloadAll();
 	pWindow.Delete();
 }
 
 void atExit(std::function<void()> f) {
-	callAtExit.emplace_back(std::move(f));
+	App::instance().atExit(std::move(f));
 }
 
 void swapBuffers() {

@@ -1,4 +1,4 @@
-// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "App.hpp"
@@ -55,6 +55,17 @@ void App::init(AppParameters params) {
 	assert(impl == nullptr);
 	impl = std::make_unique<App::Impl>(
 	    App::Impl{ std::move(params.displayName), params.pixelArt, params.steamAppId });
+}
+
+void App::atExit(std::function<void()> f) {
+	callAtExit.emplace_back(std::move(f));
+}
+
+void App::callAtExitFunctions() {
+	for (const auto& f : callAtExit) {
+		f();
+	}
+	callAtExit.clear();
 }
 
 std::string App::getDisplayName() const {

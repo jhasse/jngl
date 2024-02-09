@@ -1,4 +1,4 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 /// Functions related to the main window.
@@ -27,7 +27,8 @@ void hideWindow();
 
 /// Call this function once when the window is hidden
 ///
-/// The function shouldn't throw and will be called at the next hideWindow() call.
+/// The function will be called at the next hideWindow() call, if there is a currently active
+/// window.
 ///
 /// Use this function for any cleanup tasks when you game exits. Note that on Android, the process
 /// doesn't exit necessarely and the main function can be reentered - so C functions like atexit
