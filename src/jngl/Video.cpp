@@ -9,9 +9,9 @@
 
 #ifdef JNGL_VIDEO
 
+#include "../audio.hpp"
 #include "../audio/constants.hpp"
 #include "../audio/effect/pitch.hpp"
-#include "../audio.hpp"
 #include "../main.hpp"
 #include "../opengl.hpp"
 #include "../theoraplay/theoraplay.h"
@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <deque>
 #include <gsl/narrow>
 
 namespace jngl {
@@ -285,14 +284,14 @@ private:
 		{
 			std::scoped_lock lock(audioBufferMutex);
 			if (audio->channels == 1) {
-				for (size_t i = 0; i < audio->frames; ++i) {
+				for (int i = 0; i < audio->frames; ++i) {
 					audioBuffer.push_back(audio->samples[i]);
 					audioBuffer.push_back(audio->samples[i]);
 				}
 			} else {
 				assert(audio->channels == 2);
 				audioBuffer.insert(audioBuffer.end(), audio->samples,
-				                   audio->samples + audio->frames * 2);
+				                   audio->samples + static_cast<ptrdiff_t>(audio->frames * 2));
 			}
 		}
 		THEORAPLAY_freeAudio(audio);
@@ -315,7 +314,7 @@ private:
 			return sample_count;
 		}
 		const auto begin = audioBuffer.begin();
-		const auto end = begin + sample_count;
+		const auto end = begin + static_cast<long>(sample_count);
 		std::copy(begin, end, data);
 		audioBuffer.erase(begin, end);
 		return sample_count;
@@ -343,7 +342,8 @@ private:
 
 Video::Video(const std::string& filename) : impl(std::make_shared<Impl>(filename)) {
 	if (impl->getFrequency() != audio::frequency) {
-		getMixer()->add(audio::pitch(impl, float(impl->getFrequency()) / audio::frequency));
+		getMixer()->add(
+		    audio::pitch(impl, static_cast<float>(impl->getFrequency()) / audio::frequency));
 	} else {
 		getMixer()->add(impl);
 	}
