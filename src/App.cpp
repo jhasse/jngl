@@ -51,10 +51,11 @@ App& App::instance() {
 	return *self;
 }
 
-void App::init(AppParameters params) {
+Finally App::init(AppParameters params) {
 	assert(impl == nullptr);
 	impl = std::make_unique<App::Impl>(
 	    App::Impl{ std::move(params.displayName), params.pixelArt, params.steamAppId });
+	return Finally{ [this]() { impl.reset(); } };
 }
 
 void App::atExit(std::function<void()> f) {
@@ -117,7 +118,7 @@ void App::updateProjectionMatrix() const {
 namespace internal {
 
 void mainLoop(AppParameters params) {
-	App::instance().init(params);
+	auto context = App::instance().init(params);
 	if (auto id = params.steamAppId) {
 		jngl::initSteam(*id);
 	}
@@ -160,6 +161,7 @@ void mainLoop(AppParameters params) {
 	}
 	setWork(params.start());
 	App::instance().mainLoop();
+	hideWindow();
 }
 
 } // namespace internal

@@ -4,6 +4,8 @@
 /// @file
 #pragma once
 
+#include "jngl/Finally.hpp"
+
 #include <functional>
 #include <memory>
 #include <string>
@@ -45,8 +47,8 @@ public:
 	/// Internal function used by JNGL when the Window is resized
 	void updateProjectionMatrix() const;
 
-	/// Do not call this function yourself, it gets called by JNGL_MAIN_BEGIN
-	void init(AppParameters);
+	/// Initializes Impl, the returned Finally will destroy it again
+	[[nodiscard]] Finally init(AppParameters);
 
 	// TODO for C++23: Change to std::move_only_function<void() noexcept>
 	void atExit(std::function<void()>);

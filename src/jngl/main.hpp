@@ -29,8 +29,7 @@
 			extern android_app* androidApp;
 		}
 		#define JNGL_MAIN_BEGIN void android_main(android_app* __androidApp) { \
-			jngl::androidApp = __androidApp; \
-			jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
+			jngl::androidApp = __androidApp;
 		#define JNGL_MAIN_END }
 	#elif defined(__APPLE__) && TARGET_OS_IPHONE // iOS
 		#define JNGL_MAIN_BEGIN void shouldNotBeCalled() {
