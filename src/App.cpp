@@ -97,7 +97,7 @@ void App::setPixelArt(const bool pixelArt) {
 
 void App::registerShaderProgram(ShaderProgram* shaderProgram) {
 	if (!impl) { // unit tests
-		init({});
+		new Finally(init({})); // leak
 	}
 	impl->shaderPrograms.insert(shaderProgram);
 }
