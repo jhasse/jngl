@@ -10,8 +10,12 @@ jobs:
       run: cmake -Bbuild -G"Ninja Multi-Config" -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl
     - name: Build (Debug)
       run: cmake --build build --config Debug
+    - name: Unittest (Debug)
+      run: build/Debug/jngl-unittest
     - name: Build (Release)
       run: cmake --build build --config Release
+    - name: Unittest (Release)
+      run: build/Release/jngl-unittest
 
   msvc:
     runs-on: windows-2022
@@ -21,8 +25,12 @@ jobs:
       run: cmake -Bbuild
     - name: Build (Debug)
       run: cmake --build build --config Debug
+    - name: Unittest (Debug)
+      run: build/Debug/jngl-unittest
     - name: Build (Release)
       run: cmake --build build --config Release
+    - name: Unittest (Release)
+      run: build/Release/jngl-unittest
     - name: Configure (UWP)
       run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore '-DCMAKE_SYSTEM_VERSION=10.0'
     - name: Build (UWP, Debug)
