@@ -1,6 +1,18 @@
 name: Windows
 on: [push]
 jobs:
+  clang-cl:
+    runs-on: windows-2022
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ilammy/msvc-dev-cmd@v1
+    - name: Configure
+      run: cmake -Bbuild -G"Ninja Multi-Config" -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl
+    - name: Build (Debug)
+      run: cmake --build build --config Debug
+    - name: Build (Release)
+      run: cmake --build build --config Release
+
   msvc:
     runs-on: windows-2022
     steps:
