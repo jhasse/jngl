@@ -11,11 +11,25 @@ jobs:
     - name: Build (Debug)
       run: cmake --build build --config Debug
     - name: Unittest (Debug)
-      run: build/Debug/jngl-unittest
+      run: |
+        build/Debug/jngl-unittest Drawable
+        build/Debug/jngl-unittest ImageData
+        build/Debug/jngl-unittest Sound
+        build/Debug/jngl-unittest FinallyTest
+        build/Debug/jngl-unittest halfLoadTest
+        build/Debug/jngl-unittest getBinaryPath
+        build/Debug/jngl-unittest readAsset
     - name: Build (Release)
       run: cmake --build build --config Release
     - name: Unittest (Release)
-      run: build/Release/jngl-unittest
+      run: |
+        build/Release/jngl-unittest Drawable
+        build/Release/jngl-unittest ImageData
+        build/Release/jngl-unittest Sound
+        build/Release/jngl-unittest FinallyTest
+        build/Release/jngl-unittest halfLoadTest
+        build/Release/jngl-unittest getBinaryPath
+        build/Release/jngl-unittest readAsset
 
   msvc:
     runs-on: windows-2022
@@ -26,11 +40,25 @@ jobs:
     - name: Build (Debug)
       run: cmake --build build --config Debug
     - name: Unittest (Debug)
-      run: build/Debug/jngl-unittest
+      run: |
+        build/Debug/jngl-unittest Drawable
+        build/Debug/jngl-unittest ImageData
+        build/Debug/jngl-unittest Sound
+        build/Debug/jngl-unittest FinallyTest
+        build/Debug/jngl-unittest halfLoadTest
+        build/Debug/jngl-unittest getBinaryPath
+        build/Debug/jngl-unittest readAsset
     - name: Build (Release)
       run: cmake --build build --config Release
     - name: Unittest (Release)
-      run: build/Release/jngl-unittest
+      run: |
+        build/Release/jngl-unittest Drawable
+        build/Release/jngl-unittest ImageData
+        build/Release/jngl-unittest Sound
+        build/Release/jngl-unittest FinallyTest
+        build/Release/jngl-unittest halfLoadTest
+        build/Release/jngl-unittest getBinaryPath
+        build/Release/jngl-unittest readAsset
     - name: Configure (UWP)
       run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore '-DCMAKE_SYSTEM_VERSION=10.0'
     - name: Build (UWP, Debug)
