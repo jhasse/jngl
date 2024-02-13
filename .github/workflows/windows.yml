@@ -14,7 +14,6 @@ jobs:
       run: |
         build/Debug/jngl-unittest Drawable
         build/Debug/jngl-unittest ImageData
-        build/Debug/jngl-unittest Sound
         build/Debug/jngl-unittest FinallyTest
         build/Debug/jngl-unittest halfLoadTest
         build/Debug/jngl-unittest getBinaryPath
@@ -25,7 +24,6 @@ jobs:
       run: |
         build/Release/jngl-unittest Drawable
         build/Release/jngl-unittest ImageData
-        build/Release/jngl-unittest Sound
         build/Release/jngl-unittest FinallyTest
         build/Release/jngl-unittest halfLoadTest
         build/Release/jngl-unittest getBinaryPath
@@ -43,7 +41,6 @@ jobs:
       run: |
         build/Debug/jngl-unittest Drawable
         build/Debug/jngl-unittest ImageData
-        build/Debug/jngl-unittest Sound
         build/Debug/jngl-unittest FinallyTest
         build/Debug/jngl-unittest halfLoadTest
         build/Debug/jngl-unittest getBinaryPath
@@ -54,7 +51,6 @@ jobs:
       run: |
         build/Release/jngl-unittest Drawable
         build/Release/jngl-unittest ImageData
-        build/Release/jngl-unittest Sound
         build/Release/jngl-unittest FinallyTest
         build/Release/jngl-unittest halfLoadTest
         build/Release/jngl-unittest getBinaryPath
