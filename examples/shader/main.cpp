@@ -28,10 +28,10 @@ public:
 		jngl::translate(-700, 0);
 		sprite.drawMesh({ { 0, 0, 0, 0 },
 		                  { 300, 0, 3, 0 },
-		                  { 300, 300, 3, 2.4 },
+		                  { 300, 300, 3, 2.4f },
 		                  { 0, 0, 0, 0 },
-		                  { 300, 300, 3, 2.4 },
-		                  { 0, 300, 0, 2.4 } },
+		                  { 300, 300, 3, 2.4f },
+		                  { 0, 300, 0, 2.4f } },
 		                texturedProgram.get());
 		jngl::popMatrix();
 	}
@@ -45,9 +45,9 @@ private:
 };
 
 jngl::AppParameters jnglInit() {
-	return {
-		[]() { return std::make_shared<ShaderExample>(); },
-		"Shader Example",
-		jngl::Vec2(1280, 720),
-	};
+	jngl::AppParameters params;
+	params.start = []() { return std::make_shared<ShaderExample>(); };
+	params.displayName = "Shader Example";
+	params.screenSize = { 1280, 720 };
+	return params;
 }

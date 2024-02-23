@@ -1,89 +1,58 @@
-// Copyright 2019-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Sound.hpp"
 
 #include "audio.hpp"
-#include "SoundParams.hpp"
+#include "audio/constants.hpp"
+#include "audio/effect/loop.hpp"
+#include "audio/effect/pitch.hpp"
+#include "audio/effect/volume.hpp"
+#include "audio/Track.hpp"
 #include "jngl/debug.hpp"
 
-#ifdef __APPLE__
-// OpenAL is deprecated in favor of AVAudioEngine
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-#endif
+#include <cassert>
 
 namespace jngl {
 
 struct Sound::Impl {
-	ALuint buffer = 0;
-	ALuint source = 0;
+	std::shared_ptr<Track> track;
+	std::shared_ptr<Stream> stream;
+	std::shared_ptr<audio::volume_control> volumeControl;
 };
 
-float Sound::masterVolume = 1.0f;
-
-Sound::Sound(const SoundParams& params, std::vector<char>& bufferData)
-: impl(std::make_unique<Impl>()) {
-	alGenBuffers(1, &impl->buffer);
-	checkAlError();
-	alGenSources(1, &impl->source);
-	checkAlError();
-	alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
-	checkAlError();
-	alSource3f(impl->source, AL_POSITION, 0.0f, 0.0f, 0.0f);
-	checkAlError();
-	alBufferData(impl->buffer, params.format, &bufferData[0],
-	             static_cast<ALsizei>(bufferData.size()), params.freq);
-	checkAlError();
-	alSourcei(impl->source, AL_BUFFER, impl->buffer);
-	checkAlError();
-	alSourcePlay(impl->source);
-	checkAlError();
-	setVolume(masterVolume);
+Sound::Sound(std::vector<float>& bufferData, long frequency)
+: impl(new Impl{ load_raw(bufferData) }) {
+	auto stream = impl->track->stream();
+	if (frequency != jngl::audio::frequency) {
+		stream =
+		    audio::pitch(std::move(stream), static_cast<float>(frequency) / jngl::audio::frequency);
+	}
+	impl->stream = impl->volumeControl = audio::volume(std::move(stream));
 }
 
 Sound::~Sound() {
-	alSourceStop(impl->source);
-	checkAlError();
-	ALint processedBuffers = 0;
-	alGetSourcei(impl->source, AL_BUFFERS_PROCESSED, &processedBuffers);
-	checkAlError();
-	if (processedBuffers == 1) {
-		alSourceUnqueueBuffers(impl->source, processedBuffers, &impl->buffer);
-		checkAlError();
-	}
-	alDeleteSources(1, &impl->source);
-	checkAlError();
-	alDeleteBuffers(1, &impl->buffer);
-	checkAlError();
 }
 
 bool Sound::isPlaying() const {
-	ALint state;
-	alGetSourcei(impl->source, AL_SOURCE_STATE, &state);
-	checkAlError();
-	return state == AL_PLAYING;
+	return impl->stream->isPlaying();
+}
+
+bool Sound::isLooping() const {
+	return impl->stream != impl->volumeControl;
 }
 
 void Sound::loop() {
-	alSourcei(impl->source, AL_LOOPING, AL_TRUE);
-	checkAlError();
-}
-
-bool Sound::isStopped() const {
-	ALint state;
-	alGetSourcei(impl->source, AL_SOURCE_STATE, &state);
-	checkAlError();
-	return state == AL_STOPPED;
-}
-
-void Sound::SetPitch(float p) {
-	alSourcef(impl->source, AL_PITCH, p);
-	checkAlError();
+	assert(!isLooping());
+	impl->stream = audio::loop(impl->volumeControl);
 }
 
 void Sound::setVolume(float v) {
-	alSourcef(impl->source, AL_GAIN, v);
-	checkAlError();
+	impl->volumeControl->gain(v);
+}
+
+std::shared_ptr<Stream> Sound::getStream() {
+	return impl->stream;
 }
 
 } // namespace jngl

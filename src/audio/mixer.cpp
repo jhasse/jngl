@@ -1,0 +1,113 @@
+// Copyright 2023 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
+// Based on the audio implementation of the psemek engine, see
+// https://lisyarus.github.io/blog/programming/2022/10/15/audio-mixing.html
+#include "mixer.hpp"
+
+#include <atomic_queue/atomic_queue.h>
+
+#include <algorithm>
+#include <atomic>
+#include <memory>
+#include <mutex>
+#include <vector>
+
+namespace jngl {
+
+struct Mixer::Impl {
+	atomic_queue::AtomicQueue<Stream*, 10> streamsToRemoveOnMainThread;
+	atomic_queue::AtomicQueue<Stream*, 10> newStreams;
+	atomic_queue::AtomicQueue<Stream*, 10> streamsToStop;
+};
+
+Mixer::Mixer() : impl(std::make_unique<Impl>()) {
+}
+Mixer::~Mixer() = default;
+
+void Mixer::gc() {
+	Stream* tmp;
+	while (impl->streamsToRemoveOnMainThread.try_pop(tmp)) {
+		auto it = std::find_if(streamsOnMainThread.begin(), streamsOnMainThread.end(),
+		                       [tmp](const auto& stream) { return stream.get() == tmp; });
+		assert(it != streamsOnMainThread.end());
+		streamsOnMainThread.erase(it);
+	}
+}
+
+void Mixer::remove(Stream* stream) {
+	gc();
+	impl->streamsToStop.push(stream);
+}
+
+void Mixer::rewind() {
+	assert(false);
+}
+
+bool Mixer::isPlaying() const {
+	for (const auto& stream : streamsOnMainThread) {
+		if (stream->isPlaying()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void Mixer::add(std::shared_ptr<Stream> stream) {
+	gc();
+	impl->newStreams.push(stream.get());
+	streamsOnMainThread.emplace_back(std::move(stream));
+}
+
+size_t Mixer::read(float* data, size_t sample_count) {
+	if (sample_count > BUFFER_SIZE) {
+		size_t first = read(data, BUFFER_SIZE);
+		return first + read(data + BUFFER_SIZE, sample_count - BUFFER_SIZE);
+	}
+
+	Stream* tmp;
+	while (numberOfActiveStreams < MAX_ACTIVE_STREAMS && impl->newStreams.try_pop(tmp)) {
+		activeStreams[numberOfActiveStreams++] = tmp;
+	}
+	while (impl->streamsToStop.try_pop(tmp)) {
+		auto it = std::find(activeStreams, activeStreams + numberOfActiveStreams, tmp);
+		if (it != activeStreams + numberOfActiveStreams) {
+			*it = activeStreams[--numberOfActiveStreams]; // move the last element to the one to be
+			                                              // erased
+			impl->streamsToRemoveOnMainThread.push(tmp);
+		}
+	}
+
+	std::fill(data, data + sample_count, 0.f);
+
+	for (auto it = activeStreams; it != activeStreams + numberOfActiveStreams;) {
+		auto& stream = *it;
+		if (!stream) {
+			continue;
+		}
+
+		auto read = stream->read(buffer, sample_count);
+
+		{
+			auto begin = buffer;
+			auto end = begin + read;
+			auto dst = data;
+			for (; begin < end;) {
+				*dst++ += *begin++;
+			}
+		}
+
+		if (read < sample_count) {
+			impl->streamsToRemoveOnMainThread.push(*it);
+			*it = activeStreams[--numberOfActiveStreams]; // move the last element to the one to be
+			                                              // erased
+		} else {
+			++it;
+		}
+	}
+
+	played_.fetch_add(sample_count);
+
+	return sample_count;
+}
+
+} // namespace jngl

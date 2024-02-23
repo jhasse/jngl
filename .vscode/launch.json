@@ -2,29 +2,10 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"type": "gdb",
-			"request": "launch",
-			"name": "jngl-test (GDB)",
-			"target": "./build/jngl-test",
-			"cwd": "${workspaceRoot}",
-			"valuesFormatting": "prettyPrinters",
-			"preLaunchTask": "build"
-		},
-		{
-			"type": "gdb",
-			"request": "launch",
-			"name": "videoplayer (GDB)",
-			"target": "./build/videoplayer",
-			"arguments": "data/verysmall.ogv",
-			"cwd": "${workspaceRoot}",
-			"valuesFormatting": "prettyPrinters",
-			"preLaunchTask": "build"
-		},
-		{
 			"type": "lldb",
 			"request": "launch",
 			"name": "jngl-test (LLDB)",
-			"program": "${workspaceRoot}/build/jngl-test",
+			"program": "${workspaceRoot}/build/Debug/jngl-test",
 			"args": [],
 			"cwd": "${workspaceRoot}",
 			"preLaunchTask": "build"
@@ -33,7 +14,7 @@
 			"type": "lldb",
 			"request": "launch",
 			"name": "videoplayer",
-			"program": "${workspaceRoot}/build/videoplayer",
+			"program": "${workspaceRoot}/build/Debug/videoplayer",
 			"args": ["data/verysmall.ogv"],
 			"cwd": "${workspaceRoot}",
 			"preLaunchTask": "build"
@@ -42,7 +23,7 @@
 			"type": "lldb",
 			"request": "launch",
 			"name": "jngl-unittest (LLDB)",
-			"program": "${workspaceRoot}/build/jngl-unittest",
+			"program": "${workspaceRoot}/build/Debug/jngl-unittest",
 			"args": [],
 			"cwd": "${workspaceRoot}/build",
 			"preLaunchTask": "build"
@@ -51,12 +32,11 @@
 			"name": "jngl-test (C/C++)",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceRoot}/build/jngl-test",
+			"program": "${workspaceRoot}/build/Debug/jngl-test",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceRoot}",
 			"environment": [],
-			"externalConsole": true,
 			"setupCommands": [
 				{
 					"description": "Enable pretty-printing for gdb",
@@ -74,10 +54,10 @@
 			"preLaunchTask": "build"
 		},
 		{
-			"name": "unittest (C/C++)",
+			"name": "jngl-unittest (C/C++)",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceRoot}/build/unittest",
+			"program": "${workspaceRoot}/build/Debug/jngl-unittest",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceRoot}/build",

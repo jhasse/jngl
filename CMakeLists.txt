@@ -6,7 +6,7 @@ if(MSVC)
 	string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus")
 else()
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fdiagnostics-color")
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
@@ -15,12 +15,33 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-file(GLOB SRC src/*.cpp src/jngl/*.cpp)
+file(GLOB SRC src/*.cpp src/jngl/*.cpp
+	src/audio/*.cpp
+	src/audio/effect/*.cpp
+)
 add_library(jngl ${SRC})
 file(GLOB HEADERS src/*.hpp src/jngl/*.hpp)
 target_sources(jngl PRIVATE ${HEADERS})
 
 target_compile_features(jngl PUBLIC cxx_std_20)
+
+if(JNGL_STEAMWORKS)
+	message(STATUS "Using Steam SDK: ${JNGL_STEAMWORKS}")
+	target_include_directories(jngl PRIVATE ${JNGL_STEAMWORKS}/public/steam)
+	if(APPLE)
+		target_link_directories(jngl PUBLIC ${JNGL_STEAMWORKS}/redistributable_bin/osx)
+		target_link_libraries(jngl PRIVATE steam_api)
+	elseif(WIN32)
+		target_link_directories(jngl PUBLIC ${JNGL_STEAMWORKS}/redistributable_bin/win64)
+		target_link_libraries(jngl PRIVATE steam_api64)
+	else()
+		target_link_directories(jngl PUBLIC ${JNGL_STEAMWORKS}/redistributable_bin/linux64)
+		target_link_libraries(jngl PRIVATE steam_api)
+	endif()
+	target_sources(jngl PRIVATE src/steam/SteamAchievements.cpp)
+else()
+	target_sources(jngl PRIVATE src/steam/disabled/initSteam.cpp)
+endif()
 
 set_target_properties(jngl PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/src/
@@ -41,7 +62,7 @@ endif()
 target_include_directories(jngl PUBLIC include/public)
 
 option(JNGL_VIDEO "Enable Theora video playback" ON)
-option(JNGL_JPEG "Enable JPEG support if libjpeg is available" ON)
+option(JNGL_STEAMWORKS "Enable Steamsworks SDK support for achievements" OFF)
 
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
 if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
@@ -49,15 +70,13 @@ if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
 endif()
 option(JNGL_BUILD_WEBP_FROM_SOURCE "Build libwebp from source instead of using the system version" ${JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT})
 
-set(ALSOFT_TESTS OFF CACHE BOOL "Build and install test programs" FORCE)
-set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build and install example programs" FORCE)
-set(ALSOFT_UTILS OFF CACHE BOOL "Build and install utility programs" FORCE)
-
 if (ANDROID)
+	find_package(oboe REQUIRED CONFIG)
+	target_link_libraries(jngl PRIVATE oboe::oboe)
 	file(GLOB ANDROID_SOURCES src/android/*.cpp)
-	target_sources(jngl PRIVATE ${ANDROID_SOURCES})
+	target_sources(jngl PRIVATE ${ANDROID_SOURCES} src/audio/android/engine.cpp)
 elseif(IOS)
-	file(GLOB SRC src/ios/*.cpp src/ios/*.mm src/ios/*.h)
+	file(GLOB SRC src/ios/*.cpp src/ios/*.mm src/audio/ios/Engine.mm src/ios/*.h)
 	target_sources(jngl PRIVATE ${SRC} src/mac/message.cpp)
 elseif (UNIX)
 	file(GLOB SRC src/sdl/*.cpp src/sdl/controller/SdlController.cpp)
@@ -75,6 +94,7 @@ elseif (UNIX)
 	else()
 		file(GLOB SRC src/linux/*.cpp src/linux/*.c)
 		target_sources(jngl PRIVATE ${SRC})
+		target_link_libraries(jngl PRIVATE atomic)
     endif()
 
 	target_link_libraries(jngl PRIVATE $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>)
@@ -111,20 +131,18 @@ else() # Windows
 		                            src/win32/unicode.cpp)
 	else()
 		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp)
+		target_link_libraries(jngl PRIVATE opengl32)
 	endif()
 	target_sources(jngl PRIVATE ${SRC})
 	target_link_libraries(jngl PUBLIC winmm)
 	if(WINDOWS_STORE)
 		target_link_libraries(jngl PUBLIC libEGL libGLESv2)
+	else()
+		target_sources(jngl PRIVATE glad/src/wgl.c)
 	endif()
 	if(MSVC)
 		string(APPEND CMAKE_C_FLAGS " /D_CRT_SECURE_NO_WARNINGS")
 		string(APPEND CMAKE_CXX_FLAGS " /D_CRT_SECURE_NO_WARNINGS /D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING")
-		if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-			set(JNGL_ARCH "x86_64")
-		else()
-			set(JNGL_ARCH "x86")
-		endif()
 		target_link_libraries(jngl PUBLIC Xinput)
 	else()
 		target_link_libraries(jngl PUBLIC xinput1_4)
@@ -171,39 +189,19 @@ if(ANDROID OR MSVC OR IOS)
 	set(FREETYPE_LIBRARIES freetype)
 endif()
 if(ANDROID)
-	target_compile_definitions(jngl PRIVATE NOJPEG NOPNG OPENGLES)
-
-	CPMAddPackage(NAME openal
-		URL https://github.com/kcat/openal-soft/archive/refs/tags/1.21.1.zip
-		URL_HASH SHA1=1442363faf47a5a7cd6287513068ecd6c70e747e
-		OPTIONS
-			"LIBTYPE STATIC"
-			"ALSOFT_INSTALL_CONFIG OFF"
-			"ALSOFT_INSTALL_HRTF_DATA OFF"
-			"ALSOFT_INSTALL_AMBDEC_PRESETS OFF"
-			"ALSOFT_BACKEND_WAVE OFF"
-			"ALSOFT_CPUEXT_NEON OFF"
-	)
-	set(OPENAL_LIBRARY OpenAL)
+	target_compile_definitions(jngl PRIVATE NOPNG)
 
 	target_include_directories(jngl PUBLIC ${ANDROID_NDK}/sources/android/native_app_glue)
 	target_include_directories(jngl PRIVATE ${OGG_INCLUDE_DIRS} ${VORBIS_SRC_DIR}/include)
 else()
+	if(NOT IOS)
+		target_sources(jngl PRIVATE src/audio/sdl/engine.cpp)
+	endif()
 	if(UNIX AND NOT IOS AND NOT EMSCRIPTEN)
 		find_package(PkgConfig REQUIRED)
 		pkg_check_modules(SDL2 REQUIRED sdl2)
 		target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
 		target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
-	endif()
-
-	if(JNGL_JPEG)
-		find_package(JPEG)
-	endif()
-	if(JPEG_FOUND)
-		target_include_directories(jngl PUBLIC ${JPEG_INCLUDE_DIR})
-		target_link_libraries(jngl PRIVATE ${JPEG_LIBRARIES})
-	else()
-		target_compile_definitions(jngl PRIVATE NOJPEG)
 	endif()
 
 	if(NOT IOS AND NOT EMSCRIPTEN)
@@ -226,51 +224,51 @@ else()
 	if(MSVC)
 		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
 		if(JNGL_SDL2)
-			set(SDL_SENSOR OFF CACHE BOOL "" FORCE) # doesn't work with UWP
-			FetchContent_Declare(sdl2
-				URL https://www.libsdl.org/release/SDL2-2.0.16.zip
-				URL_HASH SHA1=4d09aad9b76b5d51366bebeded8bec46dcf67ef6
+			CPMAddPackage(NAME sdl2
+				URL https://www.libsdl.org/release/SDL2-2.28.4.zip
+				URL_HASH SHA1=0d9e0da0e935c4f0524cfd16d47d38b6045b9573
+				OPTIONS
+					"SDL_SENSOR OFF" # doesn't work with UWP
 			)
-			FetchContent_MakeAvailable(sdl2)
-			target_link_libraries(jngl PRIVATE SDL2-static)
+		else()
+			CPMAddPackage(NAME sdl2
+				URL https://www.libsdl.org/release/SDL2-2.28.4.zip
+				URL_HASH SHA1=0d9e0da0e935c4f0524cfd16d47d38b6045b9573
+				OPTIONS
+					"SDL_ATOMIC OFF"
+					"SDL_CPUINFO ON"
+					"SDL_DLOPEN OFF"
+					"SDL_FILE OFF"
+					"SDL_FILESYSTEM OFF"
+					"SDL_HAPTIC OFF"
+					"SDL_LOADSO ON"
+					"SDL_LOCALE OFF"
+					"SDL_POWER OFF"
+					"SDL_RENDER OFF"
+					"SDL_SENSOR OFF"
+					"SDL_SHARED OFF"
+					"SDL_TIMERS OFF"
+			)
 		endif()
+		target_link_libraries(jngl PRIVATE SDL2-static)
 		if(WINDOWS_STORE)
 			target_compile_definitions(jngl PUBLIC JNGL_UWP)
 			target_include_directories(jngl PUBLIC ${sdl2_SOURCE_DIR}/include ${sdl2_BINARY_DIR}/include) # TODO: This should be PRIVATE
-			FetchContent_Declare(openal
-				GIT_REPOSITORY https://github.com/jhasse/openal-soft-winphone
-				GIT_TAG e4f3681316b1e8d8d68dfc31b1fc952d9bba085d)
 			target_link_options(jngl PUBLIC $<IF:$<CONFIG:Debug>,/defaultlib:vccorlibd.lib /defaultlib:msvcrtd.lib,/defaultlib:vccorlib.lib /defaultlib:msvcrt.lib>)
-		else()
-			FetchContent_Declare(openal
-				URL https://github.com/kcat/openal-soft/archive/refs/tags/1.21.1.zip
-				URL_HASH SHA1=1442363faf47a5a7cd6287513068ecd6c70e747e)
-			set(ALSOFT_NO_CONFIG_UTIL ON CACHE BOOL "Disable building the alsoft-config utility" FORCE)
-			set(LIBTYPE "STATIC" CACHE STRING "" FORCE)
-			target_compile_definitions(jngl PRIVATE AL_LIBTYPE_STATIC)
-
-			target_include_directories(jngl PRIVATE ${PROJECT_SOURCE_DIR}/include/msvc)
-			target_link_directories(jngl PUBLIC ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH})
-			add_custom_command(TARGET jngl COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/lib/msvc/${JNGL_ARCH}/epoxy-0.dll "$<TARGET_FILE_DIR:jngl>")
-			target_link_libraries(jngl PUBLIC epoxy)
 		endif()
-		FetchContent_MakeAvailable(openal)
-		set(OPENAL_LIBRARY OpenAL)
-
 	elseif(IOS)
-		target_compile_options(jngl PRIVATE -Wno-deprecated-declarations) # OpenAL
 		target_compile_definitions(jngl PRIVATE IOS)
 		target_compile_definitions(jngl PUBLIC GLES_SILENCE_DEPRECATION)
 		target_include_directories(jngl PUBLIC include/ios)
 		find_library(IOS_OPENGLES OpenGLES)
-		find_library(IOS_OPENAL OpenAL)
 		find_library(IOS_QUARTZCORE QuartzCore)
 		find_library(IOS_UIKIT UIKit)
 		find_library(IOS_AVFOUNDATION AVFoundation)
 		find_library(IOS_GAMECONTROLLER GameController)
+		find_library(IOS_AudioToolbox AudioToolbox)
 		target_link_libraries(jngl PRIVATE
-			${IOS_OPENGLES} ${IOS_OPENAL} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
-			${IOS_GAMECONTROLLER}
+			${IOS_OPENGLES} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
+			${IOS_GAMECONTROLLER} ${IOS_AudioToolbox}
 		)
 
 		if(NOT hasParent)
@@ -286,8 +284,6 @@ else()
 			set_target_properties(jngl-test PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${PROJECT_SOURCE_DIR}/data/ios/jngl-test.in.plist")
 		endif()
 	else()
-		find_package(OpenAL REQUIRED)
-
 		if(NOT JNGL_BUILD_WEBP_FROM_SOURCE)
 			find_package(WebP)
 			if(WebP_FOUND)
@@ -299,11 +295,9 @@ else()
 
 		find_package(PkgConfig)
 		if(PkgConfig_FOUND)
-			if(JNGL_SDL2)
-				pkg_check_modules(SDL2 REQUIRED sdl2)
-				target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
-				target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
-			endif()
+			pkg_check_modules(SDL2 REQUIRED sdl2)
+			target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
+			target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
 			if(JNGL_VIDEO)
 				if(APPLE)
 					# On macOS we'll build theora from source, since Homebrew's version crashes due
@@ -327,10 +321,6 @@ else()
 					endif()
 				endif()
 			endif()
-			if(NOT APPLE AND NOT EMSCRIPTEN)
-				pkg_check_modules(EPOXY REQUIRED epoxy)
-				target_link_libraries(jngl PUBLIC ${EPOXY_LINK_LIBRARIES})
-			endif()
 			if(NOT EMSCRIPTEN)
 				pkg_check_modules(VorbisFile REQUIRED vorbisfile)
 				pkg_check_modules(FREETYPE REQUIRED freetype2)
@@ -345,20 +335,20 @@ else()
 		if(NOT EMSCRIPTEN)
 			target_link_libraries(jngl PUBLIC ${VorbisFile_LIBRARIES})
 		endif()
-		target_link_directories(jngl PUBLIC ${VorbisFile_LIBRARY_DIRS})
-		if(NOT PkgConfig_FOUND OR APPLE AND NOT EMSCRIPTEN)
-			find_package(epoxy REQUIRED)
-			target_include_directories(jngl PRIVATE ${epoxy_INCLUDE_DIR})
-			target_link_libraries(jngl PUBLIC ${epoxy_LIBRARY})
-		endif()
+	endif()
+	target_link_directories(jngl PUBLIC ${VorbisFile_LIBRARY_DIRS})
+	if(NOT EMSCRIPTEN AND NOT IOS)
+		target_include_directories(jngl PRIVATE glad/include)
+		target_sources(jngl PRIVATE glad/src/gl.c)
 	endif()
 
 	if(NOT hasParent)
 		if(WINDOWS_STORE)
 			# WIN32 is needed to build for the Windows subsystem, not Console
 			add_executable(jngl-test WIN32 src/test/test.cpp src/uwp/SDL_winrt_main_NonXAML.cpp
-				data/Arial.ttf data/jngl.webp data/test.ogg)
-			set_source_files_properties(data/Arial.ttf data/jngl.webp data/test.ogg
+				data/Arial.ttf data/jngl.webp data/jngl-icon.webp data/test.ogg)
+			set_source_files_properties(data/Arial.ttf data/jngl.webp data/jngl-icon.webp
+				data/test.ogg
 				PROPERTIES VS_DEPLOYMENT_CONTENT 1)
 
 			# Otherwise linking will fail with
@@ -404,18 +394,14 @@ if(JNGL_BUILD_WEBP_FROM_SOURCE)
 	)
 	target_include_directories(jngl PRIVATE ${webp_SOURCE_DIR}/src)
 	target_link_libraries(jngl PRIVATE webpdecode webpdspdecode webputilsdecode)
-	# Note: For some reason it's important to add webp last for MSVC. Otherwise other CMake
-	# projects linking JNGL will get:
-	#   MSVCRTD.lib(exe_winmain.obj) : error LNK2019: unresolved external symbol WinMain
-	#   referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
 endif()
 
 if(ANDROID OR IOS OR APPLE OR WINDOWS_STORE)
 	if(JNGL_VIDEO)
-		FetchContent_Declare(theora
+		CPMAddPackage(NAME theora
 			URL http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
-			URL_HASH SHA1=8dcaa8e61cd86eb1244467c0b64b9ddac04ae262)
-		FetchContent_Populate(theora)
+			URL_HASH SHA1=8dcaa8e61cd86eb1244467c0b64b9ddac04ae262
+			DOWNLOAD_ONLY)
 		add_library(theoradec OBJECT ${LIBTHEORA_DEC} "${theora_SOURCE_DIR}/lib/apiwrapper.c"
 			"${theora_SOURCE_DIR}/lib/bitpack.c" "${theora_SOURCE_DIR}/lib/dequant.c"
 			"${theora_SOURCE_DIR}/lib/fragment.c" "${theora_SOURCE_DIR}/lib/idct.c"
@@ -438,7 +424,7 @@ endif()
 
 target_include_directories(jngl PRIVATE ${FREETYPE_INCLUDE_DIRS})
 target_link_directories(jngl PUBLIC ${FREETYPE_LIBRARY_DIRS})
-target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY})
+target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES})
 
 if(NOT hasParent AND NOT WINDOWS_STORE)
 	include(CTest)

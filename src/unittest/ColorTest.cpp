@@ -20,4 +20,4 @@ boost::ut::suite _ = [] {
 		expect(eq(c.getBlue(), b.getBlue()));
 	};
 };
-}
+} // namespace

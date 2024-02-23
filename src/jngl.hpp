@@ -1,7 +1,41 @@
-// Copyright 2007-2020 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-/// Includes jngl/all.hpp
+/// Includes all JNGL headers except for init.hpp
 /// @file
 #pragma once
 
-#include "jngl/all.hpp"
+#include "jngl/Achievement.hpp"
+#include "jngl/Color.hpp"
+#include "jngl/Container.hpp"
+#include "jngl/Controller.hpp"
+#include "jngl/Drawable.hpp"
+#include "jngl/FrameBuffer.hpp"
+#include "jngl/Label.hpp"
+#include "jngl/Pixels.hpp"
+#include "jngl/ScaleablePixels.hpp"
+#include "jngl/Shader.hpp"
+#include "jngl/ShaderProgram.hpp"
+#include "jngl/Singleton.hpp"
+#include "jngl/SoundFile.hpp"
+#include "jngl/TextLine.hpp"
+#include "jngl/Vertex.hpp"
+#include "jngl/Video.hpp"
+#include "jngl/Widget.hpp"
+#include "jngl/WorkFactory.hpp"
+#include "jngl/debug.hpp"
+#include "jngl/effects.hpp"
+#include "jngl/font.hpp"
+#include "jngl/input.hpp"
+#include "jngl/job.hpp"
+#include "jngl/main.hpp"
+#include "jngl/matrix.hpp"
+#include "jngl/message.hpp"
+#include "jngl/other.hpp"
+#include "jngl/screen.hpp"
+#include "jngl/shapes.hpp"
+#include "jngl/sound.hpp"
+#include "jngl/sprite.hpp"
+#include "jngl/text.hpp"
+#include "jngl/time.hpp"
+#include "jngl/window.hpp"
+#include "jngl/work.hpp"

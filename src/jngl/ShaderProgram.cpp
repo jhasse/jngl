@@ -1,11 +1,11 @@
-// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "ShaderProgram.hpp"
 
+#include "../App.hpp"
 #include "../Shader_Impl.hpp"
 #include "../windowptr.hpp"
-#include "App.hpp"
 
 #include <array>
 #include <cassert>
@@ -30,8 +30,9 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 	glGetProgramiv(impl->id, GL_LINK_STATUS, &status);
 	if (status != GL_TRUE) {
 		std::array<char, 2048> buffer{};
-		glGetProgramInfoLog(impl->id, static_cast<GLsizei>(std::size(buffer)), nullptr, &buffer[0]);
-		throw std::runtime_error(&buffer[0]);
+		glGetProgramInfoLog(impl->id, static_cast<GLsizei>(std::size(buffer)), nullptr,
+		                    buffer.data());
+		throw std::runtime_error(buffer.data());
 	}
 	const auto tmp = use();
 	glUniformMatrix4fv(getUniformLocation("projection"), 1, GL_FALSE, opengl::projection.data);

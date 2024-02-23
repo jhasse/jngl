@@ -43,7 +43,7 @@ Executor::Action Executor::step() {
 }
 
 Move::Move(Vec2 offset, std::function<float(float)> function)
-: offset(offset), function(std::move(function)) {
+: offset(offset), progress(function(0)), function(std::move(function)) {
 }
 
 Move::Action Move::step() {

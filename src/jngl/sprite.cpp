@@ -15,6 +15,10 @@
 #include "matrix.hpp"
 #include "screen.hpp"
 
+#ifdef _WIN32
+#include "../win32/unicode.hpp"
+#endif
+
 #ifdef ANDROID
 #include "../android/fopen.hpp"
 #endif
@@ -25,16 +29,6 @@
 #include <format>
 #include <sstream>
 #include <thread>
-#ifndef NOJPEG
-#ifdef _WIN32
-// These defines are needed to prevent conflicting types declarations in jpeglib.h:
-#define XMD_H
-#define HAVE_BOOLEAN
-#endif
-extern "C" {
-#include <jpeglib.h>
-}
-#endif
 #ifndef NOWEBP
 #include "../ImageDataWebP.hpp"
 #endif
@@ -48,17 +42,6 @@ std::shared_ptr<Texture> getTexture(std::string_view filename) {
 	}
 	return it->second;
 }
-
-#ifndef NOJPEG
-struct JpegErrorMgr {
-	struct jpeg_error_mgr pub;
-	jmp_buf setjmp_buffer; // for return to caller
-};
-METHODDEF(void) JpegErrorExit(j_common_ptr info) {
-	longjmp(reinterpret_cast<JpegErrorMgr*>(info->err)->setjmp_buffer, // NOLINT
-	        1); // Return control to the setjmp point
-}
-#endif
 
 Sprite::Sprite(const unsigned char* const bytes, const size_t width, const size_t height) {
 	// std::vector<const char*> rowPointers(height);
@@ -95,9 +78,6 @@ Sprite::Sprite(std::string_view filename, LoadType loadType) : texture(getTextur
 #ifndef NOPNG
 		".png",
 #endif
-#ifndef NOJPEG
-		".jpg", ".jpeg",
-#endif
 		".bmp"
 	};
 	std::function<Finally(Sprite*, std::string_view, FILE*, bool)> functions[] = {
@@ -106,9 +86,6 @@ Sprite::Sprite(std::string_view filename, LoadType loadType) : texture(getTextur
 #endif
 #ifndef NOPNG
 		&Sprite::LoadPNG,
-#endif
-#ifndef NOJPEG
-		&Sprite::LoadJPG, &Sprite::LoadJPG,
 #endif
 		&Sprite::LoadBMP
 	};
@@ -142,7 +119,11 @@ Sprite::Sprite(std::string_view filename, LoadType loadType) : texture(getTextur
 		}
 		throw std::runtime_error(message.str());
 	}
+#ifdef _WIN32
+	FILE* pFile = _wfopen(utf8ToUtf16(fullFilename).c_str(), L"rb");
+#else
 	FILE* pFile = fopen(fullFilename.c_str(), "rb");
+#endif
 	if (pFile == nullptr) {
 		throw std::runtime_error(std::string("File not found: " + fullFilename));
 	}
@@ -243,6 +224,26 @@ void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
 	popMatrix();
 }
 
+void Sprite::drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
+                      const ShaderProgram* const shaderProgram) const {
+	if (vertexes.empty()) {
+		return;
+	}
+	modelview.scale(getScaleFactor());
+	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   modelview.data);
+	} else {
+		glUniform4f(Texture::shaderSpriteColorUniform, static_cast<float>(spriteColorRed) / 255.0f,
+		            static_cast<float>(spriteColorGreen) / 255.0f,
+		            static_cast<float>(spriteColorBlue) / 255.0f,
+		            static_cast<float>(spriteColorAlpha) / 255.0f);
+		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, modelview.data);
+	}
+	texture->drawMesh(vertexes);
+}
+
 void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
                       const ShaderProgram* const shaderProgram) const {
 	if (vertexes.empty()) {
@@ -251,9 +252,18 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	scale(getScaleFactor());
-	texture->drawMesh(vertexes, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
-	                  float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f,
-	                  shaderProgram);
+	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   opengl::modelview.data);
+	} else {
+		glUniform4f(Texture::shaderSpriteColorUniform, static_cast<float>(spriteColorRed) / 255.0f,
+		            static_cast<float>(spriteColorGreen) / 255.0f,
+		            static_cast<float>(spriteColorBlue) / 255.0f,
+		            static_cast<float>(spriteColorAlpha) / 255.0f);
+		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+	}
+	texture->drawMesh(vertexes);
 	popMatrix();
 }
 
@@ -262,7 +272,7 @@ void Sprite::setBytes(const unsigned char* const bytes) {
 }
 
 const Shader& Sprite::vertexShader() {
-	return Texture::vertexShader();
+	return *Texture::textureVertexShader;
 }
 
 #ifndef NOPNG
@@ -377,57 +387,11 @@ Finally Sprite::LoadBMP(std::string_view filename, FILE* const fp, const bool ha
 			}
 		}
 	}
+	width = static_cast<float>(header.width * getScaleFactor());
+	height = static_cast<float>(header.height * getScaleFactor());
 	loadTexture(header.width, header.height, filename, halfLoad, GL_BGR, &buf[0]);
 	return Finally(nullptr);
 }
-#ifndef NOJPEG
-Finally Sprite::LoadJPG(std::string_view filename, FILE* file, const bool halfLoad) {
-	jpeg_decompress_struct info{};
-	JpegErrorMgr err{};
-	info.err = jpeg_std_error(&err.pub);
-	err.pub.error_exit = JpegErrorExit;
-
-	// Establish the setjmp return context for my_error_exit to use.
-	if (setjmp(err.setjmp_buffer)) {
-		// If we get here, the JPEG code has signaled an error.
-		char buf[JMSG_LENGTH_MAX];
-		info.err->format_message(reinterpret_cast<jpeg_common_struct*>(&info), buf); // NOLINT
-		jpeg_destroy_decompress(&info);
-		throw std::runtime_error(buf);
-	}
-
-	jpeg_create_decompress(&info);
-	jpeg_stdio_src(&info, file);
-	jpeg_read_header(&info, TRUE);
-	jpeg_start_decompress(&info);
-
-	width = static_cast<float>(info.output_width * getScaleFactor());
-	height = static_cast<float>(info.output_height * getScaleFactor());
-	int channels = info.num_components;
-
-	GLenum format = GL_RGB;
-	if (channels == 4) {
-		format = GL_RGBA;
-	}
-
-	static_assert(sizeof(JSAMPLE) == sizeof(char));
-	std::vector<unsigned char*> buf(height);
-	for (auto& row : buf) {
-		row = new unsigned char[info.output_width * channels];
-	}
-	Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
-
-	while (info.output_scanline < info.output_height) {
-		jpeg_read_scanlines(
-		    &info, reinterpret_cast<JSAMPLE**>(&buf[info.output_scanline]) /* NOLINT */, 1);
-	}
-
-	jpeg_finish_decompress(&info);
-
-	loadTexture(info.output_width, info.output_height, filename, halfLoad, format, &buf[0]);
-	return Finally(nullptr);
-}
-#endif
 #ifndef NOWEBP
 Finally Sprite::LoadWebP(std::string_view filename, FILE* file, const bool halfLoad) {
 	auto imageData = std::make_shared<ImageDataWebP>(filename, file, getScaleFactor());

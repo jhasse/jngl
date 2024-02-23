@@ -109,8 +109,13 @@ void setRelativeMouseMode(bool relative);
 
 bool getRelativeMouseMode();
 
+/// By default the mouse cursor of the OS is visible and can be hidden by passing false
 void setMouseVisible(bool visible);
 
+/// Returns whether the mouse cursor of the OS is currently visible
+///
+/// Even when this method returns true, it could still be visible outside of the window or hidden by
+/// the OS for other means (e.g. while the user is typing).
 bool isMouseVisible();
 
 /// Returns true when there's more than one finger touching the screen

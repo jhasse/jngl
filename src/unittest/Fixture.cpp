@@ -6,6 +6,7 @@
 #include <boost/ut.hpp>
 #include <cmath>
 #include <jngl.hpp>
+#include <jngl/AppParameters.hpp>
 
 Fixture::Fixture(const double scaleFactor) {
 	jngl::setScaleFactor(scaleFactor);
@@ -13,7 +14,7 @@ Fixture::Fixture(const double scaleFactor) {
 	                 static_cast<int>(std::lround(70 * scaleFactor)), false, { 32, 7 }, { 32, 7 });
 	reset();
 	emptyAsciiArt = getAsciiArt();
-	using namespace boost::ut;
+	using namespace boost::ut; // NOLINT
 	expect(eq(emptyAsciiArt, std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒                              ▒
@@ -38,11 +39,11 @@ std::string Fixture::getAsciiArt() const {
 	// account:
 	auto reduceFactorAsFloat = static_cast<float>(10 * jngl::getScaleFactor());
 	int reduceFactor = static_cast<int>(std::lround(reduceFactorAsFloat));
-	using namespace boost::ut;
+	using namespace boost::ut; // NOLINT
 	expect(approx(reduceFactorAsFloat, reduceFactor, 1e-6));
 
-	assert(w % reduceFactor == 0);
-	assert(h % reduceFactor == 0);
+	expect(eq(w % reduceFactor, 0));
+	expect(eq(h % reduceFactor, 0));
 	size_t reducedW = w / reduceFactor;
 	std::vector<std::vector<std::vector<float>>> reduced;
 	size_t index = 0;
@@ -91,6 +92,7 @@ void Fixture::reset() {
 
 	const double frameSize = 5;
 	const jngl::Vec2 screen(jngl::getScreenWidth(), jngl::getScreenHeight());
+	jngl::setColor(0x000000_rgb);
 	jngl::drawRect(-screen.x / 2, screen.y / 2 - frameSize, screen.x, frameSize); // bottom
 	jngl::drawRect(-screen.x / 2, -screen.y / 2, screen.x, frameSize);            // top
 	jngl::drawRect(screen.x / 2 - frameSize, -screen.y / 2, frameSize, screen.y); // right

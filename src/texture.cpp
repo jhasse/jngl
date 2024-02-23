@@ -23,34 +23,10 @@ int Texture::modelviewUniform = -1;
 
 Texture::Texture(const float preciseWidth, const float preciseHeight, const int width,
                  const int height, const GLubyte* const* const rowPointers, GLenum format,
-                 const GLubyte* const data) {
-	if (!textureShaderProgram) {
-		Shader fragmentShader(R"(#version 300 es
-			uniform sampler2D tex;
-			uniform lowp vec4 spriteColor;
-
-			in mediump vec2 texCoord;
-
-			out lowp vec4 outColor;
-
-			void main() {
-				outColor = texture(tex, texCoord) * spriteColor;
-			})", Shader::Type::FRAGMENT, R"(#version 100
-			uniform sampler2D tex;
-			uniform lowp vec4 spriteColor;
-
-			varying mediump vec2 texCoord;
-
-			void main() {
-				gl_FragColor = texture2D(tex, texCoord) * spriteColor;
-			})"
-		);
-		textureShaderProgram = new ShaderProgram(vertexShader(), fragmentShader);
-		shaderSpriteColorUniform = textureShaderProgram->getUniformLocation("spriteColor");
-		modelviewUniform = textureShaderProgram->getUniformLocation("modelview");
-	}
-	texture_ = opengl::genAndBindTexture();
-	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
+                 const GLubyte* const data) : texture_(opengl::genAndBindTexture()) {
+	assert(format == GL_RGB || format == GL_RGBA || format == GL_BGR);
+	glTexImage2D(GL_TEXTURE_2D, 0, format == GL_RGBA ? GL_RGBA : GL_RGB, width, height, 0, format,
+	             GL_UNSIGNED_BYTE, nullptr);
 	vertexes = {
 		0, 0,
 		0, 0, // texture coordinates
@@ -145,18 +121,8 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
-void Texture::drawMesh(const std::vector<Vertex>& vertexes, const float red, const float green,
-                       const float blue, const float alpha,
-                       const ShaderProgram* const shaderProgram) const {
+void Texture::drawMesh(const std::vector<Vertex>& vertexes) const {
 	glBindVertexArray(opengl::vaoStream);
-	auto _ = shaderProgram ? shaderProgram->use() : textureShaderProgram->use();
-	if (shaderProgram) {
-		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
-		                   opengl::modelview.data);
-	} else {
-		glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
-		glUniformMatrix3fv(modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
-	}
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(vertexes[0]), &vertexes[0],
 	             GL_STREAM_DRAW);
@@ -196,35 +162,6 @@ void Texture::unloadShader() {
 void Texture::setBytes(const unsigned char* const bytes, const int width, const int height) const {
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
-}
-
-const Shader& Texture::vertexShader() {
-	if (!textureVertexShader) {
-		textureVertexShader = new Shader(R"(#version 300 es
-			in mediump vec2 position;
-			in mediump vec2 inTexCoord;
-			uniform highp mat3 modelview;
-			uniform mediump mat4 projection;
-			out mediump vec2 texCoord;
-
-			void main() {
-				vec3 tmp = modelview * vec3(position, 1);
-				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-				texCoord = inTexCoord;
-			})", Shader::Type::VERTEX, R"(#version 100
-			attribute mediump vec2 position;
-			attribute mediump vec2 inTexCoord;
-			uniform highp mat3 modelview;
-			uniform mediump mat4 projection;
-			varying mediump vec2 texCoord;
-
-			void main() {
-				vec3 tmp = modelview * vec3(position, 1);
-				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-				texCoord = inTexCoord;
-			})");
-	}
-	return *textureVertexShader;
 }
 
 } // namespace jngl

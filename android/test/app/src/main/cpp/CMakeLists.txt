@@ -1,5 +1,5 @@
-project(jngl-test)
 cmake_minimum_required(VERSION 3.16)
+project(jngl-test)
 
 # build native_app_glue as a static lib
 set(${CMAKE_C_FLAGS}, "${CMAKE_C_FLAGS}")
@@ -26,6 +26,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/../../../../../.. ${CMAKE_CURRENT_BINARY_
 # add lib dependencies
 target_link_libraries(jngl-test
     android
+    log
     native_app_glue
     EGL
     GLESv3

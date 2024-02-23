@@ -15,7 +15,7 @@
 #include <atomic>
 #include <cassert>
 #include <cmath>
-#include <epoxy/wgl.h>
+#include <glad/wgl.h>
 #include <mmsystem.h> // timeBeginPeriod
 #include <stdexcept>
 #include <windowsx.h> // GET_X_LPARAM
@@ -78,7 +78,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 // based on: http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=46
 bool WindowImpl::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
-	if (!wglChoosePixelFormatARB) {
+	if (!GLAD_WGL_ARB_pixel_format) {
 		return false;
 	}
 
@@ -137,6 +137,13 @@ bool WindowImpl::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 	return false;
 }
 
+static GLADapiproc gladGlGetProc(void* user, const char* name) {
+	if (auto result = reinterpret_cast<GLADapiproc>(wglGetProcAddress(name))) {
+		return result;
+	}
+	return reinterpret_cast<GLADapiproc>(GetProcAddress(reinterpret_cast<HMODULE>(user), name));
+}
+
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), isMouseVisible_(true),
@@ -154,7 +161,12 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		}
 	};
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
-	const std::function<void(bool)> init = [this, &title, &init](const bool multisample) {
+	HMODULE openglDll = LoadLibrary(L"opengl32.dll");
+	if (!openglDll) {
+		throw std::runtime_error("Can't load opengl32.dll.");
+	}
+	const std::function<void(bool)> init =
+	    [this, &title, &init, openglDll](const bool multisample) {
 		WNDCLASS wc;
 		DWORD dwExStyle;
 		DWORD dwStyle;
@@ -282,12 +294,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 			throw std::runtime_error("Can't activate the GL rendering context.");
 		}
 
-		if (epoxy_gl_version() < 20) {
-			throw std::runtime_error(
-			    "Your graphics card is missing OpenGL 2.0 support (it supports " +
-			    std::to_string(epoxy_gl_version() / 10) + "." +
-			    std::to_string(epoxy_gl_version() % 10) + ").");
-		}
+		gladLoadWGLUserPtr(impl->pDeviceContext_.get(), gladGlGetProc, openglDll);
 
 		if (!multisample && isMultisampleSupported_ && impl->InitMultisample(hInstance, pfd)) {
 			impl->pDeviceContext_.reset((HDC)nullptr); // Destroy window
@@ -300,6 +307,14 @@ Window::Window(const std::string& title, const int width, const int height, cons
 				init(false);
 			}
 			return;
+		}
+
+		int glVersion = gladLoadGLUserPtr(gladGlGetProc, openglDll);
+		if (glVersion < GLAD_MAKE_VERSION(2, 0)) {
+			throw std::runtime_error(
+			    "Your graphics card is missing OpenGL 2.0 support (it supports " +
+			    std::to_string(GLAD_VERSION_MAJOR(glVersion)) + "." +
+			    std::to_string(GLAD_VERSION_MINOR(glVersion)) + ").");
 		}
 
 		::ShowWindow(impl->pWindowHandle_.get(), SW_SHOWNORMAL);
@@ -411,7 +426,6 @@ void Window::UpdateInput() {
 			impl->distinguishLeftRight();
 			int scanCode = msg.lParam & 0x7f8000;
 			characterDown_[scanCodeToCharacter[scanCode]] = false;
-			characterPressed_[scanCodeToCharacter[scanCode]] = false;
 		} break;
 		case WM_CHAR: {
 			std::vector<char> buf(4);
@@ -451,6 +465,7 @@ void Window::UpdateInput() {
 			scanCodeToCharacter[scanCode] = character;
 			characterDown_[character] = true;
 			characterPressed_[character] = true;
+			needToBeSetFalse_.push(&characterPressed_[character]);
 			textInput += character;
 		} break;
 		}
@@ -471,9 +486,6 @@ void Window::UpdateInput() {
 			it.second = false;
 		}
 		for (auto& it : characterDown_) {
-			it.second = false;
-		}
-		for (auto& it : characterPressed_) {
 			it.second = false;
 		}
 		for (auto& b : mouseDown_) {
@@ -586,10 +598,6 @@ bool Window::getKeyDown(const std::string& key) {
 }
 
 bool Window::getKeyPressed(const std::string& key) {
-	if (characterPressed_[key]) {
-		characterPressed_[key] = false;
-		return true;
-	}
 	return characterPressed_[key];
 }
 
@@ -628,11 +636,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 }
 
 int Window::getMouseX() const {
-	return mousex_ - impl->relativeX - (width_ - canvasWidth) / 2;
+	if (relativeMouseMode) {
+		return mousex_ - impl->relativeX;
+	}
+	assert(impl->relativeX == 0);
+	return mousex_ - (width_ - canvasWidth) / 2;
 }
 
 int Window::getMouseY() const {
-	return mousey_ - impl->relativeY - (height_ - canvasHeight) / 2;
+	if (relativeMouseMode) {
+		return mousey_ - impl->relativeY;
+	}
+	assert(impl->relativeY == 0);
+	return mousey_ - (height_ - canvasHeight) / 2;
 }
 
 void Window::SetMouse(const int xposition, const int yposition) {
@@ -667,8 +683,8 @@ void Window::SetIcon(const std::string& filename) {
 
 		auto bgra =
 		    std::make_unique<char[]>(imageData->getWidth() * imageData->getHeight() * CHANNELS);
-		for (size_t x = 0; x < imageData->getWidth(); ++x) {
-			for (size_t y = 0; y < imageData->getHeight(); ++y) {
+		for (size_t x = 0; x < static_cast<size_t>(imageData->getWidth()); ++x) {
+			for (size_t y = 0; y < static_cast<size_t>(imageData->getHeight()); ++y) {
 				// transform RGBA to BGRA:
 				bgra[y * imageData->getWidth() * CHANNELS + x * CHANNELS] =
 				    imageData->pixels()[y * imageData->getWidth() * CHANNELS + x * CHANNELS + 2];
@@ -715,6 +731,14 @@ int getDesktopHeight() {
 
 void Window::setFullscreen(bool) {
 	throw std::runtime_error("Not implemented.");
+}
+
+float Window::getResizedWindowScalingX() const {
+	return 1.f;
+}
+
+float Window::getResizedWindowScalingY() const {
+	return 1.f;
 }
 
 std::string getPreferredLanguage() {

@@ -3,7 +3,7 @@
 
 #include "opengl.hpp"
 
-#include "jngl/App.hpp"
+#include "App.hpp"
 
 #include <boost/qvm_lite.hpp>
 #include <stdexcept>

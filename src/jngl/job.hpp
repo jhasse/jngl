@@ -1,9 +1,10 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Job class and related functions
 /// @file
 #pragma once
 
+#include <functional>
 #include <memory>
 
 namespace jngl {
@@ -52,6 +53,20 @@ void addJob(std::shared_ptr<Job> job);
 template <class T, class... Args>
 void addJob(Args&&... args) {
 	addJob(std::make_shared<T>(std::forward<Args>(args)...));
+}
+
+/// Removes the passed Job after all Jobs have been stepped
+///
+/// If the Job isn't found, nothing happens.
+void removeJob(Job*);
+
+/// Returns the first Job for which \a predicate returned true
+std::shared_ptr<Job> getJob(const std::function<bool(Job&)>& predicate);
+
+/// Returns the first Job that is a T
+template <class T> std::shared_ptr<T> getJob() {
+	return std::dynamic_pointer_cast<T>(
+	    getJob([](Job& job) { return dynamic_cast<T*>(&job) != nullptr; }));
 }
 
 } // namespace jngl

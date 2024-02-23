@@ -2,7 +2,7 @@
 Checks: '
        ,*,
        ,-altera-id-dependent-backward-branch,
-       ,-altera-struct-pack-align',
+       ,-altera-struct-pack-align,
        ,-altera-unroll-loops,
        ,-android-cloexec-fopen,
        ,-bugprone-easily-swappable-parameters,
@@ -28,6 +28,7 @@ Checks: '
        ,-fuchsia-multiple-inheritance,
        ,-fuchsia-overloaded-operator,
        ,-fuchsia-statically-constructed-objects,
+       ,-fuchsia-trailing-return,
        ,-google-global-names-in-headers,
        ,-google-readability-todo,
        ,-google-runtime-int,
@@ -43,15 +44,20 @@ Checks: '
        ,-llvm-qualified-auto,
        ,-llvmlibc-callee-namespace,
        ,-llvmlibc-implementation-in-namespace,
+       ,-llvmlibc-inline-function-decl,
        ,-llvmlibc-restrict-system-libc-headers,
+       ,-misc-no-recursion,
        ,-misc-non-private-member-variables-in-classes,
        ,-modernize-avoid-c-arrays,
        ,-modernize-use-nodiscard,
        ,-modernize-use-trailing-return-type,
+       ,-readability-function-cognitive-complexity,
+       ,-readability-identifier-length,
        ,-readability-magic-numbers,
        ,-readability-named-parameter,
        ,-readability-qualified-auto,
        ,-readability-uppercase-literal-suffix,
+       ,-readability-use-anyofallof,
 '
 WarningsAsErrors: 'hicpp-use-override,modernize-avoid-bind,llvm-namespace-comment,modernize-use-nullptr,modernize-pass-by-value,hicpp-noexcept-move,boost-use-to-string,google-readability-namespace-comments,modernize-use-default-member-init,modernize-loop-convert,hicpp-use-nullptr,google-readability-braces-around-statements,cert-dcl03-c,readability-else-after-return,bugprone-macro-parentheses,readability-redundant-declaration,google-explicit-constructor,readability-avoid-const-params-in-decls'
 CheckOptions:

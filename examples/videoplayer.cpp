@@ -4,7 +4,7 @@ JNGL_MAIN_BEGIN {
 	const auto args = jngl::getArgs();
 	std::string filename;
 	if (args.empty()) {
-		filename = "verysmall.ogv";
+		filename = jngl::getBinaryPath() + "verysmall.ogv";
 	} else {
 		filename = args[0];
 	}
@@ -13,6 +13,9 @@ JNGL_MAIN_BEGIN {
 	while (jngl::running()) {
 		jngl::updateInput();
 		video.draw();
+		if (video.finished()) {
+			jngl::setTitle(filename + " [FINISHED]");
+		}
 		jngl::swapBuffers();
 	}
 } JNGL_MAIN_END

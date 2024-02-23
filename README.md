@@ -1,9 +1,11 @@
-# JNGL - Just a Neat Game Library [![pipeline status](https://gitlab.com/jhasse/jngl/badges/master/pipeline.svg)](https://gitlab.com/jhasse/jngl/commits/master)
+# JNGL - Just a Neat Game Library
 
 [🌐 Website](https://bixense.com/jngl/)
 [🏃 Quickstart](https://github.com/jhasse/jngl/wiki/JNGL-Quickstart)
 [🎓 Tutorial](https://github.com/pinguin999/my-jngl-starter)
 [📚 Documentation](https://bixense.com/jngl/annotated.html)
+
+[![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/zWdnq6UJ79)
 
 An easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox, the Nintendo Switch,
 and the Web.
@@ -24,21 +26,21 @@ cmake --build build
 
 ```
 sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev \
-libjpeg-dev libpng-dev libvorbis-dev libopenal-dev cmake libepoxy-dev g++ \
+libpng-dev libvorbis-dev cmake g++ \
 libwebp-dev git libsdl2-dev
 ```
 
 ### Fedora
 
 ```
-sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libepoxy-devel libwebp-devel \
-libjpeg-turbo-devel cmake SDL2-devel openal-soft-devel gcc-c++
+sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libwebp-devel \
+cmake SDL2-devel gcc-c++
 ```
 
 ### Arch Linux
 
 ```
-pacman -Syu --needed cmake gcc sdl2 pkg-config fontconfig libepoxy libwebp openal libvorbis
+pacman -Syu --needed cmake gcc sdl2 pkg-config fontconfig libwebp libvorbis
 ```
 
 ## Windows
@@ -48,10 +50,10 @@ pacman -Syu --needed cmake gcc sdl2 pkg-config fontconfig libepoxy libwebp opena
 Set up [MSYS2](https://www.msys2.org/) and install the following in a MinGW-w64 Win64 Shell:
 
 ```
-pacman -Syu --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-openal \
+pacman -Syu --needed mingw-w64-x86_64-gcc \
 mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
-mingw-w64-x86_64-dlfcn mingw-w64-x86_64-libepoxy mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb \
-mingw-w64-x86_64-libtheora
+mingw-w64-x86_64-dlfcn mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb \
+mingw-w64-x86_64-libtheora mingw-w64-x86_64-SDL2
 ```
 
 ### Visual Studio 2017 or newer
@@ -67,7 +69,7 @@ and then open `build/jngl.sln`.
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 
 ```
-brew install sdl2 freetype libvorbis libepoxy jpeg webp pkg-config cmake
+brew install sdl2 freetype libvorbis webp pkg-config cmake
 ```
 
 ## Android

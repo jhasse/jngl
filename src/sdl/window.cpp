@@ -1,16 +1,19 @@
 // Copyright 2011-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#include "../jngl/App.hpp"
+#include "../App.hpp"
 #include "../jngl/ImageData.hpp"
 #include "../jngl/debug.hpp"
+#include "../jngl/screen.hpp"
 #include "../jngl/window.hpp"
 #include "../main.hpp"
 #include "../windowptr.hpp"
 #include "windowimpl.hpp"
 
+#include <cassert>
 #include <stdexcept>
 #if defined(_WIN32) && !defined(JNGL_UWP)
+#define NOMINMAX
 #include <windows.h>
 #endif
 
@@ -29,10 +32,9 @@ void setProcessSettings() {
 #endif
 }
 
-Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
+Window::Window(const std::string& title, int width, int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
-: impl(std::make_unique<WindowImpl>(width, height)), fullscreen_(fullscreen), isMouseVisible_(true),
-  relativeMouseMode(false), anyKeyPressed_(false), width_(width), height_(height),
+: impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), width_(width), height_(height),
   fontName_(GetFontFileByName("Arial")) {
 	SDL::init();
 
@@ -42,25 +44,25 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
+	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI;
 	if (fullscreen) {
 		if (width == getDesktopWidth() && height == getDesktopHeight()) {
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		} else {
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
+	} else {
+		flags |= SDL_WINDOW_RESIZABLE; // if we make fullscreen window resizeable on GNOME, it will
+		                               // be reduced in its height (SDL bug?).
 	}
-#ifdef __EMSCRIPTEN__
-	flags |= SDL_WINDOW_RESIZABLE;
-#endif
 
 #ifdef JNGL_UWP
 	isMultisampleSupported_ = false; // crashes on Xbox since ANGLE uses a PixelShader 4.1 for
 	                                 // multi-sampling and Xbox only supports 4.0 in UWP mode.
+#endif
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-#endif
 	const auto create = [this, &title, width, height, flags]() {
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, isMultisampleSupported_ ? 4 : 0);
 		return SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -75,6 +77,14 @@ Window::Window(const std::string& title, const int width, const int height, cons
 	}
 
 	impl->context = SDL_GL_CreateContext(impl->sdlWindow);
+#ifdef GLAD_GL
+	const auto glVersion = gladLoadGL(reinterpret_cast<GLADloadfunc>(SDL_GL_GetProcAddress));
+	if (glVersion < GLAD_MAKE_VERSION(2, 0)) {
+		throw std::runtime_error("Your graphics card is missing OpenGL 2.0 support (it supports " +
+		                         std::to_string(GLAD_VERSION_MAJOR(glVersion)) + "." +
+		                         std::to_string(GLAD_VERSION_MINOR(glVersion)) + ").");
+	}
+#endif
 
 	if (isMultisampleSupported_) {
 		int openglMSAA;
@@ -88,11 +98,49 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		}
 	}
 
+#ifndef __linux__ // This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by
+                  // SDL2). On Linux (GNOME) it results in the top of the window being cut off (by
+                  // the header bar height?).
+	{
+		assert(width_ == width);
+		assert(height_ == height);
+		// on some platforms (e.g. UWP or Emscripten) the size we specify for the window might be
+		// ignored. Check if we actually got what we asked for and correct if not:
+		SDL_GetWindowSize(impl->sdlWindow, &width, &height);
+		if (width_ != width || height_ != height) {
+			debug("Wanted window dimensions ");
+			debug(width_);
+			debug("x");
+			debug(height_);
+			debug(", but got ");
+			debug(width);
+			debug("x");
+			debug(height);
+			debug(" instead.");
+			setScaleFactor(getScaleFactor() * std::min(static_cast<double>(width) / width_,
+			                                           static_cast<double>(height) / height_));
+			width_ = width;
+			height_ = height;
+		}
+	}
+
+	SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
+#endif
+	impl->actualWidth = width_;
+	impl->actualHeight = height_;
+	impl->hidpiScaleFactor = static_cast<float>(width_) / width;
+	setScaleFactor(getScaleFactor() * impl->hidpiScaleFactor);
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
-	Init(width, height, canvasWidth, canvasHeight);
+	impl->actualCanvasWidth = canvasWidth;
+	impl->actualCanvasHeight = canvasHeight;
+	Init(width_, height_, canvasWidth, canvasHeight);
 }
 
-Window::~Window() = default;
+Window::~Window() {
+	// This is rather dirty, but needed for the rare case that one wants to create a window after
+	// hiding a previous one and doesn't reset the scale factor:
+	setScaleFactor(getScaleFactor() / impl->hidpiScaleFactor);
+}
 
 int Window::GetKeyCode(key::KeyType key) {
 	switch (key) {
@@ -180,10 +228,6 @@ bool Window::getKeyDown(const std::string& key) {
 }
 
 bool Window::getKeyPressed(const std::string& key) {
-	if (characterPressed_[key]) {
-		characterPressed_[key] = false;
-		return true;
-	}
 	return characterPressed_[key];
 }
 
@@ -298,10 +342,12 @@ void Window::UpdateInput() {
 				}
 				characterDown_[tmp] = true;
 				characterPressed_[tmp] = true;
+				needToBeSetFalse_.push(&characterPressed_[tmp]);
 			}
 			if (event.key.keysym.sym == SDLK_SPACE) {
 				characterDown_[" "] = true;
 				characterPressed_[" "] = true;
+				needToBeSetFalse_.push(&characterPressed_[" "]);
 			}
 			anyKeyPressed_ = true;
 			break;
@@ -313,14 +359,11 @@ void Window::UpdateInput() {
 			if (strlen(name) == 1) {
 				std::string tmp(1, name[0]);
 				characterDown_[tmp] = false;
-				characterPressed_[tmp] = false;
 				tmp[0] = tolower(name[0]);
 				characterDown_[tmp] = false;
-				characterPressed_[tmp] = false;
 			}
 			if (event.key.keysym.sym == SDLK_SPACE) {
 				characterDown_[" "] = false;
-				characterPressed_[" "] = false;
 			}
 			break;
 		}
@@ -331,12 +374,45 @@ void Window::UpdateInput() {
 			}
 			break;
 		case SDL_WINDOWEVENT:
-			if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-				impl->actualWidth = event.window.data1;
-				impl->actualHeight = event.window.data2;
-				updateProjection(event.window.data1, event.window.data2, width_, height_);
+			if (!impl->firstFrame && event.window.event == SDL_WINDOWEVENT_RESIZED) {
+				const int originalWidth = width_;
+				const int originalHeight = height_;
+				SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
+				impl->actualWidth = width_;
+				impl->actualHeight = height_;
+				impl->actualCanvasWidth = canvasWidth;
+				impl->actualCanvasHeight = canvasHeight;
+				calculateCanvasSize({ canvasWidth, canvasHeight }, { canvasWidth, canvasHeight });
+				const float tmpWidth = (float(width_) / canvasWidth) * impl->actualCanvasWidth;
+				const float tmpHeight = (float(height_) / canvasHeight) * impl->actualCanvasHeight;
+				const auto l = -1.f / 2.f;
+				const auto r = 1.f / 2.f;
+				const auto b = 1.f / 2.f;
+				const auto t = -1.f / 2.f;
+				opengl::projection = { 1.f / float(tmpWidth) * 2.f / (r - l),
+					                   0.f,
+					                   0.f,
+					                   -(r + l) / (r - l),
+					                   0.f,
+					                   1.f / float(tmpHeight) * 2.f / (t - b),
+					                   0.f,
+					                   -(t + b) / (t - b),
+					                   0.f,
+					                   0.f,
+					                   -1.f,
+					                   0.f,
+					                   0.f,
+					                   0.f,
+					                   0.f,
+					                   1.f };
 				App::instance().updateProjectionMatrix();
-				glViewport(0, 0, event.window.data1, event.window.data2);
+				updateViewportAndLetterboxing(width_, height_, canvasWidth, canvasHeight);
+				// restore the values in canvasWidth and canvasHeight because our scaleFactor didn't
+				// change:
+				std::swap(canvasWidth, impl->actualCanvasWidth);
+				std::swap(canvasHeight, impl->actualCanvasHeight);
+				width_ = originalWidth;
+				height_ = originalHeight;
 			}
 		}
 	}
@@ -344,6 +420,7 @@ void Window::UpdateInput() {
 
 void Window::SwapBuffers() {
 	SDL_GL_SwapWindow(impl->sdlWindow);
+	impl->firstFrame = false;
 }
 
 void Window::SetMouseVisible(const bool visible) {
@@ -360,7 +437,10 @@ void Window::SetTitle(const std::string& title) {
 }
 
 void Window::SetMouse(const int xposition, const int yposition) {
-	SDL_WarpMouseInWindow(impl->sdlWindow, xposition, yposition);
+	SDL_WarpMouseInWindow(
+	    impl->sdlWindow,
+	    static_cast<int>(std::lround(static_cast<float>(xposition) / impl->hidpiScaleFactor)),
+	    static_cast<int>(std::lround(static_cast<float>(yposition) / impl->hidpiScaleFactor)));
 }
 
 void Window::SetRelativeMouseMode(const bool relative) {
@@ -423,23 +503,23 @@ void Window::setFullscreen(bool f) {
 	fullscreen_ = f;
 }
 
-#ifdef _WIN32
 int Window::getMouseX() const {
 	if (relativeMouseMode) {
-		return mousex_;
+		return mousex_ * impl->hidpiScaleFactor;
 	}
-	return std::lround((mousex_ - (width_ - canvasWidth) / 2) *
-	                   (float(width_) / impl->actualWidth));
+	return std::lround(
+	    (mousex_ * impl->hidpiScaleFactor - (impl->actualWidth - impl->actualCanvasWidth) / 2) *
+	    (float(canvasWidth) / impl->actualCanvasWidth));
 }
 
 int Window::getMouseY() const {
 	if (relativeMouseMode) {
-		return mousey_;
+		return mousey_ * impl->hidpiScaleFactor;
 	}
-	return std::lround((mousey_ - (height_ - canvasHeight) / 2) *
-	                   (float(height_) / impl->actualHeight));
+	return std::lround(
+	    (mousey_ * impl->hidpiScaleFactor - (impl->actualHeight - impl->actualCanvasHeight) / 2) *
+	    (float(canvasHeight) / impl->actualCanvasHeight));
 }
-#endif
 
 void setCursor(Cursor type) {
 	SDL_SystemCursor sdlType = SDL_SYSTEM_CURSOR_ARROW;
@@ -472,6 +552,14 @@ void errorMessage(const std::string &text) {
 	if (window) {
 		window->SetMouseVisible(old);
 	}
+}
+
+float Window::getResizedWindowScalingX() const {
+	return impl->actualWidth / static_cast<float>(impl->actualCanvasWidth);
+}
+
+float Window::getResizedWindowScalingY() const {
+	return impl->actualHeight / static_cast<float>(impl->actualCanvasHeight);
 }
 
 } // namespace jngl

@@ -1,4 +1,4 @@
-// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Sprite class and related functions
 /// \file
@@ -83,7 +83,7 @@ public:
 		/// Returns whether the sprite has been loaded, does NOT block
 		///
 		/// After this returned true all other methods won't block any more.
-		operator bool() const;
+		operator bool() const; // NOLINT
 
 		/// Blocks until the Sprite has been loaded
 		///
@@ -123,8 +123,13 @@ public:
 	/// Draw a cutout of the sprite. drawClipped({0, 0}, {1, 1}) would draw it normally.
 	void drawClipped(Vec2 start, Vec2 end) const;
 
-	/// Draws a list of triangles with the sprite's texture on it
+	/// Draws a list of triangles with the sprite's texture on it using the global modelview from
+	/// jngl::modelview()
 	void drawMesh(const std::vector<Vertex>& vertexes, const ShaderProgram* = nullptr) const;
+
+	/// Draws a list of triangles with the sprite's texture on it, ignores the Sprite's position
+	void drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
+	              const ShaderProgram* = nullptr) const;
 
 	void setBytes(const unsigned char*);
 
@@ -151,9 +156,6 @@ private:
 		unsigned int dataSize;
 	};
 	Finally LoadBMP(std::string_view filename, FILE* fp, bool halfLoad);
-#ifndef NOJPEG
-	Finally LoadJPG(std::string_view filename, FILE* file, bool halfLoad);
-#endif
 #ifndef NOWEBP
 	Finally LoadWebP(std::string_view filename, FILE* file, bool halfLoad);
 #endif

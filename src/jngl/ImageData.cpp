@@ -1,8 +1,9 @@
-// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ImageData.hpp"
 
 #include "../helper.hpp"
+#include "../jngl/debug.hpp"
 #include "../main.hpp"
 
 #ifdef ANDROID
@@ -77,9 +78,13 @@ std::unique_ptr<ImageData> ImageData::load(const std::string& filename) {
 	}
 	FILE* pFile = fopen(fullFilename.c_str(), "rb");
 	if (pFile == nullptr) {
-		throw std::runtime_error(std::string("File not found: " + fullFilename));
+		throw std::runtime_error("File not found: " + fullFilename);
 	}
-	Finally _([pFile]() { fclose(pFile); });
+	Finally _([pFile]() {
+		if (fclose(pFile) != 0) {
+			debugLn("error closing file");
+		}
+	});
 	return loadFunction(filename, pFile);
 }
 

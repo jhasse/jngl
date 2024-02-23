@@ -1,16 +1,60 @@
 name: Windows
 on: [push]
 jobs:
+  clang-cl:
+    runs-on: windows-2022
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ilammy/msvc-dev-cmd@v1
+    - name: Configure
+      run: cmake -Bbuild -G"Ninja Multi-Config" -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl
+    - name: Build (Debug)
+      run: cmake --build build --config Debug
+    - name: Unittest (Debug)
+      run: |
+        build/Debug/jngl-unittest Drawable
+        build/Debug/jngl-unittest ImageData
+        build/Debug/jngl-unittest FinallyTest
+        build/Debug/jngl-unittest halfLoadTest
+        build/Debug/jngl-unittest getBinaryPath
+        build/Debug/jngl-unittest readAsset
+    - name: Build (Release)
+      run: cmake --build build --config Release
+    - name: Unittest (Release)
+      run: |
+        build/Release/jngl-unittest Drawable
+        build/Release/jngl-unittest ImageData
+        build/Release/jngl-unittest FinallyTest
+        build/Release/jngl-unittest halfLoadTest
+        build/Release/jngl-unittest getBinaryPath
+        build/Release/jngl-unittest readAsset
+
   msvc:
     runs-on: windows-2022
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Configure
       run: cmake -Bbuild
     - name: Build (Debug)
       run: cmake --build build --config Debug
+    - name: Unittest (Debug)
+      run: |
+        build/Debug/jngl-unittest Drawable
+        build/Debug/jngl-unittest ImageData
+        build/Debug/jngl-unittest FinallyTest
+        build/Debug/jngl-unittest halfLoadTest
+        build/Debug/jngl-unittest getBinaryPath
+        build/Debug/jngl-unittest readAsset
     - name: Build (Release)
       run: cmake --build build --config Release
+    - name: Unittest (Release)
+      run: |
+        build/Release/jngl-unittest Drawable
+        build/Release/jngl-unittest ImageData
+        build/Release/jngl-unittest FinallyTest
+        build/Release/jngl-unittest halfLoadTest
+        build/Release/jngl-unittest getBinaryPath
+        build/Release/jngl-unittest readAsset
     - name: Configure (UWP)
       run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore '-DCMAKE_SYSTEM_VERSION=10.0'
     - name: Build (UWP, Debug)
@@ -24,8 +68,8 @@ jobs:
       image: registry.fedoraproject.org/fedora-minimal:37
     steps:
     - name: Install dependencies
-      run: microdnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw64-libepoxy mingw64-openal-soft mingw32-nsis tar gzip
-    - uses: actions/checkout@v3
+      run: microdnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw32-nsis mingw64-gcc-c++ tar gzip
+    - uses: actions/checkout@v4
     - name: Build with CMake and GCC
       run: |
         mingw64-cmake -Bbuild-windows -GNinja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=0 -DJNGL_SDL2=1

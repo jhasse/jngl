@@ -1,4 +1,4 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -39,7 +39,7 @@ public:
 	Window& operator=(Window&&) = delete;
 	~Window();
 	bool isRunning() const;
-	void quit();
+	void quit() noexcept;
 	void cancelQuit();
 	void UpdateInput();
 	void updateKeyStates();
@@ -56,6 +56,13 @@ public:
 	int getCanvasHeight() const;
 	int getWidth() const;
 	int getHeight() const;
+
+	/// When the Window gets resized this returns the scaling for each direction (since letterboxing
+	/// might result in different values) which has to be taken into account for FrameBuffers (SDL
+	/// backend only)
+	float getResizedWindowScalingX() const;
+	float getResizedWindowScalingY() const;
+
 	ScaleablePixels getTextWidth(const std::string&);
 	Pixels getLineHeight();
 	void setLineHeight(Pixels);
@@ -90,6 +97,8 @@ public:
 	void draw() const;
 	std::shared_ptr<Work> getWork();
 	void addJob(std::shared_ptr<Job>);
+	void removeJob(Job*);
+	std::shared_ptr<Job> getJob(const std::function<bool(Job&)>& predicate) const;
 	void resetFrameLimiter();
 	unsigned int getStepsPerSecond() const;
 	void setStepsPerSecond(unsigned int);
@@ -124,7 +133,10 @@ private:
 	GLuint vaoRect = 0;
 	unsigned int maxStepsPerFrame = 3;
 	bool running = true;
-	bool fullscreen_, isMouseVisible_, relativeMouseMode, anyKeyPressed_;
+	bool fullscreen_;
+	bool isMouseVisible_ = true;
+	bool relativeMouseMode = false;
+	bool anyKeyPressed_ = false;
 	bool isMultisampleSupported_ = true;
 	std::array<bool, 3> mouseDown_{ { false, false, false } };
 	std::array<bool, 3> mousePressed_{ { false, false, false } };
@@ -153,6 +165,7 @@ private:
 	bool changeWork = false;
 	std::shared_ptr<Work> newWork_;
 	std::vector<std::shared_ptr<Job>> jobs;
+	std::vector<Job*> jobsToRemove;
 	unsigned int stepsPerFrame;
 	double sleepPerFrame = 0; // in seconds
 	double sleepCorrectionFactor;
@@ -173,5 +186,9 @@ private:
 	// <fontSize, <fontName, FontImpl>>
 	std::map<int, std::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
 	std::vector<std::function<void()>> updateInputCallbacks;
+
+#ifdef JNGL_PERFORMANCE_OVERLAY
+	double lastStepDuration = 0;
+#endif
 };
 } // namespace jngl

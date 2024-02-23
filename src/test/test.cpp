@@ -3,6 +3,8 @@
 
 #include "../jngl.hpp"
 #include "../jngl/init.hpp"
+#include "audio/engine.hpp"
+#include "audio/mixer.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -38,13 +40,12 @@ private:
 
 class Test : public jngl::Work {
 public:
-	Test()
-	: fb2(jngl::getWindowSize()), logoWebp("jngl.webp"), soundLoader(jngl::load("test.ogg")) {
-		jngl::setTitle(jngl::App::instance().getDisplayName() + " | UTF-8: äöüß");
-		jngl::setIcon("jngl");
+	explicit Test(const std::string& displayName)
+	: frameTime(jngl::getTime()), lastTime(jngl::getTime()), fb2(jngl::getWindowSize()),
+	  logoWebp("jngl.webp"), soundLoader(jngl::load("test.ogg")) {
+		jngl::setTitle(displayName + " | UTF-8: äöüß");
+		jngl::setIcon("jngl-icon");
 		jngl::setMouseVisible(false);
-		frameTime = jngl::getTime();
-		lastTime = jngl::getTime();
 	}
 	void step() override {
 		rotate += 90.0 / 60.0; // 90 degree per second
@@ -55,16 +56,18 @@ public:
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
 		if (jngl::keyPressed('p')) {
-			auto start = clock.now();
+			auto start = std::chrono::steady_clock::now();
 			jngl::stop("test.ogg");
 			std::cout << "stop took "
-			          << std::chrono::duration_cast<std::chrono::milliseconds>(clock.now() - start)
+			          << std::chrono::duration_cast<std::chrono::milliseconds>(
+			                 std::chrono::steady_clock::now() - start)
 			                 .count()
 			          << " ms.\n";
-			start = clock.now();
+			start = std::chrono::steady_clock::now();
 			jngl::play("test.ogg");
 			std::cout << "play took "
-			          << std::chrono::duration_cast<std::chrono::milliseconds>(clock.now() - start)
+			          << std::chrono::duration_cast<std::chrono::milliseconds>(
+			                 std::chrono::steady_clock::now() - start)
 			                 .count()
 			          << " ms.\n";
 		}
@@ -96,7 +99,7 @@ public:
 		jngl::pushMatrix();
 		lastTime = jngl::getTime();
 		for (int i = 0; i < 10; ++i) {
-			if (jngl::keyDown(char('0' + i))) {
+			if (jngl::keyDown(static_cast<char>('0' + i))) {
 				performance = i == 0 ? 10 : i;
 			}
 		}
@@ -166,10 +169,11 @@ public:
 			jngl::setFullscreen(!jngl::getFullscreen());
 		}
 		jngl::print("Press K to test key codes.", 5, 490);
-		jngl::print("Press P to play a sound, L to loop it.", 6, 510);
+		jngl::print("Press P to play a sound, L to loop it.", jngl::isPlaying("test.ogg") ? 20 : 6,
+		            510);
 		jngl::print("Press G to load a Sprite asynchronously.", 6, 530);
 		static int playbackSpeed = 100;
-		jngl::setPlaybackSpeed(float(playbackSpeed) / 100.0f);
+		jngl::setPlaybackSpeed(static_cast<float>(playbackSpeed) / 100.0f);
 		jngl::print("Press + and - to change the audio playback speed: " +
 		      std::to_string(playbackSpeed) + " %", 6, 550);
 		if (jngl::keyPressed('-')) {
@@ -180,7 +184,7 @@ public:
 		}
 		jngl::setVolume(volume);
 		jngl::print("Use your mouse wheel to change the volume: " +
-		                std::to_string(int(volume * 100)) + " %",
+		                std::to_string(static_cast<int>(volume * 100)) + " %",
 		            6, 570);
 		jngl::setColor(0,0,255,128);
 		if (drawOnFrameBuffer) {
@@ -197,7 +201,7 @@ public:
 		if (++frameNumber == 500) {
 			const auto seconds = jngl::getTime() - frameTime;
 			std::cout << "It took " << seconds << " seconds to render 500 frames (~"
-			          << int(500.0 / seconds) << " FPS)" << std::endl;
+			          << static_cast<int>(500.0 / seconds) << " FPS)" << std::endl;
 			frameNumber = 0;
 			frameTime = jngl::getTime();
 		}
@@ -220,7 +224,6 @@ private:
 	float volume = 1;
 	std::unique_ptr<jngl::Shader> vertexShader, fragmentShader;
 	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
-	std::chrono::steady_clock clock;
 	jngl::Finally soundLoader;
 };
 
@@ -228,7 +231,7 @@ jngl::AppParameters jnglInit() {
 	jngl::AppParameters params;
 	params.displayName = "JNGL Test Application";
 	params.screenSize = { 800, 600 };
-	params.start = []() {
+	params.start = [displayName = params.displayName]() {
 		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
 		          << jngl::getDesktopHeight() << std::endl
 		          << "Preferred language: " << jngl::getPreferredLanguage() << std::endl
@@ -237,7 +240,7 @@ jngl::AppParameters jnglInit() {
 			const auto controllers = jngl::getConnectedControllers();
 			std::cout << "Number of connected controllers: " << controllers.size() << std::endl;
 		});
-		return std::make_shared<Test>();
+		return std::make_shared<Test>(displayName);
 	};
 	return params;
 }
@@ -257,13 +260,14 @@ void Test::drawBackground() const {
 			}
 		}
 	} else {
-		jngl::drawClipped("jngl", jngl::getScreenWidth() / 2 - jngl::getWidth("jngl") / 2.,
-		                  jngl::getScreenHeight() / 2 - jngl::getHeight("jngl") / 2.,
-		                  float(0.5 - factor / 2), float(0.5 + factor / 2),
-		                  float(0.5 - factor / 2), float(0.5 + factor / 2));
+		jngl::drawClipped(
+		    "jngl", jngl::getScreenWidth() / 2 - jngl::getWidth("jngl") / 2.,
+		    jngl::getScreenHeight() / 2 - jngl::getHeight("jngl") / 2.,
+		    static_cast<float>(0.5 - factor / 2), static_cast<float>(0.5 + factor / 2),
+		    static_cast<float>(0.5 - factor / 2), static_cast<float>(0.5 + factor / 2));
 	}
 	jngl::setColor(255, 0, 0, 100);
-	jngl::drawTriangle(600, 30, 700, 30, 650, 130);
+	jngl::drawTriangle({ 600, 30 }, { 700, 30 }, { 650, 130 });
 	jngl::setColor(0, 255, 0, 100);
 	jngl::drawRect(600, 400, 100, 100);
 	jngl::setColor(0, 0, 255, 100);
@@ -283,7 +287,7 @@ void drawMouse(const jngl::Vec2 mouse) {
 class RecentlyPressedKey {
 public:
 	RecentlyPressedKey(std::string name, int x, int y)
-	: name_(std::move(name)), alpha_(255), x_(x), y_(y), lastTime_(jngl::getTime()) {
+	: name_(std::move(name)), x_(x), y_(y), lastTime_(jngl::getTime()) {
 	}
 	void Draw() {
 		double timeSinceLastFrame = jngl::getTime() - lastTime_;
@@ -291,15 +295,16 @@ public:
 		alpha_ -= timeSinceLastFrame * 60;
 		x_ += timeSinceLastFrame * 40;
 		jngl::setFontColor(0, 0, 0, static_cast<unsigned char>(alpha_));
-		jngl::print(name_, int(x_), int(y_));
+		jngl::print(name_, static_cast<int>(x_), static_cast<int>(y_));
 		jngl::setFontColor(0, 0, 0, 255);
 	}
 	[[nodiscard]] int GetAlpha() const {
-		return int(alpha_);
+		return static_cast<int>(alpha_);
 	}
 private:
 	std::string name_;
-	double alpha_, x_, y_, lastTime_;
+	double alpha_ = 255;
+	double x_, y_, lastTime_;
 };
 
 
@@ -386,7 +391,7 @@ void testKeys() {
 		for (char c = '0'; c <= 'z'; ++c) {
 			printChar(c, 380, y);
 			if (c >= 'a' && c <= 'z') {
-				printChar(char(toupper(c)), 610, y);
+				printChar(static_cast<char>(toupper(c)), 610, y);
 			}
 			y += 15;
 			if (c == '9') {
@@ -468,8 +473,8 @@ void testKeys() {
 			                  -controller->state(jngl::controller::RightStickY)) }) {
 				const float circleRadius = 20;
 				jngl::setColor(100, 100, 100, 255);
-				auto circleModelview =
-				    jngl::modelview().translate({ 530, double(-40 + controllerNr * 110) });
+				auto circleModelview = jngl::modelview().translate(
+				    { 530, static_cast<double>(-40 + controllerNr * 110) });
 				jngl::drawEllipse(circleModelview, circleRadius, circleRadius);
 				jngl::setColor(255, 255, 255, 255);
 				jngl::drawCircle(circleModelview.translate(circleRadius * stick), 4);
@@ -477,7 +482,8 @@ void testKeys() {
 			}
 
 			jngl::setColor(255, 255, 255, 150);
-			jngl::drawRect({500, 40. + double(controllerNr - 1) * 110.}, {300, 120});
+			jngl::drawRect({ 500, 40. + static_cast<double>(controllerNr - 1) * 110. },
+			               { 300, 120 });
 			jngl::print(sstream.str(), 558, 50 + (controllerNr - 1) * 110);
 			++controllerNr;
 		}

@@ -4,12 +4,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev libjpeg-dev libpng-dev libvorbis-dev libopenal-dev libepoxy-dev g++ libwebp-dev git libsdl2-dev ninja-build
-    - name: Build with CMake and GCC
+        sudo apt install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev libpng-dev libvorbis-dev g++ libwebp-dev git libsdl2-dev ninja-build
+    - name: Configure with CMake and GCC
+      run: cmake -Bbuild -G"Ninja Multi-Config"
+    - name: Build Debug
+      run: cd build && ninja
+    - name: Build Release
+      run: cd build && ninja -f build-Release.ninja
+    - name: Install unittest dependencies
+      run: sudo apt install xserver-xorg-core xserver-xorg-video-dummy
+    - name: Unittest
       run: |
-        cmake -Bbuild -H. -GNinja
-        ninja -Cbuild
+        cd build
+        Xorg -config ../data/xorg.conf &>/dev/null &
+        sleep 1 # wait for Xorg to boot up
+        DISPLAY=:0 ./Debug/jngl-unittest
+        DISPLAY=:0 ./Release/jngl-unittest

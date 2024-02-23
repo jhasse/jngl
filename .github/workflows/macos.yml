@@ -4,10 +4,10 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Install dependencies
       run: |
-        brew install sdl2 freetype libvorbis libepoxy jpeg webp pkg-config ninja
+        brew install sdl2 freetype libvorbis webp pkg-config ninja
     - name: Build with CMake
       run: |
         cmake -H. -Bbuild-cmake -GNinja
