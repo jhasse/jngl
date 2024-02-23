@@ -283,23 +283,23 @@ Finally Sprite::LoadPNG(std::string_view filename, FILE* const fp, const bool ha
 	// Read in some of the signature bytes
 	if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK ||
 	    png_sig_cmp(buf, png_size_t(0), PNG_BYTES_TO_CHECK) != 0) {
-		throw std::runtime_error(std::string("Error reading signature bytes. (" + filename + ")"));
+		throw std::runtime_error(std::format("Error reading signature bytes. ({})", filename));
 	}
 
 	png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 	if (!png_ptr) {
-		throw std::runtime_error(std::string("libpng error while reading (" + filename + ")"));
+		throw std::runtime_error(std::format("libpng error while reading ({})", filename));
 	}
 
 	png_infop info_ptr = png_create_info_struct(png_ptr);
 	if (!info_ptr) {
-		throw std::runtime_error(std::string("libpng error while reading (" + filename + ")"));
+		throw std::runtime_error(std::format("libpng error while reading ({})", filename));
 	}
 
 	if (setjmp(png_jmpbuf(png_ptr))) {
 		// Free all of the memory associated with the png_ptr and info_ptr
 		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
-		throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
+		throw std::runtime_error(std::format("Error reading file. ({})", filename));
 	}
 	png_init_io(png_ptr, fp);
 	png_set_sig_bytes(png_ptr, PNG_BYTES_TO_CHECK);
