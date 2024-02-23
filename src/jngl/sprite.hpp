@@ -122,8 +122,13 @@ public:
 	/// Draw a cutout of the sprite. drawClipped({0, 0}, {1, 1}) would draw it normally.
 	void drawClipped(Vec2 start, Vec2 end) const;
 
-	/// Draws a list of triangles with the sprite's texture on it
+	/// Draws a list of triangles with the sprite's texture on it using the global modelview from
+	/// jngl::modelview()
 	void drawMesh(const std::vector<Vertex>& vertexes, const ShaderProgram* = nullptr) const;
+
+	/// Draws a list of triangles with the sprite's texture on it, ignores the Sprite's position
+	void drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
+	              const ShaderProgram* = nullptr) const;
 
 	void setBytes(const unsigned char*);
 

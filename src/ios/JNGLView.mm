@@ -60,7 +60,7 @@ std::unique_ptr<jngl::App> jnglApp;
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
 
-        jngl::App::instance().init(params);
+        cleanAppImpl = new jngl::Finally(jngl::App::instance().init(params));
 		jngl::showWindow("", width, height, true,
 		                 params.minAspectRatio ? *params.minAspectRatio : std::make_pair(1, 3),
 		                 params.maxAspectRatio ? *params.maxAspectRatio : std::make_pair(3, 1));
@@ -86,6 +86,12 @@ std::unique_ptr<jngl::App> jnglApp;
 		[UIView setAnimationsEnabled:NO];
 	}
 	return self;
+}
+
+- (void)dealloc {
+	delete cleanAppImpl; // it seems this never gets called? I guess we're not allowed to do much at
+	                     // exit on iOS
+	[super dealloc];
 }
 
 - (void) drawView: (CADisplayLink*) displayLink {

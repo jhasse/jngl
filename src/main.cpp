@@ -1,4 +1,4 @@
-// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
@@ -7,6 +7,7 @@
 #include "jngl.hpp"
 #include "paths.hpp"
 #include "spriteimpl.hpp"
+#include "texture.hpp"
 
 #include <boost/qvm_lite.hpp>
 #include <cstddef>
@@ -46,8 +47,6 @@ std::stack<jngl::Mat3> modelviewStack;
 std::unique_ptr<ShaderProgram> simpleShaderProgram;
 int simpleModelviewUniform;
 int simpleColorUniform;
-
-static std::vector<std::function<void()>> callAtExit;
 
 void clearBackgroundColor() {
 	glClearColor(bgRed, bgGreen, bgBlue, 1);
@@ -118,6 +117,56 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	simpleShaderProgram = std::make_unique<ShaderProgram>(vertexShader, fragmentShader);
 	simpleModelviewUniform = simpleShaderProgram->getUniformLocation("modelview");
 	simpleColorUniform = simpleShaderProgram->getUniformLocation("color");
+
+	{
+		Texture::textureVertexShader = new Shader(R"(#version 300 es
+			in mediump vec2 position;
+			in mediump vec2 inTexCoord;
+			uniform highp mat3 modelview;
+			uniform mediump mat4 projection;
+			out mediump vec2 texCoord;
+
+			void main() {
+				vec3 tmp = modelview * vec3(position, 1);
+				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
+				texCoord = inTexCoord;
+			})", Shader::Type::VERTEX, R"(#version 100
+			attribute mediump vec2 position;
+			attribute mediump vec2 inTexCoord;
+			uniform highp mat3 modelview;
+			uniform mediump mat4 projection;
+			varying mediump vec2 texCoord;
+
+			void main() {
+				vec3 tmp = modelview * vec3(position, 1);
+				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
+				texCoord = inTexCoord;
+			})");
+		Shader fragmentShader(R"(#version 300 es
+			uniform sampler2D tex;
+			uniform lowp vec4 spriteColor;
+
+			in mediump vec2 texCoord;
+
+			out lowp vec4 outColor;
+
+			void main() {
+				outColor = texture(tex, texCoord) * spriteColor;
+			})", Shader::Type::FRAGMENT, R"(#version 100
+			uniform sampler2D tex;
+			uniform lowp vec4 spriteColor;
+
+			varying mediump vec2 texCoord;
+
+			void main() {
+				gl_FragColor = texture2D(tex, texCoord) * spriteColor;
+			})");
+		Texture::textureShaderProgram =
+		    new ShaderProgram(*Texture::textureVertexShader, fragmentShader);
+		Texture::shaderSpriteColorUniform =
+		    Texture::textureShaderProgram->getUniformLocation("spriteColor");
+		Texture::modelviewUniform = Texture::textureShaderProgram->getUniformLocation("modelview");
+	}
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -210,17 +259,16 @@ void showWindow(const std::string& title, const int width, const int height, boo
 }
 
 void hideWindow() {
-	for (const auto& f : callAtExit) {
-		f();
+	if (pWindow) {
+		App::instance().callAtExitFunctions();
 	}
-	callAtExit.clear();
 	simpleShaderProgram.reset();
 	unloadAll();
 	pWindow.Delete();
 }
 
 void atExit(std::function<void()> f) {
-	callAtExit.emplace_back(std::move(f));
+	App::instance().atExit(std::move(f));
 }
 
 void swapBuffers() {
@@ -557,7 +605,7 @@ bool getAntiAliasing() {
 	return antiAliasingEnabled;
 }
 
-Finally loadSound(const std::string&); // definied in audio.cpp
+Finally loadSound(const std::string&); // definied in SoundFile.cpp
 
 Finally load(const std::string& filename) {
 	if (filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg") {
@@ -753,6 +801,11 @@ ShaderProgram::Context useSimpleShaderProgram(const Mat3& modelview) {
 	glEnableVertexAttribArray(0);
 
 	return context;
+}
+
+int round(double v) {
+	assert(!std::isnan(v));
+	return static_cast<int>(std::lround(v));
 }
 
 } // namespace jngl

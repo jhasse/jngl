@@ -5,9 +5,10 @@
 #import <OpenGLES/ES3/glext.h>
 
 namespace jngl {
-	struct AppParameters;
-	class WindowImpl;
-}
+struct AppParameters;
+class WindowImpl;
+class Finally;
+} // namespace jngl
 
 @interface JNGLView : UIView <UIKeyInput> {
 	EAGLContext* context;
@@ -18,6 +19,7 @@ namespace jngl {
 	jngl::WindowImpl* impl;
 	bool pause;
 	bool needToResetFrameLimiter;
+	jngl::Finally* cleanAppImpl;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame withAppParameters:(const jngl::AppParameters&)params;

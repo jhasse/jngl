@@ -145,10 +145,18 @@ void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
                            const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
 	scale(getScaleFactor());
-	impl->texture.drawMesh(vertexes, static_cast<float>(spriteColorRed) / 255.0f,
-	                       static_cast<float>(spriteColorGreen) / 255.0f,
-	                       static_cast<float>(spriteColorBlue) / 255.0f,
-	                       static_cast<float>(spriteColorAlpha) / 255.0f, shaderProgram);
+	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   opengl::modelview.data);
+	} else {
+		glUniform4f(Texture::shaderSpriteColorUniform, static_cast<float>(spriteColorRed) / 255.0f,
+		            static_cast<float>(spriteColorGreen) / 255.0f,
+		            static_cast<float>(spriteColorBlue) / 255.0f,
+		            static_cast<float>(spriteColorAlpha) / 255.0f);
+		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+	}
+	impl->texture.drawMesh(vertexes);
 	popMatrix();
 }
 

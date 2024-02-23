@@ -55,6 +55,11 @@ void addJob(Args&&... args) {
 	addJob(std::make_shared<T>(std::forward<Args>(args)...));
 }
 
+/// Removes the passed Job after all Jobs have been stepped
+///
+/// If the Job isn't found, nothing happens.
+void removeJob(Job*);
+
 /// Returns the first Job for which \a predicate returned true
 std::shared_ptr<Job> getJob(const std::function<bool(Job&)>& predicate);
 

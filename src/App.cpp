@@ -1,4 +1,4 @@
-// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "App.hpp"
@@ -51,10 +51,22 @@ App& App::instance() {
 	return *self;
 }
 
-void App::init(AppParameters params) {
+Finally App::init(AppParameters params) {
 	assert(impl == nullptr);
 	impl = std::make_unique<App::Impl>(
 	    App::Impl{ std::move(params.displayName), params.pixelArt, params.steamAppId });
+	return Finally{ [this]() { impl.reset(); } };
+}
+
+void App::atExit(std::function<void()> f) {
+	callAtExit.emplace_back(std::move(f));
+}
+
+void App::callAtExitFunctions() {
+	for (const auto& f : callAtExit) {
+		f();
+	}
+	callAtExit.clear();
 }
 
 std::string App::getDisplayName() const {
@@ -85,7 +97,7 @@ void App::setPixelArt(const bool pixelArt) {
 
 void App::registerShaderProgram(ShaderProgram* shaderProgram) {
 	if (!impl) { // unit tests
-		init({});
+		new Finally(init({})); // leak
 	}
 	impl->shaderPrograms.insert(shaderProgram);
 }
@@ -106,7 +118,7 @@ void App::updateProjectionMatrix() const {
 namespace internal {
 
 void mainLoop(AppParameters params) {
-	App::instance().init(params);
+	auto context = App::instance().init(params);
 	if (auto id = params.steamAppId) {
 		jngl::initSteam(*id);
 	}
@@ -125,18 +137,10 @@ void mainLoop(AppParameters params) {
 			                  static_cast<double>(getDesktopHeight()) };
 		fullscreen = true;
 	}
-	if (fullscreen) {
-		const Vec2 desktopSize{ static_cast<double>(getDesktopWidth()),
-			                    static_cast<double>(getDesktopHeight()) };
-		if (desktopSize.x > 0 &&
-		    desktopSize.y > 0) { // desktop size isn't available on some platforms (e.g. Android)
-			setScaleFactor(std::min(desktopSize.x / params.screenSize->x,
-			                        desktopSize.y / params.screenSize->y));
-		}
-	} else {
+	if (!fullscreen) {
 		// Make window as big as possible
-		const double scaleFactor = std::min((getDesktopWidth() - 99) / params.screenSize->x,
-		                                    (getDesktopHeight() - 99) / params.screenSize->y);
+		const double scaleFactor = std::min((getDesktopWidth() * 0.925) / params.screenSize->x,
+		                                    (getDesktopHeight() * 0.925) / params.screenSize->y);
 		if (scaleFactor > 1) {
 			setScaleFactor(std::floor(scaleFactor));
 		} else {
@@ -150,8 +154,14 @@ void mainLoop(AppParameters params) {
 	                      : static_cast<int>(std::lround(params.screenSize->y * getScaleFactor())),
 	           fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
 	           params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
+	if (fullscreen && params.screenSize->x > 0 && params.screenSize->y > 0) {
+		const auto windowSize = jngl::getWindowSize();
+		setScaleFactor(std::min(static_cast<double>(windowSize[0]) / params.screenSize->x,
+		                        static_cast<double>(windowSize[1]) / params.screenSize->y));
+	}
 	setWork(params.start());
 	App::instance().mainLoop();
+	hideWindow();
 }
 
 } // namespace internal

@@ -9,7 +9,15 @@ android {
     defaultConfig {
         applicationId = 'com.bixense.jngl_test'
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
+    }
+    buildFeatures {
+        prefab true
     }
     buildTypes {
         release {
@@ -24,11 +32,12 @@ android {
             path 'src/main/cpp/CMakeLists.txt'
         }
     }
-    compileSdkVersion 31
-    ndkVersion '26.0.10792818'
+    compileSdkVersion 33
+    ndkVersion '26.1.10909125'
     namespace 'com.bixense.jngl_test'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.google.oboe:oboe:1.7.0'
 }

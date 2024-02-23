@@ -1,4 +1,4 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Includes all JNGL headers except for init.hpp
 /// @file
@@ -21,6 +21,7 @@
 #include "jngl/Vertex.hpp"
 #include "jngl/Video.hpp"
 #include "jngl/Widget.hpp"
+#include "jngl/WorkFactory.hpp"
 #include "jngl/debug.hpp"
 #include "jngl/effects.hpp"
 #include "jngl/font.hpp"
