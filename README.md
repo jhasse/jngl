@@ -34,7 +34,7 @@ libwebp-dev git libsdl2-dev
 
 ```
 sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libwebp-devel \
-cmake SDL2-devel gcc-c++
+cmake SDL2-devel gcc-c++ libatomic
 ```
 
 ### Arch Linux
