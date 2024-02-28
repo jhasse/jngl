@@ -12,6 +12,7 @@
 #include "../audio.hpp"
 #include "../audio/constants.hpp"
 #include "../audio/effect/pitch.hpp"
+#include "../audio/mixer.hpp"
 #include "../main.hpp"
 #include "../opengl.hpp"
 #include "../theoraplay/theoraplay.h"
@@ -342,10 +343,10 @@ private:
 
 Video::Video(const std::string& filename) : impl(std::make_shared<Impl>(filename)) {
 	if (impl->getFrequency() != audio::frequency) {
-		getMixer()->add(
+		Audio::handle().getMixer()->add(
 		    audio::pitch(impl, static_cast<float>(impl->getFrequency()) / audio::frequency));
 	} else {
-		getMixer()->add(impl);
+		Audio::handle().getMixer()->add(impl);
 	}
 }
 

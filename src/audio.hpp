@@ -1,21 +1,51 @@
-// Copyright 2010-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2010-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
-#include "audio/mixer.hpp"
+#include "audio/engine.hpp"
+#include "jngl/Singleton.hpp"
 
 #include <memory>
 
 namespace jngl {
 
+class Mixer;
+class Sound;
+
+namespace audio {
+struct pitch_control;
+struct volume_control;
+} // namespace audio
+
 void checkAlError();
 void pauseAudioDevice();
 void resumeAudioDevice();
 
-class Audio;
+class Audio : public jngl::Singleton<Audio> {
+public:
+	Audio();
+	Audio(const Audio&) = delete;
+	Audio& operator=(const Audio&) = delete;
+	Audio(Audio&&) = delete;
+	Audio& operator=(Audio&&) = delete;
+	~Audio();
 
-Audio& GetAudio();
-std::shared_ptr<Mixer> getMixer();
+	void play(std::shared_ptr<Sound> sound);
+	void stop(std::shared_ptr<Sound>& sound);
+	void pauseDevice();
+	void resumeDevice();
+	void setPitch(float pitch);
+	float getVolume() const;
+	void setVolume(float volume);
+	std::shared_ptr<Mixer> getMixer();
+
+private:
+	std::vector<std::shared_ptr<Sound>> sounds_;
+	std::shared_ptr<Mixer> mixer;
+	std::shared_ptr<audio::pitch_control> pitchControl;
+	std::shared_ptr<audio::volume_control> volumeControl;
+	audio::engine engine;
+};
 
 } // namespace jngl
