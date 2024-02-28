@@ -65,6 +65,9 @@ void Audio::setVolume(float volume) {
 std::shared_ptr<Mixer> Audio::getMixer() {
 	return mixer;
 }
+void Audio::step() {
+	engine.step();
+}
 
 SoundFile::SoundFile(const std::string& filename, std::launch) {
 	debug("Decoding ");

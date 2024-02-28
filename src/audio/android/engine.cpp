@@ -84,4 +84,8 @@ void engine::setPause(bool pause) {
 		}
 	}
 }
+
+void engine::step() {
+}
+
 } // namespace jngl::audio

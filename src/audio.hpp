@@ -39,6 +39,7 @@ public:
 	float getVolume() const;
 	void setVolume(float volume);
 	std::shared_ptr<Mixer> getMixer();
+    void step();
 
 private:
 	std::vector<std::shared_ptr<Sound>> sounds_;
