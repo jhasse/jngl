@@ -24,7 +24,9 @@ int Texture::modelviewUniform = -1;
 Texture::Texture(const float preciseWidth, const float preciseHeight, const int width,
                  const int height, const GLubyte* const* const rowPointers, GLenum format,
                  const GLubyte* const data) : texture_(opengl::genAndBindTexture()) {
-	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
+	assert(format == GL_RGB || format == GL_RGBA || format == GL_BGR);
+	glTexImage2D(GL_TEXTURE_2D, 0, format == GL_RGBA ? GL_RGBA : GL_RGB, width, height, 0, format,
+	             GL_UNSIGNED_BYTE, nullptr);
 	vertexes = {
 		0, 0,
 		0, 0, // texture coordinates

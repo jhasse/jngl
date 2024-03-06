@@ -50,30 +50,4 @@ namespace opengl
 
 	/// Generates a textures, binds it to GL_TEXTURE_2D and sets some common parameters
 	GLuint genAndBindTexture();
-
-	template<class T> struct Type {};
-
-	template<>
-	struct Type<float>
-	{
-		const static GLenum constant = GL_FLOAT;
-	};
-
-	template<>
-	struct Type<double>
-	{
-#ifdef GL_DOUBLE
-		const static GLenum constant = GL_DOUBLE;
-		using type = GLdouble;
-#else
-		const static GLenum constant = GL_FLOAT;
-		using type = GLfloat;
-#endif
-	};
-
-#ifdef GL_DOUBLE
-	using CoordType = GLdouble;
-#else
-	using CoordType = GLfloat;
-#endif
 } // namespace opengl

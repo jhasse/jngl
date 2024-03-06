@@ -1,16 +1,70 @@
 name: Windows
 on: [push]
 jobs:
+  clang-cl:
+    runs-on: windows-2022
+    steps:
+    - uses: actions/checkout@v4
+    - name: Cache CPM.cmake packages
+      uses: actions/cache@v4
+      with:
+        path: .cache/cpm
+        key: cpm
+    - uses: ilammy/msvc-dev-cmd@v1
+    - name: Configure
+      run: cmake -Bbuild -G"Ninja Multi-Config" -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl
+    - name: Build (Debug)
+      run: cmake --build build --config Debug
+    - name: Unittest (Debug)
+      run: |
+        build/Debug/jngl-unittest Drawable
+        build/Debug/jngl-unittest ImageData
+        build/Debug/jngl-unittest FinallyTest
+        build/Debug/jngl-unittest halfLoadTest
+        build/Debug/jngl-unittest getBinaryPath
+        build/Debug/jngl-unittest readAsset
+    - name: Build (Release)
+      run: cmake --build build --config Release
+    - name: Unittest (Release)
+      run: |
+        build/Release/jngl-unittest Drawable
+        build/Release/jngl-unittest ImageData
+        build/Release/jngl-unittest FinallyTest
+        build/Release/jngl-unittest halfLoadTest
+        build/Release/jngl-unittest getBinaryPath
+        build/Release/jngl-unittest readAsset
+
   msvc:
     runs-on: windows-2022
     steps:
     - uses: actions/checkout@v4
+    - name: Cache CPM.cmake packages
+      uses: actions/cache@v4
+      with:
+        path: .cache/cpm
+        key: cpm
     - name: Configure
       run: cmake -Bbuild
     - name: Build (Debug)
       run: cmake --build build --config Debug
+    - name: Unittest (Debug)
+      run: |
+        build/Debug/jngl-unittest Drawable
+        build/Debug/jngl-unittest ImageData
+        build/Debug/jngl-unittest FinallyTest
+        build/Debug/jngl-unittest halfLoadTest
+        build/Debug/jngl-unittest getBinaryPath
+        build/Debug/jngl-unittest readAsset
     - name: Build (Release)
       run: cmake --build build --config Release
+    - name: Unittest (Release)
+      run: |
+        build/Release/jngl-unittest Drawable
+        build/Release/jngl-unittest ImageData
+        build/Release/jngl-unittest FinallyTest
+        build/Release/jngl-unittest halfLoadTest
+        build/Release/jngl-unittest getBinaryPath
+        build/Release/jngl-unittest readAsset
     - name: Configure (UWP)
       run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore '-DCMAKE_SYSTEM_VERSION=10.0'
     - name: Build (UWP, Debug)
@@ -30,3 +84,6 @@ jobs:
       run: |
         mingw64-cmake -Bbuild-windows -GNinja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=0 -DJNGL_SDL2=1
         ninja -Cbuild-windows
+
+env:
+  CPM_SOURCE_CACHE: ${{ github.workspace }}/.cache/cpm

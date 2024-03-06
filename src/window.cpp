@@ -1,8 +1,9 @@
-// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "window.hpp"
 
+#include "audio.hpp"
 #include "freetype.hpp"
 #include "jngl.hpp"
 #include "jngl/ScaleablePixels.hpp"
@@ -354,6 +355,9 @@ void Window::stepIfNeeded() {
 #ifdef JNGL_PERFORMANCE_OVERLAY
 		auto start = std::chrono::steady_clock::now();
 #endif
+		if (auto audio = Audio::handleIfAlive()) {
+			audio->step();
+		}
 		for (auto& job : jobs) {
 			job->step();
 		}

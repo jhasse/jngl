@@ -178,7 +178,7 @@ endif()
 get_directory_property(hasParent PARENT_DIRECTORY)
 if(ANDROID OR MSVC OR IOS)
 	CPMAddPackage(NAME freetype
-		URL https://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.xz
+		URL https://sourceforge.net/projects/freetype/files/freetype2/2.11.1/freetype-2.11.1.tar.xz/download
 		URL_HASH SHA256=3333ae7cfda88429c97a7ae63b7d01ab398076c3b67182e960e5684050f2c5c8
 		OPTIONS "FT_DISABLE_HARFBUZZ 1"
 	)
@@ -236,7 +236,7 @@ else()
 				URL_HASH SHA1=0d9e0da0e935c4f0524cfd16d47d38b6045b9573
 				OPTIONS
 					"SDL_ATOMIC OFF"
-					"SDL_CPUINFO OFF"
+					"SDL_CPUINFO ON"
 					"SDL_DLOPEN OFF"
 					"SDL_FILE OFF"
 					"SDL_FILESYSTEM OFF"
