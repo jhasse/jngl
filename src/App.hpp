@@ -67,7 +67,14 @@ private:
 
 	static App* self;
 
-	/// Not part of Impl so that jngl::atExit works even before jnglInit() has been called
+	/// Not part of Impl so that jngl::atExit works even before jnglInit() has been called.
+	/// The lifecycle order is the following:
+	///
+	/// * App::App()
+	/// * jnglInit()
+	/// * App::init()
+	/// * Window::Window()
+	/// * appParameters.start()
 	std::vector<std::function<void()>> callAtExit;
 };
 
