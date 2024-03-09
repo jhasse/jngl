@@ -531,12 +531,12 @@ void drawRect(const Vec2 position, const Vec2 size) {
 }
 
 void drawRect(const Mat3& modelview, const Vec2 size, const Color color) {
-	auto red = colorRed;
-	auto green = colorGreen;
-	auto blue = colorBlue;
-	jngl::setColor(color);
-	pWindow->drawRect(modelview, size);
-	jngl::setColor(red, green, blue);
+	pWindow->drawRect(modelview, size,
+	                  Rgba::u8(color.getRed(), color.getGreen(), color.getBlue(), colorAlpha));
+}
+
+void drawRect(const Mat3& modelview, const Vec2 size, const Rgba color) {
+	pWindow->drawRect(modelview, size, color);
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {

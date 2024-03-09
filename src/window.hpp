@@ -1,4 +1,4 @@
-// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -25,6 +25,7 @@
 namespace jngl {
 class FontImpl;
 class Job;
+class Rgba;
 class ScaleablePixels;
 class WindowImpl;
 class Work;
@@ -111,6 +112,7 @@ public:
 	static void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
 	void drawLine(Mat3 modelview, Vec2 b) const;
 	void drawRect(Vec2 pos, Vec2 size) const;
+	void drawRect(Mat3 modelview, Vec2 size, Rgba color) const;
 	void drawRect(Mat3 modelview, Vec2 size) const;
 	void onControllerChanged(std::function<void()>);
 

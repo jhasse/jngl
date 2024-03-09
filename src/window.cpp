@@ -579,6 +579,18 @@ void Window::drawRect(const Vec2 pos, const Vec2 size) const {
 	jngl::popMatrix();
 }
 
+void Window::drawRect(Mat3 modelview, const Vec2 size, Rgba color) const {
+	glBindVertexArray(vaoRect);
+	auto context = jngl::simpleShaderProgram->use();
+	glUniform4f(simpleColorUniform, color.getRed(), color.getGreen(), color.getBlue(),
+	            color.getAlpha());
+	glUniformMatrix3fv(
+	    simpleModelviewUniform, 1, GL_FALSE,
+	    modelview.scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor()).data);
+	glEnableVertexAttribArray(0);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+}
+
 void Window::drawRect(Mat3 modelview, const Vec2 size) const {
 	glBindVertexArray(vaoRect);
 	auto tmp = useSimpleShaderProgram(

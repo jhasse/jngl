@@ -12,6 +12,7 @@
 #include "jngl/FrameBuffer.hpp"
 #include "jngl/Label.hpp"
 #include "jngl/Pixels.hpp"
+#include "jngl/Rgba.hpp"
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/Shader.hpp"
 #include "jngl/ShaderProgram.hpp"

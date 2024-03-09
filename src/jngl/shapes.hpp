@@ -1,4 +1,4 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Functions for drawing shapes
 /// @file
@@ -12,6 +12,7 @@
 namespace jngl {
 
 class Mat3;
+class Rgba;
 
 /// Sets the color which should be used to draw primitives
 ///
@@ -83,6 +84,11 @@ void drawRect(Vec2 position, Vec2 size);
 ///
 /// Use setAlpha to set the opacity.
 void drawRect(const Mat3& modelview, Vec2 size, Color);
+
+/// Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color
+///
+/// Use setAlpha to set the opacity.
+void drawRect(const Mat3& modelview, Vec2 size, Rgba color);
 
 template <class Vect> void drawRect(Vect pos, Vect size) {
 	drawRect(pos.x, pos.y, size.x, size.y);
