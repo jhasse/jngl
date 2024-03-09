@@ -55,5 +55,6 @@ var searchData=
   ['result_5fof_52',['result_of',['http://en.cppreference.com/w/cpp/types/result_of.html',1,'std']]],
   ['result_5fof_5ft_53',['result_of_t',['http://en.cppreference.com/w/cpp/types/result_of.html',1,'std']]],
   ['reverse_5fiterator_54',['reverse_iterator',['http://en.cppreference.com/w/cpp/iterator/reverse_iterator.html',1,'std']]],
-  ['runtime_5ferror_55',['runtime_error',['http://en.cppreference.com/w/cpp/error/runtime_error.html',1,'std']]]
+  ['rgba_55',['Rgba',['../classjngl_1_1Rgba.html',1,'jngl']]],
+  ['runtime_5ferror_56',['runtime_error',['http://en.cppreference.com/w/cpp/error/runtime_error.html',1,'std']]]
 ];

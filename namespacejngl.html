@@ -138,6 +138,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Pixels.html">Pixels</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale-dependent pixels, corresponds to actual pixels on the screen.  <a href="classjngl_1_1Pixels.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Rgba.html">Rgba</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Object representing a RGBA color.  <a href="classjngl_1_1Rgba.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1ScaleablePixels.html">ScaleablePixels</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale-independent pixels, also called "screen pixels".  <a href="classjngl_1_1ScaleablePixels.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -554,6 +557,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (<a 
 <tr class="memitem:a2c6804b18661e9201fc433980cf5d6ce"><td class="memItemLeft" align="right" valign="top"><a id="a2c6804b18661e9201fc433980cf5d6ce" name="a2c6804b18661e9201fc433980cf5d6ce"></a>
 <a class="el" href="classjngl_1_1Pixels.html">Pixels</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator/</b> (<a class="el" href="classjngl_1_1Pixels.html">Pixels</a>, float)</td></tr>
 <tr class="separator:a2c6804b18661e9201fc433980cf5d6ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6daf6049d5223d135e36b485e89134f"><td class="memItemLeft" align="right" valign="top"><a id="af6daf6049d5223d135e36b485e89134f" name="af6daf6049d5223d135e36b485e89134f"></a>
+<a class="el" href="classjngl_1_1Rgba.html">Rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><b>interpolate</b> (<a class="el" href="classjngl_1_1Rgba.html">Rgba</a> a, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> b, float t)</td></tr>
+<tr class="memdesc:af6daf6049d5223d135e36b485e89134f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
+<tr class="separator:af6daf6049d5223d135e36b485e89134f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d23d95fbe7f69b235a6984b67f5fa7c"><td class="memItemLeft" align="right" valign="top"><a id="a7d23d95fbe7f69b235a6984b67f5fa7c" name="a7d23d95fbe7f69b235a6984b67f5fa7c"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getScaleFactor</b> ()</td></tr>
 <tr class="memdesc:a7d23d95fbe7f69b235a6984b67f5fa7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of one screen pixel in actual pixels. <br /></td></tr>
@@ -642,6 +649,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawRect</b> (double 
 <tr class="memitem:a205c2adf01c829c4ebc78d9ef94ab793"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a205c2adf01c829c4ebc78d9ef94ab793">drawRect</a> (const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;<a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> size, <a class="el" href="classjngl_1_1Color.html">Color</a>)</td></tr>
 <tr class="memdesc:a205c2adf01c829c4ebc78d9ef94ab793"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color.  <a href="namespacejngl.html#a205c2adf01c829c4ebc78d9ef94ab793">More...</a><br /></td></tr>
 <tr class="separator:a205c2adf01c829c4ebc78d9ef94ab793"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ada40428e75b5dc0f697920e0753894"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a4ada40428e75b5dc0f697920e0753894">drawRect</a> (const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;<a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> size, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color)</td></tr>
+<tr class="memdesc:a4ada40428e75b5dc0f697920e0753894"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color.  <a href="namespacejngl.html#a4ada40428e75b5dc0f697920e0753894">More...</a><br /></td></tr>
+<tr class="separator:a4ada40428e75b5dc0f697920e0753894"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5d7a4704b83794f3c27871f022e2aa2"><td class="memTemplParams" colspan="2">template&lt;class Vect &gt; </td></tr>
 <tr class="memitem:af5d7a4704b83794f3c27871f022e2aa2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejngl.html#af5d7a4704b83794f3c27871f022e2aa2">drawRect</a> (Vect pos, Vect size)</td></tr>
 <tr class="separator:af5d7a4704b83794f3c27871f022e2aa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1895,7 +1905,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div>
 </div>
 <a id="a613e032e5ada91ff002f75a46bd217b9" name="a613e032e5ada91ff002f75a46bd217b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a613e032e5ada91ff002f75a46bd217b9">&#9670;&#160;</a></span>drawRect() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a613e032e5ada91ff002f75a46bd217b9">&#9670;&#160;</a></span>drawRect() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1926,7 +1936,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div>
 </div>
 <a id="a205c2adf01c829c4ebc78d9ef94ab793" name="a205c2adf01c829c4ebc78d9ef94ab793"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a205c2adf01c829c4ebc78d9ef94ab793">&#9670;&#160;</a></span>drawRect() <span class="overload">[2/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a205c2adf01c829c4ebc78d9ef94ab793">&#9670;&#160;</a></span>drawRect() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1962,8 +1972,45 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 
 </div>
 </div>
+<a id="a4ada40428e75b5dc0f697920e0753894" name="a4ada40428e75b5dc0f697920e0753894"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ada40428e75b5dc0f697920e0753894">&#9670;&#160;</a></span>drawRect() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawRect </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;&#160;</td>
+          <td class="paramname"><em>modelview</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Rgba.html">Rgba</a>&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color. </p>
+<p >Use setAlpha to set the opacity. </p>
+
+</div>
+</div>
 <a id="af5d7a4704b83794f3c27871f022e2aa2" name="af5d7a4704b83794f3c27871f022e2aa2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5d7a4704b83794f3c27871f022e2aa2">&#9670;&#160;</a></span>drawRect() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af5d7a4704b83794f3c27871f022e2aa2">&#9670;&#160;</a></span>drawRect() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1988,7 +2035,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00087">87</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00093">93</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
 
 </div>
 </div>
