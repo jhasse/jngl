@@ -62,7 +62,9 @@ void drawEllipse(Mat3 modelview, float width, float height, float startAngle = 0
 /// Angles in radian
 void drawCircle(Vec2, float radius, float startAngle = 0);
 
-void drawCircle(Mat3 modelview, float radius, float startAngle = 0);
+void drawCircle(Mat3 modelview, float radius, float startAngle);
+
+void drawCircle(Mat3 modelview, float radius);
 
 void drawPoint(double x, double y);
 

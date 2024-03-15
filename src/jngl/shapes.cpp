@@ -86,4 +86,23 @@ void drawCircle(Mat3 modelview, const float radius, const float startAngle) {
 	drawEllipse(modelview, radius, radius, startAngle);
 }
 
+void drawCircle(Mat3 modelview, const float radius) {
+	glBindVertexArray(opengl::vaoStream);
+	auto tmp = useSimpleShaderProgram(modelview.scale(radius).scale(
+	    static_cast<float>(getScaleFactor()), static_cast<float>(getScaleFactor())));
+	const static float vertexes[] = {
+		0.9659,  0.2588,  0.9397,  0.3420,  0.8702,  0.4999,  0.7568,  0.6597,  0.5878,  0.8090,
+		0.3420,  0.9397,  0.0588,  0.9983,  -0.2588, 0.9659,  -0.4999, 0.8702,  -0.6597, 0.7568,
+		-0.8090, 0.5878,  -0.9397, 0.3420,  -0.9659, 0.2588,  -0.9983, 0.0588,  -0.9659, -0.2588,
+		-0.8702, -0.4999, -0.7568, -0.6597, -0.5878, -0.8090, -0.3420, -0.9397, -0.2588, -0.9659,
+		0.0000,  -1.0000, 0.2588,  -0.9659, 0.3420,  -0.9397, 0.4999,  -0.8702, 0.6597,  -0.7568,
+		0.8090,  -0.5878, 0.9397,  -0.3420, 0.9659,  -0.2588, 1.0000,  0.0000
+	};
+	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
+	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(vertexes)), vertexes,
+	             GL_STREAM_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, static_cast<GLsizei>(sizeof(vertexes) / sizeof(float) / 2));
+}
+
 } // namespace jngl
