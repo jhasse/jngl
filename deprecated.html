@@ -79,10 +79,14 @@ $(function() {
 <div class="textblock"><dl class="reflist">
 <dt>Member <a class="el" href="classjngl_1_1FrameBuffer.html#a14dabca7589b28dc6adca2c5367546e1">FrameBuffer::clear</a>  ()</dt>
 <dd><a class="anchor" id="_deprecated000002"></a>use <a class="el" href="structjngl_1_1FrameBuffer_1_1Context.html#ab156ef3a1b8a1095c1a086c7056ad263" title="Clear the framebuffer with color.">jngl::FrameBuffer::Context::clear(Color)</a> instead  </dd>
+<dt>Member <a class="el" href="namespacejngl.html#a7b7d911b755d69ff08c637634d2c25df">jngl::drawEllipse</a>  (float xmid, float ymid, float width, float height, float startAngle=0)</dt>
+<dd><a class="anchor" id="_deprecated000012"></a>Use drawEllipse(Mat3, float, float, float) instead  </dd>
 <dt>Member <a class="el" href="namespacejngl.html#a5f3b65bc0411dcd941c0ad1e9e1d7ebb">jngl::drawLine</a>  (double xstart, double ystart, double xend, double yend)</dt>
 <dd><a class="anchor" id="_deprecated000011"></a>Use <a class="el" href="namespacejngl.html#adda6bd4a93eb670b63a319a2f6c4dd87" title="Draws a line from start to end, the width can be set using setLineWidth.">drawLine(Vec2, Vec2)</a> instead  </dd>
+<dt>Member <a class="el" href="namespacejngl.html#a85ac77722dae61e1b6b054b506bd1e45">jngl::drawPoint</a>  (double x, double y)</dt>
+<dd><a class="anchor" id="_deprecated000013"></a>Use drawCircle instead  </dd>
 <dt>Member <a class="el" href="namespacejngl.html#a5a2fef9a452c7eaa09ad0a6a7614fa76">jngl::drawTriangle</a>  (double A_x, double A_y, double B_x, double B_y, double C_x, double C_y)</dt>
-<dd><a class="anchor" id="_deprecated000012"></a>Use <a class="el" href="namespacejngl.html#a1732275d2646c634f74abec40aeaafe8" title="Draws the triangle a -&gt; b -&gt; c.">drawTriangle(Vec2, Vec2, Vec2)</a> instead  </dd>
+<dd><a class="anchor" id="_deprecated000014"></a>Use <a class="el" href="namespacejngl.html#a1732275d2646c634f74abec40aeaafe8" title="Draws the triangle a -&gt; b -&gt; c.">drawTriangle(Vec2, Vec2, Vec2)</a> instead  </dd>
 <dt>Member <a class="el" href="namespacejngl.html#a67f578ae7b31a18af696c75231554372">jngl::getConfigPath</a>  ()</dt>
 <dd><a class="anchor" id="_deprecated000007"></a>Use <a class="el" href="namespacejngl.html#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="namespacejngl.html#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead. </dd>
 <dt>Member <a class="el" href="namespacejngl.html#a36aabb71cb6dcef1e96154963745c790">jngl::getFPS</a>  ()</dt>
@@ -102,15 +106,15 @@ $(function() {
 <dt>Member <a class="el" href="namespacejngl.html#abc5e234e75b961a87cbce0b3fc9d1c5a">jngl::setLineWidth</a>  (float width)</dt>
 <dd><a class="anchor" id="_deprecated000010"></a>Use drawRectangle instead  </dd>
 <dt>Member <a class="el" href="namespacejngl.html#a9b9d453bc1307852b482b9926abeeca9">jngl::setWork</a>  (<a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> *)</dt>
-<dd><a class="anchor" id="_deprecated000017"></a>Use <a class="el" href="namespacejngl.html#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead  </dd>
+<dd><a class="anchor" id="_deprecated000019"></a>Use <a class="el" href="namespacejngl.html#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead  </dd>
 <dt>Member <a class="el" href="namespacejngl.html#a6c9a4f10e08890ed285c7062e0f0a81a">jngl::sleep</a>  (int milliseconds)</dt>
-<dd><a class="anchor" id="_deprecated000016"></a>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead  </dd>
+<dd><a class="anchor" id="_deprecated000018"></a>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead  </dd>
 <dt>Member <a class="el" href="classjngl_1_1Sprite.html#a87204f6bbbca14af2ddbc524f499f8f2">Sprite::drawClipped</a>  (float xstart, float xend, float ystart, float yend) const</dt>
-<dd><a class="anchor" id="_deprecated000015"></a>Use new drawClipped(Vec2, Vec2) method instead  </dd>
+<dd><a class="anchor" id="_deprecated000017"></a>Use new drawClipped(Vec2, Vec2) method instead  </dd>
 <dt>Member <a class="el" href="classjngl_1_1Sprite.html#a41b02a54c89c6d5fe3322b38d4a071f8">Sprite::drawScaled</a>  (float xfactor, float yfactor, const <a class="el" href="classjngl_1_1ShaderProgram.html" title="Linked vertex and fragment shaders.">ShaderProgram</a> *shaderProgram=nullptr) const</dt>
-<dd><a class="anchor" id="_deprecated000014"></a>Scale the modelview matrix instead using <a class="el" href="classjngl_1_1Mat3.html#ab617f121c1617e7156a72b12a06cb17f" title="Multiplies the matrix by a scaling matrix.">jngl::Mat3::scale</a>  </dd>
+<dd><a class="anchor" id="_deprecated000016"></a>Scale the modelview matrix instead using <a class="el" href="classjngl_1_1Mat3.html#ab617f121c1617e7156a72b12a06cb17f" title="Multiplies the matrix by a scaling matrix.">jngl::Mat3::scale</a>  </dd>
 <dt>Member <a class="el" href="classjngl_1_1Sprite.html#afc691192408ad699380be20bb1de75cc">Sprite::Sprite</a>  (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename, LoadType loadType=LoadType::NORMAL)</dt>
-<dd><a class="anchor" id="_deprecated000013"></a>Use <a class="el" href="classjngl_1_1Sprite_1_1Loader.html" title="Use this class to load a Sprite asynchronously.">Loader</a> instead </dd>
+<dd><a class="anchor" id="_deprecated000015"></a>Use <a class="el" href="classjngl_1_1Sprite_1_1Loader.html" title="Use this class to load a Sprite asynchronously.">Loader</a> instead </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
