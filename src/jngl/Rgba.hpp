@@ -4,9 +4,13 @@
 /// @file
 #pragma once
 
+#include "Rgb.hpp"
+
 #include <cstdint>
 
 namespace jngl {
+class Alpha;
+
 /// Object representing a RGBA color
 ///
 /// You can use the custom literal operator to create jngl::Rgba from HTML color codes. For example
@@ -24,6 +28,7 @@ public:
 	///
 	/// Values over 1.0f will result in 1.0f and negatives will result in 0.0f.
 	Rgba(float red, float green, float blue, float alpha);
+	Rgba(Rgb, Alpha);
 
 	static Rgba u8(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
 
@@ -46,6 +51,10 @@ public:
 	float getAlpha() const;
 	/// 0.0f ... 1.0f
 	void setAlpha(float);
+	void setAlpha(Alpha);
+
+	/// Overwrites red, green and blue, but leaves the alpha value untouched
+	void setRgb(Rgb color);
 
 private:
 	float red;

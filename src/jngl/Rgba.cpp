@@ -2,10 +2,16 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Rgba.hpp"
 
+#include "Alpha.hpp"
+
 namespace jngl {
 
 Rgba::Rgba(float red, float green, float blue, float alpha)
 : red(red), green(green), blue(blue), alpha(alpha) {
+}
+
+Rgba::Rgba(const Rgb color, const Alpha alpha)
+: red(color.getRed()), green(color.getGreen()), blue(color.getBlue()), alpha(alpha.getAlpha()) {
 }
 
 Rgba Rgba::u8(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
@@ -43,6 +49,16 @@ void Rgba::setBlue(const float blue) {
 
 void Rgba::setAlpha(const float alpha) {
 	this->alpha = alpha;
+}
+
+void Rgba::setAlpha(const Alpha alpha) {
+	this->alpha = alpha.getAlpha();
+}
+
+void Rgba::setRgb(Rgb color) {
+	red = color.getRed();
+	green = color.getGreen();
+	blue = color.getBlue();
 }
 
 Rgba interpolate(Rgba a, Rgba b, float t) {

@@ -66,6 +66,8 @@ void drawCircle(Mat3 modelview, float radius, float startAngle);
 
 void drawCircle(Mat3 modelview, float radius);
 
+void drawCircle(Mat3 modelview, float radius, Rgba color);
+
 void drawPoint(double x, double y);
 
 /// Draws the triangle a -> b -> c

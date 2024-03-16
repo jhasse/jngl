@@ -5,6 +5,7 @@
 #pragma once
 
 #include "jngl/Achievement.hpp"
+#include "jngl/Alpha.hpp"
 #include "jngl/Color.hpp"
 #include "jngl/Container.hpp"
 #include "jngl/Controller.hpp"
@@ -12,6 +13,7 @@
 #include "jngl/FrameBuffer.hpp"
 #include "jngl/Label.hpp"
 #include "jngl/Pixels.hpp"
+#include "jngl/Rgb.hpp"
 #include "jngl/Rgba.hpp"
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/Shader.hpp"

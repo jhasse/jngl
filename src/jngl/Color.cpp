@@ -1,7 +1,9 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Color.hpp"
+
+#include "Rgb.hpp"
 
 namespace jngl {
 
@@ -31,6 +33,10 @@ void Color::setGreen(const unsigned char green) {
 
 void Color::setBlue(const unsigned char blue) {
 	this->blue = blue;
+}
+
+Color::operator Rgb() const {
+	return Rgb::u8(red, green, blue);
 }
 
 Color interpolate(Color a, Color b, float t) {

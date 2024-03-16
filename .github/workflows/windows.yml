@@ -17,6 +17,8 @@ jobs:
       run: cmake --build build --config Debug
     - name: Unittest (Debug)
       run: |
+        build/Debug/jngl-unittest Color
+        build/Debug/jngl-unittest Rgb
         build/Debug/jngl-unittest Drawable
         build/Debug/jngl-unittest ImageData
         build/Debug/jngl-unittest FinallyTest
@@ -27,6 +29,8 @@ jobs:
       run: cmake --build build --config Release
     - name: Unittest (Release)
       run: |
+        build/Release/jngl-unittest Color
+        build/Release/jngl-unittest Rgb
         build/Release/jngl-unittest Drawable
         build/Release/jngl-unittest ImageData
         build/Release/jngl-unittest FinallyTest
@@ -49,6 +53,8 @@ jobs:
       run: cmake --build build --config Debug
     - name: Unittest (Debug)
       run: |
+        build/Debug/jngl-unittest Color
+        build/Debug/jngl-unittest Rgb
         build/Debug/jngl-unittest Drawable
         build/Debug/jngl-unittest ImageData
         build/Debug/jngl-unittest FinallyTest
@@ -59,6 +65,8 @@ jobs:
       run: cmake --build build --config Release
     - name: Unittest (Release)
       run: |
+        build/Release/jngl-unittest Color
+        build/Release/jngl-unittest Rgb
         build/Release/jngl-unittest Drawable
         build/Release/jngl-unittest ImageData
         build/Release/jngl-unittest FinallyTest
