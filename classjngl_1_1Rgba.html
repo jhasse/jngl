@@ -94,6 +94,9 @@ $(function() {
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a88e4c6f14213455092c6b537a6e3404b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Rgba.html#a88e4c6f14213455092c6b537a6e3404b">Rgba</a> (float red, float green, float blue, float alpha)</td></tr>
 <tr class="separator:a88e4c6f14213455092c6b537a6e3404b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52b1188c1a99d44c6379b75b41938204"><td class="memItemLeft" align="right" valign="top"><a id="a52b1188c1a99d44c6379b75b41938204" name="a52b1188c1a99d44c6379b75b41938204"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Rgba</b> (<a class="el" href="classjngl_1_1Rgb.html">Rgb</a>, <a class="el" href="classjngl_1_1Alpha.html">Alpha</a>)</td></tr>
+<tr class="separator:a52b1188c1a99d44c6379b75b41938204"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f9aa69e724c817dbef92f04c235d854"><td class="memItemLeft" align="right" valign="top"><a id="a5f9aa69e724c817dbef92f04c235d854" name="a5f9aa69e724c817dbef92f04c235d854"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getRed</b> () const</td></tr>
 <tr class="memdesc:a5f9aa69e724c817dbef92f04c235d854"><td class="mdescLeft">&#160;</td><td class="mdescRight">0.0f ... 1.0f <br /></td></tr>
@@ -126,6 +129,13 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>getAlpha</b> () cons
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setAlpha</b> (float)</td></tr>
 <tr class="memdesc:ae772bb337a8895f3e0a6f1baefc2aa72"><td class="mdescLeft">&#160;</td><td class="mdescRight">0.0f ... 1.0f <br /></td></tr>
 <tr class="separator:ae772bb337a8895f3e0a6f1baefc2aa72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9619eaea794c2364e4aec48bbf25aa4"><td class="memItemLeft" align="right" valign="top"><a id="ab9619eaea794c2364e4aec48bbf25aa4" name="ab9619eaea794c2364e4aec48bbf25aa4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setAlpha</b> (<a class="el" href="classjngl_1_1Alpha.html">Alpha</a>)</td></tr>
+<tr class="separator:ab9619eaea794c2364e4aec48bbf25aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0617d450ac4204c0ed5c5201e98ce51c"><td class="memItemLeft" align="right" valign="top"><a id="a0617d450ac4204c0ed5c5201e98ce51c" name="a0617d450ac4204c0ed5c5201e98ce51c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setRgb</b> (<a class="el" href="classjngl_1_1Rgb.html">Rgb</a> color)</td></tr>
+<tr class="memdesc:a0617d450ac4204c0ed5c5201e98ce51c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overwrites red, green and blue, but leaves the alpha value untouched. <br /></td></tr>
+<tr class="separator:a0617d450ac4204c0ed5c5201e98ce51c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -137,9 +147,9 @@ static <a class="el" href="classjngl_1_1Rgba.html">Rgba</a>&#160;</td><td class=
 <div class="textblock"><p >Object representing a RGBA color. </p>
 <p >You can use the custom literal operator to create <a class="el" href="classjngl_1_1Rgba.html" title="Object representing a RGBA color.">jngl::Rgba</a> from HTML color codes. For example <code>#68da4fee</code> becomes:</p>
 <div class="fragment"><div class="line"><a class="code hl_class" href="classjngl_1_1Rgba.html">jngl::Rgba</a> color = 0x68da4fee_rgba;</div>
-<div class="ttc" id="aclassjngl_1_1Rgba_html"><div class="ttname"><a href="classjngl_1_1Rgba.html">jngl::Rgba</a></div><div class="ttdoc">Object representing a RGBA color.</div><div class="ttdef"><b>Definition:</b> <a href="Rgba_8hpp_source.html#l00018">Rgba.hpp:18</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Rgba_html"><div class="ttname"><a href="classjngl_1_1Rgba.html">jngl::Rgba</a></div><div class="ttdoc">Object representing a RGBA color.</div><div class="ttdef"><b>Definition:</b> <a href="Rgba_8hpp_source.html#l00022">Rgba.hpp:22</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="Rgba_8hpp_source.html#l00018">18</a> of file <a class="el" href="Rgba_8hpp_source.html">Rgba.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Rgba_8hpp_source.html#l00022">22</a> of file <a class="el" href="Rgba_8hpp_source.html">Rgba.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a88e4c6f14213455092c6b537a6e3404b" name="a88e4c6f14213455092c6b537a6e3404b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a88e4c6f14213455092c6b537a6e3404b">&#9670;&#160;</a></span>Rgba()</h2>

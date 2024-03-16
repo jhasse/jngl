@@ -88,6 +88,9 @@ $(function() {
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1Achievement.html">Achievement</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Alpha.html">Alpha</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Object representing only the <a class="el" href="classjngl_1_1Alpha.html" title="Object representing only the Alpha Channel in an RGBA color.">Alpha</a> Channel in an RGBA color.  <a href="classjngl_1_1Alpha.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1AppParameters.html">AppParameters</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters used to initialize the main window.  <a href="structjngl_1_1AppParameters.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,6 +140,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Pixels.html">Pixels</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale-dependent pixels, corresponds to actual pixels on the screen.  <a href="classjngl_1_1Pixels.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Rgb.html">Rgb</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Object representing a RGB color, new version of <a class="el" href="classjngl_1_1Color.html" title="Object representing a RGB color.">jngl::Color</a> (which will be deprecated in the future)  <a href="classjngl_1_1Rgb.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Rgba.html">Rgba</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Object representing a RGBA color.  <a href="classjngl_1_1Rgba.html#details">More...</a><br /></td></tr>
@@ -557,6 +563,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (<a 
 <tr class="memitem:a2c6804b18661e9201fc433980cf5d6ce"><td class="memItemLeft" align="right" valign="top"><a id="a2c6804b18661e9201fc433980cf5d6ce" name="a2c6804b18661e9201fc433980cf5d6ce"></a>
 <a class="el" href="classjngl_1_1Pixels.html">Pixels</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator/</b> (<a class="el" href="classjngl_1_1Pixels.html">Pixels</a>, float)</td></tr>
 <tr class="separator:a2c6804b18661e9201fc433980cf5d6ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79f3946cc19ffc59833986b1eff21b79"><td class="memItemLeft" align="right" valign="top"><a id="a79f3946cc19ffc59833986b1eff21b79" name="a79f3946cc19ffc59833986b1eff21b79"></a>
+<a class="el" href="classjngl_1_1Rgb.html">Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><b>interpolate</b> (<a class="el" href="classjngl_1_1Rgb.html">Rgb</a> a, <a class="el" href="classjngl_1_1Rgb.html">Rgb</a> b, float t)</td></tr>
+<tr class="memdesc:a79f3946cc19ffc59833986b1eff21b79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
+<tr class="separator:a79f3946cc19ffc59833986b1eff21b79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6daf6049d5223d135e36b485e89134f"><td class="memItemLeft" align="right" valign="top"><a id="af6daf6049d5223d135e36b485e89134f" name="af6daf6049d5223d135e36b485e89134f"></a>
 <a class="el" href="classjngl_1_1Rgba.html">Rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><b>interpolate</b> (<a class="el" href="classjngl_1_1Rgba.html">Rgba</a> a, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> b, float t)</td></tr>
 <tr class="memdesc:af6daf6049d5223d135e36b485e89134f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
@@ -634,6 +644,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawCircle</b> (<a cl
 <tr class="memitem:a51a2914107e2e87528ad47f0aeb8526c"><td class="memItemLeft" align="right" valign="top"><a id="a51a2914107e2e87528ad47f0aeb8526c" name="a51a2914107e2e87528ad47f0aeb8526c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawCircle</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, float radius)</td></tr>
 <tr class="separator:a51a2914107e2e87528ad47f0aeb8526c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeade528077eb8e43fa8af6bb7ce457ad"><td class="memItemLeft" align="right" valign="top"><a id="aeade528077eb8e43fa8af6bb7ce457ad" name="aeade528077eb8e43fa8af6bb7ce457ad"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>drawCircle</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, float radius, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color)</td></tr>
+<tr class="separator:aeade528077eb8e43fa8af6bb7ce457ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85ac77722dae61e1b6b054b506bd1e45"><td class="memItemLeft" align="right" valign="top"><a id="a85ac77722dae61e1b6b054b506bd1e45" name="a85ac77722dae61e1b6b054b506bd1e45"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawPoint</b> (double x, double y)</td></tr>
 <tr class="separator:a85ac77722dae61e1b6b054b506bd1e45"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2038,7 +2051,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00095">95</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00097">97</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
 
 </div>
 </div>
