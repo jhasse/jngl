@@ -53,6 +53,9 @@ void drawLine(double xstart, double ystart, double xend, double yend);
 /// Draws a line from (0, 0) to \a end
 void drawLine(const Mat3& modelview, Vec2 end);
 
+
+[[deprecated("Use drawEllipse(Mat3, float, float, float) instead")]]
+/// \deprecated Use drawEllipse(Mat3, float, float, float) instead
 void drawEllipse(float xmid, float ymid, float width, float height, float startAngle = 0);
 
 void drawEllipse(Vec2, float width, float height, float startAngle = 0);
@@ -66,8 +69,12 @@ void drawCircle(Mat3 modelview, float radius, float startAngle);
 
 void drawCircle(Mat3 modelview, float radius);
 
+/// Draws a circle at (0, 0) with \a radius in \a color
 void drawCircle(Mat3 modelview, float radius, Rgba color);
 
+
+[[deprecated("Use drawCircle instead")]]
+/// \deprecated Use drawCircle instead
 void drawPoint(double x, double y);
 
 /// Draws the triangle a -> b -> c
