@@ -271,7 +271,7 @@ void Test::drawBackground() const {
 	jngl::setColor(0, 255, 0, 100);
 	jngl::drawRect(600, 400, 100, 100);
 	jngl::setColor(0, 0, 255, 100);
-	jngl::drawEllipse(80, 400, 50, 80);
+	jngl::drawEllipse(jngl::modelview().translate({ 80, 400 }), 50, 80);
 }
 
 void drawMouse(const jngl::Vec2 mouse) {
