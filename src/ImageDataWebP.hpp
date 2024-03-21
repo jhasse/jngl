@@ -11,7 +11,7 @@ namespace jngl {
 
 class ImageDataWebP : public ImageData {
 public:
-	ImageDataWebP(std::string filename, FILE*, double scaleFactor);
+	ImageDataWebP(std::string_view filename, FILE*, double scaleFactor);
 	~ImageDataWebP() override;
 	ImageDataWebP(const ImageDataWebP&) = delete;
 	ImageDataWebP& operator=(const ImageDataWebP&) = delete;
