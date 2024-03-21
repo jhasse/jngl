@@ -5,6 +5,7 @@
 #include "../helper.hpp"
 #include "../jngl/debug.hpp"
 #include "../main.hpp"
+#include "screen.hpp"
 
 #ifdef ANDROID
 #include "../android/fopen.hpp"
@@ -42,7 +43,7 @@ std::unique_ptr<ImageData> ImageData::load(const std::string& filename) {
 #endif
 #ifndef NOWEBP
 		[](std::string filename, FILE* file) {
-		    return std::make_unique<ImageDataWebP>(std::move(filename), file, 1);
+		    return std::make_unique<ImageDataWebP>(std::move(filename), file, jngl::getScaleFactor());
 		},
 #endif
 	};

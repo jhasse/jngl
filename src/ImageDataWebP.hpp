@@ -1,4 +1,4 @@
-// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
@@ -24,8 +24,8 @@ public:
 
 	/// we might scale the image using WebP built-in filter. These functions will return the
 	/// original image size, not the size of the resulting pixel buffer.
-	int getImageWidth() const;
-	int getImageHeight() const;
+	int getImageWidth() const override;
+	int getImageHeight() const override;
 
 private:
 #ifndef __EMSCRIPTEN__

@@ -21,6 +21,8 @@ public:
     const uint8_t* pixels() const override;
     int getWidth() const override;
     int getHeight() const override;
+    int getImageWidth() const override;
+    int getImageHeight() const override;
 
 private:
 	const static unsigned int PNG_BYTES_TO_CHECK = 4;

@@ -28,7 +28,7 @@ public:
 		THREADED,
 	};
 
-	Sprite(const unsigned char* bytes, size_t width, size_t height);
+	explicit Sprite(const std::string& filename, const ImageData&);
 
 	/// \deprecated Use Loader instead
 	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);

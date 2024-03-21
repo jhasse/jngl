@@ -48,5 +48,23 @@ boost::ut::suite _ = [] {
 			expect(approx(sprite.getBottom(), -124.1f, 1e-5));
 		}
 	};
+	"Loader"_test = []() {
+		for (float factor : { 1.f, 2.f, 3.4f }) {
+			Fixture f(factor);
+			jngl::Sprite::Loader loader("../data/jngl.webp");
+			loader->setPos(-60, -30);
+			expect(static_cast<bool>(loader));
+			loader->draw(jngl::modelview().scale(0.2f, 0.2f));
+			expect(eq(f.getAsciiArt(), std::string(R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒                              ▒
+▒             ░░░░             ▒
+▒           ░░░░░░░░           ▒
+▒            ░░░░░░            ▒
+▒              ░░              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)")));
+		}
+	};
 };
 } // namespace
