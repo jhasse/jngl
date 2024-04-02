@@ -100,6 +100,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:aefc3b35ef4d7e9bba2cc4481cad0398b"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt; <a class="el" href="classjngl_1_1Vec2.html">jngl::Vec2</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b">screenSize</a></td></tr>
 <tr class="memdesc:aefc3b35ef4d7e9bba2cc4481cad0398b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of the canvas in screen pixels, see <a class="el" href="namespacejngl.html#af73b72c0f9314a0e65382f95e326bd39" title="Returns the size of the useable draw area (excluding letter-boxing) in screen pixels.">jngl::getScreenSize()</a>  <a href="structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b">More...</a><br /></td></tr>
 <tr class="separator:aefc3b35ef4d7e9bba2cc4481cad0398b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e1d87e51100938785fd99460144b866"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1AppParameters.html#a4e1d87e51100938785fd99460144b866">fullscreen</a></td></tr>
+<tr class="memdesc:a4e1d87e51100938785fd99460144b866"><td class="mdescLeft">&#160;</td><td class="mdescRight">If set, can be used to control whether to run in fullscreen or windowed mode on supported platforms.  <a href="structjngl_1_1AppParameters.html#a4e1d87e51100938785fd99460144b866">More...</a><br /></td></tr>
+<tr class="separator:a4e1d87e51100938785fd99460144b866"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5325fa61e6536248b117c00f9e0c33d"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair</a>&lt; int, int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1AppParameters.html#ab5325fa61e6536248b117c00f9e0c33d">minAspectRatio</a></td></tr>
 <tr class="separator:ab5325fa61e6536248b117c00f9e0c33d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc62cb9766a4f9b018a0c8f28e6b0034"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair</a>&lt; int, int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structjngl_1_1AppParameters.html#abc62cb9766a4f9b018a0c8f28e6b0034">maxAspectRatio</a></td></tr>
@@ -118,7 +121,7 @@ Public Attributes</h2></td></tr>
 </div><div class="dynheader">
 Collaboration diagram for AppParameters:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="structjngl_1_1AppParameters__coll__graph.svg" width="506" height="267"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="structjngl_1_1AppParameters__coll__graph.svg" width="506" height="315"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -177,6 +180,25 @@ Collaboration diagram for AppParameters:</div>
 
 </div>
 </div>
+<a id="a4e1d87e51100938785fd99460144b866" name="a4e1d87e51100938785fd99460144b866"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e1d87e51100938785fd99460144b866">&#9670;&#160;</a></span>fullscreen</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt;bool&gt; fullscreen</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>If set, can be used to control whether to run in fullscreen or windowed mode on supported platforms. </p>
+<p >If not set, it will run fullscreen when NDEBUG is defined (i.e. in Release mode). </p>
+
+<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00033">33</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
+
+</div>
+</div>
 <a id="ab5325fa61e6536248b117c00f9e0c33d" name="ab5325fa61e6536248b117c00f9e0c33d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab5325fa61e6536248b117c00f9e0c33d">&#9670;&#160;</a></span>minAspectRatio</h2>
 
@@ -189,7 +211,7 @@ Collaboration diagram for AppParameters:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00031">31</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00035">35</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
 
 </div>
 </div>
@@ -205,7 +227,7 @@ Collaboration diagram for AppParameters:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00032">32</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00036">36</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
 
 </div>
 </div>
@@ -223,7 +245,7 @@ Collaboration diagram for AppParameters:</div>
 
 <p>If set and JNGL_STEAMWORKS has been passed to CMake, JNGL will ensure the app runs through Steam and initialize the SteamAPI. </p>
 
-<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00036">36</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00040">40</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
 
 </div>
 </div>
@@ -241,7 +263,7 @@ Collaboration diagram for AppParameters:</div>
 
 <p>Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation) </p>
 
-<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00039">39</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00043">43</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
 
 </div>
 </div>
