@@ -1,4 +1,4 @@
-// Copyright 2015-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowimpl.hpp"
@@ -7,9 +7,9 @@
 #include "../jngl/other.hpp"
 #include "../jngl/debug.hpp"
 #include "../jngl/screen.hpp"
+#include "../jngl/sound.hpp"
 #include "../jngl/window.hpp"
 #include "../jngl/work.hpp"
-#include "../audio.hpp"
 #include "../windowptr.hpp"
 #include "../main.hpp"
 #include "fopen.hpp"
@@ -332,7 +332,7 @@ void WindowImpl::pause() {
 	if (display) {
 		display->surface = std::nullopt;
 	}
-	pauseAudioDevice();
+	pauseAudio = jngl::pauseAudio();
 }
 
 void WindowImpl::makeCurrent() {
@@ -342,7 +342,7 @@ void WindowImpl::makeCurrent() {
 	if (!display->surface) {
 		display->surface.emplace(*display);
 	}
-	resumeAudioDevice();
+	pauseAudio = {};
 }
 
 int WindowImpl::handleKeyEvent(AInputEvent* const event) {

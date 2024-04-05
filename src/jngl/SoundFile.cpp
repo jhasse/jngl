@@ -13,6 +13,7 @@
 #include "debug.hpp"
 
 #include <algorithm>
+#include <cassert>
 #include <stdexcept>
 #include <unordered_map>
 
@@ -47,12 +48,22 @@ void Audio::stop(std::shared_ptr<Sound>& sound) {
 		sounds_.erase(i);
 	}
 }
-void Audio::pauseDevice() {
-	engine.setPause(true);
+
+void Audio::increasePauseDeviceCount() {
+	if (pauseDeviceCount == 0) {
+		engine.setPause(true);
+	}
+	++pauseDeviceCount;
 }
-void Audio::resumeDevice() {
-	engine.setPause(false);
+
+void Audio::decreasePauseDeviceCount() {
+	assert(pauseDeviceCount > 0);
+	--pauseDeviceCount;
+	if (pauseDeviceCount == 0) {
+		engine.setPause(false);
+	}
 }
+
 void Audio::setPitch(float pitch) {
 	pitchControl->pitch(pitch);
 }
@@ -215,14 +226,12 @@ void setVolume(float volume) {
 	Audio::handle().setVolume(volume);
 }
 
-void pauseAudioDevice() {
+Finally pauseAudio() {
 	if (auto audio = Audio::handleIfAlive()) {
-		audio->pauseDevice();
+		audio->increasePauseDeviceCount();
+		return Finally([audio]() { audio->decreasePauseDeviceCount(); });
 	}
-}
-
-void resumeAudioDevice() {
-	Audio::handle().resumeDevice();
+	return Finally(nullptr);
 }
 
 Audio& GetAudio() {

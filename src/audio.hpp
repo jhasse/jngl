@@ -19,8 +19,6 @@ struct volume_control;
 } // namespace audio
 
 void checkAlError();
-void pauseAudioDevice();
-void resumeAudioDevice();
 
 class Audio : public jngl::Singleton<Audio> {
 public:
@@ -33,8 +31,8 @@ public:
 
 	void play(std::shared_ptr<Sound> sound);
 	void stop(std::shared_ptr<Sound>& sound);
-	void pauseDevice();
-	void resumeDevice();
+	void increasePauseDeviceCount();
+	void decreasePauseDeviceCount();
 	void setPitch(float pitch);
 	float getVolume() const;
 	void setVolume(float volume);
@@ -47,6 +45,7 @@ private:
 	std::shared_ptr<audio::pitch_control> pitchControl;
 	std::shared_ptr<audio::volume_control> volumeControl;
 	audio::engine engine;
+	uint8_t pauseDeviceCount = 0; //< if >0 audio device is paused
 };
 
 } // namespace jngl
