@@ -24,6 +24,12 @@ void play(const std::string& filename);
 void stop(const std::string& filename);
 
 /// \return whether \a filename is currently playing
+///
+/// When playing a SoundFile multiple times (i.e. calling jngl::play multiple times), this will
+/// return true if at least one SoundFile is still playing (i.e. hasn't finished and wasn't
+/// stopped).
+///
+/// \note Unaffected by jngl::pauseAudio
 bool isPlaying(const std::string& filename);
 
 /// Play an OGG audio file in a loop
@@ -38,10 +44,10 @@ void setPlaybackSpeed(float speed);
 /// Set global volume in [0, ∞]. Default is 1.0f
 void setVolume(float volume);
 
-/// Pauses the playback of all audio, discarding the returned Finally object will resume again
+/// Pauses the playback of all audio; destroying the returned Finally object will resume again
 ///
-/// Note that this doesn't change the status of isPlaying as that only depends on the status of the
-/// SoundFile.
+/// Note that this doesn't change the status of jngl::isPlaying as that only depends on the status
+/// of the SoundFile.
 ///
 /// Example where you want to pause all audio in a menu:
 /// \code
@@ -49,7 +55,7 @@ void setVolume(float volume);
 ///     jngl::Finally paused;
 ///
 /// public:
-///     PauseMenu() : paused(jngl::pauseAudio) {}
+///     PauseMenu() : paused(jngl::pauseAudio()) {}
 ///     void step() override { /* ... */ }
 ///     void draw() const override { /* ... */ }
 /// };
