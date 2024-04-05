@@ -1,5 +1,7 @@
 <map id="jngl/sound.hpp" name="jngl/sound.hpp">
-<area shape="rect" id="node1" title="Sound related functions." alt="" coords="20,5,155,31"/>
-<area shape="rect" id="node2" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="5,79,76,104"/>
-<area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="100,79,171,104"/>
+<area shape="rect" id="node1" title="Sound related functions." alt="" coords="108,5,243,31"/>
+<area shape="rect" id="node2" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="5,79,116,104"/>
+<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="140,79,211,104"/>
+<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="235,79,305,104"/>
+<area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="9,152,112,177"/>
 </map>

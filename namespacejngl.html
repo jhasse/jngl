@@ -693,6 +693,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setPlaybackSpeed</b> 
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setVolume</b> (float volume)</td></tr>
 <tr class="memdesc:a44dbb438e1b254ef4e9b0f2aab66a433"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set global volume in [0, ∞]. Default is 1.0f. <br /></td></tr>
 <tr class="separator:a44dbb438e1b254ef4e9b0f2aab66a433"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad35ecfcfaf514795ea3a1a3df983890e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Finally.html">Finally</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ad35ecfcfaf514795ea3a1a3df983890e">pauseAudio</a> ()</td></tr>
+<tr class="memdesc:ad35ecfcfaf514795ea3a1a3df983890e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pauses the playback of all audio, discarding the returned <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> object will resume again.  <a href="namespacejngl.html#ad35ecfcfaf514795ea3a1a3df983890e">More...</a><br /></td></tr>
+<tr class="separator:ad35ecfcfaf514795ea3a1a3df983890e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f6473f335a52bc63a07947ee5c86513"><td class="memItemLeft" align="right" valign="top"><a id="a3f6473f335a52bc63a07947ee5c86513" name="a3f6473f335a52bc63a07947ee5c86513"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename, double x, double y)</td></tr>
 <tr class="separator:a3f6473f335a52bc63a07947ee5c86513"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2189,6 +2192,55 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 <p>Play an OGG audio file in a loop. </p>
 <p >If it's already playing, this function won't play it twice, but simply set it to loop and return a pointer to the same <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a>. </p>
 
+</div>
+</div>
+<a id="ad35ecfcfaf514795ea3a1a3df983890e" name="ad35ecfcfaf514795ea3a1a3df983890e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad35ecfcfaf514795ea3a1a3df983890e">&#9670;&#160;</a></span>pauseAudio()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Finally.html">Finally</a> pauseAudio </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Pauses the playback of all audio, discarding the returned <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> object will resume again. </p>
+<p >Note that this doesn't change the status of isPlaying as that only depends on the status of the <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a>.</p>
+<p >Example where you want to pause all audio in a menu: </p><div class="fragment"><div class="line"><span class="keyword">class </span>PauseMenu : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Work</a> {</div>
+<div class="line">    <a class="code hl_class" href="classjngl_1_1Finally.html">jngl::Finally</a> paused;</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">public</span>:</div>
+<div class="line">    PauseMenu() : paused(<a class="code hl_namespace" href="namespacejngl.html">jngl</a>::<a class="code hl_function" href="namespacejngl.html#ad35ecfcfaf514795ea3a1a3df983890e">pauseAudio</a>) {}</div>
+<div class="line">    <span class="keywordtype">void</span> step()<span class="keyword"> override </span>{ <span class="comment">/* ... */</span> }</div>
+<div class="line">    <span class="keywordtype">void</span> draw()<span class="keyword"> const override </span>{ <span class="comment">/* ... */</span> }</div>
+<div class="line">};</div>
+<div class="ttc" id="aclassjngl_1_1Finally_html"><div class="ttname"><a href="classjngl_1_1Finally.html">jngl::Finally</a></div><div class="ttdoc">Helper class which calls a function when being destroyed.</div><div class="ttdef"><b>Definition:</b> <a href="Finally_8hpp_source.html#l00022">Finally.hpp:22</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Work_html"><div class="ttname"><a href="classjngl_1_1Work.html">jngl::Work</a></div><div class="ttdoc">Active state of the game, e.g. a menu or the game itself.</div><div class="ttdef"><b>Definition:</b> <a href="work_8hpp_source.html#l00013">work.hpp:13</a></div></div>
+<div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition:</b> <a href="Achievement_8hpp_source.html#l00010">Achievement.hpp:10</a></div></div>
+<div class="ttc" id="anamespacejngl_html_ad35ecfcfaf514795ea3a1a3df983890e"><div class="ttname"><a href="namespacejngl.html#ad35ecfcfaf514795ea3a1a3df983890e">jngl::pauseAudio</a></div><div class="ttdeci">Finally pauseAudio()</div><div class="ttdoc">Pauses the playback of all audio, discarding the returned Finally object will resume again.</div></div>
+</div><!-- fragment --><p >Or if you want to toggle pausing audio using <code>Space</code>: </p><div class="fragment"><div class="line"><span class="keyword">class </span>PauseExample : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Work</a> {</div>
+<div class="line">    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional&lt;jngl::Finally&gt;</a> paused;</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">public</span>:</div>
+<div class="line">    <span class="keywordtype">void</span> step()<span class="keyword"> override </span>{</div>
+<div class="line">        <span class="keywordflow">if</span> (<a class="code hl_function" href="namespacejngl.html#ab4f02dd8f5a8430d8e2c43e9ff619cdc">jngl::keyPressed</a>(jngl::key::Space)) {</div>
+<div class="line">            <span class="keywordflow">if</span> (paused) {</div>
+<div class="line">                paused = {}; <span class="comment">// calls ~Finally() and resumes playback</span></div>
+<div class="line">            } <span class="keywordflow">else</span> {</div>
+<div class="line">                paused = <a class="code hl_function" href="namespacejngl.html#ad35ecfcfaf514795ea3a1a3df983890e">jngl::pauseAudio</a>();</div>
+<div class="line">            }</div>
+<div class="line">        }</div>
+<div class="line">    }</div>
+<div class="line">    <span class="keywordtype">void</span> draw()<span class="keyword"> const override </span>{ <span class="comment">/* ... */</span> }</div>
+<div class="line">};</div>
+<div class="ttc" id="anamespacejngl_html_ab4f02dd8f5a8430d8e2c43e9ff619cdc"><div class="ttname"><a href="namespacejngl.html#ab4f02dd8f5a8430d8e2c43e9ff619cdc">jngl::keyPressed</a></div><div class="ttdeci">bool keyPressed(key::KeyType key)</div><div class="ttdoc">Whether key has been pressed since the next to last call to updateInput()</div></div>
+<div class="ttc" id="aoptional_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a></div></div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="a921d4c4f4156d43fbec9a45737038b50" name="a921d4c4f4156d43fbec9a45737038b50"></a>
