@@ -119,20 +119,21 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setBlue</b> (unsigned
 <tr class="separator:a62835daefb8468feb54e8d293b2463e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc61f224a2e9e4f7aad3195ad9d75827"><td class="memItemLeft" align="right" valign="top"><a id="abc61f224a2e9e4f7aad3195ad9d75827" name="abc61f224a2e9e4f7aad3195ad9d75827"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>operator Rgb</b> () const</td></tr>
+<tr class="memdesc:abc61f224a2e9e4f7aad3195ad9d75827"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implicit conversion for backwards compatibility. <br /></td></tr>
 <tr class="separator:abc61f224a2e9e4f7aad3195ad9d75827"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Object representing a RGB color. </p>
 <p >You can use the custom literal operator to create a <a class="el" href="classjngl_1_1Color.html" title="Object representing a RGB color.">jngl::Color</a> from HTML color codes. For example <code>#68da4f</code> becomes:</p>
 <div class="fragment"><div class="line"><a class="code hl_class" href="classjngl_1_1Color.html">jngl::Color</a> color = 0x68da4f_rgb;</div>
-<div class="ttc" id="aclassjngl_1_1Color_html"><div class="ttname"><a href="classjngl_1_1Color.html">jngl::Color</a></div><div class="ttdoc">Object representing a RGB color.</div><div class="ttdef"><b>Definition:</b> <a href="Color_8hpp_source.html#l00027">Color.hpp:27</a></div></div>
-</div><!-- fragment --><p >You can use this to quickly pass a HTML code to <a class="el" href="namespacejngl.html#ae3c7e5e5522cf08149ced61283849ab0" title="Sets the color which should be used to draw primitives.">jngl::setColor</a>. The following lines are equivalent:</p>
-<div class="fragment"><div class="line"><a class="code hl_function" href="namespacejngl.html#ae3c7e5e5522cf08149ced61283849ab0">jngl::setColor</a>(0x68da4f_rgb);</div>
-<div class="line"><a class="code hl_function" href="namespacejngl.html#ae3c7e5e5522cf08149ced61283849ab0">jngl::setColor</a>(<a class="code hl_class" href="classjngl_1_1Color.html">jngl::Color</a>(0x68, 0xda, 0x4f));</div>
-<div class="line"><a class="code hl_function" href="namespacejngl.html#ae3c7e5e5522cf08149ced61283849ab0">jngl::setColor</a>(<a class="code hl_class" href="classjngl_1_1Color.html">jngl::Color</a>(104, 218, 79));</div>
-<div class="ttc" id="anamespacejngl_html_ae3c7e5e5522cf08149ced61283849ab0"><div class="ttname"><a href="namespacejngl.html#ae3c7e5e5522cf08149ced61283849ab0">jngl::setColor</a></div><div class="ttdeci">void setColor(jngl::Color rgb)</div><div class="ttdoc">Sets the color which should be used to draw primitives.</div></div>
+<div class="ttc" id="aclassjngl_1_1Color_html"><div class="ttname"><a href="classjngl_1_1Color.html">jngl::Color</a></div><div class="ttdoc">Object representing a RGB color.</div><div class="ttdef"><b>Definition:</b> <a href="Color_8hpp_source.html#l00028">Color.hpp:28</a></div></div>
+</div><!-- fragment --><p >You can use this to quickly pass a HTML code to <a class="el" href="namespacejngl.html#a70d90e8ba41cee5774048020c0319159" title="Sets the color which should be used to draw primitives.">jngl::setColor</a>. The following lines are equivalent:</p>
+<div class="fragment"><div class="line"><a class="code hl_function" href="namespacejngl.html#a70d90e8ba41cee5774048020c0319159">jngl::setColor</a>(0x68da4f_rgb);</div>
+<div class="line"><a class="code hl_function" href="namespacejngl.html#a70d90e8ba41cee5774048020c0319159">jngl::setColor</a>(<a class="code hl_class" href="classjngl_1_1Color.html">jngl::Color</a>(0x68, 0xda, 0x4f));</div>
+<div class="line"><a class="code hl_function" href="namespacejngl.html#a70d90e8ba41cee5774048020c0319159">jngl::setColor</a>(<a class="code hl_class" href="classjngl_1_1Color.html">jngl::Color</a>(104, 218, 79));</div>
+<div class="ttc" id="anamespacejngl_html_a70d90e8ba41cee5774048020c0319159"><div class="ttname"><a href="namespacejngl.html#a70d90e8ba41cee5774048020c0319159">jngl::setColor</a></div><div class="ttdeci">void setColor(Rgb rgb)</div><div class="ttdoc">Sets the color which should be used to draw primitives.</div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="Color_8hpp_source.html#l00027">27</a> of file <a class="el" href="Color_8hpp_source.html">Color.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Color_8hpp_source.html#l00028">28</a> of file <a class="el" href="Color_8hpp_source.html">Color.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0179d2c07d64a0b8f9c5dc9ddf4bc5f7" name="a0179d2c07d64a0b8f9c5dc9ddf4bc5f7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0179d2c07d64a0b8f9c5dc9ddf4bc5f7">&#9670;&#160;</a></span>Color()</h2>

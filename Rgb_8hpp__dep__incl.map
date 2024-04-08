@@ -1,5 +1,11 @@
 <map id="jngl/Rgb.hpp" name="jngl/Rgb.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Rgb class." alt="" coords="5,5,124,31"/>
-<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="21,152,108,177"/>
-<area shape="rect" id="node3" href="$Rgba_8hpp.html" title="Contains jngl::Rgba class." alt="" coords="52,79,179,104"/>
+<area shape="rect" id="node1" title="Contains jngl::Rgb class." alt="" coords="331,5,449,31"/>
+<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="347,225,433,251"/>
+<area shape="rect" id="node3" href="$Color_8hpp.html" title="Contains jngl::Color class." alt="" coords="323,79,457,104"/>
+<area shape="rect" id="node9" href="$Rgba_8hpp.html" title="Contains jngl::Rgba class." alt="" coords="699,79,825,104"/>
+<area shape="rect" id="node4" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="47,152,221,177"/>
+<area shape="rect" id="node5" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="245,152,380,177"/>
+<area shape="rect" id="node6" href="$font_8hpp.html" title="Contains jngl::Font class and related functions." alt="" coords="404,152,531,177"/>
+<area shape="rect" id="node7" href="$shapes_8hpp.html" title="Functions for drawing shapes." alt="" coords="555,152,697,177"/>
+<area shape="rect" id="node8" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="721,152,864,177"/>
 </map>

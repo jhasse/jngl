@@ -1,16 +1,17 @@
 <map id="jngl/FrameBuffer.hpp" name="jngl/FrameBuffer.hpp">
-<area shape="rect" id="node1" title="Contains jngl::FrameBuffer class." alt="" coords="396,5,571,31"/>
-<area shape="rect" id="node2" href="$Color_8hpp.html" title="Contains jngl::Color class." alt="" coords="5,79,100,104"/>
-<area shape="rect" id="node3" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="124,79,235,104"/>
-<area shape="rect" id="node5" href="$Mat3_8hpp.html" title="Contains jngl::Mat3 class." alt="" coords="385,79,472,104"/>
-<area shape="rect" id="node8" href="$Pixels_8hpp.html" title="Contains jngl::Pixels class." alt="" coords="259,79,361,104"/>
-<area shape="rect" id="node10" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="496,79,583,104"/>
-<area shape="rect" id="node12" href="$Vertex_8hpp.html" title=" " alt="" coords="607,79,709,104"/>
-<area shape="rect" id="node13" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="733,79,804,104"/>
-<area shape="rect" id="node14" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="828,79,899,104"/>
-<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="88,152,191,177"/>
-<area shape="rect" id="node6" title=" " alt="" coords="492,152,659,177"/>
-<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/initializer_list.html" title=" " alt="" coords="317,152,468,177"/>
-<area shape="rect" id="node9" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="215,152,293,177"/>
-<area shape="rect" id="node11" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="683,152,753,177"/>
+<area shape="rect" id="node1" title="Contains jngl::FrameBuffer class." alt="" coords="445,5,620,31"/>
+<area shape="rect" id="node2" href="$Color_8hpp.html" title="Contains jngl::Color class." alt="" coords="20,79,115,104"/>
+<area shape="rect" id="node5" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="183,79,293,104"/>
+<area shape="rect" id="node7" href="$Mat3_8hpp.html" title="Contains jngl::Mat3 class." alt="" coords="339,79,425,104"/>
+<area shape="rect" id="node10" href="$Pixels_8hpp.html" title="Contains jngl::Pixels class." alt="" coords="695,152,797,177"/>
+<area shape="rect" id="node11" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="449,79,536,104"/>
+<area shape="rect" id="node13" href="$Vertex_8hpp.html" title=" " alt="" coords="612,79,715,104"/>
+<area shape="rect" id="node14" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="739,79,809,104"/>
+<area shape="rect" id="node15" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="833,79,904,104"/>
+<area shape="rect" id="node3" href="$Rgb_8hpp.html" title="Contains jngl::Rgb class." alt="" coords="5,152,84,177"/>
+<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="356,225,435,251"/>
+<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="108,152,211,177"/>
+<area shape="rect" id="node8" title=" " alt="" coords="409,152,576,177"/>
+<area shape="rect" id="node9" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/initializer_list.html" title=" " alt="" coords="235,152,385,177"/>
+<area shape="rect" id="node12" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="600,152,671,177"/>
 </map>
