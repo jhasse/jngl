@@ -17,11 +17,11 @@ class Rgba;
 /// Sets the color which should be used to draw primitives
 ///
 /// Doesn't change the alpha value currently set by setAlpha()
-void setColor(jngl::Color rgb);
+void setColor(Rgb rgb);
 
 /// Sets the color and alpha which should be used to draw primitives
 /// @param alpha [0...255]
-void setColor(jngl::Color, unsigned char alpha);
+void setColor(Rgb, unsigned char alpha);
 
 void setColor(unsigned char red, unsigned char green, unsigned char blue);
 
@@ -88,7 +88,7 @@ void drawRect(double xposition, double yposition, double width, double height);
 
 /// Draws a rectangle at \a position
 ///
-/// Use setColor(Color) to change the color and setAlpha(uint8_t) to change the translucency.
+/// Use setColor(Rgb) to change the color and setAlpha(uint8_t) to change the translucency.
 void drawRect(Vec2 position, Vec2 size);
 
 /// Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color

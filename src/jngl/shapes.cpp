@@ -16,12 +16,12 @@ namespace jngl {
 
 Rgba gShapeColor{ 0, 0, 0, 1 };
 
-void setColor(const jngl::Color rgb) {
-	setColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue());
+void setColor(const Rgb rgb) {
+	gShapeColor.setRgb(rgb);
 }
 
-void setColor(const jngl::Color color, const unsigned char alpha) {
-	setColor(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+void setColor(const Rgb color, const unsigned char alpha) {
+	gShapeColor = Rgba(color, Alpha::u8(alpha));
 }
 
 void setColor(unsigned char red, unsigned char green, unsigned char blue) {

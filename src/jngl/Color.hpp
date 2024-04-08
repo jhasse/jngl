@@ -4,8 +4,9 @@
 /// @file
 #pragma once
 
+#include "Rgb.hpp"
+
 namespace jngl {
-class Rgb;
 
 /// Object representing a RGB color
 ///
@@ -46,6 +47,7 @@ public:
 	/// 0...255
 	void setBlue(unsigned char);
 
+	/// Implicit conversion for backwards compatibility
 	operator Rgb() const; // NOLINT
 
 private:
