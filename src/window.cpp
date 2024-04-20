@@ -1,12 +1,20 @@
-// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "window.hpp"
 
+#include "audio.hpp"
 #include "freetype.hpp"
-#include "jngl.hpp"
 #include "jngl/ScaleablePixels.hpp"
+#include "jngl/debug.hpp"
+#include "jngl/font.hpp"
+#include "jngl/matrix.hpp"
+#include "jngl/other.hpp"
+#include "jngl/screen.hpp"
+#include "jngl/time.hpp"
+#include "jngl/work.hpp"
 #include "main.hpp"
+#include "spriteimpl.hpp"
 #include "windowptr.hpp"
 
 #ifdef __EMSCRIPTEN__
@@ -271,7 +279,7 @@ void Window::setStepsPerSecond(const unsigned int stepsPerSecond) {
 }
 
 void Window::stepIfNeeded() {
-	const auto currentTime = jngl::getTime();
+	const auto currentTime = getTime();
 	const auto secondsSinceLastCheck = currentTime - lastCheckTime;
 	const auto targetStepsPerSecond = 1.0 / timePerStep;
 	// If SPS == FPS, this would mean that we check about every second, but in the beginning we
@@ -354,6 +362,9 @@ void Window::stepIfNeeded() {
 #ifdef JNGL_PERFORMANCE_OVERLAY
 		auto start = std::chrono::steady_clock::now();
 #endif
+		if (auto audio = Audio::handleIfAlive()) {
+			audio->step();
+		}
 		for (auto& job : jobs) {
 			job->step();
 		}
@@ -543,12 +554,11 @@ void Window::initGlObjects() {
 void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 	glBindVertexArray(opengl::vaoStream);
 	auto tmp = useSimpleShaderProgram();
-	const float vertexes[] = { static_cast<float>(a.x * jngl::getScaleFactor()),
-		                       static_cast<float>(a.y * jngl::getScaleFactor()),
-		                       static_cast<float>(b.x * jngl::getScaleFactor()),
-		                       static_cast<float>(b.y * jngl::getScaleFactor()),
-		                       static_cast<float>(c.x * jngl::getScaleFactor()),
-		                       static_cast<float>(c.y * jngl::getScaleFactor()) };
+	const float vertexes[] = {
+		static_cast<float>(a.x * getScaleFactor()), static_cast<float>(a.y * getScaleFactor()),
+		static_cast<float>(b.x * getScaleFactor()), static_cast<float>(b.y * getScaleFactor()),
+		static_cast<float>(c.x * getScaleFactor()), static_cast<float>(c.y * getScaleFactor())
+	};
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	// STREAM because we're using the buffer only once
 	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertexes, GL_STREAM_DRAW);
@@ -560,25 +570,39 @@ void Window::drawLine(Mat3 modelview, const Vec2 b) const {
 	glBindVertexArray(vaoLine);
 	auto tmp =
 	    useSimpleShaderProgram(modelview.scale(static_cast<float>(b.x * jngl::getScaleFactor()),
-	                                           static_cast<float>(b.y * jngl::getScaleFactor())));
+	                                           static_cast<float>(b.y * jngl::getScaleFactor())),
+	                           gShapeColor);
 	glDrawArrays(GL_LINES, 0, 2);
 }
 
 void Window::drawRect(const Vec2 pos, const Vec2 size) const {
 	glBindVertexArray(vaoRect);
-	jngl::pushMatrix();
-	jngl::translate(pos);
-	opengl::scale(static_cast<float>(size.x * jngl::getScaleFactor()),
-	              static_cast<float>(size.y * jngl::getScaleFactor()));
+	pushMatrix();
+	translate(pos);
+	opengl::scale(static_cast<float>(size.x * getScaleFactor()),
+	              static_cast<float>(size.y * getScaleFactor()));
 	auto tmp = useSimpleShaderProgram();
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-	jngl::popMatrix();
+	popMatrix();
+}
+
+void Window::drawRect(Mat3 modelview, const Vec2 size, Rgba color) const {
+	glBindVertexArray(vaoRect);
+	auto context = jngl::simpleShaderProgram->use();
+	glUniform4f(simpleColorUniform, color.getRed(), color.getGreen(), color.getBlue(),
+	            color.getAlpha());
+	glUniformMatrix3fv(
+	    simpleModelviewUniform, 1, GL_FALSE,
+	    modelview.scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor()).data);
+	glEnableVertexAttribArray(0);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
 void Window::drawRect(Mat3 modelview, const Vec2 size) const {
 	glBindVertexArray(vaoRect);
 	auto tmp = useSimpleShaderProgram(
-	    modelview.scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor()));
+	    modelview.scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor()),
+	    gShapeColor);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 

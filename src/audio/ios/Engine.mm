@@ -102,4 +102,7 @@ void engine::setPause(bool pause) {
 	assert(err == noErr);
 }
 
+void engine::step() {
+}
+
 } // namespace jngl::audio

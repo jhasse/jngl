@@ -1,4 +1,4 @@
-// Copyright 2007-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Finally class
 /// @file
@@ -22,6 +22,8 @@ namespace jngl {
 class Finally {
 public:
 	/// \a functionToCall will be moved into the member with the same name
+	///
+	/// You can pass nullptr to do nothing.
 	explicit Finally(std::function<void()> functionToCall);
 
 	/// The moved-from Finally object will no longer call the function

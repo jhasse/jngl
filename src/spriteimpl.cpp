@@ -1,4 +1,4 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "spriteimpl.hpp"
@@ -6,6 +6,7 @@
 #include "jngl/ImageData.hpp"
 #include "jngl/message.hpp"
 #include "texture.hpp"
+#include "windowptr.hpp"
 
 namespace jngl {
 
@@ -24,7 +25,7 @@ void setSpriteColor(Color color) {
 	spriteColorBlue = color.getBlue();
 }
 
-std::stack<unsigned char> spriteAlphas;
+std::stack<float> spriteAlphas;
 
 void pushSpriteAlpha(unsigned char alpha) {
 	spriteAlphas.push(spriteColorAlpha);

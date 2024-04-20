@@ -4,15 +4,27 @@
 #include "main.hpp"
 
 #include "App.hpp"
-#include "jngl.hpp"
+#include "jngl/Alpha.hpp"
+#include "jngl/ScaleablePixels.hpp"
+#include "jngl/Shader.hpp"
+#include "jngl/debug.hpp"
+#include "jngl/matrix.hpp"
+#include "jngl/other.hpp"
+#include "jngl/screen.hpp"
+#include "jngl/shapes.hpp"
+#include "jngl/time.hpp"
+#include "jngl/window.hpp"
+#include "jngl/work.hpp"
 #include "paths.hpp"
 #include "spriteimpl.hpp"
 #include "texture.hpp"
+#include "windowptr.hpp"
 
 #include <boost/qvm_lite.hpp>
 #include <cstddef>
 #include <fstream>
 #include <sstream>
+#include <stack>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -531,12 +543,11 @@ void drawRect(const Vec2 position, const Vec2 size) {
 }
 
 void drawRect(const Mat3& modelview, const Vec2 size, const Color color) {
-	auto red = colorRed;
-	auto green = colorGreen;
-	auto blue = colorBlue;
-	jngl::setColor(color);
-	pWindow->drawRect(modelview, size);
-	jngl::setColor(red, green, blue);
+	pWindow->drawRect(modelview, size, Rgba(color, Alpha(gShapeColor.getAlpha())));
+}
+
+void drawRect(const Mat3& modelview, const Vec2 size, const Rgba color) {
+	pWindow->drawRect(modelview, size, color);
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
@@ -787,14 +798,13 @@ void writeConfig(const std::string& key, const std::string& value) {
 #endif
 
 ShaderProgram::Context useSimpleShaderProgram() {
-	return useSimpleShaderProgram(opengl::modelview);
+	return useSimpleShaderProgram(opengl::modelview, gShapeColor);
 }
 
-ShaderProgram::Context useSimpleShaderProgram(const Mat3& modelview) {
+ShaderProgram::Context useSimpleShaderProgram(const Mat3& modelview, Rgba color) {
 	auto context = jngl::simpleShaderProgram->use();
-	glUniform4f(simpleColorUniform, static_cast<float>(colorRed) / 255.0f,
-	            static_cast<float>(colorGreen) / 255.0f, static_cast<float>(colorBlue) / 255.0f,
-	            static_cast<float>(colorAlpha) / 255.0f);
+	glUniform4f(simpleColorUniform, color.getRed(), color.getGreen(), color.getBlue(),
+	            color.getAlpha());
 	glUniformMatrix3fv(simpleModelviewUniform, 1, GL_FALSE, modelview.data);
 
 	assert(simpleShaderProgram->getAttribLocation("position") == 0);

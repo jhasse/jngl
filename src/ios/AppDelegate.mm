@@ -15,6 +15,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	jngl::setPrefix(std::string([NSBundle mainBundle].resourcePath.UTF8String) + "/");
 	jngl::AppParameters params = jnglInit();
 	view = [[JNGLView alloc] initWithFrame:[UIScreen mainScreen].bounds withAppParameters:params];
 

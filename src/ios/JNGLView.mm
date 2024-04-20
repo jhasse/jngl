@@ -77,7 +77,6 @@ std::unique_ptr<jngl::App> jnglApp;
 		startTime = -1;
 		pause = false;
 		needToResetFrameLimiter = false;
-		jngl::setPrefix(std::string([NSBundle mainBundle].resourcePath.UTF8String) + "/");
 		jngl::setConfigPath(std::string(NSSearchPathForDirectoriesInDomains(
 		                                    NSDocumentDirectory, NSUserDomainMask, YES)[0]
 		                                    .UTF8String) +

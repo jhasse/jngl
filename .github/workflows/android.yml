@@ -11,5 +11,12 @@ jobs:
       image: registry.gitlab.com/jhasse/android-ndk-docker:r26b
     steps:
     - uses: actions/checkout@v4
+    - name: Cache CPM.cmake packages
+      uses: actions/cache@v4
+      with:
+        path: .cache/cpm
+        key: cpm
     - name: Build
       run: make -C android
+env:
+  CPM_SOURCE_CACHE: ${{ github.workspace }}/.cache/cpm

@@ -127,6 +127,9 @@ void mainLoop(AppParameters params) {
 #if (!defined(__EMSCRIPTEN__) && defined(NDEBUG)) || defined(__ANDROID__)
 	fullscreen = true;
 #endif
+	if (params.fullscreen) {
+		fullscreen = *params.fullscreen;
+	}
 	std::pair<int, int> minAspectRatio{ 1, 3 };
 	std::pair<int, int> maxAspectRatio{ 3, 1 };
 	if (params.screenSize) {
