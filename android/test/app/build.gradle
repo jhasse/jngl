@@ -39,5 +39,5 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.google.oboe:oboe:1.7.0'
+    implementation 'com.google.oboe:oboe:1.8.1'
 }
