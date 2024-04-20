@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: [ubuntu-latest]
     container:
-      image: registry.gitlab.com/jhasse/android-ndk-docker:r26b
+      image: registry.gitlab.com/jhasse/android-ndk-docker:r26d
     steps:
     - uses: actions/checkout@v4
     - name: Cache CPM.cmake packages
