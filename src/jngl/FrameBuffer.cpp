@@ -110,10 +110,8 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, static_cast<float>(spriteColorRed) / 255.0f,
-		            static_cast<float>(spriteColorGreen) / 255.0f,
-		            static_cast<float>(spriteColorBlue) / 255.0f,
-		            static_cast<float>(spriteColorAlpha) / 255.0f);
+		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	}
 	impl->texture.draw();
@@ -129,10 +127,8 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 		                                    -impl->height / getScaleFactor() / 2 })
 		                       .data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, static_cast<float>(spriteColorRed) / 255.0f,
-		            static_cast<float>(spriteColorGreen) / 255.0f,
-		            static_cast<float>(spriteColorBlue) / 255.0f,
-		            static_cast<float>(spriteColorAlpha) / 255.0f);
+		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE,
 		                   modelview.scale(1, -1)
 		                       .translate({ -impl->width / getScaleFactor() / 2,
@@ -151,10 +147,8 @@ void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, static_cast<float>(spriteColorRed) / 255.0f,
-		            static_cast<float>(spriteColorGreen) / 255.0f,
-		            static_cast<float>(spriteColorBlue) / 255.0f,
-		            static_cast<float>(spriteColorAlpha) / 255.0f);
+		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	}
 	impl->texture.drawMesh(vertexes);

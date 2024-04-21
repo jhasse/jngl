@@ -3,6 +3,7 @@
 
 #include "spriteimpl.hpp"
 
+#include "jngl/Alpha.hpp"
 #include "jngl/ImageData.hpp"
 #include "jngl/message.hpp"
 #include "texture.hpp"
@@ -10,44 +11,35 @@
 
 namespace jngl {
 
-unsigned char spriteColorRed = 255, spriteColorGreen = 255, spriteColorBlue = 255,
-              spriteColorAlpha = 255;
+Rgba gSpriteColor{ 1, 1, 1, 1 };
 
 void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue) {
-	spriteColorRed = red;
-	spriteColorGreen = green;
-	spriteColorBlue = blue;
+	gSpriteColor.setRgb(Rgb::u8(red, green, blue));
 }
 
-void setSpriteColor(Color color) {
-	spriteColorRed = color.getRed();
-	spriteColorGreen = color.getGreen();
-	spriteColorBlue = color.getBlue();
+void setSpriteColor(Rgb color) {
+	gSpriteColor.setRgb(color);
 }
 
 std::stack<float> spriteAlphas;
 
 void pushSpriteAlpha(unsigned char alpha) {
-	spriteAlphas.push(spriteColorAlpha);
-	setSpriteAlpha(spriteColorAlpha * alpha / 255);
+	spriteAlphas.push(gSpriteColor.getAlpha());
+	gSpriteColor.setAlpha(gSpriteColor.getAlpha() * Alpha::u8(alpha).getAlpha());
 }
 
 void popSpriteAlpha() {
-	setSpriteAlpha(spriteAlphas.top());
+	gSpriteColor.setAlpha(spriteAlphas.top());
 	spriteAlphas.pop();
 }
 
 void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue,
                     unsigned char alpha) {
-	spriteColorRed = red;
-	spriteColorGreen = green;
-	spriteColorBlue = blue;
-	spriteColorAlpha = alpha;
+	gSpriteColor = Rgba::u8(red, green, blue, alpha);
 }
 
 void setSpriteAlpha(unsigned char alpha) {
-	spriteColorAlpha = alpha;
-	setSpriteColor(spriteColorRed, spriteColorGreen, spriteColorBlue, alpha);
+	gSpriteColor.setAlpha(Alpha::u8(alpha));
 }
 
 std::unordered_map<std::string, std::shared_ptr<Sprite>> sprites_;

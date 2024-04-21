@@ -1,11 +1,11 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Sprite class and related functions
 /// \file
 #pragma once
 
-#include "Color.hpp"
 #include "Drawable.hpp"
+#include "Rgb.hpp"
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
 
@@ -185,7 +185,8 @@ void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue,
 
 void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue);
 
-void setSpriteColor(Color);
+/// Sets the global color used for drawing Sprites, leaves the alpha value untouched
+void setSpriteColor(Rgb);
 
 void setSpriteAlpha(unsigned char alpha);
 
