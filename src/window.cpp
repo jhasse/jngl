@@ -21,6 +21,7 @@
 #include <emscripten.h>
 #endif
 
+#include <algorithm>
 #include <gsl/narrow>
 #include <thread>
 
