@@ -34,7 +34,7 @@ void Mixer::gc() {
 	}
 }
 
-void Mixer::remove(Stream* stream) {
+void Mixer::remove(const Stream* stream) {
 	gc();
 	assert(reinterpret_cast<uintptr_t>(stream) % 2 == 0); // NOLINT
 	impl->commands.push(reinterpret_cast<uintptr_t>(stream) + Impl::REMOVE_FLAG); // NOLINT

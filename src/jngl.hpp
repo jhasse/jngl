@@ -6,6 +6,7 @@
 
 #include "jngl/Achievement.hpp"
 #include "jngl/Alpha.hpp"
+#include "jngl/Channel.hpp"
 #include "jngl/Color.hpp"
 #include "jngl/Container.hpp"
 #include "jngl/Controller.hpp"

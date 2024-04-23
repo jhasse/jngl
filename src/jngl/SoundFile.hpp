@@ -1,4 +1,4 @@
-// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::SoundFile class
 /// @file
@@ -18,6 +18,7 @@ using std::experimental::optional;
 
 namespace jngl {
 
+class Channel;
 class Sound;
 struct SoundParams;
 
@@ -44,15 +45,18 @@ public:
 
 	/// Play the sound once. If called twice the sound would also play twice
 	void play();
+	void play(Channel&);
 
 	/// Stop the last started sound
 	void stop();
+	void stop(Channel&);
 
 	/// Whether the sound is still playing at least once
 	bool isPlaying();
 
 	/// Play the sound in a loop. Can also be stopped using stop()
 	void loop();
+	void loop(Channel&);
 
 	/// Set volume in [0, ∞]. Default is 1.0f
 	void setVolume(float v);

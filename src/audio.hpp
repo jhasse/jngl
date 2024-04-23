@@ -10,6 +10,7 @@
 
 namespace jngl {
 
+class Channel;
 class Mixer;
 class Sound;
 
@@ -29,19 +30,22 @@ public:
 	Audio& operator=(Audio&&) = delete;
 	~Audio();
 
-	void play(std::shared_ptr<Sound> sound);
-	void stop(std::shared_ptr<Sound>& sound);
+	void play(Channel&, std::shared_ptr<Sound> sound);
+	void stop(Channel&, std::shared_ptr<Sound>& sound);
 	void increasePauseDeviceCount();
 	void decreasePauseDeviceCount();
 	void setPitch(float pitch);
 	float getVolume() const;
 	void setVolume(float volume);
-	std::shared_ptr<Mixer> getMixer();
+	Channel& getMainChannel();
+	void registerChannel(std::shared_ptr<Stream>);
+	void unregisterChannel(const Stream&);
     void step();
 
 private:
 	std::vector<std::shared_ptr<Sound>> sounds_;
 	std::shared_ptr<Mixer> mixer;
+	std::unique_ptr<Channel> mainChannel;
 	std::shared_ptr<audio::pitch_control> pitchControl;
 	std::shared_ptr<audio::volume_control> volumeControl;
 	audio::engine engine;
