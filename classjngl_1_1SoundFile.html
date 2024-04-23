@@ -110,10 +110,16 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>play</b> ()</td></tr>
 <tr class="memdesc:a6d58098c6cf63c241ed03bc797256bb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play the sound once. If called twice the sound would also play twice. <br /></td></tr>
 <tr class="separator:a6d58098c6cf63c241ed03bc797256bb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbd9c3842dcfde289f276f11ef509be5"><td class="memItemLeft" align="right" valign="top"><a id="adbd9c3842dcfde289f276f11ef509be5" name="adbd9c3842dcfde289f276f11ef509be5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>play</b> (<a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;)</td></tr>
+<tr class="separator:adbd9c3842dcfde289f276f11ef509be5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c528baf37154d347366083f0f816846"><td class="memItemLeft" align="right" valign="top"><a id="a8c528baf37154d347366083f0f816846" name="a8c528baf37154d347366083f0f816846"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> ()</td></tr>
 <tr class="memdesc:a8c528baf37154d347366083f0f816846"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop the last started sound. <br /></td></tr>
 <tr class="separator:a8c528baf37154d347366083f0f816846"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a811a07a7c69cd4cf4d23031c99d5a589"><td class="memItemLeft" align="right" valign="top"><a id="a811a07a7c69cd4cf4d23031c99d5a589" name="a811a07a7c69cd4cf4d23031c99d5a589"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> (<a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;)</td></tr>
+<tr class="separator:a811a07a7c69cd4cf4d23031c99d5a589"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8438e3403946accc1986a05b89ee7b03"><td class="memItemLeft" align="right" valign="top"><a id="a8438e3403946accc1986a05b89ee7b03" name="a8438e3403946accc1986a05b89ee7b03"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isPlaying</b> ()</td></tr>
 <tr class="memdesc:a8438e3403946accc1986a05b89ee7b03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the sound is still playing at least once. <br /></td></tr>
@@ -122,6 +128,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isPlaying</b> ()</td>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>loop</b> ()</td></tr>
 <tr class="memdesc:afe461d27b9c48d5921c00d521181f12f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play the sound in a loop. Can also be stopped using <a class="el" href="classjngl_1_1SoundFile.html#a8c528baf37154d347366083f0f816846" title="Stop the last started sound.">stop()</a> <br /></td></tr>
 <tr class="separator:afe461d27b9c48d5921c00d521181f12f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf531aecfc325d5510e2d29942949da4"><td class="memItemLeft" align="right" valign="top"><a id="aaf531aecfc325d5510e2d29942949da4" name="aaf531aecfc325d5510e2d29942949da4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>loop</b> (<a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;)</td></tr>
+<tr class="separator:aaf531aecfc325d5510e2d29942949da4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adba16af13c4a8c53151baa2d5123ec96"><td class="memItemLeft" align="right" valign="top"><a id="adba16af13c4a8c53151baa2d5123ec96" name="adba16af13c4a8c53151baa2d5123ec96"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setVolume</b> (float v)</td></tr>
 <tr class="memdesc:adba16af13c4a8c53151baa2d5123ec96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set volume in [0, ∞]. Default is 1.0f. <br /></td></tr>
@@ -134,7 +143,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setVolume</b> (float 
 <div class="textblock"><p >Sound loaded from an OGG file. </p>
 <p >JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly - you can just use <a class="el" href="namespacejngl.html#a9a2d4a760f9febf9ab966d0ed41183b2" title="Play an OGG audio file once.">jngl::play</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="SoundFile_8hpp_source.html#l00028">28</a> of file <a class="el" href="SoundFile_8hpp_source.html">SoundFile.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoundFile_8hpp_source.html#l00029">29</a> of file <a class="el" href="SoundFile_8hpp_source.html">SoundFile.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6f8d4c7f6d06cfb5b1527d334a4fedcf" name="a6f8d4c7f6d06cfb5b1527d334a4fedcf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6f8d4c7f6d06cfb5b1527d334a4fedcf">&#9670;&#160;</a></span>SoundFile()</h2>
