@@ -1,4 +1,4 @@
-// Copyright 2015-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Defines macros for the main entry point
 /// @file
@@ -15,6 +15,7 @@
 	jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
 #define JNGL_MAIN_END return 0; } // NOLINT
 
+#undef main // SDL defines this to SDL_main
 #else
 
 #ifdef __APPLE__
