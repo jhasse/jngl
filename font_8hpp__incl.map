@@ -1,11 +1,10 @@
 <map id="jngl/font.hpp" name="jngl/font.hpp">
 <area shape="rect" id="node1" title="Contains jngl::Font class and related functions." alt="" coords="179,5,305,31"/>
-<area shape="rect" id="node2" href="$Color_8hpp.html" title="Contains jngl::Color class." alt="" coords="13,79,108,104"/>
-<area shape="rect" id="node5" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="148,79,235,104"/>
-<area shape="rect" id="node8" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="259,79,329,104"/>
-<area shape="rect" id="node9" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="353,79,424,104"/>
-<area shape="rect" id="node3" href="$Rgb_8hpp.html" title="Contains jngl::Rgb class." alt="" coords="5,152,84,177"/>
-<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="5,225,84,251"/>
-<area shape="rect" id="node6" title=" " alt="" coords="108,152,275,177"/>
-<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="299,152,369,177"/>
+<area shape="rect" id="node2" href="$Rgb_8hpp.html" title="Contains jngl::Rgb class." alt="" coords="25,79,104,104"/>
+<area shape="rect" id="node4" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="148,79,235,104"/>
+<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="259,79,329,104"/>
+<area shape="rect" id="node8" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="353,79,424,104"/>
+<area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="5,152,84,177"/>
+<area shape="rect" id="node5" title=" " alt="" coords="108,152,275,177"/>
+<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="299,152,369,177"/>
 </map>

@@ -1,52 +1,52 @@
 <map id="jngl.hpp" name="jngl.hpp">
-<area shape="rect" id="node1" title="Includes all JNGL headers except for init.hpp." alt="" coords="2518,5,2604,31"/>
-<area shape="rect" id="node2" href="$Achievement_8hpp.html" title="Contains jngl::Achievement class." alt="" coords="1315,152,1498,177"/>
-<area shape="rect" id="node5" href="$Alpha_8hpp.html" title="Contains jngl::Alpha class." alt="" coords="4151,225,4286,251"/>
-<area shape="rect" id="node7" href="$Channel_8hpp.html" title="Contains jngl::Channel class." alt="" coords="468,152,619,177"/>
-<area shape="rect" id="node10" href="$Color_8hpp.html" title="Contains jngl::Color class." alt="" coords="3456,152,3591,177"/>
-<area shape="rect" id="node11" href="$Rgb_8hpp.html" title="Contains jngl::Rgb class." alt="" coords="3996,225,4075,251"/>
-<area shape="rect" id="node12" href="$Container_8hpp.html" title="Contains jngl::Container class." alt="" coords="2120,152,2287,177"/>
-<area shape="rect" id="node15" href="$Controller_8hpp.html" title="Contains jngl::Controller class." alt="" coords="2348,79,2523,104"/>
-<area shape="rect" id="node16" href="$input_8hpp.html" title="Input related functions." alt="" coords="2508,152,2603,177"/>
-<area shape="rect" id="node19" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="2907,225,3066,251"/>
-<area shape="rect" id="node20" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="3296,79,3471,104"/>
-<area shape="rect" id="node22" href="$Pixels_8hpp.html" title="Contains jngl::Pixels class." alt="" coords="3410,225,3512,251"/>
-<area shape="rect" id="node23" href="$Vertex_8hpp.html" title=" " alt="" coords="3615,152,3718,177"/>
-<area shape="rect" id="node24" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="2919,79,3054,104"/>
-<area shape="rect" id="node25" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="3008,152,3127,177"/>
-<area shape="rect" id="node26" href="$Widget_8hpp.html" title="Contains jngl::Container class." alt="" coords="2627,152,2730,177"/>
-<area shape="rect" id="node27" href="$text_8hpp.html" title=" " alt="" coords="2010,152,2096,177"/>
-<area shape="rect" id="node28" href="$Rgba_8hpp.html" title="Contains jngl::Rgba class." alt="" coords="4054,152,4180,177"/>
-<area shape="rect" id="node29" href="$ScaleablePixels_8hpp.html" title="Contains jngl::ScaleablePixels class." alt="" coords="4256,79,4471,104"/>
-<area shape="rect" id="node30" href="$Shader_8hpp.html" title=" " alt="" coords="2638,225,2780,251"/>
-<area shape="rect" id="node31" href="$ShaderProgram_8hpp.html" title="Contains jngl::ShaderProgram class." alt="" coords="695,152,894,177"/>
-<area shape="rect" id="node32" href="$Singleton_8hpp.html" title="Contains jngl::Singleton base class." alt="" coords="1852,79,2019,104"/>
-<area shape="rect" id="node33" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="1831,152,1934,177"/>
-<area shape="rect" id="node34" href="$SoundFile_8hpp.html" title="Contains jngl::SoundFile class." alt="" coords="1522,152,1688,177"/>
-<area shape="rect" id="node35" href="$Video_8hpp.html" title=" " alt="" coords="1104,152,1239,177"/>
-<area shape="rect" id="node36" href="$WorkFactory_8hpp.html" title=" " alt="" coords="26,79,208,104"/>
-<area shape="rect" id="node37" href="$work_8hpp.html" title=" " alt="" coords="74,152,160,177"/>
-<area shape="rect" id="node38" href="$job_8hpp.html" title="Contains jngl::Job class and related functions." alt="" coords="155,225,234,251"/>
-<area shape="rect" id="node39" href="$debug_8hpp.html" title="Logging functions for debug purposes." alt="" coords="1291,79,1426,104"/>
-<area shape="rect" id="node40" href="$message_8hpp.html" title=" " alt="" coords="918,152,1028,177"/>
-<area shape="rect" id="node41" href="$effects_8hpp.html" title="Effects that can be applied to jngl::Widget." alt="" coords="3550,225,3692,251"/>
-<area shape="rect" id="node42" href="$font_8hpp.html" title="Contains jngl::Font class and related functions." alt="" coords="2095,79,2222,104"/>
-<area shape="rect" id="node43" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="1702,79,1828,104"/>
-<area shape="rect" id="node44" href="$other_8hpp.html" title="Miscellaneous functions." alt="" coords="1712,152,1807,177"/>
-<area shape="rect" id="node45" href="$matrix_8hpp.html" title="Functions related to the global ModelView matrix." alt="" coords="3130,79,3272,104"/>
-<area shape="rect" id="node46" href="$screen_8hpp.html" title=" " alt="" coords="3723,225,3866,251"/>
-<area shape="rect" id="node47" href="$shapes_8hpp.html" title="Functions for drawing shapes." alt="" coords="3886,79,4028,104"/>
-<area shape="rect" id="node48" href="$sound_8hpp.html" title="Sound related functions." alt="" coords="310,152,444,177"/>
-<area shape="rect" id="node49" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="2700,79,2843,104"/>
-<area shape="rect" id="node50" href="$time_8hpp.html" title="Timing functions." alt="" coords="4495,79,4622,104"/>
-<area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/future.html" title=" " alt="" coords="1606,225,1676,251"/>
-<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="1242,225,1312,251"/>
-<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="3996,299,4075,324"/>
-<area shape="rect" id="node8" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="602,225,712,251"/>
-<area shape="rect" id="node9" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="1532,299,1603,324"/>
-<area shape="rect" id="node13" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/set.html" title=" " alt="" coords="2388,225,2435,251"/>
-<area shape="rect" id="node14" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="2168,225,2239,251"/>
-<area shape="rect" id="node18" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/chrono.html" title=" " alt="" coords="2311,152,2382,177"/>
-<area shape="rect" id="node17" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="2943,299,3030,324"/>
-<area shape="rect" id="node21" href="$Mat3_8hpp.html" title="Contains jngl::Mat3 class." alt="" coords="3142,225,3228,251"/>
+<area shape="rect" id="node1" title="Includes all JNGL headers except for init.hpp." alt="" coords="2372,5,2459,31"/>
+<area shape="rect" id="node2" href="$Achievement_8hpp.html" title="Contains jngl::Achievement class." alt="" coords="1227,152,1409,177"/>
+<area shape="rect" id="node5" href="$Alpha_8hpp.html" title="Contains jngl::Alpha class." alt="" coords="4083,225,4217,251"/>
+<area shape="rect" id="node7" href="$Channel_8hpp.html" title="Contains jngl::Channel class." alt="" coords="381,152,532,177"/>
+<area shape="rect" id="node10" href="$Color_8hpp.html" title="Contains jngl::Color class." alt="" coords="3699,152,3833,177"/>
+<area shape="rect" id="node11" href="$Rgb_8hpp.html" title="Contains jngl::Rgb class." alt="" coords="3755,225,3833,251"/>
+<area shape="rect" id="node12" href="$Container_8hpp.html" title="Contains jngl::Container class." alt="" coords="2400,152,2567,177"/>
+<area shape="rect" id="node15" href="$Controller_8hpp.html" title="Contains jngl::Controller class." alt="" coords="1741,79,1916,104"/>
+<area shape="rect" id="node16" href="$input_8hpp.html" title="Input related functions." alt="" coords="1889,152,1984,177"/>
+<area shape="rect" id="node19" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="2823,225,2981,251"/>
+<area shape="rect" id="node20" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="3192,79,3367,104"/>
+<area shape="rect" id="node22" href="$Pixels_8hpp.html" title="Contains jngl::Pixels class." alt="" coords="3295,225,3397,251"/>
+<area shape="rect" id="node23" href="$Vertex_8hpp.html" title=" " alt="" coords="3419,152,3521,177"/>
+<area shape="rect" id="node24" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="2605,79,2740,104"/>
+<area shape="rect" id="node25" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="2971,152,3089,177"/>
+<area shape="rect" id="node26" href="$Widget_8hpp.html" title="Contains jngl::Container class." alt="" coords="2591,152,2693,177"/>
+<area shape="rect" id="node27" href="$text_8hpp.html" title=" " alt="" coords="2187,152,2273,177"/>
+<area shape="rect" id="node28" href="$Rgba_8hpp.html" title="Contains jngl::Rgba class." alt="" coords="4011,152,4137,177"/>
+<area shape="rect" id="node29" href="$ScaleablePixels_8hpp.html" title="Contains jngl::ScaleablePixels class." alt="" coords="4213,79,4428,104"/>
+<area shape="rect" id="node30" href="$Shader_8hpp.html" title=" " alt="" coords="5,79,148,104"/>
+<area shape="rect" id="node31" href="$ShaderProgram_8hpp.html" title="Contains jngl::ShaderProgram class." alt="" coords="952,152,1151,177"/>
+<area shape="rect" id="node32" href="$Singleton_8hpp.html" title="Contains jngl::Singleton base class." alt="" coords="1992,79,2159,104"/>
+<area shape="rect" id="node33" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="2008,152,2111,177"/>
+<area shape="rect" id="node34" href="$SoundFile_8hpp.html" title="Contains jngl::SoundFile class." alt="" coords="1552,152,1719,177"/>
+<area shape="rect" id="node35" href="$Video_8hpp.html" title=" " alt="" coords="112,152,247,177"/>
+<area shape="rect" id="node36" href="$WorkFactory_8hpp.html" title=" " alt="" coords="284,79,467,104"/>
+<area shape="rect" id="node37" href="$work_8hpp.html" title=" " alt="" coords="271,152,357,177"/>
+<area shape="rect" id="node38" href="$job_8hpp.html" title="Contains jngl::Job class and related functions." alt="" coords="764,225,843,251"/>
+<area shape="rect" id="node39" href="$debug_8hpp.html" title="Logging functions for debug purposes." alt="" coords="661,79,796,104"/>
+<area shape="rect" id="node40" href="$message_8hpp.html" title=" " alt="" coords="715,152,825,177"/>
+<area shape="rect" id="node41" href="$effects_8hpp.html" title="Effects that can be applied to jngl::Widget." alt="" coords="3421,225,3564,251"/>
+<area shape="rect" id="node42" href="$font_8hpp.html" title="Contains jngl::Font class and related functions." alt="" coords="2717,152,2844,177"/>
+<area shape="rect" id="node43" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="1536,79,1663,104"/>
+<area shape="rect" id="node44" href="$other_8hpp.html" title="Miscellaneous functions." alt="" coords="1433,152,1528,177"/>
+<area shape="rect" id="node45" href="$matrix_8hpp.html" title="Functions related to the global ModelView matrix." alt="" coords="3024,79,3167,104"/>
+<area shape="rect" id="node46" href="$screen_8hpp.html" title=" " alt="" coords="3588,225,3731,251"/>
+<area shape="rect" id="node47" href="$shapes_8hpp.html" title="Functions for drawing shapes." alt="" coords="3781,79,3924,104"/>
+<area shape="rect" id="node48" href="$sound_8hpp.html" title="Sound related functions." alt="" coords="556,152,691,177"/>
+<area shape="rect" id="node49" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="2235,79,2377,104"/>
+<area shape="rect" id="node50" href="$time_8hpp.html" title="Timing functions." alt="" coords="4452,79,4579,104"/>
+<area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/future.html" title=" " alt="" coords="1637,225,1708,251"/>
+<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="1283,225,1353,251"/>
+<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="3883,299,3961,324"/>
+<area shape="rect" id="node8" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="919,225,1029,251"/>
+<area shape="rect" id="node9" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="1564,299,1635,324"/>
+<area shape="rect" id="node13" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/set.html" title=" " alt="" coords="2465,225,2512,251"/>
+<area shape="rect" id="node14" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="2113,225,2184,251"/>
+<area shape="rect" id="node18" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/chrono.html" title=" " alt="" coords="1743,152,1813,177"/>
+<area shape="rect" id="node17" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="2859,299,2945,324"/>
+<area shape="rect" id="node21" href="$Mat3_8hpp.html" title="Contains jngl::Mat3 class." alt="" coords="3081,225,3168,251"/>
 </map>
