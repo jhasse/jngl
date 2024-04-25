@@ -243,10 +243,8 @@ void FontImpl::setLineHeight(Pixels h) {
 
 void FontImpl::print(Mat3 modelview, const std::string& text) {
 	auto context = Texture::textureShaderProgram->use();
-	glUniform4f(Texture::shaderSpriteColorUniform, static_cast<float>(fontColorRed) / 255.0f,
-	            static_cast<float>(fontColorGreen) / 255.0f,
-	            static_cast<float>(fontColorBlue) / 255.0f,
-	            static_cast<float>(fontColorAlpha) / 255.0f);
+	glUniform4f(Texture::shaderSpriteColorUniform, gFontColor.getRed(), gFontColor.getGreen(),
+	            gFontColor.getBlue(), gFontColor.getAlpha());
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();
@@ -266,9 +264,8 @@ void FontImpl::print(Mat3 modelview, const std::string& text) {
 
 void FontImpl::print(const ScaleablePixels x, const ScaleablePixels y, const std::string& text) {
 	auto context = Texture::textureShaderProgram->use();
-	glUniform4f(Texture::shaderSpriteColorUniform, static_cast<float>(fontColorRed) / 255.0f,
-	            static_cast<float>(fontColorGreen) / 255.0f, static_cast<float>(fontColorBlue) / 255.0f,
-	            static_cast<float>(fontColorAlpha) / 255.0f);
+	glUniform4f(Texture::shaderSpriteColorUniform, gFontColor.getRed(), gFontColor.getGreen(),
+	            gFontColor.getBlue(), gFontColor.getAlpha());
 	const int xRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ x })));
 	const int yRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ y })));
 	std::vector<std::string> lines(splitlines(text));

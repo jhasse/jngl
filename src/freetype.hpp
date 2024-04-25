@@ -4,6 +4,7 @@
 #pragma once
 
 #include "jngl/Pixels.hpp"
+#include "jngl/Rgba.hpp"
 #include "texture.hpp"
 
 #include <ft2build.h> // NOLINT
@@ -15,7 +16,7 @@
 namespace jngl {
 
 constexpr double LINE_HEIGHT_FACOTR = 1. / .63;
-extern unsigned char fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha;
+extern Rgba gFontColor;
 
 class Character {
 public:

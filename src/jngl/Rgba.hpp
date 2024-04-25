@@ -56,6 +56,9 @@ public:
 	/// Overwrites red, green and blue, but leaves the alpha value untouched
 	void setRgb(Rgb color);
 
+	/// Drops the alpha value
+	explicit operator Rgb() const;
+
 private:
 	float red;
 	float green;

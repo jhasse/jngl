@@ -4,42 +4,32 @@
 #include "font.hpp"
 
 #include "../freetype.hpp"
+#include "Alpha.hpp"
 #include "ScaleablePixels.hpp"
 
-#include <algorithm>
 #include <stack>
 
 namespace jngl {
 
-unsigned char fontColorRed = 0, fontColorGreen = 0, fontColorBlue = 0, fontColorAlpha = 255;
+Rgba gFontColor{ 0, 0, 0, 1 };
 
-void setFontColor(const jngl::Color color) {
-	setFontColor(color.getRed(), color.getGreen(), color.getBlue());
-}
-
-void setFontColor(const Color color, float alpha) {
-	setFontColor(color.getRed(), color.getGreen(), color.getBlue(),
-	             std::clamp(std::lround(alpha * 255), 0L, 255L));
+void setFontColor(const Rgb color, float alpha) {
+	gFontColor = Rgba(color, Alpha(alpha));
 }
 
 void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) {
-	fontColorRed = red;
-	fontColorGreen = green;
-	fontColorBlue = blue;
-	fontColorAlpha = alpha;
+	gFontColor = Rgba::u8(red, green, blue, alpha);
 }
 
-std::stack<Color> rgbs;
+std::stack<Rgb> rgbs;
 
 void pushFontColor(unsigned char red, unsigned char green, unsigned char blue) {
-	rgbs.push(Color(fontColorRed, fontColorGreen, fontColorBlue));
+	rgbs.push(static_cast<Rgb>(gFontColor));
 	setFontColor(red, green, blue);
 }
 
 void popFontColor() {
-	fontColorRed = rgbs.top().getRed();
-	fontColorGreen = rgbs.top().getGreen();
-	fontColorBlue = rgbs.top().getBlue();
+	gFontColor.setRgb(rgbs.top());
 	rgbs.pop();
 }
 
