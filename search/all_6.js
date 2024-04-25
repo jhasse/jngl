@@ -72,7 +72,7 @@ var searchData=
   ['fmax_69',['fmax',['http://en.cppreference.com/w/cpp/numeric/math/fmax.html',1,'std']]],
   ['fmin_70',['fmin',['http://en.cppreference.com/w/cpp/numeric/math/fmin.html',1,'std']]],
   ['fmod_71',['fmod',['http://en.cppreference.com/w/cpp/numeric/math/fmod.html',1,'std']]],
-  ['font_72',['Font',['../classjngl_1_1Font.html#af3d006332318e24fc24df9b38589f01a',1,'jngl::Font::Font()'],['../classjngl_1_1Font.html',1,'Font']]],
+  ['font_72',['Font',['../classjngl_1_1Font.html#aa393b89da88bba04d633cb15d21a1c6a',1,'jngl::Font::Font()'],['../classjngl_1_1Font.html',1,'Font']]],
   ['font_2ehpp_73',['font.hpp',['../font_8hpp.html',1,'']]],
   ['fopen_74',['fopen',['http://en.cppreference.com/w/cpp/io/c/fopen.html',1,'std']]],
   ['for_5feach_75',['for_each',['http://en.cppreference.com/w/cpp/algorithm/for_each.html',1,'std::for_each()'],['http://en.cppreference.com/w/cpp/algorithm/ranges/for_each.html',1,'std::ranges::for_each()']]],
