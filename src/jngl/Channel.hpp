@@ -13,6 +13,18 @@ namespace jngl {
 struct Stream;
 
 /// An audio channel, different channels could be for example: "Music", "Speech" and "Sound Effects"
+///
+/// Example:
+/// \code
+/// struct Channels : public jngl::Singleton<Channels> {
+///     jngl::Channel& main = jngl::Channel::main();
+///     jngl::Channel music;
+///     jngl::Channel speech;
+/// };
+///
+/// // somewhere else:
+/// Channels::handle().music.loop("background_music01.ogg");
+/// \endcode
 class Channel {
 public:
 	Channel();
