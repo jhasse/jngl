@@ -43,7 +43,8 @@ void popFontColor() {
 	rgbs.pop();
 }
 
-Font::Font(const std::string& filename, unsigned int size) : impl(new FontImpl(filename, size)) {
+Font::Font(const std::string& filename, unsigned int size, float strokePercentage)
+: impl(new FontImpl(filename, size, strokePercentage)) {
 }
 
 void Font::print(const std::string& text, int x, int y) {

@@ -1,4 +1,4 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #define _LIBCPP_DISABLE_DEPRECATION_WARNINGS
@@ -24,8 +24,9 @@
 
 namespace jngl {
 
-Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face face) {
-	const auto flags = FT_LOAD_TARGET_LIGHT | FT_LOAD_RENDER;
+Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face face,
+                     FT_Stroker stroker) {
+	const auto flags = FT_LOAD_TARGET_LIGHT | FT_LOAD_DEFAULT;
 	if (FT_Load_Char(face, ch, flags)) {
 		const std::string msg =
 		    std::string("FT_Load_Glyph failed. Character: ") + std::to_string(ch);
@@ -39,6 +40,10 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 	if (FT_Get_Glyph(face->glyph, &glyph)) {
 		throw std::runtime_error("FT_Get_Glyph failed");
 	}
+	if (stroker) {
+		FT_Glyph_StrokeBorder(&glyph, stroker, 0, 1);
+	}
+	FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, nullptr, 1);
 	Finally freeGlyph([&]() { FT_Done_Glyph(glyph); });
 	const auto bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph); // NOLINT
 	const FT_Bitmap& bitmap = bitmap_glyph->bitmap;
@@ -134,12 +139,12 @@ Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::
 	}
 	if (characters_[unicodeCharacter] == nullptr) {
 		characters_[unicodeCharacter] =
-		    std::make_shared<Character>(unicodeCharacter, height_, face);
+		    std::make_shared<Character>(unicodeCharacter, height_, face, stroker);
 	}
 	return *(characters_[unicodeCharacter]);
 }
 
-FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)
+FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height, float strokePercentage)
 : height_(static_cast<unsigned int>(height * getScaleFactor())),
   lineHeight(static_cast<int>(height_ * LINE_HEIGHT_FACOTR)) {
 	auto filename = pathPrefix + relativeFilename;
@@ -191,10 +196,20 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height)
 	// in terms of 1/64ths of pixels.  Thus, to make a font
 	// h pixels high, we need to request a size of h*64.
 	FT_Set_Char_Size(face, height_ * 64, height_ * 64, 96, 96);
+
+	FT_Fixed strokeWidth = std::lround(strokePercentage * static_cast<float>(height) * 0.64);
+	if (strokeWidth != 0) {
+		FT_Stroker_New(library, &stroker);
+		FT_Stroker_Set(stroker, strokeWidth, FT_STROKER_LINECAP_ROUND, FT_STROKER_LINEJOIN_ROUND,
+		               0);
+	}
 }
 
 FontImpl::~FontImpl() {
 	freeFace.reset(); // free face_ with FT_Done_Face
+	if (stroker) {
+		FT_Stroker_Done(stroker);
+	}
 	if (--instanceCounter == 0) {
 		FT_Done_FreeType(library);
 	}

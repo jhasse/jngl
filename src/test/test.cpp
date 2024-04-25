@@ -106,6 +106,9 @@ public:
 		if (jngl::keyPressed('g')) {
 			jngl::setWork<AsyncLoad>();
 		}
+		if (jngl::keyPressed('e')) {
+			jngl::errorMessage("Hello World!");
+		}
 	}
 	void drawBackground() const;
 	void draw() const override {
@@ -168,9 +171,14 @@ public:
 		jngl::print(" $", static_cast<int>(jngl::getTextWidth("UTF-8:   ä ö ü ß Ĉ Ψ ≈") + 5), 105);
 		jngl::setFontSize(12);
 		jngl::print("Press 1-9 to test the performance\nPress E to show a error box.", 5, 135);
-		if (jngl::keyPressed('e')) {
-			jngl::errorMessage("Hello World!");
-		}
+
+		auto mv = jngl::modelview().translate({ 5, 175 });
+		jngl::setFontColor(static_cast<unsigned char>(255 * (1 - factor)),
+		                   static_cast<unsigned char>(255 * factor), 255);
+		fontStroke.print(mv, "Text with outline.");
+		jngl::setFontColor(0x000000_rgb);
+		fontNormal.print(mv, "Text with outline.");
+
 		jngl::print("Press S to use the blur shader.", 5, 390);
 		jngl::print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 410);
 		jngl::print("Press V to toggle V-SYNC.", 5, 430);
@@ -251,6 +259,8 @@ private:
 	jngl::Finally soundLoader;
 	std::optional<jngl::Finally> paused;
 	std::unique_ptr<jngl::Channel> music;
+	jngl::Font fontNormal{ "Arial.ttf", 12 };
+	jngl::Font fontStroke{ "Arial.ttf", 12, 5 };
 };
 
 jngl::AppParameters jnglInit() {
