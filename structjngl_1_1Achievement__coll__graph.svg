@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
-<g id="a_node1"><a xlink:title=" ">
+<g id="a_node1"><a xlink:title="Unlockable Achievement (also called Trophy)">
 <polygon fill="#999999" stroke="#666666" points="123,-19 40,-19 40,0 123,0 123,-19"/>
 <text text-anchor="middle" x="81.5" y="-7" font-family="ui-monospace,monospace" font-size="10.00">Achievement</text>
 </a>

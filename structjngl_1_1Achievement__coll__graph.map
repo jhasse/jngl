@@ -1,5 +1,5 @@
 <map id="Achievement" name="Achievement">
-<area shape="rect" id="node1" title=" " alt="" coords="59,137,169,163"/>
+<area shape="rect" id="node1" title="Unlockable Achievement (also called Trophy)" alt="" coords="59,137,169,163"/>
 <area shape="rect" id="node2" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/string/basic_string.html" title=" " alt="" coords="5,5,76,31"/>
 <area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/utility/functional/function.html" title=" " alt="" coords="100,5,275,31"/>
 </map>

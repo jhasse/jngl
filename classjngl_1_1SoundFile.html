@@ -112,13 +112,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>play</b> ()</td></tr>
 <tr class="separator:a6d58098c6cf63c241ed03bc797256bb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbd9c3842dcfde289f276f11ef509be5"><td class="memItemLeft" align="right" valign="top"><a id="adbd9c3842dcfde289f276f11ef509be5" name="adbd9c3842dcfde289f276f11ef509be5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>play</b> (<a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;)</td></tr>
+<tr class="memdesc:adbd9c3842dcfde289f276f11ef509be5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play the sound once on the <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a>. <br /></td></tr>
 <tr class="separator:adbd9c3842dcfde289f276f11ef509be5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c528baf37154d347366083f0f816846"><td class="memItemLeft" align="right" valign="top"><a id="a8c528baf37154d347366083f0f816846" name="a8c528baf37154d347366083f0f816846"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> ()</td></tr>
 <tr class="memdesc:a8c528baf37154d347366083f0f816846"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop the last started sound. <br /></td></tr>
 <tr class="separator:a8c528baf37154d347366083f0f816846"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a811a07a7c69cd4cf4d23031c99d5a589"><td class="memItemLeft" align="right" valign="top"><a id="a811a07a7c69cd4cf4d23031c99d5a589" name="a811a07a7c69cd4cf4d23031c99d5a589"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> (<a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;)</td></tr>
+<tr class="memitem:a811a07a7c69cd4cf4d23031c99d5a589"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1SoundFile.html#a811a07a7c69cd4cf4d23031c99d5a589">stop</a> (<a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;)</td></tr>
+<tr class="memdesc:a811a07a7c69cd4cf4d23031c99d5a589"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop the last started sound of this <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> started on the <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a>.  <a href="classjngl_1_1SoundFile.html#a811a07a7c69cd4cf4d23031c99d5a589">More...</a><br /></td></tr>
 <tr class="separator:a811a07a7c69cd4cf4d23031c99d5a589"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8438e3403946accc1986a05b89ee7b03"><td class="memItemLeft" align="right" valign="top"><a id="a8438e3403946accc1986a05b89ee7b03" name="a8438e3403946accc1986a05b89ee7b03"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isPlaying</b> ()</td></tr>
@@ -141,7 +142,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setVolume</b> (float 
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Sound loaded from an OGG file. </p>
-<p >JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly - you can just use <a class="el" href="namespacejngl.html#a9a2d4a760f9febf9ab966d0ed41183b2" title="Play an OGG audio file once.">jngl::play</a>. </p>
+<p >JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly - you can just use <a class="el" href="namespacejngl.html#a9a2d4a760f9febf9ab966d0ed41183b2" title="Play an OGG audio file once.">jngl::play</a> or <a class="el" href="classjngl_1_1Channel.html#a9a2d4a760f9febf9ab966d0ed41183b2" title="Play OGG file on this channel.">Channel::play</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="SoundFile_8hpp_source.html#l00029">29</a> of file <a class="el" href="SoundFile_8hpp_source.html">SoundFile.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -186,6 +187,27 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setVolume</b> (float 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a811a07a7c69cd4cf4d23031c99d5a589" name="a811a07a7c69cd4cf4d23031c99d5a589"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a811a07a7c69cd4cf4d23031c99d5a589">&#9670;&#160;</a></span>stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stop </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stop the last started sound of this <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> started on the <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a>. </p>
+<dl class="section note"><dt>Note</dt><dd>If not using the main <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a> (i.e. <a class="el" href="classjngl_1_1Channel.html#a31eed6f7511dc019ad179a95b5246682" title="Returns the main Channel on which jngl::play, jngl::loop, jngl::stop operate.">Channel::main()</a>), this method should be used instead of <a class="el" href="classjngl_1_1SoundFile.html#a8c528baf37154d347366083f0f816846" title="Stop the last started sound.">stop()</a>. </dd></dl>
+
+</div>
+</div>
 <a id="a78f61ac2dd03bcba8e09ca20cd7d68e3" name="a78f61ac2dd03bcba8e09ca20cd7d68e3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a78f61ac2dd03bcba8e09ca20cd7d68e3">&#9670;&#160;</a></span>load()</h2>
 

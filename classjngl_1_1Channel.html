@@ -124,8 +124,20 @@ static <a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;&#160;</t
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >An audio channel, different channels could be for example: "Music", "Speech" and "Sound Effects". </p>
-
-<p class="definition">Definition at line <a class="el" href="Channel_8hpp_source.html#l00016">16</a> of file <a class="el" href="Channel_8hpp_source.html">Channel.hpp</a>.</p>
+<p >Example: </p><div class="fragment"><div class="line"><span class="keyword">struct </span>Channels : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Singleton.html">jngl::Singleton</a>&lt;Channels&gt; {</div>
+<div class="line">    <a class="code hl_class" href="classjngl_1_1Channel.html">jngl::Channel</a>&amp; main = <a class="code hl_function" href="classjngl_1_1Channel.html#a31eed6f7511dc019ad179a95b5246682">jngl::Channel::main</a>();</div>
+<div class="line">    <a class="code hl_class" href="classjngl_1_1Channel.html">jngl::Channel</a> music;</div>
+<div class="line">    <a class="code hl_class" href="classjngl_1_1Channel.html">jngl::Channel</a> speech;</div>
+<div class="line">};</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// somewhere else:</span></div>
+<div class="line">Channels::handle().music.<a class="code hl_function" href="classjngl_1_1Channel.html#a781812716ce21447b7b3e9b2b651efdc">loop</a>(<span class="stringliteral">&quot;background_music01.ogg&quot;</span>);</div>
+<div class="ttc" id="aclassjngl_1_1Channel_html"><div class="ttname"><a href="classjngl_1_1Channel.html">jngl::Channel</a></div><div class="ttdoc">An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.</div><div class="ttdef"><b>Definition:</b> <a href="Channel_8hpp_source.html#l00028">Channel.hpp:28</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Channel_html_a31eed6f7511dc019ad179a95b5246682"><div class="ttname"><a href="classjngl_1_1Channel.html#a31eed6f7511dc019ad179a95b5246682">jngl::Channel::main</a></div><div class="ttdeci">static Channel &amp; main()</div><div class="ttdoc">Returns the main Channel on which jngl::play, jngl::loop, jngl::stop operate.</div></div>
+<div class="ttc" id="aclassjngl_1_1Channel_html_a781812716ce21447b7b3e9b2b651efdc"><div class="ttname"><a href="classjngl_1_1Channel.html#a781812716ce21447b7b3e9b2b651efdc">jngl::Channel::loop</a></div><div class="ttdeci">void loop(const std::string &amp;filename)</div><div class="ttdoc">Play an OGG audio file on this channel in a loop.</div></div>
+<div class="ttc" id="aclassjngl_1_1Singleton_html"><div class="ttname"><a href="classjngl_1_1Singleton.html">jngl::Singleton</a></div><div class="ttdoc">Inherit from this class to create a singleton that will be destroyed when your games exits.</div><div class="ttdef"><b>Definition:</b> <a href="Singleton_8hpp_source.html#l00023">Singleton.hpp:23</a></div></div>
+</div><!-- fragment --> 
+<p class="definition">Definition at line <a class="el" href="Channel_8hpp_source.html#l00028">28</a> of file <a class="el" href="Channel_8hpp_source.html">Channel.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a781812716ce21447b7b3e9b2b651efdc" name="a781812716ce21447b7b3e9b2b651efdc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a781812716ce21447b7b3e9b2b651efdc">&#9670;&#160;</a></span>loop()</h2>
@@ -173,7 +185,6 @@ static <a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;&#160;</t
 <div class="line">    <span class="keywordtype">void</span> step()<span class="keyword"> override </span>{ <span class="comment">/* ... */</span> }</div>
 <div class="line">    <span class="keywordtype">void</span> draw()<span class="keyword"> const override </span>{ <span class="comment">/* ... */</span> }</div>
 <div class="line">};</div>
-<div class="ttc" id="aclassjngl_1_1Channel_html"><div class="ttname"><a href="classjngl_1_1Channel.html">jngl::Channel</a></div><div class="ttdoc">An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.</div><div class="ttdef"><b>Definition:</b> <a href="Channel_8hpp_source.html#l00016">Channel.hpp:16</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Finally_html"><div class="ttname"><a href="classjngl_1_1Finally.html">jngl::Finally</a></div><div class="ttdoc">Helper class which calls a function when being destroyed.</div><div class="ttdef"><b>Definition:</b> <a href="Finally_8hpp_source.html#l00022">Finally.hpp:22</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Work_html"><div class="ttname"><a href="classjngl_1_1Work.html">jngl::Work</a></div><div class="ttdoc">Active state of the game, e.g. a menu or the game itself.</div><div class="ttdef"><b>Definition:</b> <a href="work_8hpp_source.html#l00013">work.hpp:13</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition:</b> <a href="Achievement_8hpp_source.html#l00010">Achievement.hpp:10</a></div></div>
@@ -193,7 +204,6 @@ static <a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;&#160;</t
 <div class="line">    <span class="keywordtype">void</span> draw()<span class="keyword"> const override </span>{ <span class="comment">/* ... */</span> }</div>
 <div class="line">};</div>
 <div class="ttc" id="aclassjngl_1_1Channel_html_a067fa59abcab102a9f4007eeff444a1d"><div class="ttname"><a href="classjngl_1_1Channel.html#a067fa59abcab102a9f4007eeff444a1d">jngl::Channel::pause</a></div><div class="ttdeci">Finally pause()</div><div class="ttdoc">Pauses the Channel; destroying the returned Finally object will resume again.</div></div>
-<div class="ttc" id="aclassjngl_1_1Channel_html_a31eed6f7511dc019ad179a95b5246682"><div class="ttname"><a href="classjngl_1_1Channel.html#a31eed6f7511dc019ad179a95b5246682">jngl::Channel::main</a></div><div class="ttdeci">static Channel &amp; main()</div><div class="ttdoc">Returns the main Channel on which jngl::play, jngl::loop, jngl::stop operate.</div></div>
 <div class="ttc" id="anamespacejngl_html_ab4f02dd8f5a8430d8e2c43e9ff619cdc"><div class="ttname"><a href="namespacejngl.html#ab4f02dd8f5a8430d8e2c43e9ff619cdc">jngl::keyPressed</a></div><div class="ttdeci">bool keyPressed(key::KeyType key)</div><div class="ttdoc">Whether key has been pressed since the next to last call to updateInput()</div></div>
 <div class="ttc" id="aoptional_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a></div></div>
 </div><!-- fragment --> 
