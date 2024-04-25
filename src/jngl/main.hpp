@@ -11,7 +11,7 @@
 #ifdef JNGL_UWP
 #include <SDL.h>
 
-#define JNGL_MAIN_BEGIN /* NOLINT */ int main(int argc, char** argv) { \
+#define JNGL_MAIN_BEGIN /* NOLINT */ int SDL_main(int argc, char** argv) { \
 	jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
 #define JNGL_MAIN_END return 0; } // NOLINT
 
