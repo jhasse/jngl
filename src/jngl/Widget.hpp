@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Container class
 /// @file
@@ -24,6 +24,7 @@ public:
 	enum class Action {
 		NONE,
 		REMOVE,
+		REQUEST_FOCUS,
 	};
 
 	/// Steps all Effects

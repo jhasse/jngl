@@ -25,16 +25,15 @@ cmake --build build
 ### Ubuntu
 
 ```
-sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev \
-libpng-dev libvorbis-dev cmake g++ \
-libwebp-dev git libsdl2-dev
+sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libpng-dev \
+libxxf86vm-dev libvorbis-dev cmake g++ libwebp-dev git libsdl2-dev
 ```
 
 ### Fedora
 
 ```
 sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libwebp-devel \
-cmake SDL2-devel gcc-c++
+cmake SDL2-devel gcc-c++ libatomic
 ```
 
 ### Arch Linux

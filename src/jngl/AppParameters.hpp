@@ -28,6 +28,10 @@ struct AppParameters {
 	/// If not specified JNGL will create a fullscreen Window with the maximum of space available.
 	std::optional<jngl::Vec2> screenSize;
 
+	/// If set, can be used to control whether to run in fullscreen or windowed mode on supported
+	/// platforms. If not set, it will run fullscreen when NDEBUG is defined (i.e. in Release mode).
+	std::optional<bool> fullscreen;
+
 	std::optional<std::pair<int, int>> minAspectRatio;
 	std::optional<std::pair<int, int>> maxAspectRatio;
 

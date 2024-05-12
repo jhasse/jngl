@@ -1,4 +1,4 @@
-// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Container.hpp"
 
@@ -20,6 +20,7 @@ void Container::step() {
 		for (const auto& widget : widgets) {
 			switch (widget->step()) {
 			case Widget::Action::NONE:
+			case Widget::Action::REQUEST_FOCUS:
 				break;
 			case Widget::Action::REMOVE:
 				needToRemove.insert(widget.get());

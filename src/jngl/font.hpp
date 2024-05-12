@@ -4,7 +4,7 @@
 /// @file
 #pragma once
 
-#include "Color.hpp"
+#include "Rgb.hpp"
 #include "Vec2.hpp"
 
 #include <memory>
@@ -19,7 +19,15 @@ class Mat3;
 class Font {
 public:
 	/// Creates a font from \a filename in \a size px
-	Font(const std::string& filename, unsigned int size);
+	///
+	/// You may set \a strokePercentage to a positive or negative % value to increase or decrease
+	/// the font size, without actually changing the position/size of the individual characters.
+	/// This can be used to draw an outlined text by e.g. first drawing with a 5% stroke and then
+	/// printing the same text with 0% (or even a negative stroke) over it.
+	///
+	/// Example: To increase the size of each character by 2px for a Font with a \a size of 20px,
+	/// you would pass 10.f for \a strokePercentage.
+	Font(const std::string& filename, unsigned int size, float strokePercentage = 0);
 
 	/// Uses the font to print something at \a x \a y. The color can be specified using setFontColor.
 	void print(const std::string&, int x, int y);
@@ -71,13 +79,10 @@ void setFont(const std::string& filename);
 /// \endcode
 void setFontByName(const std::string& name);
 
-/// Sets the color of the currently active font
-void setFontColor(jngl::Color);
-
 /// Sets the color of the currently active font and the alpha value
 ///
 /// \a alpha goes from 0.0f to 1.0f (opaque). It's automatically clamped to these values.
-void setFontColor(Color, float alpha);
+void setFontColor(Rgb, float alpha = 1.f);
 
 /// Sets the color of the currently active font
 ///

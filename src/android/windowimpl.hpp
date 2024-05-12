@@ -1,8 +1,9 @@
-// Copyright 2015-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
+#include "../jngl/Finally.hpp"
 #include "../jngl/Vec2.hpp"
 
 #include <EGL/egl.h>
@@ -49,6 +50,7 @@ private:
 	const std::pair<int, int> maxAspectRatio;
 	android_app* app;
 	Window* window;
+	std::optional<Finally> pauseAudio;
 
 	bool firstFrame = true;
 

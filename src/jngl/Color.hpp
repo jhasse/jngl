@@ -1,10 +1,13 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Color class
 /// @file
 #pragma once
 
+#include "Rgb.hpp"
+
 namespace jngl {
+
 /// Object representing a RGB color
 ///
 /// You can use the custom literal operator to create a jngl::Color from HTML color codes. For
@@ -43,6 +46,9 @@ public:
 	unsigned char getBlue() const;
 	/// 0...255
 	void setBlue(unsigned char);
+
+	/// Implicit conversion for backwards compatibility
+	operator Rgb() const; // NOLINT
 
 private:
 	unsigned char red;

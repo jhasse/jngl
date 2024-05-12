@@ -5,6 +5,11 @@ jobs:
     runs-on: windows-2022
     steps:
     - uses: actions/checkout@v4
+    - name: Cache CPM.cmake packages
+      uses: actions/cache@v4
+      with:
+        path: .cache/cpm
+        key: cpm
     - uses: ilammy/msvc-dev-cmd@v1
     - name: Configure
       run: cmake -Bbuild -G"Ninja Multi-Config" -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl
@@ -12,6 +17,8 @@ jobs:
       run: cmake --build build --config Debug
     - name: Unittest (Debug)
       run: |
+        build/Debug/jngl-unittest Color
+        build/Debug/jngl-unittest Rgb
         build/Debug/jngl-unittest Drawable
         build/Debug/jngl-unittest ImageData
         build/Debug/jngl-unittest FinallyTest
@@ -22,6 +29,8 @@ jobs:
       run: cmake --build build --config Release
     - name: Unittest (Release)
       run: |
+        build/Release/jngl-unittest Color
+        build/Release/jngl-unittest Rgb
         build/Release/jngl-unittest Drawable
         build/Release/jngl-unittest ImageData
         build/Release/jngl-unittest FinallyTest
@@ -33,12 +42,19 @@ jobs:
     runs-on: windows-2022
     steps:
     - uses: actions/checkout@v4
+    - name: Cache CPM.cmake packages
+      uses: actions/cache@v4
+      with:
+        path: .cache/cpm
+        key: cpm
     - name: Configure
       run: cmake -Bbuild
     - name: Build (Debug)
       run: cmake --build build --config Debug
     - name: Unittest (Debug)
       run: |
+        build/Debug/jngl-unittest Color
+        build/Debug/jngl-unittest Rgb
         build/Debug/jngl-unittest Drawable
         build/Debug/jngl-unittest ImageData
         build/Debug/jngl-unittest FinallyTest
@@ -49,6 +65,8 @@ jobs:
       run: cmake --build build --config Release
     - name: Unittest (Release)
       run: |
+        build/Release/jngl-unittest Color
+        build/Release/jngl-unittest Rgb
         build/Release/jngl-unittest Drawable
         build/Release/jngl-unittest ImageData
         build/Release/jngl-unittest FinallyTest
@@ -65,7 +83,7 @@ jobs:
   mingw-sdl:
     runs-on: [ubuntu-latest]
     container:
-      image: registry.fedoraproject.org/fedora-minimal:37
+      image: registry.fedoraproject.org/fedora-minimal:39
     steps:
     - name: Install dependencies
       run: microdnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw32-nsis mingw64-gcc-c++ tar gzip
@@ -74,3 +92,6 @@ jobs:
       run: |
         mingw64-cmake -Bbuild-windows -GNinja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=0 -DJNGL_SDL2=1
         ninja -Cbuild-windows
+
+env:
+  CPM_SOURCE_CACHE: ${{ github.workspace }}/.cache/cpm

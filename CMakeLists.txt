@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 project(jngl LANGUAGES C CXX)
 
 if(MSVC)
-	string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus")
+	string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /wd4244 /wd4305")
 else()
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fdiagnostics-color")
@@ -178,7 +178,7 @@ endif()
 get_directory_property(hasParent PARENT_DIRECTORY)
 if(ANDROID OR MSVC OR IOS)
 	CPMAddPackage(NAME freetype
-		URL https://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.xz
+		URL https://sourceforge.net/projects/freetype/files/freetype2/2.11.1/freetype-2.11.1.tar.xz/download
 		URL_HASH SHA256=3333ae7cfda88429c97a7ae63b7d01ab398076c3b67182e960e5684050f2c5c8
 		OPTIONS "FT_DISABLE_HARFBUZZ 1"
 	)

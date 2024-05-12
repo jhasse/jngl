@@ -1,4 +1,4 @@
-// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "SoundFile.hpp"
@@ -9,11 +9,12 @@
 #include "../audio/effect/volume.hpp"
 #include "../audio/engine.hpp"
 #include "../audio/mixer.hpp"
-#include "../jngl/Singleton.hpp"
 #include "../main.hpp"
+#include "Channel.hpp"
 #include "debug.hpp"
 
 #include <algorithm>
+#include <cassert>
 #include <stdexcept>
 #include <unordered_map>
 
@@ -26,60 +27,73 @@
 
 namespace jngl {
 
+// TODO: Move to Audio
 std::unordered_map<std::string, std::shared_ptr<SoundFile>> sounds;
 
-class Audio : public jngl::Singleton<Audio> {
-public:
-	Audio()
-	: mixer(std::make_shared<Mixer>()), pitchControl(audio::pitch(mixer)),
-	  volumeControl(volume(pitchControl)), engine(volumeControl) {
-	}
-	Audio(const Audio&) = delete;
-	Audio& operator=(const Audio&) = delete;
-	Audio(Audio&&) = delete;
-	Audio& operator=(Audio&&) = delete;
-	~Audio() = default;
+Audio::Audio()
+: mixer(std::make_shared<Mixer>()), pitchControl(audio::pitch(mixer)),
+  volumeControl(volume(pitchControl)), engine(volumeControl) {
+}
+Audio::~Audio() = default;
 
-	void play(std::shared_ptr<Sound> sound) {
-		mixer->add(sound->getStream());
-		sounds_.erase(std::remove_if(sounds_.begin(), sounds_.end(),
-		                             [](const auto& s) { return !s->isPlaying(); }),
-		              sounds_.end());
-		sounds_.emplace_back(std::move(sound));
-	}
+void Audio::play(Channel& channel, std::shared_ptr<Sound> sound) {
+	channel.add(sound->getStream());
+	sounds_.erase(std::remove_if(sounds_.begin(), sounds_.end(),
+	                             [](const auto& s) { return !s->isPlaying(); }),
+	              sounds_.end());
+	sounds_.emplace_back(std::move(sound));
+}
 
-	void Stop(std::shared_ptr<Sound>& sound) {
-		mixer->remove(sound->getStream().get());
-		if (auto i = std::find(sounds_.begin(), sounds_.end(), sound); i != sounds_.end()) {
-			sounds_.erase(i);
-		}
+void Audio::stop(Channel& channel, std::shared_ptr<Sound>& sound) {
+	channel.remove(sound->getStream().get());
+	if (auto i = std::find(sounds_.begin(), sounds_.end(), sound); i != sounds_.end()) {
+		sounds_.erase(i);
 	}
-	void pauseDevice() {
+}
+
+void Audio::increasePauseDeviceCount() {
+	if (pauseDeviceCount == 0) {
 		engine.setPause(true);
 	}
-	void resumeDevice() {
+	++pauseDeviceCount;
+}
+
+void Audio::decreasePauseDeviceCount() {
+	assert(pauseDeviceCount > 0);
+	--pauseDeviceCount;
+	if (pauseDeviceCount == 0) {
 		engine.setPause(false);
 	}
-	void setPitch(float pitch) {
-		pitchControl->pitch(pitch);
-	}
-	float getVolume() const {
-		return volumeControl->gain();
-	}
-	void setVolume(float volume) {
-		volumeControl->gain(volume);
-	}
-	std::shared_ptr<Mixer> getMixer() {
-		return mixer;
-	}
+}
 
-private:
-	std::vector<std::shared_ptr<Sound>> sounds_;
-	std::shared_ptr<Mixer> mixer;
-	std::shared_ptr<audio::pitch_control> pitchControl;
-	std::shared_ptr<audio::volume_control> volumeControl;
-	audio::engine engine;
-};
+void Audio::setPitch(float pitch) {
+	pitchControl->pitch(pitch);
+}
+float Audio::getVolume() const {
+	return volumeControl->gain();
+}
+void Audio::setVolume(float volume) {
+	volumeControl->gain(volume);
+}
+
+Channel& Audio::getMainChannel() {
+	if (!mainChannel) {
+		mainChannel = std::make_unique<Channel>();
+	}
+	return *mainChannel;
+}
+
+void Audio::registerChannel(std::shared_ptr<Stream> stream) {
+	this->mixer->add(std::move(stream));
+}
+
+void Audio::unregisterChannel(const Stream& stream) {
+	mixer->remove(&stream);
+}
+
+void Audio::step() {
+	engine.step();
+}
 
 SoundFile::SoundFile(const std::string& filename, std::launch) {
 	debug("Decoding ");
@@ -148,15 +162,25 @@ SoundFile& SoundFile::operator=(SoundFile&& other) noexcept {
 }
 
 void SoundFile::play() {
-	sound_ = std::make_shared<Sound>(buffer_, frequency);
-	GetAudio().play(sound_);
+	play(Channel::main());
 }
+
+void SoundFile::play(Channel& channel) {
+	sound_ = std::make_shared<Sound>(buffer_, frequency);
+	Audio::handle().play(channel, sound_);
+}
+
 void SoundFile::stop() {
+	stop(Channel::main());
+}
+
+void SoundFile::stop(Channel& channel) {
 	if (sound_) {
-		GetAudio().Stop(sound_);
+		Audio::handle().stop(channel, sound_);
 		sound_.reset();
 	}
 }
+
 bool SoundFile::isPlaying() {
 	if (sound_) {
 		return sound_->isPlaying();
@@ -165,12 +189,16 @@ bool SoundFile::isPlaying() {
 }
 
 void SoundFile::loop() {
+	loop(Channel::main());
+}
+
+void SoundFile::loop(Channel& channel) {
 	if (sound_ && sound_->isLooping()) {
 		return;
 	}
 	sound_ = std::make_shared<Sound>(buffer_, frequency);
 	sound_->loop();
-	GetAudio().play(sound_);
+	Audio::handle().play(channel, sound_);
 }
 
 void SoundFile::setVolume(float v) {
@@ -183,7 +211,7 @@ void SoundFile::load() {
 }
 
 std::shared_ptr<SoundFile> getSoundFile(const std::string& filename, std::launch policy) {
-	GetAudio();
+	Audio::handle();
 	auto i = sounds.find(filename);
 	if (i == sounds.end()) { // sound hasn't been loaded yet?
 		sounds[filename] = std::make_shared<SoundFile>(pathPrefix + filename, policy);
@@ -216,33 +244,27 @@ std::shared_ptr<SoundFile> loop(const std::string& filename) {
 }
 
 void setPlaybackSpeed(float speed) {
-	GetAudio().setPitch(speed);
+	Audio::handle().setPitch(speed);
 }
 
 float getVolume() {
-	return GetAudio().getVolume();
+	return Audio::handle().getVolume();
 }
 
 void setVolume(float volume) {
-	GetAudio().setVolume(volume);
+	Audio::handle().setVolume(volume);
 }
 
-void pauseAudioDevice() {
+Finally pauseAudio() {
 	if (auto audio = Audio::handleIfAlive()) {
-		audio->pauseDevice();
+		audio->increasePauseDeviceCount();
+		return Finally([audio]() { audio->decreasePauseDeviceCount(); });
 	}
-}
-
-void resumeAudioDevice() {
-	GetAudio().resumeDevice();
+	return Finally(nullptr);
 }
 
 Audio& GetAudio() {
 	return Audio::handle();
-}
-
-std::shared_ptr<Mixer> getMixer() {
-	return GetAudio().getMixer();
 }
 
 } // namespace jngl
