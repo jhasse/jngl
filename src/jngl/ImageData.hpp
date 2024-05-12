@@ -1,4 +1,4 @@
-// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::ImageData class
 /// \file
@@ -6,6 +6,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <optional>
 #include <string>
 
 namespace jngl {
@@ -16,7 +17,9 @@ public:
 	/// Passing a filename will load the specified \a filename
 	///
 	/// PNG and WebP files are supported.
-	static std::unique_ptr<ImageData> load(const std::string& filename);
+	/// If \a scale isn't set, jngl::getScaleFactor() gets used instead.
+	static std::unique_ptr<ImageData> load(const std::string& filename,
+	                                       std::optional<double> scale = std::nullopt);
 
 	virtual ~ImageData() = default;
 
