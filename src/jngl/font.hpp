@@ -25,8 +25,8 @@ public:
 	/// This can be used to draw an outlined text by e.g. first drawing with a 5% stroke and then
 	/// printing the same text with 0% (or even a negative stroke) over it.
 	///
-	/// Example: To increase the size of each character by 2px for a Font with a \a size of 20px
-	/// pixel, you would pass 10.f for \a strokePercentage.
+	/// Example: To increase the size of each character by 2px for a Font with a \a size of 20px,
+	/// you would pass 10.f for \a strokePercentage.
 	Font(const std::string& filename, unsigned int size, float strokePercentage = 0);
 
 	/// Uses the font to print something at \a x \a y. The color can be specified using setFontColor.

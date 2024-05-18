@@ -1,16 +1,17 @@
-// Copyright 2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Achievement class
 /// @file
 #pragma once
 
-#include <future>
+#include <functional>
 #include <string>
 
 namespace jngl {
 
 class Sprite;
 
+/// Unlockable Achievement (also called Trophy)
 struct Achievement {
 	Achievement(std::string id, std::string name, std::string description, std::string icon,
 	            int initialValue = 0, int maxValue = 1);

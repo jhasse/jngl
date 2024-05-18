@@ -1,4 +1,4 @@
-// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "TextLine.hpp"
@@ -6,8 +6,6 @@
 #include "../freetype.hpp"
 #include "ScaleablePixels.hpp"
 #include "font.hpp"
-#include "matrix.hpp"
-#include "screen.hpp"
 
 namespace jngl {
 
