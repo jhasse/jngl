@@ -393,7 +393,7 @@ void WindowImpl::updateInput() {
 	int events;
 	android_poll_source* source;
 
-	while ((ident = ALooper_pollAll(
+	while ((ident = ALooper_pollOnce(
 	            display->surface ? 0 : 1e9, // This is the timeout. When we're in the background, we don't
 	                               // want to busy-wait for events.
 	            nullptr, &events, (void**)&source)) >= 0 ||
