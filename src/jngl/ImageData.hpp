@@ -1,10 +1,9 @@
-// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::ImageData class
 /// \file
 #pragma once
 
-#include <cstddef>
 #include <memory>
 #include <string>
 
@@ -27,6 +26,11 @@ public:
 	virtual int getHeight() const = 0;
 
 	/// RGBA values ordered row-major
+	///
+	/// To access the x=5, y=7 pixel: `id.pixels()[5 + 7 * id.getWidth()]`
+	///
+	/// This function doesn't create the underlying data or loads the image (that has already
+	/// happened in ImageData::load), so you may call this as often as you like.
 	virtual const uint8_t* pixels() const = 0;
 };
 
