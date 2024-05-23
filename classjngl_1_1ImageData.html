@@ -100,23 +100,31 @@ virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>getWidth</b> (
 virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>getHeight</b> () const =0</td></tr>
 <tr class="memdesc:adb1998169424610b9dcd08817535e3f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the height of the image in pixels. <br /></td></tr>
 <tr class="separator:adb1998169424610b9dcd08817535e3f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4744f83f9b7f5371151da2a441f2659"><td class="memItemLeft" align="right" valign="top"><a id="af4744f83f9b7f5371151da2a441f2659" name="af4744f83f9b7f5371151da2a441f2659"></a>
+virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>getImageWidth</b> () const =0</td></tr>
+<tr class="memdesc:af4744f83f9b7f5371151da2a441f2659"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the image has been scaled by <a class="el" href="namespacejngl.html#a7d23d95fbe7f69b235a6984b67f5fa7c" title="Size of one screen pixel in actual pixels.">getScaleFactor()</a> this will return the original image width. <br /></td></tr>
+<tr class="separator:af4744f83f9b7f5371151da2a441f2659"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8f642dca8e2aa692e0f549766edd1d3"><td class="memItemLeft" align="right" valign="top"><a id="ad8f642dca8e2aa692e0f549766edd1d3" name="ad8f642dca8e2aa692e0f549766edd1d3"></a>
+virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>getImageHeight</b> () const =0</td></tr>
+<tr class="memdesc:ad8f642dca8e2aa692e0f549766edd1d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the image has been scaled by <a class="el" href="namespacejngl.html#a7d23d95fbe7f69b235a6984b67f5fa7c" title="Size of one screen pixel in actual pixels.">getScaleFactor()</a> this will return the original image height. <br /></td></tr>
+<tr class="separator:ad8f642dca8e2aa692e0f549766edd1d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a398d80b2b7f1e151472189e4b25041e3"><td class="memItemLeft" align="right" valign="top">virtual const uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1ImageData.html#a398d80b2b7f1e151472189e4b25041e3">pixels</a> () const =0</td></tr>
 <tr class="memdesc:a398d80b2b7f1e151472189e4b25041e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">RGBA values ordered row-major.  <a href="classjngl_1_1ImageData.html#a398d80b2b7f1e151472189e4b25041e3">More...</a><br /></td></tr>
 <tr class="separator:a398d80b2b7f1e151472189e4b25041e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ae57ca86ca5967dbc1a5f8c1f2f2461cd"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="http://en.cppreference.com/w/cpp/memory/unique_ptr.html">std::unique_ptr</a>&lt; <a class="el" href="classjngl_1_1ImageData.html">ImageData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1ImageData.html#ae57ca86ca5967dbc1a5f8c1f2f2461cd">load</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
-<tr class="memdesc:ae57ca86ca5967dbc1a5f8c1f2f2461cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Passing a filename will load the specified <em>filename</em>.  <a href="classjngl_1_1ImageData.html#ae57ca86ca5967dbc1a5f8c1f2f2461cd">More...</a><br /></td></tr>
-<tr class="separator:ae57ca86ca5967dbc1a5f8c1f2f2461cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a350f91eea3fb2da330ade1e3ade40109"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="http://en.cppreference.com/w/cpp/memory/unique_ptr.html">std::unique_ptr</a>&lt; <a class="el" href="classjngl_1_1ImageData.html">ImageData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1ImageData.html#a350f91eea3fb2da330ade1e3ade40109">load</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename, double scaleHint=1.)</td></tr>
+<tr class="memdesc:a350f91eea3fb2da330ade1e3ade40109"><td class="mdescLeft">&#160;</td><td class="mdescRight">Passing a filename will load the specified <em>filename</em>.  <a href="classjngl_1_1ImageData.html#a350f91eea3fb2da330ade1e3ade40109">More...</a><br /></td></tr>
+<tr class="separator:a350f91eea3fb2da330ade1e3ade40109"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Containing the pixel data of an image file. </p>
 
 <p class="definition">Definition at line <a class="el" href="ImageData_8hpp_source.html#l00013">13</a> of file <a class="el" href="ImageData_8hpp_source.html">ImageData.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae57ca86ca5967dbc1a5f8c1f2f2461cd" name="ae57ca86ca5967dbc1a5f8c1f2f2461cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae57ca86ca5967dbc1a5f8c1f2f2461cd">&#9670;&#160;</a></span>load()</h2>
+<a id="a350f91eea3fb2da330ade1e3ade40109" name="a350f91eea3fb2da330ade1e3ade40109"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a350f91eea3fb2da330ade1e3ade40109">&#9670;&#160;</a></span>load()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -128,8 +136,18 @@ Static Public Member Functions</h2></td></tr>
           <td class="memname">static <a class="elRef" href="http://en.cppreference.com/w/cpp/memory/unique_ptr.html">std::unique_ptr</a>&lt; <a class="el" href="classjngl_1_1ImageData.html">ImageData</a> &gt; load </td>
           <td>(</td>
           <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;&#160;</td>
-          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>scaleHint</em> = <code>1.</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -140,7 +158,8 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Passing a filename will load the specified <em>filename</em>. </p>
-<p >PNG and WebP files are supported. </p>
+<p >PNG and WebP files are supported.</p>
+<p ><em>scaleHint</em> might be completely ignored, compare getImageWidth with getWidth after loading to check. </p>
 
 </div>
 </div>
@@ -168,14 +187,16 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>RGBA values ordered row-major. </p>
-<p >To access the x=5, y=7 pixel's green value: <code>img.pixels()[5 * 4 + 7 * img.getWidth() * 4 + 1]</code></p>
-<p >This function doesn't create the underlying data or loads the image (that has already happened in <a class="el" href="classjngl_1_1ImageData.html#ae57ca86ca5967dbc1a5f8c1f2f2461cd" title="Passing a filename will load the specified filename.">ImageData::load</a>), so you may call this as often as you like.</p>
-<p >Example: </p><div class="fragment"><div class="line"><span class="keywordtype">size_t</span> x = 5;</div>
+<p >To access the x=5, y=7 pixel's green value: <code>img-&gt;<a class="el" href="classjngl_1_1ImageData.html#a398d80b2b7f1e151472189e4b25041e3" title="RGBA values ordered row-major.">pixels()</a>[5 * 4 + 7 * img-&gt;<a class="el" href="classjngl_1_1ImageData.html#ad4355039828aa9d8b6c7a4758c0cc074" title="Returns the width of the image in pixels.">getWidth()</a> * 4 + 1]</code></p>
+<p >This function doesn't create the underlying data or loads the image (that has already happened in <a class="el" href="classjngl_1_1ImageData.html#a350f91eea3fb2da330ade1e3ade40109" title="Passing a filename will load the specified filename.">ImageData::load</a>), so you may call this as often as you like.</p>
+<p >Example: </p><div class="fragment"><div class="line"><span class="keyword">auto</span> img = <a class="code hl_function" href="classjngl_1_1ImageData.html#a350f91eea3fb2da330ade1e3ade40109">ImageData::load</a>(<span class="stringliteral">&quot;foo&quot;</span>);</div>
+<div class="line"><span class="keywordtype">size_t</span> x = 5;</div>
 <div class="line"><span class="keywordtype">size_t</span> y = 7;</div>
-<div class="line">uint8_t r = img.pixels()[x * 4 + y * img.getWidth() * 4];</div>
-<div class="line">uint8_t g = img.pixels()[x * 4 + y * img.getWidth() * 4 + 1];</div>
-<div class="line">uint8_t b = img.pixels()[x * 4 + y * img.getWidth() * 4 + 2];</div>
-<div class="line">uint8_t a = img.pixels()[x * 4 + y * img.getWidth() * 4 + 3];</div>
+<div class="line">uint8_t r = img-&gt;pixels()[x * 4 + y * img-&gt;getWidth() * 4];</div>
+<div class="line">uint8_t g = img-&gt;pixels()[x * 4 + y * img-&gt;getWidth() * 4 + 1];</div>
+<div class="line">uint8_t b = img-&gt;pixels()[x * 4 + y * img-&gt;getWidth() * 4 + 2];</div>
+<div class="line">uint8_t a = img-&gt;pixels()[x * 4 + y * img-&gt;getWidth() * 4 + 3];</div>
+<div class="ttc" id="aclassjngl_1_1ImageData_html_a350f91eea3fb2da330ade1e3ade40109"><div class="ttname"><a href="classjngl_1_1ImageData.html#a350f91eea3fb2da330ade1e3ade40109">jngl::ImageData::load</a></div><div class="ttdeci">static std::unique_ptr&lt; ImageData &gt; load(const std::string &amp;filename, double scaleHint=1.)</div><div class="ttdoc">Passing a filename will load the specified filename.</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
