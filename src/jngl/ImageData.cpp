@@ -24,7 +24,7 @@
 
 namespace jngl {
 
-std::unique_ptr<ImageData> ImageData::load(const std::string& filename) {
+std::unique_ptr<ImageData> ImageData::load(const std::string& filename, double scaleHint) {
 	auto fullFilename = pathPrefix + filename;
 	const char* extensions[] = {
 #ifndef NOPNG
@@ -41,8 +41,8 @@ std::unique_ptr<ImageData> ImageData::load(const std::string& filename) {
 		},
 #endif
 #ifndef NOWEBP
-		[](std::string filename, FILE* file) {
-		    return std::make_unique<ImageDataWebP>(std::move(filename), file, 1);
+		[scaleHint](std::string filename, FILE* file) {
+		    return std::make_unique<ImageDataWebP>(std::move(filename), file, scaleHint);
 		},
 #endif
 	};
