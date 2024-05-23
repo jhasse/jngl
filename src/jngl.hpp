@@ -12,6 +12,7 @@
 #include "jngl/Controller.hpp"
 #include "jngl/Drawable.hpp"
 #include "jngl/FrameBuffer.hpp"
+#include "jngl/ImageData.hpp"
 #include "jngl/Label.hpp"
 #include "jngl/Pixels.hpp"
 #include "jngl/Rgb.hpp"
