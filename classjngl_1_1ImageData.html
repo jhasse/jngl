@@ -168,9 +168,15 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>RGBA values ordered row-major. </p>
-<p >To access the x=5, y=7 pixel: <code>id.pixels()[5 + 7 * id.getWidth()]</code></p>
-<p >This function doesn't create the underlying data or loads the image (that has already happened in <a class="el" href="classjngl_1_1ImageData.html#ae57ca86ca5967dbc1a5f8c1f2f2461cd" title="Passing a filename will load the specified filename.">ImageData::load</a>), so you may call this as often as you like. </p>
-
+<p >To access the x=5, y=7 pixel's green value: <code>img.pixels()[5 * 4 + 7 * img.getWidth() * 4 + 1]</code></p>
+<p >This function doesn't create the underlying data or loads the image (that has already happened in <a class="el" href="classjngl_1_1ImageData.html#ae57ca86ca5967dbc1a5f8c1f2f2461cd" title="Passing a filename will load the specified filename.">ImageData::load</a>), so you may call this as often as you like.</p>
+<p >Example: </p><div class="fragment"><div class="line"><span class="keywordtype">size_t</span> x = 5;</div>
+<div class="line"><span class="keywordtype">size_t</span> y = 7;</div>
+<div class="line">uint8_t r = img.pixels()[x * 4 + y * img.getWidth() * 4];</div>
+<div class="line">uint8_t g = img.pixels()[x * 4 + y * img.getWidth() * 4 + 1];</div>
+<div class="line">uint8_t b = img.pixels()[x * 4 + y * img.getWidth() * 4 + 2];</div>
+<div class="line">uint8_t a = img.pixels()[x * 4 + y * img.getWidth() * 4 + 3];</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
