@@ -5,7 +5,6 @@
 #include "../helper.hpp"
 #include "../jngl/debug.hpp"
 #include "../main.hpp"
-#include "screen.hpp"
 
 #ifdef ANDROID
 #include "../android/fopen.hpp"

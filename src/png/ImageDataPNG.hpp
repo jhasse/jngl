@@ -21,8 +21,6 @@ public:
     const uint8_t* pixels() const override;
     int getWidth() const override;
     int getHeight() const override;
-    int getImageWidth() const override;
-    int getImageHeight() const override;
 
 	/// returns getWidth() as PNGs don't support scaling
 	int getImageWidth() const override;

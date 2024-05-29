@@ -81,7 +81,7 @@ std::string Fixture::getAsciiArt() const {
 		}
 		out += "\n";
 	}
-	// assert(emptyAsciiArt != out); // We shouldn't call this function without drawing something first
+	assert(emptyAsciiArt != out); // We shouldn't call this function without drawing something first
 	reset();
 	return out;
 }

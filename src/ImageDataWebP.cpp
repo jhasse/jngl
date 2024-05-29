@@ -35,9 +35,6 @@ ImageDataWebP::ImageDataWebP(std::string filename, FILE* file, double scaleFacto
 		    std::max(1, int(std::lround(imgWidth * scaleFactor)));
 		config.options.scaled_height = scaledHeight =
 		    std::max(1, int(std::lround(imgHeight * scaleFactor)));
-	} else {
-		scaledWidth = std::lround(static_cast<double>(scaledWidth) * scaleFactor);
-		scaledHeight = std::lround(static_cast<double>(scaledHeight) * scaleFactor);
 	}
 	config.output.colorspace = MODE_RGBA;
 #ifndef __EMSCRIPTEN__
