@@ -6,6 +6,7 @@
 #include "jngl/Alpha.hpp"
 #include "jngl/ImageData.hpp"
 #include "jngl/message.hpp"
+#include "jngl/screen.hpp"
 #include "texture.hpp"
 #include "windowptr.hpp"
 
@@ -84,7 +85,7 @@ Finally loadSprite(const std::string& filename) {
 Sprite::Loader::Loader(std::string filename) noexcept : filename(std::move(filename)) {
 	if (sprites_.count(this->filename) == 0) {
 		imageDataFuture = std::async(std::launch::async, [this]() {
-			auto tmp = ImageData::load(this->filename);
+			auto tmp = ImageData::load(this->filename, getScaleFactor());
 			tmp->pixels(); // TODO: Not needed when Sprite loading and jngl::load will be reworked
 			return tmp;
 		});
@@ -104,9 +105,8 @@ std::shared_ptr<Sprite> Sprite::Loader::shared() const {
 		return it->second;
 	}
 	auto imageData = imageDataFuture.get();
-	return sprites_
-	    .try_emplace(filename, std::make_shared<Sprite>(imageData->pixels(), imageData->getWidth(),
-	                                                    imageData->getHeight()))
+	double scale = imageData->getImageWidth() == imageData->getWidth() ? getScaleFactor() : 1;
+	return sprites_.try_emplace(filename, std::make_shared<Sprite>(*imageData, scale))
 	    .first->second;
 }
 

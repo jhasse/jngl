@@ -28,7 +28,21 @@ public:
 		THREADED,
 	};
 
-	Sprite(const unsigned char* bytes, size_t width, size_t height);
+	/// Creates a Sprite from ImageData and scales it by \a scale
+	///
+	/// When you want to draw an ImageData that hasn't been scaled, make sure to pass JNGL's scale
+	/// factor so that it appears as the same size independent of the resolution of the user.
+	///
+	/// Example:
+	/// \code
+	/// auto img = jngl::ImageData::load("foo.png");
+	/// auto sprite1 = std::make_unique<jngl::Sprite>(*img, jngl::getScaleFactor());
+	///
+	/// auto sprite2 = std::make_unique<jngl::Sprite>("foo.png");
+	///
+	/// assert(std::lround(sprite1.getWidth()) == std::lround(sprite2.getWidth()));
+	/// \endcode
+	explicit Sprite(const ImageData&, double scale);
 
 	/// \deprecated Use Loader instead
 	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
