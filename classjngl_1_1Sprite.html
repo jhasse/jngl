@@ -109,9 +109,9 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aba598d427dad290cafb71fefd2168555"><td class="memItemLeft" align="right" valign="top"><a id="aba598d427dad290cafb71fefd2168555" name="aba598d427dad290cafb71fefd2168555"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Sprite</b> (const unsigned char *bytes, size_t width, size_t height)</td></tr>
-<tr class="separator:aba598d427dad290cafb71fefd2168555"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5c8857fd99f9fd0df06c31844973d30"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#ae5c8857fd99f9fd0df06c31844973d30">Sprite</a> (const <a class="el" href="classjngl_1_1ImageData.html">ImageData</a> &amp;, double <a class="el" href="namespacejngl.html#a596070e6f4e07761871d407daff247b5">scale</a>)</td></tr>
+<tr class="memdesc:ae5c8857fd99f9fd0df06c31844973d30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a> from <a class="el" href="classjngl_1_1ImageData.html" title="Containing the pixel data of an image file.">ImageData</a> and scales it by <em>scale</em>.  <a href="classjngl_1_1Sprite.html#ae5c8857fd99f9fd0df06c31844973d30">More...</a><br /></td></tr>
+<tr class="separator:ae5c8857fd99f9fd0df06c31844973d30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc691192408ad699380be20bb1de75cc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#afc691192408ad699380be20bb1de75cc">Sprite</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename, LoadType loadType=LoadType::NORMAL)</td></tr>
 <tr class="separator:afc691192408ad699380be20bb1de75cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6c526798a490afe221d1447f508f16a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#ae6c526798a490afe221d1447f508f16a">step</a> () override</td></tr>
@@ -311,8 +311,56 @@ Collaboration diagram for Sprite:</div>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ae5c8857fd99f9fd0df06c31844973d30" name="ae5c8857fd99f9fd0df06c31844973d30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5c8857fd99f9fd0df06c31844973d30">&#9670;&#160;</a></span>Sprite() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Sprite.html">Sprite</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1ImageData.html">ImageData</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>scale</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a> from <a class="el" href="classjngl_1_1ImageData.html" title="Containing the pixel data of an image file.">ImageData</a> and scales it by <em>scale</em>. </p>
+<p >When you want to draw an <a class="el" href="classjngl_1_1ImageData.html" title="Containing the pixel data of an image file.">ImageData</a> that hasn't been scaled, make sure to pass JNGL's scale factor so that it appears as the same size independent of the resolution of the user.</p>
+<p >Example: </p><div class="fragment"><div class="line"><span class="keyword">auto</span> img = <a class="code hl_function" href="classjngl_1_1ImageData.html#a350f91eea3fb2da330ade1e3ade40109">jngl::ImageData::load</a>(<span class="stringliteral">&quot;foo.png&quot;</span>);</div>
+<div class="line"><span class="keyword">auto</span> sprite1 = std::make_unique&lt;jngl::Sprite&gt;(*img, <a class="code hl_function" href="namespacejngl.html#a7d23d95fbe7f69b235a6984b67f5fa7c">jngl::getScaleFactor</a>());</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> sprite2 = std::make_unique&lt;jngl::Sprite&gt;(<span class="stringliteral">&quot;foo.png&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line">assert(<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/numeric/math/round.html">std::lround</a>(sprite1.getWidth()) == <a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/numeric/math/round.html">std::lround</a>(sprite2.getWidth()));</div>
+<div class="ttc" id="aclassjngl_1_1ImageData_html_a350f91eea3fb2da330ade1e3ade40109"><div class="ttname"><a href="classjngl_1_1ImageData.html#a350f91eea3fb2da330ade1e3ade40109">jngl::ImageData::load</a></div><div class="ttdeci">static std::unique_ptr&lt; ImageData &gt; load(const std::string &amp;filename, double scaleHint=1.)</div><div class="ttdoc">Passing a filename will load the specified filename.</div></div>
+<div class="ttc" id="anamespacejngl_html_a7d23d95fbe7f69b235a6984b67f5fa7c"><div class="ttname"><a href="namespacejngl.html#a7d23d95fbe7f69b235a6984b67f5fa7c">jngl::getScaleFactor</a></div><div class="ttdeci">double getScaleFactor()</div><div class="ttdoc">Size of one screen pixel in actual pixels.</div></div>
+<div class="ttc" id="around_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/numeric/math/round.html">std::lround</a></div><div class="ttdeci">T lround(T... args)</div></div>
+</div><!-- fragment --> 
+</div>
+</div>
 <a id="afc691192408ad699380be20bb1de75cc" name="afc691192408ad699380be20bb1de75cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc691192408ad699380be20bb1de75cc">&#9670;&#160;</a></span>Sprite()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afc691192408ad699380be20bb1de75cc">&#9670;&#160;</a></span>Sprite() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -545,7 +593,7 @@ Collaboration diagram for Sprite:</div>
 
 <p>Function which actually loads the sprite. </p>
 
-<p class="definition">Definition at line <a class="el" href="sprite_8hpp_source.html#l00139">139</a> of file <a class="el" href="sprite_8hpp_source.html">sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sprite_8hpp_source.html#l00153">153</a> of file <a class="el" href="sprite_8hpp_source.html">sprite.hpp</a>.</p>
 
 </div>
 </div>
