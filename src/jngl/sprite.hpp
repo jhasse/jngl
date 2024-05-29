@@ -1,11 +1,11 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Sprite class and related functions
 /// \file
 #pragma once
 
-#include "Color.hpp"
 #include "Drawable.hpp"
+#include "Rgb.hpp"
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
 
@@ -28,7 +28,21 @@ public:
 		THREADED,
 	};
 
-	explicit Sprite(const std::string& filename, const ImageData&);
+	/// Creates a Sprite from ImageData and scales it by \a scale
+	///
+	/// When you want to draw an ImageData that hasn't been scaled, make sure to pass JNGL's scale
+	/// factor so that it appears as the same size independent of the resolution of the user.
+	///
+	/// Example:
+	/// \code
+	/// auto img = jngl::ImageData::load("foo.png");
+	/// auto sprite1 = std::make_unique<jngl::Sprite>(*img, jngl::getScaleFactor());
+	///
+	/// auto sprite2 = std::make_unique<jngl::Sprite>("foo.png");
+	///
+	/// assert(std::lround(sprite1.getWidth()) == std::lround(sprite2.getWidth()));
+	/// \endcode
+	explicit Sprite(const ImageData&, double scale);
 
 	/// \deprecated Use Loader instead
 	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
@@ -122,8 +136,13 @@ public:
 	/// Draw a cutout of the sprite. drawClipped({0, 0}, {1, 1}) would draw it normally.
 	void drawClipped(Vec2 start, Vec2 end) const;
 
-	/// Draws a list of triangles with the sprite's texture on it
+	/// Draws a list of triangles with the sprite's texture on it using the global modelview from
+	/// jngl::modelview()
 	void drawMesh(const std::vector<Vertex>& vertexes, const ShaderProgram* = nullptr) const;
+
+	/// Draws a list of triangles with the sprite's texture on it, ignores the Sprite's position
+	void drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
+	              const ShaderProgram* = nullptr) const;
 
 	void setBytes(const unsigned char*);
 
@@ -180,7 +199,8 @@ void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue,
 
 void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue);
 
-void setSpriteColor(Color);
+/// Sets the global color used for drawing Sprites, leaves the alpha value untouched
+void setSpriteColor(Rgb);
 
 void setSpriteAlpha(unsigned char alpha);
 

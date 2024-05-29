@@ -1,4 +1,4 @@
-// Copyright 2015-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowimpl.hpp"
@@ -7,9 +7,9 @@
 #include "../jngl/other.hpp"
 #include "../jngl/debug.hpp"
 #include "../jngl/screen.hpp"
+#include "../jngl/sound.hpp"
 #include "../jngl/window.hpp"
 #include "../jngl/work.hpp"
-#include "../audio.hpp"
 #include "../windowptr.hpp"
 #include "../main.hpp"
 #include "fopen.hpp"
@@ -49,6 +49,9 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 }
 
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
+	if (!app || !app->userData) {
+		return 0; // shouldn't happen but I seen a crash in this function in the Play Console
+	}
 	WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
 	const auto source = AInputEvent_getSource(event);
 	if ((source & AINPUT_SOURCE_JOYSTICK) == AINPUT_SOURCE_JOYSTICK ||
@@ -123,6 +126,12 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 		case AMOTION_EVENT_ACTION_UP:
 			impl.touches.clear();
 			return 1;
+		case AMOTION_EVENT_ACTION_HOVER_MOVE:
+			if (AMotionEvent_getPointerCount(event) >= 1) {
+				impl.mouseX = AMotionEvent_getX(event, 0 /* JNGL supports only one mouse */);
+				impl.mouseY = AMotionEvent_getY(event, 0);
+			}
+			return 1;
 		}
 	}
 	}
@@ -140,6 +149,44 @@ WindowImpl::WindowImpl(Window* window, const std::pair<int, int> minAspectRatio,
 	app->activity->vm->AttachCurrentThread(&env, nullptr);
 
 	ANativeActivity_setWindowFlags(app->activity, AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
+
+
+	jclass inputDeviceClass = env->FindClass("android/view/InputDevice");
+	if (!inputDeviceClass) { return; }
+	Finally cleanInputDeviceClass([&]() { env->DeleteLocalRef(inputDeviceClass); });
+
+	jmethodID getInputDeviceMethod =
+	    env->GetStaticMethodID(inputDeviceClass, "getDevice", "(I)Landroid/view/InputDevice;");
+	if (!getInputDeviceMethod) { return; }
+	jmethodID getSourcesMethod = env->GetMethodID(inputDeviceClass, "getSources", "()I");
+	if (!getSourcesMethod) { return; }
+
+	jmethodID getDeviceIdsMethod = env->GetStaticMethodID(inputDeviceClass, "getDeviceIds", "()[I");
+	if (!getDeviceIdsMethod) { return; }
+	auto deviceIds =
+	    static_cast<jintArray>(env->CallStaticObjectMethod(inputDeviceClass, getDeviceIdsMethod));
+	if (!deviceIds) { return; }
+	Finally cleanDeviceIds([&]() { env->DeleteLocalRef(deviceIds); });
+
+	jint* elements = env->GetIntArrayElements(deviceIds, nullptr);
+	if (!elements) { return; }
+	Finally cleanElements([&]() { env->ReleaseIntArrayElements(deviceIds, elements, 0); });
+
+	jsize length = env->GetArrayLength(deviceIds);
+	for (jsize i = 0; i < length; ++i) {
+		jobject inputDeviceObj =
+		    env->CallStaticObjectMethod(inputDeviceClass, getInputDeviceMethod, elements[i]);
+		if (!inputDeviceObj) { continue; }
+		Finally cleanInputDeviceObj([&]() { env->DeleteLocalRef(inputDeviceObj); });
+
+		jint sources = env->CallIntMethod(inputDeviceObj, getSourcesMethod);
+		if ((sources & AINPUT_SOURCE_JOYSTICK) == AINPUT_SOURCE_JOYSTICK ||
+		    (sources & AINPUT_SOURCE_GAMEPAD) == AINPUT_SOURCE_GAMEPAD) {
+            if (auto& controller = controllers[elements[i]]; !controller) {
+                controller = std::make_shared<AndroidController>();
+            }
+		}
+	}
 }
 
 WindowImpl::~WindowImpl() {
@@ -285,7 +332,7 @@ void WindowImpl::pause() {
 	if (display) {
 		display->surface = std::nullopt;
 	}
-	pauseAudioDevice();
+	pauseAudio = jngl::pauseAudio();
 }
 
 void WindowImpl::makeCurrent() {
@@ -295,7 +342,7 @@ void WindowImpl::makeCurrent() {
 	if (!display->surface) {
 		display->surface.emplace(*display);
 	}
-	resumeAudioDevice();
+	pauseAudio = {};
 }
 
 int WindowImpl::handleKeyEvent(AInputEvent* const event) {
@@ -341,17 +388,12 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 }
 
 void WindowImpl::updateInput() {
-	if (firstFrame && display && display->context) {
-		// TODO: I think this should be moved to Window::initGlObjects(). We can't do it in
-		// WindowImpl::init() as that might be called multiple times even at startup.
-		Init(window->width_, window->height_, window->canvasWidth, window->canvasHeight);
-	}
 	// Read all pending events.
 	int ident;
 	int events;
 	android_poll_source* source;
 
-	while ((ident = ALooper_pollAll(
+	while ((ident = ALooper_pollOnce(
 	            display->surface ? 0 : 1e9, // This is the timeout. When we're in the background, we don't
 	                               // want to busy-wait for events.
 	            nullptr, &events, (void**)&source)) >= 0 ||
@@ -506,6 +548,11 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 			break;
 		case AKEYCODE_BACK:
 			controller->buttonBack = down;
+			if (down && pWindow) {
+				if (const auto work = pWindow->getWork()) {
+					work->onControllerBack();
+				}
+			}
 			break;
 		case AKEYCODE_DPAD_LEFT:
 			controller->dpadX = down ? -1 : 0;

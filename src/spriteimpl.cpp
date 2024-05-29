@@ -1,52 +1,46 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "spriteimpl.hpp"
 
+#include "jngl/Alpha.hpp"
 #include "jngl/ImageData.hpp"
 #include "jngl/message.hpp"
+#include "jngl/screen.hpp"
 #include "texture.hpp"
+#include "windowptr.hpp"
 
 namespace jngl {
 
-unsigned char spriteColorRed = 255, spriteColorGreen = 255, spriteColorBlue = 255,
-              spriteColorAlpha = 255;
+Rgba gSpriteColor{ 1, 1, 1, 1 };
 
 void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue) {
-	spriteColorRed = red;
-	spriteColorGreen = green;
-	spriteColorBlue = blue;
+	gSpriteColor.setRgb(Rgb::u8(red, green, blue));
 }
 
-void setSpriteColor(Color color) {
-	spriteColorRed = color.getRed();
-	spriteColorGreen = color.getGreen();
-	spriteColorBlue = color.getBlue();
+void setSpriteColor(Rgb color) {
+	gSpriteColor.setRgb(color);
 }
 
-std::stack<unsigned char> spriteAlphas;
+std::stack<float> spriteAlphas;
 
 void pushSpriteAlpha(unsigned char alpha) {
-	spriteAlphas.push(spriteColorAlpha);
-	setSpriteAlpha(spriteColorAlpha * alpha / 255);
+	spriteAlphas.push(gSpriteColor.getAlpha());
+	gSpriteColor.setAlpha(gSpriteColor.getAlpha() * Alpha::u8(alpha).getAlpha());
 }
 
 void popSpriteAlpha() {
-	setSpriteAlpha(spriteAlphas.top());
+	gSpriteColor.setAlpha(spriteAlphas.top());
 	spriteAlphas.pop();
 }
 
 void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue,
                     unsigned char alpha) {
-	spriteColorRed = red;
-	spriteColorGreen = green;
-	spriteColorBlue = blue;
-	spriteColorAlpha = alpha;
+	gSpriteColor = Rgba::u8(red, green, blue, alpha);
 }
 
 void setSpriteAlpha(unsigned char alpha) {
-	spriteColorAlpha = alpha;
-	setSpriteColor(spriteColorRed, spriteColorGreen, spriteColorBlue, alpha);
+	gSpriteColor.setAlpha(Alpha::u8(alpha));
 }
 
 std::unordered_map<std::string, std::shared_ptr<Sprite>> sprites_;
@@ -91,7 +85,7 @@ Finally loadSprite(const std::string& filename) {
 Sprite::Loader::Loader(std::string filename) noexcept : filename(std::move(filename)) {
 	if (sprites_.count(this->filename) == 0) {
 		imageDataFuture = std::async(std::launch::async, [this]() {
-			auto tmp = ImageData::load(this->filename);
+			auto tmp = ImageData::load(this->filename, getScaleFactor());
 			tmp->pixels(); // TODO: Not needed when Sprite loading and jngl::load will be reworked
 			return tmp;
 		});
@@ -111,7 +105,8 @@ std::shared_ptr<Sprite> Sprite::Loader::shared() const {
 		return it->second;
 	}
 	auto imageData = imageDataFuture.get();
-	return sprites_.try_emplace(filename, std::make_shared<Sprite>(filename, *imageData))
+	double scale = imageData->getImageWidth() == imageData->getWidth() ? getScaleFactor() : 1;
+	return sprites_.try_emplace(filename, std::make_shared<Sprite>(*imageData, scale))
 	    .first->second;
 }
 

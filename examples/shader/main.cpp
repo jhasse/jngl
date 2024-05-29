@@ -45,9 +45,9 @@ private:
 };
 
 jngl::AppParameters jnglInit() {
-	return {
-		[]() { return std::make_shared<ShaderExample>(); },
-		"Shader Example",
-		jngl::Vec2(1280, 720),
-	};
+	jngl::AppParameters params;
+	params.start = []() { return std::make_shared<ShaderExample>(); };
+	params.displayName = "Shader Example";
+	params.screenSize = { 1280, 720 };
+	return params;
 }

@@ -1,17 +1,22 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Includes all JNGL headers except for init.hpp
 /// @file
 #pragma once
 
 #include "jngl/Achievement.hpp"
-#include "jngl/App.hpp"
+#include "jngl/Alpha.hpp"
+#include "jngl/Channel.hpp"
 #include "jngl/Color.hpp"
 #include "jngl/Container.hpp"
 #include "jngl/Controller.hpp"
 #include "jngl/Drawable.hpp"
+#include "jngl/FrameBuffer.hpp"
+#include "jngl/ImageData.hpp"
 #include "jngl/Label.hpp"
 #include "jngl/Pixels.hpp"
+#include "jngl/Rgb.hpp"
+#include "jngl/Rgba.hpp"
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/Shader.hpp"
 #include "jngl/ShaderProgram.hpp"
@@ -21,10 +26,10 @@
 #include "jngl/Vertex.hpp"
 #include "jngl/Video.hpp"
 #include "jngl/Widget.hpp"
+#include "jngl/WorkFactory.hpp"
 #include "jngl/debug.hpp"
 #include "jngl/effects.hpp"
 #include "jngl/font.hpp"
-#include "jngl/FrameBuffer.hpp"
 #include "jngl/input.hpp"
 #include "jngl/job.hpp"
 #include "jngl/main.hpp"

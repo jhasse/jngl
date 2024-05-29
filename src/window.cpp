@@ -1,18 +1,27 @@
-// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "window.hpp"
 
+#include "audio.hpp"
 #include "freetype.hpp"
-#include "jngl.hpp"
 #include "jngl/ScaleablePixels.hpp"
+#include "jngl/debug.hpp"
+#include "jngl/font.hpp"
+#include "jngl/matrix.hpp"
+#include "jngl/other.hpp"
+#include "jngl/screen.hpp"
+#include "jngl/time.hpp"
+#include "jngl/work.hpp"
 #include "main.hpp"
+#include "spriteimpl.hpp"
 #include "windowptr.hpp"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
+#include <algorithm>
 #include <gsl/narrow>
 #include <thread>
 
@@ -48,7 +57,7 @@ void Window::print(const std::string& text, const int xposition, const int yposi
 
 void Window::setFont(const std::string& filename) {
 	if (fonts_[fontSize_].find(filename) == fonts_[fontSize_].end()) {
-		auto font = std::make_shared<FontImpl>(filename, fontSize_);
+		auto font = std::make_shared<FontImpl>(filename, fontSize_, 0);
 		fonts_[fontSize_][filename] = font;
 	}
 	fontName_ = filename;
@@ -145,7 +154,7 @@ bool Window::isRunning() const {
 	return running;
 }
 
-void Window::quit() {
+void Window::quit() noexcept {
 	running = false;
 }
 
@@ -189,6 +198,9 @@ void Window::setKeyPressed(const key::KeyType key, bool p) {
 
 void Window::setKeyPressed(const std::string& key, bool p) {
 	characterPressed_[key] = p;
+	if (p) {
+		needToBeSetFalse_.push(&characterPressed_[key]);
+	}
 }
 
 bool keyDown(const char key) {
@@ -268,7 +280,7 @@ void Window::setStepsPerSecond(const unsigned int stepsPerSecond) {
 }
 
 void Window::stepIfNeeded() {
-	const auto currentTime = jngl::getTime();
+	const auto currentTime = getTime();
 	const auto secondsSinceLastCheck = currentTime - lastCheckTime;
 	const auto targetStepsPerSecond = 1.0 / timePerStep;
 	// If SPS == FPS, this would mean that we check about every second, but in the beginning we
@@ -310,10 +322,10 @@ void Window::stepIfNeeded() {
 
 		// Round up, because if we can do 40 FPS, but need 60 SPS, we need at least 2 SPF. We
 		// don't round up exactly to be a little bit "optimistic" of what we can do.
-		auto newStepsPerFrame =
-		    std::min(static_cast<unsigned int>(std::max(
-		                 1, int(0.98 + stepsPerFrame * targetStepsPerSecond / cappedOrDoable))),
-		             std::min(stepsPerFrame * 2, maxStepsPerFrame)); // never increase too much
+		auto newStepsPerFrame = std::min(
+		    static_cast<unsigned int>(std::max(
+		        1, static_cast<int>(0.98 + stepsPerFrame * targetStepsPerSecond / cappedOrDoable))),
+		    std::min(stepsPerFrame * 2, maxStepsPerFrame)); // never increase too much
 		// Divide doableStepsPerSecond by the previous stepsPerFrame and multiply it with
 		// newStepsPerFrame so that we know what can be doable in the future and not what
 		// could have been doable:
@@ -348,11 +360,35 @@ void Window::stepIfNeeded() {
 		++stepsSinceLastCheck;
 		updateKeyStates();
 		UpdateInput();
-		if (currentWork_) {
-			currentWork_->step();
+#ifdef JNGL_PERFORMANCE_OVERLAY
+		auto start = std::chrono::steady_clock::now();
+#endif
+		if (auto audio = Audio::handleIfAlive()) {
+			audio->step();
 		}
 		for (auto& job : jobs) {
 			job->step();
+		}
+		for (auto job : jobsToRemove) {
+			const auto it = std::find_if(jobs.begin(), jobs.end(),
+			                             [job](const auto& p) { return p.get() == job; });
+			if (it != jobs.end()) {
+				jobs.erase(it);
+			}
+		}
+		jobsToRemove.clear();
+		if (currentWork_) {
+			currentWork_->step();
+		}
+#ifdef JNGL_PERFORMANCE_OVERLAY
+		lastStepDuration = static_cast<double>(
+			std::chrono::duration_cast<std::chrono::microseconds>(
+				std::chrono::steady_clock::now() - start
+			).count()
+		) / 1000.;
+#endif
+		if (keyPressed(key::Escape)) {
+			currentWork_->onBackEvent();
 		}
 		if (!jngl::running() && currentWork_) {
 			currentWork_->onQuitEvent();
@@ -379,6 +415,9 @@ void Window::sleepIfNeeded() {
 }
 
 void Window::draw() const {
+#ifdef JNGL_PERFORMANCE_OVERLAY
+	auto start = std::chrono::steady_clock::now();
+#endif
 	if (currentWork_) {
 		currentWork_->draw();
 	} else {
@@ -387,6 +426,26 @@ void Window::draw() const {
 	for (auto& job : jobs) {
 		job->draw();
 	}
+#ifdef JNGL_PERFORMANCE_OVERLAY
+	auto us = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - start);
+
+	if (currentWork_) {
+		jngl::reset();
+		jngl::setColor(0xffffff_rgb, 255);
+		jngl::drawRect(-getScreenSize() / 2., jngl::Vec2(400, 100));
+		jngl::setFontColor(0x000000_rgb, 1.f);
+		{
+			std::ostringstream tmp;
+			tmp << "step: " << lastStepDuration << " ms";
+			jngl::print(tmp.str(), -getScreenSize() / 2. + jngl::Vec2(50, 10));
+		}
+		{
+			std::ostringstream tmp;
+			tmp << "draw: " << static_cast<double>(us.count()) / 1000. << " ms";
+			jngl::print(tmp.str(), -getScreenSize() / 2. + jngl::Vec2(50, 60));
+		}
+	}
+#endif
 }
 
 void Window::setWork(std::shared_ptr<Work> work) {
@@ -406,6 +465,19 @@ void Window::setWork(std::shared_ptr<Work> work) {
 
 void Window::addJob(std::shared_ptr<Job> job) {
 	jobs.emplace_back(std::move(job));
+}
+
+void Window::removeJob(Job* job) {
+	jobsToRemove.emplace_back(job);
+}
+
+std::shared_ptr<Job> Window::getJob(const std::function<bool(Job&)>& predicate) const {
+	for (const auto& job : jobs) {
+		if (predicate(*job)) {
+			return job;
+		}
+	}
+	return nullptr;
 }
 
 std::shared_ptr<Work> Window::getWork() {
@@ -436,12 +508,14 @@ void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 	canvasHeight = height_;
 	if (minAspectRatio.first * height_ > minAspectRatio.second * width_) {
 		// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
-		canvasHeight = gsl::narrow<int>(
-		    std::lround(float(minAspectRatio.second * width_) / float(minAspectRatio.first)));
+		canvasHeight =
+		    gsl::narrow<int>(std::lround(static_cast<float>(minAspectRatio.second * width_) /
+		                                 static_cast<float>(minAspectRatio.first)));
 	} else if (maxAspectRatio.first * height_ < maxAspectRatio.second * width_) {
 		// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
-		canvasWidth = gsl::narrow<int>(
-		    std::lround(float(maxAspectRatio.first * height_) / float(maxAspectRatio.second)));
+		canvasWidth =
+		    gsl::narrow<int>(std::lround(static_cast<float>(maxAspectRatio.first * height_) /
+		                                 static_cast<float>(maxAspectRatio.second)));
 	}
 	if (canvasWidth != width_ || canvasHeight != height_) {
 		debug("Letterboxing to ");
@@ -452,6 +526,9 @@ void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 }
 
 void Window::initGlObjects() {
+#ifdef ANDROID
+	Init(width_, height_, canvasWidth, canvasHeight);
+#endif
 	glGenBuffers(1, &opengl::vboStream);
 	glGenVertexArrays(1, &opengl::vaoStream);
 
@@ -478,12 +555,11 @@ void Window::initGlObjects() {
 void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 	glBindVertexArray(opengl::vaoStream);
 	auto tmp = useSimpleShaderProgram();
-	const float vertexes[] = { static_cast<float>(a.x * jngl::getScaleFactor()),
-		                       static_cast<float>(a.y * jngl::getScaleFactor()),
-		                       static_cast<float>(b.x * jngl::getScaleFactor()),
-		                       static_cast<float>(b.y * jngl::getScaleFactor()),
-		                       static_cast<float>(c.x * jngl::getScaleFactor()),
-		                       static_cast<float>(c.y * jngl::getScaleFactor()) };
+	const float vertexes[] = {
+		static_cast<float>(a.x * getScaleFactor()), static_cast<float>(a.y * getScaleFactor()),
+		static_cast<float>(b.x * getScaleFactor()), static_cast<float>(b.y * getScaleFactor()),
+		static_cast<float>(c.x * getScaleFactor()), static_cast<float>(c.y * getScaleFactor())
+	};
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	// STREAM because we're using the buffer only once
 	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertexes, GL_STREAM_DRAW);
@@ -495,25 +571,39 @@ void Window::drawLine(Mat3 modelview, const Vec2 b) const {
 	glBindVertexArray(vaoLine);
 	auto tmp =
 	    useSimpleShaderProgram(modelview.scale(static_cast<float>(b.x * jngl::getScaleFactor()),
-	                                           static_cast<float>(b.y * jngl::getScaleFactor())));
+	                                           static_cast<float>(b.y * jngl::getScaleFactor())),
+	                           gShapeColor);
 	glDrawArrays(GL_LINES, 0, 2);
 }
 
 void Window::drawRect(const Vec2 pos, const Vec2 size) const {
 	glBindVertexArray(vaoRect);
-	jngl::pushMatrix();
-	jngl::translate(pos);
-	opengl::scale(static_cast<float>(size.x * jngl::getScaleFactor()),
-	              static_cast<float>(size.y * jngl::getScaleFactor()));
+	pushMatrix();
+	translate(pos);
+	opengl::scale(static_cast<float>(size.x * getScaleFactor()),
+	              static_cast<float>(size.y * getScaleFactor()));
 	auto tmp = useSimpleShaderProgram();
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-	jngl::popMatrix();
+	popMatrix();
+}
+
+void Window::drawRect(Mat3 modelview, const Vec2 size, Rgba color) const {
+	glBindVertexArray(vaoRect);
+	auto context = jngl::simpleShaderProgram->use();
+	glUniform4f(simpleColorUniform, color.getRed(), color.getGreen(), color.getBlue(),
+	            color.getAlpha());
+	glUniformMatrix3fv(
+	    simpleModelviewUniform, 1, GL_FALSE,
+	    modelview.scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor()).data);
+	glEnableVertexAttribArray(0);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
 void Window::drawRect(Mat3 modelview, const Vec2 size) const {
 	glBindVertexArray(vaoRect);
 	auto tmp = useSimpleShaderProgram(
-	    modelview.scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor()));
+	    modelview.scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor()),
+	    gShapeColor);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 

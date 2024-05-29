@@ -35,7 +35,10 @@ void clearBackBuffer();
 bool canQuit();
 
 /// Emit a quit event which will exit App::mainLoop() and set running() to false
-void quit();
+///
+/// If the window hasn't been created yet or the loop is already about to quit, this function does
+/// nothing
+void quit() noexcept;
 
 /// Undo quit() or ignore a quit event caused by the user closing the main window
 void cancelQuit();
@@ -51,7 +54,9 @@ unsigned int getStepsPerSecond();
 /// How many times Work::step should be called per second (default: 60)
 void setStepsPerSecond(unsigned int);
 
-/// Toggles MSAA
+/// Toggles Multisample anti-aliasing (MSAA)
+///
+/// Many devices don't support this, so this function will do nothing.
 void setAntiAliasing(bool enabled);
 
 /// Returns whether MSAA is enabled. If the device doesn't support it, it will always return false.
@@ -119,7 +124,7 @@ std::string getPreferredLanguage();
 /// Opens a link (e.g. https://bixense.com) in the browser
 void openURL(const std::string&);
 
-/// Initializes the Steamworks SDK (if JNGL_STEAMWORKS has been set via CMake)
-void initSteam();
+/// Rounds a double to an integer, just like std::lround
+int round(double v);
 
 } // namespace jngl

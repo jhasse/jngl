@@ -2,20 +2,20 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
-#include "../jngl/job.hpp"
+#include "../AchievementLayer.hpp"
 
 #include <steam_api.h>
 
 namespace jngl {
 
-class SteamAchievements : public jngl::Job {
+class SteamAchievements : public AchievementLayer {
 public:
 	SteamAchievements();
-	~SteamAchievements();
+	~SteamAchievements() override;
 
 private:
 	void step() override;
-	void draw() const override;
+	void notify(const Achievement&, int oldValue, int newValue) override;
 
 	STEAM_CALLBACK(SteamAchievements, onUserStatsReceived, UserStatsReceived_t,
 	               callbackUserStatsReceived);
@@ -25,6 +25,7 @@ private:
 	               callbackAchievementStored);
 
 	uint32_t appID;
+	bool initialized = false;
 };
 
-}
+} // namespace jngl

@@ -1,4 +1,4 @@
-// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -25,6 +25,7 @@
 namespace jngl {
 class FontImpl;
 class Job;
+class Rgba;
 class ScaleablePixels;
 class WindowImpl;
 class Work;
@@ -39,7 +40,7 @@ public:
 	Window& operator=(Window&&) = delete;
 	~Window();
 	bool isRunning() const;
-	void quit();
+	void quit() noexcept;
 	void cancelQuit();
 	void UpdateInput();
 	void updateKeyStates();
@@ -56,6 +57,13 @@ public:
 	int getCanvasHeight() const;
 	int getWidth() const;
 	int getHeight() const;
+
+	/// When the Window gets resized this returns the scaling for each direction (since letterboxing
+	/// might result in different values) which has to be taken into account for FrameBuffers (SDL
+	/// backend only)
+	float getResizedWindowScalingX() const;
+	float getResizedWindowScalingY() const;
+
 	ScaleablePixels getTextWidth(const std::string&);
 	Pixels getLineHeight();
 	void setLineHeight(Pixels);
@@ -90,6 +98,8 @@ public:
 	void draw() const;
 	std::shared_ptr<Work> getWork();
 	void addJob(std::shared_ptr<Job>);
+	void removeJob(Job*);
+	std::shared_ptr<Job> getJob(const std::function<bool(Job&)>& predicate) const;
 	void resetFrameLimiter();
 	unsigned int getStepsPerSecond() const;
 	void setStepsPerSecond(unsigned int);
@@ -102,6 +112,7 @@ public:
 	static void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
 	void drawLine(Mat3 modelview, Vec2 b) const;
 	void drawRect(Vec2 pos, Vec2 size) const;
+	void drawRect(Mat3 modelview, Vec2 size, Rgba color) const;
 	void drawRect(Mat3 modelview, Vec2 size) const;
 	void onControllerChanged(std::function<void()>);
 
@@ -156,6 +167,7 @@ private:
 	bool changeWork = false;
 	std::shared_ptr<Work> newWork_;
 	std::vector<std::shared_ptr<Job>> jobs;
+	std::vector<Job*> jobsToRemove;
 	unsigned int stepsPerFrame;
 	double sleepPerFrame = 0; // in seconds
 	double sleepCorrectionFactor;
@@ -176,5 +188,9 @@ private:
 	// <fontSize, <fontName, FontImpl>>
 	std::map<int, std::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
 	std::vector<std::function<void()>> updateInputCallbacks;
+
+#ifdef JNGL_PERFORMANCE_OVERLAY
+	double lastStepDuration = 0;
+#endif
 };
 } // namespace jngl

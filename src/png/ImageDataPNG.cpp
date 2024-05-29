@@ -1,4 +1,4 @@
-// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ImageDataPNG.hpp"
 

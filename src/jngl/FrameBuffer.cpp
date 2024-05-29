@@ -1,4 +1,4 @@
-// Copyright 2011-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "FrameBuffer.hpp"
@@ -6,10 +6,10 @@
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
 #include "../texture.hpp"
+#include "../windowptr.hpp"
 #include "ScaleablePixels.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
-#include "window.hpp"
 
 namespace jngl {
 
@@ -41,7 +41,7 @@ struct FrameBuffer::Impl {
 	GLuint systemFbo = 0;
 	GLuint systemBuffer = 0;
 #if !defined(GL_VIEWPORT_BIT) || defined(__APPLE__)
-	GLint viewport[4];
+	GLint viewport[4]{};
 #endif
 
 	/// If this is not empty, there's a FrameBuffer in use and this was the function that activated
@@ -61,7 +61,7 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
 
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, static_cast<int>(width),
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, static_cast<int>(width),
 	                      static_cast<int>(height));
 
 	glGenFramebuffers(1, &impl->fbo);
@@ -73,9 +73,15 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
 
 	assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 
+	if (impl->letterboxing) {
+		glDisable(GL_SCISSOR_TEST);
+	}
 	glClearColor(1, 1, 1, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	clearBackgroundColor();
+	if (impl->letterboxing) {
+		glEnable(GL_SCISSOR_TEST);
+	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, impl->systemFbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->systemBuffer);
@@ -104,9 +110,8 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f,
-		            float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
-		            float(spriteColorAlpha) / 255.0f);
+		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	}
 	impl->texture.draw();
@@ -122,9 +127,8 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 		                                    -impl->height / getScaleFactor() / 2 })
 		                       .data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f,
-		            float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
-		            float(spriteColorAlpha) / 255.0f);
+		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE,
 		                   modelview.scale(1, -1)
 		                       .translate({ -impl->width / getScaleFactor() / 2,
@@ -138,9 +142,16 @@ void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
                            const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
 	scale(getScaleFactor());
-	impl->texture.drawMesh(vertexes, float(spriteColorRed) / 255.0f,
-	                       float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
-	                       float(spriteColorAlpha) / 255.0f, shaderProgram);
+	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   opengl::modelview.data);
+	} else {
+		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+	}
+	impl->texture.drawMesh(vertexes);
 	popMatrix();
 }
 
@@ -173,8 +184,9 @@ void FrameBuffer::Context::clear() {
 
 void FrameBuffer::Context::clear(const Color color) {
 	assert(resetCallback);
-	glClearColor(float(color.getRed()) / 255.f, float(color.getGreen()) / 255.f,
-	             float(color.getBlue()) / 255.f, 1);
+	glClearColor(static_cast<float>(color.getRed()) / 255.f,
+	             static_cast<float>(color.getGreen()) / 255.f,
+	             static_cast<float>(color.getBlue()) / 255.f, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -184,21 +196,28 @@ FrameBuffer::Context FrameBuffer::use() const {
 		glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
 		glViewport(0, 0, impl->width, impl->height);
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+
+		// each time we active we have to check again, because the window might have been resized
+		if (!impl->letterboxing) {
+			impl->letterboxing = glIsEnabled(GL_SCISSOR_TEST);
+		}
 		if (impl->letterboxing) {
 			glDisable(GL_SCISSOR_TEST);
 		}
 	};
 	pushMatrix();
 	reset();
-	opengl::scale(float(pWindow->getWidth()) / float(impl->width),
-	              float(pWindow->getHeight()) / float(impl->height));
+	opengl::scale(static_cast<float>(pWindow->getCanvasWidth()) / static_cast<float>(impl->width) *
+	                  pWindow->getResizedWindowScalingX(),
+	              static_cast<float>(pWindow->getCanvasHeight()) /
+	                  static_cast<float>(impl->height) * pWindow->getResizedWindowScalingY());
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 	glPushAttrib(GL_VIEWPORT_BIT);
 #else
 	glGetIntegerv(GL_VIEWPORT, impl->viewport);
 #endif
 	activate();
-	impl->activate.push(std::move(activate));
+	impl->activate.emplace(std::move(activate));
 	return Context([this]() {
 		impl->activate.pop();
 		popMatrix();

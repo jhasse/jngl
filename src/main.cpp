@@ -1,15 +1,30 @@
-// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
 
-#include "jngl.hpp"
+#include "App.hpp"
+#include "jngl/Alpha.hpp"
+#include "jngl/ScaleablePixels.hpp"
+#include "jngl/Shader.hpp"
+#include "jngl/debug.hpp"
+#include "jngl/matrix.hpp"
+#include "jngl/other.hpp"
+#include "jngl/screen.hpp"
+#include "jngl/shapes.hpp"
+#include "jngl/time.hpp"
+#include "jngl/window.hpp"
+#include "jngl/work.hpp"
 #include "paths.hpp"
 #include "spriteimpl.hpp"
+#include "texture.hpp"
+#include "windowptr.hpp"
 
 #include <boost/qvm_lite.hpp>
+#include <cstddef>
 #include <fstream>
 #include <sstream>
+#include <stack>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -44,8 +59,6 @@ std::stack<jngl::Mat3> modelviewStack;
 std::unique_ptr<ShaderProgram> simpleShaderProgram;
 int simpleModelviewUniform;
 int simpleColorUniform;
-
-static std::vector<std::function<void()>> callAtExit;
 
 void clearBackgroundColor() {
 	glClearColor(bgRed, bgGreen, bgBlue, 1);
@@ -117,6 +130,56 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 	simpleModelviewUniform = simpleShaderProgram->getUniformLocation("modelview");
 	simpleColorUniform = simpleShaderProgram->getUniformLocation("color");
 
+	{
+		Texture::textureVertexShader = new Shader(R"(#version 300 es
+			in mediump vec2 position;
+			in mediump vec2 inTexCoord;
+			uniform highp mat3 modelview;
+			uniform mediump mat4 projection;
+			out mediump vec2 texCoord;
+
+			void main() {
+				vec3 tmp = modelview * vec3(position, 1);
+				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
+				texCoord = inTexCoord;
+			})", Shader::Type::VERTEX, R"(#version 100
+			attribute mediump vec2 position;
+			attribute mediump vec2 inTexCoord;
+			uniform highp mat3 modelview;
+			uniform mediump mat4 projection;
+			varying mediump vec2 texCoord;
+
+			void main() {
+				vec3 tmp = modelview * vec3(position, 1);
+				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
+				texCoord = inTexCoord;
+			})");
+		Shader fragmentShader(R"(#version 300 es
+			uniform sampler2D tex;
+			uniform lowp vec4 spriteColor;
+
+			in mediump vec2 texCoord;
+
+			out lowp vec4 outColor;
+
+			void main() {
+				outColor = texture(tex, texCoord) * spriteColor;
+			})", Shader::Type::FRAGMENT, R"(#version 100
+			uniform sampler2D tex;
+			uniform lowp vec4 spriteColor;
+
+			varying mediump vec2 texCoord;
+
+			void main() {
+				gl_FragColor = texture2D(tex, texCoord) * spriteColor;
+			})");
+		Texture::textureShaderProgram =
+		    new ShaderProgram(*Texture::textureVertexShader, fragmentShader);
+		Texture::shaderSpriteColorUniform =
+		    Texture::textureShaderProgram->getUniformLocation("spriteColor");
+		Texture::modelviewUniform = Texture::textureShaderProgram->getUniformLocation("modelview");
+	}
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -164,22 +227,24 @@ void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth
 	const auto r = static_cast<float>(windowWidth) / 2.f;
 	const auto b = static_cast<float>(windowHeight) / 2.f;
 	const auto t = static_cast<float>(-windowHeight) / 2.f;
-	opengl::projection = { float(windowWidth) / float(originalWindowWidth) * 2.f / (r - l),
-		                   0.f,
-		                   0.f,
-		                   -(r + l) / (r - l),
-		                   0.f,
-		                   float(windowHeight) / float(originalWindowHeight) * 2.f / (t - b),
-		                   0.f,
-		                   -(t + b) / (t - b),
-		                   0.f,
-		                   0.f,
-		                   -1.f,
-		                   0.f,
-		                   0.f,
-		                   0.f,
-		                   0.f,
-		                   1.f };
+	opengl::projection = {
+		static_cast<float>(windowWidth) / static_cast<float>(originalWindowWidth) * 2.f / (r - l),
+		0.f,
+		0.f,
+		-(r + l) / (r - l),
+		0.f,
+		static_cast<float>(windowHeight) / static_cast<float>(originalWindowHeight) * 2.f / (t - b),
+		0.f,
+		-(t + b) / (t - b),
+		0.f,
+		0.f,
+		-1.f,
+		0.f,
+		0.f,
+		0.f,
+		0.f,
+		1.f
+	};
 }
 
 WindowPointer pWindow;
@@ -206,17 +271,16 @@ void showWindow(const std::string& title, const int width, const int height, boo
 }
 
 void hideWindow() {
-	for (const auto& f : callAtExit) {
-		f();
+	if (pWindow) {
+		App::instance().callAtExitFunctions();
 	}
-	callAtExit.clear();
 	simpleShaderProgram.reset();
 	unloadAll();
 	pWindow.Delete();
 }
 
 void atExit(std::function<void()> f) {
-	callAtExit.emplace_back(std::move(f));
+	App::instance().atExit(std::move(f));
 }
 
 void swapBuffers() {
@@ -260,8 +324,14 @@ bool canQuit() {
 #endif
 }
 
-void quit() {
-	pWindow->quit();
+void quit() noexcept {
+	if (!canQuit()) {
+		debugLn("Quitting the main loop is not supported on this patform!");
+		return;
+	}
+	if (const auto w = pWindow.get()) {
+		w->quit();
+	}
 }
 
 void cancelQuit() {
@@ -272,9 +342,9 @@ void cancelQuit() {
 
 void setBackgroundColor(const jngl::Color color) {
 	pWindow.ThrowIfNull();
-	bgRed = float(color.getRed()) / 255.f;
-	bgGreen = float(color.getGreen()) / 255.f;
-	bgBlue = float(color.getBlue()) / 255.f;
+	bgRed = static_cast<float>(color.getRed()) / 255.f;
+	bgGreen = static_cast<float>(color.getGreen()) / 255.f;
+	bgBlue = static_cast<float>(color.getBlue()) / 255.f;
 	clearBackgroundColor();
 	glClear(GL_COLOR_BUFFER_BIT);
 }
@@ -336,8 +406,9 @@ bool mousePressed(mouse::Button button) {
 }
 
 void setMouse(const jngl::Vec2 position) {
-	pWindow->SetMouse(int(std::lround((position.x + getScreenWidth() / 2) * getScaleFactor())),
-	                  int(std::lround((position.y + getScreenHeight() / 2) * getScaleFactor())));
+	pWindow->SetMouse(
+	    static_cast<int>(std::lround(position.x * getScaleFactor() + pWindow->getWidth() / 2.)),
+	    static_cast<int>(std::lround(position.y * getScaleFactor() + pWindow->getHeight() / 2.)));
 }
 
 void setRelativeMouseMode(const bool relative) {
@@ -363,7 +434,7 @@ void setTitle(const std::string& title) {
 std::vector<float> readPixels() {
 	const int w = jngl::getWindowWidth();
 	const int h = jngl::getWindowHeight();
-	std::vector<float> buffer(3 * w * h);
+	std::vector<float> buffer(static_cast<size_t>(3 * w * h));
 	glReadPixels(0, 0, w, h, GL_RGB, GL_FLOAT, buffer.data());
 	return buffer;
 }
@@ -373,7 +444,7 @@ double getTextWidth(const std::string& text) {
 }
 
 double getLineHeight() {
-	return double(ScaleablePixels(pWindow->getLineHeight()));
+	return static_cast<double>(ScaleablePixels{ pWindow->getLineHeight() });
 }
 
 void setLineHeight(double h) {
@@ -381,7 +452,8 @@ void setLineHeight(double h) {
 }
 
 void print(const std::string& text, const jngl::Vec2 position) {
-	pWindow->print(text, int(std::lround(position.x)), int(std::lround(position.y)));
+	pWindow->print(text, static_cast<int>(std::lround(position.x)),
+	               static_cast<int>(std::lround(position.y)));
 }
 
 void print(const std::string& text, const int xposition, const int yposition) {
@@ -471,12 +543,11 @@ void drawRect(const Vec2 position, const Vec2 size) {
 }
 
 void drawRect(const Mat3& modelview, const Vec2 size, const Color color) {
-	auto red = colorRed;
-	auto green = colorGreen;
-	auto blue = colorBlue;
-	jngl::setColor(color);
-	pWindow->drawRect(modelview, size);
-	jngl::setColor(red, green, blue);
+	pWindow->drawRect(modelview, size, Rgba(color, Alpha(gShapeColor.getAlpha())));
+}
+
+void drawRect(const Mat3& modelview, const Vec2 size, const Rgba color) {
+	pWindow->drawRect(modelview, size, color);
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
@@ -545,7 +616,7 @@ bool getAntiAliasing() {
 	return antiAliasingEnabled;
 }
 
-Finally loadSound(const std::string&); // definied in audio.cpp
+Finally loadSound(const std::string&); // definied in SoundFile.cpp
 
 Finally load(const std::string& filename) {
 	if (filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg") {
@@ -603,7 +674,7 @@ std::string _getConfigPath() {
 #elif defined(__EMSCRIPTEN__)
 	path << "/working1/";
 #else
-	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/";
+	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/"; // NOLINT
 #endif
 	return *(configPath = path.str());
 #endif
@@ -632,7 +703,10 @@ std::stringstream readAsset(const std::string& filename) {
 		sstream.setstate(std::ios::failbit);
 		return sstream;
 	}
-	Finally closeFile([f]() { fclose(f); });
+	Finally closeFile([f]() {
+		int result [[maybe_unused]] = fclose(f);
+		assert(result == 0);
+	});
 	if (fseek(f, 0, SEEK_END) != 0) {
 		sstream.setstate(std::ios::failbit);
 		return sstream;
@@ -667,7 +741,7 @@ std::string readConfig(const std::string& key) {
 	std::string out;
 	constexpr size_t READ_SIZE = 4096;
 	std::string buf(READ_SIZE, '\0');
-	while (fin.read(&buf[0], READ_SIZE)) {
+	while (fin.read(buf.data(), READ_SIZE)) {
 		out.append(buf, 0, fin.gcount());
 	}
 	out.append(buf, 0, fin.gcount());
@@ -689,8 +763,15 @@ void writeConfig(const std::string& key, const std::string& value) {
 	}
 #endif
 #ifdef HAVE_FILESYSTEM
+#if __cplusplus >= 202002L
+	const auto tmp = _getConfigPath();
+	const auto configPath = std::filesystem::path(std::u8string{ tmp.begin(), tmp.end() });
+	const auto directory =
+	    (configPath / std::filesystem::path(std::u8string{ key.begin(), key.end() })).parent_path();
+#else
 	const auto configPath = std::filesystem::u8path(_getConfigPath());
 	const auto directory = (configPath / std::filesystem::u8path(key)).parent_path();
+#endif
 	if (!std::filesystem::exists(directory)) {
 		std::filesystem::create_directories(directory);
 	}
@@ -717,19 +798,24 @@ void writeConfig(const std::string& key, const std::string& value) {
 #endif
 
 ShaderProgram::Context useSimpleShaderProgram() {
-	return useSimpleShaderProgram(opengl::modelview);
+	return useSimpleShaderProgram(opengl::modelview, gShapeColor);
 }
 
-ShaderProgram::Context useSimpleShaderProgram(const Mat3& modelview) {
+ShaderProgram::Context useSimpleShaderProgram(const Mat3& modelview, Rgba color) {
 	auto context = jngl::simpleShaderProgram->use();
-	glUniform4f(simpleColorUniform, float(colorRed) / 255.0f, float(colorGreen) / 255.0f,
-	            float(colorBlue) / 255.0f, float(colorAlpha) / 255.0f);
+	glUniform4f(simpleColorUniform, color.getRed(), color.getGreen(), color.getBlue(),
+	            color.getAlpha());
 	glUniformMatrix3fv(simpleModelviewUniform, 1, GL_FALSE, modelview.data);
 
 	assert(simpleShaderProgram->getAttribLocation("position") == 0);
 	glEnableVertexAttribArray(0);
 
 	return context;
+}
+
+int round(double v) {
+	assert(!std::isnan(v));
+	return static_cast<int>(std::lround(v));
 }
 
 } // namespace jngl

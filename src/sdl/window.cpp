@@ -1,7 +1,7 @@
 // Copyright 2011-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#include "../jngl/App.hpp"
+#include "../App.hpp"
 #include "../jngl/ImageData.hpp"
 #include "../jngl/debug.hpp"
 #include "../jngl/screen.hpp"
@@ -44,14 +44,16 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	Uint32 flags =
-	    SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE;
+	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI;
 	if (fullscreen) {
 		if (width == getDesktopWidth() && height == getDesktopHeight()) {
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		} else {
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
+	} else {
+		flags |= SDL_WINDOW_RESIZABLE; // if we make fullscreen window resizeable on GNOME, it will
+		                               // be reduced in its height (SDL bug?).
 	}
 
 #ifdef JNGL_UWP
@@ -76,7 +78,12 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 
 	impl->context = SDL_GL_CreateContext(impl->sdlWindow);
 #ifdef GLAD_GL
-	gladLoadGL(reinterpret_cast<GLADloadfunc>(SDL_GL_GetProcAddress));
+	const auto glVersion = gladLoadGL(reinterpret_cast<GLADloadfunc>(SDL_GL_GetProcAddress));
+	if (glVersion < GLAD_MAKE_VERSION(2, 0)) {
+		throw std::runtime_error("Your graphics card is missing OpenGL 2.0 support (it supports " +
+		                         std::to_string(GLAD_VERSION_MAJOR(glVersion)) + "." +
+		                         std::to_string(GLAD_VERSION_MINOR(glVersion)) + ").");
+	}
 #endif
 
 	if (isMultisampleSupported_) {
@@ -91,6 +98,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		}
 	}
 
+#if !defined(__linux__) || SDL_VERSION_ATLEAST(2, 30, 0)
+	// This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by SDL2). On
+	// Linux (GNOME) it results in the top of the window being cut off (by the header bar height?).
+	// The bug seems to be fixed in newer SDL2 (or GNOME) versions.
 	{
 		assert(width_ == width);
 		assert(height_ == height);
@@ -115,6 +126,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	}
 
 	SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
+#endif
 	impl->actualWidth = width_;
 	impl->actualHeight = height_;
 	impl->hidpiScaleFactor = static_cast<float>(width_) / width;
@@ -217,10 +229,6 @@ bool Window::getKeyDown(const std::string& key) {
 }
 
 bool Window::getKeyPressed(const std::string& key) {
-	if (characterPressed_[key]) {
-		characterPressed_[key] = false;
-		return true;
-	}
 	return characterPressed_[key];
 }
 
@@ -335,10 +343,12 @@ void Window::UpdateInput() {
 				}
 				characterDown_[tmp] = true;
 				characterPressed_[tmp] = true;
+				needToBeSetFalse_.push(&characterPressed_[tmp]);
 			}
 			if (event.key.keysym.sym == SDLK_SPACE) {
 				characterDown_[" "] = true;
 				characterPressed_[" "] = true;
+				needToBeSetFalse_.push(&characterPressed_[" "]);
 			}
 			anyKeyPressed_ = true;
 			break;
@@ -350,14 +360,11 @@ void Window::UpdateInput() {
 			if (strlen(name) == 1) {
 				std::string tmp(1, name[0]);
 				characterDown_[tmp] = false;
-				characterPressed_[tmp] = false;
 				tmp[0] = tolower(name[0]);
 				characterDown_[tmp] = false;
-				characterPressed_[tmp] = false;
 			}
 			if (event.key.keysym.sym == SDLK_SPACE) {
 				characterDown_[" "] = false;
-				characterPressed_[" "] = false;
 			}
 			break;
 		}
@@ -368,7 +375,7 @@ void Window::UpdateInput() {
 			}
 			break;
 		case SDL_WINDOWEVENT:
-			if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+			if (!impl->firstFrame && event.window.event == SDL_WINDOWEVENT_RESIZED) {
 				const int originalWidth = width_;
 				const int originalHeight = height_;
 				SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
@@ -414,6 +421,7 @@ void Window::UpdateInput() {
 
 void Window::SwapBuffers() {
 	SDL_GL_SwapWindow(impl->sdlWindow);
+	impl->firstFrame = false;
 }
 
 void Window::SetMouseVisible(const bool visible) {
@@ -430,7 +438,10 @@ void Window::SetTitle(const std::string& title) {
 }
 
 void Window::SetMouse(const int xposition, const int yposition) {
-	SDL_WarpMouseInWindow(impl->sdlWindow, xposition, yposition);
+	SDL_WarpMouseInWindow(
+	    impl->sdlWindow,
+	    static_cast<int>(std::lround(static_cast<float>(xposition) / impl->hidpiScaleFactor)),
+	    static_cast<int>(std::lround(static_cast<float>(yposition) / impl->hidpiScaleFactor)));
 }
 
 void Window::SetRelativeMouseMode(const bool relative) {
@@ -542,6 +553,14 @@ void errorMessage(const std::string &text) {
 	if (window) {
 		window->SetMouseVisible(old);
 	}
+}
+
+float Window::getResizedWindowScalingX() const {
+	return impl->actualWidth / static_cast<float>(impl->actualCanvasWidth);
+}
+
+float Window::getResizedWindowScalingY() const {
+	return impl->actualHeight / static_cast<float>(impl->actualCanvasHeight);
 }
 
 } // namespace jngl

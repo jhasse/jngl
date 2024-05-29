@@ -13,6 +13,9 @@ JNGL_MAIN_BEGIN {
 	while (jngl::running()) {
 		jngl::updateInput();
 		video.draw();
+		if (video.finished()) {
+			jngl::setTitle(filename + " [FINISHED]");
+		}
 		jngl::swapBuffers();
 	}
 } JNGL_MAIN_END

@@ -9,7 +9,6 @@
 #ifdef IOS
 	#include <OpenGLES/ES3/gl.h>
 	#include <OpenGLES/ES3/glext.h>
-	#include "ios/glew.h"
 #else
 	#ifdef ANDROID
 		#include <EGL/egl.h>
@@ -24,6 +23,9 @@
 			#define glGenVertexArrays glGenVertexArraysOES
 			#define glBindVertexArray glBindVertexArrayOES
 			#define glDeleteVertexArrays glDeleteVertexArraysOES
+			#if defined(__EMSCRIPTEN__)
+				#define GL_RGBA8 GL_RGBA8_OES
+			#endif
 		#else
 			#include <glad/gl.h>
 		#endif
@@ -48,30 +50,4 @@ namespace opengl
 
 	/// Generates a textures, binds it to GL_TEXTURE_2D and sets some common parameters
 	GLuint genAndBindTexture();
-
-	template<class T> struct Type {};
-
-	template<>
-	struct Type<float>
-	{
-		const static GLenum constant = GL_FLOAT;
-	};
-
-	template<>
-	struct Type<double>
-	{
-#ifdef GL_DOUBLE
-		const static GLenum constant = GL_DOUBLE;
-		using type = GLdouble;
-#else
-		const static GLenum constant = GL_FLOAT;
-		using type = GLfloat;
-#endif
-	};
-
-#ifdef GL_DOUBLE
-	using CoordType = GLdouble;
-#else
-	using CoordType = GLfloat;
-#endif
 } // namespace opengl

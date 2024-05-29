@@ -1,4 +1,4 @@
-// Copyright 2019-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::SoundFile class
 /// @file
@@ -18,13 +18,14 @@ using std::experimental::optional;
 
 namespace jngl {
 
+class Channel;
 class Sound;
 struct SoundParams;
 
 /// Sound loaded from an OGG file
 ///
 /// JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly -
-/// you can just use jngl::play.
+/// you can just use jngl::play or Channel::play.
 class SoundFile {
 public:
 	/// Load an OGG file called \a filename
@@ -35,7 +36,7 @@ public:
 	/// \note
 	/// If the file doesn't exist this will not throw, but calling SoundFile::play, SoundFile::loop
 	/// or SoundFile::load will.
-	explicit SoundFile(std::string filename, std::launch policy = std::launch::async);
+	explicit SoundFile(const std::string& filename, std::launch policy = std::launch::async);
 	~SoundFile();
 	SoundFile(const SoundFile&) = delete;
 	SoundFile& operator=(const SoundFile&) = delete;
@@ -45,17 +46,24 @@ public:
 	/// Play the sound once. If called twice the sound would also play twice
 	void play();
 
+	/// Play the sound once on the Channel
+	void play(Channel&);
+
 	/// Stop the last started sound
 	void stop();
+
+	/// Stop the last started sound of this SoundFile started on the Channel
+	///
+	/// \note If not using the main Channel (i.e. Channel::main()), this method should be used
+	///       instead of stop().
+	void stop(Channel&);
 
 	/// Whether the sound is still playing at least once
 	bool isPlaying();
 
 	/// Play the sound in a loop. Can also be stopped using stop()
 	void loop();
-
-	/// Set pitch in (0.0f, ∞]. Default is 1.0f
-	void setPitch(float);
+	void loop(Channel&);
 
 	/// Set volume in [0, ∞]. Default is 1.0f
 	void setVolume(float v);
@@ -67,11 +75,8 @@ public:
 
 private:
 	std::shared_ptr<Sound> sound_;
-	std::unique_ptr<SoundParams> params;
-	std::vector<char> buffer_;
-#ifndef EMSCRIPTEN
-	optional<std::future<void>> loader;
-#endif
+	std::vector<float> buffer_;
+	long frequency = -1;
 };
 
 } // namespace jngl

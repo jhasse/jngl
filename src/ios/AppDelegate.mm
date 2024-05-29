@@ -1,4 +1,4 @@
-// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #import "AppDelegate.h"
@@ -15,8 +15,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	jngl::setPrefix(std::string([NSBundle mainBundle].resourcePath.UTF8String) + "/");
 	jngl::AppParameters params = jnglInit();
-	jngl::App::instance().setDisplayName(params.displayName);
 	view = [[JNGLView alloc] initWithFrame:[UIScreen mainScreen].bounds withAppParameters:params];
 
 	JNGLViewController* jvc = [[JNGLViewController alloc] initWithNibName:nil bundle:nil];

@@ -1,40 +1,30 @@
-// Copyright 2019-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::App class
 /// @file
 #pragma once
 
+#include "jngl/Finally.hpp"
+
+#include <functional>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace jngl {
+struct AppParameters;
 class ShaderProgram;
 
-/// There can only be one instance of this class which will be created before the window is shown.
-///
-/// Example:
-/// \code
-/// #include <jngl/App.hpp>
-/// #include <jngl/main.hpp>
-///
-/// JNGL_MAIN_BEGIN {
-/// 	jngl::App::instance().setDisplayName("Awesome Game Name");
-/// 	// ...
-/// 	jngl::App::instance().mainLoop();
-/// } JNGL_MAIN_END
-/// \endcode
+/// Singleton, that never gets destroyed
 class App {
 public:
-	/// \deprecated Set jngl::AppParameters.displayName instead
-	[[deprecated("Set jngl::AppParameters.displayName instead")]] explicit App(
-	    std::string displayName);
 	~App();
 	App(const App&) = delete;
 	App& operator=(const App&) = delete;
 	App(App&&) = delete;
 	App& operator=(App&&) = delete;
 
-	/// Access the instance, creates it if it doesn't exist
+	/// Access the instance
 	static App& instance();
 
 	/// The display name of the app is used by jngl::writeConfig() for example.
@@ -57,6 +47,13 @@ public:
 	/// Internal function used by JNGL when the Window is resized
 	void updateProjectionMatrix() const;
 
+	/// Initializes Impl, the returned Finally will destroy it again
+	[[nodiscard]] Finally init(AppParameters);
+
+	// TODO for C++23: Change to std::move_only_function<void() noexcept>
+	void atExit(std::function<void()>);
+	void callAtExitFunctions();
+
 private:
 	App();
 
@@ -69,6 +66,16 @@ private:
 	std::unique_ptr<Impl> impl;
 
 	static App* self;
+
+	/// Not part of Impl so that jngl::atExit works even before jnglInit() has been called.
+	/// The lifecycle order is the following:
+	///
+	/// * App::App()
+	/// * jnglInit()
+	/// * App::init()
+	/// * Window::Window()
+	/// * appParameters.start()
+	std::vector<std::function<void()>> callAtExit;
 };
 
 } // namespace jngl

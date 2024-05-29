@@ -1,4 +1,4 @@
-// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #ifndef NOPNG
@@ -7,10 +7,11 @@
 
 #include "sprite.hpp"
 
-#include "../freetype.hpp"
 #include "../helper.hpp"
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
+#include "../texture.hpp"
+#include "../windowptr.hpp"
 #include "debug.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
@@ -42,20 +43,15 @@ std::shared_ptr<Texture> getTexture(const std::string& filename) {
 	return it->second;
 }
 
-Sprite::Sprite(const std::string& filename, const ImageData& imageData) {
+Sprite::Sprite(const ImageData& imageData, double scale) {
 	if (!pWindow) {
 		throw std::runtime_error("Window hasn't been created yet.");
 	}
-	width = imageData.getImageWidth();
-	height = imageData.getImageHeight();
-	auto it = textures.find(filename);
-	if (it == textures.end()) {
-		textures[filename] = texture =
-		    std::make_shared<Texture>(imageData.getImageWidth(), imageData.getImageHeight(), width,
-		                              height, nullptr, GL_RGBA, imageData.pixels());
-	} else {
-		texture = it->second;
-	}
+	width = scale * imageData.getWidth();
+	height = scale * imageData.getHeight();
+	texture = std::make_shared<Texture>(
+	    static_cast<int>(std::lround(width)), static_cast<int>(std::lround(height)),
+	    imageData.getWidth(), imageData.getHeight(), nullptr, GL_RGBA, imageData.pixels());
 	setCenter(0, 0);
 }
 
@@ -150,9 +146,8 @@ void Sprite::draw() const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	auto context = Texture::textureShaderProgram->use();
-	glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f,
-	            float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
-	            float(spriteColorAlpha) / 255.0f);
+	glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(), gSpriteColor.getGreen(),
+	            gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 	glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	texture->draw();
 	popMatrix();
@@ -166,9 +161,8 @@ void Sprite::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) cons
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   modelview.data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f,
-		            float(spriteColorGreen) / 255.0f, float(spriteColorBlue) / 255.0f,
-		            float(spriteColorAlpha) / 255.0f);
+		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	texture->draw();
@@ -183,8 +177,8 @@ void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 			opengl::modelview.data);
 	}
 	else {
-		glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
-			float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
+		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	}
 	texture->draw();
@@ -202,8 +196,8 @@ void Sprite::drawScaled(float xfactor, float yfactor,
 			opengl::modelview.data);
 	}
 	else {
-		glUniform4f(Texture::shaderSpriteColorUniform, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
-			float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
+		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	}
 	texture->draw();
@@ -220,10 +214,29 @@ void Sprite::drawClipped(float xstart, float xend, float ystart, float yend) con
 void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
-	texture->drawClipped(float(start.x), float(end.x), float(start.y), float(end.y),
-	                     float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
-	                     float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f);
+	texture->drawClipped(static_cast<float>(start.x), static_cast<float>(end.x),
+	                     static_cast<float>(start.y), static_cast<float>(end.y),
+	                     gSpriteColor.getRed(), gSpriteColor.getGreen(), gSpriteColor.getBlue(),
+	                     gSpriteColor.getAlpha());
 	popMatrix();
+}
+
+void Sprite::drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
+                      const ShaderProgram* const shaderProgram) const {
+	if (vertexes.empty()) {
+		return;
+	}
+	modelview.scale(getScaleFactor());
+	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   modelview.data);
+	} else {
+		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, modelview.data);
+	}
+	texture->drawMesh(vertexes);
 }
 
 void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
@@ -234,9 +247,16 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	scale(getScaleFactor());
-	texture->drawMesh(vertexes, float(spriteColorRed) / 255.0f, float(spriteColorGreen) / 255.0f,
-	                  float(spriteColorBlue) / 255.0f, float(spriteColorAlpha) / 255.0f,
-	                  shaderProgram);
+	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   opengl::modelview.data);
+	} else {
+		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+	}
+	texture->drawMesh(vertexes);
 	popMatrix();
 }
 
@@ -245,7 +265,7 @@ void Sprite::setBytes(const unsigned char* const bytes) {
 }
 
 const Shader& Sprite::vertexShader() {
-	return Texture::vertexShader();
+	return *Texture::textureVertexShader;
 }
 
 #ifndef NOPNG
@@ -361,6 +381,8 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 			}
 		}
 	}
+	width = static_cast<float>(header.width * getScaleFactor());
+	height = static_cast<float>(header.height * getScaleFactor());
 	loadTexture(header.width, header.height, filename, halfLoad, GL_BGR, &buf[0]);
 	return Finally(nullptr);
 }

@@ -35,10 +35,6 @@ bool Window::getKeyDown(const std::string& key) {
 }
 
 bool Window::getKeyPressed(const std::string& key) {
-	if (characterPressed_[key]) {
-		characterPressed_[key] = false;
-		return true;
-	}
 	return characterPressed_[key];
 }
 
@@ -80,6 +76,14 @@ void Window::SetRelativeMouseMode(const bool relative) {
 }
 
 void Window::SetIcon(const std::string&) {
+}
+
+float Window::getResizedWindowScalingX() const {
+	return 1.f;
+}
+
+float Window::getResizedWindowScalingY() const {
+	return 1.f;
 }
 
 int getDesktopWidth() {

@@ -1,6 +1,7 @@
-// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
+#include "../jngl/Finally.hpp"
 #include "../jngl/other.hpp"
 
 #include <SDL.h>
@@ -21,6 +22,7 @@ std::string getPreferredLanguage() {
 	}
 #elif defined(__has_include) && __has_include(<SDL_locale.h>)
 	SDL_Locale* locale = SDL_GetPreferredLocales();
+	Finally freeLocale([locale]() { SDL_free(locale); });
 	if (locale && locale->language && locale->language[0] != '\0' && locale->language[1] != '\0' &&
 	    locale->language[2] == '\0') {
 		return locale->language;
