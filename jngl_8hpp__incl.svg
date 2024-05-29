@@ -602,18 +602,18 @@
 <path fill="none" stroke="#63b8ff" d="M1552.91,-226.88C1454.1,-221.89 1149.45,-205.69 897.53,-184 892.51,-183.57 887.31,-183.08 882.08,-182.58"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="882.35,-179.08 872.05,-181.57 881.65,-186.05 882.35,-179.08"/>
 </g>
-<!-- Node58 -->
+<!-- Node59 -->
 <g id="node50" class="node">
-<title>Node58</title>
+<title>Node59</title>
 <g id="a_node50"><a xlink:href="time_8hpp.html" target="_top" xlink:title="Timing functions.">
 <polygon fill="white" stroke="#666666" points="3211.03,-184 3116.03,-184 3116.03,-165 3211.03,-165 3211.03,-184"/>
 <text text-anchor="middle" x="3163.53" y="-172" font-family="ui-monospace,monospace" font-size="10.00">jngl/time.hpp</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node58 -->
+<!-- Node1&#45;&gt;Node59 -->
 <g id="edge127" class="edge">
-<title>Node1&#45;&gt;Node58</title>
+<title>Node1&#45;&gt;Node59</title>
 <path fill="none" stroke="#63b8ff" d="M1618.14,-228.83C1779.42,-230.21 2507.84,-233.27 3101.53,-184 3102.84,-183.89 3104.17,-183.77 3105.5,-183.65"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="3106.28,-187.09 3115.86,-182.56 3105.55,-180.12 3106.28,-187.09"/>
 </g>

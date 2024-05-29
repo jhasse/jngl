@@ -1,11 +1,12 @@
 <map id="jngl/sprite.hpp" name="jngl/sprite.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Sprite class and related functions." alt="" coords="297,5,440,31"/>
+<area shape="rect" id="node1" title="Contains jngl::Sprite class and related functions." alt="" coords="369,5,512,31"/>
 <area shape="rect" id="node2" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="64,79,183,104"/>
 <area shape="rect" id="node3" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="113,152,200,177"/>
 <area shape="rect" id="node6" href="$Rgb_8hpp.html" title="Contains jngl::Rgb class." alt="" coords="259,79,337,104"/>
 <area shape="rect" id="node8" href="$ShaderProgram_8hpp.html" title="Contains jngl::ShaderProgram class." alt="" coords="361,79,520,104"/>
 <area shape="rect" id="node13" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/future.html" title=" " alt="" coords="544,79,615,104"/>
-<area shape="rect" id="node14" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="639,79,709,104"/>
+<area shape="rect" id="node14" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/optional.html" title=" " alt="" coords="639,79,725,104"/>
+<area shape="rect" id="node15" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="749,79,820,104"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,225,172,251"/>
 <area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="196,225,267,251"/>
 <area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="241,152,320,177"/>
