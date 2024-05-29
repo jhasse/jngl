@@ -106,7 +106,7 @@ std::shared_ptr<Sprite> Sprite::Loader::shared() const {
 	}
 	auto imageData = imageDataFuture.get();
 	double scale = imageData->getImageWidth() == imageData->getWidth() ? getScaleFactor() : 1;
-	return sprites_.try_emplace(filename, std::make_shared<Sprite>(*imageData, scale))
+	return sprites_.try_emplace(filename, std::make_shared<Sprite>(*imageData, scale, filename))
 	    .first->second;
 }
 

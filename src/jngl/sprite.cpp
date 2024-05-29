@@ -43,16 +43,24 @@ std::shared_ptr<Texture> getTexture(const std::string& filename) {
 	return it->second;
 }
 
-Sprite::Sprite(const ImageData& imageData, double scale) {
+Sprite::Sprite(const ImageData& imageData, double scale, std::optional<std::string_view> filename) {
 	if (!pWindow) {
 		throw std::runtime_error("Window hasn't been created yet.");
 	}
 	width = scale * imageData.getWidth();
 	height = scale * imageData.getHeight();
-	texture = std::make_shared<Texture>(
-	    static_cast<int>(std::lround(width)), static_cast<int>(std::lround(height)),
-	    imageData.getWidth(), imageData.getHeight(), nullptr, GL_RGBA, imageData.pixels());
-	setCenter(0, 0);
+	auto it = filename ? textures.find(std::string(*filename)) : textures.end();
+	if (it == textures.end()) {
+		texture = std::make_shared<Texture>(
+		    static_cast<int>(std::lround(width)), static_cast<int>(std::lround(height)),
+		    imageData.getWidth(), imageData.getHeight(), nullptr, GL_RGBA, imageData.pixels());
+		setCenter(0, 0);
+		if (filename) {
+			textures[std::string(*filename)] = texture;
+		}
+	} else {
+		texture = it->second;
+	}
 }
 
 Sprite::Sprite(const std::string& filename, LoadType loadType) : texture(getTexture(filename)) {
