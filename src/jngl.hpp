@@ -15,6 +15,7 @@
 #include "jngl/ImageData.hpp"
 #include "jngl/Label.hpp"
 #include "jngl/Pixels.hpp"
+#include "jngl/Rect.hpp"
 #include "jngl/Rgb.hpp"
 #include "jngl/Rgba.hpp"
 #include "jngl/ScaleablePixels.hpp"

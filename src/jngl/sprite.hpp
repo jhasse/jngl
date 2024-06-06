@@ -10,6 +10,7 @@
 #include "Vec2.hpp"
 
 #include <future>
+#include <optional>
 #include <vector>
 
 namespace jngl {
@@ -42,7 +43,12 @@ public:
 	///
 	/// assert(std::lround(sprite1.getWidth()) == std::lround(sprite2.getWidth()));
 	/// \endcode
-	explicit Sprite(const ImageData&, double scale);
+	///
+	/// You may pass a filename, then JNGL will use that as a key for its internal texture cache,
+	/// meaning that if there's already a file loaded with that name, it won't upload the passed
+	/// ImageData to the GPU again.
+	explicit Sprite(const ImageData&, double scale,
+	                std::optional<std::string_view> filename = std::nullopt);
 
 	/// \deprecated Use Loader instead
 	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
