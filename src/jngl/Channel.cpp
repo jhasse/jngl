@@ -62,6 +62,10 @@ Finally Channel::pause() {
 	} };
 }
 
+void Channel::setVolume(float volume) {
+	impl->volumeControl->gain(volume);
+}
+
 Channel& Channel::main() {
 	return Audio::handle().getMainChannel();
 }

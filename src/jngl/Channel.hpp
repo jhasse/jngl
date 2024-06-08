@@ -79,6 +79,9 @@ public:
 	/// \endcode
 	[[nodiscard]] Finally pause();
 
+	/// Set volume of this channel in [0, ∞]. Default is 1.0f
+	void setVolume(float volume);
+
 	/// Returns the main Channel on which jngl::play, jngl::loop, jngl::stop operate
 	static Channel& main();
 
