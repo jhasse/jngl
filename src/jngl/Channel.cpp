@@ -27,7 +27,9 @@ Channel::Channel() : impl(std::make_unique<Impl>()) {
 }
 
 Channel::~Channel() {
-	Audio::handle().unregisterChannel(*impl->pauseControl);
+	if (auto audio = Audio::handleIfAlive()) {
+		audio->unregisterChannel(*impl->pauseControl);
+	}
 }
 
 // defined in SoundFile.cpp
