@@ -37,9 +37,10 @@ void Channel::play(const std::string& filename) {
 	getSoundFile(filename, std::launch::deferred)->play(*this);
 }
 
-void Channel::loop(const std::string& filename) {
+std::shared_ptr<SoundFile> Channel::loop(const std::string& filename) {
 	auto tmp = getSoundFile(filename, std::launch::deferred);
 	tmp->loop(*this);
+	return tmp;
 }
 
 void Channel::stop(const std::string& filename) {

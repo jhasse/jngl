@@ -10,6 +10,7 @@
 
 namespace jngl {
 
+class SoundFile;
 struct Stream;
 
 /// An audio channel, different channels could be for example: "Music", "Speech" and "Sound Effects"
@@ -32,11 +33,11 @@ public:
 
 	/// Play OGG file on this channel
 	void play(const std::string& filename);
-	
+
 	/// Play an OGG audio file on this channel in a loop
 	///
 	/// If it's already playing, this function won't play it twice.
-	void loop(const std::string& filename);
+	std::shared_ptr<SoundFile> loop(const std::string& filename);
 
 	/// Stop OGG file playing on this channel
 	void stop(const std::string& filename);
