@@ -96,9 +96,9 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>play</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
 <tr class="memdesc:a9a2d4a760f9febf9ab966d0ed41183b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play OGG file on this channel. <br /></td></tr>
 <tr class="separator:a9a2d4a760f9febf9ab966d0ed41183b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a781812716ce21447b7b3e9b2b651efdc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Channel.html#a781812716ce21447b7b3e9b2b651efdc">loop</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
-<tr class="memdesc:a781812716ce21447b7b3e9b2b651efdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play an OGG audio file on this channel in a loop.  <a href="classjngl_1_1Channel.html#a781812716ce21447b7b3e9b2b651efdc">More...</a><br /></td></tr>
-<tr class="separator:a781812716ce21447b7b3e9b2b651efdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3810f7396e8aa57499cb3ddc66c73bd"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Channel.html#aa3810f7396e8aa57499cb3ddc66c73bd">loop</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
+<tr class="memdesc:aa3810f7396e8aa57499cb3ddc66c73bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play an OGG audio file on this channel in a loop.  <a href="classjngl_1_1Channel.html#aa3810f7396e8aa57499cb3ddc66c73bd">More...</a><br /></td></tr>
+<tr class="separator:aa3810f7396e8aa57499cb3ddc66c73bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe3523bc342eb0bfc08a004bc2bce9ee"><td class="memItemLeft" align="right" valign="top"><a id="abe3523bc342eb0bfc08a004bc2bce9ee" name="abe3523bc342eb0bfc08a004bc2bce9ee"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
 <tr class="memdesc:abe3523bc342eb0bfc08a004bc2bce9ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop OGG file playing on this channel. <br /></td></tr>
@@ -131,22 +131,22 @@ static <a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;&#160;</t
 <div class="line">};</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// somewhere else:</span></div>
-<div class="line">Channels::handle().music.<a class="code hl_function" href="classjngl_1_1Channel.html#a781812716ce21447b7b3e9b2b651efdc">loop</a>(<span class="stringliteral">&quot;background_music01.ogg&quot;</span>);</div>
-<div class="ttc" id="aclassjngl_1_1Channel_html"><div class="ttname"><a href="classjngl_1_1Channel.html">jngl::Channel</a></div><div class="ttdoc">An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.</div><div class="ttdef"><b>Definition:</b> <a href="Channel_8hpp_source.html#l00028">Channel.hpp:28</a></div></div>
+<div class="line">Channels::handle().music.<a class="code hl_function" href="classjngl_1_1Channel.html#aa3810f7396e8aa57499cb3ddc66c73bd">loop</a>(<span class="stringliteral">&quot;background_music01.ogg&quot;</span>);</div>
+<div class="ttc" id="aclassjngl_1_1Channel_html"><div class="ttname"><a href="classjngl_1_1Channel.html">jngl::Channel</a></div><div class="ttdoc">An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.</div><div class="ttdef"><b>Definition:</b> <a href="Channel_8hpp_source.html#l00029">Channel.hpp:29</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Channel_html_a31eed6f7511dc019ad179a95b5246682"><div class="ttname"><a href="classjngl_1_1Channel.html#a31eed6f7511dc019ad179a95b5246682">jngl::Channel::main</a></div><div class="ttdeci">static Channel &amp; main()</div><div class="ttdoc">Returns the main Channel on which jngl::play, jngl::loop, jngl::stop operate.</div></div>
-<div class="ttc" id="aclassjngl_1_1Channel_html_a781812716ce21447b7b3e9b2b651efdc"><div class="ttname"><a href="classjngl_1_1Channel.html#a781812716ce21447b7b3e9b2b651efdc">jngl::Channel::loop</a></div><div class="ttdeci">void loop(const std::string &amp;filename)</div><div class="ttdoc">Play an OGG audio file on this channel in a loop.</div></div>
+<div class="ttc" id="aclassjngl_1_1Channel_html_aa3810f7396e8aa57499cb3ddc66c73bd"><div class="ttname"><a href="classjngl_1_1Channel.html#aa3810f7396e8aa57499cb3ddc66c73bd">jngl::Channel::loop</a></div><div class="ttdeci">std::shared_ptr&lt; SoundFile &gt; loop(const std::string &amp;filename)</div><div class="ttdoc">Play an OGG audio file on this channel in a loop.</div></div>
 <div class="ttc" id="aclassjngl_1_1Singleton_html"><div class="ttname"><a href="classjngl_1_1Singleton.html">jngl::Singleton</a></div><div class="ttdoc">Inherit from this class to create a singleton that will be destroyed when your games exits.</div><div class="ttdef"><b>Definition:</b> <a href="Singleton_8hpp_source.html#l00023">Singleton.hpp:23</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="Channel_8hpp_source.html#l00028">28</a> of file <a class="el" href="Channel_8hpp_source.html">Channel.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Channel_8hpp_source.html#l00029">29</a> of file <a class="el" href="Channel_8hpp_source.html">Channel.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a781812716ce21447b7b3e9b2b651efdc" name="a781812716ce21447b7b3e9b2b651efdc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a781812716ce21447b7b3e9b2b651efdc">&#9670;&#160;</a></span>loop()</h2>
+<a id="aa3810f7396e8aa57499cb3ddc66c73bd" name="aa3810f7396e8aa57499cb3ddc66c73bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3810f7396e8aa57499cb3ddc66c73bd">&#9670;&#160;</a></span>loop()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void loop </td>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a> &gt; loop </td>
           <td>(</td>
           <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;&#160;</td>
           <td class="paramname"><em>filename</em></td><td>)</td>
