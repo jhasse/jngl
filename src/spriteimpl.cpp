@@ -139,7 +139,8 @@ void unloadAll() {
 }
 
 int getWidth(const std::string& filename) {
-	const int width = int(std::lround(GetSprite(filename, Sprite::LoadType::HALF).getWidth()));
+	const auto width =
+	    static_cast<int>(std::lround(GetSprite(filename, Sprite::LoadType::HALF).getWidth()));
 	if (!pWindow) {
 		unload(filename);
 	}
@@ -147,7 +148,8 @@ int getWidth(const std::string& filename) {
 }
 
 int getHeight(const std::string& filename) {
-	const int height = int(std::lround(GetSprite(filename, Sprite::LoadType::HALF).getHeight()));
+	const auto height =
+	    static_cast<int>(std::lround(GetSprite(filename, Sprite::LoadType::HALF).getHeight()));
 	if (!pWindow) {
 		unload(filename);
 	}

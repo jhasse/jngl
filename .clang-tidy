@@ -46,6 +46,7 @@ Checks: '
        ,-llvmlibc-implementation-in-namespace,
        ,-llvmlibc-inline-function-decl,
        ,-llvmlibc-restrict-system-libc-headers,
+       ,-misc-const-correctness,
        ,-misc-no-recursion,
        ,-misc-non-private-member-variables-in-classes,
        ,-modernize-avoid-c-arrays,

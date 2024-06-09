@@ -30,7 +30,7 @@ struct App::Impl {
 	std::string displayName;
 	bool pixelArt = false;
 	std::optional<uint32_t> steamAppId;
-	std::set<ShaderProgram*> shaderPrograms{};
+	std::set<ShaderProgram*> shaderPrograms;
 };
 
 App::App() {

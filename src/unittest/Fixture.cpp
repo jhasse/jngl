@@ -1,4 +1,4 @@
-// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Fixture.hpp"
@@ -54,7 +54,7 @@ std::string Fixture::getAsciiArt() const {
 				for (int j = 0; j < reduceFactor; ++j) {
 					for (auto& cell : reduced.back().at(x / reduceFactor)) {
 						assert(0.0f <= cell && cell <= 1.0f);
-						cell += buffer[index] / float(reduceFactor * reduceFactor);
+						cell += buffer[index] / static_cast<float>(reduceFactor * reduceFactor);
 						++index;
 					}
 				}
@@ -75,7 +75,7 @@ std::string Fixture::getAsciiArt() const {
 			const static std::vector<std::string> chars = { "█", "▓", "▒", "░", " " };
 
 			float gray = (cell.at(0) + cell.at(1) + cell.at(2)) / 3.0f;
-			const size_t index = std::lround(gray * float(chars.size() - 1));
+			const size_t index = std::lround(gray * static_cast<float>(chars.size() - 1));
 			assert(index < chars.size());
 			out += chars[index];
 		}
