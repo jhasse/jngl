@@ -1,24 +1,26 @@
-// Copyright 2007-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
 #include "jngl/Pixels.hpp"
+#include "jngl/Rgba.hpp"
 #include "texture.hpp"
 
 #include <ft2build.h> // NOLINT
 #include FT_FREETYPE_H
+#include FT_STROKER_H
 
 #include <map>
 
 namespace jngl {
 
 constexpr double LINE_HEIGHT_FACOTR = 1. / .63;
-extern unsigned char fontColorRed, fontColorGreen, fontColorBlue, fontColorAlpha;
+extern Rgba gFontColor;
 
 class Character {
 public:
-	Character(char32_t ch, unsigned int fontHeight, FT_Face);
+	Character(char32_t ch, unsigned int fontHeight, FT_Face, FT_Stroker);
 	Character(const Character&) = delete;
 	Character& operator=(const Character&) = delete;
 	Character(Character&&) = delete;
@@ -36,7 +38,7 @@ private:
 
 class FontImpl {
 public:
-	FontImpl(const std::string& relativeFilename, unsigned int height);
+	FontImpl(const std::string& relativeFilename, unsigned int height, float strokePercentage);
 	FontImpl(const FontImpl&) = delete;
 	FontImpl& operator=(const FontImpl&) = delete;
 	FontImpl(FontImpl&&) = delete;
@@ -54,6 +56,7 @@ private:
 	static int instanceCounter;
 	static FT_Library library;
 	FT_Face face = nullptr;
+	FT_Stroker stroker = nullptr;
 	std::unique_ptr<Finally> freeFace; // Frees face_ if necessary
 	unsigned int height_;
 	int lineHeight;

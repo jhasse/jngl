@@ -1,4 +1,4 @@
-// Copyright 2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
@@ -21,6 +21,11 @@ public:
     const uint8_t* pixels() const override;
     int getWidth() const override;
     int getHeight() const override;
+
+	/// returns getWidth() as PNGs don't support scaling
+	int getImageWidth() const override;
+	/// returns getHeight() as PNGs don't support scaling
+	int getImageHeight() const override;
 
 private:
 	const static unsigned int PNG_BYTES_TO_CHECK = 4;

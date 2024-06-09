@@ -30,7 +30,7 @@ ImageDataWebP::ImageDataWebP(std::string_view filename, FILE* file, double scale
 	config.options.use_threads = 1;
 	scaledWidth = imgWidth;
 	scaledHeight = imgHeight;
-	if (scaleFactor + 1e-9 < 1) {
+	if (scaleFactor + 1e-9 < 1) { // only use WebP's scaler when scaling down, otherwise use OpenGL
 		config.options.use_scaling = 1;
 		config.options.scaled_width = scaledWidth =
 		    std::max(1, int(std::lround(imgWidth * scaleFactor)));

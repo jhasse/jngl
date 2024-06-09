@@ -1,16 +1,17 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Sprite class and related functions
 /// \file
 #pragma once
 
-#include "Color.hpp"
 #include "Drawable.hpp"
+#include "Rgb.hpp"
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
 
 #include <future>
 #include <string_view>
+#include <optional>
 #include <vector>
 
 namespace jngl {
@@ -29,7 +30,26 @@ public:
 		THREADED,
 	};
 
-	Sprite(const unsigned char* bytes, size_t width, size_t height);
+	/// Creates a Sprite from ImageData and scales it by \a scale
+	///
+	/// When you want to draw an ImageData that hasn't been scaled, make sure to pass JNGL's scale
+	/// factor so that it appears as the same size independent of the resolution of the user.
+	///
+	/// Example:
+	/// \code
+	/// auto img = jngl::ImageData::load("foo.png");
+	/// auto sprite1 = std::make_unique<jngl::Sprite>(*img, jngl::getScaleFactor());
+	///
+	/// auto sprite2 = std::make_unique<jngl::Sprite>("foo.png");
+	///
+	/// assert(std::lround(sprite1.getWidth()) == std::lround(sprite2.getWidth()));
+	/// \endcode
+	///
+	/// You may pass a filename, then JNGL will use that as a key for its internal texture cache,
+	/// meaning that if there's already a file loaded with that name, it won't upload the passed
+	/// ImageData to the GPU again.
+	explicit Sprite(const ImageData&, double scale,
+	                std::optional<std::string_view> filename = std::nullopt);
 
 	/// \deprecated Use Loader instead
 	explicit Sprite(std::string_view filename, LoadType loadType = LoadType::NORMAL);
@@ -186,7 +206,8 @@ void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue,
 
 void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue);
 
-void setSpriteColor(Color);
+/// Sets the global color used for drawing Sprites, leaves the alpha value untouched
+void setSpriteColor(Rgb);
 
 void setSpriteAlpha(unsigned char alpha);
 

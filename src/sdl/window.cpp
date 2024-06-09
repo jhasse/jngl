@@ -98,9 +98,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		}
 	}
 
-#ifndef __linux__ // This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by
-                  // SDL2). On Linux (GNOME) it results in the top of the window being cut off (by
-                  // the header bar height?).
+#if !defined(__linux__) || SDL_VERSION_ATLEAST(2, 30, 0)
+	// This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by SDL2). On
+	// Linux (GNOME) it results in the top of the window being cut off (by the header bar height?).
+	// The bug seems to be fixed in newer SDL2 (or GNOME) versions.
 	{
 		assert(width_ == width);
 		assert(height_ == height);

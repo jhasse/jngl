@@ -61,6 +61,10 @@ void Rgba::setRgb(Rgb color) {
 	blue = color.getBlue();
 }
 
+Rgba::operator Rgb() const {
+	return { red, green, blue };
+}
+
 Rgba interpolate(Rgba a, Rgba b, float t) {
 	return { static_cast<float>(static_cast<float>(a.getRed()) * (1.f - t) +
 		                        static_cast<float>(b.getRed()) * t),

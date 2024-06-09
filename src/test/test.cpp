@@ -55,21 +55,41 @@ public:
 		factor = std::sin(rotate / 360 * M_PI);
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
-		if (jngl::keyPressed('p')) {
-			auto start = std::chrono::steady_clock::now();
-			jngl::stop("test.ogg");
-			std::cout << "stop took "
-			          << std::chrono::duration_cast<std::chrono::milliseconds>(
-			                 std::chrono::steady_clock::now() - start)
-			                 .count()
-			          << " ms.\n";
-			start = std::chrono::steady_clock::now();
-			jngl::play("test.ogg");
-			std::cout << "play took "
-			          << std::chrono::duration_cast<std::chrono::milliseconds>(
-			                 std::chrono::steady_clock::now() - start)
-			                 .count()
-			          << " ms.\n";
+		if (jngl::keyPressed('p') || jngl::keyPressed('P')) {
+			if (jngl::keyDown(jngl::key::ControlL)) {
+				if (paused) {
+					paused = std::nullopt;
+				} else {
+					paused = jngl::Channel::main().pause();
+				}
+			} else {
+				auto start = std::chrono::steady_clock::now();
+				jngl::stop("test.ogg");
+				std::cout << "stop took "
+						<< std::chrono::duration_cast<std::chrono::milliseconds>(
+								std::chrono::steady_clock::now() - start)
+								.count()
+						<< " ms.\n";
+				if (!jngl::keyPressed(jngl::key::ShiftL)) {
+					start = std::chrono::steady_clock::now();
+					jngl::play("test.ogg");
+					std::cout << "play took "
+							<< std::chrono::duration_cast<std::chrono::milliseconds>(
+									std::chrono::steady_clock::now() - start)
+									.count()
+							<< " ms.\n";
+				}
+			}
+		}
+		if (jngl::keyPressed('m')) {
+			if (!music) {
+				music = std::make_unique<jngl::Channel>();
+			}
+			if (jngl::isPlaying("music.ogg")) {
+				music->stop("music.ogg");
+			} else {
+				music->play("music.ogg");
+			}
 		}
 		if (jngl::keyPressed('l')) {
 			jngl::loop("test.ogg");
@@ -85,6 +105,9 @@ public:
 		}
 		if (jngl::keyPressed('g')) {
 			jngl::setWork<AsyncLoad>();
+		}
+		if (jngl::keyPressed('e')) {
+			jngl::errorMessage("Hello World!");
 		}
 	}
 	void drawBackground() const;
@@ -148,9 +171,14 @@ public:
 		jngl::print(" $", static_cast<int>(jngl::getTextWidth("UTF-8:   ä ö ü ß Ĉ Ψ ≈") + 5), 105);
 		jngl::setFontSize(12);
 		jngl::print("Press 1-9 to test the performance\nPress E to show a error box.", 5, 135);
-		if (jngl::keyPressed('e')) {
-			jngl::errorMessage("Hello World!");
-		}
+
+		auto mv = jngl::modelview().translate({ 5, 175 });
+		jngl::setFontColor(static_cast<unsigned char>(255 * (1 - factor)),
+		                   static_cast<unsigned char>(255 * factor), 255);
+		fontStroke.print(mv, "Text with outline.");
+		jngl::setFontColor(0x000000_rgb);
+		fontNormal.print(mv, "Text with outline.");
+
 		jngl::print("Press S to use the blur shader.", 5, 390);
 		jngl::print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 410);
 		jngl::print("Press V to toggle V-SYNC.", 5, 430);
@@ -169,8 +197,12 @@ public:
 			jngl::setFullscreen(!jngl::getFullscreen());
 		}
 		jngl::print("Press K to test key codes.", 5, 490);
-		jngl::print("Press P to play a sound, L to loop it.", jngl::isPlaying("test.ogg") ? 20 : 6,
-		            510);
+		if (paused) {
+			jngl::print("Press Ctrl+P to unpause.", 20, 510);
+		} else {
+			jngl::print("Press P to play a sound, L to loop it.",
+			            jngl::isPlaying("test.ogg") ? 20 : 6, 510);
+		}
 		jngl::print("Press G to load a Sprite asynchronously.", 6, 530);
 		static int playbackSpeed = 100;
 		jngl::setPlaybackSpeed(static_cast<float>(playbackSpeed) / 100.0f);
@@ -225,6 +257,10 @@ private:
 	std::unique_ptr<jngl::Shader> vertexShader, fragmentShader;
 	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
 	jngl::Finally soundLoader;
+	std::optional<jngl::Finally> paused;
+	std::unique_ptr<jngl::Channel> music;
+	jngl::Font fontNormal{ "Arial.ttf", 12 };
+	jngl::Font fontStroke{ "Arial.ttf", 12, 5 };
 };
 
 jngl::AppParameters jnglInit() {

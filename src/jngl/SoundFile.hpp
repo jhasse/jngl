@@ -1,4 +1,4 @@
-// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::SoundFile class
 /// @file
@@ -18,13 +18,14 @@ using std::experimental::optional;
 
 namespace jngl {
 
+class Channel;
 class Sound;
 struct SoundParams;
 
 /// Sound loaded from an OGG file
 ///
 /// JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly -
-/// you can just use jngl::play.
+/// you can just use jngl::play or Channel::play.
 class SoundFile {
 public:
 	/// Load an OGG file called \a filename
@@ -45,14 +46,24 @@ public:
 	/// Play the sound once. If called twice the sound would also play twice
 	void play();
 
+	/// Play the sound once on the Channel
+	void play(Channel&);
+
 	/// Stop the last started sound
 	void stop();
+
+	/// Stop the last started sound of this SoundFile started on the Channel
+	///
+	/// \note If not using the main Channel (i.e. Channel::main()), this method should be used
+	///       instead of stop().
+	void stop(Channel&);
 
 	/// Whether the sound is still playing at least once
 	bool isPlaying();
 
 	/// Play the sound in a loop. Can also be stopped using stop()
 	void loop();
+	void loop(Channel&);
 
 	/// Set volume in [0, ∞]. Default is 1.0f
 	void setVolume(float v);

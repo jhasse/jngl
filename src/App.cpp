@@ -63,8 +63,14 @@ void App::atExit(std::function<void()> f) {
 }
 
 void App::callAtExitFunctions() {
-	for (const auto& f : callAtExit) {
+	auto tmp = std::move(callAtExit);
+	assert(callAtExit.empty());
+	for (const auto& f : tmp) {
 		f();
+	}
+	if (!callAtExit.empty()) {
+		debugLn("WARNING: The destructor of a Singleton caused the creation of another Singleton. "
+		        "Use handleIfAlive inside of destructors of Singletons.");
 	}
 	callAtExit.clear();
 }

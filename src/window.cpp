@@ -21,6 +21,7 @@
 #include <emscripten.h>
 #endif
 
+#include <algorithm>
 #include <gsl/narrow>
 #include <thread>
 
@@ -56,7 +57,7 @@ void Window::print(const std::string& text, const int xposition, const int yposi
 
 void Window::setFont(const std::string& filename) {
 	if (fonts_[fontSize_].find(filename) == fonts_[fontSize_].end()) {
-		auto font = std::make_shared<FontImpl>(filename, fontSize_);
+		auto font = std::make_shared<FontImpl>(filename, fontSize_, 0);
 		fonts_[fontSize_][filename] = font;
 	}
 	fontName_ = filename;

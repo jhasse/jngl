@@ -11,7 +11,7 @@ namespace jngl {
 Finally loadSprite(const std::string&);
 Sprite& GetSprite(std::string_view filename, Sprite::LoadType loadType = Sprite::LoadType::NORMAL);
 
-extern unsigned char spriteColorRed, spriteColorGreen, spriteColorBlue, spriteColorAlpha;
+extern Rgba gSpriteColor;
 extern Rgba gShapeColor;
 
 } // namespace jngl

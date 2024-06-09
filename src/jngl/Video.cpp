@@ -16,6 +16,7 @@
 #include "../main.hpp"
 #include "../opengl.hpp"
 #include "../theoraplay/theoraplay.h"
+#include "Channel.hpp"
 #include "Shader.hpp"
 #include "debug.hpp"
 #include "screen.hpp"
@@ -343,10 +344,10 @@ private:
 
 Video::Video(const std::string& filename) : impl(std::make_shared<Impl>(filename)) {
 	if (impl->getFrequency() != audio::frequency) {
-		Audio::handle().getMixer()->add(
+		Channel::main().add(
 		    audio::pitch(impl, static_cast<float>(impl->getFrequency()) / audio::frequency));
 	} else {
-		Audio::handle().getMixer()->add(impl);
+		Channel::main().add(impl);
 	}
 }
 

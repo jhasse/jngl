@@ -1,9 +1,11 @@
-// Copyright 2022-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2022-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "SteamAchievements.hpp"
 
 #include "../jngl/Achievement.hpp"
 #include "../jngl/debug.hpp"
+
+#include <stdexcept>
 
 namespace jngl {
 
