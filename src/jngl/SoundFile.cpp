@@ -15,6 +15,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <chrono>
 #include <stdexcept>
 #include <unordered_map>
 
@@ -147,8 +148,8 @@ SoundFile::SoundFile(const std::string& filename, std::launch) {
 	debug("OK (");
 	debug(buffer_.size() * sizeof(float) / 1024. / 1024.);
 	debug(" MB, ");
-	debug(std::chrono::duration_cast<std::chrono::seconds>(length()).count());
-	debugLn(" s)");
+	debug(std::chrono::duration_cast<std::chrono::seconds>(length()));
+	debugLn(")");
 }
 
 SoundFile::~SoundFile() = default;

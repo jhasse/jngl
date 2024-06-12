@@ -1,3 +1,4 @@
+#include <chrono>
 #include <jngl.hpp>
 
 JNGL_MAIN_BEGIN {
