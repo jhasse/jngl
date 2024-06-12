@@ -1,4 +1,4 @@
-// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Sound.hpp"
@@ -16,14 +16,14 @@
 namespace jngl {
 
 struct Sound::Impl {
-	std::shared_ptr<Track> track;
+	std::shared_ptr<PlayingTrack> track;
 	std::shared_ptr<Stream> stream;
 	std::shared_ptr<audio::volume_control> volumeControl;
 };
 
 Sound::Sound(std::vector<float>& bufferData, long frequency)
-: impl(new Impl{ load_raw(bufferData) }) {
-	auto stream = impl->track->stream();
+: impl(new Impl{ load_raw(bufferData)->play() }) {
+	std::shared_ptr<Stream> stream = impl->track;
 	if (frequency != jngl::audio::frequency) {
 		stream =
 		    audio::pitch(std::move(stream), static_cast<float>(frequency) / jngl::audio::frequency);
@@ -53,6 +53,10 @@ void Sound::setVolume(float v) {
 
 std::shared_ptr<Stream> Sound::getStream() {
 	return impl->stream;
+}
+
+float Sound::progress() const {
+	return impl->track->progress();
 }
 
 } // namespace jngl

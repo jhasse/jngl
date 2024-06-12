@@ -25,6 +25,9 @@ public:
 	void setVolume(float v);
 	std::shared_ptr<Stream> getStream();
 
+	/// returns 0...1 and will reset when looping
+	float progress() const;
+
 private:
 	struct Impl;
 	std::unique_ptr<Impl> impl;

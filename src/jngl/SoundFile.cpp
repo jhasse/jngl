@@ -146,7 +146,9 @@ SoundFile::SoundFile(const std::string& filename, std::launch) {
 
 	debug("OK (");
 	debug(buffer_.size() * sizeof(float) / 1024. / 1024.);
-	debugLn(" MB)");
+	debug(" MB, ");
+	debug(std::chrono::duration_cast<std::chrono::seconds>(length()).count());
+	debugLn(" s)");
 }
 
 SoundFile::~SoundFile() = default;
@@ -208,6 +210,15 @@ void SoundFile::setVolume(float v) {
 }
 
 void SoundFile::load() {
+}
+
+std::chrono::milliseconds SoundFile::length() const {
+	assert(frequency > 0);
+	return std::chrono::milliseconds{ buffer_.size() * 1000 / frequency / 2 /* stereo */ };
+}
+
+float SoundFile::progress() const {
+	return sound_ ? sound_->progress() : 0;
 }
 
 std::shared_ptr<SoundFile> getSoundFile(const std::string& filename, std::launch policy) {
