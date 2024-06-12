@@ -148,7 +148,9 @@ SoundFile::SoundFile(const std::string& filename, std::launch) {
 	debug("OK (");
 	debug(buffer_.size() * sizeof(float) / 1024. / 1024.);
 	debug(" MB, ");
+#ifndef __APPLE__ // FIXME: Remove when AppleClang's libc++ supports this C++20 feature
 	debug(std::chrono::duration_cast<std::chrono::seconds>(length()));
+#endif
 	debugLn(")");
 }
 

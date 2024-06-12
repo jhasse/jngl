@@ -17,8 +17,10 @@ JNGL_MAIN_BEGIN {
 		jngl::updateInput();
 		std::ostringstream tmp;
 		auto secondsPlayed = std::chrono::duration_cast<std::chrono::seconds>(played);
+#ifndef __APPLE__ // FIXME: Remove when AppleClang's libc++ supports this C++20 feature
 		tmp << secondsPlayed << " " << std::lround((played - secondsPlayed).count() / 10)
 		    << "cs\nof " << std::chrono::duration_cast<std::chrono::seconds>(soundFile.length());
+#endif
 		jngl::print(tmp.str(), jngl::Vec2{ -50, -20 });
 		if (!soundFile.isPlaying()) {
 			jngl::setTitle(filename + " [FINISHED]");
