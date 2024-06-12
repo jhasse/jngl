@@ -33,9 +33,9 @@ struct volume_base {
 	void apply(float* data, std::size_t sample_count);
 
 private:
-	std::atomic<float> gain_[2];
+	std::atomic<float> gain_[2]; // NOLINT: workaround for clang-tidy bug???
 	std::atomic<float> smoothness_multiplier_;
-	float real_gain_[2];
+	float real_gain_[2]; // NOLINT: workaround for clang-tidy bug???
 };
 
 } // namespace jngl::audio

@@ -6,7 +6,7 @@ cache:
   key: cpm
   paths: [.cache/cpm]
 
-image: registry.fedoraproject.org/fedora-minimal:38
+image: registry.fedoraproject.org/fedora-minimal:40
 
 linux:
   stage: build
