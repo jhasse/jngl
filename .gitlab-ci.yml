@@ -42,7 +42,7 @@ android:
     - make -C android
 
 steamos:
-  image: registry.gitlab.steamos.cloud/steamrt/soldier/sdk
+  image: registry.gitlab.steamos.cloud/steamrt/sniper/sdk
   stage: build
   script:
     - cd /usr/local/include
