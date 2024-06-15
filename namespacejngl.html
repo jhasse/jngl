@@ -420,6 +420,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addJob</b> (<a class=
 <tr class="memitem:a4fa19061aa43809790dd0ba3f5de6a67"><td class="memTemplItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a4fa19061aa43809790dd0ba3f5de6a67">getJob</a> ()</td></tr>
 <tr class="memdesc:a4fa19061aa43809790dd0ba3f5de6a67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> that is a T.  <a href="namespacejngl.html#a4fa19061aa43809790dd0ba3f5de6a67">More...</a><br /></td></tr>
 <tr class="separator:a4fa19061aa43809790dd0ba3f5de6a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acce832d165e7712121539a21c89ca4c2"><td class="memItemLeft" align="right" valign="top"><a id="acce832d165e7712121539a21c89ca4c2" name="acce832d165e7712121539a21c89ca4c2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>trace</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;)</td></tr>
+<tr class="separator:acce832d165e7712121539a21c89ca4c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdb49614c615fb6a10de0864320a7321"><td class="memTemplParams" colspan="2">template&lt;class... Args&gt; </td></tr>
+<tr class="memitem:abdb49614c615fb6a10de0864320a7321"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejngl.html#abdb49614c615fb6a10de0864320a7321">trace</a> (Args &amp;&amp;... args)</td></tr>
+<tr class="separator:abdb49614c615fb6a10de0864320a7321"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e71f65785f67f09bcef0b72e84510a5"><td class="memItemLeft" align="right" valign="top"><a id="a1e71f65785f67f09bcef0b72e84510a5" name="a1e71f65785f67f09bcef0b72e84510a5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>warn</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;)</td></tr>
+<tr class="separator:a1e71f65785f67f09bcef0b72e84510a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a826c87ef455e0ac4c2d202a7ac3214be"><td class="memTemplParams" colspan="2">template&lt;class... Args&gt; </td></tr>
+<tr class="memitem:a826c87ef455e0ac4c2d202a7ac3214be"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a826c87ef455e0ac4c2d202a7ac3214be">warn</a> (Args &amp;&amp;... args)</td></tr>
+<tr class="separator:a826c87ef455e0ac4c2d202a7ac3214be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">jngl::Mat3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a> ()</td></tr>
 <tr class="memdesc:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the global ModelView matrix.  <a href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">More...</a><br /></td></tr>
 <tr class="separator:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1343,6 +1355,46 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 <p>Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> that is a T. </p>
 
 <p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00067">67</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abdb49614c615fb6a10de0864320a7321" name="abdb49614c615fb6a10de0864320a7321"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdb49614c615fb6a10de0864320a7321">&#9670;&#160;</a></span>trace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void trace </td>
+          <td>(</td>
+          <td class="paramtype">Args &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="log_8hpp_source.html#l00020">20</a> of file <a class="el" href="log_8hpp_source.html">log.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a826c87ef455e0ac4c2d202a7ac3214be" name="a826c87ef455e0ac4c2d202a7ac3214be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a826c87ef455e0ac4c2d202a7ac3214be">&#9670;&#160;</a></span>warn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void warn </td>
+          <td>(</td>
+          <td class="paramtype">Args &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="log_8hpp_source.html#l00030">30</a> of file <a class="el" href="log_8hpp_source.html">log.hpp</a>.</p>
 
 </div>
 </div>
