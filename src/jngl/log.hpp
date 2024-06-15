@@ -4,7 +4,7 @@
 /// @file
 #pragma once
 
-#if __has_include(<format>)
+#if __has_include(<format>) && !defined(__APPLE__)
 #include <format>
 #endif
 #include <string>
@@ -13,7 +13,7 @@ namespace jngl {
 
 void trace(const std::string&);
 
-#if __has_include(<format>)
+#if __has_include(<format>) && !defined(__APPLE__)
 template <class... Args> void trace(std::format_string<Args...> format, Args&&... args) {
 	return trace(std::format(std::move(format), std::forward<Args>(args)...));
 }
@@ -23,7 +23,7 @@ template <class... Args> void trace(Args&&... args) {}
 
 void warn(const std::string&);
 
-#if __has_include(<format>)
+#if __has_include(<format>) && !defined(__APPLE__)
 template <class... Args> void warn(std::format_string<Args...> format, Args&&... args) {
 	return warn(std::format(std::move(format), std::forward<Args>(args)...));
 }
