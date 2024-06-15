@@ -725,6 +725,16 @@ std::stringstream readAsset(const std::string& filename) {
 	return sstream;
 }
 
+#ifdef HAVE_FILESYSTEM
+std::filesystem::path u8path(const std::string& path) {
+#if __cplusplus >= 202002L
+	return std::filesystem::path(reinterpret_cast<const char8_t*>(path.c_str())); // NOLINT
+#else
+	return std::filesystem::u8path(path);
+#endif
+}
+#endif
+
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE
 std::string readConfig(const std::string& key) {
 	if (!key.empty() && key[0] == '/') {
@@ -732,7 +742,7 @@ std::string readConfig(const std::string& key) {
 	}
 
 #ifdef _WIN32
-	std::filesystem::path p = std::filesystem::u8path(_getConfigPath() + key);
+	std::filesystem::path p = u8path(_getConfigPath() + key);
 	std::ifstream fin(p, std::ios::binary);
 #else
 	std::ifstream fin(_getConfigPath() + key, std::ios::binary);
@@ -763,21 +773,14 @@ void writeConfig(const std::string& key, const std::string& value) {
 	}
 #endif
 #ifdef HAVE_FILESYSTEM
-#if __cplusplus >= 202002L
-	const auto tmp = _getConfigPath();
-	const auto configPath = std::filesystem::path(std::u8string{ tmp.begin(), tmp.end() });
-	const auto directory =
-	    (configPath / std::filesystem::path(std::u8string{ key.begin(), key.end() })).parent_path();
-#else
-	const auto configPath = std::filesystem::u8path(_getConfigPath());
-	const auto directory = (configPath / std::filesystem::u8path(key)).parent_path();
-#endif
+	const auto configPath = u8path(_getConfigPath());
+	const auto directory = (configPath / u8path(key)).parent_path();
 	if (!std::filesystem::exists(directory)) {
 		std::filesystem::create_directories(directory);
 	}
 #endif
 #ifdef _WIN32
-	std::filesystem::path p = std::filesystem::u8path(_getConfigPath() + key);
+	std::filesystem::path p = u8path(_getConfigPath() + key);
 	std::ofstream fout(p, std::ios::binary);
 #else
 	std::ofstream fout(_getConfigPath() + key, std::ios::binary);
