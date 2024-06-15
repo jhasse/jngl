@@ -7,6 +7,7 @@
 #if __has_include(<format>)
 #include <format>
 #endif
+#include <string>
 
 namespace jngl {
 
