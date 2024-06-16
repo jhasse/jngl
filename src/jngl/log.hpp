@@ -18,7 +18,7 @@ template <class... Args> void trace(std::format_string<Args...> format, Args&&..
 	return trace(std::format(std::move(format), std::forward<Args>(args)...));
 }
 #else
-template <class... Args> void trace(Args&&... args) {}
+template <class... Args> void trace(Args&&...) {}
 #endif
 
 void warn(const std::string&);
@@ -28,7 +28,7 @@ template <class... Args> void warn(std::format_string<Args...> format, Args&&...
 	return warn(std::format(std::move(format), std::forward<Args>(args)...));
 }
 #else
-template <class... Args> void warn(Args&&... args) {}
+template <class... Args> void warn(Args&&...) {}
 #endif
 
 } // namespace jngl
