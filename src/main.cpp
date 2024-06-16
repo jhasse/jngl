@@ -725,7 +725,7 @@ std::stringstream readAsset(const std::string& filename) {
 	return sstream;
 }
 
-#ifdef HAVE_FILESYSTEM
+#if defined(HAVE_FILESYSTEM) && (!defined(__APPLE__) || !TARGET_OS_IPHONE)
 std::filesystem::path u8path(const std::string& path) {
 #if __cplusplus >= 202002L
 	return std::filesystem::path(reinterpret_cast<const char8_t*>(path.c_str())); // NOLINT
