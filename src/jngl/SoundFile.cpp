@@ -149,7 +149,7 @@ SoundFile::SoundFile(const std::string& filename, std::launch) {
 	debug(buffer_.size() * sizeof(float) / 1024. / 1024.);
 	debug(" MB, ");
 #ifndef __APPLE__ // FIXME: Remove when AppleClang's libc++ supports this C++20 feature
-#if __cplusplus >= 202002L // Also remove this when SteamOS SDK supports C++20
+#if defined(__GNUC__) && __GNUC__ > 13 // Ubuntu 22.04's GCC doesn't fully support C++20
 	debug(std::chrono::duration_cast<std::chrono::seconds>(length()));
 #endif
 #endif
