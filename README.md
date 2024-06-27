@@ -5,7 +5,7 @@
 [🎓 Tutorial](https://github.com/pinguin999/my-jngl-starter)
 [📚 Documentation](https://bixense.com/jngl/annotated.html)
 
-[![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/zWdnq6UJ79)
+[![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/254P43HvWJ)
 
 An easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox, the Nintendo Switch,
 and the Web.
