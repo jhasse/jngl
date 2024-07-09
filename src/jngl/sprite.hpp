@@ -183,6 +183,29 @@ public:
 	void drawMesh(const std::vector<Vertex>& vertexes, const ShaderProgram* = nullptr) const;
 
 	/// Draws a list of triangles with the sprite's texture on it, ignores the Sprite's position
+	///
+	///	Example:
+	/// \code
+	/// std::vector<jngl::Vertex> vertexes;
+	/// // mySprite is a Texture Atlas with two images next to each other.
+	/// // First image:
+	/// vertexes.emplace_back( 0,  0,   0, 0); // triangle 1
+	/// vertexes.emplace_back(10,  0, 0.5, 0);
+	/// vertexes.emplace_back(10, 10, 0.5, 1);
+	/// vertexes.emplace_back(10, 10, 0.5, 1); // triangle 2
+	/// vertexes.emplace_back( 0, 10, 0,   1);
+	/// vertexes.emplace_back( 0,  0, 0,   0);
+	/// // Second image:
+	/// vertexes.emplace_back(30,  0, 0.5, 0); // triangle 1
+	/// vertexes.emplace_back(40,  0,   1, 0);
+	/// vertexes.emplace_back(40, 10,   1, 1);
+	/// vertexes.emplace_back(40, 10,   1, 1); // triangle 2
+	/// vertexes.emplace_back(30, 10, 0.5, 1);
+	/// vertexes.emplace_back(30,  0, 0.5, 0);
+	/// mySprite.drawMesh(vertexes);
+	/// \endcode 
+	///
+	/// \param shaderProgram Passing `nullptr` uses the default.
 	void drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
 	              const ShaderProgram* = nullptr) const;
 
