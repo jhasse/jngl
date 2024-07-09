@@ -121,6 +121,42 @@ public:
 
 	void draw(const ShaderProgram* shaderProgram) const;
 
+	/// While this object is alive, don't do any other draw calls. Should never outlive its Sprite.
+	class Batch {
+		struct Impl;
+		std::unique_ptr<Impl> impl;
+		friend class Sprite;
+
+	public:
+		explicit Batch(std::unique_ptr<Impl>);
+		~Batch();
+		Batch(Batch&&) = default;
+		Batch& operator=(Batch&&) = default;
+		Batch(const Batch&) = delete;
+		Batch& operator=(const Batch&) = delete;
+
+		/// Draws the Sprite which created this Batch centered using \a modelview
+		void draw(Mat3 modelview) const;
+	};
+
+	/// Allows to draw the Sprite multiple times at different locations in an efficient way
+	///
+	///	This is pureley a performance optimisation. If it's fast enough, use
+	/// Sprite::draw instead.
+	///
+	/// Example:
+	/// \code
+	/// void MyWork::draw() const {
+	///     auto batch = mySprite.batch();
+	///     for (jngl::Vec2 position : positions) {
+	///         batch.draw(jngl::modelview().translate(position));
+	///     }
+	/// }
+	/// \endcode
+	///
+	/// \param shaderProgram Passing `nullptr` uses the default.
+	Batch batch(const ShaderProgram* shaderProgram = nullptr) const;
+
 	/// Draws the image scaled by `xfactor` and `yfactor`
 	///
 	/// \param xfactor Scale width by this factor

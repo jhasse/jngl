@@ -193,6 +193,38 @@ void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 	popMatrix();
 }
 
+struct Sprite::Batch::Impl {
+	ShaderProgram::Context context;
+	jngl::Mat3 translation;
+	int modelviewUniform;
+};
+
+Sprite::Batch::Batch(std::unique_ptr<Impl> impl) : impl(std::move(impl)) {
+}
+
+Sprite::Batch::~Batch() = default;
+
+void Sprite::Batch::draw(Mat3 modelview) const {
+	modelview *= impl->translation;
+	glUniformMatrix3fv(impl->modelviewUniform, 1, GL_FALSE, modelview.data);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4); // see Texture::draw()
+}
+
+auto Sprite::batch(const ShaderProgram* const shaderProgram) const -> Batch {
+	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	if (!shaderProgram) {
+		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+	}
+	texture->bind();
+	return Batch{
+		std::make_unique<Batch::Impl>(
+		    std::move(context),
+		    boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. })),
+		shaderProgram ? shaderProgram->getUniformLocation("modelview") : Texture::modelviewUniform
+	)};
+}
+
 void Sprite::drawScaled(float xfactor, float yfactor,
                         const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
