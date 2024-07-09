@@ -16,7 +16,8 @@ JNGL_MAIN_BEGIN {
 		auto played = soundFile.progress() * soundFile.length();
 		jngl::updateInput();
 		std::ostringstream tmp;
-		auto secondsPlayed = std::chrono::duration_cast<std::chrono::seconds>(played);
+		auto secondsPlayed [[maybe_unused]] =
+		    std::chrono::duration_cast<std::chrono::seconds>(played);
 #ifndef __APPLE__ // FIXME: Remove when AppleClang's libc++ supports this C++20 feature
 #if defined(__GNUC__) && __GNUC__ > 13 // Ubuntu 22.04's GCC doesn't fully support C++20
 		tmp << secondsPlayed << " " << std::lround((played - secondsPlayed).count() / 10)
