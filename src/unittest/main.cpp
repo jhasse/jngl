@@ -9,5 +9,5 @@ int main(int argc, char** argv) {
 	if (argc == 2) {
 		boost::ut::cfg<boost::ut::override> = { .filter = argv[1] };
 	}
-	return boost::ut::cfg<>.run(); // explicitly run registered test suites
+	return static_cast<int>(boost::ut::cfg<>.run()); // explicitly run registered test suites
 }
