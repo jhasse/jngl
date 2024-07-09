@@ -217,12 +217,11 @@ auto Sprite::batch(const ShaderProgram* const shaderProgram) const -> Batch {
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 	}
 	texture->bind();
-	return Batch{
-		std::make_unique<Batch::Impl>(
-		    std::move(context),
-		    boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. })),
-		shaderProgram ? shaderProgram->getUniformLocation("modelview") : Texture::modelviewUniform
-	)};
+	return Batch{ std::make_unique<Batch::Impl>(Batch::Impl{
+		std::move(context),
+		boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. })),
+		shaderProgram ? shaderProgram->getUniformLocation("modelview")
+		              : Texture::modelviewUniform }) };
 }
 
 void Sprite::drawScaled(float xfactor, float yfactor,
