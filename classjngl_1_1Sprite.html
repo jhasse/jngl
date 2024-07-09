@@ -145,9 +145,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawClipped</b> (<a c
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawMesh</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
 <tr class="memdesc:a89c331aee86657889c1f1d8233c6051f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the sprite's texture on it using the global modelview from <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c" title="Returns a copy of the global ModelView matrix.">jngl::modelview()</a> <br /></td></tr>
 <tr class="separator:a89c331aee86657889c1f1d8233c6051f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16eec847da023ffb64358c9ad0a9fce2"><td class="memItemLeft" align="right" valign="top"><a id="a16eec847da023ffb64358c9ad0a9fce2" name="a16eec847da023ffb64358c9ad0a9fce2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawMesh</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
-<tr class="memdesc:a16eec847da023ffb64358c9ad0a9fce2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the sprite's texture on it, ignores the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a>'s position. <br /></td></tr>
+<tr class="memitem:a16eec847da023ffb64358c9ad0a9fce2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Sprite.html#a16eec847da023ffb64358c9ad0a9fce2">drawMesh</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
+<tr class="memdesc:a16eec847da023ffb64358c9ad0a9fce2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the sprite's texture on it, ignores the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a>'s position.  <a href="classjngl_1_1Sprite.html#a16eec847da023ffb64358c9ad0a9fce2">More...</a><br /></td></tr>
 <tr class="separator:a16eec847da023ffb64358c9ad0a9fce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac417e162aaacd2e4f918c12966052cd0"><td class="memItemLeft" align="right" valign="top"><a id="ac417e162aaacd2e4f918c12966052cd0" name="ac417e162aaacd2e4f918c12966052cd0"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setBytes</b> (const unsigned char *)</td></tr>
@@ -629,6 +628,67 @@ Collaboration diagram for Sprite:</div>
 
 </div>
 </div>
+<a id="a16eec847da023ffb64358c9ad0a9fce2" name="a16eec847da023ffb64358c9ad0a9fce2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16eec847da023ffb64358c9ad0a9fce2">&#9670;&#160;</a></span>drawMesh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawMesh </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a>&#160;</td>
+          <td class="paramname"><em>modelview</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vertexes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *&#160;</td>
+          <td class="paramname"> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws a list of triangles with the sprite's texture on it, ignores the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a>'s position. </p>
+<p >Example: </p><div class="fragment"><div class="line"><a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector&lt;jngl::Vertex&gt;</a> vertexes;</div>
+<div class="line"><span class="comment">// mySprite is a Texture Atlas with two images next to each other.</span></div>
+<div class="line"><span class="comment">// First image:</span></div>
+<div class="line">vertexes.<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/container/vector/emplace_back.html">emplace_back</a>( 0,  0,   0, 0); <span class="comment">// triangle 1</span></div>
+<div class="line">vertexes.<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/container/vector/emplace_back.html">emplace_back</a>(10,  0, 0.5, 0);</div>
+<div class="line">vertexes.<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/container/vector/emplace_back.html">emplace_back</a>(10, 10, 0.5, 1);</div>
+<div class="line">vertexes.<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/container/vector/emplace_back.html">emplace_back</a>(10, 10, 0.5, 1); <span class="comment">// triangle 2</span></div>
+<div class="line">vertexes.<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/container/vector/emplace_back.html">emplace_back</a>( 0, 10, 0,   1);</div>
+<div class="line">vertexes.<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/container/vector/emplace_back.html">emplace_back</a>( 0,  0, 0,   0);</div>
+<div class="line"><span class="comment">// Second image:</span></div>
+<div class="line">vertexes.<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/container/vector/emplace_back.html">emplace_back</a>(30,  0, 0.5, 0); <span class="comment">// triangle 1</span></div>
+<div class="line">vertexes.<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/container/vector/emplace_back.html">emplace_back</a>(40,  0,   1, 0);</div>
+<div class="line">vertexes.<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/container/vector/emplace_back.html">emplace_back</a>(40, 10,   1, 1);</div>
+<div class="line">vertexes.<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/container/vector/emplace_back.html">emplace_back</a>(40, 10,   1, 1); <span class="comment">// triangle 2</span></div>
+<div class="line">vertexes.<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/container/vector/emplace_back.html">emplace_back</a>(30, 10, 0.5, 1);</div>
+<div class="line">vertexes.<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/container/vector/emplace_back.html">emplace_back</a>(30,  0, 0.5, 0);</div>
+<div class="line">mySprite.drawMesh(vertexes);</div>
+<div class="ttc" id="aemplace_back_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/container/vector/emplace_back.html">std::vector::emplace_back</a></div><div class="ttdeci">T emplace_back(T... args)</div></div>
+<div class="ttc" id="avector_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a></div></div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">shaderProgram</td><td>Passing <code>nullptr</code> uses the default. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a5c01625ba48f5cfab329498687da16ec" name="a5c01625ba48f5cfab329498687da16ec"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5c01625ba48f5cfab329498687da16ec">&#9670;&#160;</a></span>loader</h2>
@@ -644,7 +704,7 @@ Collaboration diagram for Sprite:</div>
 
 <p>Function which actually loads the sprite. </p>
 
-<p class="definition">Definition at line <a class="el" href="sprite_8hpp_source.html#l00195">195</a> of file <a class="el" href="sprite_8hpp_source.html">sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sprite_8hpp_source.html#l00218">218</a> of file <a class="el" href="sprite_8hpp_source.html">sprite.hpp</a>.</p>
 
 </div>
 </div>
