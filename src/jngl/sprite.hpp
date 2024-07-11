@@ -23,7 +23,7 @@ struct Vertex;
 /// Higher-level representation of an image
 class Sprite : public Drawable {
 public:
-	enum class LoadType {
+	enum class LoadType : uint8_t {
 		NORMAL,
 		HALF,
 		THREADED,

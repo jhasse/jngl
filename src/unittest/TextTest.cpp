@@ -1,4 +1,4 @@
-// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/text.hpp"
@@ -12,7 +12,7 @@
 
 namespace {
 boost::ut::suite _ = [] {
-	using namespace boost::ut;
+	using namespace boost::ut; // NOLINT
 
 	"CharacterTest"_test = [] {
 		Fixture f(2);
