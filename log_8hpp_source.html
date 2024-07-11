@@ -84,7 +84,7 @@ $(function() {
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// For conditions of distribution and use, see copyright notice in LICENSE.txt</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"></span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#if __has_include(&lt;format&gt;) &amp;&amp; (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION &gt; 140000)</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#if __has_include(&lt;format&gt;) &amp;&amp; (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION &gt;= 170000)</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;format&gt;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/string.html">string</a>&gt;</span></div>
@@ -93,7 +93,7 @@ $(function() {
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keywordtype">void</span> trace(<span class="keyword">const</span> <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp;);</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#if __has_include(&lt;format&gt;) &amp;&amp; (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION &gt; 140000)</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#if __has_include(&lt;format&gt;) &amp;&amp; (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION &gt;= 170000)</span></div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">template</span> &lt;<span class="keyword">class</span>... Args&gt; <span class="keywordtype">void</span> trace(std::format_string&lt;Args...&gt; format, Args&amp;&amp;... args) {</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordflow">return</span> trace(<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/utility/format/format.html">std::format</a>(std::move(format), std::forward&lt;Args&gt;(args)...));</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>}</div>
@@ -103,7 +103,7 @@ $(function() {
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keywordtype">void</span> warn(<span class="keyword">const</span> <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp;);</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#if __has_include(&lt;format&gt;) &amp;&amp; (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION &gt; 140000)</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#if __has_include(&lt;format&gt;) &amp;&amp; (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION &gt;= 170000)</span></div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">template</span> &lt;<span class="keyword">class</span>... Args&gt; <span class="keywordtype">void</span> warn(std::format_string&lt;Args...&gt; format, Args&amp;&amp;... args) {</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordflow">return</span> warn(<a class="code hl_functionRef" href="http://en.cppreference.com/w/cpp/utility/format/format.html">std::format</a>(std::move(format), std::forward&lt;Args&gt;(args)...));</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>}</div>
