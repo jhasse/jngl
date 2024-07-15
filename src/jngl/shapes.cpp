@@ -20,6 +20,10 @@ void setColor(const Rgb rgb) {
 	gShapeColor.setRgb(rgb);
 }
 
+void setColor(const Rgba rgba) {
+	gShapeColor = rgba;
+}
+
 void setColor(const Rgb color, const unsigned char alpha) {
 	gShapeColor = Rgba(color, Alpha::u8(alpha));
 }

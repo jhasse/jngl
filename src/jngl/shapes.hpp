@@ -17,7 +17,10 @@ class Rgba;
 /// Sets the color which should be used to draw primitives
 ///
 /// Doesn't change the alpha value currently set by setAlpha()
-void setColor(Rgb rgb);
+void setColor(Rgb);
+
+/// Sets the color (including alpha) which should be used to draw primitives
+void setColor(Rgba);
 
 /// Sets the color and alpha which should be used to draw primitives
 /// @param alpha [0...255]
