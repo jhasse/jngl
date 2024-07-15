@@ -13,6 +13,14 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
 	string(APPEND CMAKE_C_FLAGS " -Wno-shorten-64-to-32") # ogg, vorbis, etc. are full of these
 endif()
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
+	set(USE_FLAGS "-sUSE_SDL=2 -sUSE_FREETYPE=1 -sUSE_VORBIS=1")
+	string(APPEND CMAKE_CXX_FLAGS " ${USE_FLAGS} -sNO_DISABLE_EXCEPTION_CATCHING")
+	string(APPEND CMAKE_C_FLAGS " ${USE_FLAGS}")
+	string(APPEND CMAKE_EXE_LINKER_FLAGS " ${USE_FLAGS} -sASSERTIONS=1 --preload-file data")
+	set(CMAKE_EXECUTABLE_SUFFIX ".html")
+endif()
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 file(GLOB SRC src/*.cpp src/jngl/*.cpp
