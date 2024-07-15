@@ -1,4 +1,4 @@
-// Copyright 2010-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2010-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "texture.hpp"
@@ -78,10 +78,14 @@ Texture::~Texture() {
 	}
 }
 
-void Texture::draw() const {
+void Texture::bind() const {
 	glBindVertexArray(vao);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
+}
+
+void Texture::draw() const {
+	bind();
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 

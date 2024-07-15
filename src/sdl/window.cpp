@@ -1,4 +1,4 @@
-// Copyright 2011-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../App.hpp"
@@ -6,6 +6,7 @@
 #include "../jngl/debug.hpp"
 #include "../jngl/screen.hpp"
 #include "../jngl/window.hpp"
+#include "../jngl/work.hpp"
 #include "../main.hpp"
 #include "../windowptr.hpp"
 #include "windowimpl.hpp"
@@ -349,6 +350,10 @@ void Window::UpdateInput() {
 				characterDown_[" "] = true;
 				characterPressed_[" "] = true;
 				needToBeSetFalse_.push(&characterPressed_[" "]);
+			} else if (event.key.keysym.sym == SDLK_ESCAPE) {
+				if (const auto& work = getWork()) {
+					work->onBackEvent();
+				}
 			}
 			anyKeyPressed_ = true;
 			break;

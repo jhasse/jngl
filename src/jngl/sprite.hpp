@@ -23,7 +23,7 @@ struct Vertex;
 /// Higher-level representation of an image
 class Sprite : public Drawable {
 public:
-	enum class LoadType {
+	enum class LoadType : uint8_t {
 		NORMAL,
 		HALF,
 		THREADED,
@@ -121,6 +121,42 @@ public:
 
 	void draw(const ShaderProgram* shaderProgram) const;
 
+	/// While this object is alive, don't do any other draw calls. Should never outlive its Sprite.
+	class Batch {
+		struct Impl;
+		std::unique_ptr<Impl> impl;
+		friend class Sprite;
+
+	public:
+		explicit Batch(std::unique_ptr<Impl>);
+		~Batch();
+		Batch(Batch&&) = default;
+		Batch& operator=(Batch&&) = default;
+		Batch(const Batch&) = delete;
+		Batch& operator=(const Batch&) = delete;
+
+		/// Draws the Sprite which created this Batch centered using \a modelview
+		void draw(Mat3 modelview) const;
+	};
+
+	/// Allows to draw the Sprite multiple times at different locations in an efficient way
+	///
+	///	This is pureley a performance optimisation. If it's fast enough, use
+	/// Sprite::draw instead.
+	///
+	/// Example:
+	/// \code
+	/// void MyWork::draw() const {
+	///     auto batch = mySprite.batch();
+	///     for (jngl::Vec2 position : positions) {
+	///         batch.draw(jngl::modelview().translate(position));
+	///     }
+	/// }
+	/// \endcode
+	///
+	/// \param shaderProgram Passing `nullptr` uses the default.
+	Batch batch(const ShaderProgram* shaderProgram = nullptr) const;
+
 	/// Draws the image scaled by `xfactor` and `yfactor`
 	///
 	/// \param xfactor Scale width by this factor
@@ -147,6 +183,29 @@ public:
 	void drawMesh(const std::vector<Vertex>& vertexes, const ShaderProgram* = nullptr) const;
 
 	/// Draws a list of triangles with the sprite's texture on it, ignores the Sprite's position
+	///
+	///	Example:
+	/// \code
+	/// std::vector<jngl::Vertex> vertexes;
+	/// // mySprite is a Texture Atlas with two images next to each other.
+	/// // First image:
+	/// vertexes.emplace_back( 0,  0,   0, 0); // triangle 1
+	/// vertexes.emplace_back(10,  0, 0.5, 0);
+	/// vertexes.emplace_back(10, 10, 0.5, 1);
+	/// vertexes.emplace_back(10, 10, 0.5, 1); // triangle 2
+	/// vertexes.emplace_back( 0, 10, 0,   1);
+	/// vertexes.emplace_back( 0,  0, 0,   0);
+	/// // Second image:
+	/// vertexes.emplace_back(30,  0, 0.5, 0); // triangle 1
+	/// vertexes.emplace_back(40,  0,   1, 0);
+	/// vertexes.emplace_back(40, 10,   1, 1);
+	/// vertexes.emplace_back(40, 10,   1, 1); // triangle 2
+	/// vertexes.emplace_back(30, 10, 0.5, 1);
+	/// vertexes.emplace_back(30,  0, 0.5, 0);
+	/// mySprite.drawMesh(vertexes);
+	/// \endcode 
+	///
+	/// \param shaderProgram Passing `nullptr` uses the default.
 	void drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
 	              const ShaderProgram* = nullptr) const;
 

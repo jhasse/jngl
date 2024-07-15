@@ -65,17 +65,17 @@ template <> struct vec_traits<jngl::Vec2> {
 	static int const dim = 2;
 	using scalar_type = double;
 
-	template <int I> static inline scalar_type& write_element(jngl::Vec2& v) {
+	template <int I> static scalar_type& write_element(jngl::Vec2& v) {
 		return (&v.x)[I];
 	}
-	template <int I> static inline scalar_type read_element(const jngl::Vec2& v) {
+	template <int I> static scalar_type read_element(const jngl::Vec2& v) {
 		return (&v.x)[I];
 	}
 
-	static inline scalar_type& write_element_idx(int i, jngl::Vec2& v) {
+	static scalar_type& write_element_idx(int i, jngl::Vec2& v) {
 		return (&v.x)[i];
 	}
-	static inline scalar_type read_element_idx(int i, jngl::Vec2 const& v) {
+	static scalar_type read_element_idx(int i, jngl::Vec2 const& v) {
 		return (&v.x)[i];
 	}
 };

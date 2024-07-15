@@ -1,4 +1,4 @@
-// Copyright 2010-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2010-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -25,6 +25,7 @@ public:
 	Texture(Texture&&) = delete;
 	Texture& operator=(Texture&&) = delete;
 	~Texture();
+	void bind() const;
 	void draw() const;
 	void drawClipped(float xstart, float xend, float ystart, float yend, float red, float green,
 	                 float blue, float alpha) const;
