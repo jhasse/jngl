@@ -38,7 +38,7 @@ Pixels Window::getLineHeight() {
 }
 
 void Window::setLineHeight(Pixels h) {
-	return fonts_[fontSize_][fontName_]->setLineHeight(h);
+	fonts_[fontSize_][fontName_]->setLineHeight(h);
 }
 
 std::shared_ptr<FontImpl> Window::getFontImpl() {

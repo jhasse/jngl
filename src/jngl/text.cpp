@@ -88,7 +88,7 @@ void Text::step() {
 
 void Text::draw() const {
 	jngl::pushMatrix();
-	jngl::translate(int(getX()), int(getY()));
+	jngl::translate(static_cast<int>(getX()), static_cast<int>(getY()));
 	for (auto& line : lines) {
 		line->draw();
 	}
