@@ -18,6 +18,8 @@
 #include "windowptr.hpp"
 
 #ifdef __EMSCRIPTEN__
+#include "emscripten/window.hpp"
+
 #include <emscripten.h>
 #endif
 
@@ -233,13 +235,6 @@ void Window::updateKeyStates() {
 double Window::getMouseWheel() const {
 	return mouseWheel;
 }
-
-#ifdef __EMSCRIPTEN__
-std::function<void()> g_jnglMainLoop;
-void jnglMainLoop() {
-	g_jnglMainLoop();
-}
-#endif
 
 void Window::mainLoop() {
 #ifdef __EMSCRIPTEN__
