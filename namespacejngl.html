@@ -1074,9 +1074,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </div><div class="memdoc">
 
 <p>Sets the currently active font by a font <em>name</em>. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="elRef" href="http://en.cppreference.com/w/cpp/error/runtime_error.html">std::runtime_error</a></td><td>If the font couldn't be found.</td></tr>
+  </table>
+  </dd>
+</dl>
 <div class="fragment"><div class="line"><a class="code hl_function" href="namespacejngl.html#a823190ae3c12dff1e3b17d2957d0769d">jngl::setFontByName</a>(<span class="stringliteral">&quot;monospace&quot;</span>);</div>
 <div class="ttc" id="anamespacejngl_html_a823190ae3c12dff1e3b17d2957d0769d"><div class="ttname"><a href="namespacejngl.html#a823190ae3c12dff1e3b17d2957d0769d">jngl::setFontByName</a></div><div class="ttdeci">void setFontByName(const std::string &amp;name)</div><div class="ttdoc">Sets the currently active font by a font name.</div></div>
-</div><!-- fragment --> 
+</div><!-- fragment --><dl class="section note"><dt>Note</dt><dd>Not supported on iOS, Switch, Xbox, and Web. Falls back to using "Arial.ttf" on those platforms. </dd></dl>
+
 </div>
 </div>
 <a id="a0cec77bf4654f9cf66ba40568eafd122" name="a0cec77bf4654f9cf66ba40568eafd122"></a>
