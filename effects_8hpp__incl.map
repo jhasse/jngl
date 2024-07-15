@@ -1,7 +1,8 @@
 <map id="jngl/effects.hpp" name="jngl/effects.hpp">
-<area shape="rect" id="node1" title="Effects that can be applied to jngl::Widget." alt="" coords="147,5,289,31"/>
+<area shape="rect" id="node1" title="Effects that can be applied to jngl::Widget." alt="" coords="195,5,337,31"/>
 <area shape="rect" id="node2" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="116,79,203,104"/>
-<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="227,79,329,104"/>
+<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="227,79,305,104"/>
+<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="329,79,432,104"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,152,172,177"/>
 <area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="196,152,267,177"/>
 </map>
