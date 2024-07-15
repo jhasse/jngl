@@ -232,8 +232,8 @@ public:
 		drawMouse(jngl::getMousePos());
 		if (++frameNumber == 500) {
 			const auto seconds = jngl::getTime() - frameTime;
-			std::cout << "It took " << seconds << " seconds to render 500 frames (~"
-			          << static_cast<int>(500.0 / seconds) << " FPS)" << std::endl;
+			jngl::trace("It took {} seconds to render 500 frames (~{} FPS)", seconds,
+			            static_cast<int>(500.0 / seconds));
 			frameNumber = 0;
 			frameTime = jngl::getTime();
 		}
