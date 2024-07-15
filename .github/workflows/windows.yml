@@ -27,6 +27,7 @@ jobs:
         build/Debug/jngl-unittest halfLoadTest
         build/Debug/jngl-unittest getBinaryPath
         build/Debug/jngl-unittest readAsset
+        build/Debug/jngl-unittest Vec2
     - name: Build (Release)
       run: cmake --build build --config Release
     - name: Unittest (Release)
@@ -41,6 +42,7 @@ jobs:
         build/Release/jngl-unittest halfLoadTest
         build/Release/jngl-unittest getBinaryPath
         build/Release/jngl-unittest readAsset
+        build/Release/jngl-unittest Vec2
 
   msvc:
     runs-on: windows-2022
@@ -67,6 +69,7 @@ jobs:
         build/Debug/jngl-unittest halfLoadTest
         build/Debug/jngl-unittest getBinaryPath
         build/Debug/jngl-unittest readAsset
+        build/Debug/jngl-unittest Vec2
     - name: Build (Release)
       run: cmake --build build --config Release
     - name: Unittest (Release)
@@ -81,6 +84,7 @@ jobs:
         build/Release/jngl-unittest halfLoadTest
         build/Release/jngl-unittest getBinaryPath
         build/Release/jngl-unittest readAsset
+        build/Release/jngl-unittest Vec2
     - name: Configure (UWP)
       run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore '-DCMAKE_SYSTEM_VERSION=10.0'
     - name: Build (UWP, Debug)
