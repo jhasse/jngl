@@ -1,4 +1,4 @@
-// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Vec2 class
 /// @file
@@ -45,6 +45,9 @@ public:
 
 	/// returns true if both x and y are exactly 0
 	bool isNull() const;
+
+	/// rotates the vector clock-wise
+	void rotate(float angle);
 
 	/// Helper function to use with cereal or Boost.Serialization
 	template <class Archive> void serialize(Archive& ar, const unsigned int) {
