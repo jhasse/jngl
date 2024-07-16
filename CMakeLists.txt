@@ -61,7 +61,7 @@ if(IOS)
 	set(CMAKE_DISABLE_FIND_PACKAGE_ZLIB TRUE)
 	set(CMAKE_DISABLE_FIND_PACKAGE_BZip2 TRUE)
 endif()
-find_package(Boost 1.76.0) # first version with boost/qvm_lite.hpp
+find_package(Boost CONFIG 1.76.0) # first version with boost/qvm_lite.hpp
 if(Boost_FOUND)
 	target_include_directories(jngl PUBLIC ${Boost_INCLUDE_DIRS})
 else()
