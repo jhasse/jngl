@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['alignment_0',['Alignment',['../namespacejngl.html#acdfaca60ec19c0265bac2692d7982726',1,'jngl']]]
+  ['alignment_0',['Alignment',['../namespacejngl.html#a7aed1e91261bf4cd3942c6f87ae468eb',1,'jngl']]]
 ];
