@@ -97,7 +97,7 @@ FrameBuffer::FrameBuffer(std::array<Pixels, 2> size) : FrameBuffer(size[0], size
 FrameBuffer::~FrameBuffer() = default;
 
 void FrameBuffer::draw(const double x, const double y) const {
-	return draw(Vec2{ x, y });
+	draw(Vec2{ x, y });
 }
 
 void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderProgram) const {

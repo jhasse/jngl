@@ -626,7 +626,7 @@ Finally load(const std::string& filename) {
 }
 
 void setWork(std::shared_ptr<Work> work) {
-	return pWindow->setWork(std::move(work));
+	pWindow->setWork(std::move(work));
 }
 
 void resetFrameLimiter() {
@@ -634,7 +634,7 @@ void resetFrameLimiter() {
 }
 
 void setWork(Work* w) {
-	return pWindow->setWork(std::shared_ptr<Work>(w));
+	pWindow->setWork(std::shared_ptr<Work>(w));
 }
 
 std::shared_ptr<Work> getWork() {

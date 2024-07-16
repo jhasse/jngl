@@ -1,4 +1,4 @@
-// Copyright 2021-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #ifndef NOWEBP
 #include "ImageDataWebP.hpp"
@@ -32,9 +32,9 @@ ImageDataWebP::ImageDataWebP(std::string filename, FILE* file, double scaleFacto
 	if (scaleFactor + 1e-9 < 1) { // only use WebP's scaler when scaling down, otherwise use OpenGL
 		config.options.use_scaling = 1;
 		config.options.scaled_width = scaledWidth =
-		    std::max(1, int(std::lround(imgWidth * scaleFactor)));
+		    std::max(1, static_cast<int>(std::lround(imgWidth * scaleFactor)));
 		config.options.scaled_height = scaledHeight =
-		    std::max(1, int(std::lround(imgHeight * scaleFactor)));
+		    std::max(1, static_cast<int>(std::lround(imgHeight * scaleFactor)));
 	}
 	config.output.colorspace = MODE_RGBA;
 #ifndef __EMSCRIPTEN__

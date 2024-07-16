@@ -1,4 +1,4 @@
-// Copyright 2017-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2017-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Controller class
 /// @file
@@ -36,7 +36,7 @@ public:
 private:
 	virtual float stateImpl(controller::Button) const = 0;
 
-	enum class ButtonState {
+	enum class ButtonState : uint8_t {
 		UNKNOWN,
 		PRESSED,
 		NOT_PRESSED,

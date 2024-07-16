@@ -21,7 +21,7 @@ public:
 
 	virtual ~Widget();
 
-	enum class Action {
+	enum class Action : uint8_t {
 		NONE,
 		REMOVE,
 		REQUEST_FOCUS,

@@ -422,7 +422,7 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 	}
 	width = static_cast<float>(header.width * getScaleFactor());
 	height = static_cast<float>(header.height * getScaleFactor());
-	loadTexture(header.width, header.height, filename, halfLoad, GL_BGR, &buf[0]);
+	loadTexture(header.width, header.height, filename, halfLoad, GL_BGR, buf.data());
 	return Finally(nullptr);
 }
 #ifndef NOWEBP

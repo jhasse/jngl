@@ -203,7 +203,7 @@ public:
 	/// vertexes.emplace_back(30, 10, 0.5, 1);
 	/// vertexes.emplace_back(30,  0, 0.5, 0);
 	/// mySprite.drawMesh(vertexes);
-	/// \endcode 
+	/// \endcode
 	///
 	/// \param shaderProgram Passing `nullptr` uses the default.
 	void drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,

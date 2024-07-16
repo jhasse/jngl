@@ -2,10 +2,10 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Channel.hpp"
 
+#include "../audio.hpp"
 #include "../audio/effect/pause.hpp"
 #include "../audio/effect/volume.hpp"
 #include "../audio/mixer.hpp"
-#include "../audio.hpp"
 #include "SoundFile.hpp"
 
 namespace jngl {

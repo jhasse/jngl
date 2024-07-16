@@ -4,12 +4,11 @@
 #include "Sound.hpp"
 
 #include "audio.hpp"
+#include "audio/Track.hpp"
 #include "audio/constants.hpp"
 #include "audio/effect/loop.hpp"
 #include "audio/effect/pitch.hpp"
 #include "audio/effect/volume.hpp"
-#include "audio/Track.hpp"
-#include "jngl/debug.hpp"
 
 #include <cassert>
 
@@ -31,8 +30,7 @@ Sound::Sound(std::vector<float>& bufferData, long frequency)
 	impl->stream = impl->volumeControl = audio::volume(std::move(stream));
 }
 
-Sound::~Sound() {
-}
+Sound::~Sound() = default;
 
 bool Sound::isPlaying() const {
 	return impl->stream->isPlaying();

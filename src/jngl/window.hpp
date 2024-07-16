@@ -59,7 +59,7 @@ void setFullscreen(bool);
 /// Sets the main window title
 void setTitle(const std::string& title);
 
-enum class Cursor {
+enum class Cursor : uint8_t {
     ARROW,
     I,
 };

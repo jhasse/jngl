@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "effects.hpp"
@@ -24,7 +24,7 @@ void Zoom::endDraw() const {
 }
 
 Zoom::Action Zoom::step() {
-	time += 1.f / float(getStepsPerSecond());
+	time += 1.f / static_cast<float>(getStepsPerSecond());
 	return Action::NONE;
 }
 

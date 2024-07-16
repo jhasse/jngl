@@ -42,7 +42,7 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 
 	glGenBuffers(1, &vertexBuffer_);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
-	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), &vertexes[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes.data(), GL_STATIC_DRAW);
 
 	const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
@@ -110,7 +110,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
 	glUniformMatrix3fv(modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
-	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), &vertexes[0], GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), vertexes.data(), GL_STREAM_DRAW);
 
 	const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
@@ -128,7 +128,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 void Texture::drawMesh(const std::vector<Vertex>& vertexes) const {
 	glBindVertexArray(opengl::vaoStream);
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
-	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(vertexes[0]), &vertexes[0],
+	glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(vertexes[0]), vertexes.data(),
 	             GL_STREAM_DRAW);
 
 	const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
