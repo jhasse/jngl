@@ -12,16 +12,20 @@ namespace jngl {
 
 ImageDataWebP::ImageDataWebP(std::string filename, FILE* file, double scaleFactor)
 : filename(std::move(filename)) {
-	fseek(file, 0, SEEK_END);
+	if (fseek(file, 0, SEEK_END) != 0) {
+		throw std::runtime_error("Error reading " + this->filename);
+	}
 	auto filesize = ftell(file);
-	fseek(file, 0, SEEK_SET);
+	if (fseek(file, 0, SEEK_SET) != 0) {
+		throw std::runtime_error("Error reading " + this->filename);
+	}
 
 	std::vector<uint8_t> buf(filesize);
-	if (!fread(&buf[0], filesize, 1, file)) {
+	if (!fread(buf.data(), filesize, 1, file)) {
 		throw std::runtime_error(std::string("Couldn't open WebP file. (" + this->filename + ")"));
 	}
 
-	if (!WebPGetInfo(&buf[0], filesize, &imgWidth, &imgHeight)) {
+	if (!WebPGetInfo(buf.data(), filesize, &imgWidth, &imgHeight)) {
 		throw std::runtime_error(std::string("Invalid WebP file. (" + this->filename + ")"));
 	}
 
@@ -40,7 +44,7 @@ ImageDataWebP::ImageDataWebP(std::string filename, FILE* file, double scaleFacto
 #ifndef __EMSCRIPTEN__
 	thread = std::make_unique<std::thread>([this, buf{ std::move(buf) }, filesize]() mutable {
 #endif
-		result = WebPDecode(&buf[0], filesize, &config);
+		result = WebPDecode(buf.data(), filesize, &config);
 #ifndef __EMSCRIPTEN__
 	});
 #endif

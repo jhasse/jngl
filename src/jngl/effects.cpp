@@ -12,8 +12,7 @@ namespace jngl {
 
 Effect::~Effect() = default;
 
-Zoom::Zoom(std::function<float(float)> function)
-: function(std::move(function)) {
+Zoom::Zoom(std::function<float(float)> function) : function(std::move(function)) {
 }
 
 void Zoom::beginDraw() const {
@@ -38,7 +37,7 @@ void Executor::endDraw() const {
 }
 
 Executor::Action Executor::step() {
-	time += 1.f / float(getStepsPerSecond());
+	time += 1.f / static_cast<float>(getStepsPerSecond());
 	return function(time);
 }
 
@@ -47,7 +46,7 @@ Move::Move(Vec2 offset, std::function<float(float)> function)
 }
 
 Move::Action Move::step() {
-	time += 1.f / float(getStepsPerSecond());
+	time += 1.f / static_cast<float>(getStepsPerSecond());
 	progress = function(time);
 	return progress >= 1 ? Action::REMOVE_EFFECT : Action::NONE;
 }
@@ -72,11 +71,23 @@ float elastic(float t) {
 }
 
 float cubic(float t) {
-	return t < 0 ? 0 : t > 1 ? 1 : 1.f - std::pow(1.f - t, 3.f);
+	if (t < 0) {
+		return 0;
+	}
+	if (t > 1) {
+		return 1;
+	}
+	return 1.f - std::pow(1.f - t, 3.f);
 }
 
 float expo(float t) {
-	return t < 0 ? 0 : t >= 1 ? 1 : 1 - std::pow(2, -10 * t);
+	if (t < 0) {
+		return 0;
+	}
+	if (t >= 1) {
+		return 1;
+	}
+	return 1 - std::pow(2, -10 * t);
 }
 
 } // namespace easing

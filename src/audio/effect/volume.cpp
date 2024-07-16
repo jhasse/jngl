@@ -75,7 +75,7 @@ struct volume_control_stereo_impl : volume_control_stereo {
 	}
 
 	void rewind() override {
-		return stream_->rewind();
+		stream_->rewind();
 	}
 
 	bool isPlaying() const override {

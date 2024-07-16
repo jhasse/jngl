@@ -90,7 +90,7 @@ void App::mainLoop() {
 	debug("Starting main loop for '");
 	debug(impl->displayName);
 	debugLn('\'');
-	return pWindow->mainLoop();
+	pWindow->mainLoop();
 }
 
 bool App::isPixelArt() {

@@ -412,11 +412,11 @@ void setMouse(const jngl::Vec2 position) {
 }
 
 void setRelativeMouseMode(const bool relative) {
-	return pWindow->SetRelativeMouseMode(relative);
+	pWindow->SetRelativeMouseMode(relative);
 }
 
 void setMouseVisible(const bool visible) {
-	return pWindow->SetMouseVisible(visible);
+	pWindow->SetMouseVisible(visible);
 }
 
 bool isMouseVisible() {
@@ -428,7 +428,7 @@ bool getRelativeMouseMode() {
 }
 
 void setTitle(const std::string& title) {
-	return pWindow->SetTitle(title);
+	pWindow->SetTitle(title);
 }
 
 std::vector<float> readPixels() {

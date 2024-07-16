@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 struct THEORAPLAY_Io
 {
     long (*read)(THEORAPLAY_Io *io, void *buf, long buflen);
@@ -18,7 +20,7 @@ struct THEORAPLAY_Io
 struct THEORAPLAY_Decoder;
 
 /* YV12 is YCrCb, not YCbCr; that's what SDL uses for YV12 overlays. */
-enum THEORAPLAY_VideoFormat {
+enum THEORAPLAY_VideoFormat : uint8_t {
 	THEORAPLAY_VIDFMT_YV12, /* NTSC colorspace, planar YCrCb 4:2:0 */
 	THEORAPLAY_VIDFMT_IYUV, /* NTSC colorspace, planar YCbCr 4:2:0 */
 	THEORAPLAY_VIDFMT_RGB,  /* 24 bits packed pixel RGB */
