@@ -18,8 +18,8 @@ bool Vec2::isNull() const {
 }
 
 void Vec2::rotate(float angle) {
-	boost::qvm::mat<float, 2, 2> rotationMatrix = { std::cos(angle), -std::sin(angle),
-		                                            std::sin(angle), std::cos(angle) };
+	boost::qvm::mat<float, 2, 2> rotationMatrix = { { { std::cos(angle), -std::sin(angle) },
+		                                              { std::sin(angle), std::cos(angle) } } };
 	*this = rotationMatrix * *this;
 }
 
