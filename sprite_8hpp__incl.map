@@ -1,17 +1,18 @@
 <map id="jngl/sprite.hpp" name="jngl/sprite.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Sprite class and related functions." alt="" coords="369,5,512,31"/>
-<area shape="rect" id="node2" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="64,79,183,104"/>
-<area shape="rect" id="node3" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="113,152,200,177"/>
-<area shape="rect" id="node6" href="$Rgb_8hpp.html" title="Contains jngl::Rgb class." alt="" coords="259,79,337,104"/>
-<area shape="rect" id="node8" href="$ShaderProgram_8hpp.html" title="Contains jngl::ShaderProgram class." alt="" coords="361,79,520,104"/>
-<area shape="rect" id="node13" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/future.html" title=" " alt="" coords="544,79,615,104"/>
-<area shape="rect" id="node14" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/optional.html" title=" " alt="" coords="639,79,725,104"/>
-<area shape="rect" id="node15" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="749,79,820,104"/>
+<area shape="rect" id="node1" title="Contains jngl::Sprite class and related functions." alt="" coords="420,5,563,31"/>
+<area shape="rect" id="node2" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="129,79,248,104"/>
+<area shape="rect" id="node3" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="165,152,252,177"/>
+<area shape="rect" id="node6" href="$Rgb_8hpp.html" title="Contains jngl::Rgb class." alt="" coords="299,152,377,177"/>
+<area shape="rect" id="node8" href="$Rgba_8hpp.html" title="Contains jngl::Rgba class." alt="" coords="375,79,461,104"/>
+<area shape="rect" id="node9" href="$ShaderProgram_8hpp.html" title="Contains jngl::ShaderProgram class." alt="" coords="485,79,644,104"/>
+<area shape="rect" id="node14" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/future.html" title=" " alt="" coords="668,79,739,104"/>
+<area shape="rect" id="node15" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/optional.html" title=" " alt="" coords="763,79,849,104"/>
+<area shape="rect" id="node16" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="873,79,944,104"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,225,172,251"/>
 <area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="196,225,267,251"/>
-<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="241,152,320,177"/>
-<area shape="rect" id="node9" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="344,152,455,177"/>
-<area shape="rect" id="node11" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="479,152,549,177"/>
-<area shape="rect" id="node12" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="573,152,644,177"/>
-<area shape="rect" id="node10" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="348,225,451,251"/>
+<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="333,225,412,251"/>
+<area shape="rect" id="node10" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="453,152,564,177"/>
+<area shape="rect" id="node12" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="588,152,659,177"/>
+<area shape="rect" id="node13" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="683,152,753,177"/>
+<area shape="rect" id="node11" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="457,225,560,251"/>
 </map>
