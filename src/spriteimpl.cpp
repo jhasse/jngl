@@ -22,6 +22,10 @@ void setSpriteColor(Rgb color) {
 	gSpriteColor.setRgb(color);
 }
 
+void setSpriteColor(Rgba color) {
+	gSpriteColor = color;
+}
+
 std::stack<float> spriteAlphas;
 
 void pushSpriteAlpha(unsigned char alpha) {

@@ -6,6 +6,7 @@
 
 #include "Drawable.hpp"
 #include "Rgb.hpp"
+#include "Rgba.hpp"
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
 
@@ -266,6 +267,9 @@ void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue);
 
 /// Sets the global color used for drawing Sprites, leaves the alpha value untouched
 void setSpriteColor(Rgb);
+
+/// Sets the global color used for drawing Sprites
+void setSpriteColor(Rgba);
 
 void setSpriteAlpha(unsigned char alpha);
 
