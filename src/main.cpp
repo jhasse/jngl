@@ -460,6 +460,10 @@ void print(const std::string& text, const int xposition, const int yposition) {
 	pWindow->print(text, xposition, yposition);
 }
 
+void print(const Mat3& modelview, const std::string& text) {
+	pWindow->print(modelview, text);
+}
+
 int getFontSize() {
 	return pWindow->getFontSize();
 }

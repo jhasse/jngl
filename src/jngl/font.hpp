@@ -55,6 +55,9 @@ void print(const std::string& text, jngl::Vec2 position);
 /// Print \a text at { \a xposition, \a yposition }
 void print(const std::string& text, int xposition, int yposition);
 
+/// Print \a text using \a modelview
+void print(const Mat3& modelview, const std::string& text);
+
 /// Get the font size used by print()
 int getFontSize();
 

@@ -57,6 +57,10 @@ void Window::print(const std::string& text, const int xposition, const int yposi
 	getFontImpl()->print(ScaleablePixels(xposition), ScaleablePixels(yposition), text);
 }
 
+void Window::print(const Mat3& modelview, const std::string& text) {
+	getFontImpl()->print(modelview, text);
+}
+
 void Window::setFont(const std::string& filename) {
 	if (fonts_[fontSize_].find(filename) == fonts_[fontSize_].end()) {
 		auto font = std::make_shared<FontImpl>(filename, fontSize_, 0);

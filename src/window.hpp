@@ -82,6 +82,7 @@ public:
 	void SetMouse(int xposition, int yposition);
 	void SetTitle(const std::string& title);
 	void print(const std::string& text, int xposition, int yposition);
+	void print(const Mat3& modelview, const std::string& text);
 	int getFontSize() const;
 	void setFontSize(int size);
 	void setFont(const std::string&);
