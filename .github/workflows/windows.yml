@@ -17,32 +17,34 @@ jobs:
       run: cmake --build build --config Debug
     - name: Unittest (Debug)
       shell: bash
+      working-directory: build
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
       run: |
-        build/Debug/jngl-unittest Color
-        build/Debug/jngl-unittest Rgb
-        build/Debug/jngl-unittest Drawable
-        build/Debug/jngl-unittest ImageData
-        build/Debug/jngl-unittest FinallyTest
-        build/Debug/jngl-unittest halfLoadTest
-        build/Debug/jngl-unittest getBinaryPath
-        build/Debug/jngl-unittest readAsset
-        build/Debug/jngl-unittest Vec2
+        Debug/jngl-unittest Color
+        Debug/jngl-unittest Rgb
+        Debug/jngl-unittest Drawable
+        Debug/jngl-unittest ImageData
+        Debug/jngl-unittest FinallyTest
+        Debug/jngl-unittest halfLoadTest
+        Debug/jngl-unittest getBinaryPath
+        Debug/jngl-unittest readAsset
+        Debug/jngl-unittest Vec2
     - name: Build (Release)
       run: cmake --build build --config Release
     - name: Unittest (Release)
       shell: bash
+      working-directory: build
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
       run: |
-        build/Release/jngl-unittest Color
-        build/Release/jngl-unittest Rgb
-        build/Release/jngl-unittest Drawable
-        build/Release/jngl-unittest ImageData
-        build/Release/jngl-unittest FinallyTest
-        build/Release/jngl-unittest halfLoadTest
-        build/Release/jngl-unittest getBinaryPath
-        build/Release/jngl-unittest readAsset
-        build/Release/jngl-unittest Vec2
+        Release/jngl-unittest Color
+        Release/jngl-unittest Rgb
+        Release/jngl-unittest Drawable
+        Release/jngl-unittest ImageData
+        Release/jngl-unittest FinallyTest
+        Release/jngl-unittest halfLoadTest
+        Release/jngl-unittest getBinaryPath
+        Release/jngl-unittest readAsset
+        Release/jngl-unittest Vec2
 
   msvc:
     runs-on: windows-2022
@@ -59,32 +61,34 @@ jobs:
       run: cmake --build build --config Debug
     - name: Unittest (Debug)
       shell: bash
+      working-directory: build
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
       run: |
-        build/Debug/jngl-unittest Color
-        build/Debug/jngl-unittest Rgb
-        build/Debug/jngl-unittest Drawable
-        build/Debug/jngl-unittest ImageData
-        build/Debug/jngl-unittest FinallyTest
-        build/Debug/jngl-unittest halfLoadTest
-        build/Debug/jngl-unittest getBinaryPath
-        build/Debug/jngl-unittest readAsset
-        build/Debug/jngl-unittest Vec2
+        Debug/jngl-unittest Color
+        Debug/jngl-unittest Rgb
+        Debug/jngl-unittest Drawable
+        Debug/jngl-unittest ImageData
+        Debug/jngl-unittest FinallyTest
+        Debug/jngl-unittest halfLoadTest
+        Debug/jngl-unittest getBinaryPath
+        Debug/jngl-unittest readAsset
+        Debug/jngl-unittest Vec2
     - name: Build (Release)
       run: cmake --build build --config Release
     - name: Unittest (Release)
       shell: bash
+      working-directory: build
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
       run: |
-        build/Release/jngl-unittest Color
-        build/Release/jngl-unittest Rgb
-        build/Release/jngl-unittest Drawable
-        build/Release/jngl-unittest ImageData
-        build/Release/jngl-unittest FinallyTest
-        build/Release/jngl-unittest halfLoadTest
-        build/Release/jngl-unittest getBinaryPath
-        build/Release/jngl-unittest readAsset
-        build/Release/jngl-unittest Vec2
+        Release/jngl-unittest Color
+        Release/jngl-unittest Rgb
+        Release/jngl-unittest Drawable
+        Release/jngl-unittest ImageData
+        Release/jngl-unittest FinallyTest
+        Release/jngl-unittest halfLoadTest
+        Release/jngl-unittest getBinaryPath
+        Release/jngl-unittest readAsset
+        Release/jngl-unittest Vec2
     - name: Configure (UWP)
       run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore '-DCMAKE_SYSTEM_VERSION=10.0'
     - name: Build (UWP, Debug)
