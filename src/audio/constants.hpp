@@ -9,7 +9,11 @@
 
 namespace jngl::audio {
 
+#ifdef __EMSCRIPTEN__
+constexpr int frequency = 48000;
+#else
 constexpr int frequency = 44100;
+#endif
 constexpr float inv_frequency = 1.f / frequency;
 
 inline std::int64_t seconds_to_samples(float seconds) {
