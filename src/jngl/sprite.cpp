@@ -63,6 +63,16 @@ Sprite::Sprite(const ImageData& imageData, double scale, std::optional<std::stri
 	}
 }
 
+Sprite::Sprite(const uint8_t* const bytes, const size_t width, const size_t height) {
+	if (!pWindow) {
+		throw std::runtime_error("Window hasn't been created yet.");
+	}
+	texture = std::make_shared<Texture>(width, height, width, height, nullptr, GL_RGBA, bytes);
+	Drawable::width = static_cast<float>(width);
+	Drawable::height = static_cast<float>(height);
+	setCenter(0, 0);
+}
+
 Sprite::Sprite(const std::string& filename, LoadType loadType) : texture(getTexture(filename)) {
 	if (texture) {
 		width = texture->getPreciseWidth();

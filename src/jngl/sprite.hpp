@@ -51,6 +51,8 @@ public:
 	explicit Sprite(const ImageData&, double scale,
 	                std::optional<std::string_view> filename = std::nullopt);
 
+	Sprite(const uint8_t* bytes, size_t width, size_t height);
+
 	/// \deprecated Use Loader instead
 	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
 
