@@ -1,10 +1,11 @@
-// Copyright 2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "unicode.hpp"
 
 #include <codecvt>
 #include <locale>
+#include <string>
 
 namespace jngl {
 
