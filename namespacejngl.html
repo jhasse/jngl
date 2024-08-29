@@ -780,9 +780,8 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getTime</b> ()</td>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/io/basic_ostream.html">std::ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/io/basic_ostream.html">std::ostream</a> &amp;, const <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> &amp;)</td></tr>
 <tr class="memdesc:a8f2a6065db986b6043f28cab9ca7cefd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints the vector like this: [x=…, y=…]. <br /></td></tr>
 <tr class="separator:a8f2a6065db986b6043f28cab9ca7cefd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a067878c05abd87f38c0aa7de7bb9b3a5"><td class="memItemLeft" align="right" valign="top"><a id="a067878c05abd87f38c0aa7de7bb9b3a5" name="a067878c05abd87f38c0aa7de7bb9b3a5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>showWindow</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;title, int width, int height, bool fullscreen=false, <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair</a>&lt; int, int &gt; minAspectRatio={ 4, 3 }, <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair</a>&lt; int, int &gt; maxAspectRatio={ 16, 9 })</td></tr>
-<tr class="memdesc:a067878c05abd87f38c0aa7de7bb9b3a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the main window. <br /></td></tr>
+<tr class="memitem:a067878c05abd87f38c0aa7de7bb9b3a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a067878c05abd87f38c0aa7de7bb9b3a5">showWindow</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;title, int width, int height, bool fullscreen=false, <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair</a>&lt; int, int &gt; minAspectRatio={ 4, 3 }, <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair</a>&lt; int, int &gt; maxAspectRatio={ 16, 9 })</td></tr>
+<tr class="memdesc:a067878c05abd87f38c0aa7de7bb9b3a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the main window.  <a href="namespacejngl.html#a067878c05abd87f38c0aa7de7bb9b3a5">More...</a><br /></td></tr>
 <tr class="separator:a067878c05abd87f38c0aa7de7bb9b3a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d20c55145d6024abf036cc86e2e0380"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a6d20c55145d6024abf036cc86e2e0380">hideWindow</a> ()</td></tr>
 <tr class="memdesc:a6d20c55145d6024abf036cc86e2e0380"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans up the window and unloads everything.  <a href="namespacejngl.html#a6d20c55145d6024abf036cc86e2e0380">More...</a><br /></td></tr>
@@ -914,7 +913,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="window_8hpp_source.html#l00062">62</a> of file <a class="el" href="window_8hpp_source.html">window.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="window_8hpp_source.html#l00065">65</a> of file <a class="el" href="window_8hpp_source.html">window.hpp</a>.</p>
 
 </div>
 </div>
@@ -2394,6 +2393,61 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 
 <p>Sleep current thread for <em>milliseconds</em>. </p>
 <dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000018">Deprecated:</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
+
+</div>
+</div>
+<a id="a067878c05abd87f38c0aa7de7bb9b3a5" name="a067878c05abd87f38c0aa7de7bb9b3a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a067878c05abd87f38c0aa7de7bb9b3a5">&#9670;&#160;</a></span>showWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void showWindow </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;&#160;</td>
+          <td class="paramname"><em>title</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>height</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>fullscreen</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair</a>&lt; int, int &gt;&#160;</td>
+          <td class="paramname"><em>minAspectRatio</em> = <code>{&#160;4,&#160;3&#160;}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/pair.html">std::pair</a>&lt; int, int &gt;&#160;</td>
+          <td class="paramname"><em>maxAspectRatio</em> = <code>{&#160;16,&#160;9&#160;}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates the main window. </p>
+<p >If you haven't set a display name for your app using <a class="el" href="structjngl_1_1AppParameters.html#abd54db44deb77f599f600479aea631a3" title="Display name of the application which will be used in the window title for example.">AppParameters::displayName</a>, <em>title</em> will set for the display name. </p>
 
 </div>
 </div>
