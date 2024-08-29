@@ -211,12 +211,41 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>openURL</b> (const <a
 int&#160;</td><td class="memItemRight" valign="bottom"><b>round</b> (double v)</td></tr>
 <tr class="memdesc:a4f88724782bbc719f5283fdde860e429"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rounds a double to an integer, just like <a class="elRef" href="http://en.cppreference.com/w/cpp/numeric/math/round.html">std::lround</a>. <br /></td></tr>
 <tr class="separator:a4f88724782bbc719f5283fdde860e429"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67f578ae7b31a18af696c75231554372"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="other_8hpp.html#a67f578ae7b31a18af696c75231554372">getConfigPath</a> ()</td></tr>
+<tr class="memdesc:a67f578ae7b31a18af696c75231554372"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the directory where to store configuration files and save games.  <a href="other_8hpp.html#a67f578ae7b31a18af696c75231554372">More...</a><br /></td></tr>
+<tr class="separator:a67f578ae7b31a18af696c75231554372"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Miscellaneous functions. </p>
 
 <p class="definition">Definition in file <a class="el" href="other_8hpp_source.html">other.hpp</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a67f578ae7b31a18af696c75231554372" name="a67f578ae7b31a18af696c75231554372"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67f578ae7b31a18af696c75231554372">&#9670;&#160;</a></span>getConfigPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> getConfigPath </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the directory where to store configuration files and save games. </p>
+<ul>
+<li>Windows: <code>%AppData%/Display Name/</code></li>
+<li>Linux: <code>~/.config/Display Name/</code></li>
+<li>macOS: <code>~/Library/Application Support/Display Name/</code></li>
+<li>Android/iOS: Data path provided by the OS </li>
+</ul>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- HTML footer for doxygen 1.9.1-->
 <!-- start footer part -->
 </body>
