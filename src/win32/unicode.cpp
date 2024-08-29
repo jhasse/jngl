@@ -5,7 +5,6 @@
 
 #include <codecvt>
 #include <locale>
-#include <string>
 
 namespace jngl {
 
