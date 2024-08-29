@@ -127,4 +127,16 @@ void openURL(const std::string&);
 /// Rounds a double to an integer, just like std::lround
 int round(double v);
 
+namespace internal {
+
+/// Returns the directory where to store configuration files and save games.
+///
+/// - Windows: `%%AppData%/Display Name/`
+/// - Linux: `~/.config/Display Name/`
+/// - macOS: `~/Library/Application Support/Display Name/`
+/// - Android/iOS: Data path provided by the OS
+std::string getConfigPath();
+
+} // namespace internal
+
 } // namespace jngl

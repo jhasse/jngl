@@ -666,7 +666,7 @@ void setConfigPath(const std::string& path) {
 	}
 }
 
-std::string _getConfigPath() {
+std::string internal::getConfigPath() {
 	if (configPath) {
 		return *configPath;
 	}
@@ -697,7 +697,7 @@ std::vector<std::string> getArgs() {
 }
 
 std::string getConfigPath() {
-	return _getConfigPath();
+	return internal::getConfigPath();
 }
 
 std::stringstream readAsset(const std::string& filename) {
@@ -749,10 +749,10 @@ std::string readConfig(const std::string& key) {
 	}
 
 #ifdef _WIN32
-	std::filesystem::path p = u8path(_getConfigPath() + key);
+	std::filesystem::path p = u8path(internal::getConfigPath() + key);
 	std::ifstream fin(p, std::ios::binary);
 #else
-	std::ifstream fin(_getConfigPath() + key, std::ios::binary);
+	std::ifstream fin(internal::getConfigPath() + key, std::ios::binary);
 #endif
 
 	std::string out;
@@ -773,24 +773,24 @@ void writeConfig(const std::string& key, const std::string& value) {
 	auto it = std::find(key.begin(), key.end(), '/');
 	while (it != key.end()) {
 		std::string directory(key.begin(), it);
-		if (mkdir((_getConfigPath() + directory).c_str(), 755) != 0 && errno != EEXIST) {
+		if (mkdir((internal::getConfigPath() + directory).c_str(), 755) != 0 && errno != EEXIST) {
 			throw std::runtime_error("Couldn't create " + directory);
 		}
 		it = std::find(it + 1, key.end(), '/');
 	}
 #endif
 #ifdef HAVE_FILESYSTEM
-	const auto configPath = u8path(_getConfigPath());
+	const auto configPath = u8path(internal::getConfigPath());
 	const auto directory = (configPath / u8path(key)).parent_path();
 	if (!std::filesystem::exists(directory)) {
 		std::filesystem::create_directories(directory);
 	}
 #endif
 #ifdef _WIN32
-	std::filesystem::path p = u8path(_getConfigPath() + key);
+	std::filesystem::path p = u8path(internal::getConfigPath() + key);
 	std::ofstream fout(p, std::ios::binary);
 #else
-	std::ofstream fout(_getConfigPath() + key, std::ios::binary);
+	std::ofstream fout(internal::getConfigPath() + key, std::ios::binary);
 #endif
 	fout.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	fout << value;
