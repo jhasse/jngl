@@ -1,7 +1,7 @@
 # Just a Neat Game Library
 
 Easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox, the Nintendo
-Switch<sup><a href="#fn1">1</a></sup> and the Web.
+Switch<sup><a href="#fn1">1</a></sup>, LG webOS and the Web.
 
 * [GitHub](https://github.com/jhasse/jngl)
 * [Try JNGL in your browser](https://jhasse.gitlab.io/ggj2021)
