@@ -46,7 +46,7 @@ public:
 	/// returns true if both x and y are exactly 0
 	bool isNull() const;
 
-	/// rotates the vector clock-wise
+	/// rotates the vector clock-wise by \a angle (radian)
 	void rotate(float angle);
 
 	/// Helper function to use with cereal or Boost.Serialization

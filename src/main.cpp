@@ -264,6 +264,9 @@ void showWindow(const std::string& title, const int width, const int height, boo
 		throw std::runtime_error("Height Is 0");
 	}
 	pWindow.Set(new Window(title, width, height, fullscreen, minAspectRatio, maxAspectRatio));
+	if (App::instance().getDisplayName().empty()) {
+		App::instance().setDisplayName(title);
+	}
 	pWindow->SetMouseVisible(isMouseVisible);
 	setAntiAliasing(antiAliasingEnabled);
 	pWindow->initGlObjects();

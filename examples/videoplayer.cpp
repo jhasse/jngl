@@ -18,4 +18,5 @@ JNGL_MAIN_BEGIN {
 		}
 		jngl::swapBuffers();
 	}
+	jngl::trace("quit");
 } JNGL_MAIN_END

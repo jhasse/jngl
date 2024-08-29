@@ -76,7 +76,7 @@ void App::callAtExitFunctions() {
 }
 
 std::string App::getDisplayName() const {
-	return impl->displayName;
+	return impl ? impl->displayName : "";
 }
 
 void App::setDisplayName(const std::string& displayName) {
