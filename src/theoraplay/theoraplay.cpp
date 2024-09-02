@@ -382,11 +382,22 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                         item->format = ctx->vidfmt;
 
 						if (!ctx->ringBuffer) {
-							ringBufferSize = (ctx->maxframes + 1) * item->width * item->height * 2;
-							jngl::debug("Allocating ");
-							jngl::debug(ringBufferSize / 1024 / 1024);
-							jngl::debugLn(" MB.");
-							ctx->ringBuffer = std::make_unique<uint8_t[]>(ringBufferSize);
+							while (true) {
+								ringBufferSize = static_cast<size_t>(ctx->maxframes + 1) *
+								                 item->width * item->height * 2;
+								jngl::debug("Allocating ");
+								jngl::debug(ringBufferSize / 1024 / 1024);
+								jngl::debugLn(" MB.");
+								try {
+									ctx->ringBuffer = std::make_unique<uint8_t[]>(ringBufferSize);
+									break;
+								} catch (std::bad_alloc&) {
+									ctx->maxframes /= 2;
+									if (ctx->maxframes < 1) {
+										throw;
+									}
+								}
+							}
 						}
 						item->pixels = &ctx->ringBuffer[ringBufferPos];
 						ringBufferPos += item->width * item->height * 2;
