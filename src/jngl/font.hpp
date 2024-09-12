@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Rgb.hpp"
+#include "Rgba.hpp"
 #include "Vec2.hpp"
 
 #include <memory>
@@ -86,6 +87,9 @@ void setFont(const std::string& filename);
 /// \note Not supported on iOS, Switch, Xbox, and Web. Falls back to using "Arial.ttf" on those
 /// platforms.
 void setFontByName(const std::string& name);
+
+/// Sets the color and alpha value of the currently active font
+void setFontColor(Rgba);
 
 /// Sets the color of the currently active font and the alpha value
 ///

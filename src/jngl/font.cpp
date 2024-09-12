@@ -13,6 +13,10 @@ namespace jngl {
 
 Rgba gFontColor{ 0, 0, 0, 1 };
 
+void setFontColor(const Rgba color) {
+	gFontColor = color;
+}
+
 void setFontColor(const Rgb color, float alpha) {
 	gFontColor = Rgba(color, Alpha(alpha));
 }
