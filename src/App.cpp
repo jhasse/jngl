@@ -80,6 +80,9 @@ std::string App::getDisplayName() const {
 }
 
 void App::setDisplayName(const std::string& displayName) {
+	if (!impl) { // e.g. Android when using showWindow without jnglInit
+		new Finally(init({})); // leak
+	}
 	impl->displayName = displayName;
 }
 
