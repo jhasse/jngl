@@ -54,7 +54,7 @@ App& App::instance() {
 Finally App::init(AppParameters params) {
 	assert(impl == nullptr);
 	impl = std::make_unique<App::Impl>(
-	    App::Impl{ std::move(params.displayName), params.pixelArt, params.steamAppId });
+	    App::Impl{ std::move(params.displayName), params.pixelArt, params.steamAppId, {} });
 	return Finally{ [this]() { impl.reset(); } };
 }
 

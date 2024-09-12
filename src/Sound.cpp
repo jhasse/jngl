@@ -21,7 +21,7 @@ struct Sound::Impl {
 };
 
 Sound::Sound(std::vector<float>& bufferData, long frequency)
-: impl(new Impl{ load_raw(bufferData)->play() }) {
+: impl(new Impl{ load_raw(bufferData)->play(), {}, {} }) {
 	std::shared_ptr<Stream> stream = impl->track;
 	if (frequency != jngl::audio::frequency) {
 		stream =
