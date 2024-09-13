@@ -3,6 +3,7 @@
 
 #include "Video.hpp"
 
+#include <atomic>
 #include <cstring>
 #include <mutex>
 #include <stdexcept>
@@ -12,7 +13,6 @@
 #include "../audio.hpp"
 #include "../audio/constants.hpp"
 #include "../audio/effect/pitch.hpp"
-#include "../audio/mixer.hpp"
 #include "../main.hpp"
 #include "../opengl.hpp"
 #include "../theoraplay/theoraplay.h"

@@ -37,26 +37,25 @@ void ConvertVideoFrame420ToIYUV(const th_info* tinfo, const th_ycbcr_buffer ycbc
 	const int p0 = 0;
 	const int p1 = 1;
 	const int p2 = 2;
-    int i;
-    const int w = tinfo->pic_width;
-    const int h = tinfo->pic_height;
-    const int yoff = (tinfo->pic_x & ~1) + ycbcr[0].stride * (tinfo->pic_y & ~1);
-    const int uvoff = (tinfo->pic_x / 2) + (ycbcr[1].stride) * (tinfo->pic_y / 2);
+	const uint32_t w = tinfo->pic_width;
+	const uint32_t h = tinfo->pic_height;
+	const uint32_t yoff = (tinfo->pic_x & ~1) + ycbcr[0].stride * (tinfo->pic_y & ~1);
+	const uint32_t uvoff = (tinfo->pic_x / 2) + (ycbcr[1].stride) * (tinfo->pic_y / 2);
     const unsigned char *p0data = ycbcr[p0].data + yoff;
-    const int p0stride = ycbcr[p0].stride;
+	const uint32_t p0stride = ycbcr[p0].stride;
     const unsigned char *p1data = ycbcr[p1].data + uvoff;
-    const int p1stride = ycbcr[p1].stride;
+	const uint32_t p1stride = ycbcr[p1].stride;
     const unsigned char *p2data = ycbcr[p2].data + uvoff;
-    const int p2stride = ycbcr[p2].stride;
+	const uint32_t p2stride = ycbcr[p2].stride;
 
-	for (i = 0; i < h; i++, dst += w) {
-		memcpy(dst, p0data + (p0stride * i), w);
+	for (int i = 0; i < h; ++i, dst += w) {
+		memcpy(dst, p0data + static_cast<ptrdiff_t>(p0stride * i), w);
 	}
-	for (i = 0; i < (h / 2); i++, dst += w / 2) {
-		memcpy(dst, p1data + (p1stride * i), w / 2);
+	for (int i = 0; i < (h / 2); ++i, dst += w / 2) {
+		memcpy(dst, p1data + static_cast<ptrdiff_t>(p1stride * i), w / 2);
 	}
-	for (i = 0; i < (h / 2); i++, dst += w / 2) {
-		memcpy(dst, p2data + (p2stride * i), w / 2);
+	for (int i = 0; i < (h / 2); ++i, dst += w / 2) {
+		memcpy(dst, p2data + static_cast<ptrdiff_t>(p2stride * i), w / 2);
 	}
 }
 
