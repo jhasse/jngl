@@ -33,7 +33,7 @@ android {
             path 'src/main/cpp/CMakeLists.txt'
         }
     }
-    ndkVersion '27.0.12077973'
+    ndkVersion '27.1.12297006'
     namespace 'com.bixense.jngl_test'
 }
 
