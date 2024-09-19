@@ -12,6 +12,7 @@
 #include "../spriteimpl.hpp"
 #include "../texture.hpp"
 #include "../windowptr.hpp"
+#include "Alpha.hpp"
 #include "debug.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
@@ -172,6 +173,10 @@ void Sprite::draw() const {
 }
 
 void Sprite::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) const {
+	draw(modelview, Alpha(gSpriteColor.getAlpha()), shaderProgram);
+}
+
+void Sprite::draw(Mat3 modelview, Alpha alpha, const ShaderProgram* const shaderProgram) const {
 	modelview *=
 	    boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. }));
 	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
@@ -180,7 +185,7 @@ void Sprite::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) cons
 		                   modelview.data);
 	} else {
 		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), alpha.getAlpha());
 		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	texture->draw();

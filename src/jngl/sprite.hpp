@@ -121,6 +121,7 @@ public:
 	///
 	/// \param shaderProgram Passing `nullptr` uses the default.
 	void draw(Mat3 modelview, const ShaderProgram* = nullptr) const;
+	void draw(Mat3 modelview, Alpha, const ShaderProgram* = nullptr) const;
 
 	void draw(const ShaderProgram* shaderProgram) const;
 
