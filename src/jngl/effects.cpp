@@ -19,9 +19,6 @@ void Zoom::beginDraw() const {
 	jngl::scale(function(time));
 }
 
-void Zoom::endDraw() const {
-}
-
 Zoom::Action Zoom::step() {
 	time += 1.f / static_cast<float>(getStepsPerSecond());
 	return Action::NONE;
@@ -31,9 +28,6 @@ Executor::Executor(std::function<Action(float)> function) : function(std::move(f
 }
 
 void Executor::beginDraw() const {
-}
-
-void Executor::endDraw() const {
 }
 
 Executor::Action Executor::step() {
@@ -53,9 +47,6 @@ Move::Action Move::step() {
 
 void Move::beginDraw() const {
 	jngl::translate(offset * (1 - progress));
-}
-
-void Move::endDraw() const {
 }
 
 namespace easing {

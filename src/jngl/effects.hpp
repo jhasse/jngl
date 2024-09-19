@@ -22,7 +22,6 @@ public:
 	virtual ~Effect();
 	[[nodiscard]] virtual Action step() = 0;
 	virtual void beginDraw() const = 0;
-	virtual void endDraw() const = 0;
 };
 
 /// Scales the ModelView matrix
@@ -32,7 +31,6 @@ public:
 	explicit Zoom(std::function<float(float)>);
 	Action step() override;
 	void beginDraw() const override;
-	void endDraw() const override;
 
 private:
 	std::function<float(float)> function;
@@ -47,7 +45,6 @@ public:
 
 	/// Does nothing
 	void beginDraw() const override;
-	void endDraw() const override;
 
 private:
 	std::function<Action(float)> function;
@@ -59,7 +56,6 @@ public:
 	explicit Move(Vec2 offset, std::function<float(float)>);
 	Action step() override;
 	void beginDraw() const override;
-	void endDraw() const override;
 
 private:
 	Vec2 offset;
