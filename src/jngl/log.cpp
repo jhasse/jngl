@@ -23,6 +23,20 @@ void trace(const std::string& line) {
 	printMessage(tmp.str());
 }
 
+void info(const std::string& line) {
+	std::ostringstream tmp;
+	if (auto displayName = App::instance().getDisplayName(); !displayName.empty()) {
+		tmp << '[';
+		if (displayName.size() > 4) {
+			tmp << displayName.substr(0, 3) << "…]";
+		} else {
+			tmp << displayName << ']';
+		}
+	}
+	tmp << "[\x1b[1;34minfo\x1b[0m] " << line << '\n';
+	printMessage(tmp.str());
+}
+
 void warn(const std::string& line) {
 	std::ostringstream tmp;
 	if (auto displayName = App::instance().getDisplayName(); !displayName.empty()) {
@@ -34,6 +48,20 @@ void warn(const std::string& line) {
 		}
 	}
 	tmp << "[\x1b[1;33mwarn\x1b[0m] " << line << '\n';
+	printMessage(tmp.str());
+}
+
+void error(const std::string& line) {
+	std::ostringstream tmp;
+	if (auto displayName = App::instance().getDisplayName(); !displayName.empty()) {
+		tmp << '[';
+		if (displayName.size() > 4) {
+			tmp << displayName.substr(0, 3) << "…]";
+		} else {
+			tmp << displayName << ']';
+		}
+	}
+	tmp << "[\x1b[1;31merror\x1b[0m] " << line << '\n';
 	printMessage(tmp.str());
 }
 
