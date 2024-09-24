@@ -1,5 +1,7 @@
 <map id="Label" name="Label">
-<area shape="rect" id="node1" title="Simple Widget displaying a line of text." alt="" coords="9,168,72,193"/>
-<area shape="rect" id="node2" href="$classjngl_1_1Widget.html" title=" " alt="" coords="5,93,76,119"/>
-<area shape="rect" id="node3" href="$classjngl_1_1Vec2.html" title="Two&#45;dimensional vector." alt="" coords="13,5,68,31"/>
+<area shape="rect" id="Node000001" title="Simple Widget displaying a line of text." alt="" coords="9,169,71,195"/>
+<area shape="rect" id="Node000002" href="$classjngl_1_1Widget.html" title=" " alt="" coords="5,94,75,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="43,135,43,169,37,169,37,135"/>
+<area shape="rect" id="Node000003" href="$classjngl_1_1Vec2.html" title="Two&#45;dimensional vector." alt="" coords="13,5,67,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="43,47,43,94,37,94,37,47"/>
 </map>

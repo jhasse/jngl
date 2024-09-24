@@ -1,5 +1,7 @@
 <map id="jngl/Mat3.hpp" name="jngl/Mat3.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Mat3 class." alt="" coords="116,5,243,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,79,172,104"/>
-<area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/initializer_list.html" title=" " alt="" coords="196,79,347,104"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Mat3 class." alt="" coords="116,5,241,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,171,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,34,117,72,113,67,162,29"/>
+<area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/initializer_list.html" title=" " alt="" coords="195,79,344,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="196,29,244,67,241,72,192,34"/>
 </map>

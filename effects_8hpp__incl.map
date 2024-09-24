@@ -1,8 +1,13 @@
 <map id="jngl/effects.hpp" name="jngl/effects.hpp">
-<area shape="rect" id="node1" title="Effects that can be applied to jngl::Widget." alt="" coords="195,5,337,31"/>
-<area shape="rect" id="node2" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="116,79,203,104"/>
-<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="227,79,305,104"/>
-<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="329,79,432,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,152,172,177"/>
-<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="196,152,267,177"/>
+<area shape="rect" id="Node000001" title="Effects that can be applied to jngl::Widget." alt="" coords="193,5,335,31"/>
+<area shape="rect" id="Node000002" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="116,79,201,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="248,34,191,72,188,68,245,29"/>
+<area shape="rect" id="Node000005" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="225,79,303,105"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="267,31,267,63,261,63,261,31"/>
+<area shape="rect" id="Node000006" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="327,79,428,105"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="285,29,347,68,344,73,282,34"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,153,171,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="149,107,112,143,109,140,145,103"/>
+<area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="195,153,264,178"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="172,103,209,140,205,143,168,107"/>
 </map>

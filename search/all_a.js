@@ -8,6 +8,6 @@ var searchData=
   ['job_2ehpp_5',['job.hpp',['../job_8hpp.html',1,'']]],
   ['join_6',['join',['http://en.cppreference.com/w/cpp/thread/jthread/join.html',1,'std::jthread::join()'],['http://en.cppreference.com/w/cpp/thread/thread/join.html',1,'std::thread::join()']]],
   ['joinable_7',['joinable',['http://en.cppreference.com/w/cpp/thread/jthread/joinable.html',1,'std::jthread::joinable()'],['http://en.cppreference.com/w/cpp/thread/thread/joinable.html',1,'std::thread::joinable()']]],
-  ['jthread_8',['jthread',['http://en.cppreference.com/w/cpp/thread/jthread/jthread.html',1,'std::jthread::jthread()'],['http://en.cppreference.com/w/cpp/thread/jthread.html',1,'jthread']]],
+  ['jthread_8',['jthread',['http://en.cppreference.com/w/cpp/thread/jthread.html',1,'jthread'],['http://en.cppreference.com/w/cpp/thread/jthread/jthread.html',1,'std::jthread::jthread()']]],
   ['just_20a_20neat_20game_20library_9',['Just a Neat Game Library',['../index.html',1,'']]]
 ];

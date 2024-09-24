@@ -1,5 +1,8 @@
 <map id="jngl/Widget.hpp" name="jngl/Widget.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Container class." alt="" coords="5,5,148,31"/>
-<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="33,152,120,177"/>
-<area shape="rect" id="node3" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="63,79,197,104"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Container class." alt="" coords="5,5,147,31"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="33,153,119,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="64,45,53,74,52,104,61,130,71,151,67,154,56,132,47,105,48,73,59,44"/>
+<area shape="rect" id="Node000003" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="61,79,195,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="96,42,121,77,117,80,91,45"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="113,119,87,154,83,151,108,116"/>
 </map>

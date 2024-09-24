@@ -1,5 +1,8 @@
 <map id="jngl/ShaderProgram.hpp" name="jngl/ShaderProgram.hpp">
-<area shape="rect" id="node1" title="Contains jngl::ShaderProgram class." alt="" coords="5,5,204,31"/>
-<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="61,152,148,177"/>
-<area shape="rect" id="node3" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="88,79,231,104"/>
+<area shape="rect" id="Node000001" title="Contains jngl::ShaderProgram class." alt="" coords="5,5,203,31"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="61,153,147,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,46,79,80,78,99,82,119,98,151,93,153,77,120,72,100,73,78,87,44"/>
+<area shape="rect" id="Node000003" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="88,79,229,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="124,41,152,77,147,80,120,45"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="143,118,115,154,111,151,138,115"/>
 </map>

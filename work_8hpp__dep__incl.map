@@ -1,5 +1,8 @@
 <map id="jngl/work.hpp" name="jngl/work.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,132,31"/>
-<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="25,152,112,177"/>
-<area shape="rect" id="node3" href="$WorkFactory_8hpp.html" title=" " alt="" coords="43,79,225,104"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,131,31"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="25,153,111,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="50,45,32,80,31,99,37,119,59,151,54,154,32,121,26,100,27,78,45,42"/>
+<area shape="rect" id="Node000003" href="$WorkFactory_8hpp.html" title=" " alt="" coords="41,79,223,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="91,40,123,77,119,80,87,44"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="113,118,81,154,77,150,109,114"/>
 </map>

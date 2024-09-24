@@ -1,6 +1,9 @@
 <map id="jngl/Container.hpp" name="jngl/Container.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Container class." alt="" coords="40,5,207,31"/>
-<area shape="rect" id="node2" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="5,79,76,104"/>
-<area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/set.html" title=" " alt="" coords="100,79,147,104"/>
-<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="171,79,241,104"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Container class." alt="" coords="39,5,204,31"/>
+<area shape="rect" id="Node000002" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="5,79,75,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,34,67,71,63,67,106,30"/>
+<area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/set.html" title=" " alt="" coords="99,79,144,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="124,31,124,63,119,63,119,31"/>
+<area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="168,79,237,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="137,30,179,67,176,71,133,34"/>
 </map>

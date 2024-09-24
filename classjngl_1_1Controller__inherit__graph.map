@@ -1,4 +1,5 @@
 <map id="Controller" name="Controller">
-<area shape="rect" id="node1" title="Object representing one Gamepad controller." alt="" coords="41,93,144,119"/>
-<area shape="rect" id="node2" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/memory/enable_shared_from_this.html" title=" " alt="" coords="5,5,180,45"/>
+<area shape="rect" id="Node000001" title="Object representing one Gamepad controller." alt="" coords="41,94,143,120"/>
+<area shape="rect" id="Node000002" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/memory/enable_shared_from_this.html" title=" " alt="" coords="5,5,179,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,62,95,93,89,93,89,62"/>
 </map>

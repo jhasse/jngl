@@ -1,8 +1,18 @@
 <map id="jngl/Drawable.hpp" name="jngl/Drawable.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Drawable class." alt="" coords="75,5,234,31"/>
-<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="166,225,253,251"/>
-<area shape="rect" id="node3" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="134,79,293,104"/>
-<area shape="rect" id="node5" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="29,152,171,177"/>
-<area shape="rect" id="node6" href="$text_8hpp.html" title=" " alt="" coords="317,79,443,104"/>
-<area shape="rect" id="node4" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="247,152,382,177"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Drawable class." alt="" coords="73,5,230,31"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="164,226,249,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,41,72,67,32,101,18,120,10,139,9,158,18,177,32,192,48,204,86,222,126,232,164,235,163,241,126,237,84,227,45,209,28,196,14,180,4,159,5,138,14,117,29,98,69,63,112,36"/>
+<area shape="rect" id="Node000003" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="132,79,289,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="173,41,203,77,199,80,169,45"/>
+<area shape="rect" id="Node000005" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="28,153,169,178"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="139,46,122,80,110,120,103,153,98,152,105,118,117,78,134,43"/>
+<area shape="rect" id="Node000006" href="$text_8hpp.html" title=" " alt="" coords="313,79,438,105"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="205,34,338,76,337,81,203,39"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="212,120,209,226,204,226,207,120"/>
+<area shape="rect" id="Node000004" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="244,153,377,178"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="241,112,295,150,292,154,238,116"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="282,189,226,228,223,224,279,185"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="131,185,190,224,187,228,128,190"/>
+<area shape="poly" id="edge9_Node000006_Node000002" title=" " alt="" coords="391,118,399,149,398,165,391,180,361,208,325,226,286,236,250,240,249,235,285,230,323,221,358,203,387,177,393,164,394,149,386,119"/>
+<area shape="poly" id="edge10_Node000006_Node000004" title=" " alt="" coords="357,118,323,154,320,150,353,114"/>
 </map>

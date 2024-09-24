@@ -1,5 +1,7 @@
 <map id="jngl/Color.hpp" name="jngl/Color.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Color class." alt="" coords="5,5,140,31"/>
-<area shape="rect" id="node2" href="$Rgb_8hpp.html" title="Contains jngl::Rgb class." alt="" coords="33,79,112,104"/>
-<area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="33,152,112,177"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Color class." alt="" coords="5,5,139,31"/>
+<area shape="rect" id="Node000002" href="$Rgb_8hpp.html" title="Contains jngl::Rgb class." alt="" coords="33,79,111,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,31,75,63,69,63,69,31"/>
+<area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="33,153,111,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="75,105,75,137,69,137,69,105"/>
 </map>

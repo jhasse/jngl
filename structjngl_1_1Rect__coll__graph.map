@@ -1,4 +1,5 @@
 <map id="Rect" name="Rect">
-<area shape="rect" id="node1" title="Simple struct for a rectangle, can be use with jngl::contains." alt="" coords="5,108,60,133"/>
-<area shape="rect" id="node2" href="$classjngl_1_1Vec2.html" title="Two&#45;dimensional vector." alt="" coords="5,5,60,31"/>
+<area shape="rect" id="Node000001" title="Simple struct for a rectangle, can be use with jngl::contains." alt="" coords="5,109,59,135"/>
+<area shape="rect" id="Node000002" href="$classjngl_1_1Vec2.html" title="Two&#45;dimensional vector." alt="" coords="5,5,59,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="35,47,35,109,29,109,29,47"/>
 </map>

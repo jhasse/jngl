@@ -1,4 +1,5 @@
 <map id="Label" name="Label">
-<area shape="rect" id="node1" title="Simple Widget displaying a line of text." alt="" coords="9,79,72,104"/>
-<area shape="rect" id="node2" href="$classjngl_1_1Widget.html" title=" " alt="" coords="5,5,76,31"/>
+<area shape="rect" id="Node000001" title="Simple Widget displaying a line of text." alt="" coords="9,79,71,105"/>
+<area shape="rect" id="Node000002" href="$classjngl_1_1Widget.html" title=" " alt="" coords="5,5,75,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="43,46,43,79,37,79,37,46"/>
 </map>

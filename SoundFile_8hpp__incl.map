@@ -1,8 +1,13 @@
 <map id="jngl/SoundFile.hpp" name="jngl/SoundFile.hpp">
-<area shape="rect" id="node1" title="Contains jngl::SoundFile class." alt="" coords="147,5,313,31"/>
-<area shape="rect" id="node2" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/future.html" title=" " alt="" coords="5,79,76,104"/>
-<area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="100,79,171,104"/>
-<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="195,79,265,104"/>
-<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="289,79,360,104"/>
-<area shape="rect" id="node6" title=" " alt="" coords="384,79,575,104"/>
+<area shape="rect" id="Node000001" title="Contains jngl::SoundFile class." alt="" coords="144,5,309,31"/>
+<area shape="rect" id="Node000002" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/future.html" title=" " alt="" coords="5,79,75,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,34,87,75,85,70,194,29"/>
+<area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="99,79,168,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="212,34,163,72,159,67,209,29"/>
+<area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="192,79,261,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="229,31,229,63,224,63,224,31"/>
+<area shape="rect" id="Node000005" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="285,79,355,105"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="244,29,294,67,291,72,241,34"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="379,79,568,105"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="269,29,417,72,416,77,268,34"/>
 </map>

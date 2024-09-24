@@ -1,5 +1,7 @@
 <map id="jngl/job.hpp" name="jngl/job.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Job class and related functions." alt="" coords="52,5,171,31"/>
-<area shape="rect" id="node2" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="5,79,108,104"/>
-<area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="132,79,203,104"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Job class and related functions." alt="" coords="52,5,169,31"/>
+<area shape="rect" id="Node000002" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="5,79,107,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,33,76,68,72,65,100,30"/>
+<area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="131,79,200,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="122,30,149,65,145,68,118,33"/>
 </map>

@@ -1,6 +1,9 @@
 <map id="jngl/debug.hpp" name="jngl/debug.hpp">
-<area shape="rect" id="node1" title="Logging functions for debug purposes." alt="" coords="52,5,187,31"/>
-<area shape="rect" id="node2" href="$message_8hpp.html" title=" " alt="" coords="5,79,116,104"/>
-<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/sstream.html" title=" " alt="" coords="140,79,219,104"/>
-<area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="25,152,96,177"/>
+<area shape="rect" id="Node000001" title="Logging functions for debug purposes." alt="" coords="52,5,185,31"/>
+<area shape="rect" id="Node000002" href="$message_8hpp.html" title=" " alt="" coords="5,79,115,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,33,81,69,77,65,107,30"/>
+<area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/sstream.html" title=" " alt="" coords="139,79,216,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="130,30,160,65,156,69,126,33"/>
+<area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="25,153,95,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="63,105,63,137,57,137,57,105"/>
 </map>

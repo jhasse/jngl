@@ -1,7 +1,12 @@
 <map id="jngl/WorkFactory.hpp" name="jngl/WorkFactory.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="37,5,220,31"/>
-<area shape="rect" id="node2" href="$work_8hpp.html" title=" " alt="" coords="85,79,172,104"/>
-<area shape="rect" id="node3" href="$job_8hpp.html" title="Contains jngl::Job class and related functions." alt="" coords="51,152,129,177"/>
-<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="132,225,203,251"/>
-<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="5,225,108,251"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="36,5,217,31"/>
+<area shape="rect" id="Node000002" href="$work_8hpp.html" title=" " alt="" coords="84,79,169,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,31,129,63,124,63,124,31"/>
+<area shape="rect" id="Node000003" href="$job_8hpp.html" title="Contains jngl::Job class and related functions." alt="" coords="51,153,128,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="123,106,105,140,100,138,118,104"/>
+<area shape="rect" id="Node000005" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="131,226,200,252"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="132,104,161,211,156,212,127,106"/>
+<area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="5,226,107,252"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="86,180,71,213,66,211,81,177"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="104,177,143,214,140,218,100,181"/>
 </map>

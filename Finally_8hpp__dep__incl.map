@@ -1,11 +1,24 @@
 <map id="jngl/Finally.hpp" name="jngl/Finally.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Finally class." alt="" coords="340,5,491,31"/>
-<area shape="rect" id="node2" href="$Channel_8hpp.html" title="Contains jngl::Channel class." alt="" coords="5,152,156,177"/>
-<area shape="rect" id="node4" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="180,152,355,177"/>
-<area shape="rect" id="node5" href="$ShaderProgram_8hpp.html" title="Contains jngl::ShaderProgram class." alt="" coords="316,79,515,104"/>
-<area shape="rect" id="node7" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="548,79,675,104"/>
-<area shape="rect" id="node9" href="$sound_8hpp.html" title="Sound related functions." alt="" coords="723,79,857,104"/>
-<area shape="rect" id="node3" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="404,225,491,251"/>
-<area shape="rect" id="node6" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="431,152,573,177"/>
-<area shape="rect" id="node8" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="649,152,776,177"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Finally class." alt="" coords="340,5,489,31"/>
+<area shape="rect" id="Node000002" href="$Channel_8hpp.html" title="Contains jngl::Channel class." alt="" coords="5,153,155,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="374,40,109,154,107,150,372,35"/>
+<area shape="rect" id="Node000004" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="179,153,352,178"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="367,40,335,57,306,81,293,98,283,118,271,153,266,151,278,116,288,96,302,77,332,53,364,35"/>
+<area shape="rect" id="Node000005" href="$ShaderProgram_8hpp.html" title="Contains jngl::ShaderProgram class." alt="" coords="316,79,513,105"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="417,46,417,79,412,79,412,46"/>
+<area shape="rect" id="Node000007" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="543,79,668,105"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="462,34,574,76,572,81,460,39"/>
+<area shape="rect" id="Node000009" href="$sound_8hpp.html" title="Sound related functions." alt="" coords="715,79,848,105"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="493,32,719,76,718,81,492,37"/>
+<area shape="rect" id="Node000003" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="400,226,485,252"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="157,179,400,227,399,232,156,184"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="310,182,413,223,411,228,308,187"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="414,120,414,148,417,178,426,203,438,225,433,227,421,206,412,179,408,148,409,120"/>
+<area shape="rect" id="Node000006" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="427,153,568,178"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="442,113,485,150,482,154,439,117"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="481,192,454,227,450,224,477,189"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="606,121,598,151,582,180,561,199,536,214,486,232,485,227,534,209,558,195,578,177,593,149,601,119"/>
+<area shape="rect" id="Node000008" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="643,153,768,178"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="636,112,690,150,687,154,633,116"/>
+<area shape="poly" id="edge13_Node000009_Node000003" title=" " alt="" coords="792,120,794,150,790,166,782,180,761,196,731,208,650,226,561,235,486,239,486,234,561,230,649,220,729,203,759,191,778,177,785,164,788,150,786,120"/>
 </map>

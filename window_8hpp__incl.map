@@ -1,9 +1,15 @@
 <map id="jngl/window.hpp" name="jngl/window.hpp">
-<area shape="rect" id="node1" title="Functions related to the main window." alt="" coords="199,5,341,31"/>
-<area shape="rect" id="node2" href="$Pixels_8hpp.html" title="Contains jngl::Pixels class." alt="" coords="5,79,108,104"/>
-<area shape="rect" id="node4" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/array.html" title=" " alt="" coords="132,79,195,104"/>
-<area shape="rect" id="node5" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="219,79,321,104"/>
-<area shape="rect" id="node6" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="345,79,416,104"/>
-<area shape="rect" id="node7" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="440,79,511,104"/>
-<area shape="rect" id="node3" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="17,152,96,177"/>
+<area shape="rect" id="Node000001" title="Functions related to the main window." alt="" coords="196,5,337,31"/>
+<area shape="rect" id="Node000002" href="$Pixels_8hpp.html" title="Contains jngl::Pixels class." alt="" coords="5,79,107,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,34,107,76,106,71,230,29"/>
+<area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/array.html" title=" " alt="" coords="131,79,192,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="250,34,193,72,190,68,247,29"/>
+<area shape="rect" id="Node000005" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="216,79,317,105"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="269,31,269,63,264,63,264,31"/>
+<area shape="rect" id="Node000006" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="341,79,411,105"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="287,29,346,68,343,73,284,34"/>
+<area shape="rect" id="Node000007" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="435,79,504,105"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="302,29,421,71,419,76,300,34"/>
+<area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="17,153,95,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="59,105,59,137,53,137,53,105"/>
 </map>

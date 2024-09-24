@@ -1,9 +1,19 @@
 <map id="jngl/Pixels.hpp" name="jngl/Pixels.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Pixels class." alt="" coords="37,5,180,31"/>
-<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="116,225,203,251"/>
-<area shape="rect" id="node3" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="21,79,196,104"/>
-<area shape="rect" id="node4" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="220,79,363,104"/>
-<area shape="rect" id="node5" href="$Singleton_8hpp.html" title="Contains jngl::Singleton base class." alt="" coords="197,152,364,177"/>
-<area shape="rect" id="node6" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="388,152,515,177"/>
-<area shape="rect" id="node7" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="388,225,515,251"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Pixels class." alt="" coords="37,5,178,31"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="116,226,201,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="60,40,38,52,19,67,10,84,12,104,37,144,71,177,106,204,137,223,134,228,103,209,67,181,33,147,7,106,4,83,15,64,35,48,58,35"/>
+<area shape="rect" id="Node000003" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="21,79,194,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="110,46,110,79,105,79,105,46"/>
+<area shape="rect" id="Node000004" href="$window_8hpp.html" title="Functions related to the main window." alt="" coords="218,79,360,105"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="154,35,259,76,257,81,152,40"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="119,119,157,225,152,227,114,120"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="241,113,211,131,186,154,175,172,168,192,162,227,157,226,163,190,170,170,182,151,208,127,239,109"/>
+<area shape="rect" id="Node000005" href="$Singleton_8hpp.html" title="Contains jngl::Singleton base class." alt="" coords="196,153,361,178"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="288,120,283,153,278,152,282,119"/>
+<area shape="rect" id="Node000006" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="385,153,510,178"/>
+<area shape="poly" id="edge8_Node000004_Node000006" title=" " alt="" coords="331,109,422,150,420,154,329,114"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="246,189,180,228,178,223,244,184"/>
+<area shape="poly" id="edge9_Node000006_Node000002" title=" " alt="" coords="385,185,202,230,201,225,383,180"/>
+<area shape="rect" id="Node000007" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="385,226,510,252"/>
+<area shape="poly" id="edge10_Node000006_Node000007" title=" " alt="" coords="450,194,450,226,445,226,445,194"/>
 </map>

@@ -1,6 +1,11 @@
 <map id="jngl/job.hpp" name="jngl/job.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Job class and related functions." alt="" coords="5,5,124,31"/>
-<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="21,225,108,251"/>
-<area shape="rect" id="node3" href="$work_8hpp.html" title=" " alt="" coords="52,79,179,104"/>
-<area shape="rect" id="node4" href="$WorkFactory_8hpp.html" title=" " alt="" coords="103,152,285,177"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Job class and related functions." alt="" coords="5,5,123,31"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="23,226,108,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="54,46,43,80,40,121,45,162,63,225,58,227,40,163,35,121,37,78,49,44"/>
+<area shape="rect" id="Node000003" href="$work_8hpp.html" title=" " alt="" coords="52,79,177,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="83,42,108,77,104,80,79,45"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="106,120,93,154,71,227,66,225,88,152,101,118"/>
+<area shape="rect" id="Node000004" href="$WorkFactory_8hpp.html" title=" " alt="" coords="103,153,284,178"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="141,113,182,150,178,154,137,117"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="160,189,88,228,86,223,157,184"/>
 </map>

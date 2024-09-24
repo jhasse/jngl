@@ -1,7 +1,13 @@
 <map id="jngl/window.hpp" name="jngl/window.hpp">
-<area shape="rect" id="node1" title="Functions related to the main window." alt="" coords="34,5,177,31"/>
-<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="62,152,149,177"/>
-<area shape="rect" id="node3" href="$Singleton_8hpp.html" title="Contains jngl::Singleton base class." alt="" coords="22,79,189,104"/>
-<area shape="rect" id="node4" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="213,79,340,104"/>
-<area shape="rect" id="node5" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="213,152,340,177"/>
+<area shape="rect" id="Node000001" title="Functions related to the main window." alt="" coords="34,5,175,31"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="62,153,147,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="57,40,31,57,12,80,8,91,9,101,23,120,46,137,73,150,70,155,44,141,19,124,4,103,3,91,7,78,28,53,54,36"/>
+<area shape="rect" id="Node000003" href="$Singleton_8hpp.html" title="Contains jngl::Singleton base class." alt="" coords="22,79,187,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="107,46,107,79,102,79,102,46"/>
+<area shape="rect" id="Node000004" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="211,79,336,105"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="148,35,246,76,244,81,146,40"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="107,120,107,152,102,152,102,120"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="232,114,134,155,132,150,230,109"/>
+<area shape="rect" id="Node000005" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="211,153,336,178"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="276,120,276,152,271,152,271,120"/>
 </map>

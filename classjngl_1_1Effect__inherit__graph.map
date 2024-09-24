@@ -1,6 +1,9 @@
 <map id="Effect" name="Effect">
-<area shape="rect" id="node1" title="Base class for effects that can be applied to jngl::Widget." alt="" coords="112,5,175,31"/>
-<area shape="rect" id="node2" href="$classjngl_1_1Executor.html" title="Executes a specific action, e.g. removes the Widget." alt="" coords="5,79,92,104"/>
-<area shape="rect" id="node3" href="$classjngl_1_1Move.html" title=" " alt="" coords="116,79,171,104"/>
-<area shape="rect" id="node4" href="$classjngl_1_1Zoom.html" title="Scales the ModelView matrix." alt="" coords="195,79,249,104"/>
+<area shape="rect" id="Node000001" title="Base class for effects that can be applied to jngl::Widget." alt="" coords="111,5,172,31"/>
+<area shape="rect" id="Node000002" href="$classjngl_1_1Executor.html" title="Executes a specific action, e.g. removes the Widget." alt="" coords="5,79,91,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,43,65,81,62,77,112,39"/>
+<area shape="rect" id="Node000003" href="$classjngl_1_1Move.html" title=" " alt="" coords="115,79,168,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="144,46,144,79,139,79,139,46"/>
+<area shape="rect" id="Node000004" href="$classjngl_1_1Zoom.html" title="Scales the ModelView matrix." alt="" coords="192,79,245,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="167,40,208,77,204,81,164,44"/>
 </map>

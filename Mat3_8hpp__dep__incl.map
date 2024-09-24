@@ -1,8 +1,16 @@
 <map id="jngl/Mat3.hpp" name="jngl/Mat3.hpp">
-<area shape="rect" id="node1" title="Contains jngl::Mat3 class." alt="" coords="164,5,291,31"/>
-<area shape="rect" id="node2" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="5,152,180,177"/>
-<area shape="rect" id="node4" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="148,79,307,104"/>
-<area shape="rect" id="node6" href="$matrix_8hpp.html" title="Functions related to the global ModelView matrix." alt="" coords="348,79,491,104"/>
-<area shape="rect" id="node3" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="227,225,313,251"/>
-<area shape="rect" id="node5" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="256,152,391,177"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Mat3 class." alt="" coords="161,5,287,31"/>
+<area shape="rect" id="Node000002" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="5,153,179,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,41,160,59,135,81,111,119,98,154,93,152,107,116,131,77,156,55,183,37"/>
+<area shape="rect" id="Node000004" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="145,79,303,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="227,46,227,79,221,79,221,46"/>
+<area shape="rect" id="Node000006" href="$matrix_8hpp.html" title="Functions related to the global ModelView matrix." alt="" coords="344,79,485,105"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="271,34,383,76,381,81,269,39"/>
+<area shape="rect" id="Node000003" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="225,226,311,252"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="137,182,239,223,237,228,135,187"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="230,119,244,178,264,225,259,227,239,179,225,120"/>
+<area shape="rect" id="Node000005" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="253,153,387,178"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="254,112,306,150,302,154,251,116"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="305,192,279,227,275,224,300,189"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="418,120,414,150,401,180,382,199,359,213,312,232,310,227,356,209,378,195,396,177,409,149,413,119"/>
 </map>

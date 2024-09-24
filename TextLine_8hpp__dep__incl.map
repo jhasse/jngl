@@ -1,5 +1,8 @@
 <map id="jngl/TextLine.hpp" name="jngl/TextLine.hpp">
-<area shape="rect" id="node1" title="Contains jngl::TextLine class." alt="" coords="5,5,164,31"/>
-<area shape="rect" id="node2" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="41,152,128,177"/>
-<area shape="rect" id="node3" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="71,79,205,104"/>
+<area shape="rect" id="Node000001" title="Contains jngl::TextLine class." alt="" coords="5,5,163,31"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="41,153,127,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="72,45,61,74,60,104,69,130,79,151,75,154,64,132,55,105,56,73,67,44"/>
+<area shape="rect" id="Node000003" href="$Label_8hpp.html" title="Contains jngl::Label class." alt="" coords="69,79,203,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="104,42,129,77,125,80,99,45"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="121,119,95,154,91,151,116,116"/>
 </map>
