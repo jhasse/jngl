@@ -33,7 +33,7 @@ void info(const std::string& line) {
 			tmp << displayName << ']';
 		}
 	}
-	tmp << "[\x1b[1;34minfo\x1b[0m] " << line << '\n';
+	tmp << "[\x1b[32minfo\x1b[0m] " << line << '\n';
 	printMessage(tmp.str());
 }
 
