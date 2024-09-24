@@ -15,7 +15,7 @@ project(jngl-doxygen NONE)
 	)
 	ExternalProject_Add(doxygen-awesome-css
 		GIT_REPOSITORY https://github.com/jothepro/doxygen-awesome-css.git
-		GIT_TAG v2.1.0
+		GIT_TAG v2.3.3
 		CONFIGURE_COMMAND ""
 		BUILD_COMMAND ""
 		INSTALL_COMMAND cd <SOURCE_DIR> && cp doxygen-awesome.css doxygen-awesome-sidebar-only.css "${CMAKE_CURRENT_SOURCE_DIR}"
