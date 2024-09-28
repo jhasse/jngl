@@ -5,6 +5,7 @@
 
 #include "../Sound.hpp"
 #include "../audio.hpp"
+#include "../audio/constants.hpp"
 #include "../audio/effect/pitch.hpp"
 #include "../audio/effect/volume.hpp"
 #include "../audio/engine.hpp"
@@ -122,7 +123,6 @@ SoundFile::SoundFile(const std::string& filename, std::launch) {
 	});
 
 	const vorbis_info* const pInfo = ov_info(&oggFile, -1);
-	frequency = pInfo->rate;
 
 	int bitStream;
 	while (true) {
@@ -144,6 +144,45 @@ SoundFile::SoundFile(const std::string& filename, std::launch) {
 			buffer_[start + i * 2 + 1] = buffer[pInfo->channels == 1 ? 0 : 1][i];
 		}
 	}
+	if (pInfo->rate != jngl::audio::frequency) {
+		float resampleFactor =
+		    static_cast<float>(jngl::audio::frequency) / static_cast<float>(pInfo->rate);
+		auto newSize = static_cast<size_t>(static_cast<float>(buffer_.size()) * resampleFactor);
+		if (newSize % 2 != 0) {
+			++newSize;
+		}
+		std::vector<float> resampledData(newSize);
+
+		// Process left channel
+		for (size_t i = 0; i < newSize / 2; ++i) {
+			float originalIndex = static_cast<float>(i * 2) / resampleFactor;
+
+			auto index = static_cast<size_t>(originalIndex);
+			float fraction = originalIndex - static_cast<float>(index);
+
+			size_t originalLeftIndex = (index / 2) * 2;
+
+			const float b =
+			    (originalLeftIndex + 2 < buffer_.size()) ? buffer_[originalLeftIndex + 2] : 0;
+			resampledData[i * 2] = buffer_[originalLeftIndex] * (1.0f - fraction) + b * fraction;
+		}
+
+		// Process right channel
+		for (size_t i = 0; i < newSize / 2; ++i) {
+			float originalIndex = static_cast<float>(i * 2 + 1) / resampleFactor;
+
+			auto index = static_cast<size_t>(originalIndex);
+			float fraction = originalIndex - static_cast<float>(index);
+
+			size_t originalRightIndex = (index / 2) * 2 + 1;
+
+			const float b =
+			    (originalRightIndex + 2 < buffer_.size()) ? buffer_[originalRightIndex + 2] : 0;
+			resampledData[i * 2 + 1] =
+			    buffer_[originalRightIndex] * (1.0f - fraction) + b * fraction;
+		}
+		buffer_ = std::move(resampledData);
+	}
 
 	debug("OK (");
 	debug(buffer_.size() * sizeof(float) / 1024. / 1024.);
@@ -164,7 +203,6 @@ SoundFile::SoundFile(SoundFile&& other) noexcept {
 SoundFile& SoundFile::operator=(SoundFile&& other) noexcept {
 	sound_ = std::move(other.sound_);
 	buffer_ = std::move(other.buffer_);
-	frequency = other.frequency;
 	return *this;
 }
 
@@ -173,7 +211,7 @@ void SoundFile::play() {
 }
 
 void SoundFile::play(Channel& channel) {
-	sound_ = std::make_shared<Sound>(buffer_, frequency);
+	sound_ = std::make_shared<Sound>(buffer_);
 	Audio::handle().play(channel, sound_);
 }
 
@@ -203,7 +241,7 @@ void SoundFile::loop(Channel& channel) {
 	if (sound_ && sound_->isLooping()) {
 		return;
 	}
-	sound_ = std::make_shared<Sound>(buffer_, frequency);
+	sound_ = std::make_shared<Sound>(buffer_);
 	sound_->loop();
 	Audio::handle().play(channel, sound_);
 }
@@ -218,8 +256,8 @@ void SoundFile::load() {
 }
 
 std::chrono::milliseconds SoundFile::length() const {
-	assert(frequency > 0);
-	return std::chrono::milliseconds{ buffer_.size() * 1000 / frequency / 2 /* stereo */ };
+	return std::chrono::milliseconds{ buffer_.size() * 1000 / jngl::audio::frequency /
+		                              2 /* stereo */ };
 }
 
 float SoundFile::progress() const {

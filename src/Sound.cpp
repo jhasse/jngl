@@ -5,9 +5,7 @@
 
 #include "audio.hpp"
 #include "audio/Track.hpp"
-#include "audio/constants.hpp"
 #include "audio/effect/loop.hpp"
-#include "audio/effect/pitch.hpp"
 #include "audio/effect/volume.hpp"
 
 #include <cassert>
@@ -20,14 +18,9 @@ struct Sound::Impl {
 	std::shared_ptr<audio::volume_control> volumeControl;
 };
 
-Sound::Sound(std::vector<float>& bufferData, long frequency)
+Sound::Sound(const std::vector<float>& bufferData)
 : impl(new Impl{ load_raw(bufferData)->play(), {}, {} }) {
-	std::shared_ptr<Stream> stream = impl->track;
-	if (frequency != jngl::audio::frequency) {
-		stream =
-		    audio::pitch(std::move(stream), static_cast<float>(frequency) / jngl::audio::frequency);
-	}
-	impl->stream = impl->volumeControl = audio::volume(std::move(stream));
+	impl->stream = impl->volumeControl = audio::volume(impl->track);
 }
 
 Sound::~Sound() = default;

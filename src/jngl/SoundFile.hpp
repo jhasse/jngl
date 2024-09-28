@@ -83,7 +83,6 @@ public:
 private:
 	std::shared_ptr<Sound> sound_;
 	std::vector<float> buffer_;
-	long frequency = -1; //< Hz
 };
 
 } // namespace jngl
