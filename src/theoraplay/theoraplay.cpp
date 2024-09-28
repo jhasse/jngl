@@ -48,13 +48,13 @@ void ConvertVideoFrame420ToIYUV(const th_info* tinfo, const th_ycbcr_buffer ycbc
     const unsigned char *p2data = ycbcr[p2].data + uvoff;
 	const uint32_t p2stride = ycbcr[p2].stride;
 
-	for (int i = 0; i < h; ++i, dst += w) {
+	for (uint32_t i = 0; i < h; ++i, dst += w) {
 		memcpy(dst, p0data + static_cast<ptrdiff_t>(p0stride * i), w);
 	}
-	for (int i = 0; i < (h / 2); ++i, dst += w / 2) {
+	for (uint32_t i = 0; i < (h / 2); ++i, dst += w / 2) {
 		memcpy(dst, p1data + static_cast<ptrdiff_t>(p1stride * i), w / 2);
 	}
-	for (int i = 0; i < (h / 2); ++i, dst += w / 2) {
+	for (uint32_t i = 0; i < (h / 2); ++i, dst += w / 2) {
 		memcpy(dst, p2data + static_cast<ptrdiff_t>(p2stride * i), w / 2);
 	}
 }
