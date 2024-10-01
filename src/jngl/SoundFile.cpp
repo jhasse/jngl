@@ -152,34 +152,24 @@ SoundFile::SoundFile(const std::string& filename, std::launch) {
 			++newSize;
 		}
 		std::vector<float> resampledData(newSize);
-
-		// Process left channel
 		for (size_t i = 0; i < newSize / 2; ++i) {
-			float originalIndex = static_cast<float>(i * 2) / resampleFactor;
-
+			float originalIndex = static_cast<float>(i) / resampleFactor;
 			auto index = static_cast<size_t>(originalIndex);
 			float fraction = originalIndex - static_cast<float>(index);
-
-			size_t originalLeftIndex = (index / 2) * 2;
-
-			const float b =
-			    (originalLeftIndex + 2 < buffer_.size()) ? buffer_[originalLeftIndex + 2] : 0;
-			resampledData[i * 2] = buffer_[originalLeftIndex] * (1.0f - fraction) + b * fraction;
-		}
-
-		// Process right channel
-		for (size_t i = 0; i < newSize / 2; ++i) {
-			float originalIndex = static_cast<float>(i * 2 + 1) / resampleFactor;
-
-			auto index = static_cast<size_t>(originalIndex);
-			float fraction = originalIndex - static_cast<float>(index);
-
-			size_t originalRightIndex = (index / 2) * 2 + 1;
-
-			const float b =
-			    (originalRightIndex + 2 < buffer_.size()) ? buffer_[originalRightIndex + 2] : 0;
-			resampledData[i * 2 + 1] =
-			    buffer_[originalRightIndex] * (1.0f - fraction) + b * fraction;
+			{
+				size_t originalLeftIndex = index * 2;
+				const float b =
+				    (originalLeftIndex + 2 < buffer_.size()) ? buffer_[originalLeftIndex + 2] : 0;
+				resampledData[i * 2] =
+				    buffer_[originalLeftIndex] * (1.0f - fraction) + b * fraction;
+			}
+			{
+				const size_t originalRightIndex = index * 2 + 1;
+				const float b =
+				    (originalRightIndex + 2 < buffer_.size()) ? buffer_[originalRightIndex + 2] : 0;
+				resampledData[i * 2 + 1] =
+				    buffer_[originalRightIndex] * (1.0f - fraction) + b * fraction;
+			}
 		}
 		buffer_ = std::move(resampledData);
 	}
