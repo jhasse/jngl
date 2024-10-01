@@ -10,6 +10,7 @@
 #include "matrix.hpp"
 #include "screen.hpp"
 
+#include <cmath>
 #include <stack>
 
 namespace jngl {
