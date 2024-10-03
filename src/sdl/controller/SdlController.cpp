@@ -1,9 +1,9 @@
-// Copyright 2017-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2017-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "SdlController.hpp"
 
-#include "../../jngl/debug.hpp"
+#include "../../log.hpp"
 #include "../../window.hpp"
 
 #include <cmath>
@@ -14,10 +14,10 @@ SdlController::SdlController(SDL_Joystick* const handle, const int index)
 : handle(handle), haptic(SDL_HapticOpenFromJoystick(handle)) {
 	if (haptic) {
 		if (SDL_HapticRumbleInit(haptic) < 0) {
-			debugLn(SDL_GetError());
+			internal::error(SDL_GetError());
 		}
 	} else {
-		debugLn(SDL_GetError());
+		internal::error(SDL_GetError());
 	}
 	switch (SDL_JoystickNumButtons(handle)) {
 		case 11:
@@ -36,7 +36,7 @@ SdlController::SdlController(SDL_Joystick* const handle, const int index)
 					this->handle = nullptr;
 					SDL_JoystickClose(handle);
 				} else {
-					debugLn("WARNING: SDL_GameControllerOpen failed, falling back to joystick.");
+					internal::warn("SDL_GameControllerOpen failed, falling back to joystick.");
 				}
 			}
 		}

@@ -609,7 +609,7 @@ void setAntiAliasing(bool enabled) {
 	}
 	antiAliasingEnabled = enabled;
 #else
-	debug("WARNING: anti aliasing not available!\n");
+	internal::warn("Anti-Aliasing not available!");
 #endif
 }
 
