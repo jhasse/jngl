@@ -6,9 +6,9 @@
 
 #include "helper.hpp"
 #include "jngl/ScaleablePixels.hpp"
-#include "jngl/debug.hpp"
 #include "jngl/matrix.hpp"
 #include "jngl/screen.hpp"
+#include "log.hpp"
 #include "main.hpp"
 
 #ifdef ANDROID
@@ -30,11 +30,11 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 	if (FT_Load_Char(face, ch, flags)) {
 		const std::string msg =
 		    std::string("FT_Load_Glyph failed. Character: ") + std::to_string(ch);
-		debugLn(msg);
 		// Load a question mark instead
 		if (FT_Load_Glyph(face, FT_Get_Char_Index(face, '?'), flags)) {
 			throw std::runtime_error(msg);
 		}
+		internal::error(msg);
 	}
 	FT_Glyph glyph;
 	if (FT_Get_Glyph(face->glyph, &glyph)) {
@@ -166,9 +166,9 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height, flo
 	auto& fileCache = fileCaches[filename];
 	bytes = fileCache.lock();
 	if (bytes) {
-		debug("Reusing font buffer for "); debug(filename); debug("... ");
+		internal::debug("Reusing font buffer for {}... ", filename);
 	} else {
-		debug("Loading font "); debug(filename); debug("... ");
+		internal::debug("Loading font {}...", filename);
 
 		FILE* const f = fopen(filename.c_str(), "rb");
 		assert(f);
@@ -188,7 +188,6 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height, flo
 	    0) {
 		throw std::runtime_error("FT_New_Memory_Face failed");
 	}
-	debug("OK\n");
 	// Finally will call FT_Done_Face when the Font class is destroyed:
 	freeFace = std::make_unique<Finally>([this]() { return FT_Done_Face(face); });
 

@@ -3,10 +3,10 @@
 
 #include "../App.hpp"
 #include "../jngl/ImageData.hpp"
-#include "../jngl/debug.hpp"
 #include "../jngl/screen.hpp"
 #include "../jngl/window.hpp"
 #include "../jngl/work.hpp"
+#include "../log.hpp"
 #include "../main.hpp"
 #include "../windowptr.hpp"
 #include "windowimpl.hpp"
@@ -27,7 +27,7 @@ void setProcessSettings() {
 		return;
 	}
 	if (!SetProcessDPIAware()) {
-		debugLn("Couldn't set the process-default DPI awareness to system-DPI awareness.");
+		internal::error("Couldn't set the process-default DPI awareness to system-DPI awareness.");
 	}
 	called = true;
 #endif
@@ -70,7 +70,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		                        width, height, flags);
 	};
 	if ((impl->sdlWindow = create()) == nullptr) {
-		jngl::debugLn("Recreating window without Anti-Aliasing support.");
+		internal::debug("Recreating window without Anti-Aliasing support.");
 		isMultisampleSupported_ = false;
 		if ((impl->sdlWindow = create()) == nullptr) {
 			throw std::runtime_error(SDL_GetError());
@@ -90,7 +90,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	if (isMultisampleSupported_) {
 		int openglMSAA;
 		if (SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &openglMSAA) != 0) {
-			debugLn("Recreating window and OpenGL Context without Anti-Aliasing support.");
+			internal::debug("Recreating window and OpenGL Context without Anti-Aliasing support.");
 			SDL_GL_DeleteContext(impl->context);
 			SDL_DestroyWindow(impl->sdlWindow);
 			isMultisampleSupported_ = false;
@@ -110,15 +110,8 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		// ignored. Check if we actually got what we asked for and correct if not:
 		SDL_GetWindowSize(impl->sdlWindow, &width, &height);
 		if (width_ != width || height_ != height) {
-			debug("Wanted window dimensions ");
-			debug(width_);
-			debug("x");
-			debug(height_);
-			debug(", but got ");
-			debug(width);
-			debug("x");
-			debug(height);
-			debug(" instead.");
+			internal::debug("Wanted window dimensions {}x{}, but got {}x{} instead.", width_,
+			                height_, width, height);
 			setScaleFactor(getScaleFactor() * std::min(static_cast<double>(width) / width_,
 			                                           static_cast<double>(height) / height_));
 			width_ = width;
@@ -472,7 +465,7 @@ void Window::SetIcon(const std::string& filepath) {
 	    0x0000ff00, 0x00ff0000, 0xff000000);
 
 	if (surface == nullptr) {
-		jngl::debugLn(SDL_GetError());
+		internal::error(SDL_GetError());
 		return;
 	}
 

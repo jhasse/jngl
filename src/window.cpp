@@ -6,13 +6,13 @@
 #include "audio.hpp"
 #include "freetype.hpp"
 #include "jngl/ScaleablePixels.hpp"
-#include "jngl/debug.hpp"
 #include "jngl/font.hpp"
 #include "jngl/matrix.hpp"
 #include "jngl/other.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/time.hpp"
 #include "jngl/work.hpp"
+#include "log.hpp"
 #include "main.hpp"
 #include "spriteimpl.hpp"
 #include "windowptr.hpp"
@@ -296,18 +296,6 @@ void Window::stepIfNeeded() {
 		}
 		previousStepsPerFrame = stepsPerFrame;
 		const auto cappedOrDoable = std::min(doableStepsPerSecond, maxFPS * stepsPerFrame);
-		// TODO: Improve logging. Log level? jngl::trace?
-		// jngl::debug("SPS: ");
-		// jngl::debug(std::lround(actualStepsPerSecond));
-		// if (cappedOrDoable < doableStepsPerSecond) {
-		// 	jngl::debug(" (capped ");
-		// } else {
-		// 	jngl::debug(" (doable ");
-		// }
-		// jngl::debug(std::lround(doableStepsPerSecond));
-		// jngl::debug(", should be ");
-		// jngl::debug(std::lround(targetStepsPerSecond));
-		// jngl::debug("); ");
 
 		// The sleep function is actually inaccurate (or at least less accurate than getTime),
 		// se we try to find a factor to correct this:
@@ -337,18 +325,15 @@ void Window::stepIfNeeded() {
 		// The factor means that we quickly go down when needed, but hesitate to go up:
 		sleepPerFrame += ((shouldSleepPerFrame < sleepPerFrame) ? 0.95 : 0.55) *
 		                 (shouldSleepPerFrame - sleepPerFrame);
-		// jngl::debug("stepsPerFrame -> ");
-		// jngl::debug(newStepsPerFrame);
-		// jngl::debug(", msSleepPerFrame -> ");
-		// jngl::debug(sleepPerFrame);
-		// jngl::debug(" * ");
-		// jngl::debug(sleepCorrectionFactor);
-		// jngl::debug(", slept(");
-		// jngl::debug(numberOfSleeps);
-		// jngl::debug("): ");
-		// jngl::debug(std::lround(1e6 * timeSleptSinceLastCheck));
-		// jngl::debug("µs, maxFPS: ");
-		// jngl::debugLn(maxFPS);
+
+		internal::trace("SPS: {} ({} {}, should be {}); stepsPerFrame -> {}, msSleepPerFrame -> {} "
+		                "* {}, slept({}): {}µs, maxFPS: {}",
+		                std::lround(actualStepsPerSecond),
+		                (cappedOrDoable < doableStepsPerSecond) ? "capped" : "doable",
+		                std::lround(doableStepsPerSecond), std::lround(targetStepsPerSecond),
+		                newStepsPerFrame, sleepPerFrame, sleepCorrectionFactor, numberOfSleeps,
+		                std::lround(1e6 * timeSleptSinceLastCheck), maxFPS);
+
 		lastCheckTime = currentTime;
 		numberOfSleeps = 0;
 		stepsSinceLastCheck = 0;
@@ -449,14 +434,10 @@ void Window::draw() const {
 
 void Window::setWork(std::shared_ptr<Work> work) {
 	if (!currentWork_) {
-		debug("setting current work to ");
-		debug(work.get());
-		debug("\n");
+		internal::debug("Setting current work to {}.", static_cast<void*>(work.get()));
 		currentWork_ = std::move(work);
 	} else {
-		debug("change work to ");
-		debug(work.get());
-		debug("\n");
+		internal::debug("Change work to {}.", static_cast<void*>(work.get()));
 		changeWork = true;
 		newWork_ = std::move(work);
 	}
@@ -517,10 +498,7 @@ void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 		                                 static_cast<float>(maxAspectRatio.second)));
 	}
 	if (canvasWidth != width_ || canvasHeight != height_) {
-		debug("Letterboxing to ");
-		debug(canvasWidth);
-		debug("x");
-		debugLn(canvasHeight);
+		internal::debug("Letterboxing to {}x{}.", canvasWidth, canvasHeight);
 	}
 }
 

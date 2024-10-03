@@ -7,7 +7,6 @@
 #include "jngl/Alpha.hpp"
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/Shader.hpp"
-#include "jngl/debug.hpp"
 #include "jngl/matrix.hpp"
 #include "jngl/other.hpp"
 #include "jngl/screen.hpp"
@@ -15,6 +14,7 @@
 #include "jngl/time.hpp"
 #include "jngl/window.hpp"
 #include "jngl/work.hpp"
+#include "log.hpp"
 #include "paths.hpp"
 #include "spriteimpl.hpp"
 #include "texture.hpp"
@@ -73,9 +73,11 @@ void
 debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity,
               GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
 	if (severity == GL_DEBUG_SEVERITY_HIGH) {
-		jngl::debugLn(std::string("\x1b[1;31m") + message + "\x1b[0m");
+		internal::error(message);
+	} else if (severity == GL_DEBUG_SEVERITY_MEDIUM) {
+		internal::warn(message);
 	} else if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {
-		jngl::debugLn(message);
+		internal::info(message);
 	}
 }
 #endif
@@ -214,15 +216,8 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 
 void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth,
                       int originalWindowHeight) {
-	debug("Updating projection matrix to ");
-	debug(windowWidth);
-	debug("x");
-	debug(windowHeight);
-	debug(" (original size: ");
-	debug(originalWindowWidth);
-	debug("x");
-	debug(originalWindowHeight);
-	debugLn(")");
+	internal::debug("Updating projection matrix to {}x{} (original size: {}x{})", windowWidth,
+	                windowHeight, originalWindowWidth, originalWindowHeight);
 	const auto l = static_cast<float>(-windowWidth) / 2.f;
 	const auto r = static_cast<float>(windowWidth) / 2.f;
 	const auto b = static_cast<float>(windowHeight) / 2.f;
@@ -253,8 +248,7 @@ bool antiAliasingEnabled = true;
 void showWindow(const std::string& title, const int width, const int height, bool fullscreen,
                 const std::pair<int, int> minAspectRatio,
                 const std::pair<int, int> maxAspectRatio) {
-	debug("jngl::showWindow(\""); debug(title); debug("\", "); debug(width); debug(", ");
-	debug(height); debug(", "); debug(fullscreen); debug(");\n");
+	internal::debug("jngl::showWindow(\"{}\", {}, {}, {});", title, width, height, fullscreen);
 	bool isMouseVisible = pWindow ? pWindow->getMouseVisible() : true;
 	hideWindow();
 	if (width == 0) {
@@ -304,7 +298,7 @@ void clearBackBuffer() {
 
 	reset();
 	if (!modelviewStack.empty()) {
-		jngl::debugLn("uneven calls to push/popMatrix at the beginning of the frame!");
+		internal::error("Uneven calls to push/popMatrix at the beginning of the frame!");
 	}
 	modelviewStack = {};
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -329,7 +323,7 @@ bool canQuit() {
 
 void quit() noexcept {
 	if (!canQuit()) {
-		debugLn("Quitting the main loop is not supported on this patform!");
+		internal::info("Quitting the main loop is not supported on this patform!");
 		return;
 	}
 	if (const auto w = pWindow.get()) {

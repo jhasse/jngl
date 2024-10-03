@@ -5,10 +5,10 @@
 
 #include "jngl/AppParameters.hpp"
 #include "jngl/ShaderProgram.hpp"
-#include "jngl/debug.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/window.hpp"
 #include "jngl/work.hpp"
+#include "log.hpp"
 #include "windowptr.hpp"
 
 #include <cmath>
@@ -69,8 +69,8 @@ void App::callAtExitFunctions() {
 		f();
 	}
 	if (!callAtExit.empty()) {
-		debugLn("WARNING: The destructor of a Singleton caused the creation of another Singleton. "
-		        "Use handleIfAlive inside of destructors of Singletons.");
+		internal::warn("The destructor of a Singleton caused the creation of another Singleton. "
+		               "Use handleIfAlive inside of destructors of Singletons.");
 	}
 	callAtExit.clear();
 }
@@ -90,9 +90,7 @@ void App::mainLoop() {
 	if (impl->steamAppId) {
 		initSteamAchievements();
 	}
-	debug("Starting main loop for '");
-	debug(impl->displayName);
-	debugLn('\'');
+	internal::debug("Starting main loop for '{}'.", impl->displayName);
 	pWindow->mainLoop();
 }
 

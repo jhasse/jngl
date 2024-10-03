@@ -3,66 +3,46 @@
 #include "log.hpp"
 
 #include "../App.hpp"
-#include "message.hpp"
+#include "../log.hpp"
 
 #include <sstream>
 
 namespace jngl {
 
-void trace(const std::string& line) {
-	std::ostringstream tmp;
+namespace {
+std::string shortenDisplayName() {
 	if (auto displayName = App::instance().getDisplayName(); !displayName.empty()) {
-		tmp << '[';
-		if (displayName.size() > 4) {
-			tmp << displayName.substr(0, 3) << "…]";
+		std::ostringstream tmp;
+		tmp << "\x1b[1m";
+		const size_t MAX_LENGTH = 12;
+		if (displayName.size() > MAX_LENGTH) {
+			tmp << displayName.substr(0, MAX_LENGTH - 1) << "…";
 		} else {
-			tmp << displayName << ']';
+			tmp << displayName;
 		}
+		tmp << "\x1b[0m";
+		return tmp.str();
 	}
-	tmp << "[\x1b[1;36mtrace\x1b[0m] " << line << '\n';
-	printMessage(tmp.str());
+	return {};
+}
+} // namespace
+
+void trace(const std::string& line) {
+#ifndef NDEBUG
+	internal::log(shortenDisplayName(), "\x1b[1;36mtrace\x1b[0m", line);
+#endif
 }
 
 void info(const std::string& line) {
-	std::ostringstream tmp;
-	if (auto displayName = App::instance().getDisplayName(); !displayName.empty()) {
-		tmp << '[';
-		if (displayName.size() > 4) {
-			tmp << displayName.substr(0, 3) << "…]";
-		} else {
-			tmp << displayName << ']';
-		}
-	}
-	tmp << "[\x1b[32minfo\x1b[0m] " << line << '\n';
-	printMessage(tmp.str());
+	internal::log(shortenDisplayName(), "\x1b[32minfo\x1b[0m", line);
 }
 
 void warn(const std::string& line) {
-	std::ostringstream tmp;
-	if (auto displayName = App::instance().getDisplayName(); !displayName.empty()) {
-		tmp << '[';
-		if (displayName.size() > 4) {
-			tmp << displayName.substr(0, 3) << "…]";
-		} else {
-			tmp << displayName << ']';
-		}
-	}
-	tmp << "[\x1b[1;33mwarn\x1b[0m] " << line << '\n';
-	printMessage(tmp.str());
+	internal::log(shortenDisplayName(), "\x1b[1;33mwarn\x1b[0m", line);
 }
 
 void error(const std::string& line) {
-	std::ostringstream tmp;
-	if (auto displayName = App::instance().getDisplayName(); !displayName.empty()) {
-		tmp << '[';
-		if (displayName.size() > 4) {
-			tmp << displayName.substr(0, 3) << "…]";
-		} else {
-			tmp << displayName << ']';
-		}
-	}
-	tmp << "[\x1b[1;31merror\x1b[0m] " << line << '\n';
-	printMessage(tmp.str());
+	internal::log(shortenDisplayName(), "\x1b[1;31merror\x1b[0m", line);
 }
 
 } // namespace jngl

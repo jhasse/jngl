@@ -1,20 +1,16 @@
 // Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#include "../jngl/debug.hpp"
-#include "../jngl/Finally.hpp"
 #include "../jngl/ImageData.hpp"
 #include "../jngl/window.hpp"
-#include "../jngl/work.hpp"
+#include "../log.hpp"
 #include "../main.hpp"
 #include "../windowptr.hpp"
 #include "ConvertUTF.h"
 #include "unicode.hpp"
 
-#include <algorithm>
 #include <atomic>
 #include <cassert>
-#include <cmath>
 #include <glad/wgl.h>
 #include <mmsystem.h> // timeBeginPeriod
 #include <stdexcept>
@@ -29,7 +25,7 @@ void setProcessSettings() {
 		return;
 	}
 	if (!SetProcessDPIAware()) {
-		debugLn("Couldn't set the process-default DPI awareness to system-DPI awareness.");
+		internal::error("Couldn't set the process-default DPI awareness to system-DPI awareness.");
 	}
 	called = true;
 }
@@ -299,7 +295,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		if (!multisample && isMultisampleSupported_ && impl->InitMultisample(hInstance, pfd)) {
 			impl->pDeviceContext_.reset((HDC)nullptr); // Destroy window
 			try {
-				jngl::debugLn("Recreating window with Anti-Aliasing support.");
+				internal::debug("Recreating window with Anti-Aliasing support.");
 				init(true);
 			} catch (...) {
 				// If Anti-Aliasing still doesn't work for some reason, let's turn it off again.
@@ -334,16 +330,16 @@ Window::~Window() {
 
 void WindowImpl::ReleaseDC(HWND hwnd, HDC hdc) {
 	if (!::ReleaseDC(hwnd, hdc)) {
-		debug("Release device context failed.");
+		internal::error("Release device context failed.");
 	}
 }
 
 void WindowImpl::ReleaseRC(HGLRC hrc) {
 	if (!wglMakeCurrent(nullptr, nullptr)) {
-		debugLn("Release of DC and RC failed.");
+		internal::error("Release of DC and RC failed.");
 	}
 	if (!wglDeleteContext(hrc)) {
-		debugLn("Release rendering context failed.");
+		internal::error("Release rendering context failed.");
 	}
 }
 
@@ -411,7 +407,7 @@ void Window::UpdateInput() {
 			mousePressed_.at(2) = false;
 			break;
 		case WM_SYSKEYDOWN:
-			debugLn("WM_SYSKEYDOWN");
+			internal::debug("WM_SYSKEYDOWN");
 		case WM_KEYDOWN:
 			keyDown_[msg.wParam] = true;
 			keyPressed_[msg.wParam] = true;
@@ -419,7 +415,7 @@ void Window::UpdateInput() {
 			impl->distinguishLeftRight();
 			break;
 		case WM_SYSKEYUP:
-			debugLn("WM_SYSKEYUP");
+			internal::debug("WM_SYSKEYUP");
 		case WM_KEYUP: {
 			keyDown_[msg.wParam] = false;
 			keyPressed_[msg.wParam] = false;
@@ -438,7 +434,7 @@ void Window::UpdateInput() {
 			ConversionResult result = ConvertUTF16toUTF8(sourceStart, sourceEnd, targetStart,
 			                                             targetEnd, lenientConversion);
 			if (result != conversionOK) {
-				debug("WARNING: Couldn't convert UTF16 to UTF8.\n");
+				internal::warn("Couldn't convert UTF16 to UTF8.\n");
 				break;
 			}
 			auto end = ++(buf.begin());
@@ -613,7 +609,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	case WM_SYSCOMMAND: // Intercept System Commands
 		switch (wParam) {
 		case SC_KEYMENU:
-			debugLn("Ignoring SC_KEYMENU (AltL / F10 menu).");
+			internal::debug("Ignoring SC_KEYMENU (AltL / F10 menu).");
 			return 0;
 		case SC_SCREENSAVE:   // Screensaver Trying To Start?
 		case SC_MONITORPOWER: // Monitor Trying To Enter Powersave?
@@ -624,11 +620,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		PostQuitMessage(0); // Send A Quit Message
 		return 0;           // Jump Back
 	case WM_SETFOCUS:
-		debugLn("Window got focus.");
+		internal::debug("Window got focus.");
 		reinterpret_cast<WindowImpl*>(GetWindowLongPtr(hWnd, GWLP_USERDATA))->onFocusChange(true);
 		break;
 	case WM_KILLFOCUS:
-		debugLn("Window lost focus.");
+		internal::debug("Window lost focus.");
 		reinterpret_cast<WindowImpl*>(GetWindowLongPtr(hWnd, GWLP_USERDATA))->onFocusChange(false);
 		break;
 	}
@@ -708,8 +704,7 @@ void Window::SetIcon(const std::string& filename) {
 		HICON hIcon = CreateIconIndirect(&icon);
 		SendMessage(impl->pWindowHandle_.get(), WM_SETICON, WPARAM(ICON_SMALL), LPARAM(hIcon));
 	} catch (std::runtime_error& e) {
-		debug("jngl::setIcon: ");
-		debugLn(e.what());
+		internal::error("jngl::setIcon: {}", e.what());
 	}
 }
 

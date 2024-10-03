@@ -8,12 +8,12 @@
 #include "sprite.hpp"
 
 #include "../helper.hpp"
+#include "../log.hpp"
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
 #include "../texture.hpp"
 #include "../windowptr.hpp"
 #include "Alpha.hpp"
-#include "debug.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
 
@@ -83,9 +83,7 @@ Sprite::Sprite(const std::string& filename, LoadType loadType) : texture(getText
 	}
 	const bool halfLoad = (loadType == LoadType::HALF);
 	if (!halfLoad) {
-		jngl::debug("Creating sprite ");
-		jngl::debug(filename);
-		jngl::debug("... ");
+		internal::debug("Creating sprite {}...", filename);
 	}
 	auto fullFilename = pathPrefix + filename;
 	const char* extensions[] = {
@@ -145,13 +143,10 @@ Sprite::Sprite(const std::string& filename, LoadType loadType) : texture(getText
 		throw std::runtime_error(std::string("File not found: " + fullFilename));
 	}
 	auto loadTexture = std::make_shared<Finally>(loadFunction(this, filename, pFile, halfLoad));
-	loader = std::make_shared<Finally>([pFile, loadTexture, halfLoad, this]() mutable {
+	loader = std::make_shared<Finally>([pFile, loadTexture, this]() mutable {
 		loadTexture.reset(); // call ~Finally
 		fclose(pFile);
 		setCenter(0, 0);
-		if (!halfLoad) {
-			jngl::debugLn("OK");
-		}
 	});
 	if (loadType != LoadType::THREADED) {
 		loader.reset();
