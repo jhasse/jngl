@@ -28,8 +28,8 @@
 #if __cplusplus < 202002L
 #include <boost/algorithm/string/predicate.hpp>
 #endif
+#include <cstddef>
 #include <sstream>
-#include <thread>
 #ifndef NOWEBP
 #include "../ImageDataWebP.hpp"
 #endif
@@ -145,7 +145,9 @@ Sprite::Sprite(const std::string& filename, LoadType loadType) : texture(getText
 	auto loadTexture = std::make_shared<Finally>(loadFunction(this, filename, pFile, halfLoad));
 	loader = std::make_shared<Finally>([pFile, loadTexture, this]() mutable {
 		loadTexture.reset(); // call ~Finally
-		fclose(pFile);
+		if (fclose(pFile) != 0) {
+			internal::warn("Error closing file: {}", strerror(errno));
+		}
 		setCenter(0, 0);
 	});
 	if (loadType != LoadType::THREADED) {
@@ -310,7 +312,8 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 }
 
 void Sprite::setBytes(const unsigned char* const bytes) {
-	texture->setBytes(bytes, int(std::lround(width)), int(std::lround(height)));
+	texture->setBytes(bytes, static_cast<int>(std::lround(width)),
+	                  static_cast<int>(std::lround(height)));
 }
 
 const Shader& Sprite::vertexShader() {
@@ -324,7 +327,7 @@ Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool 
 
 	// Read in some of the signature bytes
 	if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK ||
-	    png_sig_cmp(buf, png_size_t(0), PNG_BYTES_TO_CHECK) != 0) {
+	    png_sig_cmp(buf, static_cast<png_size_t>(0), PNG_BYTES_TO_CHECK) != 0) {
 		throw std::runtime_error(std::string("Error reading signature bytes. (" + filename + ")"));
 	}
 
@@ -387,7 +390,9 @@ void Sprite::cleanUpRowPointers(std::vector<unsigned char*>& buf) {
 }
 
 Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad) {
-	fseek(fp, 10, SEEK_SET);
+	if (fseek(fp, 10, SEEK_SET) != 0) {
+		throw std::runtime_error(std::string("Error seeking file. (" + filename + ")"));
+	}
 	BMPHeader header{};
 	if (!fread(&header, sizeof(header), 1, fp)) {
 		throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
@@ -406,26 +411,29 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 	}
 	std::vector<unsigned char*> buf(header.height);
 	for (auto& row : buf) {
-		row = new unsigned char[header.width * 3];
+		row = new unsigned char[static_cast<unsigned long>(header.width * 3)];
 	}
 	Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
 
 	if (header.height < 0) {
 		header.height = -header.height;
 		for (int i = 0; i < header.height; ++i) {
-			if (fseek(fp, header.dataOffset + i * header.width * 3, SEEK_SET) != 0) {
+			if (fseek(fp, header.dataOffset + static_cast<long>(i) * header.width * 3, SEEK_SET) !=
+			    0) {
 				throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
 			}
-			if (!fread(buf[i], header.width * 3, 1, fp)) {
+			if (!fread(buf[i], static_cast<size_t>(header.width) * 3, 1, fp)) {
 				throw std::runtime_error(std::string("Error reading data. (" + filename + ")"));
 			}
 		}
 	} else { // "bottom-up"-Bitmap
 		for (int i = header.height - 1; i >= 0; --i) {
-			if (fseek(fp, header.dataOffset + i * header.width * 3, SEEK_SET) != 0) {
+			if (fseek(fp, header.dataOffset + static_cast<long>(i) * header.width * 3, SEEK_SET) !=
+			    0) {
 				throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
 			}
-			if (!fread(buf[(header.height - 1) - i], header.width * 3, 1, fp)) {
+			if (!fread(buf[(header.height - 1) - i], static_cast<size_t>(header.width) * 3, 1,
+			           fp)) {
 				throw std::runtime_error(std::string("Error reading data. (" + filename + ")"));
 			}
 		}

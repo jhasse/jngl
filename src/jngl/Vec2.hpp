@@ -66,7 +66,7 @@ std::ostream& operator<<(std::ostream&, const Vec2&);
 
 #if __has_include(<format>) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION >= 170000)
 template <> struct std::formatter<jngl::Vec2> {
-	constexpr auto parse(std::format_parse_context& ctx) {
+	constexpr static auto parse(std::format_parse_context& ctx) {
 		return ctx.begin();
 	}
 	auto format(const jngl::Vec2& v, auto& ctx) const {
