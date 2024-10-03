@@ -65,9 +65,12 @@ std::ostream& operator<<(std::ostream&, const Vec2&);
 } // namespace jngl
 
 #if __has_include(<format>) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION >= 170000)
-template <> struct std::formatter<jngl::Vec2> : std::formatter<std::string> {
-	auto format(jngl::Vec2 v, format_context& ctx) const {
-		return formatter<string>::format(std::format("[x={}, y={}]", v.x, v.y), ctx);
+template <> struct std::formatter<jngl::Vec2> {
+	constexpr auto parse(std::format_parse_context& ctx) {
+		return ctx.begin();
+	}
+	auto format(const jngl::Vec2& v, auto& ctx) const {
+		return std::format_to(ctx.out(), "[x={}, y={}]", v.x, v.y);
 	}
 };
 #endif
