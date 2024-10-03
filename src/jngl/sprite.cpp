@@ -29,6 +29,7 @@
 #include <boost/algorithm/string/predicate.hpp>
 #endif
 #include <cstddef>
+#include <cstring>
 #include <sstream>
 #ifndef NOWEBP
 #include "../ImageDataWebP.hpp"
