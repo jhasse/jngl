@@ -13,12 +13,12 @@
 #include "../audio.hpp"
 #include "../audio/constants.hpp"
 #include "../audio/effect/pitch.hpp"
+#include "../log.hpp"
 #include "../main.hpp"
 #include "../opengl.hpp"
 #include "../theoraplay/theoraplay.h"
 #include "Channel.hpp"
 #include "Shader.hpp"
-#include "debug.hpp"
 #include "screen.hpp"
 #include "time.hpp"
 
@@ -33,7 +33,7 @@ public:
 	explicit Impl(const std::string& filename)
 	: decoder(THEORAPLAY_startDecodeFile((pathPrefix + filename).c_str(), BUFFER_SIZE,
 	                                     THEORAPLAY_VIDFMT_IYUV)),
-	  startTime(-jngl::getTime()) {
+	  startTime(-getTime()) {
 		if (!decoder) {
 			throw std::runtime_error("Failed to start decoding " + filename + "!");
 		}
@@ -55,18 +55,15 @@ public:
 
 	void draw() {
 		if (!started()) {
-			const double timeBuffering = jngl::getTime() + startTime;
+			const double timeBuffering = getTime() + startTime;
 			if (timeBuffering > 5 || THEORAPLAY_availableVideo(decoder) >= BUFFER_SIZE ||
 			    THEORAPLAY_threadDone(decoder)) {
-				jngl::debug("Buffering took ");
-				jngl::debug(timeBuffering);
-				jngl::debug(" seconds (");
-				jngl::debug(THEORAPLAY_availableVideo(decoder));
-				jngl::debugLn(" frames).");
-				startTime = jngl::getTime();
+				internal::debug("Buffering took {:.2f} seconds ({} frames).", timeBuffering,
+				                THEORAPLAY_availableVideo(decoder));
+				startTime = getTime();
 			}
 		}
-		double now = jngl::getTime() - startTime;
+		double now = getTime() - startTime;
 		if (started() && !video) {
 			video = THEORAPLAY_getVideo(decoder);
 		}
@@ -77,9 +74,7 @@ public:
 				// wait for more.
 				const THEORAPLAY_VideoFrame* last = video;
 				while ((video = THEORAPLAY_getVideo(decoder)) != nullptr) {
-					jngl::debug("\x1b[33mskipped frame at ");
-					jngl::debug(last->playms);
-					jngl::debugLn("ms\x1b[0m");
+					internal::warn("Skipped frame at {}ms.", last->playms);
 					THEORAPLAY_freeVideo(last);
 					last = video;
 					if (now - static_cast<double>(video->playms) / 1000. < timePerFrame) {
@@ -310,7 +305,7 @@ private:
 				return 0;
 			}
 			if (started()) {
-				jngl::debugLn("WARNING: Audio buffer underrun!");
+				internal::warn("Audio buffer underrun!");
 			}
 			std::memset(data, 0, sample_count);
 			return sample_count;
@@ -333,7 +328,7 @@ private:
 	double startTime;
 	double timePerFrame;
 
-	std::unique_ptr<jngl::ShaderProgram> shaderProgram;
+	std::unique_ptr<ShaderProgram> shaderProgram;
 	int modelviewUniform = -1;
 	GLuint textureY = 0; // luminance
 	GLuint textureU = 0; // chrominance

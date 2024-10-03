@@ -10,7 +10,7 @@
 //  libtheora-1.1.1/examples/player_example.c, but this is all my own
 //  code.
 
-#include "../../src/jngl/debug.hpp"
+#include "../../src/log.hpp"
 
 #include <cassert>
 #include <cstring>
@@ -384,9 +384,8 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 							while (true) {
 								ringBufferSize = static_cast<size_t>(ctx->maxframes + 1) *
 								                 item->width * item->height * 2;
-								jngl::debug("Allocating ");
-								jngl::debug(ringBufferSize / 1024 / 1024);
-								jngl::debugLn(" MB.");
+								jngl::internal::debug("Allocating {} MB for video ring buffer.",
+								                      ringBufferSize / 1024 / 1024);
 								try {
 									ctx->ringBuffer = std::make_unique<uint8_t[]>(ringBufferSize);
 									break;

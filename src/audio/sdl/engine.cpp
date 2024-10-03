@@ -5,8 +5,8 @@
 #include "../engine.hpp"
 
 #include "../../jngl/debug.hpp"
-#include "../../jngl/log.hpp"
 #include "../../jngl/other.hpp"
+#include "../../log.hpp"
 #include "../Stream.hpp"
 #include "../constants.hpp"
 
@@ -104,8 +104,8 @@ struct engine::Impl {
 				throw std::runtime_error(SDL_GetError());
 			}
 
-			trace("Initialized audio: {} channels, {} Hz, {} samples",
-			      static_cast<int>(obtained.channels), obtained.freq, obtained.samples);
+			internal::debug("Initialized audio: {} channels, {} Hz, {} samples",
+			                static_cast<int>(obtained.channels), obtained.freq, obtained.samples);
 
 			buffer.resize(obtained.samples * obtained.channels);
 			SDL_PauseAudioDevice(device, 0);
