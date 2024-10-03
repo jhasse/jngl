@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Logging functions for debug purposes.">
+<g id="a_Node000001"><a xlink:title="Logging functions for debug purposes, deprecated in favor of log.hpp.">
 <polygon fill="#999999" stroke="#666666" points="135,-129.75 35,-129.75 35,-110.5 135,-110.5 135,-129.75"/>
 <text text-anchor="middle" x="85" y="-116.25" font-family="ui-monospace,monospace" font-size="10.00">jngl/debug.hpp</text>
 </a>

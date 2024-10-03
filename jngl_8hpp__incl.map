@@ -58,7 +58,7 @@
 <area shape="poly" id="edge125_Node000001_Node000045" title=" " alt="" coords="2267,22,1824,26,1130,35,779,43,473,53,248,66,177,73,141,81,122,93,105,108,80,141,76,138,101,104,119,89,139,77,176,68,247,61,472,48,778,38,1130,30,1824,20,2267,17"/>
 <area shape="rect" id="Node000046" href="$job_8hpp.html" title="Contains jngl::Job class and related functions." alt="" coords="28,226,105,252"/>
 <area shape="poly" id="edge96_Node000001_Node000046" title=" " alt="" coords="2267,23,1817,28,1111,39,442,57,212,68,140,75,102,82,70,94,47,107,28,125,11,154,9,170,14,186,39,215,35,218,9,188,3,170,6,152,24,122,43,103,68,89,100,76,139,69,212,63,442,51,1111,33,1817,22,2267,17"/>
-<area shape="rect" id="Node000047" href="$debug_8hpp.html" title="Logging functions for debug purposes." alt="" coords="1014,79,1148,105"/>
+<area shape="rect" id="Node000047" href="$debug_8hpp.html" title="Logging functions for debug purposes, deprecated in favor of log.hpp." alt="" coords="1014,79,1148,105"/>
 <area shape="poly" id="edge84_Node000001_Node000047" title=" " alt="" coords="2267,24,1843,45,1224,82,1163,86,1163,81,1223,76,1843,40,2267,19"/>
 <area shape="rect" id="Node000048" href="$message_8hpp.html" title=" " alt="" coords="936,153,1045,178"/>
 <area shape="poly" id="edge106_Node000001_Node000048" title=" " alt="" coords="2267,22,2116,24,1889,33,1622,50,1484,64,1349,82,1266,96,1183,115,1046,150,1045,145,1182,109,1265,91,1349,76,1484,59,1622,45,1889,27,2116,19,2267,17"/>

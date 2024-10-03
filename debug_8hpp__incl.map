@@ -1,5 +1,5 @@
 <map id="jngl/debug.hpp" name="jngl/debug.hpp">
-<area shape="rect" id="Node000001" title="Logging functions for debug purposes." alt="" coords="52,5,185,31"/>
+<area shape="rect" id="Node000001" title="Logging functions for debug purposes, deprecated in favor of log.hpp." alt="" coords="52,5,185,31"/>
 <area shape="rect" id="Node000002" href="$message_8hpp.html" title=" " alt="" coords="5,79,115,105"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,33,81,69,77,65,107,30"/>
 <area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/sstream.html" title=" " alt="" coords="139,79,216,105"/>

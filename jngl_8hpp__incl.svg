@@ -542,7 +542,7 @@
 <!-- Node47 -->
 <g id="Node000047" class="node">
 <title>Node47</title>
-<g id="a_Node000047"><a xlink:href="debug_8hpp.html" target="_top" xlink:title="Logging functions for debug purposes.">
+<g id="a_Node000047"><a xlink:href="debug_8hpp.html" target="_top" xlink:title="Logging functions for debug purposes, deprecated in favor of log.hpp.">
 <polygon fill="#fff0f0" stroke="red" points="856.73,-185 756.73,-185 756.73,-165.75 856.73,-165.75 856.73,-185"/>
 <text text-anchor="middle" x="806.73" y="-171.5" font-family="ui-monospace,monospace" font-size="10.00">jngl/debug.hpp</text>
 </a>
