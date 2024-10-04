@@ -1,15 +1,11 @@
-// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
-#include "../jngl.hpp"
-#include "../jngl/init.hpp"
-#include "audio/engine.hpp"
-#include "audio/mixer.hpp"
 
 #include <algorithm>
 #include <cmath>
 #include <fstream>
-#include <iostream>
+#include <jngl.hpp>
+#include <jngl/init.hpp>
 #include <map>
 #include <optional>
 #include <sstream>
@@ -65,19 +61,17 @@ public:
 			} else {
 				auto start = std::chrono::steady_clock::now();
 				jngl::stop("test.ogg");
-				std::cout << "stop took "
-						<< std::chrono::duration_cast<std::chrono::milliseconds>(
-								std::chrono::steady_clock::now() - start)
-								.count()
-						<< " ms.\n";
+				jngl::info("stop took {} ms.",
+				           std::chrono::duration_cast<std::chrono::milliseconds>(
+				               std::chrono::steady_clock::now() - start)
+				               .count());
 				if (!jngl::keyPressed(jngl::key::ShiftL)) {
 					start = std::chrono::steady_clock::now();
 					jngl::play("test.ogg");
-					std::cout << "play took "
-							<< std::chrono::duration_cast<std::chrono::milliseconds>(
-									std::chrono::steady_clock::now() - start)
-									.count()
-							<< " ms.\n";
+					jngl::info("play took {} ms.",
+					           std::chrono::duration_cast<std::chrono::milliseconds>(
+					               std::chrono::steady_clock::now() - start)
+					               .count());
 				}
 			}
 		}
@@ -234,8 +228,8 @@ public:
 		drawMouse(jngl::getMousePos());
 		if (++frameNumber == 500) {
 			const auto seconds = jngl::getTime() - frameTime;
-			jngl::trace("It took {} seconds to render 500 frames (~{} FPS)", seconds,
-			            static_cast<int>(500.0 / seconds));
+			jngl::trace("It took {:.2f} seconds to render 500 frames (~{:.1f} FPS)", seconds,
+			            500.0 / seconds);
 			frameNumber = 0;
 			frameTime = jngl::getTime();
 		}
@@ -270,13 +264,12 @@ jngl::AppParameters jnglInit() {
 	params.displayName = "JNGL Test Application";
 	params.screenSize = { 800, 600 };
 	params.start = [displayName = params.displayName]() {
-		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
-		          << jngl::getDesktopHeight() << std::endl
-		          << "Preferred language: " << jngl::getPreferredLanguage() << std::endl
-		          << "Path of binary: " << jngl::getBinaryPath() << std::endl;
+		jngl::info("Size of Desktop: {}x{}", jngl::getDesktopWidth(), jngl::getDesktopHeight());
+		jngl::info("Preferred language: {}", jngl::getPreferredLanguage());
+		jngl::info("Path of binary: {}", jngl::getBinaryPath());
 		jngl::onControllerChanged([]() {
 			const auto controllers = jngl::getConnectedControllers();
-			std::cout << "Number of connected controllers: " << controllers.size() << std::endl;
+			jngl::info("Number of connected controllers: {}", controllers.size());
 		});
 		return std::make_shared<Test>(displayName);
 	};
