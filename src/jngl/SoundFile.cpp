@@ -10,9 +10,9 @@
 #include "../audio/effect/volume.hpp"
 #include "../audio/engine.hpp"
 #include "../audio/mixer.hpp"
+#include "../log.hpp"
 #include "../main.hpp"
 #include "Channel.hpp"
-#include "debug.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -98,9 +98,6 @@ void Audio::step() {
 }
 
 SoundFile::SoundFile(const std::string& filename, std::launch) {
-	debug("Decoding ");
-	debug(filename);
-	debug(" ... ");
 #ifdef _WIN32
 	FILE* const f = fopen(filename.c_str(), "rb");
 #else
@@ -174,15 +171,15 @@ SoundFile::SoundFile(const std::string& filename, std::launch) {
 		buffer_ = std::move(resampledData);
 	}
 
-	debug("OK (");
-	debug(buffer_.size() * sizeof(float) / 1024. / 1024.);
-	debug(" MB, ");
-#ifndef __APPLE__ // FIXME: Remove when AppleClang's libc++ supports this C++20 feature
-#if defined(__GNUC__) && __GNUC__ > 13 // Ubuntu 22.04's GCC doesn't fully support C++20
-	debug(std::chrono::duration_cast<std::chrono::seconds>(length()));
+	internal::debug("Decoded {} ({:.2f} MB, {})", filename,
+	                buffer_.size() * sizeof(float) / 1024. / 1024.,
+#if !defined(__APPLE__) /* FIXME: Remove when AppleClang's libc++ supports this C++20 feature */   \
+    && defined(__GNUC__) && __GNUC__ > 13 // Ubuntu 22.04's GCC doesn't fully support C++20
+	                std::chrono::duration_cast<std::chrono::seconds>(length())
+#else
+	                "unknown length"
 #endif
-#endif
-	debugLn(")");
+	);
 }
 
 SoundFile::~SoundFile() = default;
