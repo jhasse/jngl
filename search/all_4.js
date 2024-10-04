@@ -97,7 +97,7 @@ var searchData=
   ['drawable_94',['Drawable',['../classjngl_1_1Drawable.html',1,'jngl']]],
   ['drawable_2ehpp_95',['Drawable.hpp',['../Drawable_8hpp.html',1,'']]],
   ['drawboundingbox_96',['drawBoundingBox',['../classjngl_1_1Drawable.html#a9226b4fed0bec9f1e382e493e6a5cb05',1,'jngl::Drawable']]],
-  ['drawcircle_97',['drawCircle',['../namespacejngl.html#acffb85162aeb7457024b3fdb2b4df9b9',1,'jngl::drawCircle(Vec2, float radius, float startAngle=0)'],['../namespacejngl.html#aeade528077eb8e43fa8af6bb7ce457ad',1,'jngl::drawCircle(Mat3 modelview, float radius, Rgba color)']]],
+  ['drawcircle_97',['drawCircle',['../namespacejngl.html#acffb85162aeb7457024b3fdb2b4df9b9',1,'jngl::drawCircle(Vec2, float radius, float startAngle=0)'],['../namespacejngl.html#aeade528077eb8e43fa8af6bb7ce457ad',1,'jngl::drawCircle(Mat3 modelview, float radius, Rgba color)'],['../namespacejngl.html#a5bd8f53e1bbd511307470d76e943ea77',1,'jngl::drawCircle(Mat3 modelview, Rgba color)']]],
   ['drawclipped_98',['drawClipped',['../classjngl_1_1Sprite.html#a87204f6bbbca14af2ddbc524f499f8f2',1,'jngl::Sprite::drawClipped(float xstart, float xend, float ystart, float yend) const'],['../classjngl_1_1Sprite.html#a0702d08a03df924e22a53b22228c8ad3',1,'jngl::Sprite::drawClipped(Vec2 start, Vec2 end) const']]],
   ['drawellipse_99',['drawEllipse',['../namespacejngl.html#a7b7d911b755d69ff08c637634d2c25df',1,'jngl']]],
   ['drawline_100',['drawLine',['../namespacejngl.html#adda6bd4a93eb670b63a319a2f6c4dd87',1,'jngl::drawLine(Vec2 start, Vec2 end)'],['../namespacejngl.html#a5f3b65bc0411dcd941c0ad1e9e1d7ebb',1,'jngl::drawLine(double xstart, double ystart, double xend, double yend)'],['../namespacejngl.html#ae891e0c19cfaeb0ec2875aa2735b20a8',1,'jngl::drawLine(const Mat3 &amp;modelview, Vec2 end)']]],
