@@ -17,7 +17,6 @@ enum class Alignment : uint8_t { LEFT, RIGHT, CENTER };
 
 class Font;
 class FontImpl;
-class Line;
 
 /// Rectangle shaped text block
 class Text : public Drawable {
@@ -41,6 +40,7 @@ public:
 	void draw() const override;
 
 private:
+	class Line;
 	std::vector<std::shared_ptr<Line>> lines;
 	std::shared_ptr<FontImpl> font;
 	Alignment align = Alignment::LEFT;
