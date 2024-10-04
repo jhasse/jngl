@@ -42,8 +42,8 @@ void pushAlpha(unsigned char alpha);
 /// \deprecated Use setAlpha instead
 void popAlpha();
 
-[[deprecated("Use drawRectangle instead")]]
-/// \deprecated Use drawRectangle instead
+[[deprecated("Use drawRect instead")]]
+/// \deprecated Use drawRect instead
 void setLineWidth(float width);
 
 /// Draws a line from start to end, the width can be set using setLineWidth
@@ -75,6 +75,8 @@ void drawCircle(Mat3 modelview, float radius);
 /// Draws a circle at (0, 0) with \a radius in \a color
 void drawCircle(Mat3 modelview, float radius, Rgba color);
 
+/// Draws a circle at (0, 0) with radius of 1 in \a color
+void drawCircle(Mat3 modelview, Rgba color);
 
 [[deprecated("Use drawCircle instead")]]
 /// \deprecated Use drawCircle instead
