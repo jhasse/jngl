@@ -47,6 +47,9 @@ void Widget::draw() const {
 		effect->beginDraw();
 	}
 	drawSelf();
+	for (const auto& effect : effects) {
+		effect->endDraw();
+	}
 	jngl::popMatrix();
 }
 
