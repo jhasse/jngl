@@ -20,7 +20,7 @@ JNGL_MAIN_BEGIN {
 		jngl::Sprite sprite("././/././jngl.webp");
 		while (jngl::running()) {
 			jngl::updateInput();
-			jngl::setBackgroundColor(jngl::Color(133, 133, 133));
+			jngl::setBackgroundColor(jngl::Rgb::u8(133, 133, 133));
 			jngl::setFont("Arial.ttf");
 			jngl::setFontSize(100);
 			if (first) {

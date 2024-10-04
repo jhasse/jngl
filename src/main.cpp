@@ -54,14 +54,15 @@ namespace jngl {
 std::string pathPrefix;
 optional<std::string> configPath;
 std::vector<std::string> args;
-float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
+Rgb backgroundColor(1, 1, 1);
 std::stack<jngl::Mat3> modelviewStack;
 std::unique_ptr<ShaderProgram> simpleShaderProgram;
 int simpleModelviewUniform;
 int simpleColorUniform;
 
 void clearBackgroundColor() {
-	glClearColor(bgRed, bgGreen, bgBlue, 1);
+	glClearColor(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(),
+	             1);
 }
 
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
@@ -337,11 +338,9 @@ void cancelQuit() {
 	}
 }
 
-void setBackgroundColor(const jngl::Color color) {
+void setBackgroundColor(const jngl::Rgb color) {
 	pWindow.ThrowIfNull();
-	bgRed = static_cast<float>(color.getRed()) / 255.f;
-	bgGreen = static_cast<float>(color.getGreen()) / 255.f;
-	bgBlue = static_cast<float>(color.getBlue()) / 255.f;
+	backgroundColor = color;
 	clearBackgroundColor();
 	glClear(GL_COLOR_BUFFER_BIT);
 }
