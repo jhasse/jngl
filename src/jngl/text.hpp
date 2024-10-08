@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Drawable.hpp"
+#include "Mat3.hpp"
 
 #include <memory>
 #include <string>
@@ -38,6 +39,7 @@ public:
 
 	/// Simply draws the Text object
 	void draw() const override;
+	void draw(Mat3 modelview) const;
 
 private:
 	class Line;

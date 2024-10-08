@@ -1,4 +1,4 @@
-// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Label.hpp"
 
@@ -11,9 +11,9 @@ Label::Label(const std::string& str, Font& font, const Color color, const jngl::
 	text.setCenter(Vec2(0, 0));
 }
 
-void Label::drawSelf() const {
+void Label::drawSelf(jngl::Mat3 modelview) const {
 	jngl::setFontColor(color, alpha);
-	text.draw();
+	text.draw(modelview);
 }
 
 void Label::setAlpha(float alpha) {

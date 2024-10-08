@@ -100,10 +100,15 @@ void Text::step() {
 }
 
 void Text::draw() const {
-	auto mv = modelview().translate({ static_cast<double>(static_cast<int>(getX())),
-	                                  static_cast<double>(static_cast<int>(getY())) });
+	draw(modelview());
+}
+
+void Text::draw(Mat3 modelview) const {
+	auto mv = modelview.translate({ static_cast<double>(static_cast<int>(getX())),
+	                                static_cast<double>(static_cast<int>(getY())) });
 	for (auto& line : lines) {
 		line->draw(mv);
 	}
 }
+
 } // namespace jngl

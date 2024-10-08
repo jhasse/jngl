@@ -4,6 +4,7 @@
 /// @file
 #pragma once
 
+#include "Mat3.hpp"
 #include "Vec2.hpp"
 
 #include <memory>
@@ -36,7 +37,7 @@ public:
 	virtual void draw() const;
 
 	/// Override this function to draw the widget
-	virtual void drawSelf() const = 0;
+	virtual void drawSelf(Mat3 modelview) const = 0;
 
 	void addEffect(std::unique_ptr<Effect>);
 
