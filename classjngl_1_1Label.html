@@ -98,9 +98,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abb1900c170a32e7f2119ac7c5943dc8d" id="r_abb1900c170a32e7f2119ac7c5943dc8d"><td class="memItemLeft" align="right" valign="top"><a id="abb1900c170a32e7f2119ac7c5943dc8d" name="abb1900c170a32e7f2119ac7c5943dc8d"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Label</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;str, <a class="el" href="classjngl_1_1Font.html">Font</a> &amp;, <a class="el" href="classjngl_1_1Color.html">Color</a>, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> <a class="el" href="classjngl_1_1Widget.html#a6e37ad5a87462ee0c98d5e165b90fc40">position</a>)</td></tr>
 <tr class="separator:abb1900c170a32e7f2119ac7c5943dc8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0cb7b3373ae7883d29c49011c3580ac" id="r_ac0cb7b3373ae7883d29c49011c3580ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0cb7b3373ae7883d29c49011c3580ac">drawSelf</a> () const override</td></tr>
-<tr class="memdesc:ac0cb7b3373ae7883d29c49011c3580ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override this function to draw the widget.  <br /></td></tr>
-<tr class="separator:ac0cb7b3373ae7883d29c49011c3580ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53f78ff6fad547cf2f56d60a0ab2ea57" id="r_a53f78ff6fad547cf2f56d60a0ab2ea57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53f78ff6fad547cf2f56d60a0ab2ea57">drawSelf</a> (<a class="el" href="classjngl_1_1Mat3.html">jngl::Mat3</a>) const override</td></tr>
+<tr class="memdesc:a53f78ff6fad547cf2f56d60a0ab2ea57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override this function to draw the widget.  <br /></td></tr>
+<tr class="separator:a53f78ff6fad547cf2f56d60a0ab2ea57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a391413f3039a43801820f09b7c484248" id="r_a391413f3039a43801820f09b7c484248"><td class="memItemLeft" align="right" valign="top"><a id="a391413f3039a43801820f09b7c484248" name="a391413f3039a43801820f09b7c484248"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setAlpha</b> (float alpha)</td></tr>
 <tr class="memdesc:a391413f3039a43801820f09b7c484248"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set font color alpha from 0...1. <br /></td></tr>
@@ -176,8 +176,8 @@ Collaboration diagram for Label:</div>
 <div class="center"><iframe scrolling="no" frameborder="0" src="classjngl_1_1Label__coll__graph.svg" width="118" height="200"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac0cb7b3373ae7883d29c49011c3580ac" name="ac0cb7b3373ae7883d29c49011c3580ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0cb7b3373ae7883d29c49011c3580ac">&#9670;&#160;</a></span>drawSelf()</h2>
+<a id="a53f78ff6fad547cf2f56d60a0ab2ea57" name="a53f78ff6fad547cf2f56d60a0ab2ea57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53f78ff6fad547cf2f56d60a0ab2ea57">&#9670;&#160;</a></span>drawSelf()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -188,7 +188,7 @@ Collaboration diagram for Label:</div>
         <tr>
           <td class="memname">void drawSelf </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Mat3.html">jngl::Mat3</a></td>          <td class="paramname"><span class="paramname"><em>modelview</em></span></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -201,7 +201,7 @@ Collaboration diagram for Label:</div>
 
 <p>Override this function to draw the widget. </p>
 
-<p>Implements <a class="el" href="classjngl_1_1Widget.html#af532c2e778f0b7ed2013943d0ee3eda3">Widget</a>.</p>
+<p>Implements <a class="el" href="classjngl_1_1Widget.html#a53408210146ba42cb88bcb38b08a9a81">Widget</a>.</p>
 
 </div>
 </div>

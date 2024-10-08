@@ -87,7 +87,7 @@ var searchData=
   ['drawpoint_84',['drawPoint',['../namespacejngl.html#a85ac77722dae61e1b6b054b506bd1e45',1,'jngl']]],
   ['drawrect_85',['drawRect',['../namespacejngl.html#a613e032e5ada91ff002f75a46bd217b9',1,'jngl::drawRect(Vec2 position, Vec2 size)'],['../namespacejngl.html#a205c2adf01c829c4ebc78d9ef94ab793',1,'jngl::drawRect(const Mat3 &amp;modelview, Vec2 size, Color)'],['../namespacejngl.html#a4ada40428e75b5dc0f697920e0753894',1,'jngl::drawRect(const Mat3 &amp;modelview, Vec2 size, Rgba color)']]],
   ['drawscaled_86',['drawScaled',['../classjngl_1_1Sprite.html#a41b02a54c89c6d5fe3322b38d4a071f8',1,'jngl::Sprite']]],
-  ['drawself_87',['drawSelf',['../classjngl_1_1Label.html#ac0cb7b3373ae7883d29c49011c3580ac',1,'jngl::Label::drawSelf()'],['../classjngl_1_1Widget.html#af532c2e778f0b7ed2013943d0ee3eda3',1,'jngl::Widget::drawSelf()']]],
+  ['drawself_87',['drawSelf',['../classjngl_1_1Label.html#a53f78ff6fad547cf2f56d60a0ab2ea57',1,'jngl::Label::drawSelf()'],['../classjngl_1_1Widget.html#a53408210146ba42cb88bcb38b08a9a81',1,'jngl::Widget::drawSelf()']]],
   ['drawtriangle_88',['drawTriangle',['../namespacejngl.html#a1732275d2646c634f74abec40aeaafe8',1,'jngl::drawTriangle(Vec2 a, Vec2 b, Vec2 c)'],['../namespacejngl.html#a5a2fef9a452c7eaa09ad0a6a7614fa76',1,'jngl::drawTriangle(double A_x, double A_y, double B_x, double B_y, double C_x, double C_y)']]],
   ['duration_89',['duration',['http://en.cppreference.com/w/cpp/chrono/duration/duration.html',1,'std::chrono::duration']]],
   ['duration_5fcast_90',['duration_cast',['http://en.cppreference.com/w/cpp/chrono/duration/duration_cast.html',1,'std::chrono']]],

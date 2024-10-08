@@ -110,9 +110,9 @@ Public Member Functions</h2></td></tr>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> () const</td></tr>
 <tr class="memdesc:a96bb482f1b66dc98abe16b25d5580a08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the widget with all effects applied. <br /></td></tr>
 <tr class="separator:a96bb482f1b66dc98abe16b25d5580a08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af532c2e778f0b7ed2013943d0ee3eda3" id="r_af532c2e778f0b7ed2013943d0ee3eda3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af532c2e778f0b7ed2013943d0ee3eda3">drawSelf</a> () const =0</td></tr>
-<tr class="memdesc:af532c2e778f0b7ed2013943d0ee3eda3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override this function to draw the widget.  <br /></td></tr>
-<tr class="separator:af532c2e778f0b7ed2013943d0ee3eda3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53408210146ba42cb88bcb38b08a9a81" id="r_a53408210146ba42cb88bcb38b08a9a81"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53408210146ba42cb88bcb38b08a9a81">drawSelf</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>) const =0</td></tr>
+<tr class="memdesc:a53408210146ba42cb88bcb38b08a9a81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override this function to draw the widget.  <br /></td></tr>
+<tr class="separator:a53408210146ba42cb88bcb38b08a9a81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4026e489e804f096d432b1ae028ffa3" id="r_aa4026e489e804f096d432b1ae028ffa3"><td class="memItemLeft" align="right" valign="top"><a id="aa4026e489e804f096d432b1ae028ffa3" name="aa4026e489e804f096d432b1ae028ffa3"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addEffect</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/unique_ptr.html">std::unique_ptr</a>&lt; <a class="el" href="classjngl_1_1Effect.html">Effect</a> &gt;)</td></tr>
 <tr class="separator:aa4026e489e804f096d432b1ae028ffa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,7 +139,7 @@ Protected Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="Widget_8hpp_source.html#l00017">17</a> of file <a class="el" href="Widget_8hpp_source.html">Widget.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Widget_8hpp_source.html#l00018">18</a> of file <a class="el" href="Widget_8hpp_source.html">Widget.hpp</a>.</p>
 </div><div class="dynheader">
 Inheritance diagram for Widget:</div>
 <div class="dyncontent">
@@ -171,7 +171,7 @@ Collaboration diagram for Widget:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Widget_8hpp_source.html#l00024">24</a> of file <a class="el" href="Widget_8hpp_source.html">Widget.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Widget_8hpp_source.html#l00025">25</a> of file <a class="el" href="Widget_8hpp_source.html">Widget.hpp</a>.</p>
 
 </div>
 </div>
@@ -204,8 +204,8 @@ Collaboration diagram for Widget:</div>
 
 </div>
 </div>
-<a id="af532c2e778f0b7ed2013943d0ee3eda3" name="af532c2e778f0b7ed2013943d0ee3eda3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af532c2e778f0b7ed2013943d0ee3eda3">&#9670;&#160;</a></span>drawSelf()</h2>
+<a id="a53408210146ba42cb88bcb38b08a9a81" name="a53408210146ba42cb88bcb38b08a9a81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53408210146ba42cb88bcb38b08a9a81">&#9670;&#160;</a></span>drawSelf()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -216,7 +216,7 @@ Collaboration diagram for Widget:</div>
         <tr>
           <td class="memname">virtual void drawSelf </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a></td>          <td class="paramname"><span class="paramname"><em>modelview</em></span></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -229,7 +229,7 @@ Collaboration diagram for Widget:</div>
 
 <p>Override this function to draw the widget. </p>
 
-<p>Implemented in <a class="el" href="classjngl_1_1Label.html#ac0cb7b3373ae7883d29c49011c3580ac">Label</a>.</p>
+<p>Implemented in <a class="el" href="classjngl_1_1Label.html#a53f78ff6fad547cf2f56d60a0ab2ea57">Label</a>.</p>
 
 </div>
 </div>
@@ -258,7 +258,7 @@ template&lt;class T , class... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Widget_8hpp_source.html#l00044">44</a> of file <a class="el" href="Widget_8hpp_source.html">Widget.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Widget_8hpp_source.html#l00045">45</a> of file <a class="el" href="Widget_8hpp_source.html">Widget.hpp</a>.</p>
 
 </div>
 </div>
@@ -285,7 +285,7 @@ template&lt;class T , class... Args&gt; </div>
 
 <p>Center. </p>
 
-<p class="definition">Definition at line <a class="el" href="Widget_8hpp_source.html#l00058">58</a> of file <a class="el" href="Widget_8hpp_source.html">Widget.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Widget_8hpp_source.html#l00059">59</a> of file <a class="el" href="Widget_8hpp_source.html">Widget.hpp</a>.</p>
 
 </div>
 </div>
