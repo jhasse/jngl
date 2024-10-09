@@ -19,7 +19,7 @@ struct Sound::Impl {
 };
 
 Sound::Sound(const std::vector<float>& bufferData)
-: impl(new Impl{ load_raw(bufferData)->play(), {}, {} }) {
+: impl(new Impl{ std::make_shared<PlayingTrack>(bufferData), {}, {} }) {
 	impl->stream = impl->volumeControl = audio::volume(impl->track);
 }
 
