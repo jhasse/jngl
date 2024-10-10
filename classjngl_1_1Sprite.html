@@ -120,6 +120,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af812f4ccc27b71c0ba3aaa6b0c9f06ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c9151f9ca0ff60312eb4571a55c52d0" id="r_a9c9151f9ca0ff60312eb4571a55c52d0"><td class="memItemLeft" align="right" valign="top"><a id="a9c9151f9ca0ff60312eb4571a55c52d0" name="a9c9151f9ca0ff60312eb4571a55c52d0"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Sprite</b> (const uint8_t *bytes, size_t width, size_t height)</td></tr>
+<tr class="memdesc:a9c9151f9ca0ff60312eb4571a55c52d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The sprite data is stored as packed RGBA bytes in an array, where the size of the array needs to be calculated as <code>width * height * 4</code>. <br /></td></tr>
 <tr class="separator:a9c9151f9ca0ff60312eb4571a55c52d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc691192408ad699380be20bb1de75cc" id="r_afc691192408ad699380be20bb1de75cc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc691192408ad699380be20bb1de75cc">Sprite</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename, LoadType loadType=LoadType::NORMAL)</td></tr>
 <tr class="separator:afc691192408ad699380be20bb1de75cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,8 +136,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abff99211b8dc80f27df586f2039bd10c" id="r_abff99211b8dc80f27df586f2039bd10c"><td class="memItemLeft" align="right" valign="top"><a id="abff99211b8dc80f27df586f2039bd10c" name="abff99211b8dc80f27df586f2039bd10c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Alpha.html">Alpha</a>, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
 <tr class="separator:abff99211b8dc80f27df586f2039bd10c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad569156f9424782e97035deb46b0777b" id="r_ad569156f9424782e97035deb46b0777b"><td class="memItemLeft" align="right" valign="top"><a id="ad569156f9424782e97035deb46b0777b" name="ad569156f9424782e97035deb46b0777b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> (const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *shaderProgram) const</td></tr>
+<tr class="memitem:ad569156f9424782e97035deb46b0777b" id="r_ad569156f9424782e97035deb46b0777b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad569156f9424782e97035deb46b0777b">draw</a> (const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *shaderProgram) const</td></tr>
+<tr class="memdesc:ad569156f9424782e97035deb46b0777b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the sprite using the specified shader program.  <br /></td></tr>
 <tr class="separator:ad569156f9424782e97035deb46b0777b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a324670964d6669a7149bd1cc8b43e18a" id="r_a324670964d6669a7149bd1cc8b43e18a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Sprite_1_1Batch.html">Batch</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a324670964d6669a7149bd1cc8b43e18a">batch</a> (const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *shaderProgram=nullptr) const</td></tr>
 <tr class="memdesc:a324670964d6669a7149bd1cc8b43e18a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows to draw the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a> multiple times at different locations in an efficient way.  <br /></td></tr>
@@ -426,7 +427,7 @@ Collaboration diagram for Sprite:</div>
 </div>
 </div>
 <a id="a35460413b5c663cd8a28ad3c80caaf71" name="a35460413b5c663cd8a28ad3c80caaf71"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a35460413b5c663cd8a28ad3c80caaf71">&#9670;&#160;</a></span>draw() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a35460413b5c663cd8a28ad3c80caaf71">&#9670;&#160;</a></span>draw() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -455,7 +456,7 @@ Collaboration diagram for Sprite:</div>
 </div>
 </div>
 <a id="ae852e8df456379a31406ac8076215b4d" name="ae852e8df456379a31406ac8076215b4d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae852e8df456379a31406ac8076215b4d">&#9670;&#160;</a></span>draw() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae852e8df456379a31406ac8076215b4d">&#9670;&#160;</a></span>draw() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -477,6 +478,31 @@ Collaboration diagram for Sprite:</div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">shaderProgram</td><td>Passing <code>nullptr</code> uses the default. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad569156f9424782e97035deb46b0777b" name="ad569156f9424782e97035deb46b0777b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad569156f9424782e97035deb46b0777b">&#9670;&#160;</a></span>draw() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void draw </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *</td>          <td class="paramname"><span class="paramname"><em>shaderProgram</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws the sprite using the specified shader program. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">shaderProgram</td><td>A pointer to the <a class="el" href="classjngl_1_1ShaderProgram.html" title="Linked vertex and fragment shaders.">ShaderProgram</a> object to use for drawing. </td></tr>
   </table>
   </dd>
 </dl>
@@ -656,7 +682,7 @@ Collaboration diagram for Sprite:</div>
 
 <p>Function which actually loads the sprite. </p>
 
-<p class="definition">Definition at line <a class="el" href="sprite_8hpp_source.html#l00222">222</a> of file <a class="el" href="sprite_8hpp_source.html">sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sprite_8hpp_source.html#l00227">227</a> of file <a class="el" href="sprite_8hpp_source.html">sprite.hpp</a>.</p>
 
 </div>
 </div>
