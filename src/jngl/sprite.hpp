@@ -51,6 +51,8 @@ public:
 	explicit Sprite(const ImageData&, double scale,
 	                std::optional<std::string_view> filename = std::nullopt);
 
+	/// The sprite data is stored as packed RGBA bytes in an array, where the size of the array
+	/// needs to be calculated as `width * height * 4`.
 	Sprite(const uint8_t* bytes, size_t width, size_t height);
 
 	/// \deprecated Use Loader instead
@@ -123,6 +125,9 @@ public:
 	void draw(Mat3 modelview, const ShaderProgram* = nullptr) const;
 	void draw(Mat3 modelview, Alpha, const ShaderProgram* = nullptr) const;
 
+	/// Draws the sprite using the specified shader program.
+	///
+	/// @param shaderProgram A pointer to the ShaderProgram object to use for drawing.
 	void draw(const ShaderProgram* shaderProgram) const;
 
 	/// While this object is alive, don't do any other draw calls. Should never outlive its Sprite.
