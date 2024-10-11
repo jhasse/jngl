@@ -1,4 +1,4 @@
-// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -13,7 +13,7 @@ struct SoundParams;
 
 class Sound {
 public:
-	Sound(std::vector<float>& bufferData, long frequency);
+	explicit Sound(const std::vector<float>& bufferData);
 	Sound(const Sound&) = delete;
 	Sound& operator=(const Sound&) = delete;
 	Sound(Sound&&) = default;
@@ -24,6 +24,9 @@ public:
 	void loop();
 	void setVolume(float v);
 	std::shared_ptr<Stream> getStream();
+
+	/// returns 0...1 and will reset when looping
+	float progress() const;
 
 private:
 	struct Impl;

@@ -1,6 +1,6 @@
 // Copyright 2012-2021 Jan Niklas Hasse <jhasse@gmail.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-/// Logging functions for debug purposes
+/// Logging functions for debug purposes, deprecated in favor of log.hpp
 /// @file
 #pragma once
 

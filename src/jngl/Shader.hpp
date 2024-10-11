@@ -1,4 +1,4 @@
-// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -12,7 +12,7 @@ namespace jngl {
 class Shader {
 public:
 	/// Type of a Shader. To link a ShaderProgram, one shader of each type is needed.
-	enum class Type {
+	enum class Type : uint8_t {
 		VERTEX,
 		FRAGMENT,
 	};

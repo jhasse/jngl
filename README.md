@@ -5,10 +5,10 @@
 [🎓 Tutorial](https://github.com/pinguin999/my-jngl-starter)
 [📚 Documentation](https://bixense.com/jngl/annotated.html)
 
-[![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/zWdnq6UJ79)
+[![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/254P43HvWJ)
 
 An easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox, the Nintendo Switch,
-and the Web.
+LG webOS and the Web.
 
 [![Portal Dogs running on the Switch](https://user-images.githubusercontent.com/80071/105062511-f651d480-5a7a-11eb-8cd3-260c7929353a.gif)](https://portaldogs.com/)
 

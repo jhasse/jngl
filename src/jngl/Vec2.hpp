@@ -1,4 +1,4 @@
-// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Vec2 class
 /// @file
@@ -6,6 +6,10 @@
 
 #include <boost/qvm_lite.hpp>
 #include <iosfwd>
+
+#if __has_include(<format>) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION >= 170000)
+#include <format>
+#endif
 
 namespace jngl {
 
@@ -46,6 +50,9 @@ public:
 	/// returns true if both x and y are exactly 0
 	bool isNull() const;
 
+	/// rotates the vector clock-wise by \a angle (radian)
+	void rotate(float angle);
+
 	/// Helper function to use with cereal or Boost.Serialization
 	template <class Archive> void serialize(Archive& ar, const unsigned int) {
 		ar(x, y);
@@ -57,22 +64,33 @@ std::ostream& operator<<(std::ostream&, const Vec2&);
 
 } // namespace jngl
 
+#if __has_include(<format>) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION >= 170000)
+template <> struct std::formatter<jngl::Vec2> {
+	constexpr static auto parse(std::format_parse_context& ctx) {
+		return ctx.begin();
+	}
+	auto format(const jngl::Vec2& v, auto& ctx) const {
+		return std::format_to(ctx.out(), "[x={}, y={}]", v.x, v.y);
+	}
+};
+#endif
+
 namespace boost::qvm {
 template <> struct vec_traits<jngl::Vec2> {
 	static int const dim = 2;
 	using scalar_type = double;
 
-	template <int I> static inline scalar_type& write_element(jngl::Vec2& v) {
+	template <int I> static scalar_type& write_element(jngl::Vec2& v) {
 		return (&v.x)[I];
 	}
-	template <int I> static inline scalar_type read_element(const jngl::Vec2& v) {
+	template <int I> static scalar_type read_element(const jngl::Vec2& v) {
 		return (&v.x)[I];
 	}
 
-	static inline scalar_type& write_element_idx(int i, jngl::Vec2& v) {
+	static scalar_type& write_element_idx(int i, jngl::Vec2& v) {
 		return (&v.x)[i];
 	}
-	static inline scalar_type read_element_idx(int i, jngl::Vec2 const& v) {
+	static scalar_type read_element_idx(int i, jngl::Vec2 const& v) {
 		return (&v.x)[i];
 	}
 };

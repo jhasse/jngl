@@ -8,11 +8,12 @@
 #include "sprite.hpp"
 
 #include "../helper.hpp"
+#include "../log.hpp"
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
 #include "../texture.hpp"
 #include "../windowptr.hpp"
-#include "debug.hpp"
+#include "Alpha.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
 
@@ -28,8 +29,9 @@
 #include <boost/algorithm/string/predicate.hpp>
 #endif
 #include <format>
+#include <cstddef>
+#include <cstring>
 #include <sstream>
-#include <thread>
 #ifndef NOWEBP
 #include "../ImageDataWebP.hpp"
 #endif
@@ -64,6 +66,16 @@ Sprite::Sprite(const ImageData& imageData, double scale, std::optional<std::stri
 	}
 }
 
+Sprite::Sprite(const uint8_t* const bytes, const size_t width, const size_t height) {
+	if (!pWindow) {
+		throw std::runtime_error("Window hasn't been created yet.");
+	}
+	texture = std::make_shared<Texture>(width, height, width, height, nullptr, GL_RGBA, bytes);
+	Drawable::width = static_cast<float>(width);
+	Drawable::height = static_cast<float>(height);
+	setCenter(0, 0);
+}
+
 Sprite::Sprite(std::string_view filename, LoadType loadType) : texture(getTexture(filename)) {
 	if (texture) {
 		width = texture->getPreciseWidth();
@@ -73,9 +85,7 @@ Sprite::Sprite(std::string_view filename, LoadType loadType) : texture(getTextur
 	}
 	const bool halfLoad = (loadType == LoadType::HALF);
 	if (!halfLoad) {
-		jngl::debug("Creating sprite ");
-		jngl::debug(filename);
-		jngl::debug("... ");
+		internal::debug("Creating sprite {}...", filename);
 	}
 	auto fullFilename = std::format("{}{}", pathPrefix, filename);
 	const char* extensions[] = {
@@ -135,13 +145,12 @@ Sprite::Sprite(std::string_view filename, LoadType loadType) : texture(getTextur
 		throw std::runtime_error(std::string("File not found: " + fullFilename));
 	}
 	auto loadTexture = std::make_shared<Finally>(loadFunction(this, filename, pFile, halfLoad));
-	loader = std::make_shared<Finally>([pFile, loadTexture, halfLoad, this]() mutable {
+	loader = std::make_shared<Finally>([pFile, loadTexture, this]() mutable {
 		loadTexture.reset(); // call ~Finally
-		fclose(pFile);
-		setCenter(0, 0);
-		if (!halfLoad) {
-			jngl::debugLn("OK");
+		if (fclose(pFile) != 0) {
+			internal::warn("Error closing file: {}", strerror(errno));
 		}
+		setCenter(0, 0);
 	});
 	if (loadType != LoadType::THREADED) {
 		loader.reset();
@@ -163,6 +172,10 @@ void Sprite::draw() const {
 }
 
 void Sprite::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) const {
+	draw(modelview, Alpha(gSpriteColor.getAlpha()), shaderProgram);
+}
+
+void Sprite::draw(Mat3 modelview, Alpha alpha, const ShaderProgram* const shaderProgram) const {
 	modelview *=
 	    boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. }));
 	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
@@ -171,7 +184,7 @@ void Sprite::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) cons
 		                   modelview.data);
 	} else {
 		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), alpha.getAlpha());
 		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	texture->draw();
@@ -192,6 +205,37 @@ void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 	}
 	texture->draw();
 	popMatrix();
+}
+
+struct Sprite::Batch::Impl {
+	ShaderProgram::Context context;
+	jngl::Mat3 translation;
+	int modelviewUniform;
+};
+
+Sprite::Batch::Batch(std::unique_ptr<Impl> impl) : impl(std::move(impl)) {
+}
+
+Sprite::Batch::~Batch() = default;
+
+void Sprite::Batch::draw(Mat3 modelview) const {
+	modelview *= impl->translation;
+	glUniformMatrix3fv(impl->modelviewUniform, 1, GL_FALSE, modelview.data);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4); // see Texture::draw()
+}
+
+auto Sprite::batch(const ShaderProgram* const shaderProgram) const -> Batch {
+	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	if (!shaderProgram) {
+		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+	}
+	texture->bind();
+	return Batch{ std::make_unique<Batch::Impl>(Batch::Impl{
+		std::move(context),
+		boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. })),
+		shaderProgram ? shaderProgram->getUniformLocation("modelview")
+		              : Texture::modelviewUniform }) };
 }
 
 void Sprite::drawScaled(float xfactor, float yfactor,
@@ -270,7 +314,8 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 }
 
 void Sprite::setBytes(const unsigned char* const bytes) {
-	texture->setBytes(bytes, int(std::lround(width)), int(std::lround(height)));
+	texture->setBytes(bytes, static_cast<int>(std::lround(width)),
+	                  static_cast<int>(std::lround(height)));
 }
 
 const Shader& Sprite::vertexShader() {
@@ -284,7 +329,7 @@ Finally Sprite::LoadPNG(std::string_view filename, FILE* const fp, const bool ha
 
 	// Read in some of the signature bytes
 	if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK ||
-	    png_sig_cmp(buf, png_size_t(0), PNG_BYTES_TO_CHECK) != 0) {
+	    png_sig_cmp(buf, static_cast<png_size_t>(0), PNG_BYTES_TO_CHECK) != 0) {
 		throw std::runtime_error(std::format("Error reading signature bytes. ({})", filename));
 	}
 
@@ -346,7 +391,9 @@ void Sprite::cleanUpRowPointers(std::vector<unsigned char*>& buf) {
 }
 
 Finally Sprite::LoadBMP(std::string_view filename, FILE* const fp, const bool halfLoad) {
-	fseek(fp, 10, SEEK_SET);
+	if (fseek(fp, 10, SEEK_SET) != 0) {
+		throw std::runtime_error(std::string("Error seeking file. (" + filename + ")"));
+	}
 	BMPHeader header{};
 	if (!fread(&header, sizeof(header), 1, fp)) {
 		throw std::runtime_error(std::format("Error reading file. ({})", filename));
@@ -365,33 +412,36 @@ Finally Sprite::LoadBMP(std::string_view filename, FILE* const fp, const bool ha
 	}
 	std::vector<unsigned char*> buf(header.height);
 	for (auto& row : buf) {
-		row = new unsigned char[header.width * 3];
+		row = new unsigned char[static_cast<unsigned long>(header.width * 3)];
 	}
 	Finally cleanUp([&buf]() { cleanUpRowPointers(buf); });
 
 	if (header.height < 0) {
 		header.height = -header.height;
 		for (int i = 0; i < header.height; ++i) {
-			if (fseek(fp, header.dataOffset + i * header.width * 3, SEEK_SET) != 0) {
+			if (fseek(fp, header.dataOffset + static_cast<long>(i) * header.width * 3, SEEK_SET) !=
+			    0) {
 				throw std::runtime_error(std::format("Error reading file. ({})", filename));
 			}
-			if (!fread(buf[i], header.width * 3, 1, fp)) {
+			if (!fread(buf[i], static_cast<size_t>(header.width) * 3, 1, fp)) {
 				throw std::runtime_error(std::format("Error reading data. ({})", filename));
 			}
 		}
 	} else { // "bottom-up"-Bitmap
 		for (int i = header.height - 1; i >= 0; --i) {
-			if (fseek(fp, header.dataOffset + i * header.width * 3, SEEK_SET) != 0) {
+			if (fseek(fp, header.dataOffset + static_cast<long>(i) * header.width * 3, SEEK_SET) !=
+			    0) {
 				throw std::runtime_error(std::format("Error reading file. ({})", filename));
 			}
-			if (!fread(buf[(header.height - 1) - i], header.width * 3, 1, fp)) {
+			if (!fread(buf[(header.height - 1) - i], static_cast<size_t>(header.width) * 3, 1,
+			           fp)) {
 				throw std::runtime_error(std::format("Error reading data. ({})", filename));
 			}
 		}
 	}
 	width = static_cast<float>(header.width * getScaleFactor());
 	height = static_cast<float>(header.height * getScaleFactor());
-	loadTexture(header.width, header.height, filename, halfLoad, GL_BGR, &buf[0]);
+	loadTexture(header.width, header.height, filename, halfLoad, GL_BGR, buf.data());
 	return Finally(nullptr);
 }
 #ifndef NOWEBP

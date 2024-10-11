@@ -1,4 +1,4 @@
-// Copyright 2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 // Based on the audio implementation of the psemek engine, see
 // https://lisyarus.github.io/blog/programming/2022/10/15/audio-mixing.html
@@ -30,7 +30,7 @@ struct volume_control_impl : volume_control {
 	}
 
 	void rewind() override {
-		return stream_->rewind();
+		stream_->rewind();
 	}
 
 	bool isPlaying() const override {
@@ -75,7 +75,7 @@ struct volume_control_stereo_impl : volume_control_stereo {
 	}
 
 	void rewind() override {
-		return stream_->rewind();
+		stream_->rewind();
 	}
 
 	bool isPlaying() const override {

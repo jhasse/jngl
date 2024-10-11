@@ -1,8 +1,7 @@
-// Copyright 2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/ImageData.hpp"
-#include "Fixture.hpp"
 
 #include <boost/ut.hpp>
 
@@ -25,6 +24,8 @@ boost::ut::suite _ = [] {
 		} catch (std::runtime_error& e) {
 			expect(eq(e.what(), std::string("File not found: foo.webp")));
 		}
+		expect(eq(jngl::ImageData::load("../data/jngl.webp")->getImageWidth(), 600));
+		expect(eq(jngl::ImageData::load("../data/jngl")->getImageHeight(), 300));
 	};
 };
 } // namespace

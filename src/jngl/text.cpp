@@ -12,25 +12,38 @@
 #include "screen.hpp"
 
 namespace jngl {
-class Line : public Drawable {
+class Text::Line {
 public:
 	Line(std::string text, std::shared_ptr<FontImpl> font) : text(std::move(text)) {
 		setFont(std::move(font));
 	}
 	void setFont(std::shared_ptr<FontImpl> font) {
-		width = static_cast<float>(font->getTextWidth(text));
-		height = static_cast<float>(font->getLineHeight());
+		width = font->getTextWidth(text);
+		height = font->getLineHeight();
 		this->font = std::move(font);
 	}
-	void step() override {
+	void draw(Mat3 modelview) const {
+		font->print(modelview.translate(position), text);
 	}
-	void draw() const override {
-		font->print(ScaleablePixels(getX()), ScaleablePixels(getY()), text);
+	double getWidth() const {
+		return static_cast<double>(static_cast<ScaleablePixels>(width));
+	}
+	double getHeight() const {
+		return static_cast<double>(static_cast<ScaleablePixels>(height));
+	}
+	void setX(double x) {
+		position.x = x;
+	}
+	void setY(double y) {
+		position.y = y;
 	}
 
 private:
 	std::string text;
 	std::shared_ptr<FontImpl> font;
+	Vec2 position;
+	Pixels width{ -1 };
+	Pixels height{ -1 };
 };
 
 Text::Text(const std::string& text) : font(pWindow->getFontImpl()) {
@@ -87,11 +100,15 @@ void Text::step() {
 }
 
 void Text::draw() const {
-	jngl::pushMatrix();
-	jngl::translate(int(getX()), int(getY()));
-	for (auto& line : lines) {
-		line->draw();
-	}
-	jngl::popMatrix();
+	draw(modelview());
 }
+
+void Text::draw(Mat3 modelview) const {
+	auto mv = modelview.translate({ static_cast<double>(static_cast<int>(getX())),
+	                                static_cast<double>(static_cast<int>(getY())) });
+	for (auto& line : lines) {
+		line->draw(mv);
+	}
+}
+
 } // namespace jngl

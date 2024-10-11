@@ -1,4 +1,4 @@
-// Copyright 2021-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #ifndef NOWEBP
 #include "ImageDataWebP.hpp"
@@ -13,16 +13,20 @@ namespace jngl {
 
 ImageDataWebP::ImageDataWebP(std::string_view filename, FILE* file, double scaleFactor)
 : filename(filename) {
-	fseek(file, 0, SEEK_END);
+	if (fseek(file, 0, SEEK_END) != 0) {
+		throw std::runtime_error("Error reading " + this->filename);
+	}
 	auto filesize = ftell(file);
-	fseek(file, 0, SEEK_SET);
+	if (fseek(file, 0, SEEK_SET) != 0) {
+		throw std::runtime_error("Error reading " + this->filename);
+	}
 
 	std::vector<uint8_t> buf(filesize);
-	if (!fread(&buf[0], filesize, 1, file)) {
+	if (!fread(buf.data(), filesize, 1, file)) {
 		throw std::runtime_error(std::format("Couldn't open WebP file. ({})", filename));
 	}
 
-	if (!WebPGetInfo(&buf[0], filesize, &imgWidth, &imgHeight)) {
+	if (!WebPGetInfo(buf.data(), filesize, &imgWidth, &imgHeight)) {
 		throw std::runtime_error(std::format("Invalid WebP file. ({})", filename));
 	}
 
@@ -33,15 +37,15 @@ ImageDataWebP::ImageDataWebP(std::string_view filename, FILE* file, double scale
 	if (scaleFactor + 1e-9 < 1) { // only use WebP's scaler when scaling down, otherwise use OpenGL
 		config.options.use_scaling = 1;
 		config.options.scaled_width = scaledWidth =
-		    std::max(1, int(std::lround(imgWidth * scaleFactor)));
+		    std::max(1, static_cast<int>(std::lround(imgWidth * scaleFactor)));
 		config.options.scaled_height = scaledHeight =
-		    std::max(1, int(std::lround(imgHeight * scaleFactor)));
+		    std::max(1, static_cast<int>(std::lround(imgHeight * scaleFactor)));
 	}
 	config.output.colorspace = MODE_RGBA;
 #ifndef __EMSCRIPTEN__
 	thread = std::make_unique<std::thread>([this, buf{ std::move(buf) }, filesize]() mutable {
 #endif
-		result = WebPDecode(&buf[0], filesize, &config);
+		result = WebPDecode(buf.data(), filesize, &config);
 #ifndef __EMSCRIPTEN__
 	});
 #endif

@@ -16,7 +16,7 @@ class Label : public Widget {
 public:
 	explicit Label(const std::string& str, Font&, Color, Vec2 position);
 
-	void drawSelf() const override;
+	void drawSelf(jngl::Mat3) const override;
 
 	/// Set font color alpha from 0...1
 	void setAlpha(float alpha);

@@ -6,6 +6,7 @@
 
 #include "../../jngl/debug.hpp"
 #include "../../jngl/other.hpp"
+#include "../../log.hpp"
 #include "../Stream.hpp"
 #include "../constants.hpp"
 
@@ -92,15 +93,19 @@ struct engine::Impl {
 			desired.freq = frequency;
 			desired.channels = 2;
 			desired.format = AUDIO_S16SYS;
+#ifdef __EMSCRIPTEN__
+			desired.samples = 2048;
+#else
 			desired.samples = 256;
+#endif
 			desired.callback = &callback;
 			desired.userdata = this;
 			if (device = SDL_OpenAudioDevice(nullptr, 0, &desired, &obtained, 0); device == 0) {
 				throw std::runtime_error(SDL_GetError());
 			}
 
-			// log::info() << "Initialized audio: " << static_cast<int>(obtained.channels) << "
-			// channels, " << obtained.freq << " Hz, " << obtained.samples << " samples";
+			internal::debug("Initialized audio: {} channels, {} Hz, {} samples",
+			                static_cast<int>(obtained.channels), obtained.freq, obtained.samples);
 
 			buffer.resize(obtained.samples * obtained.channels);
 			SDL_PauseAudioDevice(device, 0);

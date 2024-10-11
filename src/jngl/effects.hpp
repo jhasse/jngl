@@ -1,10 +1,11 @@
-// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Effects that can be applied to jngl::Widget
 /// @file
 #pragma once
 
 #include "Vec2.hpp"
+#include <cstdint>
 #include <functional>
 
 namespace jngl {
@@ -12,7 +13,7 @@ namespace jngl {
 /// Base class for effects that can be applied to jngl::Widget
 class Effect {
 public:
-	enum class Action {
+	enum class Action : uint8_t {
 		NONE,
 		REMOVE_EFFECT,
 		REMOVE_WIDGET,

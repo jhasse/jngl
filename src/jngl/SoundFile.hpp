@@ -73,10 +73,16 @@ public:
 	/// \throws std::runtime_error File not found or decoding errors
 	void load();
 
+	/// Returns the duration in ms
+	std::chrono::milliseconds length() const;
+
+	/// Returns playing progress in [0, 1], can be used with length() to determine how much time
+	/// has passed
+	float progress() const;
+
 private:
 	std::shared_ptr<Sound> sound_;
 	std::vector<float> buffer_;
-	long frequency = -1;
 };
 
 } // namespace jngl

@@ -10,6 +10,7 @@
 #include "matrix.hpp"
 #include "screen.hpp"
 
+#include <cmath>
 #include <stack>
 
 namespace jngl {
@@ -18,6 +19,10 @@ Rgba gShapeColor{ 0, 0, 0, 1 };
 
 void setColor(const Rgb rgb) {
 	gShapeColor.setRgb(rgb);
+}
+
+void setColor(const Rgba rgba) {
+	gShapeColor = rgba;
 }
 
 void setColor(const Rgb color, const unsigned char alpha) {
@@ -91,11 +96,14 @@ void drawCircle(Mat3 modelview, const float radius) {
 }
 
 void drawCircle(Mat3 modelview, const float radius, const Rgba color) {
+	drawCircle(modelview.scale(radius), color);
+}
+
+void drawCircle(Mat3 modelview, const Rgba color) {
 	glBindVertexArray(opengl::vaoStream);
-	auto tmp =
-	    useSimpleShaderProgram(modelview.scale(radius).scale(static_cast<float>(getScaleFactor()),
-	                                                         static_cast<float>(getScaleFactor())),
-	                           color);
+	auto tmp = useSimpleShaderProgram(
+	    modelview.scale(static_cast<float>(getScaleFactor()), static_cast<float>(getScaleFactor())),
+	    color);
 	// clang-format off
 	const static float vertexes[] = {
 		1.f, 0.f, 0.9951847f, 0.09801714f, 0.9807853f, 0.1950903f, 0.9569403f, 0.2902847f,

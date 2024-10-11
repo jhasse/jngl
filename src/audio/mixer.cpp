@@ -15,6 +15,7 @@ namespace jngl {
 
 struct Mixer::Impl {
 	atomic_queue::AtomicQueue<Stream*, 10> streamsToRemoveOnMainThread;
+	std::vector<Stream*> streamsToRemoveLater;
 
 	constexpr static uintptr_t REMOVE_FLAG = 1;
 	atomic_queue::AtomicQueue<uintptr_t, 20> commands;
@@ -66,6 +67,24 @@ size_t Mixer::read(float* data, size_t sample_count) {
 		return first + read(data + BUFFER_SIZE, sample_count - BUFFER_SIZE);
 	}
 
+	auto end = impl->streamsToRemoveLater.end();
+	for (auto it = impl->streamsToRemoveLater.begin(); it != end;) {
+		if (*it) {
+			if (impl->streamsToRemoveOnMainThread.try_push(*it)) {
+				*it = nullptr;
+			} else {
+				break;
+			}
+			++it;
+		} else {
+			++it;
+			if (it == end) {
+				impl->streamsToRemoveLater.clear();
+				break;
+			}
+		}
+	}
+
 	uintptr_t tmp;
 	while (impl->commands.try_pop(tmp)) {
 		if (tmp % 2 == 0) { // REMOVE_FLAG not set, means we have to add a new Stream*
@@ -78,7 +97,11 @@ size_t Mixer::read(float* data, size_t sample_count) {
 			if (it != activeStreams + numberOfActiveStreams) {
 				*it = activeStreams[--numberOfActiveStreams]; // move the last element to the one to
 				                                              // be erased
-				impl->streamsToRemoveOnMainThread.push(stream);
+				if (!impl->streamsToRemoveOnMainThread.try_push(stream)) {
+					// we shall never ever block in this thread. Therefore only use try_push and
+					// lets hope that the main thread will GC at some point.
+					impl->streamsToRemoveLater.emplace_back(stream);
+				}
 			}
 		}
 	}
@@ -103,7 +126,11 @@ size_t Mixer::read(float* data, size_t sample_count) {
 		}
 
 		if (read < sample_count) {
-			impl->streamsToRemoveOnMainThread.push(*it);
+			if (!impl->streamsToRemoveOnMainThread.try_push(*it)) {
+				// we shall never ever block in this thread. Therefore only use try_push and lets
+				// hope that the main thread will GC at some point. (see above)
+				impl->streamsToRemoveLater.emplace_back(*it);
+			}
 			*it = activeStreams[--numberOfActiveStreams]; // move the last element to the one to be
 			                                              // erased
 		} else {

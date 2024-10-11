@@ -11,6 +11,7 @@ Checks: '
        ,-cert-flp30-c,
        ,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,
        ,-clang-diagnostic-unused-command-line-argument,
+       ,-concurrency-mt-unsafe,
        ,-cppcoreguidelines-avoid-c-arrays,
        ,-cppcoreguidelines-avoid-magic-numbers,
        ,-cppcoreguidelines-avoid-non-const-global-variables,
@@ -46,6 +47,8 @@ Checks: '
        ,-llvmlibc-implementation-in-namespace,
        ,-llvmlibc-inline-function-decl,
        ,-llvmlibc-restrict-system-libc-headers,
+       ,-misc-const-correctness,
+       ,-misc-include-cleaner,
        ,-misc-no-recursion,
        ,-misc-non-private-member-variables-in-classes,
        ,-modernize-avoid-c-arrays,
@@ -59,7 +62,7 @@ Checks: '
        ,-readability-uppercase-literal-suffix,
        ,-readability-use-anyofallof,
 '
-WarningsAsErrors: 'hicpp-use-override,modernize-avoid-bind,llvm-namespace-comment,modernize-use-nullptr,modernize-pass-by-value,hicpp-noexcept-move,boost-use-to-string,google-readability-namespace-comments,modernize-use-default-member-init,modernize-loop-convert,hicpp-use-nullptr,google-readability-braces-around-statements,cert-dcl03-c,readability-else-after-return,bugprone-macro-parentheses,readability-redundant-declaration,google-explicit-constructor,readability-avoid-const-params-in-decls'
+WarningsAsErrors: 'hicpp-use-override,modernize-avoid-bind,llvm-namespace-comment,modernize-use-nullptr,modernize-pass-by-value,hicpp-noexcept-move,boost-use-to-string,google-readability-namespace-comments,modernize-use-default-member-init,modernize-loop-convert,hicpp-use-nullptr,google-readability-braces-around-statements,cert-dcl03-c,readability-else-after-return,bugprone-macro-parentheses,readability-redundant-declaration,google-explicit-constructor,readability-avoid-const-params-in-decls,readability-redundant-casting'
 CheckOptions:
       - key:             readability-implicit-bool-conversion.AllowPointerConditions
         value:           '1'

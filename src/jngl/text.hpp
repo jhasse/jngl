@@ -1,10 +1,11 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 
 #pragma once
 
 #include "Drawable.hpp"
+#include "Mat3.hpp"
 
 #include <memory>
 #include <string>
@@ -13,11 +14,10 @@
 namespace jngl {
 
 /// How multiple lines should be aligned in a text block
-enum class Alignment { LEFT, RIGHT, CENTER };
+enum class Alignment : uint8_t { LEFT, RIGHT, CENTER };
 
 class Font;
 class FontImpl;
-class Line;
 
 /// Rectangle shaped text block
 class Text : public Drawable {
@@ -39,8 +39,10 @@ public:
 
 	/// Simply draws the Text object
 	void draw() const override;
+	void draw(Mat3 modelview) const;
 
 private:
+	class Line;
 	std::vector<std::shared_ptr<Line>> lines;
 	std::shared_ptr<FontImpl> font;
 	Alignment align = Alignment::LEFT;

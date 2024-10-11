@@ -13,6 +13,14 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
 	string(APPEND CMAKE_C_FLAGS " -Wno-shorten-64-to-32") # ogg, vorbis, etc. are full of these
 endif()
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
+	set(USE_FLAGS "-sUSE_SDL=2 -sUSE_FREETYPE=1 -sUSE_VORBIS=1")
+	string(APPEND CMAKE_CXX_FLAGS " ${USE_FLAGS} -sNO_DISABLE_EXCEPTION_CATCHING")
+	string(APPEND CMAKE_C_FLAGS " ${USE_FLAGS}")
+	string(APPEND CMAKE_EXE_LINKER_FLAGS " ${USE_FLAGS} -sASSERTIONS=1 --preload-file data")
+	set(CMAKE_EXECUTABLE_SUFFIX ".html")
+endif()
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 file(GLOB SRC src/*.cpp src/jngl/*.cpp
@@ -53,7 +61,7 @@ if(IOS)
 	set(CMAKE_DISABLE_FIND_PACKAGE_ZLIB TRUE)
 	set(CMAKE_DISABLE_FIND_PACKAGE_BZip2 TRUE)
 endif()
-find_package(Boost 1.76.0) # first version with boost/qvm_lite.hpp
+find_package(Boost CONFIG 1.76.0) # first version with boost/qvm_lite.hpp
 if(Boost_FOUND)
 	target_include_directories(jngl PUBLIC ${Boost_INCLUDE_DIRS})
 else()
@@ -371,6 +379,10 @@ else()
 				target_link_libraries(example-throw jngl)
 				add_executable(example-shader examples/shader/main.cpp)
 				target_link_libraries(example-shader jngl)
+
+				add_executable(audioplayer examples/audioplayer.cpp)
+				target_link_libraries(audioplayer PRIVATE jngl)
+				add_custom_command(TARGET audioplayer COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/test.ogg "$<TARGET_FILE_DIR:audioplayer>")
 			endif()
 		endif()
 		target_link_libraries(jngl-test jngl)

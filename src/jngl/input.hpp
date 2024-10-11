@@ -1,4 +1,4 @@
-// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Input related functions
 /// @file
@@ -21,7 +21,7 @@ namespace jngl {
 
 namespace key {
 /// Keyboard keys
-enum KeyType {
+enum KeyType : uint8_t {
 	Left,
 	Up,
 	Right,
@@ -72,7 +72,7 @@ enum KeyType {
 void setKeyboardVisible(bool);
 
 /// Whether a normal or a numbers-only keyboard should appear
-enum KeyboardType { Default, Numpad };
+enum KeyboardType : uint8_t { Default, Numpad };
 
 /// Type of the onscreen keyboard
 void setKeyboardType(KeyboardType);
@@ -144,7 +144,7 @@ optional<Vec2> getCursorPos();
 
 namespace mouse {
 /// Mouse buttons
-enum Button { Left, Middle, Right };
+enum Button : uint8_t { Left, Middle, Right };
 } // namespace mouse
 
 /// Returns mouse wheel movement between -100 and 100 (0 if the mousewheel doesn't move)
@@ -167,7 +167,7 @@ void setMouse(Vec2 position);
 
 namespace controller {
 /// Gamepad buttons
-enum Button {
+enum Button : uint8_t {
 	/// x axis of left stick, -1 to 1
 	LeftStickX,
 

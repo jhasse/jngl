@@ -66,14 +66,9 @@ Rgba::operator Rgb() const {
 }
 
 Rgba interpolate(Rgba a, Rgba b, float t) {
-	return { static_cast<float>(static_cast<float>(a.getRed()) * (1.f - t) +
-		                        static_cast<float>(b.getRed()) * t),
-		     static_cast<float>(static_cast<float>(a.getGreen()) * (1.f - t) +
-		                        static_cast<float>(b.getGreen()) * t),
-		     static_cast<float>(static_cast<float>(a.getBlue()) * (1.f - t) +
-		                        static_cast<float>(b.getBlue()) * t),
-		     static_cast<float>(static_cast<float>(a.getAlpha()) * (1.f - t) +
-		                        static_cast<float>(b.getAlpha()) * t) };
+	return { a.getRed() * (1.f - t) + b.getRed() * t, a.getGreen() * (1.f - t) + b.getGreen() * t,
+		     a.getBlue() * (1.f - t) + b.getBlue() * t,
+		     a.getAlpha() * (1.f - t) + b.getAlpha() * t };
 }
 
 } // namespace jngl

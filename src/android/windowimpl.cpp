@@ -316,6 +316,10 @@ void WindowImpl::terminate() {
 	if (display) {
 		display->surface = std::nullopt;
 	}
+	touches.clear(); // It seems when we get terminated via the home swipe gesture that we don't
+	                 // receive the AMOTION_EVENT_ACTION_UP which would leave a touch in the map and
+	                 // result in an assertion failure the next time the user returns to the app and
+	                 // touches the screen.
 }
 
 void WindowImpl::setRelativeMouseMode(const bool relativeMouseMode) {

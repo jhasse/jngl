@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Rgb.hpp"
+#include "Rgba.hpp"
 #include "Vec2.hpp"
 
 #include <memory>
@@ -55,6 +56,9 @@ void print(const std::string& text, jngl::Vec2 position);
 /// Print \a text at { \a xposition, \a yposition }
 void print(const std::string& text, int xposition, int yposition);
 
+/// Print \a text using \a modelview
+void print(const Mat3& modelview, const std::string& text);
+
 /// Get the font size used by print()
 int getFontSize();
 
@@ -74,10 +78,18 @@ void setFont(const std::string& filename);
 
 /// Sets the currently active font by a font \a name
 ///
+/// \throws std::runtime_error If the font couldn't be found.
+///
 /// \code
 /// jngl::setFontByName("monospace");
 /// \endcode
+///
+/// \note Not supported on iOS, Switch, Xbox, and Web. Falls back to using "Arial.ttf" on those
+/// platforms.
 void setFontByName(const std::string& name);
+
+/// Sets the color and alpha value of the currently active font
+void setFontColor(Rgba);
 
 /// Sets the color of the currently active font and the alpha value
 ///

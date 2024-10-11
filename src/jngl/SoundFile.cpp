@@ -5,16 +5,18 @@
 
 #include "../Sound.hpp"
 #include "../audio.hpp"
+#include "../audio/constants.hpp"
 #include "../audio/effect/pitch.hpp"
 #include "../audio/effect/volume.hpp"
 #include "../audio/engine.hpp"
 #include "../audio/mixer.hpp"
+#include "../log.hpp"
 #include "../main.hpp"
 #include "Channel.hpp"
-#include "debug.hpp"
 
 #include <algorithm>
 #include <cassert>
+#include <chrono>
 #include <stdexcept>
 #include <unordered_map>
 
@@ -96,9 +98,6 @@ void Audio::step() {
 }
 
 SoundFile::SoundFile(const std::string& filename, std::launch) {
-	debug("Decoding ");
-	debug(filename);
-	debug(" ... ");
 #ifdef _WIN32
 	FILE* const f = fopen(filename.c_str(), "rb");
 #else
@@ -121,7 +120,6 @@ SoundFile::SoundFile(const std::string& filename, std::launch) {
 	});
 
 	const vorbis_info* const pInfo = ov_info(&oggFile, -1);
-	frequency = pInfo->rate;
 
 	int bitStream;
 	while (true) {
@@ -143,10 +141,45 @@ SoundFile::SoundFile(const std::string& filename, std::launch) {
 			buffer_[start + i * 2 + 1] = buffer[pInfo->channels == 1 ? 0 : 1][i];
 		}
 	}
+	if (pInfo->rate != jngl::audio::frequency) {
+		float resampleFactor =
+		    static_cast<float>(jngl::audio::frequency) / static_cast<float>(pInfo->rate);
+		auto newSize = static_cast<size_t>(static_cast<float>(buffer_.size()) * resampleFactor);
+		if (newSize % 2 != 0) {
+			++newSize;
+		}
+		std::vector<float> resampledData(newSize);
+		for (size_t i = 0; i < newSize / 2; ++i) {
+			float originalIndex = static_cast<float>(i) / resampleFactor;
+			auto index = static_cast<size_t>(originalIndex);
+			float fraction = originalIndex - static_cast<float>(index);
+			{
+				size_t originalLeftIndex = index * 2;
+				const float b =
+				    (originalLeftIndex + 2 < buffer_.size()) ? buffer_[originalLeftIndex + 2] : 0;
+				resampledData[i * 2] =
+				    buffer_[originalLeftIndex] * (1.0f - fraction) + b * fraction;
+			}
+			{
+				const size_t originalRightIndex = index * 2 + 1;
+				const float b =
+				    (originalRightIndex + 2 < buffer_.size()) ? buffer_[originalRightIndex + 2] : 0;
+				resampledData[i * 2 + 1] =
+				    buffer_[originalRightIndex] * (1.0f - fraction) + b * fraction;
+			}
+		}
+		buffer_ = std::move(resampledData);
+	}
 
-	debug("OK (");
-	debug(buffer_.size() * sizeof(float) / 1024. / 1024.);
-	debugLn(" MB)");
+	internal::debug("Decoded {} ({:.2f} MB, {})", filename,
+	                buffer_.size() * sizeof(float) / 1024. / 1024.,
+#if !defined(__APPLE__) /* FIXME: Remove when AppleClang's libc++ supports this C++20 feature */   \
+    && defined(__GNUC__) && __GNUC__ > 13 // Ubuntu 22.04's GCC doesn't fully support C++20
+	                std::chrono::duration_cast<std::chrono::seconds>(length())
+#else
+	                "unknown length"
+#endif
+	);
 }
 
 SoundFile::~SoundFile() = default;
@@ -157,7 +190,6 @@ SoundFile::SoundFile(SoundFile&& other) noexcept {
 SoundFile& SoundFile::operator=(SoundFile&& other) noexcept {
 	sound_ = std::move(other.sound_);
 	buffer_ = std::move(other.buffer_);
-	frequency = other.frequency;
 	return *this;
 }
 
@@ -166,7 +198,7 @@ void SoundFile::play() {
 }
 
 void SoundFile::play(Channel& channel) {
-	sound_ = std::make_shared<Sound>(buffer_, frequency);
+	sound_ = std::make_shared<Sound>(buffer_);
 	Audio::handle().play(channel, sound_);
 }
 
@@ -196,7 +228,7 @@ void SoundFile::loop(Channel& channel) {
 	if (sound_ && sound_->isLooping()) {
 		return;
 	}
-	sound_ = std::make_shared<Sound>(buffer_, frequency);
+	sound_ = std::make_shared<Sound>(buffer_);
 	sound_->loop();
 	Audio::handle().play(channel, sound_);
 }
@@ -208,6 +240,15 @@ void SoundFile::setVolume(float v) {
 }
 
 void SoundFile::load() {
+}
+
+std::chrono::milliseconds SoundFile::length() const {
+	return std::chrono::milliseconds{ buffer_.size() * 1000 / jngl::audio::frequency /
+		                              2 /* stereo */ };
+}
+
+float SoundFile::progress() const {
+	return sound_ ? sound_->progress() : 0;
 }
 
 std::shared_ptr<SoundFile> getSoundFile(const std::string& filename, std::launch policy) {

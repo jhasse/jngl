@@ -10,7 +10,7 @@ namespace jngl {
 Job::~Job() = default;
 
 void addJob(std::shared_ptr<Job> job) {
-	return pWindow->addJob(std::move(job));
+	pWindow->addJob(std::move(job));
 }
 
 void removeJob(Job* job) {

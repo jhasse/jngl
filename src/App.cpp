@@ -5,10 +5,10 @@
 
 #include "jngl/AppParameters.hpp"
 #include "jngl/ShaderProgram.hpp"
-#include "jngl/debug.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/window.hpp"
 #include "jngl/work.hpp"
+#include "log.hpp"
 #include "windowptr.hpp"
 
 #include <cmath>
@@ -30,7 +30,7 @@ struct App::Impl {
 	std::string displayName;
 	bool pixelArt = false;
 	std::optional<uint32_t> steamAppId;
-	std::set<ShaderProgram*> shaderPrograms{};
+	std::set<ShaderProgram*> shaderPrograms;
 };
 
 App::App() {
@@ -54,7 +54,7 @@ App& App::instance() {
 Finally App::init(AppParameters params) {
 	assert(impl == nullptr);
 	impl = std::make_unique<App::Impl>(
-	    App::Impl{ std::move(params.displayName), params.pixelArt, params.steamAppId });
+	    App::Impl{ std::move(params.displayName), params.pixelArt, params.steamAppId, {} });
 	return Finally{ [this]() { impl.reset(); } };
 }
 
@@ -69,17 +69,20 @@ void App::callAtExitFunctions() {
 		f();
 	}
 	if (!callAtExit.empty()) {
-		debugLn("WARNING: The destructor of a Singleton caused the creation of another Singleton. "
-		        "Use handleIfAlive inside of destructors of Singletons.");
+		internal::warn("The destructor of a Singleton caused the creation of another Singleton. "
+		               "Use handleIfAlive inside of destructors of Singletons.");
 	}
 	callAtExit.clear();
 }
 
 std::string App::getDisplayName() const {
-	return impl->displayName;
+	return impl ? impl->displayName : "";
 }
 
 void App::setDisplayName(const std::string& displayName) {
+	if (!impl) { // e.g. Android when using showWindow without jnglInit
+		new Finally(init({})); // leak
+	}
 	impl->displayName = displayName;
 }
 
@@ -87,10 +90,8 @@ void App::mainLoop() {
 	if (impl->steamAppId) {
 		initSteamAchievements();
 	}
-	debug("Starting main loop for '");
-	debug(impl->displayName);
-	debugLn('\'');
-	return pWindow->mainLoop();
+	internal::debug("Starting main loop for '{}'.", impl->displayName);
+	pWindow->mainLoop();
 }
 
 bool App::isPixelArt() {

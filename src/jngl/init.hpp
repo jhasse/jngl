@@ -66,7 +66,7 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 JNGL_MAIN_END
 #endif
 
-#if defined(_MSC_VER) && WINAPI_FAMILY_APP == WINAPI_FAMILY_DESKTOP_APP
+#if defined(_MSC_VER) && WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
 #include <windows.h>
 
 INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {

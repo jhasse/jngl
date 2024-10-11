@@ -7,7 +7,6 @@
 #include "jngl/Alpha.hpp"
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/Shader.hpp"
-#include "jngl/debug.hpp"
 #include "jngl/matrix.hpp"
 #include "jngl/other.hpp"
 #include "jngl/screen.hpp"
@@ -15,6 +14,7 @@
 #include "jngl/time.hpp"
 #include "jngl/window.hpp"
 #include "jngl/work.hpp"
+#include "log.hpp"
 #include "paths.hpp"
 #include "spriteimpl.hpp"
 #include "texture.hpp"
@@ -54,14 +54,15 @@ namespace jngl {
 std::string pathPrefix;
 optional<std::string> configPath;
 std::vector<std::string> args;
-float bgRed = 1.0f, bgGreen = 1.0f, bgBlue = 1.0f; // Background Colors
+Rgb backgroundColor(1, 1, 1);
 std::stack<jngl::Mat3> modelviewStack;
 std::unique_ptr<ShaderProgram> simpleShaderProgram;
 int simpleModelviewUniform;
 int simpleColorUniform;
 
 void clearBackgroundColor() {
-	glClearColor(bgRed, bgGreen, bgBlue, 1);
+	glClearColor(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(),
+	             1);
 }
 
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
@@ -73,9 +74,11 @@ void
 debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity,
               GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
 	if (severity == GL_DEBUG_SEVERITY_HIGH) {
-		jngl::debugLn(std::string("\x1b[1;31m") + message + "\x1b[0m");
+		internal::error(message);
+	} else if (severity == GL_DEBUG_SEVERITY_MEDIUM) {
+		internal::warn(message);
 	} else if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {
-		jngl::debugLn(message);
+		internal::info(message);
 	}
 }
 #endif
@@ -214,15 +217,8 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 
 void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth,
                       int originalWindowHeight) {
-	debug("Updating projection matrix to ");
-	debug(windowWidth);
-	debug("x");
-	debug(windowHeight);
-	debug(" (original size: ");
-	debug(originalWindowWidth);
-	debug("x");
-	debug(originalWindowHeight);
-	debugLn(")");
+	internal::debug("Updating projection matrix to {}x{} (original size: {}x{})", windowWidth,
+	                windowHeight, originalWindowWidth, originalWindowHeight);
 	const auto l = static_cast<float>(-windowWidth) / 2.f;
 	const auto r = static_cast<float>(windowWidth) / 2.f;
 	const auto b = static_cast<float>(windowHeight) / 2.f;
@@ -253,8 +249,7 @@ bool antiAliasingEnabled = true;
 void showWindow(const std::string& title, const int width, const int height, bool fullscreen,
                 const std::pair<int, int> minAspectRatio,
                 const std::pair<int, int> maxAspectRatio) {
-	debug("jngl::showWindow(\""); debug(title); debug("\", "); debug(width); debug(", ");
-	debug(height); debug(", "); debug(fullscreen); debug(");\n");
+	internal::debug("jngl::showWindow(\"{}\", {}, {}, {});", title, width, height, fullscreen);
 	bool isMouseVisible = pWindow ? pWindow->getMouseVisible() : true;
 	hideWindow();
 	if (width == 0) {
@@ -264,6 +259,9 @@ void showWindow(const std::string& title, const int width, const int height, boo
 		throw std::runtime_error("Height Is 0");
 	}
 	pWindow.Set(new Window(title, width, height, fullscreen, minAspectRatio, maxAspectRatio));
+	if (App::instance().getDisplayName().empty()) {
+		App::instance().setDisplayName(title);
+	}
 	pWindow->SetMouseVisible(isMouseVisible);
 	setAntiAliasing(antiAliasingEnabled);
 	pWindow->initGlObjects();
@@ -301,7 +299,7 @@ void clearBackBuffer() {
 
 	reset();
 	if (!modelviewStack.empty()) {
-		jngl::debugLn("uneven calls to push/popMatrix at the beginning of the frame!");
+		internal::error("Uneven calls to push/popMatrix at the beginning of the frame!");
 	}
 	modelviewStack = {};
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -326,7 +324,7 @@ bool canQuit() {
 
 void quit() noexcept {
 	if (!canQuit()) {
-		debugLn("Quitting the main loop is not supported on this patform!");
+		internal::info("Quitting the main loop is not supported on this patform!");
 		return;
 	}
 	if (const auto w = pWindow.get()) {
@@ -340,11 +338,9 @@ void cancelQuit() {
 	}
 }
 
-void setBackgroundColor(const jngl::Color color) {
+void setBackgroundColor(const jngl::Rgb color) {
 	pWindow.ThrowIfNull();
-	bgRed = static_cast<float>(color.getRed()) / 255.f;
-	bgGreen = static_cast<float>(color.getGreen()) / 255.f;
-	bgBlue = static_cast<float>(color.getBlue()) / 255.f;
+	backgroundColor = color;
 	clearBackgroundColor();
 	glClear(GL_COLOR_BUFFER_BIT);
 }
@@ -412,11 +408,11 @@ void setMouse(const jngl::Vec2 position) {
 }
 
 void setRelativeMouseMode(const bool relative) {
-	return pWindow->SetRelativeMouseMode(relative);
+	pWindow->SetRelativeMouseMode(relative);
 }
 
 void setMouseVisible(const bool visible) {
-	return pWindow->SetMouseVisible(visible);
+	pWindow->SetMouseVisible(visible);
 }
 
 bool isMouseVisible() {
@@ -428,7 +424,7 @@ bool getRelativeMouseMode() {
 }
 
 void setTitle(const std::string& title) {
-	return pWindow->SetTitle(title);
+	pWindow->SetTitle(title);
 }
 
 std::vector<float> readPixels() {
@@ -458,6 +454,10 @@ void print(const std::string& text, const jngl::Vec2 position) {
 
 void print(const std::string& text, const int xposition, const int yposition) {
 	pWindow->print(text, xposition, yposition);
+}
+
+void print(const Mat3& modelview, const std::string& text) {
+	pWindow->print(modelview, text);
 }
 
 int getFontSize() {
@@ -608,7 +608,7 @@ void setAntiAliasing(bool enabled) {
 	}
 	antiAliasingEnabled = enabled;
 #else
-	debug("WARNING: anti aliasing not available!\n");
+	internal::warn("Anti-Aliasing not available!");
 #endif
 }
 
@@ -626,7 +626,7 @@ Finally load(const std::string& filename) {
 }
 
 void setWork(std::shared_ptr<Work> work) {
-	return pWindow->setWork(std::move(work));
+	pWindow->setWork(std::move(work));
 }
 
 void resetFrameLimiter() {
@@ -634,7 +634,7 @@ void resetFrameLimiter() {
 }
 
 void setWork(Work* w) {
-	return pWindow->setWork(std::shared_ptr<Work>(w));
+	pWindow->setWork(std::shared_ptr<Work>(w));
 }
 
 std::shared_ptr<Work> getWork() {
@@ -659,7 +659,7 @@ void setConfigPath(const std::string& path) {
 	}
 }
 
-std::string _getConfigPath() {
+std::string internal::getConfigPath() {
 	if (configPath) {
 		return *configPath;
 	}
@@ -690,7 +690,7 @@ std::vector<std::string> getArgs() {
 }
 
 std::string getConfigPath() {
-	return _getConfigPath();
+	return internal::getConfigPath();
 }
 
 std::stringstream readAsset(const std::string& filename) {
@@ -725,6 +725,16 @@ std::stringstream readAsset(const std::string& filename) {
 	return sstream;
 }
 
+#if defined(HAVE_FILESYSTEM) && (!defined(__APPLE__) || !TARGET_OS_IPHONE)
+std::filesystem::path u8path(const std::string& path) {
+#if __cplusplus >= 202002L
+	return std::filesystem::path(reinterpret_cast<const char8_t*>(path.c_str())); // NOLINT
+#else
+	return std::filesystem::u8path(path);
+#endif
+}
+#endif
+
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE
 std::string readConfig(const std::string& key) {
 	if (!key.empty() && key[0] == '/') {
@@ -732,10 +742,10 @@ std::string readConfig(const std::string& key) {
 	}
 
 #ifdef _WIN32
-	std::filesystem::path p = std::filesystem::u8path(_getConfigPath() + key);
+	std::filesystem::path p = u8path(internal::getConfigPath() + key);
 	std::ifstream fin(p, std::ios::binary);
 #else
-	std::ifstream fin(_getConfigPath() + key, std::ios::binary);
+	std::ifstream fin(internal::getConfigPath() + key, std::ios::binary);
 #endif
 
 	std::string out;
@@ -756,31 +766,24 @@ void writeConfig(const std::string& key, const std::string& value) {
 	auto it = std::find(key.begin(), key.end(), '/');
 	while (it != key.end()) {
 		std::string directory(key.begin(), it);
-		if (mkdir((_getConfigPath() + directory).c_str(), 755) != 0 && errno != EEXIST) {
+		if (mkdir((internal::getConfigPath() + directory).c_str(), 755) != 0 && errno != EEXIST) {
 			throw std::runtime_error("Couldn't create " + directory);
 		}
 		it = std::find(it + 1, key.end(), '/');
 	}
 #endif
 #ifdef HAVE_FILESYSTEM
-#if __cplusplus >= 202002L
-	const auto tmp = _getConfigPath();
-	const auto configPath = std::filesystem::path(std::u8string{ tmp.begin(), tmp.end() });
-	const auto directory =
-	    (configPath / std::filesystem::path(std::u8string{ key.begin(), key.end() })).parent_path();
-#else
-	const auto configPath = std::filesystem::u8path(_getConfigPath());
-	const auto directory = (configPath / std::filesystem::u8path(key)).parent_path();
-#endif
+	const auto configPath = u8path(internal::getConfigPath());
+	const auto directory = (configPath / u8path(key)).parent_path();
 	if (!std::filesystem::exists(directory)) {
 		std::filesystem::create_directories(directory);
 	}
 #endif
 #ifdef _WIN32
-	std::filesystem::path p = std::filesystem::u8path(_getConfigPath() + key);
+	std::filesystem::path p = u8path(internal::getConfigPath() + key);
 	std::ofstream fout(p, std::ios::binary);
 #else
-	std::ofstream fout(_getConfigPath() + key, std::ios::binary);
+	std::ofstream fout(internal::getConfigPath() + key, std::ios::binary);
 #endif
 	fout.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	fout << value;

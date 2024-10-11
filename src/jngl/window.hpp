@@ -16,6 +16,9 @@
 namespace jngl {
 
 /// Creates the main window
+///
+/// If you haven't set a display name for your app using AppParameters::displayName, \a title will
+/// set for the display name.
 void showWindow(const std::string& title, int width, int height, bool fullscreen = false,
                 std::pair<int, int> minAspectRatio = { 4, 3 },
                 std::pair<int, int> maxAspectRatio = { 16, 9 });
@@ -59,7 +62,7 @@ void setFullscreen(bool);
 /// Sets the main window title
 void setTitle(const std::string& title);
 
-enum class Cursor {
+enum class Cursor : uint8_t {
     ARROW,
     I,
 };

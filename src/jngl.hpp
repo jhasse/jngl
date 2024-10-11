@@ -33,6 +33,7 @@
 #include "jngl/font.hpp"
 #include "jngl/input.hpp"
 #include "jngl/job.hpp"
+#include "jngl/log.hpp"
 #include "jngl/main.hpp"
 #include "jngl/matrix.hpp"
 #include "jngl/message.hpp"

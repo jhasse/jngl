@@ -1,15 +1,11 @@
-// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
-#include "../jngl.hpp"
-#include "../jngl/init.hpp"
-#include "audio/engine.hpp"
-#include "audio/mixer.hpp"
 
 #include <algorithm>
 #include <cmath>
 #include <fstream>
-#include <iostream>
+#include <jngl.hpp>
+#include <jngl/init.hpp>
 #include <map>
 #include <optional>
 #include <sstream>
@@ -65,19 +61,17 @@ public:
 			} else {
 				auto start = std::chrono::steady_clock::now();
 				jngl::stop("test.ogg");
-				std::cout << "stop took "
-						<< std::chrono::duration_cast<std::chrono::milliseconds>(
-								std::chrono::steady_clock::now() - start)
-								.count()
-						<< " ms.\n";
+				jngl::info("stop took {} ms.",
+				           std::chrono::duration_cast<std::chrono::milliseconds>(
+				               std::chrono::steady_clock::now() - start)
+				               .count());
 				if (!jngl::keyPressed(jngl::key::ShiftL)) {
 					start = std::chrono::steady_clock::now();
 					jngl::play("test.ogg");
-					std::cout << "play took "
-							<< std::chrono::duration_cast<std::chrono::milliseconds>(
-									std::chrono::steady_clock::now() - start)
-									.count()
-							<< " ms.\n";
+					jngl::info("play took {} ms.",
+					           std::chrono::duration_cast<std::chrono::milliseconds>(
+					               std::chrono::steady_clock::now() - start)
+					               .count());
 				}
 			}
 		}
@@ -134,23 +128,25 @@ public:
 		                   .translate({ -50, -50 }),
 		               { 100, 100 });
 		jngl::setSpriteAlpha(200);
-		jngl::translate(jngl::getScreenSize() / 2);
-		jngl::rotate(rotate);
+		auto rotatedMv =
+		    jngl::modelview().translate(jngl::getScreenSize() / 2).rotate(rotate / 180 * M_PI);
+		jngl::popMatrix();
 		jngl::setSpriteAlpha(static_cast<unsigned char>(std::abs(factor * 255)));
 		if (useShader) {
-			logoWebp.draw(jngl::modelview().scale(static_cast<float>(factor * 2)), &*shaderProgram);
+			logoWebp.draw(jngl::Mat3(rotatedMv).scale(static_cast<float>(factor * 2)),
+			              &*shaderProgram);
 		} else {
-			logoWebp.draw(jngl::modelview().scale(static_cast<float>(factor * 2)));
+			logoWebp.draw(jngl::Mat3(rotatedMv).scale(static_cast<float>(factor * 2)));
 		}
-		jngl::setColor(0, 0, 0);
-		jngl::drawRect(-125, 100, 250, 28);
+		jngl::drawRect(jngl::Mat3(rotatedMv).translate({ -125, 100 }), { 250, 28 }, 0x000000_rgb);
 		jngl::setFontColor(255, 255, 255);
-		jngl::print("White text on black background", -115, 105);
+		jngl::print(jngl::Mat3(rotatedMv).translate({ -115, 105 }),
+		            "White text on black background");
 		jngl::setFontColor(255, 255, 255);
 		jngl::setFontSize(20);
-		jngl::print("White text without background", -115, 135);
+		jngl::print(jngl::Mat3(rotatedMv).translate({ -115, 135 }),
+		            "White text without background");
 		jngl::setFontSize(12);
-		jngl::popMatrix();
 		std::stringstream sstream;
 		sstream << "SPS" << (jngl::getVerticalSync() ? " (V-SYNC)" : "") << ": "
 		        << jngl::getStepsPerSecond() << "\nFactor: " << factor
@@ -232,8 +228,8 @@ public:
 		drawMouse(jngl::getMousePos());
 		if (++frameNumber == 500) {
 			const auto seconds = jngl::getTime() - frameTime;
-			std::cout << "It took " << seconds << " seconds to render 500 frames (~"
-			          << static_cast<int>(500.0 / seconds) << " FPS)" << std::endl;
+			jngl::trace("It took {:.2f} seconds to render 500 frames (~{:.1f} FPS)", seconds,
+			            500.0 / seconds);
 			frameNumber = 0;
 			frameTime = jngl::getTime();
 		}
@@ -268,13 +264,12 @@ jngl::AppParameters jnglInit() {
 	params.displayName = "JNGL Test Application";
 	params.screenSize = { 800, 600 };
 	params.start = [displayName = params.displayName]() {
-		std::cout << "Size of Desktop: " << jngl::getDesktopWidth() << "x"
-		          << jngl::getDesktopHeight() << std::endl
-		          << "Preferred language: " << jngl::getPreferredLanguage() << std::endl
-		          << "Path of binary: " << jngl::getBinaryPath() << std::endl;
+		jngl::info("Size of Desktop: {}x{}", jngl::getDesktopWidth(), jngl::getDesktopHeight());
+		jngl::info("Preferred language: {}", jngl::getPreferredLanguage());
+		jngl::info("Path of binary: {}", jngl::getBinaryPath());
 		jngl::onControllerChanged([]() {
 			const auto controllers = jngl::getConnectedControllers();
-			std::cout << "Number of connected controllers: " << controllers.size() << std::endl;
+			jngl::info("Number of connected controllers: {}", controllers.size());
 		});
 		return std::make_shared<Test>(displayName);
 	};
@@ -311,11 +306,9 @@ void Test::drawBackground() const {
 }
 
 void drawMouse(const jngl::Vec2 mouse) {
-	jngl::translate(mouse.x, mouse.y);
-	jngl::rotate(-45);
 	jngl::setFontSize(30);
 	jngl::setFontColor(10, 10, 200, 200);
-	jngl::print("↑", -8, -2);
+	jngl::print(jngl::modelview().translate(mouse).rotate(-M_PI / 4).translate({ -8, -2 }), "↑");
 	jngl::setFontSize(12);
 	jngl::reset();
 }

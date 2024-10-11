@@ -60,11 +60,11 @@ private:
 Color interpolate(Color a, Color b, float t);
 
 /// Sets the screen's background color which is visible when nothing is drawn
-void setBackgroundColor(jngl::Color);
+void setBackgroundColor(jngl::Rgb);
 
 /// Sets the screen's background color which is visible when nothing is drawn
-/// \deprecated Use setBackgroundColor(jngl::Color) instead.
-[[deprecated("use setBackgroundColor(jngl::Color) instead")]]
+/// \deprecated Use setBackgroundColor(jngl::Rgb) instead.
+[[deprecated("use setBackgroundColor(jngl::Rgb) instead")]]
 void setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
 
 } // namespace jngl

@@ -1,89 +1,36 @@
-// Copyright 2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 // Based on the audio implementation of the psemek engine, see
 // https://lisyarus.github.io/blog/programming/2022/10/15/audio-mixing.html
 #include "Track.hpp"
 
-#include "Stream.hpp"
-
-#include <atomic>
-#include <stdexcept>
-
 namespace jngl {
 
-namespace {
-
-struct data_holder {
-	std::vector<float> storage;
-	gsl::span<float const> samples;
-
-	explicit data_holder(gsl::span<float const> samples) : samples(samples) {
-	}
-
-	explicit data_holder(std::vector<float> storage)
-	: storage(std::move(storage)), samples(this->storage) {
-	}
-};
-
-struct raw_stream_impl : Stream {
-	explicit raw_stream_impl(std::shared_ptr<data_holder> data_holder)
-	: data_holder_(std::move(data_holder)) {
-	}
-
-	std::size_t read(float* data, std::size_t sample_count) override {
-		auto played = played_.load();
-
-		auto count = std::min(data_holder_->samples.size() - played, sample_count);
-		std::copy(data_holder_->samples.begin() + played,
-		          data_holder_->samples.begin() + played + count, data);
-		played_.fetch_add(count);
-		return count;
-	}
-
-	void rewind() override {
-		played_ = 0;
-	}
-
-	bool isPlaying() const override {
-		return data_holder_->samples.size() - played_ > 0;
-	}
-
-private:
-	std::shared_ptr<data_holder> data_holder_;
-	std::atomic<std::size_t> played_{ 0 };
-};
-
-struct raw_track_impl : Track {
-	explicit raw_track_impl(std::shared_ptr<data_holder> data_holder)
-	: data_holder_(std::move(data_holder)) {
-	}
-
-	std::shared_ptr<Stream> stream() const override {
-		return std::make_shared<raw_stream_impl>(data_holder_);
-	}
-
-	std::optional<std::size_t> length() const override {
-		return data_holder_->samples.size();
-	}
-
-private:
-	std::shared_ptr<data_holder> data_holder_;
-};
-
-} // namespace
-
-std::shared_ptr<Track> load_raw(gsl::span<float const> samples) {
-	if ((samples.size() % 2) != 0) {
-		throw std::runtime_error("bad sample count");
-	}
-	return std::make_shared<raw_track_impl>(std::make_shared<data_holder>(samples));
+PlayingTrack::PlayingTrack(gsl::span<const float> samples) : samples(samples) {
 }
 
-std::shared_ptr<Track> load_raw(std::vector<float> samples) {
-	if ((samples.size() % 2) != 0) {
-		throw std::runtime_error("bad sample count");
-	}
-	return std::make_shared<raw_track_impl>(std::make_shared<data_holder>(std::move(samples)));
+float PlayingTrack::progress() const {
+	return static_cast<float>(played_) / static_cast<float>(samples.size());
+}
+
+std::size_t PlayingTrack::read(float* data, std::size_t sample_count) {
+	auto played = played_.load();
+
+	auto count = std::min(samples.size() - played, sample_count);
+	std::copy(samples.begin() + static_cast<decltype(samples)::difference_type>(played),
+	          samples.begin() + static_cast<decltype(samples)::difference_type>(played) +
+	              static_cast<decltype(samples)::difference_type>(count),
+	          data);
+	played_.fetch_add(count);
+	return count;
+}
+
+void PlayingTrack::rewind() {
+	played_ = 0;
+}
+
+bool PlayingTrack::isPlaying() const {
+	return samples.size() - played_ > 0;
 }
 
 } // namespace jngl

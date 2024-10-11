@@ -6,7 +6,7 @@ cache:
   key: cpm
   paths: [.cache/cpm]
 
-image: registry.fedoraproject.org/fedora-minimal:38
+image: registry.fedoraproject.org/fedora-minimal:40
 
 linux:
   stage: build
@@ -36,13 +36,13 @@ mingw:
     - ninja -C build-release
 
 android:
-  image: registry.gitlab.com/jhasse/android-ndk-docker:r27
+  image: registry.gitlab.com/jhasse/android-ndk-docker:r27b
   stage: build
   script:
     - make -C android
 
 steamos:
-  image: registry.gitlab.steamos.cloud/steamrt/soldier/sdk
+  image: registry.gitlab.steamos.cloud/steamrt/sniper/sdk
   stage: build
   script:
     - cd /usr/local/include
@@ -54,15 +54,37 @@ steamos:
     - cmake -Bbuild-steamos-release -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=0 -DJNGL_VIDEO=0 -DJNGL_BUILD_WEBP_FROM_SOURCE=1 -DBUILD_SHARED_LIBS=0
     - cmake --build build-steamos-release
 
+web:
+  image: emscripten/emsdk:3.1.61
+  stage: build
+  script:
+  - emcmake cmake -Bbuild-web
+  - cp -r data build-web/
+  - cd build-web
+  - make -j$(nproc)
+  - mkdir -p ../public/demo
+  - mv jngl-test.html ../public/demo
+  - mv jngl-test.wasm ../public/demo
+  - mv jngl-test.js ../public/demo
+  - mv jngl-test.data ../public/demo
+  artifacts:
+    paths:
+    - public/demo
+
 pages:
   stage: deploy
+  dependencies:
+  - web
   script:
   - microdnf install -y doxygen cmake make tar xz git >/dev/null
   - cd doc
   - cmake .
   - make
   - doxygen
+  - mv ../public __tmp
   - mv html ../public
+  - mv __tmp/demo ../public
+  - rm -r __tmp
   artifacts:
     paths:
     - public

@@ -11,16 +11,16 @@ namespace jngl {
 
 class ImageDataPNG : public ImageData {
 public:
-    ImageDataPNG(const std::string& filename, FILE*);
-    ~ImageDataPNG() override;
-    ImageDataPNG(const ImageDataPNG&) = delete;
-    ImageDataPNG& operator=(const ImageDataPNG&) = delete;
-    ImageDataPNG(ImageDataPNG&&) noexcept;
-    ImageDataPNG& operator=(ImageDataPNG&&) noexcept;
+	ImageDataPNG(const std::string& filename, FILE*);
+	~ImageDataPNG() override;
+	ImageDataPNG(const ImageDataPNG&) = delete;
+	ImageDataPNG& operator=(const ImageDataPNG&) = delete;
+	ImageDataPNG(ImageDataPNG&&) noexcept;
+	ImageDataPNG& operator=(ImageDataPNG&&) noexcept;
 
-    const uint8_t* pixels() const override;
-    int getWidth() const override;
-    int getHeight() const override;
+	const uint8_t* pixels() const override;
+	int getWidth() const override;
+	int getHeight() const override;
 
 	/// returns getWidth() as PNGs don't support scaling
 	int getImageWidth() const override;
@@ -29,8 +29,8 @@ public:
 
 private:
 	const static unsigned int PNG_BYTES_TO_CHECK = 4;
-    std::vector<uint8_t> imageData;
-    size_t x, y;
+	std::vector<uint8_t> imageData;
+	size_t x, y;
 };
 
 } // namespace jngl

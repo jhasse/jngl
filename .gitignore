@@ -17,3 +17,7 @@ Thumbs.db
 /out/
 /.vs/
 /CMakeSettings.json
+
+# GitLab CI
+/public/
+/.gitlab-ci-local/
