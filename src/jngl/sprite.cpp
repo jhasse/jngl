@@ -392,7 +392,7 @@ void Sprite::cleanUpRowPointers(std::vector<unsigned char*>& buf) {
 
 Finally Sprite::LoadBMP(std::string_view filename, FILE* const fp, const bool halfLoad) {
 	if (fseek(fp, 10, SEEK_SET) != 0) {
-		throw std::runtime_error(std::string("Error seeking file. (" + filename + ")"));
+		throw std::runtime_error(std::format("Error seeking file. ({})", filename));
 	}
 	BMPHeader header{};
 	if (!fread(&header, sizeof(header), 1, fp)) {
