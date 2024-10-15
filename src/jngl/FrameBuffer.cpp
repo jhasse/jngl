@@ -207,10 +207,10 @@ FrameBuffer::Context FrameBuffer::use() const {
 	};
 	pushMatrix();
 	reset();
-	opengl::scale(static_cast<float>(pWindow->getCanvasWidth()) / static_cast<float>(impl->width) *
+	opengl::scale(static_cast<float>(pWindow->getWidth()) / static_cast<float>(impl->width) *
 	                  pWindow->getResizedWindowScalingX(),
-	              static_cast<float>(pWindow->getCanvasHeight()) /
-	                  static_cast<float>(impl->height) * pWindow->getResizedWindowScalingY());
+	              static_cast<float>(pWindow->getHeight()) / static_cast<float>(impl->height) *
+	                  pWindow->getResizedWindowScalingY());
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 	glPushAttrib(GL_VIEWPORT_BIT);
 #else
