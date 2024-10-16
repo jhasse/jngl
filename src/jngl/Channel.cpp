@@ -32,21 +32,18 @@ Channel::~Channel() {
 	}
 }
 
-// defined in SoundFile.cpp
-std::shared_ptr<SoundFile> getSoundFile(const std::string& filename, std::launch policy);
-
 void Channel::play(const std::string& filename) {
-	getSoundFile(filename, std::launch::deferred)->play(*this);
+	Audio::handle().getSoundFile(filename, std::launch::deferred)->play(*this);
 }
 
 std::shared_ptr<SoundFile> Channel::loop(const std::string& filename) {
-	auto tmp = getSoundFile(filename, std::launch::deferred);
+	auto tmp = Audio::handle().getSoundFile(filename, std::launch::deferred);
 	tmp->loop(*this);
 	return tmp;
 }
 
 void Channel::stop(const std::string& filename) {
-	getSoundFile(filename, std::launch::async)->stop(*this);
+	Audio::handle().getSoundFile(filename, std::launch::async)->stop(*this);
 }
 
 Finally Channel::pause() {
