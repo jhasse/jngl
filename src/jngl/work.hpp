@@ -1,4 +1,4 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -12,22 +12,53 @@ namespace jngl {
 /// Active state of the game, e.g. a menu or the game itself
 class Work : public Job {
 public:
-	/// Gets called when the "back" button is pressed (important on Android)
+	/// Gets called on Android's "back" gesture or when the <kbd>Esc</kbd> key is pressed
 	///
-	/// Calls onQuitEvent by default.
+	/// Calls quit() by default, so exits the game. It's a good idea that you would only use the
+	/// default behavior in the main menu though. While in-game you normally would switch to a pause
+	/// menu. In the pause menu onBackEvent() would go to the main menu's Work.
+	///
+	/// Example:
+	/// \code
+	/// class MainMenu : public jngl::Work {
+	///     // default implementation of onBackEvent which quits the game
+	/// };
+	///
+	/// class PauseMenu : public jngl::Work {
+	///     void onBackEvent() override {
+	///         jngl::setWork<MainMenu>();
+	///     }
+	/// };
+	///
+	/// class Game : public jngl::Work {
+	///     void onBackEvent() override {
+	///         jngl::setWork<PauseMenu>();
+	///     }
+	/// };
+	/// \endcode
 	virtual void onBackEvent();
 
 	/// Gets called when the user closes the main window or quit() has been called
 	///
-	/// To continue with the main loop, call cancelQuit().
+	/// To continue with the main loop, call cancelQuit(). For example if you want to switch to a
+	/// pause menu instead of exiting the game:
+	///
+	/// \code
+	/// class Game : public jngl::Work {
+	///     void onQuitEvent() {
+	///         jngl::cancelQuit();
+	///         jngl::setWork<PauseMenu>();
+	///     }
+	/// };
+	/// \endcode
 	virtual void onQuitEvent();
 
 	/// Gets called when the "Back" button is pressed on any connected controller (Android only)
 	///
 	/// As the TV remote is registered as a controller this is important to handle Back on the TV
 	/// remote. Most likely you won't need to overwrite this though, as it calls onBackEvent() by
-	/// default and having Android's "Back" button to the same as "Back" on the TV remote is a good
-	/// idea.
+	/// default and having Android's "Back" button behave the same as "Back" on the TV remote is a
+	/// good idea.
 	virtual void onControllerBack();
 
 	/// Gets called when the main window loses focus or the app is put in the background
