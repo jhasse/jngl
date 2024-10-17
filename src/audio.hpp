@@ -51,9 +51,11 @@ private:
 	std::unique_ptr<Channel> mainChannel;
 	std::shared_ptr<audio::pitch_control> pitchControl;
 	std::shared_ptr<audio::volume_control> volumeControl;
-	audio::engine engine;
 	uint8_t pauseDeviceCount = 0; //< if >0 audio device is paused
 	std::unordered_map<std::string, std::shared_ptr<SoundFile>> soundFiles;
+	// engine has to be declared after soundFiles so that the mixer thread gets joined and closed
+	// before any SoundFile is destroyed:
+	audio::engine engine;
 };
 
 } // namespace jngl
