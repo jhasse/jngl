@@ -47,6 +47,4 @@ private:
 	std::vector<GLfloat> vertexes;
 };
 
-extern std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
-
 } // namespace jngl

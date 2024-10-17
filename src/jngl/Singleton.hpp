@@ -32,10 +32,7 @@ public:
 	static T& handle() {
 		if (!instance) {
 			instance = new T;
-			atExit([]() {
-				delete instance;
-				instance = nullptr;
-			});
+			atExit(&Singleton::destroy);
 		}
 		return *instance;
 	}
@@ -43,6 +40,12 @@ public:
 	/// Doesn't create the Singleton, may return nullptr
 	[[nodiscard]] static T* handleIfAlive() noexcept {
 		return instance;
+	}
+
+	/// Deletes the Singleton
+	static void destroy() noexcept {
+		delete instance;
+		instance = nullptr;
 	}
 
 protected:

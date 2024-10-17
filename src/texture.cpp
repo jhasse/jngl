@@ -10,8 +10,6 @@
 
 namespace jngl {
 
-std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
-
 ShaderProgram* Texture::textureShaderProgram = nullptr;
 Shader* Texture::textureVertexShader = nullptr;
 int Texture::shaderSpriteColorUniform = -1;
