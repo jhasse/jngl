@@ -7,7 +7,11 @@
 namespace jngl {
 
 std::shared_ptr<Texture> TextureCache::get(std::string_view filename) {
+#if __cpp_lib_generic_unordered_lookup
 	auto it = textures.find(filename);
+#else
+	auto it = textures.find(std::string(filename));
+#endif
 	if (it == textures.end()) {
 		return nullptr;
 	}
@@ -20,7 +24,11 @@ void TextureCache::insert(std::string_view filename, std::shared_ptr<Texture> te
 }
 
 void TextureCache::remove(std::string_view filename) {
+#if __cpp_lib_generic_unordered_lookup
 	auto it = textures.find(filename);
+#else
+	auto it = textures.find(std::string(filename));
+#endif
 	if (it != textures.end()) {
 		textures.erase(it);
 	}
