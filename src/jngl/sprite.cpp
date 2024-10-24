@@ -29,6 +29,7 @@
 #if __cplusplus < 202002L
 #include <boost/algorithm/string/predicate.hpp>
 #endif
+#include <format>
 #include <cstddef>
 #include <cstring>
 #include <sstream>
@@ -66,7 +67,7 @@ Sprite::Sprite(const uint8_t* const bytes, const size_t width, const size_t heig
 	setCenter(0, 0);
 }
 
-Sprite::Sprite(const std::string& filename, LoadType loadType)
+Sprite::Sprite(std::string_view filename, LoadType loadType)
 : texture(TextureCache::handle().get(filename)) {
 	if (texture) {
 		width = texture->getPreciseWidth();
@@ -78,7 +79,7 @@ Sprite::Sprite(const std::string& filename, LoadType loadType)
 	if (!halfLoad) {
 		internal::debug("Creating sprite {}...", filename);
 	}
-	auto fullFilename = pathPrefix + filename;
+	auto fullFilename = std::format("{}{}", pathPrefix, filename);
 	const char* extensions[] = {
 #ifndef NOWEBP
 		".webp",
@@ -88,7 +89,7 @@ Sprite::Sprite(const std::string& filename, LoadType loadType)
 #endif
 		".bmp"
 	};
-	std::function<Finally(Sprite*, std::string, FILE*, bool)> functions[] = {
+	std::function<Finally(Sprite*, std::string_view, FILE*, bool)> functions[] = {
 #ifndef NOWEBP
 		&Sprite::LoadWebP,
 #endif
@@ -98,7 +99,7 @@ Sprite::Sprite(const std::string& filename, LoadType loadType)
 		&Sprite::LoadBMP
 	};
 	const size_t size = sizeof(extensions) / sizeof(extensions[0]);
-	std::function<Finally(Sprite*, std::string, FILE*, bool)> loadFunction;
+	std::function<Finally(Sprite*, std::string_view, FILE*, bool)> loadFunction;
 	for (size_t i = 0; i < size; ++i) {
 #if __cplusplus < 202002L
 		if (boost::algorithm::ends_with(fullFilename, extensions[i])) {
@@ -314,30 +315,30 @@ const Shader& Sprite::vertexShader() {
 }
 
 #ifndef NOPNG
-Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad) {
+Finally Sprite::LoadPNG(std::string_view filename, FILE* const fp, const bool halfLoad) {
 	const unsigned int PNG_BYTES_TO_CHECK = 4;
 	png_byte buf[PNG_BYTES_TO_CHECK];
 
 	// Read in some of the signature bytes
 	if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK ||
 	    png_sig_cmp(buf, static_cast<png_size_t>(0), PNG_BYTES_TO_CHECK) != 0) {
-		throw std::runtime_error(std::string("Error reading signature bytes. (" + filename + ")"));
+		throw std::runtime_error(std::format("Error reading signature bytes. ({})", filename));
 	}
 
 	png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 	if (!png_ptr) {
-		throw std::runtime_error(std::string("libpng error while reading (" + filename + ")"));
+		throw std::runtime_error(std::format("libpng error while reading ({})", filename));
 	}
 
 	png_infop info_ptr = png_create_info_struct(png_ptr);
 	if (!info_ptr) {
-		throw std::runtime_error(std::string("libpng error while reading (" + filename + ")"));
+		throw std::runtime_error(std::format("libpng error while reading ({})", filename));
 	}
 
 	if (setjmp(png_jmpbuf(png_ptr))) {
 		// Free all of the memory associated with the png_ptr and info_ptr
 		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
-		throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
+		throw std::runtime_error(std::format("Error reading file. ({})", filename));
 	}
 	png_init_io(png_ptr, fp);
 	png_set_sig_bytes(png_ptr, PNG_BYTES_TO_CHECK);
@@ -359,8 +360,7 @@ Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool 
 			format = GL_RGBA;
 			break;
 		default:
-			throw std::runtime_error(
-			    std::string("Unsupported number of channels. (" + filename + ")"));
+			throw std::runtime_error(std::format("Unsupported number of channels. ({})", filename));
 	}
 
 	Finally freePng([&png_ptr, &info_ptr]() {
@@ -382,22 +382,22 @@ void Sprite::cleanUpRowPointers(std::vector<unsigned char*>& buf) {
 	}
 }
 
-Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad) {
+Finally Sprite::LoadBMP(std::string_view filename, FILE* const fp, const bool halfLoad) {
 	if (fseek(fp, 10, SEEK_SET) != 0) {
-		throw std::runtime_error(std::string("Error seeking file. (" + filename + ")"));
+		throw std::runtime_error(std::format("Error seeking file. ({})", filename));
 	}
 	BMPHeader header{};
 	if (!fread(&header, sizeof(header), 1, fp)) {
-		throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
+		throw std::runtime_error(std::format("Error reading file. ({})", filename));
 	}
 	if (header.headerSize != 40) {
-		throw std::runtime_error(std::string("Unsupported header size. (" + filename + ")"));
+		throw std::runtime_error(std::format("Unsupported header size. ({})", filename));
 	}
 	if (header.bpp != 24) {
-		throw std::runtime_error(std::string("Bpp not supported. (" + filename + ")"));
+		throw std::runtime_error(std::format("Bpp not supported. ({})", filename));
 	}
 	if (header.compression != 0) {
-		throw std::runtime_error(std::string("Compression not supported. (" + filename + ")"));
+		throw std::runtime_error(std::format("Compression not supported. ({})", filename));
 	}
 	if (header.dataSize == 0) {
 		header.dataSize = header.width * header.height * 3;
@@ -413,21 +413,21 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 		for (int i = 0; i < header.height; ++i) {
 			if (fseek(fp, header.dataOffset + static_cast<long>(i) * header.width * 3, SEEK_SET) !=
 			    0) {
-				throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
+				throw std::runtime_error(std::format("Error reading file. ({})", filename));
 			}
 			if (!fread(buf[i], static_cast<size_t>(header.width) * 3, 1, fp)) {
-				throw std::runtime_error(std::string("Error reading data. (" + filename + ")"));
+				throw std::runtime_error(std::format("Error reading data. ({})", filename));
 			}
 		}
 	} else { // "bottom-up"-Bitmap
 		for (int i = header.height - 1; i >= 0; --i) {
 			if (fseek(fp, header.dataOffset + static_cast<long>(i) * header.width * 3, SEEK_SET) !=
 			    0) {
-				throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
+				throw std::runtime_error(std::format("Error reading file. ({})", filename));
 			}
 			if (!fread(buf[(header.height - 1) - i], static_cast<size_t>(header.width) * 3, 1,
 			           fp)) {
-				throw std::runtime_error(std::string("Error reading data. (" + filename + ")"));
+				throw std::runtime_error(std::format("Error reading data. ({})", filename));
 			}
 		}
 	}
@@ -437,7 +437,7 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 	return Finally(nullptr);
 }
 #ifndef NOWEBP
-Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool halfLoad) {
+Finally Sprite::LoadWebP(std::string_view filename, FILE* file, const bool halfLoad) {
 	auto imageData = std::make_shared<ImageDataWebP>(filename, file, getScaleFactor());
 	width = static_cast<float>(imageData->getImageWidth() * getScaleFactor());
 	height = static_cast<float>(imageData->getImageHeight() * getScaleFactor());
@@ -448,7 +448,7 @@ Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool hal
 }
 #endif
 
-void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, const std::string& filename,
+void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, std::string_view filename,
                          const bool halfLoad, const unsigned int format,
                          const unsigned char* const* const rowPointers,
                          const unsigned char* const data) {
@@ -456,7 +456,7 @@ void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, const st
 		if (halfLoad) {
 			return;
 		}
-		throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
+		throw std::runtime_error(std::format("Window hasn't been created yet. ({})", filename));
 	}
 	texture = std::make_shared<Texture>(width, height, scaledWidth, scaledHeight, rowPointers,
 	                                    format, data);

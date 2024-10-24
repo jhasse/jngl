@@ -9,7 +9,7 @@
 namespace jngl {
 
 Finally loadSprite(const std::string&);
-Sprite& GetSprite(const std::string& filename, Sprite::LoadType loadType = Sprite::LoadType::NORMAL);
+Sprite& GetSprite(std::string_view filename, Sprite::LoadType loadType = Sprite::LoadType::NORMAL);
 
 extern Rgba gSpriteColor;
 extern Rgba gShapeColor;
