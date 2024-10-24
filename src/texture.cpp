@@ -8,13 +8,7 @@
 
 #include <cassert>
 
-#ifndef GL_CLAMP_TO_EDGE
-#define GL_CLAMP_TO_EDGE 0x812F
-#endif
-
 namespace jngl {
-
-std::unordered_map<std::string_view, std::shared_ptr<Texture>> textures;
 
 ShaderProgram* Texture::textureShaderProgram = nullptr;
 Shader* Texture::textureVertexShader = nullptr;

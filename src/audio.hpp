@@ -6,6 +6,7 @@
 #include "audio/engine.hpp"
 #include "jngl/Singleton.hpp"
 
+#include <future>
 #include <memory>
 
 namespace jngl {
@@ -13,6 +14,7 @@ namespace jngl {
 class Channel;
 class Mixer;
 class Sound;
+class SoundFile;
 
 namespace audio {
 struct pitch_control;
@@ -40,7 +42,8 @@ public:
 	Channel& getMainChannel();
 	void registerChannel(std::shared_ptr<Stream>);
 	void unregisterChannel(const Stream&);
-    void step();
+	void step();
+	std::shared_ptr<SoundFile> getSoundFile(const std::string& filename, std::launch policy);
 
 private:
 	std::vector<std::shared_ptr<Sound>> sounds_;
@@ -48,8 +51,11 @@ private:
 	std::unique_ptr<Channel> mainChannel;
 	std::shared_ptr<audio::pitch_control> pitchControl;
 	std::shared_ptr<audio::volume_control> volumeControl;
-	audio::engine engine;
 	uint8_t pauseDeviceCount = 0; //< if >0 audio device is paused
+	std::unordered_map<std::string, std::shared_ptr<SoundFile>> soundFiles;
+	// engine has to be declared after soundFiles so that the mixer thread gets joined and closed
+	// before any SoundFile is destroyed:
+	audio::engine engine;
 };
 
 } // namespace jngl

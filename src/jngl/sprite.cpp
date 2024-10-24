@@ -7,6 +7,7 @@
 
 #include "sprite.hpp"
 
+#include "../TextureCache.hpp"
 #include "../helper.hpp"
 #include "../log.hpp"
 #include "../main.hpp"
@@ -38,31 +39,21 @@
 
 namespace jngl {
 
-std::shared_ptr<Texture> getTexture(std::string_view filename) {
-	auto it = textures.find(filename);
-	if (it == textures.end()) {
-		return nullptr;
-	}
-	return it->second;
-}
-
 Sprite::Sprite(const ImageData& imageData, double scale, std::optional<std::string_view> filename) {
 	if (!pWindow) {
 		throw std::runtime_error("Window hasn't been created yet.");
 	}
 	width = scale * imageData.getWidth();
 	height = scale * imageData.getHeight();
-	auto it = filename ? textures.find(std::string(*filename)) : textures.end();
-	if (it == textures.end()) {
+	texture = filename ? TextureCache::handle().get(*filename) : nullptr;
+	if (!texture) {
 		texture = std::make_shared<Texture>(
 		    static_cast<int>(std::lround(width)), static_cast<int>(std::lround(height)),
 		    imageData.getWidth(), imageData.getHeight(), nullptr, GL_RGBA, imageData.pixels());
 		setCenter(0, 0);
 		if (filename) {
-			textures[std::string(*filename)] = texture;
+			TextureCache::handle().insert(*filename, texture);
 		}
-	} else {
-		texture = it->second;
 	}
 }
 
@@ -76,7 +67,8 @@ Sprite::Sprite(const uint8_t* const bytes, const size_t width, const size_t heig
 	setCenter(0, 0);
 }
 
-Sprite::Sprite(std::string_view filename, LoadType loadType) : texture(getTexture(filename)) {
+Sprite::Sprite(std::string_view filename, LoadType loadType)
+: texture(TextureCache::handle().get(filename)) {
 	if (texture) {
 		width = texture->getPreciseWidth();
 		height = texture->getPreciseHeight();
@@ -468,7 +460,7 @@ void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, std::str
 	}
 	texture = std::make_shared<Texture>(width, height, scaledWidth, scaledHeight, rowPointers,
 	                                    format, data);
-	textures[filename] = texture;
+	TextureCache::handle().insert(filename, texture);
 }
 
 Finally disableBlending() {

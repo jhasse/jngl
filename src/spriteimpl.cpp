@@ -3,6 +3,7 @@
 
 #include "spriteimpl.hpp"
 
+#include "TextureCache.hpp"
 #include "jngl/Alpha.hpp"
 #include "jngl/ImageData.hpp"
 #include "jngl/message.hpp"
@@ -130,15 +131,12 @@ void unload(const std::string& filename) {
 	if (it != sprites_.end()) {
 		sprites_.erase(it);
 	}
-	auto it2 = textures.find(filename);
-	if (it2 != textures.end()) {
-		textures.erase(it2);
-	}
+	TextureCache::handle().remove(filename);
 }
 
 void unloadAll() {
 	sprites_.clear();
-	textures.clear();
+	TextureCache::destroy();
 	Texture::unloadShader();
 }
 

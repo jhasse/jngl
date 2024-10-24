@@ -554,11 +554,13 @@ void errorMessage(const std::string &text) {
 }
 
 float Window::getResizedWindowScalingX() const {
-	return impl->actualWidth / static_cast<float>(impl->actualCanvasWidth);
+	return static_cast<float>(static_cast<double>(impl->actualWidth) / impl->actualCanvasWidth *
+	                          canvasWidth / width_);
 }
 
 float Window::getResizedWindowScalingY() const {
-	return impl->actualHeight / static_cast<float>(impl->actualCanvasHeight);
+	return static_cast<float>(static_cast<double>(impl->actualHeight) / impl->actualCanvasHeight *
+	                          canvasHeight / height_);
 }
 
 } // namespace jngl

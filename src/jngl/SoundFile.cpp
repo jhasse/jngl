@@ -29,9 +29,6 @@
 
 namespace jngl {
 
-// TODO: Move to Audio
-std::unordered_map<std::string, std::shared_ptr<SoundFile>> sounds;
-
 Audio::Audio()
 : mixer(std::make_shared<Mixer>()), pitchControl(audio::pitch(mixer)),
   volumeControl(volume(pitchControl)), engine(volumeControl) {
@@ -251,35 +248,34 @@ float SoundFile::progress() const {
 	return sound_ ? sound_->progress() : 0;
 }
 
-std::shared_ptr<SoundFile> getSoundFile(const std::string& filename, std::launch policy) {
-	Audio::handle();
-	auto i = sounds.find(filename);
-	if (i == sounds.end()) { // sound hasn't been loaded yet?
-		sounds[filename] = std::make_shared<SoundFile>(pathPrefix + filename, policy);
-		return sounds[filename];
+std::shared_ptr<SoundFile> Audio::getSoundFile(const std::string& filename, std::launch policy) {
+	auto i = soundFiles.find(filename);
+	if (i == soundFiles.end()) { // sound hasn't been loaded yet?
+		soundFiles[filename] = std::make_shared<SoundFile>(pathPrefix + filename, policy);
+		return soundFiles[filename];
 	}
 	return i->second;
 }
 
 void play(const std::string& filename) {
-	getSoundFile(filename, std::launch::deferred)->play();
+	Audio::handle().getSoundFile(filename, std::launch::deferred)->play();
 }
 
 void stop(const std::string& filename) {
-	getSoundFile(filename, std::launch::async)->stop();
+	Audio::handle().getSoundFile(filename, std::launch::async)->stop();
 }
 
 Finally loadSound(const std::string& filename) {
-	auto soundFile = getSoundFile(filename, std::launch::async);
+	auto soundFile = Audio::handle().getSoundFile(filename, std::launch::async);
 	return Finally([soundFile = std::move(soundFile)]() { soundFile->load(); });
 }
 
 bool isPlaying(const std::string& filename) {
-	return getSoundFile(filename, std::launch::async)->isPlaying();
+	return Audio::handle().getSoundFile(filename, std::launch::async)->isPlaying();
 }
 
 std::shared_ptr<SoundFile> loop(const std::string& filename) {
-	auto tmp = getSoundFile(filename, std::launch::deferred);
+	auto tmp = Audio::handle().getSoundFile(filename, std::launch::deferred);
 	tmp->loop();
 	return tmp;
 }
