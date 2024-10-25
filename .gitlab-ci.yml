@@ -45,15 +45,24 @@ steamos:
   image: registry.gitlab.steamos.cloud/steamrt/sniper/sdk
   stage: build
   script:
+    - apt-get update
     - apt-get install -y libboost-dev libc++abi-16-dev libc++-16-dev clang-16
     - export LDFLAGS=-static-libstdc++
     - export CXXFLAGS=-stdlib=libc++
     - export CC=clang-16
     - export CXX=clang++-16
-    - cmake -Bbuild-steamos -GNinja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=0
-    - cmake --build build-steamos
-    - cmake -Bbuild-steamos-release -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=0 -DJNGL_VIDEO=0 -DJNGL_BUILD_WEBP_FROM_SOURCE=1 -DBUILD_SHARED_LIBS=0
-    - cmake --build build-steamos-release
+    - cmake -Bbuild-steamos -GNinja -DCMAKE_BUILD_TYPE=Debug
+    - cd build-steamos
+    - ninja
+    - apt-get install -y xserver-xorg-video-dummy >/dev/null
+    - Xorg -config ../data/xorg.conf &>/dev/null &
+    - sleep 1 # wait for Xorg to boot up
+    - DISPLAY=:0 ./jngl-unittest
+    - cd -
+    - cmake -Bbuild-steamos-release -GNinja -DCMAKE_BUILD_TYPE=Release -DJNGL_VIDEO=0 -DJNGL_BUILD_WEBP_FROM_SOURCE=1 -DBUILD_SHARED_LIBS=0
+    - cd build-steamos-release
+    - ninja
+    - DISPLAY=:0 ./jngl-unittest
 
 web:
   image: emscripten/emsdk:3.1.61

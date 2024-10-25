@@ -15,7 +15,9 @@ boost::ut::suite _ = [] {
 		//
 		jngl::Vec2 a{ 1., 0. };
 
+#if __has_include(<format>) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION >= 170000)
 		expect(eq(std::format("{}", a), std::string("[x=1, y=0]")));
+#endif
 
 		a.rotate(M_PI / 2);
 		//
