@@ -8,7 +8,7 @@ jobs:
       image: registry.fedoraproject.org/fedora-minimal:40
     steps:
       - name: Install dependencies
-        run: microdnf install -y git graphviz doxygen cmake make tar xz rsync
+        run: microdnf install -y git graphviz doxygen cmake make tar xz rsync texlive-latex texlive-newunicodechar texlive-dvips pdf2svg
       - uses: actions/checkout@v4
         with:
           persist-credentials: false

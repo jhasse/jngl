@@ -86,7 +86,7 @@ pages:
   dependencies:
   - web
   script:
-  - microdnf install -y doxygen cmake make tar xz git >/dev/null
+  - microdnf install -y doxygen cmake make tar xz git texlive-latex texlive-newunicodechar texlive-dvips pdf2svg >/dev/null
   - cd doc
   - cmake .
   - make
