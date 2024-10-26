@@ -54,7 +54,7 @@ steamos:
     - cmake -Bbuild-steamos -GNinja -DCMAKE_BUILD_TYPE=Debug
     - cd build-steamos
     - ninja
-    - apt-get install -y xserver-xorg-video-dummy >/dev/null
+    - DEBIAN_FRONTEND=noninteractive apt-get install -y xserver-xorg-video-dummy >/dev/null
     - Xorg -config ../data/xorg.conf &>/dev/null &
     - sleep 1 # wait for Xorg to boot up
     - DISPLAY=:0 ./jngl-unittest
