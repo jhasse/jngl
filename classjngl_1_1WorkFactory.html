@@ -182,7 +182,8 @@ Collaboration diagram for WorkFactory:</div>
 </div><div class="memdoc">
 
 <p>Advance the game logic. </p>
-<p>This function gets called 60 times per second or whatever has been set by <a class="el" href="namespacejngl.html#aa2222d84c7228e46ddb220bd543a5401" title="How many times Work::step should be called per second (default: 60)">setStepsPerSecond()</a>. </p>
+<p>This function gets called 60 times per second or whatever has been set by <a class="el" href="namespacejngl.html#aa2222d84c7228e46ddb220bd543a5401" title="How many times Work::step should be called per second (default: 60)">setStepsPerSecond()</a>.</p>
+<dl class="section note"><dt>Note</dt><dd>JNGL's main loop calls all Jobs' <a class="el" href="#ae6c526798a490afe221d1447f508f16a" title="Advance the game logic.">step()</a> functions before the active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a>'s <a class="el" href="#ae6c526798a490afe221d1447f508f16a" title="Advance the game logic.">step()</a> </dd></dl>
 
 <p>Implements <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31">Job</a>.</p>
 
@@ -212,7 +213,8 @@ Collaboration diagram for WorkFactory:</div>
 </div><div class="memdoc">
 
 <p>Draw the game state. </p>
-<p>As it isn't garuanteed that this function is called as often as <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Job::step</a>, you shouldn't change any game state in it. </p>
+<p>As it isn't garuanteed that this function is called as often as <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Job::step</a>, you shouldn't change any game state in it.</p>
+<dl class="section note"><dt>Note</dt><dd>JNGL's main loop calls all Jobs' <a class="el" href="#a35460413b5c663cd8a28ad3c80caaf71" title="Draw the game state.">draw()</a> functions after the active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a>'s <a class="el" href="#a35460413b5c663cd8a28ad3c80caaf71" title="Draw the game state.">draw()</a> </dd></dl>
 
 <p>Implements <a class="el" href="classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e">Job</a>.</p>
 
