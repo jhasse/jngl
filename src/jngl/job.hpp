@@ -54,9 +54,47 @@ public:
 };
 
 /// Add a new Job which will be always be stepped and drawn by App::mainLoop()
+///
+/// Example:
+/// \code
+/// class MyJob : public jngl::Job {
+/// public:
+///     MyJob();
+///     // ...
+/// };
+///
+/// jngl::AppParameters jnglInit() {
+///     jngl::AppParameters params;
+///     // ...
+///     params.start = []() {
+///         jngl::addJob(std::make_shared<MyJob>());
+///         // ...
+///     };
+///     return params;
+/// }
+/// \endcode
 void addJob(std::shared_ptr<Job> job);
 
 /// The same as addJob(std::shared_ptr<Job>) but creates the Job for you
+///
+/// Example:
+/// \code
+/// class MyJob : public jngl::Job {
+/// public:
+///     MyJob(int x, float y, std::string foo);
+///     // ...
+/// };
+///
+/// jngl::AppParameters jnglInit() {
+///     jngl::AppParameters params;
+///     // ...
+///     params.start = []() {
+///         jngl::addJob<MyJob>(42, 3.14f, "Hello, World!");
+///         // ...
+///     };
+///     return params;
+/// }
+/// \endcode
 template <class T, class... Args>
 void addJob(Args&&... args) {
 	addJob(std::make_shared<T>(std::forward<Args>(args)...));

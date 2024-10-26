@@ -386,6 +386,33 @@ bool keyPressed(const key::KeyType key) {
 }
 
 bool keyDown(const std::string& key) {
+	const static auto TOO_LONG = "Only pass one character.";
+	if (key[0] & 0x80) { // first bit (Check if this is an Unicode character)
+		// sourceEnd has to be the next character after the utf-8 sequence
+		const static auto ERROR_MSG = "Invalid UTF-8 string!";
+		if (key.size() < 2) {
+			throw std::runtime_error(ERROR_MSG);
+		}
+		if (key[0] & 0x20) { // third bit
+			if (key.size() < 3) {
+				throw std::runtime_error(ERROR_MSG);
+			}
+			if (key[0] & 0x10) {
+				if (key.size() < 4) { // fourth bit
+					throw std::runtime_error(ERROR_MSG);
+				}
+				if (key.size() > 4) {
+					throw std::runtime_error(TOO_LONG);
+				}
+			} else if (key.size() > 3) {
+				throw std::runtime_error(TOO_LONG);
+			}
+		} else if (key.size() > 2) {
+			throw std::runtime_error(TOO_LONG);
+		}
+	} else if (key.size() > 1) {
+		throw std::runtime_error(TOO_LONG);
+	}
 	return pWindow->getKeyDown(key);
 }
 

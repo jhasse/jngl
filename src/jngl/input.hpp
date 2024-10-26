@@ -93,6 +93,22 @@ bool keyDown(key::KeyType key);
 bool keyDown(char key);
 
 /// Whether \p key is down, where \p key should be exactly one UTF-8 character
+///
+/// Example:
+/// \code
+/// if (jngl::keyDown("a")) {
+///     player1Pos.x += 1;
+/// }
+/// if (jngl::keyDown("s")) {
+///     player1Pos.x -= 1;
+/// }
+/// if (jngl::keyDown("ö")) {
+///     player2Pos.x += 1;
+/// }
+/// if (jngl::keyDown("ä")) {
+///     player2Pos.x -= 1;
+/// }
+/// \endcode
 bool keyDown(const std::string& key);
 
 /// Whether \p key has been pressed since the next to last call to updateInput()
@@ -119,6 +135,8 @@ void setMouseVisible(bool visible);
 bool isMouseVisible();
 
 /// Returns true when there's more than one finger touching the screen
+///
+/// Equivalent to `jngl::getTouchPositions().size() > 1`.
 bool isMultitouch();
 
 /// Returns all positions where a finger touches the screen. Includes the mouse position if the
@@ -132,6 +150,9 @@ std::vector<jngl::Vec2> getTouchPositions();
 Vec2 getMousePos();
 
 /// Returns the position of the mouse pointer if a mouse is connected/available
+///
+/// On Android, iOS and for the Nintendo Switch this will always return std::nullopt. While Android
+/// supports connecting mice this isn't supported by JNGL yet.
 optional<Vec2> getCursorPos();
 
 /// Retrieve mouse position in pixels
