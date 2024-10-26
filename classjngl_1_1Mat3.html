@@ -95,13 +95,11 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a26af65b41f1b153fdb4b1605f35ab29e" id="r_a26af65b41f1b153fdb4b1605f35ab29e"><td class="memItemLeft" align="right" valign="top"><a id="a26af65b41f1b153fdb4b1605f35ab29e" name="a26af65b41f1b153fdb4b1605f35ab29e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Mat3</b> ()=default</td></tr>
-<tr class="memdesc:a26af65b41f1b153fdb4b1605f35ab29e"><td class="mdescLeft">&#160;</td><td class="mdescRight">creates identity matrix <br /></td></tr>
+<tr class="memitem:a26af65b41f1b153fdb4b1605f35ab29e" id="r_a26af65b41f1b153fdb4b1605f35ab29e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26af65b41f1b153fdb4b1605f35ab29e">Mat3</a> ()=default</td></tr>
+<tr class="memdesc:a26af65b41f1b153fdb4b1605f35ab29e"><td class="mdescLeft">&#160;</td><td class="mdescRight">creates identity matrix  <br /></td></tr>
 <tr class="separator:a26af65b41f1b153fdb4b1605f35ab29e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02a789c870dc2dc316a96820513a1e6f" id="r_a02a789c870dc2dc316a96820513a1e6f"><td class="memItemLeft" align="right" valign="top"><a id="a02a789c870dc2dc316a96820513a1e6f" name="a02a789c870dc2dc316a96820513a1e6f"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Mat3</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/utility/initializer_list.html">std::initializer_list</a>&lt; float &gt;)</td></tr>
-<tr class="memdesc:a02a789c870dc2dc316a96820513a1e6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">construct matrix from row-major array with 9 elements <br /></td></tr>
+<tr class="memitem:a02a789c870dc2dc316a96820513a1e6f" id="r_a02a789c870dc2dc316a96820513a1e6f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02a789c870dc2dc316a96820513a1e6f">Mat3</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/utility/initializer_list.html">std::initializer_list</a>&lt; float &gt;)</td></tr>
+<tr class="memdesc:a02a789c870dc2dc316a96820513a1e6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">construct matrix from <b>row</b>-major array with 9 elements  <br /></td></tr>
 <tr class="separator:a02a789c870dc2dc316a96820513a1e6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a363438b892f92cee74ff2f6a69616075" id="r_a363438b892f92cee74ff2f6a69616075"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a363438b892f92cee74ff2f6a69616075">translate</a> (const <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> &amp;v)</td></tr>
 <tr class="memdesc:a363438b892f92cee74ff2f6a69616075"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies the matrix with a translation matrix generated from v.  <br /></td></tr>
@@ -130,7 +128,68 @@ Public Attributes</h2></td></tr>
 <p>identical to boost::qvm::mat&lt;float, 3, 3&gt;, but stores the elements column-major in memory </p>
 
 <p class="definition">Definition at line <a class="el" href="Mat3_8hpp_source.html#l00018">18</a> of file <a class="el" href="Mat3_8hpp_source.html">Mat3.hpp</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a26af65b41f1b153fdb4b1605f35ab29e" name="a26af65b41f1b153fdb4b1605f35ab29e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26af65b41f1b153fdb4b1605f35ab29e">&#9670;&#160;</a></span>Mat3() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>creates identity matrix </p>
+<p class="formulaDsp">
+<picture><source srcset="form_0_dark.svg" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\left( \begin{array}{rrr}
+1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1
+\end{array}\right)
+\]" src="form_0.svg"/></picture>
+</p>
+ 
+</div>
+</div>
+<a id="a02a789c870dc2dc316a96820513a1e6f" name="a02a789c870dc2dc316a96820513a1e6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02a789c870dc2dc316a96820513a1e6f">&#9670;&#160;</a></span>Mat3() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/initializer_list.html">std::initializer_list</a>&lt; float &gt;</td>          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>construct matrix from <b>row</b>-major array with 9 elements </p>
+<p><code><a class="el" href="classjngl_1_1Mat3.html" title="3x3 matrix">jngl::Mat3</a>({ 1, 2, 3, 4, 5, 6, 7, 8, 9 })</code> is equivalent to:  </p><p class="formulaDsp">
+<picture><source srcset="form_1_dark.svg" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\left( \begin{array}{rrr}
+1 &amp; 2 &amp; 3 \\ 4 &amp; 5 &amp; 6 \\ 7 &amp; 8 &amp; 9
+\end{array}\right)
+\]" src="form_1.svg"/></picture>
+</p>
+ 
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="a363438b892f92cee74ff2f6a69616075" name="a363438b892f92cee74ff2f6a69616075"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a363438b892f92cee74ff2f6a69616075">&#9670;&#160;</a></span>translate() <span class="overload">[1/2]</span></h2>
 
@@ -257,7 +316,7 @@ Public Attributes</h2></td></tr>
 
 <p>column-major </p>
 
-<p class="definition">Definition at line <a class="el" href="Mat3_8hpp_source.html#l00058">58</a> of file <a class="el" href="Mat3_8hpp_source.html">Mat3.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Mat3_8hpp_source.html#l00071">71</a> of file <a class="el" href="Mat3_8hpp_source.html">Mat3.hpp</a>.</p>
 
 </div>
 </div>
