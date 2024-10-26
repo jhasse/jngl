@@ -1,4 +1,4 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Job class and related functions
 /// @file
@@ -13,18 +13,25 @@ namespace jngl {
 ///
 /// This can be used for an achievement system for example. Override this class and use
 /// jngl::addJob to register it.
+///
+/// Jobs (meaning instances of this class that were added using jngl::addJob) are always stepped
+/// before the active jngl::Work and drawn after it.
 class Job {
 public:
 	/// Advance the game logic
 	///
 	/// This function gets called 60 times per second or whatever has been set by
 	/// setStepsPerSecond().
+	///
+	/// \note JNGL's main loop calls all Jobs' step() functions before the active Work's step()
 	virtual void step() = 0;
 
 	/// Draw the game state
 	///
 	/// As it isn't garuanteed that this function is called as often as Job::step, you shouldn't
 	/// change any game state in it.
+	///
+	/// \note JNGL's main loop calls all Jobs' draw() functions after the active Work's draw()
 	virtual void draw() const = 0;
 
 	/// Does nothing
