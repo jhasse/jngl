@@ -32,6 +32,8 @@ namespace jngl {
 jngl::Mat3 modelview();
 
 /// Multiplies the global ModelView matrix with a rotation matrix
+/// \deprecated use jngl::modelview().rotate instead
+[[deprecated("use jngl::modelview().rotate instead")]]
 void rotate(double degree);
 
 /// Multiplies the global ModelView matrix with a translation matrix
