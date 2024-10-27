@@ -106,8 +106,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build with CMake and GCC
       run: |
-        mingw64-cmake -Bbuild-windows -GNinja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=0 -DJNGL_SDL2=1
-        ninja -Cbuild-windows
+        mingw64-cmake -Bbuild-windows -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=0 -DJNGL_SDL2=1
+        cmake --build build-windows
 
 env:
   CPM_SOURCE_CACHE: ${{ github.workspace }}/.cache/cpm
