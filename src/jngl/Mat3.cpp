@@ -1,4 +1,4 @@
-// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Mat3.hpp"
 
@@ -26,8 +26,8 @@ Mat3& Mat3::translate(const jngl::Vec2& v) {
 }
 
 Mat3& Mat3::translate(const Pixels x, const Pixels y) {
-	return *this *=
-	       boost::qvm::translation_mat(boost::qvm::vec<double, 2>{ { float(x), float(y) } });
+	return *this *= boost::qvm::translation_mat(
+	           boost::qvm::vec<double, 2>{ { static_cast<float>(x), static_cast<float>(y) } });
 }
 
 Mat3& Mat3::scale(const float factor) {

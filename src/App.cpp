@@ -46,7 +46,8 @@ App::~App() {
 
 App& App::instance() {
 	if (!self) {
-		self = new App;
+		static App dummy; // e.g. for unit tests
+		self = &dummy;
 	}
 	return *self;
 }
