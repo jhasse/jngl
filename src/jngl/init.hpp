@@ -33,7 +33,7 @@ void mainLoop(AppParameters);
 ///     jngl::AppParameters params;
 ///     params.displayName = "My Game";
 ///     params.screenSize = { 1920, 1080 };
-/// 
+///
 ///     params.start = []() {
 ///         return std::make_shared<MyGame>();
 ///     };
@@ -53,7 +53,8 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 		if (err) {
 			std::filesystem::current_path("../../data", err); // move out of build/Debug folder
 			if (err) {
-				std::filesystem::current_path("../../../data", err); // move out of out\build\x64-Debug
+				std::filesystem::current_path("../../../data",
+				                              err); // move out of out\build\x64-Debug
 				if (err) {
 					std::filesystem::current_path(jngl::getBinaryPath() + "data", err);
 				}

@@ -12,6 +12,7 @@ linux:
   stage: build
   script:
   - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libwebp-devel SDL2-devel libtheora-devel clang util-linux >/dev/null
+  - .github/ci.py
   - CXXFLAGS=-fdiagnostics-color cmake -Bbuild -GNinja
   - cd build
   - ninja

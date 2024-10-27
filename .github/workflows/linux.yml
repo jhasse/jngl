@@ -5,6 +5,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
+    - name: Basic linting
+      run: .github/ci.py
     - name: Install dependencies
       run: |
         sudo apt update
