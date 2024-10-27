@@ -454,9 +454,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>error</b> (const <a c
 <tr class="memitem:acfcb9cdf97108d05cf2b0da911c93a4c" id="r_acfcb9cdf97108d05cf2b0da911c93a4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">jngl::Mat3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a> ()</td></tr>
 <tr class="memdesc:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the global ModelView matrix.  <br /></td></tr>
 <tr class="separator:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c5875d20c1cdbec6c8a3b84cee6ccee" id="r_a3c5875d20c1cdbec6c8a3b84cee6ccee"><td class="memItemLeft" align="right" valign="top"><a id="a3c5875d20c1cdbec6c8a3b84cee6ccee" name="a3c5875d20c1cdbec6c8a3b84cee6ccee"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>rotate</b> (double degree)</td></tr>
-<tr class="memdesc:a3c5875d20c1cdbec6c8a3b84cee6ccee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies the global ModelView matrix with a rotation matrix. <br /></td></tr>
+<tr class="memitem:a3c5875d20c1cdbec6c8a3b84cee6ccee" id="r_a3c5875d20c1cdbec6c8a3b84cee6ccee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c5875d20c1cdbec6c8a3b84cee6ccee">rotate</a> (double degree)</td></tr>
+<tr class="memdesc:a3c5875d20c1cdbec6c8a3b84cee6ccee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies the global ModelView matrix with a rotation matrix.  <br /></td></tr>
 <tr class="separator:a3c5875d20c1cdbec6c8a3b84cee6ccee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae34bb82fbe517542fed56f90cf125d36" id="r_ae34bb82fbe517542fed56f90cf125d36"><td class="memItemLeft" align="right" valign="top"><a id="ae34bb82fbe517542fed56f90cf125d36" name="ae34bb82fbe517542fed56f90cf125d36"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>translate</b> (double x, double y)</td></tr>
@@ -1612,6 +1611,26 @@ template&lt;class... Args&gt; </div>
 </div><!-- fragment --> 
 </div>
 </div>
+<a id="a3c5875d20c1cdbec6c8a3b84cee6ccee" name="a3c5875d20c1cdbec6c8a3b84cee6ccee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c5875d20c1cdbec6c8a3b84cee6ccee">&#9670;&#160;</a></span>rotate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rotate </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>degree</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Multiplies the global ModelView matrix with a rotation matrix. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated</a></b></dt><dd>use <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c" title="Returns a copy of the global ModelView matrix.">jngl::modelview()</a>.rotate instead </dd></dl>
+
+</div>
+</div>
 <a id="adc3f4af0da695be4afd366843ebba0e6" name="adc3f4af0da695be4afd366843ebba0e6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adc3f4af0da695be4afd366843ebba0e6">&#9670;&#160;</a></span>translate()</h2>
 
@@ -1632,7 +1651,7 @@ template&lt;class Vect &gt; </div>
 <p>Multiplies the global ModelView matrix with a translation matrix. </p>
 <p>Equivalent to calling <code><a class="el" href="#ae34bb82fbe517542fed56f90cf125d36" title="Multiplies the global ModelView matrix with a translation matrix.">jngl::translate</a>(v.x, v.y);</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="matrix_8hpp_source.html#l00043">43</a> of file <a class="el" href="matrix_8hpp_source.html">matrix.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="matrix_8hpp_source.html#l00045">45</a> of file <a class="el" href="matrix_8hpp_source.html">matrix.hpp</a>.</p>
 
 </div>
 </div>
@@ -1803,7 +1822,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Calculates FPS if called once per frame. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated</a></b></dt><dd>Not really intuitive or robust, use your own calculations instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated</a></b></dt><dd>Not really intuitive or robust, use your own calculations instead </dd></dl>
 
 </div>
 </div>
@@ -1841,7 +1860,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead. </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead. </dd></dl>
 
 </div>
 </div>
@@ -1859,7 +1878,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
 <p>Returns the directory where to store configuration files and save games.</p><ul>
 <li>Windows: <code>%AppData%/Display Name/</code></li>
 <li>Linux: <code>~/.config/Display Name/</code></li>
@@ -2003,7 +2022,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated</a></b></dt><dd>Use setAlpha instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated</a></b></dt><dd>Use setAlpha instead </dd></dl>
 
 </div>
 </div>
@@ -2021,7 +2040,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated</a></b></dt><dd>Use setAlpha instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated</a></b></dt><dd>Use setAlpha instead </dd></dl>
 
 </div>
 </div>
@@ -2039,7 +2058,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated</a></b></dt><dd>Use drawRect instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated</a></b></dt><dd>Use drawRect instead </dd></dl>
 
 </div>
 </div>
@@ -2071,7 +2090,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated</a></b></dt><dd>Use <a class="el" href="#adda6bd4a93eb670b63a319a2f6c4dd87" title="Draws a line from start to end, the width can be set using setLineWidth.">drawLine(Vec2, Vec2)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated</a></b></dt><dd>Use <a class="el" href="#adda6bd4a93eb670b63a319a2f6c4dd87" title="Draws a line from start to end, the width can be set using setLineWidth.">drawLine(Vec2, Vec2)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -2108,7 +2127,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated</a></b></dt><dd>Use drawEllipse(Mat3, float, float, float) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated</a></b></dt><dd>Use drawEllipse(Mat3, float, float, float) instead </dd></dl>
 
 </div>
 </div>
@@ -2130,7 +2149,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated</a></b></dt><dd>Use drawCircle instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated</a></b></dt><dd>Use drawCircle instead </dd></dl>
 
 </div>
 </div>
@@ -2172,7 +2191,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated</a></b></dt><dd>Use <a class="el" href="#a1732275d2646c634f74abec40aeaafe8" title="Draws the triangle a -&gt; b -&gt; c.">drawTriangle(Vec2, Vec2, Vec2)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated</a></b></dt><dd>Use <a class="el" href="#a1732275d2646c634f74abec40aeaafe8" title="Draws the triangle a -&gt; b -&gt; c.">drawTriangle(Vec2, Vec2, Vec2)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -2457,7 +2476,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Sleep current thread for <em>milliseconds</em>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000018">Deprecated</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000019">Deprecated</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
 
 </div>
 </div>
@@ -2583,7 +2602,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000019">Deprecated</a></b></dt><dd>Use <a class="el" href="#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000020">Deprecated</a></b></dt><dd>Use <a class="el" href="#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in App::mainLoop()">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
 
 </div>
 </div>
