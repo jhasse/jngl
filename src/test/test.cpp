@@ -151,8 +151,7 @@ public:
 		sstream << "SPS" << (jngl::getVerticalSync() ? " (V-SYNC)" : "") << ": "
 		        << jngl::getStepsPerSecond() << "\nFactor: " << factor
 		        << "\nSize of double: " << sizeof(double);
-		jngl::setColor(0, 0, 0);
-		jngl::drawRect(0, 0, 200, 62);
+		jngl::drawRect(jngl::modelview(), { 200, 62 }, 0x000000_rgb);
 		jngl::setFontColor(static_cast<unsigned char>(255 * (1 - factor)),
 		                   static_cast<unsigned char>(255 * factor), 255);
 		jngl::setFontByName("Courier New");
@@ -301,7 +300,7 @@ void Test::drawBackground() const {
 	jngl::setColor(255, 0, 0, 100);
 	jngl::drawTriangle({ 600, 30 }, { 700, 30 }, { 650, 130 });
 	jngl::setColor(0, 255, 0, 100);
-	jngl::drawRect(600, 400, 100, 100);
+	jngl::drawRect({ 600, 400 }, { 100, 100 });
 	jngl::setColor(0, 0, 255, 100);
 	jngl::drawEllipse(jngl::modelview().translate({ 80, 400 }), 50, 80);
 }
