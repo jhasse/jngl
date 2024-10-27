@@ -28,6 +28,7 @@ public:
 	///
 	/// Values over 1.0f will result in 1.0f and negatives will result in 0.0f.
 	Rgba(float red, float green, float blue, float alpha);
+	Rgba(float red, float green, float blue, Alpha alpha);
 	Rgba(Rgb, Alpha);
 
 	static Rgba u8(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);

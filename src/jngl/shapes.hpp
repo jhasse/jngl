@@ -89,6 +89,9 @@ void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
 /// \deprecated Use drawTriangle(Vec2, Vec2, Vec2) instead
 void drawTriangle(double A_x, double A_y, double B_x, double B_y, double C_x, double C_y);
 
+/// Draws a rectangle at { \a xposition, \a yposition }
+/// \deprecated Use drawRect(const Mat3&, Vec2, Color) instead
+[[deprecated("Use drawRect(const Mat3&, Vec2, Color) instead")]]
 void drawRect(double xposition, double yposition, double width, double height);
 
 /// Draws a rectangle at \a position

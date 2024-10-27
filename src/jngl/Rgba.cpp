@@ -10,6 +10,10 @@ Rgba::Rgba(float red, float green, float blue, float alpha)
 : red(red), green(green), blue(blue), alpha(alpha) {
 }
 
+Rgba::Rgba(float red, float green, float blue, Alpha alpha)
+: red(red), green(green), blue(blue), alpha(alpha.getAlpha()) {
+}
+
 Rgba::Rgba(const Rgb color, const Alpha alpha)
 : red(color.getRed()), green(color.getGreen()), blue(color.getBlue()), alpha(alpha.getAlpha()) {
 }
