@@ -282,12 +282,13 @@ void Test::drawBackground() const {
 		const int size = performance * performance;
 		for (int x = 0; x < size; ++x) {
 			for (int y = 0; y < size; ++y) {
-				logoWebp.draw(
-				    jngl::modelview()
-				        .translate(jngl::Vec2((x + .5) * jngl::getScreenWidth() / size,
-				                              (y + .5) * jngl::getScreenHeight() / size))
-				        .scale(float(jngl::getScreenWidth() / size / jngl::getWidth("jngl")),
-				               float(jngl::getScreenHeight() / size / jngl::getHeight("jngl"))));
+				logoWebp.draw(jngl::modelview()
+				                  .translate(jngl::Vec2((x + .5) * jngl::getScreenWidth() / size,
+				                                        (y + .5) * jngl::getScreenHeight() / size))
+				                  .scale(static_cast<float>(jngl::getScreenWidth() / size /
+				                                            jngl::getWidth("jngl")),
+				                         static_cast<float>(jngl::getScreenHeight() / size /
+				                                            jngl::getHeight("jngl"))));
 			}
 		}
 	} else {

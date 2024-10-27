@@ -7,6 +7,7 @@
 #include <cmath>
 #include <jngl.hpp>
 #include <jngl/AppParameters.hpp>
+#include <ranges>
 
 Fixture::Fixture(const double scaleFactor) {
 	jngl::setScaleFactor(scaleFactor);
@@ -64,9 +65,9 @@ std::string Fixture::getAsciiArt() const {
 	expect(eq(index, buffer.size()));
 	assert(reduced.size() == size_t(h / reduceFactor));
 	std::string out = "\n"; // Start with a newline for prettier output by Boost.Test
-	for (auto itRow = reduced.rbegin(); itRow != reduced.rend(); ++itRow) {
-		assert(itRow->size() == reducedW);
-		for (const auto& cell : *itRow) {
+	for (const auto& row : std::ranges::reverse_view(reduced)) {
+		assert(row.size() == reducedW);
+		for (const auto& cell : row) {
 			// ASCII:
 			// const static std::vector<std::string> chars = { "@", "#", "%", "x", "o",
 			//                                                 ";", ":", ",", ".", " " };
