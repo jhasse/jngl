@@ -14,7 +14,9 @@
 #include <cassert>
 #include <stdexcept>
 #if defined(_WIN32) && !defined(JNGL_UWP)
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #include <windows.h>
 #endif
 
