@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Drawable.hpp"
@@ -90,19 +90,19 @@ float Drawable::getHeight() const {
 void Drawable::drawBoundingBox() const {
 	setColor(Color(255, 0, 0));
 	const double LINE_WIDTH = 2;
-	drawRect(getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2, LINE_WIDTH + getWidth(), LINE_WIDTH);
-	drawRect(getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2, LINE_WIDTH,
-	         LINE_WIDTH + getHeight());
-	drawRect(getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 + getHeight(),
-	         LINE_WIDTH + getWidth(), LINE_WIDTH);
-	drawRect(getX() - LINE_WIDTH / 2 + getWidth(), getY() - LINE_WIDTH / 2, LINE_WIDTH,
-	         LINE_WIDTH + getHeight());
+	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 },
+	         { LINE_WIDTH + getWidth(), LINE_WIDTH });
+	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 },
+	         { LINE_WIDTH, LINE_WIDTH + getHeight() });
+	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 + getHeight() },
+	         { LINE_WIDTH + getWidth(), LINE_WIDTH });
+	drawRect({ getX() - LINE_WIDTH / 2 + getWidth(), getY() - LINE_WIDTH / 2 },
+	         { LINE_WIDTH, LINE_WIDTH + getHeight() });
 }
 
 bool Drawable::contains(const jngl::Vec2 point) const {
-	return (getX() <= point.x && point.x < getX() + getWidth() &&
-	        getY() <= point.y && point.y < getY() + getHeight());
-
+	return (getX() <= point.x && point.x < getX() + getWidth() && getY() <= point.y &&
+	        point.y < getY() + getHeight());
 }
 
 } // namespace jngl
