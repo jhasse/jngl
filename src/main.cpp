@@ -23,6 +23,7 @@
 #include <boost/qvm_lite.hpp>
 #include <cstddef>
 #include <fstream>
+#include <numbers>
 #include <sstream>
 #include <stack>
 
