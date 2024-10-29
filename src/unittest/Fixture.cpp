@@ -94,8 +94,8 @@ void Fixture::reset() {
 	const double frameSize = 5;
 	const jngl::Vec2 screen(jngl::getScreenWidth(), jngl::getScreenHeight());
 	jngl::setColor(0x000000_rgb);
-	jngl::drawRect(-screen.x / 2, screen.y / 2 - frameSize, screen.x, frameSize); // bottom
-	jngl::drawRect(-screen.x / 2, -screen.y / 2, screen.x, frameSize);            // top
-	jngl::drawRect(screen.x / 2 - frameSize, -screen.y / 2, frameSize, screen.y); // right
-	jngl::drawRect(-screen.x / 2, -screen.y / 2, frameSize, screen.y);            // left
+	jngl::drawRect({ -screen.x / 2, screen.y / 2 - frameSize }, { screen.x, frameSize }); // bottom
+	jngl::drawRect({ -screen.x / 2, -screen.y / 2 }, { screen.x, frameSize });            // top
+	jngl::drawRect({ screen.x / 2 - frameSize, -screen.y / 2 }, { frameSize, screen.y }); // right
+	jngl::drawRect({ -screen.x / 2, -screen.y / 2 }, { frameSize, screen.y });            // left
 }
