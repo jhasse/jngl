@@ -535,7 +535,7 @@ void reset() {
 }
 
 void rotate(const double degree) {
-	boost::qvm::rotate_z(opengl::modelview, degree * M_PI / 180.);
+	boost::qvm::rotate_z(opengl::modelview, degree * std::numbers::pi / 180.);
 }
 
 void translate(const double x, const double y) {

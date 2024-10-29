@@ -70,7 +70,7 @@ void drawEllipse(Mat3 modelview, float width, float height, float startAngle) {
 	std::vector<float> vertexes;
 	vertexes.push_back(0.f);
 	vertexes.push_back(0.f);
-	for (float t = startAngle; t < 2.f * M_PI; t += 0.1f) {
+	for (float t = startAngle; t < 2.f * std::numbers::pi; t += 0.1f) {
 		vertexes.push_back(width * std::sin(t));
 		vertexes.push_back(-height * std::cos(t));
 	}

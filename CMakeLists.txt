@@ -127,7 +127,7 @@ else() # Windows
 	endif()
 	option(JNGL_SDL2 "Use SDL2 instead of WinAPI" ${JNGL_SDL2_DEFAULT})
 
-	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _USE_MATH_DEFINES _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
+	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
 	if(JNGL_SDL2)
 		file(GLOB SRC src/sdl/*.cpp)
 		if(WINDOWS_STORE)

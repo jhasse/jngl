@@ -65,7 +65,7 @@ float linear(float t) {
 }
 
 float elastic(float t) {
-	const float c4 = (2 * M_PI) / 3;
+	const float c4 = (2 * std::numbers::pi) / 3;
 
 	return t <= 0 ? 0 : t >= 1 ? 1 : pow(2, -10 * t) * sin((t * 10 - 0.75) * c4) + 1;
 }

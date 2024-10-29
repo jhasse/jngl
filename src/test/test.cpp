@@ -48,7 +48,7 @@ public:
 		if (rotate > 360) {
 			rotate = 0;
 		}
-		factor = std::sin(rotate / 360 * M_PI);
+		factor = std::sin(rotate / 360 * std::numbers::pi);
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
 		if (jngl::keyPressed('p') || jngl::keyPressed('P')) {
@@ -121,15 +121,16 @@ public:
 			}
 		}
 		drawBackground();
-		jngl::setColor(0,0,0,255);
+		jngl::setColor(0, 0, 0, 255);
 		jngl::drawLine(jngl::modelview()
 		                   .translate({ 650, 450 })
-		                   .rotate(rotate / 360 * M_PI)
+		                   .rotate(rotate / 360 * std::numbers::pi)
 		                   .translate({ -50, -50 }),
 		               { 100, 100 });
 		jngl::setSpriteAlpha(200);
-		auto rotatedMv =
-		    jngl::modelview().translate(jngl::getScreenSize() / 2).rotate(rotate / 180 * M_PI);
+		auto rotatedMv = jngl::modelview()
+		                     .translate(jngl::getScreenSize() / 2)
+		                     .rotate(rotate / 180 * std::numbers::pi);
 		jngl::popMatrix();
 		jngl::setSpriteAlpha(static_cast<unsigned char>(std::abs(factor * 255)));
 		if (useShader) {
@@ -308,7 +309,9 @@ void Test::drawBackground() const {
 void drawMouse(const jngl::Vec2 mouse) {
 	jngl::setFontSize(30);
 	jngl::setFontColor(10, 10, 200, 200);
-	jngl::print(jngl::modelview().translate(mouse).rotate(-M_PI / 4).translate({ -8, -2 }), "↑");
+	jngl::print(
+	    jngl::modelview().translate(mouse).rotate(-std::numbers::pi / 4).translate({ -8, -2 }),
+	    "↑");
 	jngl::setFontSize(12);
 	jngl::reset();
 }

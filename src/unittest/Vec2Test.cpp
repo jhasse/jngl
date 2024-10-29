@@ -19,7 +19,7 @@ boost::ut::suite _ = [] {
 		expect(eq(std::format("{}", a), std::string("[x=1, y=0]")));
 #endif
 
-		a.rotate(M_PI / 2);
+		a.rotate(std::numbers::pi / 2);
 		//
 		//  o
 		//  |
@@ -28,7 +28,7 @@ boost::ut::suite _ = [] {
 		expect(approx(a.x, 0., 1e-6));
 		expect(approx(a.y, 1., 1e-6)); // JNGL uses negative y for up and positive for down.
 
-		a.rotate(-M_PI / 4);
+		a.rotate(-std::numbers::pi / 4);
 		//
 		//  o
 		//   ╲
@@ -39,7 +39,7 @@ boost::ut::suite _ = [] {
 		a.rotate(0);
 		expect(approx(a.x, sqrt(2) / 2., 1e-6));
 		expect(approx(a.y, sqrt(2) / 2., 1e-6));
-		a.rotate(M_PI * 8);
+		a.rotate(std::numbers::pi * 8);
 		expect(approx(a.x, sqrt(2) / 2., 1e-6));
 		expect(approx(a.y, sqrt(2) / 2., 1e-6));
 	};
