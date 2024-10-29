@@ -26,7 +26,7 @@ public:
 private:
 	SDL();
 	~SDL();
-	void setHint(const char* name, bool);
+	static void setHint(const char* name, bool);
 };
 
 } // namespace jngl

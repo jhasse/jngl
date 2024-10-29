@@ -82,7 +82,7 @@ std::string App::getDisplayName() const {
 
 void App::setDisplayName(const std::string& displayName) {
 	if (!impl) { // e.g. Android when using showWindow without jnglInit
-		new Finally(init({})); // leak
+		static Finally dummy(init({}));
 	}
 	impl->displayName = displayName;
 }
@@ -105,7 +105,7 @@ void App::setPixelArt(const bool pixelArt) {
 
 void App::registerShaderProgram(ShaderProgram* shaderProgram) {
 	if (!impl) { // unit tests
-		new Finally(init({})); // leak
+		static Finally dummy(init({}));
 	}
 	impl->shaderPrograms.insert(shaderProgram);
 }
