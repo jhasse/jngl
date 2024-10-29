@@ -63,9 +63,17 @@ std::string stripAnsiEscapeCodes(const std::string& in) {
 void log(const std::string& appName, const std::string& level, const std::string& message) {
 	std::ostringstream tmp;
 	if (!appName.empty()) {
+#ifdef __EMSCRIPTEN__
+		tmp << '[' << stripAnsiEscapeCodes(appName) << ']';
+#else
 		tmp << '[' << appName << ']';
+#endif
 	}
+#ifdef __EMSCRIPTEN__
+	tmp << '[' << stripAnsiEscapeCodes(level) << "] ";
+#else
 	tmp << '[' << level << "] ";
+#endif
 	bool first = true;
 	std::stringstream lines(message);
 	std::string line;
