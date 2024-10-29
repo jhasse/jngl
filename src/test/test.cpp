@@ -7,6 +7,7 @@
 #include <jngl.hpp>
 #include <jngl/init.hpp>
 #include <map>
+#include <numbers>
 #include <optional>
 #include <sstream>
 #include <vector>
