@@ -4,6 +4,7 @@
 #include "../jngl/Vec2.hpp"
 
 #include <boost/ut.hpp>
+#include <numbers>
 
 namespace {
 boost::ut::suite _ = [] {
