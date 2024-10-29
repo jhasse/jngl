@@ -295,10 +295,14 @@ static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                 const int channels = vinfo.channels;
                 int chanidx, frameidx;
 				float* samples;
-				AudioPacket* item = static_cast<AudioPacket*>(malloc(sizeof(AudioPacket)));
-				if (item == nullptr) goto cleanup;
-                item->playms = static_cast<unsigned int>((((double) audioframes) / ((double) vinfo.rate)) * 1000.0);
-                item->channels = channels;
+				auto* item = static_cast<AudioPacket*>(malloc(sizeof(AudioPacket)));
+				if (item == nullptr) {
+					goto cleanup;
+				}
+				item->playms = static_cast<unsigned int>(
+				    ((static_cast<double>(audioframes)) / (static_cast<double>(vinfo.rate))) *
+				    1000.0);
+				item->channels = channels;
                 item->freq = static_cast<int>(vinfo.rate);
 				item->frames = frames;
 				item->samples = static_cast<float*>(malloc(sizeof(float) * frames * channels));
@@ -510,20 +514,15 @@ static long IoFopenRead(THEORAPLAY_Io *io, void *buf, long buflen)
     return (long) br;
 }
 
-
-static void IoFopenClose(THEORAPLAY_Io *io)
-{
-    FILE *f = (FILE *) io->userdata;
-    fclose(f);
+static void IoFopenClose(THEORAPLAY_Io* io) {
+	FILE* f = static_cast<FILE*>(io->userdata);
+	fclose(f);
     free(io);
 }
 
-
-THEORAPLAY_Decoder *THEORAPLAY_startDecodeFile(const char *fname,
-                                               const unsigned int maxframes,
-                                               THEORAPLAY_VideoFormat vidfmt)
-{
-    THEORAPLAY_Io *io = (THEORAPLAY_Io *) malloc(sizeof (THEORAPLAY_Io));
+THEORAPLAY_Decoder* THEORAPLAY_startDecodeFile(const char* fname, const unsigned int maxframes,
+                                               THEORAPLAY_VideoFormat vidfmt) {
+	auto* io = static_cast<THEORAPLAY_Io*>(malloc(sizeof(THEORAPLAY_Io)));
 	if (io == nullptr) {
 		return nullptr;
 	}
@@ -540,7 +539,6 @@ THEORAPLAY_Decoder *THEORAPLAY_startDecodeFile(const char *fname,
     return THEORAPLAY_startDecode(io, maxframes, vidfmt);
 }
 
-
 THEORAPLAY_Decoder *THEORAPLAY_startDecode(THEORAPLAY_Io *io,
                                            const unsigned int maxframes,
                                            THEORAPLAY_VideoFormat vidfmt)
@@ -556,8 +554,8 @@ THEORAPLAY_Decoder *THEORAPLAY_startDecode(THEORAPLAY_Io *io,
         ctx->thread_created = true;
     } catch (std::system_error&) {
         goto startdecode_failed;
-    }
-    return (THEORAPLAY_Decoder *) ctx;
+	}
+	return static_cast<THEORAPLAY_Decoder*>(ctx);
 
 startdecode_failed:
     io->close(io);
