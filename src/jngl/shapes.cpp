@@ -11,6 +11,7 @@
 #include "screen.hpp"
 
 #include <cmath>
+#include <numbers>
 #include <stack>
 
 namespace jngl {
