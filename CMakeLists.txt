@@ -192,8 +192,8 @@ if(NOT hasParent)
 endif()
 if(ANDROID OR MSVC OR IOS)
 	CPMAddPackage(NAME freetype
-		URL https://sourceforge.net/projects/freetype/files/freetype2/2.11.1/freetype-2.11.1.tar.xz/download
-		URL_HASH SHA256=3333ae7cfda88429c97a7ae63b7d01ab398076c3b67182e960e5684050f2c5c8
+		URL https://sourceforge.net/projects/freetype/files/freetype2/2.13.3/freetype-2.13.3.tar.xz/download
+		URL_HASH SHA256=0550350666d427c74daeb85d5ac7bb353acba5f76956395995311a9c6f063289
 		OPTIONS "FT_DISABLE_HARFBUZZ 1"
 	)
 	if(hasParent)
