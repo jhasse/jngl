@@ -150,8 +150,8 @@ void mainLoop(AppParameters params) {
 	}
 	if (!fullscreen) {
 		// Make window as big as possible
-		const double scaleFactor = std::min((getDesktopWidth() * 0.925) / params.screenSize->x,
-		                                    (getDesktopHeight() * 0.925) / params.screenSize->y);
+		const double scaleFactor = std::min((getDesktopWidth() * 0.85) / params.screenSize->x,
+		                                    (getDesktopHeight() * 0.85) / params.screenSize->y);
 		if (scaleFactor > 1) {
 			setScaleFactor(std::floor(scaleFactor));
 		} else {
