@@ -82,7 +82,7 @@ public:
 
 private:
 	std::shared_ptr<Sound> sound_;
-	std::vector<float> buffer_;
+	std::shared_ptr<std::vector<float>> buffer;
 };
 
 } // namespace jngl

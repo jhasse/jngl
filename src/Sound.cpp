@@ -16,10 +16,11 @@ struct Sound::Impl {
 	std::shared_ptr<PlayingTrack> track;
 	std::shared_ptr<Stream> stream;
 	std::shared_ptr<audio::volume_control> volumeControl;
+	std::shared_ptr<std::vector<float>> buffer; //< we might outlive our SoundFile
 };
 
-Sound::Sound(const std::vector<float>& bufferData)
-: impl(new Impl{ std::make_shared<PlayingTrack>(bufferData), {}, {} }) {
+Sound::Sound(std::shared_ptr<std::vector<float>> bufferData)
+: impl(new Impl{ std::make_shared<PlayingTrack>(*bufferData), {}, {}, std::move(bufferData) }) {
 	impl->stream = impl->volumeControl = audio::volume(impl->track);
 }
 

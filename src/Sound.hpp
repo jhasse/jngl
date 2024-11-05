@@ -13,7 +13,7 @@ struct SoundParams;
 
 class Sound {
 public:
-	explicit Sound(const std::vector<float>& bufferData);
+	explicit Sound(std::shared_ptr<std::vector<float>> bufferData);
 	Sound(const Sound&) = delete;
 	Sound& operator=(const Sound&) = delete;
 	Sound(Sound&&) = default;
