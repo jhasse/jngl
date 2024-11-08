@@ -11,6 +11,7 @@
 #include "Vec2.hpp"
 
 #include <future>
+#include <string_view>
 #include <optional>
 #include <vector>
 
@@ -56,7 +57,7 @@ public:
 	Sprite(const uint8_t* bytes, size_t width, size_t height);
 
 	/// \deprecated Use Loader instead
-	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
+	explicit Sprite(std::string_view filename, LoadType loadType = LoadType::NORMAL);
 
 	/// Does nothing
 	void step() override;
@@ -228,10 +229,10 @@ public:
 
 private:
 	static void cleanUpRowPointers(std::vector<unsigned char*>& buf);
-	void loadTexture(int scaledWidth, int scaledHeight, const std::string& filename, bool halfLoad,
+	void loadTexture(int scaledWidth, int scaledHeight, std::string_view filename, bool halfLoad,
 	                 unsigned int format, const unsigned char* const* rowPointers,
 	                 const unsigned char* data = nullptr);
-	Finally LoadPNG(const std::string& filename, FILE* fp, bool halfLoad);
+	Finally LoadPNG(std::string_view filename, FILE* fp, bool halfLoad);
 	struct BMPHeader {
 		unsigned int dataOffset;
 		unsigned int headerSize;
@@ -242,15 +243,15 @@ private:
 		unsigned int compression;
 		unsigned int dataSize;
 	};
-	Finally LoadBMP(const std::string& filename, FILE* fp, bool halfLoad);
+	Finally LoadBMP(std::string_view filename, FILE* fp, bool halfLoad);
 #ifndef NOWEBP
-	Finally LoadWebP(const std::string& filename, FILE* file, bool halfLoad);
+	Finally LoadWebP(std::string_view filename, FILE* file, bool halfLoad);
 #endif
 
 	std::shared_ptr<Texture> texture;
 };
 
-void draw(const std::string& filename, double x, double y);
+void draw(std::string_view filename, double x, double y);
 
 template <class Vect> void draw(const std::string& filename, Vect pos) {
 	draw(filename, pos.x, pos.y);
