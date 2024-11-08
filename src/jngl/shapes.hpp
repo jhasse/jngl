@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Functions for drawing shapes
 /// @file
@@ -6,6 +6,8 @@
 
 #include "Color.hpp"
 #include "Vec2.hpp"
+
+#include <cstdint>
 
 namespace jngl {
 
