@@ -83,10 +83,12 @@ pages:
   - doxygen
   - mv ../public __tmp
   - mv html ../public
+  - cp *.svg ../public
+  - cp index.html ../public
   - mv __tmp/demo ../public
   - rm -r __tmp
   artifacts:
     paths:
     - public
   only:
-  - master
+  - new-website
