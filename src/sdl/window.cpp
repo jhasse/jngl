@@ -335,7 +335,7 @@ void Window::UpdateInput() {
 				if (getKeyDown(key::ShiftL) || getKeyDown(key::ShiftR)) {
 					tmp.append(1, name[0]);
 				} else {
-					tmp.append(1, tolower(name[0]));
+					tmp.append(1, static_cast<char>(tolower(name[0])));
 				}
 				characterDown_[tmp] = true;
 				characterPressed_[tmp] = true;
@@ -510,7 +510,7 @@ int Window::getMouseX() const {
 	}
 	return std::lround(
 	    (mousex_ * impl->hidpiScaleFactor - (impl->actualWidth - impl->actualCanvasWidth) / 2) *
-	    (float(canvasWidth) / impl->actualCanvasWidth));
+	    (static_cast<float>(canvasWidth) / impl->actualCanvasWidth));
 }
 
 int Window::getMouseY() const {
@@ -519,7 +519,7 @@ int Window::getMouseY() const {
 	}
 	return std::lround(
 	    (mousey_ * impl->hidpiScaleFactor - (impl->actualHeight - impl->actualCanvasHeight) / 2) *
-	    (float(canvasHeight) / impl->actualCanvasHeight));
+	    (static_cast<float>(canvasHeight) / impl->actualCanvasHeight));
 }
 
 void setCursor(Cursor type) {

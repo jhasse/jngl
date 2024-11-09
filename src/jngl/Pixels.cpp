@@ -42,7 +42,7 @@ bool operator>(const jngl::Pixels a, const jngl::Pixels b) {
 }
 
 Pixels operator/(const jngl::Pixels a, const float b) {
-	return Pixels(float(a) / b);
+	return Pixels(static_cast<float>(a) / b);
 }
 
 } // namespace jngl

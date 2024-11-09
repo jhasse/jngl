@@ -76,7 +76,8 @@ void Drawable::setY(const double y) {
 }
 
 Vec2 Drawable::getSize() const {
-	return { double(width) / getScaleFactor(), double(height) / getScaleFactor() };
+	return { static_cast<double>(width) / getScaleFactor(),
+		     static_cast<double>(height) / getScaleFactor() };
 }
 
 float Drawable::getWidth() const {

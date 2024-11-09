@@ -7,7 +7,7 @@
 
 namespace {
 boost::ut::suite _ = [] {
-	using namespace boost::ut;
+	using namespace boost::ut; // NOLINT
 	"ImageData"_test = [] {
 		try {
 			jngl::ImageData::load("foo.tga");

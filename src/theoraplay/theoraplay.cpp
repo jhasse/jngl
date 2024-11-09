@@ -88,9 +88,9 @@ struct THEORAPLAY_Decoder {
 	std::unique_ptr<uint8_t[]> ringBuffer;
 };
 
-static int FeedMoreOggData(THEORAPLAY_Io *io, ogg_sync_state *sync)
-{
-    long buflen = 4096;
+namespace {
+int FeedMoreOggData(THEORAPLAY_Io* io, ogg_sync_state* sync) {
+	long buflen = 4096;
     char *buffer = ogg_sync_buffer(sync, buflen);
 	if (buffer == nullptr) {
 		return -1;
@@ -102,12 +102,12 @@ static int FeedMoreOggData(THEORAPLAY_Io *io, ogg_sync_state *sync)
 	return (ogg_sync_wrote(sync, buflen) == 0) ? 1 : -1;
 }
 
-
 // This massive function is where all the effort happens.
-static void WorkerThread(THEORAPLAY_Decoder* const ctx) {
-    // make sure we initialized the stream before using pagein, but the stream
-    //  will know to ignore pages that aren't meant for it, so pass to both.
-    #define queue_ogg_page(ctx) do { \
+void WorkerThread(THEORAPLAY_Decoder* const ctx) {
+// make sure we initialized the stream before using pagein, but the stream
+//  will know to ignore pages that aren't meant for it, so pass to both.
+#define queue_ogg_page(ctx)                                                                        \
+	do { \
         if (tpackets) ogg_stream_pagein(&tstream, &page); \
         if (vpackets) ogg_stream_pagein(&vstream, &page); \
     } while (0)
@@ -496,17 +496,13 @@ cleanup:
 	ctx->thread_done = true;
 }
 
-
-static void *WorkerThreadEntry(void *_this)
-{
+void* WorkerThreadEntry(void* _this) {
 	WorkerThread(static_cast<THEORAPLAY_Decoder*>(_this));
     return nullptr;
 }
 
-
-static long IoFopenRead(THEORAPLAY_Io *io, void *buf, long buflen)
-{
-    FILE *f = (FILE *) io->userdata;
+long IoFopenRead(THEORAPLAY_Io* io, void* buf, long buflen) {
+	FILE *f = (FILE *) io->userdata;
     const size_t br = fread(buf, 1, buflen, f);
 	if ((br == 0) && ferror(f)) {
 		return -1;
@@ -514,11 +510,12 @@ static long IoFopenRead(THEORAPLAY_Io *io, void *buf, long buflen)
     return (long) br;
 }
 
-static void IoFopenClose(THEORAPLAY_Io* io) {
+void IoFopenClose(THEORAPLAY_Io* io) {
 	FILE* f = static_cast<FILE*>(io->userdata);
 	fclose(f);
     free(io);
 }
+} // namespace
 
 THEORAPLAY_Decoder* THEORAPLAY_startDecodeFile(const char* fname, const unsigned int maxframes,
                                                THEORAPLAY_VideoFormat vidfmt) {

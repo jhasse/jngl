@@ -32,7 +32,7 @@ struct pause_control_impl : pause_control {
 			auto result = stream_->read(data, std::min(sample_count, level_));
 
 			for (std::size_t i = 0; i < result; i += 2) {
-				float gain = static_cast<float>(level_) / length_.samples();
+				float gain = static_cast<float>(level_) / static_cast<float>(length_.samples());
 				data[i + 0] *= gain;
 				data[i + 1] *= gain;
 				level_ -= 2;
@@ -46,7 +46,7 @@ struct pause_control_impl : pause_control {
 		auto const max_level = static_cast<std::size_t>(length_.samples());
 
 		for (std::size_t i = 0; i < result; i += 2) {
-			float gain = static_cast<float>(level_) / max_level;
+			float gain = static_cast<float>(level_) / static_cast<float>(max_level);
 			data[i + 0] *= gain;
 			data[i + 1] *= gain;
 

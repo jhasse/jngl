@@ -6,6 +6,7 @@ Checks: '
        ,-altera-unroll-loops,
        ,-android-cloexec-fopen,
        ,-bugprone-easily-swappable-parameters,
+       ,-cert-err33-c,
        ,-cert-err52-cpp,
        ,-cert-err58-cpp,
        ,-cert-flp30-c,
