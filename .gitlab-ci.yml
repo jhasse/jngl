@@ -84,6 +84,7 @@ pages:
   - mv ../public __tmp
   - mv html ../public
   - cp *.svg ../public
+  - cp *.png ../public
   - cp index.html ../public
   - mv __tmp/demo ../public
   - rm -r __tmp
