@@ -53,6 +53,9 @@ void drawLine(Vec2 start, Vec2 end);
 /// \deprecated Use drawLine(Vec2, Vec2) instead
 void drawLine(double xstart, double ystart, double xend, double yend);
 
+/// Draws a line from \a start to \a end
+void drawLine(Mat3 modelview, Vec2 start, Vec2 end);
+
 /// Draws a line from (0, 0) to \a end
 void drawLine(const Mat3& modelview, Vec2 end);
 

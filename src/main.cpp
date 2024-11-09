@@ -599,6 +599,10 @@ void drawLine(const Vec2 start, const Vec2 end) {
 	pWindow->drawLine(jngl::modelview().translate(start), end - start);
 }
 
+void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end) {
+	pWindow->drawLine(modelview.translate(start), end - start);
+}
+
 void drawLine(const Mat3& modelview, const Vec2 end) {
 	pWindow->drawLine(modelview, end);
 }
