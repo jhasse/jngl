@@ -11,7 +11,7 @@ image: registry.fedoraproject.org/fedora-minimal:40
 linux:
   stage: build
   script:
-  - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libwebp-devel SDL2-devel libtheora-devel clang util-linux >/dev/null
+  - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libwebp-devel SDL2-devel libtheora-devel clang util-linux clang-tools-extra >/dev/null
   - .github/ci.py
   - CXXFLAGS=-fdiagnostics-color cmake -Bbuild -GNinja
   - cd build
@@ -21,11 +21,9 @@ linux:
   - sleep 1 # wait for Xorg to boot up
   - DISPLAY=:0 ./jngl-unittest
   - cd ..
-  - CC=clang CXX=clang++ CXXFLAGS=-fdiagnostics-color cmake -Bbuild-clang -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+  - CC=clang CXX=clang++ CXXFLAGS=-fdiagnostics-color cmake -Bbuild-clang -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DJNGL_CLANG_TIDY=1
   - cd build-clang
   - ninja
-  - microdnf install -y clang-tools-extra python3-PyYAML >/dev/null
-  - script -qfec "../data/run-clang-tidy.py"
 
 mingw:
   stage: build
