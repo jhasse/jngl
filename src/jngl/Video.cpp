@@ -291,7 +291,6 @@ private:
 				                   audio->samples + static_cast<ptrdiff_t>(audio->frames * 2));
 			}
 		}
-		THEORAPLAY_freeAudio(audio);
 		audio = THEORAPLAY_getAudio(decoder);
 	}
 
@@ -324,7 +323,7 @@ private:
 
 	THEORAPLAY_Decoder* decoder;
 	const THEORAPLAY_VideoFrame* video = nullptr;
-	const THEORAPLAY_AudioPacket* audio = nullptr;
+	std::unique_ptr<const THEORAPLAY_AudioPacket> audio;
 	double startTime;
 	double timePerFrame;
 

@@ -82,7 +82,7 @@ struct THEORAPLAY_Decoder {
 	VideoFrame* videolist = nullptr;
 	VideoFrame* videolisttail = nullptr;
 
-	AudioPacket* audiolist = nullptr;
+	std::unique_ptr<AudioPacket> audiolist;
 	AudioPacket* audiolisttail = nullptr;
 
 	std::unique_ptr<uint8_t[]> ringBuffer;
@@ -295,10 +295,7 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                 const int channels = vinfo.channels;
                 int chanidx, frameidx;
 				float* samples;
-				auto* item = static_cast<AudioPacket*>(malloc(sizeof(AudioPacket)));
-				if (item == nullptr) {
-					goto cleanup;
-				}
+				auto item = std::make_unique<AudioPacket>();
 				item->playms = static_cast<unsigned int>(
 				    ((static_cast<double>(audioframes)) / (static_cast<double>(vinfo.rate))) *
 				    1000.0);
@@ -308,13 +305,11 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 				item->samples = static_cast<float*>(malloc(sizeof(float) * frames * channels));
 				item->next = nullptr;
 
-                if (item->samples == nullptr)
-                {
-                    free(item);
-                    goto cleanup;
+				if (item->samples == nullptr) {
+					goto cleanup;
 				}
 
-                // I bet this beats the crap out of the CPU cache...
+				// I bet this beats the crap out of the CPU cache...
                 samples = item->samples;
                 for (frameidx = 0; frameidx < frames; frameidx++)
                 {
@@ -329,18 +324,19 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                 //printf("Decoded %d frames of audio.\n", (int) frames);
                 ctx->lock.lock();
                 ctx->audioms += item->playms;
-                if (ctx->audiolisttail)
+				AudioPacket* const tail = item.get();
+				if (ctx->audiolisttail)
                 {
                     assert(ctx->audiolist);
-                    ctx->audiolisttail->next = item;
+					ctx->audiolisttail->next = std::move(item);
 				}
                 else
                 {
                     assert(!ctx->audiolist);
-                    ctx->audiolist = item;
+					ctx->audiolist = std::move(item);
 				}
-                ctx->audiolisttail = item;
-                ctx->lock.unlock();
+				ctx->audiolisttail = tail;
+				ctx->lock.unlock();
 			} else { // no audio available left in current packet?
 				// try to feed another packet to the Vorbis stream...
 				if (ogg_stream_packetout(&vstream, &packet) <= 0)
@@ -577,16 +573,7 @@ void THEORAPLAY_stopDecode(THEORAPLAY_Decoder* const ctx) {
         videolist = next;
 	}
 
-    AudioPacket *audiolist = ctx->audiolist;
-    while (audiolist)
-    {
-        AudioPacket *next = audiolist->next;
-        free(audiolist->samples);
-        free(audiolist);
-        audiolist = next;
-	}
-
-    delete ctx;
+	delete ctx;
 }
 
 bool THEORAPLAY_isDecoding(THEORAPLAY_Decoder* const ctx) {
@@ -637,16 +624,16 @@ bool THEORAPLAY_decodingError(THEORAPLAY_Decoder* const decoder) {
 	GET_SYNCED_VALUE(bool, 0, decoder, decode_error);
 }
 
-const THEORAPLAY_AudioPacket* THEORAPLAY_getAudio(THEORAPLAY_Decoder* const ctx) {
-	AudioPacket *retval;
+std::unique_ptr<const THEORAPLAY_AudioPacket> THEORAPLAY_getAudio(THEORAPLAY_Decoder* const ctx) {
+	std::unique_ptr<AudioPacket> retval;
 
-    ctx->lock.lock();
-    retval = ctx->audiolist;
-    if (retval)
+	ctx->lock.lock();
+	retval = std::move(ctx->audiolist);
+	if (retval)
     {
         ctx->audioms -= retval->playms;
-        ctx->audiolist = retval->next;
-        retval->next = nullptr;
+		ctx->audiolist = std::move(retval->next);
+		retval->next = nullptr;
 		if (ctx->audiolist == nullptr) {
 			ctx->audiolisttail = nullptr;
 		}
@@ -656,13 +643,9 @@ const THEORAPLAY_AudioPacket* THEORAPLAY_getAudio(THEORAPLAY_Decoder* const ctx)
     return retval;
 }
 
-void THEORAPLAY_freeAudio(const THEORAPLAY_AudioPacket* item) {
-    if (item != nullptr)
-    {
-        assert(item->next == nullptr);
-        free(item->samples);
-		free(const_cast<THEORAPLAY_AudioPacket*>(item));
-	}
+THEORAPLAY_AudioPacket::~THEORAPLAY_AudioPacket() noexcept {
+	assert(next == nullptr);
+	free(samples);
 }
 
 const THEORAPLAY_VideoFrame* THEORAPLAY_getVideo(THEORAPLAY_Decoder* const ctx) {
