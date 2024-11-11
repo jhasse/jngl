@@ -35,10 +35,6 @@ void Color::setBlue(const unsigned char blue) {
 	this->blue = blue;
 }
 
-Color::operator Rgb() const {
-	return Rgb::u8(red, green, blue);
-}
-
 Color interpolate(Color a, Color b, float t) {
 	return { static_cast<unsigned char>(static_cast<float>(a.getRed()) * (1.f - t) +
 		                                static_cast<float>(b.getRed()) * t),
@@ -49,8 +45,3 @@ Color interpolate(Color a, Color b, float t) {
 }
 
 } // namespace jngl
-
-jngl::Color operator"" _rgb(const unsigned long long hex) {
-	return { static_cast<unsigned char>((hex >> 16) % 256),
-		     static_cast<unsigned char>((hex >> 8) % 256), static_cast<unsigned char>(hex % 256) };
-}

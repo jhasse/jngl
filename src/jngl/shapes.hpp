@@ -105,7 +105,7 @@ void drawRect(Vec2 position, Vec2 size);
 /// Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color
 ///
 /// Use setAlpha to set the opacity.
-void drawRect(const Mat3& modelview, Vec2 size, Color);
+void drawRect(const Mat3& modelview, Vec2 size, Rgb);
 
 /// Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color
 ///

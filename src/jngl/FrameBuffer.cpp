@@ -182,11 +182,9 @@ void FrameBuffer::Context::clear() {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void FrameBuffer::Context::clear(const Color color) {
+void FrameBuffer::Context::clear(const Rgb color) {
 	assert(resetCallback);
-	glClearColor(static_cast<float>(color.getRed()) / 255.f,
-	             static_cast<float>(color.getGreen()) / 255.f,
-	             static_cast<float>(color.getBlue()) / 255.f, 1);
+	glClearColor(color.getRed(), color.getGreen(), color.getBlue(), 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 

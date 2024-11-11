@@ -47,9 +47,6 @@ public:
 	/// 0...255
 	void setBlue(unsigned char);
 
-	/// Implicit conversion for backwards compatibility
-	operator Rgb() const; // NOLINT
-
 private:
 	unsigned char red;
 	unsigned char green;
@@ -68,6 +65,3 @@ void setBackgroundColor(jngl::Rgb);
 void setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
 
 } // namespace jngl
-
-/// Create a jngl::Color object from a literal. E.g. `0x00ff00_rgb` for green.
-jngl::Color operator"" _rgb(unsigned long long);

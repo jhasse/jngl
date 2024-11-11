@@ -10,7 +10,7 @@ namespace {
 boost::ut::suite _ = [] {
 	using namespace boost::ut; // NOLINT
 	"Color"_test = [] {
-		const auto a = 0x68da4f_rgb;
+		const jngl::Color a{0x68da4f_rgb};
 		const auto b = jngl::Color(0x68, 0xda, 0x4f);
 		const auto c = jngl::Color(104, 218, 79);
 		expect(eq(a.getRed(), b.getRed()));

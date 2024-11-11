@@ -62,7 +62,7 @@ public:
 		void clear();
 
 		/// Clear the framebuffer with \a color
-		void clear(Color color);
+		void clear(Rgb color);
 
 	private:
 		std::function<void()> resetCallback;

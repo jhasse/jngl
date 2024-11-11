@@ -570,7 +570,7 @@ void drawRect(const Vec2 position, const Vec2 size) {
 	pWindow->drawRect(position, size);
 }
 
-void drawRect(const Mat3& modelview, const Vec2 size, const Color color) {
+void drawRect(const Mat3& modelview, const Vec2 size, const Rgb color) {
 	pWindow->drawRect(modelview, size, Rgba(color, Alpha(gShapeColor.getAlpha())));
 }
 
