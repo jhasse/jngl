@@ -166,6 +166,16 @@ void Sprite::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) cons
 	draw(modelview, Alpha(gSpriteColor.getAlpha()), shaderProgram);
 }
 
+void Sprite::draw(Mat3 modelview, Rgba color) const {
+	modelview *=
+	    boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. }));
+	auto context = Texture::textureShaderProgram->use();
+	glUniform4f(Texture::shaderSpriteColorUniform, color.getRed(), color.getGreen(),
+	            color.getBlue(), color.getAlpha());
+	glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, modelview.data);
+	texture->draw();
+}
+
 void Sprite::draw(Mat3 modelview, Alpha alpha, const ShaderProgram* const shaderProgram) const {
 	modelview *=
 	    boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. }));

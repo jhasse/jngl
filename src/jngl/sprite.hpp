@@ -125,6 +125,12 @@ public:
 	void draw(Mat3 modelview, const ShaderProgram* = nullptr) const;
 	void draw(Mat3 modelview, Alpha, const ShaderProgram* = nullptr) const;
 
+	/// Draws the sprite but multiplies each pixel's color with \a color
+	///
+	/// If the sprite is mostly white, this will make it appear in the specified color. If it's
+	/// black, nothing will change.
+	void draw(Mat3 modelview, Rgba color) const;
+
 	/// Draws the sprite using the specified shader program.
 	///
 	/// @param shaderProgram A pointer to the ShaderProgram object to use for drawing.
