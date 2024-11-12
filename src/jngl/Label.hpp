@@ -1,10 +1,10 @@
-// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Label class
 /// @file
 #pragma once
 
-#include "Color.hpp"
+#include "Rgb.hpp"
 #include "TextLine.hpp"
 #include "Widget.hpp"
 #include "text.hpp"
@@ -14,7 +14,7 @@ namespace jngl {
 /// Simple Widget displaying a line of text
 class Label : public Widget {
 public:
-	explicit Label(const std::string& str, Font&, Color, Vec2 position);
+	explicit Label(const std::string& str, Font&, Rgb, Vec2 position);
 
 	void drawSelf(jngl::Mat3) const override;
 
@@ -32,7 +32,7 @@ protected:
 
 private:
 	jngl::TextLine text;
-	jngl::Color color;
+	jngl::Rgb color;
 };
 
 } // namespace jngl

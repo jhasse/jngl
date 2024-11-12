@@ -6,7 +6,7 @@
 
 namespace jngl {
 
-Label::Label(const std::string& str, Font& font, const Color color, const jngl::Vec2 position)
+Label::Label(const std::string& str, Font& font, const Rgb color, const jngl::Vec2 position)
 : Widget(position), text(font, str), color(color) {
 	text.setCenter(Vec2(0, 0));
 }
