@@ -1,43 +1,41 @@
 <map id="jngl/Label.hpp" name="jngl/Label.hpp">
-<area shape="rect" id="Node000001" title="Contains jngl::Label class." alt="" coords="293,5,427,31"/>
-<area shape="rect" id="Node000002" href="$Color_8hpp.html" title="Contains jngl::Color class." alt="" coords="79,79,172,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="321,34,181,77,179,71,319,29"/>
-<area shape="rect" id="Node000005" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="239,79,356,105"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="352,33,320,69,316,65,348,29"/>
-<area shape="rect" id="Node000013" href="$Widget_8hpp.html" title="Contains jngl::Container class." alt="" coords="508,79,609,105"/>
-<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="395,29,512,71,510,76,393,34"/>
-<area shape="rect" id="Node000016" href="$text_8hpp.html" title=" " alt="" coords="380,79,465,105"/>
-<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="372,29,404,65,400,69,368,33"/>
-<area shape="rect" id="Node000003" href="$Rgb_8hpp.html" title="Contains jngl::Rgb class." alt="" coords="5,153,83,178"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,107,71,144,67,140,110,103"/>
-<area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="5,226,83,252"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="47,179,47,211,41,211,41,179"/>
-<area shape="rect" id="Node000006" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="107,153,224,178"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="276,108,202,147,200,143,274,103"/>
-<area shape="rect" id="Node000010" href="$Mat3_8hpp.html" title="Contains jngl::Mat3 class." alt="" coords="341,153,427,178"/>
-<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="314,103,360,141,356,145,310,107"/>
-<area shape="rect" id="Node000012" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="451,153,520,178"/>
-<area shape="poly" id="edge12_Node000005_Node000012" title=" " alt="" coords="330,103,440,144,438,149,328,108"/>
-<area shape="rect" id="Node000007" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="192,226,277,252"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="179,177,214,213,211,217,175,180"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="245,300,411,326"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="252,250,302,288,299,293,249,255"/>
-<area shape="rect" id="Node000009" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="152,300,221,326"/>
-<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="229,254,206,288,201,285,225,251"/>
-<area shape="poly" id="edge10_Node000010_Node000008" title=" " alt="" coords="379,180,356,227,337,286,332,284,351,225,375,178"/>
-<area shape="rect" id="Node000011" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/initializer_list.html" title=" " alt="" coords="365,226,515,252"/>
-<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="395,177,423,212,419,216,391,180"/>
-<area shape="poly" id="edge15_Node000013_Node000007" title=" " alt="" coords="582,103,603,118,623,137,634,158,633,169,627,180,584,193,495,207,293,234,292,228,494,202,583,187,624,176,628,168,629,159,619,140,600,122,578,107"/>
-<area shape="poly" id="edge14_Node000013_Node000010" title=" " alt="" coords="530,108,429,149,427,144,528,103"/>
-<area shape="poly" id="edge16_Node000013_Node000012" title=" " alt="" coords="548,107,510,144,507,140,545,103"/>
-<area shape="rect" id="Node000014" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/set.html" title=" " alt="" coords="688,153,733,178"/>
-<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="586,103,675,145,673,149,583,108"/>
-<area shape="rect" id="Node000015" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="544,153,613,178"/>
-<area shape="poly" id="edge18_Node000013_Node000015" title=" " alt="" coords="565,104,574,137,569,138,559,106"/>
-<area shape="poly" id="edge20_Node000016_Node000006" title=" " alt="" coords="380,108,225,151,223,145,379,102"/>
-<area shape="poly" id="edge21_Node000016_Node000010" title=" " alt="" coords="419,106,400,140,395,138,414,104"/>
-<area shape="poly" id="edge22_Node000016_Node000012" title=" " alt="" coords="435,103,467,139,463,142,431,107"/>
-<area shape="poly" id="edge24_Node000016_Node000015" title=" " alt="" coords="450,103,539,143,537,148,448,108"/>
-<area shape="rect" id="Node000017" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="248,153,317,178"/>
-<area shape="poly" id="edge23_Node000016_Node000017" title=" " alt="" coords="400,108,321,148,319,143,398,103"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Label class." alt="" coords="289,5,423,31"/>
+<area shape="rect" id="Node000002" href="$Rgb_8hpp.html" title="Contains jngl::Rgb class." alt="" coords="91,79,168,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="318,34,183,76,182,71,317,29"/>
+<area shape="rect" id="Node000004" href="$TextLine_8hpp.html" title="Contains jngl::TextLine class." alt="" coords="235,79,352,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="348,33,316,69,312,65,344,29"/>
+<area shape="rect" id="Node000012" href="$Widget_8hpp.html" title="Contains jngl::Container class." alt="" coords="507,79,608,105"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="391,29,510,71,508,76,389,34"/>
+<area shape="rect" id="Node000015" href="$text_8hpp.html" title=" " alt="" coords="376,79,461,105"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="368,29,400,65,396,69,364,33"/>
+<area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="5,153,83,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="117,107,71,145,68,141,113,103"/>
+<area shape="rect" id="Node000005" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="107,153,224,178"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="273,108,202,147,199,142,270,103"/>
+<area shape="rect" id="Node000009" href="$Mat3_8hpp.html" title="Contains jngl::Mat3 class." alt="" coords="435,153,520,178"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="326,103,433,144,431,149,324,108"/>
+<area shape="rect" id="Node000011" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="341,153,411,178"/>
+<area shape="poly" id="edge11_Node000004_Node000011" title=" " alt="" coords="309,103,352,140,349,144,306,107"/>
+<area shape="rect" id="Node000006" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="404,226,489,252"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="214,176,389,221,388,226,212,181"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="284,300,449,326"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="435,255,393,292,389,288,431,251"/>
+<area shape="rect" id="Node000008" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="473,300,543,326"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="459,250,490,286,486,290,455,254"/>
+<area shape="poly" id="edge9_Node000009_Node000007" title=" " alt="" coords="453,181,422,201,394,228,380,256,373,285,367,284,375,254,390,225,419,196,450,177"/>
+<area shape="rect" id="Node000010" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/initializer_list.html" title=" " alt="" coords="513,226,663,252"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="498,177,558,215,555,220,495,181"/>
+<area shape="poly" id="edge14_Node000012_Node000006" title=" " alt="" coords="581,103,602,118,622,136,633,157,633,169,627,180,611,190,582,201,506,225,504,220,580,196,609,185,623,177,627,168,627,159,617,139,599,122,578,107"/>
+<area shape="poly" id="edge13_Node000012_Node000009" title=" " alt="" coords="546,107,504,144,500,140,542,103"/>
+<area shape="poly" id="edge15_Node000012_Node000011" title=" " alt="" coords="528,108,422,149,420,144,526,103"/>
+<area shape="rect" id="Node000013" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/set.html" title=" " alt="" coords="688,153,733,178"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="584,103,675,145,673,150,582,108"/>
+<area shape="rect" id="Node000014" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="544,153,613,178"/>
+<area shape="poly" id="edge17_Node000012_Node000014" title=" " alt="" coords="563,104,573,137,568,138,558,106"/>
+<area shape="poly" id="edge19_Node000015_Node000005" title=" " alt="" coords="376,108,224,151,222,145,375,103"/>
+<area shape="poly" id="edge20_Node000015_Node000009" title=" " alt="" coords="430,103,460,139,456,142,426,107"/>
+<area shape="poly" id="edge21_Node000015_Node000011" title=" " alt="" coords="414,106,393,141,389,138,409,104"/>
+<area shape="poly" id="edge23_Node000015_Node000014" title=" " alt="" coords="447,103,539,144,537,148,445,108"/>
+<area shape="rect" id="Node000016" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="248,153,317,178"/>
+<area shape="poly" id="edge22_Node000015_Node000016" title=" " alt="" coords="397,108,320,147,318,143,394,103"/>
 </map>
