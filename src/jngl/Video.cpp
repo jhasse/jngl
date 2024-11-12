@@ -3,9 +3,6 @@
 
 #include "Video.hpp"
 
-#include <atomic>
-#include <cstring>
-#include <mutex>
 #include <stdexcept>
 
 #ifdef JNGL_VIDEO
@@ -23,8 +20,11 @@
 #include "time.hpp"
 
 #include <algorithm>
+#include <atomic>
 #include <cmath>
+#include <cstring>
 #include <gsl/narrow>
+#include <mutex>
 
 namespace jngl {
 
