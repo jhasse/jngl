@@ -43,7 +43,7 @@ void TextLine::draw(Mat3 modelview) const {
 	const double lineSpacing = static_cast<double>(ScaleablePixels{ fontImpl->getLineHeight() }) *
 	                           (1 - 1 / LINE_HEIGHT_FACOTR);
 
-	fontImpl->print(modelview.translate(position + Vec2(0, lineSpacing / 2.)), text);
+	fontImpl->print(modelview.translate(position + Vec2(0, lineSpacing / 2.)), text, gFontColor);
 }
 
 void TextLine::setText(std::string text) {

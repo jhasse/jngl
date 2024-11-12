@@ -58,7 +58,7 @@ void Window::print(const std::string& text, const int xposition, const int yposi
 }
 
 void Window::print(const Mat3& modelview, const std::string& text) {
-	getFontImpl()->print(modelview, text);
+	getFontImpl()->print(modelview, text, gFontColor);
 }
 
 void Window::setFont(const std::string& filename) {

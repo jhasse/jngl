@@ -68,9 +68,8 @@ void AchievementLayer::draw() const {
 	drawRect(mv, BOX, Color(50, 50, 50));
 	mv.translate(PADDING);
 
-	setFontColor(0xffffff_rgb, 1.f);
 	setFontSize(37);
-	pWindow->getFontImpl()->print(mv, achievement->name);
+	pWindow->getFontImpl()->print(mv, achievement->name, 0xffffffff_rgba);
 
 	mv.translate({0, 50});
 	setFontSize(28);
@@ -86,7 +85,7 @@ void AchievementLayer::draw() const {
 	} else {
 		tmp << maxValue;
 	}
-	pWindow->getFontImpl()->print(mv, tmp.str());
+	pWindow->getFontImpl()->print(mv, tmp.str(), 0xffffffff_rgba);
 
 	Vec2 bar(BOX.x - PADDING.x * 2, 10);
 	mv.translate({0, 40}); // below text

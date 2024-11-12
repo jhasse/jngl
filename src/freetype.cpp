@@ -240,10 +240,10 @@ void FontImpl::setLineHeight(Pixels h) {
 	lineHeight = static_cast<int>(h);
 }
 
-void FontImpl::print(Mat3 modelview, const std::string& text) {
+void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) {
 	auto context = Texture::textureShaderProgram->use();
-	glUniform4f(Texture::shaderSpriteColorUniform, gFontColor.getRed(), gFontColor.getGreen(),
-	            gFontColor.getBlue(), gFontColor.getAlpha());
+	glUniform4f(Texture::shaderSpriteColorUniform, color.getRed(), color.getGreen(),
+	            color.getBlue(), color.getAlpha());
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();

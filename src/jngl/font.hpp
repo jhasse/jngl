@@ -30,13 +30,16 @@ public:
 	/// you would pass 10.f for \a strokePercentage.
 	Font(const std::string& filename, unsigned int size, float strokePercentage = 0);
 
+	/// Draw \a text using \a modelview in \a color
+	void print(const Mat3& modelview, const std::string& text, Rgba color) const;
+
 	/// Uses the font to print something at \a x \a y. The color can be specified using setFontColor.
 	void print(const std::string&, int x, int y);
 
-	/// Draw \a text at \a position
+	/// Draw \a text at \a position. The color can be specified using setFontColor.
 	void print(const std::string& text, Vec2 position) const;
 
-	/// Draw \a text using \a modelview
+	/// Draw \a text using \a modelview. The color can be specified using setFontColor.
 	void print(const Mat3& modelview, const std::string& text) const;
 
 	/// Calculates the width of \a text in scale-independent pixels if it would be drawn with this
