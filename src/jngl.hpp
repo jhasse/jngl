@@ -14,6 +14,7 @@
 #include "jngl/FrameBuffer.hpp"
 #include "jngl/ImageData.hpp"
 #include "jngl/Label.hpp"
+#include "jngl/OutlinedFont.hpp"
 #include "jngl/Pixels.hpp"
 #include "jngl/Rect.hpp"
 #include "jngl/Rgb.hpp"

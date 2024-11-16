@@ -24,7 +24,8 @@ public:
 	/// You may set \a strokePercentage to a positive or negative % value to increase or decrease
 	/// the font size, without actually changing the position/size of the individual characters.
 	/// This can be used to draw an outlined text by e.g. first drawing with a 5% stroke and then
-	/// printing the same text with 0% (or even a negative stroke) over it.
+	/// printing the same text with 0% (or even a negative stroke) over it. jngl::OutlinedFont does
+	/// exactly that for you automatically.
 	///
 	/// Example: To increase the size of each character by 2px for a Font with a \a size of 20px,
 	/// you would pass 10.f for \a strokePercentage.
