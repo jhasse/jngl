@@ -48,6 +48,8 @@ public:
 	void SetRelativeMouseMode(bool relative);
 	bool getRelativeMouseMode() const;
 	void SetMouseVisible(bool visible);
+	void increaseMouseHiddenCount();
+	void decreaseMouseHiddenCount();
 	bool getMouseVisible() const;
 	bool isMultitouch() const;
 	std::vector<Vec2> getTouchPositions() const;
@@ -177,6 +179,7 @@ private:
 	unsigned int previousStepsPerFrame = 1;
 	double lastCheckTime;
 	unsigned int stepsSinceLastCheck;
+	int mouseHiddenCount = 0;
 
 	/// When VSYNC is active we will try to find out to what FPS/Hz the display is limiting us
 	double maxFPS;

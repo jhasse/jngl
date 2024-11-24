@@ -4,6 +4,7 @@
 /// @file
 #pragma once
 
+#include "Finally.hpp"
 #include "Vec2.hpp"
 
 #include <functional>
@@ -127,6 +128,9 @@ bool getRelativeMouseMode();
 
 /// By default the mouse cursor of the OS is visible and can be hidden by passing false
 void setMouseVisible(bool visible);
+
+/// Hides the mouse cursor; destroying the returned Finally object will show it again
+[[nodiscard]] Finally hideMouse();
 
 /// Returns whether the mouse cursor of the OS is currently visible
 ///

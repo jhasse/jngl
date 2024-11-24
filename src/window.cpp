@@ -136,6 +136,21 @@ bool Window::getRelativeMouseMode() const {
 	return relativeMouseMode;
 }
 
+void Window::increaseMouseHiddenCount() {
+	if (mouseHiddenCount == 0) {
+		setMouseVisible(false);
+	}
+	++mouseHiddenCount;
+}
+
+void Window::decreaseMouseHiddenCount() {
+	assert(mouseHiddenCount > 0);
+	--mouseHiddenCount;
+	if (mouseHiddenCount == 0) {
+		setMouseVisible(true);
+	}
+}
+
 int Window::getCanvasWidth() const {
 	return canvasWidth;
 }
