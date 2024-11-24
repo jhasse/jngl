@@ -29,9 +29,10 @@ var searchData=
   ['hex_26',['hex',['http://en.cppreference.com/w/cpp/io/manip/hex.html',1,'std']]],
   ['hexfloat_27',['hexfloat',['http://en.cppreference.com/w/cpp/io/manip/fixed.html',1,'std']]],
   ['hh_5fmm_5fss_28',['hh_mm_ss',['http://en.cppreference.com/w/cpp/chrono/hh_mm_ss.html',1,'hh_mm_ss'],['http://en.cppreference.com/w/cpp/chrono/hh_mm_ss/hh_mm_ss.html',1,'std::chrono::hh_mm_ss::hh_mm_ss()']]],
-  ['hidewindow_29',['hideWindow',['../namespacejngl.html#a6d20c55145d6024abf036cc86e2e0380',1,'jngl']]],
-  ['high_5fresolution_5fclock_30',['high_resolution_clock',['http://en.cppreference.com/w/cpp/chrono/high_resolution_clock.html',1,'std::chrono']]],
-  ['holds_5falternative_31',['holds_alternative',['http://en.cppreference.com/w/cpp/utility/variant/holds_alternative.html',1,'std']]],
-  ['hours_32',['hours',['http://en.cppreference.com/w/cpp/chrono/duration.html',1,'hours'],['http://en.cppreference.com/w/cpp/chrono/hh_mm_ss/accessors.html',1,'std::chrono::hh_mm_ss::hours()'],['http://en.cppreference.com/w/cpp/chrono/duration/duration.html',1,'std::chrono::hours::hours()']]],
-  ['hypot_33',['hypot',['http://en.cppreference.com/w/cpp/numeric/math/hypot.html',1,'std']]]
+  ['hidemouse_29',['hideMouse',['../namespacejngl.html#ab0906bc1d6bf6af9bb404adae4997053',1,'jngl']]],
+  ['hidewindow_30',['hideWindow',['../namespacejngl.html#a6d20c55145d6024abf036cc86e2e0380',1,'jngl']]],
+  ['high_5fresolution_5fclock_31',['high_resolution_clock',['http://en.cppreference.com/w/cpp/chrono/high_resolution_clock.html',1,'std::chrono']]],
+  ['holds_5falternative_32',['holds_alternative',['http://en.cppreference.com/w/cpp/utility/variant/holds_alternative.html',1,'std']]],
+  ['hours_33',['hours',['http://en.cppreference.com/w/cpp/chrono/duration.html',1,'hours'],['http://en.cppreference.com/w/cpp/chrono/hh_mm_ss/accessors.html',1,'std::chrono::hh_mm_ss::hours()'],['http://en.cppreference.com/w/cpp/chrono/duration/duration.html',1,'std::chrono::hours::hours()']]],
+  ['hypot_34',['hypot',['http://en.cppreference.com/w/cpp/numeric/math/hypot.html',1,'std']]]
 ];

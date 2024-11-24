@@ -1,24 +1,30 @@
 <map id="jngl/Finally.hpp" name="jngl/Finally.hpp">
-<area shape="rect" id="Node000001" title="Contains jngl::Finally class." alt="" coords="340,5,489,31"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Finally class." alt="" coords="476,5,625,31"/>
 <area shape="rect" id="Node000002" href="$Channel_8hpp.html" title="Contains jngl::Channel class." alt="" coords="5,153,155,178"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="374,40,109,154,107,150,372,35"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="481,37,311,82,200,120,110,155,109,150,198,115,310,76,479,32"/>
 <area shape="rect" id="Node000004" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="179,153,352,178"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="367,40,335,57,306,81,293,98,283,118,271,153,266,151,278,116,288,96,302,77,332,53,364,35"/>
-<area shape="rect" id="Node000005" href="$ShaderProgram_8hpp.html" title="Contains jngl::ShaderProgram class." alt="" coords="316,79,513,105"/>
-<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="417,46,417,79,412,79,412,46"/>
-<area shape="rect" id="Node000007" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="543,79,668,105"/>
-<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="462,34,574,76,572,81,460,39"/>
-<area shape="rect" id="Node000009" href="$sound_8hpp.html" title="Sound related functions." alt="" coords="715,79,848,105"/>
-<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="493,32,719,76,718,81,492,37"/>
-<area shape="rect" id="Node000003" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="400,226,485,252"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="157,179,400,227,399,232,156,184"/>
-<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="310,182,413,223,411,228,308,187"/>
-<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="414,120,414,148,417,178,426,203,438,225,433,227,421,206,412,179,408,148,409,120"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="462,37,403,55,347,81,324,98,304,118,275,154,271,151,300,114,321,94,344,77,401,50,460,32"/>
+<area shape="rect" id="Node000005" href="$ShaderProgram_8hpp.html" title="Contains jngl::ShaderProgram class." alt="" coords="357,79,555,105"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="524,43,473,81,470,77,521,39"/>
+<area shape="rect" id="Node000007" href="$input_8hpp.html" title="Input related functions." alt="" coords="579,79,712,105"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="581,39,631,77,628,81,577,43"/>
+<area shape="rect" id="Node000009" href="$main_8hpp.html" title="Defines macros for the main entry point." alt="" coords="791,79,916,105"/>
+<area shape="poly" id="edge13_Node000001_Node000009" title=" " alt="" coords="618,32,802,76,801,81,616,38"/>
+<area shape="rect" id="Node000011" href="$sound_8hpp.html" title="Sound related functions." alt="" coords="963,79,1096,105"/>
+<area shape="poly" id="edge16_Node000001_Node000011" title=" " alt="" coords="642,30,963,78,962,83,641,36"/>
+<area shape="rect" id="Node000003" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="508,226,593,252"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="171,178,508,229,507,234,170,183"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="329,180,508,225,507,230,328,185"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="434,118,415,147,412,163,417,177,435,197,458,212,509,229,507,234,456,216,432,201,412,180,407,163,410,145,430,115"/>
 <area shape="rect" id="Node000006" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="427,153,568,178"/>
-<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="442,113,485,150,482,154,439,117"/>
-<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="481,192,454,227,450,224,477,189"/>
-<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="606,121,598,151,582,180,561,199,536,214,486,232,485,227,534,209,558,195,578,177,593,149,601,119"/>
-<area shape="rect" id="Node000008" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="643,153,768,178"/>
-<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="636,112,690,150,687,154,633,116"/>
-<area shape="poly" id="edge13_Node000009_Node000003" title=" " alt="" coords="792,120,794,150,790,166,782,180,761,196,731,208,650,226,561,235,486,239,486,234,561,230,649,220,729,203,759,191,778,177,785,164,788,150,786,120"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="473,117,493,151,488,154,468,119"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="517,189,544,224,540,227,513,192"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="632,119,561,227,556,224,627,116"/>
+<area shape="rect" id="Node000008" href="$Controller_8hpp.html" title="Contains jngl::Controller class." alt="" coords="643,153,816,178"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="673,113,717,150,714,154,669,117"/>
+<area shape="poly" id="edge12_Node000008_Node000003" title=" " alt="" coords="686,187,582,228,580,223,684,182"/>
+<area shape="poly" id="edge14_Node000009_Node000003" title=" " alt="" coords="855,120,848,151,841,167,830,180,812,192,788,202,725,218,594,237,594,231,724,212,786,197,810,187,826,176,836,164,843,150,850,119"/>
+<area shape="rect" id="Node000010" href="$init_8hpp.html" title="Include this file only once, as it defines the main function." alt="" coords="891,153,1016,178"/>
+<area shape="poly" id="edge15_Node000009_Node000010" title=" " alt="" coords="884,112,938,150,935,154,881,116"/>
+<area shape="poly" id="edge17_Node000011_Node000003" title=" " alt="" coords="1040,119,1042,150,1038,166,1030,180,1007,192,964,203,842,219,594,238,593,233,842,214,963,197,1005,187,1026,176,1033,164,1037,150,1034,120"/>
 </map>

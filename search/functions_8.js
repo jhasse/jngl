@@ -24,8 +24,9 @@ var searchData=
   ['hex_21',['hex',['http://en.cppreference.com/w/cpp/io/manip/hex.html',1,'std']]],
   ['hexfloat_22',['hexfloat',['http://en.cppreference.com/w/cpp/io/manip/fixed.html',1,'std']]],
   ['hh_5fmm_5fss_23',['hh_mm_ss',['http://en.cppreference.com/w/cpp/chrono/hh_mm_ss/hh_mm_ss.html',1,'std::chrono::hh_mm_ss']]],
-  ['hidewindow_24',['hideWindow',['../namespacejngl.html#a6d20c55145d6024abf036cc86e2e0380',1,'jngl']]],
-  ['holds_5falternative_25',['holds_alternative',['http://en.cppreference.com/w/cpp/utility/variant/holds_alternative.html',1,'std']]],
-  ['hours_26',['hours',['http://en.cppreference.com/w/cpp/chrono/hh_mm_ss/accessors.html',1,'std::chrono::hh_mm_ss::hours()'],['http://en.cppreference.com/w/cpp/chrono/duration/duration.html',1,'std::chrono::hours::hours()']]],
-  ['hypot_27',['hypot',['http://en.cppreference.com/w/cpp/numeric/math/hypot.html',1,'std']]]
+  ['hidemouse_24',['hideMouse',['../namespacejngl.html#ab0906bc1d6bf6af9bb404adae4997053',1,'jngl']]],
+  ['hidewindow_25',['hideWindow',['../namespacejngl.html#a6d20c55145d6024abf036cc86e2e0380',1,'jngl']]],
+  ['holds_5falternative_26',['holds_alternative',['http://en.cppreference.com/w/cpp/utility/variant/holds_alternative.html',1,'std']]],
+  ['hours_27',['hours',['http://en.cppreference.com/w/cpp/chrono/hh_mm_ss/accessors.html',1,'std::chrono::hh_mm_ss::hours()'],['http://en.cppreference.com/w/cpp/chrono/duration/duration.html',1,'std::chrono::hours::hours()']]],
+  ['hypot_28',['hypot',['http://en.cppreference.com/w/cpp/numeric/math/hypot.html',1,'std']]]
 ];

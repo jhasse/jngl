@@ -1,5 +1,8 @@
 <map id="jngl/font.hpp" name="jngl/font.hpp">
 <area shape="rect" id="Node000001" title="Contains jngl::Font class and related functions." alt="" coords="5,5,131,31"/>
-<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="25,79,111,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,46,71,79,65,79,65,46"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="25,153,111,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="49,45,31,80,29,99,36,119,58,151,54,154,31,121,24,100,25,78,45,42"/>
+<area shape="rect" id="Node000003" href="$OutlinedFont_8hpp.html" title="Contains jngl::OutlinedFont class." alt="" coords="40,79,229,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="91,40,125,77,121,80,87,44"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="115,118,81,154,77,150,111,114"/>
 </map>
