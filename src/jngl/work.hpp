@@ -67,14 +67,17 @@ public:
 	/// continues to run you might want to pause the game if necessary.
 	virtual void onPauseEvent();
 
-	/// Gets called when the Work is activated by App::mainLoop()
+	/// Gets called when the Work is activated by the main loop
 	virtual void onLoad();
+
+	/// Gets called when the Work is deactivated by the main loop
+	virtual void onUnload();
 };
 
 /// Returns the current active Work or nullptr if none has been set
 std::shared_ptr<Work> getWork();
 
-/// Sets the passed Work to be active in App::mainLoop()
+/// Sets the passed Work to be active in the main loop
 void setWork(std::shared_ptr<Work> work);
 
 /// The same as setWork(std::shared_ptr<Work>) but creates the Work for you

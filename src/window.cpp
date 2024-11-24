@@ -394,6 +394,9 @@ void Window::stepIfNeeded() {
 		}
 		while (changeWork) {
 			changeWork = false;
+			if (currentWork_) {
+				currentWork_->onUnload();
+			}
 			currentWork_ = newWork_;
 			newWork_.reset();
 			currentWork_->onLoad();
