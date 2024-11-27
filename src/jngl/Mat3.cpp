@@ -38,6 +38,10 @@ Mat3& Mat3::scale(const float xfactor, const float yfactor) {
 	return *this *= boost::qvm::diag_mat(boost::qvm::vec<float, 3>{ { xfactor, yfactor, 1 } });
 }
 
+Mat3& Mat3::scale(const Vec2& v) {
+	return scale(v.x, v.y);
+}
+
 Mat3& Mat3::rotate(const float radian) {
 	boost::qvm::rotate_z(*this, radian);
 	return *this;

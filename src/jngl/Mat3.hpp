@@ -62,6 +62,12 @@ public:
 	/// \endcode
 	Mat3& scale(float xfactor, float yfactor);
 
+	/// Multiplies the matrix by a scaling matrix
+	///
+	/// Equivalent to calling `Mat3::scale(v.x, v.y)`.
+	/// \return *this
+	Mat3& scale(const Vec2& v);
+
 	/// Multiplies the matrix with a rotation matrix
 	///
 	/// \return *this
