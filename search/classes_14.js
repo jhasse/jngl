@@ -44,8 +44,9 @@ var searchData=
   ['unwrap_5fref_5fdecay_5ft_41',['unwrap_ref_decay_t',['http://en.cppreference.com/w/cpp/utility/functional/unwrap_reference.html',1,'std']]],
   ['unwrap_5freference_42',['unwrap_reference',['http://en.cppreference.com/w/cpp/utility/functional/unwrap_reference.html',1,'std']]],
   ['unwrap_5freference_5ft_43',['unwrap_reference_t',['http://en.cppreference.com/w/cpp/utility/functional/unwrap_reference.html',1,'std']]],
-  ['uses_5fallocator_44',['uses_allocator',['http://en.cppreference.com/w/cpp/memory/uses_allocator.html',1,'std']]],
-  ['utc_5fclock_45',['utc_clock',['http://en.cppreference.com/w/cpp/chrono/utc_clock.html',1,'std::chrono']]],
-  ['utc_5fseconds_46',['utc_seconds',['http://en.cppreference.com/w/cpp/chrono/utc_clock.html',1,'std::chrono']]],
-  ['utc_5ftime_47',['utc_time',['http://en.cppreference.com/w/cpp/chrono/utc_clock.html',1,'std::chrono']]]
+  ['updatemodelview_44',['UpdateModelview',['../classjngl_1_1UpdateModelview.html',1,'jngl']]],
+  ['uses_5fallocator_45',['uses_allocator',['http://en.cppreference.com/w/cpp/memory/uses_allocator.html',1,'std']]],
+  ['utc_5fclock_46',['utc_clock',['http://en.cppreference.com/w/cpp/chrono/utc_clock.html',1,'std::chrono']]],
+  ['utc_5fseconds_47',['utc_seconds',['http://en.cppreference.com/w/cpp/chrono/utc_clock.html',1,'std::chrono']]],
+  ['utc_5ftime_48',['utc_time',['http://en.cppreference.com/w/cpp/chrono/utc_clock.html',1,'std::chrono']]]
 ];

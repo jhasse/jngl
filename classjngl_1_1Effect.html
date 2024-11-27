@@ -111,15 +111,18 @@ virtual Action&#160;</td><td class="memItemRight" valign="bottom"><b>step</b> ()
 <tr class="memitem:ace535acb306a671901945e7be9c9bb2d" id="r_ace535acb306a671901945e7be9c9bb2d"><td class="memItemLeft" align="right" valign="top"><a id="ace535acb306a671901945e7be9c9bb2d" name="ace535acb306a671901945e7be9c9bb2d"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>endDraw</b> () const =0</td></tr>
 <tr class="separator:ace535acb306a671901945e7be9c9bb2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ab3c7403d1fa879e89c1ddb29b729c6" id="r_a5ab3c7403d1fa879e89c1ddb29b729c6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ab3c7403d1fa879e89c1ddb29b729c6">updateModelview</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;<a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>) const</td></tr>
+<tr class="memdesc:a5ab3c7403d1fa879e89c1ddb29b729c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called before drawing the widget.  <br /></td></tr>
+<tr class="separator:a5ab3c7403d1fa879e89c1ddb29b729c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Base class for effects that can be applied to <a class="el" href="classjngl_1_1Widget.html">jngl::Widget</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="effects_8hpp_source.html#l00014">14</a> of file <a class="el" href="effects_8hpp_source.html">effects.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="effects_8hpp_source.html#l00016">16</a> of file <a class="el" href="effects_8hpp_source.html">effects.hpp</a>.</p>
 </div><div class="dynheader">
 Inheritance diagram for Effect:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classjngl_1_1Effect__inherit__graph.svg" width="251" height="111"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classjngl_1_1Effect__inherit__graph.svg" width="416" height="111"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a1b0589a8e0b94ef8a83125279b03fd92" name="a1b0589a8e0b94ef8a83125279b03fd92"></a>
@@ -142,7 +145,7 @@ Inheritance diagram for Effect:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="effects_8hpp_source.html#l00016">16</a> of file <a class="el" href="effects_8hpp_source.html">effects.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="effects_8hpp_source.html#l00018">18</a> of file <a class="el" href="effects_8hpp_source.html">effects.hpp</a>.</p>
 
 </div>
 </div>
@@ -171,6 +174,35 @@ Inheritance diagram for Effect:</div>
 </div><div class="memdoc">
 
 <p>Implemented in <a class="el" href="classjngl_1_1Executor.html#af028f50dc004ae99ab4601c015e64adf">Executor</a>.</p>
+
+</div>
+</div>
+<a id="a5ab3c7403d1fa879e89c1ddb29b729c6" name="a5ab3c7403d1fa879e89c1ddb29b729c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ab3c7403d1fa879e89c1ddb29b729c6">&#9670;&#160;</a></span>updateModelview()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void updateModelview </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>modelview</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Called before drawing the widget. </p>
+
+<p>Reimplemented in <a class="el" href="classjngl_1_1UpdateModelview.html#af086d1d76a57eca0b19423018ca6a671">UpdateModelview</a>.</p>
 
 </div>
 </div>
