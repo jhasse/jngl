@@ -65,9 +65,8 @@ void drawEllipse(const Vec2 position, const float width, const float height,
 
 void drawEllipse(Mat3 modelview, float width, float height, float startAngle) {
 	glBindVertexArray(opengl::vaoStream);
-	auto tmp = useSimpleShaderProgram(
-	    modelview.scale(static_cast<float>(getScaleFactor()), static_cast<float>(getScaleFactor())),
-	    gShapeColor);
+	auto tmp =
+	    useSimpleShaderProgram(modelview.scale(static_cast<float>(getScaleFactor())), gShapeColor);
 	std::vector<float> vertexes;
 	vertexes.push_back(0.f);
 	vertexes.push_back(0.f);
@@ -102,9 +101,7 @@ void drawCircle(Mat3 modelview, const float radius, const Rgba color) {
 
 void drawCircle(Mat3 modelview, const Rgba color) {
 	glBindVertexArray(opengl::vaoStream);
-	auto tmp = useSimpleShaderProgram(
-	    modelview.scale(static_cast<float>(getScaleFactor()), static_cast<float>(getScaleFactor())),
-	    color);
+	auto tmp = useSimpleShaderProgram(modelview.scale(static_cast<float>(getScaleFactor())), color);
 	// clang-format off
 	const static float vertexes[] = {
 		1.f, 0.f, 0.9951847f, 0.09801714f, 0.9807853f, 0.1950903f, 0.9569403f, 0.2902847f,
