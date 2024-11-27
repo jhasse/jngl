@@ -13,6 +13,28 @@ namespace jngl {
 
 Effect::~Effect() = default;
 
+void Effect::updateModelview(Mat3& modelview) const {
+}
+
+UpdateModelview::UpdateModelview(std::function<void(float t, Mat3&)> function)
+: function(std::move(function)) {
+}
+
+auto UpdateModelview::step() -> Action {
+	time += 1.f / static_cast<float>(getStepsPerSecond());
+	return Action::NONE;
+}
+
+void UpdateModelview::beginDraw() const {
+}
+
+void UpdateModelview::endDraw() const {
+}
+
+void UpdateModelview::updateModelview(Mat3& modelview) const {
+	function(time, modelview);
+}
+
 Zoom::Zoom(std::function<float(float)> function) : function(std::move(function)) {
 }
 

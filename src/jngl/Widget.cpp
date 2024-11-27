@@ -46,7 +46,11 @@ void Widget::draw() const {
 	for (const auto& effect : effects) {
 		effect->beginDraw();
 	}
-	drawSelf(jngl::modelview());
+	auto mv = jngl::modelview();
+	for (const auto& effect : effects) {
+		effect->updateModelview(mv);
+	}
+	drawSelf(mv);
 	for (const auto& effect : effects) {
 		effect->endDraw();
 	}
