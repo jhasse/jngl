@@ -114,9 +114,7 @@ public:
 	void initGlObjects();
 	static void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
 	void drawLine(Mat3 modelview, Vec2 b) const;
-	void drawRect(Vec2 pos, Vec2 size) const;
-	void drawRect(Mat3 modelview, Vec2 size, Rgba color) const;
-	void drawRect(Mat3 modelview, Vec2 size) const;
+	void drawSquare(Mat3 modelview, Rgba color) const;
 	void onControllerChanged(std::function<void()>);
 
 	friend class WindowImpl;
@@ -135,7 +133,7 @@ private:
 	double timePerStep = 1.0 / 60.0;
 	double mouseWheel = 0;
 	GLuint vaoLine = 0;
-	GLuint vaoRect = 0;
+	GLuint vaoSquare = 0;
 	unsigned int maxStepsPerFrame = 3;
 	bool running = true;
 	bool fullscreen_;

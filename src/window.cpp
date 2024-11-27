@@ -537,11 +537,11 @@ void Window::initGlObjects() {
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(0);
 
-	glGenVertexArrays(1, &vaoRect);
-	glBindVertexArray(vaoRect);
+	glGenVertexArrays(1, &vaoSquare);
+	glBindVertexArray(vaoSquare);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	const static float rect[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
+	const static float rect[] = { -.5, -.5, .5, -.5, .5, .5, -.5, .5 };
 	glBufferData(GL_ARRAY_BUFFER, sizeof(rect), rect, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(0);
@@ -564,41 +564,13 @@ void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 
 void Window::drawLine(Mat3 modelview, const Vec2 b) const {
 	glBindVertexArray(vaoLine);
-	auto tmp =
-	    useSimpleShaderProgram(modelview.scale(static_cast<float>(b.x * jngl::getScaleFactor()),
-	                                           static_cast<float>(b.y * jngl::getScaleFactor())),
-	                           gShapeColor);
+	auto tmp = useSimpleShaderProgram(modelview.scale(b * getScaleFactor()), gShapeColor);
 	glDrawArrays(GL_LINES, 0, 2);
 }
 
-void Window::drawRect(const Vec2 pos, const Vec2 size) const {
-	glBindVertexArray(vaoRect);
-	pushMatrix();
-	translate(pos);
-	opengl::scale(static_cast<float>(size.x * getScaleFactor()),
-	              static_cast<float>(size.y * getScaleFactor()));
-	auto tmp = useSimpleShaderProgram();
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-	popMatrix();
-}
-
-void Window::drawRect(Mat3 modelview, const Vec2 size, Rgba color) const {
-	glBindVertexArray(vaoRect);
-	auto context = jngl::simpleShaderProgram->use();
-	glUniform4f(simpleColorUniform, color.getRed(), color.getGreen(), color.getBlue(),
-	            color.getAlpha());
-	glUniformMatrix3fv(
-	    simpleModelviewUniform, 1, GL_FALSE,
-	    modelview.scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor()).data);
-	glEnableVertexAttribArray(0);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-}
-
-void Window::drawRect(Mat3 modelview, const Vec2 size) const {
-	glBindVertexArray(vaoRect);
-	auto tmp = useSimpleShaderProgram(
-	    modelview.scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor()),
-	    gShapeColor);
+void Window::drawSquare(Mat3 modelview, Rgba color) const {
+	glBindVertexArray(vaoSquare);
+	auto context = useSimpleShaderProgram(modelview.scale(getScaleFactor()), color);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 

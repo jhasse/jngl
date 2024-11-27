@@ -563,19 +563,23 @@ void popMatrix() {
 
 void drawRect(const double xposition, const double yposition, const double width,
               const double height) {
-	pWindow->drawRect(Vec2{ xposition, yposition }, { width, height });
+	drawRect(Vec2{ xposition, yposition }, { width, height });
 }
 
 void drawRect(const Vec2 position, const Vec2 size) {
-	pWindow->drawRect(position, size);
+	pWindow->drawSquare(modelview().translate(position + size / 2).scale(size), gShapeColor);
 }
 
 void drawRect(const Mat3& modelview, const Vec2 size, const Rgb color) {
-	pWindow->drawRect(modelview, size, Rgba(color, Alpha(gShapeColor.getAlpha())));
+	drawRect(modelview, size, Rgba(color, Alpha(gShapeColor.getAlpha())));
 }
 
-void drawRect(const Mat3& modelview, const Vec2 size, const Rgba color) {
-	pWindow->drawRect(modelview, size, color);
+void drawRect(Mat3 modelview, const Vec2 size, const Rgba color) {
+	pWindow->drawSquare(modelview.translate(size / 2).scale(size), color);
+}
+
+void drawSquare(const Mat3& modelview, Rgba color) {
+	pWindow->drawSquare(modelview, color);
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
