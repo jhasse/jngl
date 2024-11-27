@@ -113,6 +113,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afbadf6fb2a6f024c6ce11a6d71bdd4bb" id="r_afbadf6fb2a6f024c6ce11a6d71bdd4bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbadf6fb2a6f024c6ce11a6d71bdd4bb">scale</a> (float xfactor, float yfactor)</td></tr>
 <tr class="memdesc:afbadf6fb2a6f024c6ce11a6d71bdd4bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies the matrix by a scaling matrix.  <br /></td></tr>
 <tr class="separator:afbadf6fb2a6f024c6ce11a6d71bdd4bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e2583d822d0d54e49e4551587e8821c" id="r_a4e2583d822d0d54e49e4551587e8821c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e2583d822d0d54e49e4551587e8821c">scale</a> (const <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> &amp;v)</td></tr>
+<tr class="memdesc:a4e2583d822d0d54e49e4551587e8821c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies the matrix by a scaling matrix.  <br /></td></tr>
+<tr class="separator:a4e2583d822d0d54e49e4551587e8821c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac464e931879218dd045195a7d7f0bc04" id="r_ac464e931879218dd045195a7d7f0bc04"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac464e931879218dd045195a7d7f0bc04">rotate</a> (float radian)</td></tr>
 <tr class="memdesc:ac464e931879218dd045195a7d7f0bc04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies the matrix with a rotation matrix.  <br /></td></tr>
 <tr class="separator:ac464e931879218dd045195a7d7f0bc04"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -235,7 +238,7 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <a id="ab617f121c1617e7156a72b12a06cb17f" name="ab617f121c1617e7156a72b12a06cb17f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab617f121c1617e7156a72b12a06cb17f">&#9670;&#160;</a></span>scale() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab617f121c1617e7156a72b12a06cb17f">&#9670;&#160;</a></span>scale() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -255,7 +258,7 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <a id="afbadf6fb2a6f024c6ce11a6d71bdd4bb" name="afbadf6fb2a6f024c6ce11a6d71bdd4bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afbadf6fb2a6f024c6ce11a6d71bdd4bb">&#9670;&#160;</a></span>scale() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afbadf6fb2a6f024c6ce11a6d71bdd4bb">&#9670;&#160;</a></span>scale() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -279,6 +282,26 @@ Public Attributes</h2></td></tr>
 <div class="ttc" id="aclassjngl_1_1Mat3_html_ab617f121c1617e7156a72b12a06cb17f"><div class="ttname"><a href="#ab617f121c1617e7156a72b12a06cb17f">jngl::Mat3::scale</a></div><div class="ttdeci">Mat3 &amp; scale(float factor)</div><div class="ttdoc">Multiplies the matrix by a scaling matrix.</div></div>
 <div class="ttc" id="anamespacejngl_html_acfcb9cdf97108d05cf2b0da911c93a4c"><div class="ttname"><a href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">jngl::modelview</a></div><div class="ttdeci">jngl::Mat3 modelview()</div><div class="ttdoc">Returns a copy of the global ModelView matrix.</div></div>
 </div><!-- fragment --> 
+</div>
+</div>
+<a id="a4e2583d822d0d54e49e4551587e8821c" name="a4e2583d822d0d54e49e4551587e8821c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e2583d822d0d54e49e4551587e8821c">&#9670;&#160;</a></span>scale() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp; scale </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Multiplies the matrix by a scaling matrix. </p>
+<p>Equivalent to calling <code><a class="el" href="#ab617f121c1617e7156a72b12a06cb17f" title="Multiplies the matrix by a scaling matrix.">Mat3::scale</a>(v.x, v.y)</code>. </p><dl class="section return"><dt>Returns</dt><dd>*this </dd></dl>
+
 </div>
 </div>
 <a id="ac464e931879218dd045195a7d7f0bc04" name="ac464e931879218dd045195a7d7f0bc04"></a>
@@ -316,7 +339,7 @@ Public Attributes</h2></td></tr>
 
 <p>column-major </p>
 
-<p class="definition">Definition at line <a class="el" href="Mat3_8hpp_source.html#l00071">71</a> of file <a class="el" href="Mat3_8hpp_source.html">Mat3.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Mat3_8hpp_source.html#l00077">77</a> of file <a class="el" href="Mat3_8hpp_source.html">Mat3.hpp</a>.</p>
 
 </div>
 </div>
