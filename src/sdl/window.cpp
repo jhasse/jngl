@@ -415,6 +415,20 @@ void Window::UpdateInput() {
 				width_ = originalWidth;
 				height_ = originalHeight;
 			}
+			break;
+		case SDL_DROPFILE:
+			if (event.drop.file) {
+				std::filesystem::path path(event.drop.file);
+				SDL_free(event.drop.file);
+				assert(std::filesystem::exists(path));
+				for (const auto& job : jobs) {
+					job->onFileDrop(path);
+				}
+				if (currentWork_) {
+					currentWork_->onFileDrop(path);
+				}
+			}
+			break;
 		}
 	}
 }

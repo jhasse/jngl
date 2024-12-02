@@ -9,6 +9,9 @@ namespace jngl {
 
 Job::~Job() = default;
 
+void Job::onFileDrop(const std::filesystem::path&) {
+}
+
 void addJob(std::shared_ptr<Job> job) {
 	pWindow->addJob(std::move(job));
 }

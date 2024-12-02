@@ -4,6 +4,7 @@
 /// @file
 #pragma once
 
+#include <filesystem>
 #include <functional>
 #include <memory>
 
@@ -33,6 +34,9 @@ public:
 	///
 	/// \note JNGL's main loop calls all Jobs' draw() functions after the active Work's draw()
 	virtual void draw() const = 0;
+
+	/// Called when a file has been dropped onto the window
+	virtual void onFileDrop(const std::filesystem::path&);
 
 	/// Does nothing
 	Job() = default;

@@ -242,6 +242,10 @@ public:
 		}
 	}
 private:
+	void onFileDrop(const std::filesystem::path& file) override {
+		jngl::errorMessage(file.string() + " dropped on window.");
+	}
+
 	mutable bool drawOnFrameBuffer = false;
 	bool useShader = false;
 	mutable double rotate = 0;
