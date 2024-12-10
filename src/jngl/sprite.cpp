@@ -60,7 +60,8 @@ Sprite::Sprite(const uint8_t* const bytes, const size_t width, const size_t heig
 	if (!pWindow) {
 		throw std::runtime_error("Window hasn't been created yet.");
 	}
-	texture = std::make_shared<Texture>(width, height, width, height, nullptr, GL_RGBA, bytes);
+	texture = std::make_shared<Texture>(width, height, static_cast<int>(width),
+	                                    static_cast<int>(height), nullptr, GL_RGBA, bytes);
 	Drawable::width = static_cast<float>(width);
 	Drawable::height = static_cast<float>(height);
 	setCenter(0, 0);
