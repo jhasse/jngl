@@ -39,7 +39,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
 : impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), width_(width), height_(height),
   fontName_(GetFontFileByName("Arial")) {
-	SDL::init();
+	SDL::handle();
 
 #ifdef __APPLE__ // https://stackoverflow.com/a/26981800/647898
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -491,7 +491,7 @@ void Window::SetIcon(const std::string& filepath) {
 
 int getDesktopWidth() {
 	setProcessSettings();
-	SDL::init();
+	SDL::handle();
 	SDL_DisplayMode mode;
 	SDL_GetDesktopDisplayMode(0, &mode);
 	return mode.w;
@@ -499,7 +499,7 @@ int getDesktopWidth() {
 
 int getDesktopHeight() {
 	setProcessSettings();
-	SDL::init();
+	SDL::handle();
 	SDL_DisplayMode mode;
 	SDL_GetDesktopDisplayMode(0, &mode);
 	return mode.h;
