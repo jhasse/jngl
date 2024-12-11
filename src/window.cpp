@@ -3,17 +3,16 @@
 
 #include "window.hpp"
 
+#include "ShaderCache.hpp"
 #include "audio.hpp"
 #include "freetype.hpp"
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/font.hpp"
-#include "jngl/matrix.hpp"
 #include "jngl/other.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/time.hpp"
 #include "jngl/work.hpp"
 #include "log.hpp"
-#include "main.hpp"
 #include "spriteimpl.hpp"
 #include "windowptr.hpp"
 
@@ -549,7 +548,7 @@ void Window::initGlObjects() {
 
 void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 	glBindVertexArray(opengl::vaoStream);
-	auto tmp = useSimpleShaderProgram();
+	auto tmp = ShaderCache::handle().useSimpleShaderProgram();
 	const float vertexes[] = {
 		static_cast<float>(a.x * getScaleFactor()), static_cast<float>(a.y * getScaleFactor()),
 		static_cast<float>(b.x * getScaleFactor()), static_cast<float>(b.y * getScaleFactor()),
@@ -564,13 +563,15 @@ void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 
 void Window::drawLine(Mat3 modelview, const Vec2 b) const {
 	glBindVertexArray(vaoLine);
-	auto tmp = useSimpleShaderProgram(modelview.scale(b * getScaleFactor()), gShapeColor);
+	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview.scale(b * getScaleFactor()),
+	                                                        gShapeColor);
 	glDrawArrays(GL_LINES, 0, 2);
 }
 
 void Window::drawSquare(Mat3 modelview, Rgba color) const {
 	glBindVertexArray(vaoSquare);
-	auto context = useSimpleShaderProgram(modelview.scale(getScaleFactor()), color);
+	auto context =
+	    ShaderCache::handle().useSimpleShaderProgram(modelview.scale(getScaleFactor()), color);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 

@@ -1,19 +1,13 @@
 // Copyright 2010-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #include "texture.hpp"
 
-#include "jngl/Shader.hpp"
+#include "ShaderCache.hpp"
 #include "jngl/Vertex.hpp"
 
 #include <cassert>
 
 namespace jngl {
-
-ShaderProgram* Texture::textureShaderProgram = nullptr;
-Shader* Texture::textureVertexShader = nullptr;
-int Texture::shaderSpriteColorUniform = -1;
-int Texture::modelviewUniform = -1;
 
 Texture::Texture(const float preciseWidth, const float preciseHeight, const int width,
                  const int height, const GLubyte* const* const rowPointers, GLenum format,
@@ -38,11 +32,13 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
 	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLfloat), vertexes.data(), GL_STATIC_DRAW);
 
-	const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
+	const GLint posAttrib =
+	    ShaderCache::handle().textureShaderProgram->getAttribLocation("position");
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 	glEnableVertexAttribArray(posAttrib);
 
-	const GLint texCoordAttrib = textureShaderProgram->getAttribLocation("inTexCoord");
+	const GLint texCoordAttrib =
+	    ShaderCache::handle().textureShaderProgram->getAttribLocation("inTexCoord");
 	glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
 	                      reinterpret_cast<void*>(2 * sizeof(float))); // NOLINT
 	glEnableVertexAttribArray(texCoordAttrib);
@@ -61,8 +57,8 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 }
 
 Texture::~Texture() {
-	if (textureShaderProgram) {
-		// if the textureShaderProgram is nullptr, this means unloadShader() has been called by
+	if (ShaderCache::handleIfAlive()) {
+		// if the ShaderCache doesn't exist anymore, this means unloadAll() has been called by
 		// hideWindow() and the OpenGL context doesn't exist anymore. It's unnecessary to delete
 		// OpenGL resources in that case. It might even lead to crashes when the OpenGL function
 		// pointers have been unloaded (Windows).
@@ -100,18 +96,19 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	vertexes[7] = vertexes[11] = yend;
 
 	glBindVertexArray(opengl::vaoStream);
-	auto tmp = textureShaderProgram->use();
-	glUniform4f(shaderSpriteColorUniform, red, green, blue, alpha);
-	glUniformMatrix3fv(modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+	auto& shaderCache = ShaderCache::handle();
+	auto tmp = shaderCache.textureShaderProgram->use();
+	glUniform4f(shaderCache.shaderSpriteColorUniform, red, green, blue, alpha);
+	glUniformMatrix3fv(shaderCache.modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(float)),
 	             vertexes.data(), GL_STREAM_DRAW);
 
-	const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
+	const GLint posAttrib = shaderCache.textureShaderProgram->getAttribLocation("position");
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 	glEnableVertexAttribArray(posAttrib);
 
-	const GLint texCoordAttrib = textureShaderProgram->getAttribLocation("inTexCoord");
+	const GLint texCoordAttrib = shaderCache.textureShaderProgram->getAttribLocation("inTexCoord");
 	glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
 	                      reinterpret_cast<void*>(2 * sizeof(float))); // NOLINT
 	glEnableVertexAttribArray(texCoordAttrib);
@@ -126,11 +123,12 @@ void Texture::drawMesh(const std::vector<Vertex>& vertexes) const {
 	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(vertexes[0])),
 	             vertexes.data(), GL_STREAM_DRAW);
 
-	const GLint posAttrib = textureShaderProgram->getAttribLocation("position");
+	auto& shaderCache = ShaderCache::handle();
+	const GLint posAttrib = shaderCache.textureShaderProgram->getAttribLocation("position");
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 	glEnableVertexAttribArray(posAttrib);
 
-	const GLint texCoordAttrib = textureShaderProgram->getAttribLocation("inTexCoord");
+	const GLint texCoordAttrib = shaderCache.textureShaderProgram->getAttribLocation("inTexCoord");
 	glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
 	                      reinterpret_cast<void*>(2 * sizeof(float))); // NOLINT
 	glEnableVertexAttribArray(texCoordAttrib);
@@ -149,13 +147,6 @@ float Texture::getPreciseWidth() const {
 
 float Texture::getPreciseHeight() const {
 	return vertexes[5];
-}
-
-void Texture::unloadShader() {
-	delete textureVertexShader;
-	textureVertexShader = nullptr;
-	delete textureShaderProgram;
-	textureShaderProgram = nullptr;
 }
 
 void Texture::setBytes(const unsigned char* const bytes, const int width, const int height) const {

@@ -3,6 +3,7 @@
 
 #include "FrameBuffer.hpp"
 
+#include "../ShaderCache.hpp"
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
 #include "../texture.hpp"
@@ -105,21 +106,24 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 	jngl::translate(position);
 	opengl::scale(1, -1);
 	jngl::translate(0, -impl->height / getScaleFactor());
-	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
-		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
+		                   opengl::modelview.data);
 	}
 	impl->texture.draw();
 	popMatrix();
 }
 
 void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) const {
-	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   modelview.scale(1, -1)
@@ -127,9 +131,9 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 		                                    -impl->height / getScaleFactor() / 2 })
 		                       .data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
-		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE,
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   modelview.scale(1, -1)
 		                       .translate({ -impl->width / getScaleFactor() / 2,
 		                                    -impl->height / getScaleFactor() / 2 })
@@ -142,14 +146,16 @@ void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
                            const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
 	scale(getScaleFactor());
-	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
-		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
+		                   opengl::modelview.data);
 	}
 	impl->texture.drawMesh(vertexes);
 	popMatrix();

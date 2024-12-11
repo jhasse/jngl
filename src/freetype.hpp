@@ -1,6 +1,5 @@
 // Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #pragma once
 
 #include "jngl/Pixels.hpp"
@@ -12,8 +11,11 @@
 #include FT_STROKER_H
 
 #include <map>
+#include <memory>
 
 namespace jngl {
+
+class Finally;
 
 constexpr double LINE_HEIGHT_FACOTR = 1. / .63;
 extern Rgba gFontColor;

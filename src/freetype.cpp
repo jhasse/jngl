@@ -4,6 +4,7 @@
 #define _LIBCPP_DISABLE_DEPRECATION_WARNINGS
 #include "freetype.hpp"
 
+#include "ShaderCache.hpp"
 #include "helper.hpp"
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/matrix.hpp"
@@ -92,7 +93,7 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 
 void Character::draw(Mat3& modelview) const {
 	if (texture_) {
-		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE,
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   Mat3(modelview).translate(left_, top_).data);
 		texture_->draw();
 	}
@@ -241,8 +242,8 @@ void FontImpl::setLineHeight(Pixels h) {
 }
 
 void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) {
-	auto context = Texture::textureShaderProgram->use();
-	glUniform4f(Texture::shaderSpriteColorUniform, color.getRed(), color.getGreen(),
+	auto context = ShaderCache::handle().textureShaderProgram->use();
+	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(), color.getGreen(),
 	            color.getBlue(), color.getAlpha());
 	std::vector<std::string> lines(splitlines(text));
 
@@ -262,9 +263,9 @@ void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) {
 }
 
 void FontImpl::print(const ScaleablePixels x, const ScaleablePixels y, const std::string& text) {
-	auto context = Texture::textureShaderProgram->use();
-	glUniform4f(Texture::shaderSpriteColorUniform, gFontColor.getRed(), gFontColor.getGreen(),
-	            gFontColor.getBlue(), gFontColor.getAlpha());
+	auto context = ShaderCache::handle().textureShaderProgram->use();
+	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gFontColor.getRed(),
+	            gFontColor.getGreen(), gFontColor.getBlue(), gFontColor.getAlpha());
 	const int xRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ x })));
 	const int yRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ y })));
 	std::vector<std::string> lines(splitlines(text));

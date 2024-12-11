@@ -66,9 +66,13 @@ void App::atExit(std::function<void()> f) {
 void App::callAtExitFunctions() {
 	auto tmp = std::move(callAtExit);
 	assert(callAtExit.empty());
-	for (const auto& f : tmp) {
-		f();
+
+	// destroy Singletons in the reverse order that they were created:
+	const auto end = tmp.rend();
+	for (auto it = tmp.rbegin(); it != end; ++it) {
+		(*it)();
 	}
+
 	if (!callAtExit.empty()) {
 		internal::warn("The destructor of a Singleton caused the creation of another Singleton. "
 		               "Use handleIfAlive inside of destructors of Singletons.");

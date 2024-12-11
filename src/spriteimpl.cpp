@@ -1,6 +1,5 @@
 // Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #include "spriteimpl.hpp"
 
 #include "TextureCache.hpp"
@@ -8,7 +7,6 @@
 #include "jngl/ImageData.hpp"
 #include "jngl/message.hpp"
 #include "jngl/screen.hpp"
-#include "texture.hpp"
 #include "windowptr.hpp"
 
 namespace jngl {
@@ -48,17 +46,16 @@ void setSpriteAlpha(unsigned char alpha) {
 	gSpriteColor.setAlpha(Alpha::u8(alpha));
 }
 
-std::unordered_map<std::string, std::shared_ptr<Sprite>> sprites_;
-
 // halfLoad is used, if we only want to find out the width or height of an image. Load won't throw
 // an exception then
 Sprite& GetSprite(const std::string& filename, const Sprite::LoadType loadType) {
-	auto it = sprites_.find(filename);
-	if (it == sprites_.end()) { // texture hasn't been loaded yet?
+	auto& sprites = TextureCache::handle().sprites;
+	auto it = sprites.find(filename);
+	if (it == sprites.end()) { // texture hasn't been loaded yet?
 		if (loadType != Sprite::LoadType::HALF) {
 			pWindow.ThrowIfNull();
 		}
-		return *sprites_.emplace(filename, std::make_shared<Sprite>(filename, loadType))
+		return *sprites.emplace(filename, std::make_shared<Sprite>(filename, loadType))
 		            .first->second;
 	}
 	return *(it->second);
@@ -88,7 +85,7 @@ Finally loadSprite(const std::string& filename) {
 }
 
 Sprite::Loader::Loader(std::string filename) noexcept : filename(std::move(filename)) {
-	if (sprites_.count(this->filename) == 0) {
+	if (TextureCache::handle().sprites.count(this->filename) == 0) {
 		imageDataFuture = std::async(std::launch::async, [this]() {
 			auto tmp = ImageData::load(this->filename, getScaleFactor());
 			tmp->pixels(); // TODO: Not needed when Sprite loading and jngl::load will be reworked
@@ -106,17 +103,18 @@ Sprite::Loader::~Loader() noexcept {
 }
 
 std::shared_ptr<Sprite> Sprite::Loader::shared() const {
-	if (auto it = sprites_.find(filename); it != sprites_.end()) {
+	auto& sprites = TextureCache::handle().sprites;
+	if (auto it = sprites.find(filename); it != sprites.end()) {
 		return it->second;
 	}
 	auto imageData = imageDataFuture.get();
 	double scale = imageData->getImageWidth() == imageData->getWidth() ? getScaleFactor() : 1;
-	return sprites_.try_emplace(filename, std::make_shared<Sprite>(*imageData, scale, filename))
+	return sprites.try_emplace(filename, std::make_shared<Sprite>(*imageData, scale, filename))
 	    .first->second;
 }
 
 Sprite::Loader::operator bool() const {
-	if (sprites_.count(filename) > 0) {
+	if (TextureCache::handle().sprites.count(filename) > 0) {
 		return true;
 	}
 	return imageDataFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
@@ -127,17 +125,16 @@ Sprite* Sprite::Loader::operator->() const {
 }
 
 void unload(const std::string& filename) {
-	auto it = sprites_.find(filename);
-	if (it != sprites_.end()) {
-		sprites_.erase(it);
+	auto& sprites = TextureCache::handle().sprites;
+	auto it = sprites.find(filename);
+	if (it != sprites.end()) {
+		sprites.erase(it);
 	}
 	TextureCache::handle().remove(filename);
 }
 
 void unloadAll() {
-	sprites_.clear();
 	TextureCache::destroy();
-	Texture::unloadShader();
 }
 
 int getWidth(const std::string& filename) {

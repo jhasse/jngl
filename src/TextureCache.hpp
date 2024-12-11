@@ -8,6 +8,7 @@
 
 namespace jngl {
 
+class Sprite;
 class Texture;
 
 class TextureCache : public Singleton<TextureCache> {
@@ -15,6 +16,8 @@ public:
 	std::shared_ptr<Texture> get(std::string_view filename);
 	void insert(std::string_view filename, std::shared_ptr<Texture>);
 	void remove(std::string_view filename);
+
+	std::unordered_map<std::string, std::shared_ptr<Sprite>> sprites;
 
 private:
 	// https://www.cppstories.com/2021/heterogeneous-access-cpp20/

@@ -7,6 +7,7 @@
 
 #include "sprite.hpp"
 
+#include "../ShaderCache.hpp"
 #include "../TextureCache.hpp"
 #include "../helper.hpp"
 #include "../log.hpp"
@@ -155,10 +156,10 @@ void Sprite::step() {
 void Sprite::draw() const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
-	auto context = Texture::textureShaderProgram->use();
-	glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(), gSpriteColor.getGreen(),
-	            gSpriteColor.getBlue(), gSpriteColor.getAlpha());
-	glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+	auto context = ShaderCache::handle().textureShaderProgram->use();
+	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
+	            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+	glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	texture->draw();
 	popMatrix();
 }
@@ -170,24 +171,25 @@ void Sprite::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) cons
 void Sprite::draw(Mat3 modelview, Rgba color) const {
 	modelview *=
 	    boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. }));
-	auto context = Texture::textureShaderProgram->use();
-	glUniform4f(Texture::shaderSpriteColorUniform, color.getRed(), color.getGreen(),
+	auto context = ShaderCache::handle().textureShaderProgram->use();
+	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(), color.getGreen(),
 	            color.getBlue(), color.getAlpha());
-	glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, modelview.data);
+	glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	texture->draw();
 }
 
 void Sprite::draw(Mat3 modelview, Alpha alpha, const ShaderProgram* const shaderProgram) const {
 	modelview *=
 	    boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. }));
-	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   modelview.data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), alpha.getAlpha());
-		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, modelview.data);
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	texture->draw();
 }
@@ -195,15 +197,17 @@ void Sprite::draw(Mat3 modelview, Alpha alpha, const ShaderProgram* const shader
 void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
-	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 			opengl::modelview.data);
 	}
 	else {
-		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
-		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
+		                   opengl::modelview.data);
 	}
 	texture->draw();
 	popMatrix();
@@ -227,9 +231,10 @@ void Sprite::Batch::draw(Mat3 modelview) const {
 }
 
 auto Sprite::batch(const ShaderProgram* const shaderProgram) const -> Batch {
-	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (!shaderProgram) {
-		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 	}
 	texture->bind();
@@ -237,7 +242,7 @@ auto Sprite::batch(const ShaderProgram* const shaderProgram) const -> Batch {
 		std::move(context),
 		boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. })),
 		shaderProgram ? shaderProgram->getUniformLocation("modelview")
-		              : Texture::modelviewUniform }) };
+		              : ShaderCache::handle().modelviewUniform }) };
 }
 
 void Sprite::drawScaled(float xfactor, float yfactor,
@@ -245,15 +250,17 @@ void Sprite::drawScaled(float xfactor, float yfactor,
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	opengl::scale(xfactor, yfactor);
-		auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 			opengl::modelview.data);
 	}
 	else {
-		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
-		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
+		                   opengl::modelview.data);
 	}
 	texture->draw();
 	popMatrix();
@@ -282,14 +289,15 @@ void Sprite::drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
 		return;
 	}
 	modelview.scale(getScaleFactor());
-	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   modelview.data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
-		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, modelview.data);
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	texture->drawMesh(vertexes);
 }
@@ -302,14 +310,16 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	scale(getScaleFactor());
-	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
-		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
+		                   opengl::modelview.data);
 	}
 	texture->drawMesh(vertexes);
 	popMatrix();
@@ -321,7 +331,7 @@ void Sprite::setBytes(const unsigned char* const bytes) {
 }
 
 const Shader& Sprite::vertexShader() {
-	return *Texture::textureVertexShader;
+	return *ShaderCache::handle().textureVertexShader;
 }
 
 #ifndef NOPNG

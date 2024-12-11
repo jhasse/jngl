@@ -1,6 +1,5 @@
 // Copyright 2018-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #include "Video.hpp"
 
 #include <stdexcept>
@@ -16,6 +15,7 @@
 #include "../theoraplay/theoraplay.h"
 #include "Channel.hpp"
 #include "Shader.hpp"
+#include "ShaderProgram.hpp"
 #include "screen.hpp"
 #include "time.hpp"
 
