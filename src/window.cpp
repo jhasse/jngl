@@ -1,6 +1,5 @@
 // Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #include "window.hpp"
 
 #include "ShaderCache.hpp"
@@ -15,6 +14,10 @@
 #include "log.hpp"
 #include "spriteimpl.hpp"
 #include "windowptr.hpp"
+
+#ifdef ANDROID
+#include "main.hpp"
+#endif
 
 #ifdef __EMSCRIPTEN__
 #include "emscripten/window.hpp"
