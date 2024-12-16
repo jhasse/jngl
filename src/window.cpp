@@ -251,6 +251,13 @@ void Window::updateKeyStates() {
 		}
 		updateInputCallbacks.clear();
 	}
+
+	// this is done here, because Window::updateKeyStates() is called by jngl::updateInput() and if
+	// someone writes their own main loop, Audio::step() needs to be called. Maybe updateKeyStates()
+	// should be renamed to updateInput() and UpdateInput() moved to WindowImpl ...
+	if (auto audio = Audio::handleIfAlive()) {
+		audio->step();
+	}
 }
 
 double Window::getMouseWheel() const {
@@ -364,9 +371,6 @@ void Window::stepIfNeeded() {
 #ifdef JNGL_PERFORMANCE_OVERLAY
 		auto start = std::chrono::steady_clock::now();
 #endif
-		if (auto audio = Audio::handleIfAlive()) {
-			audio->step();
-		}
 		for (auto& job : jobs) {
 			job->step();
 		}

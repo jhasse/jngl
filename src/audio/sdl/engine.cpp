@@ -4,7 +4,6 @@
 // https://lisyarus.github.io/blog/programming/2022/10/15/audio-mixing.html
 #include "../engine.hpp"
 
-#include "../../jngl/debug.hpp"
 #include "../../jngl/other.hpp"
 #include "../../log.hpp"
 #include "../Stream.hpp"
@@ -22,7 +21,7 @@ struct engine::Impl {
 		try {
 			backend = std::make_unique<SdlImpl>(output);
 		} catch (std::exception& e) {
-			debugLn(e.what());
+			internal::warn(e.what());
 			backend = std::make_unique<DummyImpl>(std::move(output));
 		}
 	}
