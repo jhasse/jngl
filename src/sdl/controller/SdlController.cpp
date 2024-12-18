@@ -198,6 +198,12 @@ bool SdlController::down(const controller::Button button) const {
 void SdlController::rumble(const float vibration, const std::chrono::milliseconds ms) {
 	if (haptic) {
 		SDL_HapticRumblePlay(haptic, vibration, ms.count());
+	} else if (handle) {
+		SDL_JoystickRumble(handle, static_cast<Uint16>(vibration * 65535),
+		                   static_cast<Uint16>(vibration * 65535), ms.count());
+	} else {
+		SDL_GameControllerRumble(gameController, static_cast<Uint16>(vibration * 65535),
+		                         static_cast<Uint16>(vibration * 65535), ms.count());
 	}
 }
 
