@@ -6,7 +6,10 @@ cache:
   key: cpm
   paths: [.cache/cpm]
 
-image: registry.fedoraproject.org/fedora-minimal:40
+matrix:
+  image:
+    fedora-previous: registry.fedoraproject.org/fedora-minimal:40
+    fedora-current:  registry.fedoraproject.org/fedora-minimal:41
 
 linux:
   stage: build
@@ -35,12 +38,14 @@ mingw:
     - ninja -C build-release
 
 android:
+  matrix: {}
   image: registry.gitlab.com/jhasse/android-ndk-docker:r27b
   stage: build
   script:
     - make -C android
 
 steamos:
+  matrix: {}
   image: registry.gitlab.steamos.cloud/steamrt/sniper/sdk
   stage: build
   script:
@@ -64,6 +69,7 @@ steamos:
     - DISPLAY=:0 ./jngl-unittest
 
 web:
+  matrix: {}
   image: emscripten/emsdk:3.1.61
   stage: build
   script:
