@@ -107,10 +107,7 @@ elseif (UNIX)
 
 	target_link_libraries(jngl PRIVATE $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>)
 else() # Windows
-	set(JNGL_SDL2_DEFAULT OFF)
 	if(WINDOWS_STORE)
-		set(JNGL_SDL2_DEFAULT ON)
-
 		FetchContent_Declare(
 			angle
 			GIT_REPOSITORY https://github.com/jhasse/angle.git
@@ -124,11 +121,15 @@ else() # Windows
 			add_subdirectory(${angle_SOURCE_DIR} ${angle_BINARY_DIR})
 			set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_OLD} CACHE BOOL "" FORCE)
 		endif()
+	else()
+		option(JNGL_WINAPI "Use legacy WinAPI backend" ON)
 	endif()
-	option(JNGL_SDL2 "Use SDL2 instead of WinAPI" ${JNGL_SDL2_DEFAULT})
 
 	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
-	if(JNGL_SDL2)
+	if(JNGL_WINAPI)
+		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp)
+		target_link_libraries(jngl PRIVATE opengl32)
+	else()
 		file(GLOB SRC src/sdl/*.cpp)
 		if(WINDOWS_STORE)
 			target_sources(jngl PRIVATE src/xinput/XinputController.cpp)
@@ -137,9 +138,6 @@ else() # Windows
 		endif()
 		target_sources(jngl PRIVATE src/win32/fontfile.cpp src/win32/message.cpp src/win32/other.cpp
 		                            src/win32/unicode.cpp)
-	else()
-		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp)
-		target_link_libraries(jngl PRIVATE opengl32)
 	endif()
 	target_sources(jngl PRIVATE ${SRC})
 	target_link_libraries(jngl PUBLIC winmm)
@@ -237,14 +235,7 @@ else()
 
 	if(MSVC)
 		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
-		if(JNGL_SDL2)
-			CPMAddPackage(NAME sdl2
-				URL https://www.libsdl.org/release/SDL2-2.28.4.zip
-				URL_HASH SHA1=0d9e0da0e935c4f0524cfd16d47d38b6045b9573
-				OPTIONS
-					"SDL_SENSOR OFF" # doesn't work with UWP
-			)
-		else()
+		if(JNGL_WINAPI)
 			CPMAddPackage(NAME sdl2
 				URL https://www.libsdl.org/release/SDL2-2.28.4.zip
 				URL_HASH SHA1=0d9e0da0e935c4f0524cfd16d47d38b6045b9573
@@ -262,6 +253,13 @@ else()
 					"SDL_SENSOR OFF"
 					"SDL_SHARED OFF"
 					"SDL_TIMERS OFF"
+			)
+		else()
+			CPMAddPackage(NAME sdl2
+				URL https://www.libsdl.org/release/SDL2-2.28.4.zip
+				URL_HASH SHA1=0d9e0da0e935c4f0524cfd16d47d38b6045b9573
+				OPTIONS
+					"SDL_SENSOR OFF" # doesn't work with UWP
 			)
 		endif()
 		target_link_libraries(jngl PRIVATE SDL2-static)
