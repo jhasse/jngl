@@ -102,11 +102,11 @@ jobs:
       image: registry.fedoraproject.org/fedora-minimal:40
     steps:
     - name: Install dependencies
-      run: microdnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw32-nsis mingw64-gcc-c++ tar gzip
+      run: microdnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL3 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw32-nsis mingw64-gcc-c++ tar gzip
     - uses: actions/checkout@v4
     - name: Build with CMake and GCC
       run: |
-        mingw64-cmake -Bbuild-windows -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=0 -DJNGL_SDL2=1
+        mingw64-cmake -Bbuild-windows -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=0 -DJNGL_SDL3=1
         cmake --build build-windows
 
 env:

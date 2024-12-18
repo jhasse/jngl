@@ -33,7 +33,7 @@ libxxf86vm-dev libvorbis-dev cmake g++ libwebp-dev git libsdl2-dev
 
 ```
 sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libwebp-devel \
-cmake SDL2-devel gcc-c++ libatomic
+cmake SDL3-devel gcc-c++ libatomic
 ```
 
 ### Arch Linux
@@ -52,7 +52,7 @@ Set up [MSYS2](https://www.msys2.org/) and install the following in a MinGW-w64 
 pacman -Syu --needed mingw-w64-x86_64-gcc \
 mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
 mingw-w64-x86_64-dlfcn mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb \
-mingw-w64-x86_64-libtheora mingw-w64-x86_64-SDL2
+mingw-w64-x86_64-libtheora mingw-w64-x86_64-SDL3
 ```
 
 ### Visual Studio 2017 or newer
