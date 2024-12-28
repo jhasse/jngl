@@ -84,8 +84,6 @@ struct THEORAPLAY_Decoder {
 
 	std::unique_ptr<AudioPacket> audiolist;
 	AudioPacket* audiolisttail = nullptr;
-
-	std::unique_ptr<uint8_t[]> ringBuffer;
 };
 
 namespace {
@@ -137,6 +135,7 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
     th_setup_info *tsetup = nullptr;
 	size_t ringBufferPos = 0;
 	size_t ringBufferSize;
+	std::unique_ptr<uint8_t[]> ringBuffer;
 
     ogg_sync_init(&sync);
     vorbis_info_init(&vinfo);
@@ -380,14 +379,14 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                         item->height = tinfo.pic_height;
                         item->format = ctx->vidfmt;
 
-						if (!ctx->ringBuffer) {
+						if (!ringBuffer) {
 							while (true) {
 								ringBufferSize = static_cast<size_t>(ctx->maxframes + 1) *
 								                 item->width * item->height * 2;
 								jngl::internal::debug("Allocating {} MB for video ring buffer.",
 								                      ringBufferSize / 1024 / 1024);
 								try {
-									ctx->ringBuffer = std::make_unique<uint8_t[]>(ringBufferSize);
+									ringBuffer = std::make_unique<uint8_t[]>(ringBufferSize);
 									break;
 								} catch (std::bad_alloc&) {
 									ctx->maxframes /= 2;
@@ -397,7 +396,7 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 								}
 							}
 						}
-						item->pixels = &ctx->ringBuffer[ringBufferPos];
+						item->pixels = &ringBuffer[ringBufferPos];
 						ringBufferPos += item->width * item->height * 2;
 						assert(ringBufferPos <= ringBufferSize); // width and height mustn't change
 						if (ringBufferPos == ringBufferSize) {
