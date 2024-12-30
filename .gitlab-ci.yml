@@ -6,17 +6,24 @@ cache:
   key: cpm
   paths: [.cache/cpm]
 
-image: registry.fedoraproject.org/fedora-minimal:40
-
 linux:
+  parallel:
+    matrix:
+      - VERSION: ['40', '41', 'latest']
+  image: fedora:$VERSION
+  rules:
+  - if: '$VERSION == "latest"'
+    allow_failure: true
+  - if: '$VERSION'
+    allow_failure: false
   stage: build
   script:
-  - microdnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libwebp-devel SDL2-devel libtheora-devel clang util-linux clang-tools-extra >/dev/null
+  - dnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libwebp-devel SDL2-devel libtheora-devel clang util-linux clang-tools-extra >/dev/null
   - .github/ci.py
   - CXXFLAGS=-fdiagnostics-color cmake -Bbuild -GNinja
   - cd build
   - ninja
-  - microdnf install -y mesa-dri-drivers xorg-x11-drivers >/dev/null
+  - dnf install -y mesa-dri-drivers xorg-x11-drivers >/dev/null
   - Xorg -config ../data/xorg.conf &>/dev/null &
   - sleep 1 # wait for Xorg to boot up
   - DISPLAY=:0 ./jngl-unittest
@@ -26,9 +33,18 @@ linux:
   - ninja
 
 mingw:
+  parallel:
+    matrix:
+      - VERSION: ['40', '41', 'latest']
+  image: fedora:$VERSION
+  rules:
+  - if: '$VERSION == "latest"'
+    allow_failure: true
+  - if: '$VERSION'
+    allow_failure: false
   stage: build
   script:
-    - microdnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw64-gcc-c++ > /dev/null
+    - dnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw64-gcc-c++ > /dev/null
     - mingw64-cmake -GNinja -Bbuild-debug -DCMAKE_BUILD_TYPE=Debug
     - ninja -C build-debug
     - mingw64-cmake -GNinja -Bbuild-release -DCMAKE_BUILD_TYPE=Release
@@ -64,7 +80,15 @@ steamos:
     - DISPLAY=:0 ./jngl-unittest
 
 web:
-  image: emscripten/emsdk:3.1.61
+  parallel:
+    matrix:
+      - VERSION: ['3.1.61', '3.1.74', 'latest']
+  image: emscripten/emsdk:$VERSION
+  rules:
+  - if: '$VERSION == "latest"'
+    allow_failure: true
+  - if: '$VERSION'
+    allow_failure: false
   stage: build
   script:
   - emcmake cmake -Bbuild-web
