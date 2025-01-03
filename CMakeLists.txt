@@ -107,9 +107,9 @@ elseif (UNIX)
 
 	target_link_libraries(jngl PRIVATE $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>)
 else() # Windows
-	set(JNGL_SDL2_DEFAULT OFF)
+	set(JNGL_SDL_DEFAULT OFF)
 	if(WINDOWS_STORE)
-		set(JNGL_SDL2_DEFAULT ON)
+		set(JNGL_SDL_DEFAULT ON)
 
 		FetchContent_Declare(
 			angle
@@ -125,10 +125,10 @@ else() # Windows
 			set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_OLD} CACHE BOOL "" FORCE)
 		endif()
 	endif()
-	option(JNGL_SDL2 "Use SDL2 instead of WinAPI" ${JNGL_SDL2_DEFAULT})
+	option(JNGL_SDL "Use SDL3 instead of WinAPI" ${JNGL_SDL_DEFAULT})
 
 	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
-	if(JNGL_SDL2)
+	if(JNGL_SDL)
 		file(GLOB SRC src/sdl/*.cpp)
 		if(WINDOWS_STORE)
 			target_sources(jngl PRIVATE src/xinput/XinputController.cpp)
@@ -213,9 +213,9 @@ else()
 	endif()
 	if(UNIX AND NOT IOS AND NOT EMSCRIPTEN)
 		find_package(PkgConfig REQUIRED)
-		pkg_check_modules(SDL2 REQUIRED sdl2)
-		target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
-		target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
+		pkg_check_modules(SDL3 REQUIRED sdl3)
+		target_include_directories(jngl PRIVATE ${SDL3_INCLUDE_DIRS})
+		target_link_libraries(jngl PRIVATE ${SDL3_LINK_LIBRARIES})
 	endif()
 
 	if(NOT IOS AND NOT EMSCRIPTEN)
@@ -237,17 +237,17 @@ else()
 
 	if(MSVC)
 		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
-		if(JNGL_SDL2)
-			CPMAddPackage(NAME sdl2
-				URL https://www.libsdl.org/release/SDL2-2.28.4.zip
-				URL_HASH SHA1=0d9e0da0e935c4f0524cfd16d47d38b6045b9573
+		if(JNGL_SDL)
+			CPMAddPackage(NAME sdl3
+				URL https://www.libsdl.org/release/SDL3-3.1.6.zip
+				URL_HASH SHA1=b16ad311975378dcc87b11fc02c84eaa1f028b38
 				OPTIONS
 					"SDL_SENSOR OFF" # doesn't work with UWP
 			)
 		else()
-			CPMAddPackage(NAME sdl2
-				URL https://www.libsdl.org/release/SDL2-2.28.4.zip
-				URL_HASH SHA1=0d9e0da0e935c4f0524cfd16d47d38b6045b9573
+			CPMAddPackage(NAME sdl3
+				URL https://www.libsdl.org/release/SDL3-3.1.6.zip
+				URL_HASH SHA1=b16ad311975378dcc87b11fc02c84eaa1f028b38
 				OPTIONS
 					"SDL_ATOMIC OFF"
 					"SDL_CPUINFO ON"
@@ -264,10 +264,10 @@ else()
 					"SDL_TIMERS OFF"
 			)
 		endif()
-		target_link_libraries(jngl PRIVATE SDL2-static)
+		target_link_libraries(jngl PRIVATE SDL3-static)
 		if(WINDOWS_STORE)
 			target_compile_definitions(jngl PUBLIC JNGL_UWP)
-			target_include_directories(jngl PUBLIC ${sdl2_SOURCE_DIR}/include ${sdl2_BINARY_DIR}/include) # TODO: This should be PRIVATE
+			target_include_directories(jngl PUBLIC ${sdl3_SOURCE_DIR}/include ${sdl3_BINARY_DIR}/include) # TODO: This should be PRIVATE
 			target_link_options(jngl PUBLIC $<IF:$<CONFIG:Debug>,/defaultlib:vccorlibd.lib /defaultlib:msvcrtd.lib,/defaultlib:vccorlib.lib /defaultlib:msvcrt.lib>)
 		endif()
 	elseif(IOS)
@@ -309,9 +309,9 @@ else()
 
 		find_package(PkgConfig)
 		if(PkgConfig_FOUND)
-			pkg_check_modules(SDL2 REQUIRED sdl2)
-			target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
-			target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
+			pkg_check_modules(SDL3 REQUIRED sdl3)
+			target_include_directories(jngl PRIVATE ${SDL3_INCLUDE_DIRS})
+			target_link_libraries(jngl PRIVATE ${SDL3_LINK_LIBRARIES})
 			if(JNGL_VIDEO)
 				if(APPLE)
 					# On macOS we'll build theora from source, since Homebrew's version crashes due
