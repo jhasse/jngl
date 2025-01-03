@@ -1,4 +1,4 @@
-// Copyright 2011-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../App.hpp"
@@ -531,9 +531,9 @@ int Window::getMouseY() const {
 	if (relativeMouseMode) {
 		return mousey_ * impl->hidpiScaleFactor;
 	}
-	return std::lround(
-	    (mousey_ * impl->hidpiScaleFactor - (impl->actualHeight - impl->actualCanvasHeight) / 2) *
-	    (static_cast<float>(canvasHeight) / impl->actualCanvasHeight));
+	return std::lround((mousey_ * impl->hidpiScaleFactor -
+	                    (impl->actualHeight - static_cast<float>(impl->actualCanvasHeight)) / 2) *
+	                   (static_cast<float>(canvasHeight) / impl->actualCanvasHeight));
 }
 
 void setCursor(Cursor type) {

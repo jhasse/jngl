@@ -1,4 +1,4 @@
-// Copyright 2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Rgb class
 /// @file
@@ -56,4 +56,4 @@ Rgb interpolate(Rgb a, Rgb b, float t);
 } // namespace jngl
 
 /// Create a jngl::Rgb object from a literal. E.g. `0x00ff00_rgb` for green.
-jngl::Rgb operator"" _rgb(unsigned long long);
+jngl::Rgb operator""_rgb(unsigned long long);

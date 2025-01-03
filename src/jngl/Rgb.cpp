@@ -1,4 +1,4 @@
-// Copyright 2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Rgb.hpp"
 
@@ -56,7 +56,7 @@ Rgb interpolate(Rgb a, Rgb b, float t) {
 
 } // namespace jngl
 
-jngl::Rgb operator"" _rgb(const unsigned long long hex) {
+jngl::Rgb operator""_rgb(const unsigned long long hex) {
 	return jngl::Rgb::u8(static_cast<unsigned char>((hex >> 16) % 256),
 	                     static_cast<unsigned char>((hex >> 8) % 256),
 	                     static_cast<unsigned char>(hex % 256));
