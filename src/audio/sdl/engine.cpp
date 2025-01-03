@@ -93,14 +93,14 @@ struct engine::Impl {
 			spec.freq = frequency;
 			spec.channels = 2;
 			spec.format = SDL_AUDIO_F32;
-			if (device =
-			        SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec, &callback, this);
-			    device == 0) {
+			if (device = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec,
+			                                       &callback, this);
+			    !device) {
 				throw std::runtime_error(SDL_GetError());
 			}
 
-			internal::debug("Initialized audio: {} channels, {} Hz, {} samples",
-			                static_cast<int>(spec.channels), spec.freq, spec.freq);
+			internal::debug("Initialized audio: {} channels, {} Hz, {} samples", spec.channels,
+			                spec.freq, spec.freq);
 
 			SDL_ResumeAudioStreamDevice(device);
 		}
