@@ -136,7 +136,7 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
     th_dec_ctx *tdec = nullptr;
     th_setup_info *tsetup = nullptr;
 	size_t ringBufferPos = 0;
-	size_t ringBufferSize;
+	size_t ringBufferSize = 0;
 
     ogg_sync_init(&sync);
     vorbis_info_init(&vinfo);
