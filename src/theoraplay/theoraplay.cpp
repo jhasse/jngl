@@ -643,7 +643,6 @@ std::unique_ptr<const THEORAPLAY_AudioPacket> THEORAPLAY_getAudio(THEORAPLAY_Dec
 }
 
 THEORAPLAY_AudioPacket::~THEORAPLAY_AudioPacket() noexcept {
-	assert(next == nullptr);
 	free(samples);
 }
 
