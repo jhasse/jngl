@@ -33,11 +33,11 @@ android {
             path 'src/main/cpp/CMakeLists.txt'
         }
     }
-    ndkVersion '27.1.12297006'
+    ndkVersion '27.2.12479018'
     namespace 'com.bixense.jngl_test'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.google.oboe:oboe:1.8.1'
+    implementation 'com.google.oboe:oboe:1.9.0'
 }
