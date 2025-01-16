@@ -6,7 +6,7 @@ if(MSVC)
 	string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /wd4244 /wd4305 /wd4267")
 else()
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fdiagnostics-color")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -fdiagnostics-color")
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")

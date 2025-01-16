@@ -1,4 +1,4 @@
-// Copyright 2024 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2024-2025 Jan Niklas Hasse <jhasse@gmail.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "log.hpp"
 
@@ -9,13 +9,13 @@
 
 namespace jngl::internal {
 
-void trace(const std::string& line) {
+void trace(const std::string& line [[maybe_unused]]) {
 #ifdef JNGL_TRACE
 	log("JNGL", "\x1b[36mtrace\x1b[0m", line);
 #endif
 }
 
-void debug(const std::string& line) {
+void debug(const std::string& line [[maybe_unused]]) {
 #ifndef NDEBUG
 	log("JNGL", "\x1b[34mdebug\x1b[0m", line);
 #endif
