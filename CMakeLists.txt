@@ -239,15 +239,15 @@ else()
 		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
 		if(JNGL_SDL2)
 			CPMAddPackage(NAME sdl2
-				URL https://www.libsdl.org/release/SDL2-2.28.4.zip
-				URL_HASH SHA1=0d9e0da0e935c4f0524cfd16d47d38b6045b9573
+				URL https://www.libsdl.org/release/SDL2-2.30.11.zip
+				URL_HASH SHA1=2464d38c9d247ba223f28d4ddc1a7570edf02030
 				OPTIONS
 					"SDL_SENSOR OFF" # doesn't work with UWP
 			)
 		else()
 			CPMAddPackage(NAME sdl2
-				URL https://www.libsdl.org/release/SDL2-2.28.4.zip
-				URL_HASH SHA1=0d9e0da0e935c4f0524cfd16d47d38b6045b9573
+				URL https://www.libsdl.org/release/SDL2-2.30.11.zip
+				URL_HASH SHA1=2464d38c9d247ba223f28d4ddc1a7570edf02030
 				OPTIONS
 					"SDL_ATOMIC OFF"
 					"SDL_CPUINFO ON"
