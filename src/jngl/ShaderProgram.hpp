@@ -1,10 +1,10 @@
-// Copyright 2018-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::ShaderProgram class
 /// @file
 #pragma once
 
-#include "Finally.hpp"
+#include "Rgb.hpp"
 
 #include <memory>
 #include <string>
@@ -38,6 +38,9 @@ public:
 		static void setUniform(int location, int v0);
 		static void setUniform(int location, float v0, float v1);
 		static void setUniform(int location, float v0, float v1, float v2, float v3);
+
+		/// sets a vec3 to the color of the Rgb object
+		static void setUniform(int location, Rgb);
 
 	private:
 		static int referenceCount;

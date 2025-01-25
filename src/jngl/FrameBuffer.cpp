@@ -255,6 +255,14 @@ Vec2 FrameBuffer::getSize() const {
 		     impl->texture.getPreciseHeight() / getScaleFactor() };
 }
 
+Pixels FrameBuffer::getPixelWidth() const {
+	return static_cast<Pixels>(impl->width);
+}
+
+Pixels FrameBuffer::getPixelHeight() const {
+	return static_cast<Pixels>(impl->height);
+}
+
 GLuint FrameBuffer::getTextureID() const {
 	return impl->texture.getID();
 }

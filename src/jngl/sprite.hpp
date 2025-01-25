@@ -1,10 +1,11 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Sprite class and related functions
 /// \file
 #pragma once
 
 #include "Drawable.hpp"
+#include "Finally.hpp"
 #include "Rgb.hpp"
 #include "Rgba.hpp"
 #include "ShaderProgram.hpp"

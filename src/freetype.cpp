@@ -1,4 +1,4 @@
-// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #define _LIBCPP_DISABLE_DEPRECATION_WARNINGS
@@ -6,6 +6,7 @@
 
 #include "ShaderCache.hpp"
 #include "helper.hpp"
+#include "jngl/Finally.hpp"
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/matrix.hpp"
 #include "jngl/screen.hpp"

@@ -99,4 +99,9 @@ void ShaderProgram::Context::setUniform(const int location, const float v0, cons
 	glUniform4f(location, v0, v1, v2, v3);
 }
 
+void ShaderProgram::Context::setUniform(const int location, const Rgb color) {
+	assert(referenceCount >= 0);
+	glUniform3f(location, color.getRed(), color.getGreen(), color.getBlue());
+}
+
 } // namespace jngl

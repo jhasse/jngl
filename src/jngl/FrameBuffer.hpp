@@ -1,16 +1,16 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::FrameBuffer class
 /// @file
 #pragma once
 
-#include "Color.hpp"
-#include "Finally.hpp"
 #include "Mat3.hpp"
 #include "Pixels.hpp"
 #include "Vec2.hpp"
 #include "Vertex.hpp"
+#include "ShaderProgram.hpp"
 
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -92,6 +92,9 @@ public:
 
 	/// Returns the size in screen pixels
 	Vec2 getSize() const;
+
+	Pixels getPixelWidth() const;
+	Pixels getPixelHeight() const;
 
 	/// Returns the OpenGL texture ID of the associated image buffer
 	///
