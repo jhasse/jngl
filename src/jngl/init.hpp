@@ -74,6 +74,6 @@ JNGL_MAIN_END
 #include <windows.h>
 
 INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
-	return main(1, nullptr);
+	return main(__argc, __argv);
 }
 #endif
