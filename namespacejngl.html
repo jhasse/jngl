@@ -873,10 +873,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setCursor</b> (Cursor
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Work.html">Work</a> &gt; work)</td></tr>
 <tr class="memdesc:a9937073cb10d7c761085e47010390297"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the passed <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> to be active in the main loop. <br /></td></tr>
 <tr class="separator:a9937073cb10d7c761085e47010390297"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5bc0c906f29976cf36850c5aa0c84ba" id="r_af5bc0c906f29976cf36850c5aa0c84ba"><td class="memTemplParams" colspan="2">template&lt;class T , class... Args&gt; </td></tr>
-<tr class="memitem:af5bc0c906f29976cf36850c5aa0c84ba"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#af5bc0c906f29976cf36850c5aa0c84ba">setWork</a> (Args &amp;&amp;... args)</td></tr>
-<tr class="memdesc:af5bc0c906f29976cf36850c5aa0c84ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">The same as <a class="el" href="#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in the main loop.">setWork(std::shared_ptr&lt;Work&gt;)</a> but creates the <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> for you.  <br /></td></tr>
-<tr class="separator:af5bc0c906f29976cf36850c5aa0c84ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4711f46c463334958d8561834d83b94" id="r_aa4711f46c463334958d8561834d83b94"><td class="memTemplParams" colspan="2">template&lt;class T , class... Args&gt; </td></tr>
+<tr class="memitem:aa4711f46c463334958d8561834d83b94"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#aa4711f46c463334958d8561834d83b94">setWork</a> (Args &amp;&amp;... args)</td></tr>
+<tr class="memdesc:aa4711f46c463334958d8561834d83b94"><td class="mdescLeft">&#160;</td><td class="mdescRight">The same as <a class="el" href="#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in the main loop.">setWork(std::shared_ptr&lt;Work&gt;)</a> but creates the <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> for you.  <br /></td></tr>
+<tr class="separator:aa4711f46c463334958d8561834d83b94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b9d453bc1307852b482b9926abeeca9" id="r_a9b9d453bc1307852b482b9926abeeca9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b9d453bc1307852b482b9926abeeca9">setWork</a> (<a class="el" href="classjngl_1_1Work.html">Work</a> *)</td></tr>
 <tr class="separator:a9b9d453bc1307852b482b9926abeeca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5654b5fb3dec5ca7aa0d860163ab8a09" id="r_a5654b5fb3dec5ca7aa0d860163ab8a09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5654b5fb3dec5ca7aa0d860163ab8a09">resetFrameLimiter</a> ()</td></tr>
@@ -2669,8 +2669,8 @@ template&lt;class Vect &gt; </div>
 
 </div>
 </div>
-<a id="af5bc0c906f29976cf36850c5aa0c84ba" name="af5bc0c906f29976cf36850c5aa0c84ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5bc0c906f29976cf36850c5aa0c84ba">&#9670;&#160;</a></span>setWork() <span class="overload">[1/2]</span></h2>
+<a id="aa4711f46c463334958d8561834d83b94" name="aa4711f46c463334958d8561834d83b94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4711f46c463334958d8561834d83b94">&#9670;&#160;</a></span>setWork() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2678,7 +2678,7 @@ template&lt;class Vect &gt; </div>
 template&lt;class T , class... Args&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void setWork </td>
+          <td class="memname">T &amp; setWork </td>
           <td>(</td>
           <td class="paramtype">Args &amp;&amp;...</td>          <td class="paramname"><span class="paramname"><em>args</em></span></td><td>)</td>
           <td></td>
