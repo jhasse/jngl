@@ -709,6 +709,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawTriangle</b> (<a 
 <tr class="separator:a1732275d2646c634f74abec40aeaafe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a2fef9a452c7eaa09ad0a6a7614fa76" id="r_a5a2fef9a452c7eaa09ad0a6a7614fa76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a2fef9a452c7eaa09ad0a6a7614fa76">drawTriangle</a> (double A_x, double A_y, double B_x, double B_y, double C_x, double C_y)</td></tr>
 <tr class="separator:a5a2fef9a452c7eaa09ad0a6a7614fa76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b9398a7e2e998950cfdb10feedf473c" id="r_a9b9398a7e2e998950cfdb10feedf473c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b9398a7e2e998950cfdb10feedf473c">drawTriangle</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color)</td></tr>
+<tr class="memdesc:a9b9398a7e2e998950cfdb10feedf473c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a equilateral triangle centered at (0, 0) and the top point at (0, 1)  <br /></td></tr>
+<tr class="separator:a9b9398a7e2e998950cfdb10feedf473c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedee454660ebd928eebc4fd1584f0b52" id="r_aedee454660ebd928eebc4fd1584f0b52"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aedee454660ebd928eebc4fd1584f0b52">drawRect</a> (double xposition, double yposition, double width, double height)</td></tr>
 <tr class="memdesc:aedee454660ebd928eebc4fd1584f0b52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle at { <em>xposition</em>, <em>yposition</em> }.  <br /></td></tr>
 <tr class="separator:aedee454660ebd928eebc4fd1584f0b52"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2170,7 +2173,7 @@ template&lt;class Vect &gt; </div>
 </div>
 </div>
 <a id="a5a2fef9a452c7eaa09ad0a6a7614fa76" name="a5a2fef9a452c7eaa09ad0a6a7614fa76"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a2fef9a452c7eaa09ad0a6a7614fa76">&#9670;&#160;</a></span>drawTriangle()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a2fef9a452c7eaa09ad0a6a7614fa76">&#9670;&#160;</a></span>drawTriangle() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2208,6 +2211,30 @@ template&lt;class Vect &gt; </div>
       </table>
 </div><div class="memdoc">
 <dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated</a></b></dt><dd>Use <a class="el" href="#a1732275d2646c634f74abec40aeaafe8" title="Draws the triangle a -&gt; b -&gt; c.">drawTriangle(Vec2, Vec2, Vec2)</a> instead </dd></dl>
+
+</div>
+</div>
+<a id="a9b9398a7e2e998950cfdb10feedf473c" name="a9b9398a7e2e998950cfdb10feedf473c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b9398a7e2e998950cfdb10feedf473c">&#9670;&#160;</a></span>drawTriangle() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawTriangle </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a></td>          <td class="paramname"><span class="paramname"><em>modelview</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Rgba.html">Rgba</a></td>          <td class="paramname"><span class="paramname"><em>color</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws a equilateral triangle centered at (0, 0) and the top point at (0, 1) </p>
+<p>The side length of the triangle is sqrt(3) ≈ 1.732. </p>
 
 </div>
 </div>
@@ -2375,7 +2402,7 @@ template&lt;class Vect &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00125">125</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00130">130</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
 
 </div>
 </div>

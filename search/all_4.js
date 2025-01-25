@@ -107,7 +107,7 @@ var searchData=
   ['drawscaled_104',['drawScaled',['../classjngl_1_1Sprite.html#a41b02a54c89c6d5fe3322b38d4a071f8',1,'jngl::Sprite']]],
   ['drawself_105',['drawSelf',['../classjngl_1_1Label.html#a53f78ff6fad547cf2f56d60a0ab2ea57',1,'jngl::Label::drawSelf()'],['../classjngl_1_1Widget.html#a53408210146ba42cb88bcb38b08a9a81',1,'jngl::Widget::drawSelf()']]],
   ['drawsquare_106',['drawSquare',['../namespacejngl.html#a13bf772b3b87519adfead5170ab1f5e7',1,'jngl']]],
-  ['drawtriangle_107',['drawTriangle',['../namespacejngl.html#a1732275d2646c634f74abec40aeaafe8',1,'jngl::drawTriangle(Vec2 a, Vec2 b, Vec2 c)'],['../namespacejngl.html#a5a2fef9a452c7eaa09ad0a6a7614fa76',1,'jngl::drawTriangle(double A_x, double A_y, double B_x, double B_y, double C_x, double C_y)']]],
+  ['drawtriangle_107',['drawTriangle',['../namespacejngl.html#a1732275d2646c634f74abec40aeaafe8',1,'jngl::drawTriangle(Vec2 a, Vec2 b, Vec2 c)'],['../namespacejngl.html#a5a2fef9a452c7eaa09ad0a6a7614fa76',1,'jngl::drawTriangle(double A_x, double A_y, double B_x, double B_y, double C_x, double C_y)'],['../namespacejngl.html#a9b9398a7e2e998950cfdb10feedf473c',1,'jngl::drawTriangle(Mat3 modelview, Rgba color)']]],
   ['duration_108',['duration',['http://en.cppreference.com/w/cpp/chrono/duration.html',1,'duration'],['http://en.cppreference.com/w/cpp/chrono/duration/duration.html',1,'std::chrono::duration::duration()']]],
   ['duration_5fcast_109',['duration_cast',['http://en.cppreference.com/w/cpp/chrono/duration/duration_cast.html',1,'std::chrono']]],
   ['duration_5fvalues_110',['duration_values',['http://en.cppreference.com/w/cpp/chrono/duration_values.html',1,'std::chrono']]],
