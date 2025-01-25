@@ -39,7 +39,7 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 		}
 	}
 #endif
-#if defined (JNGL_UWP) || defined (__EMSCRIPTEN__)
+#if defined (JNGL_UWP)
 	if (gles20Source) {
 		source = gles20Source;
 	} else {
