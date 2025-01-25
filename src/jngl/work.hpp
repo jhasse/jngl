@@ -82,8 +82,11 @@ void setWork(std::shared_ptr<Work> work);
 
 /// The same as setWork(std::shared_ptr<Work>) but creates the Work for you
 template <class T, class... Args>
-void setWork(Args&&... args) {
-	setWork(std::make_shared<T>(std::forward<Args>(args)...));
+T& setWork(Args&&... args) {
+	auto shared = std::make_shared<T>(std::forward<Args>(args)...);
+	auto& rtn = *shared;
+	setWork(std::move(shared));
+	return rtn;
 }
 
 /// \deprecated Use setWork(std::shared_ptr<Work>) instead
