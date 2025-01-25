@@ -92,6 +92,11 @@ void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
 /// \deprecated Use drawTriangle(Vec2, Vec2, Vec2) instead
 void drawTriangle(double A_x, double A_y, double B_x, double B_y, double C_x, double C_y);
 
+/// Draws a equilateral triangle centered at (0, 0) and the top point at (0, 1)
+///
+/// The side length of the triangle is sqrt(3) ≈ 1.732.
+void drawTriangle(Mat3 modelview, Rgba color);
+
 /// Draws a rectangle at { \a xposition, \a yposition }
 /// \deprecated Use drawRect(const Mat3&, Vec2, Color) instead
 [[deprecated("Use drawRect(const Mat3&, Vec2, Color) instead")]]

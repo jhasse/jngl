@@ -501,6 +501,10 @@ void drawTriangle(const double A_x, const double A_y, const double B_x, const do
 	pWindow->drawTriangle({ A_x, A_y }, { B_x, B_y }, { C_x, C_y });
 }
 
+void drawTriangle(Mat3 modelview, Rgba color) {
+	pWindow->drawTriangle(modelview, color);
+}
+
 void setLineWidth(const float width) {
 	glLineWidth(width);
 }

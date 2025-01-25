@@ -113,6 +113,7 @@ public:
 	std::string getTextInput() const;
 	void initGlObjects();
 	static void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
+	static void drawTriangle(Mat3 modelview, Rgba color);
 	void drawLine(Mat3 modelview, Vec2 b) const;
 	void drawSquare(Mat3 modelview, Rgba color) const;
 	void onControllerChanged(std::function<void()>);
