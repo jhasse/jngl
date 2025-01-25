@@ -88,17 +88,17 @@ $(function() { codefold.init(0); });
   <div class="headertitle"><div class="title">FrameBuffer.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="FrameBuffer_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright 2012-2023 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
+<a href="FrameBuffer_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright 2012-2025 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// For conditions of distribution and use, see copyright notice in LICENSE.txt</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="Color_8hpp.html">Color.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="Finally_8hpp.html">Finally.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="Mat3_8hpp.html">Mat3.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="Pixels_8hpp.html">Pixels.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="Vec2_8hpp.html">Vec2.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="Vertex_8hpp.html">Vertex.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="Mat3_8hpp.html">Mat3.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="Pixels_8hpp.html">Pixels.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="Vec2_8hpp.html">Vec2.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="Vertex_8hpp.html">Vertex.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="ShaderProgram_8hpp.html">ShaderProgram.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/functional.html">functional</a>&gt;</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/memory.html">memory</a>&gt;</span></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/vector.html">vector</a>&gt;</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
@@ -156,19 +156,21 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="classjngl_1_1FrameBuffer.html#aebe51f6c43d6d673fc3826046d668b38">   94</a></span>    <a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> <a class="code hl_function" href="classjngl_1_1FrameBuffer.html#aebe51f6c43d6d673fc3826046d668b38">getSize</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="classjngl_1_1FrameBuffer.html#aeb8d8a09d425d18b5963d8b7a608c629">  101</a></span>    uint32_t <a class="code hl_function" href="classjngl_1_1FrameBuffer.html#aeb8d8a09d425d18b5963d8b7a608c629">getTextureID</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    <span class="keyword">struct </span>Impl;</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::unique_ptr&lt;Impl&gt;</a> impl;</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>};</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <a class="code hl_class" href="classjngl_1_1Pixels.html">Pixels</a> getPixelWidth() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <a class="code hl_class" href="classjngl_1_1Pixels.html">Pixels</a> getPixelHeight() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno"><a class="line" href="classjngl_1_1FrameBuffer.html#aeb8d8a09d425d18b5963d8b7a608c629">  104</a></span>    uint32_t <a class="code hl_function" href="classjngl_1_1FrameBuffer.html#aeb8d8a09d425d18b5963d8b7a608c629">getTextureID</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <span class="keyword">struct </span>Impl;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::unique_ptr&lt;Impl&gt;</a> impl;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>};</div>
 </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>} <span class="comment">// namespace jngl</span></div>
-<div class="ttc" id="aColor_8hpp_html"><div class="ttname"><a href="Color_8hpp.html">Color.hpp</a></div><div class="ttdoc">Contains jngl::Color class.</div></div>
-<div class="ttc" id="aFinally_8hpp_html"><div class="ttname"><a href="Finally_8hpp.html">Finally.hpp</a></div><div class="ttdoc">Contains jngl::Finally class.</div></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>} <span class="comment">// namespace jngl</span></div>
 <div class="ttc" id="aMat3_8hpp_html"><div class="ttname"><a href="Mat3_8hpp.html">Mat3.hpp</a></div><div class="ttdoc">Contains jngl::Mat3 class.</div></div>
 <div class="ttc" id="aPixels_8hpp_html"><div class="ttname"><a href="Pixels_8hpp.html">Pixels.hpp</a></div><div class="ttdoc">Contains jngl::Pixels class.</div></div>
+<div class="ttc" id="aShaderProgram_8hpp_html"><div class="ttname"><a href="ShaderProgram_8hpp.html">ShaderProgram.hpp</a></div><div class="ttdoc">Contains jngl::ShaderProgram class.</div></div>
 <div class="ttc" id="aVec2_8hpp_html"><div class="ttname"><a href="Vec2_8hpp.html">Vec2.hpp</a></div><div class="ttdoc">Contains jngl::Vec2 class.</div></div>
 <div class="ttc" id="aVertex_8hpp_html"><div class="ttname"><a href="Vertex_8hpp.html">Vertex.hpp</a></div></div>
 <div class="ttc" id="aclassjngl_1_1FrameBuffer_html"><div class="ttname"><a href="classjngl_1_1FrameBuffer.html">jngl::FrameBuffer</a></div><div class="ttdoc">Image framebuffer object which can be rendered on.</div><div class="ttdef"><b>Definition</b> <a href="#l00035">FrameBuffer.hpp:35</a></div></div>
@@ -188,6 +190,7 @@ $(function() { codefold.init(0); });
 <div class="ttc" id="aclassjngl_1_1ShaderProgram_html"><div class="ttname"><a href="classjngl_1_1ShaderProgram.html">jngl::ShaderProgram</a></div><div class="ttdoc">Linked vertex and fragment shaders.</div><div class="ttdef"><b>Definition</b> <a href="ShaderProgram_8hpp_source.html#l00017">ShaderProgram.hpp:17</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Vec2_html"><div class="ttname"><a href="classjngl_1_1Vec2.html">jngl::Vec2</a></div><div class="ttdoc">Two-dimensional vector.</div><div class="ttdef"><b>Definition</b> <a href="Vec2_8hpp_source.html#l00036">Vec2.hpp:36</a></div></div>
 <div class="ttc" id="afunction_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::function</a></div></div>
+<div class="ttc" id="afunctional_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/functional.html">functional</a></div></div>
 <div class="ttc" id="amemory_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/memory.html">memory</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition</b> <a href="Achievement_8hpp_source.html#l00010">Achievement.hpp:10</a></div></div>
 <div class="ttc" id="anamespacejngl_html_acfcb9cdf97108d05cf2b0da911c93a4c"><div class="ttname"><a href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">jngl::modelview</a></div><div class="ttdeci">jngl::Mat3 modelview()</div><div class="ttdoc">Returns a copy of the global ModelView matrix.</div></div>

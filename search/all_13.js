@@ -95,7 +95,7 @@ var searchData=
   ['setstepspersecond_92',['setStepsPerSecond',['../namespacejngl.html#aa2222d84c7228e46ddb220bd543a5401',1,'jngl']]],
   ['settext_93',['setText',['../classjngl_1_1Text.html#acaa8a747c8b2d51cac81e5e1f90fbe77',1,'jngl::Text']]],
   ['settitle_94',['setTitle',['../namespacejngl.html#abc79cf0667bbb5c93fca3f01b52c7b57',1,'jngl']]],
-  ['setuniform_95',['setUniform',['../structjngl_1_1ShaderProgram_1_1Context.html#aee3ff4b07a7378617def927834e2467e',1,'jngl::ShaderProgram::Context']]],
+  ['setuniform_95',['setUniform',['../structjngl_1_1ShaderProgram_1_1Context.html#aee3ff4b07a7378617def927834e2467e',1,'jngl::ShaderProgram::Context::setUniform(int location, int v0)'],['../structjngl_1_1ShaderProgram_1_1Context.html#a6fcdeaf19d08d28a4cf14fdeda149a84',1,'jngl::ShaderProgram::Context::setUniform(int location, Rgb)']]],
   ['setvbuf_96',['setvbuf',['http://en.cppreference.com/w/cpp/io/c/setvbuf.html',1,'std']]],
   ['setverticalsync_97',['setVerticalSync',['../namespacejngl.html#a7cd8cba6fb6e0174b1858fd845ec15b1',1,'jngl']]],
   ['setvolume_98',['setVolume',['../classjngl_1_1Channel.html#a44dbb438e1b254ef4e9b0f2aab66a433',1,'jngl::Channel::setVolume()'],['../classjngl_1_1SoundFile.html#adba16af13c4a8c53151baa2d5123ec96',1,'jngl::SoundFile::setVolume()'],['../namespacejngl.html#a44dbb438e1b254ef4e9b0f2aab66a433',1,'jngl::setVolume()']]],

@@ -88,11 +88,11 @@ $(function() { codefold.init(0); });
   <div class="headertitle"><div class="title">ShaderProgram.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="ShaderProgram_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright 2018-2020 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
+<a href="ShaderProgram_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright 2018-2025 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// For conditions of distribution and use, see copyright notice in LICENSE.txt</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="Finally_8hpp.html">Finally.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="Rgb_8hpp.html">Rgb.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/memory.html">memory</a>&gt;</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/string.html">string</a>&gt;</span></div>
@@ -125,31 +125,34 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="structjngl_1_1ShaderProgram_1_1Context.html#aee3ff4b07a7378617def927834e2467e">setUniform</a>(<span class="keywordtype">int</span> location, <span class="keywordtype">float</span> v0, <span class="keywordtype">float</span> v1);</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="structjngl_1_1ShaderProgram_1_1Context.html#aee3ff4b07a7378617def927834e2467e">setUniform</a>(<span class="keywordtype">int</span> location, <span class="keywordtype">float</span> v0, <span class="keywordtype">float</span> v1, <span class="keywordtype">float</span> v2, <span class="keywordtype">float</span> v3);</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keyword">static</span> <span class="keywordtype">int</span> referenceCount;</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="keyword">static</span> <span class="keyword">const</span> Impl* activeImpl;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    };</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="structjngl_1_1ShaderProgram_1_1Context.html#a6fcdeaf19d08d28a4cf14fdeda149a84">   43</a></span>        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="structjngl_1_1ShaderProgram_1_1Context.html#a6fcdeaf19d08d28a4cf14fdeda149a84">setUniform</a>(<span class="keywordtype">int</span> location, <a class="code hl_class" href="classjngl_1_1Rgb.html">Rgb</a>);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keyword">static</span> <span class="keywordtype">int</span> referenceCount;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keyword">static</span> <span class="keyword">const</span> Impl* activeImpl;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    };</div>
 </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="preprocessor">#if __cplusplus &gt;= 201703L</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        [[nodiscard]]</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <a class="code hl_struct" href="structjngl_1_1ShaderProgram_1_1Context.html">Context</a></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        use() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    [[nodiscard]] <span class="keywordtype">int</span> getAttribLocation(<span class="keyword">const</span> <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; name) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="classjngl_1_1ShaderProgram.html#abef35b5e78f77e4e1ad439001dea6968">   55</a></span>    [[nodiscard]] <span class="keywordtype">int</span> <a class="code hl_function" href="classjngl_1_1ShaderProgram.html#abef35b5e78f77e4e1ad439001dea6968">getUniformLocation</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; name) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::unique_ptr&lt;Impl&gt;</a> impl;</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>};</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="preprocessor">#if __cplusplus &gt;= 201703L</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        [[nodiscard]]</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <a class="code hl_struct" href="structjngl_1_1ShaderProgram_1_1Context.html">Context</a></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        use() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    [[nodiscard]] <span class="keywordtype">int</span> getAttribLocation(<span class="keyword">const</span> <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; name) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="classjngl_1_1ShaderProgram.html#abef35b5e78f77e4e1ad439001dea6968">   58</a></span>    [[nodiscard]] <span class="keywordtype">int</span> <a class="code hl_function" href="classjngl_1_1ShaderProgram.html#abef35b5e78f77e4e1ad439001dea6968">getUniformLocation</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; name) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::unique_ptr&lt;Impl&gt;</a> impl;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>};</div>
 </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="keywordtype">void</span> setUniform(<span class="keywordtype">int</span> location, <span class="keywordtype">float</span> v0, <span class="keywordtype">float</span> v1);</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>} <span class="comment">// namespace jngl</span></div>
-<div class="ttc" id="aFinally_8hpp_html"><div class="ttname"><a href="Finally_8hpp.html">Finally.hpp</a></div><div class="ttdoc">Contains jngl::Finally class.</div></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="keywordtype">void</span> setUniform(<span class="keywordtype">int</span> location, <span class="keywordtype">float</span> v0, <span class="keywordtype">float</span> v1);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>} <span class="comment">// namespace jngl</span></div>
+<div class="ttc" id="aRgb_8hpp_html"><div class="ttname"><a href="Rgb_8hpp.html">Rgb.hpp</a></div><div class="ttdoc">Contains jngl::Rgb class.</div></div>
 <div class="ttc" id="abasic_string_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Rgb_html"><div class="ttname"><a href="classjngl_1_1Rgb.html">jngl::Rgb</a></div><div class="ttdoc">Object representing a RGB color, new version of jngl::Color (which will be deprecated in the future)</div><div class="ttdef"><b>Definition</b> <a href="Rgb_8hpp_source.html#l00015">Rgb.hpp:15</a></div></div>
 <div class="ttc" id="aclassjngl_1_1ShaderProgram_html"><div class="ttname"><a href="classjngl_1_1ShaderProgram.html">jngl::ShaderProgram</a></div><div class="ttdoc">Linked vertex and fragment shaders.</div><div class="ttdef"><b>Definition</b> <a href="#l00017">ShaderProgram.hpp:17</a></div></div>
 <div class="ttc" id="aclassjngl_1_1ShaderProgram_html_abef35b5e78f77e4e1ad439001dea6968"><div class="ttname"><a href="classjngl_1_1ShaderProgram.html#abef35b5e78f77e4e1ad439001dea6968">jngl::ShaderProgram::getUniformLocation</a></div><div class="ttdeci">int getUniformLocation(const std::string &amp;name) const</div></div>
 <div class="ttc" id="aclassjngl_1_1Shader_html"><div class="ttname"><a href="classjngl_1_1Shader.html">jngl::Shader</a></div><div class="ttdoc">Fragment or vertex GLSL shader.</div><div class="ttdef"><b>Definition</b> <a href="Shader_8hpp_source.html#l00012">Shader.hpp:12</a></div></div>
@@ -158,6 +161,7 @@ $(function() { codefold.init(0); });
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition</b> <a href="Achievement_8hpp_source.html#l00010">Achievement.hpp:10</a></div></div>
 <div class="ttc" id="astring_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/string.html">string</a></div></div>
 <div class="ttc" id="astructjngl_1_1ShaderProgram_1_1Context_html"><div class="ttname"><a href="structjngl_1_1ShaderProgram_1_1Context.html">jngl::ShaderProgram::Context</a></div><div class="ttdoc">Lifetime object when the ShaderProgram is in use.</div><div class="ttdef"><b>Definition</b> <a href="#l00028">ShaderProgram.hpp:28</a></div></div>
+<div class="ttc" id="astructjngl_1_1ShaderProgram_1_1Context_html_a6fcdeaf19d08d28a4cf14fdeda149a84"><div class="ttname"><a href="structjngl_1_1ShaderProgram_1_1Context.html#a6fcdeaf19d08d28a4cf14fdeda149a84">jngl::ShaderProgram::Context::setUniform</a></div><div class="ttdeci">static void setUniform(int location, Rgb)</div><div class="ttdoc">sets a vec3 to the color of the Rgb object</div></div>
 <div class="ttc" id="astructjngl_1_1ShaderProgram_1_1Context_html_aee3ff4b07a7378617def927834e2467e"><div class="ttname"><a href="structjngl_1_1ShaderProgram_1_1Context.html#aee3ff4b07a7378617def927834e2467e">jngl::ShaderProgram::Context::setUniform</a></div><div class="ttdeci">static void setUniform(int location, int v0)</div><div class="ttdoc">Sets the Context's associated ShaderProgram's uniform.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- HTML footer for doxygen 1.9.1-->
