@@ -93,7 +93,7 @@ var searchData=
   ['getstepspersecond_90',['getStepsPerSecond',['../namespacejngl.html#a06943dd8adf8a3d0ef639620df5dcad2',1,'jngl']]],
   ['gettextinput_91',['getTextInput',['../namespacejngl.html#a63680f5c003fed81f723fd1a3a7b3693',1,'jngl']]],
   ['gettextureid_92',['getTextureID',['../classjngl_1_1FrameBuffer.html#aeb8d8a09d425d18b5963d8b7a608c629',1,'jngl::FrameBuffer']]],
-  ['gettextwidth_93',['getTextWidth',['../classjngl_1_1Font.html#a3f6aec694509c364d41f302bfb37a018',1,'jngl::Font::getTextWidth()'],['../classjngl_1_1OutlinedFont.html#a3f6aec694509c364d41f302bfb37a018',1,'jngl::OutlinedFont::getTextWidth()'],['../namespacejngl.html#af60c08a50c17934ee771bc0cf068d49a',1,'jngl::getTextWidth(const std::string &amp;text)']]],
+  ['gettextwidth_93',['getTextWidth',['../classjngl_1_1Font.html#a4e6623c6e0e01db225975911bfdd375f',1,'jngl::Font::getTextWidth()'],['../classjngl_1_1OutlinedFont.html#a4e6623c6e0e01db225975911bfdd375f',1,'jngl::OutlinedFont::getTextWidth()'],['../namespacejngl.html#af60c08a50c17934ee771bc0cf068d49a',1,'jngl::getTextWidth(const std::string &amp;text)']]],
   ['gettime_94',['getTime',['../namespacejngl.html#a4437edd7fd2832790c13ba3179bcc64d',1,'jngl']]],
   ['gettop_95',['getTop',['../classjngl_1_1Drawable.html#a3670fae9f6c1be822e4b3e271f1f1013',1,'jngl::Drawable']]],
   ['gettouchpositions_96',['getTouchPositions',['../namespacejngl.html#a31de3c586d8061891c962b80f91055a7',1,'jngl']]],
