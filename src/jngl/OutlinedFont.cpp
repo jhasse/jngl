@@ -1,6 +1,8 @@
-// Copyright 2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "OutlinedFont.hpp"
+
+#include "Mat3.hpp"
 
 namespace jngl {
 
@@ -14,7 +16,14 @@ void OutlinedFont::print(const Mat3& modelview, const std::string& text, Rgba in
 	inner.print(modelview, text, innerColor);
 }
 
-double OutlinedFont::getTextWidth(std::string_view text) {
+void OutlinedFont::printCentered(Mat3 modelview, const std::string& text, Rgba innerColor,
+                                 Rgba outerColor) const {
+	modelview.translate({ -getTextWidth(text) / 2, 0 });
+	outer.print(modelview, text, outerColor);
+	inner.print(modelview, text, innerColor);
+}
+
+double OutlinedFont::getTextWidth(std::string_view text) const {
 	return inner.getTextWidth(text);
 }
 

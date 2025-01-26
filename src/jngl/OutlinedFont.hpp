@@ -18,9 +18,13 @@ public:
 	void print(const Mat3& modelview, const std::string& text, jngl::Rgba innerColor,
 	           jngl::Rgba outerColor) const;
 
+	/// Print \a text using \a modelview in \a innerColor and an outline in \a outerColor
+	void printCentered(Mat3 modelview, const std::string& text, jngl::Rgba innerColor,
+	                   jngl::Rgba outerColor) const;
+
 	/// Calculates the width of \a text in scale-independent pixels if it would be drawn with this
 	/// font
-	double getTextWidth(std::string_view);
+	double getTextWidth(std::string_view) const;
 
 private:
 	jngl::Font inner;

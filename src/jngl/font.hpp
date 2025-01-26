@@ -1,4 +1,4 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Font class and related functions
 /// @file
@@ -45,7 +45,7 @@ public:
 
 	/// Calculates the width of \a text in scale-independent pixels if it would be drawn with this
 	/// font
-	double getTextWidth(std::string_view);
+	double getTextWidth(std::string_view) const;
 
 	/// Internal function
 	std::shared_ptr<FontImpl> getImpl();
