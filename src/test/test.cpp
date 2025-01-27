@@ -513,8 +513,10 @@ void testKeys() {
 				auto circleModelview = jngl::modelview().translate(
 				    { 530, static_cast<double>(-40 + controllerNr * 110) });
 				jngl::drawEllipse(circleModelview, circleRadius, circleRadius);
-				jngl::setColor(255, 255, 255, 255);
-				jngl::drawCircle(circleModelview.translate(circleRadius * stick), 4);
+				const double length = boost::qvm::mag(stick);
+				jngl::drawCircle(circleModelview.translate(circleRadius * stick), 4,
+				                 length > 1 ? jngl::Rgba(1, 2 - length, 2 - length, 1)
+				                            : 0xffffffff_rgba);
 				jngl::translate(0, 2 * circleRadius + 10);
 			}
 

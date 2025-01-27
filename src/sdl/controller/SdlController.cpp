@@ -122,12 +122,26 @@ float SdlController::stateImpl(controller::Button button) const {
 		otherState *= std::sqrt(1 - 0.5 * state * state);
 		state = static_cast<float>(tmp);
 	}
-	if (model != Model::XBOX_WIRED && model != Model::XBOX) {
+	if (!gameController && model != Model::XBOX_WIRED && model != Model::XBOX) {
 		return state; // no deadzone needed
 	}
-	if (state * state + otherState * otherState < 0.1) { // inside deadzone circle?
+	const auto lengthSquared = state * state + otherState * otherState;
+	const float DEADZONE_RADIUS = 0.2;
+	if (lengthSquared < DEADZONE_RADIUS * DEADZONE_RADIUS) { // inside deadzone circle?
 		return 0;
 	}
+
+	// smooth out transition out of deadzone to 2 * deadzone:
+	if (lengthSquared < DEADZONE_RADIUS * 2 * DEADZONE_RADIUS * 2) {
+		float directionVectorInDeadzone = state / std::sqrt(lengthSquared) * DEADZONE_RADIUS;
+		return (state - directionVectorInDeadzone) * 2;
+	}
+
+	// not a perfect square, but most controllers are returning coordinates outside of a circle:
+	if (lengthSquared > 1) {
+		return state / std::sqrt(lengthSquared);
+	}
+
 	return state;
 }
 
