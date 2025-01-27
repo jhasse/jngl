@@ -399,18 +399,19 @@ endif()
 
 if(JNGL_BUILD_WEBP_FROM_SOURCE)
 	CPMAddPackage(NAME webp
-		URL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.2.4.tar.gz
-		URL_HASH SHA1=24586e2a8e01a9cced102d68852661b964502429
+		URL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.5.0.tar.gz
+		URL_HASH SHA1=b21aa842136dc59a72a38776a5aa73f4d0b00ac5
 		OPTIONS
 			"WEBP_BUILD_ANIM_UTILS OFF"
 			"WEBP_BUILD_CWEBP OFF"
 			"WEBP_BUILD_DWEBP OFF"
+			"WEBP_BUILD_EXTRAS OFF"
 			"WEBP_BUILD_GIF2WEBP OFF"
 			"WEBP_BUILD_IMG2WEBP OFF"
+			"WEBP_BUILD_LIBWEBPMUX OFF"
 			"WEBP_BUILD_VWEBP OFF"
 			"WEBP_BUILD_WEBPINFO OFF"
 			"WEBP_BUILD_WEBPMUX OFF"
-			"WEBP_BUILD_EXTRAS OFF"
 	)
 	target_include_directories(jngl PRIVATE ${webp_SOURCE_DIR}/src)
 	target_link_libraries(jngl PRIVATE webpdecode webpdspdecode webputilsdecode)
