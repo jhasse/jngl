@@ -106,7 +106,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build with CMake and GCC
       run: |
-        mingw64-cmake -Bbuild-windows -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=0 -DJNGL_SDL2=1
+        mingw64-cmake -Bbuild-windows -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=0 -DJNGL_WINAPI=0
         cmake --build build-windows
 
 env:
