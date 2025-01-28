@@ -1,4 +1,4 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Input related functions
 /// @file
@@ -261,7 +261,7 @@ std::vector<std::shared_ptr<Controller>> getConnectedControllers();
 /// called.
 ///
 /// \deprecated Use jngl::Job::onControllersChanged() instead
-[[deprecated("Use jngl::Job::onControllersChanged() instead")]] 
+[[deprecated("Use jngl::Job::onControllersChanged() instead")]]
 void onControllerChanged(std::function<void()> callback);
 
 /// Returns a string of characters that have been pressed since the last call to updateInput()
