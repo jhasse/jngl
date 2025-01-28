@@ -1387,7 +1387,8 @@ template&lt;class Box &gt; </div>
 </div><div class="memdoc">
 
 <p>Specify a function which gets called, whenever a controller gets added or removed. </p>
-<p>Whenever the return value of <a class="el" href="#ad178a38cc5f90ca8047e07693d39ac6a" title="Returns all controllers (gamepads) that are connected.">jngl::getConnectedControllers</a> would change, <em>callback</em> gets called. </p>
+<p>Whenever the return value of <a class="el" href="#ad178a38cc5f90ca8047e07693d39ac6a" title="Returns all controllers (gamepads) that are connected.">jngl::getConnectedControllers</a> would change, <em>callback</em> gets called.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated</a></b></dt><dd>Use <a class="el" href="classjngl_1_1Job.html#a266cd76ff1ed7b753a12f4ded13f44c6" title="Whenever the return value of jngl::getConnectedControllers would change, this method gets called.">jngl::Job::onControllersChanged()</a> instead </dd></dl>
 
 </div>
 </div>
@@ -1422,7 +1423,7 @@ template&lt;class Box &gt; </div>
 <div class="line">    };</div>
 <div class="line">    <span class="keywordflow">return</span> params;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassjngl_1_1Job_html"><div class="ttname"><a href="classjngl_1_1Job.html">jngl::Job</a></div><div class="ttdoc">Background job which stays part of the main loop independent of the active jngl::Work.</div><div class="ttdef"><b>Definition</b> <a href="job_8hpp_source.html#l00020">job.hpp:20</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Job_html"><div class="ttname"><a href="classjngl_1_1Job.html">jngl::Job</a></div><div class="ttdoc">Background job which stays part of the main loop independent of the active jngl::Work.</div><div class="ttdef"><b>Definition</b> <a href="job_8hpp_source.html#l00022">job.hpp:22</a></div></div>
 <div class="ttc" id="afunction_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::function</a></div></div>
 <div class="ttc" id="ainit_8hpp_html_a2471fe7de5ef776522a016331b6bf6e5"><div class="ttname"><a href="init_8hpp.html#a2471fe7de5ef776522a016331b6bf6e5">jnglInit</a></div><div class="ttdeci">jngl::AppParameters jnglInit()</div><div class="ttdoc">Implement this function and set AppParameters::start.</div></div>
 <div class="ttc" id="anamespacejngl_html_af4511ceb38d56c476938458af6bd98e6"><div class="ttname"><a href="#af4511ceb38d56c476938458af6bd98e6">jngl::addJob</a></div><div class="ttdeci">void addJob(std::shared_ptr&lt; Job &gt; job)</div><div class="ttdoc">Add a new Job which will be always be stepped and drawn by App::mainLoop()</div></div>
@@ -1466,7 +1467,7 @@ template&lt;class T , class... Args&gt; </div>
 <div class="line">}</div>
 <div class="ttc" id="abasic_string_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00103">103</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00109">109</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
 
 </div>
 </div>
@@ -1509,7 +1510,7 @@ template&lt;class T &gt; </div>
 
 <p>Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> that is a T. </p>
 
-<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00116">116</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00122">122</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
 
 </div>
 </div>
@@ -1646,7 +1647,7 @@ template&lt;class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Multiplies the global ModelView matrix with a rotation matrix. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated</a></b></dt><dd>use <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c" title="Returns a copy of the global ModelView matrix.">jngl::modelview()</a>.rotate instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated</a></b></dt><dd>use <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c" title="Returns a copy of the global ModelView matrix.">jngl::modelview()</a>.rotate instead </dd></dl>
 
 </div>
 </div>
@@ -1841,7 +1842,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Calculates FPS if called once per frame. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated</a></b></dt><dd>Not really intuitive or robust, use your own calculations instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated</a></b></dt><dd>Not really intuitive or robust, use your own calculations instead </dd></dl>
 
 </div>
 </div>
@@ -1879,7 +1880,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead. </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead. </dd></dl>
 
 </div>
 </div>
@@ -1897,7 +1898,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
 <p>Returns the directory where to store configuration files and save games.</p><ul>
 <li>Windows: <code>%AppData%/Display Name/</code></li>
 <li>Linux: <code>~/.config/Display Name/</code></li>
@@ -2041,7 +2042,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated</a></b></dt><dd>Use setAlpha instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated</a></b></dt><dd>Use setAlpha instead </dd></dl>
 
 </div>
 </div>
@@ -2059,7 +2060,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated</a></b></dt><dd>Use setAlpha instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated</a></b></dt><dd>Use setAlpha instead </dd></dl>
 
 </div>
 </div>
@@ -2077,7 +2078,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated</a></b></dt><dd>Use drawRect instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated</a></b></dt><dd>Use drawRect instead </dd></dl>
 
 </div>
 </div>
@@ -2109,7 +2110,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated</a></b></dt><dd>Use <a class="el" href="#adda6bd4a93eb670b63a319a2f6c4dd87" title="Draws a line from start to end, the width can be set using setLineWidth.">drawLine(Vec2, Vec2)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated</a></b></dt><dd>Use <a class="el" href="#adda6bd4a93eb670b63a319a2f6c4dd87" title="Draws a line from start to end, the width can be set using setLineWidth.">drawLine(Vec2, Vec2)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -2146,7 +2147,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated</a></b></dt><dd>Use drawEllipse(Mat3, float, float, float) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated</a></b></dt><dd>Use drawEllipse(Mat3, float, float, float) instead </dd></dl>
 
 </div>
 </div>
@@ -2168,7 +2169,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated</a></b></dt><dd>Use drawCircle instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated</a></b></dt><dd>Use drawCircle instead </dd></dl>
 
 </div>
 </div>
@@ -2210,7 +2211,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated</a></b></dt><dd>Use <a class="el" href="#a1732275d2646c634f74abec40aeaafe8" title="Draws the triangle a -&gt; b -&gt; c.">drawTriangle(Vec2, Vec2, Vec2)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated</a></b></dt><dd>Use <a class="el" href="#a1732275d2646c634f74abec40aeaafe8" title="Draws the triangle a -&gt; b -&gt; c.">drawTriangle(Vec2, Vec2, Vec2)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -2268,7 +2269,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a rectangle at { <em>xposition</em>, <em>yposition</em> }. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated</a></b></dt><dd>Use drawRect(const Mat3&amp;, Vec2, Color) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000017">Deprecated</a></b></dt><dd>Use drawRect(const Mat3&amp;, Vec2, Color) instead </dd></dl>
 
 </div>
 </div>
@@ -2580,7 +2581,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Sleep current thread for <em>milliseconds</em>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000020">Deprecated</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000021">Deprecated</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
 
 </div>
 </div>
@@ -2706,7 +2707,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000021">Deprecated</a></b></dt><dd>Use <a class="el" href="#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in the main loop.">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000022">Deprecated</a></b></dt><dd>Use <a class="el" href="#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in the main loop.">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
 
 </div>
 </div>
