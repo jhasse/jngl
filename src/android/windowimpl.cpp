@@ -535,6 +535,12 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 		if (window->controllerChangedCallback) {
 			window->controllerChangedCallback();
 		}
+		for (const auto& job : window->jobs) {
+			job->onControllersChanged();
+		}
+		if (window->currentWork_) {
+			window->currentWork_->onControllersChanged();
+		}
 	}
 	switch (AInputEvent_getType(event)) {
 	case AINPUT_EVENT_TYPE_KEY: {

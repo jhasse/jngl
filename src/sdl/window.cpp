@@ -373,6 +373,12 @@ void Window::UpdateInput() {
 			if (controllerChangedCallback) {
 				controllerChangedCallback();
 			}
+			for (const auto& job : jobs) {
+				job->onControllersChanged();
+			}
+			if (currentWork_) {
+				currentWork_->onControllersChanged();
+			}
 			break;
 		case SDL_WINDOWEVENT:
 			if (!impl->firstFrame && event.window.event == SDL_WINDOWEVENT_RESIZED) {

@@ -245,6 +245,10 @@ private:
 	void onFileDrop(const std::filesystem::path& file) override {
 		jngl::errorMessage(file.string() + " dropped on window.");
 	}
+	void onControllersChanged() override {
+		const auto controllers = jngl::getConnectedControllers();
+		jngl::info("Number of connected controllers: {}", controllers.size());
+	}
 
 	mutable bool drawOnFrameBuffer = false;
 	bool useShader = false;
@@ -272,10 +276,6 @@ jngl::AppParameters jnglInit() {
 		jngl::info("Size of Desktop: {}x{}", jngl::getDesktopWidth(), jngl::getDesktopHeight());
 		jngl::info("Preferred language: {}", jngl::getPreferredLanguage());
 		jngl::info("Path of binary: {}", jngl::getBinaryPath());
-		jngl::onControllerChanged([]() {
-			const auto controllers = jngl::getConnectedControllers();
-			jngl::info("Number of connected controllers: {}", controllers.size());
-		});
 		return std::make_shared<Test>(displayName);
 	};
 	return params;

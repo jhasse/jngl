@@ -1,8 +1,9 @@
-// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "XinputController.hpp"
 
+#include "../jngl/work.hpp"
 #include "../window.hpp"
 
 namespace jngl {
@@ -139,6 +140,12 @@ void Window::updateControllerStates() {
 	}
 	if (controllerChangedCallback && lastControllersConnected != controllersConnected) {
 		controllerChangedCallback();
+		for (const auto& job : jobs) {
+			job->onControllersChanged();
+		}
+		if (currentWork_) {
+			currentWork_->onControllersChanged();
+		}
 	}
 }
 

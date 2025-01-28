@@ -259,6 +259,9 @@ std::vector<std::shared_ptr<Controller>> getConnectedControllers();
 ///
 /// Whenever the return value of jngl::getConnectedControllers would change, \a callback gets
 /// called.
+///
+/// \deprecated Use jngl::Job::onControllersChanged() instead
+[[deprecated("Use jngl::Job::onControllersChanged() instead")]] 
 void onControllerChanged(std::function<void()> callback);
 
 /// Returns a string of characters that have been pressed since the last call to updateInput()

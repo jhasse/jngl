@@ -1,4 +1,4 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Job class and related functions
 /// @file
@@ -9,6 +9,8 @@
 #include <memory>
 
 namespace jngl {
+
+class Controller;
 
 /// Background job which stays part of the main loop independent of the active jngl::Work
 ///
@@ -37,6 +39,10 @@ public:
 
 	/// Called when a file has been dropped onto the window
 	virtual void onFileDrop(const std::filesystem::path&);
+
+	/// Whenever the return value of jngl::getConnectedControllers would change, this method gets
+	/// called
+	virtual void onControllersChanged();
 
 	/// Does nothing
 	Job() = default;
