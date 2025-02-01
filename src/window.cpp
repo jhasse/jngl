@@ -12,7 +12,6 @@
 #include "jngl/time.hpp"
 #include "jngl/work.hpp"
 #include "log.hpp"
-#include "spriteimpl.hpp"
 #include "windowptr.hpp"
 
 #ifdef ANDROID

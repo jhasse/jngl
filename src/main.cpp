@@ -258,7 +258,7 @@ void setBackgroundColor(const jngl::Rgb color) {
 
 void setBackgroundColor(const unsigned char red, const unsigned char green,
                         const unsigned char blue) {
-	setBackgroundColor(Color{ red, green, blue });
+	setBackgroundColor(Rgb::u8(red, green, blue));
 }
 
 Vec2 getMousePos() {

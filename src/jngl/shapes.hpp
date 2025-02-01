@@ -4,7 +4,7 @@
 /// @file
 #pragma once
 
-#include "Color.hpp"
+#include "Rgba.hpp"
 #include "Vec2.hpp"
 
 #include <cstdint>
@@ -70,10 +70,32 @@ void drawEllipse(Vec2, float width, float height, float startAngle = 0);
 
 void drawEllipse(Mat3 modelview, float width, float height, float startAngle = 0);
 
+void drawEllipse(Mat3 modelview, float width, float height, float startAngle, Rgba color);
+
 /// Angles in radian
 void drawCircle(Vec2, float radius, float startAngle = 0);
 
 void drawCircle(Mat3 modelview, float radius, float startAngle);
+
+/// Draws a circle at (0, 0) with \a radius in \a color with \a startAngle cut out
+///
+/// Passing 0 as \a startAngle will draw a full circle. Passing pi/2 would look like this:
+///
+/// @verbatim
+///       **
+///     **##
+///    *####
+///   *#####
+///  *######
+/// *#######
+/// *##############*
+///  *############*
+///   *##########*
+///    *########*
+///     **####**
+///       ****
+/// @endverbatim
+void drawCircle(Mat3 modelview, float radius, float startAngle, Rgba color);
 
 void drawCircle(Mat3 modelview, float radius);
 
