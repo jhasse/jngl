@@ -1,8 +1,5 @@
 <map id="jngl/Color.hpp" name="jngl/Color.hpp">
 <area shape="rect" id="Node000001" title="Contains jngl::Color class." alt="" coords="5,5,139,31"/>
-<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="29,153,115,178"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="60,46,47,80,46,99,50,119,66,151,61,153,45,120,40,100,41,78,55,44"/>
-<area shape="rect" id="Node000003" href="$shapes_8hpp.html" title="Functions for drawing shapes." alt="" coords="56,79,197,105"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="92,41,120,77,115,80,88,45"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="111,118,83,154,79,151,106,115"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="29,79,115,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,46,75,79,69,79,69,46"/>
 </map>

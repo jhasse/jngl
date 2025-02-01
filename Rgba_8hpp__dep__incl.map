@@ -1,14 +1,17 @@
 <map id="jngl/Rgba.hpp" name="jngl/Rgba.hpp">
-<area shape="rect" id="Node000001" title="Contains jngl::Rgba class." alt="" coords="26,5,151,31"/>
-<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="20,226,106,252"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="52,42,32,59,16,80,11,94,8,117,10,145,17,177,32,203,51,224,47,228,28,207,12,179,4,146,3,117,6,93,11,78,28,55,49,38"/>
-<area shape="rect" id="Node000003" href="$font_8hpp.html" title="Contains jngl::Font class and related functions." alt="" coords="26,79,151,105"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="91,46,91,79,86,79,86,46"/>
-<area shape="rect" id="Node000005" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="248,153,390,178"/>
-<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="121,37,301,150,298,154,119,42"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="58,116,39,133,25,154,23,173,29,192,52,224,48,227,24,194,17,173,20,152,35,129,54,112"/>
-<area shape="rect" id="Node000004" href="$OutlinedFont_8hpp.html" title="Contains jngl::OutlinedFont class." alt="" coords="35,153,224,178"/>
-<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="105,117,125,151,120,154,100,119"/>
-<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="110,191,76,228,72,224,106,188"/>
-<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="262,185,107,228,105,223,260,180"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Rgba class." alt="" coords="124,5,249,31"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="82,226,168,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,39,88,56,52,81,25,113,12,153,8,166,11,177,25,194,43,207,83,225,81,230,40,212,22,198,7,180,3,166,6,152,20,110,49,77,85,52,125,34"/>
+<area shape="rect" id="Node000003" href="$font_8hpp.html" title="Contains jngl::Font class and related functions." alt="" coords="62,79,188,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="168,44,137,80,133,77,164,41"/>
+<area shape="rect" id="Node000005" href="$shapes_8hpp.html" title="Functions for drawing shapes." alt="" coords="244,153,385,178"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="209,41,306,150,302,154,205,45"/>
+<area shape="rect" id="Node000006" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="329,79,470,105"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="238,34,364,76,362,81,236,39"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="70,113,42,130,21,154,17,165,18,175,32,195,58,211,87,223,85,228,55,215,29,198,13,177,11,165,16,151,39,126,67,109"/>
+<area shape="rect" id="Node000004" href="$OutlinedFont_8hpp.html" title="Contains jngl::OutlinedFont class." alt="" coords="30,153,220,178"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="128,120,128,152,122,152,122,120"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="128,194,128,226,122,226,122,194"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="269,187,158,228,156,223,267,182"/>
+<area shape="poly" id="edge9_Node000006_Node000002" title=" " alt="" coords="409,120,411,150,407,166,399,180,383,193,360,203,298,220,229,231,168,237,168,232,228,226,297,215,358,198,380,188,395,177,402,164,405,150,404,120"/>
 </map>

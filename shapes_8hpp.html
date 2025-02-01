@@ -89,13 +89,13 @@ $(function() {
 
 <p>Functions for drawing shapes.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="Color_8hpp_source.html">Color.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="Rgba_8hpp_source.html">Rgba.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Vec2_8hpp_source.html">Vec2.hpp</a>&quot;</code><br />
 <code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/cstdint.html">cstdint</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for shapes.hpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="shapes_8hpp__incl.svg" width="438" height="258"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="shapes_8hpp__incl.svg" width="472" height="258"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -165,6 +165,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawEllipse</b> (<a c
 <tr class="memitem:a41ebc78075d37862810bf655701dcf70" id="r_a41ebc78075d37862810bf655701dcf70"><td class="memItemLeft" align="right" valign="top"><a id="a41ebc78075d37862810bf655701dcf70" name="a41ebc78075d37862810bf655701dcf70"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawEllipse</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, float width, float height, float startAngle=0)</td></tr>
 <tr class="separator:a41ebc78075d37862810bf655701dcf70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a088880c8082351271270cd6d84518c65" id="r_a088880c8082351271270cd6d84518c65"><td class="memItemLeft" align="right" valign="top"><a id="a088880c8082351271270cd6d84518c65" name="a088880c8082351271270cd6d84518c65"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>drawEllipse</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, float width, float height, float startAngle, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color)</td></tr>
+<tr class="separator:a088880c8082351271270cd6d84518c65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acffb85162aeb7457024b3fdb2b4df9b9" id="r_acffb85162aeb7457024b3fdb2b4df9b9"><td class="memItemLeft" align="right" valign="top"><a id="acffb85162aeb7457024b3fdb2b4df9b9" name="acffb85162aeb7457024b3fdb2b4df9b9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawCircle</b> (<a class="el" href="classjngl_1_1Vec2.html">Vec2</a>, float radius, float startAngle=0)</td></tr>
 <tr class="memdesc:acffb85162aeb7457024b3fdb2b4df9b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Angles in radian. <br /></td></tr>
@@ -172,6 +175,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawCircle</b> (<a cl
 <tr class="memitem:a47c448d48e8513f76daf9e21650761a1" id="r_a47c448d48e8513f76daf9e21650761a1"><td class="memItemLeft" align="right" valign="top"><a id="a47c448d48e8513f76daf9e21650761a1" name="a47c448d48e8513f76daf9e21650761a1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawCircle</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, float radius, float startAngle)</td></tr>
 <tr class="separator:a47c448d48e8513f76daf9e21650761a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43013a0d41626ce0fccc3fe2d2da43de" id="r_a43013a0d41626ce0fccc3fe2d2da43de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a43013a0d41626ce0fccc3fe2d2da43de">drawCircle</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, float radius, float startAngle, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color)</td></tr>
+<tr class="memdesc:a43013a0d41626ce0fccc3fe2d2da43de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a circle at (0, 0) with <em>radius</em> in <em>color</em> with <em>startAngle</em> cut out.  <br /></td></tr>
+<tr class="separator:a43013a0d41626ce0fccc3fe2d2da43de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51a2914107e2e87528ad47f0aeb8526c" id="r_a51a2914107e2e87528ad47f0aeb8526c"><td class="memItemLeft" align="right" valign="top"><a id="a51a2914107e2e87528ad47f0aeb8526c" name="a51a2914107e2e87528ad47f0aeb8526c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawCircle</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, float radius)</td></tr>
 <tr class="separator:a51a2914107e2e87528ad47f0aeb8526c"><td class="memSeparator" colspan="2">&#160;</td></tr>
