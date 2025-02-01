@@ -1,4 +1,4 @@
-// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
@@ -514,15 +514,19 @@ void drawLine(const double xstart, const double ystart, const double xend, const
 }
 
 void drawLine(const Vec2 start, const Vec2 end) {
-	pWindow->drawLine(jngl::modelview().translate(start), end - start);
+	pWindow->drawLine(jngl::modelview().translate(start), end - start, gShapeColor);
 }
 
 void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end) {
-	pWindow->drawLine(modelview.translate(start), end - start);
+	pWindow->drawLine(modelview.translate(start), end - start, gShapeColor);
 }
 
 void drawLine(const Mat3& modelview, const Vec2 end) {
-	pWindow->drawLine(modelview, end);
+	pWindow->drawLine(modelview, end, gShapeColor);
+}
+
+void drawLine(const Mat3& modelview, const Vec2 end, Rgba color) {
+	pWindow->drawLine(modelview, end, color);
 }
 
 void drawPoint(const double x, const double y) {

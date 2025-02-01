@@ -1,4 +1,4 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Functions for drawing shapes
 /// @file
@@ -59,6 +59,8 @@ void drawLine(Mat3 modelview, Vec2 start, Vec2 end);
 /// Draws a line from (0, 0) to \a end
 void drawLine(const Mat3& modelview, Vec2 end);
 
+/// Draws a line from (0, 0) to \a end in \a color
+void drawLine(const Mat3& modelview, Vec2 end, Rgba color);
 
 [[deprecated("Use drawEllipse(Mat3, float, float, float) instead")]]
 /// \deprecated Use drawEllipse(Mat3, float, float, float) instead

@@ -1,4 +1,4 @@
-// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "window.hpp"
 
@@ -582,10 +582,10 @@ void Window::drawTriangle(Mat3 modelview, Rgba color) {
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-void Window::drawLine(Mat3 modelview, const Vec2 b) const {
+void Window::drawLine(Mat3 modelview, const Vec2 b, const Rgba color) const {
 	glBindVertexArray(vaoLine);
-	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview.scale(b * getScaleFactor()),
-	                                                        gShapeColor);
+	auto tmp =
+	    ShaderCache::handle().useSimpleShaderProgram(modelview.scale(b * getScaleFactor()), color);
 	glDrawArrays(GL_LINES, 0, 2);
 }
 
