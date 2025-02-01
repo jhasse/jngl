@@ -26,7 +26,7 @@ cmake --build build
 
 ```
 sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libpng-dev \
-libxxf86vm-dev libvorbis-dev cmake g++ libwebp-dev git libsdl2-dev
+libxxf86vm-dev libvorbis-dev cmake g++ libwebp-dev git libsdl3-dev
 ```
 
 ### Fedora
@@ -39,7 +39,7 @@ cmake SDL3-devel gcc-c++ libatomic
 ### Arch Linux
 
 ```
-pacman -Syu --needed cmake gcc sdl2 pkg-config fontconfig libwebp libvorbis
+pacman -Syu --needed cmake gcc sdl3 pkg-config fontconfig libwebp libvorbis
 ```
 
 ## Windows
@@ -68,7 +68,7 @@ and then open `build/jngl.sln`.
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 
 ```
-brew install sdl2 freetype libvorbis webp pkg-config cmake
+brew install sdl3 freetype libvorbis webp pkg-config cmake
 ```
 
 ## Android
