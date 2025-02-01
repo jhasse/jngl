@@ -18,7 +18,7 @@ linux:
     allow_failure: false
   stage: build
   script:
-  - dnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libwebp-devel SDL2-devel libtheora-devel clang util-linux clang-tools-extra >/dev/null
+  - dnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libwebp-devel SDL3-devel libtheora-devel clang util-linux clang-tools-extra >/dev/null
   - .github/ci.py
   - CXXFLAGS=-fdiagnostics-color cmake -Bbuild -GNinja
   - cd build
@@ -44,7 +44,7 @@ mingw:
     allow_failure: false
   stage: build
   script:
-    - dnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw64-gcc-c++ > /dev/null
+    - dnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL3 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw64-gcc-c++ > /dev/null
     - mingw64-cmake -G"Ninja Multi-Config" -Bbuild-mingw -DJNGL_WINAPI=0
     - cd build-mingw
     - ninja

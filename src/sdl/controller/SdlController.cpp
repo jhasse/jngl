@@ -10,16 +10,16 @@
 
 namespace jngl {
 
-SdlController::SdlController(SDL_Joystick* const handle, const int index)
-: handle(handle), haptic(SDL_HapticOpenFromJoystick(handle)) {
+SdlController::SdlController(SDL_Joystick* const handle, const SDL_JoystickID joystickId)
+: handle(handle), haptic(SDL_OpenHapticFromJoystick(handle)) {
 	if (haptic) {
-		if (SDL_HapticRumbleInit(haptic) < 0) {
+		if (!SDL_InitHapticRumble(haptic)) {
 			internal::error(SDL_GetError());
 		}
 	} else {
 		internal::error(SDL_GetError());
 	}
-	switch (SDL_JoystickNumButtons(handle)) {
+	switch (SDL_GetNumJoystickButtons(handle)) {
 		case 11:
 			model = Model::XBOX_WIRED;
 			break;
@@ -30,13 +30,13 @@ SdlController::SdlController(SDL_Joystick* const handle, const int index)
 			model = Model::XBOX;
 			break;
 		default: {
-			if (SDL_IsGameController(index)) {
-				gameController = SDL_GameControllerOpen(index);
+			if (SDL_IsGamepad(joystickId)) {
+				gameController = SDL_OpenGamepad(joystickId);
 				if (gameController) {
 					this->handle = nullptr;
-					SDL_JoystickClose(handle);
+					SDL_CloseJoystick(handle);
 				} else {
-					internal::warn("SDL_GameControllerOpen failed, falling back to joystick.");
+					internal::warn("SDL_OpenGamepad failed, falling back to joystick.");
 				}
 			}
 		}
@@ -45,9 +45,9 @@ SdlController::SdlController(SDL_Joystick* const handle, const int index)
 
 SdlController::~SdlController() {
 	if (handle) {
-		SDL_JoystickClose(handle);
+		SDL_CloseJoystick(handle);
 	} else {
-		SDL_GameControllerClose(gameController);
+		SDL_CloseGamepad(gameController);
 	}
 }
 
@@ -64,7 +64,7 @@ float SdlController::stateWithoutDeadzone(controller::Button button) const {
 			case controller::RightTrigger: axisIndex = xboxWired ? 4 : 5; break;
 			default: return down(button) ? 1 : 0;
 		}
-		float state = SDL_JoystickGetAxis(handle, axisIndex);
+		float state = SDL_GetJoystickAxis(handle, axisIndex);
 		if (state < 0) {
 			state /= 32768;
 		} else {
@@ -75,17 +75,17 @@ float SdlController::stateWithoutDeadzone(controller::Button button) const {
 		}
 		return state;
 	}
-	SDL_GameControllerAxis axis;
+	SDL_GamepadAxis axis;
 	switch (button) {
-		case controller::LeftStickX: axis = SDL_CONTROLLER_AXIS_LEFTX; break;
-		case controller::LeftStickY: axis = SDL_CONTROLLER_AXIS_LEFTY; break;
-		case controller::RightStickX: axis = SDL_CONTROLLER_AXIS_RIGHTX; break;
-		case controller::RightStickY: axis = SDL_CONTROLLER_AXIS_RIGHTY; break;
-		case controller::LeftTrigger: axis = SDL_CONTROLLER_AXIS_TRIGGERLEFT; break;
-		case controller::RightTrigger: axis = SDL_CONTROLLER_AXIS_TRIGGERRIGHT; break;
+		case controller::LeftStickX: axis = SDL_GAMEPAD_AXIS_LEFTX; break;
+		case controller::LeftStickY: axis = SDL_GAMEPAD_AXIS_LEFTY; break;
+		case controller::RightStickX: axis = SDL_GAMEPAD_AXIS_RIGHTX; break;
+		case controller::RightStickY: axis = SDL_GAMEPAD_AXIS_RIGHTY; break;
+		case controller::LeftTrigger: axis = SDL_GAMEPAD_AXIS_LEFT_TRIGGER; break;
+		case controller::RightTrigger: axis = SDL_GAMEPAD_AXIS_RIGHT_TRIGGER; break;
 		default: return down(button) ? 1 : 0;
 	}
-	float state = SDL_GameControllerGetAxis(gameController, axis);
+	float state = SDL_GetGamepadAxis(gameController, axis);
 	if (state < 0) {
 		state /= 32768;
 	} else {
@@ -163,47 +163,45 @@ bool SdlController::down(const controller::Button button) const {
 			case controller::RightTrigger: buttonIndex = 7; break;
 			case controller::Start: buttonIndex = xbox ? 7 : 9; break;
 			case controller::Back: buttonIndex = xbox ? 6 : 8; break;
-			case controller::DpadUp: return (SDL_JoystickGetHat(handle, 0) & SDL_HAT_UP) != 0;
-			case controller::DpadDown: return (SDL_JoystickGetHat(handle, 0) & SDL_HAT_DOWN) != 0;
-			case controller::DpadLeft: return (SDL_JoystickGetHat(handle, 0) & SDL_HAT_LEFT) != 0;
-			case controller::DpadRight: return (SDL_JoystickGetHat(handle, 0) & SDL_HAT_RIGHT) != 0;
+			case controller::DpadUp: return (SDL_GetJoystickHat(handle, 0) & SDL_HAT_UP) != 0;
+			case controller::DpadDown: return (SDL_GetJoystickHat(handle, 0) & SDL_HAT_DOWN) != 0;
+			case controller::DpadLeft: return (SDL_GetJoystickHat(handle, 0) & SDL_HAT_LEFT) != 0;
+			case controller::DpadRight: return (SDL_GetJoystickHat(handle, 0) & SDL_HAT_RIGHT) != 0;
 			case controller::LeftStick: buttonIndex = xbox ? 9 : 11; break;
 			case controller::RightStick: buttonIndex = xbox ? 10 : 12; break;
 			default: return state(button) > 0.5f; // e.g. LeftStickX
 		}
-		return SDL_JoystickGetButton(handle, buttonIndex) != 0;
+		return SDL_GetJoystickButton(handle, buttonIndex);
 	}
 	switch (button) {
 	case controller::Button::A:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_A) != 0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_SOUTH);
 	case controller::Button::B:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_B) != 0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_EAST);
 	case controller::Button::X:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_X) != 0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_WEST);
 	case controller::Button::Y:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_Y) != 0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_NORTH);
 	case controller::Button::LeftButton:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) !=
-		       0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_LEFT_SHOULDER);
 	case controller::Button::RightButton:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) !=
-		       0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER);
 	case controller::Button::Start:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_START) != 0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_START);
 	case controller::Button::Back:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_BACK) != 0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_BACK);
 	case controller::Button::DpadUp:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_UP) != 0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_DPAD_UP);
 	case controller::Button::DpadDown:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_DOWN) != 0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_DPAD_DOWN);
 	case controller::Button::DpadLeft:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_LEFT) != 0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_DPAD_LEFT);
 	case controller::Button::DpadRight:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) != 0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_DPAD_RIGHT);
 	case controller::Button::LeftStick:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_LEFTSTICK) != 0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_LEFT_STICK);
 	case controller::Button::RightStick:
-		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_RIGHTSTICK) != 0u;
+		return SDL_GetGamepadButton(gameController, SDL_GAMEPAD_BUTTON_RIGHT_STICK);
 	default:
 		return state(button) > 0.5f;
 	}
@@ -211,13 +209,13 @@ bool SdlController::down(const controller::Button button) const {
 
 void SdlController::rumble(const float vibration, const std::chrono::milliseconds ms) {
 	if (haptic) {
-		SDL_HapticRumblePlay(haptic, vibration, ms.count());
+		SDL_PlayHapticRumble(haptic, vibration, ms.count());
 	} else if (handle) {
-		SDL_JoystickRumble(handle, static_cast<Uint16>(vibration * 65535),
+		SDL_RumbleJoystick(handle, static_cast<Uint16>(vibration * 65535),
 		                   static_cast<Uint16>(vibration * 65535), ms.count());
 	} else {
-		SDL_GameControllerRumble(gameController, static_cast<Uint16>(vibration * 65535),
-		                         static_cast<Uint16>(vibration * 65535), ms.count());
+		SDL_RumbleGamepad(gameController, static_cast<Uint16>(vibration * 65535),
+		                  static_cast<Uint16>(vibration * 65535), ms.count());
 	}
 }
 
@@ -225,33 +223,34 @@ bool SdlController::is(SDL_Joystick* const handle) const {
 	if (this->handle) {
 		return this->handle == handle;
 	}
-	return SDL_GameControllerGetJoystick(gameController) == handle;
+	return SDL_GetGamepadJoystick(gameController) == handle;
 }
 
 std::vector<std::shared_ptr<Controller>> getConnectedControllers() {
 	static std::vector<std::shared_ptr<SdlController>> controllers;
-	int numJoysticks = SDL_NumJoysticks();
+	int numJoysticks = 0;
+	SDL_JoystickID* joystickId = SDL_GetJoysticks(&numJoysticks);
 	std::vector<std::shared_ptr<Controller>> rtn;
 	for (int i = 0; i < numJoysticks; ++i) {
-		SDL_Joystick* handle = SDL_JoystickOpen(i);
-		if (SDL_JoystickNumButtons(handle) == 0 ||
-		    (SDL_JoystickNumAxes(handle) == 0 && SDL_JoystickNumBalls(handle) == 0 &&
-		     SDL_JoystickNumHats(handle) == 0)) {
+		SDL_Joystick* handle = SDL_OpenJoystick(joystickId[i]);
+		if (SDL_GetNumJoystickButtons(handle) == 0 ||
+		    (SDL_GetNumJoystickAxes(handle) == 0 && SDL_GetNumJoystickBalls(handle) == 0 &&
+		     SDL_GetNumJoystickHats(handle) == 0)) {
 			// This could be the Motion Sensors of the DS4. Ignore it:
-			SDL_JoystickClose(handle);
+			SDL_CloseJoystick(handle);
 			continue;
 		}
 		bool found = false;
 		for (const auto& controller : controllers) {
 			if (controller->is(handle)) {
-				SDL_JoystickClose(handle);
+				SDL_CloseJoystick(handle);
 				rtn.push_back(controller);
 				found = true;
 				break;
 			}
 		}
 		if (!found) {
-			controllers.emplace_back(std::make_shared<SdlController>(handle, i));
+			controllers.emplace_back(std::make_shared<SdlController>(handle, joystickId[i]));
 			rtn.emplace_back(controllers.back());
 		}
 	}

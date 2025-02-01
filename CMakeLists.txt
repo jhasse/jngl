@@ -213,9 +213,9 @@ else()
 	endif()
 	if(UNIX AND NOT IOS AND NOT EMSCRIPTEN)
 		find_package(PkgConfig REQUIRED)
-		pkg_check_modules(SDL2 REQUIRED sdl2)
-		target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
-		target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
+		pkg_check_modules(SDL3 REQUIRED sdl3)
+		target_include_directories(jngl PRIVATE ${SDL3_INCLUDE_DIRS})
+		target_link_libraries(jngl PRIVATE ${SDL3_LINK_LIBRARIES})
 	endif()
 
 	if(NOT IOS AND NOT EMSCRIPTEN)
@@ -238,9 +238,9 @@ else()
 	if(MSVC)
 		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
 		if(JNGL_WINAPI)
-			CPMAddPackage(NAME sdl2
-				URL https://www.libsdl.org/release/SDL2-2.30.11.zip
-				URL_HASH SHA1=2464d38c9d247ba223f28d4ddc1a7570edf02030
+			CPMAddPackage(NAME sdl
+				URL https://www.libsdl.org/release/SDL3-3.1.6.zip
+				URL_HASH SHA1=b16ad311975378dcc87b11fc02c84eaa1f028b38
 				OPTIONS
 					"SDL_ATOMIC OFF"
 					"SDL_CPUINFO ON"
@@ -257,17 +257,17 @@ else()
 					"SDL_TIMERS OFF"
 			)
 		else()
-			CPMAddPackage(NAME sdl2
-				URL https://www.libsdl.org/release/SDL2-2.30.11.zip
-				URL_HASH SHA1=2464d38c9d247ba223f28d4ddc1a7570edf02030
+			CPMAddPackage(NAME sdl
+				URL https://www.libsdl.org/release/SDL3-3.1.6.zip
+				URL_HASH SHA1=b16ad311975378dcc87b11fc02c84eaa1f028b38
 				OPTIONS
 					"SDL_SENSOR OFF" # doesn't work with UWP
 			)
 		endif()
-		target_link_libraries(jngl PRIVATE SDL2-static)
+		target_link_libraries(jngl PRIVATE SDL3-static)
 		if(WINDOWS_STORE)
 			target_compile_definitions(jngl PUBLIC JNGL_UWP)
-			target_include_directories(jngl PUBLIC ${sdl2_SOURCE_DIR}/include ${sdl2_BINARY_DIR}/include) # TODO: This should be PRIVATE
+			target_include_directories(jngl PUBLIC ${sdl3_SOURCE_DIR}/include ${sdl3_BINARY_DIR}/include) # TODO: This should be PRIVATE
 			target_link_options(jngl PUBLIC $<IF:$<CONFIG:Debug>,/defaultlib:vccorlibd.lib /defaultlib:msvcrtd.lib,/defaultlib:vccorlib.lib /defaultlib:msvcrt.lib>)
 		endif()
 	elseif(IOS)
@@ -309,9 +309,9 @@ else()
 
 		find_package(PkgConfig)
 		if(PkgConfig_FOUND)
-			pkg_check_modules(SDL2 REQUIRED sdl2)
-			target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
-			target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
+			pkg_check_modules(SDL3 REQUIRED sdl3)
+			target_include_directories(jngl PRIVATE ${SDL3_INCLUDE_DIRS})
+			target_link_libraries(jngl PRIVATE ${SDL3_LINK_LIBRARIES})
 			if(JNGL_VIDEO)
 				if(APPLE)
 					# On macOS we'll build theora from source, since Homebrew's version crashes due

@@ -9,7 +9,7 @@
 #include "../Stream.hpp"
 #include "../constants.hpp"
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #include <cassert>
 #include <vector>
@@ -78,61 +78,54 @@ struct engine::Impl {
 	struct SdlImpl : public Backend {
 		std::shared_ptr<void> sdl_init;
 
-		SDL_AudioDeviceID device;
+		SDL_AudioStream* device = nullptr;
 
 		std::vector<float> buffer;
 
 		std::shared_ptr<Stream> output;
 
 		explicit SdlImpl(std::shared_ptr<Stream> output) : output(std::move(output)) {
-			if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+			if (!SDL_Init(SDL_INIT_AUDIO)) {
 				throw std::runtime_error(SDL_GetError());
 			}
-			SDL_AudioSpec desired, obtained;
-			desired.freq = frequency;
-			desired.channels = 2;
-			desired.format = AUDIO_S16SYS;
-#ifdef __EMSCRIPTEN__
-			desired.samples = 2048;
-#else
-			desired.samples = 256;
-#endif
-			desired.callback = &callback;
-			desired.userdata = this;
-			if (device = SDL_OpenAudioDevice(nullptr, 0, &desired, &obtained, 0); device == 0) {
+			SDL_AudioSpec spec;
+			SDL_zero(spec);
+			spec.freq = frequency;
+			spec.channels = 2;
+			spec.format = SDL_AUDIO_F32;
+			if (device = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec,
+			                                       &callback, this);
+			    !device) {
 				throw std::runtime_error(SDL_GetError());
 			}
 
-			internal::debug("Initialized audio: {} channels, {} Hz, {} samples",
-			                static_cast<int>(obtained.channels), obtained.freq, obtained.samples);
+			internal::debug("Initialized audio: {} channels, {} Hz, {} samples", spec.channels,
+			                spec.freq, spec.freq);
 
-			buffer.resize(obtained.samples * obtained.channels);
-			SDL_PauseAudioDevice(device, 0);
+			SDL_ResumeAudioStreamDevice(device);
 		}
 		~SdlImpl() override {
-			SDL_CloseAudioDevice(device);
+			SDL_DestroyAudioStream(device);
 		}
 
-		static void callback(void* userdata, std::uint8_t* dst_u8, int len) {
-			static std::string const profiler_str = "audio";
-			// prof::profiler prof(profiler_str);
-
+		static void callback(void* userdata, SDL_AudioStream* stream, int additionalAmount, int totalAmount) {
 			auto self = static_cast<SdlImpl*>(userdata);
-			std::int16_t* dst = reinterpret_cast<std::int16_t*>(dst_u8);
 
-			std::size_t const size = len / 2;
+			self->buffer.resize(additionalAmount);
+			std::size_t const size = additionalAmount;
 			std::size_t read = 0;
 			read = self->output->read(self->buffer.data(), size);
 			std::fill(self->buffer.data() + read, self->buffer.data() + size, 0.f);
 
-			for (auto s : self->buffer) {
-				*dst++ = static_cast<std::int16_t>(
-				    std::max(std::min((65535.f * s - 1.f) / 2.f, 32767.f), -32768.f));
-			}
+			SDL_PutAudioStreamData(stream, self->buffer.data(), additionalAmount * sizeof(float));
 		}
 
 		void setPause(bool pause) override {
-			SDL_PauseAudioDevice(device, pause ? 1 : 0);
+			if (pause) {
+				SDL_PauseAudioStreamDevice(device);
+			} else {
+				SDL_ResumeAudioStreamDevice(device);
+			}
 		}
 	};
 };
