@@ -35,15 +35,15 @@ void setColor(unsigned char red, unsigned char green, unsigned char blue, unsign
 void setAlpha(uint8_t alpha);
 
 [[deprecated("Use setAlpha instead")]]
-/// \deprecated Use setAlpha instead
+/// \deprecated Use jngl::setAlpha instead
 void pushAlpha(unsigned char alpha);
 
 [[deprecated("Use setAlpha instead")]]
-/// \deprecated Use setAlpha instead
+/// \deprecated Use jngl::setAlpha instead
 void popAlpha();
 
 [[deprecated("Use drawRect instead")]]
-/// \deprecated Use drawRect instead
+/// \deprecated Use jngl::drawRect instead
 void setLineWidth(float width);
 
 /// Draws a line from start to end, the width can be set using setLineWidth
