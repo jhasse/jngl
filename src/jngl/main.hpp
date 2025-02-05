@@ -1,4 +1,4 @@
-// Copyright 2015-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Defines macros for the main entry point
 /// @file
@@ -7,6 +7,9 @@
 #include "Finally.hpp"
 #include "other.hpp"
 #include "window.hpp"
+#ifdef NDEBUG
+#include "message.hpp"
+#endif
 
 #ifdef JNGL_UWP
 #include <SDL.h>
