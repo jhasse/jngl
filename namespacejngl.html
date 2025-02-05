@@ -870,6 +870,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setTitle</b> (const <
 <tr class="separator:abc79cf0667bbb5c93fca3f01b52c7b57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d69583a0bb0caba89f5011ed7ce36fd" id="r_a8d69583a0bb0caba89f5011ed7ce36fd"><td class="memItemLeft" align="right" valign="top"><a id="a8d69583a0bb0caba89f5011ed7ce36fd" name="a8d69583a0bb0caba89f5011ed7ce36fd"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setCursor</b> (Cursor)</td></tr>
+<tr class="memdesc:a8d69583a0bb0caba89f5011ed7ce36fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows to change the mouse cursor. <br /></td></tr>
 <tr class="separator:a8d69583a0bb0caba89f5011ed7ce36fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addcb9d8fa85a11a776a3de4579ce0a47" id="r_addcb9d8fa85a11a776a3de4579ce0a47"><td class="memItemLeft" align="right" valign="top"><a id="addcb9d8fa85a11a776a3de4579ce0a47" name="addcb9d8fa85a11a776a3de4579ce0a47"></a>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>readPixels</b> ()</td></tr>
@@ -2052,7 +2053,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated</a></b></dt><dd>Use setAlpha instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
 
 </div>
 </div>
@@ -2070,7 +2071,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated</a></b></dt><dd>Use setAlpha instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
 
 </div>
 </div>
@@ -2088,7 +2089,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated</a></b></dt><dd>Use drawRect instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated</a></b></dt><dd>Use <a class="el" href="#aedee454660ebd928eebc4fd1584f0b52" title="Draws a rectangle at { xposition, yposition }.">jngl::drawRect</a> instead </dd></dl>
 
 </div>
 </div>
@@ -2681,7 +2682,8 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Creates the main window. </p>
-<p>If you haven't set a display name for your app using <a class="el" href="structjngl_1_1AppParameters.html#abd54db44deb77f599f600479aea631a3" title="Display name of the application which will be used in the window title for example.">AppParameters::displayName</a>, <em>title</em> will set for the display name. </p>
+<p>Normally you wouldn't call this function yourself, but implement <a class="el" href="init_8hpp.html#a2471fe7de5ef776522a016331b6bf6e5" title="Implement this function and set AppParameters::start.">jnglInit()</a> instead.</p>
+<p>If you haven't set a display name for your app using <a class="el" href="structjngl_1_1AppParameters.html#abd54db44deb77f599f600479aea631a3" title="Display name of the application which will be used in the window title for example.">AppParameters::displayName</a>, <em>title</em> will be set for the display name. </p>
 
 </div>
 </div>
