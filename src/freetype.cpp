@@ -1,7 +1,7 @@
 // Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#define _LIBCPP_DISABLE_DEPRECATION_WARNINGS
+#define _LIBCPP_DISABLE_DEPRECATION_WARNINGS // NOLINT
 #include "freetype.hpp"
 
 #include "ShaderCache.hpp"
@@ -68,7 +68,8 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 			data[y][x * 4 + 2] = 255;
 			unsigned char alpha = 0;
 			if (bitmap.pixel_mode == FT_PIXEL_MODE_MONO) {
-				if (bitmap.buffer[y * bitmap.pitch + x / 8] & (0x80 >> (x % 8))) {
+				if (bitmap.buffer[static_cast<ptrdiff_t>(y * bitmap.pitch) + x / 8] &
+				    (0x80 >> (x % 8))) {
 					alpha = 255;
 				} else {
 					alpha = 0;
@@ -82,8 +83,8 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 		}
 	}
 
-	texture_ =
-	    new Texture(static_cast<float>(width), static_cast<float>(height), width, height, &data[0]);
+	texture_ = new Texture(static_cast<float>(width), static_cast<float>(height),
+	                       static_cast<int>(width), height, data.data());
 	for (auto d : data) {
 		delete[] d;
 	}
@@ -196,7 +197,8 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height, flo
 	// For some twisted reason, Freetype measures font size
 	// in terms of 1/64ths of pixels.  Thus, to make a font
 	// h pixels high, we need to request a size of h*64.
-	FT_Set_Char_Size(face, height_ * 64, height_ * 64, 96, 96);
+	FT_Set_Char_Size(face, static_cast<FT_F26Dot6>(height_) * 64,
+	                 static_cast<FT_F26Dot6>(height_) * 64, 96, 96);
 
 	FT_Fixed strokeWidth = std::lround(strokePercentage * static_cast<float>(height) * 0.64);
 	if (strokeWidth != 0) {

@@ -221,17 +221,17 @@ FrameBuffer::Context FrameBuffer::use() const {
 	glGetIntegerv(GL_VIEWPORT, impl->viewport);
 #endif
 	activate();
-	impl->activate.emplace(std::move(activate));
+	Impl::activate.emplace(std::move(activate));
 	return Context([this]() {
-		impl->activate.pop();
+		Impl::activate.pop();
 		popMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 		glPopAttrib();
 #else
 		glViewport(impl->viewport[0], impl->viewport[1], impl->viewport[2], impl->viewport[3]);
 #endif
-		if (!impl->activate.empty()) {
-			impl->activate.top()(); // Restore the FrameBuffer that was previously active
+		if (!Impl::activate.empty()) {
+			Impl::activate.top()(); // Restore the FrameBuffer that was previously active
 			return;
 		}
 		if (impl->letterboxing) {
