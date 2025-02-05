@@ -1,4 +1,4 @@
-// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
@@ -17,7 +17,7 @@ namespace jngl {
 
 class Finally;
 
-constexpr double LINE_HEIGHT_FACOTR = 1. / .63;
+constexpr double LINE_HEIGHT_FACTOR = 1. / .63;
 extern Rgba gFontColor;
 
 class Character {
