@@ -48,19 +48,19 @@ boost::ut::suite _ = [] {
 		}
 	};
 	"triangle"_test = [] {
-		for (double scaleFactor : { 0.5, 1.5 }) {
+		for (double scaleFactor : { 0.6, 1.5 }) {
 			Fixture f(scaleFactor);
 			auto mv = jngl::modelview();
 			jngl::setColor(0x999999ff_rgba);
-			jngl::drawTriangle(jngl::Vec2(-150, 20), jngl::Vec2(-60, 10), jngl::Vec2(-80, -30));
-			jngl::drawTriangle(mv.translate({50, 0}).scale(50, 20), 0x000000ff_rgba);
+			jngl::drawTriangle(jngl::Vec2(-130, 16), jngl::Vec2(-70, 10), jngl::Vec2(-80, -24));
+			jngl::drawTriangle(mv.translate({50, -4}).scale(40, 18), 0x000000ff_rgba);
 			expect(eq(f.getAsciiArt(), std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-▒     ░▒░           ░░         ▒
-▒    ░▒▒░          ▒██▒        ▒
-▒   ░▒▒▒▒░        ▓████▓       ▒
-▒ ░▒▒▒░░░░       ▒▒▒▒▒▒▒▒      ▒
-▒ ░                            ▒
+▒      ░            ░░         ▒
+▒     ░▒░          ▒██▒        ▒
+▒    ░▒▒░         ▓████▓       ▒
+▒   ░░░░░                      ▒
+▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
 		}
