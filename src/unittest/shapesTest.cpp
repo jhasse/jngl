@@ -3,14 +3,14 @@
 #include "Fixture.hpp"
 
 #include <boost/ut.hpp>
-#include <jngl/matrix.hpp>
-#include <jngl/shapes.hpp>
 #include <jngl/Color.hpp>
 #include <jngl/Rgba.hpp>
+#include <jngl/matrix.hpp>
+#include <jngl/shapes.hpp>
 
 namespace {
 boost::ut::suite _ = [] {
-	using namespace boost::ut;
+	using namespace boost::ut; // NOLINT
 	"shapes"_test = [] {
 		for (double scaleFactor : { 1, 2 }) {
 			Fixture f(scaleFactor);
@@ -43,6 +43,24 @@ boost::ut::suite _ = [] {
 ▒   ████                       ▒
 ▒   ████                       ▒
 ▒   ▒▒▒▒                       ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)")));
+		}
+	};
+	"triangle"_test = [] {
+		for (double scaleFactor : { 0.5, 1.5 }) {
+			Fixture f(scaleFactor);
+			auto mv = jngl::modelview();
+			jngl::setColor(0x999999ff_rgba);
+			jngl::drawTriangle(jngl::Vec2(-150, 20), jngl::Vec2(-60, 10), jngl::Vec2(-80, -30));
+			jngl::drawTriangle(mv.translate({50, 0}).scale(50, 20), 0x000000ff_rgba);
+			expect(eq(f.getAsciiArt(), std::string(R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒     ░▒░           ░░         ▒
+▒    ░▒▒░          ▒██▒        ▒
+▒   ░▒▒▒▒░        ▓████▓       ▒
+▒ ░▒▒▒░░░░       ▒▒▒▒▒▒▒▒      ▒
+▒ ░                            ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
 		}
