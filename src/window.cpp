@@ -1,4 +1,4 @@
-// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "window.hpp"
 
@@ -12,7 +12,6 @@
 #include "jngl/time.hpp"
 #include "jngl/work.hpp"
 #include "log.hpp"
-#include "spriteimpl.hpp"
 #include "windowptr.hpp"
 
 #ifdef ANDROID
@@ -553,39 +552,10 @@ void Window::initGlObjects() {
 	glEnableVertexAttribArray(0);
 }
 
-void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
-	glBindVertexArray(opengl::vaoStream);
-	auto tmp = ShaderCache::handle().useSimpleShaderProgram();
-	const float vertexes[] = {
-		static_cast<float>(a.x * getScaleFactor()), static_cast<float>(a.y * getScaleFactor()),
-		static_cast<float>(b.x * getScaleFactor()), static_cast<float>(b.y * getScaleFactor()),
-		static_cast<float>(c.x * getScaleFactor()), static_cast<float>(c.y * getScaleFactor())
-	};
-	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
-	// STREAM because we're using the buffer only once
-	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertexes, GL_STREAM_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-}
-
-void Window::drawTriangle(Mat3 modelview, Rgba color) {
-	glBindVertexArray(opengl::vaoStream);
-	auto tmp =
-	    ShaderCache::handle().useSimpleShaderProgram(modelview.scale(getScaleFactor()), color);
-	const float vertexes[] = {
-		0, -1, -std::sqrt(3.f) / 2, 0.5, std::sqrt(3.f) / 2, 0.5,
-	};
-	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
-	// STREAM because we're using the buffer only once
-	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertexes, GL_STREAM_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-}
-
-void Window::drawLine(Mat3 modelview, const Vec2 b) const {
+void Window::drawLine(Mat3 modelview, const Vec2 b, const Rgba color) const {
 	glBindVertexArray(vaoLine);
-	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview.scale(b * getScaleFactor()),
-	                                                        gShapeColor);
+	auto tmp =
+	    ShaderCache::handle().useSimpleShaderProgram(modelview.scale(b * getScaleFactor()), color);
 	glDrawArrays(GL_LINES, 0, 2);
 }
 

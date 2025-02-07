@@ -1,4 +1,4 @@
-// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Sound.hpp"
@@ -20,7 +20,10 @@ struct Sound::Impl {
 };
 
 Sound::Sound(std::shared_ptr<std::vector<float>> bufferData)
-: impl(new Impl{ std::make_shared<PlayingTrack>(*bufferData), {}, {}, std::move(bufferData) }) {
+: impl(new Impl{ .track = std::make_shared<PlayingTrack>(*bufferData),
+                 .stream = {},
+                 .volumeControl = {},
+                 .buffer = std::move(bufferData) }) {
 	impl->stream = impl->volumeControl = audio::volume(impl->track);
 }
 

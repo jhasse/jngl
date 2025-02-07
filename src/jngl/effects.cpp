@@ -1,4 +1,4 @@
-// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "effects.hpp"
@@ -13,7 +13,7 @@ namespace jngl {
 
 Effect::~Effect() = default;
 
-void Effect::updateModelview(Mat3& modelview) const {
+void Effect::updateModelview(Mat3&) const {
 }
 
 UpdateModelview::UpdateModelview(std::function<void(float t, Mat3&)> function)

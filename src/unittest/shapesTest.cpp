@@ -1,15 +1,16 @@
-// Copyright 2022-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2022-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Fixture.hpp"
 
 #include <boost/ut.hpp>
+#include <jngl/Color.hpp>
+#include <jngl/Rgba.hpp>
 #include <jngl/matrix.hpp>
 #include <jngl/shapes.hpp>
-#include <jngl/Rgba.hpp>
 
 namespace {
 boost::ut::suite _ = [] {
-	using namespace boost::ut;
+	using namespace boost::ut; // NOLINT
 	"shapes"_test = [] {
 		for (double scaleFactor : { 1, 2 }) {
 			Fixture f(scaleFactor);
@@ -42,6 +43,24 @@ boost::ut::suite _ = [] {
 ▒   ████                       ▒
 ▒   ████                       ▒
 ▒   ▒▒▒▒                       ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)")));
+		}
+	};
+	"triangle"_test = [] {
+		for (double scaleFactor : { 0.6, 1.5 }) {
+			Fixture f(scaleFactor);
+			auto mv = jngl::modelview();
+			jngl::setColor(0x999999ff_rgba);
+			jngl::drawTriangle(jngl::Vec2(-130, 16), jngl::Vec2(-70, 10), jngl::Vec2(-80, -24));
+			jngl::drawTriangle(mv.translate({50, -4}).scale(40, 18), 0x000000ff_rgba);
+			expect(eq(f.getAsciiArt(), std::string(R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒      ░            ░░         ▒
+▒     ░▒░          ▒██▒        ▒
+▒    ░▒▒░         ▓████▓       ▒
+▒   ░░░░░                      ▒
+▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
 		}

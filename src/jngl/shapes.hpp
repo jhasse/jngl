@@ -1,10 +1,10 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Functions for drawing shapes
 /// @file
 #pragma once
 
-#include "Color.hpp"
+#include "Rgba.hpp"
 #include "Vec2.hpp"
 
 #include <cstdint>
@@ -35,15 +35,15 @@ void setColor(unsigned char red, unsigned char green, unsigned char blue, unsign
 void setAlpha(uint8_t alpha);
 
 [[deprecated("Use setAlpha instead")]]
-/// \deprecated Use setAlpha instead
+/// \deprecated Use jngl::setAlpha instead
 void pushAlpha(unsigned char alpha);
 
 [[deprecated("Use setAlpha instead")]]
-/// \deprecated Use setAlpha instead
+/// \deprecated Use jngl::setAlpha instead
 void popAlpha();
 
 [[deprecated("Use drawRect instead")]]
-/// \deprecated Use drawRect instead
+/// \deprecated Use jngl::drawRect instead
 void setLineWidth(float width);
 
 /// Draws a line from start to end, the width can be set using setLineWidth
@@ -59,6 +59,8 @@ void drawLine(Mat3 modelview, Vec2 start, Vec2 end);
 /// Draws a line from (0, 0) to \a end
 void drawLine(const Mat3& modelview, Vec2 end);
 
+/// Draws a line from (0, 0) to \a end in \a color
+void drawLine(const Mat3& modelview, Vec2 end, Rgba color);
 
 [[deprecated("Use drawEllipse(Mat3, float, float, float) instead")]]
 /// \deprecated Use drawEllipse(Mat3, float, float, float) instead
@@ -68,10 +70,32 @@ void drawEllipse(Vec2, float width, float height, float startAngle = 0);
 
 void drawEllipse(Mat3 modelview, float width, float height, float startAngle = 0);
 
+void drawEllipse(Mat3 modelview, float width, float height, float startAngle, Rgba color);
+
 /// Angles in radian
 void drawCircle(Vec2, float radius, float startAngle = 0);
 
 void drawCircle(Mat3 modelview, float radius, float startAngle);
+
+/// Draws a circle at (0, 0) with \a radius in \a color with \a startAngle cut out
+///
+/// Passing 0 as \a startAngle will draw a full circle. Passing pi/2 would look like this:
+///
+/// @verbatim
+///       **
+///     **##
+///    *####
+///   *#####
+///  *######
+/// *#######
+/// *##############*
+///  *############*
+///   *##########*
+///    *########*
+///     **####**
+///       ****
+/// @endverbatim
+void drawCircle(Mat3 modelview, float radius, float startAngle, Rgba color);
 
 void drawCircle(Mat3 modelview, float radius);
 

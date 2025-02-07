@@ -1,4 +1,4 @@
-// Copyright 2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "AchievementLayer.hpp"
 
@@ -65,7 +65,7 @@ void AchievementLayer::draw() const {
 	                  ,
 	                  0));
 	jngl::setAlpha(180);
-	drawRect(mv, BOX, Color(50, 50, 50));
+	drawRect(mv, BOX, Rgb::u8(50, 50, 50));
 	mv.translate(PADDING);
 
 	setFontSize(37);
@@ -91,9 +91,9 @@ void AchievementLayer::draw() const {
 	mv.translate({0, 40}); // below text
 	const float percentage = std::min(1.f, value / static_cast<float>(maxValue));
 	bar.x *= percentage;
-	drawRect(mv, bar, interpolate(Color(255, 255, 255), 0xe2b007_rgb /* gold */, colorFade));
+	drawRect(mv, bar, interpolate(Rgb(1, 1, 1), 0xe2b007_rgb /* gold */, colorFade));
 	mv.translate({ bar.x, 0 });
-	drawRect(mv, Vec2((1.f - percentage) * (BOX.x - PADDING.x * 2), bar.y), Color(90, 90, 90));
+	drawRect(mv, Vec2((1.f - percentage) * (BOX.x - PADDING.x * 2), bar.y), Rgb::u8(90, 90, 90));
 	jngl::setAlpha(255);
 }
 

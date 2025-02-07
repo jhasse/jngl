@@ -1,4 +1,4 @@
-// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
@@ -62,6 +62,7 @@ void clearBackgroundColor() {
 	             1);
 }
 
+namespace {
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
 #ifdef _WIN32
 void __stdcall
@@ -79,6 +80,7 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 	}
 }
 #endif
+} // namespace
 
 bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
@@ -156,7 +158,9 @@ void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth
 }
 
 WindowPointer pWindow;
+namespace {
 bool antiAliasingEnabled = true;
+} // namespace
 
 void showWindow(const std::string& title, const int width, const int height, bool fullscreen,
                 const std::pair<int, int> minAspectRatio,
@@ -258,7 +262,7 @@ void setBackgroundColor(const jngl::Rgb color) {
 
 void setBackgroundColor(const unsigned char red, const unsigned char green,
                         const unsigned char blue) {
-	setBackgroundColor(Color{ red, green, blue });
+	setBackgroundColor(Rgb::u8(red, green, blue));
 }
 
 Vec2 getMousePos() {
@@ -493,16 +497,16 @@ void drawSquare(const Mat3& modelview, Rgba color) {
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
-	pWindow->drawTriangle(a, b, c);
+	ShaderCache::handle().drawTriangle(a, b, c);
 }
 
 void drawTriangle(const double A_x, const double A_y, const double B_x, const double B_y,
                   const double C_x, const double C_y) {
-	pWindow->drawTriangle({ A_x, A_y }, { B_x, B_y }, { C_x, C_y });
+	ShaderCache::handle().drawTriangle({ A_x, A_y }, { B_x, B_y }, { C_x, C_y });
 }
 
 void drawTriangle(Mat3 modelview, Rgba color) {
-	pWindow->drawTriangle(modelview, color);
+	ShaderCache::handle().drawTriangle(modelview, color);
 }
 
 void setLineWidth(const float width) {
@@ -514,15 +518,19 @@ void drawLine(const double xstart, const double ystart, const double xend, const
 }
 
 void drawLine(const Vec2 start, const Vec2 end) {
-	pWindow->drawLine(jngl::modelview().translate(start), end - start);
+	pWindow->drawLine(jngl::modelview().translate(start), end - start, gShapeColor);
 }
 
 void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end) {
-	pWindow->drawLine(modelview.translate(start), end - start);
+	pWindow->drawLine(modelview.translate(start), end - start, gShapeColor);
 }
 
 void drawLine(const Mat3& modelview, const Vec2 end) {
-	pWindow->drawLine(modelview, end);
+	pWindow->drawLine(modelview, end, gShapeColor);
+}
+
+void drawLine(const Mat3& modelview, const Vec2 end, Rgba color) {
+	pWindow->drawLine(modelview, end, color);
 }
 
 void drawPoint(const double x, const double y) {

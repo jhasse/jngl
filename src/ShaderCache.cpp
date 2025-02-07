@@ -1,8 +1,9 @@
-// Copyright 2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ShaderCache.hpp"
 
 #include "jngl/Shader.hpp"
+#include "jngl/screen.hpp"
 #include "opengl.hpp"
 #include "spriteimpl.hpp"
 
@@ -114,6 +115,34 @@ ShaderProgram::Context ShaderCache::useSimpleShaderProgram(const Mat3& modelview
 	glEnableVertexAttribArray(0);
 
 	return context;
+}
+
+void ShaderCache::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
+	glBindVertexArray(opengl::vaoStream);
+	auto tmp = useSimpleShaderProgram();
+	const float vertexes[] = {
+		static_cast<float>(a.x * getScaleFactor()), static_cast<float>(a.y * getScaleFactor()),
+		static_cast<float>(b.x * getScaleFactor()), static_cast<float>(b.y * getScaleFactor()),
+		static_cast<float>(c.x * getScaleFactor()), static_cast<float>(c.y * getScaleFactor())
+	};
+	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
+	// STREAM because we're using the buffer only once
+	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertexes, GL_STREAM_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+void ShaderCache::drawTriangle(Mat3 modelview, Rgba color) {
+	glBindVertexArray(opengl::vaoStream);
+	auto tmp = useSimpleShaderProgram(modelview.scale(getScaleFactor()), color);
+	const float vertexes[] = {
+		0, -1, -std::sqrt(3.f) / 2, 0.5, std::sqrt(3.f) / 2, 0.5,
+	};
+	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
+	// STREAM because we're using the buffer only once
+	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertexes, GL_STREAM_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 } // namespace jngl
