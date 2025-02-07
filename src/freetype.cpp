@@ -200,7 +200,8 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height, flo
 	FT_Set_Char_Size(face, static_cast<FT_F26Dot6>(height_) * 64,
 	                 static_cast<FT_F26Dot6>(height_) * 64, 96, 96);
 
-	FT_Fixed strokeWidth = std::lround(strokePercentage * static_cast<float>(height) * 0.64);
+	FT_Fixed strokeWidth =
+	    std::lround(strokePercentage * static_cast<double>(height) * getScaleFactor() * 0.64);
 	if (strokeWidth != 0) {
 		FT_Stroker_New(library, &stroker);
 		FT_Stroker_Set(stroker, strokeWidth, FT_STROKER_LINECAP_ROUND, FT_STROKER_LINEJOIN_ROUND,
