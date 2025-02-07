@@ -13,7 +13,7 @@ namespace {
 boost::ut::suite _ = [] {
 	using namespace boost::ut;
 	"OutlinedFont"_test = [] {
-		for (double scaleFactor : { 1, 2 }) {
+		for (double scaleFactor : { 1.5, 3. }) {
 			Fixture f(scaleFactor);
 			jngl::OutlinedFont font("../data/Arial.ttf", 70, 5);
 			font.print(jngl::modelview().translate({ -120, -40 }), "m", 0x55555500_rgba,
