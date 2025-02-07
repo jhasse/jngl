@@ -78,6 +78,14 @@ if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
 endif()
 option(JNGL_BUILD_WEBP_FROM_SOURCE "Build libwebp from source instead of using the system version" ${JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT})
 
+if(NOT IOS AND NOT ANDROID AND NOT EMSCRIPTEN)
+	set(JNGL_BUILD_SDL_FROM_SOURCE_DEFAULT OFF)
+	if(MSVC)
+		set(JNGL_BUILD_SDL_FROM_SOURCE_DEFAULT ON)
+	endif()
+	option(JNGL_BUILD_SDL_FROM_SOURCE "Build SDL from source instead of using the system version" ${JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT})
+endif()
+
 if (ANDROID)
 	find_package(oboe REQUIRED CONFIG)
 	target_link_libraries(jngl PRIVATE oboe::oboe)
@@ -213,9 +221,14 @@ else()
 	endif()
 	if(UNIX AND NOT IOS AND NOT EMSCRIPTEN)
 		find_package(PkgConfig REQUIRED)
-		pkg_check_modules(SDL2 REQUIRED sdl2)
-		target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
-		target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
+		pkg_check_modules(SDL sdl2)
+		if(SDL_FOUND)
+			target_include_directories(jngl PRIVATE ${SDL_INCLUDE_DIRS})
+			target_link_libraries(jngl PRIVATE ${SDL_LINK_LIBRARIES})
+		else()
+			message(WARNING "SDL not found, building from source")
+			set(JNGL_BUILD_SDL_FROM_SOURCE ON)
+		endif()
 	endif()
 
 	if(NOT IOS AND NOT EMSCRIPTEN)
@@ -235,10 +248,9 @@ else()
 		target_compile_definitions(jngl PRIVATE NOPNG)
 	endif()
 
-	if(MSVC)
-		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
+	if(JNGL_BUILD_SDL_FROM_SOURCE)
 		if(JNGL_WINAPI)
-			CPMAddPackage(NAME sdl2
+			CPMAddPackage(NAME SDL
 				URL https://www.libsdl.org/release/SDL2-2.30.11.zip
 				URL_HASH SHA1=2464d38c9d247ba223f28d4ddc1a7570edf02030
 				OPTIONS
@@ -257,7 +269,7 @@ else()
 					"SDL_TIMERS OFF"
 			)
 		else()
-			CPMAddPackage(NAME sdl2
+			CPMAddPackage(NAME SDL
 				URL https://www.libsdl.org/release/SDL2-2.30.11.zip
 				URL_HASH SHA1=2464d38c9d247ba223f28d4ddc1a7570edf02030
 				OPTIONS
@@ -265,9 +277,12 @@ else()
 			)
 		endif()
 		target_link_libraries(jngl PRIVATE SDL2-static)
+	endif()
+	if(MSVC)
+		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
 		if(WINDOWS_STORE)
 			target_compile_definitions(jngl PUBLIC JNGL_UWP)
-			target_include_directories(jngl PUBLIC ${sdl2_SOURCE_DIR}/include ${sdl2_BINARY_DIR}/include) # TODO: This should be PRIVATE
+			target_include_directories(jngl PUBLIC ${SDL_SOURCE_DIR}/include ${SDL_BINARY_DIR}/include) # TODO: This should be PRIVATE
 			target_link_options(jngl PUBLIC $<IF:$<CONFIG:Debug>,/defaultlib:vccorlibd.lib /defaultlib:msvcrtd.lib,/defaultlib:vccorlib.lib /defaultlib:msvcrt.lib>)
 		endif()
 	elseif(IOS)
@@ -303,15 +318,13 @@ else()
 			if(WebP_FOUND)
 				target_link_libraries(jngl PRIVATE ${WEBP_LIBRARIES})
 			else()
-				target_compile_definitions(jngl PRIVATE NOWEBP)
+				message(WARNING "WebP not found, building from source")
+				set(JNGL_BUILD_WEBP_FROM_SOURCE ON)
 			endif()
 		endif()
 
 		find_package(PkgConfig)
 		if(PkgConfig_FOUND)
-			pkg_check_modules(SDL2 REQUIRED sdl2)
-			target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
-			target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
 			if(JNGL_VIDEO)
 				if(APPLE)
 					# On macOS we'll build theora from source, since Homebrew's version crashes due
