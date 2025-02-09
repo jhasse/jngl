@@ -10,7 +10,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev libpng-dev libvorbis-dev g++ libwebp-dev git ninja-build
+        sudo apt install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev libpng-dev libvorbis-dev g++ libwebp-dev git ninja-build libxext-dev
     - name: Configure with CMake and GCC
       run: cmake -Bbuild -G"Ninja Multi-Config"
     - name: Build Debug
