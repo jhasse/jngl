@@ -89,7 +89,7 @@ var searchData=
   ['getscreenheight_86',['getScreenHeight',['../namespacejngl.html#a9942379fdf4fb4445c35eaf3390b7ccb',1,'jngl']]],
   ['getscreensize_87',['getScreenSize',['../namespacejngl.html#af73b72c0f9314a0e65382f95e326bd39',1,'jngl']]],
   ['getscreenwidth_88',['getScreenWidth',['../namespacejngl.html#adc82933bd579ab83d7cd4e3bc5f79a12',1,'jngl']]],
-  ['getsize_89',['getSize',['../classjngl_1_1Drawable.html#aebe51f6c43d6d673fc3826046d668b38',1,'jngl::Drawable::getSize()'],['../classjngl_1_1FrameBuffer.html#aebe51f6c43d6d673fc3826046d668b38',1,'jngl::FrameBuffer::getSize()']]],
+  ['getsize_89',['getSize',['../classjngl_1_1Drawable.html#aebe51f6c43d6d673fc3826046d668b38',1,'jngl::Drawable::getSize()'],['../classjngl_1_1FrameBuffer.html#aebe51f6c43d6d673fc3826046d668b38',1,'jngl::FrameBuffer::getSize()'],['../classjngl_1_1TextLine.html#aebe51f6c43d6d673fc3826046d668b38',1,'jngl::TextLine::getSize()']]],
   ['getstepspersecond_90',['getStepsPerSecond',['../namespacejngl.html#a06943dd8adf8a3d0ef639620df5dcad2',1,'jngl']]],
   ['gettextinput_91',['getTextInput',['../namespacejngl.html#a63680f5c003fed81f723fd1a3a7b3693',1,'jngl']]],
   ['gettextureid_92',['getTextureID',['../classjngl_1_1FrameBuffer.html#aeb8d8a09d425d18b5963d8b7a608c629',1,'jngl::FrameBuffer']]],

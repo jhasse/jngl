@@ -1,17 +1,17 @@
 <map id="jngl/Rgba.hpp" name="jngl/Rgba.hpp">
-<area shape="rect" id="Node000001" title="Contains jngl::Rgba class." alt="" coords="124,5,249,31"/>
-<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="82,226,168,252"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,39,88,56,52,81,25,113,12,153,8,166,11,177,25,194,43,207,83,225,81,230,40,212,22,198,7,180,3,166,6,152,20,110,49,77,85,52,125,34"/>
-<area shape="rect" id="Node000003" href="$font_8hpp.html" title="Contains jngl::Font class and related functions." alt="" coords="62,79,188,105"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="168,44,137,80,133,77,164,41"/>
-<area shape="rect" id="Node000005" href="$shapes_8hpp.html" title="Functions for drawing shapes." alt="" coords="244,153,385,178"/>
-<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="209,41,306,150,302,154,205,45"/>
-<area shape="rect" id="Node000006" href="$sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="329,79,470,105"/>
-<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="238,34,364,76,362,81,236,39"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="70,113,42,130,21,154,17,165,18,175,32,195,58,211,87,223,85,228,55,215,29,198,13,177,11,165,16,151,39,126,67,109"/>
-<area shape="rect" id="Node000004" href="$OutlinedFont_8hpp.html" title="Contains jngl::OutlinedFont class." alt="" coords="30,153,220,178"/>
-<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="128,120,128,152,122,152,122,120"/>
-<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="128,194,128,226,122,226,122,194"/>
-<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="269,187,158,228,156,223,267,182"/>
-<area shape="poly" id="edge9_Node000006_Node000002" title=" " alt="" coords="409,120,411,150,407,166,399,180,383,193,360,203,298,220,229,231,168,237,168,232,228,226,297,215,358,198,380,188,395,177,402,164,405,150,404,120"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Rgba class." alt="" coords="93,5,219,31"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="164,226,249,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,41,74,67,33,101,18,120,10,139,9,158,18,177,32,192,48,204,86,222,126,232,164,235,163,241,126,237,84,227,45,209,28,196,14,180,4,159,5,137,14,117,29,97,71,63,115,36"/>
+<area shape="rect" id="Node000003" href="$Sprite_8hpp.html" title="Contains jngl::Sprite class and related functions." alt="" coords="28,153,169,178"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="148,46,134,80,106,153,101,151,129,78,143,44"/>
+<area shape="rect" id="Node000004" href="$font_8hpp.html" title="Contains jngl::Font class and related functions." alt="" coords="144,79,269,105"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="175,42,200,77,196,80,171,45"/>
+<area shape="rect" id="Node000006" href="$shapes_8hpp.html" title="Functions for drawing shapes." alt="" coords="347,79,488,105"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="215,33,373,76,372,81,214,38"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="131,185,190,224,187,228,128,190"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="209,120,209,226,204,226,204,120"/>
+<area shape="rect" id="Node000005" href="$OutlinedFont_8hpp.html" title="Contains jngl::OutlinedFont class." alt="" coords="244,153,433,178"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="243,110,317,150,315,154,241,115"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="304,188,230,228,228,223,302,184"/>
+<area shape="poly" id="edge9_Node000006_Node000002" title=" " alt="" coords="438,116,453,147,454,164,447,180,434,191,414,201,362,217,250,236,249,231,361,212,412,196,431,187,443,177,449,163,448,148,433,118"/>
 </map>

@@ -56,9 +56,9 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="sprite_8hpp.html" target="_top" xlink:title="Contains jngl::Sprite class and related functions.">
+<g id="a_Node000004"><a xlink:href="Sprite_8hpp.html" target="_top" xlink:title="Contains jngl::Sprite class and related functions.">
 <polygon fill="white" stroke="#666666" points="266.32,-74.5 160.32,-74.5 160.32,-55.25 266.32,-55.25 266.32,-74.5"/>
-<text text-anchor="middle" x="213.32" y="-61" font-family="ui-monospace,monospace" font-size="10.00">jngl/sprite.hpp</text>
+<text text-anchor="middle" x="213.32" y="-61" font-family="ui-monospace,monospace" font-size="10.00">jngl/Sprite.hpp</text>
 </a>
 </g>
 </g>

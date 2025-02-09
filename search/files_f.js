@@ -12,7 +12,7 @@ var searchData=
   ['sound_2ehpp_9',['sound.hpp',['../sound_8hpp.html',1,'']]],
   ['soundfile_2ehpp_10',['SoundFile.hpp',['../SoundFile_8hpp.html',1,'']]],
   ['span_11',['span',['http://en.cppreference.com/w/cpp/header/span.html',1,'']]],
-  ['sprite_2ehpp_12',['sprite.hpp',['../sprite_8hpp.html',1,'']]],
+  ['sprite_2ehpp_12',['Sprite.hpp',['../Sprite_8hpp.html',1,'']]],
   ['sstream_13',['sstream',['http://en.cppreference.com/w/cpp/header/sstream.html',1,'']]],
   ['stack_14',['stack',['http://en.cppreference.com/w/cpp/header/stack.html',1,'']]],
   ['stdexcept_15',['stdexcept',['http://en.cppreference.com/w/cpp/header/stdexcept.html',1,'']]],

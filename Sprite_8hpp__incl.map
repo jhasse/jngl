@@ -1,4 +1,4 @@
-<map id="jngl/sprite.hpp" name="jngl/sprite.hpp">
+<map id="jngl/Sprite.hpp" name="jngl/Sprite.hpp">
 <area shape="rect" id="Node000001" title="Contains jngl::Sprite class and related functions." alt="" coords="427,5,568,31"/>
 <area shape="rect" id="Node000002" href="$Drawable_8hpp.html" title="Contains jngl::Drawable class." alt="" coords="100,79,217,105"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="440,34,232,78,231,73,439,29"/>
