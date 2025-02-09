@@ -1,11 +1,11 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #ifndef NOPNG
 #include <png.h> // Include first, see https://bugs.launchpad.net/ubuntu/+source/libpng/+bug/218409
 #endif
 
-#include "sprite.hpp"
+#include "Sprite.hpp"
 
 #include "../ShaderCache.hpp"
 #include "../TextureCache.hpp"

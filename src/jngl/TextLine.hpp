@@ -1,11 +1,11 @@
-// Copyright 2020-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::TextLine class
 /// @file
 #pragma once
 
-#include "Drawable.hpp"
 #include "Mat3.hpp"
+#include "Vec2.hpp"
 
 #include <memory>
 
@@ -24,7 +24,9 @@ public:
 	void setText(std::string);
 	std::string getText() const;
 
+	/// Returns {width, height}
 	Vec2 getSize() const;
+
 	double getWidth() const;
 	double getHeight() const;
 	void setCenter(double x, double y);

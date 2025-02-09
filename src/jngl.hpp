@@ -1,4 +1,4 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Includes all JNGL headers except for init.hpp
 /// @file
@@ -24,6 +24,7 @@
 #include "jngl/ShaderProgram.hpp"
 #include "jngl/Singleton.hpp"
 #include "jngl/SoundFile.hpp"
+#include "jngl/Sprite.hpp"
 #include "jngl/TextLine.hpp"
 #include "jngl/Vertex.hpp"
 #include "jngl/Video.hpp"
@@ -42,7 +43,6 @@
 #include "jngl/screen.hpp"
 #include "jngl/shapes.hpp"
 #include "jngl/sound.hpp"
-#include "jngl/sprite.hpp"
 #include "jngl/text.hpp"
 #include "jngl/time.hpp"
 #include "jngl/window.hpp"

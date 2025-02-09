@@ -1,13 +1,9 @@
-// Copyright 2018-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
-#include "../jngl/sprite.hpp"
 #include "Fixture.hpp"
 
-#include <jngl.hpp>
-
 #include <boost/ut.hpp>
-#include <cmath>
+#include <jngl.hpp>
 
 namespace {
 boost::ut::suite _ = [] {
