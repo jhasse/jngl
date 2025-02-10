@@ -47,6 +47,9 @@ public:
 	/// font
 	double getTextWidth(std::string_view) const;
 
+	/// Returns the font size in scale-independent pixels
+	double getLineHeight() const;
+
 	/// Internal function
 	std::shared_ptr<FontImpl> getImpl();
 
