@@ -40,6 +40,10 @@ enum KeyType : uint8_t {
 	Delete,
 	ControlL,
 	ControlR,
+
+	/// Shortcut for either ControlL or ControlR
+	Ctrl,
+
 	CapsLock,
 	AltL,
 	AltR,

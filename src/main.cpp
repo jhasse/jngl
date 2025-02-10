@@ -293,10 +293,16 @@ int getMouseY() {
 }
 
 bool keyDown(const key::KeyType key) {
+	if (key == key::Ctrl) {
+		return keyDown(key::ControlL) || keyDown(key::ControlR);
+	}
 	return pWindow->getKeyDown(key);
 }
 
 bool keyPressed(const key::KeyType key) {
+	if (key == key::Ctrl) {
+		return keyPressed(key::ControlL) || keyPressed(key::ControlR);
+	}
 	return pWindow->getKeyPressed(key);
 }
 
