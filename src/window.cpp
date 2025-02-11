@@ -370,9 +370,13 @@ void Window::stepIfNeeded() {
 #ifdef JNGL_PERFORMANCE_OVERLAY
 		auto start = std::chrono::steady_clock::now();
 #endif
-		for (auto& job : jobs) {
-			job->step();
+
+		// use oldschool for loop here, so that Jobs can add other Jobs during step():
+		const size_t numOfJobs = jobs.size();
+		for (size_t i = 0; i < numOfJobs; ++i) {
+			jobs[i]->step();
 		}
+
 		for (auto job : jobsToRemove) {
 			const auto it = std::find_if(jobs.begin(), jobs.end(),
 			                             [job](const auto& p) { return p.get() == job; });
