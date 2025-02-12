@@ -502,6 +502,14 @@ void drawSquare(const Mat3& modelview, Rgba color) {
 	pWindow->drawSquare(modelview, color);
 }
 
+void drawSquareOutline(Mat3 modelview, float lineWidth, Rgba color) {
+	glLineWidth(lineWidth);
+	pWindow->drawLine(modelview.translate({ -.5, -.5 }), { 1, 0 }, color);
+	pWindow->drawLine(modelview, { 0, 1 }, color);
+	pWindow->drawLine(modelview.translate({ 1, 1 }), { 0, -1 }, color);
+	pWindow->drawLine(modelview, { -1, 0 }, color);
+}
+
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 	ShaderCache::handle().drawTriangle(a, b, c);
 }

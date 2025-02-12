@@ -141,7 +141,7 @@ void drawRect(const Mat3& modelview, Vec2 size, Rgb);
 /// Use setAlpha to set the opacity.
 void drawRect(Mat3 modelview, Vec2 size, Rgba color);
 
-/// Draws a square of size 1x1 centered at (0, 0) with the specified color
+/// Draws a (filled) square of size 1x1 centered at (0, 0) with the specified color
 ///
 /// By squaling the modelview matrix you can change the size of the square, effectively turning it
 /// into a rectangle:
@@ -150,6 +150,17 @@ void drawRect(Mat3 modelview, Vec2 size, Rgba color);
 /// drawSquare(jngl::modelview().translate(12, 34).scale(56, 78), 0xff0000ff_rgba);
 /// \endcode
 void drawSquare(const Mat3& modelview, Rgba color);
+
+/// Draws the outline of a square (so □ instead of ■) of size 1x1 centered at (0, 0) with the
+/// specified color
+///
+/// By squaling the modelview matrix you can change the size of the square, effectively turning it
+/// into a rectangle:
+/// \code
+/// // draws a rectangle at (12 - 56 / 2, 34 - 78 / 2) with a size of 56x78 in red:
+/// drawSquareOutline(jngl::modelview().translate(12, 34).scale(56, 78), 0xff0000ff_rgba, 2.f);
+/// \endcode
+void drawSquareOutline(Mat3 modelview, float lineWidth, Rgba color);
 
 template <class Vect> void drawRect(Vect pos, Vect size) {
 	drawRect(pos.x, pos.y, size.x, size.y);
