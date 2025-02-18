@@ -4,46 +4,46 @@
 /// @file
 #pragma once
 
-#include "jngl/Achievement.hpp"
-#include "jngl/Alpha.hpp"
+#include "jngl/Achievement.hpp" // IWYU pragma: keep
+#include "jngl/Alpha.hpp"       // IWYU pragma: keep
 #include "jngl/Channel.hpp"
-#include "jngl/Color.hpp"
-#include "jngl/Container.hpp"
-#include "jngl/Controller.hpp"
-#include "jngl/Drawable.hpp"
-#include "jngl/FrameBuffer.hpp"
-#include "jngl/ImageData.hpp"
-#include "jngl/Label.hpp"
-#include "jngl/OutlinedFont.hpp"
-#include "jngl/Pixels.hpp"
-#include "jngl/Rect.hpp"
-#include "jngl/Rgb.hpp"
-#include "jngl/Rgba.hpp"
-#include "jngl/ScaleablePixels.hpp"
-#include "jngl/Shader.hpp"
-#include "jngl/ShaderProgram.hpp"
-#include "jngl/Singleton.hpp"
-#include "jngl/SoundFile.hpp"
-#include "jngl/Sprite.hpp"
-#include "jngl/TextLine.hpp"
-#include "jngl/Vertex.hpp"
-#include "jngl/Video.hpp"
-#include "jngl/Widget.hpp"
-#include "jngl/WorkFactory.hpp"
-#include "jngl/debug.hpp"
-#include "jngl/effects.hpp"
-#include "jngl/font.hpp"
-#include "jngl/input.hpp"
-#include "jngl/job.hpp"
-#include "jngl/log.hpp"
-#include "jngl/main.hpp"
-#include "jngl/matrix.hpp"
-#include "jngl/message.hpp"
-#include "jngl/other.hpp"
-#include "jngl/screen.hpp"
-#include "jngl/shapes.hpp"
-#include "jngl/sound.hpp"
-#include "jngl/text.hpp"
-#include "jngl/time.hpp"
-#include "jngl/window.hpp"
-#include "jngl/work.hpp"
+#include "jngl/Color.hpp"           // IWYU pragma: keep
+#include "jngl/Container.hpp"       // IWYU pragma: keep
+#include "jngl/Controller.hpp"      // IWYU pragma: keep
+#include "jngl/Drawable.hpp"        // IWYU pragma: keep
+#include "jngl/FrameBuffer.hpp"     // IWYU pragma: keep
+#include "jngl/ImageData.hpp"       // IWYU pragma: keep
+#include "jngl/Label.hpp"           // IWYU pragma: keep
+#include "jngl/OutlinedFont.hpp"    // IWYU pragma: keep
+#include "jngl/Pixels.hpp"          // IWYU pragma: keep
+#include "jngl/Rect.hpp"            // IWYU pragma: keep
+#include "jngl/Rgb.hpp"             // IWYU pragma: keep
+#include "jngl/Rgba.hpp"            // IWYU pragma: keep
+#include "jngl/ScaleablePixels.hpp" // IWYU pragma: keep
+#include "jngl/Shader.hpp"          // IWYU pragma: keep
+#include "jngl/ShaderProgram.hpp"   // IWYU pragma: keep
+#include "jngl/Singleton.hpp"       // IWYU pragma: keep
+#include "jngl/SoundFile.hpp"       // IWYU pragma: keep
+#include "jngl/Sprite.hpp"          // IWYU pragma: keep
+#include "jngl/TextLine.hpp"        // IWYU pragma: keep
+#include "jngl/Vertex.hpp"          // IWYU pragma: keep
+#include "jngl/Video.hpp"           // IWYU pragma: keep
+#include "jngl/Widget.hpp"          // IWYU pragma: keep
+#include "jngl/WorkFactory.hpp"     // IWYU pragma: keep
+#include "jngl/debug.hpp"           // IWYU pragma: keep
+#include "jngl/effects.hpp"         // IWYU pragma: keep
+#include "jngl/font.hpp"            // IWYU pragma: keep
+#include "jngl/input.hpp"           // IWYU pragma: keep
+#include "jngl/job.hpp"             // IWYU pragma: keep
+#include "jngl/log.hpp"             // IWYU pragma: keep
+#include "jngl/main.hpp"            // IWYU pragma: keep
+#include "jngl/matrix.hpp"          // IWYU pragma: keep
+#include "jngl/message.hpp"         // IWYU pragma: keep
+#include "jngl/other.hpp"           // IWYU pragma: keep
+#include "jngl/screen.hpp"          // IWYU pragma: keep
+#include "jngl/shapes.hpp"          // IWYU pragma: keep
+#include "jngl/sound.hpp"           // IWYU pragma: keep
+#include "jngl/text.hpp"            // IWYU pragma: keep
+#include "jngl/time.hpp"            // IWYU pragma: keep
+#include "jngl/window.hpp"          // IWYU pragma: keep
+#include "jngl/work.hpp"            // IWYU pragma: keep
