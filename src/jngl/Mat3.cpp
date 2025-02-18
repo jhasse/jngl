@@ -1,9 +1,8 @@
-// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Mat3.hpp"
 
 #include "Pixels.hpp"
-#include "Vec2.hpp"
 #include "screen.hpp"
 
 namespace jngl {

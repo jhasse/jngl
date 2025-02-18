@@ -18,7 +18,6 @@
 #include <cassert>
 #include <chrono>
 #include <stdexcept>
-#include <unordered_map>
 
 #define OV_EXCLUDE_STATIC_CALLBACKS
 #include <vorbis/vorbisfile.h>

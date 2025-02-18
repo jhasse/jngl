@@ -5,7 +5,7 @@
 #include "../jngl/ImageData.hpp"
 #include "../jngl/screen.hpp"
 #include "../jngl/window.hpp"
-#include "../jngl/work.hpp"
+#include "../jngl/work.hpp" // IWYU pragma: keep
 #include "../log.hpp"
 #include "../main.hpp"
 #include "../windowptr.hpp"

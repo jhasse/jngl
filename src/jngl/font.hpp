@@ -4,7 +4,6 @@
 /// @file
 #pragma once
 
-#include "Rgb.hpp"
 #include "Rgba.hpp"
 #include "Vec2.hpp"
 
