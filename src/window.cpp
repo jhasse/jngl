@@ -228,12 +228,32 @@ void Window::setKeyPressed(const std::string& key, bool p) {
 bool keyDown(const char key) {
 	std::string temp;
 	temp.append(1, key);
+	if (key >= 'a' && key <= 'z') {
+		if (keyDown(std::string(1, static_cast<char>(key - 32)))) {
+			return true;
+		}
+	}
+	if (key >= 'A' && key <= 'Z') {
+		if (keyDown(std::string(1, static_cast<char>(key + 32)))) {
+			return true;
+		}
+	}
 	return keyDown(temp);
 }
 
 bool keyPressed(const char key) {
 	std::string temp;
 	temp.append(1, key);
+	if (key >= 'a' && key <= 'z') {
+		if (keyPressed(std::string(1, static_cast<char>(key - 32)))) {
+			return true;
+		}
+	}
+	if (key >= 'A' && key <= 'Z') {
+		if (keyPressed(std::string(1, static_cast<char>(key + 32)))) {
+			return true;
+		}
+	}
 	return keyPressed(temp);
 }
 

@@ -104,10 +104,33 @@ void setKeyPressed(key::KeyType key, bool);
 /// Whether \p key is down
 bool keyDown(key::KeyType key);
 
-/// Whether \p key is down
+/// Whether \p key is down, case-insensitive for A-Z
+///
+/// \note `jngl::keyDown('a')` and `jngl::keyDown('A')` will both return true regardless of the
+/// state of the <kbd>Shift</kbd> key. This is different from jngl::keyDown(const std::string&)
+/// which is case-sensitive.
+///
+/// Example:
+/// \code
+/// if (jngl::keyDown('d')) {
+///     playerPos.x += 1;
+/// }
+/// if (jngl::keyDown('a')) {
+///     playerPos.x -= 1;
+/// }
+/// if (jngl::keyDown('s')) {
+///     playerPos.y += 1;
+/// }
+/// if (jngl::keyDown('w')) {
+///     playerPos.y -= 1;
+/// }
+/// \endcode
 bool keyDown(char key);
 
 /// Whether \p key is down, where \p key should be exactly one UTF-8 character
+///
+/// \note `jngl::keyDown("A")` will only return true if the user presses <kbd>Shift</kbd> and A at
+/// the same time. This is different from jngl::keyDown(char) which is case-insensitive for A-Z.
 ///
 /// Example:
 /// \code
@@ -130,10 +153,18 @@ bool keyDown(const std::string& key);
 bool keyPressed(key::KeyType key);
 
 /// Whether \p key has been pressed since the next to last call to updateInput()
+///
+/// \note `jngl::keyPressed('a')` and `jngl::keyPressed('A')` will both return true regardless of
+/// the state of the <kbd>Shift</kbd> key. This is different from jngl::keyPressed(const
+/// std::string&) which is case-sensitive.
 bool keyPressed(char key);
 
 /// Whether \p key has been pressed since the next to last call to updateInput(), where \p key
 /// should be exactly one UTF-8 character
+///
+/// \note `jngl::keyPressed("A")` will only return true if the user presses <kbd>Shift</kbd> and A
+/// at the same time. This is different from jngl::keyPressed(char) which is case-insensitive for
+/// A-Z.
 bool keyPressed(const std::string& key);
 
 void setRelativeMouseMode(bool relative);
