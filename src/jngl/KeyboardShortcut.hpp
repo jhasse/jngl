@@ -12,22 +12,37 @@ namespace jngl {
 
 class KeyboardShortcut {
 public:
-	/// no shortcut, will never trigger
+	/// No shortcut, will never trigger
 	KeyboardShortcut();
 
-	/// modifier + key, e.g. { jngl::key::Control, 's' } for Ctrl+S
+	/// Modifier + key, e.g. { jngl::key::Control, 's' } for Ctrl+S
+	///
+	/// \throws std::runtime_error if modifier is not key::Ctrl, key::Shift or key::Alt
 	KeyboardShortcut(key::KeyType modifier, char key);
 
-	/// two modifiers + key, e.g. { jngl::key::Control, jngl::key::Shift, 's' } for Ctrl+Shift+S
+	/// Two modifiers + key, e.g. { jngl::key::Control, jngl::key::Shift, 's' } for Ctrl+Shift+S
+	///
+	/// \throws std::runtime_error if modifier is not key::Ctrl, key::Shift or key::Alt or if a modifier is used
+	/// twice
 	KeyboardShortcut(key::KeyType modifier1, key::KeyType modifier2, char key);
 
-	// single key, e.g. jngl::key::F1
+	/// Single key, e.g. jngl::key::F1
 	KeyboardShortcut(key::KeyType key); // NOLINT
 
+	/// Used to display the shortcut, e.g. "Ctrl+Shift+S" or "F3", returns "" for no shortcut
+	///
+	/// \note The order of modifiers is always Ctrl, Shift, Alt
 	std::string toString() const;
 
+	/// Returns true if all modifiers and the key of the shortcut was pressed in this step
+	///
+	/// \note Won't return true for Ctrl+S if Ctrl+Shift+S or Ctrl+Alt+S was pressed.
+	bool pressed() const;
+
 private:
-	std::vector<key::KeyType> modifiers;
+	bool ctrl = false;
+	bool shift = false;
+	bool alt = false;
 	std::variant<key::KeyType, char> key;
 };
 

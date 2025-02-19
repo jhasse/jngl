@@ -47,10 +47,15 @@ enum KeyType : uint8_t {
 	Ctrl,
 
 	CapsLock,
-	AltL,
-	AltR,
-	Alt = AltL,
-	AltGr = AltR,
+
+	/// Left Alt key
+	Alt,
+
+	/// Right Alt key (Alt Graph key)
+	AltGr,
+
+	AltL = Alt,
+	AltR = AltGr,
 
 	/// Left Windows key
 	SuperL,
