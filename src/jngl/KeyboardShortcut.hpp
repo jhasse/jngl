@@ -10,6 +10,7 @@
 
 namespace jngl {
 
+/// Represents a keyboard shortcut, e.g. <kbd>Ctrl</kbd>+<kbd>S</kbd>
 class KeyboardShortcut {
 public:
 	/// No shortcut, will never trigger

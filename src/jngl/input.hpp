@@ -38,12 +38,12 @@ enum KeyType : uint8_t {
 	Pause,
 	Escape,
 	Delete,
-	ControlL,
-	ControlR,
-	CtrlL = ControlL,
-	CtrlR = ControlR,
+	CtrlL,
+	CtrlR,
+	ControlL = CtrlL,
+	ControlR = CtrlR,
 
-	/// Shortcut for either ControlL or ControlR
+	/// Shortcut for either CtrlL or CtrlR
 	Ctrl,
 
 	CapsLock,
@@ -86,6 +86,7 @@ enum KeyType : uint8_t {
 };
 } // namespace key
 
+/// Returns a string representation of a key useful for displaying it to the user
 std::string keyToString(key::KeyType);
 
 /// Display onscreen keyboard for touch devices
@@ -111,9 +112,9 @@ bool keyDown(key::KeyType key);
 
 /// Whether \p key is down, case-insensitive for A-Z
 ///
-/// \note `jngl::keyDown('a')` and `jngl::keyDown('A')` will both return true regardless of the
-/// state of the <kbd>Shift</kbd> key. This is different from jngl::keyDown(const std::string&)
-/// which is case-sensitive.
+/// \note jngl::keyDown('a') and jngl::keyDown('A') will both return true regardless of the state of
+/// the <kbd>Shift</kbd> key. This is different from jngl::keyDown(const std::string&) which is
+/// case-sensitive.
 ///
 /// Example:
 /// \code
@@ -134,8 +135,9 @@ bool keyDown(char key);
 
 /// Whether \p key is down, where \p key should be exactly one UTF-8 character
 ///
-/// \note `jngl::keyDown("A")` will only return true if the user presses <kbd>Shift</kbd> and A at
-/// the same time. This is different from jngl::keyDown(char) which is case-insensitive for A-Z.
+/// \note `jngl::keyDown("A")` will only return true if the user presses <kbd>Shift</kbd> and
+/// <kbd>A</kbd> at the same time. This is different from jngl::keyDown(char) which is
+/// case-insensitive for A-Z.
 ///
 /// Example:
 /// \code
@@ -159,9 +161,9 @@ bool keyPressed(key::KeyType key);
 
 /// Whether \p key has been pressed since the next to last call to updateInput()
 ///
-/// \note `jngl::keyPressed('a')` and `jngl::keyPressed('A')` will both return true regardless of
-/// the state of the <kbd>Shift</kbd> key. This is different from jngl::keyPressed(const
-/// std::string&) which is case-sensitive.
+/// \note jngl::keyPressed('a') and jngl::keyPressed('A') will both return true regardless of the
+/// state of the <kbd>Shift</kbd> key. This is different from jngl::keyPressed(const std::string&)
+/// which is case-sensitive.
 bool keyPressed(char key);
 
 /// Whether \p key has been pressed since the next to last call to updateInput(), where \p key
@@ -172,8 +174,12 @@ bool keyPressed(char key);
 /// A-Z.
 bool keyPressed(const std::string& key);
 
+/// Enables relative mouse mode which will hide the cursor and allow for unlimited movement
+///
+/// When enabled getMousePos() will return the relative movement in the current step.
 void setRelativeMouseMode(bool relative);
 
+/// Whether relative mouse mode is currently active
 bool getRelativeMouseMode();
 
 /// By default the mouse cursor of the OS is visible and can be hidden by passing false
