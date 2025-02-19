@@ -57,6 +57,10 @@ enum KeyType : uint8_t {
 	Space,
 	ShiftL,
 	ShiftR,
+
+	/// Shortcut for either ShiftL or ShiftR
+	Shift,
+
 	F1,
 	F2,
 	F3,
@@ -72,6 +76,8 @@ enum KeyType : uint8_t {
 	Any
 };
 } // namespace key
+
+std::string keyToString(key::KeyType);
 
 /// Display onscreen keyboard for touch devices
 void setKeyboardVisible(bool);
