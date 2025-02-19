@@ -6,6 +6,8 @@
 
 #include "input.hpp"
 
+#include <variant>
+
 namespace jngl {
 
 class KeyboardShortcut {
