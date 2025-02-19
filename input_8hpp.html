@@ -145,11 +145,11 @@ Enumerations</h2></td></tr>
 , <a class="el" href="#a544480710560e524a6d42b6a0bafc8f7ada1f11656fc90859547208749fd7b4f7">Ctrl</a>
 , <br />
 &#160;&#160;<b>CapsLock</b>
-, <b>AltL</b>
-, <b>AltR</b>
-, <b>Alt</b> = AltL
+, <a class="el" href="#a544480710560e524a6d42b6a0bafc8f7a64e349620b75cc273b5201d9206eabfa">Alt</a>
+, <a class="el" href="#a544480710560e524a6d42b6a0bafc8f7aaf8a1d0095867a23a90d4e8ad7c559ba">AltGr</a>
+, <b>AltL</b> = Alt
 , <br />
-&#160;&#160;<b>AltGr</b> = AltR
+&#160;&#160;<b>AltR</b> = AltGr
 , <a class="el" href="#a544480710560e524a6d42b6a0bafc8f7a82dbe895c37ba0fe2eb2154d3f3de628">SuperL</a>
 , <a class="el" href="#a544480710560e524a6d42b6a0bafc8f7afc33cfef6d341e77b88816dfaf1af9f8">SuperR</a>
 , <b>Space</b>
@@ -251,9 +251,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setKeyPressed</b> (<a
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>keyDown</b> (<a class="el" href="#a544480710560e524a6d42b6a0bafc8f7">key::KeyType</a> key)</td></tr>
 <tr class="memdesc:a25497813bae45729e26336658971eb65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <code>key</code> is down. <br /></td></tr>
 <tr class="separator:a25497813bae45729e26336658971eb65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66c4d78f65fec97b62c8736971413cff" id="r_a66c4d78f65fec97b62c8736971413cff"><td class="memItemLeft" align="right" valign="top"><a id="a66c4d78f65fec97b62c8736971413cff" name="a66c4d78f65fec97b62c8736971413cff"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>keyDown</b> (char key)</td></tr>
-<tr class="memdesc:a66c4d78f65fec97b62c8736971413cff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <code>key</code> is down. <br /></td></tr>
+<tr class="memitem:a66c4d78f65fec97b62c8736971413cff" id="r_a66c4d78f65fec97b62c8736971413cff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a66c4d78f65fec97b62c8736971413cff">keyDown</a> (char key)</td></tr>
+<tr class="memdesc:a66c4d78f65fec97b62c8736971413cff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <code>key</code> is down, case-insensitive for A-Z.  <br /></td></tr>
 <tr class="separator:a66c4d78f65fec97b62c8736971413cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b79bb49e4f348ec35727ca22ed5f7cb" id="r_a7b79bb49e4f348ec35727ca22ed5f7cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a7b79bb49e4f348ec35727ca22ed5f7cb">keyDown</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;key)</td></tr>
 <tr class="memdesc:a7b79bb49e4f348ec35727ca22ed5f7cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <code>key</code> is down, where <code>key</code> should be exactly one UTF-8 character.  <br /></td></tr>
@@ -262,13 +261,11 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>keyDown</b> (char key
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>keyPressed</b> (<a class="el" href="#a544480710560e524a6d42b6a0bafc8f7">key::KeyType</a> key)</td></tr>
 <tr class="memdesc:ab4f02dd8f5a8430d8e2c43e9ff619cdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <code>key</code> has been pressed since the next to last call to <a class="el" href="namespacejngl.html#ae301acc8b5118eb5b5939e9ad43ce777" title="Updates the input state.">updateInput()</a> <br /></td></tr>
 <tr class="separator:ab4f02dd8f5a8430d8e2c43e9ff619cdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac70b281629c8cf8075609ed36a79f152" id="r_ac70b281629c8cf8075609ed36a79f152"><td class="memItemLeft" align="right" valign="top"><a id="ac70b281629c8cf8075609ed36a79f152" name="ac70b281629c8cf8075609ed36a79f152"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>keyPressed</b> (char key)</td></tr>
-<tr class="memdesc:ac70b281629c8cf8075609ed36a79f152"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <code>key</code> has been pressed since the next to last call to <a class="el" href="namespacejngl.html#ae301acc8b5118eb5b5939e9ad43ce777" title="Updates the input state.">updateInput()</a> <br /></td></tr>
+<tr class="memitem:ac70b281629c8cf8075609ed36a79f152" id="r_ac70b281629c8cf8075609ed36a79f152"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ac70b281629c8cf8075609ed36a79f152">keyPressed</a> (char key)</td></tr>
+<tr class="memdesc:ac70b281629c8cf8075609ed36a79f152"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <code>key</code> has been pressed since the next to last call to <a class="el" href="namespacejngl.html#ae301acc8b5118eb5b5939e9ad43ce777" title="Updates the input state.">updateInput()</a>  <br /></td></tr>
 <tr class="separator:ac70b281629c8cf8075609ed36a79f152"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a36a281b47f1990c3b9969f2823ff5c" id="r_a6a36a281b47f1990c3b9969f2823ff5c"><td class="memItemLeft" align="right" valign="top"><a id="a6a36a281b47f1990c3b9969f2823ff5c" name="a6a36a281b47f1990c3b9969f2823ff5c"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>keyPressed</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;key)</td></tr>
-<tr class="memdesc:a6a36a281b47f1990c3b9969f2823ff5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <code>key</code> has been pressed since the next to last call to <a class="el" href="namespacejngl.html#ae301acc8b5118eb5b5939e9ad43ce777" title="Updates the input state.">updateInput()</a>, where <code>key</code> should be exactly one UTF-8 character. <br /></td></tr>
+<tr class="memitem:a6a36a281b47f1990c3b9969f2823ff5c" id="r_a6a36a281b47f1990c3b9969f2823ff5c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a6a36a281b47f1990c3b9969f2823ff5c">keyPressed</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;key)</td></tr>
+<tr class="memdesc:a6a36a281b47f1990c3b9969f2823ff5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <code>key</code> has been pressed since the next to last call to <a class="el" href="namespacejngl.html#ae301acc8b5118eb5b5939e9ad43ce777" title="Updates the input state.">updateInput()</a>, where <code>key</code> should be exactly one UTF-8 character.  <br /></td></tr>
 <tr class="separator:a6a36a281b47f1990c3b9969f2823ff5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0407a01f1c43db23e9350a2e45b7a7cc" id="r_a0407a01f1c43db23e9350a2e45b7a7cc"><td class="memItemLeft" align="right" valign="top"><a id="a0407a01f1c43db23e9350a2e45b7a7cc" name="a0407a01f1c43db23e9350a2e45b7a7cc"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setRelativeMouseMode</b> (bool relative)</td></tr>
@@ -367,6 +364,10 @@ Variables</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a544480710560e524a6d42b6a0bafc8f7ada1f11656fc90859547208749fd7b4f7" name="a544480710560e524a6d42b6a0bafc8f7ada1f11656fc90859547208749fd7b4f7"></a>Ctrl&#160;</td><td class="fielddoc"><p>Shortcut for either ControlL or ControlR. </p>
 </td></tr>
+<tr><td class="fieldname"><a id="a544480710560e524a6d42b6a0bafc8f7a64e349620b75cc273b5201d9206eabfa" name="a544480710560e524a6d42b6a0bafc8f7a64e349620b75cc273b5201d9206eabfa"></a>Alt&#160;</td><td class="fielddoc"><p>Left Alt key. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a544480710560e524a6d42b6a0bafc8f7aaf8a1d0095867a23a90d4e8ad7c559ba" name="a544480710560e524a6d42b6a0bafc8f7aaf8a1d0095867a23a90d4e8ad7c559ba"></a>AltGr&#160;</td><td class="fielddoc"><p>Right Alt key (Alt Graph key) </p>
+</td></tr>
 <tr><td class="fieldname"><a id="a544480710560e524a6d42b6a0bafc8f7a82dbe895c37ba0fe2eb2154d3f3de628" name="a544480710560e524a6d42b6a0bafc8f7a82dbe895c37ba0fe2eb2154d3f3de628"></a>SuperL&#160;</td><td class="fielddoc"><p>Left Windows key. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a544480710560e524a6d42b6a0bafc8f7afc33cfef6d341e77b88816dfaf1af9f8" name="a544480710560e524a6d42b6a0bafc8f7afc33cfef6d341e77b88816dfaf1af9f8"></a>SuperR&#160;</td><td class="fielddoc"><p>Right Windows key. </p>
@@ -393,7 +394,7 @@ Variables</h2></td></tr>
 
 <p>Mouse buttons. </p>
 
-<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00186">186</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00222">222</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
 
 </div>
 </div>
@@ -437,7 +438,7 @@ Variables</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00209">209</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00245">245</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
 
 </div>
 </div>

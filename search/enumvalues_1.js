@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ctrl_0',['Ctrl',['../input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7ada1f11656fc90859547208749fd7b4f7',1,'jngl::key']]]
+  ['back_0',['Back',['../input_8hpp.html#acd42bf24fb3e597fb4928f87e61c28a0a36625780699489b5c3dfceadfb9c27d1',1,'jngl::controller']]]
 ];

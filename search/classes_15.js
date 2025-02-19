@@ -11,11 +11,10 @@ var searchData=
   ['vec2_8',['Vec2',['../classjngl_1_1Vec2.html',1,'jngl']]],
   ['vec_5ftraits_3c_20jngl_3a_3avec2_20_3e_9',['vec_traits&lt; jngl::Vec2 &gt;',['../structboost_1_1qvm_1_1vec__traits_3_01jngl_1_1Vec2_01_4.html',1,'boost::qvm']]],
   ['vector_10',['vector',['http://en.cppreference.com/w/cpp/container/vector.html',1,'vector'],['http://en.cppreference.com/w/cpp/container/vector.html',1,'vector']]],
-  ['vector_3c_20key_3a_3akeytype_20_3e_11',['vector&lt; key::KeyType &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
-  ['vector_3c_20std_3a_3ashared_5fptr_3c_20line_20_3e_20_3e_12',['vector&lt; std::shared_ptr&lt; Line &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
-  ['vector_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3aeffect_20_3e_20_3e_13',['vector&lt; std::unique_ptr&lt; jngl::Effect &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
-  ['vector_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3awidget_20_3e_20_3e_14',['vector&lt; std::unique_ptr&lt; jngl::Widget &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
-  ['vertex_15',['Vertex',['../structjngl_1_1Vertex.html',1,'jngl']]],
-  ['video_16',['Video',['../classjngl_1_1Video.html',1,'jngl']]],
-  ['void_5ft_17',['void_t',['http://en.cppreference.com/w/cpp/experimental/void_t.html',1,'void_t'],['http://en.cppreference.com/w/cpp/types/void_t.html',1,'void_t']]]
+  ['vector_3c_20std_3a_3ashared_5fptr_3c_20line_20_3e_20_3e_11',['vector&lt; std::shared_ptr&lt; Line &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
+  ['vector_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3aeffect_20_3e_20_3e_12',['vector&lt; std::unique_ptr&lt; jngl::Effect &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
+  ['vector_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3awidget_20_3e_20_3e_13',['vector&lt; std::unique_ptr&lt; jngl::Widget &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
+  ['vertex_14',['Vertex',['../structjngl_1_1Vertex.html',1,'jngl']]],
+  ['video_15',['Video',['../classjngl_1_1Video.html',1,'jngl']]],
+  ['void_5ft_16',['void_t',['http://en.cppreference.com/w/cpp/experimental/void_t.html',1,'void_t'],['http://en.cppreference.com/w/cpp/types/void_t.html',1,'void_t']]]
 ];
