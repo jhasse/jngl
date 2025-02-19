@@ -12,8 +12,8 @@
 <g id="Node000001" class="node">
 <title>Node1</title>
 <g id="a_Node000001"><a xlink:title="Contains jngl::KeyboardShortcut class.">
-<polygon fill="#999999" stroke="#666666" points="291,-185 125,-185 125,-165.75 291,-165.75 291,-185"/>
-<text text-anchor="middle" x="208" y="-171.5" font-family="ui-monospace,monospace" font-size="10.00">jngl/KeyboardShortcut.hpp</text>
+<polygon fill="#999999" stroke="#666666" points="332,-185 166,-185 166,-165.75 332,-165.75 332,-185"/>
+<text text-anchor="middle" x="249" y="-171.5" font-family="ui-monospace,monospace" font-size="10.00">jngl/KeyboardShortcut.hpp</text>
 </a>
 </g>
 </g>
@@ -30,8 +30,26 @@
 <g id="edge1_Node000001_Node000002" class="edge">
 <title>Node1&#45;&gt;Node2</title>
 <g id="a_edge1_Node000001_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M208,-165.58C208,-159.07 208,-149.92 208,-141.62"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="211.5,-141.62 208,-131.62 204.5,-141.62 211.5,-141.62"/>
+<path fill="none" stroke="#63b8ff" d="M242.23,-165.58C236.68,-158.38 228.66,-147.96 221.77,-139.01"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="224.71,-137.1 215.84,-131.31 219.17,-141.37 224.71,-137.1"/>
+</a>
+</g>
+</g>
+<!-- Node11 -->
+<g id="Node000011" class="node">
+<title>Node11</title>
+<g id="a_Node000011"><a target="_parent" xlink:href="http://en.cppreference.com/w/cpp/header/variant.html" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="319,-129.75 261,-129.75 261,-110.5 319,-110.5 319,-129.75"/>
+<text text-anchor="middle" x="290" y="-116.25" font-family="ui-monospace,monospace" font-size="10.00">variant</text>
+</a>
+</g>
+</g>
+<!-- Node1&#45;&gt;Node11 -->
+<g id="edge11_Node000001_Node000011" class="edge">
+<title>Node1&#45;&gt;Node11</title>
+<g id="a_edge11_Node000001_Node000011"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M255.77,-165.58C261.32,-158.38 269.34,-147.96 276.23,-139.01"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="278.83,-141.37 282.16,-131.31 273.29,-137.1 278.83,-141.37"/>
 </a>
 </g>
 </g>

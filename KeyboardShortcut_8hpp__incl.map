@@ -1,7 +1,9 @@
 <map id="jngl/KeyboardShortcut.hpp" name="jngl/KeyboardShortcut.hpp">
-<area shape="rect" id="Node000001" title="Contains jngl::KeyboardShortcut class." alt="" coords="172,5,393,31"/>
+<area shape="rect" id="Node000001" title="Contains jngl::KeyboardShortcut class." alt="" coords="227,5,448,31"/>
 <area shape="rect" id="Node000002" href="$input_8hpp.html" title="Input related functions." alt="" coords="236,79,329,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="285,31,285,63,280,63,280,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="330,33,303,68,299,65,326,30"/>
+<area shape="rect" id="Node000011" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/variant.html" title=" " alt="" coords="353,79,431,105"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="348,30,376,65,372,68,344,33"/>
 <area shape="rect" id="Node000003" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="5,153,115,178"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="246,108,113,150,111,145,244,103"/>
 <area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="16,226,117,252"/>
