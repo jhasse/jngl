@@ -36,32 +36,57 @@ std::string keyToString(key::KeyType key) {
 	case key::F12:
 		return "F12";
 	case key::Left:
+		return "Left";
 	case key::Up:
+		return "Up";
 	case key::Right:
+		return "Right";
 	case key::Down:
+		return "Down";
 	case key::PageUp:
+		return "PageUp";
 	case key::PageDown:
+		return "PageDown";
 	case key::Home:
+		return "Home";
 	case key::End:
+		return "End";
 	case key::BackSpace:
+		return "BackSpace";
 	case key::Tab:
+		return "Tab";
 	case key::Clear:
+		return "Clear";
 	case key::Return:
+		return "Return";
 	case key::Pause:
+		return "Pause";
 	case key::Escape:
+		return "Escape";
 	case key::Delete:
+		return "Delete";
 	case key::ControlL:
+		return "CtrlL";
 	case key::ControlR:
+		return "CtrlR";
 	case key::CapsLock:
+		return "CapsLock";
 	case key::AltL:
+		return "Alt";
 	case key::AltR:
+		return "AltGr";
 	case key::SuperL:
+		return "SuperL";
 	case key::SuperR:
+		return "SuperR";
 	case key::Space:
+		return "Space";
 	case key::ShiftL:
+		return "ShiftL";
 	case key::ShiftR:
+		return "ShiftR";
 	case key::Any:
-		break;
+		return "Any";
 	}
 	throw std::runtime_error("Unknown key");
 }

@@ -349,45 +349,18 @@ void testKeys() {
 	jngl::setRelativeMouseMode(true);
 	double xpos = 0;
 	double ypos = 0;
-	std::map<std::string, jngl::key::KeyType> keys;
-	keys["Left"] = jngl::key::Left;
-	keys["Up"] = jngl::key::Up;
-	keys["Right"] = jngl::key::Right;
-	keys["Down"] = jngl::key::Down;
-	keys["PageUp"] = jngl::key::PageUp;
-	keys["PageDown"] = jngl::key::PageDown;
-	keys["Home"] = jngl::key::Home;
-	keys["End"] = jngl::key::End;
-	keys["BackSpace"] = jngl::key::BackSpace;
-	keys["Tab"] = jngl::key::Tab;
-	keys["Clear"] = jngl::key::Clear;
-	keys["Return"] = jngl::key::Return;
-	keys["Pause"] = jngl::key::Pause;
-	keys["Escape"] = jngl::key::Escape;
-	keys["Delete"] = jngl::key::Delete;
-	keys["ControlL"] = jngl::key::ControlL;
-	keys["ControlR"] = jngl::key::ControlR;
-	keys["CapsLock"] = jngl::key::CapsLock;
-	keys["AltL"] = jngl::key::AltL;
-	keys["AltR"] = jngl::key::AltR;
-	keys["SuperL"] = jngl::key::SuperL;
-	keys["SuperR"] = jngl::key::SuperR;
-	keys["Space"] = jngl::key::Space;
-	keys["ShiftL"] = jngl::key::ShiftL;
-	keys["ShiftR"] = jngl::key::ShiftR;
-	keys["F1"] = jngl::key::F1;
-	keys["F2"] = jngl::key::F2;
-	keys["F3"] = jngl::key::F3;
-	keys["F4"] = jngl::key::F4;
-	keys["F5"] = jngl::key::F5;
-	keys["F6"] = jngl::key::F6;
-	keys["F7"] = jngl::key::F7;
-	keys["F8"] = jngl::key::F8;
-	keys["F9"] = jngl::key::F9;
-	keys["F10"] = jngl::key::F10;
-	keys["F11"] = jngl::key::F11;
-	keys["F12"] = jngl::key::F12;
-	keys["Any"] = jngl::key::Any;
+	std::vector<jngl::key::KeyType> keys{
+		jngl::key::Left,      jngl::key::Up,       jngl::key::Right,    jngl::key::Down,
+		jngl::key::PageUp,    jngl::key::PageDown, jngl::key::Home,     jngl::key::End,
+		jngl::key::BackSpace, jngl::key::Tab,      jngl::key::Clear,    jngl::key::Return,
+		jngl::key::Pause,     jngl::key::Escape,   jngl::key::Delete,   jngl::key::Ctrl,
+		jngl::key::CtrlL,     jngl::key::CtrlR,    jngl::key::CapsLock, jngl::key::Alt,
+		jngl::key::AltGr,     jngl::key::SuperL,   jngl::key::SuperR,   jngl::key::Space,
+		jngl::key::Shift,     jngl::key::ShiftL,   jngl::key::ShiftR,   jngl::key::F1,
+		jngl::key::F2,        jngl::key::F3,       jngl::key::F4,       jngl::key::F5,
+		jngl::key::F6,        jngl::key::F7,       jngl::key::F8,       jngl::key::F9,
+		jngl::key::F10,       jngl::key::F11,      jngl::key::F12,      jngl::key::Any,
+	};
 	std::vector<RecentlyPressedKey> recentlyPressedKeys;
 	std::string textInput;
 	while (jngl::running()) {
@@ -396,18 +369,17 @@ void testKeys() {
 		jngl::pushMatrix();
 		jngl::translate(-400, -300);
 		int y = 10;
-		for (const auto& it : keys) {
-			if (jngl::keyDown(it.second)) {
+		for (const auto& key : keys) {
+			if (jngl::keyDown(key)) {
 				jngl::setFontColor(0, 0, 0);
-			}
-			else {
+			} else {
 				jngl::setFontColor(150, 150, 150);
 			}
-			jngl::print(it.first, 100, y);
-			if (jngl::keyPressed(it.second)){
-				recentlyPressedKeys.emplace_back(it.first, 100, y);
+			jngl::print(jngl::keyToString(key), 100, y);
+			if (jngl::keyPressed(key)) {
+				recentlyPressedKeys.emplace_back(jngl::keyToString(key), 100, y);
 			}
-			y += 15;
+			y += 14;
 		}
 		y = 10;
 		const auto printChar = [&recentlyPressedKeys](const char c, const int x, const int y) {

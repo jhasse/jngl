@@ -40,6 +40,8 @@ enum KeyType : uint8_t {
 	Delete,
 	ControlL,
 	ControlR,
+	CtrlL = ControlL,
+	CtrlR = ControlR,
 
 	/// Shortcut for either ControlL or ControlR
 	Ctrl,
@@ -47,6 +49,8 @@ enum KeyType : uint8_t {
 	CapsLock,
 	AltL,
 	AltR,
+	Alt = AltL,
+	AltGr = AltR,
 
 	/// Left Windows key
 	SuperL,
