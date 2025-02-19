@@ -406,8 +406,7 @@ void Window::stepIfNeeded() {
 			if (currentWork_) {
 				currentWork_->onUnload();
 			}
-			currentWork_ = newWork_;
-			newWork_.reset();
+			currentWork_ = std::move(newWork_);
 			currentWork_->onLoad();
 		}
 	}
@@ -463,6 +462,7 @@ void Window::setWork(std::shared_ptr<Work> work) {
 	if (!currentWork_) {
 		internal::debug("Setting current work to {}.", static_cast<void*>(work.get()));
 		currentWork_ = std::move(work);
+		currentWork_->onLoad();
 	} else {
 		internal::debug("Change work to {}.", static_cast<void*>(work.get()));
 		changeWork = true;
