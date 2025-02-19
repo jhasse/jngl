@@ -11,7 +11,7 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classjngl_1_1KeyboardShortcut.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="classjngl_1_1KeyboardShortcut.html" target="_top" xlink:title="Represents a keyboard shortcut, e.g. Ctrl+S">
 <polygon fill="white" stroke="#666666" points="112,-19.25 0,-19.25 0,0 112,0 112,-19.25"/>
 <text text-anchor="middle" x="56" y="-5.75" font-family="ui-monospace,monospace" font-size="10.00">KeyboardShortcut</text>
 </a>

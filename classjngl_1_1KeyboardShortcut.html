@@ -86,6 +86,11 @@ $(function() {
   <div class="headertitle"><div class="title">KeyboardShortcut Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents a keyboard shortcut, e.g. <code>Ctrl</code>+<code>S</code>  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="KeyboardShortcut_8hpp_source.html">jngl/KeyboardShortcut.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -111,8 +116,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acdbc497b551d0541aaa2bf152492f6fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="KeyboardShortcut_8hpp_source.html#l00013">13</a> of file <a class="el" href="KeyboardShortcut_8hpp_source.html">KeyboardShortcut.hpp</a>.</p>
+<div class="textblock"><p>Represents a keyboard shortcut, e.g. <code>Ctrl</code>+<code>S</code> </p>
+
+<p class="definition">Definition at line <a class="el" href="KeyboardShortcut_8hpp_source.html#l00014">14</a> of file <a class="el" href="KeyboardShortcut_8hpp_source.html">KeyboardShortcut.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1426bc6ca68da7e4d8a8356e2f81ee35" name="a1426bc6ca68da7e4d8a8356e2f81ee35"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1426bc6ca68da7e4d8a8356e2f81ee35">&#9670;&#160;</a></span>KeyboardShortcut() <span class="overload">[1/2]</span></h2>
@@ -137,7 +143,7 @@ Public Member Functions</h2></td></tr>
 <p>{ jngl::key::Control, 's' } for Ctrl+S</p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="elRef" href="http://en.cppreference.com/w/cpp/error/runtime_error.html">std::runtime_error</a></td><td>if modifier is not <a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7ada1f11656fc90859547208749fd7b4f7" title="Shortcut for either ControlL or ControlR.">key::Ctrl</a>, <a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7ae4a1b28ecfe89d0bac93fee76b23ba68" title="Shortcut for either ShiftL or ShiftR.">key::Shift</a> or <a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7a64e349620b75cc273b5201d9206eabfa" title="Left Alt key.">key::Alt</a> </td></tr>
+    <tr><td class="paramname"><a class="elRef" href="http://en.cppreference.com/w/cpp/error/runtime_error.html">std::runtime_error</a></td><td>if modifier is not <a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7ada1f11656fc90859547208749fd7b4f7" title="Shortcut for either CtrlL or CtrlR.">key::Ctrl</a>, <a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7ae4a1b28ecfe89d0bac93fee76b23ba68" title="Shortcut for either ShiftL or ShiftR.">key::Shift</a> or <a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7a64e349620b75cc273b5201d9206eabfa" title="Left Alt key.">key::Alt</a> </td></tr>
   </table>
   </dd>
 </dl>
@@ -172,7 +178,7 @@ Public Member Functions</h2></td></tr>
 <p>{ jngl::key::Control, <a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7ae4a1b28ecfe89d0bac93fee76b23ba68" title="Shortcut for either ShiftL or ShiftR.">jngl::key::Shift</a>, 's' } for Ctrl+Shift+S</p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="elRef" href="http://en.cppreference.com/w/cpp/error/runtime_error.html">std::runtime_error</a></td><td>if modifier is not <a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7ada1f11656fc90859547208749fd7b4f7" title="Shortcut for either ControlL or ControlR.">key::Ctrl</a>, <a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7ae4a1b28ecfe89d0bac93fee76b23ba68" title="Shortcut for either ShiftL or ShiftR.">key::Shift</a> or <a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7a64e349620b75cc273b5201d9206eabfa" title="Left Alt key.">key::Alt</a> or if a modifier is used twice </td></tr>
+    <tr><td class="paramname"><a class="elRef" href="http://en.cppreference.com/w/cpp/error/runtime_error.html">std::runtime_error</a></td><td>if modifier is not <a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7ada1f11656fc90859547208749fd7b4f7" title="Shortcut for either CtrlL or CtrlR.">key::Ctrl</a>, <a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7ae4a1b28ecfe89d0bac93fee76b23ba68" title="Shortcut for either ShiftL or ShiftR.">key::Shift</a> or <a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7a64e349620b75cc273b5201d9206eabfa" title="Left Alt key.">key::Alt</a> or if a modifier is used twice </td></tr>
   </table>
   </dd>
 </dl>

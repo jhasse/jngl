@@ -136,6 +136,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Background job which stays part of the main loop independent of the active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">jngl::Work</a>.  <a href="classjngl_1_1Job.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1KeyboardShortcut.html">KeyboardShortcut</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a keyboard shortcut, e.g. <code>Ctrl</code>+<code>S</code>  <a href="classjngl_1_1KeyboardShortcut.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Label.html">Label</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple <a class="el" href="classjngl_1_1Widget.html">Widget</a> displaying a line of text.  <a href="classjngl_1_1Label.html#details">More...</a><br /></td></tr>
@@ -349,11 +350,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>keyPressed</b> (<a cl
 <tr class="memitem:a6a36a281b47f1990c3b9969f2823ff5c" id="r_a6a36a281b47f1990c3b9969f2823ff5c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a36a281b47f1990c3b9969f2823ff5c">keyPressed</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;key)</td></tr>
 <tr class="memdesc:a6a36a281b47f1990c3b9969f2823ff5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <code>key</code> has been pressed since the next to last call to <a class="el" href="#ae301acc8b5118eb5b5939e9ad43ce777" title="Updates the input state.">updateInput()</a>, where <code>key</code> should be exactly one UTF-8 character.  <br /></td></tr>
 <tr class="separator:a6a36a281b47f1990c3b9969f2823ff5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0407a01f1c43db23e9350a2e45b7a7cc" id="r_a0407a01f1c43db23e9350a2e45b7a7cc"><td class="memItemLeft" align="right" valign="top"><a id="a0407a01f1c43db23e9350a2e45b7a7cc" name="a0407a01f1c43db23e9350a2e45b7a7cc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setRelativeMouseMode</b> (bool relative)</td></tr>
+<tr class="memitem:a0407a01f1c43db23e9350a2e45b7a7cc" id="r_a0407a01f1c43db23e9350a2e45b7a7cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0407a01f1c43db23e9350a2e45b7a7cc">setRelativeMouseMode</a> (bool relative)</td></tr>
+<tr class="memdesc:a0407a01f1c43db23e9350a2e45b7a7cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables relative mouse mode which will hide the cursor and allow for unlimited movement.  <br /></td></tr>
 <tr class="separator:a0407a01f1c43db23e9350a2e45b7a7cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67dd6c43aae28b586c0847542004e8ca" id="r_a67dd6c43aae28b586c0847542004e8ca"><td class="memItemLeft" align="right" valign="top"><a id="a67dd6c43aae28b586c0847542004e8ca" name="a67dd6c43aae28b586c0847542004e8ca"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>getRelativeMouseMode</b> ()</td></tr>
+<tr class="memdesc:a67dd6c43aae28b586c0847542004e8ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether relative mouse mode is currently active. <br /></td></tr>
 <tr class="separator:a67dd6c43aae28b586c0847542004e8ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8805026a7c7e55a01a77f8046fb2c0d" id="r_ac8805026a7c7e55a01a77f8046fb2c0d"><td class="memItemLeft" align="right" valign="top"><a id="ac8805026a7c7e55a01a77f8046fb2c0d" name="ac8805026a7c7e55a01a77f8046fb2c0d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setMouseVisible</b> (bool visible)</td></tr>
@@ -901,6 +903,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class
 Variables</h2></td></tr>
 <tr class="memitem:a092669470ed38b89d8e9526784493be8" id="r_a092669470ed38b89d8e9526784493be8"><td class="memItemLeft" align="right" valign="top"><a id="a092669470ed38b89d8e9526784493be8" name="a092669470ed38b89d8e9526784493be8"></a>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><b>keyToString</b> (<a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7">key::KeyType</a>)</td></tr>
+<tr class="memdesc:a092669470ed38b89d8e9526784493be8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string representation of a key useful for displaying it to the user. <br /></td></tr>
 <tr class="separator:a092669470ed38b89d8e9526784493be8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -920,7 +923,7 @@ Variables</h2></td></tr>
 
 <p>Whether a normal or a numbers-only keyboard should appear. </p>
 
-<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00095">95</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00096">96</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
 
 </div>
 </div>
@@ -1215,7 +1218,7 @@ template&lt;class Box &gt; </div>
 </div><div class="memdoc">
 
 <p>Whether <code>key</code> is down, case-insensitive for A-Z. </p>
-<dl class="section note"><dt>Note</dt><dd>&lsquo;<a class="el" href="#a25497813bae45729e26336658971eb65" title="Whether key is down.">jngl::keyDown</a>('a&rsquo;)<code>and</code><a class="el" href="#a25497813bae45729e26336658971eb65" title="Whether key is down.">jngl::keyDown</a>('A')` will both return true regardless of the state of the <code>Shift</code> key. This is different from <a class="el" href="#a7b79bb49e4f348ec35727ca22ed5f7cb" title="Whether key is down, where key should be exactly one UTF-8 character.">jngl::keyDown(const std::string&amp;)</a> which is case-sensitive.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd><a class="el" href="#a25497813bae45729e26336658971eb65" title="Whether key is down.">jngl::keyDown</a>('a') and <a class="el" href="#a25497813bae45729e26336658971eb65" title="Whether key is down.">jngl::keyDown</a>('A') will both return true regardless of the state of the <code>Shift</code> key. This is different from <a class="el" href="#a7b79bb49e4f348ec35727ca22ed5f7cb" title="Whether key is down, where key should be exactly one UTF-8 character.">jngl::keyDown(const std::string&amp;)</a> which is case-sensitive.</dd></dl>
 <p>Example: </p><div class="fragment"><div class="line"><span class="keywordflow">if</span> (<a class="code hl_function" href="#a25497813bae45729e26336658971eb65">jngl::keyDown</a>(<span class="charliteral">&#39;d&#39;</span>)) {</div>
 <div class="line">    playerPos.x += 1;</div>
 <div class="line">}</div>
@@ -1248,7 +1251,7 @@ template&lt;class Box &gt; </div>
 </div><div class="memdoc">
 
 <p>Whether <code>key</code> is down, where <code>key</code> should be exactly one UTF-8 character. </p>
-<dl class="section note"><dt>Note</dt><dd><code><a class="el" href="#a25497813bae45729e26336658971eb65" title="Whether key is down.">jngl::keyDown</a>("A")</code> will only return true if the user presses <code>Shift</code> and A at the same time. This is different from <a class="el" href="#a66c4d78f65fec97b62c8736971413cff" title="Whether key is down, case-insensitive for A-Z.">jngl::keyDown(char)</a> which is case-insensitive for A-Z.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd><code><a class="el" href="#a25497813bae45729e26336658971eb65" title="Whether key is down.">jngl::keyDown</a>("A")</code> will only return true if the user presses <code>Shift</code> and <code>A</code> at the same time. This is different from <a class="el" href="#a66c4d78f65fec97b62c8736971413cff" title="Whether key is down, case-insensitive for A-Z.">jngl::keyDown(char)</a> which is case-insensitive for A-Z.</dd></dl>
 <p>Example: </p><div class="fragment"><div class="line"><span class="keywordflow">if</span> (<a class="code hl_function" href="#a25497813bae45729e26336658971eb65">jngl::keyDown</a>(<span class="stringliteral">&quot;a&quot;</span>)) {</div>
 <div class="line">    player1Pos.x += 1;</div>
 <div class="line">}</div>
@@ -1280,8 +1283,7 @@ template&lt;class Box &gt; </div>
 </div><div class="memdoc">
 
 <p>Whether <code>key</code> has been pressed since the next to last call to <a class="el" href="#ae301acc8b5118eb5b5939e9ad43ce777" title="Updates the input state.">updateInput()</a> </p>
-<dl class="section note"><dt>Note</dt><dd>&lsquo;<a class="el" href="#ab4f02dd8f5a8430d8e2c43e9ff619cdc" title="Whether key has been pressed since the next to last call to updateInput()">jngl::keyPressed</a>('a&rsquo;)<code>and</code><a class="el" href="#ab4f02dd8f5a8430d8e2c43e9ff619cdc" title="Whether key has been pressed since the next to last call to updateInput()">jngl::keyPressed</a>('A')` will both return true regardless of the state of the <code>Shift</code> key. This is different from <a class="el" href="#a6a36a281b47f1990c3b9969f2823ff5c" title="Whether key has been pressed since the next to last call to updateInput(), where key should be exactl...">jngl::keyPressed(const
-std::string&amp;)</a> which is case-sensitive. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd><a class="el" href="#ab4f02dd8f5a8430d8e2c43e9ff619cdc" title="Whether key has been pressed since the next to last call to updateInput()">jngl::keyPressed</a>('a') and <a class="el" href="#ab4f02dd8f5a8430d8e2c43e9ff619cdc" title="Whether key has been pressed since the next to last call to updateInput()">jngl::keyPressed</a>('A') will both return true regardless of the state of the <code>Shift</code> key. This is different from <a class="el" href="#a6a36a281b47f1990c3b9969f2823ff5c" title="Whether key has been pressed since the next to last call to updateInput(), where key should be exactl...">jngl::keyPressed(const std::string&amp;)</a> which is case-sensitive. </dd></dl>
 
 </div>
 </div>
@@ -1302,6 +1304,26 @@ std::string&amp;)</a> which is case-sensitive. </dd></dl>
 
 <p>Whether <code>key</code> has been pressed since the next to last call to <a class="el" href="#ae301acc8b5118eb5b5939e9ad43ce777" title="Updates the input state.">updateInput()</a>, where <code>key</code> should be exactly one UTF-8 character. </p>
 <dl class="section note"><dt>Note</dt><dd><code><a class="el" href="#ab4f02dd8f5a8430d8e2c43e9ff619cdc" title="Whether key has been pressed since the next to last call to updateInput()">jngl::keyPressed</a>("A")</code> will only return true if the user presses <code>Shift</code> and A at the same time. This is different from <a class="el" href="#ac70b281629c8cf8075609ed36a79f152" title="Whether key has been pressed since the next to last call to updateInput()">jngl::keyPressed(char)</a> which is case-insensitive for A-Z. </dd></dl>
+
+</div>
+</div>
+<a id="a0407a01f1c43db23e9350a2e45b7a7cc" name="a0407a01f1c43db23e9350a2e45b7a7cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0407a01f1c43db23e9350a2e45b7a7cc">&#9670;&#160;</a></span>setRelativeMouseMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setRelativeMouseMode </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>relative</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables relative mouse mode which will hide the cursor and allow for unlimited movement. </p>
+<p>When enabled <a class="el" href="#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">getMousePos()</a> will return the relative movement in the current step. </p>
 
 </div>
 </div>

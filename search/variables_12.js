@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['y_0',['y',['../classjngl_1_1Vec2.html#ab927965981178aa1fba979a37168db2a',1,'jngl::Vec2::y'],['../structjngl_1_1Vertex.html#aa4f0d3eebc3c443f9be81bf48561a217',1,'jngl::Vertex::y']]]
+  ['x_0',['x',['../classjngl_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10',1,'jngl::Vec2::x'],['../structjngl_1_1Vertex.html#ad0da36b2558901e21e7a30f6c227a45e',1,'jngl::Vertex::x']]]
 ];

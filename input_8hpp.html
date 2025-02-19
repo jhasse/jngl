@@ -137,11 +137,11 @@ Enumerations</h2></td></tr>
 &#160;&#160;<b>Pause</b>
 , <b>Escape</b>
 , <b>Delete</b>
-, <b>ControlL</b>
+, <b>CtrlL</b>
 , <br />
-&#160;&#160;<b>ControlR</b>
-, <b>CtrlL</b> = ControlL
-, <b>CtrlR</b> = ControlR
+&#160;&#160;<b>CtrlR</b>
+, <b>ControlL</b> = CtrlL
+, <b>ControlR</b> = CtrlR
 , <a class="el" href="#a544480710560e524a6d42b6a0bafc8f7ada1f11656fc90859547208749fd7b4f7">Ctrl</a>
 , <br />
 &#160;&#160;<b>CapsLock</b>
@@ -267,11 +267,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>keyPressed</b> (<a cl
 <tr class="memitem:a6a36a281b47f1990c3b9969f2823ff5c" id="r_a6a36a281b47f1990c3b9969f2823ff5c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a6a36a281b47f1990c3b9969f2823ff5c">keyPressed</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;key)</td></tr>
 <tr class="memdesc:a6a36a281b47f1990c3b9969f2823ff5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <code>key</code> has been pressed since the next to last call to <a class="el" href="namespacejngl.html#ae301acc8b5118eb5b5939e9ad43ce777" title="Updates the input state.">updateInput()</a>, where <code>key</code> should be exactly one UTF-8 character.  <br /></td></tr>
 <tr class="separator:a6a36a281b47f1990c3b9969f2823ff5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0407a01f1c43db23e9350a2e45b7a7cc" id="r_a0407a01f1c43db23e9350a2e45b7a7cc"><td class="memItemLeft" align="right" valign="top"><a id="a0407a01f1c43db23e9350a2e45b7a7cc" name="a0407a01f1c43db23e9350a2e45b7a7cc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setRelativeMouseMode</b> (bool relative)</td></tr>
+<tr class="memitem:a0407a01f1c43db23e9350a2e45b7a7cc" id="r_a0407a01f1c43db23e9350a2e45b7a7cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a0407a01f1c43db23e9350a2e45b7a7cc">setRelativeMouseMode</a> (bool relative)</td></tr>
+<tr class="memdesc:a0407a01f1c43db23e9350a2e45b7a7cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables relative mouse mode which will hide the cursor and allow for unlimited movement.  <br /></td></tr>
 <tr class="separator:a0407a01f1c43db23e9350a2e45b7a7cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67dd6c43aae28b586c0847542004e8ca" id="r_a67dd6c43aae28b586c0847542004e8ca"><td class="memItemLeft" align="right" valign="top"><a id="a67dd6c43aae28b586c0847542004e8ca" name="a67dd6c43aae28b586c0847542004e8ca"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>getRelativeMouseMode</b> ()</td></tr>
+<tr class="memdesc:a67dd6c43aae28b586c0847542004e8ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether relative mouse mode is currently active. <br /></td></tr>
 <tr class="separator:a67dd6c43aae28b586c0847542004e8ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8805026a7c7e55a01a77f8046fb2c0d" id="r_ac8805026a7c7e55a01a77f8046fb2c0d"><td class="memItemLeft" align="right" valign="top"><a id="ac8805026a7c7e55a01a77f8046fb2c0d" name="ac8805026a7c7e55a01a77f8046fb2c0d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setMouseVisible</b> (bool visible)</td></tr>
@@ -341,6 +342,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setMouse</b> (<a clas
 Variables</h2></td></tr>
 <tr class="memitem:a092669470ed38b89d8e9526784493be8" id="r_a092669470ed38b89d8e9526784493be8"><td class="memItemLeft" align="right" valign="top"><a id="a092669470ed38b89d8e9526784493be8" name="a092669470ed38b89d8e9526784493be8"></a>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><b>keyToString</b> (<a class="el" href="#a544480710560e524a6d42b6a0bafc8f7">key::KeyType</a>)</td></tr>
+<tr class="memdesc:a092669470ed38b89d8e9526784493be8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string representation of a key useful for displaying it to the user. <br /></td></tr>
 <tr class="separator:a092669470ed38b89d8e9526784493be8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -362,7 +364,7 @@ Variables</h2></td></tr>
 
 <p>Keyboard keys. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a544480710560e524a6d42b6a0bafc8f7ada1f11656fc90859547208749fd7b4f7" name="a544480710560e524a6d42b6a0bafc8f7ada1f11656fc90859547208749fd7b4f7"></a>Ctrl&#160;</td><td class="fielddoc"><p>Shortcut for either ControlL or ControlR. </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a544480710560e524a6d42b6a0bafc8f7ada1f11656fc90859547208749fd7b4f7" name="a544480710560e524a6d42b6a0bafc8f7ada1f11656fc90859547208749fd7b4f7"></a>Ctrl&#160;</td><td class="fielddoc"><p>Shortcut for either CtrlL or CtrlR. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a544480710560e524a6d42b6a0bafc8f7a64e349620b75cc273b5201d9206eabfa" name="a544480710560e524a6d42b6a0bafc8f7a64e349620b75cc273b5201d9206eabfa"></a>Alt&#160;</td><td class="fielddoc"><p>Left Alt key. </p>
 </td></tr>
@@ -394,7 +396,7 @@ Variables</h2></td></tr>
 
 <p>Mouse buttons. </p>
 
-<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00222">222</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00228">228</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
 
 </div>
 </div>
@@ -438,7 +440,7 @@ Variables</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00245">245</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00251">251</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
 
 </div>
 </div>

@@ -8,8 +8,9 @@ var searchData=
   ['keyboardtype_5',['KeyboardType',['../namespacejngl.html#a0641d1a6fd8c6e3e8d709ca9e6be4638',1,'jngl']]],
   ['keydown_6',['keyDown',['../namespacejngl.html#a25497813bae45729e26336658971eb65',1,'jngl::keyDown(key::KeyType key)'],['../namespacejngl.html#a66c4d78f65fec97b62c8736971413cff',1,'jngl::keyDown(char key)'],['../namespacejngl.html#a7b79bb49e4f348ec35727ca22ed5f7cb',1,'jngl::keyDown(const std::string &amp;key)']]],
   ['keypressed_7',['keyPressed',['../namespacejngl.html#ab4f02dd8f5a8430d8e2c43e9ff619cdc',1,'jngl::keyPressed(key::KeyType key)'],['../namespacejngl.html#ac70b281629c8cf8075609ed36a79f152',1,'jngl::keyPressed(char key)'],['../namespacejngl.html#a6a36a281b47f1990c3b9969f2823ff5c',1,'jngl::keyPressed(const std::string &amp;key)']]],
-  ['keytype_8',['KeyType',['../input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7',1,'jngl::key']]],
-  ['kill_5fdependency_9',['kill_dependency',['http://en.cppreference.com/w/cpp/atomic/kill_dependency.html',1,'std']]],
-  ['kilo_10',['kilo',['http://en.cppreference.com/w/cpp/numeric/ratio/ratio.html',1,'std']]],
-  ['knuth_5fb_11',['knuth_b',['http://en.cppreference.com/w/cpp/numeric/random/shuffle_order_engine.html',1,'knuth_b'],['http://en.cppreference.com/w/cpp/numeric/random/shuffle_order_engine/shuffle_order_engine.html',1,'std::knuth_b::knuth_b()']]]
+  ['keytostring_8',['keyToString',['../namespacejngl.html#a092669470ed38b89d8e9526784493be8',1,'jngl']]],
+  ['keytype_9',['KeyType',['../input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7',1,'jngl::key']]],
+  ['kill_5fdependency_10',['kill_dependency',['http://en.cppreference.com/w/cpp/atomic/kill_dependency.html',1,'std']]],
+  ['kilo_11',['kilo',['http://en.cppreference.com/w/cpp/numeric/ratio/ratio.html',1,'std']]],
+  ['knuth_5fb_12',['knuth_b',['http://en.cppreference.com/w/cpp/numeric/random/shuffle_order_engine.html',1,'knuth_b'],['http://en.cppreference.com/w/cpp/numeric/random/shuffle_order_engine/shuffle_order_engine.html',1,'std::knuth_b::knuth_b()']]]
 ];

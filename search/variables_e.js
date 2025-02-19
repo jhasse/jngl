@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['treat_5fas_5ffloating_5fpoint_5fv_0',['treat_as_floating_point_v',['http://en.cppreference.com/w/cpp/chrono/treat_as_floating_point.html',1,'std::chrono::treat_as_floating_point_v'],['http://en.cppreference.com/w/cpp/experimental/type_trait_variable_templates.html',1,'std::experimental::treat_as_floating_point_v']]],
-  ['tuple_5fsize_5fv_1',['tuple_size_v',['http://en.cppreference.com/w/cpp/utility/tuple/tuple_size.html',1,'std::tuple_size_v'],['http://en.cppreference.com/w/cpp/experimental/type_trait_variable_templates.html',1,'std::experimental::tuple_size_v']]]
+  ['screensize_0',['screenSize',['../structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b',1,'jngl::AppParameters']]],
+  ['second_1',['second',['http://en.cppreference.com/w/cpp/utility/pair.html',1,'std::csub_match::second'],['http://en.cppreference.com/w/cpp/utility/pair.html',1,'std::pair::second'],['http://en.cppreference.com/w/cpp/utility/pair.html',1,'std::ssub_match::second'],['http://en.cppreference.com/w/cpp/utility/pair.html',1,'std::sub_match::second'],['http://en.cppreference.com/w/cpp/utility/pair.html',1,'std::wcsub_match::second'],['http://en.cppreference.com/w/cpp/utility/pair.html',1,'std::wssub_match::second']]],
+  ['start_2',['start',['../structjngl_1_1AppParameters.html#ab8f3127de4b6ccfc51833c48f37c7e1c',1,'jngl::AppParameters']]],
+  ['steamappid_3',['steamAppId',['../structjngl_1_1AppParameters.html#a02feeb271b223f9a32d2455353cd2cf3',1,'jngl::AppParameters']]]
 ];

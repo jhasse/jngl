@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['matched_0',['matched',['http://en.cppreference.com/w/cpp/regex/sub_match.html',1,'std::csub_match::matched'],['http://en.cppreference.com/w/cpp/regex/sub_match.html',1,'std::ssub_match::matched'],['http://en.cppreference.com/w/cpp/regex/sub_match.html',1,'std::sub_match::matched'],['http://en.cppreference.com/w/cpp/regex/sub_match.html',1,'std::wcsub_match::matched'],['http://en.cppreference.com/w/cpp/regex/sub_match.html',1,'std::wssub_match::matched']]],
-  ['max_5fblocks_5fper_5fchunk_1',['max_blocks_per_chunk',['http://en.cppreference.com/w/cpp/memory/pool_options.html',1,'std::pmr::pool_options']]]
+  ['largest_5frequired_5fpool_5fblock_0',['largest_required_pool_block',['http://en.cppreference.com/w/cpp/memory/pool_options.html',1,'std::pmr::pool_options']]],
+  ['loader_1',['loader',['../classjngl_1_1Sprite.html#a5c01625ba48f5cfab329498687da16ec',1,'jngl::Sprite']]]
 ];
