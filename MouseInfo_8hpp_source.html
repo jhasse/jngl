@@ -94,65 +94,68 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="Vec2_8hpp.html">Vec2.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacejngl.html">jngl</a> {</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;<a class="codeRef" href="http://en.cppreference.com/w/cpp/header/optional.html">optional</a>&gt;</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="foldopen" id="foldopen00011" data-start="{" data-end="};">
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="classjngl_1_1MouseInfo.html">   11</a></span><span class="keyword">class </span><a class="code hl_class" href="classjngl_1_1MouseInfo.html">MouseInfo</a> {</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keywordtype">void</span> setMousePos(<a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a>);</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="foldopen" id="foldopen00015" data-start="{" data-end="};">
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="structjngl_1_1MouseInfo_1_1Down.html">   15</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a> {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="structjngl_1_1MouseInfo_1_1Down.html#a22f1335ab3a7fb55e39251e54beb4ad8">   17</a></span>        <a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> <a class="code hl_function" href="structjngl_1_1MouseInfo_1_1Down.html#a22f1335ab3a7fb55e39251e54beb4ad8">newPos</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <span class="keywordtype">bool</span> released();</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> startPos() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacejngl.html">jngl</a> {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="foldopen" id="foldopen00013" data-start="{" data-end="};">
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="classjngl_1_1MouseInfo.html">   13</a></span><span class="keyword">class </span><a class="code hl_class" href="classjngl_1_1MouseInfo.html">MouseInfo</a> {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keywordtype">void</span> setMousePos(<a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a>);</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="foldopen" id="foldopen00017" data-start="{" data-end="};">
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="structjngl_1_1MouseInfo_1_1Down.html">   17</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a> {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="structjngl_1_1MouseInfo_1_1Down.html#a22f1335ab3a7fb55e39251e54beb4ad8">   19</a></span>        <a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> <a class="code hl_function" href="structjngl_1_1MouseInfo_1_1Down.html#a22f1335ab3a7fb55e39251e54beb4ad8">newPos</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="keywordtype">bool</span> released();</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>(<a class="code hl_class" href="classjngl_1_1MouseInfo.html">MouseInfo</a>&amp;, <a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> objectPos);</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>(<a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>&amp;&amp;) noexcept;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>&amp; operator=(const <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>&amp;) = delete;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>&amp; operator=(<a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>&amp;&amp;) noexcept;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        ~<a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>();</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    private:</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <a class="code hl_class" href="classjngl_1_1MouseInfo.html">MouseInfo</a>* parent = <span class="keywordtype">nullptr</span>;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> startReference;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    };</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> startPos() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>(<a class="code hl_class" href="classjngl_1_1MouseInfo.html">MouseInfo</a>&amp;, <a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> objectPos);</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>(<a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>&amp;&amp;) noexcept;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>&amp; operator=(const <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>&amp;) = delete;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>&amp; operator=(<a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>&amp;&amp;) noexcept;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        ~<a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a>();</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    private:</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        <a class="code hl_class" href="classjngl_1_1MouseInfo.html">MouseInfo</a>* parent = <span class="keywordtype">nullptr</span>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> startReference;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    };</div>
 </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="foldopen" id="foldopen00034" data-start="{" data-end="};">
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="structjngl_1_1MouseInfo_1_1Over.html">   34</a></span>    struct <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Over.html">Over</a> {</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> <a class="code hl_function" href="classjngl_1_1MouseInfo.html#aada58c59c37b272130f131f0dbb0173f">pos</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="structjngl_1_1MouseInfo_1_1Over.html#abc07d3057bca7416778effc311c66fd0">   40</a></span>        <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::optional&lt;Down&gt;</a> <a class="code hl_function" href="structjngl_1_1MouseInfo_1_1Over.html#abc07d3057bca7416778effc311c66fd0">pressed</a>(<a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> objectPos);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keyword">explicit</span> <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Over.html">Over</a>(<a class="code hl_class" href="classjngl_1_1MouseInfo.html">MouseInfo</a>&amp;);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="foldopen" id="foldopen00036" data-start="{" data-end="};">
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="structjngl_1_1MouseInfo_1_1Over.html">   36</a></span>    struct <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Over.html">Over</a> {</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> <a class="code hl_function" href="classjngl_1_1MouseInfo.html#aada58c59c37b272130f131f0dbb0173f">pos</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="structjngl_1_1MouseInfo_1_1Over.html#abc07d3057bca7416778effc311c66fd0">   42</a></span>        <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::optional&lt;Down&gt;</a> <a class="code hl_function" href="structjngl_1_1MouseInfo_1_1Over.html#abc07d3057bca7416778effc311c66fd0">pressed</a>(<a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> objectPos);</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <a class="code hl_class" href="classjngl_1_1MouseInfo.html">MouseInfo</a>&amp; parent;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    };</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="keyword">explicit</span> <a class="code hl_struct" href="structjngl_1_1MouseInfo_1_1Over.html">Over</a>(<a class="code hl_class" href="classjngl_1_1MouseInfo.html">MouseInfo</a>&amp;);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <a class="code hl_class" href="classjngl_1_1MouseInfo.html">MouseInfo</a>&amp; parent;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    };</div>
 </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="classjngl_1_1MouseInfo.html#aada58c59c37b272130f131f0dbb0173f">   49</a></span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::optional&lt;Over&gt;</a> <a class="code hl_function" href="classjngl_1_1MouseInfo.html#aada58c59c37b272130f131f0dbb0173f">pos</a>();</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordtype">bool</span> enabled = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keywordtype">bool</span> down = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> mousePos;</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>};</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="classjngl_1_1MouseInfo.html#aada58c59c37b272130f131f0dbb0173f">   51</a></span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::optional&lt;Over&gt;</a> <a class="code hl_function" href="classjngl_1_1MouseInfo.html#aada58c59c37b272130f131f0dbb0173f">pos</a>();</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordtype">bool</span> enabled = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keywordtype">bool</span> down = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <a class="code hl_class" href="classjngl_1_1Vec2.html">Vec2</a> mousePos;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>};</div>
 </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>} <span class="comment">// namespace jngl</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>} <span class="comment">// namespace jngl</span></div>
 <div class="ttc" id="aVec2_8hpp_html"><div class="ttname"><a href="Vec2_8hpp.html">Vec2.hpp</a></div><div class="ttdoc">Contains jngl::Vec2 class.</div></div>
-<div class="ttc" id="aclassjngl_1_1MouseInfo_html"><div class="ttname"><a href="classjngl_1_1MouseInfo.html">jngl::MouseInfo</a></div><div class="ttdef"><b>Definition</b> <a href="#l00011">MouseInfo.hpp:11</a></div></div>
+<div class="ttc" id="aclassjngl_1_1MouseInfo_html"><div class="ttname"><a href="classjngl_1_1MouseInfo.html">jngl::MouseInfo</a></div><div class="ttdef"><b>Definition</b> <a href="#l00013">MouseInfo.hpp:13</a></div></div>
 <div class="ttc" id="aclassjngl_1_1MouseInfo_html_aada58c59c37b272130f131f0dbb0173f"><div class="ttname"><a href="classjngl_1_1MouseInfo.html#aada58c59c37b272130f131f0dbb0173f">jngl::MouseInfo::pos</a></div><div class="ttdeci">std::optional&lt; Over &gt; pos()</div><div class="ttdoc">will return nullopt if the mouse is already over another object</div></div>
 <div class="ttc" id="aclassjngl_1_1Vec2_html"><div class="ttname"><a href="classjngl_1_1Vec2.html">jngl::Vec2</a></div><div class="ttdoc">Two-dimensional vector.</div><div class="ttdef"><b>Definition</b> <a href="Vec2_8hpp_source.html#l00036">Vec2.hpp:36</a></div></div>
 <div class="ttc" id="afunction_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::function</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition</b> <a href="Achievement_8hpp_source.html#l00010">Achievement.hpp:10</a></div></div>
-<div class="ttc" id="astructjngl_1_1MouseInfo_1_1Down_html"><div class="ttname"><a href="structjngl_1_1MouseInfo_1_1Down.html">jngl::MouseInfo::Down</a></div><div class="ttdef"><b>Definition</b> <a href="#l00015">MouseInfo.hpp:15</a></div></div>
+<div class="ttc" id="aoptional_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/optional.html">optional</a></div></div>
+<div class="ttc" id="astructjngl_1_1MouseInfo_1_1Down_html"><div class="ttname"><a href="structjngl_1_1MouseInfo_1_1Down.html">jngl::MouseInfo::Down</a></div><div class="ttdef"><b>Definition</b> <a href="#l00017">MouseInfo.hpp:17</a></div></div>
 <div class="ttc" id="astructjngl_1_1MouseInfo_1_1Down_html_a22f1335ab3a7fb55e39251e54beb4ad8"><div class="ttname"><a href="structjngl_1_1MouseInfo_1_1Down.html#a22f1335ab3a7fb55e39251e54beb4ad8">jngl::MouseInfo::Down::newPos</a></div><div class="ttdeci">Vec2 newPos() const</div><div class="ttdoc">returns nullopt when the mouse has been released</div></div>
-<div class="ttc" id="astructjngl_1_1MouseInfo_1_1Over_html"><div class="ttname"><a href="structjngl_1_1MouseInfo_1_1Over.html">jngl::MouseInfo::Over</a></div><div class="ttdef"><b>Definition</b> <a href="#l00034">MouseInfo.hpp:34</a></div></div>
+<div class="ttc" id="astructjngl_1_1MouseInfo_1_1Over_html"><div class="ttname"><a href="structjngl_1_1MouseInfo_1_1Over.html">jngl::MouseInfo::Over</a></div><div class="ttdef"><b>Definition</b> <a href="#l00036">MouseInfo.hpp:36</a></div></div>
 <div class="ttc" id="astructjngl_1_1MouseInfo_1_1Over_html_abc07d3057bca7416778effc311c66fd0"><div class="ttname"><a href="structjngl_1_1MouseInfo_1_1Over.html#abc07d3057bca7416778effc311c66fd0">jngl::MouseInfo::Over::pressed</a></div><div class="ttdeci">std::optional&lt; Down &gt; pressed(Vec2 objectPos)</div><div class="ttdoc">calling this will result in all future calls of MouseInfo::pos returning nullopt</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- HTML footer for doxygen 1.9.1-->
