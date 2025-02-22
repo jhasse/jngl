@@ -11,13 +11,13 @@ namespace jngl::internal {
 
 void trace(const std::string& line [[maybe_unused]]) {
 #ifdef JNGL_TRACE
-	log("JNGL", "\x1b[36mtrace\x1b[0m", line);
+	log("JNGL", "\x1b[37mtrace\x1b[0m", line);
 #endif
 }
 
 void debug(const std::string& line [[maybe_unused]]) {
 #ifndef NDEBUG
-	log("JNGL", "\x1b[34mdebug\x1b[0m", line);
+	log("JNGL", "\x1b[36mdebug\x1b[0m", line);
 #endif
 }
 

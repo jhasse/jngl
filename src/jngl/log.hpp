@@ -21,6 +21,16 @@ template <class... Args> void trace(std::format_string<Args...> format, Args&&..
 template <class... Args> void trace(Args&&...) {}
 #endif
 
+void debug(const std::string&);
+
+#if __has_include(<format>) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION >= 170000)
+template <class... Args> void debug(std::format_string<Args...> format, Args&&... args) {
+	return debug(std::format(std::move(format), std::forward<Args>(args)...));
+}
+#else
+template <class... Args> void debug(Args&&...) {}
+#endif
+
 void info(const std::string&);
 
 #if __has_include(<format>) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION >= 170000)
