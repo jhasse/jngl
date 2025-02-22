@@ -6,6 +6,8 @@
 
 #include "Vec2.hpp"
 
+#include <optional>
+
 namespace jngl {
 
 class MouseInfo {
