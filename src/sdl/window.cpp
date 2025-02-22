@@ -235,6 +235,11 @@ void Window::UpdateInput() {
 		mousex_ = 0;
 		mousey_ = 0;
 	}
+	if (impl->cursor != impl->currentCursor) {
+		impl->currentCursor = impl->cursor;
+		impl->sdlCursor.reset(SDL_CreateSystemCursor(impl->cursor));
+		SDL_SetCursor(impl->sdlCursor.get());
+	}
 	SDL_Event event;
 	while (SDL_PollEvent(&event) != 0) {
 		switch (event.type) {
@@ -543,21 +548,14 @@ int Window::getMouseY() const {
 }
 
 void setCursor(Cursor type) {
-	SDL_SystemCursor sdlType = SDL_SYSTEM_CURSOR_ARROW;
 	switch (type) {
 	case Cursor::ARROW:
-		sdlType = SDL_SYSTEM_CURSOR_ARROW;
+		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_ARROW;
 		break;
 	case Cursor::I:
-		sdlType = SDL_SYSTEM_CURSOR_IBEAM;
+		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_IBEAM;
 		break;
 	};
-	static SDL_Cursor* cursor = nullptr;
-	if (cursor) {
-		SDL_FreeCursor(cursor);
-	}
-	cursor = SDL_CreateSystemCursor(sdlType);
-	SDL_SetCursor(cursor);
 }
 
 void errorMessage(const std::string &text) {
