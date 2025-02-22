@@ -15,6 +15,7 @@ Checks: '
        ,-clang-diagnostic-unused-command-line-argument,
        ,-concurrency-mt-unsafe,
        ,-cppcoreguidelines-avoid-c-arrays,
+       ,-cppcoreguidelines-avoid-const-or-ref-data-members,
        ,-cppcoreguidelines-avoid-magic-numbers,
        ,-cppcoreguidelines-avoid-non-const-global-variables,
        ,-cppcoreguidelines-init-variables,

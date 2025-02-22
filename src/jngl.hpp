@@ -15,6 +15,7 @@
 #include "jngl/ImageData.hpp"        // IWYU pragma: keep
 #include "jngl/KeyboardShortcut.hpp" // IWYU pragma: keep
 #include "jngl/Label.hpp"            // IWYU pragma: keep
+#include "jngl/MouseInfo.hpp"        // IWYU pragma: keep
 #include "jngl/OutlinedFont.hpp"     // IWYU pragma: keep
 #include "jngl/Pixels.hpp"           // IWYU pragma: keep
 #include "jngl/Rect.hpp"             // IWYU pragma: keep
