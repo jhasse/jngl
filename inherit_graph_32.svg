@@ -11,9 +11,9 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classjngl_1_1Sprite_1_1Loader.html" target="_top" xlink:title="Use this class to load a Sprite asynchronously.">
+<g id="a_Node000000"><a xlink:href="classjngl_1_1Singleton.html" target="_top" xlink:title="Inherit from this class to create a singleton that will be destroyed when your games exits.">
 <polygon fill="white" stroke="#666666" points="100,-19.25 0,-19.25 0,0 100,0 100,-19.25"/>
-<text text-anchor="middle" x="50" y="-5.75" font-family="ui-monospace,monospace" font-size="10.00">Sprite::Loader</text>
+<text text-anchor="middle" x="50" y="-5.75" font-family="ui-monospace,monospace" font-size="10.00">Singleton&lt; T &gt;</text>
 </a>
 </g>
 </g>

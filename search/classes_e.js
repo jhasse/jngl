@@ -18,6 +18,7 @@ var searchData=
   ['out_5fof_5frange_15',['out_of_range',['http://en.cppreference.com/w/cpp/error/out_of_range.html',1,'std']]],
   ['outlinedfont_16',['OutlinedFont',['../classjngl_1_1OutlinedFont.html',1,'jngl']]],
   ['output_5fiterator_5ftag_17',['output_iterator_tag',['http://en.cppreference.com/w/cpp/iterator/iterator_tags.html',1,'std']]],
-  ['overflow_5ferror_18',['overflow_error',['http://en.cppreference.com/w/cpp/error/overflow_error.html',1,'std']]],
-  ['owner_5fless_19',['owner_less',['http://en.cppreference.com/w/cpp/memory/owner_less.html',1,'std']]]
+  ['over_18',['Over',['../structjngl_1_1MouseInfo_1_1Over.html',1,'jngl::MouseInfo']]],
+  ['overflow_5ferror_19',['overflow_error',['http://en.cppreference.com/w/cpp/error/overflow_error.html',1,'std']]],
+  ['owner_5fless_20',['owner_less',['http://en.cppreference.com/w/cpp/memory/owner_less.html',1,'std']]]
 ];

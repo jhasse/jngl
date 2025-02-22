@@ -1,3 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classjngl_1_1Vec2.html" title="Two&#45;dimensional vector." alt="" coords="5,5,59,31"/>
+<area shape="rect" id="Node000000" href="$classjngl_1_1Sprite_1_1Batch.html" title="While this object is alive, don&#39;t do any other draw calls. Should never outlive its Sprite." alt="" coords="5,5,131,31"/>
 </map>

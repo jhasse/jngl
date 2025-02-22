@@ -48,12 +48,13 @@ var searchData=
   ['month_5fweekday_45',['month_weekday',['http://en.cppreference.com/w/cpp/chrono/month_weekday.html',1,'std::chrono']]],
   ['month_5fweekday_5flast_46',['month_weekday_last',['http://en.cppreference.com/w/cpp/chrono/month_weekday_last.html',1,'std::chrono']]],
   ['months_47',['months',['http://en.cppreference.com/w/cpp/chrono/duration.html',1,'std::chrono']]],
-  ['move_48',['Move',['../classjngl_1_1Move.html',1,'jngl']]],
-  ['move_5fiterator_49',['move_iterator',['http://en.cppreference.com/w/cpp/iterator/move_iterator.html',1,'std']]],
-  ['mt19937_50',['mt19937',['http://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine.html',1,'std']]],
-  ['mt19937_5f64_51',['mt19937_64',['http://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine.html',1,'std']]],
-  ['multimap_52',['multimap',['http://en.cppreference.com/w/cpp/container/multimap.html',1,'multimap'],['http://en.cppreference.com/w/cpp/container/multimap.html',1,'multimap']]],
-  ['multiplies_53',['multiplies',['http://en.cppreference.com/w/cpp/utility/functional/multiplies.html',1,'std']]],
-  ['multiset_54',['multiset',['http://en.cppreference.com/w/cpp/container/multiset.html',1,'multiset'],['http://en.cppreference.com/w/cpp/container/multiset.html',1,'multiset']]],
-  ['mutex_55',['mutex',['http://en.cppreference.com/w/cpp/thread/mutex.html',1,'std']]]
+  ['mouseinfo_48',['MouseInfo',['../classjngl_1_1MouseInfo.html',1,'jngl']]],
+  ['move_49',['Move',['../classjngl_1_1Move.html',1,'jngl']]],
+  ['move_5fiterator_50',['move_iterator',['http://en.cppreference.com/w/cpp/iterator/move_iterator.html',1,'std']]],
+  ['mt19937_51',['mt19937',['http://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine.html',1,'std']]],
+  ['mt19937_5f64_52',['mt19937_64',['http://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine.html',1,'std']]],
+  ['multimap_53',['multimap',['http://en.cppreference.com/w/cpp/container/multimap.html',1,'multimap'],['http://en.cppreference.com/w/cpp/container/multimap.html',1,'multimap']]],
+  ['multiplies_54',['multiplies',['http://en.cppreference.com/w/cpp/utility/functional/multiplies.html',1,'std']]],
+  ['multiset_55',['multiset',['http://en.cppreference.com/w/cpp/container/multiset.html',1,'multiset'],['http://en.cppreference.com/w/cpp/container/multiset.html',1,'multiset']]],
+  ['mutex_56',['mutex',['http://en.cppreference.com/w/cpp/thread/mutex.html',1,'std']]]
 ];

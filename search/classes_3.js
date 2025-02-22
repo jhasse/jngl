@@ -22,7 +22,8 @@ var searchData=
   ['div_5ft_19',['div_t',['http://en.cppreference.com/w/cpp/numeric/math/div.html',1,'std']]],
   ['divides_20',['divides',['http://en.cppreference.com/w/cpp/utility/functional/divides.html',1,'std']]],
   ['domain_5ferror_21',['domain_error',['http://en.cppreference.com/w/cpp/error/domain_error.html',1,'std']]],
-  ['drawable_22',['Drawable',['../classjngl_1_1Drawable.html',1,'jngl']]],
-  ['duration_23',['duration',['http://en.cppreference.com/w/cpp/chrono/duration.html',1,'std::chrono']]],
-  ['duration_5fvalues_24',['duration_values',['http://en.cppreference.com/w/cpp/chrono/duration_values.html',1,'std::chrono']]]
+  ['down_22',['Down',['../structjngl_1_1MouseInfo_1_1Down.html',1,'jngl::MouseInfo']]],
+  ['drawable_23',['Drawable',['../classjngl_1_1Drawable.html',1,'jngl']]],
+  ['duration_24',['duration',['http://en.cppreference.com/w/cpp/chrono/duration.html',1,'std::chrono']]],
+  ['duration_5fvalues_25',['duration_values',['http://en.cppreference.com/w/cpp/chrono/duration_values.html',1,'std::chrono']]]
 ];
