@@ -687,7 +687,7 @@
 <g id="Node000059" class="node">
 <title>Node59</title>
 <g id="a_Node000059"><a xlink:href="log_8hpp.html" target="_top" xlink:title="Logging functions.">
-<polygon fill="white" stroke="#666666" points="862,-185 774,-185 774,-165.75 862,-165.75 862,-185"/>
+<polygon fill="#fff0f0" stroke="red" points="862,-185 774,-185 774,-165.75 862,-165.75 862,-185"/>
 <text text-anchor="middle" x="818" y="-171.5" font-family="ui-monospace,monospace" font-size="10.00">jngl/log.hpp</text>
 </a>
 </g>
