@@ -7,6 +7,10 @@
 #include <cctype>
 #include <sstream>
 
+#ifdef ANDROID
+#include <android/log.h>
+#endif
+
 namespace jngl::internal {
 
 void trace(const std::string& line [[maybe_unused]]) {
@@ -61,6 +65,22 @@ std::string stripAnsiEscapeCodes(const std::string& in) {
 } // namespace
 
 void log(const std::string& appName, const std::string& level, const std::string& message) {
+#ifdef ANDROID
+	std::string levelStripped = stripAnsiEscapeCodes(level);
+	auto androidLevel = ANDROID_LOG_FATAL;
+	if (levelStripped == "debug") {
+		androidLevel = ANDROID_LOG_DEBUG;
+	} else if (levelStripped == "info") {
+		androidLevel = ANDROID_LOG_INFO;
+	} else if (levelStripped == "warn") {
+		androidLevel = ANDROID_LOG_WARN;
+	} else if (levelStripped == "trace") {
+		androidLevel = ANDROID_LOG_VERBOSE;
+	} else if (levelStripped == "error") {
+		androidLevel = ANDROID_LOG_ERROR;
+	}
+	__android_log_print(androidLevel, "libjngl", "%s", message.c_str());
+#else
 	std::ostringstream tmp;
 	if (!appName.empty()) {
 #ifdef __EMSCRIPTEN__
@@ -88,6 +108,7 @@ void log(const std::string& appName, const std::string& level, const std::string
 		tmp << line << '\n';
 	}
 	printMessage(tmp.str());
+#endif
 }
 
 } // namespace jngl::internal
