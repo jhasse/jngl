@@ -33,6 +33,10 @@ void trace(const std::string& line [[maybe_unused]]) {
 #endif
 }
 
+void debug(Vec2 v) {
+	debug("{}", v);
+}
+
 void debug(const std::string& line) {
 #ifndef NDEBUG
 	internal::log(shortenDisplayName(), "\x1b[36mdebug\x1b[0m", line);

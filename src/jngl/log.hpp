@@ -1,8 +1,10 @@
-// Copyright 2024 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2024-2025 Jan Niklas Hasse <jhasse@gmail.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Logging functions
 /// @file
 #pragma once
+
+#include "Vec2.hpp"
 
 #if __has_include(<format>) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION >= 170000)
 #include <format>
@@ -21,7 +23,11 @@ template <class... Args> void trace(std::format_string<Args...> format, Args&&..
 template <class... Args> void trace(Args&&...) {}
 #endif
 
+/// Print a log message only in debug builds (i.e. when NDEBUG is not defined)
 void debug(const std::string&);
+
+/// Equivalent to jngl::debug("{}", vec);
+void debug(Vec2);
 
 #if __has_include(<format>) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION >= 170000)
 template <class... Args> void debug(std::format_string<Args...> format, Args&&... args) {
