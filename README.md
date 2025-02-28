@@ -88,11 +88,11 @@ class MyGame : public jngl::Work {
     void step() override {
         // game logic
     }
-    void draw() const {
+    void draw() const override {
         text.draw(jngl::modelview().translate({ -100, 0 }));
     }
-    jngl::Font font("Arial.ttf", 12);
-    jngl::TextLine text(font, "Hello World!");
+    jngl::Font font{ "Arial.ttf", 12 };
+    jngl::TextLine text{ font, "Hello World!" };
 };
 
 jngl::AppParameters jnglInit() {
