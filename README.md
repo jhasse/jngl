@@ -1,31 +1,16 @@
 # JNGL - Just a Neat Game Library
 
-*A lightweight, cross-platform 2D game library for modern C++ development.*
+[🌐 Website](https://bixense.com/jngl/)
+[🏃 Quickstart](https://github.com/jhasse/jngl/wiki/JNGL-Quickstart)
+[🎓 Tutorial](https://github.com/pinguin999/my-jngl-starter)
+[📚 Documentation](https://bixense.com/jngl/annotated.html)
+
+[![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/254P43HvWJ)
+
+An easy to use C++ game library for Linux, Windows, macOS, Android, iOS, Xbox, the Nintendo Switch,
+LG webOS and the Web.
 
 [![Portal Dogs running on the Switch](https://user-images.githubusercontent.com/80071/105062511-f651d480-5a7a-11eb-8cd3-260c7929353a.gif)](https://portaldogs.com/)
-
-## Overview
-JNGL (Just a Neat Game Library) is an easy-to-use C++ game development library that runs on multiple platforms, including:
-
-- **Linux**
-- **Windows**
-- **macOS**
-- **Android**
-- **iOS**
-- **Xbox**
-- **Nintendo Switch**
-- **LG webOS**
-- **Web (via Emscripten)**
-
-### Features
-- Simple API for fast game development  
-- Cross-platform support with minimal configuration  
-- Hardware-accelerated rendering  
-- Built-in support for audio, fonts, and textures  
-- Open-source and lightweight  
-
-## Getting Started
-To get started, follow these build instructions for your platform.
 
 ### Building from Source
 ```bash
@@ -34,7 +19,6 @@ cmake --build build
 ./build/jngl-test
 ```
 
-## Installation by Platform
 ## Linux
 ### Ubuntu
 ```bash
@@ -53,7 +37,7 @@ pacman -Syu --needed cmake gcc sdl2 pkg-config fontconfig libwebp libvorbis
 
 ## Windows
 ### MSYS2 / MinGW-w64
-Set up MSYS2 and install the required dependencies:
+Set up [MSYS2](https://www.msys2.org/) and install the following in a MinGW-w64 Win64 Shell:
 ```bash
 pacman -Syu --needed mingw-w64-x86_64-gcc \
 mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
@@ -67,7 +51,7 @@ cmake -Bbuild -DFETCHCONTENT_QUIET=0
 Then open `build/jngl.sln` in Visual Studio.
 
 ## macOS
-Install dependencies using Homebrew:
+Use [Homebrew](http://brew.sh/) to install the build dependencies:
 ```bash
 brew install sdl2 freetype libvorbis webp pkg-config cmake
 ```
@@ -98,28 +82,28 @@ Then open `build-uwp/jngl.sln` in Visual Studio.
 Here's a simple "Hello, World!" example in JNGL:
 ```cpp
 #include <jngl.hpp>
+#include <jngl/init.hpp>
 
-void step() {
-    jngl::setColor(255, 255, 255);
-    jngl::drawText("Hello, JNGL!", jngl::Vec2(100, 100));
-}
+class MyGame : public jngl::Work {
+    void step() override {
+        // game logic
+    }
+    void draw() const {
+        text.draw(jngl::modelview().translate({ -100, 0 }));
+    }
+    jngl::Font font("Arial.ttf", 12);
+    jngl::TextLine text(font, "Hello World!");
+};
 
-int main() {
-    jngl::setStepCallback(step);
-    jngl::run();
-    return 0;
+jngl::AppParameters jnglInit() {
+    jngl::AppParameters params;
+    params.start = []() {
+        return std::make_shared<MyGame>();
+    };
+    return params;
 }
 ```
 
-## Contributing
-If you'd like to contribute:
-- Fork the repository and create a new branch.
-- Follow the coding guidelines.
-- Submit a pull request with a clear description of your changes.
-
-## License
-JNGL is licensed under the **zlib license**. See [LICENSE](https://en.wikipedia.org/wiki/Zlib_License) for details.
-
----
-For more details, visit the [official documentation](https://bixense.com/jngl/annotated.html).
+For a more complete starting point (i.e. project structure, etc.) check out the
+[JNGL project template](https://github.com/jhasse/jngl-starter).
 
