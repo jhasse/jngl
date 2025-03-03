@@ -783,4 +783,14 @@ int round(double v) {
 	return static_cast<int>(std::lround(v));
 }
 
+int utf8Length(std::string_view text) {
+	int length = 0;
+	for (const unsigned char c : text) {
+		if ((c & 0xC0) != 0x80) {
+			++length;
+		}
+	}
+	return length;
+}
+
 } // namespace jngl
