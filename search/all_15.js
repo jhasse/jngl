@@ -94,5 +94,6 @@ var searchData=
   ['utc_5fclock_91',['utc_clock',['http://en.cppreference.com/w/cpp/chrono/utc_clock.html',1,'std::chrono']]],
   ['utc_5fseconds_92',['utc_seconds',['http://en.cppreference.com/w/cpp/chrono/utc_clock.html',1,'std::chrono']]],
   ['utc_5ftime_93',['utc_time',['http://en.cppreference.com/w/cpp/chrono/utc_clock.html',1,'std::chrono']]],
-  ['utility_94',['utility',['http://en.cppreference.com/w/cpp/header/utility.html',1,'']]]
+  ['utf8length_94',['utf8Length',['../namespacejngl.html#a709b487a002ddc180dc83489d2c3653e',1,'jngl']]],
+  ['utility_95',['utility',['http://en.cppreference.com/w/cpp/header/utility.html',1,'']]]
 ];

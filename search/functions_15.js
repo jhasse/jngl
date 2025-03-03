@@ -60,5 +60,6 @@ var searchData=
   ['use_57',['use',['../classjngl_1_1FrameBuffer.html#ae358651e3b120275590b7163a63090f5',1,'jngl::FrameBuffer']]],
   ['use_5fcount_58',['use_count',['http://en.cppreference.com/w/cpp/memory/shared_ptr/use_count.html',1,'std::shared_ptr::use_count()'],['http://en.cppreference.com/w/cpp/memory/weak_ptr/use_count.html',1,'std::weak_ptr::use_count()']]],
   ['use_5ffacet_59',['use_facet',['http://en.cppreference.com/w/cpp/locale/use_facet.html',1,'std']]],
-  ['uses_5fallocator_5fconstruction_5fargs_60',['uses_allocator_construction_args',['http://en.cppreference.com/w/cpp/memory/uses_allocator_construction_args.html',1,'std']]]
+  ['uses_5fallocator_5fconstruction_5fargs_60',['uses_allocator_construction_args',['http://en.cppreference.com/w/cpp/memory/uses_allocator_construction_args.html',1,'std']]],
+  ['utf8length_61',['utf8Length',['../namespacejngl.html#a709b487a002ddc180dc83489d2c3653e',1,'jngl']]]
 ];
