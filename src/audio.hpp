@@ -1,9 +1,10 @@
-// Copyright 2010-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2010-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
 #include "audio/engine.hpp"
+#include "helper.hpp"
 #include "jngl/Singleton.hpp"
 
 #include <future>
@@ -43,7 +44,11 @@ public:
 	void registerChannel(std::shared_ptr<Stream>);
 	void unregisterChannel(const Stream&);
 	void step();
-	std::shared_ptr<SoundFile> getSoundFile(const std::string& filename, std::launch policy);
+
+	/// Returns nullptr if the sound hasn't been loaded yet (or if the file doesn't exist)
+	std::shared_ptr<SoundFile> getSoundFileIfLoaded(std::string_view filename);
+
+	std::shared_ptr<SoundFile> getSoundFile(std::string_view filename, std::launch policy);
 
 private:
 	std::vector<std::shared_ptr<Sound>> sounds_;
@@ -52,7 +57,8 @@ private:
 	std::shared_ptr<audio::pitch_control> pitchControl;
 	std::shared_ptr<audio::volume_control> volumeControl;
 	uint8_t pauseDeviceCount = 0; //< if >0 audio device is paused
-	std::unordered_map<std::string, std::shared_ptr<SoundFile>> soundFiles;
+	std::unordered_map<std::string, std::shared_ptr<SoundFile>, string_hash, std::equal_to<>>
+	    soundFiles;
 	// engine has to be declared after soundFiles so that the mixer thread gets joined and closed
 	// before any SoundFile is destroyed:
 	audio::engine engine;

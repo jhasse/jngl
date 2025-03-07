@@ -249,13 +249,26 @@ float SoundFile::progress() const {
 	return sound_ ? sound_->progress() : 0;
 }
 
-std::shared_ptr<SoundFile> Audio::getSoundFile(const std::string& filename, std::launch policy) {
+std::shared_ptr<SoundFile> Audio::getSoundFileIfLoaded(std::string_view filename) {
 	auto i = soundFiles.find(filename);
-	if (i == soundFiles.end()) { // sound hasn't been loaded yet?
-		soundFiles[filename] = std::make_shared<SoundFile>(pathPrefix + filename, policy);
-		return soundFiles[filename];
+	if (i == soundFiles.end()) {
+		FILE* file = fopen((pathPrefix + std::string(filename)).c_str(), "rb");
+		if (!file) {
+			throw std::runtime_error(std::format("File not found ({}).", filename));
+		}
+		fclose(file);
+		return nullptr;
 	}
 	return i->second;
+}
+
+std::shared_ptr<SoundFile> Audio::getSoundFile(std::string_view filename, std::launch policy) {
+	if (auto soundFile = getSoundFileIfLoaded(filename)) { // sound hasn't been loaded yet?
+		return soundFile;
+	}
+	return soundFiles
+	    .emplace(filename, std::make_shared<SoundFile>(pathPrefix + std::string(filename), policy))
+	    .first->second;
 }
 
 void play(const std::string& filename) {
@@ -263,7 +276,9 @@ void play(const std::string& filename) {
 }
 
 void stop(const std::string& filename) {
-	Audio::handle().getSoundFile(filename, std::launch::async)->stop();
+	if (auto sound = Audio::handle().getSoundFileIfLoaded(filename)) {
+		sound->stop();
+	}
 }
 
 Finally loadSound(const std::string& filename) {
@@ -272,7 +287,8 @@ Finally loadSound(const std::string& filename) {
 }
 
 bool isPlaying(const std::string& filename) {
-	return Audio::handle().getSoundFile(filename, std::launch::async)->isPlaying();
+	const auto soundFile = Audio::handle().getSoundFileIfLoaded(filename);
+	return soundFile && soundFile->isPlaying();
 }
 
 std::shared_ptr<SoundFile> loop(const std::string& filename) {

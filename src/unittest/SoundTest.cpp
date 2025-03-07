@@ -7,10 +7,14 @@ namespace {
 boost::ut::suite _ = [] {
 	using namespace boost::ut; // NOLINT
 	"Sound"_test = [] {
+		expect(!jngl::isPlaying("../data/test.ogg"));
 		jngl::play("../data/test.ogg");
 		expect(jngl::isPlaying("../data/test.ogg"));
 		jngl::stop("../data/test.ogg");
 		expect(!jngl::isPlaying("../data/test.ogg"));
+		expect(throws<std::runtime_error>([] { jngl::play("nonexistent.ogg"); }));
+		expect(throws<std::runtime_error>([] { jngl::stop("nonexistent.ogg"); }));
+		expect(throws<std::runtime_error>([] { jngl::isPlaying("nonexistent.ogg"); }));
 	};
 };
 } // namespace

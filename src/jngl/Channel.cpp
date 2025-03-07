@@ -43,7 +43,9 @@ std::shared_ptr<SoundFile> Channel::loop(const std::string& filename) {
 }
 
 void Channel::stop(const std::string& filename) {
-	Audio::handle().getSoundFile(filename, std::launch::async)->stop(*this);
+	if (auto sound = Audio::handle().getSoundFileIfLoaded(filename)) {
+		sound->stop(*this);
+	}
 }
 
 Finally Channel::pause() {
