@@ -254,7 +254,7 @@ std::shared_ptr<SoundFile> Audio::getSoundFileIfLoaded(std::string_view filename
 	if (i == soundFiles.end()) {
 		FILE* file = fopen((pathPrefix + std::string(filename)).c_str(), "rb");
 		if (!file) {
-			throw std::runtime_error(std::format("File not found ({}).", filename));
+			throw std::runtime_error("File not found (" + std::string(filename) + ").");
 		}
 		fclose(file);
 		return nullptr;
