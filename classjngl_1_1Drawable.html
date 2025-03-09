@@ -82,7 +82,9 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classjngl_1_1Drawable-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Drawable Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
@@ -194,19 +196,33 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (<a clas
 <tr class="memdesc:a6d6e0d6afba009c29a780f255ebbc962"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether <em>point</em> is inside the bounding box. <br /></td></tr>
 <tr class="separator:a6d6e0d6afba009c29a780f255ebbc962"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a4f2dcd3eff51dee9520ab9cd563e2781" id="r_a4f2dcd3eff51dee9520ab9cd563e2781"><td class="memItemLeft" align="right" valign="top"><a id="a4f2dcd3eff51dee9520ab9cd563e2781" name="a4f2dcd3eff51dee9520ab9cd563e2781"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setWidth</b> (float)</td></tr>
+<tr class="memdesc:a4f2dcd3eff51dee9520ab9cd563e2781"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override width (in screen coordinates) <br /></td></tr>
+<tr class="separator:a4f2dcd3eff51dee9520ab9cd563e2781"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee20a5251a31b3061ecff567687e30fc" id="r_aee20a5251a31b3061ecff567687e30fc"><td class="memItemLeft" align="right" valign="top"><a id="aee20a5251a31b3061ecff567687e30fc" name="aee20a5251a31b3061ecff567687e30fc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setHeight</b> (float)</td></tr>
+<tr class="memdesc:aee20a5251a31b3061ecff567687e30fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override height (in screen coordinates) <br /></td></tr>
+<tr class="separator:aee20a5251a31b3061ecff567687e30fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a73ce306f4a2e972d8d02d1ace209af25" id="r_a73ce306f4a2e972d8d02d1ace209af25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73ce306f4a2e972d8d02d1ace209af25">position</a></td></tr>
 <tr class="separator:a73ce306f4a2e972d8d02d1ace209af25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae426f00e82704fa09578f5446e22d915" id="r_ae426f00e82704fa09578f5446e22d915"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae426f00e82704fa09578f5446e22d915">width</a> = 0</td></tr>
-<tr class="separator:ae426f00e82704fa09578f5446e22d915"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48083b65ac9a863566dc3e3fff09a5b4" id="r_a48083b65ac9a863566dc3e3fff09a5b4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48083b65ac9a863566dc3e3fff09a5b4">height</a> = 0</td></tr>
-<tr class="separator:a48083b65ac9a863566dc3e3fff09a5b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a3292175d54d93d126ba2829249316344" id="r_a3292175d54d93d126ba2829249316344"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3292175d54d93d126ba2829249316344">Sprite</a></td></tr>
+<tr class="separator:a3292175d54d93d126ba2829249316344"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee0ad1dafe471596e6d25530d9fbaf0c" id="r_aee0ad1dafe471596e6d25530d9fbaf0c"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee0ad1dafe471596e6d25530d9fbaf0c">Text</a></td></tr>
+<tr class="separator:aee0ad1dafe471596e6d25530d9fbaf0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Base class for drawable objects with a position and a rectangle size. </p>
 
-<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00012">12</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00015">15</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
 </div><div class="dynheader">
 Inheritance diagram for Drawable:</div>
 <div class="dyncontent">
@@ -303,7 +319,7 @@ template&lt;class Vect &gt; </div>
 
 <p>Sets the position of the top-left of the <a class="el" href="classjngl_1_1Drawable.html" title="Base class for drawable objects with a position and a rectangle size.">Drawable</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00031">31</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00037">37</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
 
 </div>
 </div>
@@ -334,7 +350,56 @@ template&lt;class Vect &gt; </div>
 
 <p>Centers the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a> at <em>c</em> (e.g. <a class="el" href="classjngl_1_1Vec2.html" title="Two-dimensional vector.">jngl::Vec2</a>) </p>
 
-<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00042">42</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00048">48</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Symbol Documentation</h2>
+<a id="a3292175d54d93d126ba2829249316344" name="a3292175d54d93d126ba2829249316344"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3292175d54d93d126ba2829249316344">&#9670;&#160;</a></span>Sprite</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classjngl_1_1Sprite.html">Sprite</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00017">17</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aee0ad1dafe471596e6d25530d9fbaf0c" name="aee0ad1dafe471596e6d25530d9fbaf0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee0ad1dafe471596e6d25530d9fbaf0c">&#9670;&#160;</a></span>Text</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classjngl_1_1Text.html">Text</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00018">18</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
 
 </div>
 </div>
@@ -359,55 +424,7 @@ template&lt;class Vect &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00084">84</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ae426f00e82704fa09578f5446e22d915" name="ae426f00e82704fa09578f5446e22d915"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae426f00e82704fa09578f5446e22d915">&#9670;&#160;</a></span>width</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float width = 0</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00085">85</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a48083b65ac9a863566dc3e3fff09a5b4" name="a48083b65ac9a863566dc3e3fff09a5b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a48083b65ac9a863566dc3e3fff09a5b4">&#9670;&#160;</a></span>height</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float height = 0</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00086">86</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00096">96</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
 
 </div>
 </div>
