@@ -150,7 +150,6 @@ void mainLoop(AppParameters params) {
 	} else {
 		params.screenSize = { static_cast<double>(getDesktopWidth()),
 			                  static_cast<double>(getDesktopHeight()) };
-		fullscreen = true;
 	}
 	if (!fullscreen) {
 		// Make window as big as possible
