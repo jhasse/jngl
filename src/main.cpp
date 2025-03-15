@@ -509,7 +509,7 @@ void drawSquare(const Mat3& modelview, Rgba color) {
 }
 
 void drawSquareOutline(Mat3 modelview, float lineWidth, Rgba color) {
-	glLineWidth(lineWidth);
+	glLineWidth(lineWidth * getScaleFactor());
 	pWindow->drawLine(modelview.translate({ -.5, -.5 }), { 1, 0 }, color);
 	pWindow->drawLine(modelview, { 0, 1 }, color);
 	pWindow->drawLine(modelview.translate({ 1, 1 }), { 0, -1 }, color);
