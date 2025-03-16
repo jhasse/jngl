@@ -158,9 +158,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawClipped</b> (<a c
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawMesh</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
 <tr class="memdesc:a89c331aee86657889c1f1d8233c6051f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the sprite's texture on it using the global modelview from <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c" title="Returns a copy of the global ModelView matrix.">jngl::modelview()</a> <br /></td></tr>
 <tr class="separator:a89c331aee86657889c1f1d8233c6051f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16eec847da023ffb64358c9ad0a9fce2" id="r_a16eec847da023ffb64358c9ad0a9fce2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16eec847da023ffb64358c9ad0a9fce2">drawMesh</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
-<tr class="memdesc:a16eec847da023ffb64358c9ad0a9fce2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the sprite's texture on it, ignores the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a>'s position.  <br /></td></tr>
-<tr class="separator:a16eec847da023ffb64358c9ad0a9fce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c2581c39c29eb02eb00cd282101f595" id="r_a9c2581c39c29eb02eb00cd282101f595"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c2581c39c29eb02eb00cd282101f595">drawMesh</a> (const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;<a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
+<tr class="memdesc:a9c2581c39c29eb02eb00cd282101f595"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the sprite's texture on it, ignores the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a>'s position.  <br /></td></tr>
+<tr class="separator:a9c2581c39c29eb02eb00cd282101f595"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e5dde70cf6c55aa57c632a826ccfe57" id="r_a4e5dde70cf6c55aa57c632a826ccfe57"><td class="memItemLeft" align="right" valign="top"><a id="a4e5dde70cf6c55aa57c632a826ccfe57" name="a4e5dde70cf6c55aa57c632a826ccfe57"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>drawMesh</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, <a class="el" href="classjngl_1_1Rgba.html">jngl::Rgba</a> color, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
+<tr class="separator:a4e5dde70cf6c55aa57c632a826ccfe57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac417e162aaacd2e4f918c12966052cd0" id="r_ac417e162aaacd2e4f918c12966052cd0"><td class="memItemLeft" align="right" valign="top"><a id="ac417e162aaacd2e4f918c12966052cd0" name="ac417e162aaacd2e4f918c12966052cd0"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setBytes</b> (const unsigned char *)</td></tr>
 <tr class="separator:ac417e162aaacd2e4f918c12966052cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -648,8 +651,8 @@ Collaboration diagram for Sprite:</div>
 
 </div>
 </div>
-<a id="a16eec847da023ffb64358c9ad0a9fce2" name="a16eec847da023ffb64358c9ad0a9fce2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16eec847da023ffb64358c9ad0a9fce2">&#9670;&#160;</a></span>drawMesh()</h2>
+<a id="a9c2581c39c29eb02eb00cd282101f595" name="a9c2581c39c29eb02eb00cd282101f595"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c2581c39c29eb02eb00cd282101f595">&#9670;&#160;</a></span>drawMesh()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -657,7 +660,7 @@ Collaboration diagram for Sprite:</div>
         <tr>
           <td class="memname">void drawMesh </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a></td>          <td class="paramname"><span class="paramname"><em>modelview</em>, </span></td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>modelview</em>, </span></td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -714,7 +717,7 @@ Collaboration diagram for Sprite:</div>
 
 <p>Function which actually loads the sprite. </p>
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00234">234</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00236">236</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>
