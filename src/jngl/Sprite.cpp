@@ -499,4 +499,11 @@ Finally disableBlending() {
 	});
 }
 
+Finally drawOnlyIntoAlphaChannel() {
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_TRUE);
+	return Finally([]() {
+		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	});
+}
+
 } // namespace jngl

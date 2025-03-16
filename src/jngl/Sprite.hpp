@@ -304,4 +304,6 @@ int getHeight(const std::string& filename);
 Finally
 disableBlending();
 
+Finally drawOnlyIntoAlphaChannel();
+
 } // namespace jngl
