@@ -283,7 +283,12 @@ void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
 	popMatrix();
 }
 
-void Sprite::drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
+void Sprite::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes,
+                      const ShaderProgram* const shaderProgram) const {
+	drawMesh(modelview, vertexes, gSpriteColor, shaderProgram);
+}
+
+void Sprite::drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes, jngl::Rgba color,
                       const ShaderProgram* const shaderProgram) const {
 	if (vertexes.empty()) {
 		return;
@@ -295,8 +300,8 @@ void Sprite::drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(),
+		            color.getGreen(), color.getBlue(), color.getAlpha());
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	texture->drawMesh(vertexes);
