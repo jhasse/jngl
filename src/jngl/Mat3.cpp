@@ -42,6 +42,14 @@ Mat3& Mat3::scale(const Vec2& v) {
 }
 
 Mat3& Mat3::rotate(const float radian) {
+#ifndef NDEBUG
+	if (std::isinf(radian)) {
+		throw std::runtime_error("Rotation by infinity");
+	}
+	if (std::isnan(radian)) {
+		throw std::runtime_error("Rotation by NaN");
+	}
+#endif
 	boost::qvm::rotate_z(*this, radian);
 	return *this;
 }
