@@ -4,8 +4,9 @@
 /// @file
 #pragma once
 
-#include "jngl/Achievement.hpp" // IWYU pragma: keep
-#include "jngl/Alpha.hpp"       // IWYU pragma: keep
+#include "jngl/Achievement.hpp"   // IWYU pragma: keep
+#include "jngl/Alpha.hpp"         // IWYU pragma: keep
+#include "jngl/AppParameters.hpp" // IWYU pragma: keep
 #include "jngl/Channel.hpp"
 #include "jngl/Color.hpp"            // IWYU pragma: keep
 #include "jngl/Container.hpp"        // IWYU pragma: keep
