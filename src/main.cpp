@@ -293,10 +293,22 @@ int getMouseY() {
 }
 
 bool keyDown(const key::KeyType key) {
+	if (key == key::Ctrl) {
+		return keyDown(key::ControlL) || keyDown(key::ControlR);
+	}
+	if (key == key::Shift) {
+		return keyDown(key::ShiftL) || keyDown(key::ShiftR);
+	}
 	return pWindow->getKeyDown(key);
 }
 
 bool keyPressed(const key::KeyType key) {
+	if (key == key::Ctrl) {
+		return keyPressed(key::ControlL) || keyPressed(key::ControlR);
+	}
+	if (key == key::Shift) {
+		return keyPressed(key::ShiftL) || keyPressed(key::ShiftR);
+	}
 	return pWindow->getKeyPressed(key);
 }
 
@@ -494,6 +506,14 @@ void drawRect(Mat3 modelview, const Vec2 size, const Rgba color) {
 
 void drawSquare(const Mat3& modelview, Rgba color) {
 	pWindow->drawSquare(modelview, color);
+}
+
+void drawSquareOutline(Mat3 modelview, float lineWidth, Rgba color) {
+	glLineWidth(lineWidth * getScaleFactor());
+	pWindow->drawLine(modelview.translate({ -.5, -.5 }), { 1, 0 }, color);
+	pWindow->drawLine(modelview, { 0, 1 }, color);
+	pWindow->drawLine(modelview.translate({ 1, 1 }), { 0, -1 }, color);
+	pWindow->drawLine(modelview, { -1, 0 }, color);
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
@@ -761,6 +781,16 @@ void writeConfig(const std::string& key, const std::string& value) {
 int round(double v) {
 	assert(!std::isnan(v));
 	return static_cast<int>(std::lround(v));
+}
+
+int utf8Length(std::string_view text) {
+	int length = 0;
+	for (const unsigned char c : text) {
+		if ((c & 0xC0) != 0x80) {
+			++length;
+		}
+	}
+	return length;
 }
 
 } // namespace jngl

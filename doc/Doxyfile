@@ -994,8 +994,12 @@ INPUT_FILE_ENCODING    =
 FILE_PATTERNS          = *.c \
                          *.cc \
                          *.cxx \
+                         *.cxxm \
                          *.cpp \
+                         *.cppm \
+                         *.ccm \
                          *.c++ \
+                         *.c++m \
                          *.java \
                          *.ii \
                          *.ixx \
@@ -1010,6 +1014,8 @@ FILE_PATTERNS          = *.c \
                          *.hxx \
                          *.hpp \
                          *.h++ \
+                         *.ixx \
+                         *.l \
                          *.cs \
                          *.d \
                          *.php \
@@ -1028,13 +1034,14 @@ FILE_PATTERNS          = *.c \
                          *.f95 \
                          *.f03 \
                          *.f08 \
+                         *.f18 \
                          *.f \
                          *.for \
-                         *.tcl \
                          *.vhd \
                          *.vhdl \
                          *.ucf \
-                         *.qsf
+                         *.qsf \
+                         *.ice
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.
@@ -1973,7 +1980,7 @@ LATEX_OUTPUT           = latex
 # the output language.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-LATEX_CMD_NAME         = latex
+LATEX_CMD_NAME         =
 
 # The MAKEINDEX_CMD_NAME tag can be used to specify the command name to generate
 # index for LaTeX.

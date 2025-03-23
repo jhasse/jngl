@@ -1,4 +1,4 @@
-// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "spriteimpl.hpp"
 
@@ -85,7 +85,7 @@ Finally loadSprite(const std::string& filename) {
 }
 
 Sprite::Loader::Loader(std::string filename) noexcept : filename(std::move(filename)) {
-	if (TextureCache::handle().sprites.count(this->filename) == 0) {
+	if (!TextureCache::handle().sprites.contains(this->filename)) {
 		imageDataFuture = std::async(std::launch::async, [this]() {
 			auto tmp = ImageData::load(this->filename, getScaleFactor());
 			tmp->pixels(); // TODO: Not needed when Sprite loading and jngl::load will be reworked
@@ -114,7 +114,7 @@ std::shared_ptr<Sprite> Sprite::Loader::shared() const {
 }
 
 Sprite::Loader::operator bool() const {
-	if (TextureCache::handle().sprites.count(filename) > 0) {
+	if (TextureCache::handle().sprites.contains(filename)) {
 		return true;
 	}
 	return imageDataFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready;

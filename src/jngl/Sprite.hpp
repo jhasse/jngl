@@ -222,7 +222,9 @@ public:
 	/// \endcode
 	///
 	/// \param shaderProgram Passing `nullptr` uses the default.
-	void drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
+	void drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes,
+	              const ShaderProgram* = nullptr) const;
+	void drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes, jngl::Rgba color,
 	              const ShaderProgram* = nullptr) const;
 
 	void setBytes(const unsigned char*);
@@ -301,5 +303,7 @@ int getHeight(const std::string& filename);
 #endif
 Finally
 disableBlending();
+
+Finally drawOnlyIntoAlphaChannel();
 
 } // namespace jngl

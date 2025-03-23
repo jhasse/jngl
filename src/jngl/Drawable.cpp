@@ -101,6 +101,14 @@ void Drawable::drawBoundingBox() const {
 	         { LINE_WIDTH, LINE_WIDTH + getHeight() });
 }
 
+void Drawable::setWidth(const float w) {
+	width = w * static_cast<float>(getScaleFactor());
+}
+
+void Drawable::setHeight(const float h) {
+	height = h * static_cast<float>(getScaleFactor());
+}
+
 bool Drawable::contains(const jngl::Vec2 point) const {
 	return (getX() <= point.x && point.x < getX() + getWidth() && getY() <= point.y &&
 	        point.y < getY() + getHeight());

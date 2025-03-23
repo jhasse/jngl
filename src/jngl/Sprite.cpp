@@ -1,11 +1,11 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #ifndef NOPNG
 #include <png.h> // Include first, see https://bugs.launchpad.net/ubuntu/+source/libpng/+bug/218409
 #endif
 
-#include "sprite.hpp"
+#include "Sprite.hpp"
 
 #include "../ShaderCache.hpp"
 #include "../TextureCache.hpp"
@@ -283,7 +283,12 @@ void Sprite::drawClipped(const Vec2 start, const Vec2 end) const {
 	popMatrix();
 }
 
-void Sprite::drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
+void Sprite::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes,
+                      const ShaderProgram* const shaderProgram) const {
+	drawMesh(modelview, vertexes, gSpriteColor, shaderProgram);
+}
+
+void Sprite::drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes, jngl::Rgba color,
                       const ShaderProgram* const shaderProgram) const {
 	if (vertexes.empty()) {
 		return;
@@ -295,8 +300,8 @@ void Sprite::drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(),
+		            color.getGreen(), color.getBlue(), color.getAlpha());
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	texture->drawMesh(vertexes);
@@ -491,6 +496,13 @@ Finally disableBlending() {
 	glDisable(GL_BLEND);
 	return Finally([]() {
 		glEnable(GL_BLEND);
+	});
+}
+
+Finally drawOnlyIntoAlphaChannel() {
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_TRUE);
+	return Finally([]() {
+		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	});
 }
 

@@ -1,4 +1,4 @@
-// Copyright 2014-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2014-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Miscellaneous functions
 /// @file
@@ -126,6 +126,9 @@ void openURL(const std::string&);
 
 /// Rounds a double to an integer, just like std::lround
 int round(double v);
+
+/// Returns the number of characters in the UTF-8 string
+int utf8Length(std::string_view);
 
 namespace internal {
 

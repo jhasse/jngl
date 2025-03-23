@@ -4,7 +4,6 @@
 /// @file
 #pragma once
 
-#include "Rgb.hpp"
 #include "Rgba.hpp"
 #include "Vec2.hpp"
 
@@ -46,6 +45,9 @@ public:
 	/// Calculates the width of \a text in scale-independent pixels if it would be drawn with this
 	/// font
 	double getTextWidth(std::string_view) const;
+
+	/// Returns the font size in scale-independent pixels
+	double getLineHeight() const;
 
 	/// Internal function
 	std::shared_ptr<FontImpl> getImpl();

@@ -1,11 +1,11 @@
-// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ImageData.hpp"
 
 #include "../helper.hpp"
+#include "../log.hpp"
 #include "../main.hpp"
 #include "Finally.hpp"
-#include "debug.hpp"
 
 #ifdef ANDROID
 #include "../android/fopen.hpp"
@@ -83,7 +83,7 @@ std::unique_ptr<ImageData> ImageData::load(const std::string& filename, double s
 	}
 	Finally _([pFile]() {
 		if (fclose(pFile) != 0) {
-			debugLn("error closing file");
+			internal::error("error closing file");
 		}
 	});
 	return loadFunction(filename, pFile);

@@ -61,6 +61,10 @@ double Font::getTextWidth(std::string_view text) const {
 	return static_cast<double>(static_cast<ScaleablePixels>(impl->getTextWidth(std::string(text))));
 }
 
+double Font::getLineHeight() const {
+	return static_cast<double>(static_cast<ScaleablePixels>(impl->getLineHeight()));
+}
+
 std::shared_ptr<FontImpl> Font::getImpl() {
 	return impl;
 }

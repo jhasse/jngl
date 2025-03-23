@@ -1,9 +1,8 @@
-// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Mat3.hpp"
 
 #include "Pixels.hpp"
-#include "Vec2.hpp"
 #include "screen.hpp"
 
 namespace jngl {
@@ -43,6 +42,14 @@ Mat3& Mat3::scale(const Vec2& v) {
 }
 
 Mat3& Mat3::rotate(const float radian) {
+#ifndef NDEBUG
+	if (std::isinf(radian)) {
+		throw std::runtime_error("Rotation by infinity");
+	}
+	if (std::isnan(radian)) {
+		throw std::runtime_error("Rotation by NaN");
+	}
+#endif
 	boost::qvm::rotate_z(*this, radian);
 	return *this;
 }

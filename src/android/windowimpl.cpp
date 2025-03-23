@@ -1,11 +1,11 @@
-// Copyright 2015-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowimpl.hpp"
 
 #include "AndroidController.hpp"
 #include "../jngl/other.hpp"
-#include "../jngl/debug.hpp"
+#include "../log.hpp"
 #include "../jngl/screen.hpp"
 #include "../jngl/sound.hpp"
 #include "../jngl/window.hpp"
@@ -23,7 +23,7 @@ namespace jngl {
 android_app* androidApp;
 
 static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
-	jngl::debug("Received event "); jngl::debugLn(cmd);
+	internal::debug("Received event {}", cmd);
 	WindowImpl& impl = *reinterpret_cast<WindowImpl*>(app->userData);
 	switch (cmd) {
 		case APP_CMD_SAVE_STATE:
@@ -110,8 +110,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 				const auto id = AMotionEvent_getPointerId(event, index);
 				const auto it = impl.touches.find(id);
 				if (it == impl.touches.end()) {
-					debug("WARNING: Unknown touch id: ");
-					debugLn(id);
+					internal::debug("Unknown touch id: {}", id);
 					return 0;
 				}
 				it->second.x = x;
@@ -144,7 +143,7 @@ WindowImpl::WindowImpl(Window* window, const std::pair<int, int> minAspectRatio,
 	app->userData = this;
 	app->onAppCmd = engine_handle_cmd;
 	app->onInputEvent = engine_handle_input;
-	jngl::debugLn("Handler set.");
+	internal::debug("Handler set.");
 
 	app->activity->vm->AttachCurrentThread(&env, nullptr);
 
@@ -589,7 +588,7 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 		controller->dpadY = AMotionEvent_getAxisValue(event, AMOTION_EVENT_AXIS_HAT_Y, 0);
 		break;
 	default:
-		debugLn("Unknown joystick event!");
+		internal::warn("Unknown joystick event!");
 	}
 	return 1;
 }
@@ -623,7 +622,7 @@ std::string getPreferredLanguage() {
 	    env->CallObjectMethod(language, getBytesMethod, env->NewStringUTF("UTF-8")));
 	const size_t length = env->GetArrayLength(bytesObject);
 	if (length != 2) {
-		debugLn("ERROR: Couldn't get preferred language. Falling back to \"en\".");
+		internal::error("Couldn't get preferred language. Falling back to \"en\".");
 		return "en";
 	}
 	return std::string(

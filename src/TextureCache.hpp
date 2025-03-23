@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
+#include "helper.hpp"
 #include "jngl/Singleton.hpp"
 
 #include <memory>
@@ -21,19 +22,6 @@ public:
 	std::unordered_map<std::string, std::shared_ptr<Sprite>> sprites;
 
 private:
-	// https://www.cppstories.com/2021/heterogeneous-access-cpp20/
-	struct string_hash {
-		using is_transparent = void;
-		[[nodiscard]] size_t operator()(const char* txt) const {
-			return std::hash<std::string_view>{}(txt);
-		}
-		[[nodiscard]] size_t operator()(std::string_view txt) const {
-			return std::hash<std::string_view>{}(txt);
-		}
-		[[nodiscard]] size_t operator()(const std::string& txt) const {
-			return std::hash<std::string>{}(txt);
-		}
-	};
 	std::unordered_map<std::string, std::shared_ptr<Texture>, string_hash, std::equal_to<>>
 	    textures;
 };

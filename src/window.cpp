@@ -228,12 +228,32 @@ void Window::setKeyPressed(const std::string& key, bool p) {
 bool keyDown(const char key) {
 	std::string temp;
 	temp.append(1, key);
+	if (key >= 'a' && key <= 'z') {
+		if (keyDown(std::string(1, static_cast<char>(key - 32)))) {
+			return true;
+		}
+	}
+	if (key >= 'A' && key <= 'Z') {
+		if (keyDown(std::string(1, static_cast<char>(key + 32)))) {
+			return true;
+		}
+	}
 	return keyDown(temp);
 }
 
 bool keyPressed(const char key) {
 	std::string temp;
 	temp.append(1, key);
+	if (key >= 'a' && key <= 'z') {
+		if (keyPressed(std::string(1, static_cast<char>(key - 32)))) {
+			return true;
+		}
+	}
+	if (key >= 'A' && key <= 'Z') {
+		if (keyPressed(std::string(1, static_cast<char>(key + 32)))) {
+			return true;
+		}
+	}
 	return keyPressed(temp);
 }
 
@@ -370,9 +390,13 @@ void Window::stepIfNeeded() {
 #ifdef JNGL_PERFORMANCE_OVERLAY
 		auto start = std::chrono::steady_clock::now();
 #endif
-		for (auto& job : jobs) {
-			job->step();
+
+		// use oldschool for loop here, so that Jobs can add other Jobs during step():
+		const size_t numOfJobs = jobs.size();
+		for (size_t i = 0; i < numOfJobs; ++i) {
+			jobs[i]->step();
 		}
+
 		for (auto job : jobsToRemove) {
 			const auto it = std::find_if(jobs.begin(), jobs.end(),
 			                             [job](const auto& p) { return p.get() == job; });
@@ -402,8 +426,7 @@ void Window::stepIfNeeded() {
 			if (currentWork_) {
 				currentWork_->onUnload();
 			}
-			currentWork_ = newWork_;
-			newWork_.reset();
+			currentWork_ = std::move(newWork_);
 			currentWork_->onLoad();
 		}
 	}
@@ -459,6 +482,7 @@ void Window::setWork(std::shared_ptr<Work> work) {
 	if (!currentWork_) {
 		internal::debug("Setting current work to {}.", static_cast<void*>(work.get()));
 		currentWork_ = std::move(work);
+		currentWork_->onLoad();
 	} else {
 		internal::debug("Change work to {}.", static_cast<void*>(work.get()));
 		changeWork = true;

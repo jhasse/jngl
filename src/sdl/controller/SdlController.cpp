@@ -1,4 +1,4 @@
-// Copyright 2017-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2017-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "SdlController.hpp"
@@ -12,12 +12,16 @@ namespace jngl {
 
 SdlController::SdlController(SDL_Joystick* const handle, const SDL_JoystickID joystickId)
 : handle(handle), haptic(SDL_OpenHapticFromJoystick(handle)) {
+	internal::debug("Controller #{}: {}", joystickId, SDL_GetJoystickName(handle));
+	internal::trace("Axes: {}, Balls: {}, Buttons: {}, Hats: {}", SDL_GetNumJoystickAxes(handle),
+	                SDL_GetNumJoystickBalls(handle), SDL_GetNumJoystickButtons(handle),
+	                SDL_GetNumJoystickHats(handle));
 	if (haptic) {
 		if (!SDL_InitHapticRumble(haptic)) {
 			internal::error(SDL_GetError());
 		}
 	} else {
-		internal::error(SDL_GetError());
+		internal::trace(SDL_GetError());
 	}
 	switch (SDL_GetNumJoystickButtons(handle)) {
 		case 11:
@@ -232,11 +236,12 @@ std::vector<std::shared_ptr<Controller>> getConnectedControllers() {
 	SDL_JoystickID* joystickId = SDL_GetJoysticks(&numJoysticks);
 	std::vector<std::shared_ptr<Controller>> rtn;
 	for (int i = 0; i < numJoysticks; ++i) {
-		SDL_Joystick* handle = SDL_OpenJoystick(joystickId[i]);
+		SDL_Joystick* handle = SDL_OpenJoystick(i);
 		if (SDL_GetNumJoystickButtons(handle) == 0 ||
-		    (SDL_GetNumJoystickAxes(handle) == 0 && SDL_GetNumJoystickBalls(handle) == 0 &&
-		     SDL_GetNumJoystickHats(handle) == 0)) {
-			// This could be the Motion Sensors of the DS4. Ignore it:
+		    (SDL_GetNumJoystickAxes(handle) < 2 && SDL_GetNumJoystickBalls(handle) == 0 &&
+		     SDL_GetNumJoystickHats(handle) < 2)) {
+			// This could be the Motion Sensors of the DS4 or "Keychron K3 Pro System Control".
+			// Ignore it:
 			SDL_CloseJoystick(handle);
 			continue;
 		}

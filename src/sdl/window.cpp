@@ -5,7 +5,7 @@
 #include "../jngl/ImageData.hpp"
 #include "../jngl/screen.hpp"
 #include "../jngl/window.hpp"
-#include "../jngl/work.hpp"
+#include "../jngl/work.hpp" // IWYU pragma: keep
 #include "../log.hpp"
 #include "../main.hpp"
 #include "../windowptr.hpp"
@@ -233,6 +233,11 @@ void Window::UpdateInput() {
 	if (relativeMouseMode) {
 		mousex_ = 0;
 		mousey_ = 0;
+	}
+	if (impl->cursor != impl->currentCursor) {
+		impl->currentCursor = impl->cursor;
+		impl->sdlCursor.reset(SDL_CreateSystemCursor(impl->cursor));
+		SDL_SetCursor(impl->sdlCursor.get());
 	}
 	SDL_Event event;
 	while (SDL_PollEvent(&event) != 0) {
@@ -549,21 +554,14 @@ int Window::getMouseY() const {
 }
 
 void setCursor(Cursor type) {
-	SDL_SystemCursor sdlType = SDL_SYSTEM_CURSOR_DEFAULT;
 	switch (type) {
 	case Cursor::ARROW:
-		sdlType = SDL_SYSTEM_CURSOR_DEFAULT;
+		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_DEFAULT;
 		break;
 	case Cursor::I:
-		sdlType = SDL_SYSTEM_CURSOR_TEXT;
+		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_TEXT;
 		break;
 	};
-	static SDL_Cursor* cursor = nullptr;
-	if (cursor) {
-		SDL_DestroyCursor(cursor);
-	}
-	cursor = SDL_CreateSystemCursor(sdlType);
-	SDL_SetCursor(cursor);
 }
 
 void errorMessage(const std::string &text) {

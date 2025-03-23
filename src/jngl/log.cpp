@@ -29,7 +29,17 @@ std::string shortenDisplayName() {
 
 void trace(const std::string& line [[maybe_unused]]) {
 #ifndef NDEBUG
-	internal::log(shortenDisplayName(), "\x1b[1;36mtrace\x1b[0m", line);
+	internal::log(shortenDisplayName(), "\x1b[37mtrace\x1b[0m", line);
+#endif
+}
+
+void debug(Vec2 v) {
+	debug("{}", v);
+}
+
+void debug(const std::string& line [[maybe_unused]]) {
+#ifndef NDEBUG
+	internal::log(shortenDisplayName(), "\x1b[36mdebug\x1b[0m", line);
 #endif
 }
 

@@ -1,4 +1,4 @@
-// Copyright 2016-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2016-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -20,5 +20,19 @@ bool fileExists(const std::string& path);
 /// foo//bar => foo/bar
 /// ././/././foo.bar => foo.bar
 std::string sanitizePath(std::string);
+
+// https://www.cppstories.com/2021/heterogeneous-access-cpp20/
+struct string_hash {
+	using is_transparent = void;
+	[[nodiscard]] size_t operator()(const char* txt) const {
+		return std::hash<std::string_view>{}(txt);
+	}
+	[[nodiscard]] size_t operator()(std::string_view txt) const {
+		return std::hash<std::string_view>{}(txt);
+	}
+	[[nodiscard]] size_t operator()(const std::string& txt) const {
+		return std::hash<std::string>{}(txt);
+	}
+};
 
 } // namespace jngl
