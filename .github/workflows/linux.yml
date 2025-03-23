@@ -15,9 +15,9 @@ jobs:
     - name: Configure with CMake and GCC
       run: just cmake
     - name: Build Debug
-      run: just debug
+      run: just debug all
     - name: Build Release
-      run: just release
+      run: just release all
     - name: Install unittest dependencies
       run: sudo apt install xserver-xorg-core xserver-xorg-video-dummy
     - name: Unittest
