@@ -41,9 +41,9 @@ public:
 	float actualHeight;
 	int actualCanvasWidth;
 	int actualCanvasHeight;
-	SDL_SystemCursor cursor = SDL_SYSTEM_CURSOR_ARROW;
+	SDL_SystemCursor cursor = SDL_SYSTEM_CURSOR_DEFAULT;
 	SDL_SystemCursor currentCursor = cursor;
-	std::unique_ptr<SDL_Cursor, void (*)(SDL_Cursor*)> sdlCursor{ nullptr, SDL_FreeCursor };
+	std::unique_ptr<SDL_Cursor, void (*)(SDL_Cursor*)> sdlCursor{ nullptr, SDL_DestroyCursor };
 
 	/// For Retina screens on macOS SDL does its own scaling of mouse coordinates, etc. :(
 	float hidpiScaleFactor;
