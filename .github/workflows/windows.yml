@@ -2,7 +2,7 @@ name: Windows
 on: [push]
 jobs:
   clang-cl:
-    runs-on: windows-2022
+    runs-on: windows-2025
     steps:
     - uses: actions/checkout@v4
     - name: Cache CPM.cmake packages
@@ -47,7 +47,7 @@ jobs:
         Release/jngl-unittest Vec2
 
   msvc:
-    runs-on: windows-2022
+    runs-on: windows-2025
     steps:
     - uses: actions/checkout@v4
     - name: Cache CPM.cmake packages
