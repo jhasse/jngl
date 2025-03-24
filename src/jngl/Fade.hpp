@@ -12,14 +12,18 @@ namespace jngl {
 class Fade : public jngl::Work {
 public:
 	explicit Fade(std::shared_ptr<jngl::Work>, int speed = 20);
+	~Fade() override;
 	void step() override;
 	void draw() const override;
 
 private:
+	void onQuitEvent() override;
+
 	std::shared_ptr<Work> work;
 	std::shared_ptr<jngl::Work> oldWork;
 	double fadeCount;
 	int speed;
+	bool quit = false;
 };
 
 } // namespace jngl

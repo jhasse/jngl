@@ -418,16 +418,19 @@ void Window::stepIfNeeded() {
 		if (keyPressed(key::Escape)) {
 			currentWork_->onBackEvent();
 		}
-		if (!jngl::running() && currentWork_) {
+		if (!isRunning() && currentWork_) {
 			currentWork_->onQuitEvent();
 		}
-		while (changeWork) {
+		while (isRunning() && changeWork) {
 			changeWork = false;
 			if (currentWork_) {
 				currentWork_->onUnload();
 			}
 			currentWork_ = std::move(newWork_);
 			currentWork_->onLoad();
+			if (!isRunning()) {
+				currentWork_->onQuitEvent();
+			}
 		}
 	}
 }
