@@ -12,11 +12,11 @@ run: (debug "jngl-test")
 run-release: (release "jngl-test")
 	{{absolute_path("build/Release/jngl-test")}}
 
-unittest: (debug "jngl-unittest")
-	cd build && {{absolute_path("build/Debug/jngl-unittest")}}
+unittest test='': (debug "jngl-unittest")
+	cd build && {{absolute_path("build/Debug/jngl-unittest")}} {{test}}
 
-unittest-release: (release "jngl-unittest")
-	cd build && {{absolute_path("build/Release/jngl-unittest")}}
+unittest-release test='': (release "jngl-unittest")
+	cd build && {{absolute_path("build/Release/jngl-unittest")}} {{test}}
 
 [unix] # https://github.com/casey/just/issues/1639
 cmake:
