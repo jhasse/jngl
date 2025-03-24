@@ -114,6 +114,7 @@ public:
 	void drawLine(Mat3 modelview, Vec2 b, Rgba color) const;
 	void drawSquare(Mat3 modelview, Rgba color) const;
 	void onControllerChanged(std::function<void()>);
+	void bindSystemFramebufferAndRenderbuffer();
 
 	friend class WindowImpl;
 	std::unique_ptr<WindowImpl> impl;
@@ -188,6 +189,9 @@ private:
 	// <fontSize, <fontName, FontImpl>>
 	std::map<int, std::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
 	std::vector<std::function<void()>> updateInputCallbacks;
+
+	GLuint systemFramebuffer = 0;
+	GLuint systemRenderbuffer = 0;
 
 #ifdef JNGL_PERFORMANCE_OVERLAY
 	double lastStepDuration = 0;
