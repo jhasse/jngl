@@ -115,10 +115,7 @@ elseif (UNIX)
 
 	target_link_libraries(jngl PRIVATE $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>)
 else() # Windows
-	set(JNGL_WINAPI_DEFAULT ON)
 	if(WINDOWS_STORE)
-		set(JNGL_WINAPI_DEFAULT OFF)
-
 		FetchContent_Declare(
 			angle
 			GIT_REPOSITORY https://github.com/jhasse/angle.git
@@ -133,7 +130,7 @@ else() # Windows
 			set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_OLD} CACHE BOOL "" FORCE)
 		endif()
 	endif()
-	option(JNGL_WINAPI "Use WinAPI instead of SDL" ${JNGL_WINAPI_DEFAULT})
+	option(JNGL_WINAPI "Use WinAPI instead of SDL" OFF)
 
 	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
 	if(JNGL_WINAPI)
