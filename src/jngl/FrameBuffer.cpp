@@ -95,6 +95,8 @@ FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height)
 FrameBuffer::FrameBuffer(std::array<Pixels, 2> size) : FrameBuffer(size[0], size[1]) {
 }
 
+FrameBuffer::FrameBuffer(FrameBuffer&&) noexcept = default;
+FrameBuffer& FrameBuffer::operator=(FrameBuffer&&) noexcept = default;
 FrameBuffer::~FrameBuffer() = default;
 
 void FrameBuffer::draw(const double x, const double y) const {
