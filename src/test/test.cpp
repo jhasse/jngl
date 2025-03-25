@@ -123,11 +123,9 @@ public:
 		}
 		drawBackground();
 		jngl::setColor(0, 0, 0, 255);
-		jngl::drawLine(jngl::modelview()
-		                   .translate({ 650, 450 })
-		                   .rotate(rotate / 360 * std::numbers::pi)
-		                   .translate({ -50, -50 }),
-		               { 100, 100 });
+		jngl::drawLine(
+		    jngl::modelview().translate({ 650, 450 }).rotate(rotate / 360 * std::numbers::pi),
+		    { -50, -50 }, { 50, 50 }, 1.f);
 		jngl::setSpriteAlpha(200);
 		auto rotatedMv = jngl::modelview()
 		                     .translate(jngl::getScreenSize() / 2)

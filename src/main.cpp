@@ -534,15 +534,36 @@ void setLineWidth(const float width) {
 }
 
 void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
-	drawLine(jngl::Vec2(xstart, ystart), jngl::Vec2(xend, yend));
+	pWindow->drawLine(jngl::modelview().translate(jngl::Vec2(xstart, ystart)),
+	                  jngl::Vec2(xend, yend) - jngl::Vec2(xstart, ystart), gShapeColor);
 }
 
 void drawLine(const Vec2 start, const Vec2 end) {
 	pWindow->drawLine(jngl::modelview().translate(start), end - start, gShapeColor);
 }
 
+void drawLine(const Vec2 start, const Vec2 end, float lineWidth) {
+	glLineWidth(lineWidth * getScaleFactor());
+	pWindow->drawLine(jngl::modelview().translate(start), end - start, gShapeColor);
+}
+
+void drawLine(const Vec2 start, const Vec2 end, float lineWidth, Rgba color) {
+	glLineWidth(lineWidth * getScaleFactor());
+	pWindow->drawLine(jngl::modelview().translate(start), end - start, color);
+}
+
 void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end) {
 	pWindow->drawLine(modelview.translate(start), end - start, gShapeColor);
+}
+
+void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end, float width) {
+	glLineWidth(width * getScaleFactor());
+	pWindow->drawLine(modelview.translate(start), end - start, gShapeColor);
+}
+
+void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end, float width, Rgba color) {
+	glLineWidth(width * getScaleFactor());
+	pWindow->drawLine(modelview.translate(start), end - start, color);
 }
 
 void drawLine(const Mat3& modelview, const Vec2 end) {
@@ -550,6 +571,11 @@ void drawLine(const Mat3& modelview, const Vec2 end) {
 }
 
 void drawLine(const Mat3& modelview, const Vec2 end, Rgba color) {
+	pWindow->drawLine(modelview, end, color);
+}
+
+void drawLine(const Mat3& modelview, const Vec2 end, float lineWidth, Rgba color) {
+	glLineWidth(lineWidth * getScaleFactor());
 	pWindow->drawLine(modelview, end, color);
 }
 
