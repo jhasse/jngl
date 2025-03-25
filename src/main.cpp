@@ -508,12 +508,18 @@ void drawSquare(const Mat3& modelview, Rgba color) {
 	pWindow->drawSquare(modelview, color);
 }
 
+void drawRectOutline(Mat3 modelview, Vec2 size, float lineWidth, Rgba color) {
+	drawLine(modelview.translate({ -size.x / 2., -size.y / 2. }), { size.x, 0 }, lineWidth, color);
+	drawLine(modelview, { 0, size.y }, lineWidth, color);
+	drawLine(modelview.translate(size), { 0, -size.y }, lineWidth, color);
+	drawLine(modelview, { -size.x, 0 }, lineWidth, color);
+}
+
 void drawSquareOutline(Mat3 modelview, float lineWidth, Rgba color) {
-	glLineWidth(lineWidth * getScaleFactor());
-	pWindow->drawLine(modelview.translate({ -.5, -.5 }), { 1, 0 }, color);
-	pWindow->drawLine(modelview, { 0, 1 }, color);
-	pWindow->drawLine(modelview.translate({ 1, 1 }), { 0, -1 }, color);
-	pWindow->drawLine(modelview, { -1, 0 }, color);
+	drawLine(modelview.translate({ -.5, -.5 }), { 1, 0 }, lineWidth / modelview.data[4], color);
+	drawLine(modelview, { 0, 1 }, lineWidth / modelview.data[0], color);
+	drawLine(modelview.translate({ 1, 1 }), { 0, -1 }, lineWidth / modelview.data[0], color);
+	drawLine(modelview, { -1, 0 }, lineWidth / modelview.data[4], color);
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
@@ -543,27 +549,23 @@ void drawLine(const Vec2 start, const Vec2 end) {
 }
 
 void drawLine(const Vec2 start, const Vec2 end, float lineWidth) {
-	glLineWidth(lineWidth * getScaleFactor());
-	pWindow->drawLine(jngl::modelview().translate(start), end - start, gShapeColor);
+	drawLine(jngl::modelview().translate(start), end - start, lineWidth, gShapeColor);
 }
 
 void drawLine(const Vec2 start, const Vec2 end, float lineWidth, Rgba color) {
-	glLineWidth(lineWidth * getScaleFactor());
-	pWindow->drawLine(jngl::modelview().translate(start), end - start, color);
+	drawLine(jngl::modelview().translate(start), end - start, lineWidth, color);
 }
 
 void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end) {
 	pWindow->drawLine(modelview.translate(start), end - start, gShapeColor);
 }
 
-void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end, float width) {
-	glLineWidth(width * getScaleFactor());
-	pWindow->drawLine(modelview.translate(start), end - start, gShapeColor);
+void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end, float lineWidth) {
+	drawLine(modelview.translate(start), end - start, lineWidth, gShapeColor);
 }
 
-void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end, float width, Rgba color) {
-	glLineWidth(width * getScaleFactor());
-	pWindow->drawLine(modelview.translate(start), end - start, color);
+void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end, float lineWidth, Rgba color) {
+	drawLine(modelview.translate(start), end - start, lineWidth, color);
 }
 
 void drawLine(const Mat3& modelview, const Vec2 end) {
@@ -574,9 +576,14 @@ void drawLine(const Mat3& modelview, const Vec2 end, Rgba color) {
 	pWindow->drawLine(modelview, end, color);
 }
 
-void drawLine(const Mat3& modelview, const Vec2 end, float lineWidth, Rgba color) {
-	glLineWidth(lineWidth * getScaleFactor());
-	pWindow->drawLine(modelview, end, color);
+void drawLine(Mat3 modelview, const Vec2 end, float lineWidth, Rgba color) {
+	if (end.isNull()) {
+		return;
+	}
+	pWindow->drawSquare(modelview.rotate(std::atan2(end.x, -end.y))
+	                        .scale(lineWidth, boost::qvm::mag(end))
+	                        .translate({ 0, -0.5 }),
+	                    color);
 }
 
 void drawPoint(const double x, const double y) {

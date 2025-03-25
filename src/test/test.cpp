@@ -305,6 +305,8 @@ void Test::drawBackground() const {
 	jngl::drawTriangle({ 600, 30 }, { 700, 30 }, { 650, 130 });
 	jngl::setColor(0, 255, 0, 100);
 	jngl::drawRect({ 600, 400 }, { 100, 100 });
+	jngl::drawRectOutline(jngl::modelview().translate({ 650, 450 }), { 40, 80 }, 1.f,
+	                      0x00000099_rgba);
 	jngl::setColor(0, 0, 255, 100);
 	jngl::drawEllipse(jngl::modelview().translate({ 80, 400 }), 50, 80);
 }

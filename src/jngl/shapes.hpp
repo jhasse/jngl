@@ -83,7 +83,7 @@ void drawLine(const Mat3& modelview, Vec2 end);
 void drawLine(const Mat3& modelview, Vec2 end, Rgba color);
 
 /// Draws a line from (0, 0) to \a end with width \a lineWidth in \a color
-void drawLine(const Mat3& modelview, Vec2 end, float lineWidth, Rgba color);
+void drawLine(Mat3 modelview, Vec2 end, float lineWidth, Rgba color);
 
 [[deprecated("Use drawEllipse(Mat3, float, float, float) instead")]]
 /// \deprecated Use drawEllipse(Mat3, float, float, float) instead
@@ -164,6 +164,9 @@ void drawRect(const Mat3& modelview, Vec2 size, Rgb);
 /// Use setAlpha to set the opacity.
 void drawRect(Mat3 modelview, Vec2 size, Rgba color);
 
+/// Draws the outline of a rectangle (so □ instead of ■) of \a size centered at (0, 0) in \a color
+void drawRectOutline(Mat3 modelview, Vec2 size, float lineWidth, Rgba color);
+
 /// Draws a (filled) square of size 1x1 centered at (0, 0) with the specified color
 ///
 /// By squaling the modelview matrix you can change the size of the square, effectively turning it
@@ -183,6 +186,9 @@ void drawSquare(const Mat3& modelview, Rgba color);
 /// // draws a rectangle at (12 - 56 / 2, 34 - 78 / 2) with a size of 56x78 in red:
 /// drawSquareOutline(jngl::modelview().translate(12, 34).scale(56, 78), 0xff0000ff_rgba, 2.f);
 /// \endcode
+///
+/// \note The line width is not affected by the modelview matrix scaling! Use drawRectOutline
+/// instead if you want scaling to work correctly.
 void drawSquareOutline(Mat3 modelview, float lineWidth, Rgba color);
 
 template <class Vect> void drawRect(Vect pos, Vect size) {
