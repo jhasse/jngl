@@ -23,6 +23,10 @@ cmake:
 	cmake -Bbuild -G"Ninja Multi-Config"
 
 [unix]
+cmake-clang:
+	cmake -Bbuild-clang -G"Ninja Multi-Config" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS="-stdlib=libc++" -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+
+[unix]
 clean:
 	rm -rf build
 

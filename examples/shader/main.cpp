@@ -1,7 +1,5 @@
-#include <fstream>
 #include <jngl.hpp>
 #include <jngl/init.hpp>
-#include <sstream>
 
 class ShaderExample : public jngl::Work {
 public:
