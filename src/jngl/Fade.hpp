@@ -4,14 +4,14 @@
 /// @file
 #pragma once
 
-#include "work.hpp"
+#include "Scene.hpp"
 
 namespace jngl {
 
 /// Fades between two scenes, first fading to black and then fading to the new scene
-class Fade : public jngl::Work {
+class Fade : public Scene {
 public:
-	explicit Fade(std::shared_ptr<jngl::Work>, int speed = 20);
+	explicit Fade(std::shared_ptr<Scene>, int speed = 20);
 	~Fade() override;
 	void step() override;
 	void draw() const override;
@@ -19,8 +19,8 @@ public:
 private:
 	void onQuitEvent() override;
 
-	std::shared_ptr<Work> work;
-	std::shared_ptr<jngl::Work> oldWork;
+	std::shared_ptr<Scene> work;
+	std::shared_ptr<Scene> oldWork;
 	double fadeCount;
 	int speed;
 	bool quit = false;

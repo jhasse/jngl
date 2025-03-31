@@ -1,4 +1,4 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <algorithm>
@@ -17,7 +17,7 @@ void testKeys();
 int performance = 1;
 double factor = 0;
 
-class AsyncLoad : public jngl::Work {
+class AsyncLoad : public jngl::Scene {
 public:
 	AsyncLoad() {
 		jngl::setSpriteAlpha(255);
@@ -35,7 +35,7 @@ private:
 	jngl::Sprite::Loader spriteAsync{ "../examples/bike/bg" };
 };
 
-class Test : public jngl::Work {
+class Test : public jngl::Scene {
 public:
 	explicit Test(const std::string& displayName)
 	: frameTime(jngl::getTime()), lastTime(jngl::getTime()), fb2(jngl::getWindowSize()),
@@ -99,7 +99,7 @@ public:
 			}
 		}
 		if (jngl::keyPressed('g')) {
-			jngl::setWork<AsyncLoad>();
+			jngl::setWork<jngl::Fade>(std::make_shared<AsyncLoad>());
 		}
 		if (jngl::keyPressed('e')) {
 			jngl::errorMessage("Hello World!");

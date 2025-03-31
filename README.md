@@ -84,7 +84,7 @@ Here's a simple "Hello, World!" example in JNGL:
 #include <jngl.hpp>
 #include <jngl/init.hpp>
 
-class MyGame : public jngl::Work {
+class MyGame : public jngl::Scene {
     void step() override {
         // game logic
     }

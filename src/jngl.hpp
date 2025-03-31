@@ -24,6 +24,7 @@
 #include "jngl/Rgb.hpp"              // IWYU pragma: keep
 #include "jngl/Rgba.hpp"             // IWYU pragma: keep
 #include "jngl/ScaleablePixels.hpp"  // IWYU pragma: keep
+#include "jngl/Scene.hpp"            // IWYU pragma: keep
 #include "jngl/Shader.hpp"           // IWYU pragma: keep
 #include "jngl/ShaderProgram.hpp"    // IWYU pragma: keep
 #include "jngl/Singleton.hpp"        // IWYU pragma: keep

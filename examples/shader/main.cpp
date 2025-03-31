@@ -1,7 +1,9 @@
+// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <jngl.hpp>
 #include <jngl/init.hpp>
 
-class ShaderExample : public jngl::Work {
+class ShaderExample : public jngl::Scene {
 public:
 	ShaderExample() {
 		blurFragment = std::make_unique<jngl::Shader>(jngl::readAsset("blur.frag"),
