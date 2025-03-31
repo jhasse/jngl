@@ -92,14 +92,14 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// For conditions of distribution and use, see copyright notice in LICENSE.txt</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="work_8hpp.html">work.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="Scene_8hpp.html">Scene.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacejngl.html">jngl</a> {</div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
 <div class="foldopen" id="foldopen00012" data-start="{" data-end="};">
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="classjngl_1_1Fade.html">   12</a></span><span class="keyword">class </span><a class="code hl_class" href="classjngl_1_1Fade.html">Fade</a> : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Work</a> {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="classjngl_1_1Fade.html">   12</a></span><span class="keyword">class </span><a class="code hl_class" href="classjngl_1_1Fade.html">Fade</a> : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">Scene</a> {</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keyword">explicit</span> <a class="code hl_class" href="classjngl_1_1Fade.html">Fade</a>(<a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::shared_ptr&lt;jngl::Work&gt;</a>, <span class="keywordtype">int</span> speed = 20);</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keyword">explicit</span> <a class="code hl_class" href="classjngl_1_1Fade.html">Fade</a>(<a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::shared_ptr&lt;Scene&gt;</a>, <span class="keywordtype">int</span> speed = 20);</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <a class="code hl_class" href="classjngl_1_1Fade.html">~Fade</a>() <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="classjngl_1_1Fade.html#ae6c526798a490afe221d1447f508f16a">   16</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Fade.html#ae6c526798a490afe221d1447f508f16a">step</a>() <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="classjngl_1_1Fade.html#a35460413b5c663cd8a28ad3c80caaf71">   17</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Fade.html#a35460413b5c663cd8a28ad3c80caaf71">draw</a>() <span class="keyword">const override</span>;</div>
@@ -107,8 +107,8 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">private</span>:</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="classjngl_1_1Fade.html#a9fb5042f6b152e7cf9242a1eeba6cc58">   20</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Fade.html#a9fb5042f6b152e7cf9242a1eeba6cc58">onQuitEvent</a>() <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::shared_ptr&lt;Work&gt;</a> work;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::shared_ptr&lt;jngl::Work&gt;</a> oldWork;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::shared_ptr&lt;Scene&gt;</a> work;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::shared_ptr&lt;Scene&gt;</a> oldWork;</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordtype">double</span> fadeCount;</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordtype">int</span> speed;</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordtype">bool</span> quit = <span class="keyword">false</span>;</div>
@@ -116,6 +116,7 @@ $(function() { codefold.init(0); });
 </div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>} <span class="comment">// namespace jngl</span></div>
+<div class="ttc" id="aScene_8hpp_html"><div class="ttname"><a href="Scene_8hpp.html">Scene.hpp</a></div><div class="ttdoc">Contains jngl::Scene class and related functions.</div></div>
 <div class="ttc" id="aclassjngl_1_1Fade_html"><div class="ttname"><a href="classjngl_1_1Fade.html">jngl::Fade</a></div><div class="ttdoc">Fades between two scenes, first fading to black and then fading to the new scene.</div><div class="ttdef"><b>Definition</b> <a href="#l00012">Fade.hpp:12</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Fade_html_a35460413b5c663cd8a28ad3c80caaf71"><div class="ttname"><a href="classjngl_1_1Fade.html#a35460413b5c663cd8a28ad3c80caaf71">jngl::Fade::draw</a></div><div class="ttdeci">void draw() const override</div><div class="ttdoc">Draw the game state.</div></div>
 <div class="ttc" id="aclassjngl_1_1Fade_html_a9fb5042f6b152e7cf9242a1eeba6cc58"><div class="ttname"><a href="classjngl_1_1Fade.html#a9fb5042f6b152e7cf9242a1eeba6cc58">jngl::Fade::onQuitEvent</a></div><div class="ttdeci">void onQuitEvent() override</div><div class="ttdoc">Gets called when the user closes the main window or quit() has been called.</div></div>
@@ -123,7 +124,6 @@ $(function() { codefold.init(0); });
 <div class="ttc" id="aclassjngl_1_1Work_html"><div class="ttname"><a href="classjngl_1_1Work.html">jngl::Work</a></div><div class="ttdoc">Active state of the game, e.g. a menu or the game itself.</div><div class="ttdef"><b>Definition</b> <a href="work_8hpp_source.html#l00013">work.hpp:13</a></div></div>
 <div class="ttc" id="afunction_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::function</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition</b> <a href="Achievement_8hpp_source.html#l00010">Achievement.hpp:10</a></div></div>
-<div class="ttc" id="awork_8hpp_html"><div class="ttname"><a href="work_8hpp.html">work.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- HTML footer for doxygen 1.9.1-->
 <!-- start footer part -->

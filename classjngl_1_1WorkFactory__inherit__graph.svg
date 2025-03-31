@@ -21,8 +21,8 @@
 <g id="Node000002" class="node">
 <title>Node2</title>
 <g id="a_Node000002"><a xlink:href="classjngl_1_1Work.html" target="_top" xlink:title="Active state of the game, e.g. a menu or the game itself.">
-<polygon fill="white" stroke="#666666" points="61,-74.5 21,-74.5 21,-55.25 61,-55.25 61,-74.5"/>
-<text text-anchor="middle" x="41" y="-61" font-family="ui-monospace,monospace" font-size="10.00">Work</text>
+<polygon fill="white" stroke="#666666" points="64,-74.5 18,-74.5 18,-55.25 64,-55.25 64,-74.5"/>
+<text text-anchor="middle" x="41" y="-61" font-family="ui-monospace,monospace" font-size="10.00">Scene</text>
 </a>
 </g>
 </g>

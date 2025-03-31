@@ -183,7 +183,7 @@ static <a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;&#160;</t
 
 <p>Pauses the <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a>; destroying the returned <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> object will resume again. </p>
 <p>Note that this doesn't change the status of <a class="el" href="namespacejngl.html#a41df6b862953562a4795ef71dc79fc9c">jngl::isPlaying</a> as that only depends on the status of the <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a>.</p>
-<p>Example where you want to pause audio in a menu: </p><div class="fragment"><div class="line"><span class="keyword">class </span>PauseMenu : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Work</a> {</div>
+<p>Example where you want to pause audio in a menu: </p><div class="fragment"><div class="line"><span class="keyword">class </span>PauseMenu : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Scene</a> {</div>
 <div class="line">    <a class="code hl_class" href="classjngl_1_1Finally.html">jngl::Finally</a> paused;</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">public</span>:</div>
@@ -194,7 +194,7 @@ static <a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;&#160;</t
 <div class="ttc" id="aclassjngl_1_1Finally_html"><div class="ttname"><a href="classjngl_1_1Finally.html">jngl::Finally</a></div><div class="ttdoc">Helper class which calls a function when being destroyed.</div><div class="ttdef"><b>Definition</b> <a href="Finally_8hpp_source.html#l00022">Finally.hpp:22</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Work_html"><div class="ttname"><a href="classjngl_1_1Work.html">jngl::Work</a></div><div class="ttdoc">Active state of the game, e.g. a menu or the game itself.</div><div class="ttdef"><b>Definition</b> <a href="work_8hpp_source.html#l00013">work.hpp:13</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition</b> <a href="Achievement_8hpp_source.html#l00010">Achievement.hpp:10</a></div></div>
-</div><!-- fragment --><p>Or if you want to toggle pausing audio using <code>Space</code>: </p><div class="fragment"><div class="line"><span class="keyword">class </span>PauseExample : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Work</a> {</div>
+</div><!-- fragment --><p>Or if you want to toggle pausing audio using <code>Space</code>: </p><div class="fragment"><div class="line"><span class="keyword">class </span>PauseExample : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Scene</a> {</div>
 <div class="line">    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::optional&lt;jngl::Finally&gt;</a> paused;</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">public</span>:</div>
