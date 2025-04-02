@@ -51,7 +51,7 @@
 					for (int i = 1; i < argc; ++i) { \
 						tmp[i - 1] = argv[i]; \
 					} \
-					jngl::setArgs(tmp); \
+					jngl::internal::setArgs(tmp); \
 				} \
 				jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
 		#ifdef NDEBUG

@@ -53,7 +53,6 @@ namespace jngl {
 
 std::string pathPrefix;
 optional<std::string> configPath;
-std::vector<std::string> args;
 Rgb backgroundColor(1, 1, 1);
 std::stack<jngl::Mat3> modelviewStack;
 
@@ -690,14 +689,6 @@ std::string internal::getConfigPath() {
 	return *(configPath = path.str());
 #endif
 	throw std::runtime_error("Couldn't get config path. Has the app been started?");
-}
-
-void setArgs(std::vector<std::string> args) {
-	jngl::args = std::move(args);
-}
-
-std::vector<std::string> getArgs() {
-	return args;
 }
 
 std::string getConfigPath() {

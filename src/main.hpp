@@ -22,6 +22,5 @@ void updateProjection(int windowWidth, int windowHeight, int, int);
 
 extern std::string pathPrefix;
 extern optional<std::string> configPath;
-extern std::vector<std::string> args;
 
 } // namespace jngl

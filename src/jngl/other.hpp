@@ -92,10 +92,9 @@ void setConfigPath(const std::string& path);
 /// Returns the directory of the currently running binary
 std::string getBinaryPath();
 
-/// Called by JNGL_MAIN_BEGIN to set command line arguments
-void setArgs(std::vector<std::string>);
-
-/// Returns the command line arguments passed to the executable
+/// Returns the command line arguments passed to the executable (empty when there are no arguments)
+///
+/// Does not include the executable name itself (in contrast to argc/argv).
 std::vector<std::string> getArgs();
 
 /// Returns a stringstream containing the whole file. This will read from the .apk on Android
@@ -131,6 +130,9 @@ int round(double v);
 int utf8Length(std::string_view);
 
 namespace internal {
+
+/// Called by JNGL_MAIN_BEGIN to set command line arguments
+void setArgs(std::vector<std::string>);
 
 /// Returns the directory where to store configuration files and save games.
 ///
