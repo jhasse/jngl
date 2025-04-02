@@ -43,7 +43,7 @@ var searchData=
   ['setalign_40',['setAlign',['../classjngl_1_1Label.html#a560cccd4201edfd95c859e64a777cbcc',1,'jngl::Label::setAlign()'],['../classjngl_1_1Text.html#a560cccd4201edfd95c859e64a777cbcc',1,'jngl::Text::setAlign()']]],
   ['setalpha_41',['setAlpha',['../classjngl_1_1Alpha.html#ae772bb337a8895f3e0a6f1baefc2aa72',1,'jngl::Alpha::setAlpha()'],['../classjngl_1_1Label.html#a391413f3039a43801820f09b7c484248',1,'jngl::Label::setAlpha()'],['../classjngl_1_1Rgba.html#ae772bb337a8895f3e0a6f1baefc2aa72',1,'jngl::Rgba::setAlpha()'],['../namespacejngl.html#a2e0420f68fa01ef7219a0bc2aa792169',1,'jngl::setAlpha(uint8_t alpha)']]],
   ['setantialiasing_42',['setAntiAliasing',['../namespacejngl.html#aeb43937d96fee091bb9f6d44c2e3db3b',1,'jngl']]],
-  ['setargs_43',['setArgs',['../namespacejngl.html#a5c4816c324038640de13593ee1c5844d',1,'jngl']]],
+  ['setargs_43',['setArgs',['../other_8hpp.html#a5c4816c324038640de13593ee1c5844d',1,'jngl::internal']]],
   ['setbackgroundcolor_44',['setBackgroundColor',['../namespacejngl.html#ad2bd1a6eca16b6e13dd04ed9ff6e6bb0',1,'jngl::setBackgroundColor(jngl::Rgb)'],['../namespacejngl.html#a5a1481d931704b4d0dd6342b2bf5152c',1,'jngl::setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue)']]],
   ['setbase_45',['setbase',['http://en.cppreference.com/w/cpp/io/manip/setbase.html',1,'std']]],
   ['setblue_46',['setBlue',['../classjngl_1_1Color.html#a62835daefb8468feb54e8d293b2463e0',1,'jngl::Color::setBlue()'],['../classjngl_1_1Rgb.html#a0cd5d836542f13acc1eb97a1f4f89d98',1,'jngl::Rgb::setBlue()'],['../classjngl_1_1Rgba.html#a0cd5d836542f13acc1eb97a1f4f89d98',1,'jngl::Rgba::setBlue()']]],

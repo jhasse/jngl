@@ -591,13 +591,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setPrefix</b> (const 
 <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getBinaryPath</b> ()</td></tr>
 <tr class="memdesc:ac133cf5185d3b52971d219380da1517a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the directory of the currently running binary. <br /></td></tr>
 <tr class="separator:ac133cf5185d3b52971d219380da1517a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c4816c324038640de13593ee1c5844d" id="r_a5c4816c324038640de13593ee1c5844d"><td class="memItemLeft" align="right" valign="top"><a id="a5c4816c324038640de13593ee1c5844d" name="a5c4816c324038640de13593ee1c5844d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setArgs</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &gt;)</td></tr>
-<tr class="memdesc:a5c4816c324038640de13593ee1c5844d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by JNGL_MAIN_BEGIN to set command line arguments. <br /></td></tr>
-<tr class="separator:a5c4816c324038640de13593ee1c5844d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac84a94c9280462d8c9157cbe1d3e936a" id="r_ac84a94c9280462d8c9157cbe1d3e936a"><td class="memItemLeft" align="right" valign="top"><a id="ac84a94c9280462d8c9157cbe1d3e936a" name="ac84a94c9280462d8c9157cbe1d3e936a"></a>
-<a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getArgs</b> ()</td></tr>
-<tr class="memdesc:ac84a94c9280462d8c9157cbe1d3e936a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the command line arguments passed to the executable. <br /></td></tr>
+<tr class="memitem:ac84a94c9280462d8c9157cbe1d3e936a" id="r_ac84a94c9280462d8c9157cbe1d3e936a"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac84a94c9280462d8c9157cbe1d3e936a">getArgs</a> ()</td></tr>
+<tr class="memdesc:ac84a94c9280462d8c9157cbe1d3e936a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the command line arguments passed to the executable (empty when there are no arguments)  <br /></td></tr>
 <tr class="separator:ac84a94c9280462d8c9157cbe1d3e936a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3963c47bd040588a49fe5299f9b866c4" id="r_a3963c47bd040588a49fe5299f9b866c4"><td class="memItemLeft" align="right" valign="top"><a id="a3963c47bd040588a49fe5299f9b866c4" name="a3963c47bd040588a49fe5299f9b866c4"></a>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/io/basic_stringstream.html">std::stringstream</a>&#160;</td><td class="memItemRight" valign="bottom"><b>readAsset</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
@@ -2089,6 +2084,26 @@ template&lt;class Vect &gt; </div>
 <li>macOS: <code>~/Library/Application Support/Display Name/</code></li>
 <li>Android/iOS: Data path provided by the OS </li>
 </ul>
+
+</div>
+</div>
+<a id="ac84a94c9280462d8c9157cbe1d3e936a" name="ac84a94c9280462d8c9157cbe1d3e936a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac84a94c9280462d8c9157cbe1d3e936a">&#9670;&#160;</a></span>getArgs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &gt; getArgs </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the command line arguments passed to the executable (empty when there are no arguments) </p>
+<p>Does not include the executable name itself (in contrast to argc/argv). </p>
 
 </div>
 </div>
