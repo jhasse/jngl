@@ -1,5 +1,0 @@
-<map id="Drawable" name="Drawable">
-<area shape="rect" id="Node000001" title="Base class for drawable objects with a position and a rectangle size." alt="" coords="5,94,91,120"/>
-<area shape="rect" id="Node000002" href="$classjngl_1_1Vec2.html" title="Two&#45;dimensional vector." alt="" coords="21,5,75,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="51,47,51,94,45,94,45,47"/>
-</map>

@@ -83,7 +83,6 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classjngl_1_1Drawable-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Drawable Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
@@ -115,6 +114,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2bf282904f7854c8a4fd515107aa8c4e" id="r_a2bf282904f7854c8a4fd515107aa8c4e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bf282904f7854c8a4fd515107aa8c4e">draw</a> () const =0</td></tr>
 <tr class="memdesc:a2bf282904f7854c8a4fd515107aa8c4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when drawing a frame.  <br /></td></tr>
 <tr class="separator:a2bf282904f7854c8a4fd515107aa8c4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88f380e332af287608956b3dba395895" id="r_a88f380e332af287608956b3dba395895"><td class="memItemLeft" align="right" valign="top"><a id="a88f380e332af287608956b3dba395895" name="a88f380e332af287608956b3dba395895"></a>
+<a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPos</b> () const</td></tr>
+<tr class="memdesc:a88f380e332af287608956b3dba395895"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns position (not center) <br /></td></tr>
+<tr class="separator:a88f380e332af287608956b3dba395895"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a597e686cf6c81aadeab82e6607e234fe" id="r_a597e686cf6c81aadeab82e6607e234fe"><td class="memItemLeft" align="right" valign="top"><a id="a597e686cf6c81aadeab82e6607e234fe" name="a597e686cf6c81aadeab82e6607e234fe"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setPos</b> (double x, double y)</td></tr>
 <tr class="memdesc:a597e686cf6c81aadeab82e6607e234fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the position of the top-left of the <a class="el" href="classjngl_1_1Drawable.html" title="Base class for drawable objects with a position and a rectangle size.">Drawable</a>. <br /></td></tr>
@@ -207,11 +210,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setHeight</b> (float)
 <tr class="memdesc:aee20a5251a31b3061ecff567687e30fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override height (in screen coordinates) <br /></td></tr>
 <tr class="separator:aee20a5251a31b3061ecff567687e30fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:a73ce306f4a2e972d8d02d1ace209af25" id="r_a73ce306f4a2e972d8d02d1ace209af25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73ce306f4a2e972d8d02d1ace209af25">position</a></td></tr>
-<tr class="separator:a73ce306f4a2e972d8d02d1ace209af25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:a3292175d54d93d126ba2829249316344" id="r_a3292175d54d93d126ba2829249316344"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3292175d54d93d126ba2829249316344">Sprite</a></td></tr>
@@ -227,11 +225,6 @@ Friends</h2></td></tr>
 Inheritance diagram for Drawable:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" frameborder="0" src="classjngl_1_1Drawable__inherit__graph.svg" width="158" height="111"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for Drawable:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classjngl_1_1Drawable__coll__graph.svg" width="126" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="aa6f73ac7d5899119d156a0b3a27fba31" name="aa6f73ac7d5899119d156a0b3a27fba31"></a>
@@ -319,7 +312,7 @@ template&lt;class Vect &gt; </div>
 
 <p>Sets the position of the top-left of the <a class="el" href="classjngl_1_1Drawable.html" title="Base class for drawable objects with a position and a rectangle size.">Drawable</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00037">37</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00040">40</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
 
 </div>
 </div>
@@ -350,7 +343,7 @@ template&lt;class Vect &gt; </div>
 
 <p>Centers the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a> at <em>c</em> (e.g. <a class="el" href="classjngl_1_1Vec2.html" title="Two-dimensional vector.">jngl::Vec2</a>) </p>
 
-<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00048">48</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00051">51</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
 
 </div>
 </div>
@@ -400,31 +393,6 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00018">18</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a73ce306f4a2e972d8d02d1ace209af25" name="a73ce306f4a2e972d8d02d1ace209af25"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a73ce306f4a2e972d8d02d1ace209af25">&#9670;&#160;</a></span>position</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a> position</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Drawable_8hpp_source.html#l00096">96</a> of file <a class="el" href="Drawable_8hpp_source.html">Drawable.hpp</a>.</p>
 
 </div>
 </div>

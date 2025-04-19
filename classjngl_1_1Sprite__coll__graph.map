@@ -1,9 +1,7 @@
 <map id="Sprite" name="Sprite">
-<area shape="rect" id="Node000001" title="Higher&#45;level representation of an image." alt="" coords="152,183,221,208"/>
-<area shape="rect" id="Node000002" href="$classjngl_1_1Drawable.html" title="Base class for drawable objects with a position and a rectangle size." alt="" coords="5,94,91,120"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,126,169,180,166,184,79,130"/>
-<area shape="rect" id="Node000003" href="$classjngl_1_1Vec2.html" title="Two&#45;dimensional vector." alt="" coords="21,5,75,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="51,47,51,94,45,94,45,47"/>
-<area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/memory/shared_ptr.html" title=" " alt="" coords="115,94,352,120"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="222,135,195,184,191,181,217,132"/>
+<area shape="rect" id="Node000001" title="Higher&#45;level representation of an image." alt="" coords="105,94,175,120"/>
+<area shape="rect" id="Node000002" href="$classjngl_1_1Drawable.html" title="Base class for drawable objects with a position and a rectangle size." alt="" coords="5,5,91,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="74,40,129,92,125,96,70,44"/>
+<area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/memory/shared_ptr.html" title=" " alt="" coords="115,5,352,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,43,155,96,151,92,208,39"/>
 </map>
