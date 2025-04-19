@@ -30,6 +30,9 @@ public:
 	/// Called when drawing a frame
 	virtual void draw() const = 0;
 
+	/// Returns position (not center)
+	Vec2 getPos() const;
+
 	/// Sets the position of the top-left of the Drawable
 	virtual void setPos(double x, double y);
 
@@ -93,9 +96,10 @@ protected:
 	/// Override height (in screen coordinates)
 	void setHeight(float);
 
+private:
+	/// Position in pixel, NOT screen coordinates
 	Vec2 position;
 
-private:
 	/// Width and height in pixel, NOT screen coordinates
 	float width = 0;
 	float height = 0;
