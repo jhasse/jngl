@@ -88,7 +88,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Object representing only the <a class="el" href="classjngl_1_1Alpha.html" title="Object representing only the Alpha Channel in an RGBA color.">Alpha</a> <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a> in an RGBA color.  
+<p>Object representing only the <a class="el" href="classjngl_1_1Alpha.html" title="Object representing only the Alpha Channel in an RGBA color, 0 meaning invisible, 1 fully visible.">Alpha</a> <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a> in an RGBA color, 0 meaning invisible, 1 fully visible.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Alpha_8hpp_source.html">jngl/Alpha.hpp</a>&gt;</code></p>
@@ -112,14 +112,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setAlpha</b> (float)<
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ab333d3cb0927401e3fedf26bc9ffa648" id="r_ab333d3cb0927401e3fedf26bc9ffa648"><td class="memItemLeft" align="right" valign="top"><a id="ab333d3cb0927401e3fedf26bc9ffa648" name="ab333d3cb0927401e3fedf26bc9ffa648"></a>
-static <a class="el" href="classjngl_1_1Alpha.html">Alpha</a>&#160;</td><td class="memItemRight" valign="bottom"><b>u8</b> (uint8_t alpha)</td></tr>
+<tr class="memitem:ab333d3cb0927401e3fedf26bc9ffa648" id="r_ab333d3cb0927401e3fedf26bc9ffa648"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classjngl_1_1Alpha.html">Alpha</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab333d3cb0927401e3fedf26bc9ffa648">u8</a> (uint8_t alpha)</td></tr>
 <tr class="separator:ab333d3cb0927401e3fedf26bc9ffa648"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Object representing only the <a class="el" href="classjngl_1_1Alpha.html" title="Object representing only the Alpha Channel in an RGBA color.">Alpha</a> <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a> in an RGBA color. </p>
+<div class="textblock"><p>Object representing only the <a class="el" href="classjngl_1_1Alpha.html" title="Object representing only the Alpha Channel in an RGBA color, 0 meaning invisible, 1 fully visible.">Alpha</a> <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a> in an RGBA color, 0 meaning invisible, 1 fully visible. </p>
 
-<p class="definition">Definition at line <a class="el" href="Alpha_8hpp_source.html#l00011">11</a> of file <a class="el" href="Alpha_8hpp_source.html">Alpha.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Alpha_8hpp_source.html#l00012">12</a> of file <a class="el" href="Alpha_8hpp_source.html">Alpha.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac1034e52be93a0408b09068edcccf803" name="ac1034e52be93a0408b09068edcccf803"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac1034e52be93a0408b09068edcccf803">&#9670;&#160;</a></span>Alpha()</h2>
@@ -150,6 +149,38 @@ static <a class="el" href="classjngl_1_1Alpha.html">Alpha</a>&#160;</td><td clas
   </dd>
 </dl>
 <p>Values over 1.0f will result in 1.0f and negatives will result in 0.0f. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab333d3cb0927401e3fedf26bc9ffa648" name="ab333d3cb0927401e3fedf26bc9ffa648"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab333d3cb0927401e3fedf26bc9ffa648">&#9670;&#160;</a></span>u8()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classjngl_1_1Alpha.html">Alpha</a> u8 </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>alpha</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">alpha</td><td>0...255 </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
