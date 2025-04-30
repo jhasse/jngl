@@ -98,7 +98,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ad9283b336e6952919ef4d3f435105451"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called on Android's "back" gesture or when the <code>Esc</code> key is pressed.  <br /></td></tr>
 <tr class="separator:ad9283b336e6952919ef4d3f435105451"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73f9f5ca4d5c6d4dc49b176af928cd90" id="r_a73f9f5ca4d5c6d4dc49b176af928cd90"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73f9f5ca4d5c6d4dc49b176af928cd90">onQuitEvent</a> ()</td></tr>
-<tr class="memdesc:a73f9f5ca4d5c6d4dc49b176af928cd90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called when the user closes the main window or <a class="el" href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event which will exit App::mainLoop() and set running() to false.">quit()</a> has been called.  <br /></td></tr>
+<tr class="memdesc:a73f9f5ca4d5c6d4dc49b176af928cd90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called when the user closes the main window or <a class="el" href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event (i.e.">quit()</a> has been called.  <br /></td></tr>
 <tr class="separator:a73f9f5ca4d5c6d4dc49b176af928cd90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f41ee3e30faafcabc243a0419381fb4" id="r_a7f41ee3e30faafcabc243a0419381fb4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f41ee3e30faafcabc243a0419381fb4">onControllerBack</a> ()</td></tr>
 <tr class="memdesc:a7f41ee3e30faafcabc243a0419381fb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called when the "Back" button is pressed on any connected controller (Android only)  <br /></td></tr>
@@ -192,7 +192,7 @@ Collaboration diagram for Work:</div>
 </div><div class="memdoc">
 
 <p>Gets called on Android's "back" gesture or when the <code>Esc</code> key is pressed. </p>
-<p>Calls <a class="el" href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event which will exit App::mainLoop() and set running() to false.">quit()</a> by default, so exits the game. It's a good idea that you would only use the default behavior in the main menu though. While in-game you normally would switch to a pause menu. In the pause menu <a class="el" href="#ad9283b336e6952919ef4d3f435105451" title="Gets called on Android&#39;s &quot;back&quot; gesture or when the Esc key is pressed.">onBackEvent()</a> would go to the main menu's <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a>.</p>
+<p>Calls <a class="el" href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event (i.e.">quit()</a> by default, so exits the game. It's a good idea that you would only use the default behavior in the main menu though. While in-game you normally would switch to a pause menu. In the pause menu <a class="el" href="#ad9283b336e6952919ef4d3f435105451" title="Gets called on Android&#39;s &quot;back&quot; gesture or when the Esc key is pressed.">onBackEvent()</a> would go to the main menu's <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a>.</p>
 <p>Example: </p><div class="fragment"><div class="line"><span class="keyword">class </span>MainMenu : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Work</a> {</div>
 <div class="line">    <span class="comment">// default implementation of onBackEvent which quits the game</span></div>
 <div class="line">};</div>
@@ -235,7 +235,7 @@ Collaboration diagram for Work:</div>
 </table>
 </div><div class="memdoc">
 
-<p>Gets called when the user closes the main window or <a class="el" href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event which will exit App::mainLoop() and set running() to false.">quit()</a> has been called. </p>
+<p>Gets called when the user closes the main window or <a class="el" href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event (i.e.">quit()</a> has been called. </p>
 <p>To continue with the main loop, call <a class="el" href="namespacejngl.html#a435e2f7919544ec87ae83ffdb226a50d" title="Undo quit() or ignore a quit event caused by the user closing the main window.">cancelQuit()</a>. For example if you want to switch to a pause menu instead of exiting the game:</p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>Game : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Work</a> {</div>
 <div class="line">    <span class="keywordtype">void</span> onQuitEvent() {</div>

@@ -524,7 +524,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>errorMessage</b> (con
 <tr class="separator:ad56918d844181dff49573ec374365d00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa6432a11cc8aa43cdcac30e43bf038f" id="r_aaa6432a11cc8aa43cdcac30e43bf038f"><td class="memItemLeft" align="right" valign="top"><a id="aaa6432a11cc8aa43cdcac30e43bf038f" name="aaa6432a11cc8aa43cdcac30e43bf038f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>running</b> ()</td></tr>
-<tr class="memdesc:aaa6432a11cc8aa43cdcac30e43bf038f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true until the main window is closed or <a class="el" href="#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event which will exit App::mainLoop() and set running() to false.">quit()</a> has been called. <br /></td></tr>
+<tr class="memdesc:aaa6432a11cc8aa43cdcac30e43bf038f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true until the main window is closed or <a class="el" href="#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event (i.e.">quit()</a> has been called. <br /></td></tr>
 <tr class="separator:aaa6432a11cc8aa43cdcac30e43bf038f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae301acc8b5118eb5b5939e9ad43ce777" id="r_ae301acc8b5118eb5b5939e9ad43ce777"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae301acc8b5118eb5b5939e9ad43ce777">updateInput</a> ()</td></tr>
 <tr class="memdesc:ae301acc8b5118eb5b5939e9ad43ce777"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the input state.  <br /></td></tr>
@@ -539,11 +539,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>running</b> ()</td></
 <tr class="memdesc:a4b2ac4983f758c08f92701b491f5c877"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some platforms (e.g.  <br /></td></tr>
 <tr class="separator:a4b2ac4983f758c08f92701b491f5c877"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0eb736262d05c5af0143a5eadae67ca" id="r_ad0eb736262d05c5af0143a5eadae67ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0eb736262d05c5af0143a5eadae67ca">quit</a> () noexcept</td></tr>
-<tr class="memdesc:ad0eb736262d05c5af0143a5eadae67ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emit a quit event which will exit App::mainLoop() and set <a class="el" href="#aaa6432a11cc8aa43cdcac30e43bf038f" title="Returns true until the main window is closed or quit() has been called.">running()</a> to false.  <br /></td></tr>
+<tr class="memdesc:ad0eb736262d05c5af0143a5eadae67ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emit a quit event (i.e.  <br /></td></tr>
 <tr class="separator:ad0eb736262d05c5af0143a5eadae67ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a979c0a8f14d49cc3d95960e4d672fe" id="r_a6a979c0a8f14d49cc3d95960e4d672fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a979c0a8f14d49cc3d95960e4d672fe">forceQuit</a> (uint8_t exitcode)</td></tr>
+<tr class="memdesc:a6a979c0a8f14d49cc3d95960e4d672fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exit main loop with and let the OS process return <em>exitcode</em>.  <br /></td></tr>
+<tr class="separator:a6a979c0a8f14d49cc3d95960e4d672fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a435e2f7919544ec87ae83ffdb226a50d" id="r_a435e2f7919544ec87ae83ffdb226a50d"><td class="memItemLeft" align="right" valign="top"><a id="a435e2f7919544ec87ae83ffdb226a50d" name="a435e2f7919544ec87ae83ffdb226a50d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>cancelQuit</b> ()</td></tr>
-<tr class="memdesc:a435e2f7919544ec87ae83ffdb226a50d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Undo <a class="el" href="#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event which will exit App::mainLoop() and set running() to false.">quit()</a> or ignore a quit event caused by the user closing the main window. <br /></td></tr>
+<tr class="memdesc:a435e2f7919544ec87ae83ffdb226a50d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Undo <a class="el" href="#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event (i.e.">quit()</a> or ignore a quit event caused by the user closing the main window. <br /></td></tr>
 <tr class="separator:a435e2f7919544ec87ae83ffdb226a50d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36aabb71cb6dcef1e96154963745c790" id="r_a36aabb71cb6dcef1e96154963745c790"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36aabb71cb6dcef1e96154963745c790">getFPS</a> ()</td></tr>
 <tr class="memdesc:a36aabb71cb6dcef1e96154963745c790"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates FPS if called once per frame.  <br /></td></tr>
@@ -2000,8 +2003,35 @@ template&lt;class Vect &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Emit a quit event which will exit App::mainLoop() and set <a class="el" href="#aaa6432a11cc8aa43cdcac30e43bf038f" title="Returns true until the main window is closed or quit() has been called.">running()</a> to false. </p>
+<p>Emit a quit event (i.e. </p>
+<p>call <a class="el" href="classjngl_1_1Work.html#a73f9f5ca4d5c6d4dc49b176af928cd90" title="Gets called when the user closes the main window or quit() has been called.">Work::onQuitEvent</a>), exit the main loop and set <a class="el" href="#aaa6432a11cc8aa43cdcac30e43bf038f" title="Returns true until the main window is closed or quit() has been called.">running()</a> to false</p>
 <p>If the window hasn't been created yet or the loop is already about to quit, this function does nothing </p>
+
+</div>
+</div>
+<a id="a6a979c0a8f14d49cc3d95960e4d672fe" name="a6a979c0a8f14d49cc3d95960e4d672fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a979c0a8f14d49cc3d95960e4d672fe">&#9670;&#160;</a></span>forceQuit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void forceQuit </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>exitcode</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Exit main loop with and let the OS process return <em>exitcode</em>. </p>
+<p>If <em>exitcode</em> != 0 <a class="el" href="classjngl_1_1Work.html#a73f9f5ca4d5c6d4dc49b176af928cd90" title="Gets called when the user closes the main window or quit() has been called.">Work::onQuitEvent</a> won't be called.</p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="elRef" href="http://en.cppreference.com/w/cpp/error/runtime_error.html">std::runtime_error</a></td><td>when called twice, on platforms where <a class="el" href="#a4b2ac4983f758c08f92701b491f5c877" title="Some platforms (e.g.">canQuit()</a> returns false, or the window hasn't been created yet. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

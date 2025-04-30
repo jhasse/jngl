@@ -89,13 +89,14 @@ $(function() {
 
 <p>Miscellaneous functions.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/sstream.html">sstream</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/cstdint.html">cstdint</a>&gt;</code><br />
+<code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/sstream.html">sstream</a>&gt;</code><br />
 <code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/string.html">string</a>&gt;</code><br />
 <code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/vector.html">vector</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for other.hpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="other_8hpp__incl.svg" width="275" height="111"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="other_8hpp__incl.svg" width="376" height="111"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -115,7 +116,7 @@ Namespaces</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:aaa6432a11cc8aa43cdcac30e43bf038f" id="r_aaa6432a11cc8aa43cdcac30e43bf038f"><td class="memItemLeft" align="right" valign="top"><a id="aaa6432a11cc8aa43cdcac30e43bf038f" name="aaa6432a11cc8aa43cdcac30e43bf038f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>running</b> ()</td></tr>
-<tr class="memdesc:aaa6432a11cc8aa43cdcac30e43bf038f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true until the main window is closed or <a class="el" href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event which will exit App::mainLoop() and set running() to false.">quit()</a> has been called. <br /></td></tr>
+<tr class="memdesc:aaa6432a11cc8aa43cdcac30e43bf038f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true until the main window is closed or <a class="el" href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event (i.e.">quit()</a> has been called. <br /></td></tr>
 <tr class="separator:aaa6432a11cc8aa43cdcac30e43bf038f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae301acc8b5118eb5b5939e9ad43ce777" id="r_ae301acc8b5118eb5b5939e9ad43ce777"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ae301acc8b5118eb5b5939e9ad43ce777">updateInput</a> ()</td></tr>
 <tr class="memdesc:ae301acc8b5118eb5b5939e9ad43ce777"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the input state.  <br /></td></tr>
@@ -130,11 +131,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>running</b> ()</td></
 <tr class="memdesc:a4b2ac4983f758c08f92701b491f5c877"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some platforms (e.g.  <br /></td></tr>
 <tr class="separator:a4b2ac4983f758c08f92701b491f5c877"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0eb736262d05c5af0143a5eadae67ca" id="r_ad0eb736262d05c5af0143a5eadae67ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca">quit</a> () noexcept</td></tr>
-<tr class="memdesc:ad0eb736262d05c5af0143a5eadae67ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emit a quit event which will exit App::mainLoop() and set <a class="el" href="namespacejngl.html#aaa6432a11cc8aa43cdcac30e43bf038f" title="Returns true until the main window is closed or quit() has been called.">running()</a> to false.  <br /></td></tr>
+<tr class="memdesc:ad0eb736262d05c5af0143a5eadae67ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emit a quit event (i.e.  <br /></td></tr>
 <tr class="separator:ad0eb736262d05c5af0143a5eadae67ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a979c0a8f14d49cc3d95960e4d672fe" id="r_a6a979c0a8f14d49cc3d95960e4d672fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a6a979c0a8f14d49cc3d95960e4d672fe">forceQuit</a> (uint8_t exitcode)</td></tr>
+<tr class="memdesc:a6a979c0a8f14d49cc3d95960e4d672fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exit main loop with and let the OS process return <em>exitcode</em>.  <br /></td></tr>
+<tr class="separator:a6a979c0a8f14d49cc3d95960e4d672fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a435e2f7919544ec87ae83ffdb226a50d" id="r_a435e2f7919544ec87ae83ffdb226a50d"><td class="memItemLeft" align="right" valign="top"><a id="a435e2f7919544ec87ae83ffdb226a50d" name="a435e2f7919544ec87ae83ffdb226a50d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>cancelQuit</b> ()</td></tr>
-<tr class="memdesc:a435e2f7919544ec87ae83ffdb226a50d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Undo <a class="el" href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event which will exit App::mainLoop() and set running() to false.">quit()</a> or ignore a quit event caused by the user closing the main window. <br /></td></tr>
+<tr class="memdesc:a435e2f7919544ec87ae83ffdb226a50d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Undo <a class="el" href="namespacejngl.html#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event (i.e.">quit()</a> or ignore a quit event caused by the user closing the main window. <br /></td></tr>
 <tr class="separator:a435e2f7919544ec87ae83ffdb226a50d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36aabb71cb6dcef1e96154963745c790" id="r_a36aabb71cb6dcef1e96154963745c790"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a36aabb71cb6dcef1e96154963745c790">getFPS</a> ()</td></tr>
 <tr class="memdesc:a36aabb71cb6dcef1e96154963745c790"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates FPS if called once per frame.  <br /></td></tr>
