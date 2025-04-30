@@ -246,6 +246,13 @@ void quit() noexcept {
 	}
 }
 
+void forceQuit(const uint8_t exitcode) {
+	if (!canQuit()) {
+		throw std::runtime_error("Quitting the main loop is not supported on this platform!");
+	}
+	pWindow->forceQuit(exitcode);
+}
+
 void cancelQuit() {
 	if (pWindow) {
 		pWindow->cancelQuit();

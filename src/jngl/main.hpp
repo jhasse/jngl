@@ -32,10 +32,12 @@
 		namespace jngl {
 			extern android_app* androidApp;
 		}
+		#define JNGL_MAIN_RETURN
 		#define JNGL_MAIN_BEGIN void android_main(android_app* __androidApp) { \
 			jngl::androidApp = __androidApp;
 		#define JNGL_MAIN_END }
 	#elif defined(__APPLE__) && TARGET_OS_IPHONE // iOS
+		#define JNGL_MAIN_RETURN
 		#define JNGL_MAIN_BEGIN void shouldNotBeCalled() {
 		#define JNGL_MAIN_END }
 	#else
@@ -44,6 +46,7 @@
 		#else
 			#define JNGL_CATCH_EXCEPTION_TO_ERROR_MESSAGE
 		#endif
+		#define JNGL_MAIN_RETURN return
 		#define JNGL_MAIN_BEGIN /* NOLINT */ int main(int argc, char** argv) { \
 			JNGL_CATCH_EXCEPTION_TO_ERROR_MESSAGE \
 				{ \

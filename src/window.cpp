@@ -173,15 +173,22 @@ bool Window::isMultisampleSupported() const {
 }
 
 bool Window::isRunning() const {
-	return running;
+	return !shouldExit;
 }
 
 void Window::quit() noexcept {
-	running = false;
+	shouldExit = 0;
+}
+
+void Window::forceQuit(uint8_t exitcode) {
+	if (shouldExit) {
+		throw std::runtime_error("Already exitting.");
+	}
+	shouldExit = exitcode;
 }
 
 void Window::cancelQuit() {
-	running = true;
+	shouldExit = {};
 }
 
 bool Window::getKeyDown(key::KeyType key) {
@@ -283,12 +290,12 @@ double Window::getMouseWheel() const {
 	return mouseWheel;
 }
 
-void Window::mainLoop() {
+uint8_t Window::mainLoop() {
 #ifdef __EMSCRIPTEN__
 	g_jnglMainLoop = [this]() {
 #else
 	Finally _([&]() { currentWork_.reset(); });
-	while (isRunning()) {
+	while (!shouldExit) {
 #endif
 		stepIfNeeded();
 		clearBackBuffer();
@@ -299,6 +306,9 @@ void Window::mainLoop() {
 #ifdef __EMSCRIPTEN__
 	;
 	emscripten_set_main_loop(jnglMainLoop, 0, true);
+	return 0;
+#else
+	return *shouldExit;
 #endif
 }
 
@@ -418,17 +428,17 @@ void Window::stepIfNeeded() {
 		if (keyPressed(key::Escape)) {
 			currentWork_->onBackEvent();
 		}
-		if (!isRunning() && currentWork_) {
+		if (shouldExit && *shouldExit == 0 && currentWork_) {
 			currentWork_->onQuitEvent();
 		}
-		while (isRunning() && changeWork) {
+		while (!shouldExit && changeWork) {
 			changeWork = false;
 			if (currentWork_) {
 				currentWork_->onUnload();
 			}
 			currentWork_ = std::move(newWork_);
 			currentWork_->onLoad();
-			if (!isRunning()) {
+			if (shouldExit && *shouldExit == 0) {
 				currentWork_->onQuitEvent();
 			}
 		}

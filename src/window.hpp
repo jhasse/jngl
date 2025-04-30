@@ -40,6 +40,7 @@ public:
 	~Window();
 	bool isRunning() const;
 	void quit() noexcept;
+	void forceQuit(uint8_t exitcode);
 	void cancelQuit();
 	void UpdateInput();
 	void updateKeyStates();
@@ -94,7 +95,10 @@ public:
 	std::string getFont() const;
 	std::shared_ptr<FontImpl> getFontImpl();
 	void setWork(std::shared_ptr<Work>);
-	void mainLoop();
+
+	/// Returns exitcode for process
+	[[nodiscard]] uint8_t mainLoop();
+
 	void stepIfNeeded();
 	void sleepIfNeeded();
 	void draw() const;
@@ -134,7 +138,7 @@ private:
 	GLuint vaoLine = 0;
 	GLuint vaoSquare = 0;
 	unsigned int maxStepsPerFrame = 3;
-	bool running = true;
+	optional<uint8_t> shouldExit;
 	bool fullscreen_;
 	bool isMouseVisible_ = true;
 	bool relativeMouseMode = false;

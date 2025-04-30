@@ -91,12 +91,12 @@ void App::setDisplayName(const std::string& displayName) {
 	impl->displayName = displayName;
 }
 
-void App::mainLoop() {
+uint8_t App::mainLoop() {
 	if (impl->steamAppId) {
 		initSteamAchievements();
 	}
 	internal::debug("Starting main loop for '{}'.", impl->displayName);
-	pWindow->mainLoop();
+	return pWindow->mainLoop();
 }
 
 bool App::isPixelArt() {
@@ -129,7 +129,7 @@ void App::updateProjectionMatrix() const {
 #if !defined(__APPLE__) || !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE // iOS
 namespace internal {
 
-void mainLoop(AppParameters params) {
+uint8_t mainLoop(AppParameters params) {
 	auto context = App::instance().init(params);
 	if (auto id = params.steamAppId) {
 		jngl::initSteam(*id);
@@ -174,8 +174,9 @@ void mainLoop(AppParameters params) {
 		                        static_cast<double>(windowSize[1]) / params.screenSize->y));
 	}
 	setWork(params.start());
-	App::instance().mainLoop();
+	uint8_t exitcode = App::instance().mainLoop();
 	hideWindow();
+	return exitcode;
 }
 
 } // namespace internal
