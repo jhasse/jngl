@@ -17,6 +17,7 @@
 #define JNGL_MAIN_BEGIN /* NOLINT */ int SDL_main(int argc, char** argv) { \
 	jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
 #define JNGL_MAIN_END return 0; } // NOLINT
+#define JNGL_MAIN_RETURN return
 
 #undef main // SDL defines this to SDL_main
 #else
