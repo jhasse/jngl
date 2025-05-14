@@ -16,36 +16,15 @@ jobs:
       shell: bash
     - name: Build (Debug)
       run: cmake --build build --config Debug
+    - uses: extractions/setup-just@v2
     - name: Unittest (Debug)
-      shell: bash
-      working-directory: build
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
-      run: |
-        Debug/jngl-unittest Color
-        Debug/jngl-unittest Rgb
-        Debug/jngl-unittest Drawable
-        Debug/jngl-unittest ImageData
-        Debug/jngl-unittest FinallyTest
-        Debug/jngl-unittest halfLoadTest
-        Debug/jngl-unittest getBinaryPath
-        Debug/jngl-unittest readAsset
-        Debug/jngl-unittest Vec2
+      run: just unittest-headless
     - name: Build (Release)
       run: cmake --build build --config Release
     - name: Unittest (Release)
-      shell: bash
-      working-directory: build
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
-      run: |
-        Release/jngl-unittest Color
-        Release/jngl-unittest Rgb
-        Release/jngl-unittest Drawable
-        Release/jngl-unittest ImageData
-        Release/jngl-unittest FinallyTest
-        Release/jngl-unittest halfLoadTest
-        Release/jngl-unittest getBinaryPath
-        Release/jngl-unittest readAsset
-        Release/jngl-unittest Vec2
+      run: just unittest-headless Release
 
   msvc:
     runs-on: windows-2025
@@ -61,36 +40,15 @@ jobs:
       shell: bash
     - name: Build (Debug)
       run: cmake --build build --config Debug
+    - uses: extractions/setup-just@v2
     - name: Unittest (Debug)
-      shell: bash
-      working-directory: build
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
-      run: |
-        Debug/jngl-unittest Color
-        Debug/jngl-unittest Rgb
-        Debug/jngl-unittest Drawable
-        Debug/jngl-unittest ImageData
-        Debug/jngl-unittest FinallyTest
-        Debug/jngl-unittest halfLoadTest
-        Debug/jngl-unittest getBinaryPath
-        Debug/jngl-unittest readAsset
-        Debug/jngl-unittest Vec2
+      run: just unittest-headless
     - name: Build (Release)
       run: cmake --build build --config Release
     - name: Unittest (Release)
-      shell: bash
-      working-directory: build
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
-      run: |
-        Release/jngl-unittest Color
-        Release/jngl-unittest Rgb
-        Release/jngl-unittest Drawable
-        Release/jngl-unittest ImageData
-        Release/jngl-unittest FinallyTest
-        Release/jngl-unittest halfLoadTest
-        Release/jngl-unittest getBinaryPath
-        Release/jngl-unittest readAsset
-        Release/jngl-unittest Vec2
+      run: just unittest-headless Release
     - name: Configure (UWP)
       run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore '-DCMAKE_SYSTEM_VERSION=10.0' '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
     - name: Build (UWP, Debug)
