@@ -13,17 +13,16 @@ run-release: (release "jngl-test")
 unittest test='': (debug "jngl-unittest")
 	cd build && Debug/jngl-unittest {{test}}
 
-[working-directory: 'build']
 unittest-headless config='Debug':
-	{{config}}/jngl-unittest Color
-	{{config}}/jngl-unittest Rgb
-	{{config}}/jngl-unittest Drawable
-	{{config}}/jngl-unittest ImageData
-	{{config}}/jngl-unittest FinallyTest
-	{{config}}/jngl-unittest halfLoadTest
-	{{config}}/jngl-unittest getBinaryPath
-	{{config}}/jngl-unittest readAsset
-	{{config}}/jngl-unittest Vec2
+	cd build && {{config}}/jngl-unittest Color
+	cd build && {{config}}/jngl-unittest Rgb
+	cd build && {{config}}/jngl-unittest Drawable
+	cd build && {{config}}/jngl-unittest ImageData
+	cd build && {{config}}/jngl-unittest FinallyTest
+	cd build && {{config}}/jngl-unittest halfLoadTest
+	cd build && {{config}}/jngl-unittest getBinaryPath
+	cd build && {{config}}/jngl-unittest readAsset
+	cd build && {{config}}/jngl-unittest Vec2
 
 unittest-release test='': (release "jngl-unittest")
 	cd build && Release/jngl-unittest {{test}}
