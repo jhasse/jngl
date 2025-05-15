@@ -58,3 +58,15 @@ set windows-shell := ["C:/Program Files/Git/bin/bash", "-c"]
 ubuntu:
 	sudo apt install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libpng-dev libxxf86vm-dev \
 	                 libvorbis-dev cmake g++ libwebp-dev git libsdl2-dev
+
+webos:
+	cp build-web/jngl-test.data webOS/
+	cp build-web/jngl-test.js webOS/
+	cp build-web/jngl-test.wasm webOS/
+	ares-package --no-minify webOS
+	ares-install com.bixense.jngl-test_1.0.0_all.ipk
+	ares-launch com.bixense.jngl-test
+
+[windows]
+build-web version='3.1.61':
+	powershell -Command "podman run -v$(cygpath -w $PWD):/w emscripten/emsdk:{{version}} /bin/bash -c \"cd /w && rm -rf build-web && emcmake cmake -Bbuild-web -DCMAKE_BUILD_TYPE=Release && cp -r data build-web/ && make -j8 -Cbuild-web\""
