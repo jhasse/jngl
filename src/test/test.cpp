@@ -104,6 +104,12 @@ public:
 		if (jngl::keyPressed('e')) {
 			jngl::errorMessage("Hello World!");
 		}
+		if (jngl::keyPressed('r')) {
+			achievement.increaseValue(5);
+		}
+		if (jngl::keyPressed('t')) {
+			achievement2.increaseValue(30);
+		}
 	}
 	void drawBackground() const;
 	void draw() const override {
@@ -264,6 +270,12 @@ private:
 	std::unique_ptr<jngl::Channel> music;
 	jngl::Font fontNormal{ "Arial.ttf", 12 };
 	jngl::Font fontStroke{ "Arial.ttf", 12, 5 };
+	jngl::Achievement achievement{
+		"JNGL_TEST_ACHIEVEMENT", "Pressed R", "Found easter egg", "jngl", 0, 42
+	};
+	jngl::Achievement achievement2{
+		"JNGL_TEST_ACHIEVEMENT2", "Pressed T", "Found another easter egg", "jngl", 0, 1000
+	};
 };
 
 jngl::AppParameters jnglInit() {
