@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(jngl LANGUAGES C CXX)
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5) # required for ogg, see https://github.com/jhasse/jngl/issues/107
 
 if(MSVC)
 	string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /wd4244 /wd4305 /wd4267")
