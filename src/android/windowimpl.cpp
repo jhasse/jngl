@@ -104,7 +104,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 			return 1;
 		}
 		case AMOTION_EVENT_ACTION_MOVE: {
-			for (int32_t index = 0; index < AMotionEvent_getPointerCount(event); ++index) {
+			for (size_t index = 0; index < AMotionEvent_getPointerCount(event); ++index) {
 				const auto x = AMotionEvent_getX(event, index);
 				const auto y = AMotionEvent_getY(event, index);
 				const auto id = AMotionEvent_getPointerId(event, index);
@@ -607,43 +607,106 @@ std::string getSystemConfigPath() {
 	return jngl::androidApp->activity->internalDataPath;
 }
 
+namespace {
+namespace jni {
+class Class {
+	const jclass javaClass;
+
+public:
+	explicit Class(const char* name)
+	: javaClass(reinterpret_cast<WindowImpl*>(androidApp->userData)->env->FindClass(name)) {
+		if (!javaClass) {
+			throw std::runtime_error("Couldn't find class " + std::string(name));
+		}
+	}
+	explicit Class(jobject object)
+	: javaClass(reinterpret_cast<WindowImpl*>(androidApp->userData)->env->GetObjectClass(object)) {
+		assert(javaClass);
+	}
+	~Class() {
+		reinterpret_cast<WindowImpl*>(androidApp->userData)->env->DeleteLocalRef(javaClass);
+	}
+	Class(const Class&) = delete;
+	Class& operator=(const Class&) = delete;
+
+	operator jclass() const {
+		return javaClass;
+	}
+};
+
+class String {
+	const jstring javaString;
+
+public:
+	explicit String(const char* str)
+	: javaString(reinterpret_cast<WindowImpl*>(androidApp->userData)->env->NewStringUTF(str)) {
+		assert(javaString);
+	}
+	~String() {
+		reinterpret_cast<WindowImpl*>(androidApp->userData)->env->DeleteLocalRef(javaString);
+	}
+	String(const String&) = delete;
+	String& operator=(const String&) = delete;
+
+	operator jstring() const {
+		return javaString;
+	}
+};
+} // namespace jni
+} // namespace
+
 std::string getPreferredLanguage() {
 	const auto env = reinterpret_cast<WindowImpl*>(androidApp->userData)->env;
-	const jclass localeClass = env->FindClass("java/util/Locale");
+	const jni::Class localeClass("java/util/Locale");
 	const jobject defaultLocale = env->CallStaticObjectMethod(
 	    localeClass, env->GetStaticMethodID(localeClass, "getDefault", "()Ljava/util/Locale;"));
 
 	const jobject language = env->CallObjectMethod(
 	    defaultLocale, env->GetMethodID(localeClass, "getLanguage", "()Ljava/lang/String;"));
+	env->DeleteLocalRef(defaultLocale);
 
+	jni::Class stringClass(language);
 	const jmethodID getBytesMethod =
-	    env->GetMethodID(env->GetObjectClass(language), "getBytes", "(Ljava/lang/String;)[B");
+	    env->GetMethodID(stringClass, "getBytes", "(Ljava/lang/String;)[B");
+
+	jni::String utf8("UTF-8");
 	const auto bytesObject = static_cast<jbyteArray>(
-	    env->CallObjectMethod(language, getBytesMethod, env->NewStringUTF("UTF-8")));
+	    env->CallObjectMethod(language, getBytesMethod, static_cast<jstring>(utf8)));
+	Finally releaseBytesObject([&]() { env->DeleteLocalRef(bytesObject); });
+	env->DeleteLocalRef(language);
 	const size_t length = env->GetArrayLength(bytesObject);
 	if (length != 2) {
 		internal::error("Couldn't get preferred language. Falling back to \"en\".");
 		return "en";
 	}
-	return std::string(
-	    reinterpret_cast<const char*>(env->GetByteArrayElements(bytesObject, nullptr)), length);
+	auto byteArray = env->GetByteArrayElements(bytesObject, nullptr);
+	std::string result(reinterpret_cast<const char*>(byteArray), length);
+	env->ReleaseByteArrayElements(bytesObject, reinterpret_cast<jbyte*>(byteArray), JNI_ABORT);
+	return result;
 }
 
 void openURL(const std::string& url) {
 	const auto env = reinterpret_cast<WindowImpl*>(androidApp->userData)->env;
-	jstring urlString = env->NewStringUTF(url.c_str());
-	jclass uriClass = env->FindClass("android/net/Uri");
+	jni::String urlString(url.c_str());
+	jni::Class uriClass("android/net/Uri");
 	jmethodID uriParse =
 	    env->GetStaticMethodID(uriClass, "parse", "(Ljava/lang/String;)Landroid/net/Uri;");
-	jobject uri = env->CallStaticObjectMethod(uriClass, uriParse, urlString);
-	jclass intentClass = env->FindClass("android/content/Intent");
+	jobject uri = env->CallStaticObjectMethod(uriClass, uriParse, static_cast<jstring>(urlString));
+	Finally releaseUri([&]() { env->DeleteLocalRef(uri); });
+
+	jni::Class intentClass("android/content/Intent");
 	jobject actionView = env->GetStaticObjectField(
 	    intentClass, env->GetStaticFieldID(intentClass, "ACTION_VIEW", "Ljava/lang/String;"));
+	Finally releaseActionView([&]() { env->DeleteLocalRef(actionView); });
+
 	jmethodID newIntent =
 	    env->GetMethodID(intentClass, "<init>", "(Ljava/lang/String;Landroid/net/Uri;)V");
 	jobject intent = env->AllocObject(intentClass);
+	Finally releaseIntent([&]() { env->DeleteLocalRef(intent); });
+
 	env->CallVoidMethod(intent, newIntent, actionView, uri);
-	jclass activity_class = env->FindClass("android/app/Activity");
+
+	jni::Class activity_class("android/app/Activity");
 	jmethodID start_activity =
 	    env->GetMethodID(activity_class, "startActivity", "(Landroid/content/Intent;)V");
 	env->CallVoidMethod(androidApp->activity->clazz, start_activity, intent);
