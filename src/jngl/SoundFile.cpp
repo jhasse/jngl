@@ -314,7 +314,8 @@ Finally pauseAudio() {
 		audio->increasePauseDeviceCount();
 		return Finally([audio]() { audio->decreasePauseDeviceCount(); });
 	}
-	return Finally(nullptr);
+	return Finally(nullptr); // FIXME: This is a bug if the Finally lives so long that the Audio
+	                         // object is created in time
 }
 
 Audio& GetAudio() {
