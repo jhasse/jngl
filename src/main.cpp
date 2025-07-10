@@ -626,6 +626,7 @@ void setAntiAliasing(bool enabled) {
 	antiAliasingEnabled = enabled;
 #else
 	internal::warn("Anti-Aliasing not available!");
+	(void)enabled;
 #endif
 }
 
