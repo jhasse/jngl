@@ -491,13 +491,57 @@ void Window::draw() const {
 #endif
 }
 
+#ifndef NDEBUG
+namespace {
+std::string simpleDemangle(std::string_view mangled) {
+	// Simple demangler: strip leading 'N' and trailing 'E' for namespaces, remove digits, etc.
+	// This is a naive implementation and won't handle all cases.
+	std::string result;
+	size_t i = 0;
+
+	// Remove leading 'N' (namespace) and trailing 'E'
+	if (!mangled.empty() && mangled[0] == 'N' && mangled.back() == 'E') {
+		++i;
+		mangled.remove_suffix(1);
+	}
+
+	while (i < mangled.size()) {
+		if (std::isdigit(mangled[i])) {
+			// Skip length prefixes
+			size_t len = 0;
+			while (i < mangled.size() && std::isdigit(mangled[i])) {
+				len = len * 10 + (mangled[i] - '0');
+				++i;
+			}
+			if (i + len <= mangled.size()) {
+				if (!result.empty()) {
+					result += "::";
+				}
+				result.append(mangled.substr(i, len));
+				i += len;
+			} else {
+				break;
+			}
+		} else {
+			// Copy non-digit characters as-is
+			result += mangled[i++];
+		}
+	}
+	return result.empty() ? std::string(mangled) : result;
+}
+} // namespace
+#endif
+
 void Window::setWork(std::shared_ptr<Work> work) {
+#ifndef NDEBUG
+	internal::debug("{} scene to {} ({}).", currentWork_ ? "Change" : "Setting current",
+	                simpleDemangle(typeid(*work).name()), // NOLINT
+	                static_cast<void*>(work.get()));
+#endif
 	if (!currentWork_) {
-		internal::debug("Setting current work to {}.", static_cast<void*>(work.get()));
 		currentWork_ = std::move(work);
 		currentWork_->onLoad();
 	} else {
-		internal::debug("Change work to {}.", static_cast<void*>(work.get()));
 		changeWork = true;
 		newWork_ = std::move(work);
 	}
