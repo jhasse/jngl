@@ -482,6 +482,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>error</b> (const <a c
 <tr class="memitem:a3bf00b7c310e5c9c07faaac21814f1a5" id="r_a3bf00b7c310e5c9c07faaac21814f1a5"><td class="memTemplParams" colspan="2">template&lt;class... Args&gt; </td></tr>
 <tr class="memitem:a3bf00b7c310e5c9c07faaac21814f1a5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a3bf00b7c310e5c9c07faaac21814f1a5">error</a> (Args &amp;&amp;...)</td></tr>
 <tr class="separator:a3bf00b7c310e5c9c07faaac21814f1a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fd23ad3ad3ae9e93bc126cd7caff0ea" id="r_a3fd23ad3ad3ae9e93bc126cd7caff0ea"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3fd23ad3ad3ae9e93bc126cd7caff0ea">simpleDemangle</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a> mangled)</td></tr>
+<tr class="memdesc:a3fd23ad3ad3ae9e93bc126cd7caff0ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Demangle a mangled C++ type name, e.g.  <br /></td></tr>
+<tr class="separator:a3fd23ad3ad3ae9e93bc126cd7caff0ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfcb9cdf97108d05cf2b0da911c93a4c" id="r_acfcb9cdf97108d05cf2b0da911c93a4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Mat3.html">jngl::Mat3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a> ()</td></tr>
 <tr class="memdesc:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the global ModelView matrix.  <br /></td></tr>
 <tr class="separator:acfcb9cdf97108d05cf2b0da911c93a4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1785,6 +1788,36 @@ template&lt;class... Args&gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="log_8hpp_source.html#l00067">67</a> of file <a class="el" href="log_8hpp_source.html">log.hpp</a>.</p>
 
+</div>
+</div>
+<a id="a3fd23ad3ad3ae9e93bc126cd7caff0ea" name="a3fd23ad3ad3ae9e93bc126cd7caff0ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fd23ad3ad3ae9e93bc126cd7caff0ea">&#9670;&#160;</a></span>simpleDemangle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> simpleDemangle </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a></td>          <td class="paramname"><span class="paramname"><em>mangled</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Demangle a mangled C++ type name, e.g. </p>
+<p>from typeid(*object).name()</p>
+<p>Useful for printing concrete types of pointers to base classes.</p>
+<p>Example: </p><div class="fragment"><div class="line"><span class="keyword">class </span>GameObject {</div>
+<div class="line">    <span class="keyword">virtual</span> ~GameObject() = <span class="keywordflow">default</span>;</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">class </span>Player : <span class="keyword">public</span> GameObject {};</div>
+<div class="line"> </div>
+<div class="line">GameObject* <span class="keywordtype">object</span> = <span class="keyword">new</span> Player;</div>
+<div class="line"><a class="code hl_function" href="#a40d8517a9c00f0a835f9ab77820d5537">jngl::debug</a>(<a class="code hl_function" href="#a3fd23ad3ad3ae9e93bc126cd7caff0ea">jngl::simpleDemangle</a>(<span class="keyword">typeid</span>(*object).name()));</div>
+<div class="ttc" id="anamespacejngl_html_a3fd23ad3ad3ae9e93bc126cd7caff0ea"><div class="ttname"><a href="#a3fd23ad3ad3ae9e93bc126cd7caff0ea">jngl::simpleDemangle</a></div><div class="ttdeci">std::string simpleDemangle(std::string_view mangled)</div><div class="ttdoc">Demangle a mangled C++ type name, e.g.</div></div>
+<div class="ttc" id="anamespacejngl_html_a40d8517a9c00f0a835f9ab77820d5537"><div class="ttname"><a href="#a40d8517a9c00f0a835f9ab77820d5537">jngl::debug</a></div><div class="ttdeci">void debug(const std::string &amp;)</div><div class="ttdoc">Print a log message only in debug builds (i.e. when NDEBUG is not defined)</div></div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="acfcb9cdf97108d05cf2b0da911c93a4c" name="acfcb9cdf97108d05cf2b0da911c93a4c"></a>
