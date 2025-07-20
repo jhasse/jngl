@@ -491,8 +491,6 @@ void Window::draw() const {
 #endif
 }
 
-#ifndef NDEBUG
-namespace {
 std::string simpleDemangle(std::string_view mangled) {
 	// Simple demangler: strip leading 'N' and trailing 'E' for namespaces, remove digits, etc.
 	// This is a naive implementation and won't handle all cases.
@@ -529,8 +527,6 @@ std::string simpleDemangle(std::string_view mangled) {
 	}
 	return result.empty() ? std::string(mangled) : result;
 }
-} // namespace
-#endif
 
 void Window::setWork(std::shared_ptr<Work> work) {
 #ifndef NDEBUG
