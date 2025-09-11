@@ -33,7 +33,7 @@
 		namespace jngl {
 			extern android_app* androidApp;
 		}
-		#define JNGL_MAIN_RETURN
+		#define JNGL_MAIN_RETURN (void)
 		#define JNGL_MAIN_BEGIN void android_main(android_app* __androidApp) { \
 			jngl::androidApp = __androidApp;
 		#define JNGL_MAIN_END }
