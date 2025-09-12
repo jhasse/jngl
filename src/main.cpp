@@ -683,16 +683,25 @@ std::string internal::getConfigPath() {
 	}
 #ifndef IOS
 	std::stringstream path;
-#if defined(__APPLE__)
+#if defined(ANDROID)
 	path << getSystemConfigPath() << "/" << App::instance().getDisplayName() << "/";
-#elif defined(ANDROID)
-	path << getSystemConfigPath() << "/";
-#elif defined(_WIN32)
-	path << getSystemConfigPath() << "\\" << App::instance().getDisplayName() << "\\";
 #elif defined(__EMSCRIPTEN__)
 	path << "/working1/";
 #else
-	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/"; // NOLINT
+#if defined(__APPLE__) || defined(_WIN32)
+	path << getSystemConfigPath() << "/";
+#else
+	path << getenv("HOME") << "/.config/"; // NOLINT
+#endif
+	auto appDir = App::instance().getDisplayName();
+	std::string invalid_chars = "\\/:?\"<>|*";
+	for (const char c : invalid_chars) {
+		appDir.erase(std::remove(appDir.begin(), appDir.end(), c), appDir.end());
+	}
+	if (appDir.empty()) {
+		throw std::runtime_error("Invalid display name: " + App::instance().getDisplayName());
+	}
+	path << appDir << "/";
 #endif
 	return *(configPath = path.str());
 #endif
