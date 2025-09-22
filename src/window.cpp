@@ -530,8 +530,9 @@ std::string simpleDemangle(std::string_view mangled) {
 
 void Window::setWork(std::shared_ptr<Work> work) {
 #ifndef NDEBUG
+	const auto& ref = *work;
 	internal::debug("{} scene to {} ({}).", currentWork_ ? "Change" : "Setting current",
-	                simpleDemangle(typeid(*work).name()), // NOLINT
+	                simpleDemangle(typeid(ref).name()), // NOLINT
 	                static_cast<void*>(work.get()));
 #endif
 	if (!currentWork_) {
