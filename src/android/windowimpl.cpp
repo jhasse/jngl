@@ -335,7 +335,9 @@ void WindowImpl::pause() {
 	if (display) {
 		display->surface = std::nullopt;
 	}
-	pauseAudio = jngl::pauseAudio();
+	if (!pauseAudio) {
+		pauseAudio = jngl::pauseAudio();
+	}
 }
 
 void WindowImpl::makeCurrent() {
