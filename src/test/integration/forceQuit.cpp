@@ -6,9 +6,23 @@
 #include <jngl.hpp>
 #include <jngl/init.hpp>
 
-struct MyScene : public jngl::Scene {
+struct MySingleton : jngl::Singleton<MySingleton> {
+	MySingleton() {
+		static int count = 0;
+		if (++count > 1) {
+			jngl::error("MySingleton was created more than once");
+			std::abort();
+		}
+	}
+};
+
+struct MyScene : jngl::Scene {
+	~MyScene() override {
+		MySingleton::handle();
+	}
 	void draw() const override {}
 	void step() override {
+		jngl::setWork<MyScene>();
 		jngl::forceQuit(std::stoi(jngl::getArgs().at(0)));
 	}
 	void onQuitEvent() override {

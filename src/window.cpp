@@ -294,7 +294,10 @@ uint8_t Window::mainLoop() {
 #ifdef __EMSCRIPTEN__
 	g_jnglMainLoop = [this]() {
 #else
-	Finally _([&]() { currentWork_.reset(); });
+	Finally _([&]() {
+		newWork_.reset();
+		currentWork_.reset();
+	});
 	while (!shouldExit && !forceExitCode) {
 #endif
 		stepIfNeeded();
