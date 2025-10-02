@@ -23,7 +23,7 @@ void Fade::step() {
 	const int maxAlpha = 255;
 	fadeCount += speed;
 	if (quit || fadeCount >= 2 * maxAlpha) { // Finished?
-		jngl::setWork(work);
+		jngl::setScene(work);
 	}
 }
 

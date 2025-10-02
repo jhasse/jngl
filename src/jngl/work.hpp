@@ -1,4 +1,4 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -78,6 +78,8 @@ public:
 std::shared_ptr<Work> getWork();
 
 /// Sets the passed Work to be active in the main loop
+/// \deprecated Use setScene(std::shared_ptr<Scene>) instead
+[[deprecated("Use setScene(std::shared_ptr<Scene>) instead")]]
 void setWork(std::shared_ptr<Work> work);
 
 /// The same as setWork(std::shared_ptr<Work>) but creates the Work for you
@@ -85,13 +87,9 @@ template <class T, class... Args>
 T& setWork(Args&&... args) {
 	auto shared = std::make_shared<T>(std::forward<Args>(args)...);
 	auto& rtn = *shared;
-	setWork(std::move(shared));
+	setScene(std::move(shared));
 	return rtn;
 }
-
-/// \deprecated Use setWork(std::shared_ptr<Work>) instead
-[[deprecated("Use setWork(std::shared_ptr<Work>) instead")]]
-void setWork(Work*);
 
 /// Resets the automatic frame limiter of App::mainLoop().
 ///

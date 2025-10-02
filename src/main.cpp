@@ -7,13 +7,13 @@
 #include "ShaderCache.hpp"
 #include "jngl/Alpha.hpp"
 #include "jngl/ScaleablePixels.hpp"
+#include "jngl/Scene.hpp"
 #include "jngl/matrix.hpp"
 #include "jngl/other.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/shapes.hpp"
 #include "jngl/time.hpp"
 #include "jngl/window.hpp"
-#include "jngl/work.hpp"
 #include "log.hpp"
 #include "paths.hpp"
 #include "spriteimpl.hpp"
@@ -641,6 +641,10 @@ Finally load(const std::string& filename) {
 		return loadSound(filename);
 	}
 	return loadSprite(filename);
+}
+
+void setScene(std::shared_ptr<Scene> scene) {
+	pWindow->setWork(std::move(scene));
 }
 
 void setWork(std::shared_ptr<Work> work) {
