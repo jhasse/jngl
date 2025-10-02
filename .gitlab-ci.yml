@@ -27,8 +27,11 @@ linux:
   - dnf install -y mesa-dri-drivers xorg-x11-drivers >/dev/null
   - Xorg -config ../data/xorg.conf &>/dev/null &
   - sleep 1 # wait for Xorg to boot up
-  - DISPLAY=:0 Debug/jngl-unittest
-  - DISPLAY=:0 Release/jngl-unittest
+  - export DISPLAY=:0
+  - Debug/jngl-unittest
+  - ../src/test/integration/run.py Debug
+  - Release/jngl-unittest
+  - ../src/test/integration/run.py Release
   - cd ..
   - CC=clang CXX=clang++ CXXFLAGS=-fdiagnostics-color cmake -Bbuild-clang -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DJNGL_CLANG_TIDY=1
   - cd build-clang
