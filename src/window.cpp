@@ -177,18 +177,18 @@ bool Window::isRunning() const {
 }
 
 void Window::quit() noexcept {
-	shouldExit = 0;
+	shouldExit = true;
 }
 
 void Window::forceQuit(uint8_t exitcode) {
-	if (shouldExit) {
+	if (forceExitCode) {
 		throw std::runtime_error("Already exitting.");
 	}
-	shouldExit = exitcode;
+	forceExitCode = exitcode;
 }
 
 void Window::cancelQuit() {
-	shouldExit = {};
+	shouldExit = false;
 }
 
 bool Window::getKeyDown(key::KeyType key) {
@@ -295,7 +295,7 @@ uint8_t Window::mainLoop() {
 	g_jnglMainLoop = [this]() {
 #else
 	Finally _([&]() { currentWork_.reset(); });
-	while (!shouldExit) {
+	while (!shouldExit && !forceExitCode) {
 #endif
 		stepIfNeeded();
 		clearBackBuffer();
@@ -308,7 +308,7 @@ uint8_t Window::mainLoop() {
 	emscripten_set_main_loop(jnglMainLoop, 0, true);
 	return 0;
 #else
-	return *shouldExit;
+	return forceExitCode ? *forceExitCode : 0;
 #endif
 }
 
@@ -425,10 +425,13 @@ void Window::stepIfNeeded() {
 			).count()
 		) / 1000.;
 #endif
+		if (forceExitCode) {
+			break;
+		}
 		if (keyPressed(key::Escape)) {
 			currentWork_->onBackEvent();
 		}
-		if (shouldExit && *shouldExit == 0 && currentWork_) {
+		if (shouldExit && currentWork_) {
 			currentWork_->onQuitEvent();
 		}
 		while (!shouldExit && changeWork) {
@@ -438,7 +441,7 @@ void Window::stepIfNeeded() {
 			}
 			currentWork_ = std::move(newWork_);
 			currentWork_->onLoad();
-			if (shouldExit && *shouldExit == 0) {
+			if (shouldExit) {
 				currentWork_->onQuitEvent();
 			}
 		}

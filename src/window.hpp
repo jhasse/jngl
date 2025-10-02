@@ -138,7 +138,8 @@ private:
 	GLuint vaoLine = 0;
 	GLuint vaoSquare = 0;
 	unsigned int maxStepsPerFrame = 3;
-	optional<uint8_t> shouldExit;
+	bool shouldExit = false;
+	std::optional<int> forceExitCode;
 	bool fullscreen_;
 	bool isMouseVisible_ = true;
 	bool relativeMouseMode = false;
