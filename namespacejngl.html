@@ -647,6 +647,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (<a 
 <a class="el" href="classjngl_1_1Rgba.html">Rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><b>interpolate</b> (<a class="el" href="classjngl_1_1Rgba.html">Rgba</a> a, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> b, float t)</td></tr>
 <tr class="memdesc:af6daf6049d5223d135e36b485e89134f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
 <tr class="separator:af6daf6049d5223d135e36b485e89134f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad98bbc26d3770af61a50b61da410bee8" id="r_ad98bbc26d3770af61a50b61da410bee8"><td class="memItemLeft" align="right" valign="top"><a id="ad98bbc26d3770af61a50b61da410bee8" name="ad98bbc26d3770af61a50b61da410bee8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setScene</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="#a7310ba6795e72c54ccb2742d62c31c33">Scene</a> &gt;)</td></tr>
+<tr class="memdesc:ad98bbc26d3770af61a50b61da410bee8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the passed Scene to be active in the main loop. <br /></td></tr>
+<tr class="separator:ad98bbc26d3770af61a50b61da410bee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb8f207e4c64561670de06d10aba18c5" id="r_acb8f207e4c64561670de06d10aba18c5"><td class="memTemplParams" colspan="2">template&lt;class T , class... Args&gt; </td></tr>
+<tr class="memitem:acb8f207e4c64561670de06d10aba18c5"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#acb8f207e4c64561670de06d10aba18c5">setScene</a> (Args &amp;&amp;... args)</td></tr>
+<tr class="memdesc:acb8f207e4c64561670de06d10aba18c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The same as <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop.">setScene(std::shared_ptr&lt;Scene&gt;)</a> but creates the Scene for you.  <br /></td></tr>
+<tr class="separator:acb8f207e4c64561670de06d10aba18c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d23d95fbe7f69b235a6984b67f5fa7c" id="r_a7d23d95fbe7f69b235a6984b67f5fa7c"><td class="memItemLeft" align="right" valign="top"><a id="a7d23d95fbe7f69b235a6984b67f5fa7c" name="a7d23d95fbe7f69b235a6984b67f5fa7c"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getScaleFactor</b> ()</td></tr>
 <tr class="memdesc:a7d23d95fbe7f69b235a6984b67f5fa7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of one screen pixel in actual pixels. <br /></td></tr>
@@ -940,16 +948,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setCursor</b> (Cursor
 <a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Work.html">Work</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getWork</b> ()</td></tr>
 <tr class="memdesc:a57d53df4f6801a026e40bc1ccf8bd390"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> or nullptr if none has been set. <br /></td></tr>
 <tr class="separator:a57d53df4f6801a026e40bc1ccf8bd390"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9937073cb10d7c761085e47010390297" id="r_a9937073cb10d7c761085e47010390297"><td class="memItemLeft" align="right" valign="top"><a id="a9937073cb10d7c761085e47010390297" name="a9937073cb10d7c761085e47010390297"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setWork</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Work.html">Work</a> &gt; work)</td></tr>
-<tr class="memdesc:a9937073cb10d7c761085e47010390297"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the passed <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> to be active in the main loop. <br /></td></tr>
+<tr class="memitem:a9937073cb10d7c761085e47010390297" id="r_a9937073cb10d7c761085e47010390297"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9937073cb10d7c761085e47010390297">setWork</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Work.html">Work</a> &gt; work)</td></tr>
+<tr class="memdesc:a9937073cb10d7c761085e47010390297"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the passed <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> to be active in the main loop.  <br /></td></tr>
 <tr class="separator:a9937073cb10d7c761085e47010390297"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4711f46c463334958d8561834d83b94" id="r_aa4711f46c463334958d8561834d83b94"><td class="memTemplParams" colspan="2">template&lt;class T , class... Args&gt; </td></tr>
 <tr class="memitem:aa4711f46c463334958d8561834d83b94"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#aa4711f46c463334958d8561834d83b94">setWork</a> (Args &amp;&amp;... args)</td></tr>
 <tr class="memdesc:aa4711f46c463334958d8561834d83b94"><td class="mdescLeft">&#160;</td><td class="mdescRight">The same as <a class="el" href="#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in the main loop.">setWork(std::shared_ptr&lt;Work&gt;)</a> but creates the <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> for you.  <br /></td></tr>
 <tr class="separator:aa4711f46c463334958d8561834d83b94"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b9d453bc1307852b482b9926abeeca9" id="r_a9b9d453bc1307852b482b9926abeeca9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b9d453bc1307852b482b9926abeeca9">setWork</a> (<a class="el" href="classjngl_1_1Work.html">Work</a> *)</td></tr>
-<tr class="separator:a9b9d453bc1307852b482b9926abeeca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5654b5fb3dec5ca7aa0d860163ab8a09" id="r_a5654b5fb3dec5ca7aa0d860163ab8a09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5654b5fb3dec5ca7aa0d860163ab8a09">resetFrameLimiter</a> ()</td></tr>
 <tr class="memdesc:a5654b5fb3dec5ca7aa0d860163ab8a09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the automatic frame limiter of App::mainLoop().  <br /></td></tr>
 <tr class="separator:a5654b5fb3dec5ca7aa0d860163ab8a09"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2252,6 +2257,29 @@ template&lt;class Vect &gt; </div>
 
 </div>
 </div>
+<a id="acb8f207e4c64561670de06d10aba18c5" name="acb8f207e4c64561670de06d10aba18c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb8f207e4c64561670de06d10aba18c5">&#9670;&#160;</a></span>setScene()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T , class... Args&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T &amp; setScene </td>
+          <td>(</td>
+          <td class="paramtype">Args &amp;&amp;...</td>          <td class="paramname"><span class="paramname"><em>args</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The same as <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop.">setScene(std::shared_ptr&lt;Scene&gt;)</a> but creates the Scene for you. </p>
+
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00020">20</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a00ce59d5fcb4560671c5f316c8f6410e" name="a00ce59d5fcb4560671c5f316c8f6410e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a00ce59d5fcb4560671c5f316c8f6410e">&#9670;&#160;</a></span>setScaleFactor()</h2>
 
@@ -3148,8 +3176,28 @@ template&lt;class Vect &gt; </div>
 
 </div>
 </div>
+<a id="a9937073cb10d7c761085e47010390297" name="a9937073cb10d7c761085e47010390297"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9937073cb10d7c761085e47010390297">&#9670;&#160;</a></span>setWork() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setWork </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Work.html">Work</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>work</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the passed <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> to be active in the main loop. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000027">Deprecated</a></b></dt><dd>Use <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop.">setScene(std::shared_ptr&lt;Scene&gt;)</a> instead </dd></dl>
+
+</div>
+</div>
 <a id="aa4711f46c463334958d8561834d83b94" name="aa4711f46c463334958d8561834d83b94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa4711f46c463334958d8561834d83b94">&#9670;&#160;</a></span>setWork() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4711f46c463334958d8561834d83b94">&#9670;&#160;</a></span>setWork() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3167,25 +3215,7 @@ template&lt;class T , class... Args&gt; </div>
 
 <p>The same as <a class="el" href="#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in the main loop.">setWork(std::shared_ptr&lt;Work&gt;)</a> but creates the <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> for you. </p>
 
-<p class="definition">Definition at line <a class="el" href="work_8hpp_source.html#l00085">85</a> of file <a class="el" href="work_8hpp_source.html">work.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a9b9d453bc1307852b482b9926abeeca9" name="a9b9d453bc1307852b482b9926abeeca9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b9d453bc1307852b482b9926abeeca9">&#9670;&#160;</a></span>setWork() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void setWork </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classjngl_1_1Work.html">Work</a> *</td>          <td class="paramname"><span class="paramname"></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000027">Deprecated</a></b></dt><dd>Use <a class="el" href="#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in the main loop.">setWork(std::shared_ptr&lt;Work&gt;)</a> instead </dd></dl>
+<p class="definition">Definition at line <a class="el" href="work_8hpp_source.html#l00087">87</a> of file <a class="el" href="work_8hpp_source.html">work.hpp</a>.</p>
 
 </div>
 </div>
