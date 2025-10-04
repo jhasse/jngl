@@ -1,13 +1,13 @@
-// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "App.hpp"
 
 #include "jngl/AppParameters.hpp"
+#include "jngl/Scene.hpp"
 #include "jngl/ShaderProgram.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/window.hpp"
-#include "jngl/work.hpp"
 #include "log.hpp"
 #include "windowptr.hpp"
 
@@ -91,12 +91,12 @@ void App::setDisplayName(const std::string& displayName) {
 	impl->displayName = displayName;
 }
 
-void App::mainLoop() {
+uint8_t App::mainLoop() {
 	if (impl->steamAppId) {
 		initSteamAchievements();
 	}
 	internal::debug("Starting main loop for '{}'.", impl->displayName);
-	pWindow->mainLoop();
+	return pWindow->mainLoop();
 }
 
 bool App::isPixelArt() {
@@ -129,7 +129,7 @@ void App::updateProjectionMatrix() const {
 #if !defined(__APPLE__) || !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE // iOS
 namespace internal {
 
-void mainLoop(AppParameters params) {
+uint8_t mainLoop(AppParameters params) {
 	auto context = App::instance().init(params);
 	if (auto id = params.steamAppId) {
 		jngl::initSteam(*id);
@@ -173,9 +173,10 @@ void mainLoop(AppParameters params) {
 		setScaleFactor(std::min(static_cast<double>(windowSize[0]) / params.screenSize->x,
 		                        static_cast<double>(windowSize[1]) / params.screenSize->y));
 	}
-	setWork(params.start());
-	App::instance().mainLoop();
+	setScene(params.start());
+	uint8_t exitcode = App::instance().mainLoop();
 	hideWindow();
+	return exitcode;
 }
 
 } // namespace internal

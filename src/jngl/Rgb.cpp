@@ -4,6 +4,9 @@
 
 #include "Color.hpp"
 
+#include <cmath>
+#include <iostream>
+
 namespace jngl {
 
 Rgb::Rgb(float red, float green, float blue) : red(red), green(green), blue(blue) {
@@ -44,6 +47,18 @@ void Rgb::setBlue(const float blue) {
 	this->blue = blue;
 }
 
+uint8_t Rgb::getRed_u8() const {
+	return static_cast<uint8_t>(std::lround(red * 255.f));
+}
+
+uint8_t Rgb::getGreen_u8() const {
+	return static_cast<uint8_t>(std::lround(green * 255.f));
+}
+
+uint8_t Rgb::getBlue_u8() const {
+	return static_cast<uint8_t>(std::lround(blue * 255.f));
+}
+
 Rgb::operator Color() const {
 	return Color{ static_cast<unsigned char>(red * 255), static_cast<unsigned char>(green * 255),
 		          static_cast<unsigned char>(blue * 255) };
@@ -52,6 +67,16 @@ Rgb::operator Color() const {
 Rgb interpolate(Rgb a, Rgb b, float t) {
 	return { a.getRed() * (1.f - t) + b.getRed() * t, a.getGreen() * (1.f - t) + b.getGreen() * t,
 		     a.getBlue() * (1.f - t) + b.getBlue() * t };
+}
+
+bool operator==(Rgb a, Rgb b) {
+	return a.getRed_u8() == b.getRed_u8() && a.getGreen_u8() == b.getGreen_u8() &&
+	       a.getBlue_u8() == b.getBlue_u8();
+}
+
+std::ostream& operator<<(std::ostream& os, Rgb color) {
+	os << "jngl::Rgb{ " << color.getRed() << ", " << color.getGreen() << ", " << color.getBlue() << " }";
+	return os;
 }
 
 } // namespace jngl

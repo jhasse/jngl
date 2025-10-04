@@ -1,3 +1,5 @@
+// Copyright 2008-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include <cmath>
 #include <jngl.hpp>
 #include <jngl/init.hpp>
@@ -5,7 +7,7 @@
 const int screenWidth = 800;
 const int screenHeight = 600;
 
-class Ball : public jngl::Work {
+class Ball : public jngl::Scene {
 public:
 	explicit Ball(const std::string& filename);
 	void draw() const override;

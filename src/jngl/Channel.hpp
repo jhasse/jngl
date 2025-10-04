@@ -49,7 +49,7 @@ public:
 	///
 	/// Example where you want to pause audio in a menu:
 	/// \code
-	/// class PauseMenu : public jngl::Work {
+	/// class PauseMenu : public jngl::Scene {
 	///     jngl::Finally paused;
 	///
 	/// public:
@@ -61,7 +61,7 @@ public:
 	///
 	/// Or if you want to toggle pausing audio using <kbd>Space</kbd>:
 	/// \code
-	/// class PauseExample : public jngl::Work {
+	/// class PauseExample : public jngl::Scene {
 	///     std::optional<jngl::Finally> paused;
 	///
 	/// public:

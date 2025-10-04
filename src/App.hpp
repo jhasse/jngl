@@ -34,7 +34,7 @@ public:
 	void setDisplayName(const std::string&);
 
 	/// Starts the main loop, which calls jngl::Work::step and jngl::Work::draw
-	void mainLoop();
+	[[nodiscard]] uint8_t mainLoop();
 
 	/// Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)
 	///

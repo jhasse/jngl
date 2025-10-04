@@ -20,13 +20,18 @@ linux:
   script:
   - dnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libwebp-devel SDL3-devel libtheora-devel clang util-linux clang-tools-extra >/dev/null
   - .github/ci.py
-  - CXXFLAGS=-fdiagnostics-color cmake -Bbuild -GNinja
+  - cmake -Bbuild -G"Ninja Multi-Config" -DCMAKE_COMPILE_WARNING_AS_ERROR=1
   - cd build
   - ninja
+  - ninja -f build-Release.ninja
   - dnf install -y mesa-dri-drivers xorg-x11-drivers >/dev/null
   - Xorg -config ../data/xorg.conf &>/dev/null &
   - sleep 1 # wait for Xorg to boot up
-  - DISPLAY=:0 ./jngl-unittest
+  - export DISPLAY=:0
+  - Debug/jngl-unittest
+  - ../src/test/integration/run.py Debug
+  - Release/jngl-unittest
+  - ../src/test/integration/run.py Release
   - cd ..
   - CC=clang CXX=clang++ CXXFLAGS=-fdiagnostics-color cmake -Bbuild-clang -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DJNGL_CLANG_TIDY=1
   - cd build-clang
@@ -96,7 +101,7 @@ web:
     allow_failure: false
   stage: build
   script:
-  - emcmake cmake -Bbuild-web
+  - emcmake cmake -Bbuild-web -DCMAKE_COMPILE_WARNING_AS_ERROR=1
   - cp -r data build-web/
   - cd build-web
   - make -j$(nproc)

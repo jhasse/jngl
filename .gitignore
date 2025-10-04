@@ -2,7 +2,6 @@
 /build*/
 Thumbs.db
 /.vscode/.browse*
-/.vscode/settings.json
 /.vscode/tags
 /.vscode/cquery*
 /.vscode/ipch/

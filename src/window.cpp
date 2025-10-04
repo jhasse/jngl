@@ -173,15 +173,22 @@ bool Window::isMultisampleSupported() const {
 }
 
 bool Window::isRunning() const {
-	return running;
+	return !shouldExit;
 }
 
 void Window::quit() noexcept {
-	running = false;
+	shouldExit = true;
+}
+
+void Window::forceQuit(uint8_t exitcode) {
+	if (forceExitCode) {
+		throw std::runtime_error("Already exitting.");
+	}
+	forceExitCode = exitcode;
 }
 
 void Window::cancelQuit() {
-	running = true;
+	shouldExit = false;
 }
 
 bool Window::getKeyDown(key::KeyType key) {
@@ -283,12 +290,15 @@ double Window::getMouseWheel() const {
 	return mouseWheel;
 }
 
-void Window::mainLoop() {
+uint8_t Window::mainLoop() {
 #ifdef __EMSCRIPTEN__
 	g_jnglMainLoop = [this]() {
 #else
-	Finally _([&]() { currentWork_.reset(); });
-	while (isRunning()) {
+	Finally _([&]() {
+		newWork_.reset();
+		currentWork_.reset();
+	});
+	while (!shouldExit && !forceExitCode) {
 #endif
 		stepIfNeeded();
 		clearBackBuffer();
@@ -299,6 +309,9 @@ void Window::mainLoop() {
 #ifdef __EMSCRIPTEN__
 	;
 	emscripten_set_main_loop(jnglMainLoop, 0, true);
+	return 0;
+#else
+	return forceExitCode ? *forceExitCode : 0;
 #endif
 }
 
@@ -415,19 +428,25 @@ void Window::stepIfNeeded() {
 			).count()
 		) / 1000.;
 #endif
+		if (forceExitCode) {
+			break;
+		}
 		if (keyPressed(key::Escape)) {
 			currentWork_->onBackEvent();
 		}
-		if (!jngl::running() && currentWork_) {
+		if (shouldExit && currentWork_) {
 			currentWork_->onQuitEvent();
 		}
-		while (changeWork) {
+		while (!shouldExit && changeWork) {
 			changeWork = false;
 			if (currentWork_) {
 				currentWork_->onUnload();
 			}
 			currentWork_ = std::move(newWork_);
 			currentWork_->onLoad();
+			if (shouldExit) {
+				currentWork_->onQuitEvent();
+			}
 		}
 	}
 }
@@ -478,13 +497,54 @@ void Window::draw() const {
 #endif
 }
 
+std::string simpleDemangle(std::string_view mangled) {
+	// Simple demangler: strip leading 'N' and trailing 'E' for namespaces, remove digits, etc.
+	// This is a naive implementation and won't handle all cases.
+	std::string result;
+	size_t i = 0;
+
+	// Remove leading 'N' (namespace) and trailing 'E'
+	if (!mangled.empty() && mangled[0] == 'N' && mangled.back() == 'E') {
+		++i;
+		mangled.remove_suffix(1);
+	}
+
+	while (i < mangled.size()) {
+		if (std::isdigit(mangled[i])) {
+			// Skip length prefixes
+			size_t len = 0;
+			while (i < mangled.size() && std::isdigit(mangled[i])) {
+				len = len * 10 + (mangled[i] - '0');
+				++i;
+			}
+			if (i + len <= mangled.size()) {
+				if (!result.empty()) {
+					result += "::";
+				}
+				result.append(mangled.substr(i, len));
+				i += len;
+			} else {
+				break;
+			}
+		} else {
+			// Copy non-digit characters as-is
+			result += mangled[i++];
+		}
+	}
+	return result.empty() ? std::string(mangled) : result;
+}
+
 void Window::setWork(std::shared_ptr<Work> work) {
+#ifndef NDEBUG
+	const auto& ref = *work;
+	internal::debug("{} scene to {} ({}).", currentWork_ ? "Change" : "Setting current",
+	                simpleDemangle(typeid(ref).name()), // NOLINT
+	                static_cast<void*>(work.get()));
+#endif
 	if (!currentWork_) {
-		internal::debug("Setting current work to {}.", static_cast<void*>(work.get()));
 		currentWork_ = std::move(work);
 		currentWork_->onLoad();
 	} else {
-		internal::debug("Change work to {}.", static_cast<void*>(work.get()));
 		changeWork = true;
 		newWork_ = std::move(work);
 	}
@@ -574,6 +634,12 @@ void Window::initGlObjects() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(rect), rect, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(0);
+
+	GLint tmp;
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &tmp);
+	systemFramebuffer = tmp;
+	glGetIntegerv(GL_RENDERBUFFER_BINDING, &tmp);
+	systemRenderbuffer = tmp;
 }
 
 void Window::drawLine(Mat3 modelview, const Vec2 b, const Rgba color) const {
@@ -592,6 +658,11 @@ void Window::drawSquare(Mat3 modelview, Rgba color) const {
 
 void Window::onControllerChanged(std::function<void()> callback) {
 	controllerChangedCallback = std::move(callback);
+}
+
+void Window::bindSystemFramebufferAndRenderbuffer() {
+	glBindFramebuffer(GL_FRAMEBUFFER, systemFramebuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, systemRenderbuffer);
 }
 
 } // namespace jngl

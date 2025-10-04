@@ -67,4 +67,20 @@ template <class... Args> void error(std::format_string<Args...> format, Args&&..
 template <class... Args> void error(Args&&...) {}
 #endif
 
+/// Demangle a mangled C++ type name, e.g. from typeid(*object).name()
+///
+/// Useful for printing concrete types of pointers to base classes.
+///
+/// Example:
+/// \code
+/// class GameObject {
+///     virtual ~GameObject() = default;
+/// };
+/// class Player : public GameObject {};
+///
+/// GameObject* object = new Player;
+/// jngl::debug(jngl::simpleDemangle(typeid(*object).name()));
+/// \endcode
+std::string simpleDemangle(std::string_view mangled);
+
 } // namespace jngl

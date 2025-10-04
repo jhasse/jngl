@@ -115,7 +115,10 @@ Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::
 	// https://stackoverflow.com/questions/32055357/visual-studio-c-2015-stdcodecvt-with-char16-t-or-char32-t
 	static std::wstring_convert<std::codecvt_utf8<int32_t>, int32_t> cvt;
 #else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	static std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cvt;
+#pragma GCC diagnostic pop
 #endif
 	const char& ch = (*it); // Just to have less code
 	char32_t unicodeCharacter = ch;

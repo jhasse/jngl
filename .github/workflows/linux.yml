@@ -10,13 +10,14 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libxxf86vm-dev libpng-dev libvorbis-dev g++ libwebp-dev git ninja-build libxext-dev
+        sudo apt install just
+        just ubuntu
     - name: Configure with CMake and GCC
-      run: cmake -Bbuild -G"Ninja Multi-Config"
+      run: just cmake
     - name: Build Debug
-      run: cd build && ninja
+      run: just debug all
     - name: Build Release
-      run: cd build && ninja -f build-Release.ninja
+      run: just release all
     - name: Install unittest dependencies
       run: sudo apt install xserver-xorg-core xserver-xorg-video-dummy
     - name: Unittest

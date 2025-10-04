@@ -1,4 +1,4 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <algorithm>
@@ -17,7 +17,7 @@ void testKeys();
 int performance = 1;
 double factor = 0;
 
-class AsyncLoad : public jngl::Work {
+class AsyncLoad : public jngl::Scene {
 public:
 	AsyncLoad() {
 		jngl::setSpriteAlpha(255);
@@ -35,7 +35,7 @@ private:
 	jngl::Sprite::Loader spriteAsync{ "../examples/bike/bg" };
 };
 
-class Test : public jngl::Work {
+class Test : public jngl::Scene {
 public:
 	explicit Test(const std::string& displayName)
 	: frameTime(jngl::getTime()), lastTime(jngl::getTime()), fb2(jngl::getWindowSize()),
@@ -99,10 +99,16 @@ public:
 			}
 		}
 		if (jngl::keyPressed('g')) {
-			jngl::setWork<AsyncLoad>();
+			jngl::setWork<jngl::Fade>(std::make_shared<AsyncLoad>());
 		}
 		if (jngl::keyPressed('e')) {
 			jngl::errorMessage("Hello World!");
+		}
+		if (jngl::keyPressed('r')) {
+			achievement.increaseValue(5);
+		}
+		if (jngl::keyPressed('t')) {
+			achievement2.increaseValue(30);
 		}
 	}
 	void drawBackground() const;
@@ -123,11 +129,9 @@ public:
 		}
 		drawBackground();
 		jngl::setColor(0, 0, 0, 255);
-		jngl::drawLine(jngl::modelview()
-		                   .translate({ 650, 450 })
-		                   .rotate(rotate / 360 * std::numbers::pi)
-		                   .translate({ -50, -50 }),
-		               { 100, 100 });
+		jngl::drawLine(
+		    jngl::modelview().translate({ 650, 450 }).rotate(rotate / 360 * std::numbers::pi),
+		    { -50, -50 }, { 50, 50 }, 1.f);
 		jngl::setSpriteAlpha(200);
 		auto rotatedMv = jngl::modelview()
 		                     .translate(jngl::getScreenSize() / 2)
@@ -266,6 +270,12 @@ private:
 	std::unique_ptr<jngl::Channel> music;
 	jngl::Font fontNormal{ "Arial.ttf", 12 };
 	jngl::Font fontStroke{ "Arial.ttf", 12, 5 };
+	jngl::Achievement achievement{
+		"JNGL_TEST_ACHIEVEMENT", "Pressed R", "Found easter egg", "jngl", 0, 42
+	};
+	jngl::Achievement achievement2{
+		"JNGL_TEST_ACHIEVEMENT2", "Pressed T", "Found another easter egg", "jngl", 0, 1000
+	};
 };
 
 jngl::AppParameters jnglInit() {
@@ -307,6 +317,8 @@ void Test::drawBackground() const {
 	jngl::drawTriangle({ 600, 30 }, { 700, 30 }, { 650, 130 });
 	jngl::setColor(0, 255, 0, 100);
 	jngl::drawRect({ 600, 400 }, { 100, 100 });
+	jngl::drawRectOutline(jngl::modelview().translate({ 650, 450 }), { 40, 80 }, 1.f,
+	                      0x00000099_rgba);
 	jngl::setColor(0, 0, 255, 100);
 	jngl::drawEllipse(jngl::modelview().translate({ 80, 400 }), 50, 80);
 }

@@ -45,8 +45,8 @@ public:
 
 	FrameBuffer(const FrameBuffer&) = delete;
 	FrameBuffer& operator=(const FrameBuffer&) = delete;
-	FrameBuffer(FrameBuffer&&) = default;
-	FrameBuffer& operator=(FrameBuffer&&) = default;
+	FrameBuffer(FrameBuffer&&) noexcept;
+	FrameBuffer& operator=(FrameBuffer&&) noexcept;
 	~FrameBuffer();
 
 	/// Lifetime object when the FrameBuffer is in use

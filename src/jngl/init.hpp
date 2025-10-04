@@ -8,15 +8,13 @@
 #include "AppParameters.hpp"
 #include "main.hpp"
 
-#include <cmath>
-
 #if defined(__has_include) && __has_include("filesystem")
 #include <filesystem>
 #endif
 
 namespace jngl::internal {
 
-void mainLoop(AppParameters);
+[[nodiscard]] uint8_t mainLoop(AppParameters);
 
 } // namespace jngl::internal
 
@@ -61,7 +59,7 @@ JNGL_MAIN_BEGIN {                            // NOLINT
 		}
 	}
 #endif
-	jngl::internal::mainLoop(jnglInit());
+	JNGL_MAIN_RETURN jngl::internal::mainLoop(jnglInit());
 }
 JNGL_MAIN_END
 #endif

@@ -3,7 +3,6 @@
 #pragma once
 
 #include <string>
-#include <vector>
 #if defined(__has_include) && __has_include(<optional>)
 #include <optional>
 using std::optional;
@@ -14,6 +13,7 @@ using std::experimental::optional;
 
 namespace jngl {
 
+/// Sets the global OpenGL background color, doesn't actually call glClear
 void clearBackgroundColor();
 
 bool Init(int width, int height, int canvasWidth, int canvasHeight);
@@ -22,6 +22,5 @@ void updateProjection(int windowWidth, int windowHeight, int, int);
 
 extern std::string pathPrefix;
 extern optional<std::string> configPath;
-extern std::vector<std::string> args;
 
 } // namespace jngl

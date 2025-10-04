@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import platform
 
 ignores = [
 	'.git/',
@@ -21,6 +22,8 @@ def error(path: str, msg: str) -> None:
 for root, directory, filenames in os.walk('.'):
 	for filename in filenames:
 		path = os.path.join(root, filename)[2:]
+		if platform.system() == "Windows":
+			path = path.replace('\\', '/')
 		if any([path.startswith(x) for x in ignores]):
 			continue
 		with open(path, 'rb') as file:

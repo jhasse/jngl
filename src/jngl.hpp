@@ -12,6 +12,7 @@
 #include "jngl/Container.hpp"        // IWYU pragma: keep
 #include "jngl/Controller.hpp"       // IWYU pragma: keep
 #include "jngl/Drawable.hpp"         // IWYU pragma: keep
+#include "jngl/Fade.hpp"             // IWYU pragma: keep
 #include "jngl/FrameBuffer.hpp"      // IWYU pragma: keep
 #include "jngl/ImageData.hpp"        // IWYU pragma: keep
 #include "jngl/KeyboardShortcut.hpp" // IWYU pragma: keep
@@ -23,6 +24,7 @@
 #include "jngl/Rgb.hpp"              // IWYU pragma: keep
 #include "jngl/Rgba.hpp"             // IWYU pragma: keep
 #include "jngl/ScaleablePixels.hpp"  // IWYU pragma: keep
+#include "jngl/Scene.hpp"            // IWYU pragma: keep
 #include "jngl/Shader.hpp"           // IWYU pragma: keep
 #include "jngl/ShaderProgram.hpp"    // IWYU pragma: keep
 #include "jngl/Singleton.hpp"        // IWYU pragma: keep

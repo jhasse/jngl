@@ -42,25 +42,48 @@ void pushAlpha(unsigned char alpha);
 /// \deprecated Use jngl::setAlpha instead
 void popAlpha();
 
-[[deprecated("Use drawRect instead")]]
-/// \deprecated Use jngl::drawRect instead
+[[deprecated("Pass line width to drawLine instead")]]
+/// \deprecated Pass line width to drawLine instead
 void setLineWidth(float width);
 
 /// Draws a line from start to end, the width can be set using setLineWidth
+/// \deprecated Use drawLine(Vec2, Vec2, float lineWidth) instead
+[[deprecated("Use drawLine(Vec2, Vec2, float lineWidth) instead")]]
 void drawLine(Vec2 start, Vec2 end);
 
-[[deprecated("Use drawLine(Vec2, Vec2) instead")]]
-/// \deprecated Use drawLine(Vec2, Vec2) instead
+/// Draws a line from \a start to \a end with width \a lineWidth in the color set by jngl::setColor
+void drawLine(Vec2 start, Vec2 end, float lineWidth);
+
+/// Draws a line from \a start to \a end with width \a lineWidth in \a color
+void drawLine(Vec2 start, Vec2 end, float lineWidth, Rgba color);
+
+[[deprecated("Use drawLine(Vec2, Vec2, float lineWidth) instead")]]
+/// \deprecated Use drawLine(Vec2, Vec2, float lineWidth) instead
 void drawLine(double xstart, double ystart, double xend, double yend);
 
 /// Draws a line from \a start to \a end
+/// \deprecated Use drawLine(Mat3, Vec2, Vec2, float lineWidth) instead
+[[deprecated("Use drawLine(Mat3, Vec2, Vec2, float lineWidth) instead")]]
 void drawLine(Mat3 modelview, Vec2 start, Vec2 end);
 
-/// Draws a line from (0, 0) to \a end
+/// Draws a line from \a start to \a end with width \a lineWidth in the color set by jngl::setColor
+void drawLine(Mat3 modelview, Vec2 start, Vec2 end, float lineWidth);
+
+/// Draws a line from \a start to \a end with width \a lineWidth in \a color
+void drawLine(Mat3 modelview, Vec2 start, Vec2 end, float lineWidth, Rgba color);
+
+/// Draws a line from (0, 0) to \a end in the color set by jngl::setColor
+/// \deprecated Use drawLine(const Mat3&, Vec2, float lineWidth, Rgba) instead
+[[deprecated("Use drawLine(const Mat3&, Vec2, float lineWidth, Rgba) instead")]]
 void drawLine(const Mat3& modelview, Vec2 end);
 
 /// Draws a line from (0, 0) to \a end in \a color
+/// \deprecated Use drawLine(const Mat3&, Vec2, float lineWidth, Rgba) instead
+[[deprecated("Use drawLine(const Mat3&, Vec2, float lineWidth, Rgba) instead")]]
 void drawLine(const Mat3& modelview, Vec2 end, Rgba color);
+
+/// Draws a line from (0, 0) to \a end with width \a lineWidth in \a color
+void drawLine(Mat3 modelview, Vec2 end, float lineWidth, Rgba color);
 
 [[deprecated("Use drawEllipse(Mat3, float, float, float) instead")]]
 /// \deprecated Use drawEllipse(Mat3, float, float, float) instead
@@ -141,6 +164,9 @@ void drawRect(const Mat3& modelview, Vec2 size, Rgb);
 /// Use setAlpha to set the opacity.
 void drawRect(Mat3 modelview, Vec2 size, Rgba color);
 
+/// Draws the outline of a rectangle (so □ instead of ■) of \a size centered at (0, 0) in \a color
+void drawRectOutline(Mat3 modelview, Vec2 size, float lineWidth, Rgba color);
+
 /// Draws a (filled) square of size 1x1 centered at (0, 0) with the specified color
 ///
 /// By squaling the modelview matrix you can change the size of the square, effectively turning it
@@ -160,6 +186,9 @@ void drawSquare(const Mat3& modelview, Rgba color);
 /// // draws a rectangle at (12 - 56 / 2, 34 - 78 / 2) with a size of 56x78 in red:
 /// drawSquareOutline(jngl::modelview().translate(12, 34).scale(56, 78), 0xff0000ff_rgba, 2.f);
 /// \endcode
+///
+/// \note The line width is not affected by the modelview matrix scaling! Use drawRectOutline
+/// instead if you want scaling to work correctly.
 void drawSquareOutline(Mat3 modelview, float lineWidth, Rgba color);
 
 template <class Vect> void drawRect(Vect pos, Vect size) {

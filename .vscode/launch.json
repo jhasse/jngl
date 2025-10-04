@@ -5,27 +5,27 @@
 			"type": "lldb",
 			"request": "launch",
 			"name": "jngl-test (LLDB)",
-			"program": "${workspaceRoot}/build/Debug/jngl-test",
+			"program": "build/Debug/jngl-test",
 			"args": [],
-			"cwd": "${workspaceRoot}",
 			"preLaunchTask": "build"
 		},
 		{
 			"type": "lldb",
 			"request": "launch",
 			"name": "videoplayer",
-			"program": "${workspaceRoot}/build/Debug/videoplayer",
-			"args": ["data/verysmall.ogv"],
-			"cwd": "${workspaceRoot}",
+			"program": "build/Debug/videoplayer",
+			"args": [
+				"data/verysmall.ogv"
+			],
 			"preLaunchTask": "build"
 		},
 		{
 			"type": "lldb",
 			"request": "launch",
 			"name": "jngl-unittest (LLDB)",
-			"program": "${workspaceRoot}/build/Debug/jngl-unittest",
+			"program": "build/Debug/jngl-unittest",
 			"args": [],
-			"cwd": "${workspaceRoot}/build",
+			"cwd": "build",
 			"preLaunchTask": "build"
 		},
 		{

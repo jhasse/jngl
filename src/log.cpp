@@ -79,7 +79,7 @@ void log(const std::string& appName, const std::string& level, const std::string
 	} else if (levelStripped == "error") {
 		androidLevel = ANDROID_LOG_ERROR;
 	}
-	__android_log_print(androidLevel, "libjngl", "%s", message.c_str());
+	__android_log_print(androidLevel, appName.c_str(), "%s", message.c_str());
 #else
 	std::ostringstream tmp;
 	if (!appName.empty()) {

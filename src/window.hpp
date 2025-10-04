@@ -40,6 +40,7 @@ public:
 	~Window();
 	bool isRunning() const;
 	void quit() noexcept;
+	void forceQuit(uint8_t exitcode);
 	void cancelQuit();
 	void UpdateInput();
 	void updateKeyStates();
@@ -94,7 +95,10 @@ public:
 	std::string getFont() const;
 	std::shared_ptr<FontImpl> getFontImpl();
 	void setWork(std::shared_ptr<Work>);
-	void mainLoop();
+
+	/// Returns exitcode for process
+	[[nodiscard]] uint8_t mainLoop();
+
 	void stepIfNeeded();
 	void sleepIfNeeded();
 	void draw() const;
@@ -114,6 +118,7 @@ public:
 	void drawLine(Mat3 modelview, Vec2 b, Rgba color) const;
 	void drawSquare(Mat3 modelview, Rgba color) const;
 	void onControllerChanged(std::function<void()>);
+	void bindSystemFramebufferAndRenderbuffer();
 
 	friend class WindowImpl;
 	std::unique_ptr<WindowImpl> impl;
@@ -133,7 +138,8 @@ private:
 	GLuint vaoLine = 0;
 	GLuint vaoSquare = 0;
 	unsigned int maxStepsPerFrame = 3;
-	bool running = true;
+	bool shouldExit = false;
+	std::optional<int> forceExitCode;
 	bool fullscreen_;
 	bool isMouseVisible_ = true;
 	bool relativeMouseMode = false;
@@ -188,6 +194,9 @@ private:
 	// <fontSize, <fontName, FontImpl>>
 	std::map<int, std::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
 	std::vector<std::function<void()>> updateInputCallbacks;
+
+	GLuint systemFramebuffer = 0;
+	GLuint systemRenderbuffer = 0;
 
 #ifdef JNGL_PERFORMANCE_OVERLAY
 	double lastStepDuration = 0;

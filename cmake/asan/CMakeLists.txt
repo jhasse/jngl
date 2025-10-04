@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.10)
 project(STATIC_ASAN LANGUAGES CXX)
 
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/main.cpp "int main() {}")

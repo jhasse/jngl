@@ -2,7 +2,7 @@ name: Windows
 on: [push]
 jobs:
   clang-cl:
-    runs-on: windows-2022
+    runs-on: windows-2025
     steps:
     - uses: actions/checkout@v4
     - name: Cache CPM.cmake packages
@@ -12,42 +12,22 @@ jobs:
         key: cpm
     - uses: ilammy/msvc-dev-cmd@v1
     - name: Configure
-      run: cmake -Bbuild -G"Ninja Multi-Config" -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl
+      run: cmake -Bbuild -G"Ninja Multi-Config" -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+      shell: bash
     - name: Build (Debug)
       run: cmake --build build --config Debug
+    - uses: extractions/setup-just@v2
     - name: Unittest (Debug)
-      shell: bash
-      working-directory: build
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
-      run: |
-        Debug/jngl-unittest Color
-        Debug/jngl-unittest Rgb
-        Debug/jngl-unittest Drawable
-        Debug/jngl-unittest ImageData
-        Debug/jngl-unittest FinallyTest
-        Debug/jngl-unittest halfLoadTest
-        Debug/jngl-unittest getBinaryPath
-        Debug/jngl-unittest readAsset
-        Debug/jngl-unittest Vec2
+      run: just unittest-headless
     - name: Build (Release)
       run: cmake --build build --config Release
     - name: Unittest (Release)
-      shell: bash
-      working-directory: build
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
-      run: |
-        Release/jngl-unittest Color
-        Release/jngl-unittest Rgb
-        Release/jngl-unittest Drawable
-        Release/jngl-unittest ImageData
-        Release/jngl-unittest FinallyTest
-        Release/jngl-unittest halfLoadTest
-        Release/jngl-unittest getBinaryPath
-        Release/jngl-unittest readAsset
-        Release/jngl-unittest Vec2
+      run: just unittest-headless Release
 
   msvc:
-    runs-on: windows-2022
+    runs-on: windows-2025
     steps:
     - uses: actions/checkout@v4
     - name: Cache CPM.cmake packages
@@ -56,47 +36,27 @@ jobs:
         path: .cache/cpm
         key: cpm
     - name: Configure
-      run: cmake -Bbuild
+      run: cmake -Bbuild -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+      shell: bash
     - name: Build (Debug)
       run: cmake --build build --config Debug
+    - uses: extractions/setup-just@v2
     - name: Unittest (Debug)
-      shell: bash
-      working-directory: build
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
-      run: |
-        Debug/jngl-unittest Color
-        Debug/jngl-unittest Rgb
-        Debug/jngl-unittest Drawable
-        Debug/jngl-unittest ImageData
-        Debug/jngl-unittest FinallyTest
-        Debug/jngl-unittest halfLoadTest
-        Debug/jngl-unittest getBinaryPath
-        Debug/jngl-unittest readAsset
-        Debug/jngl-unittest Vec2
+      run: just unittest-headless
     - name: Build (Release)
       run: cmake --build build --config Release
     - name: Unittest (Release)
-      shell: bash
-      working-directory: build
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
-      run: |
-        Release/jngl-unittest Color
-        Release/jngl-unittest Rgb
-        Release/jngl-unittest Drawable
-        Release/jngl-unittest ImageData
-        Release/jngl-unittest FinallyTest
-        Release/jngl-unittest halfLoadTest
-        Release/jngl-unittest getBinaryPath
-        Release/jngl-unittest readAsset
-        Release/jngl-unittest Vec2
+      run: just unittest-headless Release
     - name: Configure (UWP)
-      run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore '-DCMAKE_SYSTEM_VERSION=10.0'
+      run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore '-DCMAKE_SYSTEM_VERSION=10.0' '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
     - name: Build (UWP, Debug)
       run: cmake --build build-uwp --config Debug
     - name: Build (UWP, Release)
       run: cmake --build build-uwp --config Release
 
-  mingw-sdl:
+  mingw:
     runs-on: [ubuntu-latest]
     container:
       image: registry.fedoraproject.org/fedora-minimal:40
@@ -106,7 +66,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build with CMake and GCC
       run: |
-        mingw64-cmake -Bbuild-windows -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=0 -DJNGL_WINAPI=0
+        mingw64-cmake -Bbuild-windows -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=0
         cmake --build build-windows
 
 env:

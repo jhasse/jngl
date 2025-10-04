@@ -39,8 +39,6 @@ struct FrameBuffer::Impl {
 	const int height;
 	Texture texture;
 	bool letterboxing;
-	GLuint systemFbo = 0;
-	GLuint systemBuffer = 0;
 #if !defined(GL_VIEWPORT_BIT) || defined(__APPLE__)
 	GLint viewport[4]{};
 #endif
@@ -54,12 +52,6 @@ std::stack<std::function<void()>> FrameBuffer::Impl::activate;
 
 FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
 : impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height))) {
-	GLint tmp;
-	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &tmp);
-	impl->systemFbo = tmp;
-	glGetIntegerv(GL_RENDERBUFFER_BINDING, &tmp);
-	impl->systemBuffer = tmp;
-
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, static_cast<int>(width),
@@ -84,8 +76,7 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
 		glEnable(GL_SCISSOR_TEST);
 	}
 
-	glBindFramebuffer(GL_FRAMEBUFFER, impl->systemFbo);
-	glBindRenderbuffer(GL_RENDERBUFFER, impl->systemBuffer);
+	pWindow->bindSystemFramebufferAndRenderbuffer();
 }
 
 FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height)
@@ -95,6 +86,8 @@ FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height)
 FrameBuffer::FrameBuffer(std::array<Pixels, 2> size) : FrameBuffer(size[0], size[1]) {
 }
 
+FrameBuffer::FrameBuffer(FrameBuffer&&) noexcept = default;
+FrameBuffer& FrameBuffer::operator=(FrameBuffer&&) noexcept = default;
 FrameBuffer::~FrameBuffer() = default;
 
 void FrameBuffer::draw(const double x, const double y) const {
@@ -238,8 +231,7 @@ FrameBuffer::Context FrameBuffer::use() const {
 			glEnable(GL_SCISSOR_TEST);
 		}
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBindFramebuffer(GL_FRAMEBUFFER, impl->systemFbo);
-		glBindRenderbuffer(GL_RENDERBUFFER, impl->systemBuffer);
+		pWindow->bindSystemFramebufferAndRenderbuffer();
 		clearBackgroundColor();
 	});
 }

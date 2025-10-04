@@ -5,6 +5,7 @@
 #pragma once
 
 #include <cstdint>
+#include <iosfwd>
 
 namespace jngl {
 
@@ -41,6 +42,15 @@ public:
 	/// 0.0f ... 1.0f
 	void setBlue(float);
 
+	/// 0 ... 255
+	uint8_t getRed_u8() const;
+
+	/// 0 ... 255
+	uint8_t getGreen_u8() const;
+
+	/// 0 ... 255
+	uint8_t getBlue_u8() const;
+
 	/// Conversion for backwards compatibility
 	explicit operator Color() const;
 
@@ -52,6 +62,13 @@ private:
 
 /// Returns a color mix between a (t == 0) and b (t == 1)
 Rgb interpolate(Rgb a, Rgb b, float t);
+
+/// Returns true if the two colors are equal in 24 bit SDR space, i.e. each channel rounded to
+/// uint8_t
+bool operator==(Rgb a, Rgb b);
+
+/// Prints the color as `jngl::Rgb{ red, green, blue }`
+std::ostream& operator<<(std::ostream& os, Rgb color);
 
 } // namespace jngl
 

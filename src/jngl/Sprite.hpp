@@ -69,7 +69,7 @@ public:
 	///
 	/// Example:
 	/// \code
-	/// class MyGame : public jngl::Work {
+	/// class MyGame : public jngl::Scene {
 	///     void step() override {}
 	///     void draw() const override {
 	///         if (mySprite) {

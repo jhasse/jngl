@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(jngl LANGUAGES C CXX)
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5) # required for ogg, see https://github.com/jhasse/jngl/issues/107
 
 if(MSVC)
 	string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /wd4244 /wd4305 /wd4267")
@@ -115,10 +116,7 @@ elseif (UNIX)
 
 	target_link_libraries(jngl PRIVATE $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>)
 else() # Windows
-	set(JNGL_WINAPI_DEFAULT ON)
 	if(WINDOWS_STORE)
-		set(JNGL_WINAPI_DEFAULT OFF)
-
 		FetchContent_Declare(
 			angle
 			GIT_REPOSITORY https://github.com/jhasse/angle.git
@@ -133,7 +131,7 @@ else() # Windows
 			set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_OLD} CACHE BOOL "" FORCE)
 		endif()
 	endif()
-	option(JNGL_WINAPI "Use WinAPI instead of SDL" ${JNGL_WINAPI_DEFAULT})
+	option(JNGL_WINAPI "Use WinAPI instead of SDL" OFF)
 
 	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
 	if(JNGL_WINAPI)
@@ -200,8 +198,8 @@ if(NOT hasParent)
 endif()
 if(ANDROID OR MSVC OR IOS)
 	CPMAddPackage(NAME freetype
-		URL https://sourceforge.net/projects/freetype/files/freetype2/2.13.3/freetype-2.13.3.tar.xz/download
-		URL_HASH SHA256=0550350666d427c74daeb85d5ac7bb353acba5f76956395995311a9c6f063289
+		URL https://sourceforge.net/projects/freetype/files/freetype2/2.14.1/freetype-2.14.1.tar.xz/download
+		URL_HASH SHA256=32427e8c471ac095853212a37aef816c60b42052d4d9e48230bab3bdf2936ccc
 		OPTIONS "FT_DISABLE_HARFBUZZ 1"
 	)
 	if(hasParent)
@@ -346,9 +344,11 @@ else()
 						target_include_directories(jngl PRIVATE ${THEORA_DEC_INCLUDE_DIRS})
 						target_link_libraries(jngl PRIVATE ${VORBIS_LINK_LIBRARIES} ${THEORA_DEC_LINK_LIBRARIES})
 
-						add_executable(videoplayer examples/videoplayer.cpp)
-						target_link_libraries(videoplayer PRIVATE jngl)
-						add_custom_command(TARGET videoplayer COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/verysmall.ogv "$<TARGET_FILE_DIR:videoplayer>")
+						if(NOT hasParent)
+							add_executable(videoplayer examples/videoplayer.cpp)
+							target_link_libraries(videoplayer PRIVATE jngl)
+							add_custom_command(TARGET videoplayer POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/verysmall.ogv "$<TARGET_FILE_DIR:videoplayer>")
+						endif()
 					endif()
 				endif()
 			endif()
@@ -405,9 +405,12 @@ else()
 
 				add_executable(audioplayer examples/audioplayer.cpp)
 				target_link_libraries(audioplayer PRIVATE jngl)
-				add_custom_command(TARGET audioplayer COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/test.ogg "$<TARGET_FILE_DIR:audioplayer>")
+				add_custom_command(TARGET audioplayer POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/test.ogg "$<TARGET_FILE_DIR:audioplayer>")
 				# add_executable(benchmark-shapes src/benchmarks/benchmark-shapes.cpp)
 				# target_link_libraries(benchmark-shapes jngl)
+
+				add_executable(jngl-test-forceQuit src/test/integration/forceQuit.cpp)
+				target_link_libraries(jngl-test-forceQuit PRIVATE jngl)
 			endif()
 		endif()
 		target_link_libraries(jngl-test jngl)
