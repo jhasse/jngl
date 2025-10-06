@@ -135,6 +135,9 @@ void openURL(const std::string&);
 /// Rounds a double to an integer, just like std::lround
 int round(double v);
 
+/// Rounds a float to an integer, just like std::lround
+int round(float v);
+
 /// Returns the number of characters in the UTF-8 string
 int utf8Length(std::string_view);
 

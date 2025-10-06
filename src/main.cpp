@@ -827,6 +827,11 @@ int round(double v) {
 	return static_cast<int>(std::lround(v));
 }
 
+int round(float v) {
+	assert(!std::isnan(v));
+	return static_cast<int>(std::lround(v));
+}
+
 int utf8Length(std::string_view text) {
 	int length = 0;
 	for (const unsigned char c : text) {
