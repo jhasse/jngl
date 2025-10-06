@@ -103,7 +103,7 @@ var searchData=
   ['rotate_5fcopy_100',['rotate_copy',['http://en.cppreference.com/w/cpp/algorithm/rotate_copy.html',1,'std::rotate_copy()'],['http://en.cppreference.com/w/cpp/algorithm/ranges/rotate_copy.html',1,'std::ranges::rotate_copy()']]],
   ['rotl_101',['rotl',['http://en.cppreference.com/w/cpp/numeric/rotl.html',1,'std']]],
   ['rotr_102',['rotr',['http://en.cppreference.com/w/cpp/numeric/rotr.html',1,'std']]],
-  ['round_103',['round',['http://en.cppreference.com/w/cpp/numeric/math/round.html',1,'std::round()'],['../namespacejngl.html#a4f88724782bbc719f5283fdde860e429',1,'jngl::round()']]],
+  ['round_103',['round',['http://en.cppreference.com/w/cpp/numeric/math/round.html',1,'std::round()'],['../namespacejngl.html#a4f88724782bbc719f5283fdde860e429',1,'jngl::round(double v)'],['../namespacejngl.html#a4a3c126be6a4b2b223a62cc17d8c16cf',1,'jngl::round(float v)']]],
   ['round_5ferror_104',['round_error',['http://en.cppreference.com/w/cpp/types/numeric_limits/round_error.html',1,'std::numeric_limits']]],
   ['rumble_105',['rumble',['../classjngl_1_1Controller.html#a25b18a163d0c7c014336ba4baf9e1e8f',1,'jngl::Controller']]],
   ['running_106',['running',['../namespacejngl.html#aaa6432a11cc8aa43cdcac30e43bf038f',1,'jngl']]],
