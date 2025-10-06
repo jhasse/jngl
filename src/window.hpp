@@ -3,6 +3,7 @@
 #pragma once
 
 #include "jngl/input.hpp"
+#include "jngl/time.hpp"
 #include "opengl.hpp"
 
 #include <array>
@@ -173,21 +174,24 @@ private:
 	std::shared_ptr<Work> newWork_;
 	std::vector<std::shared_ptr<Job>> jobs;
 	std::vector<Job*> jobsToRemove;
-	unsigned int stepsPerFrame;
 	double sleepPerFrame = 0; // in seconds
-	double sleepCorrectionFactor;
 	double timeSleptSinceLastCheck = 0;
 	unsigned int numberOfSleeps = 0;
 	unsigned int previousStepsPerFrame = 1;
-	double lastCheckTime;
-	unsigned int stepsSinceLastCheck;
 	int mouseHiddenCount = 0;
 
-	/// When VSYNC is active we will try to find out to what FPS/Hz the display is limiting us
-	double maxFPS;
+	struct FrameLimiterData {
+		unsigned int stepsPerFrame = 1;
+		double sleepCorrectionFactor = 1;
+		double lastCheckTime = getTime();
+		unsigned int stepsSinceLastCheck = 0;
 
-	/// How often the frame limiter has run
-	unsigned int numberOfChecks;
+		/// When VSYNC is active we will try to find out to what FPS/Hz the display is limiting us
+		double maxFPS = 300;
+
+		/// How often the frame limiter has run
+		unsigned int numberOfChecks = 0;
+	} frameLimiter;
 
 	bool multitouch = false;
 

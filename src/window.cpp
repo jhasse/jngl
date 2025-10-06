@@ -316,12 +316,7 @@ uint8_t Window::mainLoop() {
 }
 
 void Window::resetFrameLimiter() {
-	numberOfChecks = 0;
-	stepsPerFrame = 1;
-	sleepCorrectionFactor = 1;
-	maxFPS = 300;
-	lastCheckTime = getTime();
-	stepsSinceLastCheck = 0;
+	frameLimiter = {};
 }
 
 unsigned int Window::getStepsPerSecond() const {
@@ -336,45 +331,52 @@ void Window::setStepsPerSecond(const unsigned int stepsPerSecond) {
 
 void Window::stepIfNeeded() {
 	const auto currentTime = getTime();
-	const auto secondsSinceLastCheck = currentTime - lastCheckTime;
+	const auto secondsSinceLastCheck = currentTime - frameLimiter.lastCheckTime;
 	const auto targetStepsPerSecond = 1.0 / timePerStep;
 	// If SPS == FPS, this would mean that we check about every second, but in the beginning we
 	// want to check more often, e.g. to quickly adjust to high refresh rate monitors:
-	if (stepsSinceLastCheck > targetStepsPerSecond || stepsSinceLastCheck > numberOfChecks) {
-		++numberOfChecks;
-		const auto actualStepsPerSecond = stepsSinceLastCheck / secondsSinceLastCheck;
+	if (frameLimiter.stepsSinceLastCheck > targetStepsPerSecond ||
+	    frameLimiter.stepsSinceLastCheck > frameLimiter.numberOfChecks) {
+		++frameLimiter.numberOfChecks;
+		const auto actualStepsPerSecond = frameLimiter.stepsSinceLastCheck / secondsSinceLastCheck;
 		auto doableStepsPerSecond =
-		    stepsSinceLastCheck / (secondsSinceLastCheck - timeSleptSinceLastCheck);
-		if (previousStepsPerFrame > stepsPerFrame && actualStepsPerSecond < targetStepsPerSecond) {
-			maxFPS = 0.5 * maxFPS + 0.5 * actualStepsPerSecond / stepsPerFrame;
+		    frameLimiter.stepsSinceLastCheck / (secondsSinceLastCheck - timeSleptSinceLastCheck);
+		if (previousStepsPerFrame > frameLimiter.stepsPerFrame &&
+		    actualStepsPerSecond < targetStepsPerSecond) {
+			frameLimiter.maxFPS =
+			    0.5 * frameLimiter.maxFPS + 0.5 * actualStepsPerSecond / frameLimiter.stepsPerFrame;
 		} else {
-			maxFPS += sleepPerFrame;
+			frameLimiter.maxFPS += sleepPerFrame;
 		}
-		previousStepsPerFrame = stepsPerFrame;
-		const auto cappedOrDoable = std::min(doableStepsPerSecond, maxFPS * stepsPerFrame);
+		previousStepsPerFrame = frameLimiter.stepsPerFrame;
+		const auto cappedOrDoable =
+		    std::min(doableStepsPerSecond, frameLimiter.maxFPS * frameLimiter.stepsPerFrame);
 
 		// The sleep function is actually inaccurate (or at least less accurate than getTime),
 		// se we try to find a factor to correct this:
-		sleepCorrectionFactor +=
+		frameLimiter.sleepCorrectionFactor +=
 		    0.1 * // don't change it too fast
-		    (sleepPerFrame * stepsSinceLastCheck / stepsPerFrame - timeSleptSinceLastCheck);
+		    (sleepPerFrame * frameLimiter.stepsSinceLastCheck / frameLimiter.stepsPerFrame -
+		     timeSleptSinceLastCheck);
 		//   ↑__________seconds we should have slept___________↑   ↑___actual seconds____↑
 
 		// Clamp it in case of some bug:
-		sleepCorrectionFactor = std::max(0.1, std::min(sleepCorrectionFactor, 2.0));
+		frameLimiter.sleepCorrectionFactor =
+		    std::max(0.1, std::min(frameLimiter.sleepCorrectionFactor, 2.0));
 
 		// Round up, because if we can do 40 FPS, but need 60 SPS, we need at least 2 SPF. We
 		// don't round up exactly to be a little bit "optimistic" of what we can do.
 		auto newStepsPerFrame = std::min(
-		    static_cast<unsigned int>(std::max(
-		        1, static_cast<int>(0.98 + stepsPerFrame * targetStepsPerSecond / cappedOrDoable))),
-		    std::min(stepsPerFrame * 2, maxStepsPerFrame)); // never increase too much
+		    static_cast<unsigned int>(
+		        std::max(1, static_cast<int>(0.98 + frameLimiter.stepsPerFrame *
+		                                                targetStepsPerSecond / cappedOrDoable))),
+		    std::min(frameLimiter.stepsPerFrame * 2, maxStepsPerFrame)); // never increase too much
 		// Divide doableStepsPerSecond by the previous stepsPerFrame and multiply it with
 		// newStepsPerFrame so that we know what can be doable in the future and not what
 		// could have been doable:
-		double shouldSleepPerFrame =
-		    newStepsPerFrame * // we sleep per frame, not per step
-		    (timePerStep - 1.0 / (newStepsPerFrame * doableStepsPerSecond / stepsPerFrame));
+		double shouldSleepPerFrame = newStepsPerFrame * // we sleep per frame, not per step
+		                             (timePerStep - 1.0 / (newStepsPerFrame * doableStepsPerSecond /
+		                                                   frameLimiter.stepsPerFrame));
 		if (shouldSleepPerFrame < 0) {
 			shouldSleepPerFrame = 0;
 		}
@@ -387,17 +389,18 @@ void Window::stepIfNeeded() {
 		                std::lround(actualStepsPerSecond),
 		                (cappedOrDoable < doableStepsPerSecond) ? "capped" : "doable",
 		                std::lround(doableStepsPerSecond), std::lround(targetStepsPerSecond),
-		                newStepsPerFrame, sleepPerFrame, sleepCorrectionFactor, numberOfSleeps,
-		                std::lround(1e6 * timeSleptSinceLastCheck), maxFPS);
+		                newStepsPerFrame, sleepPerFrame, frameLimiter.sleepCorrectionFactor,
+		                numberOfSleeps, std::lround(1e6 * timeSleptSinceLastCheck),
+		                frameLimiter.maxFPS);
 
-		lastCheckTime = currentTime;
+		frameLimiter.lastCheckTime = currentTime;
 		numberOfSleeps = 0;
-		stepsSinceLastCheck = 0;
+		frameLimiter.stepsSinceLastCheck = 0;
 		timeSleptSinceLastCheck = 0;
-		stepsPerFrame = newStepsPerFrame;
+		frameLimiter.stepsPerFrame = newStepsPerFrame;
 	}
-	for (unsigned int i = 0; i < stepsPerFrame; ++i) {
-		++stepsSinceLastCheck;
+	for (unsigned int i = 0; i < frameLimiter.stepsPerFrame; ++i) {
+		++frameLimiter.stepsSinceLastCheck;
 		updateKeyStates();
 		UpdateInput();
 #ifdef JNGL_PERFORMANCE_OVERLAY
@@ -453,9 +456,10 @@ void Window::stepIfNeeded() {
 
 void Window::sleepIfNeeded() {
 	const auto start = getTime();
-	const auto shouldBe = lastCheckTime + timePerStep * stepsSinceLastCheck;
-	const int64_t micros =
-	    std::lround((sleepPerFrame - (start - shouldBe)) * sleepCorrectionFactor * 1e6);
+	const auto shouldBe =
+	    frameLimiter.lastCheckTime + timePerStep * frameLimiter.stepsSinceLastCheck;
+	const int64_t micros = std::lround((sleepPerFrame - (start - shouldBe)) *
+	                                   frameLimiter.sleepCorrectionFactor * 1e6);
 	if (micros > 0) {
 		std::this_thread::sleep_for(std::chrono::microseconds(micros));
 		timeSleptSinceLastCheck += jngl::getTime() - start;

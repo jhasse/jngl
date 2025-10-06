@@ -180,7 +180,6 @@ void showWindow(const std::string& title, const int width, const int height, boo
 	pWindow->SetMouseVisible(isMouseVisible);
 	setAntiAliasing(antiAliasingEnabled);
 	pWindow->initGlObjects();
-	pWindow->resetFrameLimiter();
 }
 
 void hideWindow() {
