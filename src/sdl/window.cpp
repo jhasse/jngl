@@ -48,10 +48,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI;
+	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIGH_PIXEL_DENSITY; // TODO: SDL_WINDOW_SHOWN
 	if (fullscreen) {
 		if (width == getDesktopWidth() && height == getDesktopHeight()) {
-			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+			flags |= SDL_WINDOW_FULLSCREEN; // FIXME: SDL3
 		} else {
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
@@ -69,8 +69,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	const auto create = [this, &title, width, height, flags]() {
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, isMultisampleSupported_ ? 4 : 0);
-		return SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		                        width, height, flags);
+		return SDL_CreateWindow(title.c_str(), width, height, flags);
 	};
 	if ((impl->sdlWindow = create()) == nullptr) {
 		internal::debug("Recreating window without Anti-Aliasing support.");
@@ -95,7 +94,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		int openglMSAA;
 		if (SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &openglMSAA) != 0) {
 			internal::debug("Recreating window and OpenGL Context without Anti-Aliasing support.");
-			SDL_GL_DeleteContext(impl->context);
+			SDL_GL_DestroyContext(impl->context);
 			SDL_DestroyWindow(impl->sdlWindow);
 			isMultisampleSupported_ = false;
 			impl->sdlWindow = create();
@@ -103,7 +102,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		}
 	}
 
-#if !defined(__linux__) || SDL_VERSION_ATLEAST(2, 30, 0)
+#if (!defined(__linux__) || SDL_VERSION_ATLEAST(2, 30, 0)) && !SDL_VERSION_ATLEAST(3, 0, 0)
 	// This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by SDL2). On
 	// Linux (GNOME) it results in the top of the window being cut off (by the header bar height?).
 	// The bug seems to be fixed in newer SDL2 (or GNOME) versions.
@@ -245,10 +244,10 @@ void Window::UpdateInput() {
 	SDL_Event event;
 	while (SDL_PollEvent(&event) != 0) {
 		switch (event.type) {
-		case SDL_QUIT:
+		case SDL_EVENT_QUIT:
 			quit();
 			break;
-		case SDL_MOUSEMOTION:
+		case SDL_EVENT_MOUSE_MOTION:
 			if (relativeMouseMode) {
 				mousex_ += event.motion.xrel;
 				mousey_ += event.motion.yrel;
@@ -258,22 +257,22 @@ void Window::UpdateInput() {
 			}
 			break;
 #ifndef __APPLE__ // Somehow the trackpad on a Macbook is handled as a touch screen?
-		case SDL_FINGERUP:
+		case SDL_EVENT_FINGER_UP:
 			mouseDown_.at(0) = false;
 			mouseDown_.at(0) = false;
 			impl->currentFingerId = nullopt;
 			multitouch = false;
 			break;
-		case SDL_FINGERDOWN:
-			if (impl->currentFingerId && *impl->currentFingerId != event.tfinger.fingerId) {
+		case SDL_EVENT_FINGER_DOWN:
+			if (impl->currentFingerId && *impl->currentFingerId != event.tfinger.fingerID) {
 				multitouch = true;
 			}
-			impl->currentFingerId = event.tfinger.fingerId;
+			impl->currentFingerId = event.tfinger.fingerID;
 			mouseDown_.at(0) = true;
 			mousePressed_.at(0) = true;
 			needToBeSetFalse_.push(mousePressed_.data());
 			[[fallthrough]];
-		case SDL_FINGERMOTION:
+		case SDL_EVENT_FINGER_MOTION:
 			if (relativeMouseMode) {
 				mousex_ = jngl::round(event.tfinger.dx * static_cast<float>(width_));
 				mousey_ = jngl::round(event.tfinger.dy * static_cast<float>(height_));
@@ -283,7 +282,7 @@ void Window::UpdateInput() {
 			}
 			break;
 #endif
-		case SDL_MOUSEBUTTONDOWN: {
+		case SDL_EVENT_MOUSE_BUTTON_DOWN: {
 			int button = -1;
 			if (event.button.button == SDL_BUTTON_LEFT) {
 				button = 0;
@@ -301,11 +300,11 @@ void Window::UpdateInput() {
 			}
 			break;
 		}
-		case SDL_MOUSEWHEEL: {
+		case SDL_EVENT_MOUSE_WHEEL: {
 			mouseWheel += event.wheel.y;
 			break;
 		}
-		case SDL_MOUSEBUTTONUP: {
+		case SDL_EVENT_MOUSE_BUTTON_UP: {
 			int button = -1;
 			if (event.button.button == SDL_BUTTON_LEFT) {
 				button = 0;
@@ -322,10 +321,10 @@ void Window::UpdateInput() {
 			}
 			break;
 		}
-		case SDL_TEXTINPUT:
+		case SDL_EVENT_TEXT_INPUT:
 			textInput += event.text.text;
 			break;
-		case SDL_KEYDOWN: {
+		case SDL_EVENT_KEY_DOWN: {
 			static bool wasFullscreen = fullscreen_;
 			if (event.key.repeat != 0u && fullscreen_ != wasFullscreen) {
 				// SDL2 with Xorg has a bug, that it sends a key repeat event when toggling
@@ -334,9 +333,9 @@ void Window::UpdateInput() {
 			}
 			wasFullscreen = fullscreen_;
 
-			keyDown_[event.key.keysym.sym] = true;
-			keyPressed_[event.key.keysym.sym] = true;
-			const char* name = SDL_GetKeyName(event.key.keysym.sym);
+			keyDown_[event.key.key] = true;
+			keyPressed_[event.key.key] = true;
+			const char* name = SDL_GetKeyName(event.key.key);
 			if (strlen(name) == 1) {
 				std::string tmp;
 				if (getKeyDown(key::ShiftL) || getKeyDown(key::ShiftR)) {
@@ -348,11 +347,11 @@ void Window::UpdateInput() {
 				characterPressed_[tmp] = true;
 				needToBeSetFalse_.push(&characterPressed_[tmp]);
 			}
-			if (event.key.keysym.sym == SDLK_SPACE) {
+			if (event.key.key == SDLK_SPACE) {
 				characterDown_[" "] = true;
 				characterPressed_[" "] = true;
 				needToBeSetFalse_.push(&characterPressed_[" "]);
-			} else if (event.key.keysym.sym == SDLK_ESCAPE) {
+			} else if (event.key.key == SDLK_ESCAPE) {
 				if (const auto& work = getWork()) {
 					work->onBackEvent();
 				}
@@ -360,23 +359,23 @@ void Window::UpdateInput() {
 			anyKeyPressed_ = true;
 			break;
 		}
-		case SDL_KEYUP: {
-			keyDown_[event.key.keysym.sym] = false;
-			keyPressed_[event.key.keysym.sym] = false;
-			const char* name = SDL_GetKeyName(event.key.keysym.sym);
+		case SDL_EVENT_KEY_UP: {
+			keyDown_[event.key.key] = false;
+			keyPressed_[event.key.key] = false;
+			const char* name = SDL_GetKeyName(event.key.key);
 			if (strlen(name) == 1) {
 				std::string tmp(1, name[0]);
 				characterDown_[tmp] = false;
 				tmp[0] = static_cast<char>(tolower(name[0]));
 				characterDown_[tmp] = false;
 			}
-			if (event.key.keysym.sym == SDLK_SPACE) {
+			if (event.key.key == SDLK_SPACE) {
 				characterDown_[" "] = false;
 			}
 			break;
 		}
-		case SDL_JOYDEVICEADDED:
-		case SDL_JOYDEVICEREMOVED:
+		case SDL_EVENT_JOYSTICK_ADDED:
+		case SDL_EVENT_JOYSTICK_REMOVED:
 			if (controllerChangedCallback) {
 				controllerChangedCallback();
 			}
@@ -387,56 +386,57 @@ void Window::UpdateInput() {
 				currentWork_->onControllersChanged();
 			}
 			break;
-		case SDL_WINDOWEVENT:
-			if (!impl->firstFrame && event.window.event == SDL_WINDOWEVENT_RESIZED) {
-				const int originalWidth = width_;
-				const int originalHeight = height_;
-				SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
-				impl->actualWidth = static_cast<float>(width_);
-				impl->actualHeight = static_cast<float>(height_);
-				impl->actualCanvasWidth = canvasWidth;
-				impl->actualCanvasHeight = canvasHeight;
-				calculateCanvasSize({ canvasWidth, canvasHeight }, { canvasWidth, canvasHeight });
-				const float tmpWidth =
-				    (static_cast<float>(width_) / static_cast<float>(canvasWidth)) *
-				    static_cast<float>(impl->actualCanvasWidth);
-				const float tmpHeight =
-				    (static_cast<float>(height_) / static_cast<float>(canvasHeight)) *
-				    static_cast<float>(impl->actualCanvasHeight);
-				const auto l = -1.f / 2.f;
-				const auto r = 1.f / 2.f;
-				const auto b = 1.f / 2.f;
-				const auto t = -1.f / 2.f;
-				opengl::projection = { 1.f / tmpWidth * 2.f / (r - l),
-					                   0.f,
-					                   0.f,
-					                   -(r + l) / (r - l),
-					                   0.f,
-					                   1.f / tmpHeight * 2.f / (t - b),
-					                   0.f,
-					                   -(t + b) / (t - b),
-					                   0.f,
-					                   0.f,
-					                   -1.f,
-					                   0.f,
-					                   0.f,
-					                   0.f,
-					                   0.f,
-					                   1.f };
-				App::instance().updateProjectionMatrix();
-				updateViewportAndLetterboxing(width_, height_, canvasWidth, canvasHeight);
-				// restore the values in canvasWidth and canvasHeight because our scaleFactor didn't
-				// change:
-				std::swap(canvasWidth, impl->actualCanvasWidth);
-				std::swap(canvasHeight, impl->actualCanvasHeight);
-				width_ = originalWidth;
-				height_ = originalHeight;
-			}
-			break;
-		case SDL_DROPFILE:
-			if (event.drop.file) {
-				std::filesystem::path path(event.drop.file);
-				SDL_free(event.drop.file);
+		// FIXME: SDL3
+		// case SDL_WINDOWEVENT:
+		// 	if (!impl->firstFrame && event.window.event == SDL_WINDOWEVENT_RESIZED) {
+		// 		const int originalWidth = width_;
+		// 		const int originalHeight = height_;
+		// 		SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
+		// 		impl->actualWidth = static_cast<float>(width_);
+		// 		impl->actualHeight = static_cast<float>(height_);
+		// 		impl->actualCanvasWidth = canvasWidth;
+		// 		impl->actualCanvasHeight = canvasHeight;
+		// 		calculateCanvasSize({ canvasWidth, canvasHeight }, { canvasWidth, canvasHeight });
+		// 		const float tmpWidth =
+		// 		    (static_cast<float>(width_) / static_cast<float>(canvasWidth)) *
+		// 		    static_cast<float>(impl->actualCanvasWidth);
+		// 		const float tmpHeight =
+		// 		    (static_cast<float>(height_) / static_cast<float>(canvasHeight)) *
+		// 		    static_cast<float>(impl->actualCanvasHeight);
+		// 		const auto l = -1.f / 2.f;
+		// 		const auto r = 1.f / 2.f;
+		// 		const auto b = 1.f / 2.f;
+		// 		const auto t = -1.f / 2.f;
+		// 		opengl::projection = { 1.f / tmpWidth * 2.f / (r - l),
+		// 			                   0.f,
+		// 			                   0.f,
+		// 			                   -(r + l) / (r - l),
+		// 			                   0.f,
+		// 			                   1.f / tmpHeight * 2.f / (t - b),
+		// 			                   0.f,
+		// 			                   -(t + b) / (t - b),
+		// 			                   0.f,
+		// 			                   0.f,
+		// 			                   -1.f,
+		// 			                   0.f,
+		// 			                   0.f,
+		// 			                   0.f,
+		// 			                   0.f,
+		// 			                   1.f };
+		// 		App::instance().updateProjectionMatrix();
+		// 		updateViewportAndLetterboxing(width_, height_, canvasWidth, canvasHeight);
+		// 		// restore the values in canvasWidth and canvasHeight because our scaleFactor didn't
+		// 		// change:
+		// 		std::swap(canvasWidth, impl->actualCanvasWidth);
+		// 		std::swap(canvasHeight, impl->actualCanvasHeight);
+		// 		width_ = originalWidth;
+		// 		height_ = originalHeight;
+		// 	}
+		// 	break;
+		case SDL_EVENT_DROP_FILE:
+			if (event.drop.data) {
+				std::filesystem::path path(event.drop.data);
+				SDL_free((void*)event.drop.data); // TODO: needed in SDL3?
 				assert(std::filesystem::exists(path));
 				for (const auto& job : jobs) {
 					job->onFileDrop(path);
@@ -458,9 +458,9 @@ void Window::SwapBuffers() {
 void Window::SetMouseVisible(const bool visible) {
 	isMouseVisible_ = visible;
 	if (visible) {
-		SDL_ShowCursor(SDL_ENABLE);
+		SDL_ShowCursor();
 	} else {
-		SDL_ShowCursor(SDL_DISABLE);
+		SDL_HideCursor();
 	}
 }
 
@@ -475,57 +475,63 @@ void Window::SetMouse(const int xposition, const int yposition) {
 }
 
 void Window::SetRelativeMouseMode(const bool relative) {
-	int rtn = SDL_SetRelativeMouseMode(relative ? SDL_TRUE : SDL_FALSE);
-	if (rtn == -1) {
-		throw std::runtime_error("Relative mouse mode not supported.");
-	}
-	relativeMouseMode = relative;
-	if (relative) {
-		mousex_ = 0;
-		mousey_ = 0;
-	} else {
-		SDL_GetMouseState(&mousex_, &mousey_);
-	}
+	// TODO: SDL3
+	// int rtn = SDL_SetRelativeMouseMode(relative ? SDL_TRUE : SDL_FALSE);
+	// if (rtn == -1) {
+	// 	throw std::runtime_error("Relative mouse mode not supported.");
+	// }
+	// relativeMouseMode = relative;
+	// if (relative) {
+	// 	mousex_ = 0;
+	// 	mousey_ = 0;
+	// } else {
+	// 	SDL_GetMouseState(&mousex_, &mousey_);
+	// }
 }
 
 void Window::SetIcon(const std::string& filepath) {
-	auto imageData = ImageData::load(filepath);
-	const int CHANNELS = 4;
-	SDL_Surface* const surface = SDL_CreateRGBSurfaceFrom(
-	    const_cast<uint8_t*>(imageData->pixels()) /* NOLINT */, imageData->getWidth(),
-	    imageData->getHeight(), CHANNELS * 8, CHANNELS * imageData->getWidth(), 0x000000ff,
-	    0x0000ff00, 0x00ff0000, 0xff000000);
+	// TODO: SDL3
+	// auto imageData = ImageData::load(filepath);
+	// const int CHANNELS = 4;
+	// SDL_Surface* const surface = SDL_CreateRGBSurfaceFrom(
+	//     const_cast<uint8_t*>(imageData->pixels()) /* NOLINT */, imageData->getWidth(),
+	//     imageData->getHeight(), CHANNELS * 8, CHANNELS * imageData->getWidth(), 0x000000ff,
+	//     0x0000ff00, 0x00ff0000, 0xff000000);
 
-	if (surface == nullptr) {
-		internal::error(SDL_GetError());
-		return;
-	}
+	// if (surface == nullptr) {
+	// 	internal::error(SDL_GetError());
+	// 	return;
+	// }
 
-	SDL_SetWindowIcon(impl->sdlWindow, surface);
-	SDL_FreeSurface(surface);
+	// SDL_SetWindowIcon(impl->sdlWindow, surface);
+	// SDL_FreeSurface(surface);
 }
 
 int getDesktopWidth() {
 	setProcessSettings();
 	SDL::handle();
-	SDL_DisplayMode mode;
-	SDL_GetDesktopDisplayMode(0, &mode);
-	return mode.w;
+	const SDL_DisplayMode* mode = SDL_GetDesktopDisplayMode(SDL_GetPrimaryDisplay());
+	if (!mode) {
+		throw std::runtime_error(SDL_GetError());
+	}
+	return mode->w;
 }
 
 int getDesktopHeight() {
 	setProcessSettings();
 	SDL::handle();
-	SDL_DisplayMode mode;
-	SDL_GetDesktopDisplayMode(0, &mode);
-	return mode.h;
+	const SDL_DisplayMode* mode = SDL_GetDesktopDisplayMode(SDL_GetPrimaryDisplay());
+	if (!mode) {
+		throw std::runtime_error(SDL_GetError());
+	}
+	return mode->h;
 }
 
 void Window::setFullscreen(bool f) {
 	Uint32 flag = 0;
 	if (f) {
 		if (width_ == getDesktopWidth() && height_ == getDesktopHeight()) {
-			flag = SDL_WINDOW_FULLSCREEN_DESKTOP;
+			flag = SDL_WINDOW_FULLSCREEN; // TODO: SDL3
 		} else {
 			flag = SDL_WINDOW_FULLSCREEN;
 		}
@@ -557,10 +563,10 @@ int Window::getMouseY() const {
 void setCursor(Cursor type) {
 	switch (type) {
 	case Cursor::ARROW:
-		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_ARROW;
+		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_DEFAULT;
 		break;
 	case Cursor::I:
-		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_IBEAM;
+		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_TEXT;
 		break;
 	};
 }
