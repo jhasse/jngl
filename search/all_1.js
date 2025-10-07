@@ -7,7 +7,7 @@ var searchData=
   ['abs_28int_29_4',['abs(int)',['http://en.cppreference.com/w/cpp/numeric/math/abs.html',1,'std']]],
   ['absolute_5',['absolute',['http://en.cppreference.com/w/cpp/experimental/fs/absolute.html',1,'std::experimental::filesystem::absolute()'],['http://en.cppreference.com/w/cpp/filesystem/absolute.html',1,'std::filesystem::absolute()']]],
   ['accumulate_6',['accumulate',['http://en.cppreference.com/w/cpp/algorithm/accumulate.html',1,'std']]],
-  ['achievement_7',['Achievement',['../structjngl_1_1Achievement.html',1,'jngl']]],
+  ['achievement_7',['Achievement',['../structjngl_1_1Achievement.html',1,'Achievement'],['../structjngl_1_1Achievement.html#a428adb9b46ed68b3db23006544a1eb00',1,'jngl::Achievement::Achievement()']]],
   ['achievement_2ehpp_8',['Achievement.hpp',['../Achievement_8hpp.html',1,'']]],
   ['acos_9',['acos',['http://en.cppreference.com/w/cpp/numeric/math/acos.html',1,'std']]],
   ['acosh_10',['acosh',['http://en.cppreference.com/w/cpp/numeric/math/acosh.html',1,'std']]],

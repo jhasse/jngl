@@ -88,7 +88,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Unlockable <a class="el" href="structjngl_1_1Achievement.html" title="Unlockable Achievement (also called Trophy)">Achievement</a> (also called Trophy)  
+<p>Represents one unlockable <a class="el" href="structjngl_1_1Achievement.html" title="Represents one unlockable Achievement (aka Trophy)">Achievement</a> (aka Trophy)  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Achievement_8hpp_source.html">jngl/Achievement.hpp</a>&gt;</code></p>
@@ -97,6 +97,7 @@ $(function() {
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a428adb9b46ed68b3db23006544a1eb00" id="r_a428adb9b46ed68b3db23006544a1eb00"><td class="memItemLeft" align="right" valign="top"><a id="a428adb9b46ed68b3db23006544a1eb00" name="a428adb9b46ed68b3db23006544a1eb00"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Achievement</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> <a class="el" href="#afd0d68c6d31ff249f3ae8662162663c3">id</a>, <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> name, <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> description, <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> <a class="el" href="#aa101b5036fe941887517343150f4a9c0">icon</a>, int initialValue=0, int maxValue=1)</td></tr>
+<tr class="memdesc:a428adb9b46ed68b3db23006544a1eb00"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <em>id</em> must match the ID you set in Steamworks (if you use Steam, otherwise it's unused). <br /></td></tr>
 <tr class="separator:a428adb9b46ed68b3db23006544a1eb00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdb0b383a96801f3200302b6f4a7da64" id="r_acdb0b383a96801f3200302b6f4a7da64"><td class="memItemLeft" align="right" valign="top"><a id="acdb0b383a96801f3200302b6f4a7da64" name="acdb0b383a96801f3200302b6f4a7da64"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>getValue</b> () const</td></tr>
@@ -123,9 +124,33 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a34f7c4fb50048158ddf5137428c7b330"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Unlockable <a class="el" href="structjngl_1_1Achievement.html" title="Unlockable Achievement (also called Trophy)">Achievement</a> (also called Trophy) </p>
-
-<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00015">15</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
+<div class="textblock"><p>Represents one unlockable <a class="el" href="structjngl_1_1Achievement.html" title="Represents one unlockable Achievement (aka Trophy)">Achievement</a> (aka Trophy) </p>
+<p>This struct holds all the necessary information about a specific achievement and provides integration to the Steam SDK (if available). One way to handle achievements is to create a <a class="el" href="classjngl_1_1Singleton.html" title="Inherit from this class to create a singleton that will be destroyed when your games exits.">Singleton</a> class which holds all achievements as member variables:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="Achievement_8hpp.html">jngl/Achievement.hpp</a>&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="Singleton_8hpp.html">jngl/Singleton.hpp</a>&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">struct </span>Achievements : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Singleton.html">jngl::Singleton</a>&lt;Achievements&gt; {</div>
+<div class="line">    <a class="code hl_struct" href="structjngl_1_1Achievement.html">jngl::Achievement</a> finishLevel5{<span class="stringliteral">&quot;FINISH_LEVEL_5&quot;</span>, <span class="stringliteral">&quot;Finish Level 5&quot;</span>,</div>
+<div class="line">                                   <span class="stringliteral">&quot;Finish level 5&quot;</span>, <span class="stringliteral">&quot;finish_level_5&quot;</span>};</div>
+<div class="line">    <a class="code hl_struct" href="structjngl_1_1Achievement.html">jngl::Achievement</a> collect100Coins{<span class="stringliteral">&quot;COLLECT_100_COINS&quot;</span>, <span class="stringliteral">&quot;Collect 100 Coins&quot;</span>,</div>
+<div class="line">                                      <span class="stringliteral">&quot;Collect 100 coins&quot;</span>, <span class="stringliteral">&quot;collect_100_coins&quot;</span>,</div>
+<div class="line">                                      0, 100};</div>
+<div class="line">};</div>
+<div class="ttc" id="aAchievement_8hpp_html"><div class="ttname"><a href="Achievement_8hpp.html">Achievement.hpp</a></div><div class="ttdoc">Contains jngl::Achievement class.</div></div>
+<div class="ttc" id="aSingleton_8hpp_html"><div class="ttname"><a href="Singleton_8hpp.html">Singleton.hpp</a></div><div class="ttdoc">Contains jngl::Singleton base class.</div></div>
+<div class="ttc" id="aclassjngl_1_1Singleton_html"><div class="ttname"><a href="classjngl_1_1Singleton.html">jngl::Singleton</a></div><div class="ttdoc">Inherit from this class to create a singleton that will be destroyed when your games exits.</div><div class="ttdef"><b>Definition</b> <a href="Singleton_8hpp_source.html#l00023">Singleton.hpp:23</a></div></div>
+<div class="ttc" id="astructjngl_1_1Achievement_html"><div class="ttname"><a href="structjngl_1_1Achievement.html">jngl::Achievement</a></div><div class="ttdoc">Represents one unlockable Achievement (aka Trophy)</div><div class="ttdef"><b>Definition</b> <a href="Achievement_8hpp_source.html#l00043">Achievement.hpp:43</a></div></div>
+</div><!-- fragment --><p>Then you can unlock the achievements like this:</p>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> onNextLevel() {</div>
+<div class="line">    <span class="keywordflow">if</span> (currentLevel &gt;= 5 &amp;&amp; Achievements::handle().finishLevel5.getValue() == 0) {</div>
+<div class="line">        Achievements::handle().finishLevel5.increaseValue(1);</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+<div class="line"><span class="keywordtype">void</span> onCollectCoin() {</div>
+<div class="line">    Achievements::handle().collect100Coins.increaseValue(1);</div>
+<div class="line">}</div>
+</div><!-- fragment --> 
+<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00043">43</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
 </div><div class="dynheader">
 Collaboration diagram for Achievement:</div>
 <div class="dyncontent">
@@ -146,7 +171,7 @@ Collaboration diagram for Achievement:</div>
 
 <p>API Name. </p>
 
-<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00020">20</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00049">49</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
 
 </div>
 </div>
@@ -162,7 +187,7 @@ Collaboration diagram for Achievement:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00022">22</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00051">51</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
 
 </div>
 </div>
@@ -178,7 +203,7 @@ Collaboration diagram for Achievement:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00023">23</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00052">52</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
 
 </div>
 </div>
@@ -196,7 +221,7 @@ Collaboration diagram for Achievement:</div>
 
 <p>filename for achievement icon, will be loaded when the achievement is displayed </p>
 
-<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00026">26</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00055">55</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
 
 </div>
 </div>
@@ -212,7 +237,7 @@ Collaboration diagram for Achievement:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00028">28</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00057">57</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
 
 </div>
 </div>
@@ -228,7 +253,7 @@ Collaboration diagram for Achievement:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00034">34</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Achievement_8hpp_source.html#l00063">63</a> of file <a class="el" href="Achievement_8hpp_source.html">Achievement.hpp</a>.</p>
 
 </div>
 </div>
