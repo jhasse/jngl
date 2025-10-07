@@ -236,7 +236,11 @@ std::vector<std::shared_ptr<Controller>> getConnectedControllers() {
 	SDL_JoystickID* joystickId = SDL_GetJoysticks(&numJoysticks);
 	std::vector<std::shared_ptr<Controller>> rtn;
 	for (int i = 0; i < numJoysticks; ++i) {
-		SDL_Joystick* handle = SDL_OpenJoystick(i);
+		SDL_Joystick* handle = SDL_OpenJoystick(joystickId[i]);
+		if (!handle) {
+			internal::error("SDL_OpenJoystick failed: {}", SDL_GetError());
+			continue;
+		}
 		if (SDL_GetNumJoystickButtons(handle) == 0 ||
 		    (SDL_GetNumJoystickAxes(handle) < 2 && SDL_GetNumJoystickBalls(handle) == 0 &&
 		     SDL_GetNumJoystickHats(handle) < 2)) {
