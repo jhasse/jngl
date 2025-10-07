@@ -180,7 +180,6 @@ void showWindow(const std::string& title, const int width, const int height, boo
 	pWindow->SetMouseVisible(isMouseVisible);
 	setAntiAliasing(antiAliasingEnabled);
 	pWindow->initGlObjects();
-	pWindow->resetFrameLimiter();
 }
 
 void hideWindow() {
@@ -824,6 +823,11 @@ void writeConfig(const std::string& key, const std::string& value) {
 #endif
 
 int round(double v) {
+	assert(!std::isnan(v));
+	return static_cast<int>(std::lround(v));
+}
+
+int round(float v) {
 	assert(!std::isnan(v));
 	return static_cast<int>(std::lround(v));
 }
