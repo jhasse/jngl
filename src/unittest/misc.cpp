@@ -9,8 +9,8 @@
 #include <boost/ut.hpp>
 #include <filesystem>
 
-boost::ut::suite _ = [] {
-	using namespace boost::ut;
+boost::ut::suite suite = [] {
+	using namespace boost::ut; // NOLINT
 
 	"FinallyTest"_test = [] {
 		bool called = false;

@@ -451,12 +451,12 @@ void testKeys() {
 			return k.GetAlpha() <= 0;
 		}), end);
 		std::stringstream sstream;
-		sstream << "X: " << jngl::getMousePos().x << "\nY: " << jngl::getMousePos().y << std::endl;
+		sstream << "X: " << jngl::getMousePos().x << "\nY: " << jngl::getMousePos().y << '\n';
 		jngl::print(sstream.str(), 5, 5);
 		int controllerNr = 1;
 		for (const auto& controller : jngl::getConnectedControllers()) {
 			std::stringstream sstream;
-			sstream << "Controller " << controllerNr << " connected." << std::endl
+			sstream << "Controller " << controllerNr << " connected." << '\n'
 			        << "Trigger: " << controller->state(jngl::controller::LeftTrigger) << " " << controller->state(jngl::controller::RightTrigger)
 			        << "\nA: " << controller->down(jngl::controller::A)
 			        << " B: " << controller->down(jngl::controller::B)
