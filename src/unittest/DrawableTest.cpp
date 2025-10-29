@@ -1,4 +1,4 @@
-// Copyright 2019-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/Drawable.hpp"
@@ -15,7 +15,7 @@ public:
 
 namespace {
 boost::ut::suite _ = [] {
-	using namespace boost::ut;
+	using namespace boost::ut; // NOLINT
 	"Drawable"_test = [] {
 		Dummy d;
 		expect(approx(d.getX(), 0, 1e-9));

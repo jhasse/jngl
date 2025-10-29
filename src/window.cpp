@@ -63,7 +63,7 @@ void Window::print(const Mat3& modelview, const std::string& text) {
 }
 
 void Window::setFont(const std::string& filename) {
-	if (fonts_[fontSize_].find(filename) == fonts_[fontSize_].end()) {
+	if (!fonts_[fontSize_].contains(filename)) {
 		auto font = std::make_shared<FontImpl>(filename, fontSize_, 0);
 		fonts_[fontSize_][filename] = font;
 	}
