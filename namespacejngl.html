@@ -122,7 +122,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a specific action, e.g. removes the <a class="el" href="classjngl_1_1Widget.html">Widget</a>.  <a href="classjngl_1_1Executor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Fade.html">Fade</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fades between two scenes, first fading to black and then fading to the new scene.  <a href="classjngl_1_1Fade.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fades between two scenes, first fading to <a class="el" href="#a727fd9baaff788e0f90795d578fc9ca8" title="Returns the screen&#39;s background color which is visible when nothing is drawn and also used by jngl::F...">jngl::getBackgroundColor()</a> and then fading to the new scene.  <a href="classjngl_1_1Fade.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Finally.html">Finally</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper class which calls a function when being destroyed.  <a href="classjngl_1_1Finally.html#details">More...</a><br /></td></tr>
@@ -640,6 +640,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (<a 
 <a class="el" href="classjngl_1_1Rgb.html">Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><b>interpolate</b> (<a class="el" href="classjngl_1_1Rgb.html">Rgb</a> a, <a class="el" href="classjngl_1_1Rgb.html">Rgb</a> b, float t)</td></tr>
 <tr class="memdesc:a79f3946cc19ffc59833986b1eff21b79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
 <tr class="separator:a79f3946cc19ffc59833986b1eff21b79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a727fd9baaff788e0f90795d578fc9ca8" id="r_a727fd9baaff788e0f90795d578fc9ca8"><td class="memItemLeft" align="right" valign="top"><a id="a727fd9baaff788e0f90795d578fc9ca8" name="a727fd9baaff788e0f90795d578fc9ca8"></a>
+<a class="el" href="classjngl_1_1Rgb.html">Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getBackgroundColor</b> ()</td></tr>
+<tr class="memdesc:a727fd9baaff788e0f90795d578fc9ca8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the screen's background color which is visible when nothing is drawn and also used by <a class="el" href="classjngl_1_1Fade.html" title="Fades between two scenes, first fading to jngl::getBackgroundColor() and then fading to the new scene...">jngl::Fade</a>. <br /></td></tr>
+<tr class="separator:a727fd9baaff788e0f90795d578fc9ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cf6fb700b9ea830e116ca5289ca56da" id="r_a8cf6fb700b9ea830e116ca5289ca56da"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8cf6fb700b9ea830e116ca5289ca56da">operator==</a> (<a class="el" href="classjngl_1_1Rgb.html">Rgb</a> a, <a class="el" href="classjngl_1_1Rgb.html">Rgb</a> b)</td></tr>
 <tr class="memdesc:a8cf6fb700b9ea830e116ca5289ca56da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the two colors are equal in 24 bit SDR space, i.e.  <br /></td></tr>
 <tr class="separator:a8cf6fb700b9ea830e116ca5289ca56da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -651,14 +655,20 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (<a 
 <a class="el" href="classjngl_1_1Rgba.html">Rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><b>interpolate</b> (<a class="el" href="classjngl_1_1Rgba.html">Rgba</a> a, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> b, float t)</td></tr>
 <tr class="memdesc:af6daf6049d5223d135e36b485e89134f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
 <tr class="separator:af6daf6049d5223d135e36b485e89134f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18a187bd1dc31a4e221186d38c0672f5" id="r_a18a187bd1dc31a4e221186d38c0672f5"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="#a7310ba6795e72c54ccb2742d62c31c33">Scene</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18a187bd1dc31a4e221186d38c0672f5">getActiveScene</a> ()</td></tr>
+<tr class="memdesc:a18a187bd1dc31a4e221186d38c0672f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the currently active Scene.  <br /></td></tr>
+<tr class="separator:a18a187bd1dc31a4e221186d38c0672f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad98bbc26d3770af61a50b61da410bee8" id="r_ad98bbc26d3770af61a50b61da410bee8"><td class="memItemLeft" align="right" valign="top"><a id="ad98bbc26d3770af61a50b61da410bee8" name="ad98bbc26d3770af61a50b61da410bee8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setScene</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="#a7310ba6795e72c54ccb2742d62c31c33">Scene</a> &gt;)</td></tr>
-<tr class="memdesc:ad98bbc26d3770af61a50b61da410bee8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the passed Scene to be active in the main loop. <br /></td></tr>
+<tr class="memdesc:ad98bbc26d3770af61a50b61da410bee8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the passed Scene to be active in the main loop for the next frame. <br /></td></tr>
 <tr class="separator:ad98bbc26d3770af61a50b61da410bee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb8f207e4c64561670de06d10aba18c5" id="r_acb8f207e4c64561670de06d10aba18c5"><td class="memTemplParams" colspan="2">template&lt;class T , class... Args&gt; </td></tr>
 <tr class="memitem:acb8f207e4c64561670de06d10aba18c5"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#acb8f207e4c64561670de06d10aba18c5">setScene</a> (Args &amp;&amp;... args)</td></tr>
-<tr class="memdesc:acb8f207e4c64561670de06d10aba18c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The same as <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop.">setScene(std::shared_ptr&lt;Scene&gt;)</a> but creates the Scene for you.  <br /></td></tr>
+<tr class="memdesc:acb8f207e4c64561670de06d10aba18c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The same as <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop for the next frame.">setScene(std::shared_ptr&lt;Scene&gt;)</a> but creates the Scene for you.  <br /></td></tr>
 <tr class="separator:acb8f207e4c64561670de06d10aba18c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae96ce0b91269605aa2efd2bd95b57ef0" id="r_ae96ce0b91269605aa2efd2bd95b57ef0"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="#a7310ba6795e72c54ccb2742d62c31c33">Scene</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae96ce0b91269605aa2efd2bd95b57ef0">getNextScene</a> ()</td></tr>
+<tr class="memdesc:ae96ce0b91269605aa2efd2bd95b57ef0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the Scene that will be active in the next frame.  <br /></td></tr>
+<tr class="separator:ae96ce0b91269605aa2efd2bd95b57ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d23d95fbe7f69b235a6984b67f5fa7c" id="r_a7d23d95fbe7f69b235a6984b67f5fa7c"><td class="memItemLeft" align="right" valign="top"><a id="a7d23d95fbe7f69b235a6984b67f5fa7c" name="a7d23d95fbe7f69b235a6984b67f5fa7c"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getScaleFactor</b> ()</td></tr>
 <tr class="memdesc:a7d23d95fbe7f69b235a6984b67f5fa7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of one screen pixel in actual pixels. <br /></td></tr>
@@ -2261,6 +2271,35 @@ template&lt;class Vect &gt; </div>
 
 </div>
 </div>
+<a id="a18a187bd1dc31a4e221186d38c0672f5" name="a18a187bd1dc31a4e221186d38c0672f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18a187bd1dc31a4e221186d38c0672f5">&#9670;&#160;</a></span>getActiveScene()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="#a7310ba6795e72c54ccb2742d62c31c33">Scene</a> &gt; getActiveScene </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the currently active Scene. </p>
+
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00016">16</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+
+</div>
+</div>
 <a id="acb8f207e4c64561670de06d10aba18c5" name="acb8f207e4c64561670de06d10aba18c5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acb8f207e4c64561670de06d10aba18c5">&#9670;&#160;</a></span>setScene()</h2>
 
@@ -2278,9 +2317,30 @@ template&lt;class T , class... Args&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>The same as <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop.">setScene(std::shared_ptr&lt;Scene&gt;)</a> but creates the Scene for you. </p>
+<p>The same as <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop for the next frame.">setScene(std::shared_ptr&lt;Scene&gt;)</a> but creates the Scene for you. </p>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00020">20</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00024">24</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae96ce0b91269605aa2efd2bd95b57ef0" name="ae96ce0b91269605aa2efd2bd95b57ef0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae96ce0b91269605aa2efd2bd95b57ef0">&#9670;&#160;</a></span>getNextScene()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="#a7310ba6795e72c54ccb2742d62c31c33">Scene</a> &gt; getNextScene </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the Scene that will be active in the next frame. </p>
+<p>If you haven't called setScene in this frame yet, it will return nullptr.</p>
+<p>If you want to undo a scene change, use <code>setScene(getActiveScene())</code>. </p>
 
 </div>
 </div>
@@ -3196,7 +3256,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Sets the passed <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> to be active in the main loop. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000027">Deprecated</a></b></dt><dd>Use <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop.">setScene(std::shared_ptr&lt;Scene&gt;)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000027">Deprecated</a></b></dt><dd>Use <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop for the next frame.">setScene(std::shared_ptr&lt;Scene&gt;)</a> instead </dd></dl>
 
 </div>
 </div>

@@ -20,7 +20,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="classjngl_1_1Fade.html" target="_top" xlink:title="Fades between two scenes, first fading to black and then fading to the new scene.">
+<g id="a_Node000003"><a xlink:href="classjngl_1_1Fade.html" target="_top" xlink:title="Fades between two scenes, first fading to jngl::getBackgroundColor() and then fading to the new scene...">
 <polygon fill="white" stroke="#666666" points="40,-19.25 0,-19.25 0,0 40,0 40,-19.25"/>
 <text text-anchor="middle" x="20" y="-5.75" font-family="ui-monospace,monospace" font-size="10.00">Fade</text>
 </a>

@@ -88,7 +88,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Fades between two scenes, first fading to black and then fading to the new scene.  
+<p>Fades between two scenes, first fading to <a class="el" href="namespacejngl.html#a727fd9baaff788e0f90795d578fc9ca8" title="Returns the screen&#39;s background color which is visible when nothing is drawn and also used by jngl::F...">jngl::getBackgroundColor()</a> and then fading to the new scene.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Fade_8hpp_source.html">jngl/Fade.hpp</a>&gt;</code></p>
@@ -98,6 +98,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adb871dc11d7a650b6b3afdc4624b4653" id="r_adb871dc11d7a650b6b3afdc4624b4653"><td class="memItemLeft" align="right" valign="top"><a id="adb871dc11d7a650b6b3afdc4624b4653" name="adb871dc11d7a650b6b3afdc4624b4653"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Fade</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="namespacejngl.html#a7310ba6795e72c54ccb2742d62c31c33">Scene</a> &gt;, int speed=20)</td></tr>
 <tr class="separator:adb871dc11d7a650b6b3afdc4624b4653"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95cbb4187e56797f412834a363ca57cf" id="r_a95cbb4187e56797f412834a363ca57cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95cbb4187e56797f412834a363ca57cf">Fade</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::function</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="namespacejngl.html#a7310ba6795e72c54ccb2742d62c31c33">Scene</a> &gt;()&gt; factory, int speed=20)</td></tr>
+<tr class="memdesc:a95cbb4187e56797f412834a363ca57cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uses factory() to get the new Scene when the screen has faded to black (or the background color).  <br /></td></tr>
+<tr class="separator:a95cbb4187e56797f412834a363ca57cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6c526798a490afe221d1447f508f16a" id="r_ae6c526798a490afe221d1447f508f16a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6c526798a490afe221d1447f508f16a">step</a> () override</td></tr>
 <tr class="memdesc:ae6c526798a490afe221d1447f508f16a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Advance the game logic.  <br /></td></tr>
 <tr class="separator:ae6c526798a490afe221d1447f508f16a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,9 +165,9 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a9fb5042f6b152e7cf9242a1eeba6cc58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Fades between two scenes, first fading to black and then fading to the new scene. </p>
+<div class="textblock"><p>Fades between two scenes, first fading to <a class="el" href="namespacejngl.html#a727fd9baaff788e0f90795d578fc9ca8" title="Returns the screen&#39;s background color which is visible when nothing is drawn and also used by jngl::F...">jngl::getBackgroundColor()</a> and then fading to the new scene. </p>
 
-<p class="definition">Definition at line <a class="el" href="Fade_8hpp_source.html#l00012">12</a> of file <a class="el" href="Fade_8hpp_source.html">Fade.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Fade_8hpp_source.html#l00013">13</a> of file <a class="el" href="Fade_8hpp_source.html">Fade.hpp</a>.</p>
 </div><div class="dynheader">
 Inheritance diagram for Fade:</div>
 <div class="dyncontent">
@@ -175,6 +178,39 @@ Collaboration diagram for Fade:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" frameborder="0" src="classjngl_1_1Fade__coll__graph.svg" width="72" height="184"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a95cbb4187e56797f412834a363ca57cf" name="a95cbb4187e56797f412834a363ca57cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95cbb4187e56797f412834a363ca57cf">&#9670;&#160;</a></span>Fade()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Fade.html">Fade</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::function</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="namespacejngl.html#a7310ba6795e72c54ccb2742d62c31c33">Scene</a> &gt;()&gt;</td>          <td class="paramname"><span class="paramname"><em>factory</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>speed</em><span class="paramdefsep"> = </span><span class="paramdefval">20</span></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Uses factory() to get the new Scene when the screen has faded to black (or the background color). </p>
+<p>This is useful when the ctor of your new Scene might take a long time (e.g. loading assets) and you don't want the lag to be noticable. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="ae6c526798a490afe221d1447f508f16a" name="ae6c526798a490afe221d1447f508f16a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae6c526798a490afe221d1447f508f16a">&#9670;&#160;</a></span>step()</h2>
