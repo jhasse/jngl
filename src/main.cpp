@@ -258,6 +258,10 @@ void cancelQuit() {
 	}
 }
 
+Rgb getBackgroundColor() {
+	return backgroundColor;
+}
+
 void setBackgroundColor(const jngl::Rgb color) {
 	pWindow.ThrowIfNull();
 	backgroundColor = color;
@@ -644,6 +648,10 @@ Finally load(const std::string& filename) {
 
 void setScene(std::shared_ptr<Scene> scene) {
 	pWindow->setWork(std::move(scene));
+}
+
+std::shared_ptr<Scene> getNextScene() {
+	return pWindow->getNextScene();
 }
 
 void setWork(std::shared_ptr<Work> work) {

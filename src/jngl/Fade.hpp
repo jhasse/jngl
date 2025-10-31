@@ -8,10 +8,17 @@
 
 namespace jngl {
 
-/// Fades between two scenes, first fading to black and then fading to the new scene
+/// Fades between two scenes, first fading to jngl::getBackgroundColor() and then fading to the new
+/// scene
 class Fade : public Scene {
 public:
 	explicit Fade(std::shared_ptr<Scene>, int speed = 20);
+
+	/// Uses factory() to get the new Scene when the screen has faded to black (or the background
+	/// color). This is useful when the ctor of your new Scene might take a long time (e.g. loading
+	/// assets) and you don't want the lag to be noticable.
+	explicit Fade(std::function<std::shared_ptr<Scene>()> factory, int speed = 20);
+
 	~Fade() override;
 	void step() override;
 	void draw() const override;

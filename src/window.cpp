@@ -539,6 +539,14 @@ std::string simpleDemangle(std::string_view mangled) {
 }
 
 void Window::setWork(std::shared_ptr<Work> work) {
+	if (work == currentWork_) {
+		if (changeWork) {
+			changeWork = false;
+			newWork_.reset();
+			internal::debug("Discarding scene change.");
+		}
+		return;
+	}
 #ifndef NDEBUG
 	const auto& ref = *work;
 	internal::debug("{} scene to {} ({}).", currentWork_ ? "Change" : "Setting current",
@@ -573,6 +581,11 @@ std::shared_ptr<Job> Window::getJob(const std::function<bool(Job&)>& predicate) 
 
 std::shared_ptr<Work> Window::getWork() {
 	return currentWork_;
+}
+
+std::shared_ptr<Scene> Window::getNextScene() const {
+	assert(!changeWork || newWork_);
+	return newWork_;
 }
 
 bool Window::isMultitouch() const {

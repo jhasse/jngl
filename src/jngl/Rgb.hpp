@@ -63,6 +63,10 @@ private:
 /// Returns a color mix between a (t == 0) and b (t == 1)
 Rgb interpolate(Rgb a, Rgb b, float t);
 
+/// Returns the screen's background color which is visible when nothing is drawn and also used by
+/// jngl::Fade
+Rgb getBackgroundColor();
+
 /// Returns true if the two colors are equal in 24 bit SDR space, i.e. each channel rounded to
 /// uint8_t
 bool operator==(Rgb a, Rgb b);
