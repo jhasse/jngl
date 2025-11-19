@@ -9,6 +9,8 @@
 #include "../audio/mixer.hpp"
 #include "SoundFile.hpp"
 
+#include <algorithm>
+
 namespace jngl {
 
 struct Channel::Impl {

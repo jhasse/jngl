@@ -24,21 +24,28 @@ float VolumeControl::smoothness(float value) {
 }
 
 void VolumeControl::rewind() {
+#if !defined(__cpp_lib_atomic_shared_ptr) || __cpp_lib_atomic_shared_ptr < 201711L
 	stream_->rewind();
+#else
+	stream_.load()->rewind();
+#endif
 }
 
 bool VolumeControl::isPlaying() const {
+#if !defined(__cpp_lib_atomic_shared_ptr) || __cpp_lib_atomic_shared_ptr < 201711L
 	return stream_->isPlaying();
+#else
+	return stream_.load()->isPlaying();
+#endif
 }
 
 std::size_t VolumeControl::read(float* data, std::size_t sample_count) {
-	decltype(stream_) tmp;
-	{
 #if !defined(__cpp_lib_atomic_shared_ptr) || __cpp_lib_atomic_shared_ptr < 201711L
-		std::unique_lock lock(mutex);
+	std::unique_lock lock(mutex);
+	auto tmp = stream_;
+#else
+	auto tmp = stream_.load();
 #endif
-		tmp = stream_; // the main thread may change stream_ in replaceStream while we're in read
-	}
 	auto result = tmp->read(data, sample_count);
 	base_.apply(data, result);
 	return result;
