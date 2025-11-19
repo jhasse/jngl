@@ -1,4 +1,4 @@
-// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "SoundFile.hpp"
@@ -14,7 +14,6 @@
 #include "../main.hpp"
 #include "Channel.hpp"
 
-#include <algorithm>
 #include <cassert>
 #include <chrono>
 #include <stdexcept>
@@ -30,24 +29,9 @@ namespace jngl {
 
 Audio::Audio()
 : mixer(std::make_shared<Mixer>()), pitchControl(audio::pitch(mixer)),
-  volumeControl(volume(pitchControl)), engine(volumeControl) {
+  volumeControl(std::make_shared<audio::VolumeControl>(pitchControl)), engine(volumeControl) {
 }
 Audio::~Audio() = default;
-
-void Audio::play(Channel& channel, std::shared_ptr<Sound> sound) {
-	channel.add(sound->getStream());
-	sounds_.erase(std::remove_if(sounds_.begin(), sounds_.end(),
-	                             [](const auto& s) { return !s->isPlaying(); }),
-	              sounds_.end());
-	sounds_.emplace_back(std::move(sound));
-}
-
-void Audio::stop(Channel& channel, std::shared_ptr<Sound>& sound) {
-	channel.remove(sound->getStream().get());
-	if (auto i = std::find(sounds_.begin(), sounds_.end(), sound); i != sounds_.end()) {
-		sounds_.erase(i);
-	}
-}
 
 void Audio::increasePauseDeviceCount() {
 	if (pauseDeviceCount == 0) {
@@ -186,7 +170,7 @@ SoundFile::SoundFile(SoundFile&& other) noexcept {
 	*this = std::move(other);
 }
 SoundFile& SoundFile::operator=(SoundFile&& other) noexcept {
-	sound_ = std::move(other.sound_);
+	sound = std::move(other.sound);
 	buffer = std::move(other.buffer);
 	return *this;
 }
@@ -196,8 +180,9 @@ void SoundFile::play() {
 }
 
 void SoundFile::play(Channel& channel) {
-	sound_ = std::make_shared<Sound>(buffer);
-	Audio::handle().play(channel, sound_);
+	auto tmp = std::make_shared<Sound>(buffer);
+	channel.play(tmp);
+	sound = tmp;
 }
 
 void SoundFile::stop() {
@@ -205,14 +190,14 @@ void SoundFile::stop() {
 }
 
 void SoundFile::stop(Channel& channel) {
-	if (sound_) {
-		Audio::handle().stop(channel, sound_);
-		sound_.reset();
+	if (auto sound_ = sound.lock()) {
+		channel.stop(sound_);
+		sound.reset();
 	}
 }
 
 bool SoundFile::isPlaying() {
-	if (sound_) {
+	if (auto sound_ = sound.lock()) {
 		return sound_->isPlaying();
 	}
 	return false;
@@ -223,16 +208,19 @@ void SoundFile::loop() {
 }
 
 void SoundFile::loop(Channel& channel) {
-	if (sound_ && sound_->isLooping()) {
-		return;
+	if (auto sound_ = sound.lock()) {
+		if (sound_->isLooping()) {
+			return;
+		}
 	}
-	sound_ = std::make_shared<Sound>(buffer);
-	sound_->loop();
-	Audio::handle().play(channel, sound_);
+	auto tmp = std::make_shared<Sound>(buffer);
+	tmp->loop();
+	sound = tmp;
+	channel.play(std::move(tmp));
 }
 
 void SoundFile::setVolume(float v) {
-	if (sound_) {
+	if (auto sound_ = sound.lock()) {
 		sound_->setVolume(v);
 	}
 }
@@ -246,7 +234,10 @@ std::chrono::milliseconds SoundFile::length() const {
 }
 
 float SoundFile::progress() const {
-	return sound_ ? sound_->progress() : 0;
+	if (auto sound_ = sound.lock()) {
+		return sound_->progress();
+	}
+	return 0;
 }
 
 std::shared_ptr<SoundFile> Audio::getSoundFileIfLoaded(std::string_view filename) {

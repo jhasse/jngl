@@ -76,7 +76,7 @@ public:
 				}
 			}
 		}
-		if (jngl::keyPressed('m')) {
+		if (!jngl::keyDown(jngl::key::Shift) && jngl::keyPressed('m')) {
 			if (!music) {
 				music = std::make_unique<jngl::Channel>();
 			}
@@ -84,6 +84,12 @@ public:
 				music->stop("music.ogg");
 			} else {
 				music->play("music.ogg");
+			}
+		}
+		if (jngl::keyDown(jngl::key::Shift) && jngl::keyPressed('m')) {
+			if (music) {
+				music->stopAll();
+				assert(!jngl::isPlaying("music.ogg"));
 			}
 		}
 		if (jngl::keyPressed('l')) {

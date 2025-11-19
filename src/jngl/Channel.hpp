@@ -1,4 +1,4 @@
-// Copyright 2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Channel class
 /// \file
@@ -10,6 +10,7 @@
 
 namespace jngl {
 
+class Sound;
 class SoundFile;
 struct Stream;
 
@@ -34,6 +35,9 @@ public:
 	/// Play OGG file on this channel
 	void play(const std::string& filename);
 
+	/// Play a Sound on this channel
+	void play(std::shared_ptr<Sound>);
+
 	/// Play an OGG audio file on this channel in a loop
 	///
 	/// If it's already playing, this function won't play it twice.
@@ -41,6 +45,14 @@ public:
 
 	/// Stop OGG file playing on this channel
 	void stop(const std::string& filename);
+
+	/// Stop a Sound if it's playing on this channel
+	void stop(const std::shared_ptr<Sound>&);
+
+	/// Stops all audio playing on this channel
+	///
+	/// Equivalent to calling stop for all currently playing sounds.
+	void stopAll();
 
 	/// Pauses the Channel; destroying the returned Finally object will resume again
 	///
