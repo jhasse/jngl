@@ -46,7 +46,7 @@ var searchData=
   ['pixels_43',['pixels',['../classjngl_1_1ImageData.html#a398d80b2b7f1e151472189e4b25041e3',1,'jngl::ImageData']]],
   ['pixels_2ehpp_44',['Pixels.hpp',['../Pixels_8hpp.html',1,'']]],
   ['placeholders_45',['placeholders',['http://en.cppreference.com/w/cpp/utility/functional/placeholders.html',1,'std']]],
-  ['play_46',['play',['../classjngl_1_1Channel.html#a9a2d4a760f9febf9ab966d0ed41183b2',1,'jngl::Channel::play()'],['../classjngl_1_1SoundFile.html#a6d58098c6cf63c241ed03bc797256bb1',1,'jngl::SoundFile::play()'],['../classjngl_1_1SoundFile.html#adbd9c3842dcfde289f276f11ef509be5',1,'jngl::SoundFile::play(Channel &amp;)'],['../namespacejngl.html#a9a2d4a760f9febf9ab966d0ed41183b2',1,'jngl::play()']]],
+  ['play_46',['play',['../classjngl_1_1Channel.html#a9a2d4a760f9febf9ab966d0ed41183b2',1,'jngl::Channel::play(const std::string &amp;filename)'],['../classjngl_1_1Channel.html#a5d5695e87564a8223ecc73f488b8933e',1,'jngl::Channel::play(std::shared_ptr&lt; Sound &gt;)'],['../classjngl_1_1SoundFile.html#a6d58098c6cf63c241ed03bc797256bb1',1,'jngl::SoundFile::play()'],['../classjngl_1_1SoundFile.html#adbd9c3842dcfde289f276f11ef509be5',1,'jngl::SoundFile::play(Channel &amp;)'],['../namespacejngl.html#a9a2d4a760f9febf9ab966d0ed41183b2',1,'jngl::play()']]],
   ['plus_47',['plus',['http://en.cppreference.com/w/cpp/utility/functional/plus.html',1,'std']]],
   ['pointer_5fsafety_48',['pointer_safety',['http://en.cppreference.com/w/cpp/memory/gc/pointer_safety.html',1,'std']]],
   ['pointer_5fto_49',['pointer_to',['http://en.cppreference.com/w/cpp/memory/pointer_traits/pointer_to.html',1,'std::pointer_traits']]],
