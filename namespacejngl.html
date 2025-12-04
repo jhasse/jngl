@@ -137,7 +137,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Containing the pixel data of an image file.  <a href="classjngl_1_1ImageData.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Job.html">Job</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Background job which stays part of the main loop independent of the active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">jngl::Work</a>.  <a href="classjngl_1_1Job.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Background job which stays part of the main loop independent of the active <a class="el" href="#a7310ba6795e72c54ccb2742d62c31c33" title="Because it&#39;s more intuitive, jngl::Scene is the new name for jngl::Work.">jngl::Scene</a>.  <a href="classjngl_1_1Job.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1KeyboardShortcut.html">KeyboardShortcut</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a keyboard shortcut, e.g. <code>Ctrl</code>+<code>S</code>  <a href="classjngl_1_1KeyboardShortcut.html#details">More...</a><br /></td></tr>
@@ -430,22 +430,22 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setMouse</b> (<a clas
 <tr class="memdesc:a63680f5c003fed81f723fd1a3a7b3693"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string of characters that have been pressed since the last call to <a class="el" href="#ae301acc8b5118eb5b5939e9ad43ce777" title="Updates the input state.">updateInput()</a> <br /></td></tr>
 <tr class="separator:a63680f5c003fed81f723fd1a3a7b3693"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4511ceb38d56c476938458af6bd98e6" id="r_af4511ceb38d56c476938458af6bd98e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4511ceb38d56c476938458af6bd98e6">addJob</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Job.html">Job</a> &gt; job)</td></tr>
-<tr class="memdesc:af4511ceb38d56c476938458af6bd98e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> which will be always be stepped and drawn by App::mainLoop()  <br /></td></tr>
+<tr class="memdesc:af4511ceb38d56c476938458af6bd98e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> which will be always be stepped and drawn by App::mainLoop()  <br /></td></tr>
 <tr class="separator:af4511ceb38d56c476938458af6bd98e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae15308fbb3125f278ed8d05b971eb9ee" id="r_ae15308fbb3125f278ed8d05b971eb9ee"><td class="memTemplParams" colspan="2">template&lt;class T , class... Args&gt; </td></tr>
 <tr class="memitem:ae15308fbb3125f278ed8d05b971eb9ee"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#ae15308fbb3125f278ed8d05b971eb9ee">addJob</a> (Args &amp;&amp;... args)</td></tr>
-<tr class="memdesc:ae15308fbb3125f278ed8d05b971eb9ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">The same as <a class="el" href="#af4511ceb38d56c476938458af6bd98e6" title="Add a new Job which will be always be stepped and drawn by App::mainLoop()">addJob(std::shared_ptr&lt;Job&gt;)</a> but creates the <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> for you.  <br /></td></tr>
+<tr class="memdesc:ae15308fbb3125f278ed8d05b971eb9ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">The same as <a class="el" href="#af4511ceb38d56c476938458af6bd98e6" title="Add a new Job which will be always be stepped and drawn by App::mainLoop()">addJob(std::shared_ptr&lt;Job&gt;)</a> but creates the <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> for you.  <br /></td></tr>
 <tr class="separator:ae15308fbb3125f278ed8d05b971eb9ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5aaffe2c2b0ba8c41ae65d47726ad226" id="r_a5aaffe2c2b0ba8c41ae65d47726ad226"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5aaffe2c2b0ba8c41ae65d47726ad226">removeJob</a> (<a class="el" href="classjngl_1_1Job.html">Job</a> *)</td></tr>
-<tr class="memdesc:a5aaffe2c2b0ba8c41ae65d47726ad226"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the passed <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> after all Jobs have been stepped.  <br /></td></tr>
+<tr class="memdesc:a5aaffe2c2b0ba8c41ae65d47726ad226"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the passed <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> after all Jobs have been stepped.  <br /></td></tr>
 <tr class="separator:a5aaffe2c2b0ba8c41ae65d47726ad226"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74afbcfe46a4632076d67390db3becf0" id="r_a74afbcfe46a4632076d67390db3becf0"><td class="memItemLeft" align="right" valign="top"><a id="a74afbcfe46a4632076d67390db3becf0" name="a74afbcfe46a4632076d67390db3becf0"></a>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Job.html">Job</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getJob</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::function</a>&lt; bool(<a class="el" href="classjngl_1_1Job.html">Job</a> &amp;)&gt; &amp;predicate)</td></tr>
-<tr class="memdesc:a74afbcfe46a4632076d67390db3becf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> for which <em>predicate</em> returned true. <br /></td></tr>
+<tr class="memdesc:a74afbcfe46a4632076d67390db3becf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> for which <em>predicate</em> returned true. <br /></td></tr>
 <tr class="separator:a74afbcfe46a4632076d67390db3becf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fa19061aa43809790dd0ba3f5de6a67" id="r_a4fa19061aa43809790dd0ba3f5de6a67"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a4fa19061aa43809790dd0ba3f5de6a67"><td class="memTemplItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a4fa19061aa43809790dd0ba3f5de6a67">getJob</a> ()</td></tr>
-<tr class="memdesc:a4fa19061aa43809790dd0ba3f5de6a67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> that is a T.  <br /></td></tr>
+<tr class="memdesc:a4fa19061aa43809790dd0ba3f5de6a67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> that is a T.  <br /></td></tr>
 <tr class="separator:a4fa19061aa43809790dd0ba3f5de6a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acce832d165e7712121539a21c89ca4c2" id="r_acce832d165e7712121539a21c89ca4c2"><td class="memItemLeft" align="right" valign="top"><a id="acce832d165e7712121539a21c89ca4c2" name="acce832d165e7712121539a21c89ca4c2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>trace</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;)</td></tr>
@@ -1597,7 +1597,7 @@ template&lt;class Box &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Add a new <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> which will be always be stepped and drawn by App::mainLoop() </p>
+<p>Add a new <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> which will be always be stepped and drawn by App::mainLoop() </p>
 <p>Example: </p><div class="fragment"><div class="line"><span class="keyword">class </span>MyJob : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Job.html">jngl::Job</a> {</div>
 <div class="line"><span class="keyword">public</span>:</div>
 <div class="line">    MyJob();</div>
@@ -1613,7 +1613,7 @@ template&lt;class Box &gt; </div>
 <div class="line">    };</div>
 <div class="line">    <span class="keywordflow">return</span> params;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassjngl_1_1Job_html"><div class="ttname"><a href="classjngl_1_1Job.html">jngl::Job</a></div><div class="ttdoc">Background job which stays part of the main loop independent of the active jngl::Work.</div><div class="ttdef"><b>Definition</b> <a href="job_8hpp_source.html#l00022">job.hpp:22</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Job_html"><div class="ttname"><a href="classjngl_1_1Job.html">jngl::Job</a></div><div class="ttdoc">Background job which stays part of the main loop independent of the active jngl::Scene.</div><div class="ttdef"><b>Definition</b> <a href="job_8hpp_source.html#l00062">job.hpp:62</a></div></div>
 <div class="ttc" id="afunction_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/utility/functional/function.html">std::function</a></div></div>
 <div class="ttc" id="ainit_8hpp_html_a2471fe7de5ef776522a016331b6bf6e5"><div class="ttname"><a href="init_8hpp.html#a2471fe7de5ef776522a016331b6bf6e5">jnglInit</a></div><div class="ttdeci">jngl::AppParameters jnglInit()</div><div class="ttdoc">Implement this function and set AppParameters::start.</div></div>
 <div class="ttc" id="anamespacejngl_html_af4511ceb38d56c476938458af6bd98e6"><div class="ttname"><a href="#af4511ceb38d56c476938458af6bd98e6">jngl::addJob</a></div><div class="ttdeci">void addJob(std::shared_ptr&lt; Job &gt; job)</div><div class="ttdoc">Add a new Job which will be always be stepped and drawn by App::mainLoop()</div></div>
@@ -1639,7 +1639,7 @@ template&lt;class T , class... Args&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>The same as <a class="el" href="#af4511ceb38d56c476938458af6bd98e6" title="Add a new Job which will be always be stepped and drawn by App::mainLoop()">addJob(std::shared_ptr&lt;Job&gt;)</a> but creates the <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> for you. </p>
+<p>The same as <a class="el" href="#af4511ceb38d56c476938458af6bd98e6" title="Add a new Job which will be always be stepped and drawn by App::mainLoop()">addJob(std::shared_ptr&lt;Job&gt;)</a> but creates the <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> for you. </p>
 <p>Example: </p><div class="fragment"><div class="line"><span class="keyword">class </span>MyJob : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Job.html">jngl::Job</a> {</div>
 <div class="line"><span class="keyword">public</span>:</div>
 <div class="line">    MyJob(<span class="keywordtype">int</span> x, <span class="keywordtype">float</span> y, <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> foo);</div>
@@ -1657,7 +1657,7 @@ template&lt;class T , class... Args&gt; </div>
 <div class="line">}</div>
 <div class="ttc" id="abasic_string_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00109">109</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00149">149</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
 
 </div>
 </div>
@@ -1676,8 +1676,8 @@ template&lt;class T , class... Args&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Removes the passed <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> after all Jobs have been stepped. </p>
-<p>If the <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> isn't found, nothing happens. </p>
+<p>Removes the passed <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> after all Jobs have been stepped. </p>
+<p>If the <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> isn't found, nothing happens. </p>
 
 </div>
 </div>
@@ -1698,9 +1698,9 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work.">Job</a> that is a T. </p>
+<p>Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> that is a T. </p>
 
-<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00122">122</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00162">162</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
 
 </div>
 </div>

@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Background job which stays part of the main loop independent of the active jngl::Work.">
+<g id="a_Node000001"><a xlink:title="Background job which stays part of the main loop independent of the active jngl::Scene.">
 <polygon fill="#999999" stroke="#666666" points="76,-129.75 42,-129.75 42,-110.5 76,-110.5 76,-129.75"/>
 <text text-anchor="middle" x="59" y="-116.25" font-family="ui-monospace,monospace" font-size="10.00">Job</text>
 </a>

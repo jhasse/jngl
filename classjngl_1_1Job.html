@@ -87,7 +87,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Background job which stays part of the main loop independent of the active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">jngl::Work</a>.  
+<p>Background job which stays part of the main loop independent of the active <a class="el" href="namespacejngl.html#a7310ba6795e72c54ccb2742d62c31c33" title="Because it&#39;s more intuitive, jngl::Scene is the new name for jngl::Work.">jngl::Scene</a>.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="job_8hpp_source.html">jngl/job.hpp</a>&gt;</code></p>
@@ -134,11 +134,52 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Job</b> ()</td></
 <tr class="separator:abd38672956b19a95da42323a278727ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Background job which stays part of the main loop independent of the active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">jngl::Work</a>. </p>
+<div class="textblock"><p>Background job which stays part of the main loop independent of the active <a class="el" href="namespacejngl.html#a7310ba6795e72c54ccb2742d62c31c33" title="Because it&#39;s more intuitive, jngl::Scene is the new name for jngl::Work.">jngl::Scene</a>. </p>
 <p>This can be used for an achievement system for example. Override this class and use <a class="el" href="namespacejngl.html#af4511ceb38d56c476938458af6bd98e6" title="Add a new Job which will be always be stepped and drawn by App::mainLoop()">jngl::addJob</a> to register it.</p>
-<p>Jobs (meaning instances of this class that were added using <a class="el" href="namespacejngl.html#af4511ceb38d56c476938458af6bd98e6" title="Add a new Job which will be always be stepped and drawn by App::mainLoop()">jngl::addJob</a>) are always stepped before the active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">jngl::Work</a> and drawn after it. </p>
+<p>Jobs (meaning instances of this class that were added using <a class="el" href="namespacejngl.html#af4511ceb38d56c476938458af6bd98e6" title="Add a new Job which will be always be stepped and drawn by App::mainLoop()">jngl::addJob</a>) are always stepped before the active <a class="el" href="namespacejngl.html#a7310ba6795e72c54ccb2742d62c31c33" title="Because it&#39;s more intuitive, jngl::Scene is the new name for jngl::Work.">jngl::Scene</a> and drawn after it. The draw order is reversed, meaning the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> you added will always be drawn last. Example:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="jngl_8hpp.html">jngl.hpp</a>&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="init_8hpp.html">jngl/init.hpp</a>&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">class </span>MyFirstJob : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Job.html">jngl::Job</a> {</div>
+<div class="line">    <span class="keywordtype">void</span> step()<span class="keyword"> override </span>{ <span class="comment">/* ... */</span> }</div>
+<div class="line">    <span class="keywordtype">void</span> draw()<span class="keyword"> const override </span>{ <span class="comment">/* ... */</span>}</div>
+<div class="line">};</div>
+<div class="line"><span class="keyword">class </span>MySecondJob : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Job.html">jngl::Job</a> { <span class="comment">/* ... */</span> };</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">class </span>MyScene : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Scene</a> {</div>
+<div class="line">    <span class="keywordtype">void</span> step()<span class="keyword"> override </span>{ <span class="comment">/* ... */</span> }</div>
+<div class="line">    <span class="keywordtype">void</span> draw()<span class="keyword"> const override </span>{ <span class="comment">/* ... */</span> }</div>
+<div class="line">};</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_struct" href="structjngl_1_1AppParameters.html">jngl::AppParameters</a> <a class="code hl_function" href="init_8hpp.html#a2471fe7de5ef776522a016331b6bf6e5">jnglInit</a>() {</div>
+<div class="line">    <a class="code hl_struct" href="structjngl_1_1AppParameters.html">jngl::AppParameters</a> params;</div>
+<div class="line">    <span class="comment">// ...</span></div>
+<div class="line">    params.<a class="code hl_variable" href="structjngl_1_1AppParameters.html#ab8f3127de4b6ccfc51833c48f37c7e1c">start</a> = []() { </div>
+<div class="line">        jngl::addJob&lt;MyFirstJob&gt;();</div>
+<div class="line">        jngl::addJob&lt;MySecondJob&gt;();</div>
+<div class="line">        jngl::setScene&lt;MyScene&gt;();</div>
+<div class="line">    };</div>
+<div class="line">    <span class="keywordflow">return</span> params;</div>
+<div class="line">}</div>
+<div class="ttc" id="aclassjngl_1_1Job_html"><div class="ttname"><a href="classjngl_1_1Job.html">jngl::Job</a></div><div class="ttdoc">Background job which stays part of the main loop independent of the active jngl::Scene.</div><div class="ttdef"><b>Definition</b> <a href="job_8hpp_source.html#l00062">job.hpp:62</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Work_html"><div class="ttname"><a href="classjngl_1_1Work.html">jngl::Work</a></div><div class="ttdoc">Active state of the game, e.g. a menu or the game itself.</div><div class="ttdef"><b>Definition</b> <a href="work_8hpp_source.html#l00013">work.hpp:13</a></div></div>
+<div class="ttc" id="ainit_8hpp_html"><div class="ttname"><a href="init_8hpp.html">init.hpp</a></div><div class="ttdoc">Include this file only once, as it defines the main function.</div></div>
+<div class="ttc" id="ainit_8hpp_html_a2471fe7de5ef776522a016331b6bf6e5"><div class="ttname"><a href="init_8hpp.html#a2471fe7de5ef776522a016331b6bf6e5">jnglInit</a></div><div class="ttdeci">jngl::AppParameters jnglInit()</div><div class="ttdoc">Implement this function and set AppParameters::start.</div></div>
+<div class="ttc" id="ajngl_8hpp_html"><div class="ttname"><a href="jngl_8hpp.html">jngl.hpp</a></div><div class="ttdoc">Includes all JNGL headers except for init.hpp.</div></div>
+<div class="ttc" id="astructjngl_1_1AppParameters_html"><div class="ttname"><a href="structjngl_1_1AppParameters.html">jngl::AppParameters</a></div><div class="ttdoc">Parameters used to initialize the main window.</div><div class="ttdef"><b>Definition</b> <a href="AppParameters_8hpp_source.html#l00019">AppParameters.hpp:19</a></div></div>
+<div class="ttc" id="astructjngl_1_1AppParameters_html_ab8f3127de4b6ccfc51833c48f37c7e1c"><div class="ttname"><a href="structjngl_1_1AppParameters.html#ab8f3127de4b6ccfc51833c48f37c7e1c">jngl::AppParameters::start</a></div><div class="ttdeci">std::function&lt; std::shared_ptr&lt; jngl::Work &gt;()&gt; start</div><div class="ttdoc">A factory function which creates the first jngl::Work.</div><div class="ttdef"><b>Definition</b> <a href="AppParameters_8hpp_source.html#l00021">AppParameters.hpp:21</a></div></div>
+</div><!-- fragment --><p>In this example, the order of function calls in each frame will be:</p>
+<ol type="1">
+<li><code>MyFirstJob::step()</code></li>
+<li><code>MySecondJob::step()</code></li>
+<li><code>MyScene::step()</code></li>
+<li><code>MyScene::draw()</code></li>
+<li><code>MySecondJob::draw()</code></li>
+<li><code>MyFirstJob::draw()</code></li>
+</ol>
+<dl class="section note"><dt>Note</dt><dd>Steps 4-6 are not guaranteed to be called the same number of times as steps 1-3, depending on the frame rate and the steps per second. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00022">22</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00062">62</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
 </div><div class="dynheader">
 Inheritance diagram for Job:</div>
 <div class="dyncontent">
@@ -170,7 +211,7 @@ Inheritance diagram for Job:</div>
 
 <p>Advance the game logic. </p>
 <p>This function gets called 60 times per second or whatever has been set by <a class="el" href="namespacejngl.html#aa2222d84c7228e46ddb220bd543a5401" title="How many times Work::step should be called per second (default: 60)">setStepsPerSecond()</a>.</p>
-<dl class="section note"><dt>Note</dt><dd>JNGL's main loop calls all Jobs' <a class="el" href="#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">step()</a> functions before the active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a>'s <a class="el" href="#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">step()</a> </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>JNGL's main loop calls all Jobs' <a class="el" href="#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">step()</a> functions before the active Scene's <a class="el" href="#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">step()</a> </dd></dl>
 
 <p>Implemented in <a class="el" href="classjngl_1_1Fade.html#ae6c526798a490afe221d1447f508f16a">Fade</a>, and <a class="el" href="classjngl_1_1WorkFactory.html#ae6c526798a490afe221d1447f508f16a">WorkFactory</a>.</p>
 
@@ -201,7 +242,7 @@ Inheritance diagram for Job:</div>
 
 <p>Draw the game state. </p>
 <p>As it isn't garuanteed that this function is called as often as <a class="el" href="#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Job::step</a>, you shouldn't change any game state in it.</p>
-<dl class="section note"><dt>Note</dt><dd>JNGL's main loop calls all Jobs' <a class="el" href="#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">draw()</a> functions after the active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a>'s <a class="el" href="#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">draw()</a> </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>JNGL's main loop calls all Jobs' <a class="el" href="#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">draw()</a> functions after the active Scene's <a class="el" href="#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">draw()</a> </dd></dl>
 
 <p>Implemented in <a class="el" href="classjngl_1_1Fade.html#a35460413b5c663cd8a28ad3c80caaf71">Fade</a>, and <a class="el" href="classjngl_1_1WorkFactory.html#a35460413b5c663cd8a28ad3c80caaf71">WorkFactory</a>.</p>
 

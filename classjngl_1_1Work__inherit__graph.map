@@ -4,6 +4,6 @@
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="69,119,43,154,39,151,64,116"/>
 <area shape="rect" id="Node000004" href="$classjngl_1_1WorkFactory.html" title=" " alt="" coords="83,153,192,178"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="104,115,130,151,126,154,100,119"/>
-<area shape="rect" id="Node000002" href="$classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Work." alt="" coords="61,5,107,31"/>
+<area shape="rect" id="Node000002" href="$classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene." alt="" coords="61,5,107,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,46,87,79,81,79,81,46"/>
 </map>

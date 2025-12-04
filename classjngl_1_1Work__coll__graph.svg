@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="classjngl_1_1Job.html" target="_top" xlink:title="Background job which stays part of the main loop independent of the active jngl::Work.">
+<g id="a_Node000002"><a xlink:href="classjngl_1_1Job.html" target="_top" xlink:title="Background job which stays part of the main loop independent of the active jngl::Scene.">
 <polygon fill="white" stroke="#666666" points="37,-74.5 3,-74.5 3,-55.25 37,-55.25 37,-74.5"/>
 <text text-anchor="middle" x="20" y="-61" font-family="ui-monospace,monospace" font-size="10.00">Job</text>
 </a>

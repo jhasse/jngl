@@ -1,5 +1,5 @@
 <map id="Job" name="Job">
-<area shape="rect" id="Node000001" title="Background job which stays part of the main loop independent of the active jngl::Work." alt="" coords="61,5,107,31"/>
+<area shape="rect" id="Node000001" title="Background job which stays part of the main loop independent of the active jngl::Scene." alt="" coords="61,5,107,31"/>
 <area shape="rect" id="Node000002" href="$classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself." alt="" coords="57,79,111,105"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,46,87,79,81,79,81,46"/>
 <area shape="rect" id="Node000003" href="$classjngl_1_1Fade.html" title="Fades between two scenes, first fading to jngl::getBackgroundColor() and then fading to the new scene..." alt="" coords="5,153,59,178"/>
