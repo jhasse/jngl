@@ -47,15 +47,52 @@
 </head>
 
 <body>
-
+<div style="float:right;margin-right:1em" id="MSearchBox" class="MSearchBoxInactive"><span class="left"><span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span><input type="text" id="MSearchField" value="" placeholder="Search" accesskey="S" onfocus="searchBox.OnSearchFieldFocus(true)" onblur="searchBox.OnSearchFieldFocus(false)" onkeyup="searchBox.OnSearchFieldChange(event)"></span><span class="right"><a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()" style="display: none;"><div id="MSearchCloseImg" class="close-icon"></div></a></span></div>
 <div class="contents">
+
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
 	<p style="text-align: center; padding: 5em">
 		<img alt="Logo" src="Dell XPS 13.png" />
 	</p>
 	<div style="text-align:center">
 		<div class="button"><a href="https://github.com/jhasse/jngl"><img src="GitHub_Invertocat_Logo.svg"/>GitHub</a></div>
 		<div class="button"><a href="https://discord.gg/254P43HvWJ"><img src="discord-icon.svg"/>Discord</a></div>
-		<div class="button"><a href="namespaces.html"><img src="documentation.svg"/>Documentation</a></div>
+		<div class="button"><a href="namespacejngl.html"><img src="documentation.svg"/>Documentation</a></div>
 	</div>
 	<h1 style="text-align: center; margin-bottom: 2em; ">
 		A Cross-Platform Framework for 2D Games
