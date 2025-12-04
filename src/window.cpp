@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <gsl/narrow>
+#include <ranges>
 #include <thread>
 
 namespace jngl {
@@ -476,7 +477,7 @@ void Window::draw() const {
 	} else {
 		jngl::print("No work set. Use jngl::setWork", -50, -5);
 	}
-	for (auto& job : jobs) {
+	for (auto& job : std::ranges::reverse_view(jobs)) {
 		job->draw();
 	}
 #ifdef JNGL_PERFORMANCE_OVERLAY
