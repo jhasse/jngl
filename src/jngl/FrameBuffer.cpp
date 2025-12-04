@@ -3,6 +3,7 @@
 
 #include "FrameBuffer.hpp"
 
+#include "../ShaderCache.hpp"
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
 #include "../texture.hpp"
@@ -38,8 +39,6 @@ struct FrameBuffer::Impl {
 	const int height;
 	Texture texture;
 	bool letterboxing;
-	GLuint systemFbo = 0;
-	GLuint systemBuffer = 0;
 #if !defined(GL_VIEWPORT_BIT) || defined(__APPLE__)
 	GLint viewport[4]{};
 #endif
@@ -53,12 +52,6 @@ std::stack<std::function<void()>> FrameBuffer::Impl::activate;
 
 FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
 : impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height))) {
-	GLint tmp;
-	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &tmp);
-	impl->systemFbo = tmp;
-	glGetIntegerv(GL_RENDERBUFFER_BINDING, &tmp);
-	impl->systemBuffer = tmp;
-
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, static_cast<int>(width),
@@ -83,8 +76,7 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
 		glEnable(GL_SCISSOR_TEST);
 	}
 
-	glBindFramebuffer(GL_FRAMEBUFFER, impl->systemFbo);
-	glBindRenderbuffer(GL_RENDERBUFFER, impl->systemBuffer);
+	pWindow->bindSystemFramebufferAndRenderbuffer();
 }
 
 FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height)
@@ -94,6 +86,8 @@ FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height)
 FrameBuffer::FrameBuffer(std::array<Pixels, 2> size) : FrameBuffer(size[0], size[1]) {
 }
 
+FrameBuffer::FrameBuffer(FrameBuffer&&) noexcept = default;
+FrameBuffer& FrameBuffer::operator=(FrameBuffer&&) noexcept = default;
 FrameBuffer::~FrameBuffer() = default;
 
 void FrameBuffer::draw(const double x, const double y) const {
@@ -105,21 +99,24 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 	jngl::translate(position);
 	opengl::scale(1, -1);
 	jngl::translate(0, -impl->height / getScaleFactor());
-	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
-		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
+		                   opengl::modelview.data);
 	}
 	impl->texture.draw();
 	popMatrix();
 }
 
 void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) const {
-	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   modelview.scale(1, -1)
@@ -127,9 +124,9 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 		                                    -impl->height / getScaleFactor() / 2 })
 		                       .data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
-		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE,
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   modelview.scale(1, -1)
 		                       .translate({ -impl->width / getScaleFactor() / 2,
 		                                    -impl->height / getScaleFactor() / 2 })
@@ -142,14 +139,16 @@ void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
                            const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
 	scale(getScaleFactor());
-	auto context = shaderProgram ? shaderProgram->use() : Texture::textureShaderProgram->use();
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(Texture::shaderSpriteColorUniform, gSpriteColor.getRed(),
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
-		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
+		                   opengl::modelview.data);
 	}
 	impl->texture.drawMesh(vertexes);
 	popMatrix();
@@ -182,11 +181,9 @@ void FrameBuffer::Context::clear() {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void FrameBuffer::Context::clear(const Color color) {
+void FrameBuffer::Context::clear(const Rgb color) {
 	assert(resetCallback);
-	glClearColor(static_cast<float>(color.getRed()) / 255.f,
-	             static_cast<float>(color.getGreen()) / 255.f,
-	             static_cast<float>(color.getBlue()) / 255.f, 1);
+	glClearColor(color.getRed(), color.getGreen(), color.getBlue(), 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -217,25 +214,24 @@ FrameBuffer::Context FrameBuffer::use() const {
 	glGetIntegerv(GL_VIEWPORT, impl->viewport);
 #endif
 	activate();
-	impl->activate.emplace(std::move(activate));
+	Impl::activate.emplace(std::move(activate));
 	return Context([this]() {
-		impl->activate.pop();
+		Impl::activate.pop();
 		popMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 		glPopAttrib();
 #else
 		glViewport(impl->viewport[0], impl->viewport[1], impl->viewport[2], impl->viewport[3]);
 #endif
-		if (!impl->activate.empty()) {
-			impl->activate.top()(); // Restore the FrameBuffer that was previously active
+		if (!Impl::activate.empty()) {
+			Impl::activate.top()(); // Restore the FrameBuffer that was previously active
 			return;
 		}
 		if (impl->letterboxing) {
 			glEnable(GL_SCISSOR_TEST);
 		}
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBindFramebuffer(GL_FRAMEBUFFER, impl->systemFbo);
-		glBindRenderbuffer(GL_RENDERBUFFER, impl->systemBuffer);
+		pWindow->bindSystemFramebufferAndRenderbuffer();
 		clearBackgroundColor();
 	});
 }
@@ -249,6 +245,14 @@ void FrameBuffer::clear() {
 Vec2 FrameBuffer::getSize() const {
 	return { impl->texture.getPreciseWidth() / getScaleFactor(),
 		     impl->texture.getPreciseHeight() / getScaleFactor() };
+}
+
+Pixels FrameBuffer::getPixelWidth() const {
+	return static_cast<Pixels>(impl->width);
+}
+
+Pixels FrameBuffer::getPixelHeight() const {
+	return static_cast<Pixels>(impl->height);
 }
 
 GLuint FrameBuffer::getTextureID() const {

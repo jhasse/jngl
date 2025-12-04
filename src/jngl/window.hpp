@@ -1,9 +1,7 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 /// Functions related to the main window.
 /// @file
-
 #pragma once
 
 #include "Pixels.hpp"
@@ -17,8 +15,10 @@ namespace jngl {
 
 /// Creates the main window
 ///
+/// Normally you wouldn't call this function yourself, but implement jnglInit() instead.
+///
 /// If you haven't set a display name for your app using AppParameters::displayName, \a title will
-/// set for the display name.
+/// be set for the display name.
 void showWindow(const std::string& title, int width, int height, bool fullscreen = false,
                 std::pair<int, int> minAspectRatio = { 4, 3 },
                 std::pair<int, int> maxAspectRatio = { 16, 9 });
@@ -63,9 +63,10 @@ void setFullscreen(bool);
 void setTitle(const std::string& title);
 
 enum class Cursor : uint8_t {
-    ARROW,
-    I,
+	ARROW, //< Default cursor
+	I,     //< I-beam cursor used in text editing
 };
+/// Allows to change the mouse cursor
 void setCursor(Cursor);
 
 /// Read red, green and blue values of the whole window frame buffer

@@ -18,9 +18,22 @@ class Vec2;
 class Mat3 {
 public:
 	/// creates identity matrix
+	///
+	/// \f[
+	/// \left( \begin{array}{rrr}
+	/// 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1
+	/// \end{array}\right)
+	/// \f]
 	Mat3() = default;
 
-	/// construct matrix from row-major array with 9 elements
+	/// construct matrix from **row**-major array with 9 elements
+	///
+	/// `jngl::Mat3({ 1, 2, 3, 4, 5, 6, 7, 8, 9 })` is equivalent to:
+	/// \f[
+	/// \left( \begin{array}{rrr}
+	/// 1 & 2 & 3 \\ 4 & 5 & 6 \\ 7 & 8 & 9
+	/// \end{array}\right)
+	/// \f]
 	Mat3(std::initializer_list<float>);
 
 	/// Multiplies the matrix with a translation matrix generated from v
@@ -48,6 +61,12 @@ public:
 	/// yourSprite.draw(jngl::modelview().scale(2, 1));
 	/// \endcode
 	Mat3& scale(float xfactor, float yfactor);
+
+	/// Multiplies the matrix by a scaling matrix
+	///
+	/// Equivalent to calling `Mat3::scale(v.x, v.y)`.
+	/// \return *this
+	Mat3& scale(const Vec2& v);
 
 	/// Multiplies the matrix with a rotation matrix
 	///

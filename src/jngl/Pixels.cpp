@@ -1,4 +1,4 @@
-// Copyright 2021-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Pixels.hpp"
 
@@ -25,7 +25,7 @@ Pixels::operator double() const {
 }
 
 Pixels::operator int() const {
-	return int(std::lround(value));
+	return static_cast<int>(std::lround(value));
 }
 
 Pixels::operator ScaleablePixels() const {
@@ -42,11 +42,11 @@ bool operator>(const jngl::Pixels a, const jngl::Pixels b) {
 }
 
 Pixels operator/(const jngl::Pixels a, const float b) {
-	return Pixels(float(a) / b);
+	return Pixels(static_cast<float>(a) / b);
 }
 
 } // namespace jngl
 
-jngl::Pixels operator "" _px(const unsigned long long value) {
+jngl::Pixels operator""_px(const unsigned long long value) {
 	return jngl::Pixels(gsl::narrow<int32_t>(value));
 }

@@ -1,10 +1,12 @@
-// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#define _LIBCPP_DISABLE_DEPRECATION_WARNINGS
+#define _LIBCPP_DISABLE_DEPRECATION_WARNINGS // NOLINT
 #include "freetype.hpp"
 
+#include "ShaderCache.hpp"
 #include "helper.hpp"
+#include "jngl/Finally.hpp"
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/matrix.hpp"
 #include "jngl/screen.hpp"
@@ -66,7 +68,8 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 			data[y][x * 4 + 2] = 255;
 			unsigned char alpha = 0;
 			if (bitmap.pixel_mode == FT_PIXEL_MODE_MONO) {
-				if (bitmap.buffer[y * bitmap.pitch + x / 8] & (0x80 >> (x % 8))) {
+				if (bitmap.buffer[static_cast<ptrdiff_t>(y * bitmap.pitch) + x / 8] &
+				    (0x80 >> (x % 8))) {
 					alpha = 255;
 				} else {
 					alpha = 0;
@@ -80,8 +83,8 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 		}
 	}
 
-	texture_ =
-	    new Texture(static_cast<float>(width), static_cast<float>(height), width, height, &data[0]);
+	texture_ = new Texture(static_cast<float>(width), static_cast<float>(height),
+	                       static_cast<int>(width), height, data.data());
 	for (auto d : data) {
 		delete[] d;
 	}
@@ -92,7 +95,7 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 
 void Character::draw(Mat3& modelview) const {
 	if (texture_) {
-		glUniformMatrix3fv(Texture::modelviewUniform, 1, GL_FALSE,
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   Mat3(modelview).translate(left_, top_).data);
 		texture_->draw();
 	}
@@ -112,7 +115,10 @@ Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::
 	// https://stackoverflow.com/questions/32055357/visual-studio-c-2015-stdcodecvt-with-char16-t-or-char32-t
 	static std::wstring_convert<std::codecvt_utf8<int32_t>, int32_t> cvt;
 #else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	static std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cvt;
+#pragma GCC diagnostic pop
 #endif
 	const char& ch = (*it); // Just to have less code
 	char32_t unicodeCharacter = ch;
@@ -146,7 +152,7 @@ Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::
 
 FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height, float strokePercentage)
 : height_(static_cast<unsigned int>(height * getScaleFactor())),
-  lineHeight(static_cast<int>(height_ * LINE_HEIGHT_FACOTR)) {
+  lineHeight(static_cast<int>(height_ * LINE_HEIGHT_FACTOR)) {
 	auto filename = pathPrefix + relativeFilename;
 	if (!fileExists(filename)) {
 		if (!fileExists(relativeFilename)) {
@@ -194,9 +200,11 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height, flo
 	// For some twisted reason, Freetype measures font size
 	// in terms of 1/64ths of pixels.  Thus, to make a font
 	// h pixels high, we need to request a size of h*64.
-	FT_Set_Char_Size(face, height_ * 64, height_ * 64, 96, 96);
+	FT_Set_Char_Size(face, static_cast<FT_F26Dot6>(height_) * 64,
+	                 static_cast<FT_F26Dot6>(height_) * 64, 96, 96);
 
-	FT_Fixed strokeWidth = std::lround(strokePercentage * static_cast<float>(height) * 0.64);
+	FT_Fixed strokeWidth =
+	    std::lround(strokePercentage * static_cast<double>(height) * getScaleFactor() * 0.64);
 	if (strokeWidth != 0) {
 		FT_Stroker_New(library, &stroker);
 		FT_Stroker_Set(stroker, strokeWidth, FT_STROKER_LINECAP_ROUND, FT_STROKER_LINEJOIN_ROUND,
@@ -240,10 +248,10 @@ void FontImpl::setLineHeight(Pixels h) {
 	lineHeight = static_cast<int>(h);
 }
 
-void FontImpl::print(Mat3 modelview, const std::string& text) {
-	auto context = Texture::textureShaderProgram->use();
-	glUniform4f(Texture::shaderSpriteColorUniform, gFontColor.getRed(), gFontColor.getGreen(),
-	            gFontColor.getBlue(), gFontColor.getAlpha());
+void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) {
+	auto context = ShaderCache::handle().textureShaderProgram->use();
+	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(), color.getGreen(),
+	            color.getBlue(), color.getAlpha());
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();
@@ -262,9 +270,9 @@ void FontImpl::print(Mat3 modelview, const std::string& text) {
 }
 
 void FontImpl::print(const ScaleablePixels x, const ScaleablePixels y, const std::string& text) {
-	auto context = Texture::textureShaderProgram->use();
-	glUniform4f(Texture::shaderSpriteColorUniform, gFontColor.getRed(), gFontColor.getGreen(),
-	            gFontColor.getBlue(), gFontColor.getAlpha());
+	auto context = ShaderCache::handle().textureShaderProgram->use();
+	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gFontColor.getRed(),
+	            gFontColor.getGreen(), gFontColor.getBlue(), gFontColor.getAlpha());
 	const int xRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ x })));
 	const int yRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ y })));
 	std::vector<std::string> lines(splitlines(text));

@@ -1,4 +1,4 @@
-// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Sound.hpp"
@@ -15,12 +15,16 @@ namespace jngl {
 struct Sound::Impl {
 	std::shared_ptr<PlayingTrack> track;
 	std::shared_ptr<Stream> stream;
-	std::shared_ptr<audio::volume_control> volumeControl;
+	std::shared_ptr<audio::VolumeControl> volumeControl;
+	std::shared_ptr<std::vector<float>> buffer; //< we might outlive our SoundFile
 };
 
-Sound::Sound(const std::vector<float>& bufferData)
-: impl(new Impl{ std::make_shared<PlayingTrack>(bufferData), {}, {} }) {
-	impl->stream = impl->volumeControl = audio::volume(impl->track);
+Sound::Sound(std::shared_ptr<std::vector<float>> bufferData)
+: impl(new Impl{ .track = std::make_shared<PlayingTrack>(*bufferData),
+                 .stream = {},
+                 .volumeControl = {},
+                 .buffer = std::move(bufferData) }) {
+	impl->stream = impl->volumeControl = std::make_shared<audio::VolumeControl>(impl->track);
 }
 
 Sound::~Sound() = default;

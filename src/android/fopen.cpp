@@ -1,4 +1,4 @@
-// Copyright 2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 // See https://github.com/googlesamples/android-ndk/blob/master/native-media/app/src/main/cpp/android_fopen.c
@@ -15,7 +15,7 @@ static int android_read(void* cookie, char* buf, int size) {
 	return AAsset_read((AAsset*)cookie, buf, size);
 }
 
-static int android_write(void* cookie, const char* buf, int size) {
+static int android_write(void* /*cookie*/, const char* /*buf*/, int /*size*/) {
 	return EACCES; // can't provide write access to the apk
 }
 

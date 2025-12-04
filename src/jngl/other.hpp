@@ -1,9 +1,10 @@
-// Copyright 2014-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2014-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Miscellaneous functions
 /// @file
 #pragma once
 
+#include <cstdint>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -34,11 +35,19 @@ void clearBackBuffer();
 /// If this returns false you should hide any "Quit Game" menu buttons.
 bool canQuit();
 
-/// Emit a quit event which will exit App::mainLoop() and set running() to false
+/// Emit a quit event (i.e. call Work::onQuitEvent), exit the main loop and set running() to false
 ///
 /// If the window hasn't been created yet or the loop is already about to quit, this function does
 /// nothing
 void quit() noexcept;
+
+/// Exit main loop with and let the OS process return \a exitcode
+///
+/// If \a exitcode != 0 Work::onQuitEvent won't be called.
+///
+/// \throws std::runtime_error when called twice, on platforms where canQuit() returns false, or the
+/// window hasn't been created yet.
+void forceQuit(uint8_t exitcode);
 
 /// Undo quit() or ignore a quit event caused by the user closing the main window
 void cancelQuit();
@@ -92,10 +101,9 @@ void setConfigPath(const std::string& path);
 /// Returns the directory of the currently running binary
 std::string getBinaryPath();
 
-/// Called by JNGL_MAIN_BEGIN to set command line arguments
-void setArgs(std::vector<std::string>);
-
-/// Returns the command line arguments passed to the executable
+/// Returns the command line arguments passed to the executable (empty when there are no arguments)
+///
+/// Does not include the executable name itself (in contrast to argc/argv).
 std::vector<std::string> getArgs();
 
 /// Returns a stringstream containing the whole file. This will read from the .apk on Android
@@ -127,7 +135,16 @@ void openURL(const std::string&);
 /// Rounds a double to an integer, just like std::lround
 int round(double v);
 
+/// Rounds a float to an integer, just like std::lround
+int round(float v);
+
+/// Returns the number of characters in the UTF-8 string
+int utf8Length(std::string_view);
+
 namespace internal {
+
+/// Called by JNGL_MAIN_BEGIN to set command line arguments
+void setArgs(std::vector<std::string>);
 
 /// Returns the directory where to store configuration files and save games.
 ///

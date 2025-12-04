@@ -1,21 +1,22 @@
-// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #include "window.hpp"
 
+#include "ShaderCache.hpp"
 #include "audio.hpp"
 #include "freetype.hpp"
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/font.hpp"
-#include "jngl/matrix.hpp"
 #include "jngl/other.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/time.hpp"
 #include "jngl/work.hpp"
 #include "log.hpp"
-#include "main.hpp"
-#include "spriteimpl.hpp"
 #include "windowptr.hpp"
+
+#ifdef ANDROID
+#include "main.hpp"
+#endif
 
 #ifdef __EMSCRIPTEN__
 #include "emscripten/window.hpp"
@@ -25,6 +26,7 @@
 
 #include <algorithm>
 #include <gsl/narrow>
+#include <ranges>
 #include <thread>
 
 namespace jngl {
@@ -58,11 +60,11 @@ void Window::print(const std::string& text, const int xposition, const int yposi
 }
 
 void Window::print(const Mat3& modelview, const std::string& text) {
-	getFontImpl()->print(modelview, text);
+	getFontImpl()->print(modelview, text, gFontColor);
 }
 
 void Window::setFont(const std::string& filename) {
-	if (fonts_[fontSize_].find(filename) == fonts_[fontSize_].end()) {
+	if (!fonts_[fontSize_].contains(filename)) {
 		auto font = std::make_shared<FontImpl>(filename, fontSize_, 0);
 		fonts_[fontSize_][filename] = font;
 	}
@@ -136,6 +138,21 @@ bool Window::getRelativeMouseMode() const {
 	return relativeMouseMode;
 }
 
+void Window::increaseMouseHiddenCount() {
+	if (mouseHiddenCount == 0) {
+		setMouseVisible(false);
+	}
+	++mouseHiddenCount;
+}
+
+void Window::decreaseMouseHiddenCount() {
+	assert(mouseHiddenCount > 0);
+	--mouseHiddenCount;
+	if (mouseHiddenCount == 0) {
+		setMouseVisible(true);
+	}
+}
+
 int Window::getCanvasWidth() const {
 	return canvasWidth;
 }
@@ -157,15 +174,22 @@ bool Window::isMultisampleSupported() const {
 }
 
 bool Window::isRunning() const {
-	return running;
+	return !shouldExit;
 }
 
 void Window::quit() noexcept {
-	running = false;
+	shouldExit = true;
+}
+
+void Window::forceQuit(uint8_t exitcode) {
+	if (forceExitCode) {
+		throw std::runtime_error("Already exitting.");
+	}
+	forceExitCode = exitcode;
 }
 
 void Window::cancelQuit() {
-	running = true;
+	shouldExit = false;
 }
 
 bool Window::getKeyDown(key::KeyType key) {
@@ -212,12 +236,32 @@ void Window::setKeyPressed(const std::string& key, bool p) {
 bool keyDown(const char key) {
 	std::string temp;
 	temp.append(1, key);
+	if (key >= 'a' && key <= 'z') {
+		if (keyDown(std::string(1, static_cast<char>(key - 32)))) {
+			return true;
+		}
+	}
+	if (key >= 'A' && key <= 'Z') {
+		if (keyDown(std::string(1, static_cast<char>(key + 32)))) {
+			return true;
+		}
+	}
 	return keyDown(temp);
 }
 
 bool keyPressed(const char key) {
 	std::string temp;
 	temp.append(1, key);
+	if (key >= 'a' && key <= 'z') {
+		if (keyPressed(std::string(1, static_cast<char>(key - 32)))) {
+			return true;
+		}
+	}
+	if (key >= 'A' && key <= 'Z') {
+		if (keyPressed(std::string(1, static_cast<char>(key + 32)))) {
+			return true;
+		}
+	}
 	return keyPressed(temp);
 }
 
@@ -234,18 +278,28 @@ void Window::updateKeyStates() {
 		}
 		updateInputCallbacks.clear();
 	}
+
+	// this is done here, because Window::updateKeyStates() is called by jngl::updateInput() and if
+	// someone writes their own main loop, Audio::step() needs to be called. Maybe updateKeyStates()
+	// should be renamed to updateInput() and UpdateInput() moved to WindowImpl ...
+	if (auto audio = Audio::handleIfAlive()) {
+		audio->step();
+	}
 }
 
 double Window::getMouseWheel() const {
 	return mouseWheel;
 }
 
-void Window::mainLoop() {
+uint8_t Window::mainLoop() {
 #ifdef __EMSCRIPTEN__
 	g_jnglMainLoop = [this]() {
 #else
-	Finally _([&]() { currentWork_.reset(); });
-	while (isRunning()) {
+	Finally _([&]() {
+		newWork_.reset();
+		currentWork_.reset();
+	});
+	while (!shouldExit && !forceExitCode) {
 #endif
 		stepIfNeeded();
 		clearBackBuffer();
@@ -256,16 +310,14 @@ void Window::mainLoop() {
 #ifdef __EMSCRIPTEN__
 	;
 	emscripten_set_main_loop(jnglMainLoop, 0, true);
+	return 0;
+#else
+	return forceExitCode ? *forceExitCode : 0;
 #endif
 }
 
 void Window::resetFrameLimiter() {
-	numberOfChecks = 0;
-	stepsPerFrame = 1;
-	sleepCorrectionFactor = 1;
-	maxFPS = 300;
-	lastCheckTime = getTime();
-	stepsSinceLastCheck = 0;
+	frameLimiter = {};
 }
 
 unsigned int Window::getStepsPerSecond() const {
@@ -280,45 +332,52 @@ void Window::setStepsPerSecond(const unsigned int stepsPerSecond) {
 
 void Window::stepIfNeeded() {
 	const auto currentTime = getTime();
-	const auto secondsSinceLastCheck = currentTime - lastCheckTime;
+	const auto secondsSinceLastCheck = currentTime - frameLimiter.lastCheckTime;
 	const auto targetStepsPerSecond = 1.0 / timePerStep;
 	// If SPS == FPS, this would mean that we check about every second, but in the beginning we
 	// want to check more often, e.g. to quickly adjust to high refresh rate monitors:
-	if (stepsSinceLastCheck > targetStepsPerSecond || stepsSinceLastCheck > numberOfChecks) {
-		++numberOfChecks;
-		const auto actualStepsPerSecond = stepsSinceLastCheck / secondsSinceLastCheck;
+	if (frameLimiter.stepsSinceLastCheck > targetStepsPerSecond ||
+	    frameLimiter.stepsSinceLastCheck > frameLimiter.numberOfChecks) {
+		++frameLimiter.numberOfChecks;
+		const auto actualStepsPerSecond = frameLimiter.stepsSinceLastCheck / secondsSinceLastCheck;
 		auto doableStepsPerSecond =
-		    stepsSinceLastCheck / (secondsSinceLastCheck - timeSleptSinceLastCheck);
-		if (previousStepsPerFrame > stepsPerFrame && actualStepsPerSecond < targetStepsPerSecond) {
-			maxFPS = 0.5 * maxFPS + 0.5 * actualStepsPerSecond / stepsPerFrame;
+		    frameLimiter.stepsSinceLastCheck / (secondsSinceLastCheck - timeSleptSinceLastCheck);
+		if (previousStepsPerFrame > frameLimiter.stepsPerFrame &&
+		    actualStepsPerSecond < targetStepsPerSecond) {
+			frameLimiter.maxFPS =
+			    0.5 * frameLimiter.maxFPS + 0.5 * actualStepsPerSecond / frameLimiter.stepsPerFrame;
 		} else {
-			maxFPS += sleepPerFrame;
+			frameLimiter.maxFPS += sleepPerFrame;
 		}
-		previousStepsPerFrame = stepsPerFrame;
-		const auto cappedOrDoable = std::min(doableStepsPerSecond, maxFPS * stepsPerFrame);
+		previousStepsPerFrame = frameLimiter.stepsPerFrame;
+		const auto cappedOrDoable =
+		    std::min(doableStepsPerSecond, frameLimiter.maxFPS * frameLimiter.stepsPerFrame);
 
 		// The sleep function is actually inaccurate (or at least less accurate than getTime),
 		// se we try to find a factor to correct this:
-		sleepCorrectionFactor +=
+		frameLimiter.sleepCorrectionFactor +=
 		    0.1 * // don't change it too fast
-		    (sleepPerFrame * stepsSinceLastCheck / stepsPerFrame - timeSleptSinceLastCheck);
+		    (sleepPerFrame * frameLimiter.stepsSinceLastCheck / frameLimiter.stepsPerFrame -
+		     timeSleptSinceLastCheck);
 		//   ↑__________seconds we should have slept___________↑   ↑___actual seconds____↑
 
 		// Clamp it in case of some bug:
-		sleepCorrectionFactor = std::max(0.1, std::min(sleepCorrectionFactor, 2.0));
+		frameLimiter.sleepCorrectionFactor =
+		    std::max(0.1, std::min(frameLimiter.sleepCorrectionFactor, 2.0));
 
 		// Round up, because if we can do 40 FPS, but need 60 SPS, we need at least 2 SPF. We
 		// don't round up exactly to be a little bit "optimistic" of what we can do.
 		auto newStepsPerFrame = std::min(
-		    static_cast<unsigned int>(std::max(
-		        1, static_cast<int>(0.98 + stepsPerFrame * targetStepsPerSecond / cappedOrDoable))),
-		    std::min(stepsPerFrame * 2, maxStepsPerFrame)); // never increase too much
+		    static_cast<unsigned int>(
+		        std::max(1, static_cast<int>(0.98 + frameLimiter.stepsPerFrame *
+		                                                targetStepsPerSecond / cappedOrDoable))),
+		    std::min(frameLimiter.stepsPerFrame * 2, maxStepsPerFrame)); // never increase too much
 		// Divide doableStepsPerSecond by the previous stepsPerFrame and multiply it with
 		// newStepsPerFrame so that we know what can be doable in the future and not what
 		// could have been doable:
-		double shouldSleepPerFrame =
-		    newStepsPerFrame * // we sleep per frame, not per step
-		    (timePerStep - 1.0 / (newStepsPerFrame * doableStepsPerSecond / stepsPerFrame));
+		double shouldSleepPerFrame = newStepsPerFrame * // we sleep per frame, not per step
+		                             (timePerStep - 1.0 / (newStepsPerFrame * doableStepsPerSecond /
+		                                                   frameLimiter.stepsPerFrame));
 		if (shouldSleepPerFrame < 0) {
 			shouldSleepPerFrame = 0;
 		}
@@ -331,28 +390,30 @@ void Window::stepIfNeeded() {
 		                std::lround(actualStepsPerSecond),
 		                (cappedOrDoable < doableStepsPerSecond) ? "capped" : "doable",
 		                std::lround(doableStepsPerSecond), std::lround(targetStepsPerSecond),
-		                newStepsPerFrame, sleepPerFrame, sleepCorrectionFactor, numberOfSleeps,
-		                std::lround(1e6 * timeSleptSinceLastCheck), maxFPS);
+		                newStepsPerFrame, sleepPerFrame, frameLimiter.sleepCorrectionFactor,
+		                numberOfSleeps, std::lround(1e6 * timeSleptSinceLastCheck),
+		                frameLimiter.maxFPS);
 
-		lastCheckTime = currentTime;
+		frameLimiter.lastCheckTime = currentTime;
 		numberOfSleeps = 0;
-		stepsSinceLastCheck = 0;
+		frameLimiter.stepsSinceLastCheck = 0;
 		timeSleptSinceLastCheck = 0;
-		stepsPerFrame = newStepsPerFrame;
+		frameLimiter.stepsPerFrame = newStepsPerFrame;
 	}
-	for (unsigned int i = 0; i < stepsPerFrame; ++i) {
-		++stepsSinceLastCheck;
+	for (unsigned int i = 0; i < frameLimiter.stepsPerFrame; ++i) {
+		++frameLimiter.stepsSinceLastCheck;
 		updateKeyStates();
 		UpdateInput();
 #ifdef JNGL_PERFORMANCE_OVERLAY
 		auto start = std::chrono::steady_clock::now();
 #endif
-		if (auto audio = Audio::handleIfAlive()) {
-			audio->step();
+
+		// use oldschool for loop here, so that Jobs can add other Jobs during step():
+		const size_t numOfJobs = jobs.size();
+		for (size_t i = 0; i < numOfJobs; ++i) {
+			jobs[i]->step();
 		}
-		for (auto& job : jobs) {
-			job->step();
-		}
+
 		for (auto job : jobsToRemove) {
 			const auto it = std::find_if(jobs.begin(), jobs.end(),
 			                             [job](const auto& p) { return p.get() == job; });
@@ -371,26 +432,35 @@ void Window::stepIfNeeded() {
 			).count()
 		) / 1000.;
 #endif
+		if (forceExitCode) {
+			break;
+		}
 		if (keyPressed(key::Escape)) {
 			currentWork_->onBackEvent();
 		}
-		if (!jngl::running() && currentWork_) {
+		if (shouldExit && currentWork_) {
 			currentWork_->onQuitEvent();
 		}
-		while (changeWork) {
+		while (!shouldExit && changeWork) {
 			changeWork = false;
-			currentWork_ = newWork_;
-			newWork_.reset();
+			if (currentWork_) {
+				currentWork_->onUnload();
+			}
+			currentWork_ = std::move(newWork_);
 			currentWork_->onLoad();
+			if (shouldExit) {
+				currentWork_->onQuitEvent();
+			}
 		}
 	}
 }
 
 void Window::sleepIfNeeded() {
 	const auto start = getTime();
-	const auto shouldBe = lastCheckTime + timePerStep * stepsSinceLastCheck;
-	const int64_t micros =
-	    std::lround((sleepPerFrame - (start - shouldBe)) * sleepCorrectionFactor * 1e6);
+	const auto shouldBe =
+	    frameLimiter.lastCheckTime + timePerStep * frameLimiter.stepsSinceLastCheck;
+	const int64_t micros = std::lround((sleepPerFrame - (start - shouldBe)) *
+	                                   frameLimiter.sleepCorrectionFactor * 1e6);
 	if (micros > 0) {
 		std::this_thread::sleep_for(std::chrono::microseconds(micros));
 		timeSleptSinceLastCheck += jngl::getTime() - start;
@@ -407,7 +477,7 @@ void Window::draw() const {
 	} else {
 		jngl::print("No work set. Use jngl::setWork", -50, -5);
 	}
-	for (auto& job : jobs) {
+	for (auto& job : std::ranges::reverse_view(jobs)) {
 		job->draw();
 	}
 #ifdef JNGL_PERFORMANCE_OVERLAY
@@ -432,12 +502,62 @@ void Window::draw() const {
 #endif
 }
 
+std::string simpleDemangle(std::string_view mangled) {
+	// Simple demangler: strip leading 'N' and trailing 'E' for namespaces, remove digits, etc.
+	// This is a naive implementation and won't handle all cases.
+	std::string result;
+	size_t i = 0;
+
+	// Remove leading 'N' (namespace) and trailing 'E'
+	if (!mangled.empty() && mangled[0] == 'N' && mangled.back() == 'E') {
+		++i;
+		mangled.remove_suffix(1);
+	}
+
+	while (i < mangled.size()) {
+		if (std::isdigit(mangled[i])) {
+			// Skip length prefixes
+			size_t len = 0;
+			while (i < mangled.size() && std::isdigit(mangled[i])) {
+				len = len * 10 + (mangled[i] - '0');
+				++i;
+			}
+			if (i + len <= mangled.size()) {
+				if (!result.empty()) {
+					result += "::";
+				}
+				result.append(mangled.substr(i, len));
+				i += len;
+			} else {
+				break;
+			}
+		} else {
+			// Copy non-digit characters as-is
+			result += mangled[i++];
+		}
+	}
+	return result.empty() ? std::string(mangled) : result;
+}
+
 void Window::setWork(std::shared_ptr<Work> work) {
+	if (work == currentWork_) {
+		if (changeWork) {
+			changeWork = false;
+			newWork_.reset();
+			internal::debug("Discarding scene change.");
+		}
+		return;
+	}
+#ifndef NDEBUG
+	const auto& ref = *work;
+	internal::debug("{} scene to {} ({}).", currentWork_ ? "Change" : "Setting current",
+	                simpleDemangle(typeid(ref).name()), // NOLINT
+	                static_cast<void*>(work.get()));
+#endif
 	if (!currentWork_) {
-		internal::debug("Setting current work to {}.", static_cast<void*>(work.get()));
 		currentWork_ = std::move(work);
+		currentWork_->onLoad();
 	} else {
-		internal::debug("Change work to {}.", static_cast<void*>(work.get()));
 		changeWork = true;
 		newWork_ = std::move(work);
 	}
@@ -462,6 +582,11 @@ std::shared_ptr<Job> Window::getJob(const std::function<bool(Job&)>& predicate) 
 
 std::shared_ptr<Work> Window::getWork() {
 	return currentWork_;
+}
+
+std::shared_ptr<Scene> Window::getNextScene() const {
+	assert(!changeWork || newWork_);
+	return newWork_;
 }
 
 bool Window::isMultitouch() const {
@@ -519,73 +644,43 @@ void Window::initGlObjects() {
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(0);
 
-	glGenVertexArrays(1, &vaoRect);
-	glBindVertexArray(vaoRect);
+	glGenVertexArrays(1, &vaoSquare);
+	glBindVertexArray(vaoSquare);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	const static float rect[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
+	const static float rect[] = { -.5, -.5, .5, -.5, .5, .5, -.5, .5 };
 	glBufferData(GL_ARRAY_BUFFER, sizeof(rect), rect, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(0);
+
+	GLint tmp;
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &tmp);
+	systemFramebuffer = tmp;
+	glGetIntegerv(GL_RENDERBUFFER_BINDING, &tmp);
+	systemRenderbuffer = tmp;
 }
 
-void Window::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
-	glBindVertexArray(opengl::vaoStream);
-	auto tmp = useSimpleShaderProgram();
-	const float vertexes[] = {
-		static_cast<float>(a.x * getScaleFactor()), static_cast<float>(a.y * getScaleFactor()),
-		static_cast<float>(b.x * getScaleFactor()), static_cast<float>(b.y * getScaleFactor()),
-		static_cast<float>(c.x * getScaleFactor()), static_cast<float>(c.y * getScaleFactor())
-	};
-	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
-	// STREAM because we're using the buffer only once
-	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertexes, GL_STREAM_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-}
-
-void Window::drawLine(Mat3 modelview, const Vec2 b) const {
+void Window::drawLine(Mat3 modelview, const Vec2 b, const Rgba color) const {
 	glBindVertexArray(vaoLine);
 	auto tmp =
-	    useSimpleShaderProgram(modelview.scale(static_cast<float>(b.x * jngl::getScaleFactor()),
-	                                           static_cast<float>(b.y * jngl::getScaleFactor())),
-	                           gShapeColor);
+	    ShaderCache::handle().useSimpleShaderProgram(modelview.scale(b * getScaleFactor()), color);
 	glDrawArrays(GL_LINES, 0, 2);
 }
 
-void Window::drawRect(const Vec2 pos, const Vec2 size) const {
-	glBindVertexArray(vaoRect);
-	pushMatrix();
-	translate(pos);
-	opengl::scale(static_cast<float>(size.x * getScaleFactor()),
-	              static_cast<float>(size.y * getScaleFactor()));
-	auto tmp = useSimpleShaderProgram();
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-	popMatrix();
-}
-
-void Window::drawRect(Mat3 modelview, const Vec2 size, Rgba color) const {
-	glBindVertexArray(vaoRect);
-	auto context = jngl::simpleShaderProgram->use();
-	glUniform4f(simpleColorUniform, color.getRed(), color.getGreen(), color.getBlue(),
-	            color.getAlpha());
-	glUniformMatrix3fv(
-	    simpleModelviewUniform, 1, GL_FALSE,
-	    modelview.scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor()).data);
-	glEnableVertexAttribArray(0);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-}
-
-void Window::drawRect(Mat3 modelview, const Vec2 size) const {
-	glBindVertexArray(vaoRect);
-	auto tmp = useSimpleShaderProgram(
-	    modelview.scale(size.x * jngl::getScaleFactor(), size.y * jngl::getScaleFactor()),
-	    gShapeColor);
+void Window::drawSquare(Mat3 modelview, Rgba color) const {
+	glBindVertexArray(vaoSquare);
+	auto context =
+	    ShaderCache::handle().useSimpleShaderProgram(modelview.scale(getScaleFactor()), color);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
 void Window::onControllerChanged(std::function<void()> callback) {
 	controllerChangedCallback = std::move(callback);
+}
+
+void Window::bindSystemFramebufferAndRenderbuffer() {
+	glBindFramebuffer(GL_FRAMEBUFFER, systemFramebuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, systemRenderbuffer);
 }
 
 } // namespace jngl

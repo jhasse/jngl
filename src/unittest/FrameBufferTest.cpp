@@ -1,11 +1,11 @@
-// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#include "../jngl/ScaleablePixels.hpp"
 #include "../jngl/FrameBuffer.hpp"
+#include "../jngl/ScaleablePixels.hpp"
+#include "../jngl/Sprite.hpp"
 #include "../jngl/matrix.hpp"
 #include "../jngl/shapes.hpp"
-#include "../jngl/sprite.hpp"
 #include "Fixture.hpp"
 
 #include <boost/ut.hpp>
@@ -150,6 +150,32 @@ boost::ut::suite _ = [] {
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
 		}
+	};
+
+	"FrameBufferInception"_test = [] {
+		// create a FrameBuffer while another FrameBuffer is bound:
+		Fixture f{ 1 };
+		std::optional<jngl::FrameBuffer> fb1 = jngl::FrameBuffer(30_sp, 30_sp);
+		std::optional<jngl::FrameBuffer> fb2;
+		{
+			const auto context = fb1->use();
+			fb2.emplace(30_sp, 30_sp);
+		}
+		fb1 = {};
+		{
+			const auto context = fb2->use();
+			jngl::drawRect({ 10, 0 }, { 10, 10 });
+		}
+		fb2->draw(0, 0);
+		expect(eq(f.getAsciiArt(), std::string(R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒                              ▒
+▒                              ▒
+▒                              ▒
+▒                              ▒
+▒                 ▒            ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)")));
 	};
 };
 } // namespace

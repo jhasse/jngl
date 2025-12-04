@@ -1,4 +1,4 @@
-// Copyright 2021-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Pixels class
 /// @file
@@ -37,4 +37,4 @@ Pixels operator/(Pixels, float);
 
 } // namespace jngl
 
-jngl::Pixels operator"" _px(unsigned long long);
+jngl::Pixels operator""_px(unsigned long long);

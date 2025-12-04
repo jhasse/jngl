@@ -1,4 +1,4 @@
-// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "TextLine.hpp"
@@ -28,22 +28,22 @@ void TextLine::draw() const {
 	//                                                                   |
 	//                                                                   ├ lineSpacing
 	//                                                                   |
-	//                   <- lineHeight = fontSize * LINE_HEIGHT_FACOTR   ┘
+	//                   <- lineHeight = fontSize * LINE_HEIGHT_FACTOR   ┘
 
 	// There's a spacing after each line using the normal setCenter would result in the
 	// vertical center being off. We have to adjust by "undoing" the added space for the line.
-	const double lineSpacing =
-	    double(ScaleablePixels{ fontImpl->getLineHeight() }) * (1 - 1 / LINE_HEIGHT_FACOTR);
+	const double lineSpacing = static_cast<double>(ScaleablePixels{ fontImpl->getLineHeight() }) *
+	                           (1 - 1 / LINE_HEIGHT_FACTOR);
 
 	fontImpl->print(ScaleablePixels(getX()), ScaleablePixels(getY() + lineSpacing / 2.), text);
 }
 
 void TextLine::draw(Mat3 modelview) const {
 	// see above
-	const double lineSpacing =
-	    double(ScaleablePixels{ fontImpl->getLineHeight() }) * (1 - 1 / LINE_HEIGHT_FACOTR);
+	const double lineSpacing = static_cast<double>(ScaleablePixels{ fontImpl->getLineHeight() }) *
+	                           (1 - 1 / LINE_HEIGHT_FACTOR);
 
-	fontImpl->print(modelview.translate(position + Vec2(0, lineSpacing / 2.)), text);
+	fontImpl->print(modelview.translate(position + Vec2(0, lineSpacing / 2.)), text, gFontColor);
 }
 
 void TextLine::setText(std::string text) {

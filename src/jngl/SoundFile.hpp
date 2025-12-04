@@ -81,8 +81,10 @@ public:
 	float progress() const;
 
 private:
-	std::shared_ptr<Sound> sound_;
-	std::vector<float> buffer_;
+	/// The last currently played Sound of this SoundFile. weak_ptr because we don't own it, but
+	/// Channel does.
+	std::weak_ptr<Sound> sound;
+	std::shared_ptr<std::vector<float>> buffer;
 };
 
 } // namespace jngl

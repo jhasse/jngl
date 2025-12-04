@@ -1,12 +1,13 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(jngl LANGUAGES C CXX)
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5) # required for ogg, see https://github.com/jhasse/jngl/issues/107
 
 if(MSVC)
-	string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /wd4244 /wd4305")
+	string(APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus /wd4244 /wd4305 /wd4267")
 else()
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fdiagnostics-color")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -fdiagnostics-color")
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
@@ -78,6 +79,14 @@ if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
 endif()
 option(JNGL_BUILD_WEBP_FROM_SOURCE "Build libwebp from source instead of using the system version" ${JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT})
 
+if(NOT IOS AND NOT ANDROID AND NOT EMSCRIPTEN)
+	set(JNGL_BUILD_SDL_FROM_SOURCE_DEFAULT OFF)
+	if(MSVC)
+		set(JNGL_BUILD_SDL_FROM_SOURCE_DEFAULT ON)
+	endif()
+	option(JNGL_BUILD_SDL_FROM_SOURCE "Build SDL from source instead of using the system version" ${JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT})
+endif()
+
 if (ANDROID)
 	find_package(oboe REQUIRED CONFIG)
 	target_link_libraries(jngl PRIVATE oboe::oboe)
@@ -107,10 +116,7 @@ elseif (UNIX)
 
 	target_link_libraries(jngl PRIVATE $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>)
 else() # Windows
-	set(JNGL_SDL2_DEFAULT OFF)
 	if(WINDOWS_STORE)
-		set(JNGL_SDL2_DEFAULT ON)
-
 		FetchContent_Declare(
 			angle
 			GIT_REPOSITORY https://github.com/jhasse/angle.git
@@ -125,10 +131,13 @@ else() # Windows
 			set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_OLD} CACHE BOOL "" FORCE)
 		endif()
 	endif()
-	option(JNGL_SDL2 "Use SDL2 instead of WinAPI" ${JNGL_SDL2_DEFAULT})
+	option(JNGL_WINAPI "Use WinAPI instead of SDL" OFF)
 
-	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _USE_MATH_DEFINES _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
-	if(JNGL_SDL2)
+	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
+	if(JNGL_WINAPI)
+		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp)
+		target_link_libraries(jngl PRIVATE opengl32)
+	else()
 		file(GLOB SRC src/sdl/*.cpp)
 		if(WINDOWS_STORE)
 			target_sources(jngl PRIVATE src/xinput/XinputController.cpp)
@@ -137,9 +146,6 @@ else() # Windows
 		endif()
 		target_sources(jngl PRIVATE src/win32/fontfile.cpp src/win32/message.cpp src/win32/other.cpp
 		                            src/win32/unicode.cpp)
-	else()
-		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp)
-		target_link_libraries(jngl PRIVATE opengl32)
 	endif()
 	target_sources(jngl PRIVATE ${SRC})
 	target_link_libraries(jngl PUBLIC winmm)
@@ -161,8 +167,7 @@ endif()
 if (UNIX AND NOT EMSCRIPTEN)
 	if(NOT APPLE AND NOT ANDROID)
         find_package(Fontconfig REQUIRED)
-		target_include_directories(jngl PUBLIC ${FONTCONFIG_INCLUDE_DIR})
-		target_link_libraries(jngl PRIVATE ${FONTCONFIG_LIBRARIES})
+		target_link_libraries(jngl PRIVATE Fontconfig::Fontconfig)
     endif()
 endif()
 
@@ -184,10 +189,17 @@ if(ANDROID OR MSVC OR IOS)
 endif()
 
 get_directory_property(hasParent PARENT_DIRECTORY)
+if(NOT hasParent)
+	option(JNGL_SANITIZE_ADDRESS "Enable AddressSanitizer" OFF)
+	if(JNGL_SANITIZE_ADDRESS)
+		string(APPEND CMAKE_CXX_FLAGS " -fsanitize=address")
+		string(APPEND CMAKE_LINKER_FLAGS " -fsanitize=address")
+	endif()
+endif()
 if(ANDROID OR MSVC OR IOS)
 	CPMAddPackage(NAME freetype
-		URL https://sourceforge.net/projects/freetype/files/freetype2/2.11.1/freetype-2.11.1.tar.xz/download
-		URL_HASH SHA256=3333ae7cfda88429c97a7ae63b7d01ab398076c3b67182e960e5684050f2c5c8
+		URL https://sourceforge.net/projects/freetype/files/freetype2/2.14.1/freetype-2.14.1.tar.xz/download
+		URL_HASH SHA256=32427e8c471ac095853212a37aef816c60b42052d4d9e48230bab3bdf2936ccc
 		OPTIONS "FT_DISABLE_HARFBUZZ 1"
 	)
 	if(hasParent)
@@ -205,11 +217,16 @@ else()
 	if(NOT IOS)
 		target_sources(jngl PRIVATE src/audio/sdl/engine.cpp)
 	endif()
-	if(UNIX AND NOT IOS AND NOT EMSCRIPTEN)
+	if(NOT JNGL_BUILD_SDL_FROM_SOURCE AND NOT IOS AND NOT EMSCRIPTEN)
 		find_package(PkgConfig REQUIRED)
-		pkg_check_modules(SDL2 REQUIRED sdl2)
-		target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
-		target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
+		pkg_check_modules(SDL sdl2)
+		if(SDL_FOUND)
+			target_include_directories(jngl PRIVATE ${SDL_INCLUDE_DIRS})
+			target_link_libraries(jngl PRIVATE ${SDL_LINK_LIBRARIES})
+		else()
+			message(WARNING "SDL not found, building from source")
+			set(JNGL_BUILD_SDL_FROM_SOURCE ON)
+		endif()
 	endif()
 
 	if(NOT IOS AND NOT EMSCRIPTEN)
@@ -229,19 +246,11 @@ else()
 		target_compile_definitions(jngl PRIVATE NOPNG)
 	endif()
 
-	if(MSVC)
-		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
-		if(JNGL_SDL2)
-			CPMAddPackage(NAME sdl2
-				URL https://www.libsdl.org/release/SDL2-2.28.4.zip
-				URL_HASH SHA1=0d9e0da0e935c4f0524cfd16d47d38b6045b9573
-				OPTIONS
-					"SDL_SENSOR OFF" # doesn't work with UWP
-			)
-		else()
-			CPMAddPackage(NAME sdl2
-				URL https://www.libsdl.org/release/SDL2-2.28.4.zip
-				URL_HASH SHA1=0d9e0da0e935c4f0524cfd16d47d38b6045b9573
+	if(JNGL_BUILD_SDL_FROM_SOURCE)
+		if(JNGL_WINAPI)
+			CPMAddPackage(NAME SDL
+				URL https://www.libsdl.org/release/SDL2-2.32.4.zip
+				URL_HASH SHA1=6342d3b7fa6580879c6d86faf426013da2d6dcfb
 				OPTIONS
 					"SDL_ATOMIC OFF"
 					"SDL_CPUINFO ON"
@@ -257,11 +266,21 @@ else()
 					"SDL_SHARED OFF"
 					"SDL_TIMERS OFF"
 			)
+		else()
+			CPMAddPackage(NAME SDL
+				URL https://www.libsdl.org/release/SDL2-2.32.4.zip
+				URL_HASH SHA1=6342d3b7fa6580879c6d86faf426013da2d6dcfb
+				OPTIONS
+					"SDL_SENSOR OFF" # doesn't work with UWP
+			)
 		endif()
 		target_link_libraries(jngl PRIVATE SDL2-static)
+	endif()
+	if(MSVC)
+		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
 		if(WINDOWS_STORE)
 			target_compile_definitions(jngl PUBLIC JNGL_UWP)
-			target_include_directories(jngl PUBLIC ${sdl2_SOURCE_DIR}/include ${sdl2_BINARY_DIR}/include) # TODO: This should be PRIVATE
+			target_include_directories(jngl PUBLIC ${SDL_SOURCE_DIR}/include ${SDL_BINARY_DIR}/include) # TODO: This should be PRIVATE
 			target_link_options(jngl PUBLIC $<IF:$<CONFIG:Debug>,/defaultlib:vccorlibd.lib /defaultlib:msvcrtd.lib,/defaultlib:vccorlib.lib /defaultlib:msvcrt.lib>)
 		endif()
 	elseif(IOS)
@@ -297,15 +316,13 @@ else()
 			if(WebP_FOUND)
 				target_link_libraries(jngl PRIVATE ${WEBP_LIBRARIES})
 			else()
-				target_compile_definitions(jngl PRIVATE NOWEBP)
+				message(WARNING "WebP not found, building from source")
+				set(JNGL_BUILD_WEBP_FROM_SOURCE ON)
 			endif()
 		endif()
 
 		find_package(PkgConfig)
 		if(PkgConfig_FOUND)
-			pkg_check_modules(SDL2 REQUIRED sdl2)
-			target_include_directories(jngl PRIVATE ${SDL2_INCLUDE_DIRS})
-			target_link_libraries(jngl PRIVATE ${SDL2_LINK_LIBRARIES})
 			if(JNGL_VIDEO)
 				if(APPLE)
 					# On macOS we'll build theora from source, since Homebrew's version crashes due
@@ -323,9 +340,11 @@ else()
 						target_include_directories(jngl PRIVATE ${THEORA_DEC_INCLUDE_DIRS})
 						target_link_libraries(jngl PRIVATE ${VORBIS_LINK_LIBRARIES} ${THEORA_DEC_LINK_LIBRARIES})
 
-						add_executable(videoplayer examples/videoplayer.cpp)
-						target_link_libraries(videoplayer PRIVATE jngl)
-						add_custom_command(TARGET videoplayer COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/verysmall.ogv "$<TARGET_FILE_DIR:videoplayer>")
+						if(NOT hasParent)
+							add_executable(videoplayer examples/videoplayer.cpp)
+							target_link_libraries(videoplayer PRIVATE jngl)
+							add_custom_command(TARGET videoplayer POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/verysmall.ogv "$<TARGET_FILE_DIR:videoplayer>")
+						endif()
 					endif()
 				endif()
 			endif()
@@ -382,7 +401,12 @@ else()
 
 				add_executable(audioplayer examples/audioplayer.cpp)
 				target_link_libraries(audioplayer PRIVATE jngl)
-				add_custom_command(TARGET audioplayer COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/test.ogg "$<TARGET_FILE_DIR:audioplayer>")
+				add_custom_command(TARGET audioplayer POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/test.ogg "$<TARGET_FILE_DIR:audioplayer>")
+				# add_executable(benchmark-shapes src/benchmarks/benchmark-shapes.cpp)
+				# target_link_libraries(benchmark-shapes jngl)
+
+				add_executable(jngl-test-forceQuit src/test/integration/forceQuit.cpp)
+				target_link_libraries(jngl-test-forceQuit PRIVATE jngl)
 			endif()
 		endif()
 		target_link_libraries(jngl-test jngl)
@@ -391,18 +415,19 @@ endif()
 
 if(JNGL_BUILD_WEBP_FROM_SOURCE)
 	CPMAddPackage(NAME webp
-		URL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.2.4.tar.gz
-		URL_HASH SHA1=24586e2a8e01a9cced102d68852661b964502429
+		URL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.5.0.tar.gz
+		URL_HASH SHA1=b21aa842136dc59a72a38776a5aa73f4d0b00ac5
 		OPTIONS
 			"WEBP_BUILD_ANIM_UTILS OFF"
 			"WEBP_BUILD_CWEBP OFF"
 			"WEBP_BUILD_DWEBP OFF"
+			"WEBP_BUILD_EXTRAS OFF"
 			"WEBP_BUILD_GIF2WEBP OFF"
 			"WEBP_BUILD_IMG2WEBP OFF"
+			"WEBP_BUILD_LIBWEBPMUX OFF"
 			"WEBP_BUILD_VWEBP OFF"
 			"WEBP_BUILD_WEBPINFO OFF"
 			"WEBP_BUILD_WEBPMUX OFF"
-			"WEBP_BUILD_EXTRAS OFF"
 	)
 	target_include_directories(jngl PRIVATE ${webp_SOURCE_DIR}/src)
 	target_link_libraries(jngl PRIVATE webpdecode webpdspdecode webputilsdecode)
@@ -448,4 +473,11 @@ if(NOT hasParent AND NOT WINDOWS_STORE)
 		target_compile_definitions(jngl-unittest PRIVATE BOOST_UT_DISABLE_MODULE)
 		add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
 	endif()
+endif()
+
+option(JNGL_CLANG_TIDY "Run clang-tidy on source files" OFF)
+if(JNGL_CLANG_TIDY)
+	set_target_properties(jngl          PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color")
+	set_target_properties(jngl-test     PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color")
+	set_target_properties(jngl-unittest PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color")
 endif()

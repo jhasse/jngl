@@ -24,4 +24,7 @@ void Work::onPauseEvent() {
 void Work::onLoad() {
 }
 
+void Work::onUnload() {
+}
+
 } // namespace jngl

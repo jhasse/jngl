@@ -1,10 +1,9 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Font class and related functions
 /// @file
 #pragma once
 
-#include "Rgb.hpp"
 #include "Rgba.hpp"
 #include "Vec2.hpp"
 
@@ -24,24 +23,31 @@ public:
 	/// You may set \a strokePercentage to a positive or negative % value to increase or decrease
 	/// the font size, without actually changing the position/size of the individual characters.
 	/// This can be used to draw an outlined text by e.g. first drawing with a 5% stroke and then
-	/// printing the same text with 0% (or even a negative stroke) over it.
+	/// printing the same text with 0% (or even a negative stroke) over it. jngl::OutlinedFont does
+	/// exactly that for you automatically.
 	///
 	/// Example: To increase the size of each character by 2px for a Font with a \a size of 20px,
 	/// you would pass 10.f for \a strokePercentage.
 	Font(const std::string& filename, unsigned int size, float strokePercentage = 0);
 
+	/// Draw \a text using \a modelview in \a color
+	void print(const Mat3& modelview, const std::string& text, Rgba color) const;
+
 	/// Uses the font to print something at \a x \a y. The color can be specified using setFontColor.
 	void print(const std::string&, int x, int y);
 
-	/// Draw \a text at \a position
+	/// Draw \a text at \a position. The color can be specified using setFontColor.
 	void print(const std::string& text, Vec2 position) const;
 
-	/// Draw \a text using \a modelview
+	/// Draw \a text using \a modelview. The color can be specified using setFontColor.
 	void print(const Mat3& modelview, const std::string& text) const;
 
 	/// Calculates the width of \a text in scale-independent pixels if it would be drawn with this
 	/// font
-	double getTextWidth(std::string_view);
+	double getTextWidth(std::string_view) const;
+
+	/// Returns the font size in scale-independent pixels
+	double getLineHeight() const;
 
 	/// Internal function
 	std::shared_ptr<FontImpl> getImpl();

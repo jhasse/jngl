@@ -1,4 +1,4 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Drawable.hpp"
@@ -12,6 +12,10 @@ namespace jngl {
 Drawable::Drawable() = default;
 
 Drawable::~Drawable() = default;
+
+Vec2 Drawable::getPos() const {
+	return { getX(), getY() };
+}
 
 void Drawable::setPos(const double x, const double y) {
 	setX(x);
@@ -76,7 +80,8 @@ void Drawable::setY(const double y) {
 }
 
 Vec2 Drawable::getSize() const {
-	return { double(width) / getScaleFactor(), double(height) / getScaleFactor() };
+	return { static_cast<double>(width) / getScaleFactor(),
+		     static_cast<double>(height) / getScaleFactor() };
 }
 
 float Drawable::getWidth() const {
@@ -90,19 +95,27 @@ float Drawable::getHeight() const {
 void Drawable::drawBoundingBox() const {
 	setColor(Color(255, 0, 0));
 	const double LINE_WIDTH = 2;
-	drawRect(getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2, LINE_WIDTH + getWidth(), LINE_WIDTH);
-	drawRect(getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2, LINE_WIDTH,
-	         LINE_WIDTH + getHeight());
-	drawRect(getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 + getHeight(),
-	         LINE_WIDTH + getWidth(), LINE_WIDTH);
-	drawRect(getX() - LINE_WIDTH / 2 + getWidth(), getY() - LINE_WIDTH / 2, LINE_WIDTH,
-	         LINE_WIDTH + getHeight());
+	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 },
+	         { LINE_WIDTH + getWidth(), LINE_WIDTH });
+	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 },
+	         { LINE_WIDTH, LINE_WIDTH + getHeight() });
+	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 + getHeight() },
+	         { LINE_WIDTH + getWidth(), LINE_WIDTH });
+	drawRect({ getX() - LINE_WIDTH / 2 + getWidth(), getY() - LINE_WIDTH / 2 },
+	         { LINE_WIDTH, LINE_WIDTH + getHeight() });
+}
+
+void Drawable::setWidth(const float w) {
+	width = w * static_cast<float>(getScaleFactor());
+}
+
+void Drawable::setHeight(const float h) {
+	height = h * static_cast<float>(getScaleFactor());
 }
 
 bool Drawable::contains(const jngl::Vec2 point) const {
-	return (getX() <= point.x && point.x < getX() + getWidth() &&
-	        getY() <= point.y && point.y < getY() + getHeight());
-
+	return (getX() <= point.x && point.x < getX() + getWidth() && getY() <= point.y &&
+	        point.y < getY() + getHeight());
 }
 
 } // namespace jngl

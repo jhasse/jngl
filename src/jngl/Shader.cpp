@@ -27,7 +27,8 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 #endif
 #ifdef GLAD_GL
 	if (const auto version = glGetString(GL_SHADING_LANGUAGE_VERSION)) {
-		std::istringstream tmp(reinterpret_cast<const char*>(version)); // e.g. "4.60 NVIDIA"
+		std::istringstream tmp(
+		    /*NOLINT*/ reinterpret_cast<const char*>(version)); // e.g. "4.60 NVIDIA"
 		uint32_t major;
 		uint32_t minor;
 		tmp >> major;
@@ -38,7 +39,7 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 		}
 	}
 #endif
-#if defined (JNGL_UWP) || defined (__EMSCRIPTEN__)
+#if defined (JNGL_UWP)
 	if (gles20Source) {
 		source = gles20Source;
 	} else {

@@ -1,4 +1,4 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Sound related functions
 /// @file
@@ -23,7 +23,7 @@ void play(const std::string& filename);
 /// Stop an OGG audio file if it's currently playing
 void stop(const std::string& filename);
 
-/// \return whether \a filename is currently playing
+/// \return whether \a filename is currently playing on any Channel
 ///
 /// When playing a SoundFile multiple times (i.e. calling jngl::play multiple times), this will
 /// return true if at least one SoundFile is still playing (i.e. hasn't finished and wasn't

@@ -1,4 +1,4 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -67,25 +67,29 @@ public:
 	/// continues to run you might want to pause the game if necessary.
 	virtual void onPauseEvent();
 
-	/// Gets called when the Work is activated by App::mainLoop()
+	/// Gets called when the Work is activated by the main loop
 	virtual void onLoad();
+
+	/// Gets called when the Work is deactivated by the main loop
+	virtual void onUnload();
 };
 
 /// Returns the current active Work or nullptr if none has been set
 std::shared_ptr<Work> getWork();
 
-/// Sets the passed Work to be active in App::mainLoop()
+/// Sets the passed Work to be active in the main loop
+/// \deprecated Use setScene(std::shared_ptr<Scene>) instead
+[[deprecated("Use setScene(std::shared_ptr<Scene>) instead")]]
 void setWork(std::shared_ptr<Work> work);
 
 /// The same as setWork(std::shared_ptr<Work>) but creates the Work for you
 template <class T, class... Args>
-void setWork(Args&&... args) {
-	setWork(std::make_shared<T>(std::forward<Args>(args)...));
+T& setWork(Args&&... args) {
+	auto shared = std::make_shared<T>(std::forward<Args>(args)...);
+	auto& rtn = *shared;
+	setScene(std::move(shared));
+	return rtn;
 }
-
-/// \deprecated Use setWork(std::shared_ptr<Work>) instead
-[[deprecated("Use setWork(std::shared_ptr<Work>) instead")]]
-void setWork(Work*);
 
 /// Resets the automatic frame limiter of App::mainLoop().
 ///

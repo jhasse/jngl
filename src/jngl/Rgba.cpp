@@ -1,4 +1,4 @@
-// Copyright 2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Rgba.hpp"
 
@@ -8,6 +8,10 @@ namespace jngl {
 
 Rgba::Rgba(float red, float green, float blue, float alpha)
 : red(red), green(green), blue(blue), alpha(alpha) {
+}
+
+Rgba::Rgba(float red, float green, float blue, Alpha alpha)
+: red(red), green(green), blue(blue), alpha(alpha.getAlpha()) {
 }
 
 Rgba::Rgba(const Rgb color, const Alpha alpha)
@@ -73,6 +77,6 @@ Rgba interpolate(Rgba a, Rgba b, float t) {
 
 } // namespace jngl
 
-jngl::Rgba operator"" _rgba(const unsigned long long hex) {
+jngl::Rgba operator""_rgba(const unsigned long long hex) {
 	return jngl::Rgba::u8((hex >> 24) % 256, (hex >> 16) % 256, (hex >> 8) % 256, hex % 256);
 }

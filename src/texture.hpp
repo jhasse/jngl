@@ -1,14 +1,9 @@
 // Copyright 2010-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #pragma once
 
-#include "jngl/ShaderProgram.hpp"
 #include "opengl.hpp"
 
-#include <memory>
-#include <string>
-#include <unordered_map>
 #include <vector>
 
 namespace jngl {
@@ -33,13 +28,8 @@ public:
 	[[nodiscard]] GLuint getID() const;
 	[[nodiscard]] float getPreciseWidth() const;
 	[[nodiscard]] float getPreciseHeight() const;
-	static void unloadShader();
 	void setBytes(const unsigned char*, int width, int height) const;
 
-	static ShaderProgram* textureShaderProgram;
-	static Shader* textureVertexShader;
-	static int shaderSpriteColorUniform;
-	static int modelviewUniform;
 private:
 	GLuint texture_ = 0;
 	GLuint vertexBuffer_ = 0;

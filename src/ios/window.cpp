@@ -45,6 +45,12 @@ void Window::UpdateInput() {
 		if (controllerChangedCallback) {
 			controllerChangedCallback();
 		}
+		for (const auto& job : jobs) {
+			job->onControllersChanged();
+		}
+		if (currentWork_) {
+			currentWork_->onControllersChanged();
+		}
 	}
 }
 

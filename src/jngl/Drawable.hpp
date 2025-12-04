@@ -1,4 +1,4 @@
-// Copyright 2012-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Drawable class
 /// @file
@@ -8,9 +8,15 @@
 
 namespace jngl {
 
+class Sprite;
+class Text;
+
 /// Base class for drawable objects with a position and a rectangle size
 class Drawable {
 public:
+	friend class Sprite;
+	friend class Text;
+
 	Drawable();
 	Drawable(const Drawable&) = default;
 	Drawable& operator=(const Drawable&) = default;
@@ -23,6 +29,9 @@ public:
 
 	/// Called when drawing a frame
 	virtual void draw() const = 0;
+
+	/// Returns position (not center)
+	Vec2 getPos() const;
 
 	/// Sets the position of the top-left of the Drawable
 	virtual void setPos(double x, double y);
@@ -81,7 +90,17 @@ public:
 	bool contains(jngl::Vec2 point) const;
 
 protected:
+	/// Override width (in screen coordinates)
+	void setWidth(float);
+
+	/// Override height (in screen coordinates)
+	void setHeight(float);
+
+private:
+	/// Position in pixel, NOT screen coordinates
 	Vec2 position;
+
+	/// Width and height in pixel, NOT screen coordinates
 	float width = 0;
 	float height = 0;
 };

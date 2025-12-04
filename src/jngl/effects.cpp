@@ -1,4 +1,4 @@
-// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "effects.hpp"
@@ -7,10 +7,33 @@
 #include "other.hpp"
 
 #include <cmath>
+#include <numbers>
 
 namespace jngl {
 
 Effect::~Effect() = default;
+
+void Effect::updateModelview(Mat3&) const {
+}
+
+UpdateModelview::UpdateModelview(std::function<void(float t, Mat3&)> function)
+: function(std::move(function)) {
+}
+
+auto UpdateModelview::step() -> Action {
+	time += 1.f / static_cast<float>(getStepsPerSecond());
+	return Action::NONE;
+}
+
+void UpdateModelview::beginDraw() const {
+}
+
+void UpdateModelview::endDraw() const {
+}
+
+void UpdateModelview::updateModelview(Mat3& modelview) const {
+	function(time, modelview);
+}
 
 Zoom::Zoom(std::function<float(float)> function) : function(std::move(function)) {
 }
@@ -65,7 +88,7 @@ float linear(float t) {
 }
 
 float elastic(float t) {
-	const float c4 = (2 * M_PI) / 3;
+	const float c4 = (2 * std::numbers::pi) / 3;
 
 	return t <= 0 ? 0 : t >= 1 ? 1 : pow(2, -10 * t) * sin((t * 10 - 0.75) * c4) + 1;
 }

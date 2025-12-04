@@ -1,4 +1,4 @@
-// Copyright 2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #import "JNGLView.h"
@@ -8,7 +8,7 @@
 #include "../jngl.hpp"
 #include "../windowptr.hpp"
 #include "../jngl/AppParameters.hpp"
-#include "../jngl/sprite.hpp"
+#include "../jngl/Sprite.hpp"
 #include "windowimpl.hpp"
 #include "AppleController.h"
 

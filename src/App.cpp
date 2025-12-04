@@ -1,13 +1,13 @@
-// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "App.hpp"
 
 #include "jngl/AppParameters.hpp"
+#include "jngl/Scene.hpp"
 #include "jngl/ShaderProgram.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/window.hpp"
-#include "jngl/work.hpp"
 #include "log.hpp"
 #include "windowptr.hpp"
 
@@ -46,7 +46,8 @@ App::~App() {
 
 App& App::instance() {
 	if (!self) {
-		self = new App;
+		static App dummy; // e.g. for unit tests
+		self = &dummy;
 	}
 	return *self;
 }
@@ -65,9 +66,13 @@ void App::atExit(std::function<void()> f) {
 void App::callAtExitFunctions() {
 	auto tmp = std::move(callAtExit);
 	assert(callAtExit.empty());
-	for (const auto& f : tmp) {
-		f();
+
+	// destroy Singletons in the reverse order that they were created:
+	const auto end = tmp.rend();
+	for (auto it = tmp.rbegin(); it != end; ++it) {
+		(*it)();
 	}
+
 	if (!callAtExit.empty()) {
 		internal::warn("The destructor of a Singleton caused the creation of another Singleton. "
 		               "Use handleIfAlive inside of destructors of Singletons.");
@@ -81,17 +86,17 @@ std::string App::getDisplayName() const {
 
 void App::setDisplayName(const std::string& displayName) {
 	if (!impl) { // e.g. Android when using showWindow without jnglInit
-		new Finally(init({})); // leak
+		static Finally dummy(init({}));
 	}
 	impl->displayName = displayName;
 }
 
-void App::mainLoop() {
+uint8_t App::mainLoop() {
 	if (impl->steamAppId) {
 		initSteamAchievements();
 	}
 	internal::debug("Starting main loop for '{}'.", impl->displayName);
-	pWindow->mainLoop();
+	return pWindow->mainLoop();
 }
 
 bool App::isPixelArt() {
@@ -104,7 +109,7 @@ void App::setPixelArt(const bool pixelArt) {
 
 void App::registerShaderProgram(ShaderProgram* shaderProgram) {
 	if (!impl) { // unit tests
-		new Finally(init({})); // leak
+		static Finally dummy(init({}));
 	}
 	impl->shaderPrograms.insert(shaderProgram);
 }
@@ -124,7 +129,7 @@ void App::updateProjectionMatrix() const {
 #if !defined(__APPLE__) || !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE // iOS
 namespace internal {
 
-void mainLoop(AppParameters params) {
+uint8_t mainLoop(AppParameters params) {
 	auto context = App::instance().init(params);
 	if (auto id = params.steamAppId) {
 		jngl::initSteam(*id);
@@ -145,12 +150,11 @@ void mainLoop(AppParameters params) {
 	} else {
 		params.screenSize = { static_cast<double>(getDesktopWidth()),
 			                  static_cast<double>(getDesktopHeight()) };
-		fullscreen = true;
 	}
 	if (!fullscreen) {
 		// Make window as big as possible
-		const double scaleFactor = std::min((getDesktopWidth() * 0.925) / params.screenSize->x,
-		                                    (getDesktopHeight() * 0.925) / params.screenSize->y);
+		const double scaleFactor = std::min((getDesktopWidth() * 0.85) / params.screenSize->x,
+		                                    (getDesktopHeight() * 0.85) / params.screenSize->y);
 		if (scaleFactor > 1) {
 			setScaleFactor(std::floor(scaleFactor));
 		} else {
@@ -169,9 +173,10 @@ void mainLoop(AppParameters params) {
 		setScaleFactor(std::min(static_cast<double>(windowSize[0]) / params.screenSize->x,
 		                        static_cast<double>(windowSize[1]) / params.screenSize->y));
 	}
-	setWork(params.start());
-	App::instance().mainLoop();
+	setScene(params.start());
+	uint8_t exitcode = App::instance().mainLoop();
 	hideWindow();
+	return exitcode;
 }
 
 } // namespace internal

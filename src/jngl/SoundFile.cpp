@@ -1,4 +1,4 @@
-// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "SoundFile.hpp"
@@ -14,11 +14,9 @@
 #include "../main.hpp"
 #include "Channel.hpp"
 
-#include <algorithm>
 #include <cassert>
 #include <chrono>
 #include <stdexcept>
-#include <unordered_map>
 
 #define OV_EXCLUDE_STATIC_CALLBACKS
 #include <vorbis/vorbisfile.h>
@@ -31,24 +29,9 @@ namespace jngl {
 
 Audio::Audio()
 : mixer(std::make_shared<Mixer>()), pitchControl(audio::pitch(mixer)),
-  volumeControl(volume(pitchControl)), engine(volumeControl) {
+  volumeControl(std::make_shared<audio::VolumeControl>(pitchControl)), engine(volumeControl) {
 }
 Audio::~Audio() = default;
-
-void Audio::play(Channel& channel, std::shared_ptr<Sound> sound) {
-	channel.add(sound->getStream());
-	sounds_.erase(std::remove_if(sounds_.begin(), sounds_.end(),
-	                             [](const auto& s) { return !s->isPlaying(); }),
-	              sounds_.end());
-	sounds_.emplace_back(std::move(sound));
-}
-
-void Audio::stop(Channel& channel, std::shared_ptr<Sound>& sound) {
-	channel.remove(sound->getStream().get());
-	if (auto i = std::find(sounds_.begin(), sounds_.end(), sound); i != sounds_.end()) {
-		sounds_.erase(i);
-	}
-}
 
 void Audio::increasePauseDeviceCount() {
 	if (pauseDeviceCount == 0) {
@@ -94,7 +77,8 @@ void Audio::step() {
 	engine.step();
 }
 
-SoundFile::SoundFile(const std::string& filename, std::launch) {
+SoundFile::SoundFile(const std::string& filename, std::launch)
+: buffer(std::make_shared<std::vector<float>>()) {
 #ifdef _WIN32
 	FILE* const f = fopen(filename.c_str(), "rb");
 #else
@@ -129,19 +113,19 @@ SoundFile::SoundFile(const std::string& filename, std::launch) {
 			throw std::runtime_error("Error decoding OGG file (" + filename + ").");
 		}
 
-		size_t start = buffer_.size();
-		buffer_.resize(start + samples_read * 2);
+		size_t start = this->buffer->size();
+		this->buffer->resize(start + samples_read * 2);
 		for (std::size_t i = samples_read; i > 0;) {
 			i -= 1;
 			auto tmp = buffer[0][i];
-			buffer_[start + i * 2 + 0] = tmp;
-			buffer_[start + i * 2 + 1] = buffer[pInfo->channels == 1 ? 0 : 1][i];
+			(*this->buffer)[start + i * 2 + 0] = tmp;
+			(*this->buffer)[start + i * 2 + 1] = buffer[pInfo->channels == 1 ? 0 : 1][i];
 		}
 	}
 	if (pInfo->rate != jngl::audio::frequency) {
 		float resampleFactor =
 		    static_cast<float>(jngl::audio::frequency) / static_cast<float>(pInfo->rate);
-		auto newSize = static_cast<size_t>(static_cast<float>(buffer_.size()) * resampleFactor);
+		auto newSize = static_cast<size_t>(static_cast<float>(buffer->size()) * resampleFactor);
 		if (newSize % 2 != 0) {
 			++newSize;
 		}
@@ -153,23 +137,24 @@ SoundFile::SoundFile(const std::string& filename, std::launch) {
 			{
 				size_t originalLeftIndex = index * 2;
 				const float b =
-				    (originalLeftIndex + 2 < buffer_.size()) ? buffer_[originalLeftIndex + 2] : 0;
+				    (originalLeftIndex + 2 < buffer->size()) ? (*buffer)[originalLeftIndex + 2] : 0;
 				resampledData[i * 2] =
-				    buffer_[originalLeftIndex] * (1.0f - fraction) + b * fraction;
+				    (*buffer)[originalLeftIndex] * (1.0f - fraction) + b * fraction;
 			}
 			{
 				const size_t originalRightIndex = index * 2 + 1;
-				const float b =
-				    (originalRightIndex + 2 < buffer_.size()) ? buffer_[originalRightIndex + 2] : 0;
+				const float b = (originalRightIndex + 2 < buffer->size())
+				                    ? (*buffer)[originalRightIndex + 2]
+				                    : 0;
 				resampledData[i * 2 + 1] =
-				    buffer_[originalRightIndex] * (1.0f - fraction) + b * fraction;
+				    (*buffer)[originalRightIndex] * (1.0f - fraction) + b * fraction;
 			}
 		}
-		buffer_ = std::move(resampledData);
+		(*buffer) = std::move(resampledData);
 	}
 
 	internal::debug("Decoded {} ({:.2f} MB, {})", filename,
-	                buffer_.size() * sizeof(float) / 1024. / 1024.,
+	                static_cast<double>(buffer->size()) * sizeof(float) / 1024. / 1024.,
 #if !defined(__APPLE__) /* FIXME: Remove when AppleClang's libc++ supports this C++20 feature */   \
     && defined(__GNUC__) && __GNUC__ > 13 // Ubuntu 22.04's GCC doesn't fully support C++20
 	                std::chrono::duration_cast<std::chrono::seconds>(length())
@@ -185,8 +170,8 @@ SoundFile::SoundFile(SoundFile&& other) noexcept {
 	*this = std::move(other);
 }
 SoundFile& SoundFile::operator=(SoundFile&& other) noexcept {
-	sound_ = std::move(other.sound_);
-	buffer_ = std::move(other.buffer_);
+	sound = std::move(other.sound);
+	buffer = std::move(other.buffer);
 	return *this;
 }
 
@@ -195,8 +180,9 @@ void SoundFile::play() {
 }
 
 void SoundFile::play(Channel& channel) {
-	sound_ = std::make_shared<Sound>(buffer_);
-	Audio::handle().play(channel, sound_);
+	auto tmp = std::make_shared<Sound>(buffer);
+	channel.play(tmp);
+	sound = tmp;
 }
 
 void SoundFile::stop() {
@@ -204,14 +190,14 @@ void SoundFile::stop() {
 }
 
 void SoundFile::stop(Channel& channel) {
-	if (sound_) {
-		Audio::handle().stop(channel, sound_);
-		sound_.reset();
+	if (auto sound_ = sound.lock()) {
+		channel.stop(sound_);
+		sound.reset();
 	}
 }
 
 bool SoundFile::isPlaying() {
-	if (sound_) {
+	if (auto sound_ = sound.lock()) {
 		return sound_->isPlaying();
 	}
 	return false;
@@ -222,16 +208,19 @@ void SoundFile::loop() {
 }
 
 void SoundFile::loop(Channel& channel) {
-	if (sound_ && sound_->isLooping()) {
-		return;
+	if (auto sound_ = sound.lock()) {
+		if (sound_->isLooping()) {
+			return;
+		}
 	}
-	sound_ = std::make_shared<Sound>(buffer_);
-	sound_->loop();
-	Audio::handle().play(channel, sound_);
+	auto tmp = std::make_shared<Sound>(buffer);
+	tmp->loop();
+	sound = tmp;
+	channel.play(std::move(tmp));
 }
 
 void SoundFile::setVolume(float v) {
-	if (sound_) {
+	if (auto sound_ = sound.lock()) {
 		sound_->setVolume(v);
 	}
 }
@@ -240,21 +229,37 @@ void SoundFile::load() {
 }
 
 std::chrono::milliseconds SoundFile::length() const {
-	return std::chrono::milliseconds{ buffer_.size() * 1000 / jngl::audio::frequency /
+	return std::chrono::milliseconds{ buffer->size() * 1000 / jngl::audio::frequency /
 		                              2 /* stereo */ };
 }
 
 float SoundFile::progress() const {
-	return sound_ ? sound_->progress() : 0;
+	if (auto sound_ = sound.lock()) {
+		return sound_->progress();
+	}
+	return 0;
 }
 
-std::shared_ptr<SoundFile> Audio::getSoundFile(const std::string& filename, std::launch policy) {
+std::shared_ptr<SoundFile> Audio::getSoundFileIfLoaded(std::string_view filename) {
 	auto i = soundFiles.find(filename);
-	if (i == soundFiles.end()) { // sound hasn't been loaded yet?
-		soundFiles[filename] = std::make_shared<SoundFile>(pathPrefix + filename, policy);
-		return soundFiles[filename];
+	if (i == soundFiles.end()) {
+		FILE* file = fopen((pathPrefix + std::string(filename)).c_str(), "rb");
+		if (!file) {
+			throw std::runtime_error("File not found (" + std::string(filename) + ").");
+		}
+		fclose(file);
+		return nullptr;
 	}
 	return i->second;
+}
+
+std::shared_ptr<SoundFile> Audio::getSoundFile(std::string_view filename, std::launch policy) {
+	if (auto soundFile = getSoundFileIfLoaded(filename)) { // sound hasn't been loaded yet?
+		return soundFile;
+	}
+	return soundFiles
+	    .emplace(filename, std::make_shared<SoundFile>(pathPrefix + std::string(filename), policy))
+	    .first->second;
 }
 
 void play(const std::string& filename) {
@@ -262,7 +267,9 @@ void play(const std::string& filename) {
 }
 
 void stop(const std::string& filename) {
-	Audio::handle().getSoundFile(filename, std::launch::async)->stop();
+	if (auto sound = Audio::handle().getSoundFileIfLoaded(filename)) {
+		sound->stop();
+	}
 }
 
 Finally loadSound(const std::string& filename) {
@@ -271,7 +278,8 @@ Finally loadSound(const std::string& filename) {
 }
 
 bool isPlaying(const std::string& filename) {
-	return Audio::handle().getSoundFile(filename, std::launch::async)->isPlaying();
+	const auto soundFile = Audio::handle().getSoundFileIfLoaded(filename);
+	return soundFile && soundFile->isPlaying();
 }
 
 std::shared_ptr<SoundFile> loop(const std::string& filename) {
@@ -297,7 +305,8 @@ Finally pauseAudio() {
 		audio->increasePauseDeviceCount();
 		return Finally([audio]() { audio->decreasePauseDeviceCount(); });
 	}
-	return Finally(nullptr);
+	return Finally(nullptr); // FIXME: This is a bug if the Finally lives so long that the Audio
+	                         // object is created in time
 }
 
 Audio& GetAudio() {

@@ -9,6 +9,7 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
 
 struct THEORAPLAY_Io
 {
@@ -38,12 +39,14 @@ struct THEORAPLAY_VideoFrame {
 };
 
 struct THEORAPLAY_AudioPacket {
+	~THEORAPLAY_AudioPacket() noexcept;
+
 	unsigned int playms; /* playback start time in milliseconds. */
 	int channels;
 	int freq;
 	int frames;
 	float* samples; /* frames * channels float32 samples. */
-	struct THEORAPLAY_AudioPacket* next;
+	std::unique_ptr<THEORAPLAY_AudioPacket> next;
 };
 
 THEORAPLAY_Decoder* THEORAPLAY_startDecodeFile(const char* fname, unsigned int maxframes,
@@ -60,8 +63,7 @@ bool THEORAPLAY_hasAudioStream(THEORAPLAY_Decoder*);
 unsigned int THEORAPLAY_availableVideo(THEORAPLAY_Decoder*);
 unsigned int THEORAPLAY_availableAudio(THEORAPLAY_Decoder*);
 
-const THEORAPLAY_AudioPacket *THEORAPLAY_getAudio(THEORAPLAY_Decoder*);
-void THEORAPLAY_freeAudio(const THEORAPLAY_AudioPacket *item);
+std::unique_ptr<const THEORAPLAY_AudioPacket> THEORAPLAY_getAudio(THEORAPLAY_Decoder*);
 
 const THEORAPLAY_VideoFrame *THEORAPLAY_getVideo(THEORAPLAY_Decoder*);
 void THEORAPLAY_freeVideo(const THEORAPLAY_VideoFrame *item);

@@ -1,9 +1,9 @@
-// Copyright 2022-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2022-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "SteamAchievements.hpp"
 
 #include "../jngl/Achievement.hpp"
-#include "../jngl/debug.hpp"
+#include "../log.hpp"
 
 #include <stdexcept>
 
@@ -23,7 +23,7 @@ SteamAchievements::SteamAchievements()
 		throw std::runtime_error("SteamUser() returned nullptr");
 	}
 	if (!user->BLoggedOn()) {
-		debugLn("Steam user not logged on");
+		internal::debug("Steam user not logged on");
 		return;
 	}
 	const auto userStats = SteamUserStats();
@@ -46,7 +46,7 @@ void SteamAchievements::notify(const Achievement& achievement, int oldValue, int
 	if (initialized && newValue >= achievement.maxValue) {
 		SteamUserStats()->SetAchievement(achievement.id.c_str());
 		if (!SteamUserStats()->StoreStats()) {
-			debugLn("Error setting Steam achievement.");
+			internal::debug("Error setting Steam achievement.");
 		}
 	}
 	AchievementLayer::notify(achievement, oldValue, newValue);
@@ -64,7 +64,7 @@ void SteamAchievements::onUserStatsReceived(UserStatsReceived_t* callback) {
 
 void SteamAchievements::onUserStatsStored(UserStatsStored_t* callback) {
 	if (callback->m_eResult != k_EResultOK) {
-		debugLn("StoreStats() failed.");
+		internal::debug("StoreStats() failed.");
 	}
 }
 

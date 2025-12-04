@@ -1,15 +1,16 @@
-// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #include "../jngl/Finally.hpp"
+#include "../jngl/Sprite.hpp"
+#include "../jngl/input.hpp"
 #include "../jngl/other.hpp"
-#include "../jngl/sprite.hpp"
+#include "Fixture.hpp"
 
 #include <boost/ut.hpp>
 #include <filesystem>
 
-boost::ut::suite _ = [] {
-	using namespace boost::ut;
+boost::ut::suite suite = [] {
+	using namespace boost::ut; // NOLINT
 
 	"FinallyTest"_test = [] {
 		bool called = false;
@@ -65,5 +66,13 @@ boost::ut::suite _ = [] {
 	"readAsset"_test = [] {
 		expect(!jngl::readAsset("non existing file"));
 		expect(throws<std::runtime_error>([] { jngl::readAsset("/some/absolute/path"); }));
+	};
+
+	"keyDown"_test = [] {
+		Fixture f(1);
+		jngl::keyDown("a");
+		expect(throws<std::runtime_error>([] { jngl::keyDown("aa"); }));
+		jngl::keyDown("ä");
+		expect(throws<std::runtime_error>([] { jngl::keyDown("ää"); }));
 	};
 };

@@ -1,4 +1,4 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <algorithm>
@@ -7,6 +7,7 @@
 #include <jngl.hpp>
 #include <jngl/init.hpp>
 #include <map>
+#include <numbers>
 #include <optional>
 #include <sstream>
 #include <vector>
@@ -16,7 +17,7 @@ void testKeys();
 int performance = 1;
 double factor = 0;
 
-class AsyncLoad : public jngl::Work {
+class AsyncLoad : public jngl::Scene {
 public:
 	AsyncLoad() {
 		jngl::setSpriteAlpha(255);
@@ -34,7 +35,7 @@ private:
 	jngl::Sprite::Loader spriteAsync{ "../examples/bike/bg" };
 };
 
-class Test : public jngl::Work {
+class Test : public jngl::Scene {
 public:
 	explicit Test(const std::string& displayName)
 	: frameTime(jngl::getTime()), lastTime(jngl::getTime()), fb2(jngl::getWindowSize()),
@@ -48,7 +49,7 @@ public:
 		if (rotate > 360) {
 			rotate = 0;
 		}
-		factor = std::sin(rotate / 360 * M_PI);
+		factor = std::sin(rotate / 360 * std::numbers::pi);
 		logoWebp.setPos(-logoWebp.getWidth() * factor, -logoWebp.getHeight() * factor);
 		volume += static_cast<float>(jngl::getMouseWheel()) / 100.0f;
 		if (jngl::keyPressed('p') || jngl::keyPressed('P')) {
@@ -75,7 +76,7 @@ public:
 				}
 			}
 		}
-		if (jngl::keyPressed('m')) {
+		if (!jngl::keyDown(jngl::key::Shift) && jngl::keyPressed('m')) {
 			if (!music) {
 				music = std::make_unique<jngl::Channel>();
 			}
@@ -83,6 +84,12 @@ public:
 				music->stop("music.ogg");
 			} else {
 				music->play("music.ogg");
+			}
+		}
+		if (jngl::keyDown(jngl::key::Shift) && jngl::keyPressed('m')) {
+			if (music) {
+				music->stopAll();
+				assert(!jngl::isPlaying("music.ogg"));
 			}
 		}
 		if (jngl::keyPressed('l')) {
@@ -98,10 +105,16 @@ public:
 			}
 		}
 		if (jngl::keyPressed('g')) {
-			jngl::setWork<AsyncLoad>();
+			jngl::setWork<jngl::Fade>(std::make_shared<AsyncLoad>());
 		}
 		if (jngl::keyPressed('e')) {
 			jngl::errorMessage("Hello World!");
+		}
+		if (jngl::keyPressed('r')) {
+			achievement.increaseValue(5);
+		}
+		if (jngl::keyPressed('t')) {
+			achievement2.increaseValue(30);
 		}
 	}
 	void drawBackground() const;
@@ -121,15 +134,14 @@ public:
 			}
 		}
 		drawBackground();
-		jngl::setColor(0,0,0,255);
-		jngl::drawLine(jngl::modelview()
-		                   .translate({ 650, 450 })
-		                   .rotate(rotate / 360 * M_PI)
-		                   .translate({ -50, -50 }),
-		               { 100, 100 });
+		jngl::setColor(0, 0, 0, 255);
+		jngl::drawLine(
+		    jngl::modelview().translate({ 650, 450 }).rotate(rotate / 360 * std::numbers::pi),
+		    { -50, -50 }, { 50, 50 }, 1.f);
 		jngl::setSpriteAlpha(200);
-		auto rotatedMv =
-		    jngl::modelview().translate(jngl::getScreenSize() / 2).rotate(rotate / 180 * M_PI);
+		auto rotatedMv = jngl::modelview()
+		                     .translate(jngl::getScreenSize() / 2)
+		                     .rotate(rotate / 180 * std::numbers::pi);
 		jngl::popMatrix();
 		jngl::setSpriteAlpha(static_cast<unsigned char>(std::abs(factor * 255)));
 		if (useShader) {
@@ -151,8 +163,7 @@ public:
 		sstream << "SPS" << (jngl::getVerticalSync() ? " (V-SYNC)" : "") << ": "
 		        << jngl::getStepsPerSecond() << "\nFactor: " << factor
 		        << "\nSize of double: " << sizeof(double);
-		jngl::setColor(0, 0, 0);
-		jngl::drawRect(0, 0, 200, 62);
+		jngl::drawRect(jngl::modelview(), { 200, 62 }, 0x000000_rgb);
 		jngl::setFontColor(static_cast<unsigned char>(255 * (1 - factor)),
 		                   static_cast<unsigned char>(255 * factor), 255);
 		jngl::setFontByName("Courier New");
@@ -241,6 +252,14 @@ public:
 		}
 	}
 private:
+	void onFileDrop(const std::filesystem::path& file) override {
+		jngl::errorMessage(file.string() + " dropped on window.");
+	}
+	void onControllersChanged() override {
+		const auto controllers = jngl::getConnectedControllers();
+		jngl::info("Number of connected controllers: {}", controllers.size());
+	}
+
 	mutable bool drawOnFrameBuffer = false;
 	bool useShader = false;
 	mutable double rotate = 0;
@@ -257,6 +276,12 @@ private:
 	std::unique_ptr<jngl::Channel> music;
 	jngl::Font fontNormal{ "Arial.ttf", 12 };
 	jngl::Font fontStroke{ "Arial.ttf", 12, 5 };
+	jngl::Achievement achievement{
+		"JNGL_TEST_ACHIEVEMENT", "Pressed R", "Found easter egg", "jngl", 0, 42
+	};
+	jngl::Achievement achievement2{
+		"JNGL_TEST_ACHIEVEMENT2", "Pressed T", "Found another easter egg", "jngl", 0, 1000
+	};
 };
 
 jngl::AppParameters jnglInit() {
@@ -267,10 +292,6 @@ jngl::AppParameters jnglInit() {
 		jngl::info("Size of Desktop: {}x{}", jngl::getDesktopWidth(), jngl::getDesktopHeight());
 		jngl::info("Preferred language: {}", jngl::getPreferredLanguage());
 		jngl::info("Path of binary: {}", jngl::getBinaryPath());
-		jngl::onControllerChanged([]() {
-			const auto controllers = jngl::getConnectedControllers();
-			jngl::info("Number of connected controllers: {}", controllers.size());
-		});
 		return std::make_shared<Test>(displayName);
 	};
 	return params;
@@ -282,12 +303,13 @@ void Test::drawBackground() const {
 		const int size = performance * performance;
 		for (int x = 0; x < size; ++x) {
 			for (int y = 0; y < size; ++y) {
-				logoWebp.draw(
-				    jngl::modelview()
-				        .translate(jngl::Vec2((x + .5) * jngl::getScreenWidth() / size,
-				                              (y + .5) * jngl::getScreenHeight() / size))
-				        .scale(float(jngl::getScreenWidth() / size / jngl::getWidth("jngl")),
-				               float(jngl::getScreenHeight() / size / jngl::getHeight("jngl"))));
+				logoWebp.draw(jngl::modelview()
+				                  .translate(jngl::Vec2((x + .5) * jngl::getScreenWidth() / size,
+				                                        (y + .5) * jngl::getScreenHeight() / size))
+				                  .scale(static_cast<float>(jngl::getScreenWidth() / size /
+				                                            jngl::getWidth("jngl")),
+				                         static_cast<float>(jngl::getScreenHeight() / size /
+				                                            jngl::getHeight("jngl"))));
 			}
 		}
 	} else {
@@ -300,7 +322,9 @@ void Test::drawBackground() const {
 	jngl::setColor(255, 0, 0, 100);
 	jngl::drawTriangle({ 600, 30 }, { 700, 30 }, { 650, 130 });
 	jngl::setColor(0, 255, 0, 100);
-	jngl::drawRect(600, 400, 100, 100);
+	jngl::drawRect({ 600, 400 }, { 100, 100 });
+	jngl::drawRectOutline(jngl::modelview().translate({ 650, 450 }), { 40, 80 }, 1.f,
+	                      0x00000099_rgba);
 	jngl::setColor(0, 0, 255, 100);
 	jngl::drawEllipse(jngl::modelview().translate({ 80, 400 }), 50, 80);
 }
@@ -308,7 +332,9 @@ void Test::drawBackground() const {
 void drawMouse(const jngl::Vec2 mouse) {
 	jngl::setFontSize(30);
 	jngl::setFontColor(10, 10, 200, 200);
-	jngl::print(jngl::modelview().translate(mouse).rotate(-M_PI / 4).translate({ -8, -2 }), "↑");
+	jngl::print(
+	    jngl::modelview().translate(mouse).rotate(-std::numbers::pi / 4).translate({ -8, -2 }),
+	    "↑");
 	jngl::setFontSize(12);
 	jngl::reset();
 }
@@ -341,45 +367,18 @@ void testKeys() {
 	jngl::setRelativeMouseMode(true);
 	double xpos = 0;
 	double ypos = 0;
-	std::map<std::string, jngl::key::KeyType> keys;
-	keys["Left"] = jngl::key::Left;
-	keys["Up"] = jngl::key::Up;
-	keys["Right"] = jngl::key::Right;
-	keys["Down"] = jngl::key::Down;
-	keys["PageUp"] = jngl::key::PageUp;
-	keys["PageDown"] = jngl::key::PageDown;
-	keys["Home"] = jngl::key::Home;
-	keys["End"] = jngl::key::End;
-	keys["BackSpace"] = jngl::key::BackSpace;
-	keys["Tab"] = jngl::key::Tab;
-	keys["Clear"] = jngl::key::Clear;
-	keys["Return"] = jngl::key::Return;
-	keys["Pause"] = jngl::key::Pause;
-	keys["Escape"] = jngl::key::Escape;
-	keys["Delete"] = jngl::key::Delete;
-	keys["ControlL"] = jngl::key::ControlL;
-	keys["ControlR"] = jngl::key::ControlR;
-	keys["CapsLock"] = jngl::key::CapsLock;
-	keys["AltL"] = jngl::key::AltL;
-	keys["AltR"] = jngl::key::AltR;
-	keys["SuperL"] = jngl::key::SuperL;
-	keys["SuperR"] = jngl::key::SuperR;
-	keys["Space"] = jngl::key::Space;
-	keys["ShiftL"] = jngl::key::ShiftL;
-	keys["ShiftR"] = jngl::key::ShiftR;
-	keys["F1"] = jngl::key::F1;
-	keys["F2"] = jngl::key::F2;
-	keys["F3"] = jngl::key::F3;
-	keys["F4"] = jngl::key::F4;
-	keys["F5"] = jngl::key::F5;
-	keys["F6"] = jngl::key::F6;
-	keys["F7"] = jngl::key::F7;
-	keys["F8"] = jngl::key::F8;
-	keys["F9"] = jngl::key::F9;
-	keys["F10"] = jngl::key::F10;
-	keys["F11"] = jngl::key::F11;
-	keys["F12"] = jngl::key::F12;
-	keys["Any"] = jngl::key::Any;
+	std::vector<jngl::key::KeyType> keys{
+		jngl::key::Left,      jngl::key::Up,       jngl::key::Right,    jngl::key::Down,
+		jngl::key::PageUp,    jngl::key::PageDown, jngl::key::Home,     jngl::key::End,
+		jngl::key::BackSpace, jngl::key::Tab,      jngl::key::Clear,    jngl::key::Return,
+		jngl::key::Pause,     jngl::key::Escape,   jngl::key::Delete,   jngl::key::Ctrl,
+		jngl::key::CtrlL,     jngl::key::CtrlR,    jngl::key::CapsLock, jngl::key::Alt,
+		jngl::key::AltGr,     jngl::key::SuperL,   jngl::key::SuperR,   jngl::key::Space,
+		jngl::key::Shift,     jngl::key::ShiftL,   jngl::key::ShiftR,   jngl::key::F1,
+		jngl::key::F2,        jngl::key::F3,       jngl::key::F4,       jngl::key::F5,
+		jngl::key::F6,        jngl::key::F7,       jngl::key::F8,       jngl::key::F9,
+		jngl::key::F10,       jngl::key::F11,      jngl::key::F12,      jngl::key::Any,
+	};
 	std::vector<RecentlyPressedKey> recentlyPressedKeys;
 	std::string textInput;
 	while (jngl::running()) {
@@ -388,18 +387,17 @@ void testKeys() {
 		jngl::pushMatrix();
 		jngl::translate(-400, -300);
 		int y = 10;
-		for (const auto& it : keys) {
-			if (jngl::keyDown(it.second)) {
+		for (const auto& key : keys) {
+			if (jngl::keyDown(key)) {
 				jngl::setFontColor(0, 0, 0);
-			}
-			else {
+			} else {
 				jngl::setFontColor(150, 150, 150);
 			}
-			jngl::print(it.first, 100, y);
-			if (jngl::keyPressed(it.second)){
-				recentlyPressedKeys.emplace_back(it.first, 100, y);
+			jngl::print(jngl::keyToString(key), 100, y);
+			if (jngl::keyPressed(key)) {
+				recentlyPressedKeys.emplace_back(jngl::keyToString(key), 100, y);
 			}
-			y += 15;
+			y += 14;
 		}
 		y = 10;
 		const auto printChar = [&recentlyPressedKeys](const char c, const int x, const int y) {
@@ -459,12 +457,12 @@ void testKeys() {
 			return k.GetAlpha() <= 0;
 		}), end);
 		std::stringstream sstream;
-		sstream << "X: " << jngl::getMousePos().x << "\nY: " << jngl::getMousePos().y << std::endl;
+		sstream << "X: " << jngl::getMousePos().x << "\nY: " << jngl::getMousePos().y << '\n';
 		jngl::print(sstream.str(), 5, 5);
 		int controllerNr = 1;
 		for (const auto& controller : jngl::getConnectedControllers()) {
 			std::stringstream sstream;
-			sstream << "Controller " << controllerNr << " connected." << std::endl
+			sstream << "Controller " << controllerNr << " connected." << '\n'
 			        << "Trigger: " << controller->state(jngl::controller::LeftTrigger) << " " << controller->state(jngl::controller::RightTrigger)
 			        << "\nA: " << controller->down(jngl::controller::A)
 			        << " B: " << controller->down(jngl::controller::B)
@@ -505,8 +503,10 @@ void testKeys() {
 				auto circleModelview = jngl::modelview().translate(
 				    { 530, static_cast<double>(-40 + controllerNr * 110) });
 				jngl::drawEllipse(circleModelview, circleRadius, circleRadius);
-				jngl::setColor(255, 255, 255, 255);
-				jngl::drawCircle(circleModelview.translate(circleRadius * stick), 4);
+				const double length = boost::qvm::mag(stick);
+				jngl::drawCircle(circleModelview.translate(circleRadius * stick), 4,
+				                 length > 1 ? jngl::Rgba(1, 2 - length, 2 - length, 1)
+				                            : 0xffffffff_rgba);
 				jngl::translate(0, 2 * circleRadius + 10);
 			}
 

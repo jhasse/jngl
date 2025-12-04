@@ -1,10 +1,11 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Sprite class and related functions
 /// \file
 #pragma once
 
 #include "Drawable.hpp"
+#include "Finally.hpp"
 #include "Rgb.hpp"
 #include "Rgba.hpp"
 #include "ShaderProgram.hpp"
@@ -68,7 +69,7 @@ public:
 	///
 	/// Example:
 	/// \code
-	/// class MyGame : public jngl::Work {
+	/// class MyGame : public jngl::Scene {
 	///     void step() override {}
 	///     void draw() const override {
 	///         if (mySprite) {
@@ -122,8 +123,14 @@ public:
 	/// Draws the image centered using \a modelview
 	///
 	/// \param shaderProgram Passing `nullptr` uses the default.
-	void draw(Mat3 modelview, const ShaderProgram* = nullptr) const;
-	void draw(Mat3 modelview, Alpha, const ShaderProgram* = nullptr) const;
+	void draw(Mat3 modelview, const ShaderProgram* shaderProgram = nullptr) const;
+	void draw(Mat3 modelview, Alpha, const ShaderProgram* shaderProgram = nullptr) const;
+
+	/// Draws the sprite but multiplies each pixel's color with \a color
+	///
+	/// If the sprite is mostly white, this will make it appear in the specified color. If it's
+	/// black, nothing will change.
+	void draw(Mat3 modelview, Rgba color) const;
 
 	/// Draws the sprite using the specified shader program.
 	///
@@ -215,7 +222,9 @@ public:
 	/// \endcode
 	///
 	/// \param shaderProgram Passing `nullptr` uses the default.
-	void drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes,
+	void drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes,
+	              const ShaderProgram* shaderProgram = nullptr) const;
+	void drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes, jngl::Rgba color,
 	              const ShaderProgram* = nullptr) const;
 
 	void setBytes(const unsigned char*);
@@ -294,5 +303,7 @@ int getHeight(const std::string& filename);
 #endif
 Finally
 disableBlending();
+
+Finally drawOnlyIntoAlphaChannel();
 
 } // namespace jngl

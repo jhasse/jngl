@@ -1,10 +1,9 @@
-// Copyright 2009-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2009-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #pragma once
 
 #include "jngl/Rgba.hpp"
-#include "jngl/sprite.hpp"
+#include "jngl/Sprite.hpp"
 
 namespace jngl {
 

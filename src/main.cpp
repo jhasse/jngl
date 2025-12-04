@@ -1,28 +1,28 @@
-// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
 
 #include "App.hpp"
+#include "ShaderCache.hpp"
 #include "jngl/Alpha.hpp"
 #include "jngl/ScaleablePixels.hpp"
-#include "jngl/Shader.hpp"
+#include "jngl/Scene.hpp"
 #include "jngl/matrix.hpp"
 #include "jngl/other.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/shapes.hpp"
 #include "jngl/time.hpp"
 #include "jngl/window.hpp"
-#include "jngl/work.hpp"
 #include "log.hpp"
 #include "paths.hpp"
 #include "spriteimpl.hpp"
-#include "texture.hpp"
 #include "windowptr.hpp"
 
 #include <boost/qvm_lite.hpp>
 #include <cstddef>
 #include <fstream>
+#include <numbers>
 #include <sstream>
 #include <stack>
 
@@ -53,18 +53,15 @@ namespace jngl {
 
 std::string pathPrefix;
 optional<std::string> configPath;
-std::vector<std::string> args;
 Rgb backgroundColor(1, 1, 1);
 std::stack<jngl::Mat3> modelviewStack;
-std::unique_ptr<ShaderProgram> simpleShaderProgram;
-int simpleModelviewUniform;
-int simpleColorUniform;
 
 void clearBackgroundColor() {
 	glClearColor(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(),
 	             1);
 }
 
+namespace {
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
 #ifdef _WIN32
 void __stdcall
@@ -82,6 +79,7 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 	}
 }
 #endif
+} // namespace
 
 bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
@@ -97,91 +95,6 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 #endif
 
 	updateProjection(width, height, width, height);
-
-	Shader vertexShader(R"(#version 300 es
-		in mediump vec2 position;
-		uniform highp mat3 modelview;
-		uniform mediump mat4 projection;
-
-		void main() {
-			vec3 tmp = modelview * vec3(position, 1);
-			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-		})", Shader::Type::VERTEX, R"(#version 100
-		attribute mediump vec2 position;
-		uniform highp mat3 modelview;
-		uniform mediump mat4 projection;
-
-		void main() {
-			vec3 tmp = modelview * vec3(position, 1);
-			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-		})"
-	);
-	Shader fragmentShader(R"(#version 300 es
-		uniform lowp vec4 color;
-		out lowp vec4 outColor;
-
-		void main() {
-			outColor = color;
-		})", Shader::Type::FRAGMENT, R"(#version 100
-		uniform lowp vec4 color;
-
-		void main() {
-			gl_FragColor = color;
-		})"
-	);
-	simpleShaderProgram = std::make_unique<ShaderProgram>(vertexShader, fragmentShader);
-	simpleModelviewUniform = simpleShaderProgram->getUniformLocation("modelview");
-	simpleColorUniform = simpleShaderProgram->getUniformLocation("color");
-
-	{
-		Texture::textureVertexShader = new Shader(R"(#version 300 es
-			in mediump vec2 position;
-			in mediump vec2 inTexCoord;
-			uniform highp mat3 modelview;
-			uniform mediump mat4 projection;
-			out mediump vec2 texCoord;
-
-			void main() {
-				vec3 tmp = modelview * vec3(position, 1);
-				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-				texCoord = inTexCoord;
-			})", Shader::Type::VERTEX, R"(#version 100
-			attribute mediump vec2 position;
-			attribute mediump vec2 inTexCoord;
-			uniform highp mat3 modelview;
-			uniform mediump mat4 projection;
-			varying mediump vec2 texCoord;
-
-			void main() {
-				vec3 tmp = modelview * vec3(position, 1);
-				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-				texCoord = inTexCoord;
-			})");
-		Shader fragmentShader(R"(#version 300 es
-			uniform sampler2D tex;
-			uniform lowp vec4 spriteColor;
-
-			in mediump vec2 texCoord;
-
-			out lowp vec4 outColor;
-
-			void main() {
-				outColor = texture(tex, texCoord) * spriteColor;
-			})", Shader::Type::FRAGMENT, R"(#version 100
-			uniform sampler2D tex;
-			uniform lowp vec4 spriteColor;
-
-			varying mediump vec2 texCoord;
-
-			void main() {
-				gl_FragColor = texture2D(tex, texCoord) * spriteColor;
-			})");
-		Texture::textureShaderProgram =
-		    new ShaderProgram(*Texture::textureVertexShader, fragmentShader);
-		Texture::shaderSpriteColorUniform =
-		    Texture::textureShaderProgram->getUniformLocation("spriteColor");
-		Texture::modelviewUniform = Texture::textureShaderProgram->getUniformLocation("modelview");
-	}
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -244,7 +157,9 @@ void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth
 }
 
 WindowPointer pWindow;
+namespace {
 bool antiAliasingEnabled = true;
+} // namespace
 
 void showWindow(const std::string& title, const int width, const int height, bool fullscreen,
                 const std::pair<int, int> minAspectRatio,
@@ -265,14 +180,12 @@ void showWindow(const std::string& title, const int width, const int height, boo
 	pWindow->SetMouseVisible(isMouseVisible);
 	setAntiAliasing(antiAliasingEnabled);
 	pWindow->initGlObjects();
-	pWindow->resetFrameLimiter();
 }
 
 void hideWindow() {
 	if (pWindow) {
 		App::instance().callAtExitFunctions();
 	}
-	simpleShaderProgram.reset();
 	unloadAll();
 	pWindow.Delete();
 }
@@ -332,10 +245,21 @@ void quit() noexcept {
 	}
 }
 
+void forceQuit(const uint8_t exitcode) {
+	if (!canQuit()) {
+		throw std::runtime_error("Quitting the main loop is not supported on this platform!");
+	}
+	pWindow->forceQuit(exitcode);
+}
+
 void cancelQuit() {
 	if (pWindow) {
 		pWindow->cancelQuit();
 	}
+}
+
+Rgb getBackgroundColor() {
+	return backgroundColor;
 }
 
 void setBackgroundColor(const jngl::Rgb color) {
@@ -347,7 +271,7 @@ void setBackgroundColor(const jngl::Rgb color) {
 
 void setBackgroundColor(const unsigned char red, const unsigned char green,
                         const unsigned char blue) {
-	setBackgroundColor(Color{ red, green, blue });
+	setBackgroundColor(Rgb::u8(red, green, blue));
 }
 
 Vec2 getMousePos() {
@@ -378,14 +302,53 @@ int getMouseY() {
 }
 
 bool keyDown(const key::KeyType key) {
+	if (key == key::Ctrl) {
+		return keyDown(key::ControlL) || keyDown(key::ControlR);
+	}
+	if (key == key::Shift) {
+		return keyDown(key::ShiftL) || keyDown(key::ShiftR);
+	}
 	return pWindow->getKeyDown(key);
 }
 
 bool keyPressed(const key::KeyType key) {
+	if (key == key::Ctrl) {
+		return keyPressed(key::ControlL) || keyPressed(key::ControlR);
+	}
+	if (key == key::Shift) {
+		return keyPressed(key::ShiftL) || keyPressed(key::ShiftR);
+	}
 	return pWindow->getKeyPressed(key);
 }
 
 bool keyDown(const std::string& key) {
+	const static auto TOO_LONG = "Only pass one character.";
+	if (key[0] & 0x80) { // first bit (Check if this is an Unicode character)
+		// sourceEnd has to be the next character after the utf-8 sequence
+		const static auto ERROR_MSG = "Invalid UTF-8 string!";
+		if (key.size() < 2) {
+			throw std::runtime_error(ERROR_MSG);
+		}
+		if (key[0] & 0x20) { // third bit
+			if (key.size() < 3) {
+				throw std::runtime_error(ERROR_MSG);
+			}
+			if (key[0] & 0x10) {
+				if (key.size() < 4) { // fourth bit
+					throw std::runtime_error(ERROR_MSG);
+				}
+				if (key.size() > 4) {
+					throw std::runtime_error(TOO_LONG);
+				}
+			} else if (key.size() > 3) {
+				throw std::runtime_error(TOO_LONG);
+			}
+		} else if (key.size() > 2) {
+			throw std::runtime_error(TOO_LONG);
+		}
+	} else if (key.size() > 1) {
+		throw std::runtime_error(TOO_LONG);
+	}
 	return pWindow->getKeyDown(key);
 }
 
@@ -508,7 +471,7 @@ void reset() {
 }
 
 void rotate(const double degree) {
-	boost::qvm::rotate_z(opengl::modelview, degree * M_PI / 180.);
+	boost::qvm::rotate_z(opengl::modelview, degree * std::numbers::pi / 180.);
 }
 
 void translate(const double x, const double y) {
@@ -535,28 +498,50 @@ void popMatrix() {
 
 void drawRect(const double xposition, const double yposition, const double width,
               const double height) {
-	pWindow->drawRect(Vec2{ xposition, yposition }, { width, height });
+	drawRect(Vec2{ xposition, yposition }, { width, height });
 }
 
 void drawRect(const Vec2 position, const Vec2 size) {
-	pWindow->drawRect(position, size);
+	pWindow->drawSquare(modelview().translate(position + size / 2).scale(size), gShapeColor);
 }
 
-void drawRect(const Mat3& modelview, const Vec2 size, const Color color) {
-	pWindow->drawRect(modelview, size, Rgba(color, Alpha(gShapeColor.getAlpha())));
+void drawRect(const Mat3& modelview, const Vec2 size, const Rgb color) {
+	drawRect(modelview, size, Rgba(color, Alpha(gShapeColor.getAlpha())));
 }
 
-void drawRect(const Mat3& modelview, const Vec2 size, const Rgba color) {
-	pWindow->drawRect(modelview, size, color);
+void drawRect(Mat3 modelview, const Vec2 size, const Rgba color) {
+	pWindow->drawSquare(modelview.translate(size / 2).scale(size), color);
+}
+
+void drawSquare(const Mat3& modelview, Rgba color) {
+	pWindow->drawSquare(modelview, color);
+}
+
+void drawRectOutline(Mat3 modelview, Vec2 size, float lineWidth, Rgba color) {
+	drawLine(modelview.translate({ -size.x / 2., -size.y / 2. }), { size.x, 0 }, lineWidth, color);
+	drawLine(modelview, { 0, size.y }, lineWidth, color);
+	drawLine(modelview.translate(size), { 0, -size.y }, lineWidth, color);
+	drawLine(modelview, { -size.x, 0 }, lineWidth, color);
+}
+
+void drawSquareOutline(Mat3 modelview, float lineWidth, Rgba color) {
+	drawLine(modelview.translate({ -.5, -.5 }), { 1, 0 }, lineWidth / modelview.data[4], color);
+	drawLine(modelview, { 0, 1 }, lineWidth / modelview.data[0], color);
+	drawLine(modelview.translate({ 1, 1 }), { 0, -1 }, lineWidth / modelview.data[0], color);
+	drawLine(modelview, { -1, 0 }, lineWidth / modelview.data[4], color);
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
-	pWindow->drawTriangle(a, b, c);
+	ShaderCache::handle().drawTriangle(a, b, c);
 }
 
 void drawTriangle(const double A_x, const double A_y, const double B_x, const double B_y,
                   const double C_x, const double C_y) {
-	pWindow->drawTriangle({ A_x, A_y }, { B_x, B_y }, { C_x, C_y });
+	ShaderCache::handle().drawTriangle({ A_x, A_y }, { B_x, B_y }, { C_x, C_y });
+}
+
+void drawTriangle(Mat3 modelview, Rgba color) {
+	ShaderCache::handle().drawTriangle(modelview, color);
 }
 
 void setLineWidth(const float width) {
@@ -564,15 +549,50 @@ void setLineWidth(const float width) {
 }
 
 void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
-	drawLine(jngl::Vec2(xstart, ystart), jngl::Vec2(xend, yend));
+	pWindow->drawLine(jngl::modelview().translate(jngl::Vec2(xstart, ystart)),
+	                  jngl::Vec2(xend, yend) - jngl::Vec2(xstart, ystart), gShapeColor);
 }
 
 void drawLine(const Vec2 start, const Vec2 end) {
-	pWindow->drawLine(jngl::modelview().translate(start), end - start);
+	pWindow->drawLine(jngl::modelview().translate(start), end - start, gShapeColor);
+}
+
+void drawLine(const Vec2 start, const Vec2 end, float lineWidth) {
+	drawLine(jngl::modelview().translate(start), end - start, lineWidth, gShapeColor);
+}
+
+void drawLine(const Vec2 start, const Vec2 end, float lineWidth, Rgba color) {
+	drawLine(jngl::modelview().translate(start), end - start, lineWidth, color);
+}
+
+void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end) {
+	pWindow->drawLine(modelview.translate(start), end - start, gShapeColor);
+}
+
+void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end, float lineWidth) {
+	drawLine(modelview.translate(start), end - start, lineWidth, gShapeColor);
+}
+
+void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end, float lineWidth, Rgba color) {
+	drawLine(modelview.translate(start), end - start, lineWidth, color);
 }
 
 void drawLine(const Mat3& modelview, const Vec2 end) {
-	pWindow->drawLine(modelview, end);
+	pWindow->drawLine(modelview, end, gShapeColor);
+}
+
+void drawLine(const Mat3& modelview, const Vec2 end, Rgba color) {
+	pWindow->drawLine(modelview, end, color);
+}
+
+void drawLine(Mat3 modelview, const Vec2 end, float lineWidth, Rgba color) {
+	if (end.isNull()) {
+		return;
+	}
+	pWindow->drawSquare(modelview.rotate(std::atan2(end.x, -end.y))
+	                        .scale(lineWidth, boost::qvm::mag(end))
+	                        .translate({ 0, -0.5 }),
+	                    color);
 }
 
 void drawPoint(const double x, const double y) {
@@ -609,6 +629,7 @@ void setAntiAliasing(bool enabled) {
 	antiAliasingEnabled = enabled;
 #else
 	internal::warn("Anti-Aliasing not available!");
+	(void)enabled;
 #endif
 }
 
@@ -623,6 +644,14 @@ Finally load(const std::string& filename) {
 		return loadSound(filename);
 	}
 	return loadSprite(filename);
+}
+
+void setScene(std::shared_ptr<Scene> scene) {
+	pWindow->setWork(std::move(scene));
+}
+
+std::shared_ptr<Scene> getNextScene() {
+	return pWindow->getNextScene();
 }
 
 void setWork(std::shared_ptr<Work> work) {
@@ -665,28 +694,29 @@ std::string internal::getConfigPath() {
 	}
 #ifndef IOS
 	std::stringstream path;
-#if defined(__APPLE__)
-	path << getSystemConfigPath() << "/" << App::instance().getDisplayName() << "/";
-#elif defined(ANDROID)
-	path << getSystemConfigPath() << "/";
-#elif defined(_WIN32)
-	path << getSystemConfigPath() << "\\" << App::instance().getDisplayName() << "\\";
+#if defined(ANDROID)
+	path << getSystemConfigPath() << '/';
 #elif defined(__EMSCRIPTEN__)
 	path << "/working1/";
 #else
-	path << getenv("HOME") << "/.config/" << App::instance().getDisplayName() << "/"; // NOLINT
+#if defined(__APPLE__) || defined(_WIN32)
+	path << getSystemConfigPath() << "/";
+#else
+	path << getenv("HOME") << "/.config/"; // NOLINT
+#endif
+	auto appDir = App::instance().getDisplayName();
+	std::string invalid_chars = "\\/:?\"<>|*";
+	for (const char c : invalid_chars) {
+		appDir.erase(std::remove(appDir.begin(), appDir.end(), c), appDir.end());
+	}
+	if (appDir.empty()) {
+		throw std::runtime_error("Invalid display name: " + App::instance().getDisplayName());
+	}
+	path << appDir << "/";
 #endif
 	return *(configPath = path.str());
 #endif
 	throw std::runtime_error("Couldn't get config path. Has the app been started?");
-}
-
-void setArgs(std::vector<std::string> args) {
-	jngl::args = std::move(args);
-}
-
-std::vector<std::string> getArgs() {
-	return args;
 }
 
 std::string getConfigPath() {
@@ -800,25 +830,24 @@ void writeConfig(const std::string& key, const std::string& value) {
 }
 #endif
 
-ShaderProgram::Context useSimpleShaderProgram() {
-	return useSimpleShaderProgram(opengl::modelview, gShapeColor);
-}
-
-ShaderProgram::Context useSimpleShaderProgram(const Mat3& modelview, Rgba color) {
-	auto context = jngl::simpleShaderProgram->use();
-	glUniform4f(simpleColorUniform, color.getRed(), color.getGreen(), color.getBlue(),
-	            color.getAlpha());
-	glUniformMatrix3fv(simpleModelviewUniform, 1, GL_FALSE, modelview.data);
-
-	assert(simpleShaderProgram->getAttribLocation("position") == 0);
-	glEnableVertexAttribArray(0);
-
-	return context;
-}
-
 int round(double v) {
 	assert(!std::isnan(v));
 	return static_cast<int>(std::lround(v));
+}
+
+int round(float v) {
+	assert(!std::isnan(v));
+	return static_cast<int>(std::lround(v));
+}
+
+int utf8Length(std::string_view text) {
+	int length = 0;
+	for (const unsigned char c : text) {
+		if ((c & 0xC0) != 0x80) {
+			++length;
+		}
+	}
+	return length;
 }
 
 } // namespace jngl

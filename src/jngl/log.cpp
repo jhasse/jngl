@@ -1,4 +1,4 @@
-// Copyright 2024 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2024-2025 Jan Niklas Hasse <jhasse@gmail.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "log.hpp"
 
@@ -27,9 +27,19 @@ std::string shortenDisplayName() {
 }
 } // namespace
 
-void trace(const std::string& line) {
+void trace(const std::string& line [[maybe_unused]]) {
 #ifndef NDEBUG
-	internal::log(shortenDisplayName(), "\x1b[1;36mtrace\x1b[0m", line);
+	internal::log(shortenDisplayName(), "\x1b[37mtrace\x1b[0m", line);
+#endif
+}
+
+void debug(Vec2 v) {
+	debug("{}", v);
+}
+
+void debug(const std::string& line [[maybe_unused]]) {
+#ifndef NDEBUG
+	internal::log(shortenDisplayName(), "\x1b[36mdebug\x1b[0m", line);
 #endif
 }
 

@@ -1,11 +1,7 @@
 // Copyright 2018-2024 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #include "Video.hpp"
 
-#include <atomic>
-#include <cstring>
-#include <mutex>
 #include <stdexcept>
 
 #ifdef JNGL_VIDEO
@@ -19,12 +15,16 @@
 #include "../theoraplay/theoraplay.h"
 #include "Channel.hpp"
 #include "Shader.hpp"
+#include "ShaderProgram.hpp"
 #include "screen.hpp"
 #include "time.hpp"
 
 #include <algorithm>
+#include <atomic>
 #include <cmath>
+#include <cstring>
 #include <gsl/narrow>
+#include <mutex>
 
 namespace jngl {
 
@@ -291,7 +291,6 @@ private:
 				                   audio->samples + static_cast<ptrdiff_t>(audio->frames * 2));
 			}
 		}
-		THEORAPLAY_freeAudio(audio);
 		audio = THEORAPLAY_getAudio(decoder);
 	}
 
@@ -324,7 +323,7 @@ private:
 
 	THEORAPLAY_Decoder* decoder;
 	const THEORAPLAY_VideoFrame* video = nullptr;
-	const THEORAPLAY_AudioPacket* audio = nullptr;
+	std::unique_ptr<const THEORAPLAY_AudioPacket> audio;
 	double startTime;
 	double timePerFrame;
 

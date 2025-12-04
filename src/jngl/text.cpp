@@ -23,7 +23,7 @@ public:
 		this->font = std::move(font);
 	}
 	void draw(Mat3 modelview) const {
-		font->print(modelview.translate(position), text);
+		font->print(modelview.translate(position), text, gFontColor);
 	}
 	double getWidth() const {
 		return static_cast<double>(static_cast<ScaleablePixels>(width));

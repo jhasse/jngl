@@ -1,6 +1,5 @@
-// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #pragma once
 
 #include "jngl/Pixels.hpp"
@@ -12,10 +11,13 @@
 #include FT_STROKER_H
 
 #include <map>
+#include <memory>
 
 namespace jngl {
 
-constexpr double LINE_HEIGHT_FACOTR = 1. / .63;
+class Finally;
+
+constexpr double LINE_HEIGHT_FACTOR = 1. / .63;
 extern Rgba gFontColor;
 
 class Character {
@@ -44,7 +46,7 @@ public:
 	FontImpl(FontImpl&&) = delete;
 	FontImpl& operator=(FontImpl&&) = delete;
 	~FontImpl();
-	void print(Mat3 modelview, const std::string& text);
+	void print(Mat3 modelview, const std::string& text, Rgba color);
 	void print(ScaleablePixels x, ScaleablePixels y, const std::string& text);
 	Pixels getTextWidth(const std::string& text);
 	Pixels getLineHeight() const;

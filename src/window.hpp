@@ -1,9 +1,10 @@
-// Copyright 2007-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #pragma once
 
+#include "jngl/Scene.hpp"
 #include "jngl/input.hpp"
+#include "jngl/time.hpp"
 #include "opengl.hpp"
 
 #include <array>
@@ -41,6 +42,7 @@ public:
 	~Window();
 	bool isRunning() const;
 	void quit() noexcept;
+	void forceQuit(uint8_t exitcode);
 	void cancelQuit();
 	void UpdateInput();
 	void updateKeyStates();
@@ -48,6 +50,8 @@ public:
 	void SetRelativeMouseMode(bool relative);
 	bool getRelativeMouseMode() const;
 	void SetMouseVisible(bool visible);
+	void increaseMouseHiddenCount();
+	void decreaseMouseHiddenCount();
 	bool getMouseVisible() const;
 	bool isMultitouch() const;
 	std::vector<Vec2> getTouchPositions() const;
@@ -93,11 +97,15 @@ public:
 	std::string getFont() const;
 	std::shared_ptr<FontImpl> getFontImpl();
 	void setWork(std::shared_ptr<Work>);
-	void mainLoop();
+
+	/// Returns exitcode for process
+	[[nodiscard]] uint8_t mainLoop();
+
 	void stepIfNeeded();
 	void sleepIfNeeded();
 	void draw() const;
 	std::shared_ptr<Work> getWork();
+	std::shared_ptr<Scene> getNextScene() const;
 	void addJob(std::shared_ptr<Job>);
 	void removeJob(Job*);
 	std::shared_ptr<Job> getJob(const std::function<bool(Job&)>& predicate) const;
@@ -110,12 +118,10 @@ public:
 #endif
 	std::string getTextInput() const;
 	void initGlObjects();
-	static void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
-	void drawLine(Mat3 modelview, Vec2 b) const;
-	void drawRect(Vec2 pos, Vec2 size) const;
-	void drawRect(Mat3 modelview, Vec2 size, Rgba color) const;
-	void drawRect(Mat3 modelview, Vec2 size) const;
+	void drawLine(Mat3 modelview, Vec2 b, Rgba color) const;
+	void drawSquare(Mat3 modelview, Rgba color) const;
 	void onControllerChanged(std::function<void()>);
+	void bindSystemFramebufferAndRenderbuffer();
 
 	friend class WindowImpl;
 	std::unique_ptr<WindowImpl> impl;
@@ -133,9 +139,10 @@ private:
 	double timePerStep = 1.0 / 60.0;
 	double mouseWheel = 0;
 	GLuint vaoLine = 0;
-	GLuint vaoRect = 0;
+	GLuint vaoSquare = 0;
 	unsigned int maxStepsPerFrame = 3;
-	bool running = true;
+	bool shouldExit = false;
+	std::optional<int> forceExitCode;
 	bool fullscreen_;
 	bool isMouseVisible_ = true;
 	bool relativeMouseMode = false;
@@ -169,26 +176,33 @@ private:
 	std::shared_ptr<Work> newWork_;
 	std::vector<std::shared_ptr<Job>> jobs;
 	std::vector<Job*> jobsToRemove;
-	unsigned int stepsPerFrame;
 	double sleepPerFrame = 0; // in seconds
-	double sleepCorrectionFactor;
 	double timeSleptSinceLastCheck = 0;
 	unsigned int numberOfSleeps = 0;
 	unsigned int previousStepsPerFrame = 1;
-	double lastCheckTime;
-	unsigned int stepsSinceLastCheck;
+	int mouseHiddenCount = 0;
 
-	/// When VSYNC is active we will try to find out to what FPS/Hz the display is limiting us
-	double maxFPS;
+	struct FrameLimiterData {
+		unsigned int stepsPerFrame = 1;
+		double sleepCorrectionFactor = 1;
+		double lastCheckTime = getTime();
+		unsigned int stepsSinceLastCheck = 0;
 
-	/// How often the frame limiter has run
-	unsigned int numberOfChecks;
+		/// When VSYNC is active we will try to find out to what FPS/Hz the display is limiting us
+		double maxFPS = 300;
+
+		/// How often the frame limiter has run
+		unsigned int numberOfChecks = 0;
+	} frameLimiter;
 
 	bool multitouch = false;
 
 	// <fontSize, <fontName, FontImpl>>
 	std::map<int, std::unordered_map<std::string, std::shared_ptr<FontImpl>>> fonts_;
 	std::vector<std::function<void()>> updateInputCallbacks;
+
+	GLuint systemFramebuffer = 0;
+	GLuint systemRenderbuffer = 0;
 
 #ifdef JNGL_PERFORMANCE_OVERLAY
 	double lastStepDuration = 0;

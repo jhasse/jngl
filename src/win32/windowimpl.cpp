@@ -1,4 +1,4 @@
-// Copyright 2007-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/ImageData.hpp"
@@ -32,15 +32,15 @@ void setProcessSettings() {
 
 class WindowImpl {
 public:
-	std::shared_ptr<std::remove_pointer<HGLRC>::type> pRenderingContext_;
-	std::shared_ptr<std::remove_pointer<HWND>::type> pWindowHandle_;
-	std::shared_ptr<std::remove_pointer<HDC>::type> pDeviceContext_;
+	std::shared_ptr<std::remove_pointer_t<HGLRC>> pRenderingContext_;
+	std::shared_ptr<std::remove_pointer_t<HWND>> pWindowHandle_;
+	std::shared_ptr<std::remove_pointer_t<HDC>> pDeviceContext_;
 	int arbMultisampleFormat_ = 0;
 	bool touchscreenActive = false;
 	int relativeX = 0;
 	int relativeY = 0;
 	std::function<void()> distinguishLeftRight;
-	Window* window;
+	Window* window = nullptr;
 	std::atomic_bool clearInputAfterFocusLoss{false};
 
 	static void ReleaseDC(HWND, HDC);
@@ -142,8 +142,7 @@ static GLADapiproc gladGlGetProc(void* user, const char* name) {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
-: impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), isMouseVisible_(true),
-  relativeMouseMode(false), anyKeyPressed_(false), width_(width), height_(height),
+: impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), width_(width), height_(height),
   fontName_(GetFontFileByName("Arial")) {
 	impl->window = this;
 	impl->distinguishLeftRight = [this]() {
@@ -174,7 +173,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 
 		HINSTANCE hInstance = GetModuleHandle(nullptr);
 		wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-		wc.lpfnWndProc = (WNDPROC)WndProc;
+		wc.lpfnWndProc = static_cast<WNDPROC>(WndProc);
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
 		wc.hInstance = hInstance;
@@ -278,7 +277,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		if (!pixelFormat) {
 			throw std::runtime_error("Can't find a suitable PixelFormat.");
 		}
-		if (!SetPixelFormat(impl->pDeviceContext_.get(), pixelFormat, &pfd)) {
+		if (!SetPixelFormat(impl->pDeviceContext_.get(), static_cast<int>(pixelFormat), &pfd)) {
 			throw std::runtime_error("Can't set the PixelFormat.");
 		}
 		impl->pRenderingContext_.reset(wglCreateContext(impl->pDeviceContext_.get()),
@@ -756,7 +755,7 @@ std::string getPreferredLanguage() {
 }
 
 void openURL(const std::string& url) {
-	ShellExecute(0, 0, utf8ToUtf16(url).c_str(), 0, 0, SW_SHOW);
+	ShellExecute(nullptr, nullptr, utf8ToUtf16(url).c_str(), nullptr, nullptr, SW_SHOW);
 }
 
 void setCursor(Cursor) {}

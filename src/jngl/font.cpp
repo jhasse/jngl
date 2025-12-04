@@ -1,4 +1,4 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "font.hpp"
@@ -41,6 +41,10 @@ Font::Font(const std::string& filename, unsigned int size, float strokePercentag
 : impl(new FontImpl(filename, size, strokePercentage)) {
 }
 
+void Font::print(const Mat3& modelview, const std::string& text, Rgba color) const {
+	impl->print(modelview, text, color);
+}
+
 void Font::print(const std::string& text, int x, int y) {
 	impl->print(ScaleablePixels(x), ScaleablePixels(y), text);
 }
@@ -50,11 +54,15 @@ void Font::print(const std::string& text, const Vec2 position) const {
 }
 
 void Font::print(const Mat3& modelview, const std::string& text) const {
-	impl->print(modelview, text);
+	impl->print(modelview, text, gFontColor);
 }
 
-double Font::getTextWidth(std::string_view text) {
+double Font::getTextWidth(std::string_view text) const {
 	return static_cast<double>(static_cast<ScaleablePixels>(impl->getTextWidth(std::string(text))));
+}
+
+double Font::getLineHeight() const {
+	return static_cast<double>(static_cast<ScaleablePixels>(impl->getLineHeight()));
 }
 
 std::shared_ptr<FontImpl> Font::getImpl() {

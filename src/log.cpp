@@ -1,4 +1,4 @@
-// Copyright 2024 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2024-2025 Jan Niklas Hasse <jhasse@gmail.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "log.hpp"
 
@@ -7,17 +7,21 @@
 #include <cctype>
 #include <sstream>
 
+#ifdef ANDROID
+#include <android/log.h>
+#endif
+
 namespace jngl::internal {
 
-void trace(const std::string& line) {
+void trace(const std::string& line [[maybe_unused]]) {
 #ifdef JNGL_TRACE
-	log("JNGL", "\x1b[36mtrace\x1b[0m", line);
+	log("JNGL", "\x1b[37mtrace\x1b[0m", line);
 #endif
 }
 
-void debug(const std::string& line) {
+void debug(const std::string& line [[maybe_unused]]) {
 #ifndef NDEBUG
-	log("JNGL", "\x1b[34mdebug\x1b[0m", line);
+	log("JNGL", "\x1b[36mdebug\x1b[0m", line);
 #endif
 }
 
@@ -61,11 +65,35 @@ std::string stripAnsiEscapeCodes(const std::string& in) {
 } // namespace
 
 void log(const std::string& appName, const std::string& level, const std::string& message) {
+#ifdef ANDROID
+	std::string levelStripped = stripAnsiEscapeCodes(level);
+	auto androidLevel = ANDROID_LOG_FATAL;
+	if (levelStripped == "debug") {
+		androidLevel = ANDROID_LOG_DEBUG;
+	} else if (levelStripped == "info") {
+		androidLevel = ANDROID_LOG_INFO;
+	} else if (levelStripped == "warn") {
+		androidLevel = ANDROID_LOG_WARN;
+	} else if (levelStripped == "trace") {
+		androidLevel = ANDROID_LOG_VERBOSE;
+	} else if (levelStripped == "error") {
+		androidLevel = ANDROID_LOG_ERROR;
+	}
+	__android_log_print(androidLevel, appName.c_str(), "%s", message.c_str());
+#else
 	std::ostringstream tmp;
 	if (!appName.empty()) {
+#ifdef __EMSCRIPTEN__
+		tmp << '[' << stripAnsiEscapeCodes(appName) << ']';
+#else
 		tmp << '[' << appName << ']';
+#endif
 	}
+#ifdef __EMSCRIPTEN__
+	tmp << '[' << stripAnsiEscapeCodes(level) << "] ";
+#else
 	tmp << '[' << level << "] ";
+#endif
 	bool first = true;
 	std::stringstream lines(message);
 	std::string line;
@@ -80,6 +108,7 @@ void log(const std::string& appName, const std::string& level, const std::string
 		tmp << line << '\n';
 	}
 	printMessage(tmp.str());
+#endif
 }
 
 } // namespace jngl::internal

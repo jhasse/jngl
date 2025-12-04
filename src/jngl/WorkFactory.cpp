@@ -1,4 +1,4 @@
-// Copyright 2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "WorkFactory.hpp"
 #include <cassert>
@@ -21,7 +21,7 @@ void WorkFactory::draw() const {
 
 void WorkFactory::onLoad() {
 	work = factory();
-	jngl::setWork(work);
+	jngl::setScene(work);
 }
 
 } // namespace jngl
