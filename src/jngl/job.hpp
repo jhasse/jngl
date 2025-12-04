@@ -30,7 +30,7 @@ class Controller;
 ///     void draw() const override { /* ... */}
 /// };
 /// class MySecondJob : public jngl::Job { /* ... */ };
-/// 
+///
 /// class MyScene : public jngl::Scene {
 ///     void step() override { /* ... */ }
 ///     void draw() const override { /* ... */ }
@@ -39,7 +39,7 @@ class Controller;
 /// jngl::AppParameters jnglInit() {
 ///     jngl::AppParameters params;
 ///     // ...
-///     params.start = []() { 
+///     params.start = []() {
 ///         jngl::addJob<MyFirstJob>();
 ///         jngl::addJob<MySecondJob>();
 ///         jngl::setScene<MyScene>();
