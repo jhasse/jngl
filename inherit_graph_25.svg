@@ -11,9 +11,9 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structjngl_1_1Rect.html" target="_top" xlink:title="Simple struct for a rectangle, can be use with jngl::contains.">
+<g id="a_Node000000"><a xlink:href="classjngl_1_1Rgba.html" target="_top" xlink:title="Object representing a RGBA color.">
 <polygon fill="white" stroke="#666666" points="40,-19.25 0,-19.25 0,0 40,0 40,-19.25"/>
-<text text-anchor="middle" x="20" y="-5.75" font-family="ui-monospace,monospace" font-size="10.00">Rect</text>
+<text text-anchor="middle" x="20" y="-5.75" font-family="ui-monospace,monospace" font-size="10.00">Rgba</text>
 </a>
 </g>
 </g>
