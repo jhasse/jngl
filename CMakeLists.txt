@@ -249,8 +249,8 @@ else()
 	if(JNGL_BUILD_SDL_FROM_SOURCE)
 		if(JNGL_WINAPI)
 			CPMAddPackage(NAME SDL
-				URL https://www.libsdl.org/release/SDL2-2.32.4.zip
-				URL_HASH SHA1=6342d3b7fa6580879c6d86faf426013da2d6dcfb
+				URL https://www.libsdl.org/release/SDL2-2.32.10.zip
+				URL_HASH SHA1=86499a3e72967117bfdfd88861b7554dc996e0c5
 				OPTIONS
 					"SDL_ATOMIC OFF"
 					"SDL_CPUINFO ON"
@@ -268,8 +268,8 @@ else()
 			)
 		else()
 			CPMAddPackage(NAME SDL
-				URL https://www.libsdl.org/release/SDL2-2.32.4.zip
-				URL_HASH SHA1=6342d3b7fa6580879c6d86faf426013da2d6dcfb
+				URL https://www.libsdl.org/release/SDL2-2.32.10.zip
+				URL_HASH SHA1=86499a3e72967117bfdfd88861b7554dc996e0c5
 				OPTIONS
 					"SDL_SENSOR OFF" # doesn't work with UWP
 			)
