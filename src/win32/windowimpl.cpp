@@ -407,6 +407,7 @@ void Window::UpdateInput() {
 			break;
 		case WM_SYSKEYDOWN:
 			internal::debug("WM_SYSKEYDOWN");
+			[[fallthrough]];
 		case WM_KEYDOWN:
 			keyDown_[msg.wParam] = true;
 			keyPressed_[msg.wParam] = true;
@@ -415,6 +416,7 @@ void Window::UpdateInput() {
 			break;
 		case WM_SYSKEYUP:
 			internal::debug("WM_SYSKEYUP");
+			[[fallthrough]];
 		case WM_KEYUP: {
 			keyDown_[msg.wParam] = false;
 			keyPressed_[msg.wParam] = false;
