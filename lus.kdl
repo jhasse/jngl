@@ -1,0 +1,16 @@
+cmake-mingw {
+	- mingw64-cmake -G "Ninja Multi-Config" -Bbuild-mingw
+}
+mingw {
+	- test -f "build-mingw/build.ninja" || lus cmake-mingw
+	- cd build-mingw
+	- ninja
+}
+cmake-mingw-winapi {
+	- mingw64-cmake -G "Ninja Multi-Config" -Bbuild-mingw-winapi "-DJNGL_WINAPI=1"
+}
+mingw-winapi {
+	- test -f "build-mingw-winapi/build.ninja" || lus cmake-mingw-winapi
+	- cd build-mingw-winapi
+	- ninja
+}
