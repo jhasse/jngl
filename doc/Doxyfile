@@ -1379,7 +1379,19 @@ HTML_EXTRA_STYLESHEET  = doxygen-awesome.css \
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
 HTML_EXTRA_FILES       = Geist-Regular.woff2 \
-                         Geist-Bold.woff2
+                         Geist-Bold.woff2 \
+                         GitHub_Invertocat_Logo.svg \
+                         discord-icon.svg \
+                         Nintendo_Switch_logo.svg \
+                         HTML5_logo_and_wordmark.svg \
+                         Android_2023_3D_logo_and_wordmark.svg \
+                         IOS_wordmark_(2017).svg \
+                         MacOS_wordmark_(2017).svg \
+                         Xbox_logo_(2019).svg \
+                         Windows_logo_and_wordmark_-_2021.svg \
+                         documentation.svg \
+                         "Dell XPS 13.png"
+
 
 # The HTML_COLORSTYLE tag can be used to specify if the generated HTML output
 # should be rendered with a dark or light theme.
