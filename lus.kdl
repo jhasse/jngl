@@ -14,3 +14,20 @@ mingw-winapi {
 	- cd build-mingw-winapi
 	- ninja
 }
+doc {
+	- cd doc
+	--clean {
+		- rm -rf "build/" "html/"
+		- rm -f doxygen_sqlite3.db cppreference-doxygen-web.tag.xml doxygen-awesome-sidebar-only.css doxygen-awesome.css
+	}
+	- test -f "build/build.ninja" || cmake -Bbuild -GNinja
+	- ninja -Cbuild
+	- latex --version // for formula rendering
+	- dot --version // for UML
+	- rm -f "html/index.html"
+	- doxygen
+	- rm "html/index.html"
+	- ln -s "../index.html" "html/"
+	- cd html
+	- python3 -m http.server -b "127.0.0.1"
+}
