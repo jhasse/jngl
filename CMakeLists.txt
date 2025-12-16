@@ -71,6 +71,7 @@ endif()
 target_include_directories(jngl PUBLIC include/public)
 
 option(JNGL_VIDEO "Enable Theora video playback" ON)
+option(JNGL_RECORD "Enable video recording using FFmpeg" ON)
 option(JNGL_STEAMWORKS "Enable Steamsworks SDK support for achievements" OFF)
 
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
@@ -346,6 +347,21 @@ else()
 							add_custom_command(TARGET videoplayer POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/data/verysmall.ogv "$<TARGET_FILE_DIR:videoplayer>")
 						endif()
 					endif()
+				endif()
+			endif()
+			if(JNGL_RECORD)
+				pkg_check_modules(FFMPEG REQUIRED IMPORTED_TARGET
+					libavformat
+					libavcodec
+					libswscale
+					libavutil
+				)
+				target_sources(jngl PRIVATE src/jngl/record/VideoRecorder.cpp)
+				target_link_libraries(jngl PRIVATE PkgConfig::FFMPEG)
+				target_compile_definitions(jngl PUBLIC JNGL_RECORD)
+				if(NOT hasParent)
+					add_executable(jngl-recorder examples/recorder.cpp)
+					target_link_libraries(jngl-recorder PRIVATE jngl PkgConfig::FFMPEG)
 				endif()
 			endif()
 			if(NOT EMSCRIPTEN)
