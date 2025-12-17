@@ -490,21 +490,22 @@ void Window::SetRelativeMouseMode(const bool relative) {
 }
 
 void Window::SetIcon(const std::string& filepath) {
-	// TODO: SDL3
-	// auto imageData = ImageData::load(filepath);
-	// const int CHANNELS = 4;
-	// SDL_Surface* const surface = SDL_CreateRGBSurfaceFrom(
-	//     const_cast<uint8_t*>(imageData->pixels()) /* NOLINT */, imageData->getWidth(),
-	//     imageData->getHeight(), CHANNELS * 8, CHANNELS * imageData->getWidth(), 0x000000ff,
-	//     0x0000ff00, 0x00ff0000, 0xff000000);
+	auto imageData = ImageData::load(filepath);
+	const int CHANNELS = 4;
+	const int pitch = CHANNELS * imageData->getWidth();
+	SDL_Surface* surface = SDL_CreateSurfaceFrom(
+		imageData->getWidth(), imageData->getHeight(), SDL_PIXELFORMAT_RGBA32,
+		const_cast<uint8_t*>(imageData->pixels()) /* NOLINT */, pitch);
 
-	// if (surface == nullptr) {
-	// 	internal::error(SDL_GetError());
-	// 	return;
-	// }
+	if (surface == nullptr) {
+		internal::error(SDL_GetError());
+		return;
+	}
 
-	// SDL_SetWindowIcon(impl->sdlWindow, surface);
-	// SDL_FreeSurface(surface);
+	if (!SDL_SetWindowIcon(impl->sdlWindow, surface)) {
+		internal::error(SDL_GetError());
+	}
+	SDL_DestroySurface(surface);
 }
 
 int getDesktopWidth() {
