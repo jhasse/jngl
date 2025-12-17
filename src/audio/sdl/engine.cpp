@@ -28,19 +28,21 @@ struct engine::Impl {
 	struct Backend {
 		virtual ~Backend() = default;
 		virtual void setPause(bool) = 0;
-		virtual void step() {}
+		virtual void step() {
+		}
 	};
 	std::unique_ptr<Backend> backend;
 
 	struct DummyImpl : public Backend {
-		explicit DummyImpl(std::shared_ptr<Stream> output)
-		: output(std::move(output)) {
+		explicit DummyImpl(std::shared_ptr<Stream> output) : output(std::move(output)) {
 		}
 		void setPause(bool pause) override {
 			this->pause = pause;
 		}
 		void step() override {
-			if (pause)  { return; }
+			if (pause) {
+				return;
+			}
 			size_t size = frequency * 2 / getStepsPerSecond();
 			auto buffer = std::make_unique<float[]>(size);
 			[[maybe_unused]] const auto read = output->read(buffer.get(), size);
@@ -108,7 +110,8 @@ struct engine::Impl {
 			SDL_DestroyAudioStream(device);
 		}
 
-		static void callback(void* userdata, SDL_AudioStream* stream, int additionalAmount, int totalAmount) {
+		static void callback(void* userdata, SDL_AudioStream* stream, int additionalAmount,
+		                     int /*totalAmount*/) {
 			auto self = static_cast<SdlImpl*>(userdata);
 
 			self->buffer.resize(additionalAmount);
@@ -117,7 +120,8 @@ struct engine::Impl {
 			read = self->output->read(self->buffer.data(), size);
 			std::fill(self->buffer.data() + read, self->buffer.data() + size, 0.f);
 
-			SDL_PutAudioStreamData(stream, self->buffer.data(), additionalAmount * sizeof(float));
+			SDL_PutAudioStreamData(stream, self->buffer.data(),
+			                       additionalAmount * static_cast<int>(sizeof(float)));
 		}
 
 		void setPause(bool pause) override {
