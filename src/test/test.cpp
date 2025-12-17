@@ -522,10 +522,17 @@ void testKeys() {
 			ypos += jngl::getMousePos().y;
 			drawMouse({xpos, ypos});
 		}
-		if (jngl::keyPressed(jngl::key::Escape)) {
-			jngl::setRelativeMouseMode(false);
-			jngl::setMouseVisible(true);
-			jngl::setMouse({xpos, ypos});
+		if (jngl::mousePressed()) {
+			if (jngl::getRelativeMouseMode()) {
+				jngl::setRelativeMouseMode(false);
+				jngl::setMouseVisible(true);
+				jngl::setMouse({xpos, ypos});
+			} else {
+				xpos = jngl::getMousePos().x;
+				ypos = jngl::getMousePos().y;
+				jngl::setRelativeMouseMode(true);
+				jngl::setMouseVisible(false);
+			}
 		}
 		jngl::swapBuffers();
 	}
