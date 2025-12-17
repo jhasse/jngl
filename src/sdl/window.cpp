@@ -102,7 +102,6 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		}
 	}
 
-#if (!defined(__linux__) || SDL_VERSION_ATLEAST(2, 30, 0)) && !SDL_VERSION_ATLEAST(3, 0, 0)
 	// This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by SDL2). On
 	// Linux (GNOME) it results in the top of the window being cut off (by the header bar height?).
 	// The bug seems to be fixed in newer SDL2 (or GNOME) versions.
@@ -122,8 +121,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		}
 	}
 
-	SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
-#endif
+	SDL_GetWindowSizeInPixels(impl->sdlWindow, &width_, &height_);
 	impl->actualWidth = static_cast<float>(width_);
 	impl->actualHeight = static_cast<float>(height_);
 	impl->hidpiScaleFactor = static_cast<float>(width_) / static_cast<float>(width);
@@ -386,53 +384,53 @@ void Window::UpdateInput() {
 				currentWork_->onControllersChanged();
 			}
 			break;
-		// FIXME: SDL3
-		// case SDL_WINDOWEVENT:
-		// 	if (!impl->firstFrame && event.window.event == SDL_WINDOWEVENT_RESIZED) {
-		// 		const int originalWidth = width_;
-		// 		const int originalHeight = height_;
-		// 		SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
-		// 		impl->actualWidth = static_cast<float>(width_);
-		// 		impl->actualHeight = static_cast<float>(height_);
-		// 		impl->actualCanvasWidth = canvasWidth;
-		// 		impl->actualCanvasHeight = canvasHeight;
-		// 		calculateCanvasSize({ canvasWidth, canvasHeight }, { canvasWidth, canvasHeight });
-		// 		const float tmpWidth =
-		// 		    (static_cast<float>(width_) / static_cast<float>(canvasWidth)) *
-		// 		    static_cast<float>(impl->actualCanvasWidth);
-		// 		const float tmpHeight =
-		// 		    (static_cast<float>(height_) / static_cast<float>(canvasHeight)) *
-		// 		    static_cast<float>(impl->actualCanvasHeight);
-		// 		const auto l = -1.f / 2.f;
-		// 		const auto r = 1.f / 2.f;
-		// 		const auto b = 1.f / 2.f;
-		// 		const auto t = -1.f / 2.f;
-		// 		opengl::projection = { 1.f / tmpWidth * 2.f / (r - l),
-		// 			                   0.f,
-		// 			                   0.f,
-		// 			                   -(r + l) / (r - l),
-		// 			                   0.f,
-		// 			                   1.f / tmpHeight * 2.f / (t - b),
-		// 			                   0.f,
-		// 			                   -(t + b) / (t - b),
-		// 			                   0.f,
-		// 			                   0.f,
-		// 			                   -1.f,
-		// 			                   0.f,
-		// 			                   0.f,
-		// 			                   0.f,
-		// 			                   0.f,
-		// 			                   1.f };
-		// 		App::instance().updateProjectionMatrix();
-		// 		updateViewportAndLetterboxing(width_, height_, canvasWidth, canvasHeight);
-		// 		// restore the values in canvasWidth and canvasHeight because our scaleFactor didn't
-		// 		// change:
-		// 		std::swap(canvasWidth, impl->actualCanvasWidth);
-		// 		std::swap(canvasHeight, impl->actualCanvasHeight);
-		// 		width_ = originalWidth;
-		// 		height_ = originalHeight;
-		// 	}
-		// 	break;
+		case SDL_EVENT_WINDOW_RESIZED:
+		case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
+			if (!impl->firstFrame) {
+				const int originalWidth = width_;
+				const int originalHeight = height_;
+				SDL_GetWindowSizeInPixels(impl->sdlWindow, &width_, &height_);
+				impl->actualWidth = static_cast<float>(width_);
+				impl->actualHeight = static_cast<float>(height_);
+				impl->actualCanvasWidth = canvasWidth;
+				impl->actualCanvasHeight = canvasHeight;
+				calculateCanvasSize({ canvasWidth, canvasHeight }, { canvasWidth, canvasHeight });
+				const float tmpWidth =
+				    (static_cast<float>(width_) / static_cast<float>(canvasWidth)) *
+				    static_cast<float>(impl->actualCanvasWidth);
+				const float tmpHeight =
+				    (static_cast<float>(height_) / static_cast<float>(canvasHeight)) *
+				    static_cast<float>(impl->actualCanvasHeight);
+				const auto l = -1.f / 2.f;
+				const auto r = 1.f / 2.f;
+				const auto b = 1.f / 2.f;
+				const auto t = -1.f / 2.f;
+				opengl::projection = { 1.f / tmpWidth * 2.f / (r - l),
+					                   0.f,
+					                   0.f,
+					                   -(r + l) / (r - l),
+					                   0.f,
+					                   1.f / tmpHeight * 2.f / (t - b),
+					                   0.f,
+					                   -(t + b) / (t - b),
+					                   0.f,
+					                   0.f,
+					                   -1.f,
+					                   0.f,
+					                   0.f,
+					                   0.f,
+					                   0.f,
+					                   1.f };
+				App::instance().updateProjectionMatrix();
+				updateViewportAndLetterboxing(width_, height_, canvasWidth, canvasHeight);
+				// restore the values in canvasWidth and canvasHeight because our scaleFactor didn't
+				// change:
+				std::swap(canvasWidth, impl->actualCanvasWidth);
+				std::swap(canvasHeight, impl->actualCanvasHeight);
+				width_ = originalWidth;
+				height_ = originalHeight;
+			}
+			break;
 		case SDL_EVENT_DROP_FILE:
 			if (event.drop.data) {
 				std::filesystem::path path(event.drop.data);
