@@ -473,18 +473,20 @@ void Window::SetMouse(const int xposition, const int yposition) {
 }
 
 void Window::SetRelativeMouseMode(const bool relative) {
-	// TODO: SDL3
-	// int rtn = SDL_SetRelativeMouseMode(relative ? SDL_TRUE : SDL_FALSE);
-	// if (rtn == -1) {
-	// 	throw std::runtime_error("Relative mouse mode not supported.");
-	// }
-	// relativeMouseMode = relative;
-	// if (relative) {
-	// 	mousex_ = 0;
-	// 	mousey_ = 0;
-	// } else {
-	// 	SDL_GetMouseState(&mousex_, &mousey_);
-	// }
+	if (!SDL_SetWindowRelativeMouseMode(impl->sdlWindow, relative)) {
+		throw std::runtime_error("Relative mouse mode not supported.");
+	}
+	relativeMouseMode = relative;
+	if (relative) {
+		mousex_ = 0;
+		mousey_ = 0;
+	} else {
+		float fx = 0.f;
+		float fy = 0.f;
+		SDL_GetMouseState(&fx, &fy);
+		mousex_ = jngl::round(fx);
+		mousey_ = jngl::round(fy);
+	}
 }
 
 void Window::SetIcon(const std::string& filepath) {
