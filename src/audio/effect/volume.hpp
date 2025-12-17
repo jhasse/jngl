@@ -1,36 +1,44 @@
-// Copyright 2023-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-// Based on the audio implementation of the psemek engine, see
-// https://lisyarus.github.io/blog/programming/2022/10/15/audio-mixing.html
 #pragma once
 
 #include "../Stream.hpp"
+#include "volume_base.hpp"
 
 #include <memory>
-
+#if defined(__cpp_lib_atomic_shared_ptr) && __cpp_lib_atomic_shared_ptr >= 201711L
+#include <atomic>
+#else
+#include <mutex>
+#endif
 namespace jngl::audio {
 
-struct volume_control : Stream {
-	virtual float gain() const = 0;
-	virtual float gain(float value) = 0;
+class VolumeControl : public Stream {
+public:
+	explicit VolumeControl(std::shared_ptr<Stream> stream);
 
-	virtual float smoothness() const = 0;
-	virtual float smoothness(float value) = 0;
+	float gain() const;
+	float gain(float value);
+
+	float smoothness() const;
+	float smoothness(float value);
+
+	void rewind() override;
+
+	bool isPlaying() const override;
+
+	std::size_t read(float* data, std::size_t sample_count) override;
+
+	void replaceStream(std::shared_ptr<Stream>);
+
+private:
+	volume_base base_;
+#if defined(__cpp_lib_atomic_shared_ptr) && __cpp_lib_atomic_shared_ptr >= 201711L
+	std::atomic<std::shared_ptr<Stream>> stream_;
+#else
+	std::mutex mutex;
+	std::shared_ptr<Stream> stream_;
+#endif
 };
-
-struct volume_control_stereo : Stream {
-	virtual float gain_left() const = 0;
-	virtual float gain_right() const = 0;
-	virtual float gain_left(float value) = 0;
-	virtual float gain_right(float value) = 0;
-
-	virtual float smoothness() const = 0;
-	virtual float smoothness(float value) = 0;
-};
-
-std::shared_ptr<volume_control> volume(std::shared_ptr<Stream> stream, float gain = 1.f, float smoothness = 0.f);
-std::shared_ptr<volume_control_stereo> volume_stereo(std::shared_ptr<Stream> stream, float gain_left = 1.f,
-                                                     float gain_right = 1.f,
-                                                     float smoothness = 0.f);
 
 } // namespace jngl::audio

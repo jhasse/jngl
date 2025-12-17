@@ -123,8 +123,8 @@ public:
 	/// Draws the image centered using \a modelview
 	///
 	/// \param shaderProgram Passing `nullptr` uses the default.
-	void draw(Mat3 modelview, const ShaderProgram* = nullptr) const;
-	void draw(Mat3 modelview, Alpha, const ShaderProgram* = nullptr) const;
+	void draw(Mat3 modelview, const ShaderProgram* shaderProgram = nullptr) const;
+	void draw(Mat3 modelview, Alpha, const ShaderProgram* shaderProgram = nullptr) const;
 
 	/// Draws the sprite but multiplies each pixel's color with \a color
 	///
@@ -223,7 +223,7 @@ public:
 	///
 	/// \param shaderProgram Passing `nullptr` uses the default.
 	void drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes,
-	              const ShaderProgram* = nullptr) const;
+	              const ShaderProgram* shaderProgram = nullptr) const;
 	void drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes, jngl::Rgba color,
 	              const ShaderProgram* = nullptr) const;
 

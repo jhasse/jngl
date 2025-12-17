@@ -50,12 +50,12 @@ mingw:
   stage: build
   script:
     - dnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL3 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw64-gcc-c++ > /dev/null
-    - mingw64-cmake -G"Ninja Multi-Config" -Bbuild-mingw -DJNGL_WINAPI=0
+    - mingw64-cmake -G"Ninja Multi-Config" -Bbuild-mingw -DJNGL_WINAPI=0 -DCMAKE_COMPILE_WARNING_AS_ERROR=1
     - cd build-mingw
     - ninja
     - ninja -f build-Release.ninja
     - cd -
-    - mingw64-cmake -G"Ninja Multi-Config" -Bbuild-winapi -DJNGL_WINAPI=1
+    - mingw64-cmake -G"Ninja Multi-Config" -Bbuild-winapi -DJNGL_WINAPI=1 -DCMAKE_COMPILE_WARNING_AS_ERROR=1
     - cd build-winapi
     - ninja
     - ninja -f build-Release.ninja

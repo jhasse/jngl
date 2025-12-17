@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
+#include "jngl/Scene.hpp"
 #include "jngl/input.hpp"
 #include "jngl/time.hpp"
 #include "opengl.hpp"
@@ -104,6 +105,7 @@ public:
 	void sleepIfNeeded();
 	void draw() const;
 	std::shared_ptr<Work> getWork();
+	std::shared_ptr<Scene> getNextScene() const;
 	void addJob(std::shared_ptr<Job>);
 	void removeJob(Job*);
 	std::shared_ptr<Job> getJob(const std::function<bool(Job&)>& predicate) const;

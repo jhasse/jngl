@@ -19,7 +19,7 @@ class SoundFile;
 
 namespace audio {
 struct pitch_control;
-struct volume_control;
+class VolumeControl;
 } // namespace audio
 
 void checkAlError();
@@ -33,8 +33,6 @@ public:
 	Audio& operator=(Audio&&) = delete;
 	~Audio();
 
-	void play(Channel&, std::shared_ptr<Sound> sound);
-	void stop(Channel&, std::shared_ptr<Sound>& sound);
 	void increasePauseDeviceCount();
 	void decreasePauseDeviceCount();
 	void setPitch(float pitch);
@@ -51,11 +49,10 @@ public:
 	std::shared_ptr<SoundFile> getSoundFile(std::string_view filename, std::launch policy);
 
 private:
-	std::vector<std::shared_ptr<Sound>> sounds_;
 	std::shared_ptr<Mixer> mixer;
 	std::unique_ptr<Channel> mainChannel;
 	std::shared_ptr<audio::pitch_control> pitchControl;
-	std::shared_ptr<audio::volume_control> volumeControl;
+	std::shared_ptr<audio::VolumeControl> volumeControl;
 	uint8_t pauseDeviceCount = 0; //< if >0 audio device is paused
 	std::unordered_map<std::string, std::shared_ptr<SoundFile>, string_hash, std::equal_to<>>
 	    soundFiles;

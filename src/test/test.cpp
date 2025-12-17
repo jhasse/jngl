@@ -76,7 +76,7 @@ public:
 				}
 			}
 		}
-		if (jngl::keyPressed('m')) {
+		if (!jngl::keyDown(jngl::key::Shift) && jngl::keyPressed('m')) {
 			if (!music) {
 				music = std::make_unique<jngl::Channel>();
 			}
@@ -84,6 +84,12 @@ public:
 				music->stop("music.ogg");
 			} else {
 				music->play("music.ogg");
+			}
+		}
+		if (jngl::keyDown(jngl::key::Shift) && jngl::keyPressed('m')) {
+			if (music) {
+				music->stopAll();
+				assert(!jngl::isPlaying("music.ogg"));
 			}
 		}
 		if (jngl::keyPressed('l')) {
@@ -451,12 +457,12 @@ void testKeys() {
 			return k.GetAlpha() <= 0;
 		}), end);
 		std::stringstream sstream;
-		sstream << "X: " << jngl::getMousePos().x << "\nY: " << jngl::getMousePos().y << std::endl;
+		sstream << "X: " << jngl::getMousePos().x << "\nY: " << jngl::getMousePos().y << '\n';
 		jngl::print(sstream.str(), 5, 5);
 		int controllerNr = 1;
 		for (const auto& controller : jngl::getConnectedControllers()) {
 			std::stringstream sstream;
-			sstream << "Controller " << controllerNr << " connected." << std::endl
+			sstream << "Controller " << controllerNr << " connected." << '\n'
 			        << "Trigger: " << controller->state(jngl::controller::LeftTrigger) << " " << controller->state(jngl::controller::RightTrigger)
 			        << "\nA: " << controller->down(jngl::controller::A)
 			        << " B: " << controller->down(jngl::controller::B)

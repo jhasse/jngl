@@ -1,4 +1,4 @@
-// Copyright 2022-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2022-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/TextLine.hpp"
@@ -11,7 +11,7 @@
 
 namespace {
 boost::ut::suite _ = [] {
-	using namespace boost::ut;
+	using namespace boost::ut; // NOLINT
 	"TextLineTest"_test = [] {
 		// Test with two rather big scale factors to avoid rounding errors:
 		for (double scaleFactor : { 6, 8 }) {

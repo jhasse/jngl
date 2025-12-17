@@ -1,4 +1,4 @@
-// Copyright 2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/Vec2.hpp"
@@ -35,14 +35,14 @@ boost::ut::suite _ = [] {
 		//   ╲
 		//    ⌟
 		//
-		expect(approx(a.x, sqrt(2) / 2., 1e-6));
-		expect(approx(a.y, sqrt(2) / 2., 1e-6));
+		expect(approx(a.x, std::numbers::sqrt2 / 2., 1e-6));
+		expect(approx(a.y, std::numbers::sqrt2 / 2., 1e-6));
 		a.rotate(0);
-		expect(approx(a.x, sqrt(2) / 2., 1e-6));
-		expect(approx(a.y, sqrt(2) / 2., 1e-6));
+		expect(approx(a.x, std::numbers::sqrt2 / 2., 1e-6));
+		expect(approx(a.y, std::numbers::sqrt2 / 2., 1e-6));
 		a.rotate(std::numbers::pi * 8);
-		expect(approx(a.x, sqrt(2) / 2., 1e-6));
-		expect(approx(a.y, sqrt(2) / 2., 1e-6));
+		expect(approx(a.x, std::numbers::sqrt2 / 2., 1e-6));
+		expect(approx(a.y, std::numbers::sqrt2 / 2., 1e-6));
 	};
 };
 } // namespace
