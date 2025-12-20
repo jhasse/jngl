@@ -50,11 +50,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 
 	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIGH_PIXEL_DENSITY; // TODO: SDL_WINDOW_SHOWN
 	if (fullscreen) {
-		if (width == getDesktopWidth() && height == getDesktopHeight()) {
-			flags |= SDL_WINDOW_FULLSCREEN; // FIXME: SDL3
-		} else {
-			flags |= SDL_WINDOW_FULLSCREEN;
-		}
+		flags |= SDL_WINDOW_FULLSCREEN;
 	} else {
 		flags |= SDL_WINDOW_RESIZABLE; // if we make fullscreen window resizeable on GNOME, it will
 		                               // be reduced in its height (SDL bug?).
