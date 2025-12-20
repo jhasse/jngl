@@ -125,6 +125,8 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 		assert(canvasHeight <= height);
 		glScissor((width - canvasWidth) / 2, (height - canvasHeight) / 2, canvasWidth,
 		          canvasHeight);
+	} else {
+		glDisable(GL_SCISSOR_TEST);
 	}
 }
 
