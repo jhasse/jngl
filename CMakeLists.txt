@@ -71,7 +71,7 @@ endif()
 target_include_directories(jngl PUBLIC include/public)
 
 option(JNGL_VIDEO "Enable Theora video playback" ON)
-option(JNGL_RECORD "Enable video recording using FFmpeg" ON)
+option(JNGL_RECORD "Enable video recording using FFmpeg" OFF)
 option(JNGL_STEAMWORKS "Enable Steamsworks SDK support for achievements" OFF)
 
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
