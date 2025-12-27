@@ -19,11 +19,13 @@ namespace jngl::audio {
 
 struct engine::Impl {
 	explicit Impl(std::shared_ptr<Stream> output) {
+#ifdef JNGL_RECORD
 		if (auto videoRecorder = getJob<VideoRecorder>()) {
 			internal::debug("Using dummy audio backend because VideoRecorder is active.");
 			backend = std::make_unique<DummyImpl>(std::move(output), std::move(videoRecorder));
 			return;
 		}
+#endif
 		try {
 			backend = std::make_unique<SdlImpl>(output);
 		} catch (std::exception& e) {
