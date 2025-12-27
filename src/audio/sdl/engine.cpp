@@ -1,10 +1,11 @@
-// Copyright 2023-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 // Based on the audio implementation of the psemek engine, see
 // https://lisyarus.github.io/blog/programming/2022/10/15/audio-mixing.html
 #include "../engine.hpp"
 
 #include "../../jngl/other.hpp"
+#include "../../jngl/record/VideoRecorder.hpp"
 #include "../../log.hpp"
 #include "../Stream.hpp"
 #include "../constants.hpp"
@@ -18,11 +19,16 @@ namespace jngl::audio {
 
 struct engine::Impl {
 	explicit Impl(std::shared_ptr<Stream> output) {
+		if (auto videoRecorder = getJob<VideoRecorder>()) {
+			internal::debug("Using dummy audio backend because VideoRecorder is active.");
+			backend = std::make_unique<DummyImpl>(std::move(output), std::move(videoRecorder));
+			return;
+		}
 		try {
 			backend = std::make_unique<SdlImpl>(output);
 		} catch (std::exception& e) {
 			internal::warn(e.what());
-			backend = std::make_unique<DummyImpl>(std::move(output));
+			backend = std::make_unique<DummyImpl>(std::move(output), nullptr);
 		}
 	}
 	struct Backend {
@@ -33,8 +39,8 @@ struct engine::Impl {
 	std::unique_ptr<Backend> backend;
 
 	struct DummyImpl : public Backend {
-		explicit DummyImpl(std::shared_ptr<Stream> output)
-		: output(std::move(output)) {
+		explicit DummyImpl(std::shared_ptr<Stream> output, std::shared_ptr<VideoRecorder> videoRecorder)
+		: output(std::move(output)), videoRecorder(std::move(videoRecorder)) {
 		}
 		void setPause(bool pause) override {
 			this->pause = pause;
@@ -69,10 +75,16 @@ struct engine::Impl {
 			// } else {
 			// 	debug("█");
 			// }
+			if (auto videoRecorderShared = videoRecorder.lock()) {
+				videoRecorderShared->fillAudioBuffer(std::move(buffer));
+			}
 		}
 
 		std::shared_ptr<Stream> output;
 		bool pause{ false };
+
+	private:
+		std::weak_ptr<VideoRecorder> videoRecorder;
 	};
 
 	struct SdlImpl : public Backend {

@@ -28,7 +28,9 @@ file(GLOB SRC src/*.cpp src/jngl/*.cpp
 	src/audio/*.cpp
 	src/audio/effect/*.cpp
 )
-add_library(jngl ${SRC})
+add_library(jngl ${SRC}
+	src/jngl/record/VideoRecorder.cpp
+)
 file(GLOB HEADERS src/*.hpp src/jngl/*.hpp)
 target_sources(jngl PRIVATE ${HEADERS})
 
@@ -356,7 +358,6 @@ else()
 					libswscale
 					libavutil
 				)
-				target_sources(jngl PRIVATE src/jngl/record/VideoRecorder.cpp)
 				target_link_libraries(jngl PRIVATE PkgConfig::FFMPEG)
 				target_compile_definitions(jngl PUBLIC JNGL_RECORD)
 				if(NOT hasParent)
