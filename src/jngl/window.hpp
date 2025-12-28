@@ -39,9 +39,13 @@ void hideWindow();
 void atExit(std::function<void()>);
 
 /// Returns the width of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)
+///
+/// When letter-boxing is used, this doesn't include the black bars.
 int getWindowWidth();
 
 /// Returns the height of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)
+///
+/// When letter-boxing is used, this doesn't include the black bars.
 int getWindowHeight();
 
 /// Returns {width, height} of the window in actual pixels
