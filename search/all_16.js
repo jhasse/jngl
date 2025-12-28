@@ -33,7 +33,7 @@ var searchData=
   ['vfwscanf_30',['vfwscanf',['http://en.cppreference.com/w/cpp/io/c/vfwscanf.html',1,'std']]],
   ['video_31',['Video',['../classjngl_1_1Video.html',1,'Video'],['../classjngl_1_1Video.html#a8123d635017d393a24435bb9a78c99ce',1,'jngl::Video::Video()']]],
   ['video_2ehpp_32',['Video.hpp',['../Video_8hpp.html',1,'']]],
-  ['videorecorder_33',['VideoRecorder',['../classjngl_1_1VideoRecorder.html',1,'jngl']]],
+  ['videorecorder_33',['VideoRecorder',['../classjngl_1_1VideoRecorder.html',1,'VideoRecorder'],['../classjngl_1_1VideoRecorder.html#a68697b5e67311167b502065ec3882e48',1,'jngl::VideoRecorder::VideoRecorder()']]],
   ['visit_34',['visit',['http://en.cppreference.com/w/cpp/utility/variant/visit.html',1,'std']]],
   ['visit_5fformat_5farg_35',['visit_format_arg',['http://en.cppreference.com/w/cpp/utility/format/visit_format_arg.html',1,'std']]],
   ['void_5ft_36',['void_t',['http://en.cppreference.com/w/cpp/experimental/void_t.html',1,'void_t'],['http://en.cppreference.com/w/cpp/types/void_t.html',1,'void_t']]],

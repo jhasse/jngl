@@ -20,8 +20,8 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="classjngl_1_1VideoRecorder.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#bfbfbf" points="94,-74.5 0,-74.5 0,-55.25 94,-55.25 94,-74.5"/>
+<g id="a_Node000002"><a xlink:href="classjngl_1_1VideoRecorder.html" target="_top" xlink:title="Records video and audio output to a file.">
+<polygon fill="white" stroke="#666666" points="94,-74.5 0,-74.5 0,-55.25 94,-55.25 94,-74.5"/>
 <text text-anchor="middle" x="47" y="-61" font-family="ui-monospace,monospace" font-size="10.00">VideoRecorder</text>
 </a>
 </g>

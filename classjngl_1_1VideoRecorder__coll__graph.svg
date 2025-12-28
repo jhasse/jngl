@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Records video and audio output to a file.">
 <polygon fill="#999999" stroke="#666666" points="94,-19.25 0,-19.25 0,0 94,0 94,-19.25"/>
 <text text-anchor="middle" x="47" y="-5.75" font-family="ui-monospace,monospace" font-size="10.00">VideoRecorder</text>
 </a>

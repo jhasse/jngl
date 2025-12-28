@@ -1,5 +1,5 @@
 <map id="VideoRecorder" name="VideoRecorder">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,131,105"/>
+<area shape="rect" id="Node000001" title="Records video and audio output to a file." alt="" coords="5,79,131,105"/>
 <area shape="rect" id="Node000002" href="$classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene." alt="" coords="45,5,91,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,46,71,79,65,79,65,46"/>
 </map>
