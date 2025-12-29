@@ -161,6 +161,17 @@ void engine::setPause(bool pause) {
 }
 
 void engine::step() {
+#ifdef JNGL_RECORD
+	if (auto videoRecorder = getJob<VideoRecorder>();
+	    videoRecorder && dynamic_cast<Impl::SdlImpl*>(impl->backend.get())) {
+		// Recording started, swap the backend:
+		if (!impl->backend || dynamic_cast<Impl::DummyImpl*>(impl->backend.get()) == nullptr) {
+			internal::debug("Switching to dummy audio backend because VideoRecorder is active.");
+			impl->backend = std::make_unique<Impl::DummyImpl>(
+			    dynamic_cast<Impl::SdlImpl&>(*impl->backend).output, videoRecorder);
+		}
+	}
+#endif
 	impl->backend->step();
 }
 
