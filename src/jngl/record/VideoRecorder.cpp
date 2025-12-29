@@ -40,6 +40,7 @@ struct VideoRecorder::Impl {
 	std::unique_ptr<uint8_t[]> pixelBuffer;
 	std::unique_ptr<std::thread> workerThread;
 	std::unique_ptr<float[]> frameAudioSamples;
+	std::unique_ptr<float[]> nextFrameAudioSamples;
 	std::vector<float> audioBuffer;
 	AVSampleFormat audioSampleFmt = AV_SAMPLE_FMT_NONE;
 	int audioFrameSamples = 0;
@@ -239,7 +240,8 @@ VideoRecorder::~VideoRecorder() {
 }
 
 void VideoRecorder::fillAudioBuffer(std::unique_ptr<float[]> samples) {
-	impl->frameAudioSamples = std::move(samples);
+	assert(!impl->nextFrameAudioSamples);
+	impl->nextFrameAudioSamples = std::move(samples);
 }
 
 void VideoRecorder::step() {
@@ -254,6 +256,8 @@ void VideoRecorder::draw() const {
 		impl->workerThread->join();
 	}
 	std::swap(impl->pixelBuffer, impl->backBuffer);
+	assert(!impl->frameAudioSamples);
+	impl->frameAudioSamples = std::move(impl->nextFrameAudioSamples);
 	impl->workerThread = std::make_unique<std::thread>([this]() {
 		// Convert RGB to YUV420P
 		SwsContext* swsCtx =
@@ -293,58 +297,58 @@ void VideoRecorder::draw() const {
 		av_packet_free(&pkt);
 
 		// Encode audio
-		if (impl->frameAudioSamples) {
-			const int samplesPerFrame = 44100 / static_cast<int>(getStepsPerSecond());
-			const int frameSize = impl->audioFrameSamples;
+		assert(impl->frameAudioSamples); // the audio engine should have provided audio samples
+		const int samplesPerFrame = 44100 / static_cast<int>(getStepsPerSecond());
+		const int frameSize = impl->audioFrameSamples;
 
-			// Copy new audio samples to buffer (stereo = 2 samples per frame)
-			for (int i = 0; i < samplesPerFrame * 2; ++i) {
-				float sample = std::clamp(impl->frameAudioSamples[i], -1.0f, 1.0f);
-				impl->audioBuffer.push_back(sample);
+		// Copy new audio samples to buffer (stereo = 2 samples per frame)
+		for (int i = 0; i < samplesPerFrame * 2; ++i) {
+			float sample = std::clamp(impl->frameAudioSamples[i], -1.0f, 1.0f);
+			impl->audioBuffer.push_back(sample);
+		}
+		impl->frameAudioSamples.reset();
+
+		// Send complete frames
+		while (static_cast<int>(impl->audioBuffer.size()) >= frameSize * 2) {
+			impl->audioFrame->nb_samples = frameSize;
+			impl->audioFrame->pts = impl->audioPts;
+			impl->audioPts += frameSize;
+
+			if (impl->audioSampleFmt == AV_SAMPLE_FMT_S16) {
+				auto* frameData = reinterpret_cast<int16_t*>(impl->audioFrame->data[0]);
+				for (int i = 0; i < frameSize * 2; ++i) {
+					frameData[i] = static_cast<int16_t>(impl->audioBuffer[i] * 32767.0f);
+				}
+			} else {
+				float* left = reinterpret_cast<float*>(impl->audioFrame->data[0]);
+				float* right = reinterpret_cast<float*>(impl->audioFrame->data[1]);
+				for (int i = 0; i < frameSize; ++i) {
+					left[i] = impl->audioBuffer[2 * i];
+					right[i] = impl->audioBuffer[2 * i + 1];
+				}
 			}
 
-			// Send complete frames
-			while (static_cast<int>(impl->audioBuffer.size()) >= frameSize * 2) {
-				impl->audioFrame->nb_samples = frameSize;
-				impl->audioFrame->pts = impl->audioPts;
-				impl->audioPts += frameSize;
-
-				if (impl->audioSampleFmt == AV_SAMPLE_FMT_S16) {
-					auto* frameData = reinterpret_cast<int16_t*>(impl->audioFrame->data[0]);
-					for (int i = 0; i < frameSize * 2; ++i) {
-						frameData[i] = static_cast<int16_t>(impl->audioBuffer[i] * 32767.0f);
-					}
-				} else {
-					float* left = reinterpret_cast<float*>(impl->audioFrame->data[0]);
-					float* right = reinterpret_cast<float*>(impl->audioFrame->data[1]);
-					for (int i = 0; i < frameSize; ++i) {
-						left[i] = impl->audioBuffer[2 * i];
-						right[i] = impl->audioBuffer[2 * i + 1];
-					}
-				}
-
-				AVPacket* audioPkt = av_packet_alloc();
-				if (avcodec_send_frame(impl->audioCodecContext, impl->audioFrame) < 0) {
-					av_packet_free(&audioPkt);
-					throw std::runtime_error("Error sending audio frame to encoder.");
-				}
-				while (avcodec_receive_packet(impl->audioCodecContext, audioPkt) == 0) {
-					audioPkt->duration = frameSize;
-					av_packet_rescale_ts(audioPkt, impl->audioCodecContext->time_base,
-					                     impl->audioStream->time_base);
-					audioPkt->stream_index = impl->audioStream->index;
-					if (av_interleaved_write_frame(impl->formatContext, audioPkt) < 0) {
-						av_packet_free(&audioPkt);
-						throw std::runtime_error("Error writing audio frame to output file.");
-					}
-					av_packet_unref(audioPkt);
-				}
+			AVPacket* audioPkt = av_packet_alloc();
+			if (avcodec_send_frame(impl->audioCodecContext, impl->audioFrame) < 0) {
 				av_packet_free(&audioPkt);
-
-				// Remove used samples
-				impl->audioBuffer.erase(impl->audioBuffer.begin(),
-				                        impl->audioBuffer.begin() + frameSize * 2);
+				throw std::runtime_error("Error sending audio frame to encoder.");
 			}
+			while (avcodec_receive_packet(impl->audioCodecContext, audioPkt) == 0) {
+				audioPkt->duration = frameSize;
+				av_packet_rescale_ts(audioPkt, impl->audioCodecContext->time_base,
+				                     impl->audioStream->time_base);
+				audioPkt->stream_index = impl->audioStream->index;
+				if (av_interleaved_write_frame(impl->formatContext, audioPkt) < 0) {
+					av_packet_free(&audioPkt);
+					throw std::runtime_error("Error writing audio frame to output file.");
+				}
+				av_packet_unref(audioPkt);
+			}
+			av_packet_free(&audioPkt);
+
+			// Remove used samples
+			impl->audioBuffer.erase(impl->audioBuffer.begin(),
+			                        impl->audioBuffer.begin() + frameSize * 2);
 		}
 	});
 }
