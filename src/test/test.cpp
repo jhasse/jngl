@@ -6,6 +6,7 @@
 #include <fstream>
 #include <jngl.hpp>
 #include <jngl/init.hpp>
+#include <jngl/record/VideoRecorder.hpp>
 #include <map>
 #include <numbers>
 #include <optional>
@@ -95,6 +96,15 @@ public:
 		if (jngl::keyPressed('l')) {
 			jngl::loop("test.ogg");
 		}
+#ifdef JNGL_RECORD
+		if (jngl::keyPressed('r')) {
+			if (auto videoRecorder = jngl::getJob<jngl::VideoRecorder>()) {
+				jngl::removeJob(videoRecorder.get());
+			} else {
+				jngl::addJob<jngl::VideoRecorder>("jngl.mkv", false);
+			}
+		}
+#endif
 		if (jngl::keyPressed('s')) {
 			useShader = !useShader;
 			if (!shaderProgram) {
@@ -186,6 +196,12 @@ public:
 		jngl::setFontColor(0x000000_rgb);
 		fontNormal.print(mv, "Text with outline.");
 
+#ifdef JNGL_RECORD
+		jngl::print(std::string("Press R to ") +
+		                (jngl::getJob<jngl::VideoRecorder>() ? "stop" : "start") +
+		                " recording to jngl.mkv",
+		            5, 370);
+#endif
 		jngl::print("Press S to use the blur shader.", 5, 390);
 		jngl::print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 410);
 		jngl::print("Press V to toggle V-SYNC.", 5, 430);
