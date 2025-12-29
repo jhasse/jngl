@@ -1,4 +1,4 @@
-// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Fixture.hpp"
@@ -11,8 +11,7 @@
 
 Fixture::Fixture(const double scaleFactor) {
 	jngl::setScaleFactor(scaleFactor);
-	jngl::showWindow("unit test", static_cast<int>(std::lround(320 * scaleFactor)),
-	                 static_cast<int>(std::lround(70 * scaleFactor)), false, { 32, 7 }, { 32, 7 });
+	jngl::showWindow("unit test", 320 * scaleFactor, 70 * scaleFactor, false, { 32, 7 }, { 32, 7 });
 	reset();
 	emptyAsciiArt = getAsciiArt();
 	using namespace boost::ut; // NOLINT

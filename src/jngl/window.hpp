@@ -19,7 +19,7 @@ namespace jngl {
 ///
 /// If you haven't set a display name for your app using AppParameters::displayName, \a title will
 /// be set for the display name.
-void showWindow(const std::string& title, int width, int height, bool fullscreen = false,
+void showWindow(const std::string& title, double width, double height, bool fullscreen = false,
                 std::pair<int, int> minAspectRatio = { 4, 3 },
                 std::pair<int, int> maxAspectRatio = { 16, 9 });
 

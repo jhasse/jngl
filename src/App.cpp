@@ -176,8 +176,7 @@ uint8_t mainLoop(AppParameters params) {
 #endif
 	}
 	showWindow(params.displayName,
-	           fullscreen ? getDesktopWidth()
-	                      : static_cast<int>(std::lround(params.screenSize->x * getScaleFactor())),
+	           fullscreen ? getDesktopWidth() : (params.screenSize->x * getScaleFactor()),
 	           windowPixelHeight, fullscreen,
 	           params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
 	           params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);

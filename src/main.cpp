@@ -163,19 +163,22 @@ namespace {
 bool antiAliasingEnabled = true;
 } // namespace
 
-void showWindow(const std::string& title, const int width, const int height, bool fullscreen,
+void showWindow(const std::string& title, const double width, const double height, bool fullscreen,
                 const std::pair<int, int> minAspectRatio,
                 const std::pair<int, int> maxAspectRatio) {
 	internal::debug("jngl::showWindow(\"{}\", {}, {}, {});", title, width, height, fullscreen);
 	bool isMouseVisible = pWindow ? pWindow->getMouseVisible() : true;
 	hideWindow();
-	if (width == 0) {
+	int widthRounded = static_cast<int>(std::lround(width));
+	int heightRounded = static_cast<int>(std::lround(height));
+	if (widthRounded == 0) {
 		throw std::runtime_error("Width Is 0");
 	}
-	if (height == 0) {
+	if (heightRounded == 0) {
 		throw std::runtime_error("Height Is 0");
 	}
-	pWindow.Set(new Window(title, width, height, fullscreen, minAspectRatio, maxAspectRatio));
+	pWindow.Set(
+	    new Window(title, widthRounded, heightRounded, fullscreen, minAspectRatio, maxAspectRatio));
 	if (App::instance().getDisplayName().empty()) {
 		App::instance().setDisplayName(title);
 	}
