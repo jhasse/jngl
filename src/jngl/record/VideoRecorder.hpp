@@ -47,7 +47,8 @@ namespace jngl {
 /// video at the target frame rate. Audio playback is muted during recording since the game is not
 /// running at normal speed.
 ///
-/// You would probably convert the resulting .mkv file to a compressed format so you can upload it to Google Play or the Apple App Store. Use ffmpeg on the command line for that:
+/// You would probably convert the resulting .mkv file to a compressed format so you can upload it
+/// to Google Play or the Apple App Store. Use ffmpeg on the command line for that:
 ///
 /// \code
 /// ffmpeg -i foo.mkv \
@@ -76,9 +77,11 @@ public:
 	/// - Resolution: Current window dimensions (jngl::getWindowWidth() x jngl::getWindowHeight())
 	///
 	/// \param filename Path to the output video file (typically with .mkv extension)
+	/// \param lossless If true, uses lossless codecs (FFV1 for video, FLAC for audio). If false,
+	/// uses lossy codecs (H.264 for video, AAC for audio). Default is true.
 	/// \throws std::runtime_error if video encoding setup fails (e.g., codecs not found, file
 	/// cannot be opened)
-	explicit VideoRecorder(std::string_view filename);
+	explicit VideoRecorder(std::string_view filename, bool lossless = true);
 
 	/// Finalizes and closes the video file
 	///
