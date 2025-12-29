@@ -94,9 +94,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a68697b5e67311167b502065ec3882e48" id="r_a68697b5e67311167b502065ec3882e48"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68697b5e67311167b502065ec3882e48">VideoRecorder</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a> filename)</td></tr>
-<tr class="memdesc:a68697b5e67311167b502065ec3882e48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new video recorder that writes to the specified file (saved in your data/ directory).  <br /></td></tr>
-<tr class="separator:a68697b5e67311167b502065ec3882e48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1aa872457bb81a4c2fbc37249f254cea" id="r_a1aa872457bb81a4c2fbc37249f254cea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1aa872457bb81a4c2fbc37249f254cea">VideoRecorder</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a> filename, bool lossless=true)</td></tr>
+<tr class="memdesc:a1aa872457bb81a4c2fbc37249f254cea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new video recorder that writes to the specified file (saved in your data/ directory).  <br /></td></tr>
+<tr class="separator:a1aa872457bb81a4c2fbc37249f254cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0be30f46baf034cd35917944a16c7757" id="r_a0be30f46baf034cd35917944a16c7757"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0be30f46baf034cd35917944a16c7757">~VideoRecorder</a> () override</td></tr>
 <tr class="memdesc:a0be30f46baf034cd35917944a16c7757"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finalizes and closes the video file.  <br /></td></tr>
 <tr class="separator:a0be30f46baf034cd35917944a16c7757"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,7 +197,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Job</b> ()</td></
 <div class="line">       output.mp4</div>
 </div><!-- fragment --><p>This command converts foo.mkv to output.mp4 using H.264 video codec and AAC audio codec. </p>
 
-<p class="definition">Definition at line <a class="el" href="VideoRecorder_8hpp_source.html#l00066">66</a> of file <a class="el" href="VideoRecorder_8hpp_source.html">VideoRecorder.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VideoRecorder_8hpp_source.html#l00067">67</a> of file <a class="el" href="VideoRecorder_8hpp_source.html">VideoRecorder.hpp</a>.</p>
 </div><div class="dynheader">
 Inheritance diagram for VideoRecorder:</div>
 <div class="dyncontent">
@@ -209,8 +209,8 @@ Collaboration diagram for VideoRecorder:</div>
 <div class="center"><iframe scrolling="no" frameborder="0" src="classjngl_1_1VideoRecorder__coll__graph.svg" width="136" height="111"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a68697b5e67311167b502065ec3882e48" name="a68697b5e67311167b502065ec3882e48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68697b5e67311167b502065ec3882e48">&#9670;&#160;</a></span>VideoRecorder()</h2>
+<a id="a1aa872457bb81a4c2fbc37249f254cea" name="a1aa872457bb81a4c2fbc37249f254cea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1aa872457bb81a4c2fbc37249f254cea">&#9670;&#160;</a></span>VideoRecorder()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -221,8 +221,12 @@ Collaboration diagram for VideoRecorder:</div>
         <tr>
           <td class="memname"><a class="el" href="classjngl_1_1VideoRecorder.html">VideoRecorder</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a></td>          <td class="paramname"><span class="paramname"><em>filename</em></span></td><td>)</td>
+          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a></td>          <td class="paramname"><span class="paramname"><em>filename</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>lossless</em><span class="paramdefsep"> = </span><span class="paramdefval">true</span></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -243,6 +247,7 @@ Collaboration diagram for VideoRecorder:</div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>Path to the output video file (typically with .mkv extension) </td></tr>
+    <tr><td class="paramname">lossless</td><td>If true, uses lossless codecs (FFV1 for video, FLAC for audio). If false, uses lossy codecs (H.264 for video, AAC for audio). Default is true. </td></tr>
   </table>
   </dd>
 </dl>
