@@ -1,5 +1,7 @@
 // Copyright 2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
+/// Contains jngl::VideoRecorder class
+/// @file
 #pragma once
 
 #include "../job.hpp"

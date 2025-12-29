@@ -41,14 +41,17 @@ struct engine::Impl {
 	std::unique_ptr<Backend> backend;
 
 	struct DummyImpl : public Backend {
-		explicit DummyImpl(std::shared_ptr<Stream> output, std::shared_ptr<VideoRecorder> videoRecorder)
-		: output(std::move(output)), videoRecorder(std::move(videoRecorder)) {
+		explicit DummyImpl(std::shared_ptr<Stream> output,
+		                   const std::shared_ptr<VideoRecorder>& videoRecorder)
+		: output(std::move(output)), videoRecorder(videoRecorder) {
 		}
 		void setPause(bool pause) override {
 			this->pause = pause;
 		}
 		void step() override {
-			if (pause)  { return; }
+			if (pause) {
+				return;
+			}
 			size_t size = frequency * 2 / getStepsPerSecond();
 			auto buffer = std::make_unique<float[]>(size);
 			[[maybe_unused]] const auto read = output->read(buffer.get(), size);
@@ -102,7 +105,8 @@ struct engine::Impl {
 			if (SDL_Init(SDL_INIT_AUDIO) < 0) {
 				throw std::runtime_error(SDL_GetError());
 			}
-			SDL_AudioSpec desired, obtained;
+			SDL_AudioSpec desired;
+			SDL_AudioSpec obtained;
 			desired.freq = frequency;
 			desired.channels = 2;
 			desired.format = AUDIO_S16SYS;
@@ -120,7 +124,7 @@ struct engine::Impl {
 			internal::debug("Initialized audio: {} channels, {} Hz, {} samples",
 			                static_cast<int>(obtained.channels), obtained.freq, obtained.samples);
 
-			buffer.resize(obtained.samples * obtained.channels);
+			buffer.resize(static_cast<ssize_t>(obtained.samples) * obtained.channels);
 			SDL_PauseAudioDevice(device, 0);
 		}
 		~SdlImpl() override {
@@ -132,7 +136,7 @@ struct engine::Impl {
 			// prof::profiler prof(profiler_str);
 
 			auto self = static_cast<SdlImpl*>(userdata);
-			std::int16_t* dst = reinterpret_cast<std::int16_t*>(dst_u8);
+			auto* dst = reinterpret_cast<std::int16_t*>(dst_u8); // NOLINT
 
 			std::size_t const size = len / 2;
 			std::size_t read = 0;
