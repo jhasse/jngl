@@ -5,7 +5,7 @@ jobs:
   doxygen:
     runs-on: ubuntu-latest
     container:
-      image: registry.fedoraproject.org/fedora-minimal:40
+      image: registry.fedoraproject.org/fedora-minimal:41
     steps:
       - name: Install dependencies
         run: microdnf install -y git graphviz doxygen cmake make tar xz rsync texlive-latex texlive-newunicodechar texlive-dvips pdf2svg ghostscript
