@@ -26,7 +26,7 @@
 <area shape="poly" id="edge12_Node000007_Node000008" title=" " alt="" coords="404,184,478,223,475,228,401,188"/>
 <area shape="poly" id="edge13_Node000008_Node000002" title=" " alt="" coords="522,261,555,298,551,301,518,265"/>
 <area shape="poly" id="edge15_Node000009_Node000002" title=" " alt="" coords="567,184,590,202,608,225,612,247,605,268,579,301,575,298,600,265,606,246,603,227,586,206,564,189"/>
-<area shape="poly" id="edge17_Node000010_Node000002" title=" " alt="" coords="833,120,834,149,825,179,806,208,782,233,754,253,724,270,662,294,608,307,607,302,660,289,722,265,751,249,779,229,802,205,821,177,828,149,828,120"/>
+<area shape="poly" id="edge17_Node000010_Node000002" title=" " alt="" coords="833,120,834,149,825,179,806,208,782,233,754,253,724,270,662,294,608,307,607,302,661,289,722,265,752,249,779,229,802,205,821,177,828,149,828,120"/>
 <area shape="poly" id="edge20_Node000010_Node000006" title=" " alt="" coords="801,117,756,154,753,150,798,113"/>
 <area shape="rect" id="Node000011" href="$FrameBuffer_8hpp.html" title="Contains jngl::FrameBuffer class." alt="" coords="886,226,1059,252"/>
 <area shape="poly" id="edge18_Node000010_Node000011" title=" " alt="" coords="850,114,962,224,958,228,847,118"/>

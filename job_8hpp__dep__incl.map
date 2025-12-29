@@ -6,7 +6,7 @@
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="151,46,151,79,145,79,145,46"/>
 <area shape="rect" id="Node000004" href="$work_8hpp.html" title=" " alt="" coords="299,79,424,105"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="199,34,326,76,324,81,198,39"/>
-<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="326,115,304,132,285,154,269,193,262,234,261,272,262,299,257,300,255,272,256,233,264,191,280,151,300,129,323,111"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="326,115,303,132,285,154,269,193,262,234,261,272,263,300,257,300,255,272,256,233,264,191,280,151,300,129,322,111"/>
 <area shape="rect" id="Node000005" href="$Scene_8hpp.html" title="Contains jngl::Scene class and related functions." alt="" coords="295,153,428,178"/>
 <area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="364,120,364,152,359,152,359,120"/>
 <area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="329,189,307,207,289,228,272,266,265,300,260,299,267,264,284,225,304,203,326,185"/>
