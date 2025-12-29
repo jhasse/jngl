@@ -6,64 +6,65 @@
 
 namespace jngl {
 
-/// Records video and audio output to a file
-///
-/// VideoRecorder is a background job that captures the rendered frames and audio samples to create
-/// a video file. It uses FFV1 codec for lossless video compression and FLAC for lossless audio
-/// compression, packaged in a Matroska container.
-///
-/// The recorder captures:
-/// - Video: Frames are captured at the current window resolution and frame rate
-///   (jngl::getStepsPerSecond())
-/// - Audio: Stereo audio at 44.1 kHz sample rate
-///
-/// \note Recording requires JNGL to be compiled with JNGL_RECORD enabled and FFmpeg libraries
-/// available. Pass `-DJNGL_RECORD=1` to CMake during configuration. On macOS, install FFmpeg
-/// with `brew install ffmpeg`.
-///
-/// Example usage:
-/// \code
-/// #include <jngl.hpp>
-/// #include <jngl/init.hpp>
-/// #include <jngl/record/VideoRecorder.hpp>
-///
-/// jngl::AppParameters jnglInit() {
-///     jngl::AppParameters params;
-///     params.start = []() {
-///         // Start recording to output.mkv
-///         jngl::addJob<jngl::VideoRecorder>("output.mkv");
-///         // Your scene setup here...
-///     };
-///     return params;
-/// }
-/// \endcode
-///
-/// The VideoRecorder will automatically capture frames and audio as your application runs. Remove
-/// the job or let it go out of scope to finalize and close the video file.
-///
-/// \warning During recording, the game will run at a slower wall-clock speed to ensure no frames
-/// are dropped. The video encoding is synchronous and the application waits for each frame to be
-/// encoded before proceeding. This means the game runs slower in real-time but produces a smooth
-/// video at the target frame rate. Audio playback is muted during recording since the game is not
-/// running at normal speed.
-///
-/// You would probably convert the resulting .mkv file to a compressed format so you can upload it
-/// to Google Play or the Apple App Store. Use ffmpeg on the command line for that:
-///
-/// \code
-/// ffmpeg -i foo.mkv \
-///        -c:v libx264 \
-///        -profile:v high \
-///        -level 4.2 \
-///        -pix_fmt yuv420p \
-///        -r 30 \
-///        -c:a aac \
-///        -b:a 160k \
-///        -movflags +faststart \
-///        output.mp4
-/// \endcode
-///
-/// This command converts foo.mkv to output.mp4 using H.264 video codec and AAC audio codec.
+/** Records video and audio output to a file
+ *
+ * VideoRecorder is a background job that captures the rendered frames and audio samples to create
+ * a video file. It uses FFV1 codec for lossless video compression and FLAC for lossless audio
+ * compression, packaged in a Matroska container.
+ *
+ * The recorder captures:
+ * - Video: Frames are captured at the current window resolution and frame rate
+ *   (jngl::getStepsPerSecond())
+ * - Audio: Stereo audio at 44.1 kHz sample rate
+ *
+ * \note Recording requires JNGL to be compiled with JNGL_RECORD enabled and FFmpeg libraries
+ * available. Pass `-DJNGL_RECORD=1` to CMake during configuration. On macOS, install FFmpeg
+ * with `brew install ffmpeg`.
+ *
+ * Example usage:
+ * \code
+ * #include <jngl.hpp>
+ * #include <jngl/init.hpp>
+ * #include <jngl/record/VideoRecorder.hpp>
+ *
+ * jngl::AppParameters jnglInit() {
+ *     jngl::AppParameters params;
+ *     params.start = []() {
+ *         // Start recording to output.mkv
+ *         jngl::addJob<jngl::VideoRecorder>("output.mkv");
+ *         // Your scene setup here...
+ *     };
+ *     return params;
+ * }
+ * \endcode
+ *
+ * The VideoRecorder will automatically capture frames and audio as your application runs. Remove
+ * the job or let it go out of scope to finalize and close the video file.
+ *
+ * \warning During recording, the game will run at a slower wall-clock speed to ensure no frames
+ * are dropped. The video encoding is synchronous and the application waits for each frame to be
+ * encoded before proceeding. This means the game runs slower in real-time but produces a smooth
+ * video at the target frame rate. Audio playback is muted during recording since the game is not
+ * running at normal speed.
+ *
+ * You would probably convert the resulting .mkv file to a compressed format so you can upload it
+ * to Google Play or the Apple App Store. Use ffmpeg on the command line for that:
+ *
+ * \code
+ * ffmpeg -i foo.mkv \
+ *        -c:v libx264 \
+ *        -profile:v high \
+ *        -level 4.2 \
+ *        -pix_fmt yuv420p \
+ *        -r 30 \
+ *        -c:a aac \
+ *        -b:a 160k \
+ *        -movflags +faststart \
+ *        output.mp4
+ * \endcode
+ *
+ * This command converts foo.mkv to output.mp4 using H.264 video codec and AAC audio codec.
+ */
 class VideoRecorder : public jngl::Job {
 public:
 	/// Creates a new video recorder that writes to the specified file (saved in your data/
