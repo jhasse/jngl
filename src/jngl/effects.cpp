@@ -84,13 +84,18 @@ void Move::endDraw() const {
 namespace easing {
 
 float linear(float t) {
-	return t <= 0 ? 0 : t >= 1 ? 1 : t;
+	if (t <= 0) {
+		return 0;
+	}
+	return t >= 1 ? 1 : t;
 }
 
 float elastic(float t) {
+	if (t <= 0) {
+		return 0;
+	}
 	const float c4 = (2 * std::numbers::pi) / 3;
-
-	return t <= 0 ? 0 : t >= 1 ? 1 : pow(2, -10 * t) * sin((t * 10 - 0.75) * c4) + 1;
+	return t >= 1 ? 1 : pow(2, -10 * t) * sin((t * 10 - 0.75) * c4) + 1;
 }
 
 float cubic(float t) {
