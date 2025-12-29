@@ -9,8 +9,7 @@ namespace jngl {
 /** Records video and audio output to a file
  *
  * VideoRecorder is a background job that captures the rendered frames and audio samples to create
- * a video file. It uses FFV1 codec for lossless video compression and FLAC for lossless audio
- * compression, packaged in a Matroska container.
+ * a video file.
  *
  * The recorder captures:
  * - Video: Frames are captured at the current window resolution and frame rate
@@ -47,8 +46,17 @@ namespace jngl {
  * video at the target frame rate. Audio playback is muted during recording since the game is not
  * running at normal speed.
  *
- * You would probably convert the resulting .mkv file to a compressed format so you can upload it
- * to Google Play or the Apple App Store. Use ffmpeg on the command line for that:
+ * The video container is chosen based on the file extension you provide. For example:
+ * - `.mkv`: Matroska container
+ * - `.mp4`: MP4 container
+ *
+ * By default, lossy codecs are used (H.264 for video, AAC for audio) to produce reasonably sized
+ * files. If you want lossless quality, pass true for the \a lossless parameter when creating the
+ * VideoRecorder.
+ *
+ * If you chose to use lossless, you would probably convert the resulting .mkv file to a compressed
+ * format later so you can upload it to Google Play or the Apple App Store. Use ffmpeg on the
+ * command line for that:
  *
  * \code
  * ffmpeg -i foo.mkv \
@@ -70,19 +78,17 @@ public:
 	/// Creates a new video recorder that writes to the specified file (saved in your data/
 	/// directory).
 	///
-	/// Initializes video and audio encoding with the following settings:
-	/// - Video: FFV1 level 3 codec with range coder, YUV420P pixel format
-	/// - Audio: FLAC codec, 44.1 kHz stereo
-	/// - Container: Matroska (.mkv)
+	/// Initializes video and audio encoding with the following common settings:
 	/// - Frame rate: Current application frame rate (jngl::getStepsPerSecond())
 	/// - Resolution: Current window dimensions (jngl::getWindowWidth() x jngl::getWindowHeight())
 	///
-	/// \param filename Path to the output video file (typically with .mkv extension)
+	/// \param filename Path to the output video file. Use appropriate file extension (e.g., .mkv,
+	/// .mp4) to select the container format.
 	/// \param lossless If true, uses lossless codecs (FFV1 for video, FLAC for audio). If false,
-	/// uses lossy codecs (H.264 for video, AAC for audio). Default is true.
+	/// uses lossy codecs (H.264 for video, AAC for audio). Default is false.
 	/// \throws std::runtime_error if video encoding setup fails (e.g., codecs not found, file
 	/// cannot be opened)
-	explicit VideoRecorder(std::string_view filename, bool lossless = true);
+	explicit VideoRecorder(std::string_view filename, bool lossless = false);
 
 	/// Finalizes and closes the video file
 	///
