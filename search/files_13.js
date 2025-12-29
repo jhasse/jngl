@@ -6,5 +6,6 @@ var searchData=
   ['vector_3',['vector',['http://en.cppreference.com/w/cpp/header/vector.html',1,'']]],
   ['version_4',['version',['http://en.cppreference.com/w/cpp/header/version.html',1,'']]],
   ['vertex_2ehpp_5',['Vertex.hpp',['../Vertex_8hpp.html',1,'']]],
-  ['video_2ehpp_6',['Video.hpp',['../Video_8hpp.html',1,'']]]
+  ['video_2ehpp_6',['Video.hpp',['../Video_8hpp.html',1,'']]],
+  ['videorecorder_2ehpp_7',['VideoRecorder.hpp',['../VideoRecorder_8hpp.html',1,'']]]
 ];

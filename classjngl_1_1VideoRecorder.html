@@ -179,7 +179,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Job</b> ()</td></
 <dl class="section note"><dt>Note</dt><dd>Recording requires JNGL to be compiled with JNGL_RECORD enabled and FFmpeg libraries available. Pass <code>-DJNGL_RECORD=1</code> to CMake during configuration. On macOS, install FFmpeg with <code>brew install ffmpeg</code>.</dd></dl>
 <p>Example usage: </p><div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="jngl_8hpp.html">jngl.hpp</a>&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;<a class="code" href="init_8hpp.html">jngl/init.hpp</a>&gt;</span></div>
-<div class="line"><span class="preprocessor">#include &lt;jngl/record/VideoRecorder.hpp&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="VideoRecorder_8hpp.html">jngl/record/VideoRecorder.hpp</a>&gt;</span></div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_struct" href="structjngl_1_1AppParameters.html">jngl::AppParameters</a> <a class="code hl_function" href="init_8hpp.html#a2471fe7de5ef776522a016331b6bf6e5">jnglInit</a>() {</div>
 <div class="line">    <a class="code hl_struct" href="structjngl_1_1AppParameters.html">jngl::AppParameters</a> params;</div>
@@ -190,6 +190,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Job</b> ()</td></
 <div class="line">    };</div>
 <div class="line">    <span class="keywordflow">return</span> params;</div>
 <div class="line">}</div>
+<div class="ttc" id="aVideoRecorder_8hpp_html"><div class="ttname"><a href="VideoRecorder_8hpp.html">VideoRecorder.hpp</a></div><div class="ttdoc">Contains jngl::VideoRecorder class.</div></div>
 <div class="ttc" id="ainit_8hpp_html"><div class="ttname"><a href="init_8hpp.html">init.hpp</a></div><div class="ttdoc">Include this file only once, as it defines the main function.</div></div>
 <div class="ttc" id="ainit_8hpp_html_a2471fe7de5ef776522a016331b6bf6e5"><div class="ttname"><a href="init_8hpp.html#a2471fe7de5ef776522a016331b6bf6e5">jnglInit</a></div><div class="ttdeci">jngl::AppParameters jnglInit()</div><div class="ttdoc">Implement this function and set AppParameters::start.</div></div>
 <div class="ttc" id="ajngl_8hpp_html"><div class="ttname"><a href="jngl_8hpp.html">jngl.hpp</a></div><div class="ttdoc">Includes all JNGL headers except for init.hpp.</div></div>
@@ -216,7 +217,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Job</b> ()</td></
 <div class="line">       output.mp4</div>
 </div><!-- fragment --><p>This command converts foo.mkv to output.mp4 using H.264 video codec and AAC audio codec. </p>
 
-<p class="definition">Definition at line <a class="el" href="VideoRecorder_8hpp_source.html#l00076">76</a> of file <a class="el" href="VideoRecorder_8hpp_source.html">VideoRecorder.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VideoRecorder_8hpp_source.html#l00078">78</a> of file <a class="el" href="VideoRecorder_8hpp_source.html">VideoRecorder.hpp</a>.</p>
 </div><div class="dynheader">
 Inheritance diagram for VideoRecorder:</div>
 <div class="dyncontent">

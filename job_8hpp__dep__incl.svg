@@ -38,7 +38,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="VideoRecorder_8hpp_source.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="VideoRecorder_8hpp.html" target="_top" xlink:title="Contains jngl::VideoRecorder class.">
 <polygon fill="white" stroke="#666666" points="202.01,-185 12.01,-185 12.01,-165.75 202.01,-165.75 202.01,-185"/>
 <text text-anchor="middle" x="107.01" y="-171.5" font-family="ui-monospace,monospace" font-size="10.00">jngl/record/VideoRecorder.hpp</text>
 </a>

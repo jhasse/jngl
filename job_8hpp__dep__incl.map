@@ -2,7 +2,7 @@
 <area shape="rect" id="Node000001" title="Contains jngl::Job class and related functions." alt="" coords="89,5,207,31"/>
 <area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="219,300,304,326"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,38,46,49,22,64,9,82,8,92,12,104,33,139,59,172,89,202,121,228,184,270,236,297,233,302,182,274,118,232,85,206,55,176,28,142,7,106,3,92,4,80,18,60,43,44,73,33"/>
-<area shape="rect" id="Node000003" href="$VideoRecorder_8hpp_source.html" title=" " alt="" coords="21,79,275,105"/>
+<area shape="rect" id="Node000003" href="$VideoRecorder_8hpp.html" title="Contains jngl::VideoRecorder class." alt="" coords="21,79,275,105"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="151,46,151,79,145,79,145,46"/>
 <area shape="rect" id="Node000004" href="$work_8hpp.html" title=" " alt="" coords="299,79,424,105"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="199,34,326,76,324,81,198,39"/>

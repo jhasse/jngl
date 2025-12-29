@@ -1,0 +1,11 @@
+<map id="jngl/record/VideoRecorder.hpp" name="jngl/record/VideoRecorder.hpp">
+<area shape="rect" id="Node000001" title="Contains jngl::VideoRecorder class." alt="" coords="47,5,300,31"/>
+<area shape="rect" id="Node000002" href="$job_8hpp.html" title="Contains jngl::Job class and related functions." alt="" coords="123,79,224,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,31,176,63,171,63,171,31"/>
+<area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/filesystem.html" title=" " alt="" coords="5,153,99,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="154,108,87,147,84,142,151,103"/>
+<area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="123,153,224,178"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="176,105,176,137,171,137,171,105"/>
+<area shape="rect" id="Node000005" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="248,153,317,178"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="193,103,253,142,250,146,190,107"/>
+</map>
