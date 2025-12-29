@@ -18,7 +18,7 @@ var searchData=
   ['vfwprintf_15',['vfwprintf',['http://en.cppreference.com/w/cpp/io/c/vfwprintf.html',1,'std']]],
   ['vfwscanf_16',['vfwscanf',['http://en.cppreference.com/w/cpp/io/c/vfwscanf.html',1,'std']]],
   ['video_17',['Video',['../classjngl_1_1Video.html#a8123d635017d393a24435bb9a78c99ce',1,'jngl::Video']]],
-  ['videorecorder_18',['VideoRecorder',['../classjngl_1_1VideoRecorder.html#a1aa872457bb81a4c2fbc37249f254cea',1,'jngl::VideoRecorder']]],
+  ['videorecorder_18',['VideoRecorder',['../classjngl_1_1VideoRecorder.html#a06d5c2c5fc617f687418f79fda08954d',1,'jngl::VideoRecorder']]],
   ['visit_19',['visit',['http://en.cppreference.com/w/cpp/utility/variant/visit.html',1,'std']]],
   ['visit_5fformat_5farg_20',['visit_format_arg',['http://en.cppreference.com/w/cpp/utility/format/visit_format_arg.html',1,'std']]],
   ['vprintf_21',['vprintf',['http://en.cppreference.com/w/cpp/io/c/vfprintf.html',1,'std']]],
