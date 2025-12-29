@@ -175,6 +175,7 @@ private:
 	bool changeWork = false;
 	std::shared_ptr<Work> newWork_;
 	std::vector<std::shared_ptr<Job>> jobs;
+	std::vector<std::shared_ptr<Job>> jobsToAdd;
 	std::vector<Job*> jobsToRemove;
 	double sleepPerFrame = 0; // in seconds
 	double timeSleptSinceLastCheck = 0;
