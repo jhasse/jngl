@@ -1,11 +1,13 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "text.hpp"
 
+#include "../FontImpl.hpp"
 #include "../freetype.hpp"
 #include "../helper.hpp"
 #include "../windowptr.hpp"
+#include "Pixels.hpp"
 #include "ScaleablePixels.hpp"
 #include "font.hpp"
 #include "matrix.hpp"

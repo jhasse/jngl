@@ -2,9 +2,8 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "AchievementLayer.hpp"
 
-#include "freetype.hpp"
+#include "FontImpl.hpp"
 #include "jngl/Achievement.hpp"
-#include "jngl/Vec2.hpp"
 #include "jngl/font.hpp"
 #include "jngl/matrix.hpp"
 #include "jngl/other.hpp"

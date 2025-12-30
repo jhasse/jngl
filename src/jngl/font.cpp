@@ -1,10 +1,10 @@
 // Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #include "font.hpp"
 
-#include "../freetype.hpp"
+#include "../FontImpl.hpp"
 #include "Alpha.hpp"
+#include "Pixels.hpp"
 #include "ScaleablePixels.hpp"
 
 #include <stack>

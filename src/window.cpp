@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "window.hpp"
 
+#include "FontImpl.hpp"
 #include "ShaderCache.hpp"
 #include "audio.hpp"
 #include "freetype.hpp"
