@@ -27,8 +27,8 @@ libxxf86vm-dev libvorbis-dev cmake g++ libwebp-dev git libsdl2-dev
 ```
 ### Fedora
 ```bash
-sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libwebp-devel \
-cmake SDL2-devel gcc-c++ libatomic libavformat-free-devel libswscale-free-devel
+sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libwebp-devel cmake \
+ninja-build SDL2-devel gcc-c++ libatomic libavformat-free-devel libswscale-free-devel
 ```
 The last two are only needed if you plan to use [VideoRecorder](https://bixense.com/jngl/classjngl_1_1VideoRecorder.html#details).
 ### Arch Linux
