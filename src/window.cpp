@@ -321,6 +321,10 @@ void Window::resetFrameLimiter() {
 	frameLimiter = {};
 }
 
+void Window::dontSkipNextFrame() {
+	frameLimiter.stepsPerFrame = 1;
+}
+
 unsigned int Window::getStepsPerSecond() const {
 	return static_cast<unsigned int>(1.0 / timePerStep);
 }

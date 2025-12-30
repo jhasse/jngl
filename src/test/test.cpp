@@ -101,7 +101,7 @@ public:
 			if (auto videoRecorder = jngl::getJob<jngl::VideoRecorder>()) {
 				jngl::removeJob(videoRecorder.get());
 			} else {
-				jngl::addJob<jngl::VideoRecorder>("jngl.mkv", false);
+				jngl::addJob<jngl::VideoRecorder>("../jngl.mp4", jngl::keyDown(jngl::key::Shift));
 			}
 		}
 #endif
@@ -179,7 +179,7 @@ public:
 		jngl::setFontByName("Courier New");
 		jngl::print(sstream.str(), 5, 5);
 		jngl::setFontByName("sans-serif");
-		jngl::setFontColor(0,0,0);
+		jngl::setFontColor(0, 0, 0);
 		jngl::setFontByName("Times New Roman");
 		jngl::print("Black text on white background", 5, 75);
 		jngl::setFontByName("Arial");
@@ -197,13 +197,15 @@ public:
 		fontNormal.print(mv, "Text with outline.");
 
 #ifdef JNGL_RECORD
-		jngl::print(std::string("Press R to ") +
-		                (jngl::getJob<jngl::VideoRecorder>() ? "stop" : "start") +
-		                " recording to jngl.mkv",
-		            5, 370);
+		jngl::print(
+		    std::string("Press R to ") + (jngl::getJob<jngl::VideoRecorder>() ? "stop" : "start") +
+		        " recording to jngl.mkv" + (jngl::keyDown(jngl::key::Shift) ? " (lossless)" : ""),
+		    5, 370);
 #endif
 		jngl::print("Press S to use the blur shader.", 5, 390);
-		jngl::print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 410);
+		jngl::print("Press F to turn drawing on a FBO " +
+		                std::string(drawOnFrameBuffer ? "off" : "on") + ".",
+		            5, 410);
 		jngl::print("Press V to toggle V-SYNC.", 5, 430);
 		if (jngl::keyPressed('v')) {
 			jngl::setVerticalSync(!jngl::getVerticalSync());

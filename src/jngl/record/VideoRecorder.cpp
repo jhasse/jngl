@@ -4,10 +4,10 @@
 
 #ifdef JNGL_RECORD
 #include "../../log.hpp"
+#include "../../windowptr.hpp"
 #include "../Finally.hpp"
 #include "../other.hpp"
 #include "../window.hpp"
-#include "../work.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -137,7 +137,8 @@ struct VideoRecorder::Impl {
 			throw std::runtime_error("Failed to allocate audio frame buffer.");
 		}
 
-		audioPacketSamples = std::make_unique<float[]>(audioFrame->nb_samples * 2);
+		audioPacketSamples =
+		    std::make_unique<float[]>(static_cast<size_t>(audioFrame->nb_samples) * 2);
 
 		assert(!(formatContext->oformat->flags & AVFMT_NOFILE));
 		if (avio_open(&formatContext->pb, std::string(filename).c_str(), AVIO_FLAG_WRITE) < 0) {
@@ -242,7 +243,7 @@ void VideoRecorder::fillAudioBuffer(std::unique_ptr<float[]> samples) {
 }
 
 void VideoRecorder::step() {
-	resetFrameLimiter();
+	pWindow->dontSkipNextFrame();
 }
 
 void VideoRecorder::draw() const {
@@ -299,24 +300,25 @@ void VideoRecorder::draw() const {
 
 		// Copy new audio samples to buffer (stereo = 2 samples per frame)
 		for (int i = 0; i < samplesPerFrame * 2; ++i) {
-		    impl->audioPacketSamples[impl->audioPacketSamplesSize] =
-		        std::clamp(impl->frameAudioSamples[i], -1.0f, 1.0f);
-		    ++impl->audioPacketSamplesSize;
-		    assert(impl->audioFrame->nb_samples > 0);
+			impl->audioPacketSamples[impl->audioPacketSamplesSize] =
+			    std::clamp(impl->frameAudioSamples[i], -1.0f, 1.0f);
+			++impl->audioPacketSamplesSize;
+			assert(impl->audioFrame->nb_samples > 0);
 			if (impl->audioPacketSamplesSize == impl->audioFrame->nb_samples * 2) {
 				impl->audioFrame->pts = impl->audioPts;
 				impl->audioPts += impl->audioFrame->nb_samples;
 
 				if (impl->audioSampleFmt == AV_SAMPLE_FMT_S16) {
-					auto* frameData = reinterpret_cast<int16_t*>(impl->audioFrame->data[0]);
+					auto* frameData =
+					    reinterpret_cast<int16_t*>(impl->audioFrame->data[0]); // NOLINT
 					for (int i = 0; i < impl->audioFrame->nb_samples * 2; ++i) {
 						frameData[i] = static_cast<int16_t>(impl->audioPacketSamples[i] * 32767.0f);
 					}
 				} else {
-					float* left = reinterpret_cast<float*>(impl->audioFrame->data[0]);
-					float* right = reinterpret_cast<float*>(impl->audioFrame->data[1]);
+					auto* left = reinterpret_cast<float*>(impl->audioFrame->data[0]);  // NOLINT
+					auto* right = reinterpret_cast<float*>(impl->audioFrame->data[1]); // NOLINT
 					for (int i = 0; i < impl->audioFrame->nb_samples; ++i) {
-						left[i] = impl->audioPacketSamples[2 * i];
+						left[i] = impl->audioPacketSamples[2 * static_cast<size_t>(i)];
 						right[i] = impl->audioPacketSamples[2 * i + 1];
 					}
 				}
