@@ -940,9 +940,8 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getTime</b> ()</td>
 <tr class="memitem:a943b811007cc700d5758b550e843518a" id="r_a943b811007cc700d5758b550e843518a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a943b811007cc700d5758b550e843518a">getWindowHeight</a> ()</td></tr>
 <tr class="memdesc:a943b811007cc700d5758b550e843518a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the height of the window in actual pixels (i.e.  <br /></td></tr>
 <tr class="separator:a943b811007cc700d5758b550e843518a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad84f3e61595dd50afb8c51067ee57bb9" id="r_ad84f3e61595dd50afb8c51067ee57bb9"><td class="memItemLeft" align="right" valign="top"><a id="ad84f3e61595dd50afb8c51067ee57bb9" name="ad84f3e61595dd50afb8c51067ee57bb9"></a>
-<a class="elRef" href="http://en.cppreference.com/w/cpp/container/array.html">std::array</a>&lt; <a class="el" href="classjngl_1_1Pixels.html">Pixels</a>, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getWindowSize</b> ()</td></tr>
-<tr class="memdesc:ad84f3e61595dd50afb8c51067ee57bb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns {width, height} of the window in actual pixels. <br /></td></tr>
+<tr class="memitem:ad84f3e61595dd50afb8c51067ee57bb9" id="r_ad84f3e61595dd50afb8c51067ee57bb9"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/container/array.html">std::array</a>&lt; <a class="el" href="classjngl_1_1Pixels.html">Pixels</a>, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad84f3e61595dd50afb8c51067ee57bb9">getWindowSize</a> ()</td></tr>
+<tr class="memdesc:ad84f3e61595dd50afb8c51067ee57bb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns {width, height} of the window in actual pixels.  <br /></td></tr>
 <tr class="separator:ad84f3e61595dd50afb8c51067ee57bb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9193f06cde9afc127aac581b2876e832" id="r_a9193f06cde9afc127aac581b2876e832"><td class="memItemLeft" align="right" valign="top"><a id="a9193f06cde9afc127aac581b2876e832" name="a9193f06cde9afc127aac581b2876e832"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>getDesktopWidth</b> ()</td></tr>
@@ -972,6 +971,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setCursor</b> (Cursor
 <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>readPixels</b> ()</td></tr>
 <tr class="memdesc:addcb9d8fa85a11a776a3de4579ce0a47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read red, green and blue values of the whole window frame buffer. <br /></td></tr>
 <tr class="separator:addcb9d8fa85a11a776a3de4579ce0a47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2531c14876f3727b99543cc0e726c028" id="r_a2531c14876f3727b99543cc0e726c028"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2531c14876f3727b99543cc0e726c028">readPixels</a> (uint8_t *buffer)</td></tr>
+<tr class="memdesc:a2531c14876f3727b99543cc0e726c028"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read red, green and blue values of the whole window frame buffer into <em>buffer</em>.  <br /></td></tr>
+<tr class="separator:a2531c14876f3727b99543cc0e726c028"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57d53df4f6801a026e40bc1ccf8bd390" id="r_a57d53df4f6801a026e40bc1ccf8bd390"><td class="memItemLeft" align="right" valign="top"><a id="a57d53df4f6801a026e40bc1ccf8bd390" name="a57d53df4f6801a026e40bc1ccf8bd390"></a>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Work.html">Work</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getWork</b> ()</td></tr>
 <tr class="memdesc:a57d53df4f6801a026e40bc1ccf8bd390"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current active <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> or nullptr if none has been set. <br /></td></tr>
@@ -1081,7 +1083,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="window_8hpp_source.html#l00069">69</a> of file <a class="el" href="window_8hpp_source.html">window.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="window_8hpp_source.html#l00071">71</a> of file <a class="el" href="window_8hpp_source.html">window.hpp</a>.</p>
 
 </div>
 </div>
@@ -3304,6 +3306,46 @@ template&lt;class Vect &gt; </div>
 <p>Returns the height of the window in actual pixels (i.e. </p>
 <p>ignoring <a class="el" href="#a7d23d95fbe7f69b235a6984b67f5fa7c" title="Size of one screen pixel in actual pixels.">jngl::getScaleFactor</a>)</p>
 <p>When letter-boxing is used, this doesn't include the black bars. </p>
+
+</div>
+</div>
+<a id="ad84f3e61595dd50afb8c51067ee57bb9" name="ad84f3e61595dd50afb8c51067ee57bb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad84f3e61595dd50afb8c51067ee57bb9">&#9670;&#160;</a></span>getWindowSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/container/array.html">std::array</a>&lt; <a class="el" href="classjngl_1_1Pixels.html">Pixels</a>, 2 &gt; getWindowSize </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns {width, height} of the window in actual pixels. </p>
+<p>When letter-boxing is used, this doesn't include the black bars. </p>
+
+</div>
+</div>
+<a id="a2531c14876f3727b99543cc0e726c028" name="a2531c14876f3727b99543cc0e726c028"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2531c14876f3727b99543cc0e726c028">&#9670;&#160;</a></span>readPixels()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void readPixels </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *</td>          <td class="paramname"><span class="paramname"><em>buffer</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read red, green and blue values of the whole window frame buffer into <em>buffer</em>. </p>
+<p>The buffer must be at least width * height * 3 bytes long, where width and height are the current window dimensions as returned by <a class="el" href="#a8fc4938d1caca0f3230c1aa7acb9661b" title="Returns the width of the window in actual pixels (i.e.">getWindowWidth()</a> and <a class="el" href="#a943b811007cc700d5758b550e843518a" title="Returns the height of the window in actual pixels (i.e.">getWindowHeight()</a>. </p>
 
 </div>
 </div>
