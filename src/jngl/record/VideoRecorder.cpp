@@ -4,7 +4,6 @@
 
 #ifdef JNGL_RECORD
 #include "../../log.hpp"
-#include "../../opengl.hpp"
 #include "../Finally.hpp"
 #include "../other.hpp"
 #include "../window.hpp"
@@ -15,7 +14,6 @@
 #include <cstddef>
 #include <cstring>
 #include <thread>
-#include <vector>
 
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -248,9 +246,9 @@ void VideoRecorder::step() {
 }
 
 void VideoRecorder::draw() const {
-	// FIXME: This is broken when letter-boxing is used
-	glReadPixels(0, 0, impl->codecContext->width, impl->codecContext->height, GL_RGB,
-	             GL_UNSIGNED_BYTE, impl->backBuffer.get());
+	assert(impl->codecContext->width == getWindowWidth());
+	assert(impl->codecContext->height == getWindowHeight());
+	readPixels(impl->backBuffer.get());
 	if (impl->workerThread) {
 		impl->workerThread->join();
 	}

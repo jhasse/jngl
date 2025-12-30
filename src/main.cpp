@@ -396,11 +396,24 @@ void setTitle(const std::string& title) {
 }
 
 std::vector<float> readPixels() {
-	const int w = jngl::getWindowWidth();
-	const int h = jngl::getWindowHeight();
+	const int w = pWindow->getCanvasWidth();
+	const int h = pWindow->getCanvasHeight();
+	auto xOffset = (pWindow->getWidth() - w);
+	auto yOffset = (pWindow->getHeight() - h);
+	assert(xOffset % 2 == 0);
+	assert(yOffset % 2 == 0);
 	std::vector<float> buffer(static_cast<size_t>(3 * w * h));
-	glReadPixels(0, 0, w, h, GL_RGB, GL_FLOAT, buffer.data());
+	glReadPixels(xOffset / 2, yOffset / 2, w, h, GL_RGB, GL_FLOAT, buffer.data());
 	return buffer;
+}
+
+void readPixels(uint8_t* buffer) {
+	auto xOffset = (pWindow->getWidth() - pWindow->getCanvasWidth());
+	auto yOffset = (pWindow->getHeight() - pWindow->getCanvasHeight());
+	assert(xOffset % 2 == 0);
+	assert(yOffset % 2 == 0);
+	glReadPixels(xOffset / 2, yOffset / 2, pWindow->getCanvasWidth(), pWindow->getCanvasHeight(),
+	             GL_RGB, GL_UNSIGNED_BYTE, buffer);
 }
 
 double getTextWidth(const std::string& text) {
@@ -415,7 +428,7 @@ void setLineHeight(double h) {
 	pWindow->setLineHeight(Pixels(ScaleablePixels(h)));
 }
 
-void print(const std::string& text, const jngl::Vec2 position) {
+void print(const std::string& text, const Vec2 position) {
 	pWindow->print(text, static_cast<int>(std::lround(position.x)),
 	               static_cast<int>(std::lround(position.y)));
 }

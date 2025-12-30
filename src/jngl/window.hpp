@@ -49,6 +49,8 @@ int getWindowWidth();
 int getWindowHeight();
 
 /// Returns {width, height} of the window in actual pixels
+///
+/// When letter-boxing is used, this doesn't include the black bars.
 std::array<Pixels, 2> getWindowSize();
 
 /// Returns the width of the main display in actual pixels
@@ -75,5 +77,11 @@ void setCursor(Cursor);
 
 /// Read red, green and blue values of the whole window frame buffer
 std::vector<float> readPixels();
+
+/// Read red, green and blue values of the whole window frame buffer into \a buffer
+///
+/// The buffer must be at least width * height * 3 bytes long, where width and height are the
+/// current window dimensions as returned by getWindowWidth() and getWindowHeight().
+void readPixels(uint8_t* buffer);
 
 } // namespace jngl
