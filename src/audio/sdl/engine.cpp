@@ -124,7 +124,7 @@ struct engine::Impl {
 			internal::debug("Initialized audio: {} channels, {} Hz, {} samples",
 			                static_cast<int>(obtained.channels), obtained.freq, obtained.samples);
 
-			buffer.resize(static_cast<ssize_t>(obtained.samples) * obtained.channels);
+			buffer.resize(static_cast<size_t>(obtained.samples) * obtained.channels);
 			SDL_PauseAudioDevice(device, 0);
 		}
 		~SdlImpl() override {
