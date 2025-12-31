@@ -395,25 +395,30 @@ void setTitle(const std::string& title) {
 	pWindow->SetTitle(title);
 }
 
-std::vector<float> readPixels() {
-	const int w = pWindow->getCanvasWidth();
-	const int h = pWindow->getCanvasHeight();
-	auto xOffset = (pWindow->getWidth() - w);
-	auto yOffset = (pWindow->getHeight() - h);
-	assert(xOffset % 2 == 0);
-	assert(yOffset % 2 == 0);
-	std::vector<float> buffer(static_cast<size_t>(3 * w * h));
-	glReadPixels(xOffset / 2, yOffset / 2, w, h, GL_RGB, GL_FLOAT, buffer.data());
-	return buffer;
-}
-
-void readPixels(uint8_t* buffer) {
+namespace {
+void readPixels(void* buffer, GLenum type) {
 	auto xOffset = (pWindow->getWidth() - pWindow->getCanvasWidth());
 	auto yOffset = (pWindow->getHeight() - pWindow->getCanvasHeight());
 	assert(xOffset % 2 == 0);
 	assert(yOffset % 2 == 0);
+	GLint oldPackAlignment = 0;
+	glGetIntegerv(GL_PACK_ALIGNMENT, &oldPackAlignment);
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(xOffset / 2, yOffset / 2, pWindow->getCanvasWidth(), pWindow->getCanvasHeight(),
-	             GL_RGB, GL_UNSIGNED_BYTE, buffer);
+	             GL_RGB, type, buffer);
+	glPixelStorei(GL_PACK_ALIGNMENT, oldPackAlignment);
+}
+} // namespace
+
+std::vector<float> readPixels() {
+	std::vector<float> buffer(
+	    static_cast<size_t>(3 * pWindow->getCanvasWidth() * pWindow->getCanvasHeight()));
+	readPixels(buffer.data(), GL_FLOAT);
+	return buffer;
+}
+
+void readPixels(uint8_t* buffer) {
+	readPixels(buffer, GL_UNSIGNED_BYTE);
 }
 
 double getTextWidth(const std::string& text) {

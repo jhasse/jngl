@@ -166,7 +166,7 @@ uint8_t mainLoop(AppParameters params) {
 		windowPixelHeight = static_cast<int>(std::lround(params.screenSize->y * getScaleFactor()));
 #ifdef JNGL_RECORD
 		if (windowPixelHeight % 2 != 0) {
-			++windowPixelHeight; // make sure height is even for recording in H.264
+			--windowPixelHeight; // make sure height is even for recording in H.264
 			const double newScaleFactor =
 			    static_cast<double>(windowPixelHeight) / params.screenSize->y;
 			setScaleFactor(newScaleFactor);
