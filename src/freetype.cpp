@@ -4,6 +4,7 @@
 #define _LIBCPP_DISABLE_DEPRECATION_WARNINGS // NOLINT
 #include "freetype.hpp"
 
+#include "FontImpl.hpp"
 #include "ShaderCache.hpp"
 #include "helper.hpp"
 #include "jngl/Finally.hpp"

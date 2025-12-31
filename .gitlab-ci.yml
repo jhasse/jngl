@@ -36,6 +36,11 @@ linux:
   - CC=clang CXX=clang++ CXXFLAGS=-fdiagnostics-color cmake -Bbuild-clang -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DJNGL_CLANG_TIDY=1
   - cd build-clang
   - ninja
+  - cd ..
+  - dnf install -y libavformat-free-devel libswscale-free-devel
+  - cmake -Bbuild-record -G"Ninja Multi-Config" -DCMAKE_COMPILE_WARNING_AS_ERROR=1 -DJNGL_RECORD=1
+  - cd build-record
+  - ninja
 
 mingw:
   parallel:
@@ -61,7 +66,7 @@ mingw:
     - ninja -f build-Release.ninja
 
 android:
-  image: registry.gitlab.com/jhasse/android-ndk-docker:r27c
+  image: registry.gitlab.com/jhasse/android-ndk-docker:r28b
   stage: build
   script:
     - make -C android

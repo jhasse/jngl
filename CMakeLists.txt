@@ -28,7 +28,9 @@ file(GLOB SRC src/*.cpp src/jngl/*.cpp
 	src/audio/*.cpp
 	src/audio/effect/*.cpp
 )
-add_library(jngl ${SRC})
+add_library(jngl ${SRC}
+	src/jngl/record/VideoRecorder.cpp
+)
 file(GLOB HEADERS src/*.hpp src/jngl/*.hpp)
 target_sources(jngl PRIVATE ${HEADERS})
 
@@ -71,6 +73,7 @@ endif()
 target_include_directories(jngl PUBLIC include/public)
 
 option(JNGL_VIDEO "Enable Theora video playback" ON)
+option(JNGL_RECORD "Enable video recording using FFmpeg" OFF)
 option(JNGL_STEAMWORKS "Enable Steamsworks SDK support for achievements" OFF)
 
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
@@ -352,6 +355,16 @@ else()
 						endif()
 					endif()
 				endif()
+			endif()
+			if(JNGL_RECORD)
+				pkg_check_modules(FFMPEG REQUIRED IMPORTED_TARGET
+					libavformat
+					libavcodec
+					libswscale
+					libavutil
+				)
+				target_link_libraries(jngl PRIVATE PkgConfig::FFMPEG)
+				target_compile_definitions(jngl PUBLIC JNGL_RECORD)
 			endif()
 			if(NOT EMSCRIPTEN)
 				pkg_check_modules(VorbisFile REQUIRED vorbisfile)

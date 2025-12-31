@@ -27,9 +27,10 @@ libxxf86vm-dev libvorbis-dev cmake g++ libwebp-dev git libsdl3-dev
 ```
 ### Fedora
 ```bash
-sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libwebp-devel \
-cmake SDL3-devel gcc-c++ libatomic
+sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libwebp-devel cmake \
+ninja-build SDL3-devel gcc-c++ libatomic libavformat-free-devel libswscale-free-devel
 ```
+The last two are only needed if you plan to use [VideoRecorder](https://bixense.com/jngl/classjngl_1_1VideoRecorder.html#details).
 ### Arch Linux
 ```bash
 pacman -Syu --needed cmake gcc sdl3 pkg-config fontconfig libwebp libvorbis
@@ -53,8 +54,10 @@ Then open `build/jngl.sln` in Visual Studio.
 ## macOS
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 ```bash
-brew install sdl3 freetype libvorbis webp pkg-config cmake
+brew install sdl3 freetype libvorbis webp pkg-config cmake ffmpeg
 ```
+
+`ffmpeg` is only needed if you plan to use [VideoRecorder](https://bixense.com/jngl/classjngl_1_1VideoRecorder.html#details).
 
 ## Android
 1. Install the Android SDK and set `ANDROID_HOME` to point to it.
@@ -106,4 +109,3 @@ jngl::AppParameters jnglInit() {
 
 For a more complete starting point (i.e. project structure, etc.) check out the
 [JNGL project template](https://github.com/jhasse/jngl-starter).
-

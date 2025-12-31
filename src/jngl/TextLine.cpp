@@ -3,6 +3,7 @@
 
 #include "TextLine.hpp"
 
+#include "../FontImpl.hpp"
 #include "../freetype.hpp"
 #include "ScaleablePixels.hpp"
 #include "font.hpp"

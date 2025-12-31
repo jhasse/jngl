@@ -151,7 +151,10 @@ uint8_t mainLoop(AppParameters params) {
 		params.screenSize = { static_cast<double>(getDesktopWidth()),
 			                  static_cast<double>(getDesktopHeight()) };
 	}
-	if (!fullscreen) {
+	int windowPixelHeight;
+	if (fullscreen) {
+		windowPixelHeight = getDesktopHeight();
+	} else {
 		// Make window as big as possible
 		const double scaleFactor = std::min((getDesktopWidth() * 0.85) / params.screenSize->x,
 		                                    (getDesktopHeight() * 0.85) / params.screenSize->y);
@@ -160,13 +163,22 @@ uint8_t mainLoop(AppParameters params) {
 		} else {
 			setScaleFactor(scaleFactor);
 		}
+		windowPixelHeight = static_cast<int>(std::lround(params.screenSize->y * getScaleFactor()));
+#ifdef JNGL_RECORD
+		if (windowPixelHeight % 2 != 0) {
+			++windowPixelHeight; // make sure height is even for recording in H.264
+			const double newScaleFactor =
+			    static_cast<double>(windowPixelHeight) / params.screenSize->y;
+			setScaleFactor(newScaleFactor);
+			internal::info("Adjusted scale factor from {} to {} to get even window height.",
+			               scaleFactor, newScaleFactor);
+		}
+#endif
 	}
 	showWindow(params.displayName,
-	           fullscreen ? getDesktopWidth()
-	                      : static_cast<int>(std::lround(params.screenSize->x * getScaleFactor())),
-	           fullscreen ? getDesktopHeight()
-	                      : static_cast<int>(std::lround(params.screenSize->y * getScaleFactor())),
-	           fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
+	           fullscreen ? getDesktopWidth() : (params.screenSize->x * getScaleFactor()),
+	           windowPixelHeight, fullscreen,
+	           params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
 	           params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
 	if (fullscreen && params.screenSize->x > 0 && params.screenSize->y > 0) {
 		const auto windowSize = jngl::getWindowSize();

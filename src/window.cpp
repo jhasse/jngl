@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "window.hpp"
 
+#include "FontImpl.hpp"
 #include "ShaderCache.hpp"
 #include "audio.hpp"
 #include "freetype.hpp"
@@ -320,6 +321,10 @@ void Window::resetFrameLimiter() {
 	frameLimiter = {};
 }
 
+void Window::dontSkipNextFrame() {
+	frameLimiter.stepsPerFrame = 1;
+}
+
 unsigned int Window::getStepsPerSecond() const {
 	return static_cast<unsigned int>(1.0 / timePerStep);
 }
@@ -408,10 +413,11 @@ void Window::stepIfNeeded() {
 		auto start = std::chrono::steady_clock::now();
 #endif
 
-		// use oldschool for loop here, so that Jobs can add other Jobs during step():
-		const size_t numOfJobs = jobs.size();
-		for (size_t i = 0; i < numOfJobs; ++i) {
-			jobs[i]->step();
+		jobs.insert(jobs.end(), std::make_move_iterator(jobsToAdd.begin()),
+		            std::make_move_iterator(jobsToAdd.end()));
+		jobsToAdd.clear();
+		for (const auto& job : jobs) {
+			job->step();
 		}
 
 		for (auto job : jobsToRemove) {
@@ -564,7 +570,7 @@ void Window::setWork(std::shared_ptr<Work> work) {
 }
 
 void Window::addJob(std::shared_ptr<Job> job) {
-	jobs.emplace_back(std::move(job));
+	jobsToAdd.emplace_back(std::move(job));
 }
 
 void Window::removeJob(Job* job) {
@@ -572,9 +578,11 @@ void Window::removeJob(Job* job) {
 }
 
 std::shared_ptr<Job> Window::getJob(const std::function<bool(Job&)>& predicate) const {
-	for (const auto& job : jobs) {
-		if (predicate(*job)) {
-			return job;
+	for (const auto* const container : { &jobs, &jobsToAdd }) {
+		for (const auto& job : *container) {
+			if (predicate(*job)) {
+				return job;
+			}
 		}
 	}
 	return nullptr;

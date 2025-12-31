@@ -6,6 +6,7 @@
 #include <fstream>
 #include <jngl.hpp>
 #include <jngl/init.hpp>
+#include <jngl/record/VideoRecorder.hpp>
 #include <map>
 #include <numbers>
 #include <optional>
@@ -95,6 +96,15 @@ public:
 		if (jngl::keyPressed('l')) {
 			jngl::loop("test.ogg");
 		}
+#ifdef JNGL_RECORD
+		if (jngl::keyPressed('r')) {
+			if (auto videoRecorder = jngl::getJob<jngl::VideoRecorder>()) {
+				jngl::removeJob(videoRecorder.get());
+			} else {
+				jngl::addJob<jngl::VideoRecorder>("../jngl.mp4", jngl::keyDown(jngl::key::Shift));
+			}
+		}
+#endif
 		if (jngl::keyPressed('s')) {
 			useShader = !useShader;
 			if (!shaderProgram) {
@@ -169,7 +179,7 @@ public:
 		jngl::setFontByName("Courier New");
 		jngl::print(sstream.str(), 5, 5);
 		jngl::setFontByName("sans-serif");
-		jngl::setFontColor(0,0,0);
+		jngl::setFontColor(0, 0, 0);
 		jngl::setFontByName("Times New Roman");
 		jngl::print("Black text on white background", 5, 75);
 		jngl::setFontByName("Arial");
@@ -186,8 +196,16 @@ public:
 		jngl::setFontColor(0x000000_rgb);
 		fontNormal.print(mv, "Text with outline.");
 
+#ifdef JNGL_RECORD
+		jngl::print(
+		    std::string("Press R to ") + (jngl::getJob<jngl::VideoRecorder>() ? "stop" : "start") +
+		        " recording to jngl.mkv" + (jngl::keyDown(jngl::key::Shift) ? " (lossless)" : ""),
+		    5, 370);
+#endif
 		jngl::print("Press S to use the blur shader.", 5, 390);
-		jngl::print("Press F to turn drawing on a FBO " + std::string(drawOnFrameBuffer ? "off" : "on") + ".", 5, 410);
+		jngl::print("Press F to turn drawing on a FBO " +
+		                std::string(drawOnFrameBuffer ? "off" : "on") + ".",
+		            5, 410);
 		jngl::print("Press V to toggle V-SYNC.", 5, 430);
 		if (jngl::keyPressed('v')) {
 			jngl::setVerticalSync(!jngl::getVerticalSync());
@@ -522,10 +540,17 @@ void testKeys() {
 			ypos += jngl::getMousePos().y;
 			drawMouse({xpos, ypos});
 		}
-		if (jngl::keyPressed(jngl::key::Escape)) {
-			jngl::setRelativeMouseMode(false);
-			jngl::setMouseVisible(true);
-			jngl::setMouse({xpos, ypos});
+		if (jngl::mousePressed()) {
+			if (jngl::getRelativeMouseMode()) {
+				jngl::setRelativeMouseMode(false);
+				jngl::setMouseVisible(true);
+				jngl::setMouse({xpos, ypos});
+			} else {
+				xpos = jngl::getMousePos().x;
+				ypos = jngl::getMousePos().y;
+				jngl::setRelativeMouseMode(true);
+				jngl::setMouseVisible(false);
+			}
 		}
 		jngl::swapBuffers();
 	}

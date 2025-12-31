@@ -71,7 +71,7 @@ Checks: '
        ,-readability-use-anyofallof,
        ,-readability-use-std-min-max,
 '
-WarningsAsErrors: 'hicpp-use-override,modernize-avoid-bind,llvm-namespace-comment,modernize-use-nullptr,modernize-pass-by-value,hicpp-noexcept-move,boost-use-to-string,google-readability-namespace-comments,modernize-use-default-member-init,modernize-loop-convert,hicpp-use-nullptr,google-readability-braces-around-statements,cert-dcl03-c,readability-else-after-return,bugprone-macro-parentheses,readability-redundant-declaration,google-explicit-constructor,readability-avoid-const-params-in-decls,readability-redundant-casting'
+WarningsAsErrors: 'hicpp-use-override,modernize-avoid-bind,llvm-namespace-comment,modernize-use-nullptr,modernize-pass-by-value,hicpp-noexcept-move,boost-use-to-string,google-readability-namespace-comments,modernize-use-default-member-init,modernize-loop-convert,hicpp-use-nullptr,google-readability-braces-around-statements,cert-dcl03-c,readability-else-after-return,bugprone-macro-parentheses,readability-redundant-declaration,google-explicit-constructor,readability-avoid-const-params-in-decls,readability-redundant-casting,performance-move-const-arg'
 CheckOptions:
       - key:             readability-implicit-bool-conversion.AllowPointerConditions
         value:           '1'

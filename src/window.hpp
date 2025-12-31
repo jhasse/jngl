@@ -110,6 +110,11 @@ public:
 	void removeJob(Job*);
 	std::shared_ptr<Job> getJob(const std::function<bool(Job&)>& predicate) const;
 	void resetFrameLimiter();
+
+	/// Can be called during step and will result that before the next call to step(), draw() will
+	/// be called - even when that would mean slowing down the framerate
+	void dontSkipNextFrame();
+
 	unsigned int getStepsPerSecond() const;
 	void setStepsPerSecond(unsigned int);
 	void addUpdateInputCallback(std::function<void()>);
@@ -175,6 +180,7 @@ private:
 	bool changeWork = false;
 	std::shared_ptr<Work> newWork_;
 	std::vector<std::shared_ptr<Job>> jobs;
+	std::vector<std::shared_ptr<Job>> jobsToAdd;
 	std::vector<Job*> jobsToRemove;
 	double sleepPerFrame = 0; // in seconds
 	double timeSleptSinceLastCheck = 0;
@@ -183,7 +189,9 @@ private:
 	int mouseHiddenCount = 0;
 
 	struct FrameLimiterData {
+		/// How many step() calls per draw() call
 		unsigned int stepsPerFrame = 1;
+
 		double sleepCorrectionFactor = 1;
 		double lastCheckTime = getTime();
 		unsigned int stepsSinceLastCheck = 0;

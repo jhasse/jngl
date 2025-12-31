@@ -8,6 +8,11 @@
 
 namespace jngl {
 
+#ifndef _MSC_VER
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 std::wstring utf8ToUtf16(std::string_view s) {
 	std::wstring wstr =
 	    std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(std::string(s).c_str());
@@ -24,5 +29,9 @@ std::string utf16ToUtf8(std::wstring_view wstr) {
 	return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>().to_bytes(
 	    std::wstring(wstr).c_str());
 }
+
+#ifndef _MSC_VER
+#pragma GCC diagnostic pop
+#endif
 
 } // namespace jngl
