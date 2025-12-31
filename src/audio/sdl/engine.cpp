@@ -36,7 +36,8 @@ struct engine::Impl {
 	struct Backend {
 		virtual ~Backend() = default;
 		virtual void setPause(bool) = 0;
-		virtual void step() {}
+		virtual void step() {
+		}
 	};
 	std::unique_ptr<Backend> backend;
 
