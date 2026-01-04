@@ -413,12 +413,14 @@ void Window::stepIfNeeded() {
 		auto start = std::chrono::steady_clock::now();
 #endif
 
-		jobs.insert(jobs.end(), std::make_move_iterator(jobsToAdd.begin()),
-		            std::make_move_iterator(jobsToAdd.end()));
-		jobsToAdd.clear();
 		for (const auto& job : jobs) {
 			job->step();
 		}
+		for (auto& job : jobsToAdd) {
+			job->step();
+			jobs.emplace_back(std::move(job));
+		}
+		jobsToAdd.clear();
 
 		for (auto job : jobsToRemove) {
 			const auto it = std::find_if(jobs.begin(), jobs.end(),
