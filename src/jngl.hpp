@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Includes all JNGL headers except for init.hpp
 /// @file
@@ -45,6 +45,7 @@
 #include "jngl/matrix.hpp"           // IWYU pragma: keep
 #include "jngl/message.hpp"          // IWYU pragma: keep
 #include "jngl/other.hpp"            // IWYU pragma: keep
+#include "jngl/positioning.hpp"      // IWYU pragma: keep
 #include "jngl/screen.hpp"           // IWYU pragma: keep
 #include "jngl/shapes.hpp"           // IWYU pragma: keep
 #include "jngl/sound.hpp"            // IWYU pragma: keep

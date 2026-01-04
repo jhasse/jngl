@@ -1,4 +1,4 @@
-// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Label.hpp"
 
@@ -36,6 +36,10 @@ void Label::setAlign(Alignment align) {
 
 float Label::getWidth() const {
 	return static_cast<float>(text.getWidth());
+}
+
+void Label::setCenter(jngl::Vec2 position) {
+	this->position = position;
 }
 
 } // namespace jngl
