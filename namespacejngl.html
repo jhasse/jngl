@@ -652,6 +652,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (<a 
 <tr class="memitem:a2c6804b18661e9201fc433980cf5d6ce" id="r_a2c6804b18661e9201fc433980cf5d6ce"><td class="memItemLeft" align="right" valign="top"><a id="a2c6804b18661e9201fc433980cf5d6ce" name="a2c6804b18661e9201fc433980cf5d6ce"></a>
 <a class="el" href="classjngl_1_1Pixels.html">Pixels</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator/</b> (<a class="el" href="classjngl_1_1Pixels.html">Pixels</a>, float)</td></tr>
 <tr class="separator:a2c6804b18661e9201fc433980cf5d6ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab46f197307a8d105cafd4c3f86d1df85" id="r_ab46f197307a8d105cafd4c3f86d1df85"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:ab46f197307a8d105cafd4c3f86d1df85"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#ab46f197307a8d105cafd4c3f86d1df85">setRightEdge</a> (T &amp;obj, <a class="el" href="classjngl_1_1Vec2.html">jngl::Vec2</a> position)</td></tr>
+<tr class="memdesc:ab46f197307a8d105cafd4c3f86d1df85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass an object T that has methods setCenter(jngl::Vec2) and getWidth().  <br /></td></tr>
+<tr class="separator:ab46f197307a8d105cafd4c3f86d1df85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79f3946cc19ffc59833986b1eff21b79" id="r_a79f3946cc19ffc59833986b1eff21b79"><td class="memItemLeft" align="right" valign="top"><a id="a79f3946cc19ffc59833986b1eff21b79" name="a79f3946cc19ffc59833986b1eff21b79"></a>
 <a class="el" href="classjngl_1_1Rgb.html">Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><b>interpolate</b> (<a class="el" href="classjngl_1_1Rgb.html">Rgb</a> a, <a class="el" href="classjngl_1_1Rgb.html">Rgb</a> b, float t)</td></tr>
 <tr class="memdesc:a79f3946cc19ffc59833986b1eff21b79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
@@ -2260,6 +2264,34 @@ template&lt;class Vect &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ab46f197307a8d105cafd4c3f86d1df85" name="ab46f197307a8d105cafd4c3f86d1df85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab46f197307a8d105cafd4c3f86d1df85">&#9670;&#160;</a></span>setRightEdge()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void setRightEdge </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Vec2.html">jngl::Vec2</a></td>          <td class="paramname"><span class="paramname"><em>position</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Pass an object T that has methods setCenter(jngl::Vec2) and getWidth(). </p>
+<p>This function will position the object so that the right edge is at <em>position</em>. </p>
+
+<p class="definition">Definition at line <a class="el" href="positioning_8hpp_source.html#l00013">13</a> of file <a class="el" href="positioning_8hpp_source.html">positioning.hpp</a>.</p>
 
 </div>
 </div>

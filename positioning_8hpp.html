@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.12.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>JNGL: jngl/Vec2.hpp File Reference</title>
+<title>JNGL: jngl/positioning.hpp File Reference</title>
 <link rel="icon" href="favicon.ico" type="image/x-icon" />
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -94,36 +94,28 @@ $(function(){ initResizable(false); });
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">Vec2.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">positioning.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Contains <a class="el" href="classjngl_1_1Vec2.html" title="Two-dimensional vector.">jngl::Vec2</a> class.  
+<p>Useful functions to position elements on the screen.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;boost/qvm_lite.hpp&gt;</code><br />
-<code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/iosfwd.html">iosfwd</a>&gt;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="Vec2_8hpp_source.html">Vec2.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
-Include dependency graph for Vec2.hpp:</div>
+Include dependency graph for positioning.hpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="Vec2_8hpp__incl.svg" width="270" height="111"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="positioning_8hpp__incl.svg" width="270" height="184"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="Vec2_8hpp__dep__incl.svg" width="2312" height="331"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="positioning_8hpp__dep__incl.svg" width="192" height="111"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
-<p><a href="Vec2_8hpp_source.html">Go to the source code of this file.</a></p>
+<p><a href="positioning_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Two-dimensional vector.  <a href="classjngl_1_1Vec2.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html">jngl</a></td></tr>
@@ -132,15 +124,15 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8f2a6065db986b6043f28cab9ca7cefd" id="r_a8f2a6065db986b6043f28cab9ca7cefd"><td class="memItemLeft" align="right" valign="top"><a id="a8f2a6065db986b6043f28cab9ca7cefd" name="a8f2a6065db986b6043f28cab9ca7cefd"></a>
-<a class="elRef" href="http://en.cppreference.com/w/cpp/io/basic_ostream.html">std::ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/io/basic_ostream.html">std::ostream</a> &amp;, const <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> &amp;)</td></tr>
-<tr class="memdesc:a8f2a6065db986b6043f28cab9ca7cefd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints the vector like this: [x=…, y=…]. <br /></td></tr>
-<tr class="separator:a8f2a6065db986b6043f28cab9ca7cefd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab46f197307a8d105cafd4c3f86d1df85" id="r_ab46f197307a8d105cafd4c3f86d1df85"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:ab46f197307a8d105cafd4c3f86d1df85"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacejngl.html#ab46f197307a8d105cafd4c3f86d1df85">setRightEdge</a> (T &amp;obj, <a class="el" href="classjngl_1_1Vec2.html">jngl::Vec2</a> position)</td></tr>
+<tr class="memdesc:ab46f197307a8d105cafd4c3f86d1df85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass an object T that has methods setCenter(jngl::Vec2) and getWidth().  <br /></td></tr>
+<tr class="separator:ab46f197307a8d105cafd4c3f86d1df85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Contains <a class="el" href="classjngl_1_1Vec2.html" title="Two-dimensional vector.">jngl::Vec2</a> class. </p>
+<div class="textblock"><p>Useful functions to position elements on the screen. </p>
 
-<p class="definition">Definition in file <a class="el" href="Vec2_8hpp_source.html">Vec2.hpp</a>.</p>
+<p class="definition">Definition in file <a class="el" href="positioning_8hpp_source.html">positioning.hpp</a>.</p>
 </div></div><!-- contents -->
 <!-- HTML footer for doxygen 1.9.1-->
 <!-- start footer part -->
