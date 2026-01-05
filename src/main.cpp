@@ -76,6 +76,9 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 		internal::warn(message);
 	} else if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {
 		internal::info(message);
+	} else {
+		// NVIDIA driver will spam us, see https://stackoverflow.com/q/46771287/647898
+		// internal::trace(message);
 	}
 }
 #endif
