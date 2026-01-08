@@ -582,7 +582,7 @@ void Window::removeJob(Job* job) {
 std::shared_ptr<Job> Window::getJob(const std::function<bool(Job&)>& predicate) const {
 	for (const auto* const container : { &jobs, &jobsToAdd }) {
 		for (const auto& job : *container) {
-			if (predicate(*job)) {
+			if (job && predicate(*job)) {
 				return job;
 			}
 		}
