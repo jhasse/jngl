@@ -98,7 +98,7 @@ public:
 	double getMouseWheel() const;
 	std::string getFont() const;
 	std::shared_ptr<FontImpl> getFontImpl();
-	void setWork(std::shared_ptr<Work>);
+	void setWork(std::shared_ptr<Scene>);
 
 	/// Returns exitcode for process
 	[[nodiscard]] uint8_t mainLoop();
@@ -106,7 +106,7 @@ public:
 	void stepIfNeeded();
 	void sleepIfNeeded();
 	void draw() const;
-	std::shared_ptr<Work> getWork();
+	std::shared_ptr<Scene> getWork();
 	std::shared_ptr<Scene> getNextScene() const;
 	void addJob(std::shared_ptr<Job>);
 	void removeJob(Job*);

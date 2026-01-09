@@ -493,7 +493,7 @@ void Window::draw() const {
 	if (currentWork_) {
 		currentWork_->draw();
 	} else {
-		jngl::print("No work set. Use jngl::setWork", -50, -5);
+		jngl::print("No scene set. Use jngl::setScene", -50, -5);
 	}
 	for (auto& job : std::ranges::reverse_view(jobs)) {
 		job->draw();
@@ -557,7 +557,7 @@ std::string simpleDemangle(std::string_view mangled) {
 	return result.empty() ? std::string(mangled) : result;
 }
 
-void Window::setWork(std::shared_ptr<Work> work) {
+void Window::setWork(std::shared_ptr<Scene> work) {
 	if (work == currentWork_) {
 		if (changeWork) {
 			changeWork = false;

@@ -1,4 +1,4 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #import "AppDelegate.h"
@@ -25,7 +25,7 @@
 
 	[self.window addSubview:view];
 
-	jngl::setWork(params.start());
+	jngl::setScene(params.start());
 
 	[view drawView:nil];
     [self.window makeKeyAndVisible];

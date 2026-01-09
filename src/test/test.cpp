@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <algorithm>
@@ -115,7 +115,7 @@ public:
 			}
 		}
 		if (jngl::keyPressed('g')) {
-			jngl::setWork<jngl::Fade>(std::make_shared<AsyncLoad>());
+			jngl::setScene<jngl::Fade>(std::make_shared<AsyncLoad>());
 		}
 		if (jngl::keyPressed('e')) {
 			jngl::errorMessage("Hello World!");

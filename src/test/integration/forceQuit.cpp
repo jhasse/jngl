@@ -1,4 +1,4 @@
-// Copyright 2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2025-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 /// Test for jngl::forceQuit
@@ -22,7 +22,7 @@ struct MyScene : jngl::Scene {
 	}
 	void draw() const override {}
 	void step() override {
-		jngl::setWork<MyScene>();
+		jngl::setScene<MyScene>();
 		jngl::forceQuit(std::stoi(jngl::getArgs().at(0)));
 	}
 	void onQuitEvent() override {
