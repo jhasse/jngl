@@ -1,7 +1,8 @@
-// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
+#include "jngl/MouseInfo.hpp"
 #include "jngl/Scene.hpp"
 #include "jngl/input.hpp"
 #include "jngl/time.hpp"
@@ -57,6 +58,7 @@ public:
 	std::vector<Vec2> getTouchPositions() const;
 	int getMouseX() const;
 	int getMouseY() const;
+	MouseInfo& getMouseInfo();
 	int getCanvasWidth() const;
 	int getCanvasHeight() const;
 	int getWidth() const;
@@ -164,6 +166,7 @@ private:
 	int mousey_ = 0;
 	int fontSize_ = 12;
 	int width_, height_;
+	MouseInfo mouseInfo;
 
 	/// UTF-8 string of characters that were pressed since the last frame
 	std::string textInput;

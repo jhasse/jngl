@@ -1,14 +1,32 @@
-// Copyright 2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2025-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "MouseInfo.hpp"
 
+#include "Mat3.hpp"
 #include "input.hpp"
 
 namespace jngl {
 
+struct MouseInfo::Impl {
+	bool enabled = true;
+	bool down = false;
+	Vec2 mousePos;
+};
+
+void MouseInfo::transform(const Mat3& transformationMatrix) {
+	for (auto& impl : impls) {
+		auto inverse = boost::qvm::inverse(transformationMatrix);
+		boost::qvm::vec<float, 3> homogeneous{ static_cast<float>(impl.mousePos.x),
+			                                   static_cast<float>(impl.mousePos.y), 1.0f };
+		auto transformed = inverse * homogeneous;
+		impl.mousePos = Vec2(boost::qvm::A<0>(transformed), boost::qvm::A<1>(transformed));
+	}
+}
+
 void MouseInfo::setMousePos(Vec2 mousePos) {
-	enabled = true;
-	this->mousePos = mousePos;
+	impls.resize(1);
+	impls[0].enabled = true;
+	impls[0].mousePos = mousePos;
 }
 
 Vec2 MouseInfo::Down::newPos() const {
@@ -23,7 +41,7 @@ Vec2 MouseInfo::Down::startPos() const {
 	return startReference;
 }
 
-MouseInfo::Down::Down(MouseInfo& parent, Vec2 objectPos)
+MouseInfo::Down::Down(MouseInfo::Impl& parent, Vec2 objectPos)
 : parent(&parent), startReference(parent.mousePos - objectPos) {
 	parent.down = true;
 }
@@ -46,7 +64,7 @@ MouseInfo::Down::~Down() {
 	}
 }
 
-MouseInfo::Over::Over(MouseInfo& parent) : parent(parent) {
+MouseInfo::Over::Over(MouseInfo::Impl& parent) : parent(parent) {
 }
 
 auto MouseInfo::Over::pressed(Vec2 objectPos) -> std::optional<Down> {
@@ -61,11 +79,17 @@ Vec2 MouseInfo::Over::pos() const {
 	return parent.mousePos;
 }
 
-auto MouseInfo::pos() -> std::optional<Over> {
-	if (enabled && !down) {
-		return Over{ *this };
+std::span<MouseInfo::Over> MouseInfo::cursors() {
+	activeCursors.clear();
+	for (auto& impl : impls) {
+		if (impl.enabled && !impl.down) {
+			activeCursors.emplace_back(impl);
+		}
 	}
-	return std::nullopt;
+	return activeCursors;
 }
+
+MouseInfo::MouseInfo() = default;
+MouseInfo::~MouseInfo() = default;
 
 } // namespace jngl

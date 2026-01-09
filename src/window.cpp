@@ -286,10 +286,20 @@ void Window::updateKeyStates() {
 	if (auto audio = Audio::handleIfAlive()) {
 		audio->step();
 	}
+
+	mouseInfo.setMousePos(getMousePos());
 }
 
 double Window::getMouseWheel() const {
 	return mouseWheel;
+}
+
+MouseInfo& Window::getMouseInfo() {
+	return mouseInfo;
+}
+
+MouseInfo& input() {
+	return pWindow->getMouseInfo();
 }
 
 uint8_t Window::mainLoop() {
