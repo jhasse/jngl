@@ -212,18 +212,18 @@ Collaboration diagram for Work:</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">class </span>PauseMenu : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Work</a> {</div>
 <div class="line">    <span class="keywordtype">void</span> <a class="code hl_function" href="#ad9283b336e6952919ef4d3f435105451">onBackEvent</a>()<span class="keyword"> override </span>{</div>
-<div class="line">        <a class="code hl_function" href="namespacejngl.html#a9937073cb10d7c761085e47010390297">jngl::setWork&lt;MainMenu&gt;</a>();</div>
+<div class="line">        <a class="code hl_function" href="namespacejngl.html#ad98bbc26d3770af61a50b61da410bee8">jngl::setScene&lt;MainMenu&gt;</a>();</div>
 <div class="line">    }</div>
 <div class="line">};</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">class </span>Game : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Work</a> {</div>
 <div class="line">    <span class="keywordtype">void</span> <a class="code hl_function" href="#ad9283b336e6952919ef4d3f435105451">onBackEvent</a>()<span class="keyword"> override </span>{</div>
-<div class="line">        <a class="code hl_function" href="namespacejngl.html#a9937073cb10d7c761085e47010390297">jngl::setWork&lt;PauseMenu&gt;</a>();</div>
+<div class="line">        <a class="code hl_function" href="namespacejngl.html#ad98bbc26d3770af61a50b61da410bee8">jngl::setScene&lt;PauseMenu&gt;</a>();</div>
 <div class="line">    }</div>
 <div class="line">};</div>
 <div class="ttc" id="aclassjngl_1_1Work_html"><div class="ttname"><a href="classjngl_1_1Work.html">jngl::Work</a></div><div class="ttdoc">Active state of the game, e.g. a menu or the game itself.</div><div class="ttdef"><b>Definition</b> <a href="work_8hpp_source.html#l00013">work.hpp:13</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Work_html_ad9283b336e6952919ef4d3f435105451"><div class="ttname"><a href="#ad9283b336e6952919ef4d3f435105451">jngl::Work::onBackEvent</a></div><div class="ttdeci">virtual void onBackEvent()</div><div class="ttdoc">Gets called on Android's &quot;back&quot; gesture or when the Esc key is pressed.</div></div>
-<div class="ttc" id="anamespacejngl_html_a9937073cb10d7c761085e47010390297"><div class="ttname"><a href="namespacejngl.html#a9937073cb10d7c761085e47010390297">jngl::setWork</a></div><div class="ttdeci">void setWork(std::shared_ptr&lt; Work &gt; work)</div><div class="ttdoc">Sets the passed Work to be active in the main loop.</div></div>
+<div class="ttc" id="anamespacejngl_html_ad98bbc26d3770af61a50b61da410bee8"><div class="ttname"><a href="namespacejngl.html#ad98bbc26d3770af61a50b61da410bee8">jngl::setScene</a></div><div class="ttdeci">void setScene(std::shared_ptr&lt; Scene &gt;)</div><div class="ttdoc">Sets the passed Scene to be active in the main loop for the next frame.</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -255,7 +255,7 @@ Collaboration diagram for Work:</div>
 <div class="fragment"><div class="line"><span class="keyword">class </span>Game : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Work</a> {</div>
 <div class="line">    <span class="keywordtype">void</span> <a class="code hl_function" href="#a73f9f5ca4d5c6d4dc49b176af928cd90">onQuitEvent</a>() {</div>
 <div class="line">        <a class="code hl_function" href="namespacejngl.html#a435e2f7919544ec87ae83ffdb226a50d">jngl::cancelQuit</a>();</div>
-<div class="line">        <a class="code hl_function" href="namespacejngl.html#a9937073cb10d7c761085e47010390297">jngl::setWork&lt;PauseMenu&gt;</a>();</div>
+<div class="line">        <a class="code hl_function" href="namespacejngl.html#ad98bbc26d3770af61a50b61da410bee8">jngl::setScene&lt;PauseMenu&gt;</a>();</div>
 <div class="line">    }</div>
 <div class="line">};</div>
 <div class="ttc" id="aclassjngl_1_1Work_html_a73f9f5ca4d5c6d4dc49b176af928cd90"><div class="ttname"><a href="#a73f9f5ca4d5c6d4dc49b176af928cd90">jngl::Work::onQuitEvent</a></div><div class="ttdeci">virtual void onQuitEvent()</div><div class="ttdoc">Gets called when the user closes the main window or quit() has been called.</div></div>
