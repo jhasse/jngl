@@ -96,6 +96,7 @@ $(function(){ initResizable(false); });
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classjngl_1_1MouseInfo-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">MouseInfo Class Reference</div></div>
 </div><!--header-->
@@ -110,18 +111,81 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0f2365f9d2703641f0342be2356a7fd9" id="r_a0f2365f9d2703641f0342be2356a7fd9"><td class="memItemLeft" align="right" valign="top"><a id="a0f2365f9d2703641f0342be2356a7fd9" name="a0f2365f9d2703641f0342be2356a7fd9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setMousePos</b> (<a class="el" href="classjngl_1_1Vec2.html">Vec2</a>)</td></tr>
-<tr class="separator:a0f2365f9d2703641f0342be2356a7fd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aada58c59c37b272130f131f0dbb0173f" id="r_aada58c59c37b272130f131f0dbb0173f"><td class="memItemLeft" align="right" valign="top"><a id="aada58c59c37b272130f131f0dbb0173f" name="aada58c59c37b272130f131f0dbb0173f"></a>
-<a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt; <a class="el" href="structjngl_1_1MouseInfo_1_1Over.html">Over</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>pos</b> ()</td></tr>
-<tr class="memdesc:aada58c59c37b272130f131f0dbb0173f"><td class="mdescLeft">&#160;</td><td class="mdescRight">will return nullopt if the mouse is already over another object <br /></td></tr>
-<tr class="separator:aada58c59c37b272130f131f0dbb0173f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bda5860fe3ca5a2fac98c29d8d2516e" id="r_a6bda5860fe3ca5a2fac98c29d8d2516e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6bda5860fe3ca5a2fac98c29d8d2516e">transform</a> (const <a class="el" href="classjngl_1_1Mat3.html">jngl::Mat3</a> &amp;transformationMatrix)</td></tr>
+<tr class="memdesc:a6bda5860fe3ca5a2fac98c29d8d2516e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies the <em>transformationMatrix</em> on the mouse position.  <br /></td></tr>
+<tr class="separator:a6bda5860fe3ca5a2fac98c29d8d2516e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e060717132fa77bfee61096f532b6b7" id="r_a0e060717132fa77bfee61096f532b6b7"><td class="memItemLeft" align="right" valign="top"><a id="a0e060717132fa77bfee61096f532b6b7" name="a0e060717132fa77bfee61096f532b6b7"></a>
+<a class="elRef" href="http://en.cppreference.com/w/cpp/container/span.html">std::span</a>&lt; <a class="el" href="structjngl_1_1MouseInfo_1_1Over.html">Over</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>cursors</b> ()</td></tr>
+<tr class="memdesc:a0e060717132fa77bfee61096f532b6b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Only returns mouse cursors that are currently not over something. <br /></td></tr>
+<tr class="separator:a0e060717132fa77bfee61096f532b6b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a8610266514fc89029d7e9ef51d11f9b7" id="r_a8610266514fc89029d7e9ef51d11f9b7"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8610266514fc89029d7e9ef51d11f9b7">jngl::Window</a></td></tr>
+<tr class="separator:a8610266514fc89029d7e9ef51d11f9b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="MouseInfo_8hpp_source.html#l00013">13</a> of file <a class="el" href="MouseInfo_8hpp_source.html">MouseInfo.hpp</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="MouseInfo_8hpp_source.html#l00017">17</a> of file <a class="el" href="MouseInfo_8hpp_source.html">MouseInfo.hpp</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6bda5860fe3ca5a2fac98c29d8d2516e" name="a6bda5860fe3ca5a2fac98c29d8d2516e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bda5860fe3ca5a2fac98c29d8d2516e">&#9670;&#160;</a></span>transform()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void transform </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1Mat3.html">jngl::Mat3</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>transformationMatrix</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies the <em>transformationMatrix</em> on the mouse position. </p>
+<p>Let's say you want to move the move position in <a class="el" href="classjngl_1_1MouseInfo.html">MouseInfo</a> 50 pixel to the right, you'd do:</p>
+<div class="fragment"><div class="line"><a class="code hl_class" href="classjngl_1_1Mat3.html">jngl::Mat3</a> matrix;</div>
+<div class="line">matrix.<a class="code hl_function" href="classjngl_1_1Mat3.html#a363438b892f92cee74ff2f6a69616075">translate</a>(<a class="code hl_class" href="classjngl_1_1Vec2.html">jngl::Vec2</a>(50, 0));</div>
+<div class="line">jngl::mouseInfo().transform(matrix);</div>
+<div class="ttc" id="aclassjngl_1_1Mat3_html"><div class="ttname"><a href="classjngl_1_1Mat3.html">jngl::Mat3</a></div><div class="ttdoc">3x3 matrix</div><div class="ttdef"><b>Definition</b> <a href="Mat3_8hpp_source.html#l00018">Mat3.hpp:18</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Mat3_html_a363438b892f92cee74ff2f6a69616075"><div class="ttname"><a href="classjngl_1_1Mat3.html#a363438b892f92cee74ff2f6a69616075">jngl::Mat3::translate</a></div><div class="ttdeci">Mat3 &amp; translate(const Vec2 &amp;v)</div><div class="ttdoc">Multiplies the matrix with a translation matrix generated from v.</div></div>
+<div class="ttc" id="aclassjngl_1_1Vec2_html"><div class="ttname"><a href="classjngl_1_1Vec2.html">jngl::Vec2</a></div><div class="ttdoc">Two-dimensional vector.</div><div class="ttdef"><b>Definition</b> <a href="Vec2_8hpp_source.html#l00036">Vec2.hpp:36</a></div></div>
+</div><!-- fragment --><p>If <code>(mousePos.x, mousePos.y, 1)</code> is <picture><source srcset="form_2_dark.svg" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$p$" src="form_2.svg" width="8" height="9"/></picture> and <em>transformationMatrix</em> is <picture><source srcset="form_3_dark.svg" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$M$" src="form_3.svg" width="14" height="10"/></picture> this does:   </p><p class="formulaDsp">
+<picture><source srcset="form_4_dark.svg" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+p' = M^{-1} \cdot p
+\]" src="form_4.svg" width="70" height="15"/></picture>
+</p>
+<p>It uses the inverse of the passed matrix, because normally transformations are for rendering where world coordinates are transformed into screen coordinates. The mouse position is in screen coordinates and you want to transform it to world coordinates. This is useful if you have a camera matrix and use it for rendering (applying it on <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c" title="Returns a copy of the global ModelView matrix.">jngl::modelview()</a>) and here. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Symbol Documentation</h2>
+<a id="a8610266514fc89029d7e9ef51d11f9b7" name="a8610266514fc89029d7e9ef51d11f9b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8610266514fc89029d7e9ef51d11f9b7">&#9670;&#160;</a></span>jngl::Window</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class jngl::Window</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="MouseInfo_8hpp_source.html#l00081">81</a> of file <a class="el" href="MouseInfo_8hpp_source.html">MouseInfo.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>jngl/<a class="el" href="MouseInfo_8hpp_source.html">MouseInfo.hpp</a></li>
 </ul>
 </div><!-- contents -->

@@ -106,15 +106,15 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>pos</b> () const</td></tr>
 <tr class="separator:acba6d8ab1ed1f7c3ad400731552edc33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc07d3057bca7416778effc311c66fd0" id="r_abc07d3057bca7416778effc311c66fd0"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt; <a class="el" href="structjngl_1_1MouseInfo_1_1Down.html">Down</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc07d3057bca7416778effc311c66fd0">pressed</a> (<a class="el" href="classjngl_1_1Vec2.html">Vec2</a> objectPos)</td></tr>
-<tr class="memdesc:abc07d3057bca7416778effc311c66fd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">calling this will result in all future calls of <a class="el" href="classjngl_1_1MouseInfo.html#aada58c59c37b272130f131f0dbb0173f" title="will return nullopt if the mouse is already over another object">MouseInfo::pos</a> returning nullopt  <br /></td></tr>
+<tr class="memdesc:abc07d3057bca7416778effc311c66fd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">calling this will result in all future calls of <a class="el" href="classjngl_1_1MouseInfo.html#a0e060717132fa77bfee61096f532b6b7" title="Only returns mouse cursors that are currently not over something.">MouseInfo::cursors</a> not returning this cursor  <br /></td></tr>
 <tr class="separator:abc07d3057bca7416778effc311c66fd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5a5b2bbd859781e5e425e38ab4e7646" id="r_ad5a5b2bbd859781e5e425e38ab4e7646"><td class="memItemLeft" align="right" valign="top"><a id="ad5a5b2bbd859781e5e425e38ab4e7646" name="ad5a5b2bbd859781e5e425e38ab4e7646"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Over</b> (<a class="el" href="classjngl_1_1MouseInfo.html">MouseInfo</a> &amp;)</td></tr>
-<tr class="separator:ad5a5b2bbd859781e5e425e38ab4e7646"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a150abde959dd76c3bca59740ee05fa07" id="r_a150abde959dd76c3bca59740ee05fa07"><td class="memItemLeft" align="right" valign="top"><a id="a150abde959dd76c3bca59740ee05fa07" name="a150abde959dd76c3bca59740ee05fa07"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Over</b> (MouseInfo::Impl &amp;)</td></tr>
+<tr class="separator:a150abde959dd76c3bca59740ee05fa07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="MouseInfo_8hpp_source.html#l00036">36</a> of file <a class="el" href="MouseInfo_8hpp_source.html">MouseInfo.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MouseInfo_8hpp_source.html#l00062">62</a> of file <a class="el" href="MouseInfo_8hpp_source.html">MouseInfo.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="abc07d3057bca7416778effc311c66fd0" name="abc07d3057bca7416778effc311c66fd0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abc07d3057bca7416778effc311c66fd0">&#9670;&#160;</a></span>pressed()</h2>
@@ -131,7 +131,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>calling this will result in all future calls of <a class="el" href="classjngl_1_1MouseInfo.html#aada58c59c37b272130f131f0dbb0173f" title="will return nullopt if the mouse is already over another object">MouseInfo::pos</a> returning nullopt </p>
+<p>calling this will result in all future calls of <a class="el" href="classjngl_1_1MouseInfo.html#a0e060717132fa77bfee61096f532b6b7" title="Only returns mouse cursors that are currently not over something.">MouseInfo::cursors</a> not returning this cursor </p>
 <p>objectPos will be used to calculate newPos </p>
 
 </div>

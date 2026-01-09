@@ -541,6 +541,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>errorMessage</b> (con
 <tr class="memitem:ad56918d844181dff49573ec374365d00" id="r_ad56918d844181dff49573ec374365d00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad56918d844181dff49573ec374365d00">printMessage</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text)</td></tr>
 <tr class="memdesc:ad56918d844181dff49573ec374365d00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints <em>text</em> on stdout.  <br /></td></tr>
 <tr class="separator:ad56918d844181dff49573ec374365d00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0be462f3d81153ffe77a6bcbefe91c14" id="r_a0be462f3d81153ffe77a6bcbefe91c14"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1MouseInfo.html">MouseInfo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0be462f3d81153ffe77a6bcbefe91c14">input</a> ()</td></tr>
+<tr class="memdesc:a0be462f3d81153ffe77a6bcbefe91c14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a reference to the global <a class="el" href="classjngl_1_1MouseInfo.html">MouseInfo</a> instance, similar to <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c" title="Returns a copy of the global ModelView matrix.">jngl::modelview()</a>  <br /></td></tr>
+<tr class="separator:a0be462f3d81153ffe77a6bcbefe91c14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa6432a11cc8aa43cdcac30e43bf038f" id="r_aaa6432a11cc8aa43cdcac30e43bf038f"><td class="memItemLeft" align="right" valign="top"><a id="aaa6432a11cc8aa43cdcac30e43bf038f" name="aaa6432a11cc8aa43cdcac30e43bf038f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>running</b> ()</td></tr>
 <tr class="memdesc:aaa6432a11cc8aa43cdcac30e43bf038f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true until the main window is closed or <a class="el" href="#ad0eb736262d05c5af0143a5eadae67ca" title="Emit a quit event (i.e.">quit()</a> has been called. <br /></td></tr>
@@ -1973,6 +1976,26 @@ template&lt;class Vect &gt; </div>
 
 <p>Prints <em>text</em> on stdout. </p>
 <p>Normally this is the same as <code><a class="elRef" href="http://en.cppreference.com/w/cpp/io/cout.html">std::cout</a> &lt;&lt; text &lt;&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/io/manip/flush.html">std::flush</a>;</code>. On Android this will use <code>__android_log_print</code> for example. </p>
+
+</div>
+</div>
+<a id="a0be462f3d81153ffe77a6bcbefe91c14" name="a0be462f3d81153ffe77a6bcbefe91c14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0be462f3d81153ffe77a6bcbefe91c14">&#9670;&#160;</a></span>input()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1MouseInfo.html">MouseInfo</a> &amp; input </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a reference to the global <a class="el" href="classjngl_1_1MouseInfo.html">MouseInfo</a> instance, similar to <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c" title="Returns a copy of the global ModelView matrix.">jngl::modelview()</a> </p>
+<p>Any transformations on the position will be reset at the beginning of a step. </p>
 
 </div>
 </div>

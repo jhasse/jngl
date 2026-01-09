@@ -10,11 +10,13 @@ var searchData=
   ['variant_5fsize_7',['variant_size',['http://en.cppreference.com/w/cpp/utility/variant/variant_size.html',1,'std']]],
   ['vec2_8',['Vec2',['../classjngl_1_1Vec2.html',1,'jngl']]],
   ['vector_9',['vector',['http://en.cppreference.com/w/cpp/container/vector.html',1,'vector'],['http://en.cppreference.com/w/cpp/container/vector.html',1,'vector']]],
-  ['vector_3c_20std_3a_3ashared_5fptr_3c_20line_20_3e_20_3e_10',['vector&lt; std::shared_ptr&lt; Line &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
-  ['vector_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3aeffect_20_3e_20_3e_11',['vector&lt; std::unique_ptr&lt; jngl::Effect &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
-  ['vector_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3awidget_20_3e_20_3e_12',['vector&lt; std::unique_ptr&lt; jngl::Widget &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
-  ['vertex_13',['Vertex',['../structjngl_1_1Vertex.html',1,'jngl']]],
-  ['video_14',['Video',['../classjngl_1_1Video.html',1,'jngl']]],
-  ['videorecorder_15',['VideoRecorder',['../classjngl_1_1VideoRecorder.html',1,'jngl']]],
-  ['void_5ft_16',['void_t',['http://en.cppreference.com/w/cpp/experimental/void_t.html',1,'void_t'],['http://en.cppreference.com/w/cpp/types/void_t.html',1,'void_t']]]
+  ['vector_3c_20impl_20_3e_10',['vector&lt; Impl &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
+  ['vector_3c_20jngl_3a_3amouseinfo_3a_3aover_20_3e_11',['vector&lt; jngl::MouseInfo::Over &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
+  ['vector_3c_20std_3a_3ashared_5fptr_3c_20line_20_3e_20_3e_12',['vector&lt; std::shared_ptr&lt; Line &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
+  ['vector_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3aeffect_20_3e_20_3e_13',['vector&lt; std::unique_ptr&lt; jngl::Effect &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
+  ['vector_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3awidget_20_3e_20_3e_14',['vector&lt; std::unique_ptr&lt; jngl::Widget &gt; &gt;',['http://en.cppreference.com/w/cpp/container/vector.html',1,'std']]],
+  ['vertex_15',['Vertex',['../structjngl_1_1Vertex.html',1,'jngl']]],
+  ['video_16',['Video',['../classjngl_1_1Video.html',1,'jngl']]],
+  ['videorecorder_17',['VideoRecorder',['../classjngl_1_1VideoRecorder.html',1,'jngl']]],
+  ['void_5ft_18',['void_t',['http://en.cppreference.com/w/cpp/experimental/void_t.html',1,'void_t'],['http://en.cppreference.com/w/cpp/types/void_t.html',1,'void_t']]]
 ];
