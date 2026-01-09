@@ -1,11 +1,13 @@
 <map id="jngl/MouseInfo.hpp" name="jngl/MouseInfo.hpp">
-<area shape="rect" id="Node000001" title="Contains jngl::MouseInfo class." alt="" coords="185,5,351,31"/>
+<area shape="rect" id="Node000001" title="Contains jngl::MouseInfo class." alt="" coords="232,5,397,31"/>
 <area shape="rect" id="Node000002" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="116,79,201,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="251,34,191,73,188,68,248,29"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="289,34,200,75,198,70,287,29"/>
 <area shape="rect" id="Node000005" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/optional.html" title=" " alt="" coords="225,79,311,105"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="271,31,271,63,265,63,265,31"/>
-<area shape="rect" id="Node000006" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="335,79,404,105"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="287,29,341,67,338,72,284,34"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="309,33,286,67,282,64,305,30"/>
+<area shape="rect" id="Node000006" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/span.html" title=" " alt="" coords="335,79,388,105"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="325,30,347,64,343,67,320,33"/>
+<area shape="rect" id="Node000007" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="412,79,481,105"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="338,29,412,69,410,74,336,34"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="5,153,171,178"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="149,107,112,143,109,140,145,103"/>
 <area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="195,153,264,178"/>
