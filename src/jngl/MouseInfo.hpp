@@ -7,6 +7,7 @@
 #include "Vec2.hpp"
 
 #include <optional>
+#include <span>
 #include <vector>
 
 namespace jngl {
