@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #ifndef NOPNG
@@ -16,8 +16,10 @@
 #include "../texture.hpp"
 #include "../windowptr.hpp"
 #include "Alpha.hpp"
+#include "Color.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
+#include "shapes.hpp"
 
 #ifdef _WIN32
 #include "../win32/unicode.hpp"
@@ -63,8 +65,8 @@ Sprite::Sprite(const uint8_t* const bytes, const size_t width, const size_t heig
 	}
 	texture = std::make_shared<Texture>(width, height, static_cast<int>(width),
 	                                    static_cast<int>(height), nullptr, GL_RGBA, bytes);
-	Drawable::width = static_cast<float>(width);
-	Drawable::height = static_cast<float>(height);
+	this->width = static_cast<float>(width);
+	this->height = static_cast<float>(height);
 	setCenter(0, 0);
 }
 
@@ -153,6 +155,103 @@ Sprite::Sprite(const std::string& filename, LoadType loadType)
 void Sprite::step() {
 }
 
+Vec2 Sprite::getPos() const {
+	return { getX(), getY() };
+}
+
+void Sprite::setPos(const double x, const double y) {
+	setX(x);
+	setY(y);
+}
+
+jngl::Vec2 Sprite::getCenter() const {
+	return { getX() + getWidth() / 2, getY() + getHeight() / 2 };
+}
+
+void Sprite::setCenter(const double x, const double y) {
+	setX(x - getWidth() / 2);
+	setY(y - getHeight() / 2);
+}
+
+double Sprite::getLeft() const {
+	return getX() + getScreenWidth() / 2;
+}
+
+void Sprite::setLeft(const double x) {
+	setX(x - getScreenWidth() / 2);
+}
+
+double Sprite::getTop() const {
+	return getY() + getScreenHeight() / 2;
+}
+
+void Sprite::setTop(const double y) {
+	setY(y - getScreenHeight() / 2);
+}
+
+double Sprite::getBottom() const {
+	return getScreenHeight() / 2 - getY() - getHeight();
+}
+
+void Sprite::setBottom(const double y) {
+	setY(getScreenHeight() / 2 - y - getHeight());
+}
+
+double Sprite::getRight() const {
+	return getScreenWidth() / 2 - getX() - getWidth();
+}
+
+void Sprite::setRight(const double x) {
+	setX(getScreenWidth() / 2 - x - getWidth());
+}
+
+double Sprite::getX() const {
+	return position.x / getScaleFactor();
+}
+
+void Sprite::setX(const double x) {
+	position.x = x * getScaleFactor();
+}
+
+double Sprite::getY() const {
+	return position.y / getScaleFactor();
+}
+
+void Sprite::setY(const double y) {
+	position.y = y * getScaleFactor();
+}
+
+Vec2 Sprite::getSize() const {
+	return { static_cast<double>(width) / getScaleFactor(),
+		     static_cast<double>(height) / getScaleFactor() };
+}
+
+float Sprite::getWidth() const {
+	return width / static_cast<float>(getScaleFactor());
+}
+
+float Sprite::getHeight() const {
+	return height / static_cast<float>(getScaleFactor());
+}
+
+void Sprite::drawBoundingBox() const {
+	setColor(Color(255, 0, 0));
+	const double LINE_WIDTH = 2;
+	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 },
+	         { LINE_WIDTH + getWidth(), LINE_WIDTH });
+	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 },
+	         { LINE_WIDTH, LINE_WIDTH + getHeight() });
+	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 + getHeight() },
+	         { LINE_WIDTH + getWidth(), LINE_WIDTH });
+	drawRect({ getX() - LINE_WIDTH / 2 + getWidth(), getY() - LINE_WIDTH / 2 },
+	         { LINE_WIDTH, LINE_WIDTH + getHeight() });
+}
+
+bool Sprite::contains(const jngl::Vec2 point) const {
+	return (getX() <= point.x && point.x < getX() + getWidth() && getY() <= point.y &&
+	        point.y < getY() + getHeight());
+}
+
 void Sprite::draw() const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
@@ -201,9 +300,8 @@ void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
-			opengl::modelview.data);
-	}
-	else {
+		                   opengl::modelview.data);
+	} else {
 		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
@@ -254,9 +352,8 @@ void Sprite::drawScaled(float xfactor, float yfactor,
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
-			opengl::modelview.data);
-	}
-	else {
+		                   opengl::modelview.data);
+	} else {
 		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
@@ -375,18 +472,17 @@ Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool 
 
 	GLenum format;
 	switch (png_get_channels(png_ptr, info_ptr)) {
-		case 1: // gray or palette, we can set format to RGB because we passed PNG_TRANSFORM_EXPAND
-		        // to png_read_png
-		case 3:
-			format = GL_RGB;
-			break;
-		case 2: // gray + alpha
-		case 4:
-			format = GL_RGBA;
-			break;
-		default:
-			throw std::runtime_error(
-			    std::string("Unsupported number of channels. (" + filename + ")"));
+	case 1: // gray or palette, we can set format to RGB because we passed PNG_TRANSFORM_EXPAND
+	        // to png_read_png
+	case 3:
+		format = GL_RGB;
+		break;
+	case 2: // gray + alpha
+	case 4:
+		format = GL_RGBA;
+		break;
+	default:
+		throw std::runtime_error(std::string("Unsupported number of channels. (" + filename + ")"));
 	}
 
 	Finally freePng([&png_ptr, &info_ptr]() {
@@ -494,16 +590,12 @@ Finally disableBlending() {
 		return Finally(nullptr);
 	}
 	glDisable(GL_BLEND);
-	return Finally([]() {
-		glEnable(GL_BLEND);
-	});
+	return Finally([]() { glEnable(GL_BLEND); });
 }
 
 Finally drawOnlyIntoAlphaChannel() {
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_TRUE);
-	return Finally([]() {
-		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	});
+	return Finally([]() { glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); });
 }
 
 } // namespace jngl
