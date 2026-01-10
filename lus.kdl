@@ -41,6 +41,10 @@ build {
 	- test -f "build/build.ninja" || lus cmake
 	- ninja -Cbuild $args
 }
+run {
+	- lus build jngl-test
+	- "build/Debug/jngl-test" $args
+}
 unittest {
 	- lus build jngl-unittest
 	- cd build
