@@ -65,5 +65,22 @@ boost::ut::suite _ = [] {
 )")));
 		}
 	};
+	"ellipse"_test = [] {
+		for (double scaleFactor : { 1, 2 }) {
+			Fixture f(scaleFactor);
+			auto mv = jngl::modelview();
+			// Draw an ellipse centered near the left side
+			jngl::drawEllipse(mv.translate({ -100, 0 }), 36, 20);
+			expect(eq(f.getAsciiArt(), std::string(R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒   ░▒▒░                       ▒
+▒ ░██████░                     ▒
+▒ ▒██████▒                     ▒
+▒ ░██████░                     ▒
+▒   ░▒▒░                       ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)")));
+		}
+	};
 };
 } // namespace
