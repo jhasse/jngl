@@ -137,12 +137,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9c9151f9ca0ff60312eb4571a55c52d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc691192408ad699380be20bb1de75cc" id="r_afc691192408ad699380be20bb1de75cc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc691192408ad699380be20bb1de75cc">Sprite</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename, LoadType loadType=LoadType::NORMAL)</td></tr>
 <tr class="separator:afc691192408ad699380be20bb1de75cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6c526798a490afe221d1447f508f16a" id="r_ae6c526798a490afe221d1447f508f16a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6c526798a490afe221d1447f508f16a">step</a> () override</td></tr>
-<tr class="memdesc:ae6c526798a490afe221d1447f508f16a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does nothing.  <br /></td></tr>
-<tr class="separator:ae6c526798a490afe221d1447f508f16a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35460413b5c663cd8a28ad3c80caaf71" id="r_a35460413b5c663cd8a28ad3c80caaf71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35460413b5c663cd8a28ad3c80caaf71">draw</a> () const override</td></tr>
-<tr class="memdesc:a35460413b5c663cd8a28ad3c80caaf71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a>, centered by default.  <br /></td></tr>
-<tr class="separator:a35460413b5c663cd8a28ad3c80caaf71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6bf1a12c5c98ddec5b65e07fe74cabe" id="r_ac6bf1a12c5c98ddec5b65e07fe74cabe"><td class="memItemLeft" align="right" valign="top"><a id="ac6bf1a12c5c98ddec5b65e07fe74cabe" name="ac6bf1a12c5c98ddec5b65e07fe74cabe"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>step</b> ()</td></tr>
+<tr class="memdesc:ac6bf1a12c5c98ddec5b65e07fe74cabe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does nothing. <br /></td></tr>
+<tr class="separator:ac6bf1a12c5c98ddec5b65e07fe74cabe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a257b753011ed7e831390acf9b70614f0" id="r_a257b753011ed7e831390acf9b70614f0"><td class="memItemLeft" align="right" valign="top"><a id="a257b753011ed7e831390acf9b70614f0" name="a257b753011ed7e831390acf9b70614f0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> () const</td></tr>
+<tr class="memdesc:a257b753011ed7e831390acf9b70614f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a>, centered by default. <br /></td></tr>
+<tr class="separator:a257b753011ed7e831390acf9b70614f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2eb0147312a9f4537c126c5d8be87c92" id="r_a2eb0147312a9f4537c126c5d8be87c92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2eb0147312a9f4537c126c5d8be87c92">draw</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *shaderProgram=nullptr) const</td></tr>
 <tr class="memdesc:a2eb0147312a9f4537c126c5d8be87c92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the image centered using <em>modelview</em>.  <br /></td></tr>
 <tr class="separator:a2eb0147312a9f4537c126c5d8be87c92"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,103 +182,75 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawMesh</b> (<a clas
 <tr class="memitem:ac417e162aaacd2e4f918c12966052cd0" id="r_ac417e162aaacd2e4f918c12966052cd0"><td class="memItemLeft" align="right" valign="top"><a id="ac417e162aaacd2e4f918c12966052cd0" name="ac417e162aaacd2e4f918c12966052cd0"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setBytes</b> (const unsigned char *)</td></tr>
 <tr class="separator:ac417e162aaacd2e4f918c12966052cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classjngl_1_1Drawable"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classjngl_1_1Drawable')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classjngl_1_1Drawable.html">Drawable</a></td></tr>
-<tr class="memitem:afd7c2d5efc6c3ef3009991cc8b076da7 inherit pub_methods_classjngl_1_1Drawable" id="r_afd7c2d5efc6c3ef3009991cc8b076da7"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>Drawable</b> (const <a class="el" href="classjngl_1_1Drawable.html">Drawable</a> &amp;)=default</td></tr>
-<tr class="separator:afd7c2d5efc6c3ef3009991cc8b076da7 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a881ea9af37ac0365d175710efd812555 inherit pub_methods_classjngl_1_1Drawable" id="r_a881ea9af37ac0365d175710efd812555"><td class="memItemLeft" align="right" valign="top">
-<a class="el" href="classjngl_1_1Drawable.html">Drawable</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classjngl_1_1Drawable.html">Drawable</a> &amp;)=default</td></tr>
-<tr class="separator:a881ea9af37ac0365d175710efd812555 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeddeb34384788246932d175bab75598f inherit pub_methods_classjngl_1_1Drawable" id="r_aeddeb34384788246932d175bab75598f"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>Drawable</b> (<a class="el" href="classjngl_1_1Drawable.html">Drawable</a> &amp;&amp;)=default</td></tr>
-<tr class="separator:aeddeb34384788246932d175bab75598f inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2128ec481fa909f72f2aeb8a401d7f6 inherit pub_methods_classjngl_1_1Drawable" id="r_af2128ec481fa909f72f2aeb8a401d7f6"><td class="memItemLeft" align="right" valign="top">
-<a class="el" href="classjngl_1_1Drawable.html">Drawable</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classjngl_1_1Drawable.html">Drawable</a> &amp;&amp;)=default</td></tr>
-<tr class="separator:af2128ec481fa909f72f2aeb8a401d7f6 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88f380e332af287608956b3dba395895 inherit pub_methods_classjngl_1_1Drawable" id="r_a88f380e332af287608956b3dba395895"><td class="memItemLeft" align="right" valign="top">
+<tr class="memitem:a88f380e332af287608956b3dba395895" id="r_a88f380e332af287608956b3dba395895"><td class="memItemLeft" align="right" valign="top"><a id="a88f380e332af287608956b3dba395895" name="a88f380e332af287608956b3dba395895"></a>
 <a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPos</b> () const</td></tr>
-<tr class="memdesc:a88f380e332af287608956b3dba395895 inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns position (not center) <br /></td></tr>
-<tr class="separator:a88f380e332af287608956b3dba395895 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a597e686cf6c81aadeab82e6607e234fe inherit pub_methods_classjngl_1_1Drawable" id="r_a597e686cf6c81aadeab82e6607e234fe"><td class="memItemLeft" align="right" valign="top">
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setPos</b> (double x, double y)</td></tr>
-<tr class="memdesc:a597e686cf6c81aadeab82e6607e234fe inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the position of the top-left of the <a class="el" href="classjngl_1_1Drawable.html" title="Base class for drawable objects with a position and a rectangle size.">Drawable</a>. <br /></td></tr>
-<tr class="separator:a597e686cf6c81aadeab82e6607e234fe inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7974389245efd199961c4b65da4adee inherit pub_methods_classjngl_1_1Drawable" id="r_af7974389245efd199961c4b65da4adee"><td class="memTemplParams" colspan="2">template&lt;class Vect &gt; </td></tr>
-<tr class="memitem:af7974389245efd199961c4b65da4adee inherit pub_methods_classjngl_1_1Drawable"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjngl_1_1Drawable.html#af7974389245efd199961c4b65da4adee">setPos</a> (Vect p)</td></tr>
-<tr class="memdesc:af7974389245efd199961c4b65da4adee inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the position of the top-left of the <a class="el" href="classjngl_1_1Drawable.html" title="Base class for drawable objects with a position and a rectangle size.">Drawable</a>.  <br /></td></tr>
-<tr class="separator:af7974389245efd199961c4b65da4adee inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6a6880d5d1d6a1fe65f7e80c099e4e9 inherit pub_methods_classjngl_1_1Drawable" id="r_ad6a6880d5d1d6a1fe65f7e80c099e4e9"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:a88f380e332af287608956b3dba395895"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c9fbbda60995bf0789f327f29a0d60a" id="r_a9c9fbbda60995bf0789f327f29a0d60a"><td class="memItemLeft" align="right" valign="top"><a id="a9c9fbbda60995bf0789f327f29a0d60a" name="a9c9fbbda60995bf0789f327f29a0d60a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setPos</b> (double x, double y)</td></tr>
+<tr class="separator:a9c9fbbda60995bf0789f327f29a0d60a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7974389245efd199961c4b65da4adee" id="r_af7974389245efd199961c4b65da4adee"><td class="memTemplParams" colspan="2">template&lt;class Vect &gt; </td></tr>
+<tr class="memitem:af7974389245efd199961c4b65da4adee"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#af7974389245efd199961c4b65da4adee">setPos</a> (Vect p)</td></tr>
+<tr class="separator:af7974389245efd199961c4b65da4adee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6a6880d5d1d6a1fe65f7e80c099e4e9" id="r_ad6a6880d5d1d6a1fe65f7e80c099e4e9"><td class="memItemLeft" align="right" valign="top"><a id="ad6a6880d5d1d6a1fe65f7e80c099e4e9" name="ad6a6880d5d1d6a1fe65f7e80c099e4e9"></a>
 <a class="el" href="classjngl_1_1Vec2.html">jngl::Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getCenter</b> () const</td></tr>
-<tr class="memdesc:ad6a6880d5d1d6a1fe65f7e80c099e4e9 inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the position of the center of the <a class="el" href="classjngl_1_1Drawable.html" title="Base class for drawable objects with a position and a rectangle size.">Drawable</a>. <br /></td></tr>
-<tr class="separator:ad6a6880d5d1d6a1fe65f7e80c099e4e9 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec72028a53eba5998eaf9adc3c6d9ae4 inherit pub_methods_classjngl_1_1Drawable" id="r_aec72028a53eba5998eaf9adc3c6d9ae4"><td class="memItemLeft" align="right" valign="top">
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setCenter</b> (double x, double y)</td></tr>
-<tr class="memdesc:aec72028a53eba5998eaf9adc3c6d9ae4 inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Centers the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a> at (x, y) <br /></td></tr>
-<tr class="separator:aec72028a53eba5998eaf9adc3c6d9ae4 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a625da91b44b0307df70855d904ff0a90 inherit pub_methods_classjngl_1_1Drawable" id="r_a625da91b44b0307df70855d904ff0a90"><td class="memTemplParams" colspan="2">template&lt;class Vect &gt; </td></tr>
-<tr class="memitem:a625da91b44b0307df70855d904ff0a90 inherit pub_methods_classjngl_1_1Drawable"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classjngl_1_1Drawable.html#a625da91b44b0307df70855d904ff0a90">setCenter</a> (Vect c)</td></tr>
-<tr class="memdesc:a625da91b44b0307df70855d904ff0a90 inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Centers the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a> at <em>c</em> (e.g. <a class="el" href="classjngl_1_1Vec2.html" title="Two-dimensional vector.">jngl::Vec2</a>)  <br /></td></tr>
-<tr class="separator:a625da91b44b0307df70855d904ff0a90 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb92889e10e7fe3b53fff9548842e1aa inherit pub_methods_classjngl_1_1Drawable" id="r_afb92889e10e7fe3b53fff9548842e1aa"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:ad6a6880d5d1d6a1fe65f7e80c099e4e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a897fe4f56b276296858e3daee57d1bc7" id="r_a897fe4f56b276296858e3daee57d1bc7"><td class="memItemLeft" align="right" valign="top"><a id="a897fe4f56b276296858e3daee57d1bc7" name="a897fe4f56b276296858e3daee57d1bc7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setCenter</b> (double x, double y)</td></tr>
+<tr class="separator:a897fe4f56b276296858e3daee57d1bc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a625da91b44b0307df70855d904ff0a90" id="r_a625da91b44b0307df70855d904ff0a90"><td class="memTemplParams" colspan="2">template&lt;class Vect &gt; </td></tr>
+<tr class="memitem:a625da91b44b0307df70855d904ff0a90"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a625da91b44b0307df70855d904ff0a90">setCenter</a> (Vect c)</td></tr>
+<tr class="separator:a625da91b44b0307df70855d904ff0a90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb92889e10e7fe3b53fff9548842e1aa" id="r_afb92889e10e7fe3b53fff9548842e1aa"><td class="memItemLeft" align="right" valign="top"><a id="afb92889e10e7fe3b53fff9548842e1aa" name="afb92889e10e7fe3b53fff9548842e1aa"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getLeft</b> () const</td></tr>
-<tr class="memdesc:afb92889e10e7fe3b53fff9548842e1aa inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the distance from the left side of the screen. <br /></td></tr>
-<tr class="separator:afb92889e10e7fe3b53fff9548842e1aa inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6da5417ce0dbaf6d09b4bac26296e77 inherit pub_methods_classjngl_1_1Drawable" id="r_ae6da5417ce0dbaf6d09b4bac26296e77"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:afb92889e10e7fe3b53fff9548842e1aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6da5417ce0dbaf6d09b4bac26296e77" id="r_ae6da5417ce0dbaf6d09b4bac26296e77"><td class="memItemLeft" align="right" valign="top"><a id="ae6da5417ce0dbaf6d09b4bac26296e77" name="ae6da5417ce0dbaf6d09b4bac26296e77"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setLeft</b> (double x)</td></tr>
-<tr class="separator:ae6da5417ce0dbaf6d09b4bac26296e77 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3670fae9f6c1be822e4b3e271f1f1013 inherit pub_methods_classjngl_1_1Drawable" id="r_a3670fae9f6c1be822e4b3e271f1f1013"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:ae6da5417ce0dbaf6d09b4bac26296e77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3670fae9f6c1be822e4b3e271f1f1013" id="r_a3670fae9f6c1be822e4b3e271f1f1013"><td class="memItemLeft" align="right" valign="top"><a id="a3670fae9f6c1be822e4b3e271f1f1013" name="a3670fae9f6c1be822e4b3e271f1f1013"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getTop</b> () const</td></tr>
-<tr class="memdesc:a3670fae9f6c1be822e4b3e271f1f1013 inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the distance from the top of the screen. <br /></td></tr>
-<tr class="separator:a3670fae9f6c1be822e4b3e271f1f1013 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3ebaa5e81fcaa7d3f12db30b2573348 inherit pub_methods_classjngl_1_1Drawable" id="r_ab3ebaa5e81fcaa7d3f12db30b2573348"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:a3670fae9f6c1be822e4b3e271f1f1013"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3ebaa5e81fcaa7d3f12db30b2573348" id="r_ab3ebaa5e81fcaa7d3f12db30b2573348"><td class="memItemLeft" align="right" valign="top"><a id="ab3ebaa5e81fcaa7d3f12db30b2573348" name="ab3ebaa5e81fcaa7d3f12db30b2573348"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setTop</b> (double y)</td></tr>
-<tr class="separator:ab3ebaa5e81fcaa7d3f12db30b2573348 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac56fd76cfe6e30a7ef0b36ab06d7580a inherit pub_methods_classjngl_1_1Drawable" id="r_ac56fd76cfe6e30a7ef0b36ab06d7580a"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:ab3ebaa5e81fcaa7d3f12db30b2573348"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac56fd76cfe6e30a7ef0b36ab06d7580a" id="r_ac56fd76cfe6e30a7ef0b36ab06d7580a"><td class="memItemLeft" align="right" valign="top"><a id="ac56fd76cfe6e30a7ef0b36ab06d7580a" name="ac56fd76cfe6e30a7ef0b36ab06d7580a"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getRight</b> () const</td></tr>
-<tr class="memdesc:ac56fd76cfe6e30a7ef0b36ab06d7580a inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the distance from the right side of the screen. <br /></td></tr>
-<tr class="separator:ac56fd76cfe6e30a7ef0b36ab06d7580a inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2199040d695f902647c204b506cc5b2d inherit pub_methods_classjngl_1_1Drawable" id="r_a2199040d695f902647c204b506cc5b2d"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:ac56fd76cfe6e30a7ef0b36ab06d7580a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2199040d695f902647c204b506cc5b2d" id="r_a2199040d695f902647c204b506cc5b2d"><td class="memItemLeft" align="right" valign="top"><a id="a2199040d695f902647c204b506cc5b2d" name="a2199040d695f902647c204b506cc5b2d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setRight</b> (double x)</td></tr>
-<tr class="separator:a2199040d695f902647c204b506cc5b2d inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02049096cfb707d50451ff5d84118a5a inherit pub_methods_classjngl_1_1Drawable" id="r_a02049096cfb707d50451ff5d84118a5a"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:a2199040d695f902647c204b506cc5b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02049096cfb707d50451ff5d84118a5a" id="r_a02049096cfb707d50451ff5d84118a5a"><td class="memItemLeft" align="right" valign="top"><a id="a02049096cfb707d50451ff5d84118a5a" name="a02049096cfb707d50451ff5d84118a5a"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getBottom</b> () const</td></tr>
-<tr class="memdesc:a02049096cfb707d50451ff5d84118a5a inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the distance from the bottom of the screen. <br /></td></tr>
-<tr class="separator:a02049096cfb707d50451ff5d84118a5a inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af16158b7b481668e01f03addd1a0867f inherit pub_methods_classjngl_1_1Drawable" id="r_af16158b7b481668e01f03addd1a0867f"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:a02049096cfb707d50451ff5d84118a5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af16158b7b481668e01f03addd1a0867f" id="r_af16158b7b481668e01f03addd1a0867f"><td class="memItemLeft" align="right" valign="top"><a id="af16158b7b481668e01f03addd1a0867f" name="af16158b7b481668e01f03addd1a0867f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setBottom</b> (double y)</td></tr>
-<tr class="separator:af16158b7b481668e01f03addd1a0867f inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a344385751bee0720059403940d57a13e inherit pub_methods_classjngl_1_1Drawable" id="r_a344385751bee0720059403940d57a13e"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:af16158b7b481668e01f03addd1a0867f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a344385751bee0720059403940d57a13e" id="r_a344385751bee0720059403940d57a13e"><td class="memItemLeft" align="right" valign="top"><a id="a344385751bee0720059403940d57a13e" name="a344385751bee0720059403940d57a13e"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getX</b> () const</td></tr>
-<tr class="separator:a344385751bee0720059403940d57a13e inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07ec3723c1331109f6f3c133924fc170 inherit pub_methods_classjngl_1_1Drawable" id="r_a07ec3723c1331109f6f3c133924fc170"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:a344385751bee0720059403940d57a13e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07ec3723c1331109f6f3c133924fc170" id="r_a07ec3723c1331109f6f3c133924fc170"><td class="memItemLeft" align="right" valign="top"><a id="a07ec3723c1331109f6f3c133924fc170" name="a07ec3723c1331109f6f3c133924fc170"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setX</b> (double)</td></tr>
-<tr class="separator:a07ec3723c1331109f6f3c133924fc170 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafa51c7f8f38a09febbb9ce7853f77b4 inherit pub_methods_classjngl_1_1Drawable" id="r_aafa51c7f8f38a09febbb9ce7853f77b4"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:a07ec3723c1331109f6f3c133924fc170"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafa51c7f8f38a09febbb9ce7853f77b4" id="r_aafa51c7f8f38a09febbb9ce7853f77b4"><td class="memItemLeft" align="right" valign="top"><a id="aafa51c7f8f38a09febbb9ce7853f77b4" name="aafa51c7f8f38a09febbb9ce7853f77b4"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getY</b> () const</td></tr>
-<tr class="separator:aafa51c7f8f38a09febbb9ce7853f77b4 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6da52fd8637707e61549a2aaee536f9 inherit pub_methods_classjngl_1_1Drawable" id="r_ac6da52fd8637707e61549a2aaee536f9"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:aafa51c7f8f38a09febbb9ce7853f77b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6da52fd8637707e61549a2aaee536f9" id="r_ac6da52fd8637707e61549a2aaee536f9"><td class="memItemLeft" align="right" valign="top"><a id="ac6da52fd8637707e61549a2aaee536f9" name="ac6da52fd8637707e61549a2aaee536f9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setY</b> (double)</td></tr>
-<tr class="separator:ac6da52fd8637707e61549a2aaee536f9 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebe51f6c43d6d673fc3826046d668b38 inherit pub_methods_classjngl_1_1Drawable" id="r_aebe51f6c43d6d673fc3826046d668b38"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:ac6da52fd8637707e61549a2aaee536f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebe51f6c43d6d673fc3826046d668b38" id="r_aebe51f6c43d6d673fc3826046d668b38"><td class="memItemLeft" align="right" valign="top"><a id="aebe51f6c43d6d673fc3826046d668b38" name="aebe51f6c43d6d673fc3826046d668b38"></a>
 <a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getSize</b> () const</td></tr>
-<tr class="memdesc:aebe51f6c43d6d673fc3826046d668b38 inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns {width, height} in screen coordinates. <br /></td></tr>
-<tr class="separator:aebe51f6c43d6d673fc3826046d668b38 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaad368cfd9ea3cf64fbc091bd886f729 inherit pub_methods_classjngl_1_1Drawable" id="r_aaad368cfd9ea3cf64fbc091bd886f729"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:aebe51f6c43d6d673fc3826046d668b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaad368cfd9ea3cf64fbc091bd886f729" id="r_aaad368cfd9ea3cf64fbc091bd886f729"><td class="memItemLeft" align="right" valign="top"><a id="aaad368cfd9ea3cf64fbc091bd886f729" name="aaad368cfd9ea3cf64fbc091bd886f729"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getWidth</b> () const</td></tr>
-<tr class="memdesc:aaad368cfd9ea3cf64fbc091bd886f729 inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the width in screen coordinates. <br /></td></tr>
-<tr class="separator:aaad368cfd9ea3cf64fbc091bd886f729 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae07ffc83c6e2586b09157cacd623819b inherit pub_methods_classjngl_1_1Drawable" id="r_ae07ffc83c6e2586b09157cacd623819b"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:aaad368cfd9ea3cf64fbc091bd886f729"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae07ffc83c6e2586b09157cacd623819b" id="r_ae07ffc83c6e2586b09157cacd623819b"><td class="memItemLeft" align="right" valign="top"><a id="ae07ffc83c6e2586b09157cacd623819b" name="ae07ffc83c6e2586b09157cacd623819b"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getHeight</b> () const</td></tr>
-<tr class="memdesc:ae07ffc83c6e2586b09157cacd623819b inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the height in screen coordinates. <br /></td></tr>
-<tr class="separator:ae07ffc83c6e2586b09157cacd623819b inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9226b4fed0bec9f1e382e493e6a5cb05 inherit pub_methods_classjngl_1_1Drawable" id="r_a9226b4fed0bec9f1e382e493e6a5cb05"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:ae07ffc83c6e2586b09157cacd623819b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9226b4fed0bec9f1e382e493e6a5cb05" id="r_a9226b4fed0bec9f1e382e493e6a5cb05"><td class="memItemLeft" align="right" valign="top"><a id="a9226b4fed0bec9f1e382e493e6a5cb05" name="a9226b4fed0bec9f1e382e493e6a5cb05"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawBoundingBox</b> () const</td></tr>
-<tr class="memdesc:a9226b4fed0bec9f1e382e493e6a5cb05 inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a red box around the <a class="el" href="classjngl_1_1Drawable.html" title="Base class for drawable objects with a position and a rectangle size.">Drawable</a>. <br /></td></tr>
-<tr class="separator:a9226b4fed0bec9f1e382e493e6a5cb05 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d6e0d6afba009c29a780f255ebbc962 inherit pub_methods_classjngl_1_1Drawable" id="r_a6d6e0d6afba009c29a780f255ebbc962"><td class="memItemLeft" align="right" valign="top">
+<tr class="separator:a9226b4fed0bec9f1e382e493e6a5cb05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d6e0d6afba009c29a780f255ebbc962" id="r_a6d6e0d6afba009c29a780f255ebbc962"><td class="memItemLeft" align="right" valign="top"><a id="a6d6e0d6afba009c29a780f255ebbc962" name="a6d6e0d6afba009c29a780f255ebbc962"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (<a class="el" href="classjngl_1_1Vec2.html">jngl::Vec2</a> point) const</td></tr>
-<tr class="memdesc:a6d6e0d6afba009c29a780f255ebbc962 inherit pub_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether <em>point</em> is inside the bounding box. <br /></td></tr>
-<tr class="separator:a6d6e0d6afba009c29a780f255ebbc962 inherit pub_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a6d6e0d6afba009c29a780f255ebbc962"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -290,32 +264,15 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a5c01625ba48f5cfab329498687da16ec" id="r_a5c01625ba48f5cfab329498687da16ec"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1Finally.html">Finally</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c01625ba48f5cfab329498687da16ec">loader</a></td></tr>
 <tr class="memdesc:a5c01625ba48f5cfab329498687da16ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function which actually loads the sprite.  <br /></td></tr>
 <tr class="separator:a5c01625ba48f5cfab329498687da16ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_classjngl_1_1Drawable"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_classjngl_1_1Drawable')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classjngl_1_1Drawable.html">Drawable</a></td></tr>
-<tr class="memitem:a4f2dcd3eff51dee9520ab9cd563e2781 inherit pro_methods_classjngl_1_1Drawable" id="r_a4f2dcd3eff51dee9520ab9cd563e2781"><td class="memItemLeft" align="right" valign="top">
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setWidth</b> (float)</td></tr>
-<tr class="memdesc:a4f2dcd3eff51dee9520ab9cd563e2781 inherit pro_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override width (in screen coordinates) <br /></td></tr>
-<tr class="separator:a4f2dcd3eff51dee9520ab9cd563e2781 inherit pro_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee20a5251a31b3061ecff567687e30fc inherit pro_methods_classjngl_1_1Drawable" id="r_aee20a5251a31b3061ecff567687e30fc"><td class="memItemLeft" align="right" valign="top">
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setHeight</b> (float)</td></tr>
-<tr class="memdesc:aee20a5251a31b3061ecff567687e30fc inherit pro_methods_classjngl_1_1Drawable"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override height (in screen coordinates) <br /></td></tr>
-<tr class="separator:aee20a5251a31b3061ecff567687e30fc inherit pro_methods_classjngl_1_1Drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Higher-level representation of an image. </p>
 
 <p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00026">26</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 </div><div class="dynheader">
-Inheritance diagram for Sprite:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classjngl_1_1Sprite__inherit__graph.svg" width="96" height="111"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
 Collaboration diagram for Sprite:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classjngl_1_1Sprite__coll__graph.svg" width="358" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classjngl_1_1Sprite__coll__graph.svg" width="248" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a958cfd7b75f6f3d50ce305650070e0fa" name="a958cfd7b75f6f3d50ce305650070e0fa"></a>
@@ -422,66 +379,8 @@ Collaboration diagram for Sprite:</div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae6c526798a490afe221d1447f508f16a" name="ae6c526798a490afe221d1447f508f16a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6c526798a490afe221d1447f508f16a">&#9670;&#160;</a></span>step()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void step </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Does nothing. </p>
-
-<p>Implements <a class="el" href="classjngl_1_1Drawable.html#aa6f73ac7d5899119d156a0b3a27fba31">Drawable</a>.</p>
-
-</div>
-</div>
-<a id="a35460413b5c663cd8a28ad3c80caaf71" name="a35460413b5c663cd8a28ad3c80caaf71"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a35460413b5c663cd8a28ad3c80caaf71">&#9670;&#160;</a></span>draw() <span class="overload">[1/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void draw </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Draws the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a>, centered by default. </p>
-
-<p>Implements <a class="el" href="classjngl_1_1Drawable.html#a2bf282904f7854c8a4fd515107aa8c4e">Drawable</a>.</p>
-
-</div>
-</div>
 <a id="a2eb0147312a9f4537c126c5d8be87c92" name="a2eb0147312a9f4537c126c5d8be87c92"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2eb0147312a9f4537c126c5d8be87c92">&#9670;&#160;</a></span>draw() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2eb0147312a9f4537c126c5d8be87c92">&#9670;&#160;</a></span>draw() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -510,7 +409,7 @@ Collaboration diagram for Sprite:</div>
 </div>
 </div>
 <a id="a5fc759d605e7a4988a53e33eb090ddc3" name="a5fc759d605e7a4988a53e33eb090ddc3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5fc759d605e7a4988a53e33eb090ddc3">&#9670;&#160;</a></span>draw() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fc759d605e7a4988a53e33eb090ddc3">&#9670;&#160;</a></span>draw() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -534,7 +433,7 @@ Collaboration diagram for Sprite:</div>
 </div>
 </div>
 <a id="ad569156f9424782e97035deb46b0777b" name="ad569156f9424782e97035deb46b0777b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad569156f9424782e97035deb46b0777b">&#9670;&#160;</a></span>draw() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad569156f9424782e97035deb46b0777b">&#9670;&#160;</a></span>draw() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -574,7 +473,7 @@ Collaboration diagram for Sprite:</div>
 </div><div class="memdoc">
 
 <p>Allows to draw the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a> multiple times at different locations in an efficient way. </p>
-<p>This is pureley a performance optimisation. If it's fast enough, use <a class="el" href="#a35460413b5c663cd8a28ad3c80caaf71" title="Draws the Sprite, centered by default.">Sprite::draw</a> instead.</p>
+<p>This is pureley a performance optimisation. If it's fast enough, use <a class="el" href="#a257b753011ed7e831390acf9b70614f0" title="Draws the Sprite, centered by default.">Sprite::draw</a> instead.</p>
 <p>Example: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> MyWork::draw()<span class="keyword"> const </span>{</div>
 <div class="line">    <span class="keyword">auto</span> <a class="code hl_function" href="#a324670964d6669a7149bd1cc8b43e18a">batch</a> = mySprite.batch();</div>
 <div class="line">    <span class="keywordflow">for</span> (<a class="code hl_class" href="classjngl_1_1Vec2.html">jngl::Vec2</a> position : positions) {</div>
@@ -715,6 +614,64 @@ Collaboration diagram for Sprite:</div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="af7974389245efd199961c4b65da4adee" name="af7974389245efd199961c4b65da4adee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7974389245efd199961c4b65da4adee">&#9670;&#160;</a></span>setPos()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Vect &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setPos </td>
+          <td>(</td>
+          <td class="paramtype">Vect</td>          <td class="paramname"><span class="paramname"><em>p</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00241">241</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a625da91b44b0307df70855d904ff0a90" name="a625da91b44b0307df70855d904ff0a90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a625da91b44b0307df70855d904ff0a90">&#9670;&#160;</a></span>setCenter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Vect &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setCenter </td>
+          <td>(</td>
+          <td class="paramtype">Vect</td>          <td class="paramname"><span class="paramname"><em>c</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00247">247</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>
