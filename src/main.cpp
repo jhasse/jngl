@@ -97,7 +97,7 @@ bool Init(const int width, const int height, const int canvasWidth, const int ca
 #endif
 #endif
 
-	updateProjection(width, height, width, height);
+	updateProjection(width, height, static_cast<float>(width), static_cast<float>(height));
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -133,21 +133,22 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 	}
 }
 
-void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth,
-                      int originalWindowHeight) {
+void updateProjection(int windowWidth, int windowHeight, float originalWindowWidth,
+                      float originalWindowHeight) {
 	internal::debug("Updating projection matrix to {}x{} (original size: {}x{})", windowWidth,
-	                windowHeight, originalWindowWidth, originalWindowHeight);
+	                windowHeight, std::lround(originalWindowWidth),
+	                std::lround(originalWindowHeight));
 	const auto l = static_cast<float>(-windowWidth) / 2.f;
 	const auto r = static_cast<float>(windowWidth) / 2.f;
 	const auto b = static_cast<float>(windowHeight) / 2.f;
 	const auto t = static_cast<float>(-windowHeight) / 2.f;
 	opengl::projection = {
-		static_cast<float>(windowWidth) / static_cast<float>(originalWindowWidth) * 2.f / (r - l),
+		static_cast<float>(windowWidth) / originalWindowWidth * 2.f / (r - l),
 		0.f,
 		0.f,
 		-(r + l) / (r - l),
 		0.f,
-		static_cast<float>(windowHeight) / static_cast<float>(originalWindowHeight) * 2.f / (t - b),
+		static_cast<float>(windowHeight) / originalWindowHeight * 2.f / (t - b),
 		0.f,
 		-(t + b) / (t - b),
 		0.f,
@@ -157,7 +158,7 @@ void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth
 		0.f,
 		0.f,
 		0.f,
-		1.f
+		1.f,
 	};
 }
 

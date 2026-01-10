@@ -18,7 +18,7 @@ void clearBackgroundColor();
 
 bool Init(int width, int height, int canvasWidth, int canvasHeight);
 void updateViewportAndLetterboxing(int width, int height, int canvasWidth, int canvasHeight);
-void updateProjection(int windowWidth, int windowHeight, int, int);
+void updateProjection(int windowWidth, int windowHeight, float, float);
 
 extern std::string pathPrefix;
 extern optional<std::string> configPath;

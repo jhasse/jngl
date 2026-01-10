@@ -403,26 +403,8 @@ void Window::UpdateInput() {
 				const float tmpHeight =
 				    (static_cast<float>(height_) / static_cast<float>(canvasHeight)) *
 				    static_cast<float>(impl->actualCanvasHeight);
-				const auto l = -1.f / 2.f;
-				const auto r = 1.f / 2.f;
-				const auto b = 1.f / 2.f;
-				const auto t = -1.f / 2.f;
-				opengl::projection = { 1.f / tmpWidth * 2.f / (r - l),
-					                   0.f,
-					                   0.f,
-					                   -(r + l) / (r - l),
-					                   0.f,
-					                   1.f / tmpHeight * 2.f / (t - b),
-					                   0.f,
-					                   -(t + b) / (t - b),
-					                   0.f,
-					                   0.f,
-					                   -1.f,
-					                   0.f,
-					                   0.f,
-					                   0.f,
-					                   0.f,
-					                   1.f };
+				updateProjection(impl->actualCanvasWidth, impl->actualCanvasHeight, tmpWidth,
+				                 tmpHeight);
 				App::instance().updateProjectionMatrix();
 				updateViewportAndLetterboxing(width_, height_, canvasWidth, canvasHeight);
 				// restore the values in canvasWidth and canvasHeight because our scaleFactor didn't
