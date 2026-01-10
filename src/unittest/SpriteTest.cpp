@@ -62,5 +62,21 @@ boost::ut::suite _ = [] {
 )")));
 		}
 	};
+	"drawClipped"_test = [] {
+		Fixture f(1.5f);
+		jngl::scale(0.4f);
+		jngl::Sprite sprite("../data/jngl.webp");
+		sprite.setPos(-160, -50);
+		sprite.drawClipped({ 0.25f, 0.25f }, { 0.75f, 0.75f });
+		expect(eq(f.getAsciiArt(), std::string(R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒                 ░            ▒
+▒          ░░░░░░░▒            ▒
+▒          ░░░░▒▒░▒▒░░         ▒
+▒        ░░░░░░░░░░░▒░         ▒
+▒        ░▒░░░░░░░░░▒░         ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)")));
+	};
 };
 } // namespace
