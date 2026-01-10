@@ -1,3 +1,6 @@
+- set +x
+- export LANG=C.UTF-8 // GCC made the weird decision to translate error messages
+- set -x
 cmake-mingw {
 	- mingw64-cmake -G "Ninja Multi-Config" -Bbuild-mingw
 }
@@ -30,4 +33,16 @@ doc {
 	- ln -s "../index.html" "html/"
 	- cd html
 	- python3 -m http.server -b "127.0.0.1"
+}
+cmake {
+	- cmake -Bbuild -G "Ninja Multi-Config" $args
+}
+build {
+	- test -f "build/build.ninja" || lus cmake
+	- ninja -Cbuild $args
+}
+unittest {
+	- lus build jngl-unittest
+	- cd build
+	- "Debug/jngl-unittest"
 }
