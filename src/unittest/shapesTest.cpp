@@ -1,4 +1,4 @@
-// Copyright 2022-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2022-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Fixture.hpp"
 
@@ -70,14 +70,14 @@ boost::ut::suite _ = [] {
 			Fixture f(scaleFactor);
 			auto mv = jngl::modelview();
 			// Draw an ellipse centered near the left side
-			jngl::drawEllipse(mv.translate({ -100, 0 }), 36, 20);
+			jngl::drawEllipse(mv.translate({ -60, 0 }), 135, 20);
 			expect(eq(f.getAsciiArt(), std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-▒   ░▒▒░                       ▒
-▒ ░██████░                     ▒
-▒ ▒██████▒                     ▒
-▒ ░██████░                     ▒
-▒   ░▒▒░                       ▒
+▒ ░░░▒▒▒▒▒▒▒▒▒▒░░░             ▒
+████████████████████▓▒░        ▒
+███████████████████████░       ▒
+████████████████████▓▒░        ▒
+▒ ░░░▒▒▒▒▒▒▒▒▒▒░░░             ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
 		}
