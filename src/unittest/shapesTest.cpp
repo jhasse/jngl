@@ -50,7 +50,7 @@ boost::ut::suite _ = [] {
 #elif defined(_MSC_VER)
 #pragma warning(pop)
 #endif
-			jngl::drawCircle(jngl::modelview().translate({ 100, 0 }).scale(42, 12), 0xff0000ff_rgba);
+			jngl::drawCircle(jngl::modelview().translate({ 100, -0.1 }).scale(42.05, 11.9), 0xff0000ff_rgba);
 			expect(eq(f.getAsciiArt(), std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒   ▒▒▒▒         ░             ▒
@@ -85,14 +85,14 @@ boost::ut::suite _ = [] {
 			Fixture f(scaleFactor);
 			auto mv = jngl::modelview();
 			// Draw an ellipse centered near the left side
-			jngl::drawEllipse(mv.translate({ -61, 0 }), 136, 20);
+			jngl::drawEllipse(mv.translate({ -120, -27 }), 70, 20);
 			expect(eq(f.getAsciiArt(), std::string(R"(
-▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-▒ ░░░▒▒▒▒▒▒▒▒▒▒░░░             ▒
-████████████████████▓▒░        ▒
-███████████████████████░       ▒
-████████████████████▓▒░        ▒
-▒ ░░░▒▒▒▒▒▒▒▒▒▒░░░             ▒
+███████████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+██████████▒                    ▒
+▓▓▓▓▓▓▓▒░                      ▒
+▒                              ▒
+▒                              ▒
+▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
 		}
