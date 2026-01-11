@@ -1,4 +1,4 @@
-// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "window.hpp"
 
@@ -9,7 +9,6 @@
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/font.hpp"
 #include "jngl/other.hpp"
-#include "jngl/screen.hpp"
 #include "jngl/time.hpp"
 #include "jngl/work.hpp"
 #include "log.hpp"
@@ -682,15 +681,13 @@ void Window::initGlObjects() {
 
 void Window::drawLine(Mat3 modelview, const Vec2 b, const Rgba color) const {
 	glBindVertexArray(vaoLine);
-	auto tmp =
-	    ShaderCache::handle().useSimpleShaderProgram(modelview.scale(b * getScaleFactor()), color);
+	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview.scale(b), color);
 	glDrawArrays(GL_LINES, 0, 2);
 }
 
-void Window::drawSquare(Mat3 modelview, Rgba color) const {
+void Window::drawSquare(const Mat3& modelview, Rgba color) const {
 	glBindVertexArray(vaoSquare);
-	auto context =
-	    ShaderCache::handle().useSimpleShaderProgram(modelview.scale(getScaleFactor()), color);
+	auto context = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 

@@ -126,7 +126,7 @@ public:
 	std::string getTextInput() const;
 	void initGlObjects();
 	void drawLine(Mat3 modelview, Vec2 b, Rgba color) const;
-	void drawSquare(Mat3 modelview, Rgba color) const;
+	void drawSquare(const Mat3& modelview, Rgba color) const;
 	void onControllerChanged(std::function<void()>);
 	void bindSystemFramebufferAndRenderbuffer();
 

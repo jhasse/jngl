@@ -1,4 +1,4 @@
-// Copyright 2018-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Video.hpp"
 
@@ -16,7 +16,6 @@
 #include "Channel.hpp"
 #include "Shader.hpp"
 #include "ShaderProgram.hpp"
-#include "screen.hpp"
 #include "time.hpp"
 
 #include <algorithm>
@@ -176,8 +175,8 @@ public:
 				             static_cast<GLsizei>(video->height / 2), 0, GL_RED, GL_UNSIGNED_BYTE,
 				             nullptr);
 
-				const auto preciseWidth = static_cast<float>(video->width * getScaleFactor());
-				const auto preciseHeight = static_cast<float>(video->height * getScaleFactor());
+				const auto preciseWidth = static_cast<float>(video->width);
+				const auto preciseHeight = static_cast<float>(video->height);
 				const static GLfloat vertexes[] = {
 					-preciseWidth / 2, -preciseHeight / 2,
 					0, 0, // texture coordinates

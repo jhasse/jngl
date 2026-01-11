@@ -224,7 +224,7 @@ public:
 	/// \param shaderProgram Passing `nullptr` uses the default.
 	void drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes,
 	              const ShaderProgram* shaderProgram = nullptr) const;
-	void drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes, jngl::Rgba color,
+	void drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes, jngl::Rgba color,
 	              const ShaderProgram* = nullptr) const;
 
 	void setBytes(const unsigned char*);
@@ -299,7 +299,7 @@ private:
 
 	std::shared_ptr<Texture> texture;
 
-	// Position in pixel, NOT screen coordinates
+	// Position in screen coordinates
 	Vec2 position;
 
 	// Width and height in pixel, NOT screen coordinates

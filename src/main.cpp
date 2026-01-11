@@ -1,4 +1,4 @@
-// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
@@ -142,13 +142,14 @@ void updateProjection(int windowWidth, int windowHeight, float originalWindowWid
 	const auto r = static_cast<float>(windowWidth) / 2.f;
 	const auto b = static_cast<float>(windowHeight) / 2.f;
 	const auto t = static_cast<float>(-windowHeight) / 2.f;
+	const auto scale = static_cast<float>(getScaleFactor());
 	opengl::projection = {
-		static_cast<float>(windowWidth) / originalWindowWidth * 2.f / (r - l),
+		static_cast<float>(windowWidth) / originalWindowWidth * 2.f / (r - l) * scale,
 		0.f,
 		0.f,
 		-(r + l) / (r - l),
 		0.f,
-		static_cast<float>(windowHeight) / originalWindowHeight * 2.f / (t - b),
+		static_cast<float>(windowHeight) / originalWindowHeight * 2.f / (t - b) * scale,
 		0.f,
 		-(t + b) / (t - b),
 		0.f,
@@ -502,8 +503,7 @@ void rotate(const double degree) {
 }
 
 void translate(const double x, const double y) {
-	opengl::translate(static_cast<float>(x * getScaleFactor()),
-	                  static_cast<float>(y * getScaleFactor()));
+	opengl::translate(static_cast<float>(x), static_cast<float>(y));
 }
 
 void scale(const double factor) {

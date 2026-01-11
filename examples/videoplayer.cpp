@@ -9,7 +9,9 @@ JNGL_MAIN_BEGIN {
 		filename = args[0];
 	}
 	jngl::Video video(filename);
-	jngl::showWindow(filename, video.getWidth(), video.getHeight());
+	jngl::setScaleFactor(2);
+	jngl::showWindow(filename, video.getWidth() * jngl::getScaleFactor(),
+	                 video.getHeight() * jngl::getScaleFactor());
 	while (jngl::running()) {
 		jngl::updateInput();
 		video.draw();
@@ -19,4 +21,5 @@ JNGL_MAIN_BEGIN {
 		jngl::swapBuffers();
 	}
 	jngl::trace("quit");
-} JNGL_MAIN_END
+}
+JNGL_MAIN_END

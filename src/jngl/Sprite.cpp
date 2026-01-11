@@ -1,6 +1,5 @@
 // Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #ifndef NOPNG
 #include <png.h> // Include first, see https://bugs.launchpad.net/ubuntu/+source/libpng/+bug/218409
 #endif
@@ -206,19 +205,19 @@ void Sprite::setRight(const double x) {
 }
 
 double Sprite::getX() const {
-	return position.x / getScaleFactor();
+	return position.x;
 }
 
 void Sprite::setX(const double x) {
-	position.x = x * getScaleFactor();
+	position.x = x;
 }
 
 double Sprite::getY() const {
-	return position.y / getScaleFactor();
+	return position.y;
 }
 
 void Sprite::setY(const double y) {
-	position.y = y * getScaleFactor();
+	position.y = y;
 }
 
 Vec2 Sprite::getSize() const {
@@ -268,8 +267,8 @@ void Sprite::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) cons
 }
 
 void Sprite::draw(Mat3 modelview, Rgba color) const {
-	modelview *=
-	    boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. }));
+	modelview *= boost::qvm::translation_mat(
+	    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. }));
 	auto context = ShaderCache::handle().textureShaderProgram->use();
 	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(), color.getGreen(),
 	            color.getBlue(), color.getAlpha());
@@ -278,8 +277,8 @@ void Sprite::draw(Mat3 modelview, Rgba color) const {
 }
 
 void Sprite::draw(Mat3 modelview, Alpha alpha, const ShaderProgram* const shaderProgram) const {
-	modelview *=
-	    boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. }));
+	modelview *= boost::qvm::translation_mat(
+	    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. }));
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
@@ -336,11 +335,12 @@ auto Sprite::batch(const ShaderProgram* const shaderProgram) const -> Batch {
 		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 	}
 	texture->bind();
-	return Batch{ std::make_unique<Batch::Impl>(Batch::Impl{
-		std::move(context),
-		boost::qvm::translation_mat(boost::qvm::vec<double, 2>({ -width / 2., -height / 2. })),
-		shaderProgram ? shaderProgram->getUniformLocation("modelview")
-		              : ShaderCache::handle().modelviewUniform }) };
+	return Batch{ std::make_unique<Batch::Impl>(
+		Batch::Impl{ std::move(context),
+		             boost::qvm::translation_mat(
+		                 boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. })),
+		             shaderProgram ? shaderProgram->getUniformLocation("modelview")
+		                           : ShaderCache::handle().modelviewUniform }) };
 }
 
 void Sprite::drawScaled(float xfactor, float yfactor,
@@ -385,12 +385,11 @@ void Sprite::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes
 	drawMesh(modelview, vertexes, gSpriteColor, shaderProgram);
 }
 
-void Sprite::drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes, jngl::Rgba color,
+void Sprite::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes, jngl::Rgba color,
                       const ShaderProgram* const shaderProgram) const {
 	if (vertexes.empty()) {
 		return;
 	}
-	modelview.scale(getScaleFactor());
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
@@ -411,7 +410,6 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 	}
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
-	scale(getScaleFactor());
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {

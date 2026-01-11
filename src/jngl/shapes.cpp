@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "shapes.hpp"
 
@@ -7,7 +7,6 @@
 #include "../spriteimpl.hpp"
 #include "Alpha.hpp"
 #include "matrix.hpp"
-#include "screen.hpp"
 
 #include <cmath>
 #include <numbers>
@@ -62,14 +61,13 @@ void drawEllipse(const Vec2 position, const float width, const float height,
 	drawEllipse(modelview().translate(position), width, height, startAngle);
 }
 
-void drawEllipse(Mat3 modelview, float width, float height, float startAngle) {
+void drawEllipse(const Mat3& modelview, float width, float height, float startAngle) {
 	drawEllipse(modelview, width, height, startAngle, gShapeColor);
 }
 
-void drawEllipse(Mat3 modelview, float width, float height, float startAngle, Rgba color) {
+void drawEllipse(const Mat3& modelview, float width, float height, float startAngle, Rgba color) {
 	glBindVertexArray(opengl::vaoStream);
-	auto tmp = ShaderCache::handle().useSimpleShaderProgram(
-	    modelview.scale(static_cast<float>(getScaleFactor())), color);
+	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
 	std::vector<float> vertexes;
 	vertexes.push_back(0.f);
 	vertexes.push_back(0.f);
@@ -90,15 +88,15 @@ void drawCircle(const Vec2 position, const float radius, const float startAngle)
 	drawEllipse(modelview().translate(position), radius, radius, startAngle);
 }
 
-void drawCircle(Mat3 modelview, const float radius, const float startAngle) {
+void drawCircle(const Mat3& modelview, const float radius, const float startAngle) {
 	drawEllipse(modelview, radius, radius, startAngle);
 }
 
-void drawCircle(Mat3 modelview, const float radius, const float startAngle, Rgba color) {
+void drawCircle(const Mat3& modelview, const float radius, const float startAngle, Rgba color) {
 	drawEllipse(modelview, radius, radius, startAngle, color);
 }
 
-void drawCircle(Mat3 modelview, const float radius) {
+void drawCircle(const Mat3& modelview, const float radius) {
 	drawCircle(modelview, radius, gShapeColor);
 }
 
@@ -106,10 +104,9 @@ void drawCircle(Mat3 modelview, const float radius, const Rgba color) {
 	drawCircle(modelview.scale(radius), color);
 }
 
-void drawCircle(Mat3 modelview, const Rgba color) {
+void drawCircle(const Mat3& modelview, const Rgba color) {
 	glBindVertexArray(opengl::vaoStream);
-	auto tmp = ShaderCache::handle().useSimpleShaderProgram(
-	    modelview.scale(static_cast<float>(getScaleFactor())), color);
+	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
 	// clang-format off
 	const static float vertexes[] = {
 		1.f, 0.f, 0.9951847f, 0.09801714f, 0.9807853f, 0.1950903f, 0.9569403f, 0.2902847f,

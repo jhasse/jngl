@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Functions for drawing shapes
 /// @file
@@ -91,14 +91,14 @@ void drawEllipse(float xmid, float ymid, float width, float height, float startA
 
 void drawEllipse(Vec2, float width, float height, float startAngle = 0);
 
-void drawEllipse(Mat3 modelview, float width, float height, float startAngle = 0);
+void drawEllipse(const Mat3& modelview, float width, float height, float startAngle = 0);
 
-void drawEllipse(Mat3 modelview, float width, float height, float startAngle, Rgba color);
+void drawEllipse(const Mat3& modelview, float width, float height, float startAngle, Rgba color);
 
 /// Angles in radian
 void drawCircle(Vec2, float radius, float startAngle = 0);
 
-void drawCircle(Mat3 modelview, float radius, float startAngle);
+void drawCircle(const Mat3& modelview, float radius, float startAngle);
 
 /// Draws a circle at (0, 0) with \a radius in \a color with \a startAngle cut out
 ///
@@ -118,15 +118,15 @@ void drawCircle(Mat3 modelview, float radius, float startAngle);
 ///     **####**
 ///       ****
 /// @endverbatim
-void drawCircle(Mat3 modelview, float radius, float startAngle, Rgba color);
+void drawCircle(const Mat3& modelview, float radius, float startAngle, Rgba color);
 
-void drawCircle(Mat3 modelview, float radius);
+void drawCircle(const Mat3& modelview, float radius);
 
 /// Draws a circle at (0, 0) with \a radius in \a color
 void drawCircle(Mat3 modelview, float radius, Rgba color);
 
 /// Draws a circle at (0, 0) with radius of 1 in \a color
-void drawCircle(Mat3 modelview, Rgba color);
+void drawCircle(const Mat3& modelview, Rgba color);
 
 [[deprecated("Use drawCircle instead")]]
 /// \deprecated Use drawCircle instead
