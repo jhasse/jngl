@@ -35,7 +35,7 @@ struct THEORAPLAY_VideoFrame {
 	unsigned int height;
 	THEORAPLAY_VideoFormat format;
 	unsigned char* pixels;
-	struct THEORAPLAY_VideoFrame* next;
+	std::unique_ptr<THEORAPLAY_VideoFrame> next;
 };
 
 struct THEORAPLAY_AudioPacket {
@@ -65,8 +65,7 @@ unsigned int THEORAPLAY_availableAudio(THEORAPLAY_Decoder*);
 
 std::unique_ptr<const THEORAPLAY_AudioPacket> THEORAPLAY_getAudio(THEORAPLAY_Decoder*);
 
-const THEORAPLAY_VideoFrame *THEORAPLAY_getVideo(THEORAPLAY_Decoder*);
-void THEORAPLAY_freeVideo(const THEORAPLAY_VideoFrame *item);
+std::unique_ptr<const THEORAPLAY_VideoFrame> THEORAPLAY_getVideo(THEORAPLAY_Decoder*);
 
 /// is the background thread done decoding? (returns true before THEORAPLAY_isDecoding)
 bool THEORAPLAY_threadDone(THEORAPLAY_Decoder*);

@@ -79,7 +79,7 @@ struct THEORAPLAY_Decoder {
 
 	THEORAPLAY_VideoFormat vidfmt = THEORAPLAY_VIDFMT_IYUV;
 
-	VideoFrame* videolist = nullptr;
+	std::unique_ptr<VideoFrame> videolist;
 	VideoFrame* videolisttail = nullptr;
 
 	std::unique_ptr<AudioPacket> audiolist;
@@ -372,7 +372,7 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
                     if (th_decode_ycbcr_out(tdec, ycbcr) == 0)
                     {
                         const double videotime = th_granule_time(tdec, granulepos);
-						const auto item = new VideoFrame;
+						auto item = std::make_unique<VideoFrame>();
                         if (item == nullptr) { goto cleanup; }
 						item->playms = static_cast<unsigned int>(videotime * 1000.0);
 						item->fps = fps;
@@ -409,22 +409,22 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 
                         if (item->pixels == nullptr)
                         {
-							delete item;
                             goto cleanup;
 						}
 
                         //printf("Decoded another video frame.\n");
                         ctx->lock.lock();
+						auto itemPtr = item.get();
                         if (ctx->videolisttail)
                         {
                             assert(ctx->videolist);
-                            ctx->videolisttail->next = item;
+							ctx->videolisttail->next = std::move(item);
 						} else {
-                            assert(!ctx->videolist);
-                            ctx->videolist = item;
-                        }
-                        ctx->videolisttail = item;
-                        ctx->videocount++;
+							assert(!ctx->videolist);
+							ctx->videolist = std::move(item);
+						}
+						ctx->videolisttail = itemPtr;
+						ctx->videocount++;
                         ctx->lock.unlock();
 
                         saw_video_frame = 1;
@@ -564,15 +564,6 @@ void THEORAPLAY_stopDecode(THEORAPLAY_Decoder* const ctx) {
         ctx->halt = 1;
         ctx->worker.join();
 	}
-
-    VideoFrame *videolist = ctx->videolist;
-    while (videolist)
-    {
-        VideoFrame *next = videolist->next;
-        free(videolist);
-        videolist = next;
-	}
-
 	delete ctx;
 }
 
@@ -647,24 +638,20 @@ THEORAPLAY_AudioPacket::~THEORAPLAY_AudioPacket() noexcept {
 	free(samples);
 }
 
-const THEORAPLAY_VideoFrame* THEORAPLAY_getVideo(THEORAPLAY_Decoder* const ctx) {
-	VideoFrame* retval;
-
+std::unique_ptr<const THEORAPLAY_VideoFrame> THEORAPLAY_getVideo(THEORAPLAY_Decoder* const ctx) {
     ctx->lock.lock();
-    retval = ctx->videolist;
-    if (retval)
-    {
-        ctx->videolist = retval->next;
-        retval->next = nullptr;
+	std::unique_ptr<VideoFrame> retval = std::move(ctx->videolist);
+	if (retval) {
+		ctx->videolist = std::move(retval->next);
 		if (ctx->videolist == nullptr) {
 			ctx->videolisttail = nullptr;
 		}
 		assert(ctx->videocount > 0);
         ctx->videocount--;
-    } // if
-    ctx->lock.unlock();
+	}
+	ctx->lock.unlock();
 
-    return retval;
+	return retval;
 }
 
 void THEORAPLAY_freeVideo(const THEORAPLAY_VideoFrame* item) {
