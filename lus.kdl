@@ -39,14 +39,56 @@ cmake {
 }
 build {
 	- test -f "build/build.ninja" || lus cmake
+	--release {
+		- ninja -Cbuild -f build-Release.ninja $args
+		- exit 0
+	}
 	- ninja -Cbuild $args
 }
+- test -n $subcommand || lus run
 run {
 	- lus build jngl-test
 	- "build/Debug/jngl-test" $args
 }
+clean {
+	- ninja -Cbuild -t clean
+}
+rebuild {
+	- lus clean
+	- lus build
+}
 unittest {
+	--release {
+		- lus build --release jngl-unittest
+		- cd build
+		- "Release/jngl-unittest" $args
+		- exit 0
+	}
 	- lus build jngl-unittest
 	- cd build
-	- "Debug/jngl-unittest"
+	- "Debug/jngl-unittest" $args
+}
+// only run tests that do not require a windowing system
+unittest-headless {
+	- set +x
+	- export config=Debug
+	- export is_release=""
+	--release {
+		- export config=Release
+		- set -x
+		- lus build --release jngl-unittest
+		- export is_release="1"
+	}
+	- set -x
+	- test -n $is_release || lus build jngl-unittest
+	- cd build
+	- "$config/jngl-unittest" Color
+	- "$config/jngl-unittest" Rgb
+	- "$config/jngl-unittest" Drawable
+	- "$config/jngl-unittest" ImageData
+	- "$config/jngl-unittest" FinallyTest
+	- "$config/jngl-unittest" halfLoadTest
+	- "$config/jngl-unittest" getBinaryPath
+	- "$config/jngl-unittest" readAsset
+	- "$config/jngl-unittest" Vec2
 }
