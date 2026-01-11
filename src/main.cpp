@@ -572,7 +572,7 @@ void drawTriangle(Mat3 modelview, Rgba color) {
 }
 
 void setLineWidth(const float width) {
-	glLineWidth(width);
+	glLineWidth(width * getScaleFactor());
 }
 
 void drawLine(const double xstart, const double ystart, const double xend, const double yend) {

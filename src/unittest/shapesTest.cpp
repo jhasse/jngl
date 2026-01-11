@@ -35,14 +35,28 @@ boost::ut::suite _ = [] {
 		for (double scaleFactor : { 1, 2 }) {
 			Fixture f(scaleFactor);
 			jngl::drawSquare(jngl::modelview().translate({ -100, 0 }).scale(42), 0x111111ff_rgba);
-			jngl::drawLine(jngl::modelview().translate({ 0, -20 }), jngl::Vec2(0, 38), 5.f, 0x00ff00ff_rgba);
+			jngl::drawLine(jngl::modelview().translate({ -20, -20 }), jngl::Vec2(0, 38), 5.f, 0x00ff00ff_rgba);
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
+			jngl::setLineWidth(7);
+			jngl::drawLine(jngl::Vec2(15, -20), jngl::Vec2(19, 17));
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 			jngl::drawCircle(jngl::modelview().translate({ 100, 0 }).scale(42, 12), 0xff0000ff_rgba);
 			expect(eq(f.getAsciiArt(), std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-▒   ▒▒▒▒                       ▒
-▒   ████       ░░      ░▒▒▒▒░  ▒
-▒   ████       ░░     ▓▓▓▓▓▓▓▓ ▒
-▒   ████       ░░      ░▒▒▒▒░  ▒
+▒   ▒▒▒▒         ░             ▒
+▒   ████     ░░  ▓     ░▒▒▒▒░  ▒
+▒   ████     ░░  ▓    ▓▓▓▓▓▓▓▓ ▒
+▒   ████     ░░  ▒░    ░▒▒▒▒░  ▒
 ▒   ▒▒▒▒                       ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
@@ -71,7 +85,7 @@ boost::ut::suite _ = [] {
 			Fixture f(scaleFactor);
 			auto mv = jngl::modelview();
 			// Draw an ellipse centered near the left side
-			jngl::drawEllipse(mv.translate({ -60, 0 }), 135, 20);
+			jngl::drawEllipse(mv.translate({ -61, 0 }), 136, 20);
 			expect(eq(f.getAsciiArt(), std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒ ░░░▒▒▒▒▒▒▒▒▒▒░░░             ▒
