@@ -34,14 +34,15 @@ boost::ut::suite _ = [] {
 		}
 		for (double scaleFactor : { 1, 2 }) {
 			Fixture f(scaleFactor);
-			auto mv = jngl::modelview();
-			jngl::drawSquare(mv.translate({-100, 0}).scale(42), 0x111111ff_rgba);
+			jngl::drawSquare(jngl::modelview().translate({ -100, 0 }).scale(42), 0x111111ff_rgba);
+			jngl::drawLine(jngl::modelview().translate({ 0, -20 }), jngl::Vec2(0, 38), 5.f, 0x00ff00ff_rgba);
+			jngl::drawCircle(jngl::modelview().translate({ 100, 0 }).scale(42, 12), 0xff0000ff_rgba);
 			expect(eq(f.getAsciiArt(), std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒   ▒▒▒▒                       ▒
-▒   ████                       ▒
-▒   ████                       ▒
-▒   ████                       ▒
+▒   ████       ░░      ░▒▒▒▒░  ▒
+▒   ████       ░░     ▓▓▓▓▓▓▓▓ ▒
+▒   ████       ░░      ░▒▒▒▒░  ▒
 ▒   ▒▒▒▒                       ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
