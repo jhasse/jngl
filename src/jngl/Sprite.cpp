@@ -262,7 +262,7 @@ void Sprite::draw() const {
 	popMatrix();
 }
 
-void Sprite::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) const {
+void Sprite::draw(const Mat3& modelview, const ShaderProgram* const shaderProgram) const {
 	draw(modelview, Alpha(gSpriteColor.getAlpha()), shaderProgram);
 }
 

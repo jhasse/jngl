@@ -123,7 +123,7 @@ public:
 	/// Draws the image centered using \a modelview
 	///
 	/// \param shaderProgram Passing `nullptr` uses the default.
-	void draw(Mat3 modelview, const ShaderProgram* shaderProgram = nullptr) const;
+	void draw(const Mat3& modelview, const ShaderProgram* shaderProgram = nullptr) const;
 	void draw(Mat3 modelview, Alpha, const ShaderProgram* shaderProgram = nullptr) const;
 
 	/// Draws the sprite but multiplies each pixel's color with \a color
