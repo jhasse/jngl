@@ -89,6 +89,7 @@ unittest-headless {
 	- "$config/jngl-unittest" FinallyTest
 	- "$config/jngl-unittest" halfLoadTest
 	- "$config/jngl-unittest" getBinaryPath
+	- "$config/jngl-unittest" getConfigPath
 	- "$config/jngl-unittest" readAsset
 	- "$config/jngl-unittest" Vec2
 }
