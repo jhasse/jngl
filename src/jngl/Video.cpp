@@ -71,18 +71,17 @@ public:
 				// Skip frames to catch up, but keep track of the last one in case we catch up to a
 				// series of dupe frames, which means we'd have to draw that final frame and then
 				// wait for more.
-				const THEORAPLAY_VideoFrame* last = video;
+				std::unique_ptr<const THEORAPLAY_VideoFrame> last = std::move(video);
 				while ((video = THEORAPLAY_getVideo(decoder)) != nullptr) {
 					internal::warn("Skipped frame at {}ms.", last->playms);
-					THEORAPLAY_freeVideo(last);
-					last = video;
-					if (now - static_cast<double>(video->playms) / 1000. < timePerFrame) {
+					last = std::move(video);
+					if (now - static_cast<double>(last->playms) / 1000. < timePerFrame) {
 						break;
 					}
 				}
 
 				if (!video) {
-					video = last;
+					video = std::move(last);
 				}
 			}
 			if (!shaderProgram) {
@@ -220,7 +219,6 @@ public:
 			                static_cast<GLsizei>(video->height / 2), GL_RED, GL_UNSIGNED_BYTE,
 			                video->pixels + std::lround(1.25 * video->width * video->height));
 
-			THEORAPLAY_freeVideo(video);
 			video = nullptr;
 		}
 		if (started()) {
@@ -321,7 +319,7 @@ private:
 	constexpr static unsigned int BUFFER_SIZE = 200;
 
 	THEORAPLAY_Decoder* decoder;
-	const THEORAPLAY_VideoFrame* video = nullptr;
+	std::unique_ptr<const THEORAPLAY_VideoFrame> video;
 	std::unique_ptr<const THEORAPLAY_AudioPacket> audio;
 	double startTime;
 	double timePerFrame;
