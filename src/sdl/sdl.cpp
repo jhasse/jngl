@@ -16,10 +16,9 @@ SDL::SDL() {
 		return; // FIXME: Workaround for https://github.com/jhasse/jngl/issues/121
 	}
 	gIssue121Workaround = true;
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0) {
+	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
 		throw std::runtime_error(SDL_GetError());
 	}
-	setHint(SDL_HINT_WINRT_HANDLE_BACK_BUTTON, true);
 	setHint(SDL_HINT_MOUSE_TOUCH_EVENTS, false);
 	setHint(SDL_HINT_TOUCH_MOUSE_EVENTS, false);
 }
@@ -29,7 +28,7 @@ SDL::~SDL() {
 }
 void SDL::setHint(const char* name, bool value) {
 	[[maybe_unused]] const auto result = SDL_SetHint(name, value ? "1" : "0");
-	assert(result == SDL_TRUE);
+	assert(result);
 }
 
 } // namespace jngl
