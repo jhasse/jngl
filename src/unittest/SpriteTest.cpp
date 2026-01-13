@@ -57,15 +57,15 @@ boost::ut::suite _ = [] {
 			jngl::Sprite sprite("../data/jngl.webp");
 			expect(eq(jngl::TextureCache::handle().sprites.size(), 1u));
 			expect(neq(jngl::TextureCache::handle().get("../data/jngl.webp"), nullptr));
-			sprite.draw();
+			sprite.draw(jngl::modelview().scale(0.2f));
 			expect(eq(f.getAsciiArt(), std::string(R"(
-▒░░░░░░░▒░░▒░░▒▒▒░▒▒░ ▒▒▒▒▒░░░░▒
-░░░  ▒░░░ ░░  ░▒▒▒▒▒░ ▒▒▒▒▒░░░░▒
-▒░░░░▒░░░░░░░░░░░░░░░░░░░░░░░░▒▒
-▒▒░░▒░░░░░░░░░░░░░░░░░░░░░░▒▒▒▒▒
-▒▒▒░░░░░░░░░░░░░░░░░░▒░░░░░▒▒▒▒▒
-▒▒▒▒░░░░░░░░░░░░░░░░░░░░░░░░▒▒▒▒
-▓▒▒▒▒▒▒▒░░░░░░░░░░░░░░░░░▒▒▒▒▒▒▓
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒                              ▒
+▒             ░░░░             ▒
+▒           ░░░░░░░░           ▒
+▒            ░░░░░░            ▒
+▒              ░░              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
 		}
 		{
@@ -73,15 +73,15 @@ boost::ut::suite _ = [] {
 			expect(eq(jngl::TextureCache::handle().get("../data/jngl.webp"), nullptr));
 			Fixture f(1.9f);
 			jngl::Sprite sprite("../data/jngl.webp");
-			sprite.draw(jngl::modelview());
+			sprite.draw(jngl::modelview().scale(0.2f));
 			expect(eq(f.getAsciiArt(), std::string(R"(
-▒░░░░░░░▒░░▒░░▒▒▒░▒▒░ ▒▒▒▒▒░░░░▒
-░░░  ▒░░░ ░░  ░▒▒▒▒▒░ ▒▒▒▒▒░░░░▒
-▒░░░░▒░░░░░░░░░░░░░░░░░░░░░░░░▒▒
-▒▒░░▒░░░░░░░░░░░░░░░░░░░░░░▒▒▒▒▒
-▒▒▒░░░░░░░░░░░░░░░░░░▒░░░░░▒▒▒▒▒
-▒▒▒▒░░░░░░░░░░░░░░░░░░░░░░░░▒▒▒▒
-▓▒▒▒▒▒▒▒░░░░░░░░░░░░░░░░░▒▒▒▒▒▒▓
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒                              ▒
+▒             ░░░░             ▒
+▒           ░░░░░░░░           ▒
+▒            ░░░░░░            ▒
+▒              ░░              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
 		}
 	};
