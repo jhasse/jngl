@@ -143,11 +143,11 @@ GLuint Texture::getID() const {
 }
 
 float Texture::getPreciseWidth() const {
-	return vertexes[8];
+	return vertexes[8] * getScaleFactor();
 }
 
 float Texture::getPreciseHeight() const {
-	return vertexes[5];
+	return vertexes[5] * getScaleFactor();
 }
 
 void Texture::setBytes(const unsigned char* const bytes, const int width, const int height) const {

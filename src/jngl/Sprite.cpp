@@ -365,7 +365,7 @@ void Sprite::drawScaled(float xfactor, float yfactor,
 
 void Sprite::drawClipped(float xstart, float xend, float ystart, float yend) const {
 	pushMatrix();
-	opengl::translate(xstart * width, ystart * height);
+	opengl::translate(xstart * getWidth(), ystart * getHeight());
 	drawClipped({ xstart, ystart }, { xend, yend });
 	popMatrix();
 }
