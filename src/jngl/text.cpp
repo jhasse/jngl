@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "text.hpp"
@@ -23,6 +23,13 @@ public:
 		width = font->getTextWidth(text);
 		height = font->getLineHeight();
 		this->font = std::move(font);
+	}
+	void setText(std::string text) {
+		if (std::ranges::find(text, '\n') != text.end()) {
+			throw std::runtime_error("Line must not contain \\n");
+		}
+		width = font->getTextWidth(text);
+		this->text = std::move(text);
 	}
 	void draw(Mat3 modelview) const {
 		font->print(modelview.translate(position), text, gFontColor);
@@ -52,11 +59,10 @@ Text::Text(const std::string& text) : font(pWindow->getFontImpl()) {
 	setText(text);
 }
 
-void Text::setText(const std::string& text) {
+void Text::setText(const std::string& text, double maxWidth) {
 	lines.clear();
 	for (const auto& lineText : splitlines(text)) {
-		auto newLine = std::make_shared<Line>(lineText, font);
-		lines.emplace_back(std::move(newLine));
+		addLine(lineText, maxWidth);
 	}
 	setAlign(align);
 }
@@ -110,6 +116,36 @@ void Text::draw(Mat3 modelview) const {
 	                                static_cast<double>(static_cast<int>(getY())) });
 	for (auto& line : lines) {
 		line->draw(mv);
+	}
+}
+
+void Text::addLine(const std::string& text, double maxWidth) {
+	auto newLine = std::make_shared<Line>(text, font);
+	if (newLine->getWidth() > maxWidth) {
+		auto currentPos = text.begin();
+		while (true) {
+			auto spacePos = std::find(currentPos, text.end(), ' ');
+			bool undo = (spacePos == text.end());
+			if (!undo) {
+				newLine->setText(std::string(text.begin(), spacePos));
+				undo = (newLine->getWidth() > maxWidth);
+			}
+			if (undo) {
+				if (currentPos == text.begin()) {
+					// the line starts with a very long word. Just add it anyway:
+					lines.emplace_back(std::move(newLine));
+					return;
+				}
+				// we went too far, undo
+				newLine->setText(std::string(text.begin(), currentPos - 1));
+				break;
+			}
+			currentPos = spacePos + 1;
+		}
+		lines.emplace_back(std::move(newLine));
+		addLine(std::string(currentPos, text.end()), maxWidth);
+	} else {
+		lines.emplace_back(std::move(newLine));
 	}
 }
 
