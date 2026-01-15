@@ -61,9 +61,10 @@ void drawLine(Vec2 start, Vec2 end, float lineWidth, Rgba color);
 /// \deprecated Use drawLine(Vec2, Vec2, float lineWidth) instead
 void drawLine(double xstart, double ystart, double xend, double yend);
 
-/// Draws a line from \a start to \a end
-/// \deprecated Use drawLine(Mat3, Vec2, Vec2, float lineWidth) instead
-[[deprecated("Use drawLine(Mat3, Vec2, Vec2, float lineWidth) instead")]]
+/// Draws a line from \a start to \a end with width 1
+///
+/// Assume that this draws a line with a width of 1. You change the global line width that is used
+/// with setLineWidth, but that is deprecated.
 void drawLine(Mat3 modelview, Vec2 start, Vec2 end);
 
 /// Draws a line from \a start to \a end with width \a lineWidth in the color set by jngl::setColor
