@@ -111,10 +111,9 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Text</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text=&quot;&quot;)</td></tr>
 <tr class="memdesc:a471a8bae7d453133de20b0719c25e767"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, <em>text</em> may contain <code>\n</code> newlines. <br /></td></tr>
 <tr class="separator:a471a8bae7d453133de20b0719c25e767"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acaa8a747c8b2d51cac81e5e1f90fbe77" id="r_acaa8a747c8b2d51cac81e5e1f90fbe77"><td class="memItemLeft" align="right" valign="top"><a id="acaa8a747c8b2d51cac81e5e1f90fbe77" name="acaa8a747c8b2d51cac81e5e1f90fbe77"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setText</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;)</td></tr>
-<tr class="memdesc:acaa8a747c8b2d51cac81e5e1f90fbe77"><td class="mdescLeft">&#160;</td><td class="mdescRight">The text to display (may contain <code>\n</code> newlines) <br /></td></tr>
-<tr class="separator:acaa8a747c8b2d51cac81e5e1f90fbe77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad24877667f7f8c80603821eee5570626" id="r_ad24877667f7f8c80603821eee5570626"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad24877667f7f8c80603821eee5570626">setText</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;, double maxWidth=<a class="elRef" href="http://en.cppreference.com/w/cpp/types/numeric_limits.html">std::numeric_limits</a>&lt; double &gt;::max())</td></tr>
+<tr class="memdesc:ad24877667f7f8c80603821eee5570626"><td class="mdescLeft">&#160;</td><td class="mdescRight">The text to display (may contain <code>\n</code> newlines)  <br /></td></tr>
+<tr class="separator:ad24877667f7f8c80603821eee5570626"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af314c76c56fb8d5a84022ab208098ab1" id="r_af314c76c56fb8d5a84022ab208098ab1"><td class="memItemLeft" align="right" valign="top"><a id="af314c76c56fb8d5a84022ab208098ab1" name="af314c76c56fb8d5a84022ab208098ab1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setFont</b> (<a class="el" href="classjngl_1_1Font.html">Font</a> &amp;)</td></tr>
 <tr class="memdesc:af314c76c56fb8d5a84022ab208098ab1"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classjngl_1_1Font.html" title="Font loaded from a TTF or OTF file.">Font</a> family. <br /></td></tr>
@@ -244,8 +243,20 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setHeight</b> (float)
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Rectangle shaped text block. </p>
-
-<p class="definition">Definition at line <a class="el" href="text_8hpp_source.html#l00023">23</a> of file <a class="el" href="text_8hpp_source.html">text.hpp</a>.</p>
+<p>This class represents a drawable text block that supports multi-line text with automatic word wrapping. <a class="el" href="classjngl_1_1Text.html" title="Rectangle shaped text block.">Text</a> can contain newline characters (<code>\n</code>) for manual line breaks, or use automatic word wrapping based on a maximum width.</p>
+<dl class="section note"><dt>Note</dt><dd>Set the font using <a class="el" href="#af314c76c56fb8d5a84022ab208098ab1" title="Font family.">setFont()</a> before calling <a class="el" href="#ad24877667f7f8c80603821eee5570626" title="The text to display (may contain \n newlines)">setText()</a> with a maxWidth parameter for correct text wrapping behavior.</dd></dl>
+<p>Example usage: </p><div class="fragment"><div class="line"><a class="code hl_class" href="classjngl_1_1Text.html">jngl::Text</a> text;</div>
+<div class="line">text.<a class="code hl_function" href="#af314c76c56fb8d5a84022ab208098ab1">setFont</a>(myFont);</div>
+<div class="line">text.<a class="code hl_function" href="#ad24877667f7f8c80603821eee5570626">setText</a>(<span class="stringliteral">&quot;Hello World!\nThis is a very long line.&quot;</span>, 150);</div>
+<div class="line">text.<a class="code hl_function" href="#a560cccd4201edfd95c859e64a777cbcc">setAlign</a>(jngl::Alignment::CENTER);</div>
+<div class="line">text.<a class="code hl_function" href="#a35460413b5c663cd8a28ad3c80caaf71">draw</a>();</div>
+<div class="ttc" id="aclassjngl_1_1Text_html"><div class="ttname"><a href="classjngl_1_1Text.html">jngl::Text</a></div><div class="ttdoc">Rectangle shaped text block.</div><div class="ttdef"><b>Definition</b> <a href="text_8hpp_source.html#l00039">text.hpp:39</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Text_html_a35460413b5c663cd8a28ad3c80caaf71"><div class="ttname"><a href="#a35460413b5c663cd8a28ad3c80caaf71">jngl::Text::draw</a></div><div class="ttdeci">void draw() const override</div><div class="ttdoc">Simply draws the Text object.</div></div>
+<div class="ttc" id="aclassjngl_1_1Text_html_a560cccd4201edfd95c859e64a777cbcc"><div class="ttname"><a href="#a560cccd4201edfd95c859e64a777cbcc">jngl::Text::setAlign</a></div><div class="ttdeci">void setAlign(Alignment)</div><div class="ttdoc">Alignment of this text block.</div></div>
+<div class="ttc" id="aclassjngl_1_1Text_html_ad24877667f7f8c80603821eee5570626"><div class="ttname"><a href="#ad24877667f7f8c80603821eee5570626">jngl::Text::setText</a></div><div class="ttdeci">void setText(const std::string &amp;, double maxWidth=std::numeric_limits&lt; double &gt;::max())</div><div class="ttdoc">The text to display (may contain \n newlines)</div></div>
+<div class="ttc" id="aclassjngl_1_1Text_html_af314c76c56fb8d5a84022ab208098ab1"><div class="ttname"><a href="#af314c76c56fb8d5a84022ab208098ab1">jngl::Text::setFont</a></div><div class="ttdeci">void setFont(Font &amp;)</div><div class="ttdoc">Font family.</div></div>
+</div><!-- fragment --> 
+<p class="definition">Definition at line <a class="el" href="text_8hpp_source.html#l00039">39</a> of file <a class="el" href="text_8hpp_source.html">text.hpp</a>.</p>
 </div><div class="dynheader">
 Inheritance diagram for Text:</div>
 <div class="dyncontent">
@@ -257,6 +268,36 @@ Collaboration diagram for Text:</div>
 <div class="center"><iframe scrolling="no" frameborder="0" src="classjngl_1_1Text__coll__graph.svg" width="96" height="111"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad24877667f7f8c80603821eee5570626" name="ad24877667f7f8c80603821eee5570626"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad24877667f7f8c80603821eee5570626">&#9670;&#160;</a></span>setText()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setText </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>maxWidth</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="elRef" href="http://en.cppreference.com/w/cpp/types/numeric_limits.html">std::numeric_limits</a>&lt;&#160;double&#160;&gt;::max()</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The text to display (may contain <code>\n</code> newlines) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">maxWidth</td><td>Maximum width of the text block in pixels. If the text exceeds this width, it will be wrapped at word boundaries to fit within the specified width. Defaults to no limit (<a class="elRef" href="http://en.cppreference.com/w/cpp/types/numeric_limits/max.html">std::numeric_limits&lt;double&gt;::max()</a>).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>In order for this to work correctly, call this after setFont. </dd></dl>
+
+</div>
+</div>
 <a id="ae6c526798a490afe221d1447f508f16a" name="ae6c526798a490afe221d1447f508f16a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae6c526798a490afe221d1447f508f16a">&#9670;&#160;</a></span>step()</h2>
 

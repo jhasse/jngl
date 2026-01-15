@@ -754,7 +754,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawLine</b> (<a clas
 <tr class="memitem:a5f3b65bc0411dcd941c0ad1e9e1d7ebb" id="r_a5f3b65bc0411dcd941c0ad1e9e1d7ebb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5f3b65bc0411dcd941c0ad1e9e1d7ebb">drawLine</a> (double xstart, double ystart, double xend, double yend)</td></tr>
 <tr class="separator:a5f3b65bc0411dcd941c0ad1e9e1d7ebb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e56804210490b88fe02a65199c16e7c" id="r_a1e56804210490b88fe02a65199c16e7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e56804210490b88fe02a65199c16e7c">drawLine</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> start, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> end)</td></tr>
-<tr class="memdesc:a1e56804210490b88fe02a65199c16e7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a line from <em>start</em> to <em>end</em>.  <br /></td></tr>
+<tr class="memdesc:a1e56804210490b88fe02a65199c16e7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a line from <em>start</em> to <em>end</em> with width 1.  <br /></td></tr>
 <tr class="separator:a1e56804210490b88fe02a65199c16e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f2a89354ea7d59941736f16fc20ddd3" id="r_a0f2a89354ea7d59941736f16fc20ddd3"><td class="memItemLeft" align="right" valign="top"><a id="a0f2a89354ea7d59941736f16fc20ddd3" name="a0f2a89354ea7d59941736f16fc20ddd3"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawLine</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> start, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> end, float lineWidth)</td></tr>
@@ -2618,8 +2618,8 @@ template&lt;class T , class... Args&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Draws a line from <em>start</em> to <em>end</em>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated</a></b></dt><dd>Use <a class="el" href="#a0f2a89354ea7d59941736f16fc20ddd3" title="Draws a line from start to end with width lineWidth in the color set by jngl::setColor.">drawLine(Mat3, Vec2, Vec2, float lineWidth)</a> instead </dd></dl>
+<p>Draws a line from <em>start</em> to <em>end</em> with width 1. </p>
+<p>Assume that this draws a line with a width of 1. You change the global line width that is used with setLineWidth, but that is deprecated. </p>
 
 </div>
 </div>
@@ -2643,7 +2643,7 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a line from (0, 0) to <em>end</em> in the color set by <a class="el" href="#a55a8f2d8091f7c8fdac59075ac069413" title="Sets the color which should be used to draw primitives.">jngl::setColor</a>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000017">Deprecated</a></b></dt><dd>Use drawLine(const Mat3&amp;, Vec2, float lineWidth, Rgba) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated</a></b></dt><dd>Use drawLine(const Mat3&amp;, Vec2, float lineWidth, Rgba) instead </dd></dl>
 
 </div>
 </div>
@@ -2672,7 +2672,7 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a line from (0, 0) to <em>end</em> in <em>color</em>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000018">Deprecated</a></b></dt><dd>Use drawLine(const Mat3&amp;, Vec2, float lineWidth, Rgba) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000017">Deprecated</a></b></dt><dd>Use drawLine(const Mat3&amp;, Vec2, float lineWidth, Rgba) instead </dd></dl>
 
 </div>
 </div>
@@ -2709,7 +2709,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000019">Deprecated</a></b></dt><dd>Use drawEllipse(Mat3, float, float, float) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000018">Deprecated</a></b></dt><dd>Use drawEllipse(Mat3, float, float, float) instead </dd></dl>
 
 </div>
 </div>
@@ -2777,7 +2777,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000020">Deprecated</a></b></dt><dd>Use drawCircle instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000019">Deprecated</a></b></dt><dd>Use drawCircle instead </dd></dl>
 
 </div>
 </div>
@@ -2819,7 +2819,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000021">Deprecated</a></b></dt><dd>Use <a class="el" href="#a1732275d2646c634f74abec40aeaafe8" title="Draws the triangle a -&gt; b -&gt; c.">drawTriangle(Vec2, Vec2, Vec2)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000020">Deprecated</a></b></dt><dd>Use <a class="el" href="#a1732275d2646c634f74abec40aeaafe8" title="Draws the triangle a -&gt; b -&gt; c.">drawTriangle(Vec2, Vec2, Vec2)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -2877,7 +2877,7 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a rectangle at { <em>xposition</em>, <em>yposition</em> }. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000022">Deprecated</a></b></dt><dd>Use drawRect(const Mat3&amp;, Vec2, Color) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000021">Deprecated</a></b></dt><dd>Use drawRect(const Mat3&amp;, Vec2, Color) instead </dd></dl>
 
 </div>
 </div>
@@ -3043,7 +3043,7 @@ template&lt;class Vect &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00194">194</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00195">195</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
 
 </div>
 </div>
@@ -3232,7 +3232,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Sleep current thread for <em>milliseconds</em>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000026">Deprecated</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000025">Deprecated</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
 
 </div>
 </div>
@@ -3420,7 +3420,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Sets the passed <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> to be active in the main loop. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000027">Deprecated</a></b></dt><dd>Use <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop for the next frame.">setScene(std::shared_ptr&lt;Scene&gt;)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000026">Deprecated</a></b></dt><dd>Use <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop for the next frame.">setScene(std::shared_ptr&lt;Scene&gt;)</a> instead </dd></dl>
 
 </div>
 </div>
