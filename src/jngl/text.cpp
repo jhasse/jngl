@@ -4,11 +4,9 @@
 #include "text.hpp"
 
 #include "../FontImpl.hpp"
-#include "../freetype.hpp"
 #include "../helper.hpp"
 #include "../windowptr.hpp"
-#include "Pixels.hpp"
-#include "ScaleablePixels.hpp"
+#include "FontInterface.hpp"
 #include "font.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
@@ -16,13 +14,13 @@
 namespace jngl {
 class Text::Line {
 public:
-	Line(std::string text, std::shared_ptr<FontImpl> font) : text(std::move(text)) {
-		setFont(std::move(font));
+	Line(std::string text, FontInterface& font) : text(std::move(text)) {
+		setFont(font);
 	}
-	void setFont(std::shared_ptr<FontImpl> font) {
-		width = font->getTextWidth(text);
-		height = font->getLineHeight();
-		this->font = std::move(font);
+	void setFont(FontInterface& font) {
+		width = font.getTextWidth(text);
+		height = font.getLineHeight();
+		this->font = &font;
 	}
 	void setText(std::string text) {
 		if (std::ranges::find(text, '\n') != text.end()) {
@@ -32,13 +30,15 @@ public:
 		this->text = std::move(text);
 	}
 	void draw(Mat3 modelview) const {
-		font->print(modelview.translate(position), text, gFontColor);
+		font->print(modelview.translate(position), text);
 	}
 	double getWidth() const {
-		return static_cast<double>(static_cast<ScaleablePixels>(width));
+		assert(!std::isnan(width));
+		return width;
 	}
 	double getHeight() const {
-		return static_cast<double>(static_cast<ScaleablePixels>(height));
+		assert(!std::isnan(height));
+		return height;
 	}
 	void setX(double x) {
 		position.x = x;
@@ -49,10 +49,10 @@ public:
 
 private:
 	std::string text;
-	std::shared_ptr<FontImpl> font;
+	const FontInterface* font = nullptr;
 	Vec2 position;
-	Pixels width{ -1 };
-	Pixels height{ -1 };
+	double width = std::numeric_limits<double>::quiet_NaN();
+	double height = std::numeric_limits<double>::quiet_NaN();
 };
 
 Text::Text(const std::string& text) : font(pWindow->getFontImpl()) {
@@ -68,9 +68,13 @@ void Text::setText(const std::string& text, double maxWidth) {
 }
 
 void Text::setFont(Font& f) {
-	font = f.getImpl();
+	setFont(f.getImpl());
+}
+
+void Text::setFont(const std::shared_ptr<FontInterface>& f) {
+	font = f;
 	for (auto& line : lines) {
-		line->setFont(font);
+		line->setFont(*font);
 	}
 	setAlign(align);
 }
@@ -120,7 +124,7 @@ void Text::draw(Mat3 modelview) const {
 }
 
 void Text::addLine(const std::string& text, double maxWidth) {
-	auto newLine = std::make_shared<Line>(text, font);
+	auto newLine = std::make_shared<Line>(text, *font);
 	if (newLine->getWidth() > maxWidth) {
 		auto currentPos = text.begin();
 		while (true) {

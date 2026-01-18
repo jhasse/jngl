@@ -71,7 +71,7 @@ public:
 	float getResizedWindowScalingY() const;
 
 	ScaleablePixels getTextWidth(const std::string&);
-	Pixels getLineHeight();
+	double getLineHeight();
 	void setLineHeight(Pixels);
 	bool getFullscreen() const;
 	void setFullscreen(bool);

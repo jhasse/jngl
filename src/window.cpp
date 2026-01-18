@@ -35,7 +35,7 @@ ScaleablePixels Window::getTextWidth(const std::string& text) {
 	return static_cast<ScaleablePixels>(fonts_[fontSize_][fontName_]->getTextWidth(text));
 }
 
-Pixels Window::getLineHeight() {
+double Window::getLineHeight() {
 	return fonts_[fontSize_][fontName_]->getLineHeight();
 }
 

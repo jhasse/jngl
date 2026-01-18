@@ -17,7 +17,7 @@ namespace jngl {
 enum class Alignment : uint8_t { LEFT, RIGHT, CENTER };
 
 class Font;
-class FontImpl;
+class FontInterface;
 
 /// Rectangle shaped text block
 ///
@@ -53,6 +53,8 @@ public:
 	/// Font family
 	void setFont(Font&);
 
+	void setFont(const std::shared_ptr<FontInterface>&);
+
 	/// Alignment of this text block
 	void setAlign(Alignment);
 
@@ -69,7 +71,7 @@ private:
 
 	class Line;
 	std::vector<std::shared_ptr<Line>> lines;
-	std::shared_ptr<FontImpl> font;
+	std::shared_ptr<FontInterface> font;
 	Alignment align = Alignment::LEFT;
 };
 

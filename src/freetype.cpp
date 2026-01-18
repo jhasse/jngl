@@ -111,7 +111,8 @@ Character::~Character() {
 	delete texture_;
 }
 
-Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::iterator end) {
+Character& FontImpl::getCharacter(std::string::iterator& it,
+                                  const std::string::iterator end) const {
 #ifdef _MSC_VER
 	// https://stackoverflow.com/questions/32055357/visual-studio-c-2015-stdcodecvt-with-char16-t-or-char32-t
 	static std::wstring_convert<std::codecvt_utf8<int32_t>, int32_t> cvt;
@@ -223,33 +224,37 @@ FontImpl::~FontImpl() {
 	}
 }
 
-Pixels FontImpl::getTextWidth(const std::string& text) {
+double FontImpl::getTextWidth(std::string_view text) const {
 	auto maxWidth = 0_px;
-	std::vector<std::string> lines(splitlines(text));
+	std::vector<std::string> lines(splitlines(std::string(text)));
 
 	auto lineEnd = lines.end();
 	for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
 		auto lineWidth = 0_px;
 		auto charEnd = lineIter->end();
 		for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
-			lineWidth += GetCharacter(charIter, charEnd).getWidth();
+			lineWidth += getCharacter(charIter, charEnd).getWidth();
 		}
 		if (lineWidth > maxWidth) {
 			maxWidth = lineWidth;
 		}
 	}
-	return maxWidth;
+	return static_cast<double>(ScaleablePixels{ Pixels{ maxWidth } });
 }
 
-Pixels FontImpl::getLineHeight() const {
-	return Pixels(lineHeight);
+double FontImpl::getLineHeight() const {
+	return static_cast<double>(ScaleablePixels{ Pixels{ lineHeight } });
 }
 
 void FontImpl::setLineHeight(Pixels h) {
 	lineHeight = static_cast<int>(h);
 }
 
-void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) {
+void FontImpl::print(const Mat3& modelview, std::string_view text) const {
+	print(modelview, std::string(text), gFontColor);
+}
+
+void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) const {
 	auto context = ShaderCache::handle().textureShaderProgram->use();
 	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(), color.getGreen(),
 	            color.getBlue(), color.getAlpha());
@@ -261,7 +266,7 @@ void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) {
 		auto charEnd = lineIter->end();
 		Mat3 modelviewCopy = modelview;
 		for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
-			GetCharacter(charIter, charEnd).draw(modelviewCopy);
+			getCharacter(charIter, charEnd).draw(modelviewCopy);
 		}
 		if (++lineIter == lineEnd) {
 			break;
@@ -287,7 +292,7 @@ void FontImpl::print(const ScaleablePixels x, const ScaleablePixels y, const std
 
 		auto charEnd = lineIter->end();
 		for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
-			GetCharacter(charIter, charEnd).draw(modelview);
+			getCharacter(charIter, charEnd).draw(modelview);
 		}
 	}
 }

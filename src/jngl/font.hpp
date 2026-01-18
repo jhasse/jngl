@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Font class and related functions
 /// @file
@@ -51,6 +51,7 @@ public:
 
 	/// Internal function
 	std::shared_ptr<FontImpl> getImpl();
+	std::shared_ptr<const FontImpl> getImpl() const;
 
 private:
 	std::shared_ptr<FontImpl> impl;

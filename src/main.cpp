@@ -431,7 +431,7 @@ double getTextWidth(const std::string& text) {
 }
 
 double getLineHeight() {
-	return static_cast<double>(ScaleablePixels{ pWindow->getLineHeight() });
+	return pWindow->getLineHeight();
 }
 
 void setLineHeight(double h) {
