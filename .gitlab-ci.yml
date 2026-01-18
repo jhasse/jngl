@@ -22,9 +22,9 @@ linux:
   - .github/ci.py
   - cmake -Bbuild -G"Ninja Multi-Config" -DCMAKE_COMPILE_WARNING_AS_ERROR=1
   - cd build
-  - ninja
-  - ninja -f build-Release.ninja
-  - dnf install -y mesa-dri-drivers xorg-x11-drivers >/dev/null
+  - ninja --quiet
+  - ninja -f build-Release.ninja --quiet
+  - dnf install -y --allowerasing mesa-dri-drivers xorg-x11-drivers
   - Xorg -config ../data/xorg.conf &>/dev/null &
   - sleep 1 # wait for Xorg to boot up
   - export DISPLAY=:0
