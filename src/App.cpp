@@ -1,4 +1,4 @@
-// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "App.hpp"
@@ -168,6 +168,7 @@ uint8_t mainLoop(AppParameters params) {
 			--windowPixelHeight; // make sure height is even for recording in H.264
 			const double newScaleFactor =
 			    static_cast<double>(windowPixelHeight) / params.screenSize->y;
+			auto scaleFactor = getScaleFactor();
 			setScaleFactor(newScaleFactor);
 			internal::info("Adjusted scale factor from {} to {} to get even window height.",
 			               scaleFactor, newScaleFactor);
