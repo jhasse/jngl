@@ -87,7 +87,7 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
 #ifdef GLAD_GL
-	if (GLAD_GL_VERSION_4_3 || GLAD_GL_KHR_debug) {
+	if (GLAD_GL_VERSION_4_3 != 0 || GLAD_GL_KHR_debug != 0) {
 #endif
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -333,17 +333,17 @@ bool keyPressed(const key::KeyType key) {
 
 bool keyDown(const std::string& key) {
 	const static auto TOO_LONG = "Only pass one character.";
-	if (key[0] & 0x80) { // first bit (Check if this is an Unicode character)
+	if ((key[0] & 0x80) != 0) { // first bit (Check if this is an Unicode character)
 		// sourceEnd has to be the next character after the utf-8 sequence
 		const static auto ERROR_MSG = "Invalid UTF-8 string!";
 		if (key.size() < 2) {
 			throw std::runtime_error(ERROR_MSG);
 		}
-		if (key[0] & 0x20) { // third bit
+		if ((key[0] & 0x20) != 0) { // third bit
 			if (key.size() < 3) {
 				throw std::runtime_error(ERROR_MSG);
 			}
-			if (key[0] & 0x10) {
+			if ((key[0] & 0x10) != 0) {
 				if (key.size() < 4) { // fourth bit
 					throw std::runtime_error(ERROR_MSG);
 				}

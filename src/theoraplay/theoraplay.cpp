@@ -114,10 +114,10 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 
     unsigned long audioframes = 0;
     double fps = 0.0;
-    int was_error = 1;  // resets to 0 at the end.
-    int eos = 0;  // end of stream flag.
+	bool was_error = true; // resets to false at the end.
+	bool eos = false; // end of stream flag.
 
-    // Too much Ogg/Vorbis/Theora state...
+	// Too much Ogg/Vorbis/Theora state...
     ogg_packet packet;
     ogg_sync_state sync;
     ogg_page page;
@@ -125,15 +125,15 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
     vorbis_info vinfo;
     vorbis_comment vcomment;
     ogg_stream_state vstream;
-    int vdsp_init = 0;
-    vorbis_dsp_state vdsp;
-    int tpackets = 0;
+	bool vdsp_init = false;
+	vorbis_dsp_state vdsp;
+	int tpackets = 0;
     th_info tinfo;
     th_comment tcomment;
     ogg_stream_state tstream;
-    int vblock_init = 0;
-    vorbis_block vblock;
-    th_dec_ctx *tdec = nullptr;
+	bool vblock_init = false;
+	vorbis_block vblock;
+	th_dec_ctx *tdec = nullptr;
     th_setup_info *tsetup = nullptr;
 	size_t ringBufferPos = 0;
 	size_t ringBufferSize = 0;
@@ -144,9 +144,8 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
     th_comment_init(&tcomment);
     th_info_init(&tinfo);
 
-    int bos = 1;
-    while (!ctx->halt && bos)
-    {
+	bool bos = true;
+	while (!ctx->halt && bos) {
 		if (FeedMoreOggData(ctx->io, &sync) <= 0) {
 			goto cleanup;
 		}
@@ -155,25 +154,22 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
         {
             ogg_stream_state test;
 
-            if (!ogg_page_bos(&page))  // not a header.
-            {
-                queue_ogg_page(ctx);
-                bos = 0;
-                break;
+			if (ogg_page_bos(&page) == 0) { // not a header.
+				queue_ogg_page(ctx);
+				bos = false;
+				break;
 			}
 
-            ogg_stream_init(&test, ogg_page_serialno(&page));
+			ogg_stream_init(&test, ogg_page_serialno(&page));
             ogg_stream_pagein(&test, &page);
             ogg_stream_packetout(&test, &packet);
 
-            if (!tpackets && (th_decode_headerin(&tinfo, &tcomment, &tsetup, &packet) >= 0))
-            {
-                memcpy(&tstream, &test, sizeof (test));
+			if (tpackets == 0 && (th_decode_headerin(&tinfo, &tcomment, &tsetup, &packet) >= 0)) {
+				memcpy(&tstream, &test, sizeof (test));
                 tpackets = 1;
-            }
-            else if (!vpackets && (vorbis_synthesis_headerin(&vinfo, &vcomment, &packet) >= 0))
-            {
-                memcpy(&vstream, &test, sizeof (test));
+			} else if (vpackets == 0 &&
+			           (vorbis_synthesis_headerin(&vinfo, &vcomment, &packet) >= 0)) {
+				memcpy(&vstream, &test, sizeof (test));
                 vpackets = 1;
 			} else {
 				// whatever it is, we don't care about it
@@ -183,35 +179,33 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 	}
 
 	// no audio OR video?
-	if (ctx->halt || (!vpackets && !tpackets)) {
+	if (ctx->halt || (vpackets == 0 && tpackets == 0)) {
 		goto cleanup;
 	}
 	// apparently there are two more theora and two more vorbis headers next.
-    while ((!ctx->halt) && ((tpackets && (tpackets < 3)) || (vpackets && (vpackets < 3))))
-    {
-        while (!ctx->halt && tpackets && (tpackets < 3))
-        {
+	while ((!ctx->halt) &&
+	       ((tpackets != 0 && (tpackets < 3)) || (vpackets != 0 && (vpackets < 3)))) {
+		while (!ctx->halt && tpackets != 0 && (tpackets < 3)) {
 			if (ogg_stream_packetout(&tstream, &packet) != 1) {
 				break; // get more data?
 			}
-			if (!th_decode_headerin(&tinfo, &tcomment, &tsetup, &packet)) {
+			if (th_decode_headerin(&tinfo, &tcomment, &tsetup, &packet) == 0) {
 				goto cleanup;
 			}
 			tpackets++;
-        } // while
+		} // while
 
-        while (!ctx->halt && vpackets && (vpackets < 3))
-        {
+		while (!ctx->halt && vpackets != 0 && (vpackets < 3)) {
 			if (ogg_stream_packetout(&vstream, &packet) != 1) {
 				break; // get more data?
 			}
-			if (vorbis_synthesis_headerin(&vinfo, &vcomment, &packet)) {
+			if (vorbis_synthesis_headerin(&vinfo, &vcomment, &packet) != 0) {
 				goto cleanup;
 			}
 			vpackets++;
-        } // while
+		} // while
 
-        // get another page, try again?
+		// get another page, try again?
 		if (ogg_sync_pageout(&sync, &page) > 0) {
 			queue_ogg_page(ctx);
 		} else if (FeedMoreOggData(ctx->io, &sync) <= 0) {
@@ -219,10 +213,9 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 		}
 	} // while
 
-    // okay, now we have our streams, ready to set up decoding.
-    if (!ctx->halt && tpackets)
-    {
-        // th_decode_alloc() docs say to check for insanely large frames yourself.
+	// okay, now we have our streams, ready to set up decoding.
+	if (!ctx->halt && tpackets != 0) {
+		// th_decode_alloc() docs say to check for insanely large frames yourself.
 		if ((tinfo.frame_width > 99999) || (tinfo.frame_height > 99999)) {
 			goto cleanup;
 		}
@@ -249,18 +242,17 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
         // !!! FIXME: maybe an API to set this?
         //th_decode_ctl(tdec, TH_DECCTL_GET_PPLEVEL_MAX, &pp_level_max, sizeof(pp_level_max));
         th_decode_ctl(tdec, TH_DECCTL_SET_PPLEVEL, &pp_level_max, sizeof(pp_level_max));
-    } // if
+	} // if
 
-    // Done with this now.
+	// Done with this now.
     if (tsetup != nullptr)
     {
         th_setup_free(tsetup);
         tsetup = nullptr;
     } // if
 
-    if (!ctx->halt && vpackets)
-    {
-        vdsp_init = (vorbis_synthesis_init(&vdsp, &vinfo) == 0);
+	if (!ctx->halt && vpackets != 0) {
+		vdsp_init = (vorbis_synthesis_init(&vdsp, &vinfo) == 0);
 		if (!vdsp_init) {
 			goto cleanup;
 		}
@@ -270,7 +262,7 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 		}
 	} // if
 
-    // Now we can start the actual decoding!
+	// Now we can start the actual decoding!
     // Note that audio and video don't _HAVE_ to start simultaneously.
 
     ctx->lock.lock();
@@ -281,14 +273,13 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 
     while (!ctx->halt && !eos)
     {
-        int need_pages = 0;  // need more Ogg pages?
-        int saw_video_frame = 0;
+		bool need_pages = false; // need more Ogg pages?
+		bool saw_video_frame = false;
 
-        // Try to read as much audio as we can at once. We limit the outer
+		// Try to read as much audio as we can at once. We limit the outer
         //  loop to one video frame and as much audio as we can eat.
-        while (!ctx->halt && vpackets)
-        {
-            float **pcm = nullptr;
+		while (!ctx->halt && vpackets != 0) {
+			float **pcm = nullptr;
             const int frames = vorbis_synthesis_pcmout(&vdsp, &pcm);
             if (frames > 0)
             {
@@ -341,8 +332,8 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 				// try to feed another packet to the Vorbis stream...
 				if (ogg_stream_packetout(&vstream, &packet) <= 0)
                 {
-					if (!tpackets) {
-						need_pages = 1; // no video, get more pages now.
+					if (tpackets == 0) {
+						need_pages = true; // no video, get more pages now.
 					}
 					break;  // we'll get more pages when the video catches up.
                 }
@@ -352,12 +343,11 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 			}
 		}
 
-        if (!ctx->halt && tpackets)
-        {
-            // Theora, according to example_player.c, is
+		if (!ctx->halt && tpackets != 0) {
+			// Theora, according to example_player.c, is
             //  "one [packet] in, one [frame] out."
 			if (ogg_stream_packetout(&tstream, &packet) <= 0) {
-				need_pages = 1;
+				need_pages = true;
 			} else {
 				ogg_int64_t granulepos = 0;
 
@@ -427,17 +417,16 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 						ctx->videocount++;
                         ctx->lock.unlock();
 
-                        saw_video_frame = 1;
+						saw_video_frame = true;
 					}
 				}
 			}
 		}
 
-        if (!ctx->halt && need_pages)
-        {
-            const int rc = FeedMoreOggData(ctx->io, &sync);
+		if (!ctx->halt && need_pages) {
+			const int rc = FeedMoreOggData(ctx->io, &sync);
 			if (rc == 0) {
-				eos = 1; // end of stream
+				eos = true; // end of stream
 			} else if (rc < 0) {
 				goto cleanup; // i/o error, etc.
 			} else {
@@ -447,11 +436,11 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 			}
 		}
 
-        // Sleep the process until we have space for more frames.
+		// Sleep the process until we have space for more frames.
         if (saw_video_frame)
         {
-            int go_on = !ctx->halt;
-            //printf("Sleeping.\n");
+			bool go_on = !ctx->halt;
+			//printf("Sleeping.\n");
             while (go_on)
             {
                 // !!! FIXME: This is stupid. I should use a semaphore for this.
@@ -465,7 +454,7 @@ void WorkerThread(THEORAPLAY_Decoder* const ctx) {
 		}
 	}
 
-    was_error = 0;
+	was_error = false;
 
 cleanup:
     ctx->decode_error = (!ctx->halt && was_error);
@@ -477,10 +466,10 @@ cleanup:
 	if (vdsp_init) {
 		vorbis_dsp_clear(&vdsp);
 	}
-	if (tpackets) {
+	if (tpackets != 0) {
 		ogg_stream_clear(&tstream);
 	}
-	if (vpackets) {
+	if (vpackets != 0) {
 		ogg_stream_clear(&vstream);
 	}
 	th_info_clear(&tinfo);
@@ -500,10 +489,10 @@ void* WorkerThreadEntry(void* _this) {
 long IoFopenRead(THEORAPLAY_Io* io, void* buf, long buflen) {
 	FILE *f = (FILE *) io->userdata;
     const size_t br = fread(buf, 1, buflen, f);
-	if ((br == 0) && ferror(f)) {
+	if ((br == 0) && ferror(f) != 0) {
 		return -1;
 	}
-    return (long) br;
+	return (long) br;
 }
 
 void IoFopenClose(THEORAPLAY_Io* io) {
@@ -561,8 +550,8 @@ void THEORAPLAY_stopDecode(THEORAPLAY_Decoder* const ctx) {
 		return;
 	}
 	if (ctx->thread_created) {
-        ctx->halt = 1;
-        ctx->worker.join();
+		ctx->halt = true;
+		ctx->worker.join();
 	}
 	delete ctx;
 }
@@ -572,9 +561,9 @@ bool THEORAPLAY_isDecoding(THEORAPLAY_Decoder* const ctx) {
     if (ctx)
     {
         ctx->lock.lock();
-        retval = ( ctx && (ctx->audiolist || ctx->videolist ||
-                   (ctx->thread_created && !ctx->thread_done)) );
-        ctx->lock.unlock();
+		retval = (ctx != nullptr &&
+		          (ctx->audiolist || ctx->videolist || (ctx->thread_created && !ctx->thread_done)));
+		ctx->lock.unlock();
     }
     return retval;
 }

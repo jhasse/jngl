@@ -1,4 +1,4 @@
-// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #define _LIBCPP_DISABLE_DEPRECATION_WARNINGS // NOLINT
@@ -30,17 +30,17 @@ namespace jngl {
 Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face face,
                      FT_Stroker stroker) {
 	const auto flags = FT_LOAD_TARGET_LIGHT | FT_LOAD_DEFAULT;
-	if (FT_Load_Char(face, ch, flags)) {
+	if (FT_Load_Char(face, ch, flags) != 0) {
 		const std::string msg =
 		    std::string("FT_Load_Glyph failed. Character: ") + std::to_string(ch);
 		// Load a question mark instead
-		if (FT_Load_Glyph(face, FT_Get_Char_Index(face, '?'), flags)) {
+		if (FT_Load_Glyph(face, FT_Get_Char_Index(face, '?'), flags) != 0) {
 			throw std::runtime_error(msg);
 		}
 		internal::error(msg);
 	}
 	FT_Glyph glyph;
-	if (FT_Get_Glyph(face->glyph, &glyph)) {
+	if (FT_Get_Glyph(face->glyph, &glyph) != 0) {
 		throw std::runtime_error("FT_Get_Glyph failed");
 	}
 	if (stroker) {
@@ -69,8 +69,8 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 			data[y][x * 4 + 2] = 255;
 			unsigned char alpha = 0;
 			if (bitmap.pixel_mode == FT_PIXEL_MODE_MONO) {
-				if (bitmap.buffer[static_cast<ptrdiff_t>(y * bitmap.pitch) + x / 8] &
-				    (0x80 >> (x % 8))) {
+				if ((bitmap.buffer[static_cast<ptrdiff_t>(y * bitmap.pitch) + x / 8] &
+				     (0x80 >> (x % 8))) != 0) {
 					alpha = 255;
 				} else {
 					alpha = 0;
@@ -124,19 +124,19 @@ Character& FontImpl::getCharacter(std::string::iterator& it,
 #endif
 	const char& ch = (*it); // Just to have less code
 	char32_t unicodeCharacter = ch;
-	if (ch & 0x80) { // first bit (Check if this is an Unicode character)
+	if ((ch & 0x80) != 0) { // first bit (Check if this is an Unicode character)
 		const char* sourceEnd = &ch + 2;
 		// sourceEnd has to be the next character after the utf-8 sequence
 		const static auto ERROR_MSG = "Invalid UTF-8 string!";
 		if (++it == end) {
 			throw std::runtime_error(ERROR_MSG);
 		}
-		if (ch & 0x20) { // third bit
+		if ((ch & 0x20) != 0) { // third bit
 			if (++it == end) {
 				throw std::runtime_error(ERROR_MSG);
 			}
 			++sourceEnd;
-			if (ch & 0x10) { // fourth bit
+			if ((ch & 0x10) != 0) { // fourth bit
 				if (++it == end) {
 					throw std::runtime_error(ERROR_MSG);
 				}
@@ -166,7 +166,7 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height, flo
 		filename = relativeFilename;
 	}
 	if (++instanceCounter == 1) {
-		if (FT_Init_FreeType(&library)) {
+		if (FT_Init_FreeType(&library) != 0) {
 			--instanceCounter;
 			throw std::runtime_error("FT_Init_FreeType failed");
 		}

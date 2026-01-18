@@ -1,4 +1,4 @@
-// Copyright 2017-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2017-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "SdlController.hpp"
@@ -34,7 +34,7 @@ SdlController::SdlController(SDL_Joystick* const handle, const int index)
 			model = Model::XBOX;
 			break;
 		default: {
-			if (SDL_IsGameController(index)) {
+			if (SDL_IsGameController(index) != 0u) {
 				gameController = SDL_GameControllerOpen(index);
 				if (gameController) {
 					this->handle = nullptr;

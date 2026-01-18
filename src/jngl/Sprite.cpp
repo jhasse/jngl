@@ -507,7 +507,7 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 		throw std::runtime_error(std::string("Error seeking file. (" + filename + ")"));
 	}
 	BMPHeader header{};
-	if (!fread(&header, sizeof(header), 1, fp)) {
+	if (fread(&header, sizeof(header), 1, fp) == 0u) {
 		throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
 	}
 	if (header.headerSize != 40) {
@@ -535,7 +535,7 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 			    0) {
 				throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
 			}
-			if (!fread(buf[i], static_cast<size_t>(header.width) * 3, 1, fp)) {
+			if (fread(buf[i], static_cast<size_t>(header.width) * 3, 1, fp) == 0u) {
 				throw std::runtime_error(std::string("Error reading data. (" + filename + ")"));
 			}
 		}
@@ -545,8 +545,8 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 			    0) {
 				throw std::runtime_error(std::string("Error reading file. (" + filename + ")"));
 			}
-			if (!fread(buf[(header.height - 1) - i], static_cast<size_t>(header.width) * 3, 1,
-			           fp)) {
+			if (fread(buf[(header.height - 1) - i], static_cast<size_t>(header.width) * 3, 1, fp) ==
+			    0u) {
 				throw std::runtime_error(std::string("Error reading data. (" + filename + ")"));
 			}
 		}

@@ -532,10 +532,10 @@ std::string simpleDemangle(std::string_view mangled) {
 	}
 
 	while (i < mangled.size()) {
-		if (std::isdigit(mangled[i])) {
+		if (std::isdigit(mangled[i]) != 0) {
 			// Skip length prefixes
 			size_t len = 0;
-			while (i < mangled.size() && std::isdigit(mangled[i])) {
+			while (i < mangled.size() && std::isdigit(mangled[i]) != 0) {
 				len = len * 10 + (mangled[i] - '0');
 				++i;
 			}

@@ -1,4 +1,4 @@
-// Copyright 2024-2025 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2024-2026 Jan Niklas Hasse <jhasse@gmail.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "log.hpp"
 
@@ -56,7 +56,7 @@ std::string stripAnsiEscapeCodes(const std::string& in) {
 		i += 2;
 
 		// Skip everything up to and including the next [a-zA-Z].
-		while (i < in.size() && !std::isalpha(in[i])) {
+		while (i < in.size() && std::isalpha(in[i]) == 0) {
 			++i;
 		}
 	}
