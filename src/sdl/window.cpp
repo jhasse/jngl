@@ -1,4 +1,4 @@
-// Copyright 2011-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../App.hpp"
@@ -50,10 +50,13 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 
 	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI;
 	if (fullscreen) {
-		if (width == getDesktopWidth() && height == getDesktopHeight()) {
-			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-		} else {
-			flags |= SDL_WINDOW_FULLSCREEN;
+		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+		if (width != getDesktopWidth() || height != getDesktopHeight()) {
+			// Do the scaling ourself using the projection matrix:
+			setScaleFactor(std::min(static_cast<double>(getDesktopWidth()) / width,
+			                        static_cast<double>(getDesktopHeight()) / height));
+			width_ = width = getDesktopWidth();
+			height_ = height = getDesktopHeight();
 		}
 	} else {
 		flags |= SDL_WINDOW_RESIZABLE; // if we make fullscreen window resizeable on GNOME, it will
@@ -135,11 +138,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	Init(width_, height_, canvasWidth, canvasHeight);
 }
 
-Window::~Window() {
-	// This is rather dirty, but needed for the rare case that one wants to create a window after
-	// hiding a previous one and doesn't reset the scale factor:
-	setScaleFactor(getScaleFactor() / impl->hidpiScaleFactor);
-}
+Window::~Window() = default;
 
 int Window::GetKeyCode(key::KeyType key) {
 	switch (key) {
