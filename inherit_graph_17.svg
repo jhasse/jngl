@@ -11,9 +11,9 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classjngl_1_1Mat4.html" target="_top" xlink:title="4x4 matrix">
+<g id="a_Node000000"><a xlink:href="classjngl_1_1Mat3.html" target="_top" xlink:title="3x3 matrix">
 <polygon fill="white" stroke="#666666" points="40,-19.25 0,-19.25 0,0 40,0 40,-19.25"/>
-<text text-anchor="middle" x="20" y="-5.75" font-family="ui-monospace,monospace" font-size="10.00">Mat4</text>
+<text text-anchor="middle" x="20" y="-5.75" font-family="ui-monospace,monospace" font-size="10.00">Mat3</text>
 </a>
 </g>
 </g>

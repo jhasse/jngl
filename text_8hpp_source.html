@@ -113,7 +113,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="namespacejngl.html#a7aed1e91261bf4cd3942c6f87ae468eb">   17</a></span><span class="keyword">enum class</span> <a class="code hl_enumeration" href="namespacejngl.html#a7aed1e91261bf4cd3942c6f87ae468eb">Alignment</a> : uint8_t { LEFT, RIGHT, CENTER };</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">class </span>Font;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">class </span>FontImpl;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">class </span>FontInterface;</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
 <div class="foldopen" id="foldopen00039" data-start="{" data-end="};">
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="classjngl_1_1Text.html">   39</a></span><span class="keyword">class </span><a class="code hl_class" href="classjngl_1_1Text.html">Text</a> : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Drawable.html">Drawable</a> {</div>
@@ -124,24 +124,26 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="classjngl_1_1Text.html#af314c76c56fb8d5a84022ab208098ab1">   54</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Text.html#af314c76c56fb8d5a84022ab208098ab1">setFont</a>(<a class="code hl_class" href="classjngl_1_1Font.html">Font</a>&amp;);</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="classjngl_1_1Text.html#a560cccd4201edfd95c859e64a777cbcc">   57</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Text.html#a560cccd4201edfd95c859e64a777cbcc">setAlign</a>(<a class="code hl_enumeration" href="namespacejngl.html#a7aed1e91261bf4cd3942c6f87ae468eb">Alignment</a>);</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="classjngl_1_1Text.html#ae6c526798a490afe221d1447f508f16a">   60</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Text.html#ae6c526798a490afe221d1447f508f16a">step</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="classjngl_1_1Text.html#a35460413b5c663cd8a28ad3c80caaf71">   63</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Text.html#a35460413b5c663cd8a28ad3c80caaf71">draw</a>() <span class="keyword">const override</span>;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Text.html#a35460413b5c663cd8a28ad3c80caaf71">draw</a>(<a class="code hl_class" href="classjngl_1_1Mat3.html">Mat3</a> <a class="code hl_function" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keywordtype">void</span> addLine(<span class="keyword">const</span> <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; text, <span class="keywordtype">double</span> maxWidth);</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keyword">class </span>Line;</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector&lt;std::shared_ptr&lt;Line&gt;</a>&gt; lines;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr&lt;FontImpl&gt;</a> font;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <a class="code hl_enumeration" href="namespacejngl.html#a7aed1e91261bf4cd3942c6f87ae468eb">Alignment</a> align = Alignment::LEFT;</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>};</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Text.html#af314c76c56fb8d5a84022ab208098ab1">setFont</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr&lt;FontInterface&gt;</a>&amp;);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="classjngl_1_1Text.html#a560cccd4201edfd95c859e64a777cbcc">   59</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Text.html#a560cccd4201edfd95c859e64a777cbcc">setAlign</a>(<a class="code hl_enumeration" href="namespacejngl.html#a7aed1e91261bf4cd3942c6f87ae468eb">Alignment</a>);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="classjngl_1_1Text.html#ae6c526798a490afe221d1447f508f16a">   62</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Text.html#ae6c526798a490afe221d1447f508f16a">step</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="classjngl_1_1Text.html#a35460413b5c663cd8a28ad3c80caaf71">   65</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Text.html#a35460413b5c663cd8a28ad3c80caaf71">draw</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Text.html#a35460413b5c663cd8a28ad3c80caaf71">draw</a>(<a class="code hl_class" href="classjngl_1_1Mat3.html">Mat3</a> <a class="code hl_function" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keywordtype">void</span> addLine(<span class="keyword">const</span> <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&amp; text, <span class="keywordtype">double</span> maxWidth);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keyword">class </span>Line;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector&lt;std::shared_ptr&lt;Line&gt;</a>&gt; lines;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr&lt;FontInterface&gt;</a> font;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <a class="code hl_enumeration" href="namespacejngl.html#a7aed1e91261bf4cd3942c6f87ae468eb">Alignment</a> align = Alignment::LEFT;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>};</div>
 </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>} <span class="comment">// namespace jngl</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>} <span class="comment">// namespace jngl</span></div>
 <div class="ttc" id="aDrawable_8hpp_html"><div class="ttname"><a href="Drawable_8hpp.html">Drawable.hpp</a></div><div class="ttdoc">Contains jngl::Drawable class.</div></div>
 <div class="ttc" id="aMat3_8hpp_html"><div class="ttname"><a href="Mat3_8hpp.html">Mat3.hpp</a></div><div class="ttdoc">Contains jngl::Mat3 class.</div></div>
 <div class="ttc" id="abasic_string_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a></div></div>

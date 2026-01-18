@@ -1,3 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classjngl_1_1KeyboardShortcut.html" title="Represents a keyboard shortcut, e.g. Ctrl+S" alt="" coords="5,5,155,31"/>
+<area shape="rect" id="Node000000" href="$classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene." alt="" coords="5,31,51,56"/>
+<area shape="rect" id="Node000001" href="$classjngl_1_1VideoRecorder.html" title="Records video and audio output to a file." alt="" coords="99,5,224,31"/>
+<area shape="poly" id="edge7_Node000000_Node000001" title=" " alt="" coords="65,34,98,28,99,33,66,39"/>
+<area shape="rect" id="Node000002" href="$classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself." alt="" coords="135,55,188,80"/>
+<area shape="poly" id="edge8_Node000000_Node000002" title=" " alt="" coords="66,48,135,60,134,65,65,53"/>
+<area shape="rect" id="Node000003" href="$classjngl_1_1Fade.html" title="Fades between two scenes, first fading to jngl::getBackgroundColor() and then fading to the new scene..." alt="" coords="300,29,353,55"/>
+<area shape="poly" id="edge9_Node000002_Node000003" title=" " alt="" coords="203,58,299,44,300,49,204,64"/>
+<area shape="rect" id="Node000004" href="$classjngl_1_1WorkFactory.html" title=" " alt="" coords="272,79,381,104"/>
+<area shape="poly" id="edge10_Node000002_Node000004" title=" " alt="" coords="204,71,272,81,271,86,203,76"/>
 </map>

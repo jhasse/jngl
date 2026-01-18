@@ -11,9 +11,9 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structjngl_1_1MouseInfo_1_1Over.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="structjngl_1_1MouseInfo_1_1Down.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="106,-19.25 0,-19.25 0,0 106,0 106,-19.25"/>
-<text text-anchor="middle" x="53" y="-5.75" font-family="ui-monospace,monospace" font-size="10.00">MouseInfo::Over</text>
+<text text-anchor="middle" x="53" y="-5.75" font-family="ui-monospace,monospace" font-size="10.00">MouseInfo::Down</text>
 </a>
 </g>
 </g>

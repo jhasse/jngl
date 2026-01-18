@@ -123,12 +123,55 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>printCentered</b> (<a
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getTextWidth</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a>) const</td></tr>
 <tr class="memdesc:a4e6623c6e0e01db225975911bfdd375f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the width of <em>text</em> in scale-independent pixels if it would be drawn with this font. <br /></td></tr>
 <tr class="separator:a4e6623c6e0e01db225975911bfdd375f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4af0b9b066200c3276bf11be27b265b" id="r_ae4af0b9b066200c3276bf11be27b265b"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1FontInterface.html">FontInterface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4af0b9b066200c3276bf11be27b265b">bake</a> (<a class="el" href="classjngl_1_1Rgba.html">jngl::Rgba</a> innerColor, <a class="el" href="classjngl_1_1Rgba.html">jngl::Rgba</a> outerColor) const</td></tr>
+<tr class="memdesc:ae4af0b9b066200c3276bf11be27b265b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="classjngl_1_1FontInterface.html" title="Common interface for fonts, used internally by jngl::Font and jngl::OutlinedFont::bake.">FontInterface</a> with pre-baked colors for the inner and outer (outline) text.  <br /></td></tr>
+<tr class="separator:ae4af0b9b066200c3276bf11be27b265b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Same as <a class="el" href="classjngl_1_1Font.html" title="Font loaded from a TTF or OTF file.">jngl::Font</a> but adds an outline. </p>
 
-<p class="definition">Definition at line <a class="el" href="OutlinedFont_8hpp_source.html#l00012">12</a> of file <a class="el" href="OutlinedFont_8hpp_source.html">OutlinedFont.hpp</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="OutlinedFont_8hpp_source.html#l00014">14</a> of file <a class="el" href="OutlinedFont_8hpp_source.html">OutlinedFont.hpp</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae4af0b9b066200c3276bf11be27b265b" name="ae4af0b9b066200c3276bf11be27b265b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4af0b9b066200c3276bf11be27b265b">&#9670;&#160;</a></span>bake()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1FontInterface.html">FontInterface</a> &gt; bake </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Rgba.html">jngl::Rgba</a></td>          <td class="paramname"><span class="paramname"><em>innerColor</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Rgba.html">jngl::Rgba</a></td>          <td class="paramname"><span class="paramname"><em>outerColor</em></span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a new <a class="el" href="classjngl_1_1FontInterface.html" title="Common interface for fonts, used internally by jngl::Font and jngl::OutlinedFont::bake.">FontInterface</a> with pre-baked colors for the inner and outer (outline) text. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">innerColor</td><td>The color to use for the main text </td></tr>
+    <tr><td class="paramname">outerColor</td><td>The color to use for the outline </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A shared pointer to a <a class="el" href="classjngl_1_1FontInterface.html" title="Common interface for fonts, used internally by jngl::Font and jngl::OutlinedFont::bake.">FontInterface</a> that can be used for rendering text with the specified colors</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The <a class="el" href="classjngl_1_1OutlinedFont.html" title="Same as jngl::Font but adds an outline.">OutlinedFont</a> can be safely destroyed while the returned <a class="el" href="classjngl_1_1FontInterface.html" title="Common interface for fonts, used internally by jngl::Font and jngl::OutlinedFont::bake.">FontInterface</a> is still in use.</dd></dl>
+<p>Example: </p><div class="fragment"><div class="line"><a class="code hl_class" href="classjngl_1_1Text.html">jngl::Text</a> text(<span class="stringliteral">&quot;Outlined Text&quot;</span>);</div>
+<div class="line">text.setFont(<a class="code hl_class" href="classjngl_1_1OutlinedFont.html">jngl::OutlinedFont</a>(<span class="stringliteral">&quot;Arial.ttf&quot;</span>, 20, 5.f)</div>
+<div class="line">                .<a class="code hl_function" href="#ae4af0b9b066200c3276bf11be27b265b">bake</a>(<a class="code hl_class" href="classjngl_1_1Rgba.html">jngl::Rgba</a>(1, 1, 1, 1), <a class="code hl_class" href="classjngl_1_1Rgba.html">jngl::Rgba</a>(0, 0, 0, 1)));</div>
+<div class="ttc" id="aclassjngl_1_1OutlinedFont_html"><div class="ttname"><a href="classjngl_1_1OutlinedFont.html">jngl::OutlinedFont</a></div><div class="ttdoc">Same as jngl::Font but adds an outline.</div><div class="ttdef"><b>Definition</b> <a href="OutlinedFont_8hpp_source.html#l00014">OutlinedFont.hpp:14</a></div></div>
+<div class="ttc" id="aclassjngl_1_1OutlinedFont_html_ae4af0b9b066200c3276bf11be27b265b"><div class="ttname"><a href="#ae4af0b9b066200c3276bf11be27b265b">jngl::OutlinedFont::bake</a></div><div class="ttdeci">std::shared_ptr&lt; FontInterface &gt; bake(jngl::Rgba innerColor, jngl::Rgba outerColor) const</div><div class="ttdoc">Creates a new FontInterface with pre-baked colors for the inner and outer (outline) text.</div></div>
+<div class="ttc" id="aclassjngl_1_1Rgba_html"><div class="ttname"><a href="classjngl_1_1Rgba.html">jngl::Rgba</a></div><div class="ttdoc">Object representing a RGBA color.</div><div class="ttdef"><b>Definition</b> <a href="Rgba_8hpp_source.html#l00022">Rgba.hpp:22</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Text_html"><div class="ttname"><a href="classjngl_1_1Text.html">jngl::Text</a></div><div class="ttdoc">Rectangle shaped text block.</div><div class="ttdef"><b>Definition</b> <a href="text_8hpp_source.html#l00039">text.hpp:39</a></div></div>
+</div><!-- fragment --> 
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>jngl/<a class="el" href="OutlinedFont_8hpp_source.html">OutlinedFont.hpp</a></li>
 </ul>
 </div><!-- contents -->
