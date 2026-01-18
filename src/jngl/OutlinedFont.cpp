@@ -1,4 +1,4 @@
-// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "OutlinedFont.hpp"
 
@@ -7,7 +7,7 @@
 namespace jngl {
 
 OutlinedFont::OutlinedFont(const std::string& filename, unsigned int size, float strokePercentage)
-: inner(filename, size, -strokePercentage / 2.), outer(filename, size, strokePercentage / 2.) {
+: inner(filename, size), outer(filename, size, strokePercentage) {
 }
 
 void OutlinedFont::print(const Mat3& modelview, const std::string& text, Rgba innerColor,
