@@ -9,7 +9,7 @@ cache:
 linux:
   parallel:
     matrix:
-      - VERSION: ['40', '41', 'latest']
+      - VERSION: ['41', '42', 'latest']
   image: fedora:$VERSION
   rules:
   - if: '$VERSION == "latest"'
@@ -35,17 +35,17 @@ linux:
   - cd ..
   - CC=clang CXX=clang++ CXXFLAGS=-fdiagnostics-color cmake -Bbuild-clang -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DJNGL_CLANG_TIDY=1
   - cd build-clang
-  - ninja
+  - ninja --quiet
   - cd ..
   - dnf install -y libavformat-free-devel libswscale-free-devel
   - cmake -Bbuild-record -G"Ninja Multi-Config" -DCMAKE_COMPILE_WARNING_AS_ERROR=1 -DJNGL_RECORD=1
   - cd build-record
-  - ninja
+  - ninja --quiet
 
 mingw:
   parallel:
     matrix:
-      - VERSION: ['40', '41', 'latest']
+      - VERSION: ['41', '42', 'latest']
   image: fedora:$VERSION
   rules:
   - if: '$VERSION == "latest"'
