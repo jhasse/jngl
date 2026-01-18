@@ -45,7 +45,6 @@ build {
 	}
 	- ninja -Cbuild $args
 }
-- test -n $subcommand || lus run
 run {
 	- lus build jngl-test
 	- "build/Debug/jngl-test" $args
@@ -56,6 +55,9 @@ clean {
 rebuild {
 	- lus clean
 	- lus build
+}
+test {
+	- lus unittest $args
 }
 unittest {
 	--release {
@@ -93,3 +95,10 @@ unittest-headless {
 	- "$config/jngl-unittest" readAsset
 	- "$config/jngl-unittest" Vec2
 }
+
+// default to build:
+--release {
+	- lus build --release
+	- exit 0
+}
+- test -n $subcommand || lus build
