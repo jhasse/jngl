@@ -165,6 +165,8 @@ uint8_t mainLoop(AppParameters params) {
 	int windowPixelHeight = static_cast<int>(std::lround(params.screenSize->y * getScaleFactor()));
 #ifdef JNGL_RECORD
 	if (!fullscreen && (windowPixelWidth % 2 != 0 || windowPixelHeight % 2 != 0)) {
+		auto oldWindowPixelWidth = windowPixelWidth;
+		auto oldWindowPixelHeight = windowPixelHeight;
 		if (windowPixelWidth % 2 != 0) {
 			--windowPixelWidth; // make sure width is even for recording in H.264
 		}
@@ -174,18 +176,12 @@ uint8_t mainLoop(AppParameters params) {
 		const double newScaleFactor =
 		    std::min(static_cast<double>(windowPixelWidth) / params.screenSize->x,
 		             static_cast<double>(windowPixelHeight) / params.screenSize->y);
-		auto newWindowPixelWidth =
-		    static_cast<int>(std::lround(params.screenSize->x * getScaleFactor()));
-		auto newWindowPixelHeight =
-		    static_cast<int>(std::lround(params.screenSize->y * getScaleFactor()));
 		auto scaleFactor = getScaleFactor();
 		setScaleFactor(newScaleFactor);
 		internal::info(
 		    "Adjusted scale factor from {} to {} to get even window dimensions ({}x{} -> {}x{}).",
-		    scaleFactor, newScaleFactor, windowPixelWidth, windowPixelHeight, newWindowPixelWidth,
-		    newWindowPixelHeight);
-		windowPixelWidth = newWindowPixelWidth;
-		windowPixelHeight = newWindowPixelHeight;
+		    scaleFactor, newScaleFactor, oldWindowPixelWidth, oldWindowPixelHeight,
+		    windowPixelWidth, windowPixelHeight);
 	}
 #endif
 	showWindow(params.displayName, windowPixelWidth, windowPixelHeight, fullscreen,
