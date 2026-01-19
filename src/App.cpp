@@ -161,22 +161,35 @@ uint8_t mainLoop(AppParameters params) {
 			setScaleFactor(scaleFactor);
 		}
 	}
+	int windowPixelWidth = static_cast<int>(std::lround(params.screenSize->x * getScaleFactor()));
 	int windowPixelHeight = static_cast<int>(std::lround(params.screenSize->y * getScaleFactor()));
 #ifdef JNGL_RECORD
-	if (!fullscreen) {
+	if (!fullscreen && (windowPixelWidth % 2 != 0 || windowPixelHeight % 2 != 0)) {
+		if (windowPixelWidth % 2 != 0) {
+			--windowPixelWidth; // make sure width is even for recording in H.264
+		}
 		if (windowPixelHeight % 2 != 0) {
 			--windowPixelHeight; // make sure height is even for recording in H.264
-			const double newScaleFactor =
-			    static_cast<double>(windowPixelHeight) / params.screenSize->y;
-			auto scaleFactor = getScaleFactor();
-			setScaleFactor(newScaleFactor);
-			internal::info("Adjusted scale factor from {} to {} to get even window height.",
-			               scaleFactor, newScaleFactor);
 		}
+		const double newScaleFactor =
+		    std::min(static_cast<double>(windowPixelWidth) / params.screenSize->x,
+		             static_cast<double>(windowPixelHeight) / params.screenSize->y);
+		auto newWindowPixelWidth =
+		    static_cast<int>(std::lround(params.screenSize->x * getScaleFactor()));
+		auto newWindowPixelHeight =
+		    static_cast<int>(std::lround(params.screenSize->y * getScaleFactor()));
+		auto scaleFactor = getScaleFactor();
+		setScaleFactor(newScaleFactor);
+		internal::info(
+		    "Adjusted scale factor from {} to {} to get even window dimensions ({}x{} -> {}x{}).",
+		    scaleFactor, newScaleFactor, windowPixelWidth, windowPixelHeight, newWindowPixelWidth,
+		    newWindowPixelHeight);
+		windowPixelWidth = newWindowPixelWidth;
+		windowPixelHeight = newWindowPixelHeight;
 	}
 #endif
-	showWindow(params.displayName, params.screenSize->x * getScaleFactor(), windowPixelHeight,
-	           fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
+	showWindow(params.displayName, windowPixelWidth, windowPixelHeight, fullscreen,
+	           params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
 	           params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
 	setScene(params.start());
 	uint8_t exitcode = App::instance().mainLoop();
