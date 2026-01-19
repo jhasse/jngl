@@ -721,7 +721,7 @@ std::string internal::getConfigPath() {
 	}
 #ifndef IOS
 	std::stringstream path;
-#if defined(ANDROID)
+#ifdef ANDROID
 	path << getSystemConfigPath() << '/';
 #elif defined(__EMSCRIPTEN__)
 	path << "/working1/";

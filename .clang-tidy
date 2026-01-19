@@ -47,6 +47,7 @@ Checks: '
        ,-hicpp-uppercase-literal-suffix,
        ,-hicpp-vararg,
        ,-llvm-header-guard,
+       ,-llvm-prefer-static-over-anonymous-namespace,
        ,-llvm-qualified-auto,
        ,-llvmlibc-callee-namespace,
        ,-llvmlibc-implementation-in-namespace,

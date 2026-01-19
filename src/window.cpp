@@ -382,10 +382,10 @@ void Window::stepIfNeeded() {
 		// Round up, because if we can do 40 FPS, but need 60 SPS, we need at least 2 SPF. We
 		// don't round up exactly to be a little bit "optimistic" of what we can do.
 		auto newStepsPerFrame = std::min(
-		    static_cast<unsigned int>(
-		        std::max(1, static_cast<int>(0.98 + frameLimiter.stepsPerFrame *
-		                                                targetStepsPerSecond / cappedOrDoable))),
-		    std::min(frameLimiter.stepsPerFrame * 2, maxStepsPerFrame)); // never increase too much
+		    { static_cast<unsigned int>(
+		          std::max(1, static_cast<int>(0.98 + frameLimiter.stepsPerFrame *
+		                                                  targetStepsPerSecond / cappedOrDoable))),
+		      frameLimiter.stepsPerFrame * 2, maxStepsPerFrame }); // never increase too much
 		// Divide doableStepsPerSecond by the previous stepsPerFrame and multiply it with
 		// newStepsPerFrame so that we know what can be doable in the future and not what
 		// could have been doable:
