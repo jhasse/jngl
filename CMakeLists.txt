@@ -285,6 +285,7 @@ else()
 			add_executable(jngl-test src/test/test.cpp src/ios/test/main.mm data/Arial.ttf
 				data/jngl.webp data/test.ogg)
 			set_target_properties(jngl-test PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${PROJECT_SOURCE_DIR}/data/ios/jngl-test.in.plist")
+			target_link_libraries(jngl-test jngl)
 		endif()
 	else()
 		if(NOT JNGL_BUILD_WEBP_FROM_SOURCE)
