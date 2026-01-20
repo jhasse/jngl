@@ -1,22 +1,6 @@
 - set +x
 - export LANG=C.UTF-8 // GCC made the weird decision to translate error messages
 - set -x
-cmake-mingw {
-	- mingw64-cmake -G "Ninja Multi-Config" -Bbuild-mingw
-}
-mingw {
-	- test -f "build-mingw/build.ninja" || lus cmake-mingw
-	- cd build-mingw
-	- ninja
-}
-cmake-mingw-winapi {
-	- mingw64-cmake -G "Ninja Multi-Config" -Bbuild-mingw-winapi "-DJNGL_WINAPI=1"
-}
-mingw-winapi {
-	- test -f "build-mingw-winapi/build.ninja" || lus cmake-mingw-winapi
-	- cd build-mingw-winapi
-	- ninja
-}
 doc {
 	- cd doc
 	--clean {
@@ -94,6 +78,29 @@ unittest-headless {
 	- "$config/jngl-unittest" getConfigPath
 	- "$config/jngl-unittest" readAsset
 	- "$config/jngl-unittest" Vec2
+}
+cmake-mingw {
+	- mingw64-cmake -G "Ninja Multi-Config" -Bbuild-mingw
+}
+mingw {
+	- test -f "build-mingw/build.ninja" || lus cmake-mingw
+	- cd build-mingw
+	- ninja
+}
+cmake-mingw-winapi {
+	- mingw64-cmake -G "Ninja Multi-Config" -Bbuild-mingw-winapi "-DJNGL_WINAPI=1"
+}
+mingw-winapi {
+	- test -f "build-mingw-winapi/build.ninja" || lus cmake-mingw-winapi
+	- cd build-mingw-winapi
+	- ninja
+}
+cmake-ios {
+	- cmake -Bbuild-ios -GXcode "-DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake"
+}
+build-ios {
+	- test -f "build-ios/jngl.xcodeproj/project.pbxproj" || lus cmake-ios
+	- sh -c "xcodebuild -quiet -parallelizeTargets -project build-ios/jngl.xcodeproj -sdk iphonesimulator -target jngl-test ARCHS=$(uname -m)"
 }
 
 // default to build:

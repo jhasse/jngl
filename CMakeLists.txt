@@ -284,7 +284,9 @@ else()
 			set_source_files_properties(data/test.ogg PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 			add_executable(jngl-test src/test/test.cpp src/ios/test/main.mm data/Arial.ttf
 				data/jngl.webp data/test.ogg)
-			set_target_properties(jngl-test PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${PROJECT_SOURCE_DIR}/data/ios/jngl-test.in.plist")
+			set_target_properties(jngl-test PROPERTIES
+				MACOSX_BUNDLE_INFO_PLIST "${PROJECT_SOURCE_DIR}/data/ios/jngl-test.in.plist"
+				XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.bixense.jngl-test")
 			target_link_libraries(jngl-test jngl)
 		endif()
 	else()
