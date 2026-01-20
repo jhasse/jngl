@@ -1,4 +1,4 @@
-// Copyright 2015-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Defines macros for the main entry point
 /// @file
@@ -10,17 +10,6 @@
 #ifdef NDEBUG
 #include "message.hpp"
 #endif
-
-#ifdef JNGL_UWP
-#include <SDL.h>
-
-#define JNGL_MAIN_BEGIN /* NOLINT */ int SDL_main(int argc, char** argv) { \
-	jngl::Finally _ZtzNg47T5XSjogv(jngl::hideWindow);
-#define JNGL_MAIN_END return 0; } // NOLINT
-#define JNGL_MAIN_RETURN return
-
-#undef main // SDL defines this to SDL_main
-#else
 
 #ifdef __APPLE__
 #include "TargetConditionals.h"
@@ -68,6 +57,4 @@
 			#define JNGL_MAIN_END }
 		#endif
 	#endif
-#endif
-
 #endif

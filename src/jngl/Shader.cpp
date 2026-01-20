@@ -1,13 +1,9 @@
-// Copyright 2018-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Shader.hpp"
 
 #include "../Shader_Impl.hpp"
-
-#if defined (JNGL_UWP) || defined (__EMSCRIPTEN__)
-#include "../log.hpp"
-#endif
 
 #include <sstream>
 #include <stdexcept>
@@ -37,13 +33,6 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 		if (tmp && major <= 1 && minor <= 20 && gles20Source) {
 			source = gles20Source;
 		}
-	}
-#endif
-#if defined (JNGL_UWP)
-	if (gles20Source) {
-		source = gles20Source;
-	} else {
-		internal::warn("OpenGL ES 3.0 not supported on this platform!");
 	}
 #endif
 	glShaderSource(impl->id, 1, &source, nullptr);

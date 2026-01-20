@@ -75,12 +75,6 @@ cmake -Bbuild-ios -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake -DIOS
 ```
 Then open and build `build-ios/jngl.xcodeproj` in Xcode.
 
-## Xbox
-```bash
-cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0"
-```
-Then open `build-uwp/jngl.sln` in Visual Studio.
-
 ## Example Usage
 Here's a simple "Hello, World!" example in JNGL:
 ```cpp

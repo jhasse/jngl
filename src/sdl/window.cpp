@@ -14,7 +14,7 @@
 
 #include <cassert>
 #include <stdexcept>
-#if defined(_WIN32) && !defined(JNGL_UWP)
+#ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -24,7 +24,7 @@
 namespace jngl {
 
 void setProcessSettings() {
-#if defined(_WIN32) && !defined(JNGL_UWP)
+#ifdef _WIN32
 	static bool called = false;
 	if (called) {
 		return;
@@ -63,10 +63,6 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		                               // be reduced in its height (SDL bug?).
 	}
 
-#ifdef JNGL_UWP
-	isMultisampleSupported_ = false; // crashes on Xbox since ANGLE uses a PixelShader 4.1 for
-	                                 // multi-sampling and Xbox only supports 4.0 in UWP mode.
-#endif
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -387,7 +383,7 @@ void Window::UpdateInput() {
 			}
 			break;
 		case SDL_WINDOWEVENT:
-			if (!impl->firstFrame && event.window.event == SDL_WINDOWEVENT_RESIZED) {
+			if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
 				const int originalWidth = width_;
 				const int originalHeight = height_;
 				SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
@@ -433,7 +429,6 @@ void Window::UpdateInput() {
 
 void Window::SwapBuffers() {
 	SDL_GL_SwapWindow(impl->sdlWindow);
-	impl->firstFrame = false;
 }
 
 void Window::SetMouseVisible(const bool visible) {

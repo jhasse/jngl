@@ -49,12 +49,6 @@ jobs:
     - name: Unittest (Release)
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
       run: just unittest-headless Release
-    - name: Configure (UWP)
-      run: cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore '-DCMAKE_SYSTEM_VERSION=10.0' '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
-    - name: Build (UWP, Debug)
-      run: cmake --build build-uwp --config Debug
-    - name: Build (UWP, Release)
-      run: cmake --build build-uwp --config Release
 
   mingw:
     runs-on: [ubuntu-latest]

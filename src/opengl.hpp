@@ -1,4 +1,4 @@
-// Copyright 2009-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2009-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -15,7 +15,7 @@
 		#include <GLES3/gl3.h>
 		#include <GLES3/gl3ext.h>
 	#else
-		#if defined (JNGL_UWP) || defined (__EMSCRIPTEN__)
+		#ifdef __EMSCRIPTEN__
 			#define GL_GLEXT_PROTOTYPES 1
 			#include <GLES2/gl2.h>
 			#include <GLES2/gl2ext.h>
@@ -23,9 +23,7 @@
 			#define glGenVertexArrays glGenVertexArraysOES
 			#define glBindVertexArray glBindVertexArrayOES
 			#define glDeleteVertexArrays glDeleteVertexArraysOES
-			#if defined(__EMSCRIPTEN__)
-				#define GL_RGBA8 GL_RGBA8_OES
-			#endif
+			#define GL_RGBA8 GL_RGBA8_OES
 		#else
 			#include <glad/gl.h>
 		#endif

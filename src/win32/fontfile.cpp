@@ -1,4 +1,4 @@
-// Copyright 2019-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
@@ -12,9 +12,6 @@
 namespace jngl {
 
 std::string Window::GetFontFileByName(const std::string& fontName) {
-#ifdef JNGL_UWP
-	return "Arial.ttf"; // TODO: Does UWP include any fonts?
-#else
 	static std::unordered_map<std::string, std::string> cache;
 	const auto it = cache.find(fontName);
 	if (it != cache.end()) {
@@ -94,7 +91,6 @@ std::string Window::GetFontFileByName(const std::string& fontName) {
 	}
 	cache.emplace(fontName, fontFile);
 	return fontFile;
-#endif
 }
 
 } // namespace jngl
