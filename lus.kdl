@@ -14,6 +14,9 @@ doc {
 	- rm -f "html/index.html"
 	- doxygen
 	- rm "html/index.html"
+	--run-replace {
+		sh -c "find html/ -type f | parallel ./replace.py {}"
+	}
 	- ln -s "../index.html" "html/"
 	- cd html
 	- python3 -m http.server -b "127.0.0.1"
