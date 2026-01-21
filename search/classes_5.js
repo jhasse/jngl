@@ -34,13 +34,14 @@ var searchData=
   ['fstream_31',['fstream',['http://en.cppreference.com/w/cpp/io/basic_fstream.html',1,'std']]],
   ['function_32',['function',['http://en.cppreference.com/w/cpp/experimental/function.html',1,'function'],['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'function']]],
   ['function_3c_20action_28float_29_3e_33',['function&lt; Action(float)&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
-  ['function_3c_20float_28float_29_3e_34',['function&lt; float(float)&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
-  ['function_3c_20int_28int_29_3e_35',['function&lt; int(int)&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
-  ['function_3c_20std_3a_3ashared_5fptr_3c_20jngl_3a_3awork_20_3e_28_29_3e_36',['function&lt; std::shared_ptr&lt; jngl::Work &gt;()&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
-  ['function_3c_20void_28_29_3e_37',['function&lt; void()&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
-  ['function_3c_20void_28float_20t_2c_20jngl_3a_3amat3_20_26_29_3e_38',['function&lt; void(float t, jngl::Mat3 &amp;)&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
-  ['future_39',['future',['http://en.cppreference.com/w/cpp/experimental/future.html',1,'future'],['http://en.cppreference.com/w/cpp/thread/future.html',1,'future']]],
-  ['future_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3aimagedata_20_3e_20_3e_40',['future&lt; std::unique_ptr&lt; jngl::ImageData &gt; &gt;',['http://en.cppreference.com/w/cpp/thread/future.html',1,'std']]],
-  ['future_5ferrc_41',['future_errc',['http://en.cppreference.com/w/cpp/thread/future_errc.html',1,'std']]],
-  ['future_5ferror_42',['future_error',['http://en.cppreference.com/w/cpp/thread/future_error.html',1,'std']]]
+  ['function_3c_20double_28int_2c_20int_29_3e_34',['function&lt; double(int, int)&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
+  ['function_3c_20float_28float_29_3e_35',['function&lt; float(float)&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
+  ['function_3c_20int_28int_29_3e_36',['function&lt; int(int)&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
+  ['function_3c_20std_3a_3ashared_5fptr_3c_20jngl_3a_3awork_20_3e_28_29_3e_37',['function&lt; std::shared_ptr&lt; jngl::Work &gt;()&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
+  ['function_3c_20void_28_29_3e_38',['function&lt; void()&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
+  ['function_3c_20void_28float_20t_2c_20jngl_3a_3amat3_20_26_29_3e_39',['function&lt; void(float t, jngl::Mat3 &amp;)&gt;',['http://en.cppreference.com/w/cpp/utility/functional/function.html',1,'std']]],
+  ['future_40',['future',['http://en.cppreference.com/w/cpp/experimental/future.html',1,'future'],['http://en.cppreference.com/w/cpp/thread/future.html',1,'future']]],
+  ['future_3c_20std_3a_3aunique_5fptr_3c_20jngl_3a_3aimagedata_20_3e_20_3e_41',['future&lt; std::unique_ptr&lt; jngl::ImageData &gt; &gt;',['http://en.cppreference.com/w/cpp/thread/future.html',1,'std']]],
+  ['future_5ferrc_42',['future_errc',['http://en.cppreference.com/w/cpp/thread/future_errc.html',1,'std']]],
+  ['future_5ferror_43',['future_error',['http://en.cppreference.com/w/cpp/thread/future_error.html',1,'std']]]
 ];
