@@ -57,7 +57,8 @@ struct engine::Impl {
 			if (pause) {
 				return;
 			}
-			size_t size = frequency * 2 / getStepsPerSecond();
+			size_t size = std::lround(frequency / getStepsPerSecond() * 2);
+			assert(size % 2 == 0);
 			auto buffer = std::make_unique<float[]>(size);
 			[[maybe_unused]] const auto read = output->read(buffer.get(), size);
 			assert(read == size);
