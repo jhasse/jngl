@@ -54,6 +54,11 @@ public:
 	void atExit(std::function<void()>);
 	void callAtExitFunctions();
 
+	/// This is called by Window and is a member of App so that we can save the scaleFactor function
+	/// from AppParameters before creating the Window. The Window ctor could theoretically also take
+	/// scaleFactor as a parameter, but it would complicate things (for historical reasons mostly).
+	void initGl(int width, int height, int canvasWidth, int canvasHeight);
+
 private:
 	App();
 

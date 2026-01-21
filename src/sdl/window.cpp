@@ -131,7 +131,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	impl->actualCanvasWidth = canvasWidth;
 	impl->actualCanvasHeight = canvasHeight;
-	Init(width_, height_, canvasWidth, canvasHeight);
+	App::instance().initGl(width_, height_, canvasWidth, canvasHeight);
 }
 
 Window::~Window() = default;

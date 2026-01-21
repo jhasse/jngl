@@ -21,8 +21,9 @@ void setScaleFactor(double f) {
 		throw std::runtime_error("Invalid scale factor: " + std::to_string(f));
 	}
 	if (pWindow) {
-		throw std::runtime_error(
-		    "You may only call jngl::setScaleFactor() before creating the window.");
+		throw std::runtime_error("You may only call jngl::setScaleFactor() before creating the "
+		                         "window. If you want to make adjustment depending on the window "
+		                         "size use jngl::AppParameters::scaleFactor.");
 	}
 	factor = f;
 }
@@ -36,7 +37,7 @@ double getScreenHeight() {
 }
 
 Vec2 getScreenSize() {
-	return {getScreenWidth(), getScreenHeight()};
+	return { getScreenWidth(), getScreenHeight() };
 }
 
 } // namespace jngl

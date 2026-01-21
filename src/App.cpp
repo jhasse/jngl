@@ -6,9 +6,12 @@
 #include "jngl/AppParameters.hpp"
 #include "jngl/Scene.hpp"
 #include "jngl/ShaderProgram.hpp"
+#include "jngl/matrix.hpp"
+#include "jngl/other.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/window.hpp"
 #include "log.hpp"
+#include "main.hpp"
 #include "windowptr.hpp"
 
 #include <cmath>
@@ -31,6 +34,7 @@ struct App::Impl {
 	bool pixelArt = false;
 	std::optional<uint32_t> steamAppId;
 	std::set<ShaderProgram*> shaderPrograms;
+	std::function<double(int, int)> scaleFactor;
 };
 
 App::App() {
@@ -54,8 +58,11 @@ App& App::instance() {
 
 Finally App::init(AppParameters params) {
 	assert(impl == nullptr);
-	impl = std::make_unique<App::Impl>(
-	    App::Impl{ std::move(params.displayName), params.pixelArt, params.steamAppId, {} });
+	impl = std::make_unique<App::Impl>(App::Impl{ .displayName = std::move(params.displayName),
+	                                              .pixelArt = params.pixelArt,
+	                                              .steamAppId = params.steamAppId,
+	                                              .shaderPrograms = {},
+	                                              .scaleFactor = std::move(params.scaleFactor) });
 	return Finally{ [this]() { impl.reset(); } };
 }
 
@@ -78,6 +85,62 @@ void App::callAtExitFunctions() {
 		               "Use handleIfAlive inside of destructors of Singletons.");
 	}
 	callAtExit.clear();
+}
+
+namespace {
+#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
+#ifdef _WIN32
+void __stdcall
+#else
+void
+#endif
+debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity,
+              GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
+	if (severity == GL_DEBUG_SEVERITY_HIGH) {
+		internal::error(message);
+	} else if (severity == GL_DEBUG_SEVERITY_MEDIUM) {
+		internal::warn(message);
+	} else if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {
+		internal::info(message);
+	} else {
+		// NVIDIA driver will spam us, see https://stackoverflow.com/q/46771287/647898
+		// internal::trace(message);
+	}
+}
+#endif
+} // namespace
+
+void App::initGl(int width, int height, int canvasWidth, int canvasHeight) {
+#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
+#ifdef GLAD_GL
+	if (GLAD_GL_VERSION_4_3 != 0 || GLAD_GL_KHR_debug != 0) {
+#endif
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr); // NOLINT
+#ifdef GLAD_GL
+	}
+#endif
+#endif
+
+	if (impl && impl->scaleFactor) {
+		setScaleFactor(impl->scaleFactor(canvasWidth, canvasHeight));
+	}
+	updateProjection(width, height, static_cast<float>(width), static_cast<float>(height));
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	updateViewportAndLetterboxing(width, height, canvasWidth, canvasHeight);
+
+	reset();
+	modelviewStack = {};
+
+	clearBackgroundColor();
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glFlush();
+	setVerticalSync(true);
 }
 
 std::string App::getDisplayName() const {

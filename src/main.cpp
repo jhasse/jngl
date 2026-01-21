@@ -61,60 +61,6 @@ void clearBackgroundColor() {
 	             1);
 }
 
-namespace {
-#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
-#ifdef _WIN32
-void __stdcall
-#else
-void
-#endif
-debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity,
-              GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
-	if (severity == GL_DEBUG_SEVERITY_HIGH) {
-		internal::error(message);
-	} else if (severity == GL_DEBUG_SEVERITY_MEDIUM) {
-		internal::warn(message);
-	} else if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {
-		internal::info(message);
-	} else {
-		// NVIDIA driver will spam us, see https://stackoverflow.com/q/46771287/647898
-		// internal::trace(message);
-	}
-}
-#endif
-} // namespace
-
-bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
-#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
-#ifdef GLAD_GL
-	if (GLAD_GL_VERSION_4_3 != 0 || GLAD_GL_KHR_debug != 0) {
-#endif
-		glEnable(GL_DEBUG_OUTPUT);
-		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr); // NOLINT
-#ifdef GLAD_GL
-	}
-#endif
-#endif
-
-	updateProjection(width, height, static_cast<float>(width), static_cast<float>(height));
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	updateViewportAndLetterboxing(width, height, canvasWidth, canvasHeight);
-
-	reset();
-	modelviewStack = {};
-
-	clearBackgroundColor();
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glFlush();
-	setVerticalSync(true);
-	return true;
-}
-
 void updateViewportAndLetterboxing(const int width, const int height, const int canvasWidth,
                                    const int canvasHeight) {
 	glViewport(0, 0, width, height);
