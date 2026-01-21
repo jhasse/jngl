@@ -105,6 +105,14 @@ build-ios {
 	- test -f "build-ios/jngl.xcodeproj/project.pbxproj" || lus cmake-ios
 	- sh -c "xcodebuild -quiet -parallelizeTargets -project build-ios/jngl.xcodeproj -sdk iphonesimulator -target jngl-test ARCHS=$(uname -m)"
 }
+build-android {
+	cd "android/test" && "./gradlew" build
+}
+run-android {
+	lus build-android
+	"$ANDROID_SDK_ROOT/platform-tools/adb" install -r "test/app/build/outputs/apk/debug/app-debug.apk"
+	"$ANDROID_SDK_ROOT/platform-tools/adb" shell am start -a android.intent.action.MAIN -n "com.bixense.jngl_test/android.app.NativeActivity"
+}
 
 // default to build:
 --release {

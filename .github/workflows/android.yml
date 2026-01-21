@@ -17,6 +17,6 @@ jobs:
         path: .cache/cpm
         key: cpm
     - name: Build
-      run: make -C android
+      run: cd android/test && ./gradlew build
 env:
   CPM_SOURCE_CACHE: ${{ github.workspace }}/.cache/cpm

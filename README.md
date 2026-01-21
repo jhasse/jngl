@@ -64,7 +64,7 @@ brew install sdl2 freetype libvorbis webp pkg-config cmake ffmpeg
 2. In the Android SDK Manager, install the NDK build tools.
 3. Run the following command to test via ADB:
 ```bash
-make -C android run
+lus android-run
 ```
 Alternatively, open `android/test` in Android Studio and build from there.
 

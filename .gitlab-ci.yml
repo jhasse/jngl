@@ -69,7 +69,8 @@ android:
   image: registry.gitlab.com/jhasse/android-ndk-docker:r28b
   stage: build
   script:
-    - make -C android
+    - cd android/test
+    - ./gradlew build
 
 steamos:
   image: registry.gitlab.steamos.cloud/steamrt/sniper/sdk
