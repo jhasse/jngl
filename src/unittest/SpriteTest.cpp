@@ -46,6 +46,25 @@ boost::ut::suite _ = [] {
 			expect(approx(sprite.getBottom(), -124.1f, 1e-5));
 		}
 	};
+	"batch"_test = [] {
+		Fixture f(2.0f);
+		jngl::Sprite sprite("../data/jngl.webp");
+		sprite.setPos(-60, -30);
+		{
+			auto batch = sprite.batch();
+			batch.draw(jngl::modelview().translate({ -90, 0 }).scale(0.2f));
+			batch.draw(jngl::modelview().translate({ 80, 0 }).scale(0.2f));
+		}
+		expect(eq(f.getAsciiArt(), std::string(R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒                              ▒
+▒    ░░░░             ░░░░     ▒
+▒  ░░░░░░░░         ░░░░░░░░   ▒
+▒   ░░░░░░           ░░░░░░    ▒
+▒     ░░               ░░      ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)")));
+	};
 	"TextureCache"_test = [] {
 		{
 			Fixture f(1.9f);
