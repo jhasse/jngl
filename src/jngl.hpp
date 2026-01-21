@@ -54,3 +54,7 @@
 #include "jngl/time.hpp"             // IWYU pragma: keep
 #include "jngl/window.hpp"           // IWYU pragma: keep
 #include "jngl/work.hpp"             // IWYU pragma: keep
+
+#ifdef JNGL_RECORD
+#include "jngl/record/VideoRecorder.hpp" // IWYU pragma: keep
+#endif
