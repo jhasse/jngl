@@ -158,7 +158,7 @@ uint8_t App::mainLoop() {
 	if (impl->steamAppId) {
 		initSteamAchievements();
 	}
-	internal::debug("Starting main loop for '{}'.", impl->displayName);
+	internal::trace("Starting main loop for '{}'.", impl->displayName);
 	return pWindow->mainLoop();
 }
 
