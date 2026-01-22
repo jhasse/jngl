@@ -118,18 +118,26 @@ void log(const std::string& appName, const std::string& level, const std::string
 #else
 	tmp << '[' << level << "] ";
 #endif
-	bool first = true;
 	std::stringstream lines(message);
 	std::string line;
+	std::optional<std::string> firstLine;
+	std::optional<size_t> indentation;
 	while (std::getline(lines, line)) {
-		if (first) {
-			first = false;
+		if (firstLine || indentation) {
+			if (!indentation) {
+				indentation = stripAnsiEscapeCodes(tmp.str()).size();
+			}
+			if (firstLine) {
+				tmp << *firstLine << '\n';
+				firstLine = std::nullopt;
+			}
+			tmp << std::string(*indentation, ' ') << line << '\n';
 		} else {
-			const size_t indentation =
-			    stripAnsiEscapeCodes(appName).size() + 5 + stripAnsiEscapeCodes(level).size();
-			tmp << std::string(indentation, ' ');
+			firstLine = line;
 		}
-		tmp << line << '\n';
+	}
+	if (firstLine) {
+		tmp << *firstLine << '\n';
 	}
 	printMessage(tmp.str());
 #endif
