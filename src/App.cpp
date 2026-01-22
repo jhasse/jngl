@@ -241,7 +241,7 @@ uint8_t mainLoop(AppParameters params) {
 		             static_cast<double>(windowPixelHeight) / params.screenSize->y);
 		auto scaleFactor = getScaleFactor();
 		setScaleFactor(newScaleFactor);
-		internal::info(
+		internal::debug(
 		    "Adjusted scale factor from {} to {} to get even window dimensions ({}x{} -> {}x{}).",
 		    scaleFactor, newScaleFactor, oldWindowPixelWidth, oldWindowPixelHeight,
 		    windowPixelWidth, windowPixelHeight);
