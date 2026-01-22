@@ -117,6 +117,7 @@ bool antiAliasingEnabled = true;
 void showWindow(const std::string& title, const double width, const double height, bool fullscreen,
                 const std::pair<int, int> minAspectRatio,
                 const std::pair<int, int> maxAspectRatio) {
+	++internal::gFrameNumber; // will set it to 0 for the first window
 	internal::debug("jngl::showWindow(\"{}\", {}, {}, {});", title, width, height, fullscreen);
 	bool isMouseVisible = pWindow ? pWindow->getMouseVisible() : true;
 	hideWindow();

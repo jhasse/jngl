@@ -417,6 +417,7 @@ void Window::stepIfNeeded() {
 	}
 	for (unsigned int i = 0; i < frameLimiter.stepsPerFrame; ++i) {
 		++frameLimiter.stepsSinceLastCheck;
+		++internal::gFrameNumber; // for logging
 		updateKeyStates();
 		UpdateInput();
 #ifdef JNGL_PERFORMANCE_OVERLAY

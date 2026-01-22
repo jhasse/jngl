@@ -5,6 +5,7 @@
 #include "jngl/message.hpp"
 
 #include <cctype>
+#include <iomanip>
 #include <sstream>
 
 #ifdef ANDROID
@@ -13,16 +14,32 @@
 
 namespace jngl::internal {
 
+int64_t gFrameNumber = -1;
+
 void trace(const std::string& line [[maybe_unused]]) {
 #ifdef JNGL_TRACE
 	log("JNGL", "\x1b[37mtrace\x1b[0m", line);
 #endif
 }
 
-void debug(const std::string& line [[maybe_unused]]) {
-#ifndef NDEBUG
-	log("JNGL", "\x1b[36mdebug\x1b[0m", line);
+namespace {
+bool gDebugLogEnabled = []() {
+	const char* env = std::getenv("JNGL_DEBUG_LOG");
+	if (!env) {
+#ifdef NDEBUG
+		return false;
+#else
+		return true;
 #endif
+	}
+	return env && (std::string(env) != "0");
+}();
+} // namespace
+
+void debug(const std::string& line [[maybe_unused]]) {
+	if (gDebugLogEnabled) {
+		log("JNGL", "\x1b[36mdebug\x1b[0m", line);
+	}
 }
 
 void info(const std::string& line) {
@@ -82,7 +99,14 @@ void log(const std::string& appName, const std::string& level, const std::string
 	__android_log_print(androidLevel, appName.c_str(), "%s", message.c_str());
 #else
 	std::ostringstream tmp;
-	if (!appName.empty()) {
+	tmp << "\x1b[2m" << std::setw(4);
+	if (gFrameNumber >= 0) {
+		tmp << gFrameNumber;
+	} else {
+		tmp << ' ';
+	}
+	tmp << " \x1b[0m";
+	if (appName == "JNGL" || (!appName.empty() && gDebugLogEnabled)) {
 #ifdef __EMSCRIPTEN__
 		tmp << '[' << stripAnsiEscapeCodes(appName) << ']';
 #else
