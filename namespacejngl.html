@@ -489,6 +489,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>info</b> (const <a cl
 <tr class="memitem:a26d33b337ea900bca341a9e5ee763131" id="r_a26d33b337ea900bca341a9e5ee763131"><td class="memTemplParams" colspan="2">template&lt;class... Args&gt; </td></tr>
 <tr class="memitem:a26d33b337ea900bca341a9e5ee763131"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a26d33b337ea900bca341a9e5ee763131">info</a> (Args &amp;&amp;...)</td></tr>
 <tr class="separator:a26d33b337ea900bca341a9e5ee763131"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa37eed057a8ef3791e43fd709e651cc1" id="r_aa37eed057a8ef3791e43fd709e651cc1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa37eed057a8ef3791e43fd709e651cc1">log</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a> levelName, const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;)</td></tr>
+<tr class="memdesc:aa37eed057a8ef3791e43fd709e651cc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same level as "info", but with custom level name.  <br /></td></tr>
+<tr class="separator:aa37eed057a8ef3791e43fd709e651cc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b757ef6335d8e6aafa97ab54fa5b1ae" id="r_a4b757ef6335d8e6aafa97ab54fa5b1ae"><td class="memTemplParams" colspan="2">template&lt;class... Args&gt; </td></tr>
+<tr class="memitem:a4b757ef6335d8e6aafa97ab54fa5b1ae"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a4b757ef6335d8e6aafa97ab54fa5b1ae">log</a> (Args &amp;&amp;...)</td></tr>
+<tr class="separator:a4b757ef6335d8e6aafa97ab54fa5b1ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e71f65785f67f09bcef0b72e84510a5" id="r_a1e71f65785f67f09bcef0b72e84510a5"><td class="memItemLeft" align="right" valign="top"><a id="a1e71f65785f67f09bcef0b72e84510a5" name="a1e71f65785f67f09bcef0b72e84510a5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>warn</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;)</td></tr>
 <tr class="separator:a1e71f65785f67f09bcef0b72e84510a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1793,6 +1799,51 @@ template&lt;class... Args&gt; </div>
 
 </div>
 </div>
+<a id="aa37eed057a8ef3791e43fd709e651cc1" name="aa37eed057a8ef3791e43fd709e651cc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa37eed057a8ef3791e43fd709e651cc1">&#9670;&#160;</a></span>log() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void log </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a></td>          <td class="paramname"><span class="paramname"><em>levelName</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Same level as "info", but with custom level name. </p>
+<p>Useful for your own subsystems, for example your scripting engine. </p>
+
+</div>
+</div>
+<a id="a4b757ef6335d8e6aafa97ab54fa5b1ae" name="a4b757ef6335d8e6aafa97ab54fa5b1ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b757ef6335d8e6aafa97ab54fa5b1ae">&#9670;&#160;</a></span>log() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class... Args&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void log </td>
+          <td>(</td>
+          <td class="paramtype">Args &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>...</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="log_8hpp_source.html#l00059">59</a> of file <a class="el" href="log_8hpp_source.html">log.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aefebfa8138056013f22172a47f159619" name="aefebfa8138056013f22172a47f159619"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aefebfa8138056013f22172a47f159619">&#9670;&#160;</a></span>warn()</h2>
 
@@ -1810,7 +1861,7 @@ template&lt;class... Args&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="log_8hpp_source.html#l00057">57</a> of file <a class="el" href="log_8hpp_source.html">log.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="log_8hpp_source.html#l00069">69</a> of file <a class="el" href="log_8hpp_source.html">log.hpp</a>.</p>
 
 </div>
 </div>
@@ -1831,7 +1882,7 @@ template&lt;class... Args&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="log_8hpp_source.html#l00067">67</a> of file <a class="el" href="log_8hpp_source.html">log.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="log_8hpp_source.html#l00079">79</a> of file <a class="el" href="log_8hpp_source.html">log.hpp</a>.</p>
 
 </div>
 </div>
