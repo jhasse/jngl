@@ -8,6 +8,16 @@
 #include <iomanip>
 #include <sstream>
 
+#ifdef _WIN32
+#include <io.h>
+#define isatty _isatty
+#ifndef STDOUT_FILENO
+#define STDOUT_FILENO _fileno(stdout)
+#endif
+#else
+#include <unistd.h>
+#endif
+
 #ifdef ANDROID
 #include <android/log.h>
 #endif
@@ -139,7 +149,12 @@ void log(const std::string& appName, const std::string& level, const std::string
 	if (firstLine) {
 		tmp << *firstLine << '\n';
 	}
-	printMessage(tmp.str());
+	if (isatty(STDOUT_FILENO) != 0 || std::getenv("FORCE_COLOR") != nullptr ||
+	    std::getenv("CLICOLOR_FORCE") != nullptr) {
+		printMessage(tmp.str());
+	} else {
+		printMessage(stripAnsiEscapeCodes(tmp.str()));
+	}
 #endif
 }
 
