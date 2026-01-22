@@ -47,6 +47,10 @@ void info(const std::string& line) {
 	internal::log(shortenDisplayName(), "\x1b[32minfo\x1b[0m", line);
 }
 
+void log(std::string_view levelName, const std::string& line) {
+	internal::log(shortenDisplayName(), std::format("\x1b[35m{}\x1b[0m", std::string(levelName)), line);
+}
+
 void warn(const std::string& line) {
 	internal::log(shortenDisplayName(), "\x1b[1;33mwarn\x1b[0m", line);
 }
