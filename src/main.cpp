@@ -81,7 +81,7 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 
 void updateProjection(int windowWidth, int windowHeight, float originalWindowWidth,
                       float originalWindowHeight) {
-	internal::debug("Updating projection matrix to {}x{} (original size: {}x{})", windowWidth,
+	internal::trace("Updating projection matrix to {}x{} (original size: {}x{})", windowWidth,
 	                windowHeight, std::lround(originalWindowWidth),
 	                std::lround(originalWindowHeight));
 	const auto l = static_cast<float>(-windowWidth) / 2.f;

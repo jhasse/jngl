@@ -174,7 +174,7 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height, flo
 	auto& fileCache = fileCaches[filename];
 	bytes = fileCache.lock();
 	if (bytes) {
-		internal::debug("Reusing font buffer for {}... ", filename);
+		internal::trace("Reusing font buffer for {}... ", filename);
 	} else {
 		internal::debug("Loading font {}...", filename);
 
