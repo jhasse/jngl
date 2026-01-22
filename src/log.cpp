@@ -6,6 +6,7 @@
 
 #include <cctype>
 #include <iomanip>
+#include <optional>
 #include <sstream>
 
 #ifdef _WIN32
