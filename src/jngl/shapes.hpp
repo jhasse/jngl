@@ -75,12 +75,10 @@ void drawLine(Mat3 modelview, Vec2 start, Vec2 end, float lineWidth, Rgba color)
 
 /// Draws a line from (0, 0) to \a end in the color set by jngl::setColor
 /// \deprecated Use drawLine(const Mat3&, Vec2, float lineWidth, Rgba) instead
-[[deprecated("Use drawLine(const Mat3&, Vec2, float lineWidth, Rgba) instead")]]
+[[deprecated("Use drawLine(const Mat3&, Vec2, Rgba) instead")]]
 void drawLine(const Mat3& modelview, Vec2 end);
 
 /// Draws a line from (0, 0) to \a end in \a color
-/// \deprecated Use drawLine(const Mat3&, Vec2, float lineWidth, Rgba) instead
-[[deprecated("Use drawLine(const Mat3&, Vec2, float lineWidth, Rgba) instead")]]
 void drawLine(const Mat3& modelview, Vec2 end, Rgba color);
 
 /// Draws a line from (0, 0) to \a end with width \a lineWidth in \a color
