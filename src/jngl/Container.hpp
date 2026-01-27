@@ -1,4 +1,4 @@
-// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Container class
 /// @file
@@ -15,13 +15,15 @@ class Widget;
 /// Helper class to handle multiple instances of Widget
 class Container {
 public:
-	/// Calls Widget::step of every widget and removes the once which request it
+	/// Calls Widget::step of every widget and removes the ones which request it
 	void step();
 
 	/// Calls Widget::draw of every widget
 	void draw() const;
 
 	/// Adds a Widget to the container (safe to call during Container::step)
+	///
+	/// \return Pointer to the added Widget
 	Widget* addWidget(std::unique_ptr<Widget>);
 
 	/// The same as addWidget(std::unique_ptr<Widget>) but creates the Widget for you
