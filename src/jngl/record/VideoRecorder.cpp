@@ -34,6 +34,7 @@ struct VideoRecorder::Impl {
 	AVCodecContext* audioCodecContext = nullptr;
 	AVFrame* audioFrame = nullptr;
 	int64_t audioPts = 0;
+	int64_t videoPts = 0;
 	std::unique_ptr<uint8_t[]> backBuffer;
 	std::unique_ptr<uint8_t[]> pixelBuffer;
 	std::unique_ptr<std::thread> workerThread;
@@ -274,8 +275,7 @@ void VideoRecorder::draw() const {
 		sws_scale(swsCtx, inData, inLinesize, 0, impl->codecContext->height, impl->frame->data,
 		          impl->frame->linesize);
 
-		static int64_t pts_counter = 0;
-		impl->frame->pts = pts_counter++;
+		impl->frame->pts = impl->videoPts++;
 
 		AVPacket* pkt = av_packet_alloc();
 		if (avcodec_send_frame(impl->codecContext, impl->frame) < 0) {
@@ -315,7 +315,7 @@ void VideoRecorder::draw() const {
 						frameData[i] = static_cast<int16_t>(impl->audioPacketSamples[i] * 32767.0f);
 					}
 				} else {
-					auto* left = reinterpret_cast<float*>(impl->audioFrame->data[0]);  // NOLINT
+					auto* left = reinterpret_cast<float*>(impl->audioFrame->data[0]); // NOLINT
 					auto* right = reinterpret_cast<float*>(impl->audioFrame->data[1]); // NOLINT
 					for (int i = 0; i < impl->audioFrame->nb_samples; ++i) {
 						left[i] = impl->audioPacketSamples[2 * static_cast<size_t>(i)];
