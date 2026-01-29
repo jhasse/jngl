@@ -793,13 +793,11 @@ void writeConfig(const std::string& key, const std::string& value) {
 	fout << value;
 
 #ifdef __EMSCRIPTEN__
-	EM_ASM(
-		FS.syncfs(false, function(err) {
-			if (err) {
-				console.warn("Error saving:", err);
-			}
-		})
-	);
+	EM_ASM(FS.syncfs(false, function(err) {
+		if (err) {
+			console.warn("Error saving:", err);
+		}
+	}));
 #endif
 }
 #endif
