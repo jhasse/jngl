@@ -3,6 +3,7 @@
 #include "MouseInfo.hpp"
 
 #include "Mat3.hpp"
+#include "VirtualMouseCursor.hpp"
 #include "input.hpp"
 
 namespace jngl {
@@ -11,6 +12,20 @@ struct MouseInfo::Impl {
 	bool enabled = true;
 	bool down = false;
 	Vec2 mousePos;
+	VirtualMouseCursor* virtualCursor = nullptr;
+
+	bool getPressed() const {
+		if (virtualCursor) {
+			return virtualCursor->pressed();
+		}
+		return mousePressed();
+	}
+	bool getDown() const {
+		if (virtualCursor) {
+			return virtualCursor->down();
+		}
+		return mouseDown();
+	}
 };
 
 void MouseInfo::transform(const Mat3& transformationMatrix) {
@@ -24,9 +39,20 @@ void MouseInfo::transform(const Mat3& transformationMatrix) {
 }
 
 void MouseInfo::setMousePos(Vec2 mousePos) {
-	impls.resize(1);
+	if (impls.empty()) {
+		impls.resize(1);
+	}
 	impls[0].enabled = true;
 	impls[0].mousePos = mousePos;
+
+	if (auto virtualCursor = getJob<VirtualMouseCursor>()) {
+		if (impls.size() < 2) {
+			impls.resize(2);
+		}
+		impls[1].enabled = true;
+		impls[1].mousePos = virtualCursor->getPosition();
+		impls[1].virtualCursor = virtualCursor.get();
+	}
 }
 
 Vec2 MouseInfo::Down::newPos() const {
@@ -34,11 +60,15 @@ Vec2 MouseInfo::Down::newPos() const {
 }
 
 bool MouseInfo::Down::released() { // NOLINT
-	return !mouseDown();
+	return !parent->getDown();
 }
 
 Vec2 MouseInfo::Down::startPos() const {
 	return startReference;
+}
+
+bool MouseInfo::Down::pressedAgain() const {
+	return parent->getPressed();
 }
 
 MouseInfo::Down::Down(MouseInfo::Impl& parent, Vec2 objectPos)
@@ -69,7 +99,7 @@ MouseInfo::Over::Over(MouseInfo::Impl& parent) : parent(parent) {
 
 auto MouseInfo::Over::pressed(Vec2 objectPos) -> std::optional<Down> {
 	parent.enabled = false;
-	if (mousePressed()) {
+	if (parent.getPressed()) {
 		return Down{ parent, objectPos };
 	}
 	return std::nullopt;

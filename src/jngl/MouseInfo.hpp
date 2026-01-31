@@ -48,6 +48,10 @@ public:
 
 		Vec2 startPos() const;
 
+		/// if you keep this object alive after released() returned true, this will return true
+		/// again if the mouse is pressed again
+		bool pressedAgain() const;
+
 		Down(MouseInfo::Impl&, Vec2 objectPos);
 		Down(const Down&) = delete;
 		Down(Down&&) noexcept;
