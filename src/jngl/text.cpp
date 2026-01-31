@@ -55,11 +55,16 @@ private:
 	double height = std::numeric_limits<double>::quiet_NaN();
 };
 
-Text::Text(const std::string& text) : font(pWindow->getFontImpl()) {
-	setText(text);
+Text::Text(const std::string& text) : font(text.empty() ? nullptr : pWindow->getFontImpl()) {
+	if (!text.empty()) {
+		setText(text);
+	}
 }
 
 void Text::setText(const std::string& text, double maxWidth) {
+	if (!font) {
+		font = pWindow->getFontImpl();
+	}
 	lines.clear();
 	for (const auto& lineText : splitlines(text)) {
 		addLine(lineText, maxWidth);
