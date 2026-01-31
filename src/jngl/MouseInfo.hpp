@@ -52,6 +52,10 @@ public:
 		/// again if the mouse is pressed again
 		bool pressedAgain() const;
 
+		/// Calling this will cause pressedAgain() to return false directly, not waiting for the
+		/// next frame or anything:
+		void blockPressedImmediately();
+
 		Down(MouseInfo::Impl&, Vec2 objectPos);
 		Down(const Down&) = delete;
 		Down(Down&&) noexcept;

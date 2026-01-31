@@ -13,8 +13,12 @@ struct MouseInfo::Impl {
 	bool down = false;
 	Vec2 mousePos;
 	VirtualMouseCursor* virtualCursor = nullptr;
+	bool pressedBlocked = false;
 
 	bool getPressed() const {
+		if (pressedBlocked) {
+			return false;
+		}
 		if (virtualCursor) {
 			return virtualCursor->pressed();
 		}
@@ -43,6 +47,7 @@ void MouseInfo::setMousePos(Vec2 mousePos) {
 		impls.resize(1);
 	}
 	impls[0].enabled = true;
+	impls[0].pressedBlocked = false;
 	impls[0].mousePos = mousePos;
 
 	if (auto virtualCursor = getJob<VirtualMouseCursor>()) {
@@ -50,6 +55,7 @@ void MouseInfo::setMousePos(Vec2 mousePos) {
 			impls.resize(2);
 		}
 		impls[1].enabled = true;
+		impls[1].pressedBlocked = false;
 		impls[1].mousePos = virtualCursor->getPosition();
 		impls[1].virtualCursor = virtualCursor.get();
 	}
@@ -69,6 +75,10 @@ Vec2 MouseInfo::Down::startPos() const {
 
 bool MouseInfo::Down::pressedAgain() const {
 	return parent->getPressed();
+}
+
+void MouseInfo::Down::blockPressedImmediately() {
+	parent->pressedBlocked = true;
 }
 
 MouseInfo::Down::Down(MouseInfo::Impl& parent, Vec2 objectPos)
