@@ -94,9 +94,7 @@ SoundFile::SoundFile(const std::string& filename, std::launch)
 		           // fclose() the FILE * pointer itself.
 		throw std::runtime_error("Could not open OGG file (" + filename + ").");
 	}
-	Finally cleanup(
-	    [&oggFile]()
-	    {
+	Finally cleanup([&oggFile]() {
 		ov_clear(&oggFile); /* calls fclose */
 	});
 
@@ -262,8 +260,10 @@ std::shared_ptr<SoundFile> Audio::getSoundFile(std::string_view filename, std::l
 	    .first->second;
 }
 
-void play(const std::string& filename) {
-	Audio::handle().getSoundFile(filename, std::launch::deferred)->play();
+SoundFile& play(const std::string& filename) {
+	auto soundFile = Audio::handle().getSoundFile(filename, std::launch::deferred);
+	soundFile->play();
+	return *soundFile;
 }
 
 void stop(const std::string& filename) {
