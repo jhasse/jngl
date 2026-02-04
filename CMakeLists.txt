@@ -28,6 +28,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 file(GLOB SRC src/*.cpp src/jngl/*.cpp
 	src/audio/*.cpp
 	src/audio/effect/*.cpp
+	src/timing/*.cpp
 )
 add_library(jngl ${SRC}
 	src/jngl/record/VideoRecorder.cpp

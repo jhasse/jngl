@@ -9,10 +9,13 @@
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/font.hpp"
 #include "jngl/other.hpp"
-#include "jngl/time.hpp"
 #include "jngl/work.hpp"
 #include "log.hpp"
 #include "windowptr.hpp"
+
+#ifdef JNGL_RECORD
+#include "jngl/record/VideoRecorder.hpp"
+#endif
 
 #ifdef ANDROID
 #include "App.hpp"
@@ -88,7 +91,7 @@ void Window::setFontSize(const int size) {
 	const int oldSize = fontSize_;
 	fontSize_ = size;
 	try {
-		setFont(fontName_);       // We changed the size we also need to reload the current font
+		setFont(fontName_); // We changed the size we also need to reload the current font
 	} catch (std::exception& e) { // Something went wrong ...
 		fontSize_ = oldSize; // ... so let's set fontSize_ back to the previous size
 		throw;
@@ -304,7 +307,8 @@ MouseInfo& input() {
 
 uint8_t Window::mainLoop() {
 #ifdef __EMSCRIPTEN__
-	g_jnglMainLoop = [this]() {
+	g_jnglMainLoop =
+	    [this]() {
 #else
 	Finally _([&]() {
 		newWork_.reset();
@@ -328,95 +332,26 @@ uint8_t Window::mainLoop() {
 }
 
 void Window::resetFrameLimiter() {
-	frameLimiter = {};
-}
-
-void Window::dontSkipNextFrame() {
-	frameLimiter.stepsPerFrame = 1;
+	frameLimiter = FrameLimiter(1.0 / static_cast<double>(stepsPerSecond));
 }
 
 unsigned int Window::getStepsPerSecond() const {
-	return static_cast<unsigned int>(1.0 / timePerStep);
+	return stepsPerSecond;
 }
 
 void Window::setStepsPerSecond(const unsigned int stepsPerSecond) {
-	timePerStep = 1.0 / static_cast<double>(stepsPerSecond);
-	maxStepsPerFrame = static_cast<unsigned int>(
-	    std::lround(1.0 / 20.0 / timePerStep)); // Never drop below 20 FPS, instead slow down
+	this->stepsPerSecond = stepsPerSecond;
+	frameLimiter = FrameLimiter(1.0 / static_cast<double>(stepsPerSecond));
 }
 
 void Window::stepIfNeeded() {
-	const auto currentTime = getTime();
-	const auto secondsSinceLastCheck = currentTime - frameLimiter.lastCheckTime;
-	const auto targetStepsPerSecond = 1.0 / timePerStep;
-	// If SPS == FPS, this would mean that we check about every second, but in the beginning we
-	// want to check more often, e.g. to quickly adjust to high refresh rate monitors:
-	if (frameLimiter.stepsSinceLastCheck > targetStepsPerSecond ||
-	    frameLimiter.stepsSinceLastCheck > frameLimiter.numberOfChecks) {
-		++frameLimiter.numberOfChecks;
-		const auto actualStepsPerSecond = frameLimiter.stepsSinceLastCheck / secondsSinceLastCheck;
-		auto doableStepsPerSecond =
-		    frameLimiter.stepsSinceLastCheck / (secondsSinceLastCheck - timeSleptSinceLastCheck);
-		if (previousStepsPerFrame > frameLimiter.stepsPerFrame &&
-		    actualStepsPerSecond < targetStepsPerSecond) {
-			frameLimiter.maxFPS =
-			    0.5 * frameLimiter.maxFPS + 0.5 * actualStepsPerSecond / frameLimiter.stepsPerFrame;
-		} else {
-			frameLimiter.maxFPS += sleepPerFrame;
-		}
-		previousStepsPerFrame = frameLimiter.stepsPerFrame;
-		const auto cappedOrDoable =
-		    std::min(doableStepsPerSecond, frameLimiter.maxFPS * frameLimiter.stepsPerFrame);
-
-		// The sleep function is actually inaccurate (or at least less accurate than getTime),
-		// se we try to find a factor to correct this:
-		frameLimiter.sleepCorrectionFactor +=
-		    0.1 * // don't change it too fast
-		    (sleepPerFrame * frameLimiter.stepsSinceLastCheck / frameLimiter.stepsPerFrame -
-		     timeSleptSinceLastCheck);
-		//   ↑__________seconds we should have slept___________↑   ↑___actual seconds____↑
-
-		// Clamp it in case of some bug:
-		frameLimiter.sleepCorrectionFactor =
-		    std::max(0.1, std::min(frameLimiter.sleepCorrectionFactor, 2.0));
-
-		// Round up, because if we can do 40 FPS, but need 60 SPS, we need at least 2 SPF. We
-		// don't round up exactly to be a little bit "optimistic" of what we can do.
-		auto newStepsPerFrame = std::min(
-		    { static_cast<unsigned int>(
-		          std::max(1, static_cast<int>(0.98 + frameLimiter.stepsPerFrame *
-		                                                  targetStepsPerSecond / cappedOrDoable))),
-		      frameLimiter.stepsPerFrame * 2, maxStepsPerFrame }); // never increase too much
-		// Divide doableStepsPerSecond by the previous stepsPerFrame and multiply it with
-		// newStepsPerFrame so that we know what can be doable in the future and not what
-		// could have been doable:
-		double shouldSleepPerFrame = newStepsPerFrame * // we sleep per frame, not per step
-		                             (timePerStep - 1.0 / (newStepsPerFrame * doableStepsPerSecond /
-		                                                   frameLimiter.stepsPerFrame));
-		if (shouldSleepPerFrame < 0) {
-			shouldSleepPerFrame = 0;
-		}
-		// The factor means that we quickly go down when needed, but hesitate to go up:
-		sleepPerFrame += ((shouldSleepPerFrame < sleepPerFrame) ? 0.95 : 0.55) *
-		                 (shouldSleepPerFrame - sleepPerFrame);
-
-		internal::trace("SPS: {} ({} {}, should be {}); stepsPerFrame -> {}, msSleepPerFrame -> {} "
-		                "* {}, slept({}): {}µs, maxFPS: {}",
-		                std::lround(actualStepsPerSecond),
-		                (cappedOrDoable < doableStepsPerSecond) ? "capped" : "doable",
-		                std::lround(doableStepsPerSecond), std::lround(targetStepsPerSecond),
-		                newStepsPerFrame, sleepPerFrame, frameLimiter.sleepCorrectionFactor,
-		                numberOfSleeps, std::lround(1e6 * timeSleptSinceLastCheck),
-		                frameLimiter.maxFPS);
-
-		frameLimiter.lastCheckTime = currentTime;
-		numberOfSleeps = 0;
-		frameLimiter.stepsSinceLastCheck = 0;
-		timeSleptSinceLastCheck = 0;
-		frameLimiter.stepsPerFrame = newStepsPerFrame;
+	unsigned int stepsToDo = frameLimiter.check();
+#ifdef JNGL_RECORD
+	if (getJob([](Job& job) { return dynamic_cast<VideoRecorder*>(&job); })) {
+		stepsToDo = 1; // don't skip frames when recording video
 	}
-	for (unsigned int i = 0; i < frameLimiter.stepsPerFrame; ++i) {
-		++frameLimiter.stepsSinceLastCheck;
+#endif
+	for (unsigned int i = 0; i < stepsToDo; ++i) {
 		++internal::gFrameNumber; // for logging
 		updateKeyStates();
 		UpdateInput();
@@ -445,11 +380,11 @@ void Window::stepIfNeeded() {
 			currentWork_->step();
 		}
 #ifdef JNGL_PERFORMANCE_OVERLAY
-		lastStepDuration = static_cast<double>(
-			std::chrono::duration_cast<std::chrono::microseconds>(
-				std::chrono::steady_clock::now() - start
-			).count()
-		) / 1000.;
+		lastStepDuration =
+		    static_cast<double>(std::chrono::duration_cast<std::chrono::microseconds>(
+		                            std::chrono::steady_clock::now() - start)
+		                            .count()) /
+		    1000.;
 #endif
 		if (forceExitCode) {
 			break;
@@ -475,16 +410,9 @@ void Window::stepIfNeeded() {
 }
 
 void Window::sleepIfNeeded() {
-	const auto start = getTime();
-	const auto shouldBe =
-	    frameLimiter.lastCheckTime + timePerStep * frameLimiter.stepsSinceLastCheck;
-	const int64_t micros = std::lround((sleepPerFrame - (start - shouldBe)) *
-	                                   frameLimiter.sleepCorrectionFactor * 1e6);
-	if (micros > 0) {
-		std::this_thread::sleep_for(std::chrono::microseconds(micros));
-		timeSleptSinceLastCheck += jngl::getTime() - start;
-		++numberOfSleeps;
-	}
+	frameLimiter.sleepIfNeeded([](int64_t sleepMicroseconds) {
+		std::this_thread::sleep_for(std::chrono::microseconds(sleepMicroseconds));
+	});
 }
 
 void Window::draw() const {
@@ -500,7 +428,8 @@ void Window::draw() const {
 		job->draw();
 	}
 #ifdef JNGL_PERFORMANCE_OVERLAY
-	auto us = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - start);
+	auto us = std::chrono::duration_cast<std::chrono::microseconds>(
+	    std::chrono::steady_clock::now() - start);
 
 	if (currentWork_) {
 		jngl::reset();

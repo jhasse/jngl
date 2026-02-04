@@ -5,8 +5,8 @@
 #include "jngl/MouseInfo.hpp"
 #include "jngl/Scene.hpp"
 #include "jngl/input.hpp"
-#include "jngl/time.hpp"
 #include "opengl.hpp"
+#include "timing/FrameLimiter.hpp"
 
 #include <array>
 #include <functional>
@@ -113,10 +113,6 @@ public:
 	std::shared_ptr<Job> getJob(const std::function<bool(Job&)>& predicate) const;
 	void resetFrameLimiter();
 
-	/// Can be called during step and will result that before the next call to step(), draw() will
-	/// be called - even when that would mean slowing down the framerate
-	void dontSkipNextFrame();
-
 	unsigned int getStepsPerSecond() const;
 	void setStepsPerSecond(unsigned int);
 	void addUpdateInputCallback(std::function<void()>);
@@ -143,11 +139,10 @@ private:
 	/// Called when a controller is added or removed
 	std::function<void()> controllerChangedCallback;
 
-	double timePerStep = 1.0 / 60.0;
+	unsigned int stepsPerSecond = 60;
 	double mouseWheel = 0;
 	GLuint vaoLine = 0;
 	GLuint vaoSquare = 0;
-	unsigned int maxStepsPerFrame = 3;
 	bool shouldExit = false;
 	std::optional<int> forceExitCode;
 	bool fullscreen_;
@@ -185,26 +180,9 @@ private:
 	std::vector<std::shared_ptr<Job>> jobs;
 	std::vector<std::shared_ptr<Job>> jobsToAdd;
 	std::vector<Job*> jobsToRemove;
-	double sleepPerFrame = 0; // in seconds
-	double timeSleptSinceLastCheck = 0;
-	unsigned int numberOfSleeps = 0;
-	unsigned int previousStepsPerFrame = 1;
 	int mouseHiddenCount = 0;
 
-	struct FrameLimiterData {
-		/// How many step() calls per draw() call
-		unsigned int stepsPerFrame = 1;
-
-		double sleepCorrectionFactor = 1;
-		double lastCheckTime = getTime();
-		unsigned int stepsSinceLastCheck = 0;
-
-		/// When VSYNC is active we will try to find out to what FPS/Hz the display is limiting us
-		double maxFPS = 300;
-
-		/// How often the frame limiter has run
-		unsigned int numberOfChecks = 0;
-	} frameLimiter;
+	FrameLimiter frameLimiter{ 1.0 / static_cast<double>(stepsPerSecond) };
 
 	bool multitouch = false;
 

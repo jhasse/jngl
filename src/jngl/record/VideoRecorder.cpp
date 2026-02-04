@@ -244,7 +244,6 @@ void VideoRecorder::fillAudioBuffer(std::unique_ptr<float[]> samples) {
 }
 
 void VideoRecorder::step() {
-	pWindow->dontSkipNextFrame();
 }
 
 void VideoRecorder::draw() const {
