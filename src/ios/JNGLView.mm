@@ -113,7 +113,7 @@ std::unique_ptr<jngl::App> jnglApp;
 
 		jngl::pWindow->draw();
 		[context presentRenderbuffer:GL_RENDERBUFFER];
-		jngl::pWindow->sleepIfNeeded();
+		impl->sleepIfNeeded();
 	}
 }
 

@@ -78,4 +78,8 @@ void WindowImpl::updateInput() {
 	}
 }
 
+void WindowImpl::sleepIfNeeded() {
+	window->frameLimiter.sleepIfNeeded();
+}
+
 } // namespace jngl
