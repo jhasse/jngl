@@ -82,14 +82,14 @@ unsigned int FrameLimiter::check() {
 	return stepsPerFrame;
 }
 
-void FrameLimiter::sleepIfNeeded(const std::function<void(int64_t)>& sleepMicroseconds) {
+void FrameLimiter::sleepIfNeeded() {
 	const auto start = getTime();
 	const auto shouldBe = lastCheckTime + timePerStep * stepsSinceLastCheck;
 	const int64_t micros =
 	    std::lround((sleepPerFrame - (start - shouldBe)) * sleepCorrectionFactor * 1e6);
 	if (micros > 0) {
-		sleepMicroseconds(micros);
-		timeSleptSinceLastCheck += jngl::getTime() - start;
+		sleepSeconds(static_cast<double>(micros) / 1e6);
+		timeSleptSinceLastCheck += getTime() - start;
 		++numberOfSleeps;
 	}
 }

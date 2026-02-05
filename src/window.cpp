@@ -320,7 +320,7 @@ uint8_t Window::mainLoop() {
 		clearBackBuffer();
 		draw();
 		pWindow->SwapBuffers();
-		sleepIfNeeded();
+		frameLimiter.sleepIfNeeded();
 	}
 #ifdef __EMSCRIPTEN__
 	;
@@ -407,12 +407,6 @@ void Window::stepIfNeeded() {
 			}
 		}
 	}
-}
-
-void Window::sleepIfNeeded() {
-	frameLimiter.sleepIfNeeded([](int64_t sleepMicroseconds) {
-		std::this_thread::sleep_for(std::chrono::microseconds(sleepMicroseconds));
-	});
 }
 
 void Window::draw() const {

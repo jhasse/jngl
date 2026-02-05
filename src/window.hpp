@@ -104,7 +104,6 @@ public:
 	[[nodiscard]] uint8_t mainLoop();
 
 	void stepIfNeeded();
-	void sleepIfNeeded();
 	void draw() const;
 	std::shared_ptr<Scene> getWork();
 	std::shared_ptr<Scene> getNextScene() const;

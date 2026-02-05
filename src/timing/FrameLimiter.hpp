@@ -4,10 +4,12 @@
 
 #include "../jngl/time.hpp"
 
-#include <cstdint>
-#include <functional>
-
 namespace jngl {
+
+/// Sleep current thread for \a seconds
+///
+/// Defined in realtime.cpp
+void sleepSeconds(double seconds);
 
 class FrameLimiter {
 public:
@@ -16,7 +18,7 @@ public:
 	/// Return how many times step() should be called before the next draw()
 	unsigned int check();
 
-	void sleepIfNeeded(const std::function<void(int64_t)>& sleepMicroseconds);
+	void sleepIfNeeded();
 
 private:
 	/*const*/ double timePerStep;
