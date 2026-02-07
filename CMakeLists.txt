@@ -16,7 +16,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
-	set(USE_FLAGS "-sUSE_SDL=2 -sUSE_FREETYPE=1 -sUSE_VORBIS=1")
+	set(USE_FLAGS "-sUSE_SDL=3 -sUSE_FREETYPE=1 -sUSE_VORBIS=1")
 	string(APPEND CMAKE_CXX_FLAGS " ${USE_FLAGS} -sNO_DISABLE_EXCEPTION_CATCHING")
 	string(APPEND CMAKE_C_FLAGS " ${USE_FLAGS}")
 	string(APPEND CMAKE_EXE_LINKER_FLAGS " ${USE_FLAGS} -sASSERTIONS=1 --preload-file data")
@@ -202,7 +202,7 @@ else()
 	endif()
 	if(NOT JNGL_BUILD_SDL_FROM_SOURCE AND NOT IOS AND NOT EMSCRIPTEN)
 		find_package(PkgConfig REQUIRED)
-		pkg_check_modules(SDL sdl2)
+		pkg_check_modules(SDL sdl3)
 		if(SDL_FOUND)
 			target_include_directories(jngl PRIVATE ${SDL_INCLUDE_DIRS})
 			target_link_libraries(jngl PRIVATE ${SDL_LINK_LIBRARIES})
@@ -232,8 +232,8 @@ else()
 	if(JNGL_BUILD_SDL_FROM_SOURCE)
 		if(JNGL_WINAPI)
 			CPMAddPackage(NAME SDL
-				URL https://www.libsdl.org/release/SDL2-2.32.10.zip
-				URL_HASH SHA1=86499a3e72967117bfdfd88861b7554dc996e0c5
+				URL https://www.libsdl.org/release/SDL3-3.1.6.zip
+				URL_HASH SHA1=b16ad311975378dcc87b11fc02c84eaa1f028b38
 				OPTIONS
 					"SDL_ATOMIC OFF"
 					"SDL_CPUINFO ON"
@@ -247,17 +247,19 @@ else()
 					"SDL_RENDER OFF"
 					"SDL_SENSOR OFF"
 					"SDL_SHARED OFF"
+					"SDL_SHARED OFF"
+					"SDL_STATIC ON"
 					"SDL_TIMERS OFF"
 			)
 		else()
 			CPMAddPackage(NAME SDL
-				URL https://www.libsdl.org/release/SDL2-2.32.10.zip
-				URL_HASH SHA1=86499a3e72967117bfdfd88861b7554dc996e0c5
+				URL https://www.libsdl.org/release/SDL3-3.1.6.zip
+				URL_HASH SHA1=b16ad311975378dcc87b11fc02c84eaa1f028b38
 				OPTIONS
 					"SDL_SENSOR OFF"
 			)
 		endif()
-		target_link_libraries(jngl PRIVATE SDL2-static)
+		target_link_libraries(jngl PRIVATE SDL3-static)
 	endif()
 	if(MSVC)
 		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
