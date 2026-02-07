@@ -1,7 +1,8 @@
-// Copyright 2012-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
+#include "../App.hpp"
 #include "../jngl.hpp"
 #include "windowimpl.hpp"
 #include "../main.hpp"
@@ -16,7 +17,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
   relativeMouseMode(false), anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12),
   width_(width), height_(height), fontName_("Arial.ttf") {
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
-	Init(width, height, canvasWidth, canvasHeight);
+	App::instance().initGl(width, height, canvasWidth, canvasHeight);
 }
 
 std::string Window::GetFontFileByName(const std::string& fontname) {

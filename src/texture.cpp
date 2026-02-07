@@ -1,9 +1,10 @@
-// Copyright 2010-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2010-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "texture.hpp"
 
 #include "ShaderCache.hpp"
 #include "jngl/Vertex.hpp"
+#include "jngl/screen.hpp"
 
 #include <cassert>
 
@@ -18,11 +19,11 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 	vertexes = {
 		0, 0,
 		0, 0, // texture coordinates
-		0, preciseHeight,
+		0, static_cast<float>(preciseHeight / getScaleFactor()),
 		0, 1, // texture coordinates
-		preciseWidth, preciseHeight,
+		static_cast<float>(preciseWidth / getScaleFactor()), static_cast<float>(preciseHeight / getScaleFactor()),
 		1, 1, // texture coordinates
-		preciseWidth, 0,
+		static_cast<float>(preciseWidth / getScaleFactor()), 0,
 		1, 0 // texture coordinates
 	};
 	glGenVertexArrays(1, &vao);
@@ -142,11 +143,11 @@ GLuint Texture::getID() const {
 }
 
 float Texture::getPreciseWidth() const {
-	return vertexes[8];
+	return vertexes[8] * getScaleFactor();
 }
 
 float Texture::getPreciseHeight() const {
-	return vertexes[5];
+	return vertexes[5] * getScaleFactor();
 }
 
 void Texture::setBytes(const unsigned char* const bytes, const int width, const int height) const {

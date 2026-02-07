@@ -1,4 +1,4 @@
-// Copyright 2016-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2016-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "helper.hpp"
@@ -17,7 +17,7 @@ std::vector<std::string> splitlines(const std::string& text) {
 	std::vector<std::string> lines;
 	const char* start_line = text.c_str();
 	const char* c = text.c_str();
-	for (; *c; ++c) {
+	for (; *c != 0; ++c) {
 		if (*c == '\n') {
 			std::string line;
 			for (auto* n = start_line; n < c; ++n) {

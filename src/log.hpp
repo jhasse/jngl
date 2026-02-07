@@ -1,4 +1,4 @@
-// Copyright 2024 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2024-2026 Jan Niklas Hasse <jhasse@gmail.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
@@ -8,6 +8,13 @@
 #include <string>
 
 namespace jngl::internal {
+
+/// Number of the current current step
+///  -1 before showWindow
+///   0 during initialization
+///   1 first step
+///   ...
+extern int64_t gFrameNumber;
 
 void trace(const std::string&);
 

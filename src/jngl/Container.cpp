@@ -1,9 +1,10 @@
-// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Container.hpp"
 
 #include "Finally.hpp"
 #include "Widget.hpp"
+#include "matrix.hpp"
 
 #include <algorithm>
 
@@ -39,7 +40,7 @@ void Container::step() {
 
 void Container::draw() const {
 	for (const auto& widget : widgets) {
-		widget->draw();
+		widget->draw(modelview());
 	}
 }
 

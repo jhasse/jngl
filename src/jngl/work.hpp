@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -26,13 +26,13 @@ public:
 	///
 	/// class PauseMenu : public jngl::Work {
 	///     void onBackEvent() override {
-	///         jngl::setWork<MainMenu>();
+	///         jngl::setScene<MainMenu>();
 	///     }
 	/// };
 	///
 	/// class Game : public jngl::Work {
 	///     void onBackEvent() override {
-	///         jngl::setWork<PauseMenu>();
+	///         jngl::setScene<PauseMenu>();
 	///     }
 	/// };
 	/// \endcode
@@ -47,7 +47,7 @@ public:
 	/// class Game : public jngl::Work {
 	///     void onQuitEvent() {
 	///         jngl::cancelQuit();
-	///         jngl::setWork<PauseMenu>();
+	///         jngl::setScene<PauseMenu>();
 	///     }
 	/// };
 	/// \endcode

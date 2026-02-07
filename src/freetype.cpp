@@ -1,4 +1,4 @@
-// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #define _LIBCPP_DISABLE_DEPRECATION_WARNINGS // NOLINT
@@ -30,17 +30,17 @@ namespace jngl {
 Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face face,
                      FT_Stroker stroker) {
 	const auto flags = FT_LOAD_TARGET_LIGHT | FT_LOAD_DEFAULT;
-	if (FT_Load_Char(face, ch, flags)) {
+	if (FT_Load_Char(face, ch, flags) != 0) {
 		const std::string msg =
 		    std::string("FT_Load_Glyph failed. Character: ") + std::to_string(ch);
 		// Load a question mark instead
-		if (FT_Load_Glyph(face, FT_Get_Char_Index(face, '?'), flags)) {
+		if (FT_Load_Glyph(face, FT_Get_Char_Index(face, '?'), flags) != 0) {
 			throw std::runtime_error(msg);
 		}
 		internal::error(msg);
 	}
 	FT_Glyph glyph;
-	if (FT_Get_Glyph(face->glyph, &glyph)) {
+	if (FT_Get_Glyph(face->glyph, &glyph) != 0) {
 		throw std::runtime_error("FT_Get_Glyph failed");
 	}
 	if (stroker) {
@@ -69,8 +69,8 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 			data[y][x * 4 + 2] = 255;
 			unsigned char alpha = 0;
 			if (bitmap.pixel_mode == FT_PIXEL_MODE_MONO) {
-				if (bitmap.buffer[static_cast<ptrdiff_t>(y * bitmap.pitch) + x / 8] &
-				    (0x80 >> (x % 8))) {
+				if ((bitmap.buffer[static_cast<ptrdiff_t>(y * bitmap.pitch) + x / 8] &
+				     (0x80 >> (x % 8))) != 0) {
 					alpha = 255;
 				} else {
 					alpha = 0;
@@ -111,7 +111,8 @@ Character::~Character() {
 	delete texture_;
 }
 
-Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::iterator end) {
+Character& FontImpl::getCharacter(std::string::iterator& it,
+                                  const std::string::iterator end) const {
 #ifdef _MSC_VER
 	// https://stackoverflow.com/questions/32055357/visual-studio-c-2015-stdcodecvt-with-char16-t-or-char32-t
 	static std::wstring_convert<std::codecvt_utf8<int32_t>, int32_t> cvt;
@@ -123,19 +124,19 @@ Character& FontImpl::GetCharacter(std::string::iterator& it, const std::string::
 #endif
 	const char& ch = (*it); // Just to have less code
 	char32_t unicodeCharacter = ch;
-	if (ch & 0x80) { // first bit (Check if this is an Unicode character)
+	if ((ch & 0x80) != 0) { // first bit (Check if this is an Unicode character)
 		const char* sourceEnd = &ch + 2;
 		// sourceEnd has to be the next character after the utf-8 sequence
 		const static auto ERROR_MSG = "Invalid UTF-8 string!";
 		if (++it == end) {
 			throw std::runtime_error(ERROR_MSG);
 		}
-		if (ch & 0x20) { // third bit
+		if ((ch & 0x20) != 0) { // third bit
 			if (++it == end) {
 				throw std::runtime_error(ERROR_MSG);
 			}
 			++sourceEnd;
-			if (ch & 0x10) { // fourth bit
+			if ((ch & 0x10) != 0) { // fourth bit
 				if (++it == end) {
 					throw std::runtime_error(ERROR_MSG);
 				}
@@ -165,7 +166,7 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height, flo
 		filename = relativeFilename;
 	}
 	if (++instanceCounter == 1) {
-		if (FT_Init_FreeType(&library)) {
+		if (FT_Init_FreeType(&library) != 0) {
 			--instanceCounter;
 			throw std::runtime_error("FT_Init_FreeType failed");
 		}
@@ -173,7 +174,7 @@ FontImpl::FontImpl(const std::string& relativeFilename, unsigned int height, flo
 	auto& fileCache = fileCaches[filename];
 	bytes = fileCache.lock();
 	if (bytes) {
-		internal::debug("Reusing font buffer for {}... ", filename);
+		internal::trace("Reusing font buffer for {}... ", filename);
 	} else {
 		internal::debug("Loading font {}...", filename);
 
@@ -223,33 +224,37 @@ FontImpl::~FontImpl() {
 	}
 }
 
-Pixels FontImpl::getTextWidth(const std::string& text) {
+double FontImpl::getTextWidth(std::string_view text) const {
 	auto maxWidth = 0_px;
-	std::vector<std::string> lines(splitlines(text));
+	std::vector<std::string> lines(splitlines(std::string(text)));
 
 	auto lineEnd = lines.end();
 	for (auto lineIter = lines.begin(); lineIter != lineEnd; ++lineIter) {
 		auto lineWidth = 0_px;
 		auto charEnd = lineIter->end();
 		for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
-			lineWidth += GetCharacter(charIter, charEnd).getWidth();
+			lineWidth += getCharacter(charIter, charEnd).getWidth();
 		}
 		if (lineWidth > maxWidth) {
 			maxWidth = lineWidth;
 		}
 	}
-	return maxWidth;
+	return static_cast<double>(ScaleablePixels{ Pixels{ maxWidth } });
 }
 
-Pixels FontImpl::getLineHeight() const {
-	return Pixels(lineHeight);
+double FontImpl::getLineHeight() const {
+	return static_cast<double>(ScaleablePixels{ Pixels{ lineHeight } });
 }
 
 void FontImpl::setLineHeight(Pixels h) {
 	lineHeight = static_cast<int>(h);
 }
 
-void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) {
+void FontImpl::print(const Mat3& modelview, std::string_view text) const {
+	print(modelview, std::string(text), gFontColor);
+}
+
+void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) const {
 	auto context = ShaderCache::handle().textureShaderProgram->use();
 	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(), color.getGreen(),
 	            color.getBlue(), color.getAlpha());
@@ -261,7 +266,7 @@ void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) {
 		auto charEnd = lineIter->end();
 		Mat3 modelviewCopy = modelview;
 		for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
-			GetCharacter(charIter, charEnd).draw(modelviewCopy);
+			getCharacter(charIter, charEnd).draw(modelviewCopy);
 		}
 		if (++lineIter == lineEnd) {
 			break;
@@ -287,7 +292,7 @@ void FontImpl::print(const ScaleablePixels x, const ScaleablePixels y, const std
 
 		auto charEnd = lineIter->end();
 		for (auto charIter = lineIter->begin(); charIter != charEnd; ++charIter) {
-			GetCharacter(charIter, charEnd).draw(modelview);
+			getCharacter(charIter, charEnd).draw(modelview);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Functions for drawing shapes
 /// @file
@@ -61,9 +61,10 @@ void drawLine(Vec2 start, Vec2 end, float lineWidth, Rgba color);
 /// \deprecated Use drawLine(Vec2, Vec2, float lineWidth) instead
 void drawLine(double xstart, double ystart, double xend, double yend);
 
-/// Draws a line from \a start to \a end
-/// \deprecated Use drawLine(Mat3, Vec2, Vec2, float lineWidth) instead
-[[deprecated("Use drawLine(Mat3, Vec2, Vec2, float lineWidth) instead")]]
+/// Draws a line from \a start to \a end with width 1
+///
+/// Assume that this draws a line with a width of 1. You change the global line width that is used
+/// with setLineWidth, but that is deprecated.
 void drawLine(Mat3 modelview, Vec2 start, Vec2 end);
 
 /// Draws a line from \a start to \a end with width \a lineWidth in the color set by jngl::setColor
@@ -74,12 +75,10 @@ void drawLine(Mat3 modelview, Vec2 start, Vec2 end, float lineWidth, Rgba color)
 
 /// Draws a line from (0, 0) to \a end in the color set by jngl::setColor
 /// \deprecated Use drawLine(const Mat3&, Vec2, float lineWidth, Rgba) instead
-[[deprecated("Use drawLine(const Mat3&, Vec2, float lineWidth, Rgba) instead")]]
+[[deprecated("Use drawLine(const Mat3&, Vec2, Rgba) instead")]]
 void drawLine(const Mat3& modelview, Vec2 end);
 
 /// Draws a line from (0, 0) to \a end in \a color
-/// \deprecated Use drawLine(const Mat3&, Vec2, float lineWidth, Rgba) instead
-[[deprecated("Use drawLine(const Mat3&, Vec2, float lineWidth, Rgba) instead")]]
 void drawLine(const Mat3& modelview, Vec2 end, Rgba color);
 
 /// Draws a line from (0, 0) to \a end with width \a lineWidth in \a color
@@ -91,14 +90,14 @@ void drawEllipse(float xmid, float ymid, float width, float height, float startA
 
 void drawEllipse(Vec2, float width, float height, float startAngle = 0);
 
-void drawEllipse(Mat3 modelview, float width, float height, float startAngle = 0);
+void drawEllipse(const Mat3& modelview, float width, float height, float startAngle = 0);
 
-void drawEllipse(Mat3 modelview, float width, float height, float startAngle, Rgba color);
+void drawEllipse(const Mat3& modelview, float width, float height, float startAngle, Rgba color);
 
 /// Angles in radian
 void drawCircle(Vec2, float radius, float startAngle = 0);
 
-void drawCircle(Mat3 modelview, float radius, float startAngle);
+void drawCircle(const Mat3& modelview, float radius, float startAngle);
 
 /// Draws a circle at (0, 0) with \a radius in \a color with \a startAngle cut out
 ///
@@ -118,15 +117,15 @@ void drawCircle(Mat3 modelview, float radius, float startAngle);
 ///     **####**
 ///       ****
 /// @endverbatim
-void drawCircle(Mat3 modelview, float radius, float startAngle, Rgba color);
+void drawCircle(const Mat3& modelview, float radius, float startAngle, Rgba color);
 
-void drawCircle(Mat3 modelview, float radius);
+void drawCircle(const Mat3& modelview, float radius);
 
 /// Draws a circle at (0, 0) with \a radius in \a color
 void drawCircle(Mat3 modelview, float radius, Rgba color);
 
 /// Draws a circle at (0, 0) with radius of 1 in \a color
-void drawCircle(Mat3 modelview, Rgba color);
+void drawCircle(const Mat3& modelview, Rgba color);
 
 [[deprecated("Use drawCircle instead")]]
 /// \deprecated Use drawCircle instead

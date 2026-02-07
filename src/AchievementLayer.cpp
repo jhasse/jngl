@@ -1,4 +1,4 @@
-// Copyright 2023-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "AchievementLayer.hpp"
 
@@ -25,7 +25,7 @@ AchievementLayer& AchievementLayer::handle() {
 }
 
 void AchievementLayer::step() {
-	if (++stepsPassed > static_cast<int>(getStepsPerSecond() * 3)) {
+	if (std::cmp_greater(++stepsPassed, getStepsPerSecond() * 3)) {
 		fadeIn += 0.05f;
 	} else {
 		fadeIn *= 0.85f;

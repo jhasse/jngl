@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Sprite class and related functions
 /// \file
@@ -23,7 +23,7 @@ class Texture;
 struct Vertex;
 
 /// Higher-level representation of an image
-class Sprite : public Drawable {
+class Sprite {
 public:
 	enum class LoadType : uint8_t {
 		NORMAL,
@@ -60,10 +60,10 @@ public:
 	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
 
 	/// Does nothing
-	void step() override;
+	void step();
 
 	/// Draws the Sprite, centered by default
-	void draw() const override;
+	void draw() const;
 
 	/// Use this class to load a Sprite asynchronously
 	///
@@ -123,7 +123,7 @@ public:
 	/// Draws the image centered using \a modelview
 	///
 	/// \param shaderProgram Passing `nullptr` uses the default.
-	void draw(Mat3 modelview, const ShaderProgram* shaderProgram = nullptr) const;
+	void draw(const Mat3& modelview, const ShaderProgram* shaderProgram = nullptr) const;
 	void draw(Mat3 modelview, Alpha, const ShaderProgram* shaderProgram = nullptr) const;
 
 	/// Draws the sprite but multiplies each pixel's color with \a color
@@ -224,7 +224,7 @@ public:
 	/// \param shaderProgram Passing `nullptr` uses the default.
 	void drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes,
 	              const ShaderProgram* shaderProgram = nullptr) const;
-	void drawMesh(Mat3 modelview, const std::vector<Vertex>& vertexes, jngl::Rgba color,
+	void drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes, jngl::Rgba color,
 	              const ShaderProgram* = nullptr) const;
 
 	void setBytes(const unsigned char*);
@@ -234,6 +234,47 @@ public:
 
 	/// Function which actually loads the sprite
 	std::shared_ptr<Finally> loader;
+
+	// Position and size member variables (from Drawable)
+	Vec2 getPos() const;
+	void setPos(double x, double y);
+	template <class Vect> void setPos(Vect p) {
+		setPos(p.x, p.y);
+	}
+
+	jngl::Vec2 getCenter() const;
+	void setCenter(double x, double y);
+	template <class Vect> void setCenter(Vect c) {
+		setCenter(c.x, c.y);
+	}
+
+	double getLeft() const;
+	void setLeft(double x);
+
+	double getTop() const;
+	void setTop(double y);
+
+	double getRight() const;
+	void setRight(double x);
+
+	double getBottom() const;
+	void setBottom(double y);
+
+	double getX() const;
+	void setX(double);
+
+	double getY() const;
+	void setY(double);
+
+	Vec2 getSize() const;
+
+	float getWidth() const;
+
+	float getHeight() const;
+
+	void drawBoundingBox() const;
+
+	bool contains(jngl::Vec2 point) const;
 
 private:
 	static void cleanUpRowPointers(std::vector<unsigned char*>& buf);
@@ -257,6 +298,13 @@ private:
 #endif
 
 	std::shared_ptr<Texture> texture;
+
+	// Position in screen coordinates
+	Vec2 position;
+
+	// Width and height in pixel, NOT screen coordinates
+	float width = 0;
+	float height = 0;
 };
 
 void draw(const std::string& filename, double x, double y);
@@ -301,8 +349,7 @@ int getHeight(const std::string& filename);
 #if __cplusplus >= 201703L
 [[nodiscard]]
 #endif
-Finally
-disableBlending();
+Finally disableBlending();
 
 Finally drawOnlyIntoAlphaChannel();
 

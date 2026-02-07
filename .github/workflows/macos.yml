@@ -12,10 +12,3 @@ jobs:
       run: |
         cmake -Bbuild-cmake -GNinja
         ninja -Cbuild-cmake
-    # - uses: actions/setup-java@v4
-    #   with:
-    #     java-version: '17'
-    #     distribution: 'zulu'
-    # - name: Android
-    #   run: |
-    #     make -Candroid

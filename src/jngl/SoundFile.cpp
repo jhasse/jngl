@@ -1,4 +1,4 @@
-// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "SoundFile.hpp"
@@ -94,9 +94,7 @@ SoundFile::SoundFile(const std::string& filename, std::launch)
 		           // fclose() the FILE * pointer itself.
 		throw std::runtime_error("Could not open OGG file (" + filename + ").");
 	}
-	Finally cleanup(
-	    [&oggFile]()
-	    {
+	Finally cleanup([&oggFile]() {
 		ov_clear(&oggFile); /* calls fclose */
 	});
 
@@ -133,6 +131,10 @@ SoundFile::SoundFile(const std::string& filename, std::launch)
 		for (size_t i = 0; i < newSize / 2; ++i) {
 			float originalIndex = static_cast<float>(i) / resampleFactor;
 			auto index = static_cast<size_t>(originalIndex);
+			const size_t maxIndex = (buffer->size() >= 2) ? (buffer->size() / 2 - 1) : 0;
+			if (index > maxIndex) {
+				index = maxIndex;
+			}
 			float fraction = originalIndex - static_cast<float>(index);
 			{
 				size_t originalLeftIndex = index * 2;
@@ -262,8 +264,10 @@ std::shared_ptr<SoundFile> Audio::getSoundFile(std::string_view filename, std::l
 	    .first->second;
 }
 
-void play(const std::string& filename) {
-	Audio::handle().getSoundFile(filename, std::launch::deferred)->play();
+SoundFile& play(const std::string& filename) {
+	auto soundFile = Audio::handle().getSoundFile(filename, std::launch::deferred);
+	soundFile->play();
+	return *soundFile;
 }
 
 void stop(const std::string& filename) {

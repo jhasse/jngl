@@ -1,4 +1,4 @@
-// Copyright 2021-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Mat3.hpp"
 
@@ -20,13 +20,13 @@ Mat3::Mat3(std::initializer_list<float> elements) {
 }
 
 Mat3& Mat3::translate(const jngl::Vec2& v) {
-	return *this *= boost::qvm::translation_mat(
-	           boost::qvm::vec<double, 2>{ { v.x * getScaleFactor(), v.y * getScaleFactor() } });
+	return *this *= boost::qvm::translation_mat(boost::qvm::vec<double, 2>{ { v.x, v.y } });
 }
 
 Mat3& Mat3::translate(const Pixels x, const Pixels y) {
 	return *this *= boost::qvm::translation_mat(
-	           boost::qvm::vec<double, 2>{ { static_cast<float>(x), static_cast<float>(y) } });
+	           boost::qvm::vec<double, 2>{ { static_cast<float>(x / getScaleFactor()),
+	                                         static_cast<float>(y / getScaleFactor()) } });
 }
 
 Mat3& Mat3::scale(const float factor) {

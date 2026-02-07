@@ -1,10 +1,10 @@
-// Copyright 2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Widget.hpp"
 
+#include "../opengl.hpp"
 #include "effects.hpp"
-#include "matrix.hpp"
 
 #include <algorithm>
 
@@ -18,13 +18,13 @@ Widget::~Widget() = default;
 Widget::Action Widget::step() {
 	for (const auto& effect : effects) {
 		switch (effect->step()) {
-			case jngl::Effect::Action::NONE:
-				break;
-			case jngl::Effect::Action::REMOVE_EFFECT:
-				removeEffect(effect.get());
-				break;
-			case jngl::Effect::Action::REMOVE_WIDGET:
-				return Action::REMOVE;
+		case jngl::Effect::Action::NONE:
+			break;
+		case jngl::Effect::Action::REMOVE_EFFECT:
+			removeEffect(effect.get());
+			break;
+		case jngl::Effect::Action::REMOVE_WIDGET:
+			return Action::REMOVE;
 		}
 	}
 	if (!needToRemove.empty()) {
@@ -40,21 +40,20 @@ Widget::Action Widget::step() {
 	return Action::NONE;
 }
 
-void Widget::draw() const {
-	jngl::pushMatrix();
-	jngl::translate(position);
+void Widget::draw(Mat3 modelview) const {
+	std::swap(opengl::modelview, modelview);
+	opengl::modelview.translate(position);
 	for (const auto& effect : effects) {
 		effect->beginDraw();
 	}
-	auto mv = jngl::modelview();
 	for (const auto& effect : effects) {
-		effect->updateModelview(mv);
+		effect->updateModelview(opengl::modelview);
 	}
-	drawSelf(mv);
+	drawSelf(opengl::modelview);
 	for (const auto& effect : effects) {
 		effect->endDraw();
 	}
-	jngl::popMatrix();
+	std::swap(opengl::modelview, modelview);
 }
 
 void Widget::addEffect(std::unique_ptr<Effect> e) {

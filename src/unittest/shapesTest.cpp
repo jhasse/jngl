@@ -1,4 +1,4 @@
-// Copyright 2022-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2022-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Fixture.hpp"
 
@@ -34,14 +34,29 @@ boost::ut::suite _ = [] {
 		}
 		for (double scaleFactor : { 1, 2 }) {
 			Fixture f(scaleFactor);
-			auto mv = jngl::modelview();
-			jngl::drawSquare(mv.translate({-100, 0}).scale(42), 0x111111ff_rgba);
+			jngl::drawSquare(jngl::modelview().translate({ -100, 0 }).scale(42), 0x111111ff_rgba);
+			jngl::drawLine(jngl::modelview().translate({ -20, -20 }), jngl::Vec2(0, 38), 5.f, 0x00ff00ff_rgba);
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
+			jngl::setLineWidth(7);
+			jngl::drawLine(jngl::Vec2(15, -20), jngl::Vec2(19, 17));
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+			jngl::drawCircle(jngl::modelview().translate({ 100, -0.1 }).scale(42.05, 11.9), 0xff0000ff_rgba);
 			expect(eq(f.getAsciiArt(), std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-▒   ▒▒▒▒                       ▒
-▒   ████                       ▒
-▒   ████                       ▒
-▒   ████                       ▒
+▒   ▒▒▒▒         ░             ▒
+▒   ████     ░░  ▓     ░▒▒▒▒░  ▒
+▒   ████     ░░  ▓    ▓▓▓▓▓▓▓▓ ▒
+▒   ████     ░░  ▒░    ░▒▒▒▒░  ▒
 ▒   ▒▒▒▒                       ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
@@ -60,6 +75,23 @@ boost::ut::suite _ = [] {
 ▒     ░▒░          ▒██▒        ▒
 ▒    ░▒▒░         ▓████▓       ▒
 ▒   ░░░░░                      ▒
+▒                              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)")));
+		}
+	};
+	"ellipse"_test = [] {
+		for (double scaleFactor : { 1, 2 }) {
+			Fixture f(scaleFactor);
+			auto mv = jngl::modelview();
+			// Draw an ellipse centered near the left side
+			jngl::drawEllipse(mv.translate({ -120, -27 }), 70, 20);
+			expect(eq(f.getAsciiArt(), std::string(R"(
+███████████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+██████████▒                    ▒
+▓▓▓▓▓▓▓▒░                      ▒
+▒                              ▒
+▒                              ▒
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));

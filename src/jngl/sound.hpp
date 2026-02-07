@@ -18,7 +18,12 @@ float getVolume();
 /// Play an OGG audio file once
 ///
 /// Might block if the file hasn't been played before. To avoid that use jngl::load before.
-void play(const std::string& filename);
+///
+/// Example:
+/// \code
+/// jngl::play("sfx/foo.ogg").setVolume(0.2);
+/// \endcode
+SoundFile& play(const std::string& filename);
 
 /// Stop an OGG audio file if it's currently playing
 void stop(const std::string& filename);

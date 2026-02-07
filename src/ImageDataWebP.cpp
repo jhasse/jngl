@@ -1,10 +1,10 @@
-// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #ifndef NOWEBP
 #include "ImageDataWebP.hpp"
 
 #include <cmath>
-#include <future>
+#include <stdexcept>
 #include <thread>
 #include <vector>
 
@@ -21,11 +21,11 @@ ImageDataWebP::ImageDataWebP(std::string filename, FILE* file, double scaleFacto
 	}
 
 	std::vector<uint8_t> buf(filesize);
-	if (!fread(buf.data(), filesize, 1, file)) {
+	if (fread(buf.data(), filesize, 1, file) == 0u) {
 		throw std::runtime_error(std::string("Couldn't open WebP file. (" + this->filename + ")"));
 	}
 
-	if (!WebPGetInfo(buf.data(), filesize, &imgWidth, &imgHeight)) {
+	if (WebPGetInfo(buf.data(), filesize, &imgWidth, &imgHeight) == 0) {
 		throw std::runtime_error(std::string("Invalid WebP file. (" + this->filename + ")"));
 	}
 

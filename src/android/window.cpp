@@ -1,4 +1,4 @@
-// Copyright 2013-2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2013-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../window.hpp"
@@ -18,14 +18,6 @@ Window::Window(const std::string& /*title*/, const int width, const int height,
 
 	// Calling UpdateInput() for the first time will set-up GLES among other things:
 	UpdateInput();
-}
-
-std::string Window::GetFontFileByName(const std::string& fontname) {
-	std::string tmp = fontname;
-	if (fontname == "sans-serif") {
-		tmp = "Arial";
-	}
-	return tmp + ".ttf";
 }
 
 Window::~Window() = default;

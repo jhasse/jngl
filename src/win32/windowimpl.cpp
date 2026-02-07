@@ -1,8 +1,9 @@
-// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/ImageData.hpp"
 #include "../jngl/window.hpp"
+#include "../App.hpp"
 #include "../log.hpp"
 #include "../main.hpp"
 #include "../windowptr.hpp"
@@ -314,9 +315,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 
 		::ShowWindow(impl->pWindowHandle_.get(), SW_SHOWNORMAL);
 
-		if (!jngl::Init(width_, height_, canvasWidth, canvasHeight)) {
-			throw std::runtime_error("Initialization failed.");
-		}
+		App::instance().initGl(width_, height_, canvasWidth, canvasHeight);
 	};
 	init(false);
 }

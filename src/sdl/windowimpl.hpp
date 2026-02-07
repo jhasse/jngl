@@ -1,4 +1,4 @@
-// Copyright 2020-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -35,8 +35,7 @@ public:
 	SDL_GLContext context = nullptr;
 	optional<SDL_FingerID> currentFingerId;
 
-	/// UWP windows can be resized, no way around. So we save the actual window size here for mouse
-	/// input to work:
+	/// If the window is resized we save the actual window size here for mouse input to work:
 	float actualWidth;
 	float actualHeight;
 	int actualCanvasWidth;
@@ -47,10 +46,6 @@ public:
 
 	/// For Retina screens on macOS SDL does its own scaling of mouse coordinates, etc. :(
 	float hidpiScaleFactor;
-
-	/// On UWP there's a bug that sometimes there are "wrong" resize events at startup (maybe due to
-	/// fullscreen mode?). Just skipping them until the first frame is drawn is a workaround.
-	bool firstFrame = true;
 };
 
 } // namespace jngl

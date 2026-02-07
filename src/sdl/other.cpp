@@ -1,4 +1,4 @@
-// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/Finally.hpp"
@@ -13,7 +13,7 @@
 namespace jngl {
 
 std::string getPreferredLanguage() {
-#if defined(__EMSCRIPTEN__)
+#ifdef __EMSCRIPTEN__
 	if (const auto lang_cstr = std::getenv("LANG")) {
 		const std::string lang = lang_cstr;
 		if (lang.size() >= 2) {

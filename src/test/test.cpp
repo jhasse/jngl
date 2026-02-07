@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <algorithm>
@@ -115,7 +115,7 @@ public:
 			}
 		}
 		if (jngl::keyPressed('g')) {
-			jngl::setWork<jngl::Fade>(std::make_shared<AsyncLoad>());
+			jngl::setScene<jngl::Fade>(std::make_shared<AsyncLoad>());
 		}
 		if (jngl::keyPressed('e')) {
 			jngl::errorMessage("Hello World!");
@@ -176,11 +176,27 @@ public:
 		jngl::drawRect(jngl::modelview(), { 200, 62 }, 0x000000_rgb);
 		jngl::setFontColor(static_cast<unsigned char>(255 * (1 - factor)),
 		                   static_cast<unsigned char>(255 * factor), 255);
-		jngl::setFontByName("Courier New");
+		try {
+			jngl::setFontByName("Courier New");
+		} catch (const std::exception& e) {
+			static bool printed = false;
+			if (!printed) {
+				jngl::error(e.what());
+				printed = true;
+			}
+		}
 		jngl::print(sstream.str(), 5, 5);
 		jngl::setFontByName("sans-serif");
 		jngl::setFontColor(0, 0, 0);
-		jngl::setFontByName("Times New Roman");
+		try {
+			jngl::setFontByName("Times New Roman");
+		} catch (const std::exception& e) {
+			static bool printed = false;
+			if (!printed) {
+				jngl::error(e.what());
+				printed = true;
+			}
+		}
 		jngl::print("Black text on white background", 5, 75);
 		jngl::setFontByName("Arial");
 		jngl::setFontSize(20);

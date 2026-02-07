@@ -1,4 +1,4 @@
-// Copyright 2011-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../App.hpp"
@@ -14,7 +14,7 @@
 
 #include <cassert>
 #include <stdexcept>
-#if defined(_WIN32) && !defined(JNGL_UWP)
+#ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -24,7 +24,7 @@
 namespace jngl {
 
 void setProcessSettings() {
-#if defined(_WIN32) && !defined(JNGL_UWP)
+#ifdef _WIN32
 	static bool called = false;
 	if (called) {
 		return;
@@ -51,15 +51,18 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIGH_PIXEL_DENSITY; // TODO: SDL_WINDOW_SHOWN
 	if (fullscreen) {
 		flags |= SDL_WINDOW_FULLSCREEN;
+		if (width != getDesktopWidth() || height != getDesktopHeight()) {
+			// Do the scaling ourself using the projection matrix:
+			setScaleFactor(std::min(static_cast<double>(getDesktopWidth()) / width,
+			                        static_cast<double>(getDesktopHeight()) / height));
+			width_ = width = getDesktopWidth();
+			height_ = height = getDesktopHeight();
+		}
 	} else {
 		flags |= SDL_WINDOW_RESIZABLE; // if we make fullscreen window resizeable on GNOME, it will
 		                               // be reduced in its height (SDL bug?).
 	}
 
-#ifdef JNGL_UWP
-	isMultisampleSupported_ = false; // crashes on Xbox since ANGLE uses a PixelShader 4.1 for
-	                                 // multi-sampling and Xbox only supports 4.0 in UWP mode.
-#endif
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -125,14 +128,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	impl->actualCanvasWidth = canvasWidth;
 	impl->actualCanvasHeight = canvasHeight;
-	Init(width_, height_, canvasWidth, canvasHeight);
+	App::instance().initGl(width_, height_, canvasWidth, canvasHeight);
 }
 
-Window::~Window() {
-	// This is rather dirty, but needed for the rare case that one wants to create a window after
-	// hiding a previous one and doesn't reset the scale factor:
-	setScaleFactor(getScaleFactor() / impl->hidpiScaleFactor);
-}
+Window::~Window() = default;
 
 int Window::GetKeyCode(key::KeyType key) {
 	switch (key) {
@@ -382,7 +381,7 @@ void Window::UpdateInput() {
 			break;
 		case SDL_EVENT_WINDOW_RESIZED:
 		case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
-			if (!impl->firstFrame) {
+			{
 				const int originalWidth = width_;
 				const int originalHeight = height_;
 				SDL_GetWindowSizeInPixels(impl->sdlWindow, &width_, &height_);
@@ -397,26 +396,8 @@ void Window::UpdateInput() {
 				const float tmpHeight =
 				    (static_cast<float>(height_) / static_cast<float>(canvasHeight)) *
 				    static_cast<float>(impl->actualCanvasHeight);
-				const auto l = -1.f / 2.f;
-				const auto r = 1.f / 2.f;
-				const auto b = 1.f / 2.f;
-				const auto t = -1.f / 2.f;
-				opengl::projection = { 1.f / tmpWidth * 2.f / (r - l),
-					                   0.f,
-					                   0.f,
-					                   -(r + l) / (r - l),
-					                   0.f,
-					                   1.f / tmpHeight * 2.f / (t - b),
-					                   0.f,
-					                   -(t + b) / (t - b),
-					                   0.f,
-					                   0.f,
-					                   -1.f,
-					                   0.f,
-					                   0.f,
-					                   0.f,
-					                   0.f,
-					                   1.f };
+				updateProjection(impl->actualCanvasWidth, impl->actualCanvasHeight, tmpWidth,
+				                 tmpHeight);
 				App::instance().updateProjectionMatrix();
 				updateViewportAndLetterboxing(width_, height_, canvasWidth, canvasHeight);
 				// restore the values in canvasWidth and canvasHeight because our scaleFactor didn't
@@ -446,7 +427,6 @@ void Window::UpdateInput() {
 
 void Window::SwapBuffers() {
 	SDL_GL_SwapWindow(impl->sdlWindow);
-	impl->firstFrame = false;
 }
 
 void Window::SetMouseVisible(const bool visible) {

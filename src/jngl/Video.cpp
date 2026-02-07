@@ -1,4 +1,4 @@
-// Copyright 2018-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Video.hpp"
 
@@ -16,7 +16,6 @@
 #include "Channel.hpp"
 #include "Shader.hpp"
 #include "ShaderProgram.hpp"
-#include "screen.hpp"
 #include "time.hpp"
 
 #include <algorithm>
@@ -72,18 +71,17 @@ public:
 				// Skip frames to catch up, but keep track of the last one in case we catch up to a
 				// series of dupe frames, which means we'd have to draw that final frame and then
 				// wait for more.
-				const THEORAPLAY_VideoFrame* last = video;
+				std::unique_ptr<const THEORAPLAY_VideoFrame> last = std::move(video);
 				while ((video = THEORAPLAY_getVideo(decoder)) != nullptr) {
 					internal::warn("Skipped frame at {}ms.", last->playms);
-					THEORAPLAY_freeVideo(last);
-					last = video;
-					if (now - static_cast<double>(video->playms) / 1000. < timePerFrame) {
+					last = std::move(video);
+					if (now - static_cast<double>(last->playms) / 1000. < timePerFrame) {
 						break;
 					}
 				}
 
 				if (!video) {
-					video = last;
+					video = std::move(last);
 				}
 			}
 			if (!shaderProgram) {
@@ -176,8 +174,8 @@ public:
 				             static_cast<GLsizei>(video->height / 2), 0, GL_RED, GL_UNSIGNED_BYTE,
 				             nullptr);
 
-				const auto preciseWidth = static_cast<float>(video->width * getScaleFactor());
-				const auto preciseHeight = static_cast<float>(video->height * getScaleFactor());
+				const auto preciseWidth = static_cast<float>(video->width);
+				const auto preciseHeight = static_cast<float>(video->height);
 				const static GLfloat vertexes[] = {
 					-preciseWidth / 2, -preciseHeight / 2,
 					0, 0, // texture coordinates
@@ -221,7 +219,6 @@ public:
 			                static_cast<GLsizei>(video->height / 2), GL_RED, GL_UNSIGNED_BYTE,
 			                video->pixels + std::lround(1.25 * video->width * video->height));
 
-			THEORAPLAY_freeVideo(video);
 			video = nullptr;
 		}
 		if (started()) {
@@ -322,7 +319,7 @@ private:
 	constexpr static unsigned int BUFFER_SIZE = 200;
 
 	THEORAPLAY_Decoder* decoder;
-	const THEORAPLAY_VideoFrame* video = nullptr;
+	std::unique_ptr<const THEORAPLAY_VideoFrame> video;
 	std::unique_ptr<const THEORAPLAY_AudioPacket> audio;
 	double startTime;
 	double timePerFrame;

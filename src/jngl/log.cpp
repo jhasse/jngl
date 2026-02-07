@@ -1,4 +1,4 @@
-// Copyright 2024-2025 Jan Niklas Hasse <jhasse@gmail.com>
+// Copyright 2024-2026 Jan Niklas Hasse <jhasse@gmail.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "log.hpp"
 
@@ -45,6 +45,10 @@ void debug(const std::string& line [[maybe_unused]]) {
 
 void info(const std::string& line) {
 	internal::log(shortenDisplayName(), "\x1b[32minfo\x1b[0m", line);
+}
+
+void log(std::string_view levelName, const std::string& line) {
+	internal::log(shortenDisplayName(), "\x1b[35m" + std::string(levelName) + "\x1b[0m", line);
 }
 
 void warn(const std::string& line) {

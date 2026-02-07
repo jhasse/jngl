@@ -1,4 +1,4 @@
-// Copyright 2023-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 // Based on the audio implementation of the psemek engine, see
 // https://lisyarus.github.io/blog/programming/2022/10/15/audio-mixing.html
@@ -27,8 +27,8 @@ Mixer::~Mixer() = default;
 void Mixer::gc() {
 	Stream* tmp;
 	while (impl->streamsToRemoveOnMainThread.try_pop(tmp)) {
-		auto it = std::find_if(streamsOnMainThread.begin(), streamsOnMainThread.end(),
-		                       [tmp](const auto& stream) { return stream.get() == tmp; });
+		auto it = std::ranges::find_if(streamsOnMainThread,
+		                               [tmp](const auto& stream) { return stream.get() == tmp; });
 		assert(it != streamsOnMainThread.end());
 		streamsOnMainThread.erase(it);
 	}

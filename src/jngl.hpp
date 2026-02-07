@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Includes all JNGL headers except for init.hpp
 /// @file
@@ -13,6 +13,7 @@
 #include "jngl/Controller.hpp"       // IWYU pragma: keep
 #include "jngl/Drawable.hpp"         // IWYU pragma: keep
 #include "jngl/Fade.hpp"             // IWYU pragma: keep
+#include "jngl/FontInterface.hpp" // IWYU pragma: keep
 #include "jngl/FrameBuffer.hpp"      // IWYU pragma: keep
 #include "jngl/ImageData.hpp"        // IWYU pragma: keep
 #include "jngl/KeyboardShortcut.hpp" // IWYU pragma: keep
@@ -25,6 +26,7 @@
 #include "jngl/Rgba.hpp"             // IWYU pragma: keep
 #include "jngl/ScaleablePixels.hpp"  // IWYU pragma: keep
 #include "jngl/Scene.hpp"            // IWYU pragma: keep
+#include "jngl/ScrollArea.hpp" // IWYU pragma: keep
 #include "jngl/Shader.hpp"           // IWYU pragma: keep
 #include "jngl/ShaderProgram.hpp"    // IWYU pragma: keep
 #include "jngl/Singleton.hpp"        // IWYU pragma: keep
@@ -45,6 +47,7 @@
 #include "jngl/matrix.hpp"           // IWYU pragma: keep
 #include "jngl/message.hpp"          // IWYU pragma: keep
 #include "jngl/other.hpp"            // IWYU pragma: keep
+#include "jngl/positioning.hpp"      // IWYU pragma: keep
 #include "jngl/screen.hpp"           // IWYU pragma: keep
 #include "jngl/shapes.hpp"           // IWYU pragma: keep
 #include "jngl/sound.hpp"            // IWYU pragma: keep
@@ -52,3 +55,7 @@
 #include "jngl/time.hpp"             // IWYU pragma: keep
 #include "jngl/window.hpp"           // IWYU pragma: keep
 #include "jngl/work.hpp"             // IWYU pragma: keep
+
+#ifdef JNGL_RECORD
+#include "jngl/record/VideoRecorder.hpp" // IWYU pragma: keep
+#endif

@@ -64,7 +64,7 @@ brew install sdl3 freetype libvorbis webp pkg-config cmake ffmpeg
 2. In the Android SDK Manager, install the NDK build tools.
 3. Run the following command to test via ADB:
 ```bash
-make -C android run
+lus android-run
 ```
 Alternatively, open `android/test` in Android Studio and build from there.
 
@@ -74,12 +74,6 @@ Generate an Xcode project using CMake:
 cmake -Bbuild-ios -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR
 ```
 Then open and build `build-ios/jngl.xcodeproj` in Xcode.
-
-## Xbox
-```bash
-cmake -Bbuild-uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0"
-```
-Then open `build-uwp/jngl.sln` in Visual Studio.
 
 ## Example Usage
 Here's a simple "Hello, World!" example in JNGL:

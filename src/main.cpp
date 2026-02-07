@@ -1,4 +1,4 @@
-// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
@@ -61,57 +61,6 @@ void clearBackgroundColor() {
 	             1);
 }
 
-namespace {
-#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
-#ifdef _WIN32
-void __stdcall
-#else
-void
-#endif
-debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity,
-              GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
-	if (severity == GL_DEBUG_SEVERITY_HIGH) {
-		internal::error(message);
-	} else if (severity == GL_DEBUG_SEVERITY_MEDIUM) {
-		internal::warn(message);
-	} else if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {
-		internal::info(message);
-	}
-}
-#endif
-} // namespace
-
-bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
-#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
-#ifdef GLAD_GL
-	if (GLAD_GL_VERSION_4_3 || GLAD_GL_KHR_debug) {
-#endif
-		glEnable(GL_DEBUG_OUTPUT);
-		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr); // NOLINT
-#ifdef GLAD_GL
-	}
-#endif
-#endif
-
-	updateProjection(width, height, width, height);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	updateViewportAndLetterboxing(width, height, canvasWidth, canvasHeight);
-
-	reset();
-	modelviewStack = {};
-
-	clearBackgroundColor();
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glFlush();
-	setVerticalSync(true);
-	return true;
-}
-
 void updateViewportAndLetterboxing(const int width, const int height, const int canvasWidth,
                                    const int canvasHeight) {
 	glViewport(0, 0, width, height);
@@ -130,21 +79,23 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 	}
 }
 
-void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth,
-                      int originalWindowHeight) {
-	internal::debug("Updating projection matrix to {}x{} (original size: {}x{})", windowWidth,
-	                windowHeight, originalWindowWidth, originalWindowHeight);
+void updateProjection(int windowWidth, int windowHeight, float originalWindowWidth,
+                      float originalWindowHeight) {
+	internal::trace("Updating projection matrix to {}x{} (original size: {}x{})", windowWidth,
+	                windowHeight, std::lround(originalWindowWidth),
+	                std::lround(originalWindowHeight));
 	const auto l = static_cast<float>(-windowWidth) / 2.f;
 	const auto r = static_cast<float>(windowWidth) / 2.f;
 	const auto b = static_cast<float>(windowHeight) / 2.f;
 	const auto t = static_cast<float>(-windowHeight) / 2.f;
+	const auto scale = static_cast<float>(getScaleFactor());
 	opengl::projection = {
-		static_cast<float>(windowWidth) / static_cast<float>(originalWindowWidth) * 2.f / (r - l),
+		static_cast<float>(windowWidth) / originalWindowWidth * 2.f / (r - l) * scale,
 		0.f,
 		0.f,
 		-(r + l) / (r - l),
 		0.f,
-		static_cast<float>(windowHeight) / static_cast<float>(originalWindowHeight) * 2.f / (t - b),
+		static_cast<float>(windowHeight) / originalWindowHeight * 2.f / (t - b) * scale,
 		0.f,
 		-(t + b) / (t - b),
 		0.f,
@@ -154,7 +105,7 @@ void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth
 		0.f,
 		0.f,
 		0.f,
-		1.f
+		1.f,
 	};
 }
 
@@ -166,6 +117,7 @@ bool antiAliasingEnabled = true;
 void showWindow(const std::string& title, const double width, const double height, bool fullscreen,
                 const std::pair<int, int> minAspectRatio,
                 const std::pair<int, int> maxAspectRatio) {
+	++internal::gFrameNumber; // will set it to 0 for the first window
 	internal::debug("jngl::showWindow(\"{}\", {}, {}, {});", title, width, height, fullscreen);
 	bool isMouseVisible = pWindow ? pWindow->getMouseVisible() : true;
 	hideWindow();
@@ -328,17 +280,17 @@ bool keyPressed(const key::KeyType key) {
 
 bool keyDown(const std::string& key) {
 	const static auto TOO_LONG = "Only pass one character.";
-	if (key[0] & 0x80) { // first bit (Check if this is an Unicode character)
+	if ((key[0] & 0x80) != 0) { // first bit (Check if this is an Unicode character)
 		// sourceEnd has to be the next character after the utf-8 sequence
 		const static auto ERROR_MSG = "Invalid UTF-8 string!";
 		if (key.size() < 2) {
 			throw std::runtime_error(ERROR_MSG);
 		}
-		if (key[0] & 0x20) { // third bit
+		if ((key[0] & 0x20) != 0) { // third bit
 			if (key.size() < 3) {
 				throw std::runtime_error(ERROR_MSG);
 			}
-			if (key[0] & 0x10) {
+			if ((key[0] & 0x10) != 0) {
 				if (key.size() < 4) { // fourth bit
 					throw std::runtime_error(ERROR_MSG);
 				}
@@ -395,25 +347,30 @@ void setTitle(const std::string& title) {
 	pWindow->SetTitle(title);
 }
 
-std::vector<float> readPixels() {
-	const int w = pWindow->getCanvasWidth();
-	const int h = pWindow->getCanvasHeight();
-	auto xOffset = (pWindow->getWidth() - w);
-	auto yOffset = (pWindow->getHeight() - h);
-	assert(xOffset % 2 == 0);
-	assert(yOffset % 2 == 0);
-	std::vector<float> buffer(static_cast<size_t>(3 * w * h));
-	glReadPixels(xOffset / 2, yOffset / 2, w, h, GL_RGB, GL_FLOAT, buffer.data());
-	return buffer;
-}
-
-void readPixels(uint8_t* buffer) {
+namespace {
+void readPixels(void* buffer, GLenum type) {
 	auto xOffset = (pWindow->getWidth() - pWindow->getCanvasWidth());
 	auto yOffset = (pWindow->getHeight() - pWindow->getCanvasHeight());
 	assert(xOffset % 2 == 0);
 	assert(yOffset % 2 == 0);
+	GLint oldPackAlignment = 0;
+	glGetIntegerv(GL_PACK_ALIGNMENT, &oldPackAlignment);
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(xOffset / 2, yOffset / 2, pWindow->getCanvasWidth(), pWindow->getCanvasHeight(),
-	             GL_RGB, GL_UNSIGNED_BYTE, buffer);
+	             GL_RGB, type, buffer);
+	glPixelStorei(GL_PACK_ALIGNMENT, oldPackAlignment);
+}
+} // namespace
+
+std::vector<float> readPixels() {
+	std::vector<float> buffer(
+	    static_cast<size_t>(3 * pWindow->getCanvasWidth() * pWindow->getCanvasHeight()));
+	readPixels(buffer.data(), GL_FLOAT);
+	return buffer;
+}
+
+void readPixels(uint8_t* buffer) {
+	readPixels(buffer, GL_UNSIGNED_BYTE);
 }
 
 double getTextWidth(const std::string& text) {
@@ -421,7 +378,7 @@ double getTextWidth(const std::string& text) {
 }
 
 double getLineHeight() {
-	return static_cast<double>(ScaleablePixels{ pWindow->getLineHeight() });
+	return pWindow->getLineHeight();
 }
 
 void setLineHeight(double h) {
@@ -493,8 +450,7 @@ void rotate(const double degree) {
 }
 
 void translate(const double x, const double y) {
-	opengl::translate(static_cast<float>(x * getScaleFactor()),
-	                  static_cast<float>(y * getScaleFactor()));
+	opengl::translate(static_cast<float>(x), static_cast<float>(y));
 }
 
 void scale(const double factor) {
@@ -563,7 +519,7 @@ void drawTriangle(Mat3 modelview, Rgba color) {
 }
 
 void setLineWidth(const float width) {
-	glLineWidth(width);
+	glLineWidth(width * getScaleFactor());
 }
 
 void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
@@ -712,7 +668,7 @@ std::string internal::getConfigPath() {
 	}
 #ifndef IOS
 	std::stringstream path;
-#if defined(ANDROID)
+#ifdef ANDROID
 	path << getSystemConfigPath() << '/';
 #elif defined(__EMSCRIPTEN__)
 	path << "/working1/";
@@ -837,13 +793,11 @@ void writeConfig(const std::string& key, const std::string& value) {
 	fout << value;
 
 #ifdef __EMSCRIPTEN__
-	EM_ASM(
-		FS.syncfs(false, function(err) {
-			if (err) {
-				console.warn("Error saving:", err);
-			}
-		})
-	);
+	EM_ASM(FS.syncfs(false, function(err) {
+		if (err) {
+			console.warn("Error saving:", err);
+		}
+	}));
 #endif
 }
 #endif

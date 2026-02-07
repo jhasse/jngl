@@ -1,4 +1,4 @@
-// Copyright 2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2022-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::AppParameters struct
 /// \file
@@ -41,6 +41,22 @@ struct AppParameters {
 
 	/// Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)
 	bool pixelArt = false;
+
+	/// This function can be set to make adjustments to the scale factor used by
+	/// jngl::getScaleFactor() after the window has been created. It gets the actual window
+	/// dimensions in actual pixels as parameters (width, height) and must return the desired new
+	/// scale factor.
+	///
+	/// For example if you don't want to force an aspect ratio, but want to have a consistent
+	/// scaling based on a 1920x1080 screen, you could use:
+	/// \code{.cpp}
+	/// params.scaleFactor = [](int width, int height) {
+	///     const double windowSqr = width * height;
+	///     const double desiredSqr = 1920 * 1080;
+	///     return sqrt(windowSqr / desiredSqr);
+	/// };
+	/// \endcode
+	std::function<double(int, int)> scaleFactor;
 };
 
 } // namespace jngl

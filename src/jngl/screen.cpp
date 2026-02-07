@@ -1,8 +1,9 @@
-// Copyright 2012-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "screen.hpp"
 
+#include "../windowptr.hpp"
 #include "window.hpp"
 
 #include <stdexcept>
@@ -19,6 +20,11 @@ void setScaleFactor(double f) {
 	if (f < 0) {
 		throw std::runtime_error("Invalid scale factor: " + std::to_string(f));
 	}
+	if (pWindow) {
+		throw std::runtime_error("You may only call jngl::setScaleFactor() before creating the "
+		                         "window. If you want to make adjustment depending on the window "
+		                         "size use jngl::AppParameters::scaleFactor.");
+	}
 	factor = f;
 }
 
@@ -31,7 +37,7 @@ double getScreenHeight() {
 }
 
 Vec2 getScreenSize() {
-	return {getScreenWidth(), getScreenHeight()};
+	return { getScreenWidth(), getScreenHeight() };
 }
 
 } // namespace jngl
