@@ -23,17 +23,17 @@ cmake --build build
 ### Ubuntu
 ```bash
 sudo apt-get install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libpng-dev \
-libxxf86vm-dev libvorbis-dev cmake g++ libwebp-dev git libsdl2-dev
+libxxf86vm-dev libvorbis-dev cmake g++ libwebp-dev git libsdl3-dev
 ```
 ### Fedora
 ```bash
 sudo dnf install fontconfig-devel freetype-devel libvorbis-devel libwebp-devel cmake \
-ninja-build SDL2-devel gcc-c++ libatomic libavformat-free-devel libswscale-free-devel
+ninja-build SDL3-devel gcc-c++ libatomic libavformat-free-devel libswscale-free-devel
 ```
 The last two are only needed if you plan to use [VideoRecorder](https://bixense.com/jngl/classjngl_1_1VideoRecorder.html#details).
 ### Arch Linux
 ```bash
-pacman -Syu --needed cmake gcc sdl2 pkg-config fontconfig libwebp libvorbis
+pacman -Syu --needed cmake gcc sdl3 pkg-config fontconfig libwebp libvorbis
 ```
 
 ## Windows
@@ -43,7 +43,7 @@ Set up [MSYS2](https://www.msys2.org/) and install the following in a MinGW-w64 
 pacman -Syu --needed mingw-w64-x86_64-gcc \
 mingw-w64-x86_64-freetype mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libwebp \
 mingw-w64-x86_64-dlfcn mingw-w64-x86_64-cmake make mingw-w64-x86_64-gdb \
-mingw-w64-x86_64-libtheora mingw-w64-x86_64-SDL2
+mingw-w64-x86_64-libtheora mingw-w64-x86_64-SDL3
 ```
 ### Visual Studio 2017 or newer
 ```bash
@@ -54,7 +54,7 @@ Then open `build/jngl.sln` in Visual Studio.
 ## macOS
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 ```bash
-brew install sdl2 freetype libvorbis webp pkg-config cmake ffmpeg
+brew install sdl3 freetype libvorbis webp pkg-config cmake ffmpeg
 ```
 
 `ffmpeg` is only needed if you plan to use [VideoRecorder](https://bixense.com/jngl/classjngl_1_1VideoRecorder.html#details).
