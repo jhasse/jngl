@@ -91,7 +91,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 
 	if (isMultisampleSupported_) {
 		int openglMSAA;
-		if (SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &openglMSAA) != 0) {
+		if (SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &openglMSAA)) {
 			internal::debug("Recreating window and OpenGL Context without Anti-Aliasing support.");
 			SDL_GL_DestroyContext(impl->context);
 			SDL_DestroyWindow(impl->sdlWindow);
@@ -235,7 +235,7 @@ void Window::UpdateInput() {
 		SDL_SetCursor(impl->sdlCursor.get());
 	}
 	SDL_Event event;
-	while (SDL_PollEvent(&event) != 0) {
+	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_EVENT_QUIT:
 			quit();
@@ -319,7 +319,7 @@ void Window::UpdateInput() {
 			break;
 		case SDL_EVENT_KEY_DOWN: {
 			static bool wasFullscreen = fullscreen_;
-			if (event.key.repeat != 0u && fullscreen_ != wasFullscreen) {
+			if (event.key.repeat && fullscreen_ != wasFullscreen) {
 				// SDL2 with Xorg has a bug, that it sends a key repeat event when toggling
 				// fullscreen. So let's ignore the second event
 				break;
