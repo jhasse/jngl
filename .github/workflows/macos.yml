@@ -4,10 +4,10 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install dependencies
       run: |
-        brew install sdl2 libvorbis webp ninja
+        brew install sdl2 libvorbis webp
     - name: Build with CMake
       run: |
         cmake -Bbuild-cmake -GNinja

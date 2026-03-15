@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: microdnf install -y git graphviz doxygen cmake make tar xz rsync texlive-latex texlive-newunicodechar texlive-dvips pdf2svg ghostscript
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
       - name: Build

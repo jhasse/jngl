@@ -10,7 +10,7 @@ jobs:
     container:
       image: registry.gitlab.com/jhasse/android-ndk-docker:r28b
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Cache CPM.cmake packages
       uses: actions/cache@v4
       with:
