@@ -264,7 +264,7 @@ else()
 					"SDL_SENSOR OFF"
 			)
 		endif()
-		target_link_libraries(jngl PRIVATE SDL3-static)
+		target_link_libraries(jngl PRIVATE SDL3::SDL3)
 	endif()
 	if(MSVC)
 		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
