@@ -11,7 +11,7 @@ namespace jngl {
 
 class SdlController : public Controller {
 public:
-	SdlController(SDL_Joystick*, int index);
+	SdlController(SDL_Joystick*, SDL_JoystickID);
 	SdlController(const SdlController&) = delete;
 	SdlController& operator=(const SdlController&) = delete;
 	SdlController(SdlController&&) = delete;
@@ -27,7 +27,7 @@ private:
 	float stateWithoutDeadzone(controller::Button) const;
 
 	SDL_Joystick* handle;
-	SDL_GameController* gameController = nullptr;
+	SDL_Gamepad* gameController = nullptr;
 	SDL_Haptic* haptic = nullptr;
 
 	enum class Model {
