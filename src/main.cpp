@@ -185,7 +185,7 @@ bool running() {
 }
 
 bool canQuit() {
-#if defined(IOS) || defined(EMSCRIPTEN)
+#if defined(IOS) || defined(__EMSCRIPTEN__)
 	return false;
 #else
 	return true;
