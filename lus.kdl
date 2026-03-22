@@ -72,14 +72,16 @@ unittest-headless {
 	- test -n $is_release || lus build jngl-unittest
 	- cd build
 	- "$config/jngl-unittest" Color
-	- "$config/jngl-unittest" Rgb
 	- "$config/jngl-unittest" Drawable
-	- "$config/jngl-unittest" ImageData
 	- "$config/jngl-unittest" FinallyTest
-	- "$config/jngl-unittest" halfLoadTest
+	- "$config/jngl-unittest" FrameLimiter
+	- "$config/jngl-unittest" FrameLimiter_Vsync
 	- "$config/jngl-unittest" getBinaryPath
 	- "$config/jngl-unittest" getConfigPath
+	- "$config/jngl-unittest" halfLoadTest
+	- "$config/jngl-unittest" ImageData
 	- "$config/jngl-unittest" readAsset
+	- "$config/jngl-unittest" Rgb
 	- "$config/jngl-unittest" Vec2
 }
 cmake-mingw {

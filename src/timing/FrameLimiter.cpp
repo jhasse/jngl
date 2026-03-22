@@ -9,14 +9,15 @@
 
 namespace jngl {
 
-FrameLimiter::FrameLimiter(const double timePerStep)
+FrameLimiter::FrameLimiter(const double timePerStep, std::function<double()> getTimeFunction)
 : timePerStep(timePerStep),
   maxStepsPerFrame(static_cast<unsigned int>(
-      std::lround(1.0 / 20.0 / timePerStep)) /* Never drop below 20 FPS, instead slow down */) {
+      std::lround(1.0 / 20.0 / timePerStep)) /* Never drop below 20 FPS, instead slow down */),
+  getTimeFunction(std::move(getTimeFunction)) {
 }
 
 unsigned int FrameLimiter::check() {
-	const auto currentTime = getTime();
+	const auto currentTime = getTimeFunction();
 	const auto secondsSinceLastCheck = currentTime - lastCheckTime;
 	const auto targetStepsPerSecond = 1.0 / timePerStep;
 	// If SPS == FPS, this would mean that we check about every second, but in the beginning we
@@ -82,14 +83,14 @@ unsigned int FrameLimiter::check() {
 	return stepsPerFrame;
 }
 
-void FrameLimiter::sleepIfNeeded() {
-	const auto start = getTime();
+void FrameLimiter::sleepIfNeeded(const std::function<void(int64_t)>& sleepFunction) {
+	const auto start = getTimeFunction();
 	const auto shouldBe = lastCheckTime + timePerStep * stepsSinceLastCheck;
 	const int64_t micros =
 	    std::lround((sleepPerFrame - (start - shouldBe)) * sleepCorrectionFactor * 1e6);
 	if (micros > 0) {
-		sleepSeconds(static_cast<double>(micros) / 1e6);
-		timeSleptSinceLastCheck += getTime() - start;
+		sleepFunction(micros);
+		timeSleptSinceLastCheck += getTimeFunction() - start;
 		++numberOfSleeps;
 	}
 }
