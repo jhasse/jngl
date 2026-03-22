@@ -1,3 +1,5 @@
+// Copyright 2026 Jan Niklas Hasse <jhasse@bixense.com>
+// For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "../timing/FrameLimiter.hpp"
 #include "../log.hpp"
 
@@ -56,7 +58,11 @@ boost::ut::suite _ = [] { // NOLINT
 				auto numberOfSteps = limiter.check();
 				expect(eq(numberOfSteps, 1U));
 				totalSteps += numberOfSteps;
+				time_us += 2 * 1e3; // draw takes 2 ms, step takes 0 ms
+				const auto oldTime = time_us;
 				limiter.sleepIfNeeded(sleep);
+				const auto timeSlept = time_us - oldTime;
+				expect(le(timeSlept, 16'667u)); // we should never sleep more than 16.67 ms
 			}
 			auto averageSPS = totalSteps * 1'000'000 / time_us;
 			expect(ge(averageSPS, 59u));

@@ -84,8 +84,19 @@ unsigned int FrameLimiter::check() {
 }
 
 void FrameLimiter::sleepIfNeeded(const std::function<void(int64_t)>& sleepFunction) {
+	// Since the last time we have been called the following stuff has caused time to pass:
+	//
+	//  |- sleep -| |- step -||- step -|...|- step -||- draw -||- swapBuffers -|
+	// ^           ^
+	// |           |
+	// |           here a potential check could have happend (i.e. lastCheckTime)
+	// lastTime
+	//
+	// If a check did just happen and we took lastCheckTime as a reference, we would miss our own
+	// previous sleep. Thus we substract sleepPerFrame to get the time point lastTime.
+	const auto lastTime = lastCheckTime - sleepPerFrame;
 	const auto start = getTimeFunction();
-	const auto shouldBe = lastCheckTime + timePerStep * stepsSinceLastCheck;
+	const auto shouldBe = lastTime + timePerStep * stepsSinceLastCheck;
 	const int64_t micros =
 	    std::lround((sleepPerFrame - (start - shouldBe)) * sleepCorrectionFactor * 1e6);
 	if (micros > 0) {
