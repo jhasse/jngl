@@ -66,7 +66,7 @@ mingw:
     - ninja -f build-Release.ninja
 
 android:
-  image: registry.gitlab.com/jhasse/android-ndk-docker:r28b
+  image: registry.gitlab.com/jhasse/android-ndk-docker:r28c
   stage: build
   script:
     - cd android/test

@@ -9,8 +9,8 @@ android {
     defaultConfig {
         applicationId = 'com.bixense.jngl_test'
         minSdkVersion 21
-        targetSdkVersion 34
-        compileSdk 34
+        targetSdkVersion 35
+        compileSdk 35
         externalNativeBuild {
             cmake {
                 arguments "-DANDROID_STL=c++_shared"
@@ -33,7 +33,7 @@ android {
             path 'src/main/cpp/CMakeLists.txt'
         }
     }
-    ndkVersion '28.1.13356709'
+    ndkVersion '28.2.13676358'
     namespace 'com.bixense.jngl_test'
 }
 
