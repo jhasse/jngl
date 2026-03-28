@@ -3,7 +3,8 @@
 
 #include "../jngl/Drawable.hpp"
 
-#include <boost/ut.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 class Dummy : public jngl::Drawable {
 public:
@@ -13,17 +14,12 @@ public:
 	}
 };
 
-namespace {
-boost::ut::suite _ = [] {
-	using namespace boost::ut; // NOLINT
-	"Drawable"_test = [] {
-		Dummy d;
-		expect(approx(d.getX(), 0, 1e-9));
-		expect(approx(d.getY(), 0, 1e-9));
-		expect(approx(d.getWidth(), 0, 1e-9));
-		expect(approx(d.getHeight(), 0, 1e-9));
-		expect(approx(d.getWidth(), d.getSize().x, 1e-9));
-		expect(approx(d.getHeight(), d.getSize().y, 1e-9));
-	};
-};
-} // namespace
+TEST_CASE("Drawable") {
+	Dummy d;
+	REQUIRE_THAT(d.getX(), Catch::Matchers::WithinAbs(0, 1e-9));
+	REQUIRE_THAT(d.getY(), Catch::Matchers::WithinAbs(0, 1e-9));
+	REQUIRE_THAT(d.getWidth(), Catch::Matchers::WithinAbs(0, 1e-9));
+	REQUIRE_THAT(d.getHeight(), Catch::Matchers::WithinAbs(0, 1e-9));
+	REQUIRE_THAT(d.getWidth(), Catch::Matchers::WithinAbs(d.getSize().x, 1e-9));
+	REQUIRE_THAT(d.getHeight(), Catch::Matchers::WithinAbs(d.getSize().y, 1e-9));
+}

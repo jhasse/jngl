@@ -6,24 +6,22 @@
 
 #include <jngl.hpp>
 
-#include <boost/ut.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <cmath>
 
-namespace {
-boost::ut::suite _ = [] {
-	using namespace boost::ut; // NOLINT
-	"TextLineTest"_test = [] {
-		// Test with two rather big scale factors to avoid rounding errors:
-		for (double scaleFactor : { 6, 8 }) {
-			Fixture f(scaleFactor);
-			jngl::Font font("../data/Arial.ttf", 14);
-			jngl::TextLine text(font, "test string");
-			expect(approx(text.getWidth(), 80.7, 0.2));
-			expect(std::lround(text.getHeight()) == 22_l);
-			text.setCenter(-80, -10);
-			expect(approx(text.getX(), -120.35, 0.2));
-			text.draw();
-			const std::string screenshotCentered = R"(
+TEST_CASE("TextLineTest") { // NOLINT
+	// Test with two rather big scale factors to avoid rounding errors:
+	for (double scaleFactor : { 6, 8 }) {
+		Fixture f(scaleFactor);
+		jngl::Font font("../data/Arial.ttf", 14);
+		jngl::TextLine text(font, "test string");
+		REQUIRE_THAT(text.getWidth(), Catch::Matchers::WithinAbs(80.7, 0.2));
+		REQUIRE(std::lround(text.getHeight()) == 22);
+		text.setCenter(-80, -10);
+		REQUIRE_THAT(text.getX(), Catch::Matchers::WithinAbs(-120.35, 0.2));
+		text.draw();
+		const std::string screenshotCentered = R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒                              ▒
 ▒   ▒░░░░░░░                   ▒
@@ -32,10 +30,8 @@ boost::ut::suite _ = [] {
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )";
-			expect(eq(f.getAsciiArt(), screenshotCentered));
-			text.draw(jngl::modelview());
-			expect(eq(f.getAsciiArt(), screenshotCentered));
-		}
-	};
-};
-} // namespace
+		REQUIRE(f.getAsciiArt() == screenshotCentered);
+		text.draw(jngl::modelview());
+		REQUIRE(f.getAsciiArt() == screenshotCentered);
+	}
+}
