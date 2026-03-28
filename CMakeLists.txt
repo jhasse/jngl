@@ -451,11 +451,14 @@ target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES})
 if(NOT hasParent)
 	include(CTest)
 	if(BUILD_TESTING)
+		CPMAddPackage(NAME Catch2
+			URL https://github.com/catchorg/Catch2/archive/refs/tags/v3.13.0.tar.gz
+			URL_HASH SHA256=650795f6501af514f806e78c554729847b98db6935e69076f36bb03ed2e985ef
+		)
 		file(GLOB UNITTEST_SRC src/unittest/*.cpp)
 		add_executable(jngl-unittest ${UNITTEST_SRC})
 		target_compile_features(jngl-unittest PRIVATE cxx_std_20)
-		target_link_libraries(jngl-unittest PRIVATE jngl)
-		target_compile_definitions(jngl-unittest PRIVATE BOOST_UT_DISABLE_MODULE)
+		target_link_libraries(jngl-unittest PRIVATE jngl Catch2::Catch2WithMain)
 		add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
 	endif()
 endif()
