@@ -13,9 +13,10 @@
 Fixture::Fixture(const double scaleFactor) {
 	jngl::setScaleFactor(scaleFactor);
 	jngl::showWindow("unit test", 320 * scaleFactor, 70 * scaleFactor, false, { 32, 7 }, { 32, 7 });
-	reset();
-	emptyAsciiArt = getAsciiArt();
-	REQUIRE(emptyAsciiArt == R"(
+	try {
+		reset();
+		emptyAsciiArt = getAsciiArt();
+		REQUIRE(emptyAsciiArt == R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒                              ▒
 ▒                              ▒
@@ -24,6 +25,10 @@ Fixture::Fixture(const double scaleFactor) {
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
+	} catch (...) {
+		jngl::hideWindow();
+		throw;
+	}
 }
 
 Fixture::~Fixture() {
