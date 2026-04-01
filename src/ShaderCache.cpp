@@ -117,7 +117,7 @@ ShaderProgram::Context ShaderCache::useSimpleShaderProgram(const Mat3& modelview
 }
 
 void ShaderCache::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
-	glBindVertexArray(opengl::vaoStream);
+	opengl::bindVertexArray(opengl::vaoStream);
 	auto tmp = useSimpleShaderProgram();
 	const float vertexes[] = { static_cast<float>(a.x), static_cast<float>(a.y),
 		                       static_cast<float>(b.x), static_cast<float>(b.y),
@@ -130,7 +130,7 @@ void ShaderCache::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 }
 
 void ShaderCache::drawTriangle(const Mat3& modelview, Rgba color) {
-	glBindVertexArray(opengl::vaoStream);
+	opengl::bindVertexArray(opengl::vaoStream);
 	auto tmp = useSimpleShaderProgram(modelview, color);
 	const float vertexes[] = {
 		0, -1, -std::sqrt(3.f) / 2, 0.5, std::sqrt(3.f) / 2, 0.5,

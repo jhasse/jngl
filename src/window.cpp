@@ -579,7 +579,7 @@ void Window::initGlObjects() {
 	glGenVertexArrays(1, &opengl::vaoStream);
 
 	glGenVertexArrays(1, &vaoLine);
-	glBindVertexArray(vaoLine);
+	opengl::bindVertexArray(vaoLine);
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -589,7 +589,7 @@ void Window::initGlObjects() {
 	glEnableVertexAttribArray(0);
 
 	glGenVertexArrays(1, &vaoSquare);
-	glBindVertexArray(vaoSquare);
+	opengl::bindVertexArray(vaoSquare);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	const static float rect[] = { -.5, -.5, .5, -.5, .5, .5, -.5, .5 };
@@ -605,13 +605,13 @@ void Window::initGlObjects() {
 }
 
 void Window::drawLine(Mat3 modelview, const Vec2 b, const Rgba color) const {
-	glBindVertexArray(vaoLine);
+	opengl::bindVertexArray(vaoLine);
 	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview.scale(b), color);
 	glDrawArrays(GL_LINES, 0, 2);
 }
 
 void Window::drawSquare(const Mat3& modelview, Rgba color) const {
-	glBindVertexArray(vaoSquare);
+	opengl::bindVertexArray(vaoSquare);
 	auto context = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
