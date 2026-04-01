@@ -487,6 +487,12 @@ void drawRect(Mat3 modelview, const Vec2 size, const Rgba color) {
 	pWindow->drawSquare(modelview.translate(size / 2).scale(size), color);
 }
 
+void drawRoundedRect(Mat3 modelview, const Vec2 size, const Rgba color, float topLeft,
+                     float topRight, float bottomLeft, float bottomRight) {
+	pWindow->drawRoundedSquare(modelview.translate(size / 2).scale(size), color, size, topLeft,
+	                           topRight, bottomLeft, bottomRight);
+}
+
 void drawSquare(const Mat3& modelview, Rgba color) {
 	pWindow->drawSquare(modelview, color);
 }

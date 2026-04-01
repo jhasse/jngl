@@ -616,6 +616,14 @@ void Window::drawSquare(const Mat3& modelview, Rgba color) const {
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
+void Window::drawRoundedSquare(const Mat3& modelview, Rgba color, Vec2 size, float topLeft,
+                               float topRight, float bottomLeft, float bottomRight) const {
+	opengl::bindVertexArray(vaoSquare);
+	auto context = ShaderCache::handle().useRoundedRectShaderProgram(
+	    modelview, color, size, topLeft, topRight, bottomLeft, bottomRight);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+}
+
 void Window::onControllerChanged(std::function<void()> callback) {
 	controllerChangedCallback = std::move(callback);
 }
