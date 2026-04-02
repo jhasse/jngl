@@ -132,7 +132,7 @@ public:
 		std::optional<jngl::FrameBuffer::Context> fb2Context;
 		if (drawOnFrameBuffer) {
 			fb2Context = fb2.use();
-			fb2Context->clear(0xffffff_rgb);
+			fb2Context->clear("#ffffff"_rgb);
 		}
 		jngl::pushMatrix();
 		jngl::translate(-jngl::getScreenSize() / 2);
@@ -160,7 +160,7 @@ public:
 		} else {
 			logoWebp.draw(jngl::Mat3(rotatedMv).scale(static_cast<float>(factor * 2)));
 		}
-		jngl::drawRect(jngl::Mat3(rotatedMv).translate({ -125, 100 }), { 250, 28 }, 0x000000_rgb);
+		jngl::drawRect(jngl::Mat3(rotatedMv).translate({ -125, 100 }), { 250, 28 }, "#000000"_rgb);
 		jngl::setFontColor(255, 255, 255);
 		jngl::print(jngl::Mat3(rotatedMv).translate({ -115, 105 }),
 		            "White text on black background");
@@ -173,7 +173,7 @@ public:
 		sstream << "SPS" << (jngl::getVerticalSync() ? " (V-SYNC)" : "") << ": "
 		        << jngl::getStepsPerSecond() << "\nFactor: " << factor
 		        << "\nSize of double: " << sizeof(double);
-		jngl::drawRect(jngl::modelview(), { 200, 62 }, 0x000000_rgb);
+		jngl::drawRect(jngl::modelview(), { 200, 62 }, "#000000"_rgb);
 		jngl::setFontColor(static_cast<unsigned char>(255 * (1 - factor)),
 		                   static_cast<unsigned char>(255 * factor), 255);
 		try {
@@ -209,7 +209,7 @@ public:
 		jngl::setFontColor(static_cast<unsigned char>(255 * (1 - factor)),
 		                   static_cast<unsigned char>(255 * factor), 255);
 		fontStroke.print(mv, "Text with outline.");
-		jngl::setFontColor(0x000000_rgb);
+		jngl::setFontColor("#000000"_rgb);
 		fontNormal.print(mv, "Text with outline.");
 
 #ifdef JNGL_RECORD
@@ -358,7 +358,7 @@ void Test::drawBackground() const {
 	jngl::setColor(0, 255, 0, 100);
 	jngl::drawRect({ 600, 400 }, { 100, 100 });
 	jngl::drawRectOutline(jngl::modelview().translate({ 650, 450 }), { 40, 80 }, 1.f,
-	                      0x00000099_rgba);
+	                      "#473b9f99"_rgba);
 	jngl::setColor(0, 0, 255, 100);
 	jngl::drawEllipse(jngl::modelview().translate({ 80, 400 }), 50, 80);
 }
@@ -540,7 +540,7 @@ void testKeys() {
 				const double length = boost::qvm::mag(stick);
 				jngl::drawCircle(circleModelview.translate(circleRadius * stick), 4,
 				                 length > 1 ? jngl::Rgba(1, 2 - length, 2 - length, 1)
-				                            : 0xffffffff_rgba);
+				                            : "#ffffffff"_rgba);
 				jngl::translate(0, 2 * circleRadius + 10);
 			}
 
