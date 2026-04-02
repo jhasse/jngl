@@ -1,4 +1,4 @@
-// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Channel class
 /// \file
@@ -53,6 +53,11 @@ public:
 	///
 	/// Equivalent to calling stop for all currently playing sounds.
 	void stopAll();
+
+	/// Returns true if the OGG file is currently playing on this channel
+	///
+	/// \throws std::runtime_error if the file doesn't exist
+	bool isPlaying(std::string_view filename) const;
 
 	/// Pauses the Channel; destroying the returned Finally object will resume again
 	///

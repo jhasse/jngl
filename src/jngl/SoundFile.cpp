@@ -242,6 +242,10 @@ float SoundFile::progress() const {
 	return 0;
 }
 
+std::span<float> SoundFile::getSamples() {
+	return *buffer;
+}
+
 std::shared_ptr<SoundFile> Audio::getSoundFileIfLoaded(std::string_view filename) {
 	auto i = soundFiles.find(filename);
 	if (i == soundFiles.end()) {
