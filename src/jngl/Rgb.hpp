@@ -71,7 +71,13 @@ private:
 };
 
 /// Returns a color mix between a (t == 0) and b (t == 1)
-Rgb interpolate(Rgb a, Rgb b, float t);
+Rgb mix(Rgb a, Rgb b, float t);
+
+/// Old name for mix, will be removed in a future release
+[[deprecated("Use mix instead")]]
+inline Rgb interpolate(Rgb a, Rgb b, float t) {
+	return mix(a, b, t);
+}
 
 /// Returns the screen's background color which is visible when nothing is drawn and also used by
 /// jngl::Fade

@@ -44,7 +44,7 @@ Rgb::operator Color() const {
 		          static_cast<unsigned char>(blue * 255) };
 }
 
-Rgb interpolate(Rgb a, Rgb b, float t) {
+Rgb mix(Rgb a, Rgb b, float t) {
 	return { a.getRed() * (1.f - t) + b.getRed() * t, a.getGreen() * (1.f - t) + b.getGreen() * t,
 		     a.getBlue() * (1.f - t) + b.getBlue() * t };
 }

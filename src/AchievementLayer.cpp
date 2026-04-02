@@ -90,7 +90,7 @@ void AchievementLayer::draw() const {
 	mv.translate({0, 40}); // below text
 	const float percentage = std::min(1.f, value / static_cast<float>(maxValue));
 	bar.x *= percentage;
-	drawRect(mv, bar, interpolate(Rgb(1, 1, 1), 0xe2b007_rgb /* gold */, colorFade));
+	drawRect(mv, bar, mix(Rgb(1, 1, 1), 0xe2b007_rgb /* gold */, colorFade));
 	mv.translate({ bar.x, 0 });
 	drawRect(mv, Vec2((1.f - percentage) * (BOX.x - PADDING.x * 2), bar.y), Rgb::u8(90, 90, 90));
 	jngl::setAlpha(255);

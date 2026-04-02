@@ -1,4 +1,4 @@
-// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Rgba.hpp"
 
@@ -44,7 +44,7 @@ Rgba::operator Rgb() const {
 	return { red, green, blue };
 }
 
-Rgba interpolate(Rgba a, Rgba b, float t) {
+Rgba mix(Rgba a, Rgba b, float t) {
 	return { a.getRed() * (1.f - t) + b.getRed() * t, a.getGreen() * (1.f - t) + b.getGreen() * t,
 		     a.getBlue() * (1.f - t) + b.getBlue() * t,
 		     a.getAlpha() * (1.f - t) + b.getAlpha() * t };

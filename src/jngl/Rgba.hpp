@@ -81,7 +81,13 @@ private:
 };
 
 /// Returns a color mix between a (t == 0) and b (t == 1)
-Rgba interpolate(Rgba a, Rgba b, float t);
+Rgba mix(Rgba a, Rgba b, float t);
+
+/// Old name for mix, will be removed in a future release
+[[deprecated("Use mix instead")]]
+inline Rgba interpolate(Rgba a, Rgba b, float t) {
+	return mix(a, b, t);
+}
 
 } // namespace jngl
 
