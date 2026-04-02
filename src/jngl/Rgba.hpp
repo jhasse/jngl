@@ -100,7 +100,7 @@ void invalid_rgba_color_literal_expected_format_hash_rrggbbaa();
 } // namespace jngl::internal
 
 /// Create a jngl::Rgba object from a literal. E.g. `"#00ff00ff"_rgba` for green.
-consteval jngl::Rgba operator""_rgba(const char* hex, std::size_t length) {
+consteval jngl::Rgba operator""_rgba(const char* hex, size_t length) {
 	using jngl::internal::hexByte;
 	if (length == 9 && hex[0] == '#') {
 		return jngl::Rgba::u8(hexByte(hex + 1), hexByte(hex + 3), hexByte(hex + 5),

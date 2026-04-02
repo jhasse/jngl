@@ -291,7 +291,7 @@ private:
 		audio = THEORAPLAY_getAudio(decoder);
 	}
 
-	std::size_t read(float * data, std::size_t sample_count) override {
+	size_t read(float * data, size_t sample_count) override {
 		if (removeFromMixer) {
 			return 0;
 		}

@@ -113,7 +113,7 @@ SoundFile::SoundFile(const std::string& filename, std::launch)
 
 		size_t start = this->buffer->size();
 		this->buffer->resize(start + samples_read * 2);
-		for (std::size_t i = samples_read; i > 0;) {
+		for (size_t i = samples_read; i > 0;) {
 			i -= 1;
 			auto tmp = buffer[0][i];
 			(*this->buffer)[start + i * 2 + 0] = tmp;

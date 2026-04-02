@@ -120,7 +120,7 @@ consteval uint8_t hexByte(const char* s) {
 } // namespace jngl::internal
 
 /// Create a jngl::Rgb object from a literal. E.g. `"#00ff00"_rgb` for green.
-consteval jngl::Rgb operator""_rgb(const char* hex, std::size_t length) {
+consteval jngl::Rgb operator""_rgb(const char* hex, size_t length) {
 	using jngl::internal::hexByte;
 	if (length == 7 && hex[0] == '#') {
 		return jngl::Rgb::u8(hexByte(hex + 1), hexByte(hex + 3), hexByte(hex + 5));
