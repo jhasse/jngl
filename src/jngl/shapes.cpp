@@ -66,7 +66,7 @@ void drawEllipse(const Mat3& modelview, float width, float height, float startAn
 }
 
 void drawEllipse(const Mat3& modelview, float width, float height, float startAngle, Rgba color) {
-	glBindVertexArray(opengl::vaoStream);
+	opengl::bindVertexArray(opengl::vaoStream);
 	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
 	std::vector<float> vertexes;
 	vertexes.push_back(0.f);
@@ -105,7 +105,7 @@ void drawCircle(Mat3 modelview, const float radius, const Rgba color) {
 }
 
 void drawCircle(const Mat3& modelview, const Rgba color) {
-	glBindVertexArray(opengl::vaoStream);
+	opengl::bindVertexArray(opengl::vaoStream);
 	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
 	// clang-format off
 	const static float vertexes[] = {

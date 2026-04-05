@@ -9,14 +9,15 @@
 
 namespace jngl {
 
-FrameLimiter::FrameLimiter(const double timePerStep)
+FrameLimiter::FrameLimiter(const double timePerStep, std::function<double()> getTimeFunction)
 : timePerStep(timePerStep),
   maxStepsPerFrame(static_cast<unsigned int>(
-      std::lround(1.0 / 20.0 / timePerStep)) /* Never drop below 20 FPS, instead slow down */) {
+      std::lround(1.0 / 20.0 / timePerStep)) /* Never drop below 20 FPS, instead slow down */),
+  getTimeFunction(std::move(getTimeFunction)) {
 }
 
 unsigned int FrameLimiter::check() {
-	const auto currentTime = getTime();
+	const auto currentTime = getTimeFunction();
 	const auto secondsSinceLastCheck = currentTime - lastCheckTime;
 	const auto targetStepsPerSecond = 1.0 / timePerStep;
 	// If SPS == FPS, this would mean that we check about every second, but in the beginning we
@@ -82,14 +83,25 @@ unsigned int FrameLimiter::check() {
 	return stepsPerFrame;
 }
 
-void FrameLimiter::sleepIfNeeded() {
-	const auto start = getTime();
-	const auto shouldBe = lastCheckTime + timePerStep * stepsSinceLastCheck;
+void FrameLimiter::sleepIfNeeded(const std::function<void(int64_t)>& sleepFunction) {
+	// Since the last time we have been called the following stuff has caused time to pass:
+	//
+	//  |- sleep -| |- step -||- step -|...|- step -||- draw -||- swapBuffers -|
+	// ^           ^
+	// |           |
+	// |           here a potential check could have happend (i.e. lastCheckTime)
+	// lastTime
+	//
+	// If a check did just happen and we took lastCheckTime as a reference, we would miss our own
+	// previous sleep. Thus we substract sleepPerFrame to get the time point lastTime.
+	const auto lastTime = lastCheckTime - sleepPerFrame;
+	const auto start = getTimeFunction();
+	const auto shouldBe = lastTime + timePerStep * stepsSinceLastCheck;
 	const int64_t micros =
 	    std::lround((sleepPerFrame - (start - shouldBe)) * sleepCorrectionFactor * 1e6);
 	if (micros > 0) {
-		sleepSeconds(static_cast<double>(micros) / 1e6);
-		timeSleptSinceLastCheck += getTime() - start;
+		sleepFunction(micros);
+		timeSleptSinceLastCheck += getTimeFunction() - start;
 		++numberOfSleeps;
 	}
 }

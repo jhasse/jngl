@@ -187,7 +187,7 @@ public:
 					1, 0 // texture coordinates
 				};
 				glGenVertexArrays(1, &vao);
-				glBindVertexArray(vao);
+				opengl::bindVertexArray(vao);
 
 				glGenBuffers(1, &vertexBuffer);
 				glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -232,7 +232,7 @@ public:
 		if (shaderProgram) {
 			auto _ = shaderProgram->use();
 			glUniformMatrix3fv(modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
-			glBindVertexArray(vao);
+			opengl::bindVertexArray(vao);
 
 			glActiveTexture(GL_TEXTURE0 + 1);
 			glBindTexture(GL_TEXTURE_2D, textureU);
@@ -291,7 +291,7 @@ private:
 		audio = THEORAPLAY_getAudio(decoder);
 	}
 
-	std::size_t read(float * data, std::size_t sample_count) override {
+	size_t read(float * data, size_t sample_count) override {
 		if (removeFromMixer) {
 			return 0;
 		}

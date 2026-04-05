@@ -1,4 +1,4 @@
-// Copyright 2011-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "FrameBuffer.hpp"
@@ -138,7 +138,6 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
                            const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
-	scale(getScaleFactor());
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {

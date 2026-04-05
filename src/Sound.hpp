@@ -1,9 +1,10 @@
-// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
 
 #include <memory>
+#include <span>
 #include <vector>
 
 namespace jngl {
@@ -27,6 +28,8 @@ public:
 
 	/// returns 0...1 and will reset when looping
 	float progress() const;
+
+	std::span<float> getSamples();
 
 private:
 	struct Impl;

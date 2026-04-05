@@ -34,18 +34,22 @@
 #define GL_BGR 0x80e0
 #endif
 
-namespace opengl
-{
-	extern jngl::Mat3 modelview;
-	extern jngl::Mat4 projection;
+namespace opengl {
 
-	/// A global VAO and VBO which are used with GL_STREAM_DRAW
-	extern GLuint vaoStream;
-	extern GLuint vboStream;
+extern jngl::Mat3 modelview;
+extern jngl::Mat4 projection;
 
-	void translate(float x, float y);
-	void scale(float x, float y);
+/// A global VAO and VBO which are used with GL_STREAM_DRAW
+extern GLuint vaoStream;
+extern GLuint vboStream;
 
-	/// Generates a textures, binds it to GL_TEXTURE_2D and sets some common parameters
-	GLuint genAndBindTexture();
+void translate(float x, float y);
+void scale(float x, float y);
+
+/// Generates a textures, binds it to GL_TEXTURE_2D and sets some common parameters
+GLuint genAndBindTexture();
+
+/// Calls glBindVertexArray(vao) (on Android: only if vao is not already bound)
+void bindVertexArray(GLuint vao);
+
 } // namespace opengl

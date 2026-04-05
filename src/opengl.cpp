@@ -1,12 +1,15 @@
-// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "opengl.hpp"
 
 #include "App.hpp"
 
+#ifdef ANDROID
+#include "jngl/Singleton.hpp"
+#endif
+
 #include <boost/qvm_lite.hpp>
-#include <stdexcept>
 
 namespace opengl {
 
@@ -16,11 +19,11 @@ GLuint vaoStream;
 GLuint vboStream;
 
 void translate(float x, float y) {
-	modelview *= boost::qvm::translation_mat(boost::qvm::vec<float, 2>{{ x, y }});
+	modelview *= boost::qvm::translation_mat(boost::qvm::vec<float, 2>{ { x, y } });
 }
 
 void scale(const float x, const float y) {
-	modelview *= boost::qvm::diag_mat(boost::qvm::vec<float, 3>{{ x, y, 1 }});
+	modelview *= boost::qvm::diag_mat(boost::qvm::vec<float, 3>{ { x, y, 1 } });
 }
 
 GLuint genAndBindTexture() {
@@ -33,6 +36,25 @@ GLuint genAndBindTexture() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	return texture;
+}
+
+#ifdef ANDROID
+struct VaoCache : jngl::Singleton<VaoCache> {
+	GLuint currentlyBoundVao;
+};
+#endif
+
+void bindVertexArray(GLuint vao) {
+#ifdef ANDROID
+	if (auto cache = VaoCache::handleIfAlive()) {
+		if (vao == cache->currentlyBoundVao) {
+            // avoid constant "[GLClientState.cpp(298)] set vao to self, no-op (4)" errors in Logcat
+			return;
+		}
+	}
+	VaoCache::handle().currentlyBoundVao = vao;
+#endif
+	glBindVertexArray(vao);
 }
 
 } // namespace opengl

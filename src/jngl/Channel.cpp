@@ -1,4 +1,4 @@
-// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Channel.hpp"
 
@@ -57,8 +57,13 @@ std::shared_ptr<SoundFile> Channel::loop(const std::string& filename) {
 }
 
 void Channel::stop(const std::string& filename) {
-	if (auto sound = Audio::handle().getSoundFileIfLoaded(filename)) {
-		sound->stop(*this);
+	if (auto soundFile = Audio::handle().getSoundFileIfLoaded(filename)) {
+		for (const auto& sound : impl->sounds) {
+			if (sound->isPlaying() &&
+			    sound->getSamples().data() == soundFile->getSamples().data()) {
+				stop(sound);
+			}
+		}
 	}
 }
 
@@ -75,6 +80,21 @@ void Channel::stopAll() {
 	impl->volumeControl->replaceStream(newMixer);
 	impl->mixer = newMixer.get();
 	impl->sounds.clear();
+}
+
+bool Channel::isPlaying(std::string_view filename) const {
+	// A Sound doesn't know its filename, but it has the buffer and so does each SoundFile. So we
+	// iterate over all SoundFiles to find one with a matching filename and then check if any Sound
+	// on this Channel is playing that SoundFile's buffer.
+	if (const auto soundFile = Audio::handle().getSoundFileIfLoaded(filename)) {
+		for (const auto& sound : impl->sounds) {
+			if (sound->isPlaying() &&
+			    sound->getSamples().data() == soundFile->getSamples().data()) {
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 Finally Channel::pause() {

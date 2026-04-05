@@ -1,4 +1,4 @@
-// Copyright 2020-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/FrameBuffer.hpp"
@@ -147,6 +147,47 @@ boost::ut::suite _ = [] {
 ▒              ▒               ▒
 ▒              ▒               ▒
 ▒     ░░░█                     ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)")));
+
+			// check drawMesh works with scaling
+			{
+				auto context = smallFb.use();
+				context.clear(0xdd2222_rgb);
+				jngl::drawCircle(jngl::Vec2{ 10, 0 }, 15);
+			}
+			const float width = smallFb.getSize().x;
+			const float height = smallFb.getSize().y;
+			const float x = -100;
+			const float y = -20;
+			smallFb.drawMesh({
+			    // top right triangle
+			    jngl::Vertex{ .x = x, .y = y, .u = 0, .v = 1 },
+			    jngl::Vertex{ .x = x + width, .y = y, .u = 1, .v = 1 },
+			    jngl::Vertex{ .x = x + width, .y = y + height, .u = 1, .v = 0 },
+
+			    // bottom left triangle
+			    jngl::Vertex{ .x = x, .y = y, .u = 0, .v = 1 },
+			    jngl::Vertex{ .x = x, .y = y + height, .u = 0, .v = 0 },
+			    jngl::Vertex{ .x = x + width, .y = y + height, .u = 1, .v = 0 },
+
+			    // top right triangle
+			    jngl::Vertex{ .x = x, .y = y + height, .u = 0, .v = 0 },
+			    jngl::Vertex{ .x = x + width, .y = y + height, .u = 1, .v = 0 },
+			    jngl::Vertex{ .x = x + width, .y = y + height, .u = 1, .v = 0 },
+
+			    // bottom left triangle
+			    jngl::Vertex{ .x = x, .y = y + height, .u = 0, .v = 0 },
+			    jngl::Vertex{ .x = x, .y = y + height, .u = 0, .v = 0 },
+			    jngl::Vertex{ .x = x + width, .y = y + height, .u = 1, .v = 0 },
+			});
+			expect(eq(f.getAsciiArt(), std::string(R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒     ░░░░░▒▒░░░               ▒
+▒     ▒▒▒▒▓██▓▒▒               ▒
+▒     ▒▒▒▒▓██▓▒▒               ▒
+▒     ░░░░░▒▒░░░               ▒
+▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
 		}
