@@ -59,7 +59,7 @@ std::shared_ptr<SoundFile> Channel::loop(const std::string& filename) {
 void Channel::stop(const std::string& filename) {
 	if (auto soundFile = Audio::handle().getSoundFileIfLoaded(filename)) {
 		for (const auto& sound : impl->sounds) {
-			if (sound->isPlaying() &&
+			if (sound && sound->isPlaying() &&
 			    sound->getSamples().data() == soundFile->getSamples().data()) {
 				stop(sound);
 			}
