@@ -20,11 +20,13 @@
 #include "windowptr.hpp"
 
 #include <boost/qvm_lite.hpp>
+#include <cmath>
 #include <cstddef>
 #include <fstream>
 #include <numbers>
 #include <sstream>
 #include <stack>
+#include <vector>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -526,6 +528,58 @@ void drawRing(Mat3 modelview, float innerRadius, float outerRadius, float startA
 
 void drawSquare(const Mat3& modelview, Rgba color) {
 	pWindow->drawSquare(modelview, color);
+}
+
+Finally scissor(Vec2 position, Vec2 size) {
+	struct SavedScissorState {
+		bool enabled;
+		GLint box[4];
+	};
+	SavedScissorState saved{};
+	saved.enabled = glIsEnabled(GL_SCISSOR_TEST);
+	glGetIntegerv(GL_SCISSOR_BOX, saved.box);
+
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+	const auto viewportW = viewport[2];
+	const auto viewportH = viewport[3];
+
+	// Use saved state to determine the canvas area
+	GLint canvasX;
+	GLint canvasY;
+	GLint canvasW;
+	GLint canvasH;
+	if (saved.enabled) {
+		canvasX = saved.box[0];
+		canvasY = saved.box[1];
+		canvasW = saved.box[2];
+		canvasH = saved.box[3];
+	} else {
+		canvasX = 0;
+		canvasY = 0;
+		canvasW = viewportW;
+		canvasH = viewportH;
+	}
+
+	const auto sw = getScreenWidth();
+	const auto sh = getScreenHeight();
+
+	// Map screen coords to canvas pixels
+	const auto x = static_cast<int>(std::lround((position.x + sw / 2) / sw * canvasW)) + canvasX;
+	const auto y =
+	    static_cast<int>(std::lround((sh / 2 - position.y - size.y) / sh * canvasH)) + canvasY;
+	const auto w = static_cast<int>(std::lround(size.x / sw * canvasW));
+	const auto h = static_cast<int>(std::lround(size.y / sh * canvasH));
+	glEnable(GL_SCISSOR_TEST);
+	glScissor(x, y, w, h);
+	return Finally([saved] {
+		if (saved.enabled) {
+			glEnable(GL_SCISSOR_TEST);
+			glScissor(saved.box[0], saved.box[1], saved.box[2], saved.box[3]);
+		} else {
+			glDisable(GL_SCISSOR_TEST);
+		}
+	});
 }
 
 void drawRectOutline(Mat3 modelview, Vec2 size, float lineWidth, Rgba color) {
