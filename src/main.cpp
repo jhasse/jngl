@@ -493,6 +493,37 @@ void drawRoundedRect(Mat3 modelview, const Vec2 size, const Rgba color, float to
 	                           topRight, bottomLeft, bottomRight);
 }
 
+void drawRing(Mat3 modelview, float innerRadius, float outerRadius, float startAngle,
+              float endAngle, Rgba color) {
+	if (innerRadius >= outerRadius) {
+		return;
+	}
+	constexpr long segments = 16;
+	const float startRad = startAngle * static_cast<float>(std::numbers::pi) / 180.f;
+	const float endRad = endAngle * static_cast<float>(std::numbers::pi) / 180.f;
+	const float step = (endRad - startRad) / segments;
+
+	// Triangle strip: alternating outer/inner vertices
+	std::array<float, (segments + 1) * 4> vertexes{};
+	for (long i = 0; i <= segments; ++i) {
+		float angle = startRad + step * static_cast<float>(i);
+		float c = std::cos(angle);
+		float s = std::sin(angle);
+		vertexes[i * 4 + 0] = outerRadius * c;
+		vertexes[i * 4 + 1] = outerRadius * s;
+		vertexes[i * 4 + 2] = innerRadius * c;
+		vertexes[i * 4 + 3] = innerRadius * s;
+	}
+
+	opengl::bindVertexArray(opengl::vaoStream);
+	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
+	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream);
+	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(float)),
+	             vertexes.data(), GL_STREAM_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, static_cast<GLsizei>(vertexes.size() / 2));
+}
+
 void drawSquare(const Mat3& modelview, Rgba color) {
 	pWindow->drawSquare(modelview, color);
 }
