@@ -174,7 +174,7 @@ void clearBackBuffer() {
 		internal::error("Uneven calls to push/popMatrix at the beginning of the frame!");
 	}
 	modelviewStack = {};
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void updateInput() {
