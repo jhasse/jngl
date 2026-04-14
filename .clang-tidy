@@ -64,6 +64,7 @@ Checks: '
        ,-modernize-avoid-c-arrays,
        ,-modernize-use-nodiscard,
        ,-modernize-use-trailing-return-type,
+       ,-portability-avoid-pragma-once,
        ,-readability-function-cognitive-complexity,
        ,-readability-identifier-length,
        ,-readability-magic-numbers,

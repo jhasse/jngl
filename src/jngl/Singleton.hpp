@@ -1,4 +1,4 @@
-// Copyright 2022-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2022-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Singleton base class
 /// \file
@@ -48,10 +48,10 @@ public:
 		instance = nullptr;
 	}
 
-protected:
-	Singleton() = default;
-
 private:
+	Singleton() = default;
+	friend T;
+
 	static T* instance;
 };
 
