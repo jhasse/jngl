@@ -98,7 +98,7 @@ steamos:
 web:
   parallel:
     matrix:
-      - VERSION: ['3.1.61', '3.1.74', 'latest']
+      - VERSION: ['3.1.74', '5.0.6', 'latest']
   image: emscripten/emsdk:$VERSION
   rules:
   - if: '$VERSION == "latest"'
