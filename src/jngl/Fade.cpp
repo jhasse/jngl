@@ -41,7 +41,7 @@ void Fade::step() {
 	if (!wasHalfTime && fadeCount >= maxAlpha) {
 		fadeCount = maxAlpha; // draw at least one completely black frame
 	}
-	if (fadeCount == maxAlpha) {
+	if (oldWork && fadeCount > maxAlpha) {
 		oldWork.reset();
 		assert(!getNextScene());
 		while (dynamic_cast<WorkFactory*>(work.get())) {
@@ -61,7 +61,7 @@ void Fade::step() {
 
 void Fade::draw() const {
 	const int maxAlpha = 255;
-	if (fadeCount < maxAlpha) {
+	if (fadeCount <= maxAlpha) {
 		if (!dynamic_cast<Fade*>(oldWork.get())) {
 			oldWork->draw();
 		}
