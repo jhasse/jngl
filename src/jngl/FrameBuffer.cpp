@@ -202,6 +202,7 @@ FrameBuffer::Context FrameBuffer::use() const {
 			glDisable(GL_SCISSOR_TEST);
 		}
 	};
+	pushMatrix();
 	auto savedProjection = opengl::projection;
 	const float sx = static_cast<float>(pWindow->getWidth()) / static_cast<float>(impl->width) *
 	                 pWindow->getResizedWindowScalingX();
@@ -228,6 +229,7 @@ FrameBuffer::Context FrameBuffer::use() const {
 	Impl::activate.emplace(std::move(activate));
 	return Context([this, savedProjection]() {
 		Impl::activate.pop();
+		popMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 		glPopAttrib();
 #else
