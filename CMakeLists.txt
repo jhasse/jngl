@@ -155,7 +155,12 @@ else() # Windows
 		string(APPEND CMAKE_CXX_FLAGS " /D_CRT_SECURE_NO_WARNINGS /D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING")
 		target_link_libraries(jngl PUBLIC Xinput)
 	else()
-		target_link_libraries(jngl PUBLIC xinput1_4)
+		find_library(XINPUT_LIB xinput1_4)
+		if(NOT XINPUT_LIB)
+			message(WARNING "xinput1_4 not found, using generic version")
+			set(XINPUT_LIB xinput)
+		endif()
+		target_link_libraries(jngl PUBLIC ${XINPUT_LIB})
 	endif()
 endif()
 
