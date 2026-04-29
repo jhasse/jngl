@@ -732,7 +732,7 @@ void setWork(Work* w) {
 }
 
 std::shared_ptr<Work> getWork() {
-	return pWindow->getWork();
+	return pWindow->getScene();
 }
 
 void setPrefix(const std::string& path) {

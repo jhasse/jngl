@@ -9,7 +9,6 @@
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/font.hpp"
 #include "jngl/other.hpp"
-#include "jngl/work.hpp"
 #include "log.hpp"
 #include "windowptr.hpp"
 
@@ -524,7 +523,7 @@ std::shared_ptr<Job> Window::getJob(const std::function<bool(Job&)>& predicate) 
 	return nullptr;
 }
 
-std::shared_ptr<Work> Window::getWork() {
+std::shared_ptr<Scene> Window::getScene() {
 	return currentWork_;
 }
 

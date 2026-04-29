@@ -105,7 +105,7 @@ public:
 
 	void stepIfNeeded();
 	void draw() const;
-	std::shared_ptr<Scene> getWork();
+	std::shared_ptr<Scene> getScene();
 	std::shared_ptr<Scene> getNextScene() const;
 	void addJob(std::shared_ptr<Job>);
 	void removeJob(Job*);
