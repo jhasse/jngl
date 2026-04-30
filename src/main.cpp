@@ -20,11 +20,13 @@
 #include "windowptr.hpp"
 
 #include <boost/qvm_lite.hpp>
+#include <cmath>
 #include <cstddef>
 #include <fstream>
 #include <numbers>
 #include <sstream>
 #include <stack>
+#include <vector>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -172,7 +174,7 @@ void clearBackBuffer() {
 		internal::error("Uneven calls to push/popMatrix at the beginning of the frame!");
 	}
 	modelviewStack = {};
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void updateInput() {
@@ -493,8 +495,91 @@ void drawRoundedRect(Mat3 modelview, const Vec2 size, const Rgba color, float to
 	                           topRight, bottomLeft, bottomRight);
 }
 
+void drawRing(Mat3 modelview, float innerRadius, float outerRadius, float startAngle,
+              float endAngle, Rgba color) {
+	if (innerRadius >= outerRadius) {
+		return;
+	}
+	constexpr long segments = 16;
+	const float startRad = startAngle * static_cast<float>(std::numbers::pi) / 180.f;
+	const float endRad = endAngle * static_cast<float>(std::numbers::pi) / 180.f;
+	const float step = (endRad - startRad) / segments;
+
+	// Triangle strip: alternating outer/inner vertices
+	std::array<float, (segments + 1) * 4> vertexes{};
+	for (long i = 0; i <= segments; ++i) {
+		float angle = startRad + step * static_cast<float>(i);
+		float c = std::cos(angle);
+		float s = std::sin(angle);
+		vertexes[i * 4 + 0] = outerRadius * c;
+		vertexes[i * 4 + 1] = outerRadius * s;
+		vertexes[i * 4 + 2] = innerRadius * c;
+		vertexes[i * 4 + 3] = innerRadius * s;
+	}
+
+	opengl::bindVertexArray(opengl::vaoStream);
+	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
+	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream);
+	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(float)),
+	             vertexes.data(), GL_STREAM_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, static_cast<GLsizei>(vertexes.size() / 2));
+}
+
 void drawSquare(const Mat3& modelview, Rgba color) {
 	pWindow->drawSquare(modelview, color);
+}
+
+Finally scissor(Vec2 position, Vec2 size) {
+	struct SavedScissorState {
+		bool enabled;
+		GLint box[4];
+	};
+	SavedScissorState saved{};
+	saved.enabled = glIsEnabled(GL_SCISSOR_TEST);
+	glGetIntegerv(GL_SCISSOR_BOX, saved.box);
+
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+	const auto viewportW = viewport[2];
+	const auto viewportH = viewport[3];
+
+	// Use saved state to determine the canvas area
+	GLint canvasX;
+	GLint canvasY;
+	GLint canvasW;
+	GLint canvasH;
+	if (saved.enabled) {
+		canvasX = saved.box[0];
+		canvasY = saved.box[1];
+		canvasW = saved.box[2];
+		canvasH = saved.box[3];
+	} else {
+		canvasX = 0;
+		canvasY = 0;
+		canvasW = viewportW;
+		canvasH = viewportH;
+	}
+
+	const auto sw = getScreenWidth();
+	const auto sh = getScreenHeight();
+
+	// Map screen coords to canvas pixels
+	const auto x = static_cast<int>(std::lround((position.x + sw / 2) / sw * canvasW)) + canvasX;
+	const auto y =
+	    static_cast<int>(std::lround((sh / 2 - position.y - size.y) / sh * canvasH)) + canvasY;
+	const auto w = static_cast<int>(std::lround(size.x / sw * canvasW));
+	const auto h = static_cast<int>(std::lround(size.y / sh * canvasH));
+	glEnable(GL_SCISSOR_TEST);
+	glScissor(x, y, w, h);
+	return Finally([saved] {
+		if (saved.enabled) {
+			glEnable(GL_SCISSOR_TEST);
+			glScissor(saved.box[0], saved.box[1], saved.box[2], saved.box[3]);
+		} else {
+			glDisable(GL_SCISSOR_TEST);
+		}
+	});
 }
 
 void drawRectOutline(Mat3 modelview, Vec2 size, float lineWidth, Rgba color) {
@@ -647,7 +732,7 @@ void setWork(Work* w) {
 }
 
 std::shared_ptr<Work> getWork() {
-	return pWindow->getWork();
+	return pWindow->getScene();
 }
 
 void setPrefix(const std::string& path) {

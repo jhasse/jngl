@@ -64,7 +64,8 @@ boost::ut::suite _ = [] {
 			jngl::drawRect({ -40, 0 }, { 10, 10 });
 			{
 				const auto context2 = fb2.use();
-				jngl::drawRect({ -10, -20 }, { 10, 10 });
+				jngl::translate(-10, 0); // FrameBuffer::use() should push/pop the modelview matrix
+				jngl::drawRect({ 0, -20 }, { 10, 10 });
 			}
 			jngl::drawRect({ -80, 0 }, { 10, 10 });
 		}

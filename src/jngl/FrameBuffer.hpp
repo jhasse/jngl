@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::FrameBuffer class
 /// @file
@@ -70,7 +70,9 @@ public:
 
 	/// Starts drawing on the FrameBuffer as long as Context is alive
 	///
-	/// The modelview matrix gets adjusted so that (0, 0) is in the center of the FrameBuffer.
+	/// The projection matrix gets adjusted so that (0, 0) is in the center of the FrameBuffer. The
+	/// modelview matrix is saved (i.e. pushMatrix() is called) and restored by ~Context (i.e.
+	/// popMatrix() is called).
 #if __cplusplus >= 201703L
 	[[nodiscard]]
 #endif

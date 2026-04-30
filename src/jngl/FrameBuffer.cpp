@@ -3,6 +3,7 @@
 
 #include "FrameBuffer.hpp"
 
+#include "../App.hpp"
 #include "../ShaderCache.hpp"
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
@@ -202,11 +203,23 @@ FrameBuffer::Context FrameBuffer::use() const {
 		}
 	};
 	pushMatrix();
-	reset();
-	opengl::scale(static_cast<float>(pWindow->getWidth()) / static_cast<float>(impl->width) *
-	                  pWindow->getResizedWindowScalingX(),
-	              static_cast<float>(pWindow->getHeight()) / static_cast<float>(impl->height) *
-	                  pWindow->getResizedWindowScalingY());
+	auto savedProjection = opengl::projection;
+	const float sx = static_cast<float>(pWindow->getWidth()) / static_cast<float>(impl->width) *
+	                 pWindow->getResizedWindowScalingX();
+	const float sy = static_cast<float>(pWindow->getHeight()) / static_cast<float>(impl->height) *
+	                 pWindow->getResizedWindowScalingY();
+	// Scale the projection matrix (right-multiply by diag(sx, sy, 1, 1)) so that drawing inside the
+	// framebuffer works with letterboxing. Unlike modifying the modelview, this isn't undone when
+	// the user calls jngl::reset() or uses jngl::Mat3().
+	opengl::projection.data[0] *= sx;
+	opengl::projection.data[1] *= sx;
+	opengl::projection.data[2] *= sx;
+	opengl::projection.data[3] *= sx;
+	opengl::projection.data[4] *= sy;
+	opengl::projection.data[5] *= sy;
+	opengl::projection.data[6] *= sy;
+	opengl::projection.data[7] *= sy;
+	App::instance().updateProjectionMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 	glPushAttrib(GL_VIEWPORT_BIT);
 #else
@@ -214,7 +227,7 @@ FrameBuffer::Context FrameBuffer::use() const {
 #endif
 	activate();
 	Impl::activate.emplace(std::move(activate));
-	return Context([this]() {
+	return Context([this, savedProjection]() {
 		Impl::activate.pop();
 		popMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
@@ -222,6 +235,8 @@ FrameBuffer::Context FrameBuffer::use() const {
 #else
 		glViewport(impl->viewport[0], impl->viewport[1], impl->viewport[2], impl->viewport[3]);
 #endif
+		opengl::projection = savedProjection;
+		App::instance().updateProjectionMatrix();
 		if (!Impl::activate.empty()) {
 			Impl::activate.top()(); // Restore the FrameBuffer that was previously active
 			return;

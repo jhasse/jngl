@@ -9,7 +9,6 @@
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/font.hpp"
 #include "jngl/other.hpp"
-#include "jngl/work.hpp"
 #include "log.hpp"
 #include "windowptr.hpp"
 
@@ -103,7 +102,7 @@ bool Window::getMouseDown(mouse::Button button) {
 }
 
 bool Window::getMousePressed(mouse::Button button) const {
-	return mousePressed_[button];
+	return mousePressed_.at(button);
 }
 
 void Window::setMousePressed(mouse::Button button, bool p) {
@@ -369,8 +368,8 @@ void Window::stepIfNeeded() {
 		jobsToAdd.clear();
 
 		for (auto job : jobsToRemove) {
-			const auto it = std::find_if(jobs.begin(), jobs.end(),
-			                             [job](const auto& p) { return p.get() == job; });
+			const auto it =
+			    std::ranges::find_if(jobs, [job](const auto& p) { return p.get() == job; });
 			if (it != jobs.end()) {
 				jobs.erase(it);
 			}
@@ -451,17 +450,17 @@ std::string simpleDemangle(std::string_view mangled) {
 	size_t i = 0;
 
 	// Remove leading 'N' (namespace) and trailing 'E'
-	if (!mangled.empty() && mangled[0] == 'N' && mangled.back() == 'E') {
+	if (!mangled.empty() && mangled.at(0) == 'N' && mangled.back() == 'E') {
 		++i;
 		mangled.remove_suffix(1);
 	}
 
 	while (i < mangled.size()) {
-		if (std::isdigit(mangled[i]) != 0) {
+		if (std::isdigit(mangled.at(i)) != 0) {
 			// Skip length prefixes
 			size_t len = 0;
-			while (i < mangled.size() && std::isdigit(mangled[i]) != 0) {
-				len = len * 10 + (mangled[i] - '0');
+			while (i < mangled.size() && std::isdigit(mangled.at(i)) != 0) {
+				len = len * 10 + (mangled.at(i) - '0');
 				++i;
 			}
 			if (i + len <= mangled.size()) {
@@ -475,7 +474,7 @@ std::string simpleDemangle(std::string_view mangled) {
 			}
 		} else {
 			// Copy non-digit characters as-is
-			result += mangled[i++];
+			result += mangled.at(i++);
 		}
 	}
 	return result.empty() ? std::string(mangled) : result;
@@ -524,7 +523,7 @@ std::shared_ptr<Job> Window::getJob(const std::function<bool(Job&)>& predicate) 
 	return nullptr;
 }
 
-std::shared_ptr<Work> Window::getWork() {
+std::shared_ptr<Scene> Window::getScene() {
 	return currentWork_;
 }
 

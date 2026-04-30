@@ -162,8 +162,8 @@ endif()
 include(cmake/CPM.cmake)
 if(ANDROID OR MSVC OR IOS)
 	CPMAddPackage(NAME libogg
-		URL http://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.xz
-		URL_HASH SHA256=c4d91be36fc8e54deae7575241e03f4211eb102afb3fc0775fbbc1b740016705
+		URL http://downloads.xiph.org/releases/ogg/libogg-1.3.6.tar.xz
+		URL_HASH SHA256=5c8253428e181840cd20d41f3ca16557a9cc04bad4a3d04cce84808677fa1061
 		OPTIONS "BUILD_TESTING OFF")
 	set(OGG_INCLUDE_DIR ${libogg_SOURCE_DIR}/include)
 	set(OGG_INCLUDE_DIRS ${OGG_INCLUDE_DIR} ${libogg_BINARY_DIR}/include)
@@ -182,6 +182,12 @@ if(NOT hasParent)
 	if(JNGL_SANITIZE_ADDRESS)
 		string(APPEND CMAKE_CXX_FLAGS " -fsanitize=address")
 		string(APPEND CMAKE_LINKER_FLAGS " -fsanitize=address")
+	endif()
+	option(JNGL_SANITIZE_MEMORY "Enable MemorySanitizer" OFF)
+	if(JNGL_SANITIZE_MEMORY)
+		string(APPEND CMAKE_C_FLAGS " -fPIE")
+		string(APPEND CMAKE_CXX_FLAGS " -fsanitize=memory -fsanitize-memory-track-origins -fPIE -fno-omit-frame-pointer")
+		string(APPEND CMAKE_LINKER_FLAGS " -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -fno-omit-frame-pointer")
 	endif()
 endif()
 if(ANDROID OR MSVC OR IOS)

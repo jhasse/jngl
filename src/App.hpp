@@ -1,4 +1,4 @@
-// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::App class
 /// @file
@@ -6,6 +6,7 @@
 
 #include "jngl/Finally.hpp"
 
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <string>

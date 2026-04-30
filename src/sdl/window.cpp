@@ -6,7 +6,6 @@
 #include "../jngl/other.hpp"
 #include "../jngl/screen.hpp"
 #include "../jngl/window.hpp"
-#include "../jngl/work.hpp" // IWYU pragma: keep
 #include "../log.hpp"
 #include "../main.hpp"
 #include "../windowptr.hpp"
@@ -345,8 +344,8 @@ void Window::UpdateInput() {
 				characterPressed_[" "] = true;
 				needToBeSetFalse_.push(&characterPressed_[" "]);
 			} else if (event.key.key == SDLK_ESCAPE) {
-				if (const auto& work = getWork()) {
-					work->onBackEvent();
+				if (const auto& scene = getScene()) {
+					scene->onBackEvent();
 				}
 			}
 			anyKeyPressed_ = true;
@@ -540,7 +539,7 @@ void setCursor(Cursor type) {
 	};
 }
 
-void errorMessage(const std::string &text) {
+void errorMessage(const std::string& text) {
 	SDL_Window* sdlWindow = nullptr;
 	bool old;
 	Window* window = pWindow.get();
