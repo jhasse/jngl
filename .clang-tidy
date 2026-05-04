@@ -103,6 +103,7 @@ WarningsAsErrors: '
   performance-move-const-arg,
   readability-implicit-bool-conversion,
 '
+HeaderFilterRegex: '.*src/.*'
 CheckOptions:
       - key:             readability-implicit-bool-conversion.AllowPointerConditions
         value:           '1'
