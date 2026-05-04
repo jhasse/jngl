@@ -3,6 +3,7 @@
 /// @file
 #pragma once
 
+#include <cstdint>
 #include <memory>
 
 /// JNGL's main namespace
