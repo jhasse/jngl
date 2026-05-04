@@ -7,6 +7,7 @@
 #include "Finally.hpp"
 #include "Vec2.hpp"
 
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <vector>
@@ -246,9 +247,8 @@ void setMousePressed(jngl::mouse::Button, bool);
 /// Moves the mouse (does nothing on iOS and Android)
 void setMouse(Vec2 position);
 
-namespace controller {
 /// Gamepad buttons
-enum Button : uint8_t {
+enum class controller : uint8_t {
 	/// x axis of left stick, -1 to 1
 	LeftStickX,
 
@@ -301,7 +301,6 @@ enum Button : uint8_t {
 	RightStick,
 	Last
 };
-} // namespace controller
 
 class Controller;
 

@@ -55,7 +55,7 @@ SdlController::~SdlController() {
 	}
 }
 
-float SdlController::stateWithoutDeadzone(controller::Button button) const {
+float SdlController::stateWithoutDeadzone(controller button) const {
 	if (handle) {
 		const bool xboxWired = model == Model::XBOX_WIRED;
 		int axisIndex;
@@ -101,9 +101,9 @@ float SdlController::stateWithoutDeadzone(controller::Button button) const {
 	return state;
 }
 
-float SdlController::stateImpl(controller::Button button) const {
+float SdlController::stateImpl(controller button) const {
 	float state = stateWithoutDeadzone(button);
-	controller::Button otherAxis;
+	controller otherAxis;
 	switch(button) {
 		case controller::LeftStickY:
 			otherAxis = controller::LeftStickX;
@@ -149,7 +149,7 @@ float SdlController::stateImpl(controller::Button button) const {
 	return state;
 }
 
-bool SdlController::down(const controller::Button button) const {
+bool SdlController::down(const controller button) const {
 	if (handle) {
 		const bool xbox = (model == Model::XBOX || model == Model::XBOX_WIRED);
 		if (xbox && (button == controller::LeftTrigger || button == controller::RightTrigger)) {
@@ -178,35 +178,35 @@ bool SdlController::down(const controller::Button button) const {
 		return SDL_JoystickGetButton(handle, buttonIndex) != 0;
 	}
 	switch (button) {
-	case controller::Button::A:
+	case controller::A:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_A) != 0u;
-	case controller::Button::B:
+	case controller::B:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_B) != 0u;
-	case controller::Button::X:
+	case controller::X:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_X) != 0u;
-	case controller::Button::Y:
+	case controller::Y:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_Y) != 0u;
-	case controller::Button::LeftButton:
+	case controller::LeftButton:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) !=
 		       0u;
-	case controller::Button::RightButton:
+	case controller::RightButton:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) !=
 		       0u;
-	case controller::Button::Start:
+	case controller::Start:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_START) != 0u;
-	case controller::Button::Back:
+	case controller::Back:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_BACK) != 0u;
-	case controller::Button::DpadUp:
+	case controller::DpadUp:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_UP) != 0u;
-	case controller::Button::DpadDown:
+	case controller::DpadDown:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_DOWN) != 0u;
-	case controller::Button::DpadLeft:
+	case controller::DpadLeft:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_LEFT) != 0u;
-	case controller::Button::DpadRight:
+	case controller::DpadRight:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) != 0u;
-	case controller::Button::LeftStick:
+	case controller::LeftStick:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_LEFTSTICK) != 0u;
-	case controller::Button::RightStick:
+	case controller::RightStick:
 		return SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_RIGHTSTICK) != 0u;
 	default:
 		return state(button) > 0.5f;

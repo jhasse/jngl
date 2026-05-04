@@ -1,4 +1,4 @@
-// Copyright 2017-2022 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2017-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -17,14 +17,14 @@ public:
 	SdlController(SdlController&&) = delete;
 	SdlController& operator=(SdlController&&) = delete;
 	~SdlController() override;
-	bool down(controller::Button) const override;
+	bool down(controller) const override;
 	void rumble(float, std::chrono::milliseconds) override;
 
 	bool is(SDL_Joystick*) const;
 
 private:
-	float stateImpl(controller::Button) const override;
-	float stateWithoutDeadzone(controller::Button) const;
+	float stateImpl(controller) const override;
+	float stateWithoutDeadzone(controller) const;
 
 	SDL_Joystick* handle;
 	SDL_GameController* gameController = nullptr;

@@ -1,4 +1,4 @@
-// Copyright 2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "AppleController.h"
 
@@ -7,11 +7,11 @@ namespace jngl {
 AppleController::AppleController(GCController* gc) : gc(gc) {
 }
 
-bool AppleController::down(const controller::Button button) const {
+bool AppleController::down(const controller button) const {
 	return state(button) > 0.5f;
 }
 
-float AppleController::stateImpl(const controller::Button button) const {
+float AppleController::stateImpl(const controller button) const {
 	switch (button) {
 	case controller::A: return gc.extendedGamepad.buttonA.value;
 	case controller::B: return gc.extendedGamepad.buttonB.value;
