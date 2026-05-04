@@ -11,11 +11,10 @@
 #include <cstdint>
 #include <memory>
 
-struct THEORAPLAY_Io
-{
-    long (*read)(THEORAPLAY_Io *io, void *buf, long buflen);
-    void (*close)(THEORAPLAY_Io *io);
-    void *userdata;
+struct THEORAPLAY_Io {
+	long (*read)(THEORAPLAY_Io* io, void* buf, long buflen);
+	void (*close)(THEORAPLAY_Io* io);
+	void* userdata;
 };
 
 struct THEORAPLAY_Decoder;
@@ -24,8 +23,8 @@ struct THEORAPLAY_Decoder;
 enum THEORAPLAY_VideoFormat : uint8_t {
 	THEORAPLAY_VIDFMT_YV12, /* NTSC colorspace, planar YCrCb 4:2:0 */
 	THEORAPLAY_VIDFMT_IYUV, /* NTSC colorspace, planar YCbCr 4:2:0 */
-	THEORAPLAY_VIDFMT_RGB,  /* 24 bits packed pixel RGB */
-	THEORAPLAY_VIDFMT_RGBA  /* 32 bits packed pixel RGBA (full alpha). */
+	THEORAPLAY_VIDFMT_RGB, //< 24 bits packed pixel RGB
+	THEORAPLAY_VIDFMT_RGBA, //< 32 bits packed pixel RGBA (full alpha)
 };
 
 struct THEORAPLAY_VideoFrame {
@@ -34,7 +33,7 @@ struct THEORAPLAY_VideoFrame {
 	unsigned int width;
 	unsigned int height;
 	THEORAPLAY_VideoFormat format;
-	unsigned char* pixels;
+	unsigned char* pixels = nullptr; //< pointer into the ring buffer, not owned by this struct
 	std::unique_ptr<THEORAPLAY_VideoFrame> next;
 };
 
