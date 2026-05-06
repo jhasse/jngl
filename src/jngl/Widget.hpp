@@ -19,6 +19,8 @@ class Widget {
 public:
 	/// Creates a Widget centered at \a position
 	explicit Widget(jngl::Vec2 position);
+	Widget(Widget&&) noexcept = default;
+	Widget& operator=(Widget&&) noexcept = default;
 
 	virtual ~Widget();
 

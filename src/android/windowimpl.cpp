@@ -356,8 +356,8 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 		jngl::setKeyPressed(jngl::key::BackSpace, true);
 		return 1;
 	} else if (key == AKEYCODE_BACK) {
-		if (const auto& work = window->getWork()) {
-			work->onBackEvent();
+		if (const auto& scene = window->getScene()) {
+			scene->onBackEvent();
 		}
 		return 1;
 	}
@@ -560,8 +560,8 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 		case AKEYCODE_BACK:
 			controller->buttonBack = down;
 			if (down && pWindow) {
-				if (const auto work = pWindow->getWork()) {
-					work->onControllerBack();
+				if (const auto scene = pWindow->getScene()) {
+					scene->onControllerBack();
 				}
 			}
 			break;

@@ -64,7 +64,7 @@ std::string sanitizePath(std::string path) {
 		}
 		path.erase(pos, 1);
 	}
-	if (path.size() > 1 && path[0] == '.' && path[1] == '/') {
+	if (path.size() > 1 && path.at(0) == '.' && path.at(1) == '/') {
 		path.erase(0, 2);
 	}
 	return path;

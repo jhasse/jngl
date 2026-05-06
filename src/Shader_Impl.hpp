@@ -1,4 +1,4 @@
-// Copyright 2018 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -10,6 +10,8 @@ namespace jngl {
 
 struct Shader::Impl {
 	GLuint id;
+
+	~Impl();
 };
 
 } // namespace jngl

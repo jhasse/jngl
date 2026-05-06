@@ -1,4 +1,4 @@
-// Copyright 2018-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::ShaderProgram class
 /// @file
@@ -19,9 +19,9 @@ public:
 	ShaderProgram(const Shader& vertex, const Shader& fragment);
 	~ShaderProgram();
 	ShaderProgram(const ShaderProgram&) = delete;
-	ShaderProgram(ShaderProgram&&) = delete;
+	ShaderProgram(ShaderProgram&&) noexcept;
 	ShaderProgram& operator=(const ShaderProgram&) = delete;
-	ShaderProgram& operator=(ShaderProgram&&) = delete;
+	ShaderProgram& operator=(ShaderProgram&&) noexcept;
 
 	struct Impl;
 	/// Lifetime object when the ShaderProgram is in use

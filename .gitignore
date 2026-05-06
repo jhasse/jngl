@@ -1,5 +1,6 @@
 *.DS_Store
 /build*/
+/build*.ninja
 Thumbs.db
 /.vscode/.browse*
 /.vscode/tags

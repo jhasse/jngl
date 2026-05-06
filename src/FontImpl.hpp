@@ -2,8 +2,8 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
-#include "jngl/FontInterface.hpp"
 #include "jngl/Finally.hpp"
+#include "jngl/FontInterface.hpp"
 #include "jngl/Mat3.hpp"
 #include "jngl/Rgba.hpp"
 #include "jngl/ScaleablePixels.hpp"

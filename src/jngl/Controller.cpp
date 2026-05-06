@@ -1,4 +1,4 @@
-// Copyright 2018-2019 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Controller.hpp"
@@ -7,23 +7,23 @@
 
 namespace jngl {
 
-bool Controller::pressed(const controller::Button button) {
-	if (buttonPressed[button] == ButtonState::UNKNOWN && down(button)) {
-		buttonPressed[button] = ButtonState::PRESSED;
+bool Controller::pressed(const controller button) {
+	if (buttonPressed[static_cast<int>(button)] == ButtonState::UNKNOWN && down(button)) {
+		buttonPressed[static_cast<int>(button)] = ButtonState::PRESSED;
 		pWindow->addUpdateInputCallback([self = shared_from_this(), button]() {
-			self->buttonPressed[button] = ButtonState::WAITING_FOR_UP;
+			self->buttonPressed[static_cast<int>(button)] = ButtonState::WAITING_FOR_UP;
 		});
 	}
-	if (buttonPressed[button] == ButtonState::WAITING_FOR_UP && !down(button)) {
+	if (buttonPressed[static_cast<int>(button)] == ButtonState::WAITING_FOR_UP && !down(button)) {
 		// We're using addUpdateInputCallback since we don't want to change the state during a frame
 		pWindow->addUpdateInputCallback([self = shared_from_this(), button]() {
-			self->buttonPressed[button] = ButtonState::UNKNOWN;
+			self->buttonPressed[static_cast<int>(button)] = ButtonState::UNKNOWN;
 		});
 	}
-	return buttonPressed[button] == ButtonState::PRESSED;
+	return buttonPressed[static_cast<int>(button)] == ButtonState::PRESSED;
 }
 
-float Controller::state(const controller::Button button) const {
+float Controller::state(const controller button) const {
 	if (button == controller::LeftStickXInverse) {
 		return -stateImpl(controller::LeftStickX);
 	}

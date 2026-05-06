@@ -47,6 +47,80 @@ ShaderCache::ShaderCache() {
 	simpleColorUniform = simpleShaderProgram->getUniformLocation("color");
 
 	{
+		Shader rrVertexShader(R"(#version 300 es
+			in mediump vec2 position;
+			uniform highp mat3 modelview;
+			uniform mediump mat4 projection;
+			out mediump vec2 vPosition;
+
+			void main() {
+				vec3 tmp = modelview * vec3(position, 1);
+				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
+				vPosition = position;
+			})",
+		                      Shader::Type::VERTEX, R"(#version 100
+			attribute mediump vec2 position;
+			uniform highp mat3 modelview;
+			uniform mediump mat4 projection;
+			varying mediump vec2 vPosition;
+
+			void main() {
+				vec3 tmp = modelview * vec3(position, 1);
+				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
+				vPosition = position;
+			})");
+		Shader rrFragmentShader(R"(#version 300 es
+			uniform lowp vec4 color;
+			uniform mediump vec2 size;
+			uniform mediump vec4 cornerRadii;
+			in mediump vec2 vPosition;
+			out lowp vec4 outColor;
+
+			mediump float sdRoundBox(mediump vec2 p, mediump vec2 b, mediump vec4 r) {
+				r.xy = (p.x > 0.0) ? r.xy : r.zw;
+				r.x  = (p.y > 0.0) ? r.y  : r.x;
+				mediump vec2 q = abs(p) - b + r.x;
+				return min(max(q.x, q.y), 0.0) + length(max(q, vec2(0.0))) - r.x;
+			}
+
+			void main() {
+				mediump vec2 p = vPosition * size;
+				mediump vec2 halfSize = size * 0.5;
+				mediump vec4 r = vec4(cornerRadii.y, cornerRadii.w, cornerRadii.x, cornerRadii.z);
+				mediump float d = sdRoundBox(p, halfSize, r);
+				mediump float alpha = 1.0 - smoothstep(-0.5, 0.5, d);
+				outColor = vec4(color.rgb, color.a * alpha);
+			})",
+		                        Shader::Type::FRAGMENT, R"(#version 100
+			uniform lowp vec4 color;
+			uniform mediump vec2 size;
+			uniform mediump vec4 cornerRadii;
+			varying mediump vec2 vPosition;
+
+			mediump float sdRoundBox(mediump vec2 p, mediump vec2 b, mediump vec4 r) {
+				r.xy = (p.x > 0.0) ? r.xy : r.zw;
+				r.x  = (p.y > 0.0) ? r.y  : r.x;
+				mediump vec2 q = abs(p) - b + r.x;
+				return min(max(q.x, q.y), 0.0) + length(max(q, vec2(0.0))) - r.x;
+			}
+
+			void main() {
+				mediump vec2 p = vPosition * size;
+				mediump vec2 halfSize = size * 0.5;
+				mediump vec4 r = vec4(cornerRadii.y, cornerRadii.w, cornerRadii.x, cornerRadii.z);
+				mediump float d = sdRoundBox(p, halfSize, r);
+				mediump float alpha = 1.0 - smoothstep(-0.5, 0.5, d);
+				gl_FragColor = vec4(color.rgb, color.a * alpha);
+			})");
+		roundedRectShaderProgram =
+		    std::make_unique<ShaderProgram>(rrVertexShader, rrFragmentShader);
+		roundedRectModelviewUniform = roundedRectShaderProgram->getUniformLocation("modelview");
+		roundedRectColorUniform = roundedRectShaderProgram->getUniformLocation("color");
+		roundedRectSizeUniform = roundedRectShaderProgram->getUniformLocation("size");
+		roundedRectCornerRadiiUniform = roundedRectShaderProgram->getUniformLocation("cornerRadii");
+	}
+
+	{
 		textureVertexShader = std::make_unique<Shader>(R"(#version 300 es
 			in mediump vec2 position;
 			in mediump vec2 inTexCoord;
@@ -117,7 +191,7 @@ ShaderProgram::Context ShaderCache::useSimpleShaderProgram(const Mat3& modelview
 }
 
 void ShaderCache::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
-	glBindVertexArray(opengl::vaoStream);
+	opengl::bindVertexArray(opengl::vaoStream);
 	auto tmp = useSimpleShaderProgram();
 	const float vertexes[] = { static_cast<float>(a.x), static_cast<float>(a.y),
 		                       static_cast<float>(b.x), static_cast<float>(b.y),
@@ -130,7 +204,7 @@ void ShaderCache::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 }
 
 void ShaderCache::drawTriangle(const Mat3& modelview, Rgba color) {
-	glBindVertexArray(opengl::vaoStream);
+	opengl::bindVertexArray(opengl::vaoStream);
 	auto tmp = useSimpleShaderProgram(modelview, color);
 	const float vertexes[] = {
 		0, -1, -std::sqrt(3.f) / 2, 0.5, std::sqrt(3.f) / 2, 0.5,
@@ -140,6 +214,23 @@ void ShaderCache::drawTriangle(const Mat3& modelview, Rgba color) {
 	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertexes, GL_STREAM_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+ShaderProgram::Context ShaderCache::useRoundedRectShaderProgram(const Mat3& modelview, Rgba color,
+                                                                Vec2 size, float topLeft,
+                                                                float topRight, float bottomLeft,
+                                                                float bottomRight) {
+	auto context = roundedRectShaderProgram->use();
+	glUniform4f(roundedRectColorUniform, color.getRed(), color.getGreen(), color.getBlue(),
+	            color.getAlpha());
+	glUniformMatrix3fv(roundedRectModelviewUniform, 1, GL_FALSE, modelview.data);
+	glUniform2f(roundedRectSizeUniform, static_cast<float>(size.x), static_cast<float>(size.y));
+	glUniform4f(roundedRectCornerRadiiUniform, topLeft, topRight, bottomLeft, bottomRight);
+
+	assert(roundedRectShaderProgram->getAttribLocation("position") == 0);
+	glEnableVertexAttribArray(0);
+
+	return context;
 }
 
 } // namespace jngl

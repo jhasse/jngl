@@ -163,6 +163,15 @@ void drawRect(const Mat3& modelview, Vec2 size, Rgb);
 /// Use setAlpha to set the opacity.
 void drawRect(Mat3 modelview, Vec2 size, Rgba color);
 
+/// Draws a rectangle spawning from (0, 0) to (size.x, size.y) with rounded corners
+void drawRoundedRect(Mat3 modelview, Vec2 size, Rgba color, float topLeft, float topRight,
+                     float bottomLeft, float bottomRight);
+
+/// Draws an annulus sector (ring) centered at (0, 0). Angles are in degrees, counter-clockwise
+/// from the right (3 o'clock position).
+void drawRing(Mat3 modelview, float innerRadius, float outerRadius, float startAngle,
+              float endAngle, Rgba color);
+
 /// Draws the outline of a rectangle (so □ instead of ■) of \a size centered at (0, 0) in \a color
 void drawRectOutline(Mat3 modelview, Vec2 size, float lineWidth, Rgba color);
 

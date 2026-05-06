@@ -27,10 +27,20 @@ public:
 	void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
 	void drawTriangle(const Mat3& modelview, Rgba color);
 
+	ShaderProgram::Context useRoundedRectShaderProgram(const Mat3& modelview, Rgba color, Vec2 size,
+	                                                   float topLeft, float topRight,
+	                                                   float bottomLeft, float bottomRight);
+
 private:
 	std::unique_ptr<ShaderProgram> simpleShaderProgram;
 	int simpleModelviewUniform;
 	int simpleColorUniform;
+
+	std::unique_ptr<ShaderProgram> roundedRectShaderProgram;
+	int roundedRectModelviewUniform;
+	int roundedRectColorUniform;
+	int roundedRectSizeUniform;
+	int roundedRectCornerRadiiUniform;
 };
 
 } // namespace jngl

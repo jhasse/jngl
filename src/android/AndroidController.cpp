@@ -1,4 +1,4 @@
-// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "AndroidController.hpp"
 
@@ -10,7 +10,7 @@ AndroidController::AndroidController() = default;
 
 AndroidController::~AndroidController() = default;
 
-bool AndroidController::down(const controller::Button button) const {
+bool AndroidController::down(const controller button) const {
 	switch (button) {
 		case controller::A: return buttonA;
 		case controller::B: return buttonB;
@@ -20,7 +20,7 @@ bool AndroidController::down(const controller::Button button) const {
 	}
 }
 
-float AndroidController::stateWithoutDeadzone(const controller::Button button) const {
+float AndroidController::stateWithoutDeadzone(const controller button) const {
 	switch (button) {
 		case controller::LeftStickX: return leftStickX;
 		case controller::LeftStickY: return -leftStickY;
@@ -34,9 +34,9 @@ float AndroidController::stateWithoutDeadzone(const controller::Button button) c
 	}
 }
 
-float AndroidController::stateImpl(controller::Button button) const {
+float AndroidController::stateImpl(controller button) const {
 	float state = stateWithoutDeadzone(button);
-	controller::Button otherAxis;
+	controller otherAxis;
 	switch(button) {
 		case controller::LeftStickY:
 			otherAxis = controller::LeftStickX;

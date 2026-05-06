@@ -78,8 +78,8 @@ Shader::Shader(const std::istream& source, const Type type, const std::istream& 
 }().c_str()) {
 }
 
-Shader::~Shader() {
-	glDeleteShader(impl->id);
-}
+Shader::~Shader() = default;
+Shader::Shader(Shader&& other) noexcept = default;
+Shader& Shader::operator=(Shader&& other) noexcept = default;
 
 } // namespace jngl

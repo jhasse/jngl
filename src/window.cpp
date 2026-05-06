@@ -9,7 +9,6 @@
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/font.hpp"
 #include "jngl/other.hpp"
-#include "jngl/work.hpp"
 #include "log.hpp"
 #include "windowptr.hpp"
 
@@ -103,7 +102,7 @@ bool Window::getMouseDown(mouse::Button button) {
 }
 
 bool Window::getMousePressed(mouse::Button button) const {
-	return mousePressed_[button];
+	return mousePressed_.at(button);
 }
 
 void Window::setMousePressed(mouse::Button button, bool p) {
@@ -369,8 +368,8 @@ void Window::stepIfNeeded() {
 		jobsToAdd.clear();
 
 		for (auto job : jobsToRemove) {
-			const auto it = std::find_if(jobs.begin(), jobs.end(),
-			                             [job](const auto& p) { return p.get() == job; });
+			const auto it =
+			    std::ranges::find_if(jobs, [job](const auto& p) { return p.get() == job; });
 			if (it != jobs.end()) {
 				jobs.erase(it);
 			}
@@ -451,17 +450,17 @@ std::string simpleDemangle(std::string_view mangled) {
 	size_t i = 0;
 
 	// Remove leading 'N' (namespace) and trailing 'E'
-	if (!mangled.empty() && mangled[0] == 'N' && mangled.back() == 'E') {
+	if (!mangled.empty() && mangled.at(0) == 'N' && mangled.back() == 'E') {
 		++i;
 		mangled.remove_suffix(1);
 	}
 
 	while (i < mangled.size()) {
-		if (std::isdigit(mangled[i]) != 0) {
+		if (std::isdigit(mangled.at(i)) != 0) {
 			// Skip length prefixes
 			size_t len = 0;
-			while (i < mangled.size() && std::isdigit(mangled[i]) != 0) {
-				len = len * 10 + (mangled[i] - '0');
+			while (i < mangled.size() && std::isdigit(mangled.at(i)) != 0) {
+				len = len * 10 + (mangled.at(i) - '0');
 				++i;
 			}
 			if (i + len <= mangled.size()) {
@@ -475,7 +474,7 @@ std::string simpleDemangle(std::string_view mangled) {
 			}
 		} else {
 			// Copy non-digit characters as-is
-			result += mangled[i++];
+			result += mangled.at(i++);
 		}
 	}
 	return result.empty() ? std::string(mangled) : result;
@@ -524,7 +523,7 @@ std::shared_ptr<Job> Window::getJob(const std::function<bool(Job&)>& predicate) 
 	return nullptr;
 }
 
-std::shared_ptr<Work> Window::getWork() {
+std::shared_ptr<Scene> Window::getScene() {
 	return currentWork_;
 }
 
@@ -579,7 +578,7 @@ void Window::initGlObjects() {
 	glGenVertexArrays(1, &opengl::vaoStream);
 
 	glGenVertexArrays(1, &vaoLine);
-	glBindVertexArray(vaoLine);
+	opengl::bindVertexArray(vaoLine);
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -589,7 +588,7 @@ void Window::initGlObjects() {
 	glEnableVertexAttribArray(0);
 
 	glGenVertexArrays(1, &vaoSquare);
-	glBindVertexArray(vaoSquare);
+	opengl::bindVertexArray(vaoSquare);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	const static float rect[] = { -.5, -.5, .5, -.5, .5, .5, -.5, .5 };
@@ -605,14 +604,22 @@ void Window::initGlObjects() {
 }
 
 void Window::drawLine(Mat3 modelview, const Vec2 b, const Rgba color) const {
-	glBindVertexArray(vaoLine);
+	opengl::bindVertexArray(vaoLine);
 	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview.scale(b), color);
 	glDrawArrays(GL_LINES, 0, 2);
 }
 
 void Window::drawSquare(const Mat3& modelview, Rgba color) const {
-	glBindVertexArray(vaoSquare);
+	opengl::bindVertexArray(vaoSquare);
 	auto context = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+}
+
+void Window::drawRoundedSquare(const Mat3& modelview, Rgba color, Vec2 size, float topLeft,
+                               float topRight, float bottomLeft, float bottomRight) const {
+	opengl::bindVertexArray(vaoSquare);
+	auto context = ShaderCache::handle().useRoundedRectShaderProgram(
+	    modelview, color, size, topLeft, topRight, bottomLeft, bottomRight);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 

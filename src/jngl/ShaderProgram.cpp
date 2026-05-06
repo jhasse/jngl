@@ -1,11 +1,10 @@
-// Copyright 2018-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "ShaderProgram.hpp"
 
 #include "../App.hpp"
 #include "../Shader_Impl.hpp"
-#include "../windowptr.hpp"
 
 #include <array>
 #include <cassert>
@@ -18,7 +17,15 @@ const ShaderProgram::Impl* ShaderProgram::Context::activeImpl = nullptr;
 
 struct ShaderProgram::Impl {
 	GLuint id;
+
+	~Impl() {
+		glDeleteProgram(id);
+	}
 };
+
+Shader::Impl::~Impl() {
+	glDeleteShader(id);
+}
 
 ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 : impl(std::make_unique<Impl>()) {
@@ -56,10 +63,35 @@ int ShaderProgram::getUniformLocation(const std::string& name) const {
 }
 
 ShaderProgram::~ShaderProgram() {
-	glDeleteProgram(impl->id);
 	if (App::self) {
 		App::self->unregisterShaderProgram(this);
 	}
+}
+
+ShaderProgram::ShaderProgram(ShaderProgram&& other) noexcept : impl(std::move(other.impl)) {
+	if (App::self) {
+		App::self->unregisterShaderProgram(&other);
+		if (impl) {
+			App::self->registerShaderProgram(this);
+		}
+	}
+}
+
+ShaderProgram& ShaderProgram::operator=(ShaderProgram&& other) noexcept {
+	if (this == &other) {
+		return *this;
+	}
+	if (impl && App::self) {
+		App::self->unregisterShaderProgram(this);
+	}
+	impl = std::move(other.impl);
+	if (App::self) {
+		App::self->unregisterShaderProgram(&other);
+		if (impl) {
+			App::self->registerShaderProgram(this);
+		}
+	}
+	return *this;
 }
 
 ShaderProgram::Context::Context(const ShaderProgram::Impl& impl) {

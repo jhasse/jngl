@@ -1,8 +1,9 @@
-// Copyright 2018-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
 
+#include <cstdint>
 #include <memory>
 
 /// JNGL's main namespace
@@ -32,9 +33,9 @@ public:
 
 	~Shader();
 	Shader(const Shader&) = delete;
-	Shader(Shader&&) = delete;
+	Shader(Shader&&) noexcept;
 	Shader& operator=(const Shader&) = delete;
-	Shader& operator=(Shader&&) = delete;
+	Shader& operator=(Shader&&) noexcept;
 
 private:
 	struct Impl;

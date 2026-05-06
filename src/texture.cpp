@@ -27,7 +27,7 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 		1, 0 // texture coordinates
 	};
 	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	opengl::bindVertexArray(vao);
 
 	glGenBuffers(1, &vertexBuffer_);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
@@ -70,7 +70,7 @@ Texture::~Texture() {
 }
 
 void Texture::bind() const {
-	glBindVertexArray(vao);
+	opengl::bindVertexArray(vao);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
 }
@@ -96,7 +96,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	vertexes[10] = vertexes[14] = xend;
 	vertexes[7] = vertexes[11] = yend;
 
-	glBindVertexArray(opengl::vaoStream);
+	opengl::bindVertexArray(opengl::vaoStream);
 	auto& shaderCache = ShaderCache::handle();
 	auto tmp = shaderCache.textureShaderProgram->use();
 	glUniform4f(shaderCache.shaderSpriteColorUniform, red, green, blue, alpha);
@@ -119,7 +119,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 }
 
 void Texture::drawMesh(const std::vector<Vertex>& vertexes) const {
-	glBindVertexArray(opengl::vaoStream);
+	opengl::bindVertexArray(opengl::vaoStream);
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(vertexes[0])),
 	             vertexes.data(), GL_STREAM_DRAW);

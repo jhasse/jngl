@@ -1,8 +1,11 @@
-// Copyright 2014-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2014-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Miscellaneous functions
 /// @file
 #pragma once
+
+#include "Finally.hpp"
+#include "Vec2.hpp"
 
 #include <cstdint>
 #include <sstream>
@@ -76,6 +79,13 @@ void setVerticalSync(bool enabled);
 
 /// Returns whether V-SYNC is enabled. Many devices always enable V-SYNC with no way to turn it off.
 bool getVerticalSync();
+
+/// Enables scissor testing, clipping all rendering to the rectangle from \a position to
+/// \a position + \a size in screen coordinates (with (0, 0) at the center of the screen)
+///
+/// This is useful for letterboxing or split-screen multiplayer. Keep the returned Finally object
+/// alive while the scissor test should be active.
+Finally scissor(Vec2 position, Vec2 size);
 
 /// Sets the icon for the window (Desktop-only)
 void setIcon(const std::string& filename);

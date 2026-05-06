@@ -16,12 +16,14 @@ Widget::Widget(const jngl::Vec2 position) : position(position) {
 Widget::~Widget() = default;
 
 Widget::Action Widget::step() {
-	for (const auto& effect : effects) {
-		switch (effect->step()) {
+	/*NOLINT(modernize-loop-convert)*/ for (size_t i = 0; i < effects.size();
+	                                        ++i) { // no range-based for loop, so that effects can
+		                                           // be added while stepping
+		switch (effects[i]->step()) {
 		case jngl::Effect::Action::NONE:
 			break;
 		case jngl::Effect::Action::REMOVE_EFFECT:
-			removeEffect(effect.get());
+			removeEffect(effects[i].get());
 			break;
 		case jngl::Effect::Action::REMOVE_WIDGET:
 			return Action::REMOVE;

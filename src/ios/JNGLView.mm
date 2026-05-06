@@ -169,8 +169,8 @@ std::unique_ptr<jngl::App> jnglApp;
 
 -(void) setPause: (bool) p {
 	if (p && !pause && jngl::pWindow) {
-		if (const auto work = jngl::pWindow->getWork()) {
-			work->onPauseEvent();
+		if (const auto scene = jngl::pWindow->getScene()) {
+			scene->onPauseEvent();
 		}
 	}
 	if (!p) {

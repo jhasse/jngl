@@ -61,7 +61,8 @@ TEST_CASE("FrameBufferTest") {
 		jngl::drawRect({ -40, 0 }, { 10, 10 });
 		{
 			const auto context2 = fb2.use();
-			jngl::drawRect({ -10, -20 }, { 10, 10 });
+			jngl::translate(-10, 0); // FrameBuffer::use() should push/pop the modelview matrix
+			jngl::drawRect({ 0, -20 }, { 10, 10 });
 		}
 		jngl::drawRect({ -80, 0 }, { 10, 10 });
 	}
@@ -144,6 +145,47 @@ TEST_CASE("FrameBufferScale") {
 ▒              ▒               ▒
 ▒              ▒               ▒
 ▒     ░░░█                     ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
+
+		// check drawMesh works with scaling
+		{
+			auto context = smallFb.use();
+			context.clear(0xdd2222_rgb);
+			jngl::drawCircle(jngl::Vec2{ 10, 0 }, 15);
+		}
+		const float width = smallFb.getSize().x;
+		const float height = smallFb.getSize().y;
+		const float x = -100;
+		const float y = -20;
+		smallFb.drawMesh({
+		    // top right triangle
+		    jngl::Vertex{ .x = x, .y = y, .u = 0, .v = 1 },
+		    jngl::Vertex{ .x = x + width, .y = y, .u = 1, .v = 1 },
+		    jngl::Vertex{ .x = x + width, .y = y + height, .u = 1, .v = 0 },
+
+		    // bottom left triangle
+		    jngl::Vertex{ .x = x, .y = y, .u = 0, .v = 1 },
+		    jngl::Vertex{ .x = x, .y = y + height, .u = 0, .v = 0 },
+		    jngl::Vertex{ .x = x + width, .y = y + height, .u = 1, .v = 0 },
+
+		    // top right triangle
+		    jngl::Vertex{ .x = x, .y = y + height, .u = 0, .v = 0 },
+		    jngl::Vertex{ .x = x + width, .y = y + height, .u = 1, .v = 0 },
+		    jngl::Vertex{ .x = x + width, .y = y + height, .u = 1, .v = 0 },
+
+		    // bottom left triangle
+		    jngl::Vertex{ .x = x, .y = y + height, .u = 0, .v = 0 },
+		    jngl::Vertex{ .x = x, .y = y + height, .u = 0, .v = 0 },
+		    jngl::Vertex{ .x = x + width, .y = y + height, .u = 1, .v = 0 },
+		});
+		REQUIRE(f.getAsciiArt() == R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒     ░░░░░▒▒░░░               ▒
+▒     ▒▒▒▒▓██▓▒▒               ▒
+▒     ▒▒▒▒▓██▓▒▒               ▒
+▒     ░░░░░▒▒░░░               ▒
+▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
 	}

@@ -1,4 +1,4 @@
-// Copyright 2023-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 // Based on the audio implementation of the psemek engine, see
 // https://lisyarus.github.io/blog/programming/2022/10/15/audio-mixing.html
@@ -144,8 +144,8 @@ struct engine::Impl {
 			auto self = static_cast<SdlImpl*>(userdata);
 			auto* dst = reinterpret_cast<std::int16_t*>(dst_u8); // NOLINT
 
-			std::size_t const size = len / 2;
-			std::size_t read = 0;
+			size_t const size = len / 2;
+			size_t read = 0;
 			read = self->output->read(self->buffer.data(), size);
 			std::fill(self->buffer.data() + read, self->buffer.data() + size, 0.f);
 

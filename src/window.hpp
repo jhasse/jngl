@@ -105,7 +105,7 @@ public:
 
 	void stepIfNeeded();
 	void draw() const;
-	std::shared_ptr<Scene> getWork();
+	std::shared_ptr<Scene> getScene();
 	std::shared_ptr<Scene> getNextScene() const;
 	void addJob(std::shared_ptr<Job>);
 	void removeJob(Job*);
@@ -122,6 +122,8 @@ public:
 	void initGlObjects();
 	void drawLine(Mat3 modelview, Vec2 b, Rgba color) const;
 	void drawSquare(const Mat3& modelview, Rgba color) const;
+	void drawRoundedSquare(const Mat3& modelview, Rgba color, Vec2 size, float topLeft,
+	                       float topRight, float bottomLeft, float bottomRight) const;
 	void onControllerChanged(std::function<void()>);
 	void bindSystemFramebufferAndRenderbuffer();
 

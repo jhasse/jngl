@@ -3,8 +3,10 @@
 
 #include "../jngl/Color.hpp"
 #include "../jngl/Rgb.hpp"
+#include "../jngl/Rgba.hpp"
 
 #include <catch2/catch_test_macros.hpp>
+
 
 TEST_CASE("Color") { // NOLINT
 	const jngl::Color a{ 0x68da4f_rgb };
@@ -28,4 +30,18 @@ TEST_CASE("Rgb") { // NOLINT
 	REQUIRE(c.getGreen() == b.getGreen());
 	REQUIRE(a.getBlue() == b.getBlue());
 	REQUIRE(c.getBlue() == b.getBlue());
+}
+
+TEST_CASE("Rgba") { // NOLINT
+	const jngl::Rgba a = 0x68da4f4f_rgba;
+	const auto b = jngl::Rgba::u8(0x68, 0xda, 0x4f, 0x4f);
+	const auto c = "#68da4f4f"_rgba;
+	REQUIRE(a.getRed() == b.getRed());
+	REQUIRE(c.getRed() == b.getRed());
+	REQUIRE(a.getGreen() == b.getGreen());
+	REQUIRE(c.getGreen() == b.getGreen());
+	REQUIRE(a.getBlue() == b.getBlue());
+	REQUIRE(c.getBlue() == b.getBlue());
+	REQUIRE(a.getAlpha() == b.getAlpha());
+	REQUIRE(c.getAlpha() == b.getAlpha());
 }
