@@ -65,6 +65,7 @@ Checks: '
        ,-misc-no-recursion,
        ,-misc-non-private-member-variables-in-classes,
        ,-misc-override-with-different-visibility,
+       ,-misc-use-anonymous-namespace,
        ,-misc-use-internal-linkage,
        ,-modernize-avoid-c-arrays,
        ,-modernize-use-nodiscard,
