@@ -84,4 +84,11 @@ private:
 	std::vector<std::function<void()>> callAtExit;
 };
 
+namespace internal {
+
+std::pair<int, int> getMinAspectRatio(const AppParameters& params);
+std::pair<int, int> getMaxAspectRatio(const AppParameters& params);
+
+} // namespace internal
+
 } // namespace jngl

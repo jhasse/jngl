@@ -189,8 +189,26 @@ void App::updateProjectionMatrix() const {
 	}
 }
 
-#if !defined(__APPLE__) || !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE // iOS
 namespace internal {
+
+std::pair<int, int> getMinAspectRatio(const AppParameters& params) {
+	if (params.minAspectRatio) {
+		return *params.minAspectRatio;
+	}
+	return { 1, 3 };
+}
+
+std::pair<int, int> getMaxAspectRatio(const AppParameters& params) {
+	if (params.maxAspectRatio) {
+		return *params.maxAspectRatio;
+	}
+	if (params.screenSize) {
+		return { std::lround(params.screenSize->x), std::lround(params.screenSize->y) };
+	}
+	return { 3, 1 };
+}
+
+#if !defined(__APPLE__) || !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE // iOS
 
 uint8_t mainLoop(AppParameters params) {
 	auto context = App::instance().init(params);
@@ -205,12 +223,7 @@ uint8_t mainLoop(AppParameters params) {
 	if (params.fullscreen) {
 		fullscreen = *params.fullscreen;
 	}
-	std::pair<int, int> minAspectRatio{ 1, 3 };
-	std::pair<int, int> maxAspectRatio{ 3, 1 };
-	if (params.screenSize) {
-		maxAspectRatio = minAspectRatio = std::pair<int, int>(std::lround(params.screenSize->x),
-		                                                      std::lround(params.screenSize->y));
-	} else {
+	if (!params.screenSize) {
 		params.screenSize = { static_cast<double>(getDesktopWidth()),
 			                  static_cast<double>(getDesktopHeight()) };
 	}
@@ -248,15 +261,14 @@ uint8_t mainLoop(AppParameters params) {
 	}
 #endif
 	showWindow(params.displayName, windowPixelWidth, windowPixelHeight, fullscreen,
-	           params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
-	           params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
+	           getMinAspectRatio(params), getMaxAspectRatio(params));
 	setScene(params.start());
 	uint8_t exitcode = App::instance().mainLoop();
 	hideWindow();
 	return exitcode;
 }
 
-} // namespace internal
 #endif
+} // namespace internal
 
 } // namespace jngl
