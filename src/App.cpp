@@ -195,6 +195,9 @@ std::pair<int, int> getMinAspectRatio(const AppParameters& params) {
 	if (params.minAspectRatio) {
 		return *params.minAspectRatio;
 	}
+	if (params.screenSize) {
+		return { std::lround(params.screenSize->x), std::lround(params.screenSize->y) };
+	}
 	return { 1, 3 };
 }
 
