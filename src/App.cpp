@@ -222,6 +222,14 @@ uint8_t mainLoop(AppParameters params) {
 	bool fullscreen = false;
 #if (!defined(__EMSCRIPTEN__) && defined(NDEBUG)) || defined(__ANDROID__)
 	fullscreen = true;
+	if (!params.fullscreen.has_value()) {
+		for (const auto& arg : jngl::getArgs()) {
+			if (arg == "--window" || arg == "--windowed") {
+				fullscreen = false;
+				break;
+			}
+		}
+	}
 #else
 	if (!params.fullscreen.has_value()) {
 		for (const auto& arg : jngl::getArgs()) {
