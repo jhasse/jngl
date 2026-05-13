@@ -4,7 +4,7 @@
 #include "../jngl/Finally.hpp"
 #include "../jngl/other.hpp"
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #if defined(__has_include) && __has_include(<SDL_locale.h>)
 #include <SDL_locale.h>
@@ -42,7 +42,11 @@ void setVerticalSync(bool enabled) {
 }
 
 bool getVerticalSync() {
-	return SDL_GL_GetSwapInterval() == 1;
+	int result;
+	if (!SDL_GL_GetSwapInterval(&result)) {
+		throw std::runtime_error(SDL_GetError());
+	}
+	return result == 1;
 }
 
 } // namespace jngl
