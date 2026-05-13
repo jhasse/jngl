@@ -388,6 +388,17 @@ void Window::UpdateInput() {
 				SDL_GL_GetDrawableSize(impl->sdlWindow, &width_, &height_);
 				impl->actualWidth = static_cast<float>(width_);
 				impl->actualHeight = static_cast<float>(height_);
+				// Update hidpiScaleFactor in case the window moved to a screen with different
+				// scaling (e.g. moving between a Retina and a non-Retina display on macOS):
+				{
+					int logicalWidth = width_;
+					int logicalHeight = height_;
+					SDL_GetWindowSize(impl->sdlWindow, &logicalWidth, &logicalHeight);
+					if (logicalWidth > 0) {
+						impl->hidpiScaleFactor =
+						    static_cast<float>(width_) / static_cast<float>(logicalWidth);
+					}
+				}
 				impl->actualCanvasWidth = canvasWidth;
 				impl->actualCanvasHeight = canvasHeight;
 				calculateCanvasSize({ canvasWidth, canvasHeight }, { canvasWidth, canvasHeight });
