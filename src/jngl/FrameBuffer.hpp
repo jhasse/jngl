@@ -6,9 +6,9 @@
 
 #include "Mat3.hpp"
 #include "Pixels.hpp"
+#include "ShaderProgram.hpp"
 #include "Vec2.hpp"
 #include "Vertex.hpp"
-#include "ShaderProgram.hpp"
 
 #include <functional>
 #include <memory>

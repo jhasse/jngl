@@ -9,7 +9,7 @@ cache:
 linux:
   parallel:
     matrix:
-      - VERSION: ['41', '43', 'latest']
+      - VERSION: ['43', '44', 'latest']
   image: fedora:$VERSION
   rules:
   - if: '$VERSION == "latest"'
@@ -45,7 +45,7 @@ linux:
 mingw:
   parallel:
     matrix:
-      - VERSION: ['41', '42', 'latest']
+      - VERSION: ['43', '44', 'latest']
   image: fedora:$VERSION
   rules:
   - if: '$VERSION == "latest"'
@@ -73,15 +73,9 @@ android:
     - ./gradlew build
 
 steamos:
-  image: registry.gitlab.steamos.cloud/steamrt/sniper/sdk
+  image: registry.gitlab.steamos.cloud/steamrt/steamrt4/sdk
   stage: build
   script:
-    - apt-get update
-    - apt-get install -y libboost-dev libc++abi-16-dev libc++-16-dev clang-16
-    - export LDFLAGS=-static-libstdc++
-    - export CXXFLAGS=-stdlib=libc++
-    - export CC=clang-16
-    - export CXX=clang++-16
     - cmake -Bbuild-steamos -GNinja -DCMAKE_BUILD_TYPE=Debug
     - cd build-steamos
     - ninja

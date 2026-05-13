@@ -29,6 +29,7 @@ Checks: '
        ,-cppcoreguidelines-non-private-member-variables-in-classes,
        ,-cppcoreguidelines-owning-memory,
        ,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+       ,-cppcoreguidelines-pro-bounds-avoid-unchecked-container-access,
        ,-cppcoreguidelines-pro-bounds-constant-array-index,
        ,-cppcoreguidelines-pro-bounds-pointer-arithmetic,
        ,-cppcoreguidelines-pro-type-vararg,
@@ -103,6 +104,7 @@ WarningsAsErrors: '
   performance-move-const-arg,
   readability-implicit-bool-conversion,
 '
+HeaderFilterRegex: '.*src/.*'
 CheckOptions:
       - key:             readability-implicit-bool-conversion.AllowPointerConditions
         value:           '1'

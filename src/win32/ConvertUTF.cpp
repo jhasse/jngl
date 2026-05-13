@@ -366,7 +366,10 @@ ConversionResult ConvertUTF8toUTF16 (
 	    case 1: ch += *source++; ch <<= 6; FALLTHROUGH
 	    case 0: ch += *source++;
 	}
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
 	ch -= offsetsFromUTF8[extraBytesToRead];
+#pragma GCC diagnostic pop
 
 	if (target >= targetEnd) {
 	    source -= (extraBytesToRead+1); /* Back up source pointer! */
@@ -492,7 +495,10 @@ ConversionResult ConvertUTF8toUTF32 (
 	    case 1: ch += *source++; ch <<= 6; FALLTHROUGH
 	    case 0: ch += *source++;
 	}
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
 	ch -= offsetsFromUTF8[extraBytesToRead];
+#pragma GCC diagnostic pop
 
 	if (target >= targetEnd) {
 	    source -= (extraBytesToRead+1); /* Back up the source pointer! */

@@ -1,4 +1,4 @@
-// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
@@ -15,8 +15,8 @@ public:
 	AndroidController& operator=(AndroidController&&) = delete;
 	~AndroidController() override;
 
-	bool down(controller::Button) const override;
-	float stateImpl(controller::Button) const override;
+	bool down(controller) const override;
+	float stateImpl(controller) const override;
 
 	float leftStickX = 0;
 	float leftStickY = 0;
@@ -30,7 +30,7 @@ public:
 	bool buttonBack = false;
 
 private:
-	float stateWithoutDeadzone(controller::Button) const;
+	float stateWithoutDeadzone(controller) const;
 };
 
 } // namespace jngl

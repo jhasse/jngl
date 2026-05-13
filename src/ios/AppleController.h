@@ -1,4 +1,4 @@
-// Copyright 2020 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
@@ -13,8 +13,8 @@ class AppleController : public Controller {
 public:
 	AppleController(GCController*);
 
-	bool down(controller::Button) const override;
-	float stateImpl(controller::Button) const override;
+	bool down(controller) const override;
+	float stateImpl(controller) const override;
 
 private:
 	GCController* gc;

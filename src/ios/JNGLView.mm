@@ -60,10 +60,14 @@ std::unique_ptr<jngl::App> jnglApp;
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
 
+		if (params.screenSize) {
+			jngl::setScaleFactor(std::min(static_cast<double>(width) / params.screenSize->x,
+			                              static_cast<double>(height) / params.screenSize->y));
+		}
+
         cleanAppImpl = new jngl::Finally(jngl::App::instance().init(params));
-		jngl::showWindow("", width, height, true,
-		                 params.minAspectRatio ? *params.minAspectRatio : std::make_pair(1, 3),
-		                 params.maxAspectRatio ? *params.maxAspectRatio : std::make_pair(3, 1));
+		jngl::showWindow("", width, height, true, jngl::internal::getMinAspectRatio(params),
+		                 jngl::internal::getMaxAspectRatio(params));
 
 		CADisplayLink* displayLink;
 		displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawView:)];

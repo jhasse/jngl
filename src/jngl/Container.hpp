@@ -4,6 +4,7 @@
 /// @file
 #pragma once
 
+#include <cstdint>
 #include <memory>
 #include <set>
 #include <vector>
