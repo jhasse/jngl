@@ -136,6 +136,38 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 	impl->texture.draw();
 }
 
+void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
+                       const ShaderProgram* const shaderProgram) const {
+	impl->texture.bind();
+	int oldFilter;
+	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &oldFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+	                textureFilter == TextureFilter::NearestNeighbor ? GL_NEAREST : GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+	                textureFilter == TextureFilter::NearestNeighbor ? GL_NEAREST : GL_LINEAR);
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   modelview.scale(1, -1)
+		                       .translate({ -impl->width / getScaleFactor() / 2,
+		                                    -impl->height / getScaleFactor() / 2 })
+		                       .data);
+	} else {
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
+		                   modelview.scale(1, -1)
+		                       .translate({ -impl->width / getScaleFactor() / 2,
+		                                    -impl->height / getScaleFactor() / 2 })
+		                       .data);
+	}
+	glDrawArrays(GL_TRIANGLE_FAN, 0,
+	             4); // no need to bind again, that's why we don't call impl->texture.draw() here
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, oldFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, oldFilter);
+}
+
 void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
                            const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
