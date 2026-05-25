@@ -435,6 +435,12 @@ void Window::UpdateInput() {
 				}
 			}
 			break;
+		case SDL_EVENT_WINDOW_FOCUS_LOST:
+			if (const auto& scene = getScene()) {
+				internal::debug("Window lost focus.");
+				scene->onPauseEvent();
+			}
+			break;
 		}
 	}
 }
