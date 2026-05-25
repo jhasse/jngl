@@ -16,6 +16,16 @@
 
 namespace jngl {
 
+enum class TextureFilter : uint8_t {
+	/// Bilinear Filtering is used when jngl::AppParameters::pixelArt is false. It smooths the
+	/// image when it is scaled up.
+	Bilinear,
+
+	/// Nearest Neighbor Filtering is used when jngl::AppParameters::pixelArt is true. It
+	/// preserves the pixelated look when the image is scaled up.
+	NearestNeighbor,
+};
+
 class ShaderProgram;
 
 /// Image framebuffer object which can be rendered on
@@ -82,7 +92,18 @@ public:
 	void draw(Vec2 position, const ShaderProgram* = nullptr) const;
 	void draw(double x, double y) const;
 
+	/// Draws the framebuffer image to the screen
+	///
+	/// \param shaderProgram If not `nullptr`, this shader program is used instead of the default.
 	void draw(Mat3 modelview, const ShaderProgram* = nullptr) const;
+
+	/// Draws the framebuffer image to the screen with a specific texture filter
+	///
+	/// \param textureFilter Use this filtering for this one draw call, ignoring
+	/// jngl::AppParameters::pixelArt. You'd probably want to use TextureFilter::NearestNeighbor for
+	/// cases where you have a framebuffer the same size as the screen.
+	/// \param shaderProgram If not `nullptr`, this shader program is used instead of the default.
+	void draw(Mat3 modelview, TextureFilter textureFilter, const ShaderProgram* = nullptr) const;
 
 	/// Draws a list of triangles with the framebuffer's texture on it
 	void drawMesh(const std::vector<Vertex>& vertexes, const ShaderProgram* = nullptr) const;

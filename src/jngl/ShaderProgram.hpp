@@ -54,7 +54,18 @@ public:
 	    use() const;
 
 	[[nodiscard]] int getAttribLocation(const std::string& name) const;
-	/// \param name name of the declared variable
+
+	/// Returns the location of a uniform variable for use with Context::setUniform
+	///
+	/// The returned location is stable for the lifetime of the ShaderProgram and is typically
+	/// queried once (e.g. in a constructor) and then cached.
+	///
+	/// \param name name of the uniform variable as declared in the GLSL source. Note that GLSL
+	///             compilers strip away uniforms that aren't actually read by the shader, so this
+	///             may fail even if the variable appears in the source.
+	/// \return a non-negative location identifying the uniform
+	/// \throws std::runtime_error if no active uniform with the given name exists in the linked
+	///         shader program.
 	[[nodiscard]] int getUniformLocation(const std::string& name) const;
 
 private:
