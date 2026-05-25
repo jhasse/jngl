@@ -17,7 +17,8 @@ endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
 	set(USE_FLAGS "-sUSE_SDL=3 -sUSE_FREETYPE=1 -sUSE_VORBIS=1")
-	string(APPEND CMAKE_CXX_FLAGS " ${USE_FLAGS} -sNO_DISABLE_EXCEPTION_CATCHING")
+	# emcc: error: sdl3 port is still experimental [-Wexperimental] [-Werror]
+	string(APPEND CMAKE_CXX_FLAGS " ${USE_FLAGS} -sNO_DISABLE_EXCEPTION_CATCHING -Wno-experimental")
 	string(APPEND CMAKE_C_FLAGS " ${USE_FLAGS}")
 	string(APPEND CMAKE_EXE_LINKER_FLAGS " ${USE_FLAGS} -sASSERTIONS=1 --preload-file data")
 	set(CMAKE_EXECUTABLE_SUFFIX ".html")
