@@ -347,6 +347,10 @@ void Window::UpdateInput() {
 				if (const auto& scene = getScene()) {
 					scene->onBackEvent();
 				}
+			} else if (!event.key.repeat && event.key.key == SDLK_RETURN && getKeyDown(key::Alt)) {
+				if (const auto& scene = getScene()) {
+					scene->onToggleFullscreen();
+				}
 			}
 			anyKeyPressed_ = true;
 			break;
