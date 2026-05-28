@@ -90,7 +90,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 
 	if (isMultisampleSupported_) {
 		int openglMSAA;
-		if (SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &openglMSAA)) {
+		if (!SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &openglMSAA)) {
 			internal::debug("Recreating window and OpenGL Context without Anti-Aliasing support.");
 			SDL_GL_DestroyContext(impl->context);
 			SDL_DestroyWindow(impl->sdlWindow);
