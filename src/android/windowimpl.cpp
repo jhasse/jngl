@@ -1,4 +1,4 @@
-// Copyright 2015-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowimpl.hpp"
@@ -10,6 +10,7 @@
 #include "../jngl/sound.hpp"
 #include "../jngl/window.hpp"
 #include "../jngl/work.hpp"
+#include "../App.hpp"
 #include "../windowptr.hpp"
 #include "../main.hpp"
 #include "fopen.hpp"
@@ -309,6 +310,9 @@ void WindowImpl::init() {
 	window->width_ = w;
 	window->height_ = h;
 	window->calculateCanvasSize(minAspectRatio, maxAspectRatio);
+
+	App::instance().initGl(window->width_, window->height_, window->canvasWidth,
+	                       window->canvasHeight);
 }
 
 void WindowImpl::terminate() {

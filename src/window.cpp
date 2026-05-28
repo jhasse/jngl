@@ -16,11 +16,6 @@
 #include "jngl/record/VideoRecorder.hpp"
 #endif
 
-#ifdef ANDROID
-#include "App.hpp"
-#include "main.hpp"
-#endif
-
 #ifdef __EMSCRIPTEN__
 #include "emscripten/window.hpp"
 
@@ -571,9 +566,6 @@ void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 }
 
 void Window::initGlObjects() {
-#ifdef ANDROID
-	App::instance().initGl(width_, height_, canvasWidth, canvasHeight);
-#endif
 	glGenBuffers(1, &opengl::vboStream);
 	glGenVertexArrays(1, &opengl::vaoStream);
 
