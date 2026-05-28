@@ -605,6 +605,12 @@ std::vector<Vec2> Window::getTouchPositions() const {
 	return positions;
 }
 
+void Window::setFullscreen(bool fullscreen) {
+	if (!fullscreen) {
+		internal::warn("Can't unset fullscreen on Android!");
+	}
+}
+
 std::string getSystemConfigPath() {
 	return jngl::androidApp->activity->internalDataPath;
 }
