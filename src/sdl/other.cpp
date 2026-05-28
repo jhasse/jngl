@@ -6,10 +6,6 @@
 
 #include <SDL3/SDL.h>
 
-#if defined(__has_include) && __has_include(<SDL_locale.h>)
-#include <SDL_locale.h>
-#endif
-
 namespace jngl {
 
 std::string getPreferredLanguage() {
@@ -20,12 +16,15 @@ std::string getPreferredLanguage() {
 			return lang.substr(0, 2);
 		}
 	}
-#elif defined(__has_include) && __has_include(<SDL_locale.h>)
-	SDL_Locale* locale = SDL_GetPreferredLocales();
-	Finally freeLocale([locale]() { SDL_free(locale); });
-	if (locale && locale->language && locale->language[0] != '\0' && locale->language[1] != '\0' &&
-	    locale->language[2] == '\0') {
-		return locale->language;
+#else
+	int count = 0;
+	SDL_Locale** locales = SDL_GetPreferredLocales(&count);
+	Finally freeLocales([locales]() { SDL_free(static_cast<void*>(locales)); });
+	for (int i = 0; i < count; ++i) {
+		if (locales[i] && locales[i]->language && locales[i]->language[0] != '\0' &&
+		    locales[i]->language[1] != '\0' && locales[i]->language[2] == '\0') {
+			return locales[i]->language;
+		}
 	}
 #endif
 	return "en";
