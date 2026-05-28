@@ -98,6 +98,9 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 			isMultisampleSupported_ = false;
 			impl->sdlWindow = create();
 			impl->context = SDL_GL_CreateContext(impl->sdlWindow);
+#ifdef GLAD_GL
+			gladLoadGL(reinterpret_cast<GLADloadfunc>(SDL_GL_GetProcAddress)); // NOLINT
+#endif
 		}
 	}
 
