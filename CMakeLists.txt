@@ -19,7 +19,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
 	set(USE_FLAGS "-sUSE_SDL=3 -sUSE_FREETYPE=1 -sUSE_VORBIS=1")
 	# emcc: error: sdl3 port is still experimental [-Wexperimental] [-Werror]
 	string(APPEND CMAKE_CXX_FLAGS " ${USE_FLAGS} -sNO_DISABLE_EXCEPTION_CATCHING -Wno-experimental")
-	string(APPEND CMAKE_C_FLAGS " ${USE_FLAGS}")
+	string(APPEND CMAKE_C_FLAGS " ${USE_FLAGS} -Wno-experimental")
 	string(APPEND CMAKE_EXE_LINKER_FLAGS " ${USE_FLAGS} -sASSERTIONS=1 --preload-file data")
 	set(CMAKE_EXECUTABLE_SUFFIX ".html")
 endif()
@@ -446,6 +446,18 @@ if(JNGL_BUILD_WEBP_FROM_SOURCE)
 	)
 	target_include_directories(jngl PRIVATE ${webp_SOURCE_DIR}/src)
 	target_link_libraries(jngl PRIVATE webpdecode webpdspdecode webputilsdecode)
+	if(EMSCRIPTEN)
+		# libwebp's CMakeLists adds -Wall, which under emcc re-enables
+		# -Wexperimental that we disabled in CMAKE_C_FLAGS. Combined with
+		# CMAKE_COMPILE_WARNING_AS_ERROR=1 (-> -Werror) this turns the SDL3
+		# "port is still experimental" message into a hard error. Append
+		# -Wno-experimental on each webp target so it wins over -Wall.
+		get_property(_webp_targets DIRECTORY ${webp_SOURCE_DIR}
+		             PROPERTY BUILDSYSTEM_TARGETS)
+		foreach(_t ${_webp_targets})
+			target_compile_options(${_t} PRIVATE -Wno-experimental)
+		endforeach()
+	endif()
 endif()
 
 if(ANDROID OR IOS OR APPLE)
