@@ -274,7 +274,6 @@ else()
 					"SDL_RENDER OFF"
 					"SDL_SENSOR OFF"
 					"SDL_SHARED OFF"
-					"SDL_SHARED OFF"
 					"SDL_STATIC ON"
 					"SDL_TIMERS OFF"
 			)
@@ -284,6 +283,8 @@ else()
 				URL_HASH SHA1=b16ad311975378dcc87b11fc02c84eaa1f028b38
 				OPTIONS
 					"SDL_SENSOR OFF"
+					"SDL_SHARED OFF"
+					"SDL_STATIC ON"
 			)
 		endif()
 		target_link_libraries(jngl PRIVATE SDL3::SDL3)
