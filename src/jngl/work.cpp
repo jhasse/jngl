@@ -3,7 +3,9 @@
 
 #include "work.hpp"
 
+#include "../log.hpp"
 #include "other.hpp"
+#include "window.hpp"
 
 namespace jngl {
 
@@ -32,6 +34,14 @@ void Work::onLoad() {
 }
 
 void Work::onUnload() {
+}
+
+void Work::onToggleFullscreen() {
+	try {
+		setFullscreen(!getFullscreen());
+	} catch (const std::exception& e) {
+		internal::error("Couldn't toggle fullscreen mode: {}", e.what());
+	}
 }
 
 } // namespace jngl

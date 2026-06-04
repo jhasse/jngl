@@ -7,7 +7,7 @@ jobs:
     - uses: actions/checkout@v5
     - name: Install dependencies
       run: |
-        brew install sdl2 libvorbis webp
+        brew install sdl3 libvorbis webp
     - name: Build with CMake
       run: |
         cmake -Bbuild-cmake -GNinja
