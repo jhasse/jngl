@@ -7,87 +7,85 @@
 #include "../jngl/other.hpp"
 #include "Fixture.hpp"
 
-#include <boost/ut.hpp>
+#include <catch2/catch_test_macros.hpp>
 #include <filesystem>
 
-boost::ut::suite suite = [] {
-	using namespace boost::ut; // NOLINT
-
-	"FinallyTest"_test = [] {
-		bool called = false;
+TEST_CASE("FinallyTest") {
+	bool called = false;
+	{
+		jngl::Finally _([&called]() {
+			REQUIRE(!called);
+			called = true;
+		});
+		REQUIRE(!called);
+	}
+	REQUIRE(called);
+	{ // don't crash
+		jngl::Finally _(nullptr);
+	}
+	called = false;
+	{
+		jngl::Finally f1([&called]() {
+			REQUIRE(!called);
+			called = true;
+		});
+		jngl::Finally f2 = std::move(f1);
+		jngl::Finally f3(std::move(f2));
 		{
-			jngl::Finally _([&called]() {
-				expect(!called);
-				called = true;
-			});
-			expect(!called);
+			jngl::Finally f4(nullptr);
+			f4 = std::move(f3);
+			f3 = std::move(f4);
 		}
-		expect(called);
-		{ // don't crash
-			jngl::Finally _(nullptr);
-		}
-		called = false;
-		{
-			jngl::Finally f1([&called]() {
-				expect(!called);
-				called = true;
-			});
-			jngl::Finally f2 = std::move(f1);
-			jngl::Finally f3(std::move(f2));
-			{
-				jngl::Finally f4(nullptr);
-				f4 = std::move(f3);
-				f3 = std::move(f4);
-			}
-			expect(!called);
-		}
-		expect(called);
-	};
+		REQUIRE(!called);
+	}
+	REQUIRE(called);
+}
 
-	"halfLoadTest"_test = [] {
-		std::error_code err;
-		std::filesystem::current_path("data", err);
+TEST_CASE("halfLoadTest") {
+	std::error_code err;
+	std::filesystem::current_path("data", err);
+	if (err) {
+		std::filesystem::current_path("../data", err); // move out of build/bin folder
 		if (err) {
-			std::filesystem::current_path("../data", err); // move out of build/bin folder
+			std::filesystem::current_path("../../data", err); // move out of build/Debug folder
 			if (err) {
-				std::filesystem::current_path("../../data", err); // move out of build/Debug folder
-				if (err) {
-					std::filesystem::current_path("../../../data",
-					                              err); // move out of out\build\x64-Debug
-				}
+				std::filesystem::current_path("../../../data",
+				                              err); // move out of out\build\x64-Debug
 			}
 		}
-		expect(jngl::getWidth("jngl") == 600_i);
-		expect(jngl::getHeight("jngl") == 300_i);
-		expect(throws<std::runtime_error>([] { jngl::load("jngl"); }));
-	};
+	}
+	REQUIRE(jngl::getWidth("jngl") == 600);
+	REQUIRE(jngl::getHeight("jngl") == 300);
+	REQUIRE_THROWS_AS(jngl::load("jngl"), std::runtime_error);
+}
 
-	"getBinaryPath"_test = [] { expect(!jngl::getBinaryPath().empty()); };
+TEST_CASE("getBinaryPath") {
+	REQUIRE(!jngl::getBinaryPath().empty());
+}
 
-	"readAsset"_test = [] {
-		expect(!jngl::readAsset("non existing file"));
-		expect(throws<std::runtime_error>([] { jngl::readAsset("/some/absolute/path"); }));
-	};
+TEST_CASE("readAsset") {
+	REQUIRE(!jngl::readAsset("non existing file"));
+	REQUIRE_THROWS_AS(jngl::readAsset("/some/absolute/path"), std::runtime_error);
+}
 
-	"keyDown"_test = [] {
-		Fixture f(1);
-		jngl::keyDown("a");
-		expect(throws<std::runtime_error>([] { jngl::keyDown("aa"); }));
-		jngl::keyDown("ä");
-		expect(throws<std::runtime_error>([] { jngl::keyDown("ää"); }));
-	};
+TEST_CASE("keyDown") {
+	Fixture f(1);
+	jngl::keyDown("a");
+	REQUIRE_THROWS_AS(jngl::keyDown("aa"), std::runtime_error);
+	jngl::keyDown("ä");
+	REQUIRE_THROWS_AS(jngl::keyDown("ää"), std::runtime_error);
+}
 
-	"getConfigPath"_test = [] {
-		// Note: This test only works if jngl::internal::getConfigPath() hasn't been called before
+TEST_CASE("getConfigPath") {
+	// Note: This test only works if jngl::internal::getConfigPath() hasn't been called before
 
-		// Explicitly set the display name (showWindow only sets it if empty)
-		jngl::App::instance().setDisplayName("test:with?invalid*chars");
+	// Explicitly set the display name (showWindow only sets it if empty)
+	jngl::App::instance().setDisplayName("test:with?invalid*chars");
 
-		// Verify that App::getDisplayName() has invalid chars
-		const std::string displayName = jngl::App::instance().getDisplayName();
-		expect(eq(displayName, std::string("test:with?invalid*chars")));
+	// Verify that App::getDisplayName() has invalid chars
+	const std::string displayName = jngl::App::instance().getDisplayName();
+	REQUIRE(displayName == "test:with?invalid*chars");
 
-		const auto p = jngl::internal::getConfigPath();
-		expect(eq(p.substr(p.size() - 22), std::string("/testwithinvalidchars/")));
-	};
-};
+	const auto p = jngl::internal::getConfigPath();
+	REQUIRE(p.substr(p.size() - 22) == "/testwithinvalidchars/");
+}

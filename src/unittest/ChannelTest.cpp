@@ -3,30 +3,25 @@
 #include "../jngl/Channel.hpp"
 #include "../jngl/sound.hpp"
 
-#include <boost/ut.hpp>
+#include <catch2/catch_test_macros.hpp>
 
-namespace {
-boost::ut::suite _ = [] {
-	using namespace boost::ut; // NOLINT
-	"Channel"_test = [] {
-		jngl::Channel channel;
-		expect(!channel.isPlaying("../data/test.ogg"));
-		expect(!jngl::Channel::main().isPlaying("../data/test.ogg"));
-		jngl::play("../data/test.ogg");
-		expect(!channel.isPlaying("../data/test.ogg"));
-		expect(jngl::Channel::main().isPlaying("../data/test.ogg"));
-		channel.play("../data/test.ogg");
-		expect(channel.isPlaying("../data/test.ogg"));
-		expect(jngl::Channel::main().isPlaying("../data/test.ogg"));
-		jngl::Channel::main().stop("../data/test.ogg");
-		expect(channel.isPlaying("../data/test.ogg"));
-		expect(!jngl::Channel::main().isPlaying("../data/test.ogg"));
-		channel.stop("../data/test.ogg");
-		expect(!channel.isPlaying("../data/test.ogg"));
-		expect(!jngl::Channel::main().isPlaying("../data/test.ogg"));
-		expect(throws<std::runtime_error>([&] { channel.play("nonexistent.ogg"); }));
-		expect(throws<std::runtime_error>([&] { channel.stop("nonexistent.ogg"); }));
-		expect(throws<std::runtime_error>([&] { channel.isPlaying("nonexistent.ogg"); }));
-	};
-};
-} // namespace
+TEST_CASE("Channel") {
+	jngl::Channel channel;
+	CHECK(!channel.isPlaying("../data/test.ogg"));
+	CHECK(!jngl::Channel::main().isPlaying("../data/test.ogg"));
+	jngl::play("../data/test.ogg");
+	CHECK(!channel.isPlaying("../data/test.ogg"));
+	CHECK(jngl::Channel::main().isPlaying("../data/test.ogg"));
+	channel.play("../data/test.ogg");
+	CHECK(channel.isPlaying("../data/test.ogg"));
+	CHECK(jngl::Channel::main().isPlaying("../data/test.ogg"));
+	jngl::Channel::main().stop("../data/test.ogg");
+	CHECK(channel.isPlaying("../data/test.ogg"));
+	CHECK(!jngl::Channel::main().isPlaying("../data/test.ogg"));
+	channel.stop("../data/test.ogg");
+	CHECK(!channel.isPlaying("../data/test.ogg"));
+	CHECK(!jngl::Channel::main().isPlaying("../data/test.ogg"));
+	CHECK_THROWS_AS(channel.play("nonexistent.ogg"), std::runtime_error);
+	CHECK_THROWS_AS(channel.stop("nonexistent.ogg"), std::runtime_error);
+	CHECK_THROWS_AS(channel.isPlaying("nonexistent.ogg"), std::runtime_error);
+}
