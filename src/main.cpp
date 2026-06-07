@@ -435,6 +435,10 @@ unsigned int getStepsPerSecond() {
 	return pWindow->getStepsPerSecond();
 }
 
+float getDelta() {
+	return 1.f / static_cast<float>(getStepsPerSecond());
+}
+
 void setStepsPerSecond(const unsigned int stepsPerSecond) {
 	pWindow->setStepsPerSecond(stepsPerSecond);
 }
