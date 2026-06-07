@@ -131,6 +131,11 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	impl->actualCanvasWidth = canvasWidth;
 	impl->actualCanvasHeight = canvasHeight;
 	App::instance().initGl(width_, height_, canvasWidth, canvasHeight);
+
+	// Unlike SDL2, which implicitly enabled text input on desktop, SDL3 doesn't deliver
+	// SDL_EVENT_TEXT_INPUT events until text input has been explicitly started. Without this
+	// getTextInput() would always return an empty string.
+	SDL_StartTextInput(impl->sdlWindow);
 }
 
 Window::~Window() = default;
