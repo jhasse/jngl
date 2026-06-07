@@ -307,8 +307,13 @@ void WindowImpl::init() {
 	if (eglQuerySurface(display->display, display->surface->surface, EGL_HEIGHT, &h) == EGL_FALSE) {
 		handleEglError();
 	}
-	setScaleFactor(std::min(static_cast<double>(w) / window->width_,
-	                        static_cast<double>(h) / window->height_));
+	if (window->width_ > 0) {
+		assert(window->height_ > 0);
+		// when AppParameters::screenSize was set, width_ and height_ contain it. Otherwise they are
+		// set to -1.
+		setScaleFactor(std::min(static_cast<double>(w) / window->width_,
+		                        static_cast<double>(h) / window->height_));
+	}
 	window->width_ = w;
 	window->height_ = h;
 	window->calculateCanvasSize(minAspectRatio, maxAspectRatio);
