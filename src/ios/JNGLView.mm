@@ -153,14 +153,14 @@ std::unique_ptr<jngl::App> jnglApp;
 -(void) insertText: (NSString*) text {
 	std::string c = text.UTF8String;
 	if (c == "\n") {
-		jngl::setKeyPressed(jngl::key::Return, true);
+		impl->enqueueReturn();
 	} else {
-		jngl::setKeyPressed(c, true);
+		impl->enqueueTextInput(c); // so that jngl::getTextInput() returns the typed character
 	}
 }
 
 -(void) deleteBackward {
-	jngl::setKeyPressed(jngl::key::BackSpace, true);
+	impl->enqueueBackspace();
 }
 
 -(BOOL) canBecomeFirstResponder {
