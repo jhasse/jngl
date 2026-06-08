@@ -57,4 +57,16 @@ void bindVertexArray(GLuint vao) {
 	glBindVertexArray(vao);
 }
 
+void deleteVertexArray(GLuint vao) {
+	glDeleteVertexArrays(1, &vao);
+#ifdef ANDROID
+	if (auto cache = VaoCache::handleIfAlive(); cache && cache->currentlyBoundVao == vao) {
+		// Deleting the bound VAO reverts the GL binding to 0 (see glDeleteVertexArrays). The id is
+		// now free to be recycled by glGenVertexArrays, so we must clear the cache; otherwise the
+		// next bindVertexArray of the recycled id would wrongly be skipped as a no-op.
+		cache->currentlyBoundVao = 0;
+	}
+#endif
+}
+
 } // namespace opengl

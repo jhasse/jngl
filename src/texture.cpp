@@ -65,7 +65,7 @@ Texture::~Texture() {
 		// pointers have been unloaded (Windows).
 		glDeleteTextures(1, &texture_);
 		glDeleteBuffers(1, &vertexBuffer_);
-		glDeleteVertexArrays(1, &vao);
+		opengl::deleteVertexArray(vao);
 	}
 }
 

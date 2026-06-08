@@ -52,4 +52,10 @@ GLuint genAndBindTexture();
 /// Calls glBindVertexArray(vao) (on Android: only if vao is not already bound)
 void bindVertexArray(GLuint vao);
 
+/// Calls glDeleteVertexArrays(1, &vao) and invalidates the Android VAO cache
+///
+/// Must be used instead of glDeleteVertexArrays directly: OpenGL recycles the id after deletion, so
+/// a stale cache entry would turn the next bindVertexArray of the recycled id into a no-op.
+void deleteVertexArray(GLuint vao);
+
 } // namespace opengl
