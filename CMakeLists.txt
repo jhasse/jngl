@@ -301,11 +301,16 @@ else()
 		find_library(IOS_AVFOUNDATION AVFoundation)
 		find_library(IOS_GAMECONTROLLER GameController)
 		find_library(IOS_AudioToolbox AudioToolbox)
-		find_library(IOS_COREHAPTICS CoreHaptics)
 		target_link_libraries(jngl PRIVATE
 			${IOS_OPENGLES} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
-			${IOS_GAMECONTROLLER} ${IOS_AudioToolbox} ${IOS_COREHAPTICS}
+			${IOS_GAMECONTROLLER} ${IOS_AudioToolbox}
 		)
+		# CoreHaptics and the UIKit feedback generators aren't available on tvOS, so only link
+		# CoreHaptics where it exists (see src/ios/haptics.mm for the matching code guard).
+		find_library(IOS_COREHAPTICS CoreHaptics)
+		if(IOS_COREHAPTICS)
+			target_link_libraries(jngl PRIVATE ${IOS_COREHAPTICS})
+		endif()
 
 		if(NOT hasParent)
 			set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.bixense.jngl-test")

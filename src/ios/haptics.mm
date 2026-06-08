@@ -2,6 +2,21 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "../jngl/haptics.hpp"
 
+#import <TargetConditionals.h>
+
+#if TARGET_OS_TV
+
+// tvOS has no Taptic Engine: neither the UIKit feedback generators nor Core Haptics are available,
+// so hapticFeedback() is a no-op there.
+namespace jngl {
+
+void hapticFeedback(HapticFeedback) {
+}
+
+} // namespace jngl
+
+#else
+
 #import <CoreHaptics/CoreHaptics.h>
 #import <UIKit/UIKit.h>
 
@@ -137,3 +152,5 @@ void hapticFeedback(HapticFeedback type) {
 }
 
 } // namespace jngl
+
+#endif
