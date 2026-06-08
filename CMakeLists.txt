@@ -301,9 +301,10 @@ else()
 		find_library(IOS_AVFOUNDATION AVFoundation)
 		find_library(IOS_GAMECONTROLLER GameController)
 		find_library(IOS_AudioToolbox AudioToolbox)
+		find_library(IOS_COREHAPTICS CoreHaptics)
 		target_link_libraries(jngl PRIVATE
 			${IOS_OPENGLES} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
-			${IOS_GAMECONTROLLER} ${IOS_AudioToolbox}
+			${IOS_GAMECONTROLLER} ${IOS_AudioToolbox} ${IOS_COREHAPTICS}
 		)
 
 		if(NOT hasParent)
