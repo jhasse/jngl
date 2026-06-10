@@ -307,17 +307,24 @@ void WindowImpl::init() {
 	if (eglQuerySurface(display->display, display->surface->surface, EGL_HEIGHT, &h) == EGL_FALSE) {
 		handleEglError();
 	}
-	if (window->width_ > 0) {
-		assert(window->height_ > 0);
-		// when AppParameters::screenSize was set, width_ and height_ contain it. Otherwise they are
-		// set to -1.
-		setScaleFactor(std::min(static_cast<double>(w) / window->width_,
-		                        static_cast<double>(h) / window->height_));
+	if (pWindow) {
+		// APP_CMD_INIT_WINDOW isn't only called on first start, but also when the app was
+		// sent to the background and brought to foreground again. In that case the scale
+		// factor is already set, but we still need to initialize OpenGL again.
+		assert(window->width_ == w);
+		assert(window->height_ == h);
+	} else {
+		if (window->width_ > 0) {
+			assert(window->height_ > 0);
+			// when AppParameters::screenSize was set, width_ and height_ contain it. Otherwise they
+			// are set to -1.
+			setScaleFactor(std::min(static_cast<double>(w) / window->width_,
+			                        static_cast<double>(h) / window->height_));
+		}
+		window->width_ = w;
+		window->height_ = h;
+		window->calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	}
-	window->width_ = w;
-	window->height_ = h;
-	window->calculateCanvasSize(minAspectRatio, maxAspectRatio);
-
 	App::instance().initGl(window->width_, window->height_, window->canvasWidth,
 	                       window->canvasHeight);
 }
