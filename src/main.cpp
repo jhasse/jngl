@@ -353,8 +353,14 @@ namespace {
 void readPixels(void* buffer, GLenum type) {
 	auto xOffset = (pWindow->getWidth() - pWindow->getCanvasWidth());
 	auto yOffset = (pWindow->getHeight() - pWindow->getCanvasHeight());
-	assert(xOffset % 2 == 0);
-	assert(yOffset % 2 == 0);
+
+	// This doesn't hold true on GNOME with fractional scaling: One can only provide logical points
+	// to SDL when creating a window. Due to the scaling it might be the window is 1 pixel to big in
+	// one dimension and we had to activate letter-boxing.
+	//
+	// assert(xOffset % 2 == 0);
+	// assert(yOffset % 2 == 0);
+
 	GLint oldPackAlignment = 0;
 	glGetIntegerv(GL_PACK_ALIGNMENT, &oldPackAlignment);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
