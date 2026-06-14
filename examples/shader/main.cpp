@@ -14,6 +14,10 @@ public:
 		                                                  jngl::Shader::Type::FRAGMENT);
 		texturedProgram =
 		    std::make_unique<jngl::ShaderProgram>(jngl::Sprite::vertexShader(), *texturedFragment);
+		fadeFragment = std::make_unique<jngl::Shader>(jngl::readAsset("fade.frag"),
+		                                              jngl::Shader::Type::FRAGMENT);
+		fadeProgram =
+		    std::make_unique<jngl::ShaderProgram>(jngl::Sprite::vertexShader(), *fadeFragment);
 	}
 
 	void step() override {
@@ -25,14 +29,16 @@ public:
 		sprite.drawClipped({ 0.43, 0.1 }, { 0.61, 0.9 });
 		jngl::translate(300, 30);
 		sprite.draw(blurProgram.get());
-		jngl::translate(-700, 0);
-		sprite.drawMesh({ { 0, 0, 0, 0 },
-		                  { 300, 0, 3, 0 },
-		                  { 300, 300, 3, 2.4f },
-		                  { 0, 0, 0, 0 },
-		                  { 300, 300, 3, 2.4f },
-		                  { 0, 300, 0, 2.4f } },
-		                texturedProgram.get());
+		jngl::translate(-700, -200);
+		const std::vector<jngl::Vertex> mesh{
+			{ .x = 0, .y = 0, .u = 0, .v = 0 },        { .x = 300, .y = 0, .u = 3, .v = 0 },
+			{ .x = 300, .y = 300, .u = 3, .v = 2.4f }, { .x = 0, .y = 0, .u = 0, .v = 0 },
+			{ .x = 300, .y = 300, .u = 3, .v = 2.4f }, { .x = 0, .y = 300, .u = 0, .v = 2.4f }
+		};
+		sprite.drawMesh(mesh, texturedProgram.get());
+		// The same tiled mesh as above, but with the edges faded out.
+		jngl::translate(0, 330);
+		sprite.drawMesh(mesh, fadeProgram.get());
 		jngl::popMatrix();
 	}
 
@@ -42,6 +48,8 @@ private:
 	std::unique_ptr<jngl::ShaderProgram> texturedProgram;
 	std::unique_ptr<jngl::Shader> blurFragment;
 	std::unique_ptr<jngl::ShaderProgram> blurProgram;
+	std::unique_ptr<jngl::Shader> fadeFragment;
+	std::unique_ptr<jngl::ShaderProgram> fadeProgram;
 };
 
 jngl::AppParameters jnglInit() {
