@@ -27,6 +27,9 @@ boost::ut::suite _ = [] {
 		expect(throws<std::runtime_error>([&] { channel.play("nonexistent.ogg"); }));
 		expect(throws<std::runtime_error>([&] { channel.stop("nonexistent.ogg"); }));
 		expect(throws<std::runtime_error>([&] { channel.isPlaying("nonexistent.ogg"); }));
+		channel.play("../data/test.ogg");
+		channel = jngl::Channel{};
+		expect(!channel.isPlaying("../data/test.ogg"));
 	};
 };
 } // namespace
