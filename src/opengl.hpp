@@ -24,6 +24,8 @@
 			#define glBindVertexArray glBindVertexArrayOES
 			#define glDeleteVertexArrays glDeleteVertexArraysOES
 			#define GL_RGBA8 GL_RGBA8_OES
+			#define GL_HALF_FLOAT GL_HALF_FLOAT_OES
+			#define GL_RGBA16F GL_RGBA16F_EXT
 		#else
 			#include <glad/gl.h>
 		#endif
