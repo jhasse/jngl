@@ -62,10 +62,19 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		                               // be reduced in its height (SDL bug?).
 	}
 
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-	const auto create = [this, &title, width, height, flags]() {
+	// Request a 10-bit-per-channel (deep color) default framebuffer. This greatly reduces banding in
+	// smooth gradients on displays and drivers that support it. It's only a request: if 10 bits
+	// aren't available SDL picks the closest format (usually 8 bits), so we query what we actually
+	// got afterwards. deepColor is also dropped if it prevents window creation entirely.
+	bool deepColor = true;
+	// We never use the window's alpha channel. We must explicitly request 0 alpha bits because the
+	// default minimum is 8, which would rule out the deep color RGB10A2 format below (it only has 2
+	// alpha bits). As these are minimum counts, RGB10A2 still satisfies a request of 0.
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
+	const auto create = [this, &title, width, height, flags, &deepColor]() {
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, deepColor ? 10 : 8);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, deepColor ? 10 : 8);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, deepColor ? 10 : 8);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, isMultisampleSupported_ ? 4 : 0);
 		return SDL_CreateWindow(title.c_str(), width, height, flags);
 	};
@@ -73,7 +82,11 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		internal::debug("Recreating window without Anti-Aliasing support.");
 		isMultisampleSupported_ = false;
 		if ((impl->sdlWindow = create()) == nullptr) {
-			throw std::runtime_error(SDL_GetError());
+			internal::debug("Recreating window without deep color support.");
+			deepColor = false;
+			if ((impl->sdlWindow = create()) == nullptr) {
+				throw std::runtime_error(SDL_GetError());
+			}
 		}
 	}
 
@@ -101,6 +114,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 			gladLoadGL(reinterpret_cast<GLADloadfunc>(SDL_GL_GetProcAddress)); // NOLINT
 #endif
 		}
+	}
+
+	if (int redBits = 0; SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &redBits)) {
+		internal::trace("Default framebuffer color depth: {} bits per channel.", redBits);
 	}
 
 	// This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by SDL2). On
