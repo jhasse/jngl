@@ -12,10 +12,14 @@ namespace jngl {
 
 Texture::Texture(const float preciseWidth, const float preciseHeight, const int width,
                  const int height, const GLubyte* const* const rowPointers, GLenum format,
-                 const GLubyte* const data) : texture_(opengl::genAndBindTexture()) {
+                 const GLubyte* const data, const GLenum type)
+: texture_(opengl::genAndBindTexture()) {
 	assert(format == GL_RGB || format == GL_RGBA || format == GL_BGR);
-	glTexImage2D(GL_TEXTURE_2D, 0, format == GL_RGBA ? GL_RGBA : GL_RGB, width, height, 0, format,
-	             GL_UNSIGNED_BYTE, nullptr);
+	GLint internalFormat = format == GL_RGBA ? GL_RGBA : GL_RGB;
+	if (type == GL_HALF_FLOAT) {
+		internalFormat = GL_RGBA16F;
+	}
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, nullptr);
 	vertexes = {
 		0, 0,
 		0, 0, // texture coordinates

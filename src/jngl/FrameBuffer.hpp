@@ -45,13 +45,17 @@ class ShaderProgram;
 class FrameBuffer {
 public:
 	/// Creates a framebuffer object with \a width times \a height actual pixels
-	FrameBuffer(Pixels width, Pixels height);
+	///
+	/// \param hdr If true, the framebuffer stores floating point channels (GL_RGBA16F) instead of
+	/// 8-bit ones. This avoids banding in smooth gradients and lets channel values exceed 1.0, which
+	/// is useful for HDR lighting.
+	FrameBuffer(Pixels width, Pixels height, bool hdr = false);
 
 	/// Creates a framebuffer object with \a width times \a height scalable pixels
-	FrameBuffer(ScaleablePixels width, ScaleablePixels height);
+	FrameBuffer(ScaleablePixels width, ScaleablePixels height, bool hdr = false);
 
 	/// Creates a framebuffer object with \a size[0] times \a size[1] pixels
-	explicit FrameBuffer(std::array<Pixels, 2> size);
+	explicit FrameBuffer(std::array<Pixels, 2> size, bool hdr = false);
 
 	FrameBuffer(const FrameBuffer&) = delete;
 	FrameBuffer& operator=(const FrameBuffer&) = delete;

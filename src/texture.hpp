@@ -14,7 +14,11 @@ class Texture {
 public:
 	Texture(float preciseWidth, float preciseHeight, int width, int height,
 	        const GLubyte* const* rowPointers, // data as row pointers ...
-	        GLenum format = GL_RGBA, const GLubyte* data = nullptr /* ... or as one pointer */);
+	        GLenum format = GL_RGBA, const GLubyte* data = nullptr /* ... or as one pointer */,
+	        // Channel type of the texture's storage. Pass GL_HALF_FLOAT for an HDR texture with
+	        // floating point channels (used by the high precision FrameBuffer); the default stores
+	        // each channel as an 8-bit integer mapped to the range [0, 1].
+	        GLenum type = GL_UNSIGNED_BYTE);
 	Texture(const Texture&) = delete;
 	Texture& operator=(const Texture&) = delete;
 	Texture(Texture&&) = delete;
