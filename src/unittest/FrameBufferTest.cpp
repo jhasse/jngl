@@ -10,6 +10,9 @@
 
 #include <boost/ut.hpp>
 
+// FrameBuffers aren't implemented on the Vulkan backend yet.
+#ifndef JNGL_VULKAN
+
 namespace {
 boost::ut::suite _ = [] {
 	using namespace boost::ut;
@@ -221,3 +224,5 @@ boost::ut::suite _ = [] {
 	};
 };
 } // namespace
+
+#endif // JNGL_VULKAN

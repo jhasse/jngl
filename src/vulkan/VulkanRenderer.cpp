@@ -124,8 +124,14 @@ VulkanRenderer::~VulkanRenderer() {
 				vkDestroyFence(device, inFlightFences[i], nullptr);
 			}
 		}
+		if (readbackFence) {
+			vkDestroyFence(device, readbackFence, nullptr);
+		}
 		if (renderPass) {
 			vkDestroyRenderPass(device, renderPass, nullptr);
+		}
+		if (loadRenderPass) {
+			vkDestroyRenderPass(device, loadRenderPass, nullptr);
 		}
 		if (commandPool) {
 			vkDestroyCommandPool(device, commandPool, nullptr);
@@ -438,6 +444,12 @@ void VulkanRenderer::createRenderPass() {
 	info.dependencyCount = 1;
 	info.pDependencies = &dependency;
 	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &renderPass), "vkCreateRenderPass");
+
+	// A variant that loads (keeps) the existing contents instead of clearing, used to resume a
+	// frame after readPixels flushed it. The image is in COLOR_ATTACHMENT_OPTIMAL by then.
+	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+	colorAttachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &loadRenderPass), "vkCreateRenderPass");
 }
 
 void VulkanRenderer::createFramebuffers() {
@@ -490,6 +502,8 @@ void VulkanRenderer::createSyncObjects() {
 		VK_CHECK(vkCreateFence(device, &fenceInfo, nullptr, &inFlightFences[i]),
 		         "vkCreateFence");
 	}
+	VkFenceCreateInfo unsignaled{ .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO };
+	VK_CHECK(vkCreateFence(device, &unsignaled, nullptr, &readbackFence), "vkCreateFence");
 }
 
 void VulkanRenderer::cleanupSwapchain() {
@@ -544,6 +558,7 @@ void VulkanRenderer::beginFrame(const Rgb clearColor) {
 	vkResetFences(device, 1, &inFlightFences[currentFrame]);
 
 	vertexBuffers[currentFrame].used = 0;
+	imageAvailableWaited = false;
 
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
 	vkResetCommandBuffer(cmd, 0);
@@ -588,7 +603,9 @@ void VulkanRenderer::endFrame() {
 	const std::array<VkPipelineStageFlags, 1> waitStages = {
 		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 	};
-	submit.waitSemaphoreCount = 1;
+	// If readPixels already flushed the frame it consumed the imageAvailable semaphore, so don't
+	// wait on it again here.
+	submit.waitSemaphoreCount = imageAvailableWaited ? 0 : 1;
 	submit.pWaitSemaphores = waitSemaphores.data();
 	submit.pWaitDstStageMask = waitStages.data();
 	submit.commandBufferCount = 1;
@@ -1389,6 +1406,123 @@ void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* const
 	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
 	                   &push);
 	vkCmdDraw(cmd, static_cast<uint32_t>(vertexCount), 1, 0, 0);
+}
+
+void VulkanRenderer::readPixels(unsigned char* const rgb, const int x, const int y, const int width,
+                                const int height) {
+	const size_t pixelCount = static_cast<size_t>(width) * height;
+	if (!frameActive) {
+		std::memset(rgb, 0, pixelCount * 3);
+		return;
+	}
+
+	// Flush the draws recorded so far: end the render pass and submit, so the swapchain image
+	// actually holds the rendered content we're about to read back.
+	const VkCommandBuffer cmd = commandBuffers[currentFrame];
+	vkCmdEndRenderPass(cmd);
+	VK_CHECK(vkEndCommandBuffer(cmd), "vkEndCommandBuffer");
+
+	const VkPipelineStageFlags waitStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	VkSubmitInfo submit{ .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO };
+	if (!imageAvailableWaited) {
+		submit.waitSemaphoreCount = 1;
+		submit.pWaitSemaphores = &imageAvailableSemaphores[currentFrame];
+		submit.pWaitDstStageMask = &waitStage;
+	}
+	submit.commandBufferCount = 1;
+	submit.pCommandBuffers = &cmd;
+	vkResetFences(device, 1, &readbackFence);
+	VK_CHECK(vkQueueSubmit(graphicsQueue, 1, &submit, readbackFence), "vkQueueSubmit");
+	vkWaitForFences(device, 1, &readbackFence, VK_TRUE, std::numeric_limits<uint64_t>::max());
+	imageAvailableWaited = true;
+
+	// Copy the requested region into a host-visible buffer.
+	const VkDeviceSize size = pixelCount * 4;
+	VkBufferCreateInfo bufferInfo{ .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
+	bufferInfo.size = size;
+	bufferInfo.usage = VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+	VkBuffer staging = VK_NULL_HANDLE;
+	VK_CHECK(vkCreateBuffer(device, &bufferInfo, nullptr, &staging), "vkCreateBuffer");
+	VkMemoryRequirements memReq;
+	vkGetBufferMemoryRequirements(device, staging, &memReq);
+	VkMemoryAllocateInfo allocInfo{ .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
+	allocInfo.allocationSize = memReq.size;
+	allocInfo.memoryTypeIndex = findMemoryType(
+	    memReq.memoryTypeBits,
+	    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	VkDeviceMemory stagingMemory = VK_NULL_HANDLE;
+	VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &stagingMemory), "vkAllocateMemory");
+	VK_CHECK(vkBindBufferMemory(device, staging, stagingMemory, 0), "vkBindBufferMemory");
+
+	VkImage image = swapchainImages[currentImageIndex];
+	submitOneTime([&](VkCommandBuffer c) {
+		VkImageMemoryBarrier toSrc{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+		toSrc.oldLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+		toSrc.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+		toSrc.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toSrc.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toSrc.image = image;
+		toSrc.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		toSrc.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+		vkCmdPipelineBarrier(c, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0,
+		                     0, nullptr, 0, nullptr, 1, &toSrc);
+
+		VkBufferImageCopy region{};
+		region.imageSubresource = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1 };
+		region.imageOffset = { x, y, 0 };
+		region.imageExtent = { static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1 };
+		vkCmdCopyImageToBuffer(c, image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, staging, 1, &region);
+
+		// Move the image to COLOR_ATTACHMENT_OPTIMAL so the resumed (LOAD) render pass can keep
+		// drawing into it.
+		VkImageMemoryBarrier toAttachment{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+		toAttachment.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+		toAttachment.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		toAttachment.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toAttachment.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toAttachment.image = image;
+		toAttachment.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		toAttachment.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+		toAttachment.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+		vkCmdPipelineBarrier(c, VK_PIPELINE_STAGE_TRANSFER_BIT,
+		                     VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, 0, 0, nullptr, 0, nullptr,
+		                     1, &toAttachment);
+	});
+
+	void* mapped = nullptr;
+	VK_CHECK(vkMapMemory(device, stagingMemory, 0, size, 0, &mapped), "vkMapMemory");
+	const auto* src = static_cast<const unsigned char*>(mapped);
+	// Output RGB, bottom row first (OpenGL convention) and swap B/R (swapchain is BGRA).
+	for (int row = 0; row < height; ++row) {
+		const unsigned char* srcRow =
+		    src + static_cast<size_t>(height - 1 - row) * width * 4;
+		unsigned char* dstRow = rgb + static_cast<size_t>(row) * width * 3;
+		for (int col = 0; col < width; ++col) {
+			dstRow[col * 3 + 0] = srcRow[col * 4 + 2];
+			dstRow[col * 3 + 1] = srcRow[col * 4 + 1];
+			dstRow[col * 3 + 2] = srcRow[col * 4 + 0];
+		}
+	}
+	vkUnmapMemory(device, stagingMemory);
+	vkDestroyBuffer(device, staging, nullptr);
+	vkFreeMemory(device, stagingMemory, nullptr);
+
+	// Resume the frame: begin a fresh command buffer and a LOAD render pass that keeps the pixels
+	// we just read, so subsequent draws (and endFrame's present) continue seamlessly.
+	vkResetCommandBuffer(cmd, 0);
+	VkCommandBufferBeginInfo beginInfo{ .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
+	VK_CHECK(vkBeginCommandBuffer(cmd, &beginInfo), "vkBeginCommandBuffer");
+	VkRenderPassBeginInfo rpInfo{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
+	rpInfo.renderPass = loadRenderPass;
+	rpInfo.framebuffer = swapchainFramebuffers[currentImageIndex];
+	rpInfo.renderArea.extent = swapchainExtent;
+	vkCmdBeginRenderPass(cmd, &rpInfo, VK_SUBPASS_CONTENTS_INLINE);
+	VkViewport viewport{ 0.f, static_cast<float>(swapchainExtent.height),
+		                 static_cast<float>(swapchainExtent.width),
+		                 -static_cast<float>(swapchainExtent.height), 0.f, 1.f };
+	vkCmdSetViewport(cmd, 0, 1, &viewport);
+	VkRect2D scissor{ { 0, 0 }, swapchainExtent };
+	vkCmdSetScissor(cmd, 0, 1, &scissor);
 }
 
 } // namespace jngl

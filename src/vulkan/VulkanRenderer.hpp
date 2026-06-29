@@ -62,6 +62,10 @@ public:
 	void drawSprite(const VulkanTexture&, const float* xyuv, std::size_t vertexCount, PrimitiveType,
 	                const Mat3& modelview, Rgba color);
 
+	/// Reads back a \a width x \a height region of the current frame as tightly packed RGB bytes,
+	/// bottom row first (matching OpenGL's glReadPixels). Flushes the pending draws first.
+	void readPixels(unsigned char* rgb, int x, int y, int width, int height);
+
 private:
 	void createInstance();
 	void createSurface();
@@ -112,12 +116,16 @@ private:
 	std::vector<VkFramebuffer> swapchainFramebuffers;
 
 	VkRenderPass renderPass = VK_NULL_HANDLE;
+	// Same as renderPass but with a LOAD (instead of CLEAR) load operation, used to resume a frame
+	// after readPixels has flushed it mid-way.
+	VkRenderPass loadRenderPass = VK_NULL_HANDLE;
 	VkCommandPool commandPool = VK_NULL_HANDLE;
 	std::vector<VkCommandBuffer> commandBuffers;
 
 	std::vector<VkSemaphore> imageAvailableSemaphores;
 	std::vector<VkSemaphore> renderFinishedSemaphores;
 	std::vector<VkFence> inFlightFences;
+	VkFence readbackFence = VK_NULL_HANDLE; // signalled by the readPixels flush submit
 
 	// Pipeline drawing single-color geometry with the built-in "simple" shader. There's one
 	// pipeline per primitive topology (they only differ in input assembly state); they share the
@@ -148,6 +156,9 @@ private:
 	bool frameActive = false;
 	bool framebufferResized = false;
 	bool vertexBufferOverflowReported = false;
+	// Set once the current frame's imageAvailable semaphore has been waited on (by a readPixels
+	// flush), so endFrame doesn't wait on it a second time.
+	bool imageAvailableWaited = false;
 
 	bool validationEnabled = false;
 

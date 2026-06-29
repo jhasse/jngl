@@ -6,6 +6,9 @@
 #include "App.hpp"
 #include "Renderer.hpp"
 #include "ShaderCache.hpp"
+#ifdef JNGL_VULKAN
+#include "vulkan/VulkanRenderer.hpp"
+#endif
 #include "jngl/Alpha.hpp"
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/Scene.hpp"
@@ -23,6 +26,7 @@
 #include <boost/qvm_lite.hpp>
 #include <cmath>
 #include <cstddef>
+#include <cstring>
 #include <fstream>
 #include <numbers>
 #include <sstream>
@@ -381,12 +385,28 @@ void readPixels(void* buffer, GLenum type) {
 	// assert(xOffset % 2 == 0);
 	// assert(yOffset % 2 == 0);
 
+#ifdef JNGL_VULKAN
+	const int width = pWindow->getCanvasWidth();
+	const int height = pWindow->getCanvasHeight();
+	std::vector<unsigned char> rgb(static_cast<size_t>(width) * height * 3);
+	static_cast<VulkanRenderer&>(getRenderer())
+	    .readPixels(rgb.data(), xOffset / 2, yOffset / 2, width, height);
+	if (type == GL_FLOAT) {
+		auto* out = static_cast<float*>(buffer);
+		for (size_t i = 0; i < rgb.size(); ++i) {
+			out[i] = static_cast<float>(rgb[i]) / 255.f;
+		}
+	} else {
+		std::memcpy(buffer, rgb.data(), rgb.size());
+	}
+#else
 	GLint oldPackAlignment = 0;
 	glGetIntegerv(GL_PACK_ALIGNMENT, &oldPackAlignment);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(xOffset / 2, yOffset / 2, pWindow->getCanvasWidth(), pWindow->getCanvasHeight(),
 	             GL_RGB, type, buffer);
 	glPixelStorei(GL_PACK_ALIGNMENT, oldPackAlignment);
+#endif
 }
 } // namespace
 
@@ -556,6 +576,12 @@ void drawSquare(const Mat3& modelview, Rgba color) {
 }
 
 Finally scissor(Vec2 position, Vec2 size) {
+#ifdef JNGL_VULKAN
+	// TODO: scissor clipping isn't implemented on the Vulkan backend yet.
+	(void)position;
+	(void)size;
+	return Finally(nullptr);
+#else
 	struct SavedScissorState {
 		bool enabled;
 		GLint box[4];
@@ -605,6 +631,7 @@ Finally scissor(Vec2 position, Vec2 size) {
 			glDisable(GL_SCISSOR_TEST);
 		}
 	});
+#endif
 }
 
 void drawRectOutline(Mat3 modelview, Vec2 size, float lineWidth, Rgba color) {
@@ -642,7 +669,12 @@ void drawTriangle(Mat3 modelview, Rgba color) {
 }
 
 void setLineWidth(const float width) {
+#ifdef JNGL_VULKAN
+	// TODO: the Vulkan backend draws lines at a fixed width of 1 for now.
+	(void)width;
+#else
 	glLineWidth(width * getScaleFactor());
+#endif
 }
 
 void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
