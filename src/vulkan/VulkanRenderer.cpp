@@ -71,6 +71,7 @@ VulkanRenderer::VulkanRenderer(void* const nativeWindow)
 	createColoredPipelines();
 	createDescriptorPool();
 	createTexturedPipelines();
+	createOffscreenRenderPass();
 	createVertexBuffers();
 	internal::debug("Vulkan renderer initialized ({}x{}).", swapchainExtent.width,
 	                swapchainExtent.height);
@@ -82,6 +83,10 @@ VulkanRenderer::~VulkanRenderer() {
 	}
 	cleanupSwapchain();
 	if (device) {
+		for (auto& trashed : framebufferTrash) {
+			freeFramebufferResources(trashed.fb);
+		}
+		framebufferTrash.clear();
 		for (auto& vb : vertexBuffers) {
 			if (vb.buffer) {
 				vkDestroyBuffer(device, vb.buffer, nullptr);
@@ -132,6 +137,9 @@ VulkanRenderer::~VulkanRenderer() {
 		}
 		if (loadRenderPass) {
 			vkDestroyRenderPass(device, loadRenderPass, nullptr);
+		}
+		if (offscreenRenderPass) {
+			vkDestroyRenderPass(device, offscreenRenderPass, nullptr);
 		}
 		if (commandPool) {
 			vkDestroyCommandPool(device, commandPool, nullptr);
@@ -371,7 +379,9 @@ void VulkanRenderer::createSwapchain() {
 	createInfo.imageColorSpace = chosenFormat.colorSpace;
 	createInfo.imageExtent = swapchainExtent;
 	createInfo.imageArrayLayers = 1;
-	createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+	// TRANSFER_SRC is needed so readPixels can copy the rendered image back to the CPU.
+	createInfo.imageUsage =
+	    VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 
 	const std::array<uint32_t, 2> families = { graphicsQueueFamily, presentQueueFamily };
 	if (graphicsQueueFamily != presentQueueFamily) {
@@ -428,28 +438,82 @@ void VulkanRenderer::createRenderPass() {
 	subpass.colorAttachmentCount = 1;
 	subpass.pColorAttachments = &colorRef;
 
-	VkSubpassDependency dependency{};
-	dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-	dependency.dstSubpass = 0;
-	dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	dependency.srcAccessMask = 0;
-	dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+	// Use the same two dependencies as the offscreen render pass so that all three render passes
+	// (swapchain CLEAR, swapchain LOAD, offscreen) are mutually compatible and the colored/textured
+	// pipelines - created against `renderPass` - can be used inside any of them.
+	std::array<VkSubpassDependency, 2> deps{};
+	deps[0].srcSubpass = VK_SUBPASS_EXTERNAL;
+	deps[0].dstSubpass = 0;
+	deps[0].srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+	deps[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	deps[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	deps[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+	deps[1].srcSubpass = 0;
+	deps[1].dstSubpass = VK_SUBPASS_EXTERNAL;
+	deps[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	deps[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+	deps[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+	deps[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 
 	VkRenderPassCreateInfo info{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO };
 	info.attachmentCount = 1;
 	info.pAttachments = &colorAttachment;
 	info.subpassCount = 1;
 	info.pSubpasses = &subpass;
-	info.dependencyCount = 1;
-	info.pDependencies = &dependency;
+	info.dependencyCount = static_cast<uint32_t>(deps.size());
+	info.pDependencies = deps.data();
 	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &renderPass), "vkCreateRenderPass");
 
-	// A variant that loads (keeps) the existing contents instead of clearing, used to resume a
-	// frame after readPixels flushed it. The image is in COLOR_ATTACHMENT_OPTIMAL by then.
+	// A variant that loads (keeps) the existing contents instead of clearing, used to resume the
+	// swapchain frame after readPixels or a FrameBuffer flushed it. The image is back in
+	// PRESENT_SRC_KHR by then.
 	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
-	colorAttachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	colorAttachment.initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &loadRenderPass), "vkCreateRenderPass");
+}
+
+void VulkanRenderer::createOffscreenRenderPass() {
+	VkAttachmentDescription colorAttachment{};
+	colorAttachment.format = swapchainImageFormat; // same format keeps the pipelines compatible
+	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	colorAttachment.initialLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	colorAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+	VkAttachmentReference colorRef{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
+	VkSubpassDescription subpass{};
+	subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+	subpass.colorAttachmentCount = 1;
+	subpass.pColorAttachments = &colorRef;
+
+	// Make sure sampling of the framebuffer (in a later draw) waits for our writes, and our writes
+	// wait for any previous sampling.
+	std::array<VkSubpassDependency, 2> deps{};
+	deps[0].srcSubpass = VK_SUBPASS_EXTERNAL;
+	deps[0].dstSubpass = 0;
+	deps[0].srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+	deps[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	deps[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	deps[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+	deps[1].srcSubpass = 0;
+	deps[1].dstSubpass = VK_SUBPASS_EXTERNAL;
+	deps[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	deps[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+	deps[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+	deps[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+
+	VkRenderPassCreateInfo info{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO };
+	info.attachmentCount = 1;
+	info.pAttachments = &colorAttachment;
+	info.subpassCount = 1;
+	info.pSubpasses = &subpass;
+	info.dependencyCount = static_cast<uint32_t>(deps.size());
+	info.pDependencies = deps.data();
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &offscreenRenderPass),
+	         "vkCreateRenderPass");
 }
 
 void VulkanRenderer::createFramebuffers() {
@@ -565,29 +629,52 @@ void VulkanRenderer::beginFrame(const Rgb clearColor) {
 	VkCommandBufferBeginInfo beginInfo{ .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
 	VK_CHECK(vkBeginCommandBuffer(cmd, &beginInfo), "vkBeginCommandBuffer");
 
-	VkClearValue clear{};
-	clear.color = { { clearColor.getRed(), clearColor.getGreen(), clearColor.getBlue(), 1.f } };
+	currentClearColor = clearColor;
+	renderTargetStack.clear();
+	frameActive = true;
+	beginCurrentRenderPass(VK_ATTACHMENT_LOAD_OP_CLEAR);
+}
 
+void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
+	const VkCommandBuffer cmd = commandBuffers[currentFrame];
 	VkRenderPassBeginInfo rpInfo{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
-	rpInfo.renderPass = renderPass;
-	rpInfo.framebuffer = swapchainFramebuffers[currentImageIndex];
-	rpInfo.renderArea.offset = { 0, 0 };
-	rpInfo.renderArea.extent = swapchainExtent;
-	rpInfo.clearValueCount = 1;
-	rpInfo.pClearValues = &clear;
+	VkExtent2D extent{};
+	VkClearValue clear{};
+	clear.color = { { currentClearColor.getRed(), currentClearColor.getGreen(),
+		              currentClearColor.getBlue(), 1.f } };
+	if (renderTargetStack.empty()) {
+		rpInfo.renderPass = loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? renderPass : loadRenderPass;
+		rpInfo.framebuffer = swapchainFramebuffers[currentImageIndex];
+		extent = swapchainExtent;
+		if (loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR) {
+			rpInfo.clearValueCount = 1;
+			rpInfo.pClearValues = &clear;
+		}
+	} else {
+		const VulkanFramebuffer* target = renderTargetStack.back();
+		rpInfo.renderPass = offscreenRenderPass; // always LOAD; clearing is explicit
+		rpInfo.framebuffer = target->framebuffer;
+		extent = { static_cast<uint32_t>(target->width), static_cast<uint32_t>(target->height) };
+	}
+	rpInfo.renderArea.extent = extent;
 	vkCmdBeginRenderPass(cmd, &rpInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-	// Flip the viewport vertically (negative height, core since Vulkan 1.1) so that JNGL's
-	// projection matrix - written for OpenGL's clip space with +Y up - maps to the screen the same
-	// way it does on the OpenGL backend.
-	VkViewport viewport{ 0.f, static_cast<float>(swapchainExtent.height),
-		                 static_cast<float>(swapchainExtent.width),
-		                 -static_cast<float>(swapchainExtent.height), 0.f, 1.f };
+	// For the swapchain, flip the viewport vertically (negative height, core since Vulkan 1.1) so
+	// that JNGL's projection matrix - written for OpenGL's clip space with +Y up - maps to the
+	// screen the same way it does on the OpenGL backend. FrameBuffers are left un-flipped so their
+	// image ends up "upside down" like an OpenGL FBO texture, which jngl::FrameBuffer::draw undoes
+	// with a scale(1, -1).
+	VkViewport viewport;
+	if (renderTargetStack.empty()) {
+		viewport = { 0.f, static_cast<float>(extent.height), static_cast<float>(extent.width),
+			         -static_cast<float>(extent.height), 0.f, 1.f };
+	} else {
+		viewport = { 0.f, 0.f, static_cast<float>(extent.width), static_cast<float>(extent.height),
+			         0.f, 1.f };
+	}
 	vkCmdSetViewport(cmd, 0, 1, &viewport);
-	VkRect2D scissor{ { 0, 0 }, swapchainExtent };
+	VkRect2D scissor{ { 0, 0 }, extent };
 	vkCmdSetScissor(cmd, 0, 1, &scissor);
-
-	frameActive = true;
 }
 
 void VulkanRenderer::endFrame() {
@@ -634,6 +721,16 @@ void VulkanRenderer::endFrame() {
 
 	frameActive = false;
 	currentFrame = (currentFrame + 1) % maxFramesInFlight;
+
+	// Free trashed framebuffers whose frames have all been submitted and completed.
+	for (auto it = framebufferTrash.begin(); it != framebufferTrash.end();) {
+		if (--it->framesUntilFree <= 0) {
+			freeFramebufferResources(it->fb);
+			it = framebufferTrash.erase(it);
+		} else {
+			++it;
+		}
+	}
 }
 
 void VulkanRenderer::setViewport(int /*x*/, int /*y*/, int /*width*/, int /*height*/) {
@@ -1473,20 +1570,18 @@ void VulkanRenderer::readPixels(unsigned char* const rgb, const int x, const int
 		region.imageExtent = { static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1 };
 		vkCmdCopyImageToBuffer(c, image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, staging, 1, &region);
 
-		// Move the image to COLOR_ATTACHMENT_OPTIMAL so the resumed (LOAD) render pass can keep
-		// drawing into it.
-		VkImageMemoryBarrier toAttachment{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
-		toAttachment.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-		toAttachment.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-		toAttachment.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-		toAttachment.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-		toAttachment.image = image;
-		toAttachment.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
-		toAttachment.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
-		toAttachment.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-		vkCmdPipelineBarrier(c, VK_PIPELINE_STAGE_TRANSFER_BIT,
-		                     VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, 0, 0, nullptr, 0, nullptr,
-		                     1, &toAttachment);
+		// Move the image back to PRESENT_SRC_KHR, which is what the resumed loadRenderPass expects
+		// as its initial layout.
+		VkImageMemoryBarrier toPresent{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+		toPresent.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+		toPresent.newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+		toPresent.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toPresent.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toPresent.image = image;
+		toPresent.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		toPresent.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+		vkCmdPipelineBarrier(c, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+		                     0, 0, nullptr, 0, nullptr, 1, &toPresent);
 	});
 
 	void* mapped = nullptr;
@@ -1512,17 +1607,182 @@ void VulkanRenderer::readPixels(unsigned char* const rgb, const int x, const int
 	vkResetCommandBuffer(cmd, 0);
 	VkCommandBufferBeginInfo beginInfo{ .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
 	VK_CHECK(vkBeginCommandBuffer(cmd, &beginInfo), "vkBeginCommandBuffer");
-	VkRenderPassBeginInfo rpInfo{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
-	rpInfo.renderPass = loadRenderPass;
-	rpInfo.framebuffer = swapchainFramebuffers[currentImageIndex];
-	rpInfo.renderArea.extent = swapchainExtent;
-	vkCmdBeginRenderPass(cmd, &rpInfo, VK_SUBPASS_CONTENTS_INLINE);
-	VkViewport viewport{ 0.f, static_cast<float>(swapchainExtent.height),
-		                 static_cast<float>(swapchainExtent.width),
-		                 -static_cast<float>(swapchainExtent.height), 0.f, 1.f };
-	vkCmdSetViewport(cmd, 0, 1, &viewport);
-	VkRect2D scissor{ { 0, 0 }, swapchainExtent };
-	vkCmdSetScissor(cmd, 0, 1, &scissor);
+	beginCurrentRenderPass(VK_ATTACHMENT_LOAD_OP_LOAD);
+}
+
+VkDescriptorSet VulkanRenderer::allocateTextureDescriptor(const VkImageView view,
+                                                          const VkSampler sampler) {
+	VkDescriptorSetAllocateInfo dsAlloc{ .sType =
+		                                     VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+	dsAlloc.descriptorPool = descriptorPool;
+	dsAlloc.descriptorSetCount = 1;
+	dsAlloc.pSetLayouts = &texturedSetLayout;
+	VkDescriptorSet set = VK_NULL_HANDLE;
+	VK_CHECK(vkAllocateDescriptorSets(device, &dsAlloc, &set), "vkAllocateDescriptorSets");
+
+	VkDescriptorImageInfo imgInfo{};
+	imgInfo.sampler = sampler;
+	imgInfo.imageView = view;
+	imgInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	VkWriteDescriptorSet write{ .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
+	write.dstSet = set;
+	write.dstBinding = 0;
+	write.descriptorCount = 1;
+	write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	write.pImageInfo = &imgInfo;
+	vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+	return set;
+}
+
+std::unique_ptr<VulkanFramebuffer> VulkanRenderer::createFramebuffer(const int width,
+                                                                     const int height) {
+	auto fb = std::make_unique<VulkanFramebuffer>();
+	fb->width = width;
+	fb->height = height;
+	fb->color.width = width;
+	fb->color.height = height;
+
+	VkImageCreateInfo imageInfo{ .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO };
+	imageInfo.imageType = VK_IMAGE_TYPE_2D;
+	imageInfo.format = swapchainImageFormat;
+	imageInfo.extent = { static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1 };
+	imageInfo.mipLevels = 1;
+	imageInfo.arrayLayers = 1;
+	imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+	imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+	imageInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT |
+	                  VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+	imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	VK_CHECK(vkCreateImage(device, &imageInfo, nullptr, &fb->color.image), "vkCreateImage");
+
+	VkMemoryRequirements memReq;
+	vkGetImageMemoryRequirements(device, fb->color.image, &memReq);
+	VkMemoryAllocateInfo allocInfo{ .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
+	allocInfo.allocationSize = memReq.size;
+	allocInfo.memoryTypeIndex =
+	    findMemoryType(memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &fb->color.memory), "vkAllocateMemory");
+	VK_CHECK(vkBindImageMemory(device, fb->color.image, fb->color.memory, 0), "vkBindImageMemory");
+
+	// Clear to transparent and move to SHADER_READ_ONLY (the offscreen render pass's initial
+	// layout, and the layout it's sampled from).
+	submitOneTime([&](VkCommandBuffer c) {
+		VkImageMemoryBarrier toDst{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+		toDst.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		toDst.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		toDst.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toDst.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toDst.image = fb->color.image;
+		toDst.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		toDst.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		vkCmdPipelineBarrier(c, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0,
+		                     0, nullptr, 0, nullptr, 1, &toDst);
+		VkClearColorValue clearColor{ { 1.f, 1.f, 1.f, 0.f } };
+		VkImageSubresourceRange range{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		vkCmdClearColorImage(c, fb->color.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clearColor, 1,
+		                     &range);
+		VkImageMemoryBarrier toRead{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+		toRead.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		toRead.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		toRead.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toRead.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toRead.image = fb->color.image;
+		toRead.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		toRead.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		toRead.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		vkCmdPipelineBarrier(c, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+		                     0, 0, nullptr, 0, nullptr, 1, &toRead);
+	});
+
+	VkImageViewCreateInfo viewInfo{ .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO };
+	viewInfo.image = fb->color.image;
+	viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+	viewInfo.format = swapchainImageFormat;
+	viewInfo.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+	VK_CHECK(vkCreateImageView(device, &viewInfo, nullptr, &fb->color.view), "vkCreateImageView");
+
+	const VkFilter filter = App::isPixelArt() ? VK_FILTER_NEAREST : VK_FILTER_LINEAR;
+	VkSamplerCreateInfo samplerInfo{ .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO };
+	samplerInfo.magFilter = filter;
+	samplerInfo.minFilter = filter;
+	samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+	samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+	samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+	VK_CHECK(vkCreateSampler(device, &samplerInfo, nullptr, &fb->color.sampler), "vkCreateSampler");
+
+	fb->color.descriptorSet = allocateTextureDescriptor(fb->color.view, fb->color.sampler);
+
+	const std::array<VkImageView, 1> attachments = { fb->color.view };
+	VkFramebufferCreateInfo fbInfo{ .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO };
+	fbInfo.renderPass = offscreenRenderPass;
+	fbInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+	fbInfo.pAttachments = attachments.data();
+	fbInfo.width = static_cast<uint32_t>(width);
+	fbInfo.height = static_cast<uint32_t>(height);
+	fbInfo.layers = 1;
+	VK_CHECK(vkCreateFramebuffer(device, &fbInfo, nullptr, &fb->framebuffer),
+	         "vkCreateFramebuffer");
+	return fb;
+}
+
+void VulkanRenderer::freeFramebufferResources(VulkanFramebuffer& fb) {
+	if (fb.framebuffer) {
+		vkDestroyFramebuffer(device, fb.framebuffer, nullptr);
+		fb.framebuffer = VK_NULL_HANDLE;
+	}
+	destroyTexture(fb.color);
+}
+
+void VulkanRenderer::destroyFramebuffer(VulkanFramebuffer& fb) {
+	if (!device) {
+		return;
+	}
+	// The framebuffer may still be referenced by the current (not yet submitted) or an in-flight
+	// command buffer - jngl::FrameBuffers can be destroyed mid-frame. Hold on to the resources and
+	// free them once enough frames have been submitted that the GPU is guaranteed to be done.
+	framebufferTrash.push_back({ fb, static_cast<int>(maxFramesInFlight) + 1 });
+	fb = {}; // the trashed copy now owns the handles
+}
+
+void VulkanRenderer::pushRenderTarget(VulkanFramebuffer& framebuffer) {
+	if (!frameActive) {
+		return;
+	}
+	vkCmdEndRenderPass(commandBuffers[currentFrame]);
+	renderTargetStack.push_back(&framebuffer);
+	beginCurrentRenderPass(VK_ATTACHMENT_LOAD_OP_LOAD);
+}
+
+void VulkanRenderer::popRenderTarget() {
+	if (!frameActive || renderTargetStack.empty()) {
+		return;
+	}
+	vkCmdEndRenderPass(commandBuffers[currentFrame]);
+	renderTargetStack.pop_back();
+	beginCurrentRenderPass(VK_ATTACHMENT_LOAD_OP_LOAD);
+}
+
+void VulkanRenderer::clearCurrentRenderTarget(const Rgba color) {
+	if (!frameActive) {
+		return;
+	}
+	VkClearAttachment attachment{};
+	attachment.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	attachment.colorAttachment = 0;
+	attachment.clearValue.color = { { color.getRed(), color.getGreen(), color.getBlue(),
+		                              color.getAlpha() } };
+	const VkExtent2D extent =
+	    renderTargetStack.empty()
+	        ? swapchainExtent
+	        : VkExtent2D{ static_cast<uint32_t>(renderTargetStack.back()->width),
+		                  static_cast<uint32_t>(renderTargetStack.back()->height) };
+	VkClearRect rect{};
+	rect.rect = { { 0, 0 }, extent };
+	rect.baseArrayLayer = 0;
+	rect.layerCount = 1;
+	vkCmdClearAttachments(commandBuffers[currentFrame], 1, &attachment, 1, &rect);
 }
 
 } // namespace jngl

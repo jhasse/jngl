@@ -34,6 +34,15 @@ struct VulkanTexture {
 	int height = 0;
 };
 
+/// GPU resources backing a jngl::FrameBuffer on the Vulkan backend: a color image that can be both
+/// rendered into and sampled (\a color), plus the VkFramebuffer that targets it.
+struct VulkanFramebuffer {
+	VulkanTexture color;
+	VkFramebuffer framebuffer = VK_NULL_HANDLE;
+	int width = 0;
+	int height = 0;
+};
+
 class VulkanRenderer final : public Renderer {
 public:
 	/// \a nativeWindow must be an SDL_Window* created with the SDL_WINDOW_VULKAN flag.
@@ -66,6 +75,19 @@ public:
 	/// bottom row first (matching OpenGL's glReadPixels). Flushes the pending draws first.
 	void readPixels(unsigned char* rgb, int x, int y, int width, int height);
 
+	/// Creates an off-screen render target (see jngl::FrameBuffer), cleared to transparent.
+	std::unique_ptr<VulkanFramebuffer> createFramebuffer(int width, int height);
+	/// Schedules \a framebuffer's resources for destruction once the GPU is done with them.
+	void destroyFramebuffer(VulkanFramebuffer&);
+
+	/// Redirects subsequent draws into \a framebuffer until popRenderTarget() is called. Render
+	/// targets nest (FrameBuffers can be used inside one another).
+	void pushRenderTarget(VulkanFramebuffer& framebuffer);
+	void popRenderTarget();
+
+	/// Clears the render target that's currently bound (the active FrameBuffer, or the screen).
+	void clearCurrentRenderTarget(Rgba color);
+
 private:
 	void createInstance();
 	void createSurface();
@@ -81,6 +103,15 @@ private:
 	void createVertexBuffers();
 	void createTexturedPipelines();
 	void createDescriptorPool();
+	void createOffscreenRenderPass();
+
+	/// Begins the render pass for whatever render target is currently on top of the stack (a
+	/// FrameBuffer, or the swapchain when the stack is empty), with the given load operation.
+	void beginCurrentRenderPass(VkAttachmentLoadOp loadOp);
+	/// Sets up a combined-image-sampler descriptor set sampling \a view with \a sampler.
+	[[nodiscard]] VkDescriptorSet allocateTextureDescriptor(VkImageView view, VkSampler sampler);
+	/// Immediately destroys a framebuffer's GPU resources (assumes the GPU is no longer using them).
+	void freeFramebufferResources(VulkanFramebuffer&);
 
 	void cleanupSwapchain();
 	void recreateSwapchain();
@@ -119,6 +150,19 @@ private:
 	// Same as renderPass but with a LOAD (instead of CLEAR) load operation, used to resume a frame
 	// after readPixels has flushed it mid-way.
 	VkRenderPass loadRenderPass = VK_NULL_HANDLE;
+	// Render pass used when drawing into a FrameBuffer (LOAD; clearing is done explicitly). Shares
+	// the swapchain's color format so the colored/textured pipelines stay compatible with it.
+	VkRenderPass offscreenRenderPass = VK_NULL_HANDLE;
+	// Stack of active FrameBuffers; empty means drawing targets the swapchain.
+	std::vector<VulkanFramebuffer*> renderTargetStack;
+	// FrameBuffers destroyed while their resources might still be referenced by an in-flight (or
+	// not-yet-submitted) command buffer. They're actually freed once enough frames have passed, see
+	// destroyFramebuffer / endFrame.
+	struct TrashedFramebuffer {
+		VulkanFramebuffer fb;
+		int framesUntilFree;
+	};
+	std::vector<TrashedFramebuffer> framebufferTrash;
 	VkCommandPool commandPool = VK_NULL_HANDLE;
 	std::vector<VkCommandBuffer> commandBuffers;
 
@@ -163,6 +207,7 @@ private:
 	bool validationEnabled = false;
 
 	Mat4 projection;
+	Rgb currentClearColor{ 0, 0, 0 }; // swapchain clear color for the current frame
 };
 
 } // namespace jngl
