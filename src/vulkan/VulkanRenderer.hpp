@@ -14,12 +14,25 @@
 
 #include <array>
 #include <cstdint>
+#include <functional>
 #include <vector>
 #include <vulkan/vulkan.h>
 
 struct SDL_Window;
 
 namespace jngl {
+
+/// GPU resources backing a jngl::Texture on the Vulkan backend. Created and destroyed through
+/// VulkanRenderer; owned by jngl::Texture.
+struct VulkanTexture {
+	VkImage image = VK_NULL_HANDLE;
+	VkDeviceMemory memory = VK_NULL_HANDLE;
+	VkImageView view = VK_NULL_HANDLE;
+	VkSampler sampler = VK_NULL_HANDLE;
+	VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
+	int width = 0;
+	int height = 0;
+};
 
 class VulkanRenderer final : public Renderer {
 public:
@@ -36,6 +49,19 @@ public:
 	void drawColored(PrimitiveType, const float* xyVertices, std::size_t vertexCount,
 	                 const Mat3& modelview, Rgba color) override;
 
+	/// Create a texture from pixel data. \a format and \a type are the OpenGL enums JNGL already
+	/// uses (GL_RGBA/GL_RGB/GL_BGR and GL_UNSIGNED_BYTE); pixels come either as \a rowPointers (one
+	/// pointer per row) or as a single \a data block. Returns nullptr for unsupported formats.
+	std::unique_ptr<VulkanTexture> createTexture(int width, int height, unsigned int format,
+	                                             unsigned int type, const unsigned char* data,
+	                                             const unsigned char* const* rowPointers);
+	void destroyTexture(VulkanTexture&);
+	void updateTextureBytes(VulkanTexture&, int width, int height, const unsigned char* rgba);
+
+	/// Draw a textured primitive (\a xyuv: interleaved x, y, u, v) modulated by \a color.
+	void drawSprite(const VulkanTexture&, const float* xyuv, std::size_t vertexCount, PrimitiveType,
+	                const Mat3& modelview, Rgba color);
+
 private:
 	void createInstance();
 	void createSurface();
@@ -49,12 +75,18 @@ private:
 	void createSyncObjects();
 	void createColoredPipelines();
 	void createVertexBuffers();
+	void createTexturedPipelines();
+	void createDescriptorPool();
 
 	void cleanupSwapchain();
 	void recreateSwapchain();
 
 	[[nodiscard]] uint32_t findMemoryType(uint32_t typeFilter,
 	                                      VkMemoryPropertyFlags properties) const;
+
+	/// Records and submits \a record on a transient command buffer, waiting for completion. Used
+	/// for one-off transfers like texture uploads.
+	void submitOneTime(const std::function<void(VkCommandBuffer)>& record);
 
 	/// Maximum number of frames the CPU may be working on ahead of the GPU.
 	static constexpr uint32_t maxFramesInFlight = 2;
@@ -92,6 +124,13 @@ private:
 	// layout and shader modules.
 	VkPipelineLayout coloredPipelineLayout = VK_NULL_HANDLE;
 	std::array<VkPipeline, 4> coloredPipelines{}; // indexed by PrimitiveType
+
+	// Pipeline drawing textured geometry (sprites, text) with the built-in texture shader. One per
+	// primitive topology; they share the layout, descriptor set layout and shader modules.
+	VkDescriptorSetLayout texturedSetLayout = VK_NULL_HANDLE;
+	VkPipelineLayout texturedPipelineLayout = VK_NULL_HANDLE;
+	std::array<VkPipeline, 4> texturedPipelines{}; // indexed by PrimitiveType
+	VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
 
 	// Host-visible vertex buffer per frame in flight, written directly each frame. `used` is reset
 	// in beginFrame and grows as drawColored appends geometry.

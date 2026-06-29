@@ -3,6 +3,7 @@
 
 #include "VulkanRenderer.hpp"
 
+#include "../App.hpp"
 #include "../jngl/Mat3.hpp"
 #include "../log.hpp"
 #include "ShaderCompiler.hpp"
@@ -68,6 +69,8 @@ VulkanRenderer::VulkanRenderer(void* const nativeWindow)
 	createCommandPoolAndBuffers();
 	createSyncObjects();
 	createColoredPipelines();
+	createDescriptorPool();
+	createTexturedPipelines();
 	createVertexBuffers();
 	internal::debug("Vulkan renderer initialized ({}x{}).", swapchainExtent.width,
 	                swapchainExtent.height);
@@ -95,6 +98,20 @@ VulkanRenderer::~VulkanRenderer() {
 		}
 		if (coloredPipelineLayout) {
 			vkDestroyPipelineLayout(device, coloredPipelineLayout, nullptr);
+		}
+		for (VkPipeline pipeline : texturedPipelines) {
+			if (pipeline) {
+				vkDestroyPipeline(device, pipeline, nullptr);
+			}
+		}
+		if (texturedPipelineLayout) {
+			vkDestroyPipelineLayout(device, texturedPipelineLayout, nullptr);
+		}
+		if (texturedSetLayout) {
+			vkDestroyDescriptorSetLayout(device, texturedSetLayout, nullptr);
+		}
+		if (descriptorPool) {
+			vkDestroyDescriptorPool(device, descriptorPool, nullptr);
 		}
 		for (uint32_t i = 0; i < maxFramesInFlight; ++i) {
 			if (i < renderFinishedSemaphores.size()) {
@@ -899,6 +916,476 @@ void VulkanRenderer::drawColored(const PrimitiveType type, const float* const xy
 	                  coloredPipelines[static_cast<size_t>(type)]);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vb.buffer, &offset);
 	vkCmdPushConstants(cmd, coloredPipelineLayout,
+	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
+	                   &push);
+	vkCmdDraw(cmd, static_cast<uint32_t>(vertexCount), 1, 0, 0);
+}
+
+namespace {
+
+// Texture shader: samples a texture and modulates by the push-constant color. Mirrors ShaderCache's
+// GLSL texture shader. Vertices carry position (xy) and texture coordinates (uv).
+constexpr const char* texturedVertexShader = R"(#version 450
+layout(location = 0) in vec2 position;
+layout(location = 1) in vec2 inTexCoord;
+layout(push_constant) uniform Push {
+	mat4 mvp;
+	vec4 color;
+} pc;
+layout(location = 0) out vec2 texCoord;
+void main() {
+	gl_Position = pc.mvp * vec4(position, 0.0, 1.0);
+	texCoord = inTexCoord;
+})";
+
+constexpr const char* texturedFragmentShader = R"(#version 450
+layout(set = 0, binding = 0) uniform sampler2D tex;
+layout(push_constant) uniform Push {
+	mat4 mvp;
+	vec4 color;
+} pc;
+layout(location = 0) in vec2 texCoord;
+layout(location = 0) out vec4 outColor;
+void main() {
+	outColor = texture(tex, texCoord) * pc.color;
+})";
+
+// OpenGL pixel-format enums JNGL passes to Texture/createTexture (avoids including GL headers here).
+constexpr unsigned int glRGB = 0x1907;
+constexpr unsigned int glRGBA = 0x1908;
+constexpr unsigned int glBGR = 0x80E0;
+constexpr unsigned int glUnsignedByte = 0x1401;
+
+// Repacks pixel data described by an OpenGL \a format into a tightly packed RGBA8 buffer. Pixels
+// arrive either as \a rowPointers (one per row) or as a single \a data block.
+std::vector<unsigned char> toRgba8(int width, int height, unsigned int format,
+                                   const unsigned char* data,
+                                   const unsigned char* const* rowPointers) {
+	const auto channels = format == glRGBA ? 4 : 3;
+	const bool swapRedBlue = format == glBGR;
+	std::vector<unsigned char> out(static_cast<size_t>(width) * height * 4);
+	for (int y = 0; y < height; ++y) {
+		const unsigned char* row =
+		    rowPointers ? rowPointers[y] : data + static_cast<size_t>(y) * width * channels;
+		for (int x = 0; x < width; ++x) {
+			const unsigned char* src = row + static_cast<size_t>(x) * channels;
+			unsigned char* dst = out.data() + (static_cast<size_t>(y) * width + x) * 4;
+			dst[0] = swapRedBlue ? src[2] : src[0];
+			dst[1] = src[1];
+			dst[2] = swapRedBlue ? src[0] : src[2];
+			dst[3] = channels == 4 ? src[3] : 255;
+		}
+	}
+	return out;
+}
+
+} // namespace
+
+void VulkanRenderer::createDescriptorPool() {
+	VkDescriptorPoolSize poolSize{};
+	poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	poolSize.descriptorCount = 1024;
+	VkDescriptorPoolCreateInfo info{ .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO };
+	info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+	info.maxSets = 1024;
+	info.poolSizeCount = 1;
+	info.pPoolSizes = &poolSize;
+	VK_CHECK(vkCreateDescriptorPool(device, &info, nullptr, &descriptorPool),
+	         "vkCreateDescriptorPool");
+}
+
+void VulkanRenderer::createTexturedPipelines() {
+	VkDescriptorSetLayoutBinding samplerBinding{};
+	samplerBinding.binding = 0;
+	samplerBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	samplerBinding.descriptorCount = 1;
+	samplerBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+	VkDescriptorSetLayoutCreateInfo setLayoutInfo{
+		.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO
+	};
+	setLayoutInfo.bindingCount = 1;
+	setLayoutInfo.pBindings = &samplerBinding;
+	VK_CHECK(vkCreateDescriptorSetLayout(device, &setLayoutInfo, nullptr, &texturedSetLayout),
+	         "vkCreateDescriptorSetLayout");
+
+	const VkShaderModule vert = createShaderModule(
+	    device,
+	    compileGlslToSpirv(texturedVertexShader, VK_SHADER_STAGE_VERTEX_BIT, "textured.vert"));
+	const VkShaderModule frag = createShaderModule(
+	    device,
+	    compileGlslToSpirv(texturedFragmentShader, VK_SHADER_STAGE_FRAGMENT_BIT, "textured.frag"));
+
+	VkPushConstantRange pushRange{};
+	pushRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+	pushRange.size = sizeof(ColoredPushConstants);
+	VkPipelineLayoutCreateInfo layoutInfo{ .sType =
+		                                       VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
+	layoutInfo.setLayoutCount = 1;
+	layoutInfo.pSetLayouts = &texturedSetLayout;
+	layoutInfo.pushConstantRangeCount = 1;
+	layoutInfo.pPushConstantRanges = &pushRange;
+	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &texturedPipelineLayout),
+	         "vkCreatePipelineLayout");
+
+	const std::array<VkPipelineShaderStageCreateInfo, 2> stages = {
+		VkPipelineShaderStageCreateInfo{
+		    .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+		    .stage = VK_SHADER_STAGE_VERTEX_BIT,
+		    .module = vert,
+		    .pName = "main" },
+		VkPipelineShaderStageCreateInfo{
+		    .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+		    .stage = VK_SHADER_STAGE_FRAGMENT_BIT,
+		    .module = frag,
+		    .pName = "main" },
+	};
+
+	VkVertexInputBindingDescription binding{};
+	binding.binding = 0;
+	binding.stride = 4 * sizeof(float); // x, y, u, v
+	binding.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+	const std::array<VkVertexInputAttributeDescription, 2> attributes = {
+		VkVertexInputAttributeDescription{ 0, 0, VK_FORMAT_R32G32_SFLOAT, 0 },
+		VkVertexInputAttributeDescription{ 1, 0, VK_FORMAT_R32G32_SFLOAT, 2 * sizeof(float) },
+	};
+	VkPipelineVertexInputStateCreateInfo vertexInput{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO
+	};
+	vertexInput.vertexBindingDescriptionCount = 1;
+	vertexInput.pVertexBindingDescriptions = &binding;
+	vertexInput.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributes.size());
+	vertexInput.pVertexAttributeDescriptions = attributes.data();
+
+	VkPipelineViewportStateCreateInfo viewportState{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO
+	};
+	viewportState.viewportCount = 1;
+	viewportState.scissorCount = 1;
+
+	VkPipelineRasterizationStateCreateInfo rasterizer{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO
+	};
+	rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+	rasterizer.cullMode = VK_CULL_MODE_NONE;
+	rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+	rasterizer.lineWidth = 1.f;
+
+	VkPipelineMultisampleStateCreateInfo multisampling{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO
+	};
+	multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+
+	VkPipelineColorBlendAttachmentState blendAttachment{};
+	blendAttachment.blendEnable = VK_TRUE;
+	blendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+	blendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+	blendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+	blendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+	blendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+	blendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
+	blendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+	                                 VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+	VkPipelineColorBlendStateCreateInfo colorBlending{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO
+	};
+	colorBlending.attachmentCount = 1;
+	colorBlending.pAttachments = &blendAttachment;
+
+	const std::array<VkDynamicState, 2> dynamicStates = { VK_DYNAMIC_STATE_VIEWPORT,
+		                                                  VK_DYNAMIC_STATE_SCISSOR };
+	VkPipelineDynamicStateCreateInfo dynamicState{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO
+	};
+	dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
+	dynamicState.pDynamicStates = dynamicStates.data();
+
+	const std::array<PrimitiveType, 4> topologies = { PrimitiveType::Triangles,
+		                                              PrimitiveType::TriangleStrip,
+		                                              PrimitiveType::TriangleFan,
+		                                              PrimitiveType::Lines };
+	for (const PrimitiveType type : topologies) {
+		VkPipelineInputAssemblyStateCreateInfo inputAssembly{
+			.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
+		};
+		inputAssembly.topology = toVkTopology(type);
+
+		VkGraphicsPipelineCreateInfo pipelineInfo{
+			.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
+		};
+		pipelineInfo.stageCount = static_cast<uint32_t>(stages.size());
+		pipelineInfo.pStages = stages.data();
+		pipelineInfo.pVertexInputState = &vertexInput;
+		pipelineInfo.pInputAssemblyState = &inputAssembly;
+		pipelineInfo.pViewportState = &viewportState;
+		pipelineInfo.pRasterizationState = &rasterizer;
+		pipelineInfo.pMultisampleState = &multisampling;
+		pipelineInfo.pColorBlendState = &colorBlending;
+		pipelineInfo.pDynamicState = &dynamicState;
+		pipelineInfo.layout = texturedPipelineLayout;
+		pipelineInfo.renderPass = renderPass;
+		VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
+		                                   &texturedPipelines[static_cast<size_t>(type)]),
+		         "vkCreateGraphicsPipelines");
+	}
+
+	vkDestroyShaderModule(device, frag, nullptr);
+	vkDestroyShaderModule(device, vert, nullptr);
+}
+
+void VulkanRenderer::submitOneTime(const std::function<void(VkCommandBuffer)>& record) {
+	VkCommandBufferAllocateInfo allocInfo{
+		.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO
+	};
+	allocInfo.commandPool = commandPool;
+	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	allocInfo.commandBufferCount = 1;
+	VkCommandBuffer cmd = VK_NULL_HANDLE;
+	VK_CHECK(vkAllocateCommandBuffers(device, &allocInfo, &cmd), "vkAllocateCommandBuffers");
+
+	VkCommandBufferBeginInfo beginInfo{ .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
+	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+	VK_CHECK(vkBeginCommandBuffer(cmd, &beginInfo), "vkBeginCommandBuffer");
+	record(cmd);
+	VK_CHECK(vkEndCommandBuffer(cmd), "vkEndCommandBuffer");
+
+	VkSubmitInfo submit{ .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO };
+	submit.commandBufferCount = 1;
+	submit.pCommandBuffers = &cmd;
+	VK_CHECK(vkQueueSubmit(graphicsQueue, 1, &submit, VK_NULL_HANDLE), "vkQueueSubmit");
+	vkQueueWaitIdle(graphicsQueue);
+	vkFreeCommandBuffers(device, commandPool, 1, &cmd);
+}
+
+std::unique_ptr<VulkanTexture> VulkanRenderer::createTexture(const int width, const int height,
+                                                             const unsigned int format,
+                                                             const unsigned int type,
+                                                             const unsigned char* const data,
+                                                             const unsigned char* const* const
+                                                                 rowPointers) {
+	if (type != glUnsignedByte || (format != glRGBA && format != glRGB && format != glBGR)) {
+		internal::error("Vulkan backend: unsupported texture format/type (0x{:x}/0x{:x}).", format,
+		                type);
+		return nullptr;
+	}
+
+	auto texture = std::make_unique<VulkanTexture>();
+	texture->width = width;
+	texture->height = height;
+
+	VkImageCreateInfo imageInfo{ .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO };
+	imageInfo.imageType = VK_IMAGE_TYPE_2D;
+	imageInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+	imageInfo.extent = { static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1 };
+	imageInfo.mipLevels = 1;
+	imageInfo.arrayLayers = 1;
+	imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+	imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+	imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	VK_CHECK(vkCreateImage(device, &imageInfo, nullptr, &texture->image), "vkCreateImage");
+
+	VkMemoryRequirements memReq;
+	vkGetImageMemoryRequirements(device, texture->image, &memReq);
+	VkMemoryAllocateInfo allocInfo{ .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
+	allocInfo.allocationSize = memReq.size;
+	allocInfo.memoryTypeIndex =
+	    findMemoryType(memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &texture->memory), "vkAllocateMemory");
+	VK_CHECK(vkBindImageMemory(device, texture->image, texture->memory, 0), "vkBindImageMemory");
+
+	if (data || rowPointers) {
+		updateTextureBytes(*texture, width, height,
+		                   toRgba8(width, height, format, data, rowPointers).data());
+	} else {
+		// No initial pixels (e.g. a render target): just move it to the shader-read layout.
+		submitOneTime([&](VkCommandBuffer cmd) {
+			VkImageMemoryBarrier barrier{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+			barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+			barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+			barrier.image = texture->image;
+			barrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+			barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+			vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+			                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1,
+			                     &barrier);
+		});
+	}
+
+	VkImageViewCreateInfo viewInfo{ .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO };
+	viewInfo.image = texture->image;
+	viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+	viewInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+	viewInfo.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+	VK_CHECK(vkCreateImageView(device, &viewInfo, nullptr, &texture->view), "vkCreateImageView");
+
+	const VkFilter filter = App::isPixelArt() ? VK_FILTER_NEAREST : VK_FILTER_LINEAR;
+	VkSamplerCreateInfo samplerInfo{ .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO };
+	samplerInfo.magFilter = filter;
+	samplerInfo.minFilter = VK_FILTER_LINEAR;
+	samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+	samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+	samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+	VK_CHECK(vkCreateSampler(device, &samplerInfo, nullptr, &texture->sampler), "vkCreateSampler");
+
+	VkDescriptorSetAllocateInfo dsAlloc{ .sType =
+		                                     VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+	dsAlloc.descriptorPool = descriptorPool;
+	dsAlloc.descriptorSetCount = 1;
+	dsAlloc.pSetLayouts = &texturedSetLayout;
+	VK_CHECK(vkAllocateDescriptorSets(device, &dsAlloc, &texture->descriptorSet),
+	         "vkAllocateDescriptorSets");
+
+	VkDescriptorImageInfo imgInfo{};
+	imgInfo.sampler = texture->sampler;
+	imgInfo.imageView = texture->view;
+	imgInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	VkWriteDescriptorSet write{ .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
+	write.dstSet = texture->descriptorSet;
+	write.dstBinding = 0;
+	write.descriptorCount = 1;
+	write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	write.pImageInfo = &imgInfo;
+	vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+
+	return texture;
+}
+
+void VulkanRenderer::updateTextureBytes(VulkanTexture& texture, const int width, const int height,
+                                        const unsigned char* const rgba) {
+	const VkDeviceSize size = static_cast<VkDeviceSize>(width) * height * 4;
+
+	VkBufferCreateInfo bufferInfo{ .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
+	bufferInfo.size = size;
+	bufferInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+	bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	VkBuffer staging = VK_NULL_HANDLE;
+	VK_CHECK(vkCreateBuffer(device, &bufferInfo, nullptr, &staging), "vkCreateBuffer");
+	VkMemoryRequirements memReq;
+	vkGetBufferMemoryRequirements(device, staging, &memReq);
+	VkMemoryAllocateInfo allocInfo{ .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
+	allocInfo.allocationSize = memReq.size;
+	allocInfo.memoryTypeIndex = findMemoryType(
+	    memReq.memoryTypeBits,
+	    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	VkDeviceMemory stagingMemory = VK_NULL_HANDLE;
+	VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &stagingMemory), "vkAllocateMemory");
+	VK_CHECK(vkBindBufferMemory(device, staging, stagingMemory, 0), "vkBindBufferMemory");
+	void* mapped = nullptr;
+	VK_CHECK(vkMapMemory(device, stagingMemory, 0, size, 0, &mapped), "vkMapMemory");
+	std::memcpy(mapped, rgba, size);
+	vkUnmapMemory(device, stagingMemory);
+
+	submitOneTime([&](VkCommandBuffer cmd) {
+		VkImageMemoryBarrier toTransfer{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+		toTransfer.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		toTransfer.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		toTransfer.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toTransfer.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toTransfer.image = texture.image;
+		toTransfer.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		toTransfer.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+		                     0, 0, nullptr, 0, nullptr, 1, &toTransfer);
+
+		VkBufferImageCopy region{};
+		region.imageSubresource = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1 };
+		region.imageExtent = { static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1 };
+		vkCmdCopyBufferToImage(cmd, staging, texture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1,
+		                       &region);
+
+		VkImageMemoryBarrier toShader{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+		toShader.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		toShader.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		toShader.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toShader.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toShader.image = texture.image;
+		toShader.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		toShader.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		toShader.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TRANSFER_BIT,
+		                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1,
+		                     &toShader);
+	});
+
+	vkDestroyBuffer(device, staging, nullptr);
+	vkFreeMemory(device, stagingMemory, nullptr);
+}
+
+void VulkanRenderer::destroyTexture(VulkanTexture& texture) {
+	if (!device) {
+		return;
+	}
+	vkDeviceWaitIdle(device);
+	if (texture.descriptorSet) {
+		vkFreeDescriptorSets(device, descriptorPool, 1, &texture.descriptorSet);
+	}
+	if (texture.sampler) {
+		vkDestroySampler(device, texture.sampler, nullptr);
+	}
+	if (texture.view) {
+		vkDestroyImageView(device, texture.view, nullptr);
+	}
+	if (texture.image) {
+		vkDestroyImage(device, texture.image, nullptr);
+	}
+	if (texture.memory) {
+		vkFreeMemory(device, texture.memory, nullptr);
+	}
+}
+
+void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* const xyuv,
+                                const std::size_t vertexCount, const PrimitiveType type,
+                                const Mat3& modelview, const Rgba color) {
+	if (!frameActive || vertexCount == 0) {
+		return;
+	}
+	DynamicVertexBuffer& vb = vertexBuffers[currentFrame];
+	const VkDeviceSize bytes = vertexCount * 4 * sizeof(float);
+	if (vb.used + bytes > vb.capacity) {
+		if (!vertexBufferOverflowReported) {
+			internal::error("Vulkan per-frame vertex buffer exhausted; some sprites won't be drawn.");
+			vertexBufferOverflowReported = true;
+		}
+		return;
+	}
+	const VkDeviceSize offset = vb.used;
+	std::memcpy(static_cast<char*>(vb.mapped) + offset, xyuv, bytes);
+	vb.used += (bytes + 3) & ~VkDeviceSize{ 3 };
+
+	ColoredPushConstants push{};
+	const float* const m = modelview.data;
+	Mat4 embedded;
+	embedded.data[0] = m[0];
+	embedded.data[1] = m[1];
+	embedded.data[4] = m[3];
+	embedded.data[5] = m[4];
+	embedded.data[12] = m[6];
+	embedded.data[13] = m[7];
+	for (int col = 0; col < 4; ++col) {
+		for (int row = 0; row < 4; ++row) {
+			float sum = 0.f;
+			for (int k = 0; k < 4; ++k) {
+				sum += projection.data[k * 4 + row] * embedded.data[col * 4 + k];
+			}
+			push.mvp[col * 4 + row] = sum;
+		}
+	}
+	push.color[0] = color.getRed();
+	push.color[1] = color.getGreen();
+	push.color[2] = color.getBlue();
+	push.color[3] = color.getAlpha();
+
+	const VkCommandBuffer cmd = commandBuffers[currentFrame];
+	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+	                  texturedPipelines[static_cast<size_t>(type)]);
+	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 0, 1,
+	                        &texture.descriptorSet, 0, nullptr);
+	vkCmdBindVertexBuffers(cmd, 0, 1, &vb.buffer, &offset);
+	vkCmdPushConstants(cmd, texturedPipelineLayout,
 	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
 	                   &push);
 	vkCmdDraw(cmd, static_cast<uint32_t>(vertexCount), 1, 0, 0);
