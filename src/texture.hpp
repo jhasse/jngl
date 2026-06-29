@@ -38,6 +38,11 @@ public:
 	void drawClipped(float xstart, float xend, float ystart, float yend, float red, float green,
 	                 float blue, float alpha) const;
 	void drawMesh(const std::vector<Vertex>& vertexes) const;
+
+	/// Backend-neutral mesh draw: transforms \a vertexes by \a modelview, modulated by \a color
+	/// (and the active ShaderProgram, if any). Needed by the Vulkan backend, which can't rely on
+	/// ambient shader state.
+	void drawMesh(const std::vector<Vertex>& vertexes, const Mat3& modelview, Rgba color) const;
 	[[nodiscard]] GLuint getID() const;
 	[[nodiscard]] float getPreciseWidth() const;
 	[[nodiscard]] float getPreciseHeight() const;

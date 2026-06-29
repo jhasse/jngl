@@ -64,6 +64,7 @@ VulkanRenderer::VulkanRenderer(void* const nativeWindow)
 	createLogicalDevice();
 	createSwapchain();
 	createImageViews();
+	createPresentSemaphores();
 	createRenderPass();
 	createFramebuffers();
 	createCommandPoolAndBuffers();
@@ -119,9 +120,6 @@ VulkanRenderer::~VulkanRenderer() {
 			vkDestroyDescriptorPool(device, descriptorPool, nullptr);
 		}
 		for (uint32_t i = 0; i < maxFramesInFlight; ++i) {
-			if (i < renderFinishedSemaphores.size()) {
-				vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
-			}
 			if (i < imageAvailableSemaphores.size()) {
 				vkDestroySemaphore(device, imageAvailableSemaphores[i], nullptr);
 			}
@@ -552,7 +550,6 @@ void VulkanRenderer::createCommandPoolAndBuffers() {
 
 void VulkanRenderer::createSyncObjects() {
 	imageAvailableSemaphores.resize(maxFramesInFlight);
-	renderFinishedSemaphores.resize(maxFramesInFlight);
 	inFlightFences.resize(maxFramesInFlight);
 
 	VkSemaphoreCreateInfo semInfo{ .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO };
@@ -561,8 +558,6 @@ void VulkanRenderer::createSyncObjects() {
 	for (uint32_t i = 0; i < maxFramesInFlight; ++i) {
 		VK_CHECK(vkCreateSemaphore(device, &semInfo, nullptr, &imageAvailableSemaphores[i]),
 		         "vkCreateSemaphore");
-		VK_CHECK(vkCreateSemaphore(device, &semInfo, nullptr, &renderFinishedSemaphores[i]),
-		         "vkCreateSemaphore");
 		VK_CHECK(vkCreateFence(device, &fenceInfo, nullptr, &inFlightFences[i]),
 		         "vkCreateFence");
 	}
@@ -570,10 +565,25 @@ void VulkanRenderer::createSyncObjects() {
 	VK_CHECK(vkCreateFence(device, &unsignaled, nullptr, &readbackFence), "vkCreateFence");
 }
 
+void VulkanRenderer::createPresentSemaphores() {
+	// The semaphore the present operation waits on must be one per swapchain image, not per
+	// frame-in-flight: a swapchain image's present may still be reading the semaphore when the next
+	// frame-in-flight reuses it. (See the Vulkan swapchain-semaphore-reuse guidance.)
+	VkSemaphoreCreateInfo semInfo{ .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO };
+	renderFinishedSemaphores.resize(swapchainImages.size());
+	for (auto& semaphore : renderFinishedSemaphores) {
+		VK_CHECK(vkCreateSemaphore(device, &semInfo, nullptr, &semaphore), "vkCreateSemaphore");
+	}
+}
+
 void VulkanRenderer::cleanupSwapchain() {
 	if (!device) {
 		return;
 	}
+	for (VkSemaphore semaphore : renderFinishedSemaphores) {
+		vkDestroySemaphore(device, semaphore, nullptr);
+	}
+	renderFinishedSemaphores.clear();
 	for (VkFramebuffer fb : swapchainFramebuffers) {
 		vkDestroyFramebuffer(device, fb, nullptr);
 	}
@@ -600,6 +610,7 @@ void VulkanRenderer::recreateSwapchain() {
 	cleanupSwapchain();
 	createSwapchain();
 	createImageViews();
+	createPresentSemaphores();
 	createFramebuffers();
 }
 
@@ -697,7 +708,9 @@ void VulkanRenderer::endFrame() {
 	submit.pWaitDstStageMask = waitStages.data();
 	submit.commandBufferCount = 1;
 	submit.pCommandBuffers = &cmd;
-	const std::array<VkSemaphore, 1> signalSemaphores = { renderFinishedSemaphores[currentFrame] };
+	const std::array<VkSemaphore, 1> signalSemaphores = {
+		renderFinishedSemaphores[currentImageIndex]
+	};
 	submit.signalSemaphoreCount = 1;
 	submit.pSignalSemaphores = signalSemaphores.data();
 
@@ -1141,6 +1154,14 @@ void VulkanRenderer::createTexturedPipelines() {
 	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &texturedPipelineLayout),
 	         "vkCreatePipelineLayout");
 
+	buildTexturedPipelines(vert, frag, texturedPipelines);
+
+	vkDestroyShaderModule(device, frag, nullptr);
+	vkDestroyShaderModule(device, vert, nullptr);
+}
+
+void VulkanRenderer::buildTexturedPipelines(const VkShaderModule vert, const VkShaderModule frag,
+                                            std::array<VkPipeline, 4>& out) {
 	const std::array<VkPipelineShaderStageCreateInfo, 2> stages = {
 		VkPipelineShaderStageCreateInfo{
 		    .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
@@ -1238,12 +1259,36 @@ void VulkanRenderer::createTexturedPipelines() {
 		pipelineInfo.layout = texturedPipelineLayout;
 		pipelineInfo.renderPass = renderPass;
 		VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
-		                                   &texturedPipelines[static_cast<size_t>(type)]),
+		                                   &out[static_cast<size_t>(type)]),
 		         "vkCreateGraphicsPipelines");
 	}
+}
 
+std::unique_ptr<VulkanShaderProgram> VulkanRenderer::createShaderProgram(
+    const std::vector<uint32_t>& vertexSpirv, const std::vector<uint32_t>& fragmentSpirv) {
+	auto program = std::make_unique<VulkanShaderProgram>();
+	const VkShaderModule vert = createShaderModule(device, vertexSpirv);
+	const VkShaderModule frag = createShaderModule(device, fragmentSpirv);
+	buildTexturedPipelines(vert, frag, program->pipelines);
 	vkDestroyShaderModule(device, frag, nullptr);
 	vkDestroyShaderModule(device, vert, nullptr);
+	return program;
+}
+
+void VulkanRenderer::destroyShaderProgram(VulkanShaderProgram& program) {
+	if (!device) {
+		return;
+	}
+	vkDeviceWaitIdle(device);
+	for (VkPipeline pipeline : program.pipelines) {
+		if (pipeline) {
+			vkDestroyPipeline(device, pipeline, nullptr);
+		}
+	}
+}
+
+void VulkanRenderer::setActiveShaderProgram(const VulkanShaderProgram* program) {
+	activeShaderProgram = program;
 }
 
 void VulkanRenderer::submitOneTime(const std::function<void(VkCommandBuffer)>& record) {
@@ -1494,8 +1539,10 @@ void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* const
 	push.color[3] = color.getAlpha();
 
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
-	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-	                  texturedPipelines[static_cast<size_t>(type)]);
+	const VkPipeline pipeline = activeShaderProgram
+	                                ? activeShaderProgram->pipelines[static_cast<size_t>(type)]
+	                                : texturedPipelines[static_cast<size_t>(type)];
+	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 0, 1,
 	                        &texture.descriptorSet, 0, nullptr);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vb.buffer, &offset);

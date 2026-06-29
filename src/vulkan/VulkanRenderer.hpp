@@ -43,6 +43,12 @@ struct VulkanFramebuffer {
 	int height = 0;
 };
 
+/// GPU resources backing a jngl::ShaderProgram on the Vulkan backend: one textured pipeline per
+/// primitive topology, built from a user-supplied vertex/fragment shader pair.
+struct VulkanShaderProgram {
+	std::array<VkPipeline, 4> pipelines{}; // indexed by PrimitiveType
+};
+
 class VulkanRenderer final : public Renderer {
 public:
 	/// \a nativeWindow must be an SDL_Window* created with the SDL_WINDOW_VULKAN flag.
@@ -88,6 +94,13 @@ public:
 	/// Clears the render target that's currently bound (the active FrameBuffer, or the screen).
 	void clearCurrentRenderTarget(Rgba color);
 
+	/// Builds a custom shader program (see jngl::ShaderProgram) from vertex + fragment SPIR-V.
+	std::unique_ptr<VulkanShaderProgram> createShaderProgram(const std::vector<uint32_t>& vertexSpirv,
+	                                                         const std::vector<uint32_t>& fragmentSpirv);
+	void destroyShaderProgram(VulkanShaderProgram&);
+	/// Makes \a program (or nullptr for the built-in sprite shader) the one used by drawSprite.
+	void setActiveShaderProgram(const VulkanShaderProgram* program);
+
 private:
 	void createInstance();
 	void createSurface();
@@ -99,9 +112,14 @@ private:
 	void createFramebuffers();
 	void createCommandPoolAndBuffers();
 	void createSyncObjects();
+	/// Creates the per-swapchain-image "render finished" semaphores (recreated with the swapchain).
+	void createPresentSemaphores();
 	void createColoredPipelines();
 	void createVertexBuffers();
 	void createTexturedPipelines();
+	/// Builds one textured pipeline per primitive topology from the given shader modules into \a out.
+	void buildTexturedPipelines(VkShaderModule vert, VkShaderModule frag,
+	                            std::array<VkPipeline, 4>& out);
 	void createDescriptorPool();
 	void createOffscreenRenderPass();
 
@@ -183,6 +201,8 @@ private:
 	VkPipelineLayout texturedPipelineLayout = VK_NULL_HANDLE;
 	std::array<VkPipeline, 4> texturedPipelines{}; // indexed by PrimitiveType
 	VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
+	// Custom shader program currently bound via ShaderProgram::use(); nullptr = built-in shader.
+	const VulkanShaderProgram* activeShaderProgram = nullptr;
 
 	// Host-visible vertex buffer per frame in flight, written directly each frame. `used` is reset
 	// in beginFrame and grows as drawColored appends geometry.

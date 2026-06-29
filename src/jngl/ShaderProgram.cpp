@@ -10,10 +10,58 @@
 #include <cassert>
 #include <stdexcept>
 
+#ifdef JNGL_VULKAN
+#include "../Renderer.hpp"
+#include "../vulkan/VulkanRenderer.hpp"
+#endif
+
 namespace jngl {
 
 int ShaderProgram::Context::referenceCount = 0;
 const ShaderProgram::Impl* ShaderProgram::Context::activeImpl = nullptr;
+
+#ifdef JNGL_VULKAN
+
+namespace {
+VulkanRenderer& vulkanRenderer() {
+	return static_cast<VulkanRenderer&>(getRenderer());
+}
+} // namespace
+
+struct ShaderProgram::Impl {
+	std::unique_ptr<VulkanShaderProgram> program;
+
+	~Impl() {
+		if (program) {
+			if (auto* renderer = getRendererIfExists()) {
+				static_cast<VulkanRenderer*>(renderer)->destroyShaderProgram(*program);
+			}
+		}
+	}
+};
+
+ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
+: impl(std::make_unique<Impl>()) {
+	impl->program = vulkanRenderer().createShaderProgram(vertex.impl->spirv, fragment.impl->spirv);
+	App::instance().registerShaderProgram(this);
+}
+
+ShaderProgram::Context ShaderProgram::use() const {
+	return Context(*impl);
+}
+
+int ShaderProgram::getAttribLocation(const std::string& /*name*/) const {
+	// Attribute locations are fixed by the built-in sprite vertex shader on Vulkan.
+	return 0;
+}
+
+int ShaderProgram::getUniformLocation(const std::string& /*name*/) const {
+	// Custom uniforms aren't supported on the Vulkan backend yet; the built-in modelview/projection
+	// are passed as push constants automatically.
+	return -1;
+}
+
+#else
 
 struct ShaderProgram::Impl {
 	GLuint id;
@@ -64,6 +112,8 @@ int ShaderProgram::getUniformLocation(const std::string& name) const {
 	return location;
 }
 
+#endif
+
 ShaderProgram::~ShaderProgram() {
 	if (App::self) {
 		App::self->unregisterShaderProgram(this);
@@ -102,7 +152,11 @@ ShaderProgram::Context::Context(const ShaderProgram::Impl& impl) {
 			throw std::runtime_error("A different ShaderProgram is already in use.");
 		}
 	} else {
+#ifdef JNGL_VULKAN
+		vulkanRenderer().setActiveShaderProgram(impl.program.get());
+#else
 		glUseProgram(impl.id);
+#endif
 	}
 	++referenceCount;
 	activeImpl = &impl;
@@ -115,27 +169,59 @@ ShaderProgram::Context::Context(Context&&) noexcept {
 ShaderProgram::Context::~Context() {
 	--referenceCount;
 	assert(referenceCount >= 0);
+#ifdef JNGL_VULKAN
+	if (referenceCount == 0) {
+		activeImpl = nullptr;
+		if (auto* renderer = getRendererIfExists()) {
+			static_cast<VulkanRenderer*>(renderer)->setActiveShaderProgram(nullptr);
+		}
+	}
+#endif
 }
 
 void ShaderProgram::Context::setUniform(const int location, const int v0) {
 	assert(referenceCount >= 0);
+#ifdef JNGL_VULKAN
+	(void)location;
+	(void)v0; // custom uniforms aren't supported on Vulkan yet
+#else
 	glUniform1i(location, v0);
+#endif
 }
 
 void ShaderProgram::Context::setUniform(const int location, const float v0, const float v1) {
 	assert(referenceCount >= 0);
+#ifdef JNGL_VULKAN
+	(void)location;
+	(void)v0;
+	(void)v1;
+#else
 	glUniform2f(location, v0, v1);
+#endif
 }
 
 void ShaderProgram::Context::setUniform(const int location, const float v0, const float v1,
                                         const float v2, const float v3) {
 	assert(referenceCount >= 0);
+#ifdef JNGL_VULKAN
+	(void)location;
+	(void)v0;
+	(void)v1;
+	(void)v2;
+	(void)v3;
+#else
 	glUniform4f(location, v0, v1, v2, v3);
+#endif
 }
 
 void ShaderProgram::Context::setUniform(const int location, const Rgb color) {
 	assert(referenceCount >= 0);
+#ifdef JNGL_VULKAN
+	(void)location;
+	(void)color;
+#else
 	glUniform3f(location, color.getRed(), color.getGreen(), color.getBlue());
+#endif
 }
 
 } // namespace jngl

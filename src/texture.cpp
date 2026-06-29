@@ -11,7 +11,7 @@
 
 #ifdef JNGL_VULKAN
 #include "Renderer.hpp"
-#include "log.hpp"
+#include "spriteimpl.hpp"
 #include "vulkan/VulkanRenderer.hpp"
 #else
 #include "ShaderCache.hpp"
@@ -185,17 +185,28 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 #endif
 }
 
+void Texture::drawMesh(const std::vector<Vertex>& vertexes, const Mat3& modelview,
+                       const Rgba color) const {
+#ifdef JNGL_VULKAN
+	if (vkTexture && !vertexes.empty()) {
+		// jngl::Vertex is a tightly packed { x, y, u, v }, matching what drawSprite expects. The
+		// active ShaderProgram (if any) is applied automatically by drawSprite.
+		vulkanRenderer().drawSprite(*vkTexture, reinterpret_cast<const float*>(vertexes.data()),
+		                            vertexes.size(), PrimitiveType::Triangles, modelview, color);
+	}
+#else
+	auto& shaderCache = ShaderCache::handle();
+	auto context = shaderCache.textureShaderProgram->use();
+	glUniform4f(shaderCache.shaderSpriteColorUniform, color.getRed(), color.getGreen(),
+	            color.getBlue(), color.getAlpha());
+	glUniformMatrix3fv(shaderCache.modelviewUniform, 1, GL_FALSE, modelview.data);
+	drawMesh(vertexes);
+#endif
+}
+
 void Texture::drawMesh(const std::vector<Vertex>& vertexes) const {
 #ifdef JNGL_VULKAN
-	// drawMesh relies on the caller having set the modelview/color as ambient shader state, which
-	// the Vulkan backend doesn't have. Supporting it needs the transform and color threaded through
-	// (see Sprite::drawMesh); not done yet.
-	(void)vertexes;
-	static bool warned = false;
-	if (!warned) {
-		internal::warn("jngl::Sprite::drawMesh is not yet implemented on the Vulkan backend.");
-		warned = true;
-	}
+	drawMesh(vertexes, opengl::modelview, gSpriteColor);
 #else
 	opengl::bindVertexArray(opengl::vaoStream);
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
