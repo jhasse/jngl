@@ -80,6 +80,12 @@ option(JNGL_RECORD "Enable video recording using FFmpeg" OFF)
 option(JNGL_STEAMWORKS "Enable Steamsworks SDK support for achievements" OFF)
 option(JNGL_TRACE "Enable tracing for debugging purposes" OFF)
 
+# Experimental Vulkan renderer backend. When OFF (the default) JNGL uses its
+# OpenGL/GLES backend. When ON an additional Vulkan backend is compiled in and
+# used at runtime instead. Currently only implemented for the desktop SDL3
+# platform (Linux); see src/vulkan/.
+option(JNGL_VULKAN "Use the experimental Vulkan renderer backend instead of OpenGL" OFF)
+
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
 if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
 	set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT ON)
@@ -433,6 +439,29 @@ else()
 		target_link_libraries(jngl-test-forceQuit PRIVATE jngl)
 		target_link_libraries(jngl-test jngl)
 	endif()
+endif()
+
+if(JNGL_VULKAN)
+	if(NOT UNIX OR APPLE OR ANDROID OR IOS OR EMSCRIPTEN)
+		message(FATAL_ERROR "JNGL_VULKAN is currently only supported on the desktop SDL3/Linux platform.")
+	endif()
+	find_package(Vulkan REQUIRED)
+	target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
+
+	# shaderc (runtime GLSL -> SPIR-V). Fedora/Debian ship libshaderc-dev without a
+	# pkg-config or CMake config file, so locate the headers and library manually.
+	find_path(SHADERC_INCLUDE_DIR shaderc/shaderc.hpp)
+	find_library(SHADERC_LIBRARY NAMES shaderc_shared shaderc_combined shaderc)
+	if(NOT SHADERC_INCLUDE_DIR OR NOT SHADERC_LIBRARY)
+		message(FATAL_ERROR "JNGL_VULKAN requires shaderc (install libshaderc-devel / libshaderc-dev). "
+			"include=${SHADERC_INCLUDE_DIR} lib=${SHADERC_LIBRARY}")
+	endif()
+	target_include_directories(jngl PRIVATE ${SHADERC_INCLUDE_DIR})
+	target_link_libraries(jngl PRIVATE ${SHADERC_LIBRARY})
+
+	file(GLOB VULKAN_SRC src/vulkan/*.cpp)
+	target_sources(jngl PRIVATE ${VULKAN_SRC})
+	target_compile_definitions(jngl PUBLIC JNGL_VULKAN)
 endif()
 
 if(JNGL_BUILD_WEBP_FROM_SOURCE)

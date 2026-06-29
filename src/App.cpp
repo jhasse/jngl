@@ -3,6 +3,7 @@
 
 #include "App.hpp"
 
+#include "Renderer.hpp"
 #include "jngl/AppParameters.hpp"
 #include "jngl/Scene.hpp"
 #include "jngl/ShaderProgram.hpp"
@@ -111,6 +112,18 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 } // namespace
 
 void App::initGl(int width, int height, int canvasWidth, int canvasHeight) {
+#ifdef JNGL_VULKAN
+	// The Vulkan backend needs no GL state. We still update the projection matrix (pure math) and
+	// hand it to the backend; clearing happens via the render pass each frame.
+	if (impl && impl->scaleFactor) {
+		setScaleFactor(impl->scaleFactor(canvasWidth, canvasHeight));
+	}
+	updateProjection(width, height, static_cast<float>(width), static_cast<float>(height));
+	getRenderer().setProjection(opengl::projection);
+	getRenderer().setViewport(0, 0, width, height);
+	reset();
+	modelviewStack = {};
+#else
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
 #ifdef GLAD_GL
 	if (GLAD_GL_VERSION_4_3 != 0 || GLAD_GL_KHR_debug != 0) {
@@ -141,6 +154,7 @@ void App::initGl(int width, int height, int canvasWidth, int canvasHeight) {
 
 	glFlush();
 	setVerticalSync(true);
+#endif
 }
 
 std::string App::getDisplayName() const {

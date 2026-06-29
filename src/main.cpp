@@ -4,6 +4,7 @@
 #include "main.hpp"
 
 #include "App.hpp"
+#include "Renderer.hpp"
 #include "ShaderCache.hpp"
 #include "jngl/Alpha.hpp"
 #include "jngl/ScaleablePixels.hpp"
@@ -59,8 +60,12 @@ Rgb backgroundColor(1, 1, 1);
 std::stack<jngl::Mat3> modelviewStack;
 
 void clearBackgroundColor() {
+#ifndef JNGL_VULKAN
 	glClearColor(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(),
 	             1);
+#endif
+	// On Vulkan the background color is read from the `backgroundColor` global directly in
+	// VulkanRenderer::beginFrame, so there's nothing to set here.
 }
 
 void updateViewportAndLetterboxing(const int width, const int height, const int canvasWidth,
@@ -138,7 +143,9 @@ void showWindow(const std::string& title, const double width, const double heigh
 	}
 	pWindow->SetMouseVisible(isMouseVisible);
 	setAntiAliasing(antiAliasingEnabled);
+#ifndef JNGL_VULKAN
 	pWindow->initGlObjects();
+#endif
 }
 
 void hideWindow() {
@@ -159,6 +166,16 @@ void swapBuffers() {
 }
 
 void clearBackBuffer() {
+#ifdef JNGL_VULKAN
+	// On Vulkan the frame is started and cleared by the render pass (load op CLEAR). Letterbox
+	// bars aren't drawn yet (see VulkanRenderer::setViewport).
+	getRenderer().beginFrame(backgroundColor);
+	reset();
+	if (!modelviewStack.empty()) {
+		internal::error("Uneven calls to push/popMatrix at the beginning of the frame!");
+	}
+	modelviewStack = {};
+#else
 	if (glIsEnabled(GL_SCISSOR_TEST)) {
 		// Letterboxing with SDL_VIDEODRIVER=wayland will glitch if we don't draw the black boxes on
 		// every frame
@@ -175,6 +192,7 @@ void clearBackBuffer() {
 	}
 	modelviewStack = {};
 	glClear(GL_COLOR_BUFFER_BIT);
+#endif
 }
 
 void updateInput() {
@@ -225,7 +243,9 @@ void setBackgroundColor(const jngl::Rgb color) {
 	pWindow.ThrowIfNull();
 	backgroundColor = color;
 	clearBackgroundColor();
+#ifndef JNGL_VULKAN
 	glClear(GL_COLOR_BUFFER_BIT);
+#endif
 }
 
 void setBackgroundColor(const unsigned char red, const unsigned char green,
@@ -527,13 +547,8 @@ void drawRing(Mat3 modelview, float innerRadius, float outerRadius, float startA
 		vertexes[i * 4 + 3] = innerRadius * s;
 	}
 
-	opengl::bindVertexArray(opengl::vaoStream);
-	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
-	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream);
-	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(float)),
-	             vertexes.data(), GL_STREAM_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, static_cast<GLsizei>(vertexes.size() / 2));
+	getRenderer().drawColored(PrimitiveType::TriangleStrip, vertexes.data(), vertexes.size() / 2,
+	                          modelview, color);
 }
 
 void drawSquare(const Mat3& modelview, Rgba color) {
@@ -607,16 +622,23 @@ void drawSquareOutline(Mat3 modelview, float lineWidth, Rgba color) {
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
-	ShaderCache::handle().drawTriangle(a, b, c);
+	const float vertexes[] = { static_cast<float>(a.x), static_cast<float>(a.y),
+		                       static_cast<float>(b.x), static_cast<float>(b.y),
+		                       static_cast<float>(c.x), static_cast<float>(c.y) };
+	getRenderer().drawColored(PrimitiveType::Triangles, vertexes, 3, opengl::modelview,
+	                          gShapeColor);
 }
 
 void drawTriangle(const double A_x, const double A_y, const double B_x, const double B_y,
                   const double C_x, const double C_y) {
-	ShaderCache::handle().drawTriangle({ A_x, A_y }, { B_x, B_y }, { C_x, C_y });
+	drawTriangle(Vec2{ A_x, A_y }, Vec2{ B_x, B_y }, Vec2{ C_x, C_y });
 }
 
 void drawTriangle(Mat3 modelview, Rgba color) {
-	ShaderCache::handle().drawTriangle(modelview, color);
+	const float vertexes[] = {
+		0.f, -1.f, -std::sqrt(3.f) / 2.f, 0.5f, std::sqrt(3.f) / 2.f, 0.5f,
+	};
+	getRenderer().drawColored(PrimitiveType::Triangles, vertexes, 3, modelview, color);
 }
 
 void setLineWidth(const float width) {
