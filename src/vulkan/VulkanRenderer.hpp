@@ -101,6 +101,10 @@ public:
 	/// Makes \a program (or nullptr for the built-in sprite shader) the one used by drawSprite.
 	void setActiveShaderProgram(const VulkanShaderProgram* program);
 
+	/// Toggles v-sync by switching the swapchain present mode (FIFO vs mailbox/immediate).
+	void setVerticalSync(bool enabled);
+	[[nodiscard]] bool getVerticalSync() const;
+
 private:
 	void createInstance();
 	void createSurface();
@@ -133,6 +137,7 @@ private:
 
 	void cleanupSwapchain();
 	void recreateSwapchain();
+	[[nodiscard]] VkPresentModeKHR choosePresentMode() const;
 
 	[[nodiscard]] uint32_t findMemoryType(uint32_t typeFilter,
 	                                      VkMemoryPropertyFlags properties) const;
@@ -225,6 +230,7 @@ private:
 	bool imageAvailableWaited = false;
 
 	bool validationEnabled = false;
+	bool verticalSyncEnabled = true;
 
 	Mat4 projection;
 	Rgb currentClearColor{ 0, 0, 0 }; // swapchain clear color for the current frame

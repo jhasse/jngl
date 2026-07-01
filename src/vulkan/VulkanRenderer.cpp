@@ -404,8 +404,7 @@ void VulkanRenderer::createSwapchain() {
 		}
 	}
 
-	// Present mode: FIFO is always available and is v-synced.
-	const VkPresentModeKHR presentMode = VK_PRESENT_MODE_FIFO_KHR;
+	const VkPresentModeKHR presentMode = choosePresentMode();
 
 	// Extent.
 	if (caps.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
@@ -651,6 +650,43 @@ void VulkanRenderer::cleanupSwapchain() {
 		vkDestroySwapchainKHR(device, swapchain, nullptr);
 		swapchain = VK_NULL_HANDLE;
 	}
+}
+
+VkPresentModeKHR VulkanRenderer::choosePresentMode() const {
+	if (verticalSyncEnabled) {
+		return VK_PRESENT_MODE_FIFO_KHR;
+	}
+	uint32_t count = 0;
+	vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &count, nullptr);
+	std::vector<VkPresentModeKHR> modes(count);
+	vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &count, modes.data());
+	for (const VkPresentModeKHR mode : modes) {
+		if (mode == VK_PRESENT_MODE_MAILBOX_KHR) {
+			return mode;
+		}
+	}
+	for (const VkPresentModeKHR mode : modes) {
+		if (mode == VK_PRESENT_MODE_IMMEDIATE_KHR) {
+			return mode;
+		}
+	}
+	return VK_PRESENT_MODE_FIFO_KHR;
+}
+
+void VulkanRenderer::setVerticalSync(const bool enabled) {
+	if (verticalSyncEnabled == enabled) {
+		return;
+	}
+	verticalSyncEnabled = enabled;
+	if (!device) {
+		return;
+	}
+	vkDeviceWaitIdle(device);
+	recreateSwapchain();
+}
+
+bool VulkanRenderer::getVerticalSync() const {
+	return verticalSyncEnabled;
 }
 
 void VulkanRenderer::recreateSwapchain() {

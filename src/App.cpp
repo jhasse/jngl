@@ -124,6 +124,7 @@ void App::initGl(int width, int height, int canvasWidth, int canvasHeight) {
 	getRenderer().setViewport(0, 0, width, height);
 	reset();
 	modelviewStack = {};
+	setVerticalSync(true);
 #else
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
 #ifdef GLAD_GL
