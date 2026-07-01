@@ -13,6 +13,10 @@
 
 namespace jngl {
 
+/// Disable SDL high pixel density (call before showWindow). Used by jngl-unittest so window
+/// dimensions match the requested pixel size on fractional-scaling desktops.
+void setHighPixelDensityEnabled(bool enabled);
+
 /// Creates the main window
 ///
 /// Normally you wouldn't call this function yourself, but implement jnglInit() instead.

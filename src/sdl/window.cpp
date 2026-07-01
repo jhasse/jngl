@@ -48,7 +48,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	SDL::handle();
 
 #ifdef JNGL_VULKAN
-	Uint32 flags = SDL_WINDOW_VULKAN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
+	Uint32 flags = SDL_WINDOW_VULKAN;
 #else
 #ifdef __APPLE__ // https://stackoverflow.com/a/26981800/647898
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -56,8 +56,11 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIGH_PIXEL_DENSITY; // TODO: SDL_WINDOW_SHOWN
+	Uint32 flags = SDL_WINDOW_OPENGL; // TODO: SDL_WINDOW_SHOWN
 #endif
+	if (isHighPixelDensityEnabled()) {
+		flags |= SDL_WINDOW_HIGH_PIXEL_DENSITY;
+	}
 	if (fullscreen) {
 		flags |= SDL_WINDOW_FULLSCREEN;
 		if (width != getDesktopWidth() || height != getDesktopHeight()) {
@@ -140,18 +143,6 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	}
 #endif // JNGL_VULKAN
 
-	// Create the rendering backend (OpenGL or Vulkan). It registers itself as the active backend,
-	// so getRenderer() works from here on (e.g. in App::initGl below). On Vulkan this also brings
-	// up the instance, device and swapchain.
-	{
-		internal::StartupProfiler _{ "createRenderer" };
-		impl->renderer = createRenderer(impl->sdlWindow);
-	}
-#ifdef JNGL_VULKAN
-	isMultisampleSupported_ =
-	    static_cast<VulkanRenderer&>(*impl->renderer).isMultisampleSupported();
-#endif
-
 	// This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by SDL2). On
 	// Linux (GNOME) it results in the top of the window being cut off (by the header bar height?).
 	// The bug seems to be fixed in newer SDL2 (or GNOME) versions.
@@ -177,6 +168,18 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	impl->hidpiScaleFactor = static_cast<float>(width_) / static_cast<float>(width);
 	setScaleFactor(getScaleFactor() * impl->hidpiScaleFactor);
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
+
+	// Create the rendering backend (OpenGL or Vulkan). It registers itself as the active backend,
+	// so getRenderer() works from here on (e.g. in App::initGl below). On Vulkan this also brings
+	// up the instance, device and swapchain at the aligned pixel size.
+	{
+		internal::StartupProfiler _{ "createRenderer" };
+		impl->renderer = createRenderer(impl->sdlWindow);
+	}
+#ifdef JNGL_VULKAN
+	isMultisampleSupported_ =
+	    static_cast<VulkanRenderer&>(*impl->renderer).isMultisampleSupported();
+#endif
 	impl->actualCanvasWidth = canvasWidth;
 	impl->actualCanvasHeight = canvasHeight;
 	{

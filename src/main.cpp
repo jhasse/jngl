@@ -130,7 +130,16 @@ void updateProjection(int windowWidth, int windowHeight, float originalWindowWid
 WindowPointer pWindow;
 namespace {
 bool antiAliasingEnabled = true;
+bool highPixelDensityEnabled = true;
 } // namespace
+
+void setHighPixelDensityEnabled(const bool enabled) {
+	highPixelDensityEnabled = enabled;
+}
+
+bool isHighPixelDensityEnabled() {
+	return highPixelDensityEnabled;
+}
 
 void showWindow(const std::string& title, const double width, const double height, bool fullscreen,
                 const std::pair<int, int> minAspectRatio,
