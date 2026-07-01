@@ -4,6 +4,9 @@
 #include "../App.hpp"
 #include "../Renderer.hpp"
 #include "../StartupProfiler.hpp"
+#ifdef JNGL_VULKAN
+#include "../vulkan/VulkanRenderer.hpp"
+#endif
 #include "../jngl/ImageData.hpp"
 #include "../jngl/other.hpp"
 #include "../jngl/screen.hpp"
@@ -77,7 +80,6 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	if (!impl->sdlWindow) {
 		throw std::runtime_error(SDL_GetError());
 	}
-	isMultisampleSupported_ = false; // MSAA isn't implemented in the Vulkan backend yet
 #else
 	// Request a 10-bit-per-channel (deep color) default framebuffer. This greatly reduces banding in
 	// smooth gradients on displays and drivers that support it. It's only a request: if 10 bits
@@ -145,6 +147,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		internal::StartupProfiler _{ "createRenderer" };
 		impl->renderer = createRenderer(impl->sdlWindow);
 	}
+#ifdef JNGL_VULKAN
+	isMultisampleSupported_ =
+	    static_cast<VulkanRenderer&>(*impl->renderer).isMultisampleSupported();
+#endif
 
 	// This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by SDL2). On
 	// Linux (GNOME) it results in the top of the window being cut off (by the header bar height?).

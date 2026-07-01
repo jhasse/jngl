@@ -748,9 +748,12 @@ double getMouseWheel() {
 
 void setAntiAliasing(bool enabled) {
 #ifdef JNGL_VULKAN
-	// MSAA isn't implemented on the Vulkan backend yet.
-	antiAliasingEnabled = false;
-	(void)enabled;
+	if (!pWindow->isMultisampleSupported()) {
+		antiAliasingEnabled = false;
+		return;
+	}
+	static_cast<VulkanRenderer&>(getRenderer()).setMultisampleAntiAliasing(enabled);
+	antiAliasingEnabled = enabled;
 #elif defined(GL_MULTISAMPLE_ARB)
 	if (!pWindow->isMultisampleSupported()) {
 		antiAliasingEnabled = false;

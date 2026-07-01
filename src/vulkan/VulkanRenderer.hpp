@@ -47,6 +47,7 @@ struct VulkanFramebuffer {
 /// primitive topology, built from a user-supplied vertex/fragment shader pair.
 struct VulkanShaderProgram {
 	std::array<VkPipeline, 4> pipelines{}; // indexed by PrimitiveType
+	std::array<VkPipeline, 4> msaaPipelines{}; // swapchain MSAA, when active at creation
 };
 
 class VulkanRenderer final : public Renderer {
@@ -105,7 +106,21 @@ public:
 	void setVerticalSync(bool enabled);
 	[[nodiscard]] bool getVerticalSync() const;
 
+	/// Whether 4x MSAA is supported for the swapchain.
+	[[nodiscard]] bool isMultisampleSupported() const;
+	void setMultisampleAntiAliasing(bool enabled);
+	[[nodiscard]] bool getMultisampleAntiAliasing() const;
+
 private:
+	void queryMsaaSupport();
+	[[nodiscard]] bool swapchainMsaaActive() const;
+	void createMsaaAttachments();
+	void destroyMsaaAttachments();
+	void destroyColoredPipelines();
+	void destroyTexturedPipelines();
+	void destroyColoredMsaaPipelines();
+	void destroyTexturedMsaaPipelines();
+	void rebuildSwapchainRendering();
 	void createInstance();
 	void createSurface();
 	void pickPhysicalDevice();
@@ -119,11 +134,13 @@ private:
 	/// Creates the per-swapchain-image "render finished" semaphores (recreated with the swapchain).
 	void createPresentSemaphores();
 	void createColoredPipelines();
+	void buildColoredPipelines(VkShaderModule vert, VkShaderModule frag, VkRenderPass targetRenderPass,
+	                           VkSampleCountFlagBits samples, std::array<VkPipeline, 4>& out);
 	void createVertexBuffers();
 	void createTexturedPipelines();
 	/// Builds one textured pipeline per primitive topology from the given shader modules into \a out.
-	void buildTexturedPipelines(VkShaderModule vert, VkShaderModule frag,
-	                            std::array<VkPipeline, 4>& out);
+	void buildTexturedPipelines(VkShaderModule vert, VkShaderModule frag, VkRenderPass targetRenderPass,
+	                            VkSampleCountFlagBits samples, std::array<VkPipeline, 4>& out);
 	void createDescriptorPool();
 	void createOffscreenRenderPass();
 
@@ -168,6 +185,14 @@ private:
 	std::vector<VkImage> swapchainImages;
 	std::vector<VkImageView> swapchainImageViews;
 	std::vector<VkFramebuffer> swapchainFramebuffers;
+	// Single-sample framebuffers for the LOAD swapchain pass when MSAA is active (e.g. readPixels).
+	std::vector<VkFramebuffer> loadSwapchainFramebuffers;
+	struct MsaaColorAttachment {
+		VkImage image = VK_NULL_HANDLE;
+		VkDeviceMemory memory = VK_NULL_HANDLE;
+		VkImageView view = VK_NULL_HANDLE;
+	};
+	std::vector<MsaaColorAttachment> msaaColorAttachments;
 
 	VkRenderPass renderPass = VK_NULL_HANDLE;
 	// Same as renderPass but with a LOAD (instead of CLEAR) load operation, used to resume a frame
@@ -199,12 +224,14 @@ private:
 	// layout and shader modules.
 	VkPipelineLayout coloredPipelineLayout = VK_NULL_HANDLE;
 	std::array<VkPipeline, 4> coloredPipelines{}; // indexed by PrimitiveType
+	std::array<VkPipeline, 4> coloredMsaaPipelines{}; // swapchain MSAA, when active
 
 	// Pipeline drawing textured geometry (sprites, text) with the built-in texture shader. One per
 	// primitive topology; they share the layout, descriptor set layout and shader modules.
 	VkDescriptorSetLayout texturedSetLayout = VK_NULL_HANDLE;
 	VkPipelineLayout texturedPipelineLayout = VK_NULL_HANDLE;
 	std::array<VkPipeline, 4> texturedPipelines{}; // indexed by PrimitiveType
+	std::array<VkPipeline, 4> texturedMsaaPipelines{}; // swapchain MSAA, when active
 	VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
 	// Custom shader program currently bound via ShaderProgram::use(); nullptr = built-in shader.
 	const VulkanShaderProgram* activeShaderProgram = nullptr;
@@ -231,6 +258,13 @@ private:
 
 	bool validationEnabled = false;
 	bool verticalSyncEnabled = true;
+	bool msaaSupported = false;
+	bool msaaEnabled = true;
+	bool msaaRebuildPending = false;
+	bool pendingMsaaEnabled = true;
+	VkSampleCountFlagBits msaaSampleCount = VK_SAMPLE_COUNT_1_BIT;
+	// True while the active swapchain render pass uses multisampled attachments.
+	bool swapchainUsesMsaaPass = false;
 
 	Mat4 projection;
 	Rgb currentClearColor{ 0, 0, 0 }; // swapchain clear color for the current frame
