@@ -65,6 +65,10 @@ public:
 	void drawColored(PrimitiveType, const float* xyVertices, std::size_t vertexCount,
 	                 const Mat3& modelview, Rgba color) override;
 
+	/// Draws a unit square (-0.5..0.5) with per-corner rounding (see jngl::drawRoundedRect).
+	void drawRoundedRect(const Mat3& modelview, Rgba color, float sizeX, float sizeY, float topLeft,
+	                     float topRight, float bottomLeft, float bottomRight);
+
 	/// Create a texture from pixel data. \a format and \a type are the OpenGL enums JNGL already
 	/// uses (GL_RGBA/GL_RGB/GL_BGR and GL_UNSIGNED_BYTE); pixels come either as \a rowPointers (one
 	/// pointer per row) or as a single \a data block. Returns nullptr for unsupported formats.
@@ -163,6 +167,10 @@ private:
 	void createColoredPipelines();
 	void buildColoredPipelines(VkShaderModule vert, VkShaderModule frag, VkRenderPass targetRenderPass,
 	                           VkSampleCountFlagBits samples, std::array<VkPipeline, 4>& out);
+	void createRoundedPipelines();
+	void buildRoundedPipeline(VkShaderModule vert, VkShaderModule frag, VkRenderPass targetRenderPass,
+	                          VkSampleCountFlagBits samples, VkPipeline& out);
+	void destroyRoundedPipelines();
 	void createVertexBuffers();
 	void createTexturedPipelines();
 	/// Builds one textured pipeline per primitive topology from the given shader modules into \a out.
@@ -252,6 +260,10 @@ private:
 	VkPipelineLayout coloredPipelineLayout = VK_NULL_HANDLE;
 	std::array<VkPipeline, 4> coloredPipelines{}; // indexed by PrimitiveType
 	std::array<VkPipeline, 4> coloredMsaaPipelines{}; // swapchain MSAA, when active
+
+	VkPipelineLayout roundedPipelineLayout = VK_NULL_HANDLE;
+	VkPipeline roundedPipeline = VK_NULL_HANDLE;
+	VkPipeline roundedMsaaPipeline = VK_NULL_HANDLE;
 
 	// Pipeline drawing textured geometry (sprites, text) with the built-in texture shader. One per
 	// primitive topology; they share the layout, descriptor set layout and shader modules.

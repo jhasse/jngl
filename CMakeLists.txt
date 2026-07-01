@@ -451,7 +451,8 @@ if(JNGL_VULKAN)
 	find_program(GLSLC glslc REQUIRED)
 	find_package(Python3 REQUIRED COMPONENTS Interpreter)
 
-	set(JNGL_VULKAN_BUILTIN_SHADERS colored.vert colored.frag textured.vert textured.frag)
+	set(JNGL_VULKAN_BUILTIN_SHADERS colored.vert colored.frag textured.vert textured.frag rounded.vert
+	                            rounded.frag)
 	set(JNGL_VULKAN_SPIRV_HEADERS "")
 	foreach(SHADER ${JNGL_VULKAN_BUILTIN_SHADERS})
 		set(GLSL ${CMAKE_CURRENT_SOURCE_DIR}/src/vulkan/shaders/${SHADER})

@@ -5,6 +5,9 @@
 #include "FontImpl.hpp"
 #include "Renderer.hpp"
 #include "ShaderCache.hpp"
+#ifdef JNGL_VULKAN
+#include "vulkan/VulkanRenderer.hpp"
+#endif
 #include "audio.hpp"
 #include "freetype.hpp"
 #include "jngl/ScaleablePixels.hpp"
@@ -609,14 +612,9 @@ void Window::drawSquare(const Mat3& modelview, Rgba color) const {
 void Window::drawRoundedSquare(const Mat3& modelview, Rgba color, Vec2 size, float topLeft,
                                float topRight, float bottomLeft, float bottomRight) const {
 #ifdef JNGL_VULKAN
-	// TODO: The Vulkan backend doesn't have the rounded-rectangle shader yet; fall back to a sharp
-	// square so the geometry at least draws.
-	(void)size;
-	(void)topLeft;
-	(void)topRight;
-	(void)bottomLeft;
-	(void)bottomRight;
-	drawSquare(modelview, color);
+	static_cast<VulkanRenderer&>(getRenderer())
+	    .drawRoundedRect(modelview, color, static_cast<float>(size.x), static_cast<float>(size.y),
+	                     topLeft, topRight, bottomLeft, bottomRight);
 #else
 	opengl::bindVertexArray(vaoSquare);
 	auto context = ShaderCache::handle().useRoundedRectShaderProgram(

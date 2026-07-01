@@ -11,6 +11,8 @@
 
 #include "colored.frag.spv.hpp"
 #include "colored.vert.spv.hpp"
+#include "rounded.frag.spv.hpp"
+#include "rounded.vert.spv.hpp"
 #include "textured.frag.spv.hpp"
 #include "textured.vert.spv.hpp"
 
@@ -118,6 +120,10 @@ VulkanRenderer::VulkanRenderer(void* const nativeWindow)
 		createColoredPipelines();
 	}
 	{
+		internal::StartupProfiler _{ "createRoundedPipelines" };
+		createRoundedPipelines();
+	}
+	{
 		internal::StartupProfiler _{ "createDescriptorPool" };
 		createDescriptorPool();
 	}
@@ -168,6 +174,10 @@ VulkanRenderer::~VulkanRenderer() {
 		}
 		if (coloredPipelineLayout) {
 			vkDestroyPipelineLayout(device, coloredPipelineLayout, nullptr);
+		}
+		destroyRoundedPipelines();
+		if (roundedPipelineLayout) {
+			vkDestroyPipelineLayout(device, roundedPipelineLayout, nullptr);
 		}
 		for (VkPipeline pipeline : texturedPipelines) {
 			if (pipeline) {
@@ -1011,6 +1021,11 @@ void VulkanRenderer::rebuildSwapchainRendering() {
 		vkDestroyPipelineLayout(device, coloredPipelineLayout, nullptr);
 		coloredPipelineLayout = VK_NULL_HANDLE;
 	}
+	destroyRoundedPipelines();
+	if (roundedPipelineLayout) {
+		vkDestroyPipelineLayout(device, roundedPipelineLayout, nullptr);
+		roundedPipelineLayout = VK_NULL_HANDLE;
+	}
 	destroyTexturedPipelines();
 	destroyTexturedMsaaPipelines();
 	if (texturedPipelineLayout) {
@@ -1020,6 +1035,7 @@ void VulkanRenderer::rebuildSwapchainRendering() {
 	createRenderPass();
 	createFramebuffers();
 	createColoredPipelines();
+	createRoundedPipelines();
 	createTexturedPipelines();
 }
 
@@ -1396,6 +1412,16 @@ struct ColoredPushConstants {
 	float color[4];
 };
 
+struct RoundedPushConstants {
+	float mvp[16];
+	float color[4];
+	float size[2];
+	float pad[2];
+	float cornerRadii[4];
+};
+
+static_assert(sizeof(RoundedPushConstants) == 112);
+
 VkShaderModule createShaderModule(VkDevice device, const std::span<const uint32_t> spirv) {
 	VkShaderModuleCreateInfo info{ .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO };
 	info.codeSize = spirv.size() * sizeof(uint32_t);
@@ -1568,6 +1594,144 @@ void VulkanRenderer::buildColoredPipelines(const VkShaderModule vert, const VkSh
 	}
 }
 
+void VulkanRenderer::destroyRoundedPipelines() {
+	if (!device) {
+		return;
+	}
+	if (roundedPipeline) {
+		vkDestroyPipeline(device, roundedPipeline, nullptr);
+		roundedPipeline = VK_NULL_HANDLE;
+	}
+	if (roundedMsaaPipeline) {
+		vkDestroyPipeline(device, roundedMsaaPipeline, nullptr);
+		roundedMsaaPipeline = VK_NULL_HANDLE;
+	}
+}
+
+void VulkanRenderer::createRoundedPipelines() {
+	const VkShaderModule vert = createShaderModule(device, vulkan_shaders::rounded_vert);
+	const VkShaderModule frag = createShaderModule(device, vulkan_shaders::rounded_frag);
+
+	VkPushConstantRange pushRange{};
+	pushRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+	pushRange.offset = 0;
+	pushRange.size = sizeof(RoundedPushConstants);
+
+	VkPipelineLayoutCreateInfo layoutInfo{ .sType =
+		                                       VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
+	layoutInfo.pushConstantRangeCount = 1;
+	layoutInfo.pPushConstantRanges = &pushRange;
+	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &roundedPipelineLayout),
+	         "vkCreatePipelineLayout");
+
+	const VkRenderPass singleSamplePass = swapchainMsaaActive() ? loadRenderPass : renderPass;
+	buildRoundedPipeline(vert, frag, singleSamplePass, VK_SAMPLE_COUNT_1_BIT, roundedPipeline);
+	if (swapchainMsaaActive()) {
+		buildRoundedPipeline(vert, frag, renderPass, msaaSampleCount, roundedMsaaPipeline);
+	}
+
+	vkDestroyShaderModule(device, frag, nullptr);
+	vkDestroyShaderModule(device, vert, nullptr);
+}
+
+void VulkanRenderer::buildRoundedPipeline(const VkShaderModule vert, const VkShaderModule frag,
+                                          const VkRenderPass targetRenderPass,
+                                          const VkSampleCountFlagBits samples, VkPipeline& out) {
+	const std::array<VkPipelineShaderStageCreateInfo, 2> stages = {
+		VkPipelineShaderStageCreateInfo{
+		    .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+		    .stage = VK_SHADER_STAGE_VERTEX_BIT,
+		    .module = vert,
+		    .pName = "main" },
+		VkPipelineShaderStageCreateInfo{
+		    .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+		    .stage = VK_SHADER_STAGE_FRAGMENT_BIT,
+		    .module = frag,
+		    .pName = "main" },
+	};
+
+	VkVertexInputBindingDescription binding{};
+	binding.binding = 0;
+	binding.stride = 2 * sizeof(float);
+	binding.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+	VkVertexInputAttributeDescription attribute{};
+	attribute.location = 0;
+	attribute.binding = 0;
+	attribute.format = VK_FORMAT_R32G32_SFLOAT;
+	attribute.offset = 0;
+	VkPipelineVertexInputStateCreateInfo vertexInput{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO
+	};
+	vertexInput.vertexBindingDescriptionCount = 1;
+	vertexInput.pVertexBindingDescriptions = &binding;
+	vertexInput.vertexAttributeDescriptionCount = 1;
+	vertexInput.pVertexAttributeDescriptions = &attribute;
+
+	VkPipelineInputAssemblyStateCreateInfo inputAssembly{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
+	};
+	inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN;
+
+	VkPipelineViewportStateCreateInfo viewportState{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO
+	};
+	viewportState.viewportCount = 1;
+	viewportState.scissorCount = 1;
+
+	VkPipelineRasterizationStateCreateInfo rasterizer{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO
+	};
+	rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+	rasterizer.cullMode = VK_CULL_MODE_NONE;
+	rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+	rasterizer.lineWidth = 1.f;
+
+	VkPipelineMultisampleStateCreateInfo multisampling{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO
+	};
+	multisampling.rasterizationSamples = samples;
+
+	VkPipelineColorBlendAttachmentState blendAttachment{};
+	blendAttachment.blendEnable = VK_TRUE;
+	blendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+	blendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+	blendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+	blendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+	blendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+	blendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
+	blendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+	                                 VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+	VkPipelineColorBlendStateCreateInfo colorBlending{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO
+	};
+	colorBlending.attachmentCount = 1;
+	colorBlending.pAttachments = &blendAttachment;
+
+	const std::array<VkDynamicState, 2> dynamicStates = { VK_DYNAMIC_STATE_VIEWPORT,
+		                                                  VK_DYNAMIC_STATE_SCISSOR };
+	VkPipelineDynamicStateCreateInfo dynamicState{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO
+	};
+	dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
+	dynamicState.pDynamicStates = dynamicStates.data();
+
+	VkGraphicsPipelineCreateInfo pipelineInfo{ .sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO };
+	pipelineInfo.stageCount = static_cast<uint32_t>(stages.size());
+	pipelineInfo.pStages = stages.data();
+	pipelineInfo.pVertexInputState = &vertexInput;
+	pipelineInfo.pInputAssemblyState = &inputAssembly;
+	pipelineInfo.pViewportState = &viewportState;
+	pipelineInfo.pRasterizationState = &rasterizer;
+	pipelineInfo.pMultisampleState = &multisampling;
+	pipelineInfo.pColorBlendState = &colorBlending;
+	pipelineInfo.pDynamicState = &dynamicState;
+	pipelineInfo.layout = roundedPipelineLayout;
+	pipelineInfo.renderPass = targetRenderPass;
+	pipelineInfo.subpass = 0;
+	VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &out),
+	         "vkCreateGraphicsPipelines");
+}
+
 void VulkanRenderer::createVertexBuffers() {
 	// 1 MiB per frame is plenty for JNGL's 2D shape geometry; drawColored reports (once) if a frame
 	// ever needs more.
@@ -1660,6 +1824,69 @@ void VulkanRenderer::drawColored(const PrimitiveType type, const float* const xy
 	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
 	                   &push);
 	vkCmdDraw(cmd, static_cast<uint32_t>(vertexCount), 1, 0, 0);
+}
+
+void VulkanRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, const float sizeX,
+                                     const float sizeY, const float topLeft, const float topRight,
+                                     const float bottomLeft, const float bottomRight) {
+	if (!frameActive) {
+		return;
+	}
+	static constexpr std::array<float, 8> unitSquare = { -.5f, -.5f, .5f, -.5f,
+		                                                 .5f,  .5f,  -.5f, .5f };
+	DynamicVertexBuffer& vb = vertexBuffers[currentFrame];
+	const VkDeviceSize bytes = unitSquare.size() * sizeof(float);
+	if (vb.used + bytes > vb.capacity) {
+		if (!vertexBufferOverflowReported) {
+			internal::error("Vulkan per-frame vertex buffer exhausted; some shapes won't be drawn.");
+			vertexBufferOverflowReported = true;
+		}
+		return;
+	}
+	const VkDeviceSize offset = vb.used;
+	std::memcpy(static_cast<char*>(vb.mapped) + offset, unitSquare.data(), bytes);
+	vb.used += (bytes + 3) & ~VkDeviceSize{ 3 };
+
+	const float* const m = modelview.data;
+	Mat4 embedded;
+	embedded.data[0] = m[0];
+	embedded.data[1] = m[1];
+	embedded.data[4] = m[3];
+	embedded.data[5] = m[4];
+	embedded.data[12] = m[6];
+	embedded.data[13] = m[7];
+	embedded.data[15] = 1.f;
+
+	RoundedPushConstants push{};
+	for (int col = 0; col < 4; ++col) {
+		for (int row = 0; row < 4; ++row) {
+			float sum = 0.f;
+			for (int k = 0; k < 4; ++k) {
+				sum += projection.data[k * 4 + row] * embedded.data[col * 4 + k];
+			}
+			push.mvp[col * 4 + row] = sum;
+		}
+	}
+	push.color[0] = color.getRed();
+	push.color[1] = color.getGreen();
+	push.color[2] = color.getBlue();
+	push.color[3] = color.getAlpha();
+	push.size[0] = sizeX;
+	push.size[1] = sizeY;
+	push.cornerRadii[0] = topLeft;
+	push.cornerRadii[1] = topRight;
+	push.cornerRadii[2] = bottomLeft;
+	push.cornerRadii[3] = bottomRight;
+
+	const VkCommandBuffer cmd = commandBuffers[currentFrame];
+	const VkPipeline pipeline =
+	    swapchainUsesMsaaPass && roundedMsaaPipeline ? roundedMsaaPipeline : roundedPipeline;
+	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+	vkCmdBindVertexBuffers(cmd, 0, 1, &vb.buffer, &offset);
+	vkCmdPushConstants(cmd, roundedPipelineLayout,
+	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
+	                   &push);
+	vkCmdDraw(cmd, 4, 1, 0, 0);
 }
 
 namespace {
