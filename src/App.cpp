@@ -4,6 +4,7 @@
 #include "App.hpp"
 
 #include "Renderer.hpp"
+#include "StartupProfiler.hpp"
 #include "jngl/AppParameters.hpp"
 #include "jngl/Scene.hpp"
 #include "jngl/ShaderProgram.hpp"
@@ -296,7 +297,10 @@ uint8_t mainLoop(AppParameters params) {
 #endif
 	showWindow(params.displayName, windowPixelWidth, windowPixelHeight, fullscreen,
 	           getMinAspectRatio(params), getMaxAspectRatio(params));
-	setScene(params.start());
+	{
+		internal::StartupProfiler _{ "setScene (incl. asset loading)" };
+		setScene(params.start());
+	}
 	uint8_t exitcode = App::instance().mainLoop();
 	hideWindow();
 	return exitcode;

@@ -3,6 +3,7 @@
 
 #include "../App.hpp"
 #include "../Renderer.hpp"
+#include "../StartupProfiler.hpp"
 #include "../jngl/ImageData.hpp"
 #include "../jngl/other.hpp"
 #include "../jngl/screen.hpp"
@@ -69,7 +70,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	}
 
 #ifdef JNGL_VULKAN
-	impl->sdlWindow = SDL_CreateWindow(title.c_str(), width, height, flags);
+	{
+		internal::StartupProfiler _{ "SDL_CreateWindow" };
+		impl->sdlWindow = SDL_CreateWindow(title.c_str(), width, height, flags);
+	}
 	if (!impl->sdlWindow) {
 		throw std::runtime_error(SDL_GetError());
 	}
@@ -137,7 +141,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	// Create the rendering backend (OpenGL or Vulkan). It registers itself as the active backend,
 	// so getRenderer() works from here on (e.g. in App::initGl below). On Vulkan this also brings
 	// up the instance, device and swapchain.
-	impl->renderer = createRenderer(impl->sdlWindow);
+	{
+		internal::StartupProfiler _{ "createRenderer" };
+		impl->renderer = createRenderer(impl->sdlWindow);
+	}
 
 	// This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by SDL2). On
 	// Linux (GNOME) it results in the top of the window being cut off (by the header bar height?).
@@ -166,7 +173,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	impl->actualCanvasWidth = canvasWidth;
 	impl->actualCanvasHeight = canvasHeight;
-	App::instance().initGl(width_, height_, canvasWidth, canvasHeight);
+	{
+		internal::StartupProfiler _{ "App::initGl" };
+		App::instance().initGl(width_, height_, canvasWidth, canvasHeight);
+	}
 
 	// Unlike SDL2, which implicitly enabled text input on desktop, SDL3 doesn't deliver
 	// SDL_EVENT_TEXT_INPUT events until text input has been explicitly started. Without this

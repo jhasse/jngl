@@ -21,6 +21,7 @@
 #include "log.hpp"
 #include "paths.hpp"
 #include "spriteimpl.hpp"
+#include "StartupProfiler.hpp"
 #include "windowptr.hpp"
 
 #include <boost/qvm_lite.hpp>
@@ -140,6 +141,7 @@ void showWindow(const std::string& title, const double width, const double heigh
 	if (heightRounded == 0) {
 		throw std::runtime_error("Height Is 0");
 	}
+	internal::StartupProfiler windowCtor("Window constructor (showWindow)");
 	pWindow.Set(
 	    new Window(title, widthRounded, heightRounded, fullscreen, minAspectRatio, maxAspectRatio));
 	if (App::instance().getDisplayName().empty()) {

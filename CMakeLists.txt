@@ -448,8 +448,35 @@ if(JNGL_VULKAN)
 	find_package(Vulkan REQUIRED)
 	target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
 
-	# shaderc (runtime GLSL -> SPIR-V). Fedora/Debian ship libshaderc-dev without a
-	# pkg-config or CMake config file, so locate the headers and library manually.
+	find_program(GLSLC glslc REQUIRED)
+	find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
+	set(JNGL_VULKAN_BUILTIN_SHADERS colored.vert colored.frag textured.vert textured.frag)
+	set(JNGL_VULKAN_SPIRV_HEADERS "")
+	foreach(SHADER ${JNGL_VULKAN_BUILTIN_SHADERS})
+		set(GLSL ${CMAKE_CURRENT_SOURCE_DIR}/src/vulkan/shaders/${SHADER})
+		set(SPV ${CMAKE_CURRENT_BINARY_DIR}/generated/vulkan_shaders/${SHADER}.spv)
+		set(HPP ${CMAKE_CURRENT_BINARY_DIR}/generated/vulkan_shaders/${SHADER}.spv.hpp)
+		string(REPLACE "." "_" SYMBOL ${SHADER})
+		add_custom_command(
+			OUTPUT ${SPV} ${HPP}
+			COMMAND ${CMAKE_COMMAND} -E make_directory
+			        ${CMAKE_CURRENT_BINARY_DIR}/generated/vulkan_shaders
+			COMMAND ${GLSLC} --target-env=vulkan1.1 -O ${GLSL} -o ${SPV}
+			COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/spirv_to_header.py
+			        ${SPV} ${HPP} ${SYMBOL}
+			DEPENDS ${GLSL} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/spirv_to_header.py
+			COMMENT "Compiling Vulkan shader ${SHADER}"
+			VERBATIM
+		)
+		list(APPEND JNGL_VULKAN_SPIRV_HEADERS ${HPP})
+	endforeach()
+	add_custom_target(jngl_vulkan_shaders DEPENDS ${JNGL_VULKAN_SPIRV_HEADERS})
+	add_dependencies(jngl jngl_vulkan_shaders)
+	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated/vulkan_shaders)
+
+	# shaderc (runtime GLSL -> SPIR-V for user-defined jngl::Shader programs). Built-in backend
+	# shaders are precompiled at build time with glslc, see src/vulkan/shaders/.
 	find_path(SHADERC_INCLUDE_DIR shaderc/shaderc.hpp)
 	find_library(SHADERC_LIBRARY NAMES shaderc_shared shaderc_combined shaderc)
 	if(NOT SHADERC_INCLUDE_DIR OR NOT SHADERC_LIBRARY)

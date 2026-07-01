@@ -4,10 +4,15 @@
 #include "VulkanRenderer.hpp"
 
 #include "../App.hpp"
+#include "../StartupProfiler.hpp"
 #include "../jngl/Mat3.hpp"
 #include "../log.hpp"
-#include "ShaderCompiler.hpp"
 #include "vulkan_helper.hpp"
+
+#include "colored.frag.spv.hpp"
+#include "colored.vert.spv.hpp"
+#include "textured.frag.spv.hpp"
+#include "textured.vert.spv.hpp"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_vulkan.h>
@@ -16,6 +21,7 @@
 #include <cstring>
 #include <limits>
 #include <set>
+#include <span>
 #include <stdexcept>
 
 namespace jngl {
@@ -58,22 +64,71 @@ debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT severity,
 
 VulkanRenderer::VulkanRenderer(void* const nativeWindow)
 : window(static_cast<SDL_Window*>(nativeWindow)) {
-	createInstance();
-	createSurface();
-	pickPhysicalDevice();
-	createLogicalDevice();
-	createSwapchain();
-	createImageViews();
-	createPresentSemaphores();
-	createRenderPass();
-	createFramebuffers();
-	createCommandPoolAndBuffers();
-	createSyncObjects();
-	createColoredPipelines();
-	createDescriptorPool();
-	createTexturedPipelines();
-	createOffscreenRenderPass();
-	createVertexBuffers();
+	internal::StartupProfiler total("VulkanRenderer total");
+	{
+		internal::StartupProfiler _{ "createInstance" };
+		createInstance();
+	}
+	{
+		internal::StartupProfiler _{ "createSurface" };
+		createSurface();
+	}
+	{
+		internal::StartupProfiler _{ "pickPhysicalDevice" };
+		pickPhysicalDevice();
+	}
+	{
+		internal::StartupProfiler _{ "createLogicalDevice" };
+		createLogicalDevice();
+	}
+	{
+		internal::StartupProfiler _{ "createSwapchain" };
+		createSwapchain();
+	}
+	{
+		internal::StartupProfiler _{ "createImageViews" };
+		createImageViews();
+	}
+	{
+		internal::StartupProfiler _{ "createPresentSemaphores" };
+		createPresentSemaphores();
+	}
+	{
+		internal::StartupProfiler _{ "createRenderPass" };
+		createRenderPass();
+	}
+	{
+		internal::StartupProfiler _{ "createFramebuffers" };
+		createFramebuffers();
+	}
+	{
+		internal::StartupProfiler _{ "createCommandPoolAndBuffers" };
+		createCommandPoolAndBuffers();
+	}
+	{
+		internal::StartupProfiler _{ "createSyncObjects" };
+		createSyncObjects();
+	}
+	{
+		internal::StartupProfiler _{ "createColoredPipelines" };
+		createColoredPipelines();
+	}
+	{
+		internal::StartupProfiler _{ "createDescriptorPool" };
+		createDescriptorPool();
+	}
+	{
+		internal::StartupProfiler _{ "createTexturedPipelines" };
+		createTexturedPipelines();
+	}
+	{
+		internal::StartupProfiler _{ "createOffscreenRenderPass" };
+		createOffscreenRenderPass();
+	}
+	{
+		internal::StartupProfiler _{ "createVertexBuffers" };
+		createVertexBuffers();
+	}
 	internal::debug("Vulkan renderer initialized ({}x{}).", swapchainExtent.width,
 	                swapchainExtent.height);
 }
@@ -692,6 +747,10 @@ void VulkanRenderer::endFrame() {
 	if (!frameActive) {
 		return; // swapchain was recreated in beginFrame; skip this frame
 	}
+	static bool firstPresent = true;
+	internal::StartupProfiler firstPresentProfiler(
+	    firstPresent ? "first vkQueuePresentKHR" : "");
+	firstPresent = false;
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
 	vkCmdEndRenderPass(cmd);
 	VK_CHECK(vkEndCommandBuffer(cmd), "vkEndCommandBuffer");
@@ -761,35 +820,12 @@ void VulkanRenderer::setProjection(const Mat4& p) {
 
 namespace {
 
-// Built-in shader drawing single-color 2D geometry. The transform and color come in as push
-// constants so a single pipeline can serve every shape draw. Mirrors ShaderCache's "simple" GLSL
-// shader, but combines modelview and projection into one matrix computed on the CPU.
-constexpr const char* coloredVertexShader = R"(#version 450
-layout(location = 0) in vec2 position;
-layout(push_constant) uniform Push {
-	mat4 mvp;
-	vec4 color;
-} pc;
-void main() {
-	gl_Position = pc.mvp * vec4(position, 0.0, 1.0);
-})";
-
-constexpr const char* coloredFragmentShader = R"(#version 450
-layout(push_constant) uniform Push {
-	mat4 mvp;
-	vec4 color;
-} pc;
-layout(location = 0) out vec4 outColor;
-void main() {
-	outColor = pc.color;
-})";
-
 struct ColoredPushConstants {
 	float mvp[16];
 	float color[4];
 };
 
-VkShaderModule createShaderModule(VkDevice device, const std::vector<uint32_t>& spirv) {
+VkShaderModule createShaderModule(VkDevice device, const std::span<const uint32_t> spirv) {
 	VkShaderModuleCreateInfo info{ .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO };
 	info.codeSize = spirv.size() * sizeof(uint32_t);
 	info.pCode = spirv.data();
@@ -828,11 +864,8 @@ uint32_t VulkanRenderer::findMemoryType(const uint32_t typeFilter,
 }
 
 void VulkanRenderer::createColoredPipelines() {
-	const VkShaderModule vert = createShaderModule(
-	    device, compileGlslToSpirv(coloredVertexShader, VK_SHADER_STAGE_VERTEX_BIT, "colored.vert"));
-	const VkShaderModule frag = createShaderModule(
-	    device,
-	    compileGlslToSpirv(coloredFragmentShader, VK_SHADER_STAGE_FRAGMENT_BIT, "colored.frag"));
+	const VkShaderModule vert = createShaderModule(device, vulkan_shaders::colored_vert);
+	const VkShaderModule frag = createShaderModule(device, vulkan_shaders::colored_frag);
 
 	VkPushConstantRange pushRange{};
 	pushRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -925,30 +958,33 @@ void VulkanRenderer::createColoredPipelines() {
 		                                              PrimitiveType::TriangleStrip,
 		                                              PrimitiveType::TriangleFan,
 		                                              PrimitiveType::Lines };
-	for (const PrimitiveType type : topologies) {
-		VkPipelineInputAssemblyStateCreateInfo inputAssembly{
-			.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
-		};
-		inputAssembly.topology = toVkTopology(type);
+	{
+		internal::StartupProfiler _{ "  colored pipelines (vkCreateGraphicsPipelines x4)" };
+		for (const PrimitiveType type : topologies) {
+			VkPipelineInputAssemblyStateCreateInfo inputAssembly{
+				.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
+			};
+			inputAssembly.topology = toVkTopology(type);
 
-		VkGraphicsPipelineCreateInfo pipelineInfo{
-			.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
-		};
-		pipelineInfo.stageCount = static_cast<uint32_t>(stages.size());
-		pipelineInfo.pStages = stages.data();
-		pipelineInfo.pVertexInputState = &vertexInput;
-		pipelineInfo.pInputAssemblyState = &inputAssembly;
-		pipelineInfo.pViewportState = &viewportState;
-		pipelineInfo.pRasterizationState = &rasterizer;
-		pipelineInfo.pMultisampleState = &multisampling;
-		pipelineInfo.pColorBlendState = &colorBlending;
-		pipelineInfo.pDynamicState = &dynamicState;
-		pipelineInfo.layout = coloredPipelineLayout;
-		pipelineInfo.renderPass = renderPass;
-		pipelineInfo.subpass = 0;
-		VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
-		                                   &coloredPipelines[static_cast<size_t>(type)]),
-		         "vkCreateGraphicsPipelines");
+			VkGraphicsPipelineCreateInfo pipelineInfo{
+				.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
+			};
+			pipelineInfo.stageCount = static_cast<uint32_t>(stages.size());
+			pipelineInfo.pStages = stages.data();
+			pipelineInfo.pVertexInputState = &vertexInput;
+			pipelineInfo.pInputAssemblyState = &inputAssembly;
+			pipelineInfo.pViewportState = &viewportState;
+			pipelineInfo.pRasterizationState = &rasterizer;
+			pipelineInfo.pMultisampleState = &multisampling;
+			pipelineInfo.pColorBlendState = &colorBlending;
+			pipelineInfo.pDynamicState = &dynamicState;
+			pipelineInfo.layout = coloredPipelineLayout;
+			pipelineInfo.renderPass = renderPass;
+			pipelineInfo.subpass = 0;
+			VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
+			                                   &coloredPipelines[static_cast<size_t>(type)]),
+			         "vkCreateGraphicsPipelines");
+		}
 	}
 
 	vkDestroyShaderModule(device, frag, nullptr);
@@ -1050,33 +1086,6 @@ void VulkanRenderer::drawColored(const PrimitiveType type, const float* const xy
 
 namespace {
 
-// Texture shader: samples a texture and modulates by the push-constant color. Mirrors ShaderCache's
-// GLSL texture shader. Vertices carry position (xy) and texture coordinates (uv).
-constexpr const char* texturedVertexShader = R"(#version 450
-layout(location = 0) in vec2 position;
-layout(location = 1) in vec2 inTexCoord;
-layout(push_constant) uniform Push {
-	mat4 mvp;
-	vec4 color;
-} pc;
-layout(location = 0) out vec2 texCoord;
-void main() {
-	gl_Position = pc.mvp * vec4(position, 0.0, 1.0);
-	texCoord = inTexCoord;
-})";
-
-constexpr const char* texturedFragmentShader = R"(#version 450
-layout(set = 0, binding = 0) uniform sampler2D tex;
-layout(push_constant) uniform Push {
-	mat4 mvp;
-	vec4 color;
-} pc;
-layout(location = 0) in vec2 texCoord;
-layout(location = 0) out vec4 outColor;
-void main() {
-	outColor = texture(tex, texCoord) * pc.color;
-})";
-
 // OpenGL pixel-format enums JNGL passes to Texture/createTexture (avoids including GL headers here).
 constexpr unsigned int glRGB = 0x1907;
 constexpr unsigned int glRGBA = 0x1908;
@@ -1135,12 +1144,8 @@ void VulkanRenderer::createTexturedPipelines() {
 	VK_CHECK(vkCreateDescriptorSetLayout(device, &setLayoutInfo, nullptr, &texturedSetLayout),
 	         "vkCreateDescriptorSetLayout");
 
-	const VkShaderModule vert = createShaderModule(
-	    device,
-	    compileGlslToSpirv(texturedVertexShader, VK_SHADER_STAGE_VERTEX_BIT, "textured.vert"));
-	const VkShaderModule frag = createShaderModule(
-	    device,
-	    compileGlslToSpirv(texturedFragmentShader, VK_SHADER_STAGE_FRAGMENT_BIT, "textured.frag"));
+	const VkShaderModule vert = createShaderModule(device, vulkan_shaders::textured_vert);
+	const VkShaderModule frag = createShaderModule(device, vulkan_shaders::textured_frag);
 
 	VkPushConstantRange pushRange{};
 	pushRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -1238,29 +1243,32 @@ void VulkanRenderer::buildTexturedPipelines(const VkShaderModule vert, const VkS
 		                                              PrimitiveType::TriangleStrip,
 		                                              PrimitiveType::TriangleFan,
 		                                              PrimitiveType::Lines };
-	for (const PrimitiveType type : topologies) {
-		VkPipelineInputAssemblyStateCreateInfo inputAssembly{
-			.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
-		};
-		inputAssembly.topology = toVkTopology(type);
+	{
+		internal::StartupProfiler _{ "  textured pipelines (vkCreateGraphicsPipelines x4)" };
+		for (const PrimitiveType type : topologies) {
+			VkPipelineInputAssemblyStateCreateInfo inputAssembly{
+				.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
+			};
+			inputAssembly.topology = toVkTopology(type);
 
-		VkGraphicsPipelineCreateInfo pipelineInfo{
-			.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
-		};
-		pipelineInfo.stageCount = static_cast<uint32_t>(stages.size());
-		pipelineInfo.pStages = stages.data();
-		pipelineInfo.pVertexInputState = &vertexInput;
-		pipelineInfo.pInputAssemblyState = &inputAssembly;
-		pipelineInfo.pViewportState = &viewportState;
-		pipelineInfo.pRasterizationState = &rasterizer;
-		pipelineInfo.pMultisampleState = &multisampling;
-		pipelineInfo.pColorBlendState = &colorBlending;
-		pipelineInfo.pDynamicState = &dynamicState;
-		pipelineInfo.layout = texturedPipelineLayout;
-		pipelineInfo.renderPass = renderPass;
-		VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
-		                                   &out[static_cast<size_t>(type)]),
-		         "vkCreateGraphicsPipelines");
+			VkGraphicsPipelineCreateInfo pipelineInfo{
+				.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
+			};
+			pipelineInfo.stageCount = static_cast<uint32_t>(stages.size());
+			pipelineInfo.pStages = stages.data();
+			pipelineInfo.pVertexInputState = &vertexInput;
+			pipelineInfo.pInputAssemblyState = &inputAssembly;
+			pipelineInfo.pViewportState = &viewportState;
+			pipelineInfo.pRasterizationState = &rasterizer;
+			pipelineInfo.pMultisampleState = &multisampling;
+			pipelineInfo.pColorBlendState = &colorBlending;
+			pipelineInfo.pDynamicState = &dynamicState;
+			pipelineInfo.layout = texturedPipelineLayout;
+			pipelineInfo.renderPass = renderPass;
+			VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
+			                                   &out[static_cast<size_t>(type)]),
+			         "vkCreateGraphicsPipelines");
+		}
 	}
 }
 
@@ -1321,6 +1329,7 @@ std::unique_ptr<VulkanTexture> VulkanRenderer::createTexture(const int width, co
                                                              const unsigned char* const data,
                                                              const unsigned char* const* const
                                                                  rowPointers) {
+	internal::StartupProfiler _{ "createTexture" };
 	if (type != glUnsignedByte || (format != glRGBA && format != glRGB && format != glBGR)) {
 		internal::error("Vulkan backend: unsupported texture format/type (0x{:x}/0x{:x}).", format,
 		                type);
