@@ -121,7 +121,7 @@ void App::initGl(int width, int height, int canvasWidth, int canvasHeight) {
 	}
 	updateProjection(width, height, static_cast<float>(width), static_cast<float>(height));
 	getRenderer().setProjection(opengl::projection);
-	getRenderer().setViewport(0, 0, width, height);
+	updateViewportAndLetterboxing(width, height, canvasWidth, canvasHeight);
 	reset();
 	modelviewStack = {};
 	setVerticalSync(true);

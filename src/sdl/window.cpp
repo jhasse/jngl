@@ -475,6 +475,7 @@ void Window::UpdateInput() {
 #ifdef JNGL_VULKAN
 				getRenderer().setProjection(opengl::projection);
 				getRenderer().onResize(width_, height_);
+				updateViewportAndLetterboxing(width_, height_, canvasWidth, canvasHeight);
 #else
 				App::instance().updateProjectionMatrix();
 				updateViewportAndLetterboxing(width_, height_, canvasWidth, canvasHeight);

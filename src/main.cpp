@@ -75,6 +75,11 @@ void clearBackgroundColor() {
 
 void updateViewportAndLetterboxing(const int width, const int height, const int canvasWidth,
                                    const int canvasHeight) {
+#ifdef JNGL_VULKAN
+	static_cast<VulkanRenderer&>(getRenderer())
+	    .updateLetterboxing(width, height, canvasWidth, canvasHeight);
+	getRenderer().setViewport(0, 0, width, height);
+#else
 	glViewport(0, 0, width, height);
 
 	if (canvasWidth != width || canvasHeight != height) { // Letterboxing?
@@ -89,6 +94,7 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 	} else {
 		glDisable(GL_SCISSOR_TEST);
 	}
+#endif
 }
 
 void updateProjection(int windowWidth, int windowHeight, float originalWindowWidth,
@@ -173,8 +179,6 @@ void swapBuffers() {
 
 void clearBackBuffer() {
 #ifdef JNGL_VULKAN
-	// On Vulkan the frame is started and cleared by the render pass (load op CLEAR). Letterbox
-	// bars aren't drawn yet (see VulkanRenderer::setViewport).
 	getRenderer().beginFrame(backgroundColor);
 	reset();
 	if (!modelviewStack.empty()) {
@@ -579,10 +583,35 @@ void drawSquare(const Mat3& modelview, Rgba color) {
 
 Finally scissor(Vec2 position, Vec2 size) {
 #ifdef JNGL_VULKAN
-	// TODO: scissor clipping isn't implemented on the Vulkan backend yet.
-	(void)position;
-	(void)size;
-	return Finally(nullptr);
+	auto& renderer = static_cast<VulkanRenderer&>(getRenderer());
+	const VulkanRenderer::ScissorBox saved = renderer.getScissorBox();
+
+	int canvasX;
+	int canvasY;
+	int canvasW;
+	int canvasH;
+	if (saved.enabled) {
+		canvasX = saved.x;
+		canvasY = saved.y;
+		canvasW = saved.width;
+		canvasH = saved.height;
+	} else {
+		canvasX = 0;
+		canvasY = 0;
+		canvasW = pWindow->getWidth();
+		canvasH = pWindow->getHeight();
+	}
+
+	const auto sw = getScreenWidth();
+	const auto sh = getScreenHeight();
+
+	const auto x = static_cast<int>(std::lround((position.x + sw / 2) / sw * canvasW)) + canvasX;
+	const auto y =
+	    static_cast<int>(std::lround((sh / 2 - position.y - size.y) / sh * canvasH)) + canvasY;
+	const auto w = static_cast<int>(std::lround(size.x / sw * canvasW));
+	const auto h = static_cast<int>(std::lround(size.y / sh * canvasH));
+	renderer.pushUserScissor(x, y, w, h);
+	return Finally([&renderer, saved] { renderer.restoreUserScissor(saved); });
 #else
 	struct SavedScissorState {
 		bool enabled;

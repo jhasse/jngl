@@ -1076,9 +1076,15 @@ void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
 	VkRenderPassBeginInfo rpInfo{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
 	VkExtent2D extent{};
 	VkClearValue clear{};
-	clear.color = { { currentClearColor.getRed(), currentClearColor.getGreen(),
-		              currentClearColor.getBlue(), 1.f } };
 	std::array<VkClearValue, 2> clears{};
+	if (renderTargetStack.empty()) {
+		syncLetterboxScissor();
+	}
+	const bool letterboxClear =
+	    renderTargetStack.empty() && letterboxing && loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR;
+	const Rgb passClearColor = letterboxClear ? Rgb{ 0, 0, 0 } : currentClearColor;
+	clear.color = { { passClearColor.getRed(), passClearColor.getGreen(), passClearColor.getBlue(),
+		              1.f } };
 	if (renderTargetStack.empty()) {
 		const bool msaaClear = swapchainMsaaActive() && loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR;
 		swapchainUsesMsaaPass = msaaClear;
@@ -1125,8 +1131,179 @@ void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
 			         0.f, 1.f };
 	}
 	vkCmdSetViewport(cmd, 0, 1, &viewport);
-	VkRect2D scissor{ { 0, 0 }, extent };
+	applyScissor(cmd, extent);
+	if (letterboxClear) {
+		clearSwapchainCanvas(currentClearColor);
+	}
+}
+
+VkRect2D VulkanRenderer::glScissorToVulkan(const int glX, const int glY, const int glW,
+                                           const int glH, const int fbHeight) {
+	VkRect2D rect{};
+	rect.offset.x = static_cast<uint32_t>(std::max(glX, 0));
+	rect.offset.y = static_cast<uint32_t>(std::max(fbHeight - glY - glH, 0));
+	rect.extent.width = static_cast<uint32_t>(std::max(glW, 0));
+	rect.extent.height = static_cast<uint32_t>(std::max(glH, 0));
+	return rect;
+}
+
+VkRect2D VulkanRenderer::intersectScissors(const VkRect2D a, const VkRect2D b) {
+	const int ax1 = static_cast<int>(a.offset.x);
+	const int ay1 = static_cast<int>(a.offset.y);
+	const int ax2 = ax1 + static_cast<int>(a.extent.width);
+	const int ay2 = ay1 + static_cast<int>(a.extent.height);
+	const int bx1 = static_cast<int>(b.offset.x);
+	const int by1 = static_cast<int>(b.offset.y);
+	const int bx2 = bx1 + static_cast<int>(b.extent.width);
+	const int by2 = by1 + static_cast<int>(b.extent.height);
+	const int x1 = std::max(ax1, bx1);
+	const int y1 = std::max(ay1, by1);
+	const int x2 = std::min(ax2, bx2);
+	const int y2 = std::min(ay2, by2);
+	VkRect2D out{};
+	if (x2 > x1 && y2 > y1) {
+		out.offset = { static_cast<uint32_t>(x1), static_cast<uint32_t>(y1) };
+		out.extent = { static_cast<uint32_t>(x2 - x1), static_cast<uint32_t>(y2 - y1) };
+	}
+	return out;
+}
+
+VkRect2D VulkanRenderer::letterboxScissorForExtent(const VkExtent2D extent) const {
+	const int x = (static_cast<int>(extent.width) - canvasWidth) / 2;
+	const int y = (static_cast<int>(extent.height) - canvasHeight) / 2;
+	VkRect2D rect =
+	    glScissorToVulkan(x, y, canvasWidth, canvasHeight, static_cast<int>(extent.height));
+	return intersectScissors(rect, VkRect2D{ { 0, 0 }, extent });
+}
+
+VkRect2D VulkanRenderer::effectiveScissor(const VkExtent2D extent) const {
+	VkRect2D base{ { 0, 0 }, extent };
+	if (renderTargetStack.empty() && letterboxing) {
+		base = letterboxScissorForExtent(extent);
+	}
+	if (!renderTargetStack.empty() || userScissorStack.empty()) {
+		return base;
+	}
+	return intersectScissors(base, userScissorStack.back());
+}
+
+VulkanRenderer::ScissorBox VulkanRenderer::scissorBoxFromVulkan(const VkRect2D rect,
+                                                              const int fbHeight) const {
+	ScissorBox box{};
+	if (rect.extent.width == 0 || rect.extent.height == 0) {
+		return box;
+	}
+	box.enabled = true;
+	box.x = static_cast<int>(rect.offset.x);
+	box.y = fbHeight - static_cast<int>(rect.offset.y) - static_cast<int>(rect.extent.height);
+	box.width = static_cast<int>(rect.extent.width);
+	box.height = static_cast<int>(rect.extent.height);
+	return box;
+}
+
+void VulkanRenderer::applyScissor(const VkCommandBuffer cmd, const VkExtent2D extent) const {
+	const VkRect2D scissor = effectiveScissor(extent);
 	vkCmdSetScissor(cmd, 0, 1, &scissor);
+}
+
+void VulkanRenderer::syncLetterboxScissor() {
+	if (canvasWidth <= 0 || canvasHeight <= 0 || swapchainExtent.width == 0) {
+		return;
+	}
+	framebufferWidth = static_cast<int>(swapchainExtent.width);
+	framebufferHeight = static_cast<int>(swapchainExtent.height);
+	letterboxing = canvasWidth != framebufferWidth || canvasHeight != framebufferHeight;
+}
+
+void VulkanRenderer::clearSwapchainCanvas(const Rgb& color) {
+	if (!frameActive || !letterboxing) {
+		return;
+	}
+	VkClearAttachment attachment{};
+	attachment.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	attachment.colorAttachment = 0;
+	attachment.clearValue.color = { { color.getRed(), color.getGreen(), color.getBlue(), 1.f } };
+	VkClearRect rect{};
+	rect.rect = letterboxScissorForExtent(swapchainExtent);
+	rect.baseArrayLayer = 0;
+	rect.layerCount = 1;
+	vkCmdClearAttachments(commandBuffers[currentFrame], 1, &attachment, 1, &rect);
+}
+
+void VulkanRenderer::updateLetterboxing(const int fbWidth, const int fbHeight, const int canvasW,
+                                        const int canvasH) {
+	framebufferWidth = fbWidth;
+	framebufferHeight = fbHeight;
+	canvasWidth = canvasW;
+	canvasHeight = canvasH;
+	letterboxing = canvasWidth != fbWidth || canvasHeight != fbHeight;
+	if (frameActive && renderTargetStack.empty()) {
+		applyScissor(commandBuffers[currentFrame], swapchainExtent);
+	}
+}
+
+VulkanRenderer::ScissorBox VulkanRenderer::getScissorBox() const {
+	const VkExtent2D extent =
+	    renderTargetStack.empty()
+	        ? swapchainExtent
+	        : VkExtent2D{ static_cast<uint32_t>(renderTargetStack.back()->width),
+		                  static_cast<uint32_t>(renderTargetStack.back()->height) };
+	ScissorBox box = scissorBoxFromVulkan(
+	    effectiveScissor(extent),
+	    static_cast<int>(renderTargetStack.empty() ? swapchainExtent.height : extent.height));
+	box.enabled = letterboxing || !userScissorStack.empty();
+	return box;
+}
+
+void VulkanRenderer::pushUserScissor(const int x, const int y, const int width, const int height) {
+	const int fbHeight = renderTargetStack.empty()
+	                         ? static_cast<int>(swapchainExtent.height)
+	                         : renderTargetStack.back()->height;
+	userScissorStack.push_back(glScissorToVulkan(x, y, width, height, fbHeight));
+	if (frameActive && renderTargetStack.empty()) {
+		applyScissor(commandBuffers[currentFrame], swapchainExtent);
+	}
+}
+
+void VulkanRenderer::restoreUserScissor(const ScissorBox& saved) {
+	if (!userScissorStack.empty()) {
+		userScissorStack.pop_back();
+	}
+	if (saved.enabled) {
+		const VkExtent2D extent =
+		    renderTargetStack.empty()
+		        ? swapchainExtent
+		        : VkExtent2D{ static_cast<uint32_t>(renderTargetStack.back()->width),
+		                      static_cast<uint32_t>(renderTargetStack.back()->height) };
+		const VkRect2D restored =
+		    glScissorToVulkan(saved.x, saved.y, saved.width, saved.height,
+		                      static_cast<int>(extent.height));
+		const VkRect2D letterbox = letterboxScissorForExtent(extent);
+		const bool differsFromLetterbox =
+		    !letterboxing || restored.offset.x != letterbox.offset.x ||
+		    restored.offset.y != letterbox.offset.y ||
+		    restored.extent.width != letterbox.extent.width ||
+		    restored.extent.height != letterbox.extent.height;
+		if (differsFromLetterbox) {
+			userScissorStack.push_back(restored);
+		}
+	}
+	if (frameActive) {
+		const VkExtent2D extent =
+		    renderTargetStack.empty()
+		        ? swapchainExtent
+		        : VkExtent2D{ static_cast<uint32_t>(renderTargetStack.back()->width),
+		                      static_cast<uint32_t>(renderTargetStack.back()->height) };
+		applyScissor(commandBuffers[currentFrame], extent);
+	}
+}
+
+int VulkanRenderer::getFramebufferWidth() const {
+	return framebufferWidth;
+}
+
+int VulkanRenderer::getFramebufferHeight() const {
+	return framebufferHeight;
 }
 
 void VulkanRenderer::endFrame() {
@@ -1197,9 +1374,11 @@ void VulkanRenderer::endFrame() {
 	}
 }
 
-void VulkanRenderer::setViewport(int /*x*/, int /*y*/, int /*width*/, int /*height*/) {
-	// The viewport is set per frame to the full swapchain extent in beginFrame(). JNGL's
-	// letterboxing is applied through the projection matrix and (later) a scissor rectangle.
+void VulkanRenderer::setViewport(const int x, const int y, const int width, const int height) {
+	framebufferWidth = width;
+	framebufferHeight = height;
+	(void)x;
+	(void)y;
 }
 
 void VulkanRenderer::onResize(int /*width*/, int /*height*/) {
@@ -2261,7 +2440,7 @@ void VulkanRenderer::clearCurrentRenderTarget(const Rgba color) {
 	        : VkExtent2D{ static_cast<uint32_t>(renderTargetStack.back()->width),
 		                  static_cast<uint32_t>(renderTargetStack.back()->height) };
 	VkClearRect rect{};
-	rect.rect = { { 0, 0 }, extent };
+	rect.rect = effectiveScissor(extent);
 	rect.baseArrayLayer = 0;
 	rect.layerCount = 1;
 	vkCmdClearAttachments(commandBuffers[currentFrame], 1, &attachment, 1, &rect);

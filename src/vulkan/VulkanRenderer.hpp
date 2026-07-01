@@ -111,7 +111,34 @@ public:
 	void setMultisampleAntiAliasing(bool enabled);
 	[[nodiscard]] bool getMultisampleAntiAliasing() const;
 
+	/// Configures letterboxing: black bars outside a centered \a canvasWidth x \a canvasHeight area.
+	void updateLetterboxing(int framebufferWidth, int framebufferHeight, int canvasWidth,
+	                        int canvasHeight);
+
+	/// OpenGL-style scissor box (origin bottom-left) for the active clip region, if any.
+	struct ScissorBox {
+		bool enabled = false;
+		int x = 0;
+		int y = 0;
+		int width = 0;
+		int height = 0;
+	};
+	[[nodiscard]] ScissorBox getScissorBox() const;
+	void pushUserScissor(int x, int y, int width, int height);
+	void restoreUserScissor(const ScissorBox& saved);
+	[[nodiscard]] int getFramebufferWidth() const;
+	[[nodiscard]] int getFramebufferHeight() const;
+
 private:
+	void applyScissor(VkCommandBuffer cmd, VkExtent2D extent) const;
+	void clearSwapchainCanvas(const Rgb& color);
+	void syncLetterboxScissor();
+	[[nodiscard]] VkRect2D effectiveScissor(VkExtent2D extent) const;
+	[[nodiscard]] VkRect2D letterboxScissorForExtent(VkExtent2D extent) const;
+	[[nodiscard]] static VkRect2D intersectScissors(VkRect2D a, VkRect2D b);
+	[[nodiscard]] static VkRect2D glScissorToVulkan(int glX, int glY, int glW, int glH,
+	                                                int framebufferHeight);
+	[[nodiscard]] ScissorBox scissorBoxFromVulkan(VkRect2D rect, int framebufferHeight) const;
 	void queryMsaaSupport();
 	[[nodiscard]] bool swapchainMsaaActive() const;
 	void createMsaaAttachments();
@@ -265,6 +292,13 @@ private:
 	VkSampleCountFlagBits msaaSampleCount = VK_SAMPLE_COUNT_1_BIT;
 	// True while the active swapchain render pass uses multisampled attachments.
 	bool swapchainUsesMsaaPass = false;
+
+	int framebufferWidth = 0;
+	int framebufferHeight = 0;
+	int canvasWidth = 0;
+	int canvasHeight = 0;
+	bool letterboxing = false;
+	std::vector<VkRect2D> userScissorStack;
 
 	Mat4 projection;
 	Rgb currentClearColor{ 0, 0, 0 }; // swapchain clear color for the current frame
