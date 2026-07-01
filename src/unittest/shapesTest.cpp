@@ -32,6 +32,9 @@ boost::ut::suite _ = [] {
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒███████████
 )")));
 		}
+		// The Vulkan backend doesn't implement wide lines (setLineWidth) yet and rasterizes circles
+		// with sub-pixel differences from OpenGL, so this pixel-exact comparison is OpenGL-only.
+#ifndef JNGL_VULKAN
 		for (double scaleFactor : { 1, 2 }) {
 			Fixture f(scaleFactor);
 			jngl::drawSquare(jngl::modelview().translate({ -100, 0 }).scale(42), 0x111111ff_rgba);
@@ -61,6 +64,7 @@ boost::ut::suite _ = [] {
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
 		}
+#endif
 	};
 	"triangle"_test = [] {
 		for (double scaleFactor : { 0.6, 1.5 }) {

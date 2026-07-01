@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "../Renderer.hpp"
 #include "sdl.hpp"
 
 #include <memory>
@@ -23,7 +24,12 @@ class WindowImpl {
 public:
 	WindowImpl() = default;
 	~WindowImpl() {
+		// Tear down the rendering backend (and, on Vulkan, its surface/swapchain/instance) before
+		// the window and context it renders to.
+		renderer.reset();
+#ifndef JNGL_VULKAN
 		SDL_GL_DestroyContext(context);
+#endif
 		SDL_DestroyWindow(sdlWindow);
 	}
 	WindowImpl(const WindowImpl&) = delete;
@@ -33,6 +39,7 @@ public:
 
 	SDL_Window* sdlWindow = nullptr;
 	SDL_GLContext context = nullptr;
+	std::unique_ptr<Renderer> renderer;
 	optional<SDL_FingerID> currentFingerId;
 
 	/// If the window is resized we save the actual window size here for mouse input to work:

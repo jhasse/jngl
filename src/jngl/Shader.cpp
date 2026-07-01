@@ -8,8 +8,21 @@
 #include <sstream>
 #include <stdexcept>
 
+#ifdef JNGL_VULKAN
+#include "../vulkan/ShaderCompiler.hpp"
+#endif
+
 namespace jngl {
 
+#ifdef JNGL_VULKAN
+Shader::Shader(const char* source, const Type type, const char* const /*gles20Source*/)
+: impl(std::make_unique<Impl>()) {
+	impl->stage =
+	    type == Type::VERTEX ? VK_SHADER_STAGE_VERTEX_BIT : VK_SHADER_STAGE_FRAGMENT_BIT;
+	impl->spirv =
+	    compileGlslToSpirv(source, impl->stage, type == Type::VERTEX ? "vertex" : "fragment");
+}
+#else
 Shader::Shader(const char* source, const Type type, const char* const gles20Source [[maybe_unused]])
 : impl(std::make_unique<Impl>()) {
 	impl->id = glCreateShader(type == Type::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER);
@@ -54,6 +67,7 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 		throw std::runtime_error(buffer);
 	}
 }
+#endif
 
 Shader::Shader(const std::istream& source, const Type type)
 : Shader([&source]() {
