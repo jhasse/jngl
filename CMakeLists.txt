@@ -20,7 +20,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
 	# emcc: error: sdl3 port is still experimental [-Wexperimental] [-Werror]
 	string(APPEND CMAKE_CXX_FLAGS " ${USE_FLAGS} -sNO_DISABLE_EXCEPTION_CATCHING -Wno-experimental")
 	string(APPEND CMAKE_C_FLAGS " ${USE_FLAGS} -Wno-experimental")
-	string(APPEND CMAKE_EXE_LINKER_FLAGS " ${USE_FLAGS} -sASSERTIONS=1 --preload-file data")
+	string(APPEND CMAKE_EXE_LINKER_FLAGS " ${USE_FLAGS} -sASSERTIONS=1 -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2 --preload-file data")
 	set(CMAKE_EXECUTABLE_SUFFIX ".html")
 endif()
 
