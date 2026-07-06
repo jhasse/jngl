@@ -450,7 +450,7 @@ void Window::UpdateInput() {
 		case SDL_EVENT_DROP_FILE:
 			if (event.drop.data) {
 				std::filesystem::path path(event.drop.data);
-				SDL_free((void*)event.drop.data); // TODO: needed in SDL3?
+				// SDL3 owns event.drop.data — do not free it manually
 				assert(std::filesystem::exists(path));
 				for (const auto& job : jobs) {
 					job->onFileDrop(path);
