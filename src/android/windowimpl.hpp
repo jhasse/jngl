@@ -37,6 +37,7 @@ public:
 	[[nodiscard]] int32_t handleJoystickEvent(const AInputEvent*);
 	void setKeyboardVisible(bool);
 	std::vector<std::shared_ptr<Controller>> getConnectedControllers() const;
+	void resetTouchState();
 
 	int mouseX = 0;
 	int mouseY = 0;
@@ -53,6 +54,7 @@ private:
 	std::optional<Finally> pauseAudio;
 
 	bool firstFrame = true;
+	bool touchPressedThisUpdate = false;
 
 	struct DisplayWrapper {
 		DisplayWrapper();

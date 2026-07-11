@@ -43,6 +43,9 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 		case APP_CMD_GAINED_FOCUS:
 			impl.makeCurrent();
 			break;
+		case APP_CMD_LOST_FOCUS:
+			impl.resetTouchState();
+			break;
 		case APP_CMD_PAUSE:
 			impl.pause();
 			break;
@@ -78,6 +81,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 			assert(created);
 			impl.mouseX = touch->second.x;
 			impl.mouseY = touch->second.y;
+			impl.touchPressedThisUpdate = true;
 			return 1;
 		}
 		case AMOTION_EVENT_ACTION_POINTER_DOWN: {
@@ -124,6 +128,9 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 			return 1;
 		}
 		case AMOTION_EVENT_ACTION_UP:
+			impl.touches.clear();
+			return 1;
+		case AMOTION_EVENT_ACTION_CANCEL:
 			impl.touches.clear();
 			return 1;
 		case AMOTION_EVENT_ACTION_HOVER_MOVE:
@@ -329,14 +336,19 @@ void WindowImpl::init() {
 	                       window->canvasHeight);
 }
 
+void WindowImpl::resetTouchState() {
+	touches.clear();
+	window->mouseDown_[0] = false;
+}
+
 void WindowImpl::terminate() {
 	if (display) {
 		display->surface = std::nullopt;
 	}
-	touches.clear(); // It seems when we get terminated via the home swipe gesture that we don't
-	                 // receive the AMOTION_EVENT_ACTION_UP which would leave a touch in the map and
-	                 // result in an assertion failure the next time the user returns to the app and
-	                 // touches the screen.
+	resetTouchState(); // It seems when we get terminated via the home swipe gesture that we don't
+	                   // receive the AMOTION_EVENT_ACTION_UP which would leave a touch in the map and
+	                   // result in an assertion failure the next time the user returns to the app and
+	                   // touches the screen.
 }
 
 void WindowImpl::setRelativeMouseMode(const bool relativeMouseMode) {
@@ -353,6 +365,7 @@ void WindowImpl::pause() {
 	if (display) {
 		display->surface = std::nullopt;
 	}
+	resetTouchState();
 	if (!pauseAudio) {
 		pauseAudio = jngl::pauseAudio();
 	}
@@ -411,6 +424,7 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 }
 
 void WindowImpl::updateInput() {
+	touchPressedThisUpdate = false;
 	// Read all pending events.
 	int ident;
 	int events;
@@ -436,12 +450,11 @@ void WindowImpl::updateInput() {
 		}
 	}
 
-	if (!window->mouseDown_[0]) {
-		if ((window->mousePressed_[0] = !touches.empty())) {
-			window->needToBeSetFalse_.push(&window->mousePressed_[0]);
-		}
-	}
 	window->mouseDown_[0] = !touches.empty();
+	if (touchPressedThisUpdate) {
+		window->mousePressed_[0] = true;
+		window->needToBeSetFalse_.push(&window->mousePressed_[0]);
+	}
 	window->multitouch = touches.size() > 1;
 	window->mousex_ = mouseX - relativeX;
 	window->mousey_ = mouseY - relativeY;
