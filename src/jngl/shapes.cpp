@@ -2,8 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "shapes.hpp"
 
-#include "../ShaderCache.hpp"
-#include "../opengl.hpp"
+#include "../Renderer.hpp"
 #include "../spriteimpl.hpp"
 #include "Alpha.hpp"
 #include "matrix.hpp"
@@ -66,8 +65,6 @@ void drawEllipse(const Mat3& modelview, float width, float height, float startAn
 }
 
 void drawEllipse(const Mat3& modelview, float width, float height, float startAngle, Rgba color) {
-	opengl::bindVertexArray(opengl::vaoStream);
-	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
 	std::vector<float> vertexes;
 	vertexes.push_back(0.f);
 	vertexes.push_back(0.f);
@@ -77,11 +74,8 @@ void drawEllipse(const Mat3& modelview, float width, float height, float startAn
 	}
 	vertexes.push_back(0.f);
 	vertexes.push_back(-height);
-	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
-	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(float)),
-	             vertexes.data(), GL_STREAM_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, static_cast<GLsizei>(vertexes.size() / 2));
+	getRenderer().drawColored(PrimitiveType::TriangleFan, vertexes.data(), vertexes.size() / 2,
+	                          modelview, color);
 }
 
 void drawCircle(const Vec2 position, const float radius, const float startAngle) {
@@ -105,8 +99,6 @@ void drawCircle(Mat3 modelview, const float radius, const Rgba color) {
 }
 
 void drawCircle(const Mat3& modelview, const Rgba color) {
-	opengl::bindVertexArray(opengl::vaoStream);
-	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
 	// clang-format off
 	const static float vertexes[] = {
 		1.f, 0.f, 0.9951847f, 0.09801714f, 0.9807853f, 0.1950903f, 0.9569403f, 0.2902847f,
@@ -130,11 +122,8 @@ void drawCircle(const Mat3& modelview, const Rgba color) {
 		-0.09801714f
 	};
 	// clang-format on
-	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
-	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(vertexes)), vertexes,
-	             GL_STREAM_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, static_cast<GLsizei>(sizeof(vertexes) / sizeof(float) / 2));
+	getRenderer().drawColored(PrimitiveType::TriangleFan, vertexes,
+	                          sizeof(vertexes) / sizeof(float) / 2, modelview, color);
 }
 
 } // namespace jngl

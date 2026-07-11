@@ -3,7 +3,11 @@
 #include "window.hpp"
 
 #include "FontImpl.hpp"
+#include "Renderer.hpp"
 #include "ShaderCache.hpp"
+#ifdef JNGL_VULKAN
+#include "vulkan/VulkanRenderer.hpp"
+#endif
 #include "audio.hpp"
 #include "freetype.hpp"
 #include "jngl/ScaleablePixels.hpp"
@@ -596,23 +600,27 @@ void Window::initGlObjects() {
 }
 
 void Window::drawLine(Mat3 modelview, const Vec2 b, const Rgba color) const {
-	opengl::bindVertexArray(vaoLine);
-	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview.scale(b), color);
-	glDrawArrays(GL_LINES, 0, 2);
+	const float vertexes[] = { 0.f, 0.f, 1.f, 1.f };
+	getRenderer().drawColored(PrimitiveType::Lines, vertexes, 2, modelview.scale(b), color);
 }
 
 void Window::drawSquare(const Mat3& modelview, Rgba color) const {
-	opengl::bindVertexArray(vaoSquare);
-	auto context = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	const float vertexes[] = { -.5f, -.5f, .5f, -.5f, .5f, .5f, -.5f, .5f };
+	getRenderer().drawColored(PrimitiveType::TriangleFan, vertexes, 4, modelview, color);
 }
 
 void Window::drawRoundedSquare(const Mat3& modelview, Rgba color, Vec2 size, float topLeft,
                                float topRight, float bottomLeft, float bottomRight) const {
+#ifdef JNGL_VULKAN
+	static_cast<VulkanRenderer&>(getRenderer())
+	    .drawRoundedRect(modelview, color, static_cast<float>(size.x), static_cast<float>(size.y),
+	                     topLeft, topRight, bottomLeft, bottomRight);
+#else
 	opengl::bindVertexArray(vaoSquare);
 	auto context = ShaderCache::handle().useRoundedRectShaderProgram(
 	    modelview, color, size, topLeft, topRight, bottomLeft, bottomRight);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+#endif
 }
 
 void Window::onControllerChanged(std::function<void()> callback) {

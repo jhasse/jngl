@@ -10,6 +10,8 @@
 #include <ranges>
 
 Fixture::Fixture(const double scaleFactor) {
+	jngl::hideWindow();
+	jngl::setHighPixelDensityEnabled(false);
 	jngl::setScaleFactor(scaleFactor);
 	jngl::showWindow("unit test", 320 * scaleFactor, 70 * scaleFactor, false, { 32, 7 }, { 32, 7 });
 	reset();
@@ -28,6 +30,7 @@ Fixture::Fixture(const double scaleFactor) {
 
 Fixture::~Fixture() {
 	jngl::hideWindow();
+	jngl::setHighPixelDensityEnabled(true);
 }
 
 std::string Fixture::getAsciiArt() const {

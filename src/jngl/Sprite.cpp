@@ -16,6 +16,7 @@
 #include "../windowptr.hpp"
 #include "Alpha.hpp"
 #include "Color.hpp"
+#include "Shader.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
 #include "shapes.hpp"
@@ -254,11 +255,15 @@ bool Sprite::contains(const jngl::Vec2 point) const {
 void Sprite::draw() const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
+#ifdef JNGL_VULKAN
+	texture->draw(opengl::modelview, gSpriteColor);
+#else
 	auto context = ShaderCache::handle().textureShaderProgram->use();
 	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
 	            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
 	glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	texture->draw();
+#endif
 	popMatrix();
 }
 
@@ -269,16 +274,30 @@ void Sprite::draw(const Mat3& modelview, const ShaderProgram* const shaderProgra
 void Sprite::draw(Mat3 modelview, Rgba color) const {
 	modelview *= boost::qvm::translation_mat(
 	    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. }));
+#ifdef JNGL_VULKAN
+	texture->draw(modelview, color);
+#else
 	auto context = ShaderCache::handle().textureShaderProgram->use();
 	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(), color.getGreen(),
 	            color.getBlue(), color.getAlpha());
 	glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	texture->draw();
+#endif
 }
 
 void Sprite::draw(Mat3 modelview, Alpha alpha, const ShaderProgram* const shaderProgram) const {
 	modelview *= boost::qvm::translation_mat(
 	    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. }));
+#ifdef JNGL_VULKAN
+	const Rgba color(gSpriteColor.getRed(), gSpriteColor.getGreen(), gSpriteColor.getBlue(),
+	                 alpha.getAlpha());
+	if (shaderProgram) {
+		const auto context = shaderProgram->use(); // binds the custom pipeline for this draw
+		texture->draw(modelview, color);
+	} else {
+		texture->draw(modelview, color);
+	}
+#else
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
@@ -290,11 +309,20 @@ void Sprite::draw(Mat3 modelview, Alpha alpha, const ShaderProgram* const shader
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	texture->draw();
+#endif
 }
 
 void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
+#ifdef JNGL_VULKAN
+	if (shaderProgram) {
+		const auto context = shaderProgram->use(); // binds the custom pipeline for this draw
+		texture->draw(opengl::modelview, gSpriteColor);
+	} else {
+		texture->draw(opengl::modelview, gSpriteColor);
+	}
+#else
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
@@ -307,9 +335,37 @@ void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 		                   opengl::modelview.data);
 	}
 	texture->draw();
+#endif
 	popMatrix();
 }
 
+#ifdef JNGL_VULKAN
+struct Sprite::Batch::Impl {
+	const Texture* texture;
+	jngl::Mat3 translation;
+	Rgba color;
+};
+
+Sprite::Batch::Batch(std::unique_ptr<Impl> impl) : impl(std::move(impl)) {
+}
+
+Sprite::Batch::~Batch() = default;
+
+void Sprite::Batch::draw(Mat3 modelview) const {
+	modelview *= impl->translation;
+	impl->texture->draw(modelview, impl->color);
+}
+
+auto Sprite::batch(const ShaderProgram* const shaderProgram) const -> Batch {
+	// TODO: custom ShaderPrograms aren't supported on Vulkan yet; fall back to the default shader.
+	(void)shaderProgram;
+	return Batch{ std::make_unique<Batch::Impl>(Batch::Impl{
+		.texture = texture.get(),
+		.translation = boost::qvm::translation_mat(
+		    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. })),
+		.color = gSpriteColor }) };
+}
+#else
 struct Sprite::Batch::Impl {
 	ShaderProgram::Context context;
 	jngl::Mat3 translation;
@@ -342,12 +398,21 @@ auto Sprite::batch(const ShaderProgram* const shaderProgram) const -> Batch {
 		.modelviewUniform = shaderProgram ? shaderProgram->getUniformLocation("modelview")
 		                                  : ShaderCache::handle().modelviewUniform }) };
 }
+#endif
 
 void Sprite::drawScaled(float xfactor, float yfactor,
                         const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	opengl::scale(xfactor, yfactor);
+#ifdef JNGL_VULKAN
+	if (shaderProgram) {
+		const auto context = shaderProgram->use(); // binds the custom pipeline for this draw
+		texture->draw(opengl::modelview, gSpriteColor);
+	} else {
+		texture->draw(opengl::modelview, gSpriteColor);
+	}
+#else
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
@@ -360,6 +425,7 @@ void Sprite::drawScaled(float xfactor, float yfactor,
 		                   opengl::modelview.data);
 	}
 	texture->draw();
+#endif
 	popMatrix();
 }
 
@@ -390,6 +456,14 @@ void Sprite::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes
 	if (vertexes.empty()) {
 		return;
 	}
+#ifdef JNGL_VULKAN
+	if (shaderProgram) {
+		const auto context = shaderProgram->use();
+		texture->drawMesh(vertexes, modelview, color);
+	} else {
+		texture->drawMesh(vertexes, modelview, color);
+	}
+#else
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
@@ -401,6 +475,7 @@ void Sprite::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	texture->drawMesh(vertexes);
+#endif
 }
 
 void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
@@ -410,6 +485,14 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 	}
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
+#ifdef JNGL_VULKAN
+	if (shaderProgram) {
+		const auto context = shaderProgram->use();
+		texture->drawMesh(vertexes, opengl::modelview, gSpriteColor);
+	} else {
+		texture->drawMesh(vertexes, opengl::modelview, gSpriteColor);
+	}
+#else
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
@@ -422,6 +505,7 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 		                   opengl::modelview.data);
 	}
 	texture->drawMesh(vertexes);
+#endif
 	popMatrix();
 }
 
@@ -431,7 +515,27 @@ void Sprite::setBytes(const unsigned char* const bytes) {
 }
 
 const Shader& Sprite::vertexShader() {
+#ifdef JNGL_VULKAN
+	// The built-in sprite vertex shader, written for Vulkan: it takes the combined modelview *
+	// projection matrix and the color as push constants (matching VulkanRenderer's textured
+	// pipeline) and passes the texture coordinates through to the fragment shader.
+	static Shader shader(R"(#version 450
+layout(location = 0) in vec2 position;
+layout(location = 1) in vec2 inTexCoord;
+layout(push_constant) uniform Push {
+	mat4 mvp;
+	vec4 color;
+} pc;
+layout(location = 0) out vec2 texCoord;
+void main() {
+	gl_Position = pc.mvp * vec4(position, 0.0, 1.0);
+	texCoord = inTexCoord;
+})",
+	                     Shader::Type::VERTEX);
+	return shader;
+#else
 	return *ShaderCache::handle().textureVertexShader;
+#endif
 }
 
 #ifndef NOPNG

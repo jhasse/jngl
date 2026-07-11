@@ -4,7 +4,11 @@
 #include "main.hpp"
 
 #include "App.hpp"
+#include "Renderer.hpp"
 #include "ShaderCache.hpp"
+#ifdef JNGL_VULKAN
+#include "vulkan/VulkanRenderer.hpp"
+#endif
 #include "jngl/Alpha.hpp"
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/Scene.hpp"
@@ -17,11 +21,13 @@
 #include "log.hpp"
 #include "paths.hpp"
 #include "spriteimpl.hpp"
+#include "StartupProfiler.hpp"
 #include "windowptr.hpp"
 
 #include <boost/qvm_lite.hpp>
 #include <cmath>
 #include <cstddef>
+#include <cstring>
 #include <fstream>
 #include <numbers>
 #include <sstream>
@@ -59,12 +65,21 @@ Rgb backgroundColor(1, 1, 1);
 std::stack<jngl::Mat3> modelviewStack;
 
 void clearBackgroundColor() {
+#ifndef JNGL_VULKAN
 	glClearColor(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(),
 	             1);
+#endif
+	// On Vulkan the background color is read from the `backgroundColor` global directly in
+	// VulkanRenderer::beginFrame, so there's nothing to set here.
 }
 
 void updateViewportAndLetterboxing(const int width, const int height, const int canvasWidth,
                                    const int canvasHeight) {
+#ifdef JNGL_VULKAN
+	static_cast<VulkanRenderer&>(getRenderer())
+	    .updateLetterboxing(width, height, canvasWidth, canvasHeight);
+	getRenderer().setViewport(0, 0, width, height);
+#else
 	glViewport(0, 0, width, height);
 
 	if (canvasWidth != width || canvasHeight != height) { // Letterboxing?
@@ -79,6 +94,7 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 	} else {
 		glDisable(GL_SCISSOR_TEST);
 	}
+#endif
 }
 
 void updateProjection(int windowWidth, int windowHeight, float originalWindowWidth,
@@ -114,7 +130,16 @@ void updateProjection(int windowWidth, int windowHeight, float originalWindowWid
 WindowPointer pWindow;
 namespace {
 bool antiAliasingEnabled = true;
+bool highPixelDensityEnabled = true;
 } // namespace
+
+void setHighPixelDensityEnabled(const bool enabled) {
+	highPixelDensityEnabled = enabled;
+}
+
+bool isHighPixelDensityEnabled() {
+	return highPixelDensityEnabled;
+}
 
 void showWindow(const std::string& title, const double width, const double height, bool fullscreen,
                 const std::pair<int, int> minAspectRatio,
@@ -131,6 +156,7 @@ void showWindow(const std::string& title, const double width, const double heigh
 	if (heightRounded == 0) {
 		throw std::runtime_error("Height Is 0");
 	}
+	internal::StartupProfiler windowCtor("Window constructor (showWindow)");
 	pWindow.Set(
 	    new Window(title, widthRounded, heightRounded, fullscreen, minAspectRatio, maxAspectRatio));
 	if (App::instance().getDisplayName().empty()) {
@@ -138,7 +164,9 @@ void showWindow(const std::string& title, const double width, const double heigh
 	}
 	pWindow->SetMouseVisible(isMouseVisible);
 	setAntiAliasing(antiAliasingEnabled);
+#ifndef JNGL_VULKAN
 	pWindow->initGlObjects();
+#endif
 }
 
 void hideWindow() {
@@ -159,6 +187,14 @@ void swapBuffers() {
 }
 
 void clearBackBuffer() {
+#ifdef JNGL_VULKAN
+	getRenderer().beginFrame(backgroundColor);
+	reset();
+	if (!modelviewStack.empty()) {
+		internal::error("Uneven calls to push/popMatrix at the beginning of the frame!");
+	}
+	modelviewStack = {};
+#else
 	if (glIsEnabled(GL_SCISSOR_TEST)) {
 		// Letterboxing with SDL_VIDEODRIVER=wayland will glitch if we don't draw the black boxes on
 		// every frame
@@ -175,6 +211,7 @@ void clearBackBuffer() {
 	}
 	modelviewStack = {};
 	glClear(GL_COLOR_BUFFER_BIT);
+#endif
 }
 
 void updateInput() {
@@ -225,7 +262,9 @@ void setBackgroundColor(const jngl::Rgb color) {
 	pWindow.ThrowIfNull();
 	backgroundColor = color;
 	clearBackgroundColor();
+#ifndef JNGL_VULKAN
 	glClear(GL_COLOR_BUFFER_BIT);
+#endif
 }
 
 void setBackgroundColor(const unsigned char red, const unsigned char green,
@@ -361,12 +400,28 @@ void readPixels(void* buffer, GLenum type) {
 	// assert(xOffset % 2 == 0);
 	// assert(yOffset % 2 == 0);
 
+#ifdef JNGL_VULKAN
+	const int width = pWindow->getCanvasWidth();
+	const int height = pWindow->getCanvasHeight();
+	std::vector<unsigned char> rgb(static_cast<size_t>(width) * height * 3);
+	static_cast<VulkanRenderer&>(getRenderer())
+	    .readPixels(rgb.data(), xOffset / 2, yOffset / 2, width, height);
+	if (type == GL_FLOAT) {
+		auto* out = static_cast<float*>(buffer);
+		for (size_t i = 0; i < rgb.size(); ++i) {
+			out[i] = static_cast<float>(rgb[i]) / 255.f;
+		}
+	} else {
+		std::memcpy(buffer, rgb.data(), rgb.size());
+	}
+#else
 	GLint oldPackAlignment = 0;
 	glGetIntegerv(GL_PACK_ALIGNMENT, &oldPackAlignment);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(xOffset / 2, yOffset / 2, pWindow->getCanvasWidth(), pWindow->getCanvasHeight(),
 	             GL_RGB, type, buffer);
 	glPixelStorei(GL_PACK_ALIGNMENT, oldPackAlignment);
+#endif
 }
 } // namespace
 
@@ -527,13 +582,8 @@ void drawRing(Mat3 modelview, float innerRadius, float outerRadius, float startA
 		vertexes[i * 4 + 3] = innerRadius * s;
 	}
 
-	opengl::bindVertexArray(opengl::vaoStream);
-	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
-	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream);
-	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(float)),
-	             vertexes.data(), GL_STREAM_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, static_cast<GLsizei>(vertexes.size() / 2));
+	getRenderer().drawColored(PrimitiveType::TriangleStrip, vertexes.data(), vertexes.size() / 2,
+	                          modelview, color);
 }
 
 void drawSquare(const Mat3& modelview, Rgba color) {
@@ -541,6 +591,37 @@ void drawSquare(const Mat3& modelview, Rgba color) {
 }
 
 Finally scissor(Vec2 position, Vec2 size) {
+#ifdef JNGL_VULKAN
+	auto& renderer = static_cast<VulkanRenderer&>(getRenderer());
+	const VulkanRenderer::ScissorBox saved = renderer.getScissorBox();
+
+	int canvasX;
+	int canvasY;
+	int canvasW;
+	int canvasH;
+	if (saved.enabled) {
+		canvasX = saved.x;
+		canvasY = saved.y;
+		canvasW = saved.width;
+		canvasH = saved.height;
+	} else {
+		canvasX = 0;
+		canvasY = 0;
+		canvasW = pWindow->getWidth();
+		canvasH = pWindow->getHeight();
+	}
+
+	const auto sw = getScreenWidth();
+	const auto sh = getScreenHeight();
+
+	const auto x = static_cast<int>(std::lround((position.x + sw / 2) / sw * canvasW)) + canvasX;
+	const auto y =
+	    static_cast<int>(std::lround((sh / 2 - position.y - size.y) / sh * canvasH)) + canvasY;
+	const auto w = static_cast<int>(std::lround(size.x / sw * canvasW));
+	const auto h = static_cast<int>(std::lround(size.y / sh * canvasH));
+	renderer.pushUserScissor(x, y, w, h);
+	return Finally([&renderer, saved] { renderer.restoreUserScissor(saved); });
+#else
 	struct SavedScissorState {
 		bool enabled;
 		GLint box[4];
@@ -590,6 +671,7 @@ Finally scissor(Vec2 position, Vec2 size) {
 			glDisable(GL_SCISSOR_TEST);
 		}
 	});
+#endif
 }
 
 void drawRectOutline(Mat3 modelview, Vec2 size, float lineWidth, Rgba color) {
@@ -607,20 +689,32 @@ void drawSquareOutline(Mat3 modelview, float lineWidth, Rgba color) {
 }
 
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
-	ShaderCache::handle().drawTriangle(a, b, c);
+	const float vertexes[] = { static_cast<float>(a.x), static_cast<float>(a.y),
+		                       static_cast<float>(b.x), static_cast<float>(b.y),
+		                       static_cast<float>(c.x), static_cast<float>(c.y) };
+	getRenderer().drawColored(PrimitiveType::Triangles, vertexes, 3, opengl::modelview,
+	                          gShapeColor);
 }
 
 void drawTriangle(const double A_x, const double A_y, const double B_x, const double B_y,
                   const double C_x, const double C_y) {
-	ShaderCache::handle().drawTriangle({ A_x, A_y }, { B_x, B_y }, { C_x, C_y });
+	drawTriangle(Vec2{ A_x, A_y }, Vec2{ B_x, B_y }, Vec2{ C_x, C_y });
 }
 
 void drawTriangle(Mat3 modelview, Rgba color) {
-	ShaderCache::handle().drawTriangle(modelview, color);
+	const float vertexes[] = {
+		0.f, -1.f, -std::sqrt(3.f) / 2.f, 0.5f, std::sqrt(3.f) / 2.f, 0.5f,
+	};
+	getRenderer().drawColored(PrimitiveType::Triangles, vertexes, 3, modelview, color);
 }
 
 void setLineWidth(const float width) {
+#ifdef JNGL_VULKAN
+	// TODO: the Vulkan backend draws lines at a fixed width of 1 for now.
+	(void)width;
+#else
 	glLineWidth(width * getScaleFactor());
+#endif
 }
 
 void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
@@ -691,7 +785,14 @@ double getMouseWheel() {
 }
 
 void setAntiAliasing(bool enabled) {
-#ifdef GL_MULTISAMPLE_ARB
+#ifdef JNGL_VULKAN
+	if (!pWindow->isMultisampleSupported()) {
+		antiAliasingEnabled = false;
+		return;
+	}
+	static_cast<VulkanRenderer&>(getRenderer()).setMultisampleAntiAliasing(enabled);
+	antiAliasingEnabled = enabled;
+#elif defined(GL_MULTISAMPLE_ARB)
 	if (!pWindow->isMultisampleSupported()) {
 		antiAliasingEnabled = false;
 		return;

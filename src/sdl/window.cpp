@@ -2,12 +2,18 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../App.hpp"
+#include "../Renderer.hpp"
+#include "../StartupProfiler.hpp"
+#ifdef JNGL_VULKAN
+#include "../vulkan/VulkanRenderer.hpp"
+#endif
 #include "../jngl/ImageData.hpp"
 #include "../jngl/other.hpp"
 #include "../jngl/screen.hpp"
 #include "../jngl/window.hpp"
 #include "../log.hpp"
 #include "../main.hpp"
+#include "../opengl.hpp"
 #include "../windowptr.hpp"
 #include "windowimpl.hpp"
 
@@ -41,13 +47,20 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
   fontName_(GetFontFileByName("Arial")) {
 	SDL::handle();
 
+#ifdef JNGL_VULKAN
+	Uint32 flags = SDL_WINDOW_VULKAN;
+#else
 #ifdef __APPLE__ // https://stackoverflow.com/a/26981800/647898
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 #endif
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIGH_PIXEL_DENSITY; // TODO: SDL_WINDOW_SHOWN
+	Uint32 flags = SDL_WINDOW_OPENGL; // TODO: SDL_WINDOW_SHOWN
+#endif
+	if (isHighPixelDensityEnabled()) {
+		flags |= SDL_WINDOW_HIGH_PIXEL_DENSITY;
+	}
 	if (fullscreen) {
 		flags |= SDL_WINDOW_FULLSCREEN;
 		if (width != getDesktopWidth() || height != getDesktopHeight()) {
@@ -62,6 +75,15 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		                               // be reduced in its height (SDL bug?).
 	}
 
+#ifdef JNGL_VULKAN
+	{
+		internal::StartupProfiler _{ "SDL_CreateWindow" };
+		impl->sdlWindow = SDL_CreateWindow(title.c_str(), width, height, flags);
+	}
+	if (!impl->sdlWindow) {
+		throw std::runtime_error(SDL_GetError());
+	}
+#else
 	// Request a 10-bit-per-channel (deep color) default framebuffer. This greatly reduces banding in
 	// smooth gradients on displays and drivers that support it. It's only a request: if 10 bits
 	// aren't available SDL picks the closest format (usually 8 bits), so we query what we actually
@@ -119,6 +141,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	if (int redBits = 0; SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &redBits)) {
 		internal::trace("Default framebuffer color depth: {} bits per channel.", redBits);
 	}
+#endif // JNGL_VULKAN
 
 	// This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by SDL2). On
 	// Linux (GNOME) it results in the top of the window being cut off (by the header bar height?).
@@ -145,9 +168,24 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	impl->hidpiScaleFactor = static_cast<float>(width_) / static_cast<float>(width);
 	setScaleFactor(getScaleFactor() * impl->hidpiScaleFactor);
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
+
+	// Create the rendering backend (OpenGL or Vulkan). It registers itself as the active backend,
+	// so getRenderer() works from here on (e.g. in App::initGl below). On Vulkan this also brings
+	// up the instance, device and swapchain at the aligned pixel size.
+	{
+		internal::StartupProfiler _{ "createRenderer" };
+		impl->renderer = createRenderer(impl->sdlWindow);
+	}
+#ifdef JNGL_VULKAN
+	isMultisampleSupported_ =
+	    static_cast<VulkanRenderer&>(*impl->renderer).isMultisampleSupported();
+#endif
 	impl->actualCanvasWidth = canvasWidth;
 	impl->actualCanvasHeight = canvasHeight;
-	App::instance().initGl(width_, height_, canvasWidth, canvasHeight);
+	{
+		internal::StartupProfiler _{ "App::initGl" };
+		App::instance().initGl(width_, height_, canvasWidth, canvasHeight);
+	}
 
 	// Unlike SDL2, which implicitly enabled text input on desktop, SDL3 doesn't deliver
 	// SDL_EVENT_TEXT_INPUT events until text input has been explicitly started. Without this
@@ -437,8 +475,14 @@ void Window::UpdateInput() {
 				    static_cast<float>(impl->actualCanvasHeight);
 				updateProjection(impl->actualCanvasWidth, impl->actualCanvasHeight, tmpWidth,
 				                 tmpHeight);
+#ifdef JNGL_VULKAN
+				getRenderer().setProjection(opengl::projection);
+				getRenderer().onResize(width_, height_);
+				updateViewportAndLetterboxing(width_, height_, canvasWidth, canvasHeight);
+#else
 				App::instance().updateProjectionMatrix();
 				updateViewportAndLetterboxing(width_, height_, canvasWidth, canvasHeight);
+#endif
 				// restore the values in canvasWidth and canvasHeight because our scaleFactor didn't
 				// change:
 				std::swap(canvasWidth, impl->actualCanvasWidth);
@@ -471,7 +515,11 @@ void Window::UpdateInput() {
 }
 
 void Window::SwapBuffers() {
+#ifdef JNGL_VULKAN
+	getRenderer().endFrame();
+#else
 	SDL_GL_SwapWindow(impl->sdlWindow);
+#endif
 }
 
 void Window::SetMouseVisible(const bool visible) {
