@@ -41,6 +41,7 @@ public:
 
 	int mouseX = 0;
 	int mouseY = 0;
+	bool touchPressedThisUpdate = false;
 	std::map<int32_t, Vec2> touches;
 	int relativeX = 0;
 	int relativeY = 0;
@@ -54,7 +55,6 @@ private:
 	std::optional<Finally> pauseAudio;
 
 	bool firstFrame = true;
-	bool touchPressedThisUpdate = false;
 
 	struct DisplayWrapper {
 		DisplayWrapper();
