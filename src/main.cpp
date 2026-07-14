@@ -51,6 +51,10 @@
 #include <emscripten.h>
 #endif
 
+namespace jngl::internal {
+void resetScaleFactor();
+} // namespace jngl::internal
+
 namespace jngl {
 
 std::string pathPrefix;
@@ -144,6 +148,15 @@ void showWindow(const std::string& title, const double width, const double heigh
 void hideWindow() {
 	if (pWindow) {
 		App::instance().callAtExitFunctions();
+		// Reset all global variables for Android. This should maybe moved to App or some other
+		// class. Or a Singleton, just not global variables.
+		pathPrefix = "";
+		configPath = std::nullopt;
+		backgroundColor = Rgb(1, 1, 1);
+		modelviewStack = {};
+		antiAliasingEnabled = true;
+		internal::gFrameNumber = -1;
+		internal::resetScaleFactor();
 	}
 	unloadAll();
 	pWindow.Delete();
