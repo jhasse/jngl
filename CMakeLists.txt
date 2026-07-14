@@ -282,6 +282,7 @@ else()
 				URL https://www.libsdl.org/release/SDL3-3.4.12.zip
 				URL_HASH SHA1=d2c07e1e0e98c2c6c073d5f24112e6fe8208037a
 				OPTIONS
+				    "SDL_X11_XTEST OFF"
 					"SDL_SENSOR OFF"
 					"SDL_SHARED OFF"
 					"SDL_STATIC ON"
