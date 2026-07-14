@@ -259,8 +259,8 @@ else()
 	if(JNGL_BUILD_SDL_FROM_SOURCE)
 		if(JNGL_WINAPI)
 			CPMAddPackage(NAME SDL
-				URL https://www.libsdl.org/release/SDL3-3.1.6.zip
-				URL_HASH SHA1=b16ad311975378dcc87b11fc02c84eaa1f028b38
+				URL https://www.libsdl.org/release/SDL3-3.4.12.zip
+				URL_HASH SHA1=d2c07e1e0e98c2c6c073d5f24112e6fe8208037a
 				OPTIONS
 					"SDL_ATOMIC OFF"
 					"SDL_CPUINFO ON"
@@ -279,8 +279,8 @@ else()
 			)
 		else()
 			CPMAddPackage(NAME SDL
-				URL https://www.libsdl.org/release/SDL3-3.1.6.zip
-				URL_HASH SHA1=b16ad311975378dcc87b11fc02c84eaa1f028b38
+				URL https://www.libsdl.org/release/SDL3-3.4.12.zip
+				URL_HASH SHA1=d2c07e1e0e98c2c6c073d5f24112e6fe8208037a
 				OPTIONS
 					"SDL_SENSOR OFF"
 					"SDL_SHARED OFF"
