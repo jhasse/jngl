@@ -86,7 +86,7 @@ void Window::setFontSize(const int size) {
 	fontSize_ = size;
 	try {
 		setFont(fontName_); // We changed the size we also need to reload the current font
-	} catch (std::exception& e) { // Something went wrong ...
+	} catch (std::exception&) { // Something went wrong ...
 		fontSize_ = oldSize; // ... so let's set fontSize_ back to the previous size
 		throw;
 	}
