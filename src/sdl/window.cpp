@@ -443,7 +443,7 @@ void Window::UpdateInput() {
 				}
 			}
 			break;
-		case SDL_EVENT_WINDOW_FOCUS_LOST:
+		case SDL_EVENT_WINDOW_MINIMIZED:
 			if (const auto& scene = getScene()) {
 				internal::debug("Window lost focus.");
 				scene->onPauseEvent();
