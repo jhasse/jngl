@@ -451,6 +451,9 @@ void Window::UpdateInput() {
 			break;
 		}
 	}
+	if (gGotSigint != 0 && !forceExitCode) {
+		jngl::forceQuit(130);
+	}
 }
 
 void Window::SwapBuffers() {

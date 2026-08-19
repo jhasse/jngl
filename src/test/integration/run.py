@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2025 Jan Niklas Hasse <jhasse@bixense.com>
+# Copyright 2025-2026 Jan Niklas Hasse <jhasse@bixense.com>
 # For conditions of distribution and use, see copyright notice in LICENSE.txt
 import subprocess
 import sys
@@ -7,11 +7,13 @@ import sys
 subdir = sys.argv[1]
 
 
-def run(test, args, expected_exitcode=0):
-    cmd = f"{subdir}/jngl-test-{test} {args}"
-    print(f"{cmd}")
+def run(test, args="", expected_exitcode=0):
+    argv = [f"{subdir}/jngl-test-{test}"]
+    if args:
+        argv += args.split(" ")
+    print(" ".join(argv))
     result = subprocess.Popen(
-        [f"{subdir}/jngl-test-{test}"] + args.split(" "),
+        argv,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
     )
@@ -26,3 +28,4 @@ def run(test, args, expected_exitcode=0):
 
 run("forceQuit", "0")
 run("forceQuit", "42", expected_exitcode=42)
+run("sigint", expected_exitcode=130)

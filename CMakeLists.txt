@@ -432,6 +432,8 @@ else()
 
 		add_executable(jngl-test-forceQuit src/test/integration/forceQuit.cpp)
 		target_link_libraries(jngl-test-forceQuit PRIVATE jngl)
+		add_executable(jngl-test-sigint src/test/integration/sigint.cpp)
+		target_link_libraries(jngl-test-sigint PRIVATE jngl)
 		target_link_libraries(jngl-test jngl)
 	endif()
 endif()
