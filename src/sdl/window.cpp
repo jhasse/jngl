@@ -451,9 +451,11 @@ void Window::UpdateInput() {
 			break;
 		}
 	}
+#ifndef __EMSCRIPTEN__
 	if (gGotSigint != 0 && !forceExitCode) {
 		jngl::forceQuit(130);
 	}
+#endif
 }
 
 void Window::SwapBuffers() {
