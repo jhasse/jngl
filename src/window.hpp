@@ -127,8 +127,6 @@ public:
 	void onControllerChanged(std::function<void()>);
 	void bindSystemFramebufferAndRenderbuffer();
 
-	friend class WindowImpl;
-	std::unique_ptr<WindowImpl> impl;
 
 private:
 	static int GetKeyCode(jngl::key::KeyType key);
@@ -197,5 +195,9 @@ private:
 #ifdef JNGL_PERFORMANCE_OVERLAY
 	double lastStepDuration = 0;
 #endif
+
+public:
+	friend class WindowImpl;
+	std::unique_ptr<WindowImpl> impl;
 };
 } // namespace jngl
