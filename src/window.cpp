@@ -409,8 +409,6 @@ void Window::draw() const {
 #endif
 	if (currentWork_) {
 		currentWork_->draw();
-	} else {
-		jngl::print("No scene set. Use jngl::setScene", -50, -5);
 	}
 	for (auto& job : std::ranges::reverse_view(jobs)) {
 		job->draw();

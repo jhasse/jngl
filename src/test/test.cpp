@@ -185,7 +185,7 @@ public:
 				printed = true;
 			}
 		}
-		jngl::print(sstream.str(), 5, 5);
+		jngl::print(jngl::modelview().translate({ 5, 5 }), sstream.str());
 		jngl::setFontByName("sans-serif");
 		jngl::setFontColor(0, 0, 0);
 		try {
@@ -197,13 +197,16 @@ public:
 				printed = true;
 			}
 		}
-		jngl::print("Black text on white background", 5, 75);
+		jngl::print(jngl::modelview().translate({ 5, 75 }), "Black text on white background");
 		jngl::setFontByName("Arial");
 		jngl::setFontSize(20);
-		jngl::print("UTF-8:   ä ö ü ß Ĉ Ψ ≈", 5, 105);
-		jngl::print(" $", static_cast<int>(jngl::getTextWidth("UTF-8:   ä ö ü ß Ĉ Ψ ≈") + 5), 105);
+		jngl::print(jngl::modelview().translate({ 5, 105 }), "UTF-8:   ä ö ü ß Ĉ Ψ ≈");
+		jngl::print(
+		    jngl::modelview().translate({ jngl::getTextWidth("UTF-8:   ä ö ü ß Ĉ Ψ ≈") + 5, 105 }),
+		    " $");
 		jngl::setFontSize(12);
-		jngl::print("Press 1-9 to test the performance\nPress E to show a error box.", 5, 135);
+		jngl::print(jngl::modelview().translate({ 5, 135 }),
+		            "Press 1-9 to test the performance\nPress E to show a error box.");
 
 		auto mv = jngl::modelview().translate({ 5, 175 });
 		jngl::setFontColor(static_cast<unsigned char>(255 * (1 - factor)),
@@ -218,37 +221,40 @@ public:
 		        " recording to jngl.mkv" + (jngl::keyDown(jngl::key::Shift) ? " (lossless)" : ""),
 		    5, 370);
 #endif
-		jngl::print("Press S to use the blur shader.", 5, 390);
-		jngl::print("Press F to turn drawing on a FBO " +
-		                std::string(drawOnFrameBuffer ? "off" : "on") + ".",
-		            5, 410);
-		jngl::print("Press V to toggle V-SYNC.", 5, 430);
+		jngl::print(jngl::modelview().translate({ 5, 390 }), "Press S to use the blur shader.");
+		jngl::print(jngl::modelview().translate({ 5, 410 }),
+		            "Press F to turn drawing on a FBO " +
+		                std::string(drawOnFrameBuffer ? "off" : "on") + ".");
+		jngl::print(jngl::modelview().translate({ 5, 430 }), "Press V to toggle V-SYNC.");
 		if (jngl::keyPressed('v')) {
 			jngl::setVerticalSync(!jngl::getVerticalSync());
 		}
 		sstream.str({});
 		sstream << "Press A to turn Anti-Aliasing " << (jngl::getAntiAliasing() ? "off" : "on")
 		        << ".";
-		jngl::print(sstream.str(), 5, 450);
+		jngl::print(jngl::modelview().translate({ 5, 450 }), sstream.str());
 		if (jngl::keyPressed('a')) {
 			jngl::setAntiAliasing(!jngl::getAntiAliasing());
 		}
-		jngl::print("Press F1 to switch fullscreen mode.", 5, 470);
+		jngl::print(jngl::modelview().translate({ 5, 470 }), "Press F1 to switch fullscreen mode.");
 		if (jngl::keyPressed(jngl::key::F1)) {
 			jngl::setFullscreen(!jngl::getFullscreen());
 		}
-		jngl::print("Press K to test key codes.", 5, 490);
+		jngl::print(jngl::modelview().translate({ 5, 490 }), "Press K to test key codes.");
 		if (paused) {
-			jngl::print("Press Ctrl+P to unpause.", 20, 510);
+			jngl::print(jngl::modelview().translate({ 20, 510 }), "Press Ctrl+P to unpause.");
 		} else {
-			jngl::print("Press P to play a sound, L to loop it.",
-			            jngl::isPlaying("test.ogg") ? 20 : 6, 510);
+			jngl::print(
+			    jngl::modelview().translate({ jngl::isPlaying("test.ogg") ? 20. : 6., 510 }),
+			    "Press P to play a sound, L to loop it.");
 		}
-		jngl::print("Press G to load a Sprite asynchronously.", 6, 530);
+		jngl::print(jngl::modelview().translate({ 6, 530 }),
+		            "Press G to load a Sprite asynchronously.");
 		static int playbackSpeed = 100;
 		jngl::setPlaybackSpeed(static_cast<float>(playbackSpeed) / 100.0f);
-		jngl::print("Press + and - to change the audio playback speed: " +
-		      std::to_string(playbackSpeed) + " %", 6, 550);
+		jngl::print(jngl::modelview().translate({ 6, 550 }),
+		            "Press + and - to change the audio playback speed: " +
+		                std::to_string(playbackSpeed) + " %");
 		if (jngl::keyPressed('-')) {
 			playbackSpeed -= jngl::keyDown(jngl::key::AltL) ? 50 : 1;
 		}
@@ -256,9 +262,9 @@ public:
 			playbackSpeed += jngl::keyDown(jngl::key::AltL) ? 50 : 1;
 		}
 		jngl::setVolume(volume);
-		jngl::print("Use your mouse wheel to change the volume: " +
-		                std::to_string(static_cast<int>(volume * 100)) + " %",
-		            6, 570);
+		jngl::print(jngl::modelview().translate({ 6, 570 }),
+		            "Use your mouse wheel to change the volume: " +
+		                std::to_string(static_cast<int>(volume * 100)) + " %");
 		jngl::setColor(0,0,255,128);
 		if (drawOnFrameBuffer) {
 			fb2Context = {};
@@ -384,7 +390,7 @@ public:
 		alpha_ -= timeSinceLastFrame * 60;
 		x_ += timeSinceLastFrame * 40;
 		jngl::setFontColor(0, 0, 0, static_cast<unsigned char>(alpha_));
-		jngl::print(name_, static_cast<int>(x_), static_cast<int>(y_));
+		jngl::print(jngl::modelview().translate({ x_, y_ }), name_);
 		jngl::setFontColor(0, 0, 0, 255);
 	}
 	[[nodiscard]] int GetAlpha() const {
@@ -427,7 +433,8 @@ void testKeys() {
 			} else {
 				jngl::setFontColor(150, 150, 150);
 			}
-			jngl::print(jngl::keyToString(key), 100, y);
+			jngl::print(jngl::modelview().translate({ 100, static_cast<double>(y) }),
+			            jngl::keyToString(key));
 			if (jngl::keyPressed(key)) {
 				recentlyPressedKeys.emplace_back(jngl::keyToString(key), 100, y);
 			}
@@ -444,7 +451,9 @@ void testKeys() {
 			else {
 				jngl::setFontColor(150, 150, 150);
 			}
-			jngl::print(cString, x, y);
+			jngl::print(
+			    jngl::modelview().translate({ static_cast<double>(x), static_cast<double>(y) }),
+			    cString);
 			if (jngl::keyPressed(c)) {
 				recentlyPressedKeys.emplace_back(cString, x, y);
 			}
@@ -463,7 +472,7 @@ void testKeys() {
 		if (textInput.size() > 40) { textInput.clear(); }
 		textInput += jngl::getTextInput();
 		jngl::setFontColor(0, 0, 0);
-		jngl::print(textInput, 100, 583);
+		jngl::print(jngl::modelview().translate({ 100, 583 }), textInput);
 
 		std::map<std::string, jngl::mouse::Button> buttons;
 		buttons["Left Mouse Button"] = jngl::mouse::Left;
@@ -476,7 +485,7 @@ void testKeys() {
 			else {
 				jngl::setFontColor(150, 150, 150);
 			}
-			jngl::print(it.first, 380, y);
+			jngl::print(jngl::modelview().translate(jngl::Vec2(380, y)), it.first);
 			if (jngl::mousePressed(it.second)) {
 				recentlyPressedKeys.emplace_back(it.first, 380, y);
 			}
@@ -492,7 +501,7 @@ void testKeys() {
 		}), end);
 		std::stringstream sstream;
 		sstream << "X: " << jngl::getMousePos().x << "\nY: " << jngl::getMousePos().y << '\n';
-		jngl::print(sstream.str(), 5, 5);
+		jngl::print(jngl::modelview().translate({ 5, 5 }), sstream.str());
 		int controllerNr = 1;
 		for (const auto& controller : jngl::getConnectedControllers()) {
 			std::stringstream sstream;
@@ -547,7 +556,8 @@ void testKeys() {
 			jngl::setColor(255, 255, 255, 150);
 			jngl::drawRect({ 500, 40. + static_cast<double>(controllerNr - 1) * 110. },
 			               { 300, 120 });
-			jngl::print(sstream.str(), 558, 50 + (controllerNr - 1) * 110);
+			jngl::print(jngl::modelview().translate(jngl::Vec2(558, 50 + (controllerNr - 1) * 110)),
+			            sstream.str());
 			++controllerNr;
 		}
 		jngl::popMatrix();
