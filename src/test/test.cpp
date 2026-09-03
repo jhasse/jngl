@@ -23,7 +23,8 @@ public:
 	AsyncLoad() {
 		jngl::setSpriteAlpha(255);
 	}
-	void step() override {}
+	void step() override {
+	}
 	void draw() const override {
 		if (spriteAsync) {
 			spriteAsync->draw();
@@ -217,9 +218,9 @@ public:
 
 #ifdef JNGL_RECORD
 		jngl::print(
+		    jngl::modelview().translate({ 5, 370 }),
 		    std::string("Press R to ") + (jngl::getJob<jngl::VideoRecorder>() ? "stop" : "start") +
-		        " recording to jngl.mkv" + (jngl::keyDown(jngl::key::Shift) ? " (lossless)" : ""),
-		    5, 370);
+		        " recording to jngl.mkv" + (jngl::keyDown(jngl::key::Shift) ? " (lossless)" : ""));
 #endif
 		jngl::print(jngl::modelview().translate({ 5, 390 }), "Press S to use the blur shader.");
 		jngl::print(jngl::modelview().translate({ 5, 410 }),
@@ -265,7 +266,7 @@ public:
 		jngl::print(jngl::modelview().translate({ 6, 570 }),
 		            "Use your mouse wheel to change the volume: " +
 		                std::to_string(static_cast<int>(volume * 100)) + " %");
-		jngl::setColor(0,0,255,128);
+		jngl::setColor(0, 0, 255, 128);
 		if (drawOnFrameBuffer) {
 			fb2Context = {};
 			jngl::reset();
@@ -291,6 +292,7 @@ public:
 			jngl::quit();
 		}
 	}
+
 private:
 	void onFileDrop(const std::filesystem::path& file) override {
 		jngl::errorMessage(file.string() + " dropped on window.");
@@ -396,12 +398,12 @@ public:
 	[[nodiscard]] int GetAlpha() const {
 		return static_cast<int>(alpha_);
 	}
+
 private:
 	std::string name_;
 	double alpha_ = 255;
 	double x_, y_, lastTime_;
 };
-
 
 void testKeys() {
 	jngl::setRelativeMouseMode(true);
@@ -445,10 +447,9 @@ void testKeys() {
 			char cString[2];
 			cString[0] = c;
 			cString[1] = 0;
-			if(jngl::keyDown(c)) {
+			if (jngl::keyDown(c)) {
 				jngl::setFontColor(0, 0, 0);
-			}
-			else {
+			} else {
 				jngl::setFontColor(150, 150, 150);
 			}
 			jngl::print(
@@ -469,7 +470,9 @@ void testKeys() {
 			}
 		}
 
-		if (textInput.size() > 40) { textInput.clear(); }
+		if (textInput.size() > 40) {
+			textInput.clear();
+		}
 		textInput += jngl::getTextInput();
 		jngl::setFontColor(0, 0, 0);
 		jngl::print(jngl::modelview().translate({ 100, 583 }), textInput);
@@ -481,8 +484,7 @@ void testKeys() {
 		for (const auto& it : buttons) {
 			if (jngl::mouseDown(it.second)) {
 				jngl::setFontColor(0, 0, 0);
-			}
-			else {
+			} else {
 				jngl::setFontColor(150, 150, 150);
 			}
 			jngl::print(jngl::modelview().translate(jngl::Vec2(380, y)), it.first);
@@ -492,13 +494,11 @@ void testKeys() {
 			y += 15;
 		}
 		auto end = recentlyPressedKeys.end();
-		std::for_each(recentlyPressedKeys.begin(), end, [](RecentlyPressedKey& k) {
-			k.Draw();
-		});
-		recentlyPressedKeys.erase(std::remove_if(recentlyPressedKeys.begin(), end,
-		                          [](const RecentlyPressedKey& k) -> bool {
-			return k.GetAlpha() <= 0;
-		}), end);
+		std::for_each(recentlyPressedKeys.begin(), end, [](RecentlyPressedKey& k) { k.Draw(); });
+		recentlyPressedKeys.erase(
+		    std::remove_if(recentlyPressedKeys.begin(), end,
+		                   [](const RecentlyPressedKey& k) -> bool { return k.GetAlpha() <= 0; }),
+		    end);
 		std::stringstream sstream;
 		sstream << "X: " << jngl::getMousePos().x << "\nY: " << jngl::getMousePos().y << '\n';
 		jngl::print(jngl::modelview().translate({ 5, 5 }), sstream.str());
@@ -506,7 +506,8 @@ void testKeys() {
 		for (const auto& controller : jngl::getConnectedControllers()) {
 			std::stringstream sstream;
 			sstream << "Controller " << controllerNr << " connected." << '\n'
-			        << "Trigger: " << controller->state(jngl::controller::LeftTrigger) << " " << controller->state(jngl::controller::RightTrigger)
+			        << "Trigger: " << controller->state(jngl::controller::LeftTrigger) << " "
+			        << controller->state(jngl::controller::RightTrigger)
 			        << "\nA: " << controller->down(jngl::controller::A)
 			        << " B: " << controller->down(jngl::controller::B)
 			        << " X: " << controller->down(jngl::controller::X)
@@ -564,13 +565,13 @@ void testKeys() {
 		if (jngl::getRelativeMouseMode()) {
 			xpos += jngl::getMousePos().x;
 			ypos += jngl::getMousePos().y;
-			drawMouse({xpos, ypos});
+			drawMouse({ xpos, ypos });
 		}
 		if (jngl::mousePressed()) {
 			if (jngl::getRelativeMouseMode()) {
 				jngl::setRelativeMouseMode(false);
 				jngl::setMouseVisible(true);
-				jngl::setMouse({xpos, ypos});
+				jngl::setMouse({ xpos, ypos });
 			} else {
 				xpos = jngl::getMousePos().x;
 				ypos = jngl::getMousePos().y;
