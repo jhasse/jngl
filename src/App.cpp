@@ -123,7 +123,12 @@ void App::initGl(int width, int height, int canvasWidth, int canvasHeight) {
 #endif
 #endif
 
-	if (impl && impl->scaleFactor) {
+	if (impl && impl->scaleFactor &&
+	    !pWindow // on Android initGl will be called when the app is brought back to foreground. If
+	             // an explicit scale factor is set, this would result in setScaleFactor being
+	             // called twice and an exception (not happening when Apps don't explicitly set it
+	             // but use screenSize)
+	) {
 		setScaleFactor(impl->scaleFactor(canvasWidth, canvasHeight));
 	}
 	updateProjection(width, height, static_cast<float>(width), static_cast<float>(height));
