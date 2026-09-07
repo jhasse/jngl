@@ -80,6 +80,12 @@ JNGLView* jnglView = nullptr;
 	return YES;
 }
 
+// Requires a second swipe from the bottom edge to actually leave the app, showing a blurred
+// home bar on the first swipe instead of immediately exiting.
+- (UIRectEdge)preferredScreenEdgesDeferringSystemGestures {
+	return UIRectEdgeBottom;
+}
+
 @end
 
 namespace jngl {
