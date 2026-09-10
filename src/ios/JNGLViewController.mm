@@ -80,10 +80,12 @@ JNGLView* jnglView = nullptr;
 	return YES;
 }
 
-// Requires a second swipe from the bottom edge to actually leave the app, showing a blurred
-// home bar on the first swipe instead of immediately exiting.
+// Defers all system edge gestures (home indicator, Control Center, Notification Center, app
+// switcher) so that touches near any screen edge are delivered to the game immediately instead of
+// being delayed while iOS waits to see if a system gesture is starting. This requires a second
+// swipe from an edge to actually trigger the corresponding system gesture.
 - (UIRectEdge)preferredScreenEdgesDeferringSystemGestures {
-	return UIRectEdgeBottom;
+	return UIRectEdgeAll;
 }
 
 @end
