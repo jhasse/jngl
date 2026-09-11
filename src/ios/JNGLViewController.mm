@@ -76,8 +76,13 @@ JNGLView* jnglView = nullptr;
 	[jnglView touchesCancelled:touches withEvent:event];
 }
 
+// Must return NO: at least since iOS 18.2 (verified on iOS 26.6.1) the system ignores
+// -preferredScreenEdgesDeferringSystemGestures while the home indicator is auto-hidden, so a
+// single swipe from the bottom edge would immediately leave the app. With the indicator visible
+// the first swipe only reveals it and a second swipe is needed to leave. Since iOS 26 the
+// indicator fades out on its own shortly after launch anyway.
 - (BOOL)prefersHomeIndicatorAutoHidden {
-	return YES;
+	return NO;
 }
 
 // Defers all system edge gestures (home indicator, Control Center, Notification Center, app
