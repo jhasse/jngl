@@ -24,6 +24,11 @@ JNGLView* jnglView = nullptr;
     return self;
 }
 
+- (void)loadView {
+	self.view = jnglView; // Use the JNGLView created by the AppDelegate as our view instead of an
+	                      // empty UIView
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
