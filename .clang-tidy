@@ -8,11 +8,16 @@ Checks: '
        ,-boost-use-ranges,
        ,-bugprone-assignment-in-if-condition,
        ,-bugprone-easily-swappable-parameters,
+       ,-bugprone-exception-escape,
+       ,-bugprone-reserved-identifier,
        ,-bugprone-switch-missing-default-case,
+       ,-cert-dcl37-c,
+       ,-cert-dcl51-cpp,
        ,-cert-err33-c,
        ,-cert-err52-cpp,
        ,-cert-err58-cpp,
        ,-cert-flp30-c,
+       ,-cert-int09-c,
        ,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,
        ,-clang-diagnostic-unused-command-line-argument,
        ,-concurrency-mt-unsafe,
@@ -24,6 +29,7 @@ Checks: '
        ,-cppcoreguidelines-non-private-member-variables-in-classes,
        ,-cppcoreguidelines-owning-memory,
        ,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+       ,-cppcoreguidelines-pro-bounds-avoid-unchecked-container-access,
        ,-cppcoreguidelines-pro-bounds-constant-array-index,
        ,-cppcoreguidelines-pro-bounds-pointer-arithmetic,
        ,-cppcoreguidelines-pro-type-vararg,
@@ -47,6 +53,7 @@ Checks: '
        ,-hicpp-uppercase-literal-suffix,
        ,-hicpp-vararg,
        ,-llvm-header-guard,
+       ,-llvm-prefer-static-over-anonymous-namespace,
        ,-llvm-qualified-auto,
        ,-llvmlibc-callee-namespace,
        ,-llvmlibc-implementation-in-namespace,
@@ -56,10 +63,13 @@ Checks: '
        ,-misc-include-cleaner,
        ,-misc-no-recursion,
        ,-misc-non-private-member-variables-in-classes,
+       ,-misc-override-with-different-visibility,
        ,-misc-use-internal-linkage,
        ,-modernize-avoid-c-arrays,
        ,-modernize-use-nodiscard,
        ,-modernize-use-trailing-return-type,
+       ,-portability-avoid-pragma-once,
+       ,-readability-enum-initial-value,
        ,-readability-function-cognitive-complexity,
        ,-readability-identifier-length,
        ,-readability-magic-numbers,
@@ -71,11 +81,32 @@ Checks: '
        ,-readability-use-anyofallof,
        ,-readability-use-std-min-max,
 '
-WarningsAsErrors: 'hicpp-use-override,modernize-avoid-bind,llvm-namespace-comment,modernize-use-nullptr,modernize-pass-by-value,hicpp-noexcept-move,boost-use-to-string,google-readability-namespace-comments,modernize-use-default-member-init,modernize-loop-convert,hicpp-use-nullptr,google-readability-braces-around-statements,cert-dcl03-c,readability-else-after-return,bugprone-macro-parentheses,readability-redundant-declaration,google-explicit-constructor,readability-avoid-const-params-in-decls,readability-redundant-casting'
+WarningsAsErrors: '
+  hicpp-use-override,
+  modernize-avoid-bind,
+  llvm-namespace-comment,
+  modernize-use-nullptr,
+  modernize-pass-by-value,
+  hicpp-noexcept-move,
+  boost-use-to-string,
+  google-readability-namespace-comments,
+  modernize-use-default-member-init,
+  modernize-loop-convert,
+  hicpp-use-nullptr,
+  google-readability-braces-around-statements,
+  cert-dcl03-c,
+  readability-else-after-return,
+  bugprone-macro-parentheses,
+  readability-redundant-declaration,
+  google-explicit-constructor,
+  readability-avoid-const-params-in-decls,
+  readability-redundant-casting,
+  performance-move-const-arg,
+  readability-implicit-bool-conversion,
+'
+HeaderFilterRegex: '.*src/.*'
 CheckOptions:
       - key:             readability-implicit-bool-conversion.AllowPointerConditions
-        value:           '1'
-      - key:             readability-implicit-bool-conversion.AllowIntegerConditions
         value:           '1'
       - key:             bugprone-narrowing-conversions.WarnOnFloatingPointNarrowingConversion
         value:           '0'

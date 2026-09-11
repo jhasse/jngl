@@ -1,4 +1,4 @@
-// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "main.hpp"
@@ -20,11 +20,13 @@
 #include "windowptr.hpp"
 
 #include <boost/qvm_lite.hpp>
+#include <cmath>
 #include <cstddef>
 #include <fstream>
 #include <numbers>
 #include <sstream>
 #include <stack>
+#include <vector>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -49,6 +51,10 @@
 #include <emscripten.h>
 #endif
 
+namespace jngl::internal {
+void resetScaleFactor();
+} // namespace jngl::internal
+
 namespace jngl {
 
 std::string pathPrefix;
@@ -59,57 +65,6 @@ std::stack<jngl::Mat3> modelviewStack;
 void clearBackgroundColor() {
 	glClearColor(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(),
 	             1);
-}
-
-namespace {
-#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
-#ifdef _WIN32
-void __stdcall
-#else
-void
-#endif
-debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity,
-              GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
-	if (severity == GL_DEBUG_SEVERITY_HIGH) {
-		internal::error(message);
-	} else if (severity == GL_DEBUG_SEVERITY_MEDIUM) {
-		internal::warn(message);
-	} else if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {
-		internal::info(message);
-	}
-}
-#endif
-} // namespace
-
-bool Init(const int width, const int height, const int canvasWidth, const int canvasHeight) {
-#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
-#ifdef GLAD_GL
-	if (GLAD_GL_VERSION_4_3 || GLAD_GL_KHR_debug) {
-#endif
-		glEnable(GL_DEBUG_OUTPUT);
-		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr); // NOLINT
-#ifdef GLAD_GL
-	}
-#endif
-#endif
-
-	updateProjection(width, height, width, height);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	updateViewportAndLetterboxing(width, height, canvasWidth, canvasHeight);
-
-	reset();
-	modelviewStack = {};
-
-	clearBackgroundColor();
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glFlush();
-	setVerticalSync(true);
-	return true;
 }
 
 void updateViewportAndLetterboxing(const int width, const int height, const int canvasWidth,
@@ -125,24 +80,28 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 		assert(canvasHeight <= height);
 		glScissor((width - canvasWidth) / 2, (height - canvasHeight) / 2, canvasWidth,
 		          canvasHeight);
+	} else {
+		glDisable(GL_SCISSOR_TEST);
 	}
 }
 
-void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth,
-                      int originalWindowHeight) {
-	internal::debug("Updating projection matrix to {}x{} (original size: {}x{})", windowWidth,
-	                windowHeight, originalWindowWidth, originalWindowHeight);
+void updateProjection(int windowWidth, int windowHeight, float originalWindowWidth,
+                      float originalWindowHeight) {
+	internal::trace("Updating projection matrix to {}x{} (original size: {}x{})", windowWidth,
+	                windowHeight, std::lround(originalWindowWidth),
+	                std::lround(originalWindowHeight));
 	const auto l = static_cast<float>(-windowWidth) / 2.f;
 	const auto r = static_cast<float>(windowWidth) / 2.f;
 	const auto b = static_cast<float>(windowHeight) / 2.f;
 	const auto t = static_cast<float>(-windowHeight) / 2.f;
+	const auto scale = static_cast<float>(getScaleFactor());
 	opengl::projection = {
-		static_cast<float>(windowWidth) / static_cast<float>(originalWindowWidth) * 2.f / (r - l),
+		static_cast<float>(windowWidth) / originalWindowWidth * 2.f / (r - l) * scale,
 		0.f,
 		0.f,
 		-(r + l) / (r - l),
 		0.f,
-		static_cast<float>(windowHeight) / static_cast<float>(originalWindowHeight) * 2.f / (t - b),
+		static_cast<float>(windowHeight) / originalWindowHeight * 2.f / (t - b) * scale,
 		0.f,
 		-(t + b) / (t - b),
 		0.f,
@@ -152,7 +111,7 @@ void updateProjection(int windowWidth, int windowHeight, int originalWindowWidth
 		0.f,
 		0.f,
 		0.f,
-		1.f
+		1.f,
 	};
 }
 
@@ -161,19 +120,23 @@ namespace {
 bool antiAliasingEnabled = true;
 } // namespace
 
-void showWindow(const std::string& title, const int width, const int height, bool fullscreen,
+void showWindow(const std::string& title, const double width, const double height, bool fullscreen,
                 const std::pair<int, int> minAspectRatio,
                 const std::pair<int, int> maxAspectRatio) {
+	++internal::gFrameNumber; // will set it to 0 for the first window
 	internal::debug("jngl::showWindow(\"{}\", {}, {}, {});", title, width, height, fullscreen);
 	bool isMouseVisible = pWindow ? pWindow->getMouseVisible() : true;
 	hideWindow();
-	if (width == 0) {
+	int widthRounded = static_cast<int>(std::lround(width));
+	int heightRounded = static_cast<int>(std::lround(height));
+	if (widthRounded == 0) {
 		throw std::runtime_error("Width Is 0");
 	}
-	if (height == 0) {
+	if (heightRounded == 0) {
 		throw std::runtime_error("Height Is 0");
 	}
-	pWindow.Set(new Window(title, width, height, fullscreen, minAspectRatio, maxAspectRatio));
+	pWindow.Set(
+	    new Window(title, widthRounded, heightRounded, fullscreen, minAspectRatio, maxAspectRatio));
 	if (App::instance().getDisplayName().empty()) {
 		App::instance().setDisplayName(title);
 	}
@@ -185,6 +148,15 @@ void showWindow(const std::string& title, const int width, const int height, boo
 void hideWindow() {
 	if (pWindow) {
 		App::instance().callAtExitFunctions();
+		// Reset all global variables for Android. This should maybe moved to App or some other
+		// class. Or a Singleton, just not global variables.
+		pathPrefix = "";
+		configPath = std::nullopt;
+		backgroundColor = Rgb(1, 1, 1);
+		modelviewStack = {};
+		antiAliasingEnabled = true;
+		internal::gFrameNumber = -1;
+		internal::resetScaleFactor();
 	}
 	unloadAll();
 	pWindow.Delete();
@@ -215,7 +187,7 @@ void clearBackBuffer() {
 		internal::error("Uneven calls to push/popMatrix at the beginning of the frame!");
 	}
 	modelviewStack = {};
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void updateInput() {
@@ -228,7 +200,7 @@ bool running() {
 }
 
 bool canQuit() {
-#if defined(IOS) || defined(EMSCRIPTEN)
+#if defined(IOS) || defined(__EMSCRIPTEN__)
 	return false;
 #else
 	return true;
@@ -323,17 +295,17 @@ bool keyPressed(const key::KeyType key) {
 
 bool keyDown(const std::string& key) {
 	const static auto TOO_LONG = "Only pass one character.";
-	if (key[0] & 0x80) { // first bit (Check if this is an Unicode character)
+	if ((key[0] & 0x80) != 0) { // first bit (Check if this is an Unicode character)
 		// sourceEnd has to be the next character after the utf-8 sequence
 		const static auto ERROR_MSG = "Invalid UTF-8 string!";
 		if (key.size() < 2) {
 			throw std::runtime_error(ERROR_MSG);
 		}
-		if (key[0] & 0x20) { // third bit
+		if ((key[0] & 0x20) != 0) { // third bit
 			if (key.size() < 3) {
 				throw std::runtime_error(ERROR_MSG);
 			}
-			if (key[0] & 0x10) {
+			if ((key[0] & 0x10) != 0) {
 				if (key.size() < 4) { // fourth bit
 					throw std::runtime_error(ERROR_MSG);
 				}
@@ -390,12 +362,36 @@ void setTitle(const std::string& title) {
 	pWindow->SetTitle(title);
 }
 
+namespace {
+void readPixels(void* buffer, GLenum type) {
+	auto xOffset = (pWindow->getWidth() - pWindow->getCanvasWidth());
+	auto yOffset = (pWindow->getHeight() - pWindow->getCanvasHeight());
+
+	// This doesn't hold true on GNOME with fractional scaling: One can only provide logical points
+	// to SDL when creating a window. Due to the scaling it might be the window is 1 pixel to big in
+	// one dimension and we had to activate letter-boxing.
+	//
+	// assert(xOffset % 2 == 0);
+	// assert(yOffset % 2 == 0);
+
+	GLint oldPackAlignment = 0;
+	glGetIntegerv(GL_PACK_ALIGNMENT, &oldPackAlignment);
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	glReadPixels(xOffset / 2, yOffset / 2, pWindow->getCanvasWidth(), pWindow->getCanvasHeight(),
+	             GL_RGB, type, buffer);
+	glPixelStorei(GL_PACK_ALIGNMENT, oldPackAlignment);
+}
+} // namespace
+
 std::vector<float> readPixels() {
-	const int w = jngl::getWindowWidth();
-	const int h = jngl::getWindowHeight();
-	std::vector<float> buffer(static_cast<size_t>(3 * w * h));
-	glReadPixels(0, 0, w, h, GL_RGB, GL_FLOAT, buffer.data());
+	std::vector<float> buffer(
+	    static_cast<size_t>(3 * pWindow->getCanvasWidth() * pWindow->getCanvasHeight()));
+	readPixels(buffer.data(), GL_FLOAT);
 	return buffer;
+}
+
+void readPixels(uint8_t* buffer) {
+	readPixels(buffer, GL_UNSIGNED_BYTE);
 }
 
 double getTextWidth(const std::string& text) {
@@ -403,14 +399,14 @@ double getTextWidth(const std::string& text) {
 }
 
 double getLineHeight() {
-	return static_cast<double>(ScaleablePixels{ pWindow->getLineHeight() });
+	return pWindow->getLineHeight();
 }
 
 void setLineHeight(double h) {
 	pWindow->setLineHeight(Pixels(ScaleablePixels(h)));
 }
 
-void print(const std::string& text, const jngl::Vec2 position) {
+void print(const std::string& text, const Vec2 position) {
 	pWindow->print(text, static_cast<int>(std::lround(position.x)),
 	               static_cast<int>(std::lround(position.y)));
 }
@@ -458,6 +454,10 @@ unsigned int getStepsPerSecond() {
 	return pWindow->getStepsPerSecond();
 }
 
+float getDelta() {
+	return 1.f / static_cast<float>(getStepsPerSecond());
+}
+
 void setStepsPerSecond(const unsigned int stepsPerSecond) {
 	pWindow->setStepsPerSecond(stepsPerSecond);
 }
@@ -475,8 +475,7 @@ void rotate(const double degree) {
 }
 
 void translate(const double x, const double y) {
-	opengl::translate(static_cast<float>(x * getScaleFactor()),
-	                  static_cast<float>(y * getScaleFactor()));
+	opengl::translate(static_cast<float>(x), static_cast<float>(y));
 }
 
 void scale(const double factor) {
@@ -513,8 +512,97 @@ void drawRect(Mat3 modelview, const Vec2 size, const Rgba color) {
 	pWindow->drawSquare(modelview.translate(size / 2).scale(size), color);
 }
 
+void drawRoundedRect(Mat3 modelview, const Vec2 size, const Rgba color, float topLeft,
+                     float topRight, float bottomLeft, float bottomRight) {
+	pWindow->drawRoundedSquare(modelview.translate(size / 2).scale(size), color, size, topLeft,
+	                           topRight, bottomLeft, bottomRight);
+}
+
+void drawRing(Mat3 modelview, float innerRadius, float outerRadius, float startAngle,
+              float endAngle, Rgba color) {
+	if (innerRadius >= outerRadius) {
+		return;
+	}
+	constexpr long segments = 16;
+	const float startRad = startAngle * static_cast<float>(std::numbers::pi) / 180.f;
+	const float endRad = endAngle * static_cast<float>(std::numbers::pi) / 180.f;
+	const float step = (endRad - startRad) / segments;
+
+	// Triangle strip: alternating outer/inner vertices
+	std::array<float, (segments + 1) * 4> vertexes{};
+	for (long i = 0; i <= segments; ++i) {
+		float angle = startRad + step * static_cast<float>(i);
+		float c = std::cos(angle);
+		float s = std::sin(angle);
+		vertexes[i * 4 + 0] = outerRadius * c;
+		vertexes[i * 4 + 1] = outerRadius * s;
+		vertexes[i * 4 + 2] = innerRadius * c;
+		vertexes[i * 4 + 3] = innerRadius * s;
+	}
+
+	opengl::bindVertexArray(opengl::vaoStream);
+	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
+	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream);
+	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(float)),
+	             vertexes.data(), GL_STREAM_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, static_cast<GLsizei>(vertexes.size() / 2));
+}
+
 void drawSquare(const Mat3& modelview, Rgba color) {
 	pWindow->drawSquare(modelview, color);
+}
+
+Finally scissor(Vec2 position, Vec2 size) {
+	struct SavedScissorState {
+		bool enabled;
+		GLint box[4];
+	};
+	SavedScissorState saved{};
+	saved.enabled = glIsEnabled(GL_SCISSOR_TEST);
+	glGetIntegerv(GL_SCISSOR_BOX, saved.box);
+
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+	const auto viewportW = viewport[2];
+	const auto viewportH = viewport[3];
+
+	// Use saved state to determine the canvas area
+	GLint canvasX;
+	GLint canvasY;
+	GLint canvasW;
+	GLint canvasH;
+	if (saved.enabled) {
+		canvasX = saved.box[0];
+		canvasY = saved.box[1];
+		canvasW = saved.box[2];
+		canvasH = saved.box[3];
+	} else {
+		canvasX = 0;
+		canvasY = 0;
+		canvasW = viewportW;
+		canvasH = viewportH;
+	}
+
+	const auto sw = getScreenWidth();
+	const auto sh = getScreenHeight();
+
+	// Map screen coords to canvas pixels
+	const auto x = static_cast<int>(std::lround((position.x + sw / 2) / sw * canvasW)) + canvasX;
+	const auto y =
+	    static_cast<int>(std::lround((sh / 2 - position.y - size.y) / sh * canvasH)) + canvasY;
+	const auto w = static_cast<int>(std::lround(size.x / sw * canvasW));
+	const auto h = static_cast<int>(std::lround(size.y / sh * canvasH));
+	glEnable(GL_SCISSOR_TEST);
+	glScissor(x, y, w, h);
+	return Finally([saved] {
+		if (saved.enabled) {
+			glEnable(GL_SCISSOR_TEST);
+			glScissor(saved.box[0], saved.box[1], saved.box[2], saved.box[3]);
+		} else {
+			glDisable(GL_SCISSOR_TEST);
+		}
+	});
 }
 
 void drawRectOutline(Mat3 modelview, Vec2 size, float lineWidth, Rgba color) {
@@ -545,7 +633,7 @@ void drawTriangle(Mat3 modelview, Rgba color) {
 }
 
 void setLineWidth(const float width) {
-	glLineWidth(width);
+	glLineWidth(width * getScaleFactor());
 }
 
 void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
@@ -667,7 +755,7 @@ void setWork(Work* w) {
 }
 
 std::shared_ptr<Work> getWork() {
-	return pWindow->getWork();
+	return pWindow->getScene();
 }
 
 void setPrefix(const std::string& path) {
@@ -694,7 +782,7 @@ std::string internal::getConfigPath() {
 	}
 #ifndef IOS
 	std::stringstream path;
-#if defined(ANDROID)
+#ifdef ANDROID
 	path << getSystemConfigPath() << '/';
 #elif defined(__EMSCRIPTEN__)
 	path << "/working1/";
@@ -819,13 +907,11 @@ void writeConfig(const std::string& key, const std::string& value) {
 	fout << value;
 
 #ifdef __EMSCRIPTEN__
-	EM_ASM(
-		FS.syncfs(false, function(err) {
-			if (err) {
-				console.warn("Error saving:", err);
-			}
-		})
-	);
+	EM_ASM(FS.syncfs(false, function(err) {
+		if (err) {
+			console.warn("Error saving:", err);
+		}
+	}));
 #endif
 }
 #endif

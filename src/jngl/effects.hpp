@@ -1,4 +1,4 @@
-// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Effects that can be applied to jngl::Widget
 /// @file
@@ -99,9 +99,48 @@ private:
 
 namespace easing {
 
+/// Easing functions f(t) mapping t in [0, 1] to a value in [0, 1] (values
+/// outside this range are clamped). They share the same shape: f(0) == 0 and
+/// f(1) == 1, only the path between differs.
+
+/// Constant speed, no easing.
+///
+///   1|        /
+///    |      /
+///    |    /
+///    |  /
+///   0|/_________
+///    0         1
 float linear(float);
+
+/// Overshoots past 1 and oscillates back, like a spring settling into place.
+///
+///   1|    /\  ___
+///    |   /  \/
+///    |  /
+///    | /
+///   0|/_________
+///    0         1
 float elastic(float);
+
+/// Ease-out: starts fast, decelerates into the target (1 - (1 - t)^3).
+///
+///   1|     ____----
+///    |   /
+///    |  /
+///    | /
+///   0|/_________
+///    0         1
 float cubic(float);
+
+/// Ease-out like cubic(), but with a sharper start and flatter tail.
+///
+///   1| _---------
+///    |/
+///    |
+///    |
+///   0|__________
+///    0         1
 float expo(float);
 
 } // namespace easing

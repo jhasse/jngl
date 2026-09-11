@@ -1,4 +1,4 @@
-// Copyright 2012-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #import "AppDelegate.h"
@@ -18,14 +18,12 @@
 	jngl::setPrefix(std::string([NSBundle mainBundle].resourcePath.UTF8String) + "/");
 	jngl::AppParameters params = jnglInit();
 	view = [[JNGLView alloc] initWithFrame:[UIScreen mainScreen].bounds withAppParameters:params];
+	jnglView = view; // must be set before the view controller loads its view (see -loadView)
 
 	JNGLViewController* jvc = [[JNGLViewController alloc] initWithNibName:nil bundle:nil];
 	self.window.rootViewController = jvc;
-	jnglView = view;
 
-	[self.window addSubview:view];
-
-	jngl::setWork(params.start());
+	jngl::setScene(params.start());
 
 	[view drawView:nil];
     [self.window makeKeyAndVisible];

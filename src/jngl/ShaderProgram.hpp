@@ -1,4 +1,4 @@
-// Copyright 2018-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::ShaderProgram class
 /// @file
@@ -19,9 +19,9 @@ public:
 	ShaderProgram(const Shader& vertex, const Shader& fragment);
 	~ShaderProgram();
 	ShaderProgram(const ShaderProgram&) = delete;
-	ShaderProgram(ShaderProgram&&) = delete;
+	ShaderProgram(ShaderProgram&&) noexcept;
 	ShaderProgram& operator=(const ShaderProgram&) = delete;
-	ShaderProgram& operator=(ShaderProgram&&) = delete;
+	ShaderProgram& operator=(ShaderProgram&&) noexcept;
 
 	struct Impl;
 	/// Lifetime object when the ShaderProgram is in use
@@ -54,7 +54,18 @@ public:
 	    use() const;
 
 	[[nodiscard]] int getAttribLocation(const std::string& name) const;
-	/// \param name name of the declared variable
+
+	/// Returns the location of a uniform variable for use with Context::setUniform
+	///
+	/// The returned location is stable for the lifetime of the ShaderProgram and is typically
+	/// queried once (e.g. in a constructor) and then cached.
+	///
+	/// \param name name of the uniform variable as declared in the GLSL source. Note that GLSL
+	///             compilers strip away uniforms that aren't actually read by the shader, so this
+	///             may fail even if the variable appears in the source.
+	/// \return a non-negative location identifying the uniform
+	/// \throws std::runtime_error if no active uniform with the given name exists in the linked
+	///         shader program.
 	[[nodiscard]] int getUniformLocation(const std::string& name) const;
 
 private:

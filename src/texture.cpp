@@ -1,9 +1,10 @@
-// Copyright 2010-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2010-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "texture.hpp"
 
 #include "ShaderCache.hpp"
 #include "jngl/Vertex.hpp"
+#include "jngl/screen.hpp"
 
 #include <cassert>
 
@@ -11,22 +12,26 @@ namespace jngl {
 
 Texture::Texture(const float preciseWidth, const float preciseHeight, const int width,
                  const int height, const GLubyte* const* const rowPointers, GLenum format,
-                 const GLubyte* const data) : texture_(opengl::genAndBindTexture()) {
+                 const GLubyte* const data, const GLenum type)
+: texture_(opengl::genAndBindTexture()) {
 	assert(format == GL_RGB || format == GL_RGBA || format == GL_BGR);
-	glTexImage2D(GL_TEXTURE_2D, 0, format == GL_RGBA ? GL_RGBA : GL_RGB, width, height, 0, format,
-	             GL_UNSIGNED_BYTE, nullptr);
+	GLint internalFormat = format == GL_RGBA ? GL_RGBA : GL_RGB;
+	if (type == GL_HALF_FLOAT) {
+		internalFormat = GL_RGBA16F;
+	}
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, nullptr);
 	vertexes = {
 		0, 0,
 		0, 0, // texture coordinates
-		0, preciseHeight,
+		0, static_cast<float>(preciseHeight / getScaleFactor()),
 		0, 1, // texture coordinates
-		preciseWidth, preciseHeight,
+		static_cast<float>(preciseWidth / getScaleFactor()), static_cast<float>(preciseHeight / getScaleFactor()),
 		1, 1, // texture coordinates
-		preciseWidth, 0,
+		static_cast<float>(preciseWidth / getScaleFactor()), 0,
 		1, 0 // texture coordinates
 	};
 	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	opengl::bindVertexArray(vao);
 
 	glGenBuffers(1, &vertexBuffer_);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
@@ -64,12 +69,12 @@ Texture::~Texture() {
 		// pointers have been unloaded (Windows).
 		glDeleteTextures(1, &texture_);
 		glDeleteBuffers(1, &vertexBuffer_);
-		glDeleteVertexArrays(1, &vao);
+		opengl::deleteVertexArray(vao);
 	}
 }
 
 void Texture::bind() const {
-	glBindVertexArray(vao);
+	opengl::bindVertexArray(vao);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
 }
@@ -95,7 +100,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	vertexes[10] = vertexes[14] = xend;
 	vertexes[7] = vertexes[11] = yend;
 
-	glBindVertexArray(opengl::vaoStream);
+	opengl::bindVertexArray(opengl::vaoStream);
 	auto& shaderCache = ShaderCache::handle();
 	auto tmp = shaderCache.textureShaderProgram->use();
 	glUniform4f(shaderCache.shaderSpriteColorUniform, red, green, blue, alpha);
@@ -118,7 +123,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 }
 
 void Texture::drawMesh(const std::vector<Vertex>& vertexes) const {
-	glBindVertexArray(opengl::vaoStream);
+	opengl::bindVertexArray(opengl::vaoStream);
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(vertexes[0])),
 	             vertexes.data(), GL_STREAM_DRAW);
@@ -142,11 +147,11 @@ GLuint Texture::getID() const {
 }
 
 float Texture::getPreciseWidth() const {
-	return vertexes[8];
+	return vertexes[8] * getScaleFactor();
 }
 
 float Texture::getPreciseHeight() const {
-	return vertexes[5];
+	return vertexes[5] * getScaleFactor();
 }
 
 void Texture::setBytes(const unsigned char* const bytes, const int width, const int height) const {

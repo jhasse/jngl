@@ -1,4 +1,4 @@
-// Copyright 2021-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2021-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ImageDataPNG.hpp"
 
@@ -33,7 +33,7 @@ ImageDataPNG::ImageDataPNG(const std::string& filename, FILE* fp) {
 		throw std::runtime_error("libpng error while reading");
 	}
 
-	if (setjmp(png_jmpbuf(png_ptr))) {
+	if (setjmp(png_jmpbuf(png_ptr))) { // NOLINT(modernize-avoid-setjmp-longjmp)
 		// Free all of the memory associated with the png_ptr and info_ptr
 		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 		throw std::runtime_error("Error reading file.");
@@ -59,7 +59,7 @@ ImageDataPNG::ImageDataPNG(const std::string& filename, FILE* fp) {
 	const auto row_pointers = png_get_rows(png_ptr, info_ptr);
 	imageData.resize(x * y * channels);
 	for (size_t i = 0; i < y; ++i) {
-		memcpy(&imageData[i * x * channels], row_pointers[i], x * channels);
+		memcpy(&imageData.at(i * x * channels), row_pointers[i], x * channels);
 	}
 }
 

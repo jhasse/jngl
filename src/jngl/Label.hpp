@@ -1,4 +1,4 @@
-// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Label class
 /// @file
@@ -26,6 +26,9 @@ public:
 
 	/// Returns the width of the underlying jngl::TextLine
 	float getWidth() const;
+
+	/// Centers the label at \a position
+	void setCenter(jngl::Vec2 position);
 
 protected:
 	float alpha = 1.f;

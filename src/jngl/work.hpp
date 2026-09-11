@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// @file
 #pragma once
@@ -26,13 +26,13 @@ public:
 	///
 	/// class PauseMenu : public jngl::Work {
 	///     void onBackEvent() override {
-	///         jngl::setWork<MainMenu>();
+	///         jngl::setScene<MainMenu>();
 	///     }
 	/// };
 	///
 	/// class Game : public jngl::Work {
 	///     void onBackEvent() override {
-	///         jngl::setWork<PauseMenu>();
+	///         jngl::setScene<PauseMenu>();
 	///     }
 	/// };
 	/// \endcode
@@ -47,10 +47,13 @@ public:
 	/// class Game : public jngl::Work {
 	///     void onQuitEvent() {
 	///         jngl::cancelQuit();
-	///         jngl::setWork<PauseMenu>();
+	///         jngl::setScene<PauseMenu>();
 	///     }
 	/// };
 	/// \endcode
+	///
+	/// \note <kbd>Ctrl</kbd>+<kbd>C</kbd> (SIGINT) calls forceQuit() with exitcode 130 instead and
+	/// does not invoke this.
 	virtual void onQuitEvent();
 
 	/// Gets called when the "Back" button is pressed on any connected controller (Android only)
@@ -72,6 +75,15 @@ public:
 
 	/// Gets called when the Work is deactivated by the main loop
 	virtual void onUnload();
+
+	/// Gets called when the user pressed <kbd>Alt</kbd> + <kbd>Enter</kbd>
+	///
+	/// By default it switches between fullscreen and windowed mode. You can overwrite this if you
+	/// want to do something else, e.g. if you want to disable toggling fullscreen mode because you
+	/// need the keyboard shortcut for something else.
+	///
+	/// \note Only implemented on desktop platforms (i.e. Linux, Windows and macOS).
+	virtual void onToggleFullscreen();
 };
 
 /// Returns the current active Work or nullptr if none has been set
@@ -83,8 +95,7 @@ std::shared_ptr<Work> getWork();
 void setWork(std::shared_ptr<Work> work);
 
 /// The same as setWork(std::shared_ptr<Work>) but creates the Work for you
-template <class T, class... Args>
-T& setWork(Args&&... args) {
+template <class T, class... Args> T& setWork(Args&&... args) {
 	auto shared = std::make_shared<T>(std::forward<Args>(args)...);
 	auto& rtn = *shared;
 	setScene(std::move(shared));

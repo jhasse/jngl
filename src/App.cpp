@@ -1,4 +1,4 @@
-// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "App.hpp"
@@ -6,9 +6,12 @@
 #include "jngl/AppParameters.hpp"
 #include "jngl/Scene.hpp"
 #include "jngl/ShaderProgram.hpp"
+#include "jngl/matrix.hpp"
+#include "jngl/other.hpp"
 #include "jngl/screen.hpp"
 #include "jngl/window.hpp"
 #include "log.hpp"
+#include "main.hpp"
 #include "windowptr.hpp"
 
 #include <cmath>
@@ -31,6 +34,7 @@ struct App::Impl {
 	bool pixelArt = false;
 	std::optional<uint32_t> steamAppId;
 	std::set<ShaderProgram*> shaderPrograms;
+	std::function<double(int, int)> scaleFactor;
 };
 
 App::App() {
@@ -54,8 +58,11 @@ App& App::instance() {
 
 Finally App::init(AppParameters params) {
 	assert(impl == nullptr);
-	impl = std::make_unique<App::Impl>(
-	    App::Impl{ std::move(params.displayName), params.pixelArt, params.steamAppId, {} });
+	impl = std::make_unique<App::Impl>(App::Impl{ .displayName = std::move(params.displayName),
+	                                              .pixelArt = params.pixelArt,
+	                                              .steamAppId = params.steamAppId,
+	                                              .shaderPrograms = {},
+	                                              .scaleFactor = std::move(params.scaleFactor) });
 	return Finally{ [this]() { impl.reset(); } };
 }
 
@@ -80,6 +87,67 @@ void App::callAtExitFunctions() {
 	callAtExit.clear();
 }
 
+namespace {
+#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
+#ifdef _WIN32
+void __stdcall
+#else
+void
+#endif
+debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity,
+              GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
+	if (severity == GL_DEBUG_SEVERITY_HIGH) {
+		internal::error(message);
+	} else if (severity == GL_DEBUG_SEVERITY_MEDIUM) {
+		internal::warn(message);
+	} else if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {
+		internal::info(message);
+	} else {
+		// NVIDIA driver will spam us, see https://stackoverflow.com/q/46771287/647898
+		// internal::trace(message);
+	}
+}
+#endif
+} // namespace
+
+void App::initGl(int width, int height, int canvasWidth, int canvasHeight) {
+#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
+#ifdef GLAD_GL
+	if (GLAD_GL_VERSION_4_3 != 0 || GLAD_GL_KHR_debug != 0) {
+#endif
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageCallback(reinterpret_cast<GLDEBUGPROC>(debugCallback), nullptr); // NOLINT
+#ifdef GLAD_GL
+	}
+#endif
+#endif
+
+	if (impl && impl->scaleFactor &&
+	    !pWindow // on Android initGl will be called when the app is brought back to foreground. If
+	             // an explicit scale factor is set, this would result in setScaleFactor being
+	             // called twice and an exception (not happening when Apps don't explicitly set it
+	             // but use screenSize)
+	) {
+		setScaleFactor(impl->scaleFactor(canvasWidth, canvasHeight));
+	}
+	updateProjection(width, height, static_cast<float>(width), static_cast<float>(height));
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	updateViewportAndLetterboxing(width, height, canvasWidth, canvasHeight);
+
+	reset();
+	modelviewStack = {};
+
+	clearBackgroundColor();
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glFlush();
+	setVerticalSync(true);
+}
+
 std::string App::getDisplayName() const {
 	return impl ? impl->displayName : "";
 }
@@ -95,7 +163,7 @@ uint8_t App::mainLoop() {
 	if (impl->steamAppId) {
 		initSteamAchievements();
 	}
-	internal::debug("Starting main loop for '{}'.", impl->displayName);
+	internal::trace("Starting main loop for '{}'.", impl->displayName);
 	return pWindow->mainLoop();
 }
 
@@ -126,8 +194,29 @@ void App::updateProjectionMatrix() const {
 	}
 }
 
-#if !defined(__APPLE__) || !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE // iOS
 namespace internal {
+
+std::pair<int, int> getMinAspectRatio(const AppParameters& params) {
+	if (params.minAspectRatio) {
+		return *params.minAspectRatio;
+	}
+	if (params.screenSize) {
+		return { std::lround(params.screenSize->x), std::lround(params.screenSize->y) };
+	}
+	return { 1, 3 };
+}
+
+std::pair<int, int> getMaxAspectRatio(const AppParameters& params) {
+	if (params.maxAspectRatio) {
+		return *params.maxAspectRatio;
+	}
+	if (params.screenSize) {
+		return { std::lround(params.screenSize->x), std::lround(params.screenSize->y) };
+	}
+	return { 3, 1 };
+}
+
+#if !defined(__APPLE__) || !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE // iOS
 
 uint8_t mainLoop(AppParameters params) {
 	auto context = App::instance().init(params);
@@ -138,16 +227,28 @@ uint8_t mainLoop(AppParameters params) {
 	bool fullscreen = false;
 #if (!defined(__EMSCRIPTEN__) && defined(NDEBUG)) || defined(__ANDROID__)
 	fullscreen = true;
+	if (!params.fullscreen.has_value()) {
+		for (const auto& arg : jngl::getArgs()) {
+			if (arg == "--window" || arg == "--windowed") {
+				fullscreen = false;
+				break;
+			}
+		}
+	}
+#else
+	if (!params.fullscreen.has_value()) {
+		for (const auto& arg : jngl::getArgs()) {
+			if (arg == "--fullscreen") {
+				fullscreen = true;
+				break;
+			}
+		}
+	}
 #endif
 	if (params.fullscreen) {
 		fullscreen = *params.fullscreen;
 	}
-	std::pair<int, int> minAspectRatio{ 1, 3 };
-	std::pair<int, int> maxAspectRatio{ 3, 1 };
-	if (params.screenSize) {
-		maxAspectRatio = minAspectRatio = std::pair<int, int>(std::lround(params.screenSize->x),
-		                                                      std::lround(params.screenSize->y));
-	} else {
+	if (!params.screenSize) {
 		params.screenSize = { static_cast<double>(getDesktopWidth()),
 			                  static_cast<double>(getDesktopHeight()) };
 	}
@@ -161,25 +262,38 @@ uint8_t mainLoop(AppParameters params) {
 			setScaleFactor(scaleFactor);
 		}
 	}
-	showWindow(params.displayName,
-	           fullscreen ? getDesktopWidth()
-	                      : static_cast<int>(std::lround(params.screenSize->x * getScaleFactor())),
-	           fullscreen ? getDesktopHeight()
-	                      : static_cast<int>(std::lround(params.screenSize->y * getScaleFactor())),
-	           fullscreen, params.minAspectRatio ? *params.minAspectRatio : minAspectRatio,
-	           params.maxAspectRatio ? *params.maxAspectRatio : maxAspectRatio);
-	if (fullscreen && params.screenSize->x > 0 && params.screenSize->y > 0) {
-		const auto windowSize = jngl::getWindowSize();
-		setScaleFactor(std::min(static_cast<double>(windowSize[0]) / params.screenSize->x,
-		                        static_cast<double>(windowSize[1]) / params.screenSize->y));
+	int windowPixelWidth = static_cast<int>(std::lround(params.screenSize->x * getScaleFactor()));
+	int windowPixelHeight = static_cast<int>(std::lround(params.screenSize->y * getScaleFactor()));
+#ifdef JNGL_RECORD
+	if (!fullscreen && (windowPixelWidth % 2 != 0 || windowPixelHeight % 2 != 0)) {
+		auto oldWindowPixelWidth = windowPixelWidth;
+		auto oldWindowPixelHeight = windowPixelHeight;
+		if (windowPixelWidth % 2 != 0) {
+			--windowPixelWidth; // make sure width is even for recording in H.264
+		}
+		if (windowPixelHeight % 2 != 0) {
+			--windowPixelHeight; // make sure height is even for recording in H.264
+		}
+		const double newScaleFactor =
+		    std::min(static_cast<double>(windowPixelWidth) / params.screenSize->x,
+		             static_cast<double>(windowPixelHeight) / params.screenSize->y);
+		auto scaleFactor = getScaleFactor();
+		setScaleFactor(newScaleFactor);
+		internal::debug(
+		    "Adjusted scale factor from {} to {} to get even window dimensions ({}x{} -> {}x{}).",
+		    scaleFactor, newScaleFactor, oldWindowPixelWidth, oldWindowPixelHeight,
+		    windowPixelWidth, windowPixelHeight);
 	}
+#endif
+	showWindow(params.displayName, windowPixelWidth, windowPixelHeight, fullscreen,
+	           getMinAspectRatio(params), getMaxAspectRatio(params));
 	setScene(params.start());
 	uint8_t exitcode = App::instance().mainLoop();
 	hideWindow();
 	return exitcode;
 }
 
-} // namespace internal
 #endif
+} // namespace internal
 
 } // namespace jngl

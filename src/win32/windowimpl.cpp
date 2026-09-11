@@ -1,8 +1,9 @@
-// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/ImageData.hpp"
 #include "../jngl/window.hpp"
+#include "../App.hpp"
 #include "../log.hpp"
 #include "../main.hpp"
 #include "../windowptr.hpp"
@@ -142,8 +143,8 @@ static GLADapiproc gladGlGetProc(void* user, const char* name) {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
-: impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), width_(width), height_(height),
-  fontName_(GetFontFileByName("Arial")) {
+: fullscreen_(fullscreen), width_(width), height_(height), fontName_(GetFontFileByName("Arial")),
+  impl(std::make_unique<WindowImpl>()) {
 	impl->window = this;
 	impl->distinguishLeftRight = [this]() {
 		int codesToCheck[] = { GetKeyCode(jngl::key::ShiftL),   GetKeyCode(jngl::key::ShiftR),
@@ -314,9 +315,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 
 		::ShowWindow(impl->pWindowHandle_.get(), SW_SHOWNORMAL);
 
-		if (!jngl::Init(width_, height_, canvasWidth, canvasHeight)) {
-			throw std::runtime_error("Initialization failed.");
-		}
+		App::instance().initGl(width_, height_, canvasWidth, canvasHeight);
 	};
 	init(false);
 }
@@ -407,6 +406,7 @@ void Window::UpdateInput() {
 			break;
 		case WM_SYSKEYDOWN:
 			internal::debug("WM_SYSKEYDOWN");
+			[[fallthrough]];
 		case WM_KEYDOWN:
 			keyDown_[msg.wParam] = true;
 			keyPressed_[msg.wParam] = true;
@@ -415,6 +415,7 @@ void Window::UpdateInput() {
 			break;
 		case WM_SYSKEYUP:
 			internal::debug("WM_SYSKEYUP");
+			[[fallthrough]];
 		case WM_KEYUP: {
 			keyDown_[msg.wParam] = false;
 			keyPressed_[msg.wParam] = false;

@@ -1,15 +1,16 @@
-// Copyright 2023-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 // Based on the audio implementation of the psemek engine, see
 // https://lisyarus.github.io/blog/programming/2022/10/15/audio-mixing.html
 #include "../engine.hpp"
 
 #include "../../jngl/other.hpp"
+#include "../../jngl/record/VideoRecorder.hpp"
 #include "../../log.hpp"
 #include "../Stream.hpp"
 #include "../constants.hpp"
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #include <cassert>
 #include <vector>
@@ -18,30 +19,46 @@ namespace jngl::audio {
 
 struct engine::Impl {
 	explicit Impl(std::shared_ptr<Stream> output) {
+#ifdef JNGL_RECORD
+		try {
+			if (auto videoRecorder = getJob<VideoRecorder>()) {
+				internal::debug("Using dummy audio backend because VideoRecorder is active.");
+				backend = std::make_unique<DummyImpl>(std::move(output), std::move(videoRecorder));
+				return;
+			}
+		} catch (std::exception& e) { // in unit tests window hasn't been created yet
+			internal::warn("Could not get VideoRecorder job: {}", e.what());
+		}
+#endif
 		try {
 			backend = std::make_unique<SdlImpl>(output);
 		} catch (std::exception& e) {
 			internal::warn(e.what());
-			backend = std::make_unique<DummyImpl>(std::move(output));
+			backend = std::make_unique<DummyImpl>(std::move(output), nullptr);
 		}
 	}
 	struct Backend {
 		virtual ~Backend() = default;
 		virtual void setPause(bool) = 0;
-		virtual void step() {}
+		virtual void step() {
+		}
 	};
 	std::unique_ptr<Backend> backend;
 
 	struct DummyImpl : public Backend {
-		explicit DummyImpl(std::shared_ptr<Stream> output)
-		: output(std::move(output)) {
+		explicit DummyImpl(std::shared_ptr<Stream> output,
+		                   const std::shared_ptr<VideoRecorder>& videoRecorder)
+		: output(std::move(output)), videoRecorder(videoRecorder) {
 		}
 		void setPause(bool pause) override {
 			this->pause = pause;
 		}
 		void step() override {
-			if (pause)  { return; }
-			size_t size = frequency * 2 / getStepsPerSecond();
+			if (pause) {
+				return;
+			}
+			size_t size = std::lround(frequency / getStepsPerSecond() * 2);
+			assert(size % 2 == 0);
 			auto buffer = std::make_unique<float[]>(size);
 			[[maybe_unused]] const auto read = output->read(buffer.get(), size);
 			assert(read == size);
@@ -69,70 +86,71 @@ struct engine::Impl {
 			// } else {
 			// 	debug("█");
 			// }
+			if (auto videoRecorderShared = videoRecorder.lock()) {
+				videoRecorderShared->fillAudioBuffer(std::move(buffer));
+			}
 		}
 
 		std::shared_ptr<Stream> output;
 		bool pause{ false };
+
+	private:
+		std::weak_ptr<VideoRecorder> videoRecorder;
 	};
 
 	struct SdlImpl : public Backend {
 		std::shared_ptr<void> sdl_init;
 
-		SDL_AudioDeviceID device;
+		SDL_AudioStream* device = nullptr;
 
 		std::vector<float> buffer;
 
 		std::shared_ptr<Stream> output;
 
 		explicit SdlImpl(std::shared_ptr<Stream> output) : output(std::move(output)) {
-			if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+			if (!SDL_Init(SDL_INIT_AUDIO)) {
 				throw std::runtime_error(SDL_GetError());
 			}
-			SDL_AudioSpec desired, obtained;
-			desired.freq = frequency;
-			desired.channels = 2;
-			desired.format = AUDIO_S16SYS;
-#ifdef __EMSCRIPTEN__
-			desired.samples = 2048;
-#else
-			desired.samples = 256;
-#endif
-			desired.callback = &callback;
-			desired.userdata = this;
-			if (device = SDL_OpenAudioDevice(nullptr, 0, &desired, &obtained, 0); device == 0) {
+			SDL_AudioSpec spec;
+			SDL_zero(spec);
+			spec.freq = frequency;
+			spec.channels = 2;
+			spec.format = SDL_AUDIO_F32;
+			if (device = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec,
+			                                       &callback, this);
+			    !device) {
 				throw std::runtime_error(SDL_GetError());
 			}
 
-			internal::debug("Initialized audio: {} channels, {} Hz, {} samples",
-			                static_cast<int>(obtained.channels), obtained.freq, obtained.samples);
+			internal::debug("Initialized audio: {} channels, {} Hz, {} samples", spec.channels,
+			                spec.freq, spec.freq);
 
-			buffer.resize(obtained.samples * obtained.channels);
-			SDL_PauseAudioDevice(device, 0);
+			SDL_ResumeAudioStreamDevice(device);
 		}
 		~SdlImpl() override {
-			SDL_CloseAudioDevice(device);
+			SDL_DestroyAudioStream(device);
 		}
 
-		static void callback(void* userdata, std::uint8_t* dst_u8, int len) {
-			static std::string const profiler_str = "audio";
-			// prof::profiler prof(profiler_str);
-
+		static void callback(void* userdata, SDL_AudioStream* stream, int additionalAmount,
+		                     int /*totalAmount*/) {
 			auto self = static_cast<SdlImpl*>(userdata);
-			std::int16_t* dst = reinterpret_cast<std::int16_t*>(dst_u8);
 
-			std::size_t const size = len / 2;
-			std::size_t read = 0;
+			self->buffer.resize(additionalAmount);
+			size_t const size = additionalAmount;
+			size_t read = 0;
 			read = self->output->read(self->buffer.data(), size);
 			std::fill(self->buffer.data() + read, self->buffer.data() + size, 0.f);
 
-			for (auto s : self->buffer) {
-				*dst++ = static_cast<std::int16_t>(
-				    std::max(std::min((65535.f * s - 1.f) / 2.f, 32767.f), -32768.f));
-			}
+			SDL_PutAudioStreamData(stream, self->buffer.data(),
+			                       additionalAmount * static_cast<int>(sizeof(float)));
 		}
 
 		void setPause(bool pause) override {
-			SDL_PauseAudioDevice(device, pause ? 1 : 0);
+			if (pause) {
+				SDL_PauseAudioStreamDevice(device);
+			} else {
+				SDL_ResumeAudioStreamDevice(device);
+			}
 		}
 	};
 };
@@ -147,6 +165,26 @@ void engine::setPause(bool pause) {
 }
 
 void engine::step() {
+#ifdef JNGL_RECORD
+	if (auto videoRecorder = getJob<VideoRecorder>()) {
+		if (dynamic_cast<Impl::SdlImpl*>(impl->backend.get())) {
+			// Recording started, swap the backend:
+			if (!impl->backend || dynamic_cast<Impl::DummyImpl*>(impl->backend.get()) == nullptr) {
+				internal::debug(
+				    "Switching to dummy audio backend because VideoRecorder is active.");
+				impl->backend = std::make_unique<Impl::DummyImpl>(
+				    dynamic_cast<Impl::SdlImpl&>(*impl->backend).output, videoRecorder);
+			}
+		}
+	} else {
+		// Recording stopped, swap the backend:
+		if (dynamic_cast<Impl::DummyImpl*>(impl->backend.get()) != nullptr) {
+			internal::debug("Switching to SDL audio backend because VideoRecorder is inactive.");
+			impl->backend = std::make_unique<Impl::SdlImpl>(
+			    dynamic_cast<Impl::DummyImpl&>(*impl->backend).output);
+		}
+	}
+#endif
 	impl->backend->step();
 }
 

@@ -1,4 +1,4 @@
-// Copyright 2018-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Vec2 class
 /// @file
@@ -81,17 +81,27 @@ template <> struct vec_traits<jngl::Vec2> {
 	using scalar_type = double;
 
 	template <int I> static scalar_type& write_element(jngl::Vec2& v) {
-		return (&v.x)[I];
+		static_assert(I == 0 || I == 1, "Index out of bounds for jngl::Vec2");
+		if constexpr (I == 0) {
+			return v.x;
+		} else {
+			return v.y;
+		}
 	}
 	template <int I> static scalar_type read_element(const jngl::Vec2& v) {
-		return (&v.x)[I];
+		static_assert(I == 0 || I == 1, "Index out of bounds for jngl::Vec2");
+		if constexpr (I == 0) {
+			return v.x;
+		} else {
+			return v.y;
+		}
 	}
 
 	static scalar_type& write_element_idx(int i, jngl::Vec2& v) {
-		return (&v.x)[i];
+		return i == 0 ? v.x : v.y;
 	}
-	static scalar_type read_element_idx(int i, jngl::Vec2 const& v) {
-		return (&v.x)[i];
+	static scalar_type read_element_idx(int i, const jngl::Vec2& v) {
+		return i == 0 ? v.x : v.y;
 	}
 };
 } // namespace boost::qvm

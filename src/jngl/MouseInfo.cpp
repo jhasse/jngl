@@ -1,14 +1,64 @@
-// Copyright 2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2025-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "MouseInfo.hpp"
 
+#include "Mat3.hpp"
+#include "VirtualMouseCursor.hpp"
 #include "input.hpp"
 
 namespace jngl {
 
+struct MouseInfo::Impl {
+	bool enabled = true;
+	bool down = false;
+	Vec2 mousePos;
+	VirtualMouseCursor* virtualCursor = nullptr;
+	bool pressedBlocked = false;
+
+	bool getPressed() const {
+		if (pressedBlocked) {
+			return false;
+		}
+		if (virtualCursor) {
+			return virtualCursor->pressed();
+		}
+		return mousePressed();
+	}
+	bool getDown() const {
+		if (virtualCursor) {
+			return virtualCursor->down();
+		}
+		return mouseDown();
+	}
+};
+
+void MouseInfo::transform(const Mat3& transformationMatrix) {
+	for (auto& impl : impls) {
+		auto inverse = boost::qvm::inverse(transformationMatrix);
+		boost::qvm::vec<float, 3> homogeneous{ static_cast<float>(impl.mousePos.x),
+			                                   static_cast<float>(impl.mousePos.y), 1.0f };
+		auto transformed = inverse * homogeneous;
+		impl.mousePos = Vec2(boost::qvm::A<0>(transformed), boost::qvm::A<1>(transformed));
+	}
+}
+
 void MouseInfo::setMousePos(Vec2 mousePos) {
-	enabled = true;
-	this->mousePos = mousePos;
+	if (impls.empty()) {
+		impls.resize(1);
+	}
+	impls[0].enabled = true;
+	impls[0].pressedBlocked = false;
+	impls[0].mousePos = mousePos;
+
+	if (auto virtualCursor = getJob<VirtualMouseCursor>()) {
+		if (impls.size() < 2) {
+			impls.resize(2);
+		}
+		impls[1].enabled = true;
+		impls[1].pressedBlocked = false;
+		impls[1].mousePos = virtualCursor->getPosition();
+		impls[1].virtualCursor = virtualCursor.get();
+	}
 }
 
 Vec2 MouseInfo::Down::newPos() const {
@@ -16,14 +66,22 @@ Vec2 MouseInfo::Down::newPos() const {
 }
 
 bool MouseInfo::Down::released() { // NOLINT
-	return !mouseDown();
+	return !parent->getDown();
 }
 
 Vec2 MouseInfo::Down::startPos() const {
 	return startReference;
 }
 
-MouseInfo::Down::Down(MouseInfo& parent, Vec2 objectPos)
+bool MouseInfo::Down::pressedAgain() const {
+	return parent->getPressed();
+}
+
+void MouseInfo::Down::blockPressedImmediately() {
+	parent->pressedBlocked = true;
+}
+
+MouseInfo::Down::Down(MouseInfo::Impl& parent, Vec2 objectPos)
 : parent(&parent), startReference(parent.mousePos - objectPos) {
 	parent.down = true;
 }
@@ -46,12 +104,12 @@ MouseInfo::Down::~Down() {
 	}
 }
 
-MouseInfo::Over::Over(MouseInfo& parent) : parent(parent) {
+MouseInfo::Over::Over(MouseInfo::Impl& parent) : parent(parent) {
 }
 
 auto MouseInfo::Over::pressed(Vec2 objectPos) -> std::optional<Down> {
 	parent.enabled = false;
-	if (mousePressed()) {
+	if (parent.getPressed()) {
 		return Down{ parent, objectPos };
 	}
 	return std::nullopt;
@@ -61,11 +119,17 @@ Vec2 MouseInfo::Over::pos() const {
 	return parent.mousePos;
 }
 
-auto MouseInfo::pos() -> std::optional<Over> {
-	if (enabled && !down) {
-		return Over{ *this };
+std::span<MouseInfo::Over> MouseInfo::cursors() {
+	activeCursors.clear();
+	for (auto& impl : impls) {
+		if (impl.enabled && !impl.down) {
+			activeCursors.emplace_back(impl);
+		}
 	}
-	return std::nullopt;
+	return activeCursors;
 }
+
+MouseInfo::MouseInfo() = default;
+MouseInfo::~MouseInfo() = default;
 
 } // namespace jngl

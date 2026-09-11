@@ -19,7 +19,7 @@ namespace jngl {
 ///
 /// If you haven't set a display name for your app using AppParameters::displayName, \a title will
 /// be set for the display name.
-void showWindow(const std::string& title, int width, int height, bool fullscreen = false,
+void showWindow(const std::string& title, double width, double height, bool fullscreen = false,
                 std::pair<int, int> minAspectRatio = { 4, 3 },
                 std::pair<int, int> maxAspectRatio = { 16, 9 });
 
@@ -39,12 +39,18 @@ void hideWindow();
 void atExit(std::function<void()>);
 
 /// Returns the width of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)
+///
+/// When letter-boxing is used, this doesn't include the black bars.
 int getWindowWidth();
 
 /// Returns the height of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)
+///
+/// When letter-boxing is used, this doesn't include the black bars.
 int getWindowHeight();
 
 /// Returns {width, height} of the window in actual pixels
+///
+/// When letter-boxing is used, this doesn't include the black bars.
 std::array<Pixels, 2> getWindowSize();
 
 /// Returns the width of the main display in actual pixels
@@ -71,5 +77,11 @@ void setCursor(Cursor);
 
 /// Read red, green and blue values of the whole window frame buffer
 std::vector<float> readPixels();
+
+/// Read red, green and blue values of the whole window frame buffer into \a buffer
+///
+/// The buffer must be at least width * height * 3 bytes long, where width and height are the
+/// current window dimensions as returned by getWindowWidth() and getWindowHeight().
+void readPixels(uint8_t* buffer);
 
 } // namespace jngl

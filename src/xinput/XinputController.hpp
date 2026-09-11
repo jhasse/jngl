@@ -1,4 +1,4 @@
-// Copyright 2018-2021 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -20,8 +20,8 @@ class XinputController : public jngl::Controller {
 public:
 	explicit XinputController(int number);
 	~XinputController();
-	float stateImpl(controller::Button) const override;
-	bool down(controller::Button) const override;
+	float stateImpl(controller) const override;
+	bool down(controller) const override;
 	void rumble(float, std::chrono::milliseconds) override;
 
 private:

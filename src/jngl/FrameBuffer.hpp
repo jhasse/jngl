@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::FrameBuffer class
 /// @file
@@ -6,15 +6,25 @@
 
 #include "Mat3.hpp"
 #include "Pixels.hpp"
+#include "ShaderProgram.hpp"
 #include "Vec2.hpp"
 #include "Vertex.hpp"
-#include "ShaderProgram.hpp"
 
 #include <functional>
 #include <memory>
 #include <vector>
 
 namespace jngl {
+
+enum class TextureFilter : uint8_t {
+	/// Bilinear Filtering is used when jngl::AppParameters::pixelArt is false. It smooths the
+	/// image when it is scaled up.
+	Bilinear,
+
+	/// Nearest Neighbor Filtering is used when jngl::AppParameters::pixelArt is true. It
+	/// preserves the pixelated look when the image is scaled up.
+	NearestNeighbor,
+};
 
 class ShaderProgram;
 
@@ -35,13 +45,17 @@ class ShaderProgram;
 class FrameBuffer {
 public:
 	/// Creates a framebuffer object with \a width times \a height actual pixels
-	FrameBuffer(Pixels width, Pixels height);
+	///
+	/// \param hdr If true, the framebuffer stores floating point channels (GL_RGBA16F) instead of
+	/// 8-bit ones. This avoids banding in smooth gradients and lets channel values exceed 1.0, which
+	/// is useful for HDR lighting.
+	FrameBuffer(Pixels width, Pixels height, bool hdr = false);
 
 	/// Creates a framebuffer object with \a width times \a height scalable pixels
-	FrameBuffer(ScaleablePixels width, ScaleablePixels height);
+	FrameBuffer(ScaleablePixels width, ScaleablePixels height, bool hdr = false);
 
 	/// Creates a framebuffer object with \a size[0] times \a size[1] pixels
-	explicit FrameBuffer(std::array<Pixels, 2> size);
+	explicit FrameBuffer(std::array<Pixels, 2> size, bool hdr = false);
 
 	FrameBuffer(const FrameBuffer&) = delete;
 	FrameBuffer& operator=(const FrameBuffer&) = delete;
@@ -70,7 +84,9 @@ public:
 
 	/// Starts drawing on the FrameBuffer as long as Context is alive
 	///
-	/// The modelview matrix gets adjusted so that (0, 0) is in the center of the FrameBuffer.
+	/// The projection matrix gets adjusted so that (0, 0) is in the center of the FrameBuffer. The
+	/// modelview matrix is saved (i.e. pushMatrix() is called) and restored by ~Context (i.e.
+	/// popMatrix() is called).
 #if __cplusplus >= 201703L
 	[[nodiscard]]
 #endif
@@ -80,7 +96,18 @@ public:
 	void draw(Vec2 position, const ShaderProgram* = nullptr) const;
 	void draw(double x, double y) const;
 
+	/// Draws the framebuffer image to the screen
+	///
+	/// \param shaderProgram If not `nullptr`, this shader program is used instead of the default.
 	void draw(Mat3 modelview, const ShaderProgram* = nullptr) const;
+
+	/// Draws the framebuffer image to the screen with a specific texture filter
+	///
+	/// \param textureFilter Use this filtering for this one draw call, ignoring
+	/// jngl::AppParameters::pixelArt. You'd probably want to use TextureFilter::NearestNeighbor for
+	/// cases where you have a framebuffer the same size as the screen.
+	/// \param shaderProgram If not `nullptr`, this shader program is used instead of the default.
+	void draw(Mat3 modelview, TextureFilter textureFilter, const ShaderProgram* = nullptr) const;
 
 	/// Draws a list of triangles with the framebuffer's texture on it
 	void drawMesh(const std::vector<Vertex>& vertexes, const ShaderProgram* = nullptr) const;

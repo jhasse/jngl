@@ -1,5 +1,6 @@
-// Copyright 2018-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2018-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
+#include "../App.hpp"
 #include "../jngl/Finally.hpp"
 #include "../jngl/Sprite.hpp"
 #include "../jngl/input.hpp"
@@ -74,5 +75,19 @@ boost::ut::suite suite = [] {
 		expect(throws<std::runtime_error>([] { jngl::keyDown("aa"); }));
 		jngl::keyDown("ä");
 		expect(throws<std::runtime_error>([] { jngl::keyDown("ää"); }));
+	};
+
+	"getConfigPath"_test = [] {
+		// Note: This test only works if jngl::internal::getConfigPath() hasn't been called before
+
+		// Explicitly set the display name (showWindow only sets it if empty)
+		jngl::App::instance().setDisplayName("test:with?invalid*chars");
+
+		// Verify that App::getDisplayName() has invalid chars
+		const std::string displayName = jngl::App::instance().getDisplayName();
+		expect(eq(displayName, std::string("test:with?invalid*chars")));
+
+		const auto p = jngl::internal::getConfigPath();
+		expect(eq(p.substr(p.size() - 22), std::string("/testwithinvalidchars/")));
 	};
 };

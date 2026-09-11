@@ -1,10 +1,9 @@
-// Copyright 2023-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "AchievementLayer.hpp"
 
-#include "freetype.hpp"
+#include "FontImpl.hpp"
 #include "jngl/Achievement.hpp"
-#include "jngl/Vec2.hpp"
 #include "jngl/font.hpp"
 #include "jngl/matrix.hpp"
 #include "jngl/other.hpp"
@@ -26,7 +25,7 @@ AchievementLayer& AchievementLayer::handle() {
 }
 
 void AchievementLayer::step() {
-	if (++stepsPassed > static_cast<int>(getStepsPerSecond() * 3)) {
+	if (std::cmp_greater(++stepsPassed, getStepsPerSecond() * 3)) {
 		fadeIn += 0.05f;
 	} else {
 		fadeIn *= 0.85f;
@@ -91,7 +90,7 @@ void AchievementLayer::draw() const {
 	mv.translate({0, 40}); // below text
 	const float percentage = std::min(1.f, value / static_cast<float>(maxValue));
 	bar.x *= percentage;
-	drawRect(mv, bar, interpolate(Rgb(1, 1, 1), 0xe2b007_rgb /* gold */, colorFade));
+	drawRect(mv, bar, mix(Rgb(1, 1, 1), 0xe2b007_rgb /* gold */, colorFade));
 	mv.translate({ bar.x, 0 });
 	drawRect(mv, Vec2((1.f - percentage) * (BOX.x - PADDING.x * 2), bar.y), Rgb::u8(90, 90, 90));
 	jngl::setAlpha(255);

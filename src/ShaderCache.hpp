@@ -1,4 +1,4 @@
-// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
@@ -25,12 +25,22 @@ public:
 	int modelviewUniform;
 
 	void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
-	void drawTriangle(Mat3 modelview, Rgba color);
+	void drawTriangle(const Mat3& modelview, Rgba color);
+
+	ShaderProgram::Context useRoundedRectShaderProgram(const Mat3& modelview, Rgba color, Vec2 size,
+	                                                   float topLeft, float topRight,
+	                                                   float bottomLeft, float bottomRight);
 
 private:
 	std::unique_ptr<ShaderProgram> simpleShaderProgram;
 	int simpleModelviewUniform;
 	int simpleColorUniform;
+
+	std::unique_ptr<ShaderProgram> roundedRectShaderProgram;
+	int roundedRectModelviewUniform;
+	int roundedRectColorUniform;
+	int roundedRectSizeUniform;
+	int roundedRectCornerRadiiUniform;
 };
 
 } // namespace jngl

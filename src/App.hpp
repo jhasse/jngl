@@ -1,4 +1,4 @@
-// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::App class
 /// @file
@@ -6,6 +6,7 @@
 
 #include "jngl/Finally.hpp"
 
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <string>
@@ -54,6 +55,11 @@ public:
 	void atExit(std::function<void()>);
 	void callAtExitFunctions();
 
+	/// This is called by Window and is a member of App so that we can save the scaleFactor function
+	/// from AppParameters before creating the Window. The Window ctor could theoretically also take
+	/// scaleFactor as a parameter, but it would complicate things (for historical reasons mostly).
+	void initGl(int width, int height, int canvasWidth, int canvasHeight);
+
 private:
 	App();
 
@@ -77,5 +83,12 @@ private:
 	/// * appParameters.start()
 	std::vector<std::function<void()>> callAtExit;
 };
+
+namespace internal {
+
+std::pair<int, int> getMinAspectRatio(const AppParameters& params);
+std::pair<int, int> getMaxAspectRatio(const AppParameters& params);
+
+} // namespace internal
 
 } // namespace jngl

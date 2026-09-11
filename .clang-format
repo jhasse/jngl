@@ -1,7 +1,9 @@
 BasedOnStyle: LLVM
+
+AccessModifierOffset: -4
+AlignTrailingComments: false
 IndentWidth: 4
 TabWidth: 4
-AccessModifierOffset: -4
 UseTab: ForIndentation
 AllowShortIfStatementsOnASingleLine: true
 ColumnLimit: 100

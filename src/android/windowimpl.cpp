@@ -1,4 +1,4 @@
-// Copyright 2015-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2015-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "windowimpl.hpp"
@@ -10,6 +10,7 @@
 #include "../jngl/sound.hpp"
 #include "../jngl/window.hpp"
 #include "../jngl/work.hpp"
+#include "../App.hpp"
 #include "../windowptr.hpp"
 #include "../main.hpp"
 #include "fopen.hpp"
@@ -41,6 +42,9 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 			break;
 		case APP_CMD_GAINED_FOCUS:
 			impl.makeCurrent();
+			break;
+		case APP_CMD_LOST_FOCUS:
+			impl.resetTouchState();
 			break;
 		case APP_CMD_PAUSE:
 			impl.pause();
@@ -77,6 +81,7 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 			assert(created);
 			impl.mouseX = touch->second.x;
 			impl.mouseY = touch->second.y;
+			impl.touchPressedThisUpdate = true;
 			return 1;
 		}
 		case AMOTION_EVENT_ACTION_POINTER_DOWN: {
@@ -123,6 +128,9 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 			return 1;
 		}
 		case AMOTION_EVENT_ACTION_UP:
+			impl.touches.clear();
+			return 1;
+		case AMOTION_EVENT_ACTION_CANCEL:
 			impl.touches.clear();
 			return 1;
 		case AMOTION_EVENT_ACTION_HOVER_MOVE:
@@ -306,19 +314,41 @@ void WindowImpl::init() {
 	if (eglQuerySurface(display->display, display->surface->surface, EGL_HEIGHT, &h) == EGL_FALSE) {
 		handleEglError();
 	}
-	window->width_ = w;
-	window->height_ = h;
-	window->calculateCanvasSize(minAspectRatio, maxAspectRatio);
+	if (pWindow) {
+		// APP_CMD_INIT_WINDOW isn't only called on first start, but also when the app was
+		// sent to the background and brought to foreground again. In that case the scale
+		// factor is already set, but we still need to initialize OpenGL again.
+		assert(window->width_ == w);
+		assert(window->height_ == h);
+	} else {
+		if (window->width_ > 0) {
+			assert(window->height_ > 0);
+			// when AppParameters::screenSize was set, width_ and height_ contain it. Otherwise they
+			// are set to -1.
+			setScaleFactor(std::min(static_cast<double>(w) / window->width_,
+			                        static_cast<double>(h) / window->height_));
+		}
+		window->width_ = w;
+		window->height_ = h;
+		window->calculateCanvasSize(minAspectRatio, maxAspectRatio);
+	}
+	App::instance().initGl(window->width_, window->height_, window->canvasWidth,
+	                       window->canvasHeight);
+}
+
+void WindowImpl::resetTouchState() {
+	touches.clear();
+	window->mouseDown_[0] = false;
 }
 
 void WindowImpl::terminate() {
 	if (display) {
 		display->surface = std::nullopt;
 	}
-	touches.clear(); // It seems when we get terminated via the home swipe gesture that we don't
-	                 // receive the AMOTION_EVENT_ACTION_UP which would leave a touch in the map and
-	                 // result in an assertion failure the next time the user returns to the app and
-	                 // touches the screen.
+	resetTouchState(); // It seems when we get terminated via the home swipe gesture that we don't
+	                   // receive the AMOTION_EVENT_ACTION_UP which would leave a touch in the map and
+	                   // result in an assertion failure the next time the user returns to the app and
+	                   // touches the screen.
 }
 
 void WindowImpl::setRelativeMouseMode(const bool relativeMouseMode) {
@@ -335,6 +365,7 @@ void WindowImpl::pause() {
 	if (display) {
 		display->surface = std::nullopt;
 	}
+	resetTouchState();
 	if (!pauseAudio) {
 		pauseAudio = jngl::pauseAudio();
 	}
@@ -356,8 +387,8 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 		jngl::setKeyPressed(jngl::key::BackSpace, true);
 		return 1;
 	} else if (key == AKEYCODE_BACK) {
-		if (const auto& work = window->getWork()) {
-			work->onBackEvent();
+		if (const auto& scene = window->getScene()) {
+			scene->onBackEvent();
 		}
 		return 1;
 	}
@@ -393,6 +424,7 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 }
 
 void WindowImpl::updateInput() {
+	touchPressedThisUpdate = false;
 	// Read all pending events.
 	int ident;
 	int events;
@@ -418,12 +450,11 @@ void WindowImpl::updateInput() {
 		}
 	}
 
-	if (!window->mouseDown_[0]) {
-		if ((window->mousePressed_[0] = !touches.empty())) {
-			window->needToBeSetFalse_.push(&window->mousePressed_[0]);
-		}
-	}
 	window->mouseDown_[0] = !touches.empty();
+	if (touchPressedThisUpdate) {
+		window->mousePressed_[0] = true;
+		window->needToBeSetFalse_.push(&window->mousePressed_[0]);
+	}
 	window->multitouch = touches.size() > 1;
 	window->mousex_ = mouseX - relativeX;
 	window->mousey_ = mouseY - relativeY;
@@ -560,8 +591,8 @@ int32_t WindowImpl::handleJoystickEvent(const AInputEvent* const event) {
 		case AKEYCODE_BACK:
 			controller->buttonBack = down;
 			if (down && pWindow) {
-				if (const auto work = pWindow->getWork()) {
-					work->onControllerBack();
+				if (const auto scene = pWindow->getScene()) {
+					scene->onControllerBack();
 				}
 			}
 			break;
@@ -603,6 +634,12 @@ std::vector<Vec2> Window::getTouchPositions() const {
 		    (pos.y - (height_ - canvasHeight) / 2) / getScaleFactor() - getScreenHeight() / 2);
 	}
 	return positions;
+}
+
+void Window::setFullscreen(bool fullscreen) {
+	if (!fullscreen) {
+		internal::warn("Can't unset fullscreen on Android!");
+	}
 }
 
 std::string getSystemConfigPath() {

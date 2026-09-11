@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Font class and related functions
 /// @file
@@ -16,6 +16,23 @@ class FontImpl;
 class Mat3;
 
 /// Font loaded from a TTF or OTF file
+///
+/// A common pattern is to have a global Singleton with all your fonts, e.g.:
+/// \code
+/// struct Fonts : jngl::Singleton<Fonts> {
+///     jngl::Font headline{ "Arial.ttf", 30 };
+///     jngl::Font normal{ "Arial.ttf", 20 };
+///     jngl::Font small{ "Arial.ttf", 10 };
+///
+///     jngl::Font& editor = normal;
+/// };
+/// \endcode
+///
+/// Then you can use it like this:
+/// \code
+/// Fonts::handle().headline.print(jngl::modelview().translate({ 0, 0 }), "Hello");
+/// Fonts::handle().editor.print(jngl::modelview().translate({ 0, 90 }), "World");
+/// \endcode
 class Font {
 public:
 	/// Creates a font from \a filename in \a size px
@@ -51,6 +68,7 @@ public:
 
 	/// Internal function
 	std::shared_ptr<FontImpl> getImpl();
+	std::shared_ptr<const FontImpl> getImpl() const;
 
 private:
 	std::shared_ptr<FontImpl> impl;
@@ -60,6 +78,9 @@ private:
 void print(const std::string& text, jngl::Vec2 position);
 
 /// Print \a text at { \a xposition, \a yposition }
+///
+/// \deprecated Use jngl::Text::print() instead (i.e. don't rely on global font state)
+[[deprecated("Use jngl::Text::print() instead (i.e. don't rely on global font state)")]]
 void print(const std::string& text, int xposition, int yposition);
 
 /// Print \a text using \a modelview

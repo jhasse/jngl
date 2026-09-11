@@ -1,10 +1,10 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #include "font.hpp"
 
-#include "../freetype.hpp"
+#include "../FontImpl.hpp"
 #include "Alpha.hpp"
+#include "Pixels.hpp"
 #include "ScaleablePixels.hpp"
 
 #include <stack>
@@ -58,14 +58,18 @@ void Font::print(const Mat3& modelview, const std::string& text) const {
 }
 
 double Font::getTextWidth(std::string_view text) const {
-	return static_cast<double>(static_cast<ScaleablePixels>(impl->getTextWidth(std::string(text))));
+	return impl->getTextWidth(std::string(text));
 }
 
 double Font::getLineHeight() const {
-	return static_cast<double>(static_cast<ScaleablePixels>(impl->getLineHeight()));
+	return impl->getLineHeight();
 }
 
 std::shared_ptr<FontImpl> Font::getImpl() {
+	return impl;
+}
+
+std::shared_ptr<const FontImpl> Font::getImpl() const {
 	return impl;
 }
 

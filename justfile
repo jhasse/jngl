@@ -21,6 +21,7 @@ unittest-headless config='Debug':
 	cd build && {{config}}/jngl-unittest FinallyTest
 	cd build && {{config}}/jngl-unittest halfLoadTest
 	cd build && {{config}}/jngl-unittest getBinaryPath
+	cd build && {{config}}/jngl-unittest getConfigPath
 	cd build && {{config}}/jngl-unittest readAsset
 	cd build && {{config}}/jngl-unittest Vec2
 

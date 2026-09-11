@@ -47,6 +47,18 @@ template <class... Args> void info(std::format_string<Args...> format, Args&&...
 template <class... Args> void info(Args&&...) {}
 #endif
 
+/// Same level as "info", but with custom level name. Useful for your own subsystems, for example
+/// your scripting engine.
+void log(std::string_view levelName, const std::string&);
+
+#if __has_include(<format>) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION >= 170000)
+template <class... Args> void log(std::string_view levelName, std::format_string<Args...> format, Args&&... args) {
+	return log(levelName, std::format(std::move(format), std::forward<Args>(args)...));
+}
+#else
+template <class... Args> void log(Args&&...) {}
+#endif
+
 void warn(const std::string&);
 
 #if __has_include(<format>) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION >= 170000)

@@ -1,4 +1,4 @@
-// Copyright 2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2025-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Fade.hpp"
 
@@ -11,12 +11,13 @@
 
 namespace jngl {
 
-Fade::Fade(std::shared_ptr<Work> work, int speed)
-: work(std::move(work)), oldWork(getWork()), fadeCount(0), speed(speed) {
+Fade::Fade(std::shared_ptr<Work> work, std::optional<Options> options)
+: work(std::move(work)), oldWork(getWork()), fadeCount(0), speed(options ? options->speed : 20),
+  fadeOutOnly(options ? options->fadeOutOnly : false) {
 }
 
-Fade::Fade(std::function<std::shared_ptr<Scene>()> factory, int speed)
-: Fade(std::make_shared<WorkFactory>(std::move(factory)), speed) {
+Fade::Fade(std::function<std::shared_ptr<Scene>()> factory, std::optional<Options> options)
+: Fade(std::make_shared<WorkFactory>(std::move(factory)), options) {
 }
 
 Fade::~Fade() {
@@ -40,7 +41,7 @@ void Fade::step() {
 	if (!wasHalfTime && fadeCount >= maxAlpha) {
 		fadeCount = maxAlpha; // draw at least one completely black frame
 	}
-	if (fadeCount == maxAlpha) {
+	if (oldWork && fadeCount > maxAlpha) {
 		oldWork.reset();
 		assert(!getNextScene());
 		while (dynamic_cast<WorkFactory*>(work.get())) {
@@ -52,12 +53,15 @@ void Fade::step() {
 				break;
 			}
 		}
+		if (fadeOutOnly) {
+			setScene(work);
+		}
 	}
 }
 
 void Fade::draw() const {
 	const int maxAlpha = 255;
-	if (fadeCount < maxAlpha) {
+	if (fadeCount <= maxAlpha) {
 		if (!dynamic_cast<Fade*>(oldWork.get())) {
 			oldWork->draw();
 		}

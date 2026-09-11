@@ -1,11 +1,12 @@
-// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
+#include "jngl/MouseInfo.hpp"
 #include "jngl/Scene.hpp"
 #include "jngl/input.hpp"
-#include "jngl/time.hpp"
 #include "opengl.hpp"
+#include "timing/FrameLimiter.hpp"
 
 #include <array>
 #include <functional>
@@ -57,6 +58,7 @@ public:
 	std::vector<Vec2> getTouchPositions() const;
 	int getMouseX() const;
 	int getMouseY() const;
+	MouseInfo& getMouseInfo();
 	int getCanvasWidth() const;
 	int getCanvasHeight() const;
 	int getWidth() const;
@@ -69,7 +71,7 @@ public:
 	float getResizedWindowScalingY() const;
 
 	ScaleablePixels getTextWidth(const std::string&);
-	Pixels getLineHeight();
+	double getLineHeight();
 	void setLineHeight(Pixels);
 	bool getFullscreen() const;
 	void setFullscreen(bool);
@@ -96,20 +98,20 @@ public:
 	double getMouseWheel() const;
 	std::string getFont() const;
 	std::shared_ptr<FontImpl> getFontImpl();
-	void setWork(std::shared_ptr<Work>);
+	void setWork(std::shared_ptr<Scene>);
 
 	/// Returns exitcode for process
 	[[nodiscard]] uint8_t mainLoop();
 
 	void stepIfNeeded();
-	void sleepIfNeeded();
 	void draw() const;
-	std::shared_ptr<Work> getWork();
+	std::shared_ptr<Scene> getScene();
 	std::shared_ptr<Scene> getNextScene() const;
 	void addJob(std::shared_ptr<Job>);
 	void removeJob(Job*);
 	std::shared_ptr<Job> getJob(const std::function<bool(Job&)>& predicate) const;
 	void resetFrameLimiter();
+
 	unsigned int getStepsPerSecond() const;
 	void setStepsPerSecond(unsigned int);
 	void addUpdateInputCallback(std::function<void()>);
@@ -119,12 +121,12 @@ public:
 	std::string getTextInput() const;
 	void initGlObjects();
 	void drawLine(Mat3 modelview, Vec2 b, Rgba color) const;
-	void drawSquare(Mat3 modelview, Rgba color) const;
+	void drawSquare(const Mat3& modelview, Rgba color) const;
+	void drawRoundedSquare(const Mat3& modelview, Rgba color, Vec2 size, float topLeft,
+	                       float topRight, float bottomLeft, float bottomRight) const;
 	void onControllerChanged(std::function<void()>);
 	void bindSystemFramebufferAndRenderbuffer();
 
-	friend class WindowImpl;
-	std::unique_ptr<WindowImpl> impl;
 
 private:
 	static int GetKeyCode(jngl::key::KeyType key);
@@ -136,11 +138,10 @@ private:
 	/// Called when a controller is added or removed
 	std::function<void()> controllerChangedCallback;
 
-	double timePerStep = 1.0 / 60.0;
+	unsigned int stepsPerSecond = 60;
 	double mouseWheel = 0;
 	GLuint vaoLine = 0;
 	GLuint vaoSquare = 0;
-	unsigned int maxStepsPerFrame = 3;
 	bool shouldExit = false;
 	std::optional<int> forceExitCode;
 	bool fullscreen_;
@@ -159,6 +160,7 @@ private:
 	int mousey_ = 0;
 	int fontSize_ = 12;
 	int width_, height_;
+	MouseInfo mouseInfo;
 
 	/// UTF-8 string of characters that were pressed since the last frame
 	std::string textInput;
@@ -175,25 +177,11 @@ private:
 	bool changeWork = false;
 	std::shared_ptr<Work> newWork_;
 	std::vector<std::shared_ptr<Job>> jobs;
+	std::vector<std::shared_ptr<Job>> jobsToAdd;
 	std::vector<Job*> jobsToRemove;
-	double sleepPerFrame = 0; // in seconds
-	double timeSleptSinceLastCheck = 0;
-	unsigned int numberOfSleeps = 0;
-	unsigned int previousStepsPerFrame = 1;
 	int mouseHiddenCount = 0;
 
-	struct FrameLimiterData {
-		unsigned int stepsPerFrame = 1;
-		double sleepCorrectionFactor = 1;
-		double lastCheckTime = getTime();
-		unsigned int stepsSinceLastCheck = 0;
-
-		/// When VSYNC is active we will try to find out to what FPS/Hz the display is limiting us
-		double maxFPS = 300;
-
-		/// How often the frame limiter has run
-		unsigned int numberOfChecks = 0;
-	} frameLimiter;
+	FrameLimiter frameLimiter{ 1.0 / static_cast<double>(stepsPerSecond) };
 
 	bool multitouch = false;
 
@@ -207,5 +195,9 @@ private:
 #ifdef JNGL_PERFORMANCE_OVERLAY
 	double lastStepDuration = 0;
 #endif
+
+public:
+	friend class WindowImpl;
+	std::unique_ptr<WindowImpl> impl;
 };
 } // namespace jngl

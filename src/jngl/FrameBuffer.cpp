@@ -1,8 +1,9 @@
-// Copyright 2011-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2011-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "FrameBuffer.hpp"
 
+#include "../App.hpp"
 #include "../ShaderCache.hpp"
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
@@ -15,9 +16,10 @@
 namespace jngl {
 
 struct FrameBuffer::Impl {
-	Impl(int width, int height)
+	Impl(int width, int height, bool hdr)
 	: width(width), height(height),
-	  texture(static_cast<float>(width), static_cast<float>(height), width, height, nullptr),
+	  texture(static_cast<float>(width), static_cast<float>(height), width, height, nullptr,
+	          GL_RGBA, nullptr, hdr ? GL_HALF_FLOAT : GL_UNSIGNED_BYTE),
 	  letterboxing(glIsEnabled(GL_SCISSOR_TEST)) {
 	}
 	Impl(const Impl&) = delete;
@@ -50,11 +52,11 @@ struct FrameBuffer::Impl {
 
 std::stack<std::function<void()>> FrameBuffer::Impl::activate;
 
-FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
-: impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height))) {
+FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr)
+: impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height), hdr)) {
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, static_cast<int>(width),
+	glRenderbufferStorage(GL_RENDERBUFFER, hdr ? GL_RGBA16F : GL_RGBA8, static_cast<int>(width),
 	                      static_cast<int>(height));
 
 	glGenFramebuffers(1, &impl->fbo);
@@ -79,11 +81,12 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
 	pWindow->bindSystemFramebufferAndRenderbuffer();
 }
 
-FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height)
-: FrameBuffer(static_cast<Pixels>(width), static_cast<Pixels>(height)) {
+FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height, const bool hdr)
+: FrameBuffer(static_cast<Pixels>(width), static_cast<Pixels>(height), hdr) {
 }
 
-FrameBuffer::FrameBuffer(std::array<Pixels, 2> size) : FrameBuffer(size[0], size[1]) {
+FrameBuffer::FrameBuffer(std::array<Pixels, 2> size, const bool hdr)
+: FrameBuffer(size[0], size[1], hdr) {
 }
 
 FrameBuffer::FrameBuffer(FrameBuffer&&) noexcept = default;
@@ -135,10 +138,41 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 	impl->texture.draw();
 }
 
+void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
+                       const ShaderProgram* const shaderProgram) const {
+	impl->texture.bind();
+	int oldFilter;
+	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &oldFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+	                textureFilter == TextureFilter::NearestNeighbor ? GL_NEAREST : GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+	                textureFilter == TextureFilter::NearestNeighbor ? GL_NEAREST : GL_LINEAR);
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   modelview.scale(1, -1)
+		                       .translate({ -impl->width / getScaleFactor() / 2,
+		                                    -impl->height / getScaleFactor() / 2 })
+		                       .data);
+	} else {
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
+		                   modelview.scale(1, -1)
+		                       .translate({ -impl->width / getScaleFactor() / 2,
+		                                    -impl->height / getScaleFactor() / 2 })
+		                       .data);
+	}
+	glDrawArrays(GL_TRIANGLE_FAN, 0,
+	             4); // no need to bind again, that's why we don't call impl->texture.draw() here
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, oldFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, oldFilter);
+}
+
 void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
                            const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
-	scale(getScaleFactor());
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
@@ -203,11 +237,23 @@ FrameBuffer::Context FrameBuffer::use() const {
 		}
 	};
 	pushMatrix();
-	reset();
-	opengl::scale(static_cast<float>(pWindow->getWidth()) / static_cast<float>(impl->width) *
-	                  pWindow->getResizedWindowScalingX(),
-	              static_cast<float>(pWindow->getHeight()) / static_cast<float>(impl->height) *
-	                  pWindow->getResizedWindowScalingY());
+	auto savedProjection = opengl::projection;
+	const float sx = static_cast<float>(pWindow->getWidth()) / static_cast<float>(impl->width) *
+	                 pWindow->getResizedWindowScalingX();
+	const float sy = static_cast<float>(pWindow->getHeight()) / static_cast<float>(impl->height) *
+	                 pWindow->getResizedWindowScalingY();
+	// Scale the projection matrix (right-multiply by diag(sx, sy, 1, 1)) so that drawing inside the
+	// framebuffer works with letterboxing. Unlike modifying the modelview, this isn't undone when
+	// the user calls jngl::reset() or uses jngl::Mat3().
+	opengl::projection.data[0] *= sx;
+	opengl::projection.data[1] *= sx;
+	opengl::projection.data[2] *= sx;
+	opengl::projection.data[3] *= sx;
+	opengl::projection.data[4] *= sy;
+	opengl::projection.data[5] *= sy;
+	opengl::projection.data[6] *= sy;
+	opengl::projection.data[7] *= sy;
+	App::instance().updateProjectionMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 	glPushAttrib(GL_VIEWPORT_BIT);
 #else
@@ -215,7 +261,7 @@ FrameBuffer::Context FrameBuffer::use() const {
 #endif
 	activate();
 	Impl::activate.emplace(std::move(activate));
-	return Context([this]() {
+	return Context([this, savedProjection]() {
 		Impl::activate.pop();
 		popMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
@@ -223,6 +269,8 @@ FrameBuffer::Context FrameBuffer::use() const {
 #else
 		glViewport(impl->viewport[0], impl->viewport[1], impl->viewport[2], impl->viewport[3]);
 #endif
+		opengl::projection = savedProjection;
+		App::instance().updateProjectionMatrix();
 		if (!Impl::activate.empty()) {
 			Impl::activate.top()(); // Restore the FrameBuffer that was previously active
 			return;

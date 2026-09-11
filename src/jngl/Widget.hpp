@@ -1,4 +1,4 @@
-// Copyright 2020-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Container class
 /// @file
@@ -19,6 +19,8 @@ class Widget {
 public:
 	/// Creates a Widget centered at \a position
 	explicit Widget(jngl::Vec2 position);
+	Widget(Widget&&) noexcept = default;
+	Widget& operator=(Widget&&) noexcept = default;
 
 	virtual ~Widget();
 
@@ -34,7 +36,7 @@ public:
 	[[nodiscard]] virtual Action step();
 
 	/// Draws the widget with all effects applied
-	virtual void draw() const;
+	virtual void draw(Mat3 modelview) const;
 
 	/// Override this function to draw the widget
 	virtual void drawSelf(Mat3 modelview) const = 0;

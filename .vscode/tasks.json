@@ -99,6 +99,7 @@
 	],
 	"presentation": {
 		"echo": false,
+		"focus": true,
 		"clear": true
 	}
 }

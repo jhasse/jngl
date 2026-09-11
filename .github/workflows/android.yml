@@ -8,15 +8,15 @@ jobs:
   build:
     runs-on: [ubuntu-latest]
     container:
-      image: registry.gitlab.com/jhasse/android-ndk-docker:r27c
+      image: registry.gitlab.com/jhasse/android-ndk-docker:r29
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Cache CPM.cmake packages
       uses: actions/cache@v4
       with:
         path: .cache/cpm
         key: cpm
     - name: Build
-      run: make -C android
+      run: cd android/test && ./gradlew build
 env:
   CPM_SOURCE_CACHE: ${{ github.workspace }}/.cache/cpm

@@ -1,4 +1,4 @@
-// Copyright 2009-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2009-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #pragma once
@@ -15,17 +15,8 @@
 		#include <GLES3/gl3.h>
 		#include <GLES3/gl3ext.h>
 	#else
-		#if defined (JNGL_UWP) || defined (__EMSCRIPTEN__)
-			#define GL_GLEXT_PROTOTYPES 1
-			#include <GLES2/gl2.h>
-			#include <GLES2/gl2ext.h>
-
-			#define glGenVertexArrays glGenVertexArraysOES
-			#define glBindVertexArray glBindVertexArrayOES
-			#define glDeleteVertexArrays glDeleteVertexArraysOES
-			#if defined(__EMSCRIPTEN__)
-				#define GL_RGBA8 GL_RGBA8_OES
-			#endif
+		#ifdef __EMSCRIPTEN__
+			#include <GLES3/gl3.h>
 		#else
 			#include <glad/gl.h>
 		#endif
@@ -36,18 +27,28 @@
 #define GL_BGR 0x80e0
 #endif
 
-namespace opengl
-{
-	extern jngl::Mat3 modelview;
-	extern jngl::Mat4 projection;
+namespace opengl {
 
-	/// A global VAO and VBO which are used with GL_STREAM_DRAW
-	extern GLuint vaoStream;
-	extern GLuint vboStream;
+extern jngl::Mat3 modelview;
+extern jngl::Mat4 projection;
 
-	void translate(float x, float y);
-	void scale(float x, float y);
+/// A global VAO and VBO which are used with GL_STREAM_DRAW
+extern GLuint vaoStream;
+extern GLuint vboStream;
 
-	/// Generates a textures, binds it to GL_TEXTURE_2D and sets some common parameters
-	GLuint genAndBindTexture();
+void translate(float x, float y);
+void scale(float x, float y);
+
+/// Generates a textures, binds it to GL_TEXTURE_2D and sets some common parameters
+GLuint genAndBindTexture();
+
+/// Calls glBindVertexArray(vao) (on Android: only if vao is not already bound)
+void bindVertexArray(GLuint vao);
+
+/// Calls glDeleteVertexArrays(1, &vao) and invalidates the Android VAO cache
+///
+/// Must be used instead of glDeleteVertexArrays directly: OpenGL recycles the id after deletion, so
+/// a stale cache entry would turn the next bindVertexArray of the recycled id into a no-op.
+void deleteVertexArray(GLuint vao);
+
 } // namespace opengl

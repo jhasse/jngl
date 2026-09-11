@@ -1,4 +1,4 @@
-// Copyright 2019-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::SoundFile class
 /// @file
@@ -6,6 +6,7 @@
 
 #include <future>
 #include <memory>
+#include <span>
 #include <string>
 #include <vector>
 #if defined(__has_include) && __has_include(<optional>)
@@ -79,6 +80,9 @@ public:
 	/// Returns playing progress in [0, 1], can be used with length() to determine how much time
 	/// has passed
 	float progress() const;
+
+	/// Returns the raw audio samples of this SoundFile
+	std::span<float> getSamples();
 
 private:
 	/// The last currently played Sound of this SoundFile. weak_ptr because we don't own it, but

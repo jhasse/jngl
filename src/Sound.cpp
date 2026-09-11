@@ -1,4 +1,4 @@
-// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Sound.hpp"
@@ -52,6 +52,10 @@ std::shared_ptr<Stream> Sound::getStream() {
 
 float Sound::progress() const {
 	return impl->track->progress();
+}
+
+std::span<float> Sound::getSamples() {
+	return impl->buffer ? std::span(*impl->buffer) : std::span<float>{};
 }
 
 } // namespace jngl
