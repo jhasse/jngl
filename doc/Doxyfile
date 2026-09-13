@@ -1389,6 +1389,7 @@ HTML_EXTRA_FILES       = Geist-Regular.woff2 \
                          MacOS_wordmark_(2017).svg \
                          Xbox_logo_(2019).svg \
                          Windows_logo_and_wordmark_-_2021.svg \
+                         Linux.png \
                          documentation.svg \
                          "Dell XPS 13.png"
 

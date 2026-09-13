@@ -23,16 +23,25 @@
 		.button {
 			display: inline-block;
 			margin: 0 0.5em;
-			border: 1px solid #0078d4;
+			border: 1px solid var(--primary-color);
 			border-radius: 0.5em;
+			background-color: color-mix(in srgb, var(--primary-color) 12%, transparent);
 		}
 		.button:hover {
-			background-color: #93d0ff;
+			background-color: var(--primary-color);
 		}
 		.button img {
 			vertical-align: middle;
 			margin-right: 0.5em;
 			height: 30px;
+		}
+		.button:hover img {
+			filter: brightness(0) invert(1);
+		}
+		@media (prefers-color-scheme: dark) {
+			.button img {
+				filter: brightness(0) invert(1);
+			}
 		}
 		.button a {
 			color: var(--page-foreground-color) !important;
@@ -42,6 +51,11 @@
 		}
 		.button a:hover {
 			color: var(--page-background-color) !important;
+		}
+		@media (prefers-color-scheme: dark) {
+			.invert-dark {
+				filter: invert(1) hue-rotate(180deg);
+			}
 		}
 	</style>
 </head>
@@ -106,16 +120,17 @@ $(function() {
 		<p>JNGL is a versatile multi-platform library for game development, written in modern C++. It has been used to create several different games on a number of different platforms.
 		</p>
 		<p>
-			Games using JNGL have been released on Windows, Linux, Mac, iOS, Android and Nintendo Switch<sup><a href="#fn1">1</a></sup>, as well as the browser via Emscripten. However, there has been work done on porting games to XBox and Playstation.
+			Games using JNGL have been released on Windows, Linux, Mac, iOS, Android and Nintendo Switch<sup><a href="#fn1">1</a></sup>, as well as the browser via Emscripten. There also has been work done on porting games to XBox and Playstation.
 		</p>
 		<p style="padding: 2em 5.5em">
 			<img src="Nintendo_Switch_logo.svg" height="100px" style="margin-right: 2em; float:left" />
 			<img src="HTML5_logo_and_wordmark.svg" height="100px" style="margin-right: 2em; float:left;" />
-			<img src="Android_2023_3D_logo_and_wordmark.svg" height="40px" style="margin-right: 2em;" />
-			<img src="IOS_wordmark_(2017).svg" height="40px" style="margin-right: 2em;" />
-			<img src="MacOS_wordmark_(2017).svg" height="40px" style="margin-right: 2em;" />
-			<img src="Xbox_logo_(2019).svg" height="50px" style="margin-right: 2em;" />
-			<img src="Windows_logo_and_wordmark_-_2021.svg" height="50px" style="margin-top: 5px; margin-right: 2em;" />
+			<img class="invert-dark" src="Android_2023_3D_logo_and_wordmark.svg" height="40px" style="margin-right: 2em;" />
+			<img class="invert-dark" src="IOS_wordmark_(2017).svg" height="40px" style="margin-right: 2em;" />
+			<img class="invert-dark" src="MacOS_wordmark_(2017).svg" height="40px" style="margin-right: 2em;" />
+			<img class="invert-dark" src="Xbox_logo_(2019).svg" height="50px" style="margin-right: 2em;" />
+			<img src="Windows_logo_and_wordmark_-_2021.svg" height="50px" style="margin-top: 7px; margin-right: 2em;" />
+			<img class="invert-dark" src="Linux.png" height="46px" style="margin-right: 2em;" />
 		</p>
 		<h2 style="clear:left">Features</h2>
 		<ul>
