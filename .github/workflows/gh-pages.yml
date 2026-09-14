@@ -17,6 +17,7 @@ jobs:
           cmake .
           make
           doxygen
+          cp index.html html/
         working-directory: doc
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v4
