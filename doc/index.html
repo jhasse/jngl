@@ -20,15 +20,36 @@
 	<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
 	<link href="extra.css" rel="stylesheet" type="text/css" />
 	<style type="text/css">
-		.button {
+		.hero {
+			text-align: center;
+			padding: 3em 1em 0.5em;
+		}
+		.hero-logo-wrap {
+			position: relative;
 			display: inline-block;
-			margin: 0 0.5em;
-			border: 1px solid var(--primary-color);
-			border-radius: 0.5em;
+			padding: 2em;
+		}
+
+		.button-row {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 0.6em;
+			margin-bottom: 0.5em;
+		}
+		.button {
+			display: inline-flex;
+			align-items: center;
+			margin: 0;
+			border: 2px solid var(--primary-color);
+			border-radius: var(--border-radius-medium);
 			background-color: color-mix(in srgb, var(--primary-color) 12%, transparent);
+			transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease;
 		}
 		.button:hover {
 			background-color: var(--primary-color);
+			transform: translateY(-2px);
+			box-shadow: var(--box-shadow);
 		}
 		.button img {
 			vertical-align: middle;
@@ -47,7 +68,7 @@
 			color: var(--page-foreground-color) !important;
 			text-decoration: none;
 			display: inline-block;
-			padding: 0.5em 1em;
+			padding: 0.6em 1.2em;
 		}
 		.button a:hover {
 			color: var(--page-background-color) !important;
@@ -56,6 +77,85 @@
 			.invert-dark {
 				filter: invert(1) hue-rotate(180deg);
 			}
+		}
+
+		.platforms {
+			text-align: center;
+			margin: 2.5em 0 5em;
+		}
+		.platforms-label {
+			text-transform: uppercase;
+			letter-spacing: .14em;
+			font-size: .78em;
+			opacity: .6;
+			margin: 0 0 1.2em;
+		}
+		.platform-logos {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			gap: 2em 2.5em;
+		}
+		.platform-logos img {
+			transition: transform .2s ease;
+		}
+		.platform-logos img:hover {
+			transform: scale(1.08);
+		}
+
+		.content-grid {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 2em;
+			margin: 2em 0;
+		}
+		.card {
+			flex: 1 1 20em;
+			background: color-mix(in srgb, var(--page-background-color) 96%, var(--primary-color));
+			border: 1px solid var(--separator-color);
+			border-radius: var(--border-radius-large);
+			box-shadow: var(--box-shadow);
+			padding: var(--spacing-xlarge);
+		}
+		.card h2 {
+			display: flex;
+			align-items: center;
+			gap: .45em;
+			margin-top: 0;
+		}
+		.card ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+		.card li {
+			position: relative;
+			padding: .55em 0 .55em 1.3em;
+			border-bottom: 1px solid var(--separator-color);
+			transition: background-color .15s ease, border-radius .15s ease;
+		}
+		.card li:last-child {
+			border-bottom: none;
+		}
+		.card li::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 1.1em;
+			width: 7px;
+			height: 7px;
+			border-radius: 50%;
+			background: var(--primary-color);
+		}
+		.card li:hover {
+			background: var(--odd-color);
+			border-radius: var(--border-radius-small);
+		}
+
+		.footnote {
+			opacity: .7;
+			text-align: center;
 		}
 	</style>
 </head>
@@ -100,17 +200,17 @@ $(function() {
 </div>
 </div>
 
-	<p style="text-align: center; padding: 5em">
-		<img alt="Logo" src="Dell XPS 13.png" />
-	</p>
-	<div style="text-align:center">
-		<div class="button"><a href="https://github.com/jhasse/jngl"><img src="GitHub_Invertocat_Logo.svg"/>GitHub</a></div>
-		<div class="button"><a href="https://discord.gg/254P43HvWJ"><img src="discord-icon.svg"/>Discord</a></div>
-		<div class="button"><a href="namespacejngl.html"><img src="documentation.svg"/>Documentation</a></div>
+	<div class="hero">
+		<div class="hero-logo-wrap">
+			<img alt="Logo" src="Dell XPS 13.png" />
+		</div>
+		<h1>A Cross-Platform Framework for 2D Games</h1>
+		<div class="button-row">
+			<div class="button"><a href="https://github.com/jhasse/jngl"><img src="GitHub_Invertocat_Logo.svg"/>GitHub</a></div>
+			<div class="button"><a href="https://discord.gg/254P43HvWJ"><img src="discord-icon.svg"/>Discord</a></div>
+			<div class="button"><a href="annotated.html"><img src="documentation.svg"/>Documentation</a></div>
+		</div>
 	</div>
-	<h1 style="text-align: center; margin-bottom: 2em; ">
-		A Cross-Platform Framework for 2D Games
-	</h1>
 	<div class="textblock">
 		<!-- <p style="text-align:center">
 			<a href="https://discord.gg/254P43HvWJ" rel="nofollow"><img src="https://camo.githubusercontent.com/2117ba6332c311013979a67d3291aa5846a4b672a8c9d7cca1fe66863645fb93/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f636861742d6f6e253230646973636f72642d3732383964612e737667" alt="Chat" data-canonical-src="https://img.shields.io/badge/chat-on%20discord-7289da.svg" style="max-width: 100%;"></a>
@@ -122,45 +222,39 @@ $(function() {
 		<p>
 			Games using JNGL have been released on Windows, Linux, Mac, iOS, Android and Nintendo Switch<sup><a href="#fn1">1</a></sup>, as well as the browser via Emscripten. There also has been work done on porting games to XBox and Playstation.
 		</p>
-		<p style="padding: 2em 5.5em">
-			<img src="Nintendo_Switch_logo.svg" height="100px" style="margin-right: 2em; float:left" />
-			<img src="HTML5_logo_and_wordmark.svg" height="100px" style="margin-right: 2em; float:left;" />
-			<img class="invert-dark" src="Android_2023_3D_logo_and_wordmark.svg" height="40px" style="margin-right: 2em;" />
-			<img class="invert-dark" src="IOS_wordmark_(2017).svg" height="40px" style="margin-right: 2em;" />
-			<img class="invert-dark" src="MacOS_wordmark_(2017).svg" height="40px" style="margin-right: 2em;" />
-			<img class="invert-dark" src="Xbox_logo_(2019).svg" height="50px" style="margin-right: 2em;" />
-			<img src="Windows_logo_and_wordmark_-_2021.svg" height="50px" style="margin-top: 7px; margin-right: 2em;" />
-			<img class="invert-dark" src="Linux.png" height="46px" style="margin-right: 2em;" />
-		</p>
-		<div style="clear:left; display:flex; flex-wrap:wrap; gap: 0 3em;">
-			<div style="flex: 1 1 20em;">
-				<h2>Games</h2>
+		<div class="platforms">
+			<p class="platforms-label">Available on</p>
+			<div class="platform-logos">
+				<img src="Nintendo_Switch_logo.svg" height="90px" />
+				<img src="HTML5_logo_and_wordmark.svg" height="90px" />
+				<img class="invert-dark" src="Android_2023_3D_logo_and_wordmark.svg" height="38px" />
+				<img class="invert-dark" src="IOS_wordmark_(2017).svg" height="38px" />
+				<img class="invert-dark" src="MacOS_wordmark_(2017).svg" height="38px" />
+				<img src="Windows_logo_and_wordmark_-_2021.svg" height="46px" />
+				<img class="invert-dark" src="Linux.png" height="42px" />
+				<img class="invert-dark" src="Xbox_logo_(2019).svg" height="46px" />
+			</div>
+		</div>
+		<div class="content-grid">
+			<div class="card">
+				<h2><span aria-hidden="true">🎮</span>Games</h2>
 				<ul>
 					<li><a href="https://sweetsplit.de"><b>Sweet
 								Split</b></a><br />
-						Arcade game for iOS</li>
+						Arcade puzlle game for iOS and Android</li>
 					<li><a href="https://bixense.com/boomshineplus/"><b>Boomshine Plus</b></a><br />
 						Simple and chilly, but addictive puzzle game for Android, iOS and PC</li>
 					<li><a href="https://portaldogs.com"><b>Portal Dogs</b></a><br />
 						Puzzle platformer available for the Nintendo Switch, Android and on Steam</li>
-					<li><a href="https://gitlab.com/jhasse/ggj2020"><b>Controller Brawler Repair Force</b></a><br />
-						Four player game created for the Global Game Jam 2020</li>
-					<li><a href="https://gitlab.com/jhasse/ggj2019"><b>Tricky Homes</b></a><br />
-						Two player physics game using Box2D created for the Global Game Jam 2019</li>
-					<li><a href="https://gitlab.com/jhasse/ggj2018"><b>Snake Line Transmission</b></a><br />
-						Two player arcade game created for the Global Game Jam 2018</li>
-					<li><a href="https://igjam.eu/jams/igjam-12/490/"><b>Ghostly Intruders</b></a><br />
-						Local coop game created during the IGJam #12 (2017)</li>
-					<li><a href="https://github.com/jhasse/jntetri"><b>JNTETRI</b></a><br />
-						A simple Tetris clone</li>
-					<li><a href="https://github.com/jhasse/somyeol2d"><b>Somyeol2D</b></a><br />
-						Platformer created for the Global Game Jam 2011</li>
-					<li><a href="https://github.com/jhasse/tudi"><b>Tudi</b></a><br />
-						Platformer created for a 10 days coding competition in 2009</li>
+					<li><a href="https://bubblefall.de"><b>Bubble Fall</b></a><br />
+						2-4 player game created for the Global Game Jam 2025, completely playable in the browser</li>
+					<li><a href="https://jntetri.boomshine.de"><b>JNTETRI</b></a><br />
+						A simple Tetris clone with online multiplayer</li>
 				</ul>
+				<p>and many more...</p>
 			</div>
-			<div style="flex: 1 1 20em;">
-				<h2>Features</h2>
+			<div class="card">
+				<h2><span aria-hidden="true">⚙️</span>Features</h2>
 				<ul>
 					<li>C++17</li>
 					<li><a href="http://en.wikipedia.org/wiki/Zlib_license">zlib License</a>, so suitable for commercial use and
@@ -174,8 +268,8 @@ $(function() {
 			</div>
 		</div>
 		<hr />
-		<p> <sup id="fn1"> 1. Not open-source due to Nintendo's NDA. <a href="mailto:jhasse@bixense.com">Contact me</a> to
-				get access. </sup> </p>
+		<p class="footnote"><sup id="fn1">1. Not open-source due to Nintendo's NDA. <a href="mailto:support@bixense.com">Contact me</a> to
+				get access.</sup></p>
 	</div>
 </div>
 
