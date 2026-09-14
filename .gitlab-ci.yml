@@ -120,17 +120,20 @@ web:
 #   dependencies:
 #   - web
 #   script:
-#   - microdnf install -y doxygen cmake make tar xz git texlive-latex texlive-newunicodechar texlive-dvips pdf2svg ghostscript >/dev/null
+#   - microdnf install -y doxygen cmake make tar xz git >/dev/null
 #   - cd doc
 #   - cmake .
 #   - make
 #   - doxygen
 #   - mv ../public __tmp
 #   - mv html ../public
+#   - cp *.svg ../public
+#   - cp *.png ../public
+#   - cp index.html ../public
 #   - mv __tmp/demo ../public
 #   - rm -r __tmp
 #   artifacts:
 #     paths:
 #     - public
 #   only:
-#   - master
+#   - main
