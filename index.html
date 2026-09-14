@@ -1,52 +1,172 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+
 <head>
-<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=11"/>
-<meta name="generator" content="Doxygen 1.12.0"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>JNGL: JNGL</title>
-<link rel="icon" href="favicon.ico" type="image/x-icon" />
-<link href="tabs.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="jquery.js"></script>
-<script type="text/javascript" src="dynsections.js"></script>
-<script type="text/javascript" src="clipboard.js"></script>
-<link href="navtree.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="resize.js"></script>
-<script type="text/javascript" src="cookie.js"></script>
-<link href="search/search.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="search/searchdata.js"></script>
-<script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
-<link href="extra.css" rel="stylesheet" type="text/css"/>
+	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=11" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>JNGL: Just a Neat Game Library</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon" />
+	<link href="tabs.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="dynsections.js"></script>
+	<script type="text/javascript" src="clipboard.js"></script>
+	<script type="text/javascript" src="cookie.js"></script>
+	<link href="search/search.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="search/searchdata.js"></script>
+	<script type="text/javascript" src="search/search.js"></script>
+	<link href="doxygen.css" rel="stylesheet" type="text/css" />
+	<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+	<link href="extra.css" rel="stylesheet" type="text/css" />
+	<style type="text/css">
+		.hero {
+			text-align: center;
+			padding: 3em 1em 0.5em;
+		}
+		.hero-logo-wrap {
+			position: relative;
+			display: inline-block;
+			padding: 2em;
+		}
+
+		.button-row {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 0.6em;
+			margin-bottom: 0.5em;
+		}
+		.button {
+			display: inline-flex;
+			align-items: center;
+			margin: 0;
+			border: 2px solid var(--primary-color);
+			border-radius: var(--border-radius-medium);
+			background-color: color-mix(in srgb, var(--primary-color) 12%, transparent);
+			transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease;
+		}
+		.button:hover {
+			background-color: var(--primary-color);
+			transform: translateY(-2px);
+			box-shadow: var(--box-shadow);
+		}
+		.button img {
+			vertical-align: middle;
+			margin-right: 0.5em;
+			height: 30px;
+		}
+		.button:hover img {
+			filter: brightness(0) invert(1);
+		}
+		@media (prefers-color-scheme: dark) {
+			.button img {
+				filter: brightness(0) invert(1);
+			}
+		}
+		.button a {
+			color: var(--page-foreground-color) !important;
+			text-decoration: none;
+			display: inline-block;
+			padding: 0.6em 1.2em;
+		}
+		.button a:hover {
+			color: var(--page-background-color) !important;
+		}
+		@media (prefers-color-scheme: dark) {
+			.invert-dark {
+				filter: invert(1) hue-rotate(180deg);
+			}
+		}
+
+		.platforms {
+			text-align: center;
+			margin: 2.5em 0 5em;
+		}
+		.platforms-label {
+			text-transform: uppercase;
+			letter-spacing: .14em;
+			font-size: .78em;
+			opacity: .6;
+			margin: 0 0 1.2em;
+		}
+		.platform-logos {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			gap: 2em 2.5em;
+		}
+		.platform-logos img {
+			transition: transform .2s ease;
+		}
+		.platform-logos img:hover {
+			transform: scale(1.08);
+		}
+
+		.content-grid {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 2em;
+			margin: 2em 0;
+		}
+		.card {
+			flex: 1 1 20em;
+			background: color-mix(in srgb, var(--page-background-color) 96%, var(--primary-color));
+			border: 1px solid var(--separator-color);
+			border-radius: var(--border-radius-large);
+			box-shadow: var(--box-shadow);
+			padding: var(--spacing-xlarge);
+		}
+		.card h2 {
+			display: flex;
+			align-items: center;
+			gap: .45em;
+			margin-top: 0;
+		}
+		.card ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+		.card li {
+			position: relative;
+			padding: .55em 0 .55em 1.3em;
+			border-bottom: 1px solid var(--separator-color);
+			transition: background-color .15s ease, border-radius .15s ease;
+		}
+		.card li:last-child {
+			border-bottom: none;
+		}
+		.card li::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 1.1em;
+			width: 7px;
+			height: 7px;
+			border-radius: 50%;
+			background: var(--primary-color);
+		}
+		.card li:hover {
+			background: var(--odd-color);
+			border-radius: var(--border-radius-small);
+		}
+
+		.footnote {
+			opacity: .7;
+			text-align: center;
+		}
+	</style>
 </head>
+
 <body>
-<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
-<div id="titlearea">
-<table cellspacing="0" cellpadding="0">
- <tbody>
- <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="jngl-logo.svg"/></td>
-  <td id="projectalign">
-   <div id="projectname">JNGL
-   </div>
-   <div id="projectbrief">Easy to use cross-platform 2D game library</div>
-  </td>
- </tr>
- </tbody>
-</table>
-</div>
-<!-- end header part -->
-<!-- Generated by Doxygen 1.12.0 -->
+<div style="float:right;margin-right:1em" id="MSearchBox" class="MSearchBoxInactive"><span class="left"><span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span><input type="text" id="MSearchField" value="" placeholder="Search" accesskey="S" onfocus="searchBox.OnSearchFieldFocus(true)" onblur="searchBox.OnSearchFieldFocus(false)" onkeyup="searchBox.OnSearchFieldChange(event)"></span><span class="right"><a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()" style="display: none;"><div id="MSearchCloseImg" class="close-icon"></div></a></span></div>
+<div class="contents">
+
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
 var searchBox = new SearchBox("searchBox", "search/",'.html');
-/* @license-end */
-</script>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(function() { codefold.init(0); });
 /* @license-end */
 </script>
 <script type="text/javascript" src="menudata.js"></script>
@@ -54,17 +174,9 @@ $(function() { codefold.init(0); });
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
 $(function() {
-  initMenu('',true,false,'search.php','Search',false);
+  initMenu('',true,false,'search.php','Search');
   $(function() { init_search(); });
 });
-/* @license-end */
-</script>
-<div id="main-nav"></div>
-</div><!-- top -->
-<div id="doc-content">
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(function(){ initResizable(false); });
 /* @license-end */
 </script>
 <!-- window showing the filter options -->
@@ -88,15 +200,80 @@ $(function(){ initResizable(false); });
 </div>
 </div>
 
-<div><div class="header">
-  <div class="headertitle"><div class="title">JNGL </div></div>
-</div><!--header-->
-<div class="contents">
-<div class="textblock"><p><a class="anchor" id="md__2____w_2jngl_2jngl_2doc_2index"></a> This file is unused. The generated index.html will be replaced by doc/index.html. </p>
-</div></div><!-- PageDoc -->
-<a href="doxygen_crawl.html"></a>
-</div><!-- contents -->
-<!-- HTML footer for doxygen 1.9.1-->
-<!-- start footer part -->
+	<div class="hero">
+		<div class="hero-logo-wrap">
+			<img alt="Logo" src="Dell XPS 13.png" />
+		</div>
+		<h1>A Cross-Platform Framework for 2D Games</h1>
+		<div class="button-row">
+			<div class="button"><a href="https://github.com/jhasse/jngl"><img src="GitHub_Invertocat_Logo.svg"/>GitHub</a></div>
+			<div class="button"><a href="https://discord.gg/254P43HvWJ"><img src="discord-icon.svg"/>Discord</a></div>
+			<div class="button"><a href="annotated.html"><img src="documentation.svg"/>Documentation</a></div>
+		</div>
+	</div>
+	<div class="textblock">
+		<!-- <p style="text-align:center">
+			<a href="https://discord.gg/254P43HvWJ" rel="nofollow"><img src="https://camo.githubusercontent.com/2117ba6332c311013979a67d3291aa5846a4b672a8c9d7cca1fe66863645fb93/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f636861742d6f6e253230646973636f72642d3732383964612e737667" alt="Chat" data-canonical-src="https://img.shields.io/badge/chat-on%20discord-7289da.svg" style="max-width: 100%;"></a>
+			<a href="annotated.html"><img src="https://img.shields.io/badge/Class-List-335c80?logo=doxygen" alt="Documentation"></a>
+			<a href="https://github.com/jhasse/jngl"><img src="https://img.shields.io/badge/GitHub-jhasse%2Fjngl-1779c4?logo=github" alt="GitHub - jhasse/jngl"></a>
+		</p> -->
+		<p>JNGL is a versatile multi-platform library for game development, written in modern C++. It has been used to create several different games on a number of different platforms.
+		</p>
+		<p>
+			Games using JNGL have been released on Windows, Linux, Mac, iOS, Android and Nintendo Switch<sup><a href="#fn1">1</a></sup>, as well as the browser via Emscripten. There also has been work done on porting games to XBox and Playstation.
+		</p>
+		<div class="platforms">
+			<p class="platforms-label">Available on</p>
+			<div class="platform-logos">
+				<img src="Nintendo_Switch_logo.svg" height="90px" />
+				<img src="HTML5_logo_and_wordmark.svg" height="90px" />
+				<img class="invert-dark" src="Android_2023_3D_logo_and_wordmark.svg" height="38px" />
+				<img class="invert-dark" src="IOS_wordmark_(2017).svg" height="38px" />
+				<img class="invert-dark" src="MacOS_wordmark_(2017).svg" height="38px" />
+				<img src="Windows_logo_and_wordmark_-_2021.svg" height="46px" />
+				<img class="invert-dark" src="Linux.png" height="42px" />
+				<img class="invert-dark" src="Xbox_logo_(2019).svg" height="46px" />
+			</div>
+		</div>
+		<div class="content-grid">
+			<div class="card">
+				<h2><span aria-hidden="true">🎮</span>Games</h2>
+				<ul>
+					<li><a href="https://sweetsplit.de"><b>Sweet Split</b></a><br />
+						Puzzle game for iOS and Android inspired by JezzBall</li>
+					<li><a href="https://onebitwonder.de/2080/"><b>2080 - Operation Sunshield</b></a><br />
+					    Cheerful cartoon Point-and-click adventure game using the JNGL-based <a href="https://alpaca-engine.de/">ALPACA engine</a></li>
+					<li><a href="https://bixense.com/boomshineplus/"><b>Boomshine Plus</b></a><br />
+						Simple and chilly, but addictive puzzle game for Android, iOS and PC</li>
+					<li><a href="https://portaldogs.com"><b>Portal Dogs</b></a><br />
+						Puzzle platformer available for the Nintendo Switch, Android and on Steam</li>
+					<li><a href="https://bubblefall.de"><b>Bubble Fall</b></a><br />
+						2-4 player game created for the Global Game Jam 2025, completely playable in the browser</li>
+					<li><a href="https://jntetri.boomshine.de"><b>JNTETRI</b></a><br />
+						A simple Tetris clone with online multiplayer</li>
+				</ul>
+				<p>and many more...</p>
+			</div>
+			<div class="card">
+				<h2><span aria-hidden="true">⚙️</span>Features</h2>
+				<ul>
+					<li>C++17</li>
+					<li><a href="http://en.wikipedia.org/wiki/Zlib_license">zlib License</a>, so suitable for commercial use and
+						static linking</li>
+					<li>OpenGL (ES) 3.0 accelerated</li>
+					<li>PNG, BMP and <a href="https://developers.google.com/speed/webp/">WebP</a> image support</li>
+					<li>Ogg Vorbis audio support with support for effects like pitch shifting</li>
+					<li>Theora video playback support</li>
+					<li>UTF-8 text output using <a href="http://www.freetype.org/">FreeType</a></li>
+				</ul>
+			</div>
+		</div>
+		<hr />
+		<p class="footnote"><sup id="fn1">1. Not open-source due to Nintendo's NDA. <a href="mailto:support@bixense.com">Contact me</a> to
+				get access.</sup></p>
+	</div>
+</div>
+
 </body>
+
 </html>
