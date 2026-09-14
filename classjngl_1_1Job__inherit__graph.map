@@ -1,11 +1,13 @@
 <map id="Job" name="Job">
-<area shape="rect" id="Node000001" title="Background job which stays part of the main loop independent of the active jngl::Scene." alt="" coords="101,5,147,31"/>
+<area shape="rect" id="Node000001" title="Background job which stays part of the main loop independent of the active jngl::Scene." alt="" coords="215,5,260,31"/>
 <area shape="rect" id="Node000002" href="$classjngl_1_1VideoRecorder.html" title="Records video and audio output to a file." alt="" coords="5,79,131,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,45,80,80,75,77,103,41"/>
-<area shape="rect" id="Node000003" href="$classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself." alt="" coords="155,79,208,105"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="145,41,174,77,170,80,141,45"/>
-<area shape="rect" id="Node000004" href="$classjngl_1_1Fade.html" title="Fades between two scenes, first fading to jngl::getBackgroundColor() and then fading to the new scene..." alt="" coords="101,153,155,178"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="166,119,139,154,135,151,161,115"/>
-<area shape="rect" id="Node000005" href="$classjngl_1_1WorkFactory.html" title=" " alt="" coords="179,153,288,178"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="201,116,227,151,222,154,197,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="201,37,98,81,96,76,199,33"/>
+<area shape="rect" id="Node000003" href="$classjngl_1_1VirtualMouseCursor.html" title=" " alt="" coords="155,79,320,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="240,46,240,79,235,79,235,46"/>
+<area shape="rect" id="Node000004" href="$classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself." alt="" coords="344,79,397,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="275,36,349,76,347,81,272,41"/>
+<area shape="rect" id="Node000005" href="$classjngl_1_1Fade.html" title="Fades between two scenes, first fading to jngl::getBackgroundColor() and then fading to the new scene..." alt="" coords="291,153,344,178"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="355,119,328,154,324,151,351,115"/>
+<area shape="rect" id="Node000006" href="$classjngl_1_1WorkFactory.html" title=" " alt="" coords="368,153,477,178"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="390,116,416,151,412,154,386,119"/>
 </map>

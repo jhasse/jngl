@@ -102,14 +102,16 @@ $(function(){ initResizable(false); });
 
 <p>Miscellaneous functions.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/cstdint.html">cstdint</a>&gt;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="Finally_8hpp_source.html">Finally.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Vec2_8hpp_source.html">Vec2.hpp</a>&quot;</code><br />
+<code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/cstdint.html">cstdint</a>&gt;</code><br />
 <code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/sstream.html">sstream</a>&gt;</code><br />
 <code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/string.html">string</a>&gt;</code><br />
 <code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/vector.html">vector</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for other.hpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="other_8hpp__incl.svg" width="376" height="111"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="other_8hpp__incl.svg" width="651" height="184"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -160,6 +162,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>cancelQuit</b> ()</td
 unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>getStepsPerSecond</b> ()</td></tr>
 <tr class="memdesc:a06943dd8adf8a3d0ef639620df5dcad2"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many times <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Work::step</a> is called per second (default: 60) <br /></td></tr>
 <tr class="separator:a06943dd8adf8a3d0ef639620df5dcad2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51e49db6222d8f0356c79ef1fa2d0c83" id="r_a51e49db6222d8f0356c79ef1fa2d0c83"><td class="memItemLeft" align="right" valign="top"><a id="a51e49db6222d8f0356c79ef1fa2d0c83" name="a51e49db6222d8f0356c79ef1fa2d0c83"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>getDelta</b> ()</td></tr>
+<tr class="memdesc:a51e49db6222d8f0356c79ef1fa2d0c83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time in seconds of a step, i.e. 1 / <a class="el" href="namespacejngl.html#a06943dd8adf8a3d0ef639620df5dcad2" title="How many times Work::step is called per second (default: 60)">getStepsPerSecond()</a> <br /></td></tr>
+<tr class="separator:a51e49db6222d8f0356c79ef1fa2d0c83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2222d84c7228e46ddb220bd543a5401" id="r_aa2222d84c7228e46ddb220bd543a5401"><td class="memItemLeft" align="right" valign="top"><a id="aa2222d84c7228e46ddb220bd543a5401" name="aa2222d84c7228e46ddb220bd543a5401"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setStepsPerSecond</b> (unsigned int)</td></tr>
 <tr class="memdesc:aa2222d84c7228e46ddb220bd543a5401"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many times <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Work::step</a> should be called per second (default: 60) <br /></td></tr>
@@ -179,6 +185,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setVerticalSync</b> (
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>getVerticalSync</b> ()</td></tr>
 <tr class="memdesc:a9e6dfb86fb619ba339a0434578c79e33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether V-SYNC is enabled. Many devices always enable V-SYNC with no way to turn it off. <br /></td></tr>
 <tr class="separator:a9e6dfb86fb619ba339a0434578c79e33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf9d720b08cf2ffc9867e4c428bbae00" id="r_aaf9d720b08cf2ffc9867e4c428bbae00"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Finally.html">Finally</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#aaf9d720b08cf2ffc9867e4c428bbae00">scissor</a> (<a class="el" href="classjngl_1_1Vec2.html">Vec2</a> position, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> size)</td></tr>
+<tr class="memdesc:aaf9d720b08cf2ffc9867e4c428bbae00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables scissor testing, clipping all rendering to the rectangle from <em>position</em> to <em>position</em> + <em>size</em> in screen coordinates (with (0, 0) at the center of the screen)  <br /></td></tr>
+<tr class="separator:aaf9d720b08cf2ffc9867e4c428bbae00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb0510b50c5a13532b0943a23e25e0ca" id="r_aeb0510b50c5a13532b0943a23e25e0ca"><td class="memItemLeft" align="right" valign="top"><a id="aeb0510b50c5a13532b0943a23e25e0ca" name="aeb0510b50c5a13532b0943a23e25e0ca"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setIcon</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
 <tr class="memdesc:aeb0510b50c5a13532b0943a23e25e0ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the icon for the window (Desktop-only) <br /></td></tr>

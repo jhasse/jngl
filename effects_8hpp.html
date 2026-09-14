@@ -143,24 +143,106 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8bf98e8b51ff6f0598ac5047eb5e8f73" id="r_a8bf98e8b51ff6f0598ac5047eb5e8f73"><td class="memItemLeft" align="right" valign="top"><a id="a8bf98e8b51ff6f0598ac5047eb5e8f73" name="a8bf98e8b51ff6f0598ac5047eb5e8f73"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>linear</b> (float)</td></tr>
+<tr class="memitem:a8bf98e8b51ff6f0598ac5047eb5e8f73" id="r_a8bf98e8b51ff6f0598ac5047eb5e8f73"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8bf98e8b51ff6f0598ac5047eb5e8f73">linear</a> (float)</td></tr>
+<tr class="memdesc:a8bf98e8b51ff6f0598ac5047eb5e8f73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Easing functions f(t) mapping t in [0, 1] to a value in [0, 1] (values outside this range are clamped).  <br /></td></tr>
 <tr class="separator:a8bf98e8b51ff6f0598ac5047eb5e8f73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d80529462d90f2fd6846e1cb03714f6" id="r_a6d80529462d90f2fd6846e1cb03714f6"><td class="memItemLeft" align="right" valign="top"><a id="a6d80529462d90f2fd6846e1cb03714f6" name="a6d80529462d90f2fd6846e1cb03714f6"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>elastic</b> (float)</td></tr>
+<tr class="memitem:a6d80529462d90f2fd6846e1cb03714f6" id="r_a6d80529462d90f2fd6846e1cb03714f6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d80529462d90f2fd6846e1cb03714f6">elastic</a> (float)</td></tr>
+<tr class="memdesc:a6d80529462d90f2fd6846e1cb03714f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overshoots past 1 and oscillates back, like a spring settling into place.  <br /></td></tr>
 <tr class="separator:a6d80529462d90f2fd6846e1cb03714f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8de74ee7e9f2a4656587fb779014712e" id="r_a8de74ee7e9f2a4656587fb779014712e"><td class="memItemLeft" align="right" valign="top"><a id="a8de74ee7e9f2a4656587fb779014712e" name="a8de74ee7e9f2a4656587fb779014712e"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>cubic</b> (float)</td></tr>
+<tr class="memitem:a8de74ee7e9f2a4656587fb779014712e" id="r_a8de74ee7e9f2a4656587fb779014712e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8de74ee7e9f2a4656587fb779014712e">cubic</a> (float)</td></tr>
+<tr class="memdesc:a8de74ee7e9f2a4656587fb779014712e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ease-out: starts fast, decelerates into the target (1 - (1 - t)^3).  <br /></td></tr>
 <tr class="separator:a8de74ee7e9f2a4656587fb779014712e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa86e454c6d88fa9fd48ee46dc3f06d4c" id="r_aa86e454c6d88fa9fd48ee46dc3f06d4c"><td class="memItemLeft" align="right" valign="top"><a id="aa86e454c6d88fa9fd48ee46dc3f06d4c" name="aa86e454c6d88fa9fd48ee46dc3f06d4c"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>expo</b> (float)</td></tr>
+<tr class="memitem:aa86e454c6d88fa9fd48ee46dc3f06d4c" id="r_aa86e454c6d88fa9fd48ee46dc3f06d4c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa86e454c6d88fa9fd48ee46dc3f06d4c">expo</a> (float)</td></tr>
+<tr class="memdesc:aa86e454c6d88fa9fd48ee46dc3f06d4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ease-out like <a class="el" href="#a8de74ee7e9f2a4656587fb779014712e" title="Ease-out: starts fast, decelerates into the target (1 - (1 - t)^3).">cubic()</a>, but with a sharper start and flatter tail.  <br /></td></tr>
 <tr class="separator:aa86e454c6d88fa9fd48ee46dc3f06d4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Effects that can be applied to <a class="el" href="classjngl_1_1Widget.html">jngl::Widget</a>. </p>
 
 <p class="definition">Definition in file <a class="el" href="effects_8hpp_source.html">effects.hpp</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a8bf98e8b51ff6f0598ac5047eb5e8f73" name="a8bf98e8b51ff6f0598ac5047eb5e8f73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8bf98e8b51ff6f0598ac5047eb5e8f73">&#9670;&#160;</a></span>linear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float linear </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Easing functions f(t) mapping t in [0, 1] to a value in [0, 1] (values outside this range are clamped). </p>
+<p>They share the same shape: f(0) == 0 and f(1) == 1, only the path between differs. Constant speed, no easing.</p>
+<p>1| / | / | / | / 0|/_________ 0 1 </p>
+
+</div>
+</div>
+<a id="a6d80529462d90f2fd6846e1cb03714f6" name="a6d80529462d90f2fd6846e1cb03714f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d80529462d90f2fd6846e1cb03714f6">&#9670;&#160;</a></span>elastic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float elastic </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Overshoots past 1 and oscillates back, like a spring settling into place. </p>
+<p>1| /\ ___ | / \/ | / | / 0|/_________ 0 1 </p>
+
+</div>
+</div>
+<a id="a8de74ee7e9f2a4656587fb779014712e" name="a8de74ee7e9f2a4656587fb779014712e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8de74ee7e9f2a4656587fb779014712e">&#9670;&#160;</a></span>cubic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float cubic </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Ease-out: starts fast, decelerates into the target (1 - (1 - t)^3). </p>
+<p>1| ____-&mdash; | / | / | / 0|/_________ 0 1 </p>
+
+</div>
+</div>
+<a id="aa86e454c6d88fa9fd48ee46dc3f06d4c" name="aa86e454c6d88fa9fd48ee46dc3f06d4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa86e454c6d88fa9fd48ee46dc3f06d4c">&#9670;&#160;</a></span>expo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float expo </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Ease-out like cubic(), but with a sharper start and flatter tail. </p>
+<p>1| _------&mdash; |/ | | 0|__________ 0 1 </p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- HTML footer for doxygen 1.9.1-->
 <!-- start footer part -->
 </body>

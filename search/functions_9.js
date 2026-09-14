@@ -99,7 +99,7 @@ var searchData=
   ['isnormal_96',['isnormal',['http://en.cppreference.com/w/cpp/numeric/math/isnormal.html',1,'std']]],
   ['isnull_97',['isNull',['../classjngl_1_1Vec2.html#abada6dfb33f4cbafe1e443a5cf8dc8d0',1,'jngl::Vec2']]],
   ['iso_5fencoding_98',['iso_encoding',['http://en.cppreference.com/w/cpp/chrono/weekday/encoding.html',1,'std::chrono::weekday']]],
-  ['isplaying_99',['isPlaying',['../classjngl_1_1SoundFile.html#a8438e3403946accc1986a05b89ee7b03',1,'jngl::SoundFile::isPlaying()'],['../namespacejngl.html#a41df6b862953562a4795ef71dc79fc9c',1,'jngl::isPlaying()']]],
+  ['isplaying_99',['isPlaying',['../classjngl_1_1Channel.html#a883ed27d080695f70005f0377611ebce',1,'jngl::Channel::isPlaying()'],['../classjngl_1_1SoundFile.html#a8438e3403946accc1986a05b89ee7b03',1,'jngl::SoundFile::isPlaying()'],['../namespacejngl.html#a41df6b862953562a4795ef71dc79fc9c',1,'jngl::isPlaying()']]],
   ['isprint_28_3c_20cctype_20_3e_29_100',['isprint(&lt; cctype &gt;)',['http://en.cppreference.com/w/cpp/string/byte/isprint.html',1,'std']]],
   ['isprint_28_3c_20clocale_20_3e_29_101',['isprint(&lt; clocale &gt;)',['http://en.cppreference.com/w/cpp/locale/isprint.html',1,'std']]],
   ['ispunct_28_3c_20cctype_20_3e_29_102',['ispunct(&lt; cctype &gt;)',['http://en.cppreference.com/w/cpp/string/byte/ispunct.html',1,'std']]],

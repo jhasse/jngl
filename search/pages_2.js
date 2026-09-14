@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['game_20library_0',['Just a Neat Game Library',['../index.html',1,'']]]
+  ['list_0',['Deprecated List',['../deprecated.html',1,'']]]
 ];

@@ -18,5 +18,6 @@ var searchData=
   ['vertex_15',['Vertex',['../structjngl_1_1Vertex.html',1,'jngl']]],
   ['video_16',['Video',['../classjngl_1_1Video.html',1,'jngl']]],
   ['videorecorder_17',['VideoRecorder',['../classjngl_1_1VideoRecorder.html',1,'jngl']]],
-  ['void_5ft_18',['void_t',['http://en.cppreference.com/w/cpp/experimental/void_t.html',1,'void_t'],['http://en.cppreference.com/w/cpp/types/void_t.html',1,'void_t']]]
+  ['virtualmousecursor_18',['VirtualMouseCursor',['../classjngl_1_1VirtualMouseCursor.html',1,'jngl']]],
+  ['void_5ft_19',['void_t',['http://en.cppreference.com/w/cpp/experimental/void_t.html',1,'void_t'],['http://en.cppreference.com/w/cpp/types/void_t.html',1,'void_t']]]
 ];

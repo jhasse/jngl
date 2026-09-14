@@ -95,6 +95,7 @@ $(function(){ initResizable(false); });
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classjngl_1_1SoundFile-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">SoundFile Class Reference</div></div>
 </div><!--header-->
@@ -159,16 +160,25 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setVolume</b> (float 
 <a class="elRef" href="http://en.cppreference.com/w/cpp/chrono/duration.html">std::chrono::milliseconds</a>&#160;</td><td class="memItemRight" valign="bottom"><b>length</b> () const</td></tr>
 <tr class="memdesc:abf976888187986405a8e8ad98c716530"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the duration in ms. <br /></td></tr>
 <tr class="separator:abf976888187986405a8e8ad98c716530"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb5e1a934b01b01c1584cf4be5287bd8" id="r_afb5e1a934b01b01c1584cf4be5287bd8"><td class="memItemLeft" align="right" valign="top"><a id="afb5e1a934b01b01c1584cf4be5287bd8" name="afb5e1a934b01b01c1584cf4be5287bd8"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>progress</b> () const</td></tr>
-<tr class="memdesc:afb5e1a934b01b01c1584cf4be5287bd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns playing progress in [0, 1], can be used with <a class="el" href="#abf976888187986405a8e8ad98c716530" title="Returns the duration in ms.">length()</a> to determine how much time has passed. <br /></td></tr>
+<tr class="memitem:afb5e1a934b01b01c1584cf4be5287bd8" id="r_afb5e1a934b01b01c1584cf4be5287bd8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb5e1a934b01b01c1584cf4be5287bd8">progress</a> () const</td></tr>
+<tr class="memdesc:afb5e1a934b01b01c1584cf4be5287bd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns playing progress in [0, 1], can be used with <a class="el" href="#abf976888187986405a8e8ad98c716530" title="Returns the duration in ms.">length()</a> to determine how much time has passed.  <br /></td></tr>
 <tr class="separator:afb5e1a934b01b01c1584cf4be5287bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a0a9c0a9c9b67e5ac1db073fd6706ef" id="r_a7a0a9c0a9c9b67e5ac1db073fd6706ef"><td class="memItemLeft" align="right" valign="top"><a id="a7a0a9c0a9c9b67e5ac1db073fd6706ef" name="a7a0a9c0a9c9b67e5ac1db073fd6706ef"></a>
+<a class="elRef" href="http://en.cppreference.com/w/cpp/container/span.html">std::span</a>&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getSamples</b> ()</td></tr>
+<tr class="memdesc:a7a0a9c0a9c9b67e5ac1db073fd6706ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the raw audio samples of this <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a>. <br /></td></tr>
+<tr class="separator:a7a0a9c0a9c9b67e5ac1db073fd6706ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a98a9db313826252f0b80d42d5b078fc2" id="r_a98a9db313826252f0b80d42d5b078fc2"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98a9db313826252f0b80d42d5b078fc2">get</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a> filename)</td></tr>
+<tr class="memdesc:a98a9db313826252f0b80d42d5b078fc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to a <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> from JNGL's internal cache, creates it with async loading if necessary.  <br /></td></tr>
+<tr class="separator:a98a9db313826252f0b80d42d5b078fc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Sound loaded from an OGG file. </p>
-<p>JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly - you can just use <a class="el" href="namespacejngl.html#a9a2d4a760f9febf9ab966d0ed41183b2" title="Play an OGG audio file once.">jngl::play</a> or <a class="el" href="classjngl_1_1Channel.html#a9a2d4a760f9febf9ab966d0ed41183b2" title="Play OGG file on this channel.">Channel::play</a>. </p>
+<p>JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly - you can just use <a class="el" href="namespacejngl.html#a5dec9dac0a4970b6421c809e923dee8b" title="Play an OGG audio file once.">jngl::play</a> or <a class="el" href="classjngl_1_1Channel.html#a9a2d4a760f9febf9ab966d0ed41183b2" title="Play OGG file on this channel.">Channel::play</a>. If you want to access the internally <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> from JNGL's cache before playing, use <a class="el" href="#a98a9db313826252f0b80d42d5b078fc2" title="Returns a shared pointer to a SoundFile from JNGL&#39;s internal cache, creates it with async loading if ...">SoundFile::get</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="SoundFile_8hpp_source.html#l00029">29</a> of file <a class="el" href="SoundFile_8hpp_source.html">SoundFile.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoundFile_8hpp_source.html#l00032">32</a> of file <a class="el" href="SoundFile_8hpp_source.html">SoundFile.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6f8d4c7f6d06cfb5b1527d334a4fedcf" name="a6f8d4c7f6d06cfb5b1527d334a4fedcf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6f8d4c7f6d06cfb5b1527d334a4fedcf">&#9670;&#160;</a></span>SoundFile()</h2>
@@ -204,6 +214,38 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>progress</b> () cons
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a98a9db313826252f0b80d42d5b078fc2" name="a98a9db313826252f0b80d42d5b078fc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98a9db313826252f0b80d42d5b078fc2">&#9670;&#160;</a></span>get()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a> &gt; get </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a></td>          <td class="paramname"><span class="paramname"><em>filename</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a shared pointer to a <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> from JNGL's internal cache, creates it with async loading if necessary. </p>
+<p>Example: </p><div class="fragment"><div class="line"><span class="keyword">auto</span> sound = <a class="code hl_function" href="#a98a9db313826252f0b80d42d5b078fc2">jngl::SoundFile::get</a>(<span class="stringliteral">&quot;sfx/foo.ogg&quot;</span>);</div>
+<div class="line"><span class="keyword">auto</span> other = <a class="code hl_function" href="#a98a9db313826252f0b80d42d5b078fc2">jngl::SoundFile::get</a>(<span class="stringliteral">&quot;sfx/foo.ogg&quot;</span>);</div>
+<div class="line">assert(sound == other);</div>
+<div class="line">assert(!sound-&gt;isPlaying());</div>
+<div class="ttc" id="aclassjngl_1_1SoundFile_html_a98a9db313826252f0b80d42d5b078fc2"><div class="ttname"><a href="#a98a9db313826252f0b80d42d5b078fc2">jngl::SoundFile::get</a></div><div class="ttdeci">static std::shared_ptr&lt; SoundFile &gt; get(std::string_view filename)</div><div class="ttdoc">Returns a shared pointer to a SoundFile from JNGL's internal cache, creates it with async loading if ...</div></div>
+</div><!-- fragment --> 
+</div>
+</div>
 <a id="a811a07a7c69cd4cf4d23031c99d5a589" name="a811a07a7c69cd4cf4d23031c99d5a589"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a811a07a7c69cd4cf4d23031c99d5a589">&#9670;&#160;</a></span>stop()</h2>
 
@@ -246,6 +288,26 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>progress</b> () cons
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="afb5e1a934b01b01c1584cf4be5287bd8" name="afb5e1a934b01b01c1584cf4be5287bd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb5e1a934b01b01c1584cf4be5287bd8">&#9670;&#160;</a></span>progress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float progress </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns playing progress in [0, 1], can be used with <a class="el" href="#abf976888187986405a8e8ad98c716530" title="Returns the duration in ms.">length()</a> to determine how much time has passed. </p>
+<p>If the sound hasn't been started yet, returns 0.0f. </p>
 
 </div>
 </div>

@@ -189,6 +189,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1ScaleablePixels.html">ScaleablePixels</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale-independent pixels, also called "screen pixels".  <a href="classjngl_1_1ScaleablePixels.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1ScrollArea.html">ScrollArea</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Shader.html">Shader</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fragment or vertex GLSL shader.  <a href="classjngl_1_1Shader.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -224,6 +226,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1VideoRecorder.html">VideoRecorder</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Records video and audio output to a file.  <a href="classjngl_1_1VideoRecorder.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1VirtualMouseCursor.html">VirtualMouseCursor</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Widget.html">Widget</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Work.html">Work</a></td></tr>
@@ -243,11 +247,58 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:a86abf923535e5284b381ee2e78eadacd" id="r_a86abf923535e5284b381ee2e78eadacd"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86abf923535e5284b381ee2e78eadacd">TextureFilter</a> : uint8_t { <a class="el" href="#a86abf923535e5284b381ee2e78eadacdaaf17c98bbd83c27d6426d2ff3fa81d7f">Bilinear</a>
+, <a class="el" href="#a86abf923535e5284b381ee2e78eadacdaaa020331bb30d2fa2ecf7c3a0777823f">NearestNeighbor</a>
+ }</td></tr>
+<tr class="separator:a86abf923535e5284b381ee2e78eadacd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc275d961db164fe0a71325c768c0502" id="r_afc275d961db164fe0a71325c768c0502"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc275d961db164fe0a71325c768c0502">HapticFeedback</a> : uint8_t { <a class="el" href="#afc275d961db164fe0a71325c768c0502a9914a0ce04a7b7b6a8e39bec55064b82">Light</a>
+, <a class="el" href="#afc275d961db164fe0a71325c768c0502a87f8a6ab85c9ced3702b4ea641ad4bb5">Medium</a>
+, <a class="el" href="#afc275d961db164fe0a71325c768c0502af9ffe67a20da9cbff56b420fca4bd491">Heavy</a>
+, <a class="el" href="#afc275d961db164fe0a71325c768c0502a8394f0347c184cf156ac5924dccb773b">Long</a>
+ }</td></tr>
+<tr class="memdesc:afc275d961db164fe0a71325c768c0502"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of haptic feedback to trigger via <a class="el" href="#abcdfad22f52003d4748e3f4c72381387" title="Triggers haptic feedback (a short vibration)">jngl::hapticFeedback</a>.  <a href="#afc275d961db164fe0a71325c768c0502">More...</a><br /></td></tr>
+<tr class="separator:afc275d961db164fe0a71325c768c0502"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0641d1a6fd8c6e3e8d709ca9e6be4638" id="r_a0641d1a6fd8c6e3e8d709ca9e6be4638"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0641d1a6fd8c6e3e8d709ca9e6be4638">KeyboardType</a> : uint8_t { <b>Default</b>
 , <b>Numpad</b>
  }</td></tr>
 <tr class="memdesc:a0641d1a6fd8c6e3e8d709ca9e6be4638"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a normal or a numbers-only keyboard should appear.  <a href="#a0641d1a6fd8c6e3e8d709ca9e6be4638">More...</a><br /></td></tr>
 <tr class="separator:a0641d1a6fd8c6e3e8d709ca9e6be4638"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbab6f64e82eec829c9fc664a19bfc75" id="r_afbab6f64e82eec829c9fc664a19bfc75"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75">controller</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75a9401da4ce408415b34ce204ccb2c27d0">LeftStickX</a>
+, <a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75a8a006575363ece2c3eced59ee41cb0ff">LeftStickXInverse</a>
+, <a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75a729f2100a072d3bc80d4eaea3218e61f">LeftStickY</a>
+, <a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75a3327352f317129cfedeeff1db4353960">LeftStickYInverse</a>
+, <br />
+&#160;&#160;<a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75a815982789d1065d38cea0bf6a12e3d75">RightStickX</a>
+, <a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75a1056387b45e58ac265c8105acdfcb469">RightStickXInverse</a>
+, <a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75ad3a7ef3a60ff2067a300de6108b26671">RightStickY</a>
+, <a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75ab743be82769bccde36c712763c5e3c75">RightStickYInverse</a>
+, <br />
+&#160;&#160;<b>A</b>
+, <b>B</b>
+, <b>X</b>
+, <b>Y</b>
+, <br />
+&#160;&#160;<a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75a2a81c1ce439d7652d7a61d55229c8043">LeftButton</a>
+, <a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75a7e264b46aade8e083656f1f0897220f3">RightButton</a>
+, <b>LeftTrigger</b>
+, <b>RightTrigger</b>
+, <br />
+&#160;&#160;<a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75aa6122a65eaa676f700ae68d393054a37">Start</a>
+, <a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75a0557fa923dcee4d0f86b1409f5c2167f">Back</a>
+, <b>DpadUp</b>
+, <b>DpadDown</b>
+, <br />
+&#160;&#160;<b>DpadLeft</b>
+, <b>DpadRight</b>
+, <b>LeftStick</b>
+, <b>RightStick</b>
+, <br />
+&#160;&#160;<b>Last</b>
+<br />
+ }</td></tr>
+<tr class="memdesc:afbab6f64e82eec829c9fc664a19bfc75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gamepad buttons.  <a href="#afbab6f64e82eec829c9fc664a19bfc75">More...</a><br /></td></tr>
+<tr class="separator:afbab6f64e82eec829c9fc664a19bfc75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7aed1e91261bf4cd3942c6f87ae468eb" id="r_a7aed1e91261bf4cd3942c6f87ae468eb"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7aed1e91261bf4cd3942c6f87ae468eb">Alignment</a> : uint8_t { <b>LEFT</b>
 , <b>RIGHT</b>
 , <b>CENTER</b>
@@ -283,9 +334,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setBackgroundColor</b
 void&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text, <a class="el" href="classjngl_1_1Vec2.html">jngl::Vec2</a> position)</td></tr>
 <tr class="memdesc:a70ccf12f2af460f800c43bb827040230"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print <em>text</em> at <em>position</em>. <br /></td></tr>
 <tr class="separator:a70ccf12f2af460f800c43bb827040230"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b70617b0dcd3fbf280ea1d8d2a8f2eb" id="r_a2b70617b0dcd3fbf280ea1d8d2a8f2eb"><td class="memItemLeft" align="right" valign="top"><a id="a2b70617b0dcd3fbf280ea1d8d2a8f2eb" name="a2b70617b0dcd3fbf280ea1d8d2a8f2eb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text, int xposition, int yposition)</td></tr>
-<tr class="memdesc:a2b70617b0dcd3fbf280ea1d8d2a8f2eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print <em>text</em> at { <em>xposition</em>, <em>yposition</em> }. <br /></td></tr>
+<tr class="memitem:a2b70617b0dcd3fbf280ea1d8d2a8f2eb" id="r_a2b70617b0dcd3fbf280ea1d8d2a8f2eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b70617b0dcd3fbf280ea1d8d2a8f2eb">print</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text, int xposition, int yposition)</td></tr>
+<tr class="memdesc:a2b70617b0dcd3fbf280ea1d8d2a8f2eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print <em>text</em> at { <em>xposition</em>, <em>yposition</em> }.  <br /></td></tr>
 <tr class="separator:a2b70617b0dcd3fbf280ea1d8d2a8f2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acaa75197781285d683a8ae653784ecfc" id="r_acaa75197781285d683a8ae653784ecfc"><td class="memItemLeft" align="right" valign="top"><a id="acaa75197781285d683a8ae653784ecfc" name="acaa75197781285d683a8ae653784ecfc"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> (const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;<a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text)</td></tr>
@@ -338,6 +388,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setLineHeight</b> (do
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getTextWidth</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;text)</td></tr>
 <tr class="memdesc:af60c08a50c17934ee771bc0cf068d49a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the width of <em>text</em> in scale-independent pixels if it would be drawn with the currently active font. <br /></td></tr>
 <tr class="separator:af60c08a50c17934ee771bc0cf068d49a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcdfad22f52003d4748e3f4c72381387" id="r_abcdfad22f52003d4748e3f4c72381387"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abcdfad22f52003d4748e3f4c72381387">hapticFeedback</a> (<a class="el" href="#afc275d961db164fe0a71325c768c0502">HapticFeedback</a> type=<a class="el" href="#afc275d961db164fe0a71325c768c0502a87f8a6ab85c9ced3702b4ea641ad4bb5">HapticFeedback::Medium</a>)</td></tr>
+<tr class="memdesc:abcdfad22f52003d4748e3f4c72381387"><td class="mdescLeft">&#160;</td><td class="mdescRight">Triggers haptic feedback (a short vibration)  <br /></td></tr>
+<tr class="separator:abcdfad22f52003d4748e3f4c72381387"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d6aa0eceebd892770053c46a98cde2d" id="r_a9d6aa0eceebd892770053c46a98cde2d"><td class="memItemLeft" align="right" valign="top"><a id="a9d6aa0eceebd892770053c46a98cde2d" name="a9d6aa0eceebd892770053c46a98cde2d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setKeyboardVisible</b> (bool)</td></tr>
 <tr class="memdesc:a9d6aa0eceebd892770053c46a98cde2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Display onscreen keyboard for touch devices. <br /></td></tr>
@@ -586,6 +639,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>cancelQuit</b> ()</td
 unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>getStepsPerSecond</b> ()</td></tr>
 <tr class="memdesc:a06943dd8adf8a3d0ef639620df5dcad2"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many times <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Work::step</a> is called per second (default: 60) <br /></td></tr>
 <tr class="separator:a06943dd8adf8a3d0ef639620df5dcad2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51e49db6222d8f0356c79ef1fa2d0c83" id="r_a51e49db6222d8f0356c79ef1fa2d0c83"><td class="memItemLeft" align="right" valign="top"><a id="a51e49db6222d8f0356c79ef1fa2d0c83" name="a51e49db6222d8f0356c79ef1fa2d0c83"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>getDelta</b> ()</td></tr>
+<tr class="memdesc:a51e49db6222d8f0356c79ef1fa2d0c83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time in seconds of a step, i.e. 1 / <a class="el" href="#a06943dd8adf8a3d0ef639620df5dcad2" title="How many times Work::step is called per second (default: 60)">getStepsPerSecond()</a> <br /></td></tr>
+<tr class="separator:a51e49db6222d8f0356c79ef1fa2d0c83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2222d84c7228e46ddb220bd543a5401" id="r_aa2222d84c7228e46ddb220bd543a5401"><td class="memItemLeft" align="right" valign="top"><a id="aa2222d84c7228e46ddb220bd543a5401" name="aa2222d84c7228e46ddb220bd543a5401"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setStepsPerSecond</b> (unsigned int)</td></tr>
 <tr class="memdesc:aa2222d84c7228e46ddb220bd543a5401"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many times <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Work::step</a> should be called per second (default: 60) <br /></td></tr>
@@ -605,6 +662,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setVerticalSync</b> (
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>getVerticalSync</b> ()</td></tr>
 <tr class="memdesc:a9e6dfb86fb619ba339a0434578c79e33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether V-SYNC is enabled. Many devices always enable V-SYNC with no way to turn it off. <br /></td></tr>
 <tr class="separator:a9e6dfb86fb619ba339a0434578c79e33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf9d720b08cf2ffc9867e4c428bbae00" id="r_aaf9d720b08cf2ffc9867e4c428bbae00"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Finally.html">Finally</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf9d720b08cf2ffc9867e4c428bbae00">scissor</a> (<a class="el" href="classjngl_1_1Vec2.html">Vec2</a> position, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> size)</td></tr>
+<tr class="memdesc:aaf9d720b08cf2ffc9867e4c428bbae00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables scissor testing, clipping all rendering to the rectangle from <em>position</em> to <em>position</em> + <em>size</em> in screen coordinates (with (0, 0) at the center of the screen)  <br /></td></tr>
+<tr class="separator:aaf9d720b08cf2ffc9867e4c428bbae00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb0510b50c5a13532b0943a23e25e0ca" id="r_aeb0510b50c5a13532b0943a23e25e0ca"><td class="memItemLeft" align="right" valign="top"><a id="aeb0510b50c5a13532b0943a23e25e0ca" name="aeb0510b50c5a13532b0943a23e25e0ca"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setIcon</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
 <tr class="memdesc:aeb0510b50c5a13532b0943a23e25e0ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the icon for the window (Desktop-only) <br /></td></tr>
@@ -668,9 +728,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (<a 
 <tr class="memitem:ab46f197307a8d105cafd4c3f86d1df85"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#ab46f197307a8d105cafd4c3f86d1df85">setRightEdge</a> (T &amp;obj, <a class="el" href="classjngl_1_1Vec2.html">jngl::Vec2</a> position)</td></tr>
 <tr class="memdesc:ab46f197307a8d105cafd4c3f86d1df85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass an object T that has methods setCenter(jngl::Vec2) and getWidth().  <br /></td></tr>
 <tr class="separator:ab46f197307a8d105cafd4c3f86d1df85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79f3946cc19ffc59833986b1eff21b79" id="r_a79f3946cc19ffc59833986b1eff21b79"><td class="memItemLeft" align="right" valign="top"><a id="a79f3946cc19ffc59833986b1eff21b79" name="a79f3946cc19ffc59833986b1eff21b79"></a>
-<a class="el" href="classjngl_1_1Rgb.html">Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><b>interpolate</b> (<a class="el" href="classjngl_1_1Rgb.html">Rgb</a> a, <a class="el" href="classjngl_1_1Rgb.html">Rgb</a> b, float t)</td></tr>
-<tr class="memdesc:a79f3946cc19ffc59833986b1eff21b79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
+<tr class="memitem:abf5b032e8f145765298dba41781bc2e4" id="r_abf5b032e8f145765298dba41781bc2e4"><td class="memItemLeft" align="right" valign="top"><a id="abf5b032e8f145765298dba41781bc2e4" name="abf5b032e8f145765298dba41781bc2e4"></a>
+<a class="el" href="classjngl_1_1Rgb.html">Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mix</b> (<a class="el" href="classjngl_1_1Rgb.html">Rgb</a> a, <a class="el" href="classjngl_1_1Rgb.html">Rgb</a> b, float t)</td></tr>
+<tr class="memdesc:abf5b032e8f145765298dba41781bc2e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
+<tr class="separator:abf5b032e8f145765298dba41781bc2e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79f3946cc19ffc59833986b1eff21b79" id="r_a79f3946cc19ffc59833986b1eff21b79"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Rgb.html">Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79f3946cc19ffc59833986b1eff21b79">interpolate</a> (<a class="el" href="classjngl_1_1Rgb.html">Rgb</a> a, <a class="el" href="classjngl_1_1Rgb.html">Rgb</a> b, float t)</td></tr>
+<tr class="memdesc:a79f3946cc19ffc59833986b1eff21b79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Old name for mix, will be removed in a future release.  <br /></td></tr>
 <tr class="separator:a79f3946cc19ffc59833986b1eff21b79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a727fd9baaff788e0f90795d578fc9ca8" id="r_a727fd9baaff788e0f90795d578fc9ca8"><td class="memItemLeft" align="right" valign="top"><a id="a727fd9baaff788e0f90795d578fc9ca8" name="a727fd9baaff788e0f90795d578fc9ca8"></a>
 <a class="el" href="classjngl_1_1Rgb.html">Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getBackgroundColor</b> ()</td></tr>
@@ -683,9 +746,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (<a 
 <a class="elRef" href="http://en.cppreference.com/w/cpp/io/basic_ostream.html">std::ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (<a class="elRef" href="http://en.cppreference.com/w/cpp/io/basic_ostream.html">std::ostream</a> &amp;os, <a class="el" href="classjngl_1_1Rgb.html">Rgb</a> color)</td></tr>
 <tr class="memdesc:abfeefde6b4f90e2d3a028a6eafa0b902"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints the color as <code><a class="el" href="classjngl_1_1Rgb.html" title="Object representing a RGB color, new version of jngl::Color (which will be deprecated in the future)">jngl::Rgb</a>{ red, green, blue }</code> <br /></td></tr>
 <tr class="separator:abfeefde6b4f90e2d3a028a6eafa0b902"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6daf6049d5223d135e36b485e89134f" id="r_af6daf6049d5223d135e36b485e89134f"><td class="memItemLeft" align="right" valign="top"><a id="af6daf6049d5223d135e36b485e89134f" name="af6daf6049d5223d135e36b485e89134f"></a>
-<a class="el" href="classjngl_1_1Rgba.html">Rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><b>interpolate</b> (<a class="el" href="classjngl_1_1Rgba.html">Rgba</a> a, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> b, float t)</td></tr>
-<tr class="memdesc:af6daf6049d5223d135e36b485e89134f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
+<tr class="memitem:a651eb60debdea74b5d43f95ee8d8fe92" id="r_a651eb60debdea74b5d43f95ee8d8fe92"><td class="memItemLeft" align="right" valign="top"><a id="a651eb60debdea74b5d43f95ee8d8fe92" name="a651eb60debdea74b5d43f95ee8d8fe92"></a>
+<a class="el" href="classjngl_1_1Rgba.html">Rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mix</b> (<a class="el" href="classjngl_1_1Rgba.html">Rgba</a> a, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> b, float t)</td></tr>
+<tr class="memdesc:a651eb60debdea74b5d43f95ee8d8fe92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
+<tr class="separator:a651eb60debdea74b5d43f95ee8d8fe92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6daf6049d5223d135e36b485e89134f" id="r_af6daf6049d5223d135e36b485e89134f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Rgba.html">Rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6daf6049d5223d135e36b485e89134f">interpolate</a> (<a class="el" href="classjngl_1_1Rgba.html">Rgba</a> a, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> b, float t)</td></tr>
+<tr class="memdesc:af6daf6049d5223d135e36b485e89134f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Old name for mix, will be removed in a future release.  <br /></td></tr>
 <tr class="separator:af6daf6049d5223d135e36b485e89134f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18a187bd1dc31a4e221186d38c0672f5" id="r_a18a187bd1dc31a4e221186d38c0672f5"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="#a7310ba6795e72c54ccb2742d62c31c33">Scene</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18a187bd1dc31a4e221186d38c0672f5">getActiveScene</a> ()</td></tr>
 <tr class="memdesc:a18a187bd1dc31a4e221186d38c0672f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the currently active Scene.  <br /></td></tr>
@@ -776,8 +842,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawLine</b> (<a clas
 <tr class="memitem:ae891e0c19cfaeb0ec2875aa2735b20a8" id="r_ae891e0c19cfaeb0ec2875aa2735b20a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae891e0c19cfaeb0ec2875aa2735b20a8">drawLine</a> (const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;<a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> end)</td></tr>
 <tr class="memdesc:ae891e0c19cfaeb0ec2875aa2735b20a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a line from (0, 0) to <em>end</em> in the color set by <a class="el" href="#a55a8f2d8091f7c8fdac59075ac069413" title="Sets the color which should be used to draw primitives.">jngl::setColor</a>.  <br /></td></tr>
 <tr class="separator:ae891e0c19cfaeb0ec2875aa2735b20a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c630b19aab7777d53e71a9a4ac4f116" id="r_a2c630b19aab7777d53e71a9a4ac4f116"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c630b19aab7777d53e71a9a4ac4f116">drawLine</a> (const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;<a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> end, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color)</td></tr>
-<tr class="memdesc:a2c630b19aab7777d53e71a9a4ac4f116"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a line from (0, 0) to <em>end</em> in <em>color</em>.  <br /></td></tr>
+<tr class="memitem:a2c630b19aab7777d53e71a9a4ac4f116" id="r_a2c630b19aab7777d53e71a9a4ac4f116"><td class="memItemLeft" align="right" valign="top"><a id="a2c630b19aab7777d53e71a9a4ac4f116" name="a2c630b19aab7777d53e71a9a4ac4f116"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>drawLine</b> (const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;<a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> end, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color)</td></tr>
+<tr class="memdesc:a2c630b19aab7777d53e71a9a4ac4f116"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a line from (0, 0) to <em>end</em> in <em>color</em>. <br /></td></tr>
 <tr class="separator:a2c630b19aab7777d53e71a9a4ac4f116"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae08d93471fc521218d9210a23a62afff" id="r_ae08d93471fc521218d9210a23a62afff"><td class="memItemLeft" align="right" valign="top"><a id="ae08d93471fc521218d9210a23a62afff" name="ae08d93471fc521218d9210a23a62afff"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawLine</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> end, float lineWidth, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color)</td></tr>
@@ -838,6 +905,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawTriangle</b> (<a 
 <tr class="memitem:aab0d5492b0289dd4e3b2160b4cfcb237" id="r_aab0d5492b0289dd4e3b2160b4cfcb237"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab0d5492b0289dd4e3b2160b4cfcb237">drawRect</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> size, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color)</td></tr>
 <tr class="memdesc:aab0d5492b0289dd4e3b2160b4cfcb237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color.  <br /></td></tr>
 <tr class="separator:aab0d5492b0289dd4e3b2160b4cfcb237"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae88207a45568e63ea493185731e6cb7b" id="r_ae88207a45568e63ea493185731e6cb7b"><td class="memItemLeft" align="right" valign="top"><a id="ae88207a45568e63ea493185731e6cb7b" name="ae88207a45568e63ea493185731e6cb7b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>drawRoundedRect</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> size, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color, float topLeft, float topRight, float bottomLeft, float bottomRight)</td></tr>
+<tr class="memdesc:ae88207a45568e63ea493185731e6cb7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle spawning from (0, 0) to (size.x, size.y) with rounded corners. <br /></td></tr>
+<tr class="separator:ae88207a45568e63ea493185731e6cb7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff3198d566e9317bf10ee7fe3aaa23c0" id="r_aff3198d566e9317bf10ee7fe3aaa23c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff3198d566e9317bf10ee7fe3aaa23c0">drawRing</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, float innerRadius, float outerRadius, float startAngle, float endAngle, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color)</td></tr>
+<tr class="memdesc:aff3198d566e9317bf10ee7fe3aaa23c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws an annulus sector (ring) centered at (0, 0).  <br /></td></tr>
+<tr class="separator:aff3198d566e9317bf10ee7fe3aaa23c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02555d45b8d64c6e757683be0a4d67f8" id="r_a02555d45b8d64c6e757683be0a4d67f8"><td class="memItemLeft" align="right" valign="top"><a id="a02555d45b8d64c6e757683be0a4d67f8" name="a02555d45b8d64c6e757683be0a4d67f8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawRectOutline</b> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Vec2.html">Vec2</a> size, float lineWidth, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color)</td></tr>
 <tr class="memdesc:a02555d45b8d64c6e757683be0a4d67f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the outline of a rectangle (so □ instead of ■) of <em>size</em> centered at (0, 0) in <em>color</em>. <br /></td></tr>
@@ -854,9 +928,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawRectOutline</b> (
 <tr class="memitem:abc34138b4a6abf14269a6a34e901a5c8" id="r_abc34138b4a6abf14269a6a34e901a5c8"><td class="memItemLeft" align="right" valign="top"><a id="abc34138b4a6abf14269a6a34e901a5c8" name="abc34138b4a6abf14269a6a34e901a5c8"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getVolume</b> ()</td></tr>
 <tr class="separator:abc34138b4a6abf14269a6a34e901a5c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a2d4a760f9febf9ab966d0ed41183b2" id="r_a9a2d4a760f9febf9ab966d0ed41183b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a2d4a760f9febf9ab966d0ed41183b2">play</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
-<tr class="memdesc:a9a2d4a760f9febf9ab966d0ed41183b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play an OGG audio file once.  <br /></td></tr>
-<tr class="separator:a9a2d4a760f9febf9ab966d0ed41183b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dec9dac0a4970b6421c809e923dee8b" id="r_a5dec9dac0a4970b6421c809e923dee8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5dec9dac0a4970b6421c809e923dee8b">play</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
+<tr class="memdesc:a5dec9dac0a4970b6421c809e923dee8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play an OGG audio file once.  <br /></td></tr>
+<tr class="separator:a5dec9dac0a4970b6421c809e923dee8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe3523bc342eb0bfc08a004bc2bce9ee" id="r_abe3523bc342eb0bfc08a004bc2bce9ee"><td class="memItemLeft" align="right" valign="top"><a id="abe3523bc342eb0bfc08a004bc2bce9ee" name="abe3523bc342eb0bfc08a004bc2bce9ee"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename)</td></tr>
 <tr class="memdesc:abe3523bc342eb0bfc08a004bc2bce9ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop an OGG audio file if it's currently playing. <br /></td></tr>
@@ -1035,6 +1109,74 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a86abf923535e5284b381ee2e78eadacd" name="a86abf923535e5284b381ee2e78eadacd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86abf923535e5284b381ee2e78eadacd">&#9670;&#160;</a></span>TextureFilter</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a86abf923535e5284b381ee2e78eadacd">TextureFilter</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a86abf923535e5284b381ee2e78eadacdaaf17c98bbd83c27d6426d2ff3fa81d7f" name="a86abf923535e5284b381ee2e78eadacdaaf17c98bbd83c27d6426d2ff3fa81d7f"></a>Bilinear&#160;</td><td class="fielddoc"><p>Bilinear Filtering is used when <a class="el" href="structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805" title="Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)">jngl::AppParameters::pixelArt</a> is false. </p>
+<p>It smooths the image when it is scaled up. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a86abf923535e5284b381ee2e78eadacdaaa020331bb30d2fa2ecf7c3a0777823f" name="a86abf923535e5284b381ee2e78eadacdaaa020331bb30d2fa2ecf7c3a0777823f"></a>NearestNeighbor&#160;</td><td class="fielddoc"><p>Nearest Neighbor Filtering is used when <a class="el" href="structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805" title="Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)">jngl::AppParameters::pixelArt</a> is true. </p>
+<p>It preserves the pixelated look when the image is scaled up. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="FrameBuffer_8hpp_source.html#l00019">19</a> of file <a class="el" href="FrameBuffer_8hpp_source.html">FrameBuffer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afc275d961db164fe0a71325c768c0502" name="afc275d961db164fe0a71325c768c0502"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc275d961db164fe0a71325c768c0502">&#9670;&#160;</a></span>HapticFeedback</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#afc275d961db164fe0a71325c768c0502">HapticFeedback</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Type of haptic feedback to trigger via <a class="el" href="#abcdfad22f52003d4748e3f4c72381387" title="Triggers haptic feedback (a short vibration)">jngl::hapticFeedback</a>. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="afc275d961db164fe0a71325c768c0502a9914a0ce04a7b7b6a8e39bec55064b82" name="afc275d961db164fe0a71325c768c0502a9914a0ce04a7b7b6a8e39bec55064b82"></a>Light&#160;</td><td class="fielddoc"><p>Short, light feedback suitable for ingame interactions. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afc275d961db164fe0a71325c768c0502a87f8a6ab85c9ced3702b4ea641ad4bb5" name="afc275d961db164fe0a71325c768c0502a87f8a6ab85c9ced3702b4ea641ad4bb5"></a>Medium&#160;</td><td class="fielddoc"><p>Medium feedback, e.g. for button presses. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afc275d961db164fe0a71325c768c0502af9ffe67a20da9cbff56b420fca4bd491" name="afc275d961db164fe0a71325c768c0502af9ffe67a20da9cbff56b420fca4bd491"></a>Heavy&#160;</td><td class="fielddoc"><p>Strong feedback, e.g. for a long press or an important event. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afc275d961db164fe0a71325c768c0502a8394f0347c184cf156ac5924dccb773b" name="afc275d961db164fe0a71325c768c0502a8394f0347c184cf156ac5924dccb773b"></a>Long&#160;</td><td class="fielddoc"><p>A long (~300 ms) vibration that starts strong and fades out, e.g. for an error or game over. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="haptics_8hpp_source.html#l00012">12</a> of file <a class="el" href="haptics_8hpp_source.html">haptics.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a0641d1a6fd8c6e3e8d709ca9e6be4638" name="a0641d1a6fd8c6e3e8d709ca9e6be4638"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0641d1a6fd8c6e3e8d709ca9e6be4638">&#9670;&#160;</a></span>KeyboardType</h2>
 
@@ -1049,7 +1191,59 @@ Variables</h2></td></tr>
 
 <p>Whether a normal or a numbers-only keyboard should appear. </p>
 
-<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00096">96</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00097">97</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afbab6f64e82eec829c9fc664a19bfc75" name="afbab6f64e82eec829c9fc664a19bfc75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbab6f64e82eec829c9fc664a19bfc75">&#9670;&#160;</a></span>controller</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#afbab6f64e82eec829c9fc664a19bfc75">controller</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gamepad buttons. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="afbab6f64e82eec829c9fc664a19bfc75a9401da4ce408415b34ce204ccb2c27d0" name="afbab6f64e82eec829c9fc664a19bfc75a9401da4ce408415b34ce204ccb2c27d0"></a>LeftStickX&#160;</td><td class="fielddoc"><p>x axis of left stick, -1 to 1 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afbab6f64e82eec829c9fc664a19bfc75a8a006575363ece2c3eced59ee41cb0ff" name="afbab6f64e82eec829c9fc664a19bfc75a8a006575363ece2c3eced59ee41cb0ff"></a>LeftStickXInverse&#160;</td><td class="fielddoc"><p>-LeftStickX </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afbab6f64e82eec829c9fc664a19bfc75a729f2100a072d3bc80d4eaea3218e61f" name="afbab6f64e82eec829c9fc664a19bfc75a729f2100a072d3bc80d4eaea3218e61f"></a>LeftStickY&#160;</td><td class="fielddoc"><p>y axis of left stick, -1 to 1 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afbab6f64e82eec829c9fc664a19bfc75a3327352f317129cfedeeff1db4353960" name="afbab6f64e82eec829c9fc664a19bfc75a3327352f317129cfedeeff1db4353960"></a>LeftStickYInverse&#160;</td><td class="fielddoc"><p>-LeftStickY </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afbab6f64e82eec829c9fc664a19bfc75a815982789d1065d38cea0bf6a12e3d75" name="afbab6f64e82eec829c9fc664a19bfc75a815982789d1065d38cea0bf6a12e3d75"></a>RightStickX&#160;</td><td class="fielddoc"><p>x axis of right stick, -1 to 1 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afbab6f64e82eec829c9fc664a19bfc75a1056387b45e58ac265c8105acdfcb469" name="afbab6f64e82eec829c9fc664a19bfc75a1056387b45e58ac265c8105acdfcb469"></a>RightStickXInverse&#160;</td><td class="fielddoc"><p>-RightStickX </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afbab6f64e82eec829c9fc664a19bfc75ad3a7ef3a60ff2067a300de6108b26671" name="afbab6f64e82eec829c9fc664a19bfc75ad3a7ef3a60ff2067a300de6108b26671"></a>RightStickY&#160;</td><td class="fielddoc"><p>y axis of right stick, -1 to 1 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afbab6f64e82eec829c9fc664a19bfc75ab743be82769bccde36c712763c5e3c75" name="afbab6f64e82eec829c9fc664a19bfc75ab743be82769bccde36c712763c5e3c75"></a>RightStickYInverse&#160;</td><td class="fielddoc"><p>-RightStickY </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afbab6f64e82eec829c9fc664a19bfc75a2a81c1ce439d7652d7a61d55229c8043" name="afbab6f64e82eec829c9fc664a19bfc75a2a81c1ce439d7652d7a61d55229c8043"></a>LeftButton&#160;</td><td class="fielddoc"><p>Left shoulder button. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afbab6f64e82eec829c9fc664a19bfc75a7e264b46aade8e083656f1f0897220f3" name="afbab6f64e82eec829c9fc664a19bfc75a7e264b46aade8e083656f1f0897220f3"></a>RightButton&#160;</td><td class="fielddoc"><p>Right shoulder button. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afbab6f64e82eec829c9fc664a19bfc75aa6122a65eaa676f700ae68d393054a37" name="afbab6f64e82eec829c9fc664a19bfc75aa6122a65eaa676f700ae68d393054a37"></a>Start&#160;</td><td class="fielddoc"><p>Start, or Options button. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afbab6f64e82eec829c9fc664a19bfc75a0557fa923dcee4d0f86b1409f5c2167f" name="afbab6f64e82eec829c9fc664a19bfc75a0557fa923dcee4d0f86b1409f5c2167f"></a>Back&#160;</td><td class="fielddoc"><p>Back, Menu, or Share button. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00251">251</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
 
 </div>
 </div>
@@ -1182,6 +1376,35 @@ template&lt;class Box &gt; </div>
 
 </div>
 </div>
+<a id="a2b70617b0dcd3fbf280ea1d8d2a8f2eb" name="a2b70617b0dcd3fbf280ea1d8d2a8f2eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b70617b0dcd3fbf280ea1d8d2a8f2eb">&#9670;&#160;</a></span>print()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void print </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>text</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>xposition</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>yposition</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Print <em>text</em> at { <em>xposition</em>, <em>yposition</em> }. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000003">Deprecated</a></b></dt><dd>Use jngl::Text::print() instead (i.e. don't rely on global font state) </dd></dl>
+
+</div>
+</div>
 <a id="ac32d6beff7ac8aecb34b65b9fa5a94c9" name="ac32d6beff7ac8aecb34b65b9fa5a94c9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac32d6beff7ac8aecb34b65b9fa5a94c9">&#9670;&#160;</a></span>getFont()</h2>
 
@@ -1305,6 +1528,27 @@ template&lt;class Box &gt; </div>
 
 <p>Sets the color of the currently active font. </p>
 <p>If the <em>alpha</em> value isn't specified, it will be set to 255 (opaque). </p>
+
+</div>
+</div>
+<a id="abcdfad22f52003d4748e3f4c72381387" name="abcdfad22f52003d4748e3f4c72381387"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcdfad22f52003d4748e3f4c72381387">&#9670;&#160;</a></span>hapticFeedback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hapticFeedback </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#afc275d961db164fe0a71325c768c0502">HapticFeedback</a></td>          <td class="paramname"><span class="paramname"><em>type</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="#afc275d961db164fe0a71325c768c0502a87f8a6ab85c9ced3702b4ea641ad4bb5">HapticFeedback::Medium</a></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Triggers haptic feedback (a short vibration) </p>
+<p>On Android it plays a tuned VibrationEffect.Composition (with a fallback to View.performHapticFeedback on older devices). This requires <code>&lt;uses-permission android:name="android.permission.VIBRATE" /&gt;</code> in your AndroidManifest.xml.</p>
+<p>On iOS the short types drive Apple's UIImpactFeedbackGenerator, while Long plays a fading Core Haptics pattern (falling back to UINotificationFeedbackGenerator on devices without a Taptic Engine). On all other platforms this function does nothing. </p>
 
 </div>
 </div>
@@ -1549,7 +1793,7 @@ template&lt;class Box &gt; </div>
 </div><div class="memdoc">
 
 <p>Retrieve mouse position in pixels. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000004">Deprecated</a></b></dt><dd>Use <a class="el" href="#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">jngl::getMousePos()</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated</a></b></dt><dd>Use <a class="el" href="#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">jngl::getMousePos()</a> instead </dd></dl>
 
 </div>
 </div>
@@ -1569,7 +1813,7 @@ template&lt;class Box &gt; </div>
 </div><div class="memdoc">
 
 <p>Retrieve mouse position in pixels. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated</a></b></dt><dd>Use <a class="el" href="#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">jngl::getMousePos()</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated</a></b></dt><dd>Use <a class="el" href="#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">jngl::getMousePos()</a> instead </dd></dl>
 
 </div>
 </div>
@@ -1610,7 +1854,7 @@ template&lt;class Box &gt; </div>
 
 <p>Specify a function which gets called, whenever a controller gets added or removed. </p>
 <p>Whenever the return value of <a class="el" href="#ad178a38cc5f90ca8047e07693d39ac6a" title="Returns all controllers (gamepads) that are connected.">jngl::getConnectedControllers</a> would change, <em>callback</em> gets called.</p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated</a></b></dt><dd>Use <a class="el" href="classjngl_1_1Job.html#a266cd76ff1ed7b753a12f4ded13f44c6" title="Whenever the return value of jngl::getConnectedControllers would change, this method gets called.">jngl::Job::onControllersChanged()</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated</a></b></dt><dd>Use <a class="el" href="classjngl_1_1Job.html#a266cd76ff1ed7b753a12f4ded13f44c6" title="Whenever the return value of jngl::getConnectedControllers would change, this method gets called.">jngl::Job::onControllersChanged()</a> instead </dd></dl>
 
 </div>
 </div>
@@ -1965,7 +2209,7 @@ template&lt;class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Multiplies the global ModelView matrix with a rotation matrix. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated</a></b></dt><dd>use <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c" title="Returns a copy of the global ModelView matrix.">jngl::modelview()</a>.rotate instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated</a></b></dt><dd>use <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c" title="Returns a copy of the global ModelView matrix.">jngl::modelview()</a>.rotate instead </dd></dl>
 
 </div>
 </div>
@@ -2207,7 +2451,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Calculates FPS if called once per frame. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated</a></b></dt><dd>Not really intuitive or robust, use your own calculations instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated</a></b></dt><dd>Not really intuitive or robust, use your own calculations instead </dd></dl>
 
 </div>
 </div>
@@ -2231,6 +2475,30 @@ template&lt;class Vect &gt; </div>
 
 </div>
 </div>
+<a id="aaf9d720b08cf2ffc9867e4c428bbae00" name="aaf9d720b08cf2ffc9867e4c428bbae00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf9d720b08cf2ffc9867e4c428bbae00">&#9670;&#160;</a></span>scissor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Finally.html">Finally</a> scissor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a></td>          <td class="paramname"><span class="paramname"><em>position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a></td>          <td class="paramname"><span class="paramname"><em>size</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables scissor testing, clipping all rendering to the rectangle from <em>position</em> to <em>position</em> + <em>size</em> in screen coordinates (with (0, 0) at the center of the screen) </p>
+<p>This is useful for letterboxing or split-screen multiplayer. Keep the returned <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> object alive while the scissor test should be active. </p>
+
+</div>
+</div>
 <a id="ace0bccdd95107deb172bfae920eb4769" name="ace0bccdd95107deb172bfae920eb4769"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ace0bccdd95107deb172bfae920eb4769">&#9670;&#160;</a></span>setConfigPath()</h2>
 
@@ -2245,7 +2513,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead. </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead. </dd></dl>
 
 </div>
 </div>
@@ -2263,7 +2531,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
 <p>Returns the directory where to store configuration files and save games.</p><ul>
 <li>Windows: <code>%AppData%/Display Name/</code></li>
 <li>Linux: <code>~/.config/Display Name/</code></li>
@@ -2372,6 +2640,44 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a id="a79f3946cc19ffc59833986b1eff21b79" name="a79f3946cc19ffc59833986b1eff21b79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79f3946cc19ffc59833986b1eff21b79">&#9670;&#160;</a></span>interpolate() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Rgb.html">Rgb</a> interpolate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Rgb.html">Rgb</a></td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Rgb.html">Rgb</a></td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Old name for mix, will be removed in a future release. </p>
+
+<p class="definition">Definition at line <a class="el" href="Rgb_8hpp_source.html#l00083">83</a> of file <a class="el" href="Rgb_8hpp_source.html">Rgb.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a8cf6fb700b9ea830e116ca5289ca56da" name="a8cf6fb700b9ea830e116ca5289ca56da"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8cf6fb700b9ea830e116ca5289ca56da">&#9670;&#160;</a></span>operator==()</h2>
 
@@ -2393,6 +2699,44 @@ template&lt;class T &gt; </div>
 
 <p>Returns true if the two colors are equal in 24 bit SDR space, i.e. </p>
 <p>each channel rounded to uint8_t </p>
+
+</div>
+</div>
+<a id="af6daf6049d5223d135e36b485e89134f" name="af6daf6049d5223d135e36b485e89134f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6daf6049d5223d135e36b485e89134f">&#9670;&#160;</a></span>interpolate() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Rgba.html">Rgba</a> interpolate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Rgba.html">Rgba</a></td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Rgba.html">Rgba</a></td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Old name for mix, will be removed in a future release. </p>
+
+<p class="definition">Definition at line <a class="el" href="Rgba_8hpp_source.html#l00088">88</a> of file <a class="el" href="Rgba_8hpp_source.html">Rgba.hpp</a>.</p>
 
 </div>
 </div>
@@ -2552,7 +2896,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
 
 </div>
 </div>
@@ -2570,7 +2914,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
 
 </div>
 </div>
@@ -2588,12 +2932,12 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated</a></b></dt><dd>Pass line width to drawLine instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated</a></b></dt><dd>Pass line width to drawLine instead </dd></dl>
 
 </div>
 </div>
 <a id="adda6bd4a93eb670b63a319a2f6c4dd87" name="adda6bd4a93eb670b63a319a2f6c4dd87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adda6bd4a93eb670b63a319a2f6c4dd87">&#9670;&#160;</a></span>drawLine() <span class="overload">[1/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adda6bd4a93eb670b63a319a2f6c4dd87">&#9670;&#160;</a></span>drawLine() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2612,12 +2956,12 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a line from start to end, the width can be set using setLineWidth. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated</a></b></dt><dd>Use <a class="el" href="#a623eabacc04597be7fa31b92b09ca5da" title="Draws a line from start to end with width lineWidth in the color set by jngl::setColor.">drawLine(Vec2, Vec2, float lineWidth)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated</a></b></dt><dd>Use <a class="el" href="#a623eabacc04597be7fa31b92b09ca5da" title="Draws a line from start to end with width lineWidth in the color set by jngl::setColor.">drawLine(Vec2, Vec2, float lineWidth)</a> instead </dd></dl>
 
 </div>
 </div>
 <a id="a5f3b65bc0411dcd941c0ad1e9e1d7ebb" name="a5f3b65bc0411dcd941c0ad1e9e1d7ebb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f3b65bc0411dcd941c0ad1e9e1d7ebb">&#9670;&#160;</a></span>drawLine() <span class="overload">[2/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f3b65bc0411dcd941c0ad1e9e1d7ebb">&#9670;&#160;</a></span>drawLine() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2644,12 +2988,12 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated</a></b></dt><dd>Use <a class="el" href="#a623eabacc04597be7fa31b92b09ca5da" title="Draws a line from start to end with width lineWidth in the color set by jngl::setColor.">drawLine(Vec2, Vec2, float lineWidth)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated</a></b></dt><dd>Use <a class="el" href="#a623eabacc04597be7fa31b92b09ca5da" title="Draws a line from start to end with width lineWidth in the color set by jngl::setColor.">drawLine(Vec2, Vec2, float lineWidth)</a> instead </dd></dl>
 
 </div>
 </div>
 <a id="a1e56804210490b88fe02a65199c16e7c" name="a1e56804210490b88fe02a65199c16e7c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e56804210490b88fe02a65199c16e7c">&#9670;&#160;</a></span>drawLine() <span class="overload">[3/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e56804210490b88fe02a65199c16e7c">&#9670;&#160;</a></span>drawLine() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2678,7 +3022,7 @@ template&lt;class T , class... Args&gt; </div>
 </div>
 </div>
 <a id="ae891e0c19cfaeb0ec2875aa2735b20a8" name="ae891e0c19cfaeb0ec2875aa2735b20a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae891e0c19cfaeb0ec2875aa2735b20a8">&#9670;&#160;</a></span>drawLine() <span class="overload">[4/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae891e0c19cfaeb0ec2875aa2735b20a8">&#9670;&#160;</a></span>drawLine() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2697,35 +3041,6 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a line from (0, 0) to <em>end</em> in the color set by <a class="el" href="#a55a8f2d8091f7c8fdac59075ac069413" title="Sets the color which should be used to draw primitives.">jngl::setColor</a>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated</a></b></dt><dd>Use drawLine(const Mat3&amp;, Vec2, float lineWidth, Rgba) instead </dd></dl>
-
-</div>
-</div>
-<a id="a2c630b19aab7777d53e71a9a4ac4f116" name="a2c630b19aab7777d53e71a9a4ac4f116"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c630b19aab7777d53e71a9a4ac4f116">&#9670;&#160;</a></span>drawLine() <span class="overload">[5/5]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void drawLine </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>modelview</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a></td>          <td class="paramname"><span class="paramname"><em>end</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classjngl_1_1Rgba.html">Rgba</a></td>          <td class="paramname"><span class="paramname"><em>color</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Draws a line from (0, 0) to <em>end</em> in <em>color</em>. </p>
 <dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000017">Deprecated</a></b></dt><dd>Use drawLine(const Mat3&amp;, Vec2, float lineWidth, Rgba) instead </dd></dl>
 
 </div>
@@ -3017,6 +3332,50 @@ template&lt;class T , class... Args&gt; </div>
 
 </div>
 </div>
+<a id="aff3198d566e9317bf10ee7fe3aaa23c0" name="aff3198d566e9317bf10ee7fe3aaa23c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff3198d566e9317bf10ee7fe3aaa23c0">&#9670;&#160;</a></span>drawRing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawRing </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a></td>          <td class="paramname"><span class="paramname"><em>modelview</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>innerRadius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>outerRadius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>startAngle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>endAngle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Rgba.html">Rgba</a></td>          <td class="paramname"><span class="paramname"><em>color</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws an annulus sector (ring) centered at (0, 0). </p>
+<p>Angles are in degrees, counter-clockwise from the right (3 o'clock position). </p>
+
+</div>
+</div>
 <a id="a13bf772b3b87519adfead5170ab1f5e7" name="a13bf772b3b87519adfead5170ab1f5e7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a13bf772b3b87519adfead5170ab1f5e7">&#9670;&#160;</a></span>drawSquare()</h2>
 
@@ -3097,18 +3456,18 @@ template&lt;class Vect &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00195">195</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00202">202</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a9a2d4a760f9febf9ab966d0ed41183b2" name="a9a2d4a760f9febf9ab966d0ed41183b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a2d4a760f9febf9ab966d0ed41183b2">&#9670;&#160;</a></span>play()</h2>
+<a id="a5dec9dac0a4970b6421c809e923dee8b" name="a5dec9dac0a4970b6421c809e923dee8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5dec9dac0a4970b6421c809e923dee8b">&#9670;&#160;</a></span>play()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void play </td>
+          <td class="memname"><a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a> &amp; play </td>
           <td>(</td>
           <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>filename</em></span></td><td>)</td>
           <td></td>
@@ -3117,8 +3476,11 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Play an OGG audio file once. </p>
-<p>Might block if the file hasn't been played before. To avoid that use <a class="el" href="#a59bf57d562a77318d562ab15d017de5d" title="Starts a thread to load filename and returns a Finally which will join it.">jngl::load</a> before. </p>
-
+<p>Might block if the file hasn't been played before. To avoid that use <a class="el" href="#a59bf57d562a77318d562ab15d017de5d" title="Starts a thread to load filename and returns a Finally which will join it.">jngl::load</a> before.</p>
+<p>Example: </p><div class="fragment"><div class="line"><a class="code hl_function" href="#a5dec9dac0a4970b6421c809e923dee8b">jngl::play</a>(<span class="stringliteral">&quot;sfx/foo.ogg&quot;</span>).<a class="code hl_function" href="classjngl_1_1SoundFile.html#adba16af13c4a8c53151baa2d5123ec96">setVolume</a>(0.2);</div>
+<div class="ttc" id="aclassjngl_1_1SoundFile_html_adba16af13c4a8c53151baa2d5123ec96"><div class="ttname"><a href="classjngl_1_1SoundFile.html#adba16af13c4a8c53151baa2d5123ec96">jngl::SoundFile::setVolume</a></div><div class="ttdeci">void setVolume(float v)</div><div class="ttdoc">Set volume in [0, ∞]. Default is 1.0f.</div></div>
+<div class="ttc" id="anamespacejngl_html_a5dec9dac0a4970b6421c809e923dee8b"><div class="ttname"><a href="#a5dec9dac0a4970b6421c809e923dee8b">jngl::play</a></div><div class="ttdeci">SoundFile &amp; play(const std::string &amp;filename)</div><div class="ttdoc">Play an OGG audio file once.</div></div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="a41df6b862953562a4795ef71dc79fc9c" name="a41df6b862953562a4795ef71dc79fc9c"></a>
@@ -3136,7 +3498,7 @@ template&lt;class Vect &gt; </div>
       </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>whether <em>filename</em> is currently playing on any <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a></dd></dl>
-<p>When playing a <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> multiple times (i.e. calling <a class="el" href="#a9a2d4a760f9febf9ab966d0ed41183b2" title="Play an OGG audio file once.">jngl::play</a> multiple times), this will return true if at least one <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> is still playing (i.e. hasn't finished and wasn't stopped).</p>
+<p>When playing a <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> multiple times (i.e. calling <a class="el" href="#a5dec9dac0a4970b6421c809e923dee8b" title="Play an OGG audio file once.">jngl::play</a> multiple times), this will return true if at least one <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> is still playing (i.e. hasn't finished and wasn't stopped).</p>
 <dl class="section note"><dt>Note</dt><dd>Unaffected by <a class="el" href="#ad35ecfcfaf514795ea3a1a3df983890e" title="Pauses the playback of all audio; destroying the returned Finally object will resume again.">jngl::pauseAudio</a> </dd></dl>
 
 </div>
@@ -3497,7 +3859,7 @@ template&lt;class T , class... Args&gt; </div>
 
 <p>The same as <a class="el" href="#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in the main loop.">setWork(std::shared_ptr&lt;Work&gt;)</a> but creates the <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> for you. </p>
 
-<p class="definition">Definition at line <a class="el" href="work_8hpp_source.html#l00087">87</a> of file <a class="el" href="work_8hpp_source.html">work.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="work_8hpp_source.html#l00098">98</a> of file <a class="el" href="work_8hpp_source.html">work.hpp</a>.</p>
 
 </div>
 </div>

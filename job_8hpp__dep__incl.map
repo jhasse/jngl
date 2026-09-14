@@ -1,19 +1,21 @@
 <map id="jngl/job.hpp" name="jngl/job.hpp">
-<area shape="rect" id="Node000001" title="Contains jngl::Job class and related functions." alt="" coords="89,5,207,31"/>
-<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="219,300,304,326"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,38,46,49,22,64,9,82,8,92,12,104,33,139,59,172,89,202,121,228,184,270,236,297,233,302,182,274,118,232,85,206,55,176,28,142,7,106,3,92,4,80,18,60,43,44,73,33"/>
-<area shape="rect" id="Node000003" href="$VideoRecorder_8hpp.html" title="Contains jngl::VideoRecorder class." alt="" coords="21,79,275,105"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="151,46,151,79,145,79,145,46"/>
-<area shape="rect" id="Node000004" href="$work_8hpp.html" title=" " alt="" coords="299,79,424,105"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="199,34,326,76,324,81,198,39"/>
-<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="326,115,303,132,285,154,269,193,262,234,261,272,263,300,257,300,255,272,256,233,264,191,280,151,300,129,322,111"/>
-<area shape="rect" id="Node000005" href="$Scene_8hpp.html" title="Contains jngl::Scene class and related functions." alt="" coords="295,153,428,178"/>
-<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="364,120,364,152,359,152,359,120"/>
-<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="329,189,307,207,289,228,272,266,265,300,260,299,267,264,284,225,304,203,326,185"/>
-<area shape="rect" id="Node000006" href="$Fade_8hpp.html" title="Contains jngl::Fade class." alt="" coords="299,226,424,252"/>
-<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="364,194,364,226,359,226,359,194"/>
-<area shape="rect" id="Node000007" href="$WorkFactory_8hpp.html" title=" " alt="" coords="448,226,629,252"/>
-<area shape="poly" id="edge9_Node000005_Node000007" title=" " alt="" coords="406,182,509,223,507,228,404,187"/>
-<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="334,263,280,302,277,297,330,259"/>
-<area shape="poly" id="edge10_Node000007_Node000002" title=" " alt="" coords="477,259,305,303,304,298,476,254"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Job class and related functions." alt="" coords="222,5,339,31"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="486,300,571,326"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,21,130,25,58,38,31,49,14,63,8,81,17,103,39,132,64,158,122,201,186,236,253,262,321,281,384,294,486,307,485,312,383,299,319,286,252,267,184,241,119,206,61,161,35,135,13,106,3,81,9,60,28,44,57,33,129,20,206,16"/>
+<area shape="rect" id="Node000003" href="$VirtualMouseCursor_8hpp_source.html" title=" " alt="" coords="27,79,264,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="245,41,170,81,168,76,243,36"/>
+<area shape="rect" id="Node000004" href="$VideoRecorder_8hpp.html" title="Contains jngl::VideoRecorder class." alt="" coords="288,79,542,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="318,36,393,76,391,81,316,41"/>
+<area shape="rect" id="Node000005" href="$work_8hpp.html" title=" " alt="" coords="566,79,691,105"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="355,32,570,76,569,81,354,37"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="593,115,570,132,552,154,536,193,529,234,528,272,530,300,524,300,523,272,524,233,531,191,548,151,567,129,589,111"/>
+<area shape="rect" id="Node000006" href="$Scene_8hpp.html" title="Contains jngl::Scene class and related functions." alt="" coords="562,153,695,178"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="631,120,631,152,626,152,626,120"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="596,189,575,207,556,228,539,266,532,300,527,299,534,264,552,225,571,203,593,185"/>
+<area shape="rect" id="Node000007" href="$Fade_8hpp.html" title="Contains jngl::Fade class." alt="" coords="566,226,691,252"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="631,194,631,226,626,226,626,194"/>
+<area shape="rect" id="Node000008" href="$WorkFactory_8hpp.html" title=" " alt="" coords="715,226,896,252"/>
+<area shape="poly" id="edge10_Node000006_Node000008" title=" " alt="" coords="673,182,777,223,775,228,672,187"/>
+<area shape="poly" id="edge9_Node000007_Node000002" title=" " alt="" coords="601,263,547,302,544,297,598,259"/>
+<area shape="poly" id="edge11_Node000008_Node000002" title=" " alt="" coords="745,259,572,303,571,298,743,254"/>
 </map>

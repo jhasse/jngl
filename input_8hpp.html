@@ -106,6 +106,7 @@ $(function(){ initResizable(false); });
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="Finally_8hpp_source.html">Finally.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Vec2_8hpp_source.html">Vec2.hpp</a>&quot;</code><br />
+<code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/cstdint.html">cstdint</a>&gt;</code><br />
 <code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/functional.html">functional</a>&gt;</code><br />
 <code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/memory.html">memory</a>&gt;</code><br />
 <code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/vector.html">vector</a>&gt;</code><br />
@@ -113,7 +114,7 @@ $(function(){ initResizable(false); });
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for input.hpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="input_8hpp__incl.svg" width="680" height="184"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="input_8hpp__incl.svg" width="782" height="184"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -201,29 +202,29 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:acd42bf24fb3e597fb4928f87e61c28a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mouse buttons.  <a href="#acd42bf24fb3e597fb4928f87e61c28a0">More...</a><br /></td></tr>
 <tr class="separator:acd42bf24fb3e597fb4928f87e61c28a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd42bf24fb3e597fb4928f87e61c28a0" id="r_acd42bf24fb3e597fb4928f87e61c28a0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acd42bf24fb3e597fb4928f87e61c28a0">Button</a> : uint8_t { <br />
-&#160;&#160;<a class="el" href="#acd42bf24fb3e597fb4928f87e61c28a0aaaf5ce813fa16ece88a90e57b2428f1f">LeftStickX</a>
-, <a class="el" href="#acd42bf24fb3e597fb4928f87e61c28a0a947c569e6b1c8a25a163a0841a569920">LeftStickXInverse</a>
-, <a class="el" href="#acd42bf24fb3e597fb4928f87e61c28a0ac2784c7a9ece8b060fe51848e86b6463">LeftStickY</a>
-, <a class="el" href="#acd42bf24fb3e597fb4928f87e61c28a0a8e8dd412dc4d621da94fe2f86224c8cd">LeftStickYInverse</a>
+<tr class="memitem:afbab6f64e82eec829c9fc664a19bfc75" id="r_afbab6f64e82eec829c9fc664a19bfc75"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75">controller</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a9401da4ce408415b34ce204ccb2c27d0">LeftStickX</a>
+, <a class="el" href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a8a006575363ece2c3eced59ee41cb0ff">LeftStickXInverse</a>
+, <a class="el" href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a729f2100a072d3bc80d4eaea3218e61f">LeftStickY</a>
+, <a class="el" href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a3327352f317129cfedeeff1db4353960">LeftStickYInverse</a>
 , <br />
-&#160;&#160;<a class="el" href="#acd42bf24fb3e597fb4928f87e61c28a0ab893063c352c832cbeb93fae451bac66">RightStickX</a>
-, <a class="el" href="#acd42bf24fb3e597fb4928f87e61c28a0a674e5379458e5827dc4363ee0193819f">RightStickXInverse</a>
-, <a class="el" href="#acd42bf24fb3e597fb4928f87e61c28a0a0f9106b2bfe37c0a18a1d086ece4e5f9">RightStickY</a>
-, <a class="el" href="#acd42bf24fb3e597fb4928f87e61c28a0a15dc69c00beee5e45b18e3f905f080cc">RightStickYInverse</a>
+&#160;&#160;<a class="el" href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a815982789d1065d38cea0bf6a12e3d75">RightStickX</a>
+, <a class="el" href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a1056387b45e58ac265c8105acdfcb469">RightStickXInverse</a>
+, <a class="el" href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75ad3a7ef3a60ff2067a300de6108b26671">RightStickY</a>
+, <a class="el" href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75ab743be82769bccde36c712763c5e3c75">RightStickYInverse</a>
 , <br />
 &#160;&#160;<b>A</b>
 , <b>B</b>
 , <b>X</b>
 , <b>Y</b>
 , <br />
-&#160;&#160;<a class="el" href="#acd42bf24fb3e597fb4928f87e61c28a0a3955a0a6074e8c316cbe40ce1a53e37f">LeftButton</a>
-, <a class="el" href="#acd42bf24fb3e597fb4928f87e61c28a0aeb47e978a7943f7a47e2f2c902c7921e">RightButton</a>
+&#160;&#160;<a class="el" href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a2a81c1ce439d7652d7a61d55229c8043">LeftButton</a>
+, <a class="el" href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a7e264b46aade8e083656f1f0897220f3">RightButton</a>
 , <b>LeftTrigger</b>
 , <b>RightTrigger</b>
 , <br />
-&#160;&#160;<a class="el" href="#acd42bf24fb3e597fb4928f87e61c28a0abd5f9c956752ce4dc707b4624b3a36f7">Start</a>
-, <a class="el" href="#acd42bf24fb3e597fb4928f87e61c28a0a36625780699489b5c3dfceadfb9c27d1">Back</a>
+&#160;&#160;<a class="el" href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75aa6122a65eaa676f700ae68d393054a37">Start</a>
+, <a class="el" href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a0557fa923dcee4d0f86b1409f5c2167f">Back</a>
 , <b>DpadUp</b>
 , <b>DpadDown</b>
 , <br />
@@ -235,8 +236,8 @@ Enumerations</h2></td></tr>
 &#160;&#160;<b>Last</b>
 <br />
  }</td></tr>
-<tr class="memdesc:acd42bf24fb3e597fb4928f87e61c28a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gamepad buttons.  <a href="#acd42bf24fb3e597fb4928f87e61c28a0">More...</a><br /></td></tr>
-<tr class="separator:acd42bf24fb3e597fb4928f87e61c28a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:afbab6f64e82eec829c9fc664a19bfc75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gamepad buttons.  <a href="namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75">More...</a><br /></td></tr>
+<tr class="separator:afbab6f64e82eec829c9fc664a19bfc75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -391,12 +392,12 @@ Variables</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00025">25</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00026">26</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
 
 </div>
 </div>
 <a id="acd42bf24fb3e597fb4928f87e61c28a0" name="acd42bf24fb3e597fb4928f87e61c28a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acd42bf24fb3e597fb4928f87e61c28a0">&#9670;&#160;</a></span>Button <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#acd42bf24fb3e597fb4928f87e61c28a0">&#9670;&#160;</a></span>Button</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -409,51 +410,7 @@ Variables</h2></td></tr>
 
 <p>Mouse buttons. </p>
 
-<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00228">228</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
-
-</div>
-</div>
-<a id="acd42bf24fb3e597fb4928f87e61c28a0" name="acd42bf24fb3e597fb4928f87e61c28a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acd42bf24fb3e597fb4928f87e61c28a0">&#9670;&#160;</a></span>Button <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum Button : uint8_t</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Gamepad buttons. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="acd42bf24fb3e597fb4928f87e61c28a0aaaf5ce813fa16ece88a90e57b2428f1f" name="acd42bf24fb3e597fb4928f87e61c28a0aaaf5ce813fa16ece88a90e57b2428f1f"></a>LeftStickX&#160;</td><td class="fielddoc"><p>x axis of left stick, -1 to 1 </p>
-</td></tr>
-<tr><td class="fieldname"><a id="acd42bf24fb3e597fb4928f87e61c28a0a947c569e6b1c8a25a163a0841a569920" name="acd42bf24fb3e597fb4928f87e61c28a0a947c569e6b1c8a25a163a0841a569920"></a>LeftStickXInverse&#160;</td><td class="fielddoc"><p>-LeftStickX </p>
-</td></tr>
-<tr><td class="fieldname"><a id="acd42bf24fb3e597fb4928f87e61c28a0ac2784c7a9ece8b060fe51848e86b6463" name="acd42bf24fb3e597fb4928f87e61c28a0ac2784c7a9ece8b060fe51848e86b6463"></a>LeftStickY&#160;</td><td class="fielddoc"><p>y axis of left stick, -1 to 1 </p>
-</td></tr>
-<tr><td class="fieldname"><a id="acd42bf24fb3e597fb4928f87e61c28a0a8e8dd412dc4d621da94fe2f86224c8cd" name="acd42bf24fb3e597fb4928f87e61c28a0a8e8dd412dc4d621da94fe2f86224c8cd"></a>LeftStickYInverse&#160;</td><td class="fielddoc"><p>-LeftStickY </p>
-</td></tr>
-<tr><td class="fieldname"><a id="acd42bf24fb3e597fb4928f87e61c28a0ab893063c352c832cbeb93fae451bac66" name="acd42bf24fb3e597fb4928f87e61c28a0ab893063c352c832cbeb93fae451bac66"></a>RightStickX&#160;</td><td class="fielddoc"><p>x axis of right stick, -1 to 1 </p>
-</td></tr>
-<tr><td class="fieldname"><a id="acd42bf24fb3e597fb4928f87e61c28a0a674e5379458e5827dc4363ee0193819f" name="acd42bf24fb3e597fb4928f87e61c28a0a674e5379458e5827dc4363ee0193819f"></a>RightStickXInverse&#160;</td><td class="fielddoc"><p>-RightStickX </p>
-</td></tr>
-<tr><td class="fieldname"><a id="acd42bf24fb3e597fb4928f87e61c28a0a0f9106b2bfe37c0a18a1d086ece4e5f9" name="acd42bf24fb3e597fb4928f87e61c28a0a0f9106b2bfe37c0a18a1d086ece4e5f9"></a>RightStickY&#160;</td><td class="fielddoc"><p>y axis of right stick, -1 to 1 </p>
-</td></tr>
-<tr><td class="fieldname"><a id="acd42bf24fb3e597fb4928f87e61c28a0a15dc69c00beee5e45b18e3f905f080cc" name="acd42bf24fb3e597fb4928f87e61c28a0a15dc69c00beee5e45b18e3f905f080cc"></a>RightStickYInverse&#160;</td><td class="fielddoc"><p>-RightStickY </p>
-</td></tr>
-<tr><td class="fieldname"><a id="acd42bf24fb3e597fb4928f87e61c28a0a3955a0a6074e8c316cbe40ce1a53e37f" name="acd42bf24fb3e597fb4928f87e61c28a0a3955a0a6074e8c316cbe40ce1a53e37f"></a>LeftButton&#160;</td><td class="fielddoc"><p>Left shoulder button. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="acd42bf24fb3e597fb4928f87e61c28a0aeb47e978a7943f7a47e2f2c902c7921e" name="acd42bf24fb3e597fb4928f87e61c28a0aeb47e978a7943f7a47e2f2c902c7921e"></a>RightButton&#160;</td><td class="fielddoc"><p>Right shoulder button. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="acd42bf24fb3e597fb4928f87e61c28a0abd5f9c956752ce4dc707b4624b3a36f7" name="acd42bf24fb3e597fb4928f87e61c28a0abd5f9c956752ce4dc707b4624b3a36f7"></a>Start&#160;</td><td class="fielddoc"><p>Start, or Options button. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="acd42bf24fb3e597fb4928f87e61c28a0a36625780699489b5c3dfceadfb9c27d1" name="acd42bf24fb3e597fb4928f87e61c28a0a36625780699489b5c3dfceadfb9c27d1"></a>Back&#160;</td><td class="fielddoc"><p>Back, Menu, or Share button. </p>
-</td></tr>
-</table>
-
-<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00251">251</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00229">229</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
 
 </div>
 </div>

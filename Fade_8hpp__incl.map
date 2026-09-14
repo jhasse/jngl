@@ -1,7 +1,9 @@
 <map id="jngl/Fade.hpp" name="jngl/Fade.hpp">
-<area shape="rect" id="Node000001" title="Contains jngl::Fade class." alt="" coords="164,5,289,31"/>
+<area shape="rect" id="Node000001" title="Contains jngl::Fade class." alt="" coords="220,5,345,31"/>
 <area shape="rect" id="Node000002" href="$Scene_8hpp.html" title="Contains jngl::Scene class and related functions." alt="" coords="180,79,273,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="229,31,229,63,224,63,224,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="276,33,248,68,243,65,271,30"/>
+<area shape="rect" id="Node000008" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/optional.html" title=" " alt="" coords="297,79,383,105"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="294,30,323,65,319,68,290,33"/>
 <area shape="rect" id="Node000003" href="$work_8hpp.html" title=" " alt="" coords="184,153,269,178"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="229,105,229,137,224,137,224,105"/>
 <area shape="rect" id="Node000004" href="$job_8hpp.html" title="Contains jngl::Job class and related functions." alt="" coords="143,226,220,252"/>

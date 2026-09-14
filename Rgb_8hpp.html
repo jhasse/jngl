@@ -103,12 +103,13 @@ $(function(){ initResizable(false); });
 
 <p>Contains <a class="el" href="classjngl_1_1Rgb.html" title="Object representing a RGB color, new version of jngl::Color (which will be deprecated in the future)">jngl::Rgb</a> class.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/cstdint.html">cstdint</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/cstddef.html">cstddef</a>&gt;</code><br />
+<code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/cstdint.html">cstdint</a>&gt;</code><br />
 <code>#include &lt;<a class="elRef" href="http://en.cppreference.com/w/cpp/header/iosfwd.html">iosfwd</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for Rgb.hpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="Rgb_8hpp__incl.svg" width="182" height="111"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="Rgb_8hpp__incl.svg" width="283" height="111"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -132,9 +133,12 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a79f3946cc19ffc59833986b1eff21b79" id="r_a79f3946cc19ffc59833986b1eff21b79"><td class="memItemLeft" align="right" valign="top"><a id="a79f3946cc19ffc59833986b1eff21b79" name="a79f3946cc19ffc59833986b1eff21b79"></a>
-<a class="el" href="classjngl_1_1Rgb.html">Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><b>interpolate</b> (<a class="el" href="classjngl_1_1Rgb.html">Rgb</a> a, <a class="el" href="classjngl_1_1Rgb.html">Rgb</a> b, float t)</td></tr>
-<tr class="memdesc:a79f3946cc19ffc59833986b1eff21b79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
+<tr class="memitem:abf5b032e8f145765298dba41781bc2e4" id="r_abf5b032e8f145765298dba41781bc2e4"><td class="memItemLeft" align="right" valign="top"><a id="abf5b032e8f145765298dba41781bc2e4" name="abf5b032e8f145765298dba41781bc2e4"></a>
+<a class="el" href="classjngl_1_1Rgb.html">Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mix</b> (<a class="el" href="classjngl_1_1Rgb.html">Rgb</a> a, <a class="el" href="classjngl_1_1Rgb.html">Rgb</a> b, float t)</td></tr>
+<tr class="memdesc:abf5b032e8f145765298dba41781bc2e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
+<tr class="separator:abf5b032e8f145765298dba41781bc2e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79f3946cc19ffc59833986b1eff21b79" id="r_a79f3946cc19ffc59833986b1eff21b79"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Rgb.html">Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a79f3946cc19ffc59833986b1eff21b79">interpolate</a> (<a class="el" href="classjngl_1_1Rgb.html">Rgb</a> a, <a class="el" href="classjngl_1_1Rgb.html">Rgb</a> b, float t)</td></tr>
+<tr class="memdesc:a79f3946cc19ffc59833986b1eff21b79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Old name for mix, will be removed in a future release.  <br /></td></tr>
 <tr class="separator:a79f3946cc19ffc59833986b1eff21b79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a727fd9baaff788e0f90795d578fc9ca8" id="r_a727fd9baaff788e0f90795d578fc9ca8"><td class="memItemLeft" align="right" valign="top"><a id="a727fd9baaff788e0f90795d578fc9ca8" name="a727fd9baaff788e0f90795d578fc9ca8"></a>
 <a class="el" href="classjngl_1_1Rgb.html">Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getBackgroundColor</b> ()</td></tr>
@@ -151,12 +155,113 @@ Functions</h2></td></tr>
 <a class="el" href="classjngl_1_1Rgb.html">jngl::Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator&quot;&quot;_rgb</b> (unsigned long long)</td></tr>
 <tr class="memdesc:ae9bd0c995f310e7a4337c169f1bd239e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classjngl_1_1Rgb.html" title="Object representing a RGB color, new version of jngl::Color (which will be deprecated in the future)">jngl::Rgb</a> object from a literal. E.g. <code>0x00ff00_rgb</code> for green. <br /></td></tr>
 <tr class="separator:ae9bd0c995f310e7a4337c169f1bd239e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a928c87a5696320e87dc56575b5bf518d" id="r_a928c87a5696320e87dc56575b5bf518d"><td class="memItemLeft" align="right" valign="top"><a id="a928c87a5696320e87dc56575b5bf518d" name="a928c87a5696320e87dc56575b5bf518d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>invalid_hex_character_in_color_literal</b> ()</td></tr>
+<tr class="separator:a928c87a5696320e87dc56575b5bf518d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d98b05b108a188a6b9cdd0aae87efc3" id="r_a9d98b05b108a188a6b9cdd0aae87efc3"><td class="memItemLeft" align="right" valign="top"><a id="a9d98b05b108a188a6b9cdd0aae87efc3" name="a9d98b05b108a188a6b9cdd0aae87efc3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>invalid_rgb_color_literal_expected_format_hash_rrggbb</b> ()</td></tr>
+<tr class="separator:a9d98b05b108a188a6b9cdd0aae87efc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3eb24bc553a079d36b3325ae56b00e2" id="r_ad3eb24bc553a079d36b3325ae56b00e2"><td class="memItemLeft" align="right" valign="top">consteval uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3eb24bc553a079d36b3325ae56b00e2">hexVal</a> (char c)</td></tr>
+<tr class="separator:ad3eb24bc553a079d36b3325ae56b00e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adefffaca7dd396e4f4bdd2834ff92e86" id="r_adefffaca7dd396e4f4bdd2834ff92e86"><td class="memItemLeft" align="right" valign="top">consteval uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adefffaca7dd396e4f4bdd2834ff92e86">hexByte</a> (const char *s)</td></tr>
+<tr class="separator:adefffaca7dd396e4f4bdd2834ff92e86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab066285a8ab08cccfcb75ea2f38903bd" id="r_ab066285a8ab08cccfcb75ea2f38903bd"><td class="memItemLeft" align="right" valign="top">consteval <a class="el" href="classjngl_1_1Rgb.html">jngl::Rgb</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab066285a8ab08cccfcb75ea2f38903bd">operator&quot;&quot;_rgb</a> (const char *hex, size_t length)</td></tr>
+<tr class="memdesc:ab066285a8ab08cccfcb75ea2f38903bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classjngl_1_1Rgb.html" title="Object representing a RGB color, new version of jngl::Color (which will be deprecated in the future)">jngl::Rgb</a> object from a literal. E.g. <code>"#00ff00"_rgb</code> for green.  <br /></td></tr>
+<tr class="separator:ab066285a8ab08cccfcb75ea2f38903bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains <a class="el" href="classjngl_1_1Rgb.html" title="Object representing a RGB color, new version of jngl::Color (which will be deprecated in the future)">jngl::Rgb</a> class. </p>
 
 <p class="definition">Definition in file <a class="el" href="Rgb_8hpp_source.html">Rgb.hpp</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="ad3eb24bc553a079d36b3325ae56b00e2" name="ad3eb24bc553a079d36b3325ae56b00e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3eb24bc553a079d36b3325ae56b00e2">&#9670;&#160;</a></span>hexVal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t hexVal </td>
+          <td>(</td>
+          <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>c</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">consteval</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Rgb_8hpp_source.html#l00121">121</a> of file <a class="el" href="Rgb_8hpp_source.html">Rgb.hpp</a>.</p>
+
+</div>
+</div>
+<a id="adefffaca7dd396e4f4bdd2834ff92e86" name="adefffaca7dd396e4f4bdd2834ff92e86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adefffaca7dd396e4f4bdd2834ff92e86">&#9670;&#160;</a></span>hexByte()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t hexByte </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>s</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">consteval</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Rgb_8hpp_source.html#l00134">134</a> of file <a class="el" href="Rgb_8hpp_source.html">Rgb.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab066285a8ab08cccfcb75ea2f38903bd" name="ab066285a8ab08cccfcb75ea2f38903bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab066285a8ab08cccfcb75ea2f38903bd">&#9670;&#160;</a></span>operator&quot;&quot;_rgb()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Rgb.html">jngl::Rgb</a> operator&quot;&quot;_rgb </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>hex</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>length</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">consteval</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a <a class="el" href="classjngl_1_1Rgb.html" title="Object representing a RGB color, new version of jngl::Color (which will be deprecated in the future)">jngl::Rgb</a> object from a literal. E.g. <code>"#00ff00"_rgb</code> for green. </p>
+
+<p class="definition">Definition at line <a class="el" href="Rgb_8hpp_source.html#l00140">140</a> of file <a class="el" href="Rgb_8hpp_source.html">Rgb.hpp</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- HTML footer for doxygen 1.9.1-->
 <!-- start footer part -->
 </body>

@@ -108,7 +108,7 @@ $(function(){ initResizable(false); });
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for Rgba.hpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="Rgba_8hpp__incl.svg" width="182" height="184"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="Rgba_8hpp__incl.svg" width="283" height="184"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -132,20 +132,63 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:af6daf6049d5223d135e36b485e89134f" id="r_af6daf6049d5223d135e36b485e89134f"><td class="memItemLeft" align="right" valign="top"><a id="af6daf6049d5223d135e36b485e89134f" name="af6daf6049d5223d135e36b485e89134f"></a>
-<a class="el" href="classjngl_1_1Rgba.html">Rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><b>interpolate</b> (<a class="el" href="classjngl_1_1Rgba.html">Rgba</a> a, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> b, float t)</td></tr>
-<tr class="memdesc:af6daf6049d5223d135e36b485e89134f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
+<tr class="memitem:a651eb60debdea74b5d43f95ee8d8fe92" id="r_a651eb60debdea74b5d43f95ee8d8fe92"><td class="memItemLeft" align="right" valign="top"><a id="a651eb60debdea74b5d43f95ee8d8fe92" name="a651eb60debdea74b5d43f95ee8d8fe92"></a>
+<a class="el" href="classjngl_1_1Rgba.html">Rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mix</b> (<a class="el" href="classjngl_1_1Rgba.html">Rgba</a> a, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> b, float t)</td></tr>
+<tr class="memdesc:a651eb60debdea74b5d43f95ee8d8fe92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a color mix between a (t == 0) and b (t == 1) <br /></td></tr>
+<tr class="separator:a651eb60debdea74b5d43f95ee8d8fe92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6daf6049d5223d135e36b485e89134f" id="r_af6daf6049d5223d135e36b485e89134f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Rgba.html">Rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#af6daf6049d5223d135e36b485e89134f">interpolate</a> (<a class="el" href="classjngl_1_1Rgba.html">Rgba</a> a, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> b, float t)</td></tr>
+<tr class="memdesc:af6daf6049d5223d135e36b485e89134f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Old name for mix, will be removed in a future release.  <br /></td></tr>
 <tr class="separator:af6daf6049d5223d135e36b485e89134f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a135f9724cfee1cec29f7ecea6b8d4dd5" id="r_a135f9724cfee1cec29f7ecea6b8d4dd5"><td class="memItemLeft" align="right" valign="top"><a id="a135f9724cfee1cec29f7ecea6b8d4dd5" name="a135f9724cfee1cec29f7ecea6b8d4dd5"></a>
 <a class="el" href="classjngl_1_1Rgba.html">jngl::Rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator&quot;&quot;_rgba</b> (unsigned long long)</td></tr>
-<tr class="memdesc:a135f9724cfee1cec29f7ecea6b8d4dd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classjngl_1_1Rgba.html" title="Object representing a RGBA color.">jngl::Rgba</a> object from a literal. E.g. <code>0x00ff00_rgb</code> for green. <br /></td></tr>
+<tr class="memdesc:a135f9724cfee1cec29f7ecea6b8d4dd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classjngl_1_1Rgba.html" title="Object representing a RGBA color.">jngl::Rgba</a> object from a literal. E.g. <code>0x00ff00ff_rgba</code> for green. <br /></td></tr>
 <tr class="separator:a135f9724cfee1cec29f7ecea6b8d4dd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e7c6db22df3c47c4c3ccc8e3a607b1e" id="r_a2e7c6db22df3c47c4c3ccc8e3a607b1e"><td class="memItemLeft" align="right" valign="top"><a id="a2e7c6db22df3c47c4c3ccc8e3a607b1e" name="a2e7c6db22df3c47c4c3ccc8e3a607b1e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>invalid_rgba_color_literal_expected_format_hash_rrggbbaa</b> ()</td></tr>
+<tr class="separator:a2e7c6db22df3c47c4c3ccc8e3a607b1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8f16c01018d50e174fb351e44207f00" id="r_af8f16c01018d50e174fb351e44207f00"><td class="memItemLeft" align="right" valign="top">consteval <a class="el" href="classjngl_1_1Rgba.html">jngl::Rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8f16c01018d50e174fb351e44207f00">operator&quot;&quot;_rgba</a> (const char *hex, size_t length)</td></tr>
+<tr class="memdesc:af8f16c01018d50e174fb351e44207f00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classjngl_1_1Rgba.html" title="Object representing a RGBA color.">jngl::Rgba</a> object from a literal. E.g. <code>"#00ff00ff"_rgba</code> for green.  <br /></td></tr>
+<tr class="separator:af8f16c01018d50e174fb351e44207f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains <a class="el" href="classjngl_1_1Rgba.html" title="Object representing a RGBA color.">jngl::Rgba</a> class. </p>
 
 <p class="definition">Definition in file <a class="el" href="Rgba_8hpp_source.html">Rgba.hpp</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="af8f16c01018d50e174fb351e44207f00" name="af8f16c01018d50e174fb351e44207f00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8f16c01018d50e174fb351e44207f00">&#9670;&#160;</a></span>operator&quot;&quot;_rgba()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Rgba.html">jngl::Rgba</a> operator&quot;&quot;_rgba </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>hex</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>length</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">consteval</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a <a class="el" href="classjngl_1_1Rgba.html" title="Object representing a RGBA color.">jngl::Rgba</a> object from a literal. E.g. <code>"#00ff00ff"_rgba</code> for green. </p>
+
+<p class="definition">Definition at line <a class="el" href="Rgba_8hpp_source.html#l00103">103</a> of file <a class="el" href="Rgba_8hpp_source.html">Rgba.hpp</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- HTML footer for doxygen 1.9.1-->
 <!-- start footer part -->
 </body>

@@ -126,6 +126,9 @@ Public Member Functions</h2></td></tr>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onUnload</b> ()</td></tr>
 <tr class="memdesc:abe3b0d7fe736b3d233c96b2cb4f9546e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called when the <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> is deactivated by the main loop. <br /></td></tr>
 <tr class="separator:abe3b0d7fe736b3d233c96b2cb4f9546e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad915219920b4e3facabfa8519b955809" id="r_ad915219920b4e3facabfa8519b955809"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad915219920b4e3facabfa8519b955809">onToggleFullscreen</a> ()</td></tr>
+<tr class="memdesc:ad915219920b4e3facabfa8519b955809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called when the user pressed <code>Alt</code> + <code>Enter</code>  <br /></td></tr>
+<tr class="separator:ad915219920b4e3facabfa8519b955809"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classjngl_1_1Job"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classjngl_1_1Job')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classjngl_1_1Job.html">Job</a></td></tr>
 <tr class="memitem:aa6f73ac7d5899119d156a0b3a27fba31 inherit pub_methods_classjngl_1_1Job" id="r_aa6f73ac7d5899119d156a0b3a27fba31"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31">step</a> ()=0</td></tr>
 <tr class="memdesc:aa6f73ac7d5899119d156a0b3a27fba31 inherit pub_methods_classjngl_1_1Job"><td class="mdescLeft">&#160;</td><td class="mdescRight">Advance the game logic.  <br /></td></tr>
@@ -260,7 +263,8 @@ Collaboration diagram for Work:</div>
 <div class="line">};</div>
 <div class="ttc" id="aclassjngl_1_1Work_html_a73f9f5ca4d5c6d4dc49b176af928cd90"><div class="ttname"><a href="#a73f9f5ca4d5c6d4dc49b176af928cd90">jngl::Work::onQuitEvent</a></div><div class="ttdeci">virtual void onQuitEvent()</div><div class="ttdoc">Gets called when the user closes the main window or quit() has been called.</div></div>
 <div class="ttc" id="anamespacejngl_html_a435e2f7919544ec87ae83ffdb226a50d"><div class="ttname"><a href="namespacejngl.html#a435e2f7919544ec87ae83ffdb226a50d">jngl::cancelQuit</a></div><div class="ttdeci">void cancelQuit()</div><div class="ttdoc">Undo quit() or ignore a quit event caused by the user closing the main window.</div></div>
-</div><!-- fragment --> 
+</div><!-- fragment --><dl class="section note"><dt>Note</dt><dd><code>Ctrl</code>+<code>C</code> (SIGINT) calls <a class="el" href="namespacejngl.html#a6a979c0a8f14d49cc3d95960e4d672fe" title="Exit main loop with and let the OS process return exitcode.">forceQuit()</a> with exitcode 130 instead and does not invoke this. </dd></dl>
+
 <p>Reimplemented in <a class="el" href="classjngl_1_1Fade.html#a9fb5042f6b152e7cf9242a1eeba6cc58">Fade</a>.</p>
 
 </div>
@@ -347,6 +351,35 @@ Collaboration diagram for Work:</div>
 <p>Gets called when the <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> is activated by the main loop. </p>
 
 <p>Reimplemented in <a class="el" href="classjngl_1_1WorkFactory.html#afce19b8a1a875624f4b24428172bffd0">WorkFactory</a>.</p>
+
+</div>
+</div>
+<a id="ad915219920b4e3facabfa8519b955809" name="ad915219920b4e3facabfa8519b955809"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad915219920b4e3facabfa8519b955809">&#9670;&#160;</a></span>onToggleFullscreen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void onToggleFullscreen </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets called when the user pressed <code>Alt</code> + <code>Enter</code> </p>
+<p>By default it switches between fullscreen and windowed mode. You can overwrite this if you want to do something else, e.g. if you want to disable toggling fullscreen mode because you need the keyboard shortcut for something else.</p>
+<dl class="section note"><dt>Note</dt><dd>Only implemented on desktop platforms (i.e. Linux, Windows and macOS). </dd></dl>
 
 </div>
 </div>

@@ -1,8 +1,10 @@
 var searchData=
 [
-  ['rightbutton_0',['RightButton',['../input_8hpp.html#acd42bf24fb3e597fb4928f87e61c28a0aeb47e978a7943f7a47e2f2c902c7921e',1,'jngl::controller']]],
-  ['rightstickx_1',['RightStickX',['../input_8hpp.html#acd42bf24fb3e597fb4928f87e61c28a0ab893063c352c832cbeb93fae451bac66',1,'jngl::controller']]],
-  ['rightstickxinverse_2',['RightStickXInverse',['../input_8hpp.html#acd42bf24fb3e597fb4928f87e61c28a0a674e5379458e5827dc4363ee0193819f',1,'jngl::controller']]],
-  ['rightsticky_3',['RightStickY',['../input_8hpp.html#acd42bf24fb3e597fb4928f87e61c28a0a0f9106b2bfe37c0a18a1d086ece4e5f9',1,'jngl::controller']]],
-  ['rightstickyinverse_4',['RightStickYInverse',['../input_8hpp.html#acd42bf24fb3e597fb4928f87e61c28a0a15dc69c00beee5e45b18e3f905f080cc',1,'jngl::controller']]]
+  ['leftbutton_0',['LeftButton',['../namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a2a81c1ce439d7652d7a61d55229c8043',1,'jngl']]],
+  ['leftstickx_1',['LeftStickX',['../namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a9401da4ce408415b34ce204ccb2c27d0',1,'jngl']]],
+  ['leftstickxinverse_2',['LeftStickXInverse',['../namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a8a006575363ece2c3eced59ee41cb0ff',1,'jngl']]],
+  ['leftsticky_3',['LeftStickY',['../namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a729f2100a072d3bc80d4eaea3218e61f',1,'jngl']]],
+  ['leftstickyinverse_4',['LeftStickYInverse',['../namespacejngl.html#afbab6f64e82eec829c9fc664a19bfc75a3327352f317129cfedeeff1db4353960',1,'jngl']]],
+  ['light_5',['Light',['../namespacejngl.html#afc275d961db164fe0a71325c768c0502a9914a0ce04a7b7b6a8e39bec55064b82',1,'jngl']]],
+  ['long_6',['Long',['../namespacejngl.html#afc275d961db164fe0a71325c768c0502a8394f0347c184cf156ac5924dccb773b',1,'jngl']]]
 ];
