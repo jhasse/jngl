@@ -517,7 +517,10 @@ endif()
 
 option(JNGL_CLANG_TIDY "Run clang-tidy on source files" OFF)
 if(JNGL_CLANG_TIDY)
-	set_target_properties(jngl          PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color")
-	set_target_properties(jngl-test     PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color")
-	set_target_properties(jngl-unittest PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color")
+	# Anchor the header filter to our own src/ so vendored CPM dependencies
+	# (which may sit under any cache folder and often have their own src/)
+	# aren't picked up by clang-tidy too.
+	set_target_properties(jngl          PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color;--header-filter=^${CMAKE_SOURCE_DIR}/src/")
+	set_target_properties(jngl-test     PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color;--header-filter=^${CMAKE_SOURCE_DIR}/src/")
+	set_target_properties(jngl-unittest PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color;--header-filter=^${CMAKE_SOURCE_DIR}/src/")
 endif()
