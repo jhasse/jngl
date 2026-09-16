@@ -51,6 +51,10 @@
 #include <emscripten.h>
 #endif
 
+namespace jngl::internal {
+void resetScaleFactor();
+} // namespace jngl::internal
+
 namespace jngl {
 
 std::string pathPrefix;
@@ -144,6 +148,15 @@ void showWindow(const std::string& title, const double width, const double heigh
 void hideWindow() {
 	if (pWindow) {
 		App::instance().callAtExitFunctions();
+		// Reset all global variables for Android. This should maybe moved to App or some other
+		// class. Or a Singleton, just not global variables.
+		pathPrefix = "";
+		configPath = std::nullopt;
+		backgroundColor = Rgb(1, 1, 1);
+		modelviewStack = {};
+		antiAliasingEnabled = true;
+		internal::gFrameNumber = -1;
+		internal::resetScaleFactor();
 	}
 	unloadAll();
 	pWindow.Delete();
@@ -353,8 +366,14 @@ namespace {
 void readPixels(void* buffer, GLenum type) {
 	auto xOffset = (pWindow->getWidth() - pWindow->getCanvasWidth());
 	auto yOffset = (pWindow->getHeight() - pWindow->getCanvasHeight());
-	assert(xOffset % 2 == 0);
-	assert(yOffset % 2 == 0);
+
+	// This doesn't hold true on GNOME with fractional scaling: One can only provide logical points
+	// to SDL when creating a window. Due to the scaling it might be the window is 1 pixel to big in
+	// one dimension and we had to activate letter-boxing.
+	//
+	// assert(xOffset % 2 == 0);
+	// assert(yOffset % 2 == 0);
+
 	GLint oldPackAlignment = 0;
 	glGetIntegerv(GL_PACK_ALIGNMENT, &oldPackAlignment);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
@@ -433,6 +452,10 @@ double getFPS() {
 
 unsigned int getStepsPerSecond() {
 	return pWindow->getStepsPerSecond();
+}
+
+float getDelta() {
+	return 1.f / static_cast<float>(getStepsPerSecond());
 }
 
 void setStepsPerSecond(const unsigned int stepsPerSecond) {

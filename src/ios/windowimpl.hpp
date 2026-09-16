@@ -5,6 +5,7 @@
 
 #include <cstddef>
 #include <map>
+#include <string>
 
 namespace jngl {
 
@@ -29,6 +30,16 @@ public:
 
 	void setMouseDown(bool);
 	void setRelativeMouseMode(bool);
+
+	// Keyboard events arrive from UIKit asynchronously between frames, but
+	// Window::updateKeyStates() (which runs at the start of every step) clears the text input and
+	// the "pressed" flags. If we wrote to the Window directly, the next step would wipe the input
+	// before the game's step() could read it. So we buffer the events here and replay them in
+	// updateInput(), which runs right after updateKeyStates() and before the game steps.
+	void enqueueTextInput(const std::string&); ///< a typed UTF-8 character (see jngl::getTextInput)
+	void enqueueReturn(); ///< the Return/Enter key
+	void enqueueBackspace(); ///< the Backspace/delete key
+
 	int relativeX = 0;
 	int relativeY = 0;
 	void updateInput();
@@ -44,6 +55,10 @@ private:
 	Window* const window;
 	int mouseX = 0;
 	int mouseY = 0;
+
+	std::string pendingTextInput;
+	uint8_t pendingReturn = 0;
+	uint8_t pendingBackspace = 0;
 };
 
 } // namespace jngl

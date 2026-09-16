@@ -24,4 +24,7 @@ TEST_CASE("Channel") {
 	CHECK_THROWS_AS(channel.play("nonexistent.ogg"), std::runtime_error);
 	CHECK_THROWS_AS(channel.stop("nonexistent.ogg"), std::runtime_error);
 	CHECK_THROWS_AS(channel.isPlaying("nonexistent.ogg"), std::runtime_error);
+	channel.play("../data/test.ogg");
+	channel = jngl::Channel{};
+	CHECK(!channel.isPlaying("../data/test.ogg"));
 }

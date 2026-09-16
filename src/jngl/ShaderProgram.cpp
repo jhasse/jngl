@@ -58,7 +58,9 @@ int ShaderProgram::getAttribLocation(const std::string& name) const {
 
 int ShaderProgram::getUniformLocation(const std::string& name) const {
 	int location = glGetUniformLocation(impl->id, name.c_str());
-	assert(location != -1);
+	if (location == -1) {
+		throw std::runtime_error("Uniform '" + name + "' not found in shader program.");
+	}
 	return location;
 }
 

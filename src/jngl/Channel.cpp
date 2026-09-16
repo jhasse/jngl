@@ -32,7 +32,13 @@ Channel::Channel() : impl(std::make_unique<Impl>()) {
 	Audio::handle().registerChannel(impl->pauseControl);
 }
 
+Channel::Channel(Channel&& other) noexcept = default;
+Channel& Channel::operator=(Channel&& other) noexcept = default;
+
 Channel::~Channel() {
+	if (!impl) { // moved-from Channel
+		return;
+	}
 	if (auto audio = Audio::handleIfAlive()) {
 		audio->unregisterChannel(*impl->pauseControl);
 	}

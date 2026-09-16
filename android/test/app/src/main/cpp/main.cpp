@@ -1,4 +1,4 @@
-// Copyright 2020-2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2020-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include <jngl.hpp>
@@ -7,6 +7,7 @@
 JNGL_MAIN_BEGIN {
 	try {
 		jngl::showWindow("Android Test", 1920, 1080);
+		jngl::setFullscreen(true); // just test that this is a noop
 
 		jngl::Video video("verysmall.ogv");
 		while (jngl::running() && !video.finished()) {

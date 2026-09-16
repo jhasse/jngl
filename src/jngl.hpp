@@ -40,6 +40,7 @@
 #include "jngl/debug.hpp"            // IWYU pragma: keep
 #include "jngl/effects.hpp"          // IWYU pragma: keep
 #include "jngl/font.hpp"             // IWYU pragma: keep
+#include "jngl/haptics.hpp"          // IWYU pragma: keep
 #include "jngl/input.hpp"            // IWYU pragma: keep
 #include "jngl/job.hpp"              // IWYU pragma: keep
 #include "jngl/log.hpp"              // IWYU pragma: keep

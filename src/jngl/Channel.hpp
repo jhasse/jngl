@@ -30,6 +30,8 @@ struct Stream;
 class Channel {
 public:
 	Channel();
+	Channel(Channel&&) noexcept;
+	Channel& operator=(Channel&&) noexcept;
 	~Channel();
 
 	/// Play OGG file on this channel

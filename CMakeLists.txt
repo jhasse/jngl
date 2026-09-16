@@ -16,10 +16,11 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
-	set(USE_FLAGS "-sUSE_SDL=2 -sUSE_FREETYPE=1 -sUSE_VORBIS=1")
-	string(APPEND CMAKE_CXX_FLAGS " ${USE_FLAGS} -sNO_DISABLE_EXCEPTION_CATCHING")
-	string(APPEND CMAKE_C_FLAGS " ${USE_FLAGS}")
-	string(APPEND CMAKE_EXE_LINKER_FLAGS " ${USE_FLAGS} -sASSERTIONS=1 --preload-file data")
+	set(USE_FLAGS "-sUSE_SDL=3 -sUSE_FREETYPE=1 -sUSE_VORBIS=1")
+	# emcc: error: sdl3 port is still experimental [-Wexperimental] [-Werror]
+	string(APPEND CMAKE_CXX_FLAGS " ${USE_FLAGS} -sNO_DISABLE_EXCEPTION_CATCHING -Wno-experimental")
+	string(APPEND CMAKE_C_FLAGS " ${USE_FLAGS} -Wno-experimental")
+	string(APPEND CMAKE_EXE_LINKER_FLAGS " ${USE_FLAGS} -sASSERTIONS=1 -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2 --preload-file data")
 	set(CMAKE_EXECUTABLE_SUFFIX ".html")
 endif()
 
@@ -137,7 +138,7 @@ elseif (UNIX)
 else() # Windows
 	option(JNGL_WINAPI "Use WinAPI instead of SDL" OFF)
 
-	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
+	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x0A00 _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
 	if(JNGL_WINAPI)
 		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp)
 		target_link_libraries(jngl PRIVATE opengl32)
@@ -228,7 +229,7 @@ else()
 		target_sources(jngl PRIVATE src/audio/sdl/engine.cpp)
 	endif()
 	if(NOT JNGL_BUILD_SDL_FROM_SOURCE AND NOT IOS AND NOT EMSCRIPTEN)
-		pkg_check_modules(SDL sdl2)
+		pkg_check_modules(SDL sdl3)
 		if(SDL_FOUND)
 			target_include_directories(jngl PRIVATE ${SDL_INCLUDE_DIRS})
 			target_link_libraries(jngl PRIVATE ${SDL_LINK_LIBRARIES})
@@ -258,8 +259,8 @@ else()
 	if(JNGL_BUILD_SDL_FROM_SOURCE)
 		if(JNGL_WINAPI)
 			CPMAddPackage(NAME SDL
-				URL https://www.libsdl.org/release/SDL2-2.32.10.zip
-				URL_HASH SHA1=86499a3e72967117bfdfd88861b7554dc996e0c5
+				URL https://www.libsdl.org/release/SDL3-3.4.12.zip
+				URL_HASH SHA1=d2c07e1e0e98c2c6c073d5f24112e6fe8208037a
 				OPTIONS
 					"SDL_ATOMIC OFF"
 					"SDL_CPUINFO ON"
@@ -273,17 +274,21 @@ else()
 					"SDL_RENDER OFF"
 					"SDL_SENSOR OFF"
 					"SDL_SHARED OFF"
+					"SDL_STATIC ON"
 					"SDL_TIMERS OFF"
 			)
 		else()
 			CPMAddPackage(NAME SDL
-				URL https://www.libsdl.org/release/SDL2-2.32.10.zip
-				URL_HASH SHA1=86499a3e72967117bfdfd88861b7554dc996e0c5
+				URL https://www.libsdl.org/release/SDL3-3.4.12.zip
+				URL_HASH SHA1=d2c07e1e0e98c2c6c073d5f24112e6fe8208037a
 				OPTIONS
+				    "SDL_X11_XTEST OFF"
 					"SDL_SENSOR OFF"
+					"SDL_SHARED OFF"
+					"SDL_STATIC ON"
 			)
 		endif()
-		target_link_libraries(jngl PRIVATE SDL2-static)
+		target_link_libraries(jngl PRIVATE SDL3::SDL3)
 	endif()
 	if(MSVC)
 		target_compile_definitions(jngl PUBLIC _USE_MATH_DEFINES)
@@ -301,6 +306,12 @@ else()
 			${IOS_OPENGLES} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
 			${IOS_GAMECONTROLLER} ${IOS_AudioToolbox}
 		)
+		# CoreHaptics and the UIKit feedback generators aren't available on tvOS, so only link
+		# CoreHaptics where it exists (see src/ios/haptics.mm for the matching code guard).
+		find_library(IOS_COREHAPTICS CoreHaptics)
+		if(IOS_COREHAPTICS)
+			target_link_libraries(jngl PRIVATE ${IOS_COREHAPTICS})
+		endif()
 
 		if(NOT hasParent)
 			set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.bixense.jngl-test")
@@ -421,6 +432,8 @@ else()
 
 		add_executable(jngl-test-forceQuit src/test/integration/forceQuit.cpp)
 		target_link_libraries(jngl-test-forceQuit PRIVATE jngl)
+		add_executable(jngl-test-sigint src/test/integration/sigint.cpp)
+		target_link_libraries(jngl-test-sigint PRIVATE jngl)
 		target_link_libraries(jngl-test jngl)
 	endif()
 endif()
@@ -443,6 +456,18 @@ if(JNGL_BUILD_WEBP_FROM_SOURCE)
 	)
 	target_include_directories(jngl PRIVATE ${webp_SOURCE_DIR}/src)
 	target_link_libraries(jngl PRIVATE webpdecode webpdspdecode webputilsdecode)
+	if(EMSCRIPTEN)
+		# libwebp's CMakeLists adds -Wall, which under emcc re-enables
+		# -Wexperimental that we disabled in CMAKE_C_FLAGS. Combined with
+		# CMAKE_COMPILE_WARNING_AS_ERROR=1 (-> -Werror) this turns the SDL3
+		# "port is still experimental" message into a hard error. Append
+		# -Wno-experimental on each webp target so it wins over -Wall.
+		get_property(_webp_targets DIRECTORY ${webp_SOURCE_DIR}
+		             PROPERTY BUILDSYSTEM_TARGETS)
+		foreach(_t ${_webp_targets})
+			target_compile_options(${_t} PRIVATE -Wno-experimental)
+		endforeach()
+	endif()
 endif()
 
 if(ANDROID OR IOS OR APPLE)

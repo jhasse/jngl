@@ -3,6 +3,7 @@
 
 #include "windowimpl.hpp"
 
+#include "../jngl/input.hpp"
 #include "../log.hpp"
 #include "../window.hpp"
 
@@ -76,6 +77,33 @@ void WindowImpl::updateInput() {
 		relativeX = mouseX;
 		relativeY = mouseY;
 	}
+
+	// Replay the keyboard events buffered since the last step. This happens after
+	// Window::updateKeyStates() cleared the input and before the game's step() reads it.
+	if (!pendingTextInput.empty()) {
+		window->textInput += pendingTextInput;
+		pendingTextInput.clear();
+	}
+	if (pendingReturn > 0) {
+		window->setKeyPressed(key::Return, true);
+		--pendingReturn;
+	}
+	if (pendingBackspace > 0) {
+		window->setKeyPressed(key::BackSpace, true);
+		--pendingBackspace;
+	}
+}
+
+void WindowImpl::enqueueTextInput(const std::string& text) {
+	pendingTextInput += text;
+}
+
+void WindowImpl::enqueueReturn() {
+	++pendingReturn;
+}
+
+void WindowImpl::enqueueBackspace() {
+	++pendingBackspace;
 }
 
 void WindowImpl::sleepIfNeeded() {

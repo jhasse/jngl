@@ -1,19 +1,25 @@
-// Copyright 2012-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
 #include "../jngl/Singleton.hpp"
 
+#include <csignal>
+
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wimplicit-fallthrough"
 #endif
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #ifdef __clang__
 #pragma clang diagnostic pop
 #endif
 
 namespace jngl {
+
+#ifndef __EMSCRIPTEN__
+extern volatile std::sig_atomic_t gGotSigint;
+#endif
 
 class SDL : public Singleton<SDL> {
 	friend class Singleton<SDL>;

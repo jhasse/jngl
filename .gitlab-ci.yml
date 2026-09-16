@@ -18,7 +18,7 @@ linux:
     allow_failure: false
   stage: build
   script:
-  - dnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libwebp-devel SDL2-devel libtheora-devel clang util-linux clang-tools-extra >/dev/null
+  - dnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libwebp-devel SDL3-devel libtheora-devel clang util-linux clang-tools-extra >/dev/null
   - .github/ci.py
   - cmake -Bbuild -G"Ninja Multi-Config" -DCMAKE_COMPILE_WARNING_AS_ERROR=1
   - cd build
@@ -54,7 +54,7 @@ mingw:
     allow_failure: false
   stage: build
   script:
-    - dnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL2 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw64-gcc-c++ > /dev/null
+    - dnf install -y cmake ninja-build mingw64-pkg-config mingw64-libvorbis mingw64-SDL3 mingw64-fontconfig mingw64-libwebp mingw64-dlfcn mingw64-gcc-c++ > /dev/null
     - mingw64-cmake -G"Ninja Multi-Config" -Bbuild-mingw -DJNGL_WINAPI=0 -DCMAKE_COMPILE_WARNING_AS_ERROR=1
     - cd build-mingw
     - ninja
@@ -73,18 +73,13 @@ android:
     - ./gradlew build
 
 steamos:
-  image: registry.gitlab.steamos.cloud/steamrt/sniper/sdk
+  image: registry.gitlab.steamos.cloud/steamrt/steamrt4/sdk
   stage: build
   script:
-    - apt-get update
-    - apt-get install -y libboost-dev libc++abi-16-dev libc++-16-dev clang-16
-    - export LDFLAGS=-static-libstdc++
-    - export CXXFLAGS=-stdlib=libc++
-    - export CC=clang-16
-    - export CXX=clang++-16
     - cmake -Bbuild-steamos -GNinja -DCMAKE_BUILD_TYPE=Debug
     - cd build-steamos
     - ninja
+    - apt-get update
     - DEBIAN_FRONTEND=noninteractive apt-get install -y xserver-xorg-video-dummy >/dev/null
     - Xorg -config ../data/xorg.conf &>/dev/null &
     - sleep 1 # wait for Xorg to boot up
@@ -98,7 +93,7 @@ steamos:
 web:
   parallel:
     matrix:
-      - VERSION: ['3.1.74', '5.0.6', 'latest']
+      - VERSION: ['4.0.22', '5.0.7', 'latest']
   image: emscripten/emsdk:$VERSION
   rules:
   - if: '$VERSION == "latest"'
@@ -125,17 +120,20 @@ web:
 #   dependencies:
 #   - web
 #   script:
-#   - microdnf install -y doxygen cmake make tar xz git texlive-latex texlive-newunicodechar texlive-dvips pdf2svg ghostscript >/dev/null
+#   - microdnf install -y doxygen cmake make tar xz git >/dev/null
 #   - cd doc
 #   - cmake .
 #   - make
 #   - doxygen
 #   - mv ../public __tmp
 #   - mv html ../public
+#   - cp *.svg ../public
+#   - cp *.png ../public
+#   - cp index.html ../public
 #   - mv __tmp/demo ../public
 #   - rm -r __tmp
 #   artifacts:
 #     paths:
 #     - public
 #   only:
-#   - master
+#   - main

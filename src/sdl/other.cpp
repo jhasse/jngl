@@ -4,11 +4,7 @@
 #include "../jngl/Finally.hpp"
 #include "../jngl/other.hpp"
 
-#include <SDL.h>
-
-#if defined(__has_include) && __has_include(<SDL_locale.h>)
-#include <SDL_locale.h>
-#endif
+#include <SDL3/SDL.h>
 
 namespace jngl {
 
@@ -20,12 +16,15 @@ std::string getPreferredLanguage() {
 			return lang.substr(0, 2);
 		}
 	}
-#elif defined(__has_include) && __has_include(<SDL_locale.h>)
-	SDL_Locale* locale = SDL_GetPreferredLocales();
-	Finally freeLocale([locale]() { SDL_free(locale); });
-	if (locale && locale->language && locale->language[0] != '\0' && locale->language[1] != '\0' &&
-	    locale->language[2] == '\0') {
-		return locale->language;
+#else
+	int count = 0;
+	SDL_Locale** locales = SDL_GetPreferredLocales(&count);
+	Finally freeLocales([locales]() { SDL_free(static_cast<void*>(locales)); });
+	for (int i = 0; i < count; ++i) {
+		if (locales[i] && locales[i]->language && locales[i]->language[0] != '\0' &&
+		    locales[i]->language[1] != '\0' && locales[i]->language[2] == '\0') {
+			return locales[i]->language;
+		}
 	}
 #endif
 	return "en";
@@ -42,7 +41,11 @@ void setVerticalSync(bool enabled) {
 }
 
 bool getVerticalSync() {
-	return SDL_GL_GetSwapInterval() == 1;
+	int result;
+	if (!SDL_GL_GetSwapInterval(&result)) {
+		throw std::runtime_error(SDL_GetError());
+	}
+	return result == 1;
 }
 
 } // namespace jngl

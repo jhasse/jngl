@@ -63,6 +63,9 @@ void cancelQuit();
 /// How many times Work::step is called per second (default: 60)
 unsigned int getStepsPerSecond();
 
+/// Time in seconds of a step, i.e. 1 / getStepsPerSecond()
+float getDelta();
+
 /// How many times Work::step should be called per second (default: 60)
 void setStepsPerSecond(unsigned int);
 

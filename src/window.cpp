@@ -16,11 +16,6 @@
 #include "jngl/record/VideoRecorder.hpp"
 #endif
 
-#ifdef ANDROID
-#include "App.hpp"
-#include "main.hpp"
-#endif
-
 #ifdef __EMSCRIPTEN__
 #include "emscripten/window.hpp"
 
@@ -91,7 +86,7 @@ void Window::setFontSize(const int size) {
 	fontSize_ = size;
 	try {
 		setFont(fontName_); // We changed the size we also need to reload the current font
-	} catch (std::exception& e) { // Something went wrong ...
+	} catch (std::exception&) { // Something went wrong ...
 		fontSize_ = oldSize; // ... so let's set fontSize_ back to the previous size
 		throw;
 	}
@@ -414,8 +409,6 @@ void Window::draw() const {
 #endif
 	if (currentWork_) {
 		currentWork_->draw();
-	} else {
-		jngl::print("No scene set. Use jngl::setScene", -50, -5);
 	}
 	for (auto& job : std::ranges::reverse_view(jobs)) {
 		job->draw();
@@ -571,9 +564,6 @@ void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 }
 
 void Window::initGlObjects() {
-#ifdef ANDROID
-	App::instance().initGl(width_, height_, canvasWidth, canvasHeight);
-#endif
 	glGenBuffers(1, &opengl::vboStream);
 	glGenVertexArrays(1, &opengl::vaoStream);
 

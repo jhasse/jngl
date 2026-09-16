@@ -143,8 +143,8 @@ static GLADapiproc gladGlGetProc(void* user, const char* name) {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
-: impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), width_(width), height_(height),
-  fontName_(GetFontFileByName("Arial")) {
+: fullscreen_(fullscreen), width_(width), height_(height), fontName_(GetFontFileByName("Arial")),
+  impl(std::make_unique<WindowImpl>()) {
 	impl->window = this;
 	impl->distinguishLeftRight = [this]() {
 		int codesToCheck[] = { GetKeyCode(jngl::key::ShiftL),   GetKeyCode(jngl::key::ShiftR),

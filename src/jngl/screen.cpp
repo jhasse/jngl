@@ -12,6 +12,12 @@ namespace jngl {
 
 double factor = 1;
 
+namespace internal {
+void resetScaleFactor() {
+	factor = 1;
+}
+} // namespace internal
+
 double getScaleFactor() {
 	return factor;
 }

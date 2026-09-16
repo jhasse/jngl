@@ -18,12 +18,10 @@
 	jngl::setPrefix(std::string([NSBundle mainBundle].resourcePath.UTF8String) + "/");
 	jngl::AppParameters params = jnglInit();
 	view = [[JNGLView alloc] initWithFrame:[UIScreen mainScreen].bounds withAppParameters:params];
+	jnglView = view; // must be set before the view controller loads its view (see -loadView)
 
 	JNGLViewController* jvc = [[JNGLViewController alloc] initWithNibName:nil bundle:nil];
 	self.window.rootViewController = jvc;
-	jnglView = view;
-
-	[self.window addSubview:view];
 
 	jngl::setScene(params.start());
 

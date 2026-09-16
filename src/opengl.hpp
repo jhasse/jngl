@@ -16,14 +16,7 @@
 		#include <GLES3/gl3ext.h>
 	#else
 		#ifdef __EMSCRIPTEN__
-			#define GL_GLEXT_PROTOTYPES 1
-			#include <GLES2/gl2.h>
-			#include <GLES2/gl2ext.h>
-
-			#define glGenVertexArrays glGenVertexArraysOES
-			#define glBindVertexArray glBindVertexArrayOES
-			#define glDeleteVertexArrays glDeleteVertexArraysOES
-			#define GL_RGBA8 GL_RGBA8_OES
+			#include <GLES3/gl3.h>
 		#else
 			#include <glad/gl.h>
 		#endif
@@ -51,5 +44,11 @@ GLuint genAndBindTexture();
 
 /// Calls glBindVertexArray(vao) (on Android: only if vao is not already bound)
 void bindVertexArray(GLuint vao);
+
+/// Calls glDeleteVertexArrays(1, &vao) and invalidates the Android VAO cache
+///
+/// Must be used instead of glDeleteVertexArrays directly: OpenGL recycles the id after deletion, so
+/// a stale cache entry would turn the next bindVertexArray of the recycled id into a no-op.
+void deleteVertexArray(GLuint vao);
 
 } // namespace opengl

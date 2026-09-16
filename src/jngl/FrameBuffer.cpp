@@ -16,9 +16,10 @@
 namespace jngl {
 
 struct FrameBuffer::Impl {
-	Impl(int width, int height)
+	Impl(int width, int height, bool hdr)
 	: width(width), height(height),
-	  texture(static_cast<float>(width), static_cast<float>(height), width, height, nullptr),
+	  texture(static_cast<float>(width), static_cast<float>(height), width, height, nullptr,
+	          GL_RGBA, nullptr, hdr ? GL_HALF_FLOAT : GL_UNSIGNED_BYTE),
 	  letterboxing(glIsEnabled(GL_SCISSOR_TEST)) {
 	}
 	Impl(const Impl&) = delete;
@@ -51,11 +52,11 @@ struct FrameBuffer::Impl {
 
 std::stack<std::function<void()>> FrameBuffer::Impl::activate;
 
-FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
-: impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height))) {
+FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr)
+: impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height), hdr)) {
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, static_cast<int>(width),
+	glRenderbufferStorage(GL_RENDERBUFFER, hdr ? GL_RGBA16F : GL_RGBA8, static_cast<int>(width),
 	                      static_cast<int>(height));
 
 	glGenFramebuffers(1, &impl->fbo);
@@ -80,11 +81,12 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height)
 	pWindow->bindSystemFramebufferAndRenderbuffer();
 }
 
-FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height)
-: FrameBuffer(static_cast<Pixels>(width), static_cast<Pixels>(height)) {
+FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height, const bool hdr)
+: FrameBuffer(static_cast<Pixels>(width), static_cast<Pixels>(height), hdr) {
 }
 
-FrameBuffer::FrameBuffer(std::array<Pixels, 2> size) : FrameBuffer(size[0], size[1]) {
+FrameBuffer::FrameBuffer(std::array<Pixels, 2> size, const bool hdr)
+: FrameBuffer(size[0], size[1], hdr) {
 }
 
 FrameBuffer::FrameBuffer(FrameBuffer&&) noexcept = default;
@@ -134,6 +136,38 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 		                       .data);
 	}
 	impl->texture.draw();
+}
+
+void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
+                       const ShaderProgram* const shaderProgram) const {
+	impl->texture.bind();
+	int oldFilter;
+	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &oldFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+	                textureFilter == TextureFilter::NearestNeighbor ? GL_NEAREST : GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+	                textureFilter == TextureFilter::NearestNeighbor ? GL_NEAREST : GL_LINEAR);
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   modelview.scale(1, -1)
+		                       .translate({ -impl->width / getScaleFactor() / 2,
+		                                    -impl->height / getScaleFactor() / 2 })
+		                       .data);
+	} else {
+		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
+		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
+		                   modelview.scale(1, -1)
+		                       .translate({ -impl->width / getScaleFactor() / 2,
+		                                    -impl->height / getScaleFactor() / 2 })
+		                       .data);
+	}
+	glDrawArrays(GL_TRIANGLE_FAN, 0,
+	             4); // no need to bind again, that's why we don't call impl->texture.draw() here
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, oldFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, oldFilter);
 }
 
 void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,

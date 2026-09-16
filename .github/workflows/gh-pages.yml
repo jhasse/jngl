@@ -17,10 +17,11 @@ jobs:
           cmake .
           make
           doxygen
+          cp index.html html/
         working-directory: doc
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v4
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages

@@ -37,9 +37,11 @@ public:
 	[[nodiscard]] int32_t handleJoystickEvent(const AInputEvent*);
 	void setKeyboardVisible(bool);
 	std::vector<std::shared_ptr<Controller>> getConnectedControllers() const;
+	void resetTouchState();
 
 	int mouseX = 0;
 	int mouseY = 0;
+	bool touchPressedThisUpdate = false;
 	std::map<int32_t, Vec2> touches;
 	int relativeX = 0;
 	int relativeY = 0;
