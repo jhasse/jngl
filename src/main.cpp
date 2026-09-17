@@ -683,6 +683,10 @@ void drawLine(Mat3 modelview, const Vec2 end, float lineWidth, Rgba color) {
 	                    color);
 }
 
+void drawLine(const Mat3& modelview, const Vec2 end, const float lineWidth) {
+	drawLine(modelview, end, lineWidth, gShapeColor);
+}
+
 void drawPoint(const double x, const double y) {
 	drawEllipse(modelview().translate({ x, y }), 1, 1, 0);
 }

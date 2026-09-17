@@ -84,6 +84,9 @@ void drawLine(const Mat3& modelview, Vec2 end, Rgba color);
 /// Draws a line from (0, 0) to \a end with width \a lineWidth in \a color
 void drawLine(Mat3 modelview, Vec2 end, float lineWidth, Rgba color);
 
+/// Draws a line from (0, 0) to \a end with width \a lineWidth
+void drawLine(const Mat3& modelview, Vec2 end, float lineWidth);
+
 [[deprecated("Use drawEllipse(Mat3, float, float, float) instead")]]
 /// \deprecated Use drawEllipse(Mat3, float, float, float) instead
 void drawEllipse(float xmid, float ymid, float width, float height, float startAngle = 0);
