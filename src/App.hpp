@@ -5,10 +5,12 @@
 #pragma once
 
 #include "jngl/Finally.hpp"
+#include "jngl/Vec2.hpp"
 
 #include <cstdint>
 #include <functional>
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -33,6 +35,11 @@ public:
 
 	/// \deprecated Set jngl::AppParameters.displayName instead
 	void setDisplayName(const std::string&);
+
+	/// The canvas size as set in jngl::AppParameters::screenSize, see jngl::getScreenSize()
+	///
+	/// Empty until App::init() has been called.
+	[[nodiscard]] std::optional<Vec2> getScreenSize() const;
 
 	/// Starts the main loop, which calls jngl::Work::step and jngl::Work::draw
 	[[nodiscard]] uint8_t mainLoop();

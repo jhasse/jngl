@@ -35,6 +35,7 @@ struct App::Impl {
 	std::optional<uint32_t> steamAppId;
 	std::set<ShaderProgram*> shaderPrograms;
 	std::function<double(int, int)> scaleFactor;
+	std::optional<Vec2> screenSize;
 };
 
 App::App() {
@@ -62,8 +63,16 @@ Finally App::init(AppParameters params) {
 	                                              .pixelArt = params.pixelArt,
 	                                              .steamAppId = params.steamAppId,
 	                                              .shaderPrograms = {},
-	                                              .scaleFactor = std::move(params.scaleFactor) });
+	                                              .scaleFactor = std::move(params.scaleFactor),
+	                                              .screenSize = params.screenSize });
 	return Finally{ [this]() { impl.reset(); } };
+}
+
+std::optional<Vec2> App::getScreenSize() const {
+	if (!impl) {
+		return std::nullopt;
+	}
+	return impl->screenSize;
 }
 
 void App::atExit(std::function<void()> f) {
@@ -219,6 +228,11 @@ std::pair<int, int> getMaxAspectRatio(const AppParameters& params) {
 #if !defined(__APPLE__) || !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE // iOS
 
 uint8_t mainLoop(AppParameters params) {
+	if (!params.screenSize) {
+		// Fill this in before App::init so that jngl::getScreenSize() can return it.
+		params.screenSize = { static_cast<double>(getDesktopWidth()),
+			                  static_cast<double>(getDesktopHeight()) };
+	}
 	auto context = App::instance().init(params);
 	if (auto id = params.steamAppId) {
 		jngl::initSteam(*id);
@@ -247,10 +261,6 @@ uint8_t mainLoop(AppParameters params) {
 #endif
 	if (params.fullscreen) {
 		fullscreen = *params.fullscreen;
-	}
-	if (!params.screenSize) {
-		params.screenSize = { static_cast<double>(getDesktopWidth()),
-			                  static_cast<double>(getDesktopHeight()) };
 	}
 	if (!fullscreen) {
 		// Make window as big as possible
