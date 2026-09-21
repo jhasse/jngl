@@ -134,6 +134,9 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getTextWidth</b> (<
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getLineHeight</b> () const</td></tr>
 <tr class="memdesc:a7d430985dda8242778a2811849e91a06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the font size in scale-independent pixels. <br /></td></tr>
 <tr class="separator:a7d430985dda8242778a2811849e91a06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96e77f6bac9a45498307713a9a3ac114" id="r_a96e77f6bac9a45498307713a9a3ac114"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a96e77f6bac9a45498307713a9a3ac114">setLineHeight</a> (double)</td></tr>
+<tr class="memdesc:a96e77f6bac9a45498307713a9a3ac114"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the line height in scale-independent pixels used for multi-line text (i.e.  <br /></td></tr>
+<tr class="separator:a96e77f6bac9a45498307713a9a3ac114"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d3136346584cd5ebaa5bb318c916d56" id="r_a8d3136346584cd5ebaa5bb318c916d56"><td class="memItemLeft" align="right" valign="top"><a id="a8d3136346584cd5ebaa5bb318c916d56" name="a8d3136346584cd5ebaa5bb318c916d56"></a>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; FontImpl &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getImpl</b> ()</td></tr>
 <tr class="memdesc:a8d3136346584cd5ebaa5bb318c916d56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal function. <br /></td></tr>
@@ -187,6 +190,27 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getLineHeight</b> (
 <p>Creates a font from <em>filename</em> in <em>size</em> px. </p>
 <p>You may set <em>strokePercentage</em> to a positive or negative % value to increase or decrease the font size, without actually changing the position/size of the individual characters. This can be used to draw an outlined text by e.g. first drawing with a 5% stroke and then printing the same text with 0% (or even a negative stroke) over it. <a class="el" href="classjngl_1_1OutlinedFont.html" title="Same as jngl::Font but adds an outline.">jngl::OutlinedFont</a> does exactly that for you automatically.</p>
 <p>Example: To increase the size of each character by 2px for a <a class="el" href="classjngl_1_1Font.html" title="Font loaded from a TTF or OTF file.">Font</a> with a <em>size</em> of 20px, you would pass 10.f for <em>strokePercentage</em>. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a96e77f6bac9a45498307713a9a3ac114" name="a96e77f6bac9a45498307713a9a3ac114"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96e77f6bac9a45498307713a9a3ac114">&#9670;&#160;</a></span>setLineHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setLineHeight </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the line height in scale-independent pixels used for multi-line text (i.e. </p>
+<p><em>text</em> containing <code>\n</code>) passed to <a class="el" href="#a208167ab5a51435967eeae39c93f3958" title="Draw text using modelview in color.">print()</a>. Defaults to a value derived from the font's size. </p>
 
 </div>
 </div>

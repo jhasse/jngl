@@ -82,7 +82,7 @@ var searchData=
   ['setkeyboardtype_79',['setKeyboardType',['../namespacejngl.html#aa0d4bfbd081f4c71d8235c4883e95d5f',1,'jngl']]],
   ['setkeyboardvisible_80',['setKeyboardVisible',['../namespacejngl.html#a9d6aa0eceebd892770053c46a98cde2d',1,'jngl']]],
   ['setkeypressed_81',['setKeyPressed',['../namespacejngl.html#ab102d65818b249960d1280c6d7f630c7',1,'jngl::setKeyPressed(const std::string &amp;key, bool)'],['../namespacejngl.html#afa34d5b6e2dbd8522dd487a613746796',1,'jngl::setKeyPressed(key::KeyType key, bool)']]],
-  ['setlineheight_82',['setLineHeight',['../namespacejngl.html#a96e77f6bac9a45498307713a9a3ac114',1,'jngl']]],
+  ['setlineheight_82',['setLineHeight',['../classjngl_1_1Font.html#a96e77f6bac9a45498307713a9a3ac114',1,'jngl::Font::setLineHeight()'],['../namespacejngl.html#a96e77f6bac9a45498307713a9a3ac114',1,'jngl::setLineHeight(double)']]],
   ['setlinewidth_83',['setLineWidth',['../namespacejngl.html#abc5e234e75b961a87cbce0b3fc9d1c5a',1,'jngl']]],
   ['setlocale_84',['setlocale',['http://en.cppreference.com/w/cpp/locale/setlocale.html',1,'std']]],
   ['setmouse_85',['setMouse',['../namespacejngl.html#a3965bfe2525d2f4e238e50c607bf56b5',1,'jngl']]],
