@@ -1,9 +1,10 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Drawable.hpp"
 
 #include "Color.hpp"
+#include "matrix.hpp"
 #include "screen.hpp"
 #include "shapes.hpp"
 
@@ -95,14 +96,16 @@ float Drawable::getHeight() const {
 void Drawable::drawBoundingBox() const {
 	setColor(Color(255, 0, 0));
 	const double LINE_WIDTH = 2;
-	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 },
+	drawRect(modelview().translate({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 }),
 	         { LINE_WIDTH + getWidth(), LINE_WIDTH });
-	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 },
+	drawRect(modelview().translate({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 }),
 	         { LINE_WIDTH, LINE_WIDTH + getHeight() });
-	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 + getHeight() },
-	         { LINE_WIDTH + getWidth(), LINE_WIDTH });
-	drawRect({ getX() - LINE_WIDTH / 2 + getWidth(), getY() - LINE_WIDTH / 2 },
-	         { LINE_WIDTH, LINE_WIDTH + getHeight() });
+	drawRect(
+	    modelview().translate({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 + getHeight() }),
+	    { LINE_WIDTH + getWidth(), LINE_WIDTH });
+	drawRect(
+	    modelview().translate({ getX() - LINE_WIDTH / 2 + getWidth(), getY() - LINE_WIDTH / 2 }),
+	    { LINE_WIDTH, LINE_WIDTH + getHeight() });
 }
 
 void Drawable::setWidth(const float w) {

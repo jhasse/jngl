@@ -16,6 +16,10 @@
 #include "jngl/record/VideoRecorder.hpp"
 #endif
 
+#ifdef JNGL_PERFORMANCE_OVERLAY
+#include "jngl/matrix.hpp"
+#endif
+
 #ifdef __EMSCRIPTEN__
 #include "emscripten/window.hpp"
 
@@ -420,7 +424,7 @@ void Window::draw() const {
 	if (currentWork_) {
 		jngl::reset();
 		jngl::setColor(0xffffff_rgb, 255);
-		jngl::drawRect(-getScreenSize() / 2., jngl::Vec2(400, 100));
+		jngl::drawRect(jngl::modelview().translate(-getScreenSize() / 2.), jngl::Vec2(400, 100));
 		jngl::setFontColor(0x000000_rgb, 1.f);
 		{
 			std::ostringstream tmp;
