@@ -423,6 +423,7 @@ void testKeys() {
 	};
 	std::vector<RecentlyPressedKey> recentlyPressedKeys;
 	std::string textInput;
+	jngl::TextInputSession textInputSession;
 	while (jngl::running()) {
 		jngl::updateInput();
 		jngl::setFontSize(10);
@@ -473,7 +474,7 @@ void testKeys() {
 		if (textInput.size() > 40) {
 			textInput.clear();
 		}
-		textInput += jngl::getTextInput();
+		textInput += textInputSession.take();
 		jngl::setFontColor(0, 0, 0);
 		jngl::print(jngl::modelview().translate({ 100, 583 }), textInput);
 
