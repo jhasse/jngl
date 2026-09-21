@@ -84,7 +84,12 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	if (glVersion < GLAD_MAKE_VERSION(2, 0)) {
 		throw std::runtime_error("Your graphics card is missing OpenGL 2.0 support (it supports " +
 		                         std::to_string(GLAD_VERSION_MAJOR(glVersion)) + "." +
-		                         std::to_string(GLAD_VERSION_MINOR(glVersion)) + ").");
+		                         std::to_string(GLAD_VERSION_MINOR(glVersion)) + ")."
+#ifdef _WIN32
+		                         + "\n\nEither install your graphic card's latest driver or "
+		                           "https://apps.microsoft.com/detail/9NQPSL29BFFF."
+#endif
+		);
 	}
 #endif
 
