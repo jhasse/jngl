@@ -65,6 +65,13 @@ double Font::getLineHeight() const {
 	return impl->getLineHeight();
 }
 
+void Font::setLineHeight(const double h) {
+	// h is in scale-independent pixels (matching getLineHeight()'s return value and the
+	// constructor's size parameter), so convert to actual on-screen Pixels first, same as the
+	// global jngl::setLineHeight().
+	impl->setLineHeight(Pixels(ScaleablePixels(h)));
+}
+
 std::shared_ptr<FontImpl> Font::getImpl() {
 	return impl;
 }
