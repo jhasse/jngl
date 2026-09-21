@@ -94,11 +94,11 @@ void Fixture::reset() {
 	const jngl::Vec2 screen(jngl::getScreenWidth(), jngl::getScreenHeight());
 	jngl::setColor(0x000000_rgb);
 	jngl::drawRect(jngl::modelview().translate({ -screen.x / 2, screen.y / 2 - frameSize }),
-	               { screen.x, frameSize }); // bottom
+	               { screen.x, frameSize }, 0x000000_rgb); // bottom
 	jngl::drawRect(jngl::modelview().translate({ -screen.x / 2, -screen.y / 2 }),
-	               { screen.x, frameSize }); // top
+	               { screen.x, frameSize }, 0x000000_rgb); // top
 	jngl::drawRect(jngl::modelview().translate({ screen.x / 2 - frameSize, -screen.y / 2 }),
-	               { frameSize, screen.y }); // right
+	               { frameSize, screen.y }, 0x000000_rgb); // right
 	jngl::drawRect(jngl::modelview().translate({ -screen.x / 2, -screen.y / 2 }),
-	               { frameSize, screen.y }); // left
+	               { frameSize, screen.y }, 0x000000_rgb); // left
 }

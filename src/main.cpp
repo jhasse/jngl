@@ -497,15 +497,12 @@ void popMatrix() {
 
 void drawRect(const double xposition, const double yposition, const double width,
               const double height) {
-	drawRect(modelview().translate(Vec2{ xposition, yposition }), Vec2{ width, height });
+	drawRect(modelview().translate(Vec2{ xposition, yposition }), Vec2{ width, height },
+	         gShapeColor);
 }
 
 void drawRect(const Vec2 position, const Vec2 size) {
 	pWindow->drawSquare(modelview().translate(position + size / 2).scale(size), gShapeColor);
-}
-
-void drawRect(const Mat3& modelview, const Vec2 size) {
-	drawRect(modelview, size, gShapeColor);
 }
 
 void drawRect(const Mat3& modelview, const Vec2 size, const Rgb color) {

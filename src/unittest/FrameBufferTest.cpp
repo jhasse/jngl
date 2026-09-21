@@ -16,13 +16,13 @@ boost::ut::suite _ = [] {
 	"FrameBuffer"_test = [] {
 		Fixture f(1.f);
 		jngl::FrameBuffer fb(320_px, 70_px);
-		jngl::drawRect(jngl::modelview().translate({ -10, 0 }), { 10, 10 });
+		jngl::drawRect(jngl::modelview().translate({ -10, 0 }), { 10, 10 }, 0x000000_rgb);
 		{
 			const auto context = fb.use();
 			jngl::setAlpha(150);
-			jngl::drawRect(jngl::modelview().translate({ 10, 0 }), { 30, 10 });
+			jngl::drawRect(jngl::modelview().translate({ 10, 0 }), { 30, 10 }, 0x000000_rgb);
 			jngl::setAlpha(255);
-			jngl::drawRect(jngl::modelview().translate({ 40, 0 }), { 30, 10 });
+			jngl::drawRect(jngl::modelview().translate({ 40, 0 }), { 30, 10 }, 0x000000_rgb);
 		}
 		expect(eq(f.getAsciiArt(), std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
@@ -33,7 +33,7 @@ boost::ut::suite _ = [] {
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
-		jngl::drawRect(jngl::modelview().translate({ -10, 0 }), { 10, 10 });
+		jngl::drawRect(jngl::modelview().translate({ -10, 0 }), { 10, 10 }, 0x000000_rgb);
 		fb.draw(-160, -35);
 		expect(eq(f.getAsciiArt(), std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
@@ -47,7 +47,7 @@ boost::ut::suite _ = [] {
 		jngl::setSpriteAlpha(150);
 		fb.draw(-160, -35);
 		jngl::setSpriteAlpha(255);
-		jngl::drawRect(jngl::modelview().translate({ -10, 0 }), { 10, 10 });
+		jngl::drawRect(jngl::modelview().translate({ -10, 0 }), { 10, 10 }, 0x000000_rgb);
 		expect(eq(f.getAsciiArt(), std::string(R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒                              ▒
@@ -61,13 +61,13 @@ boost::ut::suite _ = [] {
 		jngl::FrameBuffer fb2(320_px, 70_px);
 		{
 			const auto context1 = fb.use();
-			jngl::drawRect(jngl::modelview().translate({ -40, 0 }), { 10, 10 });
+			jngl::drawRect(jngl::modelview().translate({ -40, 0 }), { 10, 10 }, 0x000000_rgb);
 			{
 				const auto context2 = fb2.use();
 				jngl::translate(-10, 0); // FrameBuffer::use() should push/pop the modelview matrix
-				jngl::drawRect(jngl::modelview().translate({ 0, -20 }), { 10, 10 });
+				jngl::drawRect(jngl::modelview().translate({ 0, -20 }), { 10, 10 }, 0x000000_rgb);
 			}
-			jngl::drawRect(jngl::modelview().translate({ -80, 0 }), { 10, 10 });
+			jngl::drawRect(jngl::modelview().translate({ -80, 0 }), { 10, 10 }, 0x000000_rgb);
 		}
 		fb2.draw(-160, -35);
 		expect(eq(f.getAsciiArt(), std::string(R"(
@@ -132,13 +132,13 @@ boost::ut::suite _ = [] {
 			Fixture f(scaleFactor);
 			// check if scaling is correct when using a small FrameBuffer
 			jngl::FrameBuffer smallFb(100_sp, 30_sp);
-			jngl::drawRect(jngl::modelview().translate({ -10, 0 }), { 10, 10 });
+			jngl::drawRect(jngl::modelview().translate({ -10, 0 }), { 10, 10 }, 0x000000_rgb);
 			{
 				const auto context = smallFb.use();
 				jngl::setAlpha(150);
-				jngl::drawRect(jngl::modelview().translate({ 10, 0 }), { 30, 10 });
+				jngl::drawRect(jngl::modelview().translate({ 10, 0 }), { 30, 10 }, 0x000000_rgb);
 				jngl::setAlpha(255);
-				jngl::drawRect(jngl::modelview().translate({ 40, 0 }), { 30, 10 });
+				jngl::drawRect(jngl::modelview().translate({ 40, 0 }), { 30, 10 }, 0x000000_rgb);
 			}
 			smallFb.draw(-160, 0);
 			expect(eq(f.getAsciiArt(), std::string(R"(
@@ -206,7 +206,7 @@ boost::ut::suite _ = [] {
 		fb1 = {};
 		{
 			const auto context = fb2->use();
-			jngl::drawRect(jngl::modelview().translate({ 10, 0 }), { 10, 10 });
+			jngl::drawRect(jngl::modelview().translate({ 10, 0 }), { 10, 10 }, 0x000000_rgb);
 		}
 		fb2->draw(0, 0);
 		expect(eq(f.getAsciiArt(), std::string(R"(

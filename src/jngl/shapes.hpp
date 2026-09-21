@@ -158,9 +158,6 @@ void drawRect(double xposition, double yposition, double width, double height);
 [[deprecated("Use drawRect(Mat3, Vec2, Rgba) instead")]]
 void drawRect(Vec2 position, Vec2 size);
 
-/// Draws a rectangle spawning from (0, 0) to (size.x, size.y) in the color set by jngl::setColor
-void drawRect(const Mat3& modelview, Vec2 size);
-
 /// Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color
 ///
 /// Use setAlpha to set the opacity.

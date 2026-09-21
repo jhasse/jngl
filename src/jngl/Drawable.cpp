@@ -94,18 +94,18 @@ float Drawable::getHeight() const {
 }
 
 void Drawable::drawBoundingBox() const {
-	setColor(Color(255, 0, 0));
 	const double LINE_WIDTH = 2;
+	const Rgb color = 0xff0000_rgb;
 	drawRect(modelview().translate({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 }),
-	         { LINE_WIDTH + getWidth(), LINE_WIDTH });
+	         { LINE_WIDTH + getWidth(), LINE_WIDTH }, color);
 	drawRect(modelview().translate({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 }),
-	         { LINE_WIDTH, LINE_WIDTH + getHeight() });
+	         { LINE_WIDTH, LINE_WIDTH + getHeight() }, color);
 	drawRect(
 	    modelview().translate({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 + getHeight() }),
-	    { LINE_WIDTH + getWidth(), LINE_WIDTH });
+	    { LINE_WIDTH + getWidth(), LINE_WIDTH }, color);
 	drawRect(
 	    modelview().translate({ getX() - LINE_WIDTH / 2 + getWidth(), getY() - LINE_WIDTH / 2 }),
-	    { LINE_WIDTH, LINE_WIDTH + getHeight() });
+	    { LINE_WIDTH, LINE_WIDTH + getHeight() }, color);
 }
 
 void Drawable::setWidth(const float w) {
