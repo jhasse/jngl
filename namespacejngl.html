@@ -895,6 +895,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawCircle</b> (<a cl
 void&#160;</td><td class="memItemRight" valign="bottom"><b>drawCircle</b> (const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;<a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color)</td></tr>
 <tr class="memdesc:a329fc9956c870c3def211ae96fed6364"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a circle at (0, 0) with radius of 1 in <em>color</em>. <br /></td></tr>
 <tr class="separator:a329fc9956c870c3def211ae96fed6364"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7212512477f8bae1a25f072a48cf2743" id="r_a7212512477f8bae1a25f072a48cf2743"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7212512477f8bae1a25f072a48cf2743">drawCircleOutline</a> (const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;<a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, float radius, float lineWidth, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color)</td></tr>
+<tr class="memdesc:a7212512477f8bae1a25f072a48cf2743"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the outline of a circle (so ○ instead of ●) at (0, 0) with <em>radius</em> in <em>color</em>.  <br /></td></tr>
+<tr class="separator:a7212512477f8bae1a25f072a48cf2743"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85ac77722dae61e1b6b054b506bd1e45" id="r_a85ac77722dae61e1b6b054b506bd1e45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85ac77722dae61e1b6b054b506bd1e45">drawPoint</a> (double x, double y)</td></tr>
 <tr class="separator:a85ac77722dae61e1b6b054b506bd1e45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1732275d2646c634f74abec40aeaafe8" id="r_a1732275d2646c634f74abec40aeaafe8"><td class="memItemLeft" align="right" valign="top"><a id="a1732275d2646c634f74abec40aeaafe8" name="a1732275d2646c634f74abec40aeaafe8"></a>
@@ -3188,6 +3191,40 @@ template&lt;class T , class... Args&gt; </div>
 /// </pre> 
 </div>
 </div>
+<a id="a7212512477f8bae1a25f072a48cf2743" name="a7212512477f8bae1a25f072a48cf2743"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7212512477f8bae1a25f072a48cf2743">&#9670;&#160;</a></span>drawCircleOutline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawCircleOutline </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>modelview</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>lineWidth</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Rgba.html">Rgba</a></td>          <td class="paramname"><span class="paramname"><em>color</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws the outline of a circle (so ○ instead of ●) at (0, 0) with <em>radius</em> in <em>color</em>. </p>
+<p>The line is centered on the circle's radius, i.e. it spans from radius - lineWidth/2 to radius + lineWidth/2. </p>
+
+</div>
+</div>
 <a id="a85ac77722dae61e1b6b054b506bd1e45" name="a85ac77722dae61e1b6b054b506bd1e45"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a85ac77722dae61e1b6b054b506bd1e45">&#9670;&#160;</a></span>drawPoint()</h2>
 
@@ -3516,7 +3553,7 @@ template&lt;class Vect &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00207">207</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="shapes_8hpp_source.html#l00213">213</a> of file <a class="el" href="shapes_8hpp_source.html">shapes.hpp</a>.</p>
 
 </div>
 </div>
