@@ -111,6 +111,18 @@ void Window::setFullscreen(bool fullscreen) {
 	}
 }
 
+void Window::startTextInputSession(TextInputType) {
+	setKeyboardVisible(true);
+}
+
+void Window::stopTextInputSession() {
+	setKeyboardVisible(false);
+}
+
+void Window::setTextInputArea(Rect, double) {
+	// TODO: reposition the IME candidate window
+}
+
 void setCursor(Cursor) {}
 
 } // namespace jngl

@@ -136,6 +136,7 @@ void onControllerChanged(std::function<void()> callback) {
 }
 
 std::string getTextInput() {
+	internal::ensureLegacyTextInputStarted();
 	return pWindow->getTextInput();
 }
 

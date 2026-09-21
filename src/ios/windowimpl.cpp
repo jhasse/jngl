@@ -82,6 +82,7 @@ void WindowImpl::updateInput() {
 	// Window::updateKeyStates() cleared the input and before the game's step() reads it.
 	if (!pendingTextInput.empty()) {
 		window->textInput += pendingTextInput;
+		internal::feedTextInput(pendingTextInput);
 		pendingTextInput.clear();
 	}
 	if (pendingReturn > 0) {

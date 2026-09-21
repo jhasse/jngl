@@ -463,6 +463,7 @@ void Window::UpdateInput() {
 			characterPressed_[character] = true;
 			needToBeSetFalse_.push(&characterPressed_[character]);
 			textInput += character;
+			internal::feedTextInput(character);
 		} break;
 		}
 		TranslateMessage(&msg);
@@ -726,6 +727,18 @@ int getDesktopHeight() {
 
 void Window::setFullscreen(bool) {
 	throw std::runtime_error("Not implemented.");
+}
+
+void Window::startTextInputSession(TextInputType) {
+	// WM_CHAR is delivered regardless of any explicit start/stop, so there's nothing to do here.
+}
+
+void Window::stopTextInputSession() {
+	// See startTextInputSession
+}
+
+void Window::setTextInputArea(Rect, double) {
+	// TODO: reposition the IME candidate window, see ImmSetCandidateWindow
 }
 
 float Window::getResizedWindowScalingX() const {

@@ -420,6 +420,7 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 	}
 	bytes[4] = '\0';
 	window->textInput += std::string(bytes);
+	internal::feedTextInput(std::string(bytes));
 	return 1;
 }
 
@@ -640,6 +641,18 @@ void Window::setFullscreen(bool fullscreen) {
 	if (!fullscreen) {
 		internal::warn("Can't unset fullscreen on Android!");
 	}
+}
+
+void Window::startTextInputSession(TextInputType) {
+	setKeyboardVisible(true);
+}
+
+void Window::stopTextInputSession() {
+	setKeyboardVisible(false);
+}
+
+void Window::setTextInputArea(Rect, double) {
+	// Android positions the IME itself, there's nothing to tell it here.
 }
 
 std::string getSystemConfigPath() {

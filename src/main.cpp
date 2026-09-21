@@ -143,6 +143,11 @@ void showWindow(const std::string& title, const double width, const double heigh
 	pWindow->SetMouseVisible(isMouseVisible);
 	setAntiAliasing(antiAliasingEnabled);
 	pWindow->initGlObjects();
+
+	// The active TextInputSession (or the deprecated getTextInput()'s legacy fallback) lives
+	// outside of Window so it survives this Window being replaced, but backends like SDL need to
+	// be told about it again for the freshly created Window.
+	internal::reapplyTextInputSession();
 }
 
 void hideWindow() {

@@ -4,6 +4,7 @@
 
 #include "jngl/MouseInfo.hpp"
 #include "jngl/Scene.hpp"
+#include "jngl/TextInputSession.hpp"
 #include "jngl/input.hpp"
 #include "opengl.hpp"
 #include "timing/FrameLimiter.hpp"
@@ -119,6 +120,20 @@ public:
 	WindowImpl* getImpl() const;
 #endif
 	std::string getTextInput() const;
+
+	/// Tells the OS/IME to start delivering typed characters, with a hint about what kind of text
+	/// is expected (used by TextInputSession)
+	void startTextInputSession(TextInputType type);
+
+	/// Tells the OS/IME that no field wants typed characters right now (used by TextInputSession)
+	void stopTextInputSession();
+
+	/// Places the IME candidate window; \a area and \a cursor are in JNGL Screen coordinates, i.e.
+	/// (0, 0) is the center of the screen and jngl::getScaleFactor() hasn't been applied yet, same
+	/// as jngl::Rect / jngl::getMousePos(). Backends are responsible for converting to actual
+	/// window pixels themselves (used by TextInputSession)
+	void setTextInputArea(Rect area, double cursor);
+
 	void initGlObjects();
 	void drawLine(Mat3 modelview, Vec2 b, Rgba color) const;
 	void drawSquare(const Mat3& modelview, Rgba color) const;
