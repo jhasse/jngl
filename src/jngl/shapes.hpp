@@ -130,6 +130,12 @@ void drawCircle(Mat3 modelview, float radius, Rgba color);
 /// Draws a circle at (0, 0) with radius of 1 in \a color
 void drawCircle(const Mat3& modelview, Rgba color);
 
+/// Draws the outline of a circle (so ○ instead of ●) at (0, 0) with \a radius in \a color
+///
+/// The line is centered on the circle's radius, i.e. it spans from radius - lineWidth/2 to
+/// radius + lineWidth/2.
+void drawCircleOutline(const Mat3& modelview, float radius, float lineWidth, Rgba color);
+
 [[deprecated("Use drawCircle instead")]]
 /// \deprecated Use drawCircle instead
 void drawPoint(double x, double y);

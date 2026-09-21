@@ -62,6 +62,24 @@ boost::ut::suite _ = [] {
 )")));
 		}
 	};
+	"circleOutline"_test = [] {
+		for (double scaleFactor : { 1, 2 }) {
+			Fixture f(scaleFactor);
+			jngl::drawCircleOutline(jngl::modelview().translate({ -80, 0 }), 25, 6,
+			                        0x000000ff_rgba);
+			jngl::drawCircleOutline(jngl::modelview().translate({ -80, 0 }), 20, 3,
+			                        "#999999ff"_rgba);
+			expect(eq(f.getAsciiArt(), std::string(R"(
+▓▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒     ▓▒▒▓             ░░      ▒
+▒    ▒    ▒           ░  ░     ▒
+▒    ▒    ▒                    ▒
+▒    ▒    ▒           ░  ░     ▒
+▒     ▓▒▒▓             ░░      ▒
+▓▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)")));
+		}
+	};
 	"triangle"_test = [] {
 		for (double scaleFactor : { 0.6, 1.5 }) {
 			Fixture f(scaleFactor);

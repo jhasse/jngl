@@ -8,7 +8,10 @@
 #include "Alpha.hpp"
 #include "matrix.hpp"
 
+#include <algorithm>
+#include <array>
 #include <cmath>
+#include <cstddef>
 #include <numbers>
 #include <stack>
 
@@ -135,6 +138,36 @@ void drawCircle(const Mat3& modelview, const Rgba color) {
 	             GL_STREAM_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, static_cast<GLsizei>(sizeof(vertexes) / sizeof(float) / 2));
+}
+
+void drawCircleOutline(const Mat3& modelview, const float radius, const float lineWidth,
+                       const Rgba color) {
+	if (lineWidth <= 0.f) {
+		return;
+	}
+	constexpr int segments = 64;
+	const float innerRadius = std::max(0.f, radius - lineWidth / 2);
+	const float outerRadius = radius + lineWidth / 2;
+
+	// Triangle strip: alternating outer/inner vertices
+	std::array<float, static_cast<size_t>((segments + 1) * 4)> vertexes{};
+	for (int i = 0; i <= segments; ++i) {
+		const float t = 2.f * std::numbers::pi_v<float> * static_cast<float>(i) / segments;
+		const float x = std::sin(t);
+		const float y = -std::cos(t);
+		vertexes[i * 4 + 0] = outerRadius * x;
+		vertexes[i * 4 + 1] = outerRadius * y;
+		vertexes[i * 4 + 2] = innerRadius * x;
+		vertexes[i * 4 + 3] = innerRadius * y;
+	}
+
+	opengl::bindVertexArray(opengl::vaoStream);
+	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
+	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
+	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(float)),
+	             vertexes.data(), GL_STREAM_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, static_cast<GLsizei>(vertexes.size() / 2));
 }
 
 } // namespace jngl

@@ -367,6 +367,8 @@ void Test::drawBackground() const {
 	               jngl::Rgba::u8(0, 255, 0, 100));
 	jngl::drawRectOutline(jngl::modelview().translate({ 650, 450 }), { 40, 80 }, 1.f,
 	                      "#473b9f99"_rgba);
+	jngl::drawCircleOutline(jngl::modelview().translate({ 480, 450 }), 40, 4,
+	                        "#473b9f99"_rgba);
 	jngl::setColor(0, 0, 255, 100);
 	jngl::drawEllipse(jngl::modelview().translate({ 80, 400 }), 50, 80);
 }
