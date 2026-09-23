@@ -228,7 +228,7 @@ std::pair<int, int> getMaxAspectRatio(const AppParameters& params) {
 #if !defined(__APPLE__) || !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE // iOS
 
 uint8_t mainLoop(AppParameters params) {
-	if (!params.screenSize) {
+	if (!params.screenSize && getDesktopWidth() > 0 /* e.g. Android returns -1 at this point */) {
 		// Fill this in before App::init so that jngl::getScreenSize() can return it.
 		params.screenSize = { static_cast<double>(getDesktopWidth()),
 			                  static_cast<double>(getDesktopHeight()) };
@@ -261,6 +261,11 @@ uint8_t mainLoop(AppParameters params) {
 #endif
 	if (params.fullscreen) {
 		fullscreen = *params.fullscreen;
+	}
+	if (!params.screenSize) { // needs to be done here AGAIN for platforms (e.g. Android) where the
+		                      // desktop size is only known after creating the window
+		params.screenSize = { static_cast<double>(getDesktopWidth()),
+			                  static_cast<double>(getDesktopHeight()) };
 	}
 	if (!fullscreen) {
 		// Make window as big as possible
