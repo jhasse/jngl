@@ -791,9 +791,8 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getScreenWidth</b> 
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getScreenHeight</b> ()</td></tr>
 <tr class="memdesc:a9942379fdf4fb4445c35eaf3390b7ccb"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="#af73b72c0f9314a0e65382f95e326bd39" title="Returns the size of the useable draw area (excluding letter-boxing) in screen pixels.">jngl::getScreenSize()</a>.y <br /></td></tr>
 <tr class="separator:a9942379fdf4fb4445c35eaf3390b7ccb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af73b72c0f9314a0e65382f95e326bd39" id="r_af73b72c0f9314a0e65382f95e326bd39"><td class="memItemLeft" align="right" valign="top"><a id="af73b72c0f9314a0e65382f95e326bd39" name="af73b72c0f9314a0e65382f95e326bd39"></a>
-<a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getScreenSize</b> ()</td></tr>
-<tr class="memdesc:af73b72c0f9314a0e65382f95e326bd39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the size of the useable draw area (excluding letter-boxing) in screen pixels. <br /></td></tr>
+<tr class="memitem:af73b72c0f9314a0e65382f95e326bd39" id="r_af73b72c0f9314a0e65382f95e326bd39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af73b72c0f9314a0e65382f95e326bd39">getScreenSize</a> ()</td></tr>
+<tr class="memdesc:af73b72c0f9314a0e65382f95e326bd39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the size of the useable draw area (excluding letter-boxing) in screen pixels.  <br /></td></tr>
 <tr class="separator:af73b72c0f9314a0e65382f95e326bd39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad701cd1f30eb048c308cacc1198f3d9b" id="r_ad701cd1f30eb048c308cacc1198f3d9b"><td class="memItemLeft" align="right" valign="top"><a id="ad701cd1f30eb048c308cacc1198f3d9b" name="ad701cd1f30eb048c308cacc1198f3d9b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setUniform</b> (int location, float v0, float v1)</td></tr>
@@ -2893,6 +2892,32 @@ template&lt;class T , class... Args&gt; </div>
 
 <p>Overwrite the size of one screen pixel. </p>
 <p>Normally you wouldn't use this, but set <a class="el" href="structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b" title="Size of the canvas in screen pixels, see jngl::getScreenSize()">AppParameters::screenSize</a> to a lower value instead. </p>
+
+</div>
+</div>
+<a id="af73b72c0f9314a0e65382f95e326bd39" name="af73b72c0f9314a0e65382f95e326bd39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af73b72c0f9314a0e65382f95e326bd39">&#9670;&#160;</a></span>getScreenSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a> getScreenSize </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the size of the useable draw area (excluding letter-boxing) in screen pixels. </p>
+<p>This is always the actual canvas, i.e. its size in actual pixels divided by <a class="el" href="#a7d23d95fbe7f69b235a6984b67f5fa7c" title="Size of one screen pixel in actual pixels.">jngl::getScaleFactor()</a>. So it takes <a class="el" href="structjngl_1_1AppParameters.html#a49bcee5687292f8135b0d9aee96f7b0e" title="This function can be set to make adjustments to the scale factor used by jngl::getScaleFactor() after...">AppParameters::scaleFactor</a> into account, as well as a window whose shape AppParameters::minAspectRatio and maxAspectRatio let differ from <a class="el" href="structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b" title="Size of the canvas in screen pixels, see jngl::getScreenSize()">AppParameters::screenSize</a>. Where it matches <a class="el" href="structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b" title="Size of the canvas in screen pixels, see jngl::getScreenSize()">AppParameters::screenSize</a>, that is returned exactly, without rounding errors. It doesn't change once the window has been created.</p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="elRef" href="http://en.cppreference.com/w/cpp/error/runtime_error.html">std::runtime_error</a></td><td>if the window hasn't been created yet </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
