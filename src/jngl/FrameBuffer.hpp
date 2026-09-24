@@ -6,6 +6,7 @@
 
 #include "Mat3.hpp"
 #include "Pixels.hpp"
+#include "Rgba.hpp"
 #include "ShaderProgram.hpp"
 #include "Vec2.hpp"
 #include "Vertex.hpp"
@@ -77,6 +78,10 @@ public:
 
 		/// Clear the framebuffer with \a color
 		void clear(Rgb color);
+
+		/// Clear the framebuffer with \a color, including its alpha, e.g. to transparent black
+		/// before drawing into it with BlendMode::Composite
+		void clear(Rgba color);
 
 	private:
 		std::function<void()> resetCallback;

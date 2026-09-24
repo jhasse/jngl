@@ -593,6 +593,30 @@ Finally disableBlending() {
 	return Finally([]() { glEnable(GL_BLEND); });
 }
 
+Finally setBlendMode(const BlendMode mode) {
+	GLint sourceRgb = 0;
+	GLint destinationRgb = 0;
+	GLint sourceAlpha = 0;
+	GLint destinationAlpha = 0;
+	glGetIntegerv(GL_BLEND_SRC_RGB, &sourceRgb);
+	glGetIntegerv(GL_BLEND_DST_RGB, &destinationRgb);
+	glGetIntegerv(GL_BLEND_SRC_ALPHA, &sourceAlpha);
+	glGetIntegerv(GL_BLEND_DST_ALPHA, &destinationAlpha);
+	switch (mode) {
+	case BlendMode::Composite:
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		break;
+	case BlendMode::Premultiplied:
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		break;
+	}
+	return Finally([=]() {
+		glBlendFuncSeparate(static_cast<GLenum>(sourceRgb), static_cast<GLenum>(destinationRgb),
+		                    static_cast<GLenum>(sourceAlpha),
+		                    static_cast<GLenum>(destinationAlpha));
+	});
+}
+
 Finally drawOnlyIntoAlphaChannel() {
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_TRUE);
 	return Finally([]() { glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); });

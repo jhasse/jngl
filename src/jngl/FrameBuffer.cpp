@@ -221,6 +221,12 @@ void FrameBuffer::Context::clear(const Rgb color) {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
+void FrameBuffer::Context::clear(const Rgba color) {
+	assert(resetCallback);
+	glClearColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
 FrameBuffer::Context FrameBuffer::use() const {
 	auto activate = [this]() {
 		glBindFramebuffer(GL_FRAMEBUFFER, impl->fbo);
