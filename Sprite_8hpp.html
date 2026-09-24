@@ -96,7 +96,9 @@ $(function(){ initResizable(false); });
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">Sprite.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -142,6 +144,14 @@ Namespaces</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html">jngl</a></td></tr>
 <tr class="memdesc:namespacejngl"><td class="mdescLeft">&#160;</td><td class="mdescRight">JNGL's main namespace. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a0a72f89222b06814e4def649e122acb1" id="r_a0a72f89222b06814e4def649e122acb1"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacejngl.html#a0a72f89222b06814e4def649e122acb1">BlendMode</a> : uint8_t { <a class="el" href="namespacejngl.html#a0a72f89222b06814e4def649e122acb1a141a5b46e2087dc7a80a43710c2dacfb">Composite</a>
+, <a class="el" href="namespacejngl.html#a0a72f89222b06814e4def649e122acb1a39a960b9c0fdfe58f8963d9ee2399459">Premultiplied</a>
+ }</td></tr>
+<tr class="memdesc:a0a72f89222b06814e4def649e122acb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">How what's drawn is blended with what's already there, see setBlendMode()  <a href="namespacejngl.html#a0a72f89222b06814e4def649e122acb1">More...</a><br /></td></tr>
+<tr class="separator:a0a72f89222b06814e4def649e122acb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -198,6 +208,13 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>getHeight</b> (const <
 <tr class="memitem:a5186fb90dc16d142b92aae38006c4700" id="r_a5186fb90dc16d142b92aae38006c4700"><td class="memItemLeft" align="right" valign="top"><a id="a5186fb90dc16d142b92aae38006c4700" name="a5186fb90dc16d142b92aae38006c4700"></a>
 <a class="el" href="classjngl_1_1Finally.html">Finally</a>&#160;</td><td class="memItemRight" valign="bottom"><b>drawOnlyIntoAlphaChannel</b> ()</td></tr>
 <tr class="separator:a5186fb90dc16d142b92aae38006c4700"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a4d2888b0f4e531f1e70345f8bfc7ed21" id="r_a4d2888b0f4e531f1e70345f8bfc7ed21"><td class="memItemLeft" align="right" valign="top"><a id="a4d2888b0f4e531f1e70345f8bfc7ed21" name="a4d2888b0f4e531f1e70345f8bfc7ed21"></a>
+<a class="el" href="classjngl_1_1Finally.html">Finally</a>&#160;</td><td class="memItemRight" valign="bottom"><b>setBlendMode</b> (<a class="el" href="namespacejngl.html#a0a72f89222b06814e4def649e122acb1">BlendMode</a>)</td></tr>
+<tr class="memdesc:a4d2888b0f4e531f1e70345f8bfc7ed21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets how what's drawn is blended with what's already there, until the returned <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> object is destroyed, which restores the previous blending. <br /></td></tr>
+<tr class="separator:a4d2888b0f4e531f1e70345f8bfc7ed21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">jngl::Sprite</a> class and related functions. </p>

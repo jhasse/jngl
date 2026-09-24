@@ -302,6 +302,11 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:afbab6f64e82eec829c9fc664a19bfc75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gamepad buttons.  <a href="#afbab6f64e82eec829c9fc664a19bfc75">More...</a><br /></td></tr>
 <tr class="separator:afbab6f64e82eec829c9fc664a19bfc75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a72f89222b06814e4def649e122acb1" id="r_a0a72f89222b06814e4def649e122acb1"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a72f89222b06814e4def649e122acb1">BlendMode</a> : uint8_t { <a class="el" href="#a0a72f89222b06814e4def649e122acb1a141a5b46e2087dc7a80a43710c2dacfb">Composite</a>
+, <a class="el" href="#a0a72f89222b06814e4def649e122acb1a39a960b9c0fdfe58f8963d9ee2399459">Premultiplied</a>
+ }</td></tr>
+<tr class="memdesc:a0a72f89222b06814e4def649e122acb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">How what's drawn is blended with what's already there, see setBlendMode()  <a href="#a0a72f89222b06814e4def649e122acb1">More...</a><br /></td></tr>
+<tr class="separator:a0a72f89222b06814e4def649e122acb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7aed1e91261bf4cd3942c6f87ae468eb" id="r_a7aed1e91261bf4cd3942c6f87ae468eb"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7aed1e91261bf4cd3942c6f87ae468eb">Alignment</a> : uint8_t { <b>LEFT</b>
 , <b>RIGHT</b>
 , <b>CENTER</b>
@@ -1100,6 +1105,10 @@ Variables</h2></td></tr>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><b>keyToString</b> (<a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7">key::KeyType</a>)</td></tr>
 <tr class="memdesc:a092669470ed38b89d8e9526784493be8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string representation of a key useful for displaying it to the user. <br /></td></tr>
 <tr class="separator:a092669470ed38b89d8e9526784493be8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d2888b0f4e531f1e70345f8bfc7ed21" id="r_a4d2888b0f4e531f1e70345f8bfc7ed21"><td class="memItemLeft" align="right" valign="top"><a id="a4d2888b0f4e531f1e70345f8bfc7ed21" name="a4d2888b0f4e531f1e70345f8bfc7ed21"></a>
+<a class="el" href="classjngl_1_1Finally.html">Finally</a>&#160;</td><td class="memItemRight" valign="bottom"><b>setBlendMode</b> (<a class="el" href="#a0a72f89222b06814e4def649e122acb1">BlendMode</a>)</td></tr>
+<tr class="memdesc:a4d2888b0f4e531f1e70345f8bfc7ed21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets how what's drawn is blended with what's already there, until the returned <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> object is destroyed, which restores the previous blending. <br /></td></tr>
+<tr class="separator:a4d2888b0f4e531f1e70345f8bfc7ed21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>JNGL's main namespace. </p>
@@ -1152,7 +1161,7 @@ Variables</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="FrameBuffer_8hpp_source.html#l00019">19</a> of file <a class="el" href="FrameBuffer_8hpp_source.html">FrameBuffer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FrameBuffer_8hpp_source.html#l00020">20</a> of file <a class="el" href="FrameBuffer_8hpp_source.html">FrameBuffer.hpp</a>.</p>
 
 </div>
 </div>
@@ -1259,6 +1268,40 @@ Variables</h2></td></tr>
 </table>
 
 <p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00251">251</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0a72f89222b06814e4def649e122acb1" name="a0a72f89222b06814e4def649e122acb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a72f89222b06814e4def649e122acb1">&#9670;&#160;</a></span>BlendMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a0a72f89222b06814e4def649e122acb1">BlendMode</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How what's drawn is blended with what's already there, see <a class="el" href="#a4d2888b0f4e531f1e70345f8bfc7ed21" title="Sets how what&#39;s drawn is blended with what&#39;s already there, until the returned Finally object is dest...">setBlendMode()</a> </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a0a72f89222b06814e4def649e122acb1a141a5b46e2087dc7a80a43710c2dacfb" name="a0a72f89222b06814e4def649e122acb1a141a5b46e2087dc7a80a43710c2dacfb"></a>Composite&#160;</td><td class="fielddoc"><p>Colours are blended by their alpha as usual, but alpha is composited too, rather than added up as it is while a <a class="el" href="classjngl_1_1FrameBuffer.html" title="Image framebuffer object which can be rendered on.">FrameBuffer</a> is in use. </p>
+<p>Drawn onto a <a class="el" href="classjngl_1_1FrameBuffer.html" title="Image framebuffer object which can be rendered on.">FrameBuffer</a> cleared to transparent black (see <a class="el" href="structjngl_1_1FrameBuffer_1_1Context.html#ae2a43ecb6551c4685445d49f31f11f60" title="Clear the framebuffer with color, including its alpha, e.g.">FrameBuffer::Context::clear(Rgba)</a>), everything ends up with the alpha of all layers put together, and its colours multiplied by that. Drawing the <a class="el" href="classjngl_1_1FrameBuffer.html" title="Image framebuffer object which can be rendered on.">FrameBuffer</a> with <a class="el" href="#a0a72f89222b06814e4def649e122acb1a39a960b9c0fdfe58f8963d9ee2399459" title="For colours that already have their alpha multiplied in, e.g.">BlendMode::Premultiplied</a> afterwards then gives the same result as drawing it all directly. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0a72f89222b06814e4def649e122acb1a39a960b9c0fdfe58f8963d9ee2399459" name="a0a72f89222b06814e4def649e122acb1a39a960b9c0fdfe58f8963d9ee2399459"></a>Premultiplied&#160;</td><td class="fielddoc"><p>For colours that already have their alpha multiplied in, e.g. </p>
+<p>those of a <a class="el" href="classjngl_1_1FrameBuffer.html" title="Image framebuffer object which can be rendered on.">FrameBuffer</a> drawn into with <a class="el" href="#a0a72f89222b06814e4def649e122acb1a141a5b46e2087dc7a80a43710c2dacfb" title="Colours are blended by their alpha as usual, but alpha is composited too, rather than added up as it ...">BlendMode::Composite</a> </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00357">357</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>
