@@ -63,7 +63,8 @@ Finally App::init(AppParameters params) {
 	                                              .pixelArt = params.pixelArt,
 	                                              .steamAppId = params.steamAppId,
 	                                              .shaderPrograms = {},
-	                                              .scaleFactor = std::move(params.scaleFactor) });
+	                                              .scaleFactor = std::move(params.scaleFactor),
+	                                              .screenSize = std::nullopt });
 	return Finally{ [this]() { impl.reset(); } };
 }
 
