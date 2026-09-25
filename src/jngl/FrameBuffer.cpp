@@ -13,6 +13,8 @@
 #include "matrix.hpp"
 #include "screen.hpp"
 
+#include <array>
+
 namespace jngl {
 
 struct FrameBuffer::Impl {
@@ -265,10 +267,15 @@ FrameBuffer::Context FrameBuffer::use() const {
 #else
 	glGetIntegerv(GL_VIEWPORT, impl->viewport);
 #endif
+	// Scissor testing inside the FrameBuffer (e.g. jngl::scissor) changes the box, which would
+	// otherwise be used for letterboxing when re-enabling the scissor test below
+	std::array<GLint, 4> scissorBox{};
+	glGetIntegerv(GL_SCISSOR_BOX, scissorBox.data());
 	activate();
 	Impl::activate.emplace(std::move(activate));
-	return Context([this, savedProjection]() {
+	return Context([this, savedProjection, scissorBox]() {
 		Impl::activate.pop();
+		glScissor(scissorBox[0], scissorBox[1], scissorBox[2], scissorBox[3]);
 		popMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 		glPopAttrib();

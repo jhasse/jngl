@@ -602,9 +602,11 @@ Finally scissor(Vec2 position, Vec2 size) {
 	glEnable(GL_SCISSOR_TEST);
 	glScissor(x, y, w, h);
 	return Finally([saved] {
+		// Restore the box even when the scissor test was off, because a FrameBuffer might turn it
+		// back on for letterboxing
+		glScissor(saved.box[0], saved.box[1], saved.box[2], saved.box[3]);
 		if (saved.enabled) {
 			glEnable(GL_SCISSOR_TEST);
-			glScissor(saved.box[0], saved.box[1], saved.box[2], saved.box[3]);
 		} else {
 			glDisable(GL_SCISSOR_TEST);
 		}
