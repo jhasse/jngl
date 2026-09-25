@@ -70,7 +70,8 @@ void setTitle(const std::string& title);
 
 enum class Cursor : uint8_t {
 	ARROW, //< Default cursor
-	I,     //< I-beam cursor used in text editing
+	I, //< I-beam cursor used in text editing
+	CROSSHAIR, //< Crosshair cursor
 };
 /// Allows to change the mouse cursor
 void setCursor(Cursor);

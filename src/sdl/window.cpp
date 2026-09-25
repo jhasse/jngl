@@ -628,6 +628,9 @@ void setCursor(Cursor type) {
 	case Cursor::I:
 		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_TEXT;
 		break;
+	case Cursor::CROSSHAIR:
+		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_CROSSHAIR;
+		break;
 	};
 }
 
