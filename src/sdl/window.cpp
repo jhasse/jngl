@@ -358,10 +358,6 @@ void Window::UpdateInput() {
 				characterDown_[" "] = true;
 				characterPressed_[" "] = true;
 				needToBeSetFalse_.push(&characterPressed_[" "]);
-			} else if (event.key.key == SDLK_ESCAPE) {
-				if (const auto& scene = getScene()) {
-					scene->onBackEvent();
-				}
 			} else if (!event.key.repeat && event.key.key == SDLK_RETURN && getKeyDown(key::Alt)) {
 				if (const auto& scene = getScene()) {
 					scene->onToggleFullscreen();
