@@ -50,9 +50,14 @@ struct FrameBuffer::Impl {
 	/// If this is not empty, there's a FrameBuffer in use and this was the function that activated
 	/// it.
 	static std::stack<std::function<void()>> activate;
+
+	/// The projection matrix of the window, saved when the outermost FrameBuffer gets activated.
+	/// FrameBuffers used inside of it scale this one instead of their outer FrameBuffer's.
+	static Mat4 screenProjection;
 };
 
 std::stack<std::function<void()>> FrameBuffer::Impl::activate;
+Mat4 FrameBuffer::Impl::screenProjection;
 
 FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr)
 : impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height), hdr)) {
@@ -246,6 +251,13 @@ FrameBuffer::Context FrameBuffer::use() const {
 	};
 	pushMatrix();
 	auto savedProjection = opengl::projection;
+	if (Impl::activate.empty()) {
+		Impl::screenProjection = opengl::projection;
+	} else {
+		// Scaling the outer FrameBuffer's projection again would only be right if its factors were
+		// 1, which isn't the case e.g. with letterboxing after the window has been resized
+		opengl::projection = Impl::screenProjection;
+	}
 	const float sx = static_cast<float>(pWindow->getWidth()) / static_cast<float>(impl->width) *
 	                 pWindow->getResizedWindowScalingX();
 	const float sy = static_cast<float>(pWindow->getHeight()) / static_cast<float>(impl->height) *
