@@ -177,11 +177,13 @@ uint8_t App::mainLoop() {
 }
 
 bool App::isPixelArt() {
-	return self ? self->impl->pixelArt : false;
+	return (self && self->impl) ? self->impl->pixelArt : false;
 }
 
 void App::setPixelArt(const bool pixelArt) {
-	impl->pixelArt = pixelArt;
+	if (impl) {
+		impl->pixelArt = pixelArt;
+	}
 }
 
 void App::registerShaderProgram(ShaderProgram* shaderProgram) {
@@ -192,14 +194,18 @@ void App::registerShaderProgram(ShaderProgram* shaderProgram) {
 }
 
 void App::unregisterShaderProgram(ShaderProgram* shaderProgram) {
-	impl->shaderPrograms.erase(shaderProgram);
+	if (impl) {
+		impl->shaderPrograms.erase(shaderProgram);
+	}
 }
 
 void App::updateProjectionMatrix() const {
-	for (const auto shaderProgram : impl->shaderPrograms) {
-		const auto context = shaderProgram->use();
-		glUniformMatrix4fv(shaderProgram->getUniformLocation("projection"), 1, GL_FALSE,
-		                   opengl::projection.data);
+	if (impl) {
+		for (const auto shaderProgram : impl->shaderPrograms) {
+			const auto context = shaderProgram->use();
+			glUniformMatrix4fv(shaderProgram->getUniformLocation("projection"), 1, GL_FALSE,
+			                   opengl::projection.data);
+		}
 	}
 }
 
