@@ -5,16 +5,22 @@
 #pragma once
 
 #include "jngl/Finally.hpp"
+#include "jngl/Vec2.hpp"
 
 #include <cstdint>
 #include <functional>
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
 namespace jngl {
 struct AppParameters;
 class ShaderProgram;
+
+namespace internal {
+uint8_t mainLoop(AppParameters);
+} // namespace internal
 
 /// Singleton, that never gets destroyed
 class App {
@@ -33,6 +39,12 @@ public:
 
 	/// \deprecated Set jngl::AppParameters.displayName instead
 	void setDisplayName(const std::string&);
+
+	/// The size asked for in jngl::AppParameters::screenSize, or the desktop's size if it wasn't.
+	/// The actual canvas can differ from it, see jngl::getScreenSize().
+	///
+	/// Empty until mainLoop() has filled it in, just before creating the window.
+	[[nodiscard]] std::optional<Vec2> getScreenSize() const;
 
 	/// Starts the main loop, which calls jngl::Work::step and jngl::Work::draw
 	[[nodiscard]] uint8_t mainLoop();
@@ -67,6 +79,7 @@ private:
 	void unregisterShaderProgram(ShaderProgram*);
 
 	friend ShaderProgram;
+	friend uint8_t internal::mainLoop(AppParameters);
 
 	struct Impl;
 	std::unique_ptr<Impl> impl;

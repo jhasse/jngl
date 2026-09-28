@@ -22,6 +22,8 @@
 #include "../texture.hpp"
 #endif
 
+#include <array>
+
 namespace jngl {
 
 #ifdef JNGL_VULKAN
@@ -98,11 +100,16 @@ struct FrameBuffer::Impl {
 	/// If this is not empty, there's a FrameBuffer in use and this was the function that activated
 	/// it.
 	static std::stack<std::function<void()>> activate;
+
+	/// The projection matrix of the window, saved when the outermost FrameBuffer gets activated.
+	/// FrameBuffers used inside of it scale this one instead of their outer FrameBuffer's.
+	static Mat4 screenProjection;
 #endif
 };
 
 #ifndef JNGL_VULKAN
 std::stack<std::function<void()>> FrameBuffer::Impl::activate;
+Mat4 FrameBuffer::Impl::screenProjection;
 #endif
 
 FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr)
@@ -313,6 +320,12 @@ void FrameBuffer::Context::clear(const Rgb color) {
 #endif
 }
 
+void FrameBuffer::Context::clear(const Rgba color) {
+	assert(resetCallback);
+	glClearColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
 FrameBuffer::Context FrameBuffer::use() const {
 #ifdef JNGL_VULKAN
 	pushMatrix();
@@ -350,6 +363,13 @@ FrameBuffer::Context FrameBuffer::use() const {
 	};
 	pushMatrix();
 	auto savedProjection = opengl::projection;
+	if (Impl::activate.empty()) {
+		Impl::screenProjection = opengl::projection;
+	} else {
+		// Scaling the outer FrameBuffer's projection again would only be right if its factors were
+		// 1, which isn't the case e.g. with letterboxing after the window has been resized
+		opengl::projection = Impl::screenProjection;
+	}
 	const float sx = static_cast<float>(pWindow->getWidth()) / static_cast<float>(impl->width) *
 	                 pWindow->getResizedWindowScalingX();
 	const float sy = static_cast<float>(pWindow->getHeight()) / static_cast<float>(impl->height) *
@@ -371,10 +391,15 @@ FrameBuffer::Context FrameBuffer::use() const {
 #else
 	glGetIntegerv(GL_VIEWPORT, impl->viewport);
 #endif
+	// Scissor testing inside the FrameBuffer (e.g. jngl::scissor) changes the box, which would
+	// otherwise be used for letterboxing when re-enabling the scissor test below
+	std::array<GLint, 4> scissorBox{};
+	glGetIntegerv(GL_SCISSOR_BOX, scissorBox.data());
 	activate();
 	Impl::activate.emplace(std::move(activate));
-	return Context([this, savedProjection]() {
+	return Context([this, savedProjection, scissorBox]() {
 		Impl::activate.pop();
+		glScissor(scissorBox[0], scissorBox[1], scissorBox[2], scissorBox[3]);
 		popMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 		glPopAttrib();

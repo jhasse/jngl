@@ -1,13 +1,13 @@
 @font-face {
-	font-family: 'Lato';
-	src: url('LatoLatin-Regular.woff2') format('woff2');
+	font-family: 'Geist';
+	src: url('Geist-Regular.woff2') format('woff2');
 	font-style: normal;
 	font-weight: normal;
 }
 
 @font-face {
-	font-family: 'Lato';
-	src: url('LatoLatin-Bold.woff2') format('woff2');
+	font-family: 'Geist';
+	src: url('Geist-Bold.woff2') format('woff2');
 	font-style: normal;
 	font-weight: bold;
 }
@@ -15,7 +15,7 @@
 :root {
 	/* --primary-color: #2d77c9; */
 	/* --page-foreground-color: #000; */
-	--font-family: "Lato", system-ui, sans-serif;
+	--font-family: "Geist", system-ui, sans-serif;
 	--side-nav-arrow-opacity: 0.4;
 }
 

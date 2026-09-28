@@ -20,7 +20,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
 	# emcc: error: sdl3 port is still experimental [-Wexperimental] [-Werror]
 	string(APPEND CMAKE_CXX_FLAGS " ${USE_FLAGS} -sNO_DISABLE_EXCEPTION_CATCHING -Wno-experimental")
 	string(APPEND CMAKE_C_FLAGS " ${USE_FLAGS} -Wno-experimental")
-	string(APPEND CMAKE_EXE_LINKER_FLAGS " ${USE_FLAGS} -sASSERTIONS=1 --preload-file data")
+	string(APPEND CMAKE_EXE_LINKER_FLAGS " ${USE_FLAGS} -sASSERTIONS=1 -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2 --preload-file data")
 	set(CMAKE_EXECUTABLE_SUFFIX ".html")
 endif()
 
@@ -144,7 +144,7 @@ elseif (UNIX)
 else() # Windows
 	option(JNGL_WINAPI "Use WinAPI instead of SDL" OFF)
 
-	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x602 _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
+	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x0A00 _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
 	if(JNGL_WINAPI)
 		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp)
 		target_link_libraries(jngl PRIVATE opengl32)
@@ -265,8 +265,8 @@ else()
 	if(JNGL_BUILD_SDL_FROM_SOURCE)
 		if(JNGL_WINAPI)
 			CPMAddPackage(NAME SDL
-				URL https://www.libsdl.org/release/SDL3-3.1.6.zip
-				URL_HASH SHA1=b16ad311975378dcc87b11fc02c84eaa1f028b38
+				URL https://www.libsdl.org/release/SDL3-3.4.12.zip
+				URL_HASH SHA1=d2c07e1e0e98c2c6c073d5f24112e6fe8208037a
 				OPTIONS
 					"SDL_ATOMIC OFF"
 					"SDL_CPUINFO ON"
@@ -285,9 +285,10 @@ else()
 			)
 		else()
 			CPMAddPackage(NAME SDL
-				URL https://www.libsdl.org/release/SDL3-3.1.6.zip
-				URL_HASH SHA1=b16ad311975378dcc87b11fc02c84eaa1f028b38
+				URL https://www.libsdl.org/release/SDL3-3.4.12.zip
+				URL_HASH SHA1=d2c07e1e0e98c2c6c073d5f24112e6fe8208037a
 				OPTIONS
+				    "SDL_X11_XTEST OFF"
 					"SDL_SENSOR OFF"
 					"SDL_SHARED OFF"
 					"SDL_STATIC ON"
@@ -437,6 +438,8 @@ else()
 
 		add_executable(jngl-test-forceQuit src/test/integration/forceQuit.cpp)
 		target_link_libraries(jngl-test-forceQuit PRIVATE jngl)
+		add_executable(jngl-test-sigint src/test/integration/sigint.cpp)
+		target_link_libraries(jngl-test-sigint PRIVATE jngl)
 		target_link_libraries(jngl-test jngl)
 	endif()
 endif()

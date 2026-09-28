@@ -3,14 +3,22 @@
 
 #include "screen.hpp"
 
+#include "../App.hpp"
 #include "../windowptr.hpp"
 #include "window.hpp"
 
+#include <cmath>
 #include <stdexcept>
 
 namespace jngl {
 
 double factor = 1;
+
+namespace internal {
+void resetScaleFactor() {
+	factor = 1;
+}
+} // namespace internal
 
 double getScaleFactor() {
 	return factor;
@@ -29,15 +37,29 @@ void setScaleFactor(double f) {
 }
 
 double getScreenWidth() {
-	return static_cast<double>(getWindowWidth()) / factor;
+	return getScreenSize().x;
 }
 
 double getScreenHeight() {
-	return static_cast<double>(getWindowHeight()) / factor;
+	return getScreenSize().y;
 }
 
 Vec2 getScreenSize() {
-	return { getScreenWidth(), getScreenHeight() };
+	const auto screenSize = App::instance().getScreenSize();
+	const Vec2 canvas{ static_cast<double>(getWindowWidth()) / factor,
+		               static_cast<double>(getWindowHeight()) / factor };
+	// The canvas can differ from the size the application asked for (or the desktop's, if it
+	// didn't), e.g. when AppParameters::scaleFactor is set or AppParameters::minAspectRatio and
+	// maxAspectRatio give the window a different shape. If it doesn't though, return the asked
+	// for size rather than the one derived from the window's size in pixels: factor is computed
+	// from the latter and therefore loses precision. On a display with fractional HiDPI scaling a
+	// canvas of 1136x640 would come out as 1135.999975x640.077703, i.e. the result would depend on
+	// which display the window happens to open on.
+	if (screenSize && std::abs(canvas.x - screenSize->x) < 1 &&
+	    std::abs(canvas.y - screenSize->y) < 1) {
+		return *screenSize;
+	}
+	return canvas;
 }
 
 } // namespace jngl

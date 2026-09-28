@@ -51,6 +51,9 @@ public:
 	///     }
 	/// };
 	/// \endcode
+	///
+	/// \note <kbd>Ctrl</kbd>+<kbd>C</kbd> (SIGINT) calls forceQuit() with exitcode 130 instead and
+	/// does not invoke this.
 	virtual void onQuitEvent();
 
 	/// Gets called when the "Back" button is pressed on any connected controller (Android only)

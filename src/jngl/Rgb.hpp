@@ -8,6 +8,10 @@
 #include <cstdint>
 #include <iosfwd>
 
+#if __has_include(<format>) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION >= 170000)
+#include <format>
+#endif
+
 namespace jngl {
 
 class Color;
@@ -92,6 +96,18 @@ bool operator==(Rgb a, Rgb b);
 std::ostream& operator<<(std::ostream& os, Rgb color);
 
 } // namespace jngl
+
+#if __has_include(<format>) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION >= 170000)
+template <> struct std::formatter<jngl::Rgb> {
+	constexpr static auto parse(std::format_parse_context& ctx) {
+		return ctx.begin();
+	}
+	auto format(const jngl::Rgb& c, auto& ctx) const {
+		return std::format_to(ctx.out(), "jngl::Rgb{{ {}, {}, {} }}", c.getRed(), c.getGreen(),
+		                      c.getBlue());
+	}
+};
+#endif
 
 /// Create a jngl::Rgb object from a literal. E.g. `0x00ff00_rgb` for green.
 jngl::Rgb operator""_rgb(unsigned long long);

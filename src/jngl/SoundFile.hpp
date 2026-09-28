@@ -8,6 +8,7 @@
 #include <memory>
 #include <span>
 #include <string>
+#include <string_view>
 #include <vector>
 #if defined(__has_include) && __has_include(<optional>)
 #include <optional>
@@ -26,7 +27,8 @@ struct SoundParams;
 /// Sound loaded from an OGG file
 ///
 /// JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly -
-/// you can just use jngl::play or Channel::play.
+/// you can just use jngl::play or Channel::play. If you want to access the internally SoundFile
+/// from JNGL's cache before playing, use SoundFile::get.
 class SoundFile {
 public:
 	/// Load an OGG file called \a filename
@@ -43,6 +45,18 @@ public:
 	SoundFile& operator=(const SoundFile&) = delete;
 	SoundFile(SoundFile&&) noexcept;
 	SoundFile& operator=(SoundFile&&) noexcept;
+
+	/// Returns a shared pointer to a SoundFile from JNGL's internal cache, creates it with async
+	/// loading if necessary
+	///
+	/// Example:
+	/// \code
+	/// auto sound = jngl::SoundFile::get("sfx/foo.ogg");
+	/// auto other = jngl::SoundFile::get("sfx/foo.ogg");
+	/// assert(sound == other);
+	/// assert(!sound->isPlaying());
+	/// \endcode
+	static std::shared_ptr<SoundFile> get(std::string_view filename);
 
 	/// Play the sound once. If called twice the sound would also play twice
 	void play();
@@ -79,6 +93,8 @@ public:
 
 	/// Returns playing progress in [0, 1], can be used with length() to determine how much time
 	/// has passed
+	///
+	/// If the sound hasn't been started yet, returns 0.0f.
 	float progress() const;
 
 	/// Returns the raw audio samples of this SoundFile

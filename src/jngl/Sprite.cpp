@@ -235,16 +235,18 @@ float Sprite::getHeight() const {
 }
 
 void Sprite::drawBoundingBox() const {
-	setColor(Color(255, 0, 0));
 	const double LINE_WIDTH = 2;
-	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 },
-	         { LINE_WIDTH + getWidth(), LINE_WIDTH });
-	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 },
-	         { LINE_WIDTH, LINE_WIDTH + getHeight() });
-	drawRect({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 + getHeight() },
-	         { LINE_WIDTH + getWidth(), LINE_WIDTH });
-	drawRect({ getX() - LINE_WIDTH / 2 + getWidth(), getY() - LINE_WIDTH / 2 },
-	         { LINE_WIDTH, LINE_WIDTH + getHeight() });
+	const Rgb color = 0xff0000_rgb;
+	drawRect(modelview().translate({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 }),
+	         { LINE_WIDTH + getWidth(), LINE_WIDTH }, color);
+	drawRect(modelview().translate({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 }),
+	         { LINE_WIDTH, LINE_WIDTH + getHeight() }, color);
+	drawRect(
+	    modelview().translate({ getX() - LINE_WIDTH / 2, getY() - LINE_WIDTH / 2 + getHeight() }),
+	    { LINE_WIDTH + getWidth(), LINE_WIDTH }, color);
+	drawRect(
+	    modelview().translate({ getX() - LINE_WIDTH / 2 + getWidth(), getY() - LINE_WIDTH / 2 }),
+	    { LINE_WIDTH, LINE_WIDTH + getHeight() }, color);
 }
 
 bool Sprite::contains(const jngl::Vec2 point) const {
@@ -693,6 +695,30 @@ Finally disableBlending() {
 	}
 	glDisable(GL_BLEND);
 	return Finally([]() { glEnable(GL_BLEND); });
+}
+
+Finally setBlendMode(const BlendMode mode) {
+	GLint sourceRgb = 0;
+	GLint destinationRgb = 0;
+	GLint sourceAlpha = 0;
+	GLint destinationAlpha = 0;
+	glGetIntegerv(GL_BLEND_SRC_RGB, &sourceRgb);
+	glGetIntegerv(GL_BLEND_DST_RGB, &destinationRgb);
+	glGetIntegerv(GL_BLEND_SRC_ALPHA, &sourceAlpha);
+	glGetIntegerv(GL_BLEND_DST_ALPHA, &destinationAlpha);
+	switch (mode) {
+	case BlendMode::Composite:
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		break;
+	case BlendMode::Premultiplied:
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		break;
+	}
+	return Finally([=]() {
+		glBlendFuncSeparate(static_cast<GLenum>(sourceRgb), static_cast<GLenum>(destinationRgb),
+		                    static_cast<GLenum>(sourceAlpha),
+		                    static_cast<GLenum>(destinationAlpha));
+	});
 }
 
 Finally drawOnlyIntoAlphaChannel() {

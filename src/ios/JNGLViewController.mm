@@ -24,6 +24,11 @@ JNGLView* jnglView = nullptr;
     return self;
 }
 
+- (void)loadView {
+	self.view = jnglView; // Use the JNGLView created by the AppDelegate as our view instead of an
+	                      // empty UIView
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -76,8 +81,21 @@ JNGLView* jnglView = nullptr;
 	[jnglView touchesCancelled:touches withEvent:event];
 }
 
+// Must return NO: at least since iOS 18.2 (verified on iOS 26.6.1) the system ignores
+// -preferredScreenEdgesDeferringSystemGestures while the home indicator is auto-hidden, so a
+// single swipe from the bottom edge would immediately leave the app. With the indicator visible
+// the first swipe only reveals it and a second swipe is needed to leave. Since iOS 26 the
+// indicator fades out on its own shortly after launch anyway.
 - (BOOL)prefersHomeIndicatorAutoHidden {
-	return YES;
+	return NO;
+}
+
+// Defers all system edge gestures (home indicator, Control Center, Notification Center, app
+// switcher) so that touches near any screen edge are delivered to the game immediately instead of
+// being delayed while iOS waits to see if a system gesture is starting. This requires a second
+// swipe from an edge to actually trigger the corresponding system gesture.
+- (UIRectEdge)preferredScreenEdgesDeferringSystemGestures {
+	return UIRectEdgeAll;
 }
 
 @end

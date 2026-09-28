@@ -20,6 +20,10 @@
 #include "jngl/record/VideoRecorder.hpp"
 #endif
 
+#ifdef JNGL_PERFORMANCE_OVERLAY
+#include "jngl/matrix.hpp"
+#endif
+
 #ifdef __EMSCRIPTEN__
 #include "emscripten/window.hpp"
 
@@ -90,7 +94,7 @@ void Window::setFontSize(const int size) {
 	fontSize_ = size;
 	try {
 		setFont(fontName_); // We changed the size we also need to reload the current font
-	} catch (std::exception& e) { // Something went wrong ...
+	} catch (std::exception&) { // Something went wrong ...
 		fontSize_ = oldSize; // ... so let's set fontSize_ back to the previous size
 		throw;
 	}
@@ -413,8 +417,6 @@ void Window::draw() const {
 #endif
 	if (currentWork_) {
 		currentWork_->draw();
-	} else {
-		jngl::print("No scene set. Use jngl::setScene", -50, -5);
 	}
 	for (auto& job : std::ranges::reverse_view(jobs)) {
 		job->draw();
@@ -426,7 +428,8 @@ void Window::draw() const {
 	if (currentWork_) {
 		jngl::reset();
 		jngl::setColor(0xffffff_rgb, 255);
-		jngl::drawRect(-getScreenSize() / 2., jngl::Vec2(400, 100));
+		jngl::drawRect(jngl::modelview().translate(-getScreenSize() / 2.), jngl::Vec2(400, 100),
+		               0xffffff_rgb);
 		jngl::setFontColor(0x000000_rgb, 1.f);
 		{
 			std::ostringstream tmp;

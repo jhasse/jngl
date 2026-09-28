@@ -320,6 +320,10 @@ std::vector<std::shared_ptr<Controller>> getConnectedControllers();
 void onControllerChanged(std::function<void()> callback);
 
 /// Returns a string of characters that have been pressed since the last call to updateInput()
-std::string getTextInput();
+///
+/// \deprecated Use jngl::TextInputSession instead. That class ties text input to the lifetime of
+/// the field that wants it, so multiple fields (e.g. a dialog opening over a form) don't steal
+/// each other's characters, and characters typed while you don't poll for a frame aren't lost.
+[[deprecated("Use jngl::TextInputSession instead")]] std::string getTextInput();
 
 } // namespace jngl

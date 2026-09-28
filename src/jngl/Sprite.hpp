@@ -353,4 +353,25 @@ Finally disableBlending();
 
 Finally drawOnlyIntoAlphaChannel();
 
+/// How what's drawn is blended with what's already there, see setBlendMode()
+enum class BlendMode : uint8_t {
+	/// Colours are blended by their alpha as usual, but alpha is composited too, rather than added
+	/// up as it is while a FrameBuffer is in use. Drawn onto a FrameBuffer cleared to transparent
+	/// black (see FrameBuffer::Context::clear(Rgba)), everything ends up with the alpha of all
+	/// layers put together, and its colours multiplied by that. Drawing the FrameBuffer with
+	/// BlendMode::Premultiplied afterwards then gives the same result as drawing it all directly.
+	Composite,
+
+	/// For colours that already have their alpha multiplied in, e.g. those of a FrameBuffer drawn
+	/// into with BlendMode::Composite
+	Premultiplied,
+};
+
+/// Sets how what's drawn is blended with what's already there, until the returned Finally object
+/// is destroyed, which restores the previous blending
+#if __cplusplus >= 201703L
+[[nodiscard]]
+#endif
+Finally setBlendMode(BlendMode);
+
 } // namespace jngl

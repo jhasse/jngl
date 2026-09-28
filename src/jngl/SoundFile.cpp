@@ -177,6 +177,10 @@ SoundFile& SoundFile::operator=(SoundFile&& other) noexcept {
 	return *this;
 }
 
+std::shared_ptr<SoundFile> SoundFile::get(std::string_view filename) {
+	return Audio::handle().getSoundFile(filename, std::launch::async);
+}
+
 void SoundFile::play() {
 	play(Channel::main());
 }
@@ -281,8 +285,7 @@ void stop(const std::string& filename) {
 }
 
 Finally loadSound(const std::string& filename) {
-	auto soundFile = Audio::handle().getSoundFile(filename, std::launch::async);
-	return Finally([soundFile = std::move(soundFile)]() { soundFile->load(); });
+	return Finally([soundFile = SoundFile::get(filename)]() { soundFile->load(); });
 }
 
 bool isPlaying(const std::string& filename) {

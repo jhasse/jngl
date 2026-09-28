@@ -13,9 +13,9 @@ namespace jngl {
 
 Window::Window(const std::string& title, const int width, const int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
-: impl(std::make_unique<WindowImpl>(this)), fullscreen_(fullscreen), isMouseVisible_(true),
-  relativeMouseMode(false), anyKeyPressed_(false), mousex_(0), mousey_(0), fontSize_(12),
-  width_(width), height_(height), fontName_("Arial.ttf") {
+: fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
+  mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height), fontName_("Arial.ttf"),
+  impl(std::make_unique<WindowImpl>(this)) {
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	App::instance().initGl(width, height, canvasWidth, canvasHeight);
 }
@@ -109,6 +109,18 @@ void Window::setFullscreen(bool fullscreen) {
 	if (!fullscreen) {
 		debugLn("Can't unset fullscreen on iOS!");
 	}
+}
+
+void Window::startTextInputSession(TextInputType) {
+	setKeyboardVisible(true);
+}
+
+void Window::stopTextInputSession() {
+	setKeyboardVisible(false);
+}
+
+void Window::setTextInputArea(Rect, double) {
+	// TODO: reposition the IME candidate window
 }
 
 void setCursor(Cursor) {}

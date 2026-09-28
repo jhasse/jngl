@@ -43,8 +43,8 @@ void setProcessSettings() {
 
 Window::Window(const std::string& title, int width, int height, const bool fullscreen,
                const std::pair<int, int> minAspectRatio, const std::pair<int, int> maxAspectRatio)
-: impl(std::make_unique<WindowImpl>()), fullscreen_(fullscreen), width_(width), height_(height),
-  fontName_(GetFontFileByName("Arial")) {
+: fullscreen_(fullscreen), width_(width), height_(height), fontName_(GetFontFileByName("Arial")),
+  impl(std::make_unique<WindowImpl>()) {
 	SDL::handle();
 
 #ifdef JNGL_VULKAN
@@ -84,19 +84,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		throw std::runtime_error(SDL_GetError());
 	}
 #else
-	// Request a 10-bit-per-channel (deep color) default framebuffer. This greatly reduces banding in
-	// smooth gradients on displays and drivers that support it. It's only a request: if 10 bits
-	// aren't available SDL picks the closest format (usually 8 bits), so we query what we actually
-	// got afterwards. deepColor is also dropped if it prevents window creation entirely.
-	bool deepColor = true;
-	// We never use the window's alpha channel. We must explicitly request 0 alpha bits because the
-	// default minimum is 8, which would rule out the deep color RGB10A2 format below (it only has 2
-	// alpha bits). As these are minimum counts, RGB10A2 still satisfies a request of 0.
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
-	const auto create = [this, &title, width, height, flags, &deepColor]() {
-		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, deepColor ? 10 : 8);
-		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, deepColor ? 10 : 8);
-		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, deepColor ? 10 : 8);
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	const auto create = [this, &title, width, height, flags]() {
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, isMultisampleSupported_ ? 4 : 0);
 		return SDL_CreateWindow(title.c_str(), width, height, flags);
 	};
@@ -104,11 +95,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		internal::debug("Recreating window without Anti-Aliasing support.");
 		isMultisampleSupported_ = false;
 		if ((impl->sdlWindow = create()) == nullptr) {
-			internal::debug("Recreating window without deep color support.");
-			deepColor = false;
-			if ((impl->sdlWindow = create()) == nullptr) {
-				throw std::runtime_error(SDL_GetError());
-			}
+			throw std::runtime_error(SDL_GetError());
 		}
 	}
 
@@ -119,7 +106,12 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	if (glVersion < GLAD_MAKE_VERSION(2, 0)) {
 		throw std::runtime_error("Your graphics card is missing OpenGL 2.0 support (it supports " +
 		                         std::to_string(GLAD_VERSION_MAJOR(glVersion)) + "." +
-		                         std::to_string(GLAD_VERSION_MINOR(glVersion)) + ").");
+		                         std::to_string(GLAD_VERSION_MINOR(glVersion)) + ")."
+#ifdef _WIN32
+		                         + "\n\nEither install your graphic card's latest driver or "
+		                           "https://apps.microsoft.com/detail/9NQPSL29BFFF."
+#endif
+		);
 	}
 #endif
 
@@ -136,10 +128,6 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 			gladLoadGL(reinterpret_cast<GLADloadfunc>(SDL_GL_GetProcAddress)); // NOLINT
 #endif
 		}
-	}
-
-	if (int redBits = 0; SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &redBits)) {
-		internal::trace("Default framebuffer color depth: {} bits per channel.", redBits);
 	}
 #endif // JNGL_VULKAN
 
@@ -188,9 +176,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	}
 
 	// Unlike SDL2, which implicitly enabled text input on desktop, SDL3 doesn't deliver
-	// SDL_EVENT_TEXT_INPUT events until text input has been explicitly started. Without this
-	// getTextInput() would always return an empty string.
-	SDL_StartTextInput(impl->sdlWindow);
+	// SDL_EVENT_TEXT_INPUT events until text input has been explicitly started. TextInputSession
+	// (or, for old code that hasn't migrated yet, jngl::getTextInput()) is responsible for that;
+	// jngl::showWindow() re-applies whichever of those was active right after constructing this
+	// Window, since neither survives this Window being recreated (e.g. by toggling fullscreen).
 }
 
 Window::~Window() = default;
@@ -378,6 +367,7 @@ void Window::UpdateInput() {
 		}
 		case SDL_EVENT_TEXT_INPUT:
 			textInput += event.text.text;
+			internal::feedTextInput(event.text.text);
 			break;
 		case SDL_EVENT_KEY_DOWN: {
 			static bool wasFullscreen = fullscreen_;
@@ -406,10 +396,6 @@ void Window::UpdateInput() {
 				characterDown_[" "] = true;
 				characterPressed_[" "] = true;
 				needToBeSetFalse_.push(&characterPressed_[" "]);
-			} else if (event.key.key == SDLK_ESCAPE) {
-				if (const auto& scene = getScene()) {
-					scene->onBackEvent();
-				}
 			} else if (!event.key.repeat && event.key.key == SDLK_RETURN && getKeyDown(key::Alt)) {
 				if (const auto& scene = getScene()) {
 					scene->onToggleFullscreen();
@@ -489,12 +475,15 @@ void Window::UpdateInput() {
 				std::swap(canvasHeight, impl->actualCanvasHeight);
 				width_ = originalWidth;
 				height_ = originalHeight;
-			}
-			break;
+
+			    // setTextInputArea converts using the values updated above, so the area we passed
+			    // to SDL before the resize is stale now:
+			    internal::reapplyTextInputArea();
+		} break;
 		case SDL_EVENT_DROP_FILE:
 			if (event.drop.data) {
 				std::filesystem::path path(event.drop.data);
-				SDL_free((void*)event.drop.data); // TODO: needed in SDL3?
+				// SDL3 owns event.drop.data — do not free it manually
 				assert(std::filesystem::exists(path));
 				for (const auto& job : jobs) {
 					job->onFileDrop(path);
@@ -504,7 +493,7 @@ void Window::UpdateInput() {
 				}
 			}
 			break;
-		case SDL_EVENT_WINDOW_FOCUS_LOST:
+		case SDL_EVENT_WINDOW_MINIMIZED:
 			if (const auto& scene = getScene()) {
 				internal::debug("Window lost focus.");
 				scene->onPauseEvent();
@@ -512,6 +501,11 @@ void Window::UpdateInput() {
 			break;
 		}
 	}
+#ifndef __EMSCRIPTEN__
+	if (gGotSigint != 0 && !forceExitCode) {
+		jngl::forceQuit(130);
+	}
+#endif
 }
 
 void Window::SwapBuffers() {
@@ -602,6 +596,58 @@ void Window::setFullscreen(bool f) {
 	fullscreen_ = f;
 }
 
+namespace {
+SDL_TextInputType toSdl(const TextInputType type) {
+	switch (type) {
+	case TextInputType::Password:
+		return SDL_TEXTINPUT_TYPE_TEXT_PASSWORD_HIDDEN;
+	case TextInputType::Number:
+		return SDL_TEXTINPUT_TYPE_NUMBER;
+	case TextInputType::Email:
+		return SDL_TEXTINPUT_TYPE_TEXT_EMAIL;
+	case TextInputType::Text:
+		break;
+	}
+	return SDL_TEXTINPUT_TYPE_TEXT;
+}
+} // namespace
+
+void Window::startTextInputSession(const TextInputType type) {
+	const SDL_PropertiesID props = SDL_CreateProperties();
+	SDL_SetNumberProperty(props, SDL_PROP_TEXTINPUT_TYPE_NUMBER, toSdl(type));
+	SDL_StartTextInputWithProperties(impl->sdlWindow, props);
+	SDL_DestroyProperties(props);
+}
+
+void Window::stopTextInputSession() {
+	SDL_StopTextInput(impl->sdlWindow);
+}
+
+void Window::setTextInputArea(const Rect area, const double cursor) {
+	// area and cursor are in JNGL Screen coordinates, while SDL expects window coordinates: (0, 0)
+	// at the top left of the window and not scaled by the display's pixel density. So this is the
+	// inverse of what getMouseX()/getMouseY() do to SDL's coordinates.
+	const auto toWindowX = [this](const double v) {
+		return v * getScaleFactor() * impl->actualCanvasWidth / canvasWidth /
+		       impl->hidpiScaleFactor;
+	};
+	const auto toWindowY = [this](const double v) {
+		return v * getScaleFactor() * impl->actualCanvasHeight / canvasHeight /
+		       impl->hidpiScaleFactor;
+	};
+	const double letterboxX =
+	    (impl->actualWidth - impl->actualCanvasWidth) / 2. / impl->hidpiScaleFactor;
+	const double letterboxY =
+	    (impl->actualHeight - impl->actualCanvasHeight) / 2. / impl->hidpiScaleFactor;
+	const SDL_Rect rect{
+		.x = jngl::round(toWindowX(area.pos.x + getScreenWidth() / 2) + letterboxX),
+		.y = jngl::round(toWindowY(area.pos.y + getScreenHeight() / 2) + letterboxY),
+		.w = jngl::round(toWindowX(area.size.x)),
+		.h = jngl::round(toWindowY(area.size.y)),
+	};
+	SDL_SetTextInputArea(impl->sdlWindow, &rect, jngl::round(toWindowX(cursor)));
+}
+
 int Window::getMouseX() const {
 	if (relativeMouseMode) {
 		return static_cast<int>(static_cast<float>(mousex_) * impl->hidpiScaleFactor);
@@ -629,6 +675,9 @@ void setCursor(Cursor type) {
 		break;
 	case Cursor::I:
 		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_TEXT;
+		break;
+	case Cursor::CROSSHAIR:
+		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_CROSSHAIR;
 		break;
 	};
 }

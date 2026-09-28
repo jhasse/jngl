@@ -1,0 +1,16 @@
+# Enable locally with: pre-commit install
+repos:
+  - repo: local
+    hooks:
+      - id: git-clang-format
+        name: clang-format (changed lines only)
+        description: Reformat only the lines changed in staged C/C++ files using clang-format.
+        # git clang-format's default --extensions list includes json, js, ts,
+        # etc. Restrict it to C/C++ so it only touches source files.
+        entry: git clang-format --extensions c,h,m,mm,cc,cpp,cxx,hh,hpp,hxx,inc,cu,cuh
+        language: system
+        types_or: [c, c++]
+        # git-clang-format figures out the staged diff itself, so it must not be
+        # invoked once per file.
+        pass_filenames: false
+        require_serial: true

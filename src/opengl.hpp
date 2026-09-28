@@ -16,16 +16,7 @@
 		#include <GLES3/gl3ext.h>
 	#else
 		#ifdef __EMSCRIPTEN__
-			#define GL_GLEXT_PROTOTYPES 1
-			#include <GLES2/gl2.h>
-			#include <GLES2/gl2ext.h>
-
-			#define glGenVertexArrays glGenVertexArraysOES
-			#define glBindVertexArray glBindVertexArrayOES
-			#define glDeleteVertexArrays glDeleteVertexArraysOES
-			#define GL_RGBA8 GL_RGBA8_OES
-			#define GL_HALF_FLOAT GL_HALF_FLOAT_OES
-			#define GL_RGBA16F GL_RGBA16F_EXT
+			#include <GLES3/gl3.h>
 		#else
 			#include <glad/gl.h>
 		#endif

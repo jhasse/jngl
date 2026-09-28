@@ -57,6 +57,10 @@
 #include <emscripten.h>
 #endif
 
+namespace jngl::internal {
+void resetScaleFactor();
+} // namespace jngl::internal
+
 namespace jngl {
 
 std::string pathPrefix;
@@ -167,11 +171,25 @@ void showWindow(const std::string& title, const double width, const double heigh
 #ifndef JNGL_VULKAN
 	pWindow->initGlObjects();
 #endif
+
+	// The active TextInputSession (or the deprecated getTextInput()'s legacy fallback) lives
+	// outside of Window so it survives this Window being replaced, but backends like SDL need to
+	// be told about it again for the freshly created Window.
+	internal::reapplyTextInputSession();
 }
 
 void hideWindow() {
 	if (pWindow) {
 		App::instance().callAtExitFunctions();
+		// Reset all global variables for Android. This should maybe moved to App or some other
+		// class. Or a Singleton, just not global variables.
+		pathPrefix = "";
+		configPath = std::nullopt;
+		backgroundColor = Rgb(1, 1, 1);
+		modelviewStack = {};
+		antiAliasingEnabled = true;
+		internal::gFrameNumber = -1;
+		internal::resetScaleFactor();
 	}
 	unloadAll();
 	pWindow.Delete();
@@ -539,7 +557,8 @@ void popMatrix() {
 
 void drawRect(const double xposition, const double yposition, const double width,
               const double height) {
-	drawRect(Vec2{ xposition, yposition }, { width, height });
+	drawRect(modelview().translate(Vec2{ xposition, yposition }), Vec2{ width, height },
+	         gShapeColor);
 }
 
 void drawRect(const Vec2 position, const Vec2 size) {
@@ -664,9 +683,11 @@ Finally scissor(Vec2 position, Vec2 size) {
 	glEnable(GL_SCISSOR_TEST);
 	glScissor(x, y, w, h);
 	return Finally([saved] {
+		// Restore the box even when the scissor test was off, because a FrameBuffer might turn it
+		// back on for letterboxing
+		glScissor(saved.box[0], saved.box[1], saved.box[2], saved.box[3]);
 		if (saved.enabled) {
 			glEnable(GL_SCISSOR_TEST);
-			glScissor(saved.box[0], saved.box[1], saved.box[2], saved.box[3]);
 		} else {
 			glDisable(GL_SCISSOR_TEST);
 		}
@@ -762,6 +783,10 @@ void drawLine(Mat3 modelview, const Vec2 end, float lineWidth, Rgba color) {
 	                        .scale(lineWidth, boost::qvm::mag(end))
 	                        .translate({ 0, -0.5 }),
 	                    color);
+}
+
+void drawLine(const Mat3& modelview, const Vec2 end, const float lineWidth) {
+	drawLine(modelview, end, lineWidth, gShapeColor);
 }
 
 void drawPoint(const double x, const double y) {
