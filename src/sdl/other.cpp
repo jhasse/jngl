@@ -6,6 +6,11 @@
 
 #include <SDL3/SDL.h>
 
+#ifdef JNGL_VULKAN
+#include "../Renderer.hpp"
+#include "../vulkan/VulkanRenderer.hpp"
+#endif
+
 namespace jngl {
 
 std::string getPreferredLanguage() {
@@ -37,15 +42,23 @@ void openURL(const std::string& url) {
 }
 
 void setVerticalSync(bool enabled) {
+#ifdef JNGL_VULKAN
+	static_cast<VulkanRenderer&>(getRenderer()).setVerticalSync(enabled);
+#else
 	SDL_GL_SetSwapInterval(enabled ? 1 : 0);
+#endif
 }
 
 bool getVerticalSync() {
+#ifdef JNGL_VULKAN
+	return static_cast<VulkanRenderer&>(getRenderer()).getVerticalSync();
+#else
 	int result;
 	if (!SDL_GL_GetSwapInterval(&result)) {
 		throw std::runtime_error(SDL_GetError());
 	}
 	return result == 1;
+#endif
 }
 
 } // namespace jngl

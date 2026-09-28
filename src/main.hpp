@@ -22,6 +22,8 @@ void clearBackgroundColor();
 void updateViewportAndLetterboxing(int width, int height, int canvasWidth, int canvasHeight);
 void updateProjection(int windowWidth, int windowHeight, float, float);
 
+bool isHighPixelDensityEnabled();
+
 extern std::string pathPrefix;
 extern optional<std::string> configPath;
 extern std::stack<jngl::Mat3> modelviewStack;
