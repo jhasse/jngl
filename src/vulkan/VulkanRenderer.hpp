@@ -11,6 +11,7 @@
 
 #include "../Renderer.hpp"
 #include "../jngl/Mat4.hpp"
+#include "ShaderCompiler.hpp"
 
 #include <array>
 #include <cstdint>
@@ -43,11 +44,23 @@ struct VulkanFramebuffer {
 	int height = 0;
 };
 
-/// GPU resources backing a jngl::ShaderProgram on the Vulkan backend: one textured pipeline per
-/// primitive topology, built from a user-supplied vertex/fragment shader pair.
+/// GPU resources backing a jngl::ShaderProgram on the Vulkan backend: textured pipelines for each
+/// blend variant × primitive topology, built from a user-supplied vertex/fragment shader pair, plus
+/// an optional CPU-side uniform staging buffer (see ShaderProgram::setUniform). At draw time the
+/// staging contents are copied into the per-frame dynamic UBO ring so mid-frame setUniform changes
+/// (e.g. blur pass 0 then 1) are visible to each draw.
 struct VulkanShaderProgram {
-	std::array<VkPipeline, 4> pipelines{}; // indexed by PrimitiveType
-	std::array<VkPipeline, 4> msaaPipelines{}; // swapchain MSAA, when active at creation
+	static constexpr uint32_t topologyCount = 4;
+	static constexpr uint32_t blendVariantCount = 4; // see VulkanRenderer::texturedBlendVariant()
+	static constexpr uint32_t pipelineCount = topologyCount * blendVariantCount;
+	std::array<VkPipeline, pipelineCount> pipelines{};
+	std::array<VkPipeline, pipelineCount>
+	    msaaPipelines{}; // swapchain MSAA, when active at creation
+	std::vector<ShaderUniform> uniforms;
+	uint32_t uniformBlockSize = 0;
+	VkBuffer uniformBuffer = VK_NULL_HANDLE; // host-visible staging; not bound to the GPU
+	VkDeviceMemory uniformMemory = VK_NULL_HANDLE;
+	void* uniformMapped = nullptr;
 };
 
 class VulkanRenderer final : public Renderer {
@@ -100,11 +113,26 @@ public:
 	void clearCurrentRenderTarget(Rgba color);
 
 	/// Builds a custom shader program (see jngl::ShaderProgram) from vertex + fragment SPIR-V.
-	std::unique_ptr<VulkanShaderProgram> createShaderProgram(const std::vector<uint32_t>& vertexSpirv,
-	                                                         const std::vector<uint32_t>& fragmentSpirv);
+	/// \a uniforms / \a uniformBlockSize describe the fragment UBO (empty if none).
+	std::unique_ptr<VulkanShaderProgram>
+	createShaderProgram(const std::vector<uint32_t>& vertexSpirv,
+	                    const std::vector<uint32_t>& fragmentSpirv,
+	                    std::vector<ShaderUniform> uniforms, uint32_t uniformBlockSize);
 	void destroyShaderProgram(VulkanShaderProgram&);
 	/// Makes \a program (or nullptr for the built-in sprite shader) the one used by drawSprite.
 	void setActiveShaderProgram(const VulkanShaderProgram* program);
+	/// Writes \a bytes at \a offset into the active program's UBO (must be bound via use()).
+	void setActiveProgramUniform(uint32_t offset, const void* data, uint32_t bytes);
+
+	/// Sprite blending state (OpenGL's glEnable/glDisable(GL_BLEND) / glBlendFunc / glColorMask).
+	/// Selects among the textured pipeline variants; see texturedBlendVariant().
+	void setBlendingEnabled(bool enabled);
+	[[nodiscard]] bool isBlendingEnabled() const;
+	enum class SpriteBlend : uint8_t { Composite, Premultiplied };
+	void setSpriteBlend(SpriteBlend);
+	[[nodiscard]] SpriteBlend getSpriteBlend() const;
+	void setAlphaOnlyWrite(bool);
+	[[nodiscard]] bool isAlphaOnlyWrite() const;
 
 	/// Toggles v-sync by switching the swapchain present mode (FIFO vs mailbox/immediate).
 	void setVerticalSync(bool enabled);
@@ -172,11 +200,19 @@ private:
 	                          VkSampleCountFlagBits samples, VkPipeline& out);
 	void destroyRoundedPipelines();
 	void createVertexBuffers();
+	void createUniformBuffers();
 	void createTexturedPipelines();
-	/// Builds one textured pipeline per primitive topology from the given shader modules into \a out.
-	void buildTexturedPipelines(VkShaderModule vert, VkShaderModule frag, VkRenderPass targetRenderPass,
-	                            VkSampleCountFlagBits samples, std::array<VkPipeline, 4>& out);
+	/// Builds textured pipelines for every blend variant × topology from the given shader modules.
+	void buildTexturedPipelines(VkShaderModule vert, VkShaderModule frag,
+	                            VkRenderPass targetRenderPass, VkSampleCountFlagBits samples,
+	                            std::array<VkPipeline, VulkanShaderProgram::pipelineCount>& out);
+	/// Index into texturedPipelines / VulkanShaderProgram::pipelines for the current blend state.
+	[[nodiscard]] uint32_t texturedBlendVariant() const;
+	[[nodiscard]] static uint32_t texturedPipelineIndex(uint32_t blendVariant, PrimitiveType type);
 	void createDescriptorPool();
+	/// Copies the active program's staging UBO into this frame's ring and binds it (dynamic
+	/// offset).
+	void bindActiveProgramUniforms(VkCommandBuffer cmd);
 	void createOffscreenRenderPass();
 
 	/// Begins the render pass for whatever render target is currently on top of the stack (a
@@ -265,15 +301,20 @@ private:
 	VkPipeline roundedPipeline = VK_NULL_HANDLE;
 	VkPipeline roundedMsaaPipeline = VK_NULL_HANDLE;
 
-	// Pipeline drawing textured geometry (sprites, text) with the built-in texture shader. One per
-	// primitive topology; they share the layout, descriptor set layout and shader modules.
+	// Pipeline drawing textured geometry (sprites, text) with the built-in texture shader.
+	// set 0 = combined image sampler; set 1 = custom-uniform UBO (used only by user
+	// ShaderPrograms). Pipelines: blendVariant × PrimitiveType, see texturedPipelineIndex().
 	VkDescriptorSetLayout texturedSetLayout = VK_NULL_HANDLE;
+	VkDescriptorSetLayout uniformsSetLayout = VK_NULL_HANDLE;
 	VkPipelineLayout texturedPipelineLayout = VK_NULL_HANDLE;
-	std::array<VkPipeline, 4> texturedPipelines{}; // indexed by PrimitiveType
-	std::array<VkPipeline, 4> texturedMsaaPipelines{}; // swapchain MSAA, when active
+	std::array<VkPipeline, VulkanShaderProgram::pipelineCount> texturedPipelines{};
+	std::array<VkPipeline, VulkanShaderProgram::pipelineCount> texturedMsaaPipelines{};
 	VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
 	// Custom shader program currently bound via ShaderProgram::use(); nullptr = built-in shader.
 	const VulkanShaderProgram* activeShaderProgram = nullptr;
+	bool blendingEnabled = true;
+	SpriteBlend spriteBlend = SpriteBlend::Composite;
+	bool alphaOnlyWrite = false;
 
 	// Host-visible vertex buffer per frame in flight, written directly each frame. `used` is reset
 	// in beginFrame and grows as drawColored appends geometry.
@@ -285,6 +326,21 @@ private:
 		VkDeviceSize used = 0;
 	};
 	std::vector<DynamicVertexBuffer> vertexBuffers;
+
+	// Per-frame dynamic UBO ring: each drawSprite with custom uniforms snapshots staging into here
+	// so mid-frame setUniform updates don't overwrite earlier draws still pending on the GPU.
+	struct DynamicUniformBuffer {
+		VkBuffer buffer = VK_NULL_HANDLE;
+		VkDeviceMemory memory = VK_NULL_HANDLE;
+		void* mapped = nullptr;
+		VkDeviceSize capacity = 0;
+		VkDeviceSize used = 0;
+		VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
+	};
+	std::vector<DynamicUniformBuffer> uniformBuffers;
+	VkDeviceSize minUniformBufferOffsetAlignment = 256;
+	static constexpr VkDeviceSize uniformDynamicRange = 256; // max UBO size we bind per draw
+	bool uniformBufferOverflowReported = false;
 
 	uint32_t currentFrame = 0;
 	uint32_t currentImageIndex = 0;

@@ -19,8 +19,11 @@ Shader::Shader(const char* source, const Type type, const char* const /*gles20So
 : impl(std::make_unique<Impl>()) {
 	impl->stage =
 	    type == Type::VERTEX ? VK_SHADER_STAGE_VERTEX_BIT : VK_SHADER_STAGE_FRAGMENT_BIT;
-	impl->spirv =
+	auto compiled =
 	    compileGlslToSpirv(source, impl->stage, type == Type::VERTEX ? "vertex" : "fragment");
+	impl->spirv = std::move(compiled.spirv);
+	impl->uniforms = std::move(compiled.uniforms);
+	impl->uniformBlockSize = compiled.uniformBlockSize;
 }
 #else
 Shader::Shader(const char* source, const Type type, const char* const gles20Source [[maybe_unused]])

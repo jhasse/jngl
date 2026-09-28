@@ -168,8 +168,12 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 	opengl::scale(1, -1);
 	jngl::translate(0, -impl->height / getScaleFactor());
 #ifdef JNGL_VULKAN
-	(void)shaderProgram; // custom ShaderPrograms aren't supported on Vulkan yet
-	drawFramebuffer(*impl->vkFramebuffer, opengl::modelview, gSpriteColor);
+	if (shaderProgram) {
+		const auto context = shaderProgram->use();
+		drawFramebuffer(*impl->vkFramebuffer, opengl::modelview, gSpriteColor);
+	} else {
+		drawFramebuffer(*impl->vkFramebuffer, opengl::modelview, gSpriteColor);
+	}
 #else
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
@@ -191,8 +195,12 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 	modelview.scale(1, -1).translate(
 	    { -impl->width / getScaleFactor() / 2, -impl->height / getScaleFactor() / 2 });
 #ifdef JNGL_VULKAN
-	(void)shaderProgram; // custom ShaderPrograms aren't supported on Vulkan yet
-	drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor);
+	if (shaderProgram) {
+		const auto context = shaderProgram->use();
+		drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor);
+	} else {
+		drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor);
+	}
 #else
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
@@ -214,10 +222,14 @@ void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
 	// The Vulkan backend bakes the filter into the framebuffer's sampler at creation, so the
 	// per-draw textureFilter is ignored for now.
 	(void)textureFilter;
-	(void)shaderProgram;
 	modelview.scale(1, -1).translate(
 	    { -impl->width / getScaleFactor() / 2, -impl->height / getScaleFactor() / 2 });
-	drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor);
+	if (shaderProgram) {
+		const auto context = shaderProgram->use();
+		drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor);
+	} else {
+		drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor);
+	}
 #else
 	impl->texture.bind();
 	int oldFilter;
@@ -253,12 +265,18 @@ void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
 void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
                            const ShaderProgram* const shaderProgram) const {
 #ifdef JNGL_VULKAN
-	(void)shaderProgram; // custom ShaderPrograms aren't supported on Vulkan yet
 	if (!vertexes.empty()) {
 		// jngl::Vertex is a tightly packed { x, y, u, v }, matching what drawSprite expects.
-		vulkanRenderer().drawSprite(impl->vkFramebuffer->color,
-		                            reinterpret_cast<const float*>(vertexes.data()), vertexes.size(),
-		                            PrimitiveType::Triangles, opengl::modelview, gSpriteColor);
+		if (shaderProgram) {
+			const auto context = shaderProgram->use();
+			vulkanRenderer().drawSprite(
+			    impl->vkFramebuffer->color, reinterpret_cast<const float*>(vertexes.data()),
+			    vertexes.size(), PrimitiveType::Triangles, opengl::modelview, gSpriteColor);
+		} else {
+			vulkanRenderer().drawSprite(
+			    impl->vkFramebuffer->color, reinterpret_cast<const float*>(vertexes.data()),
+			    vertexes.size(), PrimitiveType::Triangles, opengl::modelview, gSpriteColor);
+		}
 	}
 #else
 	pushMatrix();
@@ -322,8 +340,12 @@ void FrameBuffer::Context::clear(const Rgb color) {
 
 void FrameBuffer::Context::clear(const Rgba color) {
 	assert(resetCallback);
+#ifdef JNGL_VULKAN
+	vulkanRenderer().clearCurrentRenderTarget(color);
+#else
 	glClearColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 	glClear(GL_COLOR_BUFFER_BIT);
+#endif
 }
 
 FrameBuffer::Context FrameBuffer::use() const {

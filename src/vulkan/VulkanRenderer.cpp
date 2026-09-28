@@ -139,6 +139,10 @@ VulkanRenderer::VulkanRenderer(void* const nativeWindow)
 		internal::StartupProfiler _{ "createVertexBuffers" };
 		createVertexBuffers();
 	}
+	{
+		internal::StartupProfiler _{ "createUniformBuffers" };
+		createUniformBuffers();
+	}
 	internal::debug("Vulkan renderer initialized ({}x{}).", swapchainExtent.width,
 	                swapchainExtent.height);
 }
@@ -160,6 +164,15 @@ VulkanRenderer::~VulkanRenderer() {
 			if (vb.memory) {
 				vkUnmapMemory(device, vb.memory);
 				vkFreeMemory(device, vb.memory, nullptr);
+			}
+		}
+		for (auto& ub : uniformBuffers) {
+			if (ub.buffer) {
+				vkDestroyBuffer(device, ub.buffer, nullptr);
+			}
+			if (ub.memory) {
+				vkUnmapMemory(device, ub.memory);
+				vkFreeMemory(device, ub.memory, nullptr);
 			}
 		}
 		for (VkPipeline pipeline : coloredPipelines) {
@@ -194,6 +207,9 @@ VulkanRenderer::~VulkanRenderer() {
 		}
 		if (texturedSetLayout) {
 			vkDestroyDescriptorSetLayout(device, texturedSetLayout, nullptr);
+		}
+		if (uniformsSetLayout) {
+			vkDestroyDescriptorSetLayout(device, uniformsSetLayout, nullptr);
 		}
 		if (descriptorPool) {
 			vkDestroyDescriptorPool(device, descriptorPool, nullptr);
@@ -1074,6 +1090,7 @@ void VulkanRenderer::beginFrame(const Rgb clearColor) {
 	vkResetFences(device, 1, &inFlightFences[currentFrame]);
 
 	vertexBuffers[currentFrame].used = 0;
+	uniformBuffers[currentFrame].used = 0;
 	imageAvailableWaited = false;
 
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
@@ -1758,6 +1775,80 @@ void VulkanRenderer::createVertexBuffers() {
 	}
 }
 
+void VulkanRenderer::createUniformBuffers() {
+	VkPhysicalDeviceProperties props;
+	vkGetPhysicalDeviceProperties(physicalDevice, &props);
+	minUniformBufferOffsetAlignment = props.limits.minUniformBufferOffsetAlignment;
+
+	// Small UBOs (blur/caster/etc.) are padded to minUniformBufferOffsetAlignment per draw; 256 KiB
+	// covers thousands of custom-shader draws per frame.
+	constexpr VkDeviceSize capacity = 1u << 18u;
+	uniformBuffers.resize(maxFramesInFlight);
+	for (auto& ub : uniformBuffers) {
+		VkBufferCreateInfo bufferInfo{ .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
+		bufferInfo.size = capacity;
+		bufferInfo.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+		bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+		VK_CHECK(vkCreateBuffer(device, &bufferInfo, nullptr, &ub.buffer), "vkCreateBuffer");
+
+		VkMemoryRequirements memReq;
+		vkGetBufferMemoryRequirements(device, ub.buffer, &memReq);
+		VkMemoryAllocateInfo allocInfo{ .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
+		allocInfo.allocationSize = memReq.size;
+		allocInfo.memoryTypeIndex =
+		    findMemoryType(memReq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+		                                              VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &ub.memory), "vkAllocateMemory");
+		VK_CHECK(vkBindBufferMemory(device, ub.buffer, ub.memory, 0), "vkBindBufferMemory");
+		VK_CHECK(vkMapMemory(device, ub.memory, 0, capacity, 0, &ub.mapped), "vkMapMemory");
+		ub.capacity = capacity;
+
+		VkDescriptorSetAllocateInfo dsAlloc{ .sType =
+			                                     VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+		dsAlloc.descriptorPool = descriptorPool;
+		dsAlloc.descriptorSetCount = 1;
+		dsAlloc.pSetLayouts = &uniformsSetLayout;
+		VK_CHECK(vkAllocateDescriptorSets(device, &dsAlloc, &ub.descriptorSet),
+		         "vkAllocateDescriptorSets");
+		VkDescriptorBufferInfo bufferDesc{};
+		bufferDesc.buffer = ub.buffer;
+		bufferDesc.offset = 0;
+		bufferDesc.range = uniformDynamicRange;
+		VkWriteDescriptorSet write{ .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
+		write.dstSet = ub.descriptorSet;
+		write.dstBinding = 0;
+		write.descriptorCount = 1;
+		write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+		write.pBufferInfo = &bufferDesc;
+		vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+	}
+}
+
+void VulkanRenderer::bindActiveProgramUniforms(const VkCommandBuffer cmd) {
+	if (!activeShaderProgram || activeShaderProgram->uniformBlockSize == 0 ||
+	    !activeShaderProgram->uniformMapped) {
+		return;
+	}
+	assert(activeShaderProgram->uniformBlockSize <= uniformDynamicRange);
+	DynamicUniformBuffer& ub = uniformBuffers[currentFrame];
+	const VkDeviceSize aligned =
+	    (ub.used + minUniformBufferOffsetAlignment - 1) & ~(minUniformBufferOffsetAlignment - 1);
+	if (aligned + uniformDynamicRange > ub.capacity) {
+		if (!uniformBufferOverflowReported) {
+			internal::error(
+			    "Vulkan per-frame uniform buffer exhausted; some custom uniforms won't update.");
+			uniformBufferOverflowReported = true;
+		}
+		return;
+	}
+	std::memcpy(static_cast<char*>(ub.mapped) + aligned, activeShaderProgram->uniformMapped,
+	            activeShaderProgram->uniformBlockSize);
+	ub.used = aligned + uniformDynamicRange;
+	const uint32_t dynamicOffset = static_cast<uint32_t>(aligned);
+	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 1, 1,
+	                        &ub.descriptorSet, 1, &dynamicOffset);
+}
+
 void VulkanRenderer::drawColored(const PrimitiveType type, const float* const xyVertices,
                                  const std::size_t vertexCount, const Mat3& modelview,
                                  const Rgba color) {
@@ -1923,14 +2014,15 @@ std::vector<unsigned char> toRgba8(int width, int height, unsigned int format,
 } // namespace
 
 void VulkanRenderer::createDescriptorPool() {
-	VkDescriptorPoolSize poolSize{};
-	poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	poolSize.descriptorCount = 1024;
+	const std::array<VkDescriptorPoolSize, 2> poolSizes = { {
+		{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1024 },
+		{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 16 },
+	} };
 	VkDescriptorPoolCreateInfo info{ .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO };
 	info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-	info.maxSets = 1024;
-	info.poolSizeCount = 1;
-	info.pPoolSizes = &poolSize;
+	info.maxSets = 1024 + 16;
+	info.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
+	info.pPoolSizes = poolSizes.data();
 	VK_CHECK(vkCreateDescriptorPool(device, &info, nullptr, &descriptorPool),
 	         "vkCreateDescriptorPool");
 }
@@ -1950,6 +2042,20 @@ void VulkanRenderer::createTexturedPipelines() {
 		VK_CHECK(vkCreateDescriptorSetLayout(device, &setLayoutInfo, nullptr, &texturedSetLayout),
 		         "vkCreateDescriptorSetLayout");
 	}
+	if (!uniformsSetLayout) {
+		VkDescriptorSetLayoutBinding uboBinding{};
+		uboBinding.binding = 0;
+		uboBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+		uboBinding.descriptorCount = 1;
+		uboBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		VkDescriptorSetLayoutCreateInfo setLayoutInfo{
+			.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO
+		};
+		setLayoutInfo.bindingCount = 1;
+		setLayoutInfo.pBindings = &uboBinding;
+		VK_CHECK(vkCreateDescriptorSetLayout(device, &setLayoutInfo, nullptr, &uniformsSetLayout),
+		         "vkCreateDescriptorSetLayout");
+	}
 
 	const VkShaderModule vert = createShaderModule(device, vulkan_shaders::textured_vert);
 	const VkShaderModule frag = createShaderModule(device, vulkan_shaders::textured_frag);
@@ -1957,10 +2063,12 @@ void VulkanRenderer::createTexturedPipelines() {
 	VkPushConstantRange pushRange{};
 	pushRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 	pushRange.size = sizeof(ColoredPushConstants);
+	const std::array<VkDescriptorSetLayout, 2> setLayouts = { texturedSetLayout,
+		                                                      uniformsSetLayout };
 	VkPipelineLayoutCreateInfo layoutInfo{ .sType =
 		                                       VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
-	layoutInfo.setLayoutCount = 1;
-	layoutInfo.pSetLayouts = &texturedSetLayout;
+	layoutInfo.setLayoutCount = static_cast<uint32_t>(setLayouts.size());
+	layoutInfo.pSetLayouts = setLayouts.data();
 	layoutInfo.pushConstantRangeCount = 1;
 	layoutInfo.pPushConstantRanges = &pushRange;
 	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &texturedPipelineLayout),
@@ -1976,10 +2084,10 @@ void VulkanRenderer::createTexturedPipelines() {
 	vkDestroyShaderModule(device, vert, nullptr);
 }
 
-void VulkanRenderer::buildTexturedPipelines(const VkShaderModule vert, const VkShaderModule frag,
-                                            const VkRenderPass targetRenderPass,
-                                            const VkSampleCountFlagBits samples,
-                                            std::array<VkPipeline, 4>& out) {
+void VulkanRenderer::buildTexturedPipelines(
+    const VkShaderModule vert, const VkShaderModule frag, const VkRenderPass targetRenderPass,
+    const VkSampleCountFlagBits samples,
+    std::array<VkPipeline, VulkanShaderProgram::pipelineCount>& out) {
 	const std::array<VkPipelineShaderStageCreateInfo, 2> stages = {
 		VkPipelineShaderStageCreateInfo{
 		    .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
@@ -2028,22 +2136,6 @@ void VulkanRenderer::buildTexturedPipelines(const VkShaderModule vert, const VkS
 	};
 	multisampling.rasterizationSamples = samples;
 
-	VkPipelineColorBlendAttachmentState blendAttachment{};
-	blendAttachment.blendEnable = VK_TRUE;
-	blendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-	blendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-	blendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
-	blendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-	blendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-	blendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
-	blendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-	                                 VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-	VkPipelineColorBlendStateCreateInfo colorBlending{
-		.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO
-	};
-	colorBlending.attachmentCount = 1;
-	colorBlending.pAttachments = &blendAttachment;
-
 	const std::array<VkDynamicState, 2> dynamicStates = { VK_DYNAMIC_STATE_VIEWPORT,
 		                                                  VK_DYNAMIC_STATE_SCISSOR };
 	VkPipelineDynamicStateCreateInfo dynamicState{
@@ -2056,38 +2148,126 @@ void VulkanRenderer::buildTexturedPipelines(const VkShaderModule vert, const VkS
 		                                              PrimitiveType::TriangleStrip,
 		                                              PrimitiveType::TriangleFan,
 		                                              PrimitiveType::Lines };
-	{
-		internal::StartupProfiler _{ "  textured pipelines (vkCreateGraphicsPipelines x4)" };
-		for (const PrimitiveType type : topologies) {
-			VkPipelineInputAssemblyStateCreateInfo inputAssembly{
-				.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
-			};
-			inputAssembly.topology = toVkTopology(type);
 
-			VkGraphicsPipelineCreateInfo pipelineInfo{
-				.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
+	// Matches texturedBlendVariant(): Composite, Premultiplied, Replace, ReplaceAlphaOnly.
+	struct BlendVariant {
+		VkBool32 enable;
+		VkBlendFactor srcColor;
+		VkBlendFactor dstColor;
+		VkBlendFactor srcAlpha;
+		VkBlendFactor dstAlpha;
+		VkColorComponentFlags writeMask;
+	};
+	const std::array<BlendVariant, VulkanShaderProgram::blendVariantCount> blends = { {
+		{ VK_TRUE, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+		  VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+		  VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
+		      VK_COLOR_COMPONENT_A_BIT },
+		{ VK_TRUE, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_FACTOR_ONE,
+		  VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+		  VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
+		      VK_COLOR_COMPONENT_A_BIT },
+		{ VK_FALSE, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ONE,
+		  VK_BLEND_FACTOR_ZERO,
+		  VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
+		      VK_COLOR_COMPONENT_A_BIT },
+		{ VK_FALSE, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ONE,
+		  VK_BLEND_FACTOR_ZERO, VK_COLOR_COMPONENT_A_BIT },
+	} };
+
+	{
+		internal::StartupProfiler _{ "  textured pipelines (blend × topology)" };
+		for (uint32_t variant = 0; variant < VulkanShaderProgram::blendVariantCount; ++variant) {
+			const BlendVariant& b = blends[variant];
+			VkPipelineColorBlendAttachmentState blendAttachment{};
+			blendAttachment.blendEnable = b.enable;
+			blendAttachment.srcColorBlendFactor = b.srcColor;
+			blendAttachment.dstColorBlendFactor = b.dstColor;
+			blendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+			blendAttachment.srcAlphaBlendFactor = b.srcAlpha;
+			blendAttachment.dstAlphaBlendFactor = b.dstAlpha;
+			blendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
+			blendAttachment.colorWriteMask = b.writeMask;
+			VkPipelineColorBlendStateCreateInfo colorBlending{
+				.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO
 			};
-			pipelineInfo.stageCount = static_cast<uint32_t>(stages.size());
-			pipelineInfo.pStages = stages.data();
-			pipelineInfo.pVertexInputState = &vertexInput;
-			pipelineInfo.pInputAssemblyState = &inputAssembly;
-			pipelineInfo.pViewportState = &viewportState;
-			pipelineInfo.pRasterizationState = &rasterizer;
-			pipelineInfo.pMultisampleState = &multisampling;
-			pipelineInfo.pColorBlendState = &colorBlending;
-			pipelineInfo.pDynamicState = &dynamicState;
-			pipelineInfo.layout = texturedPipelineLayout;
-			pipelineInfo.renderPass = targetRenderPass;
-			VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
-			                                   &out[static_cast<size_t>(type)]),
-			         "vkCreateGraphicsPipelines");
+			colorBlending.attachmentCount = 1;
+			colorBlending.pAttachments = &blendAttachment;
+
+			for (const PrimitiveType type : topologies) {
+				VkPipelineInputAssemblyStateCreateInfo inputAssembly{
+					.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
+				};
+				inputAssembly.topology = toVkTopology(type);
+
+				VkGraphicsPipelineCreateInfo pipelineInfo{
+					.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
+				};
+				pipelineInfo.stageCount = static_cast<uint32_t>(stages.size());
+				pipelineInfo.pStages = stages.data();
+				pipelineInfo.pVertexInputState = &vertexInput;
+				pipelineInfo.pInputAssemblyState = &inputAssembly;
+				pipelineInfo.pViewportState = &viewportState;
+				pipelineInfo.pRasterizationState = &rasterizer;
+				pipelineInfo.pMultisampleState = &multisampling;
+				pipelineInfo.pColorBlendState = &colorBlending;
+				pipelineInfo.pDynamicState = &dynamicState;
+				pipelineInfo.layout = texturedPipelineLayout;
+				pipelineInfo.renderPass = targetRenderPass;
+				VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo,
+				                                   nullptr,
+				                                   &out[texturedPipelineIndex(variant, type)]),
+				         "vkCreateGraphicsPipelines");
+			}
 		}
 	}
 }
 
+uint32_t VulkanRenderer::texturedBlendVariant() const {
+	if (alphaOnlyWrite) {
+		return 3; // ReplaceAlphaOnly
+	}
+	if (!blendingEnabled) {
+		return 2; // Replace
+	}
+	return spriteBlend == SpriteBlend::Premultiplied ? 1u : 0u;
+}
+
+uint32_t VulkanRenderer::texturedPipelineIndex(const uint32_t blendVariant,
+                                               const PrimitiveType type) {
+	return blendVariant * VulkanShaderProgram::topologyCount + static_cast<uint32_t>(type);
+}
+
+void VulkanRenderer::setBlendingEnabled(const bool enabled) {
+	blendingEnabled = enabled;
+}
+
+bool VulkanRenderer::isBlendingEnabled() const {
+	return blendingEnabled;
+}
+
+void VulkanRenderer::setSpriteBlend(const SpriteBlend blend) {
+	spriteBlend = blend;
+}
+
+VulkanRenderer::SpriteBlend VulkanRenderer::getSpriteBlend() const {
+	return spriteBlend;
+}
+
+void VulkanRenderer::setAlphaOnlyWrite(const bool alphaOnly) {
+	alphaOnlyWrite = alphaOnly;
+}
+
+bool VulkanRenderer::isAlphaOnlyWrite() const {
+	return alphaOnlyWrite;
+}
+
 std::unique_ptr<VulkanShaderProgram> VulkanRenderer::createShaderProgram(
-    const std::vector<uint32_t>& vertexSpirv, const std::vector<uint32_t>& fragmentSpirv) {
+    const std::vector<uint32_t>& vertexSpirv, const std::vector<uint32_t>& fragmentSpirv,
+    std::vector<ShaderUniform> uniforms, const uint32_t uniformBlockSize) {
 	auto program = std::make_unique<VulkanShaderProgram>();
+	program->uniforms = std::move(uniforms);
+	program->uniformBlockSize = uniformBlockSize;
 	const VkShaderModule vert = createShaderModule(device, vertexSpirv);
 	const VkShaderModule frag = createShaderModule(device, fragmentSpirv);
 	const VkRenderPass singleSamplePass = swapchainMsaaActive() ? loadRenderPass : renderPass;
@@ -2097,6 +2277,36 @@ std::unique_ptr<VulkanShaderProgram> VulkanRenderer::createShaderProgram(
 	}
 	vkDestroyShaderModule(device, frag, nullptr);
 	vkDestroyShaderModule(device, vert, nullptr);
+
+	if (program->uniformBlockSize > 0) {
+		if (program->uniformBlockSize > uniformDynamicRange) {
+			throw std::runtime_error("Shader uniform block (" +
+			                         std::to_string(program->uniformBlockSize) +
+			                         " bytes) exceeds VulkanRenderer::uniformDynamicRange (" +
+			                         std::to_string(uniformDynamicRange) + ").");
+		}
+		VkBufferCreateInfo bufferInfo{ .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
+		bufferInfo.size = program->uniformBlockSize;
+		bufferInfo.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+		bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+		VK_CHECK(vkCreateBuffer(device, &bufferInfo, nullptr, &program->uniformBuffer),
+		         "vkCreateBuffer");
+		VkMemoryRequirements memReq;
+		vkGetBufferMemoryRequirements(device, program->uniformBuffer, &memReq);
+		VkMemoryAllocateInfo allocInfo{ .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
+		allocInfo.allocationSize = memReq.size;
+		allocInfo.memoryTypeIndex =
+		    findMemoryType(memReq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+		                                              VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &program->uniformMemory),
+		         "vkAllocateMemory");
+		VK_CHECK(vkBindBufferMemory(device, program->uniformBuffer, program->uniformMemory, 0),
+		         "vkBindBufferMemory");
+		VK_CHECK(vkMapMemory(device, program->uniformMemory, 0, program->uniformBlockSize, 0,
+		                     &program->uniformMapped),
+		         "vkMapMemory");
+		std::memset(program->uniformMapped, 0, program->uniformBlockSize);
+	}
 	return program;
 }
 
@@ -2115,10 +2325,30 @@ void VulkanRenderer::destroyShaderProgram(VulkanShaderProgram& program) {
 			vkDestroyPipeline(device, pipeline, nullptr);
 		}
 	}
+	if (program.uniformMapped) {
+		vkUnmapMemory(device, program.uniformMemory);
+		program.uniformMapped = nullptr;
+	}
+	if (program.uniformBuffer) {
+		vkDestroyBuffer(device, program.uniformBuffer, nullptr);
+		program.uniformBuffer = VK_NULL_HANDLE;
+	}
+	if (program.uniformMemory) {
+		vkFreeMemory(device, program.uniformMemory, nullptr);
+		program.uniformMemory = VK_NULL_HANDLE;
+	}
 }
 
 void VulkanRenderer::setActiveShaderProgram(const VulkanShaderProgram* program) {
 	activeShaderProgram = program;
+}
+
+void VulkanRenderer::setActiveProgramUniform(const uint32_t offset, const void* const data,
+                                             const uint32_t bytes) {
+	assert(activeShaderProgram);
+	assert(activeShaderProgram->uniformMapped);
+	assert(offset + bytes <= activeShaderProgram->uniformBlockSize);
+	std::memcpy(static_cast<char*>(activeShaderProgram->uniformMapped) + offset, data, bytes);
 }
 
 void VulkanRenderer::submitOneTime(const std::function<void(VkCommandBuffer)>& record) {
@@ -2370,22 +2600,23 @@ void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* const
 	push.color[3] = color.getAlpha();
 
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
+	const uint32_t pipelineIndex = texturedPipelineIndex(texturedBlendVariant(), type);
 	VkPipeline pipeline = VK_NULL_HANDLE;
 	if (activeShaderProgram) {
-		if (swapchainUsesMsaaPass &&
-		    activeShaderProgram->msaaPipelines[static_cast<size_t>(type)]) {
-			pipeline = activeShaderProgram->msaaPipelines[static_cast<size_t>(type)];
+		if (swapchainUsesMsaaPass && activeShaderProgram->msaaPipelines[pipelineIndex]) {
+			pipeline = activeShaderProgram->msaaPipelines[pipelineIndex];
 		} else {
-			pipeline = activeShaderProgram->pipelines[static_cast<size_t>(type)];
+			pipeline = activeShaderProgram->pipelines[pipelineIndex];
 		}
 	} else if (swapchainUsesMsaaPass) {
-		pipeline = texturedMsaaPipelines[static_cast<size_t>(type)];
+		pipeline = texturedMsaaPipelines[pipelineIndex];
 	} else {
-		pipeline = texturedPipelines[static_cast<size_t>(type)];
+		pipeline = texturedPipelines[pipelineIndex];
 	}
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 0, 1,
 	                        &texture.descriptorSet, 0, nullptr);
+	bindActiveProgramUniforms(cmd);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vb.buffer, &offset);
 	vkCmdPushConstants(cmd, texturedPipelineLayout,
 	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),

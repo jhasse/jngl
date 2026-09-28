@@ -21,6 +21,11 @@
 #include "screen.hpp"
 #include "shapes.hpp"
 
+#ifdef JNGL_VULKAN
+#include "../Renderer.hpp"
+#include "../vulkan/VulkanRenderer.hpp"
+#endif
+
 #ifdef _WIN32
 #include "../win32/unicode.hpp"
 #endif
@@ -690,14 +695,31 @@ void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, const st
 }
 
 Finally disableBlending() {
+#ifdef JNGL_VULKAN
+	auto& renderer = static_cast<VulkanRenderer&>(getRenderer());
+	if (!renderer.isBlendingEnabled()) {
+		return Finally(nullptr);
+	}
+	renderer.setBlendingEnabled(false);
+	return Finally([&renderer]() { renderer.setBlendingEnabled(true); });
+#else
 	if (!glIsEnabled(GL_BLEND)) {
 		return Finally(nullptr);
 	}
 	glDisable(GL_BLEND);
 	return Finally([]() { glEnable(GL_BLEND); });
+#endif
 }
 
 Finally setBlendMode(const BlendMode mode) {
+#ifdef JNGL_VULKAN
+	auto& renderer = static_cast<VulkanRenderer&>(getRenderer());
+	const auto previous = renderer.getSpriteBlend();
+	renderer.setSpriteBlend(mode == BlendMode::Premultiplied
+	                            ? VulkanRenderer::SpriteBlend::Premultiplied
+	                            : VulkanRenderer::SpriteBlend::Composite);
+	return Finally([&renderer, previous]() { renderer.setSpriteBlend(previous); });
+#else
 	GLint sourceRgb = 0;
 	GLint destinationRgb = 0;
 	GLint sourceAlpha = 0;
@@ -719,11 +741,18 @@ Finally setBlendMode(const BlendMode mode) {
 		                    static_cast<GLenum>(sourceAlpha),
 		                    static_cast<GLenum>(destinationAlpha));
 	});
+#endif
 }
 
 Finally drawOnlyIntoAlphaChannel() {
+#ifdef JNGL_VULKAN
+	auto& renderer = static_cast<VulkanRenderer&>(getRenderer());
+	renderer.setAlphaOnlyWrite(true);
+	return Finally([&renderer]() { renderer.setAlphaOnlyWrite(false); });
+#else
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_TRUE);
 	return Finally([]() { glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); });
+#endif
 }
 
 } // namespace jngl

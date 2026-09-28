@@ -212,11 +212,15 @@ void App::unregisterShaderProgram(ShaderProgram* shaderProgram) {
 }
 
 void App::updateProjectionMatrix() const {
+#ifdef JNGL_VULKAN
+	(void)impl; // projection is a per-draw push constant on the Vulkan backend
+#else
 	for (const auto shaderProgram : impl->shaderPrograms) {
 		const auto context = shaderProgram->use();
 		glUniformMatrix4fv(shaderProgram->getUniformLocation("projection"), 1, GL_FALSE,
 		                   opengl::projection.data);
 	}
+#endif
 }
 
 namespace internal {
