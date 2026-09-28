@@ -150,13 +150,8 @@ void drawCircleOutline(const Mat3& modelview, const float radius, const float li
 		vertexes[i * 4 + 3] = innerRadius * y;
 	}
 
-	opengl::bindVertexArray(opengl::vaoStream);
-	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
-	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
-	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(float)),
-	             vertexes.data(), GL_STREAM_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, static_cast<GLsizei>(vertexes.size() / 2));
+	getRenderer().drawColored(PrimitiveType::TriangleStrip, vertexes.data(), vertexes.size() / 2,
+	                          modelview, color);
 }
 
 } // namespace jngl
