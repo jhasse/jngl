@@ -12,7 +12,7 @@ namespace jngl {
 
 Texture::Texture(const float preciseWidth, const float preciseHeight, const int width,
                  const int height, const GLubyte* const* const rowPointers, GLenum format,
-                 const GLubyte* const data, const GLenum type)
+                 const GLubyte* const data, const GLenum type, const bool mipmap)
 : texture_(opengl::genAndBindTexture()) {
 	assert(format == GL_RGB || format == GL_RGBA || format == GL_BGR);
 	GLint internalFormat = format == GL_RGBA ? GL_RGBA : GL_RGB;
@@ -58,6 +58,10 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 	if (data) {
 		assert(!rowPointers);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
+	}
+	if (mipmap) {
+		glGenerateMipmap(GL_TEXTURE_2D);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	}
 }
 

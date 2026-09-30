@@ -40,7 +40,8 @@
 
 namespace jngl {
 
-Sprite::Sprite(const ImageData& imageData, double scale, std::optional<std::string_view> filename) {
+Sprite::Sprite(const ImageData& imageData, double scale, std::optional<std::string_view> filename,
+               const bool mipmap) {
 	if (!pWindow) {
 		throw std::runtime_error("Window hasn't been created yet.");
 	}
@@ -48,30 +49,42 @@ Sprite::Sprite(const ImageData& imageData, double scale, std::optional<std::stri
 	height = scale * imageData.getHeight();
 	texture = filename ? TextureCache::handle().get(*filename) : nullptr;
 	if (!texture) {
-		texture = std::make_shared<Texture>(
-		    static_cast<int>(std::lround(width)), static_cast<int>(std::lround(height)),
-		    imageData.getWidth(), imageData.getHeight(), nullptr, GL_RGBA, imageData.pixels());
+		texture = std::make_shared<Texture>(static_cast<int>(std::lround(width)),
+		                                    static_cast<int>(std::lround(height)),
+		                                    imageData.getWidth(), imageData.getHeight(), nullptr,
+		                                    GL_RGBA, imageData.pixels(), GL_UNSIGNED_BYTE, mipmap);
 		setCenter(0, 0);
 		if (filename) {
 			TextureCache::handle().insert(*filename, texture);
 		}
+	} else if (mipmap) {
+		enableMipmaps();
 	}
 }
 
-Sprite::Sprite(const uint8_t* const bytes, const size_t width, const size_t height) {
+Sprite::Sprite(const uint8_t* const bytes, const size_t width, const size_t height,
+               const bool mipmap) {
 	if (!pWindow) {
 		throw std::runtime_error("Window hasn't been created yet.");
 	}
-	texture = std::make_shared<Texture>(width, height, static_cast<int>(width),
-	                                    static_cast<int>(height), nullptr, GL_RGBA, bytes);
+	texture =
+	    std::make_shared<Texture>(width, height, static_cast<int>(width), static_cast<int>(height),
+	                              nullptr, GL_RGBA, bytes, GL_UNSIGNED_BYTE, mipmap);
 	this->width = static_cast<float>(width);
 	this->height = static_cast<float>(height);
 	setCenter(0, 0);
 }
 
-Sprite::Sprite(const std::string& filename, LoadType loadType)
+Sprite::Sprite(const std::string& filename, const bool mipmap)
+: Sprite(filename, LoadType::NORMAL, mipmap) {
+}
+
+Sprite::Sprite(const std::string& filename, LoadType loadType, const bool mipmap)
 : texture(TextureCache::handle().get(filename)) {
 	if (texture) {
+		if (mipmap) {
+			enableMipmaps();
+		}
 		width = texture->getPreciseWidth();
 		height = texture->getPreciseHeight();
 		setCenter(0, 0);
@@ -91,7 +104,7 @@ Sprite::Sprite(const std::string& filename, LoadType loadType)
 #endif
 		".bmp"
 	};
-	std::function<Finally(Sprite*, std::string, FILE*, bool)> functions[] = {
+	std::function<Finally(Sprite*, std::string, FILE*, bool, bool)> functions[] = {
 #ifndef NOWEBP
 		&Sprite::LoadWebP,
 #endif
@@ -101,7 +114,7 @@ Sprite::Sprite(const std::string& filename, LoadType loadType)
 		&Sprite::LoadBMP
 	};
 	const size_t size = sizeof(extensions) / sizeof(extensions[0]);
-	std::function<Finally(Sprite*, std::string, FILE*, bool)> loadFunction;
+	std::function<Finally(Sprite*, std::string, FILE*, bool, bool)> loadFunction;
 	for (size_t i = 0; i < size; ++i) {
 #if __cplusplus < 202002L
 		if (boost::algorithm::ends_with(fullFilename, extensions[i])) {
@@ -138,7 +151,8 @@ Sprite::Sprite(const std::string& filename, LoadType loadType)
 	if (pFile == nullptr) {
 		throw std::runtime_error(std::string("File not found: " + fullFilename));
 	}
-	auto loadTexture = std::make_shared<Finally>(loadFunction(this, filename, pFile, halfLoad));
+	auto loadTexture =
+	    std::make_shared<Finally>(loadFunction(this, filename, pFile, halfLoad, mipmap));
 	loader = std::make_shared<Finally>([pFile, loadTexture, this]() mutable {
 		loadTexture.reset(); // call ~Finally
 		if (fclose(pFile) != 0) {
@@ -149,6 +163,20 @@ Sprite::Sprite(const std::string& filename, LoadType loadType)
 	if (loadType != LoadType::THREADED) {
 		loader.reset();
 	}
+}
+
+void Sprite::enableMipmaps() {
+	if (!texture) {
+		return;
+	}
+	glBindTexture(GL_TEXTURE_2D, texture->getID());
+	GLint minFilter = 0;
+	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &minFilter);
+	if (minFilter == GL_LINEAR_MIPMAP_LINEAR) {
+		return;
+	}
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
 void Sprite::step() {
@@ -437,7 +465,8 @@ const Shader& Sprite::vertexShader() {
 }
 
 #ifndef NOPNG
-Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad) {
+Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad,
+                        const bool mipmap) {
 	const unsigned int PNG_BYTES_TO_CHECK = 4;
 	png_byte buf[PNG_BYTES_TO_CHECK];
 
@@ -493,7 +522,8 @@ Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool 
 	const auto scaledHeight = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
 	width = static_cast<float>(scaledWidth * getScaleFactor());
 	height = static_cast<float>(scaledHeight * getScaleFactor());
-	loadTexture(scaledWidth, scaledHeight, filename, halfLoad, format, rowPointers);
+	loadTexture(scaledWidth, scaledHeight, filename, halfLoad, format, rowPointers, nullptr,
+	            mipmap);
 	return Finally(nullptr);
 }
 #endif
@@ -504,7 +534,8 @@ void Sprite::cleanUpRowPointers(std::vector<unsigned char*>& buf) {
 	}
 }
 
-Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad) {
+Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad,
+                        const bool mipmap) {
 	if (fseek(fp, 10, SEEK_SET) != 0) {
 		throw std::runtime_error(std::string("Error seeking file. (" + filename + ")"));
 	}
@@ -555,17 +586,19 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 	}
 	width = static_cast<float>(header.width * getScaleFactor());
 	height = static_cast<float>(header.height * getScaleFactor());
-	loadTexture(header.width, header.height, filename, halfLoad, GL_BGR, buf.data());
+	loadTexture(header.width, header.height, filename, halfLoad, GL_BGR, buf.data(), nullptr,
+	            mipmap);
 	return Finally(nullptr);
 }
 #ifndef NOWEBP
-Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool halfLoad) {
+Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool halfLoad,
+                         const bool mipmap) {
 	auto imageData = std::make_shared<ImageDataWebP>(filename, file, getScaleFactor());
 	width = static_cast<float>(imageData->getImageWidth() * getScaleFactor());
 	height = static_cast<float>(imageData->getImageHeight() * getScaleFactor());
-	return Finally([imageData = std::move(imageData), filename, halfLoad, this]() mutable {
+	return Finally([imageData = std::move(imageData), filename, halfLoad, mipmap, this]() mutable {
 		loadTexture(imageData->getWidth(), imageData->getHeight(), filename, halfLoad, GL_RGBA,
-		            nullptr, imageData->pixels());
+		            nullptr, imageData->pixels(), mipmap);
 	});
 }
 #endif
@@ -573,7 +606,7 @@ Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool hal
 void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, const std::string& filename,
                          const bool halfLoad, const unsigned int format,
                          const unsigned char* const* const rowPointers,
-                         const unsigned char* const data) {
+                         const unsigned char* const data, const bool mipmap) {
 	if (!pWindow) {
 		if (halfLoad) {
 			return;
@@ -581,7 +614,7 @@ void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, const st
 		throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 	}
 	texture = std::make_shared<Texture>(width, height, scaledWidth, scaledHeight, rowPointers,
-	                                    format, data);
+	                                    format, data, GL_UNSIGNED_BYTE, mipmap);
 	TextureCache::handle().insert(filename, texture);
 }
 

@@ -48,16 +48,29 @@ public:
 	///
 	/// You may pass a filename, then JNGL will use that as a key for its internal texture cache,
 	/// meaning that if there's already a file loaded with that name, it won't upload the passed
-	/// ImageData to the GPU again.
+	/// ImageData to the GPU again. There is one texture per filename: once \a mipmap is true for
+	/// that name, every later load shares the mipmapped texture.
+	///
+	/// \param mipmap Generate mipmaps so the sprite filters cleanly when drawn smaller than its
+	/// pixel size. Minification is trilinear. On OpenGL ES 2.0 the image's width and height must
+	/// both be powers of two.
 	explicit Sprite(const ImageData&, double scale,
-	                std::optional<std::string_view> filename = std::nullopt);
+	                std::optional<std::string_view> filename = std::nullopt, bool mipmap = false);
 
 	/// The sprite data is stored as packed RGBA bytes in an array, where the size of the array
 	/// needs to be calculated as `width * height * 4`.
-	Sprite(const uint8_t* bytes, size_t width, size_t height);
+	///
+	/// \param mipmap Generate mipmaps for minification. See Sprite(const ImageData&, double, ...).
+	Sprite(const uint8_t* bytes, size_t width, size_t height, bool mipmap = false);
 
 	/// \deprecated Use Loader instead
-	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
+	/// \param mipmap Generate mipmaps for minification. See Sprite(const ImageData&, double, ...).
+	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL,
+	                bool mipmap = false);
+
+	/// \deprecated Use Loader instead
+	/// \param mipmap Generate mipmaps for minification. See Sprite(const ImageData&, double, ...).
+	explicit Sprite(const std::string& filename, bool mipmap);
 
 	/// Does nothing
 	void step();
@@ -88,7 +101,11 @@ public:
 		///
 		/// Note that if the file couldn't be found this will not throw. Instead the exception will
 		/// be thrown on first use by shared() or operator->().
-		explicit Loader(std::string filename) noexcept;
+		///
+		/// \param mipmap Generate mipmaps for minification. See Sprite(const ImageData&, double,
+		/// ...). The filename is the only cache key, so this enables mipmaps for every load of
+		/// \a filename.
+		explicit Loader(std::string filename, bool mipmap = false) noexcept;
 
 		/// Blocks until the Sprite has been loaded
 		///
@@ -118,6 +135,7 @@ public:
 	private:
 		mutable std::future<std::unique_ptr<ImageData>> imageDataFuture;
 		std::string filename;
+		bool mipmap = false;
 	};
 
 	/// Draws the image centered using \a modelview
@@ -277,11 +295,12 @@ public:
 	bool contains(jngl::Vec2 point) const;
 
 private:
+	void enableMipmaps();
 	static void cleanUpRowPointers(std::vector<unsigned char*>& buf);
 	void loadTexture(int scaledWidth, int scaledHeight, const std::string& filename, bool halfLoad,
 	                 unsigned int format, const unsigned char* const* rowPointers,
-	                 const unsigned char* data = nullptr);
-	Finally LoadPNG(const std::string& filename, FILE* fp, bool halfLoad);
+	                 const unsigned char* data = nullptr, bool mipmap = false);
+	Finally LoadPNG(const std::string& filename, FILE* fp, bool halfLoad, bool mipmap);
 	struct BMPHeader {
 		unsigned int dataOffset;
 		unsigned int headerSize;
@@ -292,9 +311,9 @@ private:
 		unsigned int compression;
 		unsigned int dataSize;
 	};
-	Finally LoadBMP(const std::string& filename, FILE* fp, bool halfLoad);
+	Finally LoadBMP(const std::string& filename, FILE* fp, bool halfLoad, bool mipmap);
 #ifndef NOWEBP
-	Finally LoadWebP(const std::string& filename, FILE* file, bool halfLoad);
+	Finally LoadWebP(const std::string& filename, FILE* file, bool halfLoad, bool mipmap);
 #endif
 
 	std::shared_ptr<Texture> texture;
