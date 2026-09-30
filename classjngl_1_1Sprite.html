@@ -128,15 +128,16 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af812f4ccc27b71c0ba3aaa6b0c9f06ba" id="r_af812f4ccc27b71c0ba3aaa6b0c9f06ba"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af812f4ccc27b71c0ba3aaa6b0c9f06ba">Sprite</a> (const <a class="el" href="classjngl_1_1ImageData.html">ImageData</a> &amp;, double <a class="el" href="namespacejngl.html#a596070e6f4e07761871d407daff247b5">scale</a>, <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a> &gt; filename=std::nullopt)</td></tr>
-<tr class="memdesc:af812f4ccc27b71c0ba3aaa6b0c9f06ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a> from <a class="el" href="classjngl_1_1ImageData.html" title="Containing the pixel data of an image file.">ImageData</a> and scales it by <em>scale</em>.  <br /></td></tr>
-<tr class="separator:af812f4ccc27b71c0ba3aaa6b0c9f06ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c9151f9ca0ff60312eb4571a55c52d0" id="r_a9c9151f9ca0ff60312eb4571a55c52d0"><td class="memItemLeft" align="right" valign="top"><a id="a9c9151f9ca0ff60312eb4571a55c52d0" name="a9c9151f9ca0ff60312eb4571a55c52d0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Sprite</b> (const uint8_t *bytes, size_t width, size_t height)</td></tr>
-<tr class="memdesc:a9c9151f9ca0ff60312eb4571a55c52d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The sprite data is stored as packed RGBA bytes in an array, where the size of the array needs to be calculated as <code>width * height * 4</code>. <br /></td></tr>
-<tr class="separator:a9c9151f9ca0ff60312eb4571a55c52d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc691192408ad699380be20bb1de75cc" id="r_afc691192408ad699380be20bb1de75cc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc691192408ad699380be20bb1de75cc">Sprite</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename, LoadType loadType=LoadType::NORMAL)</td></tr>
-<tr class="separator:afc691192408ad699380be20bb1de75cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4240b99a4d366e930043d1ec47d7a48" id="r_aa4240b99a4d366e930043d1ec47d7a48"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa4240b99a4d366e930043d1ec47d7a48">Sprite</a> (const <a class="el" href="classjngl_1_1ImageData.html">ImageData</a> &amp;, double <a class="el" href="namespacejngl.html#a596070e6f4e07761871d407daff247b5">scale</a>, <a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a> &gt; filename=std::nullopt, bool mipmap=false)</td></tr>
+<tr class="memdesc:aa4240b99a4d366e930043d1ec47d7a48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a> from <a class="el" href="classjngl_1_1ImageData.html" title="Containing the pixel data of an image file.">ImageData</a> and scales it by <em>scale</em>.  <br /></td></tr>
+<tr class="separator:aa4240b99a4d366e930043d1ec47d7a48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf02aaf1b10dfe0d36ba068606d4d051" id="r_adf02aaf1b10dfe0d36ba068606d4d051"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf02aaf1b10dfe0d36ba068606d4d051">Sprite</a> (const uint8_t *bytes, size_t width, size_t height, bool mipmap=false)</td></tr>
+<tr class="memdesc:adf02aaf1b10dfe0d36ba068606d4d051"><td class="mdescLeft">&#160;</td><td class="mdescRight">The sprite data is stored as packed RGBA bytes in an array, where the size of the array needs to be calculated as <code>width * height * 4</code>.  <br /></td></tr>
+<tr class="separator:adf02aaf1b10dfe0d36ba068606d4d051"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4221cb2d70474e0a6d9b6f9721e16226" id="r_a4221cb2d70474e0a6d9b6f9721e16226"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4221cb2d70474e0a6d9b6f9721e16226">Sprite</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename, LoadType loadType=LoadType::NORMAL, bool mipmap=false)</td></tr>
+<tr class="separator:a4221cb2d70474e0a6d9b6f9721e16226"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96c9ac960a9b8c5b93046142aad60ef1" id="r_a96c9ac960a9b8c5b93046142aad60ef1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a96c9ac960a9b8c5b93046142aad60ef1">Sprite</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename, bool mipmap)</td></tr>
+<tr class="separator:a96c9ac960a9b8c5b93046142aad60ef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6bf1a12c5c98ddec5b65e07fe74cabe" id="r_ac6bf1a12c5c98ddec5b65e07fe74cabe"><td class="memItemLeft" align="right" valign="top"><a id="ac6bf1a12c5c98ddec5b65e07fe74cabe" name="ac6bf1a12c5c98ddec5b65e07fe74cabe"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>step</b> ()</td></tr>
 <tr class="memdesc:ac6bf1a12c5c98ddec5b65e07fe74cabe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does nothing. <br /></td></tr>
@@ -300,8 +301,8 @@ Collaboration diagram for Sprite:</div>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="af812f4ccc27b71c0ba3aaa6b0c9f06ba" name="af812f4ccc27b71c0ba3aaa6b0c9f06ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af812f4ccc27b71c0ba3aaa6b0c9f06ba">&#9670;&#160;</a></span>Sprite() <span class="overload">[1/2]</span></h2>
+<a id="aa4240b99a4d366e930043d1ec47d7a48" name="aa4240b99a4d366e930043d1ec47d7a48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4240b99a4d366e930043d1ec47d7a48">&#9670;&#160;</a></span>Sprite() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -322,7 +323,12 @@ Collaboration diagram for Sprite:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>filename</em></span><span class="paramdefsep"> = </span><span class="paramdefval">std::nullopt</span>&#160;)</td>
+          <td class="paramtype"><a class="elRef" href="http://en.cppreference.com/w/cpp/utility/optional.html">std::optional</a>&lt; <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>filename</em></span><span class="paramdefsep"> = </span><span class="paramdefval">std::nullopt</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>mipmap</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -344,12 +350,57 @@ Collaboration diagram for Sprite:</div>
 <div class="ttc" id="amake_unique_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique.html">std::make_unique</a></div><div class="ttdeci">T make_unique(T... args)</div></div>
 <div class="ttc" id="anamespacejngl_html_a7d23d95fbe7f69b235a6984b67f5fa7c"><div class="ttname"><a href="namespacejngl.html#a7d23d95fbe7f69b235a6984b67f5fa7c">jngl::getScaleFactor</a></div><div class="ttdeci">double getScaleFactor()</div><div class="ttdoc">Size of one screen pixel in actual pixels.</div></div>
 <div class="ttc" id="around_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/numeric/math/round.html">std::lround</a></div><div class="ttdeci">T lround(T... args)</div></div>
-</div><!-- fragment --><p>You may pass a filename, then JNGL will use that as a key for its internal texture cache, meaning that if there's already a file loaded with that name, it won't upload the passed <a class="el" href="classjngl_1_1ImageData.html" title="Containing the pixel data of an image file.">ImageData</a> to the GPU again. </p>
+</div><!-- fragment --><p>You may pass a filename, then JNGL will use that as a key for its internal texture cache, meaning that if there's already a file loaded with that name, it won't upload the passed <a class="el" href="classjngl_1_1ImageData.html" title="Containing the pixel data of an image file.">ImageData</a> to the GPU again. There is one texture per filename: once <em>mipmap</em> is true for that name, every later load shares the mipmapped texture.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mipmap</td><td>Generate mipmaps so the sprite filters cleanly when drawn smaller than its pixel size. Minification is trilinear. On OpenGL ES 2.0 the image's width and height must both be powers of two. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="afc691192408ad699380be20bb1de75cc" name="afc691192408ad699380be20bb1de75cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc691192408ad699380be20bb1de75cc">&#9670;&#160;</a></span>Sprite() <span class="overload">[2/2]</span></h2>
+<a id="adf02aaf1b10dfe0d36ba068606d4d051" name="adf02aaf1b10dfe0d36ba068606d4d051"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf02aaf1b10dfe0d36ba068606d4d051">&#9670;&#160;</a></span>Sprite() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Sprite.html">Sprite</a> </td>
+          <td>(</td>
+          <td class="paramtype">const uint8_t *</td>          <td class="paramname"><span class="paramname"><em>bytes</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>width</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>height</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>mipmap</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The sprite data is stored as packed RGBA bytes in an array, where the size of the array needs to be calculated as <code>width * height * 4</code>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mipmap</td><td>Generate mipmaps for minification. See Sprite(const ImageData&amp;, double, ...). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4221cb2d70474e0a6d9b6f9721e16226" name="a4221cb2d70474e0a6d9b6f9721e16226"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4221cb2d70474e0a6d9b6f9721e16226">&#9670;&#160;</a></span>Sprite() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -365,7 +416,12 @@ Collaboration diagram for Sprite:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">LoadType</td>          <td class="paramname"><span class="paramname"><em>loadType</em></span><span class="paramdefsep"> = </span><span class="paramdefval">LoadType::NORMAL</span>&#160;)</td>
+          <td class="paramtype">LoadType</td>          <td class="paramname"><span class="paramname"><em>loadType</em></span><span class="paramdefsep"> = </span><span class="paramdefval">LoadType::NORMAL</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>mipmap</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -375,6 +431,48 @@ Collaboration diagram for Sprite:</div>
 </table>
 </div><div class="memdoc">
 <dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000024">Deprecated</a></b></dt><dd>Use <a class="el" href="classjngl_1_1Sprite_1_1Loader.html" title="Use this class to load a Sprite asynchronously.">Loader</a> instead </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mipmap</td><td>Generate mipmaps for minification. See Sprite(const ImageData&amp;, double, ...). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a96c9ac960a9b8c5b93046142aad60ef1" name="a96c9ac960a9b8c5b93046142aad60ef1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96c9ac960a9b8c5b93046142aad60ef1">&#9670;&#160;</a></span>Sprite() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Sprite.html">Sprite</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>filename</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>mipmap</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000025">Deprecated</a></b></dt><dd>Use <a class="el" href="classjngl_1_1Sprite_1_1Loader.html" title="Use this class to load a Sprite asynchronously.">Loader</a> instead </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mipmap</td><td>Generate mipmaps for minification. See Sprite(const ImageData&amp;, double, ...). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -528,7 +626,7 @@ Collaboration diagram for Sprite:</div>
   </dd>
 </dl>
 <p><code>drawScaled(1, 1)</code> would draw it normally. You can pass negative values to flip the image. For example <code>drawScaled(-1, 1)</code> would draw the image horizontally flipped.</p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000025">Deprecated</a></b></dt><dd>Scale the modelview matrix instead using <a class="el" href="classjngl_1_1Mat3.html#ab617f121c1617e7156a72b12a06cb17f" title="Multiplies the matrix by a scaling matrix.">jngl::Mat3::scale</a> </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000026">Deprecated</a></b></dt><dd>Scale the modelview matrix instead using <a class="el" href="classjngl_1_1Mat3.html#ab617f121c1617e7156a72b12a06cb17f" title="Multiplies the matrix by a scaling matrix.">jngl::Mat3::scale</a> </dd></dl>
 
 </div>
 </div>
@@ -560,7 +658,7 @@ Collaboration diagram for Sprite:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000026">Deprecated</a></b></dt><dd>Use new drawClipped(Vec2, Vec2) method instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000027">Deprecated</a></b></dt><dd>Use new drawClipped(Vec2, Vec2) method instead </dd></dl>
 
 </div>
 </div>
@@ -642,7 +740,7 @@ template&lt;class Vect &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00241">241</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00259">259</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>
@@ -671,7 +769,7 @@ template&lt;class Vect &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00247">247</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00265">265</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>
@@ -690,7 +788,7 @@ template&lt;class Vect &gt; </div>
 
 <p>Function which actually loads the sprite. </p>
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00236">236</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00254">254</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>
