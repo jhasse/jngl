@@ -26,7 +26,7 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-file(GLOB SRC src/*.cpp src/jngl/*.cpp
+file(GLOB SRC CONFIGURE_DEPENDS src/*.cpp src/jngl/*.cpp
 	src/audio/*.cpp
 	src/audio/effect/*.cpp
 	src/timing/*.cpp
