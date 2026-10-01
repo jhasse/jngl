@@ -77,7 +77,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 			                      AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
 			const auto id = AMotionEvent_getPointerId(event, index);
 			auto [touch, created] = impl.touches.insert(
-			    { id, { AMotionEvent_getX(event, index), AMotionEvent_getY(event, index) } });
+			    { id, impl.toWindowCoordinates(AMotionEvent_getX(event, index),
+			                                   AMotionEvent_getY(event, index)) });
 			assert(created);
 			impl.mouseX = touch->second.x;
 			impl.mouseY = touch->second.y;
@@ -89,7 +90,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 			                      AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
 			const auto id = AMotionEvent_getPointerId(event, index);
 			[[maybe_unused]] auto [_, created] = impl.touches.insert(
-			    { id, { AMotionEvent_getX(event, index), AMotionEvent_getY(event, index) } });
+			    { id, impl.toWindowCoordinates(AMotionEvent_getX(event, index),
+			                                   AMotionEvent_getY(event, index)) });
 			assert(created);
 			return 1;
 		}
@@ -110,8 +112,8 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 		}
 		case AMOTION_EVENT_ACTION_MOVE: {
 			for (size_t index = 0; index < AMotionEvent_getPointerCount(event); ++index) {
-				const auto x = AMotionEvent_getX(event, index);
-				const auto y = AMotionEvent_getY(event, index);
+				const auto [x, y] = impl.toWindowCoordinates(AMotionEvent_getX(event, index),
+				                                             AMotionEvent_getY(event, index));
 				const auto id = AMotionEvent_getPointerId(event, index);
 				const auto it = impl.touches.find(id);
 				if (it == impl.touches.end()) {
@@ -135,8 +137,11 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
 			return 1;
 		case AMOTION_EVENT_ACTION_HOVER_MOVE:
 			if (AMotionEvent_getPointerCount(event) >= 1) {
-				impl.mouseX = AMotionEvent_getX(event, 0 /* JNGL supports only one mouse */);
-				impl.mouseY = AMotionEvent_getY(event, 0);
+				const auto [x, y] = impl.toWindowCoordinates(
+				    AMotionEvent_getX(event, 0 /* JNGL supports only one mouse */),
+				    AMotionEvent_getY(event, 0));
+				impl.mouseX = x;
+				impl.mouseY = y;
 			}
 			return 1;
 		}
@@ -304,9 +309,7 @@ WindowImpl::DisplayWrapper::SurfaceWrapper::~SurfaceWrapper() {
 	}
 }
 
-void WindowImpl::init() {
-	makeCurrent();
-
+std::pair<EGLint, EGLint> WindowImpl::getSurfaceSize() const {
 	EGLint w, h;
 	if (eglQuerySurface(display->display, display->surface->surface, EGL_WIDTH, &w) == EGL_FALSE) {
 		handleEglError();
@@ -314,13 +317,17 @@ void WindowImpl::init() {
 	if (eglQuerySurface(display->display, display->surface->surface, EGL_HEIGHT, &h) == EGL_FALSE) {
 		handleEglError();
 	}
-	if (pWindow) {
-		// APP_CMD_INIT_WINDOW isn't only called on first start, but also when the app was
-		// sent to the background and brought to foreground again. In that case the scale
-		// factor is already set, but we still need to initialize OpenGL again.
-		assert(window->width_ == w);
-		assert(window->height_ == h);
-	} else {
+	return { w, h };
+}
+
+void WindowImpl::init() {
+	makeCurrent();
+
+	const auto [w, h] = getSurfaceSize();
+	// APP_CMD_INIT_WINDOW isn't only called on first start, but also when the app was sent to the
+	// background and brought to foreground again. In that case the scale factor is already set, but
+	// we still need to initialize OpenGL again.
+	if (!pWindow) {
 		if (window->width_ > 0) {
 			assert(window->height_ > 0);
 			// when AppParameters::screenSize was set, width_ and height_ contain it. Otherwise they
@@ -334,6 +341,60 @@ void WindowImpl::init() {
 	}
 	App::instance().initGl(window->width_, window->height_, window->canvasWidth,
 	                       window->canvasHeight);
+	actualWidth = window->width_;
+	actualHeight = window->height_;
+	actualCanvasWidth = window->canvasWidth;
+	actualCanvasHeight = window->canvasHeight;
+	// The window might have been resized while we were in the background:
+	resize(w, h);
+}
+
+void WindowImpl::resize(const int width, const int height) {
+	if (width == actualWidth && height == actualHeight) {
+		return;
+	}
+	internal::debug("Window resized from {}x{} to {}x{}.", actualWidth, actualHeight, width,
+	                height);
+	actualWidth = width;
+	actualHeight = height;
+
+	// The scale factor can't change anymore, so we keep the original canvas and its aspect ratio
+	// and only stretch it to fit into the new size (e.g. when unfolding a foldable).
+	const double scale = std::min(static_cast<double>(width) / window->canvasWidth,
+	                              static_cast<double>(height) / window->canvasHeight);
+	actualCanvasWidth = std::min(width, static_cast<int>(std::lround(window->canvasWidth * scale)));
+	actualCanvasHeight =
+	    std::min(height, static_cast<int>(std::lround(window->canvasHeight * scale)));
+
+	const float scaleX =
+	    static_cast<float>(actualCanvasWidth) / static_cast<float>(window->canvasWidth);
+	const float scaleY =
+	    static_cast<float>(actualCanvasHeight) / static_cast<float>(window->canvasHeight);
+	updateProjection(actualWidth, actualHeight, static_cast<float>(actualWidth) / scaleX,
+	                 static_cast<float>(actualHeight) / scaleY);
+	App::instance().updateProjectionMatrix();
+	updateViewportAndLetterboxing(actualWidth, actualHeight, actualCanvasWidth, actualCanvasHeight);
+}
+
+Vec2 WindowImpl::toWindowCoordinates(const float x, const float y) const {
+	return {
+		(x - static_cast<float>(actualWidth - actualCanvasWidth) / 2.f) *
+		        static_cast<float>(window->canvasWidth) / static_cast<float>(actualCanvasWidth) +
+		    static_cast<float>(window->width_ - window->canvasWidth) / 2.f,
+		(y - static_cast<float>(actualHeight - actualCanvasHeight) / 2.f) *
+		        static_cast<float>(window->canvasHeight) / static_cast<float>(actualCanvasHeight) +
+		    static_cast<float>(window->height_ - window->canvasHeight) / 2.f,
+	};
+}
+
+float WindowImpl::getResizedWindowScalingX() const {
+	return static_cast<float>(static_cast<double>(actualWidth) / actualCanvasWidth *
+	                          window->canvasWidth / window->width_);
+}
+
+float WindowImpl::getResizedWindowScalingY() const {
+	return static_cast<float>(static_cast<double>(actualHeight) / actualCanvasHeight *
+	                          window->canvasHeight / window->height_);
 }
 
 void WindowImpl::resetTouchState() {
@@ -470,6 +531,10 @@ void WindowImpl::swapBuffers() {
 		if (eglSwapBuffers(display->display, display->surface->surface) == EGL_FALSE) {
 			handleEglError();
 		}
+		// We get APP_CMD_WINDOW_RESIZED e.g. when a foldable gets unfolded, but the EGL surface
+		// only picks up the new size of the native window after eglSwapBuffers:
+		const auto [w, h] = getSurfaceSize();
+		resize(w, h);
 		if (firstFrame) {
 			firstFrame = false;
 			JNIEnv* const jni = env;
