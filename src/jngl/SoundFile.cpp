@@ -314,7 +314,13 @@ void setVolume(float volume) {
 Finally pauseAudio() {
 	if (auto audio = Audio::handleIfAlive()) {
 		audio->increasePauseDeviceCount();
-		return Finally([audio]() { audio->decreasePauseDeviceCount(); });
+		return Finally([audio]() {
+			// The Audio singleton might have been destroyed in the meantime, e.g. on Android when
+			// the activity gets destroyed while the app is paused:
+			if (Audio::handleIfAlive() == audio) {
+				audio->decreasePauseDeviceCount();
+			}
+		});
 	}
 	return Finally(nullptr); // FIXME: This is a bug if the Finally lives so long that the Audio
 	                         // object is created in time
