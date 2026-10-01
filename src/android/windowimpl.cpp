@@ -205,10 +205,12 @@ WindowImpl::~WindowImpl() {
 	// We need to destroy the surface before finishing our activity, otherwise the app won't start
 	// again.
 	pause();
-	// jngl::quit() has been called. We need to gracefully quit the activity, too, and handle any
-	// pending events (this will result in destroyRequested != 0):
-	ANativeActivity_finish(app->activity);
-	updateInput();
+	if (app->destroyRequested == 0) {
+		// jngl::quit() has been called. We need to gracefully quit the activity, too, and handle
+		// any pending events (this will result in destroyRequested != 0):
+		ANativeActivity_finish(app->activity);
+		updateInput();
+	}
 	app->activity->vm->DetachCurrentThread();
 }
 
@@ -487,15 +489,20 @@ int WindowImpl::handleKeyEvent(AInputEvent* const event) {
 
 void WindowImpl::updateInput() {
 	touchPressedThisUpdate = false;
+	if (app->destroyRequested != 0) {
+		// The activity is being destroyed and is waiting for android_main to return (blocking the
+		// UI thread). There won't be any new window, so we must not wait for one.
+		return;
+	}
 	// Read all pending events.
 	int ident;
 	int events;
 	android_poll_source* source;
 
 	while ((ident = ALooper_pollOnce(
-	            display->surface ? 0 : 1e9, // This is the timeout. When we're in the background, we don't
-	                               // want to busy-wait for events.
-	            nullptr, &events, (void**)&source)) >= 0 ||
+	            // This is the timeout. When we're in the background, we don't want to busy-wait for
+	            // events.
+	            (display && display->surface) ? 0 : 1e9, nullptr, &events, (void**)&source)) >= 0 ||
 	       !display /* wait for WindowImpl::init to get called by engine_handle_cmd */ ||
 	       !display->surface /* we're in the background, don't leave this event loop */) {
 
@@ -507,7 +514,11 @@ void WindowImpl::updateInput() {
 		// Check if we are exiting.
 		if (app->destroyRequested != 0) {
 			display = std::nullopt;
-			jngl::quit();
+			// Not jngl::quit(), because the game might call jngl::cancelQuit() in onQuitEvent()
+			// (e.g. to show a pause menu). We can't continue though.
+			if (!window->forceExitCode) {
+				window->forceExitCode = 0;
+			}
 			return; // surface == nullptr, we need to exit this loop
 		}
 	}
@@ -527,7 +538,7 @@ void WindowImpl::updateInput() {
 }
 
 void WindowImpl::swapBuffers() {
-	if (display->surface) {
+	if (display && display->surface) {
 		if (eglSwapBuffers(display->display, display->surface->surface) == EGL_FALSE) {
 			handleEglError();
 		}
