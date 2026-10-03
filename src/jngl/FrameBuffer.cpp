@@ -115,8 +115,7 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   opengl::modelview.data);
 	}
@@ -134,8 +133,7 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 		                                    -impl->height / getScaleFactor() / 2 })
 		                       .data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   modelview.scale(1, -1)
 		                       .translate({ -impl->width / getScaleFactor() / 2,
@@ -163,8 +161,7 @@ void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
 		                                    -impl->height / getScaleFactor() / 2 })
 		                       .data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   modelview.scale(1, -1)
 		                       .translate({ -impl->width / getScaleFactor() / 2,
@@ -186,8 +183,7 @@ void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   opengl::modelview.data);
 	}

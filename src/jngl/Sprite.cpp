@@ -285,8 +285,7 @@ void Sprite::draw() const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	auto context = ShaderCache::handle().textureShaderProgram->use();
-	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-	            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+	ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 	glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	texture->draw();
 	popMatrix();
@@ -300,8 +299,17 @@ void Sprite::draw(Mat3 modelview, Rgba color) const {
 	modelview *= boost::qvm::translation_mat(
 	    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. }));
 	auto context = ShaderCache::handle().textureShaderProgram->use();
-	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(), color.getGreen(),
-	            color.getBlue(), color.getAlpha());
+	ShaderCache::handle().setTextureColorUniforms(color);
+	glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
+	texture->draw();
+}
+
+void Sprite::drawLerped(Mat3 modelview, const Rgb color, const float red, const float green,
+                        const float blue, const Alpha alpha) const {
+	modelview *= boost::qvm::translation_mat(
+	    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. }));
+	auto context = ShaderCache::handle().textureShaderProgram->use();
+	ShaderCache::handle().setTextureLerpUniforms(color, red, green, blue, alpha);
 	glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	texture->draw();
 }
@@ -315,8 +323,8 @@ void Sprite::draw(Mat3 modelview, Alpha alpha, const ShaderProgram* const shader
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), alpha.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(
+		    Rgba(gSpriteColor.getRed(), gSpriteColor.getGreen(), gSpriteColor.getBlue(), alpha));
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	texture->draw();
@@ -331,8 +339,7 @@ void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   opengl::modelview.data);
 	}
@@ -361,8 +368,7 @@ auto Sprite::batch(const ShaderProgram* const shaderProgram) const -> Batch {
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (!shaderProgram) {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 	}
 	texture->bind();
 	return Batch{ std::make_unique<Batch::Impl>(Batch::Impl{
@@ -384,8 +390,7 @@ void Sprite::drawScaled(float xfactor, float yfactor,
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   opengl::modelview.data);
 	}
@@ -426,8 +431,7 @@ void Sprite::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(),
-		            color.getGreen(), color.getBlue(), color.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(color);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	texture->drawMesh(vertexes);
@@ -446,8 +450,7 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   opengl::modelview.data);
 	}

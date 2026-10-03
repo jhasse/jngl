@@ -107,7 +107,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	opengl::bindVertexArray(opengl::vaoStream);
 	auto& shaderCache = ShaderCache::handle();
 	auto tmp = shaderCache.textureShaderProgram->use();
-	glUniform4f(shaderCache.shaderSpriteColorUniform, red, green, blue, alpha);
+	shaderCache.setTextureColorUniforms(Rgba(red, green, blue, alpha));
 	glUniformMatrix3fv(shaderCache.modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(float)),

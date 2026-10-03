@@ -65,6 +65,48 @@ boost::ut::suite _ = [] {
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )")));
 	};
+	"drawLerped"_test = [] {
+		Fixture f(1.f);
+		jngl::Sprite sprite("../data/jngl.webp");
+		sprite.drawLerped(jngl::modelview().scale(0.2f), 0x000000_rgb, 1.f, 1.f, 1.f,
+		                  jngl::Alpha(1.f));
+		expect(eq(f.getAsciiArt(), std::string(R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒           ░▒▒▒▓▓▒░           ▒
+▒           ▒▓▓███▓░           ▒
+▒           ▒█▓▓▓██▒           ▒
+▒            ▒▓▒▓▓▒            ▒
+▒             ░▒▒▒░            ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)")));
+
+		// setSpriteColor gets ignored:
+		jngl::setSpriteColor(0x000000_rgb);
+		sprite.drawLerped(jngl::modelview().scale(0.2f), 0x000000_rgb, 0.f, 0.f, 0.f,
+		                  jngl::Alpha(1.f));
+		jngl::setSpriteColor(0xffffff_rgb);
+		expect(eq(f.getAsciiArt(), std::string(R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒                              ▒
+▒             ░░░░             ▒
+▒           ░░░░░░░░           ▒
+▒            ░░░░░░            ▒
+▒              ░░              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)")));
+
+		sprite.drawLerped(jngl::modelview().scale(0.2f), 0x000000_rgb, 1.f, 1.f, 1.f,
+		                  jngl::Alpha(.5f));
+		expect(eq(f.getAsciiArt(), std::string(R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒           ░░░░▒▒░            ▒
+▒           ░▒▒▒▒▒░            ▒
+▒           ░▒▒░▒▒▒░           ▒
+▒            ░░░░░░            ▒
+▒             ░░░░             ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)")));
+	};
 	"TextureCache"_test = [] {
 		{
 			Fixture f(1.9f);

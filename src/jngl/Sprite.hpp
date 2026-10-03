@@ -150,6 +150,25 @@ public:
 	/// black, nothing will change.
 	void draw(Mat3 modelview, Rgba color) const;
 
+	/// Draws the Sprite with each color channel linearly interpolated towards \a color
+	///
+	/// \param red 0.0f (red channel unchanged) ... 1.0f (red channel of \a color)
+	/// \param green 0.0f (green channel unchanged) ... 1.0f (green channel of \a color)
+	/// \param blue 0.0f (blue channel unchanged) ... 1.0f (blue channel of \a color)
+	///
+	/// Unlike draw(Mat3, Rgba), which multiplies, this also works for black Sprites. The color set
+	/// by jngl::setSpriteColor is ignored.
+	///
+	/// \code
+	/// // completely white:
+	/// sprite.drawLerped(jngl::modelview(), 0xffffff_rgb, 1.f, 1.f, 1.f, jngl::Alpha(1.f));
+	/// // halfway between original colors and red, half transparent:
+	/// sprite.drawLerped(jngl::modelview(), 0xff0000_rgb, .5f, .5f, .5f, jngl::Alpha(.5f));
+	/// // only set the red channel to 1.0f:
+	/// sprite.drawLerped(jngl::modelview(), 0xffffff_rgb, 1.f, 0.f, 0.f, jngl::Alpha(1.f));
+	/// \endcode
+	void drawLerped(Mat3 modelview, Rgb color, float red, float green, float blue, Alpha) const;
+
 	/// Draws the sprite using the specified shader program.
 	///
 	/// @param shaderProgram A pointer to the ShaderProgram object to use for drawing.
