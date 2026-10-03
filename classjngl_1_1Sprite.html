@@ -155,6 +155,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> (<a class="e
 <tr class="memitem:a5fc759d605e7a4988a53e33eb090ddc3" id="r_a5fc759d605e7a4988a53e33eb090ddc3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5fc759d605e7a4988a53e33eb090ddc3">draw</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color) const</td></tr>
 <tr class="memdesc:a5fc759d605e7a4988a53e33eb090ddc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the sprite but multiplies each pixel's color with <em>color</em>.  <br /></td></tr>
 <tr class="separator:a5fc759d605e7a4988a53e33eb090ddc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0df3d778defdf603f4f9e53b9b59111" id="r_af0df3d778defdf603f4f9e53b9b59111"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af0df3d778defdf603f4f9e53b9b59111">drawLerped</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="classjngl_1_1Rgb.html">Rgb</a> color, float red, float green, float blue, <a class="el" href="classjngl_1_1Alpha.html">Alpha</a>) const</td></tr>
+<tr class="memdesc:af0df3d778defdf603f4f9e53b9b59111"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a> with each color channel linearly interpolated towards <em>color</em>.  <br /></td></tr>
+<tr class="separator:af0df3d778defdf603f4f9e53b9b59111"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad569156f9424782e97035deb46b0777b" id="r_ad569156f9424782e97035deb46b0777b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad569156f9424782e97035deb46b0777b">draw</a> (const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *shaderProgram) const</td></tr>
 <tr class="memdesc:ad569156f9424782e97035deb46b0777b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the sprite using the specified shader program.  <br /></td></tr>
 <tr class="separator:ad569156f9424782e97035deb46b0777b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -530,6 +533,66 @@ Collaboration diagram for Sprite:</div>
 
 </div>
 </div>
+<a id="af0df3d778defdf603f4f9e53b9b59111" name="af0df3d778defdf603f4f9e53b9b59111"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0df3d778defdf603f4f9e53b9b59111">&#9670;&#160;</a></span>drawLerped()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawLerped </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Mat3.html">Mat3</a></td>          <td class="paramname"><span class="paramname"><em>modelview</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Rgb.html">Rgb</a></td>          <td class="paramname"><span class="paramname"><em>color</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>red</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>green</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>blue</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Alpha.html">Alpha</a></td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws the <a class="el" href="classjngl_1_1Sprite.html" title="Higher-level representation of an image.">Sprite</a> with each color channel linearly interpolated towards <em>color</em>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">red</td><td>0.0f (red channel unchanged) ... 1.0f (red channel of <em>color</em>) </td></tr>
+    <tr><td class="paramname">green</td><td>0.0f (green channel unchanged) ... 1.0f (green channel of <em>color</em>) </td></tr>
+    <tr><td class="paramname">blue</td><td>0.0f (blue channel unchanged) ... 1.0f (blue channel of <em>color</em>)</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Unlike draw(Mat3, Rgba), which multiplies, this also works for black Sprites. The color set by jngl::setSpriteColor is ignored.</p>
+<div class="fragment"><div class="line"><span class="comment">// completely white:</span></div>
+<div class="line">sprite.drawLerped(<a class="code hl_function" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">jngl::modelview</a>(), 0xffffff_rgb, 1.f, 1.f, 1.f, <a class="code hl_class" href="classjngl_1_1Alpha.html">jngl::Alpha</a>(1.f));</div>
+<div class="line"><span class="comment">// halfway between original colors and red, half transparent:</span></div>
+<div class="line">sprite.drawLerped(<a class="code hl_function" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">jngl::modelview</a>(), 0xff0000_rgb, .5f, .5f, .5f, <a class="code hl_class" href="classjngl_1_1Alpha.html">jngl::Alpha</a>(.5f));</div>
+<div class="line"><span class="comment">// only set the red channel to 1.0f:</span></div>
+<div class="line">sprite.drawLerped(<a class="code hl_function" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">jngl::modelview</a>(), 0xffffff_rgb, 1.f, 0.f, 0.f, <a class="code hl_class" href="classjngl_1_1Alpha.html">jngl::Alpha</a>(1.f));</div>
+<div class="ttc" id="aclassjngl_1_1Alpha_html"><div class="ttname"><a href="classjngl_1_1Alpha.html">jngl::Alpha</a></div><div class="ttdoc">Object representing only the Alpha Channel in an RGBA color, 0 meaning invisible, 1 fully visible.</div><div class="ttdef"><b>Definition</b> <a href="Alpha_8hpp_source.html#l00012">Alpha.hpp:12</a></div></div>
+<div class="ttc" id="anamespacejngl_html_acfcb9cdf97108d05cf2b0da911c93a4c"><div class="ttname"><a href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">jngl::modelview</a></div><div class="ttdeci">jngl::Mat3 modelview()</div><div class="ttdoc">Returns a copy of the global ModelView matrix.</div></div>
+</div><!-- fragment --> 
+</div>
+</div>
 <a id="ad569156f9424782e97035deb46b0777b" name="ad569156f9424782e97035deb46b0777b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad569156f9424782e97035deb46b0777b">&#9670;&#160;</a></span>draw() <span class="overload">[3/3]</span></h2>
 
@@ -581,7 +644,6 @@ Collaboration diagram for Sprite:</div>
 <div class="ttc" id="aclassjngl_1_1Sprite_1_1Batch_html_a84099a083d3701e8b5aa85643186a26e"><div class="ttname"><a href="classjngl_1_1Sprite_1_1Batch.html#a84099a083d3701e8b5aa85643186a26e">jngl::Sprite::Batch::draw</a></div><div class="ttdeci">void draw(Mat3 modelview) const</div><div class="ttdoc">Draws the Sprite which created this Batch centered using modelview.</div></div>
 <div class="ttc" id="aclassjngl_1_1Sprite_html_a324670964d6669a7149bd1cc8b43e18a"><div class="ttname"><a href="#a324670964d6669a7149bd1cc8b43e18a">jngl::Sprite::batch</a></div><div class="ttdeci">Batch batch(const ShaderProgram *shaderProgram=nullptr) const</div><div class="ttdoc">Allows to draw the Sprite multiple times at different locations in an efficient way.</div></div>
 <div class="ttc" id="aclassjngl_1_1Vec2_html"><div class="ttname"><a href="classjngl_1_1Vec2.html">jngl::Vec2</a></div><div class="ttdoc">Two-dimensional vector.</div><div class="ttdef"><b>Definition</b> <a href="Vec2_8hpp_source.html#l00036">Vec2.hpp:36</a></div></div>
-<div class="ttc" id="anamespacejngl_html_acfcb9cdf97108d05cf2b0da911c93a4c"><div class="ttname"><a href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">jngl::modelview</a></div><div class="ttdeci">jngl::Mat3 modelview()</div><div class="ttdoc">Returns a copy of the global ModelView matrix.</div></div>
 <div class="ttc" id="anamespacejngl_html_ae34bb82fbe517542fed56f90cf125d36"><div class="ttname"><a href="namespacejngl.html#ae34bb82fbe517542fed56f90cf125d36">jngl::translate</a></div><div class="ttdeci">void translate(double x, double y)</div><div class="ttdoc">Multiplies the global ModelView matrix with a translation matrix.</div></div>
 </div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -740,7 +802,7 @@ template&lt;class Vect &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00259">259</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00278">278</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>
@@ -769,7 +831,7 @@ template&lt;class Vect &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00265">265</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00284">284</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>
@@ -788,7 +850,7 @@ template&lt;class Vect &gt; </div>
 
 <p>Function which actually loads the sprite. </p>
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00254">254</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00273">273</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>
