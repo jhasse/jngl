@@ -459,6 +459,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>keyPressed</b> (<a cl
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>getRelativeMouseMode</b> ()</td></tr>
 <tr class="memdesc:a67dd6c43aae28b586c0847542004e8ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether relative mouse mode is currently active. <br /></td></tr>
 <tr class="separator:a67dd6c43aae28b586c0847542004e8ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a971dd1e7df6c819fe399a931e38de527" id="r_a971dd1e7df6c819fe399a931e38de527"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a971dd1e7df6c819fe399a931e38de527">setMouseConfined</a> (bool confined)</td></tr>
+<tr class="memdesc:a971dd1e7df6c819fe399a931e38de527"><td class="mdescLeft">&#160;</td><td class="mdescRight">Keeps the mouse cursor from leaving the window, e.g.  <br /></td></tr>
+<tr class="separator:a971dd1e7df6c819fe399a931e38de527"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e64caac43729afb671e32a9dc376784" id="r_a1e64caac43729afb671e32a9dc376784"><td class="memItemLeft" align="right" valign="top"><a id="a1e64caac43729afb671e32a9dc376784" name="a1e64caac43729afb671e32a9dc376784"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isMouseConfined</b> ()</td></tr>
+<tr class="memdesc:a1e64caac43729afb671e32a9dc376784"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether setMouseConfined(true) has been called, regardless of the window having focus. <br /></td></tr>
+<tr class="separator:a1e64caac43729afb671e32a9dc376784"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8805026a7c7e55a01a77f8046fb2c0d" id="r_ac8805026a7c7e55a01a77f8046fb2c0d"><td class="memItemLeft" align="right" valign="top"><a id="ac8805026a7c7e55a01a77f8046fb2c0d" name="ac8805026a7c7e55a01a77f8046fb2c0d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setMouseVisible</b> (bool visible)</td></tr>
 <tr class="memdesc:ac8805026a7c7e55a01a77f8046fb2c0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">By default the mouse cursor of the OS is visible and can be hidden by passing false. <br /></td></tr>
@@ -1273,7 +1280,7 @@ Variables</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00251">251</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="input_8hpp_source.html#l00262">262</a> of file <a class="el" href="input_8hpp_source.html">input.hpp</a>.</p>
 
 </div>
 </div>
@@ -1765,6 +1772,27 @@ template&lt;class Box &gt; </div>
 
 <p>Enables relative mouse mode which will hide the cursor and allow for unlimited movement. </p>
 <p>When enabled <a class="el" href="#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">getMousePos()</a> will return the relative movement in the current step. </p>
+
+</div>
+</div>
+<a id="a971dd1e7df6c819fe399a931e38de527" name="a971dd1e7df6c819fe399a931e38de527"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a971dd1e7df6c819fe399a931e38de527">&#9670;&#160;</a></span>setMouseConfined()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setMouseConfined </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>confined</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Keeps the mouse cursor from leaving the window, e.g. </p>
+<p>for scrolling by moving the mouse to the edge of the screen when the window doesn't cover all of it</p>
+<p>Only has an effect while the window has focus, so switching to another window (e.g. with <code>Alt</code>+<code>Tab</code>) frees the cursor until the window gets focus again. Stays in effect when the window is recreated. Does nothing on platforms without a mouse cursor. </p>
 
 </div>
 </div>
