@@ -510,6 +510,18 @@ if(NOT hasParent)
 		target_link_libraries(jngl-unittest PRIVATE jngl)
 		target_compile_definitions(jngl-unittest PRIVATE BOOST_UT_DISABLE_MODULE)
 		add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
+
+		find_program(XVFB_RUN xvfb-run)
+		if(XVFB_RUN)
+			# SDL would prefer Wayland if WAYLAND_DISPLAY is set, which xvfb-run doesn't unset
+			add_custom_target(unittest-xvfb
+				COMMAND env SDL_VIDEO_DRIVER=x11
+				        ${XVFB_RUN} -a -s "-screen 0 1920x1080x24" $<TARGET_FILE:jngl-unittest>
+				DEPENDS jngl-unittest
+				WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+				USES_TERMINAL
+				VERBATIM)
+		endif()
 	endif()
 endif()
 
