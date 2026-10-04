@@ -504,6 +504,14 @@ void Window::SetRelativeMouseMode(const bool relative) {
 	}
 }
 
+void Window::setMouseConfined(const bool confined) {
+	mouseConfined = confined;
+	// SDL only grabs the mouse while the window has focus
+	if (!SDL_SetWindowMouseGrab(impl->sdlWindow, confined)) {
+		internal::warn("Couldn't confine the mouse to the window: {}", SDL_GetError());
+	}
+}
+
 void Window::SetIcon(const std::string& filepath) {
 	auto imageData = ImageData::load(filepath);
 	const int CHANNELS = 4;

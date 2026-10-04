@@ -51,6 +51,8 @@ public:
 	void SwapBuffers();
 	void SetRelativeMouseMode(bool relative);
 	bool getRelativeMouseMode() const;
+	void setMouseConfined(bool confined);
+	bool getMouseConfined() const;
 	void SetMouseVisible(bool visible);
 	void increaseMouseHiddenCount();
 	void decreaseMouseHiddenCount();
@@ -162,6 +164,7 @@ private:
 	bool fullscreen_;
 	bool isMouseVisible_ = true;
 	bool relativeMouseMode = false;
+	bool mouseConfined = false;
 	bool anyKeyPressed_ = false;
 	bool isMultisampleSupported_ = true;
 	std::array<bool, 3> mouseDown_{ { false, false, false } };

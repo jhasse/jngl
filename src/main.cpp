@@ -126,6 +126,7 @@ void showWindow(const std::string& title, const double width, const double heigh
 	++internal::gFrameNumber; // will set it to 0 for the first window
 	internal::debug("jngl::showWindow(\"{}\", {}, {}, {});", title, width, height, fullscreen);
 	bool isMouseVisible = pWindow ? pWindow->getMouseVisible() : true;
+	bool isMouseConfined = pWindow ? pWindow->getMouseConfined() : false;
 	hideWindow();
 	int widthRounded = static_cast<int>(std::lround(width));
 	int heightRounded = static_cast<int>(std::lround(height));
@@ -141,6 +142,7 @@ void showWindow(const std::string& title, const double width, const double heigh
 		App::instance().setDisplayName(title);
 	}
 	pWindow->SetMouseVisible(isMouseVisible);
+	pWindow->setMouseConfined(isMouseConfined);
 	setAntiAliasing(antiAliasingEnabled);
 	pWindow->initGlObjects();
 
@@ -361,6 +363,14 @@ bool isMouseVisible() {
 
 bool getRelativeMouseMode() {
 	return pWindow->getRelativeMouseMode();
+}
+
+void setMouseConfined(const bool confined) {
+	pWindow->setMouseConfined(confined);
+}
+
+bool isMouseConfined() {
+	return pWindow->getMouseConfined();
 }
 
 void setTitle(const std::string& title) {

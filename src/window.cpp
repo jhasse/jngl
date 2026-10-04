@@ -140,6 +140,10 @@ bool Window::getRelativeMouseMode() const {
 	return relativeMouseMode;
 }
 
+bool Window::getMouseConfined() const {
+	return mouseConfined;
+}
+
 void Window::increaseMouseHiddenCount() {
 	if (mouseHiddenCount == 0) {
 		setMouseVisible(false);

@@ -82,6 +82,10 @@ void Window::SetRelativeMouseMode(const bool relative) {
 	impl->setRelativeMouseMode(relative);
 }
 
+void Window::setMouseConfined(const bool confined) {
+	mouseConfined = confined;
+}
+
 void Window::SetIcon(const std::string&) {
 }
 
