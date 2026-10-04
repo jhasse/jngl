@@ -631,6 +631,23 @@ void setCursor(Cursor type) {
 	case Cursor::CROSSHAIR:
 		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_CROSSHAIR;
 		break;
+#if SDL_VERSION_ATLEAST(3, 5, 0)
+	case Cursor::GRAB:
+		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_GRAB;
+		break;
+	case Cursor::GRABBING:
+		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_GRABBING;
+		break;
+#else
+	// Older versions of SDL don't have these, the closest are a pointing hand and a four pointed
+	// arrow
+	case Cursor::GRAB:
+		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_POINTER;
+		break;
+	case Cursor::GRABBING:
+		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_MOVE;
+		break;
+#endif
 	};
 }
 
