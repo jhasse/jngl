@@ -25,6 +25,7 @@ std::string Window::GetFontFileByName(const std::string& fontname) {
 }
 
 Window::~Window() {
+	releaseResources();
 }
 
 int Window::GetKeyCode(key::KeyType key) {

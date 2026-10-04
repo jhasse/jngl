@@ -144,7 +144,9 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	// Window, since neither survives this Window being recreated (e.g. by toggling fullscreen).
 }
 
-Window::~Window() = default;
+Window::~Window() {
+	releaseResources();
+}
 
 int Window::GetKeyCode(key::KeyType key) {
 	switch (key) {

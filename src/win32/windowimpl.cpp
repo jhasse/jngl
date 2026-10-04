@@ -338,6 +338,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 }
 
 Window::~Window() {
+	releaseResources();
 	if (fullscreen_) {
 		ChangeDisplaySettings(nullptr, 0);
 	}

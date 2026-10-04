@@ -140,6 +140,14 @@ bool Window::getRelativeMouseMode() const {
 	return relativeMouseMode;
 }
 
+void Window::releaseResources() {
+	currentWork_.reset();
+	newWork_.reset();
+	jobs.clear();
+	jobsToAdd.clear();
+	fonts_.clear();
+}
+
 bool Window::getMouseConfined() const {
 	return mouseConfined;
 }

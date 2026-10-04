@@ -152,6 +152,13 @@ private:
 	                         std::pair<int, int> maxAspectRatio);
 	void updateControllerStates();
 
+	/// Destroys the scenes, jobs and fonts, which might hold OpenGL resources. Called first thing
+	/// by ~Window, as `impl` is the last member and therefore destroyed first, taking the OpenGL
+	/// context with it (SDL even unloads the OpenGL library with its last window). Normally
+	/// hideWindow() has destroyed the ShaderCache by then, so that Textures don't touch OpenGL
+	/// anymore, but not when the Window is destroyed by std::exit() calling ~WindowPointer.
+	void releaseResources();
+
 	/// Called when a controller is added or removed
 	std::function<void()> controllerChangedCallback;
 

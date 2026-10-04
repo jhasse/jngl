@@ -20,7 +20,9 @@ Window::Window(const std::string& /*title*/, const int width, const int height,
 	UpdateInput();
 }
 
-Window::~Window() = default;
+Window::~Window() {
+	releaseResources();
+}
 
 int Window::GetKeyCode(key::KeyType key) {
 	return key;
