@@ -34,6 +34,7 @@ SDL::SDL() {
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
 		throw std::runtime_error(SDL_GetError());
 	}
+	setHint(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, true);
 	setHint(SDL_HINT_MOUSE_TOUCH_EVENTS, false);
 	setHint(SDL_HINT_TOUCH_MOUSE_EVENTS, false);
 }
