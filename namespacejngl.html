@@ -708,6 +708,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setPrefix</b> (const 
 <tr class="separator:ace0bccdd95107deb172bfae920eb4769"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67f578ae7b31a18af696c75231554372" id="r_a67f578ae7b31a18af696c75231554372"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67f578ae7b31a18af696c75231554372">getConfigPath</a> ()</td></tr>
 <tr class="separator:a67f578ae7b31a18af696c75231554372"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e4bb80c8db09ad1d130a899c3ad8b0c" id="r_a5e4bb80c8db09ad1d130a899c3ad8b0c"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e4bb80c8db09ad1d130a899c3ad8b0c">getDocumentsPath</a> ()</td></tr>
+<tr class="memdesc:a5e4bb80c8db09ad1d130a899c3ad8b0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the directory where to store files the user may want to find, share or back up themselves, e.g.  <br /></td></tr>
+<tr class="separator:a5e4bb80c8db09ad1d130a899c3ad8b0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac133cf5185d3b52971d219380da1517a" id="r_ac133cf5185d3b52971d219380da1517a"><td class="memItemLeft" align="right" valign="top"><a id="ac133cf5185d3b52971d219380da1517a" name="ac133cf5185d3b52971d219380da1517a"></a>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getBinaryPath</b> ()</td></tr>
 <tr class="memdesc:ac133cf5185d3b52971d219380da1517a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the directory of the currently running binary. <br /></td></tr>
@@ -2677,6 +2680,32 @@ template&lt;class Vect &gt; </div>
 <li>macOS: <code>~/Library/Application Support/Display Name/</code></li>
 <li>Android/iOS: Data path provided by the OS </li>
 </ul>
+
+</div>
+</div>
+<a id="a5e4bb80c8db09ad1d130a899c3ad8b0c" name="a5e4bb80c8db09ad1d130a899c3ad8b0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e4bb80c8db09ad1d130a899c3ad8b0c">&#9670;&#160;</a></span>getDocumentsPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> getDocumentsPath </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the directory where to store files the user may want to find, share or back up themselves, e.g. </p>
+<p>replays, save games or maps they've made, ending with a slash.</p>
+<p>The same folder other games use for that, e.g. StarCraft II:</p><ul>
+<li>Windows: <code>Documents/Display Name/</code>, wherever the Documents folder is (e.g. moved by OneDrive)</li>
+<li>Linux: <code>$XDG_DATA_HOME/Display Name/</code>, i.e. <code>~/.local/share/Display Name/</code> by default</li>
+<li>macOS: <code>~/Library/Application Support/Display Name/</code>, as accessing <code>~/Documents</code> would ask the user for permission first. This is the same directory as <a class="el" href="#a67f578ae7b31a18af696c75231554372">getConfigPath()</a>.</li>
+</ul>
+<p>Only available on desktop platforms. The directory may not exist yet. </p>
 
 </div>
 </div>
