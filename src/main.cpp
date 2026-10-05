@@ -798,6 +798,21 @@ void setConfigPath(const std::string& path) {
 	}
 }
 
+namespace {
+/// The display name without characters that aren't allowed in a directory name on some platform
+std::string appDirectoryName() {
+	auto appDir = App::instance().getDisplayName();
+	std::string invalid_chars = "\\/:?\"<>|*";
+	for (const char c : invalid_chars) {
+		appDir.erase(std::remove(appDir.begin(), appDir.end(), c), appDir.end());
+	}
+	if (appDir.empty()) {
+		throw std::runtime_error("Invalid display name: " + App::instance().getDisplayName());
+	}
+	return appDir;
+}
+} // namespace
+
 std::string internal::getConfigPath() {
 	if (configPath) {
 		return *configPath;
@@ -814,15 +829,7 @@ std::string internal::getConfigPath() {
 #else
 	path << getenv("HOME") << "/.config/"; // NOLINT
 #endif
-	auto appDir = App::instance().getDisplayName();
-	std::string invalid_chars = "\\/:?\"<>|*";
-	for (const char c : invalid_chars) {
-		appDir.erase(std::remove(appDir.begin(), appDir.end(), c), appDir.end());
-	}
-	if (appDir.empty()) {
-		throw std::runtime_error("Invalid display name: " + App::instance().getDisplayName());
-	}
-	path << appDir << "/";
+	path << appDirectoryName() << "/";
 #endif
 	return *(configPath = path.str());
 #endif
@@ -832,6 +839,23 @@ std::string internal::getConfigPath() {
 std::string getConfigPath() {
 	return internal::getConfigPath();
 }
+
+#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && (!defined(__APPLE__) || !TARGET_OS_IPHONE)
+std::string getDocumentsPath() {
+#ifdef _WIN32
+	return getSystemDocumentsPath() + "/" + appDirectoryName() + "/";
+#elif defined(__APPLE__)
+	return getSystemConfigPath() + "/" + appDirectoryName() + "/";
+#else
+	// $XDG_DATA_HOME, which is to be ignored unless it's an absolute path, or its default
+	if (const char* const dataHome = getenv("XDG_DATA_HOME"); // NOLINT
+	    dataHome && dataHome[0] == '/') {
+		return std::string(dataHome) + "/" + appDirectoryName() + "/";
+	}
+	return std::string(getenv("HOME")) + "/.local/share/" + appDirectoryName() + "/"; // NOLINT
+#endif
+}
+#endif
 
 std::stringstream readAsset(const std::string& filename) {
 	if (!filename.empty() && filename[0] == '/') {

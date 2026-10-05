@@ -7,4 +7,9 @@ namespace jngl {
 
 std::string getSystemConfigPath();
 
+#ifdef _WIN32
+/// The user's Documents folder, wherever it's been moved to, e.g. by OneDrive
+std::string getSystemDocumentsPath();
+#endif
+
 } // namespace jngl

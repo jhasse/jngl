@@ -90,4 +90,23 @@ boost::ut::suite suite = [] {
 		const auto p = jngl::internal::getConfigPath();
 		expect(eq(p.substr(p.size() - 22), std::string("/testwithinvalidchars/")));
 	};
+
+#if !defined(_WIN32) && !defined(__APPLE__)
+	"getDocumentsPath"_test = [] {
+		const auto displayName = jngl::App::instance().getDisplayName();
+		jngl::Finally restore([&]() {
+			jngl::App::instance().setDisplayName(displayName);
+			unsetenv("XDG_DATA_HOME");
+		});
+		jngl::App::instance().setDisplayName("My Game?");
+		setenv("XDG_DATA_HOME", "/data", 1);
+		expect(eq(jngl::getDocumentsPath(), std::string("/data/My Game/")));
+		// Relative or empty, it's to be ignored
+		for (const char* ignored : { "data", "" }) {
+			setenv("XDG_DATA_HOME", ignored, 1);
+			expect(eq(jngl::getDocumentsPath(),
+			          std::string(getenv("HOME")) + "/.local/share/My Game/"));
+		}
+	};
+#endif
 };

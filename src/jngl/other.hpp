@@ -12,6 +12,10 @@
 #include <string>
 #include <vector>
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 namespace jngl {
 
 /// Returns true until the main window is closed or quit() has been called
@@ -110,6 +114,20 @@ void setConfigPath(const std::string& path);
 /// - macOS: `~/Library/Application Support/Display Name/`
 /// - Android/iOS: Data path provided by the OS
 [[deprecated("use jngl::writeConfig and jngl::readConfig instead")]] std::string getConfigPath();
+
+#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && (!defined(__APPLE__) || !TARGET_OS_IPHONE)
+/// Returns the directory where to store files the user may want to find, share or back up
+/// themselves, e.g. replays, save games or maps they've made, ending with a slash.
+///
+/// The same folder other games use for that, e.g. StarCraft II:
+/// - Windows: `Documents/Display Name/`, wherever the Documents folder is (e.g. moved by OneDrive)
+/// - Linux: `$XDG_DATA_HOME/Display Name/`, i.e. `~/.local/share/Display Name/` by default
+/// - macOS: `~/Library/Application Support/Display Name/`, as accessing `~/Documents` would ask the
+///   user for permission first. This is the same directory as getConfigPath().
+///
+/// Only available on desktop platforms. The directory may not exist yet.
+std::string getDocumentsPath();
+#endif
 
 /// Returns the directory of the currently running binary
 std::string getBinaryPath();

@@ -28,4 +28,14 @@ std::string getSystemConfigPath() {
 	return tmp;
 }
 
+std::string getSystemDocumentsPath() {
+	PWSTR pPath;
+	if (SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_DEFAULT, nullptr, &pPath) != S_OK) {
+		throw std::runtime_error("Couldn't get Documents location!");
+	}
+	std::string tmp(utf16ToUtf8(pPath));
+	CoTaskMemFree(pPath);
+	return tmp;
+}
+
 } // namespace jngl
