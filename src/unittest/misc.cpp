@@ -91,7 +91,7 @@ boost::ut::suite suite = [] {
 		expect(eq(p.substr(p.size() - 22), std::string("/testwithinvalidchars/")));
 	};
 
-#if !defined(_WIN32) && !defined(__APPLE__)
+#if !defined(_WIN32) && !defined(__APPLE__) && !defined(ANDROID) && !defined(__EMSCRIPTEN__)
 	"getDocumentsPath"_test = [] {
 		const auto displayName = jngl::App::instance().getDisplayName();
 		jngl::Finally restore([&]() {
