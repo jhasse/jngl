@@ -74,6 +74,7 @@ enum class Cursor : uint8_t {
 	CROSSHAIR, //< Crosshair cursor
 	GRAB, //< Something under the cursor can be grabbed, e.g. an open hand
 	GRABBING, //< Something is being grabbed, e.g. a closed hand
+	POINTER, //< Pointer cursor, typically used for clickable elements
 };
 /// Allows to change the mouse cursor
 void setCursor(Cursor);

@@ -657,6 +657,9 @@ void setCursor(Cursor type) {
 	case Cursor::GRABBING:
 		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_MOVE;
 		break;
+	case Cursor::POINTER:
+		pWindow->impl->cursor = SDL_SYSTEM_CURSOR_POINTER;
+		break;
 #endif
 	};
 }
