@@ -4,6 +4,8 @@
 // https://lisyarus.github.io/blog/programming/2022/10/15/audio-mixing.html
 #include "mixer.hpp"
 
+#include "../log.hpp"
+
 #include <atomic_queue/atomic_queue.h>
 
 #include <algorithm>
@@ -37,7 +39,13 @@ void Mixer::gc() {
 void Mixer::remove(const Stream* stream) {
 	gc();
 	assert(reinterpret_cast<uintptr_t>(stream) % 2 == 0); // NOLINT
-	impl->commands.push(reinterpret_cast<uintptr_t>(stream) + Impl::REMOVE_FLAG); // NOLINT
+	// try_push: a blocking push deadlocks when nothing drains the queue (DummyImpl only
+	// steps from the main loop; integration tests never reach it). The stream then just
+	// plays out and is GC'd when it ends.
+	if (!impl->commands.try_push(reinterpret_cast<uintptr_t>(stream) +
+	                             Impl::REMOVE_FLAG)) { // NOLINT
+		internal::debug("Mixer command queue full; dropping remove.");
+	}
 }
 
 void Mixer::rewind() {
@@ -56,8 +64,12 @@ bool Mixer::isPlaying() const {
 void Mixer::add(std::shared_ptr<Stream> stream) {
 	gc();
 	assert(reinterpret_cast<uintptr_t>(stream.get()) % 2 == 0); // NOLINT
-	impl->commands.push(reinterpret_cast<uintptr_t>(stream.get())); // NOLINT
-	streamsOnMainThread.emplace_back(std::move(stream));
+	// Same as remove(): never block the game thread waiting for the mixer to drain.
+	if (impl->commands.try_push(reinterpret_cast<uintptr_t>(stream.get()))) { // NOLINT
+		streamsOnMainThread.emplace_back(std::move(stream));
+	} else {
+		internal::debug("Mixer command queue full; dropping stream.");
+	}
 }
 
 size_t Mixer::read(float* data, size_t sample_count) {
