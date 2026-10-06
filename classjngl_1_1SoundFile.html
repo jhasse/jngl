@@ -101,7 +101,7 @@ $(function(){ initResizable(false); });
 </div><!--header-->
 <div class="contents">
 
-<p>Sound loaded from an OGG file.  
+<p>Sound loaded from an OGG or MP3 file.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="SoundFile_8hpp_source.html">jngl/SoundFile.hpp</a>&gt;</code></p>
@@ -109,7 +109,7 @@ $(function(){ initResizable(false); });
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6f8d4c7f6d06cfb5b1527d334a4fedcf" id="r_a6f8d4c7f6d06cfb5b1527d334a4fedcf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f8d4c7f6d06cfb5b1527d334a4fedcf">SoundFile</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;filename, std::launch policy=std::launch::async)</td></tr>
-<tr class="memdesc:a6f8d4c7f6d06cfb5b1527d334a4fedcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load an OGG file called <em>filename</em>.  <br /></td></tr>
+<tr class="memdesc:a6f8d4c7f6d06cfb5b1527d334a4fedcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load an OGG or MP3 file called <em>filename</em>.  <br /></td></tr>
 <tr class="separator:a6f8d4c7f6d06cfb5b1527d334a4fedcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46aa023758c7e1252894707b50fd51fc" id="r_a46aa023758c7e1252894707b50fd51fc"><td class="memItemLeft" align="right" valign="top"><a id="a46aa023758c7e1252894707b50fd51fc" name="a46aa023758c7e1252894707b50fd51fc"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SoundFile</b> (const <a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a> &amp;)=delete</td></tr>
@@ -136,7 +136,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> ()</td></tr>
 <tr class="memdesc:a8c528baf37154d347366083f0f816846"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop the last started sound. <br /></td></tr>
 <tr class="separator:a8c528baf37154d347366083f0f816846"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a811a07a7c69cd4cf4d23031c99d5a589" id="r_a811a07a7c69cd4cf4d23031c99d5a589"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a811a07a7c69cd4cf4d23031c99d5a589">stop</a> (<a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;)</td></tr>
-<tr class="memdesc:a811a07a7c69cd4cf4d23031c99d5a589"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop the last started sound of this <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> started on the <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a>.  <br /></td></tr>
+<tr class="memdesc:a811a07a7c69cd4cf4d23031c99d5a589"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop the last started sound of this <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG or MP3 file.">SoundFile</a> started on the <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a>.  <br /></td></tr>
 <tr class="separator:a811a07a7c69cd4cf4d23031c99d5a589"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8438e3403946accc1986a05b89ee7b03" id="r_a8438e3403946accc1986a05b89ee7b03"><td class="memItemLeft" align="right" valign="top"><a id="a8438e3403946accc1986a05b89ee7b03" name="a8438e3403946accc1986a05b89ee7b03"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isPlaying</b> ()</td></tr>
@@ -165,18 +165,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setVolume</b> (float 
 <tr class="separator:afb5e1a934b01b01c1584cf4be5287bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a0a9c0a9c9b67e5ac1db073fd6706ef" id="r_a7a0a9c0a9c9b67e5ac1db073fd6706ef"><td class="memItemLeft" align="right" valign="top"><a id="a7a0a9c0a9c9b67e5ac1db073fd6706ef" name="a7a0a9c0a9c9b67e5ac1db073fd6706ef"></a>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/container/span.html">std::span</a>&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getSamples</b> ()</td></tr>
-<tr class="memdesc:a7a0a9c0a9c9b67e5ac1db073fd6706ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the raw audio samples of this <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a>. <br /></td></tr>
+<tr class="memdesc:a7a0a9c0a9c9b67e5ac1db073fd6706ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the raw audio samples of this <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG or MP3 file.">SoundFile</a>. <br /></td></tr>
 <tr class="separator:a7a0a9c0a9c9b67e5ac1db073fd6706ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a98a9db313826252f0b80d42d5b078fc2" id="r_a98a9db313826252f0b80d42d5b078fc2"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; <a class="el" href="classjngl_1_1SoundFile.html">SoundFile</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98a9db313826252f0b80d42d5b078fc2">get</a> (<a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string_view.html">std::string_view</a> filename)</td></tr>
-<tr class="memdesc:a98a9db313826252f0b80d42d5b078fc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to a <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> from JNGL's internal cache, creates it with async loading if necessary.  <br /></td></tr>
+<tr class="memdesc:a98a9db313826252f0b80d42d5b078fc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to a <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG or MP3 file.">SoundFile</a> from JNGL's internal cache, creates it with async loading if necessary.  <br /></td></tr>
 <tr class="separator:a98a9db313826252f0b80d42d5b078fc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Sound loaded from an OGG file. </p>
-<p>JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly - you can just use <a class="el" href="namespacejngl.html#a5dec9dac0a4970b6421c809e923dee8b" title="Play an OGG audio file once.">jngl::play</a> or <a class="el" href="classjngl_1_1Channel.html#a9a2d4a760f9febf9ab966d0ed41183b2" title="Play OGG file on this channel.">Channel::play</a>. If you want to access the internally <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> from JNGL's cache before playing, use <a class="el" href="#a98a9db313826252f0b80d42d5b078fc2" title="Returns a shared pointer to a SoundFile from JNGL&#39;s internal cache, creates it with async loading if ...">SoundFile::get</a>. </p>
+<div class="textblock"><p>Sound loaded from an OGG or MP3 file. </p>
+<p>JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly - you can just use <a class="el" href="namespacejngl.html#a5dec9dac0a4970b6421c809e923dee8b" title="Play an OGG or MP3 audio file once.">jngl::play</a> or <a class="el" href="classjngl_1_1Channel.html#a9a2d4a760f9febf9ab966d0ed41183b2" title="Play OGG file on this channel.">Channel::play</a>. If you want to access the internally <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG or MP3 file.">SoundFile</a> from JNGL's cache before playing, use <a class="el" href="#a98a9db313826252f0b80d42d5b078fc2" title="Returns a shared pointer to a SoundFile from JNGL&#39;s internal cache, creates it with async loading if ...">SoundFile::get</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="SoundFile_8hpp_source.html#l00032">32</a> of file <a class="el" href="SoundFile_8hpp_source.html">SoundFile.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -207,7 +207,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Load an OGG file called <em>filename</em>. </p>
+<p>Load an OGG or MP3 file called <em>filename</em>. </p>
 <p>Loading can either happen on its own thread (std::launch::async) or the first time you try to play the file (std::launch::deferred).</p>
 <dl class="section note"><dt>Note</dt><dd>If the file doesn't exist this will not throw, but calling <a class="el" href="#a6d58098c6cf63c241ed03bc797256bb1" title="Play the sound once. If called twice the sound would also play twice.">SoundFile::play</a>, <a class="el" href="#afe461d27b9c48d5921c00d521181f12f" title="Play the sound in a loop. Can also be stopped using stop()">SoundFile::loop</a> or <a class="el" href="#a78f61ac2dd03bcba8e09ca20cd7d68e3" title="Block until the sound file has been fully decompressed and loaded.">SoundFile::load</a> will. </dd></dl>
 
@@ -237,7 +237,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns a shared pointer to a <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> from JNGL's internal cache, creates it with async loading if necessary. </p>
+<p>Returns a shared pointer to a <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG or MP3 file.">SoundFile</a> from JNGL's internal cache, creates it with async loading if necessary. </p>
 <p>Example: </p><div class="fragment"><div class="line"><span class="keyword">auto</span> sound = <a class="code hl_function" href="#a98a9db313826252f0b80d42d5b078fc2">jngl::SoundFile::get</a>(<span class="stringliteral">&quot;sfx/foo.ogg&quot;</span>);</div>
 <div class="line"><span class="keyword">auto</span> other = <a class="code hl_function" href="#a98a9db313826252f0b80d42d5b078fc2">jngl::SoundFile::get</a>(<span class="stringliteral">&quot;sfx/foo.ogg&quot;</span>);</div>
 <div class="line">assert(sound == other);</div>
@@ -261,7 +261,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Stop the last started sound of this <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG file.">SoundFile</a> started on the <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a>. </p>
+<p>Stop the last started sound of this <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG or MP3 file.">SoundFile</a> started on the <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a>. </p>
 <dl class="section note"><dt>Note</dt><dd>If not using the main <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a> (i.e. <a class="el" href="classjngl_1_1Channel.html#a31eed6f7511dc019ad179a95b5246682" title="Returns the main Channel on which jngl::play, jngl::loop, jngl::stop operate.">Channel::main()</a>), this method should be used instead of <a class="el" href="#a8c528baf37154d347366083f0f816846" title="Stop the last started sound.">stop()</a>. </dd></dl>
 
 </div>
