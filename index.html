@@ -37,16 +37,21 @@
 			gap: 0.6em;
 			margin-bottom: 0.5em;
 		}
-		.button {
+		a.button {
 			display: inline-flex;
 			align-items: center;
 			margin: 0;
+			padding: 0.6em 1.2em;
+			color: var(--page-foreground-color) !important;
+			text-decoration: none;
+			cursor: pointer;
 			border: 2px solid var(--primary-color);
 			border-radius: var(--border-radius-medium);
 			background-color: color-mix(in srgb, var(--primary-color) 12%, transparent);
 			transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease;
 		}
-		.button:hover {
+		a.button:hover {
+			color: #fff !important;
 			background-color: var(--primary-color);
 			transform: translateY(-2px);
 			box-shadow: var(--box-shadow);
@@ -63,15 +68,6 @@
 			.button img {
 				filter: brightness(0) invert(1);
 			}
-		}
-		.button a {
-			color: var(--page-foreground-color) !important;
-			text-decoration: none;
-			display: inline-block;
-			padding: 0.6em 1.2em;
-		}
-		.button a:hover {
-			color: var(--page-background-color) !important;
 		}
 		@media (prefers-color-scheme: dark) {
 			.invert-dark {
@@ -153,6 +149,12 @@
 			border-radius: var(--border-radius-small);
 		}
 
+		.footnote-reference {
+			line-height: 0;
+			vertical-align: baseline;
+			position: relative;
+			top: -0.5em;
+		}
 		.footnote {
 			opacity: .7;
 			text-align: center;
@@ -206,9 +208,9 @@ $(function() {
 		</div>
 		<h1>JNGL - Cross-Platform Framework for 2D Games</h1>
 		<div class="button-row">
-			<div class="button"><a href="https://github.com/jhasse/jngl"><img src="GitHub_Invertocat_Logo.svg"/>GitHub</a></div>
-			<div class="button"><a href="https://discord.gg/254P43HvWJ"><img src="discord-icon.svg"/>Discord</a></div>
-			<div class="button"><a href="annotated.html"><img src="documentation.svg"/>Documentation</a></div>
+			<a class="button" href="https://github.com/jhasse/jngl"><img src="GitHub_Invertocat_Logo.svg"/>GitHub</a>
+			<a class="button" href="https://discord.gg/254P43HvWJ"><img src="discord-icon.svg"/>Discord</a>
+			<a class="button" href="annotated.html"><img src="documentation.svg"/>Documentation</a>
 		</div>
 	</div>
 	<div class="textblock">
@@ -218,7 +220,7 @@ $(function() {
 			<a href="https://github.com/jhasse/jngl"><img src="https://img.shields.io/badge/GitHub-jhasse%2Fjngl-1779c4?logo=github" alt="GitHub - jhasse/jngl"></a>
 		</p> -->
 		<p>
-			JNGL is a versatile multi-platform library for game development, written in modern C++. Games using JNGL have been released on Windows, Linux, macOS, iOS (including iPadOS and tvOS), Android (including Android TV), the Nintendo Switch (both 1 and 2)<sup><a href="#fn1">1</a></sup>, Xbox, as well as the browser via Emscripten. There also has been work done on porting games to webOS and PlayStation.
+			JNGL is a versatile multi-platform library for game development, written in modern C++. Games using JNGL have been released on Windows, Linux, macOS, iOS (including iPadOS and tvOS), Android (including Android TV), the Nintendo Switch (both 1 and 2)<sup class="footnote-reference"><a href="#fn1">1</a></sup>, Xbox, as well as the browser via Emscripten. There also has been work done on porting games to webOS and PlayStation.
 		</p>
 		<div class="platforms">
 			<p class="platforms-label">Available on</p>
@@ -260,7 +262,7 @@ $(function() {
 						static linking</li>
 					<li>OpenGL (ES) 3.0 accelerated</li>
 					<li>PNG, BMP and <a href="https://developers.google.com/speed/webp/">WebP</a> image support</li>
-					<li>Ogg Vorbis audio support with support for effects like pitch shifting</li>
+					<li>Ogg Vorbis and MP3 audio support with effects like pitch shifting</li>
 					<li>Theora video playback support</li>
 					<li>UTF-8 text output using <a href="http://www.freetype.org/">FreeType</a></li>
 				</ul>
