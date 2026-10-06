@@ -801,6 +801,7 @@ void setConfigPath(const std::string& path) {
 	}
 }
 
+#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && !defined(IOS)
 namespace {
 /// The display name without characters that aren't allowed in a directory name on some platform
 std::string appDirectoryName() {
@@ -815,6 +816,7 @@ std::string appDirectoryName() {
 	return appDir;
 }
 } // namespace
+#endif
 
 std::string internal::getConfigPath() {
 	if (configPath) {
