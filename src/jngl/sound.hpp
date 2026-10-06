@@ -1,4 +1,4 @@
-// Copyright 2012-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2012-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Sound related functions
 /// @file
@@ -15,7 +15,7 @@ class SoundFile;
 
 float getVolume();
 
-/// Play an OGG audio file once
+/// Play an OGG or MP3 audio file once
 ///
 /// Might block if the file hasn't been played before. To avoid that use jngl::load before.
 ///
@@ -25,7 +25,7 @@ float getVolume();
 /// \endcode
 SoundFile& play(const std::string& filename);
 
-/// Stop an OGG audio file if it's currently playing
+/// Stop an OGG or MP3 audio file if it's currently playing
 void stop(const std::string& filename);
 
 /// \return whether \a filename is currently playing on any Channel
@@ -37,7 +37,7 @@ void stop(const std::string& filename);
 /// \note Unaffected by jngl::pauseAudio
 bool isPlaying(const std::string& filename);
 
-/// Play an OGG audio file in a loop
+/// Play an OGG or MP3 audio file in a loop
 ///
 /// If it's already playing, this function won't play it twice, but simply set it to loop and return
 /// a pointer to the same SoundFile.

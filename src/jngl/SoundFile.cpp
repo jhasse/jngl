@@ -6,6 +6,7 @@
 #include "../Sound.hpp"
 #include "../audio.hpp"
 #include "../audio/constants.hpp"
+#include "../audio/dr_mp3.h"
 #include "../audio/effect/pitch.hpp"
 #include "../audio/effect/volume.hpp"
 #include "../audio/engine.hpp"
@@ -26,6 +27,126 @@
 #endif
 
 namespace jngl {
+
+namespace {
+
+bool endsWithIgnoreCase(std::string_view str, std::string_view suffix) {
+	if (str.size() < suffix.size()) {
+		return false;
+	}
+	for (size_t i = 0; i < suffix.size(); ++i) {
+		char a = str[str.size() - suffix.size() + i];
+		char b = suffix[i];
+		if (a >= 'A' && a <= 'Z') {
+			a = static_cast<char>(a - 'A' + 'a');
+		}
+		if (b >= 'A' && b <= 'Z') {
+			b = static_cast<char>(b - 'A' + 'a');
+		}
+		if (a != b) {
+			return false;
+		}
+	}
+	return true;
+}
+
+void resampleToEngineFrequency(std::vector<float>& samples, const int sampleRate) {
+	if (sampleRate == jngl::audio::frequency) {
+		return;
+	}
+	const float resampleFactor =
+	    static_cast<float>(jngl::audio::frequency) / static_cast<float>(sampleRate);
+	auto newSize = static_cast<size_t>(static_cast<float>(samples.size()) * resampleFactor);
+	if (newSize % 2 != 0) {
+		++newSize;
+	}
+	std::vector<float> resampledData(newSize);
+	for (size_t i = 0; i < newSize / 2; ++i) {
+		float originalIndex = static_cast<float>(i) / resampleFactor;
+		auto index = static_cast<size_t>(originalIndex);
+		const size_t maxIndex = (samples.size() >= 2) ? (samples.size() / 2 - 1) : 0;
+		if (index > maxIndex) {
+			index = maxIndex;
+		}
+		float fraction = originalIndex - static_cast<float>(index);
+		{
+			size_t originalLeftIndex = index * 2;
+			const float b =
+			    (originalLeftIndex + 2 < samples.size()) ? samples[originalLeftIndex + 2] : 0;
+			resampledData[i * 2] = samples[originalLeftIndex] * (1.0f - fraction) + b * fraction;
+		}
+		{
+			const size_t originalRightIndex = index * 2 + 1;
+			const float b =
+			    (originalRightIndex + 2 < samples.size()) ? samples[originalRightIndex + 2] : 0;
+			resampledData[i * 2 + 1] =
+			    samples[originalRightIndex] * (1.0f - fraction) + b * fraction;
+		}
+	}
+	samples = std::move(resampledData);
+}
+
+void loadOgg(FILE* const f, const std::string& filename, std::vector<float>& out) {
+	OggVorbis_File oggFile;
+	if (ov_open(f, &oggFile, nullptr, 0) != 0) {
+		fclose(f); // If [and only if] an ov_open() call fails, the application must explicitly
+		           // fclose() the FILE * pointer itself.
+		throw std::runtime_error("Could not open OGG file (" + filename + ").");
+	}
+	Finally cleanup([&oggFile]() {
+		ov_clear(&oggFile); /* calls fclose */
+	});
+
+	const vorbis_info* const pInfo = ov_info(&oggFile, -1);
+
+	int bitStream;
+	while (true) {
+		float** buffer = nullptr;
+		auto samples_read = ov_read_float(&oggFile, &buffer, 1024, &bitStream);
+		if (samples_read == 0) {
+			break;
+		}
+		if (samples_read < 0) {
+			throw std::runtime_error("Error decoding OGG file (" + filename + ").");
+		}
+
+		size_t start = out.size();
+		out.resize(start + samples_read * 2);
+		for (size_t i = samples_read; i > 0;) {
+			i -= 1;
+			auto tmp = buffer[0][i];
+			out[start + i * 2 + 0] = tmp;
+			out[start + i * 2 + 1] = buffer[pInfo->channels == 1 ? 0 : 1][i];
+		}
+	}
+	resampleToEngineFrequency(out, pInfo->rate);
+}
+
+void loadMp3(const std::string& filename, std::vector<float>& out) {
+	drmp3_config config{};
+	drmp3_uint64 frameCount = 0;
+	float* pcm =
+	    drmp3_open_file_and_read_pcm_frames_f32(filename.c_str(), &config, &frameCount, nullptr);
+	if (pcm == nullptr) {
+		throw std::runtime_error("Could not open MP3 file (" + filename + ").");
+	}
+	Finally cleanup([pcm]() { drmp3_free(pcm, nullptr); });
+
+	if (config.channels == 1) {
+		out.resize(static_cast<size_t>(frameCount) * 2);
+		for (drmp3_uint64 i = 0; i < frameCount; ++i) {
+			out[static_cast<size_t>(i) * 2 + 0] = pcm[i];
+			out[static_cast<size_t>(i) * 2 + 1] = pcm[i];
+		}
+	} else if (config.channels == 2) {
+		out.assign(pcm, pcm + frameCount * 2);
+	} else {
+		throw std::runtime_error("Unsupported channel count in MP3 file (" + filename + ").");
+	}
+	resampleToEngineFrequency(out, static_cast<int>(config.sampleRate));
+}
+
+} // namespace
 
 Audio::Audio()
 : mixer(std::make_shared<Mixer>()), pitchControl(audio::pitch(mixer)),
@@ -79,80 +200,18 @@ void Audio::step() {
 
 SoundFile::SoundFile(const std::string& filename, std::launch)
 : buffer(std::make_shared<std::vector<float>>()) {
+	if (endsWithIgnoreCase(filename, ".mp3")) {
+		loadMp3(filename, *buffer);
+	} else {
 #ifdef _WIN32
-	FILE* const f = fopen(filename.c_str(), "rb");
+		FILE* const f = fopen(filename.c_str(), "rb");
 #else
-	FILE* const f = fopen(filename.c_str(), "rbe");
+		FILE* const f = fopen(filename.c_str(), "rbe");
 #endif
-	if (f == nullptr) {
-		throw std::runtime_error("File not found (" + filename + ").");
-	}
-
-	OggVorbis_File oggFile;
-	if (ov_open(f, &oggFile, nullptr, 0) != 0) {
-		fclose(f); // If [and only if] an ov_open() call fails, the application must explicitly
-		           // fclose() the FILE * pointer itself.
-		throw std::runtime_error("Could not open OGG file (" + filename + ").");
-	}
-	Finally cleanup([&oggFile]() {
-		ov_clear(&oggFile); /* calls fclose */
-	});
-
-	const vorbis_info* const pInfo = ov_info(&oggFile, -1);
-
-	int bitStream;
-	while (true) {
-		float** buffer = nullptr;
-		auto samples_read = ov_read_float(&oggFile, &buffer, 1024, &bitStream);
-		if (samples_read == 0) {
-			break;
+		if (f == nullptr) {
+			throw std::runtime_error("File not found (" + filename + ").");
 		}
-		if (samples_read < 0) {
-			throw std::runtime_error("Error decoding OGG file (" + filename + ").");
-		}
-
-		size_t start = this->buffer->size();
-		this->buffer->resize(start + samples_read * 2);
-		for (size_t i = samples_read; i > 0;) {
-			i -= 1;
-			auto tmp = buffer[0][i];
-			(*this->buffer)[start + i * 2 + 0] = tmp;
-			(*this->buffer)[start + i * 2 + 1] = buffer[pInfo->channels == 1 ? 0 : 1][i];
-		}
-	}
-	if (pInfo->rate != jngl::audio::frequency) {
-		float resampleFactor =
-		    static_cast<float>(jngl::audio::frequency) / static_cast<float>(pInfo->rate);
-		auto newSize = static_cast<size_t>(static_cast<float>(buffer->size()) * resampleFactor);
-		if (newSize % 2 != 0) {
-			++newSize;
-		}
-		std::vector<float> resampledData(newSize);
-		for (size_t i = 0; i < newSize / 2; ++i) {
-			float originalIndex = static_cast<float>(i) / resampleFactor;
-			auto index = static_cast<size_t>(originalIndex);
-			const size_t maxIndex = (buffer->size() >= 2) ? (buffer->size() / 2 - 1) : 0;
-			if (index > maxIndex) {
-				index = maxIndex;
-			}
-			float fraction = originalIndex - static_cast<float>(index);
-			{
-				size_t originalLeftIndex = index * 2;
-				const float b =
-				    (originalLeftIndex + 2 < buffer->size()) ? (*buffer)[originalLeftIndex + 2] : 0;
-				resampledData[i * 2] =
-				    (*buffer)[originalLeftIndex] * (1.0f - fraction) + b * fraction;
-			}
-			{
-				const size_t originalRightIndex = index * 2 + 1;
-				const float b = (originalRightIndex + 2 < buffer->size())
-				                    ? (*buffer)[originalRightIndex + 2]
-				                    : 0;
-				resampledData[i * 2 + 1] =
-				    (*buffer)[originalRightIndex] * (1.0f - fraction) + b * fraction;
-			}
-		}
-		(*buffer) = std::move(resampledData);
+		loadOgg(f, filename, *buffer);
 	}
 
 	internal::debug("Decoded {} ({:.2f} MB, {})", filename,

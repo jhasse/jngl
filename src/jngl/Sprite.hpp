@@ -353,7 +353,7 @@ template <class Vect> void draw(const std::string& filename, Vect pos) {
 
 /// Starts a thread to load \a filename and returns a Finally which will join it
 ///
-/// \param filename Name of an image file (extension is optional) or a .ogg sound file.
+/// \param filename Name of an image file (extension is optional) or a .ogg/.mp3 sound file.
 Finally load(const std::string& filename);
 
 void unload(const std::string& filename);

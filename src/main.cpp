@@ -750,8 +750,11 @@ bool getAntiAliasing() {
 Finally loadSound(const std::string&); // definied in SoundFile.cpp
 
 Finally load(const std::string& filename) {
-	if (filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg") {
-		return loadSound(filename);
+	if (filename.length() >= 4) {
+		const auto ext = filename.substr(filename.length() - 4);
+		if (ext == ".ogg" || ext == ".mp3" || ext == ".OGG" || ext == ".MP3") {
+			return loadSound(filename);
+		}
 	}
 	return loadSprite(filename);
 }
