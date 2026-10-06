@@ -34,18 +34,18 @@ public:
 	Channel& operator=(Channel&&) noexcept;
 	~Channel();
 
-	/// Play OGG file on this channel
+	/// Play an OGG or MP3 audio file on this channel
 	void play(const std::string& filename);
 
 	/// Play a Sound on this channel
 	void play(std::shared_ptr<Sound>);
 
-	/// Play an OGG audio file on this channel in a loop
+	/// Play an OGG or MP3 audio file on this channel in a loop
 	///
 	/// If it's already playing, this function won't play it twice.
 	std::shared_ptr<SoundFile> loop(const std::string& filename);
 
-	/// Stop OGG file playing on this channel
+	/// Stop an OGG or MP3 audio file playing on this channel
 	void stop(const std::string& filename);
 
 	/// Stop a Sound if it's playing on this channel
@@ -56,7 +56,7 @@ public:
 	/// Equivalent to calling stop for all currently playing sounds.
 	void stopAll();
 
-	/// Returns true if the OGG file is currently playing on this channel
+	/// Returns true if the OGG or MP3 audio file is currently playing on this channel
 	///
 	/// \throws std::runtime_error if the file doesn't exist
 	bool isPlaying(std::string_view filename) const;
