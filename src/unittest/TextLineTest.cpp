@@ -10,7 +10,7 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <cmath>
 
-TEST_CASE("TextLineTest") { // NOLINT
+TEST_CASE("TextLineTest") {
 	// Test with two rather big scale factors to avoid rounding errors:
 	for (double scaleFactor : { 6, 8 }) {
 		Fixture f(scaleFactor);

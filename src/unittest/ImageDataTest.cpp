@@ -4,21 +4,13 @@
 #include "../jngl/ImageData.hpp"
 
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_string.hpp>
 
 TEST_CASE("ImageData") {
-	try {
-		jngl::ImageData::load("foo.tga");
-		REQUIRE(false);
-	} catch (std::runtime_error& e) {
-		REQUIRE(std::string(e.what()).substr(0, 68) ==
-		        "No suitable image file found for: foo.tga\nSupported file extensions:");
-	}
-	try {
-		jngl::ImageData::load("foo.webp");
-		REQUIRE(false);
-	} catch (std::runtime_error& e) {
-		REQUIRE(std::string(e.what()) == "File not found: foo.webp");
-	}
+	REQUIRE_THROWS_WITH(jngl::ImageData::load("foo.tga"),
+	                    Catch::Matchers::StartsWith("No suitable image file found for: foo.tga\n"
+	                                                "Supported file extensions:"));
+	REQUIRE_THROWS_WITH(jngl::ImageData::load("foo.webp"), "File not found: foo.webp");
 	REQUIRE(jngl::ImageData::load("../data/jngl.webp")->getImageWidth() == 600);
 	REQUIRE(jngl::ImageData::load("../data/jngl")->getImageHeight() == 300);
 }

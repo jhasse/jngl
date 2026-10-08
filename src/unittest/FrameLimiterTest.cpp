@@ -3,8 +3,9 @@
 #include "../timing/FrameLimiter.hpp"
 #include "../log.hpp"
 
-#include <catch2/catch_test_macros.hpp>
+#include <algorithm>
 #include <cassert>
+#include <catch2/catch_test_macros.hpp>
 
 struct VsyncTiming {
 	explicit VsyncTiming(double hz) : microsecondsPerFrame(static_cast<uint64_t>(1e6 / hz)) {
@@ -51,17 +52,22 @@ TEST_CASE("FrameLimiter") {
 
 	{ // check that when step and draw take no time we sleep and stay at 60 FPS:
 		uint64_t totalSteps = 0;
+		int unexpectedNumberOfSteps = 0;
+		uint64_t maxTimeSlept = 0;
 		jngl::FrameLimiter limiter{ 1. / 60., getTime };
 		for (int i = 0; i < 100000; ++i) {
 			auto numberOfSteps = limiter.check();
-			REQUIRE(numberOfSteps == 1U);
+			if (numberOfSteps != 1U) {
+				++unexpectedNumberOfSteps;
+			}
 			totalSteps += numberOfSteps;
 			time_us += 2 * 1e3; // draw takes 2 ms, step takes 0 ms
 			const auto oldTime = time_us;
 			limiter.sleepIfNeeded(sleep);
-			const auto timeSlept = time_us - oldTime;
-			REQUIRE(timeSlept <= 16'667u); // we should never sleep more than 16.67 ms
+			maxTimeSlept = std::max(maxTimeSlept, time_us - oldTime);
 		}
+		REQUIRE(unexpectedNumberOfSteps == 0);
+		REQUIRE(maxTimeSlept <= 16'667u); // we should never sleep more than 16.67 ms
 		auto averageSPS = totalSteps * 1'000'000 / time_us;
 		REQUIRE(averageSPS >= 59u);
 		REQUIRE(averageSPS <= 61u);
@@ -69,21 +75,21 @@ TEST_CASE("FrameLimiter") {
 	{
 		time_us = 0;
 		jngl::FrameLimiter limiter{ 1. / 60., getTime };
-		bool first = true;
+		unsigned int expectedNumberOfSteps = 1; // 1 for the first frame, then 2 to catch up
+		int unexpectedNumberOfSteps = 0;
 		uint64_t totalSteps = 0;
 		for (int i = 0; i < 100000; ++i) {
 			auto numberOfSteps = limiter.check();
-			if (first) {
-				REQUIRE(numberOfSteps == 1U);
-				first = false;
-			} else {
-				REQUIRE(numberOfSteps == 2U);
+			if (numberOfSteps != expectedNumberOfSteps) {
+				++unexpectedNumberOfSteps;
 			}
+			expectedNumberOfSteps = 2;
 			totalSteps += numberOfSteps;
 			time_us += 20 * 1e3; // draw takes 20 ms, step takes 0 ms, so we are already too
 			                     // slow, so we should not sleep at all.
 			limiter.sleepIfNeeded(sleep);
 		}
+		REQUIRE(unexpectedNumberOfSteps == 0);
 		auto averageSPS = totalSteps * 1'000'000 / time_us;
 		REQUIRE(averageSPS >= 59u);
 		REQUIRE(averageSPS <= 61u);

@@ -7,8 +7,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-
-TEST_CASE("Color") { // NOLINT
+TEST_CASE("Color") {
 	const jngl::Color a{ 0x68da4f_rgb };
 	const auto b = jngl::Color(0x68, 0xda, 0x4f);
 	const auto c = jngl::Color(104, 218, 79);
@@ -20,7 +19,7 @@ TEST_CASE("Color") { // NOLINT
 	REQUIRE(c.getBlue() == b.getBlue());
 }
 
-TEST_CASE("Rgb") { // NOLINT
+TEST_CASE("Rgb") {
 	const jngl::Rgb a = 0x68da4f_rgb;
 	const auto b = jngl::Rgb::u8(0x68, 0xda, 0x4f);
 	const auto c = jngl::Rgb::u8(104, 218, 79);
@@ -32,7 +31,7 @@ TEST_CASE("Rgb") { // NOLINT
 	REQUIRE(c.getBlue() == b.getBlue());
 }
 
-TEST_CASE("Rgba") { // NOLINT
+TEST_CASE("Rgba") {
 	const jngl::Rgba a = 0x68da4f4f_rgba;
 	const auto b = jngl::Rgba::u8(0x68, 0xda, 0x4f, 0x4f);
 	const auto c = "#68da4f4f"_rgba;

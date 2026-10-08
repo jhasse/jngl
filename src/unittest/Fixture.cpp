@@ -67,7 +67,7 @@ std::string Fixture::getAsciiArt() const {
 	}
 	REQUIRE(index == buffer.size());
 	REQUIRE(reduced.size() == size_t(h / reduceFactor));
-	std::string out = "\n"; // Start with a newline for prettier output by Boost.Test
+	std::string out = "\n"; // Start with a newline so that the ASCII art lines up in test output
 	for (const auto& row : std::ranges::reverse_view(reduced)) {
 		REQUIRE(row.size() == reducedW);
 		for (const auto& cell : row) {
