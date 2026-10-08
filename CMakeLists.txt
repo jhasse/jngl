@@ -530,10 +530,18 @@ endif()
 
 option(JNGL_CLANG_TIDY "Run clang-tidy on source files" OFF)
 if(JNGL_CLANG_TIDY)
-	# Anchor the header filter to our own src/ so vendored CPM dependencies
-	# (which may sit under any cache folder and often have their own src/)
-	# aren't picked up by clang-tidy too.
-	set_target_properties(jngl          PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color;--header-filter=^${CMAKE_SOURCE_DIR}/src/")
-	set_target_properties(jngl-test     PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color;--header-filter=^${CMAKE_SOURCE_DIR}/src/")
-	set_target_properties(jngl-unittest PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color;--header-filter=^${CMAKE_SOURCE_DIR}/src/")
+	# CPM dependencies often have their own src/ folder, which HeaderFilterRegex would match. Their
+	# location is only known here (CPM_SOURCE_CACHE can be anywhere), so exclude them on the command
+	# line. This overrides ExcludeHeaderFilterRegex from .clang-tidy, so repeat dr_mp3.h here.
+	set(CLANG_TIDY_EXCLUDE "/audio/dr_mp3\\.h$")
+	foreach(dir IN ITEMS "${FETCHCONTENT_BASE_DIR}" "${CPM_SOURCE_CACHE}")
+		if(dir)
+			string(REGEX REPLACE "([][.*+?^$(){}|\\])" "\\\\\\1" dir "${dir}")
+			string(APPEND CLANG_TIDY_EXCLUDE "|^${dir}/")
+		endif()
+	endforeach()
+	set(CLANG_TIDY_COMMAND "clang-tidy;--use-color;--exclude-header-filter=${CLANG_TIDY_EXCLUDE}")
+	set_target_properties(jngl          PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
+	set_target_properties(jngl-test     PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
+	set_target_properties(jngl-unittest PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
 endif()
