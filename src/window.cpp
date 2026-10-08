@@ -372,9 +372,13 @@ void Window::stepIfNeeded() {
 		for (const auto& job : jobs) {
 			job->step();
 		}
-		for (auto& job : jobsToAdd) {
+		// By index and by copy, as a job's step() may add another one (addJob), which would
+		// invalidate iterators and references into jobsToAdd. That one gets stepped and added
+		// to jobs, too.
+		for (size_t i = 0; i < jobsToAdd.size(); ++i) {
+			const auto job = jobsToAdd[i];
 			job->step();
-			jobs.emplace_back(std::move(job));
+			jobs.emplace_back(job);
 		}
 		jobsToAdd.clear();
 
