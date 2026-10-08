@@ -527,7 +527,10 @@ endif()
 
 option(JNGL_CLANG_TIDY "Run clang-tidy on source files" OFF)
 if(JNGL_CLANG_TIDY)
-	set_target_properties(jngl          PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color")
-	set_target_properties(jngl-test     PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color")
-	set_target_properties(jngl-unittest PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color")
+	# CMake doesn't pass -std=gnu++20 for cxx_std_20 if the compiler defaults to it anyway (e.g. GCC
+	# 16), but clang-tidy would then use Clang's default, which is older.
+	set(CLANG_TIDY_COMMAND "clang-tidy;--use-color;--extra-arg=-std=gnu++20")
+	set_target_properties(jngl          PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
+	set_target_properties(jngl-test     PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
+	set_target_properties(jngl-unittest PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
 endif()
