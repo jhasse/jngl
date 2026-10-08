@@ -355,12 +355,7 @@ void Window::setStepsPerSecond(const unsigned int stepsPerSecond) {
 }
 
 void Window::stepIfNeeded() {
-	unsigned int stepsToDo = frameLimiter.check();
-#ifdef JNGL_RECORD
-	if (getJob([](Job& job) { return dynamic_cast<VideoRecorder*>(&job); })) {
-		stepsToDo = 1; // don't skip frames when recording video
-	}
-#endif
+	const unsigned int stepsToDo = frameLimiter.check();
 	for (unsigned int i = 0; i < stepsToDo; ++i) {
 		++internal::gFrameNumber; // for logging
 		updateKeyStates();
@@ -420,6 +415,16 @@ void Window::stepIfNeeded() {
 				currentWork_->onQuitEvent();
 			}
 		}
+#ifdef JNGL_RECORD
+		// Don't skip frames when recording video. While a VideoRecorder is active, the audio
+		// engine passes the sound samples of each step to it (see
+		// VideoRecorder::fillAudioBuffer), which encodes them together with the frame captured
+		// by its next draw(). So there must be exactly one step per draw(), also when the
+		// VideoRecorder has only just been added during this step, e.g. by a Job.
+		if (jngl::getJob<VideoRecorder>()) {
+			break;
+		}
+#endif
 	}
 }
 
