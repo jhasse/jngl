@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ShaderCache.hpp"
 
+#include "jngl/Alpha.hpp"
 #include "jngl/Shader.hpp"
 #include "opengl.hpp"
 #include "spriteimpl.hpp"
@@ -147,27 +148,30 @@ ShaderCache::ShaderCache() {
 			})");
 		Shader fragmentShader(R"(#version 300 es
 			uniform sampler2D tex;
-			uniform lowp vec4 spriteColor;
+			uniform lowp vec3 lerpColor;
+			uniform lowp vec4 lerpFactors;
 
 			in mediump vec2 texCoord;
 
 			out lowp vec4 outColor;
 
 			void main() {
-				outColor = texture(tex, texCoord) * spriteColor;
+				outColor = mix(texture(tex, texCoord), vec4(lerpColor, 0.0), lerpFactors);
 			})",
 		                      Shader::Type::FRAGMENT, R"(#version 100
 			uniform sampler2D tex;
-			uniform lowp vec4 spriteColor;
+			uniform lowp vec3 lerpColor;
+			uniform lowp vec4 lerpFactors;
 
 			varying mediump vec2 texCoord;
 
 			void main() {
-				gl_FragColor = texture2D(tex, texCoord) * spriteColor;
+				gl_FragColor = mix(texture2D(tex, texCoord), vec4(lerpColor, 0.0), lerpFactors);
 			})");
 		textureShaderProgram =
 		    std::make_unique<ShaderProgram>(*textureVertexShader, fragmentShader);
-		shaderSpriteColorUniform = textureShaderProgram->getUniformLocation("spriteColor");
+		shaderLerpColorUniform = textureShaderProgram->getUniformLocation("lerpColor");
+		shaderLerpFactorsUniform = textureShaderProgram->getUniformLocation("lerpFactors");
 		modelviewUniform = textureShaderProgram->getUniformLocation("modelview");
 	}
 }
@@ -188,6 +192,19 @@ ShaderProgram::Context ShaderCache::useSimpleShaderProgram(const Mat3& modelview
 	glEnableVertexAttribArray(0);
 
 	return context;
+}
+
+void ShaderCache::setTextureColorUniforms(const Rgba color) const {
+	// Multiplying with color is the same as mixing towards black by 1 - color
+	glUniform3f(shaderLerpColorUniform, 0, 0, 0);
+	glUniform4f(shaderLerpFactorsUniform, 1.f - color.getRed(), 1.f - color.getGreen(),
+	            1.f - color.getBlue(), 1.f - color.getAlpha());
+}
+
+void ShaderCache::setTextureLerpUniforms(const Rgb color, const float red, const float green,
+                                         const float blue, const Alpha alpha) const {
+	glUniform3f(shaderLerpColorUniform, color.getRed(), color.getGreen(), color.getBlue());
+	glUniform4f(shaderLerpFactorsUniform, red, green, blue, 1.f - alpha.getAlpha());
 }
 
 void ShaderCache::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {

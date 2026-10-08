@@ -22,6 +22,14 @@ double getScreenWidth();
 double getScreenHeight();
 
 /// Returns the size of the useable draw area (excluding letter-boxing) in screen pixels
+///
+/// This is always the actual canvas, i.e. its size in actual pixels divided by
+/// jngl::getScaleFactor(). So it takes AppParameters::scaleFactor into account, as well as a
+/// window whose shape AppParameters::minAspectRatio and maxAspectRatio let differ from
+/// AppParameters::screenSize. Where it matches AppParameters::screenSize, that is returned
+/// exactly, without rounding errors. It doesn't change once the window has been created.
+///
+/// \throws std::runtime_error if the window hasn't been created yet
 Vec2 getScreenSize();
 
 } // namespace jngl

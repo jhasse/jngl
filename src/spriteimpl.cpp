@@ -1,4 +1,4 @@
-// Copyright 2007-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2007-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "spriteimpl.hpp"
 
@@ -84,7 +84,8 @@ Finally loadSprite(const std::string& filename) {
 	return Finally(nullptr);
 }
 
-Sprite::Loader::Loader(std::string filename) noexcept : filename(std::move(filename)) {
+Sprite::Loader::Loader(std::string filename, const bool mipmap) noexcept
+: filename(std::move(filename)), mipmap(mipmap) {
 	if (!TextureCache::handle().sprites.contains(this->filename)) {
 		imageDataFuture = std::async(std::launch::async, [this]() {
 			auto tmp = ImageData::load(this->filename, getScaleFactor());
@@ -105,11 +106,15 @@ Sprite::Loader::~Loader() noexcept {
 std::shared_ptr<Sprite> Sprite::Loader::shared() const {
 	auto& sprites = TextureCache::handle().sprites;
 	if (auto it = sprites.find(filename); it != sprites.end()) {
+		if (mipmap) {
+			it->second->enableMipmaps();
+		}
 		return it->second;
 	}
 	auto imageData = imageDataFuture.get();
 	double scale = imageData->getImageWidth() == imageData->getWidth() ? getScaleFactor() : 1;
-	return sprites.try_emplace(filename, std::make_shared<Sprite>(*imageData, scale, filename))
+	return sprites
+	    .try_emplace(filename, std::make_shared<Sprite>(*imageData, scale, filename, mipmap))
 	    .first->second;
 }
 
@@ -126,10 +131,7 @@ Sprite* Sprite::Loader::operator->() const {
 
 void unload(const std::string& filename) {
 	auto& sprites = TextureCache::handle().sprites;
-	auto it = sprites.find(filename);
-	if (it != sprites.end()) {
-		sprites.erase(it);
-	}
+	sprites.erase(filename);
 	TextureCache::handle().remove(filename);
 }
 

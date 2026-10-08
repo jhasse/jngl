@@ -25,6 +25,7 @@ std::string Window::GetFontFileByName(const std::string& fontname) {
 }
 
 Window::~Window() {
+	releaseResources();
 }
 
 int Window::GetKeyCode(key::KeyType key) {
@@ -82,6 +83,10 @@ void Window::SetRelativeMouseMode(const bool relative) {
 	impl->setRelativeMouseMode(relative);
 }
 
+void Window::setMouseConfined(const bool confined) {
+	mouseConfined = confined;
+}
+
 void Window::SetIcon(const std::string&) {
 }
 
@@ -109,6 +114,18 @@ void Window::setFullscreen(bool fullscreen) {
 	if (!fullscreen) {
 		debugLn("Can't unset fullscreen on iOS!");
 	}
+}
+
+void Window::startTextInputSession(TextInputType) {
+	setKeyboardVisible(true);
+}
+
+void Window::stopTextInputSession() {
+	setKeyboardVisible(false);
+}
+
+void Window::setTextInputArea(Rect, double) {
+	// TODO: reposition the IME candidate window
 }
 
 void setCursor(Cursor) {}

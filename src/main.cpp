@@ -126,6 +126,7 @@ void showWindow(const std::string& title, const double width, const double heigh
 	++internal::gFrameNumber; // will set it to 0 for the first window
 	internal::debug("jngl::showWindow(\"{}\", {}, {}, {});", title, width, height, fullscreen);
 	bool isMouseVisible = pWindow ? pWindow->getMouseVisible() : true;
+	bool isMouseConfined = pWindow ? pWindow->getMouseConfined() : false;
 	hideWindow();
 	int widthRounded = static_cast<int>(std::lround(width));
 	int heightRounded = static_cast<int>(std::lround(height));
@@ -141,8 +142,14 @@ void showWindow(const std::string& title, const double width, const double heigh
 		App::instance().setDisplayName(title);
 	}
 	pWindow->SetMouseVisible(isMouseVisible);
+	pWindow->setMouseConfined(isMouseConfined);
 	setAntiAliasing(antiAliasingEnabled);
 	pWindow->initGlObjects();
+
+	// The active TextInputSession (or the deprecated getTextInput()'s legacy fallback) lives
+	// outside of Window so it survives this Window being replaced, but backends like SDL need to
+	// be told about it again for the freshly created Window.
+	internal::reapplyTextInputSession();
 }
 
 void hideWindow() {
@@ -358,6 +365,14 @@ bool getRelativeMouseMode() {
 	return pWindow->getRelativeMouseMode();
 }
 
+void setMouseConfined(const bool confined) {
+	pWindow->setMouseConfined(confined);
+}
+
+bool isMouseConfined() {
+	return pWindow->getMouseConfined();
+}
+
 void setTitle(const std::string& title) {
 	pWindow->SetTitle(title);
 }
@@ -497,7 +512,8 @@ void popMatrix() {
 
 void drawRect(const double xposition, const double yposition, const double width,
               const double height) {
-	drawRect(Vec2{ xposition, yposition }, { width, height });
+	drawRect(modelview().translate(Vec2{ xposition, yposition }), Vec2{ width, height },
+	         gShapeColor);
 }
 
 void drawRect(const Vec2 position, const Vec2 size) {
@@ -596,9 +612,11 @@ Finally scissor(Vec2 position, Vec2 size) {
 	glEnable(GL_SCISSOR_TEST);
 	glScissor(x, y, w, h);
 	return Finally([saved] {
+		// Restore the box even when the scissor test was off, because a FrameBuffer might turn it
+		// back on for letterboxing
+		glScissor(saved.box[0], saved.box[1], saved.box[2], saved.box[3]);
 		if (saved.enabled) {
 			glEnable(GL_SCISSOR_TEST);
-			glScissor(saved.box[0], saved.box[1], saved.box[2], saved.box[3]);
 		} else {
 			glDisable(GL_SCISSOR_TEST);
 		}
@@ -683,6 +701,10 @@ void drawLine(Mat3 modelview, const Vec2 end, float lineWidth, Rgba color) {
 	                    color);
 }
 
+void drawLine(const Mat3& modelview, const Vec2 end, const float lineWidth) {
+	drawLine(modelview, end, lineWidth, gShapeColor);
+}
+
 void drawPoint(const double x, const double y) {
 	drawEllipse(modelview().translate({ x, y }), 1, 1, 0);
 }
@@ -728,8 +750,11 @@ bool getAntiAliasing() {
 Finally loadSound(const std::string&); // definied in SoundFile.cpp
 
 Finally load(const std::string& filename) {
-	if (filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg") {
-		return loadSound(filename);
+	if (filename.length() >= 4) {
+		const auto ext = filename.substr(filename.length() - 4);
+		if (ext == ".ogg" || ext == ".mp3" || ext == ".OGG" || ext == ".MP3") {
+			return loadSound(filename);
+		}
 	}
 	return loadSprite(filename);
 }
@@ -776,6 +801,23 @@ void setConfigPath(const std::string& path) {
 	}
 }
 
+#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && !defined(IOS)
+namespace {
+/// The display name without characters that aren't allowed in a directory name on some platform
+std::string appDirectoryName() {
+	auto appDir = App::instance().getDisplayName();
+	std::string invalid_chars = "\\/:?\"<>|*";
+	for (const char c : invalid_chars) {
+		appDir.erase(std::remove(appDir.begin(), appDir.end(), c), appDir.end());
+	}
+	if (appDir.empty()) {
+		throw std::runtime_error("Invalid display name: " + App::instance().getDisplayName());
+	}
+	return appDir;
+}
+} // namespace
+#endif
+
 std::string internal::getConfigPath() {
 	if (configPath) {
 		return *configPath;
@@ -792,15 +834,7 @@ std::string internal::getConfigPath() {
 #else
 	path << getenv("HOME") << "/.config/"; // NOLINT
 #endif
-	auto appDir = App::instance().getDisplayName();
-	std::string invalid_chars = "\\/:?\"<>|*";
-	for (const char c : invalid_chars) {
-		appDir.erase(std::remove(appDir.begin(), appDir.end(), c), appDir.end());
-	}
-	if (appDir.empty()) {
-		throw std::runtime_error("Invalid display name: " + App::instance().getDisplayName());
-	}
-	path << appDir << "/";
+	path << appDirectoryName() << "/";
 #endif
 	return *(configPath = path.str());
 #endif
@@ -810,6 +844,23 @@ std::string internal::getConfigPath() {
 std::string getConfigPath() {
 	return internal::getConfigPath();
 }
+
+#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && (!defined(__APPLE__) || !TARGET_OS_IPHONE)
+std::string getDocumentsPath() {
+#ifdef _WIN32
+	return getSystemDocumentsPath() + "/" + appDirectoryName() + "/";
+#elif defined(__APPLE__)
+	return getSystemConfigPath() + "/" + appDirectoryName() + "/";
+#else
+	// $XDG_DATA_HOME, which is to be ignored unless it's an absolute path, or its default
+	if (const char* const dataHome = getenv("XDG_DATA_HOME"); // NOLINT
+	    dataHome && dataHome[0] == '/') {
+		return std::string(dataHome) + "/" + appDirectoryName() + "/";
+	}
+	return std::string(getenv("HOME")) + "/.local/share/" + appDirectoryName() + "/"; // NOLINT
+#endif
+}
+#endif
 
 std::stringstream readAsset(const std::string& filename) {
 	if (!filename.empty() && filename[0] == '/') {

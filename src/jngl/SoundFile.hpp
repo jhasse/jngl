@@ -24,14 +24,14 @@ class Channel;
 class Sound;
 struct SoundParams;
 
-/// Sound loaded from an OGG file
+/// Sound loaded from an OGG or MP3 file
 ///
 /// JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly -
 /// you can just use jngl::play or Channel::play. If you want to access the internally SoundFile
 /// from JNGL's cache before playing, use SoundFile::get.
 class SoundFile {
 public:
-	/// Load an OGG file called \a filename
+	/// Load an OGG or MP3 file called \a filename
 	///
 	/// Loading can either happen on its own thread (std::launch::async) or the first time you
 	/// try to play the file (std::launch::deferred).

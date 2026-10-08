@@ -89,3 +89,21 @@ TEST_CASE("getConfigPath") {
 	const auto p = jngl::internal::getConfigPath();
 	REQUIRE(p.substr(p.size() - 22) == "/testwithinvalidchars/");
 }
+
+#if !defined(_WIN32) && !defined(__APPLE__) && !defined(ANDROID) && !defined(__EMSCRIPTEN__)
+TEST_CASE("getDocumentsPath") {
+	const auto displayName = jngl::App::instance().getDisplayName();
+	jngl::Finally restore([&]() {
+		jngl::App::instance().setDisplayName(displayName);
+		unsetenv("XDG_DATA_HOME");
+	});
+	jngl::App::instance().setDisplayName("My Game?");
+	setenv("XDG_DATA_HOME", "/data", 1);
+	REQUIRE(jngl::getDocumentsPath() == "/data/My Game/");
+	// Relative or empty, it's to be ignored
+	for (const char* ignored : { "data", "" }) {
+		setenv("XDG_DATA_HOME", ignored, 1);
+		REQUIRE(jngl::getDocumentsPath() == std::string(getenv("HOME")) + "/.local/share/My Game/");
+	}
+}
+#endif

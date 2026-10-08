@@ -35,6 +35,7 @@ struct App::Impl {
 	std::optional<uint32_t> steamAppId;
 	std::set<ShaderProgram*> shaderPrograms;
 	std::function<double(int, int)> scaleFactor;
+	std::optional<Vec2> screenSize;
 };
 
 App::App() {
@@ -62,8 +63,16 @@ Finally App::init(AppParameters params) {
 	                                              .pixelArt = params.pixelArt,
 	                                              .steamAppId = params.steamAppId,
 	                                              .shaderPrograms = {},
-	                                              .scaleFactor = std::move(params.scaleFactor) });
+	                                              .scaleFactor = std::move(params.scaleFactor),
+	                                              .screenSize = std::nullopt });
 	return Finally{ [this]() { impl.reset(); } };
+}
+
+std::optional<Vec2> App::getScreenSize() const {
+	if (!impl) {
+		return std::nullopt;
+	}
+	return impl->screenSize;
 }
 
 void App::atExit(std::function<void()> f) {
@@ -248,9 +257,13 @@ uint8_t mainLoop(AppParameters params) {
 	if (params.fullscreen) {
 		fullscreen = *params.fullscreen;
 	}
-	if (!params.screenSize) {
+	if (!params.screenSize) { // needs to be done here for platforms (e.g. Android) where the
+		                      // desktop size is only known after creating the window
 		params.screenSize = { static_cast<double>(getDesktopWidth()),
 			                  static_cast<double>(getDesktopHeight()) };
+	}
+	if (params.screenSize->x > 0 /* e.g. Android returns -1 */) {
+		App::instance().impl->screenSize = params.screenSize;
 	}
 	if (!fullscreen) {
 		// Make window as big as possible

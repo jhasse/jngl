@@ -12,7 +12,7 @@ namespace jngl {
 
 Texture::Texture(const float preciseWidth, const float preciseHeight, const int width,
                  const int height, const GLubyte* const* const rowPointers, GLenum format,
-                 const GLubyte* const data, const GLenum type)
+                 const GLubyte* const data, const GLenum type, const bool mipmap)
 : texture_(opengl::genAndBindTexture()) {
 	assert(format == GL_RGB || format == GL_RGBA || format == GL_BGR);
 	GLint internalFormat = format == GL_RGBA ? GL_RGBA : GL_RGB;
@@ -59,6 +59,10 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 		assert(!rowPointers);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
 	}
+	if (mipmap) {
+		glGenerateMipmap(GL_TEXTURE_2D);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	}
 }
 
 Texture::~Texture() {
@@ -103,7 +107,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	opengl::bindVertexArray(opengl::vaoStream);
 	auto& shaderCache = ShaderCache::handle();
 	auto tmp = shaderCache.textureShaderProgram->use();
-	glUniform4f(shaderCache.shaderSpriteColorUniform, red, green, blue, alpha);
+	shaderCache.setTextureColorUniforms(Rgba(red, green, blue, alpha));
 	glUniformMatrix3fv(shaderCache.modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(float)),

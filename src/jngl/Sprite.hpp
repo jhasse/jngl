@@ -48,16 +48,29 @@ public:
 	///
 	/// You may pass a filename, then JNGL will use that as a key for its internal texture cache,
 	/// meaning that if there's already a file loaded with that name, it won't upload the passed
-	/// ImageData to the GPU again.
+	/// ImageData to the GPU again. There is one texture per filename: once \a mipmap is true for
+	/// that name, every later load shares the mipmapped texture.
+	///
+	/// \param mipmap Generate mipmaps so the sprite filters cleanly when drawn smaller than its
+	/// pixel size. Minification is trilinear. On OpenGL ES 2.0 the image's width and height must
+	/// both be powers of two.
 	explicit Sprite(const ImageData&, double scale,
-	                std::optional<std::string_view> filename = std::nullopt);
+	                std::optional<std::string_view> filename = std::nullopt, bool mipmap = false);
 
 	/// The sprite data is stored as packed RGBA bytes in an array, where the size of the array
 	/// needs to be calculated as `width * height * 4`.
-	Sprite(const uint8_t* bytes, size_t width, size_t height);
+	///
+	/// \param mipmap Generate mipmaps for minification. See Sprite(const ImageData&, double, ...).
+	Sprite(const uint8_t* bytes, size_t width, size_t height, bool mipmap = false);
 
 	/// \deprecated Use Loader instead
-	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL);
+	/// \param mipmap Generate mipmaps for minification. See Sprite(const ImageData&, double, ...).
+	explicit Sprite(const std::string& filename, LoadType loadType = LoadType::NORMAL,
+	                bool mipmap = false);
+
+	/// \deprecated Use Loader instead
+	/// \param mipmap Generate mipmaps for minification. See Sprite(const ImageData&, double, ...).
+	explicit Sprite(const std::string& filename, bool mipmap);
 
 	/// Does nothing
 	void step();
@@ -88,7 +101,11 @@ public:
 		///
 		/// Note that if the file couldn't be found this will not throw. Instead the exception will
 		/// be thrown on first use by shared() or operator->().
-		explicit Loader(std::string filename) noexcept;
+		///
+		/// \param mipmap Generate mipmaps for minification. See Sprite(const ImageData&, double,
+		/// ...). The filename is the only cache key, so this enables mipmaps for every load of
+		/// \a filename.
+		explicit Loader(std::string filename, bool mipmap = false) noexcept;
 
 		/// Blocks until the Sprite has been loaded
 		///
@@ -118,6 +135,7 @@ public:
 	private:
 		mutable std::future<std::unique_ptr<ImageData>> imageDataFuture;
 		std::string filename;
+		bool mipmap = false;
 	};
 
 	/// Draws the image centered using \a modelview
@@ -131,6 +149,25 @@ public:
 	/// If the sprite is mostly white, this will make it appear in the specified color. If it's
 	/// black, nothing will change.
 	void draw(Mat3 modelview, Rgba color) const;
+
+	/// Draws the Sprite with each color channel linearly interpolated towards \a color
+	///
+	/// \param red 0.0f (red channel unchanged) ... 1.0f (red channel of \a color)
+	/// \param green 0.0f (green channel unchanged) ... 1.0f (green channel of \a color)
+	/// \param blue 0.0f (blue channel unchanged) ... 1.0f (blue channel of \a color)
+	///
+	/// Unlike draw(Mat3, Rgba), which multiplies, this also works for black Sprites. The color set
+	/// by jngl::setSpriteColor is ignored.
+	///
+	/// \code
+	/// // completely white:
+	/// sprite.drawLerped(jngl::modelview(), 0xffffff_rgb, 1.f, 1.f, 1.f, jngl::Alpha(1.f));
+	/// // halfway between original colors and red, half transparent:
+	/// sprite.drawLerped(jngl::modelview(), 0xff0000_rgb, .5f, .5f, .5f, jngl::Alpha(.5f));
+	/// // only set the red channel to 1.0f:
+	/// sprite.drawLerped(jngl::modelview(), 0xffffff_rgb, 1.f, 0.f, 0.f, jngl::Alpha(1.f));
+	/// \endcode
+	void drawLerped(Mat3 modelview, Rgb color, float red, float green, float blue, Alpha) const;
 
 	/// Draws the sprite using the specified shader program.
 	///
@@ -277,11 +314,12 @@ public:
 	bool contains(jngl::Vec2 point) const;
 
 private:
+	void enableMipmaps();
 	static void cleanUpRowPointers(std::vector<unsigned char*>& buf);
 	void loadTexture(int scaledWidth, int scaledHeight, const std::string& filename, bool halfLoad,
 	                 unsigned int format, const unsigned char* const* rowPointers,
-	                 const unsigned char* data = nullptr);
-	Finally LoadPNG(const std::string& filename, FILE* fp, bool halfLoad);
+	                 const unsigned char* data = nullptr, bool mipmap = false);
+	Finally LoadPNG(const std::string& filename, FILE* fp, bool halfLoad, bool mipmap);
 	struct BMPHeader {
 		unsigned int dataOffset;
 		unsigned int headerSize;
@@ -292,9 +330,9 @@ private:
 		unsigned int compression;
 		unsigned int dataSize;
 	};
-	Finally LoadBMP(const std::string& filename, FILE* fp, bool halfLoad);
+	Finally LoadBMP(const std::string& filename, FILE* fp, bool halfLoad, bool mipmap);
 #ifndef NOWEBP
-	Finally LoadWebP(const std::string& filename, FILE* file, bool halfLoad);
+	Finally LoadWebP(const std::string& filename, FILE* file, bool halfLoad, bool mipmap);
 #endif
 
 	std::shared_ptr<Texture> texture;
@@ -315,7 +353,7 @@ template <class Vect> void draw(const std::string& filename, Vect pos) {
 
 /// Starts a thread to load \a filename and returns a Finally which will join it
 ///
-/// \param filename Name of an image file (extension is optional) or a .ogg sound file.
+/// \param filename Name of an image file (extension is optional) or a .ogg/.mp3 sound file.
 Finally load(const std::string& filename);
 
 void unload(const std::string& filename);
@@ -352,5 +390,26 @@ int getHeight(const std::string& filename);
 Finally disableBlending();
 
 Finally drawOnlyIntoAlphaChannel();
+
+/// How what's drawn is blended with what's already there, see setBlendMode()
+enum class BlendMode : uint8_t {
+	/// Colours are blended by their alpha as usual, but alpha is composited too, rather than added
+	/// up as it is while a FrameBuffer is in use. Drawn onto a FrameBuffer cleared to transparent
+	/// black (see FrameBuffer::Context::clear(Rgba)), everything ends up with the alpha of all
+	/// layers put together, and its colours multiplied by that. Drawing the FrameBuffer with
+	/// BlendMode::Premultiplied afterwards then gives the same result as drawing it all directly.
+	Composite,
+
+	/// For colours that already have their alpha multiplied in, e.g. those of a FrameBuffer drawn
+	/// into with BlendMode::Composite
+	Premultiplied,
+};
+
+/// Sets how what's drawn is blended with what's already there, until the returned Finally object
+/// is destroyed, which restores the previous blending
+#if __cplusplus >= 201703L
+[[nodiscard]]
+#endif
+Finally setBlendMode(BlendMode);
 
 } // namespace jngl

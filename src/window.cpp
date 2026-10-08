@@ -16,6 +16,10 @@
 #include "jngl/record/VideoRecorder.hpp"
 #endif
 
+#ifdef JNGL_PERFORMANCE_OVERLAY
+#include "jngl/matrix.hpp"
+#endif
+
 #ifdef __EMSCRIPTEN__
 #include "emscripten/window.hpp"
 
@@ -134,6 +138,18 @@ int Window::getMouseY() const {
 
 bool Window::getRelativeMouseMode() const {
 	return relativeMouseMode;
+}
+
+void Window::releaseResources() {
+	currentWork_.reset();
+	newWork_.reset();
+	jobs.clear();
+	jobsToAdd.clear();
+	fonts_.clear();
+}
+
+bool Window::getMouseConfined() const {
+	return mouseConfined;
 }
 
 void Window::increaseMouseHiddenCount() {
@@ -339,12 +355,7 @@ void Window::setStepsPerSecond(const unsigned int stepsPerSecond) {
 }
 
 void Window::stepIfNeeded() {
-	unsigned int stepsToDo = frameLimiter.check();
-#ifdef JNGL_RECORD
-	if (getJob([](Job& job) { return dynamic_cast<VideoRecorder*>(&job); })) {
-		stepsToDo = 1; // don't skip frames when recording video
-	}
-#endif
+	const unsigned int stepsToDo = frameLimiter.check();
 	for (unsigned int i = 0; i < stepsToDo; ++i) {
 		++internal::gFrameNumber; // for logging
 		updateKeyStates();
@@ -356,9 +367,13 @@ void Window::stepIfNeeded() {
 		for (const auto& job : jobs) {
 			job->step();
 		}
-		for (auto& job : jobsToAdd) {
+		// By index and by copy, as a job's step() may add another one (addJob), which would
+		// invalidate iterators and references into jobsToAdd. That one gets stepped and added
+		// to jobs, too.
+		for (size_t i = 0; i < jobsToAdd.size(); ++i) {
+			const auto job = jobsToAdd[i];
 			job->step();
-			jobs.emplace_back(std::move(job));
+			jobs.emplace_back(job);
 		}
 		jobsToAdd.clear();
 
@@ -400,6 +415,16 @@ void Window::stepIfNeeded() {
 				currentWork_->onQuitEvent();
 			}
 		}
+#ifdef JNGL_RECORD
+		// Don't skip frames when recording video. While a VideoRecorder is active, the audio
+		// engine passes the sound samples of each step to it (see
+		// VideoRecorder::fillAudioBuffer), which encodes them together with the frame captured
+		// by its next draw(). So there must be exactly one step per draw(), also when the
+		// VideoRecorder has only just been added during this step, e.g. by a Job.
+		if (jngl::getJob<VideoRecorder>()) {
+			break;
+		}
+#endif
 	}
 }
 
@@ -420,7 +445,8 @@ void Window::draw() const {
 	if (currentWork_) {
 		jngl::reset();
 		jngl::setColor(0xffffff_rgb, 255);
-		jngl::drawRect(-getScreenSize() / 2., jngl::Vec2(400, 100));
+		jngl::drawRect(jngl::modelview().translate(-getScreenSize() / 2.), jngl::Vec2(400, 100),
+		               0xffffff_rgb);
 		jngl::setFontColor(0x000000_rgb, 1.f);
 		{
 			std::ostringstream tmp;

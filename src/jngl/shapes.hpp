@@ -84,6 +84,9 @@ void drawLine(const Mat3& modelview, Vec2 end, Rgba color);
 /// Draws a line from (0, 0) to \a end with width \a lineWidth in \a color
 void drawLine(Mat3 modelview, Vec2 end, float lineWidth, Rgba color);
 
+/// Draws a line from (0, 0) to \a end with width \a lineWidth
+void drawLine(const Mat3& modelview, Vec2 end, float lineWidth);
+
 [[deprecated("Use drawEllipse(Mat3, float, float, float) instead")]]
 /// \deprecated Use drawEllipse(Mat3, float, float, float) instead
 void drawEllipse(float xmid, float ymid, float width, float height, float startAngle = 0);
@@ -127,6 +130,12 @@ void drawCircle(Mat3 modelview, float radius, Rgba color);
 /// Draws a circle at (0, 0) with radius of 1 in \a color
 void drawCircle(const Mat3& modelview, Rgba color);
 
+/// Draws the outline of a circle (so ○ instead of ●) at (0, 0) with \a radius in \a color
+///
+/// The line is centered on the circle's radius, i.e. it spans from radius - lineWidth/2 to
+/// radius + lineWidth/2.
+void drawCircleOutline(const Mat3& modelview, float radius, float lineWidth, Rgba color);
+
 [[deprecated("Use drawCircle instead")]]
 /// \deprecated Use drawCircle instead
 void drawPoint(double x, double y);
@@ -151,6 +160,8 @@ void drawRect(double xposition, double yposition, double width, double height);
 /// Draws a rectangle at \a position
 ///
 /// Use setColor(Rgb) to change the color and setAlpha(uint8_t) to change the translucency.
+/// \deprecated Use drawRect(Mat3, Vec2, Rgba) instead
+[[deprecated("Use drawRect(Mat3, Vec2, Rgba) instead")]]
 void drawRect(Vec2 position, Vec2 size);
 
 /// Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color

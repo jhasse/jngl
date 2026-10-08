@@ -1,4 +1,4 @@
-// Copyright 2010-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2010-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
@@ -18,7 +18,9 @@ public:
 	        // Channel type of the texture's storage. Pass GL_HALF_FLOAT for an HDR texture with
 	        // floating point channels (used by the high precision FrameBuffer); the default stores
 	        // each channel as an 8-bit integer mapped to the range [0, 1].
-	        GLenum type = GL_UNSIGNED_BYTE);
+	        GLenum type = GL_UNSIGNED_BYTE,
+	        // Generate a mipmap chain and sample it when the texture is minified.
+	        bool mipmap = false);
 	Texture(const Texture&) = delete;
 	Texture& operator=(const Texture&) = delete;
 	Texture(Texture&&) = delete;

@@ -25,7 +25,7 @@ JNGLView* jnglView = nullptr;
 }
 
 - (void)loadView {
-	self.view = jnglView; // Use the JNGLView created by the AppDelegate as our view instead of an
+	self.view = jnglView; // Use the JNGLView created by the SceneDelegate as our view instead of an
 	                      // empty UIView
 }
 
@@ -35,17 +35,6 @@ JNGLView* jnglView = nullptr;
 #if !TARGET_OS_TV
 	self.view.multipleTouchEnabled = YES;
 #endif
-
-	// JNGL can't override applicationDidFinishLaunching since the AppDelegate belongs to the app.
-	// Therefore we use this method to init our controllers when the app has started:
-	[[NSNotificationCenter defaultCenter] addObserver:self
-	                                         selector:@selector(initControllers:)
-	                                             name:UIApplicationDidFinishLaunchingNotification
-	                                           object:nil];
-}
-
-- (void)initControllers:(NSNotification*)notification {
-	[jnglView initControllers];
 }
 
 - (void)viewDidUnload

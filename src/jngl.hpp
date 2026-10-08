@@ -32,6 +32,7 @@
 #include "jngl/Singleton.hpp"        // IWYU pragma: keep
 #include "jngl/SoundFile.hpp"        // IWYU pragma: keep
 #include "jngl/Sprite.hpp"           // IWYU pragma: keep
+#include "jngl/TextInputSession.hpp" // IWYU pragma: keep
 #include "jngl/TextLine.hpp"         // IWYU pragma: keep
 #include "jngl/Vertex.hpp"           // IWYU pragma: keep
 #include "jngl/Video.hpp"            // IWYU pragma: keep

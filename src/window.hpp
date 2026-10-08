@@ -4,6 +4,7 @@
 
 #include "jngl/MouseInfo.hpp"
 #include "jngl/Scene.hpp"
+#include "jngl/TextInputSession.hpp"
 #include "jngl/input.hpp"
 #include "opengl.hpp"
 #include "timing/FrameLimiter.hpp"
@@ -50,6 +51,8 @@ public:
 	void SwapBuffers();
 	void SetRelativeMouseMode(bool relative);
 	bool getRelativeMouseMode() const;
+	void setMouseConfined(bool confined);
+	bool getMouseConfined() const;
 	void SetMouseVisible(bool visible);
 	void increaseMouseHiddenCount();
 	void decreaseMouseHiddenCount();
@@ -119,6 +122,20 @@ public:
 	WindowImpl* getImpl() const;
 #endif
 	std::string getTextInput() const;
+
+	/// Tells the OS/IME to start delivering typed characters, with a hint about what kind of text
+	/// is expected (used by TextInputSession)
+	void startTextInputSession(TextInputType type);
+
+	/// Tells the OS/IME that no field wants typed characters right now (used by TextInputSession)
+	void stopTextInputSession();
+
+	/// Places the IME candidate window; \a area and \a cursor are in JNGL Screen coordinates, i.e.
+	/// (0, 0) is the center of the screen and jngl::getScaleFactor() hasn't been applied yet, same
+	/// as jngl::Rect / jngl::getMousePos(). Backends are responsible for converting to actual
+	/// window pixels themselves (used by TextInputSession)
+	void setTextInputArea(Rect area, double cursor);
+
 	void initGlObjects();
 	void drawLine(Mat3 modelview, Vec2 b, Rgba color) const;
 	void drawSquare(const Mat3& modelview, Rgba color) const;
@@ -135,6 +152,13 @@ private:
 	                         std::pair<int, int> maxAspectRatio);
 	void updateControllerStates();
 
+	/// Destroys the scenes, jobs and fonts, which might hold OpenGL resources. Called first thing
+	/// by ~Window, as `impl` is the last member and therefore destroyed first, taking the OpenGL
+	/// context with it (SDL even unloads the OpenGL library with its last window). Normally
+	/// hideWindow() has destroyed the ShaderCache by then, so that Textures don't touch OpenGL
+	/// anymore, but not when the Window is destroyed by std::exit() calling ~WindowPointer.
+	void releaseResources();
+
 	/// Called when a controller is added or removed
 	std::function<void()> controllerChangedCallback;
 
@@ -147,6 +171,7 @@ private:
 	bool fullscreen_;
 	bool isMouseVisible_ = true;
 	bool relativeMouseMode = false;
+	bool mouseConfined = false;
 	bool anyKeyPressed_ = false;
 	bool isMultisampleSupported_ = true;
 	std::array<bool, 3> mouseDown_{ { false, false, false } };

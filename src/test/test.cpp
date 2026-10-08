@@ -363,10 +363,12 @@ void Test::drawBackground() const {
 	}
 	jngl::setColor(255, 0, 0, 100);
 	jngl::drawTriangle({ 600, 30 }, { 700, 30 }, { 650, 130 });
-	jngl::setColor(0, 255, 0, 100);
-	jngl::drawRect({ 600, 400 }, { 100, 100 });
+	jngl::drawRect(jngl::modelview().translate({ 600, 400 }), { 100, 100 },
+	               jngl::Rgba::u8(0, 255, 0, 100));
 	jngl::drawRectOutline(jngl::modelview().translate({ 650, 450 }), { 40, 80 }, 1.f,
 	                      "#473b9f99"_rgba);
+	jngl::drawCircleOutline(jngl::modelview().translate({ 480, 450 }), 40, 4,
+	                        "#473b9f99"_rgba);
 	jngl::setColor(0, 0, 255, 100);
 	jngl::drawEllipse(jngl::modelview().translate({ 80, 400 }), 50, 80);
 }
@@ -423,6 +425,7 @@ void testKeys() {
 	};
 	std::vector<RecentlyPressedKey> recentlyPressedKeys;
 	std::string textInput;
+	jngl::TextInputSession textInputSession;
 	while (jngl::running()) {
 		jngl::updateInput();
 		jngl::setFontSize(10);
@@ -473,7 +476,7 @@ void testKeys() {
 		if (textInput.size() > 40) {
 			textInput.clear();
 		}
-		textInput += jngl::getTextInput();
+		textInput += textInputSession.take();
 		jngl::setFontColor(0, 0, 0);
 		jngl::print(jngl::modelview().translate({ 100, 583 }), textInput);
 
@@ -554,9 +557,9 @@ void testKeys() {
 				jngl::translate(0, 2 * circleRadius + 10);
 			}
 
-			jngl::setColor(255, 255, 255, 150);
-			jngl::drawRect({ 500, 40. + static_cast<double>(controllerNr - 1) * 110. },
-			               { 300, 120 });
+			jngl::drawRect(jngl::modelview().translate(
+			                   { 500, 40. + static_cast<double>(controllerNr - 1) * 110. }),
+			               { 300, 120 }, jngl::Rgba::u8(255, 255, 255, 150));
 			jngl::print(jngl::modelview().translate(jngl::Vec2(558, 50 + (controllerNr - 1) * 110)),
 			            sstream.str());
 			++controllerNr;

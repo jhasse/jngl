@@ -26,7 +26,7 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-file(GLOB SRC src/*.cpp src/jngl/*.cpp
+file(GLOB SRC CONFIGURE_DEPENDS src/*.cpp src/jngl/*.cpp
 	src/audio/*.cpp
 	src/audio/effect/*.cpp
 	src/timing/*.cpp
@@ -378,12 +378,10 @@ else()
 			if(JNGL_TRACE)
 				target_compile_definitions(jngl PUBLIC JNGL_TRACE)
 			endif()
-			if(NOT EMSCRIPTEN)
-				pkg_check_modules(VorbisFile REQUIRED vorbisfile)
-				pkg_check_modules(FREETYPE REQUIRED freetype2)
-			endif()
-		else()
-			if(NOT EMSCRIPTEN)
+		endif()
+		if(NOT EMSCRIPTEN)
+			pkg_check_modules(VorbisFile vorbisfile)
+			if(NOT VorbisFile_FOUND)
 				find_package(VorbisFile)
 				if(NOT VorbisFile_FOUND)
 					message(WARNING "VorbisFile not found, building from source")
@@ -391,6 +389,9 @@ else()
 					set(VorbisFile_INCLUDE_DIRS "")
 					set(VorbisFile_LIBRARIES "")
 				endif()
+			endif()
+			pkg_check_modules(FREETYPE freetype2)
+			if(NOT FREETYPE_FOUND)
 				find_package(Freetype)
 				if(NOT Freetype_FOUND)
 					message(WARNING "Freetype not found, building from source")
@@ -512,6 +513,18 @@ if(NOT hasParent)
 		target_compile_features(jngl-unittest PRIVATE cxx_std_20)
 		target_link_libraries(jngl-unittest PRIVATE jngl Catch2::Catch2WithMain)
 		add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
+
+		find_program(XVFB_RUN xvfb-run)
+		if(XVFB_RUN)
+			# SDL would prefer Wayland if WAYLAND_DISPLAY is set, which xvfb-run doesn't unset
+			add_custom_target(unittest-xvfb
+				COMMAND env SDL_VIDEO_DRIVER=x11
+				        ${XVFB_RUN} -a -s "-screen 0 1920x1080x24" $<TARGET_FILE:jngl-unittest>
+				DEPENDS jngl-unittest
+				WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+				USES_TERMINAL
+				VERBATIM)
+		endif()
 	endif()
 endif()
 

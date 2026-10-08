@@ -106,7 +106,7 @@ WarningsAsErrors: '
   performance-move-const-arg,
   readability-implicit-bool-conversion,
 '
-HeaderFilterRegex: '.*src/.*'
+HeaderFilterRegex: '.*src/(?!audio/dr_mp3\.h).*'
 CheckOptions:
       - key:             readability-implicit-bool-conversion.AllowPointerConditions
         value:           '1'

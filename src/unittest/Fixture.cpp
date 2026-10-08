@@ -1,4 +1,4 @@
-// Copyright 2019-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2019-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Fixture.hpp"
@@ -97,8 +97,12 @@ void Fixture::reset() {
 	const double frameSize = 5;
 	const jngl::Vec2 screen(jngl::getScreenWidth(), jngl::getScreenHeight());
 	jngl::setColor(0x000000_rgb);
-	jngl::drawRect({ -screen.x / 2, screen.y / 2 - frameSize }, { screen.x, frameSize }); // bottom
-	jngl::drawRect({ -screen.x / 2, -screen.y / 2 }, { screen.x, frameSize });            // top
-	jngl::drawRect({ screen.x / 2 - frameSize, -screen.y / 2 }, { frameSize, screen.y }); // right
-	jngl::drawRect({ -screen.x / 2, -screen.y / 2 }, { frameSize, screen.y });            // left
+	jngl::drawRect(jngl::modelview().translate({ -screen.x / 2, screen.y / 2 - frameSize }),
+	               { screen.x, frameSize }, 0x000000_rgb); // bottom
+	jngl::drawRect(jngl::modelview().translate({ -screen.x / 2, -screen.y / 2 }),
+	               { screen.x, frameSize }, 0x000000_rgb); // top
+	jngl::drawRect(jngl::modelview().translate({ screen.x / 2 - frameSize, -screen.y / 2 }),
+	               { frameSize, screen.y }, 0x000000_rgb); // right
+	jngl::drawRect(jngl::modelview().translate({ -screen.x / 2, -screen.y / 2 }),
+	               { frameSize, screen.y }, 0x000000_rgb); // left
 }

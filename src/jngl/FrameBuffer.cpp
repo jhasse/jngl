@@ -13,6 +13,8 @@
 #include "matrix.hpp"
 #include "screen.hpp"
 
+#include <array>
+
 namespace jngl {
 
 struct FrameBuffer::Impl {
@@ -48,9 +50,14 @@ struct FrameBuffer::Impl {
 	/// If this is not empty, there's a FrameBuffer in use and this was the function that activated
 	/// it.
 	static std::stack<std::function<void()>> activate;
+
+	/// The projection matrix of the window, saved when the outermost FrameBuffer gets activated.
+	/// FrameBuffers used inside of it scale this one instead of their outer FrameBuffer's.
+	static Mat4 screenProjection;
 };
 
 std::stack<std::function<void()>> FrameBuffer::Impl::activate;
+Mat4 FrameBuffer::Impl::screenProjection;
 
 FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr)
 : impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height), hdr)) {
@@ -108,8 +115,7 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   opengl::modelview.data);
 	}
@@ -127,8 +133,7 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 		                                    -impl->height / getScaleFactor() / 2 })
 		                       .data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   modelview.scale(1, -1)
 		                       .translate({ -impl->width / getScaleFactor() / 2,
@@ -156,8 +161,7 @@ void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
 		                                    -impl->height / getScaleFactor() / 2 })
 		                       .data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   modelview.scale(1, -1)
 		                       .translate({ -impl->width / getScaleFactor() / 2,
@@ -179,8 +183,7 @@ void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   opengl::modelview.data);
 	}
@@ -221,6 +224,12 @@ void FrameBuffer::Context::clear(const Rgb color) {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
+void FrameBuffer::Context::clear(const Rgba color) {
+	assert(resetCallback);
+	glClearColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
 FrameBuffer::Context FrameBuffer::use() const {
 	auto activate = [this]() {
 		glBindFramebuffer(GL_FRAMEBUFFER, impl->fbo);
@@ -238,6 +247,13 @@ FrameBuffer::Context FrameBuffer::use() const {
 	};
 	pushMatrix();
 	auto savedProjection = opengl::projection;
+	if (Impl::activate.empty()) {
+		Impl::screenProjection = opengl::projection;
+	} else {
+		// Scaling the outer FrameBuffer's projection again would only be right if its factors were
+		// 1, which isn't the case e.g. with letterboxing after the window has been resized
+		opengl::projection = Impl::screenProjection;
+	}
 	const float sx = static_cast<float>(pWindow->getWidth()) / static_cast<float>(impl->width) *
 	                 pWindow->getResizedWindowScalingX();
 	const float sy = static_cast<float>(pWindow->getHeight()) / static_cast<float>(impl->height) *
@@ -259,10 +275,15 @@ FrameBuffer::Context FrameBuffer::use() const {
 #else
 	glGetIntegerv(GL_VIEWPORT, impl->viewport);
 #endif
+	// Scissor testing inside the FrameBuffer (e.g. jngl::scissor) changes the box, which would
+	// otherwise be used for letterboxing when re-enabling the scissor test below
+	std::array<GLint, 4> scissorBox{};
+	glGetIntegerv(GL_SCISSOR_BOX, scissorBox.data());
 	activate();
 	Impl::activate.emplace(std::move(activate));
-	return Context([this, savedProjection]() {
+	return Context([this, savedProjection, scissorBox]() {
 		Impl::activate.pop();
+		glScissor(scissorBox[0], scissorBox[1], scissorBox[2], scissorBox[3]);
 		popMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 		glPopAttrib();

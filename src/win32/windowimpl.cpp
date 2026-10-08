@@ -43,6 +43,7 @@ public:
 	std::function<void()> distinguishLeftRight;
 	Window* window = nullptr;
 	std::atomic_bool clearInputAfterFocusLoss{false};
+	bool cursorClipped = false;
 
 	static void ReleaseDC(HWND, HDC);
 	static void ReleaseRC(HGLRC);
@@ -68,6 +69,22 @@ public:
 			}
 			clearInputAfterFocusLoss = true;
 		}
+	}
+
+	/// Confines the cursor to the client area while the window is in the foreground, see
+	/// jngl::setMouseConfined. Called every frame as the window might have been moved or resized.
+	void updateCursorClip() {
+		HWND hwnd = pWindowHandle_.get();
+		const bool clip = window->mouseConfined && GetForegroundWindow() == hwnd;
+		if (clip) {
+			RECT rect;
+			GetClientRect(hwnd, &rect);
+			MapWindowPoints(hwnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
+			ClipCursor(&rect);
+		} else if (cursorClipped) {
+			ClipCursor(nullptr);
+		}
+		cursorClipped = clip;
 	}
 };
 
@@ -321,6 +338,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
 }
 
 Window::~Window() {
+	releaseResources();
 	if (fullscreen_) {
 		ChangeDisplaySettings(nullptr, 0);
 	}
@@ -463,6 +481,7 @@ void Window::UpdateInput() {
 			characterPressed_[character] = true;
 			needToBeSetFalse_.push(&characterPressed_[character]);
 			textInput += character;
+			internal::feedTextInput(character);
 		} break;
 		}
 		TranslateMessage(&msg);
@@ -473,6 +492,7 @@ void Window::UpdateInput() {
 		mousex_ -= width_ / 2;
 		mousey_ -= height_ / 2;
 	}
+	impl->updateCursorClip();
 	if (impl->clearInputAfterFocusLoss) {
 		impl->clearInputAfterFocusLoss = false;
 		for (auto& it : keyDown_) {
@@ -671,6 +691,11 @@ void Window::SetRelativeMouseMode(bool relative) {
 	}
 }
 
+void Window::setMouseConfined(const bool confined) {
+	mouseConfined = confined;
+	impl->updateCursorClip();
+}
+
 void Window::SetIcon(const std::string& filename) {
 	try {
 		auto imageData = ImageData::load(filename);
@@ -726,6 +751,18 @@ int getDesktopHeight() {
 
 void Window::setFullscreen(bool) {
 	throw std::runtime_error("Not implemented.");
+}
+
+void Window::startTextInputSession(TextInputType) {
+	// WM_CHAR is delivered regardless of any explicit start/stop, so there's nothing to do here.
+}
+
+void Window::stopTextInputSession() {
+	// See startTextInputSession
+}
+
+void Window::setTextInputArea(Rect, double) {
+	// TODO: reposition the IME candidate window, see ImmSetCandidateWindow
 }
 
 float Window::getResizedWindowScalingX() const {

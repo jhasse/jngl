@@ -66,6 +66,10 @@ public:
 	/// Returns the font size in scale-independent pixels
 	double getLineHeight() const;
 
+	/// Sets the line height in scale-independent pixels used for multi-line text (i.e. \a text
+	/// containing `\n`) passed to print(). Defaults to a value derived from the font's size.
+	void setLineHeight(double);
+
 	/// Internal function
 	std::shared_ptr<FontImpl> getImpl();
 	std::shared_ptr<const FontImpl> getImpl() const;
@@ -79,8 +83,8 @@ void print(const std::string& text, jngl::Vec2 position);
 
 /// Print \a text at { \a xposition, \a yposition }
 ///
-/// \deprecated Use jngl::Text::print() instead (i.e. don't rely on global font state)
-[[deprecated("Use jngl::Text::print() instead (i.e. don't rely on global font state)")]]
+/// \deprecated Use jngl::Font::print() instead (i.e. don't rely on global font state)
+[[deprecated("Use jngl::Font::print() instead (i.e. don't rely on global font state)")]]
 void print(const std::string& text, int xposition, int yposition);
 
 /// Print \a text using \a modelview

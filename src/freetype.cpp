@@ -256,8 +256,7 @@ void FontImpl::print(const Mat3& modelview, std::string_view text) const {
 
 void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) const {
 	auto context = ShaderCache::handle().textureShaderProgram->use();
-	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(), color.getGreen(),
-	            color.getBlue(), color.getAlpha());
+	ShaderCache::handle().setTextureColorUniforms(color);
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();
@@ -277,8 +276,7 @@ void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) const 
 
 void FontImpl::print(const ScaleablePixels x, const ScaleablePixels y, const std::string& text) {
 	auto context = ShaderCache::handle().textureShaderProgram->use();
-	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gFontColor.getRed(),
-	            gFontColor.getGreen(), gFontColor.getBlue(), gFontColor.getAlpha());
+	ShaderCache::handle().setTextureColorUniforms(gFontColor);
 	const int xRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ x })));
 	const int yRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ y })));
 	std::vector<std::string> lines(splitlines(text));

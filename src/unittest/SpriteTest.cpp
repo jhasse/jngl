@@ -65,6 +65,47 @@ TEST_CASE("Sprite_Batch") {
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
 }
+TEST_CASE("drawLerped") {
+	Fixture f(1.f);
+	jngl::Sprite sprite("../data/jngl.webp");
+
+	// Lerping fully towards black has to look exactly like multiplying with black. Comparing
+	// against that instead of hardcoded ASCII art, because the anti-aliased edges of the
+	// black silhouette end up close to the thresholds between characters, which makes the
+	// result depend on the driver's texture filtering (e.g. llvmpipe under Xvfb).
+	jngl::setSpriteColor(0x000000_rgb);
+	sprite.draw(jngl::modelview().scale(0.2f));
+	jngl::setSpriteColor(0xffffff_rgb);
+	const std::string silhouette = f.getAsciiArt();
+
+	sprite.drawLerped(jngl::modelview().scale(0.2f), 0x000000_rgb, 1.f, 1.f, 1.f, jngl::Alpha(1.f));
+	REQUIRE(f.getAsciiArt() == silhouette);
+
+	// setSpriteColor gets ignored:
+	jngl::setSpriteColor(0x000000_rgb);
+	sprite.drawLerped(jngl::modelview().scale(0.2f), 0x000000_rgb, 0.f, 0.f, 0.f, jngl::Alpha(1.f));
+	jngl::setSpriteColor(0xffffff_rgb);
+	REQUIRE(f.getAsciiArt() == R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒                              ▒
+▒             ░░░░             ▒
+▒           ░░░░░░░░           ▒
+▒            ░░░░░░            ▒
+▒              ░░              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
+
+	sprite.drawLerped(jngl::modelview().scale(0.2f), 0x000000_rgb, 1.f, 1.f, 1.f, jngl::Alpha(.5f));
+	REQUIRE(f.getAsciiArt() == R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒           ░░░░▒▒░            ▒
+▒           ░▒▒▒▒▒░            ▒
+▒           ░▒▒░▒▒▒░           ▒
+▒            ░░░░░░            ▒
+▒             ░░░░             ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
+}
 TEST_CASE("TextureCache") {
 	{
 		Fixture f(1.9f);

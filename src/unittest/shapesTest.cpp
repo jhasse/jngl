@@ -61,6 +61,22 @@ TEST_CASE("shapes") {
 )");
 	}
 }
+TEST_CASE("circleOutline") {
+	for (double scaleFactor : { 1, 2 }) {
+		Fixture f(scaleFactor);
+		jngl::drawCircleOutline(jngl::modelview().translate({ -80, 0 }), 25, 6, 0x000000ff_rgba);
+		jngl::drawCircleOutline(jngl::modelview().translate({ -80, 0 }), 20, 3, "#999999ff"_rgba);
+		REQUIRE(f.getAsciiArt() == R"(
+▓▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒     ▓▒▒▓                     ▒
+▒    ▒░  ░▒                    ▒
+▒    ▓    ▓                    ▒
+▒    ▒░  ░▒                    ▒
+▒     ▓▒▒▓                     ▒
+▓▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
+	}
+}
 TEST_CASE("triangle") {
 	for (double scaleFactor : { 0.6, 1.5 }) {
 		Fixture f(scaleFactor);
