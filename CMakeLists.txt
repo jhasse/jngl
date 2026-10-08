@@ -530,6 +530,9 @@ endif()
 
 option(JNGL_CLANG_TIDY "Run clang-tidy on source files" OFF)
 if(JNGL_CLANG_TIDY)
+	# CMake doesn't pass -std=gnu++20 for cxx_std_20 if the compiler defaults to it anyway (e.g. GCC
+	# 16), but clang-tidy would then use Clang's default, which is older.
+	#
 	# CPM dependencies often have their own src/ folder, which HeaderFilterRegex would match. Their
 	# location is only known here (CPM_SOURCE_CACHE can be anywhere), so exclude them on the command
 	# line. This overrides ExcludeHeaderFilterRegex from .clang-tidy, so repeat dr_mp3.h here.
@@ -540,7 +543,8 @@ if(JNGL_CLANG_TIDY)
 			string(APPEND CLANG_TIDY_EXCLUDE "|^${dir}/")
 		endif()
 	endforeach()
-	set(CLANG_TIDY_COMMAND "clang-tidy;--use-color;--exclude-header-filter=${CLANG_TIDY_EXCLUDE}")
+	set(CLANG_TIDY_COMMAND
+	    "clang-tidy;--use-color;--extra-arg=-std=gnu++20;--exclude-header-filter=${CLANG_TIDY_EXCLUDE}")
 	set_target_properties(jngl          PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
 	set_target_properties(jngl-test     PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
 	set_target_properties(jngl-unittest PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")

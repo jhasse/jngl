@@ -370,7 +370,7 @@ void Window::stepIfNeeded() {
 		// By index and by copy, as a job's step() may add another one (addJob), which would
 		// invalidate iterators and references into jobsToAdd. That one gets stepped and added
 		// to jobs, too.
-		for (size_t i = 0; i < jobsToAdd.size(); ++i) {
+		for (size_t i = 0; i < jobsToAdd.size(); ++i) { // NOLINT(modernize-loop-convert)
 			const auto job = jobsToAdd[i];
 			job->step();
 			jobs.emplace_back(job);
