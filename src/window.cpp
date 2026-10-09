@@ -593,18 +593,9 @@ void Window::initGlObjects() {
 	glGenBuffers(1, &opengl::vboStream);
 	glGenVertexArrays(1, &opengl::vaoStream);
 
-	glGenVertexArrays(1, &vaoLine);
-	opengl::bindVertexArray(vaoLine);
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	const static float line[] = { 0, 0, 1, 1 };
-	glBufferData(GL_ARRAY_BUFFER, sizeof(line), line, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(0);
-
 	glGenVertexArrays(1, &vaoSquare);
 	opengl::bindVertexArray(vaoSquare);
+	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	const static float rect[] = { -.5, -.5, .5, -.5, .5, .5, -.5, .5 };
@@ -617,12 +608,6 @@ void Window::initGlObjects() {
 	systemFramebuffer = tmp;
 	glGetIntegerv(GL_RENDERBUFFER_BINDING, &tmp);
 	systemRenderbuffer = tmp;
-}
-
-void Window::drawLine(Mat3 modelview, const Vec2 b, const Rgba color) const {
-	opengl::bindVertexArray(vaoLine);
-	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview.scale(b), color);
-	glDrawArrays(GL_LINES, 0, 2);
 }
 
 void Window::drawSquare(const Mat3& modelview, Rgba color) const {

@@ -119,6 +119,7 @@ WindowPointer pWindow;
 namespace {
 bool antiAliasingEnabled = true;
 bool highDpi = true;
+float deprecatedLineWidth = 1; // set by setLineWidth
 } // namespace
 
 namespace internal {
@@ -173,6 +174,7 @@ void hideWindow() {
 		backgroundColor = Rgb(1, 1, 1);
 		modelviewStack = {};
 		antiAliasingEnabled = true;
+		deprecatedLineWidth = 1;
 		internal::gFrameNumber = -1;
 		internal::resetScaleFactor();
 	}
@@ -662,16 +664,30 @@ void drawTriangle(Mat3 modelview, Rgba color) {
 }
 
 void setLineWidth(const float width) {
-	glLineWidth(width * getScaleFactor());
+	deprecatedLineWidth = width;
 }
 
+namespace {
+/// Draws a line with the width set by setLineWidth. Like glLineWidth, which was used before, the
+/// width doesn't get scaled by \a modelview. Instead of GL_LINES, whose maximum width depends on
+/// the GPU, this draws a rectangle.
+void drawLineWithDeprecatedWidth(const Mat3& modelview, const Vec2 end, const Rgba color) {
+	const auto& m = modelview.data;
+	const Vec2 transformedStart(m[6], m[7]);
+	const Vec2 transformedEnd(m[0] * end.x + m[3] * end.y + m[6],
+	                          m[1] * end.x + m[4] * end.y + m[7]);
+	drawLine(Mat3().translate(transformedStart), transformedEnd - transformedStart,
+	         deprecatedLineWidth, color);
+}
+} // namespace
+
 void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
-	pWindow->drawLine(jngl::modelview().translate(jngl::Vec2(xstart, ystart)),
-	                  jngl::Vec2(xend, yend) - jngl::Vec2(xstart, ystart), gShapeColor);
+	drawLineWithDeprecatedWidth(jngl::modelview().translate(jngl::Vec2(xstart, ystart)),
+	                            jngl::Vec2(xend, yend) - jngl::Vec2(xstart, ystart), gShapeColor);
 }
 
 void drawLine(const Vec2 start, const Vec2 end) {
-	pWindow->drawLine(jngl::modelview().translate(start), end - start, gShapeColor);
+	drawLineWithDeprecatedWidth(jngl::modelview().translate(start), end - start, gShapeColor);
 }
 
 void drawLine(const Vec2 start, const Vec2 end, float lineWidth) {
@@ -683,7 +699,7 @@ void drawLine(const Vec2 start, const Vec2 end, float lineWidth, Rgba color) {
 }
 
 void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end) {
-	pWindow->drawLine(modelview.translate(start), end - start, gShapeColor);
+	drawLineWithDeprecatedWidth(modelview.translate(start), end - start, gShapeColor);
 }
 
 void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end, float lineWidth) {
@@ -695,11 +711,11 @@ void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end, float lineWidth,
 }
 
 void drawLine(const Mat3& modelview, const Vec2 end) {
-	pWindow->drawLine(modelview, end, gShapeColor);
+	drawLineWithDeprecatedWidth(modelview, end, gShapeColor);
 }
 
 void drawLine(const Mat3& modelview, const Vec2 end, Rgba color) {
-	pWindow->drawLine(modelview, end, color);
+	drawLineWithDeprecatedWidth(modelview, end, color);
 }
 
 void drawLine(Mat3 modelview, const Vec2 end, float lineWidth, Rgba color) {

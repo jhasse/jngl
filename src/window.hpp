@@ -137,7 +137,6 @@ public:
 	void setTextInputArea(Rect area, double cursor);
 
 	void initGlObjects();
-	void drawLine(Mat3 modelview, Vec2 b, Rgba color) const;
 	void drawSquare(const Mat3& modelview, Rgba color) const;
 	void drawRoundedSquare(const Mat3& modelview, Rgba color, Vec2 size, float topLeft,
 	                       float topRight, float bottomLeft, float bottomRight) const;
@@ -164,7 +163,6 @@ private:
 
 	unsigned int stepsPerSecond = 60;
 	double mouseWheel = 0;
-	GLuint vaoLine = 0;
 	GLuint vaoSquare = 0;
 	bool shouldExit = false;
 	std::optional<int> forceExitCode;
