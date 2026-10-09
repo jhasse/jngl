@@ -15,8 +15,15 @@
 Fixture::Fixture(const double scaleFactor) {
 	// The ASCII art needs an exact window size in actual pixels, regardless of the display's scale
 	jngl::internal::setHighDpi(false);
+	const double width = 320 * scaleFactor;
+	const double height = 70 * scaleFactor;
+	// The window manager would shrink the window otherwise
+	if (width > jngl::getDesktopWidth() || height > jngl::getDesktopHeight()) {
+		SKIP("Desktop (" << jngl::getDesktopWidth() << "x" << jngl::getDesktopHeight()
+		                 << ") too small for a " << width << "x" << height << " window");
+	}
 	jngl::setScaleFactor(scaleFactor);
-	jngl::showWindow("unit test", 320 * scaleFactor, 70 * scaleFactor, false, { 32, 7 }, { 32, 7 });
+	jngl::showWindow("unit test", width, height, false, { 32, 7 }, { 32, 7 });
 	try {
 		reset();
 		emptyAsciiArt = getAsciiArt();

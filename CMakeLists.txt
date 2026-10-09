@@ -522,7 +522,7 @@ if(NOT hasParent)
 			# SDL would prefer Wayland if WAYLAND_DISPLAY is set, which xvfb-run doesn't unset
 			add_custom_target(unittest-xvfb
 				COMMAND env SDL_VIDEO_DRIVER=x11
-				        ${XVFB_RUN} -a -s "-screen 0 1920x1080x24" $<TARGET_FILE:jngl-unittest>
+				        ${XVFB_RUN} -a -s "-screen 0 2560x1440x24" $<TARGET_FILE:jngl-unittest>
 				DEPENDS jngl-unittest
 				WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 				USES_TERMINAL
