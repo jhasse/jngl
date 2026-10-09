@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.16)
 
 project(jngl LANGUAGES C CXX)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5) # required for ogg, see https://github.com/jhasse/jngl/issues/107
