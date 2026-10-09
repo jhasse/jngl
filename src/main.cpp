@@ -411,15 +411,16 @@ void readPixels(void* buffer, GLenum type) {
 	GLint oldPackAlignment = 0;
 	glGetIntegerv(GL_PACK_ALIGNMENT, &oldPackAlignment);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	glReadPixels(xOffset / 2, yOffset / 2, pWindow->getActualCanvasWidth(),
-	             pWindow->getActualCanvasHeight(), GL_RGB, type, buffer);
+	// The buffer has the size of getWindowWidth() x getWindowHeight(), which differs from the
+	// actual canvas when the window has been resized. Don't write past it then.
+	glReadPixels(xOffset / 2, yOffset / 2, getWindowWidth(), getWindowHeight(), GL_RGB, type,
+	             buffer);
 	glPixelStorei(GL_PACK_ALIGNMENT, oldPackAlignment);
 }
 } // namespace
 
 std::vector<float> readPixels() {
-	std::vector<float> buffer(static_cast<size_t>(3 * pWindow->getActualCanvasWidth() *
-	                                              pWindow->getActualCanvasHeight()));
+	std::vector<float> buffer(static_cast<size_t>(3 * getWindowWidth() * getWindowHeight()));
 	readPixels(buffer.data(), GL_FLOAT);
 	return buffer;
 }
@@ -743,11 +744,13 @@ void drawPoint(const double x, const double y) {
 }
 
 int getWindowWidth() {
-	return pWindow->getActualCanvasWidth();
+	// Not the actual pixels after the window has been resized, but those of the canvas that
+	// FrameBuffers use, so that FrameBuffer(getWindowSize()) still covers the whole screen:
+	return pWindow->getCanvasWidth();
 }
 
 int getWindowHeight() {
-	return pWindow->getActualCanvasHeight();
+	return pWindow->getCanvasHeight();
 }
 
 std::array<Pixels, 2> getWindowSize() {

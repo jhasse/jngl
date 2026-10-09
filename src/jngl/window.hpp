@@ -40,7 +40,10 @@ void atExit(std::function<void()>);
 
 /// Returns the width of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)
 ///
-/// When letter-boxing is used, this doesn't include the black bars.
+/// When letter-boxing is used, this doesn't include the black bars. After the window has been
+/// resized and the active Scene doesn't support the new screen size (see
+/// Scene::supportsScreenSize), the canvas gets zoomed to fit into the window and this still
+/// returns its original width, so that a FrameBuffer of getWindowSize() covers the whole screen.
 int getWindowWidth();
 
 /// Returns the height of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)
