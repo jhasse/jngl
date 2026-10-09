@@ -1395,7 +1395,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="window_8hpp_source.html#l00071">71</a> of file <a class="el" href="window_8hpp_source.html">window.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="window_8hpp_source.html#l00074">74</a> of file <a class="el" href="window_8hpp_source.html">window.hpp</a>.</p>
 
 </div>
 </div>
@@ -3985,7 +3985,7 @@ template&lt;class Vect &gt; </div>
 
 <p>Returns the width of the window in actual pixels (i.e. </p>
 <p>ignoring <a class="el" href="#a7d23d95fbe7f69b235a6984b67f5fa7c" title="Size of one screen pixel in actual pixels.">jngl::getScaleFactor</a>)</p>
-<p>When letter-boxing is used, this doesn't include the black bars. </p>
+<p>When letter-boxing is used, this doesn't include the black bars. After the window has been resized and the active Scene doesn't support the new screen size (see <a class="el" href="classjngl_1_1Work.html#a819e673e9fc88a3c3948577586f94de7" title="Gets asked by JNGL whether this Scene could be shown with screenSize instead of letter-boxing.">Scene::supportsScreenSize</a>), the canvas gets zoomed to fit into the window and this still returns its original width, so that a <a class="el" href="classjngl_1_1FrameBuffer.html" title="Image framebuffer object which can be rendered on.">FrameBuffer</a> of <a class="el" href="#ad84f3e61595dd50afb8c51067ee57bb9" title="Returns {width, height} of the window in actual pixels.">getWindowSize()</a> covers the whole screen. </p>
 
 </div>
 </div>
