@@ -14,7 +14,7 @@ TEST_CASE("FinallyTest") {
 	bool called = false;
 	{
 		jngl::Finally _([&called]() {
-			REQUIRE(!called);
+			CHECK(!called);
 			called = true;
 		});
 		REQUIRE(!called);
