@@ -26,4 +26,17 @@ extern std::string pathPrefix;
 extern optional<std::string> configPath;
 extern std::stack<jngl::Mat3> modelviewStack;
 
+namespace internal {
+
+/// Whether windows created afterwards should use the full resolution of high-DPI displays
+/// (default: true)
+///
+/// When disabled, the window's size in actual pixels is exactly what has been passed to
+/// showWindow() and the operating system upscales it on displays with a scale factor greater
+/// than 1. Used by the unittests, only has an effect with the SDL backend.
+void setHighDpi(bool);
+bool getHighDpi();
+
+} // namespace internal
+
 } // namespace jngl

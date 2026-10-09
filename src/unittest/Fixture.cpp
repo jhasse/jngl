@@ -3,6 +3,8 @@
 
 #include "Fixture.hpp"
 
+#include "../main.hpp"
+
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <cmath>
@@ -11,6 +13,8 @@
 #include <ranges>
 
 Fixture::Fixture(const double scaleFactor) {
+	// The ASCII art needs an exact window size in actual pixels, regardless of the display's scale
+	jngl::internal::setHighDpi(false);
 	jngl::setScaleFactor(scaleFactor);
 	jngl::showWindow("unit test", 320 * scaleFactor, 70 * scaleFactor, false, { 32, 7 }, { 32, 7 });
 	try {

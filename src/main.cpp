@@ -118,7 +118,18 @@ void updateProjection(int windowWidth, int windowHeight, float originalWindowWid
 WindowPointer pWindow;
 namespace {
 bool antiAliasingEnabled = true;
+bool highDpi = true;
 } // namespace
+
+namespace internal {
+void setHighDpi(const bool enabled) {
+	highDpi = enabled;
+}
+
+bool getHighDpi() {
+	return highDpi;
+}
+} // namespace internal
 
 void showWindow(const std::string& title, const double width, const double height, bool fullscreen,
                 const std::pair<int, int> minAspectRatio,

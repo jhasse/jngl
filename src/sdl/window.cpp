@@ -47,7 +47,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIGH_PIXEL_DENSITY; // TODO: SDL_WINDOW_SHOWN
+	Uint32 flags = SDL_WINDOW_OPENGL; // TODO: SDL_WINDOW_SHOWN
+	if (internal::getHighDpi()) {
+		flags |= SDL_WINDOW_HIGH_PIXEL_DENSITY;
+	}
 	if (fullscreen) {
 		flags |= SDL_WINDOW_FULLSCREEN;
 		if (width != getDesktopWidth() || height != getDesktopHeight()) {
