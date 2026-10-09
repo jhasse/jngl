@@ -18,7 +18,7 @@ linux:
     allow_failure: false
   stage: build
   script:
-  - dnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libwebp-devel SDL3-devel libtheora-devel clang util-linux clang-tools-extra >/dev/null
+  - dnf install -y cmake ninja-build gcc-c++ fontconfig-devel freetype-devel libvorbis-devel libwebp-devel SDL3-devel libtheora-devel clang util-linux clang-tools-extra catch-devel >/dev/null
   - .github/ci.py
   - cmake -Bbuild -G"Ninja Multi-Config" -DCMAKE_COMPILE_WARNING_AS_ERROR=1
   - cd build

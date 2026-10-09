@@ -50,7 +50,7 @@ set windows-shell := ["C:/Program Files/Git/bin/bash", "-c"]
 [linux]
 ubuntu:
 	sudo apt install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libpng-dev libxxf86vm-dev \
-	                 libvorbis-dev cmake g++ libwebp-dev git libsdl2-dev
+	                 libvorbis-dev cmake g++ libwebp-dev git libsdl2-dev catch2
 
 webos:
 	cp build-web/jngl-test.data webOS/
