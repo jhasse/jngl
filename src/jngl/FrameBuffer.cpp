@@ -249,6 +249,10 @@ FrameBuffer::Context FrameBuffer::use() const {
 	auto savedProjection = opengl::projection;
 	if (Impl::activate.empty()) {
 		Impl::screenProjection = opengl::projection;
+		// The window might not be letter-boxed anymore, e.g. after it has been resized back to its
+		// original size. Re-enabling the scissor test when using the FrameBuffer is done would
+		// then clip to the outdated letter-boxing.
+		impl->letterboxing = glIsEnabled(GL_SCISSOR_TEST);
 	} else {
 		// Scaling the outer FrameBuffer's projection again would only be right if its factors were
 		// 1, which isn't the case e.g. with letterboxing after the window has been resized
