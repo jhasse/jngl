@@ -2,7 +2,10 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/Scene.hpp"
+#include "../jngl/matrix.hpp"
 #include "../jngl/screen.hpp"
+#include "../jngl/shapes.hpp"
+#include "../jngl/window.hpp"
 #include "../window.hpp"
 #include "../windowptr.hpp"
 #include "Fixture.hpp"
@@ -104,4 +107,23 @@ TEST_CASE("supportsScreenSize") {
 	REQUIRE(jngl::getScreenSize().x == 320);
 	REQUIRE(jngl::getScreenSize().y == 70);
 	REQUIRE(scene->changed == 4);
+}
+
+TEST_CASE("readPixels of a zoomed canvas") {
+	Fixture f(1.f); // 320x70
+	const auto draw = []() {
+		jngl::drawRect(jngl::modelview().translate({ -60, -10 }), { 40, 20 }, 0x000000_rgb);
+	};
+	draw();
+	const auto expected = f.getAsciiArt();
+
+	// The window is only half as big now, but the canvas keeps its size (as there's no Scene which
+	// would support it) and gets zoomed out. readPixels() should still return the whole canvas.
+	jngl::pWindow->setActualSize(160, 35);
+	jngl::pWindow->updateScreenSize();
+	REQUIRE(jngl::getWindowWidth() == 320);
+	REQUIRE(jngl::getWindowHeight() == 70);
+	Fixture::reset(); // the frame has been drawn before resizing
+	draw();
+	REQUIRE(f.getAsciiArt() == expected);
 }

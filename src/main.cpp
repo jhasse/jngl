@@ -397,24 +397,78 @@ void setTitle(const std::string& title) {
 }
 
 namespace {
-void readPixels(void* buffer, GLenum type) {
-	auto xOffset = (pWindow->getActualWidth() - pWindow->getActualCanvasWidth());
-	auto yOffset = (pWindow->getActualHeight() - pWindow->getActualCanvasHeight());
+/// A framebuffer with a single color renderbuffer, which gets deleted again
+class TemporaryFramebuffer {
+public:
+	TemporaryFramebuffer(const int width, const int height) {
+		glGenRenderbuffers(1, &renderbuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, width, height);
+		glGenFramebuffers(1, &framebuffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+		glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+		                          renderbuffer);
+	}
+	~TemporaryFramebuffer() {
+		glDeleteFramebuffers(1, &framebuffer);
+		glDeleteRenderbuffers(1, &renderbuffer);
+	}
+	TemporaryFramebuffer(const TemporaryFramebuffer&) = delete;
+	TemporaryFramebuffer& operator=(const TemporaryFramebuffer&) = delete;
+	TemporaryFramebuffer(TemporaryFramebuffer&&) = delete;
+	TemporaryFramebuffer& operator=(TemporaryFramebuffer&&) = delete;
 
-	// This doesn't hold true on GNOME with fractional scaling: One can only provide logical points
-	// to SDL when creating a window. Due to the scaling it might be the window is 1 pixel to big in
-	// one dimension and we had to activate letter-boxing.
-	//
-	// assert(xOffset % 2 == 0);
-	// assert(yOffset % 2 == 0);
+	GLuint framebuffer = 0;
+	GLuint renderbuffer = 0;
+};
+
+void readPixels(void* buffer, GLenum type) {
+	const int width = getWindowWidth();
+	const int height = getWindowHeight();
+	const int actualCanvasWidth = pWindow->getActualCanvasWidth();
+	const int actualCanvasHeight = pWindow->getActualCanvasHeight();
+	// This doesn't need to be even on GNOME with fractional scaling: One can only provide logical
+	// points to SDL when creating a window. Due to the scaling it might be the window is 1 pixel
+	// to big in one dimension and we had to activate letter-boxing.
+	const int x = (pWindow->getActualWidth() - actualCanvasWidth) / 2;
+	const int y = (pWindow->getActualHeight() - actualCanvasHeight) / 2;
 
 	GLint oldPackAlignment = 0;
 	glGetIntegerv(GL_PACK_ALIGNMENT, &oldPackAlignment);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	// The buffer has the size of getWindowWidth() x getWindowHeight(), which differs from the
-	// actual canvas when the window has been resized. Don't write past it then.
-	glReadPixels(xOffset / 2, yOffset / 2, getWindowWidth(), getWindowHeight(), GL_RGB, type,
-	             buffer);
+	if (actualCanvasWidth == width && actualCanvasHeight == height) {
+		glReadPixels(x, y, width, height, GL_RGB, type, buffer);
+	} else {
+		// The canvas is zoomed (see getWindowWidth), so scale it to the size of the buffer. This
+		// takes two steps, as the window's framebuffer might be multisampled, which can only be
+		// blitted to the same size.
+		GLint readFramebuffer = 0;
+		GLint drawFramebuffer = 0;
+		glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &readFramebuffer);
+		glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &drawFramebuffer);
+		GLint renderbuffer = 0;
+		glGetIntegerv(GL_RENDERBUFFER_BINDING, &renderbuffer);
+		const bool scissorTest = glIsEnabled(GL_SCISSOR_TEST); // letter-boxing
+		glDisable(GL_SCISSOR_TEST);
+		{
+			const TemporaryFramebuffer canvas(actualCanvasWidth, actualCanvasHeight);
+			glBlitFramebuffer(x, y, x + actualCanvasWidth, y + actualCanvasHeight, 0, 0,
+			                  actualCanvasWidth, actualCanvasHeight, GL_COLOR_BUFFER_BIT,
+			                  GL_NEAREST);
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, canvas.framebuffer);
+			const TemporaryFramebuffer scaled(width, height);
+			glBlitFramebuffer(0, 0, actualCanvasWidth, actualCanvasHeight, 0, 0, width, height,
+			                  GL_COLOR_BUFFER_BIT, GL_LINEAR);
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, scaled.framebuffer);
+			glReadPixels(0, 0, width, height, GL_RGB, type, buffer);
+		}
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, readFramebuffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFramebuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+		if (scissorTest) {
+			glEnable(GL_SCISSOR_TEST);
+		}
+	}
 	glPixelStorei(GL_PACK_ALIGNMENT, oldPackAlignment);
 }
 } // namespace
@@ -744,8 +798,8 @@ void drawPoint(const double x, const double y) {
 }
 
 int getWindowWidth() {
-	// Not the actual pixels after the window has been resized, but those of the canvas that
-	// FrameBuffers use, so that FrameBuffer(getWindowSize()) still covers the whole screen:
+	// Not the actual pixels when the canvas is zoomed, but those that FrameBuffers use, so that
+	// FrameBuffer(getWindowSize()) still covers the whole screen:
 	return pWindow->getCanvasWidth();
 }
 

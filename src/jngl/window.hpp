@@ -38,17 +38,16 @@ void hideWindow();
 /// or destructors of global objects won't work.
 void atExit(std::function<void()>);
 
-/// Returns the width of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)
+/// Returns the width of the canvas in pixels, i.e. jngl::getScreenWidth() * jngl::getScaleFactor()
 ///
-/// When letter-boxing is used, this doesn't include the black bars. After the window has been
-/// resized and the active Scene doesn't support the new screen size (see
-/// Scene::supportsScreenSize), the canvas gets zoomed to fit into the window and this still
-/// returns its original width, so that a FrameBuffer of getWindowSize() covers the whole screen.
+/// When letter-boxing is used, this doesn't include the black bars. Normally these are the
+/// window's actual pixels, but not when JNGL zooms the canvas: After the window has been resized
+/// (see Scene::supportsScreenSize), or when it's letter-boxed and AppParameters::scaleFactor is
+/// set. This still returns the canvas' width then, so that a FrameBuffer of getWindowSize() covers
+/// the whole screen.
 int getWindowWidth();
 
-/// Returns the height of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)
-///
-/// When letter-boxing is used, this doesn't include the black bars.
+/// Returns the height of the canvas in pixels, see getWindowWidth()
 int getWindowHeight();
 
 /// Returns {width, height} of the window in actual pixels
@@ -83,12 +82,16 @@ enum class Cursor : uint8_t {
 void setCursor(Cursor);
 
 /// Read red, green and blue values of the whole window frame buffer
+///
+/// Returns getWindowWidth() * getWindowHeight() * 3 values. When the canvas is zoomed (see
+/// getWindowWidth()), it gets scaled to that size.
 std::vector<float> readPixels();
 
 /// Read red, green and blue values of the whole window frame buffer into \a buffer
 ///
 /// The buffer must be at least width * height * 3 bytes long, where width and height are the
-/// current window dimensions as returned by getWindowWidth() and getWindowHeight().
+/// current window dimensions as returned by getWindowWidth() and getWindowHeight(). When the
+/// canvas is zoomed, it gets scaled to that size.
 void readPixels(uint8_t* buffer);
 
 } // namespace jngl
