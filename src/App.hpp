@@ -67,10 +67,13 @@ public:
 	void atExit(std::function<void()>);
 	void callAtExitFunctions();
 
-	/// This is called by Window and is a member of App so that we can save the scaleFactor function
-	/// from AppParameters before creating the Window. The Window ctor could theoretically also take
-	/// scaleFactor as a parameter, but it would complicate things (for historical reasons mostly).
-	void initGl(int width, int height, int canvasWidth, int canvasHeight);
+	/// Called by Window::initGl() after the OpenGL context has been created
+	void initGl();
+
+	/// What AppParameters::scaleFactor returns for \a width x \a height actual pixels, or
+	/// jngl::getScaleFactor() if it hasn't been set. This is a member of App so that we can save
+	/// the scaleFactor function from AppParameters before creating the Window.
+	[[nodiscard]] double getScaleFactorFor(int width, int height) const;
 
 private:
 	App();

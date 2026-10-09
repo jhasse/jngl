@@ -12,6 +12,7 @@
 #include "windowimpl.hpp"
 #include "AppleController.h"
 
+#include <cmath>
 #include <iostream>
 
 #import <GameController/GameController.h>
@@ -42,7 +43,7 @@ std::unique_ptr<jngl::App> jnglApp;
 			return nil;
 		}
 
-		GLuint framebuffer, renderbuffer;
+		GLuint framebuffer;
 		glGenFramebuffers(1, &framebuffer);
 		glGenRenderbuffers(1, &renderbuffer);
 
@@ -89,6 +90,24 @@ std::unique_ptr<jngl::App> jnglApp;
 		[UIView setAnimationsEnabled:NO];
 	}
 	return self;
+}
+
+- (void)layoutSubviews {
+	[super layoutSubviews];
+	// Called e.g. when the device has been rotated. Then the renderbuffer needs to be resized, too:
+	const auto newWidth = std::lround(self.bounds.size.width * self.contentScaleFactor);
+	const auto newHeight = std::lround(self.bounds.size.height * self.contentScaleFactor);
+	if (newWidth == width && newHeight == height) {
+		return;
+	}
+	[EAGLContext setCurrentContext:context];
+	glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+	[context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
+	glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
+	glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
+	if (jngl::pWindow) {
+		jngl::pWindow->setActualSize(width, height);
+	}
 }
 
 - (void)dealloc {

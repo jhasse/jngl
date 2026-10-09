@@ -341,62 +341,17 @@ void WindowImpl::init() {
 		window->height_ = h;
 		window->calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	}
-	App::instance().initGl(window->width_, window->height_, window->canvasWidth,
-	                       window->canvasHeight);
-	actualWidth = window->width_;
-	actualHeight = window->height_;
-	actualCanvasWidth = window->canvasWidth;
-	actualCanvasHeight = window->canvasHeight;
 	// The window might have been resized while we were in the background:
-	resize(w, h);
-}
-
-void WindowImpl::resize(const int width, const int height) {
-	if (width == actualWidth && height == actualHeight) {
-		return;
+	if (w != window->actualWidth || h != window->actualHeight) {
+		window->actualWidth = w;
+		window->actualHeight = h;
+		window->canvasCandidates.clear();
 	}
-	internal::debug("Window resized from {}x{} to {}x{}.", actualWidth, actualHeight, width,
-	                height);
-	actualWidth = width;
-	actualHeight = height;
-
-	// The scale factor can't change anymore, so we keep the original canvas and its aspect ratio
-	// and only stretch it to fit into the new size (e.g. when unfolding a foldable).
-	const double scale = std::min(static_cast<double>(width) / window->canvasWidth,
-	                              static_cast<double>(height) / window->canvasHeight);
-	actualCanvasWidth = std::min(width, static_cast<int>(std::lround(window->canvasWidth * scale)));
-	actualCanvasHeight =
-	    std::min(height, static_cast<int>(std::lround(window->canvasHeight * scale)));
-
-	const float scaleX =
-	    static_cast<float>(actualCanvasWidth) / static_cast<float>(window->canvasWidth);
-	const float scaleY =
-	    static_cast<float>(actualCanvasHeight) / static_cast<float>(window->canvasHeight);
-	updateProjection(actualWidth, actualHeight, static_cast<float>(actualWidth) / scaleX,
-	                 static_cast<float>(actualHeight) / scaleY);
-	App::instance().updateProjectionMatrix();
-	updateViewportAndLetterboxing(actualWidth, actualHeight, actualCanvasWidth, actualCanvasHeight);
+	window->initGl();
 }
 
 Vec2 WindowImpl::toWindowCoordinates(const float x, const float y) const {
-	return {
-		(x - static_cast<float>(actualWidth - actualCanvasWidth) / 2.f) *
-		        static_cast<float>(window->canvasWidth) / static_cast<float>(actualCanvasWidth) +
-		    static_cast<float>(window->width_ - window->canvasWidth) / 2.f,
-		(y - static_cast<float>(actualHeight - actualCanvasHeight) / 2.f) *
-		        static_cast<float>(window->canvasHeight) / static_cast<float>(actualCanvasHeight) +
-		    static_cast<float>(window->height_ - window->canvasHeight) / 2.f,
-	};
-}
-
-float WindowImpl::getResizedWindowScalingX() const {
-	return static_cast<float>(static_cast<double>(actualWidth) / actualCanvasWidth *
-	                          window->canvasWidth / window->width_);
-}
-
-float WindowImpl::getResizedWindowScalingY() const {
-	return static_cast<float>(static_cast<double>(actualHeight) / actualCanvasHeight *
-	                          window->canvasHeight / window->height_);
+	return window->toWindowCoordinates(x, y);
 }
 
 void WindowImpl::resetTouchState() {
@@ -545,7 +500,7 @@ void WindowImpl::swapBuffers() {
 		// We get APP_CMD_WINDOW_RESIZED e.g. when a foldable gets unfolded, but the EGL surface
 		// only picks up the new size of the native window after eglSwapBuffers:
 		const auto [w, h] = getSurfaceSize();
-		resize(w, h);
+		window->setActualSize(w, h);
 		if (firstFrame) {
 			firstFrame = false;
 			JNIEnv* const jni = env;

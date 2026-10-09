@@ -515,6 +515,10 @@ if(NOT hasParent)
 		add_executable(jngl-unittest ${UNITTEST_SRC})
 		target_compile_features(jngl-unittest PRIVATE cxx_std_20)
 		target_link_libraries(jngl-unittest PRIVATE jngl Catch2::Catch2WithMain)
+		if(NOT EMSCRIPTEN AND NOT IOS)
+			# for tests including internal headers like window.hpp
+			target_include_directories(jngl-unittest PRIVATE glad/include)
+		endif()
 		add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
 
 		find_program(XVFB_RUN xvfb-run)

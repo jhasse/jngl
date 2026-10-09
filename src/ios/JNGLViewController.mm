@@ -46,10 +46,6 @@ JNGLView* jnglView = nullptr;
 	return YES;
 }
 
-- (NSUInteger)supportedInterfaceOrientations {
-	return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
-}
-
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	[jnglView touchesBegan:touches withEvent:event];

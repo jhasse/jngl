@@ -4,6 +4,7 @@
 #include "screen.hpp"
 
 #include "../App.hpp"
+#include "../window.hpp"
 #include "../windowptr.hpp"
 #include "window.hpp"
 
@@ -46,8 +47,8 @@ double getScreenHeight() {
 
 Vec2 getScreenSize() {
 	const auto screenSize = App::instance().getScreenSize();
-	const Vec2 canvas{ static_cast<double>(getWindowWidth()) / factor,
-		               static_cast<double>(getWindowHeight()) / factor };
+	const Vec2 canvas{ static_cast<double>(pWindow->getCanvasWidth()) / factor,
+		               static_cast<double>(pWindow->getCanvasHeight()) / factor };
 	// The canvas can differ from the size the application asked for (or the desktop's, if it
 	// didn't), e.g. when AppParameters::scaleFactor is set or AppParameters::minAspectRatio and
 	// maxAspectRatio give the window a different shape. If it doesn't though, return the asked

@@ -357,9 +357,15 @@ bool mousePressed(mouse::Button button) {
 }
 
 void setMouse(const jngl::Vec2 position) {
-	pWindow->SetMouse(
-	    static_cast<int>(std::lround(position.x * getScaleFactor() + pWindow->getWidth() / 2.)),
-	    static_cast<int>(std::lround(position.y * getScaleFactor() + pWindow->getHeight() / 2.)));
+	// from screen coordinates to actual pixels of the (maybe letter-boxed or resized) window
+	const double zoomX =
+	    static_cast<double>(pWindow->getActualCanvasWidth()) / pWindow->getCanvasWidth();
+	const double zoomY =
+	    static_cast<double>(pWindow->getActualCanvasHeight()) / pWindow->getCanvasHeight();
+	pWindow->SetMouse(static_cast<int>(std::lround(position.x * getScaleFactor() * zoomX +
+	                                               pWindow->getActualWidth() / 2.)),
+	                  static_cast<int>(std::lround(position.y * getScaleFactor() * zoomY +
+	                                               pWindow->getActualHeight() / 2.)));
 }
 
 void setRelativeMouseMode(const bool relative) {
@@ -392,8 +398,8 @@ void setTitle(const std::string& title) {
 
 namespace {
 void readPixels(void* buffer, GLenum type) {
-	auto xOffset = (pWindow->getWidth() - pWindow->getCanvasWidth());
-	auto yOffset = (pWindow->getHeight() - pWindow->getCanvasHeight());
+	auto xOffset = (pWindow->getActualWidth() - pWindow->getActualCanvasWidth());
+	auto yOffset = (pWindow->getActualHeight() - pWindow->getActualCanvasHeight());
 
 	// This doesn't hold true on GNOME with fractional scaling: One can only provide logical points
 	// to SDL when creating a window. Due to the scaling it might be the window is 1 pixel to big in
@@ -405,15 +411,15 @@ void readPixels(void* buffer, GLenum type) {
 	GLint oldPackAlignment = 0;
 	glGetIntegerv(GL_PACK_ALIGNMENT, &oldPackAlignment);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	glReadPixels(xOffset / 2, yOffset / 2, pWindow->getCanvasWidth(), pWindow->getCanvasHeight(),
-	             GL_RGB, type, buffer);
+	glReadPixels(xOffset / 2, yOffset / 2, pWindow->getActualCanvasWidth(),
+	             pWindow->getActualCanvasHeight(), GL_RGB, type, buffer);
 	glPixelStorei(GL_PACK_ALIGNMENT, oldPackAlignment);
 }
 } // namespace
 
 std::vector<float> readPixels() {
-	std::vector<float> buffer(
-	    static_cast<size_t>(3 * pWindow->getCanvasWidth() * pWindow->getCanvasHeight()));
+	std::vector<float> buffer(static_cast<size_t>(3 * pWindow->getActualCanvasWidth() *
+	                                              pWindow->getActualCanvasHeight()));
 	readPixels(buffer.data(), GL_FLOAT);
 	return buffer;
 }
@@ -737,11 +743,11 @@ void drawPoint(const double x, const double y) {
 }
 
 int getWindowWidth() {
-	return pWindow->getCanvasWidth();
+	return pWindow->getActualCanvasWidth();
 }
 
 int getWindowHeight() {
-	return pWindow->getCanvasHeight();
+	return pWindow->getActualCanvasHeight();
 }
 
 std::array<Pixels, 2> getWindowSize() {

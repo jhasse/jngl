@@ -62,16 +62,37 @@ public:
 	int getMouseX() const;
 	int getMouseY() const;
 	MouseInfo& getMouseInfo();
+	/// Size of the canvas in the same units as getWidth(), i.e. dividing it by
+	/// jngl::getScaleFactor() gives jngl::getScreenSize()
 	int getCanvasWidth() const;
 	int getCanvasHeight() const;
 	int getWidth() const;
 	int getHeight() const;
 
+	/// Size of the window in actual pixels
+	int getActualWidth() const;
+	int getActualHeight() const;
+
+	/// Size of the canvas inside of the window in actual pixels, i.e. excluding letter-boxing
+	int getActualCanvasWidth() const;
+	int getActualCanvasHeight() const;
+
 	/// When the Window gets resized this returns the scaling for each direction (since letterboxing
-	/// might result in different values) which has to be taken into account for FrameBuffers (SDL
-	/// backend only)
+	/// might result in different values) which has to be taken into account for FrameBuffers
 	float getResizedWindowScalingX() const;
 	float getResizedWindowScalingY() const;
+
+	/// Called by the backends when the window has been resized to \a width x \a height actual
+	/// pixels. Fits the current canvas into it, see updateScreenSize() for changing the canvas.
+	void setActualSize(int width, int height);
+
+	/// Asks the active Scene whether it supports the screen size which would fill the whole window
+	/// and changes the canvas accordingly, see Scene::supportsScreenSize()
+	void updateScreenSize();
+
+	/// Converts from actual pixels of the (maybe resized) window to the coordinates of the window
+	/// with the size width_ x height_, which the canvas is centered in
+	Vec2 toWindowCoordinates(float x, float y) const;
 
 	ScaleablePixels getTextWidth(const std::string&);
 	double getLineHeight();
@@ -147,8 +168,32 @@ public:
 private:
 	static int GetKeyCode(jngl::key::KeyType key);
 	static std::string GetFontFileByName(const std::string& fontname);
+	/// Calculates canvasWidth and canvasHeight for a window of width_ x height_ actual pixels,
+	/// letter-boxing the canvas to the aspect ratios. Also applies AppParameters::scaleFactor.
 	void calculateCanvasSize(std::pair<int, int> minAspectRatio,
 	                         std::pair<int, int> maxAspectRatio);
+
+	/// width_, height_, canvasWidth and canvasHeight, i.e. in the units of getScaleFactor()
+	struct Canvas {
+		int width;
+		int height;
+		int canvasWidth;
+		int canvasHeight;
+		bool operator==(const Canvas&) const = default;
+	};
+
+	/// The Canvas for the actual window, either filling it or letter-boxed to the aspect ratios
+	/// passed to calculateCanvasSize(). As the scale factor can't change anymore, it's zoomed so
+	/// that its screen size is what AppParameters::scaleFactor returns for it.
+	Canvas calculateCanvas(bool letterboxed) const;
+
+	/// Initializes OpenGL (again, on Android) after the context has been created for a window of
+	/// actualWidth x actualHeight
+	void initGl();
+
+	/// Fits the canvas into the actual window, letter-boxing it where the aspect ratios differ, and
+	/// updates the projection matrix and the viewport accordingly
+	void updateLetterboxing();
 	void updateControllerStates();
 
 	/// Destroys the scenes, jobs and fonts, which might hold OpenGL resources. Called first thing
@@ -193,6 +238,28 @@ private:
 
 	/// The usable canvas height, excluding letterboxing
 	int canvasHeight = -1;
+
+	/// As passed to calculateCanvasSize()
+	std::pair<int, int> minAspectRatio;
+	std::pair<int, int> maxAspectRatio;
+
+	/// As calculated by calculateCanvasSize() when the window got created. The canvas goes back to
+	/// this when the active Scene doesn't support any of the candidates.
+	Canvas originalCanvas{ -1, -1, -1, -1 };
+
+	/// What the active Scene gets asked for in this order, see Scene::supportsScreenSize(). Empty
+	/// if it has to be calculated again for the actual window.
+	std::vector<Canvas> canvasCandidates;
+
+	/// Size of the window in actual pixels. Differs from width_ and height_ after the window has
+	/// been resized (e.g. by rotating the device), as long as the active Scene doesn't support the
+	/// new screen size.
+	int actualWidth = -1;
+	int actualHeight = -1;
+
+	/// The usable canvas inside of actualWidth x actualHeight, excluding letterboxing
+	int actualCanvasWidth = -1;
+	int actualCanvasHeight = -1;
 
 	std::string fontName_;
 	const static unsigned int PNG_BYTES_TO_CHECK = 4;

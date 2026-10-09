@@ -39,11 +39,8 @@ public:
 	std::vector<std::shared_ptr<Controller>> getConnectedControllers() const;
 	void resetTouchState();
 
-	/// Converts from actual pixels of the (maybe resized) window to the coordinates of the window
-	/// as it was originally created
+	/// See Window::toWindowCoordinates
 	Vec2 toWindowCoordinates(float x, float y) const;
-	float getResizedWindowScalingX() const;
-	float getResizedWindowScalingY() const;
 
 	int mouseX = 0;
 	int mouseY = 0;
@@ -55,7 +52,6 @@ public:
 
 private:
 	std::pair<EGLint, EGLint> getSurfaceSize() const;
-	void resize(int width, int height);
 
 	const std::pair<int, int> minAspectRatio;
 	const std::pair<int, int> maxAspectRatio;
@@ -64,13 +60,6 @@ private:
 	std::optional<Finally> pauseAudio;
 
 	bool firstFrame = true;
-
-	/// Size of the EGL surface and the letterboxed area inside of it. These differ from
-	/// Window::width_ etc. after the window has been resized (e.g. by unfolding a foldable).
-	int actualWidth = 0;
-	int actualHeight = 0;
-	int actualCanvasWidth = 0;
-	int actualCanvasHeight = 0;
 
 	struct DisplayWrapper {
 		DisplayWrapper();

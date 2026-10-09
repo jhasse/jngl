@@ -35,11 +35,6 @@ public:
 	SDL_GLContext context = nullptr;
 	optional<SDL_FingerID> currentFingerId;
 
-	/// If the window is resized we save the actual window size here for mouse input to work:
-	float actualWidth;
-	float actualHeight;
-	int actualCanvasWidth;
-	int actualCanvasHeight;
 	SDL_SystemCursor cursor = SDL_SYSTEM_CURSOR_DEFAULT;
 	SDL_SystemCursor currentCursor = cursor;
 	std::unique_ptr<SDL_Cursor, void (*)(SDL_Cursor*)> sdlCursor{ nullptr, SDL_DestroyCursor };

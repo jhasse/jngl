@@ -84,6 +84,13 @@ public:
 	/// called
 	virtual void onControllersChanged();
 
+	/// Gets called after the return value of jngl::getScreenSize() has changed, see
+	/// jngl::Scene::supportsScreenSize()
+	///
+	/// Gets called before the next step(). Override this if you need to reposition something that
+	/// depends on the screen size, e.g. a button in the bottom right corner.
+	virtual void onScreenSizeChanged();
+
 	/// Does nothing
 	Job() = default;
 

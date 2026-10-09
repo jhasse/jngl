@@ -17,7 +17,7 @@ Window::Window(const std::string& title, const int width, const int height, cons
   mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height), fontName_("Arial.ttf"),
   impl(std::make_unique<WindowImpl>(this)) {
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
-	App::instance().initGl(width, height, canvasWidth, canvasHeight);
+	initGl();
 }
 
 std::string Window::GetFontFileByName(const std::string& fontname) {
@@ -88,14 +88,6 @@ void Window::setMouseConfined(const bool confined) {
 }
 
 void Window::SetIcon(const std::string&) {
-}
-
-float Window::getResizedWindowScalingX() const {
-	return 1.f;
-}
-
-float Window::getResizedWindowScalingY() const {
-	return 1.f;
 }
 
 int getDesktopWidth() {

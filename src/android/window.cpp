@@ -65,20 +65,12 @@ void Window::setMouseConfined(const bool confined) {
 void Window::SetIcon(const std::string&) {
 }
 
-float Window::getResizedWindowScalingX() const {
-	return impl->getResizedWindowScalingX();
-}
-
-float Window::getResizedWindowScalingY() const {
-	return impl->getResizedWindowScalingY();
-}
-
 int getDesktopWidth() {
-	return pWindow ? pWindow->getWidth() : -1;
+	return pWindow ? pWindow->getActualWidth() : -1;
 }
 
 int getDesktopHeight() {
-	return pWindow ? pWindow->getHeight() : -1;
+	return pWindow ? pWindow->getActualHeight() : -1;
 }
 
 } // namespace jngl

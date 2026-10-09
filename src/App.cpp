@@ -119,7 +119,7 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 #endif
 } // namespace
 
-void App::initGl(int width, int height, int canvasWidth, int canvasHeight) {
+void App::initGl() {
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
 #ifdef GLAD_GL
 	if (GLAD_GL_VERSION_4_3 != 0 || GLAD_GL_KHR_debug != 0) {
@@ -132,20 +132,8 @@ void App::initGl(int width, int height, int canvasWidth, int canvasHeight) {
 #endif
 #endif
 
-	if (impl && impl->scaleFactor &&
-	    !pWindow // on Android initGl will be called when the app is brought back to foreground. If
-	             // an explicit scale factor is set, this would result in setScaleFactor being
-	             // called twice and an exception (not happening when Apps don't explicitly set it
-	             // but use screenSize)
-	) {
-		setScaleFactor(impl->scaleFactor(canvasWidth, canvasHeight));
-	}
-	updateProjection(width, height, static_cast<float>(width), static_cast<float>(height));
-
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	updateViewportAndLetterboxing(width, height, canvasWidth, canvasHeight);
 
 	reset();
 	modelviewStack = {};
@@ -155,6 +143,13 @@ void App::initGl(int width, int height, int canvasWidth, int canvasHeight) {
 
 	glFlush();
 	setVerticalSync(true);
+}
+
+double App::getScaleFactorFor(const int width, const int height) const {
+	if (impl && impl->scaleFactor) {
+		return impl->scaleFactor(width, height);
+	}
+	return getScaleFactor();
 }
 
 std::string App::getDisplayName() const {
@@ -196,6 +191,9 @@ void App::unregisterShaderProgram(ShaderProgram* shaderProgram) {
 }
 
 void App::updateProjectionMatrix() const {
+	if (!impl) {
+		return; // no ShaderProgram has been registered yet
+	}
 	for (const auto shaderProgram : impl->shaderPrograms) {
 		const auto context = shaderProgram->use();
 		glUniformMatrix4fv(shaderProgram->getUniformLocation("projection"), 1, GL_FALSE,

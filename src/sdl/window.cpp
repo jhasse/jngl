@@ -131,14 +131,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	}
 
 	SDL_GetWindowSizeInPixels(impl->sdlWindow, &width_, &height_);
-	impl->actualWidth = static_cast<float>(width_);
-	impl->actualHeight = static_cast<float>(height_);
 	impl->hidpiScaleFactor = static_cast<float>(width_) / static_cast<float>(width);
 	setScaleFactor(getScaleFactor() * impl->hidpiScaleFactor);
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
-	impl->actualCanvasWidth = canvasWidth;
-	impl->actualCanvasHeight = canvasHeight;
-	App::instance().initGl(width_, height_, canvasWidth, canvasHeight);
+	initGl();
 
 	// Unlike SDL2, which implicitly enabled text input on desktop, SDL3 doesn't deliver
 	// SDL_EVENT_TEXT_INPUT events until text input has been explicitly started. TextInputSession
@@ -283,15 +279,19 @@ void Window::UpdateInput() {
 			mousePressed_.at(0) = true;
 			needToBeSetFalse_.push(mousePressed_.data());
 			[[fallthrough]];
-		case SDL_EVENT_FINGER_MOTION:
+		case SDL_EVENT_FINGER_MOTION: {
+			// tfinger is normalized to the window, mousex_ and mousey_ are in window coordinates
+			// like event.motion (i.e. not multiplied by hidpiScaleFactor yet)
+			const float windowWidth = static_cast<float>(actualWidth) / impl->hidpiScaleFactor;
+			const float windowHeight = static_cast<float>(actualHeight) / impl->hidpiScaleFactor;
 			if (relativeMouseMode) {
-				mousex_ = jngl::round(event.tfinger.dx * static_cast<float>(width_));
-				mousey_ = jngl::round(event.tfinger.dy * static_cast<float>(height_));
+				mousex_ = jngl::round(event.tfinger.dx * windowWidth);
+				mousey_ = jngl::round(event.tfinger.dy * windowHeight);
 			} else {
-				mousex_ = jngl::round(event.tfinger.x * static_cast<float>(width_));
-				mousey_ = jngl::round(event.tfinger.y * static_cast<float>(height_));
+				mousex_ = jngl::round(event.tfinger.x * windowWidth);
+				mousey_ = jngl::round(event.tfinger.y * windowHeight);
 			}
-			break;
+		} break;
 #endif
 		case SDL_EVENT_MOUSE_BUTTON_DOWN: {
 			int button = -1;
@@ -399,47 +399,20 @@ void Window::UpdateInput() {
 			}
 			break;
 		case SDL_EVENT_WINDOW_RESIZED:
-		case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
-			{
-				const int originalWidth = width_;
-				const int originalHeight = height_;
-				SDL_GetWindowSizeInPixels(impl->sdlWindow, &width_, &height_);
-				impl->actualWidth = static_cast<float>(width_);
-				impl->actualHeight = static_cast<float>(height_);
-				// Update hidpiScaleFactor in case the window moved to a screen with different
-				// scaling (e.g. moving between a Retina and a non-Retina display on macOS):
-				{
-					int logicalWidth = width_;
-					int logicalHeight = height_;
-					SDL_GetWindowSize(impl->sdlWindow, &logicalWidth, &logicalHeight);
-					if (logicalWidth > 0) {
-						impl->hidpiScaleFactor =
-						    static_cast<float>(width_) / static_cast<float>(logicalWidth);
-					}
-				}
-				impl->actualCanvasWidth = canvasWidth;
-				impl->actualCanvasHeight = canvasHeight;
-				calculateCanvasSize({ canvasWidth, canvasHeight }, { canvasWidth, canvasHeight });
-				const float tmpWidth =
-				    (static_cast<float>(width_) / static_cast<float>(canvasWidth)) *
-				    static_cast<float>(impl->actualCanvasWidth);
-				const float tmpHeight =
-				    (static_cast<float>(height_) / static_cast<float>(canvasHeight)) *
-				    static_cast<float>(impl->actualCanvasHeight);
-				updateProjection(impl->actualCanvasWidth, impl->actualCanvasHeight, tmpWidth,
-				                 tmpHeight);
-				App::instance().updateProjectionMatrix();
-				updateViewportAndLetterboxing(width_, height_, canvasWidth, canvasHeight);
-				// restore the values in canvasWidth and canvasHeight because our scaleFactor didn't
-				// change:
-				std::swap(canvasWidth, impl->actualCanvasWidth);
-				std::swap(canvasHeight, impl->actualCanvasHeight);
-				width_ = originalWidth;
-				height_ = originalHeight;
-
-			    // setTextInputArea converts using the values updated above, so the area we passed
-			    // to SDL before the resize is stale now:
-			    internal::reapplyTextInputArea();
+		case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
+			int newWidth = 0;
+			int newHeight = 0;
+			SDL_GetWindowSizeInPixels(impl->sdlWindow, &newWidth, &newHeight);
+			// Update hidpiScaleFactor in case the window moved to a screen with different scaling
+			// (e.g. moving between a Retina and a non-Retina display on macOS):
+			int logicalWidth = newWidth;
+			int logicalHeight = newHeight;
+			SDL_GetWindowSize(impl->sdlWindow, &logicalWidth, &logicalHeight);
+			if (logicalWidth > 0) {
+				impl->hidpiScaleFactor =
+				    static_cast<float>(newWidth) / static_cast<float>(logicalWidth);
+			}
+			setActualSize(newWidth, newHeight);
 		} break;
 		case SDL_EVENT_DROP_FILE:
 			if (event.drop.data) {
@@ -593,17 +566,13 @@ void Window::setTextInputArea(const Rect area, const double cursor) {
 	// at the top left of the window and not scaled by the display's pixel density. So this is the
 	// inverse of what getMouseX()/getMouseY() do to SDL's coordinates.
 	const auto toWindowX = [this](const double v) {
-		return v * getScaleFactor() * impl->actualCanvasWidth / canvasWidth /
-		       impl->hidpiScaleFactor;
+		return v * getScaleFactor() * actualCanvasWidth / canvasWidth / impl->hidpiScaleFactor;
 	};
 	const auto toWindowY = [this](const double v) {
-		return v * getScaleFactor() * impl->actualCanvasHeight / canvasHeight /
-		       impl->hidpiScaleFactor;
+		return v * getScaleFactor() * actualCanvasHeight / canvasHeight / impl->hidpiScaleFactor;
 	};
-	const double letterboxX =
-	    (impl->actualWidth - impl->actualCanvasWidth) / 2. / impl->hidpiScaleFactor;
-	const double letterboxY =
-	    (impl->actualHeight - impl->actualCanvasHeight) / 2. / impl->hidpiScaleFactor;
+	const double letterboxX = (actualWidth - actualCanvasWidth) / 2. / impl->hidpiScaleFactor;
+	const double letterboxY = (actualHeight - actualCanvasHeight) / 2. / impl->hidpiScaleFactor;
 	const SDL_Rect rect{
 		.x = jngl::round(toWindowX(area.pos.x + getScreenWidth() / 2) + letterboxX),
 		.y = jngl::round(toWindowY(area.pos.y + getScreenHeight() / 2) + letterboxY),
@@ -617,20 +586,18 @@ int Window::getMouseX() const {
 	if (relativeMouseMode) {
 		return static_cast<int>(static_cast<float>(mousex_) * impl->hidpiScaleFactor);
 	}
-	return jngl::round(
-	    (static_cast<float>(mousex_) * impl->hidpiScaleFactor -
-	     (impl->actualWidth - static_cast<float>(impl->actualCanvasWidth)) / 2) *
-	    (static_cast<float>(canvasWidth) / static_cast<float>(impl->actualCanvasWidth)));
+	return jngl::round((static_cast<float>(mousex_) * impl->hidpiScaleFactor -
+	                    static_cast<float>(actualWidth - actualCanvasWidth) / 2) *
+	                   (static_cast<float>(canvasWidth) / static_cast<float>(actualCanvasWidth)));
 }
 
 int Window::getMouseY() const {
 	if (relativeMouseMode) {
 		return static_cast<int>(static_cast<float>(mousey_) * impl->hidpiScaleFactor);
 	}
-	return jngl::round(
-	    (static_cast<float>(mousey_) * impl->hidpiScaleFactor -
-	     (impl->actualHeight - static_cast<float>(impl->actualCanvasHeight)) / 2) *
-	    (static_cast<float>(canvasHeight) / static_cast<float>(impl->actualCanvasHeight)));
+	return jngl::round((static_cast<float>(mousey_) * impl->hidpiScaleFactor -
+	                    static_cast<float>(actualHeight - actualCanvasHeight) / 2) *
+	                   (static_cast<float>(canvasHeight) / static_cast<float>(actualCanvasHeight)));
 }
 
 void setCursor(Cursor type) {
@@ -680,16 +647,6 @@ void errorMessage(const std::string& text) {
 	if (window) {
 		window->SetMouseVisible(old);
 	}
-}
-
-float Window::getResizedWindowScalingX() const {
-	return static_cast<float>(static_cast<double>(impl->actualWidth) / impl->actualCanvasWidth *
-	                          canvasWidth / width_);
-}
-
-float Window::getResizedWindowScalingY() const {
-	return static_cast<float>(static_cast<double>(impl->actualHeight) / impl->actualCanvasHeight *
-	                          canvasHeight / height_);
 }
 
 } // namespace jngl

@@ -72,6 +72,19 @@ void Fade::draw() const {
 	drawSquare(modelview().scale(getScreenSize()), Rgba{ getBackgroundColor(), Alpha::u8(alpha) });
 }
 
+bool Fade::supportsScreenSize(const Vec2 screenSize) const {
+	const int maxAlpha = 255;
+	const auto& visible = fadeCount <= maxAlpha ? oldWork : work;
+	return visible && visible->supportsScreenSize(screenSize);
+}
+
+void Fade::onScreenSizeChanged() {
+	if (oldWork) {
+		oldWork->onScreenSizeChanged();
+	}
+	work->onScreenSizeChanged();
+}
+
 void Fade::onQuitEvent() {
 	quit = true;
 	cancelQuit();

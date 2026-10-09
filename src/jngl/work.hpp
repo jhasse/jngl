@@ -3,6 +3,7 @@
 /// @file
 #pragma once
 
+#include "Vec2.hpp"
 #include "job.hpp"
 
 #include <memory>
@@ -84,6 +85,44 @@ public:
 	///
 	/// \note Only implemented on desktop platforms (i.e. Linux, Windows and macOS).
 	virtual void onToggleFullscreen();
+
+	/// Gets asked by JNGL whether this Scene could be shown with \a screenSize instead of
+	/// letter-boxing
+	///
+	/// The canvas keeps the size it had when the window was created, even when the window changes
+	/// its shape later on, e.g. because the user rotated their phone or resized the window. Instead
+	/// JNGL scales it to fit into the window, letter-boxing it where the shapes differ. The same
+	/// happens when AppParameters::minAspectRatio or maxAspectRatio didn't allow the canvas to fill
+	/// the whole window in the first place.
+	///
+	/// Before each step in which the window doesn't have that shape, JNGL asks the active Scene
+	/// whether it can handle the screen size that would fill the whole window instead. If it
+	/// can't and the window's aspect ratio is outside of AppParameters::minAspectRatio and
+	/// maxAspectRatio, JNGL asks again for the screen size which is letter-boxed to them, i.e. what
+	/// the canvas would be if the window had been created with its current size. When this returns
+	/// true, jngl::getScreenSize() will return \a screenSize from then on and
+	/// Job::onScreenSizeChanged() gets called. Once it returns false for both, e.g. because another
+	/// Scene became active which doesn't override this method, the canvas goes back to its original
+	/// size.
+	///
+	/// \a screenSize is the size of the canvas in actual pixels divided by the scale factor that
+	/// AppParameters::scaleFactor returns for it. If that hasn't been set, jngl::getScaleFactor()
+	/// is used, as it doesn't change once the window has been created.
+	///
+	/// Returns false by default.
+	///
+	/// \code
+	/// class MainMenu : public jngl::Scene {
+	///     bool supportsScreenSize(jngl::Vec2 screenSize) const override {
+	///         return screenSize.x >= 900; // the buttons need at least that much space
+	///     }
+	///     void onScreenSizeChanged() override {
+	///         quitButton.setPos(jngl::getScreenSize() / 2. - jngl::Vec2(100, 50));
+	///     }
+	///     // ...
+	/// };
+	/// \endcode
+	virtual bool supportsScreenSize(Vec2 screenSize) const;
 };
 
 /// Returns the current active Work or nullptr if none has been set

@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "window.hpp"
 
+#include "App.hpp"
 #include "FontImpl.hpp"
 #include "ShaderCache.hpp"
 #include "audio.hpp"
@@ -9,7 +10,9 @@
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/font.hpp"
 #include "jngl/other.hpp"
+#include "jngl/screen.hpp"
 #include "log.hpp"
+#include "main.hpp"
 #include "windowptr.hpp"
 
 #ifdef JNGL_RECORD
@@ -29,6 +32,7 @@
 #include <algorithm>
 #include <gsl/narrow>
 #include <ranges>
+#include <tuple>
 #include <thread>
 
 namespace jngl {
@@ -173,6 +177,22 @@ int Window::getCanvasWidth() const {
 
 int Window::getCanvasHeight() const {
 	return canvasHeight;
+}
+
+int Window::getActualWidth() const {
+	return actualWidth;
+}
+
+int Window::getActualHeight() const {
+	return actualHeight;
+}
+
+int Window::getActualCanvasWidth() const {
+	return actualCanvasWidth;
+}
+
+int Window::getActualCanvasHeight() const {
+	return actualCanvasHeight;
 }
 
 int Window::getWidth() const {
@@ -360,6 +380,7 @@ void Window::stepIfNeeded() {
 		++internal::gFrameNumber; // for logging
 		updateKeyStates();
 		UpdateInput();
+		updateScreenSize();
 #ifdef JNGL_PERFORMANCE_OVERLAY
 		auto start = std::chrono::steady_clock::now();
 #endif
@@ -415,6 +436,7 @@ void Window::stepIfNeeded() {
 				currentWork_->onQuitEvent();
 			}
 		}
+		updateScreenSize(); // the active Scene might have changed or changed its mind
 #ifdef JNGL_RECORD
 		// Don't skip frames when recording video. While a VideoRecorder is active, the audio
 		// engine passes the sound samples of each step to it (see
@@ -569,24 +591,169 @@ std::string Window::getTextInput() const {
 	return textInput;
 }
 
+namespace {
+/// Letter-boxes \a width x \a height to the aspect ratios
+std::pair<int, int> fitToAspectRatios(const int width, const int height,
+                                      const std::pair<int, int> minAspectRatio,
+                                      const std::pair<int, int> maxAspectRatio) {
+	if (minAspectRatio.first * height > minAspectRatio.second * width) {
+		// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
+		const float canvasHeight = static_cast<float>(minAspectRatio.second * width) /
+		                           static_cast<float>(minAspectRatio.first);
+		return { width, gsl::narrow<int>(std::lround(canvasHeight)) };
+	}
+	if (maxAspectRatio.first * height < maxAspectRatio.second * width) {
+		// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
+		const float canvasWidth = static_cast<float>(maxAspectRatio.first * height) /
+		                          static_cast<float>(maxAspectRatio.second);
+		return { gsl::narrow<int>(std::lround(canvasWidth)), height };
+	}
+	return { width, height };
+}
+} // namespace
+
 void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
                                  const std::pair<int, int> maxAspectRatio) {
-	canvasWidth = width_;
-	canvasHeight = height_;
-	if (minAspectRatio.first * height_ > minAspectRatio.second * width_) {
-		// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
-		canvasHeight =
-		    gsl::narrow<int>(std::lround(static_cast<float>(minAspectRatio.second * width_) /
-		                                 static_cast<float>(minAspectRatio.first)));
-	} else if (maxAspectRatio.first * height_ < maxAspectRatio.second * width_) {
-		// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
-		canvasWidth =
-		    gsl::narrow<int>(std::lround(static_cast<float>(maxAspectRatio.first * height_) /
-		                                 static_cast<float>(maxAspectRatio.second)));
-	}
+	this->minAspectRatio = minAspectRatio;
+	this->maxAspectRatio = maxAspectRatio;
+	actualWidth = width_;
+	actualHeight = height_;
+	canvasCandidates.clear();
+
+	// AppParameters::scaleFactor gets the size of the whole window, so that everything will be
+	// sharp if the active Scene supports filling it (see Scene::supportsScreenSize). Until then we
+	// zoom the letter-boxed canvas.
+	setScaleFactor(App::instance().getScaleFactorFor(width_, height_));
+	originalCanvas = calculateCanvas(true);
+	width_ = originalCanvas.width;
+	height_ = originalCanvas.height;
+	canvasWidth = originalCanvas.canvasWidth;
+	canvasHeight = originalCanvas.canvasHeight;
 	if (canvasWidth != width_ || canvasHeight != height_) {
 		internal::debug("Letterboxing to {}x{}.", canvasWidth, canvasHeight);
 	}
+	std::tie(actualCanvasWidth, actualCanvasHeight) =
+	    fitToAspectRatios(actualWidth, actualHeight, minAspectRatio, maxAspectRatio);
+}
+
+Window::Canvas Window::calculateCanvas(const bool letterboxed) const {
+	const auto [actualCanvasWidth, actualCanvasHeight] =
+	    letterboxed ? fitToAspectRatios(actualWidth, actualHeight, minAspectRatio, maxAspectRatio)
+	                : std::pair{ actualWidth, actualHeight };
+	const double zoom =
+	    App::instance().getScaleFactorFor(actualCanvasWidth, actualCanvasHeight) / getScaleFactor();
+	const auto unzoom = [zoom](const int actualPixels) {
+		return std::max(1, static_cast<int>(std::lround(actualPixels / zoom)));
+	};
+	return { unzoom(actualWidth), unzoom(actualHeight), unzoom(actualCanvasWidth),
+		     unzoom(actualCanvasHeight) };
+}
+
+void Window::initGl() {
+	App::instance().initGl();
+	updateLetterboxing();
+}
+
+void Window::updateLetterboxing() {
+	// The scale factor can't change anymore, so we keep the canvas and its aspect ratio and only
+	// stretch it to fit into the actual window (e.g. when unfolding a foldable).
+	const double scale = std::min(static_cast<double>(actualWidth) / canvasWidth,
+	                              static_cast<double>(actualHeight) / canvasHeight);
+	actualCanvasWidth = std::min(actualWidth, static_cast<int>(std::lround(canvasWidth * scale)));
+	actualCanvasHeight =
+	    std::min(actualHeight, static_cast<int>(std::lround(canvasHeight * scale)));
+	updateProjection(
+	    actualWidth, actualHeight,
+	    static_cast<float>(static_cast<double>(actualWidth) * canvasWidth / actualCanvasWidth),
+	    static_cast<float>(static_cast<double>(actualHeight) * canvasHeight / actualCanvasHeight));
+	App::instance().updateProjectionMatrix();
+	updateViewportAndLetterboxing(actualWidth, actualHeight, actualCanvasWidth, actualCanvasHeight);
+
+	// Backends convert the text input area using the values updated above, so the area we passed
+	// to the OS before is stale now:
+	internal::reapplyTextInputArea();
+}
+
+void Window::setActualSize(const int width, const int height) {
+	if (width <= 0 || height <= 0) {
+		return; // e.g. minimized
+	}
+	if (width == actualWidth && height == actualHeight) {
+		return;
+	}
+	internal::debug("Window resized from {}x{} to {}x{}.", actualWidth, actualHeight, width,
+	                height);
+	actualWidth = width;
+	actualHeight = height;
+	canvasCandidates.clear();
+	updateLetterboxing();
+}
+
+void Window::updateScreenSize() {
+	if (actualWidth <= 0 || originalCanvas.canvasWidth <= 0) {
+		return;
+	}
+	if (canvasCandidates.empty()) {
+		for (const bool letterboxed : { false, true }) {
+			const auto candidate = calculateCanvas(letterboxed);
+			if (candidate == originalCanvas) {
+				break; // no need to ask, see below
+			}
+			if (std::ranges::find(canvasCandidates, candidate) == canvasCandidates.end()) {
+				canvasCandidates.emplace_back(candidate);
+			}
+		}
+		canvasCandidates.emplace_back(originalCanvas); // always supported
+	}
+	Canvas next = originalCanvas;
+	for (const auto& candidate : canvasCandidates) {
+		if (candidate == originalCanvas ||
+		    (currentWork_ &&
+		     currentWork_->supportsScreenSize({ candidate.canvasWidth / getScaleFactor(),
+		                                        candidate.canvasHeight / getScaleFactor() }))) {
+			next = candidate;
+			break;
+		}
+	}
+	if (next == Canvas{ width_, height_, canvasWidth, canvasHeight }) {
+		return;
+	}
+	internal::debug("Changing canvas from {}x{} to {}x{}.", canvasWidth, canvasHeight,
+	                next.canvasWidth, next.canvasHeight);
+	width_ = next.width;
+	height_ = next.height;
+	canvasWidth = next.canvasWidth;
+	canvasHeight = next.canvasHeight;
+	updateLetterboxing();
+	for (const auto* const container : { &jobs, &jobsToAdd }) {
+		for (const auto& job : *container) {
+			job->onScreenSizeChanged();
+		}
+	}
+	if (currentWork_) {
+		currentWork_->onScreenSizeChanged();
+	}
+}
+
+Vec2 Window::toWindowCoordinates(const float x, const float y) const {
+	return {
+		(x - static_cast<float>(actualWidth - actualCanvasWidth) / 2.f) *
+		        static_cast<float>(canvasWidth) / static_cast<float>(actualCanvasWidth) +
+		    static_cast<float>(width_ - canvasWidth) / 2.f,
+		(y - static_cast<float>(actualHeight - actualCanvasHeight) / 2.f) *
+		        static_cast<float>(canvasHeight) / static_cast<float>(actualCanvasHeight) +
+		    static_cast<float>(height_ - canvasHeight) / 2.f,
+	};
+}
+
+float Window::getResizedWindowScalingX() const {
+	return static_cast<float>(static_cast<double>(actualWidth) / actualCanvasWidth * canvasWidth /
+	                          width_);
+}
+
+float Window::getResizedWindowScalingY() const {
+	return static_cast<float>(static_cast<double>(actualHeight) / actualCanvasHeight *
+	                          canvasHeight / height_);
 }
 
 void Window::initGlObjects() {
