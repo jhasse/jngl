@@ -121,6 +121,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onFileDrop</b
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onControllersChanged</b> ()</td></tr>
 <tr class="memdesc:a266cd76ff1ed7b753a12f4ded13f44c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whenever the return value of <a class="el" href="namespacejngl.html#ad178a38cc5f90ca8047e07693d39ac6a" title="Returns all controllers (gamepads) that are connected.">jngl::getConnectedControllers</a> would change, this method gets called. <br /></td></tr>
 <tr class="separator:a266cd76ff1ed7b753a12f4ded13f44c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a190622f195011b2583b8403cce65726a" id="r_a190622f195011b2583b8403cce65726a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a190622f195011b2583b8403cce65726a">onScreenSizeChanged</a> ()</td></tr>
+<tr class="memdesc:a190622f195011b2583b8403cce65726a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called after the return value of <a class="el" href="namespacejngl.html#af73b72c0f9314a0e65382f95e326bd39" title="Returns the size of the useable draw area (excluding letter-boxing) in screen pixels.">jngl::getScreenSize()</a> has changed, see <a class="el" href="classjngl_1_1Work.html#a819e673e9fc88a3c3948577586f94de7" title="Gets asked by JNGL whether this Scene could be shown with screenSize instead of letter-boxing.">jngl::Scene::supportsScreenSize()</a>  <br /></td></tr>
+<tr class="separator:a190622f195011b2583b8403cce65726a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3919dba75c4130c8b6dd0ab31e9a461" id="r_ad3919dba75c4130c8b6dd0ab31e9a461"><td class="memItemLeft" align="right" valign="top"><a id="ad3919dba75c4130c8b6dd0ab31e9a461" name="ad3919dba75c4130c8b6dd0ab31e9a461"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Job</b> ()=default</td></tr>
 <tr class="memdesc:ad3919dba75c4130c8b6dd0ab31e9a461"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does nothing. <br /></td></tr>
@@ -177,7 +180,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Job</b> ()</td></
 <div class="ttc" id="aclassjngl_1_1Job_html"><div class="ttname"><a href="classjngl_1_1Job.html">jngl::Job</a></div><div class="ttdoc">Background job which stays part of the main loop independent of the active jngl::Scene.</div><div class="ttdef"><b>Definition</b> <a href="job_8hpp_source.html#l00062">job.hpp:62</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Job_html_a2bf282904f7854c8a4fd515107aa8c4e"><div class="ttname"><a href="#a2bf282904f7854c8a4fd515107aa8c4e">jngl::Job::draw</a></div><div class="ttdeci">virtual void draw() const =0</div><div class="ttdoc">Draw the game state.</div></div>
 <div class="ttc" id="aclassjngl_1_1Job_html_aa6f73ac7d5899119d156a0b3a27fba31"><div class="ttname"><a href="#aa6f73ac7d5899119d156a0b3a27fba31">jngl::Job::step</a></div><div class="ttdeci">virtual void step()=0</div><div class="ttdoc">Advance the game logic.</div></div>
-<div class="ttc" id="aclassjngl_1_1Work_html"><div class="ttname"><a href="classjngl_1_1Work.html">jngl::Work</a></div><div class="ttdoc">Active state of the game, e.g. a menu or the game itself.</div><div class="ttdef"><b>Definition</b> <a href="work_8hpp_source.html#l00013">work.hpp:13</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Work_html"><div class="ttname"><a href="classjngl_1_1Work.html">jngl::Work</a></div><div class="ttdoc">Active state of the game, e.g. a menu or the game itself.</div><div class="ttdef"><b>Definition</b> <a href="work_8hpp_source.html#l00014">work.hpp:14</a></div></div>
 <div class="ttc" id="ainit_8hpp_html"><div class="ttname"><a href="init_8hpp.html">init.hpp</a></div><div class="ttdoc">Include this file only once, as it defines the main function.</div></div>
 <div class="ttc" id="ainit_8hpp_html_a2471fe7de5ef776522a016331b6bf6e5"><div class="ttname"><a href="init_8hpp.html#a2471fe7de5ef776522a016331b6bf6e5">jnglInit</a></div><div class="ttdeci">jngl::AppParameters jnglInit()</div><div class="ttdoc">Implement this function and set AppParameters::start.</div></div>
 <div class="ttc" id="ajngl_8hpp_html"><div class="ttname"><a href="jngl_8hpp.html">jngl.hpp</a></div><div class="ttdoc">Includes all JNGL headers except for init.hpp.</div></div>
@@ -262,6 +265,36 @@ Inheritance diagram for Job:</div>
 <dl class="section note"><dt>Note</dt><dd>JNGL's main loop calls all Jobs' <a class="el" href="#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">draw()</a> functions after the active Scene's <a class="el" href="#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">draw()</a> </dd></dl>
 
 <p>Implemented in <a class="el" href="classjngl_1_1Fade.html#a35460413b5c663cd8a28ad3c80caaf71">Fade</a>, <a class="el" href="classjngl_1_1VideoRecorder.html#a35460413b5c663cd8a28ad3c80caaf71">VideoRecorder</a>, and <a class="el" href="classjngl_1_1WorkFactory.html#a35460413b5c663cd8a28ad3c80caaf71">WorkFactory</a>.</p>
+
+</div>
+</div>
+<a id="a190622f195011b2583b8403cce65726a" name="a190622f195011b2583b8403cce65726a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a190622f195011b2583b8403cce65726a">&#9670;&#160;</a></span>onScreenSizeChanged()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void onScreenSizeChanged </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets called after the return value of <a class="el" href="namespacejngl.html#af73b72c0f9314a0e65382f95e326bd39" title="Returns the size of the useable draw area (excluding letter-boxing) in screen pixels.">jngl::getScreenSize()</a> has changed, see <a class="el" href="classjngl_1_1Work.html#a819e673e9fc88a3c3948577586f94de7" title="Gets asked by JNGL whether this Scene could be shown with screenSize instead of letter-boxing.">jngl::Scene::supportsScreenSize()</a> </p>
+<p>Gets called before the next <a class="el" href="#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">step()</a>. Override this if you need to reposition something that depends on the screen size, e.g. a button in the bottom right corner. </p>
+
+<p>Reimplemented in <a class="el" href="classjngl_1_1Fade.html#ac7bc5224ceb90bcea02e37b37ef33bba">Fade</a>.</p>
 
 </div>
 </div>

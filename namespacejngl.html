@@ -2076,7 +2076,7 @@ template&lt;class T , class... Args&gt; </div>
 <div class="line">}</div>
 <div class="ttc" id="abasic_string_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00149">149</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00156">156</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
 
 </div>
 </div>
@@ -2119,7 +2119,7 @@ template&lt;class T &gt; </div>
 
 <p>Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> that is a T. </p>
 
-<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00162">162</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00169">169</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
 
 </div>
 </div>
@@ -3018,7 +3018,8 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Returns the size of the useable draw area (excluding letter-boxing) in screen pixels. </p>
-<p>This is always the actual canvas, i.e. its size in actual pixels divided by <a class="el" href="#a7d23d95fbe7f69b235a6984b67f5fa7c" title="Size of one screen pixel in actual pixels.">jngl::getScaleFactor()</a>. So it takes <a class="el" href="structjngl_1_1AppParameters.html#a49bcee5687292f8135b0d9aee96f7b0e" title="This function can be set to make adjustments to the scale factor used by jngl::getScaleFactor() after...">AppParameters::scaleFactor</a> into account, as well as a window whose shape AppParameters::minAspectRatio and maxAspectRatio let differ from <a class="el" href="structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b" title="Size of the canvas in screen pixels, see jngl::getScreenSize()">AppParameters::screenSize</a>. Where it matches <a class="el" href="structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b" title="Size of the canvas in screen pixels, see jngl::getScreenSize()">AppParameters::screenSize</a>, that is returned exactly, without rounding errors. It doesn't change once the window has been created.</p>
+<p>This is always the actual canvas, i.e. its size in actual pixels divided by <a class="el" href="#a7d23d95fbe7f69b235a6984b67f5fa7c" title="Size of one screen pixel in actual pixels.">jngl::getScaleFactor()</a>. So it takes <a class="el" href="structjngl_1_1AppParameters.html#a49bcee5687292f8135b0d9aee96f7b0e" title="This function can be set to make adjustments to the scale factor used by jngl::getScaleFactor() after...">AppParameters::scaleFactor</a> into account, as well as a window whose shape AppParameters::minAspectRatio and maxAspectRatio let differ from <a class="el" href="structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b" title="Size of the canvas in screen pixels, see jngl::getScreenSize()">AppParameters::screenSize</a>. Where it matches <a class="el" href="structjngl_1_1AppParameters.html#aefc3b35ef4d7e9bba2cc4481cad0398b" title="Size of the canvas in screen pixels, see jngl::getScreenSize()">AppParameters::screenSize</a>, that is returned exactly, without rounding errors.</p>
+<p>It doesn't change once the window has been created, unless the active Scene returns true from <a class="el" href="classjngl_1_1Work.html#a819e673e9fc88a3c3948577586f94de7" title="Gets asked by JNGL whether this Scene could be shown with screenSize instead of letter-boxing.">Scene::supportsScreenSize()</a>. <a class="el" href="classjngl_1_1Job.html#a190622f195011b2583b8403cce65726a" title="Gets called after the return value of jngl::getScreenSize() has changed, see jngl::Scene::supportsScr...">Job::onScreenSizeChanged()</a> gets called in that case.</p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname"><a class="elRef" href="http://en.cppreference.com/w/cpp/error/runtime_error.html">std::runtime_error</a></td><td>if the window hasn't been created yet </td></tr>
@@ -3788,7 +3789,7 @@ template&lt;class Vect &gt; </div>
 <div class="ttc" id="aclassjngl_1_1Finally_html"><div class="ttname"><a href="classjngl_1_1Finally.html">jngl::Finally</a></div><div class="ttdoc">Helper class which calls a function when being destroyed.</div><div class="ttdef"><b>Definition</b> <a href="Finally_8hpp_source.html#l00022">Finally.hpp:22</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Job_html_a2bf282904f7854c8a4fd515107aa8c4e"><div class="ttname"><a href="classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e">jngl::Job::draw</a></div><div class="ttdeci">virtual void draw() const =0</div><div class="ttdoc">Draw the game state.</div></div>
 <div class="ttc" id="aclassjngl_1_1Job_html_aa6f73ac7d5899119d156a0b3a27fba31"><div class="ttname"><a href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31">jngl::Job::step</a></div><div class="ttdeci">virtual void step()=0</div><div class="ttdoc">Advance the game logic.</div></div>
-<div class="ttc" id="aclassjngl_1_1Work_html"><div class="ttname"><a href="classjngl_1_1Work.html">jngl::Work</a></div><div class="ttdoc">Active state of the game, e.g. a menu or the game itself.</div><div class="ttdef"><b>Definition</b> <a href="work_8hpp_source.html#l00013">work.hpp:13</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Work_html"><div class="ttname"><a href="classjngl_1_1Work.html">jngl::Work</a></div><div class="ttdoc">Active state of the game, e.g. a menu or the game itself.</div><div class="ttdef"><b>Definition</b> <a href="work_8hpp_source.html#l00014">work.hpp:14</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition</b> <a href="Achievement_8hpp_source.html#l00010">Achievement.hpp:10</a></div></div>
 <div class="ttc" id="anamespacejngl_html_ad35ecfcfaf514795ea3a1a3df983890e"><div class="ttname"><a href="#ad35ecfcfaf514795ea3a1a3df983890e">jngl::pauseAudio</a></div><div class="ttdeci">Finally pauseAudio()</div><div class="ttdoc">Pauses the playback of all audio; destroying the returned Finally object will resume again.</div></div>
 </div><!-- fragment --><p>Or if you want to toggle pausing audio using <code>Space</code>: </p><div class="fragment"><div class="line"><span class="keyword">class </span>PauseExample : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Work</a> {</div>
@@ -4088,7 +4089,7 @@ template&lt;class T , class... Args&gt; </div>
 
 <p>The same as <a class="el" href="#a9937073cb10d7c761085e47010390297" title="Sets the passed Work to be active in the main loop.">setWork(std::shared_ptr&lt;Work&gt;)</a> but creates the <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> for you. </p>
 
-<p class="definition">Definition at line <a class="el" href="work_8hpp_source.html#l00098">98</a> of file <a class="el" href="work_8hpp_source.html">work.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="work_8hpp_source.html#l00137">137</a> of file <a class="el" href="work_8hpp_source.html">work.hpp</a>.</p>
 
 </div>
 </div>

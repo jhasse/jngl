@@ -129,6 +129,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onUnload</b> 
 <tr class="memitem:ad915219920b4e3facabfa8519b955809" id="r_ad915219920b4e3facabfa8519b955809"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad915219920b4e3facabfa8519b955809">onToggleFullscreen</a> ()</td></tr>
 <tr class="memdesc:ad915219920b4e3facabfa8519b955809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called when the user pressed <code>Alt</code> + <code>Enter</code>  <br /></td></tr>
 <tr class="separator:ad915219920b4e3facabfa8519b955809"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a819e673e9fc88a3c3948577586f94de7" id="r_a819e673e9fc88a3c3948577586f94de7"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a819e673e9fc88a3c3948577586f94de7">supportsScreenSize</a> (<a class="el" href="classjngl_1_1Vec2.html">Vec2</a> screenSize) const</td></tr>
+<tr class="memdesc:a819e673e9fc88a3c3948577586f94de7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets asked by JNGL whether this Scene could be shown with <em>screenSize</em> instead of letter-boxing.  <br /></td></tr>
+<tr class="separator:a819e673e9fc88a3c3948577586f94de7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classjngl_1_1Job"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classjngl_1_1Job')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classjngl_1_1Job.html">Job</a></td></tr>
 <tr class="memitem:aa6f73ac7d5899119d156a0b3a27fba31 inherit pub_methods_classjngl_1_1Job" id="r_aa6f73ac7d5899119d156a0b3a27fba31"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31">step</a> ()=0</td></tr>
 <tr class="memdesc:aa6f73ac7d5899119d156a0b3a27fba31 inherit pub_methods_classjngl_1_1Job"><td class="mdescLeft">&#160;</td><td class="mdescRight">Advance the game logic.  <br /></td></tr>
@@ -144,6 +147,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onFileDrop</b
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onControllersChanged</b> ()</td></tr>
 <tr class="memdesc:a266cd76ff1ed7b753a12f4ded13f44c6 inherit pub_methods_classjngl_1_1Job"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whenever the return value of <a class="el" href="namespacejngl.html#ad178a38cc5f90ca8047e07693d39ac6a" title="Returns all controllers (gamepads) that are connected.">jngl::getConnectedControllers</a> would change, this method gets called. <br /></td></tr>
 <tr class="separator:a266cd76ff1ed7b753a12f4ded13f44c6 inherit pub_methods_classjngl_1_1Job"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a190622f195011b2583b8403cce65726a inherit pub_methods_classjngl_1_1Job" id="r_a190622f195011b2583b8403cce65726a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Job.html#a190622f195011b2583b8403cce65726a">onScreenSizeChanged</a> ()</td></tr>
+<tr class="memdesc:a190622f195011b2583b8403cce65726a inherit pub_methods_classjngl_1_1Job"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets called after the return value of <a class="el" href="namespacejngl.html#af73b72c0f9314a0e65382f95e326bd39" title="Returns the size of the useable draw area (excluding letter-boxing) in screen pixels.">jngl::getScreenSize()</a> has changed, see <a class="el" href="#a819e673e9fc88a3c3948577586f94de7" title="Gets asked by JNGL whether this Scene could be shown with screenSize instead of letter-boxing.">jngl::Scene::supportsScreenSize()</a>  <br /></td></tr>
+<tr class="separator:a190622f195011b2583b8403cce65726a inherit pub_methods_classjngl_1_1Job"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3919dba75c4130c8b6dd0ab31e9a461 inherit pub_methods_classjngl_1_1Job" id="r_ad3919dba75c4130c8b6dd0ab31e9a461"><td class="memItemLeft" align="right" valign="top">
 &#160;</td><td class="memItemRight" valign="bottom"><b>Job</b> ()=default</td></tr>
 <tr class="memdesc:ad3919dba75c4130c8b6dd0ab31e9a461 inherit pub_methods_classjngl_1_1Job"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does nothing. <br /></td></tr>
@@ -172,7 +178,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Job</b> ()</td></
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Active state of the game, e.g. a menu or the game itself. </p>
 
-<p class="definition">Definition at line <a class="el" href="work_8hpp_source.html#l00013">13</a> of file <a class="el" href="work_8hpp_source.html">work.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="work_8hpp_source.html#l00014">14</a> of file <a class="el" href="work_8hpp_source.html">work.hpp</a>.</p>
 </div><div class="dynheader">
 Inheritance diagram for Work:</div>
 <div class="dyncontent">
@@ -224,7 +230,7 @@ Collaboration diagram for Work:</div>
 <div class="line">        <a class="code hl_function" href="namespacejngl.html#ad98bbc26d3770af61a50b61da410bee8">jngl::setScene&lt;PauseMenu&gt;</a>();</div>
 <div class="line">    }</div>
 <div class="line">};</div>
-<div class="ttc" id="aclassjngl_1_1Work_html"><div class="ttname"><a href="classjngl_1_1Work.html">jngl::Work</a></div><div class="ttdoc">Active state of the game, e.g. a menu or the game itself.</div><div class="ttdef"><b>Definition</b> <a href="work_8hpp_source.html#l00013">work.hpp:13</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Work_html"><div class="ttname"><a href="classjngl_1_1Work.html">jngl::Work</a></div><div class="ttdoc">Active state of the game, e.g. a menu or the game itself.</div><div class="ttdef"><b>Definition</b> <a href="work_8hpp_source.html#l00014">work.hpp:14</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Work_html_ad9283b336e6952919ef4d3f435105451"><div class="ttname"><a href="#ad9283b336e6952919ef4d3f435105451">jngl::Work::onBackEvent</a></div><div class="ttdeci">virtual void onBackEvent()</div><div class="ttdoc">Gets called on Android's &quot;back&quot; gesture or when the Esc key is pressed.</div></div>
 <div class="ttc" id="anamespacejngl_html_ad98bbc26d3770af61a50b61da410bee8"><div class="ttname"><a href="namespacejngl.html#ad98bbc26d3770af61a50b61da410bee8">jngl::setScene</a></div><div class="ttdeci">void setScene(std::shared_ptr&lt; Scene &gt;)</div><div class="ttdoc">Sets the passed Scene to be active in the main loop for the next frame.</div></div>
 </div><!-- fragment --> 
@@ -380,6 +386,53 @@ Collaboration diagram for Work:</div>
 <p>Gets called when the user pressed <code>Alt</code> + <code>Enter</code> </p>
 <p>By default it switches between fullscreen and windowed mode. You can overwrite this if you want to do something else, e.g. if you want to disable toggling fullscreen mode because you need the keyboard shortcut for something else.</p>
 <dl class="section note"><dt>Note</dt><dd>Only implemented on desktop platforms (i.e. Linux, Windows and macOS). </dd></dl>
+
+</div>
+</div>
+<a id="a819e673e9fc88a3c3948577586f94de7" name="a819e673e9fc88a3c3948577586f94de7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a819e673e9fc88a3c3948577586f94de7">&#9670;&#160;</a></span>supportsScreenSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool supportsScreenSize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classjngl_1_1Vec2.html">Vec2</a></td>          <td class="paramname"><span class="paramname"><em>screenSize</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets asked by JNGL whether this Scene could be shown with <em>screenSize</em> instead of letter-boxing. </p>
+<p>The canvas keeps the size it had when the window was created, even when the window changes its shape later on, e.g. because the user rotated their phone or resized the window. Instead JNGL scales it to fit into the window, letter-boxing it where the shapes differ. The same happens when AppParameters::minAspectRatio or maxAspectRatio didn't allow the canvas to fill the whole window in the first place.</p>
+<p>Before each step in which the window doesn't have that shape, JNGL asks the active Scene whether it can handle the screen size that would fill the whole window instead. If it can't and the window's aspect ratio is outside of AppParameters::minAspectRatio and maxAspectRatio, JNGL asks again for the screen size which is letter-boxed to them, i.e. what the canvas would be if the window had been created with its current size. When this returns true, <a class="el" href="namespacejngl.html#af73b72c0f9314a0e65382f95e326bd39" title="Returns the size of the useable draw area (excluding letter-boxing) in screen pixels.">jngl::getScreenSize()</a> will return <em>screenSize</em> from then on and <a class="el" href="classjngl_1_1Job.html#a190622f195011b2583b8403cce65726a" title="Gets called after the return value of jngl::getScreenSize() has changed, see jngl::Scene::supportsScr...">Job::onScreenSizeChanged()</a> gets called. Once it returns false for both, e.g. because another Scene became active which doesn't override this method, the canvas goes back to its original size.</p>
+<p><em>screenSize</em> is the size of the canvas in actual pixels divided by the scale factor that <a class="el" href="structjngl_1_1AppParameters.html#a49bcee5687292f8135b0d9aee96f7b0e" title="This function can be set to make adjustments to the scale factor used by jngl::getScaleFactor() after...">AppParameters::scaleFactor</a> returns for it. If that hasn't been set, <a class="el" href="namespacejngl.html#a7d23d95fbe7f69b235a6984b67f5fa7c" title="Size of one screen pixel in actual pixels.">jngl::getScaleFactor()</a> is used, as it doesn't change once the window has been created.</p>
+<p>Returns false by default.</p>
+<div class="fragment"><div class="line"><span class="keyword">class </span>MainMenu : <span class="keyword">public</span> <a class="code hl_class" href="classjngl_1_1Work.html">jngl::Scene</a> {</div>
+<div class="line">    <span class="keywordtype">bool</span> <a class="code hl_function" href="#a819e673e9fc88a3c3948577586f94de7">supportsScreenSize</a>(<a class="code hl_class" href="classjngl_1_1Vec2.html">jngl::Vec2</a> screenSize)<span class="keyword"> const override </span>{</div>
+<div class="line">        <span class="keywordflow">return</span> screenSize.<a class="code hl_variable" href="classjngl_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> &gt;= 900; <span class="comment">// the buttons need at least that much space</span></div>
+<div class="line">    }</div>
+<div class="line">    <span class="keywordtype">void</span> <a class="code hl_function" href="classjngl_1_1Job.html#a190622f195011b2583b8403cce65726a">onScreenSizeChanged</a>()<span class="keyword"> override </span>{</div>
+<div class="line">        quitButton.setPos(<a class="code hl_function" href="namespacejngl.html#af73b72c0f9314a0e65382f95e326bd39">jngl::getScreenSize</a>() / 2. - <a class="code hl_class" href="classjngl_1_1Vec2.html">jngl::Vec2</a>(100, 50));</div>
+<div class="line">    }</div>
+<div class="line">    <span class="comment">// ...</span></div>
+<div class="line">};</div>
+<div class="ttc" id="aclassjngl_1_1Job_html_a190622f195011b2583b8403cce65726a"><div class="ttname"><a href="classjngl_1_1Job.html#a190622f195011b2583b8403cce65726a">jngl::Job::onScreenSizeChanged</a></div><div class="ttdeci">virtual void onScreenSizeChanged()</div><div class="ttdoc">Gets called after the return value of jngl::getScreenSize() has changed, see jngl::Scene::supportsScr...</div></div>
+<div class="ttc" id="aclassjngl_1_1Vec2_html"><div class="ttname"><a href="classjngl_1_1Vec2.html">jngl::Vec2</a></div><div class="ttdoc">Two-dimensional vector.</div><div class="ttdef"><b>Definition</b> <a href="Vec2_8hpp_source.html#l00036">Vec2.hpp:36</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Vec2_html_af88b946fb90d5f08b5fb740c70e98c10"><div class="ttname"><a href="classjngl_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">jngl::Vec2::x</a></div><div class="ttdeci">double x</div><div class="ttdoc">x component</div><div class="ttdef"><b>Definition</b> <a href="Vec2_8hpp_source.html#l00045">Vec2.hpp:45</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Work_html_a819e673e9fc88a3c3948577586f94de7"><div class="ttname"><a href="#a819e673e9fc88a3c3948577586f94de7">jngl::Work::supportsScreenSize</a></div><div class="ttdeci">virtual bool supportsScreenSize(Vec2 screenSize) const</div><div class="ttdoc">Gets asked by JNGL whether this Scene could be shown with screenSize instead of letter-boxing.</div></div>
+<div class="ttc" id="anamespacejngl_html_af73b72c0f9314a0e65382f95e326bd39"><div class="ttname"><a href="namespacejngl.html#af73b72c0f9314a0e65382f95e326bd39">jngl::getScreenSize</a></div><div class="ttdeci">Vec2 getScreenSize()</div><div class="ttdoc">Returns the size of the useable draw area (excluding letter-boxing) in screen pixels.</div></div>
+</div><!-- fragment --> 
+<p>Reimplemented in <a class="el" href="classjngl_1_1Fade.html#a97d2f8ad6937e845a4d431b69a37f4f3">Fade</a>.</p>
 
 </div>
 </div>
