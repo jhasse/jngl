@@ -1,20 +1,15 @@
-// Copyright 2024-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2024-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-#include <boost/ut.hpp>
+#include <catch2/catch_test_macros.hpp>
 #include <jngl/sound.hpp>
 
-namespace {
-boost::ut::suite _ = [] {
-	using namespace boost::ut; // NOLINT
-	"Sound"_test = [] {
-		expect(!jngl::isPlaying("../data/test.ogg"));
-		jngl::play("../data/test.ogg");
-		expect(jngl::isPlaying("../data/test.ogg"));
-		jngl::stop("../data/test.ogg");
-		expect(!jngl::isPlaying("../data/test.ogg"));
-		expect(throws<std::runtime_error>([] { jngl::play("nonexistent.ogg"); }));
-		expect(throws<std::runtime_error>([] { jngl::stop("nonexistent.ogg"); }));
-		expect(throws<std::runtime_error>([] { jngl::isPlaying("nonexistent.ogg"); }));
-	};
-};
-} // namespace
+TEST_CASE("Sound") {
+	REQUIRE(!jngl::isPlaying("../data/test.ogg"));
+	jngl::play("../data/test.ogg");
+	REQUIRE(jngl::isPlaying("../data/test.ogg"));
+	jngl::stop("../data/test.ogg");
+	REQUIRE(!jngl::isPlaying("../data/test.ogg"));
+	REQUIRE_THROWS_AS(jngl::play("nonexistent.ogg"), std::runtime_error);
+	REQUIRE_THROWS_AS(jngl::stop("nonexistent.ogg"), std::runtime_error);
+	REQUIRE_THROWS_AS(jngl::isPlaying("nonexistent.ogg"), std::runtime_error);
+}

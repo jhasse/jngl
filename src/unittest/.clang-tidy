@@ -1,0 +1,8 @@
+---
+# Catch2's TEST_CASE and assertion macros trigger these:
+InheritParentConfig: true
+Checks: '
+       ,-bugprone-throwing-static-initialization,
+       ,-cppcoreguidelines-avoid-do-while,
+       ,-misc-use-anonymous-namespace,
+'

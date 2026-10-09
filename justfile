@@ -14,17 +14,8 @@ unittest test='': (debug "jngl-unittest")
 	cd build && Debug/jngl-unittest {{test}}
 
 unittest-headless config='Debug':
-	cd build && {{config}}/jngl-unittest Color
-	cd build && {{config}}/jngl-unittest Rgb
-	cd build && {{config}}/jngl-unittest Drawable
-	cd build && {{config}}/jngl-unittest ImageData
-	cd build && {{config}}/jngl-unittest FinallyTest
-	cd build && {{config}}/jngl-unittest halfLoadTest
-	cd build && {{config}}/jngl-unittest getBinaryPath
-	cd build && {{config}}/jngl-unittest getConfigPath
-	cd build && {{config}}/jngl-unittest getDocumentsPath
-	cd build && {{config}}/jngl-unittest readAsset
-	cd build && {{config}}/jngl-unittest Vec2
+	# comma = OR; names #ifdef'd out on some platforms (e.g. getDocumentsPath) are skipped
+	cd build && {{config}}/jngl-unittest "Color,Rgb,Drawable,ImageData,FinallyTest,halfLoadTest,getBinaryPath,getConfigPath,getDocumentsPath,readAsset,Vec2"
 
 unittest-release test='': (release "jngl-unittest")
 	cd build && Release/jngl-unittest {{test}}
@@ -59,7 +50,7 @@ set windows-shell := ["C:/Program Files/Git/bin/bash", "-c"]
 [linux]
 ubuntu:
 	sudo apt install libgl1-mesa-dev libfreetype6-dev libfontconfig1-dev libpng-dev libxxf86vm-dev \
-	                 libvorbis-dev cmake g++ libwebp-dev git libsdl2-dev
+	                 libvorbis-dev cmake g++ libwebp-dev git libsdl2-dev catch2
 
 webos:
 	cp build-web/jngl-test.data webOS/
