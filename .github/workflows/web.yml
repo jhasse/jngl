@@ -1,0 +1,27 @@
+name: Web
+on: [push]
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ['4.0.22', '5.0.7', 'latest']
+    runs-on: ubuntu-latest
+    container:
+      image: emscripten/emsdk:${{ matrix.version }}
+    continue-on-error: ${{ matrix.version == 'latest' }}
+    steps:
+    - uses: actions/checkout@v5
+    - name: Cache CPM.cmake packages
+      uses: actions/cache@v4
+      with:
+        path: .cache/cpm
+        key: cpm
+    - name: Configure with CMake
+      run: emcmake cmake -Bbuild-web -DCMAKE_COMPILE_WARNING_AS_ERROR=1
+    - name: Build
+      run: |
+        cp -r data build-web/
+        make -C build-web -j$(nproc)
+env:
+  CPM_SOURCE_CACHE: ${{ github.workspace }}/.cache/cpm
