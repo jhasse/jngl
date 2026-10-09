@@ -719,7 +719,9 @@ void Window::updateScreenSize() {
 			if (candidate == originalCanvas) {
 				break; // no need to ask, see below
 			}
-			if (std::ranges::find(canvasCandidates, candidate) == canvasCandidates.end()) {
+			if (std::ranges::find_if(canvasCandidates, [&candidate](const auto& existing) {
+				return existing == candidate;
+			}) == canvasCandidates.end()) {
 				canvasCandidates.emplace_back(candidate);
 			}
 		}
