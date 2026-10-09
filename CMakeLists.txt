@@ -140,6 +140,7 @@ else() # Windows
 
 	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x0A00 _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
 	if(JNGL_WINAPI)
+		target_compile_definitions(jngl PRIVATE JNGL_WINAPI)
 		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp)
 		target_link_libraries(jngl PRIVATE opengl32)
 	else()

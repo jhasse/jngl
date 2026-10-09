@@ -30,12 +30,23 @@
 #endif
 
 #include <algorithm>
+#include <csignal>
 #include <gsl/narrow>
 #include <ranges>
 #include <tuple>
 #include <thread>
 
 namespace jngl {
+
+#ifndef __EMSCRIPTEN__
+namespace {
+volatile std::sig_atomic_t gGotSigint = 0;
+} // namespace
+
+extern "C" void jngl_on_sigint(int) {
+	gGotSigint = 1;
+}
+#endif
 
 ScaleablePixels Window::getTextWidth(const std::string& text) {
 	return static_cast<ScaleablePixels>(fonts_[fontSize_][fontName_]->getTextWidth(text));
@@ -340,7 +351,11 @@ uint8_t Window::mainLoop() {
 	g_jnglMainLoop =
 	    [this]() {
 #else
+	// Only while in our main loop, as it's the one checking gGotSigint (see sdlInit)
+	gGotSigint = 0;
+	const auto previousSigintHandler = std::signal(SIGINT, jngl_on_sigint);
 	Finally _([&]() {
+		std::signal(SIGINT, previousSigintHandler);
 		newWork_.reset();
 		currentWork_.reset();
 	});
@@ -380,6 +395,11 @@ void Window::stepIfNeeded() {
 		++internal::gFrameNumber; // for logging
 		updateKeyStates();
 		UpdateInput();
+#ifndef __EMSCRIPTEN__
+		if (gGotSigint != 0 && !forceExitCode) {
+			forceQuit(130);
+		}
+#endif
 		updateScreenSize();
 #ifdef JNGL_PERFORMANCE_OVERLAY
 		auto start = std::chrono::steady_clock::now();
