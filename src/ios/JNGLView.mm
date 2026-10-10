@@ -37,6 +37,11 @@ std::unique_ptr<jngl::App> jnglApp;
 		CAEAGLLayer* eaglLayer = (CAEAGLLayer*) super.layer;
 		eaglLayer.opaque = YES;
 
+		// During a rotation UIKit animates the bounds from the old to the new size, while we
+		// already render at the new size (see -layoutSubviews). With the default (scale to fill)
+		// the new frames would be shown stretched to the intermediate bounds:
+		self.contentMode = UIViewContentModeCenter;
+
 		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
 
 		if (!context || ![EAGLContext setCurrentContext:context]) {
