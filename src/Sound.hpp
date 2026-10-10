@@ -1,6 +1,5 @@
 // Copyright 2019-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
-
 #pragma once
 
 #include <memory>
@@ -22,8 +21,18 @@ public:
 	~Sound();
 	bool isPlaying() const;
 	bool isLooping() const;
+
+	/// has to be called before playing the sound, because otherwise getStream() has already been
+	/// called
 	void loop();
 	void setVolume(float v);
+
+	/// Has to be called before playing the sound, together with an initial setPanning(). If the
+	/// sound should loop, loop() has to be called before this.
+	void enablePanning();
+
+	/// enablePanning() must have been called before
+	void setPanning(float panning);
 	std::shared_ptr<Stream> getStream();
 
 	/// returns 0...1 and will reset when looping

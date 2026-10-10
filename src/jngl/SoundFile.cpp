@@ -284,6 +284,22 @@ void SoundFile::loop(Channel& channel) {
 	channel.play(std::move(tmp));
 }
 
+SoundPanning SoundFile::playWithPanning() {
+	return playWithPanning(Channel::main());
+}
+
+SoundPanning SoundFile::playWithPanning(Channel& channel) {
+	return { buffer, channel, false };
+}
+
+SoundPanning SoundFile::loopWithPanning() {
+	return loopWithPanning(Channel::main());
+}
+
+SoundPanning SoundFile::loopWithPanning(Channel& channel) {
+	return { buffer, channel, true };
+}
+
 void SoundFile::setVolume(float v) {
 	if (auto sound_ = sound.lock()) {
 		sound_->setVolume(v);
