@@ -149,6 +149,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>loop</b> ()</td></tr>
 <tr class="memitem:aaf531aecfc325d5510e2d29942949da4" id="r_aaf531aecfc325d5510e2d29942949da4"><td class="memItemLeft" align="right" valign="top"><a id="aaf531aecfc325d5510e2d29942949da4" name="aaf531aecfc325d5510e2d29942949da4"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>loop</b> (<a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;)</td></tr>
 <tr class="separator:aaf531aecfc325d5510e2d29942949da4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64beb511526aeb18328a652d677448f4" id="r_a64beb511526aeb18328a652d677448f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1SoundPanning.html">SoundPanning</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64beb511526aeb18328a652d677448f4">playWithPanning</a> ()</td></tr>
+<tr class="memdesc:a64beb511526aeb18328a652d677448f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like <a class="el" href="#a6d58098c6cf63c241ed03bc797256bb1" title="Play the sound once. If called twice the sound would also play twice.">play()</a>, but the sound can be positioned in the stereo field.  <br /></td></tr>
+<tr class="separator:a64beb511526aeb18328a652d677448f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2192b5ba9fbfb5004dceea45dc3f361f" id="r_a2192b5ba9fbfb5004dceea45dc3f361f"><td class="memItemLeft" align="right" valign="top"><a id="a2192b5ba9fbfb5004dceea45dc3f361f" name="a2192b5ba9fbfb5004dceea45dc3f361f"></a>
+<a class="el" href="classjngl_1_1SoundPanning.html">SoundPanning</a>&#160;</td><td class="memItemRight" valign="bottom"><b>playWithPanning</b> (<a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;)</td></tr>
+<tr class="separator:a2192b5ba9fbfb5004dceea45dc3f361f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbb3415bf1baee3a1742ca36dadab6a8" id="r_afbb3415bf1baee3a1742ca36dadab6a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1SoundPanning.html">SoundPanning</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbb3415bf1baee3a1742ca36dadab6a8">loopWithPanning</a> ()</td></tr>
+<tr class="memdesc:afbb3415bf1baee3a1742ca36dadab6a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like <a class="el" href="#afe461d27b9c48d5921c00d521181f12f" title="Play the sound in a loop. Can also be stopped using stop()">loop()</a>, but the sound can be positioned in the stereo field.  <br /></td></tr>
+<tr class="separator:afbb3415bf1baee3a1742ca36dadab6a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2fd879faf1b9f45e26640b6ad6bc3f1" id="r_ac2fd879faf1b9f45e26640b6ad6bc3f1"><td class="memItemLeft" align="right" valign="top"><a id="ac2fd879faf1b9f45e26640b6ad6bc3f1" name="ac2fd879faf1b9f45e26640b6ad6bc3f1"></a>
+<a class="el" href="classjngl_1_1SoundPanning.html">SoundPanning</a>&#160;</td><td class="memItemRight" valign="bottom"><b>loopWithPanning</b> (<a class="el" href="classjngl_1_1Channel.html">Channel</a> &amp;)</td></tr>
+<tr class="separator:ac2fd879faf1b9f45e26640b6ad6bc3f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adba16af13c4a8c53151baa2d5123ec96" id="r_adba16af13c4a8c53151baa2d5123ec96"><td class="memItemLeft" align="right" valign="top"><a id="adba16af13c4a8c53151baa2d5123ec96" name="adba16af13c4a8c53151baa2d5123ec96"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setVolume</b> (float v)</td></tr>
 <tr class="memdesc:adba16af13c4a8c53151baa2d5123ec96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set volume in [0, ∞]. Default is 1.0f. <br /></td></tr>
@@ -178,7 +190,7 @@ Static Public Member Functions</h2></td></tr>
 <div class="textblock"><p>Sound loaded from an OGG or MP3 file. </p>
 <p>JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly - you can just use <a class="el" href="namespacejngl.html#a5dec9dac0a4970b6421c809e923dee8b" title="Play an OGG or MP3 audio file once.">jngl::play</a> or <a class="el" href="classjngl_1_1Channel.html#a9a2d4a760f9febf9ab966d0ed41183b2" title="Play an OGG or MP3 audio file on this channel.">Channel::play</a>. If you want to access the internally <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG or MP3 file.">SoundFile</a> from JNGL's cache before playing, use <a class="el" href="#a98a9db313826252f0b80d42d5b078fc2" title="Returns a shared pointer to a SoundFile from JNGL&#39;s internal cache, creates it with async loading if ...">SoundFile::get</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="SoundFile_8hpp_source.html#l00032">32</a> of file <a class="el" href="SoundFile_8hpp_source.html">SoundFile.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoundFile_8hpp_source.html#l00034">34</a> of file <a class="el" href="SoundFile_8hpp_source.html">SoundFile.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6f8d4c7f6d06cfb5b1527d334a4fedcf" name="a6f8d4c7f6d06cfb5b1527d334a4fedcf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6f8d4c7f6d06cfb5b1527d334a4fedcf">&#9670;&#160;</a></span>SoundFile()</h2>
@@ -263,6 +275,63 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Stop the last started sound of this <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG or MP3 file.">SoundFile</a> started on the <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a>. </p>
 <dl class="section note"><dt>Note</dt><dd>If not using the main <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a> (i.e. <a class="el" href="classjngl_1_1Channel.html#a31eed6f7511dc019ad179a95b5246682" title="Returns the main Channel on which jngl::play, jngl::loop, jngl::stop operate.">Channel::main()</a>), this method should be used instead of <a class="el" href="#a8c528baf37154d347366083f0f816846" title="Stop the last started sound.">stop()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a64beb511526aeb18328a652d677448f4" name="a64beb511526aeb18328a652d677448f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64beb511526aeb18328a652d677448f4">&#9670;&#160;</a></span>playWithPanning()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1SoundPanning.html">SoundPanning</a> playWithPanning </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Like <a class="el" href="#a6d58098c6cf63c241ed03bc797256bb1" title="Play the sound once. If called twice the sound would also play twice.">play()</a>, but the sound can be positioned in the stereo field. </p>
+<p>The sound only starts playing once <a class="el" href="classjngl_1_1SoundPanning.html#a3c35fdcd5a5df00883f8d710a1267432" title="Set the stereo position, the first call starts playing the sound.">SoundPanning::setPanning</a> has been called for the first time and stops when the returned object gets destroyed. Use the returned object to control the sound, as <a class="el" href="#a8c528baf37154d347366083f0f816846" title="Stop the last started sound.">stop()</a>, <a class="el" href="#a8438e3403946accc1986a05b89ee7b03" title="Whether the sound is still playing at least once.">isPlaying()</a>, <a class="el" href="#adba16af13c4a8c53151baa2d5123ec96" title="Set volume in [0, ∞]. Default is 1.0f.">setVolume()</a> and <a class="el" href="#afb5e1a934b01b01c1584cf4be5287bd8" title="Returns playing progress in [0, 1], can be used with length() to determine how much time has passed.">progress()</a> of this <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG or MP3 file.">SoundFile</a> won't affect it.</p>
+<dl class="section note"><dt>Note</dt><dd>The <a class="el" href="classjngl_1_1Channel.html" title="An audio channel, different channels could be for example: &quot;Music&quot;, &quot;Speech&quot; and &quot;Sound Effects&quot;.">Channel</a> must not be moved while the returned object is still alive. </dd></dl>
+
+</div>
+</div>
+<a id="afbb3415bf1baee3a1742ca36dadab6a8" name="afbb3415bf1baee3a1742ca36dadab6a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbb3415bf1baee3a1742ca36dadab6a8">&#9670;&#160;</a></span>loopWithPanning()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1SoundPanning.html">SoundPanning</a> loopWithPanning </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Like <a class="el" href="#afe461d27b9c48d5921c00d521181f12f" title="Play the sound in a loop. Can also be stopped using stop()">loop()</a>, but the sound can be positioned in the stereo field. </p>
+<p>Unlike <a class="el" href="#afe461d27b9c48d5921c00d521181f12f" title="Play the sound in a loop. Can also be stopped using stop()">loop()</a> this will always start a new sound, even if this <a class="el" href="classjngl_1_1SoundFile.html" title="Sound loaded from an OGG or MP3 file.">SoundFile</a> is already looping. See <a class="el" href="#a64beb511526aeb18328a652d677448f4" title="Like play(), but the sound can be positioned in the stereo field.">playWithPanning()</a> for details. </p>
 
 </div>
 </div>

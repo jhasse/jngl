@@ -1,0 +1,8 @@
+<map id="jngl/SoundPanning.hpp" name="jngl/SoundPanning.hpp">
+<area shape="rect" id="Node000001" title="Contains jngl::SoundPanning class." alt="" coords="5,5,195,31"/>
+<area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="57,153,143,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,45,68,80,67,99,73,119,92,151,88,154,68,121,62,100,63,78,79,43"/>
+<area shape="rect" id="Node000003" href="$SoundFile_8hpp.html" title="Contains jngl::SoundFile class." alt="" coords="77,79,243,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="122,41,152,77,148,80,118,44"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="142,118,112,154,108,150,138,115"/>
+</map>
