@@ -1,4 +1,4 @@
-// Copyright 2023 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "Achievement.hpp"
 
@@ -24,6 +24,10 @@ void Achievement::increaseValue(int by) {
 		AchievementLayer::handle().notify(*this, value, value + by);
 	}
 	value += by;
+}
+
+void setAchievementProgressSeparator(std::string separator) {
+	AchievementLayer::handle().setProgressSeparator(std::move(separator));
 }
 
 } // namespace jngl

@@ -81,7 +81,7 @@ void AchievementLayer::draw() const {
 	} else {
 		tmp << std::lround(value);
 	}
-	tmp << " of ";
+	tmp << progressSeparator;
 	if (achievement->customDisplayValue) {
 		tmp << achievement->customDisplayValue(maxValue);
 	} else {
@@ -97,6 +97,10 @@ void AchievementLayer::draw() const {
 	mv.translate({ bar.x, 0 });
 	drawRect(mv, Vec2((1.f - percentage) * (BOX.x - PADDING.x * 2), bar.y), Rgb::u8(90, 90, 90));
 	jngl::setAlpha(255);
+}
+
+void AchievementLayer::setProgressSeparator(std::string separator) {
+	progressSeparator = std::move(separator);
 }
 
 void AchievementLayer::notify(const Achievement& achievement, int oldValue, int newValue) {
