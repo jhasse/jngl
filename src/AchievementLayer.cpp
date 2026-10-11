@@ -54,8 +54,12 @@ void AchievementLayer::draw() const {
 	if (!achievement) {
 		return;
 	}
-	const Vec2 BOX(570, 140);
 	const Vec2 PADDING{ 20, 20 };
+	setFontSize(37);
+	// wider for names that don't fit, e.g. in languages with longer words
+	const Vec2 BOX(std::max(570., pWindow->getFontImpl()->getTextWidth(achievement->name) +
+	                                  PADDING.x * 2),
+	               140);
 	auto mv = modelview();
 	mv.translate({0., fadeIn * (BOX.y + PADDING.y)});
 	mv.translate(getScreenSize() / 2. - BOX - PADDING -
@@ -67,7 +71,6 @@ void AchievementLayer::draw() const {
 	drawRect(mv, BOX, Rgb::u8(50, 50, 50));
 	mv.translate(PADDING);
 
-	setFontSize(37);
 	pWindow->getFontImpl()->print(mv, achievement->name, 0xffffffff_rgba);
 
 	mv.translate({0, 50});
