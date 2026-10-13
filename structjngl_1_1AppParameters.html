@@ -298,14 +298,14 @@ Collaboration diagram for AppParameters:</div>
 </div><div class="memdoc">
 
 <p>This function can be set to make adjustments to the scale factor used by <a class="el" href="namespacejngl.html#a7d23d95fbe7f69b235a6984b67f5fa7c" title="Size of one screen pixel in actual pixels.">jngl::getScaleFactor()</a> after the window has been created. </p>
-<p>It gets the actual window dimensions in actual pixels as parameters (width, height) and must return the desired new scale factor.</p>
+<p>It gets the dimensions of the canvas in actual pixels as parameters (width, height), i.e. of the window without the letter-boxing that minAspectRatio and maxAspectRatio might require, and must return the desired new scale factor.</p>
 <p>For example if you don't want to force an aspect ratio, but want to have a consistent scaling based on a 1920x1080 screen, you could use: </p><div class="fragment"><div class="line">params.scaleFactor = [](<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height) {</div>
 <div class="line">    <span class="keyword">const</span> <span class="keywordtype">double</span> windowSqr = width * height;</div>
 <div class="line">    <span class="keyword">const</span> <span class="keywordtype">double</span> desiredSqr = 1920 * 1080;</div>
 <div class="line">    <span class="keywordflow">return</span> sqrt(windowSqr / desiredSqr);</div>
 <div class="line">};</div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00060">60</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AppParameters_8hpp_source.html#l00061">61</a> of file <a class="el" href="AppParameters_8hpp_source.html">AppParameters.hpp</a>.</p>
 
 </div>
 </div>
