@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../jngl/Scene.hpp"
+#include "../jngl/Sprite.hpp"
 #include "../jngl/matrix.hpp"
 #include "../jngl/screen.hpp"
 #include "../jngl/shapes.hpp"
@@ -125,5 +126,32 @@ TEST_CASE("readPixels of a zoomed canvas") {
 	REQUIRE(jngl::getWindowHeight() == 70);
 	Fixture::reset(); // the frame has been drawn before resizing
 	draw();
+	REQUIRE(f.getAsciiArt() == expected);
+}
+
+TEST_CASE("Sprite keeps its size when the window gets resized") {
+	Fixture f(1.f); // 320x70
+	const std::vector<uint8_t> black = [] {
+		std::vector<uint8_t> pixels(40 * 20 * 4, 0);
+		for (size_t i = 3; i < pixels.size(); i += 4) {
+			pixels[i] = 255; // opaque
+		}
+		return pixels;
+	}();
+	const jngl::Sprite sprite(black.data(), 40, 20);
+	const auto size = sprite.getSize();
+	const jngl::Vec2 center{ -40, 0 };
+	jngl::drawRect(jngl::modelview().translate(center - size / 2.), size, 0x000000_rgb);
+	const auto expected = f.getAsciiArt();
+
+	// Loaded already, so its texture keeps the resolution it has. Should the scale factor change
+	// now, its size in screen units mustn't, neither the one it reports nor the one it's drawn with.
+	jngl::pWindow->setActualSize(160, 35);
+	jngl::pWindow->updateScreenSize();
+	REQUIRE(jngl::getScreenSize().x == 320);
+	REQUIRE(jngl::getScreenSize().y == 70);
+	REQUIRE(sprite.getSize() == size);
+	Fixture::reset(); // the frame has been drawn before resizing
+	sprite.draw(jngl::modelview().translate(center));
 	REQUIRE(f.getAsciiArt() == expected);
 }
