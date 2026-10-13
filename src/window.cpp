@@ -31,7 +31,6 @@
 
 #include <algorithm>
 #include <csignal>
-#include <gsl/narrow>
 #include <ranges>
 #include <tuple>
 #include <thread>
@@ -612,21 +611,29 @@ std::string Window::getTextInput() const {
 }
 
 namespace {
+/// The canvas' size for \a exact actual pixels of the \a actual ones, with bars of whole pixels on
+/// both sides, so that it starts at the edge of a pixel rather than in its middle. Otherwise
+/// everything drawn at whole pixels of the canvas, e.g. text, would fall in between the actual
+/// ones, and get sampled unevenly.
+int withWholePixelBars(const int actual, const double exact) {
+	return std::max(1, actual - 2 * static_cast<int>(std::lround((actual - exact) / 2)));
+}
+
 /// Letter-boxes \a width x \a height to the aspect ratios
 std::pair<int, int> fitToAspectRatios(const int width, const int height,
                                       const std::pair<int, int> minAspectRatio,
                                       const std::pair<int, int> maxAspectRatio) {
 	if (minAspectRatio.first * height > minAspectRatio.second * width) {
 		// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
-		const float canvasHeight = static_cast<float>(minAspectRatio.second * width) /
-		                           static_cast<float>(minAspectRatio.first);
-		return { width, gsl::narrow<int>(std::lround(canvasHeight)) };
+		const double canvasHeight = static_cast<double>(minAspectRatio.second * width) /
+		                            static_cast<double>(minAspectRatio.first);
+		return { width, withWholePixelBars(height, canvasHeight) };
 	}
 	if (maxAspectRatio.first * height < maxAspectRatio.second * width) {
 		// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
-		const float canvasWidth = static_cast<float>(maxAspectRatio.first * height) /
-		                          static_cast<float>(maxAspectRatio.second);
-		return { gsl::narrow<int>(std::lround(canvasWidth)), height };
+		const double canvasWidth = static_cast<double>(maxAspectRatio.first * height) /
+		                           static_cast<double>(maxAspectRatio.second);
+		return { withWholePixelBars(width, canvasWidth), height };
 	}
 	return { width, height };
 }
@@ -640,10 +647,12 @@ void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
 	actualHeight = height_;
 	canvasCandidates.clear();
 
-	// AppParameters::scaleFactor gets the size of the whole window, so that everything will be
-	// sharp if the active Scene supports filling it (see Scene::supportsScreenSize). Until then we
-	// zoom the letter-boxed canvas.
-	setScaleFactor(App::instance().getScaleFactorFor(width_, height_));
+	// AppParameters::scaleFactor gets the size of the letter-boxed canvas, so that what's shown at
+	// first is sharp. As the scale factor can't change anymore, the canvas gets zoomed should the
+	// active Scene support filling the whole window (see Scene::supportsScreenSize).
+	const auto [letterboxedWidth, letterboxedHeight] =
+	    fitToAspectRatios(width_, height_, minAspectRatio, maxAspectRatio);
+	setScaleFactor(App::instance().getScaleFactorFor(letterboxedWidth, letterboxedHeight));
 	originalCanvas = calculateCanvas(true);
 	width_ = originalCanvas.width;
 	height_ = originalCanvas.height;
@@ -679,9 +688,8 @@ void Window::updateLetterboxing() {
 	// stretch it to fit into the actual window (e.g. when unfolding a foldable).
 	const double scale = std::min(static_cast<double>(actualWidth) / canvasWidth,
 	                              static_cast<double>(actualHeight) / canvasHeight);
-	actualCanvasWidth = std::min(actualWidth, static_cast<int>(std::lround(canvasWidth * scale)));
-	actualCanvasHeight =
-	    std::min(actualHeight, static_cast<int>(std::lround(canvasHeight * scale)));
+	actualCanvasWidth = withWholePixelBars(actualWidth, canvasWidth * scale);
+	actualCanvasHeight = withWholePixelBars(actualHeight, canvasHeight * scale);
 	updateProjection(
 	    actualWidth, actualHeight,
 	    static_cast<float>(static_cast<double>(actualWidth) * canvasWidth / actualCanvasWidth),

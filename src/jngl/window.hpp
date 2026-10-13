@@ -41,10 +41,10 @@ void atExit(std::function<void()>);
 /// Returns the width of the canvas in pixels, i.e. jngl::getScreenWidth() * jngl::getScaleFactor()
 ///
 /// When letter-boxing is used, this doesn't include the black bars. Normally these are the
-/// window's actual pixels, but not when JNGL zooms the canvas: After the window has been resized
-/// (see Scene::supportsScreenSize), or when it's letter-boxed and AppParameters::scaleFactor is
-/// set. This still returns the canvas' width then, so that a FrameBuffer of getWindowSize() covers
-/// the whole screen.
+/// window's actual pixels, but not when JNGL zooms the canvas, as the scale factor can't change
+/// anymore: After the window has been resized, or when the canvas changes its size (see
+/// Scene::supportsScreenSize) and AppParameters::scaleFactor is set. This still returns the
+/// canvas' width then, so that a FrameBuffer of getWindowSize() covers the whole screen.
 int getWindowWidth();
 
 /// Returns the height of the canvas in pixels, see getWindowWidth()
