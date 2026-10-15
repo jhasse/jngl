@@ -11,6 +11,8 @@
 #include <utility>
 #include <android/input.h>
 #include <map>
+#include <optional>
+#include <string>
 #include <vector>
 
 struct android_app;
@@ -33,11 +35,19 @@ public:
 	void setRelativeMouseMode(bool);
 	void pause();
 	void makeCurrent();
-	[[nodiscard]] int handleKeyEvent(AInputEvent*);
+	/// Handles key down and key up events from physical keyboards and the IME
+	[[nodiscard]] int handleKeyEvent(const AInputEvent*);
 	[[nodiscard]] int32_t handleJoystickEvent(const AInputEvent*);
 	void setKeyboardVisible(bool);
 	std::vector<std::shared_ptr<Controller>> getConnectedControllers() const;
-	void resetTouchState();
+	/// Forgets all touches and marks all keys as released, e.g. when we lose focus and would miss
+	/// the up events
+	void resetInputState();
+
+	/// Whether the input device is a full keyboard (as opposed to a gamepad or a TV remote).
+	/// Physical keyboards report the DPAD source because they have arrow keys, so we can't use the
+	/// source alone to distinguish them from controllers.
+	[[nodiscard]] bool isAlphabeticKeyboard(int32_t deviceId);
 
 	/// See Window::toWindowCoordinates
 	Vec2 toWindowCoordinates(float x, float y) const;
@@ -52,6 +62,9 @@ public:
 
 private:
 	std::pair<EGLint, EGLint> getSurfaceSize() const;
+
+	/// Asks android.view.KeyEvent which character the key produces with the event's modifiers
+	[[nodiscard]] int32_t getUnicodeChar(const AInputEvent*) const;
 
 	const std::pair<int, int> minAspectRatio;
 	const std::pair<int, int> maxAspectRatio;
@@ -79,6 +92,13 @@ private:
 	std::optional<DisplayWrapper> display;
 
 	std::map<int32_t, std::shared_ptr<AndroidController>> controllers;
+
+	/// Which entry of Window::characterDown_ a currently held key (by Android key code) set, so
+	/// that we can clear it again on key up even if the modifier state changed in the meantime
+	std::map<int32_t, std::string> keyCodeToCharacter;
+
+	/// Cache for isAlphabeticKeyboard, by device id
+	std::map<int32_t, bool> alphabeticKeyboards;
 };
 
 } // namespace jngl

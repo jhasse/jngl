@@ -46,7 +46,37 @@ JNGL_MAIN_BEGIN {
 				jngl::setKeyboardVisible(true);
 			}
 			text += jngl::getTextInput();
+			if (jngl::keyPressed(jngl::key::BackSpace) && !text.empty()) {
+				// Remove the last UTF-8 character, i.e. the last byte plus any continuation bytes
+				do {
+					text.pop_back();
+				} while (!text.empty() && (text.back() & 0xc0) == 0x80);
+			}
+			if (jngl::keyPressed(jngl::key::Return)) {
+				text += '\n';
+			}
 			jngl::print(text, -100, -200);
+
+			// Physical keyboard test:
+			std::string keysDown = "keys down:";
+			for (const auto& [key, name] :
+			     { std::pair{ jngl::key::Left, "Left" }, std::pair{ jngl::key::Right, "Right" },
+			       std::pair{ jngl::key::Up, "Up" }, std::pair{ jngl::key::Down, "Down" },
+			       std::pair{ jngl::key::Space, "Space" }, std::pair{ jngl::key::Shift, "Shift" },
+			       std::pair{ jngl::key::Ctrl, "Ctrl" },
+			       std::pair{ jngl::key::Escape, "Escape" } }) {
+				if (jngl::keyDown(key)) {
+					keysDown += " ";
+					keysDown += name;
+				}
+			}
+			for (const char c : { 'w', 'a', 's', 'd' }) {
+				if (jngl::keyDown(c)) {
+					keysDown += " ";
+					keysDown += c;
+				}
+			}
+			jngl::print(keysDown, -100, 250);
 
 			jngl::setColor(255, 0, 0);
 			jngl::drawCircle(jngl::Vec2(-800, -400), 30); // top left
