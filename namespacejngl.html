@@ -1128,9 +1128,8 @@ Variables</h2></td></tr>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><b>keyToString</b> (<a class="el" href="input_8hpp.html#a544480710560e524a6d42b6a0bafc8f7">key::KeyType</a>)</td></tr>
 <tr class="memdesc:a092669470ed38b89d8e9526784493be8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string representation of a key useful for displaying it to the user. <br /></td></tr>
 <tr class="separator:a092669470ed38b89d8e9526784493be8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d2888b0f4e531f1e70345f8bfc7ed21" id="r_a4d2888b0f4e531f1e70345f8bfc7ed21"><td class="memItemLeft" align="right" valign="top"><a id="a4d2888b0f4e531f1e70345f8bfc7ed21" name="a4d2888b0f4e531f1e70345f8bfc7ed21"></a>
-<a class="el" href="classjngl_1_1Finally.html">Finally</a>&#160;</td><td class="memItemRight" valign="bottom"><b>setBlendMode</b> (<a class="el" href="#a0a72f89222b06814e4def649e122acb1">BlendMode</a>)</td></tr>
-<tr class="memdesc:a4d2888b0f4e531f1e70345f8bfc7ed21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets how what's drawn is blended with what's already there, until the returned <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> object is destroyed, which restores the previous blending. <br /></td></tr>
+<tr class="memitem:a4d2888b0f4e531f1e70345f8bfc7ed21" id="r_a4d2888b0f4e531f1e70345f8bfc7ed21"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classjngl_1_1Finally.html">Finally</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d2888b0f4e531f1e70345f8bfc7ed21">setBlendMode</a> (<a class="el" href="#a0a72f89222b06814e4def649e122acb1">BlendMode</a>)</td></tr>
+<tr class="memdesc:a4d2888b0f4e531f1e70345f8bfc7ed21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets how what's drawn is blended with what's already there, until the returned <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> object is destroyed, which restores the previous blending.  <br /></td></tr>
 <tr class="separator:a4d2888b0f4e531f1e70345f8bfc7ed21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -4135,6 +4134,27 @@ template&lt;class T , class... Args&gt; </div>
 
 <p>Resets the automatic frame limiter of App::mainLoop(). </p>
 <p>This is useful after you have done a huge amount of work in <a class="el" href="classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">Work::draw</a>, e.g. after loading screens. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a4d2888b0f4e531f1e70345f8bfc7ed21" name="a4d2888b0f4e531f1e70345f8bfc7ed21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d2888b0f4e531f1e70345f8bfc7ed21">&#9670;&#160;</a></span>setBlendMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1Finally.html">Finally</a> setBlendMode(<a class="el" href="#a0a72f89222b06814e4def649e122acb1">BlendMode</a>) </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a0a72f89222b06814e4def649e122acb1">BlendMode</a></td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets how what's drawn is blended with what's already there, until the returned <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> object is destroyed, which restores the previous blending. </p>
+<p>Stays set while a <a class="el" href="classjngl_1_1FrameBuffer.html" title="Image framebuffer object which can be rendered on.">FrameBuffer</a> is used in between (see <a class="el" href="classjngl_1_1FrameBuffer.html#ae358651e3b120275590b7163a63090f5" title="Starts drawing on the FrameBuffer as long as Context is alive.">FrameBuffer::use()</a>), and after it's done, rather than going back to the default with it. </p>
 
 </div>
 </div>
