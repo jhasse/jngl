@@ -12,6 +12,7 @@
 namespace jngl {
 
 Rgba gSpriteColor{ 1, 1, 1, 1 };
+std::optional<BlendMode> gBlendMode;
 
 void setSpriteColor(unsigned char red, unsigned char green, unsigned char blue) {
 	gSpriteColor.setRgb(Rgb::u8(red, green, blue));

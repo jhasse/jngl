@@ -406,7 +406,9 @@ enum class BlendMode : uint8_t {
 };
 
 /// Sets how what's drawn is blended with what's already there, until the returned Finally object
-/// is destroyed, which restores the previous blending
+/// is destroyed, which restores the previous blending. Stays set while a FrameBuffer is used in
+/// between (see FrameBuffer::use()), and after it's done, rather than going back to the default
+/// with it.
 #if __cplusplus >= 201703L
 [[nodiscard]]
 #endif

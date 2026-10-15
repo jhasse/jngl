@@ -17,6 +17,34 @@
 
 namespace jngl {
 
+namespace {
+
+/// If this is not empty, there's a FrameBuffer in use and the top is the function that activated
+/// it.
+std::stack<std::function<void()>> activateStack;
+
+} // namespace
+
+void applyBlendMode() {
+	if (gBlendMode) {
+		switch (*gBlendMode) {
+		case BlendMode::Composite:
+			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+			                    GL_ONE_MINUS_SRC_ALPHA);
+			break;
+		case BlendMode::Premultiplied:
+			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+			break;
+		}
+	} else if (activateStack.empty()) {
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	} else {
+		// Alpha adds up, so that what's drawn into the FrameBuffer is as opaque as the most opaque
+		// of it when it's drawn again
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+	}
+}
+
 struct FrameBuffer::Impl {
 	Impl(int width, int height, bool hdr)
 	: width(width), height(height),
@@ -47,16 +75,11 @@ struct FrameBuffer::Impl {
 	GLint viewport[4]{};
 #endif
 
-	/// If this is not empty, there's a FrameBuffer in use and this was the function that activated
-	/// it.
-	static std::stack<std::function<void()>> activate;
-
 	/// The projection matrix of the window, saved when the outermost FrameBuffer gets activated.
 	/// FrameBuffers used inside of it scale this one instead of their outer FrameBuffer's.
 	static Mat4 screenProjection;
 };
 
-std::stack<std::function<void()>> FrameBuffer::Impl::activate;
 Mat4 FrameBuffer::Impl::screenProjection;
 
 FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr)
@@ -235,7 +258,7 @@ FrameBuffer::Context FrameBuffer::use() const {
 		glBindFramebuffer(GL_FRAMEBUFFER, impl->fbo);
 		glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
 		glViewport(0, 0, impl->width, impl->height);
-		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+		applyBlendMode(); // this FrameBuffer's on activateStack by now
 
 		// each time we active we have to check again, because the window might have been resized
 		if (!impl->letterboxing) {
@@ -247,7 +270,7 @@ FrameBuffer::Context FrameBuffer::use() const {
 	};
 	pushMatrix();
 	auto savedProjection = opengl::projection;
-	if (Impl::activate.empty()) {
+	if (activateStack.empty()) {
 		Impl::screenProjection = opengl::projection;
 		// The window might not be letter-boxed anymore, e.g. after it has been resized back to its
 		// original size. Re-enabling the scissor test when using the FrameBuffer is done would
@@ -283,10 +306,10 @@ FrameBuffer::Context FrameBuffer::use() const {
 	// otherwise be used for letterboxing when re-enabling the scissor test below
 	std::array<GLint, 4> scissorBox{};
 	glGetIntegerv(GL_SCISSOR_BOX, scissorBox.data());
-	activate();
-	Impl::activate.emplace(std::move(activate));
+	activateStack.emplace(std::move(activate));
+	activateStack.top()();
 	return Context([this, savedProjection, scissorBox]() {
-		Impl::activate.pop();
+		activateStack.pop();
 		glScissor(scissorBox[0], scissorBox[1], scissorBox[2], scissorBox[3]);
 		popMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
@@ -296,14 +319,14 @@ FrameBuffer::Context FrameBuffer::use() const {
 #endif
 		opengl::projection = savedProjection;
 		App::instance().updateProjectionMatrix();
-		if (!Impl::activate.empty()) {
-			Impl::activate.top()(); // Restore the FrameBuffer that was previously active
+		if (!activateStack.empty()) {
+			activateStack.top()(); // Restore the FrameBuffer that was previously active
 			return;
 		}
 		if (impl->letterboxing) {
 			glEnable(GL_SCISSOR_TEST);
 		}
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		applyBlendMode();
 		pWindow->bindSystemFramebufferAndRenderbuffer();
 		clearBackgroundColor();
 	});
