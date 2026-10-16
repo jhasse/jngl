@@ -2663,7 +2663,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Enables scissor testing, clipping all rendering to the rectangle from <em>position</em> to <em>position</em> + <em>size</em> in screen coordinates (with (0, 0) at the center of the screen) </p>
-<p>This is useful for letterboxing or split-screen multiplayer. Keep the returned <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> object alive while the scissor test should be active. </p>
+<p>This is useful for split-screen multiplayer or scrolling. Keep the returned <a class="el" href="classjngl_1_1Finally.html" title="Helper class which calls a function when being destroyed.">Finally</a> object alive while the scissor test should be active, and destroy nested ones innermost first: while one is inside another, what's drawn is clipped to where both overlap. Also while a <a class="el" href="classjngl_1_1FrameBuffer.html" title="Image framebuffer object which can be rendered on.">FrameBuffer</a> is used in between (see <a class="el" href="classjngl_1_1FrameBuffer.html#ae358651e3b120275590b7163a63090f5" title="Starts drawing on the FrameBuffer as long as Context is alive.">FrameBuffer::use()</a>), where the rectangle is at the same place as it would be on the screen, with (0, 0) at the center of the <a class="el" href="classjngl_1_1FrameBuffer.html" title="Image framebuffer object which can be rendered on.">FrameBuffer</a>. </p>
 
 </div>
 </div>
