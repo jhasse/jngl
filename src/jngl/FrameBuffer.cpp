@@ -208,6 +208,28 @@ void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, oldFilter);
 }
 
+void FrameBuffer::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes,
+                           const ShaderProgram* const shaderProgram) const {
+	drawMesh(modelview, vertexes, gSpriteColor, shaderProgram);
+}
+
+void FrameBuffer::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes,
+                           const Rgba color, const ShaderProgram* const shaderProgram) const {
+	if (vertexes.empty()) {
+		return;
+	}
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   modelview.data);
+	} else {
+		ShaderCache::handle().setTextureColorUniforms(color);
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
+	}
+	impl->texture.drawMesh(vertexes);
+}
+
 void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
                            const ShaderProgram* const shaderProgram) const {
 	pushMatrix();

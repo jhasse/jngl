@@ -122,6 +122,11 @@ void ShaderProgram::Context::setUniform(const int location, const int v0) {
 	glUniform1i(location, v0);
 }
 
+void ShaderProgram::Context::setUniform(const int location, const float v0) {
+	assert(referenceCount >= 0);
+	glUniform1f(location, v0);
+}
+
 void ShaderProgram::Context::setUniform(const int location, const float v0, const float v1) {
 	assert(referenceCount >= 0);
 	glUniform2f(location, v0, v1);

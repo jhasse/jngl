@@ -191,6 +191,38 @@ TEST_CASE("FrameBufferScale") {
 	}
 };
 
+TEST_CASE("FrameBufferDrawMeshModelview") {
+	Fixture f(1.f);
+	jngl::FrameBuffer fb(320_px, 70_px);
+	{
+		const auto context = fb.use();
+		// Columns 1 to 6 and rows 1 to 2 of the ASCII art
+		jngl::drawRect(jngl::modelview().translate({ -150, -25 }), { 60, 20 }, 0x000000_rgb);
+	}
+	// All of it, with v running from 1 at the top to 0 at the bottom
+	const std::vector<jngl::Vertex> all{
+		{ .x = -160, .y = -35, .u = 0, .v = 1 }, { .x = 160, .y = -35, .u = 1, .v = 1 },
+		{ .x = 160, .y = 35, .u = 1, .v = 0 },   { .x = -160, .y = -35, .u = 0, .v = 1 },
+		{ .x = 160, .y = 35, .u = 1, .v = 0 },   { .x = -160, .y = 35, .u = 0, .v = 0 },
+	};
+	// Moved by the modelview to columns 11 to 16 and rows 3 to 4, and 80% opaque. Neither the
+	// global modelview nor the sprite colour should have a say:
+	jngl::translate(-100, -100);
+	jngl::setSpriteColor(0xff0000_rgb);
+	fb.drawMesh(jngl::Mat3().translate({ 100, 20 }), all, 0xffffffcc_rgba);
+	jngl::setSpriteColor(0xffffff_rgb);
+	jngl::reset();
+	REQUIRE(f.getAsciiArt() == R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒                              ▒
+▒                              ▒
+▒          ▓▓▓▓▓▓              ▒
+▒          ▓▓▓▓▓▓              ▒
+▒                              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
+}
+
 TEST_CASE("FrameBufferInception") {
 	// create a FrameBuffer while another FrameBuffer is bound:
 	Fixture f{ 1 };
