@@ -231,7 +231,19 @@ TEST_CASE("FrameBufferInception") {
 	{
 		const auto context = fb1->use();
 		fb2.emplace(30_sp, 30_sp);
+		// Still drawing on fb1, not on the window, where this would show in the middle
+		jngl::drawRect(jngl::modelview().translate({ -15, -15 }), { 30, 30 }, 0x000000_rgb);
 	}
+	jngl::drawRect(jngl::modelview().translate({ -150, -25 }), { 10, 10 }, 0x000000_rgb);
+	REQUIRE(f.getAsciiArt() == R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒█                             ▒
+▒                              ▒
+▒                              ▒
+▒                              ▒
+▒                              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
 	fb1 = {};
 	{
 		const auto context = fb2->use();

@@ -119,7 +119,11 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr
 		glEnable(GL_SCISSOR_TEST);
 	}
 
-	pWindow->bindSystemFramebufferAndRenderbuffer();
+	if (activateStack.empty()) {
+		pWindow->bindSystemFramebufferAndRenderbuffer();
+	} else {
+		activateStack.top().activate(); // back to the FrameBuffer that's in use
+	}
 }
 
 FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height, const bool hdr)
