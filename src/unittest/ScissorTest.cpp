@@ -12,6 +12,8 @@
 #include "Fixture.hpp"
 
 #include <catch2/catch_test_macros.hpp>
+#include <sstream>
+#include <string>
 #include <tuple>
 
 namespace {
@@ -20,6 +22,24 @@ namespace {
 /// through shows
 void fill(const jngl::Rgb color) {
 	jngl::drawRect(jngl::modelview().translate({ -160, -35 }), { 320, 70 }, color);
+}
+
+/// The ASCII art's cell in \a column and \a row, as the character it's drawn with: a space or
+/// one of the three-byte block characters
+std::string cell(const std::string& art, const size_t column, const size_t row) {
+	std::istringstream lines(art);
+	std::string line;
+	for (size_t i = 0; i <= row + 1; ++i) { // the art starts with a newline
+		std::getline(lines, line);
+	}
+	const auto width = [&line](const size_t pos) -> size_t {
+		return (static_cast<unsigned char>(line.at(pos)) & 0x80) ? 3 : 1;
+	};
+	size_t pos = 0;
+	for (size_t i = 0; i < column; ++i) {
+		pos += width(pos);
+	}
+	return line.substr(pos, width(pos));
 }
 
 /// Whether OpenGL's scissor test is on, and its box: x and y from the bottom left, width, height
@@ -153,14 +173,19 @@ TEST_CASE("scissor and letterboxing") {
 		REQUIRE(!std::get<0>(scissorState())); // the letterboxing doesn't apply to a FrameBuffer
 	}
 	REQUIRE(scissorState() == letterboxing);
-	// readPixels() zooms the canvas back in
-	REQUIRE(f.getAsciiArt() == R"(
-▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-▒    ████████████              ▒
-▒    ████████████              ▒
-▒    ████████████              ▒
-▒    ████████████              ▒
-▒                              ▒
-▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-)");
+	// readPixels() zooms the canvas back in with linear filtering, which smudges the fill's edges
+	// into the cells next to them by an amount that differs between drivers, e.g. where its top
+	// meets the frame on GitHub's runners. So only the cells well inside it, columns 5 to 16 and
+	// rows 1 to 4, and well outside it are looked at.
+	const auto art = f.getAsciiArt();
+	for (size_t row = 1; row <= 4; ++row) {
+		for (size_t column = 6; column <= 15; ++column) {
+			REQUIRE(cell(art, column, row) == "█");
+		}
+		for (size_t column = 18; column <= 29; ++column) {
+			REQUIRE(cell(art, column, row) == " ");
+		}
+		REQUIRE(cell(art, 2, row) == " ");
+	}
+	REQUIRE(cell(art, 10, 6) == "▒"); // the frame, far from the fill
 }
