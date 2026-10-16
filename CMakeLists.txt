@@ -519,7 +519,7 @@ if(NOT hasParent)
 				URL_HASH SHA256=ba2a939efead3c833c499cf487e185762f419a71d30158cd1b43c6079c586490
 			)
 		endif()
-		file(GLOB UNITTEST_SRC src/unittest/*.cpp)
+		file(GLOB UNITTEST_SRC CONFIGURE_DEPENDS src/unittest/*.cpp)
 		add_executable(jngl-unittest ${UNITTEST_SRC})
 		target_compile_features(jngl-unittest PRIVATE cxx_std_20)
 		target_link_libraries(jngl-unittest PRIVATE jngl Catch2::Catch2WithMain)

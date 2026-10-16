@@ -19,11 +19,24 @@ namespace jngl {
 
 namespace {
 
-/// If this is not empty, there's a FrameBuffer in use and the top is the function that activated
-/// it.
-std::stack<std::function<void()>> activateStack;
+struct Active {
+	std::function<void()> activate;
+	int width;
+	int height;
+};
+
+/// If this is not empty, there's a FrameBuffer in use: the top, with the function that activated
+/// it
+std::stack<Active> activateStack;
 
 } // namespace
+
+optional<std::array<int, 2>> activeFrameBufferSize() {
+	if (activateStack.empty()) {
+		return std::nullopt;
+	}
+	return std::array{ activateStack.top().width, activateStack.top().height };
+}
 
 void applyBlendMode() {
 	if (gBlendMode) {
@@ -49,8 +62,7 @@ struct FrameBuffer::Impl {
 	Impl(int width, int height, bool hdr)
 	: width(width), height(height),
 	  texture(static_cast<float>(width), static_cast<float>(height), width, height, nullptr,
-	          GL_RGBA, nullptr, hdr ? GL_HALF_FLOAT : GL_UNSIGNED_BYTE),
-	  letterboxing(glIsEnabled(GL_SCISSOR_TEST)) {
+	          GL_RGBA, nullptr, hdr ? GL_HALF_FLOAT : GL_UNSIGNED_BYTE) {
 	}
 	Impl(const Impl&) = delete;
 	Impl& operator=(const Impl&) = delete;
@@ -70,7 +82,6 @@ struct FrameBuffer::Impl {
 	const int width;
 	const int height;
 	Texture texture;
-	bool letterboxing;
 #if !defined(GL_VIEWPORT_BIT) || defined(__APPLE__)
 	GLint viewport[4]{};
 #endif
@@ -98,13 +109,13 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr
 
 	assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 
-	if (impl->letterboxing) {
-		glDisable(GL_SCISSOR_TEST);
-	}
+	// All of it, whatever's clipped on the window by its letterboxing or a jngl::scissor()
+	const bool scissorTest = glIsEnabled(GL_SCISSOR_TEST);
+	glDisable(GL_SCISSOR_TEST);
 	glClearColor(1, 1, 1, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	clearBackgroundColor();
-	if (impl->letterboxing) {
+	if (scissorTest) {
 		glEnable(GL_SCISSOR_TEST);
 	}
 
@@ -258,24 +269,15 @@ FrameBuffer::Context FrameBuffer::use() const {
 		glBindFramebuffer(GL_FRAMEBUFFER, impl->fbo);
 		glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
 		glViewport(0, 0, impl->width, impl->height);
-		applyBlendMode(); // this FrameBuffer's on activateStack by now
-
-		// each time we active we have to check again, because the window might have been resized
-		if (!impl->letterboxing) {
-			impl->letterboxing = glIsEnabled(GL_SCISSOR_TEST);
-		}
-		if (impl->letterboxing) {
-			glDisable(GL_SCISSOR_TEST);
-		}
+		// This FrameBuffer's on activateStack by now: the window's letterboxing doesn't apply here,
+		// a jngl::scissor() does
+		applyBlendMode();
+		applyScissor();
 	};
 	pushMatrix();
 	auto savedProjection = opengl::projection;
 	if (activateStack.empty()) {
 		Impl::screenProjection = opengl::projection;
-		// The window might not be letter-boxed anymore, e.g. after it has been resized back to its
-		// original size. Re-enabling the scissor test when using the FrameBuffer is done would
-		// then clip to the outdated letter-boxing.
-		impl->letterboxing = glIsEnabled(GL_SCISSOR_TEST);
 	} else {
 		// Scaling the outer FrameBuffer's projection again would only be right if its factors were
 		// 1, which isn't the case e.g. with letterboxing after the window has been resized
@@ -302,15 +304,10 @@ FrameBuffer::Context FrameBuffer::use() const {
 #else
 	glGetIntegerv(GL_VIEWPORT, impl->viewport);
 #endif
-	// Scissor testing inside the FrameBuffer (e.g. jngl::scissor) changes the box, which would
-	// otherwise be used for letterboxing when re-enabling the scissor test below
-	std::array<GLint, 4> scissorBox{};
-	glGetIntegerv(GL_SCISSOR_BOX, scissorBox.data());
-	activateStack.emplace(std::move(activate));
-	activateStack.top()();
-	return Context([this, savedProjection, scissorBox]() {
+	activateStack.emplace(Active{ std::move(activate), impl->width, impl->height });
+	activateStack.top().activate();
+	return Context([this, savedProjection]() {
 		activateStack.pop();
-		glScissor(scissorBox[0], scissorBox[1], scissorBox[2], scissorBox[3]);
 		popMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 		glPopAttrib();
@@ -320,13 +317,11 @@ FrameBuffer::Context FrameBuffer::use() const {
 		opengl::projection = savedProjection;
 		App::instance().updateProjectionMatrix();
 		if (!activateStack.empty()) {
-			activateStack.top()(); // Restore the FrameBuffer that was previously active
+			activateStack.top().activate(); // Restore the FrameBuffer that was previously active
 			return;
 		}
-		if (impl->letterboxing) {
-			glEnable(GL_SCISSOR_TEST);
-		}
 		applyBlendMode();
+		applyScissor(); // the window's letterboxing again, with a jngl::scissor() inside it
 		pWindow->bindSystemFramebufferAndRenderbuffer();
 		clearBackgroundColor();
 	});

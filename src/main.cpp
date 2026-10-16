@@ -67,22 +67,84 @@ void clearBackgroundColor() {
 	             1);
 }
 
+namespace {
+
+/// The window's canvas in its pixels, from the bottom left like OpenGL, see
+/// updateViewportAndLetterboxing()
+struct WindowCanvas {
+	int x = 0;
+	int y = 0;
+	int width = 0;
+	int height = 0;
+	bool letterboxed = false; ///< whether it's smaller than the window, with black bars around it
+} windowCanvas;
+
+/// The rectangles of the scissor() calls that are alive, the innermost last, in screen coordinates
+std::vector<std::pair<Vec2, Vec2>> scissorStack;
+
+} // namespace
+
 void updateViewportAndLetterboxing(const int width, const int height, const int canvasWidth,
                                    const int canvasHeight) {
 	glViewport(0, 0, width, height);
 
-	if (canvasWidth != width || canvasHeight != height) { // Letterboxing?
+	assert(canvasWidth <= width);
+	assert(canvasHeight <= height);
+	windowCanvas = { .x = (width - canvasWidth) / 2,
+		             .y = (height - canvasHeight) / 2,
+		             .width = canvasWidth,
+		             .height = canvasHeight,
+		             .letterboxed = canvasWidth != width || canvasHeight != height };
+	if (windowCanvas.letterboxed) {
+		glDisable(GL_SCISSOR_TEST);
 		glClearColor(0, 0, 0, 1); // black boxes
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		glEnable(GL_SCISSOR_TEST);
-		assert(canvasWidth <= width);
-		assert(canvasHeight <= height);
-		glScissor((width - canvasWidth) / 2, (height - canvasHeight) / 2, canvasWidth,
-		          canvasHeight);
-	} else {
-		glDisable(GL_SCISSOR_TEST);
 	}
+	applyScissor();
+}
+
+void applyScissor() {
+	// Where screen coordinates land: the window's canvas, or all of the FrameBuffer in use, which
+	// has the window's pixels per screen unit either way, see FrameBuffer::use()
+	auto canvas = windowCanvas;
+	const auto frameBuffer = activeFrameBufferSize();
+	if (frameBuffer) {
+		canvas = { .x = 0,
+			       .y = 0,
+			       .width = (*frameBuffer)[0],
+			       .height = (*frameBuffer)[1],
+			       .letterboxed = false };
+	}
+	if (scissorStack.empty()) {
+		if (canvas.letterboxed) {
+			glEnable(GL_SCISSOR_TEST);
+			glScissor(canvas.x, canvas.y, canvas.width, canvas.height);
+		} else {
+			glDisable(GL_SCISSOR_TEST);
+		}
+		return;
+	}
+	const double pixelsPerUnitX = windowCanvas.width / getScreenWidth();
+	const double pixelsPerUnitY = windowCanvas.height / getScreenHeight();
+	// Where all of them overlap, in the canvas' pixels: from left to right and bottom to top
+	auto left = static_cast<long>(canvas.x);
+	auto bottom = static_cast<long>(canvas.y);
+	auto right = left + canvas.width;
+	auto top = bottom + canvas.height;
+	for (const auto& [position, size] : scissorStack) {
+		left =
+		    std::max(left, std::lround(canvas.x + canvas.width / 2. + position.x * pixelsPerUnitX));
+		right = std::min(right, std::lround(canvas.x + canvas.width / 2. +
+		                                    (position.x + size.x) * pixelsPerUnitX));
+		bottom = std::max(bottom, std::lround(canvas.y + canvas.height / 2. -
+		                                      (position.y + size.y) * pixelsPerUnitY));
+		top =
+		    std::min(top, std::lround(canvas.y + canvas.height / 2. - position.y * pixelsPerUnitY));
+	}
+	glEnable(GL_SCISSOR_TEST);
+	glScissor(static_cast<GLint>(left), static_cast<GLint>(bottom),
+	          static_cast<GLsizei>(std::max(0L, right - left)),
+	          static_cast<GLsizei>(std::max(0L, top - bottom)));
 }
 
 void updateProjection(int windowWidth, int windowHeight, float originalWindowWidth,
@@ -192,13 +254,13 @@ void swapBuffers() {
 }
 
 void clearBackBuffer() {
-	if (glIsEnabled(GL_SCISSOR_TEST)) {
+	if (windowCanvas.letterboxed) {
 		// Letterboxing with SDL_VIDEODRIVER=wayland will glitch if we don't draw the black boxes on
 		// every frame
 		glDisable(GL_SCISSOR_TEST);
 		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glEnable(GL_SCISSOR_TEST);
+		applyScissor();
 		clearBackgroundColor();
 	}
 
@@ -643,57 +705,12 @@ void drawSquare(const Mat3& modelview, Rgba color) {
 	pWindow->drawSquare(modelview, color);
 }
 
-Finally scissor(Vec2 position, Vec2 size) {
-	struct SavedScissorState {
-		bool enabled;
-		GLint box[4];
-	};
-	SavedScissorState saved{};
-	saved.enabled = glIsEnabled(GL_SCISSOR_TEST);
-	glGetIntegerv(GL_SCISSOR_BOX, saved.box);
-
-	GLint viewport[4];
-	glGetIntegerv(GL_VIEWPORT, viewport);
-	const auto viewportW = viewport[2];
-	const auto viewportH = viewport[3];
-
-	// Use saved state to determine the canvas area
-	GLint canvasX;
-	GLint canvasY;
-	GLint canvasW;
-	GLint canvasH;
-	if (saved.enabled) {
-		canvasX = saved.box[0];
-		canvasY = saved.box[1];
-		canvasW = saved.box[2];
-		canvasH = saved.box[3];
-	} else {
-		canvasX = 0;
-		canvasY = 0;
-		canvasW = viewportW;
-		canvasH = viewportH;
-	}
-
-	const auto sw = getScreenWidth();
-	const auto sh = getScreenHeight();
-
-	// Map screen coords to canvas pixels
-	const auto x = static_cast<int>(std::lround((position.x + sw / 2) / sw * canvasW)) + canvasX;
-	const auto y =
-	    static_cast<int>(std::lround((sh / 2 - position.y - size.y) / sh * canvasH)) + canvasY;
-	const auto w = static_cast<int>(std::lround(size.x / sw * canvasW));
-	const auto h = static_cast<int>(std::lround(size.y / sh * canvasH));
-	glEnable(GL_SCISSOR_TEST);
-	glScissor(x, y, w, h);
-	return Finally([saved] {
-		// Restore the box even when the scissor test was off, because a FrameBuffer might turn it
-		// back on for letterboxing
-		glScissor(saved.box[0], saved.box[1], saved.box[2], saved.box[3]);
-		if (saved.enabled) {
-			glEnable(GL_SCISSOR_TEST);
-		} else {
-			glDisable(GL_SCISSOR_TEST);
-		}
+Finally scissor(const Vec2 position, const Vec2 size) {
+	scissorStack.emplace_back(position, size);
+	applyScissor();
+	return Finally([] {
+		scissorStack.pop_back();
+		applyScissor();
 	});
 }
 

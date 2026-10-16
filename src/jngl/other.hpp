@@ -90,8 +90,11 @@ bool getVerticalSync();
 /// Enables scissor testing, clipping all rendering to the rectangle from \a position to
 /// \a position + \a size in screen coordinates (with (0, 0) at the center of the screen)
 ///
-/// This is useful for letterboxing or split-screen multiplayer. Keep the returned Finally object
-/// alive while the scissor test should be active.
+/// This is useful for split-screen multiplayer or scrolling. Keep the returned Finally object
+/// alive while the scissor test should be active, and destroy nested ones innermost first: while
+/// one is inside another, what's drawn is clipped to where both overlap. Also while a FrameBuffer
+/// is used in between (see FrameBuffer::use()), where the rectangle is at the same place as it
+/// would be on the screen, with (0, 0) at the center of the FrameBuffer.
 Finally scissor(Vec2 position, Vec2 size);
 
 /// Sets the icon for the window (Desktop-only)
