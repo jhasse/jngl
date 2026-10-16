@@ -154,10 +154,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> (double x, d
 <tr class="memitem:a859d8aabb1e565526f2e4ede4e8b6dd2" id="r_a859d8aabb1e565526f2e4ede4e8b6dd2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a859d8aabb1e565526f2e4ede4e8b6dd2">draw</a> (<a class="el" href="classjngl_1_1Mat3.html">Mat3</a> <a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, <a class="el" href="namespacejngl.html#a86abf923535e5284b381ee2e78eadacd">TextureFilter</a> textureFilter, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
 <tr class="memdesc:a859d8aabb1e565526f2e4ede4e8b6dd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the framebuffer image to the screen with a specific texture filter.  <br /></td></tr>
 <tr class="separator:a859d8aabb1e565526f2e4ede4e8b6dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89c331aee86657889c1f1d8233c6051f" id="r_a89c331aee86657889c1f1d8233c6051f"><td class="memItemLeft" align="right" valign="top"><a id="a89c331aee86657889c1f1d8233c6051f" name="a89c331aee86657889c1f1d8233c6051f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawMesh</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
-<tr class="memdesc:a89c331aee86657889c1f1d8233c6051f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the framebuffer's texture on it. <br /></td></tr>
+<tr class="memitem:a89c331aee86657889c1f1d8233c6051f" id="r_a89c331aee86657889c1f1d8233c6051f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89c331aee86657889c1f1d8233c6051f">drawMesh</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
+<tr class="memdesc:a89c331aee86657889c1f1d8233c6051f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the framebuffer's texture on it.  <br /></td></tr>
 <tr class="separator:a89c331aee86657889c1f1d8233c6051f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af160dd21f6023cd9809cb36bb67e91dd" id="r_af160dd21f6023cd9809cb36bb67e91dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af160dd21f6023cd9809cb36bb67e91dd">drawMesh</a> (const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;<a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *shaderProgram=nullptr) const</td></tr>
+<tr class="memdesc:af160dd21f6023cd9809cb36bb67e91dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a list of triangles with the framebuffer's texture on it, with <em>modelview</em> instead of the global one, and tinted by <em>color</em>, e.g.  <br /></td></tr>
+<tr class="separator:af160dd21f6023cd9809cb36bb67e91dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7c2bc3ab50410cccdbe8721c39138f7" id="r_ae7c2bc3ab50410cccdbe8721c39138f7"><td class="memItemLeft" align="right" valign="top"><a id="ae7c2bc3ab50410cccdbe8721c39138f7" name="ae7c2bc3ab50410cccdbe8721c39138f7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>drawMesh</b> (const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;<a class="el" href="namespacejngl.html#acfcb9cdf97108d05cf2b0da911c93a4c">modelview</a>, const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;vertexes, <a class="el" href="classjngl_1_1Rgba.html">Rgba</a> color, const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *=nullptr) const</td></tr>
+<tr class="separator:ae7c2bc3ab50410cccdbe8721c39138f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebe51f6c43d6d673fc3826046d668b38" id="r_aebe51f6c43d6d673fc3826046d668b38"><td class="memItemLeft" align="right" valign="top"><a id="aebe51f6c43d6d673fc3826046d668b38" name="aebe51f6c43d6d673fc3826046d668b38"></a>
 <a class="el" href="classjngl_1_1Vec2.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getSize</b> () const</td></tr>
 <tr class="memdesc:aebe51f6c43d6d673fc3826046d668b38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the size in screen pixels. <br /></td></tr>
@@ -309,6 +314,65 @@ Static Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">textureFilter</td><td>Use this filtering for this one draw call, ignoring <a class="el" href="structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805" title="Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)">jngl::AppParameters::pixelArt</a>. You'd probably want to use <a class="el" href="namespacejngl.html#a86abf923535e5284b381ee2e78eadacdaaa020331bb30d2fa2ecf7c3a0777823f" title="Nearest Neighbor Filtering is used when jngl::AppParameters::pixelArt is true.">TextureFilter::NearestNeighbor</a> for cases where you have a framebuffer the same size as the screen. </td></tr>
     <tr><td class="paramname">shaderProgram</td><td>If not <code>nullptr</code>, this shader program is used instead of the default. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a89c331aee86657889c1f1d8233c6051f" name="a89c331aee86657889c1f1d8233c6051f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89c331aee86657889c1f1d8233c6051f">&#9670;&#160;</a></span>drawMesh() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawMesh </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>vertexes</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *</td>          <td class="paramname"><span class="paramname"><em></em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws a list of triangles with the framebuffer's texture on it. </p>
+<p>The texture's v coordinate runs from 1 at the framebuffer's top to 0 at its bottom. </p>
+
+</div>
+</div>
+<a id="af160dd21f6023cd9809cb36bb67e91dd" name="af160dd21f6023cd9809cb36bb67e91dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af160dd21f6023cd9809cb36bb67e91dd">&#9670;&#160;</a></span>drawMesh() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawMesh </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1Mat3.html">Mat3</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>modelview</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="structjngl_1_1Vertex.html">Vertex</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>vertexes</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> *</td>          <td class="paramname"><span class="paramname"><em>shaderProgram</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Draws a list of triangles with the framebuffer's texture on it, with <em>modelview</em> instead of the global one, and tinted by <em>color</em>, e.g. </p>
+<p>its alpha for a see-through framebuffer</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">shaderProgram</td><td>Passing <code>nullptr</code> uses the default. </td></tr>
   </table>
   </dd>
 </dl>
