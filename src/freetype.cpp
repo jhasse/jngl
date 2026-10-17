@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #define _LIBCPP_DISABLE_DEPRECATION_WARNINGS // NOLINT
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING // NOLINT
 #include "freetype.hpp"
 
 #include "FontImpl.hpp"
