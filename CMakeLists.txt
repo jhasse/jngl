@@ -150,6 +150,16 @@ else() # Windows
 		target_compile_definitions(jngl PRIVATE JNGL_WINAPI)
 		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp)
 		target_link_libraries(jngl PRIVATE opengl32)
+		# The Windows SDK's xinput.lib is XInput 1.4, too
+		if(MINGW)
+			target_link_libraries(jngl PUBLIC xinput1_4)
+		else()
+			target_link_libraries(jngl PUBLIC xinput)
+			# xinput.lib lists the DLL's DllMain, which lld-link warns about
+			if(CMAKE_CXX_COMPILER_LINKER_ID STREQUAL "LLD")
+				target_link_options(jngl PUBLIC LINKER:/ignore:importeddllmain)
+			endif()
+		endif()
 	else()
 		file(GLOB SRC src/sdl/*.cpp)
 		target_sources(jngl PRIVATE src/sdl/controller/SdlController.cpp)
@@ -159,17 +169,10 @@ else() # Windows
 	target_sources(jngl PRIVATE ${SRC})
 	target_link_libraries(jngl PUBLIC winmm)
 	target_sources(jngl PRIVATE glad/src/wgl.c)
-	if(MSVC)
-		string(APPEND CMAKE_C_FLAGS " /D_CRT_SECURE_NO_WARNINGS")
-		string(APPEND CMAKE_CXX_FLAGS " /D_CRT_SECURE_NO_WARNINGS /D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING")
-		target_link_libraries(jngl PUBLIC Xinput)
-	else()
-		find_library(XINPUT_LIB xinput1_4)
-		if(NOT XINPUT_LIB)
-			message(WARNING "xinput1_4 not found, using generic version")
-			set(XINPUT_LIB xinput)
-		endif()
-		target_link_libraries(jngl PUBLIC ${XINPUT_LIB})
+	# Like MSVC (cl.exe and clang-cl), clang++ uses the Windows SDK's C runtime headers unless it
+	# targets MinGW. Also for the dependencies built from source below.
+	if(NOT MINGW)
+		add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 	endif()
 endif()
 
