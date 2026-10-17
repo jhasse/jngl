@@ -34,6 +34,12 @@ SDL::SDL() {
 	setHint(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, true);
 	setHint(SDL_HINT_MOUSE_TOUCH_EVENTS, false);
 	setHint(SDL_HINT_TOUCH_MOUSE_EVENTS, false);
+#ifdef _WIN32
+	// A Windows firewall prompt was invisible but still received clicks over fullscreen OpenGL
+	// on an AMD GPU. Minimize on focus loss so system dialogs can be seen, including in borderless
+	// fullscreen, which SDL's default "auto" policy doesn't minimize.
+	setHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, true);
+#endif
 }
 SDL::~SDL() {
 	// FIXME: Workaround for https://github.com/jhasse/jngl/issues/121
