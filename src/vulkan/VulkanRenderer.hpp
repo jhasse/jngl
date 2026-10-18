@@ -54,6 +54,17 @@ struct DynamicVertexBuffer {
 	VkDeviceSize used = 0;
 };
 
+/// Host-visible, persistently mapped ring of uniform blocks that's appended to during a frame, one
+/// per draw with a custom ShaderProgram, bound with a dynamic offset via \a descriptorSet
+struct DynamicUniformBuffer {
+	VkBuffer buffer = VK_NULL_HANDLE;
+	VkDeviceMemory memory = VK_NULL_HANDLE;
+	void* mapped = nullptr;
+	VkDeviceSize capacity = 0;
+	VkDeviceSize used = 0;
+	VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
+};
+
 /// GPU resources backing a jngl::ShaderProgram on the Vulkan backend: textured pipelines for each
 /// blend variant × primitive topology, built from a user-supplied vertex/fragment shader pair, plus
 /// an optional CPU-side uniform staging buffer (see ShaderProgram::setUniform). At draw time the
@@ -220,6 +231,8 @@ private:
 	/// full, and returns the buffer and offset to bind
 	std::pair<VkBuffer, VkDeviceSize> uploadVertices(const void* data, VkDeviceSize bytes);
 	void createUniformBuffers();
+	[[nodiscard]] DynamicUniformBuffer createUniformBuffer(VkDeviceSize capacity);
+	void destroyUniformBuffer(DynamicUniformBuffer&);
 	void createTexturedPipelines();
 	/// Builds textured pipelines for every blend variant × topology from the given shader modules.
 	void buildTexturedPipelines(VkShaderModule vert, VkShaderModule frag,
@@ -343,19 +356,12 @@ private:
 	std::vector<std::vector<DynamicVertexBuffer>> retiredVertexBuffers;
 
 	// Per-frame dynamic UBO ring: each drawSprite with custom uniforms snapshots staging into here
-	// so mid-frame setUniform updates don't overwrite earlier draws still pending on the GPU.
-	struct DynamicUniformBuffer {
-		VkBuffer buffer = VK_NULL_HANDLE;
-		VkDeviceMemory memory = VK_NULL_HANDLE;
-		void* mapped = nullptr;
-		VkDeviceSize capacity = 0;
-		VkDeviceSize used = 0;
-		VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
-	};
+	// so mid-frame setUniform updates don't overwrite earlier draws still pending on the GPU. Grows
+	// like vertexBuffers, see bindActiveProgramUniforms.
 	std::vector<DynamicUniformBuffer> uniformBuffers;
+	std::vector<std::vector<DynamicUniformBuffer>> retiredUniformBuffers;
 	VkDeviceSize minUniformBufferOffsetAlignment = 256;
 	static constexpr VkDeviceSize uniformDynamicRange = 256; // max UBO size we bind per draw
-	bool uniformBufferOverflowReported = false;
 
 	uint32_t currentFrame = 0;
 	uint32_t currentImageIndex = 0;

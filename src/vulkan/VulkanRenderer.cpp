@@ -167,12 +167,11 @@ VulkanRenderer::~VulkanRenderer() {
 			}
 		}
 		for (auto& ub : uniformBuffers) {
-			if (ub.buffer) {
-				vkDestroyBuffer(device, ub.buffer, nullptr);
-			}
-			if (ub.memory) {
-				vkUnmapMemory(device, ub.memory);
-				vkFreeMemory(device, ub.memory, nullptr);
+			destroyUniformBuffer(ub);
+		}
+		for (auto& retired : retiredUniformBuffers) {
+			for (auto& ub : retired) {
+				destroyUniformBuffer(ub);
 			}
 		}
 		for (VkPipeline pipeline : coloredPipelines) {
@@ -1079,6 +1078,10 @@ void VulkanRenderer::beginFrame(const Rgb clearColor) {
 		destroyVertexBuffer(vb);
 	}
 	retiredVertexBuffers[currentFrame].clear();
+	for (auto& ub : retiredUniformBuffers[currentFrame]) {
+		destroyUniformBuffer(ub);
+	}
+	retiredUniformBuffers[currentFrame].clear();
 
 	const VkResult acquire = vkAcquireNextImageKHR(
 	    device, swapchain, std::numeric_limits<uint64_t>::max(),
@@ -1804,47 +1807,68 @@ void VulkanRenderer::createUniformBuffers() {
 	minUniformBufferOffsetAlignment = props.limits.minUniformBufferOffsetAlignment;
 
 	// Small UBOs (blur/caster/etc.) are padded to minUniformBufferOffsetAlignment per draw; 256 KiB
-	// covers thousands of custom-shader draws per frame.
+	// covers a thousand custom-shader draws per frame, bindActiveProgramUniforms grows it if
+	// needed.
 	constexpr VkDeviceSize capacity = 1u << 18u;
 	uniformBuffers.resize(maxFramesInFlight);
+	retiredUniformBuffers.resize(maxFramesInFlight);
 	for (auto& ub : uniformBuffers) {
-		VkBufferCreateInfo bufferInfo{ .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
-		bufferInfo.size = capacity;
-		bufferInfo.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
-		bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-		VK_CHECK(vkCreateBuffer(device, &bufferInfo, nullptr, &ub.buffer), "vkCreateBuffer");
-
-		VkMemoryRequirements memReq;
-		vkGetBufferMemoryRequirements(device, ub.buffer, &memReq);
-		VkMemoryAllocateInfo allocInfo{ .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
-		allocInfo.allocationSize = memReq.size;
-		allocInfo.memoryTypeIndex =
-		    findMemoryType(memReq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-		                                              VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-		VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &ub.memory), "vkAllocateMemory");
-		VK_CHECK(vkBindBufferMemory(device, ub.buffer, ub.memory, 0), "vkBindBufferMemory");
-		VK_CHECK(vkMapMemory(device, ub.memory, 0, capacity, 0, &ub.mapped), "vkMapMemory");
-		ub.capacity = capacity;
-
-		VkDescriptorSetAllocateInfo dsAlloc{ .sType =
-			                                     VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
-		dsAlloc.descriptorPool = descriptorPool;
-		dsAlloc.descriptorSetCount = 1;
-		dsAlloc.pSetLayouts = &uniformsSetLayout;
-		VK_CHECK(vkAllocateDescriptorSets(device, &dsAlloc, &ub.descriptorSet),
-		         "vkAllocateDescriptorSets");
-		VkDescriptorBufferInfo bufferDesc{};
-		bufferDesc.buffer = ub.buffer;
-		bufferDesc.offset = 0;
-		bufferDesc.range = uniformDynamicRange;
-		VkWriteDescriptorSet write{ .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
-		write.dstSet = ub.descriptorSet;
-		write.dstBinding = 0;
-		write.descriptorCount = 1;
-		write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-		write.pBufferInfo = &bufferDesc;
-		vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+		ub = createUniformBuffer(capacity);
 	}
+}
+
+DynamicUniformBuffer VulkanRenderer::createUniformBuffer(const VkDeviceSize capacity) {
+	DynamicUniformBuffer ub;
+	VkBufferCreateInfo bufferInfo{ .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
+	bufferInfo.size = capacity;
+	bufferInfo.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+	bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	VK_CHECK(vkCreateBuffer(device, &bufferInfo, nullptr, &ub.buffer), "vkCreateBuffer");
+
+	VkMemoryRequirements memReq;
+	vkGetBufferMemoryRequirements(device, ub.buffer, &memReq);
+	VkMemoryAllocateInfo allocInfo{ .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
+	allocInfo.allocationSize = memReq.size;
+	allocInfo.memoryTypeIndex =
+	    findMemoryType(memReq.memoryTypeBits,
+	                   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &ub.memory), "vkAllocateMemory");
+	VK_CHECK(vkBindBufferMemory(device, ub.buffer, ub.memory, 0), "vkBindBufferMemory");
+	VK_CHECK(vkMapMemory(device, ub.memory, 0, capacity, 0, &ub.mapped), "vkMapMemory");
+	ub.capacity = capacity;
+
+	VkDescriptorSetAllocateInfo dsAlloc{ .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+	dsAlloc.descriptorPool = descriptorPool;
+	dsAlloc.descriptorSetCount = 1;
+	dsAlloc.pSetLayouts = &uniformsSetLayout;
+	VK_CHECK(vkAllocateDescriptorSets(device, &dsAlloc, &ub.descriptorSet),
+	         "vkAllocateDescriptorSets");
+	VkDescriptorBufferInfo bufferDesc{};
+	bufferDesc.buffer = ub.buffer;
+	bufferDesc.offset = 0;
+	bufferDesc.range = uniformDynamicRange;
+	VkWriteDescriptorSet write{ .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
+	write.dstSet = ub.descriptorSet;
+	write.dstBinding = 0;
+	write.descriptorCount = 1;
+	write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+	write.pBufferInfo = &bufferDesc;
+	vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+	return ub;
+}
+
+void VulkanRenderer::destroyUniformBuffer(DynamicUniformBuffer& ub) {
+	if (ub.descriptorSet) {
+		vkFreeDescriptorSets(device, descriptorPool, 1, &ub.descriptorSet);
+	}
+	if (ub.buffer) {
+		vkDestroyBuffer(device, ub.buffer, nullptr);
+	}
+	if (ub.memory) {
+		vkUnmapMemory(device, ub.memory);
+		vkFreeMemory(device, ub.memory, nullptr);
+	}
+	ub = {};
 }
 
 void VulkanRenderer::bindActiveProgramUniforms(const VkCommandBuffer cmd) {
@@ -1854,15 +1878,16 @@ void VulkanRenderer::bindActiveProgramUniforms(const VkCommandBuffer cmd) {
 	}
 	assert(activeShaderProgram->uniformBlockSize <= uniformDynamicRange);
 	DynamicUniformBuffer& ub = uniformBuffers[currentFrame];
-	const VkDeviceSize aligned =
+	VkDeviceSize aligned =
 	    (ub.used + minUniformBufferOffsetAlignment - 1) & ~(minUniformBufferOffsetAlignment - 1);
 	if (aligned + uniformDynamicRange > ub.capacity) {
-		if (!uniformBufferOverflowReported) {
-			internal::error(
-			    "Vulkan per-frame uniform buffer exhausted; some custom uniforms won't update.");
-			uniformBufferOverflowReported = true;
-		}
-		return;
+		// The draws recorded so far still read from the full buffer, so it can't be resized in
+		// place. Replace it with one twice as big, which is kept for the following frames.
+		internal::debug("Growing the Vulkan uniform buffer of frame {} to {} KiB.", currentFrame,
+		                ub.capacity * 2 / 1024);
+		retiredUniformBuffers[currentFrame].push_back(ub);
+		ub = createUniformBuffer(ub.capacity * 2);
+		aligned = 0;
 	}
 	std::memcpy(static_cast<char*>(ub.mapped) + aligned, activeShaderProgram->uniformMapped,
 	            activeShaderProgram->uniformBlockSize);
