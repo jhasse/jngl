@@ -29,3 +29,4 @@ def run(test, args="", expected_exitcode=0):
 run("forceQuit", "0")
 run("forceQuit", "42", expected_exitcode=42)
 run("sigint", expected_exitcode=130)
+run("frameLimiter")

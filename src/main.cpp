@@ -886,6 +886,10 @@ void resetFrameLimiter() {
 	pWindow->resetFrameLimiter();
 }
 
+void setFrameLimiter(const bool enabled) {
+	pWindow->setFrameLimiter(enabled);
+}
+
 void setWork(Work* w) {
 	pWindow->setWork(std::shared_ptr<Work>(w));
 }

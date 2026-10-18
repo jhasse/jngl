@@ -147,4 +147,13 @@ template <class T, class... Args> T& setWork(Args&&... args) {
 /// screens.
 void resetFrameLimiter();
 
+/// Whether App::mainLoop() keeps to getStepsPerSecond() (default: true), calling Work::step more
+/// than once per frame while drawing's slow, and sleeping while it's quick.
+///
+/// Without it, every frame calls Work::step exactly once, and the main loop never sleeps, so that
+/// it runs as fast as it can, e.g. to benchmark how quickly frames are drawn. A step still stands
+/// for 1 / getStepsPerSecond() seconds, though, e.g. in getDelta(). Turn off V-SYNC, too (see
+/// setVerticalSync()), for the display not to hold it back.
+void setFrameLimiter(bool enabled);
+
 } // namespace jngl
