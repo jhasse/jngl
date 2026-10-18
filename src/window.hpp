@@ -135,6 +135,7 @@ public:
 	void removeJob(Job*);
 	std::shared_ptr<Job> getJob(const std::function<bool(Job&)>& predicate) const;
 	void resetFrameLimiter();
+	void setFrameLimiter(bool enabled);
 
 	unsigned int getStepsPerSecond() const;
 	void setStepsPerSecond(unsigned int);
@@ -272,6 +273,7 @@ private:
 	int mouseHiddenCount = 0;
 
 	FrameLimiter frameLimiter{ 1.0 / static_cast<double>(stepsPerSecond) };
+	bool frameLimiterEnabled = true; // see jngl::setFrameLimiter
 
 	bool multitouch = false;
 

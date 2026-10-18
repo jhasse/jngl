@@ -368,7 +368,9 @@ uint8_t Window::mainLoop() {
 		clearBackBuffer();
 		draw();
 		pWindow->SwapBuffers();
-		frameLimiter.sleepIfNeeded();
+		if (frameLimiterEnabled) {
+			frameLimiter.sleepIfNeeded();
+		}
 	}
 #ifdef __EMSCRIPTEN__
 	;
@@ -383,6 +385,13 @@ void Window::resetFrameLimiter() {
 	frameLimiter = FrameLimiter(1.0 / static_cast<double>(stepsPerSecond));
 }
 
+void Window::setFrameLimiter(const bool enabled) {
+	if (enabled && !frameLimiterEnabled) {
+		resetFrameLimiter(); // rather than catching up on all the steps it's been running ahead
+	}
+	frameLimiterEnabled = enabled;
+}
+
 unsigned int Window::getStepsPerSecond() const {
 	return stepsPerSecond;
 }
@@ -393,7 +402,7 @@ void Window::setStepsPerSecond(const unsigned int stepsPerSecond) {
 }
 
 void Window::stepIfNeeded() {
-	const unsigned int stepsToDo = frameLimiter.check();
+	const unsigned int stepsToDo = frameLimiterEnabled ? frameLimiter.check() : 1;
 	for (unsigned int i = 0; i < stepsToDo; ++i) {
 		++internal::gFrameNumber; // for logging
 		updateKeyStates();
