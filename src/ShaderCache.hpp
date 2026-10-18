@@ -9,6 +9,7 @@
 
 namespace jngl {
 
+class Alpha;
 class Mat3;
 
 class ShaderCache : public Singleton<ShaderCache> {
@@ -21,8 +22,15 @@ public:
 
 	std::unique_ptr<Shader> textureVertexShader;
 	std::unique_ptr<ShaderProgram> textureShaderProgram;
-	int shaderSpriteColorUniform;
 	int modelviewUniform;
+
+	/// Sets the color uniforms of textureShaderProgram, which has to be in use, so that the
+	/// texture gets multiplied with \a color
+	void setTextureColorUniforms(Rgba color) const;
+
+	/// Sets the color uniforms of textureShaderProgram, which has to be in use, so that each color
+	/// channel of the texture gets linearly interpolated towards \a color
+	void setTextureLerpUniforms(Rgb color, float red, float green, float blue, Alpha) const;
 
 	void drawTriangle(Vec2 a, Vec2 b, Vec2 c);
 	void drawTriangle(const Mat3& modelview, Rgba color);
@@ -32,6 +40,9 @@ public:
 	                                                   float bottomLeft, float bottomRight);
 
 private:
+	int shaderLerpColorUniform;
+	int shaderLerpFactorsUniform;
+
 	std::unique_ptr<ShaderProgram> simpleShaderProgram;
 	int simpleModelviewUniform;
 	int simpleColorUniform;

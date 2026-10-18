@@ -26,8 +26,19 @@
 
 namespace jngl {
 
-#ifdef JNGL_VULKAN
 namespace {
+
+struct Active {
+	std::function<void()> activate;
+	int width;
+	int height;
+};
+
+/// If this is not empty, there's a FrameBuffer in use: the top, with the function that activated
+/// it
+std::stack<Active> activateStack;
+
+#ifdef JNGL_VULKAN
 VulkanRenderer& vulkanRenderer() {
 	return static_cast<VulkanRenderer&>(getRenderer());
 }
@@ -47,8 +58,43 @@ void drawFramebuffer(const VulkanFramebuffer& fb, const Mat3& modelview, Rgba co
 	vulkanRenderer().drawSprite(fb.color, vertexes.data(), 4, PrimitiveType::TriangleFan, modelview,
 	                            color);
 }
-} // namespace
 #endif
+
+} // namespace
+
+optional<std::array<int, 2>> activeFrameBufferSize() {
+	if (activateStack.empty()) {
+		return std::nullopt;
+	}
+	return std::array{ activateStack.top().width, activateStack.top().height };
+}
+
+void applyBlendMode() {
+#ifdef JNGL_VULKAN
+	// TODO: The Vulkan backend has no separate alpha blend function for FrameBuffers yet
+	vulkanRenderer().setSpriteBlend(gBlendMode == BlendMode::Premultiplied
+	                                    ? VulkanRenderer::SpriteBlend::Premultiplied
+	                                    : VulkanRenderer::SpriteBlend::Composite);
+#else
+	if (gBlendMode) {
+		switch (*gBlendMode) {
+		case BlendMode::Composite:
+			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE,
+			                    GL_ONE_MINUS_SRC_ALPHA);
+			break;
+		case BlendMode::Premultiplied:
+			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+			break;
+		}
+	} else if (activateStack.empty()) {
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	} else {
+		// Alpha adds up, so that what's drawn into the FrameBuffer is as opaque as the most opaque
+		// of it when it's drawn again
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+	}
+#endif
+}
 
 struct FrameBuffer::Impl {
 #ifdef JNGL_VULKAN
@@ -59,8 +105,7 @@ struct FrameBuffer::Impl {
 	Impl(int width, int height, bool hdr)
 	: width(width), height(height),
 	  texture(static_cast<float>(width), static_cast<float>(height), width, height, nullptr,
-	          GL_RGBA, nullptr, hdr ? GL_HALF_FLOAT : GL_UNSIGNED_BYTE),
-	  letterboxing(glIsEnabled(GL_SCISSOR_TEST)) {
+	          GL_RGBA, nullptr, hdr ? GL_HALF_FLOAT : GL_UNSIGNED_BYTE) {
 	}
 #endif
 	Impl(const Impl&) = delete;
@@ -92,25 +137,17 @@ struct FrameBuffer::Impl {
 	GLuint fbo = 0;
 	GLuint buffer = 0;
 	Texture texture;
-	bool letterboxing;
 #if !defined(GL_VIEWPORT_BIT) || defined(__APPLE__)
 	GLint viewport[4]{};
 #endif
-
-	/// If this is not empty, there's a FrameBuffer in use and this was the function that activated
-	/// it.
-	static std::stack<std::function<void()>> activate;
+#endif
 
 	/// The projection matrix of the window, saved when the outermost FrameBuffer gets activated.
 	/// FrameBuffers used inside of it scale this one instead of their outer FrameBuffer's.
 	static Mat4 screenProjection;
-#endif
 };
 
-#ifndef JNGL_VULKAN
-std::stack<std::function<void()>> FrameBuffer::Impl::activate;
 Mat4 FrameBuffer::Impl::screenProjection;
-#endif
 
 FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr)
 : impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height), hdr)) {
@@ -132,17 +169,21 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr
 
 	assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 
-	if (impl->letterboxing) {
-		glDisable(GL_SCISSOR_TEST);
-	}
+	// All of it, whatever's clipped on the window by its letterboxing or a jngl::scissor()
+	const bool scissorTest = glIsEnabled(GL_SCISSOR_TEST);
+	glDisable(GL_SCISSOR_TEST);
 	glClearColor(1, 1, 1, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	clearBackgroundColor();
-	if (impl->letterboxing) {
+	if (scissorTest) {
 		glEnable(GL_SCISSOR_TEST);
 	}
 
-	pWindow->bindSystemFramebufferAndRenderbuffer();
+	if (activateStack.empty()) {
+		pWindow->bindSystemFramebufferAndRenderbuffer();
+	} else {
+		activateStack.top().activate(); // back to the FrameBuffer that's in use
+	}
 #endif
 }
 
@@ -181,8 +222,7 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   opengl::modelview.data);
 	}
@@ -208,8 +248,7 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	impl->texture.draw();
@@ -247,8 +286,7 @@ void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
 		                                    -impl->height / getScaleFactor() / 2 })
 		                       .data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   modelview.scale(1, -1)
 		                       .translate({ -impl->width / getScaleFactor() / 2,
@@ -259,6 +297,39 @@ void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
 	             4); // no need to bind again, that's why we don't call impl->texture.draw() here
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, oldFilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, oldFilter);
+#endif
+}
+
+void FrameBuffer::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes,
+                           const ShaderProgram* const shaderProgram) const {
+	drawMesh(modelview, vertexes, gSpriteColor, shaderProgram);
+}
+
+void FrameBuffer::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes,
+                           const Rgba color, const ShaderProgram* const shaderProgram) const {
+	if (vertexes.empty()) {
+		return;
+	}
+#ifdef JNGL_VULKAN
+	std::optional<ShaderProgram::Context> context;
+	if (shaderProgram) {
+		context.emplace(shaderProgram->use());
+	}
+	// jngl::Vertex is a tightly packed { x, y, u, v }, matching what drawSprite expects.
+	vulkanRenderer().drawSprite(impl->vkFramebuffer->color,
+	                            reinterpret_cast<const float*>(vertexes.data()), vertexes.size(),
+	                            PrimitiveType::Triangles, modelview, color);
+#else
+	auto context =
+	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
+	if (shaderProgram) {
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   modelview.data);
+	} else {
+		ShaderCache::handle().setTextureColorUniforms(color);
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
+	}
+	impl->texture.drawMesh(vertexes);
 #endif
 }
 
@@ -286,8 +357,7 @@ void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   opengl::modelview.data);
 	}
@@ -352,6 +422,11 @@ FrameBuffer::Context FrameBuffer::use() const {
 #ifdef JNGL_VULKAN
 	pushMatrix();
 	auto savedProjection = opengl::projection;
+	if (activateStack.empty()) {
+		Impl::screenProjection = opengl::projection;
+	} else {
+		opengl::projection = Impl::screenProjection;
+	}
 	const float sx = static_cast<float>(pWindow->getWidth()) / static_cast<float>(impl->width) *
 	                 pWindow->getResizedWindowScalingX();
 	const float sy = static_cast<float>(pWindow->getHeight()) / static_cast<float>(impl->height) *
@@ -362,30 +437,35 @@ FrameBuffer::Context FrameBuffer::use() const {
 	}
 	vulkanRenderer().setProjection(opengl::projection);
 	vulkanRenderer().pushRenderTarget(*impl->vkFramebuffer);
-	return Context([this, savedProjection]() {
+	// The render target has already been pushed, which is all there is to switch on Vulkan
+	auto activate = []() {
+		applyBlendMode();
+		applyScissor();
+	};
+	activateStack.emplace(Active{ std::move(activate), impl->width, impl->height });
+	activateStack.top().activate();
+	return Context([savedProjection]() {
+		activateStack.pop();
 		vulkanRenderer().popRenderTarget();
 		popMatrix();
 		opengl::projection = savedProjection;
 		vulkanRenderer().setProjection(opengl::projection);
+		applyBlendMode();
+		applyScissor();
 	});
 #else
 	auto activate = [this]() {
 		glBindFramebuffer(GL_FRAMEBUFFER, impl->fbo);
 		glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
 		glViewport(0, 0, impl->width, impl->height);
-		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
-
-		// each time we active we have to check again, because the window might have been resized
-		if (!impl->letterboxing) {
-			impl->letterboxing = glIsEnabled(GL_SCISSOR_TEST);
-		}
-		if (impl->letterboxing) {
-			glDisable(GL_SCISSOR_TEST);
-		}
+		// This FrameBuffer's on activateStack by now: the window's letterboxing doesn't apply here,
+		// a jngl::scissor() does
+		applyBlendMode();
+		applyScissor();
 	};
 	pushMatrix();
 	auto savedProjection = opengl::projection;
-	if (Impl::activate.empty()) {
+	if (activateStack.empty()) {
 		Impl::screenProjection = opengl::projection;
 	} else {
 		// Scaling the outer FrameBuffer's projection again would only be right if its factors were
@@ -413,15 +493,10 @@ FrameBuffer::Context FrameBuffer::use() const {
 #else
 	glGetIntegerv(GL_VIEWPORT, impl->viewport);
 #endif
-	// Scissor testing inside the FrameBuffer (e.g. jngl::scissor) changes the box, which would
-	// otherwise be used for letterboxing when re-enabling the scissor test below
-	std::array<GLint, 4> scissorBox{};
-	glGetIntegerv(GL_SCISSOR_BOX, scissorBox.data());
-	activate();
-	Impl::activate.emplace(std::move(activate));
-	return Context([this, savedProjection, scissorBox]() {
-		Impl::activate.pop();
-		glScissor(scissorBox[0], scissorBox[1], scissorBox[2], scissorBox[3]);
+	activateStack.emplace(Active{ std::move(activate), impl->width, impl->height });
+	activateStack.top().activate();
+	return Context([this, savedProjection]() {
+		activateStack.pop();
 		popMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
 		glPopAttrib();
@@ -430,14 +505,12 @@ FrameBuffer::Context FrameBuffer::use() const {
 #endif
 		opengl::projection = savedProjection;
 		App::instance().updateProjectionMatrix();
-		if (!Impl::activate.empty()) {
-			Impl::activate.top()(); // Restore the FrameBuffer that was previously active
+		if (!activateStack.empty()) {
+			activateStack.top().activate(); // Restore the FrameBuffer that was previously active
 			return;
 		}
-		if (impl->letterboxing) {
-			glEnable(GL_SCISSOR_TEST);
-		}
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		applyBlendMode();
+		applyScissor(); // the window's letterboxing again, with a jngl::scissor() inside it
 		pWindow->bindSystemFramebufferAndRenderbuffer();
 		clearBackgroundColor();
 	});

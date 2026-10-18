@@ -1,4 +1,4 @@
-// Copyright 2023-2025 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2023-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 /// Contains jngl::Achievement class
 /// @file
@@ -65,5 +65,9 @@ struct Achievement {
 private:
 	int value;
 };
+
+/// Sets the text between the current and the maximum value in the popup that shows an achievement's
+/// progress, e.g. " von " for "5 von 20" in German. The default is " of ".
+void setAchievementProgressSeparator(std::string);
 
 } // namespace jngl

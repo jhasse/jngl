@@ -10,6 +10,10 @@
 #include "../Stream.hpp"
 #include "../constants.hpp"
 
+#ifndef JNGL_WINAPI
+#include "../../sdl/sdl.hpp"
+#endif
+
 #include <SDL3/SDL.h>
 
 #include <cassert>
@@ -108,9 +112,13 @@ struct engine::Impl {
 		std::shared_ptr<Stream> output;
 
 		explicit SdlImpl(std::shared_ptr<Stream> output) : output(std::move(output)) {
+#ifdef JNGL_WINAPI // deprecated, so we don't care about Ctrl+C handling
 			if (!SDL_Init(SDL_INIT_AUDIO)) {
 				throw std::runtime_error(SDL_GetError());
 			}
+#else
+			sdlInit(SDL_INIT_AUDIO);
+#endif
 			SDL_AudioSpec spec;
 			SDL_zero(spec);
 			spec.freq = frequency;

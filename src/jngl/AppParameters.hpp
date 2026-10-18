@@ -44,9 +44,10 @@ struct AppParameters {
 	bool pixelArt = false;
 
 	/// This function can be set to make adjustments to the scale factor used by
-	/// jngl::getScaleFactor() after the window has been created. It gets the actual window
-	/// dimensions in actual pixels as parameters (width, height) and must return the desired new
-	/// scale factor.
+	/// jngl::getScaleFactor() after the window has been created. It gets the dimensions of the
+	/// canvas in actual pixels as parameters (width, height), i.e. of the window without the
+	/// letter-boxing that minAspectRatio and maxAspectRatio might require, and must return the
+	/// desired new scale factor.
 	///
 	/// For example if you don't want to force an aspect ratio, but want to have a consistent
 	/// scaling based on a 1920x1080 screen, you could use:

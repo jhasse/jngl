@@ -95,8 +95,10 @@ public:
 			}
 		}
 		if (jngl::keyPressed('l')) {
-			jngl::loop("test.ogg");
+			soundPanning = jngl::SoundFile::get("test.ogg")->loopWithPanning();
 		}
+		soundPanning.setPanning(static_cast<float>(jngl::getMousePos().x) /
+		                        jngl::getScreenSize().x * 2.f);
 #ifdef JNGL_RECORD
 		if (jngl::keyPressed('r')) {
 			if (auto videoRecorder = jngl::getJob<jngl::VideoRecorder>()) {
@@ -324,6 +326,7 @@ private:
 	jngl::Achievement achievement2{
 		"JNGL_TEST_ACHIEVEMENT2", "Pressed T", "Found another easter egg", "jngl", 0, 1000
 	};
+	jngl::SoundPanning soundPanning;
 };
 
 jngl::AppParameters jnglInit() {

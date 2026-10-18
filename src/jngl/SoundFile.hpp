@@ -4,6 +4,8 @@
 /// @file
 #pragma once
 
+#include "SoundPanning.hpp"
+
 #include <future>
 #include <memory>
 #include <span>
@@ -24,14 +26,14 @@ class Channel;
 class Sound;
 struct SoundParams;
 
-/// Sound loaded from an OGG file
+/// Sound loaded from an OGG or MP3 file
 ///
 /// JNGL keeps a list of loaded sound files, so there's no need for you to use this class directly -
 /// you can just use jngl::play or Channel::play. If you want to access the internally SoundFile
 /// from JNGL's cache before playing, use SoundFile::get.
 class SoundFile {
 public:
-	/// Load an OGG file called \a filename
+	/// Load an OGG or MP3 file called \a filename
 	///
 	/// Loading can either happen on its own thread (std::launch::async) or the first time you
 	/// try to play the file (std::launch::deferred).
@@ -79,6 +81,24 @@ public:
 	/// Play the sound in a loop. Can also be stopped using stop()
 	void loop();
 	void loop(Channel&);
+
+	/// Like play(), but the sound can be positioned in the stereo field
+	///
+	/// The sound only starts playing once SoundPanning::setPanning has been called for the first
+	/// time and stops when the returned object gets destroyed. Use the returned object to control
+	/// the sound, as stop(), isPlaying(), setVolume() and progress() of this SoundFile won't affect
+	/// it.
+	///
+	/// \note The Channel must not be moved while the returned object is still alive.
+	[[nodiscard]] SoundPanning playWithPanning();
+	[[nodiscard]] SoundPanning playWithPanning(Channel&);
+
+	/// Like loop(), but the sound can be positioned in the stereo field
+	///
+	/// Unlike loop() this will always start a new sound, even if this SoundFile is already looping.
+	/// See playWithPanning() for details.
+	[[nodiscard]] SoundPanning loopWithPanning();
+	[[nodiscard]] SoundPanning loopWithPanning(Channel&);
 
 	/// Set volume in [0, ∞]. Default is 1.0f
 	void setVolume(float v);

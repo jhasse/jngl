@@ -31,6 +31,7 @@
 #include "jngl/ShaderProgram.hpp"    // IWYU pragma: keep
 #include "jngl/Singleton.hpp"        // IWYU pragma: keep
 #include "jngl/SoundFile.hpp"        // IWYU pragma: keep
+#include "jngl/SoundPanning.hpp"     // IWYU pragma: keep
 #include "jngl/Sprite.hpp"           // IWYU pragma: keep
 #include "jngl/TextInputSession.hpp" // IWYU pragma: keep
 #include "jngl/TextLine.hpp"         // IWYU pragma: keep

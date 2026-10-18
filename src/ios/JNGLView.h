@@ -13,6 +13,7 @@ class Finally;
 @interface JNGLView : UIView <UIKeyInput> {
 	EAGLContext* context;
 	float angle;
+	GLuint renderbuffer;
 	int width;
 	int height;
 	CFTimeInterval startTime;

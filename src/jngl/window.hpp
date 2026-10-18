@@ -13,10 +13,6 @@
 
 namespace jngl {
 
-/// Disable SDL high pixel density (call before showWindow). Used by jngl-unittest so window
-/// dimensions match the requested pixel size on fractional-scaling desktops.
-void setHighPixelDensityEnabled(bool enabled);
-
 /// Creates the main window
 ///
 /// Normally you wouldn't call this function yourself, but implement jnglInit() instead.
@@ -42,14 +38,16 @@ void hideWindow();
 /// or destructors of global objects won't work.
 void atExit(std::function<void()>);
 
-/// Returns the width of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)
+/// Returns the width of the canvas in pixels, i.e. jngl::getScreenWidth() * jngl::getScaleFactor()
 ///
-/// When letter-boxing is used, this doesn't include the black bars.
+/// When letter-boxing is used, this doesn't include the black bars. Normally these are the
+/// window's actual pixels, but not when JNGL zooms the canvas, as the scale factor can't change
+/// anymore: After the window has been resized, or when the canvas changes its size (see
+/// Scene::supportsScreenSize) and AppParameters::scaleFactor is set. This still returns the
+/// canvas' width then, so that a FrameBuffer of getWindowSize() covers the whole screen.
 int getWindowWidth();
 
-/// Returns the height of the window in actual pixels (i.e. ignoring jngl::getScaleFactor)
-///
-/// When letter-boxing is used, this doesn't include the black bars.
+/// Returns the height of the canvas in pixels, see getWindowWidth()
 int getWindowHeight();
 
 /// Returns {width, height} of the window in actual pixels
@@ -76,17 +74,24 @@ enum class Cursor : uint8_t {
 	ARROW, //< Default cursor
 	I, //< I-beam cursor used in text editing
 	CROSSHAIR, //< Crosshair cursor
+	GRAB, //< Something under the cursor can be grabbed, e.g. an open hand
+	GRABBING, //< Something is being grabbed, e.g. a closed hand
+	POINTER, //< Pointer cursor, typically used for clickable elements
 };
 /// Allows to change the mouse cursor
 void setCursor(Cursor);
 
 /// Read red, green and blue values of the whole window frame buffer
+///
+/// Returns getWindowWidth() * getWindowHeight() * 3 values. When the canvas is zoomed (see
+/// getWindowWidth()), it gets scaled to that size.
 std::vector<float> readPixels();
 
 /// Read red, green and blue values of the whole window frame buffer into \a buffer
 ///
 /// The buffer must be at least width * height * 3 bytes long, where width and height are the
-/// current window dimensions as returned by getWindowWidth() and getWindowHeight().
+/// current window dimensions as returned by getWindowWidth() and getWindowHeight(). When the
+/// canvas is zoomed, it gets scaled to that size.
 void readPixels(uint8_t* buffer);
 
 } // namespace jngl

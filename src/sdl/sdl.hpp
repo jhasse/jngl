@@ -4,8 +4,6 @@
 
 #include "../jngl/Singleton.hpp"
 
-#include <csignal>
-
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wimplicit-fallthrough"
@@ -17,9 +15,12 @@
 
 namespace jngl {
 
-#ifndef __EMSCRIPTEN__
-extern volatile std::sig_atomic_t gGotSigint;
-#endif
+/// Calls SDL_Init without letting SDL take over SIGINT
+///
+/// SDL only installs its SIGINT handler (which turns Ctrl+C into SDL_EVENT_QUIT) if the current one
+/// is SIG_DFL. Window::mainLoop installs JNGL's own handler, outside of it Ctrl+C should simply
+/// kill the process.
+void sdlInit(SDL_InitFlags);
 
 class SDL : public Singleton<SDL> {
 	friend class Singleton<SDL>;

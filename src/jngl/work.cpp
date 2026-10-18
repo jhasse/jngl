@@ -44,4 +44,8 @@ void Work::onToggleFullscreen() {
 	}
 }
 
+bool Work::supportsScreenSize(Vec2) const {
+	return false;
+}
+
 } // namespace jngl

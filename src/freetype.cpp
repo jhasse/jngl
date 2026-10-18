@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #define _LIBCPP_DISABLE_DEPRECATION_WARNINGS // NOLINT
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING // NOLINT
 #include "freetype.hpp"
 
 #include "FontImpl.hpp"
@@ -270,8 +271,7 @@ void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) const 
 	gTextColor = color;
 #else
 	auto context = ShaderCache::handle().textureShaderProgram->use();
-	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(), color.getGreen(),
-	            color.getBlue(), color.getAlpha());
+	ShaderCache::handle().setTextureColorUniforms(color);
 #endif
 	std::vector<std::string> lines(splitlines(text));
 
@@ -295,8 +295,7 @@ void FontImpl::print(const ScaleablePixels x, const ScaleablePixels y, const std
 	gTextColor = gFontColor;
 #else
 	auto context = ShaderCache::handle().textureShaderProgram->use();
-	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gFontColor.getRed(),
-	            gFontColor.getGreen(), gFontColor.getBlue(), gFontColor.getAlpha());
+	ShaderCache::handle().setTextureColorUniforms(gFontColor);
 #endif
 	const int xRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ x })));
 	const int yRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ y })));

@@ -17,8 +17,9 @@ public:
 
 	[[nodiscard]] std::string getAsciiArt() const;
 
-private:
-	static void reset() ;
+	/// Clears the window and draws the frame, e.g. after the window has been resized
+	static void reset();
 
+private:
 	std::string emptyAsciiArt;
 };

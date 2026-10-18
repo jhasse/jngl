@@ -198,6 +198,18 @@ void ShaderProgram::Context::setUniform(const int location, const int v0) {
 #endif
 }
 
+void ShaderProgram::Context::setUniform(const int location, const float v0) {
+	assert(referenceCount >= 0);
+#ifdef JNGL_VULKAN
+	assert(activeImpl);
+	const auto& u = activeImpl->program->uniforms.at(static_cast<size_t>(location));
+	assert(u.size >= sizeof(v0));
+	vulkanRenderer().setActiveProgramUniform(u.offset, &v0, sizeof(v0));
+#else
+	glUniform1f(location, v0);
+#endif
+}
+
 void ShaderProgram::Context::setUniform(const int location, const float v0, const float v1) {
 	assert(referenceCount >= 0);
 #ifdef JNGL_VULKAN

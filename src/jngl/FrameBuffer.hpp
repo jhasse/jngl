@@ -115,7 +115,18 @@ public:
 	void draw(Mat3 modelview, TextureFilter textureFilter, const ShaderProgram* = nullptr) const;
 
 	/// Draws a list of triangles with the framebuffer's texture on it
+	///
+	/// The texture's v coordinate runs from 1 at the framebuffer's top to 0 at its bottom.
 	void drawMesh(const std::vector<Vertex>& vertexes, const ShaderProgram* = nullptr) const;
+
+	/// Draws a list of triangles with the framebuffer's texture on it, with \a modelview instead of
+	/// the global one, and tinted by \a color, e.g. its alpha for a see-through framebuffer
+	///
+	/// \param shaderProgram Passing `nullptr` uses the default.
+	void drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes,
+	              const ShaderProgram* shaderProgram = nullptr) const;
+	void drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes, Rgba color,
+	              const ShaderProgram* = nullptr) const;
 
 	/// Clear the framebuffer with the color set by jngl::setBackgroundColor
 	/// \deprecated use jngl::FrameBuffer::Context::clear(Color) instead

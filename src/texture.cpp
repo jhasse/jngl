@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "texture.hpp"
 
+#include "jngl/Alpha.hpp"
 #include "jngl/Mat3.hpp"
 #include "jngl/Rgba.hpp"
 #include "jngl/Vertex.hpp"
@@ -29,7 +30,7 @@ VulkanRenderer& vulkanRenderer() {
 
 Texture::Texture(const float preciseWidth, const float preciseHeight, const int width,
                  const int height, const GLubyte* const* const rowPointers, GLenum format,
-                 const GLubyte* const data, const GLenum type)
+                 const GLubyte* const data, const GLenum type, const bool mipmap)
 #ifndef JNGL_VULKAN
 : texture_(opengl::genAndBindTexture())
 #endif
@@ -53,6 +54,7 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 		1, 0 // texture coordinates
 	};
 #ifdef JNGL_VULKAN
+	(void)mipmap; // TODO: Generate mipmaps on the Vulkan backend
 	vkTexture = vulkanRenderer().createTexture(width, height, format, type, data, rowPointers);
 #else
 	glGenVertexArrays(1, &vao);
@@ -83,6 +85,10 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 	if (data) {
 		assert(!rowPointers);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
+	}
+	if (mipmap) {
+		glGenerateMipmap(GL_TEXTURE_2D);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	}
 #endif
 }
@@ -132,8 +138,25 @@ void Texture::draw(const Mat3& modelview, const Rgba color) const {
 	opengl::bindVertexArray(vao);
 	auto& shaderCache = ShaderCache::handle();
 	auto context = shaderCache.textureShaderProgram->use();
-	glUniform4f(shaderCache.shaderSpriteColorUniform, color.getRed(), color.getGreen(),
-	            color.getBlue(), color.getAlpha());
+	shaderCache.setTextureColorUniforms(color);
+	glUniformMatrix3fv(shaderCache.modelviewUniform, 1, GL_FALSE, modelview.data);
+	glBindTexture(GL_TEXTURE_2D, texture_);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+#endif
+}
+
+void Texture::drawLerped(const Mat3& modelview, const Rgb color, const float red, const float green,
+                         const float blue, const Alpha alpha) const {
+#ifdef JNGL_VULKAN
+	if (vkTexture) {
+		vulkanRenderer().drawSprite(*vkTexture, vertexes.data(), 4, PrimitiveType::TriangleFan,
+		                            modelview, color, { red, green, blue, 1.f - alpha.getAlpha() });
+	}
+#else
+	opengl::bindVertexArray(vao);
+	auto& shaderCache = ShaderCache::handle();
+	auto context = shaderCache.textureShaderProgram->use();
+	shaderCache.setTextureLerpUniforms(color, red, green, blue, alpha);
 	glUniformMatrix3fv(shaderCache.modelviewUniform, 1, GL_FALSE, modelview.data);
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
@@ -165,7 +188,7 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	opengl::bindVertexArray(opengl::vaoStream);
 	auto& shaderCache = ShaderCache::handle();
 	auto tmp = shaderCache.textureShaderProgram->use();
-	glUniform4f(shaderCache.shaderSpriteColorUniform, red, green, blue, alpha);
+	shaderCache.setTextureColorUniforms(Rgba(red, green, blue, alpha));
 	glUniformMatrix3fv(shaderCache.modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(float)),
@@ -197,8 +220,7 @@ void Texture::drawMesh(const std::vector<Vertex>& vertexes, const Mat3& modelvie
 #else
 	auto& shaderCache = ShaderCache::handle();
 	auto context = shaderCache.textureShaderProgram->use();
-	glUniform4f(shaderCache.shaderSpriteColorUniform, color.getRed(), color.getGreen(),
-	            color.getBlue(), color.getAlpha());
+	shaderCache.setTextureColorUniforms(color);
 	glUniformMatrix3fv(shaderCache.modelviewUniform, 1, GL_FALSE, modelview.data);
 	drawMesh(vertexes);
 #endif

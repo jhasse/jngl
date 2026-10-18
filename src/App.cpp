@@ -121,16 +121,10 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 #endif
 } // namespace
 
-void App::initGl(int width, int height, int canvasWidth, int canvasHeight) {
+void App::initGl() {
 #ifdef JNGL_VULKAN
-	// The Vulkan backend needs no GL state. We still update the projection matrix (pure math) and
-	// hand it to the backend; clearing happens via the render pass each frame.
-	if (impl && impl->scaleFactor) {
-		setScaleFactor(impl->scaleFactor(canvasWidth, canvasHeight));
-	}
-	updateProjection(width, height, static_cast<float>(width), static_cast<float>(height));
-	getRenderer().setProjection(opengl::projection);
-	updateViewportAndLetterboxing(width, height, canvasWidth, canvasHeight);
+	// The Vulkan backend needs no GL state, clearing happens via the render pass each frame. The
+	// projection is handed to it by updateProjectionMatrix().
 	reset();
 	modelviewStack = {};
 	setVerticalSync(true);
@@ -147,20 +141,8 @@ void App::initGl(int width, int height, int canvasWidth, int canvasHeight) {
 #endif
 #endif
 
-	if (impl && impl->scaleFactor &&
-	    !pWindow // on Android initGl will be called when the app is brought back to foreground. If
-	             // an explicit scale factor is set, this would result in setScaleFactor being
-	             // called twice and an exception (not happening when Apps don't explicitly set it
-	             // but use screenSize)
-	) {
-		setScaleFactor(impl->scaleFactor(canvasWidth, canvasHeight));
-	}
-	updateProjection(width, height, static_cast<float>(width), static_cast<float>(height));
-
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	updateViewportAndLetterboxing(width, height, canvasWidth, canvasHeight);
 
 	reset();
 	modelviewStack = {};
@@ -171,6 +153,13 @@ void App::initGl(int width, int height, int canvasWidth, int canvasHeight) {
 	glFlush();
 	setVerticalSync(true);
 #endif
+}
+
+double App::getScaleFactorFor(const int width, const int height) const {
+	if (impl && impl->scaleFactor) {
+		return impl->scaleFactor(width, height);
+	}
+	return getScaleFactor();
 }
 
 std::string App::getDisplayName() const {
@@ -213,8 +202,14 @@ void App::unregisterShaderProgram(ShaderProgram* shaderProgram) {
 
 void App::updateProjectionMatrix() const {
 #ifdef JNGL_VULKAN
-	(void)impl; // projection is a per-draw push constant on the Vulkan backend
+	// The projection is a per-draw push constant on the Vulkan backend
+	if (auto* const renderer = getRendererIfExists()) {
+		renderer->setProjection(opengl::projection);
+	}
 #else
+	if (!impl) {
+		return; // no ShaderProgram has been registered yet
+	}
 	for (const auto shaderProgram : impl->shaderPrograms) {
 		const auto context = shaderProgram->use();
 		glUniformMatrix4fv(shaderProgram->getUniformLocation("projection"), 1, GL_FALSE,

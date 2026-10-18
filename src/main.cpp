@@ -25,9 +25,9 @@
 #include "windowptr.hpp"
 
 #include <boost/qvm_lite.hpp>
+#include <algorithm>
 #include <cmath>
 #include <cstddef>
-#include <cstring>
 #include <fstream>
 #include <numbers>
 #include <sstream>
@@ -35,6 +35,9 @@
 #include <vector>
 
 #ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include <windows.h>
 #endif
 
@@ -65,6 +68,7 @@ namespace jngl {
 
 std::string pathPrefix;
 optional<std::string> configPath;
+optional<std::string> documentsPath; ///< see setDocumentsPath()
 Rgb backgroundColor(1, 1, 1);
 std::stack<jngl::Mat3> modelviewStack;
 
@@ -77,8 +81,32 @@ void clearBackgroundColor() {
 	// VulkanRenderer::beginFrame, so there's nothing to set here.
 }
 
+namespace {
+
+/// The window's canvas in its pixels, from the bottom left like OpenGL, see
+/// updateViewportAndLetterboxing()
+struct WindowCanvas {
+	int x = 0;
+	int y = 0;
+	int width = 0;
+	int height = 0;
+	bool letterboxed = false; ///< whether it's smaller than the window, with black bars around it
+} windowCanvas;
+
+/// The rectangles of the scissor() calls that are alive, the innermost last, in screen coordinates
+std::vector<std::pair<Vec2, Vec2>> scissorStack;
+
+} // namespace
+
 void updateViewportAndLetterboxing(const int width, const int height, const int canvasWidth,
                                    const int canvasHeight) {
+	assert(canvasWidth <= width);
+	assert(canvasHeight <= height);
+	windowCanvas = { .x = (width - canvasWidth) / 2,
+		             .y = (height - canvasHeight) / 2,
+		             .width = canvasWidth,
+		             .height = canvasHeight,
+		             .letterboxed = canvasWidth != width || canvasHeight != height };
 #ifdef JNGL_VULKAN
 	static_cast<VulkanRenderer&>(getRenderer())
 	    .updateLetterboxing(width, height, canvasWidth, canvasHeight);
@@ -86,18 +114,68 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 #else
 	glViewport(0, 0, width, height);
 
-	if (canvasWidth != width || canvasHeight != height) { // Letterboxing?
+	if (windowCanvas.letterboxed) {
+		glDisable(GL_SCISSOR_TEST);
 		glClearColor(0, 0, 0, 1); // black boxes
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		glEnable(GL_SCISSOR_TEST);
-		assert(canvasWidth <= width);
-		assert(canvasHeight <= height);
-		glScissor((width - canvasWidth) / 2, (height - canvasHeight) / 2, canvasWidth,
-		          canvasHeight);
-	} else {
-		glDisable(GL_SCISSOR_TEST);
 	}
+#endif
+	applyScissor();
+}
+
+void applyScissor() {
+	// Where screen coordinates land: the window's canvas, or all of the FrameBuffer in use, which
+	// has the window's pixels per screen unit either way, see FrameBuffer::use()
+	auto canvas = windowCanvas;
+	const auto frameBuffer = activeFrameBufferSize();
+	if (frameBuffer) {
+		canvas = { .x = 0,
+			       .y = 0,
+			       .width = (*frameBuffer)[0],
+			       .height = (*frameBuffer)[1],
+			       .letterboxed = false };
+	}
+	if (scissorStack.empty()) {
+#ifdef JNGL_VULKAN
+		// The renderer applies the window's letterboxing itself
+		static_cast<VulkanRenderer&>(getRenderer()).setScissor(std::nullopt);
+#else
+		if (canvas.letterboxed) {
+			glEnable(GL_SCISSOR_TEST);
+			glScissor(canvas.x, canvas.y, canvas.width, canvas.height);
+		} else {
+			glDisable(GL_SCISSOR_TEST);
+		}
+#endif
+		return;
+	}
+	const double pixelsPerUnitX = windowCanvas.width / getScreenWidth();
+	const double pixelsPerUnitY = windowCanvas.height / getScreenHeight();
+	// Where all of them overlap, in the canvas' pixels: from left to right and bottom to top
+	auto left = static_cast<long>(canvas.x);
+	auto bottom = static_cast<long>(canvas.y);
+	auto right = left + canvas.width;
+	auto top = bottom + canvas.height;
+	for (const auto& [position, size] : scissorStack) {
+		left =
+		    std::max(left, std::lround(canvas.x + canvas.width / 2. + position.x * pixelsPerUnitX));
+		right = std::min(right, std::lround(canvas.x + canvas.width / 2. +
+		                                    (position.x + size.x) * pixelsPerUnitX));
+		bottom = std::max(bottom, std::lround(canvas.y + canvas.height / 2. -
+		                                      (position.y + size.y) * pixelsPerUnitY));
+		top =
+		    std::min(top, std::lround(canvas.y + canvas.height / 2. - position.y * pixelsPerUnitY));
+	}
+#ifdef JNGL_VULKAN
+	static_cast<VulkanRenderer&>(getRenderer())
+	    .setScissor(VulkanRenderer::ScissorBox{ static_cast<int>(left), static_cast<int>(bottom),
+	                                            static_cast<int>(std::max(0L, right - left)),
+	                                            static_cast<int>(std::max(0L, top - bottom)) });
+#else
+	glEnable(GL_SCISSOR_TEST);
+	glScissor(static_cast<GLint>(left), static_cast<GLint>(bottom),
+	          static_cast<GLsizei>(std::max(0L, right - left)),
+	          static_cast<GLsizei>(std::max(0L, top - bottom)));
 #endif
 }
 
@@ -134,16 +212,19 @@ void updateProjection(int windowWidth, int windowHeight, float originalWindowWid
 WindowPointer pWindow;
 namespace {
 bool antiAliasingEnabled = true;
-bool highPixelDensityEnabled = true;
+bool highDpi = true;
+float deprecatedLineWidth = 1; // set by setLineWidth
 } // namespace
 
-void setHighPixelDensityEnabled(const bool enabled) {
-	highPixelDensityEnabled = enabled;
+namespace internal {
+void setHighDpi(const bool enabled) {
+	highDpi = enabled;
 }
 
-bool isHighPixelDensityEnabled() {
-	return highPixelDensityEnabled;
+bool getHighDpi() {
+	return highDpi;
 }
+} // namespace internal
 
 void showWindow(const std::string& title, const double width, const double height, bool fullscreen,
                 const std::pair<int, int> minAspectRatio,
@@ -151,6 +232,7 @@ void showWindow(const std::string& title, const double width, const double heigh
 	++internal::gFrameNumber; // will set it to 0 for the first window
 	internal::debug("jngl::showWindow(\"{}\", {}, {}, {});", title, width, height, fullscreen);
 	bool isMouseVisible = pWindow ? pWindow->getMouseVisible() : true;
+	bool isMouseConfined = pWindow ? pWindow->getMouseConfined() : false;
 	hideWindow();
 	int widthRounded = static_cast<int>(std::lround(width));
 	int heightRounded = static_cast<int>(std::lround(height));
@@ -167,6 +249,7 @@ void showWindow(const std::string& title, const double width, const double heigh
 		App::instance().setDisplayName(title);
 	}
 	pWindow->SetMouseVisible(isMouseVisible);
+	pWindow->setMouseConfined(isMouseConfined);
 	setAntiAliasing(antiAliasingEnabled);
 #ifndef JNGL_VULKAN
 	pWindow->initGlObjects();
@@ -188,6 +271,7 @@ void hideWindow() {
 		backgroundColor = Rgb(1, 1, 1);
 		modelviewStack = {};
 		antiAliasingEnabled = true;
+		deprecatedLineWidth = 1;
 		internal::gFrameNumber = -1;
 		internal::resetScaleFactor();
 	}
@@ -213,13 +297,13 @@ void clearBackBuffer() {
 	}
 	modelviewStack = {};
 #else
-	if (glIsEnabled(GL_SCISSOR_TEST)) {
+	if (windowCanvas.letterboxed) {
 		// Letterboxing with SDL_VIDEODRIVER=wayland will glitch if we don't draw the black boxes on
 		// every frame
 		glDisable(GL_SCISSOR_TEST);
 		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glEnable(GL_SCISSOR_TEST);
+		applyScissor();
 		clearBackgroundColor();
 	}
 
@@ -381,9 +465,15 @@ bool mousePressed(mouse::Button button) {
 }
 
 void setMouse(const jngl::Vec2 position) {
-	pWindow->SetMouse(
-	    static_cast<int>(std::lround(position.x * getScaleFactor() + pWindow->getWidth() / 2.)),
-	    static_cast<int>(std::lround(position.y * getScaleFactor() + pWindow->getHeight() / 2.)));
+	// from screen coordinates to actual pixels of the (maybe letter-boxed or resized) window
+	const double zoomX =
+	    static_cast<double>(pWindow->getActualCanvasWidth()) / pWindow->getCanvasWidth();
+	const double zoomY =
+	    static_cast<double>(pWindow->getActualCanvasHeight()) / pWindow->getCanvasHeight();
+	pWindow->SetMouse(static_cast<int>(std::lround(position.x * getScaleFactor() * zoomX +
+	                                               pWindow->getActualWidth() / 2.)),
+	                  static_cast<int>(std::lround(position.y * getScaleFactor() * zoomY +
+	                                               pWindow->getActualHeight() / 2.)));
 }
 
 void setRelativeMouseMode(const bool relative) {
@@ -402,50 +492,139 @@ bool getRelativeMouseMode() {
 	return pWindow->getRelativeMouseMode();
 }
 
+void setMouseConfined(const bool confined) {
+	pWindow->setMouseConfined(confined);
+}
+
+bool isMouseConfined() {
+	return pWindow->getMouseConfined();
+}
+
 void setTitle(const std::string& title) {
 	pWindow->SetTitle(title);
 }
 
 namespace {
-void readPixels(void* buffer, GLenum type) {
-	auto xOffset = (pWindow->getWidth() - pWindow->getCanvasWidth());
-	auto yOffset = (pWindow->getHeight() - pWindow->getCanvasHeight());
+/// A framebuffer with a single color renderbuffer, which gets deleted again
+class TemporaryFramebuffer {
+public:
+	TemporaryFramebuffer(const int width, const int height) {
+		glGenRenderbuffers(1, &renderbuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, width, height);
+		glGenFramebuffers(1, &framebuffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+		glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+		                          renderbuffer);
+	}
+	~TemporaryFramebuffer() {
+		glDeleteFramebuffers(1, &framebuffer);
+		glDeleteRenderbuffers(1, &renderbuffer);
+	}
+	TemporaryFramebuffer(const TemporaryFramebuffer&) = delete;
+	TemporaryFramebuffer& operator=(const TemporaryFramebuffer&) = delete;
+	TemporaryFramebuffer(TemporaryFramebuffer&&) = delete;
+	TemporaryFramebuffer& operator=(TemporaryFramebuffer&&) = delete;
 
-	// This doesn't hold true on GNOME with fractional scaling: One can only provide logical points
-	// to SDL when creating a window. Due to the scaling it might be the window is 1 pixel to big in
-	// one dimension and we had to activate letter-boxing.
-	//
-	// assert(xOffset % 2 == 0);
-	// assert(yOffset % 2 == 0);
+	GLuint framebuffer = 0;
+	GLuint renderbuffer = 0;
+};
+
+void readPixels(void* buffer, GLenum type) {
+	const int width = getWindowWidth();
+	const int height = getWindowHeight();
+	const int actualCanvasWidth = pWindow->getActualCanvasWidth();
+	const int actualCanvasHeight = pWindow->getActualCanvasHeight();
+	// This doesn't need to be even on GNOME with fractional scaling: One can only provide logical
+	// points to SDL when creating a window. Due to the scaling it might be the window is 1 pixel
+	// to big in one dimension and we had to activate letter-boxing.
+	const int x = (pWindow->getActualWidth() - actualCanvasWidth) / 2;
+	const int y = (pWindow->getActualHeight() - actualCanvasHeight) / 2;
 
 #ifdef JNGL_VULKAN
-	const int width = pWindow->getCanvasWidth();
-	const int height = pWindow->getCanvasHeight();
-	std::vector<unsigned char> rgb(static_cast<size_t>(width) * height * 3);
+	std::vector<unsigned char> rgb(static_cast<size_t>(actualCanvasWidth) * actualCanvasHeight * 3);
 	static_cast<VulkanRenderer&>(getRenderer())
-	    .readPixels(rgb.data(), xOffset / 2, yOffset / 2, width, height);
-	if (type == GL_FLOAT) {
-		auto* out = static_cast<float*>(buffer);
-		for (size_t i = 0; i < rgb.size(); ++i) {
-			out[i] = static_cast<float>(rgb[i]) / 255.f;
+	    .readPixels(rgb.data(), x, y, actualCanvasWidth, actualCanvasHeight);
+	// The canvas might be zoomed (see getWindowWidth), so scale it to the size of the buffer with
+	// linear filtering, like glBlitFramebuffer does on OpenGL
+	const auto sample = [&](const int dstX, const int dstY, const int channel) {
+		const auto clamp = [](const double v, const int size) {
+			return std::clamp(v, 0., static_cast<double>(size - 1));
+		};
+		const double srcX = clamp((dstX + .5) * actualCanvasWidth / width - .5, actualCanvasWidth);
+		const double srcY =
+		    clamp((dstY + .5) * actualCanvasHeight / height - .5, actualCanvasHeight);
+		const int x0 = static_cast<int>(srcX);
+		const int y0 = static_cast<int>(srcY);
+		const int x1 = std::min(x0 + 1, actualCanvasWidth - 1);
+		const int y1 = std::min(y0 + 1, actualCanvasHeight - 1);
+		const auto at = [&](const int px, const int py) {
+			return static_cast<double>(
+			    rgb[(static_cast<size_t>(py) * actualCanvasWidth + px) * 3 + channel]);
+		};
+		const double fx = srcX - x0;
+		const double fy = srcY - y0;
+		return (at(x0, y0) * (1 - fx) + at(x1, y0) * fx) * (1 - fy) +
+		       (at(x0, y1) * (1 - fx) + at(x1, y1) * fx) * fy;
+	};
+	for (int dstY = 0; dstY < height; ++dstY) {
+		for (int dstX = 0; dstX < width; ++dstX) {
+			for (int channel = 0; channel < 3; ++channel) {
+				const size_t i = (static_cast<size_t>(dstY) * width + dstX) * 3 + channel;
+				const double value = sample(dstX, dstY, channel);
+				if (type == GL_FLOAT) {
+					static_cast<float*>(buffer)[i] = static_cast<float>(value / 255.);
+				} else {
+					static_cast<unsigned char*>(buffer)[i] =
+					    static_cast<unsigned char>(std::lround(value));
+				}
+			}
 		}
-	} else {
-		std::memcpy(buffer, rgb.data(), rgb.size());
 	}
 #else
 	GLint oldPackAlignment = 0;
 	glGetIntegerv(GL_PACK_ALIGNMENT, &oldPackAlignment);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	glReadPixels(xOffset / 2, yOffset / 2, pWindow->getCanvasWidth(), pWindow->getCanvasHeight(),
-	             GL_RGB, type, buffer);
+	if (actualCanvasWidth == width && actualCanvasHeight == height) {
+		glReadPixels(x, y, width, height, GL_RGB, type, buffer);
+	} else {
+		// The canvas is zoomed (see getWindowWidth), so scale it to the size of the buffer. This
+		// takes two steps, as the window's framebuffer might be multisampled, which can only be
+		// blitted to the same size.
+		GLint readFramebuffer = 0;
+		GLint drawFramebuffer = 0;
+		glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &readFramebuffer);
+		glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &drawFramebuffer);
+		GLint renderbuffer = 0;
+		glGetIntegerv(GL_RENDERBUFFER_BINDING, &renderbuffer);
+		const bool scissorTest = glIsEnabled(GL_SCISSOR_TEST); // letter-boxing
+		glDisable(GL_SCISSOR_TEST);
+		{
+			const TemporaryFramebuffer canvas(actualCanvasWidth, actualCanvasHeight);
+			glBlitFramebuffer(x, y, x + actualCanvasWidth, y + actualCanvasHeight, 0, 0,
+			                  actualCanvasWidth, actualCanvasHeight, GL_COLOR_BUFFER_BIT,
+			                  GL_NEAREST);
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, canvas.framebuffer);
+			const TemporaryFramebuffer scaled(width, height);
+			glBlitFramebuffer(0, 0, actualCanvasWidth, actualCanvasHeight, 0, 0, width, height,
+			                  GL_COLOR_BUFFER_BIT, GL_LINEAR);
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, scaled.framebuffer);
+			glReadPixels(0, 0, width, height, GL_RGB, type, buffer);
+		}
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, readFramebuffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFramebuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+		if (scissorTest) {
+			glEnable(GL_SCISSOR_TEST);
+		}
+	}
 	glPixelStorei(GL_PACK_ALIGNMENT, oldPackAlignment);
 #endif
 }
 } // namespace
 
 std::vector<float> readPixels() {
-	std::vector<float> buffer(
-	    static_cast<size_t>(3 * pWindow->getCanvasWidth() * pWindow->getCanvasHeight()));
+	std::vector<float> buffer(static_cast<size_t>(3 * getWindowWidth() * getWindowHeight()));
 	readPixels(buffer.data(), GL_FLOAT);
 	return buffer;
 }
@@ -609,90 +788,13 @@ void drawSquare(const Mat3& modelview, Rgba color) {
 	pWindow->drawSquare(modelview, color);
 }
 
-Finally scissor(Vec2 position, Vec2 size) {
-#ifdef JNGL_VULKAN
-	auto& renderer = static_cast<VulkanRenderer&>(getRenderer());
-	const VulkanRenderer::ScissorBox saved = renderer.getScissorBox();
-
-	int canvasX;
-	int canvasY;
-	int canvasW;
-	int canvasH;
-	if (saved.enabled) {
-		canvasX = saved.x;
-		canvasY = saved.y;
-		canvasW = saved.width;
-		canvasH = saved.height;
-	} else {
-		canvasX = 0;
-		canvasY = 0;
-		canvasW = pWindow->getWidth();
-		canvasH = pWindow->getHeight();
-	}
-
-	const auto sw = getScreenWidth();
-	const auto sh = getScreenHeight();
-
-	const auto x = static_cast<int>(std::lround((position.x + sw / 2) / sw * canvasW)) + canvasX;
-	const auto y =
-	    static_cast<int>(std::lround((sh / 2 - position.y - size.y) / sh * canvasH)) + canvasY;
-	const auto w = static_cast<int>(std::lround(size.x / sw * canvasW));
-	const auto h = static_cast<int>(std::lround(size.y / sh * canvasH));
-	renderer.pushUserScissor(x, y, w, h);
-	return Finally([&renderer, saved] { renderer.restoreUserScissor(saved); });
-#else
-	struct SavedScissorState {
-		bool enabled;
-		GLint box[4];
-	};
-	SavedScissorState saved{};
-	saved.enabled = glIsEnabled(GL_SCISSOR_TEST);
-	glGetIntegerv(GL_SCISSOR_BOX, saved.box);
-
-	GLint viewport[4];
-	glGetIntegerv(GL_VIEWPORT, viewport);
-	const auto viewportW = viewport[2];
-	const auto viewportH = viewport[3];
-
-	// Use saved state to determine the canvas area
-	GLint canvasX;
-	GLint canvasY;
-	GLint canvasW;
-	GLint canvasH;
-	if (saved.enabled) {
-		canvasX = saved.box[0];
-		canvasY = saved.box[1];
-		canvasW = saved.box[2];
-		canvasH = saved.box[3];
-	} else {
-		canvasX = 0;
-		canvasY = 0;
-		canvasW = viewportW;
-		canvasH = viewportH;
-	}
-
-	const auto sw = getScreenWidth();
-	const auto sh = getScreenHeight();
-
-	// Map screen coords to canvas pixels
-	const auto x = static_cast<int>(std::lround((position.x + sw / 2) / sw * canvasW)) + canvasX;
-	const auto y =
-	    static_cast<int>(std::lround((sh / 2 - position.y - size.y) / sh * canvasH)) + canvasY;
-	const auto w = static_cast<int>(std::lround(size.x / sw * canvasW));
-	const auto h = static_cast<int>(std::lround(size.y / sh * canvasH));
-	glEnable(GL_SCISSOR_TEST);
-	glScissor(x, y, w, h);
-	return Finally([saved] {
-		// Restore the box even when the scissor test was off, because a FrameBuffer might turn it
-		// back on for letterboxing
-		glScissor(saved.box[0], saved.box[1], saved.box[2], saved.box[3]);
-		if (saved.enabled) {
-			glEnable(GL_SCISSOR_TEST);
-		} else {
-			glDisable(GL_SCISSOR_TEST);
-		}
+Finally scissor(const Vec2 position, const Vec2 size) {
+	scissorStack.emplace_back(position, size);
+	applyScissor();
+	return Finally([] {
+		scissorStack.pop_back();
+		applyScissor();
 	});
-#endif
 }
 
 void drawRectOutline(Mat3 modelview, Vec2 size, float lineWidth, Rgba color) {
@@ -730,21 +832,30 @@ void drawTriangle(Mat3 modelview, Rgba color) {
 }
 
 void setLineWidth(const float width) {
-#ifdef JNGL_VULKAN
-	// TODO: the Vulkan backend draws lines at a fixed width of 1 for now.
-	(void)width;
-#else
-	glLineWidth(width * getScaleFactor());
-#endif
+	deprecatedLineWidth = width;
 }
 
+namespace {
+/// Draws a line with the width set by setLineWidth. Like glLineWidth, which was used before, the
+/// width doesn't get scaled by \a modelview. Instead of GL_LINES, whose maximum width depends on
+/// the GPU, this draws a rectangle.
+void drawLineWithDeprecatedWidth(const Mat3& modelview, const Vec2 end, const Rgba color) {
+	const auto& m = modelview.data;
+	const Vec2 transformedStart(m[6], m[7]);
+	const Vec2 transformedEnd(m[0] * end.x + m[3] * end.y + m[6],
+	                          m[1] * end.x + m[4] * end.y + m[7]);
+	drawLine(Mat3().translate(transformedStart), transformedEnd - transformedStart,
+	         deprecatedLineWidth, color);
+}
+} // namespace
+
 void drawLine(const double xstart, const double ystart, const double xend, const double yend) {
-	pWindow->drawLine(jngl::modelview().translate(jngl::Vec2(xstart, ystart)),
-	                  jngl::Vec2(xend, yend) - jngl::Vec2(xstart, ystart), gShapeColor);
+	drawLineWithDeprecatedWidth(jngl::modelview().translate(jngl::Vec2(xstart, ystart)),
+	                            jngl::Vec2(xend, yend) - jngl::Vec2(xstart, ystart), gShapeColor);
 }
 
 void drawLine(const Vec2 start, const Vec2 end) {
-	pWindow->drawLine(jngl::modelview().translate(start), end - start, gShapeColor);
+	drawLineWithDeprecatedWidth(jngl::modelview().translate(start), end - start, gShapeColor);
 }
 
 void drawLine(const Vec2 start, const Vec2 end, float lineWidth) {
@@ -756,7 +867,7 @@ void drawLine(const Vec2 start, const Vec2 end, float lineWidth, Rgba color) {
 }
 
 void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end) {
-	pWindow->drawLine(modelview.translate(start), end - start, gShapeColor);
+	drawLineWithDeprecatedWidth(modelview.translate(start), end - start, gShapeColor);
 }
 
 void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end, float lineWidth) {
@@ -768,11 +879,11 @@ void drawLine(Mat3 modelview, const Vec2 start, const Vec2 end, float lineWidth,
 }
 
 void drawLine(const Mat3& modelview, const Vec2 end) {
-	pWindow->drawLine(modelview, end, gShapeColor);
+	drawLineWithDeprecatedWidth(modelview, end, gShapeColor);
 }
 
 void drawLine(const Mat3& modelview, const Vec2 end, Rgba color) {
-	pWindow->drawLine(modelview, end, color);
+	drawLineWithDeprecatedWidth(modelview, end, color);
 }
 
 void drawLine(Mat3 modelview, const Vec2 end, float lineWidth, Rgba color) {
@@ -794,6 +905,8 @@ void drawPoint(const double x, const double y) {
 }
 
 int getWindowWidth() {
+	// Not the actual pixels when the canvas is zoomed, but those that FrameBuffers use, so that
+	// FrameBuffer(getWindowSize()) still covers the whole screen:
 	return pWindow->getCanvasWidth();
 }
 
@@ -841,8 +954,11 @@ bool getAntiAliasing() {
 Finally loadSound(const std::string&); // definied in SoundFile.cpp
 
 Finally load(const std::string& filename) {
-	if (filename.length() >= 4 && filename.substr(filename.length() - 4) == ".ogg") {
-		return loadSound(filename);
+	if (filename.length() >= 4) {
+		const auto ext = filename.substr(filename.length() - 4);
+		if (ext == ".ogg" || ext == ".mp3" || ext == ".OGG" || ext == ".MP3") {
+			return loadSound(filename);
+		}
 	}
 	return loadSprite(filename);
 }
@@ -889,6 +1005,23 @@ void setConfigPath(const std::string& path) {
 	}
 }
 
+#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && !defined(IOS)
+namespace {
+/// The display name without characters that aren't allowed in a directory name on some platform
+std::string appDirectoryName() {
+	auto appDir = App::instance().getDisplayName();
+	std::string invalid_chars = "\\/:?\"<>|*";
+	for (const char c : invalid_chars) {
+		appDir.erase(std::remove(appDir.begin(), appDir.end(), c), appDir.end());
+	}
+	if (appDir.empty()) {
+		throw std::runtime_error("Invalid display name: " + App::instance().getDisplayName());
+	}
+	return appDir;
+}
+} // namespace
+#endif
+
 std::string internal::getConfigPath() {
 	if (configPath) {
 		return *configPath;
@@ -905,15 +1038,7 @@ std::string internal::getConfigPath() {
 #else
 	path << getenv("HOME") << "/.config/"; // NOLINT
 #endif
-	auto appDir = App::instance().getDisplayName();
-	std::string invalid_chars = "\\/:?\"<>|*";
-	for (const char c : invalid_chars) {
-		appDir.erase(std::remove(appDir.begin(), appDir.end(), c), appDir.end());
-	}
-	if (appDir.empty()) {
-		throw std::runtime_error("Invalid display name: " + App::instance().getDisplayName());
-	}
-	path << appDir << "/";
+	path << appDirectoryName() << "/";
 #endif
 	return *(configPath = path.str());
 #endif
@@ -923,6 +1048,33 @@ std::string internal::getConfigPath() {
 std::string getConfigPath() {
 	return internal::getConfigPath();
 }
+
+#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && (!defined(__APPLE__) || !TARGET_OS_IPHONE)
+void setDocumentsPath(const std::string& path) {
+	documentsPath = path;
+	if (documentsPath->empty() || documentsPath->back() != '/') {
+		*documentsPath += '/';
+	}
+}
+
+std::string getDocumentsPath() {
+	if (documentsPath) {
+		return *documentsPath;
+	}
+#ifdef _WIN32
+	return getSystemDocumentsPath() + "/" + appDirectoryName() + "/";
+#elif defined(__APPLE__)
+	return getSystemConfigPath() + "/" + appDirectoryName() + "/";
+#else
+	// $XDG_DATA_HOME, which is to be ignored unless it's an absolute path, or its default
+	if (const char* const dataHome = getenv("XDG_DATA_HOME"); // NOLINT
+	    dataHome && dataHome[0] == '/') {
+		return std::string(dataHome) + "/" + appDirectoryName() + "/";
+	}
+	return std::string(getenv("HOME")) + "/.local/share/" + appDirectoryName() + "/"; // NOLINT
+#endif
+}
+#endif
 
 std::stringstream readAsset(const std::string& filename) {
 	if (!filename.empty() && filename[0] == '/') {

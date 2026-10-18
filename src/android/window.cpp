@@ -20,7 +20,9 @@ Window::Window(const std::string& /*title*/, const int width, const int height,
 	UpdateInput();
 }
 
-Window::~Window() = default;
+Window::~Window() {
+	releaseResources();
+}
 
 int Window::GetKeyCode(key::KeyType key) {
 	return key;
@@ -56,23 +58,19 @@ void Window::SetRelativeMouseMode(const bool relative) {
 	impl->setRelativeMouseMode(relative);
 }
 
+void Window::setMouseConfined(const bool confined) {
+	mouseConfined = confined;
+}
+
 void Window::SetIcon(const std::string&) {
 }
 
-float Window::getResizedWindowScalingX() const {
-	return 1.f;
-}
-
-float Window::getResizedWindowScalingY() const {
-	return 1.f;
-}
-
 int getDesktopWidth() {
-	return pWindow ? pWindow->getWidth() : -1;
+	return pWindow ? pWindow->getActualWidth() : -1;
 }
 
 int getDesktopHeight() {
-	return pWindow ? pWindow->getHeight() : -1;
+	return pWindow ? pWindow->getActualHeight() : -1;
 }
 
 } // namespace jngl

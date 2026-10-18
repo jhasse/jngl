@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.16)
 
 project(jngl LANGUAGES C CXX)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5) # required for ogg, see https://github.com/jhasse/jngl/issues/107
@@ -20,13 +20,13 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
 	# emcc: error: sdl3 port is still experimental [-Wexperimental] [-Werror]
 	string(APPEND CMAKE_CXX_FLAGS " ${USE_FLAGS} -sNO_DISABLE_EXCEPTION_CATCHING -Wno-experimental")
 	string(APPEND CMAKE_C_FLAGS " ${USE_FLAGS} -Wno-experimental")
-	string(APPEND CMAKE_EXE_LINKER_FLAGS " ${USE_FLAGS} -sASSERTIONS=1 -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2 --preload-file data")
+	string(APPEND CMAKE_EXE_LINKER_FLAGS " -sASSERTIONS=1 --preload-file data")
 	set(CMAKE_EXECUTABLE_SUFFIX ".html")
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-file(GLOB SRC src/*.cpp src/jngl/*.cpp
+file(GLOB SRC CONFIGURE_DEPENDS src/*.cpp src/jngl/*.cpp
 	src/audio/*.cpp
 	src/audio/effect/*.cpp
 	src/timing/*.cpp
@@ -38,6 +38,13 @@ file(GLOB HEADERS src/*.hpp src/jngl/*.hpp)
 target_sources(jngl PRIVATE ${HEADERS})
 
 target_compile_features(jngl PUBLIC cxx_std_20)
+
+if(EMSCRIPTEN)
+	# PUBLIC so that executables of projects which use JNGL via add_subdirectory get these, too
+	target_compile_options(jngl PUBLIC -sNO_DISABLE_EXCEPTION_CATCHING)
+	target_link_options(jngl PUBLIC -sUSE_SDL=3 -sUSE_FREETYPE=1 -sUSE_VORBIS=1 -Wno-experimental
+	                    -sNO_DISABLE_EXCEPTION_CATCHING -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2)
+endif()
 
 if(JNGL_STEAMWORKS)
 	message(STATUS "Using Steam SDK: ${JNGL_STEAMWORKS}")
@@ -146,8 +153,19 @@ else() # Windows
 
 	target_compile_definitions(jngl PRIVATE _WIN32_WINNT=0x0A00 _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS UNICODE)
 	if(JNGL_WINAPI)
+		target_compile_definitions(jngl PRIVATE JNGL_WINAPI)
 		file(GLOB SRC src/win32/*.cpp src/xinput/XinputController.cpp)
 		target_link_libraries(jngl PRIVATE opengl32)
+		# The Windows SDK's xinput.lib is XInput 1.4, too
+		if(MINGW)
+			target_link_libraries(jngl PUBLIC xinput1_4)
+		else()
+			target_link_libraries(jngl PUBLIC xinput)
+			# xinput.lib lists the DLL's DllMain, which lld-link warns about
+			if(CMAKE_CXX_COMPILER_LINKER_ID STREQUAL "LLD")
+				target_link_options(jngl PUBLIC LINKER:/ignore:importeddllmain)
+			endif()
+		endif()
 	else()
 		file(GLOB SRC src/sdl/*.cpp)
 		target_sources(jngl PRIVATE src/sdl/controller/SdlController.cpp)
@@ -157,17 +175,10 @@ else() # Windows
 	target_sources(jngl PRIVATE ${SRC})
 	target_link_libraries(jngl PUBLIC winmm)
 	target_sources(jngl PRIVATE glad/src/wgl.c)
-	if(MSVC)
-		string(APPEND CMAKE_C_FLAGS " /D_CRT_SECURE_NO_WARNINGS")
-		string(APPEND CMAKE_CXX_FLAGS " /D_CRT_SECURE_NO_WARNINGS /D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING")
-		target_link_libraries(jngl PUBLIC Xinput)
-	else()
-		find_library(XINPUT_LIB xinput1_4)
-		if(NOT XINPUT_LIB)
-			message(WARNING "xinput1_4 not found, using generic version")
-			set(XINPUT_LIB xinput)
-		endif()
-		target_link_libraries(jngl PUBLIC ${XINPUT_LIB})
+	# Like MSVC (cl.exe and clang-cl), clang++ uses the Windows SDK's C runtime headers unless it
+	# targets MinGW. Also for the dependencies built from source below.
+	if(NOT MINGW)
+		add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 	endif()
 endif()
 
@@ -384,12 +395,10 @@ else()
 			if(JNGL_TRACE)
 				target_compile_definitions(jngl PUBLIC JNGL_TRACE)
 			endif()
-			if(NOT EMSCRIPTEN)
-				pkg_check_modules(VorbisFile REQUIRED vorbisfile)
-				pkg_check_modules(FREETYPE REQUIRED freetype2)
-			endif()
-		else()
-			if(NOT EMSCRIPTEN)
+		endif()
+		if(NOT EMSCRIPTEN)
+			pkg_check_modules(VorbisFile vorbisfile)
+			if(NOT VorbisFile_FOUND)
 				find_package(VorbisFile)
 				if(NOT VorbisFile_FOUND)
 					message(WARNING "VorbisFile not found, building from source")
@@ -397,6 +406,9 @@ else()
 					set(VorbisFile_INCLUDE_DIRS "")
 					set(VorbisFile_LIBRARIES "")
 				endif()
+			endif()
+			pkg_check_modules(FREETYPE freetype2)
+			if(NOT FREETYPE_FOUND)
 				find_package(Freetype)
 				if(NOT Freetype_FOUND)
 					message(WARNING "Freetype not found, building from source")
@@ -560,18 +572,55 @@ target_link_libraries(jngl PUBLIC ${FREETYPE_LIBRARIES})
 if(NOT hasParent)
 	include(CTest)
 	if(BUILD_TESTING)
-		file(GLOB UNITTEST_SRC src/unittest/*.cpp)
+		find_package(Catch2 3 CONFIG)
+		if(NOT Catch2_FOUND)
+			CPMAddPackage(NAME Catch2
+				URL https://github.com/catchorg/Catch2/archive/refs/tags/v3.14.0.tar.gz
+				URL_HASH SHA256=ba2a939efead3c833c499cf487e185762f419a71d30158cd1b43c6079c586490
+			)
+		endif()
+		file(GLOB UNITTEST_SRC CONFIGURE_DEPENDS src/unittest/*.cpp)
 		add_executable(jngl-unittest ${UNITTEST_SRC})
 		target_compile_features(jngl-unittest PRIVATE cxx_std_20)
-		target_link_libraries(jngl-unittest PRIVATE jngl)
-		target_compile_definitions(jngl-unittest PRIVATE BOOST_UT_DISABLE_MODULE)
+		target_link_libraries(jngl-unittest PRIVATE jngl Catch2::Catch2WithMain)
+		if(NOT EMSCRIPTEN AND NOT IOS)
+			# for tests including internal headers like window.hpp
+			target_include_directories(jngl-unittest PRIVATE glad/include)
+		endif()
 		add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
+
+		find_program(XVFB_RUN xvfb-run)
+		if(XVFB_RUN)
+			# SDL would prefer Wayland if WAYLAND_DISPLAY is set, which xvfb-run doesn't unset
+			add_custom_target(unittest-xvfb
+				COMMAND env SDL_VIDEO_DRIVER=x11
+				        ${XVFB_RUN} -a -s "-screen 0 2560x1440x24" $<TARGET_FILE:jngl-unittest>
+				DEPENDS jngl-unittest
+				WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+				USES_TERMINAL
+				VERBATIM)
+		endif()
 	endif()
 endif()
 
 option(JNGL_CLANG_TIDY "Run clang-tidy on source files" OFF)
 if(JNGL_CLANG_TIDY)
-	set_target_properties(jngl          PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color")
-	set_target_properties(jngl-test     PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color")
-	set_target_properties(jngl-unittest PROPERTIES CXX_CLANG_TIDY "clang-tidy;--use-color")
+	# CMake doesn't pass -std=gnu++20 for cxx_std_20 if the compiler defaults to it anyway (e.g. GCC
+	# 16), but clang-tidy would then use Clang's default, which is older.
+	#
+	# CPM dependencies often have their own src/ folder, which HeaderFilterRegex would match. Their
+	# location is only known here (CPM_SOURCE_CACHE can be anywhere), so exclude them on the command
+	# line. This overrides ExcludeHeaderFilterRegex from .clang-tidy, so repeat dr_mp3.h here.
+	set(CLANG_TIDY_EXCLUDE "/audio/dr_mp3\\.h$")
+	foreach(dir IN ITEMS "${FETCHCONTENT_BASE_DIR}" "${CPM_SOURCE_CACHE}")
+		if(dir)
+			string(REGEX REPLACE "([][.*+?^$(){}|\\])" "\\\\\\1" dir "${dir}")
+			string(APPEND CLANG_TIDY_EXCLUDE "|^${dir}/")
+		endif()
+	endforeach()
+	set(CLANG_TIDY_COMMAND
+	    "clang-tidy;--use-color;--extra-arg=-std=gnu++20;--exclude-header-filter=${CLANG_TIDY_EXCLUDE}")
+	set_target_properties(jngl          PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
+	set_target_properties(jngl-test     PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
+	set_target_properties(jngl-unittest PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
 endif()

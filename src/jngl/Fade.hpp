@@ -33,6 +33,13 @@ public:
 	void step() override;
 	void draw() const override;
 
+	/// Asks the Scene that's currently visible, i.e. the old one while fading out and the new one
+	/// while fading in
+	bool supportsScreenSize(Vec2) const override;
+
+	/// Passes this on to both Scenes
+	void onScreenSizeChanged() override;
+
 private:
 	void onQuitEvent() override;
 

@@ -247,6 +247,11 @@ void VideoRecorder::step() {
 }
 
 void VideoRecorder::draw() const {
+	if (!impl->nextFrameAudioSamples) {
+		// Added during the last step, after the audio engine had already been stepped, so it
+		// hasn't been switched over to us yet. Start with the next frame instead.
+		return;
+	}
 	assert(impl->codecContext->width == getWindowWidth());
 	assert(impl->codecContext->height == getWindowHeight());
 	readPixels(impl->backBuffer.get());

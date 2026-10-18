@@ -12,6 +12,10 @@
 #include <string>
 #include <vector>
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 namespace jngl {
 
 /// Returns true until the main window is closed or quit() has been called
@@ -86,8 +90,11 @@ bool getVerticalSync();
 /// Enables scissor testing, clipping all rendering to the rectangle from \a position to
 /// \a position + \a size in screen coordinates (with (0, 0) at the center of the screen)
 ///
-/// This is useful for letterboxing or split-screen multiplayer. Keep the returned Finally object
-/// alive while the scissor test should be active.
+/// This is useful for split-screen multiplayer or scrolling. Keep the returned Finally object
+/// alive while the scissor test should be active, and destroy nested ones innermost first: while
+/// one is inside another, what's drawn is clipped to where both overlap. Also while a FrameBuffer
+/// is used in between (see FrameBuffer::use()), where the rectangle is at the same place as it
+/// would be on the screen, with (0, 0) at the center of the FrameBuffer.
 Finally scissor(Vec2 position, Vec2 size);
 
 /// Sets the icon for the window (Desktop-only)
@@ -110,6 +117,25 @@ void setConfigPath(const std::string& path);
 /// - macOS: `~/Library/Application Support/Display Name/`
 /// - Android/iOS: Data path provided by the OS
 [[deprecated("use jngl::writeConfig and jngl::readConfig instead")]] std::string getConfigPath();
+
+#if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && (!defined(__APPLE__) || !TARGET_OS_IPHONE)
+/// Returns the directory where to store files the user may want to find, share or back up
+/// themselves, e.g. replays, save games or maps they've made, ending with a slash.
+///
+/// The same folder other games use for that, e.g. StarCraft II:
+/// - Windows: `Documents/Display Name/`, wherever the Documents folder is (e.g. moved by OneDrive)
+/// - Linux: `$XDG_DATA_HOME/Display Name/`, i.e. `~/.local/share/Display Name/` by default
+/// - macOS: `~/Library/Application Support/Display Name/`, as accessing `~/Documents` would ask the
+///   user for permission first. This is the same directory as getConfigPath().
+///
+/// Only available on desktop platforms. The directory may not exist yet. See setDocumentsPath() for
+/// another one.
+std::string getDocumentsPath();
+
+/// Use \a path rather than the directory above for getDocumentsPath() from now on, e.g. a fresh one
+/// for each test. It may be called before the window's been created, unlike getDocumentsPath().
+void setDocumentsPath(const std::string& path);
+#endif
 
 /// Returns the directory of the currently running binary
 std::string getBinaryPath();

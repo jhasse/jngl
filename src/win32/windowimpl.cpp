@@ -43,6 +43,7 @@ public:
 	std::function<void()> distinguishLeftRight;
 	Window* window = nullptr;
 	std::atomic_bool clearInputAfterFocusLoss{false};
+	bool cursorClipped = false;
 
 	static void ReleaseDC(HWND, HDC);
 	static void ReleaseRC(HGLRC);
@@ -68,6 +69,22 @@ public:
 			}
 			clearInputAfterFocusLoss = true;
 		}
+	}
+
+	/// Confines the cursor to the client area while the window is in the foreground, see
+	/// jngl::setMouseConfined. Called every frame as the window might have been moved or resized.
+	void updateCursorClip() {
+		HWND hwnd = pWindowHandle_.get();
+		const bool clip = window->mouseConfined && GetForegroundWindow() == hwnd;
+		if (clip) {
+			RECT rect;
+			GetClientRect(hwnd, &rect);
+			MapWindowPoints(hwnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
+			ClipCursor(&rect);
+		} else if (cursorClipped) {
+			ClipCursor(nullptr);
+		}
+		cursorClipped = clip;
 	}
 };
 
@@ -168,9 +185,9 @@ Window::Window(const std::string& title, const int width, const int height, cons
 		DWORD dwStyle;
 		RECT WindowRect;
 		WindowRect.left = 0;
-		WindowRect.right = width_;
+		WindowRect.right = actualWidth;
 		WindowRect.top = 0;
-		WindowRect.bottom = height_;
+		WindowRect.bottom = actualHeight;
 
 		HINSTANCE hInstance = GetModuleHandle(nullptr);
 		wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
@@ -220,8 +237,8 @@ Window::Window(const std::string& title, const int width, const int height, cons
 			DEVMODE devmode;
 			memset(&devmode, 0, sizeof(devmode));
 			devmode.dmSize = sizeof(devmode);
-			devmode.dmPelsWidth = width_;
-			devmode.dmPelsHeight = height_;
+			devmode.dmPelsWidth = actualWidth;
+			devmode.dmPelsHeight = actualHeight;
 			devmode.dmBitsPerPel = 32;
 			devmode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
@@ -315,12 +332,13 @@ Window::Window(const std::string& title, const int width, const int height, cons
 
 		::ShowWindow(impl->pWindowHandle_.get(), SW_SHOWNORMAL);
 
-		App::instance().initGl(width_, height_, canvasWidth, canvasHeight);
+		initGl();
 	};
 	init(false);
 }
 
 Window::~Window() {
+	releaseResources();
 	if (fullscreen_) {
 		ChangeDisplaySettings(nullptr, 0);
 	}
@@ -470,10 +488,11 @@ void Window::UpdateInput() {
 		DispatchMessage(&msg);
 	}
 	if (relativeMouseMode && !impl->touchscreenActive) {
-		SetMouse(width_ / 2, height_ / 2);
-		mousex_ -= width_ / 2;
-		mousey_ -= height_ / 2;
+		SetMouse(actualWidth / 2, actualHeight / 2);
+		mousex_ -= actualWidth / 2;
+		mousey_ -= actualHeight / 2;
 	}
+	impl->updateCursorClip();
 	if (impl->clearInputAfterFocusLoss) {
 		impl->clearInputAfterFocusLoss = false;
 		for (auto& it : keyDown_) {
@@ -637,7 +656,8 @@ int Window::getMouseX() const {
 		return mousex_ - impl->relativeX;
 	}
 	assert(impl->relativeX == 0);
-	return mousex_ - (width_ - canvasWidth) / 2;
+	const auto pos = toWindowCoordinates(static_cast<float>(mousex_), static_cast<float>(mousey_));
+	return static_cast<int>(std::lround(pos.x)) - (width_ - canvasWidth) / 2;
 }
 
 int Window::getMouseY() const {
@@ -645,7 +665,8 @@ int Window::getMouseY() const {
 		return mousey_ - impl->relativeY;
 	}
 	assert(impl->relativeY == 0);
-	return mousey_ - (height_ - canvasHeight) / 2;
+	const auto pos = toWindowCoordinates(static_cast<float>(mousex_), static_cast<float>(mousey_));
+	return static_cast<int>(std::lround(pos.y)) - (height_ - canvasHeight) / 2;
 }
 
 void Window::SetMouse(const int xposition, const int yposition) {
@@ -664,12 +685,17 @@ void Window::SetRelativeMouseMode(bool relative) {
 			impl->relativeX = mousex_;
 			impl->relativeY = mousey_;
 		} else {
-			SetMouse(width_ / 2, height_ / 2);
+			SetMouse(actualWidth / 2, actualHeight / 2);
 			impl->relativeX = impl->relativeY = mousex_ = mousey_ = 0;
 		}
 	} else {
 		impl->relativeX = impl->relativeY = 0;
 	}
+}
+
+void Window::setMouseConfined(const bool confined) {
+	mouseConfined = confined;
+	impl->updateCursorClip();
 }
 
 void Window::SetIcon(const std::string& filename) {
@@ -739,14 +765,6 @@ void Window::stopTextInputSession() {
 
 void Window::setTextInputArea(Rect, double) {
 	// TODO: reposition the IME candidate window, see ImmSetCandidateWindow
-}
-
-float Window::getResizedWindowScalingX() const {
-	return 1.f;
-}
-
-float Window::getResizedWindowScalingY() const {
-	return 1.f;
 }
 
 std::string getPreferredLanguage() {

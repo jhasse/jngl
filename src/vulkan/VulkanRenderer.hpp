@@ -16,6 +16,7 @@
 #include <array>
 #include <cstdint>
 #include <functional>
+#include <optional>
 #include <vector>
 #include <vulkan/vulkan.h>
 
@@ -94,6 +95,10 @@ public:
 	/// Draw a textured primitive (\a xyuv: interleaved x, y, u, v) modulated by \a color.
 	void drawSprite(const VulkanTexture&, const float* xyuv, std::size_t vertexCount, PrimitiveType,
 	                const Mat3& modelview, Rgba color);
+	/// Draw a textured primitive with each of its channels (RGBA) mixed towards \a lerpColor (and
+	/// an alpha of 0) by \a lerpFactors, like OpenGL's texture shader does.
+	void drawSprite(const VulkanTexture&, const float* xyuv, std::size_t vertexCount, PrimitiveType,
+	                const Mat3& modelview, Rgb lerpColor, std::array<float, 4> lerpFactors);
 
 	/// Reads back a \a width x \a height region of the current frame as tightly packed RGB bytes,
 	/// bottom row first (matching OpenGL's glReadPixels). Flushes the pending draws first.
@@ -147,30 +152,30 @@ public:
 	void updateLetterboxing(int framebufferWidth, int framebufferHeight, int canvasWidth,
 	                        int canvasHeight);
 
-	/// OpenGL-style scissor box (origin bottom-left) for the active clip region, if any.
+	/// OpenGL-style scissor box (origin bottom-left) in the pixels of the current render target
 	struct ScissorBox {
-		bool enabled = false;
 		int x = 0;
 		int y = 0;
 		int width = 0;
 		int height = 0;
 	};
-	[[nodiscard]] ScissorBox getScissorBox() const;
-	void pushUserScissor(int x, int y, int width, int height);
-	void restoreUserScissor(const ScissorBox& saved);
+	/// Clips drawing to \a box (see jngl::applyScissor), or only to the window's letterboxing
+	void setScissor(std::optional<ScissorBox> box);
 	[[nodiscard]] int getFramebufferWidth() const;
 	[[nodiscard]] int getFramebufferHeight() const;
 
 private:
 	void applyScissor(VkCommandBuffer cmd, VkExtent2D extent) const;
+	void applyViewport(VkCommandBuffer cmd, VkExtent2D extent) const;
 	void clearSwapchainCanvas(const Rgb& color);
 	void syncLetterboxScissor();
 	[[nodiscard]] VkRect2D effectiveScissor(VkExtent2D extent) const;
+	/// The swapchain's extent, or the FrameBuffer's that's drawn on
+	[[nodiscard]] VkExtent2D currentRenderTargetExtent() const;
 	[[nodiscard]] VkRect2D letterboxScissorForExtent(VkExtent2D extent) const;
 	[[nodiscard]] static VkRect2D intersectScissors(VkRect2D a, VkRect2D b);
 	[[nodiscard]] static VkRect2D glScissorToVulkan(int glX, int glY, int glW, int glH,
 	                                                int framebufferHeight);
-	[[nodiscard]] ScissorBox scissorBoxFromVulkan(VkRect2D rect, int framebufferHeight) const;
 	void queryMsaaSupport();
 	[[nodiscard]] bool swapchainMsaaActive() const;
 	void createMsaaAttachments();
@@ -366,7 +371,7 @@ private:
 	int canvasWidth = 0;
 	int canvasHeight = 0;
 	bool letterboxing = false;
-	std::vector<VkRect2D> userScissorStack;
+	std::optional<ScissorBox> userScissor;
 
 	Mat4 projection;
 	Rgb currentClearColor{ 0, 0, 0 }; // swapchain clear color for the current frame

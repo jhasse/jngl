@@ -15,6 +15,9 @@ void Job::onFileDrop(const std::filesystem::path&) {
 void Job::onControllersChanged() {
 }
 
+void Job::onScreenSizeChanged() {
+}
+
 void addJob(std::shared_ptr<Job> job) {
 	pWindow->addJob(std::move(job));
 }

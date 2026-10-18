@@ -3,7 +3,10 @@
 
 #include "Fixture.hpp"
 
-#include <boost/ut.hpp>
+#include "../main.hpp"
+
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <cmath>
 #include <jngl.hpp>
 #include <jngl/AppParameters.hpp>
@@ -11,13 +14,21 @@
 
 Fixture::Fixture(const double scaleFactor) {
 	jngl::hideWindow();
-	jngl::setHighPixelDensityEnabled(false);
+	// The ASCII art needs an exact window size in actual pixels, regardless of the display's scale
+	jngl::internal::setHighDpi(false);
+	const double width = 320 * scaleFactor;
+	const double height = 70 * scaleFactor;
+	// The window manager would shrink the window otherwise
+	if (width > jngl::getDesktopWidth() || height > jngl::getDesktopHeight()) {
+		SKIP("Desktop (" << jngl::getDesktopWidth() << "x" << jngl::getDesktopHeight()
+		                 << ") too small for a " << width << "x" << height << " window");
+	}
 	jngl::setScaleFactor(scaleFactor);
-	jngl::showWindow("unit test", 320 * scaleFactor, 70 * scaleFactor, false, { 32, 7 }, { 32, 7 });
-	reset();
-	emptyAsciiArt = getAsciiArt();
-	using namespace boost::ut; // NOLINT
-	expect(eq(emptyAsciiArt, std::string(R"(
+	jngl::showWindow("unit test", width, height, false, { 32, 7 }, { 32, 7 });
+	try {
+		reset();
+		emptyAsciiArt = getAsciiArt();
+		REQUIRE(emptyAsciiArt == R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 ▒                              ▒
 ▒                              ▒
@@ -25,12 +36,15 @@ Fixture::Fixture(const double scaleFactor) {
 ▒                              ▒
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
-)")));
+)");
+	} catch (...) {
+		jngl::hideWindow();
+		throw;
+	}
 }
 
 Fixture::~Fixture() {
 	jngl::hideWindow();
-	jngl::setHighPixelDensityEnabled(true);
 }
 
 std::string Fixture::getAsciiArt() const {
@@ -42,11 +56,10 @@ std::string Fixture::getAsciiArt() const {
 	// account:
 	auto reduceFactorAsFloat = static_cast<float>(10 * jngl::getScaleFactor());
 	int reduceFactor = static_cast<int>(std::lround(reduceFactorAsFloat));
-	using namespace boost::ut; // NOLINT
-	expect(approx(reduceFactorAsFloat, reduceFactor, 1e-6));
+	REQUIRE_THAT(reduceFactorAsFloat, Catch::Matchers::WithinAbs(reduceFactor, 1e-6));
 
-	expect(eq(w % reduceFactor, 0));
-	expect(eq(h % reduceFactor, 0));
+	REQUIRE(w % reduceFactor == 0);
+	REQUIRE(h % reduceFactor == 0);
 	size_t reducedW = w / reduceFactor;
 	std::vector<std::vector<std::vector<float>>> reduced;
 	size_t index = 0;
@@ -64,11 +77,11 @@ std::string Fixture::getAsciiArt() const {
 			}
 		}
 	}
-	expect(eq(index, buffer.size()));
-	assert(reduced.size() == size_t(h / reduceFactor));
-	std::string out = "\n"; // Start with a newline for prettier output by Boost.Test
+	REQUIRE(index == buffer.size());
+	REQUIRE(reduced.size() == size_t(h / reduceFactor));
+	std::string out = "\n"; // Start with a newline so that the ASCII art lines up in test output
 	for (const auto& row : std::ranges::reverse_view(reduced)) {
-		assert(row.size() == reducedW);
+		REQUIRE(row.size() == reducedW);
 		for (const auto& cell : row) {
 			// ASCII:
 			// const static std::vector<std::string> chars = { "@", "#", "%", "x", "o",
@@ -79,7 +92,7 @@ std::string Fixture::getAsciiArt() const {
 
 			float gray = (cell.at(0) + cell.at(1) + cell.at(2)) / 3.0f;
 			const size_t index = std::lround(gray * static_cast<float>(chars.size() - 1));
-			assert(index < chars.size());
+			REQUIRE(index < chars.size());
 			out += chars[index];
 		}
 		out += "\n";

@@ -27,7 +27,10 @@ double getScreenHeight();
 /// jngl::getScaleFactor(). So it takes AppParameters::scaleFactor into account, as well as a
 /// window whose shape AppParameters::minAspectRatio and maxAspectRatio let differ from
 /// AppParameters::screenSize. Where it matches AppParameters::screenSize, that is returned
-/// exactly, without rounding errors. It doesn't change once the window has been created.
+/// exactly, without rounding errors.
+///
+/// It doesn't change once the window has been created, unless the active Scene returns true from
+/// Scene::supportsScreenSize(). Job::onScreenSizeChanged() gets called in that case.
 ///
 /// \throws std::runtime_error if the window hasn't been created yet
 Vec2 getScreenSize();

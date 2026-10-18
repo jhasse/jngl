@@ -1,4 +1,4 @@
-// Copyright 2010-2024 Jan Niklas Hasse <jhasse@bixense.com>
+// Copyright 2010-2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
@@ -10,7 +10,9 @@
 namespace jngl {
 
 struct Vertex;
+class Alpha;
 class Mat3;
+class Rgb;
 class Rgba;
 struct VulkanTexture;
 
@@ -22,7 +24,9 @@ public:
 	        // Channel type of the texture's storage. Pass GL_HALF_FLOAT for an HDR texture with
 	        // floating point channels (used by the high precision FrameBuffer); the default stores
 	        // each channel as an 8-bit integer mapped to the range [0, 1].
-	        GLenum type = GL_UNSIGNED_BYTE);
+	        GLenum type = GL_UNSIGNED_BYTE,
+	        // Generate a mipmap chain and sample it when the texture is minified.
+	        bool mipmap = false);
 	Texture(const Texture&) = delete;
 	Texture& operator=(const Texture&) = delete;
 	Texture(Texture&&) = delete;
@@ -35,6 +39,11 @@ public:
 	/// built-in texture shader. This is the backend-neutral path (required by the Vulkan backend,
 	/// which can't rely on ambient shader state like the OpenGL backend does).
 	void draw(const Mat3& modelview, Rgba color) const;
+
+	/// Like draw(const Mat3&, Rgba), but mixes each channel towards \a color, see
+	/// Sprite::drawLerped
+	void drawLerped(const Mat3& modelview, Rgb color, float red, float green, float blue,
+	                Alpha alpha) const;
 	void drawClipped(float xstart, float xend, float ystart, float yend, float red, float green,
 	                 float blue, float alpha) const;
 	void drawMesh(const std::vector<Vertex>& vertexes) const;

@@ -46,7 +46,8 @@
 
 namespace jngl {
 
-Sprite::Sprite(const ImageData& imageData, double scale, std::optional<std::string_view> filename) {
+Sprite::Sprite(const ImageData& imageData, double scale, std::optional<std::string_view> filename,
+               const bool mipmap) {
 	if (!pWindow) {
 		throw std::runtime_error("Window hasn't been created yet.");
 	}
@@ -54,30 +55,42 @@ Sprite::Sprite(const ImageData& imageData, double scale, std::optional<std::stri
 	height = scale * imageData.getHeight();
 	texture = filename ? TextureCache::handle().get(*filename) : nullptr;
 	if (!texture) {
-		texture = std::make_shared<Texture>(
-		    static_cast<int>(std::lround(width)), static_cast<int>(std::lround(height)),
-		    imageData.getWidth(), imageData.getHeight(), nullptr, GL_RGBA, imageData.pixels());
+		texture = std::make_shared<Texture>(static_cast<int>(std::lround(width)),
+		                                    static_cast<int>(std::lround(height)),
+		                                    imageData.getWidth(), imageData.getHeight(), nullptr,
+		                                    GL_RGBA, imageData.pixels(), GL_UNSIGNED_BYTE, mipmap);
 		setCenter(0, 0);
 		if (filename) {
 			TextureCache::handle().insert(*filename, texture);
 		}
+	} else if (mipmap) {
+		enableMipmaps();
 	}
 }
 
-Sprite::Sprite(const uint8_t* const bytes, const size_t width, const size_t height) {
+Sprite::Sprite(const uint8_t* const bytes, const size_t width, const size_t height,
+               const bool mipmap) {
 	if (!pWindow) {
 		throw std::runtime_error("Window hasn't been created yet.");
 	}
-	texture = std::make_shared<Texture>(width, height, static_cast<int>(width),
-	                                    static_cast<int>(height), nullptr, GL_RGBA, bytes);
+	texture =
+	    std::make_shared<Texture>(width, height, static_cast<int>(width), static_cast<int>(height),
+	                              nullptr, GL_RGBA, bytes, GL_UNSIGNED_BYTE, mipmap);
 	this->width = static_cast<float>(width);
 	this->height = static_cast<float>(height);
 	setCenter(0, 0);
 }
 
-Sprite::Sprite(const std::string& filename, LoadType loadType)
+Sprite::Sprite(const std::string& filename, const bool mipmap)
+: Sprite(filename, LoadType::NORMAL, mipmap) {
+}
+
+Sprite::Sprite(const std::string& filename, LoadType loadType, const bool mipmap)
 : texture(TextureCache::handle().get(filename)) {
 	if (texture) {
+		if (mipmap) {
+			enableMipmaps();
+		}
 		width = texture->getPreciseWidth();
 		height = texture->getPreciseHeight();
 		setCenter(0, 0);
@@ -97,7 +110,7 @@ Sprite::Sprite(const std::string& filename, LoadType loadType)
 #endif
 		".bmp"
 	};
-	std::function<Finally(Sprite*, std::string, FILE*, bool)> functions[] = {
+	std::function<Finally(Sprite*, std::string, FILE*, bool, bool)> functions[] = {
 #ifndef NOWEBP
 		&Sprite::LoadWebP,
 #endif
@@ -107,7 +120,7 @@ Sprite::Sprite(const std::string& filename, LoadType loadType)
 		&Sprite::LoadBMP
 	};
 	const size_t size = sizeof(extensions) / sizeof(extensions[0]);
-	std::function<Finally(Sprite*, std::string, FILE*, bool)> loadFunction;
+	std::function<Finally(Sprite*, std::string, FILE*, bool, bool)> loadFunction;
 	for (size_t i = 0; i < size; ++i) {
 #if __cplusplus < 202002L
 		if (boost::algorithm::ends_with(fullFilename, extensions[i])) {
@@ -144,7 +157,8 @@ Sprite::Sprite(const std::string& filename, LoadType loadType)
 	if (pFile == nullptr) {
 		throw std::runtime_error(std::string("File not found: " + fullFilename));
 	}
-	auto loadTexture = std::make_shared<Finally>(loadFunction(this, filename, pFile, halfLoad));
+	auto loadTexture =
+	    std::make_shared<Finally>(loadFunction(this, filename, pFile, halfLoad, mipmap));
 	loader = std::make_shared<Finally>([pFile, loadTexture, this]() mutable {
 		loadTexture.reset(); // call ~Finally
 		if (fclose(pFile) != 0) {
@@ -155,6 +169,24 @@ Sprite::Sprite(const std::string& filename, LoadType loadType)
 	if (loadType != LoadType::THREADED) {
 		loader.reset();
 	}
+}
+
+void Sprite::enableMipmaps() {
+	if (!texture) {
+		return;
+	}
+#ifdef JNGL_VULKAN
+	// TODO: Generate mipmaps on the Vulkan backend
+#else
+	glBindTexture(GL_TEXTURE_2D, texture->getID());
+	GLint minFilter = 0;
+	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &minFilter);
+	if (minFilter == GL_LINEAR_MIPMAP_LINEAR) {
+		return;
+	}
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+#endif
 }
 
 void Sprite::step() {
@@ -266,8 +298,7 @@ void Sprite::draw() const {
 	texture->draw(opengl::modelview, gSpriteColor);
 #else
 	auto context = ShaderCache::handle().textureShaderProgram->use();
-	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-	            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+	ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 	glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 	texture->draw();
 #endif
@@ -285,8 +316,21 @@ void Sprite::draw(Mat3 modelview, Rgba color) const {
 	texture->draw(modelview, color);
 #else
 	auto context = ShaderCache::handle().textureShaderProgram->use();
-	glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(), color.getGreen(),
-	            color.getBlue(), color.getAlpha());
+	ShaderCache::handle().setTextureColorUniforms(color);
+	glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
+	texture->draw();
+#endif
+}
+
+void Sprite::drawLerped(Mat3 modelview, const Rgb color, const float red, const float green,
+                        const float blue, const Alpha alpha) const {
+	modelview *= boost::qvm::translation_mat(
+	    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. }));
+#ifdef JNGL_VULKAN
+	texture->drawLerped(modelview, color, red, green, blue, alpha);
+#else
+	auto context = ShaderCache::handle().textureShaderProgram->use();
+	ShaderCache::handle().setTextureLerpUniforms(color, red, green, blue, alpha);
 	glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	texture->draw();
 #endif
@@ -311,8 +355,8 @@ void Sprite::draw(Mat3 modelview, Alpha alpha, const ShaderProgram* const shader
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), alpha.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(
+		    Rgba(gSpriteColor.getRed(), gSpriteColor.getGreen(), gSpriteColor.getBlue(), alpha));
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	texture->draw();
@@ -336,8 +380,7 @@ void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   opengl::modelview.data);
 	}
@@ -394,8 +437,7 @@ auto Sprite::batch(const ShaderProgram* const shaderProgram) const -> Batch {
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (!shaderProgram) {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 	}
 	texture->bind();
 	return Batch{ std::make_unique<Batch::Impl>(Batch::Impl{
@@ -426,8 +468,7 @@ void Sprite::drawScaled(float xfactor, float yfactor,
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   opengl::modelview.data);
 	}
@@ -477,8 +518,7 @@ void Sprite::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, color.getRed(),
-		            color.getGreen(), color.getBlue(), color.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(color);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	texture->drawMesh(vertexes);
@@ -506,8 +546,7 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
 		                   opengl::modelview.data);
 	} else {
-		glUniform4f(ShaderCache::handle().shaderSpriteColorUniform, gSpriteColor.getRed(),
-		            gSpriteColor.getGreen(), gSpriteColor.getBlue(), gSpriteColor.getAlpha());
+		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
 		                   opengl::modelview.data);
 	}
@@ -524,14 +563,13 @@ void Sprite::setBytes(const unsigned char* const bytes) {
 const Shader& Sprite::vertexShader() {
 #ifdef JNGL_VULKAN
 	// The built-in sprite vertex shader, written for Vulkan: it takes the combined modelview *
-	// projection matrix and the color as push constants (matching VulkanRenderer's textured
-	// pipeline) and passes the texture coordinates through to the fragment shader.
+	// projection matrix as a push constant (matching VulkanRenderer's textured pipeline) and passes
+	// the texture coordinates through to the fragment shader.
 	static Shader shader(R"(#version 450
 layout(location = 0) in vec2 position;
 layout(location = 1) in vec2 inTexCoord;
 layout(push_constant) uniform Push {
 	mat4 mvp;
-	vec4 color;
 } pc;
 layout(location = 0) out vec2 texCoord;
 void main() {
@@ -546,7 +584,8 @@ void main() {
 }
 
 #ifndef NOPNG
-Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad) {
+Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool halfLoad,
+                        const bool mipmap) {
 	const unsigned int PNG_BYTES_TO_CHECK = 4;
 	png_byte buf[PNG_BYTES_TO_CHECK];
 
@@ -602,7 +641,8 @@ Finally Sprite::LoadPNG(const std::string& filename, FILE* const fp, const bool 
 	const auto scaledHeight = static_cast<int>(png_get_image_height(png_ptr, info_ptr));
 	width = static_cast<float>(scaledWidth * getScaleFactor());
 	height = static_cast<float>(scaledHeight * getScaleFactor());
-	loadTexture(scaledWidth, scaledHeight, filename, halfLoad, format, rowPointers);
+	loadTexture(scaledWidth, scaledHeight, filename, halfLoad, format, rowPointers, nullptr,
+	            mipmap);
 	return Finally(nullptr);
 }
 #endif
@@ -613,7 +653,8 @@ void Sprite::cleanUpRowPointers(std::vector<unsigned char*>& buf) {
 	}
 }
 
-Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad) {
+Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool halfLoad,
+                        const bool mipmap) {
 	if (fseek(fp, 10, SEEK_SET) != 0) {
 		throw std::runtime_error(std::string("Error seeking file. (" + filename + ")"));
 	}
@@ -664,17 +705,19 @@ Finally Sprite::LoadBMP(const std::string& filename, FILE* const fp, const bool 
 	}
 	width = static_cast<float>(header.width * getScaleFactor());
 	height = static_cast<float>(header.height * getScaleFactor());
-	loadTexture(header.width, header.height, filename, halfLoad, GL_BGR, buf.data());
+	loadTexture(header.width, header.height, filename, halfLoad, GL_BGR, buf.data(), nullptr,
+	            mipmap);
 	return Finally(nullptr);
 }
 #ifndef NOWEBP
-Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool halfLoad) {
+Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool halfLoad,
+                         const bool mipmap) {
 	auto imageData = std::make_shared<ImageDataWebP>(filename, file, getScaleFactor());
 	width = static_cast<float>(imageData->getImageWidth() * getScaleFactor());
 	height = static_cast<float>(imageData->getImageHeight() * getScaleFactor());
-	return Finally([imageData = std::move(imageData), filename, halfLoad, this]() mutable {
+	return Finally([imageData = std::move(imageData), filename, halfLoad, mipmap, this]() mutable {
 		loadTexture(imageData->getWidth(), imageData->getHeight(), filename, halfLoad, GL_RGBA,
-		            nullptr, imageData->pixels());
+		            nullptr, imageData->pixels(), mipmap);
 	});
 }
 #endif
@@ -682,7 +725,7 @@ Finally Sprite::LoadWebP(const std::string& filename, FILE* file, const bool hal
 void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, const std::string& filename,
                          const bool halfLoad, const unsigned int format,
                          const unsigned char* const* const rowPointers,
-                         const unsigned char* const data) {
+                         const unsigned char* const data, const bool mipmap) {
 	if (!pWindow) {
 		if (halfLoad) {
 			return;
@@ -690,7 +733,7 @@ void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, const st
 		throw std::runtime_error(std::string("Window hasn't been created yet. (" + filename + ")"));
 	}
 	texture = std::make_shared<Texture>(width, height, scaledWidth, scaledHeight, rowPointers,
-	                                    format, data);
+	                                    format, data, GL_UNSIGNED_BYTE, mipmap);
 	TextureCache::handle().insert(filename, texture);
 }
 
@@ -712,36 +755,13 @@ Finally disableBlending() {
 }
 
 Finally setBlendMode(const BlendMode mode) {
-#ifdef JNGL_VULKAN
-	auto& renderer = static_cast<VulkanRenderer&>(getRenderer());
-	const auto previous = renderer.getSpriteBlend();
-	renderer.setSpriteBlend(mode == BlendMode::Premultiplied
-	                            ? VulkanRenderer::SpriteBlend::Premultiplied
-	                            : VulkanRenderer::SpriteBlend::Composite);
-	return Finally([&renderer, previous]() { renderer.setSpriteBlend(previous); });
-#else
-	GLint sourceRgb = 0;
-	GLint destinationRgb = 0;
-	GLint sourceAlpha = 0;
-	GLint destinationAlpha = 0;
-	glGetIntegerv(GL_BLEND_SRC_RGB, &sourceRgb);
-	glGetIntegerv(GL_BLEND_DST_RGB, &destinationRgb);
-	glGetIntegerv(GL_BLEND_SRC_ALPHA, &sourceAlpha);
-	glGetIntegerv(GL_BLEND_DST_ALPHA, &destinationAlpha);
-	switch (mode) {
-	case BlendMode::Composite:
-		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-		break;
-	case BlendMode::Premultiplied:
-		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-		break;
-	}
-	return Finally([=]() {
-		glBlendFuncSeparate(static_cast<GLenum>(sourceRgb), static_cast<GLenum>(destinationRgb),
-		                    static_cast<GLenum>(sourceAlpha),
-		                    static_cast<GLenum>(destinationAlpha));
+	const auto previous = gBlendMode;
+	gBlendMode = mode;
+	applyBlendMode();
+	return Finally([previous]() {
+		gBlendMode = previous;
+		applyBlendMode();
 	});
-#endif
 }
 
 Finally drawOnlyIntoAlphaChannel() {

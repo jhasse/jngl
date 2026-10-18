@@ -36,6 +36,7 @@ public:
 		/// Sets the Context's associated ShaderProgram's uniform
 		/// @param location see ShaderProgram::getUniformLocation(const std::string&)
 		static void setUniform(int location, int v0);
+		static void setUniform(int location, float v0);
 		static void setUniform(int location, float v0, float v1);
 		static void setUniform(int location, float v0, float v1, float v2, float v3);
 

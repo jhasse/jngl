@@ -7,14 +7,22 @@
 #include "../log.hpp"
 #include "../window.hpp"
 
+#include <vector>
+
 namespace jngl {
 WindowImpl::WindowImpl(Window* w) : window(w) {
 	internal::debug("init with Window: {:x} this: {:x}", reinterpret_cast<uintptr_t>(window),
 	                reinterpret_cast<uintptr_t>(this));
 }
 
-void WindowImpl::handleTouch(const std::pair<intptr_t, Vec2>* const positions, const size_t count,
-                             const Touch type) {
+void WindowImpl::handleTouch(const std::pair<intptr_t, Vec2>* const actualPositions,
+                             const size_t count, const Touch type) {
+	// Convert from actual pixels of the (maybe rotated) view to the coordinates of the Window:
+	std::vector<std::pair<intptr_t, Vec2>> converted(actualPositions, actualPositions + count);
+	for (auto& [id, pos] : converted) {
+		pos = window->toWindowCoordinates(static_cast<float>(pos.x), static_cast<float>(pos.y));
+	}
+	const auto* const positions = converted.data();
 	for (size_t i = 0; i < count; ++i) {
 		switch (type) {
 		case Touch::BEGAN:

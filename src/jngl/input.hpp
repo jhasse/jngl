@@ -183,6 +183,17 @@ void setRelativeMouseMode(bool relative);
 /// Whether relative mouse mode is currently active
 bool getRelativeMouseMode();
 
+/// Keeps the mouse cursor from leaving the window, e.g. for scrolling by moving the mouse to the
+/// edge of the screen when the window doesn't cover all of it
+///
+/// Only has an effect while the window has focus, so switching to another window (e.g. with
+/// <kbd>Alt</kbd>+<kbd>Tab</kbd>) frees the cursor until the window gets focus again. Stays in
+/// effect when the window is recreated. Does nothing on platforms without a mouse cursor.
+void setMouseConfined(bool confined);
+
+/// Whether setMouseConfined(true) has been called, regardless of the window having focus
+bool isMouseConfined();
+
 /// By default the mouse cursor of the OS is visible and can be hidden by passing false
 void setMouseVisible(bool visible);
 

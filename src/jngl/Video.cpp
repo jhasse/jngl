@@ -6,7 +6,7 @@
 
 #ifdef JNGL_VIDEO
 
-#include "../audio.hpp"
+#include "../audio/Stream.hpp"
 #include "../audio/constants.hpp"
 #include "../audio/effect/pitch.hpp"
 #include "../log.hpp"
@@ -20,31 +20,106 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cassert>
 #include <cmath>
-#include <cstring>
 #include <gsl/narrow>
 #include <mutex>
+#include <vector>
 
 namespace jngl {
 
-class Video::Impl : public Stream {
+namespace {
+
+// The mixer can retain this stream after Video has released its GL resources.
+class VideoStream : public Stream {
 public:
-	explicit Impl(const std::string& filename)
-	: decoder(THEORAPLAY_startDecodeFile((pathPrefix + filename).c_str(), BUFFER_SIZE,
-	                                     THEORAPLAY_VIDFMT_IYUV)),
-	  startTime(-getTime()) {
+	VideoStream(const std::string& filename, unsigned int bufferSize)
+	: decoder(THEORAPLAY_startDecodeFile((pathPrefix + filename).c_str(), bufferSize,
+	                                     THEORAPLAY_VIDFMT_IYUV),
+	          THEORAPLAY_stopDecode) {
 		if (!decoder) {
 			throw std::runtime_error("Failed to start decoding " + filename + "!");
 		}
+	}
 
+	THEORAPLAY_Decoder* getDecoder() const {
+		return decoder.get();
+	}
+
+	void start() {
+		started = true;
+	}
+
+	void stop() {
+		removeFromMixer = true;
+	}
+
+	void queueAudio(const THEORAPLAY_AudioPacket& audio) {
+		std::scoped_lock lock(audioBufferMutex);
+		if (audio.channels == 1) {
+			for (int i = 0; i < audio.frames; ++i) {
+				audioBuffer.push_back(audio.samples[i]);
+				audioBuffer.push_back(audio.samples[i]);
+			}
+		} else {
+			assert(audio.channels == 2);
+			audioBuffer.insert(audioBuffer.end(), audio.samples,
+			                   audio.samples + static_cast<ptrdiff_t>(audio.frames * 2));
+		}
+	}
+
+	void rewind() override {
+		assert(false);
+	}
+
+	bool isPlaying() const override {
+		return !removeFromMixer && THEORAPLAY_isDecoding(decoder.get());
+	}
+
+	size_t read(float* data, size_t sample_count) override {
+		if (removeFromMixer) {
+			return 0;
+		}
+		std::scoped_lock lock(audioBufferMutex);
+		if (audioBuffer.size() < sample_count) {
+			if (!isPlaying()) {
+				return 0;
+			}
+			if (started) {
+				internal::warn("Audio buffer underrun!");
+			}
+			std::fill_n(data, sample_count, 0.f);
+			return sample_count;
+		}
+		const auto begin = audioBuffer.begin();
+		const auto end = begin + static_cast<ptrdiff_t>(sample_count);
+		std::copy(begin, end, data);
+		audioBuffer.erase(begin, end);
+		return sample_count;
+	}
+
+private:
+	std::unique_ptr<THEORAPLAY_Decoder, decltype(&THEORAPLAY_stopDecode)> decoder;
+	std::mutex audioBufferMutex;
+	std::vector<float> audioBuffer;
+	std::atomic_bool started{ false };
+	std::atomic_bool removeFromMixer{ false };
+};
+
+} // namespace
+
+class Video::Impl {
+public:
+	explicit Impl(const std::string& filename)
+	: stream(std::make_shared<VideoStream>(filename, BUFFER_SIZE)), startTime(-getTime()) {
 		while (!video) {
-			video = THEORAPLAY_getVideo(decoder);
+			video = THEORAPLAY_getVideo(stream->getDecoder());
 		}
 		timePerFrame = 1. / video->fps;
 		assert(timePerFrame > 0);
 
 		while (!audio) {
-			audio = THEORAPLAY_getAudio(decoder);
+			audio = THEORAPLAY_getAudio(stream->getDecoder());
 		}
 	}
 
@@ -55,16 +130,18 @@ public:
 	void draw() {
 		if (!started()) {
 			const double timeBuffering = getTime() + startTime;
-			if (timeBuffering > 5 || THEORAPLAY_availableVideo(decoder) >= BUFFER_SIZE ||
-			    THEORAPLAY_threadDone(decoder)) {
+			if (timeBuffering > 5 ||
+			    THEORAPLAY_availableVideo(stream->getDecoder()) >= BUFFER_SIZE ||
+			    THEORAPLAY_threadDone(stream->getDecoder())) {
 				internal::debug("Buffering took {:.2f} seconds ({} frames).", timeBuffering,
-				                THEORAPLAY_availableVideo(decoder));
+				                THEORAPLAY_availableVideo(stream->getDecoder()));
 				startTime = getTime();
+				stream->start();
 			}
 		}
 		double now = getTime() - startTime;
 		if (started() && !video) {
-			video = THEORAPLAY_getVideo(decoder);
+			video = THEORAPLAY_getVideo(stream->getDecoder());
 		}
 		if (!shaderProgram || (video && static_cast<double>(video->playms) / 1000. <= now)) {
 			if (started() && now - static_cast<double>(video->playms) / 1000. >= timePerFrame) {
@@ -72,7 +149,7 @@ public:
 				// series of dupe frames, which means we'd have to draw that final frame and then
 				// wait for more.
 				std::unique_ptr<const THEORAPLAY_VideoFrame> last = std::move(video);
-				while ((video = THEORAPLAY_getVideo(decoder)) != nullptr) {
+				while ((video = THEORAPLAY_getVideo(stream->getDecoder())) != nullptr) {
 					internal::warn("Skipped frame at {}ms.", last->playms);
 					last = std::move(video);
 					if (now - static_cast<double>(last->playms) / 1000. < timePerFrame) {
@@ -223,7 +300,7 @@ public:
 		}
 		if (started()) {
 			if (!audio) {
-				audio = THEORAPLAY_getAudio(decoder);
+				audio = THEORAPLAY_getAudio(stream->getDecoder());
 			}
 			while (audio) {
 				queueAudio();
@@ -247,12 +324,19 @@ public:
 		}
 	}
 
-	[[nodiscard]] bool isPlaying() const override {
-		return THEORAPLAY_isDecoding(decoder);
+	[[nodiscard]] bool isPlaying() const {
+		return THEORAPLAY_isDecoding(stream->getDecoder());
 	}
 
-	~Impl() override {
-		THEORAPLAY_stopDecode(decoder);
+	~Impl() {
+		stream->stop();
+		if (shaderProgram) {
+			glDeleteTextures(1, &textureY);
+			glDeleteTextures(1, &textureU);
+			glDeleteTextures(1, &textureV);
+			glDeleteBuffers(1, &vertexBuffer);
+			opengl::deleteVertexArray(vao);
+		}
 	}
 
 	Impl(const Impl&) = delete;
@@ -263,62 +347,23 @@ public:
 	[[nodiscard]] int getWidth() const { return gsl::narrow<int>(video->width); }
 	[[nodiscard]] int getHeight() const { return gsl::narrow<int>(video->height); }
 
-	std::atomic_bool removeFromMixer{ false };
+	std::shared_ptr<Stream> getStream() const {
+		return stream;
+	}
 
 private:
 	[[nodiscard]] bool started() const {
 		return startTime > 0;
 	}
 
-	void rewind() override {
-		assert(false);
-	}
-
 	void queueAudio() {
-		{
-			std::scoped_lock lock(audioBufferMutex);
-			if (audio->channels == 1) {
-				for (int i = 0; i < audio->frames; ++i) {
-					audioBuffer.push_back(audio->samples[i]);
-					audioBuffer.push_back(audio->samples[i]);
-				}
-			} else {
-				assert(audio->channels == 2);
-				audioBuffer.insert(audioBuffer.end(), audio->samples,
-				                   audio->samples + static_cast<ptrdiff_t>(audio->frames * 2));
-			}
-		}
-		audio = THEORAPLAY_getAudio(decoder);
+		stream->queueAudio(*audio);
+		audio = THEORAPLAY_getAudio(stream->getDecoder());
 	}
-
-	size_t read(float * data, size_t sample_count) override {
-		if (removeFromMixer) {
-			return 0;
-		}
-		std::scoped_lock lock(audioBufferMutex);
-		if (audioBuffer.size() < sample_count) {
-			if (!isPlaying()) {
-				return 0;
-			}
-			if (started()) {
-				internal::warn("Audio buffer underrun!");
-			}
-			std::memset(data, 0, sample_count);
-			return sample_count;
-		}
-		const auto begin = audioBuffer.begin();
-		const auto end = begin + static_cast<long>(sample_count);
-		std::copy(begin, end, data);
-		audioBuffer.erase(begin, end);
-		return sample_count;
-	}
-
-	std::mutex audioBufferMutex;
-	std::vector<float> audioBuffer;
 
 	constexpr static unsigned int BUFFER_SIZE = 200;
 
-	THEORAPLAY_Decoder* decoder;
+	std::shared_ptr<VideoStream> stream;
 	std::unique_ptr<const THEORAPLAY_VideoFrame> video;
 	std::unique_ptr<const THEORAPLAY_AudioPacket> audio;
 	double startTime;
@@ -333,18 +378,16 @@ private:
 	GLuint vertexBuffer = 0;
 };
 
-Video::Video(const std::string& filename) : impl(std::make_shared<Impl>(filename)) {
+Video::Video(const std::string& filename) : impl(std::make_unique<Impl>(filename)) {
 	if (impl->getFrequency() != audio::frequency) {
-		Channel::main().add(
-		    audio::pitch(impl, static_cast<float>(impl->getFrequency()) / audio::frequency));
+		Channel::main().add(audio::pitch(
+		    impl->getStream(), static_cast<float>(impl->getFrequency()) / audio::frequency));
 	} else {
-		Channel::main().add(impl);
+		Channel::main().add(impl->getStream());
 	}
 }
 
-Video::~Video() {
-	impl->removeFromMixer = true;
-}
+Video::~Video() = default;
 
 void Video::draw() const {
 	impl->draw();

@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "window.hpp"
 
+#include "App.hpp"
 #include "FontImpl.hpp"
 #include "Renderer.hpp"
 #include "ShaderCache.hpp"
@@ -13,7 +14,9 @@
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/font.hpp"
 #include "jngl/other.hpp"
+#include "jngl/screen.hpp"
 #include "log.hpp"
+#include "main.hpp"
 #include "windowptr.hpp"
 
 #ifdef JNGL_RECORD
@@ -31,11 +34,22 @@
 #endif
 
 #include <algorithm>
-#include <gsl/narrow>
+#include <csignal>
 #include <ranges>
+#include <tuple>
 #include <thread>
 
 namespace jngl {
+
+#ifndef __EMSCRIPTEN__
+namespace {
+volatile std::sig_atomic_t gGotSigint = 0;
+} // namespace
+
+extern "C" void jngl_on_sigint(int) {
+	gGotSigint = 1;
+}
+#endif
 
 ScaleablePixels Window::getTextWidth(const std::string& text) {
 	return static_cast<ScaleablePixels>(fonts_[fontSize_][fontName_]->getTextWidth(text));
@@ -144,6 +158,18 @@ bool Window::getRelativeMouseMode() const {
 	return relativeMouseMode;
 }
 
+void Window::releaseResources() {
+	currentWork_.reset();
+	newWork_.reset();
+	jobs.clear();
+	jobsToAdd.clear();
+	fonts_.clear();
+}
+
+bool Window::getMouseConfined() const {
+	return mouseConfined;
+}
+
 void Window::increaseMouseHiddenCount() {
 	if (mouseHiddenCount == 0) {
 		setMouseVisible(false);
@@ -165,6 +191,22 @@ int Window::getCanvasWidth() const {
 
 int Window::getCanvasHeight() const {
 	return canvasHeight;
+}
+
+int Window::getActualWidth() const {
+	return actualWidth;
+}
+
+int Window::getActualHeight() const {
+	return actualHeight;
+}
+
+int Window::getActualCanvasWidth() const {
+	return actualCanvasWidth;
+}
+
+int Window::getActualCanvasHeight() const {
+	return actualCanvasHeight;
 }
 
 int Window::getWidth() const {
@@ -312,7 +354,11 @@ uint8_t Window::mainLoop() {
 	g_jnglMainLoop =
 	    [this]() {
 #else
+	// Only while in our main loop, as it's the one checking gGotSigint (see sdlInit)
+	gGotSigint = 0;
+	const auto previousSigintHandler = std::signal(SIGINT, jngl_on_sigint);
 	Finally _([&]() {
+		std::signal(SIGINT, previousSigintHandler);
 		newWork_.reset();
 		currentWork_.reset();
 	});
@@ -347,16 +393,17 @@ void Window::setStepsPerSecond(const unsigned int stepsPerSecond) {
 }
 
 void Window::stepIfNeeded() {
-	unsigned int stepsToDo = frameLimiter.check();
-#ifdef JNGL_RECORD
-	if (getJob([](Job& job) { return dynamic_cast<VideoRecorder*>(&job); })) {
-		stepsToDo = 1; // don't skip frames when recording video
-	}
-#endif
+	const unsigned int stepsToDo = frameLimiter.check();
 	for (unsigned int i = 0; i < stepsToDo; ++i) {
 		++internal::gFrameNumber; // for logging
 		updateKeyStates();
 		UpdateInput();
+#ifndef __EMSCRIPTEN__
+		if (gGotSigint != 0 && !forceExitCode) {
+			forceQuit(130);
+		}
+#endif
+		updateScreenSize();
 #ifdef JNGL_PERFORMANCE_OVERLAY
 		auto start = std::chrono::steady_clock::now();
 #endif
@@ -364,9 +411,13 @@ void Window::stepIfNeeded() {
 		for (const auto& job : jobs) {
 			job->step();
 		}
-		for (auto& job : jobsToAdd) {
+		// By index and by copy, as a job's step() may add another one (addJob), which would
+		// invalidate iterators and references into jobsToAdd. That one gets stepped and added
+		// to jobs, too.
+		for (size_t i = 0; i < jobsToAdd.size(); ++i) { // NOLINT(modernize-loop-convert)
+			const auto job = jobsToAdd[i];
 			job->step();
-			jobs.emplace_back(std::move(job));
+			jobs.emplace_back(job);
 		}
 		jobsToAdd.clear();
 
@@ -408,6 +459,17 @@ void Window::stepIfNeeded() {
 				currentWork_->onQuitEvent();
 			}
 		}
+		updateScreenSize(); // the active Scene might have changed or changed its mind
+#ifdef JNGL_RECORD
+		// Don't skip frames when recording video. While a VideoRecorder is active, the audio
+		// engine passes the sound samples of each step to it (see
+		// VideoRecorder::fillAudioBuffer), which encodes them together with the frame captured
+		// by its next draw(). So there must be exactly one step per draw(), also when the
+		// VideoRecorder has only just been added during this step, e.g. by a Job.
+		if (jngl::getJob<VideoRecorder>()) {
+			break;
+		}
+#endif
 	}
 }
 
@@ -552,42 +614,189 @@ std::string Window::getTextInput() const {
 	return textInput;
 }
 
+namespace {
+/// The canvas' size for \a exact actual pixels of the \a actual ones, with bars of whole pixels on
+/// both sides, so that it starts at the edge of a pixel rather than in its middle. Otherwise
+/// everything drawn at whole pixels of the canvas, e.g. text, would fall in between the actual
+/// ones, and get sampled unevenly.
+int withWholePixelBars(const int actual, const double exact) {
+	return std::max(1, actual - 2 * static_cast<int>(std::lround((actual - exact) / 2)));
+}
+
+/// Letter-boxes \a width x \a height to the aspect ratios
+std::pair<int, int> fitToAspectRatios(const int width, const int height,
+                                      const std::pair<int, int> minAspectRatio,
+                                      const std::pair<int, int> maxAspectRatio) {
+	if (minAspectRatio.first * height > minAspectRatio.second * width) {
+		// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
+		const double canvasHeight = static_cast<double>(minAspectRatio.second * width) /
+		                            static_cast<double>(minAspectRatio.first);
+		return { width, withWholePixelBars(height, canvasHeight) };
+	}
+	if (maxAspectRatio.first * height < maxAspectRatio.second * width) {
+		// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
+		const double canvasWidth = static_cast<double>(maxAspectRatio.first * height) /
+		                           static_cast<double>(maxAspectRatio.second);
+		return { withWholePixelBars(width, canvasWidth), height };
+	}
+	return { width, height };
+}
+} // namespace
+
 void Window::calculateCanvasSize(const std::pair<int, int> minAspectRatio,
                                  const std::pair<int, int> maxAspectRatio) {
-	canvasWidth = width_;
-	canvasHeight = height_;
-	if (minAspectRatio.first * height_ > minAspectRatio.second * width_) {
-		// Are we below the minimal aspect ratio? -> Letterboxing at the top and bottom
-		canvasHeight =
-		    gsl::narrow<int>(std::lround(static_cast<float>(minAspectRatio.second * width_) /
-		                                 static_cast<float>(minAspectRatio.first)));
-	} else if (maxAspectRatio.first * height_ < maxAspectRatio.second * width_) {
-		// Are we above the maximal aspect ratio? -> Letterboxing at the left and right
-		canvasWidth =
-		    gsl::narrow<int>(std::lround(static_cast<float>(maxAspectRatio.first * height_) /
-		                                 static_cast<float>(maxAspectRatio.second)));
-	}
+	this->minAspectRatio = minAspectRatio;
+	this->maxAspectRatio = maxAspectRatio;
+	actualWidth = width_;
+	actualHeight = height_;
+	canvasCandidates.clear();
+
+	// AppParameters::scaleFactor gets the size of the letter-boxed canvas, so that what's shown at
+	// first is sharp. As the scale factor can't change anymore, the canvas gets zoomed should the
+	// active Scene support filling the whole window (see Scene::supportsScreenSize).
+	const auto [letterboxedWidth, letterboxedHeight] =
+	    fitToAspectRatios(width_, height_, minAspectRatio, maxAspectRatio);
+	setScaleFactor(App::instance().getScaleFactorFor(letterboxedWidth, letterboxedHeight));
+	originalCanvas = calculateCanvas(true);
+	width_ = originalCanvas.width;
+	height_ = originalCanvas.height;
+	canvasWidth = originalCanvas.canvasWidth;
+	canvasHeight = originalCanvas.canvasHeight;
 	if (canvasWidth != width_ || canvasHeight != height_) {
 		internal::debug("Letterboxing to {}x{}.", canvasWidth, canvasHeight);
 	}
+	std::tie(actualCanvasWidth, actualCanvasHeight) =
+	    fitToAspectRatios(actualWidth, actualHeight, minAspectRatio, maxAspectRatio);
+}
+
+Window::Canvas Window::calculateCanvas(const bool letterboxed) const {
+	const auto [actualCanvasWidth, actualCanvasHeight] =
+	    letterboxed ? fitToAspectRatios(actualWidth, actualHeight, minAspectRatio, maxAspectRatio)
+	                : std::pair{ actualWidth, actualHeight };
+	const double zoom =
+	    App::instance().getScaleFactorFor(actualCanvasWidth, actualCanvasHeight) / getScaleFactor();
+	const auto unzoom = [zoom](const int actualPixels) {
+		return std::max(1, static_cast<int>(std::lround(actualPixels / zoom)));
+	};
+	return { unzoom(actualWidth), unzoom(actualHeight), unzoom(actualCanvasWidth),
+		     unzoom(actualCanvasHeight) };
+}
+
+void Window::initGl() {
+	App::instance().initGl();
+	updateLetterboxing();
+}
+
+void Window::updateLetterboxing() {
+	// The scale factor can't change anymore, so we keep the canvas and its aspect ratio and only
+	// stretch it to fit into the actual window (e.g. when unfolding a foldable).
+	const double scale = std::min(static_cast<double>(actualWidth) / canvasWidth,
+	                              static_cast<double>(actualHeight) / canvasHeight);
+	actualCanvasWidth = withWholePixelBars(actualWidth, canvasWidth * scale);
+	actualCanvasHeight = withWholePixelBars(actualHeight, canvasHeight * scale);
+	updateProjection(
+	    actualWidth, actualHeight,
+	    static_cast<float>(static_cast<double>(actualWidth) * canvasWidth / actualCanvasWidth),
+	    static_cast<float>(static_cast<double>(actualHeight) * canvasHeight / actualCanvasHeight));
+	App::instance().updateProjectionMatrix();
+	updateViewportAndLetterboxing(actualWidth, actualHeight, actualCanvasWidth, actualCanvasHeight);
+
+	// Backends convert the text input area using the values updated above, so the area we passed
+	// to the OS before is stale now:
+	internal::reapplyTextInputArea();
+}
+
+void Window::setActualSize(const int width, const int height) {
+	if (width <= 0 || height <= 0) {
+		return; // e.g. minimized
+	}
+	if (width == actualWidth && height == actualHeight) {
+		return;
+	}
+	internal::debug("Window resized from {}x{} to {}x{}.", actualWidth, actualHeight, width,
+	                height);
+	actualWidth = width;
+	actualHeight = height;
+	canvasCandidates.clear();
+	updateLetterboxing();
+}
+
+void Window::updateScreenSize() {
+	if (actualWidth <= 0 || originalCanvas.canvasWidth <= 0) {
+		return;
+	}
+	if (canvasCandidates.empty()) {
+		for (const bool letterboxed : { false, true }) {
+			const auto candidate = calculateCanvas(letterboxed);
+			if (candidate == originalCanvas) {
+				break; // no need to ask, see below
+			}
+			if (std::ranges::find_if(canvasCandidates, [&candidate](const auto& existing) {
+				return existing == candidate;
+			}) == canvasCandidates.end()) {
+				canvasCandidates.emplace_back(candidate);
+			}
+		}
+		canvasCandidates.emplace_back(originalCanvas); // always supported
+	}
+	Canvas next = originalCanvas;
+	for (const auto& candidate : canvasCandidates) {
+		if (candidate == originalCanvas ||
+		    (currentWork_ &&
+		     currentWork_->supportsScreenSize({ candidate.canvasWidth / getScaleFactor(),
+		                                        candidate.canvasHeight / getScaleFactor() }))) {
+			next = candidate;
+			break;
+		}
+	}
+	if (next == Canvas{ width_, height_, canvasWidth, canvasHeight }) {
+		return;
+	}
+	internal::debug("Changing canvas from {}x{} to {}x{}.", canvasWidth, canvasHeight,
+	                next.canvasWidth, next.canvasHeight);
+	width_ = next.width;
+	height_ = next.height;
+	canvasWidth = next.canvasWidth;
+	canvasHeight = next.canvasHeight;
+	updateLetterboxing();
+	for (const auto* const container : { &jobs, &jobsToAdd }) {
+		for (const auto& job : *container) {
+			job->onScreenSizeChanged();
+		}
+	}
+	if (currentWork_) {
+		currentWork_->onScreenSizeChanged();
+	}
+}
+
+Vec2 Window::toWindowCoordinates(const float x, const float y) const {
+	return {
+		(x - static_cast<float>(actualWidth - actualCanvasWidth) / 2.f) *
+		        static_cast<float>(canvasWidth) / static_cast<float>(actualCanvasWidth) +
+		    static_cast<float>(width_ - canvasWidth) / 2.f,
+		(y - static_cast<float>(actualHeight - actualCanvasHeight) / 2.f) *
+		        static_cast<float>(canvasHeight) / static_cast<float>(actualCanvasHeight) +
+		    static_cast<float>(height_ - canvasHeight) / 2.f,
+	};
+}
+
+float Window::getResizedWindowScalingX() const {
+	return static_cast<float>(static_cast<double>(actualWidth) / actualCanvasWidth * canvasWidth /
+	                          width_);
+}
+
+float Window::getResizedWindowScalingY() const {
+	return static_cast<float>(static_cast<double>(actualHeight) / actualCanvasHeight *
+	                          canvasHeight / height_);
 }
 
 void Window::initGlObjects() {
 	glGenBuffers(1, &opengl::vboStream);
 	glGenVertexArrays(1, &opengl::vaoStream);
 
-	glGenVertexArrays(1, &vaoLine);
-	opengl::bindVertexArray(vaoLine);
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	const static float line[] = { 0, 0, 1, 1 };
-	glBufferData(GL_ARRAY_BUFFER, sizeof(line), line, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(0);
-
 	glGenVertexArrays(1, &vaoSquare);
 	opengl::bindVertexArray(vaoSquare);
+	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	const static float rect[] = { -.5, -.5, .5, -.5, .5, .5, -.5, .5 };
@@ -600,11 +809,6 @@ void Window::initGlObjects() {
 	systemFramebuffer = tmp;
 	glGetIntegerv(GL_RENDERBUFFER_BINDING, &tmp);
 	systemRenderbuffer = tmp;
-}
-
-void Window::drawLine(Mat3 modelview, const Vec2 b, const Rgba color) const {
-	const float vertexes[] = { 0.f, 0.f, 1.f, 1.f };
-	getRenderer().drawColored(PrimitiveType::Lines, vertexes, 2, modelview.scale(b), color);
 }
 
 void Window::drawSquare(const Mat3& modelview, Rgba color) const {
