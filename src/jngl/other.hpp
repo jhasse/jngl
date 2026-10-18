@@ -128,8 +128,13 @@ void setConfigPath(const std::string& path);
 /// - macOS: `~/Library/Application Support/Display Name/`, as accessing `~/Documents` would ask the
 ///   user for permission first. This is the same directory as getConfigPath().
 ///
-/// Only available on desktop platforms. The directory may not exist yet.
+/// Only available on desktop platforms. The directory may not exist yet. See setDocumentsPath() for
+/// another one.
 std::string getDocumentsPath();
+
+/// Use \a path rather than the directory above for getDocumentsPath() from now on, e.g. a fresh one
+/// for each test. It may be called before the window's been created, unlike getDocumentsPath().
+void setDocumentsPath(const std::string& path);
 #endif
 
 /// Returns the directory of the currently running binary

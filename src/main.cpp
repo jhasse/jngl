@@ -62,6 +62,7 @@ namespace jngl {
 
 std::string pathPrefix;
 optional<std::string> configPath;
+optional<std::string> documentsPath; ///< see setDocumentsPath()
 Rgb backgroundColor(1, 1, 1);
 std::stack<jngl::Mat3> modelviewStack;
 
@@ -956,7 +957,17 @@ std::string getConfigPath() {
 }
 
 #if !defined(ANDROID) && !defined(__EMSCRIPTEN__) && (!defined(__APPLE__) || !TARGET_OS_IPHONE)
+void setDocumentsPath(const std::string& path) {
+	documentsPath = path;
+	if (documentsPath->empty() || documentsPath->back() != '/') {
+		*documentsPath += '/';
+	}
+}
+
 std::string getDocumentsPath() {
+	if (documentsPath) {
+		return *documentsPath;
+	}
 #ifdef _WIN32
 	return getSystemDocumentsPath() + "/" + appDirectoryName() + "/";
 #elif defined(__APPLE__)
