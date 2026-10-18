@@ -20,6 +20,7 @@
 #include <SDL3/SDL_vulkan.h>
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <cassert>
 #include <cstring>
 #include <limits>
@@ -2403,12 +2404,17 @@ void VulkanRenderer::submitOneTime(const std::function<void(VkCommandBuffer)>& r
 	vkFreeCommandBuffers(device, commandPool, 1, &cmd);
 }
 
-std::unique_ptr<VulkanTexture> VulkanRenderer::createTexture(const int width, const int height,
-                                                             const unsigned int format,
-                                                             const unsigned int type,
-                                                             const unsigned char* const data,
-                                                             const unsigned char* const* const
-                                                                 rowPointers) {
+namespace {
+/// Number of levels down to 1x1, like glGenerateMipmap creates
+uint32_t mipLevelCount(const int width, const int height) {
+	return static_cast<uint32_t>(std::bit_width(static_cast<uint32_t>(std::max(width, height))));
+}
+} // namespace
+
+std::unique_ptr<VulkanTexture>
+VulkanRenderer::createTexture(const int width, const int height, const unsigned int format,
+                              const unsigned int type, const unsigned char* const data,
+                              const unsigned char* const* const rowPointers, const bool mipmap) {
 	internal::StartupProfiler _{ "createTexture" };
 	if (type != glUnsignedByte || (format != glRGBA && format != glRGB && format != glBGR)) {
 		internal::error("Vulkan backend: unsupported texture format/type (0x{:x}/0x{:x}).", format,
@@ -2419,28 +2425,7 @@ std::unique_ptr<VulkanTexture> VulkanRenderer::createTexture(const int width, co
 	auto texture = std::make_unique<VulkanTexture>();
 	texture->width = width;
 	texture->height = height;
-
-	VkImageCreateInfo imageInfo{ .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO };
-	imageInfo.imageType = VK_IMAGE_TYPE_2D;
-	imageInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
-	imageInfo.extent = { static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1 };
-	imageInfo.mipLevels = 1;
-	imageInfo.arrayLayers = 1;
-	imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-	imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-	imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-	imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	VK_CHECK(vkCreateImage(device, &imageInfo, nullptr, &texture->image), "vkCreateImage");
-
-	VkMemoryRequirements memReq;
-	vkGetImageMemoryRequirements(device, texture->image, &memReq);
-	VkMemoryAllocateInfo allocInfo{ .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
-	allocInfo.allocationSize = memReq.size;
-	allocInfo.memoryTypeIndex =
-	    findMemoryType(memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-	VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &texture->memory), "vkAllocateMemory");
-	VK_CHECK(vkBindImageMemory(device, texture->image, texture->memory, 0), "vkBindImageMemory");
+	createTextureImage(*texture, mipmap ? mipLevelCount(width, height) : 1);
 
 	if (data || rowPointers) {
 		updateTextureBytes(*texture, width, height,
@@ -2454,7 +2439,7 @@ std::unique_ptr<VulkanTexture> VulkanRenderer::createTexture(const int width, co
 			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.image = texture->image;
-			barrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+			barrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, texture->mipLevels, 0, 1 };
 			barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 			vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
 			                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1,
@@ -2462,12 +2447,47 @@ std::unique_ptr<VulkanTexture> VulkanRenderer::createTexture(const int width, co
 		});
 	}
 
+	createTextureDescriptor(*texture);
+	return texture;
+}
+
+void VulkanRenderer::createTextureImage(VulkanTexture& texture, const uint32_t mipLevels) {
+	texture.mipLevels = mipLevels;
+	VkImageCreateInfo imageInfo{ .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO };
+	imageInfo.imageType = VK_IMAGE_TYPE_2D;
+	imageInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+	imageInfo.extent = { static_cast<uint32_t>(texture.width),
+		                 static_cast<uint32_t>(texture.height), 1 };
+	imageInfo.mipLevels = mipLevels;
+	imageInfo.arrayLayers = 1;
+	imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+	imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+	// TRANSFER_SRC for generating the mipmaps, and for copying the pixels to a new image when
+	// they're enabled later on, see enableMipmaps. VK_FORMAT_R8G8B8A8_UNORM always supports
+	// linear blits.
+	imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+	                  VK_IMAGE_USAGE_SAMPLED_BIT;
+	imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	VK_CHECK(vkCreateImage(device, &imageInfo, nullptr, &texture.image), "vkCreateImage");
+
+	VkMemoryRequirements memReq;
+	vkGetImageMemoryRequirements(device, texture.image, &memReq);
+	VkMemoryAllocateInfo allocInfo{ .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
+	allocInfo.allocationSize = memReq.size;
+	allocInfo.memoryTypeIndex =
+	    findMemoryType(memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &texture.memory), "vkAllocateMemory");
+	VK_CHECK(vkBindImageMemory(device, texture.image, texture.memory, 0), "vkBindImageMemory");
+}
+
+void VulkanRenderer::createTextureDescriptor(VulkanTexture& texture) {
 	VkImageViewCreateInfo viewInfo{ .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO };
-	viewInfo.image = texture->image;
+	viewInfo.image = texture.image;
 	viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
 	viewInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
-	viewInfo.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
-	VK_CHECK(vkCreateImageView(device, &viewInfo, nullptr, &texture->view), "vkCreateImageView");
+	viewInfo.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, texture.mipLevels, 0, 1 };
+	VK_CHECK(vkCreateImageView(device, &viewInfo, nullptr, &texture.view), "vkCreateImageView");
 
 	const VkFilter filter = App::isPixelArt() ? VK_FILTER_NEAREST : VK_FILTER_LINEAR;
 	VkSamplerCreateInfo samplerInfo{ .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO };
@@ -2476,30 +2496,78 @@ std::unique_ptr<VulkanTexture> VulkanRenderer::createTexture(const int width, co
 	samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 	samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 	samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-	VK_CHECK(vkCreateSampler(device, &samplerInfo, nullptr, &texture->sampler), "vkCreateSampler");
+	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR; // like GL_LINEAR_MIPMAP_LINEAR
+	samplerInfo.maxLod = static_cast<float>(texture.mipLevels - 1);
+	VK_CHECK(vkCreateSampler(device, &samplerInfo, nullptr, &texture.sampler), "vkCreateSampler");
 
 	VkDescriptorSetAllocateInfo dsAlloc{ .sType =
 		                                     VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
 	dsAlloc.descriptorPool = descriptorPool;
 	dsAlloc.descriptorSetCount = 1;
 	dsAlloc.pSetLayouts = &texturedSetLayout;
-	VK_CHECK(vkAllocateDescriptorSets(device, &dsAlloc, &texture->descriptorSet),
+	VK_CHECK(vkAllocateDescriptorSets(device, &dsAlloc, &texture.descriptorSet),
 	         "vkAllocateDescriptorSets");
 
 	VkDescriptorImageInfo imgInfo{};
-	imgInfo.sampler = texture->sampler;
-	imgInfo.imageView = texture->view;
+	imgInfo.sampler = texture.sampler;
+	imgInfo.imageView = texture.view;
 	imgInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 	VkWriteDescriptorSet write{ .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
-	write.dstSet = texture->descriptorSet;
+	write.dstSet = texture.descriptorSet;
 	write.dstBinding = 0;
 	write.descriptorCount = 1;
 	write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 	write.pImageInfo = &imgInfo;
 	vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+}
 
-	return texture;
+void VulkanRenderer::recordMipmapGeneration(const VkCommandBuffer cmd,
+                                            const VulkanTexture& texture) {
+	VkImageMemoryBarrier barrier{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+	barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	barrier.image = texture.image;
+	barrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+	auto width = static_cast<int32_t>(texture.width);
+	auto height = static_cast<int32_t>(texture.height);
+	for (uint32_t level = 1; level < texture.mipLevels; ++level) {
+		// The previous level has been written, now it's read from
+		barrier.subresourceRange.baseMipLevel = level - 1;
+		barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+		barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+		vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0,
+		                     0, nullptr, 0, nullptr, 1, &barrier);
+
+		const int32_t nextWidth = std::max(width / 2, 1);
+		const int32_t nextHeight = std::max(height / 2, 1);
+		VkImageBlit blit{};
+		blit.srcSubresource = { VK_IMAGE_ASPECT_COLOR_BIT, level - 1, 0, 1 };
+		blit.srcOffsets[1] = { width, height, 1 };
+		blit.dstSubresource = { VK_IMAGE_ASPECT_COLOR_BIT, level, 0, 1 };
+		blit.dstOffsets[1] = { nextWidth, nextHeight, 1 };
+		vkCmdBlitImage(cmd, texture.image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, texture.image,
+		               VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, VK_FILTER_LINEAR);
+
+		barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+		barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		barrier.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+		barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TRANSFER_BIT,
+		                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1,
+		                     &barrier);
+		width = nextWidth;
+		height = nextHeight;
+	}
+	// The last level has only been written
+	barrier.subresourceRange.baseMipLevel = texture.mipLevels - 1;
+	barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+	barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+	barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+	                     0, 0, nullptr, 0, nullptr, 1, &barrier);
 }
 
 void VulkanRenderer::updateTextureBytes(VulkanTexture& texture, const int width, const int height,
@@ -2534,7 +2602,7 @@ void VulkanRenderer::updateTextureBytes(VulkanTexture& texture, const int width,
 		toTransfer.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 		toTransfer.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 		toTransfer.image = texture.image;
-		toTransfer.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		toTransfer.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, texture.mipLevels, 0, 1 };
 		toTransfer.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 		vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
 		                     0, 0, nullptr, 0, nullptr, 1, &toTransfer);
@@ -2544,6 +2612,10 @@ void VulkanRenderer::updateTextureBytes(VulkanTexture& texture, const int width,
 		region.imageExtent = { static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1 };
 		vkCmdCopyBufferToImage(cmd, staging, texture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1,
 		                       &region);
+		if (texture.mipLevels > 1) {
+			recordMipmapGeneration(cmd, texture);
+			return;
+		}
 
 		VkImageMemoryBarrier toShader{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
 		toShader.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
@@ -2561,6 +2633,64 @@ void VulkanRenderer::updateTextureBytes(VulkanTexture& texture, const int width,
 
 	vkDestroyBuffer(device, staging, nullptr);
 	vkFreeMemory(device, stagingMemory, nullptr);
+}
+
+void VulkanRenderer::enableMipmaps(VulkanTexture& texture) {
+	const uint32_t mipLevels = mipLevelCount(texture.width, texture.height);
+	if (texture.mipLevels > 1 || mipLevels == 1 || !texture.image) {
+		return;
+	}
+	// The number of levels of an image can't be changed, so copy the pixels into a new one
+	VulkanTexture mipmapped;
+	mipmapped.width = texture.width;
+	mipmapped.height = texture.height;
+	createTextureImage(mipmapped, mipLevels);
+	submitOneTime([&](VkCommandBuffer cmd) {
+		VkImageMemoryBarrier barriers[2]{};
+		for (auto& barrier : barriers) {
+			barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		}
+		barriers[0].image = texture.image;
+		barriers[0].subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		barriers[0].oldLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		barriers[0].newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+		barriers[0].dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+		barriers[1].image = mipmapped.image;
+		barriers[1].subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, mipLevels, 0, 1 };
+		barriers[1].oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		barriers[1].newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		barriers[1].dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+		                     VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 2,
+		                     barriers);
+
+		VkImageCopy region{};
+		region.srcSubresource = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1 };
+		region.dstSubresource = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1 };
+		region.extent = { static_cast<uint32_t>(texture.width),
+			              static_cast<uint32_t>(texture.height), 1 };
+		vkCmdCopyImage(cmd, texture.image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, mipmapped.image,
+		               VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+
+		// Draws recorded earlier in this frame still sample the old image
+		barriers[0].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+		barriers[0].newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		barriers[0].srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+		barriers[0].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TRANSFER_BIT,
+		                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1,
+		                     barriers);
+
+		recordMipmapGeneration(cmd, mipmapped);
+	});
+	createTextureDescriptor(mipmapped);
+	// The old image and descriptor set might still be used by the current or an in-flight command
+	// buffer, so free them later like a destroyed FrameBuffer
+	framebufferTrash.push_back(
+	    { VulkanFramebuffer{ .color = texture }, static_cast<int>(maxFramesInFlight) + 1 });
+	texture = mipmapped;
 }
 
 void VulkanRenderer::destroyTexture(VulkanTexture& texture) {

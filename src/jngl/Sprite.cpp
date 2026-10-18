@@ -176,7 +176,7 @@ void Sprite::enableMipmaps() {
 		return;
 	}
 #ifdef JNGL_VULKAN
-	// TODO: Generate mipmaps on the Vulkan backend
+	texture->enableMipmaps();
 #else
 	glBindTexture(GL_TEXTURE_2D, texture->getID());
 	GLint minFilter = 0;

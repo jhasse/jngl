@@ -56,6 +56,10 @@ public:
 	[[nodiscard]] float getPreciseWidth() const;
 	[[nodiscard]] float getPreciseHeight() const;
 	void setBytes(const unsigned char*, int width, int height) const;
+#ifdef JNGL_VULKAN
+	/// Generates mipmaps if the texture doesn't have them yet, see Sprite::enableMipmaps
+	void enableMipmaps() const;
+#endif
 
 private:
 #ifdef JNGL_VULKAN

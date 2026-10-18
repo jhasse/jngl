@@ -54,8 +54,8 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 		1, 0 // texture coordinates
 	};
 #ifdef JNGL_VULKAN
-	(void)mipmap; // TODO: Generate mipmaps on the Vulkan backend
-	vkTexture = vulkanRenderer().createTexture(width, height, format, type, data, rowPointers);
+	vkTexture =
+	    vulkanRenderer().createTexture(width, height, format, type, data, rowPointers, mipmap);
 #else
 	glGenVertexArrays(1, &vao);
 	opengl::bindVertexArray(vao);
@@ -265,6 +265,14 @@ float Texture::getPreciseWidth() const {
 float Texture::getPreciseHeight() const {
 	return vertexes[5] * getScaleFactor();
 }
+
+#ifdef JNGL_VULKAN
+void Texture::enableMipmaps() const {
+	if (vkTexture) {
+		vulkanRenderer().enableMipmaps(*vkTexture);
+	}
+}
+#endif
 
 void Texture::setBytes(const unsigned char* const bytes, const int width, const int height) const {
 #ifdef JNGL_VULKAN

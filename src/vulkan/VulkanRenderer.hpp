@@ -34,6 +34,7 @@ struct VulkanTexture {
 	VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
 	int width = 0;
 	int height = 0;
+	uint32_t mipLevels = 1;
 };
 
 /// GPU resources backing a jngl::FrameBuffer on the Vulkan backend: a color image that can be both
@@ -106,11 +107,17 @@ public:
 	/// Create a texture from pixel data. \a format and \a type are the OpenGL enums JNGL already
 	/// uses (GL_RGBA/GL_RGB/GL_BGR and GL_UNSIGNED_BYTE); pixels come either as \a rowPointers (one
 	/// pointer per row) or as a single \a data block. Returns nullptr for unsupported formats.
+	/// \param mipmap Generate a mipmap chain and sample it trilinearly when minified
 	std::unique_ptr<VulkanTexture> createTexture(int width, int height, unsigned int format,
 	                                             unsigned int type, const unsigned char* data,
-	                                             const unsigned char* const* rowPointers);
+	                                             const unsigned char* const* rowPointers,
+	                                             bool mipmap = false);
 	void destroyTexture(VulkanTexture&);
+	/// Replaces the texture's pixels, and regenerates its mipmaps if it has any
 	void updateTextureBytes(VulkanTexture&, int width, int height, const unsigned char* rgba);
+	/// Gives a texture created without mipmaps a mipmap chain generated from its pixels. Does
+	/// nothing if it already has one.
+	void enableMipmaps(VulkanTexture&);
 
 	/// Draw a textured primitive (\a xyuv: interleaved x, y, u, v) modulated by \a color.
 	void drawSprite(const VulkanTexture&, const float* xyuv, std::size_t vertexCount, PrimitiveType,
@@ -254,6 +261,13 @@ private:
 	[[nodiscard]] VkDescriptorSet allocateTextureDescriptor(VkImageView view, VkSampler sampler);
 	/// Immediately destroys a framebuffer's GPU resources (assumes the GPU is no longer using them).
 	void freeFramebufferResources(VulkanFramebuffer&);
+	/// Creates an RGBA image with \a mipLevels levels which can be sampled and blitted from/to
+	void createTextureImage(VulkanTexture&, uint32_t mipLevels);
+	/// Creates the view, sampler and descriptor set for the texture's image
+	void createTextureDescriptor(VulkanTexture&);
+	/// Records blits that fill all of the texture's mip levels from the first one, which has to be
+	/// in TRANSFER_DST_OPTIMAL like the others. Leaves all of them in SHADER_READ_ONLY_OPTIMAL.
+	static void recordMipmapGeneration(VkCommandBuffer, const VulkanTexture&);
 
 	void cleanupSwapchain();
 	void recreateSwapchain();
@@ -306,9 +320,9 @@ private:
 	VkRenderPass offscreenRenderPass = VK_NULL_HANDLE;
 	// Stack of active FrameBuffers; empty means drawing targets the swapchain.
 	std::vector<VulkanFramebuffer*> renderTargetStack;
-	// FrameBuffers destroyed while their resources might still be referenced by an in-flight (or
-	// not-yet-submitted) command buffer. They're actually freed once enough frames have passed, see
-	// destroyFramebuffer / endFrame.
+	// FrameBuffers destroyed (or textures replaced, see enableMipmaps) while their resources might
+	// still be referenced by an in-flight (or not-yet-submitted) command buffer. They're actually
+	// freed once enough frames have passed, see destroyFramebuffer / endFrame.
 	struct TrashedFramebuffer {
 		VulkanFramebuffer fb;
 		int framesUntilFree;
