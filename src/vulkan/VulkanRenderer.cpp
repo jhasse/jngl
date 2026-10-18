@@ -159,12 +159,11 @@ VulkanRenderer::~VulkanRenderer() {
 		}
 		framebufferTrash.clear();
 		for (auto& vb : vertexBuffers) {
-			if (vb.buffer) {
-				vkDestroyBuffer(device, vb.buffer, nullptr);
-			}
-			if (vb.memory) {
-				vkUnmapMemory(device, vb.memory);
-				vkFreeMemory(device, vb.memory, nullptr);
+			destroyVertexBuffer(vb);
+		}
+		for (auto& retired : retiredVertexBuffers) {
+			for (auto& vb : retired) {
+				destroyVertexBuffer(vb);
 			}
 		}
 		for (auto& ub : uniformBuffers) {
@@ -1075,6 +1074,11 @@ void VulkanRenderer::recreateSwapchain() {
 void VulkanRenderer::beginFrame(const Rgb clearColor) {
 	vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE,
 	                std::numeric_limits<uint64_t>::max());
+	// The GPU is done with this frame's previous command buffer, and so with the buffers it read
+	for (auto& vb : retiredVertexBuffers[currentFrame]) {
+		destroyVertexBuffer(vb);
+	}
+	retiredVertexBuffers[currentFrame].clear();
 
 	const VkResult acquire = vkAcquireNextImageKHR(
 	    device, swapchain, std::numeric_limits<uint64_t>::max(),
@@ -1730,29 +1734,68 @@ void VulkanRenderer::buildRoundedPipeline(const VkShaderModule vert, const VkSha
 }
 
 void VulkanRenderer::createVertexBuffers() {
-	// 1 MiB per frame is plenty for JNGL's 2D shape geometry; drawColored reports (once) if a frame
-	// ever needs more.
+	// 1 MiB per frame is plenty for most frames, uploadVertices grows it when it isn't.
 	constexpr VkDeviceSize capacity = 1u << 20u;
 	vertexBuffers.resize(maxFramesInFlight);
+	retiredVertexBuffers.resize(maxFramesInFlight);
 	for (auto& vb : vertexBuffers) {
-		VkBufferCreateInfo bufferInfo{ .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
-		bufferInfo.size = capacity;
-		bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-		bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-		VK_CHECK(vkCreateBuffer(device, &bufferInfo, nullptr, &vb.buffer), "vkCreateBuffer");
-
-		VkMemoryRequirements memReq;
-		vkGetBufferMemoryRequirements(device, vb.buffer, &memReq);
-		VkMemoryAllocateInfo allocInfo{ .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
-		allocInfo.allocationSize = memReq.size;
-		allocInfo.memoryTypeIndex =
-		    findMemoryType(memReq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-		                                              VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-		VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &vb.memory), "vkAllocateMemory");
-		VK_CHECK(vkBindBufferMemory(device, vb.buffer, vb.memory, 0), "vkBindBufferMemory");
-		VK_CHECK(vkMapMemory(device, vb.memory, 0, capacity, 0, &vb.mapped), "vkMapMemory");
-		vb.capacity = capacity;
+		vb = createVertexBuffer(capacity);
 	}
+}
+
+DynamicVertexBuffer VulkanRenderer::createVertexBuffer(const VkDeviceSize capacity) {
+	DynamicVertexBuffer vb;
+	VkBufferCreateInfo bufferInfo{ .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
+	bufferInfo.size = capacity;
+	bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+	bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	VK_CHECK(vkCreateBuffer(device, &bufferInfo, nullptr, &vb.buffer), "vkCreateBuffer");
+
+	VkMemoryRequirements memReq;
+	vkGetBufferMemoryRequirements(device, vb.buffer, &memReq);
+	VkMemoryAllocateInfo allocInfo{ .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
+	allocInfo.allocationSize = memReq.size;
+	allocInfo.memoryTypeIndex =
+	    findMemoryType(memReq.memoryTypeBits,
+	                   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &vb.memory), "vkAllocateMemory");
+	VK_CHECK(vkBindBufferMemory(device, vb.buffer, vb.memory, 0), "vkBindBufferMemory");
+	VK_CHECK(vkMapMemory(device, vb.memory, 0, capacity, 0, &vb.mapped), "vkMapMemory");
+	vb.capacity = capacity;
+	return vb;
+}
+
+void VulkanRenderer::destroyVertexBuffer(DynamicVertexBuffer& vb) {
+	if (vb.buffer) {
+		vkDestroyBuffer(device, vb.buffer, nullptr);
+	}
+	if (vb.memory) {
+		vkUnmapMemory(device, vb.memory);
+		vkFreeMemory(device, vb.memory, nullptr);
+	}
+	vb = {};
+}
+
+std::pair<VkBuffer, VkDeviceSize> VulkanRenderer::uploadVertices(const void* const data,
+                                                                 const VkDeviceSize bytes) {
+	DynamicVertexBuffer& vb = vertexBuffers[currentFrame];
+	if (vb.used + bytes > vb.capacity) {
+		// The draws recorded so far still read from the full buffer, so it can't be resized in
+		// place. Replace it with one twice as big, which is kept for the following frames.
+		VkDeviceSize capacity = vb.capacity * 2;
+		while (capacity < bytes) {
+			capacity *= 2;
+		}
+		internal::debug("Growing the Vulkan vertex buffer of frame {} to {} KiB.", currentFrame,
+		                capacity / 1024);
+		retiredVertexBuffers[currentFrame].push_back(vb);
+		vb = createVertexBuffer(capacity);
+	}
+	const VkDeviceSize offset = vb.used;
+	std::memcpy(static_cast<char*>(vb.mapped) + offset, data, bytes);
+	// Keep the next vertex block 4-byte aligned (it already is, but stay explicit).
+	vb.used += (bytes + 3) & ~VkDeviceSize{ 3 };
+	return { vb.buffer, offset };
 }
 
 void VulkanRenderer::createUniformBuffers() {
@@ -1835,19 +1878,8 @@ void VulkanRenderer::drawColored(const PrimitiveType type, const float* const xy
 	if (!frameActive || vertexCount == 0) {
 		return;
 	}
-	DynamicVertexBuffer& vb = vertexBuffers[currentFrame];
 	const VkDeviceSize bytes = vertexCount * 2 * sizeof(float);
-	if (vb.used + bytes > vb.capacity) {
-		if (!vertexBufferOverflowReported) {
-			internal::error("Vulkan per-frame vertex buffer exhausted; some shapes won't be drawn.");
-			vertexBufferOverflowReported = true;
-		}
-		return;
-	}
-	const VkDeviceSize offset = vb.used;
-	std::memcpy(static_cast<char*>(vb.mapped) + offset, xyVertices, bytes);
-	// Keep the next vertex block 4-byte aligned (it already is, but stay explicit).
-	vb.used += (bytes + 3) & ~VkDeviceSize{ 3 };
+	const auto [vertexBuffer, offset] = uploadVertices(xyVertices, bytes);
 
 	// Combine modelview (3x3) and the projection matrix into a single 4x4 transform on the CPU. The
 	// modelview maps (x, y) -> (x', y'); embed it into a 4x4 that leaves z at 0 and w at 1.
@@ -1890,7 +1922,7 @@ void VulkanRenderer::drawColored(const PrimitiveType type, const float* const xy
 	const std::array<VkPipeline, 4>& pipelines =
 	    swapchainUsesMsaaPass ? coloredMsaaPipelines : coloredPipelines;
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines[static_cast<size_t>(type)]);
-	vkCmdBindVertexBuffers(cmd, 0, 1, &vb.buffer, &offset);
+	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
 	vkCmdPushConstants(cmd, coloredPipelineLayout,
 	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
 	                   &push);
@@ -1903,20 +1935,11 @@ void VulkanRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, co
 	if (!frameActive) {
 		return;
 	}
-	static constexpr std::array<float, 8> unitSquare = { -.5f, -.5f, .5f, -.5f,
-		                                                 .5f,  .5f,  -.5f, .5f };
-	DynamicVertexBuffer& vb = vertexBuffers[currentFrame];
+	static constexpr std::array<float, 8> unitSquare = {
+		-.5f, -.5f, .5f, -.5f, .5f, .5f, -.5f, .5f
+	};
 	const VkDeviceSize bytes = unitSquare.size() * sizeof(float);
-	if (vb.used + bytes > vb.capacity) {
-		if (!vertexBufferOverflowReported) {
-			internal::error("Vulkan per-frame vertex buffer exhausted; some shapes won't be drawn.");
-			vertexBufferOverflowReported = true;
-		}
-		return;
-	}
-	const VkDeviceSize offset = vb.used;
-	std::memcpy(static_cast<char*>(vb.mapped) + offset, unitSquare.data(), bytes);
-	vb.used += (bytes + 3) & ~VkDeviceSize{ 3 };
+	const auto [vertexBuffer, offset] = uploadVertices(unitSquare.data(), bytes);
 
 	const float* const m = modelview.data;
 	Mat4 embedded;
@@ -1953,7 +1976,7 @@ void VulkanRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, co
 	const VkPipeline pipeline =
 	    swapchainUsesMsaaPass && roundedMsaaPipeline ? roundedMsaaPipeline : roundedPipeline;
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-	vkCmdBindVertexBuffers(cmd, 0, 1, &vb.buffer, &offset);
+	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
 	vkCmdPushConstants(cmd, roundedPipelineLayout,
 	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
 	                   &push);
@@ -2553,18 +2576,8 @@ void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* const
 	if (!frameActive || vertexCount == 0) {
 		return;
 	}
-	DynamicVertexBuffer& vb = vertexBuffers[currentFrame];
 	const VkDeviceSize bytes = vertexCount * 4 * sizeof(float);
-	if (vb.used + bytes > vb.capacity) {
-		if (!vertexBufferOverflowReported) {
-			internal::error("Vulkan per-frame vertex buffer exhausted; some sprites won't be drawn.");
-			vertexBufferOverflowReported = true;
-		}
-		return;
-	}
-	const VkDeviceSize offset = vb.used;
-	std::memcpy(static_cast<char*>(vb.mapped) + offset, xyuv, bytes);
-	vb.used += (bytes + 3) & ~VkDeviceSize{ 3 };
+	const auto [vertexBuffer, offset] = uploadVertices(xyuv, bytes);
 
 	TexturedPushConstants push{};
 	const float* const m = modelview.data;
@@ -2607,7 +2620,7 @@ void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* const
 	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 0, 1,
 	                        &texture.descriptorSet, 0, nullptr);
 	bindActiveProgramUniforms(cmd);
-	vkCmdBindVertexBuffers(cmd, 0, 1, &vb.buffer, &offset);
+	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
 	vkCmdPushConstants(cmd, texturedPipelineLayout,
 	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
 	                   &push);

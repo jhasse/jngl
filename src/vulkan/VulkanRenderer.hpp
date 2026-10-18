@@ -45,6 +45,15 @@ struct VulkanFramebuffer {
 	int height = 0;
 };
 
+/// Host-visible, persistently mapped vertex buffer that's appended to during a frame
+struct DynamicVertexBuffer {
+	VkBuffer buffer = VK_NULL_HANDLE;
+	VkDeviceMemory memory = VK_NULL_HANDLE;
+	void* mapped = nullptr;
+	VkDeviceSize capacity = 0;
+	VkDeviceSize used = 0;
+};
+
 /// GPU resources backing a jngl::ShaderProgram on the Vulkan backend: textured pipelines for each
 /// blend variant × primitive topology, built from a user-supplied vertex/fragment shader pair, plus
 /// an optional CPU-side uniform staging buffer (see ShaderProgram::setUniform). At draw time the
@@ -205,6 +214,11 @@ private:
 	                          VkSampleCountFlagBits samples, VkPipeline& out);
 	void destroyRoundedPipelines();
 	void createVertexBuffers();
+	[[nodiscard]] DynamicVertexBuffer createVertexBuffer(VkDeviceSize capacity);
+	void destroyVertexBuffer(DynamicVertexBuffer&);
+	/// Copies \a bytes of vertex data into the current frame's vertex buffer, growing it if it's
+	/// full, and returns the buffer and offset to bind
+	std::pair<VkBuffer, VkDeviceSize> uploadVertices(const void* data, VkDeviceSize bytes);
 	void createUniformBuffers();
 	void createTexturedPipelines();
 	/// Builds textured pipelines for every blend variant × topology from the given shader modules.
@@ -322,15 +336,11 @@ private:
 	bool alphaOnlyWrite = false;
 
 	// Host-visible vertex buffer per frame in flight, written directly each frame. `used` is reset
-	// in beginFrame and grows as drawColored appends geometry.
-	struct DynamicVertexBuffer {
-		VkBuffer buffer = VK_NULL_HANDLE;
-		VkDeviceMemory memory = VK_NULL_HANDLE;
-		void* mapped = nullptr;
-		VkDeviceSize capacity = 0;
-		VkDeviceSize used = 0;
-	};
+	// in beginFrame and grows as the draw calls append geometry, see uploadVertices.
 	std::vector<DynamicVertexBuffer> vertexBuffers;
+	// Buffers that ran full during a frame and were replaced by a bigger one. They're still
+	// referenced by that frame's command buffer, so they're destroyed once its fence has signaled.
+	std::vector<std::vector<DynamicVertexBuffer>> retiredVertexBuffers;
 
 	// Per-frame dynamic UBO ring: each drawSprite with custom uniforms snapshots staging into here
 	// so mid-frame setUniform updates don't overwrite earlier draws still pending on the GPU.
@@ -351,7 +361,6 @@ private:
 	uint32_t currentImageIndex = 0;
 	bool frameActive = false;
 	bool framebufferResized = false;
-	bool vertexBufferOverflowReported = false;
 	// Set once the current frame's imageAvailable semaphore has been waited on (by a readPixels
 	// flush), so endFrame doesn't wait on it a second time.
 	bool imageAvailableWaited = false;

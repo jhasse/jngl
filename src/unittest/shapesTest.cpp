@@ -112,3 +112,18 @@ TEST_CASE("ellipse") {
 )");
 	}
 }
+TEST_CASE("more shapes in a frame than fit into the Vulkan backend's initial vertex buffer") {
+	Fixture f(1.f);
+	const auto draw = []() {
+		jngl::drawRect(jngl::modelview().translate({ -60, -10 }), { 40, 20 }, 0x000000_rgb);
+	};
+	draw();
+	const auto expected = f.getAsciiArt();
+	Fixture::reset();
+	// A rectangle takes 32 bytes, so this is about 3 MiB of vertices, the initial buffer has 1 MiB
+	for (int i = 0; i < 100'000; ++i) {
+		jngl::drawRect(jngl::modelview().translate({ -60, -10 }), { 40, 20 }, 0xffffff_rgb);
+	}
+	draw();
+	REQUIRE(f.getAsciiArt() == expected);
+}
