@@ -65,12 +65,12 @@ JNGL_MAIN_END
 #endif
 
 #if defined(_MSC_VER) && WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#include <windows.h>
+#include <cstdlib> // __argc and __argv
 
-INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
+// Declared as <windows.h> does (with STRICT, its default), but without including it, which would
+// leave its macros in the file defining main(), e.g. near and far, defined as nothing
+struct HINSTANCE__;
+extern "C" int __stdcall WinMain(HINSTANCE__*, HINSTANCE__*, char*, int) {
 	return main(__argc, __argv);
 }
 #endif
