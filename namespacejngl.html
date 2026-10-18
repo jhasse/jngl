@@ -1124,6 +1124,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setCursor</b> (Cursor
 <tr class="memitem:a5654b5fb3dec5ca7aa0d860163ab8a09" id="r_a5654b5fb3dec5ca7aa0d860163ab8a09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5654b5fb3dec5ca7aa0d860163ab8a09">resetFrameLimiter</a> ()</td></tr>
 <tr class="memdesc:a5654b5fb3dec5ca7aa0d860163ab8a09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the automatic frame limiter of App::mainLoop().  <br /></td></tr>
 <tr class="separator:a5654b5fb3dec5ca7aa0d860163ab8a09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a986c0ca94e9366e6c5637b7f062e5614" id="r_a986c0ca94e9366e6c5637b7f062e5614"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a986c0ca94e9366e6c5637b7f062e5614">setFrameLimiter</a> (bool enabled)</td></tr>
+<tr class="memdesc:a986c0ca94e9366e6c5637b7f062e5614"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether App::mainLoop() keeps to <a class="el" href="#a06943dd8adf8a3d0ef639620df5dcad2" title="How many times Work::step is called per second (default: 60)">getStepsPerSecond()</a> (default: true), calling <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Work::step</a> more than once per frame while drawing's slow, and sleeping while it's quick.  <br /></td></tr>
+<tr class="separator:a986c0ca94e9366e6c5637b7f062e5614"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -4157,6 +4160,26 @@ template&lt;class T , class... Args&gt; </div>
 
 <p>Resets the automatic frame limiter of App::mainLoop(). </p>
 <p>This is useful after you have done a huge amount of work in <a class="el" href="classjngl_1_1Job.html#a2bf282904f7854c8a4fd515107aa8c4e" title="Draw the game state.">Work::draw</a>, e.g. after loading screens. </p>
+
+</div>
+</div>
+<a id="a986c0ca94e9366e6c5637b7f062e5614" name="a986c0ca94e9366e6c5637b7f062e5614"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a986c0ca94e9366e6c5637b7f062e5614">&#9670;&#160;</a></span>setFrameLimiter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setFrameLimiter </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>enabled</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Whether App::mainLoop() keeps to <a class="el" href="#a06943dd8adf8a3d0ef639620df5dcad2" title="How many times Work::step is called per second (default: 60)">getStepsPerSecond()</a> (default: true), calling <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Work::step</a> more than once per frame while drawing's slow, and sleeping while it's quick. </p>
+<p>Without it, every frame calls <a class="el" href="classjngl_1_1Job.html#aa6f73ac7d5899119d156a0b3a27fba31" title="Advance the game logic.">Work::step</a> exactly once, and the main loop never sleeps, so that it runs as fast as it can, e.g. to benchmark how quickly frames are drawn. A step still stands for 1 / <a class="el" href="#a06943dd8adf8a3d0ef639620df5dcad2" title="How many times Work::step is called per second (default: 60)">getStepsPerSecond()</a> seconds, though, e.g. in <a class="el" href="#a51e49db6222d8f0356c79ef1fa2d0c83" title="Time in seconds of a step, i.e. 1 / getStepsPerSecond()">getDelta()</a>. Turn off V-SYNC, too (see <a class="el" href="#a7cd8cba6fb6e0174b1858fd845ec15b1" title="Toggles V-SYNC.">setVerticalSync()</a>), for the display not to hold it back. </p>
 
 </div>
 </div>
