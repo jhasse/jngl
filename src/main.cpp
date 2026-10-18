@@ -909,7 +909,7 @@ std::string getPrefix() {
 	return pathPrefix;
 }
 
-void setConfigPath(const std::string& path) {
+void internal::setConfigPath(const std::string& path) {
 	configPath = path;
 	if (configPath->back() != '/') {
 		*configPath += '/';

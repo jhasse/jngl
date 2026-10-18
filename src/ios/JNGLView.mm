@@ -5,6 +5,7 @@
 
 #include "../App.hpp"
 #include "../helper.hpp"
+#include "../paths.hpp"
 #include "../jngl.hpp"
 #include "../windowptr.hpp"
 #include "../jngl/AppParameters.hpp"
@@ -87,10 +88,10 @@ std::unique_ptr<jngl::App> jnglApp;
 		startTime = -1;
 		pause = false;
 		needToResetFrameLimiter = false;
-		jngl::setConfigPath(std::string(NSSearchPathForDirectoriesInDomains(
-		                                    NSDocumentDirectory, NSUserDomainMask, YES)[0]
-		                                    .UTF8String) +
-		                    "/");
+		jngl::internal::setConfigPath(std::string(NSSearchPathForDirectoriesInDomains(
+		                                              NSDocumentDirectory, NSUserDomainMask, YES)[0]
+		                                              .UTF8String) +
+		                              "/");
 		impl = jngl::pWindow->getImpl();
 		[UIView setAnimationsEnabled:NO];
 	}

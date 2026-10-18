@@ -107,9 +107,6 @@ void setPrefix(const std::string& path);
 std::string getPrefix();
 
 /// \deprecated Use jngl::writeConfig and jngl::readConfig instead.
-void setConfigPath(const std::string& path);
-
-/// \deprecated Use jngl::writeConfig and jngl::readConfig instead.
 ///
 /// Returns the directory where to store configuration files and save games.
 /// - Windows: `%%AppData%/Display Name/`
