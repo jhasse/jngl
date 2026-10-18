@@ -12,7 +12,9 @@
 #include "windowimpl.hpp"
 
 #include <cassert>
+#include <cstdlib>
 #include <stdexcept>
+#include <string_view>
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -48,6 +50,12 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 	Uint32 flags = SDL_WINDOW_OPENGL; // TODO: SDL_WINDOW_SHOWN
+	// Drawn into all the same, but never shown, e.g. for tests where SDL's offscreen video driver
+	// isn't available: it needs EGL, which Windows doesn't have
+	if (const char* const hidden = std::getenv("JNGL_HIDDEN_WINDOW");
+	    hidden && std::string_view(hidden) != "0") {
+		flags |= SDL_WINDOW_HIDDEN;
+	}
 	if (internal::getHighDpi()) {
 		flags |= SDL_WINDOW_HIGH_PIXEL_DENSITY;
 	}
