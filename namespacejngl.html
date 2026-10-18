@@ -711,8 +711,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setPrefix</b> (const 
 <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPrefix</b> ()</td></tr>
 <tr class="memdesc:abf5b2d5c1e7afb827b0151d194503854"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the global prefix set by <a class="el" href="#a331699c6d357204373f8ad42fc174d07" title="Sets a global prefix which will be prepended whenever images or sounds are loaded.">jngl::setPrefix</a>. <br /></td></tr>
 <tr class="separator:abf5b2d5c1e7afb827b0151d194503854"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace0bccdd95107deb172bfae920eb4769" id="r_ace0bccdd95107deb172bfae920eb4769"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace0bccdd95107deb172bfae920eb4769">setConfigPath</a> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;path)</td></tr>
-<tr class="separator:ace0bccdd95107deb172bfae920eb4769"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67f578ae7b31a18af696c75231554372" id="r_a67f578ae7b31a18af696c75231554372"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67f578ae7b31a18af696c75231554372">getConfigPath</a> ()</td></tr>
 <tr class="separator:a67f578ae7b31a18af696c75231554372"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e4bb80c8db09ad1d130a899c3ad8b0c" id="r_a5e4bb80c8db09ad1d130a899c3ad8b0c"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e4bb80c8db09ad1d130a899c3ad8b0c">getDocumentsPath</a> ()</td></tr>
@@ -2673,24 +2671,6 @@ template&lt;class Vect &gt; </div>
 
 </div>
 </div>
-<a id="ace0bccdd95107deb172bfae920eb4769" name="ace0bccdd95107deb172bfae920eb4769"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace0bccdd95107deb172bfae920eb4769">&#9670;&#160;</a></span>setConfigPath()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void setConfigPath </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>path</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead. </dd></dl>
-
-</div>
-</div>
 <a id="a67f578ae7b31a18af696c75231554372" name="a67f578ae7b31a18af696c75231554372"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a67f578ae7b31a18af696c75231554372">&#9670;&#160;</a></span>getConfigPath()</h2>
 
@@ -2705,7 +2685,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
 <p>Returns the directory where to store configuration files and save games.</p><ul>
 <li>Windows: <code>%AppData%/Display Name/</code></li>
 <li>Linux: <code>~/.config/Display Name/</code></li>
@@ -3143,7 +3123,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
 
 </div>
 </div>
@@ -3161,7 +3141,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
 
 </div>
 </div>
@@ -3179,7 +3159,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated</a></b></dt><dd>Pass line width to drawLine instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated</a></b></dt><dd>Pass line width to drawLine instead </dd></dl>
 
 </div>
 </div>
@@ -3203,7 +3183,7 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a line from start to end, the width can be set using setLineWidth. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated</a></b></dt><dd>Use <a class="el" href="#a623eabacc04597be7fa31b92b09ca5da" title="Draws a line from start to end with width lineWidth in the color set by jngl::setColor.">drawLine(Vec2, Vec2, float lineWidth)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated</a></b></dt><dd>Use <a class="el" href="#a623eabacc04597be7fa31b92b09ca5da" title="Draws a line from start to end with width lineWidth in the color set by jngl::setColor.">drawLine(Vec2, Vec2, float lineWidth)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -3235,7 +3215,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000017">Deprecated</a></b></dt><dd>Use <a class="el" href="#a623eabacc04597be7fa31b92b09ca5da" title="Draws a line from start to end with width lineWidth in the color set by jngl::setColor.">drawLine(Vec2, Vec2, float lineWidth)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated</a></b></dt><dd>Use <a class="el" href="#a623eabacc04597be7fa31b92b09ca5da" title="Draws a line from start to end with width lineWidth in the color set by jngl::setColor.">drawLine(Vec2, Vec2, float lineWidth)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -3288,7 +3268,7 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a line from (0, 0) to <em>end</em> in the color set by <a class="el" href="#a55a8f2d8091f7c8fdac59075ac069413" title="Sets the color which should be used to draw primitives.">jngl::setColor</a>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000018">Deprecated</a></b></dt><dd>Use drawLine(const Mat3&amp;, Vec2, float lineWidth, Rgba) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000017">Deprecated</a></b></dt><dd>Use drawLine(const Mat3&amp;, Vec2, float lineWidth, Rgba) instead </dd></dl>
 
 </div>
 </div>
@@ -3325,7 +3305,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000019">Deprecated</a></b></dt><dd>Use drawEllipse(Mat3, float, float, float) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000018">Deprecated</a></b></dt><dd>Use drawEllipse(Mat3, float, float, float) instead </dd></dl>
 
 </div>
 </div>
@@ -3427,7 +3407,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000020">Deprecated</a></b></dt><dd>Use drawCircle instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000019">Deprecated</a></b></dt><dd>Use drawCircle instead </dd></dl>
 
 </div>
 </div>
@@ -3469,7 +3449,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000021">Deprecated</a></b></dt><dd>Use <a class="el" href="#a1732275d2646c634f74abec40aeaafe8" title="Draws the triangle a -&gt; b -&gt; c.">drawTriangle(Vec2, Vec2, Vec2)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000020">Deprecated</a></b></dt><dd>Use <a class="el" href="#a1732275d2646c634f74abec40aeaafe8" title="Draws the triangle a -&gt; b -&gt; c.">drawTriangle(Vec2, Vec2, Vec2)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -3527,7 +3507,7 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a rectangle at { <em>xposition</em>, <em>yposition</em> }. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000022">Deprecated</a></b></dt><dd>Use drawRect(const Mat3&amp;, Vec2, Color) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000021">Deprecated</a></b></dt><dd>Use drawRect(const Mat3&amp;, Vec2, Color) instead </dd></dl>
 
 </div>
 </div>
@@ -3551,7 +3531,7 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a rectangle at <em>position</em>. </p>
-<p>Use <a class="el" href="#a55a8f2d8091f7c8fdac59075ac069413" title="Sets the color which should be used to draw primitives.">setColor(Rgb)</a> to change the color and <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">setAlpha(uint8_t)</a> to change the translucency. </p><dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000023">Deprecated</a></b></dt><dd>Use <a class="el" href="#aab0d5492b0289dd4e3b2160b4cfcb237" title="Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color.">drawRect(Mat3, Vec2, Rgba)</a> instead </dd></dl>
+<p>Use <a class="el" href="#a55a8f2d8091f7c8fdac59075ac069413" title="Sets the color which should be used to draw primitives.">setColor(Rgb)</a> to change the color and <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">setAlpha(uint8_t)</a> to change the translucency. </p><dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000022">Deprecated</a></b></dt><dd>Use <a class="el" href="#aab0d5492b0289dd4e3b2160b4cfcb237" title="Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color.">drawRect(Mat3, Vec2, Rgba)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -3929,7 +3909,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Sleep current thread for <em>milliseconds</em>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000028">Deprecated</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000027">Deprecated</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
 
 </div>
 </div>
@@ -4116,7 +4096,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Sets the passed <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> to be active in the main loop. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000029">Deprecated</a></b></dt><dd>Use <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop for the next frame.">setScene(std::shared_ptr&lt;Scene&gt;)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000028">Deprecated</a></b></dt><dd>Use <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop for the next frame.">setScene(std::shared_ptr&lt;Scene&gt;)</a> instead </dd></dl>
 
 </div>
 </div>
