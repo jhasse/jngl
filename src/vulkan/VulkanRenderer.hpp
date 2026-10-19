@@ -318,9 +318,9 @@ private:
 	VkExtent2D swapchainExtent{};
 	std::vector<VkImage> swapchainImages;
 	std::vector<VkImageView> swapchainImageViews;
+	// For renderPass and loadRenderPass: with MSAA, the multisampled image and the swapchain image
+	// it's resolved into
 	std::vector<VkFramebuffer> swapchainFramebuffers;
-	// Single-sample framebuffers for the LOAD swapchain pass when MSAA is active (e.g. readPixels).
-	std::vector<VkFramebuffer> loadSwapchainFramebuffers;
 	struct MsaaColorAttachment {
 		VkImage image = VK_NULL_HANDLE;
 		VkDeviceMemory memory = VK_NULL_HANDLE;
@@ -330,7 +330,8 @@ private:
 
 	VkRenderPass renderPass = VK_NULL_HANDLE;
 	// Same as renderPass but with a LOAD (instead of CLEAR) load operation, used to resume a frame
-	// after readPixels has flushed it mid-way.
+	// after readPixels has flushed it mid-way or a FrameBuffer has been drawn into. With MSAA, it
+	// continues drawing into the multisampled image.
 	VkRenderPass loadRenderPass = VK_NULL_HANDLE;
 	// Render pass used when drawing into a FrameBuffer (LOAD; clearing is done explicitly). Shares
 	// the swapchain's color format so the colored/textured pipelines stay compatible with it.

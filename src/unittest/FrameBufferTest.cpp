@@ -302,6 +302,38 @@ TEST_CASE("FrameBuffer anti-aliased like the window") {
 #endif
 }
 
+TEST_CASE("Window still anti-aliased after a FrameBuffer has been used") {
+	Fixture f(1.f);
+	if (!jngl::pWindow->isMultisampleSupported()) {
+		SKIP("Multisampling isn't supported here");
+	}
+	// How many pixels around a black triangle with a slanted edge are grey, i.e. smoothed
+	const auto greys = []() {
+		jngl::drawTriangle(jngl::Vec2(-60, -25), jngl::Vec2(60, -25), jngl::Vec2(-60, 25));
+		const auto pixels = jngl::readPixels();
+		int count = 0;
+		for (int y = 5; y < 65; ++y) {
+			for (int x = 90; x < 230; ++x) {
+				const float red = pixels.at(static_cast<size_t>(y * 320 + x) * 3);
+				if (red > 0.1f && red < 0.9f) {
+					++count;
+				}
+			}
+		}
+		Fixture::reset();
+		return count;
+	};
+	REQUIRE(greys() > 50); // about one along each of the edge's 120 columns
+	jngl::FrameBuffer fb(10_px, 10_px);
+	{
+		const auto context = fb.use();
+	}
+	REQUIRE(greys() > 50);
+	// Reading the window's pixels in the middle of a frame doesn't stop it, either
+	(void)jngl::readPixels();
+	REQUIRE(greys() > 50);
+}
+
 TEST_CASE("FrameBuffer anti-aliased keeps what's drawn while anti-aliasing is off") {
 	Fixture f(1.f);
 	if (!jngl::pWindow->isMultisampleSupported()) {

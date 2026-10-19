@@ -520,103 +520,53 @@ void VulkanRenderer::createImageViews() {
 }
 
 void VulkanRenderer::createRenderPass() {
-	const bool useMsaa = swapchainMsaaActive();
-
-	if (useMsaa) {
-		std::array<VkAttachmentDescription, 2> attachments{};
-		attachments[0].format = swapchainImageFormat;
-		attachments[0].samples = msaaSampleCount;
-		attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-		attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-		attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-		attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-		attachments[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-		attachments[0].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-		attachments[1].format = swapchainImageFormat;
-		attachments[1].samples = VK_SAMPLE_COUNT_1_BIT;
-		attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-		attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-		attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-		attachments[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-		attachments[1].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-		attachments[1].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-
-		VkAttachmentReference colorRef{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
-		VkAttachmentReference resolveRef{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
-
-		VkSubpassDescription subpass{};
-		subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-		subpass.colorAttachmentCount = 1;
-		subpass.pColorAttachments = &colorRef;
-		subpass.pResolveAttachments = &resolveRef;
-
-		const auto deps = subpassDependencies();
-
-		VkRenderPassCreateInfo info{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO };
-		info.attachmentCount = static_cast<uint32_t>(attachments.size());
-		info.pAttachments = attachments.data();
-		info.subpassCount = 1;
-		info.pSubpasses = &subpass;
-		info.dependencyCount = static_cast<uint32_t>(deps.size());
-		info.pDependencies = deps.data();
-		VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &renderPass), "vkCreateRenderPass");
-	} else {
-		VkAttachmentDescription colorAttachment{};
-		colorAttachment.format = swapchainImageFormat;
-		colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-		colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-		colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-		colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-		colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-		colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-		colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-
-		VkAttachmentReference colorRef{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
-
-		VkSubpassDescription subpass{};
-		subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-		subpass.colorAttachmentCount = 1;
-		subpass.pColorAttachments = &colorRef;
-
-		const auto deps = subpassDependencies();
-
-		VkRenderPassCreateInfo info{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO };
-		info.attachmentCount = 1;
-		info.pAttachments = &colorAttachment;
-		info.subpassCount = 1;
-		info.pSubpasses = &subpass;
-		info.dependencyCount = static_cast<uint32_t>(deps.size());
-		info.pDependencies = deps.data();
-		VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &renderPass), "vkCreateRenderPass");
-	}
-
-	// LOAD variant for resuming a swapchain frame after readPixels (always single-sample).
-	VkAttachmentDescription colorAttachment{};
-	colorAttachment.format = swapchainImageFormat;
-	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
-	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-	colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-	colorAttachment.initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-	colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+	// The swapchain image, or with MSAA, the multisampled image that's resolved into it at the end
+	// of each render pass
+	std::array<VkAttachmentDescription, 2> attachments{};
+	attachments[0].format = swapchainImageFormat;
+	attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
+	attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	attachments[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	attachments[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+	uint32_t attachmentCount = 1;
 
 	VkAttachmentReference colorRef{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
+	VkAttachmentReference resolveRef{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
 	VkSubpassDescription subpass{};
 	subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 	subpass.colorAttachmentCount = 1;
 	subpass.pColorAttachments = &colorRef;
 
-	const auto deps = subpassDependencies();
+	const bool useMsaa = swapchainMsaaActive();
+	if (useMsaa) {
+		attachments[1] = attachments[0];
+		attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // all of it is resolved into
+		// Stored, too, as the frame's later render passes (e.g. after a FrameBuffer has been drawn
+		// into) continue drawing into it
+		attachments[0].samples = msaaSampleCount;
+		attachments[0].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		attachmentCount = 2;
+		subpass.pResolveAttachments = &resolveRef;
+	}
 
+	const auto deps = subpassDependencies();
 	VkRenderPassCreateInfo info{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO };
-	info.attachmentCount = 1;
-	info.pAttachments = &colorAttachment;
+	info.attachmentCount = attachmentCount;
+	info.pAttachments = attachments.data();
 	info.subpassCount = 1;
 	info.pSubpasses = &subpass;
 	info.dependencyCount = static_cast<uint32_t>(deps.size());
 	info.pDependencies = deps.data();
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &renderPass), "vkCreateRenderPass");
+
+	// The LOAD variant, which continues the frame after it's been interrupted, e.g. by readPixels
+	// or a FrameBuffer. It uses the same framebuffers.
+	attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+	attachments[0].initialLayout =
+	    useMsaa ? VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &loadRenderPass), "vkCreateRenderPass");
 }
 
@@ -694,7 +644,8 @@ void VulkanRenderer::createMsaaAttachments() {
 		imageInfo.arrayLayers = 1;
 		imageInfo.samples = msaaSampleCount;
 		imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-		imageInfo.usage = VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+		// Not transient, as it's stored between the render passes of a frame
+		imageInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 		imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 		imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 		VK_CHECK(vkCreateImage(device, &imageInfo, nullptr, &msaa.image), "vkCreateImage");
@@ -739,44 +690,22 @@ void VulkanRenderer::destroyMsaaAttachments() {
 void VulkanRenderer::createFramebuffers() {
 	createMsaaAttachments();
 	swapchainFramebuffers.resize(swapchainImageViews.size());
-	loadSwapchainFramebuffers.clear();
 	for (size_t i = 0; i < swapchainImageViews.size(); ++i) {
+		// The multisampled image first, see createRenderPass()
+		std::vector<VkImageView> attachments;
 		if (swapchainMsaaActive()) {
-			const std::array attachments = { msaaColorAttachments[i].view, swapchainImageViews[i] };
-			VkFramebufferCreateInfo info{ .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO };
-			info.renderPass = renderPass;
-			info.attachmentCount = static_cast<uint32_t>(attachments.size());
-			info.pAttachments = attachments.data();
-			info.width = swapchainExtent.width;
-			info.height = swapchainExtent.height;
-			info.layers = 1;
-			VK_CHECK(vkCreateFramebuffer(device, &info, nullptr, &swapchainFramebuffers[i]),
-			         "vkCreateFramebuffer");
-
-			const std::array loadAttachments = { swapchainImageViews[i] };
-			VkFramebufferCreateInfo loadInfo{ .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO };
-			loadInfo.renderPass = loadRenderPass;
-			loadInfo.attachmentCount = static_cast<uint32_t>(loadAttachments.size());
-			loadInfo.pAttachments = loadAttachments.data();
-			loadInfo.width = swapchainExtent.width;
-			loadInfo.height = swapchainExtent.height;
-			loadInfo.layers = 1;
-			VkFramebuffer loadFb = VK_NULL_HANDLE;
-			VK_CHECK(vkCreateFramebuffer(device, &loadInfo, nullptr, &loadFb),
-			         "vkCreateFramebuffer");
-			loadSwapchainFramebuffers.push_back(loadFb);
-		} else {
-			const std::array attachments = { swapchainImageViews[i] };
-			VkFramebufferCreateInfo info{ .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO };
-			info.renderPass = renderPass;
-			info.attachmentCount = static_cast<uint32_t>(attachments.size());
-			info.pAttachments = attachments.data();
-			info.width = swapchainExtent.width;
-			info.height = swapchainExtent.height;
-			info.layers = 1;
-			VK_CHECK(vkCreateFramebuffer(device, &info, nullptr, &swapchainFramebuffers[i]),
-			         "vkCreateFramebuffer");
+			attachments.push_back(msaaColorAttachments[i].view);
 		}
+		attachments.push_back(swapchainImageViews[i]);
+		VkFramebufferCreateInfo info{ .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO };
+		info.renderPass = renderPass;
+		info.attachmentCount = static_cast<uint32_t>(attachments.size());
+		info.pAttachments = attachments.data();
+		info.width = swapchainExtent.width;
+		info.height = swapchainExtent.height;
+		info.layers = 1;
+		VK_CHECK(vkCreateFramebuffer(device, &info, nullptr, &swapchainFramebuffers[i]),
+		         "vkCreateFramebuffer");
 	}
 }
 
@@ -838,10 +767,6 @@ void VulkanRenderer::cleanupSwapchain() {
 		vkDestroyFramebuffer(device, fb, nullptr);
 	}
 	swapchainFramebuffers.clear();
-	for (VkFramebuffer fb : loadSwapchainFramebuffers) {
-		vkDestroyFramebuffer(device, fb, nullptr);
-	}
-	loadSwapchainFramebuffers.clear();
 	destroyMsaaAttachments();
 	for (VkImageView view : swapchainImageViews) {
 		vkDestroyImageView(device, view, nullptr);
@@ -989,10 +914,6 @@ void VulkanRenderer::rebuildSwapchainRendering() {
 		vkDestroyFramebuffer(device, fb, nullptr);
 	}
 	swapchainFramebuffers.clear();
-	for (VkFramebuffer fb : loadSwapchainFramebuffers) {
-		vkDestroyFramebuffer(device, fb, nullptr);
-	}
-	loadSwapchainFramebuffers.clear();
 	destroyMsaaAttachments();
 	if (renderPass) {
 		vkDestroyRenderPass(device, renderPass, nullptr);
@@ -1083,7 +1004,6 @@ void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
 	VkRenderPassBeginInfo rpInfo{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
 	VkExtent2D extent{};
 	VkClearValue clear{};
-	std::array<VkClearValue, 2> clears{};
 	if (renderTargetStack.empty()) {
 		syncLetterboxScissor();
 	}
@@ -1093,25 +1013,14 @@ void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
 	clear.color = { { passClearColor.getRed(), passClearColor.getGreen(), passClearColor.getBlue(),
 		              1.f } };
 	if (renderTargetStack.empty()) {
-		const bool msaaClear = swapchainMsaaActive() && loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR;
-		currentPassMultisampled = msaaClear;
+		currentPassMultisampled = swapchainMsaaActive();
+		rpInfo.framebuffer = swapchainFramebuffers[currentImageIndex];
 		if (loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR) {
 			rpInfo.renderPass = renderPass;
-			rpInfo.framebuffer = swapchainFramebuffers[currentImageIndex];
-			if (msaaClear) {
-				clears[0] = clear;
-				rpInfo.clearValueCount = static_cast<uint32_t>(clears.size());
-				rpInfo.pClearValues = clears.data();
-			} else {
-				rpInfo.clearValueCount = 1;
-				rpInfo.pClearValues = &clear;
-			}
+			rpInfo.clearValueCount = 1; // only the first attachment is cleared
+			rpInfo.pClearValues = &clear;
 		} else {
 			rpInfo.renderPass = loadRenderPass;
-			rpInfo.framebuffer = swapchainMsaaActive()
-			                         ? loadSwapchainFramebuffers[currentImageIndex]
-			                         : swapchainFramebuffers[currentImageIndex];
-			currentPassMultisampled = false;
 		}
 		extent = swapchainExtent;
 	} else {
