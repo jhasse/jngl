@@ -140,6 +140,52 @@ void drawCircle(const Mat3& modelview, const Rgba color) {
 	glDrawArrays(GL_TRIANGLE_FAN, 0, static_cast<GLsizei>(sizeof(vertexes) / sizeof(float) / 2));
 }
 
+namespace {
+
+/// The outline of a rectangle \a half across either way from (0, 0), centred on its edges: its left
+/// and right sides \a widthX wide, its top and bottom ones \a widthY high. In one go, so that each
+/// corner's only covered once, rather than twice where two sides would overlap, and that it's as
+/// see-through as the rest with a \a color that is, and isn't missing its outer corners either.
+void drawFrame(const Mat3& modelview, const Vec2 half, const double widthX, const double widthY,
+               const Rgba color) {
+	const auto outerX = static_cast<float>(std::abs(half.x) + widthX / 2);
+	const auto outerY = static_cast<float>(std::abs(half.y) + widthY / 2);
+	// Down to nothing, i.e. a filled rectangle, if the sides are wider than it
+	const auto innerX = static_cast<float>(std::max(0., std::abs(half.x) - widthX / 2));
+	const auto innerY = static_cast<float>(std::max(0., std::abs(half.y) - widthY / 2));
+	// Triangle strip: alternating outer/inner corners, round and back to the first
+	const std::array vertexes{
+		-outerX, -outerY, -innerX, -innerY, outerX,  -outerY, innerX,  -innerY, outerX,  outerY,
+		innerX,  innerY,  -outerX, outerY,  -innerX, innerY,  -outerX, -outerY, -innerX, -innerY,
+	};
+	opengl::bindVertexArray(opengl::vaoStream);
+	auto tmp = ShaderCache::handle().useSimpleShaderProgram(modelview, color);
+	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
+	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(float)),
+	             vertexes.data(), GL_STREAM_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, static_cast<GLsizei>(vertexes.size() / 2));
+}
+
+} // namespace
+
+void drawRectOutline(const Mat3 modelview, const Vec2 size, const float lineWidth,
+                     const Rgba color) {
+	if (lineWidth <= 0.f) {
+		return;
+	}
+	drawFrame(modelview, size / 2., lineWidth, lineWidth, color);
+}
+
+void drawSquareOutline(const Mat3 modelview, const float lineWidth, const Rgba color) {
+	if (lineWidth <= 0.f) {
+		return;
+	}
+	// As wide on the screen however it's scaled, see shapes.hpp
+	drawFrame(modelview, { .5, .5 }, lineWidth / modelview.data[0], lineWidth / modelview.data[4],
+	          color);
+}
+
 void drawCircleOutline(const Mat3& modelview, const float radius, const float lineWidth,
                        const Rgba color) {
 	if (lineWidth <= 0.f) {
