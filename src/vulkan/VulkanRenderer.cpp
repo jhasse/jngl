@@ -27,6 +27,7 @@
 #include <limits>
 #include <set>
 #include <span>
+#include <tuple>
 #include <stdexcept>
 
 namespace jngl {
@@ -248,8 +249,8 @@ VulkanRenderer::~VulkanRenderer() {
 		if (uniformsSetLayout) {
 			vkDestroyDescriptorSetLayout(device, uniformsSetLayout, nullptr);
 		}
-		if (descriptorPool) {
-			vkDestroyDescriptorPool(device, descriptorPool, nullptr);
+		for (const auto& pool : descriptorPools) {
+			vkDestroyDescriptorPool(device, pool.pool, nullptr);
 		}
 		for (uint32_t i = 0; i < maxFramesInFlight; ++i) {
 			if (i < imageAvailableSemaphores.size()) {
@@ -1837,12 +1838,7 @@ DynamicUniformBuffer VulkanRenderer::createUniformBuffer(const VkDeviceSize capa
 	VK_CHECK(vkMapMemory(device, ub.memory, 0, capacity, 0, &ub.mapped), "vkMapMemory");
 	ub.capacity = capacity;
 
-	VkDescriptorSetAllocateInfo dsAlloc{ .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
-	dsAlloc.descriptorPool = descriptorPool;
-	dsAlloc.descriptorSetCount = 1;
-	dsAlloc.pSetLayouts = &uniformsSetLayout;
-	VK_CHECK(vkAllocateDescriptorSets(device, &dsAlloc, &ub.descriptorSet),
-	         "vkAllocateDescriptorSets");
+	std::tie(ub.descriptorSet, ub.descriptorPool) = allocateDescriptorSet(uniformsSetLayout);
 	VkDescriptorBufferInfo bufferDesc{};
 	bufferDesc.buffer = ub.buffer;
 	bufferDesc.offset = 0;
@@ -1859,7 +1855,7 @@ DynamicUniformBuffer VulkanRenderer::createUniformBuffer(const VkDeviceSize capa
 
 void VulkanRenderer::destroyUniformBuffer(DynamicUniformBuffer& ub) {
 	if (ub.descriptorSet) {
-		vkFreeDescriptorSets(device, descriptorPool, 1, &ub.descriptorSet);
+		freeDescriptorSet(ub.descriptorSet, ub.descriptorPool, uniformsSetLayout);
 	}
 	if (ub.buffer) {
 		vkDestroyBuffer(device, ub.buffer, nullptr);
@@ -2047,16 +2043,65 @@ std::vector<unsigned char> toRgba8(int width, int height, unsigned int format,
 
 void VulkanRenderer::createDescriptorPool() {
 	const std::array<VkDescriptorPoolSize, 2> poolSizes = { {
-		{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1024 },
-		{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 16 },
+		{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, descriptorPoolTextures },
+		{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, descriptorPoolUniformBuffers },
 	} };
 	VkDescriptorPoolCreateInfo info{ .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO };
 	info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-	info.maxSets = 1024 + 16;
+	info.maxSets = descriptorPoolTextures + descriptorPoolUniformBuffers;
 	info.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
 	info.pPoolSizes = poolSizes.data();
-	VK_CHECK(vkCreateDescriptorPool(device, &info, nullptr, &descriptorPool),
-	         "vkCreateDescriptorPool");
+	VkDescriptorPool pool = VK_NULL_HANDLE;
+	VK_CHECK(vkCreateDescriptorPool(device, &info, nullptr, &pool), "vkCreateDescriptorPool");
+	descriptorPools.push_back({ .pool = pool });
+}
+
+std::pair<VkDescriptorSet, VkDescriptorPool>
+VulkanRenderer::allocateDescriptorSet(const VkDescriptorSetLayout layout) {
+	VkDescriptorSetAllocateInfo dsAlloc{ .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+	dsAlloc.descriptorSetCount = 1;
+	dsAlloc.pSetLayouts = &layout;
+	VkDescriptorSet set = VK_NULL_HANDLE;
+	const bool texture = layout == texturedSetLayout;
+	const auto hasRoom = [texture](const DescriptorPool& pool) {
+		return texture ? pool.textures < descriptorPoolTextures
+		               : pool.uniformBuffers < descriptorPoolUniformBuffers;
+	};
+	const auto count = [texture](DescriptorPool& pool) {
+		++(texture ? pool.textures : pool.uniformBuffers);
+	};
+	// Earlier pools might have room again, as descriptor sets are freed into them
+	for (auto& pool : descriptorPools) {
+		if (!hasRoom(pool)) {
+			continue;
+		}
+		dsAlloc.descriptorPool = pool.pool;
+		const VkResult result = vkAllocateDescriptorSets(device, &dsAlloc, &set);
+		if (result == VK_SUCCESS) {
+			count(pool);
+			return { set, pool.pool };
+		}
+		// Even if there's room, it might be too fragmented
+		if (result != VK_ERROR_OUT_OF_POOL_MEMORY && result != VK_ERROR_FRAGMENTED_POOL) {
+			VK_CHECK(result, "vkAllocateDescriptorSets");
+		}
+	}
+	internal::debug("All {} Vulkan descriptor pools are full, adding another one.",
+	                descriptorPools.size());
+	createDescriptorPool();
+	auto& pool = descriptorPools.back();
+	dsAlloc.descriptorPool = pool.pool;
+	VK_CHECK(vkAllocateDescriptorSets(device, &dsAlloc, &set), "vkAllocateDescriptorSets");
+	count(pool);
+	return { set, pool.pool };
+}
+
+void VulkanRenderer::freeDescriptorSet(const VkDescriptorSet set, const VkDescriptorPool pool,
+                                       const VkDescriptorSetLayout layout) {
+	vkFreeDescriptorSets(device, pool, 1, &set);
+	const auto it = std::ranges::find(descriptorPools, pool, &DescriptorPool::pool);
+	assert(it != descriptorPools.end());
+	--(layout == texturedSetLayout ? it->textures : it->uniformBuffers);
 }
 
 void VulkanRenderer::createTexturedPipelineLayout() {
@@ -2493,26 +2538,7 @@ void VulkanRenderer::createTextureDescriptor(VulkanTexture& texture) {
 	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR; // like GL_LINEAR_MIPMAP_LINEAR
 	samplerInfo.maxLod = static_cast<float>(texture.mipLevels - 1);
 	VK_CHECK(vkCreateSampler(device, &samplerInfo, nullptr, &texture.sampler), "vkCreateSampler");
-
-	VkDescriptorSetAllocateInfo dsAlloc{ .sType =
-		                                     VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
-	dsAlloc.descriptorPool = descriptorPool;
-	dsAlloc.descriptorSetCount = 1;
-	dsAlloc.pSetLayouts = &texturedSetLayout;
-	VK_CHECK(vkAllocateDescriptorSets(device, &dsAlloc, &texture.descriptorSet),
-	         "vkAllocateDescriptorSets");
-
-	VkDescriptorImageInfo imgInfo{};
-	imgInfo.sampler = texture.sampler;
-	imgInfo.imageView = texture.view;
-	imgInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-	VkWriteDescriptorSet write{ .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
-	write.dstSet = texture.descriptorSet;
-	write.dstBinding = 0;
-	write.descriptorCount = 1;
-	write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	write.pImageInfo = &imgInfo;
-	vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+	allocateTextureDescriptor(texture);
 }
 
 void VulkanRenderer::recordMipmapGeneration(const VkCommandBuffer cmd,
@@ -2698,7 +2724,7 @@ void VulkanRenderer::destroyTexture(VulkanTexture& texture) {
 
 void VulkanRenderer::freeTextureResources(const VulkanTexture& texture) {
 	if (texture.descriptorSet) {
-		vkFreeDescriptorSets(device, descriptorPool, 1, &texture.descriptorSet);
+		freeDescriptorSet(texture.descriptorSet, texture.descriptorPool, texturedSetLayout);
 	}
 	if (texture.sampler) {
 		vkDestroySampler(device, texture.sampler, nullptr);
@@ -2886,28 +2912,21 @@ void VulkanRenderer::readPixels(unsigned char* const rgb, const int x, const int
 	beginCurrentRenderPass(VK_ATTACHMENT_LOAD_OP_LOAD);
 }
 
-VkDescriptorSet VulkanRenderer::allocateTextureDescriptor(const VkImageView view,
-                                                          const VkSampler sampler) {
-	VkDescriptorSetAllocateInfo dsAlloc{ .sType =
-		                                     VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
-	dsAlloc.descriptorPool = descriptorPool;
-	dsAlloc.descriptorSetCount = 1;
-	dsAlloc.pSetLayouts = &texturedSetLayout;
-	VkDescriptorSet set = VK_NULL_HANDLE;
-	VK_CHECK(vkAllocateDescriptorSets(device, &dsAlloc, &set), "vkAllocateDescriptorSets");
+void VulkanRenderer::allocateTextureDescriptor(VulkanTexture& texture) {
+	std::tie(texture.descriptorSet, texture.descriptorPool) =
+	    allocateDescriptorSet(texturedSetLayout);
 
 	VkDescriptorImageInfo imgInfo{};
-	imgInfo.sampler = sampler;
-	imgInfo.imageView = view;
+	imgInfo.sampler = texture.sampler;
+	imgInfo.imageView = texture.view;
 	imgInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 	VkWriteDescriptorSet write{ .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
-	write.dstSet = set;
+	write.dstSet = texture.descriptorSet;
 	write.dstBinding = 0;
 	write.descriptorCount = 1;
 	write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 	write.pImageInfo = &imgInfo;
 	vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
-	return set;
 }
 
 std::unique_ptr<VulkanFramebuffer> VulkanRenderer::createFramebuffer(const int width,
@@ -2993,7 +3012,7 @@ std::unique_ptr<VulkanFramebuffer> VulkanRenderer::createFramebuffer(const int w
 	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
 	VK_CHECK(vkCreateSampler(device, &samplerInfo, nullptr, &fb->color.sampler), "vkCreateSampler");
 
-	fb->color.descriptorSet = allocateTextureDescriptor(fb->color.view, fb->color.sampler);
+	allocateTextureDescriptor(fb->color);
 
 	const std::array<VkImageView, 1> attachments = { fb->color.view };
 	VkFramebufferCreateInfo fbInfo{ .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO };

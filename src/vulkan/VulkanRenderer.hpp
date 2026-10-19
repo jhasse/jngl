@@ -32,6 +32,7 @@ struct VulkanTexture {
 	VkImageView view = VK_NULL_HANDLE;
 	VkSampler sampler = VK_NULL_HANDLE;
 	VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
+	VkDescriptorPool descriptorPool = VK_NULL_HANDLE; ///< that descriptorSet is from
 	int width = 0;
 	int height = 0;
 	uint32_t mipLevels = 1;
@@ -97,6 +98,7 @@ struct DynamicUniformBuffer {
 	VkDeviceSize capacity = 0;
 	VkDeviceSize used = 0;
 	VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
+	VkDescriptorPool descriptorPool = VK_NULL_HANDLE; ///< that descriptorSet is from
 };
 
 /// GPU resources backing a jngl::ShaderProgram on the Vulkan backend: textured pipelines for each
@@ -309,7 +311,14 @@ private:
 	[[nodiscard]] BlendVariant blendVariant() const;
 	/// Index into coloredPipelines, texturedPipelines and VulkanShaderProgram::pipelines
 	[[nodiscard]] static size_t pipelineIndex(BlendVariant, PrimitiveType);
+	/// Adds a pool to descriptorPools
 	void createDescriptorPool();
+	/// Allocates a descriptor set with \a layout (texturedSetLayout or uniformsSetLayout) from the
+	/// first of descriptorPools that has room, or a new one, and returns it with the pool it's
+	/// from, see freeDescriptorSet()
+	[[nodiscard]] std::pair<VkDescriptorSet, VkDescriptorPool>
+	allocateDescriptorSet(VkDescriptorSetLayout layout);
+	void freeDescriptorSet(VkDescriptorSet, VkDescriptorPool, VkDescriptorSetLayout layout);
 	/// Copies the active program's staging UBO into this frame's ring and binds it (dynamic
 	/// offset).
 	void bindActiveProgramUniforms(VkCommandBuffer cmd);
@@ -321,8 +330,9 @@ private:
 	/// Begins the render pass for whatever render target is currently on top of the stack (a
 	/// FrameBuffer, or the swapchain when the stack is empty), with the given load operation.
 	void beginCurrentRenderPass(VkAttachmentLoadOp loadOp);
-	/// Sets up a combined-image-sampler descriptor set sampling \a view with \a sampler.
-	[[nodiscard]] VkDescriptorSet allocateTextureDescriptor(VkImageView view, VkSampler sampler);
+	/// Sets up the texture's combined-image-sampler descriptor set, sampling its view with its
+	/// sampler
+	void allocateTextureDescriptor(VulkanTexture&);
 	/// Immediately destroys a framebuffer's GPU resources (assumes the GPU is no longer using them).
 	void freeFramebufferResources(VulkanFramebuffer&);
 	/// Immediately destroys a texture's GPU resources (assumes the GPU is no longer using them).
@@ -457,7 +467,18 @@ private:
 	VkPipelineLayout texturedPipelineLayout = VK_NULL_HANDLE;
 	std::array<std::array<VkPipeline, VulkanShaderProgram::pipelineCount>, passKindCount>
 	    texturedPipelines{};
-	VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
+	// Each holds the descriptor sets of up to descriptorPoolTextures textures and
+	// descriptorPoolUniformBuffers uniform buffers. Another one's added when they're all full.
+	// What's allocated from them is counted, as not every driver reports when a pool is full
+	// (lavapipe doesn't).
+	struct DescriptorPool {
+		VkDescriptorPool pool;
+		uint32_t textures = 0;
+		uint32_t uniformBuffers = 0;
+	};
+	std::vector<DescriptorPool> descriptorPools;
+	static constexpr uint32_t descriptorPoolTextures = 1024;
+	static constexpr uint32_t descriptorPoolUniformBuffers = 16;
 	// Custom shader program currently bound via ShaderProgram::use(); nullptr = built-in shader.
 	const VulkanShaderProgram* activeShaderProgram = nullptr;
 	bool blendingEnabled = true;
