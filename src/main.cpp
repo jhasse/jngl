@@ -109,7 +109,8 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 
 void applyScissor() {
 	// Where screen coordinates land: the window's canvas, or all of the FrameBuffer in use, which
-	// has the window's pixels per screen unit either way, see FrameBuffer::use()
+	// has getScaleFactor() pixels per screen unit (see FrameBuffer::use()), while the canvas has
+	// more or fewer when it's zoomed after the window has been resized
 	auto canvas = windowCanvas;
 	const auto frameBuffer = activeFrameBufferSize();
 	if (frameBuffer) {
@@ -128,8 +129,10 @@ void applyScissor() {
 		}
 		return;
 	}
-	const double pixelsPerUnitX = windowCanvas.width / getScreenWidth();
-	const double pixelsPerUnitY = windowCanvas.height / getScreenHeight();
+	const double pixelsPerUnitX =
+	    frameBuffer ? getScaleFactor() : windowCanvas.width / getScreenWidth();
+	const double pixelsPerUnitY =
+	    frameBuffer ? getScaleFactor() : windowCanvas.height / getScreenHeight();
 	// Where all of them overlap, in the canvas' pixels: from left to right and bottom to top
 	auto left = static_cast<long>(canvas.x);
 	auto bottom = static_cast<long>(canvas.y);

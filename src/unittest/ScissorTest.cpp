@@ -6,6 +6,7 @@
 #include "../jngl/matrix.hpp"
 #include "../jngl/other.hpp"
 #include "../jngl/shapes.hpp"
+#include "../jngl/window.hpp"
 #include "../opengl.hpp"
 #include "../window.hpp"
 #include "../windowptr.hpp"
@@ -15,6 +16,7 @@
 #include <sstream>
 #include <string>
 #include <tuple>
+#include <vector>
 
 namespace {
 
@@ -151,9 +153,9 @@ TEST_CASE("scissor and letterboxing") {
 	const ScissorState letterboxing{ true, 80, 0, 160, 35 };
 	REQUIRE(scissorState() == letterboxing);
 
-	// A FrameBuffer the canvas' size in pixels, so (0, 0) and the pixels per screen unit are the
-	// same inside it
-	jngl::FrameBuffer fb(160_px, 35_px);
+	// A FrameBuffer that covers the screen, i.e. of the canvas' pixels before it was zoomed out,
+	// which it's drawn into at getScaleFactor() pixels per screen unit rather than the zoomed half
+	jngl::FrameBuffer fb{ jngl::getWindowSize() };
 	{
 		const auto scissor = jngl::scissor({ -110, -25 }, { 120, 40 });
 		// Inside the canvas, right of its bar, at half the size
@@ -161,8 +163,18 @@ TEST_CASE("scissor and letterboxing") {
 		REQUIRE(scissorState() == onWindow);
 		{
 			const auto context = fb.use();
-			// The same place on the FrameBuffer, which has no bars
-			REQUIRE(scissorState() == ScissorState{ true, 25, 10, 60, 20 });
+			// The same place on the FrameBuffer, which has no bars, at full size: where a
+			// rectangle drawn there lands
+			REQUIRE(scissorState() == ScissorState{ true, 50, 20, 120, 40 });
+			jngl::drawRect(jngl::modelview().translate({ -110, -25 }), { 120, 40 }, 0x000000_rgb);
+			std::vector<unsigned char> pixels(size_t{ 320 } * 70 * 4);
+			glReadPixels(0, 0, 320, 70, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
+			const auto isDrawn = [&](const int x, const int y) {
+				return pixels.at(static_cast<size_t>(y * 320 + x) * 4) < 128;
+			};
+			REQUIRE((isDrawn(50, 20) && isDrawn(169, 59)));
+			REQUIRE(
+			    (!isDrawn(49, 20) && !isDrawn(170, 59) && !isDrawn(50, 19) && !isDrawn(169, 60)));
 		}
 		REQUIRE(scissorState() == onWindow);
 		fill(0x000000_rgb);
