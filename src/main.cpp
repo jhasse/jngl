@@ -806,20 +806,6 @@ Finally scissor(const Vec2 position, const Vec2 size) {
 	});
 }
 
-void drawRectOutline(Mat3 modelview, Vec2 size, float lineWidth, Rgba color) {
-	drawLine(modelview.translate({ -size.x / 2., -size.y / 2. }), { size.x, 0 }, lineWidth, color);
-	drawLine(modelview, { 0, size.y }, lineWidth, color);
-	drawLine(modelview.translate(size), { 0, -size.y }, lineWidth, color);
-	drawLine(modelview, { -size.x, 0 }, lineWidth, color);
-}
-
-void drawSquareOutline(Mat3 modelview, float lineWidth, Rgba color) {
-	drawLine(modelview.translate({ -.5, -.5 }), { 1, 0 }, lineWidth / modelview.data[4], color);
-	drawLine(modelview, { 0, 1 }, lineWidth / modelview.data[0], color);
-	drawLine(modelview.translate({ 1, 1 }), { 0, -1 }, lineWidth / modelview.data[0], color);
-	drawLine(modelview, { -1, 0 }, lineWidth / modelview.data[4], color);
-}
-
 void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 	const float vertexes[] = { static_cast<float>(a.x), static_cast<float>(a.y),
 		                       static_cast<float>(b.x), static_cast<float>(b.y),

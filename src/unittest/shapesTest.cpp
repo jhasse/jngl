@@ -7,6 +7,10 @@
 #include <jngl/Rgba.hpp>
 #include <jngl/matrix.hpp>
 #include <jngl/shapes.hpp>
+#include <jngl/window.hpp>
+
+#include <cmath>
+#include <utility>
 
 TEST_CASE("shapes") {
 	for (double scaleFactor : { 1, 2 }) {
@@ -76,6 +80,24 @@ TEST_CASE("circleOutline") {
 ▓▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
 	}
+}
+TEST_CASE("rectOutline") {
+	Fixture f(1.f);
+	// Thick and half see-through, from x = 105 to 215 and y = 10 to 60 on the 320x70 window: as
+	// grey in its corners, outside and inside, as along its sides, and nothing in the middle
+	jngl::drawRectOutline(jngl::modelview(), { 100, 40 }, 10.f, 0x00000080_rgba);
+	const auto pixels = jngl::readPixels();
+	const auto red = [&](const int x, const int y) {
+		return pixels.at(static_cast<size_t>(y * 320 + x) * 3);
+	};
+	const float side = red(160, 12);
+	REQUIRE(side > 0.4f);
+	REQUIRE(side < 0.6f);
+	for (const auto [x, y] : { std::pair{ 106, 11 }, std::pair{ 213, 58 }, std::pair{ 112, 17 },
+	                           std::pair{ 207, 52 }, std::pair{ 107, 35 } }) {
+		REQUIRE(std::abs(red(x, y) - side) < 0.02f);
+	}
+	REQUIRE(red(160, 35) > 0.99f);
 }
 TEST_CASE("triangle") {
 	for (double scaleFactor : { 0.6, 1.5 }) {
