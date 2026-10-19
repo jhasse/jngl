@@ -153,6 +153,11 @@ public:
 	/// While this is an implementation detail, it can be useful if you want to draw the
 	/// `GL_TEXTURE_2D` object yourself or need to pass it to another library. The return type is
 	/// equivalent to `GLuint`.
+	///
+	/// \deprecated There's no OpenGL texture with other rendering backends (e.g. Vulkan). Draw the
+	/// FrameBuffer with draw() instead, also with your own ShaderProgram.
+	[[deprecated("There's no OpenGL texture with other rendering backends, draw the FrameBuffer "
+	             "with draw() instead")]]
 	uint32_t getTextureID() const;
 
 private:
