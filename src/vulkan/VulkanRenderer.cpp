@@ -5,6 +5,7 @@
 
 #include "../App.hpp"
 #include "../StartupProfiler.hpp"
+#include "../jngl/Alpha.hpp"
 #include "../jngl/Mat3.hpp"
 #include "../log.hpp"
 #include "vulkan_helper.hpp"
@@ -881,6 +882,12 @@ void VulkanRenderer::setVerticalSync(const bool enabled) {
 	if (!device) {
 		return;
 	}
+	if (frameActive) {
+		// The frame's command buffer uses the swapchain's framebuffers, so wait until it's been
+		// presented
+		swapchainRecreatePending = true;
+		return;
+	}
 	vkDeviceWaitIdle(device);
 	recreateSwapchain();
 }
@@ -1018,6 +1025,18 @@ void VulkanRenderer::recreateSwapchain() {
 }
 
 void VulkanRenderer::beginFrame(const Rgb clearColor) {
+	if (frameActive) {
+		// E.g. by showWindow, before the first swapBuffers. Like glClear on OpenGL, clear what's
+		// being drawn on instead.
+		currentClearColor = clearColor;
+		if (renderTargetStack.empty()) {
+			vkCmdEndRenderPass(commandBuffers[currentFrame]);
+			beginCurrentRenderPass(VK_ATTACHMENT_LOAD_OP_CLEAR); // with the letterboxing's bars
+		} else {
+			clearCurrentRenderTarget(Rgba(clearColor, Alpha(1)));
+		}
+		return;
+	}
 	vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE,
 	                std::numeric_limits<uint64_t>::max());
 	// The GPU is done with this frame's previous command buffer, and so with the buffers it read
@@ -1300,8 +1319,9 @@ void VulkanRenderer::endFrame() {
 	present.pImageIndices = &currentImageIndex;
 
 	const VkResult result = vkQueuePresentKHR(presentQueue, &present);
-	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
-		framebufferResized = false;
+	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR ||
+	    swapchainRecreatePending) {
+		swapchainRecreatePending = false;
 		recreateSwapchain();
 	} else if (result != VK_SUCCESS) {
 		throw std::runtime_error("vkQueuePresentKHR failed");
@@ -1356,7 +1376,7 @@ void VulkanRenderer::applyViewport(const VkCommandBuffer cmd, const VkExtent2D e
 }
 
 void VulkanRenderer::onResize(int /*width*/, int /*height*/) {
-	framebufferResized = true;
+	swapchainRecreatePending = true;
 }
 
 void VulkanRenderer::setProjection(const Mat4& p) {

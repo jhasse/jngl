@@ -155,7 +155,8 @@ public:
 	void pushRenderTarget(VulkanFramebuffer& framebuffer);
 	void popRenderTarget();
 
-	/// Clears the render target that's currently bound (the active FrameBuffer, or the screen).
+	/// Clears the render target that's currently bound (the active FrameBuffer, or the screen),
+	/// within the scissor, like glClear. Does nothing if no frame has begun.
 	void clearCurrentRenderTarget(Rgba color);
 
 	/// Builds a custom shader program (see jngl::ShaderProgram) from vertex + fragment SPIR-V.
@@ -401,7 +402,9 @@ private:
 	uint32_t currentFrame = 0;
 	uint32_t currentImageIndex = 0;
 	bool frameActive = false;
-	bool framebufferResized = false;
+	// The swapchain has to be recreated after the current frame has been presented, e.g. as the
+	// window has been resized or v-sync toggled
+	bool swapchainRecreatePending = false;
 	// Set once the current frame's imageAvailable semaphore has been waited on (by a readPixels
 	// flush), so endFrame doesn't wait on it a second time.
 	bool imageAvailableWaited = false;

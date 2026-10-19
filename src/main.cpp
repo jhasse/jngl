@@ -256,6 +256,10 @@ void showWindow(const std::string& title, const double width, const double heigh
 	setAntiAliasing(antiAliasingEnabled);
 #ifndef JNGL_VULKAN
 	pWindow->initGlObjects();
+#else
+	// Begin the first frame, so that what's drawn before the first swapBuffers() isn't lost, like
+	// on OpenGL, where it's drawn into the back buffer
+	clearBackBuffer();
 #endif
 
 	// The active TextInputSession (or the deprecated getTextInput()'s legacy fallback) lives
@@ -367,7 +371,9 @@ void setBackgroundColor(const jngl::Rgb color) {
 	pWindow.ThrowIfNull();
 	backgroundColor = color;
 	clearBackgroundColor();
-#ifndef JNGL_VULKAN
+#ifdef JNGL_VULKAN
+	static_cast<VulkanRenderer&>(getRenderer()).clearCurrentRenderTarget(Rgba(color, Alpha(1)));
+#else
 	glClear(GL_COLOR_BUFFER_BIT);
 #endif
 }
