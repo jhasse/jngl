@@ -77,7 +77,8 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	const auto create = [this, &title, width, height, flags]() {
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, isMultisampleSupported_ ? 4 : 0);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,
+		                    isMultisampleSupported_ ? MULTISAMPLE_SAMPLES : 0);
 		return SDL_CreateWindow(title.c_str(), width, height, flags);
 	};
 	if ((impl->sdlWindow = create()) == nullptr) {

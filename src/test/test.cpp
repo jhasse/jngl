@@ -40,8 +40,9 @@ private:
 class Test : public jngl::Scene {
 public:
 	explicit Test(const std::string& displayName)
-	: frameTime(jngl::getTime()), lastTime(jngl::getTime()), fb2(jngl::getWindowSize()),
-	  logoWebp("jngl.webp"), soundLoader(jngl::load("test.ogg")) {
+	: frameTime(jngl::getTime()), lastTime(jngl::getTime()),
+	  fb2(jngl::getWindowSize(), false, true), logoWebp("jngl.webp"),
+	  soundLoader(jngl::load("test.ogg")) {
 		jngl::setTitle(displayName + " | UTF-8: äöüß");
 		jngl::setIcon("jngl-icon");
 		jngl::setMouseVisible(false);

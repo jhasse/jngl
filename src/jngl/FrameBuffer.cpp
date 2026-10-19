@@ -5,14 +5,17 @@
 
 #include "../App.hpp"
 #include "../ShaderCache.hpp"
+#include "../log.hpp"
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
 #include "../texture.hpp"
+#include "../window.hpp"
 #include "../windowptr.hpp"
 #include "ScaleablePixels.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
 
+#include <algorithm>
 #include <array>
 
 namespace jngl {
@@ -74,11 +77,40 @@ struct FrameBuffer::Impl {
 			           // been destroyed
 			glDeleteFramebuffers(1, &fbo);
 			glDeleteRenderbuffers(1, &buffer);
+			if (samples > 0) {
+				glDeleteFramebuffers(1, &multisampledFbo);
+				glDeleteRenderbuffers(1, &multisampledBuffer);
+			}
+		}
+	}
+
+	/// What's drawn into while it's in use: multisampledFbo if it has samples, otherwise fbo
+	GLuint drawnFbo() const {
+		return samples > 0 ? multisampledFbo : fbo;
+	}
+
+	/// Resolves multisampledFbo's samples into fbo's texture, all of it, if it has any
+	void resolve() const {
+		if (samples == 0) {
+			return;
+		}
+		const bool scissorTest = glIsEnabled(GL_SCISSOR_TEST);
+		glDisable(GL_SCISSOR_TEST);
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, multisampledFbo);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
+		glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT,
+		                  GL_NEAREST);
+		if (scissorTest) {
+			glEnable(GL_SCISSOR_TEST);
 		}
 	}
 
 	GLuint fbo = 0;
 	GLuint buffer = 0;
+	/// How many samples per pixel are drawn into multisampledBuffer, or 0 for none of those
+	int samples = 0;
+	GLuint multisampledFbo = 0;
+	GLuint multisampledBuffer = 0;
 	const int width;
 	const int height;
 	Texture texture;
@@ -93,7 +125,8 @@ struct FrameBuffer::Impl {
 
 Mat4 FrameBuffer::Impl::screenProjection;
 
-FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr)
+FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr,
+                         const bool antiAliased)
 : impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height), hdr)) {
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
@@ -114,6 +147,35 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr
 	glDisable(GL_SCISSOR_TEST);
 	glClearColor(1, 1, 1, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	// Always multisampled if it's to be anti-aliased, as jngl::setAntiAliasing() can change at any
+	// time, and rather than when it's used, it's whether GL_MULTISAMPLE is enabled while drawing
+	// that decides it, as on the window
+	if (antiAliased && pWindow->isMultisampleSupported()) {
+		GLint maxSamples = 0;
+		glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
+		impl->samples = std::min(Window::MULTISAMPLE_SAMPLES, static_cast<int>(maxSamples));
+	}
+	if (impl->samples > 0) {
+		glGenRenderbuffers(1, &impl->multisampledBuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, impl->multisampledBuffer);
+		glRenderbufferStorageMultisample(GL_RENDERBUFFER, impl->samples,
+		                                 hdr ? GL_RGBA16F : GL_RGBA8, static_cast<int>(width),
+		                                 static_cast<int>(height));
+		glGenFramebuffers(1, &impl->multisampledFbo);
+		glBindFramebuffer(GL_FRAMEBUFFER, impl->multisampledFbo);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+		                          impl->multisampledBuffer);
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) {
+			glClear(GL_COLOR_BUFFER_BIT); // like the texture
+		} else {
+			internal::warn("Multisampled FrameBuffer not supported, drawing without it.");
+			glDeleteFramebuffers(1, &impl->multisampledFbo);
+			glDeleteRenderbuffers(1, &impl->multisampledBuffer);
+			impl->samples = 0;
+		}
+	}
+
 	clearBackgroundColor();
 	if (scissorTest) {
 		glEnable(GL_SCISSOR_TEST);
@@ -126,12 +188,13 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr
 	}
 }
 
-FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height, const bool hdr)
-: FrameBuffer(static_cast<Pixels>(width), static_cast<Pixels>(height), hdr) {
+FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height, const bool hdr,
+                         const bool antiAliased)
+: FrameBuffer(static_cast<Pixels>(width), static_cast<Pixels>(height), hdr, antiAliased) {
 }
 
-FrameBuffer::FrameBuffer(std::array<Pixels, 2> size, const bool hdr)
-: FrameBuffer(size[0], size[1], hdr) {
+FrameBuffer::FrameBuffer(std::array<Pixels, 2> size, const bool hdr, const bool antiAliased)
+: FrameBuffer(size[0], size[1], hdr, antiAliased) {
 }
 
 FrameBuffer::FrameBuffer(FrameBuffer&&) noexcept = default;
@@ -292,8 +355,9 @@ void FrameBuffer::Context::clear(const Rgba color) {
 
 FrameBuffer::Context FrameBuffer::use() const {
 	auto activate = [this]() {
-		glBindFramebuffer(GL_FRAMEBUFFER, impl->fbo);
-		glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, impl->drawnFbo());
+		glBindRenderbuffer(GL_RENDERBUFFER,
+		                   impl->samples > 0 ? impl->multisampledBuffer : impl->buffer);
 		glViewport(0, 0, impl->width, impl->height);
 		// This FrameBuffer's on activateStack by now: the window's letterboxing doesn't apply here,
 		// a jngl::scissor() does
@@ -333,6 +397,7 @@ FrameBuffer::Context FrameBuffer::use() const {
 	activateStack.emplace(Active{ std::move(activate), impl->width, impl->height });
 	activateStack.top().activate();
 	return Context([this, savedProjection]() {
+		impl->resolve(); // so that it's drawn as it's been drawn into
 		activateStack.pop();
 		popMatrix();
 #if defined(GL_VIEWPORT_BIT) && !defined(__APPLE__)
