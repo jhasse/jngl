@@ -12,4 +12,9 @@ std::string getSystemConfigPath();
 std::string getSystemDocumentsPath();
 #endif
 
+namespace internal {
+/// Overrides the directory returned by internal::getConfigPath(), used on iOS
+void setConfigPath(const std::string& path);
+} // namespace internal
+
 } // namespace jngl

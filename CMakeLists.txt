@@ -585,6 +585,15 @@ if(NOT hasParent)
 		add_executable(jngl-unittest ${UNITTEST_SRC})
 		target_compile_features(jngl-unittest PRIVATE cxx_std_20)
 		target_link_libraries(jngl-unittest PRIVATE jngl Catch2::Catch2WithMain)
+		# Where the tests' images, sounds and fonts are, so that they're found wherever the tests
+		# are built and run from (see Fixture.cpp). Where data/ is bundled with the app instead,
+		# as on the web and iOS, there's no such path, so it's what the tests used before.
+		if(EMSCRIPTEN OR IOS)
+			target_compile_definitions(jngl-unittest PRIVATE JNGL_UNITTEST_DATA="../data/")
+		else()
+			target_compile_definitions(jngl-unittest PRIVATE
+			                           JNGL_UNITTEST_DATA="${CMAKE_CURRENT_SOURCE_DIR}/data/")
+		endif()
 		if(NOT EMSCRIPTEN AND NOT IOS)
 			# for tests including internal headers like window.hpp
 			target_include_directories(jngl-unittest PRIVATE glad/include)
@@ -598,7 +607,6 @@ if(NOT hasParent)
 				COMMAND env SDL_VIDEO_DRIVER=x11
 				        ${XVFB_RUN} -a -s "-screen 0 2560x1440x24" $<TARGET_FILE:jngl-unittest>
 				DEPENDS jngl-unittest
-				WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 				USES_TERMINAL
 				VERBATIM)
 		endif()

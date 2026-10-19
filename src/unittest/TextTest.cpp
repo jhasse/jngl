@@ -11,7 +11,7 @@
 
 TEST_CASE("CharacterTest") {
 	Fixture f(2);
-	jngl::Font font("../data/Arial.ttf", 40);
+	jngl::Font font("Arial.ttf", 40);
 	jngl::Text t("m ö o ß");
 	t.setFont(font);
 	t.setPos(-110, -20);
@@ -36,7 +36,7 @@ TEST_CASE("TextTest") {
 	// Test with two rather big scale factors to avoid rounding errors:
 	for (double scaleFactor : { 6, 8 }) {
 		Fixture f(scaleFactor);
-		jngl::setFont("../data/Arial.ttf");
+		jngl::setFont("Arial.ttf");
 		jngl::Text text("test string\nline 2");
 		REQUIRE_THAT(text.getWidth(), Catch::Matchers::WithinAbs(69.4, 0.1));
 		REQUIRE(std::lround(text.getHeight()) == 38);

@@ -8,7 +8,6 @@
 #include "Fixture.hpp"
 
 #include <catch2/catch_test_macros.hpp>
-#include <filesystem>
 
 TEST_CASE("FinallyTest") {
 	bool called = false;
@@ -42,18 +41,6 @@ TEST_CASE("FinallyTest") {
 }
 
 TEST_CASE("halfLoadTest") {
-	std::error_code err;
-	std::filesystem::current_path("data", err);
-	if (err) {
-		std::filesystem::current_path("../data", err); // move out of build/bin folder
-		if (err) {
-			std::filesystem::current_path("../../data", err); // move out of build/Debug folder
-			if (err) {
-				std::filesystem::current_path("../../../data",
-				                              err); // move out of out\build\x64-Debug
-			}
-		}
-	}
 	REQUIRE(jngl::getWidth("jngl") == 600);
 	REQUIRE(jngl::getHeight("jngl") == 300);
 	REQUIRE_THROWS_AS(jngl::load("jngl"), std::runtime_error);

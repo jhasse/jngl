@@ -126,7 +126,7 @@ bool WindowImpl::InitMultisample(HINSTANCE, PIXELFORMATDESCRIPTOR) {
 		                  WGL_SAMPLE_BUFFERS_ARB,
 		                  GL_TRUE,
 		                  WGL_SAMPLES_ARB,
-		                  4, // Check For 4x Multisampling
+		                  Window::MULTISAMPLE_SAMPLES,
 		                  0,
 		                  0 };
 

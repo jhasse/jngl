@@ -5,7 +5,12 @@
 #include "../jngl/ScaleablePixels.hpp"
 #include "../jngl/Sprite.hpp"
 #include "../jngl/matrix.hpp"
+#include "../jngl/other.hpp"
 #include "../jngl/shapes.hpp"
+#include "../jngl/window.hpp"
+#include "../opengl.hpp"
+#include "../window.hpp"
+#include "../windowptr.hpp"
 #include "Fixture.hpp"
 
 #include <catch2/catch_test_macros.hpp>
@@ -259,4 +264,43 @@ TEST_CASE("FrameBufferInception") {
 ▒                 ▒            ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
+}
+
+TEST_CASE("FrameBuffer anti-aliased like the window") {
+	Fixture f(1.f);
+#ifdef JNGL_VULKAN
+	SKIP("Anti-aliased FrameBuffers aren't supported on Vulkan yet");
+#endif
+	if (!jngl::pWindow->isMultisampleSupported()) {
+		SKIP("Multisampling isn't supported here");
+	}
+	// A black triangle with a slanted edge, drawn into a FrameBuffer that's then drawn onto the
+	// window pixel for pixel, and how many of the pixels around it are grey, i.e. smoothed
+	const auto greys = [](const bool antiAliased) {
+		Fixture::reset();
+		jngl::FrameBuffer fb(320_px, 70_px, false, antiAliased);
+		{
+			const auto context = fb.use();
+			jngl::drawTriangle(jngl::Vec2(-60, -25), jngl::Vec2(60, -25), jngl::Vec2(-60, 25));
+		}
+		fb.draw(-160, -35);
+		const auto pixels = jngl::readPixels();
+		int count = 0;
+		for (int y = 5; y < 65; ++y) {
+			for (int x = 90; x < 230; ++x) {
+				const float red = pixels.at(static_cast<size_t>(y * 320 + x) * 3);
+				if (red > 0.1f && red < 0.9f) {
+					++count;
+				}
+			}
+		}
+		return count;
+	};
+	REQUIRE(greys(false) == 0); // stair-stepped, as a FrameBuffer always was
+	REQUIRE(greys(true) > 50); // about one along each of the edge's 120 columns
+#ifdef GL_MULTISAMPLE_ARB
+	jngl::setAntiAliasing(false); // also for one that's anti-aliased otherwise
+	REQUIRE(greys(true) == 0);
+	jngl::setAntiAliasing(true);
+#endif
 }

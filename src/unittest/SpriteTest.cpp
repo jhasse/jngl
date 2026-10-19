@@ -11,7 +11,7 @@
 TEST_CASE("Sprite") {
 	for (float factor : { 1.f, 2.f, 3.4f }) {
 		Fixture f(factor);
-		jngl::Sprite sprite("../data/jngl.webp");
+		jngl::Sprite sprite("jngl.webp");
 		sprite.setPos(-60, -30);
 		sprite.draw(jngl::modelview().scale(0.2f, 0.2f));
 		REQUIRE(f.getAsciiArt() == R"(
@@ -23,11 +23,11 @@ TEST_CASE("Sprite") {
 ▒              ░░              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
-		jngl::load("../data/jngl.webp"); // This shouldn't crash
+		jngl::load("jngl.webp"); // This shouldn't crash
 	}
 	{
 		Fixture f(3.4f);
-		jngl::Sprite sprite("../data/jngl.webp");
+		jngl::Sprite sprite("jngl.webp");
 		REQUIRE_THAT(sprite.getWidth(), Catch::Matchers::WithinAbs(600, 1e-9));
 		REQUIRE_THAT(sprite.getHeight(), Catch::Matchers::WithinAbs(300, 1e-9));
 
@@ -48,7 +48,7 @@ TEST_CASE("Sprite") {
 }
 TEST_CASE("Sprite_Batch") {
 	Fixture f(2.0f);
-	jngl::Sprite sprite("../data/jngl.webp");
+	jngl::Sprite sprite("jngl.webp");
 	sprite.setPos(-60, -30);
 	{
 		auto batch = sprite.batch();
@@ -67,7 +67,7 @@ TEST_CASE("Sprite_Batch") {
 }
 TEST_CASE("drawLerped") {
 	Fixture f(1.f);
-	jngl::Sprite sprite("../data/jngl.webp");
+	jngl::Sprite sprite("jngl.webp");
 
 	// Lerping fully towards black has to look exactly like multiplying with black. Comparing
 	// against that instead of hardcoded ASCII art, because the anti-aliased edges of the
@@ -110,13 +110,13 @@ TEST_CASE("TextureCache") {
 	{
 		Fixture f(1.9f);
 		REQUIRE(jngl::TextureCache::handle().sprites.empty());
-		REQUIRE(jngl::TextureCache::handle().get("../data/jngl.webp") == nullptr);
-		jngl::load("../data/jngl.webp");
+		REQUIRE(jngl::TextureCache::handle().get("jngl.webp") == nullptr);
+		jngl::load("jngl.webp");
 		REQUIRE(jngl::TextureCache::handle().sprites.size() == 1u);
-		REQUIRE(jngl::TextureCache::handle().get("../data/jngl.webp") != nullptr);
-		jngl::Sprite sprite("../data/jngl.webp");
+		REQUIRE(jngl::TextureCache::handle().get("jngl.webp") != nullptr);
+		jngl::Sprite sprite("jngl.webp");
 		REQUIRE(jngl::TextureCache::handle().sprites.size() == 1u);
-		REQUIRE(jngl::TextureCache::handle().get("../data/jngl.webp") != nullptr);
+		REQUIRE(jngl::TextureCache::handle().get("jngl.webp") != nullptr);
 		sprite.draw(jngl::modelview().scale(0.2f));
 		REQUIRE(f.getAsciiArt() == R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
@@ -130,9 +130,9 @@ TEST_CASE("TextureCache") {
 	}
 	{
 		REQUIRE(jngl::TextureCache::handle().sprites.empty());
-		REQUIRE(jngl::TextureCache::handle().get("../data/jngl.webp") == nullptr);
+		REQUIRE(jngl::TextureCache::handle().get("jngl.webp") == nullptr);
 		Fixture f(1.9f);
-		jngl::Sprite sprite("../data/jngl.webp");
+		jngl::Sprite sprite("jngl.webp");
 		sprite.draw(jngl::modelview().scale(0.2f));
 		REQUIRE(f.getAsciiArt() == R"(
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
@@ -148,7 +148,7 @@ TEST_CASE("TextureCache") {
 TEST_CASE("Loader") {
 	for (float factor : { 1.f, 2.f, 3.4f }) {
 		Fixture f(factor);
-		jngl::Sprite::Loader loader("../data/jngl.webp");
+		jngl::Sprite::Loader loader("jngl.webp");
 		loader->setPos(-60, -30);
 		REQUIRE(static_cast<bool>(loader));
 		loader->draw(jngl::modelview().scale(0.2f, 0.2f));
@@ -166,7 +166,7 @@ TEST_CASE("Loader") {
 TEST_CASE("drawClipped") {
 	Fixture f(1.5f);
 	jngl::scale(0.4f);
-	jngl::Sprite sprite("../data/jngl.webp");
+	jngl::Sprite sprite("jngl.webp");
 	sprite.setPos(-310, -50);
 	sprite.drawClipped({ 0.25f, 0.25f }, { 0.75f, 0.75f });
 	sprite.setPos(-90, -120);

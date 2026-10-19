@@ -118,6 +118,9 @@ public:
 	void setFont(const std::string&);
 	void setFontByName(const std::string&);
 	bool isMultisampleSupported() const;
+	/// How many samples per pixel the window's anti-aliased with, see isMultisampleSupported(), and
+	/// an anti-aliased FrameBuffer
+	static constexpr int MULTISAMPLE_SAMPLES = 4;
 	void SetIcon(const std::string&);
 	double getMouseWheel() const;
 	std::string getFont() const;

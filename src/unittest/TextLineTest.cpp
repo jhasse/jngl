@@ -14,7 +14,7 @@ TEST_CASE("TextLineTest") {
 	// Test with two rather big scale factors to avoid rounding errors:
 	for (double scaleFactor : { 6, 8 }) {
 		Fixture f(scaleFactor);
-		jngl::Font font("../data/Arial.ttf", 14);
+		jngl::Font font("Arial.ttf", 14);
 		jngl::TextLine text(font, "test string");
 		REQUIRE_THAT(text.getWidth(), Catch::Matchers::WithinAbs(80.7, 0.2));
 		REQUIRE(std::lround(text.getHeight()) == 22);

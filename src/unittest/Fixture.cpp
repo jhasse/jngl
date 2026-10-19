@@ -7,13 +7,34 @@
 
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
+#include <catch2/reporters/catch_reporter_event_listener.hpp>
+#include <catch2/reporters/catch_reporter_registrars.hpp>
 #include <cmath>
 #include <jngl.hpp>
 #include <jngl/AppParameters.hpp>
 #include <ranges>
 
+namespace {
+
+/// Has every test load its images, sounds and fonts from JNGL_UNITTEST_DATA (see CMakeLists.txt),
+/// e.g. "jngl.webp", also those without a window. jngl::hideWindow() forgets the prefix again, so
+/// Fixture sets it, too.
+class DataPrefix : public Catch::EventListenerBase {
+public:
+	using EventListenerBase::EventListenerBase;
+
+	void testCaseStarting(const Catch::TestCaseInfo&) override {
+		jngl::setPrefix(JNGL_UNITTEST_DATA);
+	}
+};
+
+} // namespace
+
+CATCH_REGISTER_LISTENER(DataPrefix)
+
 Fixture::Fixture(const double scaleFactor) {
 	jngl::hideWindow();
+	jngl::setPrefix(JNGL_UNITTEST_DATA); // as hiding the window has forgotten it
 	// The ASCII art needs an exact window size in actual pixels, regardless of the display's scale
 	jngl::internal::setHighDpi(false);
 	const double width = 320 * scaleFactor;

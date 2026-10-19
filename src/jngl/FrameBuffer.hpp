@@ -48,15 +48,24 @@ public:
 	/// Creates a framebuffer object with \a width times \a height actual pixels
 	///
 	/// \param hdr If true, the framebuffer stores floating point channels (GL_RGBA16F) instead of
-	/// 8-bit ones. This avoids banding in smooth gradients and lets channel values exceed 1.0, which
-	/// is useful for HDR lighting.
-	FrameBuffer(Pixels width, Pixels height, bool hdr = false);
+	/// 8-bit ones. This avoids banding in smooth gradients and lets channel values exceed 1.0,
+	/// which is useful for HDR lighting.
+	/// \param antiAliased If true, what's drawn into it is anti-aliased like what's drawn onto the
+	/// window: multisampled as long as jngl::getAntiAliasing() is true and the window supports it.
+	/// Each time it's done being used (see use()), the samples are resolved into the image that's
+	/// drawn, which costs a little, so it's only worth it for shapes, e.g. jngl::drawCircle(), not
+	/// for e.g. sprites, which are smooth anyway. While jngl::setAntiAliasing(false), it still has
+	/// its samples and resolves them, only without smoothing anything (except on OpenGL ES, which
+	/// can't turn it off, like on the window): to save that too, make it again with \a antiAliased
+	/// false.
+	FrameBuffer(Pixels width, Pixels height, bool hdr = false, bool antiAliased = false);
 
 	/// Creates a framebuffer object with \a width times \a height scalable pixels
-	FrameBuffer(ScaleablePixels width, ScaleablePixels height, bool hdr = false);
+	FrameBuffer(ScaleablePixels width, ScaleablePixels height, bool hdr = false,
+	            bool antiAliased = false);
 
 	/// Creates a framebuffer object with \a size[0] times \a size[1] pixels
-	explicit FrameBuffer(std::array<Pixels, 2> size, bool hdr = false);
+	explicit FrameBuffer(std::array<Pixels, 2> size, bool hdr = false, bool antiAliased = false);
 
 	FrameBuffer(const FrameBuffer&) = delete;
 	FrameBuffer& operator=(const FrameBuffer&) = delete;
