@@ -429,7 +429,8 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the OpenGL texture ID of the associated image buffer. </p>
-<p>While this is an implementation detail, it can be useful if you want to draw the <code>GL_TEXTURE_2D</code> object yourself or need to pass it to another library. The return type is equivalent to <code>GLuint</code>. </p>
+<p>While this is an implementation detail, it can be useful if you want to draw the <code>GL_TEXTURE_2D</code> object yourself or need to pass it to another library. The return type is equivalent to <code>GLuint</code>.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated</a></b></dt><dd>There's no OpenGL texture with other rendering backends (e.g. Vulkan). Draw the <a class="el" href="classjngl_1_1FrameBuffer.html" title="Image framebuffer object which can be rendered on.">FrameBuffer</a> with <a class="el" href="#a0a9e0c8f009704fd88297bcfe198aef2" title="Draws the framebuffer image to the screen.">draw()</a> instead, also with your own <a class="el" href="classjngl_1_1ShaderProgram.html" title="Linked vertex and fragment shaders.">ShaderProgram</a>. </dd></dl>
 
 </div>
 </div>

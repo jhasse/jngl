@@ -186,15 +186,17 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    <a class="code hl_class" href="classjngl_1_1Pixels.html">Pixels</a> getPixelWidth() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <a class="code hl_class" href="classjngl_1_1Pixels.html">Pixels</a> getPixelHeight() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno"><a class="line" href="classjngl_1_1FrameBuffer.html#aeb8d8a09d425d18b5963d8b7a608c629">  156</a></span>    uint32_t <a class="code hl_function" href="classjngl_1_1FrameBuffer.html#aeb8d8a09d425d18b5963d8b7a608c629">getTextureID</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span> </div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    <span class="keyword">struct </span>Impl;</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/memory/unique_ptr.html">std::unique_ptr&lt;Impl&gt;</a> impl;</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>};</div>
-</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    [[deprecated(<span class="stringliteral">&quot;There&#39;s no OpenGL texture with other rendering backends, draw the FrameBuffer &quot;</span></div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>                 <span class="stringliteral">&quot;with draw() instead&quot;</span>)]]</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno"><a class="line" href="classjngl_1_1FrameBuffer.html#aeb8d8a09d425d18b5963d8b7a608c629">  161</a></span>    uint32_t <a class="code hl_function" href="classjngl_1_1FrameBuffer.html#aeb8d8a09d425d18b5963d8b7a608c629">getTextureID</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>} <span class="comment">// namespace jngl</span></div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    <span class="keyword">struct </span>Impl;</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    <a class="code hl_classRef" href="http://en.cppreference.com/w/cpp/memory/unique_ptr.html">std::unique_ptr&lt;Impl&gt;</a> impl;</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>};</div>
+</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>} <span class="comment">// namespace jngl</span></div>
 <div class="ttc" id="aMat3_8hpp_html"><div class="ttname"><a href="Mat3_8hpp.html">Mat3.hpp</a></div><div class="ttdoc">Contains jngl::Mat3 class.</div></div>
 <div class="ttc" id="aPixels_8hpp_html"><div class="ttname"><a href="Pixels_8hpp.html">Pixels.hpp</a></div><div class="ttdoc">Contains jngl::Pixels class.</div></div>
 <div class="ttc" id="aRgba_8hpp_html"><div class="ttname"><a href="Rgba_8hpp.html">Rgba.hpp</a></div><div class="ttdoc">Contains jngl::Rgba class.</div></div>

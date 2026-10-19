@@ -1945,7 +1945,7 @@ template&lt;class Box &gt; </div>
 </div><div class="memdoc">
 
 <p>Retrieve mouse position in pixels. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated</a></b></dt><dd>Use <a class="el" href="#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">jngl::getMousePos()</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated</a></b></dt><dd>Use <a class="el" href="#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">jngl::getMousePos()</a> instead </dd></dl>
 
 </div>
 </div>
@@ -1965,7 +1965,7 @@ template&lt;class Box &gt; </div>
 </div><div class="memdoc">
 
 <p>Retrieve mouse position in pixels. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated</a></b></dt><dd>Use <a class="el" href="#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">jngl::getMousePos()</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated</a></b></dt><dd>Use <a class="el" href="#ade03c1f38a9e52f5a27deb7d8beb5dcf" title="Mouse position in screen coordinates.">jngl::getMousePos()</a> instead </dd></dl>
 
 </div>
 </div>
@@ -2006,7 +2006,7 @@ template&lt;class Box &gt; </div>
 
 <p>Specify a function which gets called, whenever a controller gets added or removed. </p>
 <p>Whenever the return value of <a class="el" href="#ad178a38cc5f90ca8047e07693d39ac6a" title="Returns all controllers (gamepads) that are connected.">jngl::getConnectedControllers</a> would change, <em>callback</em> gets called.</p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated</a></b></dt><dd>Use <a class="el" href="classjngl_1_1Job.html#a266cd76ff1ed7b753a12f4ded13f44c6" title="Whenever the return value of jngl::getConnectedControllers would change, this method gets called.">jngl::Job::onControllersChanged()</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated</a></b></dt><dd>Use <a class="el" href="classjngl_1_1Job.html#a266cd76ff1ed7b753a12f4ded13f44c6" title="Whenever the return value of jngl::getConnectedControllers would change, this method gets called.">jngl::Job::onControllersChanged()</a> instead </dd></dl>
 
 </div>
 </div>
@@ -2026,7 +2026,7 @@ template&lt;class Box &gt; </div>
 </div><div class="memdoc">
 
 <p>Returns a string of characters that have been pressed since the last call to <a class="el" href="#ae301acc8b5118eb5b5939e9ad43ce777" title="Updates the input state.">updateInput()</a> </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated</a></b></dt><dd>Use <a class="el" href="classjngl_1_1TextInputSession.html" title="RAII handle representing a text input field that currently wants to receive typed characters.">jngl::TextInputSession</a> instead. That class ties text input to the lifetime of the field that wants it, so multiple fields (e.g. a dialog opening over a form) don't steal each other's characters, and characters typed while you don't poll for a frame aren't lost. </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated</a></b></dt><dd>Use <a class="el" href="classjngl_1_1TextInputSession.html" title="RAII handle representing a text input field that currently wants to receive typed characters.">jngl::TextInputSession</a> instead. That class ties text input to the lifetime of the field that wants it, so multiple fields (e.g. a dialog opening over a form) don't steal each other's characters, and characters typed while you don't poll for a frame aren't lost. </dd></dl>
 
 </div>
 </div>
@@ -2381,7 +2381,7 @@ template&lt;class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Multiplies the global ModelView matrix with a rotation matrix. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated</a></b></dt><dd>use <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c" title="Returns a copy of the global ModelView matrix.">jngl::modelview()</a>.rotate instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated</a></b></dt><dd>use <a class="el" href="#acfcb9cdf97108d05cf2b0da911c93a4c" title="Returns a copy of the global ModelView matrix.">jngl::modelview()</a>.rotate instead </dd></dl>
 
 </div>
 </div>
@@ -2623,7 +2623,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Calculates FPS if called once per frame. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated</a></b></dt><dd>Not really intuitive or robust, use your own calculations instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated</a></b></dt><dd>Not really intuitive or robust, use your own calculations instead </dd></dl>
 
 </div>
 </div>
@@ -2685,7 +2685,7 @@ template&lt;class Vect &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated</a></b></dt><dd>Use <a class="el" href="#a75eb68f8ea7e1d976fef38e1c27c721f" title="Write value into the persistent storage which can be read in again using jngl::readConfig(key)">jngl::writeConfig</a> and <a class="el" href="#a060f8cb034b351009016d3a37ae6c1f8" title="Read in a configuration value which has been saved under key.">jngl::readConfig</a> instead.</dd></dl>
 <p>Returns the directory where to store configuration files and save games.</p><ul>
 <li>Windows: <code>%AppData%/Display Name/</code></li>
 <li>Linux: <code>~/.config/Display Name/</code></li>
@@ -3123,7 +3123,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
 
 </div>
 </div>
@@ -3141,7 +3141,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated</a></b></dt><dd>Use <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">jngl::setAlpha</a> instead </dd></dl>
 
 </div>
 </div>
@@ -3159,7 +3159,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated</a></b></dt><dd>Pass line width to drawLine instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated</a></b></dt><dd>Pass line width to drawLine instead </dd></dl>
 
 </div>
 </div>
@@ -3183,7 +3183,7 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a line from start to end, the width can be set using setLineWidth. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated</a></b></dt><dd>Use <a class="el" href="#a623eabacc04597be7fa31b92b09ca5da" title="Draws a line from start to end with width lineWidth in the color set by jngl::setColor.">drawLine(Vec2, Vec2, float lineWidth)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated</a></b></dt><dd>Use <a class="el" href="#a623eabacc04597be7fa31b92b09ca5da" title="Draws a line from start to end with width lineWidth in the color set by jngl::setColor.">drawLine(Vec2, Vec2, float lineWidth)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -3215,7 +3215,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated</a></b></dt><dd>Use <a class="el" href="#a623eabacc04597be7fa31b92b09ca5da" title="Draws a line from start to end with width lineWidth in the color set by jngl::setColor.">drawLine(Vec2, Vec2, float lineWidth)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000017">Deprecated</a></b></dt><dd>Use <a class="el" href="#a623eabacc04597be7fa31b92b09ca5da" title="Draws a line from start to end with width lineWidth in the color set by jngl::setColor.">drawLine(Vec2, Vec2, float lineWidth)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -3268,7 +3268,7 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a line from (0, 0) to <em>end</em> in the color set by <a class="el" href="#a55a8f2d8091f7c8fdac59075ac069413" title="Sets the color which should be used to draw primitives.">jngl::setColor</a>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000017">Deprecated</a></b></dt><dd>Use drawLine(const Mat3&amp;, Vec2, float lineWidth, Rgba) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000018">Deprecated</a></b></dt><dd>Use drawLine(const Mat3&amp;, Vec2, float lineWidth, Rgba) instead </dd></dl>
 
 </div>
 </div>
@@ -3305,7 +3305,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000018">Deprecated</a></b></dt><dd>Use drawEllipse(Mat3, float, float, float) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000019">Deprecated</a></b></dt><dd>Use drawEllipse(Mat3, float, float, float) instead </dd></dl>
 
 </div>
 </div>
@@ -3407,7 +3407,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000019">Deprecated</a></b></dt><dd>Use drawCircle instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000020">Deprecated</a></b></dt><dd>Use drawCircle instead </dd></dl>
 
 </div>
 </div>
@@ -3449,7 +3449,7 @@ template&lt;class T , class... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000020">Deprecated</a></b></dt><dd>Use <a class="el" href="#a1732275d2646c634f74abec40aeaafe8" title="Draws the triangle a -&gt; b -&gt; c.">drawTriangle(Vec2, Vec2, Vec2)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000021">Deprecated</a></b></dt><dd>Use <a class="el" href="#a1732275d2646c634f74abec40aeaafe8" title="Draws the triangle a -&gt; b -&gt; c.">drawTriangle(Vec2, Vec2, Vec2)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -3507,7 +3507,7 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a rectangle at { <em>xposition</em>, <em>yposition</em> }. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000021">Deprecated</a></b></dt><dd>Use drawRect(const Mat3&amp;, Vec2, Color) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000022">Deprecated</a></b></dt><dd>Use drawRect(const Mat3&amp;, Vec2, Color) instead </dd></dl>
 
 </div>
 </div>
@@ -3531,7 +3531,7 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Draws a rectangle at <em>position</em>. </p>
-<p>Use <a class="el" href="#a55a8f2d8091f7c8fdac59075ac069413" title="Sets the color which should be used to draw primitives.">setColor(Rgb)</a> to change the color and <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">setAlpha(uint8_t)</a> to change the translucency. </p><dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000022">Deprecated</a></b></dt><dd>Use <a class="el" href="#aab0d5492b0289dd4e3b2160b4cfcb237" title="Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color.">drawRect(Mat3, Vec2, Rgba)</a> instead </dd></dl>
+<p>Use <a class="el" href="#a55a8f2d8091f7c8fdac59075ac069413" title="Sets the color which should be used to draw primitives.">setColor(Rgb)</a> to change the color and <a class="el" href="#a2e0420f68fa01ef7219a0bc2aa792169" title="Sets the alpha value which should be used to draw primitives (0 = fully transparent,...">setAlpha(uint8_t)</a> to change the translucency. </p><dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000023">Deprecated</a></b></dt><dd>Use <a class="el" href="#aab0d5492b0289dd4e3b2160b4cfcb237" title="Draws a rectangle spawning from (0, 0) to (size.x, size.y) with the specified color.">drawRect(Mat3, Vec2, Rgba)</a> instead </dd></dl>
 
 </div>
 </div>
@@ -3909,7 +3909,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Sleep current thread for <em>milliseconds</em>. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000027">Deprecated</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000028">Deprecated</a></b></dt><dd>Use std::this_thread::sleep_for(std::chrono::milliseconds(...)) instead </dd></dl>
 
 </div>
 </div>
@@ -4096,7 +4096,7 @@ template&lt;class Vect &gt; </div>
 </div><div class="memdoc">
 
 <p>Sets the passed <a class="el" href="classjngl_1_1Work.html" title="Active state of the game, e.g. a menu or the game itself.">Work</a> to be active in the main loop. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000028">Deprecated</a></b></dt><dd>Use <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop for the next frame.">setScene(std::shared_ptr&lt;Scene&gt;)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000029">Deprecated</a></b></dt><dd>Use <a class="el" href="#ad98bbc26d3770af61a50b61da410bee8" title="Sets the passed Scene to be active in the main loop for the next frame.">setScene(std::shared_ptr&lt;Scene&gt;)</a> instead </dd></dl>
 
 </div>
 </div>
