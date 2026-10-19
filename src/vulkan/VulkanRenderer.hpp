@@ -147,8 +147,10 @@ public:
 	                                             unsigned int type, const unsigned char* data,
 	                                             const unsigned char* const* rowPointers,
 	                                             bool mipmap = false);
+	/// Frees the texture's resources once the GPU is done with them, see destroyLater()
 	void destroyTexture(VulkanTexture&);
-	/// Replaces the texture's pixels, and regenerates its mipmaps if it has any
+	/// Replaces the texture's pixels, and regenerates its mipmaps if it has any. The new ones are
+	/// used by all of the current frame's draws, also those that have been recorded already.
 	void updateTextureBytes(VulkanTexture&, int width, int height, const unsigned char* rgba);
 	/// Gives a texture created without mipmaps a mipmap chain generated from its pixels. Does
 	/// nothing if it already has one.
@@ -323,6 +325,11 @@ private:
 	[[nodiscard]] VkDescriptorSet allocateTextureDescriptor(VkImageView view, VkSampler sampler);
 	/// Immediately destroys a framebuffer's GPU resources (assumes the GPU is no longer using them).
 	void freeFramebufferResources(VulkanFramebuffer&);
+	/// Immediately destroys a texture's GPU resources (assumes the GPU is no longer using them).
+	void freeTextureResources(const VulkanTexture&);
+	/// Calls \a destroy once the GPU is done with what might be referenced by the current or an
+	/// in-flight frame's command buffer, see endFrame()
+	void destroyLater(std::function<void()> destroy);
 	/// Creates an RGBA image with \a mipLevels levels which can be sampled and blitted from/to
 	void createTextureImage(VulkanTexture&, uint32_t mipLevels);
 	/// Creates the view, sampler and descriptor set for the texture's image
@@ -338,9 +345,16 @@ private:
 	[[nodiscard]] uint32_t findMemoryType(uint32_t typeFilter,
 	                                      VkMemoryPropertyFlags properties) const;
 
-	/// Records and submits \a record on a transient command buffer, waiting for completion. Used
-	/// for one-off transfers like texture uploads.
+	/// Records and submits \a record on a transient command buffer, waiting for completion.
 	void submitOneTime(const std::function<void(VkCommandBuffer)>& record);
+	/// Records \a record into the upload command buffer, which is submitted ahead of the frame's,
+	/// so that the uploads are done before any of its draws, without waiting for them now
+	void recordUpload(const std::function<void(VkCommandBuffer)>& record);
+	/// Keeps \a buffer and \a memory until the uploads that copy from them are done
+	void keepStagingBuffer(VkBuffer buffer, VkDeviceMemory memory);
+	/// The command buffers to submit for the current frame: the pending uploads first, if there
+	/// are any
+	std::vector<VkCommandBuffer> withPendingUploads(VkCommandBuffer frameCommands);
 
 	/// Maximum number of frames the CPU may be working on ahead of the GPU.
 	static constexpr uint32_t maxFramesInFlight = 2;
@@ -394,16 +408,30 @@ private:
 	void createOffscreenRenderPasses(VkFormat, OffscreenRenderPasses&);
 	// Stack of active FrameBuffers; empty means drawing targets the swapchain.
 	std::vector<VulkanFramebuffer*> renderTargetStack;
-	// FrameBuffers destroyed (or textures replaced, see enableMipmaps) while their resources might
-	// still be referenced by an in-flight (or not-yet-submitted) command buffer. They're actually
-	// freed once enough frames have passed, see destroyFramebuffer / endFrame.
-	struct TrashedFramebuffer {
-		VulkanFramebuffer fb;
+	// What's been destroyed while it might still be referenced by an in-flight (or not yet
+	// submitted) command buffer, e.g. textures and FrameBuffers, which is actually freed once
+	// enough frames have passed, see destroyLater() and endFrame()
+	struct PendingDestruction {
+		std::function<void()> destroy;
 		int framesUntilFree;
 	};
-	std::vector<TrashedFramebuffer> framebufferTrash;
+	std::vector<PendingDestruction> pendingDestructions;
 	VkCommandPool commandPool = VK_NULL_HANDLE;
 	std::vector<VkCommandBuffer> commandBuffers;
+	// Per frame in flight, see recordUpload(). Submitted with the frame's command buffer, or before
+	// it's flushed by readPixels.
+	std::vector<VkCommandBuffer> uploadCommandBuffers;
+	// Whether uploadCommandBuffers[currentFrame] is being recorded and hasn't been submitted yet
+	bool uploadPending = false;
+	struct StagingBuffer {
+		VkBuffer buffer;
+		VkDeviceMemory memory;
+	};
+	// Copied from by the pending uploads
+	std::vector<StagingBuffer> pendingStagingBuffers;
+	// Per frame in flight: copied from by the uploads submitted with it, so they're freed once its
+	// fence has signaled
+	std::vector<std::vector<StagingBuffer>> retiredStagingBuffers;
 
 	std::vector<VkSemaphore> imageAvailableSemaphores;
 	std::vector<VkSemaphore> renderFinishedSemaphores;

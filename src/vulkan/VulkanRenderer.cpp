@@ -200,10 +200,20 @@ VulkanRenderer::~VulkanRenderer() {
 	}
 	cleanupSwapchain();
 	if (device) {
-		for (auto& trashed : framebufferTrash) {
-			freeFramebufferResources(trashed.fb);
+		for (auto& pending : pendingDestructions) {
+			pending.destroy();
 		}
-		framebufferTrash.clear();
+		pendingDestructions.clear();
+		for (const auto& staging : pendingStagingBuffers) {
+			vkDestroyBuffer(device, staging.buffer, nullptr);
+			vkFreeMemory(device, staging.memory, nullptr);
+		}
+		for (const auto& retired : retiredStagingBuffers) {
+			for (const auto& staging : retired) {
+				vkDestroyBuffer(device, staging.buffer, nullptr);
+				vkFreeMemory(device, staging.memory, nullptr);
+			}
+		}
 		for (auto& vb : vertexBuffers) {
 			destroyVertexBuffer(vb);
 		}
@@ -754,6 +764,11 @@ void VulkanRenderer::createCommandPoolAndBuffers() {
 	allocInfo.commandBufferCount = static_cast<uint32_t>(commandBuffers.size());
 	VK_CHECK(vkAllocateCommandBuffers(device, &allocInfo, commandBuffers.data()),
 	         "vkAllocateCommandBuffers");
+
+	uploadCommandBuffers.resize(maxFramesInFlight);
+	VK_CHECK(vkAllocateCommandBuffers(device, &allocInfo, uploadCommandBuffers.data()),
+	         "vkAllocateCommandBuffers");
+	retiredStagingBuffers.resize(maxFramesInFlight);
 }
 
 void VulkanRenderer::createSyncObjects() {
@@ -998,6 +1013,11 @@ void VulkanRenderer::beginFrame(const Rgb clearColor) {
 		destroyUniformBuffer(ub);
 	}
 	retiredUniformBuffers[currentFrame].clear();
+	for (const auto& staging : retiredStagingBuffers[currentFrame]) {
+		vkDestroyBuffer(device, staging.buffer, nullptr);
+		vkFreeMemory(device, staging.memory, nullptr);
+	}
+	retiredStagingBuffers[currentFrame].clear();
 
 	const VkResult acquire = vkAcquireNextImageKHR(
 	    device, swapchain, std::numeric_limits<uint64_t>::max(),
@@ -1240,8 +1260,9 @@ void VulkanRenderer::endFrame() {
 	submit.waitSemaphoreCount = imageAvailableWaited ? 0 : 1;
 	submit.pWaitSemaphores = waitSemaphores.data();
 	submit.pWaitDstStageMask = waitStages.data();
-	submit.commandBufferCount = 1;
-	submit.pCommandBuffers = &cmd;
+	const auto commands = withPendingUploads(cmd);
+	submit.commandBufferCount = static_cast<uint32_t>(commands.size());
+	submit.pCommandBuffers = commands.data();
 	const std::array<VkSemaphore, 1> signalSemaphores = {
 		renderFinishedSemaphores[currentImageIndex]
 	};
@@ -1270,11 +1291,12 @@ void VulkanRenderer::endFrame() {
 	frameActive = false;
 	currentFrame = (currentFrame + 1) % maxFramesInFlight;
 
-	// Free trashed framebuffers whose frames have all been submitted and completed.
-	for (auto it = framebufferTrash.begin(); it != framebufferTrash.end();) {
+	// Free what's been destroyed when the frames that could have used it have all completed. A
+	// frame's beginFrame() waits for the one that used its slot before.
+	for (auto it = pendingDestructions.begin(); it != pendingDestructions.end();) {
 		if (--it->framesUntilFree <= 0) {
-			freeFramebufferResources(it->fb);
-			it = framebufferTrash.erase(it);
+			it->destroy();
+			it = pendingDestructions.erase(it);
 		} else {
 			++it;
 		}
@@ -2276,15 +2298,18 @@ void VulkanRenderer::destroyShaderProgram(VulkanShaderProgram& program) {
 	if (!device) {
 		return;
 	}
-	vkDeviceWaitIdle(device);
-	for (auto& pipelines : program.pipelines) {
-		for (VkPipeline& pipeline : pipelines) {
-			if (pipeline) {
-				vkDestroyPipeline(device, pipeline, nullptr);
-				pipeline = VK_NULL_HANDLE;
+	// The pipelines might still be used by the current or an in-flight command buffer. The uniform
+	// buffer is only copied from on the CPU, see bindActiveProgramUniforms().
+	destroyLater([this, pipelines = program.pipelines]() {
+		for (const auto& kindPipelines : pipelines) {
+			for (const VkPipeline pipeline : kindPipelines) {
+				if (pipeline) {
+					vkDestroyPipeline(device, pipeline, nullptr);
+				}
 			}
 		}
-	}
+	});
+	program.pipelines = {};
 	if (program.uniformMapped) {
 		vkUnmapMemory(device, program.uniformMemory);
 		program.uniformMapped = nullptr;
@@ -2335,6 +2360,44 @@ void VulkanRenderer::submitOneTime(const std::function<void(VkCommandBuffer)>& r
 	vkFreeCommandBuffers(device, commandPool, 1, &cmd);
 }
 
+void VulkanRenderer::recordUpload(const std::function<void(VkCommandBuffer)>& record) {
+	const VkCommandBuffer cmd = uploadCommandBuffers[currentFrame];
+	if (!uploadPending) {
+		if (!frameActive) {
+			// Its last submission might still be running, beginFrame() would wait for it anyway
+			vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE,
+			                std::numeric_limits<uint64_t>::max());
+		}
+		VkCommandBufferBeginInfo beginInfo{ .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
+		beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+		VK_CHECK(vkBeginCommandBuffer(cmd, &beginInfo), "vkBeginCommandBuffer");
+		uploadPending = true;
+	}
+	record(cmd);
+}
+
+void VulkanRenderer::keepStagingBuffer(const VkBuffer buffer, const VkDeviceMemory memory) {
+	pendingStagingBuffers.push_back({ buffer, memory });
+}
+
+std::vector<VkCommandBuffer>
+VulkanRenderer::withPendingUploads(const VkCommandBuffer frameCommands) {
+	if (!uploadPending) {
+		return { frameCommands };
+	}
+	const VkCommandBuffer uploads = uploadCommandBuffers[currentFrame];
+	VK_CHECK(vkEndCommandBuffer(uploads), "vkEndCommandBuffer");
+	uploadPending = false;
+	auto& retired = retiredStagingBuffers[currentFrame];
+	retired.insert(retired.end(), pendingStagingBuffers.begin(), pendingStagingBuffers.end());
+	pendingStagingBuffers.clear();
+	return { uploads, frameCommands };
+}
+
+void VulkanRenderer::destroyLater(std::function<void()> destroy) {
+	pendingDestructions.push_back({ std::move(destroy), static_cast<int>(maxFramesInFlight) + 1 });
+}
+
 namespace {
 /// Number of levels down to 1x1, like glGenerateMipmap creates
 uint32_t mipLevelCount(const int width, const int height) {
@@ -2363,7 +2426,7 @@ VulkanRenderer::createTexture(const int width, const int height, const unsigned 
 		                   toRgba8(width, height, format, data, rowPointers).data());
 	} else {
 		// No initial pixels (e.g. a render target): just move it to the shader-read layout.
-		submitOneTime([&](VkCommandBuffer cmd) {
+		recordUpload([&](VkCommandBuffer cmd) {
 			VkImageMemoryBarrier barrier{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
 			barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 			barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -2526,7 +2589,7 @@ void VulkanRenderer::updateTextureBytes(VulkanTexture& texture, const int width,
 	std::memcpy(mapped, rgba, size);
 	vkUnmapMemory(device, stagingMemory);
 
-	submitOneTime([&](VkCommandBuffer cmd) {
+	recordUpload([&](VkCommandBuffer cmd) {
 		VkImageMemoryBarrier toTransfer{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
 		toTransfer.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 		toTransfer.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
@@ -2535,8 +2598,10 @@ void VulkanRenderer::updateTextureBytes(VulkanTexture& texture, const int width,
 		toTransfer.image = texture.image;
 		toTransfer.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, texture.mipLevels, 0, 1 };
 		toTransfer.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-		vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-		                     0, 0, nullptr, 0, nullptr, 1, &toTransfer);
+		// After earlier frames are done sampling the old pixels
+		vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+		                     VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1,
+		                     &toTransfer);
 
 		VkBufferImageCopy region{};
 		region.imageSubresource = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1 };
@@ -2562,8 +2627,7 @@ void VulkanRenderer::updateTextureBytes(VulkanTexture& texture, const int width,
 		                     &toShader);
 	});
 
-	vkDestroyBuffer(device, staging, nullptr);
-	vkFreeMemory(device, stagingMemory, nullptr);
+	keepStagingBuffer(staging, stagingMemory);
 }
 
 void VulkanRenderer::enableMipmaps(VulkanTexture& texture) {
@@ -2576,7 +2640,7 @@ void VulkanRenderer::enableMipmaps(VulkanTexture& texture) {
 	mipmapped.width = texture.width;
 	mipmapped.height = texture.height;
 	createTextureImage(mipmapped, mipLevels);
-	submitOneTime([&](VkCommandBuffer cmd) {
+	recordUpload([&](VkCommandBuffer cmd) {
 		VkImageMemoryBarrier barriers[2]{};
 		for (auto& barrier : barriers) {
 			barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -2605,7 +2669,8 @@ void VulkanRenderer::enableMipmaps(VulkanTexture& texture) {
 		vkCmdCopyImage(cmd, texture.image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, mipmapped.image,
 		               VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 
-		// Draws recorded earlier in this frame still sample the old image
+		// Draws recorded earlier in this frame still sample the old image, as the uploads are done
+		// before them
 		barriers[0].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 		barriers[0].newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 		barriers[0].srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
@@ -2618,9 +2683,8 @@ void VulkanRenderer::enableMipmaps(VulkanTexture& texture) {
 	});
 	createTextureDescriptor(mipmapped);
 	// The old image and descriptor set might still be used by the current or an in-flight command
-	// buffer, so free them later like a destroyed FrameBuffer
-	framebufferTrash.push_back(
-	    { VulkanFramebuffer{ .color = texture }, static_cast<int>(maxFramesInFlight) + 1 });
+	// buffer
+	destroyTexture(texture);
 	texture = mipmapped;
 }
 
@@ -2628,7 +2692,11 @@ void VulkanRenderer::destroyTexture(VulkanTexture& texture) {
 	if (!device) {
 		return;
 	}
-	vkDeviceWaitIdle(device);
+	destroyLater([this, texture]() { freeTextureResources(texture); });
+	texture = {}; // the copy owns the handles now
+}
+
+void VulkanRenderer::freeTextureResources(const VulkanTexture& texture) {
 	if (texture.descriptorSet) {
 		vkFreeDescriptorSets(device, descriptorPool, 1, &texture.descriptorSet);
 	}
@@ -2732,8 +2800,9 @@ void VulkanRenderer::readPixels(unsigned char* const rgb, const int x, const int
 		submit.pWaitSemaphores = &imageAvailableSemaphores[currentFrame];
 		submit.pWaitDstStageMask = &waitStage;
 	}
-	submit.commandBufferCount = 1;
-	submit.pCommandBuffers = &cmd;
+	const auto commands = withPendingUploads(cmd);
+	submit.commandBufferCount = static_cast<uint32_t>(commands.size());
+	submit.pCommandBuffers = commands.data();
 	vkResetFences(device, 1, &readbackFence);
 	VK_CHECK(vkQueueSubmit(graphicsQueue, 1, &submit, readbackFence), "vkQueueSubmit");
 	vkWaitForFences(device, 1, &readbackFence, VK_TRUE, std::numeric_limits<uint64_t>::max());
@@ -2879,7 +2948,7 @@ std::unique_ptr<VulkanFramebuffer> VulkanRenderer::createFramebuffer(const int w
 
 	// Clear to transparent and move to SHADER_READ_ONLY (the offscreen render pass's initial
 	// layout, and the layout it's sampled from).
-	submitOneTime([&](VkCommandBuffer c) {
+	recordUpload([&](VkCommandBuffer c) {
 		VkImageMemoryBarrier toDst{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
 		toDst.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 		toDst.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
@@ -2951,7 +3020,7 @@ std::unique_ptr<VulkanFramebuffer> VulkanRenderer::createFramebuffer(const int w
 	VK_CHECK(vkBindImageMemory(device, fb->msaaImage, fb->msaaMemory, 0), "vkBindImageMemory");
 
 	// Clear it like the color image and move it to COLOR_ATTACHMENT_OPTIMAL, which it stays in
-	submitOneTime([&](VkCommandBuffer c) {
+	recordUpload([&](VkCommandBuffer c) {
 		VkImageMemoryBarrier toDst{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
 		toDst.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 		toDst.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
@@ -3061,7 +3130,8 @@ void VulkanRenderer::freeFramebufferResources(VulkanFramebuffer& fb) {
 		vkFreeMemory(device, fb.msaaMemory, nullptr);
 		fb.msaaMemory = VK_NULL_HANDLE;
 	}
-	destroyTexture(fb.color);
+	freeTextureResources(fb.color);
+	fb.color = {};
 }
 
 void VulkanRenderer::destroyFramebuffer(VulkanFramebuffer& fb) {
@@ -3069,10 +3139,9 @@ void VulkanRenderer::destroyFramebuffer(VulkanFramebuffer& fb) {
 		return;
 	}
 	// The framebuffer may still be referenced by the current (not yet submitted) or an in-flight
-	// command buffer - jngl::FrameBuffers can be destroyed mid-frame. Hold on to the resources and
-	// free them once enough frames have been submitted that the GPU is guaranteed to be done.
-	framebufferTrash.push_back({ fb, static_cast<int>(maxFramesInFlight) + 1 });
-	fb = {}; // the trashed copy now owns the handles
+	// command buffer - jngl::FrameBuffers can be destroyed mid-frame.
+	destroyLater([this, fb]() mutable { freeFramebufferResources(fb); });
+	fb = {}; // the copy owns the handles now
 }
 
 void VulkanRenderer::pushRenderTarget(VulkanFramebuffer& framebuffer) {
