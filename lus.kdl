@@ -49,13 +49,11 @@ test {
 unittest {
 	--release {
 		- lus build --release jngl-unittest
-		- cd build
-		- "Release/jngl-unittest" $args
+		- "build/Release/jngl-unittest" $args
 		- exit 0
 	}
 	- lus build jngl-unittest
-	- cd build
-	- "Debug/jngl-unittest" $args
+	- "build/Debug/jngl-unittest" $args
 }
 // only run tests that do not require a windowing system
 unittest-headless {

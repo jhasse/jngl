@@ -7,24 +7,24 @@
 
 TEST_CASE("Channel") {
 	jngl::Channel channel;
-	CHECK(!channel.isPlaying("../data/test.ogg"));
-	CHECK(!jngl::Channel::main().isPlaying("../data/test.ogg"));
-	jngl::play("../data/test.ogg");
-	CHECK(!channel.isPlaying("../data/test.ogg"));
-	CHECK(jngl::Channel::main().isPlaying("../data/test.ogg"));
-	channel.play("../data/test.ogg");
-	CHECK(channel.isPlaying("../data/test.ogg"));
-	CHECK(jngl::Channel::main().isPlaying("../data/test.ogg"));
-	jngl::Channel::main().stop("../data/test.ogg");
-	CHECK(channel.isPlaying("../data/test.ogg"));
-	CHECK(!jngl::Channel::main().isPlaying("../data/test.ogg"));
-	channel.stop("../data/test.ogg");
-	CHECK(!channel.isPlaying("../data/test.ogg"));
-	CHECK(!jngl::Channel::main().isPlaying("../data/test.ogg"));
+	CHECK(!channel.isPlaying("test.ogg"));
+	CHECK(!jngl::Channel::main().isPlaying("test.ogg"));
+	jngl::play("test.ogg");
+	CHECK(!channel.isPlaying("test.ogg"));
+	CHECK(jngl::Channel::main().isPlaying("test.ogg"));
+	channel.play("test.ogg");
+	CHECK(channel.isPlaying("test.ogg"));
+	CHECK(jngl::Channel::main().isPlaying("test.ogg"));
+	jngl::Channel::main().stop("test.ogg");
+	CHECK(channel.isPlaying("test.ogg"));
+	CHECK(!jngl::Channel::main().isPlaying("test.ogg"));
+	channel.stop("test.ogg");
+	CHECK(!channel.isPlaying("test.ogg"));
+	CHECK(!jngl::Channel::main().isPlaying("test.ogg"));
 	CHECK_THROWS_AS(channel.play("nonexistent.ogg"), std::runtime_error);
 	CHECK_THROWS_AS(channel.stop("nonexistent.ogg"), std::runtime_error);
 	CHECK_THROWS_AS(channel.isPlaying("nonexistent.ogg"), std::runtime_error);
-	channel.play("../data/test.ogg");
+	channel.play("test.ogg");
 	channel = jngl::Channel{};
-	CHECK(!channel.isPlaying("../data/test.ogg"));
+	CHECK(!channel.isPlaying("test.ogg"));
 }

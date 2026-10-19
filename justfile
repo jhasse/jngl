@@ -11,14 +11,14 @@ run-release: (release "jngl-test")
 	build/Release/jngl-test
 
 unittest test='': (debug "jngl-unittest")
-	cd build && Debug/jngl-unittest {{test}}
+	build/Debug/jngl-unittest {{test}}
 
 unittest-headless config='Debug':
 	# comma = OR; names #ifdef'd out on some platforms (e.g. getDocumentsPath) are skipped
-	cd build && {{config}}/jngl-unittest "Color,Rgb,Drawable,ImageData,FinallyTest,halfLoadTest,getBinaryPath,getConfigPath,getDocumentsPath,readAsset,Vec2"
+	build/{{config}}/jngl-unittest "Color,Rgb,Drawable,ImageData,FinallyTest,halfLoadTest,getBinaryPath,getConfigPath,getDocumentsPath,readAsset,Vec2"
 
 unittest-release test='': (release "jngl-unittest")
-	cd build && Release/jngl-unittest {{test}}
+	build/Release/jngl-unittest {{test}}
 
 cmake:
 	cmake -Bbuild -G"Ninja Multi-Config"

@@ -4,11 +4,11 @@
 #include <jngl/sound.hpp>
 
 TEST_CASE("Sound") {
-	REQUIRE(!jngl::isPlaying("../data/test.ogg"));
-	jngl::play("../data/test.ogg");
-	REQUIRE(jngl::isPlaying("../data/test.ogg"));
-	jngl::stop("../data/test.ogg");
-	REQUIRE(!jngl::isPlaying("../data/test.ogg"));
+	REQUIRE(!jngl::isPlaying("test.ogg"));
+	jngl::play("test.ogg");
+	REQUIRE(jngl::isPlaying("test.ogg"));
+	jngl::stop("test.ogg");
+	REQUIRE(!jngl::isPlaying("test.ogg"));
 	REQUIRE_THROWS_AS(jngl::play("nonexistent.ogg"), std::runtime_error);
 	REQUIRE_THROWS_AS(jngl::stop("nonexistent.ogg"), std::runtime_error);
 	REQUIRE_THROWS_AS(jngl::isPlaying("nonexistent.ogg"), std::runtime_error);

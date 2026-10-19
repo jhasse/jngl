@@ -25,7 +25,6 @@
 			"name": "jngl-unittest (LLDB)",
 			"program": "build/Debug/jngl-unittest",
 			"args": [],
-			"cwd": "build",
 			"preLaunchTask": "build"
 		},
 		{
@@ -60,7 +59,7 @@
 			"program": "${workspaceRoot}/build/Debug/jngl-unittest",
 			"args": [],
 			"stopAtEntry": false,
-			"cwd": "${workspaceRoot}/build",
+			"cwd": "${workspaceRoot}",
 			"environment": [],
 			"setupCommands": [
 				{
