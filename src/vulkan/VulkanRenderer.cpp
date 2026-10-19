@@ -175,11 +175,11 @@ VulkanRenderer::VulkanRenderer(void* const nativeWindow)
 		createTexturedPipelineLayout();
 	}
 	{
-		// Those for HDR FrameBuffers are only built once there's one
+		// Only those of the window's default blending, the others are built once they're used
 		internal::StartupProfiler _{ "ensurePipelines" };
-		ensurePipelines(PassKind::Ldr);
+		ensurePipelines(PassKind::Ldr, BlendVariant::Composite);
 		if (msaaSupported) {
-			ensurePipelines(PassKind::LdrMsaa);
+			ensurePipelines(PassKind::LdrMsaa, BlendVariant::Composite);
 		}
 	}
 	{
@@ -1058,7 +1058,6 @@ void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
 		// only smoothed while GL_MULTISAMPLE is enabled
 		const bool multisampled = target->msaaImage && getMultisampleAntiAliasing();
 		currentPassKind = passKind(target->hdr, multisampled);
-		ensurePipelines(currentPassKind);
 		const auto& passes = offscreenRenderPasses[target->hdr ? 1 : 0];
 		if (multisampled) {
 			if (target->samplesStale) {
@@ -1391,6 +1390,39 @@ VkPrimitiveTopology toVkTopology(const PrimitiveType type) {
 	return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 }
 
+VkPipelineColorBlendAttachmentState blendAttachmentState(const BlendVariant variant) {
+	VkPipelineColorBlendAttachmentState state{};
+	state.blendEnable = VK_TRUE;
+	state.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+	state.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+	state.colorBlendOp = VK_BLEND_OP_ADD;
+	state.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+	state.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+	state.alphaBlendOp = VK_BLEND_OP_ADD;
+	state.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+	                       VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+	switch (variant) {
+	case BlendVariant::Composite:
+		break;
+	case BlendVariant::Premultiplied:
+		state.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+		break;
+	case BlendVariant::Replace:
+		state.blendEnable = VK_FALSE;
+		break;
+	case BlendVariant::ReplaceAlphaOnly:
+		state.blendEnable = VK_FALSE;
+		state.colorWriteMask = VK_COLOR_COMPONENT_A_BIT;
+		break;
+	case BlendVariant::AddAlpha:
+		// So that what's drawn into a FrameBuffer is as opaque as the most opaque of it when it's
+		// drawn again, see applyBlendMode()
+		state.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+		break;
+	}
+	return state;
+}
+
 } // namespace
 
 uint32_t VulkanRenderer::findMemoryType(const uint32_t typeFilter,
@@ -1429,9 +1461,9 @@ VkSampleCountFlagBits VulkanRenderer::pipelineSamples(const PassKind kind) const
 	return isMultisampled(kind) ? msaaSampleCount : VK_SAMPLE_COUNT_1_BIT;
 }
 
-void VulkanRenderer::ensurePipelines(const PassKind kind) {
+void VulkanRenderer::ensurePipelines(const PassKind kind, const BlendVariant variant) {
 	const auto k = static_cast<size_t>(kind);
-	if (coloredPipelines[k][0]) {
+	if (coloredPipelines[k][pipelineIndex(variant, PrimitiveType::Triangles)]) {
 		return;
 	}
 	const VkRenderPass pass = pipelineRenderPass(kind);
@@ -1439,33 +1471,36 @@ void VulkanRenderer::ensurePipelines(const PassKind kind) {
 	{
 		const ShaderModules colored(device, vulkan_shaders::colored_vert,
 		                            vulkan_shaders::colored_frag);
-		buildColoredPipelines(colored.vert, colored.frag, pass, samples, coloredPipelines[k]);
+		buildColoredPipelines(colored.vert, colored.frag, pass, samples, variant,
+		                      coloredPipelines[k]);
 	}
 	{
 		const ShaderModules rounded(device, vulkan_shaders::rounded_vert,
 		                            vulkan_shaders::rounded_frag);
-		buildRoundedPipeline(rounded.vert, rounded.frag, pass, samples, roundedPipelines[k]);
+		buildRoundedPipeline(rounded.vert, rounded.frag, pass, samples, variant,
+		                     roundedPipelines[k][static_cast<size_t>(variant)]);
 	}
 	const ShaderModules textured(device, vulkan_shaders::textured_vert,
 	                             vulkan_shaders::textured_frag);
-	buildTexturedPipelines(textured.vert, textured.frag, pass, samples, texturedPipelines[k]);
+	buildTexturedPipelines(textured.vert, textured.frag, pass, samples, variant,
+	                       texturedPipelines[k]);
 }
 
-void VulkanRenderer::ensureProgramPipelines(const VulkanShaderProgram& program,
-                                            const PassKind kind) {
+void VulkanRenderer::ensureProgramPipelines(const VulkanShaderProgram& program, const PassKind kind,
+                                            const BlendVariant variant) {
 	auto& pipelines = program.pipelines[static_cast<size_t>(kind)];
-	if (pipelines[0]) {
+	if (pipelines[pipelineIndex(variant, PrimitiveType::Triangles)]) {
 		return;
 	}
 	const ShaderModules modules(device, program.vertexSpirv, program.fragmentSpirv);
 	buildTexturedPipelines(modules.vert, modules.frag, pipelineRenderPass(kind),
-	                       pipelineSamples(kind), pipelines);
+	                       pipelineSamples(kind), variant, pipelines);
 }
 
-void VulkanRenderer::buildColoredPipelines(const VkShaderModule vert, const VkShaderModule frag,
-                                           const VkRenderPass targetRenderPass,
-                                           const VkSampleCountFlagBits samples,
-                                           std::array<VkPipeline, 4>& out) {
+void VulkanRenderer::buildColoredPipelines(
+    const VkShaderModule vert, const VkShaderModule frag, const VkRenderPass targetRenderPass,
+    const VkSampleCountFlagBits samples, const BlendVariant variant,
+    std::array<VkPipeline, VulkanShaderProgram::pipelineCount>& out) {
 	const std::array<VkPipelineShaderStageCreateInfo, 2> stages = {
 		VkPipelineShaderStageCreateInfo{
 		    .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
@@ -1515,16 +1550,7 @@ void VulkanRenderer::buildColoredPipelines(const VkShaderModule vert, const VkSh
 	};
 	multisampling.rasterizationSamples = samples;
 
-	VkPipelineColorBlendAttachmentState blendAttachment{};
-	blendAttachment.blendEnable = VK_TRUE;
-	blendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-	blendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-	blendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
-	blendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-	blendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-	blendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
-	blendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-	                                 VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+	const VkPipelineColorBlendAttachmentState blendAttachment = blendAttachmentState(variant);
 	VkPipelineColorBlendStateCreateInfo colorBlending{
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO
 	};
@@ -1565,7 +1591,7 @@ void VulkanRenderer::buildColoredPipelines(const VkShaderModule vert, const VkSh
 		pipelineInfo.renderPass = targetRenderPass;
 		pipelineInfo.subpass = 0;
 		VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
-		                                   &out[static_cast<size_t>(type)]),
+		                                   &out[pipelineIndex(variant, type)]),
 		         "vkCreateGraphicsPipelines");
 	}
 }
@@ -1574,10 +1600,12 @@ void VulkanRenderer::destroyRoundedPipelines() {
 	if (!device) {
 		return;
 	}
-	for (VkPipeline& pipeline : roundedPipelines) {
-		if (pipeline) {
-			vkDestroyPipeline(device, pipeline, nullptr);
-			pipeline = VK_NULL_HANDLE;
+	for (auto& pipelines : roundedPipelines) {
+		for (VkPipeline& pipeline : pipelines) {
+			if (pipeline) {
+				vkDestroyPipeline(device, pipeline, nullptr);
+				pipeline = VK_NULL_HANDLE;
+			}
 		}
 	}
 }
@@ -1598,7 +1626,8 @@ void VulkanRenderer::createRoundedPipelineLayout() {
 
 void VulkanRenderer::buildRoundedPipeline(const VkShaderModule vert, const VkShaderModule frag,
                                           const VkRenderPass targetRenderPass,
-                                          const VkSampleCountFlagBits samples, VkPipeline& out) {
+                                          const VkSampleCountFlagBits samples,
+                                          const BlendVariant variant, VkPipeline& out) {
 	const std::array<VkPipelineShaderStageCreateInfo, 2> stages = {
 		VkPipelineShaderStageCreateInfo{
 		    .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
@@ -1653,16 +1682,7 @@ void VulkanRenderer::buildRoundedPipeline(const VkShaderModule vert, const VkSha
 	};
 	multisampling.rasterizationSamples = samples;
 
-	VkPipelineColorBlendAttachmentState blendAttachment{};
-	blendAttachment.blendEnable = VK_TRUE;
-	blendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-	blendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-	blendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
-	blendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-	blendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-	blendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
-	blendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-	                                 VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+	const VkPipelineColorBlendAttachmentState blendAttachment = blendAttachmentState(variant);
 	VkPipelineColorBlendStateCreateInfo colorBlending{
 		.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO
 	};
@@ -1902,8 +1922,11 @@ void VulkanRenderer::drawColored(const PrimitiveType type, const float* const xy
 	push.color[3] = color.getAlpha();
 
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
-	const auto& pipelines = coloredPipelines[static_cast<size_t>(currentPassKind)];
-	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines[static_cast<size_t>(type)]);
+	const BlendVariant variant = blendVariant();
+	ensurePipelines(currentPassKind, variant);
+	vkCmdBindPipeline(
+	    cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+	    coloredPipelines[static_cast<size_t>(currentPassKind)][pipelineIndex(variant, type)]);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
 	vkCmdPushConstants(cmd, coloredPipelineLayout,
 	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
@@ -1955,7 +1978,10 @@ void VulkanRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, co
 	push.cornerRadii[3] = bottomRight;
 
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
-	const VkPipeline pipeline = roundedPipelines[static_cast<size_t>(currentPassKind)];
+	const BlendVariant variant = blendVariant();
+	ensurePipelines(currentPassKind, variant);
+	const VkPipeline pipeline =
+	    roundedPipelines[static_cast<size_t>(currentPassKind)][static_cast<size_t>(variant)];
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
 	vkCmdPushConstants(cmd, roundedPipelineLayout,
@@ -2058,7 +2084,7 @@ void VulkanRenderer::createTexturedPipelineLayout() {
 
 void VulkanRenderer::buildTexturedPipelines(
     const VkShaderModule vert, const VkShaderModule frag, const VkRenderPass targetRenderPass,
-    const VkSampleCountFlagBits samples,
+    const VkSampleCountFlagBits samples, const BlendVariant variant,
     std::array<VkPipeline, VulkanShaderProgram::pipelineCount>& out) {
 	const std::array<VkPipelineShaderStageCreateInfo, 2> stages = {
 		VkPipelineShaderStageCreateInfo{
@@ -2121,93 +2147,60 @@ void VulkanRenderer::buildTexturedPipelines(
 		                                              PrimitiveType::TriangleFan,
 		                                              PrimitiveType::Lines };
 
-	// Matches texturedBlendVariant(): Composite, Premultiplied, Replace, ReplaceAlphaOnly.
-	struct BlendVariant {
-		VkBool32 enable;
-		VkBlendFactor srcColor;
-		VkBlendFactor dstColor;
-		VkBlendFactor srcAlpha;
-		VkBlendFactor dstAlpha;
-		VkColorComponentFlags writeMask;
+	const VkPipelineColorBlendAttachmentState blendAttachment = blendAttachmentState(variant);
+	VkPipelineColorBlendStateCreateInfo colorBlending{
+		.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO
 	};
-	const std::array<BlendVariant, VulkanShaderProgram::blendVariantCount> blends = { {
-		{ VK_TRUE, VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-		  VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-		  VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
-		      VK_COLOR_COMPONENT_A_BIT },
-		{ VK_TRUE, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, VK_BLEND_FACTOR_ONE,
-		  VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-		  VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
-		      VK_COLOR_COMPONENT_A_BIT },
-		{ VK_FALSE, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ONE,
-		  VK_BLEND_FACTOR_ZERO,
-		  VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
-		      VK_COLOR_COMPONENT_A_BIT },
-		{ VK_FALSE, VK_BLEND_FACTOR_ONE, VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ONE,
-		  VK_BLEND_FACTOR_ZERO, VK_COLOR_COMPONENT_A_BIT },
-	} };
+	colorBlending.attachmentCount = 1;
+	colorBlending.pAttachments = &blendAttachment;
 
-	{
-		internal::StartupProfiler _{ "  textured pipelines (blend × topology)" };
-		for (uint32_t variant = 0; variant < VulkanShaderProgram::blendVariantCount; ++variant) {
-			const BlendVariant& b = blends[variant];
-			VkPipelineColorBlendAttachmentState blendAttachment{};
-			blendAttachment.blendEnable = b.enable;
-			blendAttachment.srcColorBlendFactor = b.srcColor;
-			blendAttachment.dstColorBlendFactor = b.dstColor;
-			blendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
-			blendAttachment.srcAlphaBlendFactor = b.srcAlpha;
-			blendAttachment.dstAlphaBlendFactor = b.dstAlpha;
-			blendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
-			blendAttachment.colorWriteMask = b.writeMask;
-			VkPipelineColorBlendStateCreateInfo colorBlending{
-				.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO
-			};
-			colorBlending.attachmentCount = 1;
-			colorBlending.pAttachments = &blendAttachment;
+	for (const PrimitiveType type : topologies) {
+		VkPipelineInputAssemblyStateCreateInfo inputAssembly{
+			.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
+		};
+		inputAssembly.topology = toVkTopology(type);
 
-			for (const PrimitiveType type : topologies) {
-				VkPipelineInputAssemblyStateCreateInfo inputAssembly{
-					.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
-				};
-				inputAssembly.topology = toVkTopology(type);
-
-				VkGraphicsPipelineCreateInfo pipelineInfo{
-					.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
-				};
-				pipelineInfo.stageCount = static_cast<uint32_t>(stages.size());
-				pipelineInfo.pStages = stages.data();
-				pipelineInfo.pVertexInputState = &vertexInput;
-				pipelineInfo.pInputAssemblyState = &inputAssembly;
-				pipelineInfo.pViewportState = &viewportState;
-				pipelineInfo.pRasterizationState = &rasterizer;
-				pipelineInfo.pMultisampleState = &multisampling;
-				pipelineInfo.pColorBlendState = &colorBlending;
-				pipelineInfo.pDynamicState = &dynamicState;
-				pipelineInfo.layout = texturedPipelineLayout;
-				pipelineInfo.renderPass = targetRenderPass;
-				VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo,
-				                                   nullptr,
-				                                   &out[texturedPipelineIndex(variant, type)]),
-				         "vkCreateGraphicsPipelines");
-			}
-		}
+		VkGraphicsPipelineCreateInfo pipelineInfo{
+			.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
+		};
+		pipelineInfo.stageCount = static_cast<uint32_t>(stages.size());
+		pipelineInfo.pStages = stages.data();
+		pipelineInfo.pVertexInputState = &vertexInput;
+		pipelineInfo.pInputAssemblyState = &inputAssembly;
+		pipelineInfo.pViewportState = &viewportState;
+		pipelineInfo.pRasterizationState = &rasterizer;
+		pipelineInfo.pMultisampleState = &multisampling;
+		pipelineInfo.pColorBlendState = &colorBlending;
+		pipelineInfo.pDynamicState = &dynamicState;
+		pipelineInfo.layout = texturedPipelineLayout;
+		pipelineInfo.renderPass = targetRenderPass;
+		VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
+		                                   &out[pipelineIndex(variant, type)]),
+		         "vkCreateGraphicsPipelines");
 	}
 }
 
-uint32_t VulkanRenderer::texturedBlendVariant() const {
+BlendVariant VulkanRenderer::blendVariant() const {
 	if (alphaOnlyWrite) {
-		return 3; // ReplaceAlphaOnly
+		return BlendVariant::ReplaceAlphaOnly;
 	}
 	if (!blendingEnabled) {
-		return 2; // Replace
+		return BlendVariant::Replace;
 	}
-	return spriteBlend == SpriteBlend::Premultiplied ? 1u : 0u;
+	switch (spriteBlend) {
+	case SpriteBlend::Composite:
+		return BlendVariant::Composite;
+	case SpriteBlend::Premultiplied:
+		return BlendVariant::Premultiplied;
+	case SpriteBlend::AddAlpha:
+		return BlendVariant::AddAlpha;
+	}
+	return BlendVariant::Composite;
 }
 
-uint32_t VulkanRenderer::texturedPipelineIndex(const uint32_t blendVariant,
-                                               const PrimitiveType type) {
-	return blendVariant * VulkanShaderProgram::topologyCount + static_cast<uint32_t>(type);
+size_t VulkanRenderer::pipelineIndex(const BlendVariant variant, const PrimitiveType type) {
+	return static_cast<size_t>(variant) * VulkanShaderProgram::topologyCount +
+	       static_cast<size_t>(type);
 }
 
 void VulkanRenderer::setBlendingEnabled(const bool enabled) {
@@ -2242,9 +2235,9 @@ std::unique_ptr<VulkanShaderProgram> VulkanRenderer::createShaderProgram(
 	program->uniformBlockSize = uniformBlockSize;
 	program->vertexSpirv = vertexSpirv;
 	program->fragmentSpirv = fragmentSpirv;
-	ensureProgramPipelines(*program, PassKind::Ldr);
+	ensureProgramPipelines(*program, PassKind::Ldr, BlendVariant::Composite);
 	if (msaaSupported) {
-		ensureProgramPipelines(*program, PassKind::LdrMsaa);
+		ensureProgramPipelines(*program, PassKind::LdrMsaa, BlendVariant::Composite);
 	}
 
 	if (program->uniformBlockSize > 0) {
@@ -2696,14 +2689,16 @@ void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* const
 	std::copy(lerpFactors.begin(), lerpFactors.end(), push.lerpFactors);
 
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
-	const uint32_t pipelineIndex = texturedPipelineIndex(texturedBlendVariant(), type);
+	const BlendVariant variant = blendVariant();
+	const size_t index = pipelineIndex(variant, type);
 	const auto kind = static_cast<size_t>(currentPassKind);
 	VkPipeline pipeline = VK_NULL_HANDLE;
 	if (activeShaderProgram) {
-		ensureProgramPipelines(*activeShaderProgram, currentPassKind);
-		pipeline = activeShaderProgram->pipelines[kind][pipelineIndex];
+		ensureProgramPipelines(*activeShaderProgram, currentPassKind, variant);
+		pipeline = activeShaderProgram->pipelines[kind][index];
 	} else {
-		pipeline = texturedPipelines[kind][pipelineIndex];
+		ensurePipelines(currentPassKind, variant);
+		pipeline = texturedPipelines[kind][index];
 	}
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 0, 1,
@@ -3030,11 +3025,11 @@ void VulkanRenderer::expandIntoSamples(VulkanFramebuffer& fb) {
 	TexturedPushConstants push{};
 	const Mat4 identity;
 	std::copy(std::begin(identity.data), std::end(identity.data), push.mvp);
-	const uint32_t replace = 2; // see texturedBlendVariant()
-	vkCmdBindPipeline(
-	    cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-	    texturedPipelines[static_cast<size_t>(passKind(fb.hdr, true))]
-	                     [texturedPipelineIndex(replace, PrimitiveType::TriangleFan)]);
+	const PassKind kind = passKind(fb.hdr, true);
+	ensurePipelines(kind, BlendVariant::Replace);
+	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+	                  texturedPipelines[static_cast<size_t>(kind)][pipelineIndex(
+	                      BlendVariant::Replace, PrimitiveType::TriangleFan)]);
 	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 0, 1,
 	                        &fb.color.descriptorSet, 0, nullptr);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);

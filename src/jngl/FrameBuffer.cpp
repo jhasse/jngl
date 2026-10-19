@@ -73,10 +73,16 @@ optional<std::array<int, 2>> activeFrameBufferSize() {
 
 void applyBlendMode() {
 #ifdef JNGL_VULKAN
-	// TODO: The Vulkan backend has no separate alpha blend function for FrameBuffers yet
-	vulkanRenderer().setSpriteBlend(gBlendMode == BlendMode::Premultiplied
-	                                    ? VulkanRenderer::SpriteBlend::Premultiplied
-	                                    : VulkanRenderer::SpriteBlend::Composite);
+	using SpriteBlend = VulkanRenderer::SpriteBlend;
+	if (gBlendMode) {
+		vulkanRenderer().setSpriteBlend(*gBlendMode == BlendMode::Premultiplied
+		                                    ? SpriteBlend::Premultiplied
+		                                    : SpriteBlend::Composite);
+	} else {
+		// Alpha adds up in a FrameBuffer, like on OpenGL below
+		vulkanRenderer().setSpriteBlend(activateStack.empty() ? SpriteBlend::Composite
+		                                                      : SpriteBlend::AddAlpha);
+	}
 #else
 	if (gBlendMode) {
 		switch (*gBlendMode) {

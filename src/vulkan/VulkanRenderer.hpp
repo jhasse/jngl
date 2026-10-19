@@ -68,6 +68,17 @@ struct VulkanFramebuffer {
 enum class PassKind : uint8_t { Ldr, LdrMsaa, Hdr, HdrMsaa };
 constexpr size_t passKindCount = 4;
 
+/// How a pipeline blends what it draws with what's already there, see
+/// VulkanRenderer::blendVariant()
+enum class BlendVariant : uint8_t {
+	Composite, ///< alpha composited, too; the default on the window, see BlendMode::Composite
+	Premultiplied, ///< see BlendMode::Premultiplied
+	Replace, ///< see jngl::disableBlending()
+	ReplaceAlphaOnly, ///< see jngl::drawOnlyIntoAlphaChannel()
+	AddAlpha, ///< alpha added up; the default while a FrameBuffer's in use, like on OpenGL
+};
+constexpr size_t blendVariantCount = 5;
+
 /// Host-visible, persistently mapped vertex buffer that's appended to during a frame
 struct DynamicVertexBuffer {
 	VkBuffer buffer = VK_NULL_HANDLE;
@@ -95,9 +106,9 @@ struct DynamicUniformBuffer {
 /// (e.g. blur pass 0 then 1) are visible to each draw.
 struct VulkanShaderProgram {
 	static constexpr uint32_t topologyCount = 4;
-	static constexpr uint32_t blendVariantCount = 4; // see VulkanRenderer::texturedBlendVariant()
+	/// For each BlendVariant and topology, see VulkanRenderer::pipelineIndex()
 	static constexpr uint32_t pipelineCount = topologyCount * blendVariantCount;
-	/// Indexed by PassKind. Those for HDR FrameBuffers are only built once they're drawn into, see
+	/// Indexed by PassKind. Each BlendVariant's are only built once it's used, see
 	/// VulkanRenderer::ensureProgramPipelines(), from vertexSpirv and fragmentSpirv.
 	mutable std::array<std::array<VkPipeline, pipelineCount>, passKindCount> pipelines{};
 	std::vector<uint32_t> vertexSpirv;
@@ -188,11 +199,12 @@ public:
 	/// Writes \a bytes at \a offset into the active program's UBO (must be bound via use()).
 	void setActiveProgramUniform(uint32_t offset, const void* data, uint32_t bytes);
 
-	/// Sprite blending state (OpenGL's glEnable/glDisable(GL_BLEND) / glBlendFunc / glColorMask).
-	/// Selects among the textured pipeline variants; see texturedBlendVariant().
+	/// Blending state of everything that's drawn (OpenGL's glEnable/glDisable(GL_BLEND) /
+	/// glBlendFunc / glColorMask). Selects among the pipelines' variants; see blendVariant().
 	void setBlendingEnabled(bool enabled);
 	[[nodiscard]] bool isBlendingEnabled() const;
-	enum class SpriteBlend : uint8_t { Composite, Premultiplied };
+	/// See BlendVariant
+	enum class SpriteBlend : uint8_t { Composite, Premultiplied, AddAlpha };
 	void setSpriteBlend(SpriteBlend);
 	[[nodiscard]] SpriteBlend getSpriteBlend() const;
 	void setAlphaOnlyWrite(bool);
@@ -244,10 +256,13 @@ private:
 	/// The offscreen render pass that the pipelines of \a kind are built against
 	[[nodiscard]] VkRenderPass pipelineRenderPass(PassKind kind) const;
 	[[nodiscard]] VkSampleCountFlagBits pipelineSamples(PassKind kind) const;
-	/// Builds the built-in pipelines for render passes of \a kind, if they haven't been yet
-	void ensurePipelines(PassKind kind);
-	/// Builds \a program's pipelines for render passes of \a kind, if they haven't been yet
-	void ensureProgramPipelines(const VulkanShaderProgram& program, PassKind kind);
+	/// Builds the built-in pipelines with \a variant for render passes of \a kind, if they
+	/// haven't been yet
+	void ensurePipelines(PassKind kind, BlendVariant variant);
+	/// Builds \a program's pipelines with \a variant for render passes of \a kind, if they haven't
+	/// been yet
+	void ensureProgramPipelines(const VulkanShaderProgram& program, PassKind kind,
+	                            BlendVariant variant);
 	void rebuildSwapchainRendering();
 	void createInstance();
 	void createSurface();
@@ -262,11 +277,15 @@ private:
 	/// Creates the per-swapchain-image "render finished" semaphores (recreated with the swapchain).
 	void createPresentSemaphores();
 	void createColoredPipelineLayout();
-	void buildColoredPipelines(VkShaderModule vert, VkShaderModule frag, VkRenderPass targetRenderPass,
-	                           VkSampleCountFlagBits samples, std::array<VkPipeline, 4>& out);
+	/// Builds the pipelines with \a variant for every topology, see pipelineIndex()
+	void buildColoredPipelines(VkShaderModule vert, VkShaderModule frag,
+	                           VkRenderPass targetRenderPass, VkSampleCountFlagBits samples,
+	                           BlendVariant variant,
+	                           std::array<VkPipeline, VulkanShaderProgram::pipelineCount>& out);
 	void createRoundedPipelineLayout();
-	void buildRoundedPipeline(VkShaderModule vert, VkShaderModule frag, VkRenderPass targetRenderPass,
-	                          VkSampleCountFlagBits samples, VkPipeline& out);
+	void buildRoundedPipeline(VkShaderModule vert, VkShaderModule frag,
+	                          VkRenderPass targetRenderPass, VkSampleCountFlagBits samples,
+	                          BlendVariant variant, VkPipeline& out);
 	void destroyRoundedPipelines();
 	void createVertexBuffers();
 	[[nodiscard]] DynamicVertexBuffer createVertexBuffer(VkDeviceSize capacity);
@@ -278,13 +297,16 @@ private:
 	[[nodiscard]] DynamicUniformBuffer createUniformBuffer(VkDeviceSize capacity);
 	void destroyUniformBuffer(DynamicUniformBuffer&);
 	void createTexturedPipelineLayout();
-	/// Builds textured pipelines for every blend variant × topology from the given shader modules.
+	/// Builds textured pipelines with \a variant for every topology from the given shader modules,
+	/// see pipelineIndex()
 	void buildTexturedPipelines(VkShaderModule vert, VkShaderModule frag,
 	                            VkRenderPass targetRenderPass, VkSampleCountFlagBits samples,
+	                            BlendVariant variant,
 	                            std::array<VkPipeline, VulkanShaderProgram::pipelineCount>& out);
-	/// Index into texturedPipelines / VulkanShaderProgram::pipelines for the current blend state.
-	[[nodiscard]] uint32_t texturedBlendVariant() const;
-	[[nodiscard]] static uint32_t texturedPipelineIndex(uint32_t blendVariant, PrimitiveType type);
+	/// The one for the current blend state
+	[[nodiscard]] BlendVariant blendVariant() const;
+	/// Index into coloredPipelines, texturedPipelines and VulkanShaderProgram::pipelines
+	[[nodiscard]] static size_t pipelineIndex(BlendVariant, PrimitiveType);
 	void createDescriptorPool();
 	/// Copies the active program's staging UBO into this frame's ring and binds it (dynamic
 	/// offset).
@@ -388,19 +410,20 @@ private:
 	std::vector<VkFence> inFlightFences;
 	VkFence readbackFence = VK_NULL_HANDLE; // signalled by the readPixels flush submit
 
-	// Pipeline drawing single-color geometry with the built-in "simple" shader. There's one
-	// pipeline per primitive topology (they only differ in input assembly state); they share the
-	// layout and shader modules.
+	// Pipelines drawing single-color geometry with the built-in "simple" shader. There's one per
+	// blend variant and primitive topology; they share the layout and shader modules. Indexed by
+	// PassKind and pipelineIndex(), built by ensurePipelines().
 	VkPipelineLayout coloredPipelineLayout = VK_NULL_HANDLE;
-	// Indexed by PassKind and PrimitiveType, see ensurePipelines()
-	std::array<std::array<VkPipeline, 4>, passKindCount> coloredPipelines{};
+	std::array<std::array<VkPipeline, VulkanShaderProgram::pipelineCount>, passKindCount>
+	    coloredPipelines{};
 
 	VkPipelineLayout roundedPipelineLayout = VK_NULL_HANDLE;
-	std::array<VkPipeline, passKindCount> roundedPipelines{};
+	// Indexed by PassKind and BlendVariant
+	std::array<std::array<VkPipeline, blendVariantCount>, passKindCount> roundedPipelines{};
 
 	// Pipeline drawing textured geometry (sprites, text) with the built-in texture shader.
 	// set 0 = combined image sampler; set 1 = custom-uniform UBO (used only by user
-	// ShaderPrograms). Pipelines: blendVariant × PrimitiveType, see texturedPipelineIndex().
+	// ShaderPrograms). Indexed by PassKind and pipelineIndex().
 	VkDescriptorSetLayout texturedSetLayout = VK_NULL_HANDLE;
 	VkDescriptorSetLayout uniformsSetLayout = VK_NULL_HANDLE;
 	VkPipelineLayout texturedPipelineLayout = VK_NULL_HANDLE;

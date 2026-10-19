@@ -18,6 +18,8 @@
 #include <catch2/catch_test_macros.hpp>
 #include <cmath>
 #include <cstdint>
+#include <cstdlib>
+#include <optional>
 #include <vector>
 
 TEST_CASE("FrameBufferTest") {
@@ -410,4 +412,33 @@ TEST_CASE("HDR FrameBuffer keeps values above 1") {
 	REQUIRE((clamped > 120 && clamped < 135));
 	REQUIRE(drawn(true, false) == 255);
 	REQUIRE(drawn(true, true) == 255);
+}
+
+TEST_CASE("FrameBuffer adds up alpha unless a BlendMode is set") {
+	Fixture f(1.f);
+	// Two half transparent black squares on top of each other in a FrameBuffer that's then drawn
+	// onto the white window, and how bright they are there, from 0 to 255
+	const auto brightness = [](const std::optional<jngl::BlendMode> mode) {
+		Fixture::reset();
+		jngl::FrameBuffer fb(320_px, 70_px);
+		{
+			const auto context = fb.use();
+			std::optional<jngl::Finally> blendMode;
+			if (mode) {
+				blendMode.emplace(jngl::setBlendMode(*mode));
+			}
+			for (int i = 0; i < 2; ++i) {
+				jngl::drawRect(jngl::modelview().translate({ -10, -10 }), { 20, 20 },
+				               jngl::Rgba(0, 0, 0, 0.5f));
+			}
+		}
+		fb.draw(-160, -35);
+		const auto pixels = jngl::readPixels();
+		return std::lround(pixels.at(static_cast<size_t>(35 * 320 + 160) * 3) * 255);
+	};
+	// A quarter as bright as white, like when drawn directly onto the window, as the FrameBuffer
+	// ends up opaque there
+	REQUIRE(std::abs(brightness(std::nullopt) - 64) <= 3);
+	// Composited, they cover three quarters of it, which lets the window shine through
+	REQUIRE(std::abs(brightness(jngl::BlendMode::Composite) - 112) <= 3);
 }
