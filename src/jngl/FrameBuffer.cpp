@@ -187,8 +187,7 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr
 #ifdef JNGL_VULKAN
 	// createFramebuffer already clears the image to transparent.
 	impl->vkFramebuffer =
-	    vulkanRenderer().createFramebuffer(impl->width, impl->height, antiAliased);
-	(void)hdr; // HDR framebuffers aren't supported on Vulkan yet.
+	    vulkanRenderer().createFramebuffer(impl->width, impl->height, antiAliased, hdr);
 #else
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);

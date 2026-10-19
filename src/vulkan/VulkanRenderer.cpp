@@ -72,6 +72,21 @@ std::array<VkSubpassDependency, 2> subpassDependencies() {
 	return deps;
 }
 
+bool isHdr(const PassKind kind) {
+	return kind == PassKind::Hdr || kind == PassKind::HdrMsaa;
+}
+
+bool isMultisampled(const PassKind kind) {
+	return kind == PassKind::LdrMsaa || kind == PassKind::HdrMsaa;
+}
+
+PassKind passKind(const bool hdr, const bool multisampled) {
+	if (hdr) {
+		return multisampled ? PassKind::HdrMsaa : PassKind::Hdr;
+	}
+	return multisampled ? PassKind::LdrMsaa : PassKind::Ldr;
+}
+
 VKAPI_ATTR VkBool32 VKAPI_CALL
 debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT severity,
               VkDebugUtilsMessageTypeFlagsEXT /*type*/,
@@ -144,20 +159,28 @@ VulkanRenderer::VulkanRenderer(void* const nativeWindow)
 		createSyncObjects();
 	}
 	{
-		internal::StartupProfiler _{ "createColoredPipelines" };
-		createColoredPipelines();
+		internal::StartupProfiler _{ "createColoredPipelineLayout" };
+		createColoredPipelineLayout();
 	}
 	{
-		internal::StartupProfiler _{ "createRoundedPipelines" };
-		createRoundedPipelines();
+		internal::StartupProfiler _{ "createRoundedPipelineLayout" };
+		createRoundedPipelineLayout();
 	}
 	{
 		internal::StartupProfiler _{ "createDescriptorPool" };
 		createDescriptorPool();
 	}
 	{
-		internal::StartupProfiler _{ "createTexturedPipelines" };
-		createTexturedPipelines();
+		internal::StartupProfiler _{ "createTexturedPipelineLayout" };
+		createTexturedPipelineLayout();
+	}
+	{
+		// Those for HDR FrameBuffers are only built once there's one
+		internal::StartupProfiler _{ "ensurePipelines" };
+		ensurePipelines(PassKind::Ldr);
+		if (msaaSupported) {
+			ensurePipelines(PassKind::LdrMsaa);
+		}
 	}
 	{
 		internal::StartupProfiler _{ "createVertexBuffers" };
@@ -235,10 +258,11 @@ VulkanRenderer::~VulkanRenderer() {
 		if (loadRenderPass) {
 			vkDestroyRenderPass(device, loadRenderPass, nullptr);
 		}
-		for (VkRenderPass pass :
-		     { offscreenRenderPass, offscreenMsaaRenderPass, offscreenExpandRenderPass }) {
-			if (pass) {
-				vkDestroyRenderPass(device, pass, nullptr);
+		for (const auto& passes : offscreenRenderPasses) {
+			for (VkRenderPass pass : { passes.single, passes.msaa, passes.expand }) {
+				if (pass) {
+					vkDestroyRenderPass(device, pass, nullptr);
+				}
 			}
 		}
 		if (commandPool) {
@@ -571,8 +595,16 @@ void VulkanRenderer::createRenderPass() {
 }
 
 void VulkanRenderer::createOffscreenRenderPasses() {
+	for (const bool hdr : { false, true }) {
+		createOffscreenRenderPasses(hdr ? hdrFormat : swapchainImageFormat,
+		                            offscreenRenderPasses[hdr ? 1 : 0]);
+	}
+}
+
+void VulkanRenderer::createOffscreenRenderPasses(const VkFormat format,
+                                                 OffscreenRenderPasses& passes) {
 	VkAttachmentDescription colorAttachment{};
-	colorAttachment.format = swapchainImageFormat; // same format keeps the pipelines compatible
+	colorAttachment.format = format;
 	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
 	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
 	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -596,8 +628,7 @@ void VulkanRenderer::createOffscreenRenderPasses() {
 	info.pSubpasses = &subpass;
 	info.dependencyCount = static_cast<uint32_t>(deps.size());
 	info.pDependencies = deps.data();
-	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &offscreenRenderPass),
-	         "vkCreateRenderPass");
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &passes.single), "vkCreateRenderPass");
 
 	if (!msaaSupported) {
 		return;
@@ -613,10 +644,9 @@ void VulkanRenderer::createOffscreenRenderPasses() {
 	subpass.pResolveAttachments = &resolveRef;
 	info.attachmentCount = static_cast<uint32_t>(attachments.size());
 	info.pAttachments = attachments.data();
-	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &offscreenMsaaRenderPass),
-	         "vkCreateRenderPass");
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &passes.msaa), "vkCreateRenderPass");
 
-	// Pipelines built against offscreenMsaaRenderPass work with this one too, as the resolve
+	// Pipelines built against passes.msaa work with this one too, as the resolve
 	// attachments don't matter for the compatibility of render passes with a single subpass
 	VkAttachmentDescription samplesAttachment = attachments[0];
 	samplesAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // all of it is overwritten
@@ -624,8 +654,7 @@ void VulkanRenderer::createOffscreenRenderPasses() {
 	subpass.pResolveAttachments = nullptr;
 	info.attachmentCount = 1;
 	info.pAttachments = &samplesAttachment;
-	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &offscreenExpandRenderPass),
-	         "vkCreateRenderPass");
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &passes.expand), "vkCreateRenderPass");
 }
 
 void VulkanRenderer::createMsaaAttachments() {
@@ -879,8 +908,8 @@ void VulkanRenderer::destroyColoredPipelines() {
 	if (!device) {
 		return;
 	}
-	for (auto* pipelines : { &coloredPipelines, &coloredMsaaPipelines }) {
-		for (VkPipeline& pipeline : *pipelines) {
+	for (auto& pipelines : coloredPipelines) {
+		for (VkPipeline& pipeline : pipelines) {
 			if (pipeline) {
 				vkDestroyPipeline(device, pipeline, nullptr);
 				pipeline = VK_NULL_HANDLE;
@@ -893,8 +922,8 @@ void VulkanRenderer::destroyTexturedPipelines() {
 	if (!device) {
 		return;
 	}
-	for (auto* pipelines : { &texturedPipelines, &texturedMsaaPipelines }) {
-		for (VkPipeline& pipeline : *pipelines) {
+	for (auto& pipelines : texturedPipelines) {
+		for (VkPipeline& pipeline : pipelines) {
 			if (pipeline) {
 				vkDestroyPipeline(device, pipeline, nullptr);
 				pipeline = VK_NULL_HANDLE;
@@ -908,7 +937,7 @@ void VulkanRenderer::rebuildSwapchainRendering() {
 	if (frameActive) {
 		vkResetCommandBuffer(commandBuffers[currentFrame], 0);
 		frameActive = false;
-		currentPassMultisampled = false;
+		currentPassKind = PassKind::Ldr;
 	}
 	for (VkFramebuffer fb : swapchainFramebuffers) {
 		vkDestroyFramebuffer(device, fb, nullptr);
@@ -1013,7 +1042,7 @@ void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
 	clear.color = { { passClearColor.getRed(), passClearColor.getGreen(), passClearColor.getBlue(),
 		              1.f } };
 	if (renderTargetStack.empty()) {
-		currentPassMultisampled = swapchainMsaaActive();
+		currentPassKind = swapchainMsaaActive() ? PassKind::LdrMsaa : PassKind::Ldr;
 		rpInfo.framebuffer = swapchainFramebuffers[currentImageIndex];
 		if (loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR) {
 			rpInfo.renderPass = renderPass;
@@ -1027,18 +1056,21 @@ void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
 		VulkanFramebuffer* target = renderTargetStack.back();
 		// Like on OpenGL, where an anti-aliased FrameBuffer is always drawn into multisampled, but
 		// only smoothed while GL_MULTISAMPLE is enabled
-		currentPassMultisampled = target->msaaImage && getMultisampleAntiAliasing();
-		if (currentPassMultisampled) {
+		const bool multisampled = target->msaaImage && getMultisampleAntiAliasing();
+		currentPassKind = passKind(target->hdr, multisampled);
+		ensurePipelines(currentPassKind);
+		const auto& passes = offscreenRenderPasses[target->hdr ? 1 : 0];
+		if (multisampled) {
 			if (target->samplesStale) {
 				expandIntoSamples(*target);
 			}
-			rpInfo.renderPass = offscreenMsaaRenderPass; // always LOAD; clearing is explicit
+			rpInfo.renderPass = passes.msaa; // always LOAD; clearing is explicit
 			rpInfo.framebuffer = target->msaaFramebuffer;
 		} else {
 			if (target->msaaImage) {
 				target->samplesStale = true;
 			}
-			rpInfo.renderPass = offscreenRenderPass; // always LOAD; clearing is explicit
+			rpInfo.renderPass = passes.single; // always LOAD; clearing is explicit
 			rpInfo.framebuffer = target->framebuffer;
 		}
 		extent = { static_cast<uint32_t>(target->width), static_cast<uint32_t>(target->height) };
@@ -1324,6 +1356,27 @@ VkShaderModule createShaderModule(VkDevice device, const std::span<const uint32_
 	return module;
 }
 
+/// Shader modules that are only needed while pipelines are built from them
+struct ShaderModules {
+	ShaderModules(VkDevice device, const std::span<const uint32_t> vertexSpirv,
+	              const std::span<const uint32_t> fragmentSpirv)
+	: device(device), vert(createShaderModule(device, vertexSpirv)),
+	  frag(createShaderModule(device, fragmentSpirv)) {
+	}
+	~ShaderModules() {
+		vkDestroyShaderModule(device, frag, nullptr);
+		vkDestroyShaderModule(device, vert, nullptr);
+	}
+	ShaderModules(const ShaderModules&) = delete;
+	ShaderModules& operator=(const ShaderModules&) = delete;
+	ShaderModules(ShaderModules&&) = delete;
+	ShaderModules& operator=(ShaderModules&&) = delete;
+
+	VkDevice device;
+	VkShaderModule vert;
+	VkShaderModule frag;
+};
+
 VkPrimitiveTopology toVkTopology(const PrimitiveType type) {
 	switch (type) {
 	case PrimitiveType::Triangles:
@@ -1353,10 +1406,7 @@ uint32_t VulkanRenderer::findMemoryType(const uint32_t typeFilter,
 	throw std::runtime_error("No suitable Vulkan memory type found.");
 }
 
-void VulkanRenderer::createColoredPipelines() {
-	const VkShaderModule vert = createShaderModule(device, vulkan_shaders::colored_vert);
-	const VkShaderModule frag = createShaderModule(device, vulkan_shaders::colored_frag);
-
+void VulkanRenderer::createColoredPipelineLayout() {
 	VkPushConstantRange pushRange{};
 	pushRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 	pushRange.offset = 0;
@@ -1368,15 +1418,48 @@ void VulkanRenderer::createColoredPipelines() {
 	layoutInfo.pPushConstantRanges = &pushRange;
 	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &coloredPipelineLayout),
 	         "vkCreatePipelineLayout");
+}
 
-	buildColoredPipelines(vert, frag, offscreenRenderPass, VK_SAMPLE_COUNT_1_BIT, coloredPipelines);
-	if (msaaSupported) {
-		buildColoredPipelines(vert, frag, offscreenMsaaRenderPass, msaaSampleCount,
-		                      coloredMsaaPipelines);
+VkRenderPass VulkanRenderer::pipelineRenderPass(const PassKind kind) const {
+	const auto& passes = offscreenRenderPasses[isHdr(kind) ? 1 : 0];
+	return isMultisampled(kind) ? passes.msaa : passes.single;
+}
+
+VkSampleCountFlagBits VulkanRenderer::pipelineSamples(const PassKind kind) const {
+	return isMultisampled(kind) ? msaaSampleCount : VK_SAMPLE_COUNT_1_BIT;
+}
+
+void VulkanRenderer::ensurePipelines(const PassKind kind) {
+	const auto k = static_cast<size_t>(kind);
+	if (coloredPipelines[k][0]) {
+		return;
 	}
+	const VkRenderPass pass = pipelineRenderPass(kind);
+	const VkSampleCountFlagBits samples = pipelineSamples(kind);
+	{
+		const ShaderModules colored(device, vulkan_shaders::colored_vert,
+		                            vulkan_shaders::colored_frag);
+		buildColoredPipelines(colored.vert, colored.frag, pass, samples, coloredPipelines[k]);
+	}
+	{
+		const ShaderModules rounded(device, vulkan_shaders::rounded_vert,
+		                            vulkan_shaders::rounded_frag);
+		buildRoundedPipeline(rounded.vert, rounded.frag, pass, samples, roundedPipelines[k]);
+	}
+	const ShaderModules textured(device, vulkan_shaders::textured_vert,
+	                             vulkan_shaders::textured_frag);
+	buildTexturedPipelines(textured.vert, textured.frag, pass, samples, texturedPipelines[k]);
+}
 
-	vkDestroyShaderModule(device, frag, nullptr);
-	vkDestroyShaderModule(device, vert, nullptr);
+void VulkanRenderer::ensureProgramPipelines(const VulkanShaderProgram& program,
+                                            const PassKind kind) {
+	auto& pipelines = program.pipelines[static_cast<size_t>(kind)];
+	if (pipelines[0]) {
+		return;
+	}
+	const ShaderModules modules(device, program.vertexSpirv, program.fragmentSpirv);
+	buildTexturedPipelines(modules.vert, modules.frag, pipelineRenderPass(kind),
+	                       pipelineSamples(kind), pipelines);
 }
 
 void VulkanRenderer::buildColoredPipelines(const VkShaderModule vert, const VkShaderModule frag,
@@ -1491,20 +1574,15 @@ void VulkanRenderer::destroyRoundedPipelines() {
 	if (!device) {
 		return;
 	}
-	if (roundedPipeline) {
-		vkDestroyPipeline(device, roundedPipeline, nullptr);
-		roundedPipeline = VK_NULL_HANDLE;
-	}
-	if (roundedMsaaPipeline) {
-		vkDestroyPipeline(device, roundedMsaaPipeline, nullptr);
-		roundedMsaaPipeline = VK_NULL_HANDLE;
+	for (VkPipeline& pipeline : roundedPipelines) {
+		if (pipeline) {
+			vkDestroyPipeline(device, pipeline, nullptr);
+			pipeline = VK_NULL_HANDLE;
+		}
 	}
 }
 
-void VulkanRenderer::createRoundedPipelines() {
-	const VkShaderModule vert = createShaderModule(device, vulkan_shaders::rounded_vert);
-	const VkShaderModule frag = createShaderModule(device, vulkan_shaders::rounded_frag);
-
+void VulkanRenderer::createRoundedPipelineLayout() {
 	VkPushConstantRange pushRange{};
 	pushRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 	pushRange.offset = 0;
@@ -1516,15 +1594,6 @@ void VulkanRenderer::createRoundedPipelines() {
 	layoutInfo.pPushConstantRanges = &pushRange;
 	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &roundedPipelineLayout),
 	         "vkCreatePipelineLayout");
-
-	buildRoundedPipeline(vert, frag, offscreenRenderPass, VK_SAMPLE_COUNT_1_BIT, roundedPipeline);
-	if (msaaSupported) {
-		buildRoundedPipeline(vert, frag, offscreenMsaaRenderPass, msaaSampleCount,
-		                     roundedMsaaPipeline);
-	}
-
-	vkDestroyShaderModule(device, frag, nullptr);
-	vkDestroyShaderModule(device, vert, nullptr);
 }
 
 void VulkanRenderer::buildRoundedPipeline(const VkShaderModule vert, const VkShaderModule frag,
@@ -1833,8 +1902,7 @@ void VulkanRenderer::drawColored(const PrimitiveType type, const float* const xy
 	push.color[3] = color.getAlpha();
 
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
-	const std::array<VkPipeline, 4>& pipelines =
-	    currentPassMultisampled ? coloredMsaaPipelines : coloredPipelines;
+	const auto& pipelines = coloredPipelines[static_cast<size_t>(currentPassKind)];
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines[static_cast<size_t>(type)]);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
 	vkCmdPushConstants(cmd, coloredPipelineLayout,
@@ -1887,8 +1955,7 @@ void VulkanRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, co
 	push.cornerRadii[3] = bottomRight;
 
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
-	const VkPipeline pipeline =
-	    currentPassMultisampled && roundedMsaaPipeline ? roundedMsaaPipeline : roundedPipeline;
+	const VkPipeline pipeline = roundedPipelines[static_cast<size_t>(currentPassKind)];
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
 	vkCmdPushConstants(cmd, roundedPipelineLayout,
@@ -1944,7 +2011,7 @@ void VulkanRenderer::createDescriptorPool() {
 	         "vkCreateDescriptorPool");
 }
 
-void VulkanRenderer::createTexturedPipelines() {
+void VulkanRenderer::createTexturedPipelineLayout() {
 	if (!texturedSetLayout) {
 		VkDescriptorSetLayoutBinding samplerBinding{};
 		samplerBinding.binding = 0;
@@ -1974,9 +2041,6 @@ void VulkanRenderer::createTexturedPipelines() {
 		         "vkCreateDescriptorSetLayout");
 	}
 
-	const VkShaderModule vert = createShaderModule(device, vulkan_shaders::textured_vert);
-	const VkShaderModule frag = createShaderModule(device, vulkan_shaders::textured_frag);
-
 	VkPushConstantRange pushRange{};
 	pushRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 	pushRange.size = sizeof(TexturedPushConstants);
@@ -1990,16 +2054,6 @@ void VulkanRenderer::createTexturedPipelines() {
 	layoutInfo.pPushConstantRanges = &pushRange;
 	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &texturedPipelineLayout),
 	         "vkCreatePipelineLayout");
-
-	buildTexturedPipelines(vert, frag, offscreenRenderPass, VK_SAMPLE_COUNT_1_BIT,
-	                       texturedPipelines);
-	if (msaaSupported) {
-		buildTexturedPipelines(vert, frag, offscreenMsaaRenderPass, msaaSampleCount,
-		                       texturedMsaaPipelines);
-	}
-
-	vkDestroyShaderModule(device, frag, nullptr);
-	vkDestroyShaderModule(device, vert, nullptr);
 }
 
 void VulkanRenderer::buildTexturedPipelines(
@@ -2186,16 +2240,12 @@ std::unique_ptr<VulkanShaderProgram> VulkanRenderer::createShaderProgram(
 	auto program = std::make_unique<VulkanShaderProgram>();
 	program->uniforms = std::move(uniforms);
 	program->uniformBlockSize = uniformBlockSize;
-	const VkShaderModule vert = createShaderModule(device, vertexSpirv);
-	const VkShaderModule frag = createShaderModule(device, fragmentSpirv);
-	buildTexturedPipelines(vert, frag, offscreenRenderPass, VK_SAMPLE_COUNT_1_BIT,
-	                       program->pipelines);
+	program->vertexSpirv = vertexSpirv;
+	program->fragmentSpirv = fragmentSpirv;
+	ensureProgramPipelines(*program, PassKind::Ldr);
 	if (msaaSupported) {
-		buildTexturedPipelines(vert, frag, offscreenMsaaRenderPass, msaaSampleCount,
-		                       program->msaaPipelines);
+		ensureProgramPipelines(*program, PassKind::LdrMsaa);
 	}
-	vkDestroyShaderModule(device, frag, nullptr);
-	vkDestroyShaderModule(device, vert, nullptr);
 
 	if (program->uniformBlockSize > 0) {
 		if (program->uniformBlockSize > uniformDynamicRange) {
@@ -2234,14 +2284,12 @@ void VulkanRenderer::destroyShaderProgram(VulkanShaderProgram& program) {
 		return;
 	}
 	vkDeviceWaitIdle(device);
-	for (VkPipeline pipeline : program.pipelines) {
-		if (pipeline) {
-			vkDestroyPipeline(device, pipeline, nullptr);
-		}
-	}
-	for (VkPipeline pipeline : program.msaaPipelines) {
-		if (pipeline) {
-			vkDestroyPipeline(device, pipeline, nullptr);
+	for (auto& pipelines : program.pipelines) {
+		for (VkPipeline& pipeline : pipelines) {
+			if (pipeline) {
+				vkDestroyPipeline(device, pipeline, nullptr);
+				pipeline = VK_NULL_HANDLE;
+			}
 		}
 	}
 	if (program.uniformMapped) {
@@ -2649,17 +2697,13 @@ void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* const
 
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
 	const uint32_t pipelineIndex = texturedPipelineIndex(texturedBlendVariant(), type);
+	const auto kind = static_cast<size_t>(currentPassKind);
 	VkPipeline pipeline = VK_NULL_HANDLE;
 	if (activeShaderProgram) {
-		if (currentPassMultisampled && activeShaderProgram->msaaPipelines[pipelineIndex]) {
-			pipeline = activeShaderProgram->msaaPipelines[pipelineIndex];
-		} else {
-			pipeline = activeShaderProgram->pipelines[pipelineIndex];
-		}
-	} else if (currentPassMultisampled) {
-		pipeline = texturedMsaaPipelines[pipelineIndex];
+		ensureProgramPipelines(*activeShaderProgram, currentPassKind);
+		pipeline = activeShaderProgram->pipelines[kind][pipelineIndex];
 	} else {
-		pipeline = texturedPipelines[pipelineIndex];
+		pipeline = texturedPipelines[kind][pipelineIndex];
 	}
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 0, 1,
@@ -2802,17 +2846,22 @@ VkDescriptorSet VulkanRenderer::allocateTextureDescriptor(const VkImageView view
 	return set;
 }
 
-std::unique_ptr<VulkanFramebuffer>
-VulkanRenderer::createFramebuffer(const int width, const int height, const bool antiAliased) {
+std::unique_ptr<VulkanFramebuffer> VulkanRenderer::createFramebuffer(const int width,
+                                                                     const int height,
+                                                                     const bool antiAliased,
+                                                                     const bool hdr) {
 	auto fb = std::make_unique<VulkanFramebuffer>();
 	fb->width = width;
 	fb->height = height;
+	fb->hdr = hdr;
+	const VkFormat format = hdr ? hdrFormat : swapchainImageFormat;
+	const auto& passes = offscreenRenderPasses[hdr ? 1 : 0];
 	fb->color.width = width;
 	fb->color.height = height;
 
 	VkImageCreateInfo imageInfo{ .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO };
 	imageInfo.imageType = VK_IMAGE_TYPE_2D;
-	imageInfo.format = swapchainImageFormat;
+	imageInfo.format = format;
 	imageInfo.extent = { static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1 };
 	imageInfo.mipLevels = 1;
 	imageInfo.arrayLayers = 1;
@@ -2866,7 +2915,7 @@ VulkanRenderer::createFramebuffer(const int width, const int height, const bool 
 	VkImageViewCreateInfo viewInfo{ .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO };
 	viewInfo.image = fb->color.image;
 	viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-	viewInfo.format = swapchainImageFormat;
+	viewInfo.format = format;
 	viewInfo.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
 	VK_CHECK(vkCreateImageView(device, &viewInfo, nullptr, &fb->color.view), "vkCreateImageView");
 
@@ -2884,7 +2933,7 @@ VulkanRenderer::createFramebuffer(const int width, const int height, const bool 
 
 	const std::array<VkImageView, 1> attachments = { fb->color.view };
 	VkFramebufferCreateInfo fbInfo{ .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO };
-	fbInfo.renderPass = offscreenRenderPass;
+	fbInfo.renderPass = passes.single;
 	fbInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
 	fbInfo.pAttachments = attachments.data();
 	fbInfo.width = static_cast<uint32_t>(width);
@@ -2941,12 +2990,12 @@ VulkanRenderer::createFramebuffer(const int width, const int height, const bool 
 	VK_CHECK(vkCreateImageView(device, &viewInfo, nullptr, &fb->msaaView), "vkCreateImageView");
 
 	const std::array msaaAttachments = { fb->msaaView, fb->color.view };
-	fbInfo.renderPass = offscreenMsaaRenderPass;
+	fbInfo.renderPass = passes.msaa;
 	fbInfo.attachmentCount = static_cast<uint32_t>(msaaAttachments.size());
 	fbInfo.pAttachments = msaaAttachments.data();
 	VK_CHECK(vkCreateFramebuffer(device, &fbInfo, nullptr, &fb->msaaFramebuffer),
 	         "vkCreateFramebuffer");
-	fbInfo.renderPass = offscreenExpandRenderPass;
+	fbInfo.renderPass = passes.expand;
 	fbInfo.attachmentCount = 1;
 	fbInfo.pAttachments = &fb->msaaView;
 	VK_CHECK(vkCreateFramebuffer(device, &fbInfo, nullptr, &fb->expandFramebuffer),
@@ -2958,7 +3007,7 @@ void VulkanRenderer::expandIntoSamples(VulkanFramebuffer& fb) {
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
 	const VkExtent2D extent{ static_cast<uint32_t>(fb.width), static_cast<uint32_t>(fb.height) };
 	VkRenderPassBeginInfo rpInfo{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
-	rpInfo.renderPass = offscreenExpandRenderPass;
+	rpInfo.renderPass = offscreenRenderPasses[fb.hdr ? 1 : 0].expand;
 	rpInfo.framebuffer = fb.expandFramebuffer;
 	rpInfo.renderArea.extent = extent;
 	vkCmdBeginRenderPass(cmd, &rpInfo, VK_SUBPASS_CONTENTS_INLINE);
@@ -2984,7 +3033,8 @@ void VulkanRenderer::expandIntoSamples(VulkanFramebuffer& fb) {
 	const uint32_t replace = 2; // see texturedBlendVariant()
 	vkCmdBindPipeline(
 	    cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-	    texturedMsaaPipelines[texturedPipelineIndex(replace, PrimitiveType::TriangleFan)]);
+	    texturedPipelines[static_cast<size_t>(passKind(fb.hdr, true))]
+	                     [texturedPipelineIndex(replace, PrimitiveType::TriangleFan)]);
 	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 0, 1,
 	                        &fb.color.descriptorSet, 0, nullptr);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);

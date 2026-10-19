@@ -3,6 +3,8 @@
 
 #include "../jngl/FrameBuffer.hpp"
 #include "../jngl/ScaleablePixels.hpp"
+#include "../jngl/Shader.hpp"
+#include "../jngl/ShaderProgram.hpp"
 #include "../jngl/Sprite.hpp"
 #include "../jngl/matrix.hpp"
 #include "../jngl/other.hpp"
@@ -14,6 +16,9 @@
 #include "Fixture.hpp"
 
 #include <catch2/catch_test_macros.hpp>
+#include <cmath>
+#include <cstdint>
+#include <vector>
 
 TEST_CASE("FrameBufferTest") {
 	Fixture f(1.f);
@@ -361,4 +366,48 @@ TEST_CASE("FrameBuffer anti-aliased keeps what's drawn while anti-aliasing is of
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
+}
+
+TEST_CASE("HDR FrameBuffer keeps values above 1") {
+	Fixture f(1.f);
+	const std::vector<uint8_t> opaque(40 * 20 * 4, 255);
+	const jngl::Sprite sprite(opaque.data(), 40, 20);
+	const jngl::Shader two(R"(#version 300 es
+		out mediump vec4 outColor;
+
+		void main() {
+			outColor = vec4(2.0, 2.0, 2.0, 1.0);
+		})",
+	                       jngl::Shader::Type::FRAGMENT);
+	const jngl::ShaderProgram drawTwo(jngl::Sprite::vertexShader(), two);
+	const jngl::Shader half(R"(#version 300 es
+		uniform sampler2D tex;
+
+		in mediump vec2 texCoord;
+
+		out mediump vec4 outColor;
+
+		void main() {
+			mediump vec4 color = texture(tex, texCoord);
+			outColor = vec4(color.rgb * 0.5, color.a);
+		})",
+	                        jngl::Shader::Type::FRAGMENT);
+	const jngl::ShaderProgram drawHalf(jngl::Sprite::vertexShader(), half);
+	// Draws 2 into the middle of a FrameBuffer, and the FrameBuffer halved onto the window, where
+	// this returns the middle's red as 0 to 255
+	const auto drawn = [&](const bool hdr, const bool antiAliased) {
+		Fixture::reset();
+		jngl::FrameBuffer fb(320_px, 70_px, hdr, antiAliased);
+		{
+			const auto context = fb.use();
+			sprite.draw(jngl::modelview(), &drawTwo);
+		}
+		fb.draw(jngl::Vec2(-160, -35), &drawHalf);
+		const auto pixels = jngl::readPixels();
+		return std::lround(pixels.at(static_cast<size_t>(35 * 320 + 160) * 3) * 255);
+	};
+	const auto clamped = drawn(false, false); // to 1, which is halved
+	REQUIRE((clamped > 120 && clamped < 135));
+	REQUIRE(drawn(true, false) == 255);
+	REQUIRE(drawn(true, true) == 255);
 }

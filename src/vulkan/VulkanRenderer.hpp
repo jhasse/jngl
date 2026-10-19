@@ -51,14 +51,22 @@ struct VulkanFramebuffer {
 	VkImage msaaImage = VK_NULL_HANDLE; ///< VK_NULL_HANDLE if it isn't anti-aliased
 	VkDeviceMemory msaaMemory = VK_NULL_HANDLE;
 	VkImageView msaaView = VK_NULL_HANDLE;
-	/// Draws into msaaImage and resolves it into color, see offscreenMsaaRenderPass
+	/// Draws into msaaImage and resolves it into color, see OffscreenRenderPasses::msaa
 	VkFramebuffer msaaFramebuffer = VK_NULL_HANDLE;
-	/// Only msaaImage, for copying color into it, see offscreenExpandRenderPass
+	/// Only msaaImage, for copying color into it, see OffscreenRenderPasses::expand
 	VkFramebuffer expandFramebuffer = VK_NULL_HANDLE;
 	/// Whether color has been drawn into directly (while anti-aliasing was disabled), so that
 	/// msaaImage has to get its pixels before it's drawn into again
 	bool samplesStale = false;
+	/// Whether its images have 16-bit float channels (VulkanRenderer::hdrFormat)
+	bool hdr = false;
 };
+
+/// The kinds of render passes there are pipelines for, as a pipeline only works with render passes
+/// that have the same color format and number of samples: 8-bit (the swapchain's format, also used
+/// by FrameBuffers) or 16-bit float (HDR FrameBuffers), each without or with MSAA
+enum class PassKind : uint8_t { Ldr, LdrMsaa, Hdr, HdrMsaa };
+constexpr size_t passKindCount = 4;
 
 /// Host-visible, persistently mapped vertex buffer that's appended to during a frame
 struct DynamicVertexBuffer {
@@ -89,8 +97,11 @@ struct VulkanShaderProgram {
 	static constexpr uint32_t topologyCount = 4;
 	static constexpr uint32_t blendVariantCount = 4; // see VulkanRenderer::texturedBlendVariant()
 	static constexpr uint32_t pipelineCount = topologyCount * blendVariantCount;
-	std::array<VkPipeline, pipelineCount> pipelines{};
-	std::array<VkPipeline, pipelineCount> msaaPipelines{}; // MSAA, when supported
+	/// Indexed by PassKind. Those for HDR FrameBuffers are only built once they're drawn into, see
+	/// VulkanRenderer::ensureProgramPipelines(), from vertexSpirv and fragmentSpirv.
+	mutable std::array<std::array<VkPipeline, pipelineCount>, passKindCount> pipelines{};
+	std::vector<uint32_t> vertexSpirv;
+	std::vector<uint32_t> fragmentSpirv;
 	std::vector<ShaderUniform> uniforms;
 	uint32_t uniformBlockSize = 0;
 	VkBuffer uniformBuffer = VK_NULL_HANDLE; // host-visible staging; not bound to the GPU
@@ -146,7 +157,13 @@ public:
 
 	/// Creates an off-screen render target (see jngl::FrameBuffer), cleared to transparent.
 	/// \param antiAliased Multisampled while anti-aliasing is enabled, if it's supported
-	std::unique_ptr<VulkanFramebuffer> createFramebuffer(int width, int height, bool antiAliased);
+	/// \param hdr With 16-bit float channels, see hdrFormat
+	std::unique_ptr<VulkanFramebuffer> createFramebuffer(int width, int height, bool antiAliased,
+	                                                     bool hdr);
+
+	/// Format of HDR FrameBuffers, which every Vulkan implementation can render into, blend and
+	/// sample with linear filtering
+	static constexpr VkFormat hdrFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
 	/// Schedules \a framebuffer's resources for destruction once the GPU is done with them.
 	void destroyFramebuffer(VulkanFramebuffer&);
 
@@ -224,6 +241,13 @@ private:
 	void destroyMsaaAttachments();
 	void destroyColoredPipelines();
 	void destroyTexturedPipelines();
+	/// The offscreen render pass that the pipelines of \a kind are built against
+	[[nodiscard]] VkRenderPass pipelineRenderPass(PassKind kind) const;
+	[[nodiscard]] VkSampleCountFlagBits pipelineSamples(PassKind kind) const;
+	/// Builds the built-in pipelines for render passes of \a kind, if they haven't been yet
+	void ensurePipelines(PassKind kind);
+	/// Builds \a program's pipelines for render passes of \a kind, if they haven't been yet
+	void ensureProgramPipelines(const VulkanShaderProgram& program, PassKind kind);
 	void rebuildSwapchainRendering();
 	void createInstance();
 	void createSurface();
@@ -237,10 +261,10 @@ private:
 	void createSyncObjects();
 	/// Creates the per-swapchain-image "render finished" semaphores (recreated with the swapchain).
 	void createPresentSemaphores();
-	void createColoredPipelines();
+	void createColoredPipelineLayout();
 	void buildColoredPipelines(VkShaderModule vert, VkShaderModule frag, VkRenderPass targetRenderPass,
 	                           VkSampleCountFlagBits samples, std::array<VkPipeline, 4>& out);
-	void createRoundedPipelines();
+	void createRoundedPipelineLayout();
 	void buildRoundedPipeline(VkShaderModule vert, VkShaderModule frag, VkRenderPass targetRenderPass,
 	                          VkSampleCountFlagBits samples, VkPipeline& out);
 	void destroyRoundedPipelines();
@@ -253,7 +277,7 @@ private:
 	void createUniformBuffers();
 	[[nodiscard]] DynamicUniformBuffer createUniformBuffer(VkDeviceSize capacity);
 	void destroyUniformBuffer(DynamicUniformBuffer&);
-	void createTexturedPipelines();
+	void createTexturedPipelineLayout();
 	/// Builds textured pipelines for every blend variant × topology from the given shader modules.
 	void buildTexturedPipelines(VkShaderModule vert, VkShaderModule frag,
 	                            VkRenderPass targetRenderPass, VkSampleCountFlagBits samples,
@@ -265,8 +289,7 @@ private:
 	/// Copies the active program's staging UBO into this frame's ring and binds it (dynamic
 	/// offset).
 	void bindActiveProgramUniforms(VkCommandBuffer cmd);
-	/// Creates offscreenRenderPass, and offscreenMsaaRenderPass and offscreenExpandRenderPass if
-	/// MSAA is supported. Pipelines are built against these, as they don't change.
+	/// Creates offscreenRenderPasses. Pipelines are built against these, as they don't change.
 	void createOffscreenRenderPasses();
 	/// Records a render pass that copies \a framebuffer's color into all samples of its msaaImage
 	void expandIntoSamples(VulkanFramebuffer& framebuffer);
@@ -333,14 +356,20 @@ private:
 	// after readPixels has flushed it mid-way or a FrameBuffer has been drawn into. With MSAA, it
 	// continues drawing into the multisampled image.
 	VkRenderPass loadRenderPass = VK_NULL_HANDLE;
-	// Render pass used when drawing into a FrameBuffer (LOAD; clearing is done explicitly). Shares
-	// the swapchain's color format so the colored/textured pipelines stay compatible with it.
-	VkRenderPass offscreenRenderPass = VK_NULL_HANDLE;
-	// Same for an anti-aliased FrameBuffer: draws into its multisampled image (LOAD) and resolves
-	// that into its color image at the end. The MSAA pipelines are built against it.
-	VkRenderPass offscreenMsaaRenderPass = VK_NULL_HANDLE;
-	// Only the multisampled image of an anti-aliased FrameBuffer, see expandIntoSamples
-	VkRenderPass offscreenExpandRenderPass = VK_NULL_HANDLE;
+	// Render passes used when drawing into a FrameBuffer, for each of its formats: the swapchain's
+	// (so that the pipelines built against them work with the swapchain's render passes, too) and
+	// hdrFormat. Indexed by VulkanFramebuffer::hdr.
+	struct OffscreenRenderPasses {
+		// LOAD; clearing is done explicitly
+		VkRenderPass single = VK_NULL_HANDLE;
+		// Same for an anti-aliased FrameBuffer: draws into its multisampled image (LOAD) and
+		// resolves that into its color image at the end. If MSAA is supported.
+		VkRenderPass msaa = VK_NULL_HANDLE;
+		// Only the multisampled image of an anti-aliased FrameBuffer, see expandIntoSamples
+		VkRenderPass expand = VK_NULL_HANDLE;
+	};
+	std::array<OffscreenRenderPasses, 2> offscreenRenderPasses{};
+	void createOffscreenRenderPasses(VkFormat, OffscreenRenderPasses&);
 	// Stack of active FrameBuffers; empty means drawing targets the swapchain.
 	std::vector<VulkanFramebuffer*> renderTargetStack;
 	// FrameBuffers destroyed (or textures replaced, see enableMipmaps) while their resources might
@@ -363,12 +392,11 @@ private:
 	// pipeline per primitive topology (they only differ in input assembly state); they share the
 	// layout and shader modules.
 	VkPipelineLayout coloredPipelineLayout = VK_NULL_HANDLE;
-	std::array<VkPipeline, 4> coloredPipelines{}; // indexed by PrimitiveType
-	std::array<VkPipeline, 4> coloredMsaaPipelines{}; // MSAA, when supported
+	// Indexed by PassKind and PrimitiveType, see ensurePipelines()
+	std::array<std::array<VkPipeline, 4>, passKindCount> coloredPipelines{};
 
 	VkPipelineLayout roundedPipelineLayout = VK_NULL_HANDLE;
-	VkPipeline roundedPipeline = VK_NULL_HANDLE;
-	VkPipeline roundedMsaaPipeline = VK_NULL_HANDLE;
+	std::array<VkPipeline, passKindCount> roundedPipelines{};
 
 	// Pipeline drawing textured geometry (sprites, text) with the built-in texture shader.
 	// set 0 = combined image sampler; set 1 = custom-uniform UBO (used only by user
@@ -376,8 +404,8 @@ private:
 	VkDescriptorSetLayout texturedSetLayout = VK_NULL_HANDLE;
 	VkDescriptorSetLayout uniformsSetLayout = VK_NULL_HANDLE;
 	VkPipelineLayout texturedPipelineLayout = VK_NULL_HANDLE;
-	std::array<VkPipeline, VulkanShaderProgram::pipelineCount> texturedPipelines{};
-	std::array<VkPipeline, VulkanShaderProgram::pipelineCount> texturedMsaaPipelines{};
+	std::array<std::array<VkPipeline, VulkanShaderProgram::pipelineCount>, passKindCount>
+	    texturedPipelines{};
 	VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
 	// Custom shader program currently bound via ShaderProgram::use(); nullptr = built-in shader.
 	const VulkanShaderProgram* activeShaderProgram = nullptr;
@@ -417,9 +445,9 @@ private:
 	bool msaaRebuildPending = false;
 	bool pendingMsaaEnabled = true;
 	VkSampleCountFlagBits msaaSampleCount = VK_SAMPLE_COUNT_1_BIT;
-	// True while the active render pass (the swapchain's or a FrameBuffer's) is multisampled, so
-	// that the MSAA pipelines have to be used.
-	bool currentPassMultisampled = false;
+	// What the active render pass (the swapchain's or a FrameBuffer's) draws into, which decides
+	// the pipelines that have to be used
+	PassKind currentPassKind = PassKind::Ldr;
 
 	int framebufferWidth = 0;
 	int framebufferHeight = 0;
