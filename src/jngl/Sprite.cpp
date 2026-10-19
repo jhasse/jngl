@@ -39,6 +39,7 @@
 #endif
 #include <cstddef>
 #include <cstring>
+#include <optional>
 #include <sstream>
 #ifndef NOWEBP
 #include "../ImageDataWebP.hpp"
@@ -394,6 +395,8 @@ struct Sprite::Batch::Impl {
 	const Texture* texture;
 	jngl::Mat3 translation;
 	Rgba color;
+	/// Keeps the custom ShaderProgram in use while the Batch exists, like on OpenGL
+	std::optional<ShaderProgram::Context> context;
 };
 
 Sprite::Batch::Batch(std::unique_ptr<Impl> impl) : impl(std::move(impl)) {
@@ -407,13 +410,16 @@ void Sprite::Batch::draw(Mat3 modelview) const {
 }
 
 auto Sprite::batch(const ShaderProgram* const shaderProgram) const -> Batch {
-	// TODO: custom ShaderPrograms aren't supported on Vulkan yet; fall back to the default shader.
-	(void)shaderProgram;
-	return Batch{ std::make_unique<Batch::Impl>(Batch::Impl{
-		.texture = texture.get(),
-		.translation = boost::qvm::translation_mat(
-		    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. })),
-		.color = gSpriteColor }) };
+	auto impl = std::make_unique<Batch::Impl>(
+	    Batch::Impl{ .texture = texture.get(),
+	                 .translation = boost::qvm::translation_mat(
+	                     boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. })),
+	                 .color = gSpriteColor,
+	                 .context = std::nullopt });
+	if (shaderProgram) {
+		impl->context.emplace(shaderProgram->use());
+	}
+	return Batch{ std::move(impl) };
 }
 #else
 struct Sprite::Batch::Impl {

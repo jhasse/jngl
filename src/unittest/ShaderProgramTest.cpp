@@ -51,3 +51,39 @@ TEST_CASE("more custom uniforms in a frame than fit into the Vulkan backend's in
 	}
 	REQUIRE(f.getAsciiArt() == expected);
 }
+
+TEST_CASE("Sprite::batch with a custom ShaderProgram") {
+	Fixture f(1.f);
+	const std::vector<uint8_t> white(40 * 20 * 4, 255);
+	const jngl::Sprite sprite(white.data(), 40, 20);
+	const jngl::Vec2 center{ -40, 0 };
+	// So that there's something to compare in either case
+	const auto drawReference = []() {
+		jngl::drawRect(jngl::modelview().translate({ 60, -10 }), { 20, 20 }, 0x000000_rgb);
+	};
+	drawReference();
+	jngl::drawRect(jngl::modelview().translate(center - sprite.getSize() / 2.), sprite.getSize(),
+	               0x000000_rgb);
+	const auto expected = f.getAsciiArt();
+	Fixture::reset();
+
+	drawReference();
+	// Draws it black, while it'd be invisible on the white window otherwise
+	const jngl::Shader black(R"(#version 300 es
+		uniform sampler2D tex;
+
+		in mediump vec2 texCoord;
+
+		out lowp vec4 outColor;
+
+		void main() {
+			outColor = vec4(0.0, 0.0, 0.0, texture(tex, texCoord).a);
+		})",
+	                         jngl::Shader::Type::FRAGMENT);
+	const jngl::ShaderProgram program(jngl::Sprite::vertexShader(), black);
+	{
+		const auto batch = sprite.batch(&program);
+		batch.draw(jngl::modelview().translate(center));
+	}
+	REQUIRE(f.getAsciiArt() == expected);
+}
