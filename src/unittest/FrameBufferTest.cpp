@@ -268,9 +268,6 @@ TEST_CASE("FrameBufferInception") {
 
 TEST_CASE("FrameBuffer anti-aliased like the window") {
 	Fixture f(1.f);
-#ifdef JNGL_VULKAN
-	SKIP("Anti-aliased FrameBuffers aren't supported on Vulkan yet");
-#endif
 	if (!jngl::pWindow->isMultisampleSupported()) {
 		SKIP("Multisampling isn't supported here");
 	}
@@ -303,4 +300,33 @@ TEST_CASE("FrameBuffer anti-aliased like the window") {
 	REQUIRE(greys(true) == 0);
 	jngl::setAntiAliasing(true);
 #endif
+}
+
+TEST_CASE("FrameBuffer anti-aliased keeps what's drawn while anti-aliasing is off") {
+	Fixture f(1.f);
+	if (!jngl::pWindow->isMultisampleSupported()) {
+		SKIP("Multisampling isn't supported here");
+	}
+	jngl::FrameBuffer fb(320_px, 70_px, false, true);
+	jngl::setAntiAliasing(false);
+	{
+		const auto context = fb.use();
+		jngl::drawRect(jngl::modelview().translate({ -100, -25 }), { 40, 30 }, 0x000000_rgb);
+	}
+	jngl::setAntiAliasing(true);
+	{
+		const auto context = fb.use();
+		jngl::drawRect(jngl::modelview().translate({ 60, -25 }), { 40, 30 }, 0x000000_rgb);
+	}
+	// The left one's still there after the FrameBuffer's been drawn into multisampled again
+	fb.draw(-160, -35);
+	REQUIRE(f.getAsciiArt() == R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒     ████            ████     ▒
+▒     ████            ████     ▒
+▒     ████            ████     ▒
+▒                              ▒
+▒                              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
 }

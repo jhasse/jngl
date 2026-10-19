@@ -100,8 +100,7 @@ void applyBlendMode() {
 
 struct FrameBuffer::Impl {
 #ifdef JNGL_VULKAN
-	Impl(int width, int height, bool /*hdr*/)
-	: width(width), height(height), vkFramebuffer(vulkanRenderer().createFramebuffer(width, height)) {
+	Impl(int width, int height, bool /*hdr*/) : width(width), height(height) {
 	}
 #else
 	Impl(int width, int height, bool hdr)
@@ -186,9 +185,10 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr
                          const bool antiAliased)
 : impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height), hdr)) {
 #ifdef JNGL_VULKAN
-	// createFramebuffer already cleared the image to transparent.
+	// createFramebuffer already clears the image to transparent.
+	impl->vkFramebuffer =
+	    vulkanRenderer().createFramebuffer(impl->width, impl->height, antiAliased);
 	(void)hdr; // HDR framebuffers aren't supported on Vulkan yet.
-	(void)antiAliased; // Neither are multisampled ones.
 #else
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);

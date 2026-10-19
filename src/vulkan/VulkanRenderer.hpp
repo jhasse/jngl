@@ -39,11 +39,25 @@ struct VulkanTexture {
 
 /// GPU resources backing a jngl::FrameBuffer on the Vulkan backend: a color image that can be both
 /// rendered into and sampled (\a color), plus the VkFramebuffer that targets it.
+///
+/// An anti-aliased one also has a multisampled image, which is drawn into instead while
+/// anti-aliasing is enabled and resolved into \a color at the end of each render pass.
 struct VulkanFramebuffer {
 	VulkanTexture color;
 	VkFramebuffer framebuffer = VK_NULL_HANDLE;
 	int width = 0;
 	int height = 0;
+
+	VkImage msaaImage = VK_NULL_HANDLE; ///< VK_NULL_HANDLE if it isn't anti-aliased
+	VkDeviceMemory msaaMemory = VK_NULL_HANDLE;
+	VkImageView msaaView = VK_NULL_HANDLE;
+	/// Draws into msaaImage and resolves it into color, see offscreenMsaaRenderPass
+	VkFramebuffer msaaFramebuffer = VK_NULL_HANDLE;
+	/// Only msaaImage, for copying color into it, see offscreenExpandRenderPass
+	VkFramebuffer expandFramebuffer = VK_NULL_HANDLE;
+	/// Whether color has been drawn into directly (while anti-aliasing was disabled), so that
+	/// msaaImage has to get its pixels before it's drawn into again
+	bool samplesStale = false;
 };
 
 /// Host-visible, persistently mapped vertex buffer that's appended to during a frame
@@ -76,8 +90,7 @@ struct VulkanShaderProgram {
 	static constexpr uint32_t blendVariantCount = 4; // see VulkanRenderer::texturedBlendVariant()
 	static constexpr uint32_t pipelineCount = topologyCount * blendVariantCount;
 	std::array<VkPipeline, pipelineCount> pipelines{};
-	std::array<VkPipeline, pipelineCount>
-	    msaaPipelines{}; // swapchain MSAA, when active at creation
+	std::array<VkPipeline, pipelineCount> msaaPipelines{}; // MSAA, when supported
 	std::vector<ShaderUniform> uniforms;
 	uint32_t uniformBlockSize = 0;
 	VkBuffer uniformBuffer = VK_NULL_HANDLE; // host-visible staging; not bound to the GPU
@@ -132,7 +145,8 @@ public:
 	void readPixels(unsigned char* rgb, int x, int y, int width, int height);
 
 	/// Creates an off-screen render target (see jngl::FrameBuffer), cleared to transparent.
-	std::unique_ptr<VulkanFramebuffer> createFramebuffer(int width, int height);
+	/// \param antiAliased Multisampled while anti-aliasing is enabled, if it's supported
+	std::unique_ptr<VulkanFramebuffer> createFramebuffer(int width, int height, bool antiAliased);
 	/// Schedules \a framebuffer's resources for destruction once the GPU is done with them.
 	void destroyFramebuffer(VulkanFramebuffer&);
 
@@ -170,7 +184,7 @@ public:
 	void setVerticalSync(bool enabled);
 	[[nodiscard]] bool getVerticalSync() const;
 
-	/// Whether 4x MSAA is supported for the swapchain.
+	/// Whether 4x MSAA is supported for the swapchain and FrameBuffers.
 	[[nodiscard]] bool isMultisampleSupported() const;
 	void setMultisampleAntiAliasing(bool enabled);
 	[[nodiscard]] bool getMultisampleAntiAliasing() const;
@@ -209,8 +223,6 @@ private:
 	void destroyMsaaAttachments();
 	void destroyColoredPipelines();
 	void destroyTexturedPipelines();
-	void destroyColoredMsaaPipelines();
-	void destroyTexturedMsaaPipelines();
 	void rebuildSwapchainRendering();
 	void createInstance();
 	void createSurface();
@@ -252,7 +264,11 @@ private:
 	/// Copies the active program's staging UBO into this frame's ring and binds it (dynamic
 	/// offset).
 	void bindActiveProgramUniforms(VkCommandBuffer cmd);
-	void createOffscreenRenderPass();
+	/// Creates offscreenRenderPass, and offscreenMsaaRenderPass and offscreenExpandRenderPass if
+	/// MSAA is supported. Pipelines are built against these, as they don't change.
+	void createOffscreenRenderPasses();
+	/// Records a render pass that copies \a framebuffer's color into all samples of its msaaImage
+	void expandIntoSamples(VulkanFramebuffer& framebuffer);
 
 	/// Begins the render pass for whatever render target is currently on top of the stack (a
 	/// FrameBuffer, or the swapchain when the stack is empty), with the given load operation.
@@ -318,6 +334,11 @@ private:
 	// Render pass used when drawing into a FrameBuffer (LOAD; clearing is done explicitly). Shares
 	// the swapchain's color format so the colored/textured pipelines stay compatible with it.
 	VkRenderPass offscreenRenderPass = VK_NULL_HANDLE;
+	// Same for an anti-aliased FrameBuffer: draws into its multisampled image (LOAD) and resolves
+	// that into its color image at the end. The MSAA pipelines are built against it.
+	VkRenderPass offscreenMsaaRenderPass = VK_NULL_HANDLE;
+	// Only the multisampled image of an anti-aliased FrameBuffer, see expandIntoSamples
+	VkRenderPass offscreenExpandRenderPass = VK_NULL_HANDLE;
 	// Stack of active FrameBuffers; empty means drawing targets the swapchain.
 	std::vector<VulkanFramebuffer*> renderTargetStack;
 	// FrameBuffers destroyed (or textures replaced, see enableMipmaps) while their resources might
@@ -341,7 +362,7 @@ private:
 	// layout and shader modules.
 	VkPipelineLayout coloredPipelineLayout = VK_NULL_HANDLE;
 	std::array<VkPipeline, 4> coloredPipelines{}; // indexed by PrimitiveType
-	std::array<VkPipeline, 4> coloredMsaaPipelines{}; // swapchain MSAA, when active
+	std::array<VkPipeline, 4> coloredMsaaPipelines{}; // MSAA, when supported
 
 	VkPipelineLayout roundedPipelineLayout = VK_NULL_HANDLE;
 	VkPipeline roundedPipeline = VK_NULL_HANDLE;
@@ -392,8 +413,9 @@ private:
 	bool msaaRebuildPending = false;
 	bool pendingMsaaEnabled = true;
 	VkSampleCountFlagBits msaaSampleCount = VK_SAMPLE_COUNT_1_BIT;
-	// True while the active swapchain render pass uses multisampled attachments.
-	bool swapchainUsesMsaaPass = false;
+	// True while the active render pass (the swapchain's or a FrameBuffer's) is multisampled, so
+	// that the MSAA pipelines have to be used.
+	bool currentPassMultisampled = false;
 
 	int framebufferWidth = 0;
 	int framebufferHeight = 0;

@@ -50,6 +50,27 @@ bool validationLayersSupported() {
 	return true;
 }
 
+/// The same for all render passes, as it's part of what makes them compatible with the pipelines.
+/// Drawing waits for an earlier render pass's drawing (which a LOAD continues) and sampling (of a
+/// FrameBuffer that's drawn into now), and later sampling and drawing wait for it.
+std::array<VkSubpassDependency, 2> subpassDependencies() {
+	std::array<VkSubpassDependency, 2> deps{};
+	deps[0].srcSubpass = VK_SUBPASS_EXTERNAL;
+	deps[0].dstSubpass = 0;
+	deps[1].srcSubpass = 0;
+	deps[1].dstSubpass = VK_SUBPASS_EXTERNAL;
+	for (auto& dep : deps) {
+		dep.srcStageMask =
+		    VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+		dep.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+		dep.dstStageMask =
+		    VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+		dep.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT |
+		                    VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT;
+	}
+	return deps;
+}
+
 VKAPI_ATTR VkBool32 VKAPI_CALL
 debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT severity,
               VkDebugUtilsMessageTypeFlagsEXT /*type*/,
@@ -106,6 +127,10 @@ VulkanRenderer::VulkanRenderer(void* const nativeWindow)
 		createRenderPass();
 	}
 	{
+		internal::StartupProfiler _{ "createOffscreenRenderPasses" };
+		createOffscreenRenderPasses();
+	}
+	{
 		internal::StartupProfiler _{ "createFramebuffers" };
 		createFramebuffers();
 	}
@@ -132,10 +157,6 @@ VulkanRenderer::VulkanRenderer(void* const nativeWindow)
 	{
 		internal::StartupProfiler _{ "createTexturedPipelines" };
 		createTexturedPipelines();
-	}
-	{
-		internal::StartupProfiler _{ "createOffscreenRenderPass" };
-		createOffscreenRenderPass();
 	}
 	{
 		internal::StartupProfiler _{ "createVertexBuffers" };
@@ -175,16 +196,7 @@ VulkanRenderer::~VulkanRenderer() {
 				destroyUniformBuffer(ub);
 			}
 		}
-		for (VkPipeline pipeline : coloredPipelines) {
-			if (pipeline) {
-				vkDestroyPipeline(device, pipeline, nullptr);
-			}
-		}
-		for (VkPipeline pipeline : coloredMsaaPipelines) {
-			if (pipeline) {
-				vkDestroyPipeline(device, pipeline, nullptr);
-			}
-		}
+		destroyColoredPipelines();
 		if (coloredPipelineLayout) {
 			vkDestroyPipelineLayout(device, coloredPipelineLayout, nullptr);
 		}
@@ -192,16 +204,7 @@ VulkanRenderer::~VulkanRenderer() {
 		if (roundedPipelineLayout) {
 			vkDestroyPipelineLayout(device, roundedPipelineLayout, nullptr);
 		}
-		for (VkPipeline pipeline : texturedPipelines) {
-			if (pipeline) {
-				vkDestroyPipeline(device, pipeline, nullptr);
-			}
-		}
-		for (VkPipeline pipeline : texturedMsaaPipelines) {
-			if (pipeline) {
-				vkDestroyPipeline(device, pipeline, nullptr);
-			}
-		}
+		destroyTexturedPipelines();
 		if (texturedPipelineLayout) {
 			vkDestroyPipelineLayout(device, texturedPipelineLayout, nullptr);
 		}
@@ -231,8 +234,11 @@ VulkanRenderer::~VulkanRenderer() {
 		if (loadRenderPass) {
 			vkDestroyRenderPass(device, loadRenderPass, nullptr);
 		}
-		if (offscreenRenderPass) {
-			vkDestroyRenderPass(device, offscreenRenderPass, nullptr);
+		for (VkRenderPass pass :
+		     { offscreenRenderPass, offscreenMsaaRenderPass, offscreenExpandRenderPass }) {
+			if (pass) {
+				vkDestroyRenderPass(device, pass, nullptr);
+			}
 		}
 		if (commandPool) {
 			vkDestroyCommandPool(device, commandPool, nullptr);
@@ -544,19 +550,7 @@ void VulkanRenderer::createRenderPass() {
 		subpass.pColorAttachments = &colorRef;
 		subpass.pResolveAttachments = &resolveRef;
 
-		std::array<VkSubpassDependency, 2> deps{};
-		deps[0].srcSubpass = VK_SUBPASS_EXTERNAL;
-		deps[0].dstSubpass = 0;
-		deps[0].srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-		deps[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-		deps[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-		deps[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-		deps[1].srcSubpass = 0;
-		deps[1].dstSubpass = VK_SUBPASS_EXTERNAL;
-		deps[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-		deps[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-		deps[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-		deps[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		const auto deps = subpassDependencies();
 
 		VkRenderPassCreateInfo info{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO };
 		info.attachmentCount = static_cast<uint32_t>(attachments.size());
@@ -584,19 +578,7 @@ void VulkanRenderer::createRenderPass() {
 		subpass.colorAttachmentCount = 1;
 		subpass.pColorAttachments = &colorRef;
 
-		std::array<VkSubpassDependency, 2> deps{};
-		deps[0].srcSubpass = VK_SUBPASS_EXTERNAL;
-		deps[0].dstSubpass = 0;
-		deps[0].srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-		deps[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-		deps[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-		deps[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-		deps[1].srcSubpass = 0;
-		deps[1].dstSubpass = VK_SUBPASS_EXTERNAL;
-		deps[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-		deps[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-		deps[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-		deps[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		const auto deps = subpassDependencies();
 
 		VkRenderPassCreateInfo info{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO };
 		info.attachmentCount = 1;
@@ -625,19 +607,7 @@ void VulkanRenderer::createRenderPass() {
 	subpass.colorAttachmentCount = 1;
 	subpass.pColorAttachments = &colorRef;
 
-	std::array<VkSubpassDependency, 2> deps{};
-	deps[0].srcSubpass = VK_SUBPASS_EXTERNAL;
-	deps[0].dstSubpass = 0;
-	deps[0].srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-	deps[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-	deps[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	deps[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-	deps[1].srcSubpass = 0;
-	deps[1].dstSubpass = VK_SUBPASS_EXTERNAL;
-	deps[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	deps[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-	deps[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-	deps[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	const auto deps = subpassDependencies();
 
 	VkRenderPassCreateInfo info{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO };
 	info.attachmentCount = 1;
@@ -649,7 +619,7 @@ void VulkanRenderer::createRenderPass() {
 	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &loadRenderPass), "vkCreateRenderPass");
 }
 
-void VulkanRenderer::createOffscreenRenderPass() {
+void VulkanRenderer::createOffscreenRenderPasses() {
 	VkAttachmentDescription colorAttachment{};
 	colorAttachment.format = swapchainImageFormat; // same format keeps the pipelines compatible
 	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -666,21 +636,7 @@ void VulkanRenderer::createOffscreenRenderPass() {
 	subpass.colorAttachmentCount = 1;
 	subpass.pColorAttachments = &colorRef;
 
-	// Make sure sampling of the framebuffer (in a later draw) waits for our writes, and our writes
-	// wait for any previous sampling.
-	std::array<VkSubpassDependency, 2> deps{};
-	deps[0].srcSubpass = VK_SUBPASS_EXTERNAL;
-	deps[0].dstSubpass = 0;
-	deps[0].srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-	deps[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-	deps[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	deps[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-	deps[1].srcSubpass = 0;
-	deps[1].dstSubpass = VK_SUBPASS_EXTERNAL;
-	deps[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	deps[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-	deps[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-	deps[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	const auto deps = subpassDependencies();
 
 	VkRenderPassCreateInfo info{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO };
 	info.attachmentCount = 1;
@@ -690,6 +646,34 @@ void VulkanRenderer::createOffscreenRenderPass() {
 	info.dependencyCount = static_cast<uint32_t>(deps.size());
 	info.pDependencies = deps.data();
 	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &offscreenRenderPass),
+	         "vkCreateRenderPass");
+
+	if (!msaaSupported) {
+		return;
+	}
+	std::array<VkAttachmentDescription, 2> attachments{};
+	attachments[0] = colorAttachment;
+	attachments[0].samples = msaaSampleCount;
+	attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	attachments[0].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	attachments[1] = colorAttachment;
+	attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // all of it is resolved into
+	VkAttachmentReference resolveRef{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
+	subpass.pResolveAttachments = &resolveRef;
+	info.attachmentCount = static_cast<uint32_t>(attachments.size());
+	info.pAttachments = attachments.data();
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &offscreenMsaaRenderPass),
+	         "vkCreateRenderPass");
+
+	// Pipelines built against offscreenMsaaRenderPass work with this one too, as the resolve
+	// attachments don't matter for the compatibility of render passes with a single subpass
+	VkAttachmentDescription samplesAttachment = attachments[0];
+	samplesAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // all of it is overwritten
+	samplesAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	subpass.pResolveAttachments = nullptr;
+	info.attachmentCount = 1;
+	info.pAttachments = &samplesAttachment;
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &offscreenExpandRenderPass),
 	         "vkCreateRenderPass");
 }
 
@@ -963,22 +947,12 @@ void VulkanRenderer::destroyColoredPipelines() {
 	if (!device) {
 		return;
 	}
-	for (VkPipeline& pipeline : coloredPipelines) {
-		if (pipeline) {
-			vkDestroyPipeline(device, pipeline, nullptr);
-			pipeline = VK_NULL_HANDLE;
-		}
-	}
-}
-
-void VulkanRenderer::destroyColoredMsaaPipelines() {
-	if (!device) {
-		return;
-	}
-	for (VkPipeline& pipeline : coloredMsaaPipelines) {
-		if (pipeline) {
-			vkDestroyPipeline(device, pipeline, nullptr);
-			pipeline = VK_NULL_HANDLE;
+	for (auto* pipelines : { &coloredPipelines, &coloredMsaaPipelines }) {
+		for (VkPipeline& pipeline : *pipelines) {
+			if (pipeline) {
+				vkDestroyPipeline(device, pipeline, nullptr);
+				pipeline = VK_NULL_HANDLE;
+			}
 		}
 	}
 }
@@ -987,22 +961,12 @@ void VulkanRenderer::destroyTexturedPipelines() {
 	if (!device) {
 		return;
 	}
-	for (VkPipeline& pipeline : texturedPipelines) {
-		if (pipeline) {
-			vkDestroyPipeline(device, pipeline, nullptr);
-			pipeline = VK_NULL_HANDLE;
-		}
-	}
-}
-
-void VulkanRenderer::destroyTexturedMsaaPipelines() {
-	if (!device) {
-		return;
-	}
-	for (VkPipeline& pipeline : texturedMsaaPipelines) {
-		if (pipeline) {
-			vkDestroyPipeline(device, pipeline, nullptr);
-			pipeline = VK_NULL_HANDLE;
+	for (auto* pipelines : { &texturedPipelines, &texturedMsaaPipelines }) {
+		for (VkPipeline& pipeline : *pipelines) {
+			if (pipeline) {
+				vkDestroyPipeline(device, pipeline, nullptr);
+				pipeline = VK_NULL_HANDLE;
+			}
 		}
 	}
 }
@@ -1012,7 +976,7 @@ void VulkanRenderer::rebuildSwapchainRendering() {
 	if (frameActive) {
 		vkResetCommandBuffer(commandBuffers[currentFrame], 0);
 		frameActive = false;
-		swapchainUsesMsaaPass = false;
+		currentPassMultisampled = false;
 	}
 	for (VkFramebuffer fb : swapchainFramebuffers) {
 		vkDestroyFramebuffer(device, fb, nullptr);
@@ -1031,28 +995,10 @@ void VulkanRenderer::rebuildSwapchainRendering() {
 		vkDestroyRenderPass(device, loadRenderPass, nullptr);
 		loadRenderPass = VK_NULL_HANDLE;
 	}
-	destroyColoredPipelines();
-	destroyColoredMsaaPipelines();
-	if (coloredPipelineLayout) {
-		vkDestroyPipelineLayout(device, coloredPipelineLayout, nullptr);
-		coloredPipelineLayout = VK_NULL_HANDLE;
-	}
-	destroyRoundedPipelines();
-	if (roundedPipelineLayout) {
-		vkDestroyPipelineLayout(device, roundedPipelineLayout, nullptr);
-		roundedPipelineLayout = VK_NULL_HANDLE;
-	}
-	destroyTexturedPipelines();
-	destroyTexturedMsaaPipelines();
-	if (texturedPipelineLayout) {
-		vkDestroyPipelineLayout(device, texturedPipelineLayout, nullptr);
-		texturedPipelineLayout = VK_NULL_HANDLE;
-	}
+	// The pipelines are built against the offscreen render passes, which are compatible with
+	// either kind of swapchain render pass, so they're kept
 	createRenderPass();
 	createFramebuffers();
-	createColoredPipelines();
-	createRoundedPipelines();
-	createTexturedPipelines();
 }
 
 void VulkanRenderer::recreateSwapchain() {
@@ -1129,7 +1075,7 @@ void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
 		              1.f } };
 	if (renderTargetStack.empty()) {
 		const bool msaaClear = swapchainMsaaActive() && loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR;
-		swapchainUsesMsaaPass = msaaClear;
+		currentPassMultisampled = msaaClear;
 		if (loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR) {
 			rpInfo.renderPass = renderPass;
 			rpInfo.framebuffer = swapchainFramebuffers[currentImageIndex];
@@ -1146,14 +1092,27 @@ void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
 			rpInfo.framebuffer = swapchainMsaaActive()
 			                         ? loadSwapchainFramebuffers[currentImageIndex]
 			                         : swapchainFramebuffers[currentImageIndex];
-			swapchainUsesMsaaPass = false;
+			currentPassMultisampled = false;
 		}
 		extent = swapchainExtent;
 	} else {
-		swapchainUsesMsaaPass = false;
-		const VulkanFramebuffer* target = renderTargetStack.back();
-		rpInfo.renderPass = offscreenRenderPass; // always LOAD; clearing is explicit
-		rpInfo.framebuffer = target->framebuffer;
+		VulkanFramebuffer* target = renderTargetStack.back();
+		// Like on OpenGL, where an anti-aliased FrameBuffer is always drawn into multisampled, but
+		// only smoothed while GL_MULTISAMPLE is enabled
+		currentPassMultisampled = target->msaaImage && getMultisampleAntiAliasing();
+		if (currentPassMultisampled) {
+			if (target->samplesStale) {
+				expandIntoSamples(*target);
+			}
+			rpInfo.renderPass = offscreenMsaaRenderPass; // always LOAD; clearing is explicit
+			rpInfo.framebuffer = target->msaaFramebuffer;
+		} else {
+			if (target->msaaImage) {
+				target->samplesStale = true;
+			}
+			rpInfo.renderPass = offscreenRenderPass; // always LOAD; clearing is explicit
+			rpInfo.framebuffer = target->framebuffer;
+		}
 		extent = { static_cast<uint32_t>(target->width), static_cast<uint32_t>(target->height) };
 	}
 	rpInfo.renderArea.extent = extent;
@@ -1481,10 +1440,10 @@ void VulkanRenderer::createColoredPipelines() {
 	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &coloredPipelineLayout),
 	         "vkCreatePipelineLayout");
 
-	const VkRenderPass singleSamplePass = swapchainMsaaActive() ? loadRenderPass : renderPass;
-	buildColoredPipelines(vert, frag, singleSamplePass, VK_SAMPLE_COUNT_1_BIT, coloredPipelines);
-	if (swapchainMsaaActive()) {
-		buildColoredPipelines(vert, frag, renderPass, msaaSampleCount, coloredMsaaPipelines);
+	buildColoredPipelines(vert, frag, offscreenRenderPass, VK_SAMPLE_COUNT_1_BIT, coloredPipelines);
+	if (msaaSupported) {
+		buildColoredPipelines(vert, frag, offscreenMsaaRenderPass, msaaSampleCount,
+		                      coloredMsaaPipelines);
 	}
 
 	vkDestroyShaderModule(device, frag, nullptr);
@@ -1629,10 +1588,10 @@ void VulkanRenderer::createRoundedPipelines() {
 	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &roundedPipelineLayout),
 	         "vkCreatePipelineLayout");
 
-	const VkRenderPass singleSamplePass = swapchainMsaaActive() ? loadRenderPass : renderPass;
-	buildRoundedPipeline(vert, frag, singleSamplePass, VK_SAMPLE_COUNT_1_BIT, roundedPipeline);
-	if (swapchainMsaaActive()) {
-		buildRoundedPipeline(vert, frag, renderPass, msaaSampleCount, roundedMsaaPipeline);
+	buildRoundedPipeline(vert, frag, offscreenRenderPass, VK_SAMPLE_COUNT_1_BIT, roundedPipeline);
+	if (msaaSupported) {
+		buildRoundedPipeline(vert, frag, offscreenMsaaRenderPass, msaaSampleCount,
+		                     roundedMsaaPipeline);
 	}
 
 	vkDestroyShaderModule(device, frag, nullptr);
@@ -1946,7 +1905,7 @@ void VulkanRenderer::drawColored(const PrimitiveType type, const float* const xy
 
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
 	const std::array<VkPipeline, 4>& pipelines =
-	    swapchainUsesMsaaPass ? coloredMsaaPipelines : coloredPipelines;
+	    currentPassMultisampled ? coloredMsaaPipelines : coloredPipelines;
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines[static_cast<size_t>(type)]);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
 	vkCmdPushConstants(cmd, coloredPipelineLayout,
@@ -2000,7 +1959,7 @@ void VulkanRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, co
 
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
 	const VkPipeline pipeline =
-	    swapchainUsesMsaaPass && roundedMsaaPipeline ? roundedMsaaPipeline : roundedPipeline;
+	    currentPassMultisampled && roundedMsaaPipeline ? roundedMsaaPipeline : roundedPipeline;
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
 	vkCmdPushConstants(cmd, roundedPipelineLayout,
@@ -2103,10 +2062,11 @@ void VulkanRenderer::createTexturedPipelines() {
 	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &texturedPipelineLayout),
 	         "vkCreatePipelineLayout");
 
-	const VkRenderPass singleSamplePass = swapchainMsaaActive() ? loadRenderPass : renderPass;
-	buildTexturedPipelines(vert, frag, singleSamplePass, VK_SAMPLE_COUNT_1_BIT, texturedPipelines);
-	if (swapchainMsaaActive()) {
-		buildTexturedPipelines(vert, frag, renderPass, msaaSampleCount, texturedMsaaPipelines);
+	buildTexturedPipelines(vert, frag, offscreenRenderPass, VK_SAMPLE_COUNT_1_BIT,
+	                       texturedPipelines);
+	if (msaaSupported) {
+		buildTexturedPipelines(vert, frag, offscreenMsaaRenderPass, msaaSampleCount,
+		                       texturedMsaaPipelines);
 	}
 
 	vkDestroyShaderModule(device, frag, nullptr);
@@ -2299,10 +2259,11 @@ std::unique_ptr<VulkanShaderProgram> VulkanRenderer::createShaderProgram(
 	program->uniformBlockSize = uniformBlockSize;
 	const VkShaderModule vert = createShaderModule(device, vertexSpirv);
 	const VkShaderModule frag = createShaderModule(device, fragmentSpirv);
-	const VkRenderPass singleSamplePass = swapchainMsaaActive() ? loadRenderPass : renderPass;
-	buildTexturedPipelines(vert, frag, singleSamplePass, VK_SAMPLE_COUNT_1_BIT, program->pipelines);
-	if (swapchainMsaaActive()) {
-		buildTexturedPipelines(vert, frag, renderPass, msaaSampleCount, program->msaaPipelines);
+	buildTexturedPipelines(vert, frag, offscreenRenderPass, VK_SAMPLE_COUNT_1_BIT,
+	                       program->pipelines);
+	if (msaaSupported) {
+		buildTexturedPipelines(vert, frag, offscreenMsaaRenderPass, msaaSampleCount,
+		                       program->msaaPipelines);
 	}
 	vkDestroyShaderModule(device, frag, nullptr);
 	vkDestroyShaderModule(device, vert, nullptr);
@@ -2761,12 +2722,12 @@ void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* const
 	const uint32_t pipelineIndex = texturedPipelineIndex(texturedBlendVariant(), type);
 	VkPipeline pipeline = VK_NULL_HANDLE;
 	if (activeShaderProgram) {
-		if (swapchainUsesMsaaPass && activeShaderProgram->msaaPipelines[pipelineIndex]) {
+		if (currentPassMultisampled && activeShaderProgram->msaaPipelines[pipelineIndex]) {
 			pipeline = activeShaderProgram->msaaPipelines[pipelineIndex];
 		} else {
 			pipeline = activeShaderProgram->pipelines[pipelineIndex];
 		}
-	} else if (swapchainUsesMsaaPass) {
+	} else if (currentPassMultisampled) {
 		pipeline = texturedMsaaPipelines[pipelineIndex];
 	} else {
 		pipeline = texturedPipelines[pipelineIndex];
@@ -2912,8 +2873,8 @@ VkDescriptorSet VulkanRenderer::allocateTextureDescriptor(const VkImageView view
 	return set;
 }
 
-std::unique_ptr<VulkanFramebuffer> VulkanRenderer::createFramebuffer(const int width,
-                                                                     const int height) {
+std::unique_ptr<VulkanFramebuffer>
+VulkanRenderer::createFramebuffer(const int width, const int height, const bool antiAliased) {
 	auto fb = std::make_unique<VulkanFramebuffer>();
 	fb->width = width;
 	fb->height = height;
@@ -3002,13 +2963,129 @@ std::unique_ptr<VulkanFramebuffer> VulkanRenderer::createFramebuffer(const int w
 	fbInfo.layers = 1;
 	VK_CHECK(vkCreateFramebuffer(device, &fbInfo, nullptr, &fb->framebuffer),
 	         "vkCreateFramebuffer");
+
+	if (!antiAliased || !msaaSupported) {
+		return fb;
+	}
+	imageInfo.samples = msaaSampleCount;
+	imageInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+	VK_CHECK(vkCreateImage(device, &imageInfo, nullptr, &fb->msaaImage), "vkCreateImage");
+	vkGetImageMemoryRequirements(device, fb->msaaImage, &memReq);
+	allocInfo.allocationSize = memReq.size;
+	allocInfo.memoryTypeIndex =
+	    findMemoryType(memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &fb->msaaMemory), "vkAllocateMemory");
+	VK_CHECK(vkBindImageMemory(device, fb->msaaImage, fb->msaaMemory, 0), "vkBindImageMemory");
+
+	// Clear it like the color image and move it to COLOR_ATTACHMENT_OPTIMAL, which it stays in
+	submitOneTime([&](VkCommandBuffer c) {
+		VkImageMemoryBarrier toDst{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+		toDst.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		toDst.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		toDst.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toDst.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toDst.image = fb->msaaImage;
+		toDst.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		toDst.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		vkCmdPipelineBarrier(c, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+		                     0, 0, nullptr, 0, nullptr, 1, &toDst);
+		VkClearColorValue clearColor{ { 1.f, 1.f, 1.f, 0.f } };
+		VkImageSubresourceRange range{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		vkCmdClearColorImage(c, fb->msaaImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clearColor, 1,
+		                     &range);
+		VkImageMemoryBarrier toAttachment{ .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+		toAttachment.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		toAttachment.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		toAttachment.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toAttachment.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		toAttachment.image = fb->msaaImage;
+		toAttachment.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		toAttachment.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		toAttachment.dstAccessMask =
+		    VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+		vkCmdPipelineBarrier(c, VK_PIPELINE_STAGE_TRANSFER_BIT,
+		                     VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, 0, 0, nullptr, 0,
+		                     nullptr, 1, &toAttachment);
+	});
+
+	viewInfo.image = fb->msaaImage;
+	VK_CHECK(vkCreateImageView(device, &viewInfo, nullptr, &fb->msaaView), "vkCreateImageView");
+
+	const std::array msaaAttachments = { fb->msaaView, fb->color.view };
+	fbInfo.renderPass = offscreenMsaaRenderPass;
+	fbInfo.attachmentCount = static_cast<uint32_t>(msaaAttachments.size());
+	fbInfo.pAttachments = msaaAttachments.data();
+	VK_CHECK(vkCreateFramebuffer(device, &fbInfo, nullptr, &fb->msaaFramebuffer),
+	         "vkCreateFramebuffer");
+	fbInfo.renderPass = offscreenExpandRenderPass;
+	fbInfo.attachmentCount = 1;
+	fbInfo.pAttachments = &fb->msaaView;
+	VK_CHECK(vkCreateFramebuffer(device, &fbInfo, nullptr, &fb->expandFramebuffer),
+	         "vkCreateFramebuffer");
 	return fb;
 }
 
+void VulkanRenderer::expandIntoSamples(VulkanFramebuffer& fb) {
+	const VkCommandBuffer cmd = commandBuffers[currentFrame];
+	const VkExtent2D extent{ static_cast<uint32_t>(fb.width), static_cast<uint32_t>(fb.height) };
+	VkRenderPassBeginInfo rpInfo{ .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
+	rpInfo.renderPass = offscreenExpandRenderPass;
+	rpInfo.framebuffer = fb.expandFramebuffer;
+	rpInfo.renderArea.extent = extent;
+	vkCmdBeginRenderPass(cmd, &rpInfo, VK_SUBPASS_CONTENTS_INLINE);
+	const VkViewport viewport{
+		0.f, 0.f, static_cast<float>(extent.width), static_cast<float>(extent.height), 0.f, 1.f
+	};
+	vkCmdSetViewport(cmd, 0, 1, &viewport);
+	const VkRect2D scissor{ { 0, 0 }, extent };
+	vkCmdSetScissor(cmd, 0, 1, &scissor);
+
+	// A quad covering all of it in clip space, which samples each texel at its center into all of
+	// its pixel's samples, as it's drawn without blending
+	const std::array<float, 16> xyuv = {
+		-1.f, -1.f, 0.f, 0.f, // x, y, u, v
+		-1.f, 1.f,  0.f, 1.f, //
+		1.f,  1.f,  1.f, 1.f, //
+		1.f,  -1.f, 1.f, 0.f, //
+	};
+	const auto [vertexBuffer, offset] = uploadVertices(xyuv.data(), sizeof(xyuv));
+	TexturedPushConstants push{};
+	const Mat4 identity;
+	std::copy(std::begin(identity.data), std::end(identity.data), push.mvp);
+	const uint32_t replace = 2; // see texturedBlendVariant()
+	vkCmdBindPipeline(
+	    cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+	    texturedMsaaPipelines[texturedPipelineIndex(replace, PrimitiveType::TriangleFan)]);
+	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 0, 1,
+	                        &fb.color.descriptorSet, 0, nullptr);
+	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
+	vkCmdPushConstants(cmd, texturedPipelineLayout,
+	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
+	                   &push);
+	vkCmdDraw(cmd, 4, 1, 0, 0);
+	vkCmdEndRenderPass(cmd);
+	fb.samplesStale = false;
+}
+
 void VulkanRenderer::freeFramebufferResources(VulkanFramebuffer& fb) {
-	if (fb.framebuffer) {
-		vkDestroyFramebuffer(device, fb.framebuffer, nullptr);
-		fb.framebuffer = VK_NULL_HANDLE;
+	for (VkFramebuffer* framebuffer :
+	     { &fb.framebuffer, &fb.msaaFramebuffer, &fb.expandFramebuffer }) {
+		if (*framebuffer) {
+			vkDestroyFramebuffer(device, *framebuffer, nullptr);
+			*framebuffer = VK_NULL_HANDLE;
+		}
+	}
+	if (fb.msaaView) {
+		vkDestroyImageView(device, fb.msaaView, nullptr);
+		fb.msaaView = VK_NULL_HANDLE;
+	}
+	if (fb.msaaImage) {
+		vkDestroyImage(device, fb.msaaImage, nullptr);
+		fb.msaaImage = VK_NULL_HANDLE;
+	}
+	if (fb.msaaMemory) {
+		vkFreeMemory(device, fb.msaaMemory, nullptr);
+		fb.msaaMemory = VK_NULL_HANDLE;
 	}
 	destroyTexture(fb.color);
 }
