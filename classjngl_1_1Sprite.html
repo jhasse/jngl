@@ -255,6 +255,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>drawBoundingBox</b> (
 <tr class="memitem:a6d6e0d6afba009c29a780f255ebbc962" id="r_a6d6e0d6afba009c29a780f255ebbc962"><td class="memItemLeft" align="right" valign="top"><a id="a6d6e0d6afba009c29a780f255ebbc962" name="a6d6e0d6afba009c29a780f255ebbc962"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (<a class="el" href="classjngl_1_1Vec2.html">jngl::Vec2</a> point) const</td></tr>
 <tr class="separator:a6d6e0d6afba009c29a780f255ebbc962"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00e5fd1eb6ff75bb46ead7ec31980031" id="r_a00e5fd1eb6ff75bb46ead7ec31980031"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00e5fd1eb6ff75bb46ead7ec31980031">setTextureFilter</a> (<a class="el" href="namespacejngl.html#a86abf923535e5284b381ee2e78eadacd">TextureFilter</a> minification, <a class="el" href="namespacejngl.html#a86abf923535e5284b381ee2e78eadacd">TextureFilter</a> magnification)</td></tr>
+<tr class="memdesc:a00e5fd1eb6ff75bb46ead7ec31980031"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets how the texture is sampled when the sprite is drawn smaller than its pixel size (<em>minification</em>) and bigger (<em>magnification</em>).  <br /></td></tr>
+<tr class="separator:a00e5fd1eb6ff75bb46ead7ec31980031"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -272,7 +275,7 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Higher-level representation of an image. </p>
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00026">26</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00027">27</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 </div><div class="dynheader">
 Collaboration diagram for Sprite:</div>
 <div class="dyncontent">
@@ -299,7 +302,7 @@ Collaboration diagram for Sprite:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00028">28</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00029">29</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>
@@ -802,7 +805,7 @@ template&lt;class Vect &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00278">278</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00279">279</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>
@@ -831,7 +834,31 @@ template&lt;class Vect &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00284">284</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00285">285</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a00e5fd1eb6ff75bb46ead7ec31980031" name="a00e5fd1eb6ff75bb46ead7ec31980031"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00e5fd1eb6ff75bb46ead7ec31980031">&#9670;&#160;</a></span>setTextureFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setTextureFilter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacejngl.html#a86abf923535e5284b381ee2e78eadacd">TextureFilter</a></td>          <td class="paramname"><span class="paramname"><em>minification</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacejngl.html#a86abf923535e5284b381ee2e78eadacd">TextureFilter</a></td>          <td class="paramname"><span class="paramname"><em>magnification</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets how the texture is sampled when the sprite is drawn smaller than its pixel size (<em>minification</em>) and bigger (<em>magnification</em>). </p>
+<p>With mipmaps, <em>minification</em> also says how they're sampled. All sprites of the same texture, e.g. of the same file, share this. </p>
 
 </div>
 </div>
@@ -850,7 +877,7 @@ template&lt;class Vect &gt; </div>
 
 <p>Function which actually loads the sprite. </p>
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00273">273</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00274">274</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>

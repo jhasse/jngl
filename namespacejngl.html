@@ -253,10 +253,6 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a86abf923535e5284b381ee2e78eadacd" id="r_a86abf923535e5284b381ee2e78eadacd"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86abf923535e5284b381ee2e78eadacd">TextureFilter</a> : uint8_t { <a class="el" href="#a86abf923535e5284b381ee2e78eadacdaaf17c98bbd83c27d6426d2ff3fa81d7f">Bilinear</a>
-, <a class="el" href="#a86abf923535e5284b381ee2e78eadacdaaa020331bb30d2fa2ecf7c3a0777823f">NearestNeighbor</a>
- }</td></tr>
-<tr class="separator:a86abf923535e5284b381ee2e78eadacd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc275d961db164fe0a71325c768c0502" id="r_afc275d961db164fe0a71325c768c0502"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc275d961db164fe0a71325c768c0502">HapticFeedback</a> : uint8_t { <a class="el" href="#afc275d961db164fe0a71325c768c0502a9914a0ce04a7b7b6a8e39bec55064b82">Light</a>
 , <a class="el" href="#afc275d961db164fe0a71325c768c0502a87f8a6ab85c9ced3702b4ea641ad4bb5">Medium</a>
 , <a class="el" href="#afc275d961db164fe0a71325c768c0502af9ffe67a20da9cbff56b420fca4bd491">Heavy</a>
@@ -330,6 +326,11 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a90a718c946492c66ca20b9c22a8cfe12"><td class="mdescLeft">&#160;</td><td class="mdescRight">What kind of text a TextInputSession is used for.  <a href="#a90a718c946492c66ca20b9c22a8cfe12">More...</a><br /></td></tr>
 <tr class="separator:a90a718c946492c66ca20b9c22a8cfe12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86abf923535e5284b381ee2e78eadacd" id="r_a86abf923535e5284b381ee2e78eadacd"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86abf923535e5284b381ee2e78eadacd">TextureFilter</a> : uint8_t { <a class="el" href="#a86abf923535e5284b381ee2e78eadacdaaf17c98bbd83c27d6426d2ff3fa81d7f">Bilinear</a>
+, <a class="el" href="#a86abf923535e5284b381ee2e78eadacdaaa020331bb30d2fa2ecf7c3a0777823f">NearestNeighbor</a>
+ }</td></tr>
+<tr class="memdesc:a86abf923535e5284b381ee2e78eadacd"><td class="mdescLeft">&#160;</td><td class="mdescRight">How a texture is sampled when it's drawn bigger or smaller than its pixel size.  <a href="#a86abf923535e5284b381ee2e78eadacd">More...</a><br /></td></tr>
+<tr class="separator:a86abf923535e5284b381ee2e78eadacd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27a311b8b8c58ed6739a90bca192de31" id="r_a27a311b8b8c58ed6739a90bca192de31"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><b>Cursor</b> : uint8_t { <br />
 &#160;&#160;<b>ARROW</b>
 , <b>I</b>
@@ -1166,38 +1167,6 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="a86abf923535e5284b381ee2e78eadacd" name="a86abf923535e5284b381ee2e78eadacd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a86abf923535e5284b381ee2e78eadacd">&#9670;&#160;</a></span>TextureFilter</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum class <a class="el" href="#a86abf923535e5284b381ee2e78eadacd">TextureFilter</a> : uint8_t</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a86abf923535e5284b381ee2e78eadacdaaf17c98bbd83c27d6426d2ff3fa81d7f" name="a86abf923535e5284b381ee2e78eadacdaaf17c98bbd83c27d6426d2ff3fa81d7f"></a>Bilinear&#160;</td><td class="fielddoc"><p>Bilinear Filtering is used when <a class="el" href="structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805" title="Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)">jngl::AppParameters::pixelArt</a> is false. </p>
-<p>It smooths the image when it is scaled up. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a86abf923535e5284b381ee2e78eadacdaaa020331bb30d2fa2ecf7c3a0777823f" name="a86abf923535e5284b381ee2e78eadacdaaa020331bb30d2fa2ecf7c3a0777823f"></a>NearestNeighbor&#160;</td><td class="fielddoc"><p>Nearest Neighbor Filtering is used when <a class="el" href="structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805" title="Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)">jngl::AppParameters::pixelArt</a> is true. </p>
-<p>It preserves the pixelated look when the image is scaled up. </p>
-</td></tr>
-</table>
-
-<p class="definition">Definition at line <a class="el" href="FrameBuffer_8hpp_source.html#l00020">20</a> of file <a class="el" href="FrameBuffer_8hpp_source.html">FrameBuffer.hpp</a>.</p>
-
-</div>
-</div>
 <a id="afc275d961db164fe0a71325c768c0502" name="afc275d961db164fe0a71325c768c0502"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afc275d961db164fe0a71325c768c0502">&#9670;&#160;</a></span>HapticFeedback</h2>
 
@@ -1343,7 +1312,7 @@ Variables</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00395">395</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00401">401</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>
@@ -1397,6 +1366,40 @@ Variables</h2></td></tr>
 <p>Used as a hint for on-screen keyboards and IMEs, e.g. to hide typed characters or show a numeric keypad. </p>
 
 <p class="definition">Definition at line <a class="el" href="TextInputSession_8hpp_source.html#l00027">27</a> of file <a class="el" href="TextInputSession_8hpp_source.html">TextInputSession.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a86abf923535e5284b381ee2e78eadacd" name="a86abf923535e5284b381ee2e78eadacd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86abf923535e5284b381ee2e78eadacd">&#9670;&#160;</a></span>TextureFilter</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a86abf923535e5284b381ee2e78eadacd">TextureFilter</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How a texture is sampled when it's drawn bigger or smaller than its pixel size. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a86abf923535e5284b381ee2e78eadacdaaf17c98bbd83c27d6426d2ff3fa81d7f" name="a86abf923535e5284b381ee2e78eadacdaaf17c98bbd83c27d6426d2ff3fa81d7f"></a>Bilinear&#160;</td><td class="fielddoc"><p>Bilinear Filtering is used when <a class="el" href="structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805" title="Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)">jngl::AppParameters::pixelArt</a> is false. </p>
+<p>It smooths the image when it is scaled up. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a86abf923535e5284b381ee2e78eadacdaaa020331bb30d2fa2ecf7c3a0777823f" name="a86abf923535e5284b381ee2e78eadacdaaa020331bb30d2fa2ecf7c3a0777823f"></a>NearestNeighbor&#160;</td><td class="fielddoc"><p>Nearest Neighbor Filtering is used when <a class="el" href="structjngl_1_1AppParameters.html#a452c2865e2e1517b22f137b628971805" title="Activates pixel-perfect magnifying of textures (nearest-neighbor interpolation)">jngl::AppParameters::pixelArt</a> is true. </p>
+<p>It preserves the pixelated look when the image is scaled up. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="TextureFilter_8hpp_source.html#l00012">12</a> of file <a class="el" href="TextureFilter_8hpp_source.html">TextureFilter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3880,7 +3883,7 @@ template&lt;class Vect &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00350">350</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Sprite_8hpp_source.html#l00356">356</a> of file <a class="el" href="Sprite_8hpp_source.html">Sprite.hpp</a>.</p>
 
 </div>
 </div>
