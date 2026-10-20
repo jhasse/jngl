@@ -403,6 +403,19 @@ enum class BlendMode : uint8_t {
 	/// For colours that already have their alpha multiplied in, e.g. those of a FrameBuffer drawn
 	/// into with BlendMode::Composite
 	Premultiplied,
+
+	/// Adds the colors, by their alpha, to what's there, e.g. for something that glows
+	Additive,
+
+	/// BlendMode::Additive for colors that already have their alpha multiplied in
+	PremultipliedAdditive,
+
+	/// Multiplies what's there with the colors, darkening it, e.g. for a shadow. For colors that
+	/// have their alpha multiplied in, as for Screen, which other ones are just as well.
+	Multiply,
+
+	/// The opposite of Multiply: lightens what's there by the colors
+	Screen,
 };
 
 /// Sets how what's drawn is blended with what's already there, until the returned Finally object
