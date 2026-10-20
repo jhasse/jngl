@@ -12,20 +12,12 @@
 #include "Vertex.hpp"
 
 #include <functional>
+#include "TextureFilter.hpp"
+
 #include <memory>
 #include <vector>
 
 namespace jngl {
-
-enum class TextureFilter : uint8_t {
-	/// Bilinear Filtering is used when jngl::AppParameters::pixelArt is false. It smooths the
-	/// image when it is scaled up.
-	Bilinear,
-
-	/// Nearest Neighbor Filtering is used when jngl::AppParameters::pixelArt is true. It
-	/// preserves the pixelated look when the image is scaled up.
-	NearestNeighbor,
-};
 
 class ShaderProgram;
 

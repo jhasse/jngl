@@ -9,6 +9,7 @@
 #include "Rgb.hpp"
 #include "Rgba.hpp"
 #include "ShaderProgram.hpp"
+#include "TextureFilter.hpp"
 #include "Vec2.hpp"
 
 #include <future>
@@ -312,6 +313,11 @@ public:
 	void drawBoundingBox() const;
 
 	bool contains(jngl::Vec2 point) const;
+
+	/// Sets how the texture is sampled when the sprite is drawn smaller than its pixel size
+	/// (\a minification) and bigger (\a magnification). With mipmaps, \a minification also says
+	/// how they're sampled. All sprites of the same texture, e.g. of the same file, share this.
+	void setTextureFilter(TextureFilter minification, TextureFilter magnification);
 
 private:
 	void enableMipmaps();

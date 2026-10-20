@@ -4,6 +4,7 @@
 
 #include "../TextureCache.hpp"
 
+#include <array>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <jngl.hpp>
@@ -46,6 +47,29 @@ TEST_CASE("Sprite") {
 		REQUIRE_THAT(sprite.getBottom(), Catch::Matchers::WithinAbs(-124.1f, 1e-5));
 	}
 }
+TEST_CASE("Sprite::setTextureFilter") {
+	Fixture f(1.f);
+	// A black and a white pixel, stretched over the window: smoothed in between, or not
+	const std::array<uint8_t, 8> bytes{ 0, 0, 0, 255, 255, 255, 255, 255 };
+	jngl::Sprite sprite(bytes.data(), 2, 1);
+	const auto draw = [&]() {
+		Fixture::reset();
+		sprite.draw(jngl::modelview().scale(160, 70));
+		return f.getAsciiArt();
+	};
+	const auto smooth = draw();
+	sprite.setTextureFilter(jngl::TextureFilter::Bilinear, jngl::TextureFilter::NearestNeighbor);
+	const auto sharp = draw();
+	CHECK(smooth != sharp);
+	std::string half; // black, then white
+	for (int row = 0; row < 7; ++row) {
+		half += "\n" + std::string("████████████████") + std::string(16, ' ');
+	}
+	REQUIRE(sharp == half + "\n");
+	sprite.setTextureFilter(jngl::TextureFilter::Bilinear, jngl::TextureFilter::Bilinear);
+	CHECK(draw() == smooth);
+}
+
 TEST_CASE("Sprite_Batch") {
 	Fixture f(2.0f);
 	jngl::Sprite sprite("jngl.webp");
