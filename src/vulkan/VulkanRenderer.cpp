@@ -2971,6 +2971,33 @@ void VulkanRenderer::readPixels(unsigned char* const rgb, const int x, const int
 	beginCurrentRenderPass(VK_ATTACHMENT_LOAD_OP_LOAD);
 }
 
+std::string VulkanRenderer::getGraphicsApi() const {
+	VkPhysicalDeviceProperties props;
+	vkGetPhysicalDeviceProperties(physicalDevice, &props);
+	std::string api = "Vulkan " + std::to_string(VK_API_VERSION_MAJOR(props.apiVersion)) + "." +
+	                  std::to_string(VK_API_VERSION_MINOR(props.apiVersion)) + "." +
+	                  std::to_string(VK_API_VERSION_PATCH(props.apiVersion));
+	// Core since Vulkan 1.2, but we ask for 1.1. It can be queried without enabling it.
+	uint32_t extensionCount = 0;
+	vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, nullptr);
+	std::vector<VkExtensionProperties> extensions(extensionCount);
+	vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount,
+	                                     extensions.data());
+	if (std::ranges::none_of(extensions, [](const VkExtensionProperties& extension) {
+		return std::strcmp(extension.extensionName, VK_KHR_DRIVER_PROPERTIES_EXTENSION_NAME) == 0;
+	})) {
+		return api;
+	}
+	auto driver = vkStruct<VkPhysicalDeviceDriverPropertiesKHR>(
+	    VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES_KHR);
+	auto props2 =
+	    vkStruct<VkPhysicalDeviceProperties2>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2);
+	props2.pNext = &driver;
+	vkGetPhysicalDeviceProperties2(physicalDevice, &props2);
+	// E.g. "(NVIDIA) 580.95.05", like OpenGL's "NVIDIA 580.95.05"
+	return api + " (" + driver.driverName + ") " + driver.driverInfo;
+}
+
 bool VulkanRenderer::areTimestampsSupported() const {
 	return resetQueryPool != nullptr;
 }

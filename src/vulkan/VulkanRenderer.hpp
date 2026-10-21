@@ -18,6 +18,7 @@
 #include <cstdint>
 #include <functional>
 #include <optional>
+#include <string>
 #include <vector>
 #include <vulkan/vulkan.h>
 
@@ -180,6 +181,9 @@ public:
 	/// Reads back a \a width x \a height region of the current frame as tightly packed RGB bytes,
 	/// bottom row first (matching OpenGL's glReadPixels). Flushes the pending draws first.
 	void readPixels(unsigned char* rgb, int x, int y, int width, int height);
+
+	/// "Vulkan" and the device's version, with its driver if it tells, see jngl::getGraphicsApi()
+	[[nodiscard]] std::string getGraphicsApi() const;
 
 	/// Whether the GPU's time can be measured with timestamp queries, see jngl::GpuTimer
 	[[nodiscard]] bool areTimestampsSupported() const;

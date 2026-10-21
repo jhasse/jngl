@@ -957,6 +957,9 @@ std::string getGraphicsApi() {
 	if (!pWindow) {
 		return "";
 	}
+#ifdef JNGL_VULKAN
+	return static_cast<VulkanRenderer&>(getRenderer()).getGraphicsApi();
+#else
 	const auto* const version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
 	if (!version) {
 		return "";
@@ -968,6 +971,7 @@ std::string getGraphicsApi() {
 		return version;
 	}
 	return std::string(api) + " " + version;
+#endif
 }
 
 Finally loadSound(const std::string&); // definied in SoundFile.cpp
