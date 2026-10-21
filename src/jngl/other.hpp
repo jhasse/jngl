@@ -81,6 +81,10 @@ void setAntiAliasing(bool enabled);
 /// Returns whether MSAA is enabled. If the device doesn't support it, it will always return false.
 bool getAntiAliasing();
 
+/// Returns which graphics API draws, with its version as the driver gives it, e.g. "OpenGL 4.6
+/// (Core Profile) Mesa 25.1.4" or "OpenGL ES 3.0 (WebGL 2.0)", or "" if there's no window yet
+std::string getGraphicsApi();
+
 /// Toggles V-SYNC
 void setVerticalSync(bool enabled);
 

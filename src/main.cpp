@@ -854,6 +854,23 @@ bool getAntiAliasing() {
 	return antiAliasingEnabled;
 }
 
+std::string getGraphicsApi() {
+	if (!pWindow) {
+		return "";
+	}
+	const auto* const version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+	if (!version) {
+		return "";
+	}
+	// OpenGL ES and WebGL say what they are themselves, e.g. "OpenGL ES 3.0 (WebGL 2.0)", OpenGL
+	// only gives its version, e.g. "4.6 (Core Profile) Mesa 25.1.4"
+	const std::string_view api = "OpenGL";
+	if (std::string_view(version).starts_with(api)) {
+		return version;
+	}
+	return std::string(api) + " " + version;
+}
+
 Finally loadSound(const std::string&); // definied in SoundFile.cpp
 
 Finally load(const std::string& filename) {
