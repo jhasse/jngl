@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['haptics_2ehpp_0',['haptics.hpp',['../haptics_8hpp.html',1,'']]]
+  ['gputimer_2ehpp_0',['GpuTimer.hpp',['../GpuTimer_8hpp.html',1,'']]]
 ];
