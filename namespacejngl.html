@@ -702,6 +702,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setStepsPerSecond</b>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>getAntiAliasing</b> ()</td></tr>
 <tr class="memdesc:ab0159be3b7aaad7cec59d6aedb9e4687"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether MSAA is enabled. If the device doesn't support it, it will always return false. <br /></td></tr>
 <tr class="separator:ab0159be3b7aaad7cec59d6aedb9e4687"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c50ecdaa5e85470140273b7bdb9138d" id="r_a1c50ecdaa5e85470140273b7bdb9138d"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c50ecdaa5e85470140273b7bdb9138d">getGraphicsApi</a> ()</td></tr>
+<tr class="memdesc:a1c50ecdaa5e85470140273b7bdb9138d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns which graphics API draws, with its version as the driver gives it, e.g.  <br /></td></tr>
+<tr class="separator:a1c50ecdaa5e85470140273b7bdb9138d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cd8cba6fb6e0174b1858fd845ec15b1" id="r_a7cd8cba6fb6e0174b1858fd845ec15b1"><td class="memItemLeft" align="right" valign="top"><a id="a7cd8cba6fb6e0174b1858fd845ec15b1" name="a7cd8cba6fb6e0174b1858fd845ec15b1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setVerticalSync</b> (bool enabled)</td></tr>
 <tr class="memdesc:a7cd8cba6fb6e0174b1858fd845ec15b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggles V-SYNC. <br /></td></tr>
@@ -2689,6 +2692,27 @@ template&lt;class Vect &gt; </div>
 
 <p>Toggles Multisample anti-aliasing (MSAA) </p>
 <p>Many devices don't support this, so this function will do nothing. </p>
+
+</div>
+</div>
+<a id="a1c50ecdaa5e85470140273b7bdb9138d" name="a1c50ecdaa5e85470140273b7bdb9138d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c50ecdaa5e85470140273b7bdb9138d">&#9670;&#160;</a></span>getGraphicsApi()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> getGraphicsApi </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns which graphics API draws, with its version as the driver gives it, e.g. </p>
+<p>"OpenGL 4.6
+(Core Profile) Mesa 25.1.4" or "OpenGL ES 3.0 (WebGL 2.0)", or "" if there's no window yet </p>
 
 </div>
 </div>
