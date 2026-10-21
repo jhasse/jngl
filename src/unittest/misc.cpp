@@ -63,6 +63,14 @@ TEST_CASE("keyDown") {
 	REQUIRE_THROWS_AS(jngl::keyDown("ää"), std::runtime_error);
 }
 
+TEST_CASE("getGraphicsApi") {
+	Fixture f(1);
+	const auto api = jngl::getGraphicsApi();
+	INFO(api);
+	REQUIRE(api.starts_with("OpenGL "));
+	REQUIRE(api.size() > 7); // with its version
+}
+
 TEST_CASE("getConfigPath") {
 	// Note: This test only works if jngl::internal::getConfigPath() hasn't been called before
 
