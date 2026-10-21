@@ -4,6 +4,7 @@
 #include "../jngl/GpuTimer.hpp"
 #include "../jngl/matrix.hpp"
 #include "../jngl/shapes.hpp"
+#include "../jngl/window.hpp"
 #include "../opengl.hpp"
 #include "Fixture.hpp"
 
@@ -21,7 +22,11 @@ TEST_CASE("GpuTimer") {
 		jngl::drawRect(jngl::modelview(), { 10, 10 }, 0x000000_rgb);
 		timer.stop();
 	}
+#ifdef JNGL_VULKAN
+	jngl::readPixels(); // submits what's been drawn and waits for it, so that both have come in
+#else
 	glFinish(); // so that both have come in
+#endif
 	CHECK(timer.poll());
 	CHECK(timer.poll());
 	CHECK(!timer.poll());

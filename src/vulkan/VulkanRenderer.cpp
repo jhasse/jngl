@@ -464,10 +464,43 @@ void VulkanRenderer::createLogicalDevice() {
 		queueInfos.push_back(info);
 	}
 
-	const std::array deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+	std::vector<const char*> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
 	VkPhysicalDeviceFeatures features{};
 
+	// Timestamps for jngl::GpuTimer, if the graphics queue can write them and they can be reset
+	// from the host
+	uint32_t familyCount = 0;
+	vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &familyCount, nullptr);
+	std::vector<VkQueueFamilyProperties> families(familyCount);
+	vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &familyCount, families.data());
+	const uint32_t timestampValidBits = families[graphicsQueueFamily].timestampValidBits;
+	uint32_t extensionCount = 0;
+	vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, nullptr);
+	std::vector<VkExtensionProperties> extensions(extensionCount);
+	vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount,
+	                                     extensions.data());
+	VkPhysicalDeviceProperties props;
+	vkGetPhysicalDeviceProperties(physicalDevice, &props);
+	auto hostQueryReset = vkStruct<VkPhysicalDeviceHostQueryResetFeaturesEXT>(
+	    VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_QUERY_RESET_FEATURES_EXT);
+	if (props.apiVersion >= VK_API_VERSION_1_1 &&
+	    std::ranges::any_of(extensions, [](const VkExtensionProperties& extension) {
+		return std::strcmp(extension.extensionName, VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME) == 0;
+	})) {
+		auto features2 =
+		    vkStruct<VkPhysicalDeviceFeatures2>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2);
+		features2.pNext = &hostQueryReset;
+		vkGetPhysicalDeviceFeatures2(physicalDevice, &features2);
+	}
+	const bool timestamps = timestampValidBits > 0 && hostQueryReset.hostQueryReset == VK_TRUE;
+	if (timestamps) {
+		deviceExtensions.push_back(VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME);
+	}
+
 	auto createInfo = vkStruct<VkDeviceCreateInfo>(VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO);
+	if (timestamps) {
+		createInfo.pNext = &hostQueryReset;
+	}
 	createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueInfos.size());
 	createInfo.pQueueCreateInfos = queueInfos.data();
 	createInfo.pEnabledFeatures = &features;
@@ -477,6 +510,14 @@ void VulkanRenderer::createLogicalDevice() {
 	VK_CHECK(vkCreateDevice(physicalDevice, &createInfo, nullptr, &device), "vkCreateDevice");
 	vkGetDeviceQueue(device, graphicsQueueFamily, 0, &graphicsQueue);
 	vkGetDeviceQueue(device, presentQueueFamily, 0, &presentQueue);
+
+	if (timestamps) {
+		resetQueryPool = reinterpret_cast<PFN_vkResetQueryPoolEXT>(
+		    vkGetDeviceProcAddr(device, "vkResetQueryPoolEXT"));
+		timestampPeriod = props.limits.timestampPeriod;
+		timestampMask =
+		    timestampValidBits >= 64 ? ~uint64_t{ 0 } : (uint64_t{ 1 } << timestampValidBits) - 1;
+	}
 }
 
 void VulkanRenderer::createSwapchain() {
@@ -2928,6 +2969,53 @@ void VulkanRenderer::readPixels(unsigned char* const rgb, const int x, const int
 	    vkStruct<VkCommandBufferBeginInfo>(VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
 	VK_CHECK(vkBeginCommandBuffer(cmd, &beginInfo), "vkBeginCommandBuffer");
 	beginCurrentRenderPass(VK_ATTACHMENT_LOAD_OP_LOAD);
+}
+
+bool VulkanRenderer::areTimestampsSupported() const {
+	return resetQueryPool != nullptr;
+}
+
+VkQueryPool VulkanRenderer::createTimestampPool(const uint32_t count) {
+	auto info = vkStruct<VkQueryPoolCreateInfo>(VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO);
+	info.queryType = VK_QUERY_TYPE_TIMESTAMP;
+	info.queryCount = count;
+	VkQueryPool pool = VK_NULL_HANDLE;
+	VK_CHECK(vkCreateQueryPool(device, &info, nullptr, &pool), "vkCreateQueryPool");
+	resetQueryPool(device, pool, 0, count);
+	return pool;
+}
+
+void VulkanRenderer::destroyTimestampPool(const VkQueryPool pool) {
+	if (!device) {
+		return;
+	}
+	destroyLater([this, pool]() { vkDestroyQueryPool(device, pool, nullptr); });
+}
+
+bool VulkanRenderer::writeTimestamp(const VkQueryPool pool, const uint32_t query) {
+	if (!frameActive) {
+		return false;
+	}
+	vkCmdWriteTimestamp(commandBuffers[currentFrame], VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, pool,
+	                    query);
+	return true;
+}
+
+std::optional<std::chrono::nanoseconds> VulkanRenderer::takeElapsedTime(const VkQueryPool pool,
+                                                                        const uint32_t first) {
+	std::array<uint64_t, 2> ticks{};
+	const VkResult result =
+	    vkGetQueryPoolResults(device, pool, first, 2, sizeof(ticks), ticks.data(), sizeof(uint64_t),
+	                          VK_QUERY_RESULT_64_BIT);
+	if (result == VK_NOT_READY) {
+		return std::nullopt;
+	}
+	VK_CHECK(result, "vkGetQueryPoolResults");
+	// The commands that wrote them are done, as their results are there
+	resetQueryPool(device, pool, first, 2);
+	const uint64_t elapsed = (ticks[1] - ticks[0]) & timestampMask;
+	return std::chrono::nanoseconds(
+	    static_cast<std::chrono::nanoseconds::rep>(static_cast<double>(elapsed) * timestampPeriod));
 }
 
 void VulkanRenderer::allocateTextureDescriptor(VulkanTexture& texture) {

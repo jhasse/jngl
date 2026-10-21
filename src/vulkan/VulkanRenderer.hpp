@@ -14,6 +14,7 @@
 #include "ShaderCompiler.hpp"
 
 #include <array>
+#include <chrono>
 #include <cstdint>
 #include <functional>
 #include <optional>
@@ -179,6 +180,19 @@ public:
 	/// Reads back a \a width x \a height region of the current frame as tightly packed RGB bytes,
 	/// bottom row first (matching OpenGL's glReadPixels). Flushes the pending draws first.
 	void readPixels(unsigned char* rgb, int x, int y, int width, int height);
+
+	/// Whether the GPU's time can be measured with timestamp queries, see jngl::GpuTimer
+	[[nodiscard]] bool areTimestampsSupported() const;
+	/// A pool of \a count timestamp queries, which have all been reset
+	[[nodiscard]] VkQueryPool createTimestampPool(uint32_t count);
+	/// Destroys \a pool once the GPU is done with it, see destroyLater()
+	void destroyTimestampPool(VkQueryPool pool);
+	/// Records writing the GPU's time into \a query once what's been drawn before is done. Returns
+	/// false if there's no frame to record it into.
+	bool writeTimestamp(VkQueryPool pool, uint32_t query);
+	/// The time between the timestamps \a first and \a first + 1, once both have been written, or
+	/// nullopt. Then resets them, so that they can be written again.
+	std::optional<std::chrono::nanoseconds> takeElapsedTime(VkQueryPool pool, uint32_t first);
 
 	/// Creates an off-screen render target (see jngl::FrameBuffer), cleared to transparent.
 	/// \param antiAliased Multisampled while anti-aliasing is enabled, if it's supported
@@ -467,6 +481,15 @@ private:
 	std::vector<VkSemaphore> renderFinishedSemaphores;
 	std::vector<VkFence> inFlightFences;
 	VkFence readbackFence = VK_NULL_HANDLE; // signalled by the readPixels flush submit
+
+	// Of VK_EXT_host_query_reset (core since Vulkan 1.2, but we ask for 1.1), so that a query can
+	// be reset when its result has been read, instead of in a command buffer outside of a render
+	// pass. nullptr if timestamps aren't supported.
+	PFN_vkResetQueryPoolEXT resetQueryPool = nullptr;
+	// Nanoseconds per timestamp tick
+	float timestampPeriod = 1.f;
+	// Of the bits of a timestamp, those which are valid
+	uint64_t timestampMask = 0;
 
 	// Pipelines drawing single-color geometry with the built-in "simple" shader. There's one per
 	// blend variant and primitive topology; they share the layout and shader modules. Indexed by
