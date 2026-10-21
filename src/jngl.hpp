@@ -15,6 +15,7 @@
 #include "jngl/Fade.hpp"             // IWYU pragma: keep
 #include "jngl/FontInterface.hpp" // IWYU pragma: keep
 #include "jngl/FrameBuffer.hpp"      // IWYU pragma: keep
+#include "jngl/GpuTimer.hpp" // IWYU pragma: keep
 #include "jngl/ImageData.hpp"        // IWYU pragma: keep
 #include "jngl/KeyboardShortcut.hpp" // IWYU pragma: keep
 #include "jngl/Label.hpp"            // IWYU pragma: keep
