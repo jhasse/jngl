@@ -9,6 +9,7 @@
 #include "Rgb.hpp"
 #include "Rgba.hpp"
 #include "ShaderProgram.hpp"
+#include "TextureFilter.hpp"
 #include "Vec2.hpp"
 
 #include <future>
@@ -313,6 +314,11 @@ public:
 
 	bool contains(jngl::Vec2 point) const;
 
+	/// Sets how the texture is sampled when the sprite is drawn smaller than its pixel size
+	/// (\a minification) and bigger (\a magnification). With mipmaps, \a minification also says
+	/// how they're sampled. All sprites of the same texture, e.g. of the same file, share this.
+	void setTextureFilter(TextureFilter minification, TextureFilter magnification);
+
 private:
 	void enableMipmaps();
 	static void cleanUpRowPointers(std::vector<unsigned char*>& buf);
@@ -403,6 +409,19 @@ enum class BlendMode : uint8_t {
 	/// For colours that already have their alpha multiplied in, e.g. those of a FrameBuffer drawn
 	/// into with BlendMode::Composite
 	Premultiplied,
+
+	/// Adds the colors, by their alpha, to what's there, e.g. for something that glows
+	Additive,
+
+	/// BlendMode::Additive for colors that already have their alpha multiplied in
+	PremultipliedAdditive,
+
+	/// Multiplies what's there with the colors, darkening it, e.g. for a shadow. For colors that
+	/// have their alpha multiplied in, as for Screen, which other ones are just as well.
+	Multiply,
+
+	/// The opposite of Multiply: lightens what's there by the colors
+	Screen,
 };
 
 /// Sets how what's drawn is blended with what's already there, until the returned Finally object

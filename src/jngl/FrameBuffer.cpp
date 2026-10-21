@@ -75,9 +75,26 @@ void applyBlendMode() {
 #ifdef JNGL_VULKAN
 	using SpriteBlend = VulkanRenderer::SpriteBlend;
 	if (gBlendMode) {
-		vulkanRenderer().setSpriteBlend(*gBlendMode == BlendMode::Premultiplied
-		                                    ? SpriteBlend::Premultiplied
-		                                    : SpriteBlend::Composite);
+		switch (*gBlendMode) {
+		case BlendMode::Composite:
+			vulkanRenderer().setSpriteBlend(SpriteBlend::Composite);
+			break;
+		case BlendMode::Premultiplied:
+			vulkanRenderer().setSpriteBlend(SpriteBlend::Premultiplied);
+			break;
+		case BlendMode::Additive:
+			vulkanRenderer().setSpriteBlend(SpriteBlend::Additive);
+			break;
+		case BlendMode::PremultipliedAdditive:
+			vulkanRenderer().setSpriteBlend(SpriteBlend::PremultipliedAdditive);
+			break;
+		case BlendMode::Multiply:
+			vulkanRenderer().setSpriteBlend(SpriteBlend::Multiply);
+			break;
+		case BlendMode::Screen:
+			vulkanRenderer().setSpriteBlend(SpriteBlend::Screen);
+			break;
+		}
 	} else {
 		// Alpha adds up in a FrameBuffer, like on OpenGL below
 		vulkanRenderer().setSpriteBlend(activateStack.empty() ? SpriteBlend::Composite
@@ -92,6 +109,18 @@ void applyBlendMode() {
 			break;
 		case BlendMode::Premultiplied:
 			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+			break;
+		case BlendMode::Additive:
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+			break;
+		case BlendMode::PremultipliedAdditive:
+			glBlendFunc(GL_ONE, GL_ONE);
+			break;
+		case BlendMode::Multiply:
+			glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+			break;
+		case BlendMode::Screen:
+			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
 			break;
 		}
 	} else if (activateStack.empty()) {

@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
+#include "jngl/TextureFilter.hpp"
 #include "opengl.hpp"
 
 #include <memory>
@@ -59,6 +60,8 @@ public:
 #ifdef JNGL_VULKAN
 	/// Generates mipmaps if the texture doesn't have them yet, see Sprite::enableMipmaps
 	void enableMipmaps() const;
+	/// See Sprite::setTextureFilter
+	void setTextureFilter(TextureFilter minification, TextureFilter magnification) const;
 #endif
 
 private:

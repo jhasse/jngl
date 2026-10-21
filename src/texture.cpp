@@ -272,6 +272,16 @@ void Texture::enableMipmaps() const {
 		vulkanRenderer().enableMipmaps(*vkTexture);
 	}
 }
+
+void Texture::setTextureFilter(const TextureFilter minification,
+                               const TextureFilter magnification) const {
+	const auto toVk = [](const TextureFilter filter) {
+		return filter == TextureFilter::NearestNeighbor ? VK_FILTER_NEAREST : VK_FILTER_LINEAR;
+	};
+	if (vkTexture) {
+		vulkanRenderer().setTextureFilter(*vkTexture, toVk(minification), toVk(magnification));
+	}
+}
 #endif
 
 void Texture::setBytes(const unsigned char* const bytes, const int width, const int height) const {

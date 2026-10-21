@@ -14,3 +14,12 @@ repos:
         # invoked once per file.
         pass_filenames: false
         require_serial: true
+      - id: trailing-whitespace
+        name: no trailing whitespace (changed lines only)
+        description: Refuse staged lines that end in spaces or tabs, except in glad/, which is generated.
+        # git diff --check also looks for other whitespace errors by default; only keep the
+        # one at the ends of lines
+        entry: git -c core.whitespace=-space-before-tab,-blank-at-eof diff --cached --check -- . :(exclude)glad
+        language: system
+        pass_filenames: false
+        require_serial: true

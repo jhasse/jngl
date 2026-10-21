@@ -182,11 +182,33 @@ void Sprite::enableMipmaps() {
 	glBindTexture(GL_TEXTURE_2D, texture->getID());
 	GLint minFilter = 0;
 	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &minFilter);
-	if (minFilter == GL_LINEAR_MIPMAP_LINEAR) {
+	if (minFilter == GL_LINEAR_MIPMAP_LINEAR || minFilter == GL_NEAREST_MIPMAP_NEAREST) {
 		return;
 	}
 	glGenerateMipmap(GL_TEXTURE_2D);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+	                minFilter == GL_NEAREST ? GL_NEAREST_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR);
+#endif
+}
+
+void Sprite::setTextureFilter(const TextureFilter minification, const TextureFilter magnification) {
+	if (!texture) {
+		return;
+	}
+#ifdef JNGL_VULKAN
+	texture->setTextureFilter(minification, magnification);
+#else
+	glBindTexture(GL_TEXTURE_2D, texture->getID());
+	GLint minFilter = 0;
+	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &minFilter);
+	const bool mipmaps =
+	    minFilter == GL_LINEAR_MIPMAP_LINEAR || minFilter == GL_NEAREST_MIPMAP_NEAREST;
+	const bool nearest = minification == TextureFilter::NearestNeighbor;
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+	                mipmaps ? (nearest ? GL_NEAREST_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR)
+	                        : (nearest ? GL_NEAREST : GL_LINEAR));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+	                magnification == TextureFilter::NearestNeighbor ? GL_NEAREST : GL_LINEAR);
 #endif
 }
 

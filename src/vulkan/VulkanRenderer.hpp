@@ -31,6 +31,9 @@ struct VulkanTexture {
 	VkDeviceMemory memory = VK_NULL_HANDLE;
 	VkImageView view = VK_NULL_HANDLE;
 	VkSampler sampler = VK_NULL_HANDLE;
+	/// Of \a sampler, see Sprite::setTextureFilter. Mipmaps are sampled like \a minFilter.
+	VkFilter minFilter = VK_FILTER_LINEAR;
+	VkFilter magFilter = VK_FILTER_LINEAR;
 	VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
 	VkDescriptorPool descriptorPool = VK_NULL_HANDLE; ///< that descriptorSet is from
 	int width = 0;
@@ -77,8 +80,12 @@ enum class BlendVariant : uint8_t {
 	Replace, ///< see jngl::disableBlending()
 	ReplaceAlphaOnly, ///< see jngl::drawOnlyIntoAlphaChannel()
 	AddAlpha, ///< alpha added up; the default while a FrameBuffer's in use, like on OpenGL
+	Additive, ///< see BlendMode::Additive
+	PremultipliedAdditive, ///< see BlendMode::PremultipliedAdditive
+	Multiply, ///< see BlendMode::Multiply
+	Screen, ///< see BlendMode::Screen
 };
-constexpr size_t blendVariantCount = 5;
+constexpr size_t blendVariantCount = 9;
 
 /// Host-visible, persistently mapped vertex buffer that's appended to during a frame
 struct DynamicVertexBuffer {
@@ -157,6 +164,9 @@ public:
 	/// Gives a texture created without mipmaps a mipmap chain generated from its pixels. Does
 	/// nothing if it already has one.
 	void enableMipmaps(VulkanTexture&);
+	/// Samples the texture with \a minFilter and \a magFilter from now on, see
+	/// Sprite::setTextureFilter. Draws recorded earlier in the frame keep the old ones.
+	void setTextureFilter(VulkanTexture&, VkFilter minFilter, VkFilter magFilter);
 
 	/// Draw a textured primitive (\a xyuv: interleaved x, y, u, v) modulated by \a color.
 	void drawSprite(const VulkanTexture&, const float* xyuv, std::size_t vertexCount, PrimitiveType,
@@ -208,7 +218,15 @@ public:
 	void setBlendingEnabled(bool enabled);
 	[[nodiscard]] bool isBlendingEnabled() const;
 	/// See BlendVariant
-	enum class SpriteBlend : uint8_t { Composite, Premultiplied, AddAlpha };
+	enum class SpriteBlend : uint8_t {
+		Composite,
+		Premultiplied,
+		AddAlpha,
+		Additive,
+		PremultipliedAdditive,
+		Multiply,
+		Screen,
+	};
 	void setSpriteBlend(SpriteBlend);
 	[[nodiscard]] SpriteBlend getSpriteBlend() const;
 	void setAlphaOnlyWrite(bool);
@@ -344,6 +362,8 @@ private:
 	void createTextureImage(VulkanTexture&, uint32_t mipLevels);
 	/// Creates the view, sampler and descriptor set for the texture's image
 	void createTextureDescriptor(VulkanTexture&);
+	/// Creates the texture's sampler from its minFilter and magFilter
+	void createTextureSampler(VulkanTexture&);
 	/// Records blits that fill all of the texture's mip levels from the first one, which has to be
 	/// in TRANSFER_DST_OPTIMAL like the others. Leaves all of them in SHADER_READ_ONLY_OPTIMAL.
 	static void recordMipmapGeneration(VkCommandBuffer, const VulkanTexture&);

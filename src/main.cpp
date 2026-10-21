@@ -118,6 +118,9 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 		glDisable(GL_SCISSOR_TEST);
 		glClearColor(0, 0, 0, 1); // black boxes
 		glClear(GL_COLOR_BUFFER_BIT);
+		// Otherwise the canvas would be cleared black from now on, when the active Scene supports
+		// the window's new size and it's not letterboxed anymore
+		clearBackgroundColor();
 	}
 #endif
 	applyScissor();
@@ -507,6 +510,10 @@ void setMouseConfined(const bool confined) {
 
 bool isMouseConfined() {
 	return pWindow->getMouseConfined();
+}
+
+bool hasFocus() {
+	return pWindow->hasFocus();
 }
 
 void setTitle(const std::string& title) {

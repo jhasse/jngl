@@ -52,6 +52,7 @@ public:
 	/// See Window::toWindowCoordinates
 	Vec2 toWindowCoordinates(float x, float y) const;
 
+	bool focused = true; // see Window::hasFocus
 	int mouseX = 0;
 	int mouseY = 0;
 	bool touchPressedThisUpdate = false;

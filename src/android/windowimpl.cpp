@@ -42,9 +42,11 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 		impl.terminate();
 		break;
 	case APP_CMD_GAINED_FOCUS:
+		impl.focused = true;
 		impl.makeCurrent();
 		break;
 	case APP_CMD_LOST_FOCUS:
+		impl.focused = false;
 		impl.resetInputState();
 		break;
 	case APP_CMD_PAUSE:

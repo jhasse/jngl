@@ -35,6 +35,7 @@
 #include "jngl/Sprite.hpp"           // IWYU pragma: keep
 #include "jngl/TextInputSession.hpp" // IWYU pragma: keep
 #include "jngl/TextLine.hpp"         // IWYU pragma: keep
+#include "jngl/TextureFilter.hpp" // IWYU pragma: keep
 #include "jngl/Vertex.hpp"           // IWYU pragma: keep
 #include "jngl/Video.hpp"            // IWYU pragma: keep
 #include "jngl/Widget.hpp"           // IWYU pragma: keep

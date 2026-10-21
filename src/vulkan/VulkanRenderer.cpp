@@ -1456,6 +1456,25 @@ VkPipelineColorBlendAttachmentState blendAttachmentState(const BlendVariant vari
 		// drawn again, see applyBlendMode()
 		state.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
 		break;
+	// The following ones blend alpha like the colors, as glBlendFunc does
+	case BlendVariant::Additive:
+		state.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
+		state.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+		state.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+		break;
+	case BlendVariant::PremultipliedAdditive:
+		state.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+		state.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
+		state.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+		break;
+	case BlendVariant::Multiply:
+		state.srcColorBlendFactor = VK_BLEND_FACTOR_DST_COLOR;
+		state.srcAlphaBlendFactor = VK_BLEND_FACTOR_DST_ALPHA;
+		break;
+	case BlendVariant::Screen:
+		state.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+		state.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+		break;
 	}
 	return state;
 }
@@ -2222,6 +2241,14 @@ BlendVariant VulkanRenderer::blendVariant() const {
 		return BlendVariant::Premultiplied;
 	case SpriteBlend::AddAlpha:
 		return BlendVariant::AddAlpha;
+	case SpriteBlend::Additive:
+		return BlendVariant::Additive;
+	case SpriteBlend::PremultipliedAdditive:
+		return BlendVariant::PremultipliedAdditive;
+	case SpriteBlend::Multiply:
+		return BlendVariant::Multiply;
+	case SpriteBlend::Screen:
+		return BlendVariant::Screen;
 	}
 	return BlendVariant::Composite;
 }
@@ -2448,6 +2475,9 @@ VulkanRenderer::createTexture(const int width, const int height, const unsigned 
 		});
 	}
 
+	if (App::isPixelArt()) {
+		texture->magFilter = VK_FILTER_NEAREST;
+	}
 	createTextureDescriptor(*texture);
 	return texture;
 }
@@ -2489,18 +2519,23 @@ void VulkanRenderer::createTextureDescriptor(VulkanTexture& texture) {
 	viewInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
 	viewInfo.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, texture.mipLevels, 0, 1 };
 	VK_CHECK(vkCreateImageView(device, &viewInfo, nullptr, &texture.view), "vkCreateImageView");
+	createTextureSampler(texture);
+	allocateTextureDescriptor(texture);
+}
 
-	const VkFilter filter = App::isPixelArt() ? VK_FILTER_NEAREST : VK_FILTER_LINEAR;
+void VulkanRenderer::createTextureSampler(VulkanTexture& texture) {
 	auto samplerInfo = vkStruct<VkSamplerCreateInfo>(VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO);
-	samplerInfo.magFilter = filter;
-	samplerInfo.minFilter = VK_FILTER_LINEAR;
+	samplerInfo.magFilter = texture.magFilter;
+	samplerInfo.minFilter = texture.minFilter;
 	samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 	samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 	samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR; // like GL_LINEAR_MIPMAP_LINEAR
+	// like GL_LINEAR_MIPMAP_LINEAR or GL_NEAREST_MIPMAP_NEAREST
+	samplerInfo.mipmapMode = texture.minFilter == VK_FILTER_NEAREST
+	                             ? VK_SAMPLER_MIPMAP_MODE_NEAREST
+	                             : VK_SAMPLER_MIPMAP_MODE_LINEAR;
 	samplerInfo.maxLod = static_cast<float>(texture.mipLevels - 1);
 	VK_CHECK(vkCreateSampler(device, &samplerInfo, nullptr, &texture.sampler), "vkCreateSampler");
-	allocateTextureDescriptor(texture);
 }
 
 void VulkanRenderer::recordMipmapGeneration(const VkCommandBuffer cmd,
@@ -2627,6 +2662,8 @@ void VulkanRenderer::enableMipmaps(VulkanTexture& texture) {
 	VulkanTexture mipmapped;
 	mipmapped.width = texture.width;
 	mipmapped.height = texture.height;
+	mipmapped.minFilter = texture.minFilter;
+	mipmapped.magFilter = texture.magFilter;
 	createTextureImage(mipmapped, mipLevels);
 	recordUpload([&](VkCommandBuffer cmd) {
 		VkImageMemoryBarrier barriers[2]{};
@@ -2674,6 +2711,24 @@ void VulkanRenderer::enableMipmaps(VulkanTexture& texture) {
 	// buffer
 	destroyTexture(texture);
 	texture = mipmapped;
+}
+
+void VulkanRenderer::setTextureFilter(VulkanTexture& texture, const VkFilter minFilter,
+                                      const VkFilter magFilter) {
+	if ((texture.minFilter == minFilter && texture.magFilter == magFilter) || !texture.view) {
+		return;
+	}
+	// The old sampler and descriptor set might still be used by the current or an in-flight
+	// command buffer
+	VulkanTexture old;
+	old.sampler = texture.sampler;
+	old.descriptorSet = texture.descriptorSet;
+	old.descriptorPool = texture.descriptorPool;
+	destroyTexture(old);
+	texture.minFilter = minFilter;
+	texture.magFilter = magFilter;
+	createTextureSampler(texture);
+	allocateTextureDescriptor(texture);
 }
 
 void VulkanRenderer::destroyTexture(VulkanTexture& texture) {

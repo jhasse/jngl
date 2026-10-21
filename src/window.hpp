@@ -53,6 +53,7 @@ public:
 	bool getRelativeMouseMode() const;
 	void setMouseConfined(bool confined);
 	bool getMouseConfined() const;
+	bool hasFocus() const;
 	void SetMouseVisible(bool visible);
 	void increaseMouseHiddenCount();
 	void decreaseMouseHiddenCount();
