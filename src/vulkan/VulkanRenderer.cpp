@@ -473,10 +473,6 @@ void VulkanRenderer::createLogicalDevice() {
 	createInfo.pEnabledFeatures = &features;
 	createInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
 	createInfo.ppEnabledExtensionNames = deviceExtensions.data();
-	if (validationEnabled) {
-		createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
-		createInfo.ppEnabledLayerNames = validationLayers.data();
-	}
 
 	VK_CHECK(vkCreateDevice(physicalDevice, &createInfo, nullptr, &device), "vkCreateDevice");
 	vkGetDeviceQueue(device, graphicsQueueFamily, 0, &graphicsQueue);

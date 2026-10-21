@@ -51,6 +51,19 @@ cmake -Bbuild -DFETCHCONTENT_QUIET=0
 ```
 Then open `build/jngl.sln` in Visual Studio.
 
+### Vulkan
+Install the Vulkan SDK, including shaderc, and open a new terminal so that `VULKAN_SDK` and
+`PATH` include it. Enable the experimental Vulkan renderer with the default SDL3 window backend:
+```bash
+cmake -Bbuild-vulkan -DJNGL_VULKAN=1 -DJNGL_WINAPI=OFF
+cmake --build build-vulkan --config Release
+```
+The same option works with cja: `cja build -DJNGL_VULKAN=1`.
+
+At runtime, `shaderc_shared.dll` from the SDK's `Bin` directory must be on `PATH` or beside the
+executable. Include this DLL when distributing a Vulkan build. The Vulkan loader is supplied by
+the graphics driver; users need a Vulkan-capable driver, but do not need the SDK.
+
 ## macOS
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 ```bash

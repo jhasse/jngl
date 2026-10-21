@@ -90,7 +90,7 @@ option(JNGL_TRACE "Enable tracing for debugging purposes" OFF)
 # Experimental Vulkan renderer backend. When OFF (the default) JNGL uses its
 # OpenGL/GLES backend. When ON an additional Vulkan backend is compiled in and
 # used at runtime instead. Currently only implemented for the desktop SDL3
-# platform (Linux); see src/vulkan/.
+# platform (Linux and Windows); see src/vulkan/.
 option(JNGL_VULKAN "Use the experimental Vulkan renderer backend instead of OpenGL" OFF)
 
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
@@ -459,13 +459,25 @@ else()
 endif()
 
 if(JNGL_VULKAN)
-	if(NOT UNIX OR APPLE OR ANDROID OR IOS OR EMSCRIPTEN)
-		message(FATAL_ERROR "JNGL_VULKAN is currently only supported on the desktop SDL3/Linux platform.")
+	if((NOT UNIX AND NOT WIN32) OR APPLE OR ANDROID OR IOS OR EMSCRIPTEN OR JNGL_WINAPI)
+		message(FATAL_ERROR "JNGL_VULKAN requires the desktop SDL3 backend on Linux or Windows (JNGL_WINAPI=OFF).")
 	endif()
-	find_package(Vulkan REQUIRED)
-	target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
+	if(WIN32)
+		set(JNGL_VULKAN_SDK_LIBDIR "$ENV{VULKAN_SDK}/Lib")
+		if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+			set(JNGL_VULKAN_SDK_LIBDIR "$ENV{VULKAN_SDK}/Lib32")
+		endif()
+		# Explicit SDK lookup also works with cja, whose FindVulkan only searches Unix libraries.
+		find_path(Vulkan_INCLUDE_DIR vulkan/vulkan.h HINTS "$ENV{VULKAN_SDK}/Include" REQUIRED)
+		find_library(Vulkan_LIBRARY NAMES vulkan-1 HINTS "${JNGL_VULKAN_SDK_LIBDIR}" REQUIRED)
+		target_include_directories(jngl PRIVATE ${Vulkan_INCLUDE_DIR})
+		target_link_libraries(jngl PRIVATE ${Vulkan_LIBRARY})
+	else()
+		find_package(Vulkan REQUIRED)
+		target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
+	endif()
 
-	find_program(GLSLC glslc REQUIRED)
+	find_program(GLSLC glslc HINTS "$ENV{VULKAN_SDK}/Bin" REQUIRED)
 	find_package(Python3 REQUIRED COMPONENTS Interpreter)
 
 	set(JNGL_VULKAN_BUILTIN_SHADERS colored.vert colored.frag textured.vert textured.frag rounded.vert
@@ -495,10 +507,18 @@ if(JNGL_VULKAN)
 
 	# shaderc (runtime GLSL -> SPIR-V for user-defined jngl::Shader programs). Built-in backend
 	# shaders are precompiled at build time with glslc, see src/vulkan/shaders/.
-	find_path(SHADERC_INCLUDE_DIR shaderc/shaderc.hpp)
-	find_library(SHADERC_LIBRARY NAMES shaderc_shared shaderc_combined shaderc)
+	find_path(SHADERC_INCLUDE_DIR shaderc/shaderc.hpp HINTS "$ENV{VULKAN_SDK}/Include")
+	if(WIN32)
+		# The SDK's static shaderc uses its own CRT settings. The C API in its DLL works with
+		# both Debug and Release builds, including applications using a static CRT.
+		find_library(SHADERC_LIBRARY NAMES shaderc_shared HINTS "${JNGL_VULKAN_SDK_LIBDIR}")
+		target_compile_definitions(jngl PRIVATE SHADERC_SHAREDLIB)
+	else()
+		find_library(SHADERC_LIBRARY NAMES shaderc_shared shaderc_combined shaderc)
+	endif()
 	if(NOT SHADERC_INCLUDE_DIR OR NOT SHADERC_LIBRARY)
-		message(FATAL_ERROR "JNGL_VULKAN requires shaderc (install libshaderc-devel / libshaderc-dev). "
+		message(FATAL_ERROR "JNGL_VULKAN requires shaderc (install the Vulkan SDK on Windows, "
+			"or libshaderc-devel / libshaderc-dev on Linux). "
 			"include=${SHADERC_INCLUDE_DIR} lib=${SHADERC_LIBRARY}")
 	endif()
 	target_include_directories(jngl PRIVATE ${SHADERC_INCLUDE_DIR})
