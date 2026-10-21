@@ -698,6 +698,10 @@ void Window::setMouseConfined(const bool confined) {
 	impl->updateCursorClip();
 }
 
+bool Window::hasFocus() const {
+	return GetForegroundWindow() == impl->pWindowHandle_.get();
+}
+
 void Window::SetIcon(const std::string& filename) {
 	try {
 		auto imageData = ImageData::load(filename);

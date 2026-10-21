@@ -62,6 +62,10 @@ void Window::setMouseConfined(const bool confined) {
 	mouseConfined = confined;
 }
 
+bool Window::hasFocus() const {
+	return impl->focused;
+}
+
 void Window::SetIcon(const std::string&) {
 }
 

@@ -194,6 +194,11 @@ void setMouseConfined(bool confined);
 /// Whether setMouseConfined(true) has been called, regardless of the window having focus
 bool isMouseConfined();
 
+/// Whether the window has the keyboard focus, i.e. the user is currently working with it and not
+/// with another window. Always true on iOS, where the main loop doesn't run while the app isn't
+/// active.
+bool hasFocus();
+
 /// By default the mouse cursor of the OS is visible and can be hidden by passing false
 void setMouseVisible(bool visible);
 

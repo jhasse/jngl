@@ -464,6 +464,10 @@ bool isMouseConfined() {
 	return pWindow->getMouseConfined();
 }
 
+bool hasFocus() {
+	return pWindow->hasFocus();
+}
+
 void setTitle(const std::string& title) {
 	pWindow->SetTitle(title);
 }

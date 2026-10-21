@@ -494,6 +494,10 @@ void Window::setMouseConfined(const bool confined) {
 	}
 }
 
+bool Window::hasFocus() const {
+	return (SDL_GetWindowFlags(impl->sdlWindow) & SDL_WINDOW_INPUT_FOCUS) != 0;
+}
+
 void Window::SetIcon(const std::string& filepath) {
 	auto imageData = ImageData::load(filepath);
 	const int CHANNELS = 4;
