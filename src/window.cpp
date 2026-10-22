@@ -11,6 +11,7 @@
 #endif
 #include "audio.hpp"
 #include "freetype.hpp"
+#include "helper.hpp"
 #include "jngl/ScaleablePixels.hpp"
 #include "jngl/font.hpp"
 #include "jngl/other.hpp"
@@ -38,6 +39,7 @@
 #include <ranges>
 #include <tuple>
 #include <thread>
+#include <utility>
 
 namespace jngl {
 
@@ -272,12 +274,41 @@ bool Window::getKeyPressed(key::KeyType key) {
 
 void Window::setKeyPressed(const key::KeyType key, bool p) {
 	keyPressed_[GetKeyCode(key)] = p;
+	if (p && key != key::Ctrl && key != key::Shift && key != key::Any) {
+		addKeyPressed(key);
+	}
 }
 
 void Window::setKeyPressed(const std::string& key, bool p) {
 	characterPressed_[key] = p;
 	if (p) {
 		needToBeSetFalse_.push(&characterPressed_[key]);
+		if (isOneCharacter(key)) {
+			addKeyPressed(Key(key));
+		}
+	}
+}
+
+const std::vector<Key>& Window::getKeysPressed() const {
+	return keysPressed_;
+}
+
+std::optional<key::KeyType> Window::keyTypeOf(const unsigned int code) {
+	if (code == 0) {
+		return std::nullopt; // what GetKeyCode() returns for key::Ctrl, key::Shift and key::Any
+	}
+	for (int i = 0; i < key::Any; ++i) {
+		const auto type = static_cast<key::KeyType>(i);
+		if (type != key::Ctrl && type != key::Shift && std::cmp_equal(GetKeyCode(type), code)) {
+			return type;
+		}
+	}
+	return std::nullopt;
+}
+
+void Window::addKeyPressed(Key key) {
+	if (std::ranges::find(keysPressed_, key) == keysPressed_.end()) {
+		keysPressed_.emplace_back(std::move(key));
 	}
 }
 
@@ -315,6 +346,7 @@ bool keyPressed(const char key) {
 
 void Window::updateKeyStates() {
 	textInput.clear();
+	keysPressed_.clear();
 	while (!needToBeSetFalse_.empty()) {
 		*(needToBeSetFalse_.top()) = false;
 		needToBeSetFalse_.pop();

@@ -4,6 +4,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace jngl {
@@ -20,6 +21,16 @@ bool fileExists(const std::string& path);
 /// foo//bar => foo/bar
 /// ././/././foo.bar => foo.bar
 std::string sanitizePath(std::string);
+
+/// Whether \a text is exactly one character, encoded as valid UTF-8
+bool isOneCharacter(std::string_view text);
+
+/// \a character as it's stored in Window::characterDown_ while Shift is held: a letter of a-z or
+/// à-þ in uppercase, anything else (e.g. a digit or ß) as it is
+std::string withShift(std::string character);
+
+/// The other way around: a letter of A-Z or À-Þ in lowercase, anything else as it is
+std::string withoutShift(std::string character);
 
 // https://www.cppstories.com/2021/heterogeneous-access-cpp20/
 struct string_hash {

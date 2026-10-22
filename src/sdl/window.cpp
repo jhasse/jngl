@@ -7,6 +7,7 @@
 #ifdef JNGL_VULKAN
 #include "../vulkan/VulkanRenderer.hpp"
 #endif
+#include "../helper.hpp"
 #include "../jngl/ImageData.hpp"
 #include "../jngl/other.hpp"
 #include "../jngl/screen.hpp"
@@ -17,8 +18,11 @@
 #include "../windowptr.hpp"
 #include "windowimpl.hpp"
 
+#include <array>
 #include <cassert>
+#include <cctype>
 #include <cstdlib>
+#include <cstring>
 #include <stdexcept>
 #include <string_view>
 #ifdef _WIN32
@@ -29,6 +33,30 @@
 #endif
 
 namespace jngl {
+
+namespace {
+/// The character the key with \a keycode types without Shift, as it's stored in
+/// Window::characterDown_, e.g. "a", "1", "ä" or " ", or "" if it doesn't type one, e.g. F1
+std::string keyCharacter(const SDL_Keycode keycode) {
+	if ((keycode & (SDLK_SCANCODE_MASK | SDLK_EXTENDED_MASK)) != 0) {
+		// The keyboard layout has no character for it, so SDL names it after a US keyboard's key
+		const char* const name = SDL_GetKeyName(keycode);
+		return std::strlen(name) == 1
+		           ? std::string(
+		                 1, static_cast<char>(std::tolower(static_cast<unsigned char>(name[0]))))
+		           : "";
+	}
+	// Not Return, Tab, Escape, Backspace or Delete. Apart from those, the keycode of a key that
+	// types a character is the character's code point.
+	if (keycode < SDLK_SPACE || keycode == SDLK_DELETE || keycode > 0x10FFFF) {
+		return "";
+	}
+	std::array<char, 4> utf8{};
+	char* const end = SDL_UCS4ToUTF8(keycode, utf8.data());
+	// Emscripten's keycodes are for what's typed with Shift, if it's held
+	return withoutShift(std::string(utf8.data(), end));
+}
+} // namespace
 
 void setProcessSettings() {
 #ifdef _WIN32
@@ -391,23 +419,21 @@ void Window::UpdateInput() {
 
 			keyDown_[event.key.key] = true;
 			keyPressed_[event.key.key] = true;
-			const char* name = SDL_GetKeyName(event.key.key);
-			if (strlen(name) == 1) {
-				std::string tmp;
-				if (getKeyDown(key::ShiftL) || getKeyDown(key::ShiftR)) {
-					tmp.append(1, name[0]);
-				} else {
-					tmp.append(1, static_cast<char>(tolower(name[0])));
-				}
-				characterDown_[tmp] = true;
-				characterPressed_[tmp] = true;
-				needToBeSetFalse_.push(&characterPressed_[tmp]);
+			const auto character = keyCharacter(event.key.key);
+			if (!character.empty()) {
+				const auto typed = getKeyDown(key::ShiftL) || getKeyDown(key::ShiftR)
+				                       ? withShift(character)
+				                       : character;
+				characterDown_[typed] = true;
+				characterPressed_[typed] = true;
+				needToBeSetFalse_.push(&characterPressed_[typed]);
 			}
-			if (event.key.key == SDLK_SPACE) {
-				characterDown_[" "] = true;
-				characterPressed_[" "] = true;
-				needToBeSetFalse_.push(&characterPressed_[" "]);
-			} else if (!event.key.repeat && event.key.key == SDLK_RETURN && getKeyDown(key::Alt)) {
+			if (const auto type = keyTypeOf(event.key.key)) {
+				addKeyPressed(*type);
+			} else if (!character.empty()) {
+				addKeyPressed(Key(character));
+			}
+			if (!event.key.repeat && event.key.key == SDLK_RETURN && getKeyDown(key::Alt)) {
 				if (const auto& scene = getScene()) {
 					scene->onToggleFullscreen();
 				}
@@ -418,15 +444,10 @@ void Window::UpdateInput() {
 		case SDL_EVENT_KEY_UP: {
 			keyDown_[event.key.key] = false;
 			keyPressed_[event.key.key] = false;
-			const char* name = SDL_GetKeyName(event.key.key);
-			if (strlen(name) == 1) {
-				std::string tmp(1, name[0]);
-				characterDown_[tmp] = false;
-				tmp[0] = static_cast<char>(tolower(name[0]));
-				characterDown_[tmp] = false;
-			}
-			if (event.key.key == SDLK_SPACE) {
-				characterDown_[" "] = false;
+			if (const auto character = keyCharacter(event.key.key); !character.empty()) {
+				// Shift might have been let go of in the meantime, or pressed
+				characterDown_[character] = false;
+				characterDown_[withShift(character)] = false;
 			}
 			break;
 		}
