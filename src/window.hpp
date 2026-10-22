@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
+#include "jngl/Key.hpp"
 #include "jngl/MouseInfo.hpp"
 #include "jngl/Scene.hpp"
 #include "jngl/TextInputSession.hpp"
@@ -12,6 +13,7 @@
 #include <array>
 #include <functional>
 #include <map>
+#include <optional>
 #include <stack>
 #include <string>
 #include <unordered_map>
@@ -106,6 +108,8 @@ public:
 	bool getKeyDown(const std::string& key);
 	bool getKeyPressed(const std::string& key);
 	void setKeyPressed(const std::string& key, bool);
+	/// See jngl::keysPressed()
+	const std::vector<Key>& getKeysPressed() const;
 	bool getMouseDown(mouse::Button);
 	void setMouseDown(mouse::Button, bool);
 	bool getMousePressed(mouse::Button button) const;
@@ -172,6 +176,11 @@ public:
 
 private:
 	static int GetKeyCode(jngl::key::KeyType key);
+	/// The key::KeyType that GetKeyCode() returns \a code for, if there's one (apart from key::Ctrl
+	/// and key::Shift, which stand for two)
+	static std::optional<key::KeyType> keyTypeOf(unsigned int code);
+	/// Adds \a key to keysPressed_, unless it's in there already
+	void addKeyPressed(Key key);
 	static std::string GetFontFileByName(const std::string& fontname);
 	/// Calculates canvasWidth and canvasHeight for a window of width_ x height_ actual pixels,
 	/// letter-boxing the canvas to the aspect ratios. Also applies AppParameters::scaleFactor.
@@ -228,6 +237,8 @@ private:
 	std::map<unsigned int, bool> keyPressed_;
 	std::map<std::string, bool> characterDown_;
 	std::map<std::string, bool> characterPressed_;
+	/// See jngl::keysPressed(), cleared by updateKeyStates()
+	std::vector<Key> keysPressed_;
 	std::stack<bool*> needToBeSetFalse_;
 	int mousex_ = 0;
 	int mousey_ = 0;

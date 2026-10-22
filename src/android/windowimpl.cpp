@@ -625,6 +625,7 @@ int WindowImpl::handleKeyEvent(const AInputEvent* const event) {
 		window->keyDown_[*jnglKey] = true;
 		window->keyPressed_[*jnglKey] = true;
 		window->needToBeSetFalse_.push(&window->keyPressed_[*jnglKey]);
+		window->addKeyPressed(*jnglKey);
 		handled = true;
 	}
 	const int32_t unicode = getUnicodeChar(event);
@@ -643,6 +644,7 @@ int WindowImpl::handleKeyEvent(const AInputEvent* const event) {
 		window->characterDown_[character] = true;
 		window->characterPressed_[character] = true;
 		window->needToBeSetFalse_.push(&window->characterPressed_[character]);
+		window->addKeyPressed(Key(character));
 		const int32_t metaState = AKeyEvent_getMetaState(event);
 		if ((metaState & (AMETA_CTRL_ON | AMETA_META_ON)) == 0) { // Ctrl+S shouldn't type an "s"
 			window->textInput += character;

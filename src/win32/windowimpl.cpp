@@ -4,6 +4,7 @@
 #include "../jngl/ImageData.hpp"
 #include "../jngl/window.hpp"
 #include "../App.hpp"
+#include "../helper.hpp"
 #include "../log.hpp"
 #include "../main.hpp"
 #include "../windowptr.hpp"
@@ -430,6 +431,9 @@ void Window::UpdateInput() {
 			keyPressed_[msg.wParam] = true;
 			anyKeyPressed_ = true;
 			impl->distinguishLeftRight();
+			if (const auto type = keyTypeOf(static_cast<unsigned int>(msg.wParam))) {
+				addKeyPressed(*type); // one with a character comes as WM_CHAR, see below
+			}
 			break;
 		case WM_SYSKEYUP:
 			internal::debug("WM_SYSKEYUP");
@@ -480,6 +484,9 @@ void Window::UpdateInput() {
 			characterDown_[character] = true;
 			characterPressed_[character] = true;
 			needToBeSetFalse_.push(&characterPressed_[character]);
+			if (isOneCharacter(character)) {
+				addKeyPressed(Key(character));
+			}
 			textInput += character;
 			internal::feedTextInput(character);
 		} break;
