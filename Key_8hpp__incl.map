@@ -1,0 +1,33 @@
+<map id="jngl/Key.hpp" name="jngl/Key.hpp">
+<area shape="rect" id="Node000001" title="Contains jngl::Key class." alt="" coords="701,5,819,31"/>
+<area shape="rect" id="Node000002" href="$input_8hpp.html" title="Input related functions." alt="" coords="339,79,432,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="702,33,447,81,446,76,701,28"/>
+<area shape="rect" id="Node000010" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title=" " alt="" coords="707,153,776,178"/>
+<area shape="poly" id="edge16_Node000001_Node000010" title=" " alt="" coords="719,34,684,52,669,65,657,80,654,98,662,115,679,130,700,143,697,147,676,134,658,118,648,99,652,78,665,61,681,48,717,29"/>
+<area shape="rect" id="Node000012" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/optional.html" title=" " alt="" coords="667,79,752,105"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="754,33,729,68,724,65,749,30"/>
+<area shape="rect" id="Node000013" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title=" " alt="" coords="776,79,845,105"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="771,30,796,65,791,68,766,33"/>
+<area shape="rect" id="Node000014" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string_view.html" title=" " alt="" coords="869,79,979,105"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="789,29,883,70,881,75,787,34"/>
+<area shape="rect" id="Node000015" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/variant.html" title=" " alt="" coords="1003,79,1080,105"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="808,29,988,74,987,79,807,34"/>
+<area shape="rect" id="Node000003" href="$Finally_8hpp.html" title="Contains jngl::Finally class." alt="" coords="5,153,115,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="339,106,130,152,129,146,337,101"/>
+<area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title=" " alt="" coords="16,226,117,252"/>
+<area shape="poly" id="edge8_Node000002_Node000004" title=" " alt="" coords="339,104,262,123,219,137,179,155,130,186,91,218,88,214,127,181,176,150,217,132,260,118,337,99"/>
+<area shape="rect" id="Node000005" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="189,153,275,178"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="360,108,273,148,271,143,358,103"/>
+<area shape="rect" id="Node000008" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="299,153,376,178"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="380,106,356,141,352,138,375,103"/>
+<area shape="rect" id="Node000009" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="400,153,469,178"/>
+<area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="396,103,420,138,416,141,391,106"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="433,99,692,149,691,155,432,104"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="493,153,683,178"/>
+<area shape="poly" id="edge11_Node000002_Node000011" title=" " alt="" coords="421,103,540,144,538,150,419,108"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="64,178,67,211,61,211,58,179"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="145,226,311,252"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="234,179,232,211,227,211,229,178"/>
+<area shape="rect" id="Node000007" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="335,226,404,252"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="257,177,334,216,331,221,254,181"/>
+</map>

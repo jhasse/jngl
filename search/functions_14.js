@@ -51,7 +51,7 @@ var searchData=
   ['tolower_28_3c_20cctype_20_3e_29_48',['tolower(&lt; cctype &gt;)',['http://en.cppreference.com/w/cpp/string/byte/tolower.html',1,'std']]],
   ['tolower_28_3c_20clocale_20_3e_29_49',['tolower(&lt; clocale &gt;)',['http://en.cppreference.com/w/cpp/locale/tolower.html',1,'std']]],
   ['top_50',['top',['http://en.cppreference.com/w/cpp/container/priority_queue/top.html',1,'std::priority_queue::top()'],['http://en.cppreference.com/w/cpp/container/stack/top.html',1,'std::stack::top()']]],
-  ['tostring_51',['toString',['../classjngl_1_1KeyboardShortcut.html#a1fe5121d6528fdea3f243321b3fa3a49',1,'jngl::KeyboardShortcut']]],
+  ['tostring_51',['toString',['../classjngl_1_1Key.html#a1fe5121d6528fdea3f243321b3fa3a49',1,'jngl::Key::toString()'],['../classjngl_1_1KeyboardShortcut.html#a1fe5121d6528fdea3f243321b3fa3a49',1,'jngl::KeyboardShortcut::toString()']]],
   ['toupper_52',['toupper',['http://en.cppreference.com/w/cpp/locale/ctype/toupper.html',1,'std::ctype::toupper()'],['http://en.cppreference.com/w/cpp/locale/ctype/toupper.html',1,'std::ctype_byname::toupper()']]],
   ['toupper_28_3c_20cctype_20_3e_29_53',['toupper(&lt; cctype &gt;)',['http://en.cppreference.com/w/cpp/string/byte/toupper.html',1,'std']]],
   ['toupper_28_3c_20clocale_20_3e_29_54',['toupper(&lt; clocale &gt;)',['http://en.cppreference.com/w/cpp/locale/toupper.html',1,'std']]],

@@ -158,6 +158,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Job.html">Job</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Background job which stays part of the main loop independent of the active <a class="el" href="#a7310ba6795e72c54ccb2742d62c31c33" title="Because it&#39;s more intuitive, jngl::Scene is the new name for jngl::Work.">jngl::Scene</a>.  <a href="classjngl_1_1Job.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1Key.html">Key</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A key on the keyboard: one without a character, e.g.  <a href="classjngl_1_1Key.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjngl_1_1KeyboardShortcut.html">KeyboardShortcut</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a keyboard shortcut, e.g. <code>Ctrl</code>+<code>S</code>  <a href="classjngl_1_1KeyboardShortcut.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -567,6 +570,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setMouse</b> (<a clas
 <tr class="memitem:a4fa19061aa43809790dd0ba3f5de6a67"><td class="memTemplItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/memory/shared_ptr.html">std::shared_ptr</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a4fa19061aa43809790dd0ba3f5de6a67">getJob</a> ()</td></tr>
 <tr class="memdesc:a4fa19061aa43809790dd0ba3f5de6a67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> that is a T.  <br /></td></tr>
 <tr class="separator:a4fa19061aa43809790dd0ba3f5de6a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0984ba1e1e8ab63febd1d05270d9e86" id="r_aa0984ba1e1e8ab63febd1d05270d9e86"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="classjngl_1_1Key.html">Key</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa0984ba1e1e8ab63febd1d05270d9e86">keysPressed</a> ()</td></tr>
+<tr class="memdesc:aa0984ba1e1e8ab63febd1d05270d9e86"><td class="mdescLeft">&#160;</td><td class="mdescRight">The keys that have been pressed since the next to last call to <a class="el" href="#ae301acc8b5118eb5b5939e9ad43ce777" title="Updates the input state.">updateInput()</a>, in the order they went down, e.g.  <br /></td></tr>
+<tr class="separator:aa0984ba1e1e8ab63febd1d05270d9e86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acce832d165e7712121539a21c89ca4c2" id="r_acce832d165e7712121539a21c89ca4c2"><td class="memItemLeft" align="right" valign="top"><a id="acce832d165e7712121539a21c89ca4c2" name="acce832d165e7712121539a21c89ca4c2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>trace</b> (const <a class="elRef" href="http://en.cppreference.com/w/cpp/string/basic_string.html">std::string</a> &amp;)</td></tr>
 <tr class="separator:acce832d165e7712121539a21c89ca4c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2197,6 +2203,27 @@ template&lt;class T &gt; </div>
 <p>Returns the first <a class="el" href="classjngl_1_1Job.html" title="Background job which stays part of the main loop independent of the active jngl::Scene.">Job</a> that is a T. </p>
 
 <p class="definition">Definition at line <a class="el" href="job_8hpp_source.html#l00169">169</a> of file <a class="el" href="job_8hpp_source.html">job.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa0984ba1e1e8ab63febd1d05270d9e86" name="aa0984ba1e1e8ab63febd1d05270d9e86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0984ba1e1e8ab63febd1d05270d9e86">&#9670;&#160;</a></span>keysPressed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="http://en.cppreference.com/w/cpp/container/vector.html">std::vector</a>&lt; <a class="el" href="classjngl_1_1Key.html">Key</a> &gt; keysPressed </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The keys that have been pressed since the next to last call to <a class="el" href="#ae301acc8b5118eb5b5939e9ad43ce777" title="Updates the input state.">updateInput()</a>, in the order they went down, e.g. </p>
+<p>to let the user choose one for an action</p>
+<p>Keys which a <a class="el" href="classjngl_1_1Key.html" title="A key on the keyboard: one without a character, e.g.">jngl::Key</a> can't be, e.g. the numpad's, are left out. A key that's held down for a while is pressed again and again, as the operating system repeats it. </p>
 
 </div>
 </div>
