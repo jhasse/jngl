@@ -287,8 +287,12 @@ VulkanRenderer::~VulkanRenderer() {
 		if (loadRenderPass) {
 			vkDestroyRenderPass(device, loadRenderPass, nullptr);
 		}
+		if (resolveRenderPass) {
+			vkDestroyRenderPass(device, resolveRenderPass, nullptr);
+		}
 		for (const auto& passes : offscreenRenderPasses) {
-			for (VkRenderPass pass : { passes.single, passes.msaa, passes.expand }) {
+			for (VkRenderPass pass :
+			     { passes.single, passes.msaa, passes.resolve, passes.expand }) {
 				if (pass) {
 					vkDestroyRenderPass(device, pass, nullptr);
 				}
@@ -611,7 +615,7 @@ void VulkanRenderer::createImageViews() {
 
 void VulkanRenderer::createRenderPass() {
 	// The swapchain image, or with MSAA, the multisampled image that's resolved into it at the end
-	// of each render pass
+	// of the frame
 	std::array<VkAttachmentDescription, 2> attachments{};
 	attachments[0].format = swapchainImageFormat;
 	attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
@@ -632,14 +636,18 @@ void VulkanRenderer::createRenderPass() {
 
 	const bool useMsaa = swapchainMsaaActive();
 	if (useMsaa) {
+		// Only resolved into by resolveRenderPass at the end of the frame, rather than at the end
+		// of each of its render passes, as one takes as long as drawing much of the frame. Until
+		// then it's in the framebuffer, but not used.
 		attachments[1] = attachments[0];
-		attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // all of it is resolved into
-		// Stored, too, as the frame's later render passes (e.g. after a FrameBuffer has been drawn
+		attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+		attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		attachments[1].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		// Stored, as the frame's later render passes (e.g. after a FrameBuffer has been drawn
 		// into) continue drawing into it
 		attachments[0].samples = msaaSampleCount;
 		attachments[0].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 		attachmentCount = 2;
-		subpass.pResolveAttachments = &resolveRef;
 	}
 
 	const auto deps = subpassDependencies();
@@ -655,9 +663,23 @@ void VulkanRenderer::createRenderPass() {
 	// The LOAD variant, which continues the frame after it's been interrupted, e.g. by readPixels
 	// or a FrameBuffer. It uses the same framebuffers.
 	attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
-	attachments[0].initialLayout =
-	    useMsaa ? VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+	if (useMsaa) {
+		attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		attachments[1].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	} else {
+		attachments[0].initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+	}
 	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &loadRenderPass), "vkCreateRenderPass");
+
+	if (!useMsaa) {
+		return;
+	}
+	// The same framebuffers work with it, as the resolve attachments don't matter for the
+	// compatibility of render passes with a single subpass
+	attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	attachments[1].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+	subpass.pResolveAttachments = &resolveRef;
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &resolveRenderPass), "vkCreateRenderPass");
 }
 
 void VulkanRenderer::createOffscreenRenderPasses() {
@@ -704,13 +726,21 @@ void VulkanRenderer::createOffscreenRenderPasses(const VkFormat format,
 	attachments[0].samples = msaaSampleCount;
 	attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 	attachments[0].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	// In the framebuffer, but not used, so that it keeps what was resolved into it last, see
+	// passes.resolve
 	attachments[1] = colorAttachment;
-	attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // all of it is resolved into
-	VkAttachmentReference resolveRef{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
-	subpass.pResolveAttachments = &resolveRef;
+	attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 	info.attachmentCount = static_cast<uint32_t>(attachments.size());
 	info.pAttachments = attachments.data();
 	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &passes.msaa), "vkCreateRenderPass");
+
+	// The same framebuffers work with it, as the resolve attachments don't matter for the
+	// compatibility of render passes with a single subpass
+	attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_STORE; // all of it is resolved into
+	VkAttachmentReference resolveRef{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
+	subpass.pResolveAttachments = &resolveRef;
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &passes.resolve), "vkCreateRenderPass");
 
 	// Pipelines built against passes.msaa work with this one too, as the resolve
 	// attachments don't matter for the compatibility of render passes with a single subpass
@@ -1022,6 +1052,10 @@ void VulkanRenderer::rebuildSwapchainRendering() {
 		vkDestroyRenderPass(device, loadRenderPass, nullptr);
 		loadRenderPass = VK_NULL_HANDLE;
 	}
+	if (resolveRenderPass) {
+		vkDestroyRenderPass(device, resolveRenderPass, nullptr);
+		resolveRenderPass = VK_NULL_HANDLE;
+	}
 	// The pipelines are built against the offscreen render passes, which are compatible with
 	// either kind of swapchain render pass, so they're kept
 	createRenderPass();
@@ -1141,7 +1175,11 @@ void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
 			}
 			rpInfo.renderPass = passes.msaa; // always LOAD; clearing is explicit
 			rpInfo.framebuffer = target->msaaFramebuffer;
+			target->resolvePending = true;
 		} else {
+			if (target->resolvePending) {
+				resolveFramebuffer(*target); // before what's drawn now, which it'd overwrite
+			}
 			if (target->msaaImage) {
 				target->samplesStale = true;
 			}
@@ -1163,6 +1201,19 @@ void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
 	if (letterboxClear) {
 		clearSwapchainCanvas(currentClearColor);
 	}
+}
+
+void VulkanRenderer::resolveSwapchain() {
+	if (!resolveRenderPass) {
+		return; // without MSAA, it's been drawn into directly
+	}
+	auto rpInfo = vkStruct<VkRenderPassBeginInfo>(VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO);
+	rpInfo.renderPass = resolveRenderPass;
+	rpInfo.framebuffer = swapchainFramebuffers[currentImageIndex];
+	rpInfo.renderArea.extent = swapchainExtent;
+	const VkCommandBuffer cmd = commandBuffers[currentFrame];
+	vkCmdBeginRenderPass(cmd, &rpInfo, VK_SUBPASS_CONTENTS_INLINE);
+	vkCmdEndRenderPass(cmd);
 }
 
 VkRect2D VulkanRenderer::glScissorToVulkan(const int glX, const int glY, const int glW,
@@ -1304,6 +1355,7 @@ void VulkanRenderer::endFrame() {
 	firstPresent = false;
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
 	vkCmdEndRenderPass(cmd);
+	resolveSwapchain();
 	VK_CHECK(vkEndCommandBuffer(cmd), "vkEndCommandBuffer");
 
 	auto submit = vkStruct<VkSubmitInfo>(VK_STRUCTURE_TYPE_SUBMIT_INFO);
@@ -2875,6 +2927,7 @@ void VulkanRenderer::readPixels(unsigned char* const rgb, const int x, const int
 	// actually holds the rendered content we're about to read back.
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
 	vkCmdEndRenderPass(cmd);
+	resolveSwapchain();
 	VK_CHECK(vkEndCommandBuffer(cmd), "vkEndCommandBuffer");
 
 	const VkPipelineStageFlags waitStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
@@ -2930,11 +2983,11 @@ void VulkanRenderer::readPixels(unsigned char* const rgb, const int x, const int
 		region.imageExtent = { static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1 };
 		vkCmdCopyImageToBuffer(c, image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, staging, 1, &region);
 
-		// Move the image back to PRESENT_SRC_KHR, which is what the resumed loadRenderPass expects
-		// as its initial layout.
+		// Move the image back to what the resumed loadRenderPass expects as its initial layout
 		auto toPresent = vkStruct<VkImageMemoryBarrier>(VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER);
 		toPresent.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-		toPresent.newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+		toPresent.newLayout = resolveRenderPass ? VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+		                                        : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 		toPresent.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 		toPresent.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 		toPresent.image = image;
@@ -3262,6 +3315,18 @@ void VulkanRenderer::expandIntoSamples(VulkanFramebuffer& fb) {
 	fb.samplesStale = false;
 }
 
+void VulkanRenderer::resolveFramebuffer(VulkanFramebuffer& fb) {
+	auto rpInfo = vkStruct<VkRenderPassBeginInfo>(VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO);
+	rpInfo.renderPass = offscreenRenderPasses[fb.hdr ? 1 : 0].resolve;
+	rpInfo.framebuffer = fb.msaaFramebuffer;
+	rpInfo.renderArea.extent = { static_cast<uint32_t>(fb.width),
+		                         static_cast<uint32_t>(fb.height) };
+	const VkCommandBuffer cmd = commandBuffers[currentFrame];
+	vkCmdBeginRenderPass(cmd, &rpInfo, VK_SUBPASS_CONTENTS_INLINE);
+	vkCmdEndRenderPass(cmd);
+	fb.resolvePending = false;
+}
+
 void VulkanRenderer::freeFramebufferResources(VulkanFramebuffer& fb) {
 	for (VkFramebuffer* framebuffer :
 	     { &fb.framebuffer, &fb.msaaFramebuffer, &fb.expandFramebuffer }) {
@@ -3310,7 +3375,11 @@ void VulkanRenderer::popRenderTarget() {
 		return;
 	}
 	vkCmdEndRenderPass(commandBuffers[currentFrame]);
+	VulkanFramebuffer& popped = *renderTargetStack.back();
 	renderTargetStack.pop_back();
+	if (popped.resolvePending) {
+		resolveFramebuffer(popped); // as it's done being drawn into, like on OpenGL
+	}
 	beginCurrentRenderPass(VK_ATTACHMENT_LOAD_OP_LOAD);
 }
 

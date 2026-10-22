@@ -341,6 +341,75 @@ TEST_CASE("Window still anti-aliased after a FrameBuffer has been used") {
 	REQUIRE(greys() > 50);
 }
 
+TEST_CASE("Window keeps what's been drawn before a FrameBuffer is drawn into") {
+	Fixture f(1.f);
+	if (!jngl::pWindow->isMultisampleSupported()) {
+		SKIP("Multisampling isn't supported here");
+	}
+	// A black triangle with a slanted edge on the left, then a FrameBuffer, then a black square on
+	// the right: both on the window, the triangle smoothed
+	jngl::drawTriangle(jngl::Vec2(-150, -25), jngl::Vec2(-30, -25), jngl::Vec2(-150, 25));
+	jngl::FrameBuffer fb(10_px, 10_px);
+	{
+		const auto context = fb.use();
+		jngl::drawRect(jngl::modelview().translate({ -5, -5 }), { 10, 10 }, 0x000000_rgb);
+	}
+	jngl::drawRect(jngl::modelview().translate({ 40, -20 }), { 40, 40 }, 0x000000_rgb);
+	const auto pixels = jngl::readPixels();
+	const auto red = [&pixels](const int x, const int y) {
+		return pixels.at(static_cast<size_t>(y * 320 + x) * 3);
+	};
+	int greys = 0;
+	for (int y = 5; y < 65; ++y) {
+		for (int x = 5; x < 135; ++x) {
+			if (red(x, y) > 0.1f && red(x, y) < 0.9f) {
+				++greys;
+			}
+		}
+	}
+	CHECK(greys > 50); // about one along each of the edge's 120 columns
+	CHECK(red(20, 35) < 0.1f); // in the triangle
+	CHECK(red(220, 35) < 0.1f); // in the square
+	CHECK(red(160, 35) > 0.9f); // between them
+}
+
+TEST_CASE("FrameBuffer anti-aliased keeps what's been drawn before another is drawn into") {
+	Fixture f(1.f);
+	if (!jngl::pWindow->isMultisampleSupported()) {
+		SKIP("Multisampling isn't supported here");
+	}
+	// Like the window above, but in an anti-aliased FrameBuffer, which is then drawn onto the
+	// window pixel for pixel
+	jngl::FrameBuffer fb(320_px, 70_px, false, true);
+	{
+		const auto context = fb.use();
+		jngl::drawTriangle(jngl::Vec2(-150, -25), jngl::Vec2(-30, -25), jngl::Vec2(-150, 25));
+		jngl::FrameBuffer inner(10_px, 10_px);
+		{
+			const auto innerContext = inner.use();
+			jngl::drawRect(jngl::modelview().translate({ -5, -5 }), { 10, 10 }, 0x000000_rgb);
+		}
+		jngl::drawRect(jngl::modelview().translate({ 40, -20 }), { 40, 40 }, 0x000000_rgb);
+	}
+	fb.draw(-160, -35);
+	const auto pixels = jngl::readPixels();
+	const auto red = [&pixels](const int x, const int y) {
+		return pixels.at(static_cast<size_t>(y * 320 + x) * 3);
+	};
+	int greys = 0;
+	for (int y = 5; y < 65; ++y) {
+		for (int x = 5; x < 135; ++x) {
+			if (red(x, y) > 0.1f && red(x, y) < 0.9f) {
+				++greys;
+			}
+		}
+	}
+	CHECK(greys > 50); // about one along each of the edge's 120 columns
+	CHECK(red(20, 35) < 0.1f); // in the triangle
+	CHECK(red(220, 35) < 0.1f); // in the square
+	CHECK(red(160, 35) > 0.9f); // between them
+}
+
 TEST_CASE("FrameBuffer anti-aliased keeps what's drawn while anti-aliasing is off") {
 	Fixture f(1.f);
 	if (!jngl::pWindow->isMultisampleSupported()) {

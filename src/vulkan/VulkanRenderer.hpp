@@ -47,7 +47,9 @@ struct VulkanTexture {
 /// rendered into and sampled (\a color), plus the VkFramebuffer that targets it.
 ///
 /// An anti-aliased one also has a multisampled image, which is drawn into instead while
-/// anti-aliasing is enabled and resolved into \a color at the end of each render pass.
+/// anti-aliasing is enabled and resolved into \a color once it's no longer drawn into, like on
+/// OpenGL, rather than at the end of each render pass (e.g. whenever another FrameBuffer is drawn
+/// into in the meantime).
 struct VulkanFramebuffer {
 	VulkanTexture color;
 	VkFramebuffer framebuffer = VK_NULL_HANDLE;
@@ -57,13 +59,15 @@ struct VulkanFramebuffer {
 	VkImage msaaImage = VK_NULL_HANDLE; ///< VK_NULL_HANDLE if it isn't anti-aliased
 	VkDeviceMemory msaaMemory = VK_NULL_HANDLE;
 	VkImageView msaaView = VK_NULL_HANDLE;
-	/// Draws into msaaImage and resolves it into color, see OffscreenRenderPasses::msaa
+	/// msaaImage and color, see OffscreenRenderPasses::msaa and OffscreenRenderPasses::resolve
 	VkFramebuffer msaaFramebuffer = VK_NULL_HANDLE;
 	/// Only msaaImage, for copying color into it, see OffscreenRenderPasses::expand
 	VkFramebuffer expandFramebuffer = VK_NULL_HANDLE;
 	/// Whether color has been drawn into directly (while anti-aliasing was disabled), so that
 	/// msaaImage has to get its pixels before it's drawn into again
 	bool samplesStale = false;
+	/// Whether msaaImage has been drawn into since it was last resolved into color
+	bool resolvePending = false;
 	/// Whether its images have 16-bit float channels (VulkanRenderer::hdrFormat)
 	bool hdr = false;
 };
@@ -362,10 +366,16 @@ private:
 	void createOffscreenRenderPasses();
 	/// Records a render pass that copies \a framebuffer's color into all samples of its msaaImage
 	void expandIntoSamples(VulkanFramebuffer& framebuffer);
+	/// Resolves what's been drawn into the multisampled image of \a framebuffer into its color
+	/// image, outside of any render pass
+	void resolveFramebuffer(VulkanFramebuffer& framebuffer);
 
 	/// Begins the render pass for whatever render target is currently on top of the stack (a
 	/// FrameBuffer, or the swapchain when the stack is empty), with the given load operation.
 	void beginCurrentRenderPass(VkAttachmentLoadOp loadOp);
+	/// With MSAA, resolves what's been drawn into the swapchain image so far, outside of any render
+	/// pass. Its layout is PRESENT_SRC_KHR afterwards.
+	void resolveSwapchain();
 	/// Sets up the texture's combined-image-sampler descriptor set, sampling its view with its
 	/// sampler
 	void allocateTextureDescriptor(VulkanTexture&);
@@ -425,8 +435,8 @@ private:
 	VkExtent2D swapchainExtent{};
 	std::vector<VkImage> swapchainImages;
 	std::vector<VkImageView> swapchainImageViews;
-	// For renderPass and loadRenderPass: with MSAA, the multisampled image and the swapchain image
-	// it's resolved into
+	// For renderPass, loadRenderPass and resolveRenderPass: with MSAA, the multisampled image and
+	// the swapchain image it's resolved into
 	std::vector<VkFramebuffer> swapchainFramebuffers;
 	struct MsaaColorAttachment {
 		VkImage image = VK_NULL_HANDLE;
@@ -440,15 +450,21 @@ private:
 	// after readPixels has flushed it mid-way or a FrameBuffer has been drawn into. With MSAA, it
 	// continues drawing into the multisampled image.
 	VkRenderPass loadRenderPass = VK_NULL_HANDLE;
+	// With MSAA, a render pass that draws nothing, but resolves the multisampled image into the
+	// swapchain image and leaves that ready to be presented, see resolveSwapchain()
+	VkRenderPass resolveRenderPass = VK_NULL_HANDLE;
 	// Render passes used when drawing into a FrameBuffer, for each of its formats: the swapchain's
 	// (so that the pipelines built against them work with the swapchain's render passes, too) and
 	// hdrFormat. Indexed by VulkanFramebuffer::hdr.
 	struct OffscreenRenderPasses {
 		// LOAD; clearing is done explicitly
 		VkRenderPass single = VK_NULL_HANDLE;
-		// Same for an anti-aliased FrameBuffer: draws into its multisampled image (LOAD) and
-		// resolves that into its color image at the end. If MSAA is supported.
+		// Same for an anti-aliased FrameBuffer: draws into its multisampled image (LOAD), leaving
+		// its color image alone. If MSAA is supported.
 		VkRenderPass msaa = VK_NULL_HANDLE;
+		// Draws nothing, but resolves an anti-aliased FrameBuffer's multisampled image into its
+		// color image, see resolveFramebuffer()
+		VkRenderPass resolve = VK_NULL_HANDLE;
 		// Only the multisampled image of an anti-aliased FrameBuffer, see expandIntoSamples
 		VkRenderPass expand = VK_NULL_HANDLE;
 	};
