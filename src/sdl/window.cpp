@@ -15,6 +15,7 @@
 #include <array>
 #include <cassert>
 #include <cctype>
+#include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <stdexcept>
@@ -561,6 +562,20 @@ int getDesktopHeight() {
 void Window::setFullscreen(bool f) {
 	SDL_SetWindowFullscreen(impl->sdlWindow, f);
 	fullscreen_ = f;
+	if (!f && (SDL_GetWindowFlags(impl->sdlWindow) & SDL_WINDOW_RESIZABLE) == 0) {
+		// The window has been created in fullscreen mode (e.g. in Release builds) and would keep
+		// the desktop's size. Give it the size it would have gotten if it had been created
+		// windowed instead and make it resizable, like it is in that case:
+		SDL_SyncWindow(impl->sdlWindow); // resizing a fullscreen window has no effect
+		SDL_SetWindowResizable(impl->sdlWindow, true);
+		if (const auto screenSize = App::instance().getScreenSize()) {
+			const double scaleFactor = internal::getWindowedScaleFactor(*screenSize);
+			SDL_SetWindowSize(impl->sdlWindow,
+			                  static_cast<int>(std::lround(screenSize->x * scaleFactor)),
+			                  static_cast<int>(std::lround(screenSize->y * scaleFactor)));
+			SDL_SetWindowPosition(impl->sdlWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+		}
+	}
 }
 
 namespace {

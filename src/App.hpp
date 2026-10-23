@@ -105,6 +105,9 @@ namespace internal {
 std::pair<int, int> getMinAspectRatio(const AppParameters& params);
 std::pair<int, int> getMaxAspectRatio(const AppParameters& params);
 
+/// Scale factor which makes a window that isn't fullscreen as big as possible for \a screenSize
+double getWindowedScaleFactor(Vec2 screenSize);
+
 } // namespace internal
 
 } // namespace jngl

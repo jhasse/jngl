@@ -223,6 +223,15 @@ std::pair<int, int> getMaxAspectRatio(const AppParameters& params) {
 	return { 3, 1 };
 }
 
+double getWindowedScaleFactor(const Vec2 screenSize) {
+	const double scaleFactor = std::min((getDesktopWidth() * 0.85) / screenSize.x,
+	                                    (getDesktopHeight() * 0.85) / screenSize.y);
+	if (scaleFactor > 1) {
+		return std::floor(scaleFactor);
+	}
+	return scaleFactor;
+}
+
 #if !defined(__APPLE__) || !defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE // iOS
 
 uint8_t mainLoop(AppParameters params) {
@@ -264,14 +273,7 @@ uint8_t mainLoop(AppParameters params) {
 		App::instance().impl->screenSize = params.screenSize;
 	}
 	if (!fullscreen) {
-		// Make window as big as possible
-		const double scaleFactor = std::min((getDesktopWidth() * 0.85) / params.screenSize->x,
-		                                    (getDesktopHeight() * 0.85) / params.screenSize->y);
-		if (scaleFactor > 1) {
-			setScaleFactor(std::floor(scaleFactor));
-		} else {
-			setScaleFactor(scaleFactor);
-		}
+		setScaleFactor(getWindowedScaleFactor(*params.screenSize));
 	}
 	int windowPixelWidth = static_cast<int>(std::lround(params.screenSize->x * getScaleFactor()));
 	int windowPixelHeight = static_cast<int>(std::lround(params.screenSize->y * getScaleFactor()));
