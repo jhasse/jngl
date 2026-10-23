@@ -41,6 +41,31 @@ template <class T> T vkStruct(const VkStructureType type) {
 	return value;
 }
 
+/// Metal emulates triangle fans with extra GPU work. Expand the common four-vertex fan
+/// on the CPU, keeping the same diagonal, winding and provoking vertices.
+template <size_t floatsPerVertex>
+std::array<float, 6 * floatsPerVertex> triangulateQuad(const float* vertices) {
+	constexpr std::array<size_t, 6> indices{ 1, 2, 0, 2, 3, 0 };
+	std::array<float, 6 * floatsPerVertex> triangles;
+	for (size_t i = 0; i < indices.size(); ++i) {
+		std::copy_n(vertices + indices[i] * floatsPerVertex, floatsPerVertex,
+		            triangles.data() + i * floatsPerVertex);
+	}
+	return triangles;
+}
+
+/// Like triangulateQuad, preserving the fan's winding and provoking vertices.
+template <size_t floatsPerVertex>
+void triangulateFan(const float* vertices, const size_t vertexCount, std::vector<float>& triangles) {
+	triangles.resize((vertexCount - 2) * 3 * floatsPerVertex);
+	float* out = triangles.data();
+	for (size_t i = 1; i + 1 < vertexCount; ++i) {
+		for (const size_t index : { i, i + 1, size_t{ 0 } }) {
+			out = std::copy_n(vertices + index * floatsPerVertex, floatsPerVertex, out);
+		}
+	}
+}
+
 /// The stage of a pipeline that runs \a module's main function
 VkPipelineShaderStageCreateInfo shaderStage(const VkShaderStageFlagBits stage,
                                             const VkShaderModule module) {
@@ -290,9 +315,13 @@ VulkanRenderer::~VulkanRenderer() {
 		if (resolveRenderPass) {
 			vkDestroyRenderPass(device, resolveRenderPass, nullptr);
 		}
+		if (clearResolveRenderPass) {
+			vkDestroyRenderPass(device, clearResolveRenderPass, nullptr);
+		}
 		for (const auto& passes : offscreenRenderPasses) {
 			for (VkRenderPass pass :
-			     { passes.single, passes.msaa, passes.resolve, passes.expand }) {
+			     { passes.single, passes.singleClear, passes.msaa, passes.msaaClear, passes.resolve,
+			       passes.resolveClear, passes.expand }) {
 				if (pass) {
 					vkDestroyRenderPass(device, pass, nullptr);
 				}
@@ -350,6 +379,26 @@ void VulkanRenderer::createInstance() {
 
 	auto createInfo = vkStruct<VkInstanceCreateInfo>(VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO);
 	createInfo.pApplicationInfo = &appInfo;
+	// MoltenVK needs an explicit opt-in to enumerate its GPUs. Query support rather than
+	// assuming all macOS drivers need it: KosmicKrisp is a conformant implementation.
+	uint32_t extensionCount = 0;
+	VK_CHECK(vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr),
+	         "vkEnumerateInstanceExtensionProperties");
+	std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+	VK_CHECK(vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount,
+	                                                availableExtensions.data()),
+	         "vkEnumerateInstanceExtensionProperties");
+	if (std::ranges::any_of(availableExtensions, [](const VkExtensionProperties& extension) {
+		return std::strcmp(extension.extensionName,
+		                   VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME) == 0;
+	})) {
+		if (std::ranges::none_of(extensions, [](const char* extension) {
+			return std::strcmp(extension, VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME) == 0;
+		})) {
+			extensions.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+		}
+		createInfo.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+	}
 	createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
 	createInfo.ppEnabledExtensionNames = extensions.data();
 
@@ -483,6 +532,27 @@ void VulkanRenderer::createLogicalDevice() {
 	std::vector<VkExtensionProperties> extensions(extensionCount);
 	vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount,
 	                                     extensions.data());
+	const bool portabilitySubset =
+	    std::ranges::any_of(extensions, [](const VkExtensionProperties& extension) {
+		return std::strcmp(extension.extensionName, VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME) == 0;
+	});
+	auto portabilityFeatures = vkStruct<VkPhysicalDevicePortabilitySubsetFeaturesKHR>(
+	    VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PORTABILITY_SUBSET_FEATURES_KHR);
+	if (portabilitySubset) {
+		deviceExtensions.push_back(VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME);
+		auto supported =
+		    vkStruct<VkPhysicalDeviceFeatures2>(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2);
+		supported.pNext = &portabilityFeatures;
+		vkGetPhysicalDeviceFeatures2(physicalDevice, &supported);
+		if (!portabilityFeatures.triangleFans) {
+			throw std::runtime_error("The Vulkan driver does not support triangle fans.");
+		}
+		// Triangle fans are core on conformant drivers, but must be explicitly enabled on
+		// portability drivers. Leave the other optional portability features disabled.
+		portabilityFeatures = vkStruct<VkPhysicalDevicePortabilitySubsetFeaturesKHR>(
+		    VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PORTABILITY_SUBSET_FEATURES_KHR);
+		portabilityFeatures.triangleFans = VK_TRUE;
+	}
 	VkPhysicalDeviceProperties props;
 	vkGetPhysicalDeviceProperties(physicalDevice, &props);
 	auto hostQueryReset = vkStruct<VkPhysicalDeviceHostQueryResetFeaturesEXT>(
@@ -502,7 +572,11 @@ void VulkanRenderer::createLogicalDevice() {
 	}
 
 	auto createInfo = vkStruct<VkDeviceCreateInfo>(VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO);
+	if (portabilitySubset) {
+		createInfo.pNext = &portabilityFeatures;
+	}
 	if (timestamps) {
+		hostQueryReset.pNext = portabilitySubset ? &portabilityFeatures : nullptr;
 		createInfo.pNext = &hostQueryReset;
 	}
 	createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueInfos.size());
@@ -636,9 +710,8 @@ void VulkanRenderer::createRenderPass() {
 
 	const bool useMsaa = swapchainMsaaActive();
 	if (useMsaa) {
-		// Only resolved into by resolveRenderPass at the end of the frame, rather than at the end
-		// of each of its render passes, as one takes as long as drawing much of the frame. Until
-		// then it's in the framebuffer, but not used.
+		// Only resolve when the target finishes drawing. Intermediate passes preserve the
+		// samples without resolving, e.g. while a nested FrameBuffer is drawn into.
 		attachments[1] = attachments[0];
 		attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
 		attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -680,6 +753,11 @@ void VulkanRenderer::createRenderPass() {
 	attachments[1].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 	subpass.pResolveAttachments = &resolveRef;
 	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &resolveRenderPass), "vkCreateRenderPass");
+	attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	attachments[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	attachments[1].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &clearResolveRenderPass),
+	         "vkCreateRenderPass");
 }
 
 void VulkanRenderer::createOffscreenRenderPasses() {
@@ -717,6 +795,9 @@ void VulkanRenderer::createOffscreenRenderPasses(const VkFormat format,
 	info.dependencyCount = static_cast<uint32_t>(deps.size());
 	info.pDependencies = deps.data();
 	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &passes.single), "vkCreateRenderPass");
+	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &passes.singleClear), "vkCreateRenderPass");
+	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
 
 	if (!msaaSupported) {
 		return;
@@ -734,6 +815,9 @@ void VulkanRenderer::createOffscreenRenderPasses(const VkFormat format,
 	info.attachmentCount = static_cast<uint32_t>(attachments.size());
 	info.pAttachments = attachments.data();
 	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &passes.msaa), "vkCreateRenderPass");
+	attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &passes.msaaClear), "vkCreateRenderPass");
+	attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
 
 	// The same framebuffers work with it, as the resolve attachments don't matter for the
 	// compatibility of render passes with a single subpass
@@ -741,6 +825,10 @@ void VulkanRenderer::createOffscreenRenderPasses(const VkFormat format,
 	VkAttachmentReference resolveRef{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
 	subpass.pResolveAttachments = &resolveRef;
 	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &passes.resolve), "vkCreateRenderPass");
+	attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	VK_CHECK(vkCreateRenderPass(device, &info, nullptr, &passes.resolveClear),
+	         "vkCreateRenderPass");
+	attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
 
 	// Pipelines built against passes.msaa work with this one too, as the resolve
 	// attachments don't matter for the compatibility of render passes with a single subpass
@@ -1037,6 +1125,7 @@ void VulkanRenderer::rebuildSwapchainRendering() {
 	if (frameActive) {
 		vkResetCommandBuffer(commandBuffers[currentFrame], 0);
 		frameActive = false;
+		renderPassActive = false;
 		currentPassKind = PassKind::Ldr;
 	}
 	for (VkFramebuffer fb : swapchainFramebuffers) {
@@ -1055,6 +1144,10 @@ void VulkanRenderer::rebuildSwapchainRendering() {
 	if (resolveRenderPass) {
 		vkDestroyRenderPass(device, resolveRenderPass, nullptr);
 		resolveRenderPass = VK_NULL_HANDLE;
+	}
+	if (clearResolveRenderPass) {
+		vkDestroyRenderPass(device, clearResolveRenderPass, nullptr);
+		clearResolveRenderPass = VK_NULL_HANDLE;
 	}
 	// The pipelines are built against the offscreen render passes, which are compatible with
 	// either kind of swapchain render pass, so they're kept
@@ -1084,7 +1177,7 @@ void VulkanRenderer::beginFrame(const Rgb clearColor) {
 		// being drawn on instead.
 		currentClearColor = clearColor;
 		if (renderTargetStack.empty()) {
-			vkCmdEndRenderPass(commandBuffers[currentFrame]);
+			endCurrentRenderPass();
 			beginCurrentRenderPass(VK_ATTACHMENT_LOAD_OP_CLEAR); // with the letterboxing's bars
 		} else {
 			clearCurrentRenderTarget(Rgba(clearColor, Alpha(1)));
@@ -1124,6 +1217,7 @@ void VulkanRenderer::beginFrame(const Rgb clearColor) {
 
 	vertexBuffers[currentFrame].used = 0;
 	uniformBuffers[currentFrame].used = 0;
+	usedSecondaryCommands[currentFrame] = 0;
 	imageAvailableWaited = false;
 
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
@@ -1139,6 +1233,46 @@ void VulkanRenderer::beginFrame(const Rgb clearColor) {
 }
 
 void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
+	assert(!renderPassActive);
+	pendingLoadOp = loadOp;
+	pendingClearColor = Rgba(currentClearColor, Alpha(1));
+}
+
+bool VulkanRenderer::endCurrentRenderPass(const bool resolve) {
+	bool resolvedSwapchain = false;
+	// An empty LOAD pass has no effect. A clear still has to happen even without any draws.
+	if (pendingLoadOp == VK_ATTACHMENT_LOAD_OP_CLEAR) {
+		ensureRenderPass();
+	}
+	if (renderPassActive) {
+		const VkCommandBuffer cmd = commandBuffers[currentFrame];
+		if (renderCommands != cmd) {
+			VK_CHECK(vkEndCommandBuffer(renderCommands), "vkEndCommandBuffer");
+			if (resolve && renderTargetStack.empty()) {
+				deferredPass.renderPass =
+				    deferredPass.clearValueCount ? clearResolveRenderPass : resolveRenderPass;
+				resolvedSwapchain = true;
+			} else if (resolve) {
+				auto& target = *renderTargetStack.back();
+				const auto& passes = offscreenRenderPasses[target.hdr ? 1 : 0];
+				deferredPass.renderPass =
+				    deferredPass.clearValueCount ? passes.resolveClear : passes.resolve;
+				target.resolvePending = false;
+			}
+			vkCmdBeginRenderPass(cmd, &deferredPass, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS);
+			vkCmdExecuteCommands(cmd, 1, &renderCommands);
+		}
+		vkCmdEndRenderPass(cmd);
+		renderPassActive = false;
+	}
+	return resolvedSwapchain;
+}
+
+void VulkanRenderer::ensureRenderPass() {
+	if (renderPassActive) {
+		return;
+	}
+	const VkAttachmentLoadOp loadOp = pendingLoadOp;
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
 	auto rpInfo = vkStruct<VkRenderPassBeginInfo>(VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO);
 	VkExtent2D extent{};
@@ -1148,9 +1282,9 @@ void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
 	}
 	const bool letterboxClear =
 	    renderTargetStack.empty() && letterboxing && loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR;
-	const Rgb passClearColor = letterboxClear ? Rgb{ 0, 0, 0 } : currentClearColor;
+	const Rgba passClearColor = letterboxClear ? Rgba(0.f, 0.f, 0.f, 1.f) : pendingClearColor;
 	clear.color = { { passClearColor.getRed(), passClearColor.getGreen(), passClearColor.getBlue(),
-		              1.f } };
+		              passClearColor.getAlpha() } };
 	if (renderTargetStack.empty()) {
 		currentPassKind = swapchainMsaaActive() ? PassKind::LdrMsaa : PassKind::Ldr;
 		rpInfo.framebuffer = swapchainFramebuffers[currentImageIndex];
@@ -1170,34 +1304,76 @@ void VulkanRenderer::beginCurrentRenderPass(const VkAttachmentLoadOp loadOp) {
 		currentPassKind = passKind(target->hdr, multisampled);
 		const auto& passes = offscreenRenderPasses[target->hdr ? 1 : 0];
 		if (multisampled) {
-			if (target->samplesStale) {
+			if (target->samplesStale && loadOp != VK_ATTACHMENT_LOAD_OP_CLEAR) {
 				expandIntoSamples(*target);
 			}
-			rpInfo.renderPass = passes.msaa; // always LOAD; clearing is explicit
+			target->samplesStale = false;
+			rpInfo.renderPass =
+			    loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? passes.msaaClear : passes.msaa;
 			rpInfo.framebuffer = target->msaaFramebuffer;
 			target->resolvePending = true;
 		} else {
-			if (target->resolvePending) {
+			if (target->resolvePending && loadOp != VK_ATTACHMENT_LOAD_OP_CLEAR) {
 				resolveFramebuffer(*target); // before what's drawn now, which it'd overwrite
 			}
+			target->resolvePending = false;
 			if (target->msaaImage) {
 				target->samplesStale = true;
 			}
-			rpInfo.renderPass = passes.single; // always LOAD; clearing is explicit
+			rpInfo.renderPass =
+			    loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? passes.singleClear : passes.single;
 			rpInfo.framebuffer = target->framebuffer;
 		}
 		extent = { static_cast<uint32_t>(target->width), static_cast<uint32_t>(target->height) };
+		if (loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR) {
+			rpInfo.clearValueCount = 1;
+			rpInfo.pClearValues = &clear;
+		}
 	}
 	rpInfo.renderArea.extent = extent;
-	vkCmdBeginRenderPass(cmd, &rpInfo, VK_SUBPASS_CONTENTS_INLINE);
+	renderCommands = cmd;
+	if (isMultisampled(currentPassKind)) {
+		auto& buffers = secondaryCommands[currentFrame];
+		const size_t index = usedSecondaryCommands[currentFrame]++;
+		if (index == buffers.size()) {
+			auto alloc = vkStruct<VkCommandBufferAllocateInfo>(
+			    VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO);
+			alloc.commandPool = commandPool;
+			alloc.level = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
+			alloc.commandBufferCount = 1;
+			VkCommandBuffer secondary;
+			VK_CHECK(vkAllocateCommandBuffers(device, &alloc, &secondary),
+			         "vkAllocateCommandBuffers");
+			buffers.push_back(secondary);
+		}
+		renderCommands = buffers[index];
+		VK_CHECK(vkResetCommandBuffer(renderCommands, 0), "vkResetCommandBuffer");
+		auto inheritance = vkStruct<VkCommandBufferInheritanceInfo>(
+		    VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO);
+		inheritance.renderPass = rpInfo.renderPass;
+		inheritance.framebuffer = rpInfo.framebuffer;
+		auto begin =
+		    vkStruct<VkCommandBufferBeginInfo>(VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
+		begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT |
+		              VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
+		begin.pInheritanceInfo = &inheritance;
+		VK_CHECK(vkBeginCommandBuffer(renderCommands, &begin), "vkBeginCommandBuffer");
+		deferredClear = clear;
+		deferredPass = rpInfo;
+		deferredPass.pClearValues = &deferredClear;
+	} else {
+		vkCmdBeginRenderPass(cmd, &rpInfo, VK_SUBPASS_CONTENTS_INLINE);
+	}
+	renderPassActive = true;
+	pendingLoadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
 
 	// For the swapchain, flip the viewport vertically (negative height, core since Vulkan 1.1) so
 	// that JNGL's projection matrix - written for OpenGL's clip space with +Y up - maps to the
 	// screen the same way it does on the OpenGL backend. FrameBuffers are left un-flipped so their
 	// image ends up "upside down" like an OpenGL FBO texture, which jngl::FrameBuffer::draw undoes
 	// with a scale(1, -1).
-	applyViewport(cmd, extent);
-	applyScissor(cmd, extent);
+	applyViewport(renderCommands, extent);
+	applyScissor(renderCommands, extent);
 	if (letterboxClear) {
 		clearSwapchainCanvas(currentClearColor);
 	}
@@ -1307,7 +1483,7 @@ void VulkanRenderer::clearSwapchainCanvas(const Rgb& color) {
 	rect.rect = letterboxScissorForExtent(swapchainExtent);
 	rect.baseArrayLayer = 0;
 	rect.layerCount = 1;
-	vkCmdClearAttachments(commandBuffers[currentFrame], 1, &attachment, 1, &rect);
+	vkCmdClearAttachments(renderCommands, 1, &attachment, 1, &rect);
 }
 
 void VulkanRenderer::updateLetterboxing(const int fbWidth, const int fbHeight, const int canvasW,
@@ -1317,8 +1493,8 @@ void VulkanRenderer::updateLetterboxing(const int fbWidth, const int fbHeight, c
 	canvasWidth = canvasW;
 	canvasHeight = canvasH;
 	letterboxing = canvasWidth != fbWidth || canvasHeight != fbHeight;
-	if (frameActive && renderTargetStack.empty()) {
-		applyScissor(commandBuffers[currentFrame], swapchainExtent);
+	if (renderPassActive && renderTargetStack.empty()) {
+		applyScissor(renderCommands, swapchainExtent);
 	}
 }
 
@@ -1332,8 +1508,8 @@ VkExtent2D VulkanRenderer::currentRenderTargetExtent() const {
 
 void VulkanRenderer::setScissor(const std::optional<ScissorBox> box) {
 	userScissor = box;
-	if (frameActive) {
-		applyScissor(commandBuffers[currentFrame], currentRenderTargetExtent());
+	if (renderPassActive) {
+		applyScissor(renderCommands, currentRenderTargetExtent());
 	}
 }
 
@@ -1354,8 +1530,9 @@ void VulkanRenderer::endFrame() {
 	    firstPresent ? "first vkQueuePresentKHR" : "");
 	firstPresent = false;
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
-	vkCmdEndRenderPass(cmd);
-	resolveSwapchain();
+	if (!endCurrentRenderPass(true)) {
+		resolveSwapchain();
+	}
 	VK_CHECK(vkEndCommandBuffer(cmd), "vkEndCommandBuffer");
 
 	auto submit = vkStruct<VkSubmitInfo>(VK_STRUCTURE_TYPE_SUBMIT_INFO);
@@ -1423,8 +1600,8 @@ void VulkanRenderer::setViewport(const int x, const int y, const int width, cons
 	(void)y;
 	framebufferWidth = width;
 	framebufferHeight = height;
-	if (frameActive && renderTargetStack.empty()) {
-		applyViewport(commandBuffers[currentFrame], swapchainExtent);
+	if (renderPassActive && renderTargetStack.empty()) {
+		applyViewport(renderCommands, swapchainExtent);
 	}
 }
 
@@ -1780,7 +1957,7 @@ void VulkanRenderer::buildRoundedPipeline(const VkShaderModule vert, const VkSha
 
 	auto inputAssembly = vkStruct<VkPipelineInputAssemblyStateCreateInfo>(
 	    VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO);
-	inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN;
+	inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 
 	auto viewportState = vkStruct<VkPipelineViewportStateCreateInfo>(
 	    VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO);
@@ -1985,11 +2162,22 @@ void VulkanRenderer::bindActiveProgramUniforms(const VkCommandBuffer cmd) {
 	                        &ub.descriptorSet, 1, &dynamicOffset);
 }
 
-void VulkanRenderer::drawColored(const PrimitiveType type, const float* const xyVertices,
-                                 const std::size_t vertexCount, const Mat3& modelview,
-                                 const Rgba color) {
+void VulkanRenderer::drawColored(PrimitiveType type, const float* xyVertices,
+                                 std::size_t vertexCount, const Mat3& modelview, const Rgba color) {
 	if (!frameActive || vertexCount == 0) {
 		return;
+	}
+	std::array<float, 12> triangles;
+	if (type == PrimitiveType::TriangleFan && vertexCount == 4) {
+		triangles = triangulateQuad<2>(xyVertices);
+		xyVertices = triangles.data();
+		vertexCount = 6;
+		type = PrimitiveType::Triangles;
+	} else if (type == PrimitiveType::TriangleFan && vertexCount >= 3) {
+		triangulateFan<2>(xyVertices, vertexCount, triangulatedVertices);
+		xyVertices = triangulatedVertices.data();
+		vertexCount = (vertexCount - 2) * 3;
+		type = PrimitiveType::Triangles;
 	}
 	const VkDeviceSize bytes = vertexCount * 2 * sizeof(float);
 	const auto [vertexBuffer, offset] = uploadVertices(xyVertices, bytes);
@@ -2031,7 +2219,8 @@ void VulkanRenderer::drawColored(const PrimitiveType type, const float* const xy
 	push.color[2] = color.getBlue();
 	push.color[3] = color.getAlpha();
 
-	const VkCommandBuffer cmd = commandBuffers[currentFrame];
+	ensureRenderPass();
+	const VkCommandBuffer cmd = renderCommands;
 	const BlendVariant variant = blendVariant();
 	ensurePipelines(currentPassKind, variant);
 	vkCmdBindPipeline(
@@ -2050,9 +2239,8 @@ void VulkanRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, co
 	if (!frameActive) {
 		return;
 	}
-	static constexpr std::array<float, 8> unitSquare = {
-		-.5f, -.5f, .5f, -.5f, .5f, .5f, -.5f, .5f
-	};
+	static constexpr std::array<float, 12> unitSquare = { .5f, -.5f, .5f,  .5f, -.5f, -.5f,
+		                                                  .5f, .5f,  -.5f, .5f, -.5f, -.5f };
 	const VkDeviceSize bytes = unitSquare.size() * sizeof(float);
 	const auto [vertexBuffer, offset] = uploadVertices(unitSquare.data(), bytes);
 
@@ -2087,7 +2275,8 @@ void VulkanRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, co
 	push.cornerRadii[2] = bottomLeft;
 	push.cornerRadii[3] = bottomRight;
 
-	const VkCommandBuffer cmd = commandBuffers[currentFrame];
+	ensureRenderPass();
+	const VkCommandBuffer cmd = renderCommands;
 	const BlendVariant variant = blendVariant();
 	ensurePipelines(currentPassKind, variant);
 	const VkPipeline pipeline =
@@ -2097,7 +2286,7 @@ void VulkanRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, co
 	vkCmdPushConstants(cmd, roundedPipelineLayout,
 	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
 	                   &push);
-	vkCmdDraw(cmd, 4, 1, 0, 0);
+	vkCmdDraw(cmd, 6, 1, 0, 0);
 }
 
 namespace {
@@ -2859,12 +3048,23 @@ void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* const
 	             1.f - color.getAlpha() });
 }
 
-void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* const xyuv,
-                                const std::size_t vertexCount, const PrimitiveType type,
-                                const Mat3& modelview, const Rgb lerpColor,
-                                const std::array<float, 4> lerpFactors) {
+void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* xyuv,
+                                std::size_t vertexCount, PrimitiveType type, const Mat3& modelview,
+                                const Rgb lerpColor, const std::array<float, 4> lerpFactors) {
 	if (!frameActive || vertexCount == 0) {
 		return;
+	}
+	std::array<float, 24> triangles;
+	if (type == PrimitiveType::TriangleFan && vertexCount == 4) {
+		triangles = triangulateQuad<4>(xyuv);
+		xyuv = triangles.data();
+		vertexCount = 6;
+		type = PrimitiveType::Triangles;
+	} else if (type == PrimitiveType::TriangleFan && vertexCount >= 3) {
+		triangulateFan<4>(xyuv, vertexCount, triangulatedVertices);
+		xyuv = triangulatedVertices.data();
+		vertexCount = (vertexCount - 2) * 3;
+		type = PrimitiveType::Triangles;
 	}
 	const VkDeviceSize bytes = vertexCount * 4 * sizeof(float);
 	const auto [vertexBuffer, offset] = uploadVertices(xyuv, bytes);
@@ -2892,7 +3092,8 @@ void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* const
 	push.lerpColor[2] = lerpColor.getBlue();
 	std::copy(lerpFactors.begin(), lerpFactors.end(), push.lerpFactors);
 
-	const VkCommandBuffer cmd = commandBuffers[currentFrame];
+	ensureRenderPass();
+	const VkCommandBuffer cmd = renderCommands;
 	const BlendVariant variant = blendVariant();
 	const size_t index = pipelineIndex(variant, type);
 	const auto kind = static_cast<size_t>(currentPassKind);
@@ -2926,7 +3127,7 @@ void VulkanRenderer::readPixels(unsigned char* const rgb, const int x, const int
 	// Flush the draws recorded so far: end the render pass and submit, so the swapchain image
 	// actually holds the rendered content we're about to read back.
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
-	vkCmdEndRenderPass(cmd);
+	endCurrentRenderPass();
 	resolveSwapchain();
 	VK_CHECK(vkEndCommandBuffer(cmd), "vkEndCommandBuffer");
 
@@ -3076,8 +3277,8 @@ bool VulkanRenderer::writeTimestamp(const VkQueryPool pool, const uint32_t query
 	if (!frameActive) {
 		return false;
 	}
-	vkCmdWriteTimestamp(commandBuffers[currentFrame], VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, pool,
-	                    query);
+	vkCmdWriteTimestamp(renderPassActive ? renderCommands : commandBuffers[currentFrame],
+	                    VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, pool, query);
 	return true;
 }
 
@@ -3189,6 +3390,8 @@ std::unique_ptr<VulkanFramebuffer> VulkanRenderer::createFramebuffer(const int w
 	VK_CHECK(vkCreateImageView(device, &viewInfo, nullptr, &fb->color.view), "vkCreateImageView");
 
 	const VkFilter filter = App::isPixelArt() ? VK_FILTER_NEAREST : VK_FILTER_LINEAR;
+	fb->color.minFilter = filter;
+	fb->color.magFilter = filter;
 	auto samplerInfo = vkStruct<VkSamplerCreateInfo>(VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO);
 	samplerInfo.magFilter = filter;
 	samplerInfo.minFilter = filter;
@@ -3289,11 +3492,13 @@ void VulkanRenderer::expandIntoSamples(VulkanFramebuffer& fb) {
 
 	// A quad covering all of it in clip space, which samples each texel at its center into all of
 	// its pixel's samples, as it's drawn without blending
-	const std::array<float, 16> xyuv = {
-		-1.f, -1.f, 0.f, 0.f, // x, y, u, v
-		-1.f, 1.f,  0.f, 1.f, //
+	const std::array<float, 24> xyuv = {
+		-1.f, 1.f,  0.f, 1.f, // x, y, u, v
+		1.f,  1.f,  1.f, 1.f, //
+		-1.f, -1.f, 0.f, 0.f, //
 		1.f,  1.f,  1.f, 1.f, //
 		1.f,  -1.f, 1.f, 0.f, //
+		-1.f, -1.f, 0.f, 0.f, //
 	};
 	const auto [vertexBuffer, offset] = uploadVertices(xyuv.data(), sizeof(xyuv));
 	TexturedPushConstants push{};
@@ -3303,14 +3508,14 @@ void VulkanRenderer::expandIntoSamples(VulkanFramebuffer& fb) {
 	ensurePipelines(kind, BlendVariant::Replace);
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
 	                  texturedPipelines[static_cast<size_t>(kind)][pipelineIndex(
-	                      BlendVariant::Replace, PrimitiveType::TriangleFan)]);
+	                      BlendVariant::Replace, PrimitiveType::Triangles)]);
 	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 0, 1,
 	                        &fb.color.descriptorSet, 0, nullptr);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
 	vkCmdPushConstants(cmd, texturedPipelineLayout,
 	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
 	                   &push);
-	vkCmdDraw(cmd, 4, 1, 0, 0);
+	vkCmdDraw(cmd, 6, 1, 0, 0);
 	vkCmdEndRenderPass(cmd);
 	fb.samplesStale = false;
 }
@@ -3325,6 +3530,26 @@ void VulkanRenderer::resolveFramebuffer(VulkanFramebuffer& fb) {
 	vkCmdBeginRenderPass(cmd, &rpInfo, VK_SUBPASS_CONTENTS_INLINE);
 	vkCmdEndRenderPass(cmd);
 	fb.resolvePending = false;
+}
+
+const VulkanTexture& VulkanRenderer::framebufferTexture(VulkanFramebuffer& fb,
+                                                        const VkFilter filter) {
+	if (filter == fb.color.minFilter) {
+		return fb.color;
+	}
+	if (!fb.alternateFilter.descriptorSet) {
+		auto& texture = fb.alternateFilter;
+		texture.minFilter = filter;
+		texture.magFilter = filter;
+		createTextureSampler(texture);
+		// Only the descriptor references the shared view; alternateFilter must not own it.
+		VulkanTexture binding = texture;
+		binding.view = fb.color.view;
+		allocateTextureDescriptor(binding);
+		texture.descriptorSet = binding.descriptorSet;
+		texture.descriptorPool = binding.descriptorPool;
+	}
+	return fb.alternateFilter;
 }
 
 void VulkanRenderer::freeFramebufferResources(VulkanFramebuffer& fb) {
@@ -3348,7 +3573,9 @@ void VulkanRenderer::freeFramebufferResources(VulkanFramebuffer& fb) {
 		fb.msaaMemory = VK_NULL_HANDLE;
 	}
 	freeTextureResources(fb.color);
+	freeTextureResources(fb.alternateFilter);
 	fb.color = {};
+	fb.alternateFilter = {};
 }
 
 void VulkanRenderer::destroyFramebuffer(VulkanFramebuffer& fb) {
@@ -3365,7 +3592,7 @@ void VulkanRenderer::pushRenderTarget(VulkanFramebuffer& framebuffer) {
 	if (!frameActive) {
 		return;
 	}
-	vkCmdEndRenderPass(commandBuffers[currentFrame]);
+	endCurrentRenderPass();
 	renderTargetStack.push_back(&framebuffer);
 	beginCurrentRenderPass(VK_ATTACHMENT_LOAD_OP_LOAD);
 }
@@ -3374,7 +3601,7 @@ void VulkanRenderer::popRenderTarget() {
 	if (!frameActive || renderTargetStack.empty()) {
 		return;
 	}
-	vkCmdEndRenderPass(commandBuffers[currentFrame]);
+	endCurrentRenderPass(true);
 	VulkanFramebuffer& popped = *renderTargetStack.back();
 	renderTargetStack.pop_back();
 	if (popped.resolvePending) {
@@ -3387,16 +3614,27 @@ void VulkanRenderer::clearCurrentRenderTarget(const Rgba color) {
 	if (!frameActive) {
 		return;
 	}
+	const VkExtent2D extent = currentRenderTargetExtent();
+	const VkRect2D scissor = effectiveScissor(extent);
+	if (!renderPassActive && !renderTargetStack.empty() && scissor.offset.x == 0 &&
+	    scissor.offset.y == 0 && scissor.extent.width == extent.width &&
+	    scissor.extent.height == extent.height) {
+		// Clear on tile load instead of loading the previous frame and clearing it afterwards.
+		pendingLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		pendingClearColor = color;
+		return;
+	}
+	ensureRenderPass();
 	VkClearAttachment attachment{};
 	attachment.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	attachment.colorAttachment = 0;
 	attachment.clearValue.color = { { color.getRed(), color.getGreen(), color.getBlue(),
 		                              color.getAlpha() } };
 	VkClearRect rect{};
-	rect.rect = effectiveScissor(currentRenderTargetExtent());
+	rect.rect = scissor;
 	rect.baseArrayLayer = 0;
 	rect.layerCount = 1;
-	vkCmdClearAttachments(commandBuffers[currentFrame], 1, &attachment, 1, &rect);
+	vkCmdClearAttachments(renderCommands, 1, &attachment, 1, &rect);
 }
 
 } // namespace jngl

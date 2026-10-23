@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <array>
+#include <optional>
 
 namespace jngl {
 
@@ -48,7 +49,8 @@ VulkanRenderer& vulkanRenderer() {
 /// Draws the framebuffer \a fb's image as a textured quad transformed by \a modelview. The quad is
 /// (0, 0)-(width, height) in screen pixels with (0, 0)-(1, 1) texture coordinates, matching what
 /// jngl::Texture builds.
-void drawFramebuffer(const VulkanFramebuffer& fb, const Mat3& modelview, Rgba color) {
+void drawFramebuffer(VulkanFramebuffer& fb, const Mat3& modelview, Rgba color,
+                     const std::optional<VkFilter> filter = std::nullopt) {
 	const auto w = static_cast<float>(fb.width / getScaleFactor());
 	const auto h = static_cast<float>(fb.height / getScaleFactor());
 	const std::array<float, 16> vertexes = {
@@ -57,7 +59,8 @@ void drawFramebuffer(const VulkanFramebuffer& fb, const Mat3& modelview, Rgba co
 		w,   h,   1.f, 1.f, //
 		w,   0.f, 1.f, 0.f, //
 	};
-	vulkanRenderer().drawSprite(fb.color, vertexes.data(), 4, PrimitiveType::TriangleFan, modelview,
+	const auto& texture = filter ? vulkanRenderer().framebufferTexture(fb, *filter) : fb.color;
+	vulkanRenderer().drawSprite(texture, vertexes.data(), 4, PrimitiveType::TriangleFan, modelview,
 	                            color);
 }
 #endif
@@ -357,16 +360,15 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
                        const ShaderProgram* const shaderProgram) const {
 #ifdef JNGL_VULKAN
-	// The Vulkan backend bakes the filter into the framebuffer's sampler at creation, so the
-	// per-draw textureFilter is ignored for now.
-	(void)textureFilter;
+	const VkFilter filter =
+	    textureFilter == TextureFilter::NearestNeighbor ? VK_FILTER_NEAREST : VK_FILTER_LINEAR;
 	modelview.scale(1, -1).translate(
 	    { -impl->width / getScaleFactor() / 2, -impl->height / getScaleFactor() / 2 });
 	if (shaderProgram) {
 		const auto context = shaderProgram->use();
-		drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor);
+		drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor, filter);
 	} else {
-		drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor);
+		drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor, filter);
 	}
 #else
 	impl->texture.bind();

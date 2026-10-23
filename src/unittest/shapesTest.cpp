@@ -12,6 +12,16 @@
 #include <cmath>
 #include <utility>
 
+TEST_CASE("rounded rectangle without corner radii fills the whole rectangle") {
+	Fixture f(1);
+	const auto modelview = jngl::modelview().translate({ -60, -20 });
+	const jngl::Vec2 size{ 120, 40 };
+	jngl::drawRect(modelview, size, 0x000000ff_rgba);
+	const auto expected = f.getAsciiArt();
+	jngl::drawRoundedRect(modelview, size, 0x000000ff_rgba, 0, 0, 0, 0);
+	REQUIRE(f.getAsciiArt() == expected);
+}
+
 TEST_CASE("shapes") {
 	for (double scaleFactor : { 1, 2 }) {
 		Fixture f(scaleFactor);
@@ -142,7 +152,7 @@ TEST_CASE("more shapes in a frame than fit into the Vulkan backend's initial ver
 	draw();
 	const auto expected = f.getAsciiArt();
 	Fixture::reset();
-	// A rectangle takes 32 bytes, so this is about 3 MiB of vertices, the initial buffer has 1 MiB
+	// Enough rectangles to exceed the Vulkan backend's initial 1 MiB vertex buffer
 	for (int i = 0; i < 100'000; ++i) {
 		jngl::drawRect(jngl::modelview().translate({ -60, -10 }), { 40, 20 }, 0xffffff_rgb);
 	}

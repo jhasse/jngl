@@ -90,7 +90,7 @@ option(JNGL_TRACE "Enable tracing for debugging purposes" OFF)
 # Experimental Vulkan renderer backend. When OFF (the default) JNGL uses its
 # OpenGL/GLES backend. When ON an additional Vulkan backend is compiled in and
 # used at runtime instead. Currently only implemented for the desktop SDL3
-# platform (Linux and Windows); see src/vulkan/.
+# platform (Linux, Windows and macOS); see src/vulkan/.
 option(JNGL_VULKAN "Use the experimental Vulkan renderer backend instead of OpenGL" OFF)
 
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
@@ -459,8 +459,8 @@ else()
 endif()
 
 if(JNGL_VULKAN)
-	if((NOT UNIX AND NOT WIN32) OR APPLE OR ANDROID OR IOS OR EMSCRIPTEN OR JNGL_WINAPI)
-		message(FATAL_ERROR "JNGL_VULKAN requires the desktop SDL3 backend on Linux or Windows (JNGL_WINAPI=OFF).")
+	if((NOT UNIX AND NOT WIN32) OR ANDROID OR IOS OR EMSCRIPTEN OR JNGL_WINAPI)
+		message(FATAL_ERROR "JNGL_VULKAN requires the desktop SDL3 backend on Linux, Windows or macOS (JNGL_WINAPI=OFF).")
 	endif()
 	if(WIN32)
 		set(JNGL_VULKAN_SDK_LIBDIR "$ENV{VULKAN_SDK}/Lib")
@@ -477,7 +477,7 @@ if(JNGL_VULKAN)
 		target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
 	endif()
 
-	find_program(GLSLC glslc HINTS "$ENV{VULKAN_SDK}/Bin" REQUIRED)
+	find_program(GLSLC glslc HINTS "$ENV{VULKAN_SDK}/Bin" "$ENV{VULKAN_SDK}/bin" REQUIRED)
 	find_package(Python3 REQUIRED COMPONENTS Interpreter)
 
 	set(JNGL_VULKAN_BUILTIN_SHADERS colored.vert colored.frag textured.vert textured.frag rounded.vert
@@ -507,18 +507,20 @@ if(JNGL_VULKAN)
 
 	# shaderc (runtime GLSL -> SPIR-V for user-defined jngl::Shader programs). Built-in backend
 	# shaders are precompiled at build time with glslc, see src/vulkan/shaders/.
-	find_path(SHADERC_INCLUDE_DIR shaderc/shaderc.hpp HINTS "$ENV{VULKAN_SDK}/Include")
+	find_path(SHADERC_INCLUDE_DIR shaderc/shaderc.hpp
+		HINTS "$ENV{VULKAN_SDK}/Include" "$ENV{VULKAN_SDK}/include")
 	if(WIN32)
 		# The SDK's static shaderc uses its own CRT settings. The C API in its DLL works with
 		# both Debug and Release builds, including applications using a static CRT.
 		find_library(SHADERC_LIBRARY NAMES shaderc_shared HINTS "${JNGL_VULKAN_SDK_LIBDIR}")
 		target_compile_definitions(jngl PRIVATE SHADERC_SHAREDLIB)
 	else()
-		find_library(SHADERC_LIBRARY NAMES shaderc_shared shaderc_combined shaderc)
+		find_library(SHADERC_LIBRARY NAMES shaderc_shared shaderc_combined shaderc
+			HINTS "$ENV{VULKAN_SDK}/lib")
 	endif()
 	if(NOT SHADERC_INCLUDE_DIR OR NOT SHADERC_LIBRARY)
-		message(FATAL_ERROR "JNGL_VULKAN requires shaderc (install the Vulkan SDK on Windows, "
-			"or libshaderc-devel / libshaderc-dev on Linux). "
+		message(FATAL_ERROR "JNGL_VULKAN requires shaderc (install the Vulkan SDK, "
+			"shaderc via Homebrew on macOS, or libshaderc-devel / libshaderc-dev on Linux). "
 			"include=${SHADERC_INCLUDE_DIR} lib=${SHADERC_LIBRARY}")
 	endif()
 	target_include_directories(jngl PRIVATE ${SHADERC_INCLUDE_DIR})
@@ -527,6 +529,8 @@ if(JNGL_VULKAN)
 	file(GLOB VULKAN_SRC src/vulkan/*.cpp)
 	target_sources(jngl PRIVATE ${VULKAN_SRC})
 	target_compile_definitions(jngl PUBLIC JNGL_VULKAN)
+	# MoltenVK's portability feature declarations are still in the beta Vulkan headers.
+	target_compile_definitions(jngl PRIVATE VK_ENABLE_BETA_EXTENSIONS)
 endif()
 
 if(JNGL_BUILD_WEBP_FROM_SOURCE)

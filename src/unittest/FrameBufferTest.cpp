@@ -136,6 +136,61 @@ TEST_CASE("FrameBufferTest") {
 )");
 };
 
+TEST_CASE("FrameBuffer clears without draws survive empty nested targets") {
+	for (const bool antiAliased : { false, true }) {
+		Fixture f(1.f);
+		jngl::FrameBuffer fb(320_px, 70_px, false, antiAliased);
+		jngl::FrameBuffer inner(10_px, 10_px);
+		{
+			auto context = fb.use();
+			context.clear(0x000000_rgb);
+			{
+				const auto nested = inner.use();
+			}
+		}
+		{
+			const auto context = fb.use(); // no draws or clear this time
+		}
+		fb.draw(-160, -35);
+		CHECK(jngl::readPixels().at((35 * 320 + 160) * 3) < 0.01f);
+
+		// A scissored clear must preserve the rest, even before the first draw in a target.
+		{
+			auto context = fb.use();
+			const auto clip = jngl::scissor({ -20, -10 }, { 40, 20 });
+			context.clear(0xffffff_rgb);
+		}
+		fb.draw(-160, -35);
+		const auto pixels = jngl::readPixels();
+		CHECK(pixels.at((35 * 320 + 160) * 3) > 0.99f);
+		CHECK(pixels.at((35 * 320 + 100) * 3) < 0.01f);
+		CHECK(pixels.at((35 * 320 + 220) * 3) < 0.01f);
+	}
+}
+
+TEST_CASE("FrameBuffer texture filters apply to each draw") {
+	Fixture f(1.f);
+	jngl::FrameBuffer fb(2_px, 1_px);
+	{
+		auto context = fb.use();
+		context.clear(0xffffff_rgb);
+		jngl::drawRect(jngl::modelview().translate({ -1, -.5f }), { 1, 1 }, 0x000000_rgb);
+	}
+	fb.draw(jngl::Mat3().scale(80, 40));
+	const float defaultEdge = jngl::readPixels().at((35 * 320 + 150) * 3);
+	const auto edge = [&](const jngl::TextureFilter filter) {
+		fb.draw(jngl::Mat3().scale(80, 40), filter);
+		return jngl::readPixels().at((35 * 320 + 150) * 3);
+	};
+	CHECK(edge(jngl::TextureFilter::NearestNeighbor) < 0.01f);
+	const float blended = edge(jngl::TextureFilter::Bilinear);
+	CHECK(blended > 0.2f);
+	CHECK(blended < 0.8f);
+	CHECK(edge(jngl::TextureFilter::NearestNeighbor) < 0.01f);
+	fb.draw(jngl::Mat3().scale(80, 40));
+	CHECK(std::abs(jngl::readPixels().at((35 * 320 + 150) * 3) - defaultEdge) < 0.01f);
+}
+
 TEST_CASE("FrameBufferScale") {
 	for (float scaleFactor : { 1.f, 5.f }) {
 		Fixture f(scaleFactor);

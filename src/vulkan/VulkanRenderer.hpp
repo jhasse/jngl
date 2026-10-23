@@ -47,11 +47,12 @@ struct VulkanTexture {
 /// rendered into and sampled (\a color), plus the VkFramebuffer that targets it.
 ///
 /// An anti-aliased one also has a multisampled image, which is drawn into instead while
-/// anti-aliasing is enabled and resolved into \a color once it's no longer drawn into, like on
-/// OpenGL, rather than at the end of each render pass (e.g. whenever another FrameBuffer is drawn
-/// into in the meantime).
+/// anti-aliasing is enabled. Its last drawing pass resolves into \a color, while passes
+/// interrupted by a nested FrameBuffer only preserve the samples for later drawing.
 struct VulkanFramebuffer {
 	VulkanTexture color;
+	/// The other filtering mode, sharing color's image. Owns only its sampler and descriptor set.
+	VulkanTexture alternateFilter;
 	VkFramebuffer framebuffer = VK_NULL_HANDLE;
 	int width = 0;
 	int height = 0;
@@ -213,6 +214,9 @@ public:
 	static constexpr VkFormat hdrFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
 	/// Schedules \a framebuffer's resources for destruction once the GPU is done with them.
 	void destroyFramebuffer(VulkanFramebuffer&);
+	/// Samples the framebuffer with the requested filter, caching both modes without changing
+	/// the default or allocating new samplers on each draw.
+	const VulkanTexture& framebufferTexture(VulkanFramebuffer&, VkFilter);
 
 	/// Redirects subsequent draws into \a framebuffer until popRenderTarget() is called. Render
 	/// targets nest (FrameBuffers can be used inside one another).
@@ -370,9 +374,14 @@ private:
 	/// image, outside of any render pass
 	void resolveFramebuffer(VulkanFramebuffer& framebuffer);
 
-	/// Begins the render pass for whatever render target is currently on top of the stack (a
-	/// FrameBuffer, or the swapchain when the stack is empty), with the given load operation.
+	/// Requests a render pass for the current target. Drawing starts it lazily so that an initial
+	/// clear can replace LOAD and empty LOAD passes can be skipped.
 	void beginCurrentRenderPass(VkAttachmentLoadOp loadOp);
+	/// Starts a deferred render pass when a draw actually needs it.
+	void ensureRenderPass();
+	/// Ends an active pass, or records a pending clear without drawing anything.
+	/// Returns whether it resolved the swapchain, so a separate resolve pass can be skipped.
+	bool endCurrentRenderPass(bool resolve = false);
 	/// With MSAA, resolves what's been drawn into the swapchain image so far, outside of any render
 	/// pass. Its layout is PRESENT_SRC_KHR afterwards.
 	void resolveSwapchain();
@@ -450,21 +459,24 @@ private:
 	// after readPixels has flushed it mid-way or a FrameBuffer has been drawn into. With MSAA, it
 	// continues drawing into the multisampled image.
 	VkRenderPass loadRenderPass = VK_NULL_HANDLE;
-	// With MSAA, a render pass that draws nothing, but resolves the multisampled image into the
-	// swapchain image and leaves that ready to be presented, see resolveSwapchain()
+	// MSAA variants that resolve into the swapchain image in the final drawing pass. Also used
+	// without draws when no drawing pass is active, e.g. by readPixels (see resolveSwapchain).
 	VkRenderPass resolveRenderPass = VK_NULL_HANDLE;
+	VkRenderPass clearResolveRenderPass = VK_NULL_HANDLE;
 	// Render passes used when drawing into a FrameBuffer, for each of its formats: the swapchain's
 	// (so that the pipelines built against them work with the swapchain's render passes, too) and
 	// hdrFormat. Indexed by VulkanFramebuffer::hdr.
 	struct OffscreenRenderPasses {
-		// LOAD; clearing is done explicitly
+		// LOAD, or CLEAR when the first operation replaces the entire attachment
 		VkRenderPass single = VK_NULL_HANDLE;
+		VkRenderPass singleClear = VK_NULL_HANDLE;
 		// Same for an anti-aliased FrameBuffer: draws into its multisampled image (LOAD), leaving
 		// its color image alone. If MSAA is supported.
 		VkRenderPass msaa = VK_NULL_HANDLE;
-		// Draws nothing, but resolves an anti-aliased FrameBuffer's multisampled image into its
-		// color image, see resolveFramebuffer()
+		VkRenderPass msaaClear = VK_NULL_HANDLE;
+		// Resolve into color in the last drawing pass, or without draws (see resolveFramebuffer).
 		VkRenderPass resolve = VK_NULL_HANDLE;
+		VkRenderPass resolveClear = VK_NULL_HANDLE;
 		// Only the multisampled image of an anti-aliased FrameBuffer, see expandIntoSamples
 		VkRenderPass expand = VK_NULL_HANDLE;
 	};
@@ -472,6 +484,18 @@ private:
 	void createOffscreenRenderPasses(VkFormat, OffscreenRenderPasses&);
 	// Stack of active FrameBuffers; empty means drawing targets the swapchain.
 	std::vector<VulkanFramebuffer*> renderTargetStack;
+	bool renderPassActive = false;
+	VkAttachmentLoadOp pendingLoadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+	Rgba pendingClearColor{ 0.f, 0.f, 0.f, 0.f };
+	// Record MSAA draws separately so that finishing a target can resolve in its drawing pass,
+	// while an interruption by a nested target only stores the samples for later drawing.
+	VkCommandBuffer renderCommands = VK_NULL_HANDLE;
+	VkRenderPassBeginInfo deferredPass{};
+	VkClearValue deferredClear{};
+	std::array<std::vector<VkCommandBuffer>, maxFramesInFlight> secondaryCommands;
+	std::array<size_t, maxFramesInFlight> usedSecondaryCommands{};
+	// Reused when expanding larger triangle fans, avoiding Metal's GPU topology emulation.
+	std::vector<float> triangulatedVertices;
 	// What's been destroyed while it might still be referenced by an in-flight (or not yet
 	// submitted) command buffer, e.g. textures and FrameBuffers, which is actually freed once
 	// enough frames have passed, see destroyLater() and endFrame()
