@@ -46,11 +46,18 @@ std::string cell(const std::string& art, const size_t column, const size_t row) 
 
 /// Whether OpenGL's scissor test is on, and its box: x and y from the bottom left, width, height
 using ScissorState = std::tuple<bool, GLint, GLint, GLint, GLint>;
-ScissorState scissorState() {
+[[maybe_unused]] ScissorState scissorState() {
 	std::array<GLint, 4> box{};
 	glGetIntegerv(GL_SCISSOR_BOX, box.data());
 	return { glIsEnabled(GL_SCISSOR_TEST) == GL_TRUE, box[0], box[1], box[2], box[3] };
 }
+
+/// OpenGL's scissor state can't be queried on the Vulkan backend, only what gets drawn
+#ifdef JNGL_VULKAN
+#define REQUIRE_SCISSOR_STATE(...)
+#else
+#define REQUIRE_SCISSOR_STATE(...) REQUIRE(__VA_ARGS__)
+#endif
 
 } // namespace
 
@@ -85,7 +92,7 @@ TEST_CASE("scissor clips to where nested ones overlap") {
 ▒                              ▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
-	REQUIRE(!std::get<0>(scissorState()));
+	REQUIRE_SCISSOR_STATE(!std::get<0>(scissorState()));
 	fill(0x000000_rgb); // nothing clips it anymore
 	REQUIRE(f.getAsciiArt() == R"(
 ████████████████████████████████
@@ -150,8 +157,8 @@ TEST_CASE("scissor and letterboxing") {
 	jngl::pWindow->setActualSize(320, 35);
 	jngl::pWindow->updateScreenSize();
 	Fixture::reset();
-	const ScissorState letterboxing{ true, 80, 0, 160, 35 };
-	REQUIRE(scissorState() == letterboxing);
+	[[maybe_unused]] const ScissorState letterboxing{ true, 80, 0, 160, 35 };
+	REQUIRE_SCISSOR_STATE(scissorState() == letterboxing);
 
 	// A FrameBuffer that covers the screen, i.e. of the canvas' pixels before it was zoomed out,
 	// which it's drawn into at getScaleFactor() pixels per screen unit rather than the zoomed half
@@ -159,14 +166,15 @@ TEST_CASE("scissor and letterboxing") {
 	{
 		const auto scissor = jngl::scissor({ -110, -25 }, { 120, 40 });
 		// Inside the canvas, right of its bar, at half the size
-		const ScissorState onWindow{ true, 105, 10, 60, 20 };
-		REQUIRE(scissorState() == onWindow);
+		[[maybe_unused]] const ScissorState onWindow{ true, 105, 10, 60, 20 };
+		REQUIRE_SCISSOR_STATE(scissorState() == onWindow);
 		{
 			const auto context = fb.use();
 			// The same place on the FrameBuffer, which has no bars, at full size: where a
 			// rectangle drawn there lands
-			REQUIRE(scissorState() == ScissorState{ true, 50, 20, 120, 40 });
+			REQUIRE_SCISSOR_STATE(scissorState() == ScissorState{ true, 50, 20, 120, 40 });
 			jngl::drawRect(jngl::modelview().translate({ -110, -25 }), { 120, 40 }, 0x000000_rgb);
+#ifndef JNGL_VULKAN // glReadPixels can't read a FrameBuffer there
 			std::vector<unsigned char> pixels(size_t{ 320 } * 70 * 4);
 			glReadPixels(0, 0, 320, 70, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
 			const auto isDrawn = [&](const int x, const int y) {
@@ -175,16 +183,18 @@ TEST_CASE("scissor and letterboxing") {
 			REQUIRE((isDrawn(50, 20) && isDrawn(169, 59)));
 			REQUIRE(
 			    (!isDrawn(49, 20) && !isDrawn(170, 59) && !isDrawn(50, 19) && !isDrawn(169, 60)));
+#endif
 		}
-		REQUIRE(scissorState() == onWindow);
+		REQUIRE_SCISSOR_STATE(scissorState() == onWindow);
 		fill(0x000000_rgb);
 	}
-	REQUIRE(scissorState() == letterboxing);
+	REQUIRE_SCISSOR_STATE(scissorState() == letterboxing);
 	{
 		const auto context = fb.use();
-		REQUIRE(!std::get<0>(scissorState())); // the letterboxing doesn't apply to a FrameBuffer
+		// the letterboxing doesn't apply to a FrameBuffer
+		REQUIRE_SCISSOR_STATE(!std::get<0>(scissorState()));
 	}
-	REQUIRE(scissorState() == letterboxing);
+	REQUIRE_SCISSOR_STATE(scissorState() == letterboxing);
 	// readPixels() zooms the canvas back in with linear filtering, which smudges the fill's edges
 	// into the cells next to them by an amount that differs between drivers, e.g. where its top
 	// meets the frame on GitHub's runners. So only the cells well inside it, columns 5 to 16 and

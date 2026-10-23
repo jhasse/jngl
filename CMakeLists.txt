@@ -87,6 +87,12 @@ option(JNGL_RECORD "Enable video recording using FFmpeg" OFF)
 option(JNGL_STEAMWORKS "Enable Steamsworks SDK support for achievements" OFF)
 option(JNGL_TRACE "Enable tracing for debugging purposes" OFF)
 
+# Experimental Vulkan renderer backend. When OFF (the default) JNGL uses its
+# OpenGL/GLES backend. When ON an additional Vulkan backend is compiled in and
+# used at runtime instead. Currently only implemented for the desktop SDL3
+# platform (Linux, Windows and macOS); see src/vulkan/.
+option(JNGL_VULKAN "Use the experimental Vulkan renderer backend instead of OpenGL" OFF)
+
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
 if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
 	set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT ON)
@@ -450,6 +456,81 @@ else()
 		target_link_libraries(jngl-test-frameLimiter PRIVATE jngl)
 		target_link_libraries(jngl-test jngl)
 	endif()
+endif()
+
+if(JNGL_VULKAN)
+	if((NOT UNIX AND NOT WIN32) OR ANDROID OR IOS OR EMSCRIPTEN OR JNGL_WINAPI)
+		message(FATAL_ERROR "JNGL_VULKAN requires the desktop SDL3 backend on Linux, Windows or macOS (JNGL_WINAPI=OFF).")
+	endif()
+	if(WIN32)
+		set(JNGL_VULKAN_SDK_LIBDIR "$ENV{VULKAN_SDK}/Lib")
+		if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+			set(JNGL_VULKAN_SDK_LIBDIR "$ENV{VULKAN_SDK}/Lib32")
+		endif()
+		# Explicit SDK lookup also works with cja, whose FindVulkan only searches Unix libraries.
+		find_path(Vulkan_INCLUDE_DIR vulkan/vulkan.h HINTS "$ENV{VULKAN_SDK}/Include" REQUIRED)
+		find_library(Vulkan_LIBRARY NAMES vulkan-1 HINTS "${JNGL_VULKAN_SDK_LIBDIR}" REQUIRED)
+		target_include_directories(jngl PRIVATE ${Vulkan_INCLUDE_DIR})
+		target_link_libraries(jngl PRIVATE ${Vulkan_LIBRARY})
+	else()
+		find_package(Vulkan REQUIRED)
+		target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
+	endif()
+
+	find_program(GLSLC glslc HINTS "$ENV{VULKAN_SDK}/Bin" "$ENV{VULKAN_SDK}/bin" REQUIRED)
+	find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
+	set(JNGL_VULKAN_BUILTIN_SHADERS colored.vert colored.frag textured.vert textured.frag rounded.vert
+	                            rounded.frag)
+	set(JNGL_VULKAN_SPIRV_HEADERS "")
+	foreach(SHADER ${JNGL_VULKAN_BUILTIN_SHADERS})
+		set(GLSL ${CMAKE_CURRENT_SOURCE_DIR}/src/vulkan/shaders/${SHADER})
+		set(SPV ${CMAKE_CURRENT_BINARY_DIR}/generated/vulkan_shaders/${SHADER}.spv)
+		set(HPP ${CMAKE_CURRENT_BINARY_DIR}/generated/vulkan_shaders/${SHADER}.spv.hpp)
+		string(REPLACE "." "_" SYMBOL ${SHADER})
+		add_custom_command(
+			OUTPUT ${SPV} ${HPP}
+			COMMAND ${CMAKE_COMMAND} -E make_directory
+			        ${CMAKE_CURRENT_BINARY_DIR}/generated/vulkan_shaders
+			COMMAND ${GLSLC} --target-env=vulkan1.1 -O ${GLSL} -o ${SPV}
+			COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/spirv_to_header.py
+			        ${SPV} ${HPP} ${SYMBOL}
+			DEPENDS ${GLSL} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/spirv_to_header.py
+			COMMENT "Compiling Vulkan shader ${SHADER}"
+			VERBATIM
+		)
+		list(APPEND JNGL_VULKAN_SPIRV_HEADERS ${HPP})
+	endforeach()
+	add_custom_target(jngl_vulkan_shaders DEPENDS ${JNGL_VULKAN_SPIRV_HEADERS})
+	add_dependencies(jngl jngl_vulkan_shaders)
+	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated/vulkan_shaders)
+
+	# shaderc (runtime GLSL -> SPIR-V for user-defined jngl::Shader programs). Built-in backend
+	# shaders are precompiled at build time with glslc, see src/vulkan/shaders/.
+	find_path(SHADERC_INCLUDE_DIR shaderc/shaderc.hpp
+		HINTS "$ENV{VULKAN_SDK}/Include" "$ENV{VULKAN_SDK}/include")
+	if(WIN32)
+		# The SDK's static shaderc uses its own CRT settings. The C API in its DLL works with
+		# both Debug and Release builds, including applications using a static CRT.
+		find_library(SHADERC_LIBRARY NAMES shaderc_shared HINTS "${JNGL_VULKAN_SDK_LIBDIR}")
+		target_compile_definitions(jngl PRIVATE SHADERC_SHAREDLIB)
+	else()
+		find_library(SHADERC_LIBRARY NAMES shaderc_shared shaderc_combined shaderc
+			HINTS "$ENV{VULKAN_SDK}/lib")
+	endif()
+	if(NOT SHADERC_INCLUDE_DIR OR NOT SHADERC_LIBRARY)
+		message(FATAL_ERROR "JNGL_VULKAN requires shaderc (install the Vulkan SDK, "
+			"shaderc via Homebrew on macOS, or libshaderc-devel / libshaderc-dev on Linux). "
+			"include=${SHADERC_INCLUDE_DIR} lib=${SHADERC_LIBRARY}")
+	endif()
+	target_include_directories(jngl PRIVATE ${SHADERC_INCLUDE_DIR})
+	target_link_libraries(jngl PRIVATE ${SHADERC_LIBRARY})
+
+	file(GLOB VULKAN_SRC src/vulkan/*.cpp)
+	target_sources(jngl PRIVATE ${VULKAN_SRC})
+	target_compile_definitions(jngl PUBLIC JNGL_VULKAN)
+	# MoltenVK's portability feature declarations are still in the beta Vulkan headers.
+	target_compile_definitions(jngl PRIVATE VK_ENABLE_BETA_EXTENSIONS)
 endif()
 
 if(JNGL_BUILD_WEBP_FROM_SOURCE)

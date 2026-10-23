@@ -3,6 +3,8 @@
 
 #include "../jngl/FrameBuffer.hpp"
 #include "../jngl/ScaleablePixels.hpp"
+#include "../jngl/Shader.hpp"
+#include "../jngl/ShaderProgram.hpp"
 #include "../jngl/Sprite.hpp"
 #include "../jngl/matrix.hpp"
 #include "../jngl/other.hpp"
@@ -14,6 +16,11 @@
 #include "Fixture.hpp"
 
 #include <catch2/catch_test_macros.hpp>
+#include <cmath>
+#include <cstdint>
+#include <cstdlib>
+#include <optional>
+#include <vector>
 
 TEST_CASE("FrameBufferTest") {
 	Fixture f(1.f);
@@ -128,6 +135,61 @@ TEST_CASE("FrameBufferTest") {
 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 )");
 };
+
+TEST_CASE("FrameBuffer clears without draws survive empty nested targets") {
+	for (const bool antiAliased : { false, true }) {
+		Fixture f(1.f);
+		jngl::FrameBuffer fb(320_px, 70_px, false, antiAliased);
+		jngl::FrameBuffer inner(10_px, 10_px);
+		{
+			auto context = fb.use();
+			context.clear(0x000000_rgb);
+			{
+				const auto nested = inner.use();
+			}
+		}
+		{
+			const auto context = fb.use(); // no draws or clear this time
+		}
+		fb.draw(-160, -35);
+		CHECK(jngl::readPixels().at((35 * 320 + 160) * 3) < 0.01f);
+
+		// A scissored clear must preserve the rest, even before the first draw in a target.
+		{
+			auto context = fb.use();
+			const auto clip = jngl::scissor({ -20, -10 }, { 40, 20 });
+			context.clear(0xffffff_rgb);
+		}
+		fb.draw(-160, -35);
+		const auto pixels = jngl::readPixels();
+		CHECK(pixels.at((35 * 320 + 160) * 3) > 0.99f);
+		CHECK(pixels.at((35 * 320 + 100) * 3) < 0.01f);
+		CHECK(pixels.at((35 * 320 + 220) * 3) < 0.01f);
+	}
+}
+
+TEST_CASE("FrameBuffer texture filters apply to each draw") {
+	Fixture f(1.f);
+	jngl::FrameBuffer fb(2_px, 1_px);
+	{
+		auto context = fb.use();
+		context.clear(0xffffff_rgb);
+		jngl::drawRect(jngl::modelview().translate({ -1, -.5f }), { 1, 1 }, 0x000000_rgb);
+	}
+	fb.draw(jngl::Mat3().scale(80, 40));
+	const float defaultEdge = jngl::readPixels().at((35 * 320 + 150) * 3);
+	const auto edge = [&](const jngl::TextureFilter filter) {
+		fb.draw(jngl::Mat3().scale(80, 40), filter);
+		return jngl::readPixels().at((35 * 320 + 150) * 3);
+	};
+	CHECK(edge(jngl::TextureFilter::NearestNeighbor) < 0.01f);
+	const float blended = edge(jngl::TextureFilter::Bilinear);
+	CHECK(blended > 0.2f);
+	CHECK(blended < 0.8f);
+	CHECK(edge(jngl::TextureFilter::NearestNeighbor) < 0.01f);
+	fb.draw(jngl::Mat3().scale(80, 40));
+	CHECK(std::abs(jngl::readPixels().at((35 * 320 + 150) * 3) - defaultEdge) < 0.01f);
+}
 
 TEST_CASE("FrameBufferScale") {
 	for (float scaleFactor : { 1.f, 5.f }) {
@@ -300,4 +362,207 @@ TEST_CASE("FrameBuffer anti-aliased like the window") {
 	REQUIRE(greys(true) == 0);
 	jngl::setAntiAliasing(true);
 #endif
+}
+
+TEST_CASE("Window still anti-aliased after a FrameBuffer has been used") {
+	Fixture f(1.f);
+	if (!jngl::pWindow->isMultisampleSupported()) {
+		SKIP("Multisampling isn't supported here");
+	}
+	// How many pixels around a black triangle with a slanted edge are grey, i.e. smoothed
+	const auto greys = []() {
+		jngl::drawTriangle(jngl::Vec2(-60, -25), jngl::Vec2(60, -25), jngl::Vec2(-60, 25));
+		const auto pixels = jngl::readPixels();
+		int count = 0;
+		for (int y = 5; y < 65; ++y) {
+			for (int x = 90; x < 230; ++x) {
+				const float red = pixels.at(static_cast<size_t>(y * 320 + x) * 3);
+				if (red > 0.1f && red < 0.9f) {
+					++count;
+				}
+			}
+		}
+		Fixture::reset();
+		return count;
+	};
+	REQUIRE(greys() > 50); // about one along each of the edge's 120 columns
+	jngl::FrameBuffer fb(10_px, 10_px);
+	{
+		const auto context = fb.use();
+	}
+	REQUIRE(greys() > 50);
+	// Reading the window's pixels in the middle of a frame doesn't stop it, either
+	(void)jngl::readPixels();
+	REQUIRE(greys() > 50);
+}
+
+TEST_CASE("Window keeps what's been drawn before a FrameBuffer is drawn into") {
+	Fixture f(1.f);
+	if (!jngl::pWindow->isMultisampleSupported()) {
+		SKIP("Multisampling isn't supported here");
+	}
+	// A black triangle with a slanted edge on the left, then a FrameBuffer, then a black square on
+	// the right: both on the window, the triangle smoothed
+	jngl::drawTriangle(jngl::Vec2(-150, -25), jngl::Vec2(-30, -25), jngl::Vec2(-150, 25));
+	jngl::FrameBuffer fb(10_px, 10_px);
+	{
+		const auto context = fb.use();
+		jngl::drawRect(jngl::modelview().translate({ -5, -5 }), { 10, 10 }, 0x000000_rgb);
+	}
+	jngl::drawRect(jngl::modelview().translate({ 40, -20 }), { 40, 40 }, 0x000000_rgb);
+	const auto pixels = jngl::readPixels();
+	const auto red = [&pixels](const int x, const int y) {
+		return pixels.at(static_cast<size_t>(y * 320 + x) * 3);
+	};
+	int greys = 0;
+	for (int y = 5; y < 65; ++y) {
+		for (int x = 5; x < 135; ++x) {
+			if (red(x, y) > 0.1f && red(x, y) < 0.9f) {
+				++greys;
+			}
+		}
+	}
+	CHECK(greys > 50); // about one along each of the edge's 120 columns
+	CHECK(red(20, 35) < 0.1f); // in the triangle
+	CHECK(red(220, 35) < 0.1f); // in the square
+	CHECK(red(160, 35) > 0.9f); // between them
+}
+
+TEST_CASE("FrameBuffer anti-aliased keeps what's been drawn before another is drawn into") {
+	Fixture f(1.f);
+	if (!jngl::pWindow->isMultisampleSupported()) {
+		SKIP("Multisampling isn't supported here");
+	}
+	// Like the window above, but in an anti-aliased FrameBuffer, which is then drawn onto the
+	// window pixel for pixel
+	jngl::FrameBuffer fb(320_px, 70_px, false, true);
+	{
+		const auto context = fb.use();
+		jngl::drawTriangle(jngl::Vec2(-150, -25), jngl::Vec2(-30, -25), jngl::Vec2(-150, 25));
+		jngl::FrameBuffer inner(10_px, 10_px);
+		{
+			const auto innerContext = inner.use();
+			jngl::drawRect(jngl::modelview().translate({ -5, -5 }), { 10, 10 }, 0x000000_rgb);
+		}
+		jngl::drawRect(jngl::modelview().translate({ 40, -20 }), { 40, 40 }, 0x000000_rgb);
+	}
+	fb.draw(-160, -35);
+	const auto pixels = jngl::readPixels();
+	const auto red = [&pixels](const int x, const int y) {
+		return pixels.at(static_cast<size_t>(y * 320 + x) * 3);
+	};
+	int greys = 0;
+	for (int y = 5; y < 65; ++y) {
+		for (int x = 5; x < 135; ++x) {
+			if (red(x, y) > 0.1f && red(x, y) < 0.9f) {
+				++greys;
+			}
+		}
+	}
+	CHECK(greys > 50); // about one along each of the edge's 120 columns
+	CHECK(red(20, 35) < 0.1f); // in the triangle
+	CHECK(red(220, 35) < 0.1f); // in the square
+	CHECK(red(160, 35) > 0.9f); // between them
+}
+
+TEST_CASE("FrameBuffer anti-aliased keeps what's drawn while anti-aliasing is off") {
+	Fixture f(1.f);
+	if (!jngl::pWindow->isMultisampleSupported()) {
+		SKIP("Multisampling isn't supported here");
+	}
+	jngl::FrameBuffer fb(320_px, 70_px, false, true);
+	jngl::setAntiAliasing(false);
+	{
+		const auto context = fb.use();
+		jngl::drawRect(jngl::modelview().translate({ -100, -25 }), { 40, 30 }, 0x000000_rgb);
+	}
+	jngl::setAntiAliasing(true);
+	{
+		const auto context = fb.use();
+		jngl::drawRect(jngl::modelview().translate({ 60, -25 }), { 40, 30 }, 0x000000_rgb);
+	}
+	// The left one's still there after the FrameBuffer's been drawn into multisampled again
+	fb.draw(-160, -35);
+	REQUIRE(f.getAsciiArt() == R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒     ████            ████     ▒
+▒     ████            ████     ▒
+▒     ████            ████     ▒
+▒                              ▒
+▒                              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
+}
+
+TEST_CASE("HDR FrameBuffer keeps values above 1") {
+	Fixture f(1.f);
+	const std::vector<uint8_t> opaque(40 * 20 * 4, 255);
+	const jngl::Sprite sprite(opaque.data(), 40, 20);
+	const jngl::Shader two(R"(#version 300 es
+		out mediump vec4 outColor;
+
+		void main() {
+			outColor = vec4(2.0, 2.0, 2.0, 1.0);
+		})",
+	                       jngl::Shader::Type::FRAGMENT);
+	const jngl::ShaderProgram drawTwo(jngl::Sprite::vertexShader(), two);
+	const jngl::Shader half(R"(#version 300 es
+		uniform sampler2D tex;
+
+		in mediump vec2 texCoord;
+
+		out mediump vec4 outColor;
+
+		void main() {
+			mediump vec4 color = texture(tex, texCoord);
+			outColor = vec4(color.rgb * 0.5, color.a);
+		})",
+	                        jngl::Shader::Type::FRAGMENT);
+	const jngl::ShaderProgram drawHalf(jngl::Sprite::vertexShader(), half);
+	// Draws 2 into the middle of a FrameBuffer, and the FrameBuffer halved onto the window, where
+	// this returns the middle's red as 0 to 255
+	const auto drawn = [&](const bool hdr, const bool antiAliased) {
+		Fixture::reset();
+		jngl::FrameBuffer fb(320_px, 70_px, hdr, antiAliased);
+		{
+			const auto context = fb.use();
+			sprite.draw(jngl::modelview(), &drawTwo);
+		}
+		fb.draw(jngl::Vec2(-160, -35), &drawHalf);
+		const auto pixels = jngl::readPixels();
+		return std::lround(pixels.at(static_cast<size_t>(35 * 320 + 160) * 3) * 255);
+	};
+	const auto clamped = drawn(false, false); // to 1, which is halved
+	REQUIRE((clamped > 120 && clamped < 135));
+	REQUIRE(drawn(true, false) == 255);
+	REQUIRE(drawn(true, true) == 255);
+}
+
+TEST_CASE("FrameBuffer adds up alpha unless a BlendMode is set") {
+	Fixture f(1.f);
+	// Two half transparent black squares on top of each other in a FrameBuffer that's then drawn
+	// onto the white window, and how bright they are there, from 0 to 255
+	const auto brightness = [](const std::optional<jngl::BlendMode> mode) {
+		Fixture::reset();
+		jngl::FrameBuffer fb(320_px, 70_px);
+		{
+			const auto context = fb.use();
+			std::optional<jngl::Finally> blendMode;
+			if (mode) {
+				blendMode.emplace(jngl::setBlendMode(*mode));
+			}
+			for (int i = 0; i < 2; ++i) {
+				jngl::drawRect(jngl::modelview().translate({ -10, -10 }), { 20, 20 },
+				               jngl::Rgba(0, 0, 0, 0.5f));
+			}
+		}
+		fb.draw(-160, -35);
+		const auto pixels = jngl::readPixels();
+		return std::lround(pixels.at(static_cast<size_t>(35 * 320 + 160) * 3) * 255);
+	};
+	// A quarter as bright as white, like when drawn directly onto the window, as the FrameBuffer
+	// ends up opaque there
+	REQUIRE(std::abs(brightness(std::nullopt) - 64) <= 3);
+	// Composited, they cover three quarters of it, which lets the window shine through
+	REQUIRE(std::abs(brightness(jngl::BlendMode::Composite) - 112) <= 3);
 }

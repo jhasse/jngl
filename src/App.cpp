@@ -3,6 +3,8 @@
 
 #include "App.hpp"
 
+#include "Renderer.hpp"
+#include "StartupProfiler.hpp"
 #include "jngl/AppParameters.hpp"
 #include "jngl/Scene.hpp"
 #include "jngl/ShaderProgram.hpp"
@@ -120,6 +122,13 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 } // namespace
 
 void App::initGl() {
+#ifdef JNGL_VULKAN
+	// The Vulkan backend needs no GL state, clearing happens via the render pass each frame. The
+	// projection is handed to it by updateProjectionMatrix().
+	reset();
+	modelviewStack = {};
+	setVerticalSync(true);
+#else
 #if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
 #ifdef GLAD_GL
 	if (GLAD_GL_VERSION_4_3 != 0 || GLAD_GL_KHR_debug != 0) {
@@ -143,6 +152,7 @@ void App::initGl() {
 
 	glFlush();
 	setVerticalSync(true);
+#endif
 }
 
 double App::getScaleFactorFor(const int width, const int height) const {
@@ -191,6 +201,12 @@ void App::unregisterShaderProgram(ShaderProgram* shaderProgram) {
 }
 
 void App::updateProjectionMatrix() const {
+#ifdef JNGL_VULKAN
+	// The projection is a per-draw push constant on the Vulkan backend
+	if (auto* const renderer = getRendererIfExists()) {
+		renderer->setProjection(opengl::projection);
+	}
+#else
 	if (!impl) {
 		return; // no ShaderProgram has been registered yet
 	}
@@ -199,6 +215,7 @@ void App::updateProjectionMatrix() const {
 		glUniformMatrix4fv(shaderProgram->getUniformLocation("projection"), 1, GL_FALSE,
 		                   opengl::projection.data);
 	}
+#endif
 }
 
 namespace internal {
@@ -300,7 +317,10 @@ uint8_t mainLoop(AppParameters params) {
 #endif
 	showWindow(params.displayName, windowPixelWidth, windowPixelHeight, fullscreen,
 	           getMinAspectRatio(params), getMaxAspectRatio(params));
-	setScene(params.start());
+	{
+		internal::StartupProfiler _{ "setScene (incl. asset loading)" };
+		setScene(params.start());
+	}
 	uint8_t exitcode = App::instance().mainLoop();
 	hideWindow();
 	return exitcode;

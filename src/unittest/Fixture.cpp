@@ -33,7 +33,8 @@ public:
 CATCH_REGISTER_LISTENER(DataPrefix)
 
 Fixture::Fixture(const double scaleFactor) {
-	jngl::setPrefix(JNGL_UNITTEST_DATA); // in case an earlier Fixture's hidden its window
+	jngl::hideWindow();
+	jngl::setPrefix(JNGL_UNITTEST_DATA); // as hiding the window has forgotten it
 	// The ASCII art needs an exact window size in actual pixels, regardless of the display's scale
 	jngl::internal::setHighDpi(false);
 	const double width = 320 * scaleFactor;

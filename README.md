@@ -51,6 +51,19 @@ cmake -Bbuild -DFETCHCONTENT_QUIET=0
 ```
 Then open `build/jngl.sln` in Visual Studio.
 
+### Vulkan
+Install the Vulkan SDK, including shaderc, and open a new terminal so that `VULKAN_SDK` and
+`PATH` include it. Enable the experimental Vulkan renderer with the default SDL3 window backend:
+```bash
+cmake -Bbuild-vulkan -DJNGL_VULKAN=1 -DJNGL_WINAPI=OFF
+cmake --build build-vulkan --config Release
+```
+The same option works with cja: `cja build -DJNGL_VULKAN=1`.
+
+At runtime, `shaderc_shared.dll` from the SDK's `Bin` directory must be on `PATH` or beside the
+executable. Include this DLL when distributing a Vulkan build. The Vulkan loader is supplied by
+the graphics driver; users need a Vulkan-capable driver, but do not need the SDK.
+
 ## macOS
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 ```bash
@@ -58,6 +71,32 @@ brew install sdl3 freetype libvorbis webp pkg-config cmake ffmpeg
 ```
 
 `ffmpeg` is only needed if you plan to use [VideoRecorder](https://bixense.com/jngl/classjngl_1_1VideoRecorder.html#details).
+
+### Vulkan
+On Apple Silicon with macOS 26 or newer, Homebrew's Mesa package includes the KosmicKrisp
+Vulkan driver, which runs on Metal. Install the Vulkan dependencies and select that driver:
+```bash
+brew install mesa vulkan-loader vulkan-headers shaderc vulkan-tools vulkan-validationlayers
+export VK_DRIVER_FILES="$(brew --prefix mesa)/share/vulkan/icd.d/kosmickrisp_mesa_icd.aarch64.json"
+vulkaninfo --summary
+cmake -Bbuild-vulkan -DJNGL_VULKAN=ON
+cmake --build build-vulkan
+./build-vulkan/jngl-test
+```
+
+To enable Homebrew's validation layer in Debug builds, also set:
+```bash
+export VK_ADD_LAYER_PATH="$(brew --prefix)/share/vulkan/explicit_layer.d"
+export DYLD_LIBRARY_PATH="$(brew --prefix vulkan-validationlayers)/lib${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}"
+```
+
+For Intel Macs or older macOS versions, use `brew install molten-vk` and select its driver with
+`export VK_DRIVER_FILES="$(brew --prefix)/etc/vulkan/icd.d/MoltenVK_icd.json"` instead.
+MoltenVK currently hits sampler limits in the descriptor-pool stress test; prefer KosmicKrisp
+where available.
+The LunarG Vulkan SDK can also supply the dependencies; source its `setup-env.sh` before
+configuring. JNGL links to the Vulkan loader, so the driver can be selected at runtime.
+When distributing a Vulkan build, bundle the loader and driver with the application.
 
 ## Android
 1. Install the Android SDK and set `ANDROID_HOME` to point to it.
