@@ -13,18 +13,18 @@ namespace jngl {
 
 ShaderCache::ShaderCache() {
 	Shader vertexShader(R"(#version 300 es
-		in mediump vec2 position;
+		in highp vec2 position;
 		uniform highp mat3 modelview;
-		uniform mediump mat4 projection;
+		uniform highp mat4 projection;
 
 		void main() {
 			vec3 tmp = modelview * vec3(position, 1);
 			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
 		})",
 	                    Shader::Type::VERTEX, R"(#version 100
-		attribute mediump vec2 position;
+		attribute highp vec2 position;
 		uniform highp mat3 modelview;
-		uniform mediump mat4 projection;
+		uniform highp mat4 projection;
 
 		void main() {
 			vec3 tmp = modelview * vec3(position, 1);
@@ -49,9 +49,9 @@ ShaderCache::ShaderCache() {
 
 	{
 		Shader rrVertexShader(R"(#version 300 es
-			in mediump vec2 position;
+			in highp vec2 position;
 			uniform highp mat3 modelview;
-			uniform mediump mat4 projection;
+			uniform highp mat4 projection;
 			out mediump vec2 vPosition;
 
 			void main() {
@@ -60,9 +60,9 @@ ShaderCache::ShaderCache() {
 				vPosition = position;
 			})",
 		                      Shader::Type::VERTEX, R"(#version 100
-			attribute mediump vec2 position;
+			attribute highp vec2 position;
 			uniform highp mat3 modelview;
-			uniform mediump mat4 projection;
+			uniform highp mat4 projection;
 			varying mediump vec2 vPosition;
 
 			void main() {
@@ -123,10 +123,10 @@ ShaderCache::ShaderCache() {
 
 	{
 		textureVertexShader = std::make_unique<Shader>(R"(#version 300 es
-			in mediump vec2 position;
+			in highp vec2 position;
 			in mediump vec2 inTexCoord;
 			uniform highp mat3 modelview;
-			uniform mediump mat4 projection;
+			uniform highp mat4 projection;
 			out mediump vec2 texCoord;
 
 			void main() {
@@ -135,10 +135,10 @@ ShaderCache::ShaderCache() {
 				texCoord = inTexCoord;
 			})",
 		                                               Shader::Type::VERTEX, R"(#version 100
-			attribute mediump vec2 position;
+			attribute highp vec2 position;
 			attribute mediump vec2 inTexCoord;
 			uniform highp mat3 modelview;
-			uniform mediump mat4 projection;
+			uniform highp mat4 projection;
 			varying mediump vec2 texCoord;
 
 			void main() {

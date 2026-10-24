@@ -163,10 +163,10 @@ public:
 			}
 			if (!shaderProgram) {
 				Shader vertexShader(R"(#version 300 es
-					in mediump vec2 position;
+					in highp vec2 position;
 					in mediump vec2 inTexCoord;
 					uniform mediump mat3 modelview;
-					uniform mediump mat4 projection;
+					uniform highp mat4 projection;
 					out mediump vec2 texCoord;
 
 					void main() {
@@ -174,10 +174,10 @@ public:
 						gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
 						texCoord = inTexCoord;
 					})", Shader::Type::VERTEX, R"(
-					attribute mediump vec2 position;
+					attribute highp vec2 position;
 					attribute mediump vec2 inTexCoord;
 					uniform mediump mat3 modelview;
-					uniform mediump mat4 projection;
+					uniform highp mat4 projection;
 					varying mediump vec2 texCoord;
 
 					void main() {
