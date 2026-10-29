@@ -10,32 +10,23 @@
 
 #include <cassert>
 
-#ifdef JNGL_VULKAN
-#include "Renderer.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "GpuBackend.hpp"
 #include "spriteimpl.hpp"
-#include "vulkan/VulkanRenderer.hpp"
 #else
 #include "ShaderCache.hpp"
 #endif
 
 namespace jngl {
 
-#ifdef JNGL_VULKAN
-namespace {
-VulkanRenderer& vulkanRenderer() {
-	return static_cast<VulkanRenderer&>(getRenderer());
-}
-} // namespace
-#endif
-
 Texture::Texture(const float preciseWidth, const float preciseHeight, const int width,
                  const int height, const GLubyte* const* const rowPointers, GLenum format,
                  const GLubyte* const data, const GLenum type, const bool mipmap)
-#ifndef JNGL_VULKAN
+#ifndef JNGL_GPU_BACKEND
 : texture_(opengl::genAndBindTexture())
 #endif
 {
-#ifndef JNGL_VULKAN
+#ifndef JNGL_GPU_BACKEND
 	assert(format == GL_RGB || format == GL_RGBA || format == GL_BGR);
 	GLint internalFormat = format == GL_RGBA ? GL_RGBA : GL_RGB;
 	if (type == GL_HALF_FLOAT) {
@@ -53,9 +44,9 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 		static_cast<float>(preciseWidth / getScaleFactor()), 0,
 		1, 0 // texture coordinates
 	};
-#ifdef JNGL_VULKAN
-	vkTexture =
-	    vulkanRenderer().createTexture(width, height, format, type, data, rowPointers, mipmap);
+#ifdef JNGL_GPU_BACKEND
+	gpuTexture =
+	    gpuRenderer().createTexture(width, height, format, type, data, rowPointers, mipmap);
 #else
 	glGenVertexArrays(1, &vao);
 	opengl::bindVertexArray(vao);
@@ -94,10 +85,10 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 }
 
 Texture::~Texture() {
-#ifdef JNGL_VULKAN
-	if (vkTexture) {
-		if (auto* renderer = getRendererIfExists()) {
-			static_cast<VulkanRenderer*>(renderer)->destroyTexture(*vkTexture);
+#ifdef JNGL_GPU_BACKEND
+	if (gpuTexture) {
+		if (auto* renderer = gpuRendererIfExists()) {
+			renderer->destroyTexture(*gpuTexture);
 		}
 	}
 #else
@@ -114,7 +105,7 @@ Texture::~Texture() {
 }
 
 void Texture::bind() const {
-#ifndef JNGL_VULKAN
+#ifndef JNGL_GPU_BACKEND
 	opengl::bindVertexArray(vao);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
@@ -122,17 +113,17 @@ void Texture::bind() const {
 }
 
 void Texture::draw() const {
-#ifndef JNGL_VULKAN
+#ifndef JNGL_GPU_BACKEND
 	bind();
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 #endif
 }
 
 void Texture::draw(const Mat3& modelview, const Rgba color) const {
-#ifdef JNGL_VULKAN
-	if (vkTexture) {
-		vulkanRenderer().drawSprite(*vkTexture, vertexes.data(), 4, PrimitiveType::TriangleFan,
-		                            modelview, color);
+#ifdef JNGL_GPU_BACKEND
+	if (gpuTexture) {
+		gpuRenderer().drawSprite(*gpuTexture, vertexes.data(), 4, PrimitiveType::TriangleFan,
+		                         modelview, color);
 	}
 #else
 	opengl::bindVertexArray(vao);
@@ -147,10 +138,10 @@ void Texture::draw(const Mat3& modelview, const Rgba color) const {
 
 void Texture::drawLerped(const Mat3& modelview, const Rgb color, const float red, const float green,
                          const float blue, const Alpha alpha) const {
-#ifdef JNGL_VULKAN
-	if (vkTexture) {
-		vulkanRenderer().drawSprite(*vkTexture, vertexes.data(), 4, PrimitiveType::TriangleFan,
-		                            modelview, color, { red, green, blue, 1.f - alpha.getAlpha() });
+#ifdef JNGL_GPU_BACKEND
+	if (gpuTexture) {
+		gpuRenderer().drawSprite(*gpuTexture, vertexes.data(), 4, PrimitiveType::TriangleFan,
+		                         modelview, color, { red, green, blue, 1.f - alpha.getAlpha() });
 	}
 #else
 	opengl::bindVertexArray(vao);
@@ -179,10 +170,10 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	vertexes[10] = vertexes[14] = xend;
 	vertexes[7] = vertexes[11] = yend;
 
-#ifdef JNGL_VULKAN
-	if (vkTexture) {
-		vulkanRenderer().drawSprite(*vkTexture, vertexes.data(), 4, PrimitiveType::TriangleFan,
-		                            opengl::modelview, Rgba(red, green, blue, alpha));
+#ifdef JNGL_GPU_BACKEND
+	if (gpuTexture) {
+		gpuRenderer().drawSprite(*gpuTexture, vertexes.data(), 4, PrimitiveType::TriangleFan,
+		                         opengl::modelview, Rgba(red, green, blue, alpha));
 	}
 #else
 	opengl::bindVertexArray(opengl::vaoStream);
@@ -210,12 +201,12 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 
 void Texture::drawMesh(const std::vector<Vertex>& vertexes, const Mat3& modelview,
                        const Rgba color) const {
-#ifdef JNGL_VULKAN
-	if (vkTexture && !vertexes.empty()) {
+#ifdef JNGL_GPU_BACKEND
+	if (gpuTexture && !vertexes.empty()) {
 		// jngl::Vertex is a tightly packed { x, y, u, v }, matching what drawSprite expects. The
 		// active ShaderProgram (if any) is applied automatically by drawSprite.
-		vulkanRenderer().drawSprite(*vkTexture, reinterpret_cast<const float*>(vertexes.data()),
-		                            vertexes.size(), PrimitiveType::Triangles, modelview, color);
+		gpuRenderer().drawSprite(*gpuTexture, reinterpret_cast<const float*>(vertexes.data()),
+		                         vertexes.size(), PrimitiveType::Triangles, modelview, color);
 	}
 #else
 	auto& shaderCache = ShaderCache::handle();
@@ -227,7 +218,7 @@ void Texture::drawMesh(const std::vector<Vertex>& vertexes, const Mat3& modelvie
 }
 
 void Texture::drawMesh(const std::vector<Vertex>& vertexes) const {
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	drawMesh(vertexes, opengl::modelview, gSpriteColor);
 #else
 	opengl::bindVertexArray(opengl::vaoStream);
@@ -251,7 +242,7 @@ void Texture::drawMesh(const std::vector<Vertex>& vertexes) const {
 }
 
 GLuint Texture::getID() const {
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	return 0;
 #else
 	return texture_;
@@ -266,28 +257,25 @@ float Texture::getPreciseHeight() const {
 	return vertexes[5] * getScaleFactor();
 }
 
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 void Texture::enableMipmaps() const {
-	if (vkTexture) {
-		vulkanRenderer().enableMipmaps(*vkTexture);
+	if (gpuTexture) {
+		gpuRenderer().enableMipmaps(*gpuTexture);
 	}
 }
 
 void Texture::setTextureFilter(const TextureFilter minification,
                                const TextureFilter magnification) const {
-	const auto toVk = [](const TextureFilter filter) {
-		return filter == TextureFilter::NearestNeighbor ? VK_FILTER_NEAREST : VK_FILTER_LINEAR;
-	};
-	if (vkTexture) {
-		vulkanRenderer().setTextureFilter(*vkTexture, toVk(minification), toVk(magnification));
+	if (gpuTexture) {
+		gpuRenderer().setTextureFilter(*gpuTexture, minification, magnification);
 	}
 }
 #endif
 
 void Texture::setBytes(const unsigned char* const bytes, const int width, const int height) const {
-#ifdef JNGL_VULKAN
-	if (vkTexture) {
-		vulkanRenderer().updateTextureBytes(*vkTexture, width, height, bytes);
+#ifdef JNGL_GPU_BACKEND
+	if (gpuTexture) {
+		gpuRenderer().updateTextureBytes(*gpuTexture, width, height, bytes);
 	}
 #else
 	glBindTexture(GL_TEXTURE_2D, texture_);

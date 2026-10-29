@@ -21,9 +21,8 @@
 #include "screen.hpp"
 #include "shapes.hpp"
 
-#ifdef JNGL_VULKAN
-#include "../Renderer.hpp"
-#include "../vulkan/VulkanRenderer.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "../GpuBackend.hpp"
 #endif
 
 #ifdef _WIN32
@@ -176,7 +175,7 @@ void Sprite::enableMipmaps() {
 	if (!texture) {
 		return;
 	}
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	texture->enableMipmaps();
 #else
 	glBindTexture(GL_TEXTURE_2D, texture->getID());
@@ -195,7 +194,7 @@ void Sprite::setTextureFilter(const TextureFilter minification, const TextureFil
 	if (!texture) {
 		return;
 	}
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	texture->setTextureFilter(minification, magnification);
 #else
 	glBindTexture(GL_TEXTURE_2D, texture->getID());
@@ -317,7 +316,7 @@ bool Sprite::contains(const jngl::Vec2 point) const {
 void Sprite::draw() const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	texture->draw(opengl::modelview, gSpriteColor);
 #else
 	auto context = ShaderCache::handle().textureShaderProgram->use();
@@ -335,7 +334,7 @@ void Sprite::draw(const Mat3& modelview, const ShaderProgram* const shaderProgra
 void Sprite::draw(Mat3 modelview, Rgba color) const {
 	modelview *= boost::qvm::translation_mat(
 	    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. }));
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	texture->draw(modelview, color);
 #else
 	auto context = ShaderCache::handle().textureShaderProgram->use();
@@ -349,7 +348,7 @@ void Sprite::drawLerped(Mat3 modelview, const Rgb color, const float red, const 
                         const float blue, const Alpha alpha) const {
 	modelview *= boost::qvm::translation_mat(
 	    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. }));
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	texture->drawLerped(modelview, color, red, green, blue, alpha);
 #else
 	auto context = ShaderCache::handle().textureShaderProgram->use();
@@ -362,7 +361,7 @@ void Sprite::drawLerped(Mat3 modelview, const Rgb color, const float red, const 
 void Sprite::draw(Mat3 modelview, Alpha alpha, const ShaderProgram* const shaderProgram) const {
 	modelview *= boost::qvm::translation_mat(
 	    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. }));
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	const Rgba color(gSpriteColor.getRed(), gSpriteColor.getGreen(), gSpriteColor.getBlue(),
 	                 alpha.getAlpha());
 	if (shaderProgram) {
@@ -389,7 +388,7 @@ void Sprite::draw(Mat3 modelview, Alpha alpha, const ShaderProgram* const shader
 void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	if (shaderProgram) {
 		const auto context = shaderProgram->use(); // binds the custom pipeline for this draw
 		texture->draw(opengl::modelview, gSpriteColor);
@@ -412,7 +411,7 @@ void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 	popMatrix();
 }
 
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 struct Sprite::Batch::Impl {
 	const Texture* texture;
 	jngl::Mat3 translation;
@@ -482,7 +481,7 @@ void Sprite::drawScaled(float xfactor, float yfactor,
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	opengl::scale(xfactor, yfactor);
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	if (shaderProgram) {
 		const auto context = shaderProgram->use(); // binds the custom pipeline for this draw
 		texture->draw(opengl::modelview, gSpriteColor);
@@ -532,7 +531,7 @@ void Sprite::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes
 	if (vertexes.empty()) {
 		return;
 	}
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	if (shaderProgram) {
 		const auto context = shaderProgram->use();
 		texture->drawMesh(vertexes, modelview, color);
@@ -560,7 +559,7 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 	}
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	if (shaderProgram) {
 		const auto context = shaderProgram->use();
 		texture->drawMesh(vertexes, opengl::modelview, gSpriteColor);
@@ -589,10 +588,10 @@ void Sprite::setBytes(const unsigned char* const bytes) {
 }
 
 const Shader& Sprite::vertexShader() {
-#ifdef JNGL_VULKAN
-	// The built-in sprite vertex shader, written for Vulkan: it takes the combined modelview *
-	// projection matrix as a push constant (matching VulkanRenderer's textured pipeline) and passes
-	// the texture coordinates through to the fragment shader.
+#ifdef JNGL_GPU_BACKEND
+	// The built-in sprite vertex shader, written for Vulkan (Direct3D 12 translates it): it takes
+	// the combined modelview * projection matrix as a push constant (matching GpuRenderer's
+	// textured pipeline) and passes the texture coordinates through to the fragment shader.
 	static Shader shader(R"(#version 450
 layout(location = 0) in vec2 position;
 layout(location = 1) in vec2 inTexCoord;
@@ -766,8 +765,8 @@ void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, const st
 }
 
 Finally disableBlending() {
-#ifdef JNGL_VULKAN
-	auto& renderer = static_cast<VulkanRenderer&>(getRenderer());
+#ifdef JNGL_GPU_BACKEND
+	auto& renderer = gpuRenderer();
 	if (!renderer.isBlendingEnabled()) {
 		return Finally(nullptr);
 	}
@@ -793,8 +792,8 @@ Finally setBlendMode(const BlendMode mode) {
 }
 
 Finally drawOnlyIntoAlphaChannel() {
-#ifdef JNGL_VULKAN
-	auto& renderer = static_cast<VulkanRenderer&>(getRenderer());
+#ifdef JNGL_GPU_BACKEND
+	auto& renderer = gpuRenderer();
 	renderer.setAlphaOnlyWrite(true);
 	return Finally([&renderer]() { renderer.setAlphaOnlyWrite(false); });
 #else

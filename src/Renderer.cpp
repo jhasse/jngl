@@ -6,8 +6,8 @@
 #include <cassert>
 #include <stdexcept>
 
-#ifdef JNGL_VULKAN
-#include "vulkan/VulkanRenderer.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "GpuBackend.hpp"
 #else
 #include "OpenGLRenderer.hpp"
 #endif
@@ -43,8 +43,8 @@ Renderer* getRendererIfExists() {
 
 std::unique_ptr<Renderer> createRenderer(void* const nativeWindow) {
 	assert(nativeWindow);
-#ifdef JNGL_VULKAN
-	return std::make_unique<VulkanRenderer>(nativeWindow);
+#ifdef JNGL_GPU_BACKEND
+	return std::make_unique<GpuRenderer>(nativeWindow);
 #else
 	return std::make_unique<OpenGLRenderer>(nativeWindow);
 #endif

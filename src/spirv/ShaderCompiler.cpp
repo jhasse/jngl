@@ -46,7 +46,8 @@ std::pair<uint32_t, uint32_t> std140AlignAndSize(std::string_view type) {
 	if (type == "mat4") {
 		return { 16, 64 };
 	}
-	throw std::runtime_error("Unsupported uniform type for Vulkan UBO: " + std::string(type));
+	throw std::runtime_error("Unsupported uniform type for the uniform block: " +
+	                         std::string(type));
 }
 
 std::string uboMemberType(std::string_view type) {
@@ -150,19 +151,10 @@ std::string wrapUniformsInUbo(std::string source, std::vector<ShaderUniform>& ou
 
 } // namespace
 
-CompiledShader compileGlslToSpirv(const char* const source, const VkShaderStageFlagBits stage,
+CompiledShader compileGlslToSpirv(const char* const source, const Shader::Type stage,
                                   const char* const name) {
-	shaderc_shader_kind kind = shaderc_glsl_vertex_shader;
-	switch (stage) {
-	case VK_SHADER_STAGE_VERTEX_BIT:
-		kind = shaderc_glsl_vertex_shader;
-		break;
-	case VK_SHADER_STAGE_FRAGMENT_BIT:
-		kind = shaderc_glsl_fragment_shader;
-		break;
-	default:
-		throw std::runtime_error("Unsupported shader stage for SPIR-V compilation.");
-	}
+	const shaderc_shader_kind kind =
+	    stage == Shader::Type::VERTEX ? shaderc_glsl_vertex_shader : shaderc_glsl_fragment_shader;
 
 	// JNGL's shaders (and user shaders written for the OpenGL backend) use "#version 300 es", which
 	// glslang rejects for SPIR-V (it requires ES 310+). Swap it for a desktop version that compiles
@@ -187,8 +179,8 @@ CompiledShader compileGlslToSpirv(const char* const source, const VkShaderStageF
 	const shaderc::SpvCompilationResult result =
 	    compiler.CompileGlslToSpv(adjusted, kind, name, options);
 	if (result.GetCompilationStatus() != shaderc_compilation_status_success) {
-		throw std::runtime_error("Failed to compile " + std::string(name) + " to SPIR-V: " +
-		                         result.GetErrorMessage());
+		throw std::runtime_error("Failed to compile " + std::string(name) +
+		                         " to SPIR-V: " + result.GetErrorMessage());
 	}
 	compiled.spirv.assign(result.cbegin(), result.cend());
 	return compiled;

@@ -35,11 +35,11 @@ def main() -> int:
         "#pragma once\n\n"
         "#include <array>\n"
         "#include <cstdint>\n\n"
-        "namespace jngl::vulkan_shaders {\n\n"
+        "namespace jngl::spirv_shaders {\n\n"
         f"inline constexpr std::array<uint32_t, {len(words)}> {symbol_name} = {{\n"
         + "\n".join(lines)
         + "\n};\n\n"
-        "} // namespace jngl::vulkan_shaders\n"
+        "} // namespace jngl::spirv_shaders\n"
     )
     return 0
 

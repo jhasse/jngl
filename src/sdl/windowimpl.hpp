@@ -24,10 +24,10 @@ class WindowImpl {
 public:
 	WindowImpl() = default;
 	~WindowImpl() {
-		// Tear down the rendering backend (and, on Vulkan, its surface/swapchain/instance) before
-		// the window and context it renders to.
+		// Tear down the rendering backend (and, on Vulkan or D3D12, its device and swapchain)
+		// before the window and context it renders to.
 		renderer.reset();
-#ifndef JNGL_VULKAN
+#ifndef JNGL_GPU_BACKEND
 		SDL_GL_DestroyContext(context);
 #endif
 		SDL_DestroyWindow(sdlWindow);

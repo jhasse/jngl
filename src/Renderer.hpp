@@ -4,14 +4,15 @@
 /// Internal rendering-backend abstraction.
 ///
 /// Historically JNGL issued OpenGL/GLES calls directly from all over its code base. To make room
-/// for alternative graphics APIs (currently an experimental Vulkan backend, see JNGL_VULKAN) the
-/// per-frame and resource operations that genuinely differ between APIs are funnelled through the
-/// abstract Renderer interface below. Exactly one Renderer is alive while a Window exists; it's
-/// created by createRenderer() and reachable through getRenderer().
+/// for alternative graphics APIs (currently experimental Vulkan and Direct3D 12 backends, see
+/// JNGL_VULKAN and JNGL_D3D12) the per-frame and resource operations that genuinely differ between
+/// APIs are funnelled through the abstract Renderer interface below. Exactly one Renderer is alive
+/// while a Window exists; it's created by createRenderer() and reachable through getRenderer().
 ///
-/// The backend is selected at compile time: without JNGL_VULKAN createRenderer() returns the
-/// OpenGL backend (and the historic inline GL code keeps working unchanged); with JNGL_VULKAN it
-/// returns the Vulkan backend.
+/// The backend is selected at compile time: without JNGL_GPU_BACKEND createRenderer() returns the
+/// OpenGL backend (and the historic inline GL code keeps working unchanged); otherwise it returns
+/// the Vulkan or the Direct3D 12 backend, which both offer the same API beyond this interface, see
+/// GpuBackend.hpp.
 /// @file
 #pragma once
 
@@ -46,19 +47,21 @@ public:
 	Renderer(Renderer&&) = delete;
 	Renderer& operator=(Renderer&&) = delete;
 
-	/// Human-readable name of the backend, e.g. "OpenGL" or "Vulkan".
+	/// Human-readable name of the backend, e.g. "OpenGL", "Vulkan" or "Direct3D 12".
 	[[nodiscard]] virtual const char* name() const = 0;
 
 	/// Begin recording a frame and clear the default render target to \a clearColor.
 	///
 	/// For OpenGL this performs the glClear; for Vulkan it acquires a swapchain image and begins
-	/// the render pass (whose load operation clears to \a clearColor).
+	/// the render pass (whose load operation clears to \a clearColor); for Direct3D 12 it starts
+	/// recording a command list that begins with clearing the swap chain's back buffer.
 	virtual void beginFrame(Rgb clearColor) = 0;
 
 	/// Finish the current frame and present it to the screen.
 	///
 	/// For OpenGL this swaps the double buffer; for Vulkan it ends the render pass, submits the
-	/// command buffer and queues the image for presentation.
+	/// command buffer and queues the image for presentation; for Direct3D 12 it executes the
+	/// command list and presents the swap chain.
 	virtual void endFrame() = 0;
 
 	/// Set the viewport in framebuffer pixels (origin is the lower-left corner, as in OpenGL).
@@ -66,7 +69,8 @@ public:
 
 	/// Inform the backend that the drawable surface size changed to \a width x \a height pixels.
 	///
-	/// For Vulkan this triggers a swapchain recreation on the next frame. For OpenGL it's a no-op.
+	/// For Vulkan and Direct3D 12 this triggers a swapchain recreation after the current frame. For
+	/// OpenGL it's a no-op.
 	virtual void onResize(int width, int height) = 0;
 
 	/// Set the projection matrix that the built-in shaders use.

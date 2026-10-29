@@ -52,8 +52,8 @@ using ScissorState = std::tuple<bool, GLint, GLint, GLint, GLint>;
 	return { glIsEnabled(GL_SCISSOR_TEST) == GL_TRUE, box[0], box[1], box[2], box[3] };
 }
 
-/// OpenGL's scissor state can't be queried on the Vulkan backend, only what gets drawn
-#ifdef JNGL_VULKAN
+/// OpenGL's scissor state can't be queried on the GPU backends, only what gets drawn
+#ifdef JNGL_GPU_BACKEND
 #define REQUIRE_SCISSOR_STATE(...)
 #else
 #define REQUIRE_SCISSOR_STATE(...) REQUIRE(__VA_ARGS__)
@@ -174,7 +174,7 @@ TEST_CASE("scissor and letterboxing") {
 			// rectangle drawn there lands
 			REQUIRE_SCISSOR_STATE(scissorState() == ScissorState{ true, 50, 20, 120, 40 });
 			jngl::drawRect(jngl::modelview().translate({ -110, -25 }), { 120, 40 }, 0x000000_rgb);
-#ifndef JNGL_VULKAN // glReadPixels can't read a FrameBuffer there
+#ifndef JNGL_GPU_BACKEND // glReadPixels can't read a FrameBuffer there
 			std::vector<unsigned char> pixels(size_t{ 320 } * 70 * 4);
 			glReadPixels(0, 0, 320, 70, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
 			const auto isDrawn = [&](const int x, const int y) {

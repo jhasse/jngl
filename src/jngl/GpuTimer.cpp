@@ -6,9 +6,8 @@
 #include "../opengl.hpp"
 #include "../windowptr.hpp"
 
-#ifdef JNGL_VULKAN
-#include "../Renderer.hpp"
-#include "../vulkan/VulkanRenderer.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "../GpuBackend.hpp"
 #endif
 
 #include <deque>
@@ -34,37 +33,31 @@ std::optional<std::chrono::nanoseconds> GpuTimer::poll() {
 	return std::nullopt;
 }
 
-#elif defined(JNGL_VULKAN)
-
-namespace {
-VulkanRenderer* vulkanRenderer() {
-	return static_cast<VulkanRenderer*>(getRendererIfExists());
-}
-} // namespace
+#elif defined(JNGL_GPU_BACKEND)
 
 struct GpuTimer::Impl {
 	/// Two timestamp queries in \a pool, for start() and stop()
 	struct Queries {
-		VkQueryPool pool;
+		GpuRenderer::TimestampPool pool;
 		uint32_t first;
 	};
 
 	~Impl() {
-		if (auto* const renderer = vulkanRenderer()) {
+		if (auto* const renderer = gpuRendererIfExists()) {
 			for (const auto pool : pools) {
 				renderer->destroyTimestampPool(pool);
 			}
 		}
 	}
 
-	std::vector<VkQueryPool> pools;
+	std::vector<GpuRenderer::TimestampPool> pools;
 	std::deque<Queries> pending; ///< stopped, oldest first, waiting for their results
 	std::vector<Queries> unused; ///< reset, to be used again
 	std::optional<Queries> running;
 };
 
 bool GpuTimer::isSupported() {
-	const auto* const renderer = vulkanRenderer();
+	const auto* const renderer = gpuRendererIfExists();
 	return renderer && renderer->areTimestampsSupported();
 }
 
@@ -74,37 +67,38 @@ void GpuTimer::start() {
 	}
 	if (impl->unused.empty()) {
 		constexpr uint32_t poolSize = 32;
-		const VkQueryPool pool = vulkanRenderer()->createTimestampPool(poolSize);
+		const GpuRenderer::TimestampPool pool =
+		    gpuRendererIfExists()->createTimestampPool(poolSize);
 		impl->pools.push_back(pool);
 		for (uint32_t first = 0; first < poolSize; first += 2) {
 			impl->unused.push_back({ pool, first });
 		}
 	}
 	const auto queries = impl->unused.back();
-	if (vulkanRenderer()->writeTimestamp(queries.pool, queries.first)) {
+	if (gpuRendererIfExists()->writeTimestamp(queries.pool, queries.first)) {
 		impl->unused.pop_back();
 		impl->running = queries;
 	}
 }
 
 void GpuTimer::stop() {
-	if (!impl->running || !vulkanRenderer()) {
+	if (!impl->running || !gpuRendererIfExists()) {
 		return;
 	}
 	// Otherwise the frame has been dropped since start(). Its query won't be used again, as it
 	// can't be reset before the GPU is done with it.
-	if (vulkanRenderer()->writeTimestamp(impl->running->pool, impl->running->first + 1)) {
+	if (gpuRendererIfExists()->writeTimestamp(impl->running->pool, impl->running->first + 1)) {
 		impl->pending.push_back(*impl->running);
 	}
 	impl->running.reset();
 }
 
 std::optional<std::chrono::nanoseconds> GpuTimer::poll() {
-	if (impl->pending.empty() || !vulkanRenderer()) {
+	if (impl->pending.empty() || !gpuRendererIfExists()) {
 		return std::nullopt;
 	}
 	const auto queries = impl->pending.front();
-	const auto elapsed = vulkanRenderer()->takeElapsedTime(queries.pool, queries.first);
+	const auto elapsed = gpuRendererIfExists()->takeElapsedTime(queries.pool, queries.first);
 	if (elapsed) {
 		impl->pending.pop_front();
 		impl->unused.push_back(queries);

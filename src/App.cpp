@@ -122,8 +122,8 @@ debugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity
 } // namespace
 
 void App::initGl() {
-#ifdef JNGL_VULKAN
-	// The Vulkan backend needs no GL state, clearing happens via the render pass each frame. The
+#ifdef JNGL_GPU_BACKEND
+	// The GPU backends need no GL state, clearing happens when each frame begins. The
 	// projection is handed to it by updateProjectionMatrix().
 	reset();
 	modelviewStack = {};
@@ -201,8 +201,8 @@ void App::unregisterShaderProgram(ShaderProgram* shaderProgram) {
 }
 
 void App::updateProjectionMatrix() const {
-#ifdef JNGL_VULKAN
-	// The projection is a per-draw push constant on the Vulkan backend
+#ifdef JNGL_GPU_BACKEND
+	// The projection is a per-draw push constant on the GPU backends
 	if (auto* const renderer = getRendererIfExists()) {
 		renderer->setProjection(opengl::projection);
 	}

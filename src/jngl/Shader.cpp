@@ -8,19 +8,16 @@
 #include <sstream>
 #include <stdexcept>
 
-#ifdef JNGL_VULKAN
-#include "../vulkan/ShaderCompiler.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "../spirv/ShaderCompiler.hpp"
 #endif
 
 namespace jngl {
 
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 Shader::Shader(const char* source, const Type type, const char* const /*gles20Source*/)
 : impl(std::make_unique<Impl>()) {
-	impl->stage =
-	    type == Type::VERTEX ? VK_SHADER_STAGE_VERTEX_BIT : VK_SHADER_STAGE_FRAGMENT_BIT;
-	auto compiled =
-	    compileGlslToSpirv(source, impl->stage, type == Type::VERTEX ? "vertex" : "fragment");
+	auto compiled = compileGlslToSpirv(source, type, type == Type::VERTEX ? "vertex" : "fragment");
 	impl->spirv = std::move(compiled.spirv);
 	impl->uniforms = std::move(compiled.uniforms);
 	impl->uniformBlockSize = compiled.uniformBlockSize;

@@ -13,10 +13,9 @@
 #include "matrix.hpp"
 #include "screen.hpp"
 
-#ifdef JNGL_VULKAN
-#include "../Renderer.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "../GpuBackend.hpp"
 #include "../opengl.hpp"
-#include "../vulkan/VulkanRenderer.hpp"
 #include "Rgba.hpp"
 #else
 #include "../ShaderCache.hpp"
@@ -41,16 +40,12 @@ struct Active {
 /// it
 std::stack<Active> activateStack;
 
-#ifdef JNGL_VULKAN
-VulkanRenderer& vulkanRenderer() {
-	return static_cast<VulkanRenderer&>(getRenderer());
-}
-
+#ifdef JNGL_GPU_BACKEND
 /// Draws the framebuffer \a fb's image as a textured quad transformed by \a modelview. The quad is
 /// (0, 0)-(width, height) in screen pixels with (0, 0)-(1, 1) texture coordinates, matching what
 /// jngl::Texture builds.
-void drawFramebuffer(VulkanFramebuffer& fb, const Mat3& modelview, Rgba color,
-                     const std::optional<VkFilter> filter = std::nullopt) {
+void drawFramebuffer(GpuFramebuffer& fb, const Mat3& modelview, Rgba color,
+                     const std::optional<TextureFilter> filter = std::nullopt) {
 	const auto w = static_cast<float>(fb.width / getScaleFactor());
 	const auto h = static_cast<float>(fb.height / getScaleFactor());
 	const std::array<float, 16> vertexes = {
@@ -59,9 +54,9 @@ void drawFramebuffer(VulkanFramebuffer& fb, const Mat3& modelview, Rgba color,
 		w,   h,   1.f, 1.f, //
 		w,   0.f, 1.f, 0.f, //
 	};
-	const auto& texture = filter ? vulkanRenderer().framebufferTexture(fb, *filter) : fb.color;
-	vulkanRenderer().drawSprite(texture, vertexes.data(), 4, PrimitiveType::TriangleFan, modelview,
-	                            color);
+	const auto& texture = filter ? gpuRenderer().framebufferTexture(fb, *filter) : fb.color;
+	gpuRenderer().drawSprite(texture, vertexes.data(), 4, PrimitiveType::TriangleFan, modelview,
+	                         color);
 }
 #endif
 
@@ -75,33 +70,33 @@ optional<std::array<int, 2>> activeFrameBufferSize() {
 }
 
 void applyBlendMode() {
-#ifdef JNGL_VULKAN
-	using SpriteBlend = VulkanRenderer::SpriteBlend;
+#ifdef JNGL_GPU_BACKEND
+	using SpriteBlend = GpuRenderer::SpriteBlend;
 	if (gBlendMode) {
 		switch (*gBlendMode) {
 		case BlendMode::Composite:
-			vulkanRenderer().setSpriteBlend(SpriteBlend::Composite);
+			gpuRenderer().setSpriteBlend(SpriteBlend::Composite);
 			break;
 		case BlendMode::Premultiplied:
-			vulkanRenderer().setSpriteBlend(SpriteBlend::Premultiplied);
+			gpuRenderer().setSpriteBlend(SpriteBlend::Premultiplied);
 			break;
 		case BlendMode::Additive:
-			vulkanRenderer().setSpriteBlend(SpriteBlend::Additive);
+			gpuRenderer().setSpriteBlend(SpriteBlend::Additive);
 			break;
 		case BlendMode::PremultipliedAdditive:
-			vulkanRenderer().setSpriteBlend(SpriteBlend::PremultipliedAdditive);
+			gpuRenderer().setSpriteBlend(SpriteBlend::PremultipliedAdditive);
 			break;
 		case BlendMode::Multiply:
-			vulkanRenderer().setSpriteBlend(SpriteBlend::Multiply);
+			gpuRenderer().setSpriteBlend(SpriteBlend::Multiply);
 			break;
 		case BlendMode::Screen:
-			vulkanRenderer().setSpriteBlend(SpriteBlend::Screen);
+			gpuRenderer().setSpriteBlend(SpriteBlend::Screen);
 			break;
 		}
 	} else {
 		// Alpha adds up in a FrameBuffer, like on OpenGL below
-		vulkanRenderer().setSpriteBlend(activateStack.empty() ? SpriteBlend::Composite
-		                                                      : SpriteBlend::AddAlpha);
+		gpuRenderer().setSpriteBlend(activateStack.empty() ? SpriteBlend::Composite
+		                                                   : SpriteBlend::AddAlpha);
 	}
 #else
 	if (gBlendMode) {
@@ -137,7 +132,7 @@ void applyBlendMode() {
 }
 
 struct FrameBuffer::Impl {
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	Impl(int width, int height, bool /*hdr*/) : width(width), height(height) {
 	}
 #else
@@ -153,10 +148,10 @@ struct FrameBuffer::Impl {
 	Impl& operator=(Impl&&) = delete;
 
 	~Impl() {
-#ifdef JNGL_VULKAN
-		if (vkFramebuffer) {
-			if (auto* renderer = getRendererIfExists()) {
-				static_cast<VulkanRenderer*>(renderer)->destroyFramebuffer(*vkFramebuffer);
+#ifdef JNGL_GPU_BACKEND
+		if (gpuFramebuffer) {
+			if (auto* renderer = gpuRendererIfExists()) {
+				renderer->destroyFramebuffer(*gpuFramebuffer);
 			}
 		}
 #else
@@ -172,7 +167,7 @@ struct FrameBuffer::Impl {
 #endif
 	}
 
-#ifndef JNGL_VULKAN
+#ifndef JNGL_GPU_BACKEND
 	/// What's drawn into while it's in use: multisampledFbo if it has samples, otherwise fbo
 	GLuint drawnFbo() const {
 		return samples > 0 ? multisampledFbo : fbo;
@@ -197,8 +192,8 @@ struct FrameBuffer::Impl {
 
 	const int width;
 	const int height;
-#ifdef JNGL_VULKAN
-	std::unique_ptr<VulkanFramebuffer> vkFramebuffer;
+#ifdef JNGL_GPU_BACKEND
+	std::unique_ptr<GpuFramebuffer> gpuFramebuffer;
 #else
 	GLuint fbo = 0;
 	GLuint buffer = 0;
@@ -222,10 +217,10 @@ Mat4 FrameBuffer::Impl::screenProjection;
 FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr,
                          const bool antiAliased)
 : impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height), hdr)) {
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	// createFramebuffer already clears the image to transparent.
-	impl->vkFramebuffer =
-	    vulkanRenderer().createFramebuffer(impl->width, impl->height, antiAliased, hdr);
+	impl->gpuFramebuffer =
+	    gpuRenderer().createFramebuffer(impl->width, impl->height, antiAliased, hdr);
 #else
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
@@ -310,12 +305,12 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 	jngl::translate(position);
 	opengl::scale(1, -1);
 	jngl::translate(0, -impl->height / getScaleFactor());
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	if (shaderProgram) {
 		const auto context = shaderProgram->use();
-		drawFramebuffer(*impl->vkFramebuffer, opengl::modelview, gSpriteColor);
+		drawFramebuffer(*impl->gpuFramebuffer, opengl::modelview, gSpriteColor);
 	} else {
-		drawFramebuffer(*impl->vkFramebuffer, opengl::modelview, gSpriteColor);
+		drawFramebuffer(*impl->gpuFramebuffer, opengl::modelview, gSpriteColor);
 	}
 #else
 	auto context =
@@ -336,12 +331,12 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) const {
 	modelview.scale(1, -1).translate(
 	    { -impl->width / getScaleFactor() / 2, -impl->height / getScaleFactor() / 2 });
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	if (shaderProgram) {
 		const auto context = shaderProgram->use();
-		drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor);
+		drawFramebuffer(*impl->gpuFramebuffer, modelview, gSpriteColor);
 	} else {
-		drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor);
+		drawFramebuffer(*impl->gpuFramebuffer, modelview, gSpriteColor);
 	}
 #else
 	auto context =
@@ -359,16 +354,14 @@ void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram)
 
 void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
                        const ShaderProgram* const shaderProgram) const {
-#ifdef JNGL_VULKAN
-	const VkFilter filter =
-	    textureFilter == TextureFilter::NearestNeighbor ? VK_FILTER_NEAREST : VK_FILTER_LINEAR;
+#ifdef JNGL_GPU_BACKEND
 	modelview.scale(1, -1).translate(
 	    { -impl->width / getScaleFactor() / 2, -impl->height / getScaleFactor() / 2 });
 	if (shaderProgram) {
 		const auto context = shaderProgram->use();
-		drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor, filter);
+		drawFramebuffer(*impl->gpuFramebuffer, modelview, gSpriteColor, textureFilter);
 	} else {
-		drawFramebuffer(*impl->vkFramebuffer, modelview, gSpriteColor, filter);
+		drawFramebuffer(*impl->gpuFramebuffer, modelview, gSpriteColor, textureFilter);
 	}
 #else
 	impl->texture.bind();
@@ -411,15 +404,15 @@ void FrameBuffer::drawMesh(const Mat3& modelview, const std::vector<Vertex>& ver
 	if (vertexes.empty()) {
 		return;
 	}
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	std::optional<ShaderProgram::Context> context;
 	if (shaderProgram) {
 		context.emplace(shaderProgram->use());
 	}
 	// jngl::Vertex is a tightly packed { x, y, u, v }, matching what drawSprite expects.
-	vulkanRenderer().drawSprite(impl->vkFramebuffer->color,
-	                            reinterpret_cast<const float*>(vertexes.data()), vertexes.size(),
-	                            PrimitiveType::Triangles, modelview, color);
+	gpuRenderer().drawSprite(impl->gpuFramebuffer->color,
+	                         reinterpret_cast<const float*>(vertexes.data()), vertexes.size(),
+	                         PrimitiveType::Triangles, modelview, color);
 #else
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
@@ -436,17 +429,17 @@ void FrameBuffer::drawMesh(const Mat3& modelview, const std::vector<Vertex>& ver
 
 void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
                            const ShaderProgram* const shaderProgram) const {
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	if (!vertexes.empty()) {
 		// jngl::Vertex is a tightly packed { x, y, u, v }, matching what drawSprite expects.
 		if (shaderProgram) {
 			const auto context = shaderProgram->use();
-			vulkanRenderer().drawSprite(
-			    impl->vkFramebuffer->color, reinterpret_cast<const float*>(vertexes.data()),
+			gpuRenderer().drawSprite(
+			    impl->gpuFramebuffer->color, reinterpret_cast<const float*>(vertexes.data()),
 			    vertexes.size(), PrimitiveType::Triangles, opengl::modelview, gSpriteColor);
 		} else {
-			vulkanRenderer().drawSprite(
-			    impl->vkFramebuffer->color, reinterpret_cast<const float*>(vertexes.data()),
+			gpuRenderer().drawSprite(
+			    impl->gpuFramebuffer->color, reinterpret_cast<const float*>(vertexes.data()),
 			    vertexes.size(), PrimitiveType::Triangles, opengl::modelview, gSpriteColor);
 		}
 	}
@@ -490,8 +483,8 @@ FrameBuffer::Context::~Context() {
 
 void FrameBuffer::Context::clear() {
 	assert(resetCallback);
-#ifdef JNGL_VULKAN
-	vulkanRenderer().clearCurrentRenderTarget(Rgba(1, 1, 1, 0));
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().clearCurrentRenderTarget(Rgba(1, 1, 1, 0));
 #else
 	glClearColor(1, 1, 1, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -500,8 +493,8 @@ void FrameBuffer::Context::clear() {
 
 void FrameBuffer::Context::clear(const Rgb color) {
 	assert(resetCallback);
-#ifdef JNGL_VULKAN
-	vulkanRenderer().clearCurrentRenderTarget(
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().clearCurrentRenderTarget(
 	    Rgba(color.getRed(), color.getGreen(), color.getBlue(), 1.f));
 #else
 	glClearColor(color.getRed(), color.getGreen(), color.getBlue(), 1);
@@ -511,8 +504,8 @@ void FrameBuffer::Context::clear(const Rgb color) {
 
 void FrameBuffer::Context::clear(const Rgba color) {
 	assert(resetCallback);
-#ifdef JNGL_VULKAN
-	vulkanRenderer().clearCurrentRenderTarget(color);
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().clearCurrentRenderTarget(color);
 #else
 	glClearColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -520,7 +513,7 @@ void FrameBuffer::Context::clear(const Rgba color) {
 }
 
 FrameBuffer::Context FrameBuffer::use() const {
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	pushMatrix();
 	auto savedProjection = opengl::projection;
 	if (activateStack.empty()) {
@@ -536,9 +529,10 @@ FrameBuffer::Context FrameBuffer::use() const {
 		opengl::projection.data[i] *= sx;
 		opengl::projection.data[i + 4] *= sy;
 	}
-	vulkanRenderer().setProjection(opengl::projection);
-	vulkanRenderer().pushRenderTarget(*impl->vkFramebuffer);
-	// The render target has already been pushed, which is all there is to switch on Vulkan
+	gpuRenderer().setProjection(opengl::projection);
+	gpuRenderer().pushRenderTarget(*impl->gpuFramebuffer);
+	// The render target has already been pushed, which is all that switching takes on the GPU
+	// backends
 	auto activate = []() {
 		applyBlendMode();
 		applyScissor();
@@ -547,10 +541,10 @@ FrameBuffer::Context FrameBuffer::use() const {
 	activateStack.top().activate();
 	return Context([savedProjection]() {
 		activateStack.pop();
-		vulkanRenderer().popRenderTarget();
+		gpuRenderer().popRenderTarget();
 		popMatrix();
 		opengl::projection = savedProjection;
-		vulkanRenderer().setProjection(opengl::projection);
+		gpuRenderer().setProjection(opengl::projection);
 		applyBlendMode();
 		applyScissor();
 	});
@@ -621,8 +615,8 @@ FrameBuffer::Context FrameBuffer::use() const {
 }
 
 void FrameBuffer::clear() {
-#ifdef JNGL_VULKAN
-	vulkanRenderer().clearCurrentRenderTarget(Rgba(1, 1, 1, 0));
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().clearCurrentRenderTarget(Rgba(1, 1, 1, 0));
 #else
 	glClearColor(1, 1, 1, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -631,7 +625,7 @@ void FrameBuffer::clear() {
 }
 
 Vec2 FrameBuffer::getSize() const {
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	return { impl->width / getScaleFactor(), impl->height / getScaleFactor() };
 #else
 	return { impl->texture.getPreciseWidth() / getScaleFactor(),
@@ -648,8 +642,8 @@ Pixels FrameBuffer::getPixelHeight() const {
 }
 
 GLuint FrameBuffer::getTextureID() const {
-#ifdef JNGL_VULKAN
-	return 0; // no equivalent on Vulkan
+#ifdef JNGL_GPU_BACKEND
+	return 0; // no equivalent on the GPU backends
 #else
 	return impl->texture.getID();
 #endif

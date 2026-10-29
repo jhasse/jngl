@@ -18,7 +18,7 @@
 #include "ShaderProgram.hpp"
 #include "time.hpp"
 
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 #include "../texture.hpp"
 #include "Rgba.hpp"
 #include "Sprite.hpp"
@@ -172,8 +172,8 @@ public:
 				}
 			}
 			if (!shaderProgram) {
-#ifdef JNGL_VULKAN
-				// The Vulkan backend's ShaderPrograms sample a single texture, so each of its
+#ifdef JNGL_GPU_BACKEND
+				// The GPU backends' ShaderPrograms sample a single texture, so each of its
 				// texels has the Y, U and V of its pixel in R, G and B, see upload()
 				Shader fragmentShader(R"(#version 300 es
 					uniform sampler2D tex;
@@ -322,7 +322,7 @@ public:
 #endif
 			}
 
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 			upload(*video);
 #else
 			glBindTexture(GL_TEXTURE_2D, textureY);
@@ -354,7 +354,7 @@ public:
 		}
 		if (shaderProgram) {
 			auto _ = shaderProgram->use();
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 			texture->draw(Mat3(opengl::modelview).translate({ -width / 2., -height / 2. }),
 			              Rgba(1, 1, 1, 1));
 #else
@@ -381,7 +381,7 @@ public:
 
 	~Impl() {
 		stream->stop();
-#ifndef JNGL_VULKAN
+#ifndef JNGL_GPU_BACKEND
 		if (shaderProgram) {
 			glDeleteTextures(1, &textureY);
 			glDeleteTextures(1, &textureU);
@@ -413,7 +413,7 @@ private:
 		return startTime > 0;
 	}
 
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	/// Puts the frame's Y, U and V into the R, G and B of texture's texels. U and V are a quarter
 	/// of the size of the video, so each of their values goes into a square of four texels.
 	void upload(const THEORAPLAY_VideoFrame& frame) {
@@ -454,7 +454,7 @@ private:
 	int height;
 
 	std::unique_ptr<ShaderProgram> shaderProgram;
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	std::unique_ptr<Texture> texture;
 	std::vector<unsigned char> yuv; ///< what upload() puts into texture
 #else

@@ -6,8 +6,8 @@
 #include "FontImpl.hpp"
 #include "Renderer.hpp"
 #include "ShaderCache.hpp"
-#ifdef JNGL_VULKAN
-#include "vulkan/VulkanRenderer.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "GpuBackend.hpp"
 #endif
 #include "audio.hpp"
 #include "freetype.hpp"
@@ -859,10 +859,10 @@ void Window::drawSquare(const Mat3& modelview, Rgba color) const {
 
 void Window::drawRoundedSquare(const Mat3& modelview, Rgba color, Vec2 size, float topLeft,
                                float topRight, float bottomLeft, float bottomRight) const {
-#ifdef JNGL_VULKAN
-	static_cast<VulkanRenderer&>(getRenderer())
-	    .drawRoundedRect(modelview, color, static_cast<float>(size.x), static_cast<float>(size.y),
-	                     topLeft, topRight, bottomLeft, bottomRight);
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().drawRoundedRect(modelview, color, static_cast<float>(size.x),
+	                              static_cast<float>(size.y), topLeft, topRight, bottomLeft,
+	                              bottomRight);
 #else
 	opengl::bindVertexArray(vaoSquare);
 	auto context = ShaderCache::handle().useRoundedRectShaderProgram(

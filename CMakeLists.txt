@@ -93,6 +93,10 @@ option(JNGL_TRACE "Enable tracing for debugging purposes" OFF)
 # platform (Linux, Windows and macOS); see src/vulkan/.
 option(JNGL_VULKAN "Use the experimental Vulkan renderer backend instead of OpenGL" OFF)
 
+# Experimental Direct3D 12 renderer backend, like JNGL_VULKAN. Only for the SDL3 platform on
+# Windows; see src/d3d12/. Building it requires the Vulkan SDK for its shader compilers.
+option(JNGL_D3D12 "Use the experimental Direct3D 12 renderer backend instead of OpenGL" OFF)
+
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
 if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
 	set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT ON)
@@ -458,55 +462,59 @@ else()
 	endif()
 endif()
 
+if(JNGL_VULKAN AND JNGL_D3D12)
+	message(FATAL_ERROR "JNGL_VULKAN and JNGL_D3D12 can't be enabled at the same time.")
+endif()
 if(JNGL_VULKAN)
 	if((NOT UNIX AND NOT WIN32) OR ANDROID OR IOS OR EMSCRIPTEN OR JNGL_WINAPI)
 		message(FATAL_ERROR "JNGL_VULKAN requires the desktop SDL3 backend on Linux, Windows or macOS (JNGL_WINAPI=OFF).")
 	endif()
+endif()
+if(JNGL_D3D12)
+	if(NOT WIN32 OR JNGL_WINAPI)
+		message(FATAL_ERROR "JNGL_D3D12 requires the SDL3 backend on Windows (JNGL_WINAPI=OFF).")
+	endif()
+endif()
+
+if(JNGL_VULKAN OR JNGL_D3D12)
+	# Both GPU backends compile GLSL to SPIR-V: their built-in shaders at build time with glslc, see
+	# src/spirv/shaders/, and user-defined jngl::Shader programs at runtime with shaderc. They're
+	# both in the Vulkan SDK, which is also what's needed for building the Direct3D 12 backend.
 	if(WIN32)
 		set(JNGL_VULKAN_SDK_LIBDIR "$ENV{VULKAN_SDK}/Lib")
 		if(CMAKE_SIZEOF_VOID_P EQUAL 4)
 			set(JNGL_VULKAN_SDK_LIBDIR "$ENV{VULKAN_SDK}/Lib32")
 		endif()
-		# Explicit SDK lookup also works with cja, whose FindVulkan only searches Unix libraries.
-		find_path(Vulkan_INCLUDE_DIR vulkan/vulkan.h HINTS "$ENV{VULKAN_SDK}/Include" REQUIRED)
-		find_library(Vulkan_LIBRARY NAMES vulkan-1 HINTS "${JNGL_VULKAN_SDK_LIBDIR}" REQUIRED)
-		target_include_directories(jngl PRIVATE ${Vulkan_INCLUDE_DIR})
-		target_link_libraries(jngl PRIVATE ${Vulkan_LIBRARY})
-	else()
-		find_package(Vulkan REQUIRED)
-		target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
 	endif()
 
 	find_program(GLSLC glslc HINTS "$ENV{VULKAN_SDK}/Bin" "$ENV{VULKAN_SDK}/bin" REQUIRED)
 	find_package(Python3 REQUIRED COMPONENTS Interpreter)
 
-	set(JNGL_VULKAN_BUILTIN_SHADERS colored.vert colored.frag textured.vert textured.frag rounded.vert
-	                            rounded.frag)
-	set(JNGL_VULKAN_SPIRV_HEADERS "")
-	foreach(SHADER ${JNGL_VULKAN_BUILTIN_SHADERS})
-		set(GLSL ${CMAKE_CURRENT_SOURCE_DIR}/src/vulkan/shaders/${SHADER})
-		set(SPV ${CMAKE_CURRENT_BINARY_DIR}/generated/vulkan_shaders/${SHADER}.spv)
-		set(HPP ${CMAKE_CURRENT_BINARY_DIR}/generated/vulkan_shaders/${SHADER}.spv.hpp)
+	set(JNGL_BUILTIN_SHADERS colored.vert colored.frag textured.vert textured.frag rounded.vert
+	                         rounded.frag)
+	set(JNGL_SPIRV_HEADERS "")
+	foreach(SHADER ${JNGL_BUILTIN_SHADERS})
+		set(GLSL ${CMAKE_CURRENT_SOURCE_DIR}/src/spirv/shaders/${SHADER})
+		set(SPV ${CMAKE_CURRENT_BINARY_DIR}/generated/spirv_shaders/${SHADER}.spv)
+		set(HPP ${CMAKE_CURRENT_BINARY_DIR}/generated/spirv_shaders/${SHADER}.spv.hpp)
 		string(REPLACE "." "_" SYMBOL ${SHADER})
 		add_custom_command(
 			OUTPUT ${SPV} ${HPP}
 			COMMAND ${CMAKE_COMMAND} -E make_directory
-			        ${CMAKE_CURRENT_BINARY_DIR}/generated/vulkan_shaders
+			        ${CMAKE_CURRENT_BINARY_DIR}/generated/spirv_shaders
 			COMMAND ${GLSLC} --target-env=vulkan1.1 -O ${GLSL} -o ${SPV}
 			COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/spirv_to_header.py
 			        ${SPV} ${HPP} ${SYMBOL}
 			DEPENDS ${GLSL} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/spirv_to_header.py
-			COMMENT "Compiling Vulkan shader ${SHADER}"
+			COMMENT "Compiling shader ${SHADER} to SPIR-V"
 			VERBATIM
 		)
-		list(APPEND JNGL_VULKAN_SPIRV_HEADERS ${HPP})
+		list(APPEND JNGL_SPIRV_HEADERS ${HPP})
 	endforeach()
-	add_custom_target(jngl_vulkan_shaders DEPENDS ${JNGL_VULKAN_SPIRV_HEADERS})
-	add_dependencies(jngl jngl_vulkan_shaders)
-	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated/vulkan_shaders)
+	add_custom_target(jngl_spirv_shaders DEPENDS ${JNGL_SPIRV_HEADERS})
+	add_dependencies(jngl jngl_spirv_shaders)
+	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated/spirv_shaders)
 
-	# shaderc (runtime GLSL -> SPIR-V for user-defined jngl::Shader programs). Built-in backend
-	# shaders are precompiled at build time with glslc, see src/vulkan/shaders/.
 	find_path(SHADERC_INCLUDE_DIR shaderc/shaderc.hpp
 		HINTS "$ENV{VULKAN_SDK}/Include" "$ENV{VULKAN_SDK}/include")
 	if(WIN32)
@@ -519,18 +527,52 @@ if(JNGL_VULKAN)
 			HINTS "$ENV{VULKAN_SDK}/lib")
 	endif()
 	if(NOT SHADERC_INCLUDE_DIR OR NOT SHADERC_LIBRARY)
-		message(FATAL_ERROR "JNGL_VULKAN requires shaderc (install the Vulkan SDK, "
+		message(FATAL_ERROR "JNGL_VULKAN and JNGL_D3D12 require shaderc (install the Vulkan SDK, "
 			"shaderc via Homebrew on macOS, or libshaderc-devel / libshaderc-dev on Linux). "
 			"include=${SHADERC_INCLUDE_DIR} lib=${SHADERC_LIBRARY}")
 	endif()
 	target_include_directories(jngl PRIVATE ${SHADERC_INCLUDE_DIR})
 	target_link_libraries(jngl PRIVATE ${SHADERC_LIBRARY})
 
+	file(GLOB SPIRV_SRC src/spirv/*.cpp)
+	target_sources(jngl PRIVATE ${SPIRV_SRC})
+	# Everything's drawn through GpuBackend.hpp instead of OpenGL
+	target_compile_definitions(jngl PUBLIC JNGL_GPU_BACKEND)
+endif()
+
+if(JNGL_VULKAN)
+	if(WIN32)
+		# Explicit SDK lookup also works with cja, whose FindVulkan only searches Unix libraries.
+		find_path(Vulkan_INCLUDE_DIR vulkan/vulkan.h HINTS "$ENV{VULKAN_SDK}/Include" REQUIRED)
+		find_library(Vulkan_LIBRARY NAMES vulkan-1 HINTS "${JNGL_VULKAN_SDK_LIBDIR}" REQUIRED)
+		target_include_directories(jngl PRIVATE ${Vulkan_INCLUDE_DIR})
+		target_link_libraries(jngl PRIVATE ${Vulkan_LIBRARY})
+	else()
+		find_package(Vulkan REQUIRED)
+		target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
+	endif()
+
 	file(GLOB VULKAN_SRC src/vulkan/*.cpp)
 	target_sources(jngl PRIVATE ${VULKAN_SRC})
 	target_compile_definitions(jngl PUBLIC JNGL_VULKAN)
 	# MoltenVK's portability feature declarations are still in the beta Vulkan headers.
 	target_compile_definitions(jngl PRIVATE VK_ENABLE_BETA_EXTENSIONS)
+endif()
+
+if(JNGL_D3D12)
+	# SPIRV-Cross translates the SPIR-V of the shaders to HLSL, which D3DCompile compiles (its DLL
+	# ships with Windows), see src/d3d12/HlslCompiler.cpp
+	find_path(SPIRV_CROSS_INCLUDE_DIR spirv_cross/spirv_cross_c.h
+		HINTS "$ENV{VULKAN_SDK}/Include" REQUIRED)
+	find_library(SPIRV_CROSS_LIBRARY NAMES spirv-cross-c-shared
+		HINTS "${JNGL_VULKAN_SDK_LIBDIR}" REQUIRED)
+	target_include_directories(jngl PRIVATE ${SPIRV_CROSS_INCLUDE_DIR})
+	target_link_libraries(jngl PRIVATE ${SPIRV_CROSS_LIBRARY} d3d12 dxgi d3dcompiler dxguid)
+
+	file(GLOB D3D12_SRC src/d3d12/*.cpp)
+	target_sources(jngl PRIVATE ${D3D12_SRC})
+	set_source_files_properties(${D3D12_SRC} PROPERTIES COMPILE_DEFINITIONS NOMINMAX)
+	target_compile_definitions(jngl PUBLIC JNGL_D3D12)
 endif()
 
 if(JNGL_BUILD_WEBP_FROM_SOURCE)

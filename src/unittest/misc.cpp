@@ -69,6 +69,8 @@ TEST_CASE("getGraphicsApi") {
 	INFO(api);
 #ifdef JNGL_VULKAN
 	REQUIRE(api.starts_with("Vulkan "));
+#elif defined(JNGL_D3D12)
+	REQUIRE(api.starts_with("Direct3D 12 "));
 #else
 	REQUIRE(api.starts_with("OpenGL "));
 #endif

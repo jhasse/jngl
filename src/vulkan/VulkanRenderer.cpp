@@ -1795,19 +1795,19 @@ void VulkanRenderer::ensurePipelines(const PassKind kind, const BlendVariant var
 	const VkRenderPass pass = pipelineRenderPass(kind);
 	const VkSampleCountFlagBits samples = pipelineSamples(kind);
 	{
-		const ShaderModules colored(device, vulkan_shaders::colored_vert,
-		                            vulkan_shaders::colored_frag);
+		const ShaderModules colored(device, spirv_shaders::colored_vert,
+		                            spirv_shaders::colored_frag);
 		buildColoredPipelines(colored.vert, colored.frag, pass, samples, variant,
 		                      coloredPipelines[k]);
 	}
 	{
-		const ShaderModules rounded(device, vulkan_shaders::rounded_vert,
-		                            vulkan_shaders::rounded_frag);
+		const ShaderModules rounded(device, spirv_shaders::rounded_vert,
+		                            spirv_shaders::rounded_frag);
 		buildRoundedPipeline(rounded.vert, rounded.frag, pass, samples, variant,
 		                     roundedPipelines[k][static_cast<size_t>(variant)]);
 	}
-	const ShaderModules textured(device, vulkan_shaders::textured_vert,
-	                             vulkan_shaders::textured_frag);
+	const ShaderModules textured(device, spirv_shaders::textured_vert,
+	                             spirv_shaders::textured_frag);
 	buildTexturedPipelines(textured.vert, textured.frag, pass, samples, variant,
 	                       texturedPipelines[k]);
 }
@@ -2715,6 +2715,10 @@ void VulkanRenderer::destroyLater(std::function<void()> destroy) {
 }
 
 namespace {
+VkFilter toVkFilter(const TextureFilter filter) {
+	return filter == TextureFilter::NearestNeighbor ? VK_FILTER_NEAREST : VK_FILTER_LINEAR;
+}
+
 /// Number of levels down to 1x1, like glGenerateMipmap creates
 uint32_t mipLevelCount(const int width, const int height) {
 	return static_cast<uint32_t>(std::bit_width(static_cast<uint32_t>(std::max(width, height))));
@@ -2995,8 +2999,10 @@ void VulkanRenderer::enableMipmaps(VulkanTexture& texture) {
 	texture = mipmapped;
 }
 
-void VulkanRenderer::setTextureFilter(VulkanTexture& texture, const VkFilter minFilter,
-                                      const VkFilter magFilter) {
+void VulkanRenderer::setTextureFilter(VulkanTexture& texture, const TextureFilter minification,
+                                      const TextureFilter magnification) {
+	const VkFilter minFilter = toVkFilter(minification);
+	const VkFilter magFilter = toVkFilter(magnification);
 	if ((texture.minFilter == minFilter && texture.magFilter == magFilter) || !texture.view) {
 		return;
 	}
@@ -3533,7 +3539,8 @@ void VulkanRenderer::resolveFramebuffer(VulkanFramebuffer& fb) {
 }
 
 const VulkanTexture& VulkanRenderer::framebufferTexture(VulkanFramebuffer& fb,
-                                                        const VkFilter filter) {
+                                                        const TextureFilter textureFilter) {
+	const VkFilter filter = toVkFilter(textureFilter);
 	if (filter == fb.color.minFilter) {
 		return fb.color;
 	}

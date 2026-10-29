@@ -11,7 +11,8 @@
 
 #include "../Renderer.hpp"
 #include "../jngl/Mat4.hpp"
-#include "ShaderCompiler.hpp"
+#include "../jngl/TextureFilter.hpp"
+#include "../spirv/ShaderCompiler.hpp"
 
 #include <array>
 #include <chrono>
@@ -173,7 +174,7 @@ public:
 	void enableMipmaps(VulkanTexture&);
 	/// Samples the texture with \a minFilter and \a magFilter from now on, see
 	/// Sprite::setTextureFilter. Draws recorded earlier in the frame keep the old ones.
-	void setTextureFilter(VulkanTexture&, VkFilter minFilter, VkFilter magFilter);
+	void setTextureFilter(VulkanTexture&, TextureFilter minFilter, TextureFilter magFilter);
 
 	/// Draw a textured primitive (\a xyuv: interleaved x, y, u, v) modulated by \a color.
 	void drawSprite(const VulkanTexture&, const float* xyuv, std::size_t vertexCount, PrimitiveType,
@@ -192,6 +193,7 @@ public:
 
 	/// Whether the GPU's time can be measured with timestamp queries, see jngl::GpuTimer
 	[[nodiscard]] bool areTimestampsSupported() const;
+	using TimestampPool = VkQueryPool;
 	/// A pool of \a count timestamp queries, which have all been reset
 	[[nodiscard]] VkQueryPool createTimestampPool(uint32_t count);
 	/// Destroys \a pool once the GPU is done with it, see destroyLater()
@@ -216,7 +218,7 @@ public:
 	void destroyFramebuffer(VulkanFramebuffer&);
 	/// Samples the framebuffer with the requested filter, caching both modes without changing
 	/// the default or allocating new samplers on each draw.
-	const VulkanTexture& framebufferTexture(VulkanFramebuffer&, VkFilter);
+	const VulkanTexture& framebufferTexture(VulkanFramebuffer&, TextureFilter);
 
 	/// Redirects subsequent draws into \a framebuffer until popRenderTarget() is called. Render
 	/// targets nest (FrameBuffers can be used inside one another).

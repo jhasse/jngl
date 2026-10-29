@@ -64,6 +64,18 @@ At runtime, `shaderc_shared.dll` from the SDK's `Bin` directory must be on `PATH
 executable. Include this DLL when distributing a Vulkan build. The Vulkan loader is supplied by
 the graphics driver; users need a Vulkan-capable driver, but do not need the SDK.
 
+### Direct3D 12
+The experimental Direct3D 12 renderer also needs the Vulkan SDK to build, for its shader compilers
+(GLSL is compiled to SPIR-V and translated to HLSL by SPIRV-Cross):
+```bash
+cmake -Bbuild-d3d12 -DJNGL_D3D12=1 -DJNGL_WINAPI=OFF
+cmake --build build-d3d12 --config Release
+```
+At runtime, `shaderc_shared.dll` and `spirv-cross-c-shared.dll` from the SDK's `Bin` directory
+must be on `PATH` or beside the executable. Include these DLLs when distributing a Direct3D 12
+build. Debug builds enable the Direct3D 12 debug layer if the Graphics Tools optional feature of
+Windows is installed.
+
 ## macOS
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 ```bash

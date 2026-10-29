@@ -10,9 +10,8 @@
 #include <cassert>
 #include <stdexcept>
 
-#ifdef JNGL_VULKAN
-#include "../Renderer.hpp"
-#include "../vulkan/VulkanRenderer.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "../GpuBackend.hpp"
 #endif
 
 namespace jngl {
@@ -20,21 +19,15 @@ namespace jngl {
 int ShaderProgram::Context::referenceCount = 0;
 const ShaderProgram::Impl* ShaderProgram::Context::activeImpl = nullptr;
 
-#ifdef JNGL_VULKAN
-
-namespace {
-VulkanRenderer& vulkanRenderer() {
-	return static_cast<VulkanRenderer&>(getRenderer());
-}
-} // namespace
+#ifdef JNGL_GPU_BACKEND
 
 struct ShaderProgram::Impl {
-	std::unique_ptr<VulkanShaderProgram> program;
+	std::unique_ptr<GpuShaderProgram> program;
 
 	~Impl() {
 		if (program) {
-			if (auto* renderer = getRendererIfExists()) {
-				static_cast<VulkanRenderer*>(renderer)->destroyShaderProgram(*program);
+			if (auto* renderer = gpuRendererIfExists()) {
+				renderer->destroyShaderProgram(*program);
 			}
 		}
 	}
@@ -43,9 +36,9 @@ struct ShaderProgram::Impl {
 ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 : impl(std::make_unique<Impl>()) {
 	// Custom uniforms live on the fragment stage (sprite vertex uses push constants only).
-	impl->program = vulkanRenderer().createShaderProgram(vertex.impl->spirv, fragment.impl->spirv,
-	                                                     fragment.impl->uniforms,
-	                                                     fragment.impl->uniformBlockSize);
+	impl->program =
+	    gpuRenderer().createShaderProgram(vertex.impl->spirv, fragment.impl->spirv,
+	                                      fragment.impl->uniforms, fragment.impl->uniformBlockSize);
 	App::instance().registerShaderProgram(this);
 }
 
@@ -54,7 +47,7 @@ ShaderProgram::Context ShaderProgram::use() const {
 }
 
 int ShaderProgram::getAttribLocation(const std::string& /*name*/) const {
-	// Attribute locations are fixed by the built-in sprite vertex shader on Vulkan.
+	// Attribute locations are fixed by the built-in sprite vertex shader on the GPU backends.
 	return 0;
 }
 
@@ -159,8 +152,8 @@ ShaderProgram::Context::Context(const ShaderProgram::Impl& impl) {
 			throw std::runtime_error("A different ShaderProgram is already in use.");
 		}
 	} else {
-#ifdef JNGL_VULKAN
-		vulkanRenderer().setActiveShaderProgram(impl.program.get());
+#ifdef JNGL_GPU_BACKEND
+		gpuRenderer().setActiveShaderProgram(impl.program.get());
 #else
 		glUseProgram(impl.id);
 #endif
@@ -176,11 +169,11 @@ ShaderProgram::Context::Context(Context&&) noexcept {
 ShaderProgram::Context::~Context() {
 	--referenceCount;
 	assert(referenceCount >= 0);
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	if (referenceCount == 0) {
 		activeImpl = nullptr;
-		if (auto* renderer = getRendererIfExists()) {
-			static_cast<VulkanRenderer*>(renderer)->setActiveShaderProgram(nullptr);
+		if (auto* renderer = gpuRendererIfExists()) {
+			renderer->setActiveShaderProgram(nullptr);
 		}
 	}
 #endif
@@ -188,11 +181,11 @@ ShaderProgram::Context::~Context() {
 
 void ShaderProgram::Context::setUniform(const int location, const int v0) {
 	assert(referenceCount >= 0);
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	assert(activeImpl);
 	const auto& u = activeImpl->program->uniforms.at(static_cast<size_t>(location));
 	assert(u.size >= sizeof(v0));
-	vulkanRenderer().setActiveProgramUniform(u.offset, &v0, sizeof(v0));
+	gpuRenderer().setActiveProgramUniform(u.offset, &v0, sizeof(v0));
 #else
 	glUniform1i(location, v0);
 #endif
@@ -200,11 +193,11 @@ void ShaderProgram::Context::setUniform(const int location, const int v0) {
 
 void ShaderProgram::Context::setUniform(const int location, const float v0) {
 	assert(referenceCount >= 0);
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	assert(activeImpl);
 	const auto& u = activeImpl->program->uniforms.at(static_cast<size_t>(location));
 	assert(u.size >= sizeof(v0));
-	vulkanRenderer().setActiveProgramUniform(u.offset, &v0, sizeof(v0));
+	gpuRenderer().setActiveProgramUniform(u.offset, &v0, sizeof(v0));
 #else
 	glUniform1f(location, v0);
 #endif
@@ -212,12 +205,12 @@ void ShaderProgram::Context::setUniform(const int location, const float v0) {
 
 void ShaderProgram::Context::setUniform(const int location, const float v0, const float v1) {
 	assert(referenceCount >= 0);
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	assert(activeImpl);
 	const auto& u = activeImpl->program->uniforms.at(static_cast<size_t>(location));
 	const float values[2] = { v0, v1 };
 	assert(u.size >= sizeof(values));
-	vulkanRenderer().setActiveProgramUniform(u.offset, values, sizeof(values));
+	gpuRenderer().setActiveProgramUniform(u.offset, values, sizeof(values));
 #else
 	glUniform2f(location, v0, v1);
 #endif
@@ -226,12 +219,12 @@ void ShaderProgram::Context::setUniform(const int location, const float v0, cons
 void ShaderProgram::Context::setUniform(const int location, const float v0, const float v1,
                                         const float v2, const float v3) {
 	assert(referenceCount >= 0);
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	assert(activeImpl);
 	const auto& u = activeImpl->program->uniforms.at(static_cast<size_t>(location));
 	const float values[4] = { v0, v1, v2, v3 };
 	assert(u.size >= sizeof(values));
-	vulkanRenderer().setActiveProgramUniform(u.offset, values, sizeof(values));
+	gpuRenderer().setActiveProgramUniform(u.offset, values, sizeof(values));
 #else
 	glUniform4f(location, v0, v1, v2, v3);
 #endif
@@ -239,12 +232,12 @@ void ShaderProgram::Context::setUniform(const int location, const float v0, cons
 
 void ShaderProgram::Context::setUniform(const int location, const Rgb color) {
 	assert(referenceCount >= 0);
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	assert(activeImpl);
 	const auto& u = activeImpl->program->uniforms.at(static_cast<size_t>(location));
 	const float values[3] = { color.getRed(), color.getGreen(), color.getBlue() };
 	assert(u.size >= sizeof(values));
-	vulkanRenderer().setActiveProgramUniform(u.offset, values, sizeof(values));
+	gpuRenderer().setActiveProgramUniform(u.offset, values, sizeof(values));
 #else
 	glUniform3f(location, color.getRed(), color.getGreen(), color.getBlue());
 #endif

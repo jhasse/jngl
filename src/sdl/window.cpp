@@ -4,8 +4,8 @@
 #include "../App.hpp"
 #include "../Renderer.hpp"
 #include "../StartupProfiler.hpp"
-#ifdef JNGL_VULKAN
-#include "../vulkan/VulkanRenderer.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "../GpuBackend.hpp"
 #endif
 #include "../helper.hpp"
 #include "../jngl/ImageData.hpp"
@@ -79,6 +79,8 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 
 #ifdef JNGL_VULKAN
 	Uint32 flags = SDL_WINDOW_VULKAN;
+#elif defined(JNGL_D3D12)
+	Uint32 flags = 0; // D3D12Renderer creates the swap chain for the window's HWND itself
 #else
 #ifdef __APPLE__ // https://stackoverflow.com/a/26981800/647898
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -111,7 +113,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		                               // be reduced in its height (SDL bug?).
 	}
 
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	{
 		internal::StartupProfiler _{ "SDL_CreateWindow" };
 		impl->sdlWindow = SDL_CreateWindow(title.c_str(), width, height, flags);
@@ -166,7 +168,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 #endif
 		}
 	}
-#endif // JNGL_VULKAN
+#endif // JNGL_GPU_BACKEND
 
 	// This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by SDL2). On
 	// Linux (GNOME) it results in the top of the window being cut off (by the header bar height?).
@@ -192,16 +194,15 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	setScaleFactor(getScaleFactor() * impl->hidpiScaleFactor);
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 
-	// Create the rendering backend (OpenGL or Vulkan). It registers itself as the active backend,
-	// so getRenderer() works from here on (e.g. in App::initGl below). On Vulkan this also brings
-	// up the instance, device and swapchain at the aligned pixel size.
+	// Create the rendering backend (OpenGL, Vulkan or Direct3D 12). It registers itself as the
+	// active backend, so getRenderer() works from here on (e.g. in App::initGl below). On Vulkan
+	// and Direct3D 12 this also brings up the device and swapchain at the aligned pixel size.
 	{
 		internal::StartupProfiler _{ "createRenderer" };
 		impl->renderer = createRenderer(impl->sdlWindow);
 	}
-#ifdef JNGL_VULKAN
-	isMultisampleSupported_ =
-	    static_cast<VulkanRenderer&>(*impl->renderer).isMultisampleSupported();
+#ifdef JNGL_GPU_BACKEND
+	isMultisampleSupported_ = static_cast<GpuRenderer&>(*impl->renderer).isMultisampleSupported();
 #endif
 	{
 		internal::StartupProfiler _{ "Window::initGl" };
@@ -477,7 +478,7 @@ void Window::UpdateInput() {
 				impl->hidpiScaleFactor =
 				    static_cast<float>(newWidth) / static_cast<float>(logicalWidth);
 			}
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 			getRenderer().onResize(newWidth, newHeight);
 #endif
 			setActualSize(newWidth, newHeight);
@@ -506,7 +507,7 @@ void Window::UpdateInput() {
 }
 
 void Window::SwapBuffers() {
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	getRenderer().endFrame();
 #else
 	SDL_GL_SwapWindow(impl->sdlWindow);

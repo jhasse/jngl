@@ -6,8 +6,8 @@
 #include "App.hpp"
 #include "Renderer.hpp"
 #include "ShaderCache.hpp"
-#ifdef JNGL_VULKAN
-#include "vulkan/VulkanRenderer.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "GpuBackend.hpp"
 #endif
 #include "jngl/Alpha.hpp"
 #include "jngl/ScaleablePixels.hpp"
@@ -73,12 +73,12 @@ Rgb backgroundColor(1, 1, 1);
 std::stack<jngl::Mat3> modelviewStack;
 
 void clearBackgroundColor() {
-#ifndef JNGL_VULKAN
+#ifndef JNGL_GPU_BACKEND
 	glClearColor(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(),
 	             1);
 #endif
-	// On Vulkan the background color is read from the `backgroundColor` global directly in
-	// VulkanRenderer::beginFrame, so there's nothing to set here.
+	// On the GPU backends the background color is passed to Renderer::beginFrame, so there's
+	// nothing to set here.
 }
 
 namespace {
@@ -107,9 +107,8 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 		             .width = canvasWidth,
 		             .height = canvasHeight,
 		             .letterboxed = canvasWidth != width || canvasHeight != height };
-#ifdef JNGL_VULKAN
-	static_cast<VulkanRenderer&>(getRenderer())
-	    .updateLetterboxing(width, height, canvasWidth, canvasHeight);
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().updateLetterboxing(width, height, canvasWidth, canvasHeight);
 	getRenderer().setViewport(0, 0, width, height);
 #else
 	glViewport(0, 0, width, height);
@@ -140,9 +139,9 @@ void applyScissor() {
 			       .letterboxed = false };
 	}
 	if (scissorStack.empty()) {
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 		// The renderer applies the window's letterboxing itself
-		static_cast<VulkanRenderer&>(getRenderer()).setScissor(std::nullopt);
+		gpuRenderer().setScissor(std::nullopt);
 #else
 		if (canvas.letterboxed) {
 			glEnable(GL_SCISSOR_TEST);
@@ -172,11 +171,11 @@ void applyScissor() {
 		top =
 		    std::min(top, std::lround(canvas.y + canvas.height / 2. - position.y * pixelsPerUnitY));
 	}
-#ifdef JNGL_VULKAN
-	static_cast<VulkanRenderer&>(getRenderer())
-	    .setScissor(VulkanRenderer::ScissorBox{ static_cast<int>(left), static_cast<int>(bottom),
-	                                            static_cast<int>(std::max(0L, right - left)),
-	                                            static_cast<int>(std::max(0L, top - bottom)) });
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().setScissor(
+	    GpuRenderer::ScissorBox{ static_cast<int>(left), static_cast<int>(bottom),
+	                             static_cast<int>(std::max(0L, right - left)),
+	                             static_cast<int>(std::max(0L, top - bottom)) });
 #else
 	glEnable(GL_SCISSOR_TEST);
 	glScissor(static_cast<GLint>(left), static_cast<GLint>(bottom),
@@ -257,7 +256,7 @@ void showWindow(const std::string& title, const double width, const double heigh
 	pWindow->SetMouseVisible(isMouseVisible);
 	pWindow->setMouseConfined(isMouseConfined);
 	setAntiAliasing(antiAliasingEnabled);
-#ifndef JNGL_VULKAN
+#ifndef JNGL_GPU_BACKEND
 	pWindow->initGlObjects();
 #else
 	// Begin the first frame, so that what's drawn before the first swapBuffers() isn't lost, like
@@ -299,7 +298,7 @@ void swapBuffers() {
 }
 
 void clearBackBuffer() {
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	getRenderer().beginFrame(backgroundColor);
 	reset();
 	if (!modelviewStack.empty()) {
@@ -374,8 +373,8 @@ void setBackgroundColor(const jngl::Rgb color) {
 	pWindow.ThrowIfNull();
 	backgroundColor = color;
 	clearBackgroundColor();
-#ifdef JNGL_VULKAN
-	static_cast<VulkanRenderer&>(getRenderer()).clearCurrentRenderTarget(Rgba(color, Alpha(1)));
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().clearCurrentRenderTarget(Rgba(color, Alpha(1)));
 #else
 	glClear(GL_COLOR_BUFFER_BIT);
 #endif
@@ -557,10 +556,9 @@ void readPixels(void* buffer, GLenum type) {
 	const int x = (pWindow->getActualWidth() - actualCanvasWidth) / 2;
 	const int y = (pWindow->getActualHeight() - actualCanvasHeight) / 2;
 
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	std::vector<unsigned char> rgb(static_cast<size_t>(actualCanvasWidth) * actualCanvasHeight * 3);
-	static_cast<VulkanRenderer&>(getRenderer())
-	    .readPixels(rgb.data(), x, y, actualCanvasWidth, actualCanvasHeight);
+	gpuRenderer().readPixels(rgb.data(), x, y, actualCanvasWidth, actualCanvasHeight);
 	// The canvas might be zoomed (see getWindowWidth), so scale it to the size of the buffer with
 	// linear filtering, like glBlitFramebuffer does on OpenGL
 	const auto sample = [&](const int dstX, const int dstY, const int channel) {
@@ -925,12 +923,12 @@ double getMouseWheel() {
 }
 
 void setAntiAliasing(bool enabled) {
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	if (!pWindow->isMultisampleSupported()) {
 		antiAliasingEnabled = false;
 		return;
 	}
-	static_cast<VulkanRenderer&>(getRenderer()).setMultisampleAntiAliasing(enabled);
+	gpuRenderer().setMultisampleAntiAliasing(enabled);
 	antiAliasingEnabled = enabled;
 #elif defined(GL_MULTISAMPLE_ARB)
 	if (!pWindow->isMultisampleSupported()) {
@@ -957,8 +955,8 @@ std::string getGraphicsApi() {
 	if (!pWindow) {
 		return "";
 	}
-#ifdef JNGL_VULKAN
-	return static_cast<VulkanRenderer&>(getRenderer()).getGraphicsApi();
+#ifdef JNGL_GPU_BACKEND
+	return gpuRenderer().getGraphicsApi();
 #else
 	const auto* const version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
 	if (!version) {

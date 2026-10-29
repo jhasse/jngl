@@ -22,7 +22,7 @@ TEST_CASE("GpuTimer") {
 		jngl::drawRect(jngl::modelview(), { 10, 10 }, 0x000000_rgb);
 		timer.stop();
 	}
-#ifdef JNGL_VULKAN
+#ifdef JNGL_GPU_BACKEND
 	jngl::readPixels(); // submits what's been drawn and waits for it, so that both have come in
 #else
 	glFinish(); // so that both have come in

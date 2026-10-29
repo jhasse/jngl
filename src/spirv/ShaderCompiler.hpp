@@ -1,20 +1,23 @@
 // Copyright 2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-/// Runtime GLSL -> SPIR-V compilation for user-defined jngl::Shader programs on the Vulkan backend.
-/// Built-in backend shaders are precompiled at build time; see src/vulkan/shaders/.
+/// Runtime GLSL -> SPIR-V compilation for user-defined jngl::Shader programs on the Vulkan and
+/// Direct3D 12 backends. Built-in backend shaders are precompiled at build time; see
+/// src/spirv/shaders/.
 ///
-/// JNGL's public Shader API (see jngl/Shader.hpp) hands shaders to the engine as GLSL source. The
-/// Vulkan backend compiles that source to SPIR-V at runtime so the public API doesn't have to
-/// change. OpenGL-style bare non-opaque uniforms are wrapped into a std140 UBO at set 1, binding 0
-/// (sampler stays at set 0, binding 0) so setUniform can update them.
+/// JNGL's public Shader API (see jngl/Shader.hpp) hands shaders to the engine as GLSL source. These
+/// backends compile that source to SPIR-V at runtime so the public API doesn't have to change (the
+/// Direct3D 12 backend then translates the SPIR-V to HLSL, see compileSpirvToDxbc). OpenGL-style
+/// bare non-opaque uniforms are wrapped into a std140 UBO at set 1, binding 0 (sampler stays at set
+/// 0, binding 0) so setUniform can update them.
 /// @file
 #pragma once
+
+#include "../jngl/Shader.hpp"
 
 #include <cstdint>
 #include <string>
 #include <vector>
-#include <vulkan/vulkan.h>
 
 namespace jngl {
 
@@ -35,7 +38,6 @@ struct CompiledShader {
 
 /// Compiles GLSL \a source for the given shader \a stage to SPIR-V. \a name is only used in error
 /// messages. Throws std::runtime_error on a compilation error.
-CompiledShader compileGlslToSpirv(const char* source, VkShaderStageFlagBits stage,
-                                  const char* name);
+CompiledShader compileGlslToSpirv(const char* source, Shader::Type stage, const char* name);
 
 } // namespace jngl

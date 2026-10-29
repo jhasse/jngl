@@ -1,7 +1,7 @@
 // Copyright 2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-#ifndef JNGL_VULKAN
+#ifndef JNGL_GPU_BACKEND
 
 #include "OpenGLRenderer.hpp"
 
