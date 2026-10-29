@@ -22,6 +22,9 @@
 namespace jngl {
 
 /// One non-opaque uniform inside the auto-generated UBO, with its std140 byte offset/size.
+///
+/// Of an array, there's one for each element: the first one has the array's name, the others
+/// "name[1]", "name[2]" and so on, see ShaderProgram::getUniformLocation.
 struct ShaderUniform {
 	std::string name;
 	uint32_t offset = 0;

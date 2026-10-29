@@ -2076,9 +2076,8 @@ void VulkanRenderer::createUniformBuffers() {
 	vkGetPhysicalDeviceProperties(physicalDevice, &props);
 	minUniformBufferOffsetAlignment = props.limits.minUniformBufferOffsetAlignment;
 
-	// Small UBOs (blur/caster/etc.) are padded to minUniformBufferOffsetAlignment per draw; 256 KiB
-	// covers a thousand custom-shader draws per frame, bindActiveProgramUniforms grows it if
-	// needed.
+	// Each custom-shader draw takes its UBO's size, padded to minUniformBufferOffsetAlignment;
+	// 256 KiB covers a thousand of them per frame, bindActiveProgramUniforms grows it if needed.
 	constexpr VkDeviceSize capacity = 1u << 18u;
 	uniformBuffers.resize(maxFramesInFlight);
 	retiredUniformBuffers.resize(maxFramesInFlight);
@@ -2156,7 +2155,8 @@ void VulkanRenderer::bindActiveProgramUniforms(const VkCommandBuffer cmd) {
 	}
 	std::memcpy(static_cast<char*>(ub.mapped) + aligned, activeShaderProgram->uniformMapped,
 	            activeShaderProgram->uniformBlockSize);
-	ub.used = aligned + uniformDynamicRange;
+	// The next draw's may start within uniformDynamicRange, which only has to fit into the buffer
+	ub.used = aligned + activeShaderProgram->uniformBlockSize;
 	const uint32_t dynamicOffset = static_cast<uint32_t>(aligned);
 	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 1, 1,
 	                        &ub.descriptorSet, 1, &dynamicOffset);

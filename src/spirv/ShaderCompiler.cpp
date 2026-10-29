@@ -3,6 +3,7 @@
 
 #include "ShaderCompiler.hpp"
 
+#include <algorithm>
 #include <regex>
 #include <shaderc/shaderc.hpp>
 #include <stdexcept>
@@ -18,6 +19,7 @@ struct ParsedUniform {
 	std::string precision; // e.g. "HIGHP " or ""
 	std::string type; // vec2, bool, sampler2D, …
 	std::string name;
+	uint32_t arrayLength = 0; // 0 if it isn't an array
 	bool opaque = false;
 };
 
@@ -79,7 +81,7 @@ std::size_t insertPositionAfterPreprocessor(const std::string& source) {
 std::string wrapUniformsInUbo(std::string source, std::vector<ShaderUniform>& outUniforms,
                               uint32_t& outBlockSize) {
 	static const std::regex re(
-	    R"(\buniform\s+((?:(?:lowp|mediump|highp|HIGHP)\s+)*)(\w+)\s+(\w+)\s*;)");
+	    R"(\buniform\s+((?:(?:lowp|mediump|highp|HIGHP)\s+)*)(\w+)\s+(\w+)\s*(?:\[\s*(\w+)\s*\])?\s*;)");
 
 	std::vector<ParsedUniform> parsed;
 	std::string withoutDecls;
@@ -91,6 +93,15 @@ std::string wrapUniformsInUbo(std::string source, std::vector<ShaderUniform>& ou
 		u.precision = m[1].str();
 		u.type = m[2].str();
 		u.name = m[3].str();
+		if (m[4].matched) {
+			const std::string length = m[4].str();
+			if (!std::ranges::all_of(length, [](const char c) { return c >= '0' && c <= '9'; }) ||
+			    std::stoul(length) == 0) {
+				throw std::runtime_error("The length of the uniform array " + u.name +
+				                         " has to be a positive number, not " + length + ".");
+			}
+			u.arrayLength = static_cast<uint32_t>(std::stoul(length));
+		}
 		u.opaque = u.type.find("sampler") == 0;
 		parsed.push_back(std::move(u));
 		withoutDecls.append(source, last, static_cast<std::size_t>(m.position()) - last);
@@ -107,21 +118,39 @@ std::string wrapUniformsInUbo(std::string source, std::vector<ShaderUniform>& ou
 			continue;
 		}
 		const auto [alignment, size] = std140AlignAndSize(u.type);
-		offset = alignUp(offset, alignment);
-		outUniforms.push_back({ u.name, offset, size });
+		const uint32_t occupied = alignment == 16 && size == 12 ? 16u : size; // vec3: 16 bytes
 		blockMembers += '\t';
 		blockMembers += uboMemberType(u.type);
 		blockMembers += ' ';
 		blockMembers += u.name;
+		if (u.arrayLength == 0) {
+			offset = alignUp(offset, alignment);
+			outUniforms.push_back({ u.name, offset, size });
+			offset += occupied;
+		} else {
+			blockMembers += '[' + std::to_string(u.arrayLength) + ']';
+			// std140 starts the array and each of its elements at a multiple of 16 bytes
+			const uint32_t stride = alignUp(occupied, 16);
+			offset = alignUp(offset, 16);
+			// Like on OpenGL, the name alone is the first element, and "name[i]" the others
+			outUniforms.push_back({ u.name, offset, size });
+			for (uint32_t i = 1; i < u.arrayLength; ++i) {
+				outUniforms.push_back(
+				    { u.name + '[' + std::to_string(i) + ']', offset + i * stride, size });
+			}
+			offset += u.arrayLength * stride;
+		}
 		blockMembers += ";\n";
-		offset += alignment == 16 && size == 12 ? 16u : size; // vec3 occupies 16 bytes
 	}
 	if (!outUniforms.empty()) {
 		outBlockSize = alignUp(offset, 16);
 	}
 
 	// Qualify non-opaque names as u.name now that their bare declarations are gone.
-	for (const ShaderUniform& u : outUniforms) {
+	for (const ParsedUniform& u : parsed) {
+		if (u.opaque) {
+			continue;
+		}
 		const std::regex nameRe("\\b" + u.name + "\\b");
 		withoutDecls = std::regex_replace(withoutDecls, nameRe, "u." + u.name);
 	}
@@ -136,6 +165,9 @@ std::string wrapUniformsInUbo(std::string source, std::vector<ShaderUniform>& ou
 		header += u.type;
 		header += ' ';
 		header += u.name;
+		if (u.arrayLength > 0) {
+			header += '[' + std::to_string(u.arrayLength) + ']';
+		}
 		header += ";\n";
 	}
 	if (!outUniforms.empty()) {

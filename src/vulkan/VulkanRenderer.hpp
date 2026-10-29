@@ -587,7 +587,8 @@ private:
 	std::vector<DynamicUniformBuffer> uniformBuffers;
 	std::vector<std::vector<DynamicUniformBuffer>> retiredUniformBuffers;
 	VkDeviceSize minUniformBufferOffsetAlignment = 256;
-	static constexpr VkDeviceSize uniformDynamicRange = 256; // max UBO size we bind per draw
+	// Max UBO size we bind per draw: the maxUniformBufferRange that every device supports
+	static constexpr VkDeviceSize uniformDynamicRange = 16384;
 
 	uint32_t currentFrame = 0;
 	uint32_t currentImageIndex = 0;

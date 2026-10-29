@@ -9,6 +9,7 @@
 #include <array>
 #include <cassert>
 #include <stdexcept>
+#include <string_view>
 
 #ifdef JNGL_GPU_BACKEND
 #include "../GpuBackend.hpp"
@@ -52,9 +53,14 @@ int ShaderProgram::getAttribLocation(const std::string& /*name*/) const {
 }
 
 int ShaderProgram::getUniformLocation(const std::string& name) const {
+	// Like on OpenGL, the first element of an array is also its name alone, see ShaderUniform
+	const std::string_view element0 = "[0]";
+	const std::string_view search =
+	    name.ends_with(element0) ? std::string_view(name).substr(0, name.size() - element0.size())
+	                             : std::string_view(name);
 	const auto& uniforms = impl->program->uniforms;
 	for (int i = 0; i < static_cast<int>(uniforms.size()); ++i) {
-		if (uniforms[static_cast<size_t>(i)].name == name) {
+		if (uniforms[static_cast<size_t>(i)].name == search) {
 			return i;
 		}
 	}
