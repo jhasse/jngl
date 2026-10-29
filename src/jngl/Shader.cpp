@@ -8,7 +8,7 @@
 #include <sstream>
 #include <stdexcept>
 
-#ifdef JNGL_GPU_BACKEND
+#if defined(JNGL_GPU_BACKEND) && !defined(JNGL_D3D12)
 #include "../spirv/ShaderCompiler.hpp"
 #endif
 
@@ -17,8 +17,13 @@ namespace jngl {
 #ifdef JNGL_GPU_BACKEND
 Shader::Shader(const char* source, const Type type, const char* const /*gles20Source*/)
 : impl(std::make_unique<Impl>()) {
+#ifdef JNGL_D3D12
+	// Only compiled at build time by jngl-shaderc, see ShaderProgram(const ShaderBytecode&)
+	(void)type;
+#else
 	// So that errors are reported here, like on OpenGL
 	checkGlsl(source, type, type == Type::VERTEX ? "vertex" : "fragment");
+#endif
 	impl->source = source;
 }
 #else

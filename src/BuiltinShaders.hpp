@@ -169,4 +169,26 @@ inline constexpr const char* texturedFragmentGles2 = R"(#version 100
 		gl_FragColor = mix(texture2D(tex, texCoord), vec4(lerpColor, 0.0), lerpFactors);
 	})";
 
+/// jngl::Video's frames on the GPU backends, whose ShaderPrograms sample a single texture: each of
+/// its texels has the Y, U and V of its pixel in R, G and B. Used with texturedVertex.
+inline constexpr const char* videoFragment = R"(#version 300 es
+	uniform sampler2D tex;
+
+	in mediump vec2 texCoord;
+
+	out lowp vec4 outColor;
+
+	void main() {
+		lowp vec3 yuv = texture(tex, texCoord).rgb;
+		lowp float y = 1.1643 * (yuv.r - 0.0625);
+		lowp float u = yuv.g - 0.5;
+		lowp float v = yuv.b - 0.5;
+		outColor = vec4(
+			y + 1.5958 * v,
+			y - 0.39173 * u - 0.81290 * v,
+			y + 2.017 * u,
+			1.0
+		);
+	})";
+
 } // namespace jngl::builtin_shaders

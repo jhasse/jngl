@@ -4,9 +4,9 @@
 /// Experimental Direct3D 12 implementation of the Renderer interface, see Renderer.hpp.
 ///
 /// A 2D backend for the SDL3 platform on Windows, with the same API as VulkanRenderer (see
-/// GpuBackend.hpp). Shaders are compiled from GLSL to SPIR-V and translated to HLSL, which is
-/// compiled to DXBC, see HlslCompiler.hpp: the built-in ones at build time by jngl-shaderc, and
-/// user-defined ShaderPrograms at runtime.
+/// GpuBackend.hpp), except that it doesn't compile shaders at runtime: all of them, the built-in
+/// ones and those of a game's ShaderPrograms, are compiled at build time by jngl-shaderc from GLSL
+/// to SPIR-V, translated to HLSL and compiled to DXBC, see HlslCompiler.hpp and ShaderBytecode.
 ///
 /// This header doesn't include any Windows or Direct3D headers, as it's included by everything
 /// that draws, see GpuBackend.hpp. D3D12Renderer's state lives in its Impl, see
@@ -187,8 +187,8 @@ public:
 	/// within the scissor, like glClear. Does nothing if no frame has begun.
 	void clearCurrentRenderTarget(Rgba color);
 
-	/// Builds a custom shader program (see jngl::ShaderProgram), translating its SPIR-V to DXBC
-	std::unique_ptr<D3D12ShaderProgram> createShaderProgram(CompiledProgram);
+	/// Builds a custom shader program (see jngl::ShaderProgram) from DXBC compiled by jngl-shaderc
+	std::unique_ptr<D3D12ShaderProgram> createShaderProgram(const ShaderBytecode&);
 	void destroyShaderProgram(D3D12ShaderProgram&);
 	/// Makes \a program (or nullptr for the built-in sprite shader) the one used by drawSprite.
 	void setActiveShaderProgram(const D3D12ShaderProgram* program);

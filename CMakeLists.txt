@@ -477,9 +477,9 @@ if(JNGL_D3D12)
 endif()
 
 if(JNGL_VULKAN OR JNGL_D3D12)
-	# Both GPU backends compile GLSL to SPIR-V with shaderc: user-defined jngl::Shader programs at
-	# runtime, and the built-in shaders at build time with jngl-shaderc, see below. It's in the
-	# Vulkan SDK, which is also what's needed for building the Direct3D 12 backend.
+	# jngl-shaderc compiles GLSL to SPIR-V with shaderc, which the Vulkan backend also does at
+	# runtime for user-defined jngl::Shader programs. It's in the Vulkan SDK, which is also what's
+	# needed for building the Direct3D 12 backend.
 	if(WIN32)
 		set(JNGL_VULKAN_SDK_LIBDIR "$ENV{VULKAN_SDK}/Lib")
 		if(CMAKE_SIZEOF_VOID_P EQUAL 4)
@@ -504,32 +504,31 @@ if(JNGL_VULKAN OR JNGL_D3D12)
 			"shaderc via Homebrew on macOS, or libshaderc-devel / libshaderc-dev on Linux). "
 			"include=${SHADERC_INCLUDE_DIR} lib=${SHADERC_LIBRARY}")
 	endif()
-	target_include_directories(jngl PRIVATE ${SHADERC_INCLUDE_DIR})
-	target_link_libraries(jngl PRIVATE ${SHADERC_LIBRARY})
-	target_compile_definitions(jngl PRIVATE ${JNGL_SHADERC_DEFINITIONS})
-
 	file(GLOB SPIRV_SRC src/spirv/*.cpp)
-	target_sources(jngl PRIVATE ${SPIRV_SRC})
+
 	# Everything's drawn through GpuBackend.hpp instead of OpenGL
 	target_compile_definitions(jngl PUBLIC JNGL_GPU_BACKEND)
+	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-	# Compiles the built-in shaders (see src/BuiltinShaders.hpp) with the same code that compiles
-	# games' shaders at runtime, into a header with their bytecode for the backend
+	# Compiles ShaderPrograms' GLSL into a header with their bytecode for the backend, see
+	# src/jngl/ShaderBytecode.hpp: the built-in ones (see src/BuiltinShaders.hpp) and those of games,
+	# see jngl_compile_shaders() below
 	add_executable(jngl-shaderc src/shaderc/main.cpp ${SPIRV_SRC})
 	target_compile_features(jngl-shaderc PRIVATE cxx_std_20)
 	target_include_directories(jngl-shaderc PRIVATE ${SHADERC_INCLUDE_DIR})
 	target_link_libraries(jngl-shaderc PRIVATE ${SHADERC_LIBRARY})
 	target_compile_definitions(jngl-shaderc PRIVATE ${JNGL_SHADERC_DEFINITIONS})
 	if(JNGL_D3D12)
-		set(JNGL_BYTECODE_FORMAT dxbc)
+		set_property(GLOBAL PROPERTY JNGL_BYTECODE_FORMAT dxbc)
 	else()
-		set(JNGL_BYTECODE_FORMAT spirv)
+		set_property(GLOBAL PROPERTY JNGL_BYTECODE_FORMAT spirv)
 	endif()
+	get_property(JNGL_BYTECODE_FORMAT GLOBAL PROPERTY JNGL_BYTECODE_FORMAT)
 	set(JNGL_BUILTIN_BYTECODE ${CMAKE_CURRENT_BINARY_DIR}/generated/BuiltinBytecode.hpp)
 	add_custom_command(
 		OUTPUT ${JNGL_BUILTIN_BYTECODE}
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/generated
-		COMMAND jngl-shaderc ${JNGL_BYTECODE_FORMAT} ${JNGL_BUILTIN_BYTECODE}
+		COMMAND jngl-shaderc ${JNGL_BYTECODE_FORMAT} ${JNGL_BUILTIN_BYTECODE} --builtin
 		DEPENDS jngl-shaderc
 		COMMENT "Compiling the built-in shaders to ${JNGL_BYTECODE_FORMAT}"
 		VERBATIM
@@ -537,6 +536,56 @@ if(JNGL_VULKAN OR JNGL_D3D12)
 	add_custom_target(jngl_builtin_shaders DEPENDS ${JNGL_BUILTIN_BYTECODE})
 	add_dependencies(jngl jngl_builtin_shaders)
 	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated)
+endif()
+
+# jngl_compile_shaders(<output.hpp> <namespace> <name>=[<vertex>,]<fragment>...)
+#
+# Compiles the GLSL of ShaderPrograms at build time for the Vulkan or the Direct3D 12 renderer,
+# which can't compile it at runtime, into <output.hpp> with a jngl::ShaderBytecode for each in
+# <namespace>, see src/jngl/ShaderBytecode.hpp. Without a vertex shader, a program uses
+# Sprite::vertexShader(). The paths are relative to the current source directory. Also needs a
+# target that depends on <output.hpp>, e.g. add_custom_target(... DEPENDS <output.hpp>).
+function(jngl_compile_shaders output namespace)
+	get_property(format GLOBAL PROPERTY JNGL_BYTECODE_FORMAT)
+	if(NOT format)
+		message(FATAL_ERROR "jngl_compile_shaders() needs JNGL_VULKAN or JNGL_D3D12.")
+	endif()
+	# With absolute paths, as jngl-shaderc runs in the build directory
+	set(programs "")
+	set(sources "")
+	foreach(program ${ARGN})
+		string(REGEX MATCH "^[^=]*" name "${program}")
+		string(REGEX REPLACE "^[^=]*=" "" files "${program}")
+		string(REPLACE "," ";" files "${files}")
+		set(absolute "")
+		foreach(file ${files})
+			list(APPEND absolute ${CMAKE_CURRENT_SOURCE_DIR}/${file})
+		endforeach()
+		list(APPEND sources ${absolute})
+		string(REPLACE ";" "," absolute "${absolute}")
+		list(APPEND programs "${name}=${absolute}")
+	endforeach()
+	get_filename_component(directory ${output} DIRECTORY)
+	add_custom_command(
+		OUTPUT ${output}
+		COMMAND ${CMAKE_COMMAND} -E make_directory ${directory}
+		COMMAND jngl-shaderc ${format} ${output} ${namespace} ${programs}
+		DEPENDS jngl-shaderc ${sources}
+		COMMENT "Compiling the shaders of ${namespace} to ${format}"
+		VERBATIM
+	)
+endfunction()
+
+if(JNGL_D3D12 AND TARGET jngl-test)
+	# The demos' shaders, see data/*.frag
+	set(JNGL_EXAMPLE_SHADERS ${CMAKE_CURRENT_BINARY_DIR}/generated/examples/ExampleShaders.hpp)
+	jngl_compile_shaders(${JNGL_EXAMPLE_SHADERS} example_shaders blur=data/blur.frag
+	                     textured=data/textured.frag fade=data/fade.frag)
+	add_custom_target(jngl_example_shaders DEPENDS ${JNGL_EXAMPLE_SHADERS})
+	foreach(target jngl-test example-shader)
+		add_dependencies(${target} jngl_example_shaders)
+		target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated/examples)
+	endforeach()
 endif()
 
 if(JNGL_VULKAN)
@@ -551,6 +600,12 @@ if(JNGL_VULKAN)
 		target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
 	endif()
 
+	# For user-defined jngl::Shader programs, which can also be compiled at runtime
+	target_sources(jngl PRIVATE ${SPIRV_SRC})
+	target_include_directories(jngl PRIVATE ${SHADERC_INCLUDE_DIR})
+	target_link_libraries(jngl PRIVATE ${SHADERC_LIBRARY})
+	target_compile_definitions(jngl PRIVATE ${JNGL_SHADERC_DEFINITIONS})
+
 	file(GLOB VULKAN_SRC src/vulkan/*.cpp)
 	target_sources(jngl PRIVATE ${VULKAN_SRC})
 	target_compile_definitions(jngl PUBLIC JNGL_VULKAN)
@@ -559,22 +614,21 @@ if(JNGL_VULKAN)
 endif()
 
 if(JNGL_D3D12)
-	# SPIRV-Cross translates the SPIR-V of the shaders to HLSL, which D3DCompile compiles (its DLL
-	# ships with Windows), see src/d3d12/HlslCompiler.cpp
+	# Its shaders are all compiled at build time by jngl-shaderc: SPIRV-Cross translates their
+	# SPIR-V to HLSL, which D3DCompile compiles, see src/d3d12/HlslCompiler.cpp. So JNGL itself
+	# doesn't need either.
 	find_path(SPIRV_CROSS_INCLUDE_DIR spirv_cross/spirv_cross_c.h
 		HINTS "$ENV{VULKAN_SDK}/Include" REQUIRED)
 	find_library(SPIRV_CROSS_LIBRARY NAMES spirv-cross-c-shared
 		HINTS "${JNGL_VULKAN_SDK_LIBDIR}" REQUIRED)
-	target_include_directories(jngl PRIVATE ${SPIRV_CROSS_INCLUDE_DIR})
-	target_link_libraries(jngl PRIVATE ${SPIRV_CROSS_LIBRARY} d3d12 dxgi d3dcompiler dxguid)
 	target_sources(jngl-shaderc PRIVATE src/d3d12/HlslCompiler.cpp)
 	target_include_directories(jngl-shaderc PRIVATE ${SPIRV_CROSS_INCLUDE_DIR})
 	target_link_libraries(jngl-shaderc PRIVATE ${SPIRV_CROSS_LIBRARY} d3dcompiler)
 	target_compile_definitions(jngl-shaderc PRIVATE JNGL_SHADERC_DXBC)
 
-	file(GLOB D3D12_SRC src/d3d12/*.cpp)
-	target_sources(jngl PRIVATE ${D3D12_SRC})
-	set_source_files_properties(${D3D12_SRC} PROPERTIES COMPILE_DEFINITIONS NOMINMAX)
+	target_sources(jngl PRIVATE src/d3d12/D3D12Renderer.cpp)
+	set_source_files_properties(src/d3d12/D3D12Renderer.cpp PROPERTIES COMPILE_DEFINITIONS NOMINMAX)
+	target_link_libraries(jngl PRIVATE d3d12 dxgi dxguid)
 	target_compile_definitions(jngl PUBLIC JNGL_D3D12)
 endif()
 
@@ -666,6 +720,17 @@ if(NOT hasParent)
 		if(NOT EMSCRIPTEN AND NOT IOS)
 			# for tests including internal headers like window.hpp
 			target_include_directories(jngl-unittest PRIVATE glad/include)
+		endif()
+		if(JNGL_D3D12)
+			# See src/unittest/TestShaders.hpp
+			set(JNGL_TEST_SHADERS ${CMAKE_CURRENT_BINARY_DIR}/generated/unittest/TestShaderBytecode.hpp)
+			jngl_compile_shaders(${JNGL_TEST_SHADERS} test_shaders color=data/unittest/color.frag
+			                     colors=data/unittest/colors.frag black=data/unittest/black.frag
+			                     two=data/unittest/two.frag half=data/unittest/half.frag)
+			add_custom_target(jngl_test_shaders DEPENDS ${JNGL_TEST_SHADERS})
+			add_dependencies(jngl-unittest jngl_test_shaders)
+			target_include_directories(jngl-unittest
+			                           PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated/unittest)
 		endif()
 		add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
 

@@ -9,7 +9,6 @@
 #include "../jngl/Mat3.hpp"
 #include "../jngl/Mat4.hpp"
 #include "../log.hpp"
-#include "HlslCompiler.hpp"
 
 #include "BuiltinBytecode.hpp"
 
@@ -400,8 +399,7 @@ struct ShaderPair {
 	D3D12_SHADER_BYTECODE pixel;
 };
 
-/// A built-in program's shaders, see BuiltinShaders.hpp
-ShaderPair shaderPair(const builtin_bytecode::Program& program) {
+ShaderPair shaderPair(const ShaderBytecode& program) {
 	return { { program.vertex.data(), program.vertex.size_bytes() },
 		     { program.fragment.data(), program.fragment.size_bytes() } };
 }
@@ -2193,15 +2191,18 @@ void D3D12Renderer::clearCurrentRenderTarget(const Rgba color) {
 	impl->commandList->ClearRenderTargetView(impl->currentRtv, values.data(), 1, &rect);
 }
 
-std::unique_ptr<D3D12ShaderProgram> D3D12Renderer::createShaderProgram(CompiledProgram compiled) {
+std::unique_ptr<D3D12ShaderProgram>
+D3D12Renderer::createShaderProgram(const ShaderBytecode& bytecode) {
 	auto program = std::make_unique<D3D12ShaderProgram>();
-	program->vertexShader =
-	    compileSpirvToDxbc(compiled.vertexSpirv, Shader::Type::VERTEX, "vertex");
-	program->pixelShader =
-	    compileSpirvToDxbc(compiled.fragmentSpirv, Shader::Type::FRAGMENT, "fragment");
+	const auto bytes = [](const std::span<const uint32_t> words) {
+		const auto* const begin = reinterpret_cast<const uint8_t*>(words.data());
+		return std::vector<uint8_t>(begin, begin + words.size_bytes());
+	};
+	program->vertexShader = bytes(bytecode.vertex);
+	program->pixelShader = bytes(bytecode.fragment);
 	program->uniformBlock =
-	    uniformBlock(compiled.uniforms, compiled.uniformBlockSize, compiled.pushConstants);
-	program->uniforms = std::move(compiled.uniforms);
+	    uniformBlock(bytecode.uniforms, bytecode.uniformBlockSize, bytecode.pushConstants);
+	program->uniforms = shaderUniforms(bytecode);
 	program->uniformData.resize(program->uniformBlock.size);
 	// Fails here rather than when it's first drawn with if the shaders don't fit together
 	impl->programPipeline(*program, PassKind::Ldr, BlendVariant::Composite,

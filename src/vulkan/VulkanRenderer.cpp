@@ -2498,6 +2498,17 @@ std::unique_ptr<VulkanShaderProgram> VulkanRenderer::createShaderProgram(Compile
 	return program;
 }
 
+std::unique_ptr<VulkanShaderProgram>
+VulkanRenderer::createShaderProgram(const ShaderBytecode& bytecode) {
+	CompiledProgram compiled;
+	compiled.vertexSpirv.assign(bytecode.vertex.begin(), bytecode.vertex.end());
+	compiled.fragmentSpirv.assign(bytecode.fragment.begin(), bytecode.fragment.end());
+	compiled.uniforms = shaderUniforms(bytecode);
+	compiled.uniformBlockSize = bytecode.uniformBlockSize;
+	compiled.pushConstants = bytecode.pushConstants;
+	return createShaderProgram(std::move(compiled));
+}
+
 void VulkanRenderer::destroyShaderProgram(VulkanShaderProgram& program) {
 	if (!device) {
 		return;

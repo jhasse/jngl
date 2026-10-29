@@ -3,9 +3,19 @@
 #include <jngl.hpp>
 #include <jngl/init.hpp>
 
+#ifdef JNGL_D3D12
+#include "ExampleShaders.hpp" // generated, see CMakeLists.txt
+#endif
+
 class ShaderExample : public jngl::Scene {
 public:
 	ShaderExample() {
+#ifdef JNGL_D3D12
+		// Direct3D 12 can't compile them at runtime, see jngl_compile_shaders() in CMakeLists.txt
+		blurProgram = std::make_unique<jngl::ShaderProgram>(example_shaders::blur);
+		texturedProgram = std::make_unique<jngl::ShaderProgram>(example_shaders::textured);
+		fadeProgram = std::make_unique<jngl::ShaderProgram>(example_shaders::fade);
+#else
 		blurFragment = std::make_unique<jngl::Shader>(jngl::readAsset("blur.frag"),
 		                                              jngl::Shader::Type::FRAGMENT);
 		blurProgram =
@@ -18,6 +28,7 @@ public:
 		                                              jngl::Shader::Type::FRAGMENT);
 		fadeProgram =
 		    std::make_unique<jngl::ShaderProgram>(jngl::Sprite::vertexShader(), *fadeFragment);
+#endif
 	}
 
 	void step() override {

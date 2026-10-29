@@ -20,8 +20,9 @@
 
 #ifdef JNGL_GPU_BACKEND
 #include "../texture.hpp"
+#include "BuiltinBytecode.hpp"
 #include "Rgba.hpp"
-#include "Sprite.hpp"
+#include "ShaderBytecode.hpp"
 #include "screen.hpp"
 #endif
 
@@ -173,30 +174,8 @@ public:
 			}
 			if (!shaderProgram) {
 #ifdef JNGL_GPU_BACKEND
-				// The GPU backends' ShaderPrograms sample a single texture, so each of its
-				// texels has the Y, U and V of its pixel in R, G and B, see upload()
-				Shader fragmentShader(R"(#version 300 es
-					uniform sampler2D tex;
-
-					in mediump vec2 texCoord;
-
-					out lowp vec4 outColor;
-
-					void main() {
-						lowp vec3 yuv = texture(tex, texCoord).rgb;
-						lowp float y = 1.1643 * (yuv.r - 0.0625);
-						lowp float u = yuv.g - 0.5;
-						lowp float v = yuv.b - 0.5;
-						outColor = vec4(
-							y + 1.5958 * v,
-							y - 0.39173 * u - 0.81290 * v,
-							y + 2.017 * u,
-							1.0
-						);
-					})",
-				                      Shader::Type::FRAGMENT);
-				shaderProgram =
-				    std::make_unique<ShaderProgram>(Sprite::vertexShader(), fragmentShader);
+				// See builtin_shaders::videoFragment
+				shaderProgram = std::make_unique<ShaderProgram>(builtin_bytecode::video);
 				// One screen unit per pixel of the video, like on OpenGL
 				const auto scaleFactor = static_cast<float>(getScaleFactor());
 				texture = std::make_unique<Texture>(static_cast<float>(width) * scaleFactor,

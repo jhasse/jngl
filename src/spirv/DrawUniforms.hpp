@@ -10,11 +10,13 @@
 
 #include "../jngl/Mat3.hpp"
 #include "../jngl/Mat4.hpp"
+#include "../jngl/ShaderBytecode.hpp"
 #include "ShaderCompiler.hpp"
 
 #include <array>
 #include <cstdint>
 #include <cstring>
+#include <string>
 #include <vector>
 
 namespace jngl {
@@ -53,6 +55,16 @@ UniformBlock uniformBlock(const Uniforms& uniforms, const uint32_t size, const b
 		              find("lerpColor"),  find("lerpFactors"), find("size"),
 		              find("cornerRadii") };
 	return block;
+}
+
+/// The uniforms of a ShaderBytecode, like CompiledProgram::uniforms
+inline std::vector<ShaderUniform> shaderUniforms(const ShaderBytecode& bytecode) {
+	std::vector<ShaderUniform> uniforms;
+	uniforms.reserve(bytecode.uniforms.size());
+	for (const ShaderBytecode::Uniform& uniform : bytecode.uniforms) {
+		uniforms.push_back({ std::string(uniform.name), uniform.offset, uniform.size });
+	}
+	return uniforms;
 }
 
 /// Writes \a values at \a offset into \a data, if it isn't -1

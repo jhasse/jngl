@@ -232,6 +232,8 @@ public:
 
 	/// Builds a custom shader program (see jngl::ShaderProgram)
 	std::unique_ptr<VulkanShaderProgram> createShaderProgram(CompiledProgram);
+	/// \overload with SPIR-V compiled by jngl-shaderc
+	std::unique_ptr<VulkanShaderProgram> createShaderProgram(const ShaderBytecode&);
 	void destroyShaderProgram(VulkanShaderProgram&);
 	/// Makes \a program (or nullptr for the built-in sprite shader) the one used by drawSprite.
 	void setActiveShaderProgram(const VulkanShaderProgram* program);

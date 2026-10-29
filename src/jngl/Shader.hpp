@@ -19,6 +19,9 @@ public:
 	};
 
 	/// Creates a vertex or fragment shader by compiling it.
+	///
+	/// The Direct3D 12 renderer can't compile it, it needs ShaderBytecode compiled by jngl-shaderc
+	/// instead, see ShaderProgram(const ShaderBytecode&).
 	/// \param source Source code using either GLSL v3.30 or GLSL ES v3.00.
 	/// \param gles20Source Source code using GLSL v1.00 for OpenGL ES 2.0
 	Shader(const char* source, Type, const char* gles20Source = nullptr);

@@ -73,10 +73,21 @@ The experimental Direct3D 12 renderer also needs the Vulkan SDK to build, for it
 cmake -Bbuild-d3d12 -DJNGL_D3D12=1 -DJNGL_WINAPI=OFF
 cmake --build build-d3d12 --config Release
 ```
-During the build and at runtime, `shaderc_shared.dll` and `spirv-cross-c-shared.dll` from the
-SDK's `Bin` directory must be on `PATH` (or at runtime beside the executable), like for Vulkan.
-Include these DLLs when distributing a Direct3D 12 build. Debug builds enable the Direct3D 12 debug layer if the Graphics Tools optional feature of
-Windows is installed.
+During the build, `shaderc_shared.dll` and `spirv-cross-c-shared.dll` from the SDK's `Bin`
+directory must be on `PATH`. Unlike Vulkan, it doesn't compile shaders at runtime, so a Direct3D 12
+build doesn't need any DLLs of the SDK. Instead, a game's shaders have to be compiled at build
+time, into a header with a `jngl::ShaderBytecode` for each `jngl::ShaderProgram`:
+```cmake
+jngl_compile_shaders(${CMAKE_CURRENT_BINARY_DIR}/shaders.hpp shaders
+                     blur=data/blur.frag outline=data/outline.vert,data/outline.frag)
+add_custom_target(shaders DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/shaders.hpp)
+add_dependencies(game shaders)
+```
+```cpp
+const jngl::ShaderProgram blur(shaders::blur); // with jngl::Sprite::vertexShader()
+```
+Debug builds enable the Direct3D 12 debug layer if the Graphics Tools optional feature of Windows
+is installed.
 
 ## macOS
 Use [Homebrew](http://brew.sh/) to install the build dependencies:

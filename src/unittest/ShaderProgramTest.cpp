@@ -2,10 +2,10 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "Fixture.hpp"
+#include "TestShaders.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 #include <cstdint>
-#include <jngl/Shader.hpp>
 #include <jngl/ShaderProgram.hpp>
 #include <jngl/Sprite.hpp>
 #include <jngl/matrix.hpp>
@@ -22,20 +22,7 @@ TEST_CASE("more custom uniforms in a frame than fit into the Vulkan backend's in
 	const auto expected = f.getAsciiArt();
 	Fixture::reset();
 
-	const jngl::Shader fragment(R"(#version 300 es
-		uniform sampler2D tex;
-		uniform lowp vec4 color;
-		uniform lowp vec4 padding[15];
-
-		in mediump vec2 texCoord;
-
-		out lowp vec4 outColor;
-
-		void main() {
-			outColor = vec4(color.rgb, texture(tex, texCoord).a);
-		})",
-	                            jngl::Shader::Type::FRAGMENT);
-	const jngl::ShaderProgram program(jngl::Sprite::vertexShader(), fragment);
+	const jngl::ShaderProgram program = JNGL_TEST_SHADER_PROGRAM(color);
 	const int color = program.getUniformLocation("color");
 	// Each draw gets its own copy of the uniforms, as they might change in between (which they
 	// don't here). With the padding that's 256 bytes, so this is about 500 KiB, the initial buffer
@@ -63,21 +50,8 @@ TEST_CASE("uniform arrays") {
 	const auto expected = f.getAsciiArt();
 	Fixture::reset();
 
-	// Big enough for the uniforms to need more than 256 bytes
-	const jngl::Shader fragment(R"(#version 300 es
-		uniform sampler2D tex;
-		uniform lowp vec4 colors[32];
-		uniform int index;
-
-		in mediump vec2 texCoord;
-
-		out lowp vec4 outColor;
-
-		void main() {
-			outColor = vec4(colors[index].rgb, texture(tex, texCoord).a);
-		})",
-	                            jngl::Shader::Type::FRAGMENT);
-	const jngl::ShaderProgram program(jngl::Sprite::vertexShader(), fragment);
+	// Its uniforms need more than 256 bytes
+	const jngl::ShaderProgram program = JNGL_TEST_SHADER_PROGRAM(colors);
 	// Like on OpenGL, the array's name is its first element
 	REQUIRE(program.getUniformLocation("colors") == program.getUniformLocation("colors[0]"));
 	{
@@ -109,18 +83,7 @@ TEST_CASE("Sprite::batch with a custom ShaderProgram") {
 
 	drawReference();
 	// Draws it black, while it'd be invisible on the white window otherwise
-	const jngl::Shader black(R"(#version 300 es
-		uniform sampler2D tex;
-
-		in mediump vec2 texCoord;
-
-		out lowp vec4 outColor;
-
-		void main() {
-			outColor = vec4(0.0, 0.0, 0.0, texture(tex, texCoord).a);
-		})",
-	                         jngl::Shader::Type::FRAGMENT);
-	const jngl::ShaderProgram program(jngl::Sprite::vertexShader(), black);
+	const jngl::ShaderProgram program = JNGL_TEST_SHADER_PROGRAM(black);
 	{
 		const auto batch = sprite.batch(&program);
 		batch.draw(jngl::modelview().translate(center));

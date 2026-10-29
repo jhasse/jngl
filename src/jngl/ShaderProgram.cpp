@@ -13,7 +13,9 @@
 
 #ifdef JNGL_GPU_BACKEND
 #include "../GpuBackend.hpp"
+#ifndef JNGL_D3D12
 #include "../spirv/ShaderCompiler.hpp"
+#endif
 #endif
 
 namespace jngl {
@@ -37,8 +39,21 @@ struct ShaderProgram::Impl {
 
 ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 : impl(std::make_unique<Impl>()) {
+#ifdef JNGL_D3D12
+	(void)vertex;
+	(void)fragment;
+	throw std::runtime_error(
+	    "The Direct3D 12 renderer can't compile shaders at runtime. Compile "
+	    "them with jngl-shaderc and use ShaderProgram(const ShaderBytecode&).");
+#else
 	impl->program = gpuRenderer().createShaderProgram(
 	    compileGlslProgram(vertex.impl->source.c_str(), fragment.impl->source.c_str()));
+	App::instance().registerShaderProgram(this);
+#endif
+}
+
+ShaderProgram::ShaderProgram(const ShaderBytecode& bytecode) : impl(std::make_unique<Impl>()) {
+	impl->program = gpuRenderer().createShaderProgram(bytecode);
 	App::instance().registerShaderProgram(this);
 }
 
@@ -97,6 +112,11 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 	const auto tmp = use();
 	glUniformMatrix4fv(getUniformLocation("projection"), 1, GL_FALSE, opengl::projection.data);
 	App::instance().registerShaderProgram(this);
+}
+
+ShaderProgram::ShaderProgram(const ShaderBytecode& /*bytecode*/) {
+	throw std::runtime_error("The OpenGL renderer doesn't support ShaderBytecode, compile the GLSL "
+	                         "at runtime with ShaderProgram(const Shader&, const Shader&).");
 }
 
 ShaderProgram::Context ShaderProgram::use() const {
