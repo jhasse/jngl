@@ -17,10 +17,9 @@ namespace jngl {
 #ifdef JNGL_GPU_BACKEND
 Shader::Shader(const char* source, const Type type, const char* const /*gles20Source*/)
 : impl(std::make_unique<Impl>()) {
-	auto compiled = compileGlslToSpirv(source, type, type == Type::VERTEX ? "vertex" : "fragment");
-	impl->spirv = std::move(compiled.spirv);
-	impl->uniforms = std::move(compiled.uniforms);
-	impl->uniformBlockSize = compiled.uniformBlockSize;
+	// So that errors are reported here, like on OpenGL
+	checkGlsl(source, type, type == Type::VERTEX ? "vertex" : "fragment");
+	impl->source = source;
 }
 #else
 Shader::Shader(const char* source, const Type type, const char* const gles20Source [[maybe_unused]])

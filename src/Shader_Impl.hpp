@@ -6,10 +6,7 @@
 #include "jngl/Shader.hpp"
 
 #ifdef JNGL_GPU_BACKEND
-#include "spirv/ShaderCompiler.hpp"
-
-#include <cstdint>
-#include <vector>
+#include <string>
 #else
 #include "opengl.hpp"
 #endif
@@ -17,10 +14,10 @@
 namespace jngl {
 
 #ifdef JNGL_GPU_BACKEND
+/// Compiled together with the program's other shader, see ShaderProgram, so that their uniforms
+/// can share a layout
 struct Shader::Impl {
-	std::vector<uint32_t> spirv;
-	std::vector<ShaderUniform> uniforms;
-	uint32_t uniformBlockSize = 0;
+	std::string source;
 };
 #else
 struct Shader::Impl {

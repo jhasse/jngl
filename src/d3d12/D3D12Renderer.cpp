@@ -11,12 +11,7 @@
 #include "../log.hpp"
 #include "HlslCompiler.hpp"
 
-#include "colored.frag.spv.hpp"
-#include "colored.vert.spv.hpp"
-#include "rounded.frag.spv.hpp"
-#include "rounded.vert.spv.hpp"
-#include "textured.frag.spv.hpp"
-#include "textured.vert.spv.hpp"
+#include "BuiltinBytecode.hpp"
 
 #include <SDL3/SDL.h>
 #include <algorithm>
@@ -122,28 +117,9 @@ void triangulateFan(const float* vertices, const size_t vertexCount,
 	}
 }
 
-struct ColoredPushConstants {
-	float mvp[16];
-	float color[4];
-};
-
-struct TexturedPushConstants {
-	float mvp[16];
-	float lerpColor[4];
-	float lerpFactors[4];
-};
-
-struct RoundedPushConstants {
-	float mvp[16];
-	float color[4];
-	float size[2];
-	float pad[2];
-	float cornerRadii[4];
-};
-
-static_assert(sizeof(RoundedPushConstants) == 112);
-/// The root constants, at b0, hold the push constants of all of the built-in shaders
-constexpr UINT rootConstantCount = sizeof(RoundedPushConstants) / 4;
+/// The root constants, at b0, hold the uniforms that fit into push constants, see
+/// ShaderCompiler.hpp
+constexpr UINT rootConstantCount = maxPushConstantsSize / 4;
 
 /// Root parameters, see Impl::createRootSignature()
 enum RootParameter : UINT {
@@ -164,44 +140,6 @@ constexpr std::array<float, 24> fullscreenQuad = {
 	1.f,  -1.f, 1.f, 1.f, //
 	-1.f, -1.f, 0.f, 1.f, //
 };
-
-/// mvp = projection * modelview (embedded into a 4x4 that leaves z at 0 and w at 1), both
-/// column-major (element [col * 4 + row]). With \a flipY, clip space's y is inverted as well, see
-/// Impl::flipClipY().
-void computeMvp(const Mat4& projection, const Mat3& modelview, const bool flipY, float* const mvp) {
-	const float* const m = modelview.data; // column-major: m[C * 3 + R]
-	Mat4 embedded;
-	embedded.data[0] = m[0];
-	embedded.data[1] = m[1];
-	embedded.data[2] = 0.f;
-	embedded.data[3] = 0.f;
-	embedded.data[4] = m[3];
-	embedded.data[5] = m[4];
-	embedded.data[6] = 0.f;
-	embedded.data[7] = 0.f;
-	embedded.data[8] = 0.f;
-	embedded.data[9] = 0.f;
-	embedded.data[10] = 0.f;
-	embedded.data[11] = 0.f;
-	embedded.data[12] = m[6];
-	embedded.data[13] = m[7];
-	embedded.data[14] = 0.f;
-	embedded.data[15] = 1.f;
-	for (int col = 0; col < 4; ++col) {
-		for (int row = 0; row < 4; ++row) {
-			float sum = 0.f;
-			for (int k = 0; k < 4; ++k) {
-				sum += projection.data[k * 4 + row] * embedded.data[col * 4 + k];
-			}
-			mvp[col * 4 + row] = row == 1 && flipY ? -sum : sum;
-		}
-	}
-}
-
-void setIdentity(float* const mvp) {
-	const Mat4 identity;
-	std::copy(std::begin(identity.data), std::end(identity.data), mvp);
-}
 
 D3D12_BLEND_DESC blendDesc(const BlendVariant variant) {
 	D3D12_BLEND_DESC desc{};
@@ -456,11 +394,17 @@ struct UploadBuffer {
 	uint64_t used = 0;
 };
 
-/// Compiled shaders of a pipeline state
+/// DXBC of a pipeline state's shaders
 struct ShaderPair {
-	std::vector<uint8_t> vertex;
-	std::vector<uint8_t> pixel;
+	D3D12_SHADER_BYTECODE vertex;
+	D3D12_SHADER_BYTECODE pixel;
 };
+
+/// A built-in program's shaders, see BuiltinShaders.hpp
+ShaderPair shaderPair(const builtin_bytecode::Program& program) {
+	return { { program.vertex.data(), program.vertex.size_bytes() },
+		     { program.fragment.data(), program.fragment.size_bytes() } };
+}
 
 /// The vertex layouts of the pipeline states: only the position, or with texture coordinates
 const std::array<D3D12_INPUT_ELEMENT_DESC, 2> vertexLayout = { {
@@ -510,12 +454,9 @@ struct D3D12Renderer::Impl {
 	[[nodiscard]] bool swapchainMsaaActive() const;
 	void createRootSignature();
 	void createSamplers();
-	void compileBuiltinShaders();
 
 	[[nodiscard]] ComPtr<ID3D12PipelineState>
-	createPipeline(const std::vector<uint8_t>& vertexShader,
-	               const std::vector<uint8_t>& pixelShader, bool textured, PassKind, BlendVariant,
-	               PrimitiveType) const;
+	createPipeline(const ShaderPair&, bool textured, PassKind, BlendVariant, PrimitiveType) const;
 	enum class Builtin : uint8_t { Colored, Rounded, Textured };
 	/// The built-in pipeline state for this, built when it's first used
 	ID3D12PipelineState* builtinPipeline(Builtin, PassKind, BlendVariant, PrimitiveType);
@@ -528,8 +469,18 @@ struct D3D12Renderer::Impl {
 	/// Copies \a bytes of vertex data into the current frame's vertex buffer, growing it if it's
 	/// full, and returns where it is
 	D3D12_GPU_VIRTUAL_ADDRESS uploadVertices(const void* data, uint64_t bytes);
-	/// Copies the active program's uniforms into this frame's ring and binds them
-	void bindActiveProgramUniforms();
+	/// drawUniforms, sized for \a block, with the uniforms \a program's been given, or zeros
+	/// without one, for the draw to write its own into, see writeUniform()
+	std::vector<uint8_t>& prepareDrawUniforms(const UniformBlock& block,
+	                                          const D3D12ShaderProgram* program);
+	/// Writes modelview and projection into drawUniforms
+	void writeTransform(const UniformBlock& block, const Mat3& modelview);
+	/// Makes \a data the uniforms of the next draws: as root constants, or copied into this frame's
+	/// ring
+	void bindUniforms(const UniformBlock& block, const std::vector<uint8_t>& data);
+	/// Makes the textured shader copy the texture, see fullscreenQuad, with \a cmd, which might be
+	/// the upload command list
+	void bindCopyUniforms(ID3D12GraphicsCommandList* cmd) const;
 
 	/// Resets \a list with \a allocator and sets up what all of the draws use
 	void beginCommandList(ID3D12GraphicsCommandList* list, ID3D12CommandAllocator* allocator) const;
@@ -568,7 +519,7 @@ struct D3D12Renderer::Impl {
 	/// upside down like OpenGL FBO textures (see jngl::FrameBuffer::draw), which the Vulkan backend
 	/// gets by not flipping its viewport, while Direct3D 12's viewports can't be flipped.
 	[[nodiscard]] bool flipClipY() const;
-	void draw(ID3D12PipelineState*, const void* push, size_t pushSize,
+	void draw(ID3D12PipelineState*, const UniformBlock&, const std::vector<uint8_t>& uniforms,
 	          D3D12_GPU_VIRTUAL_ADDRESS vertices, size_t vertexCount, UINT stride, PrimitiveType);
 
 	void applyViewport() const;
@@ -624,9 +575,16 @@ struct D3D12Renderer::Impl {
 	static constexpr uint32_t srvCapacity = 65536;
 
 	ComPtr<ID3D12RootSignature> rootSignature;
-	ShaderPair coloredShaders;
-	ShaderPair roundedShaders;
-	ShaderPair texturedShaders;
+	// The uniforms of the built-in shaders, see BuiltinShaders.hpp
+	UniformBlock coloredUniforms;
+	UniformBlock roundedUniforms;
+	UniformBlock texturedUniforms;
+	// Reused for writing each draw's uniforms, see prepareDrawUniforms()
+	std::vector<uint8_t> drawUniforms;
+	/// texturedUniforms that make it copy the texture, see bindCopyUniforms(). They never change,
+	/// so that the uploads can use them, too.
+	std::vector<uint8_t> copyUniforms;
+	UploadBuffer copyUniformsBuffer;
 	// Indexed by Builtin and pipelineIndex(), see builtinPipeline()
 	std::array<std::array<ComPtr<ID3D12PipelineState>, D3D12ShaderProgram::pipelineCount>, 3>
 	    builtinPipelines;
@@ -657,8 +615,8 @@ struct D3D12Renderer::Impl {
 	// Buffers that ran full during a frame and were replaced by a bigger one. They're still
 	// referenced by that frame's command list, so they're released once its fence value is reached.
 	std::array<std::vector<UploadBuffer>, maxFramesInFlight> retiredVertexBuffers;
-	// Each draw with a custom ShaderProgram that has uniforms copies them into here, see
-	// bindActiveProgramUniforms. Grows like vertexBuffers.
+	// Each draw whose uniforms don't fit into the root constants copies them into here, see
+	// bindUniforms. Grows like vertexBuffers.
 	std::array<UploadBuffer, maxFramesInFlight> uniformBuffers;
 	std::array<std::vector<UploadBuffer>, maxFramesInFlight> retiredUniformBuffers;
 	// Reused when expanding triangle fans
@@ -763,10 +721,15 @@ D3D12Renderer::Impl::Impl(SDL_Window* const window) : window(window) {
 	}
 
 	createRootSignature();
-	{
-		internal::StartupProfiler _{ "compileBuiltinShaders" };
-		compileBuiltinShaders();
-	}
+	coloredUniforms =
+	    uniformBlock(builtin_bytecode::colored.uniforms, builtin_bytecode::colored.uniformBlockSize,
+	                 builtin_bytecode::colored.pushConstants);
+	roundedUniforms =
+	    uniformBlock(builtin_bytecode::rounded.uniforms, builtin_bytecode::rounded.uniformBlockSize,
+	                 builtin_bytecode::rounded.pushConstants);
+	texturedUniforms = uniformBlock(builtin_bytecode::textured.uniforms,
+	                                builtin_bytecode::textured.uniformBlockSize,
+	                                builtin_bytecode::textured.pushConstants);
 	{
 		// Only those of the window's default blending, the others are built once they're used
 		internal::StartupProfiler _{ "builtinPipeline" };
@@ -785,6 +748,14 @@ D3D12Renderer::Impl::Impl(SDL_Window* const window) : window(window) {
 	}
 	fullscreenQuadBuffer = createUploadBuffer(sizeof(fullscreenQuad));
 	std::memcpy(fullscreenQuadBuffer.mapped, fullscreenQuad.data(), sizeof(fullscreenQuad));
+	// The identity as modelview and projection, and no mixing towards lerpColor
+	copyUniforms.resize(texturedUniforms.size);
+	writeUniform(copyUniforms, texturedUniforms.offsets.modelview, Mat3());
+	writeUniform(copyUniforms, texturedUniforms.offsets.projection, Mat4());
+	copyUniformsBuffer =
+	    createUploadBuffer(alignUp(std::max<uint64_t>(copyUniforms.size(), 1),
+	                               D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT));
+	std::memcpy(copyUniformsBuffer.mapped, copyUniforms.data(), copyUniforms.size());
 	internal::debug("Direct3D 12 renderer initialized ({}x{}).", swapchainWidth, swapchainHeight);
 }
 
@@ -1055,30 +1026,15 @@ void D3D12Renderer::Impl::createSamplers() {
 	}
 }
 
-void D3D12Renderer::Impl::compileBuiltinShaders() {
-	coloredShaders = {
-		compileSpirvToDxbc(spirv_shaders::colored_vert, Shader::Type::VERTEX, "colored.vert"),
-		compileSpirvToDxbc(spirv_shaders::colored_frag, Shader::Type::FRAGMENT, "colored.frag"),
-	};
-	roundedShaders = {
-		compileSpirvToDxbc(spirv_shaders::rounded_vert, Shader::Type::VERTEX, "rounded.vert"),
-		compileSpirvToDxbc(spirv_shaders::rounded_frag, Shader::Type::FRAGMENT, "rounded.frag"),
-	};
-	texturedShaders = {
-		compileSpirvToDxbc(spirv_shaders::textured_vert, Shader::Type::VERTEX, "textured.vert"),
-		compileSpirvToDxbc(spirv_shaders::textured_frag, Shader::Type::FRAGMENT, "textured.frag"),
-	};
-}
-
-ComPtr<ID3D12PipelineState>
-D3D12Renderer::Impl::createPipeline(const std::vector<uint8_t>& vertexShader,
-                                    const std::vector<uint8_t>& pixelShader, const bool textured,
-                                    const PassKind kind, const BlendVariant variant,
-                                    const PrimitiveType type) const {
+ComPtr<ID3D12PipelineState> D3D12Renderer::Impl::createPipeline(const ShaderPair& shaders,
+                                                                const bool textured,
+                                                                const PassKind kind,
+                                                                const BlendVariant variant,
+                                                                const PrimitiveType type) const {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC desc{};
 	desc.pRootSignature = rootSignature.Get();
-	desc.VS = { vertexShader.data(), vertexShader.size() };
-	desc.PS = { pixelShader.data(), pixelShader.size() };
+	desc.VS = shaders.vertex;
+	desc.PS = shaders.pixel;
 	desc.BlendState = blendDesc(variant);
 	desc.SampleMask = UINT_MAX;
 	desc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
@@ -1104,11 +1060,11 @@ ID3D12PipelineState* D3D12Renderer::Impl::builtinPipeline(const Builtin builtin,
 	auto& pipeline =
 	    builtinPipelines[static_cast<size_t>(builtin)][pipelineIndex(kind, variant, type)];
 	if (!pipeline) {
-		const ShaderPair& shaders = builtin == Builtin::Colored   ? coloredShaders
-		                            : builtin == Builtin::Rounded ? roundedShaders
-		                                                          : texturedShaders;
-		pipeline = createPipeline(shaders.vertex, shaders.pixel, builtin == Builtin::Textured, kind,
-		                          variant, type);
+		const auto& program = builtin == Builtin::Colored   ? builtin_bytecode::colored
+		                      : builtin == Builtin::Rounded ? builtin_bytecode::rounded
+		                                                    : builtin_bytecode::textured;
+		pipeline =
+		    createPipeline(shaderPair(program), builtin == Builtin::Textured, kind, variant, type);
 	}
 	return pipeline.Get();
 }
@@ -1119,9 +1075,9 @@ ID3D12PipelineState* D3D12Renderer::Impl::programPipeline(const D3D12ShaderProgr
                                                           const PrimitiveType type) const {
 	auto& pipeline = program.pipelines[pipelineIndex(kind, variant, type)];
 	if (!pipeline) {
-		pipeline =
-		    createPipeline(program.vertexShader, program.pixelShader, true, kind, variant, type)
-		        .Detach();
+		const ShaderPair shaders{ { program.vertexShader.data(), program.vertexShader.size() },
+			                      { program.pixelShader.data(), program.pixelShader.size() } };
+		pipeline = createPipeline(shaders, true, kind, variant, type).Detach();
 	}
 	return pipeline;
 }
@@ -1189,12 +1145,42 @@ D3D12_GPU_VIRTUAL_ADDRESS D3D12Renderer::Impl::uploadVertices(const void* const 
 	return vb.resource->GetGPUVirtualAddress() + offset;
 }
 
-void D3D12Renderer::Impl::bindActiveProgramUniforms() {
-	if (!activeShaderProgram || activeShaderProgram->uniformBlockSize == 0) {
+std::vector<uint8_t>&
+D3D12Renderer::Impl::prepareDrawUniforms(const UniformBlock& block,
+                                         const D3D12ShaderProgram* const program) {
+	if (program) {
+		drawUniforms.assign(program->uniformData.begin(), program->uniformData.end());
+	} else {
+		// Not zeroed, as the built-in shaders' draws write all of their uniforms
+		drawUniforms.resize(block.size);
+	}
+	return drawUniforms;
+}
+
+void D3D12Renderer::Impl::writeTransform(const UniformBlock& block, const Mat3& modelview) {
+	writeUniform(drawUniforms, block.offsets.modelview, modelview);
+	if (flipClipY()) {
+		Mat4 flipped = projection;
+		for (int column = 0; column < 4; ++column) {
+			flipped.data[column * 4 + 1] = -flipped.data[column * 4 + 1];
+		}
+		writeUniform(drawUniforms, block.offsets.projection, flipped);
+	} else {
+		writeUniform(drawUniforms, block.offsets.projection, projection);
+	}
+}
+
+void D3D12Renderer::Impl::bindUniforms(const UniformBlock& block,
+                                       const std::vector<uint8_t>& data) {
+	if (block.size == 0) {
 		return;
 	}
-	const uint64_t size = alignUp(activeShaderProgram->uniformBlockSize,
-	                              D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
+	assert(data.size() == block.size);
+	if (block.pushConstants) {
+		commandList->SetGraphicsRoot32BitConstants(RootConstants, block.size / 4, data.data(), 0);
+		return;
+	}
+	const uint64_t size = alignUp(block.size, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
 	UploadBuffer& ub = uniformBuffers[currentFrame];
 	uint64_t offset = alignUp(ub.used, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
 	if (offset + size > ub.capacity) {
@@ -1209,11 +1195,20 @@ void D3D12Renderer::Impl::bindActiveProgramUniforms() {
 		ub = createUploadBuffer(capacity);
 		offset = 0;
 	}
-	std::memcpy(ub.mapped + offset, activeShaderProgram->uniformData.data(),
-	            activeShaderProgram->uniformBlockSize);
+	std::memcpy(ub.mapped + offset, data.data(), block.size);
 	ub.used = offset + size;
 	commandList->SetGraphicsRootConstantBufferView(RootUniforms,
 	                                               ub.resource->GetGPUVirtualAddress() + offset);
+}
+
+void D3D12Renderer::Impl::bindCopyUniforms(ID3D12GraphicsCommandList* const cmd) const {
+	if (texturedUniforms.pushConstants) {
+		cmd->SetGraphicsRoot32BitConstants(RootConstants, texturedUniforms.size / 4,
+		                                   copyUniforms.data(), 0);
+	} else {
+		cmd->SetGraphicsRootConstantBufferView(RootUniforms,
+		                                       copyUniformsBuffer.resource->GetGPUVirtualAddress());
+	}
 }
 
 void D3D12Renderer::Impl::beginCommandList(ID3D12GraphicsCommandList* const list,
@@ -1386,15 +1381,13 @@ void D3D12Renderer::Impl::expandIntoSamples(D3D12Framebuffer& fb) {
 	cmd->RSSetScissorRects(1, &scissor);
 	// Samples each texel at its center into all of its pixel's samples, as it's drawn without
 	// blending
-	TexturedPushConstants push{};
-	setIdentity(push.mvp);
 	const PassKind kind = passKind(fb.hdr, true);
 	cmd->SetPipelineState(
 	    builtinPipeline(Builtin::Textured, kind, BlendVariant::Replace, PrimitiveType::Triangles));
 	cmd->SetGraphicsRootDescriptorTable(RootTexture, srvHeap.gpu(fb.color.srv));
 	cmd->SetGraphicsRootDescriptorTable(
 	    RootSampler, samplerHeap.gpu(samplerIndex(fb.color.minFilter, fb.color.magFilter)));
-	cmd->SetGraphicsRoot32BitConstants(RootConstants, sizeof(push) / 4, &push, 0);
+	bindCopyUniforms(cmd);
 	cmd->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	const D3D12_VERTEX_BUFFER_VIEW view{ fullscreenQuadBuffer.resource->GetGPUVirtualAddress(),
 		                                 sizeof(fullscreenQuad), 4 * sizeof(float) };
@@ -1421,13 +1414,13 @@ bool D3D12Renderer::Impl::flipClipY() const {
 	return !renderTargetStack.empty();
 }
 
-void D3D12Renderer::Impl::draw(ID3D12PipelineState* const pipeline, const void* const push,
-                               const size_t pushSize, const D3D12_GPU_VIRTUAL_ADDRESS vertices,
-                               const size_t vertexCount, const UINT stride,
-                               const PrimitiveType type) {
+void D3D12Renderer::Impl::draw(ID3D12PipelineState* const pipeline, const UniformBlock& block,
+                               const std::vector<uint8_t>& uniforms,
+                               const D3D12_GPU_VIRTUAL_ADDRESS vertices, const size_t vertexCount,
+                               const UINT stride, const PrimitiveType type) {
 	ID3D12GraphicsCommandList* const cmd = commandList.Get();
 	cmd->SetPipelineState(pipeline);
-	cmd->SetGraphicsRoot32BitConstants(RootConstants, static_cast<UINT>(pushSize / 4), push, 0);
+	bindUniforms(block, uniforms);
 	cmd->IASetPrimitiveTopology(toD3DTopology(type));
 	const D3D12_VERTEX_BUFFER_VIEW view{ vertices, static_cast<UINT>(vertexCount * stride),
 		                                 stride };
@@ -1558,9 +1551,7 @@ void D3D12Renderer::Impl::recordMipmapGeneration(ID3D12GraphicsCommandList* cons
 	cmd->SetGraphicsRootDescriptorTable(
 	    RootSampler,
 	    samplerHeap.gpu(samplerIndex(TextureFilter::Bilinear, TextureFilter::Bilinear)));
-	TexturedPushConstants push{};
-	setIdentity(push.mvp);
-	cmd->SetGraphicsRoot32BitConstants(RootConstants, sizeof(push) / 4, &push, 0);
+	bindCopyUniforms(cmd);
 	cmd->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	const D3D12_VERTEX_BUFFER_VIEW view{ fullscreenQuadBuffer.resource->GetGPUVirtualAddress(),
 		                                 sizeof(fullscreenQuad), 4 * sizeof(float) };
@@ -1756,15 +1747,14 @@ void D3D12Renderer::drawColored(PrimitiveType type, const float* xyVertices,
 	const auto vertices = impl->uploadVertices(xyVertices, vertexCount * 2 * sizeof(float));
 
 	impl->bindTarget();
-	ColoredPushConstants push{};
-	computeMvp(impl->projection, modelview, impl->flipClipY(), push.mvp);
-	push.color[0] = color.getRed();
-	push.color[1] = color.getGreen();
-	push.color[2] = color.getBlue();
-	push.color[3] = color.getAlpha();
+	const UniformBlock& block = impl->coloredUniforms;
+	auto& uniforms = impl->prepareDrawUniforms(block, nullptr);
+	impl->writeTransform(block, modelview);
+	writeUniform(uniforms, block.offsets.color,
+	             std::array{ color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() });
 	impl->draw(impl->builtinPipeline(Impl::Builtin::Colored, impl->currentPassKind,
 	                                 impl->blendVariant(), type),
-	           &push, sizeof(push), vertices, vertexCount, 2 * sizeof(float), type);
+	           block, uniforms, vertices, vertexCount, 2 * sizeof(float), type);
 }
 
 void D3D12Renderer::drawRoundedRect(const Mat3& modelview, const Rgba color, const float sizeX,
@@ -1778,21 +1768,17 @@ void D3D12Renderer::drawRoundedRect(const Mat3& modelview, const Rgba color, con
 	const auto vertices = impl->uploadVertices(unitSquare.data(), sizeof(unitSquare));
 
 	impl->bindTarget();
-	RoundedPushConstants push{};
-	computeMvp(impl->projection, modelview, impl->flipClipY(), push.mvp);
-	push.color[0] = color.getRed();
-	push.color[1] = color.getGreen();
-	push.color[2] = color.getBlue();
-	push.color[3] = color.getAlpha();
-	push.size[0] = sizeX;
-	push.size[1] = sizeY;
-	push.cornerRadii[0] = topLeft;
-	push.cornerRadii[1] = topRight;
-	push.cornerRadii[2] = bottomLeft;
-	push.cornerRadii[3] = bottomRight;
+	const UniformBlock& block = impl->roundedUniforms;
+	auto& uniforms = impl->prepareDrawUniforms(block, nullptr);
+	impl->writeTransform(block, modelview);
+	writeUniform(uniforms, block.offsets.color,
+	             std::array{ color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() });
+	writeUniform(uniforms, block.offsets.size, std::array{ sizeX, sizeY });
+	writeUniform(uniforms, block.offsets.cornerRadii,
+	             std::array{ topLeft, topRight, bottomLeft, bottomRight });
 	impl->draw(impl->builtinPipeline(Impl::Builtin::Rounded, impl->currentPassKind,
 	                                 impl->blendVariant(), PrimitiveType::Triangles),
-	           &push, sizeof(push), vertices, 6, 2 * sizeof(float), PrimitiveType::Triangles);
+	           block, uniforms, vertices, 6, 2 * sizeof(float), PrimitiveType::Triangles);
 }
 
 std::unique_ptr<D3D12Texture>
@@ -1937,12 +1923,15 @@ void D3D12Renderer::drawSprite(const D3D12Texture& texture, const float* xyuv,
 	const auto vertices = impl->uploadVertices(xyuv, vertexCount * 4 * sizeof(float));
 
 	impl->bindTarget();
-	TexturedPushConstants push{};
-	computeMvp(impl->projection, modelview, impl->flipClipY(), push.mvp);
-	push.lerpColor[0] = lerpColor.getRed();
-	push.lerpColor[1] = lerpColor.getGreen();
-	push.lerpColor[2] = lerpColor.getBlue();
-	std::copy(lerpFactors.begin(), lerpFactors.end(), push.lerpFactors);
+	const D3D12ShaderProgram* const program = impl->activeShaderProgram;
+	const UniformBlock& block = program ? program->uniformBlock : impl->texturedUniforms;
+	auto& uniforms = impl->prepareDrawUniforms(block, program);
+	impl->writeTransform(block, modelview);
+	if (!program) { // a ShaderProgram's other uniforms are its own, like on OpenGL
+		writeUniform(uniforms, block.offsets.lerpColor,
+		             std::array{ lerpColor.getRed(), lerpColor.getGreen(), lerpColor.getBlue() });
+		writeUniform(uniforms, block.offsets.lerpFactors, lerpFactors);
+	}
 
 	const BlendVariant variant = impl->blendVariant();
 	ID3D12PipelineState* const pipeline =
@@ -1954,8 +1943,7 @@ void D3D12Renderer::drawSprite(const D3D12Texture& texture, const float* xyuv,
 	cmd->SetGraphicsRootDescriptorTable(RootTexture, impl->srvHeap.gpu(texture.srv));
 	cmd->SetGraphicsRootDescriptorTable(
 	    RootSampler, impl->samplerHeap.gpu(samplerIndex(texture.minFilter, texture.magFilter)));
-	impl->bindActiveProgramUniforms();
-	impl->draw(pipeline, &push, sizeof(push), vertices, vertexCount, 4 * sizeof(float), type);
+	impl->draw(pipeline, block, uniforms, vertices, vertexCount, 4 * sizeof(float), type);
 }
 
 void D3D12Renderer::readPixels(unsigned char* const rgb, const int x, const int y, const int width,
@@ -2205,15 +2193,16 @@ void D3D12Renderer::clearCurrentRenderTarget(const Rgba color) {
 	impl->commandList->ClearRenderTargetView(impl->currentRtv, values.data(), 1, &rect);
 }
 
-std::unique_ptr<D3D12ShaderProgram> D3D12Renderer::createShaderProgram(
-    const std::vector<uint32_t>& vertexSpirv, const std::vector<uint32_t>& fragmentSpirv,
-    std::vector<ShaderUniform> uniforms, const uint32_t uniformBlockSize) {
+std::unique_ptr<D3D12ShaderProgram> D3D12Renderer::createShaderProgram(CompiledProgram compiled) {
 	auto program = std::make_unique<D3D12ShaderProgram>();
-	program->vertexShader = compileSpirvToDxbc(vertexSpirv, Shader::Type::VERTEX, "vertex");
-	program->pixelShader = compileSpirvToDxbc(fragmentSpirv, Shader::Type::FRAGMENT, "fragment");
-	program->uniforms = std::move(uniforms);
-	program->uniformBlockSize = uniformBlockSize;
-	program->uniformData.resize(uniformBlockSize);
+	program->vertexShader =
+	    compileSpirvToDxbc(compiled.vertexSpirv, Shader::Type::VERTEX, "vertex");
+	program->pixelShader =
+	    compileSpirvToDxbc(compiled.fragmentSpirv, Shader::Type::FRAGMENT, "fragment");
+	program->uniformBlock =
+	    uniformBlock(compiled.uniforms, compiled.uniformBlockSize, compiled.pushConstants);
+	program->uniforms = std::move(compiled.uniforms);
+	program->uniformData.resize(program->uniformBlock.size);
 	// Fails here rather than when it's first drawn with if the shaders don't fit together
 	impl->programPipeline(*program, PassKind::Ldr, BlendVariant::Composite,
 	                      PrimitiveType::Triangles);
@@ -2242,8 +2231,8 @@ void D3D12Renderer::setActiveShaderProgram(const D3D12ShaderProgram* const progr
 void D3D12Renderer::setActiveProgramUniform(const uint32_t offset, const void* const data,
                                             const uint32_t bytes) {
 	assert(impl->activeShaderProgram);
-	assert(offset + bytes <= impl->activeShaderProgram->uniformBlockSize);
-	// Only copied from on the CPU, see bindActiveProgramUniforms()
+	assert(offset + bytes <= impl->activeShaderProgram->uniformData.size());
+	// Only copied from on the CPU, see prepareDrawUniforms()
 	std::memcpy(impl->activeShaderProgram->uniformData.data() + offset, data, bytes);
 }
 

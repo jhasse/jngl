@@ -22,6 +22,7 @@
 #include "shapes.hpp"
 
 #ifdef JNGL_GPU_BACKEND
+#include "../BuiltinShaders.hpp"
 #include "../GpuBackend.hpp"
 #endif
 
@@ -589,21 +590,8 @@ void Sprite::setBytes(const unsigned char* const bytes) {
 
 const Shader& Sprite::vertexShader() {
 #ifdef JNGL_GPU_BACKEND
-	// The built-in sprite vertex shader, written for Vulkan (Direct3D 12 translates it): it takes
-	// the combined modelview * projection matrix as a push constant (matching GpuRenderer's
-	// textured pipeline) and passes the texture coordinates through to the fragment shader.
-	static Shader shader(R"(#version 450
-layout(location = 0) in vec2 position;
-layout(location = 1) in vec2 inTexCoord;
-layout(push_constant) uniform Push {
-	mat4 mvp;
-} pc;
-layout(location = 0) out vec2 texCoord;
-void main() {
-	gl_Position = pc.mvp * vec4(position, 0.0, 1.0);
-	texCoord = inTexCoord;
-})",
-	                     Shader::Type::VERTEX);
+	// The same as on OpenGL, GpuRenderer sets its modelview and projection
+	static Shader shader(builtin_shaders::texturedVertex, Shader::Type::VERTEX);
 	return shader;
 #else
 	return *ShaderCache::handle().textureVertexShader;

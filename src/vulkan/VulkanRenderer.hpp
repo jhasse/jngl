@@ -12,6 +12,7 @@
 #include "../Renderer.hpp"
 #include "../jngl/Mat4.hpp"
 #include "../jngl/TextureFilter.hpp"
+#include "../spirv/DrawUniforms.hpp"
 #include "../spirv/ShaderCompiler.hpp"
 
 #include <array>
@@ -105,7 +106,8 @@ struct DynamicVertexBuffer {
 };
 
 /// Host-visible, persistently mapped ring of uniform blocks that's appended to during a frame, one
-/// per draw with a custom ShaderProgram, bound with a dynamic offset via \a descriptorSet
+/// per draw whose uniforms don't fit into push constants, bound with a dynamic offset via
+/// \a descriptorSet
 struct DynamicUniformBuffer {
 	VkBuffer buffer = VK_NULL_HANDLE;
 	VkDeviceMemory memory = VK_NULL_HANDLE;
@@ -118,9 +120,9 @@ struct DynamicUniformBuffer {
 
 /// GPU resources backing a jngl::ShaderProgram on the Vulkan backend: textured pipelines for each
 /// blend variant × primitive topology, built from a user-supplied vertex/fragment shader pair, plus
-/// an optional CPU-side uniform staging buffer (see ShaderProgram::setUniform). At draw time the
-/// staging contents are copied into the per-frame dynamic UBO ring so mid-frame setUniform changes
-/// (e.g. blur pass 0 then 1) are visible to each draw.
+/// a CPU-side copy of its uniforms (see ShaderProgram::setUniform). Each draw pushes them or copies
+/// them into the per-frame dynamic UBO ring, so mid-frame setUniform changes (e.g. blur pass 0 then
+/// 1) are visible to each draw.
 struct VulkanShaderProgram {
 	static constexpr uint32_t topologyCount = 4;
 	/// For each BlendVariant and topology, see VulkanRenderer::pipelineIndex()
@@ -131,10 +133,9 @@ struct VulkanShaderProgram {
 	std::vector<uint32_t> vertexSpirv;
 	std::vector<uint32_t> fragmentSpirv;
 	std::vector<ShaderUniform> uniforms;
-	uint32_t uniformBlockSize = 0;
-	VkBuffer uniformBuffer = VK_NULL_HANDLE; // host-visible staging; not bound to the GPU
-	VkDeviceMemory uniformMemory = VK_NULL_HANDLE;
-	void* uniformMapped = nullptr;
+	UniformBlock uniformBlock;
+	/// Written by setActiveProgramUniform() while the program is in use
+	mutable std::vector<uint8_t> uniformData;
 };
 
 class VulkanRenderer final : public Renderer {
@@ -229,12 +230,8 @@ public:
 	/// within the scissor, like glClear. Does nothing if no frame has begun.
 	void clearCurrentRenderTarget(Rgba color);
 
-	/// Builds a custom shader program (see jngl::ShaderProgram) from vertex + fragment SPIR-V.
-	/// \a uniforms / \a uniformBlockSize describe the fragment UBO (empty if none).
-	std::unique_ptr<VulkanShaderProgram>
-	createShaderProgram(const std::vector<uint32_t>& vertexSpirv,
-	                    const std::vector<uint32_t>& fragmentSpirv,
-	                    std::vector<ShaderUniform> uniforms, uint32_t uniformBlockSize);
+	/// Builds a custom shader program (see jngl::ShaderProgram)
+	std::unique_ptr<VulkanShaderProgram> createShaderProgram(CompiledProgram);
 	void destroyShaderProgram(VulkanShaderProgram&);
 	/// Makes \a program (or nullptr for the built-in sprite shader) the one used by drawSprite.
 	void setActiveShaderProgram(const VulkanShaderProgram* program);
@@ -326,13 +323,11 @@ private:
 	void createSyncObjects();
 	/// Creates the per-swapchain-image "render finished" semaphores (recreated with the swapchain).
 	void createPresentSemaphores();
-	void createColoredPipelineLayout();
 	/// Builds the pipelines with \a variant for every topology, see pipelineIndex()
 	void buildColoredPipelines(VkShaderModule vert, VkShaderModule frag,
 	                           VkRenderPass targetRenderPass, VkSampleCountFlagBits samples,
 	                           BlendVariant variant,
 	                           std::array<VkPipeline, VulkanShaderProgram::pipelineCount>& out);
-	void createRoundedPipelineLayout();
 	void buildRoundedPipeline(VkShaderModule vert, VkShaderModule frag,
 	                          VkRenderPass targetRenderPass, VkSampleCountFlagBits samples,
 	                          BlendVariant variant, VkPipeline& out);
@@ -346,7 +341,8 @@ private:
 	void createUniformBuffers();
 	[[nodiscard]] DynamicUniformBuffer createUniformBuffer(VkDeviceSize capacity);
 	void destroyUniformBuffer(DynamicUniformBuffer&);
-	void createTexturedPipelineLayout();
+	/// Creates pipelineLayout, which all pipelines use
+	void createPipelineLayout();
 	/// Builds textured pipelines with \a variant for every topology from the given shader modules,
 	/// see pipelineIndex()
 	void buildTexturedPipelines(VkShaderModule vert, VkShaderModule frag,
@@ -365,9 +361,15 @@ private:
 	[[nodiscard]] std::pair<VkDescriptorSet, VkDescriptorPool>
 	allocateDescriptorSet(VkDescriptorSetLayout layout);
 	void freeDescriptorSet(VkDescriptorSet, VkDescriptorPool, VkDescriptorSetLayout layout);
-	/// Copies the active program's staging UBO into this frame's ring and binds it (dynamic
-	/// offset).
-	void bindActiveProgramUniforms(VkCommandBuffer cmd);
+	/// drawUniforms, sized for \a block, with the uniforms \a program's been given, or zeros
+	/// without one, for the draw to write its own into, see writeUniform()
+	std::vector<uint8_t>& prepareDrawUniforms(const UniformBlock& block,
+	                                          const VulkanShaderProgram* program);
+	/// Makes \a data the uniforms of the next draws: pushes them, or copies them into this frame's
+	/// ring and binds them (dynamic offset). Also binds \a textureSet, if it isn't VK_NULL_HANDLE.
+	void bindUniforms(VkCommandBuffer cmd, const UniformBlock& block,
+	                  const std::vector<uint8_t>& data,
+	                  VkDescriptorSet textureSet = VK_NULL_HANDLE);
 	/// Creates offscreenRenderPasses. Pipelines are built against these, as they don't change.
 	void createOffscreenRenderPasses();
 	/// Records a render pass that copies \a framebuffer's color into all samples of its msaaImage
@@ -537,23 +539,30 @@ private:
 	// Of the bits of a timestamp, those which are valid
 	uint64_t timestampMask = 0;
 
+	// The layout of all pipelines: set 0 = combined image sampler; set 1 = the UBO of uniforms
+	// that don't fit into the push constants, see ShaderCompiler.hpp
+	VkDescriptorSetLayout texturedSetLayout = VK_NULL_HANDLE;
+	VkDescriptorSetLayout uniformsSetLayout = VK_NULL_HANDLE;
+	VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
+
+	// The uniforms of the built-in shaders, see BuiltinShaders.hpp
+	UniformBlock coloredUniforms;
+	UniformBlock roundedUniforms;
+	UniformBlock texturedUniforms;
+	// Reused for writing each draw's uniforms, see prepareDrawUniforms()
+	std::vector<uint8_t> drawUniforms;
+
 	// Pipelines drawing single-color geometry with the built-in "simple" shader. There's one per
-	// blend variant and primitive topology; they share the layout and shader modules. Indexed by
-	// PassKind and pipelineIndex(), built by ensurePipelines().
-	VkPipelineLayout coloredPipelineLayout = VK_NULL_HANDLE;
+	// blend variant and primitive topology; they share the shader modules. Indexed by PassKind and
+	// pipelineIndex(), built by ensurePipelines().
 	std::array<std::array<VkPipeline, VulkanShaderProgram::pipelineCount>, passKindCount>
 	    coloredPipelines{};
 
-	VkPipelineLayout roundedPipelineLayout = VK_NULL_HANDLE;
 	// Indexed by PassKind and BlendVariant
 	std::array<std::array<VkPipeline, blendVariantCount>, passKindCount> roundedPipelines{};
 
-	// Pipeline drawing textured geometry (sprites, text) with the built-in texture shader.
-	// set 0 = combined image sampler; set 1 = custom-uniform UBO (used only by user
-	// ShaderPrograms). Indexed by PassKind and pipelineIndex().
-	VkDescriptorSetLayout texturedSetLayout = VK_NULL_HANDLE;
-	VkDescriptorSetLayout uniformsSetLayout = VK_NULL_HANDLE;
-	VkPipelineLayout texturedPipelineLayout = VK_NULL_HANDLE;
+	// Pipeline drawing textured geometry (sprites, text) with the built-in texture shader. Indexed
+	// by PassKind and pipelineIndex().
 	std::array<std::array<VkPipeline, VulkanShaderProgram::pipelineCount>, passKindCount>
 	    texturedPipelines{};
 	// Each holds the descriptor sets of up to descriptorPoolTextures textures and

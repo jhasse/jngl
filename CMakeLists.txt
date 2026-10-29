@@ -477,9 +477,9 @@ if(JNGL_D3D12)
 endif()
 
 if(JNGL_VULKAN OR JNGL_D3D12)
-	# Both GPU backends compile GLSL to SPIR-V: their built-in shaders at build time with glslc, see
-	# src/spirv/shaders/, and user-defined jngl::Shader programs at runtime with shaderc. They're
-	# both in the Vulkan SDK, which is also what's needed for building the Direct3D 12 backend.
+	# Both GPU backends compile GLSL to SPIR-V with shaderc: user-defined jngl::Shader programs at
+	# runtime, and the built-in shaders at build time with jngl-shaderc, see below. It's in the
+	# Vulkan SDK, which is also what's needed for building the Direct3D 12 backend.
 	if(WIN32)
 		set(JNGL_VULKAN_SDK_LIBDIR "$ENV{VULKAN_SDK}/Lib")
 		if(CMAKE_SIZEOF_VOID_P EQUAL 4)
@@ -487,44 +487,17 @@ if(JNGL_VULKAN OR JNGL_D3D12)
 		endif()
 	endif()
 
-	find_program(GLSLC glslc HINTS "$ENV{VULKAN_SDK}/Bin" "$ENV{VULKAN_SDK}/bin" REQUIRED)
-	find_package(Python3 REQUIRED COMPONENTS Interpreter)
-
-	set(JNGL_BUILTIN_SHADERS colored.vert colored.frag textured.vert textured.frag rounded.vert
-	                         rounded.frag)
-	set(JNGL_SPIRV_HEADERS "")
-	foreach(SHADER ${JNGL_BUILTIN_SHADERS})
-		set(GLSL ${CMAKE_CURRENT_SOURCE_DIR}/src/spirv/shaders/${SHADER})
-		set(SPV ${CMAKE_CURRENT_BINARY_DIR}/generated/spirv_shaders/${SHADER}.spv)
-		set(HPP ${CMAKE_CURRENT_BINARY_DIR}/generated/spirv_shaders/${SHADER}.spv.hpp)
-		string(REPLACE "." "_" SYMBOL ${SHADER})
-		add_custom_command(
-			OUTPUT ${SPV} ${HPP}
-			COMMAND ${CMAKE_COMMAND} -E make_directory
-			        ${CMAKE_CURRENT_BINARY_DIR}/generated/spirv_shaders
-			COMMAND ${GLSLC} --target-env=vulkan1.1 -O ${GLSL} -o ${SPV}
-			COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/spirv_to_header.py
-			        ${SPV} ${HPP} ${SYMBOL}
-			DEPENDS ${GLSL} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/spirv_to_header.py
-			COMMENT "Compiling shader ${SHADER} to SPIR-V"
-			VERBATIM
-		)
-		list(APPEND JNGL_SPIRV_HEADERS ${HPP})
-	endforeach()
-	add_custom_target(jngl_spirv_shaders DEPENDS ${JNGL_SPIRV_HEADERS})
-	add_dependencies(jngl jngl_spirv_shaders)
-	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated/spirv_shaders)
-
 	find_path(SHADERC_INCLUDE_DIR shaderc/shaderc.hpp
 		HINTS "$ENV{VULKAN_SDK}/Include" "$ENV{VULKAN_SDK}/include")
 	if(WIN32)
 		# The SDK's static shaderc uses its own CRT settings. The C API in its DLL works with
 		# both Debug and Release builds, including applications using a static CRT.
 		find_library(SHADERC_LIBRARY NAMES shaderc_shared HINTS "${JNGL_VULKAN_SDK_LIBDIR}")
-		target_compile_definitions(jngl PRIVATE SHADERC_SHAREDLIB)
+		set(JNGL_SHADERC_DEFINITIONS SHADERC_SHAREDLIB)
 	else()
 		find_library(SHADERC_LIBRARY NAMES shaderc_shared shaderc_combined shaderc
 			HINTS "$ENV{VULKAN_SDK}/lib")
+		set(JNGL_SHADERC_DEFINITIONS "")
 	endif()
 	if(NOT SHADERC_INCLUDE_DIR OR NOT SHADERC_LIBRARY)
 		message(FATAL_ERROR "JNGL_VULKAN and JNGL_D3D12 require shaderc (install the Vulkan SDK, "
@@ -533,11 +506,37 @@ if(JNGL_VULKAN OR JNGL_D3D12)
 	endif()
 	target_include_directories(jngl PRIVATE ${SHADERC_INCLUDE_DIR})
 	target_link_libraries(jngl PRIVATE ${SHADERC_LIBRARY})
+	target_compile_definitions(jngl PRIVATE ${JNGL_SHADERC_DEFINITIONS})
 
 	file(GLOB SPIRV_SRC src/spirv/*.cpp)
 	target_sources(jngl PRIVATE ${SPIRV_SRC})
 	# Everything's drawn through GpuBackend.hpp instead of OpenGL
 	target_compile_definitions(jngl PUBLIC JNGL_GPU_BACKEND)
+
+	# Compiles the built-in shaders (see src/BuiltinShaders.hpp) with the same code that compiles
+	# games' shaders at runtime, into a header with their bytecode for the backend
+	add_executable(jngl-shaderc src/shaderc/main.cpp ${SPIRV_SRC})
+	target_compile_features(jngl-shaderc PRIVATE cxx_std_20)
+	target_include_directories(jngl-shaderc PRIVATE ${SHADERC_INCLUDE_DIR})
+	target_link_libraries(jngl-shaderc PRIVATE ${SHADERC_LIBRARY})
+	target_compile_definitions(jngl-shaderc PRIVATE ${JNGL_SHADERC_DEFINITIONS})
+	if(JNGL_D3D12)
+		set(JNGL_BYTECODE_FORMAT dxbc)
+	else()
+		set(JNGL_BYTECODE_FORMAT spirv)
+	endif()
+	set(JNGL_BUILTIN_BYTECODE ${CMAKE_CURRENT_BINARY_DIR}/generated/BuiltinBytecode.hpp)
+	add_custom_command(
+		OUTPUT ${JNGL_BUILTIN_BYTECODE}
+		COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/generated
+		COMMAND jngl-shaderc ${JNGL_BYTECODE_FORMAT} ${JNGL_BUILTIN_BYTECODE}
+		DEPENDS jngl-shaderc
+		COMMENT "Compiling the built-in shaders to ${JNGL_BYTECODE_FORMAT}"
+		VERBATIM
+	)
+	add_custom_target(jngl_builtin_shaders DEPENDS ${JNGL_BUILTIN_BYTECODE})
+	add_dependencies(jngl jngl_builtin_shaders)
+	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated)
 endif()
 
 if(JNGL_VULKAN)
@@ -568,6 +567,10 @@ if(JNGL_D3D12)
 		HINTS "${JNGL_VULKAN_SDK_LIBDIR}" REQUIRED)
 	target_include_directories(jngl PRIVATE ${SPIRV_CROSS_INCLUDE_DIR})
 	target_link_libraries(jngl PRIVATE ${SPIRV_CROSS_LIBRARY} d3d12 dxgi d3dcompiler dxguid)
+	target_sources(jngl-shaderc PRIVATE src/d3d12/HlslCompiler.cpp)
+	target_include_directories(jngl-shaderc PRIVATE ${SPIRV_CROSS_INCLUDE_DIR})
+	target_link_libraries(jngl-shaderc PRIVATE ${SPIRV_CROSS_LIBRARY} d3dcompiler)
+	target_compile_definitions(jngl-shaderc PRIVATE JNGL_SHADERC_DXBC)
 
 	file(GLOB D3D12_SRC src/d3d12/*.cpp)
 	target_sources(jngl PRIVATE ${D3D12_SRC})

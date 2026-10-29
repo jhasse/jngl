@@ -2,6 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "ShaderCache.hpp"
 
+#include "BuiltinShaders.hpp"
 #include "jngl/Alpha.hpp"
 #include "jngl/Shader.hpp"
 #include "opengl.hpp"
@@ -12,107 +13,17 @@
 namespace jngl {
 
 ShaderCache::ShaderCache() {
-	Shader vertexShader(R"(#version 300 es
-		in mediump vec2 position;
-		uniform highp mat3 modelview;
-		uniform mediump mat4 projection;
-
-		void main() {
-			vec3 tmp = modelview * vec3(position, 1);
-			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-		})",
-	                    Shader::Type::VERTEX, R"(#version 100
-		attribute mediump vec2 position;
-		uniform highp mat3 modelview;
-		uniform mediump mat4 projection;
-
-		void main() {
-			vec3 tmp = modelview * vec3(position, 1);
-			gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-		})");
-	Shader fragmentShader(R"(#version 300 es
-		uniform lowp vec4 color;
-		out lowp vec4 outColor;
-
-		void main() {
-			outColor = color;
-		})",
-	                      Shader::Type::FRAGMENT, R"(#version 100
-		uniform lowp vec4 color;
-
-		void main() {
-			gl_FragColor = color;
-		})");
+	using namespace builtin_shaders;
+	const Shader vertexShader(coloredVertex, Shader::Type::VERTEX, coloredVertexGles2);
+	const Shader fragmentShader(coloredFragment, Shader::Type::FRAGMENT, coloredFragmentGles2);
 	simpleShaderProgram = std::make_unique<ShaderProgram>(vertexShader, fragmentShader);
 	simpleModelviewUniform = simpleShaderProgram->getUniformLocation("modelview");
 	simpleColorUniform = simpleShaderProgram->getUniformLocation("color");
 
 	{
-		Shader rrVertexShader(R"(#version 300 es
-			in mediump vec2 position;
-			uniform highp mat3 modelview;
-			uniform mediump mat4 projection;
-			out mediump vec2 vPosition;
-
-			void main() {
-				vec3 tmp = modelview * vec3(position, 1);
-				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-				vPosition = position;
-			})",
-		                      Shader::Type::VERTEX, R"(#version 100
-			attribute mediump vec2 position;
-			uniform highp mat3 modelview;
-			uniform mediump mat4 projection;
-			varying mediump vec2 vPosition;
-
-			void main() {
-				vec3 tmp = modelview * vec3(position, 1);
-				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-				vPosition = position;
-			})");
-		Shader rrFragmentShader(R"(#version 300 es
-			uniform lowp vec4 color;
-			uniform mediump vec2 size;
-			uniform mediump vec4 cornerRadii;
-			in mediump vec2 vPosition;
-			out lowp vec4 outColor;
-
-			mediump float sdRoundBox(mediump vec2 p, mediump vec2 b, mediump vec4 r) {
-				r.xy = (p.x > 0.0) ? r.xy : r.zw;
-				r.x  = (p.y > 0.0) ? r.y  : r.x;
-				mediump vec2 q = abs(p) - b + r.x;
-				return min(max(q.x, q.y), 0.0) + length(max(q, vec2(0.0))) - r.x;
-			}
-
-			void main() {
-				mediump vec2 p = vPosition * size;
-				mediump vec2 halfSize = size * 0.5;
-				mediump vec4 r = vec4(cornerRadii.y, cornerRadii.w, cornerRadii.x, cornerRadii.z);
-				mediump float d = sdRoundBox(p, halfSize, r);
-				mediump float alpha = 1.0 - smoothstep(-0.5, 0.5, d);
-				outColor = vec4(color.rgb, color.a * alpha);
-			})",
-		                        Shader::Type::FRAGMENT, R"(#version 100
-			uniform lowp vec4 color;
-			uniform mediump vec2 size;
-			uniform mediump vec4 cornerRadii;
-			varying mediump vec2 vPosition;
-
-			mediump float sdRoundBox(mediump vec2 p, mediump vec2 b, mediump vec4 r) {
-				r.xy = (p.x > 0.0) ? r.xy : r.zw;
-				r.x  = (p.y > 0.0) ? r.y  : r.x;
-				mediump vec2 q = abs(p) - b + r.x;
-				return min(max(q.x, q.y), 0.0) + length(max(q, vec2(0.0))) - r.x;
-			}
-
-			void main() {
-				mediump vec2 p = vPosition * size;
-				mediump vec2 halfSize = size * 0.5;
-				mediump vec4 r = vec4(cornerRadii.y, cornerRadii.w, cornerRadii.x, cornerRadii.z);
-				mediump float d = sdRoundBox(p, halfSize, r);
-				mediump float alpha = 1.0 - smoothstep(-0.5, 0.5, d);
-				gl_FragColor = vec4(color.rgb, color.a * alpha);
-			})");
+		const Shader rrVertexShader(roundedVertex, Shader::Type::VERTEX, roundedVertexGles2);
+		const Shader rrFragmentShader(roundedFragment, Shader::Type::FRAGMENT,
+		                              roundedFragmentGles2);
 		roundedRectShaderProgram =
 		    std::make_unique<ShaderProgram>(rrVertexShader, rrFragmentShader);
 		roundedRectModelviewUniform = roundedRectShaderProgram->getUniformLocation("modelview");
@@ -122,52 +33,10 @@ ShaderCache::ShaderCache() {
 	}
 
 	{
-		textureVertexShader = std::make_unique<Shader>(R"(#version 300 es
-			in mediump vec2 position;
-			in mediump vec2 inTexCoord;
-			uniform highp mat3 modelview;
-			uniform mediump mat4 projection;
-			out mediump vec2 texCoord;
-
-			void main() {
-				vec3 tmp = modelview * vec3(position, 1);
-				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-				texCoord = inTexCoord;
-			})",
-		                                               Shader::Type::VERTEX, R"(#version 100
-			attribute mediump vec2 position;
-			attribute mediump vec2 inTexCoord;
-			uniform highp mat3 modelview;
-			uniform mediump mat4 projection;
-			varying mediump vec2 texCoord;
-
-			void main() {
-				vec3 tmp = modelview * vec3(position, 1);
-				gl_Position = projection * vec4(tmp.x, tmp.y, 0, 1);
-				texCoord = inTexCoord;
-			})");
-		Shader fragmentShader(R"(#version 300 es
-			uniform sampler2D tex;
-			uniform lowp vec3 lerpColor;
-			uniform lowp vec4 lerpFactors;
-
-			in mediump vec2 texCoord;
-
-			out lowp vec4 outColor;
-
-			void main() {
-				outColor = mix(texture(tex, texCoord), vec4(lerpColor, 0.0), lerpFactors);
-			})",
-		                      Shader::Type::FRAGMENT, R"(#version 100
-			uniform sampler2D tex;
-			uniform lowp vec3 lerpColor;
-			uniform lowp vec4 lerpFactors;
-
-			varying mediump vec2 texCoord;
-
-			void main() {
-				gl_FragColor = mix(texture2D(tex, texCoord), vec4(lerpColor, 0.0), lerpFactors);
-			})");
+		textureVertexShader =
+		    std::make_unique<Shader>(texturedVertex, Shader::Type::VERTEX, texturedVertexGles2);
+		const Shader fragmentShader(texturedFragment, Shader::Type::FRAGMENT,
+		                            texturedFragmentGles2);
 		textureShaderProgram =
 		    std::make_unique<ShaderProgram>(*textureVertexShader, fragmentShader);
 		shaderLerpColorUniform = textureShaderProgram->getUniformLocation("lerpColor");

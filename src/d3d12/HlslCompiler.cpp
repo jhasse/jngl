@@ -3,8 +3,6 @@
 
 #include "HlslCompiler.hpp"
 
-#include "../log.hpp"
-
 #include <d3dcompiler.h>
 #include <spirv_cross/spirv_cross_c.h>
 #include <stdexcept>
@@ -118,8 +116,7 @@ std::vector<uint8_t> compileSpirvToDxbc(const std::span<const uint32_t> spirv,
 			message.append(static_cast<const char*>(errors->GetBufferPointer()),
 			               errors->GetBufferSize());
 		}
-		internal::debug("HLSL of the shader that failed to compile:\n{}", hlsl);
-		throw std::runtime_error(message);
+		throw std::runtime_error(message + "\nHLSL that SPIRV-Cross translated it to:\n" + hlsl);
 	}
 	const auto* const begin = static_cast<const uint8_t*>(bytecode->GetBufferPointer());
 	return { begin, begin + bytecode->GetBufferSize() };

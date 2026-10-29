@@ -10,12 +10,7 @@
 #include "../log.hpp"
 #include "vulkan_helper.hpp"
 
-#include "colored.frag.spv.hpp"
-#include "colored.vert.spv.hpp"
-#include "rounded.frag.spv.hpp"
-#include "rounded.vert.spv.hpp"
-#include "textured.frag.spv.hpp"
-#include "textured.vert.spv.hpp"
+#include "BuiltinBytecode.hpp"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_vulkan.h>
@@ -203,21 +198,22 @@ VulkanRenderer::VulkanRenderer(void* const nativeWindow)
 		createSyncObjects();
 	}
 	{
-		internal::StartupProfiler _{ "createColoredPipelineLayout" };
-		createColoredPipelineLayout();
-	}
-	{
-		internal::StartupProfiler _{ "createRoundedPipelineLayout" };
-		createRoundedPipelineLayout();
-	}
-	{
 		internal::StartupProfiler _{ "createDescriptorPool" };
 		createDescriptorPool();
 	}
 	{
-		internal::StartupProfiler _{ "createTexturedPipelineLayout" };
-		createTexturedPipelineLayout();
+		internal::StartupProfiler _{ "createPipelineLayout" };
+		createPipelineLayout();
 	}
+	coloredUniforms =
+	    uniformBlock(builtin_bytecode::colored.uniforms, builtin_bytecode::colored.uniformBlockSize,
+	                 builtin_bytecode::colored.pushConstants);
+	roundedUniforms =
+	    uniformBlock(builtin_bytecode::rounded.uniforms, builtin_bytecode::rounded.uniformBlockSize,
+	                 builtin_bytecode::rounded.pushConstants);
+	texturedUniforms = uniformBlock(builtin_bytecode::textured.uniforms,
+	                                builtin_bytecode::textured.uniformBlockSize,
+	                                builtin_bytecode::textured.pushConstants);
 	{
 		// Only those of the window's default blending, the others are built once they're used
 		internal::StartupProfiler _{ "ensurePipelines" };
@@ -275,16 +271,10 @@ VulkanRenderer::~VulkanRenderer() {
 			}
 		}
 		destroyColoredPipelines();
-		if (coloredPipelineLayout) {
-			vkDestroyPipelineLayout(device, coloredPipelineLayout, nullptr);
-		}
 		destroyRoundedPipelines();
-		if (roundedPipelineLayout) {
-			vkDestroyPipelineLayout(device, roundedPipelineLayout, nullptr);
-		}
 		destroyTexturedPipelines();
-		if (texturedPipelineLayout) {
-			vkDestroyPipelineLayout(device, texturedPipelineLayout, nullptr);
+		if (pipelineLayout) {
+			vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
 		}
 		if (texturedSetLayout) {
 			vkDestroyDescriptorSetLayout(device, texturedSetLayout, nullptr);
@@ -1632,27 +1622,6 @@ void VulkanRenderer::setProjection(const Mat4& p) {
 
 namespace {
 
-struct ColoredPushConstants {
-	float mvp[16];
-	float color[4];
-};
-
-struct TexturedPushConstants {
-	float mvp[16];
-	float lerpColor[4];
-	float lerpFactors[4];
-};
-
-struct RoundedPushConstants {
-	float mvp[16];
-	float color[4];
-	float size[2];
-	float pad[2];
-	float cornerRadii[4];
-};
-
-static_assert(sizeof(RoundedPushConstants) == 112);
-
 VkShaderModule createShaderModule(VkDevice device, const std::span<const uint32_t> spirv) {
 	auto info = vkStruct<VkShaderModuleCreateInfo>(VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO);
 	info.codeSize = spirv.size() * sizeof(uint32_t);
@@ -1764,20 +1733,6 @@ uint32_t VulkanRenderer::findMemoryType(const uint32_t typeFilter,
 	throw std::runtime_error("No suitable Vulkan memory type found.");
 }
 
-void VulkanRenderer::createColoredPipelineLayout() {
-	VkPushConstantRange pushRange{};
-	pushRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
-	pushRange.offset = 0;
-	pushRange.size = sizeof(ColoredPushConstants);
-
-	auto layoutInfo =
-	    vkStruct<VkPipelineLayoutCreateInfo>(VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO);
-	layoutInfo.pushConstantRangeCount = 1;
-	layoutInfo.pPushConstantRanges = &pushRange;
-	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &coloredPipelineLayout),
-	         "vkCreatePipelineLayout");
-}
-
 VkRenderPass VulkanRenderer::pipelineRenderPass(const PassKind kind) const {
 	const auto& passes = offscreenRenderPasses[isHdr(kind) ? 1 : 0];
 	return isMultisampled(kind) ? passes.msaa : passes.single;
@@ -1795,19 +1750,19 @@ void VulkanRenderer::ensurePipelines(const PassKind kind, const BlendVariant var
 	const VkRenderPass pass = pipelineRenderPass(kind);
 	const VkSampleCountFlagBits samples = pipelineSamples(kind);
 	{
-		const ShaderModules colored(device, spirv_shaders::colored_vert,
-		                            spirv_shaders::colored_frag);
+		const ShaderModules colored(device, builtin_bytecode::colored.vertex,
+		                            builtin_bytecode::colored.fragment);
 		buildColoredPipelines(colored.vert, colored.frag, pass, samples, variant,
 		                      coloredPipelines[k]);
 	}
 	{
-		const ShaderModules rounded(device, spirv_shaders::rounded_vert,
-		                            spirv_shaders::rounded_frag);
+		const ShaderModules rounded(device, builtin_bytecode::rounded.vertex,
+		                            builtin_bytecode::rounded.fragment);
 		buildRoundedPipeline(rounded.vert, rounded.frag, pass, samples, variant,
 		                     roundedPipelines[k][static_cast<size_t>(variant)]);
 	}
-	const ShaderModules textured(device, spirv_shaders::textured_vert,
-	                             spirv_shaders::textured_frag);
+	const ShaderModules textured(device, builtin_bytecode::textured.vertex,
+	                             builtin_bytecode::textured.fragment);
 	buildTexturedPipelines(textured.vert, textured.frag, pass, samples, variant,
 	                       texturedPipelines[k]);
 }
@@ -1895,7 +1850,7 @@ void VulkanRenderer::buildColoredPipelines(
 		pipelineInfo.pMultisampleState = &multisampling;
 		pipelineInfo.pColorBlendState = &colorBlending;
 		pipelineInfo.pDynamicState = &dynamicState;
-		pipelineInfo.layout = coloredPipelineLayout;
+		pipelineInfo.layout = pipelineLayout;
 		pipelineInfo.renderPass = targetRenderPass;
 		pipelineInfo.subpass = 0;
 		VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
@@ -1916,20 +1871,6 @@ void VulkanRenderer::destroyRoundedPipelines() {
 			}
 		}
 	}
-}
-
-void VulkanRenderer::createRoundedPipelineLayout() {
-	VkPushConstantRange pushRange{};
-	pushRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
-	pushRange.offset = 0;
-	pushRange.size = sizeof(RoundedPushConstants);
-
-	auto layoutInfo =
-	    vkStruct<VkPipelineLayoutCreateInfo>(VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO);
-	layoutInfo.pushConstantRangeCount = 1;
-	layoutInfo.pPushConstantRanges = &pushRange;
-	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &roundedPipelineLayout),
-	         "vkCreatePipelineLayout");
 }
 
 void VulkanRenderer::buildRoundedPipeline(const VkShaderModule vert, const VkShaderModule frag,
@@ -1999,7 +1940,7 @@ void VulkanRenderer::buildRoundedPipeline(const VkShaderModule vert, const VkSha
 	pipelineInfo.pMultisampleState = &multisampling;
 	pipelineInfo.pColorBlendState = &colorBlending;
 	pipelineInfo.pDynamicState = &dynamicState;
-	pipelineInfo.layout = roundedPipelineLayout;
+	pipelineInfo.layout = pipelineLayout;
 	pipelineInfo.renderPass = targetRenderPass;
 	pipelineInfo.subpass = 0;
 	VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &out),
@@ -2135,12 +2076,35 @@ void VulkanRenderer::destroyUniformBuffer(DynamicUniformBuffer& ub) {
 	ub = {};
 }
 
-void VulkanRenderer::bindActiveProgramUniforms(const VkCommandBuffer cmd) {
-	if (!activeShaderProgram || activeShaderProgram->uniformBlockSize == 0 ||
-	    !activeShaderProgram->uniformMapped) {
+std::vector<uint8_t>&
+VulkanRenderer::prepareDrawUniforms(const UniformBlock& block,
+                                    const VulkanShaderProgram* const program) {
+	if (program) {
+		drawUniforms.assign(program->uniformData.begin(), program->uniformData.end());
+	} else {
+		// Not zeroed, as the built-in shaders' draws write all of their uniforms
+		drawUniforms.resize(block.size);
+	}
+	return drawUniforms;
+}
+
+void VulkanRenderer::bindUniforms(const VkCommandBuffer cmd, const UniformBlock& block,
+                                  const std::vector<uint8_t>& data,
+                                  const VkDescriptorSet textureSet) {
+	if (block.size == 0 || block.pushConstants) {
+		if (textureSet) {
+			vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1,
+			                        &textureSet, 0, nullptr);
+		}
+		if (block.size > 0) {
+			vkCmdPushConstants(cmd, pipelineLayout,
+			                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0,
+			                   block.size, data.data());
+		}
 		return;
 	}
-	assert(activeShaderProgram->uniformBlockSize <= uniformDynamicRange);
+	assert(data.size() == block.size);
+	assert(block.size <= uniformDynamicRange);
 	DynamicUniformBuffer& ub = uniformBuffers[currentFrame];
 	VkDeviceSize aligned =
 	    (ub.used + minUniformBufferOffsetAlignment - 1) & ~(minUniformBufferOffsetAlignment - 1);
@@ -2153,13 +2117,18 @@ void VulkanRenderer::bindActiveProgramUniforms(const VkCommandBuffer cmd) {
 		ub = createUniformBuffer(ub.capacity * 2);
 		aligned = 0;
 	}
-	std::memcpy(static_cast<char*>(ub.mapped) + aligned, activeShaderProgram->uniformMapped,
-	            activeShaderProgram->uniformBlockSize);
+	std::memcpy(static_cast<char*>(ub.mapped) + aligned, data.data(), block.size);
 	// The next draw's may start within uniformDynamicRange, which only has to fit into the buffer
-	ub.used = aligned + activeShaderProgram->uniformBlockSize;
+	ub.used = aligned + block.size;
 	const uint32_t dynamicOffset = static_cast<uint32_t>(aligned);
-	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 1, 1,
-	                        &ub.descriptorSet, 1, &dynamicOffset);
+	if (textureSet) { // both with one call
+		const std::array sets = { textureSet, ub.descriptorSet };
+		vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0,
+		                        static_cast<uint32_t>(sets.size()), sets.data(), 1, &dynamicOffset);
+	} else {
+		vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 1, 1,
+		                        &ub.descriptorSet, 1, &dynamicOffset);
+	}
 }
 
 void VulkanRenderer::drawColored(PrimitiveType type, const float* xyVertices,
@@ -2182,44 +2151,13 @@ void VulkanRenderer::drawColored(PrimitiveType type, const float* xyVertices,
 	const VkDeviceSize bytes = vertexCount * 2 * sizeof(float);
 	const auto [vertexBuffer, offset] = uploadVertices(xyVertices, bytes);
 
-	// Combine modelview (3x3) and the projection matrix into a single 4x4 transform on the CPU. The
-	// modelview maps (x, y) -> (x', y'); embed it into a 4x4 that leaves z at 0 and w at 1.
-	const float* const m = modelview.data; // column-major: m[C * 3 + R]
-	Mat4 embedded;
-	embedded.data[0] = m[0];
-	embedded.data[1] = m[1];
-	embedded.data[2] = 0.f;
-	embedded.data[3] = 0.f;
-	embedded.data[4] = m[3];
-	embedded.data[5] = m[4];
-	embedded.data[6] = 0.f;
-	embedded.data[7] = 0.f;
-	embedded.data[8] = 0.f;
-	embedded.data[9] = 0.f;
-	embedded.data[10] = 0.f;
-	embedded.data[11] = 0.f;
-	embedded.data[12] = m[6];
-	embedded.data[13] = m[7];
-	embedded.data[14] = 0.f;
-	embedded.data[15] = 1.f;
+	ensureRenderPass(); // before the uniforms, as it might draw itself, see expandIntoSamples
+	auto& uniforms = prepareDrawUniforms(coloredUniforms, nullptr);
+	writeUniform(uniforms, coloredUniforms.offsets.modelview, modelview);
+	writeUniform(uniforms, coloredUniforms.offsets.projection, projection);
+	writeUniform(uniforms, coloredUniforms.offsets.color,
+	             std::array{ color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() });
 
-	ColoredPushConstants push{};
-	// mvp = projection * embedded, both column-major (element [col * 4 + row]).
-	for (int col = 0; col < 4; ++col) {
-		for (int row = 0; row < 4; ++row) {
-			float sum = 0.f;
-			for (int k = 0; k < 4; ++k) {
-				sum += projection.data[k * 4 + row] * embedded.data[col * 4 + k];
-			}
-			push.mvp[col * 4 + row] = sum;
-		}
-	}
-	push.color[0] = color.getRed();
-	push.color[1] = color.getGreen();
-	push.color[2] = color.getBlue();
-	push.color[3] = color.getAlpha();
-
-	ensureRenderPass();
 	const VkCommandBuffer cmd = renderCommands;
 	const BlendVariant variant = blendVariant();
 	ensurePipelines(currentPassKind, variant);
@@ -2227,9 +2165,7 @@ void VulkanRenderer::drawColored(PrimitiveType type, const float* xyVertices,
 	    cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
 	    coloredPipelines[static_cast<size_t>(currentPassKind)][pipelineIndex(variant, type)]);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
-	vkCmdPushConstants(cmd, coloredPipelineLayout,
-	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
-	                   &push);
+	bindUniforms(cmd, coloredUniforms, uniforms);
 	vkCmdDraw(cmd, static_cast<uint32_t>(vertexCount), 1, 0, 0);
 }
 
@@ -2244,38 +2180,17 @@ void VulkanRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, co
 	const VkDeviceSize bytes = unitSquare.size() * sizeof(float);
 	const auto [vertexBuffer, offset] = uploadVertices(unitSquare.data(), bytes);
 
-	const float* const m = modelview.data;
-	Mat4 embedded;
-	embedded.data[0] = m[0];
-	embedded.data[1] = m[1];
-	embedded.data[4] = m[3];
-	embedded.data[5] = m[4];
-	embedded.data[12] = m[6];
-	embedded.data[13] = m[7];
-	embedded.data[15] = 1.f;
+	ensureRenderPass(); // before the uniforms, as it might draw itself, see expandIntoSamples
+	auto& uniforms = prepareDrawUniforms(roundedUniforms, nullptr);
+	const DrawUniformOffsets& offsets = roundedUniforms.offsets;
+	writeUniform(uniforms, offsets.modelview, modelview);
+	writeUniform(uniforms, offsets.projection, projection);
+	writeUniform(uniforms, offsets.color,
+	             std::array{ color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() });
+	writeUniform(uniforms, offsets.size, std::array{ sizeX, sizeY });
+	writeUniform(uniforms, offsets.cornerRadii,
+	             std::array{ topLeft, topRight, bottomLeft, bottomRight });
 
-	RoundedPushConstants push{};
-	for (int col = 0; col < 4; ++col) {
-		for (int row = 0; row < 4; ++row) {
-			float sum = 0.f;
-			for (int k = 0; k < 4; ++k) {
-				sum += projection.data[k * 4 + row] * embedded.data[col * 4 + k];
-			}
-			push.mvp[col * 4 + row] = sum;
-		}
-	}
-	push.color[0] = color.getRed();
-	push.color[1] = color.getGreen();
-	push.color[2] = color.getBlue();
-	push.color[3] = color.getAlpha();
-	push.size[0] = sizeX;
-	push.size[1] = sizeY;
-	push.cornerRadii[0] = topLeft;
-	push.cornerRadii[1] = topRight;
-	push.cornerRadii[2] = bottomLeft;
-	push.cornerRadii[3] = bottomRight;
-
-	ensureRenderPass();
 	const VkCommandBuffer cmd = renderCommands;
 	const BlendVariant variant = blendVariant();
 	ensurePipelines(currentPassKind, variant);
@@ -2283,9 +2198,7 @@ void VulkanRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, co
 	    roundedPipelines[static_cast<size_t>(currentPassKind)][static_cast<size_t>(variant)];
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
-	vkCmdPushConstants(cmd, roundedPipelineLayout,
-	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
-	                   &push);
+	bindUniforms(cmd, roundedUniforms, uniforms);
 	vkCmdDraw(cmd, 6, 1, 0, 0);
 }
 
@@ -2386,7 +2299,7 @@ void VulkanRenderer::freeDescriptorSet(const VkDescriptorSet set, const VkDescri
 	--(layout == texturedSetLayout ? it->textures : it->uniformBuffers);
 }
 
-void VulkanRenderer::createTexturedPipelineLayout() {
+void VulkanRenderer::createPipelineLayout() {
 	if (!texturedSetLayout) {
 		VkDescriptorSetLayoutBinding samplerBinding{};
 		samplerBinding.binding = 0;
@@ -2405,7 +2318,7 @@ void VulkanRenderer::createTexturedPipelineLayout() {
 		uboBinding.binding = 0;
 		uboBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
 		uboBinding.descriptorCount = 1;
-		uboBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		uboBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 		auto setLayoutInfo = vkStruct<VkDescriptorSetLayoutCreateInfo>(
 		    VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO);
 		setLayoutInfo.bindingCount = 1;
@@ -2416,7 +2329,7 @@ void VulkanRenderer::createTexturedPipelineLayout() {
 
 	VkPushConstantRange pushRange{};
 	pushRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
-	pushRange.size = sizeof(TexturedPushConstants);
+	pushRange.size = maxPushConstantsSize;
 	const std::array<VkDescriptorSetLayout, 2> setLayouts = { texturedSetLayout,
 		                                                      uniformsSetLayout };
 	auto layoutInfo =
@@ -2425,7 +2338,7 @@ void VulkanRenderer::createTexturedPipelineLayout() {
 	layoutInfo.pSetLayouts = setLayouts.data();
 	layoutInfo.pushConstantRangeCount = 1;
 	layoutInfo.pPushConstantRanges = &pushRange;
-	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &texturedPipelineLayout),
+	VK_CHECK(vkCreatePipelineLayout(device, &layoutInfo, nullptr, &pipelineLayout),
 	         "vkCreatePipelineLayout");
 }
 
@@ -2501,7 +2414,7 @@ void VulkanRenderer::buildTexturedPipelines(
 		pipelineInfo.pMultisampleState = &multisampling;
 		pipelineInfo.pColorBlendState = &colorBlending;
 		pipelineInfo.pDynamicState = &dynamicState;
-		pipelineInfo.layout = texturedPipelineLayout;
+		pipelineInfo.layout = pipelineLayout;
 		pipelineInfo.renderPass = targetRenderPass;
 		VK_CHECK(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
 		                                   &out[pipelineIndex(variant, type)]),
@@ -2564,47 +2477,23 @@ bool VulkanRenderer::isAlphaOnlyWrite() const {
 	return alphaOnlyWrite;
 }
 
-std::unique_ptr<VulkanShaderProgram> VulkanRenderer::createShaderProgram(
-    const std::vector<uint32_t>& vertexSpirv, const std::vector<uint32_t>& fragmentSpirv,
-    std::vector<ShaderUniform> uniforms, const uint32_t uniformBlockSize) {
+std::unique_ptr<VulkanShaderProgram> VulkanRenderer::createShaderProgram(CompiledProgram compiled) {
 	auto program = std::make_unique<VulkanShaderProgram>();
-	program->uniforms = std::move(uniforms);
-	program->uniformBlockSize = uniformBlockSize;
-	program->vertexSpirv = vertexSpirv;
-	program->fragmentSpirv = fragmentSpirv;
+	program->vertexSpirv = std::move(compiled.vertexSpirv);
+	program->fragmentSpirv = std::move(compiled.fragmentSpirv);
+	program->uniformBlock =
+	    uniformBlock(compiled.uniforms, compiled.uniformBlockSize, compiled.pushConstants);
+	program->uniforms = std::move(compiled.uniforms);
+	if (program->uniformBlock.size > uniformDynamicRange) {
+		throw std::runtime_error("Shader uniform block (" +
+		                         std::to_string(program->uniformBlock.size) +
+		                         " bytes) exceeds VulkanRenderer::uniformDynamicRange (" +
+		                         std::to_string(uniformDynamicRange) + ").");
+	}
+	program->uniformData.resize(program->uniformBlock.size);
 	ensureProgramPipelines(*program, PassKind::Ldr, BlendVariant::Composite);
 	if (msaaSupported) {
 		ensureProgramPipelines(*program, PassKind::LdrMsaa, BlendVariant::Composite);
-	}
-
-	if (program->uniformBlockSize > 0) {
-		if (program->uniformBlockSize > uniformDynamicRange) {
-			throw std::runtime_error("Shader uniform block (" +
-			                         std::to_string(program->uniformBlockSize) +
-			                         " bytes) exceeds VulkanRenderer::uniformDynamicRange (" +
-			                         std::to_string(uniformDynamicRange) + ").");
-		}
-		auto bufferInfo = vkStruct<VkBufferCreateInfo>(VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO);
-		bufferInfo.size = program->uniformBlockSize;
-		bufferInfo.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
-		bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-		VK_CHECK(vkCreateBuffer(device, &bufferInfo, nullptr, &program->uniformBuffer),
-		         "vkCreateBuffer");
-		VkMemoryRequirements memReq;
-		vkGetBufferMemoryRequirements(device, program->uniformBuffer, &memReq);
-		auto allocInfo = vkStruct<VkMemoryAllocateInfo>(VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO);
-		allocInfo.allocationSize = memReq.size;
-		allocInfo.memoryTypeIndex =
-		    findMemoryType(memReq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-		                                              VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-		VK_CHECK(vkAllocateMemory(device, &allocInfo, nullptr, &program->uniformMemory),
-		         "vkAllocateMemory");
-		VK_CHECK(vkBindBufferMemory(device, program->uniformBuffer, program->uniformMemory, 0),
-		         "vkBindBufferMemory");
-		VK_CHECK(vkMapMemory(device, program->uniformMemory, 0, program->uniformBlockSize, 0,
-		                     &program->uniformMapped),
-		         "vkMapMemory");
-		std::memset(program->uniformMapped, 0, program->uniformBlockSize);
 	}
 	return program;
 }
@@ -2613,8 +2502,7 @@ void VulkanRenderer::destroyShaderProgram(VulkanShaderProgram& program) {
 	if (!device) {
 		return;
 	}
-	// The pipelines might still be used by the current or an in-flight command buffer. The uniform
-	// buffer is only copied from on the CPU, see bindActiveProgramUniforms().
+	// The pipelines might still be used by the current or an in-flight command buffer
 	destroyLater([this, pipelines = program.pipelines]() {
 		for (const auto& kindPipelines : pipelines) {
 			for (const VkPipeline pipeline : kindPipelines) {
@@ -2625,17 +2513,8 @@ void VulkanRenderer::destroyShaderProgram(VulkanShaderProgram& program) {
 		}
 	});
 	program.pipelines = {};
-	if (program.uniformMapped) {
-		vkUnmapMemory(device, program.uniformMemory);
-		program.uniformMapped = nullptr;
-	}
-	if (program.uniformBuffer) {
-		vkDestroyBuffer(device, program.uniformBuffer, nullptr);
-		program.uniformBuffer = VK_NULL_HANDLE;
-	}
-	if (program.uniformMemory) {
-		vkFreeMemory(device, program.uniformMemory, nullptr);
-		program.uniformMemory = VK_NULL_HANDLE;
+	if (activeShaderProgram == &program) {
+		activeShaderProgram = nullptr;
 	}
 }
 
@@ -2646,9 +2525,9 @@ void VulkanRenderer::setActiveShaderProgram(const VulkanShaderProgram* program) 
 void VulkanRenderer::setActiveProgramUniform(const uint32_t offset, const void* const data,
                                              const uint32_t bytes) {
 	assert(activeShaderProgram);
-	assert(activeShaderProgram->uniformMapped);
-	assert(offset + bytes <= activeShaderProgram->uniformBlockSize);
-	std::memcpy(static_cast<char*>(activeShaderProgram->uniformMapped) + offset, data, bytes);
+	assert(offset + bytes <= activeShaderProgram->uniformData.size());
+	// Only copied from on the CPU, see prepareDrawUniforms()
+	std::memcpy(activeShaderProgram->uniformData.data() + offset, data, bytes);
 }
 
 void VulkanRenderer::submitOneTime(const std::function<void(VkCommandBuffer)>& record) {
@@ -3075,30 +2954,18 @@ void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* xyuv,
 	const VkDeviceSize bytes = vertexCount * 4 * sizeof(float);
 	const auto [vertexBuffer, offset] = uploadVertices(xyuv, bytes);
 
-	TexturedPushConstants push{};
-	const float* const m = modelview.data;
-	Mat4 embedded;
-	embedded.data[0] = m[0];
-	embedded.data[1] = m[1];
-	embedded.data[4] = m[3];
-	embedded.data[5] = m[4];
-	embedded.data[12] = m[6];
-	embedded.data[13] = m[7];
-	for (int col = 0; col < 4; ++col) {
-		for (int row = 0; row < 4; ++row) {
-			float sum = 0.f;
-			for (int k = 0; k < 4; ++k) {
-				sum += projection.data[k * 4 + row] * embedded.data[col * 4 + k];
-			}
-			push.mvp[col * 4 + row] = sum;
-		}
+	const UniformBlock& block =
+	    activeShaderProgram ? activeShaderProgram->uniformBlock : texturedUniforms;
+	ensureRenderPass(); // before the uniforms, as it might draw itself, see expandIntoSamples
+	auto& uniforms = prepareDrawUniforms(block, activeShaderProgram);
+	writeUniform(uniforms, block.offsets.modelview, modelview);
+	writeUniform(uniforms, block.offsets.projection, projection);
+	if (!activeShaderProgram) { // a ShaderProgram's other uniforms are its own, like on OpenGL
+		writeUniform(uniforms, block.offsets.lerpColor,
+		             std::array{ lerpColor.getRed(), lerpColor.getGreen(), lerpColor.getBlue() });
+		writeUniform(uniforms, block.offsets.lerpFactors, lerpFactors);
 	}
-	push.lerpColor[0] = lerpColor.getRed();
-	push.lerpColor[1] = lerpColor.getGreen();
-	push.lerpColor[2] = lerpColor.getBlue();
-	std::copy(lerpFactors.begin(), lerpFactors.end(), push.lerpFactors);
 
-	ensureRenderPass();
 	const VkCommandBuffer cmd = renderCommands;
 	const BlendVariant variant = blendVariant();
 	const size_t index = pipelineIndex(variant, type);
@@ -3112,13 +2979,8 @@ void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* xyuv,
 		pipeline = texturedPipelines[kind][index];
 	}
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 0, 1,
-	                        &texture.descriptorSet, 0, nullptr);
-	bindActiveProgramUniforms(cmd);
+	bindUniforms(cmd, block, uniforms, texture.descriptorSet);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
-	vkCmdPushConstants(cmd, texturedPipelineLayout,
-	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
-	                   &push);
 	vkCmdDraw(cmd, static_cast<uint32_t>(vertexCount), 1, 0, 0);
 }
 
@@ -3507,20 +3369,18 @@ void VulkanRenderer::expandIntoSamples(VulkanFramebuffer& fb) {
 		-1.f, -1.f, 0.f, 0.f, //
 	};
 	const auto [vertexBuffer, offset] = uploadVertices(xyuv.data(), sizeof(xyuv));
-	TexturedPushConstants push{};
-	const Mat4 identity;
-	std::copy(std::begin(identity.data), std::end(identity.data), push.mvp);
+	// The identity as modelview and projection, and no mixing towards lerpColor. Not in
+	// drawUniforms, as the draw that's started the render pass might have written those already.
+	std::vector<uint8_t> uniforms(texturedUniforms.size);
+	writeUniform(uniforms, texturedUniforms.offsets.modelview, Mat3());
+	writeUniform(uniforms, texturedUniforms.offsets.projection, Mat4());
 	const PassKind kind = passKind(fb.hdr, true);
 	ensurePipelines(kind, BlendVariant::Replace);
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
 	                  texturedPipelines[static_cast<size_t>(kind)][pipelineIndex(
 	                      BlendVariant::Replace, PrimitiveType::Triangles)]);
-	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, texturedPipelineLayout, 0, 1,
-	                        &fb.color.descriptorSet, 0, nullptr);
 	vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, &offset);
-	vkCmdPushConstants(cmd, texturedPipelineLayout,
-	                   VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push),
-	                   &push);
+	bindUniforms(cmd, texturedUniforms, uniforms, fb.color.descriptorSet);
 	vkCmdDraw(cmd, 6, 1, 0, 0);
 	vkCmdEndRenderPass(cmd);
 	fb.samplesStale = false;

@@ -13,6 +13,7 @@
 
 #ifdef JNGL_GPU_BACKEND
 #include "../GpuBackend.hpp"
+#include "../spirv/ShaderCompiler.hpp"
 #endif
 
 namespace jngl {
@@ -36,10 +37,8 @@ struct ShaderProgram::Impl {
 
 ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 : impl(std::make_unique<Impl>()) {
-	// Custom uniforms live on the fragment stage (sprite vertex uses push constants only).
-	impl->program =
-	    gpuRenderer().createShaderProgram(vertex.impl->spirv, fragment.impl->spirv,
-	                                      fragment.impl->uniforms, fragment.impl->uniformBlockSize);
+	impl->program = gpuRenderer().createShaderProgram(
+	    compileGlslProgram(vertex.impl->source.c_str(), fragment.impl->source.c_str()));
 	App::instance().registerShaderProgram(this);
 }
 

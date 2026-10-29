@@ -4,9 +4,9 @@
 /// Experimental Direct3D 12 implementation of the Renderer interface, see Renderer.hpp.
 ///
 /// A 2D backend for the SDL3 platform on Windows, with the same API as VulkanRenderer (see
-/// GpuBackend.hpp). Its built-in shaders are the Vulkan backend's GLSL ones, which are compiled to
-/// SPIR-V at build time and translated to HLSL at runtime, like user-defined ShaderPrograms; see
-/// HlslCompiler.hpp.
+/// GpuBackend.hpp). Shaders are compiled from GLSL to SPIR-V and translated to HLSL, which is
+/// compiled to DXBC, see HlslCompiler.hpp: the built-in ones at build time by jngl-shaderc, and
+/// user-defined ShaderPrograms at runtime.
 ///
 /// This header doesn't include any Windows or Direct3D headers, as it's included by everything
 /// that draws, see GpuBackend.hpp. D3D12Renderer's state lives in its Impl, see
@@ -16,6 +16,7 @@
 
 #include "../Renderer.hpp"
 #include "../jngl/TextureFilter.hpp"
+#include "../spirv/DrawUniforms.hpp"
 #include "../spirv/ShaderCompiler.hpp"
 
 #include <array>
@@ -91,7 +92,7 @@ struct D3D12ShaderProgram {
 	std::vector<uint8_t> vertexShader; ///< DXBC
 	std::vector<uint8_t> pixelShader; ///< DXBC
 	std::vector<ShaderUniform> uniforms;
-	uint32_t uniformBlockSize = 0;
+	UniformBlock uniformBlock;
 	/// Written by setActiveProgramUniform() while the program is in use
 	mutable std::vector<uint8_t> uniformData;
 };
@@ -186,12 +187,8 @@ public:
 	/// within the scissor, like glClear. Does nothing if no frame has begun.
 	void clearCurrentRenderTarget(Rgba color);
 
-	/// Builds a custom shader program (see jngl::ShaderProgram) from vertex + fragment SPIR-V.
-	/// \a uniforms / \a uniformBlockSize describe the fragment UBO (empty if none).
-	std::unique_ptr<D3D12ShaderProgram>
-	createShaderProgram(const std::vector<uint32_t>& vertexSpirv,
-	                    const std::vector<uint32_t>& fragmentSpirv,
-	                    std::vector<ShaderUniform> uniforms, uint32_t uniformBlockSize);
+	/// Builds a custom shader program (see jngl::ShaderProgram), translating its SPIR-V to DXBC
+	std::unique_ptr<D3D12ShaderProgram> createShaderProgram(CompiledProgram);
 	void destroyShaderProgram(D3D12ShaderProgram&);
 	/// Makes \a program (or nullptr for the built-in sprite shader) the one used by drawSprite.
 	void setActiveShaderProgram(const D3D12ShaderProgram* program);

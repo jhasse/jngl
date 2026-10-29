@@ -4,6 +4,7 @@
 #include "ShaderCompiler.hpp"
 
 #include <algorithm>
+#include <initializer_list>
 #include <regex>
 #include <shaderc/shaderc.hpp>
 #include <stdexcept>
@@ -75,19 +76,29 @@ std::size_t insertPositionAfterPreprocessor(const std::string& source) {
 	return pos;
 }
 
-/// Wraps OpenGL-style bare uniforms into `layout(set=1,binding=0) uniform JnglUniforms { … } u;`
-/// and gives samplers an explicit `layout(set=0,binding=0)`. Fills \a outUniforms / \a
-/// outBlockSize.
-std::string wrapUniformsInUbo(std::string source, std::vector<ShaderUniform>& outUniforms,
-                              uint32_t& outBlockSize) {
+/// A shader's OpenGL-style uniform declarations and the rest of it
+struct ParsedSource {
+	/// Without the declarations, and with "#version 450" instead of "#version 300 es"
+	std::string withoutDecls;
+	std::vector<ParsedUniform> uniforms;
+};
+
+ParsedSource parseUniforms(const char* const source) {
 	static const std::regex re(
 	    R"(\buniform\s+((?:(?:lowp|mediump|highp|HIGHP)\s+)*)(\w+)\s+(\w+)\s*(?:\[\s*(\w+)\s*\])?\s*;)");
 
-	std::vector<ParsedUniform> parsed;
-	std::string withoutDecls;
-	withoutDecls.reserve(source.size());
+	// JNGL's shaders (and user shaders written for the OpenGL backend) use "#version 300 es", which
+	// glslang rejects for SPIR-V (it requires ES 310+). Swap it for a desktop version that compiles
+	// to Vulkan SPIR-V; the "es" precision qualifiers (lowp/mediump/highp) are still accepted.
+	std::string adjusted = source;
+	if (const auto pos = adjusted.find("#version 300 es"); pos != std::string::npos) {
+		adjusted.replace(pos, sizeof("#version 300 es") - 1, "#version 450    ");
+	}
+
+	ParsedSource parsed;
+	parsed.withoutDecls.reserve(adjusted.size());
 	std::size_t last = 0;
-	for (std::sregex_iterator it(source.begin(), source.end(), re), end; it != end; ++it) {
+	for (std::sregex_iterator it(adjusted.begin(), adjusted.end(), re), end; it != end; ++it) {
 		const std::smatch& m = *it;
 		ParsedUniform u;
 		u.precision = m[1].str();
@@ -103,60 +114,93 @@ std::string wrapUniformsInUbo(std::string source, std::vector<ShaderUniform>& ou
 			u.arrayLength = static_cast<uint32_t>(std::stoul(length));
 		}
 		u.opaque = u.type.find("sampler") == 0;
-		parsed.push_back(std::move(u));
-		withoutDecls.append(source, last, static_cast<std::size_t>(m.position()) - last);
+		parsed.uniforms.push_back(std::move(u));
+		parsed.withoutDecls.append(adjusted, last, static_cast<std::size_t>(m.position()) - last);
 		last = static_cast<std::size_t>(m.position() + m.length());
 	}
-	withoutDecls.append(source, last, std::string::npos);
+	parsed.withoutDecls.append(adjusted, last, std::string::npos);
+	return parsed;
+}
 
-	outUniforms.clear();
-	outBlockSize = 0;
-	std::string blockMembers;
-	uint32_t offset = 0;
-	for (const ParsedUniform& u : parsed) {
-		if (u.opaque) {
-			continue;
+/// The uniform block that all stages of a program share
+struct UniformLayout {
+	std::vector<ShaderUniform> uniforms;
+	uint32_t blockSize = 0;
+	bool pushConstants = false;
+	/// Its members, one declaration per line
+	std::string members;
+};
+
+/// Lays out the non-opaque uniforms of \a stages in the order they're declared, the first stage's
+/// first. One that several stages declare is the same.
+UniformLayout layoutUniforms(const std::initializer_list<const ParsedSource*> stages) {
+	std::vector<const ParsedUniform*> merged;
+	for (const ParsedSource* const stage : stages) {
+		for (const ParsedUniform& u : stage->uniforms) {
+			if (u.opaque) {
+				continue;
+			}
+			const auto existing = std::ranges::find_if(
+			    merged, [&u](const ParsedUniform* const other) { return other->name == u.name; });
+			if (existing == merged.end()) {
+				merged.push_back(&u);
+			} else if ((*existing)->type != u.type || (*existing)->arrayLength != u.arrayLength) {
+				throw std::runtime_error("The uniform " + u.name +
+				                         " is declared differently in the shaders.");
+			}
 		}
-		const auto [alignment, size] = std140AlignAndSize(u.type);
+	}
+
+	UniformLayout layout;
+	uint32_t offset = 0;
+	for (const ParsedUniform* const u : merged) {
+		const auto [alignment, size] = std140AlignAndSize(u->type);
 		const uint32_t occupied = alignment == 16 && size == 12 ? 16u : size; // vec3: 16 bytes
-		blockMembers += '\t';
-		blockMembers += uboMemberType(u.type);
-		blockMembers += ' ';
-		blockMembers += u.name;
-		if (u.arrayLength == 0) {
+		layout.members += '\t';
+		layout.members += uboMemberType(u->type);
+		layout.members += ' ';
+		layout.members += u->name;
+		if (u->arrayLength == 0) {
 			offset = alignUp(offset, alignment);
-			outUniforms.push_back({ u.name, offset, size });
+			layout.uniforms.push_back({ u->name, offset, size });
 			offset += occupied;
 		} else {
-			blockMembers += '[' + std::to_string(u.arrayLength) + ']';
+			layout.members += '[' + std::to_string(u->arrayLength) + ']';
 			// std140 starts the array and each of its elements at a multiple of 16 bytes
 			const uint32_t stride = alignUp(occupied, 16);
 			offset = alignUp(offset, 16);
 			// Like on OpenGL, the name alone is the first element, and "name[i]" the others
-			outUniforms.push_back({ u.name, offset, size });
-			for (uint32_t i = 1; i < u.arrayLength; ++i) {
-				outUniforms.push_back(
-				    { u.name + '[' + std::to_string(i) + ']', offset + i * stride, size });
+			layout.uniforms.push_back({ u->name, offset, size });
+			for (uint32_t i = 1; i < u->arrayLength; ++i) {
+				layout.uniforms.push_back(
+				    { u->name + '[' + std::to_string(i) + ']', offset + i * stride, size });
 			}
-			offset += u.arrayLength * stride;
+			offset += u->arrayLength * stride;
 		}
-		blockMembers += ";\n";
+		layout.members += ";\n";
 	}
-	if (!outUniforms.empty()) {
-		outBlockSize = alignUp(offset, 16);
+	if (!layout.uniforms.empty()) {
+		layout.blockSize = alignUp(offset, 16);
 	}
+	layout.pushConstants = layout.blockSize > 0 && layout.blockSize <= maxPushConstantsSize;
+	return layout;
+}
 
+/// \a stage's source with its OpenGL-style uniforms in the block of \a layout, which all stages
+/// declare the same, and its samplers at set 0, binding 0
+std::string wrapUniforms(const ParsedSource& stage, const UniformLayout& layout) {
+	std::string source = stage.withoutDecls;
 	// Qualify non-opaque names as u.name now that their bare declarations are gone.
-	for (const ParsedUniform& u : parsed) {
+	for (const ParsedUniform& u : stage.uniforms) {
 		if (u.opaque) {
 			continue;
 		}
 		const std::regex nameRe("\\b" + u.name + "\\b");
-		withoutDecls = std::regex_replace(withoutDecls, nameRe, "u." + u.name);
+		source = std::regex_replace(source, nameRe, "u." + u.name);
 	}
 
 	std::string header;
-	for (const ParsedUniform& u : parsed) {
+	for (const ParsedUniform& u : stage.uniforms) {
 		if (!u.opaque) {
 			continue;
 		}
@@ -170,51 +214,62 @@ std::string wrapUniformsInUbo(std::string source, std::vector<ShaderUniform>& ou
 		}
 		header += ";\n";
 	}
-	if (!outUniforms.empty()) {
-		header += "layout(std140, set = 1, binding = 0) uniform JnglUniforms {\n";
-		header += blockMembers;
+	if (!layout.uniforms.empty()) {
+		// std140 for push constants, too, so that the offsets are the same either way
+		header += layout.pushConstants
+		              ? "layout(push_constant, std140) uniform JnglUniforms {\n"
+		              : "layout(std140, set = 1, binding = 0) uniform JnglUniforms {\n";
+		header += layout.members;
 		header += "} u;\n";
 	}
 
-	const std::size_t insertAt = insertPositionAfterPreprocessor(withoutDecls);
-	withoutDecls.insert(insertAt, header);
-	return withoutDecls;
+	const std::size_t insertAt = insertPositionAfterPreprocessor(source);
+	source.insert(insertAt, header);
+	return source;
 }
 
-} // namespace
-
-CompiledShader compileGlslToSpirv(const char* const source, const Shader::Type stage,
-                                  const char* const name) {
+std::vector<uint32_t> compileToSpirv(const std::string& source, const Shader::Type stage,
+                                     const char* const name) {
 	const shaderc_shader_kind kind =
 	    stage == Shader::Type::VERTEX ? shaderc_glsl_vertex_shader : shaderc_glsl_fragment_shader;
-
-	// JNGL's shaders (and user shaders written for the OpenGL backend) use "#version 300 es", which
-	// glslang rejects for SPIR-V (it requires ES 310+). Swap it for a desktop version that compiles
-	// to Vulkan SPIR-V; the "es" precision qualifiers (lowp/mediump/highp) are still accepted.
-	std::string adjusted = source;
-	if (const auto pos = adjusted.find("#version 300 es"); pos != std::string::npos) {
-		adjusted.replace(pos, sizeof("#version 300 es") - 1, "#version 450    ");
-	}
-
-	CompiledShader compiled;
-	adjusted = wrapUniformsInUbo(std::move(adjusted), compiled.uniforms, compiled.uniformBlockSize);
-
 	shaderc::Compiler compiler;
 	shaderc::CompileOptions options;
 	options.SetOptimizationLevel(shaderc_optimization_level_performance);
 	options.SetTargetEnvironment(shaderc_target_env_vulkan, shaderc_env_version_vulkan_1_1);
 	// in/out without explicit locations (OpenGL habit) still need auto-assigned locations. Samplers
-	// and the UBO already have explicit set/binding from wrapUniformsInUbo.
+	// and the UBO already have explicit set/binding from wrapUniforms.
 	options.SetAutoMapLocations(true);
 	options.SetVulkanRulesRelaxed(true);
 
 	const shaderc::SpvCompilationResult result =
-	    compiler.CompileGlslToSpv(adjusted, kind, name, options);
+	    compiler.CompileGlslToSpv(source, kind, name, options);
 	if (result.GetCompilationStatus() != shaderc_compilation_status_success) {
 		throw std::runtime_error("Failed to compile " + std::string(name) +
 		                         " to SPIR-V: " + result.GetErrorMessage());
 	}
-	compiled.spirv.assign(result.cbegin(), result.cend());
+	return { result.cbegin(), result.cend() };
+}
+
+} // namespace
+
+void checkGlsl(const char* const source, const Shader::Type stage, const char* const name) {
+	const ParsedSource parsed = parseUniforms(source);
+	compileToSpirv(wrapUniforms(parsed, layoutUniforms({ &parsed })), stage, name);
+}
+
+CompiledProgram compileGlslProgram(const char* const vertexSource,
+                                   const char* const fragmentSource) {
+	const ParsedSource vertex = parseUniforms(vertexSource);
+	const ParsedSource fragment = parseUniforms(fragmentSource);
+	UniformLayout layout = layoutUniforms({ &vertex, &fragment });
+	CompiledProgram compiled;
+	compiled.vertexSpirv =
+	    compileToSpirv(wrapUniforms(vertex, layout), Shader::Type::VERTEX, "vertex");
+	compiled.fragmentSpirv =
+	    compileToSpirv(wrapUniforms(fragment, layout), Shader::Type::FRAGMENT, "fragment");
+	compiled.uniforms = std::move(layout.uniforms);
+	compiled.uniformBlockSize = layout.blockSize;
+	compiled.pushConstants = layout.pushConstants;
 	return compiled;
 }
 
