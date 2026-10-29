@@ -375,6 +375,8 @@ std::string toUtf8(const wchar_t* const wide) {
 	return utf8;
 }
 
+#ifndef NDEBUG
+/// Logs the debug layer's messages
 void CALLBACK debugCallback(D3D12_MESSAGE_CATEGORY /*category*/,
                             const D3D12_MESSAGE_SEVERITY severity, D3D12_MESSAGE_ID /*id*/,
                             const LPCSTR description, void* /*context*/) {
@@ -386,6 +388,7 @@ void CALLBACK debugCallback(D3D12_MESSAGE_CATEGORY /*category*/,
 		internal::trace(std::string("Direct3D 12: ") + description);
 	}
 }
+#endif
 
 /// Descriptors of one type, which are handed out by index and can be given back
 class DescriptorHeap {
