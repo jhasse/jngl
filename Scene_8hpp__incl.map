@@ -4,7 +4,7 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="459,31,459,63,453,63,453,31"/>
 <area shape="rect" id="Node000003" href="$Vec2_8hpp.html" title="Contains jngl::Vec2 class." alt="" coords="187,153,272,178"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="418,108,283,150,282,145,417,103"/>
-<area shape="rect" id="Node000006" href="$job_8hpp.html" title="Contains jngl::Job class and related functions." alt="" coords="417,153,495,178"/>
+<area shape="rect" id="Node000006" href="$Job_8hpp.html" title="Contains jngl::Job class and related functions." alt="" coords="417,153,495,178"/>
 <area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="459,105,459,137,453,137,453,105"/>
 <area shape="rect" id="Node000009" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="531,226,600,252"/>
 <area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="469,103,509,151,552,212,547,215,505,154,465,107"/>

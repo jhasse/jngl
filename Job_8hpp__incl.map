@@ -1,4 +1,4 @@
-<map id="jngl/job.hpp" name="jngl/job.hpp">
+<map id="jngl/Job.hpp" name="jngl/Job.hpp">
 <area shape="rect" id="Node000001" title="Contains jngl::Job class and related functions." alt="" coords="115,5,232,31"/>
 <area shape="rect" id="Node000002" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/filesystem.html" title=" " alt="" coords="5,79,99,105"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,34,87,73,84,68,151,29"/>

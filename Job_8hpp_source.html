@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.12.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>JNGL: jngl/job.hpp Source File</title>
+<title>JNGL: jngl/Job.hpp Source File</title>
 <link rel="icon" href="favicon.ico" type="image/x-icon" />
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -93,10 +93,10 @@ $(function(){ initResizable(false); });
 </div><!-- top -->
 <div id="doc-content">
 <div class="header">
-  <div class="headertitle"><div class="title">job.hpp</div></div>
+  <div class="headertitle"><div class="title">Job.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="job_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright 2012-2025 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
+<a href="Job_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright 2012-2025 Jan Niklas Hasse &lt;jhasse@bixense.com&gt;</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// For conditions of distribution and use, see copyright notice in LICENSE.txt</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
@@ -156,7 +156,7 @@ $(function(){ initResizable(false); });
 </div>
 <div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>} <span class="comment">// namespace jngl</span></div>
-<div class="ttc" id="aclassjngl_1_1Job_html"><div class="ttname"><a href="classjngl_1_1Job.html">jngl::Job</a></div><div class="ttdoc">Background job which stays part of the main loop independent of the active jngl::Scene.</div><div class="ttdef"><b>Definition</b> <a href="#l00062">job.hpp:62</a></div></div>
+<div class="ttc" id="aclassjngl_1_1Job_html"><div class="ttname"><a href="classjngl_1_1Job.html">jngl::Job</a></div><div class="ttdoc">Background job which stays part of the main loop independent of the active jngl::Scene.</div><div class="ttdef"><b>Definition</b> <a href="#l00062">Job.hpp:62</a></div></div>
 <div class="ttc" id="aclassjngl_1_1Job_html_a190622f195011b2583b8403cce65726a"><div class="ttname"><a href="classjngl_1_1Job.html#a190622f195011b2583b8403cce65726a">jngl::Job::onScreenSizeChanged</a></div><div class="ttdeci">virtual void onScreenSizeChanged()</div><div class="ttdoc">Gets called after the return value of jngl::getScreenSize() has changed, see jngl::Scene::supportsScr...</div></div>
 <div class="ttc" id="aclassjngl_1_1Job_html_a266cd76ff1ed7b753a12f4ded13f44c6"><div class="ttname"><a href="classjngl_1_1Job.html#a266cd76ff1ed7b753a12f4ded13f44c6">jngl::Job::onControllersChanged</a></div><div class="ttdeci">virtual void onControllersChanged()</div><div class="ttdoc">Whenever the return value of jngl::getConnectedControllers would change, this method gets called.</div></div>
 <div class="ttc" id="aclassjngl_1_1Job_html_a297e04a8ffb86a98eb276fd3b838e425"><div class="ttname"><a href="classjngl_1_1Job.html#a297e04a8ffb86a98eb276fd3b838e425">jngl::Job::onFileDrop</a></div><div class="ttdeci">virtual void onFileDrop(const std::filesystem::path &amp;)</div><div class="ttdoc">Called when a file has been dropped onto the window.</div></div>
@@ -175,7 +175,7 @@ $(function(){ initResizable(false); });
 <div class="ttc" id="amake_shared_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared.html">std::make_shared</a></div><div class="ttdeci">T make_shared(T... args)</div></div>
 <div class="ttc" id="amemory_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/header/memory.html">memory</a></div></div>
 <div class="ttc" id="anamespacejngl_html"><div class="ttname"><a href="namespacejngl.html">jngl</a></div><div class="ttdoc">JNGL's main namespace.</div><div class="ttdef"><b>Definition</b> <a href="Achievement_8hpp_source.html#l00010">Achievement.hpp:10</a></div></div>
-<div class="ttc" id="anamespacejngl_html_a4fa19061aa43809790dd0ba3f5de6a67"><div class="ttname"><a href="namespacejngl.html#a4fa19061aa43809790dd0ba3f5de6a67">jngl::getJob</a></div><div class="ttdeci">std::shared_ptr&lt; T &gt; getJob()</div><div class="ttdoc">Returns the first Job that is a T.</div><div class="ttdef"><b>Definition</b> <a href="#l00169">job.hpp:169</a></div></div>
+<div class="ttc" id="anamespacejngl_html_a4fa19061aa43809790dd0ba3f5de6a67"><div class="ttname"><a href="namespacejngl.html#a4fa19061aa43809790dd0ba3f5de6a67">jngl::getJob</a></div><div class="ttdeci">std::shared_ptr&lt; T &gt; getJob()</div><div class="ttdoc">Returns the first Job that is a T.</div><div class="ttdef"><b>Definition</b> <a href="#l00169">Job.hpp:169</a></div></div>
 <div class="ttc" id="anamespacejngl_html_a5aaffe2c2b0ba8c41ae65d47726ad226"><div class="ttname"><a href="namespacejngl.html#a5aaffe2c2b0ba8c41ae65d47726ad226">jngl::removeJob</a></div><div class="ttdeci">void removeJob(Job *)</div><div class="ttdoc">Removes the passed Job after all Jobs have been stepped.</div></div>
 <div class="ttc" id="anamespacejngl_html_af4511ceb38d56c476938458af6bd98e6"><div class="ttname"><a href="namespacejngl.html#af4511ceb38d56c476938458af6bd98e6">jngl::addJob</a></div><div class="ttdeci">void addJob(std::shared_ptr&lt; Job &gt; job)</div><div class="ttdoc">Add a new Job which will be always be stepped and drawn by App::mainLoop()</div></div>
 <div class="ttc" id="apath_html"><div class="ttname"><a href="http://en.cppreference.com/w/cpp/filesystem/path.html">std::filesystem::path</a></div></div>

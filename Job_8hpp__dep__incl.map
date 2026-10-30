@@ -1,4 +1,4 @@
-<map id="jngl/job.hpp" name="jngl/job.hpp">
+<map id="jngl/Job.hpp" name="jngl/Job.hpp">
 <area shape="rect" id="Node000001" title="Contains jngl::Job class and related functions." alt="" coords="222,5,339,31"/>
 <area shape="rect" id="Node000002" href="$jngl_8hpp.html" title="Includes all JNGL headers except for init.hpp." alt="" coords="486,300,571,326"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,21,130,25,58,38,31,49,14,63,8,81,17,103,39,132,64,158,122,201,186,236,253,262,321,281,384,294,486,307,485,312,383,299,319,286,252,267,184,241,119,206,61,161,35,135,13,106,3,81,9,60,28,44,57,33,129,20,206,16"/>
