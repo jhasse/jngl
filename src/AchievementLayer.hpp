@@ -2,7 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
-#include "jngl/job.hpp"
+#include "jngl/Job.hpp"
 
 #include <functional>
 #include <string>

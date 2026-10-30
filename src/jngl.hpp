@@ -17,6 +17,7 @@
 #include "jngl/FrameBuffer.hpp"      // IWYU pragma: keep
 #include "jngl/GpuTimer.hpp" // IWYU pragma: keep
 #include "jngl/ImageData.hpp"        // IWYU pragma: keep
+#include "jngl/Job.hpp" // IWYU pragma: keep
 #include "jngl/Key.hpp" // IWYU pragma: keep
 #include "jngl/KeyboardShortcut.hpp" // IWYU pragma: keep
 #include "jngl/Label.hpp"            // IWYU pragma: keep
@@ -47,7 +48,6 @@
 #include "jngl/font.hpp"             // IWYU pragma: keep
 #include "jngl/haptics.hpp"          // IWYU pragma: keep
 #include "jngl/input.hpp"            // IWYU pragma: keep
-#include "jngl/job.hpp"              // IWYU pragma: keep
 #include "jngl/log.hpp"              // IWYU pragma: keep
 #include "jngl/main.hpp"             // IWYU pragma: keep
 #include "jngl/matrix.hpp"           // IWYU pragma: keep

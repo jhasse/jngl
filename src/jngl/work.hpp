@@ -4,7 +4,7 @@
 #pragma once
 
 #include "Vec2.hpp"
-#include "job.hpp"
+#include "Job.hpp"
 
 #include <memory>
 
