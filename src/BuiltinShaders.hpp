@@ -13,9 +13,9 @@ namespace jngl::builtin_shaders {
 
 /// Single-color shapes, e.g. jngl::drawRect
 inline constexpr const char* coloredVertex = R"(#version 300 es
-	in mediump vec2 position;
+	in highp vec2 position;
 	uniform highp mat3 modelview;
-	uniform mediump mat4 projection;
+	uniform highp mat4 projection;
 
 	void main() {
 		vec3 tmp = modelview * vec3(position, 1);
@@ -23,9 +23,9 @@ inline constexpr const char* coloredVertex = R"(#version 300 es
 	})";
 
 inline constexpr const char* coloredVertexGles2 = R"(#version 100
-	attribute mediump vec2 position;
+	attribute highp vec2 position;
 	uniform highp mat3 modelview;
-	uniform mediump mat4 projection;
+	uniform highp mat4 projection;
 
 	void main() {
 		vec3 tmp = modelview * vec3(position, 1);
@@ -49,9 +49,9 @@ inline constexpr const char* coloredFragmentGles2 = R"(#version 100
 
 /// See jngl::drawRoundedRect
 inline constexpr const char* roundedVertex = R"(#version 300 es
-	in mediump vec2 position;
+	in highp vec2 position;
 	uniform highp mat3 modelview;
-	uniform mediump mat4 projection;
+	uniform highp mat4 projection;
 	out mediump vec2 vPosition;
 
 	void main() {
@@ -61,9 +61,9 @@ inline constexpr const char* roundedVertex = R"(#version 300 es
 	})";
 
 inline constexpr const char* roundedVertexGles2 = R"(#version 100
-	attribute mediump vec2 position;
+	attribute highp vec2 position;
 	uniform highp mat3 modelview;
-	uniform mediump mat4 projection;
+	uniform highp mat4 projection;
 	varying mediump vec2 vPosition;
 
 	void main() {
@@ -119,10 +119,10 @@ inline constexpr const char* roundedFragmentGles2 = R"(#version 100
 
 /// Sprites, text and so on, also of ShaderPrograms that use Sprite::vertexShader()
 inline constexpr const char* texturedVertex = R"(#version 300 es
-	in mediump vec2 position;
+	in highp vec2 position;
 	in mediump vec2 inTexCoord;
 	uniform highp mat3 modelview;
-	uniform mediump mat4 projection;
+	uniform highp mat4 projection;
 	out mediump vec2 texCoord;
 
 	void main() {
@@ -132,10 +132,10 @@ inline constexpr const char* texturedVertex = R"(#version 300 es
 	})";
 
 inline constexpr const char* texturedVertexGles2 = R"(#version 100
-	attribute mediump vec2 position;
+	attribute highp vec2 position;
 	attribute mediump vec2 inTexCoord;
 	uniform highp mat3 modelview;
-	uniform mediump mat4 projection;
+	uniform highp mat4 projection;
 	varying mediump vec2 texCoord;
 
 	void main() {

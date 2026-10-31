@@ -2,7 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #pragma once
 
-#include "job.hpp"
+#include "Job.hpp"
 #include "Vec2.hpp"
 
 namespace jngl {

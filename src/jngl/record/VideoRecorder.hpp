@@ -4,7 +4,7 @@
 /// @file
 #pragma once
 
-#include "../job.hpp"
+#include "../Job.hpp"
 
 namespace jngl {
 

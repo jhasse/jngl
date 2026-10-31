@@ -263,6 +263,7 @@ std::vector<std::shared_ptr<Controller>> getConnectedControllers() {
 			rtn.emplace_back(controllers.back());
 		}
 	}
+	SDL_free(joystickId);
 	return rtn;
 }
 
