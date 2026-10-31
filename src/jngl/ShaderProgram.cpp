@@ -61,9 +61,15 @@ ShaderProgram::Context ShaderProgram::use() const {
 	return Context(*impl);
 }
 
-int ShaderProgram::getAttribLocation(const std::string& /*name*/) const {
-	// Attribute locations are fixed by the built-in sprite vertex shader on the GPU backends.
-	return 0;
+int ShaderProgram::getAttribLocation(const std::string& name) const {
+	// The only vertex shader inputs on the GPU backends, see compileGlslProgram
+	if (name == "position") {
+		return 0;
+	}
+	if (name == "inTexCoord") {
+		return 1;
+	}
+	return -1;
 }
 
 int ShaderProgram::getUniformLocation(const std::string& name) const {
@@ -100,6 +106,9 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 	impl->id = glCreateProgram();
 	glAttachShader(impl->id, vertex.impl->id);
 	glAttachShader(impl->id, fragment.impl->id);
+	// Where Texture puts the vertices, whatever order a custom vertex shader declares them in
+	glBindAttribLocation(impl->id, 0, "position");
+	glBindAttribLocation(impl->id, 1, "inTexCoord");
 	glLinkProgram(impl->id);
 	GLint status = GL_FALSE;
 	glGetProgramiv(impl->id, GL_LINK_STATUS, &status);

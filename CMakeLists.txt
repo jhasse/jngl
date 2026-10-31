@@ -720,7 +720,8 @@ if(NOT hasParent)
 			                     colors=data/unittest/colors.frag black=data/unittest/black.frag
 			                     two=data/unittest/two.frag half=data/unittest/half.frag
 			                     minified=data/unittest/minified.frag
-			                     layout=data/unittest/layout.frag)
+			                     layout=data/unittest/layout.frag
+			                     varyings=data/unittest/varyings.vert,data/unittest/varyings.frag)
 			add_custom_target(jngl_test_shaders DEPENDS ${JNGL_TEST_SHADERS})
 			add_dependencies(jngl-unittest jngl_test_shaders)
 			target_include_directories(jngl-unittest

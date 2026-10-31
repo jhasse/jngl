@@ -9,12 +9,22 @@
 #include <stdexcept>
 #include <string>
 
-jngl::ShaderProgram testShaderProgram(const char* const name) {
-	const std::string path = std::string("unittest/") + name + ".frag";
+namespace {
+jngl::Shader readShader(const std::string& path, const jngl::Shader::Type type) {
 	const auto source = jngl::readAsset(path);
 	if (!source) {
 		throw std::runtime_error("Couldn't read " + path);
 	}
-	return { jngl::Sprite::vertexShader(), jngl::Shader(source, jngl::Shader::Type::FRAGMENT) };
+	return { source, type };
+}
+} // namespace
+
+jngl::ShaderProgram testShaderProgram(const char* const name, const bool vertexShader) {
+	const std::string path = std::string("unittest/") + name;
+	const jngl::Shader fragment = readShader(path + ".frag", jngl::Shader::Type::FRAGMENT);
+	if (vertexShader) {
+		return { readShader(path + ".vert", jngl::Shader::Type::VERTEX), fragment };
+	}
+	return { jngl::Sprite::vertexShader(), fragment };
 }
 #endif

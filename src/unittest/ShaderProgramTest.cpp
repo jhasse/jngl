@@ -112,6 +112,23 @@ TEST_CASE("uniforms after a vec3 and a mat2") {
 	REQUIRE(f.getAsciiArt() == expected);
 }
 
+TEST_CASE("vertex shader inputs and outputs are matched by name") {
+	Fixture f(1.f);
+	const std::vector<uint8_t> white(40 * 20 * 4, 255);
+	const jngl::Sprite sprite(white.data(), 40, 20);
+	const jngl::Vec2 center{ -40, 0 };
+	jngl::drawRect(jngl::modelview().translate(center - sprite.getSize() / 2.), sprite.getSize(),
+	               0x000000_rgb);
+	const auto expected = f.getAsciiArt();
+	Fixture::reset();
+
+	// Only drawn black and in the right place if position and inTexCoord get the sprite's vertices
+	// and texCoord and tint what the vertex shader writes into them
+	const jngl::ShaderProgram program = JNGL_TEST_SHADER_PROGRAM_WITH_VERTEX(varyings);
+	sprite.draw(jngl::modelview().translate(center), &program);
+	REQUIRE(f.getAsciiArt() == expected);
+}
+
 TEST_CASE("Sprite::batch with a custom ShaderProgram") {
 	Fixture f(1.f);
 	const std::vector<uint8_t> white(40 * 20 * 4, 255);
