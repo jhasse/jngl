@@ -589,16 +589,8 @@ if(JNGL_D3D12 AND TARGET jngl-test)
 endif()
 
 if(JNGL_VULKAN)
-	if(WIN32)
-		# Explicit SDK lookup also works with cja, whose FindVulkan only searches Unix libraries.
-		find_path(Vulkan_INCLUDE_DIR vulkan/vulkan.h HINTS "$ENV{VULKAN_SDK}/Include" REQUIRED)
-		find_library(Vulkan_LIBRARY NAMES vulkan-1 HINTS "${JNGL_VULKAN_SDK_LIBDIR}" REQUIRED)
-		target_include_directories(jngl PRIVATE ${Vulkan_INCLUDE_DIR})
-		target_link_libraries(jngl PRIVATE ${Vulkan_LIBRARY})
-	else()
-		find_package(Vulkan REQUIRED)
-		target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
-	endif()
+	find_package(Vulkan REQUIRED)
+	target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
 
 	# For user-defined jngl::Shader programs, which can also be compiled at runtime
 	target_sources(jngl PRIVATE ${SPIRV_SRC})
