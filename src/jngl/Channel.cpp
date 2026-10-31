@@ -64,10 +64,13 @@ std::shared_ptr<SoundFile> Channel::loop(const std::string& filename) {
 
 void Channel::stop(const std::string& filename) {
 	if (auto soundFile = Audio::handle().getSoundFileIfLoaded(filename)) {
-		for (const auto& sound : impl->sounds) {
-			if (sound && sound->isPlaying() &&
-			    sound->getSamples().data() == soundFile->getSamples().data()) {
-				stop(sound);
+		for (auto it = impl->sounds.begin(); it != impl->sounds.end();) {
+			if (*it && (*it)->isPlaying() &&
+			    (*it)->getSamples().data() == soundFile->getSamples().data()) {
+				impl->mixer->remove((*it)->getStream().get());
+				it = impl->sounds.erase(it);
+			} else {
+				++it;
 			}
 		}
 	}
