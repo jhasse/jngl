@@ -5,7 +5,9 @@
 #include "TestShaders.hpp"
 
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_string.hpp>
 #include <cstdint>
+#include <jngl/Shader.hpp>
 #include <jngl/ShaderProgram.hpp>
 #include <jngl/Sprite.hpp>
 #include <jngl/matrix.hpp>
@@ -128,6 +130,37 @@ TEST_CASE("vertex shader inputs and outputs are matched by name") {
 	sprite.draw(jngl::modelview().translate(center), &program);
 	REQUIRE(f.getAsciiArt() == expected);
 }
+
+TEST_CASE("sampler declared in both branches of an #ifdef") {
+	Fixture f(1.f);
+	const std::vector<uint8_t> white(40 * 20 * 4, 255);
+	const jngl::Sprite sprite(white.data(), 40, 20);
+	const jngl::Vec2 center{ -40, 0 };
+	jngl::drawRect(jngl::modelview().translate(center - sprite.getSize() / 2.), sprite.getSize(),
+	               0x000000_rgb);
+	const auto expected = f.getAsciiArt();
+	Fixture::reset();
+
+	const jngl::ShaderProgram program = JNGL_TEST_SHADER_PROGRAM(ifdef);
+	sprite.draw(jngl::modelview().translate(center), &program);
+	REQUIRE(f.getAsciiArt() == expected);
+}
+
+#ifdef JNGL_VULKAN
+TEST_CASE("a second sampler is an error on Vulkan") {
+	// There'd be no texture for it, the one that's drawn is the only one
+	REQUIRE_THROWS_WITH(jngl::Shader(R"(#version 300 es
+		uniform sampler2D tex;
+		uniform sampler2D mask;
+		in mediump vec2 texCoord;
+		out lowp vec4 outColor;
+		void main() {
+			outColor = texture(tex, texCoord) * texture(mask, texCoord);
+		})",
+	                                 jngl::Shader::Type::FRAGMENT),
+	                    Catch::Matchers::ContainsSubstring("tex and mask"));
+}
+#endif
 
 TEST_CASE("Sprite::batch with a custom ShaderProgram") {
 	Fixture f(1.f);

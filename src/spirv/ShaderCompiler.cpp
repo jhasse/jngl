@@ -175,9 +175,22 @@ struct UniformLayout {
 /// first. One that several stages declare is the same.
 UniformLayout layoutUniforms(const std::initializer_list<const ParsedSource*> stages) {
 	std::vector<const ParsedUniform*> merged;
+	const ParsedUniform* sampler = nullptr;
 	for (const ParsedSource* const stage : stages) {
 		for (const ParsedUniform& u : stage->uniforms) {
 			if (u.opaque) {
+				// There's only the texture that's drawn, see wrapUniforms
+				if (u.type != "sampler2D" || u.arrayLength > 0) {
+					throw std::runtime_error("The uniform " + u.name + " can't be a " + u.type +
+					                         (u.arrayLength > 0 ? " array" : "") +
+					                         ", only a sampler2D is supported.");
+				}
+				if (sampler && sampler->name != u.name) {
+					throw std::runtime_error("Only one sampler2D is supported, the texture that's "
+					                         "drawn, but there's " +
+					                         sampler->name + " and " + u.name + ".");
+				}
+				sampler = &u;
 				continue;
 			}
 			const auto existing = std::ranges::find_if(
@@ -226,7 +239,7 @@ UniformLayout layoutUniforms(const std::initializer_list<const ParsedSource*> st
 }
 
 /// \a stage's source with its OpenGL-style uniforms in the block of \a layout, which all stages
-/// declare the same, and its samplers at set 0, binding 0
+/// declare the same, and its sampler at set 0, binding 0
 std::string wrapUniforms(const ParsedSource& stage, const UniformLayout& layout) {
 	std::string source = stage.withoutDecls;
 	// Qualify non-opaque names as jnglUniforms.name now that their bare declarations are gone, but
@@ -241,19 +254,12 @@ std::string wrapUniforms(const ParsedSource& stage, const UniformLayout& layout)
 	}
 
 	std::string header;
-	for (const ParsedUniform& u : stage.uniforms) {
-		if (!u.opaque) {
-			continue;
-		}
-		header += "layout(set = 0, binding = 0) uniform ";
-		header += u.precision;
-		header += u.type;
-		header += ' ';
-		header += u.name;
-		if (u.arrayLength > 0) {
-			header += '[' + std::to_string(u.arrayLength) + ']';
-		}
-		header += ";\n";
+	// Only once, even if it's declared several times, e.g. with different precisions in #ifdefs.
+	// layoutUniforms has checked that it's the stage's only sampler2D.
+	if (const auto sampler = std::ranges::find_if(stage.uniforms, &ParsedUniform::opaque);
+	    sampler != stage.uniforms.end()) {
+		header += "layout(set = 0, binding = 0) uniform " + sampler->precision + "sampler2D " +
+		          sampler->name + ";\n";
 	}
 	if (!layout.uniforms.empty()) {
 		// std140 for push constants, too, so that the offsets are the same either way
