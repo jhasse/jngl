@@ -1415,6 +1415,9 @@ void VulkanRenderer::clearSwapchainCanvas(const Rgb& color) {
 	attachment.clearValue.color = { { color.getRed(), color.getGreen(), color.getBlue(), 1.f } };
 	VkClearRect rect{};
 	rect.rect = letterboxScissorForExtent(swapchainExtent);
+	if (rect.rect.extent.width == 0 || rect.rect.extent.height == 0) {
+		return; // e.g. while the swapchain is still smaller than the canvas after a resize
+	}
 	rect.baseArrayLayer = 0;
 	rect.layerCount = 1;
 	vkCmdClearAttachments(renderCommands, 1, &attachment, 1, &rect);
@@ -3433,6 +3436,9 @@ void VulkanRenderer::clearCurrentRenderTarget(const Rgba color) {
 	}
 	const VkExtent2D extent = currentRenderTargetExtent();
 	const VkRect2D scissor = effectiveScissor(extent);
+	if (scissor.extent.width == 0 || scissor.extent.height == 0) {
+		return; // e.g. inside a jngl::scissor() that's outside of the render target
+	}
 	if (!renderPassActive && !renderTargetStack.empty() && scissor.offset.x == 0 &&
 	    scissor.offset.y == 0 && scissor.extent.width == extent.width &&
 	    scissor.extent.height == extent.height) {

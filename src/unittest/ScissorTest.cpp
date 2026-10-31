@@ -1,10 +1,12 @@
 // Copyright 2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
+#include "../jngl/Color.hpp"
 #include "../jngl/FrameBuffer.hpp"
 #include "../jngl/ScaleablePixels.hpp"
 #include "../jngl/matrix.hpp"
 #include "../jngl/other.hpp"
+#include "../jngl/screen.hpp"
 #include "../jngl/shapes.hpp"
 #include "../jngl/window.hpp"
 #include "../opengl.hpp"
@@ -210,4 +212,25 @@ TEST_CASE("scissor and letterboxing") {
 		REQUIRE(cell(art, 2, row) == " ");
 	}
 	REQUIRE(cell(art, 10, 6) == "▒"); // the frame, far from the fill
+}
+
+TEST_CASE("clearing inside a scissor that's outside of what's drawn into does nothing") {
+	Fixture f(1.f);
+	fill(0x000000_rgb);
+	const auto expected = f.getAsciiArt();
+	Fixture::reset();
+
+	jngl::FrameBuffer fb(jngl::Pixels(320), jngl::Pixels(70));
+	{
+		auto context = fb.use();
+		fill(0x000000_rgb);
+		const auto scissor = jngl::scissor({ 1000, 1000 }, { 10, 10 });
+		context.clear(0xffffff_rgb);
+	}
+	fb.draw(-jngl::getScreenSize() / 2);
+	{
+		const auto scissor = jngl::scissor({ 1000, 1000 }, { 10, 10 });
+		jngl::setBackgroundColor(0xffffff_rgb); // which also clears the window
+	}
+	REQUIRE(f.getAsciiArt() == expected);
 }
