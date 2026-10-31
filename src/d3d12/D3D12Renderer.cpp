@@ -4,7 +4,6 @@
 #include "D3D12Renderer.hpp"
 
 #include "../App.hpp"
-#include "../StartupProfiler.hpp"
 #include "../jngl/Alpha.hpp"
 #include "../jngl/Mat3.hpp"
 #include "../jngl/Mat4.hpp"
@@ -671,23 +670,16 @@ struct D3D12Renderer::Impl {
 };
 
 D3D12Renderer::Impl::Impl(SDL_Window* const window) : window(window) {
-	internal::StartupProfiler total("D3D12Renderer total");
 	hwnd = static_cast<HWND>(SDL_GetPointerProperty(SDL_GetWindowProperties(window),
 	                                                SDL_PROP_WINDOW_WIN32_HWND_POINTER, nullptr));
 	if (!hwnd) {
 		throw std::runtime_error(std::string("Couldn't get the window's HWND: ") + SDL_GetError());
 	}
-	{
-		internal::StartupProfiler _{ "createDevice" };
-		createDevice();
-	}
+	createDevice();
 	rtvHeap.create(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, rtvCapacity, false);
 	srvHeap.create(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, srvCapacity, true);
 	createSamplers();
-	{
-		internal::StartupProfiler _{ "createSwapchain" };
-		createSwapchain();
-	}
+	createSwapchain();
 	queryMsaaSupport();
 	if (swapchainMsaaActive()) {
 		createMsaaTarget();
@@ -728,16 +720,12 @@ D3D12Renderer::Impl::Impl(SDL_Window* const window) : window(window) {
 	texturedUniforms = uniformBlock(builtin_bytecode::textured.uniforms,
 	                                builtin_bytecode::textured.uniformBlockSize,
 	                                builtin_bytecode::textured.pushConstants);
-	{
-		// Only those of the window's default blending, the others are built once they're used
-		internal::StartupProfiler _{ "builtinPipeline" };
-		for (const auto builtin : { Builtin::Colored, Builtin::Textured }) {
-			builtinPipeline(builtin, PassKind::Ldr, BlendVariant::Composite,
+	// Only those of the window's default blending, the others are built once they're used
+	for (const auto builtin : { Builtin::Colored, Builtin::Textured }) {
+		builtinPipeline(builtin, PassKind::Ldr, BlendVariant::Composite, PrimitiveType::Triangles);
+		if (msaaSupported) {
+			builtinPipeline(builtin, PassKind::LdrMsaa, BlendVariant::Composite,
 			                PrimitiveType::Triangles);
-			if (msaaSupported) {
-				builtinPipeline(builtin, PassKind::LdrMsaa, BlendVariant::Composite,
-				                PrimitiveType::Triangles);
-			}
 		}
 	}
 	for (uint32_t i = 0; i < maxFramesInFlight; ++i) {
@@ -1655,9 +1643,6 @@ void D3D12Renderer::endFrame() {
 	if (!impl->frameActive) {
 		return;
 	}
-	static bool firstPresent = true;
-	internal::StartupProfiler firstPresentProfiler(firstPresent ? "first Present" : "");
-	firstPresent = false;
 	impl->unbindTarget();
 	impl->resolveSwapchain();
 	impl->transitionBackBuffer(D3D12_RESOURCE_STATE_PRESENT);
@@ -1783,7 +1768,6 @@ std::unique_ptr<D3D12Texture>
 D3D12Renderer::createTexture(const int width, const int height, const unsigned int format,
                              const unsigned int type, const unsigned char* const data,
                              const unsigned char* const* const rowPointers, const bool mipmap) {
-	internal::StartupProfiler _{ "createTexture" };
 	if (type != glUnsignedByte || (format != glRGBA && format != glRGB && format != glBGR)) {
 		internal::error("Direct3D 12 backend: unsupported texture format/type (0x{:x}/0x{:x}).",
 		                format, type);

@@ -3,7 +3,6 @@
 
 #include "../App.hpp"
 #include "../Renderer.hpp"
-#include "../StartupProfiler.hpp"
 #ifdef JNGL_GPU_BACKEND
 #include "../GpuBackend.hpp"
 #endif
@@ -115,10 +114,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	}
 
 #ifdef JNGL_GPU_BACKEND
-	{
-		internal::StartupProfiler _{ "SDL_CreateWindow" };
-		impl->sdlWindow = SDL_CreateWindow(title.c_str(), width, height, flags);
-	}
+	impl->sdlWindow = SDL_CreateWindow(title.c_str(), width, height, flags);
 	if (!impl->sdlWindow) {
 		throw std::runtime_error(SDL_GetError());
 	}
@@ -198,17 +194,11 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	// Create the rendering backend (OpenGL, Vulkan or Direct3D 12). It registers itself as the
 	// active backend, so getRenderer() works from here on (e.g. in App::initGl below). On Vulkan
 	// and Direct3D 12 this also brings up the device and swapchain at the aligned pixel size.
-	{
-		internal::StartupProfiler _{ "createRenderer" };
-		impl->renderer = createRenderer(impl->sdlWindow);
-	}
+	impl->renderer = createRenderer(impl->sdlWindow);
 #ifdef JNGL_GPU_BACKEND
 	isMultisampleSupported_ = static_cast<GpuRenderer&>(*impl->renderer).isMultisampleSupported();
 #endif
-	{
-		internal::StartupProfiler _{ "Window::initGl" };
-		initGl();
-	}
+	initGl();
 
 	// Unlike SDL2, which implicitly enabled text input on desktop, SDL3 doesn't deliver
 	// SDL_EVENT_TEXT_INPUT events until text input has been explicitly started. TextInputSession

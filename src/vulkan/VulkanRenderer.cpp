@@ -4,7 +4,6 @@
 #include "VulkanRenderer.hpp"
 
 #include "../App.hpp"
-#include "../StartupProfiler.hpp"
 #include "../jngl/Alpha.hpp"
 #include "../jngl/Mat3.hpp"
 #include "../log.hpp"
@@ -144,67 +143,21 @@ debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT severity,
 
 VulkanRenderer::VulkanRenderer(void* const nativeWindow)
 : window(static_cast<SDL_Window*>(nativeWindow)) {
-	internal::StartupProfiler total("VulkanRenderer total");
-	{
-		internal::StartupProfiler _{ "createInstance" };
-		createInstance();
-	}
-	{
-		internal::StartupProfiler _{ "createSurface" };
-		createSurface();
-	}
-	{
-		internal::StartupProfiler _{ "pickPhysicalDevice" };
-		pickPhysicalDevice();
-	}
-	{
-		internal::StartupProfiler _{ "createLogicalDevice" };
-		createLogicalDevice();
-	}
-	{
-		internal::StartupProfiler _{ "queryMsaaSupport" };
-		queryMsaaSupport();
-	}
-	{
-		internal::StartupProfiler _{ "createSwapchain" };
-		createSwapchain();
-	}
-	{
-		internal::StartupProfiler _{ "createImageViews" };
-		createImageViews();
-	}
-	{
-		internal::StartupProfiler _{ "createPresentSemaphores" };
-		createPresentSemaphores();
-	}
-	{
-		internal::StartupProfiler _{ "createRenderPass" };
-		createRenderPass();
-	}
-	{
-		internal::StartupProfiler _{ "createOffscreenRenderPasses" };
-		createOffscreenRenderPasses();
-	}
-	{
-		internal::StartupProfiler _{ "createFramebuffers" };
-		createFramebuffers();
-	}
-	{
-		internal::StartupProfiler _{ "createCommandPoolAndBuffers" };
-		createCommandPoolAndBuffers();
-	}
-	{
-		internal::StartupProfiler _{ "createSyncObjects" };
-		createSyncObjects();
-	}
-	{
-		internal::StartupProfiler _{ "createDescriptorPool" };
-		createDescriptorPool();
-	}
-	{
-		internal::StartupProfiler _{ "createPipelineLayout" };
-		createPipelineLayout();
-	}
+	createInstance();
+	createSurface();
+	pickPhysicalDevice();
+	createLogicalDevice();
+	queryMsaaSupport();
+	createSwapchain();
+	createImageViews();
+	createPresentSemaphores();
+	createRenderPass();
+	createOffscreenRenderPasses();
+	createFramebuffers();
+	createCommandPoolAndBuffers();
+	createSyncObjects();
+	createDescriptorPool();
+	createPipelineLayout();
 	coloredUniforms =
 	    uniformBlock(builtin_bytecode::colored.uniforms, builtin_bytecode::colored.uniformBlockSize,
 	                 builtin_bytecode::colored.pushConstants);
@@ -214,22 +167,13 @@ VulkanRenderer::VulkanRenderer(void* const nativeWindow)
 	texturedUniforms = uniformBlock(builtin_bytecode::textured.uniforms,
 	                                builtin_bytecode::textured.uniformBlockSize,
 	                                builtin_bytecode::textured.pushConstants);
-	{
-		// Only those of the window's default blending, the others are built once they're used
-		internal::StartupProfiler _{ "ensurePipelines" };
-		ensurePipelines(PassKind::Ldr, BlendVariant::Composite);
-		if (msaaSupported) {
-			ensurePipelines(PassKind::LdrMsaa, BlendVariant::Composite);
-		}
+	// Only those of the window's default blending, the others are built once they're used
+	ensurePipelines(PassKind::Ldr, BlendVariant::Composite);
+	if (msaaSupported) {
+		ensurePipelines(PassKind::LdrMsaa, BlendVariant::Composite);
 	}
-	{
-		internal::StartupProfiler _{ "createVertexBuffers" };
-		createVertexBuffers();
-	}
-	{
-		internal::StartupProfiler _{ "createUniformBuffers" };
-		createUniformBuffers();
-	}
+	createVertexBuffers();
+	createUniformBuffers();
 	internal::debug("Vulkan renderer initialized ({}x{}).", swapchainExtent.width,
 	                swapchainExtent.height);
 }
@@ -1515,10 +1459,6 @@ void VulkanRenderer::endFrame() {
 	if (!frameActive) {
 		return; // swapchain was recreated in beginFrame; skip this frame
 	}
-	static bool firstPresent = true;
-	internal::StartupProfiler firstPresentProfiler(
-	    firstPresent ? "first vkQueuePresentKHR" : "");
-	firstPresent = false;
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
 	if (!endCurrentRenderPass(true)) {
 		resolveSwapchain();
@@ -2619,7 +2559,6 @@ std::unique_ptr<VulkanTexture>
 VulkanRenderer::createTexture(const int width, const int height, const unsigned int format,
                               const unsigned int type, const unsigned char* const data,
                               const unsigned char* const* const rowPointers, const bool mipmap) {
-	internal::StartupProfiler _{ "createTexture" };
 	if (type != glUnsignedByte || (format != glRGBA && format != glRGB && format != glBGR)) {
 		internal::error("Vulkan backend: unsupported texture format/type (0x{:x}/0x{:x}).", format,
 		                type);
