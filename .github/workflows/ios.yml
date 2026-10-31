@@ -17,7 +17,7 @@ jobs:
         git submodule sync --recursive
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
     - name: Configure with CMake
-      run: cmake -Bbuild-ios -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR
+      run: cmake -Bbuild-ios -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR -DCMAKE_COMPILE_WARNING_AS_ERROR=1
     - name: Build with Xcode
       run: xcodebuild -quiet -project build-ios/jngl.xcodeproj -sdk iphonesimulator -arch x86_64 -target jngl-test
     - name: Configure with CMake (tvOS)
