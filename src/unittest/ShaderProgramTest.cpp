@@ -90,6 +90,28 @@ TEST_CASE("minified shader") {
 	REQUIRE(f.getAsciiArt() == expected);
 }
 
+TEST_CASE("uniforms after a vec3 and a mat2") {
+	Fixture f(1.f);
+	const std::vector<uint8_t> white(40 * 20 * 4, 255);
+	const jngl::Sprite sprite(white.data(), 40, 20);
+	const jngl::Vec2 center{ -40, 0 };
+	jngl::drawRect(jngl::modelview().translate(center - sprite.getSize() / 2.), sprite.getSize(),
+	               0x000000_rgb);
+	const auto expected = f.getAsciiArt();
+	Fixture::reset();
+
+	// A float takes the last 4 bytes of a vec3 before it, and a mat2 needs 32 bytes
+	const jngl::ShaderProgram program = JNGL_TEST_SHADER_PROGRAM(layout);
+	{
+		const auto context = program.use();
+		jngl::ShaderProgram::Context::setUniform(program.getUniformLocation("tint"), 0xffffff_rgb);
+		jngl::ShaderProgram::Context::setUniform(program.getUniformLocation("strength"), 1.f);
+		jngl::ShaderProgram::Context::setUniform(program.getUniformLocation("scale"), 1.f);
+		sprite.draw(jngl::modelview().translate(center), &program);
+	}
+	REQUIRE(f.getAsciiArt() == expected);
+}
+
 TEST_CASE("Sprite::batch with a custom ShaderProgram") {
 	Fixture f(1.f);
 	const std::vector<uint8_t> white(40 * 20 * 4, 255);

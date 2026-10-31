@@ -28,8 +28,8 @@ uint32_t alignUp(const uint32_t offset, const uint32_t alignment) {
 	return (offset + alignment - 1u) & ~(alignment - 1u);
 }
 
-/// std140 base alignment and the number of bytes setUniform writes for \a type.
-/// `bool` is 32-bit in std140, matching setUniform(int) / glUniform1i for bool uniforms.
+/// std140 base alignment and size of \a type. `bool` is 32-bit in std140, matching setUniform(int)
+/// / glUniform1i for bool uniforms.
 std::pair<uint32_t, uint32_t> std140AlignAndSize(std::string_view type) {
 	if (type == "bool" || type == "int" || type == "uint" || type == "float") {
 		return { 4, 4 };
@@ -38,10 +38,14 @@ std::pair<uint32_t, uint32_t> std140AlignAndSize(std::string_view type) {
 		return { 8, 8 };
 	}
 	if (type == "vec3" || type == "ivec3" || type == "uvec3") {
-		return { 16, 12 }; // 16-byte slot; Rgb writes 12 bytes
+		return { 16, 12 }; // a scalar after it takes the remaining 4 bytes
 	}
-	if (type == "vec4" || type == "ivec4" || type == "uvec4" || type == "mat2") {
+	if (type == "vec4" || type == "ivec4" || type == "uvec4") {
 		return { 16, 16 };
+	}
+	// Matrices are arrays of their columns, each of which starts at a multiple of 16 bytes
+	if (type == "mat2") {
+		return { 16, 32 };
 	}
 	if (type == "mat3") {
 		return { 16, 48 };
@@ -173,7 +177,6 @@ UniformLayout layoutUniforms(const std::initializer_list<const ParsedSource*> st
 	uint32_t offset = 0;
 	for (const ParsedUniform* const u : merged) {
 		const auto [alignment, size] = std140AlignAndSize(u->type);
-		const uint32_t occupied = alignment == 16 && size == 12 ? 16u : size; // vec3: 16 bytes
 		layout.members += '\t';
 		layout.members += uboMemberType(u->type);
 		layout.members += ' ';
@@ -181,11 +184,11 @@ UniformLayout layoutUniforms(const std::initializer_list<const ParsedSource*> st
 		if (u->arrayLength == 0) {
 			offset = alignUp(offset, alignment);
 			layout.uniforms.push_back({ u->name, offset, size });
-			offset += occupied;
+			offset += size;
 		} else {
 			layout.members += '[' + std::to_string(u->arrayLength) + ']';
 			// std140 starts the array and each of its elements at a multiple of 16 bytes
-			const uint32_t stride = alignUp(occupied, 16);
+			const uint32_t stride = alignUp(size, 16);
 			offset = alignUp(offset, 16);
 			// Like on OpenGL, the name alone is the first element, and "name[i]" the others
 			layout.uniforms.push_back({ u->name, offset, size });

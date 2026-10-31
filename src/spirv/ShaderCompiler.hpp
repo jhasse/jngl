@@ -33,7 +33,7 @@ constexpr uint32_t maxPushConstantsSize = 128;
 struct ShaderUniform {
 	std::string name;
 	uint32_t offset = 0;
-	uint32_t size = 0; // bytes Context::setUniform writes
+	uint32_t size = 0; // std140 size, e.g. 12 bytes for a vec3
 };
 
 /// Result of compileGlslProgram: SPIR-V words of both shaders plus the layout of their uniforms
