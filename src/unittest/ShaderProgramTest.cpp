@@ -66,6 +66,30 @@ TEST_CASE("uniform arrays") {
 	REQUIRE(f.getAsciiArt() == expected);
 }
 
+TEST_CASE("minified shader") {
+	Fixture f(1.f);
+	const std::vector<uint8_t> white(40 * 20 * 4, 255);
+	const jngl::Sprite sprite(white.data(), 40, 20);
+	const jngl::Vec2 center{ -40, 0 };
+	jngl::drawRect(jngl::modelview().translate(center - sprite.getSize() / 2.), sprite.getSize(),
+	               0x000000_rgb);
+	const auto expected = f.getAsciiArt();
+	Fixture::reset();
+
+	// Its uniforms are declared together, "uniform lowp vec4 color,weights[2];", it has a local
+	// variable u, and it's only black if both uniforms are where setUniform puts them
+	const jngl::ShaderProgram program = JNGL_TEST_SHADER_PROGRAM(minified);
+	{
+		const auto context = program.use();
+		jngl::ShaderProgram::Context::setUniform(program.getUniformLocation("color"), 1.f, 1.f, 1.f,
+		                                         1.f);
+		jngl::ShaderProgram::Context::setUniform(program.getUniformLocation("weights[1]"), 1.f, 1.f,
+		                                         1.f, 1.f);
+		sprite.draw(jngl::modelview().translate(center), &program);
+	}
+	REQUIRE(f.getAsciiArt() == expected);
+}
+
 TEST_CASE("Sprite::batch with a custom ShaderProgram") {
 	Fixture f(1.f);
 	const std::vector<uint8_t> white(40 * 20 * 4, 255);

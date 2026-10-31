@@ -718,7 +718,8 @@ if(NOT hasParent)
 			set(JNGL_TEST_SHADERS ${CMAKE_CURRENT_BINARY_DIR}/generated/unittest/TestShaderBytecode.hpp)
 			jngl_compile_shaders(${JNGL_TEST_SHADERS} test_shaders color=data/unittest/color.frag
 			                     colors=data/unittest/colors.frag black=data/unittest/black.frag
-			                     two=data/unittest/two.frag half=data/unittest/half.frag)
+			                     two=data/unittest/two.frag half=data/unittest/half.frag
+			                     minified=data/unittest/minified.frag)
 			add_custom_target(jngl_test_shaders DEPENDS ${JNGL_TEST_SHADERS})
 			add_dependencies(jngl-unittest jngl_test_shaders)
 			target_include_directories(jngl-unittest

@@ -57,21 +57,31 @@ std::string uboMemberType(std::string_view type) {
 	return std::string(type);
 }
 
-/// After the leading #version / #define / #extension lines so macros like HIGHP are visible.
+/// After the leading #version / #define / #extension lines so macros like HIGHP are visible, and
+/// precision statements. Only the statements: a minified shader has the rest of its code on the
+/// same line.
 std::size_t insertPositionAfterPreprocessor(const std::string& source) {
+	const auto isSpace = [](const char c) {
+		return c == ' ' || c == '\t' || c == '\r' || c == '\n';
+	};
 	std::size_t pos = 0;
 	while (pos < source.size()) {
-		const std::size_t lineEnd = source.find('\n', pos);
-		const std::size_t end = lineEnd == std::string::npos ? source.size() : lineEnd + 1;
-		std::string_view line(source.data() + pos, end - pos);
-		while (!line.empty() && (line.front() == ' ' || line.front() == '\t')) {
-			line.remove_prefix(1);
+		if (isSpace(source[pos])) {
+			++pos;
+		} else if (source[pos] == '#') { // a directive takes the rest of the line
+			const std::size_t lineEnd = source.find('\n', pos);
+			pos = lineEnd == std::string::npos ? source.size() : lineEnd + 1;
+		} else if (const std::string_view keyword = "precision";
+		           source.compare(pos, keyword.size(), keyword) == 0 &&
+		           pos + keyword.size() < source.size() && isSpace(source[pos + keyword.size()])) {
+			const std::size_t semicolon = source.find(';', pos);
+			if (semicolon == std::string::npos) {
+				break;
+			}
+			pos = semicolon + 1;
+		} else {
+			break;
 		}
-		if (line.empty() || line.front() == '#' || line.starts_with("precision")) {
-			pos = end;
-			continue;
-		}
-		break;
 	}
 	return pos;
 }
@@ -84,8 +94,11 @@ struct ParsedSource {
 };
 
 ParsedSource parseUniforms(const char* const source) {
+	// One or more declarators, each a name and maybe an array length, e.g. "a, b[2]" (minified
+	// shaders declare uniforms of the same type like this)
 	static const std::regex re(
-	    R"(\buniform\s+((?:(?:lowp|mediump|highp|HIGHP)\s+)*)(\w+)\s+(\w+)\s*(?:\[\s*(\w+)\s*\])?\s*;)");
+	    R"(\buniform\s+((?:(?:lowp|mediump|highp|HIGHP)\s+)*)(\w+)\s+(\w+\s*(?:\[\s*\w+\s*\])?(?:\s*,\s*\w+\s*(?:\[\s*\w+\s*\])?)*)\s*;)");
+	static const std::regex declarator(R"((\w+)\s*(?:\[\s*(\w+)\s*\])?)");
 
 	// JNGL's shaders (and user shaders written for the OpenGL backend) use "#version 300 es", which
 	// glslang rejects for SPIR-V (it requires ES 310+). Swap it for a desktop version that compiles
@@ -100,21 +113,26 @@ ParsedSource parseUniforms(const char* const source) {
 	std::size_t last = 0;
 	for (std::sregex_iterator it(adjusted.begin(), adjusted.end(), re), end; it != end; ++it) {
 		const std::smatch& m = *it;
-		ParsedUniform u;
-		u.precision = m[1].str();
-		u.type = m[2].str();
-		u.name = m[3].str();
-		if (m[4].matched) {
-			const std::string length = m[4].str();
-			if (!std::ranges::all_of(length, [](const char c) { return c >= '0' && c <= '9'; }) ||
-			    std::stoul(length) == 0) {
-				throw std::runtime_error("The length of the uniform array " + u.name +
-				                         " has to be a positive number, not " + length + ".");
+		const std::string declarators = m[3].str();
+		for (std::sregex_iterator d(declarators.begin(), declarators.end(), declarator), dEnd;
+		     d != dEnd; ++d) {
+			ParsedUniform u;
+			u.precision = m[1].str();
+			u.type = m[2].str();
+			u.name = (*d)[1].str();
+			if ((*d)[2].matched) {
+				const std::string length = (*d)[2].str();
+				if (!std::ranges::all_of(length,
+				                         [](const char c) { return c >= '0' && c <= '9'; }) ||
+				    std::stoul(length) == 0) {
+					throw std::runtime_error("The length of the uniform array " + u.name +
+					                         " has to be a positive number, not " + length + ".");
+				}
+				u.arrayLength = static_cast<uint32_t>(std::stoul(length));
 			}
-			u.arrayLength = static_cast<uint32_t>(std::stoul(length));
+			u.opaque = u.type.find("sampler") == 0;
+			parsed.uniforms.push_back(std::move(u));
 		}
-		u.opaque = u.type.find("sampler") == 0;
-		parsed.uniforms.push_back(std::move(u));
 		parsed.withoutDecls.append(adjusted, last, static_cast<std::size_t>(m.position()) - last);
 		last = static_cast<std::size_t>(m.position() + m.length());
 	}
@@ -190,13 +208,15 @@ UniformLayout layoutUniforms(const std::initializer_list<const ParsedSource*> st
 /// declare the same, and its samplers at set 0, binding 0
 std::string wrapUniforms(const ParsedSource& stage, const UniformLayout& layout) {
 	std::string source = stage.withoutDecls;
-	// Qualify non-opaque names as u.name now that their bare declarations are gone.
+	// Qualify non-opaque names as jnglUniforms.name now that their bare declarations are gone, but
+	// not those of members, e.g. light.color. Not "u." or the like, which minified shaders might
+	// have as a local variable.
 	for (const ParsedUniform& u : stage.uniforms) {
 		if (u.opaque) {
 			continue;
 		}
-		const std::regex nameRe("\\b" + u.name + "\\b");
-		source = std::regex_replace(source, nameRe, "u." + u.name);
+		const std::regex nameRe("(^|[^.\\w])(" + u.name + ")\\b");
+		source = std::regex_replace(source, nameRe, "$1jnglUniforms.$2");
 	}
 
 	std::string header;
@@ -220,7 +240,7 @@ std::string wrapUniforms(const ParsedSource& stage, const UniformLayout& layout)
 		              ? "layout(push_constant, std140) uniform JnglUniforms {\n"
 		              : "layout(std140, set = 1, binding = 0) uniform JnglUniforms {\n";
 		header += layout.members;
-		header += "} u;\n";
+		header += "} jnglUniforms;\n";
 	}
 
 	const std::size_t insertAt = insertPositionAfterPreprocessor(source);
