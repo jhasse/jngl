@@ -10,10 +10,6 @@ namespace jngl {
 
 WindowPointer::WindowPointer() = default;
 
-WindowPointer::~WindowPointer() {
-	Delete();
-}
-
 Window* WindowPointer::operator->() const {
 	ThrowIfNull();
 	return ptr_;

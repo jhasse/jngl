@@ -14,7 +14,11 @@ public:
 	WindowPointer& operator=(const WindowPointer&) = delete;
 	WindowPointer(WindowPointer&&) = delete;
 	WindowPointer& operator=(WindowPointer&&) = delete;
-	~WindowPointer();
+
+	/// Leaks the Window if hideWindow() hasn't been called, e.g. because std::exit() was called
+	/// while it's open. Destroying it here would tear down its graphics context and the current
+	/// Scene in an unspecified order relative to other globals.
+	~WindowPointer() = default;
 	Window* operator->() const;
 	explicit operator bool() const noexcept;
 	void Delete();
