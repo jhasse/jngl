@@ -14,6 +14,7 @@
 /// @file
 #pragma once
 
+#include "../gpu/GpuScissor.hpp"
 #include "../Renderer.hpp"
 #include "../jngl/Rgb.hpp"
 #include "../jngl/TextureFilter.hpp"
@@ -220,17 +221,8 @@ public:
 	void updateLetterboxing(int framebufferWidth, int framebufferHeight, int canvasWidth,
 	                        int canvasHeight);
 
-	/// OpenGL-style scissor box (origin bottom-left) in the pixels of the current render target
-	struct ScissorBox {
-		int x = 0;
-		int y = 0;
-		int width = 0;
-		int height = 0;
-	};
 	/// Clips drawing to \a box (see jngl::applyScissor), or only to the window's letterboxing
 	void setScissor(std::optional<ScissorBox> box);
-	[[nodiscard]] int getFramebufferWidth() const;
-	[[nodiscard]] int getFramebufferHeight() const;
 
 private:
 	struct Impl;

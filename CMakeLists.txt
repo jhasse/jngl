@@ -510,6 +510,9 @@ if(JNGL_VULKAN OR JNGL_D3D12)
 	# Everything's drawn through GpuBackend.hpp instead of OpenGL
 	target_compile_definitions(jngl PUBLIC JNGL_GPU_BACKEND)
 	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+	# What's the same for both of them
+	file(GLOB GPU_SRC src/gpu/*.cpp)
+	target_sources(jngl PRIVATE ${GPU_SRC})
 
 	# Compiles ShaderPrograms' GLSL into a header with their bytecode for the backend, see
 	# src/jngl/ShaderBytecode.hpp: the built-in ones (see src/BuiltinShaders.hpp) and those of games,

@@ -1166,10 +1166,11 @@ void VulkanRenderer::ensureRenderPass() {
 	VkExtent2D extent{};
 	VkClearValue clear{};
 	if (renderTargetStack.empty()) {
-		syncLetterboxScissor();
+		scissor.sync(static_cast<int>(swapchainExtent.width),
+		             static_cast<int>(swapchainExtent.height));
 	}
-	const bool letterboxClear =
-	    renderTargetStack.empty() && letterboxing && loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR;
+	const bool letterboxClear = renderTargetStack.empty() && scissor.isLetterboxed() &&
+	                            loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR;
 	const Rgba passClearColor = letterboxClear ? Rgba(0.f, 0.f, 0.f, 1.f) : pendingClearColor;
 	clear.color = { { passClearColor.getRed(), passClearColor.getGreen(), passClearColor.getBlue(),
 		              passClearColor.getAlpha() } };
@@ -1280,67 +1281,16 @@ void VulkanRenderer::resolveSwapchain() {
 	vkCmdEndRenderPass(cmd);
 }
 
-VkRect2D VulkanRenderer::glScissorToVulkan(const int glX, const int glY, const int glW,
-                                           const int glH, const int fbHeight) {
-	VkRect2D rect{};
-	rect.offset.x = static_cast<uint32_t>(std::max(glX, 0));
-	rect.offset.y = static_cast<uint32_t>(std::max(fbHeight - glY - glH, 0));
-	rect.extent.width = static_cast<uint32_t>(std::max(glW, 0));
-	rect.extent.height = static_cast<uint32_t>(std::max(glH, 0));
-	return rect;
+namespace {
+VkRect2D vkRect(const PixelRect& rect) {
+	return { { rect.x, rect.y },
+		     { static_cast<uint32_t>(rect.width), static_cast<uint32_t>(rect.height) } };
 }
-
-VkRect2D VulkanRenderer::intersectScissors(const VkRect2D a, const VkRect2D b) {
-	const int ax1 = static_cast<int>(a.offset.x);
-	const int ay1 = static_cast<int>(a.offset.y);
-	const int ax2 = ax1 + static_cast<int>(a.extent.width);
-	const int ay2 = ay1 + static_cast<int>(a.extent.height);
-	const int bx1 = static_cast<int>(b.offset.x);
-	const int by1 = static_cast<int>(b.offset.y);
-	const int bx2 = bx1 + static_cast<int>(b.extent.width);
-	const int by2 = by1 + static_cast<int>(b.extent.height);
-	const int x1 = std::max(ax1, bx1);
-	const int y1 = std::max(ay1, by1);
-	const int x2 = std::min(ax2, bx2);
-	const int y2 = std::min(ay2, by2);
-	VkRect2D out{};
-	if (x2 > x1 && y2 > y1) {
-		out.offset = { static_cast<int32_t>(x1), static_cast<int32_t>(y1) };
-		out.extent = { static_cast<uint32_t>(x2 - x1), static_cast<uint32_t>(y2 - y1) };
-	}
-	return out;
-}
-
-VkRect2D VulkanRenderer::letterboxScissorForExtent(const VkExtent2D extent) const {
-	// Centered in the viewport, which is at the bottom left of the swapchain, see setViewport
-	const int x = (framebufferWidth - canvasWidth) / 2;
-	const int y = (framebufferHeight - canvasHeight) / 2;
-	VkRect2D rect =
-	    glScissorToVulkan(x, y, canvasWidth, canvasHeight, static_cast<int>(extent.height));
-	return intersectScissors(rect, VkRect2D{ { 0, 0 }, extent });
-}
+} // namespace
 
 VkRect2D VulkanRenderer::effectiveScissor(const VkExtent2D extent) const {
-	VkRect2D base{ { 0, 0 }, extent };
-	if (renderTargetStack.empty() && letterboxing) {
-		base = letterboxScissorForExtent(extent);
-	}
-	if (!userScissor) {
-		return base;
-	}
-	if (renderTargetStack.empty()) {
-		return intersectScissors(base, glScissorToVulkan(userScissor->x, userScissor->y,
-		                                                 userScissor->width, userScissor->height,
-		                                                 static_cast<int>(extent.height)));
-	}
-	// FrameBuffers aren't flipped vertically (see beginCurrentRenderPass), so their rows already
-	// start at the bottom like OpenGL's
-	VkRect2D rect{};
-	rect.offset.x = std::max(userScissor->x, 0);
-	rect.offset.y = std::max(userScissor->y, 0);
-	rect.extent.width = static_cast<uint32_t>(std::max(userScissor->width, 0));
-	rect.extent.height = static_cast<uint32_t>(std::max(userScissor->height, 0));
-	return intersectScissors(base, rect);
+	return vkRect(scissor.clip(static_cast<int>(extent.width), static_cast<int>(extent.height),
+	                           renderTargetStack.empty()));
 }
 
 void VulkanRenderer::applyScissor(const VkCommandBuffer cmd, const VkExtent2D extent) const {
@@ -1348,19 +1298,8 @@ void VulkanRenderer::applyScissor(const VkCommandBuffer cmd, const VkExtent2D ex
 	vkCmdSetScissor(cmd, 0, 1, &scissor);
 }
 
-void VulkanRenderer::syncLetterboxScissor() {
-	if (canvasWidth <= 0 || canvasHeight <= 0 || swapchainExtent.width == 0) {
-		return;
-	}
-	if (framebufferWidth <= 0 || framebufferHeight <= 0) { // setViewport hasn't been called yet
-		framebufferWidth = static_cast<int>(swapchainExtent.width);
-		framebufferHeight = static_cast<int>(swapchainExtent.height);
-	}
-	letterboxing = canvasWidth != framebufferWidth || canvasHeight != framebufferHeight;
-}
-
 void VulkanRenderer::clearSwapchainCanvas(const Rgb& color) {
-	if (!frameActive || !letterboxing) {
+	if (!frameActive || !scissor.isLetterboxed()) {
 		return;
 	}
 	VkClearAttachment attachment{};
@@ -1368,7 +1307,8 @@ void VulkanRenderer::clearSwapchainCanvas(const Rgb& color) {
 	attachment.colorAttachment = 0;
 	attachment.clearValue.color = { { color.getRed(), color.getGreen(), color.getBlue(), 1.f } };
 	VkClearRect rect{};
-	rect.rect = letterboxScissorForExtent(swapchainExtent);
+	rect.rect = vkRect(scissor.letterbox(static_cast<int>(swapchainExtent.width),
+	                                     static_cast<int>(swapchainExtent.height)));
 	if (rect.rect.extent.width == 0 || rect.rect.extent.height == 0) {
 		return; // e.g. while the swapchain is still smaller than the canvas after a resize
 	}
@@ -1379,11 +1319,7 @@ void VulkanRenderer::clearSwapchainCanvas(const Rgb& color) {
 
 void VulkanRenderer::updateLetterboxing(const int fbWidth, const int fbHeight, const int canvasW,
                                         const int canvasH) {
-	framebufferWidth = fbWidth;
-	framebufferHeight = fbHeight;
-	canvasWidth = canvasW;
-	canvasHeight = canvasH;
-	letterboxing = canvasWidth != fbWidth || canvasHeight != fbHeight;
+	scissor.setLetterboxing(fbWidth, fbHeight, canvasW, canvasH);
 	if (renderPassActive && renderTargetStack.empty()) {
 		applyScissor(renderCommands, swapchainExtent);
 	}
@@ -1398,18 +1334,10 @@ VkExtent2D VulkanRenderer::currentRenderTargetExtent() const {
 }
 
 void VulkanRenderer::setScissor(const std::optional<ScissorBox> box) {
-	userScissor = box;
+	scissor.setBox(box);
 	if (renderPassActive) {
 		applyScissor(renderCommands, currentRenderTargetExtent());
 	}
-}
-
-int VulkanRenderer::getFramebufferWidth() const {
-	return framebufferWidth;
-}
-
-int VulkanRenderer::getFramebufferHeight() const {
-	return framebufferHeight;
 }
 
 void VulkanRenderer::endFrame() {
@@ -1485,8 +1413,7 @@ void VulkanRenderer::setViewport(const int x, const int y, const int width, cons
 	assert(x == 0 && y == 0);
 	(void)x;
 	(void)y;
-	framebufferWidth = width;
-	framebufferHeight = height;
+	scissor.setFramebufferSize(width, height);
 	if (renderPassActive && renderTargetStack.empty()) {
 		applyViewport(renderCommands, swapchainExtent);
 	}
@@ -1497,10 +1424,12 @@ void VulkanRenderer::applyViewport(const VkCommandBuffer cmd, const VkExtent2D e
 	if (renderTargetStack.empty()) {
 		// Like glViewport, at the bottom left. When the swapchain hasn't been recreated after a
 		// resize yet, this might not cover all of it.
-		const auto width = static_cast<float>(
-		    framebufferWidth > 0 ? framebufferWidth : static_cast<int>(extent.width));
-		const auto height = static_cast<float>(
-		    framebufferHeight > 0 ? framebufferHeight : static_cast<int>(extent.height));
+		const int fbWidth = scissor.getFramebufferWidth();
+		const int fbHeight = scissor.getFramebufferHeight();
+		const auto width =
+		    static_cast<float>(fbWidth > 0 ? fbWidth : static_cast<int>(extent.width));
+		const auto height =
+		    static_cast<float>(fbHeight > 0 ? fbHeight : static_cast<int>(extent.height));
 		viewport = { 0.f, static_cast<float>(extent.height), width, -height, 0.f, 1.f };
 	} else {
 		viewport = { 0.f, 0.f, static_cast<float>(extent.width), static_cast<float>(extent.height),
@@ -1973,18 +1902,6 @@ void VulkanRenderer::destroyUniformBuffer(DynamicUniformBuffer& ub) {
 	ub = {};
 }
 
-std::vector<uint8_t>&
-VulkanRenderer::prepareDrawUniforms(const UniformBlock& block,
-                                    const VulkanShaderProgram* const program) {
-	if (program) {
-		drawUniforms.assign(program->uniformData.begin(), program->uniformData.end());
-	} else {
-		// Not zeroed, as the built-in shaders' draws write all of their uniforms
-		drawUniforms.resize(block.size);
-	}
-	return drawUniforms;
-}
-
 void VulkanRenderer::bindUniforms(const VkCommandBuffer cmd, const UniformBlock& block,
                                   const std::vector<uint8_t>& data,
                                   const VkDescriptorSet textureSet) {
@@ -2049,7 +1966,7 @@ void VulkanRenderer::drawColored(PrimitiveType type, const float* xyVertices,
 	const auto [vertexBuffer, offset] = uploadVertices(xyVertices, bytes);
 
 	ensureRenderPass(); // before the uniforms, as it might draw itself, see expandIntoSamples
-	auto& uniforms = prepareDrawUniforms(coloredUniforms, nullptr);
+	auto& uniforms = prepareDrawUniforms(drawUniforms, coloredUniforms);
 	writeUniform(uniforms, coloredUniforms.offsets.modelview, modelview);
 	writeUniform(uniforms, coloredUniforms.offsets.projection, projection);
 	writeUniform(uniforms, coloredUniforms.offsets.color,
@@ -2078,7 +1995,7 @@ void VulkanRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, co
 	const auto [vertexBuffer, offset] = uploadVertices(unitSquare.data(), bytes);
 
 	ensureRenderPass(); // before the uniforms, as it might draw itself, see expandIntoSamples
-	auto& uniforms = prepareDrawUniforms(roundedUniforms, nullptr);
+	auto& uniforms = prepareDrawUniforms(drawUniforms, roundedUniforms);
 	const DrawUniformOffsets& offsets = roundedUniforms.offsets;
 	writeUniform(uniforms, offsets.modelview, modelview);
 	writeUniform(uniforms, offsets.projection, projection);
@@ -2864,7 +2781,7 @@ void VulkanRenderer::drawSprite(const VulkanTexture& texture, const float* xyuv,
 	const UniformBlock& block =
 	    activeShaderProgram ? activeShaderProgram->uniformBlock : texturedUniforms;
 	ensureRenderPass(); // before the uniforms, as it might draw itself, see expandIntoSamples
-	auto& uniforms = prepareDrawUniforms(block, activeShaderProgram);
+	auto& uniforms = prepareDrawUniforms(drawUniforms, block, activeShaderProgram);
 	writeUniform(uniforms, block.offsets.modelview, modelview);
 	writeUniform(uniforms, block.offsets.projection, projection);
 	if (!activeShaderProgram) { // a ShaderProgram's other uniforms are its own, like on OpenGL

@@ -411,14 +411,6 @@ const std::array<D3D12_INPUT_ELEMENT_DESC, 2> vertexLayout = { {
 	  0 },
 } };
 
-/// What a top-left based rectangle in pixels of a render target is
-struct Rect {
-	int x = 0;
-	int y = 0;
-	int width = 0;
-	int height = 0;
-};
-
 } // namespace
 
 struct D3D12Renderer::Impl {
@@ -457,10 +449,6 @@ struct D3D12Renderer::Impl {
 	/// Copies \a bytes of vertex data into the current frame's vertex buffer, growing it if it's
 	/// full, and returns where it is
 	D3D12_GPU_VIRTUAL_ADDRESS uploadVertices(const void* data, uint64_t bytes);
-	/// drawUniforms, sized for \a block, with the uniforms \a program's been given, or zeros
-	/// without one, for the draw to write its own into, see writeUniform()
-	std::vector<uint8_t>& prepareDrawUniforms(const UniformBlock& block,
-	                                          const D3D12ShaderProgram* program);
 	/// Writes modelview and projection into drawUniforms
 	void writeTransform(const UniformBlock& block, const Mat3& modelview);
 	/// Makes \a data the uniforms of the next draws: as root constants, or copied into this frame's
@@ -512,12 +500,8 @@ struct D3D12Renderer::Impl {
 
 	void applyViewport() const;
 	void applyScissor() const;
-	[[nodiscard]] Rect effectiveScissor(int targetWidth, int targetHeight) const;
-	[[nodiscard]] Rect letterboxScissor() const;
-	void syncLetterboxScissor();
-	[[nodiscard]] static Rect glScissorToTopLeft(int glX, int glY, int glW, int glH,
-	                                             int targetHeight);
-	[[nodiscard]] static Rect intersectScissors(Rect a, Rect b);
+	/// What drawing into what's drawn on is clipped to, see GpuScissor::clip
+	[[nodiscard]] PixelRect currentScissor() const;
 	/// The swapchain's size, or the FrameBuffer's that's drawn on
 	[[nodiscard]] std::pair<int, int> currentTargetSize() const;
 
@@ -646,12 +630,7 @@ struct D3D12Renderer::Impl {
 	bool msaaRebuildPending = false;
 	bool pendingMsaaEnabled = true;
 
-	int framebufferWidth = 0;
-	int framebufferHeight = 0;
-	int canvasWidth = 0;
-	int canvasHeight = 0;
-	bool letterboxing = false;
-	std::optional<ScissorBox> userScissor;
+	GpuScissor scissor;
 
 	Mat4 projection;
 	Rgb currentClearColor{ 0, 0, 0 }; // swapchain clear color for the current frame
@@ -1116,18 +1095,6 @@ D3D12_GPU_VIRTUAL_ADDRESS D3D12Renderer::Impl::uploadVertices(const void* const 
 	return vb.resource->GetGPUVirtualAddress() + offset;
 }
 
-std::vector<uint8_t>&
-D3D12Renderer::Impl::prepareDrawUniforms(const UniformBlock& block,
-                                         const D3D12ShaderProgram* const program) {
-	if (program) {
-		drawUniforms.assign(program->uniformData.begin(), program->uniformData.end());
-	} else {
-		// Not zeroed, as the built-in shaders' draws write all of their uniforms
-		drawUniforms.resize(block.size);
-	}
-	return drawUniforms;
-}
-
 void D3D12Renderer::Impl::writeTransform(const UniformBlock& block, const Mat3& modelview) {
 	writeUniform(drawUniforms, block.offsets.modelview, modelview);
 	if (flipClipY()) {
@@ -1259,7 +1226,7 @@ void D3D12Renderer::Impl::bindTarget() {
 	}
 	ID3D12GraphicsCommandList* const cmd = commandList.Get();
 	if (renderTargetStack.empty()) {
-		syncLetterboxScissor();
+		scissor.sync(swapchainWidth, swapchainHeight);
 		if (swapchainMsaaActive()) {
 			currentPassKind = PassKind::LdrMsaa;
 			currentRtv = rtvHeap.cpu(msaaTargetRtv);
@@ -1313,13 +1280,13 @@ void D3D12Renderer::Impl::clearSwapchain() {
 	bindTarget();
 	const Rgb& c = currentClearColor;
 	const std::array<float, 4> color = { c.getRed(), c.getGreen(), c.getBlue(), 1.f };
-	if (!letterboxing) {
+	if (!scissor.isLetterboxed()) {
 		commandList->ClearRenderTargetView(currentRtv, color.data(), 0, nullptr);
 		return;
 	}
 	const std::array<float, 4> black = { 0.f, 0.f, 0.f, 1.f };
 	commandList->ClearRenderTargetView(currentRtv, black.data(), 0, nullptr);
-	const Rect canvas = letterboxScissor();
+	const PixelRect canvas = scissor.letterbox(swapchainWidth, swapchainHeight);
 	if (canvas.width > 0 && canvas.height > 0) {
 		const D3D12_RECT rect{ canvas.x, canvas.y, canvas.x + canvas.width,
 			                   canvas.y + canvas.height };
@@ -1405,10 +1372,10 @@ void D3D12Renderer::Impl::applyViewport() const {
 	if (renderTargetStack.empty()) {
 		// Like glViewport, at the bottom left. When the swapchain hasn't been resized after a
 		// resize of the window yet, this might not cover all of it.
-		viewport.Width =
-		    static_cast<float>(framebufferWidth > 0 ? framebufferWidth : swapchainWidth);
-		viewport.Height =
-		    static_cast<float>(framebufferHeight > 0 ? framebufferHeight : swapchainHeight);
+		const int fbWidth = scissor.getFramebufferWidth();
+		const int fbHeight = scissor.getFramebufferHeight();
+		viewport.Width = static_cast<float>(fbWidth > 0 ? fbWidth : swapchainWidth);
+		viewport.Height = static_cast<float>(fbHeight > 0 ? fbHeight : swapchainHeight);
 		viewport.TopLeftY = static_cast<float>(swapchainHeight) - viewport.Height;
 	} else {
 		viewport.Width = static_cast<float>(renderTargetStack.back()->width);
@@ -1418,67 +1385,14 @@ void D3D12Renderer::Impl::applyViewport() const {
 }
 
 void D3D12Renderer::Impl::applyScissor() const {
-	const auto [width, height] = currentTargetSize();
-	const Rect scissor = effectiveScissor(width, height);
-	const D3D12_RECT rect{ scissor.x, scissor.y, scissor.x + scissor.width,
-		                   scissor.y + scissor.height };
+	const PixelRect clip = currentScissor();
+	const D3D12_RECT rect{ clip.x, clip.y, clip.x + clip.width, clip.y + clip.height };
 	commandList->RSSetScissorRects(1, &rect);
 }
 
-Rect D3D12Renderer::Impl::glScissorToTopLeft(const int glX, const int glY, const int glW,
-                                             const int glH, const int targetHeight) {
-	return { std::max(glX, 0), std::max(targetHeight - glY - glH, 0), std::max(glW, 0),
-		     std::max(glH, 0) };
-}
-
-Rect D3D12Renderer::Impl::intersectScissors(const Rect a, const Rect b) {
-	const int x1 = std::max(a.x, b.x);
-	const int y1 = std::max(a.y, b.y);
-	const int x2 = std::min(a.x + a.width, b.x + b.width);
-	const int y2 = std::min(a.y + a.height, b.y + b.height);
-	if (x2 > x1 && y2 > y1) {
-		return { x1, y1, x2 - x1, y2 - y1 };
-	}
-	return {};
-}
-
-Rect D3D12Renderer::Impl::letterboxScissor() const {
-	// Centered in the viewport, which is at the bottom left of the swapchain, see setViewport
-	const int x = (framebufferWidth - canvasWidth) / 2;
-	const int y = (framebufferHeight - canvasHeight) / 2;
-	return intersectScissors(glScissorToTopLeft(x, y, canvasWidth, canvasHeight, swapchainHeight),
-	                         { 0, 0, swapchainWidth, swapchainHeight });
-}
-
-Rect D3D12Renderer::Impl::effectiveScissor(const int targetWidth, const int targetHeight) const {
-	Rect base{ 0, 0, targetWidth, targetHeight };
-	if (renderTargetStack.empty() && letterboxing) {
-		base = letterboxScissor();
-	}
-	if (!userScissor) {
-		return base;
-	}
-	if (renderTargetStack.empty()) {
-		return intersectScissors(base, glScissorToTopLeft(userScissor->x, userScissor->y,
-		                                                  userScissor->width, userScissor->height,
-		                                                  targetHeight));
-	}
-	// FrameBuffers are drawn into upside down (see flipClipY), so their rows already start at the
-	// bottom like OpenGL's
-	return intersectScissors(base,
-	                         { std::max(userScissor->x, 0), std::max(userScissor->y, 0),
-	                           std::max(userScissor->width, 0), std::max(userScissor->height, 0) });
-}
-
-void D3D12Renderer::Impl::syncLetterboxScissor() {
-	if (canvasWidth <= 0 || canvasHeight <= 0 || swapchainWidth == 0) {
-		return;
-	}
-	if (framebufferWidth <= 0 || framebufferHeight <= 0) { // setViewport hasn't been called yet
-		framebufferWidth = swapchainWidth;
-		framebufferHeight = swapchainHeight;
-	}
-	letterboxing = canvasWidth != framebufferWidth || canvasHeight != framebufferHeight;
+PixelRect D3D12Renderer::Impl::currentScissor() const {
+	const auto [width, height] = currentTargetSize();
+	return scissor.clip(width, height, renderTargetStack.empty());
 }
 
 std::pair<int, int> D3D12Renderer::Impl::currentTargetSize() const {
@@ -1672,8 +1586,7 @@ void D3D12Renderer::setViewport(const int x, const int y, const int width, const
 	assert(x == 0 && y == 0);
 	(void)x;
 	(void)y;
-	impl->framebufferWidth = width;
-	impl->framebufferHeight = height;
+	impl->scissor.setFramebufferSize(width, height);
 	if (impl->targetBound && impl->renderTargetStack.empty()) {
 		impl->applyViewport();
 	}
@@ -1711,7 +1624,7 @@ void D3D12Renderer::drawColored(PrimitiveType type, const float* xyVertices,
 
 	impl->bindTarget();
 	const UniformBlock& block = impl->coloredUniforms;
-	auto& uniforms = impl->prepareDrawUniforms(block, nullptr);
+	auto& uniforms = prepareDrawUniforms(impl->drawUniforms, block);
 	impl->writeTransform(block, modelview);
 	writeUniform(uniforms, block.offsets.color,
 	             std::array{ color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() });
@@ -1732,7 +1645,7 @@ void D3D12Renderer::drawRoundedRect(const Mat3& modelview, const Rgba color, con
 
 	impl->bindTarget();
 	const UniformBlock& block = impl->roundedUniforms;
-	auto& uniforms = impl->prepareDrawUniforms(block, nullptr);
+	auto& uniforms = prepareDrawUniforms(impl->drawUniforms, block);
 	impl->writeTransform(block, modelview);
 	writeUniform(uniforms, block.offsets.color,
 	             std::array{ color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() });
@@ -1887,7 +1800,7 @@ void D3D12Renderer::drawSprite(const D3D12Texture& texture, const float* xyuv,
 	impl->bindTarget();
 	const D3D12ShaderProgram* const program = impl->activeShaderProgram;
 	const UniformBlock& block = program ? program->uniformBlock : impl->texturedUniforms;
-	auto& uniforms = impl->prepareDrawUniforms(block, program);
+	auto& uniforms = prepareDrawUniforms(impl->drawUniforms, block, program);
 	impl->writeTransform(block, modelview);
 	if (!program) { // a ShaderProgram's other uniforms are its own, like on OpenGL
 		writeUniform(uniforms, block.offsets.lerpColor,
@@ -2089,8 +2002,7 @@ void D3D12Renderer::clearCurrentRenderTarget(const Rgba color) {
 		return;
 	}
 	impl->bindTarget();
-	const auto [width, height] = impl->currentTargetSize();
-	const Rect scissor = impl->effectiveScissor(width, height);
+	const PixelRect scissor = impl->currentScissor();
 	if (scissor.width <= 0 || scissor.height <= 0) {
 		return; // without any rectangles ClearRenderTargetView would clear all of it
 	}
@@ -2217,29 +2129,17 @@ bool D3D12Renderer::getMultisampleAntiAliasing() const {
 
 void D3D12Renderer::updateLetterboxing(const int fbWidth, const int fbHeight, const int canvasW,
                                        const int canvasH) {
-	impl->framebufferWidth = fbWidth;
-	impl->framebufferHeight = fbHeight;
-	impl->canvasWidth = canvasW;
-	impl->canvasHeight = canvasH;
-	impl->letterboxing = canvasW != fbWidth || canvasH != fbHeight;
+	impl->scissor.setLetterboxing(fbWidth, fbHeight, canvasW, canvasH);
 	if (impl->targetBound && impl->renderTargetStack.empty()) {
 		impl->applyScissor();
 	}
 }
 
 void D3D12Renderer::setScissor(const std::optional<ScissorBox> box) {
-	impl->userScissor = box;
+	impl->scissor.setBox(box);
 	if (impl->targetBound) {
 		impl->applyScissor();
 	}
-}
-
-int D3D12Renderer::getFramebufferWidth() const {
-	return impl->framebufferWidth;
-}
-
-int D3D12Renderer::getFramebufferHeight() const {
-	return impl->framebufferHeight;
 }
 
 } // namespace jngl

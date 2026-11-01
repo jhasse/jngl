@@ -9,6 +9,7 @@
 /// @file
 #pragma once
 
+#include "../gpu/GpuScissor.hpp"
 #include "../Renderer.hpp"
 #include "../jngl/Mat4.hpp"
 #include "../jngl/Rgb.hpp"
@@ -268,30 +269,17 @@ public:
 	void updateLetterboxing(int framebufferWidth, int framebufferHeight, int canvasWidth,
 	                        int canvasHeight);
 
-	/// OpenGL-style scissor box (origin bottom-left) in the pixels of the current render target
-	struct ScissorBox {
-		int x = 0;
-		int y = 0;
-		int width = 0;
-		int height = 0;
-	};
 	/// Clips drawing to \a box (see jngl::applyScissor), or only to the window's letterboxing
 	void setScissor(std::optional<ScissorBox> box);
-	[[nodiscard]] int getFramebufferWidth() const;
-	[[nodiscard]] int getFramebufferHeight() const;
 
 private:
 	void applyScissor(VkCommandBuffer cmd, VkExtent2D extent) const;
 	void applyViewport(VkCommandBuffer cmd, VkExtent2D extent) const;
 	void clearSwapchainCanvas(const Rgb& color);
-	void syncLetterboxScissor();
+	/// What drawing into what's \a extent big is clipped to, see GpuScissor::clip
 	[[nodiscard]] VkRect2D effectiveScissor(VkExtent2D extent) const;
 	/// The swapchain's extent, or the FrameBuffer's that's drawn on
 	[[nodiscard]] VkExtent2D currentRenderTargetExtent() const;
-	[[nodiscard]] VkRect2D letterboxScissorForExtent(VkExtent2D extent) const;
-	[[nodiscard]] static VkRect2D intersectScissors(VkRect2D a, VkRect2D b);
-	[[nodiscard]] static VkRect2D glScissorToVulkan(int glX, int glY, int glW, int glH,
-	                                                int framebufferHeight);
 	void queryMsaaSupport();
 	[[nodiscard]] bool swapchainMsaaActive() const;
 	void createMsaaAttachments();
@@ -359,10 +347,6 @@ private:
 	[[nodiscard]] std::pair<VkDescriptorSet, VkDescriptorPool>
 	allocateDescriptorSet(VkDescriptorSetLayout layout);
 	void freeDescriptorSet(VkDescriptorSet, VkDescriptorPool, VkDescriptorSetLayout layout);
-	/// drawUniforms, sized for \a block, with the uniforms \a program's been given, or zeros
-	/// without one, for the draw to write its own into, see writeUniform()
-	std::vector<uint8_t>& prepareDrawUniforms(const UniformBlock& block,
-	                                          const VulkanShaderProgram* program);
 	/// Makes \a data the uniforms of the next draws: pushes them, or copies them into this frame's
 	/// ring and binds them (dynamic offset). Also binds \a textureSet, if it isn't VK_NULL_HANDLE.
 	void bindUniforms(VkCommandBuffer cmd, const UniformBlock& block,
@@ -609,12 +593,7 @@ private:
 	// the pipelines that have to be used
 	PassKind currentPassKind = PassKind::Ldr;
 
-	int framebufferWidth = 0;
-	int framebufferHeight = 0;
-	int canvasWidth = 0;
-	int canvasHeight = 0;
-	bool letterboxing = false;
-	std::optional<ScissorBox> userScissor;
+	GpuScissor scissor;
 
 	Mat4 projection;
 	Rgb currentClearColor{ 0, 0, 0 }; // swapchain clear color for the current frame

@@ -171,10 +171,9 @@ void applyScissor() {
 		    std::min(top, std::lround(canvas.y + canvas.height / 2. - position.y * pixelsPerUnitY));
 	}
 #ifdef JNGL_GPU_BACKEND
-	gpuRenderer().setScissor(
-	    GpuRenderer::ScissorBox{ static_cast<int>(left), static_cast<int>(bottom),
-	                             static_cast<int>(std::max(0L, right - left)),
-	                             static_cast<int>(std::max(0L, top - bottom)) });
+	gpuRenderer().setScissor(ScissorBox{ static_cast<int>(left), static_cast<int>(bottom),
+	                                     static_cast<int>(std::max(0L, right - left)),
+	                                     static_cast<int>(std::max(0L, top - bottom)) });
 #else
 	glEnable(GL_SCISSOR_TEST);
 	glScissor(static_cast<GLint>(left), static_cast<GLint>(bottom),

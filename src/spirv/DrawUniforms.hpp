@@ -67,6 +67,27 @@ inline std::vector<ShaderUniform> shaderUniforms(const ShaderBytecode& bytecode)
 	return uniforms;
 }
 
+/// \a drawUniforms, sized for \a block of a built-in shader, for the draw to write its uniforms
+/// into, see writeUniform()
+inline std::vector<uint8_t>& prepareDrawUniforms(std::vector<uint8_t>& drawUniforms,
+                                                 const UniformBlock& block) {
+	// Not zeroed, as the built-in shaders' draws write all of their uniforms
+	drawUniforms.resize(block.size);
+	return drawUniforms;
+}
+
+/// Like prepareDrawUniforms(std::vector<uint8_t>&, const UniformBlock&), but with the uniforms
+/// \a program's been given (its uniformData), if it isn't nullptr
+template <class Program>
+std::vector<uint8_t>& prepareDrawUniforms(std::vector<uint8_t>& drawUniforms,
+                                          const UniformBlock& block, const Program* const program) {
+	if (!program) {
+		return prepareDrawUniforms(drawUniforms, block);
+	}
+	drawUniforms.assign(program->uniformData.begin(), program->uniformData.end());
+	return drawUniforms;
+}
+
 /// Writes \a values at \a offset into \a data, if it isn't -1
 template <size_t N>
 void writeUniform(std::vector<uint8_t>& data, const int32_t offset,
