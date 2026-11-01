@@ -7,6 +7,9 @@
 #include "jngl/Singleton.hpp"
 #include "jngl/Vec2.hpp"
 
+#include <array>
+#include <optional>
+
 namespace jngl {
 
 class Alpha;
@@ -40,8 +43,14 @@ public:
 	                                                   float bottomLeft, float bottomRight);
 
 private:
+	/// lerpColor and lerpFactors of textureShaderProgram, unless they're set to that already
+	void setTextureUniforms(const std::array<float, 7>& lerpColorAndFactors) const;
+
 	int shaderLerpColorUniform;
 	int shaderLerpFactorsUniform;
+	/// What setTextureUniforms() has set them to, as sprites and characters are often drawn with
+	/// the same color one after another
+	mutable std::optional<std::array<float, 7>> textureUniforms;
 
 	std::unique_ptr<ShaderProgram> simpleShaderProgram;
 	int simpleModelviewUniform;

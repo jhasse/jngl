@@ -65,15 +65,24 @@ ShaderProgram::Context ShaderCache::useSimpleShaderProgram(const Mat3& modelview
 
 void ShaderCache::setTextureColorUniforms(const Rgba color) const {
 	// Multiplying with color is the same as mixing towards black by 1 - color
-	glUniform3f(shaderLerpColorUniform, 0, 0, 0);
-	glUniform4f(shaderLerpFactorsUniform, 1.f - color.getRed(), 1.f - color.getGreen(),
-	            1.f - color.getBlue(), 1.f - color.getAlpha());
+	setTextureUniforms({ 0, 0, 0, 1.f - color.getRed(), 1.f - color.getGreen(),
+	                     1.f - color.getBlue(), 1.f - color.getAlpha() });
 }
 
 void ShaderCache::setTextureLerpUniforms(const Rgb color, const float red, const float green,
                                          const float blue, const Alpha alpha) const {
-	glUniform3f(shaderLerpColorUniform, color.getRed(), color.getGreen(), color.getBlue());
-	glUniform4f(shaderLerpFactorsUniform, red, green, blue, 1.f - alpha.getAlpha());
+	setTextureUniforms({ color.getRed(), color.getGreen(), color.getBlue(), red, green, blue,
+	                     1.f - alpha.getAlpha() });
+}
+
+void ShaderCache::setTextureUniforms(const std::array<float, 7>& lerpColorAndFactors) const {
+	if (textureUniforms == lerpColorAndFactors) {
+		return;
+	}
+	textureUniforms = lerpColorAndFactors;
+	const auto& v = lerpColorAndFactors;
+	glUniform3f(shaderLerpColorUniform, v[0], v[1], v[2]);
+	glUniform4f(shaderLerpFactorsUniform, v[3], v[4], v[5], v[6]);
 }
 
 void ShaderCache::drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
