@@ -388,12 +388,11 @@ std::vector<uint32_t> compileToSpirv(const std::string& source, const Shader::Ty
 
 } // namespace
 
-void checkGlsl(const char* const source, const Shader::Type stage, const char* const name) {
+void checkGlsl(const char* const source, const Shader::Type stage) {
 	const ParsedSource parsed = parseUniforms(source);
+	layoutUniforms({ &parsed });
 	Varyings varyings;
-	compileToSpirv(
-	    assignLocations(wrapUniforms(parsed, layoutUniforms({ &parsed })), stage, varyings), stage,
-	    name);
+	assignLocations(parsed.withoutDecls, stage, varyings);
 }
 
 CompiledProgram compileGlslProgram(const char* const vertexSource,

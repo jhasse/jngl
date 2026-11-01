@@ -51,8 +51,9 @@ struct CompiledProgram {
 /// Throws std::runtime_error on a compilation error.
 CompiledProgram compileGlslProgram(const char* vertexSource, const char* fragmentSource);
 
-/// Throws std::runtime_error if GLSL \a source for the given shader \a stage doesn't compile, see
-/// jngl::Shader. \a name is only used in error messages.
-void checkGlsl(const char* source, Shader::Type stage, const char* name);
+/// Throws std::runtime_error if GLSL \a source for the given shader \a stage has uniforms, inputs or
+/// outputs that aren't supported, see jngl::Shader. It's only compiled together with the program's
+/// other shader, see compileGlslProgram, as that's what their layout depends on.
+void checkGlsl(const char* source, Shader::Type stage);
 
 } // namespace jngl

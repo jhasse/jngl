@@ -160,6 +160,19 @@ TEST_CASE("a second sampler is an error on Vulkan") {
 	                                 jngl::Shader::Type::FRAGMENT),
 	                    Catch::Matchers::ContainsSubstring("tex and mask"));
 }
+
+TEST_CASE("Vulkan reports GLSL errors when the ShaderProgram is created") {
+	Fixture f(1.f);
+	// It's only compiled once, together with the other shader
+	const jngl::Shader fragment(R"(#version 300 es
+		out lowp vec4 outColor;
+		void main() {
+			outColor = undeclared;
+		})",
+	                            jngl::Shader::Type::FRAGMENT);
+	REQUIRE_THROWS_WITH(jngl::ShaderProgram(jngl::Sprite::vertexShader(), fragment),
+	                    Catch::Matchers::ContainsSubstring("'undeclared' : undeclared identifier"));
+}
 #endif
 
 TEST_CASE("Sprite::batch with a custom ShaderProgram") {

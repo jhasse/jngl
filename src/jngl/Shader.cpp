@@ -21,8 +21,9 @@ Shader::Shader(const char* source, const Type type, const char* const /*gles20So
 	// Only compiled at build time by jngl-shaderc, see ShaderProgram(const ShaderBytecode&)
 	(void)type;
 #else
-	// So that errors are reported here, like on OpenGL
-	checkGlsl(source, type, type == Type::VERTEX ? "vertex" : "fragment");
+	// What can be reported here, like on OpenGL. It's compiled with the program's other shader, see
+	// ShaderProgram.
+	checkGlsl(source, type);
 #endif
 	impl->source = source;
 }
