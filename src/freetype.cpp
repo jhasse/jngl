@@ -6,7 +6,6 @@
 #include "freetype.hpp"
 
 #include "FontImpl.hpp"
-#include "ShaderCache.hpp"
 #include "helper.hpp"
 #include "jngl/Finally.hpp"
 #include "jngl/ScaleablePixels.hpp"
@@ -95,22 +94,12 @@ Character::Character(const char32_t ch, const unsigned int fontHeight, FT_Face f
 	left_ = Pixels(bitmap_glyph->left);
 }
 
-#ifdef JNGL_GPU_BACKEND
-// The color the next characters are drawn with. The OpenGL backend keeps this as ambient shader
-// state (a uniform set in FontImpl::print); the GPU backends need it per draw call, so print()
-// stashes it here.
+// The color the next characters are drawn with, set by FontImpl::print
 Rgba gTextColor{ 0, 0, 0, 1 };
-#endif
 
 void Character::draw(Mat3& modelview) const {
 	if (texture_) {
-#ifdef JNGL_GPU_BACKEND
 		texture_->draw(Mat3(modelview).translate(left_, top_), gTextColor);
-#else
-		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
-		                   Mat3(modelview).translate(left_, top_).data);
-		texture_->draw();
-#endif
 	}
 	modelview.translate(width_, 0_px);
 }
@@ -267,12 +256,7 @@ void FontImpl::print(const Mat3& modelview, std::string_view text) const {
 }
 
 void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) const {
-#ifdef JNGL_GPU_BACKEND
 	gTextColor = color;
-#else
-	auto context = ShaderCache::handle().textureShaderProgram->use();
-	ShaderCache::handle().setTextureColorUniforms(color);
-#endif
 	std::vector<std::string> lines(splitlines(text));
 
 	auto lineEnd = lines.end();
@@ -291,12 +275,7 @@ void FontImpl::print(Mat3 modelview, const std::string& text, Rgba color) const 
 }
 
 void FontImpl::print(const ScaleablePixels x, const ScaleablePixels y, const std::string& text) {
-#ifdef JNGL_GPU_BACKEND
 	gTextColor = gFontColor;
-#else
-	auto context = ShaderCache::handle().textureShaderProgram->use();
-	ShaderCache::handle().setTextureColorUniforms(gFontColor);
-#endif
 	const int xRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ x })));
 	const int yRounded = static_cast<int>(std::lround(static_cast<double>(Pixels{ y })));
 	std::vector<std::string> lines(splitlines(text));

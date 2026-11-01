@@ -15,6 +15,7 @@ class Alpha;
 class Mat3;
 class Rgb;
 class Rgba;
+class ShaderProgram;
 // See GpuBackend.hpp
 #ifdef JNGL_VULKAN
 struct VulkanTexture;
@@ -43,10 +44,9 @@ public:
 	void bind() const;
 	void draw() const;
 
-	/// Draws the texture's quad transformed by \a modelview and modulated by \a color, using the
-	/// built-in texture shader. This is the backend-neutral path (required by the GPU backends,
-	/// which can't rely on ambient shader state like the OpenGL backend does).
-	void draw(const Mat3& modelview, Rgba color) const;
+	/// Draws the texture's quad transformed by \a modelview with \a shaderProgram, or with the
+	/// built-in texture shader, which modulates it by \a color
+	void draw(const Mat3& modelview, Rgba color, const ShaderProgram* shaderProgram = nullptr) const;
 
 	/// Like draw(const Mat3&, Rgba), but mixes each channel towards \a color, see
 	/// Sprite::drawLerped
@@ -56,20 +56,17 @@ public:
 	                 float blue, float alpha) const;
 	void drawMesh(const std::vector<Vertex>& vertexes) const;
 
-	/// Backend-neutral mesh draw: transforms \a vertexes by \a modelview, modulated by \a color
-	/// (and the active ShaderProgram, if any). Needed by the GPU backends, which can't rely on
-	/// ambient shader state.
-	void drawMesh(const std::vector<Vertex>& vertexes, const Mat3& modelview, Rgba color) const;
+	/// Like draw(const Mat3&, Rgba, const ShaderProgram*), but with \a vertexes instead of the quad
+	void drawMesh(const std::vector<Vertex>& vertexes, const Mat3& modelview, Rgba color,
+	              const ShaderProgram* shaderProgram = nullptr) const;
 	[[nodiscard]] GLuint getID() const;
 	[[nodiscard]] float getPreciseWidth() const;
 	[[nodiscard]] float getPreciseHeight() const;
 	void setBytes(const unsigned char*, int width, int height) const;
-#ifdef JNGL_GPU_BACKEND
 	/// Generates mipmaps if the texture doesn't have them yet, see Sprite::enableMipmaps
 	void enableMipmaps() const;
 	/// See Sprite::setTextureFilter
 	void setTextureFilter(TextureFilter minification, TextureFilter magnification) const;
-#endif
 
 private:
 #ifdef JNGL_GPU_BACKEND
