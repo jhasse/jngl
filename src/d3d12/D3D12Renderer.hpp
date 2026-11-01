@@ -20,7 +20,6 @@
 #include "../spirv/ShaderCompiler.hpp"
 
 #include <array>
-#include <chrono>
 #include <cstdint>
 #include <memory>
 #include <optional>
@@ -97,9 +96,6 @@ struct D3D12ShaderProgram {
 	mutable std::vector<uint8_t> uniformData;
 };
 
-/// The timestamp queries of a jngl::GpuTimer, see D3D12Renderer.cpp
-struct D3D12TimestampPool;
-
 class D3D12Renderer final : public Renderer {
 public:
 	/// \a nativeWindow must be an SDL_Window*, created without SDL_WINDOW_OPENGL.
@@ -153,20 +149,6 @@ public:
 
 	/// "Direct3D 12" and the adapter, with its driver version, see jngl::getGraphicsApi()
 	[[nodiscard]] std::string getGraphicsApi() const;
-
-	/// Whether the GPU's time can be measured with timestamp queries, see jngl::GpuTimer
-	[[nodiscard]] bool areTimestampsSupported() const;
-	using TimestampPool = D3D12TimestampPool*;
-	/// A pool of \a count timestamp queries, none of which have been written
-	[[nodiscard]] TimestampPool createTimestampPool(uint32_t count);
-	/// Destroys \a pool once the GPU is done with it
-	void destroyTimestampPool(TimestampPool pool);
-	/// Records writing the GPU's time into \a query once what's been drawn before is done. Returns
-	/// false if there's no frame to record it into.
-	bool writeTimestamp(TimestampPool pool, uint32_t query);
-	/// The time between the timestamps \a first and \a first + 1, once both have been written, or
-	/// nullopt. Then forgets them, so that they can be written again.
-	std::optional<std::chrono::nanoseconds> takeElapsedTime(TimestampPool pool, uint32_t first);
 
 	/// Creates an off-screen render target (see jngl::FrameBuffer), cleared to transparent.
 	/// \param antiAliased Multisampled while anti-aliasing is enabled, if it's supported

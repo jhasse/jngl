@@ -421,15 +421,6 @@ struct Rect {
 
 } // namespace
 
-struct D3D12TimestampPool {
-	ComPtr<ID3D12QueryHeap> heap;
-	/// The queries' ticks are resolved into this
-	ComPtr<ID3D12Resource> readback;
-	const uint64_t* ticks = nullptr; ///< readback, mapped
-	/// For each query, the value of Impl::fence once it's been written, or 0 if it hasn't been
-	std::vector<uint64_t> writtenAt;
-};
-
 struct D3D12Renderer::Impl {
 	explicit Impl(SDL_Window*);
 	~Impl();
@@ -655,9 +646,6 @@ struct D3D12Renderer::Impl {
 	bool msaaRebuildPending = false;
 	bool pendingMsaaEnabled = true;
 
-	// Ticks per second of the queue's timestamps, or 0 if they aren't supported
-	uint64_t timestampFrequency = 0;
-
 	int framebufferWidth = 0;
 	int framebufferHeight = 0;
 	int canvasWidth = 0;
@@ -706,10 +694,6 @@ D3D12Renderer::Impl::Impl(SDL_Window* const window) : window(window) {
 	if (!fenceEvent) {
 		throw std::runtime_error("CreateEvent failed.");
 	}
-	if (UINT64 frequency = 0; SUCCEEDED(queue->GetTimestampFrequency(&frequency))) {
-		timestampFrequency = frequency;
-	}
-
 	createRootSignature();
 	coloredUniforms =
 	    uniformBlock(builtin_bytecode::colored.uniforms, builtin_bytecode::colored.uniformBlockSize,
@@ -2002,60 +1986,6 @@ std::string D3D12Renderer::getGraphicsApi() const {
 		                   HIWORD(version.LowPart), LOWORD(version.LowPart));
 	}
 	return api;
-}
-
-bool D3D12Renderer::areTimestampsSupported() const {
-	return impl->timestampFrequency > 0;
-}
-
-D3D12Renderer::TimestampPool D3D12Renderer::createTimestampPool(const uint32_t count) {
-	auto pool = std::make_unique<D3D12TimestampPool>();
-	D3D12_QUERY_HEAP_DESC heapDesc{};
-	heapDesc.Type = D3D12_QUERY_HEAP_TYPE_TIMESTAMP;
-	heapDesc.Count = count;
-	check(impl->device->CreateQueryHeap(&heapDesc, IID_PPV_ARGS(&pool->heap)), "CreateQueryHeap");
-	const auto heap = heapProperties(D3D12_HEAP_TYPE_READBACK);
-	const auto desc = bufferDesc(uint64_t{ count } * sizeof(uint64_t));
-	check(impl->device->CreateCommittedResource(&heap, D3D12_HEAP_FLAG_NONE, &desc,
-	                                            D3D12_RESOURCE_STATE_COPY_DEST, nullptr,
-	                                            IID_PPV_ARGS(&pool->readback)),
-	      "CreateCommittedResource");
-	void* mapped = nullptr;
-	check(pool->readback->Map(0, nullptr, &mapped), "ID3D12Resource::Map");
-	pool->ticks = static_cast<const uint64_t*>(mapped);
-	pool->writtenAt.resize(count);
-	return pool.release();
-}
-
-void D3D12Renderer::destroyTimestampPool(const TimestampPool pool) {
-	impl->destroyLater([pool]() { delete pool; });
-}
-
-bool D3D12Renderer::writeTimestamp(const TimestampPool pool, const uint32_t query) {
-	if (!impl->frameActive) {
-		return false;
-	}
-	ID3D12GraphicsCommandList* const cmd = impl->commandList.Get();
-	cmd->EndQuery(pool->heap.Get(), D3D12_QUERY_TYPE_TIMESTAMP, query);
-	cmd->ResolveQueryData(pool->heap.Get(), D3D12_QUERY_TYPE_TIMESTAMP, query, 1,
-	                      pool->readback.Get(), uint64_t{ query } * sizeof(uint64_t));
-	// It's done once the next signal(), after this command list has been executed, has been
-	pool->writtenAt[query] = impl->lastSignaled + 1;
-	return true;
-}
-
-std::optional<std::chrono::nanoseconds> D3D12Renderer::takeElapsedTime(const TimestampPool pool,
-                                                                       const uint32_t first) {
-	const uint64_t written = std::max(pool->writtenAt[first], pool->writtenAt[first + 1]);
-	if (pool->writtenAt[first] == 0 || pool->writtenAt[first + 1] == 0 ||
-	    impl->fence->GetCompletedValue() < written) {
-		return std::nullopt;
-	}
-	pool->writtenAt[first] = 0;
-	pool->writtenAt[first + 1] = 0;
-	const uint64_t elapsed = pool->ticks[first + 1] - pool->ticks[first];
-	return std::chrono::nanoseconds(static_cast<std::chrono::nanoseconds::rep>(
-	    static_cast<double>(elapsed) * 1e9 / static_cast<double>(impl->timestampFrequency)));
 }
 
 std::unique_ptr<D3D12Framebuffer> D3D12Renderer::createFramebuffer(const int width,
