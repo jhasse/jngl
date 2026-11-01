@@ -3,9 +3,9 @@
 
 /// Experimental Vulkan backend, see GpuBackend.hpp.
 ///
-/// This is a minimal 2D backend for the desktop SDL3 platform: it brings up a Vulkan instance,
-/// device and swapchain and can clear the screen and present. Drawing pipelines (sprites/shapes)
-/// are built on top of this; see VulkanRenderer.cpp.
+/// A 2D backend for the desktop SDL3 platform, which draws JNGL's shapes, sprites and text, into
+/// the window or FrameBuffers (multisampled or HDR, too), also with ShaderPrograms, whose GLSL it
+/// compiles to SPIR-V, see ShaderCompiler.hpp.
 /// @file
 #pragma once
 
@@ -581,7 +581,7 @@ private:
 
 	// Per-frame dynamic UBO ring: each drawSprite with custom uniforms snapshots staging into here
 	// so mid-frame setUniform updates don't overwrite earlier draws still pending on the GPU. Grows
-	// like vertexBuffers, see bindActiveProgramUniforms.
+	// like vertexBuffers, see bindUniforms.
 	std::vector<DynamicUniformBuffer> uniformBuffers;
 	std::vector<std::vector<DynamicUniformBuffer>> retiredUniformBuffers;
 	VkDeviceSize minUniformBufferOffsetAlignment = 256;

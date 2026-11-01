@@ -1014,13 +1014,8 @@ void VulkanRenderer::destroyTexturedPipelines() {
 }
 
 void VulkanRenderer::rebuildSwapchainRendering() {
+	assert(!frameActive); // see its callers, which wait for the frame to end
 	vkDeviceWaitIdle(device);
-	if (frameActive) {
-		vkResetCommandBuffer(commandBuffers[currentFrame], 0);
-		frameActive = false;
-		renderPassActive = false;
-		currentPassKind = PassKind::Ldr;
-	}
 	for (VkFramebuffer fb : swapchainFramebuffers) {
 		vkDestroyFramebuffer(device, fb, nullptr);
 	}
@@ -1920,7 +1915,7 @@ void VulkanRenderer::createUniformBuffers() {
 	minUniformBufferOffsetAlignment = props.limits.minUniformBufferOffsetAlignment;
 
 	// Each custom-shader draw takes its UBO's size, padded to minUniformBufferOffsetAlignment;
-	// 256 KiB covers a thousand of them per frame, bindActiveProgramUniforms grows it if needed.
+	// 256 KiB covers a thousand of them per frame, bindUniforms grows it if needed.
 	constexpr VkDeviceSize capacity = 1u << 18u;
 	uniformBuffers.resize(maxFramesInFlight);
 	retiredUniformBuffers.resize(maxFramesInFlight);

@@ -829,7 +829,8 @@ void D3D12Renderer::Impl::createSwapchain() {
 	// matching JNGL's OpenGL backend whose default framebuffer isn't sRGB-encoded.
 	desc.Format = ldrFormat;
 	desc.SampleDesc.Count = 1;
-	// COPY_SOURCE for readPixels, RESOLVE_DEST for MSAA
+	// readPixels copies from the back buffers and MSAA is resolved into them, which Direct3D 12
+	// allows without any further usage
 	desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	desc.BufferCount = backBufferCount;
 	desc.Scaling = DXGI_SCALING_STRETCH;
