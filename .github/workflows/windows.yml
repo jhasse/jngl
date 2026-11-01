@@ -74,6 +74,32 @@ jobs:
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
       run: just unittest-headless Release
 
+  d3d12:
+    runs-on: windows-2025
+    steps:
+    - uses: actions/checkout@v5
+    - name: Cache CPM.cmake packages
+      uses: actions/cache@v4
+      with:
+        path: .cache/cpm
+        key: cpm
+    - name: Install the Vulkan SDK
+      # for its shader compilers, which jngl-shaderc uses at build time
+      uses: jakoch/install-vulkan-sdk-action@v1
+      with:
+        vulkan_version: 1.4.363.0
+    - name: Put the Vulkan SDK's DLLs on PATH
+      run: echo "$env:VULKAN_SDK\Bin" >> $env:GITHUB_PATH
+    - name: Install cja
+      run: pip install git+https://github.com/jhasse/cja
+    - name: Build
+      run: cja build -Bbuild-d3d12 --release -DJNGL_D3D12=1
+    - name: Unittest
+      # on WARP, as there's no GPU
+      run: |
+        cd build-d3d12
+        ./jngl-unittest
+
   mingw:
     runs-on: [ubuntu-latest]
     container:
