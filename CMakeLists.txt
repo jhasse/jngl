@@ -495,7 +495,8 @@ if(JNGL_VULKAN OR JNGL_D3D12)
 		find_library(SHADERC_LIBRARY NAMES shaderc_shared HINTS "${JNGL_VULKAN_SDK_LIBDIR}")
 		set(JNGL_SHADERC_DEFINITIONS SHADERC_SHAREDLIB)
 	else()
-		find_library(SHADERC_LIBRARY NAMES shaderc_shared shaderc_combined shaderc
+		# The shared library before Ubuntu's libshaderc_combined.a, which lacks glslang
+		find_library(SHADERC_LIBRARY NAMES shaderc_shared shaderc shaderc_combined
 			HINTS "$ENV{VULKAN_SDK}/lib")
 		set(JNGL_SHADERC_DEFINITIONS "")
 	endif()
