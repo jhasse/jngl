@@ -141,8 +141,7 @@ debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT severity,
 
 } // namespace
 
-VulkanRenderer::VulkanRenderer(void* const nativeWindow)
-: window(static_cast<SDL_Window*>(nativeWindow)) {
+VulkanRenderer::VulkanRenderer(SDL_Window* const window) : window(window) {
 	createInstance();
 	createSurface();
 	pickPhysicalDevice();
@@ -278,10 +277,6 @@ VulkanRenderer::~VulkanRenderer() {
 	if (instance) {
 		vkDestroyInstance(instance, nullptr);
 	}
-}
-
-const char* VulkanRenderer::name() const {
-	return "Vulkan";
 }
 
 void VulkanRenderer::createInstance() {

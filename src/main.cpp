@@ -76,7 +76,7 @@ void clearBackgroundColor() {
 	glClearColor(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(),
 	             1);
 #endif
-	// On the GPU backends the background color is passed to Renderer::beginFrame, so there's
+	// On the GPU backends the background color is passed to GpuRenderer::beginFrame, so there's
 	// nothing to set here.
 }
 
@@ -108,7 +108,7 @@ void updateViewportAndLetterboxing(const int width, const int height, const int 
 		             .letterboxed = canvasWidth != width || canvasHeight != height };
 #ifdef JNGL_GPU_BACKEND
 	gpuRenderer().updateLetterboxing(width, height, canvasWidth, canvasHeight);
-	getRenderer().setViewport(0, 0, width, height);
+	gpuRenderer().setViewport(0, 0, width, height);
 #else
 	glViewport(0, 0, width, height);
 
@@ -297,7 +297,7 @@ void swapBuffers() {
 
 void clearBackBuffer() {
 #ifdef JNGL_GPU_BACKEND
-	getRenderer().beginFrame(backgroundColor);
+	gpuRenderer().beginFrame(backgroundColor);
 	reset();
 	if (!modelviewStack.empty()) {
 		internal::error("Uneven calls to push/popMatrix at the beginning of the frame!");
@@ -792,7 +792,7 @@ void drawRing(Mat3 modelview, float innerRadius, float outerRadius, float startA
 		vertexes[i * 4 + 3] = innerRadius * s;
 	}
 
-	getRenderer().drawColored(PrimitiveType::TriangleStrip, vertexes.data(), vertexes.size() / 2,
+	drawColored(PrimitiveType::TriangleStrip, vertexes.data(), vertexes.size() / 2,
 	                          modelview, color);
 }
 
@@ -813,7 +813,7 @@ void drawTriangle(const Vec2 a, const Vec2 b, const Vec2 c) {
 	const float vertexes[] = { static_cast<float>(a.x), static_cast<float>(a.y),
 		                       static_cast<float>(b.x), static_cast<float>(b.y),
 		                       static_cast<float>(c.x), static_cast<float>(c.y) };
-	getRenderer().drawColored(PrimitiveType::Triangles, vertexes, 3, opengl::modelview,
+	drawColored(PrimitiveType::Triangles, vertexes, 3, opengl::modelview,
 	                          gShapeColor);
 }
 
@@ -826,7 +826,7 @@ void drawTriangle(Mat3 modelview, Rgba color) {
 	const float vertexes[] = {
 		0.f, -1.f, -std::sqrt(3.f) / 2.f, 0.5f, std::sqrt(3.f) / 2.f, 0.5f,
 	};
-	getRenderer().drawColored(PrimitiveType::Triangles, vertexes, 3, modelview, color);
+	drawColored(PrimitiveType::Triangles, vertexes, 3, modelview, color);
 }
 
 void setLineWidth(const float width) {

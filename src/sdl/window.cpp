@@ -2,7 +2,6 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../App.hpp"
-#include "../Renderer.hpp"
 #ifdef JNGL_GPU_BACKEND
 #include "../GpuBackend.hpp"
 #endif
@@ -191,12 +190,11 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	setScaleFactor(getScaleFactor() * impl->hidpiScaleFactor);
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 
-	// Create the rendering backend (OpenGL, Vulkan or Direct3D 12). It registers itself as the
-	// active backend, so getRenderer() works from here on (e.g. in App::initGl below). On Vulkan
-	// and Direct3D 12 this also brings up the device and swapchain at the aligned pixel size.
-	impl->renderer = createRenderer(impl->sdlWindow);
 #ifdef JNGL_GPU_BACKEND
-	isMultisampleSupported_ = static_cast<GpuRenderer&>(*impl->renderer).isMultisampleSupported();
+	// Brings up the device and swapchain at the aligned pixel size, gpuRenderer() works from here on
+	// (e.g. in App::initGl below)
+	createGpuRenderer(impl->sdlWindow);
+	isMultisampleSupported_ = gpuRenderer().isMultisampleSupported();
 #endif
 	initGl();
 
@@ -470,7 +468,7 @@ void Window::UpdateInput() {
 				    static_cast<float>(newWidth) / static_cast<float>(logicalWidth);
 			}
 #ifdef JNGL_GPU_BACKEND
-			getRenderer().onResize(newWidth, newHeight);
+			gpuRenderer().onResize(newWidth, newHeight);
 #endif
 			setActualSize(newWidth, newHeight);
 		} break;
@@ -499,7 +497,7 @@ void Window::UpdateInput() {
 
 void Window::SwapBuffers() {
 #ifdef JNGL_GPU_BACKEND
-	getRenderer().endFrame();
+	gpuRenderer().endFrame();
 #else
 	SDL_GL_SwapWindow(impl->sdlWindow);
 #endif

@@ -1,7 +1,7 @@
 // Copyright 2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-/// Experimental Vulkan implementation of the Renderer interface, see Renderer.hpp.
+/// Experimental Vulkan backend, see GpuBackend.hpp.
 ///
 /// This is a minimal 2D backend for the desktop SDL3 platform: it brings up a Vulkan instance,
 /// device and swapchain and can clear the screen and present. Drawing pipelines (sprites/shapes)
@@ -11,6 +11,7 @@
 
 #include "../Renderer.hpp"
 #include "../jngl/Mat4.hpp"
+#include "../jngl/Rgb.hpp"
 #include "../jngl/TextureFilter.hpp"
 #include "../spirv/DrawUniforms.hpp"
 #include "../spirv/ShaderCompiler.hpp"
@@ -137,20 +138,30 @@ struct VulkanShaderProgram {
 	mutable std::vector<uint8_t> uniformData;
 };
 
-class VulkanRenderer final : public Renderer {
+class VulkanRenderer {
 public:
-	/// \a nativeWindow must be an SDL_Window* created with the SDL_WINDOW_VULKAN flag.
-	explicit VulkanRenderer(void* nativeWindow);
-	~VulkanRenderer() override;
+	/// \a window must have been created with the SDL_WINDOW_VULKAN flag.
+	explicit VulkanRenderer(SDL_Window* window);
+	~VulkanRenderer();
+	VulkanRenderer(const VulkanRenderer&) = delete;
+	VulkanRenderer& operator=(const VulkanRenderer&) = delete;
+	VulkanRenderer(VulkanRenderer&&) = delete;
+	VulkanRenderer& operator=(VulkanRenderer&&) = delete;
 
-	[[nodiscard]] const char* name() const override;
-	void beginFrame(Rgb clearColor) override;
-	void endFrame() override;
-	void setViewport(int x, int y, int width, int height) override;
-	void onResize(int width, int height) override;
-	void setProjection(const Mat4&) override;
+	/// Acquires a swapchain image and begins the render pass, whose load operation clears it to
+	/// \a clearColor
+	void beginFrame(Rgb clearColor);
+	/// Ends the render pass, submits the command buffer and queues the image for presentation
+	void endFrame();
+	/// In framebuffer pixels, with the origin in the lower-left corner like on OpenGL
+	void setViewport(int x, int y, int width, int height);
+	/// Recreates the swapchain after the current frame
+	void onResize(int width, int height);
+	/// The projection matrix that the built-in shaders use
+	void setProjection(const Mat4&);
+	/// See jngl::drawColored
 	void drawColored(PrimitiveType, const float* xyVertices, std::size_t vertexCount,
-	                 const Mat3& modelview, Rgba color) override;
+	                 const Mat3& modelview, Rgba color);
 
 	/// Draws a unit square (-0.5..0.5) with per-corner rounding (see jngl::drawRoundedRect).
 	void drawRoundedRect(const Mat3& modelview, Rgba color, float sizeX, float sizeY, float topLeft,

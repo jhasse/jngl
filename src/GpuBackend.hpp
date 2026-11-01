@@ -1,15 +1,13 @@
 // Copyright 2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-/// The Renderer that's compiled in instead of OpenGL, see JNGL_GPU_BACKEND.
+/// The backend that's compiled in instead of OpenGL, see JNGL_GPU_BACKEND and Renderer.hpp.
 ///
-/// The Vulkan (JNGL_VULKAN) and the Direct3D 12 (JNGL_D3D12) backends offer the same API beyond
-/// the Renderer interface, for textures, FrameBuffers, ShaderPrograms and so on. JNGL's code uses
-/// them through the aliases below, so that it doesn't have to care which one it is.
+/// The Vulkan (JNGL_VULKAN) and the Direct3D 12 (JNGL_D3D12) backends offer the same API, for
+/// drawing, textures, FrameBuffers, ShaderPrograms and so on. JNGL's code uses them through the
+/// aliases below, so that it doesn't have to care which one it is.
 /// @file
 #pragma once
-
-#include "Renderer.hpp"
 
 #ifdef JNGL_VULKAN
 #include "vulkan/VulkanRenderer.hpp"
@@ -33,14 +31,16 @@ using GpuFramebuffer = D3D12Framebuffer;
 using GpuShaderProgram = D3D12ShaderProgram;
 #endif
 
-/// The active backend. Must only be called while a Window exists, see getRenderer().
-inline GpuRenderer& gpuRenderer() {
-	return static_cast<GpuRenderer&>(getRenderer());
-}
+/// Creates the backend for \a window, which gpuRenderer() returns until destroyGpuRenderer()
+void createGpuRenderer(SDL_Window* window);
 
-/// The active backend or nullptr if no Window exists, see getRendererIfExists().
-inline GpuRenderer* gpuRendererIfExists() {
-	return static_cast<GpuRenderer*>(getRendererIfExists());
-}
+/// Destroys the backend, before the window it renders to
+void destroyGpuRenderer();
+
+/// The backend. Must only be called while a Window exists.
+GpuRenderer& gpuRenderer();
+
+/// The backend or nullptr if no Window exists
+GpuRenderer* gpuRendererIfExists();
 
 } // namespace jngl

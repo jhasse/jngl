@@ -854,7 +854,7 @@ void Window::initGlObjects() {
 
 void Window::drawSquare(const Mat3& modelview, Rgba color) const {
 	const float vertexes[] = { -.5f, -.5f, .5f, -.5f, .5f, .5f, -.5f, .5f };
-	getRenderer().drawColored(PrimitiveType::TriangleFan, vertexes, 4, modelview, color);
+	drawColored(PrimitiveType::TriangleFan, vertexes, 4, modelview, color);
 }
 
 void Window::drawRoundedSquare(const Mat3& modelview, Rgba color, Vec2 size, float topLeft,

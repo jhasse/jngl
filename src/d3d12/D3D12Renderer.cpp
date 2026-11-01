@@ -1581,15 +1581,10 @@ void D3D12Renderer::Impl::freeTextureResources(const D3D12Texture& texture) {
 	}
 }
 
-D3D12Renderer::D3D12Renderer(void* const nativeWindow)
-: impl(std::make_unique<Impl>(static_cast<SDL_Window*>(nativeWindow))) {
+D3D12Renderer::D3D12Renderer(SDL_Window* const window) : impl(std::make_unique<Impl>(window)) {
 }
 
 D3D12Renderer::~D3D12Renderer() = default;
-
-const char* D3D12Renderer::name() const {
-	return "Direct3D 12";
-}
 
 void D3D12Renderer::beginFrame(const Rgb clearColor) {
 	if (impl->frameActive) {

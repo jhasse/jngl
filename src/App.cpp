@@ -3,7 +3,9 @@
 
 #include "App.hpp"
 
-#include "Renderer.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "GpuBackend.hpp"
+#endif
 #include "jngl/AppParameters.hpp"
 #include "jngl/Scene.hpp"
 #include "jngl/ShaderProgram.hpp"
@@ -202,7 +204,7 @@ void App::unregisterShaderProgram(ShaderProgram* shaderProgram) {
 void App::updateProjectionMatrix() const {
 #ifdef JNGL_GPU_BACKEND
 	// The projection is a per-draw push constant on the GPU backends
-	if (auto* const renderer = getRendererIfExists()) {
+	if (auto* const renderer = gpuRendererIfExists()) {
 		renderer->setProjection(opengl::projection);
 	}
 #else

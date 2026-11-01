@@ -77,7 +77,7 @@ void drawEllipse(const Mat3& modelview, float width, float height, float startAn
 	}
 	vertexes.push_back(0.f);
 	vertexes.push_back(-height);
-	getRenderer().drawColored(PrimitiveType::TriangleFan, vertexes.data(), vertexes.size() / 2,
+	drawColored(PrimitiveType::TriangleFan, vertexes.data(), vertexes.size() / 2,
 	                          modelview, color);
 }
 
@@ -125,7 +125,7 @@ void drawCircle(const Mat3& modelview, const Rgba color) {
 		-0.09801714f
 	};
 	// clang-format on
-	getRenderer().drawColored(PrimitiveType::TriangleFan, vertexes,
+	drawColored(PrimitiveType::TriangleFan, vertexes,
 	                          sizeof(vertexes) / sizeof(float) / 2, modelview, color);
 }
 
@@ -147,7 +147,7 @@ void drawFrame(const Mat3& modelview, const Vec2 half, const double widthX, cons
 		-outerX, -outerY, -innerX, -innerY, outerX,  -outerY, innerX,  -innerY, outerX,  outerY,
 		innerX,  innerY,  -outerX, outerY,  -innerX, innerY,  -outerX, -outerY, -innerX, -innerY,
 	};
-	getRenderer().drawColored(PrimitiveType::TriangleStrip, vertexes.data(), vertexes.size() / 2,
+	drawColored(PrimitiveType::TriangleStrip, vertexes.data(), vertexes.size() / 2,
 	                          modelview, color);
 }
 
@@ -191,7 +191,7 @@ void drawCircleOutline(const Mat3& modelview, const float radius, const float li
 		vertexes[i * 4 + 3] = innerRadius * y;
 	}
 
-	getRenderer().drawColored(PrimitiveType::TriangleStrip, vertexes.data(), vertexes.size() / 2,
+	drawColored(PrimitiveType::TriangleStrip, vertexes.data(), vertexes.size() / 2,
 	                          modelview, color);
 }
 

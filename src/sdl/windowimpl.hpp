@@ -3,7 +3,9 @@
 
 #pragma once
 
-#include "../Renderer.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "../GpuBackend.hpp"
+#endif
 #include "sdl.hpp"
 
 #include <memory>
@@ -24,10 +26,9 @@ class WindowImpl {
 public:
 	WindowImpl() = default;
 	~WindowImpl() {
-		// Tear down the rendering backend (and, on Vulkan or D3D12, its device and swapchain)
-		// before the window and context it renders to.
-		renderer.reset();
-#ifndef JNGL_GPU_BACKEND
+#ifdef JNGL_GPU_BACKEND
+		destroyGpuRenderer(); // before the window it renders to
+#else
 		SDL_GL_DestroyContext(context);
 #endif
 		SDL_DestroyWindow(sdlWindow);
@@ -39,7 +40,6 @@ public:
 
 	SDL_Window* sdlWindow = nullptr;
 	SDL_GLContext context = nullptr;
-	std::unique_ptr<Renderer> renderer;
 	optional<SDL_FingerID> currentFingerId;
 
 	SDL_SystemCursor cursor = SDL_SYSTEM_CURSOR_DEFAULT;

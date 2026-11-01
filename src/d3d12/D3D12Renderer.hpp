@@ -1,7 +1,7 @@
 // Copyright 2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-/// Experimental Direct3D 12 implementation of the Renderer interface, see Renderer.hpp.
+/// Experimental Direct3D 12 backend, see GpuBackend.hpp.
 ///
 /// A 2D backend for the SDL3 platform on Windows, with the same API as VulkanRenderer (see
 /// GpuBackend.hpp), except that it doesn't compile shaders at runtime: all of them, the built-in
@@ -15,6 +15,7 @@
 #pragma once
 
 #include "../Renderer.hpp"
+#include "../jngl/Rgb.hpp"
 #include "../jngl/TextureFilter.hpp"
 #include "../spirv/DrawUniforms.hpp"
 #include "../spirv/ShaderCompiler.hpp"
@@ -28,6 +29,7 @@
 
 struct ID3D12PipelineState;
 struct ID3D12Resource;
+struct SDL_Window;
 
 namespace jngl {
 
@@ -96,20 +98,29 @@ struct D3D12ShaderProgram {
 	mutable std::vector<uint8_t> uniformData;
 };
 
-class D3D12Renderer final : public Renderer {
+class D3D12Renderer {
 public:
-	/// \a nativeWindow must be an SDL_Window*, created without SDL_WINDOW_OPENGL.
-	explicit D3D12Renderer(void* nativeWindow);
-	~D3D12Renderer() override;
+	/// \a window must have been created without SDL_WINDOW_OPENGL.
+	explicit D3D12Renderer(SDL_Window* window);
+	~D3D12Renderer();
+	D3D12Renderer(const D3D12Renderer&) = delete;
+	D3D12Renderer& operator=(const D3D12Renderer&) = delete;
+	D3D12Renderer(D3D12Renderer&&) = delete;
+	D3D12Renderer& operator=(D3D12Renderer&&) = delete;
 
-	[[nodiscard]] const char* name() const override;
-	void beginFrame(Rgb clearColor) override;
-	void endFrame() override;
-	void setViewport(int x, int y, int width, int height) override;
-	void onResize(int width, int height) override;
-	void setProjection(const Mat4&) override;
+	/// Starts recording a command list that begins with clearing the swap chain's back buffer
+	void beginFrame(Rgb clearColor);
+	/// Executes the command list and presents the swap chain
+	void endFrame();
+	/// See VulkanRenderer::setViewport
+	void setViewport(int x, int y, int width, int height);
+	/// Resizes the swap chain after the current frame
+	void onResize(int width, int height);
+	/// The projection matrix that the built-in shaders use
+	void setProjection(const Mat4&);
+	/// See jngl::drawColored
 	void drawColored(PrimitiveType, const float* xyVertices, std::size_t vertexCount,
-	                 const Mat3& modelview, Rgba color) override;
+	                 const Mat3& modelview, Rgba color);
 
 	/// Draws a unit square (-0.5..0.5) with per-corner rounding (see jngl::drawRoundedRect).
 	void drawRoundedRect(const Mat3& modelview, Rgba color, float sizeX, float sizeY, float topLeft,
