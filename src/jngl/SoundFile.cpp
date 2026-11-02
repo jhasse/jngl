@@ -198,41 +198,54 @@ void Audio::step() {
 	engine.step();
 }
 
-SoundFile::SoundFile(const std::string& filename, std::launch)
-: buffer(std::make_shared<std::vector<float>>()) {
-	if (endsWithIgnoreCase(filename, ".mp3")) {
-		loadMp3(filename, *buffer);
-	} else {
-#ifdef _WIN32
-		FILE* const f = fopen(filename.c_str(), "rb");
-#else
-		FILE* const f = fopen(filename.c_str(), "rbe");
-#endif
-		if (f == nullptr) {
-			throw std::runtime_error("File not found (" + filename + ").");
-		}
-		loadOgg(f, filename, *buffer);
-	}
+namespace {
 
-	internal::debug("Decoded {} ({:.2f} MB, {})", filename,
-	                static_cast<double>(buffer->size()) * sizeof(float) / 1024. / 1024.,
+std::chrono::milliseconds lengthOf(const std::vector<float>& samples) {
+	return std::chrono::milliseconds{ samples.size() * 1000 / jngl::audio::frequency /
+		                              2 /* stereo */ };
+}
+
+} // namespace
+
+SoundFile::SoundFile(const std::string& filename, const std::launch policy)
+: buffer(std::make_shared<std::vector<float>>()) {
+	// Into its own std::shared_ptr of the buffer, which is still there should this SoundFile be
+	// moved from in the meantime
+	loader = std::async(policy, [filename, buffer = buffer]() {
+		if (endsWithIgnoreCase(filename, ".mp3")) {
+			loadMp3(filename, *buffer);
+		} else {
+#ifdef _WIN32
+			FILE* const f = fopen(filename.c_str(), "rb");
+#else
+			FILE* const f = fopen(filename.c_str(), "rbe");
+#endif
+			if (f == nullptr) {
+				throw std::runtime_error("File not found (" + filename + ").");
+			}
+			loadOgg(f, filename, *buffer);
+		}
+
+		internal::debug("Decoded {} ({:.2f} MB, {})", filename,
+		                static_cast<double>(buffer->size()) * sizeof(float) / 1024. / 1024.,
 #if !defined(__APPLE__) /* FIXME: Remove when AppleClang's libc++ supports this C++20 feature */   \
     && defined(__GNUC__) && __GNUC__ > 13 // Ubuntu 22.04's GCC doesn't fully support C++20
-	                std::chrono::duration_cast<std::chrono::seconds>(length())
+		                std::chrono::duration_cast<std::chrono::seconds>(lengthOf(*buffer))
 #else
-	                "unknown length"
+		                "unknown length"
 #endif
-	);
+		);
+	}).share();
 }
 
 SoundFile::~SoundFile() = default;
 SoundFile::SoundFile(SoundFile&& other) noexcept {
-	other.load();
 	*this = std::move(other);
 }
 SoundFile& SoundFile::operator=(SoundFile&& other) noexcept {
 	sound = std::move(other.sound);
 	buffer = std::move(other.buffer);
+	loader = std::move(other.loader);
 	return *this;
 }
 
@@ -245,6 +258,7 @@ void SoundFile::play() {
 }
 
 void SoundFile::play(Channel& channel) {
+	load();
 	auto tmp = std::make_shared<Sound>(buffer);
 	channel.play(tmp);
 	sound = tmp;
@@ -273,6 +287,7 @@ void SoundFile::loop() {
 }
 
 void SoundFile::loop(Channel& channel) {
+	load();
 	if (auto sound_ = sound.lock()) {
 		if (sound_->isLooping()) {
 			return;
@@ -289,6 +304,7 @@ SoundPanning SoundFile::playWithPanning() {
 }
 
 SoundPanning SoundFile::playWithPanning(Channel& channel) {
+	load();
 	return { buffer, channel, false };
 }
 
@@ -297,6 +313,7 @@ SoundPanning SoundFile::loopWithPanning() {
 }
 
 SoundPanning SoundFile::loopWithPanning(Channel& channel) {
+	load();
 	return { buffer, channel, true };
 }
 
@@ -307,11 +324,20 @@ void SoundFile::setVolume(float v) {
 }
 
 void SoundFile::load() {
+	if (loader.valid()) {
+		loader.get(); // which throws again each time, should it have failed
+	}
+}
+
+bool SoundFile::isLoaded() const {
+	return !loader.valid() || loader.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
 }
 
 std::chrono::milliseconds SoundFile::length() const {
-	return std::chrono::milliseconds{ buffer->size() * 1000 / jngl::audio::frequency /
-		                              2 /* stereo */ };
+	if (loader.valid()) {
+		loader.get();
+	}
+	return lengthOf(*buffer);
 }
 
 float SoundFile::progress() const {
@@ -322,6 +348,7 @@ float SoundFile::progress() const {
 }
 
 std::span<float> SoundFile::getSamples() {
+	load();
 	return *buffer;
 }
 
