@@ -168,6 +168,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setVolume</b> (float 
 <tr class="memitem:a78f61ac2dd03bcba8e09ca20cd7d68e3" id="r_a78f61ac2dd03bcba8e09ca20cd7d68e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78f61ac2dd03bcba8e09ca20cd7d68e3">load</a> ()</td></tr>
 <tr class="memdesc:a78f61ac2dd03bcba8e09ca20cd7d68e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Block until the sound file has been fully decompressed and loaded.  <br /></td></tr>
 <tr class="separator:a78f61ac2dd03bcba8e09ca20cd7d68e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4529478109e5691162fef4acf9bf0c5" id="r_af4529478109e5691162fef4acf9bf0c5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4529478109e5691162fef4acf9bf0c5">isLoaded</a> () const</td></tr>
+<tr class="memdesc:af4529478109e5691162fef4acf9bf0c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the sound file has been decompressed (or failed to), so that <a class="el" href="#a78f61ac2dd03bcba8e09ca20cd7d68e3" title="Block until the sound file has been fully decompressed and loaded.">load()</a> won't block any more, does NOT block.  <br /></td></tr>
+<tr class="separator:af4529478109e5691162fef4acf9bf0c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf976888187986405a8e8ad98c716530" id="r_abf976888187986405a8e8ad98c716530"><td class="memItemLeft" align="right" valign="top"><a id="abf976888187986405a8e8ad98c716530" name="abf976888187986405a8e8ad98c716530"></a>
 <a class="elRef" href="http://en.cppreference.com/w/cpp/chrono/duration.html">std::chrono::milliseconds</a>&#160;</td><td class="memItemRight" valign="bottom"><b>length</b> () const</td></tr>
 <tr class="memdesc:abf976888187986405a8e8ad98c716530"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the duration in ms. <br /></td></tr>
@@ -357,6 +360,26 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="af4529478109e5691162fef4acf9bf0c5" name="af4529478109e5691162fef4acf9bf0c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4529478109e5691162fef4acf9bf0c5">&#9670;&#160;</a></span>isLoaded()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool isLoaded </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns whether the sound file has been decompressed (or failed to), so that <a class="el" href="#a78f61ac2dd03bcba8e09ca20cd7d68e3" title="Block until the sound file has been fully decompressed and loaded.">load()</a> won't block any more, does NOT block. </p>
+<p>With std::launch::deferred this is false until <a class="el" href="#a78f61ac2dd03bcba8e09ca20cd7d68e3" title="Block until the sound file has been fully decompressed and loaded.">load()</a>, <a class="el" href="#a6d58098c6cf63c241ed03bc797256bb1" title="Play the sound once. If called twice the sound would also play twice.">play()</a> or <a class="el" href="#afe461d27b9c48d5921c00d521181f12f" title="Play the sound in a loop. Can also be stopped using stop()">loop()</a> has been called. </p>
 
 </div>
 </div>
