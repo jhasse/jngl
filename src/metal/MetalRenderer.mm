@@ -66,6 +66,15 @@ enum class BlendVariant : uint8_t {
 };
 constexpr size_t blendVariantCount = 9;
 
+/// Why a render pass ends, which decides what happens to a multisampled texture that it draws into,
+/// see Impl::unbindTarget()
+enum class PassEnd : uint8_t {
+	Interrupted, ///< something else is drawn into, after which the pass continues
+	Read, ///< the frame's texture is read, see MetalRenderer::readPixels
+	FrameEnd, ///< the frame's presented
+	Popped, ///< the FrameBuffer it draws into is done being drawn into, see popRenderTarget()
+};
+
 /// Index into the pipeline state arrays, see MetalShaderProgram::pipelines. Unlike Direct3D 12's,
 /// Metal's pipeline states work with every primitive type.
 size_t pipelineIndex(const PassKind kind, const BlendVariant variant) {
@@ -336,7 +345,10 @@ struct MetalRenderer::Impl {
 	/// Waits until the GPU's done with everything that's been committed
 	void waitIdle();
 
-	/// The drawable's texture, or one that's drawn into instead while the window can't be seen
+	/// Gets the drawable's texture, or one that's drawn into instead while the window can't be
+	/// seen, and the multisampled texture, if that hasn't happened yet this frame. That's as late as
+	/// possible, i.e. once the window's drawn into, as nextDrawable waits for the window server to
+	/// hand one back, while what's drawn into FrameBuffers before can be recorded already.
 	void acquireFrameTexture();
 	/// The multisampled texture that's drawn into instead of the frame's with MSAA, and resolved
 	/// into it at the end of each render pass
@@ -345,14 +357,22 @@ struct MetalRenderer::Impl {
 
 	/// Begins a render pass into the top of renderTargetStack, or the frame's texture, if there
 	/// isn't one yet. Draws and clears call this. With \a clear, the pass clears all of what's
-	/// drawn into first.
+	/// drawn into first, otherwise a pass into the frame's texture does so if screenClearPending.
 	void bindTarget(std::optional<MTLClearColor> clear = std::nullopt);
 	/// Ends the render pass, which resolves what's been drawn into a multisampled texture. The next
 	/// draw calls bindTarget() again.
-	void unbindTarget();
+	///
+	/// The samples are only stored if they might be drawn into again, as \a end says: at the
+	/// window's size, storing and loading them takes up a lot of the GPU's time. (Not resolving them
+	/// when the pass is only interrupted isn't possible, as Metal only lets a pass that has a
+	/// texture to resolve into choose between resolving and storing as well.)
+	void unbindTarget(PassEnd end = PassEnd::Interrupted);
+	/// Ends the render pass, so that the frame's texture has all that's been drawn into the window
+	void finishScreen(PassEnd);
 	/// Clears all of what's drawn into, whatever the scissor
 	void clearTarget(MTLClearColor);
-	/// Clears the swap chain's image to the clear color, and the letterboxing's bars to black
+	/// Clears the swap chain's image to the clear color, and the letterboxing's bars to black. Until
+	/// it's drawn into, that's only noted in screenClearPending.
 	void clearSwapchain();
 	/// Fills \a rect of what's drawn into with \a color, without blending
 	void fillRect(PixelRect rect, MTLClearColor color);
@@ -435,6 +455,15 @@ struct MetalRenderer::Impl {
 
 	// Stack of active FrameBuffers; empty means drawing targets the window.
 	std::vector<MetalFramebuffer*> renderTargetStack;
+	/// Whether the frame's texture still has to be cleared by clearSwapchain(), which the first
+	/// pass into it does. Starting a frame with one only to clear it would have its samples stored
+	/// and loaded again when the frame first draws into FrameBuffers, as it usually does.
+	bool screenClearPending = false;
+	/// Whether encoder draws into the window, and into its multisampled texture
+	bool encoderOnScreen = false;
+	bool encoderOnScreenSamples = false;
+	/// The FrameBuffer whose multisampled texture encoder draws into, if it does
+	MetalFramebuffer* encoderSamplesOf = nullptr;
 	// What's drawn into now, which decides the pipeline states that have to be used
 	PassKind currentPassKind = PassKind::Ldr;
 	// Whether the scissor doesn't let anything through, which Metal's can't be set to
@@ -760,6 +789,9 @@ void MetalRenderer::Impl::waitIdle() {
 }
 
 void MetalRenderer::Impl::acquireFrameTexture() {
+	if (frameTexture) {
+		return;
+	}
 	// Drawables of a window that can't be seen might not be presented, after which nextDrawable
 	// would wait a second each time for one to become available again
 	const SDL_WindowFlags hidden = SDL_WINDOW_HIDDEN | SDL_WINDOW_MINIMIZED | SDL_WINDOW_OCCLUDED;
@@ -780,6 +812,7 @@ void MetalRenderer::Impl::acquireFrameTexture() {
 	}
 	swapchainWidth = static_cast<int>(frameTexture.width);
 	swapchainHeight = static_cast<int>(frameTexture.height);
+	updateMsaaTarget();
 }
 
 void MetalRenderer::Impl::updateMsaaTarget() {
@@ -798,21 +831,32 @@ bool MetalRenderer::Impl::swapchainMsaaActive() const {
 	return msaaEnabled && msaaSupported;
 }
 
-void MetalRenderer::Impl::bindTarget(const std::optional<MTLClearColor> clear) {
+void MetalRenderer::Impl::bindTarget(std::optional<MTLClearColor> clear) {
 	if (encoder) {
 		return;
 	}
+	bool fillCanvas = false; // with the clear color, after clearing the letterboxing's bars
 	@autoreleasepool {
 		MTLRenderPassDescriptor* const pass = [MTLRenderPassDescriptor renderPassDescriptor];
 		MTLRenderPassColorAttachmentDescriptor* const attachment = pass.colorAttachments[0];
 		attachment.storeAction = MTLStoreActionStore;
-		if (renderTargetStack.empty()) {
+		encoderOnScreen = renderTargetStack.empty();
+		if (encoderOnScreen) {
+			acquireFrameTexture(); // which decides whether there's msaaTarget
+			encoderOnScreenSamples = msaaTarget != nil;
 			scissor.sync(swapchainWidth, swapchainHeight);
+			if (screenClearPending && !clear) {
+				const Rgb& c = currentClearColor;
+				fillCanvas = scissor.isLetterboxed();
+				clear = fillCanvas ? MTLClearColorMake(0, 0, 0, 1)
+				                   : MTLClearColorMake(c.getRed(), c.getGreen(), c.getBlue(), 1);
+			}
+			screenClearPending = false;
 			if (msaaTarget) {
 				currentPassKind = PassKind::LdrMsaa;
 				attachment.texture = msaaTarget;
 				attachment.resolveTexture = frameTexture;
-				attachment.storeAction = MTLStoreActionStoreAndMultisampleResolve;
+				attachment.storeAction = MTLStoreActionUnknown; // see unbindTarget()
 			} else {
 				currentPassKind = PassKind::Ldr;
 				attachment.texture = frameTexture;
@@ -829,9 +873,10 @@ void MetalRenderer::Impl::bindTarget(const std::optional<MTLClearColor> clear) {
 					expandIntoSamples(target);
 				}
 				target.samplesStale = false;
+				encoderSamplesOf = &target;
 				attachment.texture = (__bridge id<MTLTexture>)target.msaa;
 				attachment.resolveTexture = (__bridge id<MTLTexture>)target.color.texture;
-				attachment.storeAction = MTLStoreActionStoreAndMultisampleResolve;
+				attachment.storeAction = MTLStoreActionUnknown; // see unbindTarget()
 			} else {
 				if (target.msaa) {
 					target.samplesStale = true;
@@ -849,13 +894,54 @@ void MetalRenderer::Impl::bindTarget(const std::optional<MTLClearColor> clear) {
 	}
 	applyViewport();
 	applyScissor();
+	if (fillCanvas) {
+		const PixelRect canvas = scissor.letterbox(swapchainWidth, swapchainHeight);
+		if (canvas.width > 0 && canvas.height > 0) {
+			const Rgb& c = currentClearColor;
+			fillRect(canvas, MTLClearColorMake(c.getRed(), c.getGreen(), c.getBlue(), 1));
+		}
+	}
 }
 
-void MetalRenderer::Impl::unbindTarget() {
-	if (encoder) {
-		[encoder endEncoding];
-		encoder = nil;
+void MetalRenderer::Impl::unbindTarget(const PassEnd end) {
+	if (!encoder) {
+		return;
 	}
+	if (encoderOnScreenSamples) {
+		// Nothing loads the samples again once the frame's done
+		[encoder setColorStoreAction:end == PassEnd::FrameEnd
+		                                 ? MTLStoreActionMultisampleResolve
+		                                 : MTLStoreActionStoreAndMultisampleResolve
+		                     atIndex:0];
+	} else if (encoderSamplesOf) {
+		if (end == PassEnd::Popped) {
+			// Usually, it's cleared before it's drawn into again. If it isn't, its samples are
+			// drawn from what they're resolved into now, see bindTarget().
+			[encoder setColorStoreAction:MTLStoreActionMultisampleResolve atIndex:0];
+			encoderSamplesOf->samplesStale = true;
+		} else {
+			[encoder setColorStoreAction:MTLStoreActionStoreAndMultisampleResolve atIndex:0];
+		}
+	}
+	[encoder endEncoding];
+	encoder = nil;
+	encoderOnScreen = false;
+	encoderOnScreenSamples = false;
+	encoderSamplesOf = nullptr;
+}
+
+void MetalRenderer::Impl::finishScreen(const PassEnd end) {
+	if (encoder && !encoderOnScreen) {
+		unbindTarget();
+	}
+	if (!encoder && screenClearPending) {
+		// A pass into the window that does nothing but its pending clear
+		std::vector<MetalFramebuffer*> stack;
+		std::swap(stack, renderTargetStack);
+		bindTarget();
+		std::swap(stack, renderTargetStack);
+	}
+	unbindTarget(end);
 }
 
 void MetalRenderer::Impl::clearTarget(const MTLClearColor color) {
@@ -868,6 +954,10 @@ void MetalRenderer::Impl::clearTarget(const MTLClearColor color) {
 }
 
 void MetalRenderer::Impl::clearSwapchain() {
+	if (!encoder) {
+		screenClearPending = true; // see bindTarget()
+		return;
+	}
 	const Rgb& c = currentClearColor;
 	const MTLClearColor color = MTLClearColorMake(c.getRed(), c.getGreen(), c.getBlue(), 1);
 	if (!scissor.isLetterboxed()) {
@@ -1039,8 +1129,6 @@ void MetalRenderer::beginFrame(const Rgb clearColor) {
 		// The GPU is done with this frame's buffers once it's done with the frame before last
 		dispatch_semaphore_wait(impl->frameSemaphore, DISPATCH_TIME_FOREVER);
 		impl->vertexBuffers[impl->currentFrame].used = 0;
-		impl->acquireFrameTexture();
-		impl->updateMsaaTarget();
 		impl->beginCommandBuffer();
 
 		impl->currentClearColor = clearColor;
@@ -1055,7 +1143,7 @@ void MetalRenderer::endFrame() {
 		return;
 	}
 	@autoreleasepool {
-		impl->unbindTarget();
+		impl->finishScreen(PassEnd::FrameEnd);
 		if (impl->drawable) {
 			[impl->commandBuffer presentDrawable:impl->drawable];
 		}
@@ -1323,6 +1411,11 @@ void MetalRenderer::drawSprite(const MetalTexture& texture, const float* xyuv,
 void MetalRenderer::readPixels(unsigned char* const rgb, const int x, const int y, const int width,
                                const int height) {
 	const size_t pixelCount = static_cast<size_t>(width) * height;
+	if (impl->frameActive) {
+		@autoreleasepool {
+			impl->acquireFrameTexture(); // for its size
+		}
+	}
 	if (!impl->frameActive || x < 0 || y < 0 || x + width > impl->swapchainWidth ||
 	    y + height > impl->swapchainHeight || pixelCount == 0) {
 		std::memset(rgb, 0, pixelCount * 3);
@@ -1330,8 +1423,8 @@ void MetalRenderer::readPixels(unsigned char* const rgb, const int x, const int 
 	}
 	@autoreleasepool {
 		// Copy the requested region into a buffer the CPU can read, after the draws recorded so
-		// far. Ending the render pass resolves them if they're multisampled.
-		impl->unbindTarget();
+		// far
+		impl->finishScreen(PassEnd::Read);
 		const size_t rowSize = static_cast<size_t>(width) * 4;
 		const id<MTLBuffer> readback =
 		    [impl->device newBufferWithLength:rowSize * height
@@ -1460,8 +1553,7 @@ void MetalRenderer::popRenderTarget() {
 	if (!impl->frameActive || impl->renderTargetStack.empty()) {
 		return;
 	}
-	// Resolves it if it's multisampled, as it's done being drawn into, like on OpenGL
-	impl->unbindTarget();
+	impl->unbindTarget(PassEnd::Popped);
 	impl->renderTargetStack.pop_back();
 }
 
@@ -1470,6 +1562,9 @@ void MetalRenderer::clearCurrentRenderTarget(const Rgba color) {
 		return;
 	}
 	if (impl->renderTargetStack.empty()) {
+		@autoreleasepool {
+			impl->acquireFrameTexture(); // for its size
+		}
 		impl->scissor.sync(impl->swapchainWidth, impl->swapchainHeight);
 	}
 	const PixelRect scissor = impl->currentScissor();
