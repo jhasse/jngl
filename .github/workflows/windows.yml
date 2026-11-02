@@ -5,16 +5,31 @@ jobs:
     runs-on: windows-2025
     steps:
     - uses: actions/checkout@v5
-    - name: Cache CPM.cmake packages
-      uses: actions/cache@v4
+    # The newest one for this workflow, as each builds different packages from source
+    - name: Restore CPM.cmake packages
+      id: cpm-restore
+      uses: actions/cache/restore@v6
       with:
         path: .cache/cpm
-        key: cpm
+        key: cpm-${{ github.workflow }}
+        restore-keys: cpm-${{ github.workflow }}-
     - name: Configure
       run: cmake -Bbuild -G"Ninja Multi-Config" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_POLICY_VERSION_MINIMUM=3.5
       shell: bash
     - name: Build (Debug)
       run: cmake --build build --config Debug
+    # From the directories, which CPM names after a hash of what's downloaded into them, so that
+    # the cache is only saved again once something new was downloaded
+    - name: Key CPM.cmake packages
+      id: cpm-key
+      shell: bash
+      run: echo "key=cpm-$GITHUB_WORKFLOW-$(ls -d .cache/cpm/*/*/ | git hash-object --stdin)" >> "$GITHUB_OUTPUT"
+    - name: Save CPM.cmake packages
+      if: steps.cpm-key.outputs.key != steps.cpm-restore.outputs.cache-matched-key
+      uses: actions/cache/save@v6
+      with:
+        path: .cache/cpm
+        key: ${{ steps.cpm-key.outputs.key }}
     - uses: extractions/setup-just@v2
     - name: Unittest (Debug)
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
@@ -29,17 +44,32 @@ jobs:
     runs-on: windows-2025
     steps:
     - uses: actions/checkout@v5
-    - name: Cache CPM.cmake packages
-      uses: actions/cache@v4
+    # The newest one for this workflow, as each builds different packages from source
+    - name: Restore CPM.cmake packages
+      id: cpm-restore
+      uses: actions/cache/restore@v6
       with:
         path: .cache/cpm
-        key: cpm
+        key: cpm-${{ github.workflow }}
+        restore-keys: cpm-${{ github.workflow }}-
     - uses: ilammy/msvc-dev-cmd@v1
     - name: Configure
       run: cmake -Bbuild -G"Ninja Multi-Config" -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl -DCMAKE_POLICY_VERSION_MINIMUM=3.5
       shell: bash
     - name: Build (Debug)
       run: cmake --build build --config Debug
+    # From the directories, which CPM names after a hash of what's downloaded into them, so that
+    # the cache is only saved again once something new was downloaded
+    - name: Key CPM.cmake packages
+      id: cpm-key
+      shell: bash
+      run: echo "key=cpm-$GITHUB_WORKFLOW-$(ls -d .cache/cpm/*/*/ | git hash-object --stdin)" >> "$GITHUB_OUTPUT"
+    - name: Save CPM.cmake packages
+      if: steps.cpm-key.outputs.key != steps.cpm-restore.outputs.cache-matched-key
+      uses: actions/cache/save@v6
+      with:
+        path: .cache/cpm
+        key: ${{ steps.cpm-key.outputs.key }}
     - uses: extractions/setup-just@v2
     - name: Unittest (Debug)
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners
@@ -54,16 +84,31 @@ jobs:
     runs-on: windows-2025
     steps:
     - uses: actions/checkout@v5
-    - name: Cache CPM.cmake packages
-      uses: actions/cache@v4
+    # The newest one for this workflow, as each builds different packages from source
+    - name: Restore CPM.cmake packages
+      id: cpm-restore
+      uses: actions/cache/restore@v6
       with:
         path: .cache/cpm
-        key: cpm
+        key: cpm-${{ github.workflow }}
+        restore-keys: cpm-${{ github.workflow }}-
     - name: Configure
       run: cmake -Bbuild -DCMAKE_POLICY_VERSION_MINIMUM=3.5
       shell: bash
     - name: Build (Debug)
       run: cmake --build build --config Debug
+    # From the directories, which CPM names after a hash of what's downloaded into them, so that
+    # the cache is only saved again once something new was downloaded
+    - name: Key CPM.cmake packages
+      id: cpm-key
+      shell: bash
+      run: echo "key=cpm-$GITHUB_WORKFLOW-$(ls -d .cache/cpm/*/*/ | git hash-object --stdin)" >> "$GITHUB_OUTPUT"
+    - name: Save CPM.cmake packages
+      if: steps.cpm-key.outputs.key != steps.cpm-restore.outputs.cache-matched-key
+      uses: actions/cache/save@v6
+      with:
+        path: .cache/cpm
+        key: ${{ steps.cpm-key.outputs.key }}
     - uses: extractions/setup-just@v2
     - name: Unittest (Debug)
       # tests like CharacterTest need OpenGL 2.0 and can't run on GitHub Actions runners

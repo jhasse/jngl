@@ -5,11 +5,14 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v5
-    - name: Cache CPM.cmake packages
-      uses: actions/cache@v4
+    # The newest one for this workflow, as each builds different packages from source
+    - name: Restore CPM.cmake packages
+      id: cpm-restore
+      uses: actions/cache/restore@v6
       with:
         path: .cache/cpm
-        key: cpm
+        key: cpm-${{ github.workflow }}
+        restore-keys: cpm-${{ github.workflow }}-
     - name: Checkout submodules
       shell: bash
       run: |
@@ -24,5 +27,17 @@ jobs:
       run: cmake -Bbuild-tvossimulator -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/tvOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR
     - name: Build with Xcode (tvOS)
       run: xcodebuild -quiet -project build-tvossimulator/jngl.xcodeproj -sdk appletvsimulator -arch x86_64 -target jngl-test
+    # From the directories, which CPM names after a hash of what's downloaded into them, so that
+    # the cache is only saved again once something new was downloaded
+    - name: Key CPM.cmake packages
+      id: cpm-key
+      shell: bash
+      run: echo "key=cpm-$GITHUB_WORKFLOW-$(ls -d .cache/cpm/*/*/ | git hash-object --stdin)" >> "$GITHUB_OUTPUT"
+    - name: Save CPM.cmake packages
+      if: steps.cpm-key.outputs.key != steps.cpm-restore.outputs.cache-matched-key
+      uses: actions/cache/save@v6
+      with:
+        path: .cache/cpm
+        key: ${{ steps.cpm-key.outputs.key }}
 env:
   CPM_SOURCE_CACHE: ${{ github.workspace }}/.cache/cpm

@@ -108,6 +108,12 @@ public:
 	/// \throws std::runtime_error File not found or decoding errors
 	void load();
 
+	/// Returns whether the sound file has been decompressed (or failed to), so that load() won't
+	/// block any more, does NOT block
+	///
+	/// With std::launch::deferred this is false until load(), play() or loop() has been called.
+	bool isLoaded() const;
+
 	/// Returns the duration in ms
 	std::chrono::milliseconds length() const;
 
@@ -125,6 +131,9 @@ private:
 	/// Channel does.
 	std::weak_ptr<Sound> sound;
 	std::shared_ptr<std::vector<float>> buffer;
+	/// Decompressing the file into `buffer`, on its own thread or once it's needed, see the
+	/// constructor. Waited for by load() and whatever needs `buffer`.
+	std::shared_future<void> loader;
 };
 
 } // namespace jngl
