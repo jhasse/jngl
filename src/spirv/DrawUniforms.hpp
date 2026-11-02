@@ -1,7 +1,7 @@
 // Copyright 2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-/// The uniforms that the Vulkan and Direct3D 12 renderers set for each draw, like the OpenGL
+/// The uniforms that the Vulkan, Direct3D 12 and Metal renderers set for each draw, like the OpenGL
 /// backend does with glUniform: modelview and projection, and the colors and sizes of the built-in
 /// shaders (see BuiltinShaders.hpp). They're written into a copy of the program's std140 block,
 /// see ShaderCompiler.hpp, which is then pushed or copied into a UBO.

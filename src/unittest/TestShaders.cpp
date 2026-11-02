@@ -2,7 +2,7 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "TestShaders.hpp"
 
-#ifndef JNGL_D3D12
+#ifndef JNGL_PRECOMPILED_SHADERS
 #include <jngl/Shader.hpp>
 #include <jngl/Sprite.hpp>
 #include <jngl/other.hpp>

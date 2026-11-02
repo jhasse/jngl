@@ -97,6 +97,10 @@ option(JNGL_VULKAN "Use the experimental Vulkan renderer backend instead of Open
 # Windows; see src/d3d12/. Building it requires the Vulkan SDK for its shader compilers.
 option(JNGL_D3D12 "Use the experimental Direct3D 12 renderer backend instead of OpenGL" OFF)
 
+# Experimental Metal renderer backend, like JNGL_D3D12. Only for the SDL3 platform on macOS; see
+# src/metal/. Building it requires shaderc (e.g. from Homebrew) for its shader compiler.
+option(JNGL_METAL "Use the experimental Metal renderer backend instead of OpenGL" OFF)
+
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
 if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
 	set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT ON)
@@ -462,8 +466,8 @@ else()
 	endif()
 endif()
 
-if(JNGL_VULKAN AND JNGL_D3D12)
-	message(FATAL_ERROR "JNGL_VULKAN and JNGL_D3D12 can't be enabled at the same time.")
+if((JNGL_VULKAN AND JNGL_D3D12) OR (JNGL_VULKAN AND JNGL_METAL) OR (JNGL_D3D12 AND JNGL_METAL))
+	message(FATAL_ERROR "Only one of JNGL_VULKAN, JNGL_D3D12 and JNGL_METAL can be enabled.")
 endif()
 if(JNGL_VULKAN)
 	if((NOT UNIX AND NOT WIN32) OR ANDROID OR IOS OR EMSCRIPTEN OR JNGL_WINAPI)
@@ -475,8 +479,13 @@ if(JNGL_D3D12)
 		message(FATAL_ERROR "JNGL_D3D12 requires the SDL3 backend on Windows (JNGL_WINAPI=OFF).")
 	endif()
 endif()
+if(JNGL_METAL)
+	if(NOT APPLE OR IOS)
+		message(FATAL_ERROR "JNGL_METAL requires the SDL3 backend on macOS.")
+	endif()
+endif()
 
-if(JNGL_VULKAN OR JNGL_D3D12)
+if(JNGL_VULKAN OR JNGL_D3D12 OR JNGL_METAL)
 	# jngl-shaderc compiles GLSL to SPIR-V with shaderc, which the Vulkan backend also does at
 	# runtime for user-defined jngl::Shader programs. It's in the Vulkan SDK, which is also what's
 	# needed for building the Direct3D 12 backend.
@@ -501,7 +510,7 @@ if(JNGL_VULKAN OR JNGL_D3D12)
 		set(JNGL_SHADERC_DEFINITIONS "")
 	endif()
 	if(NOT SHADERC_INCLUDE_DIR OR NOT SHADERC_LIBRARY)
-		message(FATAL_ERROR "JNGL_VULKAN and JNGL_D3D12 require shaderc (install the Vulkan SDK, "
+		message(FATAL_ERROR "JNGL_VULKAN, JNGL_D3D12 and JNGL_METAL require shaderc (install the Vulkan SDK, "
 			"shaderc via Homebrew on macOS, or libshaderc-devel / libshaderc-dev on Linux). "
 			"include=${SHADERC_INCLUDE_DIR} lib=${SHADERC_LIBRARY}")
 	endif()
@@ -509,6 +518,11 @@ if(JNGL_VULKAN OR JNGL_D3D12)
 
 	# Everything's drawn through GpuBackend.hpp instead of OpenGL
 	target_compile_definitions(jngl PUBLIC JNGL_GPU_BACKEND)
+	if(JNGL_D3D12 OR JNGL_METAL)
+		# They can't compile GLSL at runtime, so their ShaderPrograms are only created from what
+		# jngl_compile_shaders() compiled at build time, see ShaderBytecode.hpp
+		target_compile_definitions(jngl PUBLIC JNGL_PRECOMPILED_SHADERS)
+	endif()
 	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 	# What's the same for both of them
 	file(GLOB GPU_SRC src/gpu/*.cpp)
@@ -524,6 +538,8 @@ if(JNGL_VULKAN OR JNGL_D3D12)
 	target_compile_definitions(jngl-shaderc PRIVATE ${JNGL_SHADERC_DEFINITIONS})
 	if(JNGL_D3D12)
 		set_property(GLOBAL PROPERTY JNGL_BYTECODE_FORMAT dxbc)
+	elseif(JNGL_METAL)
+		set_property(GLOBAL PROPERTY JNGL_BYTECODE_FORMAT msl)
 	else()
 		set_property(GLOBAL PROPERTY JNGL_BYTECODE_FORMAT spirv)
 	endif()
@@ -544,15 +560,15 @@ endif()
 
 # jngl_compile_shaders(<output.hpp> <namespace> <name>=[<vertex>,]<fragment>...)
 #
-# Compiles the GLSL of ShaderPrograms at build time for the Vulkan or the Direct3D 12 renderer,
-# which can't compile it at runtime, into <output.hpp> with a jngl::ShaderBytecode for each in
-# <namespace>, see src/jngl/ShaderBytecode.hpp. Without a vertex shader, a program uses
-# Sprite::vertexShader(). The paths are relative to the current source directory. Also needs a
+# Compiles the GLSL of ShaderPrograms at build time for the Vulkan, the Direct3D 12 or the Metal
+# renderer, the latter two of which can't compile it at runtime, into <output.hpp> with a
+# jngl::ShaderBytecode for each in <namespace>, see src/jngl/ShaderBytecode.hpp. Without a vertex
+# shader, a program uses Sprite::vertexShader(). The paths are relative to the current source directory. Also needs a
 # target that depends on <output.hpp>, e.g. add_custom_target(... DEPENDS <output.hpp>).
 function(jngl_compile_shaders output namespace)
 	get_property(format GLOBAL PROPERTY JNGL_BYTECODE_FORMAT)
 	if(NOT format)
-		message(FATAL_ERROR "jngl_compile_shaders() needs JNGL_VULKAN or JNGL_D3D12.")
+		message(FATAL_ERROR "jngl_compile_shaders() needs JNGL_VULKAN, JNGL_D3D12 or JNGL_METAL.")
 	endif()
 	# With absolute paths, as jngl-shaderc runs in the build directory
 	set(programs "")
@@ -580,7 +596,7 @@ function(jngl_compile_shaders output namespace)
 	)
 endfunction()
 
-if(JNGL_D3D12 AND TARGET jngl-test)
+if((JNGL_D3D12 OR JNGL_METAL) AND TARGET jngl-test)
 	# The demos' shaders, see data/*.frag
 	set(JNGL_EXAMPLE_SHADERS ${CMAKE_CURRENT_BINARY_DIR}/generated/examples/ExampleShaders.hpp)
 	jngl_compile_shaders(${JNGL_EXAMPLE_SHADERS} example_shaders blur=data/blur.frag
@@ -626,6 +642,44 @@ if(JNGL_D3D12)
 	set_source_files_properties(src/d3d12/D3D12Renderer.cpp PROPERTIES COMPILE_DEFINITIONS NOMINMAX)
 	target_link_libraries(jngl PRIVATE d3d12 dxgi dxguid)
 	target_compile_definitions(jngl PUBLIC JNGL_D3D12)
+endif()
+
+if(JNGL_METAL)
+	# Its shaders are all compiled at build time by jngl-shaderc: SPIRV-Cross translates their
+	# SPIR-V to the Metal Shading Language, which MetalRenderer compiles when it loads them, see
+	# src/metal/MslCompiler.cpp. So JNGL itself doesn't need SPIRV-Cross, nor does building it need
+	# Xcode's optional Metal Toolchain. Only SPIRV-Cross's core and its MSL backend, with its C API
+	# like the Vulkan SDK's that the Direct3D 12 backend uses, built from their sources.
+	CPMAddPackage(
+		NAME spirv_cross
+		URL https://github.com/KhronosGroup/SPIRV-Cross/archive/refs/tags/vulkan-sdk-1.4.357.0.tar.gz
+		URL_HASH SHA1=05389fa399187083dd6fb1f5935a9f6de4ab9567
+		DOWNLOAD_ONLY YES
+	)
+	add_library(jngl-spirv-cross STATIC
+		${spirv_cross_SOURCE_DIR}/spirv_cfg.cpp
+		${spirv_cross_SOURCE_DIR}/spirv_cross.cpp
+		${spirv_cross_SOURCE_DIR}/spirv_cross_c.cpp
+		${spirv_cross_SOURCE_DIR}/spirv_cross_parsed_ir.cpp
+		${spirv_cross_SOURCE_DIR}/spirv_glsl.cpp
+		${spirv_cross_SOURCE_DIR}/spirv_msl.cpp
+		${spirv_cross_SOURCE_DIR}/spirv_parser.cpp)
+	target_include_directories(jngl-spirv-cross PUBLIC ${spirv_cross_SOURCE_DIR})
+	target_compile_definitions(jngl-spirv-cross PUBLIC SPIRV_CROSS_C_API_GLSL=1
+	                                                   SPIRV_CROSS_C_API_MSL=1)
+	target_compile_features(jngl-spirv-cross PRIVATE cxx_std_11)
+	target_sources(jngl-shaderc PRIVATE src/metal/MslCompiler.cpp)
+	target_link_libraries(jngl-shaderc PRIVATE jngl-spirv-cross)
+	target_compile_definitions(jngl-shaderc PRIVATE JNGL_SHADERC_MSL)
+
+	target_sources(jngl PRIVATE src/metal/MetalRenderer.mm)
+	# Its Objective-C objects are kept alive by ARC, unlike those of src/mac/
+	set_source_files_properties(src/metal/MetalRenderer.mm PROPERTIES COMPILE_OPTIONS -fobjc-arc)
+	enable_language(OBJCXX)
+	find_library(MAC_METAL Metal REQUIRED)
+	find_library(MAC_QUARTZCORE QuartzCore REQUIRED)
+	target_link_libraries(jngl PRIVATE ${MAC_METAL} ${MAC_QUARTZCORE})
+	target_compile_definitions(jngl PUBLIC JNGL_METAL)
 endif()
 
 if(JNGL_BUILD_WEBP_FROM_SOURCE)
@@ -717,7 +771,7 @@ if(NOT hasParent)
 			# for tests including internal headers like window.hpp
 			target_include_directories(jngl-unittest PRIVATE glad/include)
 		endif()
-		if(JNGL_D3D12)
+		if(JNGL_D3D12 OR JNGL_METAL)
 			# See src/unittest/TestShaders.hpp
 			set(JNGL_TEST_SHADERS ${CMAKE_CURRENT_BINARY_DIR}/generated/unittest/TestShaderBytecode.hpp)
 			jngl_compile_shaders(${JNGL_TEST_SHADERS} test_shaders color=data/unittest/color.frag

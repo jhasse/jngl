@@ -4,8 +4,9 @@
 /// The GLSL of JNGL's built-in shaders, for all backends.
 ///
 /// The OpenGL backend compiles them at runtime (see ShaderCache), falling back to the GLES 2
-/// versions where "#version 300 es" isn't supported. For the Vulkan and Direct3D 12 backends,
-/// jngl-shaderc compiles them at build time like a game's shaders, see src/shaderc/main.cpp.
+/// versions where "#version 300 es" isn't supported. For the Vulkan, Direct3D 12 and Metal
+/// backends, jngl-shaderc compiles them at build time like a game's shaders, see
+/// src/shaderc/main.cpp.
 /// @file
 #pragma once
 

@@ -3,9 +3,9 @@
 
 /// The backend that's compiled in instead of OpenGL, see JNGL_GPU_BACKEND and Renderer.hpp.
 ///
-/// The Vulkan (JNGL_VULKAN) and the Direct3D 12 (JNGL_D3D12) backends offer the same API, for
-/// drawing, textures, FrameBuffers, ShaderPrograms and so on. JNGL's code uses them through the
-/// aliases below, so that it doesn't have to care which one it is.
+/// The Vulkan (JNGL_VULKAN), the Direct3D 12 (JNGL_D3D12) and the Metal (JNGL_METAL) backends offer
+/// the same API, for drawing, textures, FrameBuffers, ShaderPrograms and so on. JNGL's code uses
+/// them through the aliases below, so that it doesn't have to care which one it is.
 /// @file
 #pragma once
 
@@ -13,8 +13,10 @@
 #include "vulkan/VulkanRenderer.hpp"
 #elif defined(JNGL_D3D12)
 #include "d3d12/D3D12Renderer.hpp"
+#elif defined(JNGL_METAL)
+#include "metal/MetalRenderer.hpp"
 #else
-#error "GpuBackend.hpp requires JNGL_VULKAN or JNGL_D3D12."
+#error "GpuBackend.hpp requires JNGL_VULKAN, JNGL_D3D12 or JNGL_METAL."
 #endif
 
 namespace jngl {
@@ -24,11 +26,16 @@ using GpuRenderer = VulkanRenderer;
 using GpuTexture = VulkanTexture;
 using GpuFramebuffer = VulkanFramebuffer;
 using GpuShaderProgram = VulkanShaderProgram;
-#else
+#elif defined(JNGL_D3D12)
 using GpuRenderer = D3D12Renderer;
 using GpuTexture = D3D12Texture;
 using GpuFramebuffer = D3D12Framebuffer;
 using GpuShaderProgram = D3D12ShaderProgram;
+#else
+using GpuRenderer = MetalRenderer;
+using GpuTexture = MetalTexture;
+using GpuFramebuffer = MetalFramebuffer;
+using GpuShaderProgram = MetalShaderProgram;
 #endif
 
 /// Creates the backend for \a window, which gpuRenderer() returns until destroyGpuRenderer()

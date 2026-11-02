@@ -13,7 +13,7 @@
 #include <sstream>
 #include <vector>
 
-#ifdef JNGL_D3D12
+#ifdef JNGL_PRECOMPILED_SHADERS
 #include "ExampleShaders.hpp" // generated, see CMakeLists.txt
 #endif
 
@@ -116,8 +116,8 @@ public:
 		if (jngl::keyPressed('s')) {
 			useShader = !useShader;
 			if (!shaderProgram) {
-#ifdef JNGL_D3D12
-				// Direct3D 12 can't compile it at runtime, see jngl_compile_shaders()
+#ifdef JNGL_PRECOMPILED_SHADERS
+				// Direct3D 12 and Metal can't compile it at runtime, see jngl_compile_shaders()
 				shaderProgram = std::make_unique<jngl::ShaderProgram>(example_shaders::blur);
 #else
 				fragmentShader = std::make_unique<jngl::Shader>(std::ifstream("blur.frag"),

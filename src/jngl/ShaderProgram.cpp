@@ -13,7 +13,7 @@
 
 #ifdef JNGL_GPU_BACKEND
 #include "../GpuBackend.hpp"
-#ifndef JNGL_D3D12
+#ifndef JNGL_PRECOMPILED_SHADERS
 #include "../spirv/ShaderCompiler.hpp"
 #endif
 #endif
@@ -39,11 +39,16 @@ struct ShaderProgram::Impl {
 
 ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 : impl(std::make_unique<Impl>()) {
-#ifdef JNGL_D3D12
+#ifdef JNGL_PRECOMPILED_SHADERS
 	(void)vertex;
 	(void)fragment;
 	throw std::runtime_error(
-	    "The Direct3D 12 renderer can't compile shaders at runtime. Compile "
+#ifdef JNGL_D3D12
+	    "The Direct3D 12 renderer"
+#else
+	    "The Metal renderer"
+#endif
+	    " can't compile shaders at runtime. Compile "
 	    "them with jngl-shaderc and use ShaderProgram(const ShaderBytecode&).");
 #else
 	impl->program = gpuRenderer().createShaderProgram(
