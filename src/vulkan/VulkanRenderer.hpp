@@ -3,9 +3,10 @@
 
 /// Experimental Vulkan backend, see GpuBackend.hpp.
 ///
-/// A 2D backend for the desktop SDL3 platform, which draws JNGL's shapes, sprites and text, into
-/// the window or FrameBuffers (multisampled or HDR, too), also with ShaderPrograms, whose GLSL it
-/// compiles to SPIR-V, see ShaderCompiler.hpp.
+/// A 2D backend for the desktop SDL3 platform and Android, which draws JNGL's shapes, sprites and
+/// text, into the window or FrameBuffers (multisampled or HDR, too), also with ShaderPrograms,
+/// whose GLSL it compiles to SPIR-V, see ShaderCompiler.hpp. On Android only at build time, see
+/// jngl_compile_shaders() in CMakeLists.txt.
 /// @file
 #pragma once
 
@@ -22,10 +23,15 @@
 #include <functional>
 #include <optional>
 #include <string>
+#include <utility>
 #include <vector>
 #include <vulkan/vulkan.h>
 
+#ifdef __ANDROID__
+struct ANativeWindow;
+#else
 struct SDL_Window;
+#endif
 
 namespace jngl {
 
@@ -141,8 +147,13 @@ struct VulkanShaderProgram {
 
 class VulkanRenderer {
 public:
+#ifdef __ANDROID__
+	/// Presents to \a window until releaseWindow() is called
+	explicit VulkanRenderer(ANativeWindow* window);
+#else
 	/// \a window must have been created with the SDL_WINDOW_VULKAN flag.
 	explicit VulkanRenderer(SDL_Window* window);
+#endif
 	~VulkanRenderer();
 	VulkanRenderer(const VulkanRenderer&) = delete;
 	VulkanRenderer& operator=(const VulkanRenderer&) = delete;
@@ -158,6 +169,19 @@ public:
 	void setViewport(int x, int y, int width, int height);
 	/// Recreates the swapchain after the current frame
 	void onResize(int width, int height);
+	/// The size of the swapchain's images in pixels. On Android it's recreated by endFrame() when
+	/// the window's size changes.
+	[[nodiscard]] std::pair<int, int> getSwapchainSize() const;
+#ifdef __ANDROID__
+	/// Destroys the surface and its swapchain, as Android destroys the window when the app goes
+	/// into the background. Nothing's drawn until setWindow() has been called. If a frame has
+	/// begun, it's discarded and begun again by setWindow().
+	void releaseWindow();
+	/// Presents to \a window from now on, after releaseWindow()
+	void setWindow(ANativeWindow* window);
+	/// Whether there's a window to present to, see releaseWindow()
+	[[nodiscard]] bool hasWindow() const;
+#endif
 	/// The projection matrix that the built-in shaders use
 	void setProjection(const Mat4&);
 	/// See jngl::drawColored
@@ -408,11 +432,20 @@ private:
 	/// The command buffers to submit for the current frame: the pending uploads first, if there
 	/// are any
 	std::vector<VkCommandBuffer> withPendingUploads(VkCommandBuffer frameCommands);
+	/// Ends the current frame's command buffer and submits it after the pending uploads, without
+	/// presenting it. \a fence is signaled once the GPU is done.
+	void submitWithoutPresenting(VkFence fence);
 
 	/// Maximum number of frames the CPU may be working on ahead of the GPU.
 	static constexpr uint32_t maxFramesInFlight = 2;
 
+#ifdef __ANDROID__
+	ANativeWindow* window; ///< nullptr after releaseWindow()
+	/// Whether releaseWindow() has discarded a frame that setWindow() has to begin again
+	bool frameDiscarded = false;
+#else
 	SDL_Window* window;
+#endif
 
 	VkInstance instance = VK_NULL_HANDLE;
 	VkDebugUtilsMessengerEXT debugMessenger = VK_NULL_HANDLE;

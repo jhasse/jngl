@@ -15,6 +15,9 @@
 #include "../windowptr.hpp"
 #include "../main.hpp"
 #include "fopen.hpp"
+#ifdef JNGL_VULKAN
+#include "../GpuBackend.hpp"
+#endif
 
 #include <android_native_app_glue.h>
 #include <android/storage_manager.h>
@@ -218,8 +221,21 @@ WindowImpl::~WindowImpl() {
 		updateInput();
 	}
 	app->activity->vm->DetachCurrentThread();
+#ifdef JNGL_VULKAN
+	destroyGpuRenderer();
+#endif
 }
 
+#ifdef JNGL_VULKAN
+std::pair<int, int> WindowImpl::getSurfaceSize() const {
+	return gpuRenderer().getSwapchainSize();
+}
+
+bool WindowImpl::hasSurface() const {
+	const auto renderer = gpuRendererIfExists();
+	return renderer && renderer->hasWindow();
+}
+#else
 static void handleEglError() {
 	EGLenum error = eglGetError();
 	const char* errorString = eglQueryString(EGL_NO_DISPLAY, error);
@@ -317,7 +333,7 @@ WindowImpl::DisplayWrapper::SurfaceWrapper::~SurfaceWrapper() {
 	}
 }
 
-std::pair<EGLint, EGLint> WindowImpl::getSurfaceSize() const {
+std::pair<int, int> WindowImpl::getSurfaceSize() const {
 	EGLint w, h;
 	if (eglQuerySurface(display->display, display->surface->surface, EGL_WIDTH, &w) == EGL_FALSE) {
 		handleEglError();
@@ -327,6 +343,11 @@ std::pair<EGLint, EGLint> WindowImpl::getSurfaceSize() const {
 	}
 	return { w, h };
 }
+
+bool WindowImpl::hasSurface() const {
+	return display && display->surface;
+}
+#endif
 
 void WindowImpl::init() {
 	makeCurrent();
@@ -372,10 +393,20 @@ void WindowImpl::resetInputState() {
 	keyCodeToCharacter.clear();
 }
 
-void WindowImpl::terminate() {
+void WindowImpl::destroySurface() {
+#ifdef JNGL_VULKAN
+	if (const auto renderer = gpuRendererIfExists()) {
+		renderer->releaseWindow();
+	}
+#else
 	if (display) {
 		display->surface = std::nullopt;
 	}
+#endif
+}
+
+void WindowImpl::terminate() {
+	destroySurface();
 	resetInputState(); // It seems when we get terminated via the home swipe gesture that we don't
 	                   // receive the AMOTION_EVENT_ACTION_UP which would leave a touch in the map
 	                   // and result in an assertion failure the next time the user returns to the
@@ -393,9 +424,7 @@ void WindowImpl::setRelativeMouseMode(const bool relativeMouseMode) {
 }
 
 void WindowImpl::pause() {
-	if (display) {
-		display->surface = std::nullopt;
-	}
+	destroySurface();
 	resetInputState();
 	if (!pauseAudio) {
 		pauseAudio = jngl::pauseAudio();
@@ -403,12 +432,26 @@ void WindowImpl::pause() {
 }
 
 void WindowImpl::makeCurrent() {
+#ifdef JNGL_VULKAN
+	if (!app->window) {
+		return; // APP_CMD_INIT_WINDOW will call init()
+	}
+	if (const auto renderer = gpuRendererIfExists()) {
+		if (!renderer->hasWindow()) {
+			renderer->setWindow(app->window);
+		}
+	} else {
+		createGpuRenderer(app->window);
+		window->isMultisampleSupported_ = gpuRenderer().isMultisampleSupported();
+	}
+#else
 	if (!display) {
 		display.emplace();
 	}
 	if (!display->surface) {
 		display->surface.emplace(*display);
 	}
+#endif
 	pauseAudio = {};
 }
 
@@ -673,9 +716,9 @@ void WindowImpl::updateInput() {
 	while ((ident = ALooper_pollOnce(
 	            // This is the timeout. When we're in the background, we don't want to busy-wait for
 	            // events.
-	            (display && display->surface) ? 0 : 1e9, nullptr, &events, (void**)&source)) >= 0 ||
-	       !display /* wait for WindowImpl::init to get called by engine_handle_cmd */ ||
-	       !display->surface /* we're in the background, don't leave this event loop */) {
+	            hasSurface() ? 0 : 1e9, nullptr, &events, (void**)&source)) >= 0 ||
+	       !hasSurface() /* wait for WindowImpl::init to get called by engine_handle_cmd, or we're
+	                        in the background, don't leave this event loop */) {
 
 		// Process this event.
 		if (source != NULL) {
@@ -684,7 +727,11 @@ void WindowImpl::updateInput() {
 
 		// Check if we are exiting.
 		if (app->destroyRequested != 0) {
+#ifdef JNGL_VULKAN
+			destroySurface(); // the renderer is destroyed with the Window
+#else
 			display = std::nullopt;
+#endif
 			// Not jngl::quit(), because the game might call jngl::cancelQuit() in onQuitEvent()
 			// (e.g. to show a pause menu). We can't continue though.
 			if (!window->forceExitCode) {
@@ -709,12 +756,17 @@ void WindowImpl::updateInput() {
 }
 
 void WindowImpl::swapBuffers() {
-	if (display && display->surface) {
+	if (hasSurface()) {
+#ifdef JNGL_VULKAN
+		gpuRenderer().endFrame();
+#else
 		if (eglSwapBuffers(display->display, display->surface->surface) == EGL_FALSE) {
 			handleEglError();
 		}
+#endif
 		// We get APP_CMD_WINDOW_RESIZED e.g. when a foldable gets unfolded, but the EGL surface
-		// only picks up the new size of the native window after eglSwapBuffers:
+		// only picks up the new size of the native window after eglSwapBuffers (and the Vulkan
+		// swapchain is only recreated by endFrame):
 		const auto [w, h] = getSurfaceSize();
 		window->setActualSize(w, h);
 		if (firstFrame) {

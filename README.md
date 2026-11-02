@@ -132,6 +132,14 @@ lus android-run
 ```
 Alternatively, open `android/test` in Android Studio and build from there.
 
+### Vulkan
+The experimental Vulkan renderer works on Android 9 (API level 28) and newer. Build with
+`-DJNGL_VULKAN=ON`, e.g. the test app with `./gradlew installDebug -Pvulkan` in `android/test`.
+The built-in shaders are compiled during the build by `jngl-shaderc`, which is built for the machine
+that's building, so it needs a C++ compiler and shaderc there (see Vulkan above for Linux, Windows
+and macOS). shaderc isn't available on Android, so a game's shaders have to be compiled at build
+time with `jngl_compile_shaders()`, like for Direct3D 12 (see above).
+
 ## iOS
 Generate an Xcode project using CMake:
 ```bash

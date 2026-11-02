@@ -13,7 +13,7 @@
 
 #ifdef JNGL_GPU_BACKEND
 #include "../GpuBackend.hpp"
-#ifndef JNGL_D3D12
+#if !defined(JNGL_D3D12) && !defined(__ANDROID__)
 #include "../spirv/ShaderCompiler.hpp"
 #endif
 #endif
@@ -44,6 +44,12 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 	(void)fragment;
 	throw std::runtime_error(
 	    "The Direct3D 12 renderer can't compile shaders at runtime. Compile "
+	    "them with jngl-shaderc and use ShaderProgram(const ShaderBytecode&).");
+#elif defined(__ANDROID__)
+	(void)vertex;
+	(void)fragment;
+	throw std::runtime_error(
+	    "The Vulkan renderer can't compile shaders at runtime on Android. Compile "
 	    "them with jngl-shaderc and use ShaderProgram(const ShaderBytecode&).");
 #else
 	impl->program = gpuRenderer().createShaderProgram(

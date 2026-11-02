@@ -90,7 +90,8 @@ option(JNGL_TRACE "Enable tracing for debugging purposes" OFF)
 # Experimental Vulkan renderer backend. When OFF (the default) JNGL uses its
 # OpenGL/GLES backend. When ON an additional Vulkan backend is compiled in and
 # used at runtime instead. Currently only implemented for the desktop SDL3
-# platform (Linux, Windows and macOS); see src/vulkan/.
+# platform (Linux, Windows and macOS) and Android 9+; see src/vulkan/. Building
+# for Android also needs a C++ compiler and shaderc for the machine that builds.
 option(JNGL_VULKAN "Use the experimental Vulkan renderer backend instead of OpenGL" OFF)
 
 # Experimental Direct3D 12 renderer backend, like JNGL_VULKAN. Only for the SDL3 platform on
@@ -466,8 +467,13 @@ if(JNGL_VULKAN AND JNGL_D3D12)
 	message(FATAL_ERROR "JNGL_VULKAN and JNGL_D3D12 can't be enabled at the same time.")
 endif()
 if(JNGL_VULKAN)
-	if((NOT UNIX AND NOT WIN32) OR ANDROID OR IOS OR EMSCRIPTEN OR JNGL_WINAPI)
-		message(FATAL_ERROR "JNGL_VULKAN requires the desktop SDL3 backend on Linux, Windows or macOS (JNGL_WINAPI=OFF).")
+	if(ANDROID)
+		if(ANDROID_PLATFORM_LEVEL LESS 28)
+			# libvulkan.so has Vulkan 1.1's functions since then
+			message(FATAL_ERROR "JNGL_VULKAN requires Android 9 (minSdk 28) or newer.")
+		endif()
+	elseif((NOT UNIX AND NOT WIN32) OR IOS OR EMSCRIPTEN OR JNGL_WINAPI)
+		message(FATAL_ERROR "JNGL_VULKAN requires Android or the desktop SDL3 backend on Linux, Windows or macOS (JNGL_WINAPI=OFF).")
 	endif()
 endif()
 if(JNGL_D3D12)
@@ -478,32 +484,9 @@ endif()
 
 if(JNGL_VULKAN OR JNGL_D3D12)
 	# jngl-shaderc compiles GLSL to SPIR-V with shaderc, which the Vulkan backend also does at
-	# runtime for user-defined jngl::Shader programs. It's in the Vulkan SDK, which is also what's
-	# needed for building the Direct3D 12 backend.
-	if(WIN32)
-		set(JNGL_VULKAN_SDK_LIBDIR "$ENV{VULKAN_SDK}/Lib")
-		if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-			set(JNGL_VULKAN_SDK_LIBDIR "$ENV{VULKAN_SDK}/Lib32")
-		endif()
-	endif()
-
-	find_path(SHADERC_INCLUDE_DIR shaderc/shaderc.hpp
-		HINTS "$ENV{VULKAN_SDK}/Include" "$ENV{VULKAN_SDK}/include")
-	if(WIN32)
-		# The SDK's static shaderc uses its own CRT settings. The C API in its DLL works with
-		# both Debug and Release builds, including applications using a static CRT.
-		find_library(SHADERC_LIBRARY NAMES shaderc_shared HINTS "${JNGL_VULKAN_SDK_LIBDIR}")
-		set(JNGL_SHADERC_DEFINITIONS SHADERC_SHAREDLIB)
-	else()
-		# The shared library before Ubuntu's libshaderc_combined.a, which lacks glslang
-		find_library(SHADERC_LIBRARY NAMES shaderc_shared shaderc shaderc_combined
-			HINTS "$ENV{VULKAN_SDK}/lib")
-		set(JNGL_SHADERC_DEFINITIONS "")
-	endif()
-	if(NOT SHADERC_INCLUDE_DIR OR NOT SHADERC_LIBRARY)
-		message(FATAL_ERROR "JNGL_VULKAN and JNGL_D3D12 require shaderc (install the Vulkan SDK, "
-			"shaderc via Homebrew on macOS, or libshaderc-devel / libshaderc-dev on Linux). "
-			"include=${SHADERC_INCLUDE_DIR} lib=${SHADERC_LIBRARY}")
+	# runtime for user-defined jngl::Shader programs, except on Android.
+	if(NOT ANDROID)
+		include(shaderc)
 	endif()
 	file(GLOB SPIRV_SRC src/spirv/*.cpp)
 
@@ -517,11 +500,31 @@ if(JNGL_VULKAN OR JNGL_D3D12)
 	# Compiles ShaderPrograms' GLSL into a header with their bytecode for the backend, see
 	# src/jngl/ShaderBytecode.hpp: the built-in ones (see src/BuiltinShaders.hpp) and those of games,
 	# see jngl_compile_shaders() below
-	add_executable(jngl-shaderc src/shaderc/main.cpp ${SPIRV_SRC})
-	target_compile_features(jngl-shaderc PRIVATE cxx_std_20)
-	target_include_directories(jngl-shaderc PRIVATE ${SHADERC_INCLUDE_DIR})
-	target_link_libraries(jngl-shaderc PRIVATE ${SHADERC_LIBRARY})
-	target_compile_definitions(jngl-shaderc PRIVATE ${JNGL_SHADERC_DEFINITIONS})
+	if(CMAKE_CROSSCOMPILING)
+		# It runs while building, so it's built on its own for the machine that's building, which
+		# needs a C++ compiler and shaderc then
+		include(ExternalProject)
+		set(JNGL_SHADERC_HOST_DIR ${CMAKE_CURRENT_BINARY_DIR}/jngl-shaderc-host)
+		set(JNGL_SHADERC_HOST ${JNGL_SHADERC_HOST_DIR}/jngl-shaderc)
+		if(CMAKE_HOST_WIN32)
+			string(APPEND JNGL_SHADERC_HOST .exe)
+		endif()
+		ExternalProject_Add(jngl-shaderc-host
+			SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/shaderc
+			BINARY_DIR ${JNGL_SHADERC_HOST_DIR}
+			# Without the toolchain file, so it's built with the host's compiler
+			CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_MAKE_PROGRAM=${CMAKE_MAKE_PROGRAM}
+			BUILD_ALWAYS ON # so that it's rebuilt when its sources change
+			BUILD_BYPRODUCTS ${JNGL_SHADERC_HOST}
+			INSTALL_COMMAND ""
+		)
+		# Imported executables are run on the host, also when cross-compiling
+		add_executable(jngl-shaderc IMPORTED GLOBAL)
+		set_target_properties(jngl-shaderc PROPERTIES IMPORTED_LOCATION ${JNGL_SHADERC_HOST})
+		add_dependencies(jngl-shaderc jngl-shaderc-host)
+	else()
+		add_subdirectory(src/shaderc)
+	endif()
 	if(JNGL_D3D12)
 		set_property(GLOBAL PROPERTY JNGL_BYTECODE_FORMAT dxbc)
 	else()
@@ -545,10 +548,11 @@ endif()
 # jngl_compile_shaders(<output.hpp> <namespace> <name>=[<vertex>,]<fragment>...)
 #
 # Compiles the GLSL of ShaderPrograms at build time for the Vulkan or the Direct3D 12 renderer,
-# which can't compile it at runtime, into <output.hpp> with a jngl::ShaderBytecode for each in
-# <namespace>, see src/jngl/ShaderBytecode.hpp. Without a vertex shader, a program uses
-# Sprite::vertexShader(). The paths are relative to the current source directory. Also needs a
-# target that depends on <output.hpp>, e.g. add_custom_target(... DEPENDS <output.hpp>).
+# which can't compile it at runtime (Vulkan only on Android), into <output.hpp> with a
+# jngl::ShaderBytecode for each in <namespace>, see src/jngl/ShaderBytecode.hpp. Without a vertex
+# shader, a program uses Sprite::vertexShader(). The paths are relative to the current source
+# directory. Also needs a target that depends on <output.hpp>, e.g.
+# add_custom_target(... DEPENDS <output.hpp>).
 function(jngl_compile_shaders output namespace)
 	get_property(format GLOBAL PROPERTY JNGL_BYTECODE_FORMAT)
 	if(NOT format)
@@ -593,14 +597,21 @@ if(JNGL_D3D12 AND TARGET jngl-test)
 endif()
 
 if(JNGL_VULKAN)
-	find_package(Vulkan REQUIRED)
-	target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
+	if(ANDROID)
+		target_link_libraries(jngl PRIVATE vulkan)
+		target_compile_definitions(jngl PRIVATE VK_USE_PLATFORM_ANDROID_KHR)
+		# shaderc isn't part of the NDK, so jngl::Shader programs can only be compiled at build time
+		# there, see jngl_compile_shaders()
+	else()
+		find_package(Vulkan REQUIRED)
+		target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
 
-	# For user-defined jngl::Shader programs, which can also be compiled at runtime
-	target_sources(jngl PRIVATE ${SPIRV_SRC})
-	target_include_directories(jngl PRIVATE ${SHADERC_INCLUDE_DIR})
-	target_link_libraries(jngl PRIVATE ${SHADERC_LIBRARY})
-	target_compile_definitions(jngl PRIVATE ${JNGL_SHADERC_DEFINITIONS})
+		# For user-defined jngl::Shader programs, which can also be compiled at runtime
+		target_sources(jngl PRIVATE ${SPIRV_SRC})
+		target_include_directories(jngl PRIVATE ${SHADERC_INCLUDE_DIR})
+		target_link_libraries(jngl PRIVATE ${SHADERC_LIBRARY})
+		target_compile_definitions(jngl PRIVATE ${JNGL_SHADERC_DEFINITIONS})
+	endif()
 
 	file(GLOB VULKAN_SRC src/vulkan/*.cpp)
 	target_sources(jngl PRIVATE ${VULKAN_SRC})

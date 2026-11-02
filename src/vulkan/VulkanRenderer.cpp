@@ -11,8 +11,12 @@
 
 #include "BuiltinBytecode.hpp"
 
+#ifdef __ANDROID__
+#include <android/native_window.h>
+#else
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_vulkan.h>
+#endif
 #include <algorithm>
 #include <array>
 #include <bit>
@@ -141,7 +145,11 @@ debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT severity,
 
 } // namespace
 
+#ifdef __ANDROID__
+VulkanRenderer::VulkanRenderer(ANativeWindow* const window) : window(window) {
+#else
 VulkanRenderer::VulkanRenderer(SDL_Window* const window) : window(window) {
+#endif
 	createInstance();
 	createSurface();
 	pickPhysicalDevice();
@@ -295,13 +303,18 @@ void VulkanRenderer::createInstance() {
 	appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
 	appInfo.apiVersion = VK_API_VERSION_1_1;
 
-	// Instance extensions required by SDL to present to its window, plus debug utils.
+	// Instance extensions required to present to the window, plus debug utils.
+#ifdef __ANDROID__
+	std::vector<const char*> extensions = { VK_KHR_SURFACE_EXTENSION_NAME,
+		                                    VK_KHR_ANDROID_SURFACE_EXTENSION_NAME };
+#else
 	uint32_t sdlExtCount = 0;
 	const char* const* const sdlExt = SDL_Vulkan_GetInstanceExtensions(&sdlExtCount);
 	if (!sdlExt) {
 		throw std::runtime_error(std::string("SDL_Vulkan_GetInstanceExtensions: ") + SDL_GetError());
 	}
 	std::vector<const char*> extensions(sdlExt, sdlExt + sdlExtCount);
+#endif
 	if (validationEnabled) {
 		extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 	}
@@ -358,9 +371,17 @@ void VulkanRenderer::createInstance() {
 }
 
 void VulkanRenderer::createSurface() {
+#ifdef __ANDROID__
+	auto info =
+	    vkStruct<VkAndroidSurfaceCreateInfoKHR>(VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR);
+	info.window = window;
+	VK_CHECK(vkCreateAndroidSurfaceKHR(instance, &info, nullptr, &surface),
+	         "vkCreateAndroidSurfaceKHR");
+#else
 	if (!SDL_Vulkan_CreateSurface(window, instance, nullptr, &surface)) {
 		throw std::runtime_error(std::string("SDL_Vulkan_CreateSurface: ") + SDL_GetError());
 	}
+#endif
 }
 
 void VulkanRenderer::pickPhysicalDevice() {
@@ -501,12 +522,15 @@ void VulkanRenderer::createSwapchain() {
 	std::vector<VkSurfaceFormatKHR> formats(formatCount);
 	vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, formats.data());
 	// Prefer a plain (non-sRGB) 8-bit BGRA format so that colors written by the shaders reach the
-	// screen unmodified, matching JNGL's OpenGL backend whose default framebuffer isn't sRGB-encoded.
+	// screen unmodified, matching JNGL's OpenGL backend whose default framebuffer isn't
+	// sRGB-encoded. Android only offers RGBA.
 	VkSurfaceFormatKHR chosenFormat = formats.front();
-	for (const auto& f : formats) {
-		if (f.format == VK_FORMAT_B8G8R8A8_UNORM &&
-		    f.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-			chosenFormat = f;
+	for (const VkFormat preferred : { VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM }) {
+		const auto f = std::ranges::find_if(formats, [preferred](const VkSurfaceFormatKHR& f) {
+			return f.format == preferred && f.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+		});
+		if (f != formats.end()) {
+			chosenFormat = *f;
 			break;
 		}
 	}
@@ -519,7 +543,12 @@ void VulkanRenderer::createSwapchain() {
 	} else {
 		int w = 0;
 		int h = 0;
+#ifdef __ANDROID__
+		w = ANativeWindow_getWidth(window);
+		h = ANativeWindow_getHeight(window);
+#else
 		SDL_GetWindowSizeInPixels(window, &w, &h);
+#endif
 		swapchainExtent.width = std::clamp(static_cast<uint32_t>(w), caps.minImageExtent.width,
 		                                   caps.maxImageExtent.width);
 		swapchainExtent.height = std::clamp(static_cast<uint32_t>(h), caps.minImageExtent.height,
@@ -551,8 +580,18 @@ void VulkanRenderer::createSwapchain() {
 	} else {
 		createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 	}
-	createInfo.preTransform = caps.currentTransform;
+	// What's drawn isn't rotated, so when the display is (e.g. a phone, whose natural orientation
+	// is portrait, in landscape), the compositor has to rotate it
+	createInfo.preTransform =
+	    (caps.supportedTransforms & VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR) != 0
+	        ? VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR
+	        : caps.currentTransform;
+	// Android only supports INHERIT, its windows are opaque anyway
 	createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+	if ((caps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR) == 0 &&
+	    (caps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR) != 0) {
+		createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR;
+	}
 	createInfo.presentMode = presentMode;
 	createInfo.clipped = VK_TRUE;
 
@@ -1044,6 +1083,11 @@ void VulkanRenderer::rebuildSwapchainRendering() {
 }
 
 void VulkanRenderer::recreateSwapchain() {
+#ifdef __ANDROID__
+	if (!surface) {
+		return; // see releaseWindow(), setWindow() creates it
+	}
+#else
 	int w = 0;
 	int h = 0;
 	SDL_GetWindowSizeInPixels(window, &w, &h);
@@ -1051,6 +1095,7 @@ void VulkanRenderer::recreateSwapchain() {
 		SDL_GetWindowSizeInPixels(window, &w, &h);
 		SDL_WaitEvent(nullptr);
 	}
+#endif
 	vkDeviceWaitIdle(device);
 	cleanupSwapchain();
 	createSwapchain();
@@ -1072,6 +1117,11 @@ void VulkanRenderer::beginFrame(const Rgb clearColor) {
 		}
 		return;
 	}
+#ifdef __ANDROID__
+	if (!surface) {
+		return; // in the background, see releaseWindow()
+	}
+#endif
 	vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE,
 	                std::numeric_limits<uint64_t>::max());
 	// The GPU is done with this frame's previous command buffer, and so with the buffers it read
@@ -1379,7 +1429,21 @@ void VulkanRenderer::endFrame() {
 	present.pSwapchains = &swapchain;
 	present.pImageIndices = &currentImageIndex;
 
-	const VkResult result = vkQueuePresentKHR(presentQueue, &present);
+	VkResult result = vkQueuePresentKHR(presentQueue, &present);
+#ifdef __ANDROID__
+	// Android only reports VK_SUBOPTIMAL_KHR when the display's rotation isn't the swapchain's,
+	// which it never is while the display is rotated, see createSwapchain(). It doesn't tell when
+	// the window's size has changed though, e.g. when a foldable has been unfolded.
+	if (result == VK_SUBOPTIMAL_KHR) {
+		result = VK_SUCCESS;
+	}
+	VkSurfaceCapabilitiesKHR caps;
+	if (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, &caps) == VK_SUCCESS &&
+	    (caps.currentExtent.width != swapchainExtent.width ||
+	     caps.currentExtent.height != swapchainExtent.height)) {
+		swapchainRecreatePending = true;
+	}
+#endif
 	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR ||
 	    swapchainRecreatePending) {
 		swapchainRecreatePending = false;
@@ -1441,6 +1505,58 @@ void VulkanRenderer::applyViewport(const VkCommandBuffer cmd, const VkExtent2D e
 void VulkanRenderer::onResize(int /*width*/, int /*height*/) {
 	swapchainRecreatePending = true;
 }
+
+std::pair<int, int> VulkanRenderer::getSwapchainSize() const {
+	return { static_cast<int>(swapchainExtent.width), static_cast<int>(swapchainExtent.height) };
+}
+
+#ifdef __ANDROID__
+void VulkanRenderer::releaseWindow() {
+	if (!surface) {
+		return;
+	}
+	if (frameActive) {
+		// Not presented, but the uploads are needed and the image's semaphore has to be waited on
+		// before it can be used again
+		endCurrentRenderPass();
+		submitWithoutPresenting(inFlightFences[currentFrame]);
+		frameActive = false;
+		frameDiscarded = true;
+	}
+	vkDeviceWaitIdle(device);
+	cleanupSwapchain();
+	vkDestroySurfaceKHR(instance, surface, nullptr);
+	surface = VK_NULL_HANDLE;
+	window = nullptr;
+}
+
+void VulkanRenderer::setWindow(ANativeWindow* const window) {
+	assert(!surface);
+	this->window = window;
+	createSurface();
+	VkBool32 presentSupport = VK_FALSE;
+	vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, presentQueueFamily, surface,
+	                                     &presentSupport);
+	if (!presentSupport) {
+		throw std::runtime_error("The Vulkan GPU can't present to the new window surface.");
+	}
+	// The format is the same as before, as Android always offers the same ones, so the render
+	// passes and pipelines can be kept
+	createSwapchain();
+	createImageViews();
+	createPresentSemaphores();
+	createFramebuffers();
+	swapchainRecreatePending = false;
+	if (frameDiscarded) {
+		frameDiscarded = false;
+		beginFrame(currentClearColor);
+	}
+}
+
+bool VulkanRenderer::hasWindow() const {
+	return surface != VK_NULL_HANDLE;
+}
+#endif
 
 void VulkanRenderer::setProjection(const Mat4& p) {
 	projection = p;
@@ -2414,6 +2530,24 @@ VulkanRenderer::withPendingUploads(const VkCommandBuffer frameCommands) {
 	return { uploads, frameCommands };
 }
 
+void VulkanRenderer::submitWithoutPresenting(const VkFence fence) {
+	const VkCommandBuffer cmd = commandBuffers[currentFrame];
+	VK_CHECK(vkEndCommandBuffer(cmd), "vkEndCommandBuffer");
+
+	const VkPipelineStageFlags waitStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	auto submit = vkStruct<VkSubmitInfo>(VK_STRUCTURE_TYPE_SUBMIT_INFO);
+	if (!imageAvailableWaited) {
+		submit.waitSemaphoreCount = 1;
+		submit.pWaitSemaphores = &imageAvailableSemaphores[currentFrame];
+		submit.pWaitDstStageMask = &waitStage;
+	}
+	const auto commands = withPendingUploads(cmd);
+	submit.commandBufferCount = static_cast<uint32_t>(commands.size());
+	submit.pCommandBuffers = commands.data();
+	VK_CHECK(vkQueueSubmit(graphicsQueue, 1, &submit, fence), "vkQueueSubmit");
+	imageAvailableWaited = true;
+}
+
 void VulkanRenderer::destroyLater(std::function<void()> destroy) {
 	pendingDestructions.push_back({ std::move(destroy), static_cast<int>(maxFramesInFlight) + 1 });
 }
@@ -2821,22 +2955,9 @@ void VulkanRenderer::readPixels(unsigned char* const rgb, const int x, const int
 	const VkCommandBuffer cmd = commandBuffers[currentFrame];
 	endCurrentRenderPass();
 	resolveSwapchain();
-	VK_CHECK(vkEndCommandBuffer(cmd), "vkEndCommandBuffer");
-
-	const VkPipelineStageFlags waitStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	auto submit = vkStruct<VkSubmitInfo>(VK_STRUCTURE_TYPE_SUBMIT_INFO);
-	if (!imageAvailableWaited) {
-		submit.waitSemaphoreCount = 1;
-		submit.pWaitSemaphores = &imageAvailableSemaphores[currentFrame];
-		submit.pWaitDstStageMask = &waitStage;
-	}
-	const auto commands = withPendingUploads(cmd);
-	submit.commandBufferCount = static_cast<uint32_t>(commands.size());
-	submit.pCommandBuffers = commands.data();
 	vkResetFences(device, 1, &readbackFence);
-	VK_CHECK(vkQueueSubmit(graphicsQueue, 1, &submit, readbackFence), "vkQueueSubmit");
+	submitWithoutPresenting(readbackFence);
 	vkWaitForFences(device, 1, &readbackFence, VK_TRUE, std::numeric_limits<uint64_t>::max());
-	imageAvailableWaited = true;
 
 	// Copy the requested region into a host-visible buffer.
 	const VkDeviceSize size = pixelCount * 4;
@@ -2893,15 +3014,20 @@ void VulkanRenderer::readPixels(unsigned char* const rgb, const int x, const int
 	void* mapped = nullptr;
 	VK_CHECK(vkMapMemory(device, stagingMemory, 0, size, 0, &mapped), "vkMapMemory");
 	const auto* src = static_cast<const unsigned char*>(mapped);
-	// Output RGB, bottom row first (OpenGL convention) and swap B/R (swapchain is BGRA).
+	// Output RGB, bottom row first (OpenGL convention), swapping B/R if the swapchain is BGRA (it's
+	// RGBA on Android).
+	const bool bgra = swapchainImageFormat == VK_FORMAT_B8G8R8A8_UNORM ||
+	                  swapchainImageFormat == VK_FORMAT_B8G8R8A8_SRGB;
+	const int red = bgra ? 2 : 0;
+	const int blue = bgra ? 0 : 2;
 	for (int row = 0; row < height; ++row) {
 		const unsigned char* srcRow =
 		    src + static_cast<size_t>(height - 1 - row) * width * 4;
 		unsigned char* dstRow = rgb + static_cast<size_t>(row) * width * 3;
 		for (int col = 0; col < width; ++col) {
-			dstRow[col * 3 + 0] = srcRow[col * 4 + 2];
+			dstRow[col * 3 + 0] = srcRow[col * 4 + red];
 			dstRow[col * 3 + 1] = srcRow[col * 4 + 1];
-			dstRow[col * 3 + 2] = srcRow[col * 4 + 0];
+			dstRow[col * 3 + 2] = srcRow[col * 4 + blue];
 		}
 	}
 	vkUnmapMemory(device, stagingMemory);
