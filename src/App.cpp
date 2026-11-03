@@ -100,7 +100,7 @@ void App::callAtExitFunctions() {
 }
 
 namespace {
-#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG)
+#if defined(GL_DEBUG_OUTPUT) && !defined(NDEBUG) && !defined(JNGL_GPU_BACKEND)
 #ifdef _WIN32
 void __stdcall
 #else

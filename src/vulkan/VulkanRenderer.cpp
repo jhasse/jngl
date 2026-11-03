@@ -77,6 +77,7 @@ VkPipelineShaderStageCreateInfo shaderStage(const VkShaderStageFlagBits stage,
 
 constexpr std::array validationLayers = { "VK_LAYER_KHRONOS_validation" };
 
+#ifndef NDEBUG
 bool validationLayersSupported() {
 	uint32_t count = 0;
 	vkEnumerateInstanceLayerProperties(&count, nullptr);
@@ -92,6 +93,7 @@ bool validationLayersSupported() {
 	}
 	return true;
 }
+#endif
 
 /// The same for all render passes, as it's part of what makes them compatible with the pipelines.
 /// Drawing waits for an earlier render pass's drawing (which a LOAD continues) and sampling (of a
