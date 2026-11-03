@@ -87,16 +87,16 @@ option(JNGL_RECORD "Enable video recording using FFmpeg" OFF)
 option(JNGL_STEAMWORKS "Enable Steamsworks SDK support for achievements" OFF)
 option(JNGL_TRACE "Enable tracing for debugging purposes" OFF)
 
-# Experimental Vulkan renderer backend. When OFF (the default) JNGL uses its
+# Vulkan renderer backend. When OFF (the default) JNGL uses its
 # OpenGL/GLES backend. When ON an additional Vulkan backend is compiled in and
 # used at runtime instead. Currently only implemented for the desktop SDL3
 # platform (Linux, Windows and macOS) and Android 9+; see src/vulkan/. Building
 # for Android also needs a C++ compiler and shaderc for the machine that builds.
-option(JNGL_VULKAN "Use the experimental Vulkan renderer backend instead of OpenGL" OFF)
+option(JNGL_VULKAN "Use the Vulkan renderer backend instead of OpenGL" OFF)
 
-# Experimental Direct3D 12 renderer backend, like JNGL_VULKAN. Only for the SDL3 platform on
+# Direct3D 12 renderer backend, like JNGL_VULKAN. Only for the SDL3 platform on
 # Windows; see src/d3d12/. Building it requires the Vulkan SDK for its shader compilers.
-option(JNGL_D3D12 "Use the experimental Direct3D 12 renderer backend instead of OpenGL" OFF)
+option(JNGL_D3D12 "Use the Direct3D 12 renderer backend instead of OpenGL" OFF)
 
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
 if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)

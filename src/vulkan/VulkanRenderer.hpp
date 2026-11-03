@@ -1,7 +1,7 @@
 // Copyright 2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-/// Experimental Vulkan backend, see GpuBackend.hpp.
+/// Vulkan backend, see GpuBackend.hpp.
 ///
 /// A 2D backend for the desktop SDL3 platform and Android, which draws JNGL's shapes, sprites and
 /// text, into the window or FrameBuffers (multisampled or HDR, too), also with ShaderPrograms,

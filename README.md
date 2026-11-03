@@ -53,7 +53,7 @@ Then open `build/jngl.sln` in Visual Studio.
 
 ### Vulkan
 Install the Vulkan SDK, including shaderc, and open a new terminal so that `VULKAN_SDK` and
-`PATH` include it. Enable the experimental Vulkan renderer with the default SDL3 window backend:
+`PATH` include it. Enable the Vulkan renderer with the default SDL3 window backend:
 ```bash
 cmake -Bbuild-vulkan -DJNGL_VULKAN=1 -DJNGL_WINAPI=OFF
 cmake --build build-vulkan --config Release
@@ -67,7 +67,7 @@ Vulkan build. The Vulkan loader is supplied by
 the graphics driver; users need a Vulkan-capable driver, but do not need the SDK.
 
 ### Direct3D 12
-The experimental Direct3D 12 renderer also needs the Vulkan SDK to build, for its shader compilers
+The Direct3D 12 renderer also needs the Vulkan SDK to build, for its shader compilers
 (GLSL is compiled to SPIR-V and translated to HLSL by SPIRV-Cross):
 ```bash
 cmake -Bbuild-d3d12 -DJNGL_D3D12=1 -DJNGL_WINAPI=OFF
@@ -133,7 +133,7 @@ lus android-run
 Alternatively, open `android/test` in Android Studio and build from there.
 
 ### Vulkan
-The experimental Vulkan renderer works on Android 9 (API level 28) and newer. Build with
+The Vulkan renderer works on Android 9 (API level 28) and newer. Build with
 `-DJNGL_VULKAN=ON`, e.g. the test app with `./gradlew installDebug -Pvulkan` in `android/test`.
 The built-in shaders are compiled during the build by `jngl-shaderc`, which is built for the machine
 that's building, so it needs a C++ compiler and shaderc there (see Vulkan above for Linux, Windows
