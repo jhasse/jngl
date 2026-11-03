@@ -1,0 +1,9 @@
+<map id="jngl/ShaderBytecode.hpp" name="jngl/ShaderBytecode.hpp">
+<area shape="rect" id="Node000001" title="Contains jngl::ShaderBytecode." alt="" coords="31,5,236,31"/>
+<area shape="rect" id="Node000002" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="5,79,83,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,34,73,71,69,67,117,29"/>
+<area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/span.html" title=" " alt="" coords="107,79,160,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="136,31,136,63,131,63,131,31"/>
+<area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/string_view.html" title=" " alt="" coords="184,79,293,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="153,29,210,68,207,72,150,34"/>
+</map>

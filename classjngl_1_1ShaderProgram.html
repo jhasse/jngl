@@ -116,7 +116,11 @@ Classes</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:acedd46de78597be78c86c140f1366905" id="r_acedd46de78597be78c86c140f1366905"><td class="memItemLeft" align="right" valign="top"><a id="acedd46de78597be78c86c140f1366905" name="acedd46de78597be78c86c140f1366905"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ShaderProgram</b> (const <a class="el" href="classjngl_1_1Shader.html">Shader</a> &amp;vertex, const <a class="el" href="classjngl_1_1Shader.html">Shader</a> &amp;fragment)</td></tr>
+<tr class="memdesc:acedd46de78597be78c86c140f1366905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Not supported by the Direct3D 12 renderer and the Vulkan renderer on Android, which need the program's <a class="el" href="structjngl_1_1ShaderBytecode.html" title="A ShaderProgram&#39;s GLSL compiled at build time by jngl-shaderc, for the Vulkan (SPIR-V) or the Direct3...">ShaderBytecode</a>. <br /></td></tr>
 <tr class="separator:acedd46de78597be78c86c140f1366905"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afea6b2e6b240bae27b6c67f35fd1f251" id="r_afea6b2e6b240bae27b6c67f35fd1f251"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afea6b2e6b240bae27b6c67f35fd1f251">ShaderProgram</a> (const <a class="el" href="structjngl_1_1ShaderBytecode.html">ShaderBytecode</a> &amp;)</td></tr>
+<tr class="memdesc:afea6b2e6b240bae27b6c67f35fd1f251"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the program from what jngl-shaderc has compiled it to.  <br /></td></tr>
+<tr class="separator:afea6b2e6b240bae27b6c67f35fd1f251"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89e883b9fb929899903727a636d6eb7c" id="r_a89e883b9fb929899903727a636d6eb7c"><td class="memItemLeft" align="right" valign="top"><a id="a89e883b9fb929899903727a636d6eb7c" name="a89e883b9fb929899903727a636d6eb7c"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ShaderProgram</b> (const <a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> &amp;)=delete</td></tr>
 <tr class="separator:a89e883b9fb929899903727a636d6eb7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,8 +146,37 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>getAttribLocation</b> 
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Linked vertex and fragment shaders. </p>
 
-<p class="definition">Definition at line <a class="el" href="ShaderProgram_8hpp_source.html#l00017">17</a> of file <a class="el" href="ShaderProgram_8hpp_source.html">ShaderProgram.hpp</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+<p class="definition">Definition at line <a class="el" href="ShaderProgram_8hpp_source.html#l00018">18</a> of file <a class="el" href="ShaderProgram_8hpp_source.html">ShaderProgram.hpp</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="afea6b2e6b240bae27b6c67f35fd1f251" name="afea6b2e6b240bae27b6c67f35fd1f251"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afea6b2e6b240bae27b6c67f35fd1f251">&#9670;&#160;</a></span>ShaderProgram()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classjngl_1_1ShaderProgram.html">ShaderProgram</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structjngl_1_1ShaderBytecode.html">ShaderBytecode</a> &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates the program from what jngl-shaderc has compiled it to. </p>
+<p>Only supported by the Vulkan and Direct3D 12 renderers, and the bytecode has to be for the one that's compiled in. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="abef35b5e78f77e4e1ad439001dea6968" name="abef35b5e78f77e4e1ad439001dea6968"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abef35b5e78f77e4e1ad439001dea6968">&#9670;&#160;</a></span>getUniformLocation()</h2>
 

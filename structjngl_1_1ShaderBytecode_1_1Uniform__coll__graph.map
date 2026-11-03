@@ -1,0 +1,5 @@
+<map id="ShaderBytecode::Uniform" name="ShaderBytecode::Uniform">
+<area shape="rect" id="Node000001" title="One of the program&#39;s uniforms, see ShaderProgram::getUniformLocation." alt="" coords="5,94,211,120"/>
+<area shape="rect" id="Node000002" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/string/basic_string_view.html" title=" " alt="" coords="53,5,163,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,47,111,94,105,94,105,47"/>
+</map>
