@@ -1979,7 +1979,10 @@ const D3D12Texture& D3D12Renderer::framebufferTexture(D3D12Framebuffer& fb,
 
 void D3D12Renderer::pushRenderTarget(D3D12Framebuffer& framebuffer) {
 	if (!impl->frameActive) {
-		return;
+		// E.g. a FrameBuffer drawn into in a Scene's step(), which runs between endFrame() and the
+		// next beginFrame(). That works on OpenGL, so start the next frame early. Its beginFrame()
+		// will then only clear the screen.
+		beginFrame(impl->currentClearColor);
 	}
 	impl->unbindTarget();
 	impl->renderTargetStack.push_back(&framebuffer);

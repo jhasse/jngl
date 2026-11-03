@@ -168,6 +168,26 @@ TEST_CASE("FrameBuffer clears without draws survive empty nested targets") {
 	}
 }
 
+TEST_CASE("FrameBuffer drawn into between frames") {
+	// E.g. in a Scene's step(), which jngl::mainLoop calls after the frame has been presented and
+	// before the next one has begun
+	Fixture f(1.f);
+	jngl::FrameBuffer fb(320_px, 70_px);
+	jngl::pWindow->SwapBuffers(); // ends the frame without beginning the next one
+	{
+		const auto context = fb.use();
+		jngl::drawRect(jngl::modelview().translate({ 10, 0 }), { 30, 10 }, 0x000000_rgb);
+	}
+	jngl::clearBackBuffer(); // begins the next frame, like mainLoop does before draw()
+	fb.draw(-160, -35);
+	const auto pixels = jngl::readPixels();
+	const auto red = [&](const int x, const int y) { // from the top left
+		return pixels.at((static_cast<size_t>(69 - y) * 320 + x) * 3);
+	};
+	CHECK(red(185, 40) < 0.01f); // inside the rectangle
+	CHECK(red(100, 40) > 0.99f); // outside of it
+}
+
 TEST_CASE("FrameBuffer texture filters apply to each draw") {
 	Fixture f(1.f);
 	jngl::FrameBuffer fb(2_px, 1_px);
