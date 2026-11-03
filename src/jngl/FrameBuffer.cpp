@@ -4,19 +4,27 @@
 #include "FrameBuffer.hpp"
 
 #include "../App.hpp"
-#include "../ShaderCache.hpp"
 #include "../log.hpp"
 #include "../main.hpp"
 #include "../spriteimpl.hpp"
-#include "../texture.hpp"
 #include "../window.hpp"
 #include "../windowptr.hpp"
 #include "ScaleablePixels.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
 
+#ifdef JNGL_GPU_BACKEND
+#include "../GpuBackend.hpp"
+#include "../opengl.hpp"
+#include "Rgba.hpp"
+#else
+#include "../ShaderCache.hpp"
+#include "../texture.hpp"
+#endif
+
 #include <algorithm>
 #include <array>
+#include <optional>
 
 namespace jngl {
 
@@ -32,6 +40,26 @@ struct Active {
 /// it
 std::stack<Active> activateStack;
 
+#ifdef JNGL_GPU_BACKEND
+/// Draws the framebuffer \a fb's image as a textured quad transformed by \a modelview. The quad is
+/// (0, 0)-(width, height) in screen pixels with (0, 0)-(1, 1) texture coordinates, matching what
+/// jngl::Texture builds.
+void drawFramebuffer(GpuFramebuffer& fb, const Mat3& modelview, Rgba color,
+                     const std::optional<TextureFilter> filter = std::nullopt) {
+	const auto w = static_cast<float>(fb.width / getScaleFactor());
+	const auto h = static_cast<float>(fb.height / getScaleFactor());
+	const std::array<float, 16> vertexes = {
+		0.f, 0.f, 0.f, 0.f, // x, y, u, v
+		0.f, h,   0.f, 1.f, //
+		w,   h,   1.f, 1.f, //
+		w,   0.f, 1.f, 0.f, //
+	};
+	const auto& texture = filter ? gpuRenderer().framebufferTexture(fb, *filter) : fb.color;
+	gpuRenderer().drawSprite(texture, vertexes.data(), 4, PrimitiveType::TriangleFan, modelview,
+	                         color);
+}
+#endif
+
 } // namespace
 
 optional<std::array<int, 2>> activeFrameBufferSize() {
@@ -42,6 +70,35 @@ optional<std::array<int, 2>> activeFrameBufferSize() {
 }
 
 void applyBlendMode() {
+#ifdef JNGL_GPU_BACKEND
+	using SpriteBlend = GpuRenderer::SpriteBlend;
+	if (gBlendMode) {
+		switch (*gBlendMode) {
+		case BlendMode::Composite:
+			gpuRenderer().setSpriteBlend(SpriteBlend::Composite);
+			break;
+		case BlendMode::Premultiplied:
+			gpuRenderer().setSpriteBlend(SpriteBlend::Premultiplied);
+			break;
+		case BlendMode::Additive:
+			gpuRenderer().setSpriteBlend(SpriteBlend::Additive);
+			break;
+		case BlendMode::PremultipliedAdditive:
+			gpuRenderer().setSpriteBlend(SpriteBlend::PremultipliedAdditive);
+			break;
+		case BlendMode::Multiply:
+			gpuRenderer().setSpriteBlend(SpriteBlend::Multiply);
+			break;
+		case BlendMode::Screen:
+			gpuRenderer().setSpriteBlend(SpriteBlend::Screen);
+			break;
+		}
+	} else {
+		// Alpha adds up in a FrameBuffer, like on OpenGL below
+		gpuRenderer().setSpriteBlend(activateStack.empty() ? SpriteBlend::Composite
+		                                                   : SpriteBlend::AddAlpha);
+	}
+#else
 	if (gBlendMode) {
 		switch (*gBlendMode) {
 		case BlendMode::Composite:
@@ -71,20 +128,33 @@ void applyBlendMode() {
 		// of it when it's drawn again
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 	}
+#endif
 }
 
 struct FrameBuffer::Impl {
+#ifdef JNGL_GPU_BACKEND
+	Impl(int width, int height, bool /*hdr*/) : width(width), height(height) {
+	}
+#else
 	Impl(int width, int height, bool hdr)
 	: width(width), height(height),
 	  texture(static_cast<float>(width), static_cast<float>(height), width, height, nullptr,
 	          GL_RGBA, nullptr, hdr ? GL_HALF_FLOAT : GL_UNSIGNED_BYTE) {
 	}
+#endif
 	Impl(const Impl&) = delete;
 	Impl& operator=(const Impl&) = delete;
 	Impl(Impl&&) = delete;
 	Impl& operator=(Impl&&) = delete;
 
 	~Impl() {
+#ifdef JNGL_GPU_BACKEND
+		if (gpuFramebuffer) {
+			if (auto* renderer = gpuRendererIfExists()) {
+				renderer->destroyFramebuffer(*gpuFramebuffer);
+			}
+		}
+#else
 		if (pWindow) { // Don't bother deleting OpenGL objects when the OpenGL context has already
 			           // been destroyed
 			glDeleteFramebuffers(1, &fbo);
@@ -94,8 +164,10 @@ struct FrameBuffer::Impl {
 				glDeleteRenderbuffers(1, &multisampledBuffer);
 			}
 		}
+#endif
 	}
 
+#ifndef JNGL_GPU_BACKEND
 	/// What's drawn into while it's in use: multisampledFbo if it has samples, otherwise fbo
 	GLuint drawnFbo() const {
 		return samples > 0 ? multisampledFbo : fbo;
@@ -116,18 +188,23 @@ struct FrameBuffer::Impl {
 			glEnable(GL_SCISSOR_TEST);
 		}
 	}
+#endif
 
+	const int width;
+	const int height;
+#ifdef JNGL_GPU_BACKEND
+	std::unique_ptr<GpuFramebuffer> gpuFramebuffer;
+#else
 	GLuint fbo = 0;
 	GLuint buffer = 0;
 	/// How many samples per pixel are drawn into multisampledBuffer, or 0 for none of those
 	int samples = 0;
 	GLuint multisampledFbo = 0;
 	GLuint multisampledBuffer = 0;
-	const int width;
-	const int height;
 	Texture texture;
 #if !defined(GL_VIEWPORT_BIT) || defined(__APPLE__)
 	GLint viewport[4]{};
+#endif
 #endif
 
 	/// The projection matrix of the window, saved when the outermost FrameBuffer gets activated.
@@ -140,6 +217,11 @@ Mat4 FrameBuffer::Impl::screenProjection;
 FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr,
                          const bool antiAliased)
 : impl(std::make_unique<Impl>(static_cast<int>(width), static_cast<int>(height), hdr)) {
+#ifdef JNGL_GPU_BACKEND
+	// createFramebuffer already clears the image to transparent.
+	impl->gpuFramebuffer =
+	    gpuRenderer().createFramebuffer(impl->width, impl->height, antiAliased, hdr);
+#else
 	glGenRenderbuffers(1, &impl->buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, impl->buffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, hdr ? GL_RGBA16F : GL_RGBA8, static_cast<int>(width),
@@ -198,6 +280,7 @@ FrameBuffer::FrameBuffer(const Pixels width, const Pixels height, const bool hdr
 	} else {
 		activateStack.top().activate(); // back to the FrameBuffer that's in use
 	}
+#endif
 }
 
 FrameBuffer::FrameBuffer(ScaleablePixels width, ScaleablePixels height, const bool hdr,
@@ -222,6 +305,14 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 	jngl::translate(position);
 	opengl::scale(1, -1);
 	jngl::translate(0, -impl->height / getScaleFactor());
+#ifdef JNGL_GPU_BACKEND
+	if (shaderProgram) {
+		const auto context = shaderProgram->use();
+		drawFramebuffer(*impl->gpuFramebuffer, opengl::modelview, gSpriteColor);
+	} else {
+		drawFramebuffer(*impl->gpuFramebuffer, opengl::modelview, gSpriteColor);
+	}
+#else
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
@@ -233,31 +324,46 @@ void FrameBuffer::draw(const Vec2 position, const ShaderProgram* const shaderPro
 		                   opengl::modelview.data);
 	}
 	impl->texture.draw();
+#endif
 	popMatrix();
 }
 
 void FrameBuffer::draw(Mat3 modelview, const ShaderProgram* const shaderProgram) const {
+	modelview.scale(1, -1).translate(
+	    { -impl->width / getScaleFactor() / 2, -impl->height / getScaleFactor() / 2 });
+#ifdef JNGL_GPU_BACKEND
+	if (shaderProgram) {
+		const auto context = shaderProgram->use();
+		drawFramebuffer(*impl->gpuFramebuffer, modelview, gSpriteColor);
+	} else {
+		drawFramebuffer(*impl->gpuFramebuffer, modelview, gSpriteColor);
+	}
+#else
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
 		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
-		                   modelview.scale(1, -1)
-		                       .translate({ -impl->width / getScaleFactor() / 2,
-		                                    -impl->height / getScaleFactor() / 2 })
-		                       .data);
+		                   modelview.data);
 	} else {
 		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
-		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
-		                   modelview.scale(1, -1)
-		                       .translate({ -impl->width / getScaleFactor() / 2,
-		                                    -impl->height / getScaleFactor() / 2 })
-		                       .data);
+		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	impl->texture.draw();
+#endif
 }
 
 void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
                        const ShaderProgram* const shaderProgram) const {
+#ifdef JNGL_GPU_BACKEND
+	modelview.scale(1, -1).translate(
+	    { -impl->width / getScaleFactor() / 2, -impl->height / getScaleFactor() / 2 });
+	if (shaderProgram) {
+		const auto context = shaderProgram->use();
+		drawFramebuffer(*impl->gpuFramebuffer, modelview, gSpriteColor, textureFilter);
+	} else {
+		drawFramebuffer(*impl->gpuFramebuffer, modelview, gSpriteColor, textureFilter);
+	}
+#else
 	impl->texture.bind();
 	int oldFilter;
 	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &oldFilter);
@@ -285,6 +391,7 @@ void FrameBuffer::draw(Mat3 modelview, const TextureFilter textureFilter,
 	             4); // no need to bind again, that's why we don't call impl->texture.draw() here
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, oldFilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, oldFilter);
+#endif
 }
 
 void FrameBuffer::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes,
@@ -297,6 +404,16 @@ void FrameBuffer::drawMesh(const Mat3& modelview, const std::vector<Vertex>& ver
 	if (vertexes.empty()) {
 		return;
 	}
+#ifdef JNGL_GPU_BACKEND
+	std::optional<ShaderProgram::Context> context;
+	if (shaderProgram) {
+		context.emplace(shaderProgram->use());
+	}
+	// jngl::Vertex is a tightly packed { x, y, u, v }, matching what drawSprite expects.
+	gpuRenderer().drawSprite(impl->gpuFramebuffer->color,
+	                         reinterpret_cast<const float*>(vertexes.data()), vertexes.size(),
+	                         PrimitiveType::Triangles, modelview, color);
+#else
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
 	if (shaderProgram) {
@@ -307,10 +424,26 @@ void FrameBuffer::drawMesh(const Mat3& modelview, const std::vector<Vertex>& ver
 		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
 	}
 	impl->texture.drawMesh(vertexes);
+#endif
 }
 
 void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
                            const ShaderProgram* const shaderProgram) const {
+#ifdef JNGL_GPU_BACKEND
+	if (!vertexes.empty()) {
+		// jngl::Vertex is a tightly packed { x, y, u, v }, matching what drawSprite expects.
+		if (shaderProgram) {
+			const auto context = shaderProgram->use();
+			gpuRenderer().drawSprite(
+			    impl->gpuFramebuffer->color, reinterpret_cast<const float*>(vertexes.data()),
+			    vertexes.size(), PrimitiveType::Triangles, opengl::modelview, gSpriteColor);
+		} else {
+			gpuRenderer().drawSprite(
+			    impl->gpuFramebuffer->color, reinterpret_cast<const float*>(vertexes.data()),
+			    vertexes.size(), PrimitiveType::Triangles, opengl::modelview, gSpriteColor);
+		}
+	}
+#else
 	pushMatrix();
 	auto context =
 	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
@@ -324,6 +457,7 @@ void FrameBuffer::drawMesh(const std::vector<Vertex>& vertexes,
 	}
 	impl->texture.drawMesh(vertexes);
 	popMatrix();
+#endif
 }
 
 FrameBuffer::Context::Context(std::function<void()> resetCallback)
@@ -349,23 +483,72 @@ FrameBuffer::Context::~Context() {
 
 void FrameBuffer::Context::clear() {
 	assert(resetCallback);
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().clearCurrentRenderTarget(Rgba(1, 1, 1, 0));
+#else
 	glClearColor(1, 1, 1, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
+#endif
 }
 
 void FrameBuffer::Context::clear(const Rgb color) {
 	assert(resetCallback);
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().clearCurrentRenderTarget(
+	    Rgba(color.getRed(), color.getGreen(), color.getBlue(), 1.f));
+#else
 	glClearColor(color.getRed(), color.getGreen(), color.getBlue(), 1);
 	glClear(GL_COLOR_BUFFER_BIT);
+#endif
 }
 
 void FrameBuffer::Context::clear(const Rgba color) {
 	assert(resetCallback);
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().clearCurrentRenderTarget(color);
+#else
 	glClearColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 	glClear(GL_COLOR_BUFFER_BIT);
+#endif
 }
 
 FrameBuffer::Context FrameBuffer::use() const {
+#ifdef JNGL_GPU_BACKEND
+	pushMatrix();
+	auto savedProjection = opengl::projection;
+	if (activateStack.empty()) {
+		Impl::screenProjection = opengl::projection;
+	} else {
+		opengl::projection = Impl::screenProjection;
+	}
+	const float sx = static_cast<float>(pWindow->getWidth()) / static_cast<float>(impl->width) *
+	                 pWindow->getResizedWindowScalingX();
+	const float sy = static_cast<float>(pWindow->getHeight()) / static_cast<float>(impl->height) *
+	                 pWindow->getResizedWindowScalingY();
+	for (int i = 0; i < 4; ++i) {
+		opengl::projection.data[i] *= sx;
+		opengl::projection.data[i + 4] *= sy;
+	}
+	gpuRenderer().setProjection(opengl::projection);
+	gpuRenderer().pushRenderTarget(*impl->gpuFramebuffer);
+	// The render target has already been pushed, which is all that switching takes on the GPU
+	// backends
+	auto activate = []() {
+		applyBlendMode();
+		applyScissor();
+	};
+	activateStack.emplace(Active{ std::move(activate), impl->width, impl->height });
+	activateStack.top().activate();
+	return Context([savedProjection]() {
+		activateStack.pop();
+		gpuRenderer().popRenderTarget();
+		popMatrix();
+		opengl::projection = savedProjection;
+		gpuRenderer().setProjection(opengl::projection);
+		applyBlendMode();
+		applyScissor();
+	});
+#else
 	auto activate = [this]() {
 		glBindFramebuffer(GL_FRAMEBUFFER, impl->drawnFbo());
 		glBindRenderbuffer(GL_RENDERBUFFER,
@@ -428,17 +611,26 @@ FrameBuffer::Context FrameBuffer::use() const {
 		pWindow->bindSystemFramebufferAndRenderbuffer();
 		clearBackgroundColor();
 	});
+#endif
 }
 
 void FrameBuffer::clear() {
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().clearCurrentRenderTarget(Rgba(1, 1, 1, 0));
+#else
 	glClearColor(1, 1, 1, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	clearBackgroundColor();
+#endif
 }
 
 Vec2 FrameBuffer::getSize() const {
+#ifdef JNGL_GPU_BACKEND
+	return { impl->width / getScaleFactor(), impl->height / getScaleFactor() };
+#else
 	return { impl->texture.getPreciseWidth() / getScaleFactor(),
 		     impl->texture.getPreciseHeight() / getScaleFactor() };
+#endif
 }
 
 Pixels FrameBuffer::getPixelWidth() const {
@@ -450,7 +642,11 @@ Pixels FrameBuffer::getPixelHeight() const {
 }
 
 GLuint FrameBuffer::getTextureID() const {
+#ifdef JNGL_GPU_BACKEND
+	return 0; // no equivalent on the GPU backends
+#else
 	return impl->texture.getID();
+#endif
 }
 
 } // namespace jngl

@@ -8,8 +8,26 @@
 #include <sstream>
 #include <stdexcept>
 
+#if defined(JNGL_GPU_BACKEND) && !defined(JNGL_D3D12) && !defined(__ANDROID__)
+#include "../spirv/ShaderCompiler.hpp"
+#endif
+
 namespace jngl {
 
+#ifdef JNGL_GPU_BACKEND
+Shader::Shader(const char* source, const Type type, const char* const /*gles20Source*/)
+: impl(std::make_unique<Impl>()) {
+#if defined(JNGL_D3D12) || defined(__ANDROID__)
+	// Only compiled at build time by jngl-shaderc, see ShaderProgram(const ShaderBytecode&)
+	(void)type;
+#else
+	// What can be reported here, like on OpenGL. It's compiled with the program's other shader, see
+	// ShaderProgram.
+	checkGlsl(source, type);
+#endif
+	impl->source = source;
+}
+#else
 Shader::Shader(const char* source, const Type type, const char* const gles20Source [[maybe_unused]])
 : impl(std::make_unique<Impl>()) {
 	impl->id = glCreateShader(type == Type::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER);
@@ -54,6 +72,7 @@ Shader::Shader(const char* source, const Type type, const char* const gles20Sour
 		throw std::runtime_error(buffer);
 	}
 }
+#endif
 
 Shader::Shader(const std::istream& source, const Type type)
 : Shader([&source]() {

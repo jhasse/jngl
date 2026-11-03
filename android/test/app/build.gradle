@@ -18,6 +18,15 @@ android {
                 arguments "-DANDROID_STL=c++_shared"
             }
         }
+        // E.g. ./gradlew installDebug -Pvulkan to use JNGL's Vulkan renderer instead of OpenGL ES
+        if (project.hasProperty('vulkan')) {
+            minSdkVersion 28
+            externalNativeBuild {
+                cmake {
+                    arguments "-DJNGL_VULKAN=ON"
+                }
+            }
+        }
     }
     buildFeatures {
         prefab true

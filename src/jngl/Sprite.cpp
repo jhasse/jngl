@@ -16,9 +16,15 @@
 #include "../windowptr.hpp"
 #include "Alpha.hpp"
 #include "Color.hpp"
+#include "Shader.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
 #include "shapes.hpp"
+
+#ifdef JNGL_GPU_BACKEND
+#include "../BuiltinShaders.hpp"
+#include "../GpuBackend.hpp"
+#endif
 
 #ifdef _WIN32
 #include "../win32/unicode.hpp"
@@ -33,6 +39,7 @@
 #endif
 #include <cstddef>
 #include <cstring>
+#include <optional>
 #include <sstream>
 #ifndef NOWEBP
 #include "../ImageDataWebP.hpp"
@@ -166,35 +173,15 @@ Sprite::Sprite(const std::string& filename, LoadType loadType, const bool mipmap
 }
 
 void Sprite::enableMipmaps() {
-	if (!texture) {
-		return;
+	if (texture) {
+		texture->enableMipmaps();
 	}
-	glBindTexture(GL_TEXTURE_2D, texture->getID());
-	GLint minFilter = 0;
-	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &minFilter);
-	if (minFilter == GL_LINEAR_MIPMAP_LINEAR || minFilter == GL_NEAREST_MIPMAP_NEAREST) {
-		return;
-	}
-	glGenerateMipmap(GL_TEXTURE_2D);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-	                minFilter == GL_NEAREST ? GL_NEAREST_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR);
 }
 
 void Sprite::setTextureFilter(const TextureFilter minification, const TextureFilter magnification) {
-	if (!texture) {
-		return;
+	if (texture) {
+		texture->setTextureFilter(minification, magnification);
 	}
-	glBindTexture(GL_TEXTURE_2D, texture->getID());
-	GLint minFilter = 0;
-	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &minFilter);
-	const bool mipmaps =
-	    minFilter == GL_LINEAR_MIPMAP_LINEAR || minFilter == GL_NEAREST_MIPMAP_NEAREST;
-	const bool nearest = minification == TextureFilter::NearestNeighbor;
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-	                mipmaps ? (nearest ? GL_NEAREST_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR)
-	                        : (nearest ? GL_NEAREST : GL_LINEAR));
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-	                magnification == TextureFilter::NearestNeighbor ? GL_NEAREST : GL_LINEAR);
 }
 
 void Sprite::step() {
@@ -302,10 +289,7 @@ bool Sprite::contains(const jngl::Vec2 point) const {
 void Sprite::draw() const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
-	auto context = ShaderCache::handle().textureShaderProgram->use();
-	ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
-	glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
-	texture->draw();
+	texture->draw(opengl::modelview, gSpriteColor);
 	popMatrix();
 }
 
@@ -316,55 +300,63 @@ void Sprite::draw(const Mat3& modelview, const ShaderProgram* const shaderProgra
 void Sprite::draw(Mat3 modelview, Rgba color) const {
 	modelview *= boost::qvm::translation_mat(
 	    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. }));
-	auto context = ShaderCache::handle().textureShaderProgram->use();
-	ShaderCache::handle().setTextureColorUniforms(color);
-	glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
-	texture->draw();
+	texture->draw(modelview, color);
 }
 
 void Sprite::drawLerped(Mat3 modelview, const Rgb color, const float red, const float green,
                         const float blue, const Alpha alpha) const {
 	modelview *= boost::qvm::translation_mat(
 	    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. }));
-	auto context = ShaderCache::handle().textureShaderProgram->use();
-	ShaderCache::handle().setTextureLerpUniforms(color, red, green, blue, alpha);
-	glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
-	texture->draw();
+	texture->drawLerped(modelview, color, red, green, blue, alpha);
 }
 
 void Sprite::draw(Mat3 modelview, Alpha alpha, const ShaderProgram* const shaderProgram) const {
 	modelview *= boost::qvm::translation_mat(
 	    boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. }));
-	auto context =
-	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
-	if (shaderProgram) {
-		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
-		                   modelview.data);
-	} else {
-		ShaderCache::handle().setTextureColorUniforms(
-		    Rgba(gSpriteColor.getRed(), gSpriteColor.getGreen(), gSpriteColor.getBlue(), alpha));
-		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
-	}
-	texture->draw();
+	texture->draw(modelview,
+	              Rgba(gSpriteColor.getRed(), gSpriteColor.getGreen(), gSpriteColor.getBlue(), alpha),
+	              shaderProgram);
 }
 
 void Sprite::draw(const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
-	auto context =
-	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
-	if (shaderProgram) {
-		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
-		                   opengl::modelview.data);
-	} else {
-		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
-		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
-		                   opengl::modelview.data);
-	}
-	texture->draw();
+	texture->draw(opengl::modelview, gSpriteColor, shaderProgram);
 	popMatrix();
 }
 
+#ifdef JNGL_GPU_BACKEND
+struct Sprite::Batch::Impl {
+	const Texture* texture;
+	jngl::Mat3 translation;
+	Rgba color;
+	/// Keeps the custom ShaderProgram in use while the Batch exists, like on OpenGL
+	std::optional<ShaderProgram::Context> context;
+};
+
+Sprite::Batch::Batch(std::unique_ptr<Impl> impl) : impl(std::move(impl)) {
+}
+
+Sprite::Batch::~Batch() = default;
+
+void Sprite::Batch::draw(Mat3 modelview) const {
+	modelview *= impl->translation;
+	impl->texture->draw(modelview, impl->color);
+}
+
+auto Sprite::batch(const ShaderProgram* const shaderProgram) const -> Batch {
+	auto impl = std::make_unique<Batch::Impl>(
+	    Batch::Impl{ .texture = texture.get(),
+	                 .translation = boost::qvm::translation_mat(
+	                     boost::qvm::vec<double, 2>({ -getWidth() / 2., -getHeight() / 2. })),
+	                 .color = gSpriteColor,
+	                 .context = std::nullopt });
+	if (shaderProgram) {
+		impl->context.emplace(shaderProgram->use());
+	}
+	return Batch{ std::move(impl) };
+}
+#else
 struct Sprite::Batch::Impl {
 	ShaderProgram::Context context;
 	jngl::Mat3 translation;
@@ -396,23 +388,14 @@ auto Sprite::batch(const ShaderProgram* const shaderProgram) const -> Batch {
 		.modelviewUniform = shaderProgram ? shaderProgram->getUniformLocation("modelview")
 		                                  : ShaderCache::handle().modelviewUniform }) };
 }
+#endif
 
 void Sprite::drawScaled(float xfactor, float yfactor,
                         const ShaderProgram* const shaderProgram) const {
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
 	opengl::scale(xfactor, yfactor);
-	auto context =
-	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
-	if (shaderProgram) {
-		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
-		                   opengl::modelview.data);
-	} else {
-		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
-		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
-		                   opengl::modelview.data);
-	}
-	texture->draw();
+	texture->draw(opengl::modelview, gSpriteColor, shaderProgram);
 	popMatrix();
 }
 
@@ -443,16 +426,7 @@ void Sprite::drawMesh(const Mat3& modelview, const std::vector<Vertex>& vertexes
 	if (vertexes.empty()) {
 		return;
 	}
-	auto context =
-	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
-	if (shaderProgram) {
-		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
-		                   modelview.data);
-	} else {
-		ShaderCache::handle().setTextureColorUniforms(color);
-		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE, modelview.data);
-	}
-	texture->drawMesh(vertexes);
+	texture->drawMesh(vertexes, modelview, color, shaderProgram);
 }
 
 void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
@@ -462,17 +436,7 @@ void Sprite::drawMesh(const std::vector<Vertex>& vertexes,
 	}
 	pushMatrix();
 	opengl::translate(static_cast<float>(position.x), static_cast<float>(position.y));
-	auto context =
-	    shaderProgram ? shaderProgram->use() : ShaderCache::handle().textureShaderProgram->use();
-	if (shaderProgram) {
-		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
-		                   opengl::modelview.data);
-	} else {
-		ShaderCache::handle().setTextureColorUniforms(gSpriteColor);
-		glUniformMatrix3fv(ShaderCache::handle().modelviewUniform, 1, GL_FALSE,
-		                   opengl::modelview.data);
-	}
-	texture->drawMesh(vertexes);
+	texture->drawMesh(vertexes, opengl::modelview, gSpriteColor, shaderProgram);
 	popMatrix();
 }
 
@@ -482,7 +446,13 @@ void Sprite::setBytes(const unsigned char* const bytes) {
 }
 
 const Shader& Sprite::vertexShader() {
+#ifdef JNGL_GPU_BACKEND
+	// The same as on OpenGL, GpuRenderer sets its modelview and projection
+	static Shader shader(builtin_shaders::texturedVertex, Shader::Type::VERTEX);
+	return shader;
+#else
 	return *ShaderCache::handle().textureVertexShader;
+#endif
 }
 
 #ifndef NOPNG
@@ -640,11 +610,20 @@ void Sprite::loadTexture(const int scaledWidth, const int scaledHeight, const st
 }
 
 Finally disableBlending() {
+#ifdef JNGL_GPU_BACKEND
+	auto& renderer = gpuRenderer();
+	if (!renderer.isBlendingEnabled()) {
+		return Finally(nullptr);
+	}
+	renderer.setBlendingEnabled(false);
+	return Finally([&renderer]() { renderer.setBlendingEnabled(true); });
+#else
 	if (!glIsEnabled(GL_BLEND)) {
 		return Finally(nullptr);
 	}
 	glDisable(GL_BLEND);
 	return Finally([]() { glEnable(GL_BLEND); });
+#endif
 }
 
 Finally setBlendMode(const BlendMode mode) {
@@ -658,8 +637,14 @@ Finally setBlendMode(const BlendMode mode) {
 }
 
 Finally drawOnlyIntoAlphaChannel() {
+#ifdef JNGL_GPU_BACKEND
+	auto& renderer = gpuRenderer();
+	renderer.setAlphaOnlyWrite(true);
+	return Finally([&renderer]() { renderer.setAlphaOnlyWrite(false); });
+#else
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_TRUE);
 	return Finally([]() { glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); });
+#endif
 }
 
 } // namespace jngl

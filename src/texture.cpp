@@ -2,24 +2,69 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 #include "texture.hpp"
 
-#include "ShaderCache.hpp"
+#include "jngl/Alpha.hpp"
+#include "jngl/Mat3.hpp"
+#include "jngl/Rgba.hpp"
+#include "jngl/ShaderProgram.hpp"
 #include "jngl/Vertex.hpp"
 #include "jngl/screen.hpp"
 
 #include <cassert>
 
+#ifdef JNGL_GPU_BACKEND
+#include "GpuBackend.hpp"
+#include "spriteimpl.hpp"
+
+#include <optional>
+#else
+#include "ShaderCache.hpp"
+#endif
+
 namespace jngl {
+
+namespace {
+#ifdef JNGL_GPU_BACKEND
+/// \a shaderProgram in use if it isn't nullptr, otherwise drawSprite uses the built-in one
+std::optional<ShaderProgram::Context> use(const ShaderProgram* const shaderProgram) {
+	if (!shaderProgram) {
+		return std::nullopt;
+	}
+	return shaderProgram->use();
+}
+#else
+/// \a shaderProgram in use with \a modelview, or the built-in texture shader also with \a color
+ShaderProgram::Context use(const ShaderProgram* const shaderProgram, const Mat3& modelview,
+                           const Rgba color) {
+	if (shaderProgram) {
+		auto context = shaderProgram->use();
+		glUniformMatrix3fv(shaderProgram->getUniformLocation("modelview"), 1, GL_FALSE,
+		                   modelview.data);
+		return context;
+	}
+	auto& shaderCache = ShaderCache::handle();
+	auto context = shaderCache.textureShaderProgram->use();
+	shaderCache.setTextureColorUniforms(color);
+	glUniformMatrix3fv(shaderCache.modelviewUniform, 1, GL_FALSE, modelview.data);
+	return context;
+}
+#endif
+} // namespace
 
 Texture::Texture(const float preciseWidth, const float preciseHeight, const int width,
                  const int height, const GLubyte* const* const rowPointers, GLenum format,
                  const GLubyte* const data, const GLenum type, const bool mipmap)
-: texture_(opengl::genAndBindTexture()) {
+#ifndef JNGL_GPU_BACKEND
+: texture_(opengl::genAndBindTexture())
+#endif
+{
+#ifndef JNGL_GPU_BACKEND
 	assert(format == GL_RGB || format == GL_RGBA || format == GL_BGR);
 	GLint internalFormat = format == GL_RGBA ? GL_RGBA : GL_RGB;
 	if (type == GL_HALF_FLOAT) {
 		internalFormat = GL_RGBA16F;
 	}
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, nullptr);
+#endif
 	vertexes = {
 		0, 0,
 		0, 0, // texture coordinates
@@ -30,6 +75,10 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 		static_cast<float>(preciseWidth / getScaleFactor()), 0,
 		1, 0 // texture coordinates
 	};
+#ifdef JNGL_GPU_BACKEND
+	gpuTexture =
+	    gpuRenderer().createTexture(width, height, format, type, data, rowPointers, mipmap);
+#else
 	glGenVertexArrays(1, &vao);
 	opengl::bindVertexArray(vao);
 
@@ -63,9 +112,17 @@ Texture::Texture(const float preciseWidth, const float preciseHeight, const int 
 		glGenerateMipmap(GL_TEXTURE_2D);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	}
+#endif
 }
 
 Texture::~Texture() {
+#ifdef JNGL_GPU_BACKEND
+	if (gpuTexture) {
+		if (auto* renderer = gpuRendererIfExists()) {
+			renderer->destroyTexture(*gpuTexture);
+		}
+	}
+#else
 	if (ShaderCache::handleIfAlive()) {
 		// if the ShaderCache doesn't exist anymore, this means unloadAll() has been called by
 		// hideWindow() and the OpenGL context doesn't exist anymore. It's unnecessary to delete
@@ -75,17 +132,54 @@ Texture::~Texture() {
 		glDeleteBuffers(1, &vertexBuffer_);
 		opengl::deleteVertexArray(vao);
 	}
+#endif
 }
 
 void Texture::bind() const {
+#ifndef JNGL_GPU_BACKEND
 	opengl::bindVertexArray(vao);
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
+#endif
 }
 
 void Texture::draw() const {
+#ifndef JNGL_GPU_BACKEND
 	bind();
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+#endif
+}
+
+void Texture::draw(const Mat3& modelview, const Rgba color,
+                   const ShaderProgram* const shaderProgram) const {
+#ifdef JNGL_GPU_BACKEND
+	const auto context = use(shaderProgram);
+	if (gpuTexture) {
+		gpuRenderer().drawSprite(*gpuTexture, vertexes.data(), 4, PrimitiveType::TriangleFan,
+		                         modelview, color);
+	}
+#else
+	const auto context = use(shaderProgram, modelview, color);
+	draw();
+#endif
+}
+
+void Texture::drawLerped(const Mat3& modelview, const Rgb color, const float red, const float green,
+                         const float blue, const Alpha alpha) const {
+#ifdef JNGL_GPU_BACKEND
+	if (gpuTexture) {
+		gpuRenderer().drawSprite(*gpuTexture, vertexes.data(), 4, PrimitiveType::TriangleFan,
+		                         modelview, color, { red, green, blue, 1.f - alpha.getAlpha() });
+	}
+#else
+	opengl::bindVertexArray(vao);
+	auto& shaderCache = ShaderCache::handle();
+	auto context = shaderCache.textureShaderProgram->use();
+	shaderCache.setTextureLerpUniforms(color, red, green, blue, alpha);
+	glUniformMatrix3fv(shaderCache.modelviewUniform, 1, GL_FALSE, modelview.data);
+	glBindTexture(GL_TEXTURE_2D, texture_);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+#endif
 }
 
 void Texture::drawClipped(const float xstart, const float xend, const float ystart,
@@ -104,6 +198,12 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 	vertexes[10] = vertexes[14] = xend;
 	vertexes[7] = vertexes[11] = yend;
 
+#ifdef JNGL_GPU_BACKEND
+	if (gpuTexture) {
+		gpuRenderer().drawSprite(*gpuTexture, vertexes.data(), 4, PrimitiveType::TriangleFan,
+		                         opengl::modelview, Rgba(red, green, blue, alpha));
+	}
+#else
 	opengl::bindVertexArray(opengl::vaoStream);
 	auto& shaderCache = ShaderCache::handle();
 	auto tmp = shaderCache.textureShaderProgram->use();
@@ -124,9 +224,28 @@ void Texture::drawClipped(const float xstart, const float xend, const float ysta
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+#endif
+}
+
+void Texture::drawMesh(const std::vector<Vertex>& vertexes, const Mat3& modelview,
+                       const Rgba color, const ShaderProgram* const shaderProgram) const {
+#ifdef JNGL_GPU_BACKEND
+	const auto context = use(shaderProgram);
+	if (gpuTexture && !vertexes.empty()) {
+		// jngl::Vertex is a tightly packed { x, y, u, v }, matching what drawSprite expects
+		gpuRenderer().drawSprite(*gpuTexture, reinterpret_cast<const float*>(vertexes.data()),
+		                         vertexes.size(), PrimitiveType::Triangles, modelview, color);
+	}
+#else
+	const auto context = use(shaderProgram, modelview, color);
+	drawMesh(vertexes);
+#endif
 }
 
 void Texture::drawMesh(const std::vector<Vertex>& vertexes) const {
+#ifdef JNGL_GPU_BACKEND
+	drawMesh(vertexes, opengl::modelview, gSpriteColor);
+#else
 	opengl::bindVertexArray(opengl::vaoStream);
 	glBindBuffer(GL_ARRAY_BUFFER, opengl::vboStream); // VAO does NOT save the VBO binding
 	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexes.size() * sizeof(vertexes[0])),
@@ -144,10 +263,15 @@ void Texture::drawMesh(const std::vector<Vertex>& vertexes) const {
 
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertexes.size()));
+#endif
 }
 
 GLuint Texture::getID() const {
+#ifdef JNGL_GPU_BACKEND
+	return 0;
+#else
 	return texture_;
+#endif
 }
 
 float Texture::getPreciseWidth() const {
@@ -158,9 +282,54 @@ float Texture::getPreciseHeight() const {
 	return vertexes[5] * getScaleFactor();
 }
 
+void Texture::enableMipmaps() const {
+#ifdef JNGL_GPU_BACKEND
+	if (gpuTexture) {
+		gpuRenderer().enableMipmaps(*gpuTexture);
+	}
+#else
+	glBindTexture(GL_TEXTURE_2D, texture_);
+	GLint minFilter = 0;
+	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &minFilter);
+	if (minFilter == GL_LINEAR_MIPMAP_LINEAR || minFilter == GL_NEAREST_MIPMAP_NEAREST) {
+		return;
+	}
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+	                minFilter == GL_NEAREST ? GL_NEAREST_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR);
+#endif
+}
+
+void Texture::setTextureFilter(const TextureFilter minification,
+                               const TextureFilter magnification) const {
+#ifdef JNGL_GPU_BACKEND
+	if (gpuTexture) {
+		gpuRenderer().setTextureFilter(*gpuTexture, minification, magnification);
+	}
+#else
+	glBindTexture(GL_TEXTURE_2D, texture_);
+	GLint minFilter = 0;
+	glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, &minFilter);
+	const bool mipmaps =
+	    minFilter == GL_LINEAR_MIPMAP_LINEAR || minFilter == GL_NEAREST_MIPMAP_NEAREST;
+	const bool nearest = minification == TextureFilter::NearestNeighbor;
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+	                mipmaps ? (nearest ? GL_NEAREST_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR)
+	                        : (nearest ? GL_NEAREST : GL_LINEAR));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+	                magnification == TextureFilter::NearestNeighbor ? GL_NEAREST : GL_LINEAR);
+#endif
+}
+
 void Texture::setBytes(const unsigned char* const bytes, const int width, const int height) const {
+#ifdef JNGL_GPU_BACKEND
+	if (gpuTexture) {
+		gpuRenderer().updateTextureBytes(*gpuTexture, width, height, bytes);
+	}
+#else
 	glBindTexture(GL_TEXTURE_2D, texture_);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+#endif
 }
 
 } // namespace jngl

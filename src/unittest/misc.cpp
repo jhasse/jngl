@@ -67,7 +67,13 @@ TEST_CASE("getGraphicsApi") {
 	Fixture f(1);
 	const auto api = jngl::getGraphicsApi();
 	INFO(api);
+#ifdef JNGL_VULKAN
+	REQUIRE(api.starts_with("Vulkan "));
+#elif defined(JNGL_D3D12)
+	REQUIRE(api.starts_with("Direct3D 12 "));
+#else
 	REQUIRE(api.starts_with("OpenGL "));
+#endif
 	REQUIRE(api.size() > 7); // with its version
 }
 

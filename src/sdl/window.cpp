@@ -2,6 +2,9 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 #include "../App.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "../GpuBackend.hpp"
+#endif
 #include "../helper.hpp"
 #include "../jngl/ImageData.hpp"
 #include "../jngl/other.hpp"
@@ -9,6 +12,7 @@
 #include "../jngl/window.hpp"
 #include "../log.hpp"
 #include "../main.hpp"
+#include "../opengl.hpp"
 #include "../windowptr.hpp"
 #include "windowimpl.hpp"
 
@@ -72,6 +76,11 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
   impl(std::make_unique<WindowImpl>()) {
 	SDL::handle();
 
+#ifdef JNGL_VULKAN
+	Uint32 flags = SDL_WINDOW_VULKAN;
+#elif defined(JNGL_D3D12)
+	Uint32 flags = 0; // D3D12Renderer creates the swap chain for the window's HWND itself
+#else
 #ifdef __APPLE__ // https://stackoverflow.com/a/26981800/647898
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 #endif
@@ -79,6 +88,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 	Uint32 flags = SDL_WINDOW_OPENGL; // TODO: SDL_WINDOW_SHOWN
+#endif
 	// Drawn into all the same, but never shown, e.g. for tests where SDL's offscreen video driver
 	// isn't available: it needs EGL, which Windows doesn't have
 	if (const char* const hidden = std::getenv("JNGL_HIDDEN_WINDOW");
@@ -102,6 +112,12 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 		                               // be reduced in its height (SDL bug?).
 	}
 
+#ifdef JNGL_GPU_BACKEND
+	impl->sdlWindow = SDL_CreateWindow(title.c_str(), width, height, flags);
+	if (!impl->sdlWindow) {
+		throw std::runtime_error(SDL_GetError());
+	}
+#else
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -148,6 +164,7 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 #endif
 		}
 	}
+#endif // JNGL_GPU_BACKEND
 
 	// This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by SDL2). On
 	// Linux (GNOME) it results in the top of the window being cut off (by the header bar height?).
@@ -172,6 +189,13 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	impl->hidpiScaleFactor = static_cast<float>(width_) / static_cast<float>(width);
 	setScaleFactor(getScaleFactor() * impl->hidpiScaleFactor);
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
+
+#ifdef JNGL_GPU_BACKEND
+	// Brings up the device and swapchain at the aligned pixel size, gpuRenderer() works from here on
+	// (e.g. in App::initGl below)
+	createGpuRenderer(impl->sdlWindow);
+	isMultisampleSupported_ = gpuRenderer().isMultisampleSupported();
+#endif
 	initGl();
 
 	// Unlike SDL2, which implicitly enabled text input on desktop, SDL3 doesn't deliver
@@ -443,6 +467,9 @@ void Window::UpdateInput() {
 				impl->hidpiScaleFactor =
 				    static_cast<float>(newWidth) / static_cast<float>(logicalWidth);
 			}
+#ifdef JNGL_GPU_BACKEND
+			gpuRenderer().onResize(newWidth, newHeight);
+#endif
 			setActualSize(newWidth, newHeight);
 		} break;
 		case SDL_EVENT_DROP_FILE:
@@ -469,7 +496,11 @@ void Window::UpdateInput() {
 }
 
 void Window::SwapBuffers() {
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().endFrame();
+#else
 	SDL_GL_SwapWindow(impl->sdlWindow);
+#endif
 }
 
 void Window::SetMouseVisible(const bool visible) {

@@ -87,6 +87,17 @@ option(JNGL_RECORD "Enable video recording using FFmpeg" OFF)
 option(JNGL_STEAMWORKS "Enable Steamsworks SDK support for achievements" OFF)
 option(JNGL_TRACE "Enable tracing for debugging purposes" OFF)
 
+# Vulkan renderer backend. When OFF (the default) JNGL uses its
+# OpenGL/GLES backend. When ON an additional Vulkan backend is compiled in and
+# used at runtime instead. Currently only implemented for the desktop SDL3
+# platform (Linux, Windows and macOS) and Android 9+; see src/vulkan/. Building
+# for Android also needs a C++ compiler and shaderc for the machine that builds.
+option(JNGL_VULKAN "Use the Vulkan renderer backend instead of OpenGL" OFF)
+
+# Direct3D 12 renderer backend, like JNGL_VULKAN. Only for the SDL3 platform on
+# Windows; see src/d3d12/. Building it requires the Vulkan SDK for its shader compilers.
+option(JNGL_D3D12 "Use the Direct3D 12 renderer backend instead of OpenGL" OFF)
+
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
 if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
 	set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT ON)
@@ -452,6 +463,182 @@ else()
 	endif()
 endif()
 
+if(JNGL_VULKAN AND JNGL_D3D12)
+	message(FATAL_ERROR "JNGL_VULKAN and JNGL_D3D12 can't be enabled at the same time.")
+endif()
+if(JNGL_VULKAN)
+	if(ANDROID)
+		if(ANDROID_PLATFORM_LEVEL LESS 28)
+			# libvulkan.so has Vulkan 1.1's functions since then
+			message(FATAL_ERROR "JNGL_VULKAN requires Android 9 (minSdk 28) or newer.")
+		endif()
+	elseif((NOT UNIX AND NOT WIN32) OR IOS OR EMSCRIPTEN OR JNGL_WINAPI)
+		message(FATAL_ERROR "JNGL_VULKAN requires Android or the desktop SDL3 backend on Linux, Windows or macOS (JNGL_WINAPI=OFF).")
+	endif()
+endif()
+if(JNGL_D3D12)
+	if(NOT WIN32 OR JNGL_WINAPI)
+		message(FATAL_ERROR "JNGL_D3D12 requires the SDL3 backend on Windows (JNGL_WINAPI=OFF).")
+	endif()
+endif()
+
+if(JNGL_VULKAN OR JNGL_D3D12)
+	# jngl-shaderc compiles GLSL to SPIR-V with shaderc, which the Vulkan backend also does at
+	# runtime for user-defined jngl::Shader programs, except on Android.
+	if(NOT ANDROID)
+		include(shaderc)
+	endif()
+	file(GLOB SPIRV_SRC src/spirv/*.cpp)
+
+	# Everything's drawn through GpuBackend.hpp instead of OpenGL
+	target_compile_definitions(jngl PUBLIC JNGL_GPU_BACKEND)
+	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+	# What's the same for both of them
+	file(GLOB GPU_SRC src/gpu/*.cpp)
+	target_sources(jngl PRIVATE ${GPU_SRC})
+
+	# Compiles ShaderPrograms' GLSL into a header with their bytecode for the backend, see
+	# src/jngl/ShaderBytecode.hpp: the built-in ones (see src/BuiltinShaders.hpp) and those of games,
+	# see jngl_compile_shaders() below
+	if(CMAKE_CROSSCOMPILING)
+		# It runs while building, so it's built on its own for the machine that's building, which
+		# needs a C++ compiler and shaderc then
+		include(ExternalProject)
+		set(JNGL_SHADERC_HOST_DIR ${CMAKE_CURRENT_BINARY_DIR}/jngl-shaderc-host)
+		set(JNGL_SHADERC_HOST ${JNGL_SHADERC_HOST_DIR}/jngl-shaderc)
+		if(CMAKE_HOST_WIN32)
+			string(APPEND JNGL_SHADERC_HOST .exe)
+		endif()
+		ExternalProject_Add(jngl-shaderc-host
+			SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/shaderc
+			BINARY_DIR ${JNGL_SHADERC_HOST_DIR}
+			# Without the toolchain file, so it's built with the host's compiler
+			CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_MAKE_PROGRAM=${CMAKE_MAKE_PROGRAM}
+			BUILD_ALWAYS ON # so that it's rebuilt when its sources change
+			BUILD_BYPRODUCTS ${JNGL_SHADERC_HOST}
+			INSTALL_COMMAND ""
+		)
+		# Imported executables are run on the host, also when cross-compiling
+		add_executable(jngl-shaderc IMPORTED GLOBAL)
+		set_target_properties(jngl-shaderc PROPERTIES IMPORTED_LOCATION ${JNGL_SHADERC_HOST})
+		add_dependencies(jngl-shaderc jngl-shaderc-host)
+	else()
+		add_subdirectory(src/shaderc)
+	endif()
+	if(JNGL_D3D12)
+		set_property(GLOBAL PROPERTY JNGL_BYTECODE_FORMAT dxbc)
+	else()
+		set_property(GLOBAL PROPERTY JNGL_BYTECODE_FORMAT spirv)
+	endif()
+	get_property(JNGL_BYTECODE_FORMAT GLOBAL PROPERTY JNGL_BYTECODE_FORMAT)
+	set(JNGL_BUILTIN_BYTECODE ${CMAKE_CURRENT_BINARY_DIR}/generated/BuiltinBytecode.hpp)
+	add_custom_command(
+		OUTPUT ${JNGL_BUILTIN_BYTECODE}
+		COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/generated
+		COMMAND jngl-shaderc ${JNGL_BYTECODE_FORMAT} ${JNGL_BUILTIN_BYTECODE} --builtin
+		DEPENDS jngl-shaderc
+		COMMENT "Compiling the built-in shaders to ${JNGL_BYTECODE_FORMAT}"
+		VERBATIM
+	)
+	add_custom_target(jngl_builtin_shaders DEPENDS ${JNGL_BUILTIN_BYTECODE})
+	add_dependencies(jngl jngl_builtin_shaders)
+	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated)
+endif()
+
+# jngl_compile_shaders(<output.hpp> <namespace> <name>=[<vertex>,]<fragment>...)
+#
+# Compiles the GLSL of ShaderPrograms at build time for the Vulkan or the Direct3D 12 renderer,
+# which can't compile it at runtime (Vulkan only on Android), into <output.hpp> with a
+# jngl::ShaderBytecode for each in <namespace>, see src/jngl/ShaderBytecode.hpp. Without a vertex
+# shader, a program uses Sprite::vertexShader(). The paths are relative to the current source
+# directory. Also needs a target that depends on <output.hpp>, e.g.
+# add_custom_target(... DEPENDS <output.hpp>).
+function(jngl_compile_shaders output namespace)
+	get_property(format GLOBAL PROPERTY JNGL_BYTECODE_FORMAT)
+	if(NOT format)
+		message(FATAL_ERROR "jngl_compile_shaders() needs JNGL_VULKAN or JNGL_D3D12.")
+	endif()
+	# With absolute paths, as jngl-shaderc runs in the build directory
+	set(programs "")
+	set(sources "")
+	foreach(program ${ARGN})
+		string(REGEX MATCH "^[^=]*" name "${program}")
+		string(REGEX REPLACE "^[^=]*=" "" files "${program}")
+		string(REPLACE "," ";" files "${files}")
+		set(absolute "")
+		foreach(file ${files})
+			list(APPEND absolute ${CMAKE_CURRENT_SOURCE_DIR}/${file})
+		endforeach()
+		list(APPEND sources ${absolute})
+		string(REPLACE ";" "," absolute "${absolute}")
+		list(APPEND programs "${name}=${absolute}")
+	endforeach()
+	get_filename_component(directory ${output} DIRECTORY)
+	add_custom_command(
+		OUTPUT ${output}
+		COMMAND ${CMAKE_COMMAND} -E make_directory ${directory}
+		COMMAND jngl-shaderc ${format} ${output} ${namespace} ${programs}
+		DEPENDS jngl-shaderc ${sources}
+		COMMENT "Compiling the shaders of ${namespace} to ${format}"
+		VERBATIM
+	)
+endfunction()
+
+if(JNGL_D3D12 AND TARGET jngl-test)
+	# The demos' shaders, see data/*.frag
+	set(JNGL_EXAMPLE_SHADERS ${CMAKE_CURRENT_BINARY_DIR}/generated/examples/ExampleShaders.hpp)
+	jngl_compile_shaders(${JNGL_EXAMPLE_SHADERS} example_shaders blur=data/blur.frag
+	                     textured=data/textured.frag fade=data/fade.frag)
+	add_custom_target(jngl_example_shaders DEPENDS ${JNGL_EXAMPLE_SHADERS})
+	foreach(target jngl-test example-shader)
+		add_dependencies(${target} jngl_example_shaders)
+		target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated/examples)
+	endforeach()
+endif()
+
+if(JNGL_VULKAN)
+	if(ANDROID)
+		target_link_libraries(jngl PRIVATE vulkan)
+		target_compile_definitions(jngl PRIVATE VK_USE_PLATFORM_ANDROID_KHR)
+		# shaderc isn't part of the NDK, so jngl::Shader programs can only be compiled at build time
+		# there, see jngl_compile_shaders()
+	else()
+		find_package(Vulkan REQUIRED)
+		target_link_libraries(jngl PRIVATE Vulkan::Vulkan)
+
+		# For user-defined jngl::Shader programs, which can also be compiled at runtime
+		target_sources(jngl PRIVATE ${SPIRV_SRC})
+		target_include_directories(jngl PRIVATE ${SHADERC_INCLUDE_DIR})
+		target_link_libraries(jngl PRIVATE ${SHADERC_LIBRARY})
+		target_compile_definitions(jngl PRIVATE ${JNGL_SHADERC_DEFINITIONS})
+	endif()
+
+	file(GLOB VULKAN_SRC src/vulkan/*.cpp)
+	target_sources(jngl PRIVATE ${VULKAN_SRC})
+	target_compile_definitions(jngl PUBLIC JNGL_VULKAN)
+	# MoltenVK's portability feature declarations are still in the beta Vulkan headers.
+	target_compile_definitions(jngl PRIVATE VK_ENABLE_BETA_EXTENSIONS)
+endif()
+
+if(JNGL_D3D12)
+	# Its shaders are all compiled at build time by jngl-shaderc: SPIRV-Cross translates their
+	# SPIR-V to HLSL, which D3DCompile compiles, see src/d3d12/HlslCompiler.cpp. So JNGL itself
+	# doesn't need either.
+	find_path(SPIRV_CROSS_INCLUDE_DIR spirv_cross/spirv_cross_c.h
+		HINTS "$ENV{VULKAN_SDK}/Include" REQUIRED)
+	find_library(SPIRV_CROSS_LIBRARY NAMES spirv-cross-c-shared
+		HINTS "${JNGL_VULKAN_SDK_LIBDIR}" REQUIRED)
+	target_sources(jngl-shaderc PRIVATE src/d3d12/HlslCompiler.cpp)
+	target_include_directories(jngl-shaderc PRIVATE ${SPIRV_CROSS_INCLUDE_DIR})
+	target_link_libraries(jngl-shaderc PRIVATE ${SPIRV_CROSS_LIBRARY} d3dcompiler)
+	target_compile_definitions(jngl-shaderc PRIVATE JNGL_SHADERC_DXBC)
+
+	target_sources(jngl PRIVATE src/d3d12/D3D12Renderer.cpp)
+	set_source_files_properties(src/d3d12/D3D12Renderer.cpp PROPERTIES COMPILE_DEFINITIONS NOMINMAX)
+	target_link_libraries(jngl PRIVATE d3d12 dxgi dxguid)
+	target_compile_definitions(jngl PUBLIC JNGL_D3D12)
+endif()
+
 if(JNGL_BUILD_WEBP_FROM_SOURCE)
 	CPMAddPackage(NAME webp
 		URL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.5.0.tar.gz
@@ -540,6 +727,21 @@ if(NOT hasParent)
 		if(NOT EMSCRIPTEN AND NOT IOS)
 			# for tests including internal headers like window.hpp
 			target_include_directories(jngl-unittest PRIVATE glad/include)
+		endif()
+		if(JNGL_D3D12)
+			# See src/unittest/TestShaders.hpp
+			set(JNGL_TEST_SHADERS ${CMAKE_CURRENT_BINARY_DIR}/generated/unittest/TestShaderBytecode.hpp)
+			jngl_compile_shaders(${JNGL_TEST_SHADERS} test_shaders color=data/unittest/color.frag
+			                     colors=data/unittest/colors.frag black=data/unittest/black.frag
+			                     two=data/unittest/two.frag half=data/unittest/half.frag
+			                     minified=data/unittest/minified.frag
+			                     layout=data/unittest/layout.frag
+			                     varyings=data/unittest/varyings.vert,data/unittest/varyings.frag
+			                     ifdef=data/unittest/ifdef.frag)
+			add_custom_target(jngl_test_shaders DEPENDS ${JNGL_TEST_SHADERS})
+			add_dependencies(jngl-unittest jngl_test_shaders)
+			target_include_directories(jngl-unittest
+			                           PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated/unittest)
 		endif()
 		add_test(NAME JNGLUnitTest COMMAND jngl-unittest)
 

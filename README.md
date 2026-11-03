@@ -51,6 +51,44 @@ cmake -Bbuild -DFETCHCONTENT_QUIET=0
 ```
 Then open `build/jngl.sln` in Visual Studio.
 
+### Vulkan
+Install the Vulkan SDK, including shaderc, and open a new terminal so that `VULKAN_SDK` and
+`PATH` include it. Enable the Vulkan renderer with the default SDL3 window backend:
+```bash
+cmake -Bbuild-vulkan -DJNGL_VULKAN=1 -DJNGL_WINAPI=OFF
+cmake --build build-vulkan --config Release
+```
+The same option works with cja: `cja build -DJNGL_VULKAN=1`.
+
+The built-in shaders are compiled during the build by `jngl-shaderc`, which needs
+`shaderc_shared.dll` from the SDK's `Bin` directory on `PATH`. So does the game at runtime, for
+its `jngl::Shader`s, unless it's beside the executable. Include this DLL when distributing a
+Vulkan build. The Vulkan loader is supplied by
+the graphics driver; users need a Vulkan-capable driver, but do not need the SDK.
+
+### Direct3D 12
+The Direct3D 12 renderer also needs the Vulkan SDK to build, for its shader compilers
+(GLSL is compiled to SPIR-V and translated to HLSL by SPIRV-Cross):
+```bash
+cmake -Bbuild-d3d12 -DJNGL_D3D12=1 -DJNGL_WINAPI=OFF
+cmake --build build-d3d12 --config Release
+```
+During the build, `shaderc_shared.dll` and `spirv-cross-c-shared.dll` from the SDK's `Bin`
+directory must be on `PATH`. Unlike Vulkan, it doesn't compile shaders at runtime, so a Direct3D 12
+build doesn't need any DLLs of the SDK. Instead, a game's shaders have to be compiled at build
+time, into a header with a `jngl::ShaderBytecode` for each `jngl::ShaderProgram`:
+```cmake
+jngl_compile_shaders(${CMAKE_CURRENT_BINARY_DIR}/shaders.hpp shaders
+                     blur=data/blur.frag outline=data/outline.vert,data/outline.frag)
+add_custom_target(shaders DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/shaders.hpp)
+add_dependencies(game shaders)
+```
+```cpp
+const jngl::ShaderProgram blur(shaders::blur); // with jngl::Sprite::vertexShader()
+```
+Debug builds enable the Direct3D 12 debug layer if the Graphics Tools optional feature of Windows
+is installed.
+
 ## macOS
 Use [Homebrew](http://brew.sh/) to install the build dependencies:
 ```bash
@@ -58,6 +96,29 @@ brew install sdl3 freetype libvorbis webp pkg-config cmake ffmpeg
 ```
 
 `ffmpeg` is only needed if you plan to use [VideoRecorder](https://bixense.com/jngl/classjngl_1_1VideoRecorder.html#details).
+
+### Vulkan
+Install the Vulkan dependencies, including the MoltenVK driver, which runs on Metal, and select it:
+```bash
+brew install molten-vk vulkan-loader vulkan-headers shaderc vulkan-tools vulkan-validationlayers
+export VK_DRIVER_FILES="$(brew --prefix)/etc/vulkan/icd.d/MoltenVK_icd.json"
+vulkaninfo --summary
+cmake -Bbuild-vulkan -DJNGL_VULKAN=ON
+cmake --build build-vulkan
+./build-vulkan/jngl-test
+```
+
+To enable Homebrew's validation layer in Debug builds, also set:
+```bash
+export VK_ADD_LAYER_PATH="$(brew --prefix)/share/vulkan/explicit_layer.d"
+export DYLD_LIBRARY_PATH="$(brew --prefix vulkan-validationlayers)/lib${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}"
+```
+
+Mesa's KosmicKrisp driver (`brew install mesa`, Apple Silicon with macOS 26 or newer) works too,
+but it's a lot slower.
+The LunarG Vulkan SDK can also supply the dependencies; source its `setup-env.sh` before
+configuring. JNGL links to the Vulkan loader, so the driver can be selected at runtime.
+When distributing a Vulkan build, bundle the loader and driver with the application.
 
 ## Android
 1. Install the Android SDK and set `ANDROID_HOME` to point to it.
@@ -67,6 +128,14 @@ brew install sdl3 freetype libvorbis webp pkg-config cmake ffmpeg
 lus android-run
 ```
 Alternatively, open `android/test` in Android Studio and build from there.
+
+### Vulkan
+The Vulkan renderer works on Android 9 (API level 28) and newer. Build with
+`-DJNGL_VULKAN=ON`, e.g. the test app with `./gradlew installDebug -Pvulkan` in `android/test`.
+The built-in shaders are compiled during the build by `jngl-shaderc`, which is built for the machine
+that's building, so it needs a C++ compiler and shaderc there (see Vulkan above for Linux, Windows
+and macOS). shaderc isn't available on Android, so a game's shaders have to be compiled at build
+time with `jngl_compile_shaders()`, like for Direct3D 12 (see above).
 
 ## iOS
 Generate an Xcode project using CMake:

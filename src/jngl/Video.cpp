@@ -18,6 +18,14 @@
 #include "ShaderProgram.hpp"
 #include "time.hpp"
 
+#ifdef JNGL_GPU_BACKEND
+#include "../texture.hpp"
+#include "BuiltinBytecode.hpp"
+#include "Rgba.hpp"
+#include "ShaderBytecode.hpp"
+#include "screen.hpp"
+#endif
+
 #include <algorithm>
 #include <atomic>
 #include <cassert>
@@ -115,6 +123,9 @@ public:
 		while (!video) {
 			video = THEORAPLAY_getVideo(stream->getDecoder());
 		}
+		// Not from video later on, as draw() releases each frame once it's uploaded
+		width = gsl::narrow<int>(video->width);
+		height = gsl::narrow<int>(video->height);
 		timePerFrame = 1. / video->fps;
 		assert(timePerFrame > 0);
 
@@ -162,6 +173,15 @@ public:
 				}
 			}
 			if (!shaderProgram) {
+#ifdef JNGL_GPU_BACKEND
+				// See builtin_shaders::videoFragment
+				shaderProgram = std::make_unique<ShaderProgram>(builtin_bytecode::video);
+				// One screen unit per pixel of the video, like on OpenGL
+				const auto scaleFactor = static_cast<float>(getScaleFactor());
+				texture = std::make_unique<Texture>(static_cast<float>(width) * scaleFactor,
+				                                    static_cast<float>(height) * scaleFactor, width,
+				                                    height, nullptr);
+#else
 				Shader vertexShader(R"(#version 300 es
 					in highp vec2 position;
 					in mediump vec2 inTexCoord;
@@ -278,8 +298,12 @@ public:
 				glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
 				                      reinterpret_cast<void*>(2 * sizeof(float))); // NOLINT
 				glEnableVertexAttribArray(texCoordAttrib);
+#endif
 			}
 
+#ifdef JNGL_GPU_BACKEND
+			upload(*video);
+#else
 			glBindTexture(GL_TEXTURE_2D, textureY);
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, static_cast<GLsizei>(video->width),
 			                static_cast<GLsizei>(video->height), GL_RED, GL_UNSIGNED_BYTE,
@@ -295,6 +319,7 @@ public:
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, static_cast<GLsizei>(video->width / 2),
 			                static_cast<GLsizei>(video->height / 2), GL_RED, GL_UNSIGNED_BYTE,
 			                video->pixels + std::lround(1.25 * video->width * video->height));
+#endif
 
 			video = nullptr;
 		}
@@ -308,6 +333,10 @@ public:
 		}
 		if (shaderProgram) {
 			auto _ = shaderProgram->use();
+#ifdef JNGL_GPU_BACKEND
+			texture->draw(Mat3(opengl::modelview).translate({ -width / 2., -height / 2. }),
+			              Rgba(1, 1, 1, 1));
+#else
 			glUniformMatrix3fv(modelviewUniform, 1, GL_FALSE, opengl::modelview.data);
 			opengl::bindVertexArray(vao);
 
@@ -321,6 +350,7 @@ public:
 			glBindTexture(GL_TEXTURE_2D, textureY);
 
 			glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+#endif
 		}
 	}
 
@@ -330,6 +360,7 @@ public:
 
 	~Impl() {
 		stream->stop();
+#ifndef JNGL_GPU_BACKEND
 		if (shaderProgram) {
 			glDeleteTextures(1, &textureY);
 			glDeleteTextures(1, &textureU);
@@ -337,6 +368,7 @@ public:
 			glDeleteBuffers(1, &vertexBuffer);
 			opengl::deleteVertexArray(vao);
 		}
+#endif
 	}
 
 	Impl(const Impl&) = delete;
@@ -344,8 +376,12 @@ public:
 	Impl(Impl&&) = delete;
 	Impl& operator=(Impl&&) = delete;
 
-	[[nodiscard]] int getWidth() const { return gsl::narrow<int>(video->width); }
-	[[nodiscard]] int getHeight() const { return gsl::narrow<int>(video->height); }
+	[[nodiscard]] int getWidth() const {
+		return width;
+	}
+	[[nodiscard]] int getHeight() const {
+		return height;
+	}
 
 	std::shared_ptr<Stream> getStream() const {
 		return stream;
@@ -355,6 +391,31 @@ private:
 	[[nodiscard]] bool started() const {
 		return startTime > 0;
 	}
+
+#ifdef JNGL_GPU_BACKEND
+	/// Puts the frame's Y, U and V into the R, G and B of texture's texels. U and V are a quarter
+	/// of the size of the video, so each of their values goes into a square of four texels.
+	void upload(const THEORAPLAY_VideoFrame& frame) {
+		const auto w = static_cast<size_t>(frame.width);
+		const auto h = static_cast<size_t>(frame.height);
+		assert(w % 2 == 0 && h % 2 == 0);
+		const unsigned char* const yPlane = frame.pixels;
+		const unsigned char* const uPlane = yPlane + w * h;
+		const unsigned char* const vPlane = uPlane + w * h / 4;
+		yuv.resize(w * h * 4);
+		for (size_t y = 0; y < h; ++y) {
+			const size_t chromaRow = y / 2 * (w / 2);
+			for (size_t x = 0; x < w; ++x) {
+				unsigned char* const texel = &yuv[(y * w + x) * 4];
+				texel[0] = yPlane[y * w + x];
+				texel[1] = uPlane[chromaRow + x / 2];
+				texel[2] = vPlane[chromaRow + x / 2];
+				texel[3] = 255;
+			}
+		}
+		texture->setBytes(yuv.data(), static_cast<int>(w), static_cast<int>(h));
+	}
+#endif
 
 	void queueAudio() {
 		stream->queueAudio(*audio);
@@ -368,14 +429,21 @@ private:
 	std::unique_ptr<const THEORAPLAY_AudioPacket> audio;
 	double startTime;
 	double timePerFrame;
+	int width;
+	int height;
 
 	std::unique_ptr<ShaderProgram> shaderProgram;
+#ifdef JNGL_GPU_BACKEND
+	std::unique_ptr<Texture> texture;
+	std::vector<unsigned char> yuv; ///< what upload() puts into texture
+#else
 	int modelviewUniform = -1;
 	GLuint textureY = 0; // luminance
 	GLuint textureU = 0; // chrominance
 	GLuint textureV = 0; // chrominance
 	GLuint vao = 0;
 	GLuint vertexBuffer = 0;
+#endif
 };
 
 Video::Video(const std::string& filename) : impl(std::make_unique<Impl>(filename)) {

@@ -9,11 +9,91 @@
 #include <array>
 #include <cassert>
 #include <stdexcept>
+#include <string_view>
+
+#ifdef JNGL_GPU_BACKEND
+#include "../GpuBackend.hpp"
+#if !defined(JNGL_D3D12) && !defined(__ANDROID__)
+#include "../spirv/ShaderCompiler.hpp"
+#endif
+#endif
 
 namespace jngl {
 
 int ShaderProgram::Context::referenceCount = 0;
 const ShaderProgram::Impl* ShaderProgram::Context::activeImpl = nullptr;
+
+#ifdef JNGL_GPU_BACKEND
+
+struct ShaderProgram::Impl {
+	std::unique_ptr<GpuShaderProgram> program;
+
+	~Impl() {
+		if (program) {
+			if (auto* renderer = gpuRendererIfExists()) {
+				renderer->destroyShaderProgram(*program);
+			}
+		}
+	}
+};
+
+ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
+: impl(std::make_unique<Impl>()) {
+#ifdef JNGL_D3D12
+	(void)vertex;
+	(void)fragment;
+	throw std::runtime_error(
+	    "The Direct3D 12 renderer can't compile shaders at runtime. Compile "
+	    "them with jngl-shaderc and use ShaderProgram(const ShaderBytecode&).");
+#elif defined(__ANDROID__)
+	(void)vertex;
+	(void)fragment;
+	throw std::runtime_error(
+	    "The Vulkan renderer can't compile shaders at runtime on Android. Compile "
+	    "them with jngl-shaderc and use ShaderProgram(const ShaderBytecode&).");
+#else
+	impl->program = gpuRenderer().createShaderProgram(
+	    compileGlslProgram(vertex.impl->source.c_str(), fragment.impl->source.c_str()));
+	App::instance().registerShaderProgram(this);
+#endif
+}
+
+ShaderProgram::ShaderProgram(const ShaderBytecode& bytecode) : impl(std::make_unique<Impl>()) {
+	impl->program = gpuRenderer().createShaderProgram(bytecode);
+	App::instance().registerShaderProgram(this);
+}
+
+ShaderProgram::Context ShaderProgram::use() const {
+	return Context(*impl);
+}
+
+int ShaderProgram::getAttribLocation(const std::string& name) const {
+	// The only vertex shader inputs on the GPU backends, see compileGlslProgram
+	if (name == "position") {
+		return 0;
+	}
+	if (name == "inTexCoord") {
+		return 1;
+	}
+	return -1;
+}
+
+int ShaderProgram::getUniformLocation(const std::string& name) const {
+	// Like on OpenGL, the first element of an array is also its name alone, see ShaderUniform
+	const std::string_view element0 = "[0]";
+	const std::string_view search =
+	    name.ends_with(element0) ? std::string_view(name).substr(0, name.size() - element0.size())
+	                             : std::string_view(name);
+	const auto& uniforms = impl->program->uniforms;
+	for (int i = 0; i < static_cast<int>(uniforms.size()); ++i) {
+		if (uniforms[static_cast<size_t>(i)].name == search) {
+			return i;
+		}
+	}
+	throw std::runtime_error("Uniform '" + name + "' not found in shader program.");
+}
+
+#else
 
 struct ShaderProgram::Impl {
 	GLuint id;
@@ -32,6 +112,9 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 	impl->id = glCreateProgram();
 	glAttachShader(impl->id, vertex.impl->id);
 	glAttachShader(impl->id, fragment.impl->id);
+	// Where Texture puts the vertices, whatever order a custom vertex shader declares them in
+	glBindAttribLocation(impl->id, 0, "position");
+	glBindAttribLocation(impl->id, 1, "inTexCoord");
 	glLinkProgram(impl->id);
 	GLint status = GL_FALSE;
 	glGetProgramiv(impl->id, GL_LINK_STATUS, &status);
@@ -44,6 +127,11 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 	const auto tmp = use();
 	glUniformMatrix4fv(getUniformLocation("projection"), 1, GL_FALSE, opengl::projection.data);
 	App::instance().registerShaderProgram(this);
+}
+
+ShaderProgram::ShaderProgram(const ShaderBytecode& /*bytecode*/) {
+	throw std::runtime_error("The OpenGL renderer doesn't support ShaderBytecode, compile the GLSL "
+	                         "at runtime with ShaderProgram(const Shader&, const Shader&).");
 }
 
 ShaderProgram::Context ShaderProgram::use() const {
@@ -63,6 +151,8 @@ int ShaderProgram::getUniformLocation(const std::string& name) const {
 	}
 	return location;
 }
+
+#endif
 
 ShaderProgram::~ShaderProgram() {
 	if (App::self) {
@@ -102,7 +192,11 @@ ShaderProgram::Context::Context(const ShaderProgram::Impl& impl) {
 			throw std::runtime_error("A different ShaderProgram is already in use.");
 		}
 	} else {
+#ifdef JNGL_GPU_BACKEND
+		gpuRenderer().setActiveShaderProgram(impl.program.get());
+#else
 		glUseProgram(impl.id);
+#endif
 	}
 	++referenceCount;
 	activeImpl = &impl;
@@ -115,32 +209,78 @@ ShaderProgram::Context::Context(Context&&) noexcept {
 ShaderProgram::Context::~Context() {
 	--referenceCount;
 	assert(referenceCount >= 0);
+#ifdef JNGL_GPU_BACKEND
+	if (referenceCount == 0) {
+		activeImpl = nullptr;
+		if (auto* renderer = gpuRendererIfExists()) {
+			renderer->setActiveShaderProgram(nullptr);
+		}
+	}
+#endif
 }
 
 void ShaderProgram::Context::setUniform(const int location, const int v0) {
 	assert(referenceCount >= 0);
+#ifdef JNGL_GPU_BACKEND
+	assert(activeImpl);
+	const auto& u = activeImpl->program->uniforms.at(static_cast<size_t>(location));
+	assert(u.size >= sizeof(v0));
+	gpuRenderer().setActiveProgramUniform(u.offset, &v0, sizeof(v0));
+#else
 	glUniform1i(location, v0);
+#endif
 }
 
 void ShaderProgram::Context::setUniform(const int location, const float v0) {
 	assert(referenceCount >= 0);
+#ifdef JNGL_GPU_BACKEND
+	assert(activeImpl);
+	const auto& u = activeImpl->program->uniforms.at(static_cast<size_t>(location));
+	assert(u.size >= sizeof(v0));
+	gpuRenderer().setActiveProgramUniform(u.offset, &v0, sizeof(v0));
+#else
 	glUniform1f(location, v0);
+#endif
 }
 
 void ShaderProgram::Context::setUniform(const int location, const float v0, const float v1) {
 	assert(referenceCount >= 0);
+#ifdef JNGL_GPU_BACKEND
+	assert(activeImpl);
+	const auto& u = activeImpl->program->uniforms.at(static_cast<size_t>(location));
+	const float values[2] = { v0, v1 };
+	assert(u.size >= sizeof(values));
+	gpuRenderer().setActiveProgramUniform(u.offset, values, sizeof(values));
+#else
 	glUniform2f(location, v0, v1);
+#endif
 }
 
 void ShaderProgram::Context::setUniform(const int location, const float v0, const float v1,
                                         const float v2, const float v3) {
 	assert(referenceCount >= 0);
+#ifdef JNGL_GPU_BACKEND
+	assert(activeImpl);
+	const auto& u = activeImpl->program->uniforms.at(static_cast<size_t>(location));
+	const float values[4] = { v0, v1, v2, v3 };
+	assert(u.size >= sizeof(values));
+	gpuRenderer().setActiveProgramUniform(u.offset, values, sizeof(values));
+#else
 	glUniform4f(location, v0, v1, v2, v3);
+#endif
 }
 
 void ShaderProgram::Context::setUniform(const int location, const Rgb color) {
 	assert(referenceCount >= 0);
+#ifdef JNGL_GPU_BACKEND
+	assert(activeImpl);
+	const auto& u = activeImpl->program->uniforms.at(static_cast<size_t>(location));
+	const float values[3] = { color.getRed(), color.getGreen(), color.getBlue() };
+	assert(u.size >= sizeof(values));
+	gpuRenderer().setActiveProgramUniform(u.offset, values, sizeof(values));
+#else
 	glUniform3f(location, color.getRed(), color.getGreen(), color.getBlue());
+#endif
 }
 
 } // namespace jngl

@@ -30,6 +30,7 @@
 #include "jngl/Scene.hpp"            // IWYU pragma: keep
 #include "jngl/ScrollArea.hpp" // IWYU pragma: keep
 #include "jngl/Shader.hpp"           // IWYU pragma: keep
+#include "jngl/ShaderBytecode.hpp" // IWYU pragma: keep
 #include "jngl/ShaderProgram.hpp"    // IWYU pragma: keep
 #include "jngl/Singleton.hpp"        // IWYU pragma: keep
 #include "jngl/SoundFile.hpp"        // IWYU pragma: keep

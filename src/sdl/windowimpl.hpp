@@ -3,6 +3,9 @@
 
 #pragma once
 
+#ifdef JNGL_GPU_BACKEND
+#include "../GpuBackend.hpp"
+#endif
 #include "sdl.hpp"
 
 #include <memory>
@@ -23,7 +26,11 @@ class WindowImpl {
 public:
 	WindowImpl() = default;
 	~WindowImpl() {
+#ifdef JNGL_GPU_BACKEND
+		destroyGpuRenderer(); // before the window it renders to
+#else
 		SDL_GL_DestroyContext(context);
+#endif
 		SDL_DestroyWindow(sdlWindow);
 	}
 	WindowImpl(const WindowImpl&) = delete;

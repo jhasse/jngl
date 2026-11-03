@@ -6,6 +6,10 @@
 
 #include <SDL3/SDL.h>
 
+#ifdef JNGL_GPU_BACKEND
+#include "../GpuBackend.hpp"
+#endif
+
 namespace jngl {
 
 std::string getPreferredLanguage() {
@@ -37,15 +41,23 @@ void openURL(const std::string& url) {
 }
 
 void setVerticalSync(bool enabled) {
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().setVerticalSync(enabled);
+#else
 	SDL_GL_SetSwapInterval(enabled ? 1 : 0);
+#endif
 }
 
 bool getVerticalSync() {
+#ifdef JNGL_GPU_BACKEND
+	return gpuRenderer().getVerticalSync();
+#else
 	int result;
 	if (!SDL_GL_GetSwapInterval(&result)) {
 		throw std::runtime_error(SDL_GetError());
 	}
 	return result == 1;
+#endif
 }
 
 } // namespace jngl

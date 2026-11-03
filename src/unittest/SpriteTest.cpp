@@ -7,7 +7,10 @@
 #include <array>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
+#include <cstdint>
 #include <jngl.hpp>
+#include <memory>
+#include <vector>
 
 TEST_CASE("Sprite") {
 	for (float factor : { 1.f, 2.f, 3.4f }) {
@@ -216,4 +219,41 @@ TEST_CASE("drawClipped") {
 ▒  ░▒░░░░░░░░░▒░  ░▒░░░░░░░░░▒░▒
 ▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
 )");
+}
+
+TEST_CASE("more Sprites than fit into the Vulkan backend's first descriptor pool") {
+	Fixture f(1.f);
+	// It holds 1024. Each draws a black 2x2 pixel square in a 30 by 30 grid (60x60 pixels).
+	const std::vector<uint8_t> black{ 0, 0, 0, 255 };
+	std::vector<std::unique_ptr<jngl::Sprite>> sprites;
+	const auto drawAll = [&]() {
+		for (size_t i = 0; i < sprites.size(); ++i) {
+			const auto x = static_cast<double>(i % 30) * 2. - 30.;
+			const auto y = static_cast<double>(i / 30 % 30) * 2. - 30.;
+			sprites[i]->draw(jngl::modelview().translate({ x + 1, y + 1 }).scale(2));
+		}
+	};
+	for (int i = 0; i < 1100; ++i) {
+		sprites.emplace_back(std::make_unique<jngl::Sprite>(black.data(), 1, 1));
+	}
+	drawAll();
+	const auto expected = R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒                              ▒
+▒                              ▒
+▒                              ▒
+▒                              ▒
+▒                              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)";
+	const auto art = f.getAsciiArt();
+	// Frees some in the first pool and some in the second, then creates as many again
+	sprites.erase(sprites.begin() + 1000, sprites.begin() + 1050);
+	sprites.erase(sprites.begin(), sprites.begin() + 50);
+	for (int i = 0; i < 100; ++i) {
+		sprites.emplace_back(std::make_unique<jngl::Sprite>(black.data(), 1, 1));
+	}
+	drawAll();
+	REQUIRE(f.getAsciiArt() == art);
+	REQUIRE(art != expected); // the squares show
 }

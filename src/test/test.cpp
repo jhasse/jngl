@@ -13,6 +13,10 @@
 #include <sstream>
 #include <vector>
 
+#ifdef JNGL_D3D12
+#include "ExampleShaders.hpp" // generated, see CMakeLists.txt
+#endif
+
 void drawMouse(jngl::Vec2);
 void testKeys();
 int performance = 1;
@@ -112,10 +116,15 @@ public:
 		if (jngl::keyPressed('s')) {
 			useShader = !useShader;
 			if (!shaderProgram) {
+#ifdef JNGL_D3D12
+				// Direct3D 12 can't compile it at runtime, see jngl_compile_shaders()
+				shaderProgram = std::make_unique<jngl::ShaderProgram>(example_shaders::blur);
+#else
 				fragmentShader = std::make_unique<jngl::Shader>(std::ifstream("blur.frag"),
 				                                                jngl::Shader::Type::FRAGMENT);
 				shaderProgram = std::make_unique<jngl::ShaderProgram>(jngl::Sprite::vertexShader(),
 				                                                      *fragmentShader);
+#endif
 			}
 		}
 		if (jngl::keyPressed('g')) {
