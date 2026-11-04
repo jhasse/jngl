@@ -11,7 +11,7 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structjngl_1_1ShaderBytecode.html" target="_top" xlink:title="A ShaderProgram&#39;s GLSL compiled at build time by jngl&#45;shaderc, for the Vulkan (SPIR&#45;V) or the Direct3...">
+<g id="a_Node000000"><a xlink:href="structjngl_1_1ShaderBytecode.html" target="_top" xlink:title="A ShaderProgram&#39;s GLSL compiled at build time by jngl&#45;shaderc, for the Vulkan (SPIR&#45;V),...">
 <polygon fill="white" stroke="#666666" points="100,-19.25 0,-19.25 0,0 100,0 100,-19.25"/>
 <text text-anchor="middle" x="50" y="-5.75" font-family="ui-monospace,monospace" font-size="10.00">ShaderBytecode</text>
 </a>

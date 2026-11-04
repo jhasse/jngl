@@ -201,7 +201,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a vertex or fragment shader by compiling it. </p>
-<p>The Vulkan renderer only compiles it together with the other shader of a <a class="el" href="classjngl_1_1ShaderProgram.html" title="Linked vertex and fragment shaders.">ShaderProgram</a>, so that's where most errors are reported there. The Direct3D 12 renderer and the Vulkan renderer on Android can't compile it, they need <a class="el" href="structjngl_1_1ShaderBytecode.html" title="A ShaderProgram&#39;s GLSL compiled at build time by jngl-shaderc, for the Vulkan (SPIR-V) or the Direct3...">ShaderBytecode</a> compiled by jngl-shaderc instead, see ShaderProgram(const ShaderBytecode&amp;). </p><dl class="params"><dt>Parameters</dt><dd>
+<p>The Vulkan renderer only compiles it together with the other shader of a <a class="el" href="classjngl_1_1ShaderProgram.html" title="Linked vertex and fragment shaders.">ShaderProgram</a>, so that's where most errors are reported there. The Direct3D 12 and Metal renderers and the Vulkan renderer on Android can't compile it, they need <a class="el" href="structjngl_1_1ShaderBytecode.html" title="A ShaderProgram&#39;s GLSL compiled at build time by jngl-shaderc, for the Vulkan (SPIR-V),...">ShaderBytecode</a> compiled by jngl-shaderc instead, see ShaderProgram(const ShaderBytecode&amp;). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">source</td><td>Source code using either GLSL v3.30 or GLSL ES v3.00. </td></tr>
     <tr><td class="paramname">gles20Source</td><td>Source code using GLSL v1.00 for OpenGL ES 2.0 </td></tr>

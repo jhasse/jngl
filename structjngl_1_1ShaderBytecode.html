@@ -101,7 +101,7 @@ $(function(){ initResizable(false); });
 </div><!--header-->
 <div class="contents">
 
-<p>A <a class="el" href="classjngl_1_1ShaderProgram.html" title="Linked vertex and fragment shaders.">ShaderProgram</a>'s GLSL compiled at build time by jngl-shaderc, for the Vulkan (SPIR-V) or the Direct3D 12 (DXBC) renderer.  
+<p>A <a class="el" href="classjngl_1_1ShaderProgram.html" title="Linked vertex and fragment shaders.">ShaderProgram</a>'s GLSL compiled at build time by jngl-shaderc, for the Vulkan (SPIR-V), the Direct3D 12 (DXBC) or the Metal (MSL, which it compiles when it loads it) renderer.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="ShaderBytecode_8hpp_source.html">jngl/ShaderBytecode.hpp</a>&gt;</code></p>
@@ -128,8 +128,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:aad053d8c0e85ac4034cd1706f2f638c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A <a class="el" href="classjngl_1_1ShaderProgram.html" title="Linked vertex and fragment shaders.">ShaderProgram</a>'s GLSL compiled at build time by jngl-shaderc, for the Vulkan (SPIR-V) or the Direct3D 12 (DXBC) renderer. </p>
-<p>Direct3D 12 and Vulkan on Android can't compile GLSL at runtime, so they only support ShaderPrograms created from these. jngl-shaderc generates a header with one for each program, see jngl_compile_shaders() in JNGL's CMakeLists.txt:</p>
+<div class="textblock"><p>A <a class="el" href="classjngl_1_1ShaderProgram.html" title="Linked vertex and fragment shaders.">ShaderProgram</a>'s GLSL compiled at build time by jngl-shaderc, for the Vulkan (SPIR-V), the Direct3D 12 (DXBC) or the Metal (MSL, which it compiles when it loads it) renderer. </p>
+<p>Direct3D 12, Metal and Vulkan on Android can't compile GLSL at runtime, so they only support ShaderPrograms created from these, see JNGL_PRECOMPILED_SHADERS. jngl-shaderc generates a header with one for each program, see jngl_compile_shaders() in JNGL's CMakeLists.txt:</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;shaders.hpp&quot;</span> <span class="comment">// generated</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">const</span> <a class="code hl_class" href="classjngl_1_1ShaderProgram.html">jngl::ShaderProgram</a> blur(shaders::blur);</div>

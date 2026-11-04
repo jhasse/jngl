@@ -1,5 +1,5 @@
 <map id="ShaderBytecode" name="ShaderBytecode">
-<area shape="rect" id="Node000001" title="A ShaderProgram&#39;s GLSL compiled at build time by jngl&#45;shaderc, for the Vulkan (SPIR&#45;V) or the Direct3..." alt="" coords="152,124,285,150"/>
+<area shape="rect" id="Node000001" title="A ShaderProgram&#39;s GLSL compiled at build time by jngl&#45;shaderc, for the Vulkan (SPIR&#45;V),..." alt="" coords="152,124,285,150"/>
 <area shape="rect" id="Node000002" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/container/span.html" title=" " alt="" coords="5,13,203,38"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,47,208,121,204,125,125,51"/>
 <area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/container/span.html" title=" " alt="" coords="227,5,440,46"/>

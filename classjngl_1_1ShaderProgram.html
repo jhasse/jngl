@@ -116,7 +116,7 @@ Classes</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:acedd46de78597be78c86c140f1366905" id="r_acedd46de78597be78c86c140f1366905"><td class="memItemLeft" align="right" valign="top"><a id="acedd46de78597be78c86c140f1366905" name="acedd46de78597be78c86c140f1366905"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ShaderProgram</b> (const <a class="el" href="classjngl_1_1Shader.html">Shader</a> &amp;vertex, const <a class="el" href="classjngl_1_1Shader.html">Shader</a> &amp;fragment)</td></tr>
-<tr class="memdesc:acedd46de78597be78c86c140f1366905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Not supported by the Direct3D 12 renderer and the Vulkan renderer on Android, which need the program's <a class="el" href="structjngl_1_1ShaderBytecode.html" title="A ShaderProgram&#39;s GLSL compiled at build time by jngl-shaderc, for the Vulkan (SPIR-V) or the Direct3...">ShaderBytecode</a>. <br /></td></tr>
+<tr class="memdesc:acedd46de78597be78c86c140f1366905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Not supported by the Direct3D 12 and Metal renderers and the Vulkan renderer on Android, which need the program's <a class="el" href="structjngl_1_1ShaderBytecode.html" title="A ShaderProgram&#39;s GLSL compiled at build time by jngl-shaderc, for the Vulkan (SPIR-V),...">ShaderBytecode</a>. <br /></td></tr>
 <tr class="separator:acedd46de78597be78c86c140f1366905"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afea6b2e6b240bae27b6c67f35fd1f251" id="r_afea6b2e6b240bae27b6c67f35fd1f251"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afea6b2e6b240bae27b6c67f35fd1f251">ShaderProgram</a> (const <a class="el" href="structjngl_1_1ShaderBytecode.html">ShaderBytecode</a> &amp;)</td></tr>
 <tr class="memdesc:afea6b2e6b240bae27b6c67f35fd1f251"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the program from what jngl-shaderc has compiled it to.  <br /></td></tr>
@@ -172,7 +172,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>getAttribLocation</b> 
 </div><div class="memdoc">
 
 <p>Creates the program from what jngl-shaderc has compiled it to. </p>
-<p>Only supported by the Vulkan and Direct3D 12 renderers, and the bytecode has to be for the one that's compiled in. </p>
+<p>Only supported by the Vulkan, Direct3D 12 and Metal renderers, and the bytecode has to be for the one that's compiled in. </p>
 
 </div>
 </div>
