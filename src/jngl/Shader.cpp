@@ -8,7 +8,7 @@
 #include <sstream>
 #include <stdexcept>
 
-#if defined(JNGL_GPU_BACKEND) && !defined(JNGL_D3D12) && !defined(__ANDROID__)
+#if defined(JNGL_GPU_BACKEND) && !defined(JNGL_PRECOMPILED_SHADERS)
 #include "../spirv/ShaderCompiler.hpp"
 #endif
 
@@ -17,7 +17,7 @@ namespace jngl {
 #ifdef JNGL_GPU_BACKEND
 Shader::Shader(const char* source, const Type type, const char* const /*gles20Source*/)
 : impl(std::make_unique<Impl>()) {
-#if defined(JNGL_D3D12) || defined(__ANDROID__)
+#ifdef JNGL_PRECOMPILED_SHADERS
 	// Only compiled at build time by jngl-shaderc, see ShaderProgram(const ShaderBytecode&)
 	(void)type;
 #else

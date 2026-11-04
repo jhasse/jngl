@@ -98,6 +98,11 @@ option(JNGL_VULKAN "Use the Vulkan renderer backend instead of OpenGL" OFF)
 # Windows; see src/d3d12/. Building it requires the Vulkan SDK for its shader compilers.
 option(JNGL_D3D12 "Use the Direct3D 12 renderer backend instead of OpenGL" OFF)
 
+# Experimental Metal renderer backend, like JNGL_D3D12. For the SDL3 platform on macOS and for iOS
+# and tvOS; see src/metal/. Building it requires shaderc (e.g. from Homebrew) for its shader
+# compiler, also when building for iOS, as that runs on the Mac that's building.
+option(JNGL_METAL "Use the experimental Metal renderer backend instead of OpenGL" OFF)
+
 set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT OFF)
 if(MSVC OR IOS OR ANDROID OR EMSCRIPTEN)
 	set(JNGL_BUILD_WEBP_FROM_SOURCE_DEFAULT ON)
@@ -318,16 +323,19 @@ else()
 		target_compile_definitions(jngl PRIVATE IOS)
 		target_compile_definitions(jngl PUBLIC GLES_SILENCE_DEPRECATION)
 		target_include_directories(jngl PUBLIC include/ios)
-		find_library(IOS_OPENGLES OpenGLES)
 		find_library(IOS_QUARTZCORE QuartzCore)
 		find_library(IOS_UIKIT UIKit)
 		find_library(IOS_AVFOUNDATION AVFoundation)
 		find_library(IOS_GAMECONTROLLER GameController)
 		find_library(IOS_AudioToolbox AudioToolbox)
 		target_link_libraries(jngl PRIVATE
-			${IOS_OPENGLES} ${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION}
-			${IOS_GAMECONTROLLER} ${IOS_AudioToolbox}
+			${IOS_QUARTZCORE} ${IOS_UIKIT} ${IOS_AVFOUNDATION} ${IOS_GAMECONTROLLER}
+			${IOS_AudioToolbox}
 		)
+		if(NOT JNGL_METAL) # which links Metal instead, see below
+			find_library(IOS_OPENGLES OpenGLES)
+			target_link_libraries(jngl PRIVATE ${IOS_OPENGLES})
+		endif()
 		# CoreHaptics and the UIKit feedback generators aren't available on tvOS, so only link
 		# CoreHaptics where it exists (see src/ios/haptics.mm for the matching code guard).
 		find_library(IOS_COREHAPTICS CoreHaptics)
@@ -463,8 +471,8 @@ else()
 	endif()
 endif()
 
-if(JNGL_VULKAN AND JNGL_D3D12)
-	message(FATAL_ERROR "JNGL_VULKAN and JNGL_D3D12 can't be enabled at the same time.")
+if((JNGL_VULKAN AND JNGL_D3D12) OR (JNGL_VULKAN AND JNGL_METAL) OR (JNGL_D3D12 AND JNGL_METAL))
+	message(FATAL_ERROR "Only one of JNGL_VULKAN, JNGL_D3D12 and JNGL_METAL can be enabled.")
 endif()
 if(JNGL_VULKAN)
 	if(ANDROID)
@@ -481,17 +489,35 @@ if(JNGL_D3D12)
 		message(FATAL_ERROR "JNGL_D3D12 requires the SDL3 backend on Windows (JNGL_WINAPI=OFF).")
 	endif()
 endif()
+if(JNGL_METAL)
+	if(NOT APPLE)
+		message(FATAL_ERROR "JNGL_METAL requires the SDL3 backend on macOS, or iOS or tvOS.")
+	endif()
+	# Its shaders are all compiled at build time by jngl-shaderc: SPIRV-Cross translates their
+	# SPIR-V to the Metal Shading Language, which MetalRenderer compiles when it loads them, see
+	# src/metal/MslCompiler.cpp. So JNGL itself doesn't need SPIRV-Cross, nor does building it need
+	# Xcode's optional Metal Toolchain.
+	set(JNGL_SHADERC_MSL ON) # see src/shaderc/CMakeLists.txt
+endif()
 
-if(JNGL_VULKAN OR JNGL_D3D12)
+if(JNGL_VULKAN OR JNGL_D3D12 OR JNGL_METAL)
 	# jngl-shaderc compiles GLSL to SPIR-V with shaderc, which the Vulkan backend also does at
-	# runtime for user-defined jngl::Shader programs, except on Android.
-	if(NOT ANDROID)
+	# runtime for user-defined jngl::Shader programs, except on Android. When building for Android
+	# or iOS only jngl-shaderc, which is built for the machine that's building, needs it.
+	if(NOT ANDROID AND NOT IOS)
 		include(shaderc)
 	endif()
 	file(GLOB SPIRV_SRC src/spirv/*.cpp)
 
 	# Everything's drawn through GpuBackend.hpp instead of OpenGL
 	target_compile_definitions(jngl PUBLIC JNGL_GPU_BACKEND)
+	# Direct3D 12, Metal and Vulkan on Android can't compile GLSL at runtime, so their
+	# ShaderPrograms are only created from what jngl_compile_shaders() compiled at build time, see
+	# ShaderBytecode.hpp
+	if(JNGL_D3D12 OR JNGL_METAL OR ANDROID)
+		set(JNGL_PRECOMPILED_SHADERS ON)
+		target_compile_definitions(jngl PUBLIC JNGL_PRECOMPILED_SHADERS)
+	endif()
 	target_include_directories(jngl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 	# What's the same for both of them
 	file(GLOB GPU_SRC src/gpu/*.cpp)
@@ -504,6 +530,32 @@ if(JNGL_VULKAN OR JNGL_D3D12)
 		# It runs while building, so it's built on its own for the machine that's building, which
 		# needs a C++ compiler and shaderc then
 		include(ExternalProject)
+		# Without the toolchain file, so it's built with the host's compiler
+		set(JNGL_SHADERC_HOST_ARGS -DCMAKE_BUILD_TYPE=Release
+		                           -DJNGL_SHADERC_MSL=${JNGL_SHADERC_MSL})
+		if(CPM_SOURCE_CACHE)
+			# Otherwise CPM falls back to the environment variable, if there is one
+			list(APPEND JNGL_SHADERC_HOST_ARGS -DCPM_SOURCE_CACHE=${CPM_SOURCE_CACHE})
+		endif()
+		if(CMAKE_GENERATOR STREQUAL "Xcode")
+			# Xcode runs it with the build settings of iOS in the environment (SDKROOT,
+			# IPHONEOS_DEPLOYMENT_TARGET, ...), which the compiler would build it for, so it's
+			# configured and built without them. And not with Xcode, which would put it into a
+			# directory for each configuration.
+			set(env /usr/bin/env -i "PATH=$ENV{PATH}" "HOME=$ENV{HOME}")
+			foreach(variable TMPDIR DEVELOPER_DIR)
+				if(DEFINED ENV{${variable}})
+					list(APPEND env "${variable}=$ENV{${variable}}")
+				endif()
+			endforeach()
+			set(JNGL_SHADERC_HOST_COMMANDS
+				CONFIGURE_COMMAND ${env} ${CMAKE_COMMAND} -G "Unix Makefiles"
+				                  ${JNGL_SHADERC_HOST_ARGS} <SOURCE_DIR>
+				BUILD_COMMAND ${env} ${CMAKE_COMMAND} --build <BINARY_DIR>)
+		else()
+			set(JNGL_SHADERC_HOST_COMMANDS
+				CMAKE_ARGS -DCMAKE_MAKE_PROGRAM=${CMAKE_MAKE_PROGRAM} ${JNGL_SHADERC_HOST_ARGS})
+		endif()
 		set(JNGL_SHADERC_HOST_DIR ${CMAKE_CURRENT_BINARY_DIR}/jngl-shaderc-host)
 		set(JNGL_SHADERC_HOST ${JNGL_SHADERC_HOST_DIR}/jngl-shaderc)
 		if(CMAKE_HOST_WIN32)
@@ -512,8 +564,7 @@ if(JNGL_VULKAN OR JNGL_D3D12)
 		ExternalProject_Add(jngl-shaderc-host
 			SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/shaderc
 			BINARY_DIR ${JNGL_SHADERC_HOST_DIR}
-			# Without the toolchain file, so it's built with the host's compiler
-			CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_MAKE_PROGRAM=${CMAKE_MAKE_PROGRAM}
+			${JNGL_SHADERC_HOST_COMMANDS}
 			BUILD_ALWAYS ON # so that it's rebuilt when its sources change
 			BUILD_BYPRODUCTS ${JNGL_SHADERC_HOST}
 			INSTALL_COMMAND ""
@@ -527,6 +578,10 @@ if(JNGL_VULKAN OR JNGL_D3D12)
 	endif()
 	if(JNGL_D3D12)
 		set_property(GLOBAL PROPERTY JNGL_BYTECODE_FORMAT dxbc)
+	elseif(JNGL_METAL AND IOS)
+		set_property(GLOBAL PROPERTY JNGL_BYTECODE_FORMAT msl-ios)
+	elseif(JNGL_METAL)
+		set_property(GLOBAL PROPERTY JNGL_BYTECODE_FORMAT msl)
 	else()
 		set_property(GLOBAL PROPERTY JNGL_BYTECODE_FORMAT spirv)
 	endif()
@@ -547,16 +602,16 @@ endif()
 
 # jngl_compile_shaders(<output.hpp> <namespace> <name>=[<vertex>,]<fragment>...)
 #
-# Compiles the GLSL of ShaderPrograms at build time for the Vulkan or the Direct3D 12 renderer,
-# which can't compile it at runtime (Vulkan only on Android), into <output.hpp> with a
-# jngl::ShaderBytecode for each in <namespace>, see src/jngl/ShaderBytecode.hpp. Without a vertex
-# shader, a program uses Sprite::vertexShader(). The paths are relative to the current source
-# directory. Also needs a target that depends on <output.hpp>, e.g.
-# add_custom_target(... DEPENDS <output.hpp>).
+# Compiles the GLSL of ShaderPrograms at build time for the Vulkan, the Direct3D 12 or the Metal
+# renderer, the latter two of which can't compile it at runtime (nor Vulkan on Android), into
+# <output.hpp> with a jngl::ShaderBytecode for each in <namespace>, see
+# src/jngl/ShaderBytecode.hpp. Without a vertex shader, a program uses Sprite::vertexShader(). The
+# paths are relative to the current source directory. Also needs a target that depends on
+# <output.hpp>, e.g. add_custom_target(... DEPENDS <output.hpp>).
 function(jngl_compile_shaders output namespace)
 	get_property(format GLOBAL PROPERTY JNGL_BYTECODE_FORMAT)
 	if(NOT format)
-		message(FATAL_ERROR "jngl_compile_shaders() needs JNGL_VULKAN or JNGL_D3D12.")
+		message(FATAL_ERROR "jngl_compile_shaders() needs JNGL_VULKAN, JNGL_D3D12 or JNGL_METAL.")
 	endif()
 	# With absolute paths, as jngl-shaderc runs in the build directory
 	set(programs "")
@@ -584,15 +639,18 @@ function(jngl_compile_shaders output namespace)
 	)
 endfunction()
 
-if(JNGL_D3D12 AND TARGET jngl-test)
+if(JNGL_PRECOMPILED_SHADERS AND TARGET jngl-test)
 	# The demos' shaders, see data/*.frag
 	set(JNGL_EXAMPLE_SHADERS ${CMAKE_CURRENT_BINARY_DIR}/generated/examples/ExampleShaders.hpp)
 	jngl_compile_shaders(${JNGL_EXAMPLE_SHADERS} example_shaders blur=data/blur.frag
 	                     textured=data/textured.frag fade=data/fade.frag)
 	add_custom_target(jngl_example_shaders DEPENDS ${JNGL_EXAMPLE_SHADERS})
 	foreach(target jngl-test example-shader)
-		add_dependencies(${target} jngl_example_shaders)
-		target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated/examples)
+		if(TARGET ${target}) # there's no example-shader on iOS
+			add_dependencies(${target} jngl_example_shaders)
+			target_include_directories(${target} PRIVATE
+			                           ${CMAKE_CURRENT_BINARY_DIR}/generated/examples)
+		endif()
 	endforeach()
 endif()
 
@@ -637,6 +695,17 @@ if(JNGL_D3D12)
 	set_source_files_properties(src/d3d12/D3D12Renderer.cpp PROPERTIES COMPILE_DEFINITIONS NOMINMAX)
 	target_link_libraries(jngl PRIVATE d3d12 dxgi dxguid)
 	target_compile_definitions(jngl PUBLIC JNGL_D3D12)
+endif()
+
+if(JNGL_METAL)
+	target_sources(jngl PRIVATE src/metal/MetalRenderer.mm)
+	# Its Objective-C objects are kept alive by ARC, unlike those of src/mac/ and src/ios/
+	set_source_files_properties(src/metal/MetalRenderer.mm PROPERTIES COMPILE_OPTIONS -fobjc-arc)
+	enable_language(OBJCXX)
+	find_library(MAC_METAL Metal REQUIRED)
+	find_library(MAC_QUARTZCORE QuartzCore REQUIRED)
+	target_link_libraries(jngl PRIVATE ${MAC_METAL} ${MAC_QUARTZCORE})
+	target_compile_definitions(jngl PUBLIC JNGL_METAL)
 endif()
 
 if(JNGL_BUILD_WEBP_FROM_SOURCE)
@@ -728,7 +797,7 @@ if(NOT hasParent)
 			# for tests including internal headers like window.hpp
 			target_include_directories(jngl-unittest PRIVATE glad/include)
 		endif()
-		if(JNGL_D3D12)
+		if(JNGL_PRECOMPILED_SHADERS)
 			# See src/unittest/TestShaders.hpp
 			set(JNGL_TEST_SHADERS ${CMAKE_CURRENT_BINARY_DIR}/generated/unittest/TestShaderBytecode.hpp)
 			jngl_compile_shaders(${JNGL_TEST_SHADERS} test_shaders color=data/unittest/color.frag

@@ -12,6 +12,9 @@
 #include "../jngl/Sprite.hpp"
 #include "windowimpl.hpp"
 #include "AppleController.h"
+#ifdef JNGL_METAL
+#include "../GpuBackend.hpp"
+#endif
 
 #include <cmath>
 #include <iostream>
@@ -23,7 +26,11 @@ std::unique_ptr<jngl::App> jnglApp;
 @implementation JNGLView
 
 + (Class) layerClass {
+#ifdef JNGL_METAL
+	return [CAMetalLayer class];
+#else
 	return [CAEAGLLayer class];
+#endif
 }
 
 - (instancetype) initWithFrame: (CGRect)frame withAppParameters: (const jngl::AppParameters&)params {
@@ -35,14 +42,21 @@ std::unique_ptr<jngl::App> jnglApp;
 			}
 		}
 
-		CAEAGLLayer* eaglLayer = (CAEAGLLayer*) super.layer;
-		eaglLayer.opaque = YES;
+		self.layer.opaque = YES;
 
 		// During a rotation UIKit animates the bounds from the old to the new size, while we
 		// already render at the new size (see -layoutSubviews). With the default (scale to fill)
 		// the new frames would be shown stretched to the intermediate bounds:
 		self.contentMode = UIViewContentModeCenter;
 
+#ifdef JNGL_METAL
+		width = static_cast<int>(std::lround(self.bounds.size.width * self.contentScaleFactor));
+		height = static_cast<int>(std::lround(self.bounds.size.height * self.contentScaleFactor));
+		// It draws into the layer for as long as the view exists, also when showWindow is called
+		// again, so it's this view's, not the Window's
+		jngl::createGpuRenderer(self.layer);
+#else
+		CAEAGLLayer* eaglLayer = (CAEAGLLayer*) super.layer;
 		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
 
 		if (!context || ![EAGLContext setCurrentContext:context]) {
@@ -66,6 +80,7 @@ std::unique_ptr<jngl::App> jnglApp;
 
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
 		glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
+#endif
 
 		if (params.screenSize) {
 			jngl::setScaleFactor(std::min(static_cast<double>(width) / params.screenSize->x,
@@ -106,11 +121,18 @@ std::unique_ptr<jngl::App> jnglApp;
 	if (newWidth == width && newHeight == height) {
 		return;
 	}
+#ifdef JNGL_METAL
+	width = static_cast<int>(newWidth);
+	height = static_cast<int>(newHeight);
+	// Its drawables get the layer's new size once the current frame has been presented
+	jngl::gpuRenderer().onResize(width, height);
+#else
 	[EAGLContext setCurrentContext:context];
 	glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
 	[context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
 	glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
 	glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
+#endif
 	if (jngl::pWindow) {
 		jngl::pWindow->setActualSize(width, height);
 	}
@@ -136,12 +158,20 @@ std::unique_ptr<jngl::App> jnglApp;
 
 			jngl::pWindow->stepIfNeeded();
 		}
+#ifdef JNGL_METAL
+		// Like Window::mainLoop on the other platforms: begins the frame (or clears the one
+		// showWindow began), which SwapBuffers presents
+		jngl::clearBackBuffer();
+		jngl::pWindow->draw();
+		jngl::pWindow->SwapBuffers();
+#else
 		jngl::reset();
 		// jngl::clearBackgroundColor();
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		jngl::pWindow->draw();
 		[context presentRenderbuffer:GL_RENDERBUFFER];
+#endif
 		impl->sleepIfNeeded();
 	}
 }

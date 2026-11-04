@@ -80,6 +80,8 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	Uint32 flags = SDL_WINDOW_VULKAN;
 #elif defined(JNGL_D3D12)
 	Uint32 flags = 0; // D3D12Renderer creates the swap chain for the window's HWND itself
+#elif defined(JNGL_METAL)
+	Uint32 flags = SDL_WINDOW_METAL; // MetalRenderer gives it a CAMetalLayer
 #else
 #ifdef __APPLE__ // https://stackoverflow.com/a/26981800/647898
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);

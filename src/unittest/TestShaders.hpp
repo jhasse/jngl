@@ -7,8 +7,8 @@
 
 #include <jngl/ShaderProgram.hpp>
 
-#ifdef JNGL_D3D12
-// Direct3D 12 can't compile them at runtime, see jngl_compile_shaders() in CMakeLists.txt
+#ifdef JNGL_PRECOMPILED_SHADERS
+// Direct3D 12 and Metal can't compile them at runtime, see jngl_compile_shaders() in CMakeLists.txt
 #include "TestShaderBytecode.hpp" // IWYU pragma: export
 #define JNGL_TEST_SHADER_PROGRAM(name) jngl::ShaderProgram(test_shaders::name)
 #define JNGL_TEST_SHADER_PROGRAM_WITH_VERTEX(name) jngl::ShaderProgram(test_shaders::name)

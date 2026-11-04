@@ -23,6 +23,9 @@ using GpuTexture = VulkanTexture;
 #elif defined(JNGL_D3D12)
 struct D3D12Texture;
 using GpuTexture = D3D12Texture;
+#elif defined(JNGL_METAL)
+struct MetalTexture;
+using GpuTexture = MetalTexture;
 #endif
 
 class Texture {

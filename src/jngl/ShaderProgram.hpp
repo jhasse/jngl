@@ -17,12 +17,12 @@ struct ShaderBytecode;
 /// Linked vertex and fragment shaders
 class ShaderProgram {
 public:
-	/// Not supported by the Direct3D 12 renderer and the Vulkan renderer on Android, which need the
-	/// program's ShaderBytecode
+	/// Not supported by the Direct3D 12 and Metal renderers and the Vulkan renderer on Android,
+	/// which need the program's ShaderBytecode
 	ShaderProgram(const Shader& vertex, const Shader& fragment);
 
-	/// Creates the program from what jngl-shaderc has compiled it to. Only supported by the Vulkan
-	/// and Direct3D 12 renderers, and the bytecode has to be for the one that's compiled in.
+	/// Creates the program from what jngl-shaderc has compiled it to. Only supported by the Vulkan,
+	/// Direct3D 12 and Metal renderers, and the bytecode has to be for the one that's compiled in.
 	explicit ShaderProgram(const ShaderBytecode&);
 	~ShaderProgram();
 	ShaderProgram(const ShaderProgram&) = delete;

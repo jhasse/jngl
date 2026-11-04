@@ -13,7 +13,7 @@
 
 #ifdef JNGL_GPU_BACKEND
 #include "../GpuBackend.hpp"
-#if !defined(JNGL_D3D12) && !defined(__ANDROID__)
+#ifndef JNGL_PRECOMPILED_SHADERS
 #include "../spirv/ShaderCompiler.hpp"
 #endif
 #endif
@@ -39,18 +39,18 @@ struct ShaderProgram::Impl {
 
 ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 : impl(std::make_unique<Impl>()) {
+#ifdef JNGL_PRECOMPILED_SHADERS
+	(void)vertex;
+	(void)fragment;
+	throw std::runtime_error(
 #ifdef JNGL_D3D12
-	(void)vertex;
-	(void)fragment;
-	throw std::runtime_error(
-	    "The Direct3D 12 renderer can't compile shaders at runtime. Compile "
-	    "them with jngl-shaderc and use ShaderProgram(const ShaderBytecode&).");
-#elif defined(__ANDROID__)
-	(void)vertex;
-	(void)fragment;
-	throw std::runtime_error(
-	    "The Vulkan renderer can't compile shaders at runtime on Android. Compile "
-	    "them with jngl-shaderc and use ShaderProgram(const ShaderBytecode&).");
+	    "The Direct3D 12 renderer can't compile shaders at runtime."
+#elif defined(JNGL_METAL)
+	    "The Metal renderer can't compile shaders at runtime."
+#else
+	    "The Vulkan renderer can't compile shaders at runtime on Android."
+#endif
+	    " Compile them with jngl-shaderc and use ShaderProgram(const ShaderBytecode&).");
 #else
 	impl->program = gpuRenderer().createShaderProgram(
 	    compileGlslProgram(vertex.impl->source.c_str(), fragment.impl->source.c_str()));

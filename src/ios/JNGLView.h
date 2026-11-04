@@ -1,8 +1,10 @@
 #import <UIKit/UIKit.h>
-#import <OpenGLES/EAGL.h>
 #import <QuartzCore/QuartzCore.h>
+#ifndef JNGL_METAL
+#import <OpenGLES/EAGL.h>
 #import <OpenGLES/ES3/gl.h>
 #import <OpenGLES/ES3/glext.h>
+#endif
 
 namespace jngl {
 struct AppParameters;
@@ -10,10 +12,14 @@ class WindowImpl;
 class Finally;
 } // namespace jngl
 
+/// Backed by a CAMetalLayer that the MetalRenderer draws into with JNGL_METAL, otherwise by a
+/// CAEAGLLayer for OpenGL ES
 @interface JNGLView : UIView <UIKeyInput> {
+#ifndef JNGL_METAL
 	EAGLContext* context;
-	float angle;
 	GLuint renderbuffer;
+#endif
+	float angle;
 	int width;
 	int height;
 	CFTimeInterval startTime;

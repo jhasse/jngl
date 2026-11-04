@@ -3,9 +3,10 @@
 
 /// What JNGL draws with, whichever graphics API it's been compiled for.
 ///
-/// The backend is chosen at compile time: OpenGL by default, or the Vulkan or Direct3D 12
-/// backend, see JNGL_VULKAN, JNGL_D3D12 and GpuBackend.hpp. Most of JNGL's code that
-/// differs between them is in #ifdef JNGL_GPU_BACKEND, only what's the same for all of them is here.
+/// The backend is chosen at compile time: OpenGL by default, or the Vulkan or Direct3D 12 backend,
+/// or the experimental Metal one, see JNGL_VULKAN, JNGL_D3D12, JNGL_METAL and GpuBackend.hpp. Most
+/// of JNGL's code that differs between them is in #ifdef JNGL_GPU_BACKEND, only what's the same for
+/// all of them is here.
 /// @file
 #pragma once
 

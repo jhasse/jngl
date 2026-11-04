@@ -23,7 +23,8 @@ else()
 	set(JNGL_SHADERC_DEFINITIONS "")
 endif()
 if(NOT SHADERC_INCLUDE_DIR OR NOT SHADERC_LIBRARY)
-	message(FATAL_ERROR "JNGL_VULKAN and JNGL_D3D12 require shaderc (install the Vulkan SDK, "
-		"shaderc via Homebrew on macOS, or libshaderc-devel / libshaderc-dev on Linux). "
+	message(FATAL_ERROR "JNGL_VULKAN, JNGL_D3D12 and JNGL_METAL require shaderc (install the "
+		"Vulkan SDK, shaderc via Homebrew on macOS, or libshaderc-devel / libshaderc-dev on "
+		"Linux). "
 		"include=${SHADERC_INCLUDE_DIR} lib=${SHADERC_LIBRARY}")
 endif()

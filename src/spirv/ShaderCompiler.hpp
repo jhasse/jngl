@@ -1,13 +1,14 @@
 // Copyright 2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-/// GLSL -> SPIR-V compilation for the Vulkan and Direct3D 12 backends: at runtime for user-defined
-/// jngl::ShaderPrograms, and at build time for the built-in ones by jngl-shaderc (see
+/// GLSL -> SPIR-V compilation for the Vulkan, Direct3D 12 and Metal backends: at runtime for
+/// user-defined jngl::ShaderPrograms, and at build time for the built-in ones by jngl-shaderc (see
 /// BuiltinShaders.hpp).
 ///
 /// JNGL's public Shader API (see jngl/Shader.hpp) hands shaders to the engine as GLSL source,
 /// written for OpenGL. These backends compile that source to SPIR-V so the public API doesn't have
-/// to change (the Direct3D 12 backend then translates the SPIR-V to HLSL, see compileSpirvToDxbc).
+/// to change (the Direct3D 12 backend then translates the SPIR-V to HLSL, see compileSpirvToDxbc,
+/// and the Metal one to MSL, see translateSpirvToMsl).
 /// The bare non-opaque uniforms of a program's shaders are wrapped into one std140 block so
 /// setUniform can update them: push constants if they fit, otherwise a UBO at set 1, binding 0.
 /// Samplers are at set 0, binding 0.

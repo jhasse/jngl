@@ -514,6 +514,33 @@ TEST_CASE("FrameBuffer anti-aliased keeps what's drawn while anti-aliasing is of
 )");
 }
 
+TEST_CASE("FrameBuffer anti-aliased keeps what's drawn when it's used again") {
+	Fixture f(1.f);
+	if (!jngl::pWindow->isMultisampleSupported()) {
+		SKIP("Multisampling isn't supported here");
+	}
+	// The Metal backend doesn't keep the samples once a FrameBuffer's done being drawn into
+	jngl::FrameBuffer fb(320_px, 70_px, false, true);
+	{
+		const auto context = fb.use();
+		jngl::drawRect(jngl::modelview().translate({ -100, -25 }), { 40, 30 }, 0x000000_rgb);
+	}
+	{
+		const auto context = fb.use();
+		jngl::drawRect(jngl::modelview().translate({ 60, -25 }), { 40, 30 }, 0x000000_rgb);
+	}
+	fb.draw(-160, -35);
+	REQUIRE(f.getAsciiArt() == R"(
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+▒     ████            ████     ▒
+▒     ████            ████     ▒
+▒     ████            ████     ▒
+▒                              ▒
+▒                              ▒
+▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓
+)");
+}
+
 TEST_CASE("HDR FrameBuffer keeps values above 1") {
 	Fixture f(1.f);
 	const std::vector<uint8_t> opaque(40 * 20 * 4, 255);
