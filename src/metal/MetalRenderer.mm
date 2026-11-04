@@ -14,18 +14,24 @@
 
 #import <Metal/Metal.h>
 #import <QuartzCore/CAMetalLayer.h>
+#ifdef IOS
+#import <UIKit/UIKit.h>
+#else
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_metal.h>
+#endif
 #include <algorithm>
 #include <bit>
 #include <cassert>
+#include <cmath>
 #include <cstring>
 #include <format>
 #include <span>
 #include <stdexcept>
 
 // Every public function of MetalRenderer that might create autoreleased objects drains them with
-// @autoreleasepool, as nothing else would: SDL's event loop isn't NSApplication's.
+// @autoreleasepool, as nothing else would on macOS: SDL's event loop isn't NSApplication's. (On iOS
+// UIKit's run loop would drain them, too, only later.)
 
 namespace jngl {
 
@@ -305,7 +311,11 @@ struct UploadBuffer {
 } // namespace
 
 struct MetalRenderer::Impl {
+#ifdef IOS
+	explicit Impl(CAMetalLayer*);
+#else
 	explicit Impl(SDL_Window*);
+#endif
 	~Impl();
 	Impl(const Impl&) = delete;
 	Impl& operator=(const Impl&) = delete;
@@ -344,6 +354,13 @@ struct MetalRenderer::Impl {
 	void submitUploads();
 	/// Waits until the GPU's done with everything that's been committed
 	void waitIdle();
+
+	/// The size the drawables should have: the window's in pixels, or the layer's on iOS. 0x0
+	/// while the window's minimized.
+	[[nodiscard]] std::pair<int, int> windowSizeInPixels() const;
+	/// Whether the window can be seen, otherwise what's drawn isn't presented, see
+	/// acquireFrameTexture()
+	[[nodiscard]] bool windowVisible() const;
 
 	/// Gets the drawable's texture, or one that's drawn into instead while the window can't be
 	/// seen, and the multisampled texture, if that hasn't happened yet this frame. That's as late
@@ -401,8 +418,10 @@ struct MetalRenderer::Impl {
 	/// Maximum number of frames the CPU may be working on ahead of the GPU.
 	static constexpr uint32_t maxFramesInFlight = 2;
 
+#ifndef IOS
 	SDL_Window* window;
 	SDL_MetalView view = nullptr;
+#endif
 	CAMetalLayer* layer = nil;
 
 	id<MTLDevice> device;
@@ -486,17 +505,23 @@ struct MetalRenderer::Impl {
 	Rgb currentClearColor{ 0, 0, 0 }; // swapchain clear color for the current frame
 };
 
+#ifdef IOS
+MetalRenderer::Impl::Impl(CAMetalLayer* const layer) : layer(layer) {
+#else
 MetalRenderer::Impl::Impl(SDL_Window* const window) : window(window) {
+#endif
 	device = MTLCreateSystemDefaultDevice();
 	if (!device) {
 		throw std::runtime_error("No Metal device found.");
 	}
 	internal::debug("Metal: using {}", toString(device.name));
+#ifndef IOS
 	view = SDL_Metal_CreateView(window);
 	if (!view) {
 		throw std::runtime_error(std::string("Couldn't create a Metal view: ") + SDL_GetError());
 	}
 	layer = (__bridge CAMetalLayer*)SDL_Metal_GetLayer(view);
+#endif
 	layer.device = device;
 	layer.pixelFormat = ldrFormat;
 	// readPixels copies from the drawables
@@ -504,9 +529,7 @@ MetalRenderer::Impl::Impl(SDL_Window* const window) : window(window) {
 	// Without a color space, so that colors written by the shaders reach the screen unmodified,
 	// matching JNGL's OpenGL backend whose default framebuffer isn't color managed
 	layer.colorspace = nil;
-	int width = 0;
-	int height = 0;
-	SDL_GetWindowSizeInPixels(window, &width, &height);
+	const auto [width, height] = windowSizeInPixels();
 	layer.drawableSize = CGSizeMake(std::max(width, 1), std::max(height, 1));
 	swapchainWidth = std::max(width, 1);
 	swapchainHeight = std::max(height, 1);
@@ -578,9 +601,11 @@ MetalRenderer::Impl::~Impl() {
 		frameTexture = nil;
 		layer = nil;
 	}
+#ifndef IOS
 	if (view) {
 		SDL_Metal_DestroyView(view);
 	}
+#endif
 }
 
 void MetalRenderer::Impl::createSamplers() {
@@ -792,14 +817,38 @@ void MetalRenderer::Impl::waitIdle() {
 	[marker waitUntilCompleted];
 }
 
+std::pair<int, int> MetalRenderer::Impl::windowSizeInPixels() const {
+#ifdef IOS
+	// Like the view's bounds in pixels, see JNGLView's -layoutSubviews
+	const CGSize size = layer.bounds.size;
+	return { static_cast<int>(std::lround(size.width * layer.contentsScale)),
+	         static_cast<int>(std::lround(size.height * layer.contentsScale)) };
+#else
+	int width = 0;
+	int height = 0;
+	SDL_GetWindowSizeInPixels(window, &width, &height);
+	return { width, height };
+#endif
+}
+
+bool MetalRenderer::Impl::windowVisible() const {
+#ifdef IOS
+	// Apps in the background mustn't use the GPU. JNGLView doesn't draw while the app's inactive
+	// anyway, but showWindow begins a frame, too.
+	return [UIApplication sharedApplication].applicationState != UIApplicationStateBackground;
+#else
+	const SDL_WindowFlags hidden = SDL_WINDOW_HIDDEN | SDL_WINDOW_MINIMIZED | SDL_WINDOW_OCCLUDED;
+	return (SDL_GetWindowFlags(window) & hidden) == 0;
+#endif
+}
+
 void MetalRenderer::Impl::acquireFrameTexture() {
 	if (frameTexture) {
 		return;
 	}
 	// Drawables of a window that can't be seen might not be presented, after which nextDrawable
 	// would wait a second each time for one to become available again
-	const SDL_WindowFlags hidden = SDL_WINDOW_HIDDEN | SDL_WINDOW_MINIMIZED | SDL_WINDOW_OCCLUDED;
-	drawable = (SDL_GetWindowFlags(window) & hidden) == 0 ? [layer nextDrawable] : nil;
+	drawable = windowVisible() ? [layer nextDrawable] : nil;
 	if (drawable) {
 		frameTexture = drawable.texture;
 	} else {
@@ -1113,11 +1162,19 @@ id<MTLTexture> MetalRenderer::Impl::createTexture(const int width, const int hei
 	}
 }
 
+#ifdef IOS
+MetalRenderer::MetalRenderer(void* const metalLayer) {
+	@autoreleasepool {
+		impl = std::make_unique<Impl>((__bridge CAMetalLayer*)metalLayer);
+	}
+}
+#else
 MetalRenderer::MetalRenderer(SDL_Window* const window) {
 	@autoreleasepool {
 		impl = std::make_unique<Impl>(window);
 	}
 }
+#endif
 
 MetalRenderer::~MetalRenderer() = default;
 
@@ -1170,9 +1227,7 @@ void MetalRenderer::endFrame() {
 
 		if (impl->drawableResizePending) {
 			impl->drawableResizePending = false;
-			int width = 0;
-			int height = 0;
-			SDL_GetWindowSizeInPixels(impl->window, &width, &height);
+			const auto [width, height] = impl->windowSizeInPixels();
 			if (width > 0 && height > 0) { // not while it's minimized
 				impl->layer.drawableSize = CGSizeMake(width, height);
 			}
@@ -1479,7 +1534,7 @@ void MetalRenderer::readPixels(unsigned char* const rgb, const int x, const int 
 std::string MetalRenderer::getGraphicsApi() const {
 	@autoreleasepool {
 		// E.g. "Metal (Apple M2 Pro) 26.1.0", like Vulkan's "(NVIDIA) 580.95.05", as there's no
-		// driver version but that of macOS
+		// driver version but that of macOS (or iOS)
 		const NSOperatingSystemVersion version = [NSProcessInfo processInfo].operatingSystemVersion;
 		return std::format("Metal ({}) {}.{}.{}", toString(impl->device.name), version.majorVersion,
 		                   version.minorVersion, version.patchVersion);
@@ -1675,8 +1730,12 @@ bool MetalRenderer::isAlphaOnlyWrite() const {
 }
 
 void MetalRenderer::setVerticalSync(const bool enabled) {
+#ifdef IOS
+	(void)enabled; // CAMetalLayer always waits for the vertical blank there
+#else
 	impl->verticalSyncEnabled = enabled;
 	impl->layer.displaySyncEnabled = enabled;
+#endif
 }
 
 bool MetalRenderer::getVerticalSync() const {

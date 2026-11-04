@@ -164,6 +164,15 @@ cmake -Bbuild-ios -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake -DIOS
 ```
 Then open and build `build-ios/jngl.xcodeproj` in Xcode.
 
+### Metal
+Instead of OpenGL ES, which iOS has deprecated, the experimental Metal renderer (see macOS above)
+can be used on iOS and tvOS, too. Building it needs shaderc on the Mac that's building
+(`brew install shaderc`), for `jngl-shaderc`, which is built for the Mac along with the project:
+```bash
+cmake -Bbuild-ios -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR -DJNGL_METAL=ON
+```
+As on macOS, a game's shaders have to be compiled with `jngl_compile_shaders()`.
+
 ## Example Usage
 Here's a simple "Hello, World!" example in JNGL:
 ```cpp

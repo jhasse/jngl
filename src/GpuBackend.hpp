@@ -41,6 +41,9 @@ using GpuShaderProgram = MetalShaderProgram;
 /// Creates the backend for \a window, which gpuRenderer() returns until destroyGpuRenderer()
 #ifdef __ANDROID__
 void createGpuRenderer(ANativeWindow* window);
+#elif defined(IOS)
+/// On iOS for \a metalLayer, a CAMetalLayer*, see MetalRenderer
+void createGpuRenderer(void* metalLayer);
 #else
 void createGpuRenderer(SDL_Window* window);
 #endif

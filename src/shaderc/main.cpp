@@ -2,12 +2,12 @@
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
 /// jngl-shaderc: compiles ShaderPrograms' GLSL at build time for the Vulkan (SPIR-V), the
-/// Direct3D 12 (DXBC) or the Metal (MSL) renderer, into a header with a jngl::ShaderBytecode for
-/// each.
+/// Direct3D 12 (DXBC) or the Metal (MSL for macOS, or msl-ios for iOS and tvOS) renderer, into a
+/// header with a jngl::ShaderBytecode for each.
 ///
 /// Usage:
-///   jngl-shaderc spirv|dxbc|msl <output.hpp> <namespace> <name>=[<vertex>,]<fragment>...
-///   jngl-shaderc spirv|dxbc|msl <output.hpp> --builtin
+///   jngl-shaderc spirv|dxbc|msl|msl-ios <output.hpp> <namespace> <name>=[<vertex>,]<fragment>...
+///   jngl-shaderc spirv|dxbc|msl|msl-ios <output.hpp> --builtin
 ///
 /// Without a vertex shader, a program uses Sprite::vertexShader(). --builtin compiles JNGL's own
 /// shaders, see BuiltinShaders.hpp, into jngl::builtin_bytecode.
@@ -37,7 +37,7 @@
 namespace {
 
 /// What the shaders are compiled to, see the usage
-enum class Format : uint8_t { Spirv, Dxbc, Msl };
+enum class Format : uint8_t { Spirv, Dxbc, Msl, MslIos };
 
 struct ProgramSource {
 	std::string name;
@@ -112,6 +112,8 @@ const char* formatDescription(const Format format) {
 		return "DXBC for the Direct3D 12";
 	case Format::Msl:
 		return "MSL for the Metal";
+	case Format::MslIos:
+		return "MSL for iOS for the Metal";
 	}
 	return "";
 }
@@ -162,11 +164,13 @@ std::string compile(const std::vector<ProgramSource>& programs, const std::strin
 		}
 #endif
 #ifdef JNGL_SHADERC_MSL
-		if (format == Format::Msl) {
-			vertex = toWords(jngl::translateSpirvToMsl(vertex, jngl::Shader::Type::VERTEX,
+		if (format == Format::Msl || format == Format::MslIos) {
+			const auto platform =
+			    format == Format::MslIos ? jngl::MslPlatform::Ios : jngl::MslPlatform::MacOS;
+			vertex = toWords(jngl::translateSpirvToMsl(vertex, jngl::Shader::Type::VERTEX, platform,
 			                                           program.vertexOrigin.c_str()));
 			fragment = toWords(jngl::translateSpirvToMsl(fragment, jngl::Shader::Type::FRAGMENT,
-			                                             program.fragmentOrigin.c_str()));
+			                                             platform, program.fragmentOrigin.c_str()));
 		}
 #endif
 		const std::string& name = program.name;
@@ -195,11 +199,12 @@ std::string compile(const std::vector<ProgramSource>& programs, const std::strin
 
 int main(const int argc, const char* const* const argv) {
 	const std::vector<std::string_view> args(argv, argv + argc);
-	if (args.size() < 4 || (args[1] != "spirv" && args[1] != "dxbc" && args[1] != "msl")) {
+	if (args.size() < 4 ||
+	    (args[1] != "spirv" && args[1] != "dxbc" && args[1] != "msl" && args[1] != "msl-ios")) {
 		std::fprintf(stderr,
-		             "Usage: %s spirv|dxbc|msl <output.hpp> <namespace> "
+		             "Usage: %s spirv|dxbc|msl|msl-ios <output.hpp> <namespace> "
 		             "<name>=[<vertex>,]<fragment>...\n"
-		             "       %s spirv|dxbc|msl <output.hpp> --builtin\n",
+		             "       %s spirv|dxbc|msl|msl-ios <output.hpp> --builtin\n",
 		             argv[0], argv[0]);
 		return 1;
 	}
@@ -208,6 +213,8 @@ int main(const int argc, const char* const* const argv) {
 		format = Format::Dxbc;
 	} else if (args[1] == "msl") {
 		format = Format::Msl;
+	} else if (args[1] == "msl-ios") {
+		format = Format::MslIos;
 	}
 #ifndef JNGL_SHADERC_DXBC
 	if (format == Format::Dxbc) {
@@ -216,7 +223,7 @@ int main(const int argc, const char* const* const argv) {
 	}
 #endif
 #ifndef JNGL_SHADERC_MSL
-	if (format == Format::Msl) {
+	if (format == Format::Msl || format == Format::MslIos) {
 		std::fprintf(stderr, "This jngl-shaderc has been built without MSL support.\n");
 		return 1;
 	}

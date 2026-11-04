@@ -39,7 +39,8 @@ public:
 	spvc_context context = nullptr;
 };
 
-std::string translate(const std::span<const uint32_t> spirv, const SpvExecutionModel stage) {
+std::string translate(const std::span<const uint32_t> spirv, const SpvExecutionModel stage,
+                      const MslPlatform platform) {
 	SpirvCrossContext spvc;
 	spvc_parsed_ir ir = nullptr;
 	spvc.check(spvc_context_parse_spirv(spvc.context, spirv.data(), spirv.size(), &ir),
@@ -51,10 +52,12 @@ std::string translate(const std::span<const uint32_t> spirv, const SpvExecutionM
 	spvc_compiler_options options = nullptr;
 	spvc.check(spvc_compiler_create_compiler_options(compiler, &options),
 	           "Creating the MSL options");
-	spvc.check(spvc_compiler_options_set_uint(options, SPVC_COMPILER_OPTION_MSL_PLATFORM,
-	                                          SPVC_MSL_PLATFORM_MACOS),
+	spvc.check(spvc_compiler_options_set_uint(
+	               options, SPVC_COMPILER_OPTION_MSL_PLATFORM,
+	               platform == MslPlatform::Ios ? SPVC_MSL_PLATFORM_IOS : SPVC_MSL_PLATFORM_MACOS),
 	           "Setting the platform");
-	// What every Mac that runs macOS 10.14 supports, see MetalRenderer's MTLCompileOptions
+	// What every Mac that runs macOS 10.14 and every device that runs iOS 12 supports, see
+	// MetalRenderer's MTLCompileOptions
 	spvc.check(spvc_compiler_options_set_uint(options, SPVC_COMPILER_OPTION_MSL_VERSION,
 	                                          SPVC_MAKE_MSL_VERSION(2, 1, 0)),
 	           "Setting the MSL version");
@@ -92,10 +95,12 @@ std::string translate(const std::span<const uint32_t> spirv, const SpvExecutionM
 } // namespace
 
 std::string translateSpirvToMsl(const std::span<const uint32_t> spirv, const Shader::Type stage,
-                                const char* const name) {
+                                const MslPlatform platform, const char* const name) {
 	try {
-		return translate(spirv, stage == Shader::Type::VERTEX ? SpvExecutionModelVertex
-		                                                      : SpvExecutionModelFragment);
+		return translate(spirv,
+		                 stage == Shader::Type::VERTEX ? SpvExecutionModelVertex
+		                                               : SpvExecutionModelFragment,
+		                 platform);
 	} catch (const std::exception& e) {
 		throw std::runtime_error("Failed to translate " + std::string(name) +
 		                         " shader to MSL: " + e.what());

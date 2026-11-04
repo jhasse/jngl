@@ -6,6 +6,9 @@
 #include "../jngl.hpp"
 #include "windowimpl.hpp"
 #include "../main.hpp"
+#ifdef JNGL_GPU_BACKEND
+#include "../GpuBackend.hpp"
+#endif
 
 #include <stdexcept>
 
@@ -16,6 +19,10 @@ Window::Window(const std::string& title, const int width, const int height, cons
 : fullscreen_(fullscreen), isMouseVisible_(true), relativeMouseMode(false), anyKeyPressed_(false),
   mousex_(0), mousey_(0), fontSize_(12), width_(width), height_(height), fontName_("Arial.ttf"),
   impl(std::make_unique<WindowImpl>(this)) {
+#ifdef JNGL_GPU_BACKEND
+	// Which JNGLView has created before calling showWindow
+	isMultisampleSupported_ = gpuRenderer().isMultisampleSupported();
+#endif
 	calculateCanvasSize(minAspectRatio, maxAspectRatio);
 	initGl();
 }
@@ -57,6 +64,9 @@ void Window::UpdateInput() {
 }
 
 void Window::SwapBuffers() {
+#ifdef JNGL_GPU_BACKEND
+	gpuRenderer().endFrame();
+#endif
 }
 
 void Window::SetMouseVisible(const bool) {

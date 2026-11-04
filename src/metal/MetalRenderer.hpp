@@ -3,11 +3,11 @@
 
 /// Experimental Metal backend, see GpuBackend.hpp.
 ///
-/// A 2D backend for the SDL3 platform on macOS, with the same API as D3D12Renderer (see
-/// GpuBackend.hpp). Like it, it doesn't compile GLSL at runtime: all of the shaders, the built-in
-/// ones and those of a game's ShaderPrograms, are compiled at build time by jngl-shaderc from GLSL
-/// to SPIR-V and translated to the Metal Shading Language, see MslCompiler.hpp and ShaderBytecode.
-/// MetalRenderer compiles the MSL when it creates a program.
+/// A 2D backend for the SDL3 platform on macOS and for iOS and tvOS, with the same API as
+/// D3D12Renderer (see GpuBackend.hpp). Like it, it doesn't compile GLSL at runtime: all of the
+/// shaders, the built-in ones and those of a game's ShaderPrograms, are compiled at build time by
+/// jngl-shaderc from GLSL to SPIR-V and translated to the Metal Shading Language, see
+/// MslCompiler.hpp and ShaderBytecode. MetalRenderer compiles the MSL when it creates a program.
 ///
 /// This header doesn't include any Objective-C or Metal headers, as it's included by everything
 /// that draws, see GpuBackend.hpp. The Metal objects that the structs below hold are retained
@@ -91,8 +91,14 @@ struct MetalShaderProgram {
 
 class MetalRenderer {
 public:
+#ifdef IOS
+	/// Draws into \a metalLayer, a CAMetalLayer* that's the layer of a UIView (see JNGLView) and
+	/// has to outlive the MetalRenderer. Its drawables have the layer's size in pixels.
+	explicit MetalRenderer(void* metalLayer);
+#else
 	/// \a window must have been created with SDL_WINDOW_METAL.
 	explicit MetalRenderer(SDL_Window* window);
+#endif
 	~MetalRenderer();
 	MetalRenderer(const MetalRenderer&) = delete;
 	MetalRenderer& operator=(const MetalRenderer&) = delete;
@@ -149,7 +155,7 @@ public:
 	/// bottom row first (matching OpenGL's glReadPixels). Waits for the pending draws first.
 	void readPixels(unsigned char* rgb, int x, int y, int width, int height);
 
-	/// "Metal", the GPU and the version of macOS, see jngl::getGraphicsApi()
+	/// "Metal", the GPU and the version of macOS or iOS, see jngl::getGraphicsApi()
 	[[nodiscard]] std::string getGraphicsApi() const;
 
 	/// Creates an off-screen render target (see jngl::FrameBuffer), cleared to transparent.
@@ -197,7 +203,7 @@ public:
 	void setAlphaOnlyWrite(bool);
 	[[nodiscard]] bool isAlphaOnlyWrite() const;
 
-	/// Toggles v-sync, i.e. whether presenting waits for the vertical blank.
+	/// Toggles v-sync, i.e. whether presenting waits for the vertical blank. Always on on iOS.
 	void setVerticalSync(bool enabled);
 	[[nodiscard]] bool getVerticalSync() const;
 

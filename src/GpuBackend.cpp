@@ -18,6 +18,8 @@ std::unique_ptr<GpuRenderer> renderer;
 
 #ifdef __ANDROID__
 void createGpuRenderer(ANativeWindow* const window) {
+#elif defined(IOS)
+void createGpuRenderer(void* const window) {
 #else
 void createGpuRenderer(SDL_Window* const window) {
 #endif

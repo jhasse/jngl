@@ -27,9 +27,15 @@ namespace jngl {
 constexpr const char* metalVertexEntryPoint = "vertexMain";
 constexpr const char* metalFragmentEntryPoint = "fragmentMain";
 
-/// Translates \a spirv of a vertex or fragment shader (\a stage) to MSL. \a name is only used in
-/// error messages. Throws std::runtime_error if that fails.
+/// What the MSL is for, as SPIRV-Cross translates some things differently for each
+enum class MslPlatform : uint8_t {
+	MacOS,
+	Ios, ///< also tvOS
+};
+
+/// Translates \a spirv of a vertex or fragment shader (\a stage) to MSL for \a platform. \a name
+/// is only used in error messages. Throws std::runtime_error if that fails.
 std::string translateSpirvToMsl(std::span<const uint32_t> spirv, Shader::Type stage,
-                                const char* name);
+                                MslPlatform platform, const char* name);
 
 } // namespace jngl
