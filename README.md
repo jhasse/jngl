@@ -97,6 +97,26 @@ brew install sdl3 freetype libvorbis webp pkg-config cmake ffmpeg
 
 `ffmpeg` is only needed if you plan to use [VideoRecorder](https://bixense.com/jngl/classjngl_1_1VideoRecorder.html#details).
 
+### Metal
+The experimental Metal renderer needs shaderc to build, for its shader compiler (GLSL is compiled
+to SPIR-V and translated to the Metal Shading Language by SPIRV-Cross, which is downloaded and
+built along with JNGL):
+```bash
+brew install shaderc
+cmake -Bbuild-metal -DJNGL_METAL=ON
+cmake --build build-metal
+./build-metal/jngl-test
+```
+The same option works with cja: `cja build -DJNGL_METAL=1`.
+
+Like Direct3D 12, it doesn't compile GLSL at runtime, so a game's shaders have to be compiled at
+build time with `jngl_compile_shaders()` (see Direct3D 12 above). The renderer then compiles their
+MSL with the Metal framework when it creates a `jngl::ShaderProgram`, so neither building nor
+running needs Xcode's optional Metal Toolchain, and a Metal build doesn't need shaderc or anything
+else to be bundled.
+
+To have Metal check how it's used, run a Debug build with `MTL_DEBUG_LAYER=1`.
+
 ### Vulkan
 Install the Vulkan dependencies, including the MoltenVK driver, which runs on Metal, and select it:
 ```bash
