@@ -217,6 +217,30 @@ namespace {
 bool antiAliasingEnabled = true;
 bool highDpi = true;
 float deprecatedLineWidth = 1; // set by setLineWidth
+#ifndef JNGL_GPU_BACKEND
+/// The widest GL_LINES this context supports, see queryMaxGlLineWidth(). Lines up to this many
+/// pixels wide are drawn with GL_LINES, which hits the pixels along thin lines more evenly than a
+/// thin rectangle does. Wider ones are drawn as rectangles, as the maximum depends on the GPU (e.g.
+/// 7.375 on Intel).
+float maxGlLineWidth = 1;
+
+void queryMaxGlLineWidth() {
+	GLfloat range[2] = { 1, 1 };
+	glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, range);
+	maxGlLineWidth = range[1];
+#if !defined(IOS) && !defined(ANDROID) && !defined(__EMSCRIPTEN__)
+	// Forward-compatible contexts (like the core profile on macOS) don't allow lines wider than 1,
+	// even if GL_ALIASED_LINE_WIDTH_RANGE says otherwise
+	if (GLAD_GL_VERSION_3_0 != 0) {
+		GLint flags = 0;
+		glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+		if ((flags & GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT) != 0) {
+			maxGlLineWidth = 1;
+		}
+	}
+#endif
+}
+#endif
 } // namespace
 
 namespace internal {
@@ -255,6 +279,7 @@ void showWindow(const std::string& title, const double width, const double heigh
 	setAntiAliasing(antiAliasingEnabled);
 #ifndef JNGL_GPU_BACKEND
 	pWindow->initGlObjects();
+	queryMaxGlLineWidth();
 #else
 	// Begin the first frame, so that what's drawn before the first swapBuffers() isn't lost, like
 	// on OpenGL, where it's drawn into the back buffer
@@ -833,10 +858,38 @@ void setLineWidth(const float width) {
 }
 
 namespace {
+/// Draws the line from \a modelview's origin to \a end with GL_LINES if the GPU supports lines that
+/// are \a widthInScreenUnits wide, returns false otherwise
+bool drawThinLine(const Mat3& modelview, const Vec2 end, const double widthInScreenUnits,
+                  const Rgba color) {
+#ifdef JNGL_GPU_BACKEND
+	(void)modelview;
+	(void)end;
+	(void)widthInScreenUnits;
+	(void)color;
+	return false;
+#else
+	const double pixelsPerUnit = activeFrameBufferSize() || windowCanvas.width == 0
+	                                 ? getScaleFactor()
+	                                 : windowCanvas.width / getScreenWidth();
+	const auto pixels = static_cast<float>(widthInScreenUnits * pixelsPerUnit);
+	if (!(pixels > 0.f) || pixels > maxGlLineWidth) {
+		return false;
+	}
+	glLineWidth(std::max(1.f, pixels));
+	const float vertexes[] = { 0.f, 0.f, static_cast<float>(end.x), static_cast<float>(end.y) };
+	drawColored(PrimitiveType::Lines, vertexes, 2, modelview, color);
+	return true;
+#endif
+}
+
 /// Draws a line with the width set by setLineWidth. Like glLineWidth, which was used before, the
-/// width doesn't get scaled by \a modelview. Instead of GL_LINES, whose maximum width depends on
-/// the GPU, this draws a rectangle.
+/// width doesn't get scaled by \a modelview. Lines as wide as the GPU supports are drawn with
+/// GL_LINES, wider ones as rectangles, see maxGlLineWidth.
 void drawLineWithDeprecatedWidth(const Mat3& modelview, const Vec2 end, const Rgba color) {
+	if (end.isNull() || drawThinLine(modelview, end, deprecatedLineWidth, color)) {
+		return;
+	}
 	const auto& m = modelview.data;
 	const Vec2 transformedStart(m[6], m[7]);
 	const Vec2 transformedEnd(m[0] * end.x + m[3] * end.y + m[6],
@@ -885,6 +938,16 @@ void drawLine(const Mat3& modelview, const Vec2 end, Rgba color) {
 
 void drawLine(Mat3 modelview, const Vec2 end, float lineWidth, Rgba color) {
 	if (end.isNull()) {
+		return;
+	}
+	// How wide the rectangle below ends up on the screen: its area divided by its length
+	const auto& m = modelview.data;
+	const Vec2 transformedEnd(m[0] * end.x + m[3] * end.y, m[1] * end.x + m[4] * end.y);
+	if (!transformedEnd.isNull() &&
+	    drawThinLine(modelview, end,
+	                 lineWidth * std::abs(m[0] * m[4] - m[1] * m[3]) * boost::qvm::mag(end) /
+	                     boost::qvm::mag(transformedEnd),
+	                 color)) {
 		return;
 	}
 	pWindow->drawSquare(modelview.rotate(std::atan2(end.x, -end.y))
