@@ -293,7 +293,7 @@ struct ShaderFunctions {
 
 ShaderFunctions compileFunctions(const id<MTLDevice> device, const ShaderBytecode& program) {
 	return { compileFunction(device, mslSource(program.vertex), metalVertexEntryPoint),
-		     compileFunction(device, mslSource(program.fragment), metalFragmentEntryPoint) };
+	         compileFunction(device, mslSource(program.fragment), metalFragmentEntryPoint) };
 }
 
 /// Buffer that's appended to during a frame, see Impl::vertexBuffers
@@ -346,9 +346,9 @@ struct MetalRenderer::Impl {
 	void waitIdle();
 
 	/// Gets the drawable's texture, or one that's drawn into instead while the window can't be
-	/// seen, and the multisampled texture, if that hasn't happened yet this frame. That's as late as
-	/// possible, i.e. once the window's drawn into, as nextDrawable waits for the window server to
-	/// hand one back, while what's drawn into FrameBuffers before can be recorded already.
+	/// seen, and the multisampled texture, if that hasn't happened yet this frame. That's as late
+	/// as possible, i.e. once the window's drawn into, as nextDrawable waits for the window server
+	/// to hand one back, while what's drawn into FrameBuffers before can be recorded already.
 	void acquireFrameTexture();
 	/// The multisampled texture that's drawn into instead of the frame's with MSAA, and resolved
 	/// into it at the end of each render pass
@@ -363,16 +363,16 @@ struct MetalRenderer::Impl {
 	/// draw calls bindTarget() again.
 	///
 	/// The samples are only stored if they might be drawn into again, as \a end says: at the
-	/// window's size, storing and loading them takes up a lot of the GPU's time. (Not resolving them
-	/// when the pass is only interrupted isn't possible, as Metal only lets a pass that has a
+	/// window's size, storing and loading them takes up a lot of the GPU's time. (Not resolving
+	/// them when the pass is only interrupted isn't possible, as Metal only lets a pass that has a
 	/// texture to resolve into choose between resolving and storing as well.)
 	void unbindTarget(PassEnd end = PassEnd::Interrupted);
 	/// Ends the render pass, so that the frame's texture has all that's been drawn into the window
 	void finishScreen(PassEnd);
 	/// Clears all of what's drawn into, whatever the scissor
 	void clearTarget(MTLClearColor);
-	/// Clears the swap chain's image to the clear color, and the letterboxing's bars to black. Until
-	/// it's drawn into, that's only noted in screenClearPending.
+	/// Clears the swap chain's image to the clear color, and the letterboxing's bars to black.
+	/// Until it's drawn into, that's only noted in screenClearPending.
 	void clearSwapchain();
 	/// Fills \a rect of what's drawn into with \a color, without blending
 	void fillRect(PixelRect rect, MTLClearColor color);
@@ -522,14 +522,14 @@ MetalRenderer::Impl::Impl(SDL_Window* const window) : window(window) {
 	                msaaEnabled);
 
 	builtinFunctions = { compileFunctions(device, builtin_bytecode::colored),
-		                 compileFunctions(device, builtin_bytecode::rounded),
-		                 compileFunctions(device, builtin_bytecode::textured) };
+	                     compileFunctions(device, builtin_bytecode::rounded),
+	                     compileFunctions(device, builtin_bytecode::textured) };
 	coloredUniforms =
 	    uniformBlock(builtin_bytecode::colored.uniforms, builtin_bytecode::colored.uniformBlockSize,
-	                 builtin_bytecode::colored.pushConstants);
+		             builtin_bytecode::colored.pushConstants);
 	roundedUniforms =
 	    uniformBlock(builtin_bytecode::rounded.uniforms, builtin_bytecode::rounded.uniformBlockSize,
-	                 builtin_bytecode::rounded.pushConstants);
+		             builtin_bytecode::rounded.pushConstants);
 	texturedUniforms = uniformBlock(builtin_bytecode::textured.uniforms,
 	                                builtin_bytecode::textured.uniformBlockSize,
 	                                builtin_bytecode::textured.pushConstants);
@@ -590,13 +590,15 @@ void MetalRenderer::Impl::createSamplers() {
 			// Mipmaps are sampled like the minification, like GL_LINEAR_MIPMAP_LINEAR or
 			// GL_NEAREST_MIPMAP_NEAREST
 			const bool linearMin = minFilter == TextureFilter::Bilinear;
-			desc.minFilter = linearMin ? MTLSamplerMinMagFilterLinear : MTLSamplerMinMagFilterNearest;
+			desc.minFilter =
+			    linearMin ? MTLSamplerMinMagFilterLinear : MTLSamplerMinMagFilterNearest;
 			desc.mipFilter = linearMin ? MTLSamplerMipFilterLinear : MTLSamplerMipFilterNearest;
 			desc.magFilter = magFilter == TextureFilter::Bilinear ? MTLSamplerMinMagFilterLinear
 			                                                      : MTLSamplerMinMagFilterNearest;
 			desc.sAddressMode = MTLSamplerAddressModeClampToEdge;
 			desc.tAddressMode = MTLSamplerAddressModeClampToEdge;
-			samplers[samplerIndex(minFilter, magFilter)] = [device newSamplerStateWithDescriptor:desc];
+			samplers[samplerIndex(minFilter, magFilter)] =
+			    [device newSamplerStateWithDescriptor:desc];
 		}
 	}
 }
@@ -652,7 +654,7 @@ id<MTLRenderPipelineState> MetalRenderer::Impl::programPipeline(const MetalShade
 	void*& pipeline = program.pipelines[pipelineIndex(kind, variant)];
 	if (!pipeline) {
 		const ShaderFunctions functions{ (__bridge id<MTLFunction>)program.vertexFunction,
-			                             (__bridge id<MTLFunction>)program.fragmentFunction };
+		                                 (__bridge id<MTLFunction>)program.fragmentFunction };
 		pipeline = (void*)CFBridgingRetain(createPipeline(functions, true, kind, variant));
 	}
 	return (__bridge id<MTLRenderPipelineState>)pipeline;
@@ -710,7 +712,9 @@ void MetalRenderer::Impl::bindVertices(const void* const data, const size_t byte
 		return;
 	}
 	const size_t offset = upload(data, bytes);
-	[encoder setVertexBuffer:vertexBuffers[currentFrame].buffer offset:offset atIndex:verticesIndex];
+	[encoder setVertexBuffer:vertexBuffers[currentFrame].buffer
+	                  offset:offset
+	                 atIndex:verticesIndex];
 }
 
 void MetalRenderer::Impl::writeTransform(const UniformBlock& block, const Mat3& modelview) {
@@ -806,7 +810,7 @@ void MetalRenderer::Impl::acquireFrameTexture() {
 		    static_cast<int>(offscreenTarget.height) != height) {
 			offscreenTarget =
 			    createTexture(width, height, 1, ldrFormat,
-			                  MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead);
+				              MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead);
 		}
 		frameTexture = offscreenTarget;
 	}
@@ -909,10 +913,10 @@ void MetalRenderer::Impl::unbindTarget(const PassEnd end) {
 	}
 	if (encoderOnScreenSamples) {
 		// Nothing loads the samples again once the frame's done
-		[encoder setColorStoreAction:end == PassEnd::FrameEnd
-		                                 ? MTLStoreActionMultisampleResolve
-		                                 : MTLStoreActionStoreAndMultisampleResolve
-		                     atIndex:0];
+		[encoder
+		    setColorStoreAction:end == PassEnd::FrameEnd ? MTLStoreActionMultisampleResolve
+			                                             : MTLStoreActionStoreAndMultisampleResolve
+		                atIndex:0];
 	} else if (encoderSamplesOf) {
 		if (end == PassEnd::Popped) {
 			// Usually, it's cleared before it's drawn into again. If it isn't, its samples are
@@ -1007,12 +1011,16 @@ void MetalRenderer::Impl::expandIntoSamples(MetalFramebuffer& fb) {
 	[expand setFragmentSamplerState:samplers[samplerIndex(fb.color.minFilter, fb.color.magFilter)]
 	                        atIndex:0];
 	if (!copyUniforms.empty()) {
-		[expand setVertexBytes:copyUniforms.data() length:copyUniforms.size() atIndex:uniformsIndex];
+		[expand setVertexBytes:copyUniforms.data()
+		                length:copyUniforms.size()
+		               atIndex:uniformsIndex];
 		[expand setFragmentBytes:copyUniforms.data()
 		                  length:copyUniforms.size()
 		                 atIndex:uniformsIndex];
 	}
-	[expand setVertexBytes:fullscreenQuad.data() length:sizeof(fullscreenQuad) atIndex:verticesIndex];
+	[expand setVertexBytes:fullscreenQuad.data()
+	                length:sizeof(fullscreenQuad)
+	               atIndex:verticesIndex];
 	[expand drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:6];
 	[expand endEncoding];
 }
@@ -1021,10 +1029,10 @@ bool MetalRenderer::Impl::flipClipY() const {
 	return !renderTargetStack.empty();
 }
 
-void MetalRenderer::Impl::draw(const id<MTLRenderPipelineState> pipeline,
-                               const UniformBlock& block, const std::vector<uint8_t>& uniforms,
-                               const void* const vertices, const size_t vertexCount,
-                               const size_t stride, const PrimitiveType type) {
+void MetalRenderer::Impl::draw(const id<MTLRenderPipelineState> pipeline, const UniformBlock& block,
+                               const std::vector<uint8_t>& uniforms, const void* const vertices,
+                               const size_t vertexCount, const size_t stride,
+                               const PrimitiveType type) {
 	if (scissorEmpty) {
 		return;
 	}
@@ -1221,9 +1229,9 @@ void MetalRenderer::drawColored(PrimitiveType type, const float* xyVertices,
 	impl->writeTransform(block, modelview);
 	writeUniform(uniforms, block.offsets.color,
 	             std::array{ color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() });
-	impl->draw(impl->builtinPipeline(Impl::Builtin::Colored, impl->currentPassKind,
-	                                 impl->blendVariant()),
-	           block, uniforms, xyVertices, vertexCount, 2 * sizeof(float), type);
+	impl->draw(
+	    impl->builtinPipeline(Impl::Builtin::Colored, impl->currentPassKind, impl->blendVariant()),
+	    block, uniforms, xyVertices, vertexCount, 2 * sizeof(float), type);
 }
 
 void MetalRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, const float sizeX,
@@ -1233,7 +1241,7 @@ void MetalRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, con
 		return;
 	}
 	static constexpr std::array<float, 12> unitSquare = { .5f, -.5f, .5f,  .5f, -.5f, -.5f,
-		                                                  .5f, .5f,  -.5f, .5f, -.5f, -.5f };
+	                                                      .5f, .5f,  -.5f, .5f, -.5f, -.5f };
 	impl->bindTarget();
 	const UniformBlock& block = impl->roundedUniforms;
 	auto& uniforms = prepareDrawUniforms(impl->drawUniforms, block);
@@ -1243,9 +1251,9 @@ void MetalRenderer::drawRoundedRect(const Mat3& modelview, const Rgba color, con
 	writeUniform(uniforms, block.offsets.size, std::array{ sizeX, sizeY });
 	writeUniform(uniforms, block.offsets.cornerRadii,
 	             std::array{ topLeft, topRight, bottomLeft, bottomRight });
-	impl->draw(impl->builtinPipeline(Impl::Builtin::Rounded, impl->currentPassKind,
-	                                 impl->blendVariant()),
-	           block, uniforms, unitSquare.data(), 6, 2 * sizeof(float), PrimitiveType::Triangles);
+	impl->draw(
+	    impl->builtinPipeline(Impl::Builtin::Rounded, impl->currentPassKind, impl->blendVariant()),
+	    block, uniforms, unitSquare.data(), 6, 2 * sizeof(float), PrimitiveType::Triangles);
 }
 
 std::unique_ptr<MetalTexture>
@@ -1294,12 +1302,13 @@ void MetalRenderer::updateTextureBytes(MetalTexture& texture, const int width, c
 		const id<MTLTexture> target = (__bridge id<MTLTexture>)texture.texture;
 		// After earlier frames are done sampling the old pixels, as Metal tracks the hazard
 		const id<MTLBlitCommandEncoder> blit = impl->uploadBlit();
+		const MTLSize size =
+		    MTLSizeMake(static_cast<NSUInteger>(width), static_cast<NSUInteger>(height), 1);
 		[blit copyFromBuffer:staging
 		           sourceOffset:0
 		      sourceBytesPerRow:rowSize
 		    sourceBytesPerImage:rowSize * height
-		             sourceSize:MTLSizeMake(static_cast<NSUInteger>(width),
-		                                    static_cast<NSUInteger>(height), 1)
+		             sourceSize:size
 		              toTexture:target
 		       destinationSlice:0
 		       destinationLevel:0
@@ -1320,17 +1329,17 @@ void MetalRenderer::enableMipmaps(MetalTexture& texture) {
 		const id<MTLTexture> old = (__bridge id<MTLTexture>)texture.texture;
 		const id<MTLTexture> mipmapped =
 		    impl->createTexture(texture.width, texture.height, mipLevels, textureFormat,
-		                        MTLTextureUsageShaderRead | MTLTextureUsageRenderTarget);
+			                    MTLTextureUsageShaderRead | MTLTextureUsageRenderTarget);
 		const id<MTLBlitCommandEncoder> blit = impl->uploadBlit();
 		[blit copyFromTexture:old
-		             sourceSlice:0
-		             sourceLevel:0
-		            sourceOrigin:MTLOriginMake(0, 0, 0)
-		              sourceSize:MTLSizeMake(old.width, old.height, 1)
-		               toTexture:mipmapped
-		        destinationSlice:0
-		        destinationLevel:0
-		       destinationOrigin:MTLOriginMake(0, 0, 0)];
+		          sourceSlice:0
+		          sourceLevel:0
+		         sourceOrigin:MTLOriginMake(0, 0, 0)
+		           sourceSize:MTLSizeMake(old.width, old.height, 1)
+		            toTexture:mipmapped
+		     destinationSlice:0
+		     destinationLevel:0
+		    destinationOrigin:MTLOriginMake(0, 0, 0)];
 		[blit generateMipmapsForTexture:mipmapped];
 		// Draws recorded earlier in this frame still sample the old texture, which their command
 		// buffer keeps alive
@@ -1400,7 +1409,7 @@ void MetalRenderer::drawSprite(const MetalTexture& texture, const float* xyuv,
 	const BlendVariant variant = impl->blendVariant();
 	const id<MTLRenderPipelineState> pipeline =
 	    program ? impl->programPipeline(*program, impl->currentPassKind, variant)
-	            : impl->builtinPipeline(Impl::Builtin::Textured, impl->currentPassKind, variant);
+		        : impl->builtinPipeline(Impl::Builtin::Textured, impl->currentPassKind, variant);
 	[impl->encoder setFragmentTexture:(__bridge id<MTLTexture>)texture.texture atIndex:0];
 	[impl->encoder
 	    setFragmentSamplerState:impl->samplers[samplerIndex(texture.minFilter, texture.magFilter)]
@@ -1432,13 +1441,15 @@ void MetalRenderer::readPixels(unsigned char* const rgb, const int x, const int 
 		const id<MTLBlitCommandEncoder> blit = [impl->commandBuffer blitCommandEncoder];
 		// x and y are from the bottom left like glReadPixels
 		const int top = impl->swapchainHeight - y - height;
+		const MTLOrigin origin =
+		    MTLOriginMake(static_cast<NSUInteger>(x), static_cast<NSUInteger>(top), 0);
+		const MTLSize size =
+		    MTLSizeMake(static_cast<NSUInteger>(width), static_cast<NSUInteger>(height), 1);
 		[blit copyFromTexture:impl->frameTexture
 		                 sourceSlice:0
 		                 sourceLevel:0
-		                sourceOrigin:MTLOriginMake(static_cast<NSUInteger>(x),
-		                                           static_cast<NSUInteger>(top), 0)
-		                  sourceSize:MTLSizeMake(static_cast<NSUInteger>(width),
-		                                         static_cast<NSUInteger>(height), 1)
+		                sourceOrigin:origin
+		                  sourceSize:size
 		                    toBuffer:readback
 		           destinationOffset:0
 		      destinationBytesPerRow:rowSize
@@ -1491,9 +1502,8 @@ std::unique_ptr<MetalFramebuffer> MetalRenderer::createFramebuffer(const int wid
 	fb->color.minFilter = filter;
 	fb->color.magFilter = filter;
 	@autoreleasepool {
-		const id<MTLTexture> color =
-		    impl->createTexture(width, height, 1, format,
-		                        MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead);
+		const id<MTLTexture> color = impl->createTexture(
+		    width, height, 1, format, MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead);
 		fb->color.texture = (void*)CFBridgingRetain(color);
 		id<MTLTexture> msaa = nil;
 		if (antiAliased && impl->msaaSupported) {

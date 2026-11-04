@@ -79,11 +79,9 @@ std::string translate(const std::span<const uint32_t> spirv, const SpvExecutionM
 	bind(0, 0, "Mapping the texture");
 	bind(1, 0, "Mapping the uniforms");
 
-	spvc.check(spvc_compiler_rename_entry_point(compiler, "main",
-	                                            stage == SpvExecutionModelVertex
-	                                                ? metalVertexEntryPoint
-	                                                : metalFragmentEntryPoint,
-	                                            stage),
+	const char* const entryPoint =
+	    stage == SpvExecutionModelVertex ? metalVertexEntryPoint : metalFragmentEntryPoint;
+	spvc.check(spvc_compiler_rename_entry_point(compiler, "main", entryPoint, stage),
 	           "Renaming the entry point");
 
 	const char* msl = nullptr;

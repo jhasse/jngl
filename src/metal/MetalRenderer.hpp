@@ -53,8 +53,8 @@ struct MetalTexture {
 ///
 /// An anti-aliased one also has a multisampled texture, which is drawn into instead while
 /// anti-aliasing is enabled. Each render pass that draws into it resolves it into \a color when it
-/// ends, and it's only kept until the FrameBuffer's done being drawn into: if it's drawn into again without being cleared first, its
-/// samples are drawn from \a color, see samplesStale.
+/// ends, and it's only kept until the FrameBuffer's done being drawn into: if it's drawn into again
+/// without being cleared first, its samples are drawn from \a color, see samplesStale.
 struct MetalFramebuffer {
 	MetalTexture color;
 	/// The other filtering mode, sharing color's texture, see framebufferTexture()
