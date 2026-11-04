@@ -13,9 +13,9 @@ namespace jngl {
 /// A ShaderProgram's GLSL compiled at build time by jngl-shaderc, for the Vulkan (SPIR-V), the
 /// Direct3D 12 (DXBC) or the Metal (MSL, which it compiles when it loads it) renderer
 ///
-/// Direct3D 12 and Metal can't compile GLSL at runtime, so they only support ShaderPrograms created
-/// from these, see JNGL_PRECOMPILED_SHADERS. jngl-shaderc generates a header with one for each program, see jngl_compile_shaders() in
-/// JNGL's CMakeLists.txt:
+/// Direct3D 12, Metal and Vulkan on Android can't compile GLSL at runtime, so they only support
+/// ShaderPrograms created from these, see JNGL_PRECOMPILED_SHADERS. jngl-shaderc generates a header
+/// with one for each program, see jngl_compile_shaders() in JNGL's CMakeLists.txt:
 ///
 /// \code
 /// #include "shaders.hpp" // generated

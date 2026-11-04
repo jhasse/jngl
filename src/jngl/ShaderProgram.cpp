@@ -44,12 +44,13 @@ ShaderProgram::ShaderProgram(const Shader& vertex, const Shader& fragment)
 	(void)fragment;
 	throw std::runtime_error(
 #ifdef JNGL_D3D12
-	    "The Direct3D 12 renderer"
+	    "The Direct3D 12 renderer can't compile shaders at runtime."
+#elif defined(JNGL_METAL)
+	    "The Metal renderer can't compile shaders at runtime."
 #else
-	    "The Metal renderer"
+	    "The Vulkan renderer can't compile shaders at runtime on Android."
 #endif
-	    " can't compile shaders at runtime. Compile "
-	    "them with jngl-shaderc and use ShaderProgram(const ShaderBytecode&).");
+	    " Compile them with jngl-shaderc and use ShaderProgram(const ShaderBytecode&).");
 #else
 	impl->program = gpuRenderer().createShaderProgram(
 	    compileGlslProgram(vertex.impl->source.c_str(), fragment.impl->source.c_str()));

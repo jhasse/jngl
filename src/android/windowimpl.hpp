@@ -6,7 +6,9 @@
 #include "../jngl/Finally.hpp"
 #include "../jngl/Vec2.hpp"
 
+#ifndef JNGL_VULKAN
 #include <EGL/egl.h>
+#endif
 #include <jni.h>
 #include <utility>
 #include <android/input.h>
@@ -62,7 +64,13 @@ public:
 	JNIEnv* env = nullptr;
 
 private:
-	std::pair<EGLint, EGLint> getSurfaceSize() const;
+	/// In pixels
+	std::pair<int, int> getSurfaceSize() const;
+
+	/// Whether there's something to draw on, which there's only while we're in the foreground
+	bool hasSurface() const;
+	/// Called when we go into the background, see makeCurrent()
+	void destroySurface();
 
 	/// Asks android.view.KeyEvent which character the key produces with the event's modifiers
 	[[nodiscard]] int32_t getUnicodeChar(const AInputEvent*) const;
@@ -75,6 +83,7 @@ private:
 
 	bool firstFrame = true;
 
+#ifndef JNGL_VULKAN // otherwise the VulkanRenderer creates the surface, see GpuBackend.hpp
 	struct DisplayWrapper {
 		DisplayWrapper();
 		~DisplayWrapper();
@@ -91,6 +100,7 @@ private:
 		std::optional<SurfaceWrapper> surface;
 	};
 	std::optional<DisplayWrapper> display;
+#endif
 
 	std::map<int32_t, std::shared_ptr<AndroidController>> controllers;
 

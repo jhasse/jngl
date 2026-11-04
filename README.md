@@ -53,7 +53,7 @@ Then open `build/jngl.sln` in Visual Studio.
 
 ### Vulkan
 Install the Vulkan SDK, including shaderc, and open a new terminal so that `VULKAN_SDK` and
-`PATH` include it. Enable the experimental Vulkan renderer with the default SDL3 window backend:
+`PATH` include it. Enable the Vulkan renderer with the default SDL3 window backend:
 ```bash
 cmake -Bbuild-vulkan -DJNGL_VULKAN=1 -DJNGL_WINAPI=OFF
 cmake --build build-vulkan --config Release
@@ -67,7 +67,7 @@ Vulkan build. The Vulkan loader is supplied by
 the graphics driver; users need a Vulkan-capable driver, but do not need the SDK.
 
 ### Direct3D 12
-The experimental Direct3D 12 renderer also needs the Vulkan SDK to build, for its shader compilers
+The Direct3D 12 renderer also needs the Vulkan SDK to build, for its shader compilers
 (GLSL is compiled to SPIR-V and translated to HLSL by SPIRV-Cross):
 ```bash
 cmake -Bbuild-d3d12 -DJNGL_D3D12=1 -DJNGL_WINAPI=OFF
@@ -98,11 +98,10 @@ brew install sdl3 freetype libvorbis webp pkg-config cmake ffmpeg
 `ffmpeg` is only needed if you plan to use [VideoRecorder](https://bixense.com/jngl/classjngl_1_1VideoRecorder.html#details).
 
 ### Vulkan
-On Apple Silicon with macOS 26 or newer, Homebrew's Mesa package includes the KosmicKrisp
-Vulkan driver, which runs on Metal. Install the Vulkan dependencies and select that driver:
+Install the Vulkan dependencies, including the MoltenVK driver, which runs on Metal, and select it:
 ```bash
-brew install mesa vulkan-loader vulkan-headers shaderc vulkan-tools vulkan-validationlayers
-export VK_DRIVER_FILES="$(brew --prefix mesa)/share/vulkan/icd.d/kosmickrisp_mesa_icd.aarch64.json"
+brew install molten-vk vulkan-loader vulkan-headers shaderc vulkan-tools vulkan-validationlayers
+export VK_DRIVER_FILES="$(brew --prefix)/etc/vulkan/icd.d/MoltenVK_icd.json"
 vulkaninfo --summary
 cmake -Bbuild-vulkan -DJNGL_VULKAN=ON
 cmake --build build-vulkan
@@ -115,10 +114,8 @@ export VK_ADD_LAYER_PATH="$(brew --prefix)/share/vulkan/explicit_layer.d"
 export DYLD_LIBRARY_PATH="$(brew --prefix vulkan-validationlayers)/lib${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}"
 ```
 
-For Intel Macs or older macOS versions, use `brew install molten-vk` and select its driver with
-`export VK_DRIVER_FILES="$(brew --prefix)/etc/vulkan/icd.d/MoltenVK_icd.json"` instead.
-MoltenVK currently hits sampler limits in the descriptor-pool stress test; prefer KosmicKrisp
-where available.
+Mesa's KosmicKrisp driver (`brew install mesa`, Apple Silicon with macOS 26 or newer) works too,
+but it's a lot slower.
 The LunarG Vulkan SDK can also supply the dependencies; source its `setup-env.sh` before
 configuring. JNGL links to the Vulkan loader, so the driver can be selected at runtime.
 When distributing a Vulkan build, bundle the loader and driver with the application.
@@ -131,6 +128,14 @@ When distributing a Vulkan build, bundle the loader and driver with the applicat
 lus android-run
 ```
 Alternatively, open `android/test` in Android Studio and build from there.
+
+### Vulkan
+The Vulkan renderer works on Android 9 (API level 28) and newer. Build with
+`-DJNGL_VULKAN=ON`, e.g. the test app with `./gradlew installDebug -Pvulkan` in `android/test`.
+The built-in shaders are compiled during the build by `jngl-shaderc`, which is built for the machine
+that's building, so it needs a C++ compiler and shaderc there (see Vulkan above for Linux, Windows
+and macOS). shaderc isn't available on Android, so a game's shaders have to be compiled at build
+time with `jngl_compile_shaders()`, like for Direct3D 12 (see above).
 
 ## iOS
 Generate an Xcode project using CMake:

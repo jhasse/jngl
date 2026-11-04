@@ -16,7 +16,11 @@ namespace {
 std::unique_ptr<GpuRenderer> renderer;
 } // namespace
 
+#ifdef __ANDROID__
+void createGpuRenderer(ANativeWindow* const window) {
+#else
 void createGpuRenderer(SDL_Window* const window) {
+#endif
 	assert(!renderer);
 	renderer = std::make_unique<GpuRenderer>(window);
 }

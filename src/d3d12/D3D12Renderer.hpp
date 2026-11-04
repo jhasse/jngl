@@ -1,7 +1,7 @@
 // Copyright 2026 Jan Niklas Hasse <jhasse@bixense.com>
 // For conditions of distribution and use, see copyright notice in LICENSE.txt
 
-/// Experimental Direct3D 12 backend, see GpuBackend.hpp.
+/// Direct3D 12 backend, see GpuBackend.hpp.
 ///
 /// A 2D backend for the SDL3 platform on Windows, with the same API as VulkanRenderer (see
 /// GpuBackend.hpp), except that it doesn't compile shaders at runtime: all of them, the built-in

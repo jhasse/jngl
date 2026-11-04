@@ -39,7 +39,11 @@ using GpuShaderProgram = MetalShaderProgram;
 #endif
 
 /// Creates the backend for \a window, which gpuRenderer() returns until destroyGpuRenderer()
+#ifdef __ANDROID__
+void createGpuRenderer(ANativeWindow* window);
+#else
 void createGpuRenderer(SDL_Window* window);
+#endif
 
 /// Destroys the backend, before the window it renders to
 void destroyGpuRenderer();
