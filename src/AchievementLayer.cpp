@@ -11,6 +11,7 @@
 #include "jngl/shapes.hpp"
 #include "windowptr.hpp"
 
+#include <cmath>
 #include <sstream>
 
 namespace jngl {
