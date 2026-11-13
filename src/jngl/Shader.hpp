@@ -4,6 +4,7 @@
 #pragma once
 
 #include <cstdint>
+#include <iosfwd>
 #include <memory>
 
 /// JNGL's main namespace

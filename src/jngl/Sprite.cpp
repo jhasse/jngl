@@ -15,7 +15,6 @@
 #include "../texture.hpp"
 #include "../windowptr.hpp"
 #include "Alpha.hpp"
-#include "Color.hpp"
 #include "Shader.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
@@ -39,6 +38,7 @@
 #endif
 #include <cstddef>
 #include <cstring>
+#include <cmath>
 #include <optional>
 #include <sstream>
 #ifndef NOWEBP

@@ -3,13 +3,15 @@
 
 #include "text.hpp"
 
-#include "../FontImpl.hpp"
+#include "../FontImpl.hpp" // IWYU pragma: keep
 #include "../helper.hpp"
 #include "../windowptr.hpp"
 #include "FontInterface.hpp"
 #include "font.hpp"
 #include "matrix.hpp"
 #include "screen.hpp"
+
+#include <algorithm>
 
 namespace jngl {
 class Text::Line {

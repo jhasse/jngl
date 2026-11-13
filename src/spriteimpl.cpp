@@ -9,6 +9,8 @@
 #include "jngl/screen.hpp"
 #include "windowptr.hpp"
 
+#include <cmath>
+
 namespace jngl {
 
 Rgba gSpriteColor{ 1, 1, 1, 1 };

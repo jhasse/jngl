@@ -21,6 +21,7 @@
 #include FT_GLYPH_H
 
 #include <cassert>
+#include <cmath>
 #include <codecvt>
 #include <locale>
 #include <memory>

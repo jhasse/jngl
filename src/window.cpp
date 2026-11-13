@@ -35,10 +35,10 @@
 #endif
 
 #include <algorithm>
+#include <cmath>
 #include <csignal>
 #include <ranges>
 #include <tuple>
-#include <thread>
 #include <utility>
 
 namespace jngl {
