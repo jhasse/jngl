@@ -1,7 +1,9 @@
 <map id="jngl/Shader.hpp" name="jngl/Shader.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="21,5,163,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="71,5,212,31"/>
 <area shape="rect" id="Node000002" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title=" " alt="" coords="5,79,83,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,33,63,67,58,64,82,30"/>
-<area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="107,79,176,105"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="102,30,127,65,122,68,98,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,34,74,72,71,68,123,29"/>
+<area shape="rect" id="Node000003" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/iosfwd.html" title=" " alt="" coords="107,79,176,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="144,31,144,63,139,63,139,31"/>
+<area shape="rect" id="Node000004" href="/__w/jngl/jngl/doc/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title=" " alt="" coords="200,79,269,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="159,29,209,67,205,72,156,34"/>
 </map>
