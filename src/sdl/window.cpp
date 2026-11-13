@@ -90,6 +90,10 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	// SDL defaults to OpenGL ES 2.0 (= WebGL 1), but we link with -sMIN_WEBGL_VERSION=2
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+	// SDL's default of 8 gives the canvas an alpha channel, which the browser uses to blend it
+	// with the page behind it. Drawing anything translucent lowers the alpha that ends up in the
+	// canvas, so the page's background would shine through there.
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
 #endif
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
