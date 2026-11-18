@@ -177,6 +177,16 @@ Window::Window(const std::string& title, int width, int height, const bool fulls
 	}
 #endif // JNGL_GPU_BACKEND
 
+	if (fullscreen) {
+		// SDL3 (unlike SDL2) doesn't wait for the window to become fullscreen, which can take a
+		// while: macOS moves it into a Space of its own with an animation. Only then does the
+		// window have its final size, which there is smaller than the display's if that has a
+		// notch. Without waiting the first frames would be drawn for the display's size and the
+		// scale factor, which can't change later, wouldn't fit the window. Does nothing where
+		// becoming fullscreen is immediate.
+		SDL_SyncWindow(impl->sdlWindow);
+	}
+
 	// This code was written for UWP, Emscripten and macOS (annoying HiDPI scaling by SDL2). On
 	// Linux (GNOME) it results in the top of the window being cut off (by the header bar height?).
 	// The bug seems to be fixed in newer SDL2 (or GNOME) versions.
